@@ -1,0 +1,8 @@
+<!-- Search input-->
+<div class="agile-group<% if(required) {%> required-control<% } %>">
+  <label class="agile-label" for="<%= id %>"><%= label %></label>
+  <div class="<%= inputsize %> agile-field">
+    <input id="<%= id %>" name="<%if(agilefield){%><%= agilefield %><%}else{%><%= id %><%}%>" type="text" placeholder="<%= placeholder %>" class="<%= inputheight %>" <% if(required) {%> required <% } %> />
+  </div>
+  <div class="agile-custom-clear"></div>
+</div>

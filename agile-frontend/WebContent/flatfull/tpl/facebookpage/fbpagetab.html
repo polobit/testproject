@@ -1,0 +1,90 @@
+<script id="fbpagetab-template" type="text/html">
+<style>
+.help-inline {
+color:red;
+}
+</style>
+<div class="row">
+<div class="col-md-4 col-sm-6 col-xs-12">
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<center><img class="img-responsive" alt="facebook-integration" style="height: 47px;" src="{{getS3ImagePath 'img/crm-plugins/facebook.png'}}"></center>
+	</div>
+	<div class="panel-body">
+<div id="fbPageSettingsHolder">
+
+<p>Capture leads directly from your Facebook page.</p>
+
+<div id="fbFormsHolder"></div>
+
+{{#if linked_pages.length}}<p class="font-bold">Current Facebook Pages</p>
+
+<table class="table" id="fbFormsTable">
+<tbody>
+{{#each linked_pages}}
+	<tr id="connectedFormHolder_{{page_id}}">
+		<td colspan="3" style="padding-left:0px;"><a target="_blank" href="/form.jsp?id={{form_id}}" class="text-info">{{form_name}}</a> form has been added to<br>
+		<a target="_blank" href="https://www.facebook.com/pages/null/{{page_id}}?sk=app_{{../app_id}}" class="text-info">{{page_name}}</a> page</td>
+		<td style="padding-top:18px;"><a href="#" data-pageid="{{page_id}}" id="connectedForm_{{form_id}}" class="deleteFacebookLinkedpage" title="To delete the Form from Facebook Page"><i class="icon-trash"></i></a></td>
+	</tr>
+{{/each}}
+</tbody>
+</table>
+
+<div id="delStatusMessageHolder"></div>
+
+{{#if_equals is_authenticated "false"}}
+<p><a  class="btn btn-sm btn-primary" href="{{oauth_url}}" id="AddFormLinkFacebookAccount">Link Facebook Account</a></p><br>
+{{/if_equals}}
+{{else}}
+{{#if_equals is_authenticated "false"}}
+<p><a class="btn btn-sm btn-primary" href="{{oauth_url}}">Link Facebook Account</a></p><br>
+{{/if_equals}}
+{{/if}}
+
+{{#if_equals is_authenticated "true"}}
+<p id="{{userInfo.id}}">Your Facebook - {{userInfo.first_name}} {{userInfo.last_name}} (<a href="#" id="unlinkFacebookAccount" class="text-info" title="To link a new Facebook account, first you need to unlink your already linked account. Unlinking old account will not delete added forms in your Facebook page.">Unlink</a>)</p>
+<hr class="m-xs">
+<p><a class="btn btn-sm btn-default" href="#" id="addFacebookFormLink"><i class="icon-plus-sign"></i> Add Form</a></p>
+<div id="statusMessageHolder"></div>
+<div id="facebookFormAddHolder" style="display:none;">
+<p>Select form to be added (You can manage your forms here) to your Facebook Page.</p>
+<form id="facebookPageTabSettingForm">
+  <fieldset>
+	<input type="hidden" id="AgileFacebookAppId" value="{{app_id}}">
+	<label for="formToUse">Add this Agile CRM form 
+	{{#unless forms}}
+	<a href="#forms" class="text-info">Create a form</a>
+	{{/unless}}
+	</label>
+    <select id="formToUse" name="formToUse" required="" class="form-control">
+	<option value="">Select</option>
+	{{#each forms}}
+      <option value="{{id}}">{{formName}}</option>
+	{{/each}}
+    </select><br>
+
+    <label for="facebookTabPage">To this Facebook page 
+    {{#unless pages}}
+    <a href="https://www.facebook.com/pages/create/" class="text-info">Create a page</a>
+    {{/unless}}
+    </label>
+    <select id="facebookTabPage" name="facebookTabPage" required="" class="form-control">
+	<option value="">Select</option>
+	{{#each pages}}
+      <option data-token="{{access_token}}" value="{{id}}">{{name}}</option>
+	{{/each}}
+    </select><br>
+
+    <div><a href="#" id="facebookPageTabSave" class="btn btn-primary">Save</a></div>
+  </fieldset>
+</form>
+</div>
+{{/if_equals}}
+
+</div>
+	</div>
+</div>
+</div>
+</div>
+</script>

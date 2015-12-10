@@ -1,0 +1,28 @@
+<script id="shopify-template" type="text/html">
+<div class="row">
+    <div class="span9">
+		<div class="alert-info alert">
+            <div class="slate-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+                </div>
+                <div class="box-right pull-left">
+					{{#if installed}}
+					<h4 class="m-t-none">Your Agile CRM account is already linked to shop.</h4>
+					<div class="text">
+						Please uninstall Agile CRM app from {{shopurl}} and try again.
+					</div>
+					{{else}}
+                    <h3>Agile CRM's code is successfully installed in your Shopify Store.</h3>
+                    <div class="text">
+						You can now <a href="#web-rules"> define popups</a> to be shown on your store.
+                    </div>
+					{{/if}}
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+	</div>
+</div>
+</script>

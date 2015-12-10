@@ -1,0 +1,92 @@
+<script id="settings-imap-prefs-template" type="text/html">
+<div class="row">
+<div class="col-md-4 col-sm-6">
+<div class="panel panel-default">
+<div class="panel-heading font-bold"><h4 class="h4">IMAP</h4></div>
+    <div class="panel-body">
+    <form id="imap-prefs-form">
+        
+        <fieldset>
+            {{#if id}}
+			{{add_tag "Email"}}
+            <input name="id" type="hidden" value="{{id}}" /> 
+            {{/if}}
+            <!--<div class="control-group form-group">
+                <label class="control-label">Email <span class="field_req">*</span></label>
+                <div class="controls">
+                    <input name="email" type="text" class="email required form-control" placeholder="Email" value="{{email}}" autocapitalize="off" />
+                </div>
+            </div>-->
+            <div class="control-group form-group">
+                <label class="control-label">Server (Host) <span class="field_req">*</span></label>
+                <div class="controls">
+                    <input name="server_name" type="text" class="required form-control" placeholder="Server Name" value="{{server_name}}" autocapitalize="off" />
+                </div>
+            </div>
+            <div class="control-group form-group">
+                <label class="control-label">User Name <span class="field_req">*</span></label>
+                <div class="controls">
+                    <input name="user_name" type="text" class="required form-control" placeholder="User Name" value="{{user_name}}" autocapitalize="off" />
+                </div>
+            </div>
+            <div class="control-group form-group">
+                <label class="control-label">Password <span class="field_req">*</span></label>
+                <div class="controls">
+                    <input name="password" id="imap-password" type="password" class="required form-control" placeholder="Password" autocapitalize="off" />
+                </div>
+            </div>
+            <div class="control-group form-group">
+                <div class="controls">
+                    <div class="checkbox">
+					<label class="i-checks i-checks-sm">
+                    <input name="is_secure" type="checkbox" value="{{is_secure}}" checked/><i></i>
+                    Use SSL (Secure communication)
+                    </label>
+				</div>
+            </div>
+            </div>
+             <div class="control-group form-group m-t-md">
+	            <div class="controls">
+	                <a href="#" class="imap-share-settings-select text-info" oid={{id}}><i class='icon-plus-sign'/></i> Sharing settings</a>
+	                <span class ="imap-share-settings-txt" style="vertical-align:text-top;margin-left:-3px">         
+       				 <img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="You can share this email integration with other users. This allows them to see emails you have exchanged with a Contact. The shared users will see your email account in the Mail tab when they open a Contact." id="element-title" data-trigger="hover" data-original-title="Email Account Sharing">
+        			</span>
+				    <span class="imap-share-select" style="display:none;">
+				   	<a href="#" class="imap-share-settings-cancel" name = "imap" style="margin-bottom:20px"><i class='icon-minus-sign'/></i> Sharing settings</a>
+				   	<span style="vertical-align:text-top;margin-left:-3px">         
+       				 <img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="You can share this email integration with other users. This allows them to see emails you have exchanged with a Contact. The shared users will see your email account in the Mail tab when they open a Contact." id="element-title" data-trigger="hover" data-original-title="Email Account Sharing">
+        			</span>
+                    <br>
+				   	<label class="control-label" style="margin-top:10px">Select users to share with</label>
+					<select name="shared_with_users_ids" multiple id="imap-share-user-select" class = "multi-select  form-control" style="margin-bottom: 5px; overflow: auto">
+					</select>
+	             	<span class="imap-share-status"></span>
+					</span>
+			     </div>
+			  </div>
+			   {{#if id}}
+			   <div id="imap-folders" class="control-group form-group m-t-sm">
+	            <div class="controls">
+	                <a href="#" class="imap-folders-settings-click" oid={{id}}><i class='icon-plus-sign'/></i> Email folders</a>
+				    <span class="imap-folders-select" style="display:none;">
+				   	<a href="#" class="imap-folders-settings-cancel m-b-md" name = "imap"><i class='icon-minus-sign'/></i> Email folders</a>
+                    <br>
+				   	<label class="control-label m-t-sm">Select a maximum of 3 folders</label>
+					<select name="folders" multiple id="imap-folders-multi-select" class = "multi-select form-control" limit = "3" style="margin-bottom: 5px; overflow: auto">
+					</select>
+	             	<span class="imap-folders-settings-status"></span>
+					</span>
+			   </div>
+			</div>
+			{{/if}}
+            <div class="form-group m-t-sm form-actions"> 
+				<a href="#email" class="btn btn-default btn-sm">Cancel</a>
+                <button type="submit" class="save btn btn-sm btn-primary">Save </button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+</div>
+</div>
+</div>
+</script>

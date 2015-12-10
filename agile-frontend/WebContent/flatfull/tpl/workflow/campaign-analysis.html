@@ -1,0 +1,47 @@
+<script id="campaign-analysis-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b" id="campaign-logs-list">
+<div class="row">
+    <div class="col-md-12">
+        
+            <h3 class="pull-left font-thin h3">Campaign <small>analysis</small></h3>
+
+			<!--Shown only in Subscribers block-->
+			<div id="subscribers-block">
+				<div class="btn btn-sm btn-default m-l-lg delete-checked-contacts pull-left" id="remove-active-from-campaign" style="display: none;">Remove from Campaign</div>
+            	<!-- Shows selected contacts list and offer to select all if current list is more than the page-size -->
+            	<div class="pull-left m-l-sm"  style="left: 70px;" id="subscribers-bulk-select"></div>
+			</div>
+
+            <div class="right">
+        		<select id="campaign-reports-select" class="required form-control">
+        			<option value="">Select...</option>
+        		</select>
+			</div>
+            <div class="clearfix"></div>
+       
+    </div>
+</div>
+</div>
+<div id="campaign-analysis-tabs"></div>
+</script>
+
+<script id="campaign-analysis-tabs-template" type="text/html">
+
+	<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">	
+		<div class="col w b-r">
+   		<div class="vbox">
+     	<div class="row-row">
+		<div id="campaign-tabs" class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+			<a href="#email-reports/{{id}}" class="campaign-stats-tab list-group-item select" data-campaign-tab-active="STATS">Reports</a>
+			<a href="#workflow/all-subscribers/{{id}}" class="campaign-subscribers-tab list-group-item" data-campaign-tab-active="SUBSCRIBERS">Subscribers</a>
+			<a href="#workflows/logs/{{id}}" class="campaign-logs-tab list-group-item" data-campaign-tab-active="LOGS">Logs</a>
+		</div>
+		</div>
+		</div>
+		</div>
+		<div class="col overflow-visible">
+			<div class="tabs wrapper-md" id="campaign-analysis-tabs-content"></div>
+		</div>
+	</div>
+
+</script>

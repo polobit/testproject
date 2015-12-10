@@ -1,0 +1,527 @@
+html
+{
+font-size: 10px;
+}
+
+body{       
+    border: 0px;
+    margin: 0px;    
+}
+
+body{
+	border: 0px none;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;	
+}
+
+#main{    
+    position:relative;    
+    padding:10px 14px;    
+    height: 750px;
+}
+
+.uicontainer
+{
+display:block;
+margin-top:7px;
+margin-bottom:7px;	
+}
+
+label {font-weight:bold;}
+#nodeui label {font-weight:bold;margin-right:2px; min-width:50px}
+#nodeui input, select {margin-bottom:5px;}
+#nodeui select {min-width:100px;}
+
+
+textarea { display:block; margin-bottom:10px;}
+
+#nodeui table {margin-bottom:3px; min-height:50px; margin-top:3px}
+		
+#nodeui input { padding: .4em; }
+fieldset { padding:0; border:0; margin-top:25px; }
+button { margin-right:4px;}
+
+#nodeui td {
+border:1px solid #EEEEEE;
+padding:0.6em 10px;
+text-align:left;
+}
+
+#nodeui th {
+border:1px solid #EEEEEE;
+padding:0.6em 10px;
+text-align:left;
+}
+
+/* Login form changes   (yasin/03-09-10) */
+
+/* Login form css */
+
+.login_form{
+  	display:none;
+  	padding:15px;
+
+}
+
+.login_right_img{
+	float:right;
+	padding-top:20px;
+	width:40%;
+	}
+.login_details{
+	float:left;
+	width:50%;
+	float: left;
+	margin:15px 0 10px 20px;
+	width: 48%
+	}
+.login_disblock{
+	display:block;
+	}
+.login_field_spacing{
+
+	margin:5px 0;
+	width:170px;
+
+}
+
+
+.forgot_pass_lable{
+float:left;
+font-weight:bold;
+text-align:right;
+width:70px;
+padding-top:10px;
+}
+.forgot_pass_input{
+	width:200px;
+	margin:5px;
+	}
+
+/* End of login form changes   (yasin/03-09-10) */
+
+
+
+/* register form css*/
+.register_form_lable{
+float:left;
+font-weight:bold;
+text-align:right;
+width:100px;
+padding-top:10px;
+}
+.register_form_input{
+	width:250px;
+	margin:5px;
+	}
+
+.register_form_details{
+padding:5px 10px 0px 106px;
+font-size:9px;
+
+}
+
+/* Seperator form and Signup(Yasin/24-09-10)*/
+
+.signup_form_seperator{
+ float:left;
+ margin:8em 20px 0px 20px;
+}
+.signup_form_images{
+ float:left;
+ margin-top:100px;
+}
+/* Seperator form and Signup (Yasin/24-09-10)*/
+
+/* save css*/
+
+.save_phone_button{
+
+float:right;
+}
+
+/* Phone System template*/
+
+.phonesystem{
+   /* margin-bottom:5px;
+    padding-bottom:3px;*/
+}
+ .container_scroll{
+  height:250px;
+ overflow-y:scroll;
+ }
+ 
+.phonesystem_name{
+
+	float:left;
+	margin-right:3px;
+	margin-left:5px;
+	width:70%;
+	text-align:left;
+	font-weight:bold;
+}
+.phonesystem_icons{
+	width:20%;
+	float:right;
+}
+.phonesystem_divheight{
+	height: 15px; 
+	/*margin-top:10px;
+	border:1px solid #AAAAAA;*/
+	width:300px;
+	padding:5px;
+}
+
+/* Queue Template */
+
+.queuesystem_temp{
+
+	float:left;
+	margin-top:6px;
+	/*width:50%;
+	text-align:center;*/
+	font-weight:bold;
+	
+}
+
+.queuesystem_button{
+	float:right;
+	margin:0 5px
+	}
+
+.memberqueues_heading {
+    margin: 10px 0px;
+    width:400px;
+    text-align:left;
+    padding: 5px;
+}
+.memberqueue_data {
+	
+	width:300px;
+	min-height: 15px;
+	padding:5px;
+}
+.queue_name {
+	text-align:left;
+	float:left;
+}
+
+.avilablequeue_data {
+	width:300px;
+	min-height: 15px;
+	padding:5px;
+}
+.availablequeues_heading {
+    margin: 10px 0px;
+    width:400px;
+    text-align:left;
+    padding: 5px;
+}
+
+/* Queue form css*/
+.queue_form_lable{
+float:left;
+font-weight:bold;
+text-align:right;
+width:150px;
+padding-top:8px;
+}
+.queue_form_input{
+	min-width:130px;
+	margin:5px;
+}
+
+/* widget form css*/
+.widget_form_lable{
+float:left;
+font-weight:bold;
+text-align:right;
+width:120px;
+padding-top:4px;
+}
+.widget_form_input{
+	min-width:160px;
+	margin:5px;
+	}
+	
+/* Agents css */
+
+
+.agents_icons{
+	width:25%;
+	float:right;
+}
+.agents_divheight{
+	min-height:15px;
+	/*margin-top:10px;
+	border:1px solid #AAAAAA;*/
+	width:400px;
+	padding:5px;
+	
+}
+
+.agents_details{
+	/*height: 15px; 
+	margin-top:10px;
+	border:1px solid #AAAAAA;*/
+	
+	text-align:left;
+	width:65%;
+	float:left;
+}
+
+/* Agent new form css*/
+.newagent_form_lable{
+float:left;
+font-weight:bold;
+text-align:right;
+width:140px;
+padding-top:6px;
+}
+.newagent_form_input{
+	min-width:150px;
+	margin:5px;
+	}
+
+
+/*  Sip CSS */
+
+.sip_icons{
+	width:20%;
+	float:right;
+}
+.sip_divheight{
+	min-height:15px;
+	width:350px;
+	padding:5px;
+	
+}
+
+.sip_details{
+		
+	text-align:left;
+	width:75%;
+	float:left;
+}
+
+/* New Sip form css */
+
+.newsip_form_lable{
+float:left;
+font-weight:bold;
+text-align:right;
+width:120px;
+padding-top:6px;
+}
+.newsip_form_input{
+	min-width:130px;
+	margin:5px;
+	}
+
+.newsip_form_checkbox{
+float:left;
+font-weight:bold;
+text-align:right;
+width:120px;
+
+}
+
+/*  Number CSS */
+
+.number_icons{
+	width:20%;
+	float:right;
+}
+.number_divheight{
+	min-height: 20px;
+	padding: 10px;
+	
+}
+.number_divleft{
+	width:72%;
+	float:left;	
+}
+
+.number_img{
+	width:20px;
+	height:20px;
+	float:left;
+	margin:0 5px;
+	margin-top:-2px;
+}
+
+.number_name{
+	width:45%;
+	float:left;
+}
+.number_connectorId{
+	width:38%;
+	/*overflow:hidden;*/
+	word-wrap: break-word;
+	float:left;
+}
+.number_phoneSystemName{
+	width:15%;
+	float:left;
+}
+.number_assignconnector{
+	float:right;
+	margin:0px 10px;
+}
+.number_details{
+		
+	text-align:left;
+	width:75%;
+	float:left;
+}
+
+/* Audio Grid  css */
+
+.invoxtable
+{
+min-height:100px;
+width:480px;
+overflow:auto;
+margin-bottom:10px;
+height:150px;
+}
+
+.invoxtable_header{
+width:480px;
+margin-bottom:10px;
+
+}
+
+.audiolib_spacing{
+padding:0.6em 10px;
+}
+
+.audiolib_buttons{
+width:150px;
+}
+
+.grid_width{
+width:450px;
+}
+
+.addtts_style{
+	margin:10px;
+	display:inline;
+	width:200px;
+	height:250px;
+	float:left;
+	padding:15px;
+}
+
+/* Start   (yasin/03-09-10) */
+
+/* Edit/ Delete Icons css */
+
+.editdelete_icons{
+	
+	float:left;
+	margin:0 5px
+	
+	
+	}
+	
+/* Catalog Or Add more */
+
+
+
+.addmorebutton {
+   margin:6px;
+   width:68px;
+   padding:6px 0;
+}
+
+/* Save And Test Phone system */
+
+.saveandtest_sytle{
+
+width:200px;
+float:left;
+margin:5px  10px;
+padding: 10px;
+height:300px;
+}
+/* End   (yasin/03-09-10) */
+
+/*Ramesh 21/9/2010*/
+.newuser_lookingfor_label {
+	float:left;
+	height:150px;
+	padding-top:50px;
+}
+.newuser_option {
+	height:35px;
+	font-size:11px;
+}
+/* End   (*Ramesh/03-09-10) */
+
+/* Manage tabs icons (yasin/21-09-10)*/
+
+.managetab_icons{
+float:left;
+margin-right:5px;
+
+}
+
+/*End (yasin/21-09-10)*/
+
+/*Ramesh 24/9/2010*/
+.addontemplate
+{
+padding-bottom:10px;
+padding-top:10px;
+padding-left:10px;
+padding-right:10px;
+margin-bottom:10px;
+margin-right:10px;
+}
+
+#portletcatalogaddons
+{
+max-height:288px;
+overflow:auto;
+list-style-type: none;
+}
+
+#portletcatalog li
+{
+display:inline;
+float: left;
+width: 200px;
+padding: 15px;
+margin: 5px;
+height:265px;
+overflow:auto;
+
+}
+
+.cataloginfo
+{
+min-height:65px;
+max-height:65px;
+overflow:auto;
+margin-top:10px;
+margin-bottom:10px;
+}
+/* End   (*Ramesh/24/09/10) */
+#loading-image {
+    background-color: #FFFFFE;
+	/* background-color:#333333; */
+	height:100%;
+	position:absolute;
+	width:100%;
+	z-index:10000000000000000;
+	opacity:0.6;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px; /* future proofing */
+	-khtml-border-radius: 10px;
+}
+
+
+

@@ -1,0 +1,108 @@
+<script id="contact-view-template" type="text/html">
+<div class="wrapper-md bg-light lter b-b">
+<h3 class="font-thin m-none h3">Select Columns</h3>
+</div>
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-md-9">
+        <div>
+            <form id="opportunityform" class="form-horizontal">
+                <fieldset>
+                    <input name="id" type="hidden" value="{{id}}" />
+					<div class="control-group form-group">
+                        <div class="controls col-sm-offset-2 col-sm-10 col-xs-offset-3">Select Contact fields to view</div>
+                    </div>
+                    <div class="control-group form-group">
+                        <div class="controls col-sm-offset-2 col-sm-10 col-xs-offset-3" id="contactTypeAhead">
+                            <select id="multipleSelect" class="required form-control" multiple="multiple">
+							<optgroup label='Contact Fields'>
+                                <option value="basic_info">Basic Info</option>
+								<option value="first_name">First Name</option>
+                                <option value="last_name">Last Name</option>
+                                <option value="email">Email</option>
+                                <option value="company">Company</option>
+                                <option value="tags">Tags</option>
+                                <option value="title">Title</option>
+								<option value="phone">Phone</option>
+								<option value="address">Address</option>
+								<option value="website">Website</option>
+                                <option value="created_time">Created Date</option>
+                                <option value="updated_time">Updated Date</option>
+								<option value="image">Image</option>
+								<option value="star_value">Star Value</option>
+								<option value="lead_score">Lead Score</option>
+                                <option value="lead_owner">Lead Owner</option>
+                                <option value="last_contacted">Last Contacted</option>
+							</optgroup>
+							<optgroup id="custom-fields-optgroup" label='Custom Fields'>
+							
+							</optgroup>
+                            </select>
+                        </div>
+                    </div>
+<div class="line line-bg b-b"></div>
+<div class="row">
+                    <div class="form-actions col-sm-offset-2 col-sm-10 col-xs-offset-3">          
+						<a href="#contacts" class="btn btn-default btn-sm">Cancel</a>
+                        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="contactView">Save Changes</a>
+                    </div>
+</div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</script>
+
+<script id="company-view-template" type="text/html">
+<div class="wrapper-md bg-light lter b-b">
+<h3 class="font-thin m-none h3">Select Columns</h3>
+</div>
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-md-9">
+        <div>
+            <form id="opportunityform" class="form-horizontal">
+                <fieldset>
+                    <input name="id" type="hidden" value="{{id}}" />
+					<div class="control-group form-group">
+                        <div class="controls col-sm-offset-2 col-sm-10 col-xs-offset-3">Select Company fields to view</div>
+                    </div>
+                    <div class="control-group form-group">
+                        <div class="controls col-sm-offset-2 col-sm-10 col-xs-offset-3">
+                            <select id="multipleSelect" class="required form-control" multiple="multiple">
+							<optgroup label='Company Fields'>
+								<option value="basic_info">Basic Info</option>
+								<option value="name">Name</option>
+                                <option value="tags">Tags</option>
+								<option value="url">URL</option>
+								<option value="phone">Phone</option>
+								<option value="address">Address</option>
+								<option value="website">Website</option>
+                                <option value="created_time">Created Date</option>
+                                <option value="updated_time">Updated Date</option>
+								<option value="image">Image</option>
+								<option value="star_value">Star Value</option>
+                                <option value="owner">Owner</option>
+							</optgroup>
+							<optgroup id="custom-fields-optgroup" label='Custom Fields'>
+							
+							</optgroup>
+                            </select>
+                        </div>
+                    </div>
+<div class="line line-bg b-b"></div>
+<div class="row">
+                    <div class="form-actions col-sm-offset-2 col-sm-10 col-xs-offset-3">          
+						<a href="#companies" class="btn btn-default btn-sm">Cancel</a>
+                        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="companyView">Save Changes</a>
+                    </div>
+</div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</script>

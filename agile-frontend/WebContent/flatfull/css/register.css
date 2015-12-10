@@ -1,0 +1,259 @@
+/*reg page css starting */
+
+/*css for all login pages */
+
+
+
+
+
+html,body
+{
+	height:100%;
+}
+.reg-page-bg
+{
+	background:url("../../img/signin/reg-bg.jpg") no-repeat scroll center center ;
+	background-attachment:fixed;
+	background-size:100% 100%;
+}
+.logpages
+{
+	font-family:"Open Sans",Arial,sans-serif;
+}
+
+#domain-error, #email-error
+{
+	background: #e87251;
+color: #fff;
+}
+
+#domain-error a
+ {
+ 	color:#fff;
+ 	text-decoration:underline;
+ 	font-weight:bold;
+ }
+ #domain-error a:hover
+ {
+ 	text-decoration:none;
+ }
+    .logpages .form-group
+    {
+    position:relative;
+    }
+  /* .logpages .form-group span:before
+    {
+        
+    font-family: fontawesome;
+    font-size: 21px;
+    left: 10px;
+    position: absolute;
+    top: 9px;
+}*/
+.logpages .form-group
+{
+	margin-bottom:20px;
+}
+.logpages .form-control
+{
+padding:12px 35px 12px 10px;
+box-shadow:none;
+border:1px solid #dbd9d9;
+font-weight:normal;
+height:auto;
+	border: 1px solid #e8ecf3;
+	box-shadow: none;
+	border-radius: 2px;
+	background: none;
+}
+
+
+.regpage-logHead {
+border-bottom: medium none;
+color: #000;
+font-size: 25px;
+padding: 20px 0 6px;
+margin: 0px;
+}
+.regpage-container {
+background: none repeat scroll 0 0 #fff;
+border-radius: 8px;
+padding: 0 40px;
+width: 500px;
+
+margin: 10px auto 20px;
+
+}
+.regpage-uname,.regpage-mail,.regpage-password,.login-uname,.login-password
+{
+	display: block;
+    height: 16px;
+    opacity: 0.3;
+    position: absolute;
+    right: 4%;
+    top: 15px;
+    width: 16px;
+    z-index: 99;
+}
+.regpage-uname,.login-uname
+{
+	  background: url("../../img/signin/sign-user.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    
+}
+.regpage-mail
+{
+background:url("../../img/signin/sign-email.png") no-repeat scroll 96% center rgba(0, 0, 0, 0);
+width:24px;
+height:24px;
+
+}
+.regpage-password,.login-password
+{
+	background:url("../../img/signin/sign-lock.png") no-repeat 95% center rgba(0, 0, 0, 0);
+}
+.form-pad {
+	
+    color: #74b9ef;
+    font-size: 14px;
+    font-weight: 600;
+
+    padding: 0 47px 19px;
+	background:#fff;
+	
+}
+.regpage-logHead img {
+margin: 0 10px 0 0;
+opacity: 0.4;
+vertical-align: bottom;
+}
+.reg-info
+{
+ border-bottom: 1px solid #d4d4d4;
+    margin: 0 0 20px;
+    padding: 0 0 19px;
+	 color: #74b9ef;
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+.regpage-fieldview
+{
+ margin: 0;
+    padding: 10px 30px 0;	
+}
+.regpage-fieldview .form-group
+{
+	margin-bottom:20px;
+	position:relative;
+}
+.regpage-fieldview .form-control
+{
+	  border: 1px solid #dbd9d9;
+    border-radius: 9px;
+    box-shadow: none;
+    padding: 14px 35px 14px 21px;
+}
+.regpage-domain
+{
+	  background: none repeat scroll 0 0 transparent;
+    border-radius: 0 9px 9px 0;
+    font-size: 1.1em;
+}
+ 
+.regpage-signup
+{
+	 margin: 25px 0 8px;
+}
+.regpage-btn
+{
+	 background: none repeat scroll 0 0 #5db85c;
+    border: medium none #5db85c;
+    border-radius: 6px;
+    font-size: 17px;
+    margin: 15px 0 5px;
+    padding: 14px 21px;
+   
+    width: 54%;
+}
+.log-options
+{
+	 background: none repeat scroll 0 0 #fff;
+    border-radius: 0 0 8px 8px;
+    padding: 0 0 34px;
+}
+.regpage-options
+{
+	 background: none repeat scroll 0 0 #fff;
+    border-radius: 0 0 8px 8px;
+    color: #4a4a4a;
+    font-size: 1.02em;
+    padding: 15px 0 40px;
+}
+.regpage-options a,.log-options a
+{
+	color:#777;
+	
+}
+
+#agile select
+{
+	height : 50px;
+	
+}
+
+#agile .safari-select
+{
+	line-height:45px;
+	text-indent:6px;
+	border-radius:9px;
+}
+
+.regpage-container-fixed-height
+{
+}
+
+
+.country-list {
+	width: 350px!important;
+	max-height :160px!important;
+}
+
+.intl-tel-input {
+	display:block;
+}
+.elements-sibling {
+float:left;
+margin-right:5px;
+width:175px;
+}
+.elements-sibling-last
+{
+    display: inline-block;
+    width:180px;
+}
+
+
+@media all and (max-width:500px) {
+
+.regpage-container {
+    width: 90%;
+}
+
+.regpage-container {
+        padding:0px;
+    }
+
+ .elements-sibling {
+    float: none;
+    margin-right: 0px;
+    margin-bottom:10px;
+    width:100%;
+ }   
+ .elements-sibling-last {
+
+display: block;
+width: auto;
+ }
+
+}

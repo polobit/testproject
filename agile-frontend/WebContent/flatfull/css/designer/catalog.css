@@ -1,0 +1,68 @@
+ul.column
+{    
+	width:100%;	
+	list-style:none;	
+	padding-left:1%;	
+ }
+
+ul.column li 
+{
+	  float:left;
+	  /*width:250px;*/
+	  line-height:1.8em;		  
+}
+.block 
+{
+	   height:auto;	
+	   font-size:1em;
+	   margin-right:10px;
+	   padding:20px 3px 25px 20px;
+	   background:#E5E5E5;
+	   -moz-border-radius:3px;
+	   -khtml-border-radius:3px;
+	   -webkit-border-radius:3px;
+	   border:2px solid #2191C0;
+}
+
+ul#catalogtemplate
+{
+  font-color:black;
+}
+
+
+.catalogtemp{
+	margin:5px; 
+	padding:15px;
+	width:200px;
+	height:240px;
+	}
+.catalogname{
+	font-size:18px;
+	margin:5px 0px;
+}
+
+.cataloginfo{
+	max-height:65px;
+	min-height:65px;
+	overflow:auto;
+	font-weight:normal;
+}
+.catalogadd{
+ 	float:left;
+ 	margin-top:10px;
+ 	display:block;
+ }
+ 
+ .catalog_url{
+ margin:10px
+ }
+ 
+ .catalog_url_input{
+ width:170px;
+ margin:10px;
+ }
+ .catalog_url_button{
+ float:right;
+ margin:10px 0;
+ }
+ 

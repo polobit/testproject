@@ -1,0 +1,101 @@
+<script id="gmap-table-model-template" type="text/html">
+
+<td style="cursor:default;" class="select_checkbox">
+</td>panel-heading
+
+
+{{#if contact}}
+<td class="data-contact" data="{{contact.id}}">
+	<div class="row-fluid">
+    	<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
+{{#wrap_entity this.contact}}
+        	<img class="img-inital r r-2x" style="height:30px;width:30px" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" />
+        </div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:70%">
+        	<a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} 
+               </a>
+        	<br />
+        		{{getPropertyValue properties "email"}}
+{{/wrap_entity}}
+		</div>
+</td>
+<div class="row-fluid">
+{{else}}
+<td>
+<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
+<img class="img-inital r r-2x" style="height:30px;width:30px" data-name="{{dataNameAvatar properties}}" src="{{getDefaultImage}}" />
+</div>
+ 
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:70%">
+        		Unknown 
+		</div>
+{{/if}}
+	</div>
+</td>
+<td class="referer"  style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden"><a class="refererUrl" target="_blank" href="{{ref}}">{{ref}}</a></td>
+<td><div>{{capitalizeFirstLetter city country}}</div></td>
+<td>{{#if user_agent}}
+			{{#stringToJSON this "parsedUserAgent"}}
+        	<div>
+				{{#if device_type}}
+              		<img class="inline m-r-xs r r-2x" style="width:12px;" src="/img/web-stats/devices/{{device_type}}.png"  title="{{device_type}}">
+				{{/if}}
+				{{#if os}}
+                	<img class="inline m-r-xs r r-2x" style="width:12px;" src="/img/web-stats/os/{{normalize_os os}}.png" title="{{os}}">
+				{{/if}}
+				{{#if browser_name}}
+		      		<img class="inline m-r-xs r r-2x" style="width:12px;" src="/img/web-stats/browsers/{{browser_name}}.png"  title="{{browser_name}}">
+				{{/if}}
+        	</div>
+       		{{/stringToJSON}}
+        {{/if}}</td>
+<td><div style="text-align:right;width: 100px;">{{timeAgo visit_time}} 
+
+</div></td>
+
+</script>
+
+<script id="gmap-table-collection-template" type="text/html">
+
+<div class="row-fluid">
+	<div class="span12">
+		{{#unless this.length}}
+			<div class="filter-criteria">
+					
+			</div>
+			<div id="slate"></div>
+	{{/unless}}
+		{{#if this.length}}
+		<div class="data">
+			<div class="data-container"></div>
+			<div class="panel panel-default">
+			<table id="contacts" class="table table-striped agile-ellipsis-dynamic"
+				url="core/api/bulk/update?action_type=DELETE">
+				<col width="0%">
+				<col width="20%">
+                <col width="35%">
+				<col width="25%">
+                <col width="10%">
+				<col width="10%">
+				<div class="filter-criteria"></div>
+				<thead>
+					<tr>
+                        <th></th>
+						<th>Name</th>
+                        <th>Referer</th>
+						<th>Location</th>
+                        <th></th>
+                        <th></th>
+					</tr>
+				</thead>
+				<tbody id="gmap-table-model-list" class="gmap-table-model-list agile-row"
+					route="contact/" style="overflow: scroll;overflow:hidden;">
+				</tbody>
+			</table>
+			</div>
+		</div>
+	</div>
+	{{/if}}
+</div>
+</script>

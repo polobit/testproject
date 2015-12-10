@@ -1,0 +1,58 @@
+<script id="sip-profile-template" type="text/html">
+<div class="widget_content">
+  <div class="row-fluid">  
+     <div>
+        <p>{{msg}}</p>
+     </div>  
+  </div>
+<div>
+</script>
+
+<script id="sip-login-template" type="text/html">
+<div>
+	<form class="p-xs" id="sip_login_form" name="sip_login_form" method="post">
+    	<fieldset>
+		      <p class="m-t-sm">
+                   Make and receive calls from your contacts using any SIP account.
+              </p>
+			  
+				<label><b>Enter your Sip details </b></label>
+                <label id="sip_reg_status"></label>
+				<div class="control-group form-group">
+                     <div class="controls">
+                         <input type="text" id="sip_username" class="form-control input-medium required widget_input_box"  title="e.g. John Doe, ACME Inc" value="" name="sip_username" placeholder="Full 'Friendly' Display Name"></input>
+                     </div>
+                </div>
+                <div class="control-group form-group">
+                     <div class="controls">
+                          <input type="text" id="sip_realm" class="form-control input-medium required widget_input_box"  title="e.g. computer.network, proxy.domain.com" value="" name="sip_realm" placeholder="Server (SIP Proxy or Virtual PBX)"></input>
+                     </div>
+                </div>				
+                <div class="control-group form-group">
+                     <div class="controls">
+                          <input type="text" id="sip_privateid" class="form-control input-medium required widget_input_box"  title="e.g. 555123456 (or John.Doe)" value="" name="sip_privateid" placeholder="SIP Number (or User Number)"></input>
+                     </div>
+                </div>				
+                <div class="control-group form-group">
+                     <div class="controls">
+                          <input type="password" id="sip_password" class="form-control input-medium required widget_input_box"  title="Password" value="" name="sip_password" placeholder="Password"></input>
+                     </div>
+                </div>
+<div class="checkbox">
+<label class="i-checks i-checks-sm">
+              <input type="checkbox" id="sip_wsenable" name="sip_wsenable" title="Websocket URL"></input><i></i> Enable SIP Legacy Mode
+</label>
+</div>
+              <div class="text-center">
+			  <a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
+			  <a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
+</div>
+              
+              <p class="m-t-sm m-b-none">
+                  Don't have an SIP account? 
+                  <a href="http://www.voip-info.org/wiki/view/Sip+Trunking+Providers" target="_blank" class="text-info"> SignUp </a>
+              </p>
+		 </fieldset>
+    </form>
+</div>
+</script>

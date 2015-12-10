@@ -1,0 +1,113 @@
+<html lang="en">
+   <head>
+      <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+      <title>Popup</title>
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,800" rel="stylesheet" type="text/css" />
+      <style>
+         body {
+         background: #333;
+         width:620px;
+         height:454px;
+         }
+         #popup {
+         background-color: #fffdd9;
+         background-image: url('https://s3.amazonaws.com/PopupTemplates/survey/choice-two/images/bg.png');
+         background-repeat: repeat-x;
+         background-position: 0% 30%;
+         box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+         border-radius: 20px;
+         border: 10px solid white;
+         -webkit-border-radius: 20px;
+         -moz-border-radius: 20px;
+         border-radius: 20px;
+         color: #163747!important;
+         font: 14px/20px 'Open Sans', Arial, sans-serif!important;
+         letter-spacing: 0;
+         position: fixed;
+         width: 600px;
+         }
+         #popup-body {
+         padding: 25px 20px;
+         }
+         #popup-header  {
+         font: 800 32px/34px 'Open Sans', Arial, sans-serif!important;
+         margin-bottom: 20px;
+         text-align: center;
+         text-transform: uppercase;
+         }
+         #popup-content  {
+         position: relative;
+         }
+         #popup-content p  {
+         margin: 0 0 20px;
+         }
+         .popup-column {
+         background: #fff none no-repeat center 30px;
+         -webkit-border-radius: 10px;
+         -moz-border-radius: 10px;
+         border-radius: 10px;
+         box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+         padding: 140px 10px 5px;
+         text-align: center;
+         width: 250px;
+         }
+         .popup-column-left {
+         background-image: url('https://s3.amazonaws.com/PopupTemplates/survey/choice-two/images/image-1.png');
+         float: left;
+         }
+         .popup-column-right {
+         background-image: url('https://s3.amazonaws.com/PopupTemplates/survey/choice-two/images/image-2.png');
+         float: right;
+         }
+         .popup-column big {
+         border-bottom: 1px solid #9a9a9a;
+         display: block;
+         font: 800 22px/24px 'Open Sans', Arial, sans-serif!important;
+         padding-bottom: 20px;
+         text-transform: uppercase;
+         }
+         .popup-button {
+         background: #eb593c;
+         -webkit-border-radius: 5px;
+         -moz-border-radius: 5px;
+         border-radius: 5px;
+         border: 1px solid #c26c57;
+         box-shadow: inset 0 -1px 0 #c26c57;
+         color: #fff;
+         display: inline-block;
+         font: 800 16px/18px 'Open Sans', Arial, sans-serif!important;
+         padding: 10px 0;
+         text-decoration: none;
+         text-transform: uppercase;
+         width: 230px;
+         }
+         .popup-button:hover {
+         background: #c64931;
+         }
+         .popup-clear {
+         clear: both;
+         height: 0;
+         }
+      </style>
+   </head>
+   <body>
+      <div id="popup">
+         <div id="popup-body">
+            <div id="popup-header">What do you like to do?</div>
+            <div id="popup-content">
+               <div class="popup-column popup-column-left">
+                  <p><big>Make Money</big></p>
+                  <p>Quick money is a scam. Work towards it.</p>
+                  <p><a href="" class="popup-button">Next</a>
+               </div>
+               <div class="popup-column popup-column-right">
+                  <p><big>Surf Internet</big></p>
+                  <p>You are in luck with Youtube, Facebook, and Twitter.</p>
+                  <p><a href="" class="popup-button">Learn More</a>
+               </div>
+               <div class="popup-clear"></div>
+            </div>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,237 @@
+<script id="all-domain-model-template" type="text/html">
+
+<td></td>
+<td>{{name}}</td>
+<td>{{email}}</td>
+<td class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" style="border-bottom:dotted 1px #999">{{epochToDate info_json_string "logged_in_time"}}</time></td>
+<td ><a href="/#change-password-admin/{{id}}"  >Reset password</a></td>
+<td><a href="#" data="{{id}}" class="delete_user btn-mini btn-danger">Delete</a></td>
+<td>{{#if is_account_owner}}<i class="agilecrm-profile-dropdown"></i>{{/if}}</td>
+ 
+
+</script>
+<script id="all-domain-collection-template" type="text/html">
+<div class="wrapper-md">
+ <div class="page-header">
+        <h2 >DomainDetails </h2><br/>
+<h3 >Domain Name:&nbsp;&nbsp;&nbsp;{{this.0.domain}}</h3>
+    </div>
+
+<div class="row">
+<div class="col-md-9">
+   
+
+    {{#unless this.length}}
+    <div class="slate m-t-sm">
+        <div class="slate-content">
+                <h3>Domain Not Found.</h3>
+                <br />
+                <a href="#" class="btn btn-default btn-sm blue btn-slate-action"><i class="icon-plus-sign"></i> Domain Users </a>
+            
+        </div>
+    </div>
+    {{/unless}}
+    {{#if this.length}}
+<div ><h3  style="color:#069">Users <small>{{count}}</small></h3> 
+
+    <div class="">
+        <div class="panel">
+            <table class="table table-striped onlySorting">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Last Logged In</th>
+                        <th>Reset Password</th>
+						<th>Delete User</th>
+                    </tr>
+                </thead>
+                <tbody id="all-domain-model-list" ></tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</div>
+<div  class=" past-invoicecollection"></div>
+<div  class=" past-chargecollection"></div>
+</div>
+<div class="col-md-3">
+<div  id="planinfo"></div>
+<div id="account" class="pull-left" style="float:left" > </div>
+</div>
+</div>
+</div>
+
+
+</script>
+
+<script id="plan-info-template" type="text/html">
+<div class="header"><a id="login_id"   href='https://{{description}}.agilecrm.com/login'  target='_blank'><strong><u>Login To Domain</u></strong></a></div>
+{{#if this.subscription}}
+<div class="">
+<p>
+	<strong><u>Your Current Plans</u>:</strong>
+</p>
+{{#each subscriptions.data}}
+
+{{#is_userPlan plan.id}}
+<div id="user_sub" class="panel wrapper">
+<p><strong><u>User Plan</u></strong></p>
+<p>
+     Start Date: <i class="text-muted fa fa-clock-o m-r-xs"></i><time class="time-ago text-muted" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time>     
+</p>
+{{#if this.currentPeriodEnd}}
+<p>
+    End Date:<i class="text-muted fa fa-clock-o m-r-xs"></i> <time class="text-muted time-ago" datetime="{{epochToHumanDate "" currentPeriodEnd}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" currentPeriodEnd}}</time>     
+</p>
+{{/if}}
+
+<p>
+Current Plan: &nbsp;&nbsp;{{plan.id}}
+</p>
+
+<p>
+Interval: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.interval}}
+</p>
+<p>
+Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{get_total_amount plan.amount quantity}} {{toUpperCase plan.currency}}
+</p>
+<p>
+Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
+</p>
+<p>
+	Users: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{quantity}}
+</p><br/><p>
+	<span style="width: auto;max-width: 40%;display: inline-block;"><a href="/#domainSubscribe/{{../../description}}"><strong><u> Change Plan</strong></u> </a> </span>
+	<span id="deleteUserPlanSpan" class="pull-right" style="text-overflow: ellipsis;overflow: hidden;height: auto;white-space: nowrap;max-width: 55%;display: inline-block;">
+	<a href="#" id="delete_userplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>Cancel Subscription</u></strong> </a></span>
+</p><br/><br/>
+</div>
+{{/is_userPlan}}
+{{/each}}
+
+
+
+{{#each subscriptions.data}}
+{{#is_emailPlan plan.id}}
+
+<div id="email_sub" class="panel wrapper">
+<p><strong><u>Email Plan</u></strong></p>
+
+
+<p>
+     Start Date: <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago text-muted" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time>     
+</p>
+
+{{#if this.currentPeriodEnd}}
+<p>
+    End Date: <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago text-muted" datetime="{{epochToHumanDate "" currentPeriodEnd}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" currentPeriodEnd}}</time>     
+</p>
+<p>
+	Email Limit: &nbsp;&nbsp;&nbsp;&nbsp;{{numeric_operation quantity 1000 "*"}}
+</p>
+{{/if}}
+<p>
+Current Plan: &nbsp;&nbsp;{{plan.id}}
+</p>
+<p>
+Interval: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.interval}}
+</p>
+<p>
+Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{get_total_amount plan.amount quantity}} {{toUpperCase plan.currency}}
+</p>
+<p>
+Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
+</p>
+<p>
+	<span class="pull-right" id="deleteEmailPlanSpan">
+	<a href="#" id="delete_emailplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>Cancel Subscription</u></strong> </a></span>
+</p>
+<br/><br/>
+</div>
+{{/is_emailPlan}}
+{{/each}}
+
+  {{else}}
+        <div ><strong>No active subscription</strong></div>
+</div>
+{{/if}}
+
+
+</script>
+
+<script id="email-stats-template" type="text/html">
+<div>
+					This Hour:{{numberWithCommas sent_hourly}}<br/>
+				This Week:{{numberWithCommas sent_weekly}}<br/>
+					This Month:{{numberWithCommas sent_monthly}}<br/>
+					Overall :{{numberWithCommas sent_total}}<br/>
+	</div>		
+
+</script>
+
+<script id="domain-info-template" type="text/html">
+<div style=" float:right;" >
+<legend>Account Stats</legend>
+<div class="stats-content panel" style="width:280px">
+<table class="table table-bordered">    
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>campaigns_count</td>
+            <td >{{compaign_count}}</td>
+        </tr>
+      
+ <tr>
+            <td>webrules_count</td>
+            <td>{{webrule_count}}</td>
+        </tr>
+        <tr>
+            <td>emails_count</td>
+            <td id="emailcount" ></td>
+        </tr>
+
+        <tr>
+            <td>Web-stats_count</td>
+            <td >{{webstats_count}}</td>
+        </tr>
+ <tr>
+            <td>Contacts_count</td>
+            <td >{{contact_count}}</td>
+        </tr>
+
+ <tr>
+            <td>deals_count</td>
+            <td >{{deals_count}}</td>
+        </tr>
+ <tr>
+            <td>documents_count</td>
+            <td >{{docs_count}}</td>
+        </tr>
+ <tr>
+            <td>events_count</td>
+            <td >{{events_count}}</td>
+        </tr>
+ <tr>
+            <td>triggers_count</td>
+            <td >{{triggers_count}}</td>
+        </tr>
+
+    </tbody>
+</table>
+</div>
+
+{{#if emailcount}}
+	{{#if_equals emailcount.status "paused"}}<div class="text-danger" id="unPauseMandrillDiv">Email sending on this domain is paused.<a href="#" class="btn" id="unpause_mandrill" domain={{emailcount.name}}>Resume</a></div><br/>{{/if_equals}}
+{{/if}}
+<a  align="center" data="" class="delete-namespace data btn btn-danger">Delete  Account</a>
+
+</div>
+</div>
+</script>

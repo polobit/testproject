@@ -1,0 +1,121 @@
+<script id="portlets-add-model-template" type="text/html">
+<form id="{{remove_spaces name}}_portlet">
+			<div class="show_screeshot"  
+						id="{{remove_spaces name}}">
+			<div class="panel wrapper b-a text-center">
+				<div class="text-md"><i class="portlets-modal-icon icon {{get_portlet_icon name}}"></i>				
+					<b>{{get_portlet_name name}}</b></div><br>
+				<div class="text-flow-ellipsis line-clamp line-clamp-3 m-b widget-text" style="height:60px"  rel="tooltip" title="{{get_portlet_description name}}">
+					{{get_portlet_description name}}
+					<!--<img class="show_screeshot v-top question-tag" id="{{remove_spaces name}}"
+							border="0" src="{{getS3ImagePath '/img/help.png'}}"/>-->
+				</div>
+
+			{{#if_equals "Mini Calendar" name}}
+			  {{#if is_added}}
+			  {{#isAdmin}}
+				<div class="btn-group  m-l-n-lg">
+  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet disabled"  portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    									<span class="caret"></span>
+    									<span class="sr-only">Toggle Dropdown</span>
+  									</a>
+  									<ul class="dropdown-menu" role="menu">
+    									<li><a class="btn btn-sm add_to_all"  portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add for all users</a></li>    									
+  									</ul>
+								</div>
+					{{else}}
+					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet disabled" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
+					  {{/isAdmin}}
+			{{else}}
+				{{#isAdmin}}
+					<div class="btn-group  m-l-n-lg">
+  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet"  portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    									<span class="caret"></span>
+    									<span class="sr-only">Toggle Dropdown</span>
+  									</a>
+  									<ul class="dropdown-menu" role="menu">
+    									<li><a class="btn btn-sm add_to_all"  portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add for all users</a></li>    									
+  									</ul>
+								</div>
+				{{else}}
+			 <div>	<a class="btn btn-sm btn-default add-widget add-portlet" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
+			{{/isAdmin}}
+			{{/if}}
+			{{else}}
+				{{#isAdmin}}
+					<div class="btn-group  m-l-n-lg">
+  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet"   portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    									<span class="caret"></span>
+    									<span class="sr-only">Toggle Dropdown</span>
+  									</a>
+  									<ul class="dropdown-menu" role="menu">
+    									<li><a class="btn btn-sm add_to_all"  portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add for all users</a></li>    									
+  									</ul>
+								</div>
+				{{else}}
+				<div>	<a class="btn btn-sm btn-default add-widget add-portlet" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
+				{{/isAdmin}}
+		{{/if_equals}}
+			
+		</div> 
+		</div>
+</form>
+</script>
+<script id="portlets-add-collection-template" type="text/html">
+<div class="bg-light lter b-b wrapper-md">
+<h1 class="m-n font-thin h3"><i class="icon-plus-sign">
+</i> Add Dashlet </h1>
+</div>
+<div class="wrapper-md p-t-none">
+<div class="row">
+	<div class="col-md-12">
+		<h4 class="m-b">Contacts</h4>
+		<div id="contacts" class="row"></div><br/>
+	</div>
+    </div>
+</div>
+</div>
+<div class="wrapper-md p-t-none">
+<div class="row">
+	<div class="col-md-12">
+		<h4 class="m-b">Deals</h4>
+		<div id="deals" class="row"></div><br/>
+    </div>
+</div>
+</div>
+<div class="wrapper-md p-t-none">
+<div class="row">
+	<div class="col-md-12">
+		<h4 class="m-b">Calendar</h4>
+		<div id="taksAndEvents" class="row"></div><br/>
+	</div>
+</div>
+</div>
+<div class="wrapper-md p-t-none">
+<div class="row">
+	<div class="col-md-12">
+		<h4 class="m-b">Activity</h4>
+		<div id="userActivity" class="row"></div><br/>
+	</div>
+</div>
+</div>
+<div class="wrapper-md p-t-none">
+<div class="row">
+	<div class="col-md-12">
+		<h4 class="m-b">RSS Feed</h4>
+		<div id="rssFeed" class="row"></div><br/>
+	</div>
+</div>
+</div>
+<div class="wrapper-md p-t-none">
+<div class="row">
+	<div class="col-md-12">
+		<h4 class="m-b">Account Info</h4>
+		<div id="accountInfo" class="row"></div><br/>
+	</div>
+</div>
+</div>
+</script>

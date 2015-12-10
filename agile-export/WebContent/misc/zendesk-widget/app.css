@@ -1,0 +1,170 @@
+
+* {
+	font-family: sans-serif;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.text-left {
+	text-align: left;
+}
+
+.text-right {
+	text-align: right;
+}
+.top-margin{
+	margin-top: 3px;
+}
+.apikey-input {
+	width: 98%;
+}
+
+.div-margin-top {
+	margin-top: 5px;
+}
+
+.show-more-container {
+	width: 50%;
+	display: inline-block;
+	float: right;
+	padding: 5px;
+	text-align: right;
+	background-color: #F8F8F8;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+.show-loader {
+	width: 66px;
+	height: 49px;
+	background-image: app-asset-url("loader-jar.gif");
+	background-repeat: no-repeat;
+}
+
+.show-more-loader {
+	display: inline-block;
+	float: left;
+	margin-top: 3px;
+}
+
+.show-popout {
+	width: 14px;
+	height: 13px;
+	margin-left: 5px;
+	display: inline-block;
+	background-image: app-asset-url("pop-out.png");
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+
+.chat-date {
+	font-size: 10px;
+	color: #999999;
+}
+
+.left-img-div {
+	display: inline-block;
+	vertical-align: text-top;
+}
+
+.display-block {
+	display: block;
+}
+
+.display-inline-block {
+	display: inline-block;
+}
+
+.text-wrap {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.left-div-text {
+	width: 11em;
+	font-size: 15px;
+	display: inline-block;
+}
+
+.agent-name-email {
+	width: 11em;
+	display: block;
+	font-size: 15px;
+}
+
+.box-size {
+	box-sizing: border-box;
+}
+
+.right-div-img {
+	padding: 4px;
+	vertical-align: top;
+}
+
+.show-more {
+	height: 30px;
+	background-color: #F8F8F8;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+table {
+	width: 100%;
+}
+
+a {
+	color: #444444;
+}
+
+td {
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+.tr-border {
+	border-bottom: 1px dotted #CCC;
+}
+
+td .show-popout {
+	display: none;
+}
+
+td.chat-session:hover .show-popout {
+	display: inline-block;
+}
+
+.position-abs {
+	position: absolute;
+	right: 5px;
+	bottom: 0px;
+}
+
+.chat-label {
+	display: inline-block;
+	margin: 5px;
+	margin-right: -15px;
+	margin-top: 26px;
+}
+
+.show-popout-hover {
+	position: relative;
+	width: 81px;
+	display: block;
+	height: 53px;
+}
+
+.div-hyperlinks {
+	cursor: pointer;
+	display: inline-block;
+	float: right;
+}
+
+.chat-history-text {
+	float: right;
+	font-size: 11px;
+	color: #000000;
+	font-weight: 100;
+}

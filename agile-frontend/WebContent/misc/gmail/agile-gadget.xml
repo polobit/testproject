@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<ModulePrefs title="Agile CRM" description="Built with Love for Small Businesses"
+		height="100" author="" author_email="" author_location="">
+
+		<!-- Declare feature dependencies. -->
+
+		<!-- This one is not specific to Gmail contextual gadgets. -->
+		<Require feature="dynamic-height" />
+		
+		<!-- The next feature, google.contentmatch, is required for all Gmail contextual 
+			gadgets. <Param> - specify one or more comma-separated extractor IDs in a 
+			param named "extractors". This line is overridden by the extractor ID in 
+			the manifest, but is still expected to be present. -->
+		<Require feature="google.contentmatch">
+			<Param name="extractors">
+				google.com:EmailAddressExtractor,289680308650:Agile
+			</Param>
+		</Require>
+
+		<!-- Single Sign on -->
+		<Require feature="opensocial-0.9" /> 
+		<!--<Require feature="osapi" />-->
+		<Require feature="setprefs" />
+		
+
+	</ModulePrefs>
+	
+	<UserPref name="agile_api_key" default_value="" datatype="hidden"/>
+	<UserPref name="agile_domain" default_value="" datatype="hidden"/>
+	<UserPref name="agile_email" default_value="" datatype="hidden"/>
+	<UserPref name="agile_popup_link" default_value="" datatype="hidden"/>
+	<UserPref name="agile_expires_at" default_value="" datatype="hidden"/>
+	
+	<!-- Define the content type and display location. The settings "html" and 
+		"card" are required for all Gmail contextual gadgets. -->
+	<Content type="html" view="card">
+    <![CDATA[
+
+   
+    <script src="//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js"></script>
+   <script src="https://mctest.agilecrm.com/stats/min/agile-min.js"></script>
+	
+	
+	<script type="text/javascript">
+	
+	var LIB_PATH = "https://googleapps.agilecrm.com/";
+	
+	function agile_download_scripts (callback)
+	{
+		 head.js("//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js", "//ajax.aspnetcdn.com/ajax/jquery.validate/1.7/jquery.validate.js", "https://googledrive.com/host/0B_7PZgY8S6g-eDFxY0pxMlR2aWc/gadget.min.js");
+		 head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.runtime.min.js", 'https://googledrive.com/host/0B_7PZgY8S6g-eDFxY0pxMlR2aWc/tpl.js');	
+		 head.js(LIB_PATH + "jscore/handlebars/handlebars-helpers.js");	
+			
+		 head.ready(callback);
+	}
+	
+	// Start of the gadget - downloads the scripts and shows init gadget
+	function agile_start()
+	{
+		gadgets.window.adjustHeight();
+		
+		agile_download_scripts(function(){
+			$(function()
+					{
+					agile_init_gadget();
+					gadgets.window.adjustHeight();
+					});
+		});
+	}
+
+	function open_popup()
+	{
+		// Open the popup
+		var return_url = "gadget.jsp?o=" + "open_social_id"; 
+		var child = window.open("https://our.agilecrm.com/oauth2?return_url=" + encodeURIComponent(return_url), 'OpenID', 'height=400,width=400');
+	}
+
+    // Call init function to initialize and display tabs.
+   gadgets.util.registerOnLoadHandler(agile_start);
+    </script>
+    	
+	<div id="agile_content" >			
+		<img id="loading" width="66px" height="49px" style="padding-right:5px" src= "https://d13yacurqjgara.cloudfront.net/users/4613/screenshots/911982/jar-loading.gif"></img>		
+	</div>
+	
+    <link media="screen" rel="stylesheet" type="text/css" href="https://my.agilecrm.com/css/bootstrap-pink.min.css" /> 
+	<link rel="stylesheet" type="text/css" href="https://my.agilecrm.com/css/lib/datepicker-min.css" /> 
+	<!-- Fire to work -->
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+	<style type="text/css">
+	#agile-content
+	{
+		font-family: 'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+		font-size: 13px;
+		line-height: 18px;
+		color: #333333;
+	}
+	</style>
+	
+	
+  	
+  ]]>
+</Content>
+</Module>

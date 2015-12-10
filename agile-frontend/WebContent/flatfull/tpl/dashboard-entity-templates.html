@@ -1,0 +1,292 @@
+<!-- Opportunity template -->
+<script id="dashboard-opportunities-collection-template" type="text/html">
+<div class="m-l-none">
+<h2 class="m-b-sm" style="border-bottom:1px solid #f5f5f5;">Ongoing <small>Deals</small></h2>
+{{#if this.length}}
+<table class="table table-striped no-sorting agile-ellipsis-dynamic">
+<colgroup>
+	<col width="26%">
+	<col width="158px">
+	<col width="13%">
+	<col width="15%">
+	<col width="15%">
+</colgroup>          
+          			<thead>
+                        <tr style="background-color:#EDF3FE;">
+                            <th>Opportunity</th>
+                            <th>Related To</th>
+                            <th>Value</th>
+                            <th>Milestone</th>
+                            <th>Close Date</th>
+                  </tr>
+                    </thead>
+              <tbody id="dashboard-opportunities-model-list" class="c-p">
+          </tbody>
+	</table>
+{{else}}
+{{set_up_dashboard_padcontent "deals"}}
+
+{{/if}}
+</div>
+</script>
+
+<script id="dashboard-opportunities-model-template" type="text/html">
+<td data="{{id}}" class="data">
+    <div class="h-auto">
+		<b>{{name}}</b>
+    </div>
+</td>
+<td>
+	<div class="h-auto inline-block">
+		{{#each contacts}}
+        	{{#if_contact_type "PERSON"}}
+        		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital inline thumb" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        	{{/if_contact_type}}
+			{{#if_contact_type "COMPANY"}}
+        		<a href="#company/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        	{{/if_contact_type}}
+       {{/each}}
+	</div>{{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
+</td>
+<td><div class="h-auto">{{currencySymbol}}{{numberWithCommas expected_value}}</div></td>
+<td><div class="h-auto">{{milestone}}<br />({{probability}}%) </div></td>
+<td class="text-muted"><div class="h-auto"><i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time b-b-dotted" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></div></td>
+</script>
+
+<!-- Notes Template -->
+<script id="dashboard-notes-collection-template" type="text/html">
+{{#if this.length}}
+<table class="table">
+    <thead>
+        <tr>
+            <th>subject</th>
+            <th>description</th>
+        </tr>
+    </thead>
+    <tbody id="dashboard-notes-model-list">
+    </tbody>
+</table>
+{{/if}}
+</script>
+
+<script id="dashboard-notes-model-template" type="text/html">
+	<td>{{subject}} </td>
+	<td>{{note}}</td>
+<br />
+</script>
+
+<!-- Tasks Template -->
+<script id="dashboard1-tasks-collection-template" type="text/html">
+<h2 class="m-b-sm" style="border-bottom:1px solid #f5f5f5;">Upcoming <small>Tasks</small></h2>
+{{#if this.length}}
+<div class="m-l-none">
+    <div class="data-container">
+        <table class="table table-striped no-sorting agile-ellipsis-dynamic" url="core/api/tasks/bulk">
+				<colgroup>
+					<col width="33%">
+				 	<col width="13%">
+				 	<col width="13%">
+					<col width="13%">
+				 	<col width="26%">
+				</colgroup>
+            <thead>
+                <tr style="background-color:#EDF3FE;">
+                    <th>Task Name</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Due Date</th>
+                    <th>Related To</th>
+                </tr>
+            </thead>
+            <tbody id="dashboard1-tasks-model-list" class="c-p">
+            </tbody>
+        </table>
+    </div>
+</div>
+{{else}}
+{{set_up_dashboard_padcontent "tasks"}}
+{{/if}}
+</script>
+
+<script id="dashboard1-tasks-model-template" type="text/html">
+<td class="data" data="{{id}}"><div class="h-auto">{{#is_link subject}}<b class="activate-link">{{else}}<b>{{/is_link}}{{safe_string subject}}</b></div></td>
+<td><div style="height: 50px;"><span class="label">{{task_property type}}</span></div></td>
+<td><div><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></div></td>
+<td class="text-muted"><div><i class="fa fa-clock-o m-r-xs"></i><time class="b-b-dotted task-due-time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</time></div></td>
+<td>
+	<div class="h-auto inline-block">
+		{{#each contacts}} 
+			{{#if_contact_type "PERSON"}}
+			 	<a href="#contact/{{id}}" class="activate-link">
+				<img class="thumbnail img-inital inline thumb" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+			{{/if_contact_type}}
+			{{#if_contact_type "COMPANY"}} 
+				<a href="#company/{{id}}" class="activate-link">
+				<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties " name"}}"/></a>
+			{{/if_contact_type}}
+		{{/each}}
+	</div> {{#if_greater this.contacts.length "3"}}<span class="m-r-n">...</span>{{/if_greater}}
+</td>
+</script>
+
+
+<!-- Contacts Template -->
+<script id="dashboard-contacts-model-template" type="text/html">
+	<td class="data" data="{{id}}">
+	<div class="row m-l-xs">
+    	<div class="inline p-r-xs h-auto">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="thumbnail img-inital inline thumb" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px"/>
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
+        	{{/if_contact_type}}
+    	</div>
+    	<div class="h-auto inline-block v-top text-ellipsis" style="width:70%">
+        	{{#if_contact_type "PERSON"}}
+        		<b>	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </b>
+        		<br />
+        		{{getPropertyValue properties "email"}}
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<b>{{getPropertyValue properties "name"}}</b></br>
+        		{{getPropertyValue properties "url"}}
+        	{{/if_contact_type}}
+	</div>
+	</div>
+	</td>
+	<td><div class="v-top inline-block word-break">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td> 
+<!-- <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;"> --> 
+	 <div class="ellipsis-multiline word-break-keep l-h"> 	
+		{{#each tags}}
+	    	<span class="label">{{this}}</span>	
+		{{/each}}
+	</div>
+	
+	</td>
+	<td><div>{{lead_score}}</div></td>
+</script>
+
+<script id="dashboard-contacts-collection-template" type="text/html">
+<div class="m-l-none">
+<h2 class="m-b-sm" style="border-bottom:1px solid #f5f5f5;">Recently Viewed  <small>Contacts</small></h2>
+{{#if this.length}}
+		<div class="data">
+			<div class="data-container">
+			<table id="contacts-table" class="table table-striped agile-ellipsis-dynamic no-sorting word-break-all w-full"
+				url="core/api/contacts/bulk" style="overflow: fixed;">
+				<colgroup>
+				<col width="41%">
+				<col width="22%">
+				<col width="24%">
+				<col width="14%">
+				</colgroup>
+				<thead>
+					<tr style="background-color:#EDF3FE;">
+						<th>Name</th>
+						<th>Work</th>
+						<th>Tags</th>
+						<th>Lead Score</th>
+					</tr>
+				</thead>
+				<tbody id="dashboard-contacts-model-list" class="contacts-model-list c-p">
+				</tbody>
+			</table>
+			</div>
+			</div>
+	</div>
+{{else}}
+{{set_up_dashboard_padcontent "contacts"}}
+{{/if}}
+</div>
+</script>
+
+<!-- Workflows template-->
+<script id="dashboard-workflows-model-template" type="text/html">
+	<td class="hide">{{id}}</td>
+	<td><a href="#workflow/{{id}}">{{name}}</a></td>
+	<td>{{creatorName}}</td>
+	<td><a href="#workflows/logs/{{id}}">View Logs</a></td>
+    <td><a href="#email-reports/{{id}}">View Stats</a></td>
+<br />
+</script>
+
+<script id="dashboard-workflows-collection-template" type="text/html">
+{{#if this.length}}
+<div class="m-l-none">
+<h2 class="m-b-sm" style="border-bottom:1px solid #f5f5f5;">Workflows</h2>
+                <table class="table table-striped onlySorting">
+                    <thead>
+                       <tr style="background-color:#EDF3FE;">
+                            <th class="hide">Id</th>
+                            <th>Name</th>
+                            <th>Creator</th>
+                            <th>Logs</th>
+                            <th>Stats</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashboard-workflows-model-list"> </tbody>
+                </table>
+</div>
+{{else}}
+{{set_up_dashboard_padcontent "workflows"}}
+{{/if}}
+</script>
+
+<script id="dashboard-campaign-logs-collection-template" type="text/html">
+<div class="m-l-none">
+<h2 class="m-b-sm" style="border-bottom:1px solid #f5f5f5;">Recent Campaign <small>Logs
+</small></h2>
+{{#if this.length}}
+    <div class="data">
+        <div class="data-container">
+            <table class="table table-striped agile-ellipsis-dynamic no-sorting" id="logs-table" url="core/api/campaigns/logs/bulk">
+				<colgroup><col width="35%"><col width="20%"><col width="12%"><col width="20%"><col width="13%"></colgroup>
+                <thead>
+                     <tr style="background-color:#EDF3FE;">
+                        <th>Contact</th>
+                        <th>Campaign</th>
+                        <th>Type</th>
+                        <th>Message</th>
+                        <th>Time</th>                    
+                    </tr>
+                </thead>
+                <tbody id="dashboard-campaign-logs-model-list" route="contact/">
+                </tbody>
+            </table>
+        </div>
+    </div>
+{{else}}
+{{set_up_dashboard_padcontent "workflows"}}
+{{/if}}
+</div>
+</script>
+
+<script id="dashboard-campaign-logs-model-template" type="text/html">
+<input name="id" class="campaign" type="hidden" value="{{campaign_id}}" />
+<td class="data" data={{subscriber_id}} style="width:20em;">
+	<div class="p-r-sm inline h-auto">
+    	<img class="thumbnail img-inital inline thumb" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl contact.properties 40}}" width="40px" height="40px" />
+    </div>
+ 	<div class="h-auto inline-block v-top text-ellipsis" style="width:12em;">
+    	<b>	{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b>
+        <br />
+        	{{getPropertyValue contact.properties "email"}}
+    </div>
+    <div style="float:right"></div>
+</td>
+<td>{{campaign_name}}</td>
+<td>{{titleFromEnums log_type}}</td>
+<td class="word-break-all" style="width: 30%;">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}</td>
+<td><small class="edit-hover text-muted"> 
+		<i class="fa fa-clock-o m-r-xs"></i>
+		<time class="log-created-time b-b-dotted" datetime="{{epochToHumanDate "" time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+	</small></td>
+<br/>
+</script>

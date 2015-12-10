@@ -1,0 +1,302 @@
+body {
+	padding-top: 120px;
+	/* 60px to make the container go all the way to the bottom of the topbar */
+	padding-bottom: 10px;
+	position: relative;
+}
+
+@media ( max-width : 979px) {
+	body {
+		padding-top: 0px;
+	}
+}
+
+#components {
+	min-height: 500px;
+}
+
+#target fieldset {
+	border: 1px solid #ccc;
+	min-height: 600px;
+	padding: 5px;
+	padding-bottom: 30px;
+}
+
+.component {
+	cursor: pointer;
+}
+
+input {
+	cursor: pointer;
+}
+
+textarea {
+	resize: vertical;
+}
+
+.popover .control-group {
+	cursor: default;
+}
+
+.popover input {
+	cursor: text;
+}
+
+.temp {
+	width: 100%;
+	height: 100%;
+	background: transparent;
+	position: absolute;
+	z-index: 999999;
+	top: 0;
+	overflow-x: hidden;
+	left: 0;
+}
+
+.temp form {
+	padding: 8px 4px;
+	border: 1px dotted #ccc;
+	position: absolute;
+	background: white;
+	box-shadow: 0px 0px 30px #999;
+	-webkit-transition: -webkit-transform 0.1s ease-out;
+	overflow: hidden;
+}
+
+#render {
+	min-height: 454px;
+	font-family: monospace;
+}
+
+#form-save {
+	float: right;
+	margin-top: -40px;
+}
+
+/* Popovers now are appended to their parent rather
+than to the body/main document as they once were.
+We need to over-ride some inherited stuff.. */
+form .popover .controls {
+	margin-left: 0;
+}
+
+form .popover .control-label {
+	text-align: left;
+}
+
+form .popover form {
+	width: 224px;
+}
+
+.popover-content form .btn {
+	margin-right: 10px
+}
+
+.target:after {
+	float: left;
+	content: " ";
+	height: 77px;
+	margin-top: 3px;
+	background: #f0f0f0;
+	width: 100%;
+	border: 1px dashed #ccc;
+}
+
+#target,#input,#radioscheckboxes,#select,#buttons {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+#target fieldset {
+	width: 100%;
+	overflow: hidden;
+}
+
+.nav>li>a {
+	padding: 8px 13px;
+}
+
+.tab-pane {
+	padding-top: 20px;
+}
+
+.popover {
+	z-index: 2000;
+}
+
+.required-control .control-label:after {
+	content: " *";
+	color: #fc4c5e;
+}
+
+/* snippet css included in plugin */
+.form-view {
+	font-family: Tahoma, Geneva, sans-serif;
+	margin: 0 auto;
+	width: 450px;
+}
+
+.agile-group {
+	margin-bottom: 15px;
+}
+
+.agile-label {
+	float: left;
+	overflow: hidden;
+	padding: 7px 25px 0 0;
+	text-align: right;
+	word-wrap: break-word;
+	width: 109px;
+	font-size: 15px;
+}
+
+.agile-group label {
+	font-weight: normal;
+}
+
+.agile-label::first-letter {
+	text-transform: capitalize;
+}
+
+.agile-field {
+	display: inline-block;
+}
+
+.agile-field-small {
+	width: 100px;
+}
+
+.agile-field-medium {
+	width: 150px;
+}
+
+.agile-field-large {
+	width: 200px;
+}
+
+.agile-field-xlarge {
+	width: 250px;
+}
+
+.agile-height-small {
+	padding: 5px 10px !important;
+}
+
+.agile-height-default {
+	padding: 6px 12px !important;
+}
+
+.agile-height-large {
+	padding: 10px 16px !important;
+}
+
+.agile-field input[type="text"], .agile-field input[type="email"] {
+	padding: 6px 12px;
+}
+
+.agile-field select {
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	width: 100%;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+}
+
+.agile-input-group {
+	border-collapse: separate;
+	display: table;
+	position: relative;
+}
+
+.agile-input-group input[type="text"], .agile-input-group input[type="email"] {
+	display: table-cell;
+}
+
+.agile-input-group input[type="text"]:first-child, .agile-input-group input[type="email"]:first-child, .agile-input-group .agile-group-addon:first-child {
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.agile-input-group input[type="text"]:last-child, .agile-input-group input[type="email"]:last-child, .agile-input-group .agile-group-addon:last-child {
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+}
+
+.agile-group-addon:first-child, .agile-input-group input[type="text"]:first-child, .agile-input-group input[type="email"]:first-child {
+	border-right: 0 none;
+}
+
+.agile-group-addon {
+	background: none repeat scroll 0 0 #eee;
+	border: 1px solid #ccc;
+	display: table-cell;
+	font-size: 14px;
+	padding: 3px 12px;
+	text-align: center;
+}
+
+.agile-group-addon-append {
+	border-bottom-right-radius: 4px;
+	border-top-right-radius: 4px;
+}
+
+.agile-group-addon-prepend {
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+input[type="text"], input[type="email"], textarea, input[type="password"] {
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	color: #555;
+	font-size: 14px;
+	line-height: 1.42857;
+	transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s	ease-in-out 0s;
+	width: 100%;
+	margin: 0;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, textarea:focus, input[type="password"]:focus {
+	border: 1px solid #66afe9;
+}
+
+.agile-btn-red {
+	background: none repeat scroll 0 0 #ff604f !important;
+	margin-left: 10px;
+}
+
+.help-block {
+	color: #999;
+	margin: 0;
+	font-size: 14px;
+	text-transform: capitalize;
+}
+
+legend {
+	border-bottom: 1px solid rgb(238, 238, 238);
+	margin-bottom: 18px;
+	padding-bottom: 6px;
+	width: 100%;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+fieldset {
+	border: none;
+}
+
+.agile-custom-clear {
+	clear: both;
+}
+
+#agile-error-msg {
+	position: relative;
+	top: 2px;
+	left: 8px;
+	color: red;
+	font-size: 12px;
+}

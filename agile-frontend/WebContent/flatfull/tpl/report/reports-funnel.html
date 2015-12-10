@@ -1,0 +1,53 @@
+<script id="report-funnel-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        
+        <div class="row">
+        <div class="col-md-4 col-sm-6">
+            <h3 class="font-thin h3">Funnel Reports <small class="no-wrap m-l-xs" id="reports-funnel-tags"></small>
+			</h3>
+
+			<div id="plan-limit-error" class="p-t-4" style="display:none"></div>
+			</div>
+			<div class="col-md-8 col-sm-12">
+			<div class="pull-right">               
+              <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
+			border:1px solid #cfdadd;height:34px;padding:5px;">
+				<i class="icon-calendar icon-large"></i>
+                <span id="range">{{date-range "today" "-6"}}</span>
+              </div>
+		<div class="pull-right" style="padding:0px 8px 10px">
+				<select name="frequency" id="frequency" class="required form-control" style="width:100px">
+					<option value="daily">Daily</option>
+					<option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+			</div>
+			<div class="pull-right" style="padding:0px 8px 10px">
+				<select name="filter" id="filter" class="required form-control">
+					<option value="ALL">All</option>
+                </select>
+			</div>
+		</div>
+		</div>
+    </div>
+        
+
+</div>
+</div>
+</div>
+<div>	
+	<!-- Funnel Reports -->
+	<div id="email-reports" class="wrapper-md">	
+		<div class="row p-md">
+			<div id="funnel-chart" class="col-md-12 bg-white"></div>
+		</div>
+		<hr>
+	</div>
+	<!-- End of Email Reports -->  
+
+   </div>
+</div>
+</script>

@@ -1,0 +1,52 @@
+<script id="contact-filter-list-collection-template" type="text/html">
+<div class="btn-group"  id="filters-tour-step">
+	<button class="btn btn-default btn-sm filter-dropdown "><i class="icon-filter" style="margin-right:3px"></i></button>
+	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+    	<span class="caret"></span>
+  	</button>
+	<ul id = "contact-filter-list-model-list" class="pull-right dropdown-menu">
+		<li>
+			<a href="#contacts" class="default_filter">Contacts</a>
+		</li>
+		<li class="divider"></li>
+		<li>
+			<a href='#contact-filters'>Add/Edit Filter</a>
+		</li>
+		<li class="divider"></li>
+		<!--<li><a class="filter" id="system-RECENT" data="Recent" href="#contact-filter/system-RECENT">Recent </a></li>-->
+		<li><a class="filter" id="system-CONTACTS"  data="My Contacts" href="#contact-filter/system-CONTACTS">My Contacts</a></li>
+		<!--<li><a class="filter" id="system-LEADS"  data="Leads" href="#contact-filter/system-LEADS">Leads</a></li>-->
+	</ul>
+</div>
+</script>
+
+<script id="contact-filter-list-model-template" type="text/html">
+<a id='{{id}}' class="filter" data={{name}} filter_type="{{contact_type}}" href="#contact-filter/{{id}}">{{name}}</a>
+</script>
+
+<script id="company-filter-list-collection-template" type="text/html">
+<div class="btn-group"  id="filters-tour-step">
+	<button class="btn btn-default btn-sm filter-dropdown "><i class="icon-filter" style="margin-right:3px"></i></button>
+	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+    	<span class="caret"></span>
+  	</button>
+	<ul id = "company-filter-list-model-list" class="pull-right dropdown-menu">
+		<li>
+			<a href="#companies" id="companies-filter">Companies</a>
+		</li>
+		<li class="divider"></li>
+		<li>
+			<a href='#contact-filters'>Add/Edit Filter</a>
+		</li>
+		<li class="divider"></li>
+		<!--<li><a class="filter" id="system-RECENT" data="Recent" href="#contact-filter/system-RECENT">Recent </a></li>-->
+		<!--<li><a class="filter" id="system-CONTACTS"  data="My Contacts" href="#contact-filter/system-CONTACTS">My Contacts</a></li>-->
+		<!--<li><a class="filter" id="system-LEADS"  data="Leads" href="#contact-filter/system-LEADS">Leads</a></li>-->
+	</ul>
+</div>
+</script>
+
+<script id="company-filter-list-model-template" type="text/html">
+<a id='{{id}}' class="company_static_filter" data={{name}} filter_type="{{contact_type}}" href="#contact-filter/{{id}}">{{name}}</a>
+</script>
+

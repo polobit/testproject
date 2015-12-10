@@ -1,0 +1,167 @@
+<html lang="en">
+   <head>
+      <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+      <title>Popup</title>
+      <link
+         href="https://fonts.googleapis.com/css?family=Lobster:400|PT+Sans:400"
+         rel="stylesheet" type="text/css" />
+      <style>
+         body {
+         background: #333;
+         width: 379px;
+         height: 554px;
+         }
+         #popup {
+         background: #d4d4d4
+         url('https://s3.amazonaws.com/PopupTemplates/form/valentine/images/bg.png')
+         no-repeat;
+         border: 3px solid rgba(0, 0, 0, .5);
+         -webkit-border-radius: 8px;
+         -moz-border-radius: 8px;
+         border-radius: 8px;
+         box-shadow: inset 1px 1px 1px rgba(255, 255, 255, .5);
+         background-clip: content-box;
+         color: #787878 !important;
+         font: 18px/24px 'PT Sans', Arial, sans-serif !important;
+         letter-spacing: 0;
+         position: fixed;
+         text-shadow: 1px 1px 0 #F2F2F2;
+         width: 373px;
+         }
+         #popup-body {
+         padding: 10px 30px 0px;
+         }
+         #popup-header {
+         color: #e36bbf !important;
+         font: 28px/132% 'Lobster', Arial, sans-serif !important;
+         margin-bottom: 10px;
+         text-align: center;
+         text-shadow: -1px -1px 0 #A96A96, 1px 1px 0 #FFFFFF;
+         }
+         #popup-content {
+         position: relative;
+         }
+         #popup-content p {
+         margin: 0 0 5px;
+         }
+         #popup-content ul,#popup-content ul li {
+         display: block;
+         list-style: none;
+         margin: 0;
+         padding: 0;
+         }
+         #popup-content ul li {
+         background:
+         url('https://s3.amazonaws.com/PopupTemplates/form/valentine/images/bullet.png')
+         no-repeat 0 2px;
+         padding: 2px 0 2px 36px;
+         }
+         #popup-form {
+         margin-top: 20px;
+         }
+         #popup-form p {
+         margin-bottom: 5px;
+         }
+         #popup-form p:last-child {
+         margin: -10px -16px 0;
+         }
+         #popup-form input.popup-text {
+         background:
+         url('https://s3.amazonaws.com/PopupTemplates/form/valentine/images/text.png');
+         border: 0;
+         color: #787878 !important;
+         font: bold 25px/35px 'PT Sans', Arial, sans-serif !important;
+         margin: 0;
+         outline: 0;
+         padding: 11px 20px;
+         width: 303px;
+         }
+         #popup-form input.popup-text.popup-text-error {
+         color: #c00 !important;
+         }
+         #popup-form input.popup-text:focus {
+         border-color: #999;
+         }
+         #popup-form  :focus::-webkit-input-placeholder {
+         color: transparent;
+         }
+         #popup-form  :focus::-moz-placeholder {
+         color: transparent;
+         }
+         #popup-form  :focus:-moz-placeholder {
+         color: transparent;
+         }
+         #popup-form input.popup-button {
+         background:
+         url('https://s3.amazonaws.com/PopupTemplates/form/valentine/images/button.png');
+         border: 0;
+         color: #fff !important;
+         cursor: pointer;
+         font: bold 27px/27px 'Lobster', Arial, sans-serif !important;
+         padding: 38px 32px 26px;
+         width: 335px;
+         }
+      </style>
+   </head>
+   <body>
+      <div id="popup">
+         <div id="popup-body">
+            <div id="popup-header">You will love Agile as much as we did
+               building
+            </div>
+            <div id="popup-content">
+               <p>Agile has all you need - contact management, marketing
+                  automation, web analytics, telephony, lead scoring, newsletter
+                  management, 2-way emails, and lots more.
+               </p>
+               <ul>
+                  <li>Right popup at the right time</li>
+                  <li>Show popups after a certain time</li>
+                  <li>Exit Intent to prevent visitors</li>
+               </ul>
+               <form id="popup-form">
+                  <p>
+                     <input type="text" class="popup-text" agile-field="first_name"
+                        name="name" placeholder="Name" />
+                  </p>
+                  <p>
+                     <input type="text" class="popup-text" agile-field="email"
+                        name="email" placeholder="Email" />
+                  </p>
+                  <p>
+                     <input type="submit" class="popup-button" value="Sign-Up!" />
+                  </p>
+               </form>
+            </div>
+         </div>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/additional-methods.min.js"></script>
+      <script type="text/javascript">
+      window.parent._agile_load_fields();
+      jQuery.validator.setDefaults({
+          debug: true,
+          success: 'valid'
+      });
+      $('#popup-form').validate({
+          rules: {
+              name: 'required',
+              email: {
+                  required: true,
+                  email: true
+              }
+          },
+          submitHandler: function (form) {
+              window.parent._agile_save_form(true, window.parent._agile.set_email(document.getElementsByName('email')[0].value));
+              try{
+            	  $(form).ajaxSubmit();
+              }
+              catch(e){
+            	  window.parent._agile_close_modal()
+              }
+          }
+      })
+      </script>
+   </body>
+</html>

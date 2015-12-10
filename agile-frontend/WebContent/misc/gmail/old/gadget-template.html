@@ -1,0 +1,623 @@
+
+<script id="gadget-contact-list-template" type="text/html">
+	{{#if id}}
+<!-- conteact exist -->			
+		<div class="contact-minified row-fluid">
+			<div style="max-width:95%; display:inline-block;">
+				<div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+					<a class="gadget-show-contact display-toggle" style="cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;"><i class="icon-expand-alt" style="text-decoration:none; margin-right:5px;"></i><span>Show</span></a><span title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}} ({{email}})" style="cursor:default;"> {{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}} ({{email}}) </span>
+				</div>
+			</div>
+		</div>
+
+		<div class="row-fluid show-contact-summary" style="display:none; margin-top:10px;"> 
+  			
+		</div>
+
+   		<div class="option-tabs row-fluid" style="display:none;">
+
+		</div>
+	{{else}}
+<!--contact not exist, add contact -->
+		<div class="agile-no-contact row-fluid">	
+			<div class="contact-list-width" style="max-width:75%; display:inline-block;">
+				<div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+					{{#if fname}}
+						<a class="gadget-add-contact" style="cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;"><i class="icon-plus" style="text-decoration:none; margin-right:5px;"></i><span>Add</span></a><span title="{{fname}} {{lname}} ({{email}})" style="cursor:default;"> {{fname}} {{lname}} ({{email}})</span> <span style="margin-left:10px;">in Agile Contacts</span></span>
+					{{else}}
+						<a class="gadget-add-contact" style="cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;"><i class="icon-plus" style="text-decoration:none; margin-right:5px;"></i><span>Add</span></a><span title="{{email}}" style="cursor:default;"> {{email}} <span style="margin-left:10px;">in Agile Contacts</span></span>
+					{{/if}}
+				</div>
+			</div>
+			<i class="contact-search-status" style="color:indianred; margin-left:20px; position:absolute;">Contact not found</i>
+		</div>
+      	<div class="show-add-contact-form row-fluid" style="display:none;">
+			
+		</div>
+	{{/if}}
+</script>
+
+<script id="gadget-add-contact-template" type="text/html">
+<form class="gadget-contact-form form-horizontal" name="gadget_contact_form" method="post" style="margin:0px;">
+	<fieldset>
+		<div class="control-group" style="margin:0px; padding-top:10px; border-top:1px solid #e5e5e5;">
+			<label class="control-label" for="fname"><b>First Name</b><span class="field_req">*</span></label>
+  			<div class="controls">
+				{{#if fname}}
+	   				<input name="first_name" id="fname" placeholder="First name" value="{{fname}}" type="text" class="required" />
+				{{else}}
+					<input name="first_name" id="fname" placeholder="First name" type="text" class="required" />
+				{{/if}}
+			</div>
+		</div>
+		
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+    		<label class="control-label" for="lname"><b>Last Name</b><span class="field_req">*</span></label>
+			<div class="controls">
+	    			{{#if lname}}
+		    			<input name="last_name" id="lname" placeholder="Last name" value="{{lname}}" class="required" type="text" />
+					{{else}}
+						<input name="last_name" id="lname" placeholder="Last name" class="required" type="text" />
+					{{/if}}	
+			</div>
+		</div>
+
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+			<label class="control-label" for="email"><b>Email</b></label>
+			<div class="controls">
+				 <input name="email" id="email" placeholder="Email" value="{{email}}" type="text" />
+			</div>
+		</div>
+  		
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+       		<label class="control-label" for="tags"><b>Tags</b></label>
+			<div class="controls">
+				 <input name="tags" id="tags" placeholder="Tags" type="text" />
+			</div>
+    	</div>
+	
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+			<label class="control-label" for="company"><b>Company</b></label>
+			<div class="controls">
+				<input name="company" id="company" placeholder="Company" type="text" />
+			</div>
+  		</div>
+
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+       		<label class="control-label" for="title"><b>Job Description</b></label>
+			<div class="controls">
+				<input name="title" id="title" placeholder="Job title" type="text" />
+			</div>
+	  	</div>
+	</div>
+	<div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">
+		<a type="submit" class="btn btn-primary gadget-contact-validate" style="padding:2px 6px 2px;">Add Contact</a>
+		<a class="cancel btn" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
+		<img class="contact-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+		<i class="contact-add-status" style="color:indianred; margin-left:10px; display:none;">Contact not found.</i>
+	</div>
+</fieldset>
+</form>	
+</script>
+
+<script id="gadget-contact-summary-template" type="text/html">
+	
+		
+<!-- 1st coloum (conatct image) -->
+				<div class="span1" style="min-width:65px;">
+					<div class="thumbnails">
+	   					<div class="span12">
+    						<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" />
+		   				</div>
+					</div>
+    			</div>
+
+<!-- 2nd coloum (conatct details) -->
+				<div class="span8" style="margin-left:0;">
+<!-- First row (Name) - Starts -->
+					<div class="row-fluid">
+						<div style="display:inline-block; max-width: 16em; vertical-align:middle;">
+							<div style="height: 20px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+								<b>
+									<font size="4" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</font>
+								</b>
+							</div>
+						</div>
+						<a target="_blank" href="{{ac_path}}#contact/{{id}}" style="margin-left:6px; text-decoration:none; vertical-align:middle;"><i class="icon-external-link" title="Show contact in Agile"></i></a><br/>
+					</div>
+<!-- First row (Name) - Ends -->
+
+<!-- Second row (Title, Company) - Starts -->					
+					<div class="row-fluid">
+					{{#if_propertyName "title"}}
+						{{value}}
+					{{/if_propertyName}}
+					{{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}
+					{{#if_propertyName "company"}}
+						{{value}}
+					{{/if_propertyName}}
+					</div>
+<!-- Second row (Title, Company) - Ends -->
+
+<!-- Third row (tags) - Starts -->					
+					<div class="row-fluid">
+						<div class="span11">	 		
+						<div class="add-tag">
+							<div style="padding-top:4px;">
+								<ul id="added_tags_ul" class="tagsinput">
+									<li class="tag" style="display: none; padding:1px 4px;">
+											<span>
+											<span class="anchor tag-name" style="float:left; cursor:default;">lead</span>
+											<a class="close remove-tag remove-tag-icon" style="float:left; line-height:16px;" title="Remove Tag">&times;</a>
+										</span>
+									</li> 
+								</ul>
+								<div style="display: inline-block; vertical-align:top;" >
+										<form id="add_tags_form" name="add_tags_form" method="post" style="display: none; margin-bottom: 0px; margin-top:1px;">
+										<div style="margin-bottom:0px;">
+											<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}'/>
+											<input class="tags-typeahead ignore-comma-keydown input-small" name="tags" type="text" id="tags" style="margin: 0px;" placeholder="Enter tag" autocomplete="off">
+											<a type="submit" class="btn" id="contact_add_tags" style="margin-left: 10px; padding: 1px 10px;">Add</a>
+										</div>
+									</form>
+									<img class="tag-waiting" style="display:none; width:16px; margin-top:6px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+									<i id="add_tags" class="icon-plus toggle-tag" style="cursor:pointer; margin-top:4px; display:block;" title="Add Tag"></i>
+								</div>
+							</div>
+						</div>
+						</div>
+					</div>
+<!-- Third row (Tags) - End -->
+				</div>
+
+<!-- 3rd coloum -->				
+				<div class="span3 contact-col-3" style="margin-left:0; position:absolute; right:28;">
+					<div class="row-fluid">
+						<div class="span12" style="min-width:95px;">
+
+							<div class="row-fluid unselectable score-scope" unselectable="on" onselectstart="return false">
+								<div class="pull-right">
+									<ul style="margin:0 2px 10px 0; min-width:90px; list-style-type:none; width:auto; height:26px; display:table; border:1px solid rgba(0, 0, 0, 0.15); box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05); border-radius:3px;">
+										<li style="line-height:26px;">
+											<div style="display:inline; padding-right:2px; margin-right: 4px; margin-left: 5px; border-right: 1px dotted rgba(0, 0, 0, 0.20);">
+												<span style="font-weight:bold; font-size:13px; cursor:default;">Score</span>
+											</div>
+											<div style="display:inline;">
+												{{#if lead_score}}
+													<div class="score-value" style="display:inline-block; font-size:15px; margin-right:2px; vertical-align:middle; cursor:default; min-width:16px; width:16px; text-align:center;">
+														{{lead_score}}
+													</div>
+												{{else}}
+													<div class="score-value" style="display:inline-block; font-size:15px; margin-right:2px; vertical-align:middle; cursor:default; min-width:16px; width:16px; text-align:center;">
+														0
+													</div>
+												{{/if}}
+												<ul style="margin:0; list-style-type:none; display:inline-block; vertical-align:middle;">
+													<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}'/>
+													<li style="line-height:5px;"><i class="icon-sort-up add-score" style="font-size:12px; cursor:pointer;" title="Add Score"></i></li>
+													<li style="line-height:4px;"><i class="icon-sort-down subtract-score" style="font-size:12px; cursor:pointer;" title="Subtract Score"></i></li>
+												</ul>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+
+							<div class="row-fluid">
+								<div class="btn-group row-fluid" style="display:inline-block; min-width:72px; margin-bottom:10px;">
+									<div class="pull-right">
+										<a class="btn dropdown-toggle" data-toggle="dropdown" style="width:70px;">Actions<span class="caret" style="margin-left:5px;"></span></a>
+  										<ul class="dropdown-menu pull-right">
+   											<!-- dropdown menu links -->
+											<li class="action-add-note"><a style="cursor:default;">Add Note</a></li>
+											<li class="action-add-email-note"><a style="cursor:default;">Add Email as Note</a></li>
+											<li class="action-add-task"><a style="cursor:default;">Add Task</a></li>
+											<li class="action-add-deal"><a style="cursor:default;">Add Deal</a></li>
+											<li class="action-add-campaign"><a style="cursor:default;">Add to Campaign</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+<!-- end of contact info-->
+</script>
+
+<script id="gadget-tabs-template" type="text/html">
+<!-- Gadget Tab -->
+		<ul class="nav nav-tabs gadget_tabs" data-tabs="tabs" style="margin-top:15px;">
+	        <li class="active gadget-notes-tab"><a href="#Notes-{{id}}" data-toggle="tab">Notes</a></li>
+	        <li class="gadget-tasks-tab"><a href="#Tasks-{{id}}" data-toggle="tab">Tasks</a></li>
+			<li class="gadget-deals-tab"><a href="#Deals-{{id}}" data-toggle="tab">Deals</a></li>
+			<li class="gadget-campaigns-tab"><a href="#Campaigns-{{id}}" data-toggle="tab">Campaigns</a></li>
+	    </ul>
+	    <div class="tab-content">
+			<img class="tab-waiting" style="display:none; width:16px; float:left; margin:5px 0px 0px 8px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+	        <div class="tab-pane active" id="Notes-{{id}}">
+	            <div class="gadget-notes-tab-list">
+					
+				</div>
+	        </div>
+	        <div class="tab-pane" id="Tasks-{{id}}">
+	            <div class="gadget-tasks-tab-list">
+					
+				</div>
+	        </div>
+			<div class="tab-pane" id="Deals-{{id}}">
+	            <div class="gadget-deals-tab-list">
+					
+				</div>
+	        </div>
+			<div class="tab-pane" id="Campaigns-{{id}}">
+	            <div class="gadget-campaigns-tab-list">
+					
+				</div>
+	        </div>
+	    </div>
+</script>
+
+<script id="gadget-notes-list-template" type="text/html">
+<!-- Notes list tab -->
+<ul style="list-style-type:none; margin-right:25px;">
+	{{#if this.length}}
+		{{#each this}}
+			{{#stringToJSON this ""}}
+				<li>
+					<div style="display:block;" class="activity">
+						<div id="notes" class="activity-text-block">
+							<h4><a style="text-decoration: none"><b>{{ucfirst subject}}</b></a></h4><br/>
+							<p style="margin-right:40px;">{{description}}</p>	
+					 		
+							<small class="edit-hover" style="color:#b2b0b1;"> 
+								<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+							</small>
+						</div>
+					</div>
+				</li>
+			{{/stringToJSON}}
+		{{/each}}
+	{{else}}
+		<li>
+			<div style="display:block;" class="activity">
+				<div id="notes" class="activity-text-block">
+					<h4 style="display:inline; margin-right:10px;">You have no notes for this contact.</h4>
+					<a class="action-add-note" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;"><i class="icon-plus" style="text-decoration:none; margin-right:2px;"></i><span>Add Note</span></a>
+				</div>
+			</div>
+		</li>
+	{{/if}}		
+</ul>
+</script>
+
+<script id="gadget-tasks-list-template" type="text/html">
+<!-- Tasks list tab -->
+<ul style="list-style-type:none; margin-right:25px;">
+{{#if this.length}}
+		{{#each this}}
+			{{#stringToJSON this ""}}
+<li>
+	<div class="activity" style="display:block;">
+		{{#if is_complete}}
+			<div id="tasks" class="activity-text-block" style="background-color:#FFFAFA">
+		{{else}}
+			<div id="tasks" class="activity-text-block">
+		{{/if}}	
+			{{#if is_complete}}
+				<div style="margin-bottom: 10px;">
+					<h4 class="task-subject" style="text-decoration:line-through;display:inline;">
+						<a style="text-decoration: none; margin:0px 20px 0px 0;"><b>{{ucfirst subject}}</b></a>
+						<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+					</h4>
+				</div>
+			{{else}}
+				<div style="margin-bottom: 10px;">
+					<h4 class="task-subject" style="display:inline;">
+						<a style="text-decoration: none; margin:0px 20px 0px 0;"><b>{{ucfirst subject}}</b></a>
+						<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>	
+					</h4>
+				</div>
+			{{/if}}
+			<div>
+				<p>
+					<i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}
+					<span style="margin-left:20px;">Due : <time class="task-created-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span>
+				</p>
+				<div class="clear">
+					<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;"> 
+						<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+					</small>
+				</div>
+			</div>
+		</div>
+	</div>
+</li>
+			{{/stringToJSON}}
+		{{/each}}
+	{{else}}
+		<li>
+			<div style="display:block;" class="activity">
+				<div id="notes" class="activity-text-block">
+					<h4 style="display:inline; margin-right:10px;">You have no tasks for this contact.</h4>
+					<a class="action-add-task" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;"><i class="icon-plus" style="text-decoration:none; margin-right:2px;"></i><span>Add Task</span></a>
+				</div>
+			</div>
+		</li>
+	{{/if}}
+</ul>	
+</script>
+
+<script id="gadget-deals-list-template" type="text/html">
+<!-- Deals list tab -->
+<ul style="list-style-type:none; margin-right:25px;"> 
+{{#if this.length}}
+		{{#each this}}
+			{{#stringToJSON this ""}}
+<li>
+	<div style="display:block;" class="activity">
+		<div id="notes" class="activity-text-block">
+			<h4 style="margin-bottom: 9px;"><a style="text-decoration: none"><b>{{ucfirst name}}</b></a><span style="margin-left:20px;">{{milestone}} ({{probability}} %)</span></h4>
+			<p><span style="margin-right: 10px;">Value : </span>
+				{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}{{numberWithCommas expected_value}}
+			</p>
+			<div class="clear">
+				<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;">
+					<time class="deal-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+				</small>
+			</div>
+		</div>
+	</div>
+</li>
+			{{/stringToJSON}}
+		{{/each}}
+	{{else}}
+		<li>
+			<div style="display:block;" class="activity">
+				<div id="notes" class="activity-text-block">
+					<h4 style="display:inline; margin-right:10px;">You have no deals for this contact.</h4>
+					<a class="action-add-deal" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;"><i class="icon-plus" style="text-decoration:none; margin-right:2px;"></i><span>Add Deal</span></a>
+				</div>
+			</div>
+		</li>
+	{{/if}}
+</ul>
+</script>
+
+<script id="gadget-campaigns-list-template" type="text/html">
+<!-- Campaign logs tab -->
+<ul style="list-style-type:none; margin-right:25px;"> 
+{{#if this.response.length}}
+		{{#each this.response}}
+			{{#stringToJSON this ""}}
+<li>
+	<div style="display:block;">
+		<div id="campaigns" class="activity-text-block">
+			<span class="activity-block-owner pull-right">
+				{{#if log_type}}
+					<img class="user-img" width="40" height="40" alt="" src="{{../../../lib_path}}img/campaigns/{{log_type}}.png">
+				{{else}}
+					<img class="user-img" width="40" height="40" src="https://dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png">
+				{{/if}}
+			</span>
+			
+			{{#if_email_sent this "log_type"}}
+	
+				<h4><a style="text-decoration: none"><b>{{Subject}}</b></a></h4></br>
+				<div class="in collapse">
+					<ul style="list-style-type:none; border-bottom:1px solid #ddd; padding-bottom:12px; margin:0px;">
+    		    		<li><strong>From:</strong> {{From}}</li> 
+						<li><strong>To:</strong> {{To}}</li>
+					</ul>
+       				<p style="margin-top:10px">{{{Body}}}</p>
+	    		</div>
+				     
+			{{else}}			
+
+				<h4><a style="text-decoration: none"><b>{{titleFromEnums log_type}}</b></a></h4></br>
+				<p>{{{message}}}</p>
+			
+			{{/if_email_sent}}
+
+			<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;">
+				<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+	        	<a target="_blank" class="pull-right" href="{{../../ac_path}}#workflow/{{campaign_id}}" title="Show Workflow in Agile"> {{campaign_name}}</a>
+				<p class="pull-right">Campaign - </p>
+			</small>	
+		</div>
+	</div>
+</li>
+			{{/stringToJSON}}
+		{{/each}}
+	{{else}}
+		<li>
+			<div style="display:block;" class="activity">
+				<div id="notes" class="activity-text-block">
+					<h4 style="display:inline; margin-right:10px;">You have no campaigns for this contact.</h4>
+					<a class="action-add-campaign" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;"><i class="icon-plus" style="text-decoration:none; margin-right:2px;"></i><span>Add to Campaign</span></a>
+				</div>
+			</div>
+		</li>
+	{{/if}}
+</ul>
+</script>
+
+<script id="gadget-note-template" type="text/html">
+<!--  Add Note Form -->
+	<div class="gadget-note row-fluid">
+		<form class='gadget-note-form form-horizontal' name="gadget_note_form" method="post" style="margin:0px;">
+			<fieldset style="margin:0px;">
+                <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
+
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="subject"><b>Subject</b><span class="field_req">*</span></label>
+					<div class="controls">
+						<input name="subject" id="subject" placeholder="About" class="required" type="text" />
+					</div>
+				</div>
+				
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="description"><b>Description</b><span class="field_req">*</span></label>
+					<div class="controls">
+						<textarea name="description" id="description" rows="3" placeholder="Detailed Note..." class="required"></textarea> 
+					</div>
+				</div>
+
+                <div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">
+                   	<a type="submit" class="btn btn-primary gadget-note-validate" style="padding:2px 6px 2px;">Add Note</a>
+	             	<a class="cancel btn" data-tab-identity="notes" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
+                   	<img class="note-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</script>
+
+<script id="gadget-task-template" type="text/html">
+<!--  Add Task Form -->
+  	<div class="gadget-task row-fluid">
+       	<form class='gadget-task-form form-horizontal' name="gadget_task_form" method="post" style="margin:0px;">
+			<fieldset style="margin:0px;">
+              	<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
+				
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="subject"> <b>Task</b> <span class="field_req">*</span></label>
+					<div class="controls">
+						<input name="subject" id="subject" placeholder="Task name" size="40" class="required" type="text" />
+					</div>
+				</div>
+
+				<div class="control-group" style="margin:0px; padding-top:6px;">					
+					<label class="control-label" for="type"><b>Category</b><span class="field_req">*</span></label>
+					<div class="controls">
+						<select name="type" id="type" class="required" style="width:210px;">
+							<option value="">Select</option>
+							<option value="CALL">Call</option>
+							<option value="EMAIL">Email</option>
+							<option value="FOLLOW_UP">Follow-up</option>
+							<option value="MEETING">Meeting</option>
+							<option value="MILESTONE">Milestone</option>
+							<option value="SEND">Send</option>
+							<option value="TWEET">Tweet</option>
+                            <option value="OTHER">Other</option>
+						</select> 
+					</div>
+				</div>
+				
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="due"><b>Due Date</b><span class="field_req">*</span></label>
+					<div class="controls">
+						<input name="due" id="due" placeholder="MM/DD/YYYY" class="required task-calender" type="text" />
+					</div>
+				</div>
+				
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="priority_type"><b>Priority</b></label>
+					<div class="controls"> 
+						<select	name="priority_type" id="priority_type" size="1" style="width:210px;">
+							<option value="HIGH">High</option>
+							<option value="NORMAL" selected="selected">Normal</option>
+							<option value="LOW">Low</option>
+						</select> 
+					</div>
+				</div>
+				 
+	            <div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">
+	            	<a type="submit" class="btn btn-primary gadget-task-validate" style="padding:2px 6px 2px;">Add Task</a>
+			    	<a class="cancel btn" data-tab-identity="tasks" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
+					<img class="task-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+                </div>
+			</fieldset>				
+		</form>	
+   	</div>
+</script>
+
+<script id="gadget-deal-template" type="text/html">
+<!--  Add Deal Form -->
+  	   	<div class="gadget-deal row-fluid">
+			<form class="gadget-deal-form form-horizontal" name="gadget_deal_form" method="post" style="margin:0px;">
+				<fieldset style="margin:0px;">
+                   	<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
+					
+					<div class="control-group" style="margin:0px; padding-top:6px;">
+						<label class="control-label" for="name"><b>Name</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<input name="name" id="name" placeholder="Name of deal" class=" required" type="text" />
+		  				</div>
+					</div>
+					
+                   	<div class="control-group" style="margin:0px; padding-top:6px;">
+						<label class="control-label" for="expected_value"><b>Value</b> <span class="field_req">*</span></label>
+               			<div class="controls"> 
+							<input name="expected_value" id="expected_value" max="1000000000000" placeholder="Value of deal" class="required  digits" type="text" />
+						</div>
+					</div>
+					
+					<div class="control-group" style="margin:0px; padding-top:6px;">		
+						<label class="control-label" for="milestone"><b>Milestone</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<select name="milestone" id="milestone" class="required" style="width:210px;">
+								<option value="">Select</option>
+								{{#if milestones.length}}
+									{{#each milestones}}
+										<option value="{{.}}">{{.}}</option>
+									{{/each}}
+								{{/if}}
+                            </select>	
+		  				</div>
+					</div>
+					
+              		<div class="control-group" style="margin:0px; padding-top:6px;">
+						<label class="control-label" for="probability"><b>Probability (%)</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<input name="probability" id="probability" max="100" placeholder="Probability %" class="required digits" type="text" />				
+		  				</div>
+					</div>
+
+					<div class="control-group" style="margin:0px; padding-top:6px;">
+						<label class="control-label" for="probability"><b>Close Date</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<input name="close_date" id="close_date" class="required deal-calender" placeholder="MM/DD/YYYY" type="text"/>				
+						</div>
+					</div>
+					
+               		<div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">
+               			<a type="submit" class="btn btn-primary gadget-deal-validate" style="padding:2px 6px 2px;">Add Deal</a> 
+			   			<a class="cancel btn" data-tab-identity="deals" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
+						<img class="deal-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+                   	</div>
+		  		</fieldset>
+			</form>
+		</div>
+</script>
+
+<script id="gadget-campaign-template" type="text/html">
+<!--  Add to Campaign Form -->
+	<div class="gadget-campaign" row-fluid">
+        <form class="gadget-campaign-form form-horizontal" name="gadget_campaign_form" method="post" style="margin:0px;">
+            <fieldset style="margin:0px;">
+				<input type="hidden" name="email" value='{{email}}' />
+                
+				<div class="control-group" style="margin:0px; padding-top:6px;">       
+                    <label class="control-label" for="campaign-select">Select campaign<span class="field_req">*</span></label>
+                    <div class="controls">
+                        <select name="id" id="campaign-select" class="required" style="width:210px;">
+							<option value="">Select..</option>
+							{{#if this.length}}
+								{{#each this}}
+									<option value="{{id}}">{{name}}</option>
+								{{/each}}
+							{{/if}}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">         
+                    <a type="submit" class="btn btn-primary gadget-campaign-validate" style="padding:2px 6px 2px;">Add to Campaign</a> 
+                    <a class="cancel btn " data-tab-identity="campaigns" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
+					<img class="campaign-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</script>

@@ -1,0 +1,76 @@
+<script id="automations-model-template" type="text/html">
+	<td class="data" data="{{id}}">{{name}}</td>
+    <td>{{titleFromEnums durationType}}</td>
+    <td>{{contactFilter}}</td>
+	<td>{{campaign}}</td>
+	<br />
+</script>
+<script id="automations-collection-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-md-12">
+        
+            <h3 class="font-thin h3">List of Automations</h3>
+            <a href="#automation-add" class="btn btn-sm btn-default right m-t-n-lg pos-rlt" id="addAutomation">
+				<i class="icon-plus-sign"></i> Add Automation
+			</a>
+        
+    </div>
+</div>
+</div>
+<div class="row">
+    <div class="col-md-9">
+        {{#unless this.length}}
+        <div class="alert-info alert">
+            <div class="slate-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">You do not have any Automations currently.</h4>
+                    <div class="text">
+                        You can define a automations to start execution of a campaign. But please make sure to create atleast one campaign before creating automation.
+                    </div>
+                    <a href="#automation-add" class="btn btn-default btn-sm blue btn-slate-action m-t-xs">
+						<i class="icon-plus-sign"></i>  Add Automation 
+					</a>
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+        <div class="data-block">
+            <div class="data-container">
+                <table class="table table-striped showCheckboxes" url="core/api/automations/bulk">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Period</th>
+                            <th>Contact Filter</th>
+                            <th>Campaign</th>
+                        </tr>
+                    </thead>
+                    <tbody id="automations-model-list" route="automation/"> </tbody>
+                </table>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    <div class="col-md-3">
+        <div class="well">
+            <h3>
+                What are Automations?
+            </h3>
+            <br />
+            <p>
+                Automations are pre-defined conditions set up by you. If the condition is satisfied, you can choose an action to follow using workflow automation.
+            </p>
+            <p>
+                e.g. If a user registers on your website, you can automate the workflow to send a welcome email. The user registering on site is the trigger.
+            </p>
+        </div>
+    </div>
+</div>
+</script>

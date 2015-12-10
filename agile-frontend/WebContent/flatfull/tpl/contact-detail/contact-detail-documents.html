@@ -1,0 +1,121 @@
+<script id="contact-documents-collection-template" type="text/html">
+		{{#unless this.length}}
+        <div class="wrapper p-t-none">
+            <div class="slate-content mobile-pad-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">You have no documents for {{contactShortName}}.</h4>
+                  {{#hasMenuScope 'DOCUMENT'}}  
+                  <div class="text">
+                        You can add a document related to a {{#isCompany}}company{{else}}contact{{/isCompany}}.
+                    </div>
+                    {{/hasMenuScope}}
+					<div>{{#hasMenuScope 'DOCUMENT'}}<a href="#" class="btn btn-default btn-sm add-document-select m-t-xs"><i class='icon-plus-sign'/></i> Add Document</a>{{/hasMenuScope}}
+						<span class="contact-document-select upload-doc-field" style="display:none;">
+							<select id="document-select" class="form-control inline-block">
+								<option value="">Select...</option>
+							</select>
+ 					<div class="m-t-sm">
+							<a href="#" class="btn btn-default btn-sm add-document-cancel m-r-sm">Cancel</a>
+                    		<a href="#" class="btn btn-sm btn-primary add-document-confirm">Add</a> 
+							<span class="save-status"></span>
+						</span>
+					</div>
+					</div>
+         			<!--<div class="btn-group" style="margin-top:12px;">
+        				<a href="#" class="btn btn-default btn-sm right contact-add-document"><i class="icon-plus-sign"></i> Add Document</a>
+        				<a class="btn btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+						<ul class="dropdown-menu" style="text-shadow:0px 0px;">
+							<li><a href="#" class="document-exist">Existing Document</a></li>
+						</ul>
+					</div>-->
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+	<div class="m-b-md m-t-md m-r-sm" align="right">
+        <!--<div class="btn-group right">
+        	<a href="#" class="btn btn-sm btn-default right contact-add-document"><i class="icon-plus-sign"></i> Add Document</a>
+        	<a class="btn btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+			<ul class="dropdown-menu pull-right">
+				<li><a href="#" class="document-exist">Existing Document</a></li>
+			</ul>
+		</div>-->
+		<div>{{#hasMenuScope 'DOCUMENT'}}<a href="#" class="add-document-select btn btn-default btn-sm btn-addon"><i class='icon-plus-sign'/></i> Add Document</a>{{/hasMenuScope}}
+			<span class="contact-document-select upload-doc-field" style="display:none;">
+				<select id="document-select" class="form-control inline-block m-r-sm p-t-xs w-xl"> 
+					<option value="">Select...</option>
+				</select>
+				<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <a href="#" class="btn btn-sm btn-primary add-document-confirm">Add</a> 
+                <a href="#" class="btn btn-default btn-sm add-document-cancel">Cancel</a>
+				<span class="save-status"></span>
+			</span>
+		</div>
+	</div>
+			<ul id="contact-documents-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs"></ul>
+		{{/if}} 
+</script>
+
+
+<script id="contact-documents-model-template" type="text/html">
+<div class="activity block pos-rlt">
+	
+	<div class="activity-block-owner  thumb-xs pull-left m-r-sm avatar">
+		{{#if ownerPic}}
+			<img class="user-img r r-2x"  alt="" src="{{ownerPic}}" >
+		{{else}}
+			<img class="user-img r r-2x"  src="{{defaultGravatarurl 40}}">
+		{{/if}}
+		<span class="owner-name hide">{{owner.name}}</span>
+	</div>
+	<div class="pull-left rightThumbView">
+	<div class="document-title text-md text-cap pull-left contact-title-dynamic custom-color">{{name}}</div>
+	<div class="pull-right">	
+		 <small class="edit-hover text-muted"> 
+		 <i class="fa fa-clock-o m-r-xs"></i>
+			<time class="document-created-time  text-base" datetime="{{epochToHumanDate "" uploaded_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
+		</small>
+		</div>
+		<div class="clearfix"></div>
+    <div>
+		{{network network_type}}{{#hasMenuScope 'DOCUMENT'}}&nbsp;&nbsp;<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>{{/hasMenuScope}}
+	</div>
+<div class="clearfix"></div>
+	
+		<div class="agile-thumb">	
+		{{#each contacts}}
+           	{{#if id}}
+				{{#isDuplicateContactProperty properties "email"}}
+
+					{{else}}
+						{{#if_contact_type "PERSON"}}	
+							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
+        				{{/if_contact_type}}
+						{{#if_contact_type "COMPANY"}}
+        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
+        				{{/if_contact_type}}
+				{{/isDuplicateContactProperty}}
+           		
+           	{{/if}}
+       	{{/each}}
+		{{{getDealNames deals}}}
+		</div>
+	
+		
+		<div class="actions pull-right pos-abs pos-r-0 pos-b-0">
+            {{#hasMenuScope 'DOCUMENT'}}
+			<a title="Edit"  data="{{id}}" class="document-edit-contact-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+			<a title="Detach"  data="{{id}}" class="document-unlink-contact-tab c-p text-l-none p-r-sm"> <i class="icon-unlink"></i> </a>
+            <!--<a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>-->
+			{{/hasMenuScope}}
+        </div>
+        <div class="clearfix"></div>
+	</div>
+<div class="clearfix"></div>
+</script>

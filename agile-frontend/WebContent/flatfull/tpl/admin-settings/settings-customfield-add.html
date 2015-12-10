@@ -1,0 +1,538 @@
+<script id="custom-field-add-modal-template" type="text/html">
+<!-- New (Text) Modal views -->
+<div class="modal fade" id="custom-field-add-modal">
+ <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+    </div>
+    <div class="modal-body">
+        <form id="textModalForm" name="textModalForm" method="post" class="form-horizontal">
+            <fieldset>
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
+                    <div class="controls col-sm-9">
+					{{#if id}}
+                        <input type="text" id="label" placeholder="Label" class="required form-control noSpecialChars" value="{{../field_label}}" disabled / >
+						<input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars hide" value="{{../field_label}}" / >
+						{{else}}
+							<input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars field_length" max_len="500" value="{{field_label}}"/>
+					{{/if}}
+                    </div>
+                </div>
+  				<div class="control-group form-group">
+                    <label class="control-label col-sm-3">Type <span class="field_req">*</span></label>
+                    <div class="controls col-sm-9">
+						 <select name="field_type" id="custom-field-type" class="form-control">
+							<option value="TEXT">Text Field</option>
+							<option value="TEXTAREA">Text Area</option>
+							<option value="DATE">Date Field</option>
+							<option value="CHECKBOX">Checkbox</option>
+							<option value="LIST">List</option>
+							<option value="NUMBER">Number</option>
+							<option value="FORMULA">Formula</option>
+						</select>
+                    </div>
+                </div>
+                <input class="hide form-control" name="scope" type="text" placeholder="Label" value="{{scope}}" />
+				<input class="hide form-control" name="position" type="text" placeholder="Label" value="{{position}}" />
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
+                    <div class="controls col-sm-9">
+                        <input name="field_description" type="text" id="field_description" placeholder="Description" class="required form-control" />
+                    </div>
+                </div>
+				<div id="custom-field-custom-info"></div>
+				 <div class="control-group form-group" id="custom-field-list-values" style="display:none">
+                    <label class="control-label col-sm-3">List Values <span class="field_req">*</span></label>
+                    <div class="controls col-sm-9">
+                        <input name="field_data" type="text" id="listvalues" placeholder="Enter values separated by semicolon" class="required form-control" />
+                    </div>
+                </div>
+			    <div class="control-group form-group" id="custom-field-data" style="display:none">
+                    <label class="control-label col-sm-3">Number of Lines <span class="field_req">*</span></label>
+                    <div class="controls col-sm-9"> 
+                        <input name="field_data" type="text" id="arearows" placeholder="Rows" class="required digits form-control" max="10" min="2" />
+                    </div>
+                </div>
+				<div class="control-group form-group" id="custom-field-formula-data" style="display:none">
+                    <label class="control-label col-sm-3">Formula <span class="field_req">*</span></label>
+                    <div class="controls col-sm-9"> 
+                        <textarea name="field_data" id="formulaData" placeholder="Ex: \{{number1}}*(\{{number2}}+\{{number3}})" class="formulaData required" style="width:100%;" rows="3" />
+                    </div>
+					<div class="tip" style="padding-left:27.5%;">
+						<p class="text-muted">
+							<i class="icon-lightbulb text-md"></i> 
+							An arithmetic formula in following format \{{number1}}*\{{number2}} - works with numerical custom fields only. <a class="text-info" href="http://mustache.github.io/" target="_blank">Mustache conditions</a> can be used here.
+						</p>
+					</div>
+                </div>
+                
+
+                    <div class="control-group form-group required-and-searchable">
+                    <div class="row">
+                    <div class="col-sm-offset-3 col-sm-9 col-xs-12">
+                    <div class="col-sm-6 col-xs-6">
+                        <label class="control-label pull-left m-r-sm">Required </label>
+                        <div class="controls checkbox checkbox-mobile-view">
+
+<label class="i-checks i-checks-sm">
+                            <input name="is_required" type="checkbox" id="required"  /><i></i>
+</label>
+        </div>
+        </div>
+                    
+                    <div class="col-sm-6 col-xs-6">
+                        <label class="control-label pull-left m-r-sm">Searchable </label>
+                        <div class="controls checkbox checkbox-mobile-view">
+                            <label class="i-checks i-checks-sm"> 
+                            <input name="searchable" type="checkbox" id="searchable" /><i></i>
+                            </label>
+                        </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3 hide">Validation Rule <span class="field_req">*</span></label>
+                    <div class="controls"> 
+                        <input name="validationRule" type="hidden" id="validationRule" placeholder="Validation Rule" class="required form-control" value="*" />
+                    </div>
+                </div>
+				{{#if id}}
+					<input name="id" value="{{id}}" class="hide form-control"></input>
+				{{/if}}
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer form-actions">
+        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="customfield_validate">Save Changes</a>
+    </div>
+</div>
+</div>
+</div>
+</script>
+
+<script id="custom-field-text-modal-template" type="text/html">
+<!-- New (Text) Modal views -->
+<div class="modal fade" id="textModal">
+ <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+    </div>
+    <div class="modal-body">
+        <form id="textModalForm" name="textModalForm" method="post" class="form-horizontal">
+            <fieldset>
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
+                    <div class="controls">
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control field_length" max_len="500" />
+                    </div>
+                </div>
+                <input class="hide form-control" name="field_type" type="text" placeholder="Label" value="TEXT" />
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input name="field_description" type="text" id="field_description" placeholder="Description" class="required form-control" />
+                    </div>
+                </div>
+			     <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Scope <span class="field_req">*</span></label>
+                    <div class="controls">
+						 <select name="scope" class="form-control">
+							<option value="PERSON">Contact</option>
+							<option value="COMPANY">Company</option>
+							<option value="DEAL">Deals</option>
+							<option value="CASE">Cases</option>
+						</select>
+                    </div>
+                </div>
+               
+                    <div class="control-group form-group span4">
+                        <label class="control-label col-sm-3">Required </label>
+                        <div class="controls checkbox">
+                        <label class="i-checks i-checks-sm">
+                            <input name="is_required" type="checkbox" id="required" /><i></i>
+                        </label>
+                        </div>
+                    </div>
+                    <div class="control-group form-group m-l-md span4">
+                        <label class="control-label col-sm-3">Searchable </label>
+                        <div class="controls checkbox">
+                        <label class="i-checks i-checks-sm"> 
+                            <input name="searchable" type="checkbox" id="searchable" /><i></i>
+                        </label>
+                        </div>
+                    </div>
+              
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3 hide">Validation Rule <span class="field_req">*</span></label>
+                    <div class="controls"> 
+                        <input name="validationRule" type="hidden" id="validationRule" placeholder="Validation Rule" class="required form-control" value="*" />
+                    </div>
+                </div>
+			
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer form-actions">
+        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="customfield_validate">Save Changes</a>
+    </div>
+  </div>
+  </div>
+</div>
+</script>
+<!-- End of (Text) Modal views -->
+
+<script id="custom-field-date-modal-template" type="text/html">
+<!-- New (Date) Modal views -->
+<div class="modal fade" id="dateModal">
+ <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+    </div>
+    <div class="modal-body">
+        <form id="dateModalForm" name="dateModalForm" method="post" class="form-horizontal">
+            <fieldset>
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
+                    <div class="controls">
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control field_length" max_len="500" />
+                    </div>
+                </div>
+                <input class="hide form-control" name="field_type" type="text" placeholder="Label" value="DATE" />
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
+                    <div class="controls"> 
+                        <input name="field_description" type="text" id="description" placeholder="Description" class="required form-control" />
+                    </div>
+                </div>
+	    	 <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Scope <span class="field_req">*</span></label>
+                    <div class="controls">
+						<select name="scope" class="form-control">
+							<option value="PERSON">Contact</option>
+							<option value="COMPANY">Company</option>
+							<option value="DEAL">Deals</option>
+							<option value="CASE">Cases</option>
+						</select>
+                    </div>
+                </div>
+                
+                    <div class="control-group form-group span4">
+                        <label class="control-label col-sm-3">Required </label>
+                        <div class="controls checkbox">
+                        <label class="i-checks i-checks-sm">
+                            <input name="is_required" type="checkbox" id="required" /><i></i>
+                        </label>
+                        </div>
+                    </div>
+                    <div class="control-group form-group span4">
+                        <label class="control-label col-sm-3">Searchable </label>
+                        <div class="controls checkbox">
+                          <label class="i-checks i-checks-sm"> 
+                            <input name="searchable" type="checkbox" id="searchable" /><i></i>
+                        </label>
+                             </div>
+                    
+                </div>
+				<p>Note : For date custom fields, the field value if provided using the API, should be an epoch number.</p>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer form-actions">
+        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">Save Changes</a>
+    </div>
+  </div>
+  </div>
+</div>
+</script>
+<!-- End of (Date) Modal views -->
+
+<script id="custom-field-list-modal-template" type="text/html">
+<!-- New (List) Modal views -->
+<div class="modal fade" id="listModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+    </div>
+    <div class="modal-body">
+        <form id="listModalForm" name="listModalForm" method="post" class="form-horizontal">
+            <fieldset>
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
+                    <div class="controls">
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars field_length" max_len="500" />
+                    </div>
+                </div>
+                <input class="hide" name="field_type" type="text" placeholder="Label" value="LIST" />
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
+                    <div class="controls"> 
+                        <input name="field_description" type="text" id="description" placeholder="Description" class="required form-control" />
+                    </div>
+                </div>
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">List Values <span class="field_req">*</span></label>
+                    <div class="controls"> 
+                        <input name="field_data" type="text" id="listvalues" placeholder="Enter values separated by semicolon" class="required form-control" />
+                    </div>
+                </div>
+	     		<div class="control-group form-group">
+                    <label class="control-label col-sm-3">Scope <span class="field_req">*</span></label>
+                    <div class="controls">
+						<select name="scope" class="form-control">
+							<option value="PERSON">Contact</option>
+							<option value="COMPANY">Company</option>
+							<option value="DEAL">Deals</option>
+							<option value="CASE">Cases</option>
+						</select>
+                    </div>
+                </div>
+                
+                    <div class="control-group form-group span4">
+                        <label class="control-label col-sm-3">Required </label>
+                        <div class="controls checkbox">
+                        <label class="i-checks i-checks-sm">
+                            <input name="is_required" type="checkbox" id="required" /><i></i>
+                         </label>
+                        </div>
+                    </div>
+                    <div class="control-group form-group span4">
+                        <label class="control-label col-sm-3">Searchable </label>
+                        <div class="controls checkbox"> 
+                        <label class="i-checks i-checks-sm"> 
+                            <input name="searchable" type="checkbox" id="searchable" /><i></i>
+                        </label>
+                        </div>
+                    
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer form-actions">
+        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">Save Changes</a>
+    </div>
+</div>
+</div>
+</div>
+</script>
+<!-- End of (List) Modal views -->
+
+<script id="custom-field-checkbox-modal-template" type="text/html">
+<!-- New (Check Box) Modal views -->
+<div class="modal fade" id="checkboxModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+    </div>
+    <div class="modal-body">
+        <form id="checkboxModalForm" name="checkboxModalForm" method="post" class="form-horizontal">
+            <fieldset>
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
+                    <div class="controls">
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control field_length" max_len="500" />
+                    </div>
+                </div>
+                <input class="hide" name="field_type" type="text" placeholder="Label" value="CHECKBOX"  />
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
+                    <div class="controls"> 
+                        <input name="field_description" type="text" id="description" placeholder="Description" class="required form-control" />
+                    </div>
+                </div>
+	    	 <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Scope <span class="field_req">*</span></label>
+                    <div class="controls">
+						<select name="scope" class="form-control">
+							<option value="PERSON">Contact</option>
+							<option value="COMPANY">Company</option>
+							<option value="DEAL">Deals</option>
+							<option value="CASE">Cases</option>
+						</select>
+                    </div>
+                </div>
+                
+                    <div class="control-group form-group span4">
+                        <label class="control-label col-sm-3">Required </label>
+                        <div class="controls checkbox">
+                         <label class="i-checks i-checks-sm">
+                            <input name="is_required" type="checkbox" id="required" /><i></i>
+                         </label>
+                        </div>
+                    </div>
+                    <div class="control-group form-group span4">
+                        <label class="control-label col-sm-3">Searchable </label>
+                        <div class="controls checkbox"> 
+                        <label class="i-checks i-checks-sm">
+                            <input name="searchable" type="checkbox" id="searchable" /><i></i>
+                        </label>
+                        </div>
+                    
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer form-actions">
+        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">Save Changes</a>
+    </div>
+</div>
+</div>
+</div>
+</script>
+<!-- End of (Check Box) Modal views -->
+
+<script id="custom-field-textarea-modal-template" type="text/html">
+<!-- New (Text Area) Modal views -->
+<div class="modal fade" id="textareaModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+    </div>
+    <div class="modal-body">
+        <form id="textareaModalForm" name="textareaModalForm" method="post" class="form-horizontal">
+            <fieldset>
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
+                    <div class="controls">
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control field_length" max_len="500" />
+                    </div>
+                </div>
+                <input class="hide" name="field_type" type="text" placeholder="Label" value="TEXTAREA" />
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
+                    <div class="controls"> 
+                        <input name="field_description" type="text" id="description" placeholder="Description" class="required form-control" />
+                    </div>
+                </div>
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Number of Lines <span class="field_req">*</span></label>
+                    <div class="controls"> 
+                        <input name="field_data" type="text" id="arearows" placeholder="Rows" class="required digits form-control" max="10" min="2" />
+                    </div>
+                </div>
+	    	 <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Scope <span class="field_req">*</span></label>
+                    <div class="controls">
+						<select name="scope" class="form-control">
+							<option value="PERSON">Contact</option>
+							<option value="COMPANY">Company</option>
+							<option value="DEAL">Deals</option>
+							<option value="CASE">Cases</option>
+						</select>
+                    </div>
+                </div>
+                
+                    <div class="control-group form-group span4">
+                        <label class="control-label col-sm-3">Required </label>
+                        <div class="controls checkbox">
+                         <label class="i-checks i-checks-sm">
+                            <input name="is_required" type="checkbox" id="required" /><i></i>
+                         </label>
+                        </div>
+                    </div>
+                    <div class="control-group form-group span4">
+                        <label class="control-label col-sm-3">Searchable </label>
+                        <div class="controls checkbox">
+                          <label class="i-checks i-checks-sm"> 
+                            <input name="searchable" type="checkbox" id="searchable" /><i></i>
+                          </label>
+                        </div>
+                    
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer form-actions">
+        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">Save Changes</a>
+    </div>
+</div>
+</div>
+</div>
+</script>
+<!-- End of (Text Area) Modal views -->
+
+
+<script id="custom-field-checkbox-modal-template" type="text/html">
+<!-- New (Generated Link) Modal views -->
+<div class="modal fade" id="linkModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+    </div>
+    <div class="modal-body">
+        <form id="linkModalForm" name="linkModalForm" method="post" class="form-horizontal">
+            <fieldset>
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
+                    <div class="controls">
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control field_length" max_len="500" />
+                    </div>
+                </div>
+                <input class="hide" name="field_type" type="text" placeholder="Label" value="LINK" />
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
+                    <div class="controls"> 
+                        <input name="field_description" type="text" id="description" placeholder="Description" class="required form-control" />
+                    </div>
+                </div>
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Link Definition <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input name="listvalues" type="text" id="listvalues" placeholder="e.g. http://example.com?emailAddress={email}" class="required form-control" />
+                    </div>
+                </div>
+	    	 <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Scope <span class="field_req">*</span></label>
+                    <div class="controls">
+						<select name="scope" class="form-control">
+							<option value="PERSON">Contact</option>
+							<option value="COMPANY">Company</option>
+							<option value="DEAL">Deals</option>
+							<option value="CASE">Cases</option>
+						</select>
+                    </div>
+                </div>
+                
+                    <div class="control-group form-group span4">
+                        <label class="control-label col-sm-3">Required </label>
+                        <div class="controls checkbox">
+                        <label class="i-checks i-checks-sm">
+                            <input name="is_required" type="checkbox" id="required" /><i></i>
+                         </label>
+                        </div>
+                    </div>
+                    <div class="control-group form-group span4">
+                        <label class="control-label col-sm-3">Searchable </label>
+                        <div class="controls checkbox"> 
+                        <label class="i-checks i-checks-sm">
+                            <input name="searchable" type="checkbox" id="searchable" /><i></i>
+                          </label>
+                        </div>
+                    
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer form-actions">
+        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">Save Changes</a>
+    </div>
+</div>
+</div>
+</div>
+</script>
+<!-- End of (Generated Link) Modal views -->

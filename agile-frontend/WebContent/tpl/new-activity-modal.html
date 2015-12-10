@@ -1,0 +1,116 @@
+<!-- New (Activity) Modal views -->
+<div class="modal hide fade" id="activityModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3><i class="icon-plus-sign"></i>&nbsp;Add Event</h3>
+    </div>
+    <div class="modal-body">
+        <input type="hidden" value="event" id="hiddentask" /> 
+        <div id="relatedEvent">
+            <p><i><i class="icon-calendar"></i>&nbsp;Events are time based such as
+                meetings. They show up in calendar.</i>
+            </p>
+            <!--Event form  -->
+            <form id="activityForm" name="activityForm" method="post">
+                <fieldset>
+                    <div class="row">
+                        <div id="addEvent" class="control-group span3">
+                            <label class="control-label"><b>Event Name </b><span class="field_req">*</span></label>
+                            <div class="controls">
+                                <input id="title" placeholder="Name of Event" type="text" name="title" class="required" />
+                            </div>
+                        </div>
+                        <div class="span2 control-group">
+                            <label for="priority_type" class="control-label"><b>Priority </b></label>
+                            <div class="controls">
+                                <span class="input ">
+                                    <select name="color" id="color" size="1" class="input-small">
+                                        <option value="red">High</option>
+                                        <option value="#36C" selected="selected">Normal</option>
+                                        <option value="green">Low</option>
+                                    </select>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                       <div class="control-group span3">
+							<label class="control-label">Owner<span class="field_req">*</span></label>
+							<div class="controls" id="event-owners">
+								<select id="event-owners-list" class="required" name="owner_id"></select>
+								<img class="loading-img" src="img/21-0.gif"></img>
+							</div>
+					   </div>
+                     </div>
+                    
+                    <div class="row">
+                        <div class="control-group span3">
+                            <label class="control-label"><b>Start Date </b><span class="field_req">*</span></label>
+                            <div class="controls">
+                                <input type="text" name="start" placeholder="mm/dd/yyyy" id="event-date-1" class="required date" />							
+                            </div>
+                        </div>
+                        <div class="control-group span2">
+                            <label class="control-label"><b>Start Time </b><span class="field_req">*</span></label>
+                            <div class="controls">
+                                <input type="text" name="start_time" class="start-timepicker required" id="event-time-1" style="width:65px" placeholder="time" />		
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="control-group span3">
+                            <label class="control-label"><b>End Date </b><span class="field_req">*</span></label>
+                            <div class="controls">
+                                <input type="text" name="end" placeholder="mm/dd/yyyy" id="event-date-2" class="required date" />									
+                            </div>
+                        </div>
+                        <div class="control-group span2">
+                            <label class="control-label"><b>End Time </b><span class="field_req">*</span></label>
+                            <div class="controls">							
+                                <input type="text" name="end_time" class="end-timepicker required" id="event-time-2" style="width:65px" placeholder="time" /><br />		
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span5  invalid-range">
+                        </div>
+                    </div>
+                    <div class="control-group" style="margin-bottom: 0px;">
+                        <div class="controls">
+                            <label class="checkbox" style="display:inline-block; cursor:pointer;">
+                            	<input type="checkbox" name="allDay" id="allDay" />						
+                            	<div style="display:inline-block;margin-top:1px;">All day event</div>
+                        	</label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label"><b>Related To</b></label>
+                        <div class="controls">
+                            <div>
+                                <div class="pull-left">
+                                    <ul name="contacts" class="contacts tags tagsinput"></ul>
+                                </div>
+                                <input type="text" id="event_related_to" class="typeahead typeahead_contacts" data-provide="typeahead" data-mode="multiple" size="40" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+					<div class="control-group">
+						<a href="#" id="add_event_desctiption"><i class="icon-plus"></i>Add Description </a>
+						<div class="controls event_discription hide">
+							<textarea id="description" name="description" rows="3"
+								class="input span8" placeholder="Add Comment"></textarea>
+						</div>
+					</div>
+					</div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" id="task_event_validate">Save </a>
+        <span class="save-status"></span>
+    </div>
+</div>
+<!-- End of Modal views -->

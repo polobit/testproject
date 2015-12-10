@@ -1,0 +1,100 @@
+<script id="deal-detail-activities-collection-template" type="text/html">
+{{#unless this.length}}
+        <div class="wrapper p-t-none">
+            <div class="slate-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">No activity on this deal yet.</h4>
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+ {{/unless}}
+
+{{#if this.length}}
+<div class="m-t-none b-b-none"></div>
+<section class="scroll">
+	<ul id="deal-detail-activities-model-list" class="ativity-block-ul list-group list-group-lg m-b-none"></ul>
+</section>
+{{/if}}
+</script>
+
+<script id="deal-detail-activities-model-template" type="text/html">
+<div  class="activity block pos-rlt">
+<div class="thumb-xs pull-left m-r-sm b-light b avatar">
+
+		    {{#if this.user}}
+                <img class="user-img ref-roundedimg"  alt="" src="{{this.user.ownerPic}}" title="{{this.user.name}}">
+            {{else}}
+                <img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+            {{/if}}
+<span class="owner-name hide">{{#if user}} {{user.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
+		
+	</div>
+<div class="pull-left rightThumbView pos-rlt">	
+<div class="pull-left contact-title-dynamic">
+   <a class="text-md text-cap custom-color">{{get_normal_activity_type activity_type}}</a>
+   </div>
+   <div class="pull-right ">
+   	<small class="edit-hover text-muted"> 
+			<i class="fa fa-clock-o m-r-xs"></i>
+			<time class="note-created-time"  datetime="{{epochToHumanDate "" time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+		</div>
+		<div class="clearfix"></div>
+	<div>
+{{#if_equals "DEAL_ADD" activity_type}}
+        <div>Deal created for {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%). </div>
+     {{/if_equals}}
+
+{{#if_equals "DEAL_EDIT" activity_type}}
+        <div>{{displayActivityFieldText custom3}} modified.</div>
+     {{/if_equals}}
+
+{{#if_equals "DEAL_CLOSE" activity_type}}
+       <div>Hurray. {{entityObject.owner.name}} has won deal worth {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}. </div>
+     {{/if_equals}}
+{{#if_equals "DEAL_LOST" activity_type}}
+        <div>Alas. {{entityObject.owner.name}} has lost the deal worth {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}.</div>
+     {{/if_equals}}
+
+{{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
+        <div>Milestone changed from {{custom2}} to {{custom1}}. </div>
+     {{/if_equals}}
+
+{{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
+        <div>Owner changed from {{custom2}} to {{custom1}}. </div>
+     {{/if_equals}}
+
+{{#if_equals "DEAL_RELATED_CONTACTS" activity_type}}
+         {{#if related_contact_ids}}
+{{#if_equals "removed_all_relatedcontacts" custom3}}
+<div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal. </div>
+{{/if_equals}} 
+{{#if_equals "removed_relatedcontacts" custom3}}
+<div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal. </div>
+{{/if_equals}} 
+{{#if_equals "added_relatedcontacts" custom3}}
+<div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to deal. </div> 
+{{/if_equals}}
+{{else}}
+Modified deal.   
+
+{{/if}} 
+     {{/if_equals}}
+
+{{#if_equals "NOTE_ADD" activity_type}}
+        <div>{{custom1}}<br/>{{custom2}}.  </div>
+     {{/if_equals}}
+		
+	</div>	
+<div class="clearfix"></div>
+	 
+
+</div>
+<div class="clearfix"></div>
+</div>
+</script>

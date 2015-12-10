@@ -1,0 +1,77 @@
+<script id="tasks-collection-template" type="text/html">
+<header class="b-b m-b">
+    <h3 class="inline-block m-t-none">
+        <!--<span><i class="icon-edit"></i></span>--> 
+        My Tasks<small> {{count}}</small>
+        <span>         
+        	<img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="Tasks are like to-dos. Result oriented. You can assign a category such as call, email etc and add them to your calendar." id="element" data-trigger="hover" />
+        </span>
+    </h3>
+		<span class="right m-t-xs">
+    		 <span class="add-task m-r-xs"><a href="#" class="text-l-none" title="Add Task"><i class="icon-plus"/></a></span>
+			 <a href="#tasks" class="tasks-table text-l-none" title="All Tasks" id="tasks-list"><i class="icon-tasks"/></a>
+		</span>
+</header>
+{{#unless this.length}}
+<div class="slate m-t-sm" style="padding:5px 2px;">
+    <div class="slate-content" style="text-align:center;">
+		<h4>You have no tasks due</h4>
+	</div>
+</div>
+{{/unless}}
+{{#if this.length}}
+<table class="overflow-hidden block"><tbody><tr><td>
+<section>
+    <form>
+        <table class="table agile-ellipsis-dynamic overflow-hidden">
+            <div id="overdue-heading" style="display:none;"><b >Overdue</b>
+			&nbsp<small class="count" count="0">(10)</small></div>
+			<colgroup><col width="30px"><col width="99%"></colgroup>
+            <tbody id="overdue" style="display: inline;" route="task/" class="agile-edit-row"></tbody>
+        </table>
+        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
+            <div id="today-heading" style="display: none"><b >Today</b>	
+			&nbsp<small class="count" count="0">(10)</small></div>
+			<colgroup><col width="30px"><col width="99%"></colgroup>
+            <tbody id="today" style="display: inline;" route="task/" class="agile-edit-row"></tbody>
+        </table>
+        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
+            <div id="tomorrow-heading" style="display: none"><b >Tomorrow</b>
+			&nbsp<small class="count" count="0">(10)</small></div>
+			<colgroup><col width="30px"><col width="99%"></colgroup>
+            <tbody id="tomorrow" style="display: inline;" route="task/" class="agile-edit-row"></tbody>
+        </table>
+        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
+		<div id="next-week-heading" style="display: none">
+            <b >Later</b>
+			&nbsp<small class="count" count="0">(10)</small></div>
+			<colgroup><col width="30px"><col width="99%"></colgroup>
+            <tbody id="next-week" style="display: inline;" route="task/" class="agile-edit-row"></tbody>
+        </table>
+    </form>
+</section>
+</td></tr></tbody></table>
+{{/if}}
+</script>
+<script id="tasks-model-template" type="text/html">
+	<td  class="data" data="{{id}}"><label class="i-checks i-checks-sm"><input type="checkbox" data='{{id}}' class='tasks-select'><i></i></label></td>
+	<td style="width:100%!important;">
+		<div>
+  			<p style="word-break: break-word!important;-ms-word-break: break-all;word-break: break-all;">
+              <a href="javascript:void(0)"><span  class="new-task-subject">{{#is_link subject}}<b  style="white-space: normal!important;">{{else}}<b style="white-space: normal!important;">{{/is_link}}{{safe_string subject}}</b></span></a></p>
+  			{{#if this.contacts}}
+				<p  style="white-space: nowrap;">{{#related_to_one contacts}}{{/related_to_one}}</p>
+			{{/if}}
+  			<p class="m-b-xs" style="line-height: 20px;"> 
+				<span class="label label-info">{{task_property type}}</span>
+				{{#if_equals priority_type "NORMAL"}}{{else}}
+					<span class="label label-{{task_label_color priority_type}} m-l-xs">{{ucfirst priority_type}}</span>
+				{{/if_equals}}
+			</p>
+        	<p>
+				<i class="fa fa-clock-o m-r-xs text-muted"></i>
+        		<time class="task-due-time text-muted" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time>
+	   		</p>
+		</div>
+	</td>
+</script>

@@ -1,0 +1,30 @@
+<script id="report-cohorts-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="page-header">                
+              <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
+			border:1px solid #cfdadd;height:34px">
+                <i class="icon-calendar icon-large"></i>
+                <span id="range">{{date-range "today" "-180"}}</span>
+              </div>
+            <h1>Cohorts Reports</h1>
+			<span id="reports-cohorts-tags"></span>
+        </div>
+    </div>
+</div>
+
+<div>	
+	<!-- Growth Reports -->
+	<div id="email-reports" class="wrapper-md">	
+		<div class="row p-md">
+			<div id="cohorts-chart" class="col-md-12 bg-white"></div>
+		</div>
+		<hr>
+	</div>
+	<!-- End of Growth Reports -->  
+
+   </div>
+</div>
+
+</script>

@@ -1,0 +1,8 @@
+<!-- Textarea -->
+<div class="agile-group<% if(required) {%> required-control<% } %>">
+  <label class="agile-label" for ="<%= id %>"><%= label %></label>
+  <div class="<%= inputsize %> agile-field">
+    <textarea id="<%= id %>" name="<%if(agilefield){%><%= agilefield %><%}else{%><%= id %><%}%>" <% if(required) {%> required <% } %> class="<%= inputheight %>"><%= textarea %></textarea>
+  </div>
+  <div class="agile-custom-clear"></div>
+</div>

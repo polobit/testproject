@@ -1,0 +1,107 @@
+<script id="admin-settings-categories-collection-template" type="text/html">
+	<div class='col'>
+		<div class="hbox h-auto m-b-sm">
+			
+		
+		<div class="accordion" id="category-tracks-accordion">
+			<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    			<!-- div id="admin-settings-milestones-model-list"></div -->
+				
+
+<!-- Category pannel starts-->
+		<div class="panel panel-default">
+		<div id="{{id}}-deal-track" class="accordion-group overflow-hidden">
+		<div class="panel-heading pos-rlt" role="tab" id="headingOne">
+		<div class="accordion-heading">
+			<div class="panel-title">Tasks</div>
+			<div class="clearfix"></div>
+			</div>
+		</div>
+			
+			<div class="panel-collapse" role="tabpanel" aria-labelledby="headingOne" id="collapseOne">
+			<div class="panel-body p-n" id="task-category">
+			<fieldset>
+    		<div class="control-group m-b-none">  	 
+                    <div id="task-category-values-{{name}}">
+					<table class="table table-hover  custom-fields-table bg-white table-hover m-b-none" >
+					<colgroup><col width="50%"><col width="4%"></colgroup>
+					<tbody id="admin-settings-categories-model-list" class="task-categories-tbody ui-sortable">
+		
+					</tbody>
+					</table>
+					</div>
+					<div class="p-l p-t p-b"><a href="#" class="show_task_category_field text-info"><i class="icon-plus-sign"></i> Add Task</a></div>
+					<div class="show_field p-l p-t p-b" style="display:none;">
+						<input id="add_new_task_category" class="add_new_category form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="New Task">
+						<a class="btn btn-info btn-addon btn-sm add_task_category" data-toggle="modal" id="add_task_category" href="#">Add</a>
+						<span class="save-status"></span>
+					</div>
+    				<div class="hidden"><input name="milestones" type="text" class="required form-control" value="{{milestones}}"/></div>
+    		</div> 
+    		</fieldset>
+			</div>
+			</div>
+
+		</div>
+		</div>
+
+<!-- Category pannel ends -->
+
+
+
+			</div>
+		</div>
+		<!-- <div class="form-actions">
+    		<a href="#" class="save-pipelines btn btn-primary">Save</a>
+    	</div> -->
+	</div>
+	</div>
+<!-- Help Text -->
+<div class="col w-md">
+	<div class="data-block">
+		<div class="p-l p-r">
+			<h4 class="m-t-none">What are Tasks?</h4>			
+			<p>Tasks allow you to segregate and manage tasks better. You can customize categories for Tasks here. Add or remove tasks and order them as needed.</p>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="category-delete-modal">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3>Delete Category</h3>
+    </div>
+	<div class="modal-body">
+        <div id="delete-category-confirm-dialog">
+			<input type="hidden" name="id"></input>
+             <p>Are you sure you want to delete Category - <span id="category-name"></span> ? </p>
+			<p>All existing tasks in this category can be accessed from the Tasks list view.</p>
+        </div>
+    </div>
+    <div class="modal-footer">
+    <span class="category-delete-message" style="margin-right:5px;color:red;"></span>
+	<a href="#" id="category-delete-confirm" class="btn btn-primary">Yes</a>
+	<a  href="#" class="btn btn-default" data-dismiss="modal">No</a>
+    </div>
+</div>
+</div>
+</div>
+</script>
+
+<script id="admin-settings-categories-model-template" type="text/html">
+    	
+	<td>
+		<div class="inline-block v-top text-ellipsis" style="width:80%">{{label}}</div>
+		<input type="hidden" name="id" value="{{id}}">
+	</td>
+	<td class="b-r-none">
+		<div class="m-b-n-xs" style="display:none;">
+			<a class="text-l-none-hover c-p text-xs"><i title="Drag" class="icon-move"></i></a>
+			<a id="{{id}}" class="category-delete c-p text-l-none text-xs" data-toggle="modal" role="button" href="#" data="{{label}}">
+				<i title="Delete Category" class="task-action icon icon-trash"></i>
+			</a>
+		</div>
+	</td>
+		
+</script>

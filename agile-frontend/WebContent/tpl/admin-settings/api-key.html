@@ -1,0 +1,291 @@
+<script id="admin-settings-api-key-model-template" type="text/html">
+<!-- 
+<div class="row">
+	<div class="span12">
+		<div class="">
+			<h3><strong>API & Analytics</strong></h3>
+		</div>
+	</div>
+</div>-->
+
+<div class="row">
+	<div class="span5">
+		<ul class="nav nav-tabs" id="APITab">
+			<li class="api-tab active"><a data-toggle="tab" href="#api">API Key</a></li>
+			<li class="analytics-tab"><a data-toggle="tab" href="#analytics">Analytics Code</a></li>
+		</ul>
+		<div class="tab-content">
+
+			<!--  API Key templete -->
+
+<div class="tab-pane active" id="api">
+    <b>API key</b> for REST clients (Java, PHP, .Net wrappers) and integrations (Zapier, Wufoo, Unbounce, Chrome extension and others).
+   <div class="clearfix"></div>
+   <br/>
+   <div class="row-fluid">
+      <div class="span11">
+         <div>
+			<pre class="prettyprint pln" id="api_key_code">{{api_key}}<span style="display: inline-block; float:right;"><a id="api_key_generate_icon" style="margin:4px 4px 0px 0px;cursor:pointer;"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" style="height: 6px; vertical-align: text-top" rel="popover" data-placement="bottom" data-title="" data-content="Reset API Key" id="element" data-trigger="hover" data-original-title=""></span></pre>
+         </div>
+      </div>
+   </div>
+  <b>Javascript API key</b> only for tracking code on website.
+  <div class="clearfix"></div>
+   <br/>
+      <div class="row-fluid">
+      <div class="span11">
+         <div>
+			<pre class="prettyprint pln" id="jsapi_key_code">{{js_api_key}}<span style="display: inline-block; float:right;"><a id="jsapi_key_generate_icon" style="margin:4px 4px 0px 0px;cursor:pointer;"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" style="height: 6px; vertical-align: text-top" rel="popover" data-placement="bottom" data-title="" data-content="Reset JavaScript API Key" id="element" data-trigger="hover" data-original-title=""></span></pre>
+         </div>
+      </div>
+   </div>
+	<!--<form id="allowedDomainsForm" method="get" action="" class="form-horizontal">
+
+    	<label>Allowed Domains<span class="field_req">*</span></label> <br/>
+		<textarea class="required" name="allowed_domains" cols="50" rows="4" id="allowed_domains">{{allowed_domains}}</textarea>
+		<input type="text" name="id" class="hidden" value={{id}}>
+		<input type="text" name="api_key" class="hidden" value={{api_key}}>
+		<input type="text" name="js_api_key" class="hidden" value={{js_api_key}}> <br/> <br/>       	
+		<button type="submit" class="save btn btn-primary">Save Changes</button>
+	</form>-->
+</div>
+
+			<!-- End of API Key templete-->
+
+			<div class="tab-pane" id="analytics">
+
+<div class="row-fluid">
+	<div class="span11">
+		<p>You can use javascript API to track page views on your site, add / delete contacts from your website or blog directly. Copy and paste the below code in your webpage's HTML just before the <b>&lt;/BODY&gt;</b> tag to enable tracking / API methods.</p>
+
+		<ul class="nav nav-pills" id="TrackingTab">
+			<li class="tracking-tab"><a data-toggle="tab" href="#tracking"><span>Tracking code</span></a></li>
+			<li class="tracking-webrules-tab active"><a data-toggle="tab" href="#tracking-webrules"><span>Tracking code with Web Rules enabled</span></a></li>
+			<li class="tracking-webrules-whitelist-tab active"><a data-toggle="tab" href="#tracking-webrules-whitelist"><span>Tracking code with Web Rules Whitelist enabled</span></a></li>
+		</ul>
+		<div class="tab-content">
+
+			<!--  Tracking code templete -->
+			<div class="tab-pane" id="tracking">
+<div class="clearfix"></div>
+<div><!--<a class="right btn" id="api_track_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
+<pre class="prettyprint" id="api_track_code">
+&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
+&lt;/script&gt;
+&lt;script type="text/javascript" &gt;
+ _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
+ _agile.track_page_view();
+&lt;/script&gt;
+</pre></div>
+			</div>
+			<!-- End of Tracking code templete -->
+
+			<!--  Tracking code with Web Rules templete -->
+			<div class="tab-pane active" id="tracking-webrules">
+<div class="clearfix"></div>
+<div><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
+<pre class="prettyprint" id="api_track_webrules_code">
+&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
+&lt;/script&gt;
+&lt;script type="text/javascript" &gt;
+ _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
+ _agile.track_page_view();
+ _agile_execute_web_rules();
+&lt;/script&gt;
+</pre></div>
+			</div>
+			<!-- Tracking code with Web Rules templete -->
+
+			<!--  Tracking code with Web Rules whitelist enabled -->
+			<div class="tab-pane active" id="tracking-webrules-whitelist">
+<div class="clearfix"></div>
+<div><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
+<pre class="prettyprint" id="api_track_webrules_code">
+&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt;
+&lt;/script&gt;
+&lt;script type="text/javascript" &gt;
+ _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
+ _agile_set_whitelist('{{getBase64Domain}}');
+ _agile.track_page_view();
+ _agile_execute_web_rules();
+&lt;/script&gt;
+</pre></div>
+			</div>
+			<!-- / Tracking code with Web Rules whitelist enabled -->
+
+		</div>
+	</div>
+</div>
+
+<br/>
+<p><b>API Reference</b></p>
+
+Set Email (Mandatory)<div class="clearfix"></div><br/>
+				<div class="row-fluid">
+    				<div class="span11">
+<pre class="prettyprint">
+ _agile.set_email('jim@example.com');
+</pre>
+	</div>
+</div>
+
+Track Page View<div class="clearfix"></div><br/>
+				<div class="row-fluid">
+    				<div class="span11">
+<pre class="prettyprint">
+ _agile.track_page_view({
+   success: function(data) {
+     console.log("success");
+   },
+   error: function(data) {
+     console.log("error");
+   }
+ })</pre>
+	</div>
+</div>
+
+Create Contact<div class="clearfix"></div><br/>
+				<div class="row-fluid">
+    				<div class="span11">
+<pre class="prettyprint">
+ _agile.create_contact({
+  "email": "jim@example.com",
+  "first_name": "Jim",
+  "last_name": "Brown",
+  "company": "abc corp",
+  "title": "lead",
+  "phone": "+1-541-754-3010",
+  "website": "http://www.example.com",
+  "address": "{\"city\":\"new delhi\", \"state\":\"delhi\",\"country\":\"india\"}",
+  "tags": "tag1, tag2"
+}, {
+  success: function(data) {
+    console.log("success");
+  },
+  error: function(data) {
+    console.log("error");
+  }
+});
+</pre>
+	</div>
+</div>
+
+Delete Contact<div class="clearfix"></div><br/>
+				<div class="row-fluid">
+    				<div class="span11">
+<pre class="prettyprint">
+ _agile.delete_contact('jim@example.com', {
+   success: function(data) {
+     console.log("success");
+   },
+   error: function(data) {
+     console.log("error");
+   }
+ });</pre>
+	</div>
+</div>
+
+Add Property<div class="clearfix"></div><br/>
+				<div class="row-fluid">
+    				<div class="span11">
+<pre class="prettyprint">
+_agile.set_property({
+  "name": "phone",
+  "value": "+1-541-754-3010",
+  "type": "mobile"
+}, {
+  success: function(data) {
+    console.log("success");
+  },
+  error: function(data) {
+    console.log("error");
+  }
+});</pre>
+	</div>
+</div>
+
+Add Tag<div class="clearfix"></div><br/>
+				<div class="row-fluid">
+    				<div class="span11">
+<pre class="prettyprint">
+ _agile.add_tag('tags2, tag3, tag4', {
+   success: function(data) {
+     console.log("success");
+   },
+   error: function(data) {
+     console.log("error");
+   }
+ });</pre>
+	</div>
+</div>
+
+Remove Tag<div class="clearfix"></div><br/>
+				<div class="row-fluid">
+    				<div class="span11">
+<pre class="prettyprint">
+ _agile.remove_tag('tag4, tag5, tag6', {
+   success: function(data) {
+     console.log("success");
+   },
+   error: function(data) {
+     console.log("error");
+   }
+ });</pre>
+	</div>
+</div>
+
+Add Score<div class="clearfix"></div><br/>
+				<div class="row-fluid">
+    				<div class="span11">
+<pre class="prettyprint">
+_agile.add_score(10, {
+  success: function(data) {
+    console.log("success");
+  },
+  error: function(data) {
+    console.log("error");
+  }
+});
+
+// Subtract Score
+_agile.add_score(-5, {
+  success: function(data) {
+    console.log("success");
+  },
+  error: function(data) {
+    console.log("error");
+  }
+});
+</pre>
+	</div>
+</div>
+
+			</div>
+
+		</div>
+	</div>
+
+    <div class="span3 offset4">
+        <div class="data-block">
+            <div class="well">
+				<h3>
+                    Help
+                </h3>
+                <br />
+				<p>Agile supports open standard REST. You can use any language which supports REST.</p>
+				We currently have the following libraries for your convenience<br/>
+				<ul>
+					<li>Java - <a href="https://github.com/agilecrm/java-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/java-api">GitHub</a></li>
+					<li>Javascript - <a href="https://github.com/agilecrm/javascript-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/javascript-api">GitHub</a></li>
+                    <li>PHP - <a href="https://github.com/agilecrm/php-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/php-api">GitHub</a></li>
+                    <li>.NET - <a href="https://github.com/agilecrm/c-sharp-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/c-sharp-api">GitHub</a></li>
+				</ul>
+				We will be publishing API for other languages very soon.
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+</script>

@@ -1,0 +1,98 @@
+<script id="deal-tasks-collection-template" type="text/html">
+		{{#unless this.length}}
+        <div class="wrapper p-t-none">
+            <div class="slate-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">You have no tasks for this Deal.</h4>
+                    <div class="text">
+                        You can add a task related to a deal for calling, email, follow-up etc.
+                    </div>
+                    <a href="#" class="btn blue btn-slate-action btn-default btn-sm deal-add-task m-t-xs"><i class="icon-plus-sign"></i>  Add Task</a>
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+	<div class="m-b-md m-t-md m-r-sm" align="right">
+		<a href="#" class="btn btn-default btn-sm deal-add-task pos-rlt m-t-xs btn-addon"><span><i class='icon-plus-sign'/></span> Add Task</a>
+	</div>
+			<ul id="deal-tasks-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs" url="core/api/notes/bulk"></ul>
+		{{/if}} 
+</script>
+
+
+<script id="deal-tasks-model-template" type="text/html">
+<div class="activity block pos-rlt">
+	{{#if is_complete}}
+		<div>
+	{{else}}
+		<div>
+	{{/if}}	
+	<div class="activity-block-owner thumb-xs pull-right avatar">
+		{{#if ownerPic}}
+			<img class="user-img r r-2x" alt="" src="{{ownerPic}}" >
+		{{else}}
+			<img class="user-img r r-2x" src="{{defaultGravatarurl 40}}">
+		{{/if}}
+	</div>
+<span class="hidden">{{taskOwner.name}}</span>
+<div class="pull-left rightThumbView">
+<div class="pull-left  text-md text-cap">
+    {{#if is_complete}}
+			<div><span><i class="fa fa-check"></i></span><div class="task-subject inline text-l-t" style="margin-left:9px"><a  href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
+                   <span><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}} hide"></i>&nbsp; -->{{ucfirst type}}</label></span>
+				</div>
+		{{else}}
+			<div><label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-deal-task form-control" type="checkbox"/><i></i></label><div class="task-subject inline"><a  href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
+                    <span><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}}"></i>&nbsp; -->{{ucfirst type}}</label></span>
+				</div>
+	{{/if}}
+</div>
+    
+     <div class="clearfix"></div>
+ 
+	<div><span class="m-l-md p-l-xs">Due : <i class="fa fa-clock-o m-r-xs hide"></i><time class="task-created-time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span></div>
+    <div class="m-l-md p-l-xs">	
+		{{#each contacts}}
+           	{{#if id}}
+				{{#isDuplicateContactProperty properties "email"}}
+
+					{{else}}
+						{{#if_contact_type "PERSON"}}	
+							<a  href="#contact/{{id}}" >{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+        				{{/if_contact_type}}
+						{{#if_contact_type "COMPANY"}}
+        					<a  href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        				{{/if_contact_type}}
+				{{/isDuplicateContactProperty}}
+           		
+           	{{/if}}
+       	{{/each}}
+		</div>
+		</div>
+		<div class="clearfix"></div>
+ <div class="pull-left">
+     <small class="edit-hover text-muted m-l-md p-l-xs"> 
+          <i class="fa fa-clock-o m-r-xs"></i>
+			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+		</small>
+     </div>
+<div class="pull-right">
+		<span class="actions">
+			<a title="Edit"  data="{{id}}" class="task-edit-deal-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+            <a title="Delete" class="c-p text-l-none"><span class="deal-task-delete icon-trash" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>
+        </span>
+        </div>
+<div class="clearfix"></div>
+ 
+</div>
+</div>
+<div class="priority_type hidden">{{priority_type}}</div>
+</script>

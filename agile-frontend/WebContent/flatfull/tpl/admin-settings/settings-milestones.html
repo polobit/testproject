@@ -1,0 +1,222 @@
+<script id="settings-milestones-tab-template" type="text/html">
+	<div class="tab-container m-b-none">
+           <ul class="nav nav-tabs b-b-none">
+             <li class="settings-milestones"><a href="#milestones" class="b-l-none">Tracks and Milestones</a></li>
+             <li class="settings-lost-reasons"><a href="#lost-reasons">Loss Reasons</a></li>
+			 <li class="settings-deal-sources"><a href="#deal-sources">Sources</a></li>
+           </ul>
+	</div>
+	<div class="tab-pane active" id="settings-milestones-tab-content">
+</script>
+<script id="admin-settings-milestones-collection-template"
+	type="text/html">
+	<div class='col panel wrapper b-t'>
+		<div class="hbox h-auto m-b-sm">
+			<h4>
+			{{#isTracksEligible}}
+				<a href="#pipelineModal" role="button" data-toggle="modal" type="submit" class="add-pipeline btn btn-default btn-addon btn-sm" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</a>
+			{{else}}
+				<span class="btn btn-default disabled" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</span>
+				<div class="clearfix"></div>
+			{{/isTracksEligible}}
+			</h4>
+            <div class="clearfix"></div>
+			{{#isTracksEligible}}
+			{{else}}
+			<div class="pull-right m-t-n-sm m-b-sm"><i>Regular or Enterprise plan only</i></div>
+			<div class="clearfix"></div>
+			{{/isTracksEligible}}
+		</div>
+		<div class="accordion" id="deal-tracks-accordion">
+			<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    			<div id="admin-settings-milestones-model-list"></div>
+			</div>
+		</div>
+		<!-- <div class="form-actions">
+    		<a href="#" class="save-pipelines btn btn-primary">Save</a>
+    	</div> -->
+    	<!-- <div class="hbox h-auto m-b-sm">
+			<h4>
+				<div class="m-t-xs pull-left">Lost Reasons</div>
+			</h4>
+		</div>
+		<div id="admin-settings-lost-reasons"></div>
+		<div class="hbox h-auto m-b-sm">
+			<h4>
+				<div class="m-t-xs pull-left">Deal Sources</div>
+			</h4>
+		</div>
+		<div id="admin-settings-deal-sources"></div> -->
+	</div>
+<!-- Help Text -->
+<div class="col w-md  wrapper pos-rlt track-milestone-text">
+	<div class="data-block">
+		<div class="p-l p-r">
+			<h4 class="m-t-none">What are Tracks and Milestones?</h4>			
+			<p>Tracks are sales processes. Use tracks to correspond to particular products or services offered by your company, or set up tracks to be used in deals with customers, partners, resellers, etc. When you create a new deal, you choose which track to associate it with.</p>
+			<br/>
+			<p>Milestones define the status of deals in a particular track. You can create any number of custom milestones in a track. Common milestones include 'New', 'In Progress',  'Won' or  'Lost'. When you associate a deal with a track, that deal will typically need to go through all of the track's milestones to be completed or finalized.</p>
+		</div>
+	</div>
+</div>
+</script>
+
+<script id="admin-settings-milestones-model-template" type="text/html">
+    	
+		<div class="panel panel-default">
+		<form id="milestonesForm_{{id}}" class="form-horizontal m-b-none pipeline" method=post>
+		<div id="{{id}}-deal-track" class="accordion-group overflow-hidden">
+		<div class="panel-heading pos-rlt" role="tab" id="headingOne">
+		<div class="accordion-heading">
+    		{{#if id}}
+    			<input type="text" name="id" class="hide form-control" value="{{id}}">
+    		{{/if}} 
+			{{#if id}}
+    			<input type="text" name="name" class="hide form-control" value="{{name}}">
+    		{{/if}}
+			<input type="hidden" name="isDefault" value="{{isDefault}}">
+			<input type="hidden" name="won_milestone" value="{{won_milestone}}" />
+			<input type="hidden" name="lost_milestone" value="{{lost_milestone}}" />
+			<div class="panel-title"><a class="accordion-toggle pull-left text-l-none-hover" data-toggle="collapse" aria-controls="collapseOne" aria-expanded="true" data-parent="#deal-tracks-accordion" href="#dealtracks-{{id}}-accordion" style="width:90%;">{{name}}</a></div>
+			<div id="icons" class="pull-right pos-abs pos-r-0 pos-t-0 p-r m-t-xs" style="display:none;">
+			{{#isTracksEligible}}
+			{{#hasSingleTrack}}
+				<a href="#pipeline-delete-modal" role="button" data-toggle="modal" class="pipeline-delete m-t-xs m-l-sm c-p text-l-none pull-right text-sm" id="{{id}}" data="{{name}}"><i class="task-action icon icon-trash" data="{{id}}" title="Delete Track"></i></a>
+			{{/hasSingleTrack}}
+			<a href="#pipelineModal" role="button" data-toggle="modal" class="pipeline-edit m-t-xs c-p text-l-none pull-right text-sm {{#hasSingleTrack}} {{else}}p-r-xs{{/hasSingleTrack}}" id="{{id}}" data="{{name}}" ><i class="task-action icon icon-edit" data="{{id}}" title="Edit Track"></i></a>
+			{{else}}
+			{{#if_equals isDefault 'false'}}
+				{{#hasSingleTrack}}
+					<a href="#pipeline-delete-modal" role="button" data-toggle="modal" class="pipeline-delete m-t-xs m-l-sm c-p text-l-none pull-right text-sm" id="{{id}}" data="{{name}}"><i class="task-action icon icon-trash" data="{{id}}" title="Delete Track"></i></a>
+				{{/hasSingleTrack}}
+				<a href="#pipelineModal" role="button" data-toggle="modal" class="pipeline-edit m-t-xs c-p text-l-none pull-right text-sm" id="{{id}}" data="{{name}}" ><i class="task-action icon icon-edit" data="{{id}}" title="Edit Track"></i></a>
+			{{/if_equals}}
+			{{/isTracksEligible}}
+			</div>
+			<div class="clearfix"></div>
+			</div>
+		</div>
+			<div class="panel-collapse" role="tabpanel" aria-labelledby="headingOne" id="collapseOne">
+			<div class="panel-body p-n  collapse" id="dealtracks-{{id}}-accordion">
+			<fieldset>
+    		<div class="control-group m-b-none">  	 
+                    <div id="milestone-values-{{id}}">
+					<table class="table table-hover  milestones-table bg-white table-hover m-b-none" >
+					<colgroup><col width="50%"><col width="8%"></colgroup>
+					<tbody class="deal-tracks-tbody ui-sortable">
+					{{#milestone_ul this}}{{/milestone_ul}}
+					</tbody>
+					</table>
+					</div>
+					<div class="p-l p-t p-b"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> Add Milestone</a></div>
+					<div class="show_field p-l p-t p-b" style="display:none;">
+						<input id="add_new_milestone" class="add_new_milestone form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="New Milestone">
+						<a class="btn btn-default btn-addon btn-sm add_milestone m-b-xxs m-t-n-xxs" data-toggle="modal" id="add_milestone" href="#">Add</a>
+						<span id="new_milestone_name_error_{{id}}" for="new_milestone_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>
+						<span id="new_milestone_chars_error_{{id}}" for="new_milestone_name" generated="true" class="help-inline" style="display:none;">Special characters are not allowed other than underscore, space and hyphen.</span>
+						<span id="new_milestone_existed_error_{{id}}" for="new_milestone_name" generated="true" class="help-inline" style="display:none;">Milestone with this name already exists.</span>
+					</div>
+    				<div class="hidden"><input name="milestones" type="text" class="required form-control" value="{{milestones}}"/></div>
+    		</div> 
+    		</fieldset>
+			</div>
+			</div>
+		</div>
+    	</form>
+		</div>
+		
+</script>
+
+<script id="admin-settings-lost-reasons-collection-template" type="text/html">
+<div class="panel wrapper">
+	<div class="">
+		<table id="lost-reasons-table" class="table table-bordered agile-table onlySorting m-b-n-xs table-hover">
+			<tbody id="admin-settings-lost-reasons-model-list" class="admin-settings-lost-reasons-model-list" style="word-break:normal!important;" ></tbody>
+		</table>
+	</div>
+	<form id="lostReasonsForm" class="form-horizontal m-b-none pipeline" method=post>
+		<div class="p-l p-t p-b show_lost_reason_add"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> Add Reason</a></div>
+		<div class="show_field p-l p-t p-b" style="display:none;">
+			<input id="lost_reason_name" name="label" class="form-control input-sm required" style="width:145px;display:inline-block" type="text" placeholder="New Loss Reason">
+			<input type="hidden" name="entity_type" value="DEAL_LOST_REASON" />
+			<a class="btn btn-default btn-addon btn-sm add_lost_reason m-t-n-xxs" data-toggle="modal" id="add_lost_reason" href="#">Add</a>
+			<span id="lost_reason_name_error" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>
+			<span id="lost_reason_chars_error" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Special characters are not allowed other than underscore, space and hyphen.</span>
+			<span id="lost_reason_existed_error" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Reason with this name already exists.</span>
+		</div>
+	</form>
+<div>
+</script>
+
+<script id="admin-settings-lost-reasons-model-template" type="text/html">
+<td>
+	<form id="lostReasonsForm_{{id}}" class="form-horizontal m-b-none pipeline" method=post>
+	<div class="pull-left inline-block v-top text-ellipsis lost_reason_name_div text-cap" style="width:80%">{{label}}</div>
+	<div class="pull-left inline-block v-top text-ellipsis lost_reason_name_input" style="width:80%;display:none;">
+		<input id="{{id}}" name="label" class="form-control input-sm required inline-block update_lost_reason" style="width:145px;" type="text" value="{{label}}">
+		<a class="btn btn-default btn-addon btn-sm updates_lost_reason m-t-n-xxs" data-toggle="modal" id="updates_lost_reason" href="#">Update</a>
+		<input type="hidden" name="id" value="{{id}}" />
+		<input type="hidden" name="entity_type" value="{{entity_type}}" />
+		<input type="hidden" name="created_time" value="{{created_time}}" />
+		<span id="lost_reason_name_error_{{id}}" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>
+		<span id="lost_reason_chars_error_{{id}}" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Special characters are not allowed other than underscore, space and hyphen.</span>
+		<span id="lost_reason_existed_error_{{id}}" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Reason with this name already exists.</span>
+	</div>
+	<div class="m-b-n-xs pull-right vis-hide lost-reason-icons">
+		<a class="lost-reason-edit c-p m-l-sm text-l-none text-xs hover-show" >
+			<i title="Edit Reason" class="icon icon-edit"></i>
+		</a>
+		<a class="lost-reason-delete text-l-none-hover c-p text-xs m-l-sm hover-show">
+			<i title="Delete Reason" class="icon-trash"></i>
+		</a>
+	</div>
+	</form>
+</td>
+</script>
+
+<script id="admin-settings-deal-sources-collection-template" type="text/html">
+<div class="panel wrapper">
+	<div class="">
+		<table id="deal-sources-table" class="table  table-bordered agile-table onlySorting m-b-n-xs table-hover">
+			<tbody id="admin-settings-deal-sources-model-list" class="admin-settings-deal-sources-model-list" style="word-break:normal!important;" ></tbody>
+		</table>
+	</div>
+	<form id="dealSourcesForm" class="form-horizontal m-b-none pipeline" method=post>
+		<div class="p-l p-t p-b show_deal_source_add"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> Add Source</a></div>
+		<div class="show_field p-l p-t p-b" style="display:none;">
+			<input id="deal_source_name" name="label" class="form-control input-sm required" style="width:145px;display:inline-block" type="text" placeholder="New Source">
+			<input type="hidden" name="entity_type" value="DEAL_SOURCE" />
+			<a class="btn btn-default btn-addon btn-sm add_deal_source m-t-n-xxs" data-toggle="modal" id="add_deal_source" href="#">Add</a>
+			<span id="deal_source_name_error" for="deal_source_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>
+			<span id="deal_source_chars_error" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Special characters are not allowed other than underscore, space and hyphen.</span>
+			<span id="deal_source_existed_error" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Source with this name already exists.</span>
+		</div>
+	</form>
+<div>
+</script>
+
+<script id="admin-settings-deal-sources-model-template" type="text/html">
+<td>
+	<form id="dealSourcesForm_{{id}}" class="form-horizontal m-b-none pipeline" method=post>
+	<div class="pull-left inline-block v-top text-ellipsis deal_source_name_div text-cap" style="width:80%">{{label}}</div>
+	<div class="pull-left inline-block v-top text-ellipsis deal_source_name_input" style="width:80%;display:none;">
+		<input id="{{id}}" name="label" class="form-control input-sm required inline-block update_deal_source" style="width:145px;" type="text" value="{{label}}">
+		<a class="btn btn-default btn-addon btn-sm updates_deal_source m-t-n-xxs" data-toggle="modal" id="updates_deal_source" href="#">Update</a>
+		<input type="hidden" name="id" value="{{id}}" />
+		<input type="hidden" name="entity_type" value="{{entity_type}}" />
+		<input type="hidden" name="created_time" value="{{created_time}}" />
+		<span id="deal_source_name_error_{{id}}" for="deal_source_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>
+		<span id="deal_source_chars_error_{{id}}" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Special characters are not allowed other than underscore, space and hyphen.</span>
+		<span id="deal_source_existed_error_{{id}}" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Source with this name already exists.</span>
+	</div>
+	<div class="m-b-n-xs pull-right vis-hide lost-reason-icons">
+		<a class="deal-source-edit c-p m-l-sm text-l-none text-xs hover-show" >
+			<i title="Edit Source" class="icon icon-edit"></i>
+		</a>
+		<a class="deal-source-delete text-l-none-hover c-p text-xs m-l-sm hover-show">
+			<i title="Delete Source" class="icon-trash"></i>
+		</a>
+	</div>
+	</form>
+</td>
+</script>

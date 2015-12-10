@@ -1,0 +1,49 @@
+<!-- Add (Voice Mail) Modal views -->
+<div class="modal fade voice-mail-modal word-break" id="uploadVoiceMailModal" aria-hidden="false" style="padding-left: 17px;">
+<div class="modal-backdrop fade" style="height: auto;"></div> 
+ <div class="modal-dialog"> 
+  <div class="modal-content"> 
+
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3><i class="icon-plus-sign"></i>&nbsp;Add Voicemail</h3>
+	</div>
+	<div class="modal-body">
+		<form id="uploadVoiceMaiForm" name="uploadVoiceMaiForm" method="post">
+			<fieldset>				
+				<div class="control-group">
+					<label class="control-label"><b>Title </b><span
+						class="field_req">*</span></label>
+					<div class="controls">
+						<span><input id="name" name="name" type="text"
+							class="required form-control" placeholder="Name of Voicemail" required/></span>
+					</div>
+				</div>				
+				<div class="m-t-xs">
+					<input name="extension" id="extension" type="hidden"/>
+					<div class="control-group">
+						<label class="control-label"><b>Voice File</b><span
+							class="field_req">*</span></label>
+						<div class="controls">
+						    <input type="hidden" name="url" id="upload_url" class="required"/>
+						    <input type="hidden" name="network_type" id="network_type" class="required"/>
+							<div class="span3" style="margin-left:0px!important;">							
+							<div class="addFileLink">
+								<a href="#" class="btn btn-sm btn-default" id="S3"><i class="icon-plus-sign"></i> <span>Add File</span></a>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="error"></div>
+			</fieldset>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn btn-sm btn-primary" id="voicemail_validate">Save</a> <span class="save-status"></span>
+	</div>
+
+</div>
+</div>
+</div>
+<!-- End of Modal views -->

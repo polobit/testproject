@@ -1,0 +1,42 @@
+<div id="refundModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+  <div class="modal-content">
+  <div class="modal-header">
+    <button class="close" data-dismiss="modal">x</button>
+    <h3 id="myModalLabel">Refund</h3>
+  </div>
+ 
+    <div class="modal-body">
+		<form id="admin-partial-refund" class="card_details">
+			<fieldset>
+
+				
+				<div class="control-group form-group">
+					<label class="control-label"><b>Amount &nbsp; $</b></label>
+					<div class="controls">
+						<div style="margin-top: 3px;"><input type="text" name="amount" id="amount" class="input required number form-control" /></div>
+						<div id="errormsg" style="color: red;"></div>
+						<input type="hidden" name="hchargeid" id="hchargeid" class="hchargeid" />
+						<input type="hidden" name="totamount" id="totamount" class="totamount" />
+						
+					</div>
+
+				</div>
+					
+				
+			</fieldset>
+			
+		</form>
+		
+	</div>
+ 
+ 
+ 
+ 
+ 
+  <div class="modal-footer" id="partial-refund-footer">
+        <button class="btn btn-sm btn-primary" data-loading-text="Refund" id="partialrefund">Refund</button>
+  </div>
+  </div>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<script id="bulk-actions-tags-template" type="text/html">
+<div class="span8">
+    <div class="well">
+        <form id="tagsBulkForm" class="form-horizontal">
+            <fieldset>
+                <legend>Add tags to selected contacts</legend>
+                                    <div style="margin-bottom:30px"> 
+    <div class="alert danger info-block" style="color: black;background-color: rgb(255,255,204);border: 1px solid rgb(211,211,211);">
+                <div>
+               <div class="pull-left m-r-sm"> <i class="icon-warning-sign"></i></div><div> We are experiencing a temporary issue with bulk actions. We suggest you to limit your bulk actions to less than 1000 contacts. This issue will be rectified at the earliest. We apologise for the inconvenience.</div>
+                <div class="clearfix "></div>
+                </div>
+            </div>
+    </div>
+                <div class="control-group">         
+                    <label class="control-label">Add tags <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <div class="pull-left">
+                        <ul name="tags" class= "tagsinput tags"></ul>
+                        </div>              
+                        <input name="tags" type="text" id="addBulkTags" class="tags-typeahead" placeholder="Enter tags separated by comma"/>
+						<span class="error-tags" style="display:none;color:red;">This field is required.</span>
+						<input class="hide"/>      
+              		</div>
+                </div>
+				<div class="invalid-tags" style="display:none;color:red;">Tag name should start with an alphabet and can not contain special characters other than underscore and space.</div>
+                <div class="form-actions">          
+                    <a href="#" type="submit" id="addTagsToContactsBulk" class="btn btn-primary">Add</a> 
+                    <a href="#contacts" class="btn">Close</a>
+                    <span class="save-status"></span>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+</script>		

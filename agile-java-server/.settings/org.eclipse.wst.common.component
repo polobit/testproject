@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="agile-java-server">
+        <wb-resource deploy-path="/" source-path="/EarContent" tag="defaultRootSource"/>
+        <dependent-module archiveName="agile-frontend.war" deploy-path="/" handle="module:/resource/agile-frontend/agile-frontend">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="agile-calendar.war" deploy-path="/" handle="module:/resource/agile-calendar/agile-calendar">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="agile-normal-bulk.war" deploy-path="/" handle="module:/resource/agile-normal-bulk/agile-normal-bulk">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="agile-campaigns-bulk.war" deploy-path="/" handle="module:/resource/agile-campaigns-bulk/agile-campaigns-bulk">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="agile-campaigns-normal.war" deploy-path="/" handle="module:/resource/agile-campaigns-normal/agile-campaigns-normal">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="agile-core-classes.jar" deploy-path="/lib" handle="module:/resource/agile-core-classes/agile-core-classes">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="agile-temp-bulk.war" deploy-path="/" handle="module:/resource/agile-temp-bulk/agile-temp-bulk">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>

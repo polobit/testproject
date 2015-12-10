@@ -1,0 +1,161 @@
+
+<script type="text/html" id="admin-settings-integrations-stats-template">
+<div class="m-b-sm" id="account-stats">
+<h4>Account Stats</h4>
+<div class="row">
+<div class="col-md-6 b-r b-light">
+<div class="panel panel-default">
+<table class="table table-bordered table-hover">
+   
+    <thead class="panel-heading">
+        <tr>
+            <th style="width:46%" class="font-normal">Name</th>
+            <th style="width:54%" class="font-normal">Count <span class="text-right block m-t-n-md text-muted">Your Plan Limits</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Contacts and Companies</td>
+            <td>{{contact_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'contactLimit'}}</span></td>
+        </tr>
+        <tr>
+            <td>Deals</td>
+            <td>{{deals_count}} <span class="text-right block m-t-n-md text-muted">Unlimited</span></td>
+        </tr>
+		<tr>
+            <td>Campaigns</td>
+            <td>{{compaign_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'workflowLimit'}}</span></td>
+        </tr>
+        <tr>
+            <td>Triggers</td>
+            <td>{{triggers_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'triggersLimit'}}</span></td>
+        </tr>
+		<tr>
+            <td>Web Rules</td>
+            <td>{{webrule_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'webRuleLimit'}}</span></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>		
+<div class="m-b-sm">
+<h4 class="h4 pull-left"> Email Stats </h4>
+				<div  class="pull-right">
+					{{#if this.id}}Reputation {{{get_subaccount_reputation reputation}}}
+					{{/if}}
+				</div>
+<div class="clearfix"></div>
+		</div>
+		{{#unless _agile_email_gateway}}
+			{{#if_equals "paused" status}}
+				<div class="alert alert-danger m-t" role="alert">
+  					Important: Emails from your account are blocked due to poor reputation. Please contact our <a href="#contact-us">support</a> team if you wish to correct this.
+				</div>
+			{{/if_equals}}
+		{{/unless}}
+		<div>
+		
+		{{#if_equals "SEND_GRID" _agile_email_gateway}}
+			<div class="text-md">SendGrid stats are shown <a class="text-info" href="https://sendgrid.com/statistics" target="_blank">here</a></div><br/>
+		{{/if_equals}}
+		{{!--SES Stats--}}
+		{{#if_equals "SES" _agile_email_gateway}}
+			<div class="text-md">Amazon SES stats are shown <a class="text-info" href="https://aws.amazon.com/" target="_blank">here</a></div><br/>
+		{{else}}
+		<div class="row">
+        	<div class="col-md-6 b-r b-light">
+        	<div class="panel panel-default">
+            	<div class="panel-heading">Emails Sent</div>
+            	
+				<table class="table table-bordered table-hover">
+					<tbody>
+						<tr><td>This Hour</td><td>{{numberWithCommas sent_hourly}}</td></tr>
+						<tr><td>This Week</td><td>{{numberWithCommas sent_weekly}}</td></tr>
+						<tr><td>This Month</td><td>{{numberWithCommas sent_monthly}}</td></tr>
+						<tr><td>Overall</td><td>{{numberWithCommas sent_total}}</td></tr>
+					</tbody>
+				</table>
+				
+        	</div>
+        	</div>
+        	<div class="col-md-6">
+        	<div class="panel panel-default">
+            	<div class="panel-heading">Bounces (Last 30 Days)</div>
+            	
+				<table class="table table-bordered table-hover">
+					<tbody>
+						<tr><td>Hard Bounce</td><td>{{numberWithCommas last_30_days.hard_bounces}}</td></tr>
+						<tr><td>Soft Bounce</td><td>{{numberWithCommas last_30_days.soft_bounces}}</td></tr>
+						<tr><td>Rejects</td><td>{{numberWithCommas last_30_days.rejects}}</td></tr>
+						<tr><td>Spam Complaints</td><td>{{numberWithCommas last_30_days.complaints}}</td></tr>
+					</tbody>
+				</table>
+				
+        	</div>
+    	</div>
+    	</div>
+		{{/if_equals}}	
+    	</div>
+    	
+		<div class="m-b-sm"> 
+			<h4 class="h4"> SMS Stats </h4>
+			<span class="inline" ></span>
+		</div>
+		<div>
+					{{#unless Stats-Type}}
+					<div class="text-md">No SMS gateway configured. <a class="text-info" href="#integrations">Configure Now</a></div>
+					{{/unless}}
+		{{#if_equals "TWILIO" Stats-Type}}
+		
+		<div class="row">
+        	<div class="col-md-6 b-r">
+             <div class="panel panel-default">
+            	<div class="panel-heading">SMS Sent</div>
+                 
+				<table class="table table-bordered table-hover bg-white">
+					<tbody>
+						<tr><td>Today</td><td>{{numberWithCommas Today}}</td></tr>
+						<tr><td>Yesterday</td><td> {{numberWithCommas Yesterday}}</td></tr>
+						<tr><td>This Month</td><td>{{numberWithCommas ThisMonth}} </td></tr>
+						<tr><td>Last Month</td><td>{{numberWithCommas LastMonth}} </td></tr>
+					</tbody>
+				</table>
+        	
+            </div>
+            </div>
+        	<div class="col-md-6">
+            <div class="panel panel-default">
+            <div class="panel-heading">Delivery Status (Last 50 Messages)</div>
+            
+				<table class="table table-bordered table-hover bg-white">
+					<tbody>
+						<tr><td>Queued</td><td>{{numberWithCommas Queued}} </td></tr>
+						<tr><td>Delivered</td><td> {{numberWithCommas Delivered}}</td></tr>
+						<tr><td>Undelivered
+						<span class="v-top">
+						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
+						data-content="This can happen for a number of reasons including carrier content filtering, availability of the destination handset, etc." 
+						id="element" data-trigger="hover" data-original-title=""></span>
+						</td><td>{{numberWithCommas Undelivered}}</td></tr>
+						<tr><td>Failed
+						<span class="v-top">
+						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
+						data-content="This can happen for various reasons including incorrect number, improper number format, queue overflows or  account suspensions. Twilio does not charge you for failed messages." 
+						id="element" data-trigger="hover" data-original-title=""></span>
+						</td><td>{{numberWithCommas Failed}} </td></tr>
+					</tbody>
+				</table>
+           
+           </div>
+        	</div>
+    	</div>
+    	
+		{{/if_equals}}
+		{{#if_equals "PLIVO" Stats-Type}}
+		<div class="text-md">No stats available for Plivo SMS Gateway.</div>			
+		{{/if_equals}}
+		</div>
+
+</script>

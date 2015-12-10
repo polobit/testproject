@@ -1,0 +1,388 @@
+<!-- online scheduling Modal views -->
+
+
+ <script id="settings-online-calendar-new-template" type="text/html">
+<div class="row">
+	<div id="settings-online-calendar" class="col-md-9">
+
+		<div class="tab-container m-b-none">
+			<ul class="nav nav-tabs" id="online-calendar">
+				<li><a href="#calendar-tab" class="b-l-none"  data-toggle="tab">Calendar</a></li>
+				<li><a href="#businesshours-tab" data-toggle="tab">Business
+						Hours</a></li>
+				<li><a href="#meeting-types-tab" data-toggle="tab">Meeting
+						Types</a></li>
+				<li><a href="#advanced-tab" data-toggle="tab">Advanced</a></li>
+			</ul>
+		</div>
+		<div class="tab-content panel wrapper" id="online-calendar-content">
+			<div class="tab-pane" id="calendar-tab">
+				<div class="col" id="schedule-preferences">
+					<div class="hbox h-auto m-b-lg">
+						
+							<div class="panel-body">
+								<form id="scheduleid" name="scheduleid" method="post" action=""
+									class="form-horizontal">
+									<fieldset>
+
+										<div class="row control-group form-group m-b-n-xs">
+											<label class="control-label col-sm-3"><b>Scheduling
+													URL </b></label>
+											<div class="col-sm-9">
+
+												<div
+													class="controls schedule_url_online pos-rlt  word-break p-t-xs"
+													id="schedule-url-id">
+													<a href="" target="_blank" name="scheduleurl"
+														id="scheduleurl" class="text-info text-15"></a>
+													<div class="inline" id="edit">
+														<a href="" id="edit-schedule-id"
+															class="edit-schedule-id nounderline m-t-xs m-l-sm"><i
+															title="Edit" class="icon-edit-sign"></i></a>
+													</div>
+												</div>
+												<div id="specialchar" class="m-t-xs text-danger"
+													style="display: none;">Special characters are not
+													allowed except underscore.</div>
+												<div id="charlength" class="m-t-xs text-danger"
+													style="display: none;">Please enter at least 4
+													letters.</div>
+												<div id="schedule_error_message" class="m-t-xs text-danger"
+													style="display: none;"></div>
+												<div class="clearfix"></div>
+												<div class="tip">
+													<p class="text-muted">Put this link in the signature or
+														in your automated emails</p>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-9 line line-dashed b-b line-lg"></div>
+
+									</fieldset>
+								</form>
+
+
+								<form id="scheduleform" name="scheduleform" method="post"
+									action="" class="form-horizontal hide">
+									<fieldset>
+										<input type="text" name="id" class="hide form-control"
+											value="{{id}}">
+									</fieldset>
+								</form>
+
+								<form class="form-horizontal" id="bufferTimeForm"
+									name="bufferTimeForm">
+									<fieldset>
+
+										<div class="control-group form-group">
+
+											<label class="control-label col-sm-3" for="addToSite"></label>
+											<div class="controls col-sm-9">
+
+												<div>
+													<a
+														class="onlineCalendarAddToSite btn btn-default btn-sm btn-addon">
+														<i class="icon icon-plus-sign"></i> Add to Site
+													</a>
+												</div>
+												<div>
+													<span class="text-muted help-block m-b-none"><span>Get
+															more appointments automatically by adding your calendar
+															to your site or blog</span></span>
+												</div>
+
+											</div>
+										</div>
+
+										<!--<div class="line line-lg b-b"></div>
+									<div class="control-group form-group">
+										<div class="col-sm-offset-3 col-sm-9 m-t-xs">
+											<button type="submit"
+												class="btnSerialize btn-sm btn btn-primary no-outline"
+												id="btnSerialize">Save</button>
+											<span class="m-l-sm text-danger" id="error_message"></span>
+										</div>
+									</div>-->
+									</fieldset>
+								</form>
+							
+						</div>
+					</div>
+				</div>
+
+
+
+			</div>
+			<div class="tab-pane" id="businesshours-tab">
+
+				<div class="col" id="schedule-preferences">
+					<div class="hbox h-auto m-b-lg">
+							<div class="panel-body">
+
+								<form class="form-horizontal">
+									<fieldset>
+										<div class="control-group form-group">
+											<label class="control-label col-sm-3" for="cname">Business
+												Hours</label>
+											<div class="controls col-sm-9 m-t-xs">
+												<div id="define-business-hours"></div>
+											</div>
+											<div class="col-md-3"></div>
+											<div class="col-md-9 m-t-xs col-xs-12">
+												<span class="text-muted">For more granularity in
+													business hours, please configure them in your associated
+													Google Calendar </span>
+											</div>
+
+										</div>
+
+										<div class="line line-lg b-b"></div>
+										<div class="control-group form-group">
+											<div class="col-sm-offset-3 col-sm-9 m-t-xs">
+												<button type="submit"
+													class="btnSerialize btn-sm btn btn-primary no-outline"
+													id="btnSerialize">Save</button>
+												<span class="m-l-sm text-danger" id="error_message"></span>
+											</div>
+										</div>
+									</fieldset>
+								</form>
+
+							</div>
+						
+					</div>
+				</div>
+
+
+			</div>
+			<div class="tab-pane" id="meeting-types-tab">
+
+				<div class="col" id="schedule-preferences">
+					<div class="hbox h-auto m-b-lg">
+						
+							<div class="panel-body">
+
+								<form id="scheduleform" name="scheduleform" method="post"
+									action="" class="form-horizontal">
+									<fieldset>
+										<input type="text" name="id" class="hide form-control"
+											value="{{id}}">
+
+										<div class="control-group form-group">
+
+											<label class="control-label col-sm-3" for="cname">Location
+											</label>
+											<div class="controls col-sm-9 ">
+												<input class="input-xlarge form-control" type="text"
+													id="meeting_types" name="meeting_types"
+													value="{{meeting_types}}"
+													placeholder="Enter comma separated meeting types"
+													autocapitalize="off" />
+												<div id="meeting_type_error" class="text-danger"
+													style="display: none;">Speacial characters are not
+													allowed except comma</div>
+											</div>
+										</div>
+									</fieldset>
+								</form>
+								<form class="form-horizontal">
+									<fieldset>
+
+										{{#stringToJSON this "meeting_durations"}}
+										<div class="control-group form-group">
+											<label class="control-label col-sm-3" for="cname">Types
+											</label>
+
+											<div class="controls col-sm-9">
+												<div class="row m-b-sm">
+
+													<div class="col-sm-8">
+														<input type="text" class="form-control inline-block"
+															id="15mins" name="15mins"
+															placeholder="Add multiple meeting names comma (,) separated"
+															value="{{15mins}}">
+													</div>
+													<div class="col-sm-4 text-right">
+														<div>
+															<div class="m-t-xs">
+																<span>Slot </span> <span
+																	class="text-sm online-meeting-padding online-padding">15
+																	Mins</span>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row m-b-sm">
+
+													<div class="col-sm-8">
+														<input type="text" class="form-control inline-block"
+															id="30mins" name="30mins"
+															placeholder="Add multiple meeting names comma (,) separated"
+															value="{{30mins}}">
+													</div>
+													<div class="col-sm-4 text-right">
+														<div>
+															<div class="m-t-xs">
+																<span>Slot</span> <span
+																	class="text-sm online-meeting-padding online-padding">30
+																	Mins</span>
+															</div>
+														</div>
+													</div>
+												</div>
+												<!-- -->
+												<div class="row m-b-sm">
+
+													<div class="col-sm-8">
+														<input type="text" class="form-control inline-block"
+															id="60mins" name="60mins"
+															placeholder="Add multiple meeting names comma (,) separated"
+															value="{{60mins}}">
+													</div>
+													<div class="col-sm-4 text-right">
+														<div>
+															<div class="m-t-xs">
+																<span>Slot </span><span
+																	class="text-sm online-meeting-padding online-padding">60
+																	Mins</span>
+															</div>
+														</div>
+													</div>
+												</div>
+
+											</div>
+
+											{{/stringToJSON}}
+
+											<div id="meeting_duration_message" class="text-danger"
+												style="display: none;">Please enable at least one
+												option by mentioning a short text for it.</div>
+										</div>
+										<div class="line line-lg b-b"></div>
+										<div class="control-group form-group">
+											<div class="col-sm-offset-3 col-sm-9 m-t-xs">
+												<button type="submit"
+													class="btnSerialize btn-sm btn btn-primary no-outline"
+													id="btnSerialize">Save</button>
+												<span class="m-l-sm text-danger" id="error_message"></span>
+											</div>
+										</div>
+									</fieldset>
+								</form>
+
+
+							</div>
+						
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane" id="advanced-tab">
+				<div class="col" id="schedule-preferences">
+					<div class="hbox h-auto m-b-lg">
+						
+							<div class="panel-body">
+
+
+
+
+
+
+
+								<form class="form-horizontal" id="bufferTimeForm"
+									name="bufferTimeForm">
+									<fieldset>
+
+
+
+											<!-- calendar advanced block-->
+
+											<div class="row">
+												<div class="col-sm-12" id="calendar_advanced_block1">
+													<div class="control-group form-group">
+
+														<label class="control-label col-sm-3" for="cname">Buffer
+															Time</label>
+														<div class="controls col-sm-9">
+															<div class="row m-b-sm">
+
+																<div class="col-sm-6">
+																	<input type="text" class="form-control inline-block"
+																		name="bufferTime" id="bufferTime"
+																		placeholder="Buffer time">
+																</div>
+																<div class="col-sm-3">
+																	<select class="form-control" id="bufferTimeUnit"
+																		name="bufferTimeUnit">
+																		<option value="minutes">Minutes</option>
+																		<option value="hours">Hours</option>
+																	</select>
+																</div>
+															</div>
+															<span style="margin-top: -7px;"
+																class="text-muted help-block m-b-none  p-t-xs">Not
+																ready to take surprise appointments? Buffer time is the
+																minimum notice time you need for your next appointment</span>
+
+
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											
+										<div class="control-group form-group">
+
+											<label class="control-label col-sm-3" for="cname">Message
+											</label>
+											<div class="controls col-sm-9 ">
+												<div class="online_summer_note"></div>
+												<span class="text-muted help-block m-b-none">This message will appear on your appointment scheduling page</span>
+											</div>
+										</div>
+											<div class="line line-lg b-b"></div>
+											<div class="control-group form-group">
+												<div class="col-sm-offset-3 col-sm-9 m-t-xs">
+													<button type="submit"
+														class="btnSerialize btn-sm btn btn-primary no-outline"
+														id="btnSerialize">Save</button>
+													<span class="m-l-sm text-danger" id="error_message"></span>
+												</div>
+											</div>
+											<!-- end of advanced block-->
+									</fieldset>
+								</form>
+							</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="word-break-full col-md-3">
+		<div class="data-block">
+			<div class="p-l p-r">
+				<h4 class="m-t-none">Online Appointment Scheduling</h4>
+
+				<p>Scheduling meetings over email or phone is tedious. Share
+					your Scheduling URL with your prospects so that they can schedule
+					demos, meetings with just a few clicks. Your prospects & you, both
+					receive confirmation of the scheduled meeting.</p>
+			</div>
+		</div>
+		<div class="data-block">
+			<div class="p-l p-r">
+				<h4 class="m-t-none">Group Calendar</h4>
+
+				<p>The group calendar schedule makes it easy for your customers
+					to see the calendar slots of some/all of your team members or
+					resources, at a glance. All you need to do is just add the calendar
+					IDs of your team members at the end of your Online Calendar URL
+					separated by comma. eg:
+					https://DOMAIN.agilecrm.com/calendar/alice,bob,mike</p>
+			</div>
+		</div>
+	</div>
+
+</div>
+</script>
+

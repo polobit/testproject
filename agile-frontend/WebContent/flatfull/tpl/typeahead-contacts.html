@@ -1,0 +1,108 @@
+<script id="typeahead-contacts-model-template" type="text/html">
+<div class="custom-color wrapper-sm">
+	{{#if_equals type "COMPANY"}}
+	<div class="thumb-sm agile-img m-r-xs">
+		<img class="img-inital r r-2x" {{getCompanyImage "40"}} /></img>
+	</div>
+	<div class="agile-thumb text-ellipsis">
+	 {{getPropertyValue properties "name"}}<br />
+        
+		{{getPropertyValue properties "email"}}</br>
+        
+       {{getPropertyValue properties "url"}}</br>
+       
+	</div>
+	{{/if_equals}}
+		{{#if_equals type "PERSON"}}
+	<div class="thumb-sm agile-img m-r-xs">
+		<img class="img-inital r r-2x" src="{{gravatarurl properties 40}}" /></img>
+	</div>
+	<div class="agile-thumb text-ellipsis">
+		{{getPropertyValue properties "first_name"}} {{getPropertyValue
+			properties "last_name"}}
+        <br /> {{getPropertyValue properties
+		"email"}} </br> {{getPropertyValue properties "company"}}
+   		
+	</div>
+	{{/if_equals}} 
+
+<!-- Deals result -->
+
+
+{{#if_equals entity_type "deal"}}
+	<div class="thumb-sm agile-img m-r-xs">
+				<!-- <i class="icon-money icon-3x" id="minus" style="height: 10px; cursor: pointer"></i> -->
+				<i class="icon-money img-inital r r-2x" id="minus" style="font-size:2.75em;"></i>
+	</div>
+	<div class="agile-thumb text-ellipsis">
+		<div class="text-ellipsis"> {{name}}</div>
+<div><span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
+({{probability}}%)<br/>
+<div>{{description}}</div>
+	</div>
+	{{/if_equals}}
+
+</div>
+
+<!-- Document Result -->
+{{#if_equals entity_type "document"}}
+<div class="thumb-sm agile-img m-r-xs">
+				<!-- <i class="icon-folder-close icon-3x" id="minus" style="height: 10px; cursor: pointer"></i> -->
+				<i class="icon-file img-inital r r-2x" id="minus" style="font-size:2.75em;"></i>
+	</div>
+	<div class="agile-thumb text-ellipsis">
+		 <span>{{name}}</span><br /> {{network network_type}}
+         
+	</div>
+	{{/if_equals}}
+
+</div>
+
+<!-- Case Result -->
+{{#if_equals entity_type "case"}}
+<div class="thumb-sm agile-img m-r-xs">
+				<!-- <i class="icon-folder-close icon-3x" id="minus" style="height: 10px; cursor: pointer"></i> -->
+				<i class="icon-folder-close img-inital r r-2x" id="minus" style="font-size:2.75em;"></i>
+	</div>
+	<div class="text-ellipsis agile-thumb">
+		 <span>{{title}}</span><br /> {{description}}
+         
+	</div>
+	{{/if_equals}}
+
+</div>
+
+</script>
+
+<script id="typeahead-contacts-collection-template" type="text/html">
+<div id="contact-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Contacts</div>
+	<div id="contact-results">
+	</div>
+<div id="deal-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Deals</div>
+	<div id="deals-results">
+	</div>
+<div id="document-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Documents</div>	
+	<div id="document-results">
+	</div>
+<div id="case-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Cases</div>	
+	<div id="case-results">
+	</div>
+	<div id="typeahead-contacts-model-list"></div>
+</script>
+
+<script id="no-permission-template" type="text/html">
+<div id="deal_bulk_archive_modal" class="modal hide fade">
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+  <h3>Can't access {{entity}}</h3>
+</div>
+<div class="modal-body">
+  <div id="deal-bulk-confirm">
+		<i class="fa-exclamation-triangle icon-white"></i> Sorry, you do not have the privileges to access {{entity}}. Please contact your CRM administrator.
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Ok</button>
+</div>
+</div>
+</script>

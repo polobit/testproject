@@ -1,0 +1,823 @@
+<script id="subscribe-new-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+		<div class="row">
+  			<div class="col-md-12">
+				<h3 class="pull-left h3 font-thin">Plan and Upgrade</h3>
+			</div>
+		</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+	<div class="col-md-9">
+		<div class="tab-container">
+{{#check_plan "FREE"}}
+<div style="font-size: 13px; /* line-height: 16px; *//* padding: 8px 8px 8px; *//* width: auto; */ position: relative;
+/* top: -49px; */margin: 0 auto;z-index: 9;width: 202px;bottom: 9px;"><span style="padding: 5px 15px 5px 15px;border: 1px solid #E2E29C;background-color: #F7F7D0;">You are currently on FREE plan</span></div>
+
+			<ul class="nav nav-tabs hide" id="subTab" style="margin-top: -18px;">
+{{else}}
+<ul class="nav nav-tabs" id="subTab">
+{{/check_plan}}
+										    <li role="presentation" id="usertab" class="active" data-tab="1">
+												<a href="#users-content" role="tab" name="users-content" data-toggle="tab" aria-control="users-content" id="users">Plans</a>
+											</li>
+											<li role="presentation" id="emailtab" data-tab="2">
+												<a href="#email-content" name="email-content" aria-control="email-content" role="tab" data-toggle="tab" id="emails">Email</a>
+											</li>
+</ul>
+            <div class="tab-content" style=" display: block;">
+            	<div class="tab-pane active" role="tab-panel" id="users-content">
+<div class="panel-body p-t-none">
+              		 <div class="row">
+
+<div id="starter_plan" class="col-md-4 col-sm-12 col-xs-12  p-n" style="opacity: 1;">
+  
+                     <div class="plan-collection-in panel  liteplan" style="background: rgb(246, 247, 249);">
+                       
+                        <div class="p-t-sm text-center show_limits" style="padding-bottom:30px;">
+                           <img src="{{getS3ImagePath '/flatfull/img/lite-plan.png'}}" style="width: 132px;">
+                        </div>
+
+                        <div style="position: relative;" class="show_limits price-panel wrapper m-t-none text-center b-b b-light bg-white p-b-none">
+                        	<div  class="plan_features w-full h-full text-white p-t-xs pos-abs" style="display:none;top: 0px;left: 0px;background-color:black;opacity:0.75;">
+                        		<ul class="p-l-none" style="list-style-type:none">
+                        			<li>10,000 Contacts</li>
+                        			<li>5 Campaigns</li>
+                        			<li>1,000 Pageviews</li>
+                        			<li>5 Web Rules</li>
+                        		</ul>
+                        	</div>
+                        	<div class="price_per_month" style="opacity:1;">
+                        	
+                           <h4 class="m-b-none m-t-none" title="Lite Plan" id="plan_name">Starter</h4>
+                           <div class="p-t-xs" id="propricebox">
+                              <h2 class="m-none" style="line-height: 1 !important;">
+                                 <div id="starter_plan_price_content" class="text-20" style="color: #2b866e;">
+                                    $<span id="starter_plan_price">14.99</span>/user
+                                    <div class="text-xs m-t-xs" style="color:#58666e">per month</div> 
+									<br>
+                                 </div>
+                              </h2>
+                           </div>
+                           </div>
+                        </div>
+
+
+                        <div class="plan-collection-content show_limits text-base text-center p" style="height:104px;" id="basic_plan_statement">
+                           Ideal for startups with lean sales teams for sales tracking & basic marketing automation. 
+                        </div>
+
+<button class="btn btn-block btn-default btn-plan btn-lg m-b-md" id="choose-starter">Choose</button>
+
+                     
+                  </div></div>
+                  <!--End of starter-->
+<div id="regular_plan" class="col-md-4 col-sm-12 col-xs-12  p-n" style="opacity: 1;">
+{{#check_plan "FREE"}}
+                     <div class="plan-collection-in panel  proplan selected-plan" style="background: rgb(246, 247, 249);">
+{{else}}
+ <div class="plan-collection-in panel  proplan " style="background: rgb(246, 247, 249);">
+  {{/check_plan}}
+                        <div class="p-t-sm text-center show_limits" style="padding-bottom:30px;">
+                           <img src="{{getS3ImagePath '/flatfull/img/pro-plan.png'}}" height="110" width="132">
+                        </div>
+                        <div style="position: relative;" class="price-panel wrapper text-center m-t-none b-b b-light m-t p-b-none show_limits">
+                        <div  class="plan_features w-full h-full text-white p-t-xs pos-abs" style="display:none;top: 0px;left: 0px;background-color:black;opacity:0.75;">
+                        		<ul class="p-l-none" style="list-style-type:none">
+                        			<li>50,000 Contacts</li>
+                        			<li>10 Campaigns</li>
+                        			<li>10,000 Pageviews</li>
+                        			<li>10 Web Rules</li>
+                        		</ul>
+                        	</div>
+                        	<div class="price_per_month" style="opacity:1;">
+                        	
+                           <h4 class="m-b-none m-t-none" title="Pro Plan" id="plan_name">Regular</h4>
+                           <div class="p-t-xs" id="propricebox">
+                              <h2 class="m-none" style="line-height: 1 !important;">
+                                 <div id="regular_plan_price_content" class="text-20" style="color: #2b866e;">
+                                    $<span id="regular_plan_price">49.99</span>/user
+                                    <div class="text-xs m-t-xs" style="color:#58666e">per month</div> 
+									<br>
+                                 </div>
+                              </h2>
+                           </div>
+                           </div>
+                        </div>
+                        <div class="plan-collection-content text-base text-center p show_limits" style="height:104px" id="pro_plan_statement">
+                           Popular option for growing businesses looking 
+                           for sales & marketing automation.
+                        </div>
+
+
+<button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-regular">
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+Choose
+{{else}}
+7 Day Trial
+{{/is_cancelled_user}}
+{{else}}
+Choose
+{{/check_plan}}
+</button>
+
+                     </div>
+                  </div>
+                  <!--End of regular-->
+<div id="pro_plan" class="col-md-4 col-sm-12 col-xs-12 p-n" style="opacity: 1;">
+                     <div class="plan-collection-in panel  customplan" style="background: rgb(246, 247, 249);cursor: pointer;">
+                        <div class="p-t-sm text-center p-b show_limits" style="padding-bottom:30px;">
+                           <img src="{{getS3ImagePath '/flatfull/img/enterprise-plan.png'}}" style="width: 132px;">
+                        </div>
+                        <div style="position: relative;" class="price-panel wrapper m-t-none text-center b-b b-light p-b-none show_limits">
+                        <div  class="plan_features w-full h-full text-white p-t-xs pos-abs" style="display:none;top: 0px;left: 0px;background-color:black;opacity:0.75;">
+                        		<ul class="p-l-none" style="list-style-type:none">
+                        			<li>Unlimited Contacts</li>
+                        			<li>Unlimited Campaigns</li>
+                        			<li>20,000 Pageviews</li>
+                        			<li>Unlimited Web Rules</li>
+                        		</ul>
+                        	</div>
+                        	<div class="price_per_month" style="opacity:1;">
+                        	
+                           <h4 class="m-b-none m-t-none" title="Enterprise" id="plan_name">Enterprise</h4>
+                           <div class="p-t-xs" id="propricebox">
+                              <h2 class="m-none" style="line-height: 1 !important;">
+                                 <div id="pro_plan_price_content" class="text-20" style="color: #2b866e;">
+                                    $<span id="pro_plan_price">79.99</span>/user<br>
+                                    <div class="text-xs m-t-xs" style="color:#58666e">per month</div> 
+									<br>
+                                 </div>
+                              </h2>
+                           </div>
+                           </div>
+                        </div>
+                        <div class="plan-collection-content text-base p text-center show_limits" style="height: 104px;">
+                           Best choice for businesses trying to scale, with process-centric sales & marketing automation.
+                        </div>
+
+<button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-pro">
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+Choose
+{{else}}
+7 Day Trial
+{{/is_cancelled_user}}
+{{else}}
+Choose
+{{/check_plan}}
+</button>
+                  </div>
+                  </div>
+                  <!-- End of pro-->
+
+					 </div><!-- End of row -->
+                </div>
+
+<div class=" form-horizontal m-t-xs">
+	
+	<div class="control-group form-group">
+		<div class="col-md-2"></div>
+        <label class="control-label col-sm-3">Number of Users</label> 
+               <div class="controls col-sm-3">
+
+			<select name="quantity" id="user_quantity" class="form-control">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+						<option value="13">13</option>
+						<option value="14">14</option>
+						<option value="15">15</option>
+						<option value="16">16</option>
+						<option value="17">17</option>
+						<option value="18">18</option>
+						<option value="19">19</option>
+						<option value="20">20</option>
+						<option value="21">21</option>
+						<option value="22">22</option>
+						<option value="23">23</option>
+						<option value="24">24</option>
+						<option value="25">25</option>
+						<option value="26">26</option>
+						<option value="27">27</option>
+						<option value="28">28</option>
+						<option value="29">29</option>
+						<option value="30">30</option>
+						<option value="31">31</option>
+						<option value="32">32</option>
+						<option value="33">33</option>
+						<option value="34">34</option>
+						<option value="35">35</option>
+						<option value="36">36</option>
+						<option value="37">37</option>
+						<option value="38">38</option>
+						<option value="39">39</option>
+						<option value="40">40</option>
+						<option value="41">41</option>
+						<option value="42">42</option>
+						<option value="43">43</option>
+						<option value="44">44</option>
+						<option value="45">45</option>
+						<option value="46">46</option>
+						<option value="47">47</option>
+						<option value="48">48</option>
+						<option value="49">49</option>
+						<option value="50">50</option>
+						<option value="51">51</option>
+						<option value="52">52</option>
+						<option value="53">53</option>
+						<option value="54">54</option>
+						<option value="55">55</option>
+						<option value="56">56</option>
+						<option value="57">57</option>
+						<option value="58">58</option>
+						<option value="59">59</option>
+						<option value="60">60</option>
+						<option value="61">61</option>
+						<option value="62">62</option>
+						<option value="63">63</option>
+						<option value="64">64</option>
+						<option value="65">65</option>
+						<option value="66">66</option>
+						<option value="67">67</option>
+						<option value="68">68</option>
+						<option value="69">69</option>
+						<option value="70">70</option>
+						<option value="71">71</option>
+						<option value="72">72</option>
+						<option value="73">73</option>
+						<option value="74">74</option>
+						<option value="75">75</option>
+						<option value="76">76</option>
+						<option value="77">77</option>
+						<option value="78">78</option>
+						<option value="79">79</option>
+						<option value="80">80</option>
+						<option value="81">81</option>
+						<option value="82">82</option>
+						<option value="83">83</option>
+						<option value="84">84</option>
+						<option value="85">85</option>
+						<option value="86">86</option>
+						<option value="87">87</option>
+						<option value="88">88</option>
+						<option value="89">89</option>
+						<option value="90">90</option>
+						<option value="91">91</option>
+						<option value="92">92</option>
+						<option value="93">93</option>
+						<option value="94">94</option>
+						<option value="95">95</option>
+						<option value="96">96</option>
+						<option value="97">97</option>
+						<option value="98">98</option>
+						<option value="99">99</option>
+						<option value="100">100</option>
+
+						<option disabled="disabled">Contact us if you need more users</option>
+				</select>
+			</div><!-- End of controls col-sm-6 -->
+	</div> <!-- End of control-group form-group -->
+
+   <div class="control-group form-group hide">
+        <label class="control-label col-sm-3">Plan Type</label> 
+                <div class="controls col-sm-6">
+			<select name="cycle" id="plan_type" class="form-control">
+				
+				<option value="starter">Starter</option>
+				<option value="regular" selected>Regular</option>
+				<option value="pro">Pro</option>
+			</select>
+		</div><!-- End of controls col-sm-6 -->
+	</div> <!-- End of control-group form-group -->
+
+   <div class="control-group form-group">
+	<div class="col-md-2"></div>
+	<label class="control-label col-sm-3">Billing Cycle</label> 
+		<div class="controls col-sm-3">
+			<select name="cycle" id="billing_cycle" class="form-control">
+				<option value="monthly" selected>Monthly</option>
+				<option value="yearly">Yearly (20% off)</option>
+				<option value="biennial">2 Years  (40% off)</option>
+			</select>
+		</div> <!-- End of controls col-sm-6 -->
+	</div> <!-- End of control-group form-group -->
+
+	<div class="line line-dashed b-b line-lg m-t-lg"></div>
+	<form class="form-horizontal">
+		<div class="control-group form-group  m-b-none">
+		<div class="col-md-2"></div>
+		<label class="control-label col-sm-3">Monthly</label>
+			<div class="controls col-sm-6">
+				<span class="text-danger text-xlg">$<span id="users_total_cost">49.99</span></span>
+{{quantity}}
+				<p class="help-block m-t-none">For <span class="text-danger" id="users_quantity">{{quantity}}</span> <span id="users_quantity_text">Users</span></p>
+			</div>
+		</div>
+	</form>
+	<div class="control-group form-group" style="display:none" id="coupon_code_container">
+		<form class="">
+			<label class="control-label col-sm-4 col-xs-12">Coupon Code <br><span class="text-xs">(Only for Credit Card)</span></label>
+			<div class="controls col-xs-5 col-sm-5 p-r-none">
+				<input type="text" class="form-control  input-sm" placeholder="Enter Promo Code" id="coupon_code" rel="tooltip" title="">
+				<span class="error text-danger"></span>
+			</div> <!-- End of controls col-xs-5 col-sm-5 p-r-none -->
+			<div class="controls col-xs-2 col-sm-2 m-l-none p-l-xs" >
+				<input type="button" class="btn btn-sm btn-default" value="Validate" id="check_valid_coupon">
+			</div> <!-- End of controls col-xs-2 col-sm-2 -->
+			<div class="controls col-xs-1 col-sm-1 p-l-none">
+				<i class=""></i>
+			</div> <!-- End of controls col-xs-1 col-sm-1 -->
+		</form>
+	</div> <!-- End of control-group form-group - coupon_code_container -->
+
+	{{#stringToJSON this "billingData"}}{{/stringToJSON}}
+	
+
+	<div class="line ling-lg b-b">
+	</div>
+	<div class="row p-l-xxl p-t-sm">
+		<div class="col-sm-offset-4 col-sm-8 p-l-xxl">
+
+<a href="#purchase-plan" id="purchase-plan"	class="btn btn-large btn-primary">
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+Proceed to Pay
+{{else}}
+Proceed to Trial
+{{/is_cancelled_user}}
+{{else}}
+Proceed to Pay
+{{/check_plan}}
+</a>
+
+
+			
+<small class="help-block" id="subscribe_plan_tooltext">
+		<i class="fa fa-lock"></i> All transactions are secure and encrypted, and we never store your credit card information
+</small>
+		</div> <!-- End of col-sm-offset-4 col-sm-8 -->
+	</div> <!-- End of row -->
+
+	
+
+</div> <!-- End of form-horizontal -->
+</div>  <!-- End of tab-pane -->
+<div class="tab-pane" role="tab-panel" id="email-content" onclick="document.getElementById('email-quantity').focus();">
+<div class="row" style="
+">
+<!-- start of purchase email -->
+<div class="col-md-4 col-sm-6 col-xs-12  p-r-none" id="purchase-email">
+ 
+</div>
+<!-- end of purchase email -->
+ <!-- Detailed Info div start -->
+<div class="col-md-8 col-sm-6 col-xs-12">
+<div class="panel panel-default m-t-sm">
+        <div class="panel-heading ">Detailed Information</div>
+        <div class="panel-body">
+{{#getSubscriptionBasedOnPlan billingData emailPlan}} 
+          <form class="bs-example form-horizontal">
+            <div class="form-group m-b-sm">
+              <label class="col-sm-6 control-label p-t-none">One Time Free Emails</label>
+              <div class="col-sm-6">
+                -
+              </div>
+            </div>
+			<div class="form-group m-b-sm">
+              <label class="col-sm-6 control-label p-t-none ">Purchased Emails</label>
+              <div class="col-sm-6">
+                {{numeric_operation ../emailPlan.quantity 1000 "*"}}
+              </div>
+            </div>
+
+			<div class="form-group m-b-sm">
+              <label class="col-sm-6 control-label p-t-none ">Emails Remaining</label>
+              <div class="col-sm-6">
+                {{getRemaininaEmails}}
+              </div>
+            </div>
+			<div class="form-group m-b-sm">
+              <label class="col-sm-6 control-label p-t-none ">Last Billed Date</label>
+              <div class="col-sm-6">
+              {{epochToHumanDate "mmm dd, yyyy" currentPeriodStart}}
+                
+              </div>
+            </div>
+			<div class="form-group m-b-sm">
+              <label class="col-sm-6 control-label p-t-none ">Last Purchased Emails</label>
+              <div class="col-sm-6">
+                {{numeric_operation ../emailPlan.quantity 1000 "*"}}
+                
+              </div>
+            </div>
+			<div class="form-group m-b-sm">
+              <label class="col-sm-6 control-label p-t-none ">Last Purchased Date</label>
+              <div class="col-sm-6">
+               {{epochToHumanDate "mmm dd, yyyy" currentPeriodStart}}
+                
+              </div>
+            </div>
+			<div class="form-group m-b-sm">
+              <label class="col-sm-6 control-label p-t-none ">Last Purchased Amount</label>
+              <div class="col-sm-6">
+                ${{total}}
+                
+              </div>
+            </div>
+    
+          </form>
+{{else}}
+          <form class="bs-example form-horizontal">
+            <div class="form-group m-b-sm">
+              <label class="col-sm-6 control-label p-t-none">One Time Free Emails</label>
+              <div class="col-sm-6">
+                5000 
+              </div>
+            </div>
+<div class="form-group m-b-sm">
+              <label class="col-sm-6 control-label p-t-none ">Purchased Emails</label>
+              <div class="col-sm-6">
+                0 
+              </div>
+            </div>
+<div class="form-group m-b-sm">
+              <label class="col-sm-6 control-label p-t-none ">Emails Remaining</label>
+              <div class="col-sm-6">
+               {{getRemaininaEmails}}
+              </div>
+            </div>
+<div class="form-group m-b-sm">
+              <label class="col-sm-6 control-label p-t-none ">Last Billed Date</label>
+              <div class="col-sm-6">
+              -
+                
+              </div>
+            </div>
+<div class="form-group m-b-sm">
+              <label class="col-sm-6 control-label p-t-none ">Last Purchased Emails</label>
+              <div class="col-sm-6">
+                -
+                
+              </div>
+            </div>
+<div class="form-group m-b-sm">
+              <label class="col-sm-6 control-label p-t-none ">Last Purchased Date</label>
+              <div class="col-sm-6">
+                -
+                
+              </div>
+            </div>
+<div class="form-group m-b-sm">
+              <label class="col-sm-6 control-label p-t-none ">Last Purchased Amount</label>
+              <div class="col-sm-6">
+                -
+                
+              </div>
+            </div>  
+          </form>
+{{/getSubscriptionBasedOnPlan}} 
+
+<div class="line line-dashed b-b line-lg"></div>
+
+<!-- Start of Testimonials -->
+
+<div class="agile-testimonial  p-t-none b-n" style="box-shadow: none;height:145px; border: 0;">
+   <div id="myCarousel" class="carousel slide" style="width: 90%;margin: 0 auto;">
+      <ol class="carousel-indicators">
+         <li data-target="#myCarousel" data-slide-to="0" class=""></li>
+         <li data-target="#myCarousel" data-slide-to="1" class=""></li>
+         <li data-target="#myCarousel" data-slide-to="2" class="active"></li>
+      </ol>
+      <div class="carousel-inner">
+         <div class="item">
+            <div class="pull-left tweet-img-pricing">
+               <img title="Nicolas Woirhaye" src="{{getS3ImagePath '../../img/testimonial-nicolas.png'}}">
+            </div>
+            <div class="pull-left tweet-txt">
+               <span class="tweet-arrow"></span>
+               <div class="tweet-head">
+                  <span class="tweet-authname">Nicolas Woirhaye</span>
+                  <span class="tweet-authdesc">Co-founder - IKO System</span>
+               </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="tweet-info">
+               I've seen and used dozens of CRMs. This one may change the market upside down. Absolutely great, easy-to-use and powerful. 
+            </div>
+         </div>
+         <div class="item">
+            <div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="{{getS3ImagePath '../../img/testimonial-ron.png'}}"></div>
+            <div class="pull-left tweet-txt">
+               <span class="tweet-arrow"></span>
+               <div class="tweet-head">
+                  <span class="tweet-authname">Ron Kaplan</span><span class="tweet-authdesc">Sales and Business Development - Espresso Logic</span>
+               </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="tweet-info">
+               Agile CRM is an exciting and powerful system. The capability to create complex workflows is immensely useful and easy - simply a matter of drag and drop.  
+            </div>
+         </div>
+         <div class="item active">
+            <div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="{{getS3ImagePath '../../img/testimonial-gary.png'}}"></div>
+            <div class="pull-left tweet-txt">
+               <span class="tweet-arrow"></span>
+               <div class="tweet-head">
+                  <span class="tweet-authname">Gary Tramer</span><span class="tweet-authdesc">Head of Strategy - WebReception</span>
+               </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="tweet-info">
+               Agile CRM is the coolest, easiest and by far the most productive CRM I've ever used. Within 20 minutes we had customized the CRM and sent out a complex outbound email campaign. We're already converting our leads. Insane!   
+            </div>
+         </div>
+         <div class="item">
+            <div class="pull-left tweet-img-pricing"><img title="Mark Valles" src="{{getS3ImagePath '../../img/testimonial-mark.png'}}"></div>
+            <div class="pull-left tweet-txt">
+               <span class="tweet-arrow"></span>
+               <div class="tweet-head">
+                  <span class="tweet-authname">Mark Valles
+                  </span><span class="tweet-authdesc">Sales Acceleration Expert - Infusion-4</span>
+               </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="tweet-info">
+               Brilliant! I literally made 3 clicks and I was able to connect and immediately place calls, get actionable social media information, and view my emails in a stunningly nice way.  
+            </div>
+         </div>
+         <div class="item">
+            <div class="pull-left tweet-img-pricing"><img title="Paul Singh" src="{{getS3ImagePath '../../img/testimonial-paulsingh.png'}}"></div>
+            <div class="pull-left tweet-txt">
+               <span class="tweet-arrow"></span>
+               <div class="tweet-head">
+                  <span class="tweet-authname">Paul Singh
+                  </span><span class="tweet-authdesc">CEO, Espresso Logic (Venture Backed)
+                  </span>
+               </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="tweet-info">
+               For a startup that relies a lot on on-line business, Agile CRM has been an invaluable team to our sales team as it integrates many capabilities out-of-the-box. 
+            </div>
+         </div>
+      </div>
+      <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
+      <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+   </div>
+</div>
+
+<!-- End of Testimonials -->
+
+ </div>
+</div>
+</div>
+<!-- Detailed Info div end -->
+</div>
+</div> 
+<!-- End of email pane -->
+            </div>  <!-- End of tab-content -->
+{{#check_plan "FREE"}}
+<div class="pull-right"><a href="#" id="cancel-account" class="text-info" style="font-size:12px;">Cancel Account</a></div>
+<div class="clearfix"></div>
+{{/check_plan}}
+        </div> <!-- End of tab container -->
+		
+    </div> <!-- End of col-md-9 -->
+{{#check_plan "FREE"}}
+<div class="col-md-3 p-t-sm m-t-xs" id="email">
+	
+		<div class="panel panel-default wrapper-md m-b-none">
+		<p class="b-b b-light p-b-xs">Emails<a onclick='emailClickEvent()' style="font-size: 12px;" class="text-info pull-right">Purchase</a></p>
+		<div>
+Your current plan provides 5000 emails (branded). 
+</div>
+		</div>
+	
+	</div>
+{{else}}
+{{/check_plan}}   
+     
+  <div class="col-md-3" id="currentPlan">
+
+{{#getSubscriptionBasedOnPlan billingData plan}}
+   <div class="panel panel-default wrapper-md m-t-xl">
+      <p class="b-b b-light p-b-xs">
+         Current Plan
+      </p>
+
+ You are currently on {{proToEnterprise ../plan.plan_type}} plan with {{quantity}}  {{#if_equals quantity 1}}
+  user.
+{{else}}
+users.
+{{/if_equals}} 
+
+
+   </div> <!-- End of panel wrapper-md -->
+  
+{{/getSubscriptionBasedOnPlan}}
+{{#if billingData}}
+<div class="row">
+	<div class="col-md-12">
+{{#check_plan "FREE"}}
+        <div class="panel panel-default wrapper-md m-t-md">
+{{else}}
+		<div class="panel panel-default wrapper-md">
+{{/check_plan}}
+			<p class="b-b b-light p-b-xs">Credit Card
+<a href="#updateCreditCard" class="text-info pull-right" style="
+    font-size: 12px;">Change</a>
+			</p>
+
+		<div>
+		
+			<div id="customer-details-holder"></div>
+		</div>
+		
+		<div class="clearfix"></div>
+
+		</div>
+</div>
+ 
+</div>
+{{/if}}
+</div> <!-- End of col-md-3 -->
+
+{{#if billingData}}
+	{{#if this.freePlan}}
+		{{#if this.freeEmailPack}}
+				<div class="col-md-3 hide">
+		{{else}}
+			<div class="col-md-3">
+		{{/if}}
+	{{else}}
+		<div class="col-md-3">
+	{{/if}}
+		<div class="panel panel-default wrapper-md m-b-none">
+		<p class="b-b b-light p-b-xs">Invoices<a href="#invoice-details" style="font-size: 12px;" class="text-info pull-right">More</a></p>
+		<div id="recent_invoice">
+		</div>
+		</div>
+	{{#check_plan "FREE"}}
+	{{else}}
+	{{#is_trial_exist billingData}}
+	<a href="#"  id="cancel_free_trial" class="pull-right text-lg text-info" style="font-size:12px;">Cancel your Trial</a>
+	{{else}}
+	<a href="#"  id="cancel-account-request" class="pull-right text-lg text-info" style="font-size:12px;">Cancel Subscription</a>
+	{{/is_trial_exist}}
+	{{/check_plan}}
+	</div>  <!-- End of col-md-3 -->
+{{/if}}
+		
+		<div class="clearfix"></div>
+
+		</div>
+</div>
+
+</div> <!-- End of row -->
+</div>
+</script>
+
+<script id="email-update-template" type="text/html">
+<form id="gateway" class="form-horizontal hide">
+				<input type="text" name="gateway" class="hidden form-control" value="Stripe" />
+			</form>
+<form class="form-horizontal" id="email-plan-form">
+<div class="email-selected-plan panel" style="background: rgb(246, 247, 249);" id="email-div" onclick="focus()">
+
+<div class="p-t-md text-center m-b" style="">
+   <img src="{{getS3ImagePath '/flatfull/img/mail.png'}}" style="width: 132px;">
+</div>
+<div  class="price-panel wrapper text-center b-b b-light m-t bg-white">
+  <h4 class="m-b-none">Emails</h4>
+  <div class="p-t-xs p-b-xs">
+<div class="text-20"  style="color:#2b866e">
+<span>$<span id="emails_total_cost">0</span></span><span>/month</span>
+</div>
+<small class="text-xs m-t-xs" style="color: #58666e;">charged @ <span id="email_rate">{{#mandrill_exist}}$2{{else}}$4{{/mandrill_exist}}</span>/1000 emails</small>
+			
+</div>
+   
+</div>
+<div class="text-center m-t">One Time FREE</div>
+<div class="text-center">5000 Emails</div>
+<div id="email_validation_container">
+<div class="m-t" style="
+    margin: 15px auto 0;
+    width: 67%;
+">
+<div class="controls text-center">
+<div class="input-group">
+              <input type="text" class="input input-small number email_plan_minimum number_input required form-control m-b-none" style="/* margin: 0px auto 10px; */width: 100%;" id="email-quantity" name="quantity" placeholder="Emails" maxlength="12">
+              <span class="input-group-addon" style="
+">*1000</span>
+            </div>
+</div>
+
+</div>
+</div>
+<div class="text-center text-xs">Emails to be purchased</div>
+
+<div class="text-center m-t-lg m-b-md">
+
+<a id="purchase-email-plan" class="btn pricing-btn text-center w-full  b-n btn-lg btn-primary" href="#purchase-email"> Proceed to Pay </a>
+
+</div>                    
+</div>
+</form>
+</script>
+
+<script id="latest-invoice-template" type="text/html">
+ Thank you for your last payment of ${{numeric_operation this.total 100 "/"}} on {{epochToHumanDate "mmm dd, yyyy" periodStart}}.
+</script>
+
+<script id="subscribe-error-modal-template" type="text/html">
+	<div class="modal" data-backdrop="static">
+<div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-header">
+            <button class="close" data-dismiss="modal">x</button>
+			<h3 class="modal-title">Plan Restrictions</h3>
+		</div>
+		<div class="modal-body help-text">
+			<strong>Sorry, we are unable to subscribe you to {{plan}} plan because of the following reason{{#if_greater errorsCount 2}}s{{/if_greater}}:</strong><br/><br/>
+			
+			{{#if is_more_users}}
+				<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{../count}} users with your current plan and are trying to subscribe with {{../newCount}} user{{#if_greater ../newCount 1}}s{{/if_greater}} for the new plan.</div></div>
+			{{else}}
+				{{#if_greater users.count users.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{users.count}} users with your current plan and are trying to subscribe with {{users.limit}} user for the new plan.</div></div>
+				{{/if_greater}}
+				{{#if_greater contacts.count contacts.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{contacts.count}} contacts with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{contacts.count}} contacts.</div></div>
+				{{/if_greater}}
+				{{#if_greater workflows.count workflows.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{workflows.count}} campaigns with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{workflows.count}} campaigns.</div></div>
+				{{/if_greater}}
+				{{#if_greater webrules.count webrules.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{webrules.count}} web rules with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{webrules.count}} web rules.</div></div>
+				{{/if_greater}}
+				{{#if_greater triggers.count triggers.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{triggers.count}} triggers with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{triggers.count}} triggers.</div></div>
+				{{/if_greater}}
+			{{/if}}
+			<br/>
+			<div class="text-danger">Please adjust your current plan accordingly and proceed to process your new subscription.</div>
+			
+		</div>
+		<div class="modal-footer">
+			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">Close</a>
+		</div>
+	</div>
+</div>
+</div>
+</script>
+
+<script id="trial-error-modal-template" type="text/html">
+	<div class="modal" data-backdrop="static">
+<div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-header">
+            <button class="close" data-dismiss="modal">x</button>
+			<h3 class="modal-title">Plan Restrictions</h3>
+		</div>
+		<div class="modal-body help-text">
+			<strong>Sorry, we are unable to cancel your trial subscription due to the following reasons:</strong><br/><br/>
+			
+				{{#is_greater userscount userslimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{userslimit}} users.</div></div>
+				{{/is_greater}}
+				{{#is_greater contactcount contactlimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{contactlimit}} contacts.</div></div>
+				{{/is_greater}}
+				{{#is_greater compaigncount compaignlimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{compaignlimit}} campaign{{#is_greater compaignlimit 1}}s{{/is_greater}}.</div></div>
+				{{/is_greater}}
+				{{#is_greater webrulecount webrulelimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{webrulelimit}} web rule{{#is_greater webrulelimit 1}}s{{/is_greater}}.</div></div>
+				{{/is_greater}}
+				{{#is_greater triggerscount triggerslimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{triggerslimit}} trigger{{#is_greater triggerslimit 1}}s{{/is_greater}}.</div></div>
+				{{/is_greater}}
+			
+			<br/>
+			<div class="text-danger">Please reset your account with the help of the above mentioned features and then proceed to cancel your trial subscription</div>
+			
+		</div>
+		<div class="modal-footer">
+			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">Close</a>
+		</div>
+	</div>
+</div>
+</div>
+</script>

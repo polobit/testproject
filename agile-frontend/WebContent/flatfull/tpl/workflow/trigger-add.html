@@ -1,0 +1,810 @@
+<script id="trigger-add-template" type="text/html">
+<div class="wrapper-md bg-light lter b-b">
+
+  {{#if id}}
+                       <h3 class="h3 font-thin">Edit Trigger</h3>
+                    {{else}}
+                        <h3 class="h3 font-thin"><i class="icon-plus-sign"></i> Add Trigger</h3>
+                    {{/if}} 
+</div>
+<div class="wrapper-md">
+<div class="row">
+    
+        <div class="col-md-9">
+            <div class="panel wrapper">
+                <form id="addTriggerForm" name="addTriggerForm" class="form-horizontal">
+                    {{#if id}}
+					   <input name="id" type="hidden" value="{{id}}" />
+					{{/if}}
+                    <fieldset>
+                        <div class="control-group form-group">
+                            <label class="control-label col-sm-4">Name 
+								<span class="field_req">*</span>
+							</label>
+                            <div class="controls col-sm-8">
+                                <input type="text" id="name" class="required form-control w-md" name="name" />
+                            </div>
+                        </div>
+                        <div class="control-group form-group new-trigger-hidden">
+                            <label class="control-label col-sm-4">When this happens <span class="field_req">*</span></label>
+                            <div id="LHS" name="LHS" class="col-sm-8">
+                                  <div class="controls">
+                                    <select id="trigger-type" name="type" class="required form-control w-md">		
+ 										<option></option>
+                                        <optgroup label="Tag">
+										<option value="TAG_IS_ADDED">Tag is added</option>
+                                        <option value="TAG_IS_DELETED">Tag is deleted</option>
+										<optgroup label="Contact">
+                                        <option value="CONTACT_IS_ADDED">Contact is added</option>
+                                        <option value="ADD_SCORE" id="add-score">Contact Score (>=)</option>
+                                        <optgroup label="Deal">
+                                        <option value="DEAL_IS_ADDED">Deal is added</option>
+                                        <option value="DEAL_IS_DELETED">Deal is deleted</option>
+                                        <option value="DEAL_MILESTONE_IS_CHANGED">Deal milestone is changed</option>
+										<optgroup label="Timer">
+										<option value="RUNS_DAILY">Daily</option>
+                                        <option value="RUNS_WEEKLY">Weekly</option>
+                                        <option value="RUNS_MONTHLY">Monthly</option>
+										<optgroup label="Payments">
+										<option value="STRIPE_CHARGE_EVENT" id="stripe-charge-event">Stripe Event</option>
+										<optgroup label="Email Event">
+										<option value="INBOUND_MAIL_EVENT" id="inbound-mail-event">New Email</option>
+										<option value="EMAIL_OPENED">Email Opened</option>
+										<option value="EMAIL_LINK_CLICKED">Email Link Clicked</option>
+										<option value="UNSUBSCRIBED">Unsubscribed</option>
+										<option value="SOFT_BOUNCE">Soft Bounce</option>
+										<option value="HARD_BOUNCE">Hard Bounce</option>
+										<option value="SPAM_REPORT">Spam Report</option>
+										<optgroup label="Calendar">
+										<option value="EVENT_IS_ADDED">Event is added</option>
+										<optgroup label="Call">
+										<option value="INBOUND_CALL">Inbound Call</option>
+										<option value="OUTBOUND_CALL">Outbound Call</option>
+										<optgroup label="Ecommerce">
+										<option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>
+										<optgroup label="Form">
+										<option value="FORM_SUBMIT" id="form-event">Form Submit</option>
+									</select>
+                                </div>
+                            </div>
+                        </div>
+						
+						<div class="control-group form-group" style="display:none;">
+							<div class="controls col-sm-offset-4 col-sm-8">
+                            <select id="contact-filter" name="contact_filter_id" class="required form-control w-md">
+                                    <option value="">Select...</option>
+                                </select>
+							</div>
+                        </div>
+							
+                        <div class="control-group form-group" style="display:none;">
+                            <div id="RHS" name="RHS">
+                                <label class="control-label TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE EMAIL_OPENED col-sm-4"></label>
+                                <div class="controls col-sm-8">
+                                    <input type="text" value="{{custom_tags}}" id="trigger-custom-tags" name="custom_tags" class="required trigger-tags TAG_IS_ADDED TAG_IS_DELETED form-control m-b-n-xxs w-md" placeholder="Enter tag" style ="width:100%!imp" />
+                                    <input type="text" placeholder="Enter Score" {{#if custom_score}} value="{{this.custom_score}}" {{/if}} id="trigger-custom-score" name="custom_score" class="ADD_SCORE required custom-value digits form-control w-md" />
+                                </div>
+                            </div>
+                        </div>
+						
+						<!--Call Inbound and Outbound -->
+						<div class="control-group form-group" style="display: none;">
+							<div id="CALL">
+								<label class="control-label INBOUND_CALL OUTBOUND_CALL"></label>
+								<div class="controls col-sm-offset-4 col-sm-8">	
+									<select name="call_disposition" class="required form-control w-md">
+										<option value="" class="INBOUND_CALL OUTBOUND_CALL">Select call status</option>
+										<option value="ALL" class="INBOUND_CALL OUTBOUND_CALL">All</option>			
+										<option value="answered" class="INBOUND_CALL OUTBOUND_CALL">Answered</option>
+										<!--<option value="no-answer" class="INBOUND_CALL OUTBOUND_CALL">No Answer</option>-->
+										<option value="busy" class="INBOUND_CALL OUTBOUND_CALL">Busy</option>
+										<option value="failed" class="OUTBOUND_CALL">Failed</option>
+										<option value="voicemail" class="OUTBOUND_CALL">Voicemail</option>
+									</select>
+								</div>
+							</div>
+						</div>
+                        
+						<div class="control-group form-group" style="display:none;">
+							<div class="controls col-sm-offset-4 col-sm-8">
+                            <select id="trigger-deal-milestone" name="trigger_deal_milestone" class="required form-control w-md">
+                                    <option value="">Select...</option>
+                                </select>
+							</div>
+                        </div>
+						<!-- Calendar Event -->
+						 <div class="control-group form-group" style="display:none;">
+							<div class="controls col-sm-offset-4 col-sm-8">
+                            <select id="event-type" name="event_type" class="required form-control w-md">
+									<option value="">Select Event Type</option>
+                                    <option value="ANY">Any Event</option>
+									<option value="WEB_APPOINTMENT">Online Appointment</option>
+                                </select>
+							</div>
+                        </div>
+						 <div class="control-group form-group" style="display:none;">
+							<div class="controls col-sm-offset-4 col-sm-8">
+                            <select id="event-owner-id" name="event_owner_id" class="required form-control w-md">
+                                    <option value="">Select...</option>
+                                </select>
+							</div>
+                        </div>
+						<div class="control-group form-group" style="display:none;">
+							<div class="controls col-sm-offset-4 col-sm-8">
+							<select id="trigger-stripe-event" name="trigger_stripe_event" class="required form-control w-md">
+									<option value="">Select Stripe Event</option>
+									<option value="CHARGE_SUCCEEDED" id="charge-succeeded">Charge succeeded</option>
+									<option value="CHARGE_FAILED" id="charge-failed">Charge failed</option>
+									<option value="CHARGE_REFUNDED" id="charge-refunded">Charge refunded</option>
+									<option value="CHARGE_CAPTURED" id="charge-captured">Charge captured</option>
+									<option value="CHARGE_UPDATED" id="charge-updated">Charge updated</option>
+									<option value="CUSTOMER_DELETED" id="customer-deleted">Customer deleted</option>
+							</select>
+							<div class="m-t-xs">
+							<small>You need to <a href="https://stripe.com/docs/webhooks#configuring-your-webhook-settings" target="_blank" class="text-info">setup webhooks</a> in your stripe account for this</small>
+							</div>
+							</div>
+						</div>
+                        <!--Email Clicked and Opened-->
+						<div class="control-group form-group" style="display:none;">
+							<div class="controls col-sm-offset-4 col-sm-8">
+									<select id="email-tracking-type" name="email_tracking_type" class="required form-control w-md">
+										<option value="ANY">Personal or Campaign emails</option>
+										<option value="PERSONAL">Personal emails only</option>
+										<option value="CAMPAIGNS">Campaign emails only</option>
+									</select>
+							</div>
+						</div>
+						<div class="control-group form-group" style="display:none;">
+                            <label class="control-label col-sm-4" ></label>
+                            <div class="controls col-sm-8">
+                                <select id="email-tracking-campaign-id" name="email_tracking_campaign_id" class="required form-control w-md">
+                                    <option value="">Select...</option>
+                                </select>
+                            </div>
+                        </div>
+						 <div class="control-group form-group" style="display:none;">
+                            <div>
+                                <label class="control-label col-sm-4"></label>
+                                <div class="controls col-sm-8">
+                                    <input type="text" id="custom-link-clicked" value="{{custom_link_clicked}}" name="custom_link_clicked" class="required EMAIL_LINK_CLICKED form-control m-b-n-xxs w-md" placeholder="Link URL contains" />
+                                </div>
+                            </div>
+                        </div>
+						<div class="control-group form-group" style="display:none;">
+							<div class="controls col-sm-offset-4 col-sm-8">
+							<select id="trigger-shopify-event" name="trigger_shopify_event" class="required form-control w-md">
+									<option value="">Select Shopify Event</option>
+									<option value="CUSTOMERS_CREATE">Customer created</option>
+									<option value="CUSTOMERS_UPDATE">Customer updated</option>
+									<option value="ORDERS_CREATE">Order created</option>
+									<option value="ORDERS_UPDATED">Order updated</option>
+									<option value="ORDERS_PAID">Order payment</option>
+									<option value="ORDERS_DELETE">Order deleted</option>
+									<option value="ORDERS_FULFILLED">Order fulfilled</option>
+									<option value="ORDERS_CANCELLED">Order cancelled</option>
+									<option value="CHECKOUTS_CREATE">Checkout created</option>
+									<option value="CHECKOUTS_UPDATE">Checkout updated</option>
+									<option value="CHECKOUTS_DELETE">Checkout deleted</option>
+							</select>
+							<div class="m-t">
+								<small><i class="icon-info-sign"></i> You need to setup Webhooks in your Shopify account for this. In your stores Admin panel, go to Settings, Notifications, Webhooks, and create a webhook for the desired event with the below URL. <br> <a class="inbound-help-text">{{shopifyWebhook}}</a></small>
+							</div>
+							</div>	
+						</div>
+						<div class="control-group form-group" style="display:none;">
+							<div class="controls col-sm-offset-4 col-sm-8">
+							<select id="trigger-form-event" name="trigger_form_event" class="required form-control w-md">
+								<option value="">Select...</option>
+							</select>
+							</div>
+						</div>
+						<div id="trigger-inbound-mail-event" style="display:none;">
+						<div class="control-group form-group">
+							<div class="controls col-sm-offset-4 col-sm-8">
+								<small><i class="icon-info-sign"></i> For Agile CRM to recognize your emails, please setup <a class="inbound-help-text">{{inboundMail}}</a> as forwarding email at your email server. When there is a new email to this address, the From address will be added to your Contacts and to the Campaign (in case it is a new Contact).</small>								
+							</div>
+                		</div>
+						</div>
+                       <div id="trigger-run-on-new-contacts" style="display:none;">
+							<div class="control-group form-group">
+								<div class="controls col-sm-offset-4 col-sm-8">
+                                <div class="checkbox">
+                              <label class="i-checks i-checks-sm">
+                               <input type="checkbox"  name="trigger_run_on_new_contacts"><i></i>
+	                            Run only on new Contacts</label>
+                               </div>
+								</div>
+							</div>
+						</div>
+						<div id="new-mail-trigger-run-on-new-contacts" style="display:none;">
+							<div class="control-group form-group">
+								<div class="controls col-sm-offset-4 col-sm-8">
+                                <div class="checkbox">
+                                 <label class="i-checks i-checks-sm">
+									<input type="checkbox"  name="new_email_trigger_run_on_new_contacts" checked="true"><i></i>
+									Run only for new Contacts</label>
+                                  </div>
+								</div>
+							</div>
+						</div>
+                        <div id="trigger-filter-condition" style="display:none;"></div>
+                        <div class="control-group form-group">
+                            <label class="control-label col-sm-4">Run this Campaign on the Contact <span class="field_req">*</span></label>
+                            <div class="controls col-sm-8">
+                                <select id="campaign-select" name="campaign_id" class="required form-control w-md inline-block">
+                                    <option value="">Select...</option>
+                                </select>
+                            </div>
+                        </div>
+						<div class="line line-bg b-b"></div>
+                        <div class="form-actions col-sm-offset-4 col-sm-8">          							
+                            <a href="#triggers" id="trigger-save" class="save btn btn-sm btn-primary">Save</a>
+							<a href="#" id="trigger-cancel" class="btn btn-default btn-sm">Cancel</a>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="wrapper">
+                <h4 class="m-t-none font-thin">
+                    Triggers
+                </h4>
+                
+                <p> Give your trigger a name and choose a condition to be satisfied. Immediately link your trigger to the appropriate campaign, for an action to follow.</p>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+<script id="trigger-categories-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+    <div class="wrapper-md lter bg-light b-b">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <h3 class="pull-left font-thin h3">Triggers</h3>
+                <div class="">
+                    <input id="campaign-id" class="hide">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper-md p-t-none" id = "triggeradd">
+<div id="triggers-tab-container">
+<div class="tab-container p-t-sm">
+
+<!-- Tabs for Triggers -->
+<ul class="nav nav-tabs" id="subTab">
+										    <li role="presentation" class="active" data-tab="1">
+												<a href="#contact" role="tab" name="tab1" data-toggle="tab" aria-control="tab1" id="tab1">Contact</a>
+											</li>
+											<li role="presentation" data-tab="2">
+												<a href="#deal" name="tab2" aria-control="tab2" role="tab" data-toggle="tab" id="tab2">Deal</a>
+											</li>
+											<li role="presentation" data-tab="3">
+												<a href="#emailEvent" role="tab" name="tab3" data-toggle="tab" aria-control="tab3" id="tab3">Email Event</a>
+											</li>
+											<li role="presentation" data-tab="4">
+												<a href="#call" role="tab" name="tab4" data-toggle="tab" aria-control="tab4" id="tab4">Call</a>
+											</li>
+											<li role="presentation" data-tab="5">
+												<a href="#calendar" name="tab6" aria-control="tab5" role="tab" data-toggle="tab" id="tab5">Calendar</a>
+											</li>
+											<li role="presentation" data-tab="6">
+												<a href="#timer" role="tab" name="tab6" data-toggle="tab" aria-control="tab6" id="tab6">Timer</a>
+											</li>
+											<li role="presentation" data-tab="7">
+												<a href="#thirdPartyint" name="tab7" aria-control="tab7" role="tab" data-toggle="tab" id="tab7">Third Party Integrations</a>
+											</li>
+
+											<li role="presentation" data-tab="8">
+												<a href="#form" name="tab8" aria-control="tab8" role="tab" data-toggle="tab" id="tab8">Form</a>
+											</li>
+</ul>
+
+            <div class="tab-content" style=" display: block;">
+<!-- Start of tab-pane - contact -->
+            	<div class="tab-pane active" role="tab-panel" id="contact">
+
+        <div id="general" class="row" >
+            <div class="col-md-3 col-sm-6 col-xs-12" style="height:240px">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="icon-user icon-3x"></i>
+                        </div>
+                        <b>Contact Added</b> 
+                    </div>
+                    <br>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+						 Add contact to a campaign as soon as the contact is created.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "CONTACT_IS_ADDED"  >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12" style="height:240px">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                             <i class="icon-fire icon-3x"></i>
+                        </div>
+                        <b>Score Increased</b>
+                    </div>
+                    <br>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+						Add contact to a campaign when the score crosses a given limit.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "ADD_SCORE"  >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12" style="height:240px">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-tags icon-3x"></i>
+                        </div>
+                        <b>Tag Added</b>
+                    </div>
+                    <br/>
+                    <div class="m-b-md" rel="tooltip">
+						 Add contact to a campaign when a specified tag is added.
+                    </div>
+					<br>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "TAG_IS_ADDED"  >Go</a>
+                    </div>
+                </div>
+            </div>
+			<div class="col-md-3 col-sm-6 col-xs-12" style="height:240px">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-tags icon-3x"></i>
+                        </div>
+                        <b>Tag Removed</b>
+                    </div>
+                    <br/>
+                    <div class="m-b-md" rel="tooltip">
+						Add contact to a campaign when a specified tag is removed.
+                    </div>
+					<br>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "TAG_IS_DELETED"  >Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                </div>  <!-- End of tab-pane - contact -->
+<!-- Start of tab-pane - deal -->
+<div class="tab-pane" role="tab-panel" id="deal">
+
+
+ <div id="general" class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12" style="height:240px">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa fa-dollar icon-3x"></i>
+                        </div>
+                        <b>Added to Deal</b> 
+                    </div>
+                    <br>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+						 Add contact to a campaign when the contact is attached to a deal.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "DEAL_IS_ADDED"  >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12" style="height:240px">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa fa-dollar icon-3x"></i>
+                        </div>
+                        <b>Removed from Deal</b> 
+                    </div>
+                    <br>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+						Add contact to a campaign when the contact is removed from a deal.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "DEAL_IS_DELETED"  >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa fa-money icon-3x"></i>
+                        </div>
+                        <b>Deal Milestone Changed</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+						Add all the contacts attached to a deal to a campaign when the deal milestone is changed.						
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "DEAL_MILESTONE_IS_CHANGED"  >Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>  <!-- End of tab-pane - deal -->
+<!-- Start of tab-pane - timer -->
+<div class="tab-pane" role="tab-panel" id="timer">
+
+
+<div id="general" class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="icon-time icon-3x"></i>
+                        </div>
+                        <b>Daily</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Run a campaign on a filtered list of contacts every day.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "RUNS_DAILY"  >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="icon-calendar icon-3x"></i>
+                        </div>
+                        <b>Weekly</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Run a campaign on a filtered list of contacts every week.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "RUNS_WEEKLY"  >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-calendar icon-3x"></i>
+                        </div>
+                        <b>Monthly</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Run a campaign on a filtered list of contacts every month.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "RUNS_MONTHLY"  >Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>  <!-- End of tab-pane - timer -->
+<!-- Start of tab-pane - thirdpartyint -->
+<div class="tab-pane" role="tab-panel" id="thirdPartyint">
+
+       <div id="general" class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-cc-stripe icon-3x"></i>
+                        </div>
+                        <b>Stripe</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+						Run a campaign on a contact when a specified Stripe event is performed by the contact.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "STRIPE_CHARGE_EVENT"  >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-shopping-cart icon-3x"></i>
+                        </div>
+                        <b>Shopify</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+						 Run a campaign on a contact when a specified Shopify event is performed by the contact.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "SHOPIFY_EVENT"  >Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                </div>  <!-- End of tab-pane - thirdpartyint -->
+<!-- Start of tab-pane - emailEvent -->
+<div class="tab-pane" role="tab-panel" id="emailEvent">
+
+        <div id="general" class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-envelope icon-3x"></i>
+                        </div>
+                        <b>New Email</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                         Run a campaign on a contact when a new email is received.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "INBOUND_MAIL_EVENT" >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-envelope-o icon-3x"></i>
+                        </div>
+                        <b>Email Opened</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                         Run a campaign on a contact when they open an email.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "EMAIL_OPENED"  >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-link icon-3x"></i>
+                        </div>
+                        <b>Email Link Clicked</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Run a campaign on a contact when an email link is clicked.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "EMAIL_LINK_CLICKED"  >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="icon-minus-sign icon-3x"></i>
+                        </div>
+                        <b>Unsubscribed</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Run a campaign on a contact when they unsubscribe.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "UNSUBSCRIBED"  >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-share-square-o  icon-3x"></i>
+                        </div>
+                        <b>Soft Bounce</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Run a campaign on a contact when an email to them bounces (soft bounce).
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "SOFT_BOUNCE"  >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-share-square-o  icon-3x"></i>
+                        </div>
+                        <b>Hard Bounce</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Run a campaign on a contact when an email to them bounces (hard bounce).
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "HARD_BOUNCE"  >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="icon-ban-circle icon-3x"></i>
+                        </div>
+                        <b>Spam Report</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Run a campaign on a contact when they report spam.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger"  data = "SPAM_REPORT" >Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                </div>  <!-- End of tab-pane - emailEvent -->
+<!-- Start of tab-pane - calendar -->
+<div class="tab-pane" role="tab-panel" id="calendar">
+
+       <div id="general" class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="glyphicon glyphicon-calendar" style="font-size: 3em;"></i>
+                        </div>
+                        <b>Event Added</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+						 Run a campaign on a contact when they are added to an event.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "EVENT_IS_ADDED"  >Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div>  <!-- End of tab-pane - calendar -->
+<!-- Start of tab-pane - call -->
+<div class="tab-pane" role="tab-panel" id="call">
+
+ <div id="general" class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="icon-call-in icon-3x"></i>
+                        </div>
+                        <b>Inbound Call</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Run a campaign on a contact when they call your Twilio number.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "INBOUND_CALL"  >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="icon-call-out icon-3x"></i>
+                        </div>
+                        <b>Outbound Call</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Run a campaign on a contact when you receive a call from your Twilio number.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "OUTBOUND_CALL"  >Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                </div>  <!-- End of tab-pane - call -->
+<!-- Start of tab-pane - form -->
+<div class="tab-pane" role="tab-panel" id="form">
+
+<div id="general" class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-list-alt icon-3x"></i>
+                        </div>
+                        <b>Form Submit</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Run a campaign on a contact when they submit an Agile form on your website.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "FORM_SUBMIT"  >Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                </div>  <!-- End of tab-pane - form -->
+
+            </div>  <!-- End of tab-content -->
+
+        </div>
+       </div><!--End of triggers-tab-container --> 
+    </div>
+    <!-- End of row -->
+</div>
+</script>

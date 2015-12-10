@@ -1,0 +1,94 @@
+<script type="text/html" id="admin-settings-integration-stats-template">
+<div class="col">
+	<div class="col-md-12">
+		<div class="panel wrapper-md m-t-sm"> 
+		<legend class="m-b-sm"> Email Stats LKAJSLKSDJF
+				<span class="pull-right inline">
+					{{#if this.id}}Reputation {{{get_subaccount_reputation reputation}}}
+					{{/if}}
+				</span>
+		</legend>
+		<div class="row">
+        	<div class="col-md-6">
+            	<h4 class="text-center">Emails Sent</h4>
+				<table class="table table-bordered">
+					<tbody>
+						{{#if this.id}}
+						<tr><th>This Hour</th><td>{{numberWithCommas sent_hourly}}</td></tr>
+						<tr><th>This Week</th><td>{{numberWithCommas sent_weekly}}</td></tr>
+						<tr><th>This Month</th><td>{{numberWithCommas sent_monthly}}</td></tr>
+						<tr><th>Overall</th><td>{{numberWithCommas sent_total}}</td></tr>
+						{{else}}
+						<tr><th>This Hour</th><td>0</td></tr>
+						<tr><th>This Week</th><td>0</td></tr>
+						<tr><th>This Month</th><td>0</td></tr>
+						<tr><th>Overall</th><td>0</td></tr>
+						{{/if}}
+					</tbody>
+				</table>
+        	</div>
+        	<div class="col-md-6">
+            	<h4 class="text-center">Bounces ( Last 30 Days )</h4>
+				<table class="table table-bordered">
+					<tbody>
+						{{#if this.id}}
+						<tr><th>Hard Bounce</th><td>{{numberWithCommas last_30_days.hard_bounces}}</td></tr>
+						<tr><th>Soft Bounce</th><td>{{numberWithCommas last_30_days.soft_bounces}}</td></tr>
+						<tr><th>Rejects</th><td>{{numberWithCommas last_30_days.rejects}}</td></tr>
+						<tr><th>Spam Complaints</th><td>{{numberWithCommas last_30_days.complaints}}</td></tr>
+						{{else}}
+						<tr><th>Hard Bounce</th><td>0</td></tr>
+						<tr><th>Soft Bounce</th><td>0</td></tr>
+						<tr><th>Rejects</th><td>0</td></tr>
+						<tr><th>Spam Complaints</th><td>0</td></tr>
+						{{/if}}
+					</tbody>
+				</table>
+        	</div>
+    	</div>
+		<legend class="m-b-sm"> SMS Stats
+				<span class="inline" ></span>
+		</legend>
+					{{#unless Stats-Type}}
+					<div class="text-md">No SMS gateway configured. <a class="text-info" href="#integrations">Configure Now</a></div>
+					{{/unless}}
+		{{#if_equals "SMS-Stats" Stats-Type}}
+		<div class="row">
+        	<div class="col-md-6">
+            	<h4 class="text-center">SMS Sent</h4>
+				<table class="table table-bordered">
+					<tbody>
+						<tr><th>Today</th><td>{{numberWithCommas Today}} </td></tr>
+						<tr><th>Yesterday</th><td> {{numberWithCommas Yesterday}}</td></tr>
+						<tr><th>This Month</th><td>{{numberWithCommas ThisMonth}} </td></tr>
+						<tr><th>Last Month</th><td>{{numberWithCommas LastMonth}} </td></tr>
+					</tbody>
+				</table>
+        	</div>
+        	<div class="col-md-6">
+            	<h4 class="text-center">SMS Details ( Last 30 Days )</h4>
+				<table class="table table-bordered">
+					<tbody>
+						<tr><th>Queued</th><td>{{Queued}} </td></tr>
+						<tr><th>Delivered</th><td> {{Delivered}}</td></tr>
+						<tr><th>Undelivered
+						<span class="v-top">
+						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top"  rel="popover" data-placement="right" data-title:"="" 
+						data-content="Twilio has received a delivery receipt indicating that the message was not delivered. This can happen for a number of reasons including carrier content filtering, availability of the destination handset, etc." 
+						id="element" data-trigger="hover" data-original-title=""></span>
+						</th><td>{{Undelivered}}</td></tr>
+						<tr><th>Failed
+						<span class="v-top">
+						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
+						data-content="The message could not be sent. This can happen for various reasons including queue overflows, account suspensions. Twilio does not charge you for failed messages." 
+						id="element" data-trigger="hover" data-original-title=""></span>
+						</th><td>{{Failed}} </td></tr>
+					</tbody>
+				</table>
+        	</div>
+    	</div>
+		{{/if_equals}}
+		</div>
+	</div>
+</div>
+</script>

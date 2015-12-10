@@ -1,0 +1,2286 @@
+<script id="portlets-contacts-model-template" type="text/html">
+<td class="data v-middle" data="{{id}}" style="width:70px;" class="p-r-xs">
+	<div class="table-resp">
+		<div class="thumb-sm agile-img m-r-sm">
+			<img class="img-inital r-2x" title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+		</div>
+	</div>
+</td>
+<td style="width:calc(65%-70px);" class="p-l-none">
+	<div class="table-resp m-l-n-xs">
+		{{#if_contact_type "PERSON"}}
+        	<a class="text-cap custom-link">	{{getPropertyValue properties "first_name"}}
+        	{{getPropertyValue properties "last_name"}} </a>
+        	<div>
+				<small class="text-muted m-t-xs">{{#if_propertyName "title"}}{{value}}, {{/if_propertyName}}{{getPropertyValue properties "company"}}</small>
+			</div>
+        {{/if_contact_type}}
+		{{#if_contact_type "COMPANY"}}
+			<a class="text-cap custom-link">{{getPropertyValue properties "name"}}</a>
+		{{/if_contact_type}}
+	</div>
+</td>
+<td style="width:35%">
+	<div class="table-resp text-right p-b-xs">
+		{{#each tags}}
+    		<span class="label bg-light dk text-tiny">{{this}}</span>	
+		{{/each}}
+	</div>
+</td>
+</script>
+
+<script id="portlets-contacts-collection-template" type="text/html">
+{{#if this.length}}
+	<div class="">
+		<table id="contacts-portlets" class="table agile-table" style="overflow-x: hidden;overflow-y:auto;">
+			<tbody id="portlets-contacts-model-list" class="portlets-contacts-model-list" style="word-break:normal!important;" route="contact/"></tbody>
+		</table>
+	</div>
+{{else}}
+	<div class="portlet-error-message">
+		No Contacts Found
+	</div>
+{{/if}}
+</script>
+
+<script id="portlets-contacts-email-opens-model-template" type="text/html">
+<td class="data" data="{{contact_id}}" style="width:50%">
+	<div class="table-resp">
+		<div class="thumb-xs agile-img">
+			<img class="img-inital r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+		</div>
+		<div class="agile-thumb-view agile-thumb-xs">
+			{{#if_contact_type "PERSON"}}
+        		<span class="text-base">	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </span>
+        		<br />
+        		Opened email '{{subject}}'
+        	{{/if_contact_type}}
+  
+            {{#if_contact_type "COMPANY"}}
+        		{{getPropertyValue properties "name"}}</br>
+        		Opened email '{{subject}}'
+        	{{/if_contact_type}}
+		</div>
+	</div>
+</td>
+<td class="text-muted" style="width:50%">
+	<div class="table-resp text-right">
+		<i class="fa fa-clock-o m-r-xs"></i>
+		<time class="time-ago" datetime="{{epochToHumanDate "" openedTime}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" openedTime}}</time>
+	</div>
+</td>
+</script>
+
+<script id="portlets-contacts-email-opens-collection-template" type="text/html">
+{{#if this.length}}
+	<div style="border-bottom:1px solid #eee"></div>
+	<table id="contacts" class="table agile-table" style="overflow-x: hidden;overflow-y:auto;">
+		<tbody id="portlets-contacts-email-opens-model-list" class="portlets-contacts-emails-opened-model-list" style="word-break:normal!important;" route="contact/"></tbody>
+	</table>
+{{else}}
+	<!-- <div class="portlet-error-message">
+		No email activity
+	</div> -->
+{{/if}}
+</script>
+
+<script id="portlets-companies-model-template" type="text/html">
+	<td class="data" data="{{id}}">
+        <div class="p-r-xs h-auto inline">
+        		<img class="portlet-roundimg img-inital thumb-xs" {{getCompanyImage "30" "display:inline;"}} />
+    	</div>
+    	<div class="h-auto inline-block v-top text-ellipsis w-half">
+        		{{getPropertyValue properties "name"}}</br>
+        		{{getPropertyValue properties "url"}}
+    	</div>
+	</td>
+	<td>
+		<div>{{setupRating star_value}}</div>
+	</td>
+	<td>
+		<div>{{owner.name}}</div>
+	</td>
+</script>
+
+<script id="portlets-companies-collection-template" type="text/html">
+<!-- <div class="row"> -->
+		{{#if this.length}}
+		<!-- <div class="data">
+			<div class="data-container"></div> -->
+			<table id="contacts" class="table agile-ellipsis-dynamic">
+				<col width="30%">
+				<col width="26%">
+				<col width="30%">
+				<!-- <div class="filter-criteria"></div> -->
+				<!-- <thead>
+					<tr>
+						<th>Name</th>
+						<th>Star Value</th>
+						<th>Owner</th>
+					</tr>
+				</thead> -->
+				<tbody id="portlets-companies-model-list" class="portlets-companies-model-list overflow-scroll"
+					route="contact/">
+				</tbody>
+			</table>
+		<!-- </div>
+	</div> -->
+    {{else}}
+		<div class="portlet-error-message">
+      		No comapnies found
+		</div>
+	{{/if}}
+<!-- </div> -->
+</script>
+<script id="portlets-opportunities-collection-template" type="text/html">
+<div id="dealsWonValue" class="dealsWonValue font-bold" style="display:none;"></div>
+{{#if this.length}}
+	<table class="table agile-table-ellipsis">
+		<tbody id="portlets-opportunities-model-list" class="portlets-opportunities-model-list c-p" style="word-break:normal!important;"></tbody>
+	</table>
+{{else}}
+	<div class="portlet-error-message">
+      No deals pending
+	</div>
+{{/if}}
+</script>
+
+<script id="portlets-opportunities-model-template" type="text/html">
+<td data="{{id}}" class="data">
+	<div class="portlet-time-view no-inherit">
+		<div class="pull-left" style="width: 70%;">
+			<div class="w-full pull-left text-ellipsis text-cap custom-link">{{name}}</div> <!-- <span class="label" style="max-width: 10%;">{{milestone}}</span> -->
+		</div>
+		<div class="pull-right text-right font-bold m-b-xs text-ellipsis" style="width: 30%; white-space: nowrap;">
+			<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
+		</div>
+		<!-- <div class="clearfix"></div> -->
+	</div>
+	<div class="no-inherit">
+		<div style="width: 30%;" class="pull-left">
+			<div class="text-ellipsis text-muted">
+				{{#if close_date}}
+					<i class="fa fa-clock-o m-r-xs"></i>
+					<time class="time-ago" datetime="{{epochToHumanDate "" close_date}}" >{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>
+				{{else}}
+					&nbsp;
+				{{/if}}
+			</div>
+		</div>
+		{{#if this.contacts}}
+			<div class="activate-link text-right text-ellipsis pull-right inline-block" style="width: 70%;">
+				{{#related_to_one contacts}}{{/related_to_one}}
+			</div>
+		{{/if}}
+	</div>
+</td>
+</script>
+<script id="portlets-tasks-collection-template" type="text/html">
+{{#if this.length}}
+<div class="">
+	<table class="table agile-table-ellipsis">      
+		<tbody id="portlets-tasks-model-list" class="c-p"></tbody>
+	</table>
+</div>
+{{else}}
+<div class="portlet-error-message">
+	No tasks
+</div>
+{{/if}}
+</script>
+<script id="portlets-tasks-model-template" type="text/html">
+	<td data="{{id}}" class="data" style="width:30px;border-left:3px solid {{#if_equals priority_type "NORMAL"}}#7266ba{{else}}{{#if_equals priority_type "HIGH"}}#f05050{{else}}#fad733{{/if_equals}}{{/if_equals}}"><label class="i-checks i-checks-sm"><input type="checkbox" data='{{id}}' class='portlets-tasks-select' id="tasklist"><i></i></label></td>
+	<td style="width:calc(100%-30px)">
+		<div class="no-inherit">
+  			<div class="pull-left text-ellipsis" style="width:70%;">
+				<span>{{safe_string subject}}</span>
+			</div>
+  			<div class="m-b-xs pull-right text-right" style="width:30%;"> 
+				<!-- {{#if_equals priority_type "NORMAL"}}
+					<span class="m-l-xs label bg-info">{{ucfirst priority_type}}</span>
+					{{else}}
+						{{#if_equals priority_type "HIGH"}}
+							<span class="m-l-xs label bg-danger">{{ucfirst priority_type}}</span>
+						{{else}}
+							<span class="m-l-xs label bg-green">{{ucfirst priority_type}}</span>
+						{{/if_equals}} 
+				{{/if_equals}} -->
+				<span class="text-ellipsis label bg-light">{{task_property type}}</span>
+			</div>
+		</div>
+        <div class="pull-left w-full">
+  			{{#if this.contacts}}
+				<div class="text-ellipsis">{{#related_to_one contacts}}{{/related_to_one}}</div>
+			{{/if}}
+		</div>
+	</td>
+</script>
+<script id="portlets-events-collection-template" type="text/html">
+{{#if this.length}}
+<div class="">
+	<table class="table no-sorting t-l-fix agile-table-ellipsis">
+		<tbody id="portlets-events-model-list" style="cursor:pointer;"></tbody>
+	</table>
+</div>
+{{else}}
+	<!-- <div class="portlet-error-message">
+		No calendar events
+	</div> -->
+{{/if}}
+</script>
+<script id="portlets-events-model-template" type="text/html">
+<td data="{{id}}" class="data">
+	<div class="portlet-time-view no-inherit">
+		<div style="width: 73%;padding-top:2px;padding-bottom:3px;" class="pull-left m-b-xs text-ellipsis">
+			<span class="label p-l-xs p-r-xxs text-base pos-rlt m-r event-start-time font-bold bg-{{event_label_color color}}" datetime="{{get_AM_PM_format start}}">
+				<i class="arrow right arrow-{{event_label_color color}}" style="right:-8px;"></i>
+				{{get_AM_PM_format start}}
+			</span>
+			<a class="text-ellipsis" style="width:60%;">{{title}}</a>
+		</div>
+		<div class="text-right m-b-xs  text-ellipsis text-muted" style="width: 27%;">
+		<i class="fa fa-clock-o m-r-xs"></i>	
+		<time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" end}}" >{{get_duration start end}}</time>
+		</div>
+		{{#if this.contacts}}
+			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:79px;">
+				{{#related_to_one contacts}}{{/related_to_one}}
+			</div>
+		{{/if}}
+	</div>
+</td>
+</script>
+
+<script id="portlets-google-events-collection-template" type="text/html">
+{{#if this.length}}
+<div class="">
+	<table class="table no-sorting t-l-fix agile-table-ellipsis">
+		<tbody id="portlets-google-events-model-list" style="cursor:pointer;"></tbody>
+	</table>
+</div>
+{{/if}}
+</script>
+<script id="portlets-google-events-model-template" type="text/html">
+<td class="data">
+	<div class="portlet-time-view no-inherit">
+		<div style="width: 73%;padding-top:2px;padding-bottom:3px;" class="pull-left m-b-xs text-ellipsis">
+			<span class="label p-l-xs p-r-xxs text-base pos-rlt m-r event-start-time font-bold bg-dark" datetime="{{get_AM_PM_format startEpoch}}">
+				<i class="arrow right arrow-dark" style="right:-8px;"></i>
+				{{get_AM_PM_format startEpoch}}
+			</span>
+			<a class="text-ellipsis" style="width:60%;">{{title}}</a>
+		</div>
+		<div class="text-right m-b-xs  text-ellipsis text-muted" style="width: 27%;">
+		<i class="fa fa-clock-o m-r-xs"></i>	
+		<time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" endEpoch}}" >{{get_duration startEpoch endEpoch}}</time>
+		</div>
+		{{#if this.contacts}}
+			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:79px;">
+				{{#each contacts}}
+					<span class="label bg-light dk text-tiny">{{getContactDisplayValue this}}</span> 
+				{{/each}}
+			</div>
+		{{/if}}
+	</div>
+</td>
+</script>
+
+<script id="portlets-status-count-report-model-template" type="text/html">
+<div class="row row-sm text-center">
+	<div class="col-xs-6">
+		<div class="panel padder-v item m-l-none overflow-hidden" style="cursor:auto;">
+			<div class="h1 text-info font-thin h1">{{numberWithCommasForActivities newContactsCount}}</div>
+			<span class="text-muted text-xs">New contacts</span>
+			<div class="top text-right w-full">
+				<!-- <i class="fa fa-caret-down text-warning m-r-sm"></i> -->
+			</div>
+		</div>
+	</div>     
+	<div class="col-xs-6">
+		<div class="block panel padder-v bg-primary item m-l-none p-t-none stats-report-settings pos-rlt overflow-hidden" style="cursor:auto;">
+			<div class="clearfix"></div>
+			<span class="text-white font-thin h1 block p-t">{{currencySymbol}}{{numberWithCommasForActivities wonDealValue}}</span>
+			<span class="text-muted text-xs">Won from {{numberWithCommasForActivities wonDealsCount}} deals</span>
+			<span class="bottom text-right w-full">
+				<!-- <i class="fa fa-cloud-upload text-muted m-r-sm"></i> -->
+			</span>
+		</div>
+	</div>
+	<div class="col-xs-6">
+		<div class="block panel padder-v bg-info item m-l-none overflow-hidden" style="cursor:auto;">
+			<span class="text-white font-thin h1 block">{{numberWithCommasForActivities emailsSentCount}}</span>
+			<span class="text-muted text-xs">Campaign emails sent</span>
+			<span class="top text-left">
+				<!-- <i class="fa fa-caret-up text-warning m-l-sm m-l-none"></i> -->
+			</span>
+		</div>
+	</div>
+	<div class="col-xs-6">
+		<div class="panel padder-v item m-l-none overflow-hidden" style="cursor:auto;">
+			<div class="font-thin h1">{{numberWithCommasForActivities newDealsCount}}</div>
+			<span class="text-muted text-xs">New deals worth {{currencySymbol}}{{numberWithCommasForActivities newDealValue}}</span>
+			<div class="bottom text-left">
+				<!-- <i class="fa fa-caret-up text-warning m-l-sm"></i> -->
+			</div>
+		</div>
+	</div>
+</div>
+</script>
+
+<script id="portlets-leader-board-body-model-template" type="text/html">
+<div>
+	<ul class="m-n p-n leader-board-{{categoryCount}} leader-board-view">
+		{{#if revenue}}
+		<li class="pull-left">
+		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
+				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">Revenue</span>
+				</div>
+				</div>
+		    {{#each revenueJson}}
+			{{#if isDomainUser}}
+				<div class="p-sm p-b-none bg-light pos-rlt" style="top:-1px;">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>You</div>
+						<div class="text-xlg">{{currencySymbol}}{{numberWithCommasForActivities value}}</div>
+					</div>
+				</div>
+			{{else}}
+				<div class="p-sm p-b-none pos-rlt">
+					<div class="leaderboard-bottom-border-edge">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>{{userName}}</div>
+						<div class="text-xlg">{{currencySymbol}}{{numberWithCommasForActivities value}}</div>
+					</div>
+					</div>
+				</div>
+			{{/if}}
+			{{/each}}
+		</li>
+		{{/if}}
+		{{#if dealsWon}}
+		<li class="pull-left">
+		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
+				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">Deals</span>
+				</div>
+				</div>
+			{{#each dealsWonJson}}
+				{{#if isDomainUser}}
+				<div class="p-sm p-b-none bg-light pos-rlt" style="top:-1px;">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>You</div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Won</small></div>
+					</div>
+				</div>
+			{{else}}
+				<div class="p-sm p-b-none pos-rlt">
+					<div class="leaderboard-bottom-border-edge">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>{{userName}}</div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Won</small></div>
+					</div>
+					</div>
+				</div>
+			{{/if}}
+			{{/each}}
+		</li>
+		{{/if}}
+		{{#if calls}}
+		<li class="pull-left">
+		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
+				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">Calls</span>
+				
+				</div>
+				
+			</div>
+			{{#each callsJson}}
+				{{#if isDomainUser}}
+				<div class="p-sm p-b-none bg-light pos-rlt" style="top:-1px;">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>You</div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Done</small></div>
+					</div>
+				</div>
+			{{else}}
+				<div class="p-sm p-b-none pos-rlt">
+					<div class="leaderboard-bottom-border-edge">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>{{userName}}</div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Done</small></div>
+					</div>
+					</div>
+				</div>
+			{{/if}}
+			{{/each}}
+		</li>
+		{{/if}}
+		{{#if tasks}}
+		<li class="pull-left">
+		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
+				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">Tasks</span>
+				</div>
+				</div>
+			{{#each tasksJson}}
+				{{#if isDomainUser}}
+				<div class="p-sm p-b-none bg-light pos-rlt" style="top:-1px;">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>You</div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Done</small></div>
+					</div>
+				</div>
+			{{else}}
+				<div class="p-sm p-b-none pos-rlt">
+					<div class="leaderboard-bottom-border-edge">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>{{userName}}</div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Done</small></div>
+					</div>
+					</div>
+				</div>
+			{{/if}}
+			{{/each}}
+		</li>
+		{{/if}}
+	</ul>
+</div>
+</script>
+
+<script id="portlets-contacts-filterbased-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis flitered_contact_portlet_header" style="width:90%;"></span>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>			
+		</div>
+        <div class="portlet_body panel-body p-n  b-n"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-contacts-emails-opened-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Emails Opened</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
+					{{get_portlet_duration settings.duration}}
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body panel-body p-n  b-n">
+			<div id="emails-opened-pie-chart" class="emails-opened-pie-chart" style="height:155px;"></div>
+			<div id="emails-opened-contacts-list" class="emails-opened-contacts-list"></div>
+		</div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-contacts-emails-sent-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Emails Sent</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
+					{{get_portlet_duration settings.duration}}
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body panel-body p-n  b-n"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-contacts-growth-graph-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Tag Graph</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
+					{{get_portlet_duration settings.duration}}
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body panel-body p-n b-n">
+			<div id="plan-limit-error-{{id}}" class="pull-left w-full" style="display:none"></div>
+        </div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-deals-pending-deals-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:90%;">
+					{{#if_equals settings.deals "all-deals"}}
+						All Pending Deals
+					{{/if_equals}}
+					{{#if_equals settings.deals "my-deals"}}
+						My Pending Deals
+					{{/if_equals}}
+				</span>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body panel-body p-n b-n"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-deals-deals-by-milestone-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">
+					{{#if_equals settings.deals "all-deals"}}
+						All Deals by Milestone
+					{{/if_equals}}
+					{{#if_equals settings.deals "my-deals"}}
+						My Deals by Milestone
+					{{/if_equals}}
+				</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis deals_funnel_portlet_header" style="width: 30%;">
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>			
+		</div>
+        <div class="portlet_body panel-body p-n b-n deals-by-milestone-portlet-body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-deals-closures-per-person-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:90%;">Closures per Person</span>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>			
+		</div>
+        <div class="portlet_body panel-body p-n b-n"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-deals-deals-won-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Deals Won</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
+					{{get_portlet_duration settings.duration}}
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body panel-body p-n b-n"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-deals-deals-funnel-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">
+					{{#if_equals settings.deals "all-deals"}}
+						All Deals Funnel
+					{{/if_equals}}
+					{{#if_equals settings.deals "my-deals"}}
+						My Deals Funnel
+					{{/if_equals}}
+				</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis deals_funnel_portlet_header" style="width: 30%;">
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>			
+		</div>
+        <div class="portlet_body panel-body p-n b-n"></div>
+
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-deals-deals-assigned-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Deals Assigned</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
+					{{get_portlet_duration settings.duration}}
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body panel-body p-n b-n"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-contacts-calls-per-person-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Calls</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
+					{{get_portlet_duration settings.duration}}
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body panel-body p-n b-n"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-tasksandevents-agenda-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:50%;">Events</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 50%;">
+					{{get_portlet_duration settings.duration}}
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body panel-body p-n b-n">
+        	<div id="normal-events">&nbsp;</div>
+        	<div id="google-events">&nbsp;</div>
+        </div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-tasksandevents-today-tasks-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:50%;">Tasks</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 50%;">
+					{{get_portlet_duration settings.duration}}
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body panel-body p-n b-n"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-useractivity-blog-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:90%;">Agile CRM Blog</span>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body panel-body p-n b-n">
+			<div id="portlet_blog_sync_container" class="p-sm"></div>
+		</div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-tasksandevents-task-report-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Task Report</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
+					{{get_portlet_duration settings.duration}}
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-status-report-model-template" type="text/html">	
+     <div class="stats_report_portlet_body panel-body p-n b-n" style="cursor:move">
+	 <div class="row row-sm text-center">
+	<div class="col-xs-6">
+		<div class="panel padder-v item m-l-none overflow-hidden portlet-panel" style="cursor:auto;">
+			<div class="h1 text-info font-thin h1" id="new-contacts-count">&nbsp;</div>
+			<span class="text-muted text-xs" id="new-contacts-label">&nbsp;</span>
+			<div class="top text-right w-full">
+				<!-- <i class="fa fa-caret-down text-warning m-r-sm"></i> -->
+			</div>
+		</div>
+	</div>     
+	<div class="col-xs-6">
+		<div class="block panel padder-v bg-primary item m-l-none p-t-none stats-report-settings pos-rlt overflow-hidden portlet-panel" style="cursor:auto;">
+			<div class="clearfix"></div>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0 bigger-font-mobile">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+			<span class="text-white font-thin h1 block p-t text-ellipsis" id="won-deal-value">&nbsp;</span>
+			<span class="text-muted text-xs text-ellipsis" id="won-deal-count">&nbsp;</span>
+			<span class="bottom text-right w-full">
+				<!-- <i class="fa fa-cloud-upload text-muted m-r-sm"></i> -->
+			</span>
+		</div>
+	</div>
+	<div class="col-xs-6">
+		<div class="block panel padder-v bg-info item m-l-none overflow-hidden portlet-panel" style="cursor:auto;">
+			<span class="text-white font-thin h1 block" id="emails-sent-count">&nbsp;</span>
+			<span class="text-muted text-xs" id="emails-sent-label">&nbsp;</span>
+			<span class="top text-left">
+				<!-- <i class="fa fa-caret-up text-warning m-l-sm m-l-none"></i> -->
+			</span>
+		</div>
+	</div>
+	<div class="col-xs-6">
+		<div class="panel padder-v item m-l-none overflow-hidden portlet-panel" style="cursor:auto;">
+			<div class="font-thin h1 text-ellipsis" id="new-deal-value">&nbsp;</div>
+			<span class="text-muted text-xs text-ellipsis block" id="new-deal-count">&nbsp;</span>
+			<div class="bottom text-left">
+				<!-- <i class="fa fa-caret-up text-warning m-l-sm"></i> -->
+			</div>
+		</div>
+	</div>
+</div>
+	 </div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-admin-onboarding-model-template" type="text/html">
+	<div class="portlet_header portlet_edit_icons panel-heading b-b bg-light panel-heading getting-started-header">
+		<h4 class="h4 text-ellipsis">
+			<span class="pull-left inline-block text-ellipsis" style="width:90%;">Getting Started</span>
+		</h4>
+		<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+			<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+		</div>
+	</div>
+	<div class="portlet_body  text-lg getting-started-body bg-white ">
+	<div style="font-size: 15px;margin: 10px 0px 7px;" class="text-muted">Here are few steps to kick start your new CRM. </div>
+		<div>
+			{{#if settings.addUsers.done}}
+				<label class="i-checks i-checks-sm m-b-none   onboarding-check" value="addUsers">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="i-checks i-checks-sm m-b-none  onboarding-check" value="addUsers">
+					<input class="thead_check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.addUsers.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#users-add">Invite Users</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#users-add">Invite Users</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Agile is more fun with your colleagues. Invite them now.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.importContacts.done}}
+
+
+
+
+
+	<label class="i-checks i-checks-sm m-b-none  onboarding-check" value="importContacts">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
+		</label>
+			{{else}}
+
+
+
+				 <label class="i-checks i-checks-sm m-b-none  onboarding-check" value="importContacts">
+					<input class="thead_check" type="checkbox"><i></i>
+				</label> 
+			{{/if}}
+			{{#if settings.importContacts.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#import">Import Contacts</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#import">Import Contacts</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Start your list from CSV, Google Contacts, Stripe or other CRMs.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.setupIntegrations.done}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="setupIntegrations">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="setupIntegrations">
+					<input class="thead_check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.setupIntegrations.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#integrations">Setup Integrations</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#integrations">Setup Integrations</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Configure Agile with your CMS, eCommerce, SMS and email gateways.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.createCampaign.done}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="createCampaign">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="createCampaign">
+					<input class="thead_check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.createCampaign.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#workflow-templates">Marketing Automation</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#workflow-templates">Marketing Automation</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Engage your customers with the world's easiest visual designer.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.setupTrackingCode.done}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="setupTrackingCode">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="setupTrackingCode">
+					<input class="thead_check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.setupTrackingCode.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#analytics-code">Add Tracking Code to your site</a></span>
+			{{else}}
+				<span inline-block v-text-bottom"><a href="#analytics-code">Add Tracking Code to your site</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Track who is visiting and get real-time notifications.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.addWebrule.done}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="addWebrule">
+					<input class="thead_check type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="addWebrule">
+					<input class="thead_check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.addWebrule.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#webrules-add">Web Engagement</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#webrules-add">Web Engagement</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Show those personalized popup messages to your visitors to keep them coming back.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.upgradePlan.done}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="upgradePlan">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="upgradePlan">
+					<input class="thead_check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.upgradePlan.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#subscribe-plan">Show some love</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#subscribe-plan">Show some love</a></span>
+			{{/if}}
+			<!-- {{#if settings.upgradePlan.done}}
+				<small class="p-l-sm onboarding-undo c-p">(undo)</small>
+				{{#if settings.upgradePlan.skip}}
+				{{else}}
+					<small class="p-l-sm onboarding-skip c-p">(skip)</small>
+				{{/if}}
+			{{else}}
+				{{#if settings.upgradePlan.skip}}
+					<small class="p-l-sm onboarding-undo c-p">(undo)</small>
+				{{else}}
+					<small class="p-l-sm onboarding-skip c-p">(skip)</small>
+				{{/if}}
+			{{/if}} -->
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Support Agile's development by upgrading your account.</p>
+			</div>
+		</div>
+	</div>
+	<div class="portlets" id="{{id}}">&nbsp;</div>
+	<div class="column_position" style="display:none">{{column_position}}</div>
+	<div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-user-onboarding-model-template" type="text/html">
+	<div class="portlet_header portlet_edit_icons panel-heading b-b">
+		<h4 class="h4 text-ellipsis">
+			<span class="pull-left inline-block text-ellipsis" style="width:90%;">Getting Started</span>
+		</h4>
+		<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+			<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+		</div>
+	</div>
+	<div class="portlet_body m-l text-lg getting-started-body bg-white">
+	<div style="font-size: 15px;margin: 10px 0px 7px;" class="text-muted">Here are few steps to kick start your new CRM. </div>
+		<div>
+			{{#if settings.setupProfile.done}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="setupProfile">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
+				</label>
+
+			
+			{{else}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="setupProfile">
+					<input class="thead_check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.setupProfile.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#user-prefs">Setup your profile</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#user-prefs">Setup your profile</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Update your pic, email signature and reminders.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.linkEmailAccount.done}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="linkEmailAccount">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="linkEmailAccount">
+					<input class="thead_check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.linkEmailAccount.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#email">Bring your emails</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#email">Bring your emails</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>No more tedious cc' emails. Agile will pull your emails automatically.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.addWidgets.done}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="addWidgets">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="addWidgets">
+					<input class="thead_check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.addWidgets.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#add-widget">Add widgets</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#add-widget">Add widgets</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Setup telephony, social, helpdesk, billing and enhance your contact view.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.importContacts.done}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="importContacts">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="importContacts">
+					<input class="thead_check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.importContacts.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#import">Import Contacts</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#import">Import Contacts</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Start your list from CSV, Google Contacts, Stripe or other CRMs.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.createCampaign.done}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="createCampaign">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="createCampaign">
+					<input class="thead_check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.createCampaign.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#workflow-templates">Marketing Automation</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#workflow-templates">Marketing Automation</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Engage your customers with the world's easiest visual designer.</p>
+			</div>
+		</div>
+	</div>
+	<div class="portlets" id="{{id}}">&nbsp;</div>
+	<div class="column_position" style="display:none">{{column_position}}</div>
+	<div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-leader-board-model-template" type="text/html">
+<div class="leaderboard_portlet_header portlet_header portlet_edit_icons">
+	<ul class="m-n p-n leader-board-{{getLeaderboardCateCount settings.category}}">
+		{{#if settings.category.revenue}}
+		<li class="pull-left">
+			<div class="panel-heading">
+				<h4 class="h4 text-ellipsis"><span class="pull-left inline-block" style="width:50px;">Revenue</span>
+				{{#if settings.category.dealsWon}}
+				</h4>
+				{{else}}
+					{{#if settings.category.calls}}
+					</h4>
+					{{else}}
+						{{#if settings.category.tasks}}
+						</h4>
+						{{else}}
+							<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width:calc(100% - 50px);">
+								{{get_portlet_duration settings.duration}}
+							</small></h4>
+							<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs" style="visibility: hidden;">
+								<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+								<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+							</div>
+						{{/if}}
+					{{/if}}
+				{{/if}}
+			</div>
+		</li>
+		{{/if}}
+		{{#if settings.category.dealsWon}}
+		<li class="pull-left">
+			<div class="panel-heading">
+				<h4 class="h4 text-ellipsis"><span class="pull-left inline-block" style="width:50px;">Deals</span>
+				{{#if settings.category.calls}}
+				</h4>
+				{{else}}
+					{{#if settings.category.tasks}}
+					</h4>
+					{{else}}
+						<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width:calc(100% - 50px);">
+							{{get_portlet_duration settings.duration}}
+						</small></h4>
+						<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs" style="visibility: hidden;">
+							<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+							<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+						</div>
+					{{/if}}
+				{{/if}}
+			</div>
+		</li>
+		{{/if}}
+		{{#if settings.category.calls}}
+		<li class="pull-left">
+			<div class="panel-heading">
+				<h4 class="h4 text-ellipsis"><span class="pull-left inline-block" style="width:50px;">Calls</span>
+				{{#if settings.category.tasks}}
+				</h4>
+				{{else}}
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width:calc(100% - 50px);">
+					{{get_portlet_duration settings.duration}}
+				</small></h4>
+				<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs" style="visibility: hidden;">
+					<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+					<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+				</div>
+				{{/if}}
+			</div>
+		</li>
+		{{/if}}
+		{{#if settings.category.tasks}}
+		<li class="pull-left leader-board-text-mobile">
+			<div class="panel-heading" style='min-height:39px'>
+			   <h4 class="h4 text-ellipsis visible-xs"><span class="pull-left inline-block">Leader Board</span></h4>
+				<h4 class="h4 text-ellipsis hidden-xs"><span class="pull-left inline-block" style="width:50px;">Tasks</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width:calc(100% - 50px);">
+					{{get_portlet_duration settings.duration}}
+				</small></h4>
+				<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs" style="visibility: hidden;">
+					<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+					<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+				</div>
+			</div>
+		</li>
+		{{/if}}
+	</ul>
+	<div class="clearfix"></div>
+</div>
+<div class="portlet_body"></div>
+<div class="portlets" id="{{id}}">&nbsp;</div>
+<div class="column_position" style="display:none">{{column_position}}</div>
+<div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-deals-revenue-graph-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+			<h4 class="h4 text-ellipsis text-muted">
+				<span class="pull-left inline-block text-ellipsis" style="width:60%;">Revenue Graph</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 40%;">
+					{{get_portlet_duration settings.duration}}
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body panel-body p-n b-n">
+		</div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-collection-template" type="text/html">
+<div class="alert-info alert" id="no-portlets" style="display:none">
+    <div class="slate-content">
+       <div class="box-left pull-left m-r-md">
+            <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+       </div>
+       <div class="box-right pull-left">
+            <h4 class="m-t-none">You do not have any dashlets currently.</h4>
+            <div class="text">
+               	Dashlets help you to view different modules data by grouping and manage your dashlets by adding them.  
+            </div>
+          		Get started by adding a dashlet.<br>
+                <a href="#add-dashlet" id="add-portlet" class="add-portlet add-stream-tab btn btn-default btn-sm m-t-xs">
+ 		          <i class="icon icon-plus-sign"></i> Add Dashlet
+		        </a> 
+	   </div>
+	   <div class="clearfix">
+	   </div>
+    </div>
+</div>
+{{#unless this.length}}
+  <div class="alert-info alert" id="zero-portlets">
+    <div class="slate-content">
+       <div class="box-left pull-left m-r-md">
+            <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+       </div>
+       <div class="box-right pull-left">
+            <h4 class="m-t-none">You do not have any dashlets currently.</h4>
+            <div class="text">
+               	Dashlets help you to view different modules data by grouping and manage your dashlets by adding them.  
+            </div>
+          		Get started by adding a dashlet.<br>
+                <a href="#add-dashlet" id="add-portlet" class="add-portlet add-stream-tab btn btn-default btn-sm m-t-xs">
+ 		          <i class="icon icon-plus-sign"></i> Add Dashlet
+		        </a> 
+	   </div>
+	   <div class="clearfix">
+	   </div>
+    </div>
+  </div>
+{{/unless}}
+<div class="gridster" id="portlet-res">
+     <!-- <div id="col-0" class="portlet-column col-md-4" style="width:30.624%;"></div>
+     <div id="col-1" class="portlet-column col-md-4" style="width:30.624%;"></div>
+     <div id="col-2" class="portlet-column col-md-4" style="width:30.624%;"></div> -->
+    
+	<div class="gridster-portlets pos-rlt">
+		<!-- <div style="display:none">&nbsp;</div> -->
+	</div>
+    
+</div>
+</script>
+
+<script id="portlets-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+	<div class="wrapper-md bg-light lter b-b">
+	<div id="dashlet_heading" class="row">
+    	<div class="col-md-12">
+			<div class="pull-left">
+				<h1 class="m-n font-thin h3 text-black">Dashboard</h1>
+				<small class="text-muted">Welcome to Agile CRM</small>
+			</div>
+			<div class="pull-right">
+
+<a id="chrome-extension-button" href="https://chrome.google.com/webstore/detail/agile-crm/eofoblinhpjfhkjlfckmeidagfogclib" data-toggle="tooltip" data-placement="bottom" title="" data-original-title=" Agile CRM Chrome Extension is available now. Please click here to install the extension." class="hide  text-info inline-block dashboart_tooltip" target="_blank">
+					 <img src = "{{getS3ImagePath '../flatfull/img/dashboard/google.png'}}">
+				</a>
+				<a href="#" id="tutotial_modal" class="btn btn-default btn-sm  pos-rlt  dashboart_tooltip" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Help">
+					<i class="fa fa-graduation-cap"></i>
+				</a>
+				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
+					<i class="icon icon-plus-sign"></i> Add Dashlet
+				</a> 
+				
+			</div>
+			<div class="clearfix"></div>      	
+    	</div>
+	</div>
+	</div>
+	<div class="wrapper-md">
+	<div class="row">
+		<div class="col-md-12">
+			<div>
+				<div id="portlets">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
+</script>
+
+<script id="portlets-contact-filter-list-collection-template" type="text/html">
+<select id="filter" name="filter" class="required form-control">
+	<option value="">Select...</option>
+	<option value="contacts">All Contacts</option>
+	<!-- <option value="companies">Companies</option> -->
+	<option value="myContacts">My Contacts</option>
+	<!-- <option value="leads">Leads</option> -->
+	{{#if this.length}}
+		{{#each this}}
+			<option value="{{this.id}}">{{this.name}}</option>
+		{{/each}}
+	{{/if}}
+</select>
+</script>
+
+<script id="portlets-account-body-model-template" type="text/html">
+<div class="row">
+				<label class="control-label  col-xs-2 p-t-none font-bold">Plan</label>
+				<div class="control-label text-left col-xs-8 p-t-none">
+					 {{Plan}} <small class="p-l-xs">{{ucfirst Plan_Interval}} </small>(<a href="#subscribe" class="text-sm text-info">Change</a>)<br>
+						{{Count}} users.
+					{{#if Email}}
+							 {{numberWithCommas Email}} emails per month
+					{{else}}
+							5,000 Branded emails
+					{{/if}}</div>
+			</div>
+		<div class="row m-t-sm m-b-xs">
+			{{#if Owner_name}}
+				<label class="m-l font-bold">Need help? </label><label class="m-l">Talk to your Account Representative</label>
+				<div class="clearfix"></div>
+			{{else}}
+				<label class="m-l font-bold">Need help? </label><label class="m-l">Talk to Agile Support</label>
+				<div class="clearfix"></div>
+			{{/if}}
+	</div>
+	{{#if Owner_name}}
+<div class="row">		
+		<div class="col-xs-2"><div class="thumb-sm agile-img"><img class= "img-inital r-2x" src="{{Owner_pic}}" alt="..." style="width:40px;height:40px;"></div>
+		</div>	
+			<div class="control-label col-xs-10 p-t-none m-l-n">
+			<label>{{Owner_name}}</label>
+			<div>
+			<a href="{{Owner_url}}" target="_blank" class="text-info .p-xs">Schedule a call</a></div>
+			
+			</div>
+</div>
+{{else}}
+	<div>
+			<a href="https://our.agilecrm.com/calendar/Raja_Shekar,Natesh,Abhishek_Pandey" target="_blank" class="text-info .p-xs">Schedule a call</a></div>
+
+{{/if}}
+
+</script>
+<script id="portlets-account-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:90%;">Account Information</span>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>	
+		</div>
+        <div class="portlet_body panel-body p b-n " style=" height: 155px; max-height: 155px; overflow-x: hidden;overflow-y:auto;padding: 10px;">
+		</div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-activities-list-log-collection-template" type="text/html">
+{{#if this.length}}
+<div>
+<section class="scroll">
+			 <div id="today-heading" style="display: none" class="p-sm"><b >Today</b>	</div>
+            <div id="today-activity" style="display: inline;"></div>
+            <div id="tomorrow-heading" style="display: none" class="p-sm"><b >Yesterday</b></div>
+            <div id="tomorrow-activity" style="display: inline;"></div>
+		<div id="next-week-heading" style="display: none" class="p-sm">
+            <b id="earllier" style="display:none">Earlier</b>
+			</div>
+            <div id="next-week-activity" style="display: inline;"></div>
+    </section>
+</div>
+{{else}}
+<div class="portlet-error-message">
+      No Customer activites
+	</div>
+{{/if}}
+
+</script>
+
+<script id="portlets-activities-list-log-model-template" type="text/html">
+<div class="pos-rlt p-sm p-b-xs p-t-xs">
+	<div class="pull-left avatar thumb-xs m-r m-t-xs">
+
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg"  alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="activity-tag p-l-xxl">
+<div class="custom-link">
+{{#if_equals "TASK" entity_type}}
+{{#if_equals "TASK_ADD" activity_type}} 
+Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_string label}}</a>{{else}} '{{safe_string label}}'{{/if}} <br/>
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+
+{{#if custom2}}
+<i class="icon-tasks"></i>  {{#unless this.entityObject}}Task deleted later. {{/unless}}Task assigned to {{custom1}} due <span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" custom2}}</span>. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+{{else}}
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task assigned to {{entityObject.taskOwner.name}} due <span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}</span>. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+
+{{/if}}
+</small>
+</div>
+
+{{/if_equals}}
+
+
+{{#if_equals "TASK_COMPLETED" activity_type}}
+Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}} '{{safe_string label}}'{{/if}} <br/>
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+ <i class="icon-tasks"></i>{{#if this.entityObject}} Task due {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}} was completed.{{else}} Task deleted later.{{/if}} {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+</small></div>
+{{/if_equals}}
+{{#if_equals "TASK_DELETE" activity_type}}
+ Deleted Task '{{safe_string label}}' 
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+{{#if related_contact_ids}}<i class="icon-tasks"></i> Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}. {{/if}} 
+</small></div>
+{{/if_equals}}
+
+
+{{#if_equals "TASK_EDIT" activity_type}}
+{{#if this.entityObject}}	
+{{#get_event_rescheduled custom3}} 
+Changed Due date of Task <a href="#task/{{../entity_id}}" >{{safe_string ../label}}</a><br/>
+
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-tasks icon-white"></i> Task Due time changed to {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" ../entityObject.due}}.{{#if ../../related_contact_ids}} Task related to {{#stringToJSON ../../this "related_contact_ids"}} {{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+</small></div> 
+{{else}}
+ Modified Task <a href="#task/{{../entity_id}}" >{{safe_string ../label}}</a><br/>
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-tasks icon-white"></i> Task {{displayActivityFieldText ../custom3}} modified. {{#if ../../related_contact_ids}} Task related to {{#stringToJSON ../../this "related_contact_ids"}} {{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
+</small></div>
+{{/get_event_rescheduled}}
+{{else}}
+{{#get_event_rescheduled custom3}} 
+Changed Due date of Tasks '{{safe_string ../label}}'<br/>
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-tasks icon-white"></i> Task deleted later. Task Due time changed to {{#getDueDateOfTask ../custom3  ../custom1}}{{/getDueDateOfTask}}.{{#if ../../related_contact_ids}} Task related to {{#stringToJSON ../../this "related_contact_ids"}} {{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+</small></div> 
+{{else}}
+ Modified Task '{{safe_string ../label}}'<br/>
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-tasks icon-white"></i> Task deleted later. Task {{displayActivityFieldText ../custom3}} modified.{{#if ../../related_contact_ids}} Task related to {{#stringToJSON ../../this "related_contact_ids"}} {{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+</small></div>
+{{/get_event_rescheduled}}
+{{/if}}
+
+</div>
+{{/if_equals}}
+
+
+{{#if_equals "TASK_OWNER_CHANGE" activity_type}}
+Reassigned Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}} <br/>
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later.{{/unless}} Task Owner changed to {{custom1}}. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+</small></div>	
+{{/if_equals}}
+
+
+
+{{#if_equals "TASK_RELATED_CONTACTS" activity_type}}
+{{#if related_contact_ids}}
+{{#if_equals "removed_all_relatedcontacts" custom3}}
+Removed Contact(s) from Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}<br/>
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Task.
+</small></div>
+{{/if_equals}} 
+{{#if_equals "removed_relatedcontacts" custom3}}
+Removed Contact(s) from Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}<br/>
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Task.
+</small></div>
+{{/if_equals}} 
+{{#if_equals "added_relatedcontacts" custom3}}
+Added Contact(s) to Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}<br/>
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Task. 
+{{/if_equals}}
+{{else}}
+Modified Task.
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-tasks"></i> <a href="" data="{{entity_id}}" class="activity-task-edit">{{label}}</a> Modified  
+</small></div>
+{{/if}} 
+</small></div>
+{{/if_equals}}
+
+
+{{#if_equals "TASK_PROGRESS_CHANGE" activity_type}}
+Changed Progress of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}<br/>    
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+ <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task Progress changed from {{custom2}}% to {{custom1}}%. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 	
+</small></div>
+{{/if_equals}}
+
+
+
+{{#if_equals "TASK_STATUS_CHANGE" activity_type}}
+Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}<br/>   
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small> 
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task Status changed from {{get_normal_name custom2}} to {{get_normal_name custom1}}. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}	
+</small></div>
+{{/if_equals}}
+
+{{#if_equals "BULK_DELETE" activity_type}}
+{{#if_equals "1" custom1}}
+  Deleted {{custom1}} Task 
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>  
+{{#if custom2}}<i class="icon-tasks"></i> {{custom2}}{{/if}}
+</small></div> 
+{{else}} 
+	Deleted {{custom1}} Tasks 
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>    
+{{#if custom2}}<i class="icon-tasks"></i> {{custom2}}. {{/if}} 
+</small></div>
+{{/if_equals}}
+{{/if_equals}}
+{{/if_equals}}
+
+<!-- starting of deal condition-->
+
+{{#if_equals "DEAL" entity_type}}
+{{#if_equals "DEAL_ADD" activity_type}}
+Created Deal {{#if entityObject}}<a  href="#deal/{{entity_id}}">{{label}}</a> {{else}}'{{label}}'{{/if}}
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+{{#if custom2}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}Deal ({{currencySymbol}}{{numberWithCommasForActivities custom2}} - {{custom3}}%) added {{#if entityObject}}to track '{{entityObject.pipeline.name}}'{{/if}}. {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+{{else}}
+<i class="icon-money icon-white"></i>{{#unless this.entityObject}} Deal deleted later.{{/unless}} Deal {{#if this.entityObject}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) added to track '{{entityObject.pipeline.name}}'.{{/if}} {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+{{/if}}	
+</small></div>	
+{{/if_equals}}
+
+
+{{#if_equals "DEAL_ARCHIVE" activity_type}}
+ Archived Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}} 
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later.{{/unless}} {{#if this.entityObject}} Deal ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) archived.{{/if}} {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+</small></div>	
+{{/if_equals}}
+
+{{#if_equals "DEAL_RESTORE" activity_type}}
+ Restored Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}} 
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later.{{/unless}} {{#if this.entityObject}} Deal ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) restored.{{/if}} {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+</small></div>	
+{{/if_equals}}
+
+
+
+{{#if_equals "DEAL_CLOSE" activity_type}}
+ Won Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later.{{/unless}} {{#if this.entityObject}} Deal ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) Won.{{/if}} {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+</small></div>	
+{{/if_equals}}
+
+
+{{#if_equals "DEAL_EDIT" activity_type}}
+Modified Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-money icon-white"></i>{{#unless this.entityObject}} Deal deleted later.{{/unless}} Deal {{#if this.entityObject}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}} {{displayActivityFieldText custom3}} modified. {{#if related_contact_ids}} Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+</small></div>	
+{{/if_equals}}
+
+
+
+{{#if_equals "DEAL_DELETE" activity_type}}
+Deleted Deal '{{label}}' 
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+{{#if related_contact_ids}}<i class="icon-money icon-white"></i> Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+</small></div>
+{{/if_equals}}
+
+
+{{#if_equals "DEAL_RELATED_CONTACTS" activity_type}}
+{{#if related_contact_ids}}
+{{#if_equals "removed_all_relatedcontacts" custom3}}
+Removed Contact(s) from Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}} {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from  Deal {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}} 
+</small><div>
+{{/if_equals}} 
+{{#if_equals "removed_relatedcontacts" custom3}}
+Removed Contact(s) from Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}  {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Deal {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}}
+</small></div>
+{{/if_equals}} 
+{{#if_equals "added_relatedcontacts" custom3}}
+Added Contact(s) to Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}{{label}}{{/if}}
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+ <i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Deal {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}}
+</small></div>
+{{/if_equals}}
+{{else}}
+Modified  Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}.
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+{{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
+</small></div>
+{{/if}}	
+{{/if_equals}}
+
+
+
+{{#if_equals "NOTE_ADD" activity_type}}
+Added note to Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-pencil"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}<span title="{{custom1}}">{{add_dots_end custom1}}</span> {{#if custom2}}- <span title="{{custom2}}">{{add_dots_end custom2}}{{/if}}
+</small></div>
+{{/if_equals}}
+
+
+{{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
+Reassigned Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to {{custom1}}
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-money icon-white"></i> {{#unless entityObject}} Deal deleted later.{{/unless}} Deal{{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}} assigned to '{{custom1}}'. {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}	
+</small></div>
+{{/if_equals}}
+
+
+
+
+{{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
+Changed Milestone of Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small> 
+<i class="icon-money icon-white"></i> {{#unless entityObject}} Deal deleted later.{{/unless}}{{#if this.entityObject}}Deal ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}} Milestone changed from '{{custom2}}' to '{{custom1}}'. {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+</small></div>	
+{{/if_equals}}
+
+ {{#if_equals "DEAL_IMPORT" activity_type}}
+Imported {{custom1}} Deals <br/>	
+{{/if_equals}}
+
+{{#if_equals "DEAL_EXPORT" activity_type}}
+Exported {{custom1}} Deals <br/>	
+{{/if_equals}}
+
+
+{{#if_equals "DEAL_LOST" activity_type}}
+Lost Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-money icon-white"></i>{{#unless entityObject}} Deal deleted later.{{/unless}} Deal {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) {{/if}} Lost. {{#if related_contact_ids}} Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+</small></div>	
+{{/if_equals}}
+
+{{#if_equals "BULK_ACTION" activity_type}}
+
+{{#if_equals "BULK_DEAL_ARCHIVE" custom1}}
+Archived {{custom3}} Deals<br/>
+{{/if_equals}}
+
+
+{{#if_equals "BULK_DEAL_RESTORE" custom1}}
+ Restored {{custom3}} Deals<br/>
+
+{{/if_equals}}
+
+
+{{#if_equals "BULK_DEAL_OWNER_CHANGE" custom1}}
+
+{{#if_equals "1" custom3}}
+Changed owner for {{custom3}} Deal 
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-money icon-white"></i> Deal assigned to {{custom2}}.
+</small></div>
+{{else}}
+Changed owner for {{custom3}} Deals 
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-money icon-white"></i> Deals assigned to {{custom2}}.
+</small></div>
+{{/if_equals}}
+{{/if_equals}}
+
+{{#if_equals "BULK_DEAL_MILESTONE_CHANGE" custom1}}
+{{#getTracksCount}}
+{{#if_equals "1" custom3}}
+Changed track/milestone for {{custom3}} Deal <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-money icon-white"></i> Deal track/milestone changed to {{custom4}} - {{custom2}}.
+</small></div>
+{{else}}
+	Changed track/milestone for {{custom3}} Deals <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-money icon-white"></i> Deals track/milestone changed to {{custom4}} - {{custom2}}.
+</small></div>
+{{/if_equals}}
+{{else}}
+{{#if_equals "1" custom3}}
+Changed milestone for {{custom3}} Deal <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-money icon-white"></i> Deal milestone changed to {{custom2}}.
+</small></div>
+{{else}}
+	Changed milestone for {{custom3}} Deals <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-money icon-white"></i> Deals milestone changed to {{custom2}}.
+</small></div>
+{{/if_equals}}
+{{/getTracksCount}}
+{{/if_equals}}
+{{/if_equals}}
+
+
+{{#if_equals "BULK_DELETE" activity_type}}
+  {{#if_equals "1" custom1}}
+  Deleted {{custom1}} Deal<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+  {{#if custom2}}<i class="icon-money icon-white"></i> {{custom2}}.{{/if}}
+</small></div>
+{{else}} 
+	Deleted {{custom1}} Deals <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+ {{#if custom2}}<i class="icon-money icon-white"></i> {{custom2}}.{{/if}}
+</small></div>
+{{/if_equals}}
+{{/if_equals}}
+{{/if_equals}}
+
+<!-- end of deal condition-->	
+
+<!-- starting event condition-->
+{{#if_equals "EVENT" entity_type}}
+{{#if_equals "EVENT_ADD" activity_type}}
+ Created Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+{{#if custom2}}
+<i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}Event deleted later. {{/unless}}Event starts at {{epochToHumanDate "h:MM TT" custom2}} on {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.{{#if related_contact_ids}} Event related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+{{else}}
+<i class="icon-calendar icon-white"></i> {{#if this.entityObject}} Event starts at {{epochToHumanDate "h:MM TT" entityObject.start}} on {{epochToHumanDate "ddd mmm dd yyyy" entityObject.start}}.{{else}} Event deleted later.{{/if}}{{#if related_contact_ids}} Event related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}   
+{{/if}}
+</small></div>
+{{/if_equals}}
+
+
+
+{{#if_equals "EVENT_RELATED_CONTACTS" activity_type}}
+{{#if related_contact_ids}}
+{{#if_equals "removed_all_relatedcontacts" custom3}}
+Removed Contact(s) from Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}Event deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Event. 
+</small></div>
+{{/if_equals}} 
+{{#if_equals "removed_relatedcontacts" custom3}}
+Removed Contact(s) from Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}Event deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Event.
+{{/if_equals}} 
+</small></div>
+{{#if_equals "added_relatedcontacts" custom3}}
+Added Contact(s) to Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}Event deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Event.
+ {{/if_equals}}
+</small></div>
+{{else}}
+Modified Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+{{#if related_contact_ids}}
+<i class="icon-calendar icon-white"></i>Event related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+{{/if}}	
+</small></div>
+{{/if_equals}}
+
+
+
+{{#if_equals "BULK_DELETE" activity_type}}
+ {{#if_equals "1" custom1}}
+  Deleted {{custom1}} Event <br/>
+{{#if custom2}}
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-calendar icon-white"></i> {{custom2}}.
+</small></div>
+ {{/if}} 
+{{else}} 
+	Deleted {{custom1}} Events <br/>
+{{#if custom2}}
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-calendar icon-white"></i> {{custom2}}.
+</small></div>
+ {{/if}} 
+{{/if_equals}}
+{{/if_equals}}
+
+
+
+
+{{#if_equals "EVENT_DELETE" activity_type}}
+Deleted Event '{{label}}'<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+ {{#if related_contact_ids}} <i class="icon-calendar icon-white"></i> Event related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+</small></div>
+{{/if_equals}}
+
+
+
+
+{{#if_equals "EVENT_EDIT" activity_type}}
+
+{{#if this.entityObject}}	
+{{#get_event_rescheduled custom3}} 
+Rescheduled Event <a href="" data={{../entity_id}} class='activity-event-edit'">{{../label}}</a><br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-calendar icon-white"></i> Event Start time changed to {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" ../entityObject.start}}.{{#if ../../related_contact_ids}} Task related to {{#stringToJSON ../../this "related_contact_ids"}} {{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+</small> </div>
+{{else}}
+Modified Event <a href="" data={{../entity_id}} class='activity-event-edit'">{{../label}}</a> <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-calendar icon-white"></i> Event {{displayActivityFieldText ../custom3}} modified.{{#if ../../related_contact_ids}} Task related to {{#stringToJSON ../../this "related_contact_ids"}} {{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+</small></div>
+{{/get_event_rescheduled}}
+{{else}}
+{{#get_event_rescheduled custom3}} 
+Rescheduled Event '{{../label}}'<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-calendar icon-white"></i> Event deleted later. Event Start time changed to {{#getDueDateOfTask ../custom3  ../custom1}}{{/getDueDateOfTask}}.{{#if ../../related_contact_ids}} Task related to {{#stringToJSON ../../this "related_contact_ids"}} {{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+</small> </div>
+{{else}}
+ Modified Event '{{../label}}' <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-calendar icon-white"></i> Event deleted later. Event {{displayActivityFieldText ../custom3}} modified.{{#if ../../related_contact_ids}} Task related to {{#stringToJSON ../../this "related_contact_ids"}} {{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+</small></div>
+{{/get_event_rescheduled}}
+{{/if}}
+{{/if_equals}}
+{{/if_equals}}
+
+
+<!-- end event condition-->
+
+<!-- start of contact condition-->
+{{#if_equals "CONTACT" entity_type}}
+
+{{#if_equals "CONTACT_CREATE" activity_type}}
+Created a new Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>	
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+ <i class="icon-user"></i>{{#unless this.entityObject}}Contact deleted later. {{/unless}}Contact assigned to {{custom1}}.
+</small></div>
+{{/if_equals}}
+
+{{#if_equals "COMPANY_CREATE" activity_type}}
+Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>	
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+ <i class="icon-user"></i>{{#unless this.entityObject}}Company deleted later. {{/unless}} Company assigned to {{custom1}}.
+</small></div>
+{{/if_equals}}
+
+{{#if_equals "CONTACT_DELETE" activity_type}}
+Deleted Contact '{{label}}'
+{{/if_equals}}
+{{#if_equals "COMPANY_DELETE" activity_type}}
+Deleted Company '{{label}}'
+{{/if_equals}}
+
+{{#if_equals "CONTACT_IMPORT" activity_type}}
+Imported {{custom1}} Contact(s) <br/>	
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+{{#if custom2}}<i class="icon-user"></i> {{custom2}} contact(s) were updated during the import.{{/if}} 
+</small></div>
+{{/if_equals}}
+
+ {{#if_equals "COMPANY_IMPORT" activity_type}}
+Imported {{custom1}} Companies <br/>	
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+{{#if custom2}}<i class="icon-user"></i> {{custom2}} companies were updated during the import.{{/if}} 
+</small></div>
+{{/if_equals}}
+
+{{#if_equals "CONTACT_EXPORT" activity_type}}
+Exported {{custom1}} Contact(s) <br/>	
+{{/if_equals}}
+
+{{#if_equals "COMPANY_EXPORT" activity_type}}
+{{#if_equals "1" custom1}}
+Exported {{custom1}} Company <br/>
+{{else}}
+Exported {{custom1}} Companies <br/>
+{{/if_equals}}	
+{{/if_equals}}
+
+{{#if_equals "CONTACT_OWNER_CHANGE" activity_type}}
+Changed owner for Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>	
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-user icon-white"></i>{{#unless this.entityObject}} Contact deleted later. {{/unless}} Contact assigned to {{custom1}}.
+</small></div>
+{{/if_equals}}
+
+  {{#if_equals "NOTE_ADD" activity_type}}
+Added note to Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+ <i class="icon-pencil"></i>{{#unless this.entityObject}} Contact deleted later. {{/unless}} {{custom1}} {{#if custom2}}- {{custom2}}{{/if}}
+</small></div>
+{{/if_equals}}
+
+
+{{#if_equals "EMAIL_SENT" activity_type}}
+Sent email to {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-envelope-alt"></i>{{#unless this.entityObject}}Contact deleted later. {{/unless}} Email subject - <a href="" class="email-details" data="{{id}}">{{custom3}}</a> 
+</small></div>
+{{/if_equals}}
+
+{{#if_equals "BULK_ACTION" activity_type}}
+
+{{#if_equals "ADD_TAG" custom1}}
+Added  tag to {{custom3}} Contacts<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} added.
+</small></div>
+{{/if_equals}}
+
+
+{{#if_equals "REMOVE_TAG" custom1}}
+Removed tag from {{custom3}} Contacts<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} removed.
+</small></div>
+{{/if_equals}}
+
+{{#if_equals "ASIGN_WORKFLOW" custom1}}
+{{#if_equals "1" custom3}}
+		Added {{custom3}} Contact to Campaign<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>  
+<i class="icon-sitemap icon-white"></i> {{custom2}}. 
+</small></div>
+{{else}}
+Added {{custom3}} Contacts to Campaign<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>   
+<i class="icon-sitemap icon-white"></i> {{custom2}}. 
+</small></div>
+{{/if_equals}}
+{{/if_equals}}
+
+{{#if_equals "SEND_EMAIL" custom1}}
+
+{{#if_equals "contacts" label}}	
+{{#if_equals "1" custom3}}	
+Sent a email to {{custom3}} Contact<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-envelope-alt"></i> Email subject- <a href="" class="email-details" data={{id}}>{{custom4}}</a>
+</small></div> 
+{{else}}
+Sent a bulk email to {{custom3}} Contacts<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-envelope-alt"></i> Email subject- <a href="" class="email-details" data={{id}}>{{custom4}}</a> 
+</small></div>
+{{/if_equals}}
+{{else}}
+{{#if_equals "1" custom3}}
+Sent a email to {{custom3}} company<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-envelope-alt"></i> Email subject - <a href="" class="email-details" data={{id}}>{{custom4}}</a>
+</small></div>
+{{else}}
+Sent a bulk email to {{custom3}} Companies<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-envelope-alt"></i> Email subject - <a href="" class="email-details" data={{id}}>{{custom4}}</a>
+</small></div>
+{{/if_equals}}
+{{/if_equals}}
+{{/if_equals}}
+
+{{#if_equals "CHANGE_OWNER" custom1}}
+
+{{#if_equals "contacts" label}}	
+{{#if_equals "1" custom3}}
+Changed owner for {{custom3}} Contact <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-user icon-white"></i> Contact assigned to {{custom2}}.
+</small></div>
+{{else}}
+	Changed owner for {{custom3}} Contacts <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-user icon-white"></i> Contacts assigned to {{custom2}}.
+</small></div>
+{{/if_equals}}
+{{else}}
+
+{{#if_equals "1" custom3}}
+Changed owner for {{custom3}} Company <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-user icon-white"></i> Company assigned to {{custom2}}.
+</small></div>
+{{else}}
+	Changed owner for {{custom3}} Companies <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-user icon-white"></i> Companies assigned to {{custom2}}.
+</small></div>
+{{/if_equals}}
+{{/if_equals}}
+{{/if_equals}}
+
+{{#if_equals "DELETE" custom1}}
+	
+{{#if_equals "contacts" label}}	
+{{#if_equals "1" custom3}}
+		Deleted {{custom3}} Contact
+{{else}}	
+    Deleted {{custom3}} Contacts
+{{/if_equals}}
+{{else}}
+{{#if_equals "1" custom3}}
+		Deleted {{custom3}} company
+{{else}}	
+    Deleted {{custom3}} Companies
+{{/if_equals}}
+{{/if_equals}}
+{{/if_equals}}
+
+
+{{/if_equals}}
+
+
+{{#if_equals "CAMPAIGN" activity_type}}
+Added {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to Campaign <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small> 
+<i class="icon-sitemap icon-white"></i> {{#unless this.entityObject}}Contact deleted later. {{/unless}} {{custom2}}.
+</small></div>
+{{/if_equals}}
+
+{{#if_equals "TAG_ADD" activity_type}}
+Added a Tag to Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-tag icon-white"></i> {{removeDoubleCoutes custom1}} added.{{#unless this.entityObject}} Contact deleted later. {{/unless}}
+</small></div>
+{{/if_equals}}
+
+{{#if_equals "TAG_REMOVE" activity_type}}
+Removed a Tag from Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-tag icon-white"></i> {{removeDoubleCoutes custom1}} removed.{{#unless this.entityObject}} Contact deleted later. {{/unless}}
+</small></div>
+{{/if_equals}}
+
+{{#if_equals "CALL" activity_type}}
+{{#if_equals "incoming" custom2}}
+Call from {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+</small></div>
+{{/if_equals}}
+{{#if_equals "outgoing" custom2}}	
+Called {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+</small></div>
+{{/if_equals}}
+{{/if_equals}}
+
+{{/if_equals}}
+<!-- end of contact-->
+<!-- document added startig-->
+{{#if_equals "DOCUMENT" entity_type}}
+{{#if_equals "DOCUMENT_ADD" activity_type}}
+{{#if_equals "1" custom2}}
+   Added Contact to Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>  
+<i class="icon-file icon-white"></i> {{#unless entityObject}}Document deleted later. {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Document.{{/if}}
+</small></div>
+{{else}} 
+{{#if_equals "no related contacts" custom3}}
+   Added Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small> 
+<i class="icon-file icon-white"></i> {{#unless entityObject}}Document deleted later. {{/unless}}{{#if entityObject}}Document type - {{network entityObject.network_type}}{{/if}}
+</small></div>
+{{else}}
+	 Added Contacts to Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-file icon-white"></i> {{#unless entityObject}}Document deleted later. {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Document.{{/if}}
+</small></div>
+{{/if_equals}} 
+{{/if_equals}}	
+{{/if_equals}}
+
+
+{{#if_equals "DOCUMENT_REMOVE" activity_type}}
+{{#if_equals "1" custom2}}
+   Removed Contact from Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+  <i class="icon-file"></i> {{#unless entityObject}}Document deleted later.{{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Document.{{/if}} 
+</small></div>
+{{else}} 
+ Removed Contacts from Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-file"></i> {{#unless entityObject}}Document deleted later. {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Document.{{/if}}
+</small></div>
+{{/if_equals}}	
+{{/if_equals}}
+
+
+{{#if_equals "BULK_DELETE" activity_type}}
+  {{#if_equals "1" custom1}}
+  Deleted {{custom1}} Document <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+ <i class="icon-file icon-white"></i> {{custom2}}.
+</small></div>
+{{else}} 
+Deleted  {{custom1}} Documents<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-file icon-white"></i> {{custom2}}.
+ </small></div>
+{{/if_equals}}	
+{{/if_equals}}
+{{/if_equals}}
+
+{{#if_equals "CALL" activity_type}}
+{{#unless entity_type}}
+{{#if_equals "incoming" custom2}}
+Call from {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+</small></div>
+{{/if_equals}}
+{{#if_equals "outgoing" custom2}}	
+Called {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+</small></div>
+{{/if_equals}}
+{{/unless}}
+{{/if_equals}}
+
+<!-- starting of campaign status-->
+
+
+{{#if_equals "CAMPAIGN" entity_type}}
+
+{{#if_equals "CAMPAIGN_CREATE" activity_type}}
+Created a Campaign {{#if this.entityObject}} <a href="#workflow/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>	
+<div class="activities_second_line p-t-xs m-t-none text-sm"><small>
+ {{#unless this.entityObject}}<i class="icon-sitemap icon-white"></i> Campaign deleted later. {{/unless}}
+</small>  </div>
+
+{{/if_equals}}
+
+{{#if_equals "CAMPAIGN_EDIT" activity_type}}
+Modified a Campaign {{#if this.entityObject}} <a href="#workflow/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>	
+<div class="activities_second_line p-t-xs m-t-none text-sm"><small>
+ {{#unless this.entityObject}}<i class="icon-sitemap icon-white"></i> Campaign deleted later. {{/unless}}
+</small>  </div>
+{{/if_equals}}
+
+
+{{#if_equals "CAMPAIGN_DELETE" activity_type}}
+Deleted Campaign '{{label}}'
+{{/if_equals}}
+
+{{#if_equals "BULK_DELETE" activity_type}}
+  {{#if_equals "1" custom1}}
+  Deleted {{custom1}} Campaign <br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm"><small>
+ <i class="icon-sitemap icon-white"></i> Campaign {{custom2}} deleted.
+</small></div>  
+{{else}} 
+Deleted  {{custom1}} Campaigns<br/>
+<div class="activities_second_line p-t-xs m-t-none text-sm"><small>
+ <i class="icon-sitemap icon-white"></i> Campaign {{custom2}} deleted.
+</small></div>  
+{{/if_equals}}	
+{{/if_equals}}
+
+{{/if_equals}}
+</div>
+<small class="edit-hover pull-right p-r-xs text-muted" > 
+			<i class="fa fa-clock-o"></i>&nbsp;<time class="pull-right  text-sm" datetime="{{epochToHumanDate "" time}}"> {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" time}}</time>
+		</small>
+</div>
+<div class="clearfix"></div>
+</div>
+</script>
+
+<script id="portlets-activites-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading">
+		
+		<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:90%;">Activities</span>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>			
+</div>
+        <div class="portlet_body panel-body p-n b-n activity_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+
+<script id="portlets-minicalendar-model-template" type="text/html">
+	
+        <div class="portlet_body_calendar panel-body p-n b-n">
+	
+			<div id="" class="events_show pull-left" style="width:30%">
+			</div>
+			<div id="calendar_container" class="pull-right" style="width:70%"></div>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0 vis-hide">
+				
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+        <div class="portlet_body panel-body p-n b-n activity_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+
+<script id="portlets-campaign-stats-report-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis campaign_stats_header" style="width:70%;"></span>
+				 <small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
+					{{get_portlet_duration settings.duration}}
+				</small> 
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body">
+			<div id="emails-sent" style="height:50%">
+			<div id="emails-sent-label" class="text-sm text-light text-ellipsis"></div> 
+			<div id="emails-sent-count" class="text-count text-center" style="color:#23b7e5;"></div>
+			
+			</div>
+			<div id="emails-opened" style="height:50%; display:none;"></div>
+			<div id="emails-clicked" style="height:50%; display:none;"></div>
+
+			<div id="emails-unsubscribed" style="height:50%; display:none;"></div>
+
+		</div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>

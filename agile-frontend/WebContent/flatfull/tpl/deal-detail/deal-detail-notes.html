@@ -1,0 +1,82 @@
+<script id="deal-notes-collection-template" type="text/html">
+{{#unless this.length}}
+        <div class="wrapper p-t-none">
+            <div class="slate-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="/{{getS3ImagePath 'img/clipboard.png'}}" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">You have no notes for this Deal.</h4>
+                    <div class="text">
+                        You can save specific information about Deals as a Note.
+                    </div>
+                    <a href="#deal-note-modal1" data-toggle="modal" class="btn btn-default btn-sm blue btn-slate-action deal-note m-t-xs"><i class="icon-plus-sign"></i>  Add Note</a>
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+        {{/unless}}
+{{#if this.length}}
+<div class="m-b-md m-t-md m-r-sm" align="right">
+   <a href="#deal-note-modal1" data-toggle="modal" class="btn btn-default btn-sm btn-addon  deal-note"><span><i class='icon-plus-sign'/></span> Add Note</a> 
+</div>
+	<ul id="deal-notes-model-list" class="ativity-block-ul list-group list-group-lg m-b-none"></ul>
+{{/if}}
+</script>
+<script id="deal-notes-model-template" type="text/html">
+<div  class="activity block pos-rlt">
+<div class="activity-block-owner thumb-xs pull-left m-r-sm b-light b avatar">
+		{{#if domainOwner}}
+			{{#if ownerPic}}
+				<img class="user-img r r-2x"  alt="" src="{{ownerPic}}" >
+			{{else}}
+				<img class="user-img r r-2x"  alt="" src="{{defaultGravatarurl 40}}" >
+			{{/if}}
+		{{else}}
+			<img class="user-img r r-2x"  alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
+		{{/if}}
+		<span class="owner-name hide">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
+	</div>
+	
+	<div class="pull-left rightThumbView pos-rlt">
+	<div class="pull-left contact-title-dynamic"><a class="text-md text-cap custom-color">{{subject}}</a></div>
+	<div class="pull-right">
+	<small class="edit-hover  text-muted"> 
+			<i class="fa fa-clock-o m-r-xs "></i>
+			<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+		</small>
+	</div>
+	<div class="clearfix"></div>
+	
+		<pre style="white-space:pre-wrap;">{{show_link_in_statement description}}</pre>
+		
+	 	<div>
+		<div class="m-b-sm">	
+		{{#each contacts}}
+           	{{#if id}}
+				{{#isDuplicateContactProperty properties "email"}}
+					{{else}}	
+						{{#if_contact_type "PERSON"}}
+						<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+					{{/if_contact_type}}
+					{{#if_contact_type "COMPANY"}}
+        				<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        			{{/if_contact_type}}
+				{{/isDuplicateContactProperty}}
+           		
+           	{{/if}}
+       	{{/each}}
+		</div>
+		<div class="pos-abs pos-r-0 pos-b-0" id="deal-hover-actions">
+		<span class="actions">
+<a title="Edit"  data="{{id}}" data-toggle="modal" class="deal-edit-note c-p text-l-none-hover p-r-sm"> <i class="icon-pencil"></i> </a>
+            <a title="Delete" class="c-p text-l-none-hover"><span class="activity-delete icon-trash inline"  id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
+        </span>
+        </div>
+	</div>
+
+</div>
+<div class="clearfix"></div>
+</div>
+</script>

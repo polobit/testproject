@@ -1,0 +1,109 @@
+<script id="socialsuite-twitter-message-template" type="text/html">
+<div class="modal  fade message-modal" id="socialsuite_twitter_messageModal" >
+<div class="modal-dialog">
+    <div class="modal-content">
+  <form id="socialsuite_twitter_messageForm" name="socialsuite_twitter_messageForm" method="post">
+	 <fieldset>    
+         <div class="modal-header">
+	        <button class="close" data-dismiss="modal">x</button>
+			{{#if_equals headline "Direct Message"}}
+	        	<h3><i class="icon-envelope"></i> {{headline}}</h3>
+			{{/if_equals}}
+			{{#if_equals headline "Tweet"}}
+				<h3><i class="icon-twitter"></i> {{headline}}</h3>
+			{{/if_equals}}
+            {{#if_equals headline "Reply Tweet"}}
+				<h3><i class="icon-share"></i> {{headline}}</h3>
+			{{/if_equals}}
+            {{#if_equals headline "Retweet"}}
+				<h3><i class="icon-retweet"></i> {{headline}}</h3>
+			{{/if_equals}}
+        </div>
+        <div class="modal-body agile-modal-body">	      
+                    <input name="tweetId" type="hidden" value={{tweetId}} />
+                    <input name="tweetOwner" type="hidden" value={{tweetOwner}} />  
+                    <input name="streamId" type="hidden" value={{streamId}} />
+                    <input name="profileImg" type="hidden" value={{profileImg}} />
+                    <input name="headline" type="hidden" value="{{headline}}" />                    
+                    <input name="info" type="hidden" value="{{info}}" />
+                    <input name="description" type="hidden" value="{{description}}" />
+                    <input name="domain_user_id" type="hidden" value="{{domain_user_id}}" />
+					<input name="screen_name" type="hidden" value={{screen_name}} />
+					<input name="network_type" type="hidden" value={{network_type}} />
+					<input name="token" type="hidden" value={{token}} />
+                    <input name="secret" type="hidden" value={{secret}} />
+                    <input name="schedule" type="hidden" id="schedule" value={{schedule}} />
+
+					<div style="margin-bottom:10px;">
+						{{info}}
+					</div>	                
+	                <div class="control-group form-group">
+	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
+	                    <div class="controls" style="margin-left:0px;">
+                            {{#if message}} <!-- Edit Scheduled Update -->
+                              <input name="id" type="hidden" value={{id}} />
+							  {{#if_equals headline "Reply Tweet"}}
+	                        	<textarea rows="4" class="required form-control w-full twit-tweet-limit" placeholder="Reply Message to {{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" >{{message}}</textarea>
+							  {{else}} <!-- tweet and direct msg -->
+								<textarea rows="4" class="required form-control w-full twit-tweet-limit" placeholder="{{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" >{{message}}</textarea>
+							  {{/if_equals}}
+                            {{else}}
+                              {{#if_equals headline "Reply Tweet"}}
+	                        	<textarea rows="4" class="required form-control w-full twit-tweet-limit" placeholder="Reply Message to {{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" >{{description}}&nbsp</textarea>
+							  {{else}} 
+                                   {{#if_equals headline "Retweet"}}
+                                         <textarea rows="4" class="required form-control-F-width"  id="twit-retweet" disabled>{{description}}</textarea>                            
+                                         <textarea rows="4" class="required form-control w-full twit-tweet-limit" placeholder="RT @{{tweetOwner}}: {{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" style="display:none;">RT @{{tweetOwner}}: {{description}}</textarea>
+								   {{else}}<!-- tweet and direct msg -->
+                                         <textarea rows="4" class="required form-control w-full twit-tweet-limit" placeholder="{{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" ></textarea>
+                                   {{/if_equals}}			   	                
+							  {{/if_equals}}  
+                            {{/if}}
+							<div class="right"><small style="font-style: italic;">Characters Left <em id="twitter-counter" style="margin-right:5px;">140</em></small></div>
+                        </div>
+	                </div>	   
+         
+                    {{#if_equals headline "Retweet"}}
+                      <div id="tweet_scheduling" class="tweet-scheduling" title="Scheduling" style="display:none;">
+                    {{else}}
+                      <div id="tweet_scheduling" class="tweet-scheduling" title="Scheduling">
+                    {{/if_equals}}	
+                        <i class="icon-time icon-2x" style="color: gray;"></i>
+                      </div>
+                      <div id="schedule_controls" class="row" style="display:none;">
+                        <div id="schedule_date" class="control-group form-group col-md-6">
+                          <label class="control-label"><b>Date </b></label>
+                          <div class="controls">
+                            <input id="scheduled_date" class="required form-control date" type="text" name="scheduled_date" placeholder="{{dateFormat}}">							
+                          </div>
+                        </div>
+                        <div id="schedule_time" class="control-group form-group col-md-6">
+                          <label class="control-label"><b>Time </b></label>
+                          <div class="controls">
+                             <input id="scheduled_time" class="required form-control" type="text" name="scheduled_time" placeholder="time">		
+                          </div>
+                        </div>
+                      </div> 
+            {{#if_equals headline "Retweet"}}
+               <span id="link-text" class="is-actionable right" style="font:menu;margin-right: 5px;display:none;"><a id="add_message" style="color:grey;">Spread the word about Agile CRM</a></span>
+            {{else}}
+               <span id="link-text" class="is-actionable right" style="font:menu;margin-right: 5px;"><a id="add_message" style="color:grey;">Spread the word about Agile CRM</a></span>
+            {{/if_equals}} 
+        </div>
+	    <div class="modal-footer form-actions" style="margin-top: 0px;">
+            {{#if_equals headline "Retweet"}}
+                 <a href="#" class="btn btn-sm btn-primary" id="edit_retweet">Edit</a>
+                 <a href="#" class=" save btn btn-sm btn-primary" id="send_retweet">Retweet</a>
+                 <a href="#" class="save btn btn-sm btn-primary" id="send_tweet" style="display:none;">Send</a>
+            {{else}}       		 
+			     <a href="#" class="save btn btn-sm btn-primary" id="send_tweet">Send</a>
+            {{/if_equals}}			
+			<span><img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-modal" style="display:none;"></img></span>
+	        <span class="save-status"></span>
+	    </div>
+     </fieldset> 
+  </form>
+</div>
+</div>
+</div>
+</script>

@@ -1,0 +1,509 @@
+<script id="import-contacts-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        
+            <h3 class="font-thin h3">Import From CSV <small></small>	</h3>
+        
+    </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+<div class="col-sm-6 col-xs-12 col-md-4">
+<div class="panel panel-default">
+	<div class="panel-heading">CSV Contacts Import<!--<span class="label label-important">Beta</span>--></div>
+	<div class="panel-body">
+    <form id="imap-prefs-form">
+        
+		<div class="p-b-sm">
+			Import upto 10,000 contacts from a CSV file
+		</div>
+		<input type="hidden" id="type" value="contacts" class="form-control">
+        <fieldset>
+			{{#canSyncContacts}}
+           		<div class="btn btn-sm upload btn-default inline-block">Upload CSV file</div>
+					{{else}}
+           				<span class="btn btn-sm btn-default inline-block" disabled="">Upload CSV file</span>
+						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+			{{/canSyncContacts}}
+           
+        </fieldset>
+    </form>
+    </div>
+</div>
+</div>
+
+
+<div class="col-sm-6 col-xs-12 col-md-4" style="height: 200px;">
+<div class="panel panel-default">
+	<div class="panel-heading">CSV Companies Import <span class="label label-sm bg-danger">Beta</span></div>
+	<div class="panel-body">
+    <form id="company-import-form">
+        
+		<div class="p-b-sm">
+			Import upto 10,000 companies from a CSV file
+		</div>
+			<input type="hidden" id="type" value="company" class="form-control">
+        <fieldset>
+			{{#canSyncContacts}}
+           		<div class="btn btn-sm upload btn-default inline-block">Upload CSV file</div>
+					{{else}}
+           				<span class="btn btn-sm btn-default inline-block"  disabled="">Upload CSV file</span>
+						<span style="margin-left:5px"><i>Needs import privilege.</i></span>
+			{{/canSyncContacts}}
+           
+        </fieldset>
+    </form>
+    </div>
+</div>
+</div></div>
+</div>
+</script>
+<script id="import-deals-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+       
+            <h3 class="font-thin h3">Import Deals From CSV <small></small>	</h3>
+        
+    </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+<div class="col-sm-6 col-md-4 col-xs-12">
+<div class="panel panel-default">
+	<div class="panel-heading">CSV Deals Import <span class="label label-sm bg-danger">Beta</span></div>
+	<div class="panel-body">
+    <form id="deal-import-form">
+		<div class="p-b-sm">
+			Import upto 10,000 deals from a CSV file
+		</div>
+<input type="hidden" id="type" value="deals" class="form-control">
+        <fieldset>
+           		<div class="btn btn-sm upload btn-default inline-block">Upload CSV file</div>
+        </fieldset>
+    </form>
+    </div>
+    </div>
+</div>
+</div>
+</div>
+</script>
+<script id="import-contacts-2-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        
+            <h3 class="font-thin h3">CSV Contacts Import <br><small> Field mapping </small></h3>
+       
+    </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-sm-9 col-md-9">
+		<div class="panel panel-default">
+			<div class="panel-heading">CSV Contacts Import List</div>	 
+				<table class="table table-striped showCheckboxes m-b-none agile-table panel">
+			    <thead id="import-header">
+			       </thead><thead>
+						<tr><th style="width:50%;">
+							CSV headings
+						</th>
+						<th style="width:50%;">	
+							Fields
+						</th>
+					</tr></thead>
+			 <tbody id="import-tbody">
+				{{#each_with_index1 data}}
+				<tr>
+			 		<td>
+					{{#is_blank this.value}}
+							{{../index}}
+						{{else}}
+							{{this}}		
+					{{/is_blank}}	
+			        </td>
+					<td class="import-contact-fields">
+						{{setupCSVUploadOptions "contacts" this.value ../this}}
+					</td>
+				 </tr>
+			{{/each_with_index1}} 
+			</tbody>
+			</table>
+		
+		<footer class="panel-footer">
+		<div class="row">
+		  <div class="col-md-12 col-sm-12 col-xs-12">
+			<form id="import-contact-tags">
+			    <div class="form-group control-group">
+			        <label class="control-label">Tags (Optional)</label><br>
+			        <div class="pull-left" style="margin-top:0px;">
+			            <ul name="tags" class="tagsinput tags p-l-none"></ul>
+			        </div>
+			        <div class="controls">
+			            <input id="tags-import" class="tags-typeahead form-control" name="tags" type="text" placeholder="Tags should be separated by comma.">
+			        </div>
+					<p class="help-block">You can optionally add tags to all new contacts being created.</p>
+				
+			    </div>
+			</form>
+			</div>
+			</div>
+			<div class="row">
+			<div class="col-ms-12 col-sm-12 col-xs-12">
+			<a class="btn btn-sm btn-primary pull-right" id="import-contacts" style="margin-left:2px">Import</a>
+			<a class="btn btn-default btn-sm pull-right" id="import-cancel">Cancel</a>
+			<div id="import-validation-error"></div>
+			</div>
+			</div>
+			</footer>
+		</div>
+	</div>
+	<div class="col-sm-3 col-md-3 p-none">
+        <div class="data-block">
+            <div class="wrapper-sm">
+				<h4 class="m-t-none h4">
+                    Import Help
+                </h4>
+                
+				<ul class="p-l-md">
+					<li>Email is mandatory for all contacts. If some of your contacts don't have email, please add a dummy email (distinct for each contact) before importing.</li>
+					<li>Either of first name or last name is mandatory.</li>
+					<li>Define <a href="#custom-fields">custom fields</a> to import some of the columns in your CSV file and map them here.</li>
+					<li>Notes can be imported by selecting the 'Note' option.</li>
+                    <li>Acceptable date format are 'MM/dd/yyyy' or 'MM-dd-yyyy'</li>
+					<li>Tags can be imported with 'Tag' option. If the csv has "abc,xyz" in the column we add 2 tags 'abc' and 'xyz'.</li>
+				</ul>
+            </div>
+
+        </div>
+	</div>
+</div>
+</div>
+</script>
+
+
+
+<script id="import-companies-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+     
+            <h3 class="font-thin h3">CSV Companies Import<br> <small> Field mapping </small></h3>
+       
+    </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-sm-9 col-md-9">
+    <div class="panel panel-default">
+    <div class="panel-heading">CSV Companies Import List</div>
+		<div class="col-sm-9 col-md-9">
+			
+				<table class="table table-striped m-b-none agile-table panel">
+			    <thead id="import-header">
+			       </thead><thead>
+						<tr><th style="width:50%;">
+							CSV headings
+						</th>
+						<th style="width:50%;">	
+							Fields
+						</th>
+					</tr></thead>
+			 <tbody id="import-tbody">
+					{{#each_with_index1 data}}
+					<tr>
+			 		<td>
+					{{#is_blank this.value}}
+							{{../index}}
+						{{else}}
+							{{this}}		
+					{{/is_blank}}	
+			        </td>
+					<td class="import-contact-fields">
+						{{setupCSVUploadOptions "company" this.value ../this}}
+					</td></tr>
+					{{/each_with_index1}}
+				 </tbody>
+			</table>
+		</div>
+		<footer class="panel-footer">
+		<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12">
+		
+			
+			<a class="btn btn-sm btn-primary pull-right" id="import-comp" style="margin-left:2px">Import</a>
+			<a class="btn btn-default btn-sm pull-right" id="import-cancel">Cancel</a>
+			<div id="import-validation-error"></div>
+			
+		</div>
+		</div>
+		</footer>
+	</div>
+	</div>
+	<div class="col-sm-3 col-md-3 p-none">
+        <div class="data-block">
+            <div class="wrapper-sm">
+				<h4 class="m-t-none h4">
+                    Import Help
+                </h4>
+                <br>
+				<ul class="p-l-md">
+					<li>Company name is mandatory for import companies</li>
+				</ul>
+            </div>
+
+        </div>
+	</div>
+</div>
+</div>
+</script>
+
+
+<script id="import-deals2-template" type="text/html">
+<div class="wrapper-md lter bg-light">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+       
+            <h3 class="font-thin h3">Import Deals From CSV <br><small> Field mapping </small></h3>
+        
+    </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-sm-9 col-md-9">
+		<div class="panel panel-default">
+			<div class="panel-heading">CSV Deals Import List</div>
+				<table class="table table-striped m-b-none agile-table panel">
+			    <thead id="import-header">
+			       </thead><thead>
+						<tr><th style="width:50%;">
+							CSV headings
+						</th>
+						<th style="width:50%;">	
+							Fields
+						</th>
+					</tr></thead>
+			 <tbody id="import-tbody">
+					{{#each_with_index1 data}}
+					<tr>
+			 		<td>
+					{{#is_blank this.value}}
+							{{../index}}
+						{{else}}
+							{{this}}		
+					{{/is_blank}}	
+			        </td>
+					<td class="import-contact-fields">
+						{{setupCSVUploadOptions "deals" this.value ../this}}
+					</td></tr>
+					{{/each_with_index1}}
+				 </tbody>
+			</table>
+			<footer class="panel-footer">
+			<div class="row">
+		 	<div class="col-md-12 col-sm-12 col-xs-12">
+			<a class="btn btn-sm btn-primary pull-right" id="import-deals" style="margin-left:2px">Import</a>
+			<a class="btn btn-default btn-sm pull-right" id="deal-cancel">Cancel</a>
+			<div id="import-validation-error pull-right"></div>
+			</div>
+			</div>
+			</footer>
+	</div>
+	</div>
+	<div class="col-sm-3 col-md-3 p-none">
+        <div class="data-block">
+            <div class="wrapper-sm">
+				<h4 class="m-t-none h4">
+                    Import Help
+                </h4>
+                <br>
+				<ul class="p-l-md">
+					<li>Deal Name is mandatory.</li>
+					<li>All other fields are optional</li>
+					<li>Note that Track and Milestone names in the CSV should match exactly with the ones defined in Agile (including case)</li>
+					<li>You can define Tracks and Milestones <here></here></li>
+				</ul>
+            </div>
+
+        </div>
+	</div>
+</div>
+</div>
+</script>
+
+
+
+
+<script id="import-contacts-validation-message-template"
+	type="text/html">
+<div class="row">
+    <div class="col-sm-5 col-md-5">
+        <div class="alert alert-danger import_contact_error alert-warning alert-dismissable">
+            <a class="close" data-dismiss="alert" href="#">x</a>
+          {{error_message}}
+        </div>
+    </div>
+</div>
+</script>
+
+<script id="import-company-validation-message-template" type="text/html">
+<div class="row">
+    <div class="col-sm-5 col-md-5">
+        <div class="alert alert-danger import_contact_error alert-warning alert-dismissable">
+            <a class="close" data-dismiss="alert" href="#">x</a>
+          {{error_message}}
+        </div>
+    </div>
+</div>
+</script>
+
+
+<script id="import-deal-validation-message-template" type="text/html">
+<div class="row">
+    <div class="col-sm-5 col-md-5">
+        <div class="alert alert-danger import_contact_error alert-warning alert-dismissable">
+            <a class="close" data-dismiss="alert" href="#">x</a>
+          {{error_message}}
+        </div>
+    </div>
+</div>
+</script>
+
+<script id="csv_upload_options-template" type="text/html">
+<select class="import-select form-control">
+<option value="properties__ignore_">-Ignore-</option>
+<option value="properties_first_name">First Name</option>
+<option value="properties_last_name">Last Name</option>
+<option value="properties_company">Company</option>
+<option value="tags">Tag</option>
+<option value="note">Note</option>
+<option value="properties_title">Job Description</option>
+<optgroup label="Email">
+    <option value="properties_home-email">Email (Personal)</option>
+    <option value="properties_work-email">Email (Work)</option>
+</optgroup>
+<optgroup label="Phone">
+    <option value="properties_home-phone">Phone (Home)</option>
+    <option value="properties_work-phone">Phone (Work)</option>
+    <option value="properties_mobile-phone">Phone (Mobile)</option>
+    <option value="properties_main-phone">Phone (Main)</option>
+    <option value="properties_home fax-phone">Phone (Home fax)</option>
+    <option value="properties_work fax-phone">Phone (Work fax)</option>
+    <option value="properties_other-phone">Phone (Other)</option>
+</optgroup>
+<optgroup label="Website">
+    <option value="properties_URL-website">Website</option>
+    <option value="properties_SKYPE-website">Skype</option>
+    <option value="properties_TWITTER-website">Twitter</option>
+    <option value="properties_LINKEDIN-website">LinkedIn</option>
+    <option value="properties_FACEBOOK-website">Facebook</option>
+    <option value="properties_XING-website">Xing</option>
+    <option value="properties_FEED-website">Blog</option>
+    <option value="properties_GOOGLE-website">Google+</option>
+    <option value="properties_FLICKR-website">Flickr</option>
+    <option value="properties_GITHUB-website">GitHub</option>
+    <option value="properties_YOUTUBE-website">YouTube</option>
+</optgroup>
+<optgroup label="Address">
+    <option value="properties_address-address">Home</option>
+    <option value="properties_address-city">City</option>
+    <option value="properties_address-state">State</option>
+    <option value="properties_address-zip">Zip</option>
+    <option value="properties_address-country">Country</option>
+</optgroup>
+ {{#if custom_fields}}
+<optgroup label="Custom field" id="custom_fields">
+   
+		{{#each custom_fields}}
+			<option class="CUSTOM" value="properties_{{this.field_label}}">{{this.field_label}}</option>
+		{{/each}}
+</optgroup>
+{{/if}}
+</select>
+
+
+</script>
+
+
+<script id="csv_companies_upload_options-template" type="text/html">
+<select class="import-select form-control">
+<option value="properties__ignore_">-Ignore-</option>
+<option value="properties_name">Organization</option>
+<optgroup label="Email">
+    <option value="properties_primary-email">Email (Primary)</option>
+    <option value="properties_alternate-email">Email (Alternate)</option>
+</optgroup>
+<optgroup label="Phone">
+    <option value="properties_primary-phone">Phone (Primary)</option>
+    <option value="properties_alternate-phone">Phone (Alternate)</option>
+    <option value="properties_fax-phone">Phone (Fax)</option>
+    <option value="properties_other-phone">Phone (Other)</option>
+</optgroup>
+<optgroup label="Website">
+    <option value="properties_URL-website">Website</option>
+	<option value="properties_url">URL</option>
+    <option value="properties_SKYPE-website">Skype</option>
+    <option value="properties_TWITTER-website">Twitter</option>
+    <option value="properties_LINKEDIN-website">LinkedIn</option>
+    <option value="properties_FACEBOOK-website">Facebook</option>
+    <option value="properties_XING-website">Xing</option>
+    <option value="properties_FEED-website">Blog</option>
+    <option value="properties_GOOGLE-website">Google+</option>
+    <option value="properties_FLICKR-website">Flickr</option>
+    <option value="properties_GITHUB-website">GitHub</option>
+    <option value="properties_YOUTUBE-website">YouTube</option>
+</optgroup>
+<optgroup label="Address">
+    <option value="properties_address-address">Address</option>
+    <option value="properties_address-city">City</option>
+    <option value="properties_address-state">State</option>
+    <option value="properties_address-zip">Zip</option>
+    <option value="properties_address-country">Country</option>
+</optgroup>
+ {{#if custom_fields}}
+<optgroup label="Custom field" id = "custom_fields">
+   
+		{{#each custom_fields}}
+			<option class="CUSTOM" value="properties_{{this.field_type}}-{{this.field_label}}">{{this.field_label}}</option>
+		{{/each}}
+</optgroup>
+{{/if}}
+</select>
+
+
+</script>
+
+
+
+<script id="csv_deals_options-template" type="text/html">
+<select class="import-select form-control">
+<option value="properties__ignore_">-Ignore-</option>
+<option value="properties_name">Deal Name</option>
+    <option value="properties_value">Value</option>
+  <option value="properties_track">Track</option>
+  <option value="properties_milestone">Milestone</option>
+
+    <option value="properties_probability">Probability</option>
+    <option value="properties_closeDate">Close Date</option>
+<option value="properties_relatedTo">Related To</option>
+<option value="properties_note">Note</option>
+<option value="properties_description">Descriptions</option> 
+{{#if custom_fields}}
+<optgroup label="Custom field" id = "custom_fields">
+   
+		{{#each custom_fields}}
+			<option class="CUSTOM" value="properties_{{this.field_label}}">{{this.field_label}}</option>
+		{{/each}}
+</optgroup>
+{{/if}}
+</select>
+
+
+</script>
+

@@ -1,0 +1,88 @@
+<script id="referrals-model-template" type="text/html">
+<td>
+	<div class="table-resp" style="width:15em;">
+		<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
+			<img class="img-inital r r-2x" src="https://secure.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e.jpg?s=50&amp;d=https%3A//dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png" title="{{name}}">
+		</div>
+		<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
+			<a class="text-cap custom-link">{{name}}</a></br>		
+			<div><small class="text-muted m-t-xs">{{email}}</small></div>
+		</div>		
+	</div>
+</td>
+</script>
+ <script id="referrals-collection-template" type="text/html">
+{{#unless this.length}}
+<div class="wrapper-md lter bg-light b-b">
+	<div class="row">
+		<div class="col-sm-12 col-md-12">
+			<h3 class="pull-left font-thin h3">Referral Program</h3>			
+		</div>
+	</div>
+</div>
+<div class="wrapper-md">
+	<div class="col-md-10">
+		<div class="alert-info alert">
+			<div class="slate-content">
+       			<div class="box-left pull-left m-r-md">
+ 	           		<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
+				</div>
+				<div class="box-right pull-left">
+					<h4 class="m-t-none"> 
+						You have not referred Agile CRM yet to any one
+					</h4>
+					<div>
+						Place this link on your website, in your email newsletter, or give it to someone when you refer them to AgileCRM .
+					</div>	
+            		<div class="bg-warning r-5x p-sm">
+		   				<span id="referral_url" class="text-base inline-block m-r-xxl">http://www.agilecrm.com/?utm_source=affiliates&utm_medium=web&utm_campaign={{get_current_domain}}</span>
+						<a  id="url_clip_button" class="inline-block text-l-none" data-clipboard-text="http://www.agilecrm.com/?utm_source=affiliates&utm_medium=web&utm_campaign={{get_current_domain}}">
+						<i class="icon-copy copy_email_clipboard_icon text-xlg p-r-xs font-bold" title=""></i> Copy</a>
+		    		</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+</div>
+{{/unless}}
+{{#if this.length}}
+<div class="wrapper-md lter bg-light b-b">
+	<div class="row">
+		<div class="col-sm-12 col-md-12">
+			<h3 class="pull-left font-thin h3">Referral Program</h3>			
+		</div>
+	</div>
+</div>
+<div class="wrapper-md">
+	<div class="col-md-8">
+		<h3> Referral Link</h3>
+		<div  style="padding-top: 10px; padding-bottom: 5px;">
+			Place this link on your website, in your email newsletter, or give it to someone when you refer them to AgileCRM.
+		</div>
+		<div style="margin-bottom: 20px;" class="data">
+			<div class="data-container">
+				<div  class="p-sm r-5x inline-block">
+					<span class="text-md inline-block m-r-xxl"  id="referral_url">http://www.agilecrm.com/?utm_source=affiliates&utm_medium=web&utm_campaign={{get_current_domain}} </span>
+					<a href="javascript:;" id="url_clip_button" class="text-l-none"  data-clipboard-text="http://www.agilecrm.com/?utm_source=affiliates&utm_medium=web&utm_campaign={{get_current_domain}}">
+					<i class="icon-copy copy_email_clipboard_icon text-xlg font-bold" title=""></i> Copy</a>	
+				</div>
+            </div>
+		</div>		
+    </div>        
+	<div id="your_referrals" class="col-md-4">	
+	<div class="panel panel-default">						
+		<div class="panel-heading">Your Referrals till date {{count}}</div>
+		<table id="referrals" class="table" style="table-layout:auto">
+			<thead>
+                <tr style="text-transform: capitalize;">					
+                    <th>Basic info</th>
+                </tr>
+            </thead>
+			<tbody id="referrals-model-list" class="referrals-model-list c-p overflow-scroll"></tbody>
+		</table>										
+	</div>
+	</div>
+</div>
+{{/if}}	
+</script>

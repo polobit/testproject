@@ -1,0 +1,312 @@
+<script id="deal-filter-old-template" type="text/html">
+<div class="widget-box" id="widget-box">
+	<div id="deal-filters" class="btn-group helpdesk-filters">
+		<a id="" class="btn btn-sm btn-default" title="Filters">
+			<i id="icon-filter" class="icon-filter icon-white"></i>
+		</a>
+		<a id="show-filter-button" class="btn btn-sm btn-default dropdown-toggle" title="Filters">
+			<i id="icon-filter" class="caret"></i>
+		</a>
+		<div class="dropdown-menu btn-sm btn-default pull-right m-t-xs p-n" id="filter_options"
+			style="background-color: #cad2dd;right:-10px;">
+			<div id="filter_list">
+				<div class="arrow"></div>
+				<div id="popover-content" class="popover-content">
+					<div id="popup_header" class="popup_header p-b-xs">
+						<span id="filters-heading" class="heading text-xs">Filters</span> <span
+							id="clear-deal-filters" class="btn btn-xs btn-default pull-left"
+							style="color: #475b6f; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5); padding: 2px 6px 2px 6px;">Clear</span>
+						<span id="deals-filter-validate" class="btn btn-primary btn-xs pull-right save"
+							style="color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3); padding: 2px 6px 2px 6px;">Done</span>
+<div class="clearfix"></div>
+					</div>
+					<style>
+						.ticket-filter-container select, .ticket-filter-container input{
+							width: 100%;
+							height: 23px;
+							font-size: 10px;
+						}
+						.ticket-filter-container label{
+							font-size: 11px;
+							width: 170px;
+							height: 20px;
+							margin-bottom: 0;
+						}
+						.row-filter{
+							padding-top: 4px !important;
+						}
+					</style>
+					<div id="deal-filter-container" class="deal-filter-container inner-box" style="width:243px">
+		<form id="dealsFilterForm" name="dealsFilterForm" role="form">
+			<fieldset>
+				<div class="control-group form-group pos-rlt row-filter">
+					<label class="control-label"><b>Owner </b> 
+						<a data-toggle="collapse" href="#owners" style="right:5px;top:5px;text-decoration:none;" class="changeIcon pos-abs text-l-none"><i class="icon-plus" /></a>
+					</label>
+					<div class="controls collapse" id="owners">
+						<select id="owners-list-filters" name="owner_id" class="form-control"></select>
+						<img class="loading-img" src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
+					</div>
+				</div>
+				<div class="control-group form-group pos-rlt row-filter list_view">
+					<label class="control-label"><b>Track </b>
+						<a data-toggle="collapse" href="#track_div" style="right:5px;top:5px;text-decoration:none;" class="changeIcon pos-abs text-l-none"><i class="icon-plus" /></a>
+					</label>
+					<div class="controls collapse" id="track_div">
+						<span><select id="pipeline" name="pipeline_id" class="form-control">
+								<option value="">Select..</option>
+						</select></span><img class="loading-img" src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
+					</div>
+				</div>
+				<div class="control-group form-group pos-rlt row-filter list_view">
+					<label class="control-label"><b>Milestone </b>
+						<a data-toggle="collapse" href="#milestone_div" style="right:5px;top:5px;text-decoration:none;" class="changeIcon pos-abs text-l-none"><i class="icon-plus" /></a>
+					</label>
+					<div class="controls collapse" id="milestone_div">
+						<span><select id="milestone" name="milestone" class="form-control">
+								<option value="">Select..</option>
+						</select></span><img class="loading-img" src="{{getS3ImagePath 'img/21-0-new.gif'}}" style="display:none;"></img>
+					</div>
+				</div>
+					
+				<div class="control-group form-group pos-rlt row-filter" id="deal-value-filter">
+					<label class="control-label"><b>Value</b>
+						<a data-toggle="collapse" href="#value_div" style="right:5px;top:5px;text-decoration:none;" class="changeIcon pos-abs text-l-none"><i class="icon-plus" /></a>
+					</label>
+					<div class="controls collapse" id="value_div">
+							<select id="value_filter" name="value_filter" class="filter_type form-control m-b-sm" data="expected_value" style="max-width:90px;">
+								<option value="equals">Equals</option>
+								<option value="between">Between</option>
+							</select>
+						<div class="equals">
+							<input type="number" id="value" name="value"
+								placeholder="Value" class="equals form-control"/>
+						</div>
+						<div class="between">
+							<input type="number" id="value_start" name="value_start"
+								class="between form-control" placeholder="Min Value"/> 
+							<input type="number" id="value_end" name="value_end"
+								placeholder="Max Value" class="between m-t-xs form-control" />
+						</div>
+					</div>
+				</div>
+				<div class="control-group form-group pos-rlt row-filter">
+					<label class="control-label"><b>State </b>
+						<a data-toggle="collapse" href="#archived_div" style="right:5px;top:5px;text-decoration:none;" class="changeIcon pos-abs text-l-none"><i class="icon-plus" /></a>
+					</label>
+					<div class="controls collapse" id="archived_div">
+						<span><select id="archived" name="archived" class="form-control">
+								<option value="true">Archived</option>
+								<option value="false" selected>Active</option>
+								<option value="all">All</option>
+						</select></span>
+					</div>
+				</div>
+				<!--<div class="control-group row-filter" id="deal-probability-filter">
+					<label class="control-label"><b>Probability</b>
+						<a data-toggle="collapse" href="#probability_div" style="right:5px;top:5px;" class="changeIcon pos-abs"><i class="icon-plus" /></a>
+					</label>
+					<div id="probability_div" class="controls collapse">
+						<select id="probability_filter" name="probability_filter" class="filter_type form-control" data="probability" style="max-width:90px;">
+								<option value="equals">Equals</option>
+								<option value="between">Between</option>
+						</select>
+					<div class="equals" >
+							<input type="text" id="probability" class="form-control" name="probability"
+								placeholder="Probability %"/>
+					</div>
+					<div class="between hide" >
+							<input type="text" id="probability_start" class="form-control" name="probability_start"
+								placeholder="Min Probability %"/>
+							<input type="text" id="probability_end" class="form-control" name="probability_end"
+								placeholder="Max Probability %"/>
+					</div>
+					</div>
+				</div>
+				<div class="control-group row-filter" id="deal-closed-filter">
+					<label class="control-label"><b>Deal Closed</b>
+						<a data-toggle="collapse" href="#close_date_div" style="right:5px;top:5px;" class="changeIcon pos-abs"><i class="icon-plus" /></a>
+					</label>
+					<div id="close_date_div" class="controls collapse">
+						<select id="close_date_filter" name="close_date_filter" class="filter_type form-control" data="close_date" style="max-width:90px;">
+								<option value="equals">Equals</option>
+								<option value="between">Between</option>
+						</select>
+					<div class="equals" >
+							<input type="text" id="close_date" name="close_date"
+								 placeholder="{{dateFormat}}" class="date input form-control" />
+					</div>
+					<div class="between hide" >
+							<input type="text" id="close_date_start" name="close_date_start"
+								placeholder="{{dateFormat}}" class="date input form-control" />
+							<input type="text" id="close_date_end" name="colse_date_end"
+								placeholder="{{dateFormat}}" class="date input form-control" />
+					</div>
+					</div>
+				</div>
+				<div class="control-group row-filter" id="deal-created-filter">
+					<label class="control-label"><b>Deal Created</b>
+						<a data-toggle="collapse" href="#created_time_div" style="right:5px;top:5px;" class="changeIcon pos-abs"><i class="icon-plus" /></a>
+					</label>
+					<div id="created_time_div" class="controls collapse">
+						<select id="created_time_filter" name="created_time_filter" class="filter_type form-control" data="created_time" style="max-width:90px;">
+								<option value="equals">Equals</option>
+								<option value="between">Between</option>
+						</select>
+					<div class="equals" >
+							<input type="text" id="created_time" name="created_time"
+								placeholder="{{dateFormat}}" class="date input form-control" />
+					</div>
+					<div class="between hide" >
+							<input type="text" id="created_time_start" name="created_time_start"
+								placeholder="{{dateFormat}}" class="date input form-control" />
+							<input type="text" id="created_time_end" name="created_time_end"
+								placeholder="{{dateFormat}}" class="date input form-control" />
+					</div>
+					</div>
+				</div> -->
+			</fieldset>
+		</form>
+		<!-- form id="dealsCustomFilterForm" name="dealsCustomFilterForm" role="form">
+			<fieldset></fieldset>
+		</form -->
+					</div>
+					<!-- End of filters-container -->
+				</div>
+				<!-- popover-content -->
+			</div>
+		</div>
+		<!-- dropdown-menu class div-->
+	</div>
+</script>
+
+<script id="deal-custom-filter-template" type="text/html">
+		{{#each this}}
+			{{#if_equals field_type "TEXT"}}
+			<div class="control-group row-filter">
+				<label class="control-label"><b>{{field_label}}</b></label>
+					<div class="controls" >
+							<input type="text" class="form-control" id="{{replace_spaces field_label}}" name="{{replace_spaces field_label}}"/>
+					</div>
+			</div>
+			{{/if_equals}}
+			{{#if_equals field_type "TEXTAREA"}}
+			<div class="control-group row-filter">
+				<label class="control-label"><b>{{field_label}}</b></label>
+					<div class="controls" >
+							<textarea id="{{replace_spaces field_label}}" class="form-control" name="{{replace_spaces field_label}}"/>
+					</div>
+			</div>
+			{{/if_equals}}
+			{{#if_equals field_type "CHECKBOX"}}
+			<div class="control-group row-filter">
+				<label class="i-checks i-checks-sm control-label"><input type="checkbox" id="{{replace_spaces field_label}}" class="form-control" name="{{replace_spaces field_label}}" style="margin-right:5px;"/><i></i><b>{{field_label}}</b></label>
+			</div>
+			{{/if_equals}}
+			{{#if_equals field_type "LIST"}}
+			<div class="control-group row-filter">
+				<label class="control-label"><b>{{field_label}}</b></label>
+					<div class="controls" >
+							<select id="{{replace_spaces field_label}}" name="{{replace_spaces field_label}}" class="form-control">
+								<option value="">Select..</option>
+								{{{buildOptions field_data}}}
+							</select>
+					</div>
+			</div>
+			{{/if_equals}}
+			{{#if_equals field_type "DATE"}}
+			<div class="control-group row-filter" id="deal_{{replace_spaces field_label}}_filter">
+				<label class="control-label"><b>{{field_label}}</b><select name="{{replace_spaces field_label}}_filter" class="filter_type form-control" data={{field_label}} style="max-width: 90px;margin-left: 20px;">
+								<option value="equals">Equals</option>
+								<option value="between">Between</option>
+						</select></label>
+					<div class="controls equals" >
+							<input type="text" id="{{replace_spaces field_label}}" name="{{replace_spaces field_label}}"
+								 placeholder="{{dateFormat}}" class="date input form-control" />
+					</div>
+					<div class="controls between hide" >
+							<input type="text" id="{{replace_spaces field_label}}_start" name="{{replace_spaces field_label}}_start"
+								placeholder="{{dateFormat}}" class="date input form-control" /> to
+							<input type="text" id="{{replace_spaces field_label}}_end" name="{{replace_spaces field_label}}_end"
+								placeholder="{{dateFormat}}" class="date input form-control" />
+					</div>
+			</div>
+			{{/if_equals}}
+		{{/each}}
+</script>
+
+<script id="deal-filter-template" type="text/html">
+<div class="btn-group inline-block m-r-xs" id="filter-list">
+	<div>
+		<div class="btn-group" id="filters-tour-step">
+			<button class="btn btn-default btn-sm filter-dropdown ">
+				<i class="icon-filter" style="margin-right:3px"></i>
+			</button>
+			<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    			<span class="caret"></span>
+  			</button>
+			<ul id="deal-filter-list-model-list" class="pull-right dropdown-menu">
+				<li>
+					<a href="#deal-filters">Add/Edit Filter</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+</script>
+
+<script id="deal-filter-collection-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+	<div class="row">
+    	<div class="col-md-12">
+        	<h3 class="pull-left font-thin h3">Deal Filters</h3>
+            <a href="#deal-filter-add" class="btn btn-sm btn-default right" id="addFilter"><span><i class='icon-plus-sign'/></span>  Add Filter</a>
+            <div class="clearfix"></div>
+           
+        </div>
+	</div>
+</div>
+<div class="wrapper-md">
+	<div class="row">
+    	<div class="col-md-9"> 
+			<div id="slate"></div>
+        	{{#if this.length}}
+				<div class="table-responsive">
+        			<table class="table table-bordered showCheckboxes agile-table panel table-layout-mob-view" url="core/api/deal/filters/bulk" id="deal-filter-list">  
+            			<thead>
+                			<tr>   
+                    			<th style="width:50%">Name</th>
+                    			<th style="width:50%"></th>
+                			</tr>
+            			</thead>
+            			<tbody id='deal-filter-model-list' route='deal-filter-edit/'></tbody>
+        			</table>
+				</div>
+			{{/if}}
+    	</div>
+    	<div class='col-md-3'>
+        	<div class="wrapper" id='addview'>
+             	<h4 class="m-t-none m-b-sm">
+              		What are Filters?
+             	</h4>
+            	<p>Filters are used to sort deals with a specific criteria to find patterns. You can save your preferred filters and fetch the deals based on saved preferences.</p>
+        	</div>
+    	</div>
+	</div>
+</div>
+</script>
+
+<script id="deal-filter-model-template" type="text/html">
+<td data='{{id}}' class='data c-p'>
+  <div>
+    {{name}} 
+  </div>
+</td>
+<td> 
+  {{#if created_time}}
+      <div>
+         Created <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="created_time time-ago border-highlight text-muted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{filterOwner.name}}
+      </div>
+  {{/if}}
+</td>
+</script>

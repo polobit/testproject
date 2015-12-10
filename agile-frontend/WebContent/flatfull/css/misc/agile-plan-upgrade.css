@@ -1,0 +1,230 @@
+/**************** Plan and upgrade css *************for plan css strip********************************************/
+.pagination li:last-child a {
+	-webkit-border-radius: 0 20px 20px 0;
+	-moz-border-radius: 0 20px 20px 0;
+	border-radius: 0 20px 20px 0;
+}
+
+.pagination li:first-child a {
+	-webkit-border-radius: 20px 0 0 20px;
+	-moz-border-radius: 20px 0 0 20px;
+	border-radius: 20px 0 0 20px;
+}
+
+.ac {
+	text-align: center;
+}
+
+/*for plans-selection*/
+.plan-select {
+	background-color: whiteSmoke;
+	font-weight: bold;
+	color: #000;
+}
+
+/*type2  plan and upgrade*/
+.plan-collection-bot {
+/*	background: url(../../img/triangle-lightgrey-bot.png) center bottom
+		repeat-x;*/
+	padding: 0 0 6px 0;
+	/*float: left;*/
+}
+
+.plan-collection-in {
+	/*background: #f1f0ee; 03/26/2015*/
+  background: #f1f0ee;
+  padding: 5px 20px;
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  line-height: 21px;
+  position: relative;
+  cursor: pointer;
+  margin: 10px 10px;
+}
+
+/*type2  plan and upgrade*/
+.plan-collection-bot {
+/*	background: url(../../img/triangle-lightgrey-bot.png) center bottom
+		repeat-x;*/
+	padding: 0 0 6px 0;
+	/*float: left;*/
+}
+
+.plan-collection-in.selected-plan {
+ border: 1px solid #5fa2dd;
+ box-shadow: 0px 0px 5px #8bc0e0;
+ opacity: 1;
+ margin: 0px 0px;
+ padding-bottom: 20px;
+ transform: scale(1);
+ / you need a scale here to allow it to transition in both directions /
+ transition: 0.15s padding ease-out, 0.15s margin ease-out;
+}
+
+#email-div .help-inline {
+	font-size: 11px;
+	text-align: center;
+}
+
+.selected-plan
+{
+border: 1px solid #5fa2dd;
+box-shadow: 0px 0px 5px #8bc0e0;
+opacity: 1;
+margin: 0px 0px;
+padding-bottom: 20px;
+transform: scale(1);
+transition: 0.15s padding ease-out, 0.15s margin ease-out;
+}
+
+.selected-plan .btn {
+	background:#50c7a7 !important;
+	color: white !important;
+}
+
+.plan-collection-in .plan-details {
+ background: #fff;
+ padding: 10px 8px 12px 8px;
+ margin-top: 15px;
+ border-radius: 5px;
+}
+
+.plan-collection-in.selected-plan .btn-plan {
+ background-color: #48c5a3;
+ border-color: #50c7a7;
+ color: #fff;
+}
+
+.plan-collection-in.selected-plan .btn-plan:hover,.plan-collection-in.selected-plan .btn-plan:active
+ {
+ background-color: #39b392;
+ border-color: #3bb897;
+ color: #fff;
+}
+
+.text-20
+{
+	font-size: 20px
+}
+
+.price-panel{
+background: #fff;
+padding: 8px 8px 8px 8px;
+margin-top: 15px;
+border-radius: 5px;
+}
+
+.email-selected-plan {
+  border: 1px solid #5fa2dd;
+  box-shadow: 0px 0px 5px #8bc0e0;
+  opacity: 1;
+  margin: 0px 0px;
+  padding-bottom: 20px;
+  transform: scale(1);
+  transition: 0.15s padding ease-out, 0.15s margin ease-out;
+  background: #f1f0ee;
+  padding: 5px 20px;
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  line-height: 21px;
+  position: relative;
+  cursor: pointer;
+  margin: 10px 10px;
+}
+
+span.plan-off-ribbon {
+	width: 45px;
+	height: 55px;
+	position: absolute;
+	top: -3px;
+	right: 10px;
+	display: inline-block;
+}
+
+h3.plan-collection-top {
+	font-size: 20px;
+	line-height: 0px;
+	padding: 0 0 15px 0;
+	margin: 0;
+	/* border-bottom: 1px dotted #c8c8c8; 03/26/2015*/
+	text-align: center;
+	text-shadow: 0px 1px 0px #fff;
+}
+
+h3.plan-collection-top a:link,h3.plan-collection-top a:visited {
+	color: #4B4B4B;
+}
+
+h3.plan-collection-top a:hover {
+	color: #000;
+	text-decoration: none;
+}
+/*	
+div.plan-collection-in:hover h3.plan-collection-top {
+    color: #f7521c;
+  -webkit-transition: color 0.2s ease-in;
+  -moz-transition: color 0.2s ease-in;
+  -o-transition: color 0.2s ease-in;
+  transition: color 0.2s ease-in;
+  
+}
+*/
+span.plan-collection-icon {
+	display: inline-block;
+	width: 106px;
+	height: 106px;
+	margin: 0 0 15px 0; 
+}
+
+.plan-collection-content {
+	/* border-top: 1px dotted #fff;
+	border-bottom: 1px dotted #c8c8c8; 03/26/2015*/
+	padding: 10px; 
+	
+}
+
+.plan-collection-buy {
+	border-top: 1px dotted #fff;
+	padding: 15px 0 0 0;
+}
+
+.plan-collection-buy .cat-addtocart-out {
+	margin: 0;
+	text-align: center;
+	padding: 4px 5px;
+}
+/*
+div.plan-collection-in.proplan span.plan-off-ribbon{
+	background: url(../../images/off-prices.png) -135px 0 no-repeat;
+}
+*/
+div.plan-collection-in.liteplan span.plan-collection-icon {
+	background: url(../../img/template.png) 0px -348px no-repeat;
+}
+
+div.plan-collection-in.liteplan:hover span.plan-collection-icon,.lite_selected
+	{
+	background: url(../../img/template.png) 0px -232px no-repeat !important;
+}
+
+div.plan-collection-in.proplan span.plan-collection-icon {
+	background: url(../../img/template.png) 0px -580px no-repeat;
+}
+
+div.plan-collection-in.proplan:hover span.plan-collection-icon,.pro_selected
+	{
+	background: url(../../img/template.png) 0px -464px no-repeat !important;
+}
+
+div.plan-collection-in.customplan span.plan-collection-icon {
+	background: url(../../img/template.png) 0px -116px no-repeat;
+}
+
+div.plan-collection-in.customplan:hover span.plan-collection-icon,.enterprise_selected
+	{
+	background: url(../../img/template.png) 0px 0px no-repeat !important;
+}
+
+#sort-table .headerSortUp::after{
+top:12px!important;
+}

@@ -1,0 +1,243 @@
+<script id="contact-activity-list-log-collection-template" type="text/html">
+{{#if this.length}}
+<div class="list-group list-group-sp" >
+<section class="scroll">
+    <form>
+      <div class="ref-log">  
+
+	 <div id="today-heading" style="display: none" class="p-b-xs m-b-xs"><b>Today</b></div>
+
+	 <div id="contact-activity-today-list-log-model-list" style="display: inline;"></div>
+	<!--<tbody id="contact-activity-today-list-log-model-list"  class="contacts-model-list" route="contact/" style="overflow: scroll;overflow:hidden;">
+	</tbody>
+	-->
+
+	<div id="yesterday-heading" style="display: none" class="p-b-xs m-b-xs"><b>Yesterday</b></div>
+ <div id="contact-activity-yesterday-list-log-model-list" style="display: inline;"></div>
+	<!--
+	<tbody id="contact-activity-yesterday-list-log-model-list"  class="contacts-model-list" route="contact/" style="overflow: scroll;overflow:hidden;">
+	</tbody>
+	-->
+
+	<div id="earlier-heading" style="display: none" class="p-b-xs m-b-xs b-light"><b>Earlier</b></div>
+	<div id="contact-activity-earlier-list-log-model-list" style="display: inline;"></div>
+	<!--
+	<tbody id="contact-activity-earlier-list-log-model-list"  class="contacts-model-list" route="contact/" style="overflow: scroll;overflow:hidden;">
+	</tbody>
+	-->
+
+		</div>
+    </form>
+</section>
+</div>
+
+{{else}}
+<div id="slate">
+<div class="slate" class="alert-info alert">
+    <div class="slate-content">
+				<div class="box-left pull-left m-r-md">
+ 	           		<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
+				</div>
+				<div class="box-right pull-left">
+            <h4 class="m-t-none">No Contact activity recorded yet.</h4>
+            <div class="text">Web and Campaign activity of your contacts is shown here.</div>
+			<div class="clearfix">
+			</div>
+        </div>
+    </div>
+</div>
+</div>
+
+{{/if}}
+
+</script>
+
+<script id="contact-activity-list-log-model-template" type="text/html">
+<div class="pos-rlt list-group-item data" data= "{{contact.id}}" >
+	<div  class="pull-left avatar thumb-xs m-r m-t-xs">
+			{{#if contact}}
+			    <a href="#contact/{{contact.id}}"><img class="user-img ref-roundedimg" src="{{gravatarurl contact.properties 36}}"/></a>
+		{{else}}
+	            <a href="#contact/{{contact.id}}"><img class="user-img ref-roundedimg" src="{{defaultGravatarurl 40}}"/></a>
+		{{/if}}	
+    </div>
+
+	<div class="contact-activity-tag" >
+		<div class="custom-link">
+			{{#if_equals "null" log_time}}
+				 {{#if contact}} 
+					<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</a> visited your website 
+				{{else}}
+					Someone visited your website 
+				{{/if}}<br>
+				<span class="activities_second_line m-t-none">  
+					<i class="icon-link"></i> 
+					<a href={{get_url url}}>{{get_url url}}</a>
+					{{#unless contact}}
+						. This contact may have been deleted
+					{{/unless}}
+
+			{{else}}
+				{{#if_equals "EMAIL_OPENED" log_type}}
+					{{#if contact}} 
+						<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</a> opened an email
+					{{else}}
+						Someone opened an email
+					{{/if}}<br>
+					<span class="activities_second_line m-t-none">  
+					<i class="icon-envelope-alt"></i> 
+					Email from campaign '{{get_limiter message "Email Opened of campaign "}}'
+					{{#unless contact}}
+						. This contact may have been deleted
+					{{/unless}}
+				{{/if_equals}}
+					
+				{{#if_equals "EMAIL_CLICKED" log_type}}
+					{{#if contact}} 
+						<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> clicked an email
+					{{else}}
+						Someone clicked an email
+					{{/if}}<br>
+					<span class="activities_second_line m-t-none">  
+					<i class="icon-hand-up"></i> 
+					Link clicked in campaign '{{campaign_name}}'
+	 				{{#unless contact}}
+						. This contact may have been deleted
+					{{/unless}}
+				{{/if_equals}}
+					
+				{{#if_equals "UNSUBSCRIBED" log_type}}
+					{{#if contact}} 
+			        	<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a>
+					{{else}}
+						Someone 
+					{{/if}}
+					{{#if_equals "Unsubscribed from all campaigns" message}}
+						unsubscribed from all campaigns
+					{{else}} 
+						unsubscribed from a campaign
+					{{/if_equals}}<br>
+					<span class="activities_second_line m-t-none">  
+						<i class="icon-minus-sign"></i> 
+						Unsubscribe link clicked from campaign '{{campaign_name}}'
+						{{#unless contact}}
+							. This contact may have been deleted
+						{{/unless}}
+				{{/if_equals}}
+	
+				{{#if_equals "EMAIL_SPAM" log_type}}
+					{{#if contact}} 
+						<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> marked an email as Spam
+					{{else}}
+						Someone marked an email as Spam
+					{{/if}}<br>
+					<span class="activities_second_line m-t-none">  
+						<i class="icon-ban-circle"></i> 
+						Email '{{get_limiter message "Email subject: "}}' in '{{campaign_name}}'
+						{{#unless contact}}
+							. This contact may have been deleted
+						{{/unless}}	
+				{{/if_equals}}
+		
+				{{#if_equals "EMAIL_HARD_BOUNCED" log_type}}
+					{{#if contact}} 
+						<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> - Email bounced
+						<br>
+						<span class="activities_second_line">  
+							<i class="icon-undo"></i> 
+							There was a hard bounce for email  {{getPropertyValue contact.properties "email"}}
+					{{else}}
+						Someone's Email bounced
+						<span class="activities_second_line m-t-none">  
+						<br>
+						This contact may have been deleted
+					{{/if}}
+				{{/if_equals}}
+
+				{{#if_equals "EMAIL_SOFT_BOUNCED" log_type}}
+					{{#if contact}} 
+						<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> - Email bounced
+						<br>
+						<span class="activities_second_line m-t-none">  
+						<i class="icon-undo"></i> 
+						There was a soft bounce for email  {{getPropertyValue contact.properties "email"}}
+					{{else}}
+						Someone's Email bounced
+						<span class="activities_second_line m-t-none">  
+						<br>
+						This contact may have been deleted
+					{{/if}}
+				{{/if_equals}}
+	
+				{{#unless log_time}}
+					{{#if contact}} 
+						<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> visited your website
+					{{else}}
+						Someone visited your website
+					{{/if}}<br>
+					<span class="activities_second_line m-t-none">  
+					<i class="icon-link"></i> 
+					<a href={{get_url url}}>{{get_url url}}</a>
+					{{#unless contact}}
+						. This contact may have been deleted
+					{{/unless}}	
+				{{/unless}}
+		{{/if_equals}}
+			</span>
+		</div>
+		<div>
+			<small class="edit-hover pull-right activity_time p-r-xs p-t-xs text-muted"> 
+				<i class="fa fa-clock-o"></i>&nbsp;
+				<time class="pull-right  text-sm" datetime="{{epochToHumanDate "" time}}"  >{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" time}}</time>
+			</small>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+</script>
+
+<script id="contact-activity-header-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+	<div class="wrapper-md bg-light b-b">
+		<div class="row">
+ 			<div class="col-md-12" id="contact_activity_header">
+           		<h3 class="contact-activity-heading font-thin h3  pull-left">
+					<span>Contact Activities</span>&nbsp;<small class="contact-activity-sub-heading" ></small>&nbsp;<small class="contact-activity-user" ></small>
+				</h3>
+				
+				<div class="pull-right">
+					<div class="btn-group pull-right type-task-button c-p" ><!--style="cursor:pointer;margin-right:15px;top: -28px;">-->
+               			<div class="btn btn-default btn-sm selected_name" id ="log-filter-title">All Activities</div>
+                		<a class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" href="#">
+                			<span class="caret"></span>
+               			</a>
+              			<ul class="dropdown-menu" >
+							<li><a href="#contact-activities/all" >All Activities</a></li> 
+								<li><a href="#contact-activities/page-views" >Page Views</a></li>
+							<li><a href="#contact-activities/email-opens" >Email Opens</a></li>
+							<li><a href="#contact-activities/email-clicks" >Email Clicks</a></li>
+							<li><a href="#contact-activities/unsubscriptions">Unsubscriptions</a></li>
+							<li><a href="#contact-activities/spam-reports">Spam Reports</a></li>
+							<li><a href="#contact-activities/hard-bounces">Hard Bounces</a></li>
+							<li><a href="#contact-activities/soft-bounces">Soft Bounces</a></li>              
+               			</ul>
+            		</div> 
+            		<div class="btn-group pull-right m-r" role="group">
+                		<a href="#activities" class="btn btn-default btn-sm" onclick="$(this).next().removeClass('bg-light')">User Activities</a> 
+                		<a href="#contact-activities" class="btn btn-default btn-sm bg-light">Contact Activities</a>
+            		</div>
+          		</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<div class="wrapper-md">
+		<div class="row" id="contact_activity_model">
+			<div class="col-md-12">
+				<div id="contact-activity-list-based-condition"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</script>

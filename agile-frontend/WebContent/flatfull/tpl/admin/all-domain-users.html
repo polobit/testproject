@@ -1,0 +1,60 @@
+<script id="all-domain-users-model-template" type="text/html">
+<td></td>
+ <td class='data' data='{{domain}}'>{{domain}}</td>
+<td>{{name}}</td>
+<td>{{email}}</td>
+<td>{{is_account_owner}}</td>
+
+</script>
+
+<script id="all-domain-users-collection-template" type="text/html">
+<div class="row">
+<div class="span12">
+    <div class="page-header">
+        <h1>List of All Domain Users <small>{{count}}</small></h1>
+    </div>
+</div>
+</div>
+<div class="row">
+<div class="span12">
+    {{#unless this.length}}
+    <div class="alert-info alert">
+        <div class="slate-content">
+            <div class="box-left pull-left m-r-md">
+                <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+            </div>
+            <div class="box-right pull-left">
+                <h4 class="m-t-none">You don't have Domain Users.</h4>
+                <div class="text">
+                    No user is registered yet.
+                </div>
+                <br />
+                <a href="#" class="btn btn-default btn-sm blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i> Domain Users </a>
+            </div>
+			<div class="clearfix">
+			</div>
+        </div>
+    </div>
+    {{/unless}}
+    {{#if this.length}}
+    <div class="">
+        <div class="">
+            <table class="table table-striped onlySorting" id="all-domain-users-table">
+                <thead>
+                    <tr>
+                        <th></th>
+						<th>Domain</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Account Owner</th>
+						
+                    </tr>
+                </thead>
+                <tbody id="all-domain-users-model-list"  style="cursor:pointer"></tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</div>
+</div>
+</script>

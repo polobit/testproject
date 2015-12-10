@@ -1,0 +1,62 @@
+
+
+body {
+	padding-top: 60px;
+    padding-bottom: 40px;
+}
+
+div#outer_container .nav li {
+	padding-top: 5px;
+}
+	  
+.nav li a:hover {
+	background-color: #f2f2f2;
+}
+
+.nav-tabs .active a, .nav-tabs .active a:hover {
+	background-color: #f5f5f5;
+}
+
+.sidebar-nav {
+	padding: 9px 0;
+}
+
+.leaderboard {
+  	margin-bottom: 30px;
+}
+
+.leaderboard h1 {
+	font-size: 40px;
+  	margin-bottom: 5px;
+  	line-height: 1;
+  	letter-spacing: -1px;
+  	color:#FF6600;
+}
+
+.leaderboard p {
+	font-size: 18px;
+  	font-weight: 200;
+  	line-height: 27px;
+  	margin: 0px;
+}
+
+.nav .nav-header {
+	font-size: 18px;
+	color:blueviolet;
+}
+
+.bottom-table p {
+	font-weight: bold;
+	text-align:center;
+}
+
+.map {
+	border: 1px solid rgba(0, 0, 0, 0.05);
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+div#google_map img {
+ max-width: none !important;
+}

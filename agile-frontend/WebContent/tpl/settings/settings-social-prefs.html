@@ -1,0 +1,45 @@
+<script id="settings-social-prefs-model-template" type="text/html">
+<div class="span4">
+	<div class="well" style="width: 220px; height: 200px; margin-left: 0px;">
+		{{#if id}} 
+			{{add_tag "Email"}} 
+			<img class="data-sync-mailimg thumbnail" src="/img/icons/google-mail-sync.png"> <br>
+			<div>
+				{{#if picture}} 
+					<i class="media-grid"> 
+						{{#if_equals picture "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg"}}
+							<img class="thumbnail" src="{{emailGravatarurl 75 email}}" width="40px" height="40px" /> 
+						{{else}} 
+							<img class="thumbnail" src="{{picture}}" width="40px" height="40px" /> 
+						{{/if_equals}}
+					</i>
+				{{else}} 
+					<i class="media-grid"> <img class="thumbnail" src="{{emailGravatarurl 50 email}}" width="40px" height="40px" /> </i>
+			   	{{/if}}
+			   	<label style="margin:5px 0px 5px 0px">{{name}}</label> 
+			   	<a href="#" id="gmail-prefs-delete" class="btn btn-danger" oid={{id}}>Disable</a>
+			   	<a class="btn" href="#gmail/{{id}}">Settings</a>
+			</div>
+		{{else}}
+			<img class="data-sync-mailimg thumbnail" src="/img/icons/google-mail-sync.png">
+			<!--<div align="center">
+				<br/> <img class="thumbnail" src="img/{{service}}-logo-small.png" />
+			</div>--><br/>
+    		<div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="See all emails related to a contact from your Gmail account.">
+				See all emails related to a contact from your Gmail account.
+			</div>
+			{{#has_email_account_limit_reached}}
+			<div> <a class="btn pull-left" disabled="disabled">Enable</a></div>
+			{{#check_plan "FREE"}}
+			<div class="pull-left m-l-sm text-xs" style="line-height:13px;width:149px"> Upgrade to Pro plan to add more accounts</div>
+			{{/check_plan}}
+			{{else}}
+			<div> <a href="/scribe?service={{service}}&amp;return_url={{return_url}}" class="btn">Enable</a></div>
+			{{/has_email_account_limit_reached}}
+		{{/if}}
+	</div>
+</div>
+</script>
+<script id="settings-social-prefs-collection-template" type="text/html">
+<div id="settings-social-prefs-model-list"></div>
+</script>

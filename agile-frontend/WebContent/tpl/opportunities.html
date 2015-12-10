@@ -1,0 +1,261 @@
+<script id="opportunities-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Deals <small>Opportunities</small></h1>
+			<!--a href="#deals-add" class="deals-add btn right" style="top:-30px;position: relative;"><i class="icon-plus-sign" /> Add Deal</a-->
+			<div class="btn-group right" id="deals-action"
+				style="display: inline; top: -30px;margin-right:20px;">
+					<a href="#deals-add" class="deals-add btn right"><i class="icon-plus-sign" /> Add Deal
+					</a>
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu pull-right">
+						<li><a href="#import-deals" >Import from CSV</a></li>
+						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
+					</ul>
+			</div>
+			<div class="btn-group right" id="deals-view"
+				style="display: inline; top: -30px;margin-right:20px;">
+					<div class="btn"><i class="icon-list" style="margin-right:3px"></i></div>
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu pull-right">
+						<li><a href="#" class="deals-list-view" onclick="return false;">List View</a></li>
+						<li><a href="#" class="deals-pipelined-view">Milestone View</a></li>
+					</ul>
+			</div>
+			<div id="deal-list-filters" class="btn-group right" style="display: inline; top: -30px;margin-right:20px;">
+				 <img class="loading_img" style="padding-right:5px;" height="32px" width="32px" src= "img/21-0.gif"></img>
+			</div>
+			<div class="btn-group right hidden" id="deals-tracks"
+				style="display: inline; top: -30px;margin-right:20px;">
+			</div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span9">
+        <div id="slate">
+        </div>
+        {{#if this.length}}
+        <div id="total-pipeline-chart" style="width:100%; height:300px"></div>
+        <br /><br />
+        <div class="data-block">
+            <div class="data-container" style="overflow-x:auto;">
+				<div class="btn-group pull-left" id="bulk-actions" style="display: none;">
+					<div class="btn">Bulk Actions</div>
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu" id="view-actions">
+						<li><a href="#deal_owner_change_modal" data-toggle="modal">Change Owner</a></li>
+						<li><a href="#deal_mile_change_modal" data-toggle="modal">Change Milestone/Track</a></li>
+						<li><a href="#deal_bulk_archive_modal" data-toggle="modal">Archive</a></li>
+						<li><a href="#deal_bulk_restore_modal" data-toggle="modal">Restore</a></li>
+						<li><a href="#deal_bulk_delete_modal" data-toggle="modal">Delete</a></li>
+					</ul>
+			</div>
+			<div class="btn-group pull-left" style="display: none;left: 10px;margin-top: 5px;" id="bulk-select"></div>
+                <table class="table table-striped showCheckboxes agile-ellipsis-dynamic" url="core/api/opportunity/delete" id="deal-list" style="table-layout:auto;">
+                    <col width="30px"><col width="20%"><col width="27%"><col width="14%"><col width="13%"><col width="15%"><col width="10%">
+					<thead>
+                        <tr>
+                            <th>Opportunity</th>
+                            <th>Related To</th>
+                            <th>Value</th>
+                            <th>Milestone</th>
+                            <th>Close Date</th>
+                            <th>Owner</th>
+                        </tr>
+                    </thead>
+                    <tbody id="opportunities-model-list" style="cursor:pointer;"><!--route="deals/"-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    <div class="span3">
+        <div class="data-block">
+            <div class="well">
+                <header>
+                    <h3><span><i class="icon-flag"></i></span> Milestones</h3>
+                </header>
+                <div id="pie-deals-chart" style="width:100%; height:400px"></div>
+                <h3 style="margin-top:10px;">
+                    What are Milestones?
+                </h3>
+                <br />
+                <p>
+                    Milestones are used to define the status of the deal.
+                </p>
+                <p>
+                    e.g. Use 'Won' in case of a successfully completed deal or 'New' for a newly added deal. You can define custom milestones.
+                </p>
+                <br />
+                <h3>
+                    What are Deals?
+                </h3>
+                <br />
+                <p>
+                    Deals are opportunities you can continuously track throughout its life cycle. You may add contacts related to the deal, add description, monetary value and timelines. You can also setup milestones to constantly track the status of the deal.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="deal_owner_change_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Change Owner</h3>
+  </div>
+  <div class="modal-body">
+    <div class="control-group span5" style="margin-left: 30px;">
+		<p style="margin-top:5px;">Changing owner for <span class="count"> </span> Deal(s).</p>
+		<label class="control-label"><b>Select Owner </b><span
+			class="field_req">*</span></label>
+			<div class="controls" id="owners">
+				<select id="owners-list-bulk" class="required" name="owner_id"></select>
+			</div>
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-bulk-owner" class="btn btn-primary">Done</a>
+  </div>
+</div>
+<div id="deal_mile_change_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Change Milestone/Track</h3>
+  </div>
+  <div class="modal-body">
+	<form id="bulk_mile_Form" name="opportunityForm" method="post">
+	<p style="margin-left:30px;margin-top:5px;">Changing track/milestone for <span class="count"> </span> Deal(s).</p>
+    <div class="control-group span5" style="margin-left: 30px;">
+		<label class="control-label"><b>Select Track </b><span
+			class="field_req">*</span></label>
+			<div class="controls" id="bulk-pipeline">
+				<select id="pipeline-list-bulk" class="required" name="pipeline"></select>
+			</div>
+	</div>
+	<div class="control-group span5" style="margin-left: 30px;">
+		<label class="control-label"><b>Select Milestone </b><span
+			class="field_req">*</span></label>
+			<div class="controls" id="bulk-pipeline">
+				<select id="milestone-list-bulk" class="required" name="milestone"></select>
+			</div>
+	</div>
+<input type="hidden" id="pipeline-name"  name="pipeline-name"></input>
+	</form>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-bulk-mile" class="btn btn-primary">Done</a>
+  </div>
+</div>
+
+<!-- Bulk archive confirmation-->
+<div id="deal_bulk_archive_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Archive</h3>
+  </div>
+  <div class="modal-body">
+    <div id="deal-bulk-confirm" style="margin-left: 30px;">
+		Archive <span class="count"> </span> Deal(s)?
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-bulk-archive" class="btn btn-primary">Yes</a>
+	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+  </div>
+</div>
+
+<!-- Bulk restore confirmation-->
+<div id="deal_bulk_restore_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Restore</h3>
+  </div>
+  <div class="modal-body">
+    <div id="deal-bulk-confirm" style="margin-left: 30px;">
+		Restore <span class="count"> </span> Deal(s)?
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-bulk-restore" class="btn btn-primary">Yes</a>
+	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+  </div>
+</div>
+
+<!-- Bulk delete confirmation-->
+<div id="deal_bulk_delete_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Delete</h3>
+  </div>
+  <div class="modal-body">
+    <div id="deal-bulk-confirm" style="margin-left: 30px;">
+		Delete <span class="count"> </span> Deal(s)?
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-bulk-delete" class="btn btn-primary">Yes</a>
+	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+  </div>
+</div>
+</script>
+<script id="opportunities-model-template" type="text/html">
+<td data="{{id}}" class="data">
+	<div style="width:10em;text-overflow:ellipsis;">
+	<b style="height:auto;display:inline-block;">{{name}}</b>
+	</div>
+</td>
+<td>
+	<div style="max-height:50px!important;">
+		<div style="max-height:50px!important;display:inline-block;width:158px!important;text-overflow:clip!important;">
+		{{#each contacts}}
+        	{{#if_contact_type "PERSON"}}
+        		<a href="#contact/{{id}}" class="activate-link hide-popover"><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        	{{/if_contact_type}}
+			{{#if_contact_type "COMPANY"}}
+        		<a href="#contact/{{id}}" class="activate-link hide-popover"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        	{{/if_contact_type}}
+       {{/each}}
+		</div>{{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
+	</div>
+</td>
+<td value="{{expected_value}}"><div>{{currencySymbol}}{{numberWithCommas expected_value}}</div></td>
+<td><div style="">{{milestone}} ({{probability}}%) </div></td>
+<td><div style="width:8em;"><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></div></td>
+<td>
+    <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:4em;overflow:hidden;">
+       {{#if pic}}
+        <img class="thumbnail" src="{{pic}}" width="40px" height="40px" title="{{owner.name}}" />
+	   {{else}}
+		<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{owner.name}}" />
+       {{/if}}
+    </div>
+</td>
+</script>
+
+<script id="opportunity-track-list-collection-template" type="text/html">
+<div class="btn-group right" style='position:relative' id="filters-tour-step">
+	<button class="btn filter-dropdown "><i class="icon-road" style="margin-right:4px"/></button>
+	<button class="btn dropdown-toggle" data-toggle="dropdown">
+    	<span class="caret"></span>
+  	</button>
+	<ul id = "opportunity-track-list-model-list" class="pull-right dropdown-menu">
+	</ul>
+</div>
+</script>
+
+<script id="opportunity-track-list-model-template" type="text/html">
+{{#if name}}
+<a id='{{id}}' class="pipeline" data="{{name}}" style="cursor: pointer;">{{name}}</a>
+ {{else}}
+<a id='{{id}}' class="pipeline" data="Default" style="cursor: pointer;">Default</a>
+{{/if}}
+</script>

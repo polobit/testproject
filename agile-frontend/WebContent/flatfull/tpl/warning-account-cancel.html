@@ -1,0 +1,140 @@
+<script id="warning-template" type="text/html">
+<div id="warning-deletion" class="modal fade in">
+ <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header warning-header bg-danger">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 class="modal-title">Make sure you want to do this</h3>
+    </div>
+    <div class="modal-body">
+        <div class="warning-dangerzone">
+            <p>
+                This is extremely important. If you don't read this, unexpected bad things will most definitely occur.
+            </p>
+        </div>
+        <ul class="p-sm">
+            <li>This action cannot be UNDONE.</li>
+            <li>
+                Data you used 
+                <ul>
+                    <li>Data : {{bytes}}</li>
+                    <li>Entities : {{entities}}</li>
+                </ul>
+            </li>
+            <li>All data will be DELETED.</li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-sm btn-danger" data-dismiss="modal">Close</a>
+        <a href="#" id="confirm-delete-account" class="btn btn-sm btn-danger ">Delete Account</a>
+    </div>
+</div>
+</div>
+</div>
+</script>
+
+<script id="warning-feedback-template" type="text/html">
+<div id="warning-deletion-feedback" class="modal fade in">
+ <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header warning-header bg-danger">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3  class="modal-title">Make sure you want to do this</h3>
+    </div>
+    <div class="modal-body">
+            <p>
+			   <b>Sorry to see you go. Please tell us why?</b>
+            </p>
+		<form id="cancelation-feedback-form">
+       		<ul  class="p-l-sm" style="list-style-type: none;">
+            	<li class="p-b-xs">
+					<label for="Did not like it" class="inline i-checks i-checks-sm">
+						<input type="radio" name="cancellation_reason" value="No need"  class="inline"/><i></i>
+				        Was just checking it out. Don't need it.</label>
+           		</li>
+				<li class="p-b-xs">
+					<label class="i-checks i-checks-sm">
+						<input type="radio" name="cancellation_reason" value="Overkill" class="inline" /><i></i></label>
+				        <label for="Overwhelming" class="inline">Overwhelming for me</label>
+            	</li>
+				<li class="p-b-xs">
+					<label class="i-checks i-checks-sm">
+						<input type="radio" name="cancellation_reason" value="Hard to use"  class="inline"/><i></i></label>
+				        <label for="Hard to use" class="inline">Hard to use</label>
+            	</li>
+				<li class="p-b-xs">
+					<label class="i-checks i-checks-sm">
+						<input type="radio" name="cancellation_reason" value="Costly" class="inline"/><i></i></label>
+				        <label for="Expensive for me" class="inline">Expensive for me</label>
+            	</li>
+				<li class="p-b-xs">
+					<label class="i-checks i-checks-sm">
+						<input type="radio" name="cancellation_reason" class="extra_info inline" value="No fit"/><i></i></label>
+				        <label for="No fit" class="inline">Doesn't meet my requirements</label>
+            	</li>
+				<li class="p-b-xs">
+					<label class="i-checks i-checks-sm">
+						<input type="radio" name="cancellation_reason" value="Other"  checked="checked" class="extra_info inline" /><i></i></label>
+				        <label for="Other" class="inline">Other</label>
+            	</li>
+        	</ul>
+			<div  class="controls">
+				<textarea name="account_delete_reason" class="required form-control" id="account_delete_reason" rows="6" placeholder="Please give us more details. This will help us a lot."></textarea>
+    		</div>
+		</form>
+	</div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</a>
+        <a href="#" id="warning-feedback-save" class="btn btn-sm btn-danger ">Delete Account</a>
+    </div>
+</div>
+</div>
+</div>
+</script>
+
+<script id="send-cancellation-request-template" type="text/html">
+<div id="send-cancellation" class="modal fade in">
+ <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 class="modal-title">Request for cancellation</h3>
+    </div>
+    <div class="modal-body">
+            <p>
+			   <b>Please tell us why you want to leave. Our support team get in touch with you soon.</b>
+            </p>
+		<form id="cancelation-request-form">
+			<div class="controls">
+				<textarea name="account_cancel_reason" class="required form-control w-full" id="account_cancel_reason" rows="3" ></textarea>
+    		</div>
+		</form>
+	</div>
+    <div class="modal-footer">
+        <!-- <a href="#" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</a> -->
+        <a href="#" id="send-delete-request" class="btn btn-sm btn-primary ">Send Request</a>
+    </div>
+</div>
+</div>
+</div>
+</script>
+
+<div id="send-delete-request-step2" class="modal fade in">
+ <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h3 class="modal-title">Cancellation Request Received</h3>
+    </div>
+    <div class="modal-body">
+        We are sorry to see you leaving. Our Support team will contact you within 48 hours to know more about the reason for leaving us. Please note <i>your subscription is still active</i> and our Support team will help you with the further process.<br><br>
+		To know the status of the request, please <a href="#contact-us" class="text-info">write to us</a>.
+	</div>
+    <div class="modal-footer">
+       
+        <a href="#" class="btn btn-primary btn-sm" data-dismiss="modal">OK</a>
+    </div>
+</div>
+</div>
+</div>
+

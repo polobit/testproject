@@ -1,0 +1,88 @@
+<script id="settings-email-prefs-template" type="text/html">
+<div class="row-fluid">
+	<div class="span11" style="margin-left:0px;">
+        <div id="social-prefs"></div>
+		<div id="imap-prefs"></div>
+		<div id="office-prefs"></div>
+    </div>
+</div>
+</script>
+
+<script id="settings-imap-access-model-template" type="text/html">
+<div class="span4">
+	<div class="well" style="width: 220px; min-height: 0;min-height:200px">
+			<img class="thumbnail" src="/img/email-prefs/imap.jpg" style="height:70px;width:210px;"/>
+		<br />
+		{{#if id}}
+		   <div class="m-b-md p-b-xs">
+		   	  <div style="line-height:20px">server: {{server_name}}</div>
+			  <div>email: {{user_name}}</div>
+		   </div>
+		{{else}}
+    	<div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important"  rel="tooltip" title="Just link your IMAP account and Agile will show emails below a contact from your Inbox.">
+			Just link your IMAP account and Agile will show emails below a contact from your account.
+		</div>
+		{{/if}}
+		<div>
+			{{#if id}}
+				<a class="btn btn-danger" href="#" id="imap-prefs-delete" name="imap" oid={{id}}>Disable</a>
+				<a class="btn" href="#imap/{{id}}">Settings</a>
+			{{else}}
+			    <div class="m-t-md">
+			    {{#has_email_account_limit_reached}}
+				<a class="btn pull-left" disabled="disabled">Enable</a>
+				{{#check_plan "FREE"}}
+				<div class="pull-left m-l-sm text-xs" style="line-height:13px;width:149px"> Upgrade to Pro plan to add more accounts</div>
+				{{/check_plan}}
+				{{else}}
+				<a class="btn" href="#imap">Enable</a>
+				{{/has_email_account_limit_reached}}
+				<div>
+			{{/if}}
+		</div>
+	</div>
+</div>
+</script>
+<script id="settings-imap-access-collection-template" type="text/html">
+<div id="settings-imap-access-model-list"></div>
+</script>
+<script id="settings-office-access-model-template" type="text/html">
+<div class="span4">
+	<div class="well" style="width: 220px; min-height: 0;min-height:200px">
+		<center>
+			<img class="thumbnail" src="/img/email-prefs/office365.jpg" style="height:70px;width:210px;"/>
+		</center>
+		<br />
+		{{#if id}}
+		   <div class="m-b-md p-b-xs">
+		   	  <div style="line-height:20px">server: {{server_url}}</div>
+			  <div>email: {{user_name}}</div>
+		   </div>
+		{{else}}
+    	<div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="See all emails related to a contact from your Office365 account.">
+			See all emails related to a contact from your Office365 account.
+		</div>
+		{{/if}}
+		<div>
+			{{#if id}}
+				<a class="btn btn-danger" href="#" id="office-prefs-delete" name="office" oid={{id}}>Disable</a>
+				<a class="btn" href="#office/{{id}}">Settings</a>
+			{{else}}
+				<div class="m-t-md">
+			    {{#has_email_account_limit_reached}}
+				<a class="btn pull-left" disabled="disabled">Enable</a>
+				{{#check_plan "FREE"}}
+				<div class="pull-left m-l-sm text-xs" style="line-height:13px;width:149px"> Upgrade to Pro plan to add more accounts</div>
+				{{/check_plan}}
+				{{else}}
+				<a class="btn" href="#office">Enable</a>
+				{{/has_email_account_limit_reached}}
+				</div>
+			{{/if}}
+		</div>
+	</div>
+</div>
+</script>
+<script id="settings-office-access-collection-template" type="text/html">
+<div id="settings-office-access-model-list"></div>
+</script>

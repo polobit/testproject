@@ -1,0 +1,58 @@
+<!--  Add Deal Form -->
+  	   	<div class="gadget-deal row-fluid">
+			<form class="gadget-deal-form form-horizontal" name="gadget_deal_form" method="post" style="margin:0px;">
+				<fieldset style="margin:0px;">
+                   	<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
+					
+					<div class="control-group" style="margin:0px; padding-top:6px;">
+						<label class="control-label" for="name"><b>Name</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<input name="name" id="name" placeholder="Name of deal" class=" required" type="text" style="height: 24px;" />
+		  				</div>
+					</div>
+					
+                   	<div class="control-group" style="margin:0px; padding-top:6px;">
+						<label class="control-label" for="expected_value"><b>Value</b> <span class="field_req">*</span></label>
+               			<div class="controls"> 
+							<input name="expected_value" id="expected_value" max="1000000000000" placeholder="Value of deal" class="required  digits" type="text" style="height: 24px;" />
+						</div>
+					</div>
+					<div class="control-group" style="margin:0px; padding-top:6px;">		
+						<label class="control-label" for="owner_id"><b>Owner</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<select name="owner_id" id="ownerId" class="required" style="width:210px;">
+                            </select>	
+		  				</div>
+					</div>
+					<div class="control-group" style="margin:0px; padding-top:6px;">		
+						<label class="control-label" for="pipeline_milestone"><b>Track & Milestone</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<select id="pipeline_milestone" class="required" style="width:210px;">
+                            </select>	
+		  				</div>
+					</div>
+					<input id="pipeline" name="pipeline_id" type="hidden"/>
+					<input id="milestone" name="milestone" type="hidden"/>
+					
+              		<div class="control-group" style="margin:0px; padding-top:6px;">
+						<label class="control-label" for="probability"><b>Probability (%)</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<input name="probability" id="probability" max="100" placeholder="Probability %" class="required digits" type="text" style="height: 24px;" value="50" />				
+		  				</div>
+					</div>
+
+					<div class="control-group" style="margin:0px; padding-top:6px;">
+						<label class="control-label" for="probability"><b>Close Date</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<input name="close_date" id="close_date" class="required deal-calender" placeholder="MM/DD/YYYY" type="text" style="height: 24px;"/>				
+						</div>
+					</div>
+					
+               		<div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">
+               			<a type="submit" class="btn btn-primary gadget-deal-validate" style="padding:2px 6px 2px;">Add Deal</a> 
+			   			<a class="cancel btn" data-tab-identity="deals" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
+						<img class="deal-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+                   	</div>
+		  		</fieldset>
+			</form>
+		</div>

@@ -1,0 +1,374 @@
+  <script id="company-detail-template" type="text/html">
+<div class="row hide"><small class="navigation span9" style="min-height:10px!important;font-size:smaller;line-height:6px;"></small></div>
+<div class="app-content-full  h-full dock-view-fixing">
+<div class="hbox hbox-auto-xs  bg-light ">
+<div class="col w-xl bg-light lter b-r">
+<div class="vbox">
+<div class="row-row">
+<div class="wrapper  text-center-mobile-view company-details-mobile-view">
+				<div class="text-center pos-rlt">
+				
+						
+							<form id="contact-container">
+								<a href="#" class="tooltip_info" data-placement="top"
+									data-toggle="tooltip"
+									title="<i class='icon-edit icon-white icon'></i> Change Picture"
+									style='text-decoration: none;'> 
+								<img class='b-2x r-2x upload_pic imgholder submit' style="width:96px;height:96px" type="submit"
+									{{getCompanyImage "80" "display:inline;"}} /> 
+								</a> <input type="hidden" id="upload_url" name="gravatarurl">
+								<a style="display: none;" class="save_img submit" type="submit">Save</a>
+							</form>
+<div class="pos-abs pos-r-0 pos-t-0">
+<div>
+ 
+								<a class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
+								<ul class="dropdown-menu pull-right">
+<li> <a href="#company-edit"><i class="icon-edit"></i> Edit</a></li>
+<li class="divider"></li>
+									<li><a href='#' class="contact-add-case"><i
+											class="icon-folder-close"></i> Add Case</a></li>
+									{{#hasMenuScope 'DEALS'}}
+									<li><a href='#' class="contact-add-deal"><i class="icon-money"></i>
+											Add Opportunity</a></li>
+									{{/hasMenuScope}}
+									<li class='divider'></li>
+									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
+											class="icon-envelope-alt"></i> Send Email</a></li>
+									<li class='divider'></li>
+									<li><a href='#' id='company-actions-delete'><i
+											class="icon-trash"></i> Delete</a></li>
+								</ul>
+</div>
+</div>
+						
+					
+							<div class="text-ellipsis  m-t-xs  h3 font-thin custom-color w-full">
+
+								{{getPropertyValue properties "name"}}
+								{{#if_propertyName "url"}}</br>
+									<a class="text-lg" href="{{getHyperlinkFromURL value}}" title="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
+								{{/if_propertyName}}
+								
+								<div class="text-base text-center m-b-xs text-muted m-t-sm">
+									{{#property_is_exists "website" properties}}
+									{{#multiple_Company_Property_Element "website" properties}} {{#each
+									this}} {{#if_equals subtype "TWITTER"}} <span class="m-r-xs"><a target="_blank"
+										href="https://twitter.com/{{getTwitterHandleByURL value}}"
+										style="text-decoration: none" class="text-muted"> <i
+											class="{{get_social_icon "
+											TWITTER"}}" ></i>
+									</a>
+									</span> {{else}}  {{#if_equals subtype "SKYPE"}} <span
+										style="margin-right: 5px"><a target="_blank"
+										href="{{getSkypeURL value}}"
+										style="text-decoration: none" class="text-muted"> <i
+											class="{{get_social_icon "
+											SKYPE"}}"></i>
+									</a>
+									</span>{{else}} <span style="margin-right: 5px"> <a
+										target="_blank" href="{{getHyperlinkFromURL value}}" style="text-decoration: none" class="text-muted">
+											<i class="{{get_social_icon subtype}}"></i>
+									</a>
+									</span>{{/if_equals}} {{/if_equals}} {{/each}} {{/multiple_Company_Property_Element}}
+									{{/property_is_exists}}
+								</div>
+							</div>
+					
+		
+							
+				<div id='star' class="company-star-view" style='width:auto!important;padding-bottom: 13px;margin:0 auto;'></div>
+								
+				
+					
+
+					</div>
+					<!-- Owner block -->
+	<div clas="m-t-sm"><small class="text-muted text-sm">Owner</small></div>				
+					<div class="change-owner-succes"></div>
+     <div title="Owner" class="contact-owner-view">
+      	<div class="contact-owner text-base" id="change-owner-element">
+        	
+			{{#if owner}}
+        	<span class="contact-owner-pic" style="visibility:visible;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span>
+			{{else}}
+			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span><span class="contact-owner-add" ><a class="c-p">Assign Owner</a></span>
+ 			{{/if}}
+        	<a href="#" id="contact-owner" data={{owner.id}}  class="contact-owner-name">{{owner.name}}</a>
+        
+        	{{#canEditContact owner.id}}
+        	<div class="dropdown" id="change-owner-ul" style="display: none">
+        		 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change owner <span class="caret"></span></a>
+        		 <ul id='contact-detail-owner' class="dropdown-menu"></ul>
+        	</div> 
+			{{/canEditContact}}
+       </div>
+    </div>
+				
+<!-- Tags block -->
+
+<div class="m-t-sm"><small class="text-muted text-sm">Tags</small></div>
+						<div class="contact-tags m-b-xs m-t-xs">
+					<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
+							{{#if tagsWithTime.length}} 
+							 {{#canEditContact owner.id}}
+								{{#each tagsWithTime}}
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
+								class="close remove-company-tags" tag="{{this.tag}}">&times</a></span></li> 
+								{{/each}}
+								{{else}}
+									{{#each tagsWithTime}}
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+											class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
+									{{/each}}
+							 {{/canEditContact}}
+							{{/if}}
+						 
+						
+					</ul>	
+					<div class="inline-block m-t-xs">
+						<div id="addTagsForm" style="display: none;" class="m-b-none">
+							<div class="control-group save-tag m-b-none">
+								<input name="" type="text" id="companyAddTags"
+									class="tags-typeahead ignore-comma-keydown form-control inline-block"
+									style="width: 60%" placeholder="Enter tag" />
+								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="company-add-tags">Add</a></span>
+							</div>
+						</div>
+						{{#canEditContact owner.id}}
+			<a href="#" id="add-tags" rel="tooltip"
+							data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i
+							class="icon-plus"></i> <span >Add</span></a>
+						{{/canEditContact}}
+					</div>
+				</div>	
+<!-- funda for contact details edit -->
+
+{{#property_is_exists "phone" properties}}
+			<div class="widget_container" id="{{name}}-container">
+				 {{else}} 
+					{{#property_is_exists "email" properties}}
+						<div class="widget_container" id="{{name}}-container">
+						{{else}} 
+							{{#property_is_exists "address" properties}}
+									<div class="widget_container" id="{{name}}-container">
+									{{else}}
+										{{#getContactCustomProperties properties}}
+											<div class="widget_container" id="{{name}}-container">
+											{{else}}
+												<div class="widget_container hide" id="{{name}}-container"> 
+										{{/getContactCustomProperties }}
+							{{/property_is_exists}} 
+					{{/property_is_exists}}
+		{{/property_is_exists}}
+						<div class="widget_header hide">
+							<div class="pull-left"
+								style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 18em">
+								<i class="icon-user "></i> <strong>Contact
+									{{getPropertyValue properties "first_name"}}</strong>
+							</div>
+						</div>
+						<!-- <div id="qrcode"><img src="{{getS3ImagePath 'img/1-0.gif'}}"></div> -->
+						<div class="clearfix"></div>
+						
+
+
+
+							{{#property_is_exists "phone" properties}}
+<div class="m-t-sm"><small class="text-xs text-muted">Contact Info</small></div>
+							<div>
+								{{#multiple_Company_Property_Element "phone" properties}}
+								
+								<div class="custom-color text-sm">
+									{{#each this}}
+									<div class="l-h-xs">
+                                        <a href='#' class="contact-make-sip-call" style="display:none;"
+                                           phone="{{value}}">
+                                           {{value}}
+                                        </a>            
+                                        <a href='#' class="contact-make-twilio-call" style="display:none;"                                           
+                                           phone="{{value}}">
+                                           {{value}}
+                                        </a>
+										<a href="tel:{{value}}" class="contact-make-call">{{value}}</a> 
+                                        {{#if subtype}}<span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
+									</div>
+									{{/each}}
+								</div>
+								{{/multiple_Company_Property_Element}}
+							</div>
+							{{/property_is_exists}}
+ 							{{#property_is_exists "email" properties}}
+							<div class="custom-color">
+								{{#multiple_Company_Property_Element "email" properties}}
+								
+								{{#property_is_exists "phone" ../properties}}
+								
+									{{else}}
+<div class="m-t-sm"><small class="text-xs text-muted">Contact Info</small></div>
+									
+										{{/property_is_exists}} 
+									{{#each this}}
+										<div>
+											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
+										</div>
+									{{/each}}
+									
+									{{/multiple_Company_Property_Element}}
+								</div>
+								{{/property_is_exists}}
+
+ <div class="custom-data"> {{#getCompanyCustomPropertiesExclusively properties}}
+<div class="clearfix"></div>
+<div class="m-t-sm"><small class="text-xs text-muted">Custom Info</small></div>
+
+								<div class="word-break-all">
+									{{#each_with_index this}}
+
+									<div>
+										<div class="inline-block">
+											<span class="text-muted"  title="{{name}}">{{name}}<span>
+										</div>
+										{{#if_equals index ../this.length}}
+											<div class="inline-block custom-color">
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+										{{else}}
+											<div class="inline-block custom-color">
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+
+										{{/if_equals}}
+										</div>
+                                        <div class="clearfix"></div>
+										{{/each_with_index}}
+									</div>
+									{{/getCompanyCustomPropertiesExclusively}}
+									</div>
+
+
+
+ 									{{#property_is_exists "address" properties}}
+<div class="m-t-sm "><small class="text-xs text-muted">Location</small></div>
+										<div>
+											{{#address_Element properties}}{{/address_Element}}</div></div>
+
+										<div class="pull-left m-t-sm m-b-sm w-full">
+											<div id="map" style="width: auto; height: 200px; display: none; margin: 10px">
+											</div>
+										</div>
+									{{/property_is_exists}}
+<div class="clearfix"></div>
+<!-- ending funda for contact detail edit -->
+            	</div>
+				</div>
+				</div>
+				</div>
+				</div>
+		<div class="col  bg-white">
+<div class="vbox" style="display:block">
+<div class="row-row" style="display:block">
+	<div class="tab-container">
+			<ul class="nav nav-tabs  bg-light" id="contactDetailsTab">
+				<li class="active"><a data-toggle="tab" href="#company-contacts">Contacts</a></li>
+				<li class=""><a data-toggle="tab" href="#company-deals">Deals</a></li>
+				<li class=""><a data-toggle="tab" href="#company-cases">Cases</a></li>
+                <li class=""><a data-toggle="tab" href="#company-notes">Notes</a></li>
+                <li class=""><a data-toggle="tab" href="#company-documents">Documents</a></li>				
+			</ul>
+			</div>
+			<div class="tab-content" id="contact-tab-content">
+				<div class="tab-pane active" id="company-contacts">...</div>
+				<div class="tab-pane" id="deals">...</div>
+				<div class="tab-pane" id="cases">...</div>
+                <div class="tab-pane" id="notes"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+               <div class="tab-pane" id="documents"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+			</div>
+		
+	</div>
+	</div>
+	</div>
+	
+	<!-- Contact Details -->
+	<div class="col bg-white hide">
+
+<div id="widgets"></div>
+						</div>
+					</div>
+</div>
+					</script>
+					
+<script id="company-contacts-model-template" type="text/html">
+	<td></td>
+	<td class="data" data="{{id}}" >
+    	<div class="thumb-sm agile-img m-r-xs"> 
+        		<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" />
+    	</div>
+    	<div class="agile-thumb agile-thumb-view">
+        		<a class="text-cap">	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </a>  </br>      		
+        		<small class="text-muted">{{getPropertyValue properties "email"}}</small>
+    	</div>
+	</td>
+	<td><div class="text-ellipsis">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td> 
+<div class="ellipsis-multiline l-h" style=" word-break:keep-all;">
+	{{#each tags}}
+    	<span class="label bg-light">{{this}}</span>
+    {{/each}}
+</div>
+	</td>
+	<td><div>{{lead_score}}</div></td>
+</script>
+
+<script id="company-contacts-collection-template" type="text/html">
+
+{{#if this.length}}
+	<div align="right" class="m-b-md m-t-md m-r-sm">
+		<a href="#" class="contact-add-contact btn btn-default btn-sm btn-addon">
+			<span><i class="icon-plus-sign"></i></span> Add Contact
+		</a>
+	</div>
+	
+		<div class="table-responsive">
+<table id="contacts" class="table table-striped onlySorting b-t  showCheckboxes m-b-none agile-table panel table-layout-mob-view">
+			
+				<thead>
+					<tr>
+<th></th>
+						<th style="width:40%">Name</th>
+						<th style="width:20%">Work</th>
+						<th style="width:20%">Tags</th>
+						<th style="width:20%">Lead Score</th>
+					</tr>
+				</thead>
+				<tbody id="company-contacts-model-list" class="contacts-model-list"
+					route="contact/" style="overflow: scroll;">
+				</tbody>
+			</table>
+			</div>
+
+		{{else}}
+            <div class="p-sm">
+			<div>
+            	<div class="slate-content mobile-pad-content">
+                	<div class="box-left pull-left m-r-md">
+                    	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
+                	</div>
+                	<div class="box-right pull-left">
+                    	<h4 class="m-t-none">{{contactShortName}} is not associated with any person/contact. </h4>
+                    	<div class="text">
+							All Contacts that have this company in the 'Organization' or 'Company' field are shown here.
+						</div>
+                    	<a href="#" class="contact-add-contact btn btn-default btn-sm left m-t-xs">
+								<i class="icon-plus-sign"></i> Add Contact
+							</a>
+                	</div>
+					<div class="clearfix">
+					</div>
+            	</div>
+        	</div>
+           </div>
+		{{/if}}
+</script>

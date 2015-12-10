@@ -1,0 +1,87 @@
+<script id="admin-settings-users-collection-template" type="text/html">
+
+<div class="panel panel-default">
+ <div class="panel-heading">
+	<div class="pull-left  m-t-xs">Users</div>
+	<div class="pull-right">
+		<a href="#users-add" class="btn btn-sm btn-default btn-addon" id="addUser"><span><i class='icon-plus-sign'/></span> Add User</a>
+	</div>
+	<div class="clearfix"></div>
+ </div>
+<div class="row">
+<div class="col-md-12 col-sm-12">
+            <div class=" table-responsive"> 
+            <table class="table table-striped showCheckboxes agile-table panel table-layout-mob-view" url="core/api/users/bulk">
+                <thead>
+                    <tr>
+						
+                        <th style="width:60%" class="header">User</th>
+						<!--  <th style="width:20%" class="header">Tags</th> -->
+                        <th style="width:20%" class="header">Created On</th>
+                        <th style="width:20%" class="header">Last Logged In</th>
+						<!-- <th style="width:20%" class="header">&nbsp;</th> -->
+                    </tr>
+                 </thead>
+                 <tbody id='admin-settings-users-model-list' route='user-edit/'>
+                 </tbody>
+            </table>
+            </div>
+    </div>
+</div>
+</div>
+</script>
+<script id="admin-settings-users-model-template" type="text/html">
+    <td class='data' data='{{id}}'>
+    <div class="table-resp">
+	<div class="thumb-xs agile-img avatar">
+	   {{#if ownerPic}}
+        <img class="img-inital r r-2x" src="{{ownerPic}}"  title="{{name}}" />
+	   {{else}}
+		<img class="w-full" src="{{defaultGravatarurl 50}}" title="{{name}}" />
+       {{/if}}
+    </div>
+	<div class="agile-thumb agile-thumb-view">
+		<a class="m-r-sm custom-link pull-left text-ellipsis w-auto" style="max-width:calc(100% - 101px);">{{name}}</a>
+<span class="pull-left" style="width:91px">
+		{{#if is_admin}}
+			<span class="label m-r-xs bg-light dk text-tiny">Admin</span>
+		{{/if}}
+		{{#if is_account_owner}}
+			<span class="label bg-light dk text-tiny">Owner</span>
+		{{/if}}
+		{{#if is_disabled}}
+			<span class="label label-danger">Disabled</span>
+		{{/if}}
+		</span>	
+<div class="clearfix"></div>
+		<div class="text-xs">{{email}}</div>
+	</div>
+	</div>
+	</td>
+	<!-- <td>
+		<span class="pull-left" style="width:91px">
+		{{#if is_admin}}
+			<span class="label m-r-xs bg-light dk text-tiny">Admin</span>
+		{{/if}}
+		{{#if is_account_owner}}
+			<span class="label bg-light dk text-tiny">Owner</span>
+		{{/if}}
+		{{#if is_disabled}}
+			<span class="label label-danger">Disabled</span>
+		{{/if}}
+		</span>	
+	</td> -->
+    <td>
+		<div class="table-resp">
+		{{epochToDate info_json_string "created_time"}}
+		</div>
+	</td>
+    <td class="text-muted">
+		<div class="table-resp">
+			<i class="fa fa-clock-o"></i>
+			<time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" >{{epochToDate info_json_string "logged_in_time"}}</time>
+		</div>
+	</td>
+   <!-- <td><div class="table-resp">{{#if is_admin}}<span class="label m-r-xs bg-light dk text-tiny">Admin</span>{{/if}}{{#if is_account_owner}}<span class="label bg-light dk text-tiny">Owner</span>{{/if}}{{#if is_disabled}}<span class="label label-danger">Disabled</span>{{/if}}</div></td> -->
+    
+</script>

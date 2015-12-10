@@ -1,0 +1,49 @@
+<script id="report-growth-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+                     
+               <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
+			border:1px solid #cfdadd;height:34px;padding:5px;">
+				<i class="icon-calendar icon-large"></i>
+                <span id="range">{{date-range "today" "-6"}}</span>
+              </div>
+			<div class="pull-right" style="padding:0px 8px 10px">
+				<select name="frequency" id="frequency" class="required form-control" style="width:100px">
+					<option value="daily">Daily</option>
+					<option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+			</div>
+			<div class="pull-right" style="padding:0px 8px 10px">
+				<select name="filter" id="filter" class="required form-control">
+					<option value="ALL">All</option>
+                </select>
+			</div>
+			<div class="col-md-4 col-sm-6" style="padding-left:0px;">
+            <h3 class="font-thin h3">Growth Reports  <small id="reports-growth-tags" class="no-wrap m-l-xs"></small></h3>
+
+			
+			</div>
+			<div id="plan-limit-error" class="pull-left p-t-4" style="display:none"></div>  
+   
+        </div>
+
+</div>
+</div>
+<div>	
+	<!-- Growth Reports -->
+	<div id="email-reports" class="wrapper-md">	
+		<div class="row">
+			<div class="col-md-12">
+				<div id="growth-chart" class="panel"></div>
+			</div>
+		</div>
+		<hr>
+	</div>
+	<!-- End of Growth Reports -->  
+
+   </div>
+</div>
+</script>

@@ -1,0 +1,98 @@
+<script id="deals-collection-template" type="text/html">
+  {{#unless this.length}}
+        <div class="wrapper p-t-none">
+            <div class="slate-content mobile-pad-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">{{contactShortName}} is not associated with any deals. </h4>
+                    <div class="text">
+						All Deals that have this {{#isCompany}}company{{else}}contact{{/isCompany}} in the 'Related to' field are shown here.
+                    </div>
+                    {{#hasMenuScope 'DEALS'}}
+                    <a href="#" class="contact-add-deal btn-default btn-sm btn blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  Add Deal</a>
+                    {{/hasMenuScope}}
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+   {{/unless}}
+
+{{#if this.length}}
+<div class="m-b-md m-t-md m-r-sm" align="right">
+{{#hasMenuScope 'DEALS'}}
+   <a href="#" class="contact-add-deal btn btn-sm btn-default pos-rlt btn-addon"><span><i class='icon-plus-sign'/></span> Add Deal</a> 
+{{/hasMenuScope}}
+</div>
+	<ul id="deals-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs"></ul>
+{{/if}}
+</script>
+
+<script id="deals-model-template" type="text/html">
+<div  class="activity block pos-rlt">
+	<div>
+		<div class="activity-block-owner  thumb-xs pull-left m-r-sm avatar">
+			{{#if pic}}
+				<img class="user-img r r-2x" alt="" src="{{pic}}" >
+			{{else}}
+				<img class="user-img r r-2x" src="{{defaultGravatarurl 40}}">
+			{{/if}}
+			<span class="owner-name hide">{{owner.name}}</span>
+		</div>
+		
+<div class="pull-left rightThumbView">			
+		<div class="pull-left contact-title-dynamic"><a class="text-md text-cap custom-color" href="#deal/{{id}}"><div class="text-md text-cap custom-color">{{name}}</div></a></div>
+		<div class="pull-right">
+		<small class="edit-hover m-r-sm text-muted">
+         <i class="fa fa-clock-o text-muted m-r-xs"></i>
+			<time class="deal-created-time text-base" datetime="{{epochToHumanDate "" created_time}}" >{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+		</small>
+		</div>
+		<div class="clearfix"></div>
+		<div class="contact-desc-dynamic">
+        
+		<div><span class="m-r-xs hide">Value : </span>
+			{{currencySymbol}}{{numberWithCommas expected_value}}  <span class="m-l-sm text-muted">{{milestone}} ({{probability}} %)</span>
+		</div>
+         {{#if description}}
+          <div>{{description}}</div>
+          {{/if}}
+<div class="clearfix"></div>
+       
+       <div>	
+		{{#each contacts}}
+           	{{#if id}}
+				{{#isDuplicateContactProperty properties "email"}}
+
+					{{else}}
+						{{#if_contact_type "PERSON"}}	
+							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
+        				{{/if_contact_type}}
+						{{#if_contact_type "COMPANY"}}
+        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
+        				{{/if_contact_type}}
+				{{/isDuplicateContactProperty}}
+           		
+           	{{/if}}
+       	{{/each}}
+		</div>
+      
+		</div>
+		<div class="actions pull-right pos-abs pos-r-0 pos-b-0">
+			{{#if notes}}
+             <a title="Notes" data="{{id}}" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit-contact-tab c-p text-l-none"><i class="deal-action icon icon-comment deal-notes" data="{{id}}" title="Notes"></i></a>
+              <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
+			{{/if}}
+			{{#hasMenuScope 'DEALS'}}
+			 <a title="Edit"  data="{{id}}" href="#" class="deal-edit-contact-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+             <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/opportunity/delete"></span></a>
+      		{{/hasMenuScope}}
+	</div>
+	<div class="clearfix"></div>
+</div>
+<div class="clearfix"></div>
+</div>
+</div>
+</script>

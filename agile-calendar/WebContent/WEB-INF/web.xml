@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<servlet>
+		<servlet-name>WebEventCalendar</servlet-name>
+		<jsp-file>/web-event-calendar.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WebEventCalendar</servlet-name>
+		<url-pattern>/calendar/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>CancelWebAppointment</servlet-name>
+		<jsp-file>/cancel-web-appointment.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CancelWebAppointment</servlet-name>
+		<url-pattern>/appointment/cancel/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>WebAppointmentCancelled</servlet-name>
+		<jsp-file>/appointment-cancelled.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WebAppointmentCancelled</servlet-name>
+		<url-pattern>/appointment/confirmation</url-pattern>
+	</servlet-mapping>
+	
+	<filter>
+		<filter-name>NamespaceFilter</filter-name>
+		<filter-class>com.agilecrm.filter.NamespaceFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>NamespaceFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+	
+</web-app>

@@ -1,0 +1,31 @@
+<div class="modal fade webEventCancelModel" id="webEventCancelModel">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal">x</button>
+				<h3 id="cancel_event_title"></h3>
+			</div>
+			<div class="modal-body">
+				<form id="webEventCancelForm" name="webEventCancelForm"
+					method="post">
+					<fieldset class="m-b-n-md">
+						<div id="event_id_hidden"></div>
+						<p id="event_text">Please mention reason for cancellation.</p>
+						<div class="form-group">
+							<textarea
+								style="margin: 0px 0px 9px; width: 573px; height: 126px;"
+								name='appointment_cancel_reason' id='appointment_cancel_reason'></textarea>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			<div class="modal-footer">
+			<a href="#"  action_parameter="donotdelete"
+					class="btn btn-default" id="cancel_delete">Cancel </a> 
+			<a href="#" class="btn btn-primary"
+					action_parameter="updateattendee" id="cancel_delete">Ok</a>
+				
+			</div>
+		</div>
+	</div>
+</div>

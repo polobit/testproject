@@ -1,0 +1,163 @@
+<script id="chargify-login-template" type="text/html">
+	<div class="inline word-break l-h-xs">
+		<form class="widget_content m-b-none b-b-none" id="chargify_login_form" name="chargify_login_form">
+	    	<fieldset>
+				<p>Chargify simplifies recurring billing for Web 2.0 and SaaS companies. Build innovative web apps without worrying how to bill your customers. </p>
+				<p>
+				<label>Enter your API key</label>
+				<div class="control-group m-b-none"><div class="controls"><input type="text" id="chargify_api_key" class="input-medium form-control required" placeholder="API Key" value="" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
+				</p>
+				<p>
+				<label>Enter your SubDomain</label>
+				<div class="control-group m-b-none"><div class="controls"><input type="text" id="chargify_subdomain" class="input-medium form-control required" placeholder="chargify SubDomain" value="" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
+				</p>
+				<a href="#add-widget" class="btn btn-default btn-sm text-l-none">Cancel</a>
+				<a href="#" id="chargify_save_api_key" class="btn btn-sm btn-primary text-l-none ml_5">Save</a>
+				<p class="l-h-lg p-xs">Don't have an API key? <a href="http://chargify.com/" target="_blank"> SignUp </a></p></div>
+			</fieldset>
+	    </form>
+	</div>
+</script>
+
+<script id="chargify-error-template" type="text/html">
+{{#check_length message "140"}}
+	<div class="ellipsis-multi-line p-sm word-break overflow-hidden collapse-25" title="{{message}}" style="height:110px;line-height:160%;">
+		{{message}}
+	</div>
+{{else}}
+	<div class="word-break p-sm" style="line-height:160%;">
+		{{message}}
+	</div>
+{{/check_length}}
+</script>
+
+<script id="chargify-profile-addcontact-template" type="text/html">
+<div class="widget_content">
+		<div>{{{message}}}</div>
+		<a class="btn btn-sm btn-default m-t-sm c-p" id="chargify_add_contact"><i class="icon-plus"></i>Add Contact</a>
+	</div>
+</script>
+<script id="chargify-profile-template" type="text/html"> 
+<div class="widget_content">
+	<div class="inline-block">
+		<div  class="title_txt inline-block">
+			<a href="https://agilecrm.chargify.com/customers/{{customer.id}}" target="_blank"><h4 class="text-u-c"><b>
+			{{customer.first_name}} {{customer.last_name}}<br>	
+			</b></h4></a>
+		</div>
+	</div>
+	<div>
+		<p class="text-sm">	
+				{{#if customer.address}}
+					{{ customer.address}}
+				{{/if}}
+				{{#if customer.city}}
+					{{customer.city}}
+				{{/if}}	
+				{{#if customer.state}}
+					{{customer.state}}
+				{{/if}}
+				{{#if customer.country}}
+					{{customer.country}}
+				{{/if}}
+				{{#if customer.organization}}
+					{{customer.organization}}
+				{{/if}}	
+				
+		</p>				
+	</div>
+	<div>
+		{{#if customer.phone}}
+			<i class="icon-phone"></i> {{customer.phone}}
+		{{/if}}
+	</div>
+	<div>
+		<a class="btn btn-sm btn-default m-t-sm c-p" id="chargify_add_subscription" href="https://agilecrm.chargify.com/subscriptions/new" target="_blank"><i class="icon-plus"></i>Add Subscription</a>
+	</div>
+</div>
+	{{#if subscriptions}}
+	<div class="sub_header">
+		<a href="https://agilecrm.chargify.com/subscriptions" target="_blank"><h4>Subscriptions</h4></a>
+	</div>
+	{{#each subscriptions}}
+		{{#if subscription}}	
+			<ul class="m-n p-sm text-base" style="border-bottom:1px solid #ddd;">
+				<li class="row">	
+					<div class="col-md-5">ID
+						<div class="pull-right">:</div>
+					</div>
+					<div class="col-md-6 m-l-sm">
+						{{subscription.id}}
+					</div>
+				</li>
+				<li class="row">	
+					<div class="col-md-5">Product
+						<div class="pull-right">:</div>
+					</div>
+					<div class="col-md-6 m-l-sm">
+						{{subscription.product.name}}
+					</div>
+				</li>
+				<li class="row">	
+					<div class="col-md-5">Start Date
+						<div class="pull-right">:</div>
+					</div>
+					<div class="col-md-6 m-l-sm text-muted">
+						<i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{subscription.current_period_started_at}}">{{subscription.current_period_started_at}}</time>
+					</div>
+				</li>
+				<li class="row">	
+					<div class="col-md-5">End Date
+						<div class="pull-right">:</div>
+					</div>
+					<div class="col-md-6 m-l-sm text-muted">
+						<i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{subscription.current_period_ends_at}}">{{subscription.current_period_ends_at}}</time>
+					</div>
+				</li>
+				<li class="row">	
+					<div class="col-lg-5">Interval
+						<div class="pull-right">:</div>
+					</div>
+					<div class="col-lg-6 m-l-sm">
+						{{subscription.product.expiration_interval}}{{subscription.product.expiration_interval_unit}}
+					</div>
+				</li>
+				<li class="row">	
+					<div class="col-lg-5">Amount
+						<div class="pull-right">:</div>
+					</div>
+							
+					<div class="col-lg-6 m-l-sm">
+						{{subscription.product_price_in_cents}}
+					</div>
+				</li>
+		
+			</ul>
+		{{/if}}
+	{{/each}}
+{{/if}}
+
+{{#if invoices}}
+	<div class="sub_header">
+		<a href="https://agilecrm.chargify.com/invoices" target="_blank"><h4>Invoices</h4></a>
+	</div>
+	{{#isArray invoices}}
+	{{#each invoices}}
+			<li class="row sub_header_li">
+				<div class="pull-left">
+				<a class="invoices c-p"   value="#{{invoice.number}}"></i></a>
+				&nbsp;
+				<a  data-toggle="tooltip" data-placement="top"  class="c-p" href="https://agilecrm.chargify.com/invoices/{{invoice.id}}" target="_blank">#{{invoice.number}} </a>&nbsp;({{invoice.subscription_id}})
+				</div>				
+				<div class="pull-right"> {{invoice.total_amount_in_cents}}</div><br>
+				
+				<div>
+				<div class="pull-left text-muted"><small><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago pull-left" datetime="{{invoice.updated_at}}">{{invoice.updated_at}}</time></small></div>					
+				<div class="pull-right"><span class="badge">{{capFirstLetter invoice.state}}</span></div><br>
+				</div>			
+			</li>
+		{{/each}}	
+	{{/isArray}}
+{{/if}}
+
+</script>

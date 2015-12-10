@@ -1,0 +1,137 @@
+<script id="campaigns-collection-template" type="text/html">
+<div style="margin-bottom:20px">
+{{#contact_model}}
+	<div>
+		 {{#contact_campaigns this "campaignStatus"}}
+		 {{!-- Shows Active and Done campaigns like tags --}}
+         {{#if this}} 
+         
+		 {{#if this.done}}
+         <div>
+           <div style="display: inline-block; margin-right: 5px" class="font-15">Completed Campaigns: </div> <ul class="tagsinput">
+                   {{#each this.done}}
+						<li class="tag" style="display:inline-block; background-color: gray; border-color: gray;" data="{{campaign_id}}"><span>
+						{{#hasMenuScope 'CAMPAIGN'}}
+							<a class="anchor" href="#workflow/{{campaign_id}}">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Done Campaign{{/if}}</a>
+						{{else}}
+							<span style="color:#888">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Done Campaign{{/if}}</span>
+						{{/hasMenuScope}}
+						</span></li> 
+					{{/each}}
+                    </ul>
+         </div>
+         <br>
+         {{/if}}
+
+         {{#if this.active}}
+         <div>
+           <div class="font-15" id="contact-active-campaigns" style="display: inline-block; margin-right: 5px;">Active Campaigns: </div> <ul class="tagsinput active-campaigns">
+                   {{#each this.active}}
+						<li class="tag" style="display:inline-block; background-color: gray; border-color: gray;" data="{{campaign_id}}"><span>
+							{{#hasMenuScope 'CAMPAIGN'}}
+								<a class="anchor" href="#workflow/{{campaign_id}}">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Active Campaign{{/if}}</a>
+								<a class="close remove-active-campaign" contact_name = "{{contactShortName}}" campaign_name="{{campaign_name}}" title="Remove from Campaign">&times</a>
+							{{else}}
+								<span style="color:#888">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Active Campaign{{/if}}</span>
+							{{/hasMenuScope}}
+						</span></li> 
+					{{/each}}
+                    </ul>
+	{{#canEditCurrentContact "1"}}
+		{{#hasMenuScope 'CAMPAIGN'}}
+            <a class="add-to-campaign" style="margin-top:1%;" href="#"><i class="icon-plus-sign"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
+		{{/hasMenuScope}}
+	{{/canEditCurrentContact}}
+            <form id="add-to-campaign-form" class="show_campaigns_list" style="display:none;">
+            	<div class="control-group">
+                	<div class="controls">
+			        	<select id="campaign-select" class="required" name="campaign_id" style="margin-bottom: -1px;">
+                        	<option value="">Select...</option>
+                      	</select>
+				  	  	<span style="margin-left: 5px;"><a class="btn" id="add-to-campaign" href="#">Add</a></span>
+                      	<span style="margin-left: 5px;"><a class="btn" id="cancel-to-add-campaign" href="#">Cancel</a></span>
+                    </div> 
+			   </div>
+            </form> 
+         </div>
+         
+         {{else}}
+         {{#canEditCurrentContact "1"}}
+			{{#hasMenuScope 'CAMPAIGN'}}
+        	 <a class="add-to-campaign" style="margin-top:1%;" href="#"><i class="icon-plus-sign"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
+			{{/hasMenuScope}}
+		{{/canEditCurrentContact}}
+         	<form id="add-to-campaign-form" class="show_campaigns_list" style="display: none;">
+				<div class="control-group">
+                	<div class="controls">
+			        	<select id="campaign-select" class="required" name="campaign_id" style="margin-bottom: -1px;">
+                        	<option value="">Select...</option>
+                      	</select>
+				  	    <span style="margin-left: 5px;"><a class="btn" id="add-to-campaign" href="#">Add</a></span>
+                        <span style="margin-left: 5px;"><a class="btn" id="cancel-to-add-campaign" href="#">Cancel</a></span>
+                    </div> 
+			    </div>
+           </form> 
+         {{/if}}
+
+         {{/if}}
+         {{/contact_campaigns}}
+    </div>
+
+{{/contact_model}}
+
+</div>
+<div class="clearfix"></div>
+		{{#unless this.length}}
+        <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>No campaign activity for {{contactShortName}}.</h3>
+                    <div class="text">
+						Contact campaign activity like email opens and link clicks are shown here.
+					</div>
+                </div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+          <div style="margin-top:10px">
+		     
+              <div class="font-15">Campaign Log</div>
+          </div>
+		  <ul id="campaigns-model-list" class="ativity-block-ul"></ul>
+		  <table class="m-t-md"></table>
+		{{/if}}
+</script>
+
+<script id="campaigns-model-template" type="text/html">
+<div style="display:block;">
+
+<div class="activity-text-block">
+	<span class="activity-block-owner">
+		{{#if log_type}}
+			<img class="user-img" width="40" height="40" alt="" src="img/campaigns/{{log_type}}.png">
+		{{else}}
+			<img class="user-img" width="40" height="40" src="https://dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png">
+		{{/if}}
+	</span>
+
+	<h4><b>{{titleFromEnums log_type}}</b></h4></br>
+
+ 	<p>{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}</p>
+
+    <small class="edit-hover">
+		<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+        {{#hasMenuScope 'CAMPAIGN'}}
+			<a class="pull-right" href="#workflow/{{campaign_id}}"> {{campaign_name}}</a>
+		{{else}}
+			<p class="pull-right">{{campaign_name}}</p>
+		{{/hasMenuScope}}
+        <p class="pull-right">Campaign - </p>
+	</small>	
+</div>
+</div>
+</script>

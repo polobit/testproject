@@ -1,0 +1,759 @@
+<script id="admin-settings-import-google-contacts-template"
+	type="text/html">
+	<div class="panel panel-default widget-add"  style="min-height: 250px;">
+	<div class="panel-heading">
+	    <center>
+	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/icons/google-contacts-sync.png'}}" />
+	    </center>
+    </div>
+    <div class="panel-body">
+	    <div style="height:120px"  rel="tooltip" title="Agile can periodically sync your contacts in your CRM with your Google Contacts.">
+			Agile can periodically sync your contacts in your CRM with your Google Contacts.
+		</div>
+	    <div class="text-center">
+				{{#if id}}
+	    			<a class="btn btn-sm btn-danger delete"  id="google-import-prefs-delete" >Disable</a>
+					<a href="#sync/contacts" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+	    		{{else}}
+					{{#canSyncContacts}}
+	    					<div class="btn btn-sm btn-default inline-block" id="google-import">Enable</div>
+						{{else}}
+							<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
+							<span class="m-l-xs"><i>Needs import privilege.</i></span>
+					{{/canSyncContacts}}
+	    		{{/if}}
+		</div>
+	</div>
+</div>
+</script>
+
+<script id="admin-settings-import-google-contacts-setup-template"
+	type="text/html">
+<div class="row">
+<div class="col-md-4 col-sm-6 col-xs-12">
+	<div class="panel panel-default" >
+ 	<!-- <legend>Contacts <span class="label label-danger m-b-sm">Beta</span>{{#if id}}<span style="font-size:14px;float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span>{{/if}}</legend> -->
+	<div class="panel-heading">
+	<span class="label label-danger pull-right m-b-sm">Beta</span>
+   <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height="47px;" src="{{getS3ImagePath '/img/icons/google-contacts-sync.png'}}" /></center>
+	</div>
+	<div class="panel-body">
+{{#unless id}}
+    <div class="ellipsis-multiline"  rel="tooltip" >
+		Setup contact sync with your Gmail or Google Apps account.
+	</div>
+</div>
+{{/unless}}
+{{#if id}}
+
+    <form id="google-contacts-import-form">
+        <fieldset>
+	<div class="control-group form-group">
+		<label class="control-label">Type</label> 
+           <div class="controls">
+				<select class="required form-control" name="sync_type" id="sync-type">
+					<option value="">- Select -</option>
+					<option value="CLIENT_TO_AGILE">Google to Agile</option>
+					<option value="AGILE_TO_CLIENT">Agile to Google</option>
+					<option value="TWO_WAY">Both ways</option>
+				</select>
+			</div>
+	</div>
+
+{{#if_equals sync_type "AGILE_TO_CLIENT"}}
+	<div class="control-group form-group" style="display:none" id="sync_from_group_controlgroup">
+{{else}}
+	<div class="control-group form-group" id="sync_from_group_controlgroup">
+{{/if_equals}}
+		<label class="control-label">Sync From</label> 
+           <div class="controls">
+				<select name="sync_from_group" class="required form-control">
+				{{#each groups}}
+					{{#if_equals groupName "Agile"}}
+						{{else}}
+					{{#if_equals groupName "Contacts"}}
+						<option value="{{atomIdDecoded}}">My Contacts (Recommended)</option>
+						{{else}}
+						<option value="{{atomIdDecoded}}">{{groupName}}</option>
+				{{/if_equals}}
+					{{/if_equals}}
+				{{/each}}
+				</select>
+			</div>
+<span class="help-block"><small>Google contact  group to sync from.</small></span>
+	</div>
+
+{{#if_equals sync_type "AGILE_TO_CLIENT"}}
+	<div class="control-group form-group" id="sync_to_group_controlgroup">
+{{else}}
+{{#if_equals sync_type "TWO_WAY"}}
+<div class="control-group form-group" id="sync_to_group_controlgroup">
+{{else}}
+<div class="control-group form-group" style="display:none" id="sync_to_group_controlgroup">
+{{/if_equals}}
+{{/if_equals}}
+
+		<label class="control-label">Sync To</label> 
+           <div class="controls">
+				<select name="sync_to_group" class="required form-control">
+				{{#each groups}}
+					{{#if_equals groupName "Agile"}}
+						{{#if atomIdDecoded}}
+								<option value="{{atomIdDecoded}}" selected="selected">{{groupName}}  (Recommended)</option>
+							{{else}}
+								<option value="{{groupName}}" selected="selected">{{groupName}}  (Recommended)</option>
+						{{/if}}
+					{{/if_equals}}
+					{{#if_equals groupName "Contacts"}}
+						<option value="{{atomIdDecoded}}">My Contacts</option>
+					{{/if_equals}}
+				{{/each}}
+				</select>
+			</div>
+	<span class="help-block"><small>Google contact  group to sync to.</small></span>
+	</div>
+
+		<div class="control-group form-group">
+		<label class="control-label" style="text-align:">Frequency</label> 
+           <div class="controls">
+				<select class="required form-control" name="duration">
+
+{{#check_plan "FREE"}}
+					<option value="" disabled>Only once (Paid plans)</option>
+					<option value="" disabled>Daily  (Paid plans)</option>
+{{else}}
+					s<option value="ONCE">Only once</option>
+					<option value="DAILY">Daily</option>
+{{/check_plan}}
+					<option value="WEEKLY">Weekly</option>
+					<option value="MONTHLY">Monthly</option>
+				</select>
+			</div>
+	</div>
+
+ 
+
+{{#if_equals sync_type "AGILE_TO_CLIENT"}}
+<div class="control-group form-group"  id="my_contacts_sync_group">
+{{else}}
+{{#if_equals sync_type "TWO_WAY"}}
+<div class="control-group form-group" id="my_contacts_sync_group">
+{{else}}
+<div class="control-group form-group" style="display:none" id="my_contacts_sync_group">
+{{/if_equals}}
+{{/if_equals}}
+	<div class="controls">
+       <div class="checkbox">
+<label class="i-checks i-checks-sm">
+          <input  type="checkbox" name="my_contacts" value="true" checked="checked"><i></i>
+            Only sync Agile contacts owned by me
+        </label> 
+</div>      
+    </div>
+</div>
+		 <input name="id" type="hidden" value="{{id}}" />
+
+
+      <div class="form-actions text-center">
+<a href="#sync" class="btn btn-default btn-sm ml_5">Cancel</a>
+{{#if inProgress}}
+			<div class="btn btn-primary btn-sm save-contact-prefs inline-block" id="google-import-prefs-save" disabled>Syncing</div>
+	{{else}}
+<div class="btn btn-sm btn-primary save-contact-prefs inline-block" id="google-import-prefs-save">Sync</div>
+{{/if}}		
+
+	 </div>
+	{{/if}}
+        </fieldset>
+    </form>
+    </div>
+</div>
+</div>
+</script>
+
+
+
+<script id="admin-settings-import-stripe-contact-sync-prefs-template"
+	type="text/html">
+<div class="row">
+<div class="col-md-4 col-sm-6 col-xs-12">
+<div class="panel panel-default" >
+<div class="panel-heading">
+<span class="label label-danger pull-right m-b">Beta</span>
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/Stripe.png'}}" /></center>
+</div>
+<div class="panel-body">
+{{#unless id}}
+    <div class="m-t m-b"  rel="tooltip" >
+		Setup contact sync with your Stripe account.
+	</div>
+
+{{/unless}} 
+    {{#if id}}
+<form id="stripe-prefs-form" class="m-b">
+<input type ="hidden" value = "{{id}}" name ="id">
+          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
+	
+          
+             	<div class="control-group form-group">
+					<label class="control-label">Frequency</label> 
+           				<div class="controls">
+							<select class="required form-control" name="duration" id="freq">
+
+						{{#check_plan "FREE"}}
+							<option value="" disabled>Only once (Paid plans)</option>
+							<option value="" disabled>Daily  (Paid plans)</option>
+						{{else}}
+							<option value="ONCE">Only once</option>
+							<option value="DAILY">Daily</option>
+						{{/check_plan}}
+							<option value="WEEKLY">Weekly</option>
+							<option value="MONTHLY">Monthly</option>
+						</select>
+					</div>
+		   		</div>
+
+			<div class="form-actions text-center">
+<a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
+{{#if inProgress}}
+			<button class="btn btn-sm btn-primary ml_5" id="stripe_sync_prefs" disabled="disabled">Syncing</button>
+{{else}}
+<button class="btn btn-sm btn-primary ml_5" id="stripe_sync_prefs">Sync</button>
+{{/if}}
+
+       	  	</div>
+
+
+       
+    </form>
+{{else}}
+<div class="btn btn-primary btn-sm inline-block" sync_type="STRIPE" id="data-sync-type">Enable</div>
+{{/if}}
+</div>
+</div>
+</div>
+</script>
+
+
+<script id="admin-settings-import-stripe-contact-sync-template"
+	type="text/html">
+	<div class="panel panel-default widget-add" style="height:220px;">
+	<div class="panel-heading">
+	    <center>
+	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/Stripe.png'}}" />
+		</center>
+	</div>
+	<div class="panel-body">
+	    <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px" rel="tooltip" title="Sync customers in Stripe as Contacts in Agile CRM with their subscription & payment data.">
+	    Sync customers in Stripe as Contacts in Agile CRM with their subscription & payment data.
+	    </div>
+	    <div class="text-center">
+				{{#if id}}
+	    			<a class="btn btn-sm btn-danger delete"  id="stripe-import-prefs-delete" >Disable</a>
+					<a href="#sync/stripe-import" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+	    		{{else}}
+					{{#canSyncContacts}}
+	    						<div class="btn btn-sm btn-default inline-block" id="stripe_import">Enable</div>
+						{{else}}
+								<span class="btn btn-sm btn-default inline-block"  disabled>Enable</span>
+								<span class="m-l-xs"><i>Needs import privilege.</i></span>
+					{{/canSyncContacts}}
+	    		
+	    		{{/if}}
+		</div>
+	</div>
+</div>
+</script>
+
+<script id="admin-settings-import-shopify-prefs-template"
+	type="text/html">
+<div class="row">
+<div class="col-md-6 col-sm-6 col-xs-12">
+<div class="panel panel-default" >
+<div class="panel-heading">
+<span class="label label-danger pull-right m-b-sm">Beta</span>
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/crm-plugins/shopify.png'}}" /></center>
+</div>
+<div class="panel-body">
+{{#unless id}}
+    <div class="m-b-md"   rel="tooltip" >
+		Setup contact sync with your Shopify account.
+	</div>
+
+
+<div class='input-group'>
+	<span class="input-group-addon">https://</span>
+	  <input id="shop" required="required" name="shopname" class="form-control"  type="text" placeholder="Enter shop domain">
+    <span class="input-group-addon">.myshopify.com</span>
+    
+    </div>
+<div class="text-center">
+<a href ="#" id ="import_shopify" class="btn btn-sm btn-primary m-t">Connect</a>
+</div>
+  {{/unless}}
+
+  
+
+    <form id="shopify-contact-import-form">
+<input type ="hidden" value = "{{id}}" name ="id">
+        
+	
+           {{#if id}}
+              <div>
+                   Shop : <span>{{othersParams}}</span>
+                
+                       <div class="text-center"><a class="delete" href="#"  id="shopify-import-prefs-delete" >Change</a></div>
+					</div>
+                 
+             	<div class="control-group form-group">
+					<label class="control-label">Frequency</label> 
+           				<div class="controls">
+							<select class="required form-control" name="duration" id="freq">
+
+						{{#check_plan "FREE"}}
+							<option value="" disabled>Only once (Paid plans)</option>
+							<option value="" disabled>Daily  (Paid plans)</option>
+						{{else}}
+							<option value="ONCE">Only once</option>
+							<option value="DAILY">Daily</option>
+						{{/check_plan}}
+							<option value="WEEKLY">Weekly</option>
+							<option value="MONTHLY">Monthly</option>
+						</select>
+					</div>
+		   		</div>
+
+			<div class="form-actions text-center">
+<a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
+{{#if inProgress}}
+			<button class="btn btn-sm btn-primary ml_5" id="shopify-setting" disabled="disabled">Syncing</button>
+{{else}}
+<button class="btn btn-sm btn-primary ml_5" id="shopify-setting">Sync</button>
+{{/if}}
+
+       	  	</div>
+
+	{{/if}}
+
+       
+    </form>
+</div>
+</div>
+</div>
+</script>
+
+
+<script id="admin-settings-import-shopify-contact-syncPrefs-template"
+	type="text/html">
+	<div class="panel panel-default widget-add" style="height: 220px;">
+	<div class="panel-heading">
+	    <center>
+	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/crm-plugins/shopify.png'}}" />
+		</center>
+	</div>
+	<div class="panel-body">
+	    <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px" rel="tooltip" title="Sync customer data and Agile CRM as contacts along with purchase history.">
+			Sync customer data and Agile CRM as contacts along with purchase history.
+		</div>
+	   	<div class="text-center">
+			{{#if id}}
+	    	   <a class="btn btn-sm btn-danger delete"  id="shopify-import-prefs-delete" >Disable</a>
+				<a href="#sync/shopify" class="btn btn-sm btn-default">Settings</a>
+			{{else}}
+					{{#canSyncContacts}}
+							   <a href="#sync/shopify"  class="btn btn-sm btn-default inline-block">Enable</a>
+						{{else}}
+							   <a class="btn btn-sm btn-default inline-block" disabled>Enable</a>
+								<span class="m-l-xs"><i>Needs import privilege.</i></span>
+					{{/canSyncContacts}}
+			
+			{{/if}}
+		</div>
+	</div>
+
+</div>
+
+
+</script>
+
+<!--  creating template for zoho crm syn -->
+<script id="admin-settings-import-zoho-contact-sync-template"
+	type="text/html">
+<div class="span4 well" style="height: 200px;">
+    <form id="imap-prefs-form">
+        <legend>Import from Zoho <span class="label label-important">Alpha</span></legend>
+		<div>
+			Import customers from Zoho
+		</div>
+
+           {{#if id}}
+          <div class="form-actions">
+        	   <a class="btn btn-sm btn-danger delete"  id="zoho-prefs-delete" >Disable</a>
+				<a href="#sync/zoho-import" class="btn btn-sm btn-primary" id="setting-widget">Settings</a>
+			</div>
+         {{else}}
+				{{#canSyncContacts}}
+    						   <button class="btn btn-sm" id="zoho-import" style="display:inline-block;">Enable</button>
+						{{else}}
+							   <a href="#" class="btn btn-sm" style="display:inline-block;" disabled>Enable</a>
+								<span class="m-r-xs"><i>Needs import privilege.</i></span>
+					{{/canSyncContacts}}
+         <div>
+           
+        </div>
+{{/if}}
+
+    </form>
+</div>
+</script>
+
+
+<script id="admin-settings-import-quickbook-settings-template"
+	type="text/html">
+<div class="row">
+<div class="col-md-4 col-sm-6 col-xs-12">
+<div class="panel panel-default" >
+<div class="panel-heading">
+<span class="label label-danger pull-right">Beta</span>
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" height="47px;" src="{{getS3ImagePath '/widgets/QuickBooks210x70.png'}}" /></center>
+</div>
+<div class="panel-body">
+{{#unless id}}
+    <div class="ellipsis-multiline m-b-md"   rel="tooltip" >
+		Setup contact sync with your Quickbook account.
+	</div>
+{{/unless}} 
+    {{#if id}}
+<form id="quickbook-form">
+<input type ="hidden" value = "{{id}}" name ="id">
+          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
+	
+          <br>
+             	<div class="control-group form-group">
+					<label class="control-label">Frequency</label> 
+           				<div class="controls">
+							<select class="required form-control" name="duration" id="freq">
+
+						{{#check_plan "FREE"}}
+							<option value="" disabled>Only once (Paid plans)</option>
+							<option value="" disabled>Daily  (Paid plans)</option>
+						{{else}}
+							<option value="ONCE">Only once</option>
+							<option value="DAILY">Daily</option>
+						{{/check_plan}}
+							<option value="WEEKLY">Weekly</option>
+							<option value="MONTHLY">Monthly</option>
+						</select>
+					</div>
+		   		</div>
+
+			<div class="form-actions m-t-md text-center">
+<a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
+{{#if inProgress}}
+			<button class="btn btn-sm btn-primary ml_5" id="quickbook_sync_prefs" disabled="disabled">Syncing</button>
+{{else}}
+<button class="btn btn-sm btn-primary ml_5" id="quickbook_sync_prefs">Sync</button>
+{{/if}}
+
+       	  	</div>
+
+
+       
+    </form>
+{{else}}
+ <a  sync_type="QUICKBOOK" id="data-sync-type"  class="btn btn-sm btn-primary inline-block">Enable</a>
+{{/if}}
+</div>
+</div>
+</div>
+</script>
+
+
+<script id="admin-settings-import-quickbook-template" type="text/html">
+	<div class="panel panel-default widget-add" style="height:220px;">
+	 <div class="panel-heading">
+	    <center>
+	    	<img class="thumb-xl m-b-none" style="height:47px;"  src="{{getS3ImagePath '/widgets/QuickBooks210x70.png'}}"/>
+		</center>
+	 </div>
+	 <div class="panel-body">
+    <div   rel="tooltip" class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px;" title="Sync customers in Quickbooks as Contacts in Agile CRM along with invoice and payment data.">
+		Sync customers in Quickbooks as Contacts in Agile CRM along with invoice and payment data.
+	</div>
+    	<div class="text-center">
+			{{#if id}}
+        	   <a class="btn btn-sm btn-danger delete"  id="quick-book-delete" >Disable</a>
+				<a href="#sync/quickbook" class="btn btn-sm btn-default">Settings</a>
+			{{else}}
+
+			  
+				{{#canSyncContacts}}
+    						 <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn btn-sm btn-default inline-block">Enable</a>
+						{{else}}
+							   <a href="#"  class="btn btn-sm btn-default inline-block" disabled>Enable</a>
+								<span class="m-l-xs"><i>Needs import privilege.</i></span>
+					{{/canSyncContacts}}
+
+			{{/if}}
+		</div>
+	</div>
+</div>
+
+
+</script>
+
+
+<script id="admin-settings-import-xeroSync-template" type="text/html">
+	<div class="panel wrapper widget-add" >
+    <center>
+    <img class="thumbnail"  src="{{getS3ImagePath '/widgets/xero210x70.png'}}"  style="width:210px; height:80px;" />
+	</center>
+    <br />
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;"  rel="tooltip" >
+		Sync customers in Xero as Contacts in Agile CRM along with invoice and payment data.
+	</div>
+    
+			{{#if id}}
+        	   <a class="btn btn-sm btn-danger delete" >Disable</a>
+				<a href="#sync/xero" class="btn btn-default btn-sm">Settings</a>
+			{{else}}
+
+			   
+			{{#canSyncContacts}}
+    						 <a href="#" id ="xeroconnect"class="btn btn-default btn-sm" style="display:inline-block;">Enable</a>
+						{{else}}
+							   <a href="#"  class="btn btn-default"  style="display:inline-block;" disabled>Enable</a>
+								<span style="margin-left:5px"><i>Needs import privilege.</i></span>
+					{{/canSyncContacts}}
+			{{/if}}
+
+</div>
+
+
+</script>
+
+
+<script id="admin-settings-import-xero-settings-template"
+	type="text/html">
+<div class="col-md-4 panel wrapper" >
+<span class="label label-important" style="float:right">Beta</span>
+<center> <img class="thumbnail" src="{{getS3ImagePath '/widgets/xero210x70.png'}}"  style="width:210px; height:70px;margin-left:40px" /></center>
+<br/>
+{{#unless id}}
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" >
+		Setup contact sync with your Xero account.
+	</div>
+{{/unless}} 
+    {{#if id}}
+<form id="xero-form" class="form-horizontal">
+<input type ="hidden" value = "{{id}}" name ="id">
+          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
+	
+          
+             	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
+					<label class="control-label">Frequency</label> 
+           				<div class="controls">
+							<select class="required form-control" name="duration" id="freq">
+
+						{{#check_plan "FREE"}}
+							<option value="" disabled>Only once (Paid plans)</option>
+							<option value="" disabled>Daily  (Paid plans)</option>
+						{{else}}
+							<option value="ONCE">Only once</option>
+							<option value="DAILY">Daily</option>
+						{{/check_plan}}
+							<option value="WEEKLY">Weekly</option>
+							<option value="MONTHLY">Monthly</option>
+						</select>
+					</div>
+		   		</div>
+
+			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
+
+{{#if inProgress}}
+			<button class="btn btn-sm btn-primary" id="xero_sync_prefs" style="display:inline-block;" disabled="disabled">Syncing</button>
+{{else}}
+<button class="btn btn-sm btn-primary" id="xero_sync_prefs" style="display:inline-block;">Sync</button>
+{{/if}}
+
+           		<a href="#sync" class="btn btn-default btn-sm ml_5" style="text-decoration:none;">Cancel</a>
+       	  	</div>
+
+
+       
+    </form>
+{{else}}
+ <a href="#" id ="xeroconnect" class="btn btn-default btn-sm" style="display:inline-block;">Enable</a>
+{{/if}}
+
+</div>
+</script>
+
+
+<script id="admin-settings-import-freshbooks-settings-template"
+	type="text/html">
+<div class="row">
+<div class="col-md-4 col-sm-6 col-xs-12">
+<div class="panel wrapper" >
+<span class="label label-danger pull-right m-b">Beta</span>
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}"  /></center>
+{{#unless id}}
+    <div class="m-t m-b"  rel="tooltip" >
+		Setup contacts sync with your Freshbooks account.
+	</div>
+{{/unless}} 
+
+    {{#if id}}
+<form id="freshbooks-form">
+<input type ="hidden" value = "{{id}}" name ="id">
+          <div><span>Account Linked </span>  <span>{{othersParams}}.freshbooks.com <span><a href="#" class="delete">Change</a></span></span></div>
+	
+          
+             	<div class="control-group form-group">
+					<label class="control-label">Frequency</label> 
+           				<div class="controls">
+							<select class="required form-control" name="duration" id="freq">
+
+						{{#check_plan "FREE"}}
+							<option value="" disabled>Only once (Paid plans)</option>
+							<option value="" disabled>Daily  (Paid plans)</option>
+						{{else}}
+							<option value="ONCE">Only once</option>
+							<option value="DAILY">Daily</option>
+						{{/check_plan}}
+							<option value="WEEKLY">Weekly</option>
+							<option value="MONTHLY">Monthly</option>
+						</select>
+					</div>
+		   		</div>
+
+			<div class="form-actions">
+<a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
+{{#if inProgress}}
+			<button class="btn btn-sm btn-primary ml_5" id="freshbooks_sync_prefs" disabled="disabled">Syncing</button>
+{{else}}
+<button class="btn btn-sm btn-primary ml_5" id="freshbooks_sync_prefs">Sync</button>
+{{/if}}
+       	  	</div>
+
+
+       
+    </form>
+{{else}}
+<div>
+
+<form id="freshbooks_login_form" name="freshbooks_login_form" method="post">
+	    	
+			
+                   
+				<div class="control-group form-group"><div class="controls">
+
+
+
+<div class='input-group'>
+	<span class="input-group-addon">https://</span>
+	  <input type="url" id="freshbooks_url" class="input-medium form-control" placeholder="Freshbooks domain name" value="" id="freshbooks_url">
+    <span class="input-group-addon">.freshbooks.com</span>
+
+                </div>  
+<div id="domainerror" class="hide text-danger">Enter Domain Name</div>
+         </div>
+			</div>	
+               
+           <div class="control-group form-group"><div class="controls">
+              <input type="text" id="freshbooks_apiKey" class="input-medium form-control"   placeholder="API Token" value="" id="freshbooks_apiKey"></input>
+            <div id="apierror" class="hide text-danger">Enter Valid API Token</div>
+    </div></div>
+				
+               <a href ="#" id ="freshbooks" class="btn btn-sm btn-primary">Connect</a>
+				
+	    </form>
+</div>
+{{/if}}
+
+</div>
+</div>
+</script>
+
+<script
+	id="admin-settings-import-freshbooks-contacts-syncPrefs-template"
+	type="text/html">
+
+
+	<div class="panel panel-default widget-add" style="height:220px;">
+	<div class="panel-heading">
+	    <center>
+	    	<img class="m-b-none thumb-xl bg-transparent"  style="height:47px;" src="{{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}" />
+	    </center>
+	 </div>
+	 <div class="panel-body">
+	    <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px;" rel="tooltip" title="Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.">
+			Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.
+		</div>
+    	<div class="text-center">
+			{{#if id}}
+        	   <a class="btn btn-sm btn-danger delete">Disable</a>
+				<a href="#sync/freshbooks/setting" class="btn btn-sm btn-default">Settings</a>
+			{{else}}
+
+	  	{{#canSyncContacts}}
+	            <a href="#sync/freshbooks" class="btn btn-sm btn-default inline-block">Enable</a>
+           {{else}}
+		         <span class="btn btn-sm btn-default inline-block" disabled>Enable</span>
+				 <span class="m-l-xs"><i>Needs import privilege.</i></span>
+		{{/canSyncContacts}}
+			{{/if}}
+		</div>
+	</div>
+</div>
+
+</script>
+
+
+<script id="admin-settings-import-freshbooks-contacts-form-template"
+	type="text/html">
+<div class="row">
+<div class="col-md-4 col-sm-6 col-xs-12">
+<div class="panel panel-default" >
+<div class="panel-heading">
+<span class="label label-danger pull-right m-b">Beta</span>
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" {{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}" /></center>
+</div>
+<div class="panel-body">
+{{#unless id}}
+    <div class="m-t m-b"  rel="tooltip" >
+		Setup contacts sync with your Freshbooks account.
+	</div>
+{{/unless}}
+
+<form  id="freshbooks_login_form" name="freshbooks_login_form" method="post">
+	    	
+			
+                     
+				<div class="control-group form-group"><div class="controls">
+
+
+
+<div class='input-group'>
+	<span class="input-group-addon">https://</span>
+	  <input type="url" id="freshbooks_url" class="input-medium form-control"  placeholder="Freshbooks domain name" value="" id="freshbooks_url">
+    <span class="input-group-addon">.freshbooks.com</span>
+
+                </div>  
+<div id="domainerror" class="hide text-danger">Enter Domain Name</div>
+         </div>
+</div>
+				
+               
+           <div class="control-group form-group"><div class="controls">
+              <input type="text" id="freshbooks_apiKey" class="input-medium form-control"  placeholder="API Token" value="" id="freshbooks_apiKey"></input>
+           <div id="apierror" class="hide text-danger">Enter Valid API Token</div>
+       </div></div>
+				<div class="m-t-md text-center">
+               <a href ="#" id ="freshbooks" class="btn btn-sm btn-primary">Connect</a>
+				</div>
+	    </form>
+</div>
+</div>
+</div>
+</script>

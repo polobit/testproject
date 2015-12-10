@@ -1,0 +1,48 @@
+<!-- to be removed -->
+<script id="contact-custom-view-collection-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-md-12">
+       
+            <h3 class="pull-left font-thin h3">Views</h3>
+            <a href="#contact-view-add" class="btn btn-sm btn-default right" id="addView"><span><i class="icon-plus-sign" /></span> Add View</a>
+<div class="clearfix"></div>
+        
+    </div>
+</div>
+</div>
+<div class="row">
+    <div class="col-md-9">
+		<div id="slate">
+         </div>
+        {{#if this.length}}
+        <table class="table table-bordered showCheckboxes" url="core/api/contact-view/delete/bulk">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Fields</th>
+                </tr>
+            </thead>
+            <tbody id="contact-custom-view-model-list" route="contact-custom-view-edit/">
+            </tbody>
+        </table>
+		{{/if}}
+    </div>
+    <div class="col-md-3">
+        <div class="well" id="addview">
+            <h4>Customize your view</h4>
+            
+            <p>Look at contacts the way you want to. Choose different fields and the order in which you would like them to appear. You can add any number of views.</p>
+        </div>
+    </div>
+</div>
+</script>
+
+<script id="contact-custom-view-model-template" type="text/html">
+<td data='{{id}}' class='data'></td>  	
+<td> {{name}} </td>
+<td><div class="text-cap">{{#field_Element fields_set}}{{/field_Element}}</div>
+</td>
+<br/>
+</script>

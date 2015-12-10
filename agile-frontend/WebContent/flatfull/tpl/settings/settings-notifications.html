@@ -1,0 +1,274 @@
+<script id="settings-notification-prefs-template" type="text/html">
+    <div class="col">
+	<div class="hbox h-auto m-b-lg">
+        <div class="panel panel-default">
+       
+            <form id="notificationsForm" name="notificationsForm" class="form-horizontal">
+                <fieldset>
+                <div class="panel-heading">
+					<span class="pull-left m-r-sm m-t-xs text-head-black">Notifications</span>
+					<div class="pull-left">                                          
+                        <div id="notification-switch">
+							<label class="i-switch m-t-xs m-r">
+                          		{{#if control_notifications}}
+                          			<input type="checkbox" id="control_notifications" class="left"  name="control_notifications" checked="checked">
+                         	 	{{else}}
+                          				<input type="checkbox" id="control_notifications" class="left"  name="control_notifications">
+                         		 {{/if}}
+						  		 <i></i>
+							</label>
+                        </div>                                           
+                    {{#if control_notifications}}
+                    </div>
+                    <div class="pull-right">
+                    <span id="desktop-notification-content" class="right text-base"></span>
+                    <a href="#notification-prefs" class="btn pull-right btn-sm btn-default btn-addon" id="set-desktop-notification"><i class="icon-bullhorn"></i> Set Desktop Notifications</a>
+                    {{/if}}
+                    <input name="id" type="hidden" value="{{id}}" /> 
+                    </div>
+                    <div class="clearfix"></div>
+                    </div>
+                    <div class="panel-body">
+                  {{#if control_notifications}}
+                  
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Browsing</label>
+                        <div class="controls col-sm-8">
+                            <select id="browsing" name="browsing" class="form-control">
+                                <option value="ANY_CONTACT">Any Contact</option>
+                                <option value="CONTACT_ASSIGNED">Contact assigned to me</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
+                            </select>
+<p class="help-block m-b-none">Get notified when a contact is browsing your website.</p>
+                        </div>
+                        
+                    </div>
+                   
+                    
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Email Opened</label>
+                        <div class="controls col-sm-8">
+                            <select id="email-opened" name="email_opened" class="form-control">
+                                <option value="ANY_CONTACT">Any Contact</option>
+                                <option value="CONTACT_ASSIGNED">Contact assigned to me</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
+                            </select>
+ <p class="help-block m-b-none">Get notified when a contact opens the email sent.</p>
+                        </div>
+                       
+                    </div>
+                   
+                  
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Link Clicked</label>
+                        <div class="controls col-sm-8">
+                            <select id="link-clicked" name="link_clicked" class="form-control">
+                                <option value="ANY_CONTACT">Any Contact</option>
+                                <option value="CONTACT_ASSIGNED">Contact assigned to me</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
+                            </select>
+<p class="help-block m-b-none">Get notified when a contact clicks a link in email (via a campaign).</p>
+                        </div>
+                        
+                    </div>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Deal</label>
+                        <div class="controls col-sm-8">
+                            <div class="checkbox">
+<label class="i-checks i-checks-sm">
+                            <input type="checkbox" id="deal_created" name="deal_created" value="true" /><i></i> 
+                            Deal is created
+                            </label>
+</div>
+                            <div class="checkbox">
+<label class="i-checks i-checks-sm">
+                            <input type="checkbox" id="deal_closed" name="deal_closed" value="true" /><i></i> 
+                            Deal is closed
+                            </label>
+</div>
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Tag</label>
+                        <div class="controls col-sm-8">
+                            <div class="checkbox"><label class="i-checks i-checks-sm">
+                            <input type="checkbox" id="tag_added" name="tag_added" value="true" /><i></i> 
+                            Tag is created
+                            </label>
+</div>
+                            <div class="checkbox"><label class="i-checks i-checks-sm">
+                            <input type="checkbox" id="tag_deleted" name="tag_deleted" value="true" /><i></i> 
+                            Tag is deleted
+                            </label>
+</div>
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Contact</label>
+                        <div class="controls col-sm-8">
+                            <div class="checkbox"><label class="i-checks i-checks-sm">
+                            <input type="checkbox" id="contact_added" name="contact_added" value="true" /><i></i> 
+                            Contact is created
+                            </label>
+</div>
+                            <div class="checkbox"><label class="i-checks i-checks-sm">
+                            <input type="checkbox" id="contact_deleted" name="contact_deleted" value="true" /><i></i> 
+                            Contact is deleted
+                            </label>
+</div>
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Call</label>
+                        <div class="controls col-sm-8">
+                            <div class="checkbox"><label class="i-checks i-checks-sm">
+                            <input type="checkbox" id="call" name="call" value="true"/><i></i> 
+                            Incoming call
+                            </label>
+</div>
+                        </div>
+                    </div>
+
+                   {{else}}
+
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Browsing</label>
+                        <div class="controls col-sm-8">
+                            <select id="browsing" name="browsing" disabled="disabled" class="form-control">
+                                <option value="ANY_CONTACT">Any Contact</option>
+                                <option value="CONTACT_ASSIGNED">Contact assigned to me</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
+                            </select>
+<p class="help-block m-b-none">Get notified when a contact is browsing your website.</p>
+                        </div>
+                        
+                    </div>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Email Opened</label>
+                        <div class="controls col-sm-8">
+                            <select id="email-opened" name="email_opened" disabled="disabled" class="form-control">
+                                <option value="ANY_CONTACT">Any Contact</option>
+                                <option value="CONTACT_ASSIGNED">Contact assigned to me</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
+                            </select>
+<p class="help-block m-b-none">Get notified when a contact opens the email sent.</p>
+                        </div>
+                    
+                    </div>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Link Clicked</label>
+                        <div class="controls col-sm-8">
+                            <select id="link-clicked" name="link_clicked" disabled="disabled" class="form-control">
+                                <option value="ANY_CONTACT">Any Contact</option>
+                                <option value="CONTACT_ASSIGNED">Contact assigned to me</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
+                            </select>
+<p class="help-block m-b-none">Get notified when a contact clicks a link in email (via a campaign).</p>
+                        </div>
+                        
+                    </div>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Deal</label>
+                        <div class="controls col-sm-8">
+                            <div class="checkbox"><label class="i-checks i-checks-sm">
+                            <input type="checkbox" id="deal_created" name="deal_created" value="true" disabled="disabled"/><i></i> 
+                            Deal is created
+                            </label>
+</div>
+                            <div class="checkbox"><label class="i-checks i-checks-sm">
+                            <input type="checkbox" id="deal_closed" name="deal_closed" value="true" disabled="disabled"/><i></i> 
+                            Deal is closed
+                            </label>
+</div>
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Tag</label>
+                        <div class="controls col-sm-8">
+                            <div class="checkbox"><label class="i-checks i-checks-sm">
+                            <input type="checkbox" id="tag_added" name="tag_added" value="true" disabled="disabled"/><i></i> 
+                            Tag is created
+                            </label>
+</div>
+                            <div class="checkbox"><label class="i-checks i-checks-sm">
+                            <input type="checkbox" id="tag_deleted" name="tag_deleted" value="true" disabled="disabled"/><i></i> 
+                            Tag is deleted
+                            </label>
+</div>
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Contact</label>
+                        <div class="controls col-sm-8">
+                            <div class="checkbox"><label class="i-checks i-checks-sm">
+                            <input type="checkbox" id="contact_added" name="contact_added" value="true" disabled="disabled"/><i></i> 
+                            Contact is created
+                            </label>
+</div>
+                            <div class="checkbox"><label class="i-checks i-checks-sm">
+                            <input type="checkbox" id="contact_deleted" name="contact_deleted" value="true" disabled="disabled"/><i></i> 
+                            Contact is deleted
+                            </label>
+</div>
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Call</label>
+                        <div class="controls col-sm-8">
+                            <div class="checkbox"><label class="i-checks i-checks-sm">
+                            <input type="checkbox" id="call" name="call" value="true" disabled="disabled"/><i></i> 
+                            Incoming call
+                            </label>
+</div>
+                        </div>
+                    </div>
+                    {{/if}}
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Sound</label>
+                        <div class="controls col-sm-8" >
+                                    <select id="notification_sound" name="notification_sound" class="form-control inline-block" style="width:75%;">
+                                        <option value="alert_1">Notes</option>
+                                        <option value="alert_2">Twinkle</option>
+                                        <option value="alert_3">Bubble</option>
+                                        <option value="alert_4">Triple Tone</option>
+                                        <option value="alert_5">Chime</option>
+                                        <option value="no_sound">Silent</option>
+                                    </select>
+                        <button class="btn btn-default  m-l-sm inline-block" id="notification-sound-play"><i class="icon-play"></i></button>
+                        </div>
+                    </div>
+<div class="line line-lg b-b"></div>
+                  <div class="row">
+                    <div class="col-sm-offset-3 col-sm-8">                      
+                        <button type="submit" class="save btn btn-sm btn-primary">Save Changes</button>
+                        <!--<a href="#settings" class="btn btn-sm btn-default">Cancel</a>-->
+                    </div>
+                    </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+		</div>
+    </div>
+    
+	<div class="col w-md">
+       <div class="data-block">
+		<div class="p-l p-r">
+			<h4 class="m-t-none">What are Notifications?</h4>
+            <p>Notifications are pop-up alerts shown to you as soon as an event occurs. </p>
+            <p>These events can be a contact opening an email you sent, or browsing your website, or a new deal or tag being created in your crm.</p>
+	        
+
+            <strong>Default Notifications</strong>
+
+            <p>Default notifications appears as below:</p>
+            <div class="m-b"><img src="{{getS3ImagePath 'img/sample-notification.png'}}"/ class="img-responsive"></div>
+            <strong>Desktop Notifications</strong>
+            <p>Desktop notifications appears as below:</p>
+            <div><img src="{{getS3ImagePath 'img/sample-html-notification.png'}}"/ class="img-responsive"></div>
+            <p class="m-t-xs" style="font-size:10px;">Please note that all browsers do not support desktop notifications.</p>    
+	</div>  
+</div>		
+	</div>
+
+</script>

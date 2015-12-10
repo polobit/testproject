@@ -1,0 +1,167 @@
+<script id="email-account-types-template" type="text/html">
+	<div class="btn-group right" style='position:relative'>
+	<button class="btn filter-dropdown" id="email-type-select">Agile</button>
+	<button class="btn dropdown-toggle" id="email-type-select-dropdown" data-toggle="dropdown">
+	<span class="caret"></span>
+	</button>
+	<ul id = "mail-account-type-select" class="pull-right dropdown-menu">
+	{{#if agileUserName}}
+	<li>
+	<a href="" class="agile-emails" email-server="agile" data-url="core/api/emails/agile-emails?e=" email-server-type={{this}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>Agile</a>
+	</li>
+	{{/if}}
+	{{#if gmailUserNames}}
+	{{#each gmailUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if imapUserNames}}
+	{{#each imapUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="imap" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if exchangeUserNames}}
+	{{#each exchangeUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if sharedGmailUserNames}}
+	{{#each sharedGmailUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if sharedImapUserNames}}
+	{{#each sharedImapUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="imap" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if sharedExchangeUserNames}}
+	{{#each sharedExchangeUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	</ul>
+	
+	<label id="has_email_configured" style="display:none">{{#if hasEmailAccountsConfigured}}{{hasEmailAccountsConfigured}}{{else}}false{{/if}}</label>
+	
+	</div>
+	</div>
+	<div class="clearfix"></div>
+</script>
+<script id="email-social-collection-template" type="text/html">
+{{#unless this.length}}
+    <div class="slate" style="margin-top:10px">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>You have no emails for {{contactShortName}}.</h3>
+                    <div class="text">
+                        You have no emails for {{contactShortName}} in {{read_global_var}} account.
+                    </div>
+                    {{#if_email_type_is_agile "agilecrm"}}
+                    <a href="#send-email/{{getCurrentContactProperty "email"}}" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i> Send Email</a>
+                    {{/if_email_type_is_agile}}
+                </div>
+            </div>
+        </div>
+{{/unless}}
+        
+{{#if this.length}}
+       <ul id="email-prefs-verification" style="margin-top:-5px;display:none;">
+            <div class="alert danger info-block" style="color: black;background-color: rgb(255,255,204);border: 1px solid rgb(211,211,211);">
+                <div>
+                <i class="icon-warning-sign"></i><strong style="">PENDING EMAIL CONFIGURATION.</strong>
+                <p>You have not yet configured your email. Please click <a href='#email'>here</a> to get started.</p>
+                </div>
+            </div>
+        </ul>
+	<ul id="email-social-model-list" class="ativity-block-ul"></ul>
+	<table style="margin-top:18px">
+	</table>
+{{/if}}
+</script>
+
+<!-- Imap-Email model -->
+<script id="email-social-model-template" type="text/html">
+<div style="display:block;0 1px 2px rgba(0,0,0,0.05)">
+	<div class="activity-text-block">
+	{{#if errormssg}}
+    <span style="color:red;">Error: {{errormssg}}</span>
+    {{else}}
+    <span class="activity-block-owner">	
+			<img class="user-img thumbnail" width="40" height="40" src="{{#extractEmail from}}{{emailGravatarurl 40 this}}{{/extractEmail}}">
+	</span>
+		<div id="email-reply-div">
+        
+			<h4>
+	{{#containString owner_email from}}
+			<i class="icon-reply"></i>
+		{{else}}
+			<i class="icon-share-alt icon-flip-vertical"></i>
+	{{/containString}}
+
+    {{#if trackerId}}
+        {{#if_equals "true" is_email_opened}}
+            <i class="icon-folder-open-alt" title="Email Opened"></i>
+        {{/if_equals}}
+    {{/if}}
+				<a class="email-subject" id={{id}} style="font-weight:bold" href="#collapse-{{id}}">{{subject}}</a>
+
+			</h4></br>
+			<div style="height:70px;margin-bottom:5px" class="ellipsis-multi-line collapse-{{id}}">
+				<div>
+					<div class="email-body">{{{message}}}</div>
+				</div>
+      		</div>
+			<div id="collapse-{{id}}" class="collapse activity-email-collapse">
+				<ul class="email-headers">
+                	<li><strong>From:</strong> {{from}}</li> 
+						
+                	<li>
+						<div class="caption to-emails" data-to="{{to}}" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
+							<strong>To:</strong> {{to}}
+						</div>
+					</li>
+                    {{#if cc}}
+                    <li>
+                    <div class="caption cc-emails" data-cc="{{cc}}" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
+                    	<strong>Cc:</strong> {{cc}}
+            		</div>
+          			</li>
+					{{/if}}
+
+                    {{#if bcc}}
+                    <li>
+            		<div class="caption bcc-emails" data-bcc="{{bcc}}" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
+              			<strong>Bcc:</strong> {{bcc}}
+            		</div>
+          			</li>
+                    {{/if}}
+           		</ul>
+       			<div style="margin-top:10px" class="email-body">{{#if message}}{{{message}}}{{/if}}</div>
+    		</div>
+		<div style="padding-top: 5px;">
+		<small class="edit-hover"> 
+			<time class="email-sent-time" datetime="{{epochToHumanDate "" date_secs}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date_secs}}</time>
+		</small>
+
+		<a href="#" data-from ="{{#extractEmail from}}{{this}}{{/extractEmail}}" id='email-reply' style="float: right; text-decoration: none; display:none;"><i class="icon-mail-reply-all"></i> Reply</a>
+       
+{{/if}}
+	</div>	
+</div>
+</script>

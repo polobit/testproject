@@ -1,0 +1,115 @@
+<!-- initial script which displayes social suite tabs with Add Stream and Added Streams. -->
+<script id="socialsuite-scheduled-updates-template" type="text/html">
+<div class="wrapper-md bg-light lter b-b">
+<div class="row">
+    <div class="col-md-12">
+        
+            <h3 class="h3 font-thin ">Scheduled Messages</h3>
+        
+    </div>
+</div>         
+</div>
+
+
+<div class="row">
+           <div class="col-md-12">              
+                <div id="socialsuite-scheduled-updates-content">
+                     
+                </div>        
+            </div><!-- col-md-12 end -->       
+</div> <!-- row end -->
+
+<div id="schedule-edit-modal"></div>
+
+</script>    
+
+<script id="socialsuite-scheduled-updates-collection-template" type="text/html">
+<div class="wrapper-md bg-light lter b-b">	
+<div class="row">
+    <div class="col-md-12">
+        
+            <h3 class="h3 font-thin ">Scheduled Messages</h3>
+        
+    </div>
+</div>         
+</div>
+
+
+<div class="row">
+           <div class="col-md-12">              
+                <div id="socialsuite-scheduled-updates-content">
+                     
+                </div>        
+            </div><!-- col-md-12 end -->       
+</div> <!-- row end -->
+
+<div id="schedule-edit-modal"></div>
+<div class="wrapper-md">
+<div class="data-block">
+         <div class="data-container"> 
+         <div class="panel panel-default">
+         <div class="panel-heading">Scheduled Messages List</div>   
+<div class="table-responsive">      	
+			<table id="schedule-updates" class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view"
+				url="core/scheduledupdate/bulk">
+             
+				<thead>
+					<tr>
+						<th class="hide">Id</th>
+						<th style="width:30%">User</th>
+						<th style="width:25%">Message</th>
+						<th style="width:15%">Schedule</th>
+						<th style="width:15%">Message Type</th>
+                        <th style="width:15%">Recipient</th>
+					</tr>
+				</thead>
+				<tbody id="socialsuite-scheduled-updates-model-list" class="socialsuite-scheduled-updates-model-list">
+				</tbody>
+			</table>
+</div>
+			</div>
+         </div>
+</div>	
+</div>	
+</script>
+
+<script id="socialsuite-scheduled-updates-model-template" type="text/html">	
+{{#if checkbox}}
+	<td><label class="i-checks i-checks-sm"><input class="tbody_check" type="checkbox"/><i></i></label></td>
+{{/if}}	
+<td class='data hide' data='{{id}}'>{{id}}</td>
+<td>
+   <div class="table-resp">
+      <a class="account-link link-complex block" href="https://twitter.com/{{screen_name}}" rel="user" target="_blank">    
+    	<div class="thumb-sm agile-img m-r-sm">   
+           <img class="img-inital r r-2x" src="{{profileImg}}"  alt="{{screen_name}}'s avatar" title="{{screen_name}}'s avatar">     	
+    	</div>
+    	<div class="agile-thumb agile-thumb-view">
+        		 	
+                    <a class="text-cap custom-link">@{{screen_name}}</a>
+ 		         
+        		<br/>
+        		<small class="text-muted m-t-xs">
+        		{{network_type}}        	</small>
+	    </div>
+      </a>
+   </div>
+</td>
+<td class="is-actionable edit-scheduled-update"><div class="table-resp">{{message}}</div></td>
+<td class="is-actionable edit-scheduled-update text-muted">
+	<div class="table-resp">
+	<i class="fa fa-clock-o m-r-xs"></i>
+    <time class="time-ago" value="{{schedule}}" datetime="{{epochToHumanDate "" schedule}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" schedule}}</time>
+	</div>
+</td>
+<td class="is-actionable edit-scheduled-update"><div class="table-resp">{{headline}}</div></td>
+<td class="is-actionable edit-scheduled-update">
+	<div class="table-resp">
+    {{#if_equals tweetOwner "/"}}
+         <span style="display:none;"></span>
+    {{else}}
+         <span>{{tweetOwner}}</span>
+    {{/if_equals}}
+    </div>
+</td>
+</script>

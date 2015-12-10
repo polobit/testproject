@@ -1,0 +1,93 @@
+ <script id="settings-email-template-add-template" type="text/html">
+<div class="panel panel-default">
+	<div class="panel-heading">
+	{{#if id}}
+      Edit Email Template
+    {{else}}
+       New Email Template
+   	{{/if}}
+	
+	</div>
+	<div class="panel-body">
+
+
+
+	
+	    <form id="templatePrefs" class="form-horizontal">
+         <fieldset>
+			{{#if id}}
+               <input name="id" type="hidden" value="{{id}}" />
+              
+            {{else}}
+             
+   			{{/if}}
+      <!--   <ul class="nav right">
+                <li class="dropdown" id="menu2">
+                    <a href="#merge-fields-add" class="dropdown-toggle btn btn-sm btn-default right" data-toggle="dropdown" style="position:relative;">
+                    <span><i class="icon-plus-sign" /></span> Add Merge Field</a>
+                    <ul class="dropdown-menu pull-right" style="top:28px">
+                    <li><a href="#" name="first_name" class="merge-field">&nbsp;First Name</a></li>
+					<li><a href="#" name="last_name" class="merge-field">&nbsp;Last Name</a></li>
+					<li><a href="#" name="email" class="merge-field">&nbsp;Email</a></li>
+					<li><a href="#" name="company" class="merge-field">&nbsp;Company</a></li>
+                    </ul>
+                </li>
+            </ul> -->
+        <div class="control-group form-group ">
+	    <label class="control-label col-sm-2">Name <span class="field_req">*</span></label>
+	        <div class="controls col-sm-5">
+	        	<input type="text" class="required input-xlarge form-control" name="name" placeholder="Enter Name"/>
+            </div>
+	    </div>
+        <div class="control-group form-group">
+	    <label class="control-label col-sm-2">Subject <span class="field_req">*</span></label>
+	        <div class="controls col-sm-5">
+	        	<input type="text" class="required input-xlarge form-control" name="subject" placeholder="Enter Subject"/>
+            </div>
+	    </div>
+	    <div class="control-group form-group">
+	    <label class="control-label col-sm-2">Text <span class="field_req">*</span></label>
+	        <div class="controls col-sm-9">
+			<div id="loading-editor"></div>
+	        <textarea class="col-md-6 required" style="width: 75%; height: 45%; display: none;" name="text" id="email-template-html" placeholder="Email template html"></textarea>
+	        </div>
+	    </div>
+	    <div class="control-group form-group">
+	    	<div class="controls col-sm-offset-2 col-sm-9" id="tpl-attachment-select">
+	        	<a href="#" class="add-attachment-select text-info"><i class='icon-plus-sign'/></i> Add Attachment</a>
+	        	<span class="attachment-document-select" style="display:none;">
+	        		<select id="attachment-select" style="margin-bottom: -1px;" name="document_id" class="form-control inline-block w overflow-auto">
+	        		</select>
+	        		<a href="#" class="btn btn-default btn-sm add-tpl-attachment-cancel">Cancel</a>
+	        		<a href="#" class="btn btn-sm btn-primary add-tpl-attachment-confirm">Add</a>
+	        		<span id="attachment-select-required" for="attachment-select" generated="true" class="help-inline" style="display:none;">This field is required.</span>
+	        	</span>
+	        </div>
+	        <div class="controls col-sm-9 col-sm-offset-2" id="tpl-attachment-name" style="display:none">
+				<div class="email-attchment-bg form-control inline-block">
+					<div id="tpl_attachment_fname" class="text-ellipsis"></div>
+					{{#if attachment_id}}
+						<input type="hidden" id="attachment_id" name="attachment_id" value={{attachment_id}}/>
+					{{else}}
+						<input type="hidden" id="attachment_id" name="attachment_id" />
+					{{/if}}	
+				</div> 
+				<a href="#" class="add-tpl-attachment-cancel pos-rlt pos-t-n-xs"><i class="icon-remove-circle"></i></a>		
+			</div>
+	    </div>
+<hr>
+<div class="row p-b-md">
+	    
+<div class="col-sm-offset-2 col-sm-9">
+			<a href="#email-templates" class="btn btn-default btn-sm">Cancel</a>
+            <a href="#" type="submit" class="save btn btn-sm btn-primary">{{#if id}}Save Changes {{else}}Save {{/if}}</a> 
+		</div>
+
+         </fieldset>
+		</form>
+    
+
+
+</div>
+</div>
+</script>

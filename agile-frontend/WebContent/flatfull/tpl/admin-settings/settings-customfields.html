@@ -1,0 +1,303 @@
+<div id="custom-field-modal"></div>
+<script id="admin-settings-customfields-collection-template" type="text/html">
+<!-- <div class="" style="margin-bottom: 15px;">
+            <h4>Custom Fields</h4>
+            <ul class="nav right">
+                <li class="btn-group right pos-rlt" style="top:0px;">
+                    <a href="#custom-fields-add" class="dropdown-toggle btn btn-sm right" data-toggle="dropdown">
+                    <i class="icon-plus-sign" /> Add Custom Field  <span class="caret"></span></a>
+                    <ul class="dropdown-menu pull-right">
+						<li>
+                            <a href="#contactCustomFModal" class="fieldmodal"  type="COMPANY">To Company</a>
+                        </li>
+						<li>
+                            <a href="#contactCustomFModal" class="fieldmodal" type="CONTACT">To Contact</a>
+                        </li>
+						<li>	
+                            <a href="#contactCustomFModal" class="fieldmodal" type="DEAL">To Deals</a>
+                        </li>
+						<li>	
+                            <a href="#contactCustomFModal" class="fieldmodal" type="CASE">To Case</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+</div> -->
+
+    <div class="col">
+    <div class="hbox h-auto m-b-lg">
+	<div  id="custom-fields-accordion">
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+	
+         {{#if this.length}}
+        	<div class="panel panel-default">
+			<div id="CONTACT-custom-fields">
+				<div class="panel-heading" role="tab" id="headingOne">
+					<div class="panel-title">
+						<a class="accordion-toggle" data-toggle="collapse"  aria-controls="collapseOne" aria-expanded="true"  data-parent="#accordion" href="#collapseOne">Contacts</a>
+					</div>
+				</div>
+				<div class="panel-collapse collapse in" role="tabpanel"  aria-labelledby="headingOne" id="collapseOne" >
+				<div class="panel-body p-n" id="customfields-contacts-accordion"></div>
+				</div>
+				</div>
+			
+			</div>
+			<div class="panel panel-default">
+			<div id="COMPANY-custom-fields">
+				<div class="panel-heading" role="tab" id="headingTwo">
+					<div class="panel-title">
+						<a class="collapsed accordion-toggle" aria-controls="collapseTwo" aria-expanded="false"  data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Companies</a>
+					</div>
+				</div>
+				<div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="collapseTwo" >
+				<div class="panel-body p-n" id="customfields-companies-accordion"></div>
+			
+			</div>
+			</div>
+			</div>
+			
+			<div class="panel panel-default">
+			<div id="DEAL-custom-fields">
+				<div class="panel-heading" role="tab" id="headingThree">
+					<div class="panel-title">
+						<a class="collapsed accordion-toggle" aria-controls="collapseThree" aria-expanded="false"   data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Deals</a>
+					</div>
+				</div>
+				<div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree" id="collapseThree" >
+				<div class="panel-body p-n" id="customfields-deals-accordion"></div>
+			</div>
+			</div>
+			</div>
+			<div class="panel panel-default">
+			<div id="CASE-custom-fields">
+				<div class="panel-heading" role="tab" id="headingFour">
+					<div class="panel-title">
+						<a class="collapsed accordion-toggle" aria-controls="collapseFour"  aria-expanded="false"  data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Cases</a>
+					</div>
+				</div>
+				<div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour" id="collapseFour" >
+				<div class="panel-body p-n" id="customfields-cases-accordion"></div>
+			</div>
+			</div>
+			</div>
+        {{/if}}
+	</div>
+    </div>
+    </div>
+    </div>
+    <div class="col w-md">
+        <div class="data-block">
+            <div class="p-l p-r">
+				<h4 class="m-t-none">
+                    Help
+                </h4>
+                
+				<p>You can define custom fields for Contacts here. They appear in new contact form in Agile and can also be updated using our <a href="#analytics-code">API</a>.</p>
+				Agile provides the following custom field types:<br/>
+				<ul class="p-l-md">
+					<li>Text field - A simple text field</li>
+					<li>Date field - A calendar date input field. (If you are providing this field value through API, provide an epoch number)</li>
+					<li>List field - A drop down list option</li>
+					<li>Check box - A true/false check box option</li>
+					<li>Text area -A large text input field</li>
+					<li>Number - A number value</li>
+					<li>Formula - An arithmetic formula in following format \{{number1}}*\{{number2}} - works with numerical custom fields only. <a class="text-info" href="http://mustache.github.io/" target="_blank">Mustache conditions</a> can be used here.</li>
+				</ul>
+				Enabling the 'Searchable' option in the custom field dialog will allow you to search contacts in Agile using the custom field value.
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="admin-settings-customfields-model-template" type="text/html">
+    <td><div class="inline-block v-top text-ellipsis w-full">{{field_label}}</div> </td>
+    <td><div class="inline-block v-top text-ellipsis w-full">{{field_description}}</div> </td>
+    <td>{{ucfirst field_type}}</td>
+	<td>{{ucfirst scope}}</td>
+    <br/>
+</script>
+
+
+<script id="admin-settings-customfields-contact-collection-template" type="text/html">
+{{#if this.length}}
+        <table class="table table-hover  custom-fields-table table-hover m-b-none agile-table" url="core/api/custom-fields/bulk">
+				<!-- <colgroup><col width="40%"><col width="12%"><col width="1%"></colgroup> -->
+                    <tbody id="admin-settings-customfields-contact-model-list" class="custom-fields-contact-tbody">
+                    </tbody>
+                </table> 
+        {{/if}}
+		<div class="p-l p-t p-b">
+			<a href="#contactCustomFModal" class="fieldmodal text-info" data-toggle="modal" type="CONTACT" ><i class="icon-plus-sign" /> Add </a>
+		</div>
+</script>
+
+<script id="admin-settings-customfields-contact-model-template" type="text/html">
+	<td class="b-r-none" style="width:60%;">
+		<div class="inline-block v-top text-ellipsis w-full table-resp">
+			{{field_label}}
+			{{#if_equals is_required true}}
+				<span class="field_req">*</span>
+			{{/if_equals}}
+		</div>
+		<div class="inline-block v-top text-ellipsi w-full table-resp"><small>{{field_description}}</small></div> 
+	</td>
+    <td class="p-r-none b-r-none" style="width:20%;">
+		<div class="text-right">
+			{{#if_equals searchable true}}
+				<span class="label m-r-xs bg-light dk text-tiny">Searchable</span>
+			{{/if_equals}}
+			<span class="label m-r-xs bg-light dk text-tiny">{{choose_custom_field_type field_type}}</span>
+		</div>
+	</td>
+	<td align="right" class="b-r-none p-l-none" style="width:10%;">
+		<div class="m-l" style="visibility:hidden;">
+			<a class="text-l-none-hover c-p text-sm"><i title="Drag" class="icon-move"></i></a>
+		</div>
+		<div style="visibility:hidden;">
+			<a id="edit-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
+				<i title="Edit Contact Custom Field" class="task-action icon icon-edit"></i>
+			</a>
+			<a id="delete-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
+				<i title="Delete Contact Custom Field" class="task-action icon icon-trash"></i>
+			</a>
+		</div>
+	</td>
+	<br/>
+</script>
+<script id="admin-settings-customfields-company-collection-template" type="text/html">
+    {{#if this.length}}
+        <table class="table table-hover custom-fields-table table-hover m-b-none agile-table" url="core/api/custom-fields/bulk">
+			<!-- <colgroup><col width="40%"><col width="12%"><col width="3%"></colgroup> -->
+                    <tbody id="admin-settings-customfields-company-model-list" class="custom-fields-company-tbody">
+                    </tbody>
+                </table>
+        {{/if}}
+		<div class="p-l p-t p-b">
+			<a href="#contactCustomFModal" class="fieldmodal text-info" data-toggle="modal" type="COMPANY"><i class="icon-plus-sign" /> Add </a>
+		</div>
+</script>
+<script id="admin-settings-customfields-company-model-template" type="text/html">
+    <td class="b-r-none" style="width:60%;">
+		<div class="inline-block v-top text-ellipsis w-full table-resp">
+			{{field_label}}
+			{{#if_equals is_required true}}
+				<span class="field_req">*</span>
+			{{/if_equals}}
+		</div>
+		<div class="inline-block v-top text-ellipsis w-full table-resp"><small>{{field_description}}</small></div> 
+	</td>
+    <td class="p-r-none b-r-none" style="width:20%;">
+		<div class="text-right">
+			{{#if_equals searchable true}}
+				<span class="label m-r-xs bg-light dk text-tiny">Searchable</span>
+			{{/if_equals}}
+			<span class="label m-r-xs bg-light dk text-tiny">{{choose_custom_field_type field_type}}</span>
+		</div>
+	</td>
+	<td align="right" class="b-r-none" style="width:10%;"> 
+		<div  class="m-l-sm" style="visibility:hidden;">
+			<a class="text-l-none-hover c-p text-sm"><i title="Drag" class="icon-move"></i></a>
+		</div>
+		<div style="visibility:hidden;">
+			<a id="edit-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
+				<i title="Edit Company Custom Field" class="task-action icon icon-edit"></i>
+			</a>
+			<a id="delete-custom-field" class="c-p t-l-none text-sm" data-toggle="modal" role="button" href="#">
+				<i title="Delete Company Custom Field" class="task-action icon icon-trash"></i>
+			</a>
+		</div>
+	</td>
+	<br/>
+</script>
+<script id="admin-settings-customfields-deal-collection-template" type="text/html">
+    {{#if this.length}}
+        <table class="table table-hover custom-fields-table table-hover m-b-none agile-table" url="core/api/custom-fields/bulk">
+			<!-- <colgroup><col width="40%"><col width="12%"><col width="3%"></colgroup> -->
+                    <tbody id="admin-settings-customfields-deal-model-list" class="custom-fields-deal-tbody">
+                    </tbody>
+                </table>
+        {{/if}}
+		<div class="p-l p-t p-b">
+			<a href="#contactCustomFModal" class="fieldmodal text-info" data-toggle="modal" type="DEAL"><i class="icon-plus-sign" /> Add </a>
+		</div>
+</script>
+
+<script id="admin-settings-customfields-deal-model-template" type="text/html">
+    <td class="b-r-none" style="width:60%;">
+		<div class="inline-block v-top text-ellipsis w-full table-resp">
+			{{field_label}}
+			{{#if_equals is_required true}}
+				<span class="field_req">*</span>
+			{{/if_equals}}
+		</div>
+		<div class="inline-block v-top text-ellipsis w-full table-resp"><small>{{field_description}}</small></div> 
+	</td>
+    <td class="p-r-none b-r-none" style="width:20%;">
+		<div class="text-right">
+			{{#if_equals searchable true}}
+				<span class="label m-r-xs bg-light dk text-tiny">Searchable</span>
+			{{/if_equals}}
+			<span class="label m-r-xs bg-light dk text-tiny">{{choose_custom_field_type field_type}}</span>
+		</div>
+	</td>
+	<td align="right" class="b-r-none" style="width:10%;">
+		<div class="m-l m-b-n-xs" style="visibility:hidden;">
+			<a class="text-l-none-hover c-p text-sm"><i title="Drag" class="icon-move"></i></a>
+		</div>
+		<div style="visibility:hidden;">
+			<a id="edit-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
+				<i title="Edit Deal Custom Field" class="task-action icon icon-edit"></i>
+			</a>
+			<a id="delete-custom-field" class="c-p t-l-none text-sm" data-toggle="modal" role="button" href="#">
+				<i title="Delete Deal Custom Field" class="task-action icon icon-trash"></i>
+			</a>
+		</div>
+	</td>
+	<br/>
+</script>
+<script id="admin-settings-customfields-case-collection-template" type="text/html">
+    {{#if this.length}}
+        <table class="table table-hover  custom-fields-table table-hover m-b-none agile-table" url="core/api/custom-fields/bulk">
+			<!-- <colgroup><col width="40%"><col width="12%"><col width="3%"></colgroup> -->
+                    <tbody id="admin-settings-customfields-case-model-list" class="custom-fields-case-tbody">
+                    </tbody>
+                </table>
+        {{/if}}
+		<div class="p-l p-t p-b">
+			<a href="#contactCustomFModal" class="fieldmodal text-info" data-toggle="modal" type="CASE"><i class="icon-plus-sign" /> Add </a>
+		</div>
+</script>
+<script id="admin-settings-customfields-case-model-template" type="text/html">
+	<td class="b-r-none" style="width:60%;">
+		<div class="inline-block v-top text-ellipsis w-full table-resp">
+			{{field_label}}
+			{{#if_equals is_required true}}
+				<span class="field_req">*</span>
+			{{/if_equals}}
+		</div>
+		<div class="inline-block v-top text-ellipsis w-full table-resp"><small>{{field_description}}</small></div> 
+	</td>
+    <td class="p-r-none b-r-none" style="width:20%;">
+		<div class="text-right">
+			{{#if_equals searchable true}}
+				<span class="label m-r-xs bg-light dk text-tiny">Searchable</span>
+			{{/if_equals}}
+			<span class="label m-r-xs bg-light dk text-tiny">{{choose_custom_field_type field_type}}</span>
+		</div>
+	</td>
+	<td align="right" class="b-r-none" style="width:10%;">
+		<div class="m-l m-b-n-xs" style="visibility:hidden;">
+			<a class="text-l-none-hover c-p text-sm"><i title="Drag" class="icon-move"></i></a>
+		</div>
+		<div style="visibility:hidden;">
+			<a id="edit-custom-field" class="c-p t-l-none text-sm" data-toggle="modal" role="button" href="#">
+				<i title="Edit Case Custom Field" class="task-action icon icon-edit"></i>
+			</a>
+			<a id="delete-custom-field" class="c-p t-l-none text-sm" data-toggle="modal" role="button" href="#">
+				<i title="Delete Case Custom Field" class="task-action icon icon-trash"></i>
+			</a>
+		</div>
+	</td>
+	<br/>
+</script>

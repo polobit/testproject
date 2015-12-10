@@ -1,0 +1,62 @@
+<!--  Add Task Form -->
+  	<div class="gadget-task row-fluid">
+       	<form class='gadget-task-form form-horizontal' name="gadget_task_form" method="post" style="margin:0px;">
+			<fieldset style="margin:0px;">
+              	<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
+				
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="subject"> <b>Task</b> <span class="field_req">*</span></label>
+					<div class="controls">
+						<input name="subject" id="subject" placeholder="Task name" size="40" class="required" type="text" style="height: 24px;" />
+					</div>
+				</div>
+
+				<div class="control-group" style="margin:0px; padding-top:6px;">					
+					<label class="control-label" for="type"><b>Category</b><span class="field_req">*</span></label>
+					<div class="controls">
+						<select name="type" id="type" class="required" style="width:210px;">
+							<option value="">Select</option>
+							<option value="CALL">Call</option>
+							<option value="EMAIL">Email</option>
+							<option value="FOLLOW_UP">Follow-up</option>
+							<option value="MEETING">Meeting</option>
+							<option value="MILESTONE">Milestone</option>
+							<option value="SEND">Send</option>
+							<option value="TWEET">Tweet</option>
+                            <option value="OTHER">Other</option>
+						</select> 
+					</div>
+				</div>
+				
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="due"><b>Due Date</b><span class="field_req">*</span></label>
+					<div class="controls">
+						<input name="due" id="due" placeholder="MM/DD/YYYY" class="required task-calender" type="text" style="height: 24px;" />
+					</div>
+				</div>
+				<div class="control-group" style="margin:0px; padding-top:6px;">		
+						<label class="control-label" for="owner_id"><b>Owner</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<select name="owner_id" id="ownerId" class="required" style="width:210px;">
+                            </select>	
+		  				</div>
+					</div>
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="priority_type"><b>Priority</b></label>
+					<div class="controls"> 
+						<select	name="priority_type" id="priority_type" size="1" style="width:210px;">
+							<option value="HIGH">High</option>
+							<option value="NORMAL" selected="selected">Normal</option>
+							<option value="LOW">Low</option>
+						</select> 
+					</div>
+				</div>
+				 
+	            <div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">
+	            	<a type="submit" class="btn btn-primary gadget-task-validate" style="padding:2px 6px 2px;">Add Task</a>
+			    	<a class="cancel btn" data-tab-identity="tasks" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
+					<img class="task-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+                </div>
+			</fieldset>				
+		</form>	
+   	</div>

@@ -1,8 +1,7 @@
-.gitignore
-
 **/.project
 **/.classpath
 **/.settings
+.gitignore
 util/*
 
 agile-java-server/build.properties
@@ -12,7 +11,7 @@ agile-frontend/.classpath
 agile-normal-bulk/.classpath
 agile-campaigns-bulk/.classpath
 agile-campaigns-normal/.classpath
-**/war/WEB-INF
+
 */.classpath
 
 war/WEB-INF
@@ -40,7 +39,6 @@ war/WEB-INF/web.xml
 war/WEB-INF/appengine-generated/datastore-indexes-auto.xml
 war/WEB-INF/appengine-web.xml
 war/WEB-INF/web.xml
-
 
 
 

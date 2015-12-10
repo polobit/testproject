@@ -1,0 +1,89 @@
+
+<script id="campaign-logs-collection-template" type="text/html">
+<div class="row">
+    <div class="col-md-12">
+        
+            <h4 class="pull-left font-thin">Logs 
+				<!--<small>for <span id="logs-campaign-name"></span></small>-->
+			</h4>
+            <div class="pull-right">
+            <div class="inline-block p-r-xs">
+				<div class="btn-group">
+  				<button class="btn btn-sm btn-default"><span id="log-filter-title">All</span></button>
+  				<button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+    				<span class="caret"></span>
+  				</button>
+  				<ul class="dropdown-menu">
+                    <li><a href="#" data-log-type="ALL" data-campaign-id="{{get_id_from_hash}}" class="log-filters">All</a></li> 
+    				<li><a href="#" data-log-type="EMAIL_SENT" data-campaign-id="{{get_id_from_hash}}" class="log-filters">Sent</a></li>
+					<li><a href="#" data-log-type="EMAIL_OPENED" data-campaign-id="{{get_id_from_hash}}" class="log-filters">Opened</a></li>
+					<li><a href="#" data-log-type="EMAIL_CLICKED" data-campaign-id="{{get_id_from_hash}}" class="log-filters">Clicked</a></li>
+					<li><a href="#" data-log-type="UNSUBSCRIBED" data-campaign-id="{{get_id_from_hash}}" class="log-filters">Unsubscribed</a></li>
+                    <li><a href="#" data-log-type="EMAIL_HARD_BOUNCED" data-campaign-id="{{get_id_from_hash}}" class="log-filters">Hard Bounced</a></li>
+					<li><a href="#" data-log-type="EMAIL_SOFT_BOUNCED" data-campaign-id="{{get_id_from_hash}}" class="log-filters">Soft Bounced</a></li>
+                    <li><a href="#" data-log-type="EMAIL_SPAM" data-campaign-id="{{get_id_from_hash}}" class="log-filters">Spam Reported</a></li>
+  				</ul>
+			</div>
+			</div>
+            <a href="#" class="btn btn-sm btn-danger inline-block" id="delete_campaign_logs">Delete All Logs</a>
+			</div>
+        <div class="clearfix"></div>
+       
+    </div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+    {{#unless this.length}}
+	<div id="logs-slate"></div>
+    {{/unless}}
+
+    {{#if this.length}}
+    <div class="data">
+        <div class="data-container">
+        <div class="table-responsive">
+            <table class="table table-striped onlySorting panel" id="logs-table" url="core/api/campaigns/logs/bulk">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th style="width:35%" class="header">Contact</th>
+                        <th style="width:20%" class="header">Log Type</th>
+                        <th style="width:25%" class="header">Message</th>
+                        <th style="width:20%" class="header">Time</th>                    
+                    </tr>
+                </thead>
+                <tbody id="campaign-logs-model-list" route="contact/">
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+    {{/if}}
+</div>
+</div>
+</script>
+<script id="campaign-logs-model-template" type="text/html">
+{{#if contact}}
+<input name="id" class="campaign" type="hidden" value="{{campaign_id}}" />
+<td></td>
+<td class="data no-wrap" data={{subscriber_id}}>
+	<div>
+	<span class="thumb">
+    	<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl contact.properties 40}}" width="40px" height="40px"/>
+    </span>
+ 	<span class="inline-block">
+		<span class="text-info">{{contact_name contact.properties contact.type}}</span>
+        <br>
+        	{{getPropertyValue contact.properties "email"}}
+    </span>
+	</div>
+</td>
+<td>{{titleFromEnums log_type}}</td>
+<td class="ellipsis-multi-line" id="autoellipsis" ">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}</td>
+<td class="text-muted"><small class="edit-hover"> 
+		<i class="fa fa-clock-o m-r-xs"></i>
+		<time class="log-created-time b-b-dotted" datetime="{{epochToHumanDate "" time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+	</small></td>
+<br/>
+{{/if}}
+</script>

@@ -1,0 +1,333 @@
+<script id="admin-settings-user-add-template" type="text/html">
+<div class="wrapper">
+    <div class="row">
+    	<div class="col-md-9">
+    	<div class="panel panel-default">
+    		<div class="panel-heading">
+    			{{#if id}}
+             	   Edit User Details
+    				
+				{{else}}
+					New User Details
+    			{{/if}}
+			</div>
+    		<form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
+				{{#if id}}
+					<input type="text" name="id" class="hide" value={{id}} >
+				{{/if}}
+                {{#if is_forms_updated}}
+                    <input type="hidden" name="is_forms_updated" value="{{is_forms_updated}}">
+                {{else}}
+                    <input type="hidden" name="is_forms_updated" value="false">
+                {{/if}}
+    			<fieldset class="wrapper">					
+    				<br/> 
+                   	<div class="control-group form-group">
+
+    					<label class="control-label col-md-3" for="cname">Name <span class="field_req">*</span></label> 
+<div class="col-md-9">
+                   		<div class="controls">
+    						<input type="text" id="cname" name="name" class="required form-control" placeholder="Name" autocapitalize="off"/>
+    					</div>
+</div>
+    				</div> 
+    			
+    				<div class="control-group form-group">
+
+    					<label class="control-label col-md-3" for="eaddress">Email Address <span class="field_req">*</span></label> 
+
+<div class="col-md-9">                   		
+<div class="controls">
+    						<input type="text" id="eaddress" class="email required form-control" name='email' placeholder="Email address" autocapitalize="off"/> 
+    					</div>
+    				</div>
+    </div>
+                       <div class="control-group form-group">
+
+    					<label class="control-label col-md-3" for="password">Password <span class="field_req">*</span></label> 
+<div class="col-md-9">                   		
+<div class="controls">
+    						<input type="password" class="required form-control" id="password" value="{{password}}" name='password' maxlength="20" minlength="4" placeholder="Password" autocapitalize="off"/> 
+    					</div>
+    					
+    				</div>
+    				{{#unless id}}
+    				<div class="col-sm-offset-3 col-md-9">
+    					<div class="controls">
+    						<div class="checkbox">
+<label class="i-checks i-checks-sm">
+    							<input type="checkbox" id="Disabled" name="is_send_password" value="true" checked><i></i>
+                           	Include password in the email
+</label>
+    						</div>
+    					</div>
+    				</div>
+    				{{/unless}}
+    				
+</div>
+
+    
+    				<div class="control-group form-group">
+<div class="col-sm-offset-3 col-md-9">
+    					<div class="controls">
+    						<div class="checkbox">
+<label class="i-checks i-checks-sm">
+    							<input type="checkbox" id="Disabled" name='is_disabled' value='true'/><i></i>
+                           		Disable this user
+</label>
+    						</div>
+    					</div>
+    				</div>
+</div>
+	
+					<div class="control-group form-group">
+<div class="col-sm-offset-3 col-md-9">
+    					<div class="controls">
+    						<div class="checkbox">
+<label class="i-checks i-checks-sm">
+    							<input type="checkbox" id="Admin" name='is_admin' value='true'/><i></i> 
+                           		Administrator<br/><div style="margin-left:6px;"><small>Allow access to admin settings (configuration and user management)</small></div>
+    						</label>
+</div>
+    					</div>
+    				</div>
+</div>
+<div class="col-sm-offset-3 col-md-9 p-l-xs">
+					<div id="accordion">
+					  <div class="controls">
+     					 <div>
+        					<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" >
+          						<span class="icon-plus"> </span> Privileges</a>
+					        </a>
+      					</div>
+    				</div>
+					<div id="collapseOne" class="panel-collapse collapse" >
+      					<div class="m-l-md">
+					{{#unless id}}
+ 					<div class="control-group form-group">
+						
+					<div class="controls">
+						<div class="multiple-checkbox" name="newscopes">
+								<label class="i-checks i-checks-sm checkbox">
+                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT" checked><i></i> 
+                            		Create Contacts <br/>
+									<div style="margin-left:6px;"><small> Add contacts</small></div>
+								</label>
+								<label class="i-checks i-checks-sm checkbox">
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" checked><i></i> 
+        	                    	Import Contacts  <br/>
+									<div style="margin-left:6px;"><small> Import from CSV file, sync from Google Apps and other integrations </small></div>
+    	                       </label>
+                               <label class="i-checks i-checks-sm checkbox">
+            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS" checked><i></i> 
+        	                    	Export Contacts  <br/>
+									<div style="margin-left:6px;"><small> Export contacts as a CSV file </small></div>
+    	                       </label>
+								<label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS" checked><i></i> 
+                            		View All Contacts  <br/>
+									<div style="margin-left:6px;"><small> View contacts owned by other users</small></div>
+                           		</label>
+								<label class="i-checks i-checks-sm checkbox">
+                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" checked><i></i> 
+                        	    	Update All Contacts  <br/>
+									<div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
+                    	       </label>
+							</div>
+						</div>
+                    </div>
+						{{else}}
+						{{#unless is_admin}}
+						<div class="control-group form-group">
+						<div class="controls">
+						<div class="multiple-checkbox"  name="newscopes">
+								<label class="i-checks i-checks-sm checkbox">
+                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT"><i></i> 
+                            		Create Contacts <br/>
+									<div style="margin-left:6px;"><small> Add contacts</small></div>
+								</label>
+								<label class="i-checks i-checks-sm checkbox">
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS"><i></i>
+        	                    	Import Contacts  <br/>
+									<div style="margin-left:6px;"><small> Import from CSV file, sync from Google Apps and other integrations</small></div>
+    	                       </label>
+                               <label class="i-checks i-checks-sm checkbox">
+            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS"><i></i>
+        	                    	Export Contacts  <br/>
+									<div style="margin-left:6px;"><small> Export contacts as a CSV file</small></div>
+    	                       </label>
+								<label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS"><i></i> 
+                            		View All Contacts  <br/>
+									<div style="margin-left:6px;"><small> View contacts owned by other users </small></div>
+                           		</label>
+								<label class="i-checks i-checks-sm checkbox">
+                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS"><i></i> 
+                        	    	Update All Contacts  <br/>
+									<div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
+                    	       </label>
+							</div>
+						</div>
+                    </div>
+					{{else}}
+					<div class="control-group form-group">
+						<div class="controls">
+						<div class="multiple-checkbox"  name="newscopes">
+									<label class="i-checks i-checks-sm checkbox" >
+                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT" disabled><i></i> 
+                            		Create Contacts <br/>
+									<div style="margin-left:6px;"><small> Add contacts</small></div>
+								</label>
+								<label class="i-checks i-checks-sm checkbox" >
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" disabled><i></i> 
+        	                    	Import Contacts  <br/>
+									<div style="margin-left:6px;"><small> Import from CSV file, sync from Google Apps and other integrations </small></div>
+    	                       </label>
+                               <label class="i-checks i-checks-sm checkbox" >
+            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS" disabled><i></i> 
+        	                    	Export Contacts  <br/>
+									<div style="margin-left:6px;"><small> Export contacts as a CSV file </small></div>
+    	                       </label>
+								<label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS" disabled><i></i> 
+                            		View All Contacts  <br/>
+									<div style="margin-left:6px;"><small> View contacts owned by other users </small></div>
+                           		</label>
+								<label class="i-checks i-checks-sm checkbox">
+                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" disabled><i></i> 
+                        	    	Update All Contacts  <br/>
+									<div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
+                    	       </label>
+							</div>
+						</div>
+                    </div>
+					{{/unless}}
+					{{/unless}}
+				
+					<div class="control-group form-group" style="margin-top:-20px">
+						<div class="controls">
+						<div class="multiple-checkbox"  name="newMenuScopes" style="padding-top:5px">
+					{{#if id}}
+						<label class="i-checks i-checks-sm checkbox hide">
+                        		    <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked><i></i> 
+                        	    	Contacts<br/><div style="margin-left:6px;"><small>Manage contacts</small></div></label> 
+								<label class="i-checks i-checks-sm checkbox">
+                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" ><i></i> 
+                        	    	Calendar<br/><div style="margin-left:6px;"><small>Manage your tasks and events</small></div></label> 
+								<label class="i-checks i-checks-sm checkbox">
+            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS"><i></i> 
+        	                    	Deals<br/>
+									<div style="margin-left:6px;"><small> Track sales opportunities</small></div>
+    	                       </label><label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CAMPAIGN"><i></i> 
+                            		Campaigns<br/>
+										<div style="margin-left:6px;"><small> Automate marketing</small></div>
+                           		</label>
+						
+								 </label><label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CASES"><i></i> 
+                            		Cases<br/>
+									<div style="margin-left:6px;"><small>Log and address customer issues</small></div>
+                           		</label>
+ 								</label><label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" ><i></i> 
+                            		Social Suite<br/>
+									<div style="margin-left:6px;"><small> Monitor your brand on social media</small></div>
+                           		</label>
+								</label><label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" ><i></i> 
+                            		Web Rule<br/>
+									<div style="margin-left:6px;"><small> Enagage your website visitors with smart popups, or perform automatic actions </small></div>
+                           		</label>
+								</label><label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" ><i></i> 
+                            		Documents<br/>
+								<div style="margin-left:6px;"><small> Upload and attach documents to contacts, deals or cases</small></div>
+                           		</label>
+								</label><label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" ><i></i> 
+                            		Activities<br/>
+									<div style="margin-left:6px;"><small> Know what other users are doing</small></div>
+                           		</label>
+								</label><label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="REPORT" ><i></i> 
+                            		Reports<br/>
+									<div style="margin-left:6px;"><small> Stay on top of your data</small></div>
+                           		</label>
+
+						{{else}}
+								<label class="i-checks i-checks-sm checkbox hide"  >
+                        		    <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked><i></i> 
+                        	    	Contacts<br/><div style="margin-left:6px;"><small>Manage contacts</small></div></label>
+								<label class="i-checks i-checks-sm checkbox">
+                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" checked><i></i> 
+                        	    	Calendar<br/><div style="margin-left:6px;"><small>Manage your tasks and events</small></div></label> 
+								<label class="i-checks i-checks-sm checkbox">
+            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" checked><i></i> 
+        	                    	Deals<br/>
+									<div style="margin-left:6px;"><small> Track sales opportunities</small></div>
+    	                       </label><label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CAMPAIGN" checked><i></i> 
+                            		Campaigns<br/>
+										<div style="margin-left:6px;"><small> Automate marketing</small></div>
+                           		</label>
+						
+								 </label><label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CASES" checked><i></i> 
+                            		Cases<br/>
+									<div style="margin-left:6px;"><small>Log and address customer issues</small></div>
+                           		</label>
+ 								</label><label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" checked><i></i> 
+                            		Social Suite<br/>
+									<div style="margin-left:6px;"><small> Monitor your brand on social media</small></div>
+                           		</label>
+								</label><label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" checked><i></i> 
+                            		Web Rule<br/>
+									<div style="margin-left:6px;"><small> Enagage your website visitors with smart popups, or perform automatic actions </small></div>
+                           		</label>
+								</label><label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" checked><i></i> 
+                            		Documents<br/>
+								<div style="margin-left:6px;"><small> Upload and attach documents to contacts, deals or cases</small></div>
+                           		</label>
+								</label><label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" checked><i></i> 
+                            		Activities<br/>
+									<div style="margin-left:6px;"><small> Know what other users are doing</small></div>
+                           		</label>
+								</label><label class="i-checks i-checks-sm checkbox">
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="REPORT" checked><i></i> 
+                            		Reports<br/>
+									<div style="margin-left:6px;"><small> Stay on top of your data</small></div>
+                           		</label>
+
+					{{/if}}
+				</div>
+				</div>	
+				</div>
+    			</div>
+					</div>
+					</div>
+					</div>
+					<div class="row">
+<div class="col-md-12"><hr>
+</div>
+</div>
+<div class="form-group">
+    				<div class="form-actions col-sm-offset-3 col-md-9">
+
+    				<div class="form-actions">
+						<a type="reset" href='#users' class="btn btn-default btn-sm">Cancel</a>
+               			<button type="submit" class="save btn btn-sm btn-primary">Save Changes</button>
+             			</div>
+</div>
+</div>
+    			</fieldset>
+    		</form>
+    	</div>
+    </div>
+    </div>
+    </div>
+</script>

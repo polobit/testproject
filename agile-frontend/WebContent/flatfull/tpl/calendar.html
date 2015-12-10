@@ -1,0 +1,221 @@
+<script id="calendar-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+        <div class="col-md-12">
+		
+        	 <h3 class="pull-left font-thin h3">Calendar <small></small></h3>
+     	
+        <div class="pull-right">
+        <!-- <div id="event-list-filters" class="btn-group inline-block m-r">
+					 <img class="loading_img p-r-xs thumb-xs"  src= "{{getS3ImagePath 'img/21-0.gif'}}"></img>
+				   </div> -->
+	      <!-- 	<div class="btn-group  inline-block m-r" id="">
+				<div class="btn btn-sm btn-default"><i class="icon-list"></i></div>
+				<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+					<span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu pull-right">
+				  <li><a href="#" class="c_list">List</a></li>
+	   			  <li><a href="#" class="c_cal">Calendar</a></li>
+				</ul>
+			</div> -->
+<div class="inline-block m-r" id="calendarAgendaButtons">
+				<button type="button" class="btn btn-sm btn-default" onclick="today()">Today</button>
+					<div class="btn-group m-l-xs">
+						<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >Day</button>
+						<button id="agendaWeek" class="btn btn-sm btn-default agendaDayWeekMonth" >Week</button>
+						<button id="month" class="btn btn-sm btn-default agendaDayWeekMonth" >Month</button>
+					</div>
+			</div>
+			 <div class="btn-group  inline-block" id="add-event-div">
+				  
+	               <div class="btn btn-sm btn-default add-event" data-toggle="modal"><i class="icon-plus-sign"></i> Add Event</div>
+	               <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+	               <span class="caret"></span>
+	               </a>             
+	               <ul class="dropdown-menu pull-right c-p">
+	                   <li><a data-toggle="modal" class="add-event">Add Event</a></li>
+	                   <li><a data-toggle="modal" class="add-task">Add Task</a></li>
+	               </ul>
+	           </div>
+		</div>
+		<div class="clearfix"></div>
+		
+</div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-md-2">
+    <div class="bg-transparent">
+		<div class="data-block todo-block">
+        	<div class="data-container">
+            	<div id="calendar-filters"></div><br/><br/><br/><br/>
+<div id="ical_appointment_links"><a  href="#scheduler-prefs"  id="show-schedule-url1"><i class="icon-time" style="margin-right:3px;"></i> Online Scheduling</a><br/>
+
+<br/><a  href="#icalModal" data-toggle="modal" id="subscribe-ical"><i class="icon-calendar" style="margin-right:4px;"></i>Subscribe to iCal</a>
+        	</div>
+		</div></div>
+
+</div>
+
+</div>
+
+    <div class="col-md-10">
+    <div class="bg-light lter">
+		<!--<div class="clearfix m-b" id="calendar-view-button" style="display:none;">
+			 <button type="button" tooltip="Double click on calendar day to create event" class="btn btn-sm btn-primary btn-addon add-event">
+				<i class="fa fa-plus"></i>Add
+			</button>
+			<div class="pull-right">
+				<button type="button" class="btn btn-sm btn-default" onclick="today()">today</button>
+					<div class="btn-group m-l-xs">
+						<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >Day</button>
+						<button id="agendaWeek" class="btn btn-sm btn-default agendaDayWeekMonth" >Week</button>
+						<button id="month" class="btn btn-sm btn-default agendaDayWeekMonth" >Month</button>
+					</div>
+			</div>
+		</div> -->
+        <div id="calendar_event">
+           <ul class="nav nav-tabs" id="event_tab">
+            <li class="active"><a href="#agile" data-toggle="tab" >Agile Events</a></li>
+            <li><a href="#google" data-toggle="tab">Google Events</a></li>
+            </ul>
+        </div>
+           <div class="tab-content">
+           <div class="tab-pane active" id="agile"></div>
+          <div class="tab-pane" id="google"></div>
+          </div>
+          <div id="agile_event_list"><h2> Event List</h2>
+         <div  id="agile_event" style="margin-top: 6px;"></div>
+          </div>
+
+    </div>
+	
+</div>
+</div>
+</div>
+</script>
+
+<script id="event-filter-template" type="text/html">
+<div class="widget-box" id="widget-box">
+	<div id="event-filters" class="btn-group helpdesk-filters">
+		<a id="event-filter-button" class="btn btn-sm btn-default dropdown-toggle" title="Filters">
+			<i id="icon-filter" class="icon-filter icon-white"></i>
+		</a>
+		<div class="dropdown-menu pull-right m-t-xs p-n" id="filter_options"
+			style="background-color: #cad2dd; right:-10px;">
+			<div id="filter_list">
+				<div class="arrow"></div>
+				<div id="popover-content" class="popover-content">
+					<div id="popup_header" class="popup_header p-b-xs">
+						<span id="filters-heading" class="heading text-xs">Filters</span> <span
+							id="clear-event-filters" class="btn btn-xs btn-default pull-left"
+							style="color: #475b6f; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);">Clear</span>
+						<span id="event-filter-validate" class="btn btn-primary btn-xs pull-right save"
+							style="color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);">Done</span>
+					</div>
+					<style>
+						.ticket-filter-container select, .ticket-filter-container input{
+							width: 100%;
+							height: 23px;
+							font-size: 10px;
+						}
+						.ticket-filter-container label{
+							font-size: 11px;
+							width: 170px;
+							height: 20px;
+							margin-bottom: 0;
+						}
+						.row-filter{
+							padding-top: 4px !important;
+						}
+					</style>
+					<div id="deal-filter-container" class="deal-filter-container inner-box" style="width:243px;">
+		<form id="eventsFilterForm" class="m-b-none" name="dealsFilterForm" role="form">
+			<fieldset>
+				<div class="control-group row-filter">
+					<label class="control-label"><b>Owner </b> 
+					</label>
+					<div class="controls" id="owners">
+						<select id="event-owner" name="owner_id" class="form-control">
+							<option value="all">Any</option>
+						</select>
+					</div>
+				</div>
+				<div class="control-group row-filter calendar-view">
+					<label class="control-label"><b>Type </b>
+					</label>
+					<div class="controls" id="type_div">
+						<span><select id="event_type" name="type" class="form-control">
+								<option value="">All</option>
+								<option value="google">Google</option>
+								<option value="agile">Agile</option>
+						</select></span>
+					</div>
+				</div>
+				<div class="control-group row-filter list-view">
+					<label class="control-label"><b>Time </b>
+					</label>
+					<div class="controls" id="time_div">
+						<span><select id="event_time" name="time" class="form-control">
+								<option value="">All Events</option>
+								<option value="future">Future Events</option>
+						</select></span>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+		<!-- form id="dealsCustomFilterForm" name="dealsCustomFilterForm" role="form">
+			<fieldset></fieldset>
+		</form -->
+					</div>
+					<!-- End of filters-container -->
+				</div>
+				<!-- popover-content -->
+			</div>
+		</div>
+		<!-- dropdown-menu class div-->
+	</div>
+</script>
+<script id="event-left-filter-template" type="text/html">
+<div>
+<!--<span id="heading"><h4></h4></span><br/>-->
+<div id="user_calendars">
+<label><h4 class="m-b-n-sm">My Calendars</label></h4><br/>
+			  <div><label class="i-checks i-checks-sm">
+                <input type="checkbox" class="calendar_check" value="agile">
+                <i></i>    Agile             
+              </label></div>
+			  <div><label class="i-checks i-checks-sm hide" id="google_cal">
+                <input type="checkbox" class="calendar_check" value="google">
+                <i></i>     Google           
+              </label></div>
+			  <div class="hide" id="google_cal_link">
+              	<span style="margin-left:26px;font-size: 12px;"> <a  href="#sync" class="text-muted"><i class="fa fa-plus-square"></i> Add Google Calendar</a></span>           
+              </div>
+</div><br/>
+<div>
+{{#if this.length}}
+<label><h4 class="m-b-n-sm">Team</label></h4><br/>
+{{/if}}
+{{#each this}}
+<label class="i-checks i-checks-sm">
+                <input type="checkbox" data="{{this.domain_user_id}}" class="calendar_user_check" value="{{this.id}}">
+                <i></i>    {{this.name}}             
+              </label><br/>{{/each}}
+</div><br/>
+<div id="list_event_time" class='m-b-md hide'>
+<label class="control-label">Showing 
+					</label>
+					
+						<span><select id="event_time" name="event_time" class="form-control">
+								<option value="">All Events</option>
+								<option value="future">Future Events</option>
+						</select></span>
+					</div>
+
+
+</div>
+</script>

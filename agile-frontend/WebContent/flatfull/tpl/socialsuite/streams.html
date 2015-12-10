@@ -1,0 +1,194 @@
+<!-- main social suite container -->
+<script id="socialsuite-streams-collection-template" type="text/html">
+{{#unless this.length}}
+ <div class="alert-info alert">
+    <div class="slate-content">
+       <div class="box-left pull-left m-r-md">
+            <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+       </div>
+       <div class="box-right pull-left">
+            <h4 class="m-t-none">You have not associated any social accounts currently.</h4>
+            <div class="text">
+               	Track relevant conversations and participate. Import prospective customers and run multichannel campaigns.  
+            </div>
+          		Get started by adding a social stream.<br>
+                <a id="add-stream" class="add-stream add-stream-tab btn btn-default btn-sm m-t-xs">
+ 		          <i class="icon icon-plus-sign"></i> Add Stream
+		        </a> 
+	  	</div>
+		<div class="clearfix">
+		</div>
+    </div>
+ </div>
+{{else}} 
+  <ul id="socialsuite-streams-model-list" class="columns row p-l-none ui-sortable">  </ul> 
+{{/unless}}
+</script>
+
+<!-- main column in container -->
+<script id="socialsuite-streams-model-template" type="text/html">
+<div class="column panel panel-default">
+<header class="column-header panel-heading p-b-xs">    
+  {{#if profile_img_url}}
+     <img src={{profile_img_url}} id={{id}}-profile-img class="user-profile-img pull-left thumb r-2x m-b-none" alt="{{screen_name}}'s avatar." title="{{screen_name}}'s avatar.">
+  {{/if}}             
+  <!-- <small class="pull-right column-index">{{column_index}}</small> -->    
+  <span class="socialicons-widget-top">           
+    {{#if_equals network_type "TWITTER"}}                 
+        <i class="pull-right margin-hs social-type-icon icon icon-twitter text-muted"></i>
+    {{else}}
+        <i class="margin-hs social-type-icon icon icon-linkedin text-muted"></i>
+    {{/if_equals}}     
+
+    {{#if_equals stream_type "Mentions"}}
+         <p class="stream-type-icon icon mentions-small-title text-muted" title="Mentions Stream">@</p>
+    {{else}}
+         <i class="stream-type-icon icon {{get_stream_icon stream_type}} text-muted" title="{{stream_type}} Stream"></i>
+    {{/if_equals}}
+   </span>
+<span id="stream-spinner-modal-{{id}}" class="waiting-symbol">
+         <img src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}"></img>
+    </span>        
+  <h4 class="column-title txt-ellipsis m-t-none"> 
+      {{#if_equals stream_type "All_Updates"}}    
+          <span>All Updates</span>
+      {{else}} 
+        {{#if_equals stream_type "DM_Inbox"}}
+           <span>DM Inbox</span>
+        {{else}} 
+           {{#if_equals stream_type "DM_Outbox"}}
+               <span>DM Outbox</span>
+           {{else}}
+  		       <span>{{stream_type}}</span>
+           {{/if_equals}}
+        {{/if_equals}}
+      {{/if_equals}}
+      {{#if_equals stream_type "Search"}}                 
+ 		 <small>{{keyword}}</small>
+      {{/if_equals}}
+      <br>
+ 	  <span class="attribution txt-mute txt-sub-antialiased">@{{screen_name}}</span>
+   </h4> 
+   <span class="column-header-link is-actionable">
+      <i class="pull-right icon icon-trash stream-delete header-action" id={{id}} title="Delete Stream"></i>                     
+      {{#if_equals network_type "TWITTER"}} 		 		
+          <i class="compose-status icon icon-edit compose-message header-action" stream-id={{id}} title="Compose Message"></i>
+	  {{else}}
+	      <i class="compose-status icon icon-edit share-update header-action" stream-id={{id}} title="Share an update"></i>
+	  {{/if_equals}} 
+   </span>	 
+</header>
+<div id="stream_notifications_{{id}}" class="stream-notifications action-notify" data={{id}} rel=""></div>
+<div id="stream" class="column-content">
+                      
+</div>
+</div>
+</script>
+
+<!-- sub-column as model but collection in main-column  -->
+<script id="Column-collection-template" type="text/html">
+<div id="Column-model-list" class="chirp-container scroll-v" onscroll="OnScrollDiv(this)" data="0">
+   
+</div>
+</script>
+
+<!-- models for tweets -->
+<script id="Column-model-template" type="text/html">
+{{#if_equals msg_type "Tweet"}}
+ {{#if isNew}}
+  <article id={{id}} tweet-id-str="{{id_str}}" stream-id={{stream_id}} class="stream-item nav-tabs is-actionable is-new {{deleted_msg}}" style="display:none;">
+ {{else}}
+  <article id={{id}} tweet-id-str="{{id_str}}" stream-id={{stream_id}} class="stream-item nav-tabs is-actionable {{deleted_msg}}">
+ {{/if}}
+    <div class="item-box">       
+      <div class="tweet">
+           <header class="tweet-header">        
+	          <a class="account-link link-complex block" href="https://twitter.com/{{user.screen_name}}" rel="user" target="_blank"> 
+		         <div class="thumb thumb-wrapper tweet-img">  
+			       <img class="r-2x" src={{user.profile_image_url}}  alt="{{user.screen_name}}'s avatar" title="Klout Score {{klout_score}}">   
+ 		         </div> 
+ 		         
+    		  </a>  
+		   </header> 
+		   <div class="tweet-body"> 
+<a class="account-link link-complex block" href="https://twitter.com/{{user.screen_name}}" rel="user" target="_blank"> 
+<div class="tweet-user text-base"> 
+ 			        <span class="account-inline txt-ellipsis"> 
+ 						<span class="fullname link-complex-target inline-block" style="padding-bottom:1px">{{user.name}}</span> 
+ 						<span class="username text-muted"><span class="at">@</span>{{user.screen_name}}</span>  
+ 		    		</span> 
+ 				 </div> 
+</a>
+ 	          <p class="tweet-text m-b-xs  text-sm">
+                 {{safe_tweet text}}
+              </p>                  
+ 			  <footer class="tweet-footer cf text-muted">
+              {{#if id_str}}
+              {{#if retweeted}}
+                 <a class="txt-mute  txt-small block m-b-xs show-retweet text-info">{{retweeted}}</a>
+              {{/if}}
+             <i class="fa fa-clock-o text-muted text-xs"></i> <time class="time-ago text-muted text-xs time-ellipsis" datetime="{{created_at}}">{{created_at}}</time>
+                           
+ 	    	  <ul class="tweet-actions">
+                 {{#if direct_message}}
+                    <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn btn-sm btn-default right" data-toggle="modal"> 
+                            <i class="icon icon-plus-sign" title="Add Contact"></i>                            
+                         </a> </li>
+                 {{else}}
+                    <li> <a class="tweet-action" href="https://twitter.com/{{user.screen_name}}/status/{{id_str}}" rel="url" target="_blank"> 
+                            <i class="icon icon-external-link" title="Detail Status"></i>                            
+                         </a> </li>	    		
+                    <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn btn-sm btn-default right" data-toggle="modal"> 
+                            <i class="icon icon-plus-sign" title="Add Contact"></i>                            
+                         </a> </li>	                 
+ 		    		<li> <a class="tweet-action" href="#social" rel="reply"> 
+                            <i class="icon icon-reply reply-message" title="Reply"></i>                             
+                         </a> </li>                    
+ 		    		<li> <a class="tweet-action" href="#social" rel="retweet">
+                         {{#if retweeted_by_user}}
+                           <i class="icon icon-retweet undo-retweet-status" title="Retweet" style="color:#00FF40;"></i>
+                         {{else}}
+                             {{#if tweetowner_not_streamuser}}
+                                 <i class="icon icon-retweet retweet-status" title="Retweet"></i>
+                             {{/if}}
+                         {{/if}}
+                         </a> </li>
+ 		    		<li> <a class="tweet-action" href="#social" rel="favorite"> 
+                         {{#if favorited_by_user}}
+                            <i class="icon icon-star undo-favorite-status" style="color:orange;" title="Unfavorite from {{user.screen_name}}"></i>                             
+                         {{else}}
+                            <i class="icon icon-star favorite-status" title="Favorite from {{user.screen_name}}"></i>                             
+                         {{/if}}
+                         </a> </li>
+                 {{/if}}
+ 		    		<li> 
+                         <a id="{{id_str}}_more_options" class="tweet-action more-options" href="#social"> 
+                            <i class="icon icon-ellipsis-horizontal" title="More Options"></i> 
+                         </a>
+    					 <ul id="{{id_str}}_more_options_list" class="pull-right more-options-list dropdown-menu" role="menu">
+                                <li role="presentation"><a href="#social" class="reply-message" role="menuitem">Tweet to @{{user.screen_name}}</a></li> 							
+                            {{#if deletable_tweet}}
+                                <li class="divider"></li>
+                                <li role="presentation"><a href="#social" class="delete-tweet" role="menuitem">Delete</a></li>                                
+                            {{/if}}
+    					 </ul>
+                    </li>  
+        		</ul>             
+              {{/if}}
+ 			 </footer>  
+    	   </div>	
+<div class="clearfix"></div>	   
+		</div>
+	</div>                        
+  </article>
+
+{{else}} 
+  {{#if_equals msg_type "NoTweet"}}
+   {{#if show}}
+	<article id={{id}}_{{stream_id}} class="no-tweet">
+       <p class="bg-danger">{{text}}</p>              
+	</article>
+   {{/if}}  
+  {{/if_equals}}
+{{/if_equals}}
+</script>

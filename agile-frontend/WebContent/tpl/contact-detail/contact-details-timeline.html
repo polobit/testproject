@@ -1,0 +1,409 @@
+  <script id="year-marker-template" type="text/x-handlebars-template">
+    <div class="item year-marker">
+      <div class="inner">
+        <div class="inner2">
+          <div class="timestamp">{{timestamp}}</div>
+          <div class="year">{{year}}</div>
+        </div>
+      </div>
+    </div>
+  </script>
+
+<script id="timeline-template" type="text/x-handlebars-template">
+<div class="item post" id={{id}}>
+    <div class="inner">
+        {{#if_entity "note"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <pre class="text" style="color: #999999;background:none;border:none;">{{description}}</pre>
+            </div>
+        {{/if_entity}}
+
+        {{#if_entity "task"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Task</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <div class="caption" style="margin-top:-8px"><i class="{{icons type}}"></i> ({{type}})</div>         
+                <div class="text" style="color: #333333">{{{subject}}}</div>
+            </div>
+        {{/if_entity}}
+
+        {{#if_entity "contact_entity"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body" style="padding:5px">
+                <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
+            </div>
+        {{/if_entity}}
+	
+	  {{#if_entity "tag"}}
+			<div id="{{remove_spaces tag}}-tag-timeline-element"></div>
+            <div class="timestamp">{{createdTime}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added - {{tag}}</h3></div>
+            <div class="date">{{epochToTaskDate createdTime}}</div>
+            <div class="body" style="padding:5px">
+                <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
+            </div>
+        {{/if_entity}}
+
+        {{#if_entity "agile_email"}}
+            <div class="timestamp">{{createdTime}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span> Email Opened</h3></div>
+            <div class="date">{{epochToTaskDate createdTime}}</div>
+            <div class="body">
+                <div style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Subject:</b> {{subject}}</div>
+                <div class="text" style="color: #999999" ><span><em>Sent on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" trackerId}}</div>
+                <div class="text" style="color: #999999" ><span><em>Opened on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
+            </div>
+        {{/if_entity}}
+
+        {{#if_entity "deal"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-money"></i></a></span> Deal</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <div class="text" style="color: #333333">{{name}}</div>
+                <div class="text" style="color: #999999">{{description}}</div>
+            </div>
+        {{/if_entity}}
+
+		{{#if_entity "case"}}
+			
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Case</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <div class="text" style="color: #333333">{{title}}</div>
+                <div class="text" style="color: #999999">{{description}}</div>
+            </div>
+        {{/if_entity}}
+
+        {{#if_entity "log"}}
+            <div class="timestamp">{{time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-inbox"></i></a></span> {{titleFromEnums log_type}}</h3></div>
+            <div class="date">{{epochToTaskDate time}}</div>
+            <div class="body">
+                <div class="caption" style="margin-top:-8px">Campaign - {{campaign_name}}</div>
+
+            {{#if message}}
+                    <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
+                        <div class="right" data="{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}"><a href="#" id="tl-log-popover"><i class="icon-plus"></i></a></div>
+                    </div>   
+            {{/if}}        
+            </div>
+        {{/if_entity}}
+
+        {{#if_entity "date"}}
+            <div class="timestamp">{{date_secs}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-envelope"></i>
+			{{#if trackerId}}
+        		{{#if_equals "true" is_email_opened}}
+        	    		<i class="icon-folder-open-alt" title="Email Opened"></i>
+        		{{/if_equals}}
+    		{{/if}}
+            </a>
+            </span> {{subject}}</h3></div>
+            <div class="date">{{epochToTaskDate date_secs}}</div>
+            <div class="body">
+                <div class="caption" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>From:</b> {{from}}</div>
+                <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>To:</b> {{to}}
+                </div>
+            
+            {{#if message}}
+                <div class="text"><div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;"><div> <p>{{{message}}}</p></div></div>
+                    <div class="right" data="{{message}}"><a href="#" id="tl-mail-popover"><i class="icon-plus"></i></a></div>
+                </div> 
+            {{/if}}       
+            
+			</div>
+        
+        {{/if_entity}}
+
+     {{#if_entity "guid"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> Web</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <div class="text" style="color: #333333">
+                    <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
+                        <div>
+							<b>Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
+								<span style="float: right;">
+									{{#if user_agent}}
+										{{#stringToJSON this "parsedUserAgent"}}
+										{{#if device_type}}
+											<img src="img/web-stats/devices/{{device_type}}.png" title="{{device_type}}">
+									    {{/if}}
+										{{#if os}}
+											<img src="img/web-stats/os/{{normalize_os os}}.png" title="{{os}}">
+										{{/if}}
+										{{#if browser_name}}
+                                        	<img src="img/web-stats/browsers/{{browser_name}}.png" title="{{browser_name}}">
+										{{/if}}
+                                        {{/stringToJSON}}
+									{{/if}}
+								</span>
+							</b><br> 
+                        {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
+					    {{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br />{{/each}}
+                        </div>
+                    </div>
+                </div>
+                {{#if ref}}
+                     <div class="text" style="color: #333333"><b>Referred:</b></br> {{ref}}</div>
+                {{/if}}
+
+                {{#if city}}
+                   <div class="text" style="color: #333333"><b>ADDRESS:</b></br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
+                {{/if}}
+
+                <div class="right" style="margin-top:-10px;"><a href="#" id="tl-analytics-popover"><i class="icon-plus"></i></a></div>
+            </div>
+     {{/if_entity}}
+
+{{#if_entity "twilio"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-phone" title="You Called"></i></a></span>{{title}}</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                 <div class="text" style="color: #333333">{{name}}</div>
+                <div class="text" style="color: #333333">{{body}}</div>
+            </div>
+        {{/if_entity}}
+
+{{#if_entity "custom"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span>{{title}}</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                 <div class="text" style="color: #333333">{{name}}</div>
+                <div class="text" style="color: #999999">{{body}}</div>
+            </div>
+        {{/if_entity}}
+	<a href="#" class="open-close"></a>
+  </div>
+</div>
+</script>
+
+
+<script id="timeline1-template" type="text/x-handlebars-template">
+
+{{#each this}}
+
+<div class="item post" id={{id}}>
+    <div class="inner">
+        {{#if_entity "note"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <pre class="text" style="color: #999999;background:none;border:none;">{{description}}</pre>
+            </div>
+        {{/if_entity}}
+
+        {{#if_entity "task"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Task</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <div class="caption" style="margin-top:-8px"><i class="{{icons type}}"></i> ({{type}})</div>         
+                <div class="text" style="color: #333333">{{{subject}}}</div>
+            </div>
+        {{/if_entity}}
+
+        {{#if_entity "contact_entity"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body" style="padding:5px">
+                <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
+            </div>
+        {{/if_entity}}
+	
+	  {{#if_entity "tag"}}
+			<div id="{{remove_spaces tag}}-tag-timeline-element"></div>
+            <div class="timestamp">{{createdTime}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added - {{tag}}</h3></div>
+            <div class="date">{{epochToTaskDate createdTime}}</div>
+            <div class="body" style="padding:5px">
+                <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
+            </div>
+        {{/if_entity}}
+
+        {{#if_entity "agile_email"}}
+            <div class="timestamp">{{createdTime}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span> Email Opened</h3></div>
+            <div class="date">{{epochToTaskDate createdTime}}</div>
+            <div class="body">
+                <div style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Subject:</b> {{subject}}</div>
+                <div class="text" style="color: #999999" ><span><em>Sent on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" trackerId}}</div>
+                <div class="text" style="color: #999999" ><span><em>Opened on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
+            </div>
+        {{/if_entity}}
+
+        {{#if_entity "deal"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-money"></i></a></span> Deal</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <div class="text" style="color: #333333">{{name}}</div>
+                <div class="text" style="color: #999999">{{description}}</div>
+            </div>
+        {{/if_entity}}
+
+        {{#if_entity "CONTACT"}}
+			{{#if_equals "CALL" activity_type}}
+            {{#if_equals "incoming" custom2}}
+         <div class="timestamp">{{time}}</div>
+         <div class="title"><h3><span><a class="no-line"><i class="icon-phone"></i></a></span> Incoming Call</h3></div>
+            <div class="date">{{epochToTaskDate time}}</div>
+            <div class="body" style="padding:5px">
+                <div class="text" style="color: #333333" >{{user.name}}</div>
+                <div class="text" style="color: #333333" >{{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}</div>
+            </div>
+         {{/if_equals}}
+        {{#if_equals "outgoing" custom2}}
+
+        <div class="timestamp">{{time}}</div>
+        <div class="title"><h3><span><a class="no-line"><i class="icon-phone"></i></a></span> Outgoing Call</h3></div>
+            <div class="date">{{epochToTaskDate time}}</div>
+            <div class="body" style="padding:5px">
+                <div class="text" style="color: #333333" >{{user.name}}</div>
+                <div class="text" style="color: #333333" >{{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}</div>
+            </div>	
+        {{/if_equals}}
+        {{/if_equals}}
+
+         {{#if_equals "CONTACT_OWNER_CHANGE" activity_type}}
+         <div class="timestamp">{{time}}</div>
+         <div class="title"><h3><span><a class="no-line"><i class="icon-user"></i></a></span> Owner Changed</h3></div>
+            <div class="date">{{epochToTaskDate time}}</div>
+            <div class="body" style="padding:5px">
+                <div class="text" style="color: #333333" >Owner changed to {{custom1}}</div>
+            </div>
+         {{/if_equals}}
+        {{/if_entity}}
+
+
+		{{#if_entity "case"}}
+			
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Case</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <div class="text" style="color: #333333">{{title}}</div>
+                <div class="text" style="color: #999999">{{description}}</div>
+            </div>
+        {{/if_entity}}
+
+        {{#if_entity "log"}}
+            <div class="timestamp">{{time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class={{#if_log_type_equals this "log_type" "EMAIL_SENT"}}"icon-envelope"{{else}} {{#if_log_type_equals this "log_type" "EMAIL_OPENED"}}"icon-folder-open-alt"{{else}}"icon-inbox"{{/if_log_type_equals}}{{/if_log_type_equals}}></i></a></span> {{titleFromEnums log_type}}</h3></div>
+            <div class="date">{{epochToTaskDate time}}</div>
+            <div class="body">
+                <div class="caption" style="margin-top:-8px">Campaign - {{campaign_name}}</div>
+
+            {{#if message}}
+                    <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
+                        <div class="right" data="{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}"><a href="#" id="tl-log-popover"><i class="icon-plus"></i></a></div>
+                    </div>   
+            {{/if}}        
+            </div>
+        {{/if_entity}}
+
+        {{#if_entity "date"}}
+            <div class="timestamp">{{date_secs}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-envelope"></i>
+			{{#if trackerId}}
+        		{{#if_equals "true" is_email_opened}}
+        	    		<i class="icon-folder-open-alt" title="Email Opened"></i>
+        		{{/if_equals}}
+    		{{/if}}
+            </a>
+            </span> {{subject}}</h3></div>
+            <div class="date">{{epochToTaskDate date_secs}}</div>
+            <div class="body">
+                <div class="caption" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>From:</b> {{from}}</div>
+                <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>To:</b> {{to}}
+                </div>
+            
+            {{#if message}}
+                <div class="text"><div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;"><div> <p>{{{message}}}</p></div></div>
+                    <div class="right" data="{{message}}"><a href="#" id="tl-mail-popover"><i class="icon-plus"></i></a></div>
+                </div> 
+            {{/if}}       
+            
+			</div>
+        
+        {{/if_entity}}
+
+     {{#if_entity "guid"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> Web</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <div class="text" style="color: #333333">
+                    <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
+                        <div>
+							<b>Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
+								<span style="float: right;">
+									{{#if user_agent}}
+										{{#stringToJSON this "parsedUserAgent"}}
+										{{#if device_type}}
+											<img src="img/web-stats/devices/{{device_type}}.png" title="{{device_type}}">
+										{{/if}}
+										{{#if os}}
+											<img src="img/web-stats/os/{{normalize_os os}}.png" title="{{os}}">
+										{{/if}}
+										{{#if browser_name}}
+                                        <img src="img/web-stats/browsers/{{browser_name}}.png" title="{{browser_name}}">
+										{{/if}}
+                                        {{/stringToJSON}}
+									{{/if}}
+								</span>
+							</b><br> 
+                        {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
+					    {{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br />{{/each}}
+                        </div>
+                    </div>
+                </div>
+                {{#if ref}}
+                     <div class="text" style="color: #333333"><b>Referred:</b></br> {{ref}}</div>
+                {{/if}}
+
+                {{#if city}}
+                   <div class="text" style="color: #333333"><b>ADDRESS:</b></br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
+                {{/if}}
+
+                <div class="right" style="margin-top:-10px;"><a href="#" id="tl-analytics-popover"><i class="icon-plus"></i></a></div>
+            </div>
+     {{/if_entity}}
+
+{{#if_entity "twilio"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-phone" title="You Called"></i></a></span>{{title}}</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                 <div class="text" style="color: #333333">{{name}}</div>
+                <div class="text" style="color: #333333">{{body}}</div>
+            </div>
+        {{/if_entity}}
+
+{{#if_entity "custom"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span>{{title}}</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                 <div class="text" style="color: #333333">{{name}}</div>
+                <div class="text" style="color: #999999">{{body}}</div>
+            </div>
+        {{/if_entity}}
+	<a href="#" class="open-close"></a>
+  </div>
+</div>
+{{/each}}
+</script>

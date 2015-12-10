@@ -1,0 +1,79 @@
+<!-- Edit cases modal -->
+<div class="modal fade cases-modal" id="casesUpdateModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3><i class="icon-edit"></i> Edit Case</h3>
+	</div>
+	<div class="modal-body">
+		<form id="casesUpdateForm" name="casesUpdateForm" method="post">
+			<fieldset>
+				<input name="id" type="hidden"/>
+				<div class="row">
+					<div class="control-group form-group col-md-5 col-sm-5">
+						<label class="control-label"><b>Title </b><span
+							class="field_req">*</span></label>
+						<div class="controls">
+							<span><input id="title" name="title" type="text"
+								class="required form-control" placeholder="Title of the Case" /></span>
+						</div>
+					</div>
+					
+				</div>
+				<div class="row">
+					<div class="control-group form-group col-md-5 col-sm-5">
+						<label class="control-label"><b>Owner </b><span
+							class="field_req">*</span></label>
+						<div class="controls" id="owners">
+							<select id="owners-list" class="required form-control" name="owner_id"></select>
+						</div>
+					</div>
+					
+					<div class="control-group form-group col-md-5 col-sm-5">
+						<label class="control-label"><b>Status </b><span class="field_req">*</span></label>
+						<div class="controls" id='status'>
+							<span>
+								<select id="status-list" class="required form-control" name="status">
+									<option value='OPEN'>Open</option>
+									<option value='CLOSE'>Closed</option>
+								</select>
+							</span>
+						</div>
+					</div>
+				</div>
+								
+				<div class="control-group form-group">
+					<label class="control-label"><b>Related Contacts </b></label>
+					<div class="controls" id="contactTypeAhead">
+						<div>
+							<div>
+								<ul name="related_contacts_id" class="contacts tagsinput tags p-l-none"></ul>
+							</div>
+							<div>
+								<input type="text" id="contacts-typeahead-input"
+								placeholder="Contact Name" class="typeahead form-control typeahead_contacts"
+								data-provide="typeahead" data-mode="multiple" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="custom-field-case"></div>
+				<div class="control-group form-group">
+					<label class="control-label"><b>Description </b></label>
+					<div class="controls" style="margin-right:10px;">
+						<textarea id="description" name="description" rows="3" style='width:100%;'
+							class="input form-control" placeholder="Add Comment.."></textarea>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<div class="modal-footer" id="cases-add-save">
+		<a href="#" class="btn btn-sm btn-primary" id="cases_validate">Save
+			Changes</a> <span class="save-status"></span>
+	</div>
+</div>
+</div>
+</div>
+<!-- end cases edit modal -->

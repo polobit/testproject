@@ -1,0 +1,65 @@
+<script id="settings-office-prefs-template" type="text/html">
+<div class="span3 well" style="margin-left:5px;">
+    <form id="office-prefs-form">
+        <legend>Office 365</legend>
+        <fieldset>
+            {{#if id}}
+			{{add_tag "Email"}}
+            <input name="id" type="hidden" value="{{id}}" /> 
+            {{/if}}
+            <div class="control-group">
+                <label class="control-label">Server (Host) <span class="field_req">*</span>
+					<span style="vertical-align:text-top;margin-left:-3px">         
+       				 <img border="0" src="/img/help.png" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="In your Office365 web interface, click the Gear icon on the top right corner and select 'Options'.  Select the 'Account' tab from the right pane.  Scroll down the page and go to 'Settings for POP or IMAP access'. Under the IMAP category, copy the server name given and paste it here below." id="element-title" data-trigger="hover" data-original-title="How do I get this?">
+        			</span>
+				</label>
+                <div class="controls">
+                    <input name="server_url" type="text" class="required" placeholder="Server URL" value="{{server_url}}" autocapitalize="off" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">User Name <span class="field_req">*</span></label>
+                <div class="controls">
+                    <input name="user_name" type="text" class="required" placeholder="User Name" value="{{user_name}}" autocapitalize="off" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Password <span class="field_req">*</span></label>
+                <div class="controls">
+                    <input name="password" id="office-password" type="password" class="required" placeholder="Password" autocapitalize="off" />
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="checkbox">
+                    <input name="is_secure" type="checkbox" value="{{is_secure}}" checked/>
+                    Use SSL (Secure communication)
+                    </label>
+                </div>
+            </div>
+            <div class="control-group" style="margin-top:20px">
+	            <div class="controls">
+	                <a href="#" class="office-share-settings-select" oid={{id}}><i class='icon-plus-sign'/></i> Sharing settings</a>
+	                <span class ="office-share-settings-txt" style="vertical-align:text-top;margin-left:-3px">         
+       				 <img border="0" src="/img/help.png" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="You can share this email integration with other users. This allows them to see emails you have exchanged with a Contact. The shared users will see your email account in the Mail tab when they open a Contact." id="element-title" data-trigger="hover" data-original-title="Email Account Sharing">
+        			</span>
+				    <span class="office-share-select" style="display:none;">
+				   	<a href="#" class="office-share-settings-cancel" style="margin-bottom:20px"><i class='icon-minus-sign'/></i> Sharing settings</a>
+				   	<span style="vertical-align:text-top;margin-left:-3px">         
+       				 <img border="0" src="/img/help.png" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="You can share this email integration with other users. This allows them to see emails you have exchanged with a Contact. The shared users will see your email account in the Mail tab when they open a Contact." id="element-title" data-trigger="hover" data-original-title="Email Account Sharing">
+        			</span>
+				   	<label class="control-label" style="margin-top:10px">Select users to share with</label>
+					<select name="shared_with_users_ids" multiple id="office-share-user-select" class = "multi-select" style="margin-bottom: 5px; overflow: auto">
+					</select>
+	             	<span class="office-share-status"></span>
+					</span>
+			    </div>
+			</div>
+            <div class="form-actions"> 
+                <button type="submit" class="save btn btn-primary" style="margin-left:-15pt">Save </button>
+                <a href="#email" class="btn">Cancel</a>
+            </div>
+        </fieldset>
+    </form>
+</div>
+</script>

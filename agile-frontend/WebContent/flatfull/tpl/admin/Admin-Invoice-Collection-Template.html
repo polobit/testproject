@@ -1,0 +1,35 @@
+   <script id="admin-invoice-collection-template" type="html/text">
+        <div class="page-header">
+
+        </div>
+    <div >
+        <table class="table table-striped" id="sort-table">
+            <thead>
+                <tr>
+                    <th>Plan Type</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                    <th>Amount(USD)</th>
+                </tr>
+            </thead>
+            <tbody id="admin-invoice-model-list" class="model-list-cursor">
+            </tbody>
+        </table>
+    </div>
+
+</script>
+<script id="admin-invoice-model-template" type="text/html">	
+
+
+{{#each lines.data}}	
+{{#if this.plan}}
+	<td class="data" data="{{this.id}}">
+    	{{this.plan.name}}
+	</td>
+	<td>{{epochToHumanDate "mm/dd/yyyy" period.start}}</td>
+	<td>{{epochToHumanDate "mm/dd/yyyy" period.end}}</td>
+	<td>{{numeric_operation plan.amount 100 "/"}}</td>
+
+{{/if}}
+{{/each}}	
+</script>

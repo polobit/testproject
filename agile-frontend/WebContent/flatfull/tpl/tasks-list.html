@@ -1,0 +1,137 @@
+<script id="tasks-list-collection-template" type="text/html">
+{{#unless this.length}}
+<div class="slate p-xs">
+    <div class="slate-content">
+		<h3> <icon class="icon-edit"></icon> No tasks found</h3>
+	</div>
+</div>
+{{else}}
+<div class="data-block">
+    <div class="table-responsive">
+		<div class="panel panel-default">
+		<div class="panel-heading">Tasks List</div>
+        <div class="table-responsive">
+        <table class="table table-striped showCheckboxes no-sorting panel m-b-none agile-table table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
+            <thead>
+                <tr>
+					<th style="width:10%;" class="header">Owner</th>
+					<th style="width:30%;" class="header">Task Name</th>
+                    <th style="width:10%;" class="header">Category</th>
+                   	<th style="width:10%;" class="header">Priority</th>
+					<th style="width:10%;" class="header">Due Date</th>
+                    <th style="width:30%;" class="header">Related To</th>
+                </tr>
+            </thead>
+            <tbody id="tasks-list-model-list" class="c-p" route="task/">
+            </tbody>
+        </table>
+        </div>
+		</div>
+		<a href="#" class="btn btn-sm btn-default m-b m-l-md"  style="display:none;" id="bulk-complete">Complete</a>
+    </div>
+</div>
+{{/unless}}
+</script>
+
+<script id="tasks-list-model-template" type="text/html">
+<td class="data" data="{{id}}">  
+  <div class="h-auto">
+	{{#if ownerPic}}
+		<span class="thumb avatar">
+        	<img class="r r-2x" src="{{ownerPic}}"  title="{{taskOwner.name}}"/>
+		</span>
+	{{else}}
+		<span class="thumb">
+			<img class="r r-2x" src="{{defaultGravatarurl 50}}" w title="{{taskOwner.name}}"/>
+		</span>
+	{{/if}}
+  </div>
+</td>
+{{#if is_complete}}
+	<td><div class="text-l-t table-resp">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></td>
+    <td><div class="text-l-t"><!--<i class="{{icons type}}"></i>&nbsp;--><span class="label bg-light dk text-tiny">{{task_property type}}</span></div></td>
+    <td><div class="text-l-t"><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></div></td>
+    <td><div class="text-l-t text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="task-due-time" value="{{due}}" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time></div></td>
+{{else}}
+	<td><div class="table-resp">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></td>
+    <td><div class="table-resp"><!--<i class="{{icons type}}"></i>&nbsp;-->
+
+          <span class="label bg-light dk text-tiny m-r-xs">{{task_property type}}</span></div></td>
+    <td>	{{#if_equals priority_type "NORMAL"}}{{else}}
+					<span class="m-l-xs" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+				{{/if_equals}}</td>
+	<td><div class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="task-due-time" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time></div></td>
+{{/if}}
+	<td>
+		<div class="image-ellipsis-3">
+        	{{#each contacts}}
+        		{{#if_contact_type "PERSON"}}
+        				<a href="#contact/{{id}}" class="activate-link thumb">
+							<img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+						</a>
+        		{{/if_contact_type}}
+				{{#if_contact_type "COMPANY"}}
+        				<a href="#company/{{id}}" class="activate-link thumb">
+							<img class="r r-2x" {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/>
+						</a>
+        		{{/if_contact_type}}
+        	{{/each}}
+		</div>
+       {{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
+    </td>
+</script>
+<script id="tasks-list-header-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="m-l-lg">
+        
+            <h3 class="task-heading font-thin h3"><span>My Pending Tasks</span>&nbsp<small class="tasks-count"></small> <span class="text-sm p-xxs" style="color: #525252; background-color: rgb(255,255,204);  border: 1px solid rgb(211,211,211);border-radius: 3px;">Try our <a href="#tasks-new">new look</a></span></h3>
+            <div class="btn-group pull-right owner-task-button c-p m-r m-t-n-lg">
+                <div class="btn btn-sm btn-default selected_name">My Pending Tasks</div>
+                <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                	<span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" id="owner-tasks"></ul>
+            </div>
+            <div class="btn-group pull-right type-task-button c-p m-r m-t-n-lg">
+                <div class="btn btn-sm btn-default selected_name">All Categories</div>
+                <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" id="type-tasks">
+					 <li><a href="">All Categories</a></li>
+                     <li><a href="CALL">Call</a></li>
+                     <li><a href="EMAIL">Email</a></li>
+                     <li><a href="FOLLOW_UP">Follow-up</a></li>
+                     <li><a href="MEETING">Meeting</a></li>
+                     <li><a href="MILESTONE">Milestone</a></li>
+                     <li><a href="SEND">Send</a></li>
+                     <li><a href="TWEET">Tweet</a></li>
+					 <li><a href="OTHER">Other</a></li>
+                </ul>
+            </div>
+        
+    </div>
+</div>
+</div>
+<div class="row">
+	<div id="task-list-based-condition" class="col-md-9" ></div>
+	<div class="col-md-3">
+        <div class="data-block">
+            <div class="well">
+                <header>
+                    <h3><span><i class="icon-tasks"></i></span> Tasks</h3>
+                </header>
+                <div id="pie-tasks-chart" class="w-full" style="height:400px"></div>
+                <h4 class="m-t-none">
+                    What are Tasks?
+                </h4>
+                <br />
+                <p>
+                    Tasks are like to-dos. Result oriented. You can assign a category such as call, email etc and add them to your calendar.
+                </p>
+            </div>
+        </div>
+	</div>
+</div>
+</script>

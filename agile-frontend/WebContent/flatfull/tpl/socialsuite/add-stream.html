@@ -1,0 +1,132 @@
+<script id="socialsuite-social-network-template" type="text/html">
+<div class="at-center">
+   <label class="font15"><b>Choose your Social Network</b></label> 
+   <div class="row">
+     <div class="col-md-7 col-sm-7 col-xs-7">
+       <div id="twitter_option" class="pull-right network-type text-l-none-hover" value="TWITTER">
+ 	      <a href="#social">
+             <i id="twitter_icon" class="icon-twitter icon-5x network-type-icon text-l-none-hover" title="Twitter" style="text-decoration:none"></i>
+<div class="text-l-none-hover"><b>Twitter</b></div>     
+          </a>
+       </div>
+     </div><!-- /.span5 -->     
+  </div>	<!-- /.row -->
+</div>
+</script>
+
+<script id="socialsuite-hover-helptext-template" type="text/html">
+    {{#if_equals item "Search"}}<i class="icon-search"></i> Relevant Tweets matching a specified Search Keyword.{{/if_equals}}
+    {{#if_equals item "Home"}}<i class="icon-home"></i> Tweets and retweets of user and followers.{{/if_equals}}
+    {{#if_equals item "Mentions"}}<img src="{{getS3ImagePath '../img/socialsuite/mentions.png'}}" style="width: 15px;height: 15px;"> Mentions (all tweets containing a users's @screen_name). {{/if_equals}}
+    {{#if_equals item "Retweets"}}<i class="icon-retweet"></i> User's tweets retweeted by others. {{/if_equals}}
+    {{#if_equals item "DM_Inbox"}}<i class="icon-download-alt"></i> Direct messages sent to the user. {{/if_equals}}
+    {{#if_equals item "DM_Outbox"}}<i class="icon-upload-alt"></i> Direct messages sent by the user. {{/if_equals}}
+    {{#if_equals item "Favorites"}}<i class="icon-star"></i> User's favorite tweets.{{/if_equals}}
+    {{#if_equals item "Sent"}}<i class="icon-share-alt"></i> Tweets sent by the user.{{/if_equals}}
+    {{#if_equals item "Scheduled"}} <i class="icon-time"></i> Tweets scheduled for sending later.{{/if_equals}}
+    {{#if_equals item "All_Updates"}}<i class="icon-home"></i> Updates and shares from user's connections and groups. {{/if_equals}}
+    {{#if_equals item "My_Updates"}} <i class="icon-share-alt"></i> Updates authored by the user.{{/if_equals}}
+
+</script>
+
+<script id="twitter-stream-type-template" type="text/html">
+<div class="at-center">  
+  <div id="account_description" class="row">
+    <div class="col-md-4 col-sm-4 col-xs-4"> 
+       <a style="text-decoration:none;"><i class="icon-twitter-sign icon-5x pull-right"  title="Selected Social Network is Twitter"></i></a>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-4">
+      <label id="account_description_label"></label>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-4">
+		<div class="thumb-md pull-left">
+      		<img id="twitter_profile_img" name="twitter_profile_img" class="img-inital r r-2x" src="">
+		</div>
+    </div>  	 						               						          						        
+  </div>  
+  <hr>
+  <div class="social-stream-types">	
+   <label class="font15 m-b-sm"><b>Select the Stream</b></label> 
+   <div class="row m-b-sm">
+    <div class="col-md-3 col-sm-3 col-xs-12">
+     <div class="stream-type" id="home" value="Home" title="Home">
+ 	  <a> <i class="icon-home icon-3x text-l-none"></i><br>Home </a>
+     </div>
+    </div><!-- /.col-md-3 -->    
+    <div class="col-md-3 col-sm-3 col-xs-12">
+     <div class="stream-type" id="retweets" value="Retweets" title="Retweets">
+ 	  <a> <i class="icon-retweet icon-3x text-l-none"></i><br>Retweets </a>
+     </div>
+    </div><!-- /.col-md-3 -->	
+	<div class="col-md-3 col-sm-3 col-xs-12">
+     <div class="stream-type" id="sent" value="Sent" title="Sent">
+ 	  <a> <i class="icon-share-alt icon-3x text-l-none"></i><br>Sent </a>
+     </div> 
+    </div><!-- /.col-md-3 -->
+    <div class="col-md-3 col-sm-3 col-xs-12">
+     <div class="stream-type" id="mentions" value="Mentions" title="Mentions">				
+      <a> <span style="font-size:26px">@</span><br>Mentions </a>
+	 </div>				                
+    </div><!-- /.col-md-3 -->		
+   </div><!-- /row-->
+   <div class="row">    
+    <div class="col-md-3 col-sm-3 col-xs-12">
+     <div class="stream-type" id="dm_inbox" value="DM_Inbox" title="DM Inbox">				
+      <a> <i class="icon-download-alt icon-3x text-l-none"></i><br>DM Inbox </a>
+     </div>					                
+    </div><!-- /.col-md-3 -->
+    <div class="col-md-3 col-sm-3 col-xs-12">
+     <div class="stream-type" id="dm_outbox" value="DM_Outbox" title="DM Outbox"> 
+ 	  <a> <i class="icon-upload-alt icon-3x text-l-none"></i><br>DM Outbox </a>
+     </div>
+    </div><!-- /.col-md-3 -->      
+    <div class="col-md-3 col-sm-3 col-xs-12">	
+     <div class="stream-type" id="favorites" value="Favorites" title="Favorites">			
+      <a> <i class="icon-star icon-3x text-l-none"></i><br>Favorites </a>
+     </div>					                
+    </div><!-- /.col-md-3 -->    
+    <div class="col-md-3 col-sm-3 col-xs-12">
+     <div class="stream-type" id="search" value="Search" title="Search">		
+      <a> <i class="icon-search icon-3x text-l-none"></i><br>Search </a>      
+     </div>					                
+    </div><!-- /.col-md-3 -->    
+   </div>	<!-- /.row -->     
+  </div>
+</div>
+</script>
+
+<!-- addStreamModal -->
+<div id="addStreamModal" class="modal fade message-modal" tabindex="-1" role="dialog" aria-labelledby="addStreamModalLabel" aria-hidden="false" style="display: none; padding-left: 17px;">
+   <div class="modal-backdrop fade" style="height: auto;"></div>
+   <div class="modal-dialog">
+    <div class="modal-content">
+  <div class="modal-header">
+	<button class="close" data-dismiss="modal">x</button>
+	<h3 id="addStreamModalLabel"><i class="icon-plus-sign"></i> Add Stream</h3>			
+  </div>
+  <div class="modal-body">
+	 <form id="streamDetail" name="streamDetail" class="form-horizontal">
+       <fieldset>   
+        	<input id="domain_user_id" name="domain_user_id" type="hidden" value=""> 		
+            <input id="client_channel" name="client_channel" type="hidden" value="">
+        	<input id="twitter_token" name="token" type="hidden" value="">
+            <input id="twitter_token_secret" name="secret" type="hidden" value="">    
+            <input id="twitter_account" name="screen_name" type="hidden" value="">
+            <input id="network_type" name="network_type" type="hidden" value="">
+            <input id="stream_type" name="stream_type" type="hidden" value="">
+            <img id="twitter_profile_img_url" name="twitter_profile_img_url" onload="onloadProfileImg()" src="">
+                	
+            <div id="streamDetails" class="stream-details">                   		    							
+								
+        	</div>  
+        	<div id="search_stream_keyword"></div>
+        	<label id="stream_description_label" class="txt-mute">  </label>         					   			  
+       </fieldset>
+    </form>		   	
+  </div><!-- modal body -->
+  <div class="modal-footer">	 	         
+     <a href="#social" id="add_twitter_stream" type="button" class="save-twitter-stream btn btn-sm btn-primary"> Save </a>                			    
+  </div>
+</div>
+	</div>
+	</div>

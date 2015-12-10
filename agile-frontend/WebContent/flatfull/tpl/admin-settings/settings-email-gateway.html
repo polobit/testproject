@@ -1,0 +1,85 @@
+<script id="settings-email-gateway-template" type="text/html">
+<div class="row">
+<div class="col-md-4 col-sm-6 col-xs-12">
+	<div class="widget-add">
+		<form style="border-bottom:none;margin-top:-10px;margin-bottom: 0px;" id="email-gateway-integration-form" autocomplete="off">
+	    	<fieldset>
+				
+				<!--To disable AutoComplete of browsers-->
+				<input type="password" style="display: none">
+
+				<div class="panel panel-default">
+				<div class="panel-heading">
+					<center>
+						<img class="img-responsive" alt="email-integration" id="integrations-image" style="height: 47px;" />
+					</center>
+				</div>
+				<div class="panel-body">
+				<input type="hidden" name="email_api" value="{{email_api}}">
+				<div class="control-group form-group">
+						<div class="controls">
+							{{#if_equals email_api "SEND_GRID"}}
+								<input type="text" autocomplete="off" class="input-medium required form-control" placeholder="Username" value="{{api_user}}" name="api_user">
+							{{/if_equals}}
+							{{#if_equals email_api "SES"}}
+								<input type="text" autocomplete="off" class="input-medium required form-control" placeholder="Access Key" value="{{api_user}}" name="api_user">
+							{{/if_equals}}
+						</div>
+				</div>
+				<div class="control-group form-group">
+						<div class="controls">
+							{{#if_equals email_api "SEND_GRID"}}
+								<input type="password" autocomplete="off" class="input-medium form-control required" placeholder="Password" value="{{api_key}}"  name="api_key"/>
+							{{/if_equals}}
+							{{#if_equals email_api "SES"}}
+								<input type="password" autocomplete="off" class="input-medium form-control required" placeholder="Secret Key" value="{{api_key}}"  name="api_key"/>
+							{{/if_equals}}
+                        	{{#if_equals email_api "MANDRILL"}}
+								<input type="text" autocomplete="off" class="input-medium required form-control"  placeholder="API Key" value="{{api_key}}" name="api_key"/>
+							{{/if_equals}}
+						</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">
+						{{#if_equals email_api "SES"}}
+							<select name="regions" class="form-control required">
+								<option value="us-east-1">US East (N. Virginia)</option>
+								<option value="us-west-2">US West (Oregon)</option>
+								<option value="eu-west-1">EU (Ireland)</option>
+							</select>
+						{{/if_equals}}
+					</div>
+				</div>	
+				{{#if_equals email_api "SEND_GRID"}}
+					<p>Note: Emails with attachments are currently not supported by the SendGrid integration. They are sent via Agile&#39;s default email gateway.</p>
+				{{/if_equals}}	
+				{{#if_equals email_api "SES"}}
+					<!-- SES Content -->
+					<div class="m-t-n-sm">
+            			<div class="ses-success-msg" style="display:none;">
+							<p class="bg-success wrapper-xs text-center">Your settings are successfully saved.</p>
+            			</div>
+        			</div>
+					<br/>
+        			<div class="m-t-n-sm">
+            			<div class="alert danger info-block alert-warning text-black">
+                			<div>
+								<p><b>Note:</b> <br/></p>
+								<p>1. Amazon SES services require verification of email addresses in the &#39;From&#39; field of sent emails. Please ensure that you <a class="text-u-l" href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html" target="_blank">verify</a> the email addresses of all your Agile CRM users and the &#39;From&#39; addresses of all your campaign emails.</p>
+								<p>2. If you are sending bulk emails, ensure that your SES account has the required <a class="text-u-l" href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html" target="_blank">sending</a> capacity. Agile does NOT queue your emails.</p>
+                			</div>
+            			</div>
+        			</div>
+        			<!-- End of SES Content -->
+				{{/if_equals}}	
+				<div class="form-actions text-center">
+					<a type="reset" class="btn btn-default btn-sm" href="#integrations">Cancel</a>
+               		<a type="submit" href="#" class="save btn btn-sm btn-primary">Save</a>
+            	</div>
+            	</div>
+			 </fieldset>
+	    </form>
+	</div>
+</div>
+</div>
+</script>

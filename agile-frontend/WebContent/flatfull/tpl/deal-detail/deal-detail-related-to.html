@@ -1,0 +1,71 @@
+<script id="deal-related-model-template" type="text/html">
+<td></td>
+<td class="data no-wrap" data="{{id}}" {{#if_equals type "PERSON"}}route="contact/"{{else}}route="company/"{{/if_equals}} >
+    <div class="thumb-sm agile-img m-r-sm">
+		{{#if_equals type "PERSON"}}        		
+			<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties "40"}}"  />
+		{{else}}
+			<img class="img-inital r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/>
+		{{/if_equals}}    	
+	</div>
+    <div class="agile-thumb agile-thumb-view">
+        <a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
+        {{getPropertyValue properties "last_name"}} </a>
+        <div><small class="text-muted">{{getPropertyValue properties "name"}}</small></div>
+    </div>
+</td>
+	
+<td><div class="table-resp">{{#if_equals type "PERSON"}}Contact {{else}} Company{{/if_equals}}</div></td>
+<td><div class="table-resp">{{lead_score}}</div></td>
+
+	<td><div>{{getPropertyValue properties "phone"}}</div></td>
+	
+</script>
+
+<script id="deal-related-collection-template" type="text/html">
+
+{{#if this.length}}
+	<div  align="right">
+		<a href="#" class="deal-add-contact btn btn-sm btn-primary  pos-rlt m-b-md m-r-md">
+			<span><i class="icon-plus-sign"></i></span> Add Contact
+		</a>
+	</div>
+	
+		
+			<table id="contacts" class="onlySorting  table table-striped  agile-table  b-t b-light m-b-none">
+				
+				<thead>
+					<tr><th></th>
+						<th style="width:40%;">Name</th>
+						<th style="width:20%;">Type</th>
+						<th style="width:20%;">Score</th>
+						<th style="width:20%;">Phone</th>
+					</tr>
+				</thead>
+				<tbody id="deal-related-model-list" class="deal-related-model-list agile-edit-row "
+					route="contact/" >
+				</tbody>
+			</table>
+
+		{{else}}
+			<div class="wrapper p-t-none">
+            	<div class="slate-content">
+                	<div class="box-left pull-left m-r-md">
+                    	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
+                	</div>
+                	<div class="box-right pull-left">
+                    	<h4 class="m-t-none">Deal is not associated with any person/contact. </h4>
+                    	<div class="text">
+							All Contacts which are related to this deal are shown here.
+							<br/>
+							<a href="#" class="deal-add-contact btn btn-default btn-sm m-t-xs left" style="margin-top:10px; margin-bottom:10px;">
+								<i class="icon-plus-sign"></i> Add Contact
+							</a>
+                    	</div>
+                	</div>
+					<div class="clearfix">
+					</div>
+            	</div>
+        	</div>
+		{{/if}}
+</script>

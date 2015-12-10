@@ -1,0 +1,250 @@
+<script id = "contacts-custom-view-image-template" type="text/html">
+	<td class="data" data="{{id}}">
+    	<div class="overflow-hidden thumb-sm" style="width:15em;">
+			{{#if_equals type "COMPANY"}}
+					<img class="img-inital r r-2x pull-left" {{getCompanyImage "40"}}/></img>
+				{{else}}
+					<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties }}" />	
+			{{/if_equals}}
+    	</div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-basic_info-template" type="text/html">
+	<td class="data" data="{{id}}">
+    	<div class="table-resp" style="width:15em;">
+    	<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<img class="r r-2x" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
+        	{{/if_contact_type}}
+    	</div>
+    	<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
+        	{{#if_contact_type "PERSON"}}
+        		<a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </a></br>
+        		<div><small class="text-muted m-t-xs">{{getPropertyValue properties "email"}}</small></div>
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a></br>
+        		<div><small class="text-muted m-t-xs">{{getPropertyValue properties "url"}}</small></div>
+        	{{/if_contact_type}}
+	</div>
+	</div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-name-template" type="text/html">
+	<td class="data" data="{{id}}">
+    	<div class="text-ellipsis" style="width:15em;">
+    		<a class="text-cap">{{getPropertyValue properties "name"}}</>
+    	</div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-first_name-template" type="text/html">
+	<td class="data" data="{{id}}">
+    	<div class="text-ellipsis" style="width:15em;">
+    		<a class="text-cap">{{getPropertyValue properties "first_name"}}</>
+    	</div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-last_name-template" type="text/html">
+	<td class="data" data="{{id}}">
+    	<div class="text-ellipsis" style="width:15em;">
+        	<a class="text-cap">{{getPropertyValue properties "last_name"}}</a>
+        </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-phone-template" type="text/html">
+	<td class="data" data="{{id}}">
+        <div class="text-ellipsis" style="width:15em;">
+    		<a class="text-cap">{{getPropertyValue properties "phone"}}</a>
+        </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-address-template" type="text/html">
+	<td class="data" data="{{id}}">
+        <div class="text-ellipsis" style="width:15em;">
+    		<a class="text-cap">{{#address_Template properties}}{{/address_Template}}</a>
+        </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-website-template" type="text/html">
+	<td class="data" data="{{id}}">
+        <div class="text-ellipsis" style="width:15em;">
+    		<a class="text-cap">{{getPropertyValue properties "website"}}</a>
+        </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-email-template" type="text/html">
+	<td class="data" data="{{id}}">
+        <div class="text-ellipsis" style="width:15em;">
+    		<a class="text-cap">{{getPropertyValue properties "email"}}</a>
+        </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-company-template" type="text/html">
+	<td class="data" data="{{id}}">
+      <div class="text-ellipsis" style="width:15em;">
+      	<a class="text-cap">{{getPropertyValue properties "company"}}</a>
+      </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-tags-template" type="text/html">
+	<td class="data" data="{{id}}">
+	 <div class="overflow-hidden line-clamp line-clamp-2" style="width:15em;"> 	
+		{{#each tags}}
+	    	<span class="label bg-light dk text-tiny">{{this}}</span>	
+		{{/each}}
+	</div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-created_time-template" type="text/html">
+	<td class='data' data='{{id}}'>
+    <div class="text-ellipsis" style="width:15em;">
+		<a class="text-cap">{{epochToHumanDateInFormat  created_time}}</a>
+    </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-updated_time-template" type="text/html">
+	<td class='data' data='{{id}}'>
+    <div class="text-ellipsis" style="width:15em;">
+		{{#if updated_time}}
+			{{epochToHumanDateInFormat  updated_time}}
+		{{/if}}
+    </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-title-template" type="text/html">
+	<td class='data' data='{{id}}'>
+    <div class="text-ellipsis" style="width:15em;">
+		<a class="text-cap">{{getPropertyValue properties "title"}}</a>
+    </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-url-template" type="text/html">
+	<td class='data' data='{{id}}'>
+    <div class="text-ellipsis" style="width:15em;">
+		<a href="{{getPropertyValue properties 'url'}}" class="text-cap">{{getPropertyValue properties "url"}}</a>
+    </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-lead_owner-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+	   	<a class="text-cap">{{owner.name}}</a>
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-owner-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+	   	<a class="text-cap">{{owner.name}}</a>
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-star_value-template" type="text/html">
+	<td class='data' data='{{id}}'>
+		 <ul class="m-n p-n list-none" style="width:15em;">
+			{{setupRating star_value}}
+		</ul>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-lead_score-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div style="width:15em;">
+		  {{lead_score}}
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-last_contacted-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+       {{#if_equals last_contacted 0}}
+       
+	   	{{else}}
+	   	 <span>{{epochToHumanDateInFormat  last_contacted}}</span>	
+	   	 		{{#if_equals last_contacted last_emailed}}<i class="fa fa-envelope-o text-muted m-l-xs"></i>
+	   	 		{{else}}
+	   	 			{{#if_equals last_contacted last_campaign_emaild}}<i class="fa fa-sitemap text-muted m-l-xs"></i>
+	   	 			{{else}}
+	   	 				{{#if_equals last_contacted last_called}}<i class="fa fa-phone text-muted m-l-xs"></i>{{/if_equals}}
+	   	 			{{/if_equals}}
+	   	 		{{/if_equals}}
+	   	 {{/if_equals}} 
+       </div>
+	</td>
+</script>
+
+
+<script id ="contacts-custom-view-custom-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+		  <span>{{value}}</span>
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-custom-date-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+	   	  <span>{{stringToHumanDateInFormat value}}</span>
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-last_contacted-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+       {{#if_equals last_contacted 0}}
+       
+	   	{{else}}
+	   	 <span>{{epochToHumanDateInFormat  last_contacted}}</span>	
+	   	 		{{#if_equals last_contacted last_emailed}}<i class="fa fa-envelope-o text-muted m-l-xs"></i>
+	   	 		{{else}}
+	   	 			{{#if_equals last_contacted last_campaign_emaild}}<i class="fa fa-sitemap text-muted m-l-xs"></i>
+	   	 			{{else}}
+	   	 				{{#if_equals last_contacted last_called}}<i class="fa fa-phone text-muted m-l-xs"></i>{{/if_equals}}
+	   	 			{{/if_equals}}
+	   	 		{{/if_equals}}
+	   	 {{/if_equals}} 
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-last_emailed-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_emailed}}</span>
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-last_called-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_called}}</span>
+       </div>
+	</td>
+</script>

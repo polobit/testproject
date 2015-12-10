@@ -1,0 +1,165 @@
+<script id="admin-settings-milestones-collection-template" type="text/html">
+<div class="row">
+	<div class='span9'>
+	
+		<div>
+			<h3>Deal Tracks
+			{{#isTracksEligible}}
+				<a href="#pipelineModal" role="button" data-toggle="modal" type="submit" class="add-pipeline btn" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</a>
+			{{else}}
+				<span class="btn disabled" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</span>
+				<div class="clearfix"></div>
+			{{/isTracksEligible}}
+			</h3>
+		{{#isTracksEligible}}
+		{{else}}
+		<div class="pull-right" style="margin-top:2px;"><i>Please <a href="#subscribe">upgrade</a> to add more Tracks.</i></div>
+		<div class="clearfix"></div>
+		{{/isTracksEligible}}
+		</div>
+		<div class="accordion" id="deal-tracks-accordion">
+    	<div id="admin-settings-milestones-model-list"></div>
+		</div>
+	<!--	<div class="form-actions">
+    		<a href="#" class="save-pipelines btn btn-primary">Save</a>
+    	</div>	-->
+		<!-- New (Pipeline) Modal views -->
+	<div class="modal hide fade" id="pipelineModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3><i class="icon-plus-sign"></i>&nbsp;Add Track</h3>
+    </div>
+    <div class="modal-body" style="max-height:420px !important;">
+        <form id="pipelineForm" name="pipelineForm" method="post">
+            <fieldset>
+                <p>
+				<input type="hidden" name="id" id="pipeline_id"/>
+				<input type="checkbox" name="isDefault" id="is_default" style="display:none;"/>
+                <div class="control-group">
+                    <label class="control-label"><b>Track Name</b> <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input name="name" type="text" field="pipeline" class="required" id="pipline_name" placeholder="Track" />
+
+                    </div>
+                </div>
+                <div class="control-group hide">
+					<label class="control-label"><b>Milestones</b> <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input class="input-large" name="milestones" class="required" type="text" id="milestones" value="New,Prospect,Proposal,Won,Lost" />
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+		<span class="save-status"></span>
+        <a href="#" class="save btn btn-primary" id="pipeline_validate">Save
+        </a>
+    </div>
+
+</div>
+<!-- End of Modal views -->
+    </div>
+<!-- Help Text -->
+<div class="span3">
+	<div class="data-block">
+		<div class="well">
+			<h3>What are Tracks and Milestones?</h3>
+			<br/>
+			<p>Tracks are sales processes. Use tracks to correspond to particular products or services offered by your company, or set up tracks to be used in deals with customers, partners, resellers, etc. When you create a new deal, you choose which track to associate it with.</p>
+			<br/>
+			<p>Milestones define the status of deals in a particular track. You can create any number of custom milestones in a track. Common milestones include 'New', 'In Progress',  'Won' or  'Lost'. When you associate a deal with a track, that deal will typically need to go through all of the track's milestones to be completed or finalized.</p>
+		</div>
+	</div>
+</div>
+<!-- End Help Text -->
+<div class="modal hide fade" id="pipeline-delete-modal">
+	<div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3>Delete Track</h3>
+    </div>
+	<div class="modal-body">
+        <div id="deals-export-csv-detail">
+             <p>Are you sure you want to delete Track - <span id="track-name"></span> ? </p>
+			<p>All existing deals in this track can be accessed from the Deals list view.</p>
+        </div>
+    </div>
+    <div class="modal-footer">
+    <span class="pipeline-delete-message" style="margin-right:5px;color:red;"></span>
+    <a href="#" id="pipeline-delete-confirm" class="btn btn-primary">Yes</a>
+    <a  href="#" class="btn close" data-dismiss="modal" style="opacity:0.5;">No</a>
+    </div>
+</div>
+
+<!-- milestone error message -->
+<div class="modal hide fade" id="milestone-error-modal">
+	<div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3>Add Milestone</h3>
+    </div>
+	<div class="modal-body">
+        <p><i class="icon-exclamation-sign" style="font-size: 25px;vertical-align: middle;padding-right: 5px;"></i>Special characters are not allowed except space and underscore</p>
+    </div>
+    <div class="modal-footer">
+    <a  href="#" class="btn close" data-dismiss="modal" style="opacity:0.5;">Ok</a>
+    </div>
+</div>
+</div>
+</script>
+
+<script id="admin-settings-milestones-model-template" type="text/html">
+    	
+		<form id="milestonesForm_{{id}}" class="form-horizontal m-t-sm m-b-none pipeline" method=post>
+		<div id="{{id}}-deal-track" class="accordion-group overflow-hidden m-b-xs">
+		<div class="accordion-heading" style="background:#f5f5f5;">
+    		{{#if id}}
+    			<input type="text" name="id" class="hide" value="{{id}}">
+    		{{/if}} 
+			{{#if id}}
+    			<input type="text" name="name" class="hide" value="{{name}}">
+    		{{/if}}
+
+			<input type="hidden" name="isDefault" value={{isDefault}}>
+			<h4><a class="accordion-toggle collapsed pull-left text-l-none-hover" style="width:90%" data-toggle="collapse" data-parent="#deal-tracks-accordion" href="#dealtracks-{{id}}-accordion">{{name}}</a>
+			<div id="icons" style="display:none;">
+			{{#isTracksEligible}}
+			{{#hasSingleTrack}}
+				<a href="#pipeline-delete-modal" role="button" data-toggle="modal" class="pipeline-delete m-t-xs m-l-sm c-p text-l-none pull-right text-lg" id="{{id}}" data="{{name}}"><i class="task-action icon icon-trash" data="{{id}}" title="Delete Track"></i></a>
+			{{/hasSingleTrack}}
+			<a href="#pipelineModal" role="button" data-toggle="modal" class="pipeline-edit m-t-xs c-p text-l-none pull-right text-lg {{#hasSingleTrack}} {{else}}p-r-xs{{/hasSingleTrack}}" id="{{id}}" data="{{name}}" ><i class="task-action icon icon-edit" data="{{id}}" title="Edit Track"></i></a>
+			{{else}}
+			{{#if_equals isDefault 'false'}}
+				{{#hasSingleTrack}}
+					<a href="#pipeline-delete-modal" role="button" data-toggle="modal" class="pipeline-delete m-t-xs m-l-sm c-p text-l-none pull-right text-lg" id="{{id}}" data="{{name}}"><i class="task-action icon icon-trash" data="{{id}}" title="Delete Track"></i></a>
+				{{/hasSingleTrack}}
+				<a href="#pipelineModal" role="button" data-toggle="modal" class="pipeline-edit m-t-xs c-p text-l-none pull-right text-lg {{#if isDefault}} p-r-xs{{/if}}" id="{{id}}" data="{{name}}" ><i class="task-action icon icon-edit" data="{{id}}" title="Edit Track"></i></a>
+			{{/if_equals}}
+			{{/isTracksEligible}}
+			</div></h4>
+			<div class="clearfix"></div>
+			</div>
+			<div class="collapse" id="dealtracks-{{id}}-accordion">
+			<fieldset>
+    		<div class="control-group m-b-none">  	 
+                    <div id="milestone-values-{{id}}">
+					<table class="table table-bordered agile-ellipsis-dynamic custom-fields-table m-b-xxs" >
+					<colgroup><col width="50%"><col width="3%"></colgroup>
+					<tbody class="deal-tracks-tbody ui-sortable">
+					{{#milestone_ul milestones}}{{/milestone_ul}}
+					</tbody>
+					</table>
+					</div>
+					<div class="p-l-md p-t p-b"><a href="#" class="show_milestone_field anchor-link"><i class="icon-plus-sign"></i> Add Milestone</a></div>
+					<div class="show_field p-l-md p-t p-b" style="display:none;padding-left: 18px;">
+						<input id="add_new_milestone" class="add_new_milestone"  type="text" placeholder="New Milestone">
+						<a class="btn add_milestone" id="add_milestone" href="#">Add</a>
+					</div>
+    				<div class="hidden"><input name="milestones" type="text" class="required" value="{{milestones}}"/></div>
+    		</div> 
+    		</fieldset>
+			</div>
+		</div>
+    	</form>
+		
+</script>
+

@@ -1,0 +1,116 @@
+<script id="contact-filter-collection-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-md-12">
+        
+            <h3 class="pull-left font-thin h3">Filters</h3>
+            <a href="#contact-filter-add" class="btn btn-sm btn-default right" id="addFilter"><span><i class='icon-plus-sign'/></span>  Add Filter</a>
+            <div class="clearfix"></div>
+           
+        </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-md-9"> 
+		<div id="slate">
+         </div>
+        {{#if this.length}}
+<div class="table-responsive">
+        <table class="table table-bordered showCheckboxes agile-table panel table-layout-mob-view" url="core/api/filters/bulk" id="contact-filter-list">  
+            <thead>
+                <tr>   
+                    <th style="width:50%">Name</th>
+                    <th style="width:50%"></th>
+                </tr>
+            </thead>
+            <tbody id='contact-filter-model-list' route='contact-filter-edit/'>
+            </tbody>
+        </table>
+</div>
+		{{/if}}
+    </div>
+    <div class='col-md-3'>
+        <div class="wrapper" id='addview'>
+             <h4 class="m-t-none m-b-sm">
+              What are Filters?
+             </h4>
+            <p>Filters are used to sort contacts with a specific criteria to find patterns. You can save your preferred filters and also have daily, weekly or monthly reports sent to you based on the filter</p>
+        </div>
+    </div>
+</div>
+</div>
+</script>
+
+<script id="contact-filter-model-template" type="text/html">
+	<td data='{{id}}' class='data c-p'>
+  <div>
+    {{name}} 
+  </div>
+</td>
+<td> 
+  {{#if created_time}}
+      <div>
+         Created <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="created_time time-ago border-highlight text-muted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{filterOwner.name}}
+      </div>
+  {{/if}}
+</td>
+</script>
+<script id="company-filter-collection-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-md-12">
+        
+            <h3 class="pull-left font-thin h3">Filters</h3>
+            <a href="#contact-filter-add" class="btn btn-sm btn-default right" id="addFilter"><span><i class='icon-plus-sign'/></span>  Add Filter</a>
+            <div class="clearfix"></div>
+           
+        </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-md-9"> 
+		<div id="slate">
+         </div>
+        {{#if this.length}}
+<div class="table-responsive">
+        <table class="table table-bordered showCheckboxes agile-table panel" url="core/api/filters/bulk" id="company-filter-list">  
+            <thead>
+                <tr>   
+                    <th style="width:50%">Name</th>
+                    <th style="width:50%"></th>
+                </tr>
+            </thead>
+            <tbody id='company-filter-model-list' route='company-filter-edit/'>
+            </tbody>
+        </table>
+</div>
+		{{/if}}
+    </div>
+    <div class='col-md-3'>
+        <div class="wrapper" id='addview'>
+             <h4 class="m-t-none m-b-sm">
+              What are Filters?
+             </h4>
+            <p>Filters are used to sort contacts with a specific criteria to find patterns. You can save your preferred filters and also have daily, weekly or monthly reports sent to you based on the filter</p>
+        </div>
+    </div>
+</div>
+</div>
+</script>
+
+<script id="company-filter-model-template" type="text/html">
+	<td data='{{id}}' class='data c-p'>
+  <div>
+    {{name}} 
+  </div>
+</td>
+<td> 
+  {{#if created_time}}
+      <div>
+         Created <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="created_time time-ago border-highlight text-muted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{filterOwner.name}}
+      </div>
+  {{/if}}
+</td>
+</script>

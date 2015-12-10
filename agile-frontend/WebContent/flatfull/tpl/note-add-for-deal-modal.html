@@ -1,0 +1,50 @@
+<!-- New (Note) Modal views -->
+<div class="modal fade deal-note-modal" id="deal-note-modal">
+<div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>&nbsp;Add Note</h3>
+    </div>
+    <div class="modal-body">
+        <form id="dealnoteForm" name="dealnoteForm" method="post">
+            <fieldset>
+                <input name="from_task" id="from_task" type="hidden" value="" />
+                <input name="task_form" id="task_form" type="hidden" value="" />
+                	            
+                <div class="control-group form-group">
+                    <label class="control-label"><b>Subject</b> <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input type="text" placeholder="About" name="subject" id="subject" class="required form-control" />
+                    </div>
+                </div>
+                
+	                <div class="control-group form-group">
+	                    <label class="control-label"><b>Description</b></label>
+	                    <div class="controls">
+	                        <textarea rows="3" class="form-control" placeholder="Detailed Note" name="description" id="description" ></textarea> 
+	                    </div>
+	                </div>
+                
+                <div class="control-group form-group">
+                    <label class="control-label"><b>Related To</b></label>
+                    <div class="controls">
+                        <div>
+                            <div class="pull-left">
+                                <ul name="deal_ids" class="contacts tags tagsinput p-n"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer" id="deal-note-add-footer">
+        <a href="#" class="btn btn-sm btn-primary" id="dealnote_validate">Save
+        </a>
+        <span class="save-status"></span>
+    </div>
+</div>
+</div>
+</div>
+<!-- End of Modal views -->

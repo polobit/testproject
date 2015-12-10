@@ -1,0 +1,107 @@
+<body>
+    <div>
+          <div style="background-color: #8A6086; font-family: Arial, sans-serif; padding: 5px">
+            <div style="min-height: 36px; font-size: 14px; font-weight: bold; padding-bottom: 4px">
+                <table style="display: inline; width: 100%">
+                    <tbody>
+                        <tr>
+                            <td valign="middle" height="32px" style="padding: 0; color: white">{{email_subject}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="font-size:14px;background-color:#fff;padding:10px 7px 7px 7px">
+                <p>*****This is an automated email. Please do not reply*****</p>
+                {{#limit_message}}
+                <p>***{{limit_message}}***</p>
+                {{/limit_message}}
+                <table width="100%" cellpadding="0" cellspacing="0" bgcolor="#F3F3F3" style="border-top:3px solid #cccccc;border-bottom:3px solid #cccccc">
+                    <tbody>
+                        <tr>
+                            <td valign="top" align="center">
+                                <table width="600" cellpadding="0" border="0" cellspacing="0">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <h2 style="font-size:16px">%reports_heading%{{reports_heading}}</h2>
+                                                <p style="font-size:12px">
+                                                    Account Holder Name: <strong>{{user_name}}</strong><br />
+                                                    <br />
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table width="100%" cellpadding="10" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td valign="top" align="center">
+                                <table width="600" cellpadding="0" border="0" cellspacing="0">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <h4 style="padding:0px;margin:0px;">Report Name:  {{report_name}}</h4>
+                                                <br />
+                                                <table width="100%" cellpadding="4" cellspacing="0">
+                                                    <thead>
+                                                        <tr bgcolor="#CCCCCC">
+                                                            <th align="left" style="font-size:12px"><strong>S.No</strong></th>
+                                                            <th align="left" style="font-size:12px"><strong>Name</strong></th>
+                                                            <th align="left" style="font-size:12px"><strong>Email</strong></th>
+                                                            <th align="left" style="font-size:12px"><strong>Lead Score</strong></th>
+                                                            <th align="right" width="20" style="font-size:12px"><strong>Tags</strong></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    	{{#report_results}}
+                                                        <tr>
+                                                        	
+         								                   {{#contact_properties}}
+                                                            	<td align="left" valign="top" style="border-bottom:1px solid #f3f3f3;font-size:12px">{{first_name}}&nbsp;{{last_name}}</td>
+                                                            	<td align="left" valign="top" style="border-bottom:1px solid #f3f3f3;font-size:12px">{{title}}</td>
+                                                            	<td align="left" valign="top" style="border-bottom:1px solid #f3f3f3;font-size:12px">{{email}}</td>
+                                                           {{/contact_properties}}
+															<td align="left" valign="top" style="border-bottom:1px solid #f3f3f3;font-size:12px">1</td>
+                                                            <td align="right" valign="top" width="20" style="border-bottom:1px solid #f3f3f3;font-size:12px"><strong>{{broadcast_chats}}</strong></td>
+                                                        </tr>
+                                                        {{/report_results}}
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr bgcolor="#F3F3F3" style="border-bottom:1px solid #cccccc">
+                                                            <td align="right" colspan="2" style="border-bottom:1px solid #cccccc;font-size:12px"><strong>Total:</strong></td>
+                                                            <td align="right" width="20" style="border-bottom:1px solid #cccccc;font-size:12px"><strong>{{total_chats}}</strong></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
+                <p style="font-weight: bold;"> Have questions or need help?</p>
+                <p>Our customer service and support team is here to help you any way we can. Please email us at support@clickdesk.com or chat with us at http://www.clickdesk.com</p>
+                <p>Thanks for being a valued customer.</p>
+                <br />
+                Best Wishes,
+                <br />
+                ClickDesk Support.
+                <br />
+                http://www.clickdesk.com
+                <span style="color:#898989">This Chat was closed by {{closed_by}} and duration of chat is {{duration}}</span>
+                <div style="text-align:right">
+                    <a href="http://www.clickdesk.com" target="_blank">
+                    <img style="border:0;margin-top:10px" src="http://my.clickdesk.com/images/clickdesklogo.png" alt="Logo for ClickDesk" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

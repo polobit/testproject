@@ -1,0 +1,160 @@
+<html lang="en">
+   <head>
+      <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+      <title>Popup</title>
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,700" rel="stylesheet" type="text/css" />
+      <style>
+         @font-face {
+         font-family: 'Armalite';
+         src: url('https://s3.amazonaws.com/PopupTemplates/form/bold/fonts/armalite_rifle-webfont.eot');
+         src: url('https://s3.amazonaws.com/PopupTemplates/form/bold/fonts/armalite_rifle-webfont.eot?#iefix') format('embedded-opentype'),
+         url('https://s3.amazonaws.com/PopupTemplates/form/bold/fonts/armalite_rifle-webfont.woff') format('woff'),
+         url('https://s3.amazonaws.com/PopupTemplates/form/bold/fonts/armalite_rifle-webfont.ttf') format('truetype'),
+         url('https://s3.amazonaws.com/PopupTemplates/form/bold/fonts/armalite_rifle-webfont.svg#armalite_rifleregular') format('svg');
+         font-weight: normal;
+         font-style: normal;
+         }
+         body {
+         background: #333;
+         width: 906px;
+         height: 527px;
+         }
+         #popup {
+         background: url('https://s3.amazonaws.com/PopupTemplates/form/bold/images/bg.png');
+         color: #000!important;
+         height: 529px;
+         font: 17px/23px 'Open Sans', Calibri, Arial, sans-serif!important;
+         letter-spacing: 0;
+         position: fixed;
+         width: 906px;
+         }
+         #popup-body {
+         padding: 120px;
+         }
+         #popup-header  {
+         color: #555!important;
+         font: bold 38px/38px 'Armalite', 'Open Sans', Calibri, Arial, sans-serif!important;
+         margin-bottom: 20px;
+         text-transform: uppercase;
+         }
+         #popup-content  {
+         padding-right: 280px;
+         position: relative;
+         }
+         #popup-content p  {
+         margin: 0 0 15px;
+         }
+         #popup-content ul, #popup-content ul li {
+         display: block;
+         list-style: none;
+         margin: 0;
+         padding: 0;
+         }
+         #popup-content ul li {
+         background: url('https://s3.amazonaws.com/PopupTemplates/form/bold/images/bullet.png') no-repeat;
+         padding: 5px 0 5px 36px;
+         }
+         #popup-form {
+         position: absolute;
+         right: 0;
+         top: 0;
+         width: 253px;
+         }
+         #popup-form p {
+         margin-bottom: 5px;
+         }
+         #popup-form input.popup-text {
+         background: url('https://s3.amazonaws.com/PopupTemplates/form/bold/images/text.png');
+         border: 0;
+         color: #787878!important;
+         font: bold 24px/34px 'Open Sans', Calibri, Arial, sans-serif!important;
+         margin: 0;
+         outline: 0;
+         padding: 21px 40px;
+         width: 253px;
+         }
+         #popup-form input.popup-text.popup-text-error {
+         color: #c00!important;
+         }
+         #popup-form input.popup-text:focus {
+         border-color: #999;
+         }
+         #popup-form  :focus::-webkit-input-placeholder {
+         color: transparent;
+         }
+         #popup-form  :focus::-moz-placeholder {
+         color: transparent;
+         }
+         #popup-form  :focus:-moz-placeholder {
+         color: transparent;
+         }
+         #popup-form input.popup-button {
+         background: url('https://s3.amazonaws.com/PopupTemplates/form/bold/images/button.png');
+         border: 0;
+         color: #9c0c0c!important;
+         cursor: pointer;
+         font: bold 24px/26px 'Armalite', 'Open Sans', Calibri, Arial, sans-serif!important;
+         padding: 17px;
+         text-transform: uppercase;
+         width: 254px;
+         }
+         #popup-form  p:last-child {
+         padding: 0 5px;
+         }
+         #popup-form  p small {
+         font-size: 12px!important;
+         font-style: italic;
+         line-height: 14px!important;
+         }
+      </style>
+   </head>
+   <body>
+      <div id="popup">
+         <div id="popup-body">
+            <div id="popup-header">Upgrade today to save $25</div>
+            <div id="popup-content">
+               <p>Agile has all you need - contact management, marketing automation, web analytics, telephony, lead scoring, newsletter management, 2-way emails, real-time activity alerts, third-party integrations, and lots more.</p>
+               <ul>
+                  <li>Right popup at the right time</li>
+                  <li>Show popups after a certain time</li>
+                  <li>Exit Intent to prevent visitors</li>
+               </ul>
+               <form id="popup-form">
+                  <p><input type="text" class="popup-text" name="name" agile-field="first_name" placeholder="Name" /></p>
+                  <p><input type="text" class="popup-text" name="email" agile-field="email" placeholder="Email" /></p>
+                  <p><input type="submit" class="popup-button" value="Sign-Up!" /></p>
+                  <p><small>Your personal email will never be shared</small></p>
+               </form>
+            </div>
+         </div>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/additional-methods.min.js"></script>
+      <script type="text/javascript">
+      window.parent._agile_load_fields();
+      jQuery.validator.setDefaults({
+          debug: true,
+          success: 'valid'
+      });
+      $('#popup-form').validate({
+          rules: {
+              name: 'required',
+              email: {
+                  required: true,
+                  email: true
+              }
+          },
+          submitHandler: function (form) {
+              window.parent._agile_save_form(true, window.parent._agile.set_email(document.getElementsByName('email')[0].value));
+              try{
+            	  $(form).ajaxSubmit();
+              }
+              catch(e){
+            	  window.parent._agile_close_modal()
+              }
+          }
+      })
+      </script>
+   </body>
+</html>

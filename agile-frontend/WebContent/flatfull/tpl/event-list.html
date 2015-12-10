@@ -1,0 +1,253 @@
+<script id="future-collection-template" type="text/html">
+{{#unless this.length}}
+<div class="slate m-t" style="padding:5px 2px;">
+    <div class="slate-content" style="text-align:center;">
+        <h4 class="h4">You have no Events</h4>
+    </div>
+</div>
+{{/unless}}
+{{#if this.length}}
+<div class="future_event_group">
+       
+        <table class="table hide table-striped " style="overflow:hidden!important">
+            <div id="today-heading" style="display: none"><b>Today</b></div>
+            
+            <tbody id="today-event" style="display: inline;display: table;width: 100%;"></tbody>
+        </table>
+
+        <table class="table hide table-striped" style="overflow:hidden!important;">
+            <div id="tomorrow-heading" style="display: none"><b>Tomorrow</b></div>
+            
+            <tbody id="tomorrow-event" style="display: inline;display: table;width: 100%;"></tbody>
+        </table>
+
+        <table class="table hide table-striped" style="overflow:hidden!important;">
+            <div id="next-week-heading" style="display: none"><b>Later</b></div>
+            <tbody id="next-week-event" style="display: inline;display: table;width: 100%;"></tbody>
+        </table>
+
+</div>
+{{/if}}
+</script>
+
+<script id="future-model-template" type="text/html">
+
+<td class="e_owner" style="width:60px;cursor: pointer;" onclick=show_model({{id}})>
+    <div class="thumb-sm agile-img m-r-sm">
+	{{#if ownerPic}}
+        	<img class="img-inital r r-2x" src="{{ownerPic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+	{{else}}
+			<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+	{{/if}}
+  </div>
+</td> 
+
+<td onclick=show_model({{id}}) style="cursor:pointer">
+<div class="row" style="margin-left: 1px;">
+<div class="col-md-8">
+<div class="line-clamp">{{title}}</div></div>
+
+<div class="col-md-4" style="text-align:right">
+<div class="ellipsis-multiline" style="line-height:20px !important;height: auto !important; word-break:keep-all;">  
+<span class="label" style="background-color:{{color}}">{{event_priority color}}</span></div>
+</div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="row" style="margin-left: 1px;">
+<div class="col-md-4">{{getCustomDateWithTime start end}}</div>
+
+<div class="col-md-8 contact_text" style="text-align:right;">
+{{#if contacts.length}} 
+<div class="ctx contact_text">  
+        {{#each contacts}}<a  href ="#contact/{{this.id}}">{{#if_contact_type "PERSON"}}
+        		{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} 
+        		
+        	{{/if_contact_type}}{{#if_contact_type "COMPANY"}}{{getPropertyValue properties "name"}}{{/if_contact_type}},</a> {{/each}}  
+        
+    </div>
+{{/if}}
+</div>
+</div> 
+
+</td>
+
+</script>
+
+
+<script id="events-collection-template" type="text/html">
+{{#unless this.length}}
+<div class="slate m-t" style="padding:5px 2px;">
+    <div class="slate-content" style="text-align:center;">
+        <h4 class="h4">You have no Events</h4>
+    </div>
+</div>
+{{/unless}}
+{{#if this.length}}
+<div class="table-responsive">
+		<div class="panel panel-default">
+			    <div class="panel-heading">Event List</div>		
+        <table class="table table-striped" style="overflow:hidden!important;">
+            <tbody id="eventAll" style="display: table;width:100%"></tbody>
+        </table>
+	</div>
+</div>
+{{/if}}
+</script>
+
+<script id="events-model-template" type="text/html">
+ <td class="e_owner" style="width:60px;cursor: pointer;" onclick=show_model({{id}})>
+ <div class="thumb-sm agile-img m-r-sm">
+	{{#if ownerPic}}
+        	<img class="img-inital r r-2x" src="{{ownerPic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+	{{else}}
+			<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+	{{/if}}
+  </div>
+</td>
+<td style="cursor: pointer;"  onclick=show_model({{id}})>
+	<div class="row m-b-xs m-l-none m-r-none">
+		<div class="pull-left text-ellipsis" style="width:80%;">
+			{{title}}
+		</div>
+		<div class="pull-right text-right text-ellipsis p-b-xs" style="width:20%">
+			<span class="label bg-{{event_label_color color}}">{{event_priority color}}</span>
+		</div>
+	</div>
+	<div class="row m-b-xs m-l-none m-r-none">
+		<div class="pull-left text-ellipsis" style="cursor: pointer;width:40%;">
+			{{getCustomDateWithTime start end}}
+		</div>
+		<div class="pull-right text-right text-ellipsis" style="width:60%;">
+			{{#if contacts.length}} 
+				{{#each contacts}}
+					<a class="contact_text" href="#contact/{{this.id}}">{{#if_contact_type "PERSON"}}
+        				{{getPropertyValue properties "first_name"}}
+        				{{getPropertyValue properties "last_name"}} 
+        				{{/if_contact_type}}{{#if_contact_type "COMPANY"}}{{getPropertyValue properties "name"}}{{/if_contact_type}}
+					</a> 
+				{{/each}}
+			{{/if}}
+		</div>
+	</div> 
+</td>
+
+</script>
+
+
+
+
+<script id="google-event-collection-template" type="text/html">
+
+{{#unless this.length}}
+<div class="slate m-t" style="padding:5px 2px;">
+    <div class="slate-content" style="text-align:center;">
+        <h4 class="h4">You have no Events</h4>
+    </div>
+</div>
+{{/unless}}
+{{#if this.length}}
+	<div class="table-responsive">
+		<div class="panel panel-default">
+		<div class="panel-heading">Event List</div>
+        <table class="table table-striped" style="overflow:hidden!important;">
+            <tbody id="google_event" style="display: table;width:100%"></tbody>
+        </table>
+		</div>
+	</div>
+{{/if}}
+</script>
+
+<script id="google-event-model-template" type="text/html">
+<td>
+	<div class="row m-b-xs m-l-none m-r-none">
+		<div class="pull-left text-ellipsis" style="width:80%;">
+			{{title}}
+		</div>
+		<div class="pull-right text-right text-ellipsis p-b-xs" style="width:20%">
+			<span class="label bg-light dk text-tiny">Google Event</span>
+		</div>
+	</div>
+	<div class="row m-b-xs m-l-none m-r-none">
+		<div class="pull-left text-ellipsis" style="cursor: pointer;width:40%;">
+			{{getGoogleEventCustomTime start end}}
+		</div>
+		<div class="pull-right text-right text-ellipsis" style="width:60%;">
+			{{#if contacts.length}} 
+				{{#each contacts}}
+					<span class="label bg-light dk text-tiny">{{getContactDisplayValue this}}</span> 
+				{{/each}}
+			{{/if}}
+		</div>
+	</div> 
+</td>
+</script>
+
+
+<script id="googleEventCategorization-collection-template" type="text/html">
+    
+</header>
+{{#unless this.length}}
+<div class="slate m-t" style="padding:5px 2px;">
+    <div class="slate-content" style="text-align:center;">
+        <h4 class="h4">You have no Events</h4>
+    </div>
+</div>
+{{/unless}}
+{{#if this.length}}
+<div class="future_event_group">
+       
+        <table class="table hide table-striped" style="overflow:hidden!important">
+            <div id="today-heading" style="display: none"><b>Today</b></div>
+            
+            <tbody id="today-event" style="display: inline;display: table;width: 100%;"></tbody>
+        </table>
+
+        <table class="table hide table-striped" style="overflow:hidden!important;">
+            <div id="tomorrow-heading" style="display: none"><b>Tomorrow</b></div>
+            
+            <tbody id="tomorrow-event" style="display: inline;display: table;width: 100%;"></tbody>
+        </table>
+
+        <table class="table hide table-striped" style="overflow:hidden!important;">
+            <div id="next-week-heading" style="display: none"><b>Later</b></div>
+            <tbody id="next-week-event" style="display: inline;display: table;width: 100%;"></tbody>
+        </table>
+
+</div>
+{{/if}}
+</script>
+
+<script id="googleEventCategorization-model-template" type="text/html">
+<td>
+<div class="row" style="height: 23px;margin-left:1px;">
+<div class="span8" style="overflow: hidden;">{{title}}</div>
+<div class="span4 pull-right" style="text-align:right;">
+<div class="ellipsis-multiline" style="line-height:20px !important;height: auto !important; word-break:keep-all;">  
+<span class="label">Google Event</span></div>
+</div>
+
+</div>
+
+<div class="clearfix"></div>
+
+<div class="row" style="height: 23px;margin-left:1px;">
+<div class="span4">{{getGoogleEventCustomTime start end}}</div>
+
+<div class="span8 pull-right" style="overflow-x: auto;text-align:right;">
+{{#if contacts.length}} 
+<div class="ellipsis-multiline contact_text" style="line-height:20px !important;height: auto !important; word-break:keep-all;white-space: nowrap;">  
+        {{#each contacts}}<span class="label">{{getContactDisplayValue this}}</span> {{/each}}  
+        
+    </div>
+{{/if}}
+</div>
+
+
+</div>
+
+</td>
+</script>
+

@@ -1,0 +1,30 @@
+<!-- Notes list tab -->
+<ul style="list-style-type:none; margin-right:25px;">
+	{{#if this.length}}
+		{{#each this}}
+			{{#stringToJSON this ""}}
+				<li style="padding:5px;margin:5px;border:1px solid #ddd;">
+					<div style="display:block;" class="activity">
+						<div id="notes" class="activity-text-block">
+							<h4><a style="text-decoration: none"><b>{{ucfirst subject}}</b></a></h4><br/>
+							<p style="margin-right:40px;">{{description}}</p>	
+					 		
+							<small class="edit-hover" style="color:#b2b0b1;"> 
+								<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+							</small>
+						</div>
+					</div>
+				</li>
+			{{/stringToJSON}}
+		{{/each}}
+	{{else}}
+		<li>
+			<div style="display:block;" class="activity">
+				<div id="notes" class="activity-text-block">
+					<p style="display:inline; margin-right:10px;">You have no notes for this contact.</p>
+					<a class="action-add-note" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;"><i class="icon-plus" style="text-decoration:none; margin-right:2px;"></i><span>Add Note</span></a>
+				</div>
+			</div>
+		</li>
+	{{/if}}		
+</ul>

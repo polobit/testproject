@@ -1,0 +1,157 @@
+<html lang="en">
+   <head>
+      <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+      <title>Popup</title>
+      <style>
+         body {
+         background: #333;
+         width: 800px;
+         height:459px;
+         }
+         #popup {
+         background: #f00047;
+         color: #fff!important;
+         font: 17px/21px Calibri, "Trebuchet MS", Arial, Helvetica, sans-serif!important;
+         letter-spacing: 0;
+         position: fixed;
+         width: 800px;
+         }
+         #popup-body {
+         background: url('https://s3.amazonaws.com/PopupTemplates/form/image-split/images/image.png') no-repeat;
+         height: 379px;
+         padding: 40px 30px 40px 345px;
+         }
+         #popup-content p  {
+         margin: 0 0 15px;
+         }
+         #popup-content > p:first-child  {
+         font-size: 35px!important;
+         line-height: 37px!important;
+         margin-bottom: 7px;
+         text-transform: uppercase;
+         }
+         #popup-content p big  {
+         font-size: 54px!important;
+         font-weight: bold!important;
+         line-height: 56px!important;
+         text-transform: uppercase;
+         }
+         #popup-form {
+         border-top: 1px solid #fff;
+         margin: 15px -30px -40px;
+         padding: 20px 30px;
+         position: relative;
+         }
+         #popup-form p {
+         margin-bottom: 10px;
+         }
+         #popup-form > p:first-child{
+         margin-bottom: 15px;
+         }
+         #popup-form > p:last-child{
+         margin-top: 15px;
+         }
+         #popup-form label {
+         display: block;
+         margin-bottom: 4px;
+         }
+         #popup-form input.popup-text {
+         border: 0;
+         color: #333!important;
+         font: 15px/19px Calibri, "Trebuchet MS", Arial, Helvetica, sans-serif!important;
+         margin: 0;
+         outline: 0;
+         padding: 7px 10px;
+         width: 100%;
+         }
+         #popup-form input.popup-text.popup-text-error {
+         border: 2px solid #c00!important;
+         color: #c00!important;
+         padding: 5px 8px;
+         }
+         #popup-form input.popup-text:focus {
+         border-color: #999;
+         }
+         #popup-form  :focus::-webkit-input-placeholder {
+         color: transparent;
+         }
+         #popup-form  :focus::-moz-placeholder {
+         color: transparent;
+         }
+         #popup-form  :focus:-moz-placeholder {
+         color: transparent;
+         }
+         #popup-form p.popup-button {
+         text-align: right;
+         }
+         #popup-form input.popup-button {
+         background: #e4bc42;
+         border: 0;
+         color: #fff!important;
+         cursor: pointer;
+         font: 20px/25px Calibri, "Trebuchet MS", Arial, Helvetica, sans-serif!important;
+         outline: 0;
+         padding: 10px 20px;
+         }
+         #popup-form input.popup-button:active {
+         position: relative;
+         top: 2px;
+         }
+         #popup-form p small {
+         display: block;
+         font-size: 14px!important;
+         line-height: 16px!important;
+         }
+         #popup-form p small a {
+         color: inherit;
+         }
+      </style>
+   </head>
+   <body>
+      <div id="popup">
+         <div id="popup-body">
+            <div id="popup-content">
+               <p>Upgrade Today</p>
+               <p><big>Smart Engagement</big></p>
+               <form id="popup-form">
+                  <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod.</p>
+                  <p><label>Your Name:</label><input type="text" name="name" agile-field="first_name" class="popup-text" /></p>
+                  <p><label>Your E-mail:</label><input type="text" name="email" agile-field="email" class="popup-text" /></p>
+                  <p class="popup-button"><input type="submit" class="popup-button" value="Subscribe Now!" /></p>
+                  <p><small>Your personal information will not be shared with any third party<br>
+               </form>
+            </div>
+         </div>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/additional-methods.min.js"></script>
+      <script type="text/javascript">
+      window.parent._agile_load_fields();
+      jQuery.validator.setDefaults({
+          debug: true,
+          success: 'valid'
+      });
+      $('#popup-form').validate({
+          rules: {
+              name: 'required',
+              email: {
+                  required: true,
+                  email: true
+              }
+          },
+          submitHandler: function (form) {
+              window.parent._agile_save_form(true, window.parent._agile.set_email(document.getElementsByName('email')[0].value));
+              try{
+            	  $(form).ajaxSubmit();
+              }
+              catch(e){
+            	  window.parent._agile_close_modal()
+              }
+          },
+          errorPlacement: function (error, element) {
+          }
+      })
+      </script>
+   </body>
+</html>

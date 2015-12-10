@@ -1,0 +1,144 @@
+<html lang="en">
+   <head>
+      <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+      <title>Popup</title>
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css" />
+      <style>
+         body {
+         background: #333;
+         width: 960px;
+         height: 524px;
+         }
+         #popup {
+         background: #fff;
+         -webkit-border-radius: 8px;
+         -moz-border-radius: 8px;
+         border-radius: 8px;
+         color: #666!important;
+         font: 16px/23px 'Open Sans', Arial, sans-serif!important;
+         letter-spacing: 0;
+         position: fixed;
+         width: 960px;
+         }
+         #popup-body {
+         padding: 20px 25px 15px;
+         }
+         #popup-header  {
+         color: #163747!important;
+         font: bold 19px/21px 'Open Sans', Arial, sans-serif!important;
+         margin-bottom: 20px;
+         text-align: center;
+         }
+         #popup-content  {
+         position: relative;
+         }
+         #popup-content p  {
+         margin: 0 0 15px;
+         }
+         #popup-squares {
+         }
+         .popup-square {
+         border-left: 2px dotted #ccc;
+         display: block;
+         color: inherit;
+         float: left;
+         padding: 20px 20px 30px;
+         text-decoration: none;
+         width: 414px;
+         }
+         .popup-square:hover {
+         background: #fcfdea;
+         }
+         .popup-square-1, .popup-square-3 {
+         border-left: 0;
+         }
+         .popup-squares-separator {
+         border-top: 2px dotted #ccc;
+         clear: both;
+         height: 0;
+         }
+         .popup-square big {
+         color: #000;
+         font: bold 23px/23px 'Open Sans', Arial, sans-serif!important;
+         }
+         .popup-square p.popup-image {
+         background: none no-repeat;
+         display: table-cell;
+         height: 96px;
+         padding-left: 116px;
+         vertical-align: middle;
+         }
+         .popup-square-1 p.popup-image { background-image: url('https://s3.amazonaws.com/PopupTemplates/survey/choice-four/images/image-1.png'); }
+         .popup-square-2 p.popup-image { background-image: url('https://s3.amazonaws.com/PopupTemplates/survey/choice-four/images/image-2.png'); }
+         .popup-square-3 p.popup-image { background-image: url('https://s3.amazonaws.com/PopupTemplates/survey/choice-four/images/image-3.png'); }
+         .popup-square-4 p.popup-image { background-image: url('https://s3.amazonaws.com/PopupTemplates/survey/choice-four/images/image-4.png'); }
+         #popup-buttons {
+         height: 44px;
+         margin-top: 30px;
+         }
+         #popup-button-prev {
+         background: url('https://s3.amazonaws.com/PopupTemplates/survey/choice-four/images/button-prev.png');
+         color: #888;
+         display: inline-block;
+         float: left;
+         font: bold 16px/16px 'Open Sans', Arial, sans-serif!important;
+         padding: 12px 12px 12px 22px;
+         text-align: center;
+         text-decoration: none;
+         width: 56px;
+         }
+         #popup-button-prev:hover {
+         color: #333;
+         }
+         #popup-button-next {
+         background: url('https://s3.amazonaws.com/PopupTemplates/survey/choice-four/images/button-next.png');
+         color: #fff;
+         display: inline-block;
+         float: right;
+         font: bold 16px/16px 'Open Sans', Arial, sans-serif!important;
+         padding: 14px 22px 14px 12px;
+         opacity: .85;
+         text-align: center;
+         text-decoration: none;
+         width: 206px;
+         }
+         #popup-button-next:hover {
+         opacity: 1;
+         }
+      </style>
+   </head>
+   <body>
+      <div id="popup">
+         <div id="popup-body">
+            <div id="popup-header">Setup Instructions</div>
+            <div id="popup-content">
+               <div id="popup-squares">
+                  <div class="popup-squares-separator"></div>
+                  <a href="#" class="popup-square popup-square-1">
+                     <p><big>I can install code myself.</big></p>
+                     <p class="popup-image">Add the code at the bottom of the body tag in your home page. </p>
+                  </a>
+                  <a href="#" class="popup-square popup-square-2">
+                     <p><big>I use WordPress.</big></p>
+                     <p class="popup-image">If you are using CMS or eCommerce for your site, adding code is instant and just one-click away.</p>
+                  </a>
+                  <div class="popup-squares-separator"></div>
+                  <a href="#" class="popup-square popup-square-3">
+                     <p><big>E-mail my web developer.</big></p>
+                     <p class="popup-image">Send the instructions to your web administrator.</p>
+                  </a>
+                  <a href="#" class="popup-square popup-square-4">
+                     <p><big>I need help.</big></p>
+                     <p class="popup-image">Chat with one of our qualified reps. They can guide you.</p>
+                  </a>
+                  <div class="popup-squares-separator"></div>
+               </div>
+               <div id="popup-buttons">
+                  <a href="#" id="popup-button-prev">Back</a>
+                  <a href="#" id="popup-button-next">Step 2. </a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </body>
+</html>

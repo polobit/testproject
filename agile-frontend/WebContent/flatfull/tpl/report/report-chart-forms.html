@@ -1,0 +1,207 @@
+<script id="report-funnel-form-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+       
+            <h3 class="pull-left font-thin h3">Graphs</h3>
+            
+       
+    </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+<div class="col-sm-9 col-md-9 col-xs-12">
+    <div class="panel panel-default">
+	<div class="panel-heading">
+		<i class="icon-filter p-r-sm p-l-none"></i>Funnel graph
+	</div>
+	<div class="panel-body">
+        <form id="funnel-graph" class="form-horizontal">
+            <fieldset>
+                <div class="control-group form-group">  
+					  <label class="control-label col-sm-2">Tags <span class="field_req">*</span></label>       
+                    <div class="controls col-sm-8">
+                        <div class="pull-left">
+                        	<ul name="tags" class="tagsinput tags p-l-none"></ul>
+                        </div>              
+                        <input name="tags" type="text" id="addBulkTags multi-tags" class="tags-typeahead multi-tags form-control" placeholder="Enter tags separated by comma">
+						<span class="error-tags text-danger" style="display:none;">This field is required.</span>
+						<input class="hide form-control" name="report_chart_type" value="FUNNEL">      
+              		</div>
+                </div>
+            </fieldset>
+<hr>
+<div class="row">
+<div class="col-sm-offset-2 col-sm-10">
+				  <div class="form-actions">          
+                     <a href="#" type="submit" class="btn btn-sm btn-primary report-chorts">Show</a>
+                    <span class="save-status"></span>
+                </div>
+</div>
+</div>
+        </form>
+	</div>
+    </div>
+</div>
+
+  <div class="col-sm-3 col-md-3 col-xs-12 p-none">
+	<div class="data-block">
+        <div class="wrapper-xs" id="addview">
+            <h4>
+              What is a Funnel Report?
+            </h4>
+            
+            <p>
+			Funnel report graphically shows you how leads are passing through various stages in your sales cycle. For each Stage you need to have Tags added in Agile. <br><br>For example, you can have Tags like Lead, Qualified, Opportunity, Converted - for all contacts in Agile, that reflect their state. You can then create a Funnel Graph on those tags. 
+
+
+			</p>
+        </div>
+	</div>
+    </div>
+</div>
+</div>
+</div>
+</script>
+
+<script id="report-growth-form-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+       
+            <h3 class="pull-left font-thin h3">Graphs</h3>
+            
+       
+    </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+<div class="col-sm-9 col-md-9 col-xs-12">
+    <div class="panel panel-default">
+	<div class="panel-heading">
+		<i class="icon-bar-chart p-r-sm"></i>Growth graph
+	</div>
+	<div class="panel-body">
+        <form id="growth-graph" class="form-horizontal">
+            <fieldset>
+                <div class="form-group control-group">  
+					  <label class="control-label col-sm-2">Tags <span class="field_req">*</span></label>       
+                    <div class="controls col-sm-8">
+                        <div class="pull-left">
+                        	<ul name="tags" class="tagsinput tags p-l-none"></ul>
+                        </div>              
+                        <input name="tags" type="text" id="addBulkTags" class="tags-typeahead multi-tags form-control" placeholder="Enter tags separated by comma">
+						<span class="error-tags text-danger" style="display:none;">This field is required.</span>
+						<input class="hide form-control" name="report_chart_type" value="GROWTH">      
+              		</div>
+                </div>
+            </fieldset>	
+<hr>
+<div class="row">
+<div class="col-sm-offset-2 col-sm-8">
+ 				 <div class="form-actions">          
+                     <a href="#" type="submit" class="btn btn-sm btn-primary report-chorts">Show</a>
+                    <span class="save-status"></span>
+                </div>
+</div>
+</div>
+        </form>
+    </div>
+	</div>
+</div>
+
+   <div class="col-sm-3 col-md-3 col-xs-12 p-none">
+		<div class="data-block">
+        <div class="wrapper-xs" id="addview">
+            <h4 class="m-t-none m-b-sm h4">
+               What is a Growth Graph?
+            </h4>
+            
+            <p>
+				Growth graphs allow you to see how Contacts/leads with particular Tags are getting added over time. <br><br>
+
+				For example, if you are adding a 'Lead' tag to all leads/contacts that you add (or get pushed via API), then you can create a Growth Graph on that tag, to see how many leads you get daily/weekly/monthly over time. <br><br>
+You can apply additional Filters when you see the graph. Say you have a filter defined for all leads from a particular source (they may have a particular Tag or custom filed value). You can apply that filter on the graph and see how leads from the source are growing. 
+
+</p>
+        </div>
+	</div>
+    </div>
+    </div>
+</div>
+</div>
+</script>
+
+<script id="report-cohorts-form-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+       
+            <h3 class="pull-left font-thin h3">Graphs</h3>
+            
+       
+    </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+<div class="col-sm-9 col-md-9 col-xs-12">
+    <div class="panel panel-default">
+<div class="panel-heading">
+<i class="icon-group p-r-sm"></i>Ratio graph</div>
+<div class="panel-body">
+        <form id="icon-dashboard" class="form-horizontal">
+            <fieldset>
+                <div class="control-group form-group">  
+					  <label class="control-label col-sm-2">Tag 1<span class="field_req">*</span></label>       
+                    <div class="controls col-sm-10" id="tags-reports">
+                        <input name="tag1" type="text" id="addBulkTags1" class="tags-typeahead-one required form-control" placeholder="Enter Tag">
+						<span class="error-tags text-danger" style="display:none;">This field is required.</span>
+						<input class="hide form-control" name="report_chart_type" value="RATIO">      
+              		</div>
+              		</div>
+				 <div class="control-group form-group">  
+					  <label class="control-label col-sm-2">Tag 2<span class="field_req">*</span></label>       
+                    <div class="controls col-sm-10" id="tags-reports">
+                        <input name="tag2" type="text" id="addBulkTags2" class="tags-typeahead-one required form-control" placeholder="Enter Tag">
+						<span class="error-tags text-danger" style="display:none;">This field is required.</span>
+              		</div>
+                </div>
+            </fieldset>
+<hr>
+<div class="row">
+<div class="col-sm-offset-2 col-sm-8">
+				  <div class="form-actions">          
+                     <a href="#" type="submit" class="btn btn-sm btn-primary report-chorts">Show</a>
+                    <span class="save-status"></span>
+                </div>
+</div>
+</div>
+        </form>
+</div>
+    </div>
+</div>
+   <div class="col-sm-3 col-md-3 p-none">
+	<div class="data-block">
+        <div class="wrapper-xs" id="addview">
+            <h4 class="h4 m-t-none m-b-sm ">
+              What is a Ratio Graph?
+            </h4>
+            
+            <p>
+				Ratio graph allow to compare two Tags over time. This allows you to do reports like percentage conversions from one stage to another (represented by Tags). <br/><br/>
+For example, if you have a 'Lead' tag for all new contacts and an 'Opportunity' tag for all qualified Opportunities, a Ratio graph between these tags tells you what percentage of Leads that have come in the specified period (day/week/month), have converted into an Opportunity later.<br/>
+You can apply Filters for more insightful information. If you have a Filter that gives you leads from a particular source, then applying the filter on the above Ratio report will tell you how many Leads coming from the particular source have converted into an opportunity.
+</p>
+        </div>
+	</div>
+    </div>
+</div>
+</div>
+</div>
+</script>

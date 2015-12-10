@@ -1,0 +1,27 @@
+<script id="account-stats-template" type="text/html">
+<legend>Account Stats</legend>
+<table class="table table-bordered table-hover">
+   
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Data</td>
+            <td>{{bytes}}</td>
+        </tr>
+        <tr>
+            <td>Entities</td>
+            <td>{{entities}}</td>
+        </tr>
+    </tbody>
+</table>
+{{#check_plan "FREE"}}
+	<a href="#" id="cancel-account" align="center" class="btn btn-default btn-sm">Cancel My Account</a>
+{{else}}
+	<a href="#" id="cancel-account-request" align="center" class="btn btn-default btn-sm">Cancel My Account</a>
+{{/check_plan}}
+</script>

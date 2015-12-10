@@ -1,0 +1,614 @@
+<script id="report-collection-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-md-12">
+       
+            <h3 class="pull-left font-thin h3">Email Reports</h3>
+            <a href="#report-add" class="btn btn-default btn-sm pull-right btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span>  Add Report</a>
+            <div class="clearfix">
+        </div>
+   
+</div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+         <div id="slate">
+         </div>
+        {{#if this.length}}
+        <div class="col-md-9 col-sm-9">
+        <div class="panel panel-default">
+        <div class="panel-heading">Email Reports List</div>
+       <div class="table-responsive">
+        <table class="table table-bordered table-striped showCheckboxes agile-table panel table-layout-mob-view " url="core/api/reports/bulk">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Duration</th>
+                    <th>Fields</th>
+                </tr>
+            </thead>
+            <tbody id="report-model-list" route="report-edit/">
+            </tbody>
+        </table>
+       </div>
+        </div>
+        </div>
+        {{/if}}
+    <div class="col-md-3 col-sm-3 pull-right p-none">
+        <div class="data-block">
+        <div class="wrapper-xs " id="addview">
+            <h4 class="m-t-none h4 m-b-sm">
+                What are Email Reports?
+            </h4>
+          
+            <p>Customize your reports based on a variety of tags and filters and receive them periodically to constantly be in touch with your sales cycle and pipeline. Use the information to improve lead nurturing and customer retention strategies.
+            </p>
+        </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</script>
+
+<script id="report-model-template" type="text/html">
+    <td data="{{id}}" class="data c-p"><div class="table-resp"><a class="text-cap">{{name}}</a></div></td>
+    <td>
+        <div class="table-resp">
+            {{ucfirst duration}}
+        </div>
+    </td>
+    <td><div class="table-resp" style="text-transform:capitalize;">{{#field_Element fields_set}}{{/field_Element}}</div></td>
+    <td>
+        <div class="table-resp">
+            <a href="#report-results/{{id}}" class="text-info" data={{id}} id="report-instant-results">Show Results</a>             
+        </div>
+    </td>
+    <td>
+        <div class="table-resp">
+            <a  data={{id}} class="text-info" id="reports-email-now" >Send Now</a>
+        </div>
+    </td>
+<br />
+</script>
+
+<script type="text/html" id="report-categories-template">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <h3 class="pull-left font-thin h3">Reports</h3>
+
+        <div class="pull-right">
+            <a href="#add-dashlet" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can also configure more reports as dashlets on your dashboard" class="text-info m-t-sm inline-block">Configure Dashlet Reports</a>
+            
+        </div>
+    </div>
+</div>
+</div>
+<div class="wrapper-md p-t-none">
+
+
+<div id="reports-tab-container">
+               <div class="tab-container">
+       <ul class="nav nav-tabs" id="subTab">
+                                            {{#hasMenuScope 'DEALS'}}
+                                            <li role="presentation" data-tab="6" id="dealstab">
+                                                <a href="#deals-tab" role="tab" data-toggle="tab">Deals</a>
+                                            </li>
+                                            {{/hasMenuScope}}
+                                             <li role="presentation" data-tab="5" id="callstab">
+                                                <a href="#calls-tab"   role="tab" data-toggle="tab" >Calls</a>
+                                            </li>
+                                            {{#hasMenuScope 'ACTIVITY'}}
+                                             <li role="presentation" data-tab="4">
+                                                <a href="#activities-tab"  role="tab" data-toggle="tab" >Activities</a>
+                                            </li>
+                                            {{/hasMenuScope}}
+                                              <li role="presentation" data-tab="2">
+                                                <a href="#graph-tab"  role="tab" data-toggle="tab">Growth Graphs</a>
+                                            </li>
+                                            <li role="presentation"  data-tab="1">
+                                                <a href="#email-tab" role="tab"  data-toggle="tab">Reports via Email</a>
+                                            </li>
+                                          
+                                             <li role="presentation" data-tab="3">
+                                                <a href="#campaign-tab" role="tab" data-toggle="tab">Campaigns</a>
+                                            </li>
+
+</ul>
+
+
+<div class="tab-content wrapper-md-panel" style="display:block">
+<div class="tab-pane" id="email-tab">
+   <div class="row"> 
+<!-- Contact reports -->
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="panel wrapper text-center b-a">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-user icon-3x"></i>
+            </div>
+            <b>Contact Reports</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+            Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
+        </div>
+        <!-- Add button -->
+        <div>
+            <a class="btn btn-sm btn-default" href="#contact-reports">Go</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Activity reports -->
+{{#hasMenuScope 'ACTIVITY'}}
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="panel wrapper text-center b-a">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-cogs icon-3x"></i>
+            </div>
+            <b>Activity Reports</b>
+        </div>  
+        <br />
+                
+        {{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+            Get a periodic  email digest of various activities by users in Agile.
+            <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+        </div>
+        <!-- Add button -->
+            {{#hasMenuScope 'ACTIVITY'}}
+                <div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+                    <a class="btn btn-sm btn-default"  href="#activity-reports" id="activity-reports-upgrade">Go</a>
+                </div>
+                
+            {{else}}
+                <span class="btn btn-default btn-sm disabled" >Go</span>
+            {{/hasMenuScope}}
+            {{else}}
+            <!-- Description -->
+            <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+            Get a periodic  email digest of various activities by users in Agile.
+            <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+             </div>
+        <!-- Add button -->
+            <div >
+                    <div class="btn btn-sm btn-default _upgrade" id="activity-reports-upgrade">Go</div>
+                </div>
+                 
+            {{/isAllowedInCurrentPlan}}
+             <div class="clearfix"></div>
+        
+    </div>
+</div>
+{{/hasMenuScope}}
+</div>
+    </div>
+
+
+<div class="tab-pane" id="graph-tab">
+<div class="row">
+ <div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Growth-graph.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-bar-chart icon-3x"></i>
+            </div>
+            <b>Growth Graphs</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+            Visually see how your leads are growing over time. Compare channels for essential insights.
+        </div>
+        <!-- Add button -->
+        <div >
+            <a class="btn btn-sm btn-default" href="#report-charts/growth">Go</a>
+        </div>
+    </div>
+</div>
+<!-- Funnel reports -->
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/funnel-graph.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-filter icon-3x"></i>
+            </div>
+            <b>Funnel Graphs</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+            See a funnel graph of how leads are passing through various stages in your sales cycle.
+        </div>
+        <!-- Add button -->
+        <div >
+            <a class="btn btn-sm btn-default" href="#report-charts/funnel">Go</a>
+        </div>
+    </div>
+</div>
+<!-- cohorts reports -->
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/ratio.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-group icon-3x"></i>
+            </div>
+            <b>Ratio Reports</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+            See what percentage of leads are converting over time.
+        </div>
+        <!-- Add button -->
+        <div >
+            <a class="btn btn-sm btn-default" href="#report-charts/cohorts">Go</a>
+        </div>
+    </div>
+</div>   
+</div>
+</div>
+
+<div class="tab-pane" id="campaign-tab">
+<div class="row">
+<!-- Performance Stats -->
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Daily-reports.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-dashboard icon-3x"></i>
+            </div>
+            <b>Campaign Stats</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+           Find out how a campaign is performing over a time period.
+        </div>
+        <!-- Add button -->
+       
+        <div >
+            <a id="campaign_id" class="btn btn-sm btn-default" href="#">Go</a>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Comparison -->
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Campaign-stats.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-bar-chart icon-3x"></i>
+            </div>
+            <b>Compare Campaigns</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+            See how your campaigns fare against each other.
+        </div>
+        <!-- Add button -->
+        <div >
+            <a class="btn btn-sm btn-default" href="#campaign-stats" id="campaign-stats">Go</a>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="tab-pane" id="activities-tab">
+<div class="row">
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/user-activities.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-cogs icon-3x"></i>
+            </div>
+            <b>User Activities</b>
+        </div>
+        <br />
+        
+        {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+          See a chronological activity report of your CRM users.
+          <div style="display:none;" class="activities-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+        </div>
+        <!-- Add button -->
+          
+                <div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+                      <a class="btn btn-sm btn-default" href="#activities">Go</a>
+                </div>
+            {{else}}
+            <!-- Description -->
+            <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+             See a chronological activity report of your CRM users.
+           <div style="display:none;" class="activities-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+            </div>
+        <!-- Add button -->
+            <div class="inline " style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+                    <div class="btn btn-sm btn-default _upgrade" id="activities-upgrade">Go</div>
+                </div>
+                 
+            {{/isAllowedInCurrentPlan}}
+             <div class="clearfix"></div>
+
+    </div>
+</div>
+
+<!-- Contact Activities -->
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/contact.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-cogs icon-3x"></i>
+            </div>
+            <b>Contact Activities</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+          See a chronological contact activity report of your CRM contacts.
+        </div>
+        <!-- Add button -->
+        <div >
+            <a class="btn btn-sm btn-default" href="#contact-activities">Go</a>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<div class="tab-pane" id="calls-tab">
+<div class="row">
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Calls-By-User.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-call-end  icon-3x"></i>
+            </div>
+            <b>Calls by User</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="See a report of total calls made or total time spent on calls by each user.">
+          See a report of total calls made or total time spent on calls by each user.
+          <div style="display:none;" class="activities-upgrade" ><p class="text-danger"><p></div>
+        </div>
+        <!-- Add button -->
+
+     <div><a class="btn btn-sm btn-default" href="#report-calls/total-calls">Go</a></div>
+                 
+            
+             <div class="clearfix"></div>
+
+    </div>
+</div>
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/averageofcall.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-clock icon-3x"></i>
+            </div>
+            <b>Average call duration</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Know the average time spent on a call by each user.">
+          Know the average time spent on a call by each user.
+        </div>
+        <!-- Add button -->
+        <div >
+            <a class="btn btn-sm btn-default" href="#report-calls/average-calls">Go</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/user-activities-call.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-list  icon-3x"></i>
+            </div>
+            <b>Call Logs</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="See a full call log of all users.">
+          Generate ​timelines of calls by user.
+        </div>
+        <!-- Add button -->
+        <div >
+            <a class="btn btn-sm btn-default" id="call-activity-link">Go</a>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/Call-Outcomes.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-pie-chart  icon-3x"></i>
+            </div>
+            <b>Call Outcomes</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Know the calls made  by each user on a pie graph.">
+          Generate a pie graph with call outcomes.
+        </div>
+        <!-- Add button -->
+        <div >
+            <a class="btn btn-sm btn-default" href="#report-calls/pie-graph">Go</a>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Call_Report_Time.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-bar-chart  icon-3x"></i>
+            </div>
+            <b>Call Report-Time Based</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Generate a bar graph with calls based on time.">
+          Generate a bar graph with calls based on time.
+        </div>
+        <!-- Add button -->
+        <div >
+            <a class="btn btn-sm btn-default" href="#report-calls/timebased">Go</a>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="tab-pane" id="deals-tab">
+<div class="row">
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Incoming-Deals.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-graph icon-3x"></i>
+            </div>
+            <b>Incoming Deals</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+            See how your deal sources are performing over time.
+        </div>
+        <!-- Add button -->
+        <div>
+            <a class="btn btn-sm btn-default" href="#report-deals">Go</a>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Lost-Deal-Analysis.png'></img>" data-trigger="hover">
+           <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-pie-chart icon-3x"></i>
+            </div>
+            <b>Lost Deal Analysis</b>
+            </div>
+             <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+           Get insights into why deals were lost. Filter by owner, track and source.
+
+        </div>
+        <!-- Add button -->
+        <div >
+            <a class="btn btn-sm btn-default" href="#report-lossReason">Go</a>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/Revenue.png'></img>" data-trigger="hover">
+           <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-pie-chart icon-3x"></i>
+            </div>
+            <b>Revenue by Source</b>
+            </div>
+             <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+           See how each source contributes to revenue. Know which owner converts from which source better.
+        </div>
+        <!-- Add button -->
+        <div >
+            <a class="btn btn-sm btn-default" href="#reports-wonDeals">Go</a>
+        </div>
+    </div>
+ </div>
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/Sales-forecast.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-graph icon-3x"></i>
+            </div>
+            <b>Sales Forecast</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+         Know your revenue forecast based on your deals data.
+        </div>
+        <!-- Add button -->
+        <div>
+            <a class="btn btn-sm btn-default" href="#report-sales">Go</a>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/User-reports.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-graph icon-3x"></i>
+            </div>
+            <b>User Reports</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+        Analyze sales performance by user.
+        </div>
+        <!-- Add button -->
+        <div>
+            <a class="btn btn-sm btn-default" href="#user-reports">Go</a>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+
+
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</script>

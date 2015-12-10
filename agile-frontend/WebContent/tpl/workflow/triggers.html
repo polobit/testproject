@@ -1,0 +1,70 @@
+<script id="triggers-model-template" type="text/html">
+			
+	<td class="data" data="{{id}}"><a href="#trigger/{{id}}" class="stop-propagation">{{name}}</a></td>        
+	<td>{{triggerType type}}</td>
+	<td>{{#if custom_score}}{{custom_score}} {{/if}} {{#if custom_tags}}{{custom_tags}}{{/if}} {{#if trigger_deal_milestone}}{{trigger_milestone trigger_deal_milestone}}{{/if}} {{#if trigger_stripe_event}}{{trigger_stripe_event}}{{/if}}{{#if trigger_shopify_event}}{{trigger_shopify_event}}{{/if}} {{#if contactFilter}}{{contactFilter}}{{/if}}{{#if trigger_form_event}}{{getFormNameFromId trigger_form_event}}{{/if}}</td>
+	<td>{{campaign}}</td>
+	<br />
+</script>
+
+<script id="triggers-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>List of Triggers</h1>
+            <a href="#trigger-add" class="btn right" id="addTrigger" style="top:-30px;position:relative"><i class="icon-plus-sign"></i> Add Trigger</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span9">
+        {{#unless this.length}}
+        <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>You do not have any triggers currently.</h3>
+                    <div class="text">
+                        You can define a trigger to start execution of a campaign. But please make sure to create atleast one campaign before creating triggers.
+                    </div>
+                    <a href="#trigger-add" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i>  Add trigger </a>
+                </div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+        <div class="data-block">
+            <div class="data-container">
+                <table class="table table-striped showCheckboxes" url="core/api/triggers/bulk">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Condition</th>
+                            <th>Value</th>
+                            <th>Campaign</th>
+                        </tr>
+                    </thead>
+                    <tbody id="triggers-model-list" route="trigger/"> </tbody>
+                </table>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    <div class="span3">
+        <div class="well">
+            <h3>
+                What are Triggers?
+            </h3>
+            <br />
+            <p>
+                Triggers are pre-defined conditions set up by you. If the condition is satisfied, you can choose an action to follow using workflow automation.
+            </p>
+            <p>
+                e.g. If a user registers on your website, you can automate the workflow to send a welcome email. The user registering on site is the trigger.
+            </p>
+        </div>
+    </div>
+</div>
+</script>

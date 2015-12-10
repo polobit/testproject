@@ -1,0 +1,83 @@
+<script id="forms-collection-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-md-12">
+            <h3 class="font-thin h3 pull-left">Forms</h3>
+			<a target="_blank" href="formbuilder" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> Add Form</a>
+			<div class="clearfix"></div> 
+    </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+ <div class="col-md-9">
+	{{#unless this.length}}
+	<div style="height: 245px;">
+	<div class="alert-info alert">
+		<div class="slate-content">
+			<div class="box-left pull-left m-r-md">
+				<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+			</div>
+			<div class="box-right pull-left">
+				<h4 class="m-t-none">You do not have any Forms saved.</h4>
+				<a target="_blank" href="formbuilder" class="btn btn-default m-t-xs btn-sm blue btn-slate-action"><i class="icon-plus-sign"></i> Add Form</a>
+			</div>
+			<div class="clearfix">
+			</div>
+		</div>
+	</div>
+	</div>
+	{{/unless}}
+	{{#if this.length}}
+	<div class="data-block">
+		<div class="data-container">
+			<div class="panel panel-default">
+			<div class="panel-heading">Forms List</div>
+			<table class="table table-bordered table-striped showCheckboxes c-p agile-table" url="core/api/forms/bulk">
+				
+				<thead>
+					<tr>
+						<th style="width:50%">Form Title</th>
+						<th style="width:50%">Last Modified</th>
+					</tr>
+				</thead>
+				<tbody id="forms-model-list">
+				</tbody>
+			</table>
+			</div>
+		</div>
+	</div>
+	{{/if}}
+ </div>
+
+<div class="col-md-3">
+        <div class="data-block">
+			
+            	<h4 class="h4 m-t-none m-b-sm">
+                	What are Forms?
+            	</h4>
+            	
+				<p>
+					Forms created using the <a target="_blank" href="formbuilder">Form Builder</a> can be placed on your website or app. These Forms are readily linked to your Agile account. When a visitor fills the form, a Contact is created and subsequent web activity is logged automatically.
+				</p>
+			
+    </div>
+</div>
+</div>
+</div>
+</script>
+
+<script id="forms-model-template" type="text/html">
+	<td><a target="_blank" href="formbuilder?form={{id}}"><span  style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">{{formName}}</span></a></td>
+    <td>
+		<a target="_blank" href="formbuilder?form={{id}}">
+			<span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">
+				<small class="edit-hover text-muted">
+					<i class="fa fa-clock-o m-r-xs"></i>
+					<time class="form-modified-time" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+				</small>
+			</span>
+		</a>
+	</td>
+	</br>
+</script>

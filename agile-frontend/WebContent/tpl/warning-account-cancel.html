@@ -1,0 +1,118 @@
+<script id="warning-template" type="text/html">
+<div id="warning-deletion" class="modal hide">
+    <div class="modal-header warning-header" style="background-color:#DA4F49">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 font-color="background-color:black">Make sure you want to do this</h3>
+    </div>
+    <div class="modal-body" style="padding:0px">
+        <div class="warning-dangerzone">
+            <p>
+                This is extremely important. If you don't read this, unexpected bad things will most definitely occur.
+            </p>
+        </div>
+        <ul style="padding:10px">
+            <li>This action cannot be UNDONE.</li>
+            <li>
+                Data you used 
+                <ul>
+                    <li>Data : {{bytes}}</li>
+                    <li>Entities : {{entities}}</li>
+                </ul>
+            </li>
+            <li>All data will be DELETED.</li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+        <a href="#" id="confirm-delete-account" class="btn btn-danger ">Delete Account</a>
+    </div>
+</div>
+</script>
+
+<script id="warning-feedback-template" type="text/html">
+<div id="warning-deletion-feedback" class="modal hide">
+    <div class="modal-header warning-header" style="background-color:#DA4F49">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 font-color="background-color:black">Make sure you want to do this</h3>
+    </div>
+    <div class="modal-body">
+            <p>
+			   <b>Sorry to see you go. Please tell us why?</b>
+            </p>
+		<form id="cancelation-feedback-form">
+       		<ul style="list-style-type:none;">
+            	<li style="padding-bottom:4px">
+					<label for="Did not like it" style="display:inline">
+						<input type="radio" name="cancellation_reason" value="No need"  style="display:inline"/>
+				        Was just checking it out. Don't need it.</label>
+           		</li>
+				<li style="padding-bottom:4px">
+						<input type="radio" name="cancellation_reason" value="Overkill" style="display:inline"/>
+				        <label for="Overwhelming" style="display:inline">Overwhelming for me</label>
+            	</li>
+				<li style="padding-bottom:4px">
+						<input type="radio" name="cancellation_reason" value="Hard to use"  style="display:inline"/>
+				        <label for="Hard to use" style="display:inline">Hard to use</label>
+            	</li>
+				<li style="padding-bottom:4px">
+						<input type="radio" name="cancellation_reason" value="Costly" style="display:inline"/>
+				        <label for="Expensive for me" style="display:inline">Expensive for me</label>
+            	</li>
+				<li style="padding-bottom:4px">
+						<input type="radio" name="cancellation_reason" class="extra_info" value="No fit" style="display:inline"/>
+				        <label for="No fit" style="display:inline">Doesn't meet my requirements</label>
+            	</li>
+				<li style="padding-bottom:4px">
+						<input type="radio" name="cancellation_reason" value="Other"  checked="checked" class="extra_info" style="display:inline"/>
+				        <label for="Other" style="display:inline">Other</label>
+            	</li>
+        	</ul>
+			<div style="padding-left:5%" class="controls">
+				<textarea name="account_delete_reason" class="required span4" id="account_delete_reason" rows="6" placeholder="Please give us more details. This will help us a lot."></textarea>
+    		</div>
+		</form>
+	</div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+        <a href="#" id="warning-feedback-save" class="btn btn-danger ">Delete Account</a>
+    </div>
+</div>
+</script>
+
+<script id="send-cancellation-request-template" type="text/html">
+<div id="send-cancellation" class="modal hide">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Request for cancellation</h3>
+    </div>
+    <div class="modal-body">
+            <p>
+			   <b>Please tell us why you want to leave. Our support team get in touch with you soon.</b>
+            </p>
+		<form id="cancelation-request-form">
+			<div class="controls">
+				<textarea name="account_cancel_reason" style="width:100%;" class="required" id="account_cancel_reason" rows="3"></textarea>
+    		</div>
+		</form>
+	</div>
+    <div class="modal-footer">
+        <!-- <a href="#" class="btn" data-dismiss="modal">Cancel</a> -->
+        <a href="#" id="send-delete-request" class="btn btn-primary ">Send Request</a>
+    </div>
+</div>
+</script>
+
+<div id="send-delete-request-step2" class="modal hide">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h3>Cancellation Request Received</h3>
+    </div>
+   <div class="modal-body">
+        We are sorry to see you leaving. Our Support team will contact you within 48 hours to know more about the reason for leaving us. Please note <i>your subscription is still active</i> and our Support team will help you with the further process.<br><br>
+		To know the status of the request, please <a href="#contact-us" class="text-info" onclick="$('.modal-backdrop').hide()">write to us</a>.
+	</div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" data-dismiss="modal">OK</a>
+        
+    </div>
+</div>

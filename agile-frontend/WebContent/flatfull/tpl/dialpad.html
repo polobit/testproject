@@ -1,0 +1,28 @@
+<script id="dialpad-template" type="text/html">
+<div id="dialpad_btns" class="dialpad_btns" style="display: block;width: 140px;"> 
+  <div style="max-width: 100%;background-color: transparent;border-collapse: collapse;border-spacing: 0;display: table;">
+   <div style="display: table-row-group;vertical-align: middle;border-color: inherit;"> 
+     <div style="display: table-row;vertical-align: inherit;border-color: inherit;">
+       <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="1" class="button1" id="button1" onclick="sipSendDTMF('1');"></div>
+       <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="2" class="button2" id="button2" onclick="sipSendDTMF('2');"></div>
+       <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="3" class="button3" id="button3" onclick="sipSendDTMF('3');"></div>
+     </div>
+     <div style="display: table-row;vertical-align: inherit;border-color: inherit;">
+       <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="4" class="button4" id="button4" onclick="sipSendDTMF('4');"></div>
+       <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="5" class="button5" id="button5" onclick="sipSendDTMF('5');"></div>
+       <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="6" class="button6" id="button6" onclick="sipSendDTMF('6');"></div>
+     </div>
+     <div style="display: table-row;vertical-align: inherit;border-color: inherit;">
+       <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="7" class="button7" id="button7" onclick="sipSendDTMF('7');"></div>
+       <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="8" class="button8" id="button8" onclick="sipSendDTMF('8');"></div>
+       <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="9" class="button9" id="button9" onclick="sipSendDTMF('9');"></div>
+     </div>
+     <div style="display: table-row;vertical-align: inherit;border-color: inherit;">
+       <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="sipSendDTMF('*');"></div>
+       <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="0" class="button0" id="button0" onclick="sipSendDTMF('0');"></div>
+       <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="sipSendDTMF('#');"></div>
+     </div>
+    </div>
+  </div>
+</div>
+</script>

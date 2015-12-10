@@ -1,0 +1,80 @@
+<script id="cases-contact-collection-template" type="text/html">
+  {{#unless this.length}}
+        <div class="wrapper p-t-none">
+            <div class="slate-content mobile-pad-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">{{contactShortName}} is not associated with any cases. </h4>
+                    <div class="text">
+						All Cases that have this {{#isCompany}}company{{else}}contact{{/isCompany}} in the 'Related to' field are shown here.
+                    </div>
+					{{#hasMenuScope 'CASES'}}
+                    <a href="#" class="contact-add-case btn btn-default btn-addon btn-sm blue btn-slate-action"><i class="icon-plus-sign"></i>  Add Case</a>
+					{{/hasMenuScope}}
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+   {{/unless}}
+
+{{#if this.length}}
+<div class="m-b-md m-t-md m-r-sm" align="right">
+{{#hasMenuScope 'CASES'}}
+   		<a href="#" class="contact-add-case btn btn-default btn-sm  btn-addon"><span><i class='icon-plus-sign'/></span> Add Case</a> 
+	{{/hasMenuScope}}
+</div>
+	<ul id="cases-contact-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs"></ul>
+{{/if}}
+</script>
+
+<script id="cases-contact-model-template" type="text/html"> 
+<div  class="activity block pos-rlt">
+	
+		<div class="activity-block-owner thumb-xs pull-left m-r-sm avatar">
+			{{#if ownerPic}}
+				<img class="user-img r r-2x" alt="" src="{{ownerPic}}" >
+			{{else}}
+				<img class="user-img r r-2x" src="{{defaultGravatarurl 40}}">
+			{{/if}}
+			<span class="owner-name hide">{{owner.name}}</span>
+		</div>
+		<div class="pull-left rightThumbView">
+		<div class="pull-left contact-title-dynamic">
+		<div class="text-cap text-md custom-color">
+		{{title}}
+<div>
+		<span class="label bg-light">{{ucfirst status}}</span>
+</div>
+		</div>
+		</div>	
+       <div class="pull-right">
+		<small class="edit-hover text-muted">
+		<i class="fa fa-clock-o m-r-xs"></i><time class="deal-created-time  text-sm" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+		</small>
+		</div>	
+<div class="clearfix"></div>
+<div class="contact-desc-dynamic hide">
+    {{description}} &nbsp;
+</div>
+<div class="clearfix"></div>
+	
+		<div class="pull-right pos-abs pos-r-0 pos-b-0">
+		<span class="actions">
+             {{#hasMenuScope 'CASES'}}
+			 <a title="Edit"  data="{{id}}" href="#" class="cases-edit-contact-tab c-p text-l-none p-r-sm" > <i class="icon-pencil"></i> </a>
+             <a title="Delete" class="c-p"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/cases/bulk"></span></a>
+             {{/hasMenuScope}}
+        </span>
+        </div>
+        <div class="clearfix"></div>
+	
+
+</div>
+<div class="clearfix"></div>
+</div>
+
+</script>
+

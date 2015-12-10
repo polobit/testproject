@@ -1,0 +1,63 @@
+/* Generic context menu styles */
+.contextMenu {
+	position: absolute;
+	width: 164px;
+	z-index: 99999;
+	padding: 0px;
+	margin: 0px;
+	margin-left:-42px;
+	display: none;
+}
+
+.contextMenu LI {
+	list-style: none;
+	padding: 0px;
+	
+}
+
+.contextMenu A{
+	
+	text-decoration: none;
+	display: block;
+	background-position: left center;
+	background-repeat: no-repeat;
+	outline: none;
+	margin:0px;
+	padding: 0px;
+	cursor:normal;
+	width:164px;
+	height:31px;
+}
+
+.contextMenu LI.hover A  {
+	
+	cursor: pointer;
+}
+
+.contextMenu LI.disabled A {
+	
+	cursor: default;
+}
+
+.contextMenu LI.hover.disabled A {
+	background-color: transparent;
+}
+
+.contextMenu LI.separator {
+	border: 0px none;
+}
+
+/*
+	Adding Icons
+	
+	You can add icons to the context menu by adding
+	classes to the respective LI element(s)
+*/
+
+.contextMenu LI.edit A { background-image: url(../images/draw2d/rightclickedit.png); width:156px;height:38px;}
+.contextMenu LI.duplicate A { background-image: url(../images/draw2d/rightclickduplicate1.png); width:156px;height:42px;}
+.contextMenu LI.delete A { background-image: url(../images/draw2d/rightclickdelete.png); width:156px;height:31px;}
+
+.contextMenu LI.edit.hover A{ background-image: url(../images/draw2d/rightclickedit-over.png); }
+.contextMenu LI.duplicate.hover A { background-image: url(../images/draw2d/rightclickduplicate1-over.png); }
+.contextMenu LI.delete.hover A{ background-image: url(../images/draw2d/rightclickdelete-over.png); }

@@ -1,0 +1,118 @@
+<script id="settings-email-prefs-template" type="text/html">
+{{#check_plan "PRO"}}
+<div class="row" style="display: none;">
+<div class="col-md-12">
+<div align="center" class="p-b-xl">
+You can integrate a maximum of 3 email accounts irrespective of the type of account (Gmail/IMAP/Office365).
+</div>
+</div>
+</div>
+{{/check_plan}}
+
+<div id = "all-email-settings-prefs" class="row">
+	<div class="col-md-12">
+<div class="row">
+	<div id="social-prefs"></div>
+	<div id="imap-prefs"></div>
+	<div id="office-prefs"></div>
+</div>
+    </div>
+</div>
+</script>
+
+
+<script id="settings-imap-access-model-template" type="text/html">
+<div class="col-md-4 col-sm-6 col-xs-12">
+	<div class="panel panel-default" style="height:225px;">
+	<div class="panel-heading">
+		<center>
+			<img class="m-b-none thumb-transparent img-responsive thumb-xl" style="height:47px;" src="{{getS3ImagePath '/img/email-prefs/imap.jpg'}}"/>
+		</center>
+	</div>
+	<div class="panel-body">
+		<div  style="min-height: 85px;">
+		{{#if id}}
+		   <div>
+		   	  <div class="l-h word-break">Server: {{server_name}}</div>
+			  <div class="l-h word-break">Email: {{user_name}}</div>
+		   </div>
+		{{else}}
+    	<div class="m-b-sm" rel="tooltip" title="Just link your IMAP account and Agile will show emails below a contact from your Inbox.">
+			Just link your IMAP account and Agile will show emails below a contact from your Inbox and Sent folders.
+		</div>
+		
+        {{/if}}
+        </div>
+		<center>
+			{{#if id}}
+                <div class="">
+				<a class="btn btn-sm btn-danger" href="#" id="imap-prefs-delete" name="imap" oid={{id}}>Disable</a>
+				<a class="btn btn-sm btn-default" href="#imap/{{id}}">Settings</a>
+                </div>
+			{{else}}
+			<div>
+			    {{#has_email_account_limit_reached}}
+			    {{#if_non_pro_plan}}
+				<div class="p-xs" style="width: 75%;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>
+				{{/if_non_pro_plan}}
+				<!--<a class="btn btn-sm btn-default m-t-sm" disabled="disabled">Enable</a>-->
+				
+				{{else}}
+				<a class="btn btn-sm btn-default" href="#imap">Enable</a>
+				{{/has_email_account_limit_reached}}
+			</div>
+			{{/if}}
+		</center>
+	</div>
+	</div>
+</div>
+</script>
+<script id="settings-imap-access-collection-template" type="text/html">
+<div id="settings-imap-access-model-list"></div>
+</script>
+
+<script id="settings-office-access-model-template" type="text/html">
+<div class="col-md-4 col-sm-6 col-xs-12">
+	<div class="panel panel-default" style="height:225px;">
+	<div class="panel-heading">
+		<center>
+			<img class="m-b-none thumb-transparent img-responsive thumb-xl" style="height:47px;" src="{{getS3ImagePath '/img/email-prefs/office365.jpg'}}"/>
+		</center>
+		</div>
+		<div class="panel-body">
+		<div  style="min-height: 85px;"> 
+			{{#if id}}
+			  <div class="m-b-md p-b-xs">
+		   	  <div class="l-h word-break">Server: {{server_url}}</div>
+		   	  <div class="l-h word-break">Email: {{user_name}}</div>
+		   </div>
+			{{else}}
+			<div class="m-b-sm" rel="tooltip" title="See all emails related to a contact from your Office365 account.">
+				See all emails related to a contact from your Office365 account.
+			</div>
+			{{/if}}
+		</div>
+        <center>
+			{{#if id}}
+				<a class="btn btn-sm btn-danger" href="#" id="office-prefs-delete" name="office" oid={{id}}>Disable</a>
+				<a class="btn btn-sm btn-default" href="#office/{{id}}">Settings</a>
+			{{else}}
+				<div>
+			    {{#has_email_account_limit_reached}}
+			    {{#if_non_pro_plan}}
+				<div class="p-xs" style="width: 75%;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>				
+				{{/if_non_pro_plan}}
+				<!--<a class="btn m-t-sm btn-sm btn-default" disabled="disabled">Enable</a>-->
+				{{else}}
+				<a class="btn btn-sm btn-default" href="#office">Enable</a>
+				{{/has_email_account_limit_reached}}
+				</div>
+			{{/if}}
+		</center>
+	</div>
+	</div>
+</div>
+</script>
+<script id="settings-office-access-collection-template" type="text/html">
+<div id="settings-office-access-model-list"></div>
+</script>

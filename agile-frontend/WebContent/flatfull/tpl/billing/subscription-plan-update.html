@@ -1,0 +1,39 @@
+<script id="update-plan-template" type="text/html">
+<div class="span6">
+    <div class="well">
+        <form id="planform" class="form-horizontal " name="plan">
+            <fieldset>
+                <div class="control-group">
+                    <legend>Update Plan</legend>
+                    <label class="control-label">Plan<span class="field_req">*</span></label>
+                    <div class="controls">
+                        <select class="required form-control" name="plan_id">
+                            <option value="plan10">Lite</option>
+                            <option value="plan20">Pro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Quantity<span class="field_req">*</span></label>
+                    <div class="controls">
+                        <select class="required form-control" name="quantity">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <form id="gateway" class="form-horizontal hide">
+            <input type="text" name="gateway" class="hidden form-control" value="Stripe" />
+        </form>
+        <div class="form-actions" align="center">
+			<a href="#subscribe" class="btn btn-sm btn-default">Close</a>
+            <a href="#" type="submit" id="subscribe" class="save btn btn-sm btn-primary">Change Plan</a>
+        </div>
+    </div>
+</div>
+</script>

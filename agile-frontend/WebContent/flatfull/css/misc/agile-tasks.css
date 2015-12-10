@@ -1,0 +1,493 @@
+/* ************* Task UI (Trello) CSS ***************** */
+#activityModal>.modal-body, #activityTaskModal>.modal-body {
+	max-height: 453px;
+	padding-bottom: 0 !important;
+	margin-bottom: 0 !important;
+}
+
+#activityModal>.for-description, #activityTaskModal>.for-description {
+	padding-bottom: 0 !important;
+	margin-bottom: 0 !important;
+}
+
+.ui-sortable-placeholder {
+	border: 3px dashed #aaa;
+	background: #ccc;
+}
+
+.ui-sortable-helper {
+	cursor: move;
+}
+
+.list-area-wrapper {
+	/*font: 14px/18px "Helvetica Neue", Arial, Helvetica, sans-serif;*/
+	height: 100%;
+}
+
+.list-area {
+	/*box-sizing: border-box;
+	font-size: 0;
+	line-height: 0;*/
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding-bottom: 10px;
+	white-space: nowrap;
+	width: 100%;
+}
+
+.list-area::-webkit-scrollbar {
+	height: 8px;
+}
+
+.list-area::-webkit-scrollbar-track {
+	background: #d0d0d0;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+.list-area::-webkit-scrollbar-thumb {
+	background: #999;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+.task-trello-list {
+	/*background: none;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	box-sizing: border-box;
+	
+	font-size: 14px;
+	line-height: 18px;
+	margin-left: 6px;
+	padding: 32px 7px 40px;*/
+	position: relative;
+	width:280px;
+	vertical-align: top;
+	display: inline-block;
+	margin-right:10px;
+/*	white-space: normal;
+	max-height: 100%;
+	border: 1px solid #ddd;*/
+}
+
+
+
+.task-trello-list:first-child {
+	/*margin-left: 0;*/
+}
+
+.list-header {
+	/*font-size: 17px;
+	font-weight: normal;
+	padding: 6px 9px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	background: #eee;*/
+}
+
+.list-tasks {
+	/*box-sizing: border-box;*/
+	overflow: auto;
+	/*margin-right: -4px;
+	margin-top: 5px;*/
+}
+
+.list-tasks::-webkit-scrollbar {
+	width: 7px;
+}
+
+.list-tasks::-webkit-scrollbar-track {
+	background: #d0d0d0;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+.list-tasks::-webkit-scrollbar-thumb {
+	background: #999;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+.list-bottom {
+/*	-webkit-border-radius: 0 0 3px 3px;
+	-moz-border-radius: 0 0 3px 3px;
+	border-radius: 0 0 3px 3px;
+	color: #939393;
+	cursor: pointer;
+	padding: 7px 10px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;*/
+}
+
+.list-bottom:hover,.list-bottom>a {
+	/*text-decoration: none;*/
+}
+
+.listed-task {
+	/*background: #fff;
+	border-bottom: 1px solid #eee;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;*/
+	min-height: 30px;
+	
+	position: relative;
+	/*margin: 5px 4px 0 0;
+	padding: 8px 8px 4px 8px;*/
+}
+
+.listed-task:after {
+	/* background: yellow; */
+	/*content: ' ';
+	display: block;
+	height: 3px;
+	position: absolute;
+	left:0px;
+	top: -3px;
+	width: 30px;*/
+	  content: ' ';
+  display: block;
+  height: 31px;
+  position: absolute;
+  left: -15px;
+  top: 0px;
+  width: 2px;
+}
+
+.listed-task.yellow:after {
+	background: #fad733;
+}
+
+.listed-task.red:after {
+	background: #f05050;
+}
+
+.listed-task.gray:after {
+	background: #edf1f2;
+}
+
+.listed-task.blue:after {
+	background: #7266ba;
+}
+
+.listed-task:first-child {
+	/*margin-top: 0;*/
+}
+
+.listed-task:hover {
+	/*background: #f2f2f2;*/
+}
+
+.new-task-subject {
+	/*font-size: 13px;
+	font-weight: bold;
+	margin-bottom: 2px;
+	text-overflow: ellipsis;
+	display: block;
+	overflow: hidden;*/
+
+	/* apply ellipses if long text are there */
+	/* display: -webkit-box;
+    line-height: 15px;     fallback
+    max-height: 75px;      fallback
+    -webkit-line-clamp: 5; number of lines to show
+    -webkit-box-orient: vertical; */
+	/*width: 100%;
+	/* white-space: nowrap; */
+	position:relative;
+	top:-3px;
+}
+.new-task-subject::first-letter
+{
+	text-transform:capitalize;
+}
+.task-completed {
+	text-decoration: line-through;
+}
+
+/* .new-task-related-to {
+	color: #1f1f8e;
+	font-size: 13px;
+	
+	apply ellipses if more contacts are there
+	display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+} */
+.new-task-due-time {
+	/*color: #888;
+	font-size: 12px;
+	line-height: 16px;
+	float: left;
+	padding-bottom: 2px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	width: 67%;
+	display: block;
+	overflow: hidden;*/
+	cursor: move;
+}
+
+.new-task-type {
+	/*background-color: #777;*/
+/*	03/03/2015 background: #777;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	color: #fff;
+	padding: 2px 4px 2px 4px; */
+	
+	/* position: absolute; */
+	/* right: 5px; */
+	/* top: 4px; */
+	/* text-align: center; */
+	cursor: move;
+	text-shadow: none;
+}
+
+.deal-task-type {
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	color: #fff;
+	padding: 2px 4px 2px 4px;
+	/* position: absolute; */
+	/* right: 5px; */
+	/* top: 4px; */
+	/* text-align: center; */
+	cursor: move;
+	text-shadow: none;
+}
+
+.new-task-owner {
+	
+	/* 3/3/2015 border: 1px solid #e6e6e6;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	padding: 1px; */
+	
+	/* position: absolute; */
+	/* right: 5px; */
+	/* top: 25px; */
+	float: left;
+	margin-right: 7px;
+}
+
+.shift-up {
+	top: 3px;
+}
+
+.task-body {
+	/*padding-bottom: 18px;*/
+	min-height: 38px;
+}
+
+.task-body-category {
+	min-height: 30px;
+}
+
+.task-body-owner {
+	min-height: 20px;
+}
+
+.new-task-footer {
+	/*min-height: 20px;
+	position: absolute;
+	bottom: 0;
+	width: 97%;*/
+}
+
+.task-note-action {
+	color: #888;
+	/*padding-right: 4px;*/
+	/*float: right;*/
+}
+
+.task-actions {
+	color: #888;
+	display: none;
+	/*padding-right: 4px;*/
+	/*float: right;*/
+	cursor: pointer;
+}
+
+.progress-label {
+	/* width: 20px; */
+	cursor: move;
+	margin-top: 4px;
+	text-shadow: none;
+	background: #777;
+	float: right;
+}
+
+.task-model-list {
+	min-height: 30px;
+}
+
+.task-left {
+	width: auto;
+	float: left;
+	
+}
+.task-right
+{
+float:right;
+}
+.task-content-view
+{
+	width:calc(100% - 37px);
+}
+@-moz-document url-prefix() {
+   .task-content-view
+{
+	width:81%;
+}
+}
+
+.task-body-owner .task-content-view
+{
+	width:100%!important;
+}
+
+.progress-slider {
+	margin-left: 1 px;
+	width: 103%;
+	margin-top: 6 px;
+	display: none;
+}
+
+.task-add-note {
+	margin-top: -21px;
+	margin-right: 50px;
+	cursor: pointer;
+}
+
+.notes>li {
+	list-style: none !important;
+	display: -webkit-box;
+	margin-left: -24px;
+	margin-bottom: 10px;
+}
+
+.notes-list>li {
+	list-style: none !important;
+	display: -webkit-box;
+	margin-bottom: 10px;
+	margin-left: -12px;
+	width: 100%
+}
+
+/*#new-tasks-lists-model-list {
+	height: 100%;
+}*/
+
+#show_loader {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding-bottom: 10px;
+}
+
+div.task-body:hover {
+	cursor: move;
+}
+
+.task-related-contacts {
+	text-overflow: ellipsis;
+	display: block;
+	overflow: hidden;
+}
+/* .task-actions:hover,.task-actions:focus {display: block;} */
+/* ********************************************************* */
+
+/** add to cart **/
+.cat-addtocart-out {
+	position: relative;
+	margin-bottom: 30px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	/*border-radius: 5px;
+	border: 1px solid #fc9851;
+	
+	background: #FA782D;*/
+	font-size: 30px;
+	line-height: 40px;
+	padding: 4px 10px;
+	color: #fff;
+}
+
+.cat-addtocart-out:hover {
+	/*
+	background: #fcb343; 
+	*/
+	
+}
+
+.cat-addtocart:hover,input.democheckbox {
+	cursor: pointer;
+}
+
+.cat-addtocart-out .djc_addtocart_button_v {
+	border-right: 1px solid #fdc178;
+	margin: 0 25px 0 0;
+	padding: 0 30px 0 10px;
+	font-style: normal !important;
+	color: #fff;
+	float: left;
+	width: 75px;
+}
+
+.cat-addtocart-out .djc_addtocart_link {
+	color: #fff;
+}
+
+.cat-addtocart-out a:hover {
+	color: #fff;
+	text-decoration: none;
+}
+
+div.djc_addtocart_box {
+	padding: 0 0 10px 0;
+}
+
+div.row1 div.djc_addtocart_box {
+	padding: 0 0 0 20px;
+	margin: 0 0 10px 0;
+}
+
+div.cat-addtocart-row.row1,div.cat-addtocart-row.row2 {
+	border-bottom: 1px dotted #D9D9D9;
+	margin: 0 0 10px 0;
+}
+
+div.cat-addtocart-row.row1 span,div.cat-addtocart-row.row2 span {
+	float: right;
+}
+
+#djc_additionallink {
+	border-top: 1px dotted #D9D9D9;
+	margin: 10px 0 0 0;
+	padding: 10px 0 0 0;
+}
+
+#djc_additionallink span,#djc_additionallink a:hover {
+	color: #000;
+}
+/*.task-trello-list .txt-small
+{
+	font-size:75%;
+}*/

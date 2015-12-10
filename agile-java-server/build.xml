@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="agile-java-server">
+
+    <property environment="env"/>
+    <property file="build.properties"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <target name="clean">
+        <delete dir="${TARGET_DIR}"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+              	<target name="build"/>
+    <target depends="clean" name="create-target">
+        <!--Copy static content to target -->
+        <copy todir="${TARGET_DIR}">
+            <fileset dir="EarContent" />
+        </copy>
+    	<!--ant antfile="build.xml" target="build" dir="../agile-core-classes"/-->
+        <ant antfile="build.xml" target="create-target" dir="../agile-calendar"/>
+        <ant antfile="build.xml" target="create-target" dir="../agile-frontend"/>
+        <ant antfile="build.xml" target="create-target" dir="../agile-normal-bulk"/>
+        <ant antfile="build.xml" target="create-target" dir="../agile-campaigns-bulk"/>
+        <ant antfile="build.xml" target="create-target" dir="../agile-campaigns-normal"/>
+    	<ant antfile="build.xml" target="create-target" dir="../agile-temp-bulk"/>
+        <ant antfile="build.xml" target="create-target" dir="../agile-sync"/>
+    </target>
+                                                                                                        
+</project>
+                                                                                                                                                                                                                                                                                                                                                                        

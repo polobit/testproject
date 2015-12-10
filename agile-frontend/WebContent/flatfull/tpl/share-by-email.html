@@ -1,0 +1,47 @@
+<script id="share-by-email-template" type="text/html">
+	<div id="share-by-email" class="modal fade in">
+	 <div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-header">
+            <button class="close" data-dismiss="modal">x</button>
+			<h3 class="modal-title">Thanks for sharing. We sure appreciate it!</h3>
+		</div>
+		<div class="modal-body">
+		<form id='sharemailForm' name="sharemailForm" class="form-horizontal">
+			<fieldset>
+				<input type="hidden" name="from" value="{{email}}"/>
+				<div class="control-group form-group">
+					<label class="control-label col-sm-3">To<span
+						class="field_req">*</span></label>
+					<div class="controls col-sm-7">
+						<input type="text" class="required input-xlarge form-control w-full" name="to"
+							id="to" placeholder="Enter Your Friend's Email Address" value=""/>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<label class="control-label col-sm-3">Subject <span
+						class="field_req">*</span></label>
+					<div class="controls col-sm-7">
+						<input type="text" class="required input-xlarge form-control w-full" name="subject"
+							id="subject" placeholder="About" value="I love AgileCRM - I want you to try it"/>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<label class="control-label col-sm-3">Message <span
+						class="field_req">*</span></label>
+					<div class="controls col-sm-7">
+						<textarea class="required input-xlarge form-control w-full p-sm" rows="14" name="body" id="body" placeholder="Description">Hi,<br/><br/>I am using Agile CRM - it allows me to easily manage my contacts, track clicks, setup email and twitter campaigns, configure contact-level analytics, call and even receive notifications when a star contact is online.<br/><br/>I thought you would love as much as I do.<br/><br/>You can visit https://www.agilecrm.com/?utm_source=affiliates&utm_medium=web&utm_campaign={{get_current_domain}} to learn more.<br/><br/>- {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}}.</textarea>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+        </div>
+		<div class="modal-footer">
+			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">Close</a>
+            <a href="#" id="shareMail" class="save btn btn-sm btn-primary">Send</a>
+			&nbsp;&nbsp;<span id="msg"></span>
+		</div>
+</div>
+</div>
+</div>
+</script>

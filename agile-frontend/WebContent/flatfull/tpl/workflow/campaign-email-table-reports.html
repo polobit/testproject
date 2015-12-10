@@ -1,0 +1,51 @@
+<script id="campaign-email-table-reports-template" type="text/html">
+<div class="table-responsive">  
+	<table class="table table-bordered table-layout-mob-view">
+		<tbody>
+			<tr>
+				<th>Emails Sent</th>
+				<th>Emails Opened<span
+							style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="{{getS3ImagePath '/img/help.png'}}"
+							style="height: 6px; vertical-align: top" rel="popover"
+							data-placement="right"
+							data-title:" data-content="Total email opens recorded & unique opens."
+							id="element" data-trigger="hover" />
+						</span></th>
+				<th>Clicks<span
+							style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="{{getS3ImagePath '/img/help.png'}}"
+							style="height: 6px; vertical-align: top" rel="popover"
+							data-placement="right"
+							data-title:" data-content="Total email link clicks recorded & unique clicks"
+							id="element" data-trigger="hover" /></th>
+				<th>Unsubscriptions</th>
+				<th>Hard Bounces 
+					<span class="v-top m-l-n-xs">
+						<img border="0" src="{{getS3ImagePath '/img/help.png'}}"	class="v-top" style="height: 6px;" rel="popover"
+							data-placement="right" data-title:" data-content="A hard bounce occurs when the recipient's email is invalid."
+							id="element" data-trigger="hover" />
+					</span>
+				</th>
+				<th>Soft Bounces 
+					<span class="v-top m-l-n-xs"> 
+						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top" style="height: 6px;" rel="popover"
+							data-placement="right" data-title:" data-content="A soft bounce occurs when the sender's email box is full or for other reasons."
+							id="element" data-trigger="hover" />
+					</span>
+				</th>
+				<th>Spam Complaints</th>
+			</tr>
+            <tr>
+				<td>{{#if sent}}{{sent}}{{else}} - {{/if}}</td>
+				<td>{{#if opened}}{{opened}} ({{unique_opened}}) {{else}} - {{/if}}</td>
+				<td>{{#if clicks}} {{clicks}} ({{unique_clicks}}) {{else}} - {{/if}}</td>
+				<td>{{#if unsubscribed}}{{unsubscribed}} {{else}} - {{/if}}</td>
+				<td>{{#if hard_bounce}}{{hard_bounce}} {{else}} - {{/if}}</td>
+				<td>{{#if soft_bounce}}{{soft_bounce}} {{else}} - {{/if}}</td>
+                <td>{{#if spam}}{{spam}} {{else}} - {{/if}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</script>

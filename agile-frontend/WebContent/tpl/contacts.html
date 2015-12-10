@@ -1,0 +1,352 @@
+<script id="contacts-model-template" type="text/html">
+	<td style="cursor:default;" class="select_checkbox">
+			<input class="tbody_check" type="checkbox"/>
+	</td>
+	<td class="data" data="{{id}}">
+	<div class="row-fluid">
+    	<div style="display:inline;padding-right:5px;height:auto;">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
+        	{{/if_contact_type}}
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:70%">
+        	{{#if_contact_type "PERSON"}}
+        		<b>	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </b>
+        		<br />
+        		{{getPropertyValue properties "email"}}
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<b>{{getPropertyValue properties "name"}}</b></br>
+        		{{getPropertyValue properties "url"}}
+        	{{/if_contact_type}}
+	</div>
+	</div>
+	</td>
+	<td><div style="display:inline-block;vertical-align:top;">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td> 
+<!-- <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;"> --> 
+	 <div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
+		{{#each tags}}
+	    	<span class="label">{{this}}</span>	
+		{{/each}}
+	</div>
+	
+	</td>
+	<td><div>{{lead_score}}</div></td>
+</script>
+
+<script id="contacts-table-model-template" type="text/html">
+	<td style="cursor:default;" class="select_checkbox">
+			<input class="tbody_check" type="checkbox"/>
+	</td>
+	<td class="data" data="{{id}}">
+	<div class="row-fluid">
+    	<div style="display:inline;padding-right:5px;height:auto;">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
+        	{{/if_contact_type}}
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:70%">
+        	{{#if_contact_type "PERSON"}}
+        		<b>	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </b>
+        		<br />
+        		{{getPropertyValue properties "email"}}
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<b>{{getPropertyValue properties "name"}}</b></br>
+        		{{getPropertyValue properties "url"}}
+        	{{/if_contact_type}}
+	</div>
+	</div>
+	</td>
+	<td><div style="display:inline-block;vertical-align:top;">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td> 
+<!-- <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;"> --> 
+	 <div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
+		{{#each tags}}
+	    	<span class="label">{{this}}</span>	
+		{{/each}}
+	</div>
+	
+	</td>
+	<td><div>{{lead_score}}</div></td>
+</script>
+
+
+<script id="contacts-collection-template" type="text/html">
+<div class="row">
+	<div class="span12">
+		<div class="page-header">
+			<h1><span id="contact-heading">Contacts </span><span id="contacts-count">{{contacts_count}}</span></h1>
+			<div class="btn-group right" id="view-list"
+				style="top: -29px;"></div>
+			<div class="btn-group right" id="filter-list"
+				style="top: -29px;margin-right: 5px"></div>
+			<div>
+			<div class="btn-group pull-left" id="bulk-actions"
+				style="display: none; top: -29px;margin-left:26%;">
+					<div class="btn">Bulk Actions</div>
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu" id="view-actions">
+						<li><a href="#" id="bulk-tags">Add Tags</a></li>
+						<li><a href="#" id="bulk-tags-remove">Remove Tags</a></li>
+                        <li class='divider'></li>  
+						<li><a href="#" id="bulk-campaigns">Add to Campaign</a></li>
+						<li><a href="#" id="bulk-email">Send Email</a></li>
+                        <li class='divider'></li>
+						<li><a href="#" id="bulk-owner">Change Owner</a></li>
+                        {{#hasScope "EXPORT_CONTACTS"}}
+                        <li><a href="#" id="bulk-contacts-export">Export Contacts as CSV</a></li>
+                        {{/hasScope}}
+						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
+					</ul>
+			</div>
+			<div  class="btn-group pull-left" style="display: none;top:-25px;left:10px" id="bulk-select"></div>
+		</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="span3">
+		<div class="data-block">
+			<div class="well" id="lhs_filters_conatiner" style="background:none;box-shadow:0 0px 7px 0px #ddd;">
+						</div>
+		</div>
+	</div>
+	<div class="span9">
+		{{#unless this.length}}
+			<div class="filter-criteria">
+					
+			</div>
+			<div id="slate"></div>
+	{{/unless}}
+		{{#if this.length}}
+		<div class="data">
+			<div class="data-container"></div>
+			<table id="contacts-table" class="table table-striped showCheckboxes agile-ellipsis-dynamic no-sorting"
+				url="core/api/bulk/update?action_type=DELETE">
+				<col width="30px">
+				<col width="41%">
+				<col width="24%">
+				<col width="24%">
+				<col width="12%">
+				<div class="filter-criteria"></div>
+				<thead>
+					<tr>
+						<th><input class="thead_check" type="checkbox"></input></th>
+						<th>Name</th>
+						<th>Work</th>
+						<th>Tags</th>
+						<th>Lead Score</th>
+					</tr>
+				</thead>
+				<tbody id="contacts-model-list" class="contacts-model-list"
+					route="contact/" style="overflow: scroll;overflow:hidden;">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{/if}}
+</div>
+</script>
+
+<!-- Company Default View 
+	Separate HTML template, allows customization of companies list page.
+	Also when selecting Companies from filter drop-down, only this will be rendered, no custom view is supported for Companies.
+-->
+<script id="companies-model-template" type="text/html">
+<td style="cursor:default;" class="select_checkbox">
+			<input class="tbody_check" type="checkbox"/>
+	</td>
+	<td class="data" data="{{id}}">
+    	<div style="display:inline;padding-right:10px;height:auto;">
+        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:14em;overflow:hidden;">
+        		<b>{{getPropertyValue properties "name"}}</b></br>
+        		{{getPropertyValue properties "url"}}
+    	</div>
+	</td>
+	<td>
+		<div>{{setupRating star_value}}</div>
+	</td>
+	<td>
+		<div>{{owner.name}}</div>
+	</td>
+</script>
+
+<script id="companies-table-model-template" type="text/html">
+<td style="cursor:default;" class="select_checkbox">
+			<input class="tbody_check" type="checkbox"/>
+	</td>
+	<td class="data" data="{{id}}">
+    	<div style="display:inline;padding-right:10px;height:auto;">
+        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:14em;overflow:hidden;">
+        		<b>{{getPropertyValue properties "name"}}</b></br>
+        		{{getPropertyValue properties "url"}}
+    	</div>
+	</td>
+	<td>
+		<div>{{setupRating star_value}}</div>
+	</td>
+	<td>
+		<div>{{owner.name}}</div>
+	</td>
+</script>
+
+
+<script id="companies-collection-template" type="text/html">
+<div class="row">
+	<div class="span12">
+		<div class="page-header">
+			<h1><span id="contact-heading">Companies </span><span id="contacts-count"><small>{{count}}</small></span></h1>
+			<div class="btn-group right" id="view-list"
+				style="top: -29px;"></div>
+			<div class="btn-group right" id="filter-list"
+				style="top: -29px;margin-right: 5px"></div>
+			<div>
+			<div class="btn-group pull-left" id="bulk-actions"
+				style="display: none; top: -29px;margin-left:26%;">
+					<div class="btn">Bulk Actions</div>
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu" id="view-actions">
+						<li><a href="#" id="bulk-email">Send Email</a></li>
+                        <li class='divider'></li>
+						<li><a href="#" id="bulk-owner">Change Owner</a></li>
+						<li><a href="#" id="bulk-companies-export">Export Companies as CSV</a></li>
+						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
+					</ul>
+			</div>
+			<div  class="btn-group pull-left" style="display: none;top:-25px;left:10px" id="bulk-select"></div>
+		</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="span3">
+		<div class="data-block">
+			<div class="well" id="lhs_filters_conatiner" style="background:none;box-shadow:0 0px 7px 0px #ddd;">
+						</div>
+		</div>
+	</div>
+	<div class="span9">
+		{{#unless this.length}}
+			<div class="filter-criteria">
+					
+			</div>
+			<div id="slate"></div>
+	{{/unless}}
+		{{#if this.length}}
+		<div class="data">
+			<div class="data-container"></div>
+			<table id="companies" class="table table-striped showCheckboxes"
+				url="core/api/bulk/update?action_type=DELETE" style="overflow: scroll">
+				<div class="filter-criteria">
+					
+				</div>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Star Value</th>
+						<th>Owner</th>
+					</tr>
+				</thead>
+				<tbody id="companies-model-list" class="companies-model-list"
+					route="contact/" style="overflow: scroll;">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{/if}}
+</div>
+</script>
+<script id="contacts-table-collection-template" type="text/html">
+{{#unless this.length}}
+			<div class="filter-criteria">
+					
+			</div>
+			<div id="slate"></div>
+	{{/unless}}
+		{{#if this.length}}
+		<div class="data">
+			<div class="data-container"></div>
+			<table id="contacts-table" class="table table-striped showCheckboxes agile-ellipsis-dynamic no-sorting"
+				url="core/api/bulk/update?action_type=DELETE">
+				<col width="30px">
+				<col width="41%">
+				<col width="24%">
+				<col width="24%">
+				<col width="12%">
+				<div class="filter-criteria"></div>
+				<thead>
+					<tr>
+						<th><input class="thead_check" type="checkbox"></input></th>
+						<th>Name</th>
+						<th>Work</th>
+						<th>Tags</th>
+						<th>Lead Score</th>
+					</tr>
+				</thead>
+				<tbody id="contacts-table-model-list" class="contacts-table-model-list"
+					route="contact/" style="overflow: scroll;overflow:hidden;">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{/if}}
+</script>
+<script id="companies-table-collection-template" type="text/html">
+{{#unless this.length}}
+			<div class="filter-criteria">
+					
+			</div>
+			<div id="slate"></div>
+	{{/unless}}
+		{{#if this.length}}
+		<div class="data">
+			<div class="data-container"></div>
+			<table id="companies" class="table table-striped showCheckboxes"
+				url="core/api/bulk/update?action_type=DELETE" style="overflow: scroll">
+				<div class="filter-criteria">
+					
+				</div>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Star Value</th>
+						<th>Owner</th>
+					</tr>
+				</thead>
+				<tbody id="companies-table-model-list" class="companies-table-model-list"
+					route="contact/" style="overflow: scroll;">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{/if}}
+
+</script>

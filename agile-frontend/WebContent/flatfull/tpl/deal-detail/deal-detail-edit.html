@@ -1,0 +1,110 @@
+<script id="deal-detail-edit-template" type="text/html">
+<div class="row">
+    <div class="container well opportunityEdit col-md-8">
+        <form id="opportunityEditForm" name="opportunityEditForm" method="post">
+			<fieldset>
+				<input name="id" type="hidden"/>
+				<div class="row">
+					<div class="control-group form-group col-sm-5">
+						<label class="control-label"><b>Name </b><span
+							class="field_req">*</span></label>
+						<div class="controls">
+							<span><input id="name" name="name" type="text"
+								class="form-control required" placeholder="Name of Deal" /></span>
+						</div>
+					</div>
+					<div class="control-group span5" style="margin-left: 30px;">
+						<label class="control-label"><b>Owner </b><span
+							class="field_req">*</span></label>
+						<div class="controls" id="owners">
+							<select id="owners-list" class="required form-control" name="owner_id"></select>
+							<img class="loading-img" src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
+						</div>
+					</div>
+				</div>
+				<div class="row-fluid">
+					<div class="control-group span5">
+						<label class="control-label"><b>Value </b><span
+							class="field_req">*</span></label>
+						<div class="controls">
+							<span><input type="text" name="expected_value"
+								class="required form-control number" min="0" max="1000000000000"
+								placeholder="Value of Deal" /></span>
+						</div>
+					</div>
+					<div class="control-group span5" style="margin-left: 30px;">
+						<label class="control-label"><b>Probability (%) </b><span
+							class="field_req">*</span></label>
+						<div class="controls">
+							<span><input type="text" id="probability"
+								name="probability" class="form-control required digits" max="100"
+								placeholder="Probability %" /></span>
+						</div>
+					</div>
+				</div>
+				<div class="row-fluid">
+					<div class="control-group span5">
+						<label class="control-label"><b>Track </b><span
+							class="field_req">*</span></label>
+						<div class="controls">
+							<span><select id="pipeline" name="pipeline_id"
+								class="required form-control">
+									<option value="">Select..</option>
+							</select></span><img class="loading-img" src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
+						</div>
+					</div>
+					<div class="control-group span5" style="margin-left: 30px;">
+						<label class="control-label"><b>Milestone </b><span
+							class="field_req">*</span></label>
+						<div class="controls">
+							<span><select id="milestone" name="milestone"
+								class="required form-control">
+									<option value="">Select..</option>
+							</select></span><img class="loading-img" src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
+						</div>
+					</div>
+				</div>
+				<div class="row-fluid">
+					<div class="control-group span5">
+						<label class="control-label"><b>Close Date </b></label>
+						<div class="controls">
+							<span><input id="close_date" type="text" name="close_date"
+								class="input form-control date" placeholder="{{dateFormat}}" /></span>
+						</div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label"><b>Related To </b></label>
+					<div class="controls" id="contactTypeAhead">
+						<div>
+							<div>
+								<ul name="contact_ids" class="contacts tagsinput tags"></ul>
+							</div>
+							<div class="clearfix"></div>
+							<input type="text" id="relates_to" name="relates_to"
+								placeholder="Contact Name" class="typeahead form-control typeahead_contacts"
+								data-provide="typeahead" data-mode="multiple" />
+						</div>
+					</div>
+				</div>
+				<div id="custom-field-deals">
+				</div>
+				<div class="control-group">
+					<label class="control-label"><b>Description </b></label>
+					<div class="controls">
+						<textarea id="description" name="description" rows="3"
+							class="input" placeholder="Add Comment"></textarea>
+					</div>
+				</div>
+			
+			</fieldset>
+		</form>
+	</div>
+	<div class="form-actons">
+		<a href="#" class="btn btn-sm btn-primary" id="opportunity_validate_form">Save
+			Changes</a> <span class="save-status"></span>
+	</div>
+    </div>
+    <!-- End of Modal views -->
+</div>
+</script>

@@ -1,0 +1,61 @@
+<script id="admin-settings-menu-settings-template" type="text/html">
+<!--  Contact View Detail in Detailed mode - when only one contact is shown -->
+<div class="span8 well">
+    <form id="navmodsSelect" class="form-horizontal">
+        <fieldset>
+            {{#if id}}
+			<input name="id" type="hidden" value="{{id}}" />
+			{{/if}}
+            <legend>Select the options to show in the menu bar (on the top)</legend>
+            <div class="row-fluid">
+				<div class="span11">
+         
+                    <div style="margin-left: 50px;">
+                        <input name='calendar' type='checkbox' style="vertical-align:top; " />
+						<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Calendar<br/><small> manage your tasks and events</small></label>
+                    </div>
+                    <div style="margin-left: 50px;">
+                         <input name='campaign' type='checkbox' style="vertical-align:top; " />
+						 <label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Campaigns<br/><small> automate marketing</small></label>
+                    </div>
+                    <div style="margin-left: 50px;">
+                         <input name='deals' type='checkbox' style="vertical-align:top; " />
+						 <label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Deals<br/><small> track sales opportunities</small></label>
+                    </div>
+                    <div style="margin-left: 50px;">
+                         <input name='social' type='checkbox' style="vertical-align:top; " />
+						 <label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Social<br/><small> monitor your brand on social media</small></label>
+                    </div>
+                	<div style="margin-left: 50px;">
+                        <input name='documents' type='checkbox' style="vertical-align:top; " />
+						<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Documents<br/><small> upload and attach documents to contacts, deals or cases</small></label>
+                    </div>
+                    <div style="margin-left: 50px;">
+                         <input name='reports' type='checkbox' style="vertical-align:top; " />
+						 <label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Reports<br/><small> stay on top of your data</small></label>
+                    </div>
+                    <div style="margin-left: 50px;">
+                        <input name='cases' type='checkbox' style="vertical-align:top; " />
+						<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Cases<br/><small> log and address customer issues</small></label>
+                    </div>
+					 <div style="margin-left: 50px;">
+                        <input name='web_rules' type='checkbox' style="vertical-align:top; " />
+						<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Web Rules<br/><small> log and address customer issues</small></label>
+                    </div>
+
+				</div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-actions">
+                <a type="submit" class="btn btn-sm btn-primary save">Save Changes</a>
+					<p style='display:inline-block;'>
+						<i><small>
+							<span id='div-success' style='display:none;'>Saved Successfully</span>
+							<span id='div-fail' style='display:none; color:#B94A48; font-size:14px'>Save Failed</span>
+						</small></i>
+					</p>
+			 </div>
+        </fieldset>
+    </form>
+</div>
+</script>

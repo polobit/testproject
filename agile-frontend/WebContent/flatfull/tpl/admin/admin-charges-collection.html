@@ -1,0 +1,45 @@
+   <script id="admin-charge-collection-template" type="html/text">
+        <div class="page-header">
+            <h2>Past Transactions</h2> 
+        </div>
+    <div class="panel">
+        <table class="table table-striped" id="sort-table">
+            <thead>
+                <tr>
+                    <th>Amount(USD)</th>
+                    <th>Created Date</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="admin-charge-model-list" class="model-list-cursor">
+            </tbody>
+        </table>
+    </div>
+
+</script>
+<script id="admin-charge-model-template" type="text/html">	
+
+
+	
+	<td >
+    	${{numeric_operation amount 100 "/"}}&nbsp;&nbsp;&nbsp;--{{id}} {{#if_not_equals amountRefunded 0}}<strong>(${{numeric_operation amountRefunded 100 "/"}}-Refunded)</strong>{{/if_not_equals}}
+	</td>
+	<td class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>
+	<td>
+			{{#if paid}}
+				{{#if refunded}}
+      				refunded ({{numeric_operation amount 100 "/"}} {{toUpperCase currency}})
+				{{else}}
+					paid
+				{{/if}}
+			{{else}}
+				failed
+{{/if}}</td>
+	<td>{{#unless refunded}}
+		{{#if paid}}
+		<a href="#" id="refundpopup" totalamount={{numeric_operation amount 100 "/"}} refundedAmount={{numeric_operation amountRefunded 100 "/"}} chargeid={{id}} role="button" class="btn btn-default btn-sm refundpopup" data-toggle="modal">Refund</a>{{/if}}{{/unless}}</td>
+
+
+
+</script>

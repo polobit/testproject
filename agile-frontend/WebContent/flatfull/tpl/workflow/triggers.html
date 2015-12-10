@@ -1,0 +1,88 @@
+<script id="triggers-model-template" type="text/html">		
+	<td class="data" data="{{id}}">
+		<div class="table-resp">
+			<a href="#trigger/{{id}}" class="stop-propagation">{{name}}</a>
+		</div>
+	</td>        
+	<td><div class="table-resp">{{triggerType type}}</div></td>
+	<td><div class="table-resp">{{#if custom_score}}{{custom_score}} {{/if}} {{#if custom_tags}}{{custom_tags}}{{/if}} {{#if trigger_deal_milestone}}{{trigger_milestone trigger_deal_milestone}}{{/if}} {{#if trigger_stripe_event}}{{trigger_stripe_event}}{{/if}}{{#if trigger_shopify_event}}{{trigger_shopify_event}}{{/if}} {{#if contactFilter}}{{contactFilter}}{{/if}}{{#if trigger_form_event}}{{getFormNameFromId trigger_form_event}}{{/if}}</div></td>
+	<td><div class="table-resp"><div class="pull-left text-ellipsis" style="width: 70%;">{{campaign}}</div>{{#if is_disabled}}<div class="pull-right"><label class="label label-danger m-b-none">Disabled</label></div>{{/if}}</div></td>
+	<br />
+</script>
+<script id="triggers-collection-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        
+			
+            	<h3 class="pull-left font-thin h3">List of Triggers</h3>
+			
+			<div class="pull-right">
+            	<a href="#trigger-add" class="btn right btn-default btn-sm btn-addon" id="addTrigger">
+					<i class="icon-plus-sign"></i> Add Trigger
+				</a>
+			</div>
+           <div class="clearfix"></div>
+       
+    </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+        {{#unless this.length}}
+		<div class="col-md-9 col-sm-9 table-responsive">
+        <div class="alert-info alert">
+            <div class="slate-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="h4 m-t-none">You do not have any triggers currently.</h4>
+                    <p class="m-b-none">
+                        You can define a trigger to start execution of a campaign. But please make sure to create atleast one campaign before creating triggers.
+                    </p>
+                    <a href="#trigger-add" class="btn btn-slate-action btn-default btn-sm m-t-xs">
+						<i class="icon-plus-sign"></i>  Add trigger 
+					</a>
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+		</div>
+        {{/unless}}
+        {{#if this.length}}
+            <div class="col-md-9 col-sm-9 table-responsive">
+				<div class="panel panel-default">
+			    <div class="panel-heading">Triggers List</div>
+                <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/triggers/bulk">
+                    <thead>
+                        <tr>
+                            <th style="width:25%">Name</th>
+                            <th style="width:25%">Condition</th>
+                            <th style="width:20%">Value</th>
+                            <th style="width:36%">Campaign</th>
+                        </tr>
+                    </thead>
+                    <tbody id="triggers-model-list" route="trigger/"> </tbody>
+                </table>
+				</div>
+            </div>
+        {{/if}}
+    <div class="col-sm-3 col-md-3 p-none">
+        <div class="wrapper-sm">
+            <h4 class="m-t-none h4 m-b-sm">
+                What are Triggers?
+            </h4>
+            
+            <p>
+                Triggers are pre-defined conditions set up by you. If a condition is satisfied, you can choose an action to follow using workflow automation.
+            </p>
+            <p>
+                e.g. If a user registers on your website, you can automate the workflow to send a welcome email. The user registering on site is the trigger.
+            </p>
+        </div>
+    </div>
+</div>
+</div>
+</script>

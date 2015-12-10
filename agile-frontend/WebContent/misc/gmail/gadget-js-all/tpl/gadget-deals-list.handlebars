@@ -1,0 +1,33 @@
+<!-- Deals list tab -->
+<ul style="list-style-type:none; margin-right:25px;"> 
+{{#if this.length}}
+		{{#each this}}
+			{{#stringToJSON this ""}}
+<li style="padding:5px;margin:5px;border:1px solid #ddd;">
+	<div style="display:block;" class="activity">
+		<div id="notes" class="activity-text-block">
+			<h4 style="margin-bottom: 9px;"><a style="text-decoration: none"><b>{{ucfirst name}}</b></a><span style="margin-left:20px;">{{milestone}} ({{probability}} %)</span></h4>
+			<p><span style="margin-right: 10px;">Value : </span>
+				{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{numberWithCommas expected_value}}
+			</p>
+			<div class="clear">
+				<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;">
+					<time class="deal-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+				</small>
+			</div>
+		</div>
+	</div>
+</li>
+			{{/stringToJSON}}
+		{{/each}}
+	{{else}}
+		<li>
+			<div style="display:block;" class="activity">
+				<div id="notes" class="activity-text-block">
+					<p style="display:inline; margin-right:10px;">You have no deals for this contact.</p>
+					<a class="action-add-deal" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;"><i class="icon-plus" style="text-decoration:none; margin-right:2px;"></i><span>Add Deal</span></a>
+				</div>
+			</div>
+		</li>
+	{{/if}}
+</ul>

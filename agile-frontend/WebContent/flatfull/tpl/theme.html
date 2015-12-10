@@ -1,0 +1,253 @@
+<script id="theme-layout-form-template" type="text/html">
+<div id="theme-and-layout" class="custom-animated custom-fadeInUp">
+<div class="wrapper-md bg-light lter b-b">
+	<div class="row">
+		<div class="col-md-12">
+			<h3 class="h3 font-thin pull-left">Theme & Layout</h3>
+		</div>
+	</div>
+</div>
+
+<div class="wrapper-md">
+	<form id="themeform" class="form-horizontal" role="form">
+        <fieldset>
+        	<div class="row">
+                <div class="col-md-6 col-sm-6 col-sm-offset-0 col-xs-offset-3 col-xs-6">
+                   <div class="control-group form-group hidden-xs">
+                        <label class="control-label col-sm-4">Menu position</label> 
+                        <div class="controls col-sm-8">
+                            <select name="menuPosition" id="menuPosition" class="form-control">
+								<option value="leftcol">Left - Collapsed</option>
+								<option value="left">Left - Expanded</option>
+                                <option value="top">Top</option>
+                            </select>
+                        </div>
+                    </div>
+          <!--      <div class="control-group form-group">
+                        <label class="control-label col-sm-4">Layout</label> 
+                        <div class="controls col-sm-8">
+                            <select name="layout" id="layout" class="form-control">
+								<option value="fluid">Fluid</option>
+                                <option value="fixed">Fixed</option>
+                            </select>
+                        </div>
+                    </div>	-->
+					<input type="hidden" name="layout" id="layout" value={{layout}}>
+					<div class="control-group form-group">
+                        <label class="control-label col-sm-4">Theme</label> 
+                        <div class="controls col-sm-8">
+                            
+                       
+                    
+                                   	
+                    	
+                    	
+                    	<div  class="settings">
+  
+ 
+
+  <div class="b-t b-light lter r-b magicMenu">
+    <div class="row row-sm">
+      <div class="col-xs-12 col-sm-6">
+        <label class="i-checks i-checks-sm block m-b">
+          <input type="radio" name="theme" target-aside-class="bg-black" target-logo-class="bg-black" target-topbar-class="bg-white-only" value="1">
+          <span class="block bg-light clearfix pos-rlt b">
+            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
+              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
+            </span>
+            <b class="bg-black header"></b>
+            <b class="bg-white header"></b>
+            <b class="bg-black"></b>
+          </span>
+        </label>
+
+        <label class="i-checks i-checks-sm block m-b">
+          <input type="radio" name="theme" target-aside-class="bg-dark" target-logo-class="bg-dark" target-topbar-class="bg-white-only"  value="13" >
+          <span class="block bg-light clearfix pos-rlt b">
+            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
+              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
+            </span>
+            <b class="bg-dark header"></b>
+            <b class="bg-white header"></b>
+            <b class="bg-dark"></b>
+          </span>
+        </label>
+
+        <label class="i-checks i-checks-sm block m-b">
+          <input type="radio"  name="theme" target-aside-class="bg-black" target-logo-class="bg-white-only" target-topbar-class="bg-white-only" value="2">
+          <span class="block bg-light clearfix pos-rlt b">
+            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
+              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
+            </span>
+            <b class="bg-white header"></b>
+            <b class="bg-white header"></b>
+            <b class="bg-black"></b>
+          </span>
+        </label>
+
+        <label class="i-checks block m-b">
+          <input type="radio"  name="theme" target-aside-class="bg-dark" target-logo-class="bg-primary" target-topbar-class="bg-white-only"  value="3" >
+          <span class="block bg-light clearfix pos-rlt b">
+            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
+              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
+            </span>
+            <b class="bg-primary header"></b>
+            <b class="bg-white header"></b>
+            <b class="bg-dark"></b>
+          </span>
+        </label>
+
+        <label class="i-checks i-checks-sm block m-b">
+          <input type="radio" name="theme" target-aside-class="bg-black" target-logo-class="bg-info" target-topbar-class="bg-white-only"  value="4">
+          <span class="block bg-light clearfix pos-rlt b">
+            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
+              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
+            </span>
+            <b class="bg-info header"></b>
+            <b class="bg-white header"></b>
+            <b class="bg-black"></b>
+          </span>
+        </label>
+
+        <label class="i-checks i-checks-sm block m-b">
+          <input type="radio" name="theme" target-aside-class="bg-dark" target-logo-class="bg-success" target-topbar-class="bg-white-only"  value="5" >
+          <span class="block bg-light clearfix pos-rlt b">
+            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
+              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
+            </span>
+            <b class="bg-success header"></b>
+            <b class="bg-white header"></b>
+            <b class="bg-dark"></b>
+          </span>
+        </label>
+
+        <label class="i-checks i-checks-sm block">
+          <input type="radio" name="theme" target-aside-class="bg-dark" target-logo-class="bg-danger" target-topbar-class="bg-white-only"  value="6">
+          <span class="block bg-light clearfix pos-rlt b">
+            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
+              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
+            </span>
+            <b class="bg-danger header"></b>
+            <b class="bg-white header"></b>
+            <b class="bg-dark"></b>
+          </span>
+        </label>
+      </div>
+      <div class="col-xs-12 col-sm-6">
+        <label class="i-checks i-checks-sm block m-b">
+          <input type="radio" name="theme" target-aside-class="bg-white b-r" target-logo-class="bg-black" target-topbar-class="bg-black"  value="7" >
+          <span class="block bg-light clearfix pos-rlt b">
+            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
+              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
+            </span>
+            <b class="bg-black header"></b>
+            <b class="bg-black header"></b>
+            <b class="bg-white"></b>
+          </span>
+        </label>
+
+        <label class="i-checks i-checks-sm block m-b">
+          <input type="radio" name="theme" target-aside-class="bg-light" target-logo-class="bg-dark" target-topbar-class="bg-dark"  value="14" >
+          <span class="block bg-light clearfix pos-rlt b">
+            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
+              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
+            </span>
+            <b class="bg-dark header"></b>
+            <b class="bg-dark header"></b>
+            <b class="bg-light"></b>
+          </span>
+        </label>
+
+        <label class="i-checks i-checks-sm block m-b">
+          <input type="radio" name="theme" target-aside-class="bg-light dker  b-r" target-logo-class="bg-info dker" target-topbar-class="bg-info dker"  value="8">
+          <span class="block bg-light clearfix pos-rlt b">
+            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
+              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
+            </span>
+            <b class="bg-info dker header"></b>
+            <b class="bg-info dker header"></b>
+            <b class="bg-light dker"></b>
+          </span>
+        </label>
+
+        <label class="i-checks i-checks-sm block m-b">
+          <input type="radio" name="theme" target-aside-class="bg-dark" target-logo-class="bg-primary" target-topbar-class="bg-primary"  value="9">
+          <span class="block bg-light clearfix pos-rlt b">
+            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
+              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
+            </span>
+            <b class="bg-primary header"></b>
+            <b class="bg-primary header"></b>
+            <b class="bg-dark"></b>
+          </span>
+        </label>
+
+        <label class="i-checks i-checks-sm block m-b">
+          <input type="radio" name="theme" target-aside-class="bg-black" target-logo-class="bg-info dker" target-topbar-class="bg-info dk"  value="10">
+          <span class="block bg-light clearfix pos-rlt b">
+            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
+              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
+            </span>
+            <b class="bg-info dker header"></b>
+            <b class="bg-info dk header"></b>
+            <b class="bg-black"></b>
+          </span>
+        </label>
+
+        <label class="i-checks i-checks-sm block m-b">
+          <input type="radio"  name="theme" target-aside-class="bg-dark" target-logo-class="bg-success" target-topbar-class="bg-success" value="11">
+          <span class="block bg-light clearfix pos-rlt b">
+            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
+              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
+            </span>
+            <b class="bg-success header"></b>
+            <b class="bg-success header"></b>
+            <b class="bg-dark"></b>
+          </span>
+        </label>
+        
+        <label class="i-checks i-checks-sm block">
+          <input type="radio"  name="theme" target-aside-class="bg-dark" target-logo-class="bg-danger dker" target-topbar-class="bg-danger dker" value="12">
+          <span class="block bg-light clearfix pos-rlt b">
+            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
+              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
+            </span>
+            <b class="bg-danger dker header"></b>
+            <b class="bg-danger dker header"></b>
+            <b class="bg-dark"></b>
+          </span>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+                    	
+                    	
+                    	
+                    	
+                  </div>
+                    </div>   	
+            <div class="control-group form-group">
+                        <label class="control-label col-sm-4">Animations</label> 
+                        <div class="controls col-sm-8">
+                            <label class="i-switch m-t-xs m-r">
+                          		<input type="checkbox" id="animations" class="left" name="animations">
+                         	<i></i>
+							</label>
+                        </div>
+             </div>        	
+                </div>
+            </div>
+            <span class="theme-save-status text-danger col-md-offset-2" style="display:none;">Your settings are not saved yet.</span>
+			<div class="line  b-b line-lg"></div>
+            <div class="form-group">
+				<div class="col-md-offset-2 col-sm-8 col-xs-offset-3 col-xs-3">
+					<a href="#themeandlayout" type="submit" id="saveTheme" class="btn btn-sm btn-primary">Save</a>
+            	</div>
+			</div>
+        </fieldset>
+    </form>
+
+</div>
+</div>
+</script>

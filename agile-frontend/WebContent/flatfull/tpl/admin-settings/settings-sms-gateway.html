@@ -1,0 +1,122 @@
+<script id="settings-sms-gateway-template" type="text/html">
+<div class="row">
+<div class="col-md-4 col-sm-6 col-xs-12">
+	<div class="">
+		<form id="sms-gateway-integration-form">
+			<fieldset>
+
+				<div class="panel panel-default">
+				<div class="panel-heading">
+					<center>
+						<img class="img-responsive" alt="sms-integration" id="integrations-image" style="height: 47px;" />
+					</center>
+				</div>
+				<div class="panel-body">
+				<div class="control-group" class="m-b-none">
+					<div class="controls">
+						<h5 id="integrations-label"></h5>             			
+					</div>
+				</div>
+
+				<div class="p-t-sm">
+					<div>
+						{{#if id}} 
+							<input type="hidden" class="input-medium required TWILIO PLIVO form-control" style="width: 90%" name="id" value="{{id}}" />
+						{{/if}} 
+							<input type="hidden" class="input-medium required TWILIO" style="width: 90%" value="INTEGRATIONS" name="widget_type" /> 
+							<input type="hidden" class="input-medium required TWILIO PLIVO" style="width: 90%" value="SMS-Gateway" name="name" /> 
+						
+						{{#if widget_type}} 
+							<input type="hidden" class="input-medium required TWILIO PLIVO" style="width: 90%" value="This is a {{widget_type}} gateway" name="description" />
+						{{/if}}
+
+						{{#if_equals "TWILIO" sms_api}} 
+							<input type="hidden" class="input-medium required TWILIO" style="width: 90%" name="endpoint" value="https://api.twilio.com" /> 
+						{{/if_equals}} 
+
+						{{#if_equals "INTEGRATIONS" widget_type}}
+							{{#if_equals "SMS-Gateway" name}} 
+								{{#if prefs}} 
+									{{#stringToJSON this "prefs"}} 
+										
+										<input type="hidden" class="input-medium required TWILIO PLIVO form-control" style="width: 90%" name="id" />
+
+										{{#if_equals "TWILIO" sms_api}}
+											<div class="control-group" style="margin-bottom: 0px; margin-top: -12px;">
+												<div class="controls">
+													<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%" placeholder="ACCOUNT SID"  name="account_sid" value="{{account_sid}}"/>
+												</div>
+											</div>
+
+										{{else}}
+
+										<div class="control-group" style="margin-bottom: 0px; margin-top: -12px;">
+											<div class="controls">
+												<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%" placeholder="ACCOUNT ID" name="account_id" value="{{account_id}}"/>
+											</div>
+										</div>
+
+										{{/if_equals}}
+
+										<div class="control-group form-group" style="margin-bottom: 0px;">
+											<div class="controls">
+												<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%; margin-top: 10px;" placeholder="Auth Token" name="auth_token" value="{{auth_token}}" id = "auth_token" />
+											</div>
+										</div>
+
+									{{/stringToJSON}}
+
+								{{/if}}
+
+							{{/if_equals}}
+
+						{{else}} 
+
+							{{#if id}}
+								<input type="hidden" class="input-medium required TWILIO PLIVO form-control" style="width: 90%" name="id" />
+							{{/if}}
+
+							<div class="control-group form-group" style="margin-bottom: 0px;">
+								<div class="controls">
+									<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%;margin-top: -12px;" id="accoundID" />
+								</div>
+							</div>
+
+							<div class="control-group form-group" style="margin-bottom: 0px;">
+								<div class="controls">
+									<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%; margin-top: 10px" placeholder="Auth Token" name="auth_token" id = "auth_token" />
+								</div>
+							</div>
+
+						{{/if_equals}}
+					</div>
+				</div>
+
+				<div id="sms-integration-error">
+					<p class="text-center" style="margin: 10px 0px 5px 0px;">
+						<a type="reset" class="btn btn-default btn-sm" href="#integrations" style="text-decoration: none;">Cancel</a>
+						<a type="submit" href="#" class="save btn-sm btn btn-primary" style="text-decoration: none;">Save</a> 
+					</p>
+				</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>
+</div>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

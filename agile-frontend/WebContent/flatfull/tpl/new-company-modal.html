@@ -1,0 +1,50 @@
+<!-- Cusrom fields add modal -->
+<div id="custom-field-modal"></div>
+<!-- New (Contact) Modal views -->
+<div class="modal  fade" id="companyModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>&nbsp;Add Company</h3>
+    </div>
+    <div class="modal-body">
+        <form id="companyForm" name="companyForm" method="post">
+            <fieldset>
+                <p>
+                <div class="control-group form-group">
+                    <label class="control-label"><b>Company</b> <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input name="name" type="text" field="test company" class="required form-control field_length" max_len="100" id="company_name" placeholder="Company" />
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5  duplicate-email">
+                    </div>
+                </div>
+                <div class="control-group form-group">
+                    <label class="control-label"><b>URL</b> </label>
+                    <div class="controls">
+                        <input class="input-large form-control field_length" max_len="500" name="url" type="text" id="company_url" placeholder="http://www." />
+                    </div>
+                </div>
+                <div  id="custom-field-deals"></div>
+                <input type="text" name="type" style="display:none" value="COMPANY" class="form-control field_length" max_len="500"/>				
+            </fieldset>
+        </form>
+    </div>
+ <div class="modal-footer">
+    	<span class="form-action-error"></span>
+        <a href="#continue-company" class="btn btn-sm btn-default" id="continue-company">Continue
+        Editing</a> 
+        <a href="#" class="save btn btn-sm btn-primary" id="company_validate">Save
+        </a>
+        <span class="save-status"></span>
+    </div>
+    </div>
+</div>
+</div>
+
+<!-- End of Modal views -->
+	

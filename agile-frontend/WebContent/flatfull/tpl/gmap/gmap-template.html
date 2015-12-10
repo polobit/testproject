@@ -1,0 +1,57 @@
+<script id="gmap-html-page-template" type="text/html">
+
+
+    <div id="outer_container">
+<div class="bg-light lter b-b wrapper-md ng-scope">
+   <h1 class="m-n font-thin h3 pull-left"><span>Visitors</span><span class="m-l-xs"></span></h1>
+ <div class="pull-right">
+			 <div id="gmap_date_range" class="pull-right" style="box-shadow: 0 0px 2px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1); padding: 5px; cursor: pointer;">
+					<i class="icon-calendar"></i>
+					<span id="range">June 20, 2015 - June 26, 2015</span>
+					<i class="caret m-l-xs"></i>
+				 </div>
+              </div>
+        <div class="clearfix"></div>
+    </div>
+
+
+
+
+      <div class="wrapper-md">
+          
+        <!-- Gmap Main Area -->
+              <div class="leaderboard">
+            	 <div class="row">
+            	  <div class="col-md-12 col-sm-12 col-xs-12">
+        <!-- Map Tab Area -->    	    
+            	    <div class="map-tab option-tabs">
+            	      <ul class="nav nav-tabs" data-tabs="tabs">
+            	        <li id="gmap-map-tab" class="active"><a href="#gmap-map-view" data-toggle="tab">Map</a></li>
+            	        <li id="gmap-table-tab"><a href="#gmap-table-view" data-toggle="tab">List</a></li>
+                        <li id="noContactMessage" style="margin-left:400px;color:red;display: none;">Contact not found</li>
+                        <li class="pull-right"><img id="map-tab-waiting" style="width: 16px; float: left; margin: 5px 5px 0px 8px; display: block;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></li>
+            	      </ul>
+            	      
+            	      <div class="tab-content">
+            	      	
+            	      	<div class="tab-pane active" id="gmap-map-view">
+        <!-- Google Map -->    	      	  
+            	      	  <div id="google_map" class="map" style="width:auto; height:430px;"></div>
+        <!-- Google Map -->    	      	  
+            	      	</div>
+            	      	<div class="tab-pane" id="gmap-table-view">
+            	      	  
+            	      	</div>
+            	      </div>
+            	    </div>
+        <!-- Map Tab Area -->     	  
+            	  </div>
+				
+		      </div>
+        <!-- Gmap Main Area -->      
+          </div>
+        </div>
+      
+    </div>
+
+</script>

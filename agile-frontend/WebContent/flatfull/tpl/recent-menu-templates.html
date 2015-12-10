@@ -1,0 +1,106 @@
+
+<script id="recent-menu-model-template" type="text/html">
+<div class="wrapper-sm custom-color-star">
+<a data-id="{{id}}"  class="c-p custom-color">
+
+{{#if_equals entity_type "contact_entity"}}
+    	<div class="thumb-sm agile-img m-r-xs">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<img class="img-inital r r-2x" {{getCompanyImage "40" "display:inline;"}} />
+        	{{/if_contact_type}}
+    	</div>
+    	<div class="agile-thumb text-ellipsis">
+        	{{#if_contact_type "PERSON"}}
+        		<div class="text-cap">	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} 
+        		<div class="text-ellipsis">
+        		<small>{{getPropertyValue properties "email"}}</small>
+				</div>
+                <div class="text-ellipsis">
+				<small>{{getPropertyValue properties "company"}}</small>
+                </div>
+                </div>
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<div class="text-cap">{{getPropertyValue properties "name"}}
+        		<div class="text-ellipsis">
+                <small>{{getPropertyValue properties "url"}}</small>
+                 </div>
+                </div>
+        	{{/if_contact_type}}
+		</div>
+		<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals entity_type "case"}}
+	<div class="thumb-sm agile-img m-r-xs">
+		<!--<i class="icon-folder-close icon-3x" id="minus" style="cursor: pointer; position:relative; top:10px;"></i> -->
+		<i class="icon-folder-close icon-3x img-inital r r-2x" id="minus"></i>
+	</div>
+	<div class="agile-thumb text-ellipsis">
+		<div class="text-cap">{{title}}
+       <div class="text-ellipsis">
+        <small> {{description}}</small>
+       </div>
+        </div>
+	</div>
+	<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals entity_type "deal"}}
+	<div class="thumb-sm agile-img m-r-xs">
+		<!-- <i class="icon-money icon-3x" id="minus" style="cursor: pointer; position:relative; top:10px;"></i> -->
+		<i class="icon-money img-inital r r-2x" id="minus"  style="font-size:2.75em;"></i>
+	</div>
+	<div class="agile-thumb text-ellipsis">
+		 <div class="text-cap">{{name}}
+        <div class="text-ellipsis">
+         <small> {{description}} </small>
+         </div>
+         </div>
+	</div>
+	<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals entity_type "document"}}
+	<div class="thumb-sm agile-img m-r-xs">
+		<!-- <i class="icon-file-text icon-3x" id="minus" style="cursor: pointer; position:relative; top:10px;"></i> -->
+		<i class="icon-file-text img-inital r r-2x" id="minus"  style="font-size:2.75em;"></i>
+	</div>
+	<div class="agile-thumb text-ellipsis">
+		 <div class="text-cap"> {{name}}
+       <div class="text-ellipsis">
+        <small> {{description}}</small> 
+        </div>
+       </div>
+	</div>
+	<div class="clearfix"></div>
+{{else}}
+{{#if network_type}}
+	<div class="thumb-sm agile-img  m-r-xs">
+		<!-- <i class="fa-file-text icon-3x" id="minus" style="cursor: pointer; position:relative; top:10px;"></i> -->
+		<i class="icon-file-text img-inital r r-2x" id="minus" style="font-size:2.75em;"></i>
+	</div>
+	<div class="agile-thumb text-ellipsis">
+		 <div class="text-cap">{{name}}</div>
+	</div>
+	<div class="clearfix"></div>
+{{/if}}
+{{/if_equals}}
+
+</a>
+</div>
+</div>
+</script>
+
+<script id="recent-menu-collection-template" type="text/html">
+
+	<ul class="dropdown-menu animated fadeInRight list-group p-n" style="width:23em; right:-11px;" id="recent-menu-model-list">
+		<li><a class="disabled custom-color text-base">Recently Viewed ({{this.length}})</a></li>
+	</ul>
+</script>

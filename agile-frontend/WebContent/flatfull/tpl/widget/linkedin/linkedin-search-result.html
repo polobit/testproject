@@ -1,0 +1,48 @@
+<script id="linkedin-search-result-template" type="text/html">
+<div style="padding:10px" id="linkedin-search">
+{{#if_equals this.keywords ""}}
+<p class="a-dotted">Search results. <a href="#" class="linkedin_modify_search">Modify search</a></p>
+{{else}}
+<p class="a-dotted">Search results for <a href="#" class="linkedin_modify_search">{{this.keywords}}</a></p>
+{{/if_equals}}
+{{#each this.search_results}}
+{{#if picture}}
+<img  rel='popover' data-original-title='LinkedIn Profile' class='linkedinImage thumbnail' id="{{id}}" is_gravatar_pic="false" src ="{{picture}}" url="{{url}}"
+   summary="{{summary}}" style='width: 35px;height: 35px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;'
+   data-content="
+       
+ 		<div class='row-fluid' style='padding-bottom:10px;'>
+            <div class='span4' style='padding:0px 10px 0px 10px;'>
+              <img style='width:55px;height:55px;' src='{{picture}}'></img>
+            </div>
+            <div class='span8'>
+               <b style='color:#069;font-size:14px;'>{{name}}</b><span class='badge badge-info pull-right'>{{distance}}</span> 
+			   <p>{{location}}<br/>{{#if_equals num_connections "500"}}{{num_connections}}+ connections{{else}}{{num_connections}} connections{{/if_equals}}</p>
+            </div>		
+      </div>
+	  <div  class='row-fluid' style='padding-bottom:10px;word-wrap: break-word;'>
+		 <p style='font-style: italic;'>{{summary}}</p>
+	  </div>
+"></img>
+{{else}}
+<img  rel='popover' data-original-title='LinkedIn Profile' class='linkedinImage thumbnail' id="{{id}}" is_gravatar_pic="true" src ="{{defaultGravatarurl 35}}" url="{{url}}"
+   summary="{{summary}}" style='width: 35px;height: 35px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;'
+   data-content="
+       
+ 		<div class='row-fluid' style='padding-bottom:10px;'>
+            <div class='span4' style='padding:0px 10px 0px 10px;'>
+              <img style='width:55px;height:55px;' src ='{{defaultGravatarurl 35}}'></img>
+            </div>
+            <div class='span8'>
+               <b style='color:#069;font-size:14px;'>{{name}}</b><span class='badge badge-info pull-right'>{{distance}}</span>
+			   <p>{{location}}<br/>{{num_connections}} Connections</p>
+            </div>		
+      </div>
+	  <div  class='row-fluid' style='padding-bottom:10px;word-wrap: break-word;'>
+		 <p style='font-style: italic;'>{{summary}}</p>
+	  </div>
+"></img>
+{{/if}}
+{{/each}}
+</div>
+</script>  

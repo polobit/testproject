@@ -1,0 +1,116 @@
+<script id="typeahead-contacts-model-template" type="text/html">
+<div>
+	{{#if_equals type "COMPANY"}}
+	<div style="display: inline; padding-right: 10px; height: auto;">
+		<img class="thumbnail pull-left" {{getCompanyImage "40"}} /></img>
+	</div>
+	<div
+		style="height: 50px; display: inline-block; vertical-align: -20px; margin-left: 2px; text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
+		<b>{{getPropertyValue properties "name"}}</b><br />
+		{{getPropertyValue properties "email"}}</br> {{getPropertyValue properties
+		"url"}}</br>
+	</div>
+	{{/if_equals}}
+		{{#if_equals type "PERSON"}}
+	<div style="display: inline; padding-right: 10px; height: auto;">
+		<img class="thumbnail pull-left" src="{{gravatarurl properties 40}}"
+			style="width: 40px; height: 40px;" /></img>
+	</div>
+	<div
+		style="height: 55px; display: inline-block; vertical-align: -20px; margin-left: 2px; text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
+		<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue
+			properties "last_name"}}</b><br /> {{getPropertyValue properties
+		"email"}}</br> {{getPropertyValue properties "company"}}
+	</div>
+	{{/if_equals}} 
+
+<!-- Deals result -->
+
+
+{{#if_equals entity_type "deal"}}
+	<div style="display: inline;margin-top:10px height: auto;">
+		<ul style="display: inline-block; list-style-type: none; margin-left: 0px;">								
+			<li>
+				<!-- <i class="icon-money icon-3x" id="minus" style="height: 10px; cursor: pointer"></i> -->
+				<i class="icon-money thumbnail" id="minus" style="cursor: pointer; width:40px; height:38px; padding-top:6px; font-size:2.75em;"></i>
+			</li>
+		</ul>
+	</div>
+	<div
+		style="height: 55px; display: inline-block; vertical-align: -20px; margin-left: 2px;margin-top:40px text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
+		 <b>{{name}}</b><br /> <span>{{currencySymbol}}{{numberWithCommas expected_value}}</span> ({{probability}}%)<br/>{{description}}
+	</div>
+	{{/if_equals}}
+
+</div>
+
+<!-- Document Result -->
+{{#if_equals entity_type "document"}}
+<div style="display: inline;margin-top:10px height: auto;">
+		<ul style="display: inline-block; list-style-type: none; margin-left: 0px;">								
+			<li>
+				<!-- <i class="icon-folder-close icon-3x" id="minus" style="height: 10px; cursor: pointer"></i> -->
+				<i class="icon-file icon-3x thumbnail" id="minus" style="cursor: pointer; width:40px; height:40px; "></i>
+			</li>
+		</ul>
+	</div>
+	<div
+		style="height: 55px; display: inline-block; vertical-align: -20px; margin-left: 2px;margin-top:40px text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
+		 <b>{{name}}</b><br /> {{network network_type}}
+	</div>
+	{{/if_equals}}
+
+</div>
+
+<!-- Case Result -->
+{{#if_equals entity_type "case"}}
+<div style="display: inline;margin-top:10px height: auto;">
+		<ul style="display: inline-block; list-style-type: none; margin-left: 0px;">								
+			<li>
+				<!-- <i class="icon-folder-close icon-3x" id="minus" style="height: 10px; cursor: pointer"></i> -->
+				<i class="icon-folder-close icon-3x thumbnail" id="minus" style="cursor: pointer; width:40px; height:40px; "></i>
+			</li>
+		</ul>
+	</div>
+	<div
+		style="height: 55px; display: inline-block; vertical-align: -20px; margin-left: 2px;margin-top:40px text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
+		 <b>{{title}}</b><br /> {{description}}
+	</div>
+	{{/if_equals}}
+
+</div>
+
+</script>
+
+<script id="typeahead-contacts-collection-template" type="text/html">
+<div id="contact-typeahead-heading" style="display:none;margin-left:5px"><b>Contacts</b></div>
+	<div id="contact-results">
+	</div>
+<div id="deal-typeahead-heading" style="display:none;margin-left:5px"><b>Deals</b></div>
+	<div id="deals-results">
+	</div>
+<div id="document-typeahead-heading" style="display:none;margin-left:5px"><b>Documents</b></div>	
+	<div id="document-results">
+	</div>
+<div id="case-typeahead-heading" style="display:none;margin-left:5px"><b>Cases</b></div>	
+	<div id="case-results">
+	</div>
+	<div id="typeahead-contacts-model-list"></div>
+</script>
+
+<script id="no-permission-template" type="text/html">
+<div id="deal_bulk_archive_modal" class="modal hide fade">
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+  <h3>Can't access {{entity}}</h3>
+</div>
+<div class="modal-body">
+  <div id="deal-bulk-confirm">
+		<i class="fa-exclamation-triangle icon-white"></i> Sorry, you do not have the privileges to access {{entity}}. Please contact your CRM administrator.
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Ok</button>
+</div>
+</div>
+</script>

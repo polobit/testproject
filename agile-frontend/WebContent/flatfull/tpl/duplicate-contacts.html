@@ -1,0 +1,93 @@
+<script id="duplicate-contacts-model-template" type="text/html">
+	<td style="cursor:default;" class="select_checkbox">
+	<label class="i-checks i-checks-sm">
+	<input class="tbody_check" type="checkbox"/><i></i></label>
+	</td>
+	<td class="data" data="{{id}}">
+	<div class="table-resp">
+	<div class="thumb-sm agile-img">
+	{{#if_contact_type "PERSON"}}
+	<img class="img-initial r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+	{{/if_contact_type}}
+
+	{{#if_contact_type "COMPANY"}}
+	<img class="img-initial r r-2x" {{getCompanyImage "40" "display:inline;"}} />
+	{{/if_contact_type}}
+	</div>
+	<div class="agile-thumb agile-thumb-view">
+	{{#if_contact_type "PERSON"}}
+	<a class="text-cap">{{getPropertyValue properties "first_name"}}
+	{{getPropertyValue properties "last_name"}} </a> </br>
+	<small class="text-muted">{{getPropertyValue properties "email"}}</small>
+	{{/if_contact_type}}
+
+	{{#if_contact_type "COMPANY"}}
+	<b>{{getPropertyValue properties "name"}}</b></br>
+	{{getPropertyValue properties "url"}}
+	{{/if_contact_type}}
+	</div>
+	</div>
+	</td>
+	<td><div class="table-resp">{{getPropertyValue properties "title"}}<br />
+	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td>{{getPropertyValue properties "phone"}}</td>	
+	<td>{{epochToHumanDate "mm-dd-yy" created_time}}</td>
+</script>
+<script id="duplicate-contacts-collection-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+	<div class="row">
+		<div class="col-md-12">
+			<h3 class="font-thin h3"><span id="contact-heading">List of Duplicates</span><small>{{duplicate_contacts_count}}</small></h3>
+		</div>
+	</div>
+</div>
+<div class="wrapper-md">
+	<div class="row">
+    <div class="col-md-12">
+        {{#unless this.length}}
+        <div class="alert-info alert">
+            <div class="slate-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">No duplicate records for this contact.</h4>
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+        {{/unless}}
+
+	
+	{{#if this.length}}
+	<div class="data">
+	<div class="data-container table-responsive"></div>
+	<table class="table table-striped showCheckboxes noDelete panel">
+	<thead>
+	<tr>
+	<th style="width:5%;"><label class="i-checks i-checks-sm"><input class="thead_check" type="checkbox"/><i></i></label></th>
+	<th style="width:35%;">Name</th>
+	<th style="width:25%;">Work</th>
+	<th style="width:20%;">Phone</th>
+	<th style="width:20%;">Created Time</th>
+	</tr>
+	</thead>
+	<tbody id="duplicate-contacts-model-list">
+	</tbody>
+	</table>
+	<div class="row">
+	<div class="col-md-6  select-none">
+	</div>
+	</div>
+	<a href="#contacts" class="btn btn-default btn-sm m-b pos-rlt" id="duplicate-contacts-cancel"> Cancel</a>
+	<a href="#merge-contacts" class="btn btn-sm left btn-primary m-b pos-rlt" id="duplicate-contacts-checked-grid"> Next</a>
+	</div>
+	</div>
+	{{/if}}
+	</div>
+	</div>
+</div>
+</script>

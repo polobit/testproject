@@ -1,0 +1,11 @@
+<!-- Appended Input-->
+<div class="agile-group<% if(required) {%> required-control<% } %>">
+  <label class="agile-label"  for="<%= id %>"><%= label %></label>
+  <div class="<%= inputsize %> agile-field">
+    <div class="agile-input-group">
+      <input id="<%= id %>" name="<%if(agilefield){%><%= agilefield %><%}else{%><%= id %><%}%>" class="<%= inputheight %>" placeholder="<%= placeholder %>" type="text"<% if(required) {%> required <% } %> />
+      <span class="agile-group-addon"><%= append %></span>
+    </div>
+  </div>
+  <div class="agile-custom-clear"></div>
+</div>

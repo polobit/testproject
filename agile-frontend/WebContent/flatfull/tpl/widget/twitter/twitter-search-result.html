@@ -1,0 +1,27 @@
+<script id="twitter-search-result-template" type="text/html">
+{{#each this}}
+<a class="thumb-sm m-r-sm m-b-sm" target="_blank">
+<img rel='popover'  data-trigger="hover" data-original-title='Twitter Profile' class='twitterImage pull-left r r-2x c-p' id='{{id}}' src ='{{picture}}' screen_name="{{screen_name}}"
+   summary="{{summary}}"  
+   data-content="
+      <div class='row p-b-sm' >
+            <div class='pull-left p-t-none m-r p-r-sm p-b-none p-l-sm'>
+              <img src='{{picture}}'></img>
+            </div>
+            <div class='pull-left'>
+               <b class='font-base' style='color:#069;'>{{name}}</b>
+				<p class='p-t-xs'>{{location}}</p>
+            </div>		
+      </div>
+	  <div  class='row p-b-sm word-break'>
+		 <p class='m-l-sm font-italic'>{{summary}}</p>
+	  </div>    
+      <div class='row p-b-sm'>
+            <div class='col-md-4 text-center'>Tweets<p>{{tweet_count}}</p></div>
+            <div class='col-md-4 text-center b-l'>Followers<p>{{num_connections}}</p></div>
+            <div class='col-md-4 text-center b-l'>Follows<p>{{friends_count}}</p></div>
+      </div>" >
+</img>
+</a>
+{{/each}}
+</script>

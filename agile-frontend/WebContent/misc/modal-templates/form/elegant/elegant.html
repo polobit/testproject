@@ -1,0 +1,130 @@
+<html lang="en">
+   <head>
+      <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+      <title>Popup</title>
+      <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+      <style>
+         body {
+         background: #333;
+         width: 720px;
+         height: 475px;
+         }
+         #popup {
+         background: #fff url('https://s3.amazonaws.com/PopupTemplates/form/elegant/images/border.png');
+         color: #000!important;
+         font: 24px/32px 'Montserrat', Arial, sans-serif!important;
+         letter-spacing: 0;
+         padding: 5px;
+         width: 710px;
+         }
+         #popup-body {
+         background: #fff;
+         border: 1px solid #e0edf3;
+         padding: 50px 60px 60px;
+         text-align: center;
+         }
+         #popup-content p  {
+         margin: 0 0 15px;
+         }
+         #popup-content p big  {
+         background: url('https://s3.amazonaws.com/PopupTemplates/form/elegant/images/secure.png') no-repeat center bottom;
+         color: #006790!important;
+         display: block;
+         font-size: 44px!important;
+         line-height: 48px!important;
+         padding-bottom: 58px;
+         }
+         #popup-form {
+         margin: 30px 40px 0;
+         }
+         #popup-form input.text {
+         border: 1px solid #a8a8a8;
+         -webkit-border-radius: 8px;
+         -moz-border-radius: 8px;
+         border-radius: 8px;
+         box-shadow: inset 0 1px 1px 1px rgba(0,0,0,.25);
+         color: #333!important;
+         font-weight: 100;
+         font-size: 18px!important;
+         line-height: 24px!important;
+         margin: 0;
+         outline: 0;
+         padding: 8px 16px 6px;
+         text-align: center;
+         width: 530px;
+         }
+         #popup-form input.button {
+         background: #ffc929;
+         border: 1px solid #fcb113;
+         -webkit-border-radius: 8px;
+         -moz-border-radius: 8px;
+         border-radius: 8px;
+         color: #fff;
+         cursor: pointer;
+         font: 28px/32px 'Montserrat', Arial, sans-serif!important;
+         padding: 10px;
+         text-transform: uppercase;
+         width: 530px;
+         }
+         #popup-content-copyright {
+         font-size: 18px!important;
+         line-height: 22px!important;
+         position: absolute;
+         right: 20px;
+         bottom: 20px;
+         }
+         #popup-content-copyright a {
+         color: #006790;
+         }
+         #popup-close {
+         cursor: pointer;
+         position: absolute;
+         top: -17px;
+         right: -17px;
+         height: 34px;
+         width: 34px;
+         }
+      </style>
+   </head>
+   <body>
+      <div id="popup">
+         <div id="popup-body">
+            <div id="popup-content">
+               <p><big>Can you keep a secret?</big></p>
+               <p><b>Secret Sales</b> are only announced<br/>to our email subscribers.</p>
+               <form id="popup-form">
+                  <p><input type="text" class="text" agile-field="email" name="email" placeholder="Enter your email address" /></p>
+                  <p><input type="submit" class="button" value="Sign me up" />
+               </form>
+            </div>
+         </div>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/additional-methods.min.js"></script>
+      <script type="text/javascript">
+      window.parent._agile_load_fields();
+      jQuery.validator.setDefaults({
+          debug: true,
+          success: 'valid'
+      });
+      $('#popup-form').validate({
+          rules: {
+              email: {
+                  required: true,
+                  email: true
+              }
+          },
+          submitHandler: function (form) {
+              window.parent._agile_save_form(true, window.parent._agile.set_email(document.getElementsByName('email')[0].value));
+              try{
+            	  $(form).ajaxSubmit();
+              }
+              catch(e){
+            	  window.parent._agile_close_modal()
+              }
+          }
+      })
+      </script>
+   </body>
+</html>

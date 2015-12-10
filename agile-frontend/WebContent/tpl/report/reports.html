@@ -1,0 +1,354 @@
+<script id="report-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Email Reports</h1>
+            <a href="#report-add" class="btn right" id="addReport" style="top:-28px;position:relative"><span><i class="icon-plus-sign" /></span>  Add Report</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span9">
+		 <div id="slate">
+         </div>
+        {{#if this.length}}
+        <table class="table table-bordered table-striped showCheckboxes" url="core/api/reports/bulk">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Duration</th>
+					<th>Fields</th>
+                </tr>
+            </thead>
+            <tbody id="report-model-list" route="report-edit/">
+            </tbody>
+        </table>
+		{{/if}}
+    </div>
+    <div class="span3">
+        <div class="well" id="addview">
+            <h3>
+                What are Email Reports?
+            </h3>
+            <br />
+            <p>Customize your reports based on a variety of tags and filters and receive them periodically to constantly be in touch with your sales cycle and pipeline. Use the information to improve lead nurturing and customer retention strategies.
+</p>
+        </div>
+    </div>
+</div>
+</script>
+
+<script id="report-model-template" type="text/html">
+	<td data="{{id}}" class="data" style="cursor:pointer"><a>{{name}}</a></td>
+	<td>
+    	{{ucfirst duration}}
+	</td>
+	<td><div style="width:17em;text-transform:capitalize;">{{#field_Element fields_set}}{{/field_Element}}</div></td>
+	<td>
+		<a href="#report-results/{{id}}" data={{id}} id="report-instant-results">Show Results</a> 			
+	</td>
+	<td>
+	 	<a  data={{id}} id="reports-email-now" >Send Now</a>
+	</td>
+<br />
+</script>
+
+
+<script type="text/html" id="report-categories-template">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h2>Email</h2>
+        </div>
+	</div>
+</div>
+
+<div id="general" class="row-fluid">
+<div class="span11">
+<!-- Contact reports -->
+<div class="span4" style="margin-left:0px;">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-user icon-4x"></i>
+            </div>
+            <b>Contact Reports</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
+            Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
+        </div>
+        <!-- Add button -->
+        <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary" href="#contact-reports">Go</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Activity reports -->
+
+{{#hasMenuScope 'ACTIVITY'}}
+<div class="span4" style="margin-left:0px;">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-cogs icon-4x"></i>
+            </div>
+            <b>Activity Reports</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
+          	Get a periodic  email digest of various activities by users in Agile.
+        </div>
+        <!-- Add button -->
+       
+			{{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}		
+			{{#hasMenuScope 'ACTIVITY'}}
+ <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/ display:inline;" class="left">
+            	<a class="btn btn-primary" href="#activity-reports">Go</a>
+</div>
+			{{else}}
+
+			{{/hasMenuScope}}
+			{{else}}
+				<div style="/*margin: 40px auto;	width: 50%;*/ display:inline;float:left;">
+					<div class="btn btn-primary _upgrade" id="activity-reports-upgrade">Go</div>
+				</div>
+				 <div style="display:inline;float:right;display:none; max-width:135px" class="text-right activity-reports-upgrade" ><p><i>{{toSafeString message}}</i><p></div>
+			{{/isAllowedInCurrentPlan}}
+        
+    </div>
+</div>
+{{/hasMenuScope}}
+</div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h2>Graphs</h2>
+        </div>
+	</div>
+</div>
+
+<div id="general" class="row-fluid">
+<div class="span11">
+<!-- Growth reports -->
+
+<div class="span4" style="margin-left:0px;">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-bar-chart icon-4x"></i>
+            </div>
+            <b>Growth Graphs</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
+          Visually see how your leads are growing over time. Compare various channels and gain insight.
+        </div>
+        <!-- Add button -->
+        <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/">
+            		<a class="btn btn-primary" href="#report-charts/growth">Go</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Funnel reports -->
+<div class="span4" style="margin-left:0px;">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-filter icon-4x"></i>
+            </div>
+            <b>Funnel Graphs</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
+          See a funnel graph of how leads are passing through various stages in your sales cycle.
+        </div>
+        <!-- Add button -->
+        <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/">
+			<a class="btn btn-primary"  href="#report-charts/funnel">Go</a>
+        </div>
+    </div>
+</div>
+
+<!-- cohorts reports -->
+<div class="span4" style="margin-left:0px;">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-group icon-4x"></i>
+            </div>
+            <b>Cohorts Reports</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
+            See what percentage of leads are you converting over time.
+        </div>
+        <!-- Add button -->
+        <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/">
+			<a class="btn btn-primary"  href="#report-charts/cohorts">Go</a>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h2>Campaigns</h2>
+        </div>
+	</div>
+</div>
+
+<div id="general" class="row-fluid">
+<div class="span11">
+
+
+<!-- Performance Stats -->
+
+<div class="span4" style="margin-left:0px;">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-dashboard icon-4x"></i>
+            </div>
+            <b>Campaign Stats</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
+          	Find out how a campaign is performing over a time period.
+        </div>
+
+		
+        <!-- Add button -->
+        <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/">
+			
+           		<a id="campaign_id" class="btn btn-primary" href="#">Go</a>
+			
+        </div>
+    </div>
+</div>
+
+<!-- Comparison -->
+<div class="span4" style="margin-left:0px;">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-bar-chart icon-4x"></i>
+            </div>
+            <b>Compare Campaigns</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
+            See how your campaigns fare against each other.
+        </div>
+		
+        <!-- Add button -->
+        <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary" href="#campaign-stats" id="campaign-stats">Go</a>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+{{#hasMenuScope 'ACTIVITY'}}
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h2>Activities</h2>
+        </div>
+	</div>
+</div>
+
+<div id="general" class="row-fluid">
+<div class="span11">
+
+
+
+<!-- User Activities -->
+
+<div class="span4" style="margin-left:0px;">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-cogs icon-4x"></i>
+            </div>
+            <b>User Activities</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
+          	See a chronological activity report of your CRM users.
+        </div>
+        <!-- Add button -->
+        <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/">
+            
+
+<div>
+			{{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+				<a class="btn btn-primary" href="#activities">Go</a>
+			{{else}}
+				<div style="/*margin: 40px auto;	width: 50%;*/ display:inline;float:left">
+					<a class="btn btn-primary _upgrade" id="activities-upgrade">Go</a> 
+				</div>
+				<div style="float: right; max-width: 135px; display: none;" class="text-right activities-upgrade"><p><i> {{toSafeString message}} </i></p></div>
+	
+			{{/isAllowedInCurrentPlan}}
+</div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Activities -->
+
+<div class="span4" style="margin-left:0px;">
+	<div class="well" style="width:220px; height:200px; text-align: center;">  
+        <!-- Icon and Title -->
+       	<div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-cogs icon-4x"></i>
+            </div>
+            <b>Contact Activities</b>
+        </div>
+        <br /> 
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip">
+          	See a chronological contact activity report of your CRM contacts.
+        </div> 
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary" href="#contact-activities">Go</a>
+        </div> 
+   	</div>
+</div>
+
+
+
+</div>
+</div>
+
+{{/hasMenuScope}}
+</script>

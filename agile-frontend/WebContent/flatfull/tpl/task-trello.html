@@ -1,0 +1,207 @@
+<script id="new-tasks-list-header-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">  
+	<div class="col-md-12">
+		     
+			<h3 id="new-task-heading" class="task-heading pull-left font-thin h3">My Pending Tasks<small class="tasks-count"></small></h3>
+		<div class="pull-right">
+		<div class="btn-group owner-task-button m-r">
+	            <button class="btn btn-default btn-sm selected_name">My Pending Tasks</button>
+	            <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+	            <span class="caret"></span>
+	            </a>
+	            <ul class="dropdown-menu" id="new-owner-tasks">   		 
+	            </ul>
+	        </div> 	
+          {{#is_mobile}}
+          {{else}}
+			<div class="btn-group type-task-button c-p pull-right">
+		        <button class="btn btn-default btn-sm selected_name">Due</button>
+		        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+		        <span class="caret"></span>
+		        </a>
+		        <ul class="dropdown-menu main-menu" id="new-type-tasks">
+		           <li class="dropdown-submenu do-onclick-nothing">
+		               <a data-toggle="dropdown">Group By</a>
+		               <ul class="dropdown-menu w-xs" id="new-type-tasks" style="left:-159px">
+		                  <li><a href="CATEGORY" class="new-type-task">Category</a></li>
+		                  <li><a href="OWNER" class="hide-on-pending hide-on-my-task new-type-task">Owner</a></li>
+		                  <li><a href="DUE" class="new-type-task">Due</a></li>
+		                  <li><a href="PRIORITY" class="new-type-task">Priority</a></li>
+		                  <li><a href="STATUS" class="hide-on-pending hide-on-all-pending new-type-task">Status</a></li>
+		               </ul>
+		           </li>
+		           <li><a href="LIST" class="list-view new-type-task">List View</a></li>
+		           <li><a href="GroupView" class="group-view" style="display:none;">Group View</a></li>                     
+		        </ul>
+		    </div>
+	        {{/is_mobile}}		
+		</div>
+		<div class="clearfix"></div>
+		
+	</div>  	  
+</div>
+</div>
+<div class="wrapper-md">
+	<div id="new-task-list-based-condition"> 
+  		<img class="loading_task_img thumb-xs p-r-xs" src= "{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
+	</div>
+	<div id="task-list-based-condition"></div>
+</div>
+</div>
+</script>
+
+<script id="new-tasks-lists-collection-template" type="text/html"> 
+ <div id="new-tasks-lists-model-list" class="list-area">
+
+ </div>
+</script>
+
+<script id="new-tasks-lists-model-template" type="text/html">
+     <div class="list-header panel-heading" attr="{{heading}}" ownerID={{owner_id}}>
+<div class="pull-left text-ellipsis" style="width:80%;"> 
+         <span class="m-r-xs">{{get_normal_name heading}}</span>
+        <!-- <span id="task-count-{{heading}}-{{owner_id}}" class="badge bg-primary txt-mute"></span> -->
+         
+</div>
+         <div class="pull-right"><img id="task-list-loading-img-{{heading}}-{{owner_id}}"  src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}">
+<span id="task-count-{{heading}}-{{owner_id}}" class="badge badge-empty pull-right  m-l-sm"></span>
+</div>  
+<div class="clearfix"></div>               
+     </div>     
+     {{#if owner_id}}
+      <div id="list-tasks-{{heading}}-{{owner_id}}" class="list-tasks panel-body bg-light lter p-n">
+     {{else}}
+      <div id="list-tasks-{{heading}}" class="list-tasks panel-body bg-light lter p-n">
+     {{/if}}
+        
+     </div>  
+     <div id="show_loader"></div>      
+     <div class="list-bottom left add-task panel-footer" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#"><i class="icon-plus" /> Add a task</a></div>     
+</script>
+
+<script id="task-collection-template" type="text/html">
+<div id="task-model-list" class="task-model-list">
+  
+</div>
+</script>
+
+
+<script id="task-model-template" type="text/html">
+{{#if_equals priority_type "HIGH"}}
+ <div class="listed-task red ui-state-default" id="{{id}}">
+{{else}}
+  {{#if_equals priority_type "LOW"}}
+    <div class="listed-task yellow ui-state-default" id="{{id}}">
+  {{else}}
+    <div class="listed-task blue ui-state-default" id="{{id}}">
+  {{/if_equals}}
+{{/if_equals}}
+
+  <div class="task-body">    
+    <div class="task-left">  
+<div class="new-task-owner  thumb-xxs avatar">     
+         {{#if ownerPic}}
+        	<img src="{{ownerPic}}" class="thumb-xxs r r-2x" title="{{taskOwner.name}}"/>
+	     {{else}}
+			<img src="{{defaultGravatarurl 50}}" class="thumb-xxs r r-2x" title="{{taskOwner.name}}"/>
+	     {{/if}}
+      </div> 
+      </div>
+<div class="pull-left task-content-view">
+<div class="pull-left" style="width:68%">
+      {{#if is_complete}}
+         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link task-completed">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis task-completed">{{/is_link}}{{safe_string subject}}</span></a>
+      {{else}}
+         {{#if_equals status "COMPLETED"}}
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link task-completed">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis task-completed">{{/is_link}}{{safe_string subject}}</span></a>
+         {{else}}
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis">{{/is_link}}{{safe_string subject}}</span></a>
+         {{/if_equals}}       
+      {{/if}}      
+</div>
+<div class="task-right text-ellipsis" style="width:30%">
+      <label class="label bg-light dk text-tiny" title="Category">{{get_normal_name type}}</label>
+  </div>
+    <div class="clearfix"></div>
+      {{#if contacts}}  
+         <div class="task-related-to" title="Related To">
+        	{{#each contacts}}
+        		{{#if_contact_type "PERSON"}}
+        			<a href="#contact/{{id}}" class="activate-link task-related-contacts text-sm text-muted">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+        		{{/if_contact_type}}
+				{{#if_contact_type "COMPANY"}}
+        			<a href="#company/{{id}}" class="activate-link task-related-contacts text-sm text-muted">{{getPropertyValue properties "name"}}</a>
+        		{{/if_contact_type}}
+        	{{/each}}
+		 </div>
+      {{/if}}
+</div>
+<div class="clearfix"></div>
+      {{#if_equals status "IN_PROGRESS"}}
+       <!-- <label class="label bg-light dk text-tiny progress-label" title="Progress">{{progress}}%</label> -->
+<div class="task-circle">
+    <div id="activeBorder" class="active-border" style="{{getcircle progress}}">
+<abbr title="{{progress}}%">
+        <div id="circle" class="circle">
+           <!-- <span class="prec 270" id="prec">{{!--progress}}--}}%</span> -->
+        </div>
+</abbr>
+    </div>
+</div>
+{{/if_equals}}
+<div class="clearfix"></div>
+    </div> <!--task-body--> 
+
+    
+<div class="clearfix"></div>
+ 
+   <div class="new-task-footer">
+<div class="pull-left w-half text-ellipsis text-muted" style="margin-left:35px;">
+     <i class="fa fa-clock-o text-muted"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time>
+</div>    
+<div class="pull-right"> 
+ <div class="task-actions">
+           <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="Mark as Complete"></i>
+           <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>          
+          <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
+           {{#if notes}} 
+             <i class="task-action icon icon-comment notes-task-popover edit-task" data="{{id}}" title="Notes"></i>
+             <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
+           {{/if}}
+      </div>
+      {{#if notes}} 
+           <div class="task-note-action">
+             <i class="task-action icon icon-comment" data="{{id}}" title="Notes"></i>
+             <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
+           </div>
+      {{/if}}
+</div>
+<div class="clearfix"></div>
+   </div> <!--task-footer-->
+</div>
+</script>
+
+<script id="notes-for-task-template" type="text/html">
+<li class="task-note" data="{{id}}"> 
+<div class="thumb avatar">
+{{#if domainOwner}}
+	{{#if ownerPic}}
+		<img class="thumbnail" width="20" height="20" alt="" src="{{ownerPic}}" title="{{domainOwner.name}}">
+	{{else}}
+		<img class="thumbnail" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{domainOwner.name}}">
+	{{/if}}
+{{else}}
+	{{#getCurrentUserPrefs}}<img class="thumbnail" width="20" height="20" alt="" title="{{currentDomainUserName}}" src="{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}">{{/getCurrentUserPrefs}}
+{{/if}}
+</div>
+<div class="r-3x m-l-xs p-l-xs" style="border: 1px solid #cccccc; width: 92%;"> 
+ <div class="txt-mute">{{description}}</div>
+</div>
+</li>
+</script>
+
+<script id="note-form-template" type="text/html">
+   <textarea placeholder="Detailed Note" name="note_description" rows="3" class="input form-control form-control-F-width" id="note_description"></textarea> 
+</script>

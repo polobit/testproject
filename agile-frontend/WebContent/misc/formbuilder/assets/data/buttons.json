@@ -1,0 +1,37 @@
+[
+  {
+    "title": "Single Button",
+    "fields": {
+      "label": {
+        "label": "Label Text",
+        "type": "input",
+        "value": ""
+      },
+      "buttonlabel": {
+        "label": "Button Label",
+        "type": "input",
+        "value": "Submit"
+      }
+    }
+  },
+  {
+    "title": "Double Button",
+    "fields": {
+      "label": {
+        "label": "Label Text",
+        "type": "input",
+        "value": ""
+      },
+      "button1label": {
+        "label": "Button Label",
+        "type": "input",
+        "value": "Submit"
+      },
+      "button2label": {
+        "label": "Button Label",
+        "type": "input",
+        "value": "Reset"
+      }
+    }
+  }
+]

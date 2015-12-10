@@ -1,0 +1,840 @@
+
+<script id="contacts-model-template" type="text/html">
+	<td  class="select_checkbox c-p">
+			<label class="i-checks i-checks-sm">
+                <input type="checkbox" class="tbody_check" value="">
+                <i></i>                
+              </label>
+	</td>
+	<td class="data" data="{{id}}">
+	<div class="row">
+    	<div class="inline p-r-xs h-auto thumb-sm">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="thumbnail img-inital inline" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties }}" />
+        	{{/if_contact_type}}
+			{{#if_contact_type "COMPANY"}}
+        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
+        	{{/if_contact_type}}
+    	</div>
+    	<div class="h-auto inline-block v-top text-ellipsis" style="width:70%">
+        	{{#if_contact_type "PERSON"}}
+        		<a class="text-cap">{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </a>        	
+        		<small class="text-muted">{{getPropertyValue properties "email"}}</small>
+        	{{/if_contact_type}}
+			{{#if_contact_type "COMPANY"}}
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
+        		<small class="text-muted">{{getPropertyValue properties "url"}}</small>
+        	{{/if_contact_type}}
+		</div>
+	</div>
+	</td>
+	<td><div class="inline-block v-top">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td> 
+<!-- <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;"> --> 
+	 <div class="ellipsis-multiline word-break-keep l-h"> 	
+		{{#each tags}}
+	    	<span class="label">{{this}}</span>	
+		{{/each}}
+	</div>
+	
+	</td>
+	<td><div>{{lead_score}}</div></td>
+</script>
+
+<script id="contacts-table-model-template" type="text/html">
+	<td  class="select_checkbox">
+			<label class="i-checks i-checks-sm">
+                <input type="checkbox" class="tbody_check" value="">
+                <i></i>                
+              </label>
+	</td>
+	<td class="data" data="{{id}}">
+	<div class="row">
+    	<div class="inline p-r-xs h-auto">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="thumbnail img-inital inline thumb" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<img class="thumbnail thumb" {{getCompanyImage "40" "display:inline;"}} />
+        	{{/if_contact_type}}
+    	</div>
+    	<div class="h-auto inline-block v-top text-ellipsis" style="width:70%">
+        	{{#if_contact_type "PERSON"}}
+        		<b>	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </b>
+        		<br />
+        		{{getPropertyValue properties "email"}}
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<b>{{getPropertyValue properties "name"}}</b></br>
+        		{{getPropertyValue properties "url"}}
+        	{{/if_contact_type}}
+	</div>
+	</div>
+	</td>
+	<td><div class="inline-block v-top">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td> 
+<!-- <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;"> --> 
+	 <div class="ellipsis-multiline l-h word-break-keep"> 	
+		{{#each tags}}
+	    	<span class="label">{{this}}</span>	
+		{{/each}}
+	</div>
+	
+	</td>
+	<td><div>{{lead_score}}</div></td>
+</script>
+
+
+<script id="contacts-collection-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="bg-light lter b-b wrapper-md ng-scope">
+	<div>
+		
+		<div class="pull-left">
+			<h3 class="m-n font-thin h3"><span id="contact-heading">Contacts</span><span id="contacts-count" class="m-l-xs">{{contacts_count}}</span></h3>
+			<div class="btn-group m-l-md inline-block" id="bulk-actions"
+				style="display: none;">
+					<div class="btn btn-sm btn-default">Bulk Actions</div>
+					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu" id="view-actions">
+						<li><a href="#" id="bulk-tags" class="_contact_bulk_action">Add Tags</a></li>
+						<li><a href="#" id="bulk-tags-remove" class="_contact_bulk_action">Remove Tags</a></li>
+                        <li class='divider'></li>  
+						<li><a href="#" id="bulk-campaigns" class="_contact_bulk_action">Add to Campaign</a></li>
+						<li><a href="#" id="bulk-email" class="_contact_bulk_action">Send Email</a></li>
+                        <li class='divider'></li>
+						<li><a href="#" id="bulk-owner" class="_contact_bulk_action">Change Owner</a></li>
+                        {{#hasScope "EXPORT_CONTACTS"}}
+                        <li><a href="#" id="bulk-contacts-export" class="_contact_bulk_action">Export Contacts as CSV</a></li>
+                        {{/hasScope}}
+						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
+					</ul>
+					<div  class="btn-group p-l p-t-xs inline-block" style="display: none;" id="bulk-select"></div>
+					</div>
+			</div>
+			
+			<div class="pull-right">
+            <div class="btn-group inline-block" id="filter-list"></div>
+			<div class="btn-group inline-block" id="view-list"></div>
+			
+			</div>
+			<div class="clearfix"></div>
+			<div>
+			
+			</div>
+		
+		
+	</div>
+</div>
+
+<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
+	<div class="col w-md b-r ">
+		<div class="data-block">
+			<div  id="lhs_filters_conatiner" >
+						</div>
+		</div>
+	</div>
+	<div class="col contacts-div">
+		{{#unless this.length}}
+			<div class="filter-criteria">
+					
+			</div>
+			<div id="slate"></div>
+	{{/unless}}
+		{{#if this.length}}
+		<div class="data">
+			<div class="data-container"></div>
+            <div class="table-responsive">
+			<div class="panel panel-default">
+			    <div class="panel-heading">Contacts List</div>
+			<table id="contacts-table" class="table table-striped showCheckboxes  no-sorting panel"
+				url="core/api/bulk/update?action_type=DELETE">
+				
+				<div class="filter-criteria"></div>
+				<thead>
+					<tr>
+						<th><label class="i-checks i-checks-sm"><input class="thead_check" type="checkbox"/><i></i></label></th>
+						<th>Name</th>
+						<th>Work</th>
+						<th>Tags</th>
+						<th>Lead Score</th>
+					</tr>
+				</thead>
+				<tbody id="contacts-model-list" class="contacts-model-list"
+					route="contact/">
+				</tbody>
+			</table>	
+			</div>
+            </div>
+		</div>
+	</div>
+	{{/if}}
+	</div>
+</div>
+</script>
+
+<!-- Company Default View 
+	Separate HTML template, allows customization of companies list page.
+	Also when selecting Companies from filter drop-down, only this will be rendered, no custom view is supported for Companies.
+-->
+<script id="companies-model-template" type="text/html">
+<td  class="select_checkbox">
+			<label class="i-checks i-checks-sm">
+                <input type="checkbox" class="tbody_check" value="">
+                <i></i>                
+              </label>
+	</td>
+	<td class="data" data="{{id}}">
+    	<div class="thumb-sm agile-img">
+        	<img class="img-inital r r-2x" {{getCompanyImage "50" "display:inline;"}} />
+    	</div>
+    	<div class="h-auto inline-block v-top text-ellipsis" style="width:14em;">
+        	<a class="text-cap">{{getPropertyValue properties "name"}}</a> <br>
+        	<small class="text-muted">{{getPropertyValue properties "url"}}</small>
+    	</div>
+	</td>
+	<td>
+		<div>{{setupRating star_value}}</div>
+	</td>
+	<td>
+		<div>{{owner.name}}</div>
+	</td>
+</script>
+
+<script id="companies-table-model-template" type="text/html">
+<td  class="select_checkbox">
+			<label class="i-checks i-checks-sm">
+                <input type="checkbox" class="tbody_check" value="">
+                <i></i>                
+              </label>
+	</td>
+	<td class="data" data="{{id}}">
+    	<div class="inline p-r-sm h-auto thumb-sm">
+        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
+    	</div>
+    	<div class="h-auto inline-block v-top text-ellipsis" style="width:14em;">
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a> 
+        		<small class="text-muted>"{{getPropertyValue properties "url"}}</small>
+    	</div>
+	</td>
+	<td>
+		<div>{{setupRating star_value}}</div>
+	</td>
+	<td>
+		<div>{{owner.name}}</div>
+	</td>
+</script>
+
+<script id="companies-collection-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+	<div class="col-md-12">
+		
+		<div class="pull-left">
+			<h3 class="inline-block font-thin h3"><span id="contact-heading">Companies</span><span id="contacts-count" class="m-l-xs"><small>{{count}}</small></span></h3>
+			<div class="inline-block">
+			<div class="btn-group m-l-md inline-block" id="bulk-actions" style="display: none;">
+					<div class="btn btn-default btn-sm">Bulk Actions</div>
+					<a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu" id="view-actions">
+						<li><a href="#" id="bulk-email">Send Email</a></li>
+                        <li class='divider'></li>
+						<li><a href="#" id="bulk-owner">Change Owner</a></li>
+						<li><a href="#" id="bulk-companies-export">Export Companies as CSV</a></li>
+						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
+					</ul>
+					<div  class="btn-group p-l p-t-xs inline-block" style="display: none;" id="bulk-select"></div>
+			</div>
+		</div>
+			</div>
+<div class="pull-right">
+            <div class="btn-group" id="filter-list"></div>
+			<div class="btn-group" id="view-list"></div>
+			
+			
+		</div>
+		<div class="clearfix"></div>
+	
+</div>
+</div>
+</div>
+<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
+	<div class="col w-md b-r ">
+		<div class="data-block">
+			<div  id="lhs_filters_conatiner" >
+						</div>
+		</div>
+	</div>
+	<div class="col contacts-div">
+		{{#unless this.length}}
+			<div class="filter-criteria">
+					
+			</div>
+			<div id="slate"></div>
+	{{/unless}}
+		{{#if this.length}}
+		<div class="data">
+			<div class="data-container"></div>
+			<div class="table-responsive">
+			<div class="panel panel-default">
+			<div class="panel-heading">Companies List</div>
+			<table id="companies" class="table table-striped showCheckboxes panel"
+				url="core/api/bulk/update?action_type=DELETE">
+				<div class="filter-criteria">
+					
+				</div>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Star Value</th>
+						<th>Owner</th>
+					</tr>
+				</thead>
+				<tbody id="companies-model-list" class="companies-model-list"
+					route="company/" >
+				</tbody>
+			</table>
+			</div>
+			</div>
+		</div>
+	</div>
+	{{/if}}
+</div>
+</div>
+</script>
+<script id="contacts-table-collection-template" type="text/html">
+{{#unless this.length}}
+			<div class="filter-criteria">
+			</div>
+			<div id="slate"></div>
+	{{/unless}}
+		{{#if this.length}}
+		<div class="data">
+			<div class="data-container"></div>
+			<div class="panel panel-default">
+			    <div class="panel-heading">Contacts List</div>
+			<table id="contacts-table" class="table table-striped showCheckboxes agile-ellipsis-dynamic no-sorting"
+				url="core/api/bulk/update?action_type=DELETE">
+				<col width="30px">
+				<col width="41%">
+				<col width="24%">
+				<col width="24%">
+				<col width="12%">
+				<div class="filter-criteria"></div>
+				<thead>
+					<tr>
+						<th><label class="i-checks i-checks-sm"><input class="thead_check" type="checkbox"/><i></i></label></th>
+						<th>Name</th>
+						<th>Work</th>
+						<th>Tags</th>
+						<th>Lead Score</th>
+					</tr>
+				</thead>
+				<tbody id="contacts-table-model-list" class="contacts-table-model-list"
+					route="contact/">
+				</tbody>
+			</table>
+			</div>
+		</div>
+	</div>
+	{{/if}}
+</script>
+<script id="companies-table-collection-template" type="text/html">
+{{#unless this.length}}
+			<div class="filter-criteria">
+					
+			</div>
+			<div id="slate"></div>
+	{{/unless}}
+		{{#if this.length}}
+		<div class="data">
+			<div class="data-container"></div>
+			<div class="panel panel-default">
+			<div class="panel-heading">Companies List</div>
+			<table id="companies" class="table table-striped showCheckboxes"
+				url="core/api/bulk/update?action_type=DELETE">
+				<div class="filter-criteria">
+					
+				</div>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Star Value</th>
+						<th>Owner</th>
+					</tr>
+				</thead>
+				<tbody id="companies-table-model-list" class="companies-table-model-list"
+					route="contact/">
+				</tbody>
+			</table>
+			</div>
+		</div>
+	</div>
+	{{/if}}
+
+</script>
+<!-- <script id="contacts-lhs-filters-custom-template" type="text/html">
+{{#each this}}
+<div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none"> 
+	<a data-toggle="collapse" id="lhs-filters-header" 
+class="c-p text-l-none text-l-none-hover" >
+{{field_label}}
+<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+{{#if_equals_or "CHECKBOX" field_type "TEXT" field_type "TEXTAREA" field_type}}
+	<div class="controls hide" id="{{replace_spaces field_label}}_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="{{field_label}}" />
+		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="pull-left form-control">
+			<option value="EQUALS" >is</option>
+			<option value="NOTEQUALS" >isn't</option>
+		</select>
+		<div class="EQUALS NOTEQUALS condition_container">
+			<span id="RHS">
+				<input type="text" placeholder="Value" prev-val="" class="w-full required form-control">
+			</span>
+		</div>
+<div class="clearfix"></div>
+		<div align="right"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		</div>
+	</div>
+	{{/if_equals_or}}
+	{{#if_equals "NUMBER" field_type}}
+	<div class="controls hide" id="{{replace_spaces field_label}}_number_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="{{field_label}}_number" />
+		<select id="between_filter" name="CONDITION" class="pull-left form-control">
+			<option value="EQUALS">equals</option>
+			<option value="IS_LESS_THAN">less than</option>
+			<option value="IS_GREATER_THAN">greater than</option>
+			<option value="BETWEEN">between</option>
+		</select>
+		<div class="EQUALS IS_GREATER_THAN IS_LESS_THAN condition_container">
+			<span id="RHS">
+				<input type="number" min="0" placeholder="Value" prev-val="" class="form-control  required">
+			</span>
+		</div>
+		<div class="BETWEEN condition_container hide">
+			<div class="clear" />
+			<span id="RHS">
+				<input type="number" min="0" class="required form-control" prev-val="" placeholder="Min Value"> 
+			</span>
+			<span id="RHS_NEW">
+				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control">
+			</span>
+		</div>
+<div class="clearfix"></div>
+		<div align="right"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+	</div>
+	</div>
+	{{/if_equals}}
+	{{#if_equals "DATE" field_type}}
+	<div class="controls hide" id="{{replace_spaces field_label}}_time_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+	<input type="hidden" name="LHS" value="{{field_label}}_time" />
+	<select id="between_filter" name="CONDITION" class="pull-left form-control">
+		<option value="ON">on</option>
+		<option value="AFTER">is after</option>
+		<option value="BEFORE">is before</option>
+		<option value="BETWEEN">is between</option>
+		<option value="LAST">in last</option>
+		<option value="NEXT">in next</option>
+	</select>
+	<div class="AFTER BEFORE ON condition_container">
+		<span id="RHS">
+			<input type="text" placeholder="MM/DD/YYYY" prev-val="" class="date form-control required w-full" >
+		</span>
+	</div>
+	<div class="LAST NEXT condition_container hide">
+		<span id="RHS">
+			<input type="number" placeholder="Number of days" prev-val="" class="form-control required w-full">
+		</span>
+	</div>
+	<div class="BETWEEN condition_container hide">
+		<div class="clear" />
+		<span id="RHS">
+			<input type="text" placeholder="MM/DD/YYYY" prev-val="" class="date w-half required form-control">
+		</span>
+		<span id="RHS_NEW">
+			<input type="text" placeholder="MM/DD/YYYY" prev-val="" class="date w-half required form-control">
+		</span>
+	</div>
+	<div class="pos-abs pos-r-0 pos-b"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+	</div>
+	</div>
+	{{/if_equals}}
+	{{#if_equals "LIST" field_type}}
+	<div class="controls hide" id="{{replace_spaces field_label}}_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="{{field_label}}" />
+		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="pull-left form-control">
+			<option value="EQUALS" >is</option>
+			<option value="NOTEQUALS" >isn't</option>
+		</select>
+		<div class="EQUALS NOTEQUALS condition_container">
+			<span id="RHS">
+				<select id="{{replace_spaces field_label}}-values" prev-val="" class="required form-control" name="temp">
+					<option value="">Select value</option>
+					{{{buildOptions field_data}}}
+				</select>
+			</span>
+		</div>
+<div class="clearfix"></div>
+		<div align="right"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		</div>
+	</div>
+	{{/if_equals}}
+	</div>
+{{/each}}
+</script>
+<script id="contacts-lhs-filters-template" type="text/html">
+<header>
+<div class="b-b b-light  wrapper">
+	<h4 class="m-t-none pull-left">
+		<span><span>Filter Contacts</span>
+		</span>
+	</h4>
+	<span class="pull-right">
+		<a id="clear-lhs-contact-filters text-info" href="#">
+			 clear all</i>
+		</a>
+	</span>
+<div class="clearfix"></div>
+</div>
+</header>
+<form id="lhs-contact-filter-form" name="lhs-contact-filter-form">
+<input type="hidden" name="contact_type" id="contact_type" value="PERSON" />
+<div id="tagslist" class="word-break">
+<fieldset>
+<div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		class="c-p text-l-none text-l-none-hover" >
+		Tags
+		<i class="inline pos-abs fa fa-plus-square-o pos-r"></i></a>
+	<div class="controls hide" id="tags_div">
+		<div id="tags-lhs-filter-table" class="ignore-collection">
+				<div class="hide master-tags-add-div pos-rlt form-group">
+					<input type="hidden" name="LHS" value="tags" />
+					<select id="tags-filter" class="form-control" name="CONDITION">
+						<option value="EQUALS" class="tags">is</option>
+						<option value="NOTEQUALS" class="tags">isn't</option>
+					</select>
+					<div class="EQUALS NOTEQUALS condition_container">
+						<span id="RHS">
+							<input type="text" placeholder="Value" prev-val="" class="required form-control w-full">
+						</span>
+					</div>
+					<div class="pos-abs pos-r-0"><a><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
+				</div>
+				<div class="lhs-contact-filter-row pos-rlt">
+					<input type="hidden" name="LHS" value="tags" />
+					<select id="tags-filter" class="form-control" name="CONDITION">
+						<option value="EQUALS" class="tags">is</option>
+						<option value="NOTEQUALS" class="tags">isn't</option>
+					</select>
+					<div class="EQUALS NOTEQUALS condition_container">
+						<span id="RHS">
+							<input type="text" placeholder="Value" prev-val="" class="required form-control w-full">
+						</span>
+					</div>
+					<div class="pos-abs pos-r-0"><a><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></a></i></div>
+				</div>
+		</div>
+		<a href="#" class="filter-tags-multiple-add-lhs text-l-none m-t-xs"><i class="icon-plus"></i> Add</a>
+	</div>
+</div>
+	
+<div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		class="c-p text-l-none text-l-none-hover" >
+		Score
+		<i class="inline pos-abs fa fa-plus-square-o pos-r"></i></a>
+	<div class="controls hide" id="lead_score_div">
+		<div class="lhs-contact-filter-row pos-rlt form-group">
+		<input type="hidden" name="LHS" value="lead_score" />
+		<select id="between_filter" name="CONDITION" class="form-control">
+			<option value="IS_GREATER_THAN">greater than</option>
+			<option value="IS_LESS_THAN">less than</option>
+			<option value="BETWEEN">between</option>
+		</select>
+		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container">
+			<span id="RHS">
+				<input type="number" min="0" placeholder="Value" prev-val=""  class="form-control  required">
+			</span>
+		</div>
+		<div class="BETWEEN condition_container hide">
+			<div class="clear" />
+			<span id="RHS">
+				<input type="number" min="0" class="required form-control" prev-val="" placeholder="Min Value"> 
+			</span>
+			<span id="RHS_NEW">
+				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control">
+			</span>
+		</div>
+		<div class="pos-abs pos-r-0"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		</div>
+	</div>
+</div>
+<div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		class="c-p text-l-none text-l-none-hover" >
+		Star Value
+		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+	<div class="controls hide" id="star_value_div">
+		<div class="lhs-contact-filter-row pos-rlt form-group">
+		<input type="hidden" name="LHS" value="star_value" />
+		<select id="between_filter" name="CONDITION" class="form-control">
+			<option value="IS_GREATER_THAN">greater than</option>
+			<option value="IS_LESS_THAN">less than</option>
+			<option value="BETWEEN">between</option>
+		</select>
+		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container">
+			<span id="RHS">
+				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="form-control required">
+			</span>
+		</div>
+		<div class="BETWEEN condition_container hide">
+			<div class="clear" />
+			<span id="RHS">
+				<input type="number" min="0" max="5" class="required form-control" prev-val="" placeholder="Min Value"> 
+			</span>
+			<span id="RHS_NEW">
+				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control">
+			</span>
+		</div>
+		<div class="pos-abs pos-r-0"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		</div>
+	</div>
+</div>
+<div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		class="c-p text-l-none text-l-none-hover" >
+		Owner
+		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+	<div class="controls hide" id="owner_id_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="owner_id" />
+		<select id="between_filter" name="CONDITION" class="form-control">
+			<option value="EQUALS" >is</option>
+			<option value="NOTEQUALS" >isn't</option>
+		</select>
+		
+		<div class="EQUALS NOTEQUALS condition_container">
+			<span id="RHS">
+				<select id="owner_select" class="required form-control" name="temp1" prev-val="">
+					<option value="">Select value</option>
+					
+				</select>
+			</span>
+		</div>
+		<div class="pos-abs pos-r-0"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		</div>
+	</div>
+</div>
+
+<div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		class="c-p text-l-none text-l-none-hover" >
+		Created Date
+		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+	<div class="controls hide" id="created_time_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="created_time" />
+		<select id="between_filter" name="CONDITION" class="form-control">
+			<option value="ON">on</option>
+			<option value="AFTER">is after</option>
+			<option value="BEFORE">is before</option>
+			<option value="BETWEEN">is between</option>
+			<option value="LAST">in last</option>
+			<option value="NEXT">in next</option>
+		</select>
+		<div class="AFTER BEFORE ON condition_container">
+			<span id="RHS">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="form-control  required date">
+			</span>
+		</div>
+		<div class="LAST NEXT condition_container hide">
+			<span id="RHS">
+				<input type="number" placeholder="Number of days" prev-val="" class="form-control required">
+			</span>
+		</div>
+		<div class="BETWEEN condition_container hide">
+			<div class="clear" />
+			<span id="RHS">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="form-control w-half  date required" placeholder="MM/DD/YYYY">
+			</span>
+			<span id="RHS_NEW"> 
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="form-control  date required">
+			</span>
+
+		</div>
+		<div class="pos-abs pos-r-0"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		</div>
+	</div>
+</div>
+<div id="custom-filter-fields" ></div>
+	
+</div>
+
+</fieldset>
+</div>
+</form>
+</script>
+<script id="companies-lhs-filters-template" type="text/html">
+<header>
+<div class="b-b b-light wrapper">
+	<h4 class="m-t-none pull-left">
+		<span><span>Filter Companies</span>
+		</span>
+	</h4>
+	<span class="pull-right">
+		<a id="clear-lhs-company-filters" href="#">
+			 clear all</i>
+		</a>
+	</span>
+<div class="clearfix"></div>
+</div>
+</header>
+<form id="lhs-contact-filter-form" name="lhs-contact-filter-form">
+<input type="hidden" name="contact_type" id="contact_type" value="COMPANY" />
+<div id="tagslist" class="word-break">
+<fieldset>
+<div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		class="c-p text-l-none text-l-none-hover" >
+		Star Value
+		<i class="inline pos-abs pos-r fa fa-plus-square-o"></i></a>
+	<div class="controls hide" id="star_value_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="star_value" />
+		<select id="between_filter" name="CONDITION" class="form-control" >
+			<option value="IS_GREATER_THAN">greater than</option>
+			<option value="IS_LESS_THAN">less than</option>
+			<option value="BETWEEN">between</option>
+		</select>
+		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container">
+			<span id="RHS">
+				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="form-control required w-full">
+			</span>
+		</div>
+		<div class="BETWEEN condition_container hide">
+			<div class="clear" />
+			<span id="RHS">
+				<input type="number" min="0" max="5" class="required form-control" prev-val="" placeholder="Min Value"> 
+			</span>
+			<span id="RHS_NEW">
+				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required  form-control">
+			</span>
+		</div>
+		<div class="pos-abs pos-r-0"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		</div>
+	</div>
+</div>
+<div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		class="c-p text-l-none text-l-none-hover" >
+		Owner
+		<i class="inline pos-abs pos-r fa fa-plus-square-o"></i></a>
+	<div class="controls hide" id="owner_id_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="owner_id" />
+		<select id="between_filter" name="CONDITION" class="form-control" >
+			<option value="EQUALS" >is</option>
+			<option value="NOTEQUALS" >isn't</option>
+		</select>
+		
+		<div class="EQUALS NOTEQUALS condition_container">
+			<span id="RHS">
+				<select id="owner_select" class="required form-control" prev-val="" name="temp1">
+					<option value="">Select value</option>
+					
+				</select>
+			</span>
+		</div>
+		<div class="pos-abs pos-r-0"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		</div>
+	</div>
+</div>
+
+<div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		class="c-p text-l-none text-l-none-hover" >
+		Created Date
+		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+	<div class="controls hide" id="created_time_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="created_time" />
+		<select id="between_filter" name="CONDITION" class="pull-left form-control" >
+			<option value="ON">on</option>
+			<option value="AFTER">is after</option>
+			<option value="BEFORE">is before</option>
+			<option value="BETWEEN">is between</option>
+			<option value="LAST">in last</option>
+			<option value="NEXT">in next</option>
+		</select>
+		<div class="AFTER BEFORE ON condition_container">
+			<span id="RHS">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="form-control required date">
+			</span>
+		</div>
+		<div class="LAST NEXT hide condition_container">
+			<span id="RHS">
+				<input type="number" placeholder="Number of days" prev-val="" class="form-control required">
+			</span>
+		</div>
+		<div class="BETWEEN hide condition_container">
+			<div class="clear" />
+			<span id="RHS">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="form-control date required" placeholder="MM/DD/YYYY">
+			</span>
+			<span id="RHS_NEW"> 
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="form-control date required">
+			</span>
+		</div>
+		<div class="pos-abs pos-r-0 pos-b"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		</div>
+	</div>
+</div>
+<div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		class="c-p text-l-none text-l-none-hover" >
+		Name
+		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+	<div class="controls hide" id="name_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="name" />
+		<select id="between_filter" name="CONDITION" class="form-control" >
+			<option value="EQUALS" >is</option>
+			<option value="NOTEQUALS" >isn't</option>
+		</select>
+		<div class="EQUALS NOTEQUALS condition_container">
+			<span id="RHS">
+				<input type="text" placeholder="Value" prev-val="" class="form-control required">
+			</span>
+		</div>
+		<div class="pos-abs pos-r-0"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		</div>
+	</div>
+</div>
+<div id="custom-filter-fields" ></div>
+	
+</div>
+
+</fieldset>
+</div>
+</form>
+=======
+>>>>>>> 1ebb59a07047b74d48e5e88f7a949122f2711936
+</script> -->

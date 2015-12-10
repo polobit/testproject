@@ -1,0 +1,85 @@
+<script id="contact-events-collection-template" type="text/html">
+		{{#unless this.length}}
+        <div class="wrapper p-t-none">
+            <div class="slate-content mobile-pad-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">You have no events for {{contactShortName}}.</h4>
+                    <div class="text">
+                        You can add an event related to a contact.
+                    </div>
+                    <a href="#" class="btn blue btn-slate-action btn-default btn-sm m-t-xs contact-add-event"><i class="icon-plus-sign"></i>  Add Event</a>
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+	<div class="m-b-md m-t-md m-r-sm" align="right">
+		<a href="#" class="btn btn-sm btn-default contact-add-event pos-rlt btn-addon"><span><i class='icon-plus-sign'/></span> Add Event</a>
+	</div>
+			<ul id="contact-events-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs"></ul>
+		{{/if}} 
+</script>
+
+<script id="contact-events-model-template" type="text/html">
+<div class="activity block pos-rlt">
+	
+	<div class="activity-block-owner  thumb-xs pull-left m-r-sm avatar">
+			{{#if ownerPic}}
+				<img class="user-img r r-2x"  alt="" src="{{ownerPic}}" >
+			{{else}}
+				<img class="user-img r r-2x" src="{{defaultGravatarurl 40}}">
+			{{/if}}
+			<span class="owner-name hidden">{{owner.name}}</span>
+	</div>
+<div class="pull-left rightThumbView">	
+	<div class="event-title pull-left text-md text-cap contact-title-dynamic custom-color">{{title}} <span class="hidden label label-{{task_label_color color}}">{{event_priority color}}</span></div><div class="pull-right"><span class="text-muted"><i class="fa fa-clock-o"></i> <time datetime="{{epochToHumanDate "" start}}" class="event-created-time">{{epochToHumanDate "dd mmm yyyy' - 'hh:MM tt" start}}</time></span></div>
+<div class="clearfix"></div>
+<!-- <div class="m-b-xs">
+	<span>StartTime : <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="event-created-time text-muted" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time></span>
+		{{#if allDay}} ( all day )
+		{{else}}
+		<span class="m-l-md">EndTime :<i class="fa fa-clock-o m-r-xs text-muted"></i> <time class="event-created-time text-muted" datetime="{{epochToHumanDate "" end}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" end}}</time></span>
+		{{/if}}
+</div> -->
+<div>	
+		{{#each contacts}}
+           	{{#if id}}
+				{{#isDuplicateContactProperty properties "email"}}
+
+					{{else}}
+						{{#if_contact_type "PERSON"}}	
+							<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
+        				{{/if_contact_type}}
+						{{#if_contact_type "COMPANY"}}
+        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
+        				{{/if_contact_type}}
+				{{/isDuplicateContactProperty}}
+           		
+           	{{/if}}
+       	{{/each}}
+		</div>
+		</div>
+<div class="clearfix"></div>
+	<div class="m-t-xs">
+		<div class="pull-left hide">
+		 <small class="edit-hover m-l-xxl text-muted"> 
+			<i class="fa fa-clock-o m-r-xs"></i> <time class="event-created-time text-base" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+		</small>
+		</div>
+		<div class="pull-right pos-abs pos-r-0 pos-b-0 m-r-xs">
+		<span class="actions">
+			<a title="Edit"  data="{{id}}" class="c-p text-l-none event-edit-contact-tab p-r-sm"> <i class="icon-pencil"></i> </a>
+            <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/events/bulk"><i></i></span></a>
+        </span>
+        </div>        
+	</div>
+	<div class="clearfix"></div>
+<div class="clearfix"></div>
+</div>
+<div class="priority_type hidden">{{event_priority color}}</div>
+</script>

@@ -1,0 +1,236 @@
+ <script id="billing-settings-template" type="text/html"> 
+<div class="">
+<div class="bg-light lter b-b wrapper-md">
+<h1 class="m-n font-thin h3">Invoice Details<small></small></h1>
+</div>
+   
+    <!-- <div class="app-content-full  h-full enable-full-height"> -->  
+    <div>
+	<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
+      <div class="row-row">
+		<div id="BillingSettingsTab" class="invoice-details-tab">
+		
+		</div>
+		</div>
+		<div class="tab-content wrapper-md p-t-none" style="padding-top: 5px !important;">
+			<div class="tabs" id="billing-settings-tab-content"></div>
+		</div>
+		
+	
+</div>
+</div>
+</div>
+</script>
+<script id="account-details-template" type="text/html">
+<div class="row">
+
+
+<div class="col-md-5" id="plan-details-pane"><div>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<p class="h4 text-center">Current Plan Details</p>
+	</div>
+	<div class="panel-body">
+		<div class="form-horizontal">
+          <div class="p-t-lg text-center m-b">
+ <img src="{{getS3ImagePath '/flatfull/img/free-plan.png'}}" height="110" width="115">
+                        </div>
+
+		{{#check_plan "FREE"}}
+		<div class="control-group form-group m-b-none p-l-xxl">
+				<label class="col-md-5 text-right">Plan:</label>
+				<label class="col-md-5 text-left">Free</label>
+			</div>
+			<div class="control-group form-group m-b-none p-l-xxl">
+  				<label class="col-md-5 text-right">Users:</label>
+				<label class="col-md-5 text-left">2</label>
+			</div>
+			
+			<div class="control-group form-group m-b-none p-l-xxl">
+  				<label class="col-md-5 text-right">Billing Cycle:</label>
+				<label class="col-md-5 text-left">-</label>
+			</div>
+
+		{{else}}
+{{#stringToJSON this "billingData"}}{{/stringToJSON}}
+
+	    <div class="control-group form-group m-b-none p-l-xxl">
+				<label class="col-md-5 text-right">Plan:</label>
+				<label class="col-md-5 text-left">{{getAccountPlanName ../plan.plan_type}}</label>
+			</div>
+			<div class="control-group form-group m-b-none p-l-xxl">
+  				<label class="col-md-5 text-right">Users:</label>
+				<label class="col-md-5 text-left">{{this.plan.quantity}}</label>
+			</div>
+			
+			<div class="control-group form-group m-b-none p-l-xxl" >
+  				<label class="col-md-5 text-right">Billing Cycle:</label>
+				<label class="col-md-5 text-left">{{getAccountPlanInteval ../plan.plan_type}}</label>
+			</div>
+		
+		{{/check_plan}}
+         
+			
+		</div> 
+
+<div class="text-center">
+  <a class="btn btn-sm btn-primary" href="#subscribe">
+
+				Change Plan</a>
+</div>
+<!--<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="user-plan-details-popover"><i class="icon-user"></i> Plan Details</a> -->
+</div>
+
+</div></div></div><div class="col-md-5" id="plan-details-pane"><div>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<p class="h4 text-center">Existing Credit Card</p>
+	</div>
+	<div class="panel-body">
+		<div class="form-horizontal">
+         
+{{#stringToJSON this "billingData"}}{{/stringToJSON}}
+{{#if billingData}}
+ <div class="p-t-lg text-center m-b">
+                           <img src="{{getS3ImagePath '/flatfull/img/credit-card.png'}}" height="110" width="115">
+                        </div>
+	<div class="card-details">
+<div class="control-group p-b-md p-t-xs"></div>
+<div class="control-group form-group m-b-none p-l-xxl">
+  				<label class="col-md-5 text-right">Credit Card:</label>
+				<label class="col-md-5 text-left">**** {{this.billingData.cards.data.0.last4}} </label>
+			</div>
+<div class="control-group form-group m-b-none p-l-xxl">
+  				<label class="col-md-5 text-right">Expiration:</label>
+				<label class="col-md-5 text-left">{{#if_less_than billingData.cards.data.0.expMonth 9}}0{{billingData.cards.data.0.expMonth}}{{else}}{{billingData.cards.data.0.expMonth}}{{/if_less_than}}/{{billingData.cards.data.0.expYear}}</label>
+			</div>
+	</div>
+<div class="text-center">
+  <a class="btn btn-sm btn-primary" href="#updateCreditCard" style="background-color: #87bd4b; border-color: #8bbf51;">
+				Update Card</a>
+</div>
+{{else}}
+ <div class="p-t-lg text-center m-b">
+                           <img src="{{getS3ImagePath '/flatfull/img/no-credit-card.png'}}" height="110" width="115">
+                        </div>
+<div class="p-b p-t-md">
+<div style="width: 100%; text-align: center;">
+  				Sorry, we do not have your card details. <br>
+You can upgrade your account at any time.
+			</div>
+	</div>
+<div class="text-center">
+  <a class="btn btn-sm btn-primary" href="#subscribe" style="background-color: #87bd4b; border-color: #8bbf51;" disabled>
+				Update Card</a>
+</div>
+{{/if}}
+
+
+</div>
+</div>
+</div> 
+
+	<!--<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="user-plan-details-popover"><i class="icon-user"></i> Plan Details</a> -->
+</div>
+
+</div>
+</div>
+{{#check_plan "FREE"}}
+{{else}}
+<div>
+<a href="#"  id="cancel-account-request" class="col-md-10 text-right text-lg text-info m-t-n-md p-r-xs" style="font-size:12px;
+">Cancel Account</a>
+</div>
+{{/check_plan}}
+</script>
+
+<script id="charge-collection-template" type="html/text">
+	{{#if this.length}}
+        <table class="table table-striped m-b-none" id="sort-table">
+            <thead>
+                <tr>
+					<th>Plan</th>
+					<th>Description</th>
+				 	<th>Date</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody id="charge-model-list" class="model-list-cursor">
+            </tbody>
+        </table>
+	{{else}}
+		<div class="wrapper-sm">
+			No recent payments.
+		</div>
+	{{/if}}
+</script>
+<script id="charge-model-template" type="text/html">
+ 
+{{#if paid}}
+
+ <td>{{plan.name}} (${{numeric_operation plan.amount 100 "/"}}/{{plan.interval}}) <br/> for the period {{epochToHumanDate "mm/dd/yyyy" period.start}} - {{epochToHumanDate "mm/dd/yyyy" period.end}}</td>
+ <td>{{description}}</td>
+ <td class="data text-muted" data="{{invoice}}"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>	
+    <td >
+    	${{numeric_operation amount 100 "/"}} {{#if refunded}}  (Refunded) {{/if}}{{#unless refunded}}{{#if_not_equals amountRefunded 0}} (Refunded ${{numeric_operation amountRefunded 100 "/"}}){{/if_not_equals}}{{/unless}}
+	</td>
+{{/if}}
+</script>
+<script id="account-template" type="text/html">
+</script>
+<script id="creditcard-update-template" type="text/html">
+
+<div class="wrapper-md">
+<div class="row">
+
+  <div class="col-md-9">
+<div class="panel panel-default">
+  <div class="panel-heading">Update Card
+  </div>
+<div class="panel-body">
+<form id="CCform" class="form-horizontal card_details" name="card_details">
+			<fieldset>
+				
+					<div class="control-group form-group">
+						<label class="control-label col-sm-3">Card Number <span class="field_req">*</span></label>
+						<div class="controls col-sm-6">
+							<input type="text" name="number" class="input required  digits form-control" placeholder="Enter Your Card Number" style="width: 99%;">
+						</div>
+					</div>
+					<div class="control-group form-group">
+						<label class="control-label col-sm-3">Expiry<span class="field_req">*</span></label>
+						<div class="controls col-sm-6">
+							<select name="exp_month" id="exp_month" class="input form-control exp_month inline-block" style="width: 50%;" placeholder="Expiry Month"></select>
+							<select name="exp_year" id="exp_year" class="input required form-control  digits  exp_year atleastThreeMonths inline-block" style="width: 49%;" placeholder="Expiry Year"></select>
+						</div>
+					</div>
+				
+				<div class="control-group form-group">
+					<label class="control-label col-sm-3 col-xs-12">CVC<span class="field_req">*</span></label>
+					<div class="controls col-sm-6 col-xs-12">
+<input type="text" name="cvc" class="input required  digits form-control pull-left" placeholder="Card Security Code" style="width: calc(100% - 75px);">
+ <img src="{{getS3ImagePath '/flatfull/img/cvc.png'}}" class="pull-left m-l-sm" style="width: 60px;">
+<div class="clearfix"></div>
+					</div>
+
+				</div>
+
+				<div class="control-group form-group">
+					<label class="control-label col-sm-3"></label>
+					<div class="controls col-sm-6" style="width: 42%;">
+						<a class="save btn btn-sm btn-primary" href="#subscribe" id="updatecard">
+				Update</a>
+					</div>
+				</div>
+					
+			</fieldset>
+		</form>
+        <form id="gateway" class="form-horizontal hide">
+				<input type="text" name="gateway" class="hidden form-control" value="Stripe" />
+			</form>	
+</div>
+</div>
+</div>
+</div>
+</div>
+</script>

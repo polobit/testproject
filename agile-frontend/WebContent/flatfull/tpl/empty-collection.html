@@ -1,0 +1,65 @@
+<script id="empty-collection-model-template" type="text/html">
+<div class="alert alert-info">
+    <div class="slate-content">
+        
+			{{#if image}}	
+				<div class="box-left pull-left m-r-md">
+ 	           		<img alt="Clipboard" src="{{image}}" />
+				</div>
+				{{else}}
+					{{#if icon}}
+						{{#if description}}
+							<div class="box-left pull-left m-r-md">
+								<i class="{{icon}}"></i>
+							</div>
+						{{else}}
+							<div class="box-left pull-left m-r-md">
+								<i class="{{icon}}"></i>
+							</div>
+						{{/if}}
+					{{/if}}
+			{{/if}}
+        
+		{{#if icon}}
+	        	<div class="box-right pull-left">
+			{{else}}
+				<div class="box-right pull-left">
+		{{/if}}
+            <h4 class="m-t-none">{{title}}</h4>
+            {{#if description}}<div class="text">{{{description}}}</div>{{/if}}
+			{{#if learn_more}}
+            	<a href="#">{{learn_more}}</a><br />
+			{{/if}}
+            
+            {{#if modal_id}}
+            	<a href="{{route}}" modal_id="{{modal_id}}" class="modal-form btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  {{button_text}}</a>
+            {{else}}
+				{{#if button_text}}
+            		<a href="{{route}}" class="btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  {{button_text}}</a>
+				{{/if}}
+            {{/if}}
+        </div>
+    </div>
+<div class="clearfix"></div>
+</div>
+</script>
+
+
+<script id="empty-collection-contacts-model-template" type="text/html">
+    <div class="slate-content">
+                <div class="box-right text-center m-t-md">
+                    <div class="text-md">{{title}}</div>
+                    <div class="text text-muted">
+                        {{{description}}}
+                    </div>
+             {{#if modal_id}}
+            	<a href="{{route}}" modal_id="{{modal_id}}" class="modal-form btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  {{button_text}}</a>
+            {{else}}
+				{{#if button_text}}
+            		<a href="{{route}}" class="btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  {{button_text}}</a>
+				{{/if}}
+            {{/if}}
+                </div>
+			<div class="clearfix"></div>
+
+</script>

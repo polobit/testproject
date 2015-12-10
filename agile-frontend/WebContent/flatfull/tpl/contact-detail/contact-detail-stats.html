@@ -1,0 +1,142 @@
+<script id="stats-collection-template" type="text/html">
+{{#unless this.length}}
+        <div class="wrapper p-t-none">
+            <div class="slate-content mobile-pad-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">{{contactShortName}} has no web activity.</h4>
+                    <div class="text">
+						May be {{contactShortName}} did not visit the required page yet.
+                    </div>
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+        {{/unless}}
+
+{{#if this.length}}
+
+<div class="m-l">
+	<span>
+		<h5 class="m-t-none">
+	  	    <a class="text-l-none"><b>Initial Referrer URL</b></a><img border="0" src="{{getS3ImagePath '/img/help.png'}}"
+		    style="height: 6px; vertical-align: text-top" rel="popover"
+			data-placement="bottom" data-title="Referrer URL"
+			data-content="This is the web page from where this contact has come to your website the very first time."
+			id="element" data-trigger="hover"> : {{checkOriginalRef "original_ref"}} {{#if this.length}}{{queryWords "original_ref"}}{{/if}}
+		</h5>
+	</span>	
+</div>
+	<ul id="stats-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs"></ul>
+{{/if}}
+
+</script>
+
+<!-- Web Stats model -->
+<script id="stats-model-template" type="text/html">
+<div  class="activity block">
+	<div class="activity-text-block">
+		
+		<h4 class="inline hide"><b>Page View Analytics</b></h4>
+
+<div class="pull-right">
+		<small class="edit-hover text-muted">
+			<i class="fa fa-clock-o m-r-xs"></i><time class="stats-created-time" datetime="{{epochToHumanDate "" created_time}}" >{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+		</small>	
+        
+	</div>
+
+        <div class="m-b-xs"  id="truncated-webstats">
+		    <div class="list-none p-n">
+			    <div>	
+					{{#stringToJSON this "urls_with_time_spent"}}
+                    <div class="text-md text-cap custom-color"><a id="show-page-views" href="#">Pages Visited ({{this.length}}) </a></div>
+							
+					{{!-- {{#if_more_urls this this.length}}		
+						<div class="limited-page-urls word-break-all">
+                    		{{#each this.urls}}{{url}} - {{convertSecondsToHour time_spent}}<br/>{{/each}}
+						</div>
+
+                     {{else}}
+						<div class="word-break-all">{{#each this}}{{url}} - {{convertSecondsToHour time_spent}}<br/>{{/each}}</div>
+                     {{/if_more_urls}}--}}
+
+                    {{/stringToJSON}}
+				</div>
+             </div>  
+      	</div>
+
+<div id="complete-webstats" style="display:none;">
+		<div class="list-none p-n">
+			<div>	
+					{{#stringToJSON this "urls_with_time_spent"}}
+                    <!--<div  class="text-md text-cap custom-color">
+						Pages Visited ({{this.length}}){{/stringToJSON}}
+					
+					</div>-->
+
+					{{#stringToJSON this "urls_with_time_spent"}}	
+					<div>
+					{{#each this}}{{url}} - {{convertSecondsToHour time_spent}}<br/> {{/each}}
+					</div>
+
+                    {{/stringToJSON}}
+				</div>  
+ 
+                {{#if ref}}
+                <div class="m-t-xs">	
+					<span>Referred -- </span>
+							
+					<span>
+						{{ref}}
+					</span>
+				</div>
+               {{/if}}
+               
+               {{#if ip}}
+				<div class="m-t-xs">	
+					<span>IP Address -- </span>		
+					<span>
+						{{ip}}
+					</span>
+				</div>
+               {{/if}}
+
+			   {{#if city}}
+                <div class="m-t-xs">	
+					<span>Location -- </span>		
+					<span>
+						{{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}
+					</span>
+				</div>
+               {{/if}}
+		</div>
+<div class="pull-left">
+{{#if user_agent}}
+			{{#stringToJSON this "parsedUserAgent"}}
+        	<div>
+				{{#if device_type}}
+              		<img class="inline m-r-xs r r-2x" src="/img/web-stats/devices/{{device_type}}.png"  title="{{device_type}}">
+				{{/if}}
+				{{#if os}}
+                	<img class="inline m-r-xs r r-2x" src="/img/web-stats/os/{{normalize_os os}}.png" title="{{os}}">
+				{{/if}}
+				{{#if browser_name}}
+		      		<img class="inline m-r-xs r r-2x" src="img/web-stats/browsers/{{browser_name}}.png"  title="{{browser_name}}">
+				{{/if}}
+        	</div>
+       		{{/stringToJSON}}
+        {{/if}}
+</div>
+</div>
+	<div class="clearfix"></div>
+<!--<div class="pull-right">
+<a href="#" id="more-page-urls">More</a>
+</div>-->
+<div class="clearfix"></div>	
+</div>
+</div>
+</script>

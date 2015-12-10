@@ -1,0 +1,112 @@
+<script id="workflow-active-contacts-collection-template" type="text/html">
+
+<div class="row">
+    <div class="col-md-12">
+        
+			<h4 class="pull-left font-light h4">Active Subscribers
+				<!-- <small> - <span id="subscribers-campaign-name"></span></small>--> 
+				<span class="badge bg-primary">{{subscribers_count}}</span>
+			</h3>
+            <div class="pull-right m-b-sm">
+				<div class="btn-group">
+  					<a class="btn btn-sm btn-default m-l-xs">{{get_subscribers_type_from_hash}} Subscribers</a>
+  					<a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">
+    					<span class="caret"></span>
+  					</a>
+  					<ul class="dropdown-menu" role="menu">
+    					<li><a href="#workflow/all-subscribers/{{get_id_from_hash}}">All</a></li>
+						<li><a href="#workflow/active-subscribers/{{get_id_from_hash}}">Active</a></li>
+						<li><a href="#workflow/completed-subscribers/{{get_id_from_hash}}">Completed</a></li>
+                        <li><a href="#workflow/removed-subscribers/{{get_id_from_hash}}">Removed</a></li>
+                        <li><a href="#workflow/unsubscribed-subscribers/{{get_id_from_hash}}">Unsubscribed</a></li>
+                        <li><a href="#workflow/hardbounced-subscribers/{{get_id_from_hash}}">Hard Bounced</a></li>
+						<li><a href="#workflow/softbounced-subscribers/{{get_id_from_hash}}">Soft Bounced</a></li>
+						<li><a href="#workflow/spam-reported-subscribers/{{get_id_from_hash}}">Spam Reported</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+        
+    </div>
+</div>
+
+{{!-- Shows pad-content if active subscribers are empty --}}
+{{#unless this.length}}
+<div id="subscribers-slate"></div>
+{{/unless}}
+
+{{#if this.length}}
+<div class="row">
+	<div class="col-md-12">
+ 		<div class="data">
+        	<div class="data-container">
+            	<div class="table-responsive m-t-sm">
+            	<div class="panel panel-default">
+            	<div class="panel-heading">Active Subscribers List</div>
+            	<table class="table table-striped  panel agile-table showCheckboxes" url="core/api/bulk/update?workflow_id={{get_id_from_hash}}&action_type=REMOVE_ACTIVE_SUBSCRIBERS" id="active-campaign">
+                	<thead>
+                    	<tr>
+                        	<th style="width:40%;" class="header">Contact</th>
+                        	<th style="width:25%;" class="header">Campaign Date</th>
+                        	<th style="width:30%;" class="header">Campaigns</th>
+                    	</tr>
+                	</thead>
+                	<tbody id="workflow-active-contacts-model-list" route="contact/">
+                	</tbody>
+            	</table>
+            	</div>
+            	</div>
+        	</div>
+    	</div>
+	</div>
+</div>
+{{/if}}
+</script>
+<script id="workflow-active-contacts-model-template" type="text/html">
+<td class="data" data={{id}}>
+	<div class="table-resp">
+	<div class="thumb-sm agile-img">
+    	<a href="#contact/{{id}}" class="activate-link">
+			<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties }}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+		</a>
+    </div>
+    
+ 	<span>
+    	<span><a class="text-cap">	{{contact_name properties type}} </a></span><br>
+        <small>
+        	{{getPropertyValue properties "email"}}</small>
+    </span>
+    </div>
+</td>
+<td>
+    <div class="table-resp">
+        <small class="edit-hover text-muted"> 
+		    <span>Started&nbsp;</span>
+                {{!-- Gets started time of current campaign from campaignStatus array having same campaign-id --}}
+
+                {{#if_same_campaign this "campaignStatus"}}
+				<i class="fa fa-clock-o m-r-xs"></i>
+                <time class="campaign-started-time b-b-dotted" datetime="{{epochToHumanDate "" start_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start_time}}</time>
+                {{/if_same_campaign}}
+        </small>
+    </div>
+</td>
+<td>
+    <div class="table-resp word-break-all">
+		{{#if_other_active_campaigns this "campaignStatus"}}           
+         {{!-- Shows Active campaigns separated by comma --}}
+         {{#if this.active}} 
+         <div class="text-ellipsis" style="width: 30em;">
+           Active - {{#toLinkTrigger this.active}}<a href="#workflow/{{campaign_id}}" class="stop-propagation">{{#if campaign_name}}{{campaign_name}}{{else}} Active Campaign {{/if}}</a>{{/toLinkTrigger}}
+         </div>
+         {{/if}}
+         {{#if this.done}}
+         <div class="text-ellipsis" style="width: 30em;">
+         	Done - {{#toLinkTrigger this.done}}<a href="#workflow/{{campaign_id}}" class="stop-propagation">{{#if campaign_name}}{{campaign_name}}{{else}} Done Campaign {{/if}}</a>{{/toLinkTrigger}}
+         </div>
+         {{/if}} 
+   
+        {{/if_other_active_campaigns}}
+	</div>
+</td>
+</script>

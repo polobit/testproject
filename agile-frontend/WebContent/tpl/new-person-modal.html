@@ -1,0 +1,123 @@
+<!-- New (Person) Modal views -->
+<div class="modal hide fade" id="personModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3><i class="icon-plus-sign"></i>&nbsp;Add Contact</h3>
+    </div>
+    <div class="modal-body" style="max-height:420px !important;">
+        <form id="personForm" name="personForm" method="post">
+            <fieldset>            
+                <div class="control-group">
+	                <label class="control-label"><b>Name</b> <span class="field_req">*</span></label>
+	                <div class="row-fluid">
+		                 <div class="control-group span5" style="margin-bottom:0px; margin-right:20px;">
+		                     <span class="controls">
+		                     <input name="first_name" type="text" class="required" id="fname" placeholder="First Name" />
+		                     </span>
+		                 </div>
+		                 <div class="control-group span6" style="margin-bottom:0px;">
+		                     <span class="controls">
+		                     <input name="last_name" type="text" id="lname" placeholder="Last Name" />
+		                     </span>
+		                 </div>
+	                </div>
+                </div>
+                 <div class="row-fluid">
+	                <div class="control-group span5"  style="margin-right:20px;">
+	                    <label class="control-label"><b>Title</b></label>
+	                    <div class="controls">
+	                        <input name="title" type="text" id="job_title" placeholder="Job Title" />
+	                    </div>
+	                </div>
+	                <div class="control-group span6" id='company_source_person_modal'>
+	                    <label class="control-label"><b>Company</b></label>
+	                    <div class="controls">
+							<div class="pull-left" style="display:inline-block;">
+								<ul name="contact_company_id" class="contacts tagsinput tags"></ul>
+							</div>
+	                        <input type="text" id="contact_company" placeholder="Company Name" />
+	                    </div>
+	                </div>
+                </div>               
+                <div class="control-group">
+	                <div class="row-fluid">
+	                	<div class="span5">
+		                    <label class="control-label"><b>Email</b> </label>
+		                    <div class="controls">
+		                        <span><input name="email" class="email" type="text" id="email" placeholder="Email" /></span>
+		                    </div>
+	                    </div>
+	                    <div class="span2">	                                       
+	                    	<span id="pic" style="padding-left:20px;display:none;"></span>
+	                    	<input name="image" id="image" type="hidden" />
+	                    	<div id="network_handle" class="network-handle">
+		                    	<label class="control-label"><b>Twitter</b> </label>
+		                    	<div class="controls">
+		                        	<span><input name="handle" type="text" id="handle" disabled value=""/></span>
+		                    	</div>
+	                    	</div>	                    	 
+	                    	
+	                    	<div class="control-group" >                    
+                    		  <div class="controls">
+                        		<div class="website multiple-template" style="display:none" data="website">
+                                  <input type="text" id="website" name="website"/> 
+                                  <select class="website-select" name="website-select">
+                                    <option></option>                                
+                                    <option value="TWITTER">Twitter</option>
+                                    <option value="LINKED_IN">LinkedIn</option>
+                                    <option value="FACEBOOK">Facebook</option>
+                                  </select>                            
+                                </div>
+                              </div>
+	                    	</div>	                    	
+	                    		                    	
+	                    </div>
+	                </div>
+                </div>
+                <div class="row-fluid">
+	                <div class="control-group span5"  style="margin-right:20px;">
+	                    <label class="control-label"><b>Phone</b></label>
+	                    <div class="controls">
+	                        <input name="phone" class="phone" type="text" id="phone" placeholder="Phone Number" />
+	                    </div>
+	                </div>
+	            </div>
+
+                <div class="row">
+                    <div class="span5  duplicate-email"></div>
+                </div>
+                <div class="row-fluid">                
+	                <div class="control-group" id='tags_source_person_modal'>
+	                    <label class="control-label"><b>Tags</b></label>
+	                    <div class="pull-left">
+	                        <ul name="tags" class="tagsinput tags">
+	                        </ul>
+	                    </div>
+	                    <div class="controls pull-left">
+	                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead" />
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="row-fluid invalid-tags-person" style="display:none;">
+                    <div class="span9" style="margin-top:5px;">
+                        <div style="color:red;">Tag name should start with an alphabet and can not contain special characters other than underscore and space.</div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span9" style="margin-top:5px;">
+                        <span style="display:inline;"><i class="icon-arrow-right"></i></span>
+                        <a href="#import" data-dismiss="modal" id="import-link"> Click here to import your contacts from CSV and other CRMs</a>
+                    </div>
+                </div> 
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+    	<span class="form-action-error"></span>
+        <a href="#continue-contact" class="btn" id="continue-contact">Continue
+        Editing</a> <a href="#" class="save btn btn-primary" id="person_validate">Save
+        </a>
+        <span class="save-status"></span>
+    </div>
+</div>
+<!-- End of Modal views -->

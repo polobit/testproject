@@ -1,0 +1,112 @@
+<script id="contact-documents-collection-template" type="text/html">
+		{{#unless this.length}}
+        <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>You have no documents for {{contactShortName}}.</h3>
+					{{#hasMenuScope 'DOCUMENT'}}
+                    <div class="text">
+                        You can add a document related to a contact.
+                    </div>
+					{{/hasMenuScope}}
+					<div>{{#hasMenuScope 'DOCUMENT'}}<a href="#" class="add-document-select"><i class='icon-plus-sign'/></i> Add Document</a>{{/hasMenuScope}}
+						<span class="contact-document-select" style="display:none;">
+							<select id="document-select" style="margin-bottom: -1px;">
+								<option value="">Select...</option>
+							</select>
+                    		<a href="#" class="btn add-document-confirm">Add</a> 
+                   			<a href="#" class="btn add-document-cancel">Cancel</a>
+							<span class="save-status"></span>
+						</span>
+					</div>
+         			<!--<div class="btn-group" style="margin-top:12px;">
+        				<a href="#" class="btn right contact-add-document"><i class="icon-plus-sign"></i> Add Document</a>
+        				<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+						<ul class="dropdown-menu" style="text-shadow:0px 0px;">
+							<li><a href="#" class="document-exist">Existing Document</a></li>
+						</ul>
+					</div>-->
+                </div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+	<div class="page-header" style="margin-top: 0px !important">
+        <!--<div class="btn-group right">
+        	<a href="#" class="btn right contact-add-document"><i class="icon-plus-sign"></i> Add Document</a>
+        	<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+			<ul class="dropdown-menu pull-right">
+				<li><a href="#" class="document-exist">Existing Document</a></li>
+			</ul>
+		</div>-->
+		<div class="right">{{#hasMenuScope 'DOCUMENT'}}<a href="#" class="add-document-select"><i class='icon-plus-sign'/></i> Add Document</a>{{/hasMenuScope}}
+			<span class="contact-document-select" style="display:none;">
+				<select id="document-select" style="margin-bottom: -1px;">
+					<option value="">Select...</option>
+				</select>
+                <a href="#" class="btn add-document-confirm">Add</a> 
+                <a href="#" class="btn add-document-cancel">Cancel</a>
+				<span class="save-status"></span>
+			</span>
+		</div>
+	</div>
+			<ul id="contact-documents-model-list" class="ativity-block-ul"></ul>
+		{{/if}} 
+</script>
+
+<script id="contact-documents-model-template" type="text/html">
+
+<div class="activity" style="display:block;">
+	<div class="activity-text-block">
+	<span class="activity-block-owner">
+		{{#if ownerPic}}
+			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
+		{{else}}
+			<img class="user-img thumbnail" width="40" height="40" src="{{defaultGravatarurl 40}}">
+		{{/if}}
+		<span class="owner-name">{{owner.name}}</span>
+	</span>
+	<div style="margin-bottom: 9px;"><h4 class="document-title" style="display:inline;"><b style="margin:0px 20px 20px 0px;">{{name}}</b></h4></div>
+
+  <div style="">
+
+	<p>
+		{{network network_type}}{{#hasMenuScope 'DOCUMENT'}}&nbsp;&nbsp;<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>{{/hasMenuScope}}
+	</p>
+	<div class="clear">
+		<div style="margin-bottom: 9px;">	
+		{{#each contacts}}
+           	{{#if id}}
+				{{#isDuplicateContactProperty properties "email"}}
+
+					{{else}}
+						{{#if_contact_type "PERSON"}}	
+							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+        				{{/if_contact_type}}
+						{{#if_contact_type "COMPANY"}}
+        					<a href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        				{{/if_contact_type}}
+				{{/isDuplicateContactProperty}}
+           		
+           	{{/if}}
+       	{{/each}}
+		{{{getDealNames deals}}}
+		</div>
+		 <small class="edit-hover" style="margin-right:10px"> 
+			<time class="document-created-time" datetime="{{epochToHumanDate "" uploaded_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
+		</small>
+		<span class="actions pull-right">
+			{{#hasMenuScope 'DOCUMENT'}}
+			<a title="Edit"  data="{{id}}" class="document-edit-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
+			<a title="Detach"  data="{{id}}" class="document-unlink-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-unlink"></i> </a>
+            <!--<a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>-->
+			{{/hasMenuScope}}
+        </span>
+	</div>
+  </div>
+</div>
+</div>
+</script>

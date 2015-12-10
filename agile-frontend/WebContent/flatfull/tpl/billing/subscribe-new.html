@@ -1,0 +1,537 @@
+<script id="cancel-trial-confirmation-modal-template" type="text/html">
+<div class="modal fade" id="cancelTrial">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+        <h4 class="modal-title">Cancel Trial</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to cancel your trial and move to free?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        <a type="submit" confirm="yes" class="save btn btn-sm btn-primary" href="#cancelTrial">Yes</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+</script>
+<script id="subscribe-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="bg-light lter b-b wrapper-md">
+<div class="row">
+	<div class="col-md-12">
+		
+			<h3 class="pull-left m-t-none h3 font-thin">Plan and Upgrade</h3>
+<a href="#" {{#check_plan "FREE"}} id="cancel-account" {{else}} id="cancel-account-request" {{/check_plan}} class="pull-right text-lg text-info">Cancel My Account</a>
+<div class="clearfix"></div>		
+ </div>
+	
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+	<div class="col-md-7">
+<div class="row">
+		<div class="col-md-6" id="plan-details-pane"></div>
+		<div class="col-md-5" id="email-details-pane"></div>
+		</div>
+	</div>
+	
+	<div class="col-md-4 col-md-offset-0 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 agile-testimonial panel">
+ <div id="myCarousel" class="carousel slide">
+  <ol class="carousel-indicators">
+    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+    <li data-target="#myCarousel" data-slide-to="1"></li>
+    <li data-target="#myCarousel" data-slide-to="2"></li>
+  </ol>
+  
+  <div class="carousel-inner">
+  <div class="active item">
+	<div class="pull-left tweet-img-pricing">
+		<img title="Nicolas Woirhaye" src="{{getS3ImagePath '../../img/testimonial-nicolas.png'}}">
+	</div>
+	<div class="pull-left tweet-txt">
+		<span class="tweet-arrow"></span>
+	<div class="tweet-head">
+		<span class="tweet-authname">Nicolas Woirhaye</span>
+		<span class="tweet-authdesc">Co-founder - IKO System</span>
+	</div>
+	</div>
+<div class="clearfix"></div>
+<div class="tweet-info">
+ I've seen and used dozens of CRMs. This one may change the market upside down. Absolutely great, easy-to-use and powerful. </div>
+
+
+</div>
+ <div class="item">
+ <div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="{{getS3ImagePath '../../img/testimonial-ron.png'}}"></div>
+<div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
+<div class="tweet-head">
+<span class="tweet-authname">Ron Kaplan</span><span class="tweet-authdesc">Sales and Business Development - Espresso Logic</span></div>
+</div>
+<div class="clearfix"></div>
+<div class="tweet-info">
+ Agile CRM is an exciting and powerful system. The capability to create complex workflows is immensely useful and easy - simply a matter of drag and drop.  </div>
+</div>
+
+ 
+ 
+ 
+  <div class="item">
+  <div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="{{getS3ImagePath '../../img/testimonial-gary.png'}}"></div>
+<div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
+<div class="tweet-head">
+<span class="tweet-authname">Gary Tramer</span><span class="tweet-authdesc">Head of Strategy - WebReception</span></div>
+</div>
+<div class="clearfix"></div>
+<div class="tweet-info">
+ Agile CRM is the coolest, easiest and by far the most productive CRM I've ever used. Within 20 minutes we had customized the CRM and sent out a complex outbound email campaign. We're already converting our leads. Insane!   </div>
+
+    </div>
+    
+   <div class="item"> 
+ <div class="pull-left tweet-img-pricing"><img title="Mark Valles" src="{{getS3ImagePath '../../img/testimonial-mark.png'}}"></div>
+<div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
+<div class="tweet-head">
+<span class="tweet-authname">Mark Valles
+</span><span class="tweet-authdesc">Sales Acceleration Expert - Infusion-4</span></div>
+
+</div>
+<div class="clearfix"></div>
+<div class="tweet-info">
+Brilliant! I literally made 3 clicks and I was able to connect and immediately place calls, get actionable social media information, and view my emails in a stunningly nice way.  
+</div>
+</div>
+   <div class="item"> 
+   <div class="pull-left tweet-img-pricing"><img title="Paul Singh" src="{{getS3ImagePath '../../img/testimonial-paulsingh.png'}}"></div>
+<div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
+<div class="tweet-head">
+<span class="tweet-authname">Paul Singh
+</span><span class="tweet-authdesc">CEO, Espresso Logic (Venture Backed)
+</span></div>
+
+</div>
+<div class="clearfix"></div>
+<div class="tweet-info">
+For a startup that relies a lot on on-line business, Agile CRM has been an invaluable team to our sales team as it integrates many capabilities out-of-the-box. 
+</div>
+</div>
+  </div>
+  
+  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+</div>
+
+ 
+<!-- <li>
+
+</li> -->
+<!-- <li>
+<div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="{{getS3ImagePath '../../img/testimonial-ron.png'}}"></div>
+<div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
+<div class="tweet-head">
+<span class="tweet-authname">Ron Kaplan</span><span class="tweet-authdesc">Sales and Business Development - Espresso Logic</span></div>
+<div class="tweet-info">
+ Agile CRM is an exciting and powerful system. The capability to create complex workflows is immensely useful and easy - simply a matter of drag and drop.  </div>
+</div>
+<div class="clearfix"></div>
+</li>
+<li>
+<div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="{{getS3ImagePath '../../img/testimonial-gary.png'}}"></div>
+<div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
+<div class="tweet-head">
+<span class="tweet-authname">Gary Tramer</span><span class="tweet-authdesc">Head of Strategy - WebReception</span></div>
+<div class="tweet-info">
+ Agile CRM is the coolest, easiest and by far the most productive CRM I've ever used. Within 20 minutes we had customized the CRM and sent out a complex outbound email campaign. We're already converting our leads. Insane!   </div>
+</div>
+<div class="clearfix"></div>
+</li> -->
+
+
+
+<!-- <li>
+
+</li>
+<li>
+
+</li> -->
+
+</div>
+	
+</div>
+{{#if billingData}}
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+
+			<div class="panel-heading">Your Credit Card Details
+				
+					<a href="#update-card" id="change-card" class="pull-right m-r-sm text-info">Change Card</a>
+				
+				
+			</div>
+
+		<div class="panel-body">
+			<div id="customer-details-holder"></div>
+		</div>
+
+		</div>
+	</div>
+</div>
+{{/if}}
+	{{#if billingData}}
+	<div class="row m-t m-b-sm">
+	<div class="col-md-12">
+<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="text-lg">Recent Payments &nbsp;<small>Thank you</small></div>
+		</div>
+
+			<div id="invoice-details-holder"></div>
+</div>
+	
+</div>
+</div>
+{{/if}}
+</script>
+
+<script id="customer-details-block-template" type="text/html">
+{{#stringToJSON this "billingData"}}{{/stringToJSON}}
+{{#if billingData}}
+	<div class="card-details">
+		Card: **** {{billingData.cards.data.0.last4}} <br/>
+		Expiration: {{#if_less_than billingData.cards.data.0.expMonth 9}}0{{billingData.cards.data.0.expMonth}}{{else}}{{billingData.cards.data.0.expMonth}}{{/if_less_than}}/{{billingData.cards.data.0.expYear}}  
+	</div>
+
+{{/if}}
+</script>
+
+<script id="account-plan-details-template" type="text/html">
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<div><i class="icon-group m-r-xs"></i>Users</div>
+	</div>
+	<div class="panel-body">
+		
+		
+		
+		{{#stringToJSON this "billingData"}}{{/stringToJSON}}
+		<div class="form-horizontal">
+		{{#getSubscriptionBasedOnPlan billingData plan}}
+			<div class="control-group form-group m-b-none">
+				<label class="control-label  col-xs-4 p-t-none">Plan</label>
+				<div class="control-label text-left col-xs-8 p-t-none">
+					{{getAccountPlanName ../plan.plan_type}} ({{getAccountPlanInteval
+					../plan.plan_type}})</div>
+			</div>  
+      
+
+			<div class="control-group form-group m-b-none">
+				<label class="control-label col-xs-4">Users</label>
+				<div class="control-label text-left col-xs-8">{{quantity}}</div>
+			</div>
+			<div class="control-group form-group m-b-none">
+				<label class="control-label col-xs-4">Cost</label>
+				<div class="control-label text-left  col-xs-8">${{total}} <small class="block">({{quantity}} * {{numeric_operation plan.amount "100" "/"}})</small>
+				</div> 
+			</div>
+			<div class="control-group form-group m-b-none">
+				<label class="control-label col-xs-4">Next Invoice</label>
+				<div class="control-label text-left col-xs-8">
+					{{epochToHumanDate "mmm dd, yyyy" currentPeriodEnd}}
+				</div>
+			</div>
+		
+		{{else}}
+		<div class="control-group form-group m-b-none">
+				<label class="control-label col-xs-4">Plan</label>
+				<div class="control-label text-left col-xs-8">
+					Free</div>
+			</div>
+
+            <div class="control-group form-group m-b-none">
+				<label class="control-label col-xs-4"></label>
+
+			</div>
+
+			<div class="control-group form-group m-b-none">
+				<label class="control-label col-xs-4">Users</label>
+				<div class="control-label text-left col-xs-8">2</div>
+			</div>
+            <br> 
+
+		{{/getSubscriptionBasedOnPlan}}
+		</div> 
+{{#stringToJSON this "billingData"}}{{/stringToJSON}}
+
+<a class="btn btn-sm btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
+
+				Upgrade </a>
+
+	<!--<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="user-plan-details-popover"><i class="icon-user"></i> Plan Details</a> -->
+</div>
+</script>
+<script id="account-plan-details-popover-template" type="text/html">
+{{#if_greater contactLimit 2100000000}}
+ 	Contacts   : Unlimited Contacts <br/>
+{{else}}
+	Contacts   : {{contactLimit}} <br/>
+{{/if_greater}}
+ Webrules   : {{webRuleLimit}} <br/>
+{{#if_greater contactLimit 2100000000}}
+ 	Contacts   : Unlimited Workflows <br/>
+{{else}}
+	Workflows   : {{workflowLimit}} <br/>
+{{/if_greater}}
+White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}} 
+</script>
+
+<script id="email-plan-subscription-details-popover-template" type="text/html">
+{{#if emailPlan}}
+		 Plan Limit   : {{numeric_operation emailPlan.quantity "1000" "*"}} <br/>
+	{{else}}
+		Plan Limit   : 5000 <small>Powered by Agile CRM</small> <br/>
+{{/if}}
+{{#if cachedData.one_time_emails_count}}
+ 	Emails in account    : {{cachedData.one_time_emails_count}} <br/>
+{{/if}}
+
+</script>
+
+
+
+<script id="email-plan-details-template" type="text/html">
+	<div class="panel panel-default">
+		<div class="panel-heading"><div><i class="icon-envelope m-r-xs"></i>Emails</div></div>
+		<div class="panel-body">
+
+			<form id="gateway" class="form-horizontal hide">
+				<input type="text" name="gateway" class="hidden form-control" value="Stripe" />
+			</form>
+
+			{{#getSubscriptionBasedOnPlan billingData emailPlan}} 
+			<div class="form-horizontal" name="emailPlan" id="email-plan-form">
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-4 p-t-none">Emails</label>
+					<div class="controls col-xs-8 p-t-none">
+						{{numeric_operation ../emailPlan.quantity 1000 "*"}} <small>per month</small> <br/>
+						<span>{{getRemaininaEmails}}  <small>Remaining</small></span>
+				</div>
+</div>
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-4">Cost</label>
+					<div class="control-label text-left col-xs-8">${{total}} <small>(Charged @ ${{numeric_operation plan.amount "100" "/"}} per thousand)</small></div>
+				</div>	
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-4">Next Invoice</label>
+					<div class="control-label text-left col-xs-8">
+						{{epochToHumanDate "mmm dd, yyyy" currentPeriodEnd}}
+					</div>
+				</div>
+				</div>
+
+				{{else}}
+				<div class="text-center">
+					5000 Emails <br />
+				<div><small>(One time free emails powered by Agile CRM)
+				
+<span>
+									<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag m-t-n-xs " rel="popover" data-placement="bottom" data-title="Lead Score" data-content="5000 one time free emails that will contain 'Powered by Agile CRM' at the bottom of the email. To remove this, you may purchase an email package." id="element" data-trigger="hover" data-original-title="">
+								</span>
+			</small></div>
+
+				<div class="text-center m-b-lg m-t-md">
+					{{getRemaininaEmails}} Emails remaining
+				</div>
+</div>
+			{{/getSubscriptionBasedOnPlan}}
+
+			<div class="clearfix"></div>
+			{{#if billingData}}
+			{{#if emailPlan}}
+					<a class="btn btn-sm btn-primary pricing-btn m-t-md" href="#subscribe" id="account_email_plan_upgrade">Modify </a>
+				{{else}}
+					<a class="btn btn-sm btn-primary pricing-btn m-t-md" href="#subscribe" id="account_email_plan_upgrade">Upgrade </a>
+			{{/if}}
+			{{else}} 
+				<a class="btn btn-sm btn-primary pricing-btn m-t-md" href="#" id="account_email_attach_card"> Upgrade </a> 
+			{{/if}}
+<!--	<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="email-plan-details-popover"><i class="icon-info-sign"></i> Usage Details</span> -->
+		
+</div>
+</div>
+</script>
+
+<script id="email-plan-form-template" type="text/html">
+<div>
+	<div class="panel p pos-rlt">
+		<div>`
+			<div class="b-b  p-b-xs">
+				<div class="text-lg">Email plan</div>
+			</div>
+			<div class="clearfix"></div>
+
+			<form id="gateway" class="form-horizontal hide">
+				<input type="text" name="gateway" class="hidden form-control" value="Stripe" />
+			</form>
+				<form class="form-horizontal" name="emailPlan"  id="email-plan-form">
+						<div class="control-group form-group text-center">
+                       		 <label class="control-label col-xs-12 text-left">Send Rate</label>
+                        		<div class="controls m-t-xs col-xs-12">
+									<span class="m-t-xs pull-right"> X 1000 </span><input type="text" class="input input-small number email_plan_minimum required form-control" style="width:71%;" id="email-quantity"  name="quantity" placeholder="Number of emails"></input>
+                        		</div>
+                    		</div>
+							<div class="control-group form-group">
+								<div class="controls text-center">
+									<span class="m-l-none text-xlg">$<span id="emails_total_cost">0</span></span><span class="m-l-xs">/ month</span>
+									<br/>
+									<small>
+										 charged @ <span id="email_rate">{{#mandrill_exist}}$2{{else}}$4{{/mandrill_exist}}</span> / 1000 emails
+									</small>
+								</div>
+							</div>
+				</form>
+		</div>
+<div class="clearfix"></div>
+<div class="pricing-btn">
+					<a class="btn btn-default btn-sm pricing-btn" href="#" id="close"> Cancel </a>
+					<a class="btn btn-sm btn-primary save pricing-btn" href="#" style="left:108px;"> Purchase </a>
+
+</div>
+	</div>
+</div>
+</div>
+</script>
+
+   <script id="charge-collection-template" type="html/text">
+	{{#if this.length}}
+        <table class="table table-striped m-b-none" id="sort-table">
+            <thead>
+                <tr>
+				 	<th>Date</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody id="charge-model-list" class="model-list-cursor">
+            </tbody>
+        </table>
+	{{else}}
+		<div class="wrapper-sm">
+			No recent payments.
+		</div>
+	{{/if}}
+</script>
+<script id="charge-model-template" type="text/html">
+{{#if paid}}
+	<td class="data text-muted" data="{{invoice}}"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>	
+	<td >
+    	${{numeric_operation amount 100 "/"}} {{#if refunded}}  (Refunded) {{/if}}{{#unless refunded}}{{#if_not_equals amountRefunded 0}} (Refunded ${{numeric_operation amountRefunded 100 "/"}}){{/if_not_equals}}{{/unless}}
+	</td>
+{{/if}}
+	
+	
+
+
+</script>
+<script id="subscribe-custom-admin-stats-template" type="text/html">
+<div class="m-n text-base">
+  	<div>
+  		<p class="b-b p-b-xs font-bold p-l-sm">Users</p>
+  		{{#getSubscriptionBasedOnPlan billingData plan}}
+			<div class="form-horizontal">
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Plan</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="controls col-xs-6 p-t-none">{{getAccountPlanName ../plan.plan_type}}</div>
+				</div>
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Users</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="control-label text-left col-xs-6 p-t-none">{{../userCount}} ({{quantity}})</div>
+				</div>	
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Amount</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="control-label text-left col-xs-6 p-t-none">${{total}}
+						<i class="icon-info p-t-none" data-toggle="tooltip" data-placement="left" title="{{quantity}} * {{numeric_operation plan.amount "100" "/"}}"></i>
+					</div>
+				</div>
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Billing</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="control-label text-left col-xs-6 p-t-none">{{getAccountPlanInteval ../plan.plan_type}}</div>					
+				</div>
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Next Billing</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="control-label text-left col-xs-6 p-t-none">{{epochToHumanDate "mmm dd, yyyy" currentPeriodEnd}}</div>
+				</div>
+			</div>
+		{{else}}
+			<div class="control-group form-group m-b-none">
+				<label class="control-label col-xs-5 p-t-none">Plan</label>
+				<label class="col-xs-1 text-left p-n">:</label>
+				<div class="control-label text-left col-xs-6 p-t-none">Free</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="control-group form-group m-b-none">
+				<label class="control-label col-xs-5 p-t-none">Users</label>
+				<label class="col-xs-1 text-left p-n">:</label>
+				<div class="control-label text-left col-xs-6 p-t-none">2</div>
+			</div>
+			<div class="clearfix"></div>
+		{{/getSubscriptionBasedOnPlan}}
+  	</div>
+	<div class="m-t-md">
+		<p class="b-b p-b-xs font-bold p-l-sm">Emails</p>
+			{{#getSubscriptionBasedOnPlan billingData emailPlan}} 
+			<div class="form-horizontal" name="emailPlan" id="email-plan-form">
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Purchased</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="controls col-xs-6 p-t-none">
+						{{numeric_operation ../emailPlan.quantity 1000 "*"}}<small> /month</small> <br/>
+					</div>
+				</div>
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Existing</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="controls col-xs-6 p-t-none">
+						<span>{{../remainingEmails}}</span><br/>
+					</div>
+				</div>
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Amount</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="control-label text-left col-xs-6 p-t-none">${{total}} <i class="icon-info" data-toggle="tooltip" data-placement="left" title="${{numeric_operation plan.amount "100" "/"}} / thousand"></i></div>
+				</div>	
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Next Billing</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="control-label text-left col-xs-6 p-t-none">
+						{{epochToHumanDate "mmm dd, yyyy" currentPeriodEnd}}
+					</div>
+				</div>
+			</div>
+		 {{else}}		
+			<div class="form-horizontal" name="emailPlan" id="email-plan-form">
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Free</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="controls col-xs-6 p-t-none"> 5000 <i class="icon-info" data-toggle="tooltip" data-placement="left" title="free emails that will contain 'Powered by Agile CRM' at the bottom of the email. To remove this, you may purchase an email package."></i></div>
+				</div>
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Remaining</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="controls col-xs-6 p-t-none">
+						<span>{{../remainingEmails}}</span><br/>
+					</div>
+				</div>
+			</div>
+		{{/getSubscriptionBasedOnPlan}}
+	</div>
+</div>
+</script>

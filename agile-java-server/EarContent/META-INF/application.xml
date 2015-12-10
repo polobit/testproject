@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is the application.xml file intended for use with gradle, if you find it in your maven project, then that's a problem most likely. -->
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_6.xsd" version="6">
+  <description>Agile CRM Cloud Application</description>
+  <display-name>AgileCRM</display-name>
+  <module>
+    <web>
+      <web-uri>agile-frontend.war</web-uri>
+      <context-root>agile-frontend</context-root>
+    </web>
+  </module>
+  <!-- <module>
+    <web>
+      <web-uri>agile-calendar.war</web-uri>
+      <context-root>agile-calendar</context-root>
+    </web>
+  </module>
+  <module>
+    <web>
+      <web-uri>agile-normal-bulk.war</web-uri>
+      <context-root>agile-normal-bulk</context-root>
+    </web>
+  </module>
+  <module>
+    <web>
+      <web-uri>agile-campaigns-bulk.war</web-uri>
+      <context-root>agile-campaigns-bulk</context-root>
+    </web>
+  </module>
+  <module>
+    <web>
+      <web-uri>agile-campaigns-normal.war</web-uri>
+      <context-root>agile-campaigns-normal</context-root>
+    </web>
+  </module>
+  <module>
+    <web>
+      <web-uri>agile-temp-bulk.war</web-uri>
+      <context-root>agile-temp-bulk</context-root>
+    </web>
+  </module>
+  <module>
+       <web>
+      <web-uri>agile-sync.war</web-uri>
+      <context-root>agile-sync</context-root>
+    </web>
+  </module> -->
+</application>
