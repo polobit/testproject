@@ -34,7 +34,41 @@
 <div>	
 	<!-- Growth Reports -->
 		
-		<div class="row m-b-lg" style="background-color:white">
+        <div class="row">
+
+        <div class="panel b-a">
+            <div class="panel-heading bg-info dk no-border wrapper-lg">
+            
+            </div>
+            <div class="text-center m-b clearfix">
+              <div class="thumb-lg avatar m-t-n-xxl">
+              {{#if userPic}}
+                        <img class="b b-3x b-white" src="{{userPic}}" />
+                        {{else}}
+                 
+                        <img class="b b-3x b-white" src="{{defaultGravatarurl 50}}" />
+                        {{/if}}
+                <div class="h4 font-thin m-t-sm">{{userName}}</div>
+              </div>
+            </div>
+            
+            <div class="hbox text-center b-t b-light">          
+              <div class="col padder-v text-muted b-r b-light text-ellipsis">
+                <div class="h4">{{currencySymbol}}{{numberWithCommasForActivities sales}}</div>
+                <span>Total Sales</span>
+              </div>
+              <div class="col padder-v text-muted b-r b-light text-ellipsis">
+                <div class="h4">{{numberWithCommasForActivities soldDeals}}</div>
+                <span>Won Deals</span>
+              </div>
+              <div class="col padder-v text-muted text-ellipsis">
+                <div class="h4">{{currencySymbol}}{{numberWithCommasForActivities avgSalesValue}}</div>
+                <span>Avg. Deal Size</span>
+              </div>
+            </div>
+          </div>
+        </div>
+		<!--<div class="row m-b-lg" style="background-color:white">
 		<div class="pull-left rep-user-info btn-rounded ">
             {{#if userPic}}
 						<span class="pull-left thumb-m avatar  m-t-n-sm m-b-n-sm m-l-sm">
@@ -53,7 +87,7 @@
 <div class=" pull-left m-r-lg bg-white text-center"><div class="font-bold">Events</div><i class="icon-calendar icon-white m-sm" style="font-size:54px; color:#E7EEF1"></i><div>1</div></div>
 <div class=" pull-left m-r-lg  bg-white text-center"><div class="font-bold">Campaigns</div><i class="icon-sitemap icon-white  m-sm" style="font-size:54px; color:#E7EEF1"></i><div>1</div></div>
 <div class=" pull-left m-r-lg  bg-white text-center"><div class="font-bold">Cases</div><i class="icon icon-folder icon-white  m-sm" style="font-size:54px; color:#E7EEF1"></i><div>1</div></div>
- --><div class="panel-default">
+ <div class="panel-default">
 <table class="table repTable pull-right">
    
     <tbody>
@@ -106,53 +140,30 @@
 
            	<td>{{workflows}}</td>
 			<td>{{cases}}</td>
-				</tr>-->
+				</tr>
 				
     </tbody>
 </table>
 </div>
-</div>
+</div>-->
 
 		
 </div>
 <div class="row">
-        <div class="pull-left p-l-sm" style="width:45%">
-			<h4 class="b-b"style="line-height: 35px">Rep Performance </h4>
+        <div class="col-sm-4">
+			<div class="p-sm bg-primary lt">
+                <span class="h4 text-white">Loss Reasons</span>
+              </div>
 
-	<div class="col-md-6 b-light pull-right p-t-xxl">
-<div class="panel-default">
-<table class="table repTable" style="background-color:transparent;">
-   
-    <tbody>
-        <tr> 
-            <td>Total Sales</td>
-           <td>{{currencySymbol}}{{numberWithCommasForActivities sales}}</td>
-        </tr>
-        <tr>
-            <td>Avg. Deal Size</td>
-            <td>{{currencySymbol}}{{numberWithCommasForActivities avgSalesValue}}</td>
-        </tr>
-		<tr>
-            <td>Deals Sold</td>
-           <td>{{soldDeals}}</td>
-        </tr>
-        <tr>
-            <td>Average Deal Closure Time</td>
-         	 <td>{{avgDealClosetime}}</td>
-        </tr>
-    </tbody>
-</table>
-</div>
-</div>
-        <div class="col-md-6"><h5>Loss Reasons</h5>
-				<div id="lossreasonpie-chart-users"></div></div>
+        <div class="panel wrapper">
+				<div id="lossreasonpie-chart-users"></div>
+                </div>
 		</div>
 		<div class="pull-right" style="width:45%">
 		<h4 class="b-b"style="line-height: 35px">Call Outcomes </h4>
 		 <div class="col-md-6">
 				<h5>Calls chart</h5><div id="calls-chart-user"></div></div>
 		<div class="pull-right avg-duration" style="padding: 80px 36px 0px 0px;"></div>
-		</div>
       </div>
            </div>       
 	<!-- End of Growth Reports -->  
