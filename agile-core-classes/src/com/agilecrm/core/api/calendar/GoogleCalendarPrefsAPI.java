@@ -126,6 +126,9 @@ public class GoogleCalendarPrefsAPI
     {
 	System.out.println("delete");
 	GoogleCalenderPrefs prefs = GooglecalendarPrefsUtil.getCalendarPrefsByType(calendar_type);
+	
+	System.out.println("prefs = " + prefs);
+	
 	if (prefs != null)
 	    prefs.delete();
     }
