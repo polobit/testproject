@@ -18,6 +18,8 @@ import com.googlecode.objectify.Query;
 
 public class LandingPageUtil
 {
+	public String requestingDomain = NamespaceManager.get();
+	
 	/**
 	 * ObjectifyDao of LandingPage.
 	 */
@@ -36,7 +38,7 @@ public class LandingPageUtil
 		}
 	}
 	
-	public static LandingPage getLandingPage(HttpServletRequest req)
+	public LandingPage getLandingPage(HttpServletRequest req)
 	{
 		String protocol = "http://";
 		Map<String, String> reqHeaders = getHeadersInfo(req);
@@ -53,7 +55,7 @@ public class LandingPageUtil
 					return null;
 				}
 				
-				// String oldNameSpace = NamespaceManager.get();
+				String oldNameSpace = NamespaceManager.get();
 				NamespaceManager.set("");
 				
 				try
@@ -66,12 +68,13 @@ public class LandingPageUtil
 					if(lpCNames == null)
 						return null;
 					
+					requestingDomain = lpCNames.domain;
 					NamespaceManager.set(lpCNames.domain);
 					return getLandingPage(lpCNames.landing_page_id);
 				}
 				finally
 				{
-					// NamespaceManager.set(oldNameSpace);
+					NamespaceManager.set(oldNameSpace);
 				}
 				
 				
