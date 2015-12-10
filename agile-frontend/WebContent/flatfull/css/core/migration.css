@@ -1815,6 +1815,9 @@ table td .thumb img {
   width: 32px;
   height: 34px;
 }
+.portlet_header_icons i {
+  font-size: 14px;
+}
 }
 
 @media all and (min-width: 768px) {
@@ -1883,13 +1886,20 @@ a.lpt_fancybox:hover{
 
 
 
-#task-detail-lhs .dropdown-menu>li>a , .contactView .dropdown-menu > li > a{
+#task-detail-lhs .dropdown-menu>li>a , .contactView .dropdown-menu > li > a , .company-details-mobile-view .dropdown-menu > li > a {
   color: #727272;
   font-size: 13px;
 } 
+
+.portlet_header_icons i {
+  font-size: 12px;
+}
 
 
 .icon-widget-move {
   cursor: move;
 }
 
+.addField i {
+  color:#838D93
+}

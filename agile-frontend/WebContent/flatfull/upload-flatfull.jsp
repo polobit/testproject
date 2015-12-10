@@ -131,7 +131,7 @@ function isValid(){
 <div class="panel panel-default mobile-popup">
 <div class="panel-heading">Upload your image file</div>
 <div class="panel-body">
-<p>For best results, we recommend you upload png files. You can also upload jpg or gif files also.</i></p>
+<p>For best results, we recommend that you upload .png files. We even support .jpg and .gif formats.</i></p>
 
 <br/>
 <form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 
