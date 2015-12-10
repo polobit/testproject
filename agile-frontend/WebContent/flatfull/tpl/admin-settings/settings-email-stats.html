@@ -73,13 +73,13 @@
 						<tr><th>Delivered</th><td> {{Delivered}}</td></tr>
 						<tr><th>Undelivered
 						<span class="v-top">
-						<img border="0" src="/img/help.png" class="question-tag-tiny v-top"  rel="popover" data-placement="right" data-title:"="" 
+						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top"  rel="popover" data-placement="right" data-title:"="" 
 						data-content="Twilio has received a delivery receipt indicating that the message was not delivered. This can happen for a number of reasons including carrier content filtering, availability of the destination handset, etc." 
 						id="element" data-trigger="hover" data-original-title=""></span>
 						</th><td>{{Undelivered}}</td></tr>
 						<tr><th>Failed
 						<span class="v-top">
-						<img border="0" src="/img/help.png" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
+						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
 						data-content="The message could not be sent. This can happen for various reasons including queue overflows, account suspensions. Twilio does not charge you for failed messages." 
 						id="element" data-trigger="hover" data-original-title=""></span>
 						</th><td>{{Failed}} </td></tr>

@@ -32,7 +32,7 @@
 {{/if_equals}}
 	<ul id="twilio-logs-panel" class="sub_header_ul text-base">
 		<li>
-			<center><img id="logs_load" src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
+			<center><img id="logs_load" src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}" class="m-t"></img></center>
 		</li>
 	</ul>
 </script>
@@ -49,7 +49,7 @@
 				<div class="pull-left">{{#if_equals call.Status "no-answer"}}Call unaswered{{else}}Call connected{{/if_equals}}</div>
 				<div class="pull-right">{{#is_string call.Duration}}{{toProperFormat call.Duration}}{{else}}0 s{{/is_string}}</div>
 				<div class="clearfix"></div>
-				<small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xs"></i><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time></small>
+				<small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time></small>
 				<div class="clearfix"></div>
 			</li>
 		{{/each}}

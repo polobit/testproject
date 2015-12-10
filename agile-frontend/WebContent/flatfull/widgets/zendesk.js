@@ -4,6 +4,11 @@
  * based on the function provided on agile_widgets.js (Third party API).
  */
 
+var ZENTickets = {};
+var ZENCount = 1;
+var showMoreHtmlZEN = '<div class="widget_tab_footer zen_show_more" align="center"><a class="c-p text-info" id="ZEN_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+
+
 /**
  * Shows setup if user adds Zendesk widget for the first time or clicks on reset
  * icon on Zendesk panel in the UI
@@ -128,6 +133,46 @@ function getTicketsFromZendesk(callback, contact_id)
 	});
 }
 
+
+function loadZENTickets(offSet){
+	if(offSet == 0){
+
+		var result = {};
+		var isArray = ZENTickets.isArray;
+		
+		if(ZENTickets instanceof Array){
+			result = ZENTickets.slice(0, 5); 
+		}else{
+			result = ZENTickets;
+		}
+
+		getTemplate('zendesk-ticket-stream', result, undefined, function(template_ui){
+			$('#all_tickets_panel').append(template_ui);
+			if(ZENTickets.length > 5 && ZENTickets instanceof Array){
+				$('#all_tickets_panel').append(showMoreHtmlZEN);
+			}
+		});
+		
+		// Load jquery time ago function to show time ago in tickets
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(template_ui)
+		{
+			$(".time-ago", template_ui).timeago();
+		});
+	}else if(offSet > 0  && (offSet + 5) < ZENTickets.length){
+		var result = {};
+		result = ZENTickets.slice(offSet, (offSet+5));
+		console.log("xero 2nd result **** ");
+		console.log(result);
+		$('.zen_show_more').remove();
+		$('#all_tickets_panel').append(getTemplate('zendesk-ticket-stream', result)).append(showMoreHtmlZEN);
+	}else{
+		var result = {};
+		result = ZENTickets.slice(offSet, ZENTickets.length);
+		$('.zen_show_more').remove();
+		$('#all_tickets_panel').append(getTemplate('zendesk-ticket-stream', result));
+	}
+}
+
 /**
  * Shows retrieved tickets in Zendesk widget tickets Panel
  * 
@@ -138,7 +183,6 @@ function showTicketsInZendesk(data)
 {
 	// Fill template with tickets and append it to Zendesk panel
 	
-	
 	getTemplate('zendesk-profile', data, undefined, function(template_ui){
  		if(!template_ui){
     		return;
@@ -146,63 +190,15 @@ function showTicketsInZendesk(data)
     	
 		$('#Zendesk').html(template_ui); 
 
-		// All tickets and first five tickets stored in variables to be used further
-		var all_tickets;
-		var first_five;
-
-		try
-		{
-			/*
-			 * If error occurs while retrieving tickets, we get it as string in
-			 * data.all_tickets, parse tickets as JSON if tickets are returned since
-			 * we splice 5 tickets and use it to show. If error is returned it is
-			 * taken care in handle bars
-			 */
-			all_tickets = JSON.parse(data.all_tickets);
-			first_five = all_tickets.splice(0, 5);
-		}
-		catch (err)
-		{
-			/*
-			 * If tickets contain error, store in first_five to show error in Zedesk
-			 * widget panel
-			 */
-			first_five = data.all_tickets;
+		if(data){
+			try{
+				ZENTickets = JSON.parse(data.all_tickets);
+			}catch (err){
+				ZENTickets = data.all_tickets;
+			}
 		}
 
-		// Get and fill the template with tickets
-		getTemplate('zendesk-ticket-stream', first_five, undefined, function(template_ui1){
-	 		if(!template_ui1)
-	    		return;
-	    	var all_tickets_template = template_ui1;
-	    	// show the tickets in Zendeks panel
-	    	console.log(all_tickets_template);
-	    	
-			$('#all_tickets_panel').html(all_tickets_template);
-
-			// Load jquery time ago function to show time ago in tickets
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", all_tickets_template).timeago();
-			});
-
-			/*
-			 * On click of show more in tickets panel, we splice 5 tickets from
-			 * all_tickets and show every time
-			 */
-			 $('body').off('click', '.revoke-widget');
-			 $("#widgets").on('click','#more_tickets', function(e){
-				e.preventDefault();
-
-				// If all tickets is not defined, return
-				if (!all_tickets)
-					return;
-
-				// More tickets are shown in the tickets panel
-				showMoreTickets(all_tickets.splice(0, 5));
-			});
-			
-		}, null);
+		loadZENTickets(0);
 
 	}, "#Zendesk");
 
@@ -217,7 +213,7 @@ function showTicketsInZendesk(data)
  * @param more_tickets
  *            List of tickets
  */
-function showMoreTickets(more_tickets)
+function showZenMoreTickets(more_tickets)
 {
 	// Show spinner until tickets are shown
 	$('#spinner-tickets').show();
@@ -241,17 +237,15 @@ function showMoreTickets(more_tickets)
 	getTemplate('zendesk-ticket-stream', more_tickets, undefined, function(template_ui){
  		if(!template_ui)
     		return;
-		$('#all_tickets_panel').append(more_tickets_template);
+		$('#all_tickets_panel').append(template_ui);
 		$('#spinner-tickets').hide();
 
 		// Load jquery time ago function to show time ago in tickets
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 		{
-			$(".time-ago", more_tickets_template).timeago();
+			$(".time-ago", template_ui).timeago();
 		});
 	}, null);
-
-		
 }
 
 /**
@@ -553,6 +547,10 @@ function zendeskStreamError(id, message)
 }
 
 function startZendeskWidget(contact_id){
+
+	ZENTickets = {};
+	ZENCount = 1;
+
 	// Zendesk widget name declared as global variable
 	ZENDESK_PLUGIN_NAME = "Zendesk";
 
@@ -614,5 +612,19 @@ function startZendeskWidget(contact_id){
 	{
 		$('.zendesk_tab_link').hide();
 	});
+
+
+	/*
+	 * On click of show more in tickets panel, we splice 5 tickets from
+	 * all_tickets and show every time
+	 */
+	 $('body').off('click', '.revoke-widget');
+	 $("#widgets").off('click','#ZEN_show_more');
+	 $("#widgets").on('click','#ZEN_show_more', function(e){
+		e.preventDefault();
+		var offSet = ZENCount * 5;
+		loadZENTickets(offSet);
+		++ZENCount;
+	 });
 
 }

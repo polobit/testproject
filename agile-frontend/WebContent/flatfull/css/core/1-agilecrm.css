@@ -1227,8 +1227,9 @@ Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats
 }
 /* Tag management */
 #tag-solid-state {
-	
-	height:18px;
+	height:17px;
+	position: relative;
+	min-width:40px;
 }
 
 .tag-management-key
@@ -1244,22 +1245,28 @@ font-weight:normal;
 width:10%;
 }
 ul.tags-management li.tag {
-	margin : 0px 10px 10px;
+	margin : 0px 0px 10px 5px;
 	text-shadow: none;
-	line-height: normal;
-	padding:5px;
+	padding:2px;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 	/*background:#888;
 	border-color:#888;*/
-	width: 200px;
+	
 	float: left;
 	/*background-color: #f8f8b9;*/
 	border: 1px solid #ddd;
 }
+ul.tags-management li #actions {
+	position: absolute;
+	right: -2px;
+	top: -17px;
+	z-index: 99;
+	display: none;
+}
 ul.tags-management li.tag #editing {
-	width: 200px;
+	
 	float: left;
 	line-height: normal;
 	padding: 4px;
@@ -1267,6 +1274,9 @@ ul.tags-management li.tag #editing {
 }
 ul.tags-management li.tag a {/*color:#ffffff;*/
 	/*color: #000;*/
+	font-size: 12px;
+	width: 100%;
+	max-width:100px;
 }
 .tag-management-actions a {
 	cursor: pointer;
@@ -2069,7 +2079,7 @@ a:hover i
  text-decoration:none;
 }
 li.error {
-	border-color: #df382c !important;
+	/*border-color: #df382c !important;*/
 }
 
 .noty_twilio_unmute{
@@ -2571,6 +2581,12 @@ div.cat-addtocart-row.row1 span,div.cat-addtocart-row.row2 span {
 	padding: 10px 0 0 0;
 }
 
+
+.custom_popover{
+	border-radius:4px;
+	position: fixed;
+	background-color: #f6f6f6;
+}
 #djc_additionallink span,#djc_additionallink a:hover {
 	color: #000;
 }
@@ -2990,4 +3006,15 @@ width: 915px;
     margin-top: 108px;
     margin-left: 156px;
 }
+
+.custom_popover .popover-content{
+	padding-top: 5px;
+	padding-bottom:5px;
+	background-color: #fff;
+}
+
+.show_screenshot + .popover
+{
+	max-width: none;
+	
 }

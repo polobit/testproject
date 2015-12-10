@@ -350,7 +350,6 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 
 	$("#calendar-listers").on('click', '.calendar_check', function(e)
 	{
-		showLoadingOnCalendar(true);
 		createRequestUrlBasedOnFilter();
 		var calendar = $(this).val();
 		var ownerids = '';
@@ -364,31 +363,44 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 
 			else
 			{
-				ownerids = getOwnerIdsFromCookie(true);
-				removeFullCalendarEvents(ownerids);
+				removeFullCalendarEvents(CURRENT_DOMAIN_USER.id);
 			}
 
 		}
 
-		if (calendar == "google")
-			loadFullCalednarOrListView();
+		if(calendar == 'google'){
+			if (this.checked == true){
+				//_init_gcal_options();
+				addGoogleCalendarEvents();
+			}else{
+				removeEventSource('google');
+			}
+		}	
+
+		if(calendar == 'office'){
+			if(this.checked == true){
+				addOffice365CalendarEvents();
+			}else{
+				removeEventSource('office');
+			}
+		}
 
 	});
 
 	$("#calendar-listers").on('click', '.calendar_user_check', function(e)
 	{
-		showLoadingOnCalendar(true);
 		// checkBothCalWhenNoCalSelected();
 		createRequestUrlBasedOnFilter();
 		// loadFullCalednarOrListView();
 		var user_id = $(this).val();
+		var domain_user_id = $(this).attr('data');
 		if (this.checked == true)
 		{
 			renderFullCalenarEvents(user_id);
 		}
 		else
 		{
-			removeFullCalendarEvents(user_id);
+			removeFullCalendarEvents(domain_user_id);
 		}
 
 		// $('.select_all_users').removeAttr("checked");

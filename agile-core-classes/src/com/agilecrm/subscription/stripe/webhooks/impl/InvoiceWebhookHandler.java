@@ -329,6 +329,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    NamespaceManager.set(domain);
 	    Map<String, Object> map = getPlanDetails();
 	    int count = (int) map.get("quantity");
+	    System.out.println("quantity " + count);
 	    if (count == 0)
 		count = 1;
 	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
@@ -349,8 +350,20 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 		restriction.one_time_emails_count = (count * 1000);
 		restriction.max_emails_count = restriction.one_time_emails_count;
 	    }
-	    restriction.save();
 
+	    System.out.println("Updating restriction object : " + restriction.one_time_emails_count);
+
+	    // To reset count
+	    restriction.isNewEmailPlanUpgrade = true;
+	    restriction.save();
+	    restriction.isNewEmailPlanUpgrade = false;
+
+	    System.out.println("After restriction object update : " + restriction.one_time_emails_count);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
 	finally
 	{

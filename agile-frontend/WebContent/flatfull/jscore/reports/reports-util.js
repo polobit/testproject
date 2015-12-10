@@ -122,6 +122,12 @@ edit_contacts : function(el, report)
 call_reports : function(url,reportType,graphOn){
 	var selector="calls-chart";
 
+
+		if(reportType == 'timebased'){
+			showBar(url,selector,null,"","");
+			//report_utility.call_timeBased(selector,data);
+			return;
+		}
 	var answeredCallsCountList=[];
 	var busyCallsCountList=[];
 	var failedCallsCountList=[];
@@ -135,13 +141,14 @@ call_reports : function(url,reportType,graphOn){
 	var topPos = 50*sizey;
 	if(sizey==2 || sizey==3)
 		topPos += 50;
-	$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+	$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
 
 	portlet_graph_data_utility.fetchPortletsGraphData(url,function(data){
 		if(data.status==403){
 			$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 			return;
 		}
+
 		answeredCallsCountList=data["answeredCallsCountList"];
 		busyCallsCountList=data["busyCallsCountList"];
 		failedCallsCountList=data["failedCallsCountList"];
@@ -280,7 +287,7 @@ user_reports :function(callReportUrl){
 		var topPos = 50*sizey;
 		if(sizey==2 || sizey==3)
 			topPos += 50;
-		$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
 		
 		portlet_graph_data_utility.fetchPortletsGraphData(callReportUrl,function(data){
 			if(data.status==403){

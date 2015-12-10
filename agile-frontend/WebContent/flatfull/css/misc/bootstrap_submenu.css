@@ -34,6 +34,14 @@
     margin-right: -10px;
 }
 
+#contact-view-model-list .dropdown-submenu>a:after {
+    /*float: right;
+    border-width: 7px 7px 7px 0px;
+    border-right-color: #ccc;
+    margin-top: 3px;
+    margin-right: 0px;*/
+}
+
 .dropdown-submenu:hover>a:after {
     border-left-color: #fff;
 }

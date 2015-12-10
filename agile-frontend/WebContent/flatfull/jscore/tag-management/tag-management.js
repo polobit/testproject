@@ -41,7 +41,7 @@ var TAG_MODEL_VIEW = Backbone.View
 				 * Checks for last 'tr' and change placement of popover to 'top'
 				 * inorder to prevent scrolling on last row of list
 				 */
-				$(this.el).popover(
+				/*$(this.el).popover(
 						{
 							"rel" : "popover",
 							"trigger" : "click",
@@ -52,7 +52,7 @@ var TAG_MODEL_VIEW = Backbone.View
 							"html" : true,
 							'data-container' : this.el
 						// "data-container" : '.tag'
-						});
+						});*/
 
 
 				$.getJSON('core/api/tags/getstats/' + this.model.get('tag'),
@@ -60,11 +60,20 @@ var TAG_MODEL_VIEW = Backbone.View
 							_that.model.set('availableCount',
 									data.availableCount);
 							console.log(_that.model.toJSON());
-							$(_that.el).attr(
+							$(_that.el).find('.tag_tooltip').tooltip({
+						        title: _that.model.get('availableCount')+ " Contacts",
+						        placement : 'right'
+						    }).on("mouseleave",function(){
+						    	$(".tags-management #actions").hide();
+						    });
+						    
+						    $(_that.el).find('.tag_tooltip').trigger("mouseover");
+						    $(_that.el).find('.details').hide();
+							/*$(_that.el).attr(
 									'data-content',
 									_that.model.get('availableCount')
 											+ " Contacts");
-							$(_that.el).popover('show');
+							$(_that.el).popover('show');*/
 						})
 			},
 			renameTag : function(e) {
@@ -251,7 +260,7 @@ function append_tag_management(base_model) {
 	console.log($('div[tag-alphabet="' + encodeURI(key) + '"]', this.el))
 
 	var el = itemView.render().el;
-	$(el).addClass('tag bg-white');
+	$(el).addClass('tag bg-white').css("margin-top","10px");
 	
 	var tag_name = base_model.get('tag');
 	if(!isValidTag(tag_name, false)) {

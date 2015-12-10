@@ -77,7 +77,7 @@
         <div class="wrapper p-t-none">
             <div class="slate-content">
                 <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">No campaign activity for {{contactShortName}}.</h4>
@@ -93,7 +93,7 @@
         {{#if this.length}}
           <div class="wrapper p-t-none">
               <div class="text-md">Campaign Log
-              <span class="pull-right"><a href="#" id="unsubscribe-modal" class="btn btn-xs btn-default pos-rlt pull-left">Manage Subscription</a></span>
+              <span class="pull-right"><a href="#" id="unsubscribe-modal" class="btn btn-xs btn-default pos-rlt pull-left">Manage Subscriptions</a></span>
               </div>
           </div>                                
 		  <ul id="campaigns-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs  "></ul>
@@ -107,7 +107,7 @@
 <div class="activity-text-block">
 	<div class="activity-block-owner thumb-xs pull-left m-r-sm b-light b avatar">
 		{{#if log_type}}
-			<img class="user-img r-2x"  alt="" src="img/campaigns/{{log_type}}.png">
+			<img class="user-img r-2x"  alt="" src="{{getS3ImagePath ''}}/img/campaigns/{{log_type}}.png">
 		{{else}}
 			<img class="user-img r-2x"  src="https://dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png">
 		{{/if}}

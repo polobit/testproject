@@ -1,14 +1,15 @@
 
 <script id="task-detail-template" type="text/html">
 <div class="app-content-full  h-full dock-view-fixing">
-<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
-<div class="col  bg-light lter b-r" style="width:299px;">
-<div class="vbox" style="display:block">
-<div class="row-row" style="display:block">
-<div id="task-detail-lhs" class="wrapper pos-rlt">
+<div class="hbox hbox-auto-xs  bg-light">
+<div class="col w-xl bg-light lter b-r text-center-mobile-view" >
+<div class="vbox">
+<div class="row-row">
+<div id="task-detail-lhs" class="wrapper pos-rlt details-mobile-view">
 
                   <div> 
-                    <div class="text-cap h3 font-thin custom-color" style="width:85%">{{#is_link subject}}<span class="activate-link">{{else}}<span class="m-r-sm">{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs text-ellipsis" style="width:30%;vertical-align:bottom;">{{task_property type}}</span>                  
+                    <div class="text-cap h3 font-thin custom-color w-full">{{#is_link subject}}<span class="activate-link">{{else}}<span class="block" style="margin-right:7px;">{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs text-ellipsis"
+                     style="max-width:200px;min-width:auto;vertical-align:bottom;">{{task_property type}}</span>                  
                     {{#if_not_equals priority_type "NORMAL" }}
                    <span class="label label-{{task_label_color priority_type}} inline-block  text-xs pos-rlt pos-t-n-xs">{{ucfirst priority_type}}</span>
                          {{/if_not_equals}}</div>
@@ -16,27 +17,28 @@
 					
                  	<!--  starting rating,edit,owner -->
                    
-					<div class="pos-abs pos-r pos-t">
+					<div class="pos-abs pos-r-xs pos-t">
 					   
                         <a class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
                     	
 								<ul class="dropdown-menu pull-right" role="menu">
 
-                                   <li><a  href="javascript:void(0)" data="{{id}}" id="task_edit" ><i class="icon-edit"></i> Edit</a></li>
+                                   <li><a  href="javascript:void(0)" data="{{id}}" id="task_edit" ><i class="fa fa-pencil-square" style="margin-right:2px"></i> Edit</a></li>
                                    <li class="divider"></li>
-									<li><a href="#new-task-modal"  data-toggle="modal"><i class="icon-file"></i> Add Note</a></li>
+									<li><a href="#new-task-modal"  data-toggle="modal"><i class="fa fa-file-text" style="margin-right:2px"></i> Add Note</a></li>
                                     
-									<li><a href='javascript:void(0)'  data="{{id}}" class ="delete_task"><i	class="icon-trash"></i> Delete</a></li>
+									<li><a href='javascript:void(0)'  data="{{id}}" class ="delete_task"><i	class="fa fa-trash" style="margin-right:2px"></i> Delete</a></li>
 								</ul>
 					 </div>
 					
                 
              <!--------- task status ---------------->
 
-
+{{#is_mobile}}
+{{else}}
 <div class="m-t-sm">
 {{#if_equals "IN_PROGRESS" status}}
-<div class="w-md">
+<div class="w-md task-progress-center-mobile">
 <div class="m-b-xs">{{displayTaskStatus status}} - {{progress}}%</div>
 <div style="height:5px;" class="progress  w-full m-b-none">
           <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;"></div>
@@ -62,7 +64,7 @@
 </span>
 {{/if_equals}}
 </div>
-
+{{/is_mobile}}
 
 <div class="contact-owner-position m-t-sm">
 <div class="change-owner-succes"></div>
@@ -121,7 +123,7 @@
 {{/if}}
 
 {{#each deals}}
-	<div>
+	<div class="task-deals-mobile-view">
   		<div style="width:60%" class="text-ellipsis pull-left">
 			<a href="#deal/{{id}}" class="activate-link thumb m-b-xs text-cap text-ellipsis" style="width: 100%;">{{name}}</a>
 		</div>
@@ -147,10 +149,10 @@
 			</ul>
           </div>
 			<div class="tab-content no-tab-cell" id="task_tab_detail">
-                <div class="tab-pane active" id="activity"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane " id="contacts"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane" id="notes"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane" id="deals"><img src="img/21-0.gif"></img></div>
+                <div class="tab-pane active" id="activity"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+				<div class="tab-pane " id="contacts"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+				<div class="tab-pane" id="notes"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+				<div class="tab-pane" id="deals"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
 			</div>
        </div>
        </div>
@@ -170,26 +172,27 @@
 		</a>
 	</div>
 	<br/>
-			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b " style=" border-collapse: separate;">
-				<colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup>
+	<div class="table-responsive">
+			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b showCheckboxes m-b-none  panel table-layout-mob-view" style=" border-collapse: separate;">
+				
 				<thead>
 					<tr><th></th>
-						<th>Name</th>
-						<th>Work</th>
-						<th>Tags</th>
-						<th>Lead Score</th>
+						<th style="width:36%;">Name</th>
+						<th style="width:25%;">Work</th>
+						<th style="width:31%;">Tags</th>
+						<th style="width:12%;">Lead Score</th>
 					</tr>
 				</thead>
 				<tbody id="task-related-model-list" class="task-related-model-list agile-edit-row overflow-scroll"
 					route="contact/" >
 				</tbody>
 			</table>
-
+			</div>
 		{{else}}
 			<div class="wrapper p-t-none">
-            	<div class="slate-content">
+            	<div class="slate-content mobile-pad-content">
                 	<div class="box-left pull-left m-r-md">
-                    	<img alt="Clipboard" src="/img/clipboard.png">
+                    	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
                 	</div>
                 	<div class="box-right pull-left">
                     	<h4 class="m-t-none">Task is not associated with any person/contact. </h4>
@@ -212,11 +215,12 @@
 	<td></td>
 
 	<td class="data no-wrap" data="{{id}}" {{#if_equals type "PERSON"}}route="contact/"{{else}}route="company/"{{/if_equals}}>
+	<div class="table-resp">
           {{#if_contact_type "PERSON"}}
 			<div class="thumb-sm agile-img m-r-sm">
         		<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
 			</div>
-            <div>
+            <div class="agile-thumb-sm text-ellipsis">
         		<a class="">{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} </a>
         		<br />
@@ -227,22 +231,23 @@
 			<div class="thumb-sm agile-img m-r-sm">
         	 <img class="thumbnail m-b-none" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/>
 			</div>
-           	<div>
+           	<div class="agile-thumb-sm text-ellipsis">
         		<b>{{getPropertyValue properties "name"}}        	
     		</div>
-          {{/if_contact_type}}    	 	
+          {{/if_contact_type}} 
+          </div>   	 	
 	</td>
-	<td><div class="h-auto inline-block v-top text-ellipsis" style="width:8em;">{{getPropertyValue properties "title"}}<br />
+	<td><div class="h-auto inline-block v-top text-ellipsis table-resp">{{getPropertyValue properties "title"}}<br />
     	{{getPropertyValue properties "company"}}</div>
 	</td>
 	<td> 
-<div class="ellipsis-multiline l-h word-break-keep">
+<div class="table-resp">
 	{{#each tags}}
-    	<span class="label  bg-light  text-tiny">{{this}}</span>
+    	<span class="label  bg-light  text-tiny m-r-xs">{{this}}</span>
     {{/each}}
 </div>
 	</td>
-	<td style="width:6em;"><div>{{lead_score}}</div></td>
+	<td><div class="table-resp">{{lead_score}}</div></td>
 </script>
 
 
@@ -250,9 +255,9 @@
 <script id="task-related-activity-collection-template" type="text/html">
 {{#unless this.length}}
         <div class="wrapper p-t-none">
-            <div class="slate-content">
+            <div class="slate-content mobile-pad-content">
                 <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">No Activity Found.</h4>
@@ -284,7 +289,7 @@
 	</div>
 	
 <div class="pull-left rightThumbView pos-rlt">
-<div class="pull-left contact-title-dynamic">	
+<div class="pull-left contact-title-dynamic text-ellipsis">	
 	<a class="text-md text-cap custom-color">{{get_normal_activity_type activity_type}}</a>
 </div>
 <div class="pull-right">
@@ -364,7 +369,8 @@
 		</a>
 	</div>
 	<br/>
-			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b " style=" border-collapse: separate;">
+	<div class="table-responsive">
+			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b    m-b-none agile-table panel table-layout-mob-view" style=" border-collapse: separate;">
 				<!-- <colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup> -->
 				<thead>
 					<tr>
@@ -381,12 +387,12 @@
 					route="deal/" >
 				</tbody>
 			</table>
-
+		</div>
 		{{else}}
 			<div class="wrapper p-t-none">
-            	<div class="slate-content">
+            	<div class="slate-content mobile-pad-content">
                 	<div class="box-left pull-left m-r-md">
-                    	<img alt="Clipboard" src="/img/clipboard.png">
+                    	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
                 	</div>
                 	<div class="box-right pull-left">
                     	<h4 class="m-t-none">Task is not associated with any deal. </h4>
@@ -408,7 +414,7 @@
 <script id="task-related-deals-model-template" type="text/html">
 <td data="{{id}}" class="data"></td>
 <td>
-	<div class="text-ellipsis"> 
+	<div class="table-resp"> 
 		<a class="text-cap">{{name}}</a>
 	</div>
 </td>
@@ -428,7 +434,7 @@
 </div>
 </td> -->
 <td value="{{expected_value}}"><div class="text-ellipsis" >{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}</div></td>
-<td><div class="text-ellipsis">{{milestone}} ({{probability}}%) </div></td>
+<td><div class="table-resp">{{milestone}} ({{probability}}%) </div></td>
 <td class="text-muted"><div class="text-ellipsis" style="width:10em">{{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}</div></td>
 <td>
 <div class="text-ellipsis">
@@ -474,7 +480,7 @@
 					<div class="control-group form-group">
 						<label class="control-label"><b>Description</b></label>
 						<div class="controls">
-							<textarea rows="3" class="w-half form-control" placeholder="Detailed Note"
+							<textarea rows="3" class=" form-control" placeholder="Detailed Note"
 								name="description" id="description"></textarea>
 						</div>
 					</div>

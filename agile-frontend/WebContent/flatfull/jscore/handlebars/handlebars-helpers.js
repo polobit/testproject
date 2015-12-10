@@ -18,6 +18,17 @@ $(function()
 	});
 
 
+	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
+	{
+		if(amount == 0){
+			return (amount);
+		}else if(amount > 0){
+			return ("-"+ parseFloat(amount/100));
+		}else{
+			return (Math.abs(parseFloat(amount/100)));
+		}
+	});
+
 	
 	/**
 	 * displays , in between 2 conatct fields.
@@ -685,7 +696,7 @@ $(function()
 										{
 											if (count == 1 && key == "")
 											{
-												html += '<div class="alert-info alert"><div class="slate-content"><div class="box-left pull-left m-r-md"><img alt="Clipboard" src="/img/clipboard.png"></div><div class="box-right pull-left"><h4 class="m-t-none">You have no milestones defined</h4><br><a href="#milestones" class="btn btn-default btn-sm m-t-xs"><i class="icon icon-plus-sign"></i> Add Milestones</a></div><div class="clearfix"></div></div></div>';
+												html += '<div class="alert-info alert"><div class="slate-content"><div class="box-left pull-left m-r-md"><img alt="Clipboard" src="'+updateImageS3Path("/img/clipboard.png")+'"></div><div class="box-right pull-left"><h4 class="m-t-none">You have no milestones defined</h4><br><a href="#milestones" class="btn btn-default btn-sm m-t-xs"><i class="icon icon-plus-sign"></i> Add Milestones</a></div><div class="clearfix"></div></div></div>';
 											}
 											else
 											{
@@ -1020,11 +1031,15 @@ $(function()
 		var el = "";
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
 		{
-			if (element.indexOf("custom_") == 0)
-				element = element.split("custom_")[1];
+			
+			if (element.indexOf("CUSTOM_") == 0) {
+				element = element.split("_")[1];
+				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
+			}
+			else {
 			element = element.replace("_", " ")
-
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
+			}	
 
 		});
 
@@ -1945,10 +1960,10 @@ $(function()
 		{
 			if (i < parseInt(value))
 			{
-				element = element.concat('<li style="display: inline;"><img src="img/star-on.png" alt="' + i + '"></li>');
+				element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-on.png")+'" alt="' + i + '"></li>');
 				continue;
 			}
-			element = element.concat('<li style="display: inline;"><img src="img/star-off.png" alt="' + i + '"></li>');
+			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-off.png")+'" alt="' + i + '"></li>');
 		}
 		return new Handlebars.SafeString(element);
 	});
@@ -2642,15 +2657,14 @@ $(function()
 	 */
 	Handlebars.registerHelper('capFirstLetter', function(data)
 	{
-		if (data === "DEFAULT")
-		{
-			// console.log("return empty");
-			return "";
-		}
-		else
-		{
-			var temp = data.toLowerCase();
-			return temp.charAt(0).toUpperCase() + temp.slice(1);
+		if(data){
+			if (data === "DEFAULT"){
+				// console.log("return empty");
+				return "";
+			}else{
+				var temp = data.toLowerCase();
+				return temp.charAt(0).toUpperCase() + temp.slice(1);
+			}
 		}
 	});
 
@@ -2760,7 +2774,10 @@ $(function()
 						var html_temp = "";
 
 						for (var i = 0; i < keys.length; i++)
-							html_temp += "<div class=\"clearfix\"></div><div style='margin-right:10px;'><div class='tag-key tag-management-key'>" + keys[i] + "</div><div class=\"clearfix\"></div><div class='left' tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div>";
+							
+
+
+							html_temp += "<div class='row b-b p-b-md'><div class='col-md-1 p-t' style='font-size:16px;padding-top:20px;'>" + keys[i] + "</div><div class='col-md-10'><div tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div></div>";
 
 						console.log(html_temp);
 						return new Handlebars.SafeString(html_temp);
@@ -2895,6 +2912,17 @@ $(function()
 		var plan_fragments = plan_name.split("_");
 
 		return ucfirst(plan_fragments[0]);
+
+	});
+
+	Handlebars.registerHelper('getFullAccountPlanName', function(plan_name)
+	{
+		if (!plan_name)
+			return "Free";
+
+		var plan_fragments = plan_name.split("_");
+
+		return ucfirst(plan_fragments[0])+" ("+ucfirst(plan_fragments[1])+")";
 
 	});
 
@@ -3341,7 +3369,7 @@ $(function()
 
 						// default when we can't find image uploaded or url to
 						// fetch from
-						var default_return = "src='img/company.png' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+						var default_return = "src='"+updateImageS3Path('img/company.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
 
 						// when the image from uploaded one or favicon can't be
 						// fetched, then show company.png, adjust CSS ( if style
@@ -3356,7 +3384,7 @@ $(function()
 								// found uploaded image, break, no need to
 								// lookup url
 
-								error_fxn = "this.src='img/company.png'; this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path('img/company.png')+"'; this.onerror=null;";
 								// no need to resize, company.png is of good
 								// quality & can be scaled to this size
 
@@ -3368,7 +3396,7 @@ $(function()
 								// favicon fetch -- Google S2 Service, 32x32,
 								// rest padding added
 
-								error_fxn = "this.src='img/company.png'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path("img/company.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
 								// resize needed as favicon is 16x16 & scaled to
 								// just 32x32, company.png is adjusted on error
 							}
@@ -3416,7 +3444,7 @@ $(function()
 						{
 
 							if (this[0].count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
-								count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+								count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 
 							else
 								count_message = "<small> (" + this[0].count + " Total) </small>";
@@ -3563,6 +3591,31 @@ $(function()
 		else
 			return options.inverse(this);
 	});
+
+	/**
+	 * Compares the arguments (value and target) and executes the template based
+	 * on the result (used in contacts typeahead)
+	 */
+	Handlebars.registerHelper('if_domain', function(value, options)
+	{
+
+
+		if (typeof value === "undefined")
+			return options.inverse(this);
+
+		var domainName = CURRENT_DOMAIN_USER.domain;
+
+		if(domainName){
+			if (value.toString().trim().toLowerCase() == domainName.toLowerCase()){
+				return options.fn(this);
+			}else{
+				return options.inverse(this);
+			}
+		}else{
+			return options.inverse(this);
+		}
+	});
+
 	Handlebars.registerHelper('if_not_equals', function(value, target, options)
 	{
 
@@ -3578,6 +3631,7 @@ $(function()
 	/**
 	 * Compares the arguments (value and target) and executes the template based
 	 * on the result (used in contacts typeahead)
+	 * working as greater than or equal to
 	 */
 	Handlebars.registerHelper('if_greater', function(value, target, options)
 	{
@@ -4041,10 +4095,10 @@ $(function()
 		{
 			if (i < parseInt(value))
 			{
-				element = element.concat('<li style="display: inline;"><img src="img/star-on.png" alt="' + i + '"></li>');
+				element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-on.png")+'" alt="' + i + '"></li>');
 				continue;
 			}
-			element = element.concat('<li style="display: inline;"><img src="img/star-off.png" alt="' + i + '"></li>');
+			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-off.png")+'" alt="' + i + '"></li>');
 		}
 		return new Handlebars.SafeString(element);
 	});
@@ -4767,15 +4821,17 @@ $(function()
 	 */
 	Handlebars.registerHelper('capFirstLetter', function(data)
 	{
-		if (data === "DEFAULT")
-		{
-			// console.log("return empty");
-			return "";
-		}
-		else
-		{
-			var temp = data.toLowerCase();
-			return temp.charAt(0).toUpperCase() + temp.slice(1);
+		if(data){
+			if (data === "DEFAULT")
+			{
+				// console.log("return empty");
+				return "";
+			}
+			else
+			{
+				var temp = data.toLowerCase();
+				return temp.charAt(0).toUpperCase() + temp.slice(1);
+			}
 		}
 	});
 
@@ -4889,7 +4945,7 @@ $(function()
 						var html_temp = "";
 
 						for (var i = 0; i < keys.length; i++)
-							html_temp += "<div class=\"clearfix\"></div><div style='margin-right:10px;'><div class='tag-key tag-management-key'>" + keys[i] + "</div><div class=\"clearfix\"></div><div class='left' tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div>";
+							html_temp += "<div class='row b-b p-b-md'><div class='col-md-1' style='font-size:16px;padding-top:20px;'>" + keys[i] + "</div><div class='col-md-10'><div tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div></div>";
 
 						console.log(html_temp);
 						return new Handlebars.SafeString(html_temp);
@@ -6327,7 +6383,7 @@ $(function()
 	 * 
 	 */
 	Handlebars.registerHelper('getDefaultImage',function(){
-		return new Handlebars.SafeString(FLAT_FULL_PATH + 'images/flatfull/user-default.jpg');
+		return new Handlebars.SafeString(updateImageS3Path(FLAT_FULL_PATH + 'images/flatfull/user-default.jpg'));
 		
 	});
 	
@@ -6340,12 +6396,14 @@ $(function()
 		var el = "";
 		$.each(App_Companies.companyViewModel[item], function(index, element)
 		{
-			if (element.indexOf("custom_") == 0)
-				element = element.split("custom_")[1];
+			if (element.indexOf("CUSTOM_") == 0) {
+				element = element.split("_")[1];
+				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
+			}
+			else {
 			element = element.replace("_", " ")
-
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
-
+			}	
 		});
 
 		return new Handlebars.SafeString(el);
@@ -6361,7 +6419,7 @@ $(function()
 				{
 
 					if (this[0].count > 9999 && (readCookie('company_filter') || readData('dynamic_company_filter')))
-						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 
 					else
 						count_message = "<small> (" + this[0].count + " Total) </small>";
@@ -6616,12 +6674,14 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	    	
 			});
 	
-	Handlebars.registerHelper('toggle_contacts_filter', function(options)
+	
+	Handlebars.registerHelper('toggle_companies_filter', function(options)
 			{	        
-		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
-		    	return "none";
-	       	}
+		   return  localStorage.getItem('companiesFilterStatus');
+		    
 			});
+
+	
 
 	Handlebars.registerHelper('totalTimeFormat', function(timeInSec)
 			{
@@ -6727,4 +6787,73 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 
                return options.inverse(this);
         });
+
+Handlebars.registerHelper('is_mobile', function(options)
+	{
+		if(agile_is_mobile_browser())
+		return options.fn(this);
+		else
+		return options.inverse(this);
+	});
+
+
+/**
+ * Returns a S3 image url .
+ * 
+ */
+Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
+	return new Handlebars.SafeString(updateImageS3Path(imageUrl));	
+});
+	Handlebars.registerHelper('is_trial_exist', function(billingData, options)
+	{
+		if (billingData && billingData.subscriptions){
+			var is_trial_exist = false;
+			$.each(billingData.subscriptions.data, function( index, value ) {
+			  if(!value.plan.id.indexOf("email") > -1 && value.trialStart && value.trialEnd && value.trialEnd >= (new Date().getTime()/1000))
+			  {
+			  	var trial_start = value.trialStart;
+			  	var trial_end = value.trialEnd;
+			  	if(trial_end - trial_start <= 864000){
+			  		is_trial_exist = true;
+			  		return false;
+			  	}
+			  }
+			});
+			if(is_trial_exist)
+				return options.fn(this);
+			else
+				return options.inverse(this);
+		}else{
+			return options.inverse(this);
+		}
+	});
+
+	/**
+	 * Compares the arguments (value and target) and executes the template based
+	 * on the result (used in contacts typeahead)
+	 * working as greater than but not equal to
+	 */ 
+	Handlebars.registerHelper('is_greater', function(value, target, options)
+	{
+		if (parseInt(target) < value)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
+
+	Handlebars.registerHelper('is_cancelled_user', function(options)
+	{
+		if(IS_CANCELLED_USER)
+			return options.fn(this);
+		else if(IS_TRIAL)
+			return options.inverse(this);
+		else
+			return options.fn(this);
+	});
+
+
+function agile_is_mobile_browser(){
+    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+
+}
 

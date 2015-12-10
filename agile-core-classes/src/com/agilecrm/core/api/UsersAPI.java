@@ -1,5 +1,8 @@
 package com.agilecrm.core.api;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -246,7 +249,25 @@ public class UsersAPI
     @Produces({ MediaType.APPLICATION_JSON })
     public List<AgileUser> getAgileUsers()
     {
-	return AgileUser.getUsers();
+	List<AgileUser> agileUser = AgileUser.getUsers();
+	List<AgileUser> agileWithDomain = new ArrayList<AgileUser>();
+
+	for (AgileUser auser : agileUser)
+	{
+	    if (auser.getDomainUser() == null)
+		continue;
+	    agileWithDomain.add(auser);
+	}
+
+	// Now sort by name.
+	Collections.sort(agileWithDomain, new Comparator<AgileUser>()
+	{
+	    public int compare(AgileUser one, AgileUser other)
+	    {
+		return one.getDomainUser().name.toLowerCase().compareTo(other.getDomainUser().name.toLowerCase());
+	    }
+	});
+	return agileWithDomain;
     }
 
     // Get all refered people based on reference code
@@ -316,6 +337,33 @@ public class UsersAPI
 	    return null;
 	}
 	return null;
+    }
+
+    /**
+     * When all forms are updated with html code, then we update
+     * is_forms_updated to true
+     */
+
+    @Path("/formsupdated")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    public DomainUser setFormUpdatedToTrue()
+    {
+	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+	user.is_forms_updated = true;
+	try
+	{
+	    user.save();
+	    return user;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println(e.getMessage());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
     }
 
 }

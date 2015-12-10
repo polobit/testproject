@@ -386,6 +386,28 @@
   		<task-retry-limit>2</task-retry-limit>
   	</retry-parameters>
   </queue>
+
+   <queue>
+    <name>bulk-export-pull-queue</name>
+    <mode>pull</mode>
+       <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+    </acl>
+    <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+    </retry-parameters>
+  </queue>
+
+    <queue>
+    <name>contact-import-queue</name>
+    <mode>pull</mode>
+       <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+    </acl>
+    <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+    </retry-parameters>
+  </queue>
   
   <!-- Notification Pull Queue -->
   <queue>

@@ -174,13 +174,13 @@
 						<tr><td>Delivered</td><td> {{numberWithCommas Delivered}}</td></tr>
 						<tr><td>Undelivered
 						<span class="v-top">
-						<img border="0" src="/img/help.png" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
+						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
 						data-content="This can happen for a number of reasons including carrier content filtering, availability of the destination handset, etc." 
 						id="element" data-trigger="hover" data-original-title=""></span>
 						</td><td>{{numberWithCommas Undelivered}}</td></tr>
 						<tr><td>Failed
 						<span class="v-top">
-						<img border="0" src="/img/help.png" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
+						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
 						data-content="This can happen for various reasons including incorrect number, improper number format, queue overflows or  account suspensions. Twilio does not charge you for failed messages." 
 						id="element" data-trigger="hover" data-original-title=""></span>
 						</td><td>{{numberWithCommas Failed}} </td></tr>
