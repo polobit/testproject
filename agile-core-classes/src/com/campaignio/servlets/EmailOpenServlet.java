@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
@@ -312,7 +313,7 @@ public class EmailOpenServlet extends HttpServlet
 	    // Interrupt opened in DeferredTask
 	    EmailOpenDeferredTask emailOpenDeferredTask = new EmailOpenDeferredTask(campaignId, subscriberId,
 		    customData.toString());
-	    Queue queue = QueueFactory.getDefaultQueue();
+	    Queue queue = QueueFactory.getQueue(AgileQueues.CRON_INTERRUPT_QUEUE);
 	    queue.addAsync(TaskOptions.Builder.withPayload(emailOpenDeferredTask));
 	}
 	catch (Exception e)

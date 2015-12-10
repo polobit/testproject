@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
@@ -175,7 +176,7 @@ public class TrackClickUtil
 	    // Interrupt clicked in DeferredTask
 	    EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, campaignId,
 		    subscriberId, interruptedData.toString());
-	    Queue queue = QueueFactory.getDefaultQueue();
+	    Queue queue = QueueFactory.getQueue(AgileQueues.CRON_INTERRUPT_QUEUE);
 	    queue.addAsync(TaskOptions.Builder.withPayload(emailClickDeferredTask));
 	}
 	catch (Exception e)
