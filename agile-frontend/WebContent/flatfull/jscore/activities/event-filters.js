@@ -203,23 +203,19 @@ function put_thirdparty_calendar_links()
 			console.log(preference);
 			if(preference.calendar_type == 'GOOGLE')
 				putGoogleCalendarLink(true);
-			else if(preference.calendar_type == 'OFFICE')
+			else if(preference.calendar_type == 'OFFICE365')
 				putOfficeCalendarLink(true)
 		});
 	})
 }
 
+
 function putOfficeCalendarLink(calEnable)
 {
-
-	if (calEnable)
-	{
+	if (calEnable){
 		$("#office_cal").removeClass('hide');
 		$("#office_cal_link").addClass('hide');
-	}
-
-	else
-	{
+	} else {
 		$("#office_cal").addClass('hide');
 		$("#office_cal_link").removeClass('hide');
 	}
@@ -333,6 +329,10 @@ function addGoogleCalendarEvents()
 	addAsyncCalendarEvents(loadUserEventsfromGoogle);
 //	$('#calendar_event').fullCalendar('removeEventSource', tempFunction);
 
+}
+
+function addOffice365CalendarEvents(){
+	addAsyncCalendarEvents(loadOfficeEvents);
 }
 
 function addAsyncCalendarEvents(asyncCallbackFunction)
@@ -616,6 +616,12 @@ function showLoadingOnCalendar(loading)
 		pushLoading();
 
 		$("#loading_calendar_events").remove();
+		$("#user_calendars *").attr('disabled','disabled');
+		$("#user_cal_sub *").attr('disabled','disabled');
+
+		$("#user_calendars *").addClass('disable-cp');
+		$("#user_cal_sub *").addClass('disable-cp');
+
 		$('.fc-header-left').append(
 				'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
 				.show();
@@ -623,6 +629,11 @@ function showLoadingOnCalendar(loading)
 	}
 	else if(popLoading() <= 0)
 	{
-		$("#loading_calendar_events").hide();
+		$("#loading_calendar_events").hide();		
+		$("#user_calendars *").removeAttr('disabled');
+		$("#user_cal_sub *").removeAttr('disabled');
+
+		$("#user_calendars *").removeClass('disable-cp');
+		$("#user_cal_sub *").removeClass('disable-cp');
 	}
 }

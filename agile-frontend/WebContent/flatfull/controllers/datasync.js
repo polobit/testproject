@@ -14,6 +14,7 @@ routes : {
             "sync/calendar-setup": "google_calendar_setup",
             "sync/stripe-import": "stripe_sync",
             "sync/shopify": "shopify",
+            "sync/officeCalendar" : "office365_calendar_sync",
             "sync/salesforce": "salesforce",
             "sync/zoho-import": "zoho_sync",
             "sync/quickbook": "quickbook_import",
@@ -25,63 +26,70 @@ routes : {
 
 dataSync : function()
 {
-	 var that = this;
-            getTemplate('settings', {}, undefined, function(template_ui) {
-                if (!template_ui)
-                    return;
-                $('#content').html($(template_ui));
+	var that = this;
+    getTemplate('settings', {}, undefined, function(template_ui) {
+        if (!template_ui)
+            return;
+        $('#content').html($(template_ui));
 
-                $('#PrefsTab .select').removeClass('select');
-                $('.contact-sync-tab').addClass('select');
-               
-                that.agile_sync_collection_view = new Base_Collection_View({
-                    url: 'core/api/contactprefs/allPrefs',
-                    type: 'GET',
-                    individual_tag_name: 'div',
-                    templateKey: 'data-sync',
-                    postRenderCallback: function(el) {
-                        var dataSyncTab = localStorage.getItem("datasync_tab");
-                        if(!dataSyncTab || dataSyncTab == null) {
-                            if(islocalStorageHasSpace())
-                               localStorage.setItem('datasync_tab', "google-tab");
-                        dataSyncTab = "google-tab";
-                    }
-                        $('#prefs-tabs-content a[href="#'+dataSyncTab+'"]').tab('show');
-                        $("#prefs-tabs-content .tab-container ul li").off("click");
-                        $("#prefs-tabs-content").on("click",".tab-container ul li",function(){
-                            var temp = $(this).find("a").attr("href").split("#");
-                            if(islocalStorageHasSpace())
-                                localStorage.setItem('datasync_tab', temp[1]);
-                        });
-                    	that.google_calendar(el);
-                        initializeDataSyncListners();
-
-                    }
+        $('#PrefsTab .select').removeClass('select');
+        $('.contact-sync-tab').addClass('select');
+       
+        that.agile_sync_collection_view = new Base_Collection_View({
+            url: 'core/api/contactprefs/allPrefs',
+            type: 'GET',
+            individual_tag_name: 'div',
+            templateKey: 'data-sync',
+            postRenderCallback: function(el) {
+                var dataSyncTab = localStorage.getItem("datasync_tab");
+                if(!dataSyncTab || dataSyncTab == null) {
+                    if(islocalStorageHasSpace())
+                        localStorage.setItem('datasync_tab', "google-tab");
+                    dataSyncTab = "google-tab";
+                }
+                $('#prefs-tabs-content a[href="#'+dataSyncTab+'"]').tab('show');
+                $("#prefs-tabs-content .tab-container ul li").off("click");
+                $("#prefs-tabs-content").on("click",".tab-container ul li",function(){
+                    var temp = $(this).find("a").attr("href").split("#");
+                    if(islocalStorageHasSpace())
+                        localStorage.setItem('datasync_tab', temp[1]);
                 });
+            	that.google_calendar(el);
+                that.office_calendar();
+                initializeDataSyncListners();
 
-                that.agile_sync_collection_view.collection.fetch();
-                that.agile_sync_collection_view.appendItem = organize_sync_widgets;
-                $('#prefs-tabs-content').html(that.agile_sync_collection_view.render().el);
+            }
+        });
 
+        that.agile_sync_collection_view.collection.fetch();
+        that.agile_sync_collection_view.appendItem = organize_sync_widgets;
+        $('#prefs-tabs-content').html(that.agile_sync_collection_view.render().el);
 
-            }, "#content");
-	
+    }, "#content");
 },
 
 
-google_calendar:function(el){
+    google_calendar:function(el){
+    	this.calendar_sync_google = new GoogleCalendar_Event_Modal_View({
+            url: 'core/api/calendar-prefs/get',
+            template: 'import-google-calendar',
+            postRenderCallback: function(el) {
+                initializeImportListeners();
+            }
+        });
 
+        // console.log(getTemplate("import-google-contacts", {}));
+        $('#calendar-prefs').html(this.calendar_sync_google.render().el);
+    },
 
-	 this.calendar_sync_google = new GoogleCalendar_Event_Modal_View({
-                            url: 'core/api/calendar-prefs/get',
-                            template: 'import-google-calendar',
-                            postRenderCallback: function(el) {
-                                initializeImportListeners();
-                            }
-                        });
-                        // console.log(getTemplate("import-google-contacts", {}));
-                        $('#calendar-prefs').html(this.calendar_sync_google.render().el);
-},
+    office_calendar: function(){
+
+         var calendar_settings_view = new Calendar_Sync_Settings_View({
+                        url : "core/api/calendar-prefs/type/OFFICE365",
+                        template : "admin-settings-import-office365-sync-details"
+                    });
+        $('#office365').html(calendar_settings_view.render().el);
+    },
 
 	 google_contacts_sync: function() {
 	            var that = this;
@@ -214,6 +222,63 @@ google_calendar:function(el){
 
         },
 
+        office365_calendar_sync: function() {
+            var that = this;
+            getTemplate('settings', {}, undefined, function(template_ui) {
+                if (!template_ui)
+                    return;
+                $('#content').html($(template_ui));
+
+                $('#PrefsTab .select').removeClass('select');
+                $('.contact-sync-tab').addClass('select');
+
+               getTemplate('data-sync-settings', {}, undefined, function(template_ui1){
+                        if(!template_ui1)
+                            return;
+                        $("#prefs-tabs-content").html(template_ui1);
+                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
+                        initializeTabListeners("datasync_tab", "sync");
+
+                        var calendar_settings_view = new Calendar_Sync_Settings_View({
+                            url : "core/api/calendar-prefs/type/OFFICE365",
+                            template : "admin-settings-import-office365-calendar-prefs",
+                            postRenderCallback: function(el){
+                               var model = calendar_settings_view.model;
+                               if(model && model.get("prefs"))
+                               {
+                                    try
+                                    {
+                                        var prefs = model.get("prefs");
+                                        if(typeof prefs != 'object')
+                                            model.set('prefs', JSON.parse(prefs), {silent: true});
+                                    }
+                                    catch (err)
+                                    {
+                                        console.log(err)
+                                    }
+                               }
+                            },
+                            saveCallback: function() {
+                                App_Datasync.dataSync();
+                                showNotyPopUp("information", "Office365 calendar saved successfully", "top", 1000);
+                            }
+                        });
+                        $("#data-sync-settings-tab-content").html(calendar_settings_view.render().el);
+
+
+                       // getSyncModelFromName("officeCalendar", function(model){
+                       //      var url= '',
+                       //      template= '';
+                       //      renderInnerSyncView(url,template,model,function(model){
+                       //          showNotyPopUp("information", "Office 365 calendar saved successfully", "top", 1000);
+                       //      });                       
+                       //  });
+
+                }, null);
+             }, "#content");
+
+        },
 
         shopify : function() {
             var that = this;

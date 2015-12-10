@@ -46,17 +46,17 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
         var sync_type=$(ele).attr('sync_type');
         if(sync_type=='STRIPE'){
+            var callbackURL = window.location.origin + "/#sync/stripe-import";
+            // For every request of import, it will ask to grant access
+            window.open( "/scribe?service=stripe_import&window_opened=true&return_url=" + encodeURIComponent(callbackURL),'dataSync','height=1000,width=500');
+            return false;
 
-        var callbackURL = window.location.origin + "/#sync/stripe-import";
-        // For every request of import, it will ask to grant access
-        window.open( "/scribe?service=stripe_import&window_opened=true&return_url=" + encodeURIComponent(callbackURL),'dataSync','height=1000,width=500');
-        return false;
-
-        }
-        else if(sync_type=='QUICKBOOK'){
+        }else if(sync_type=='QUICKBOOK'){
 
           window.open('/OAuthServlet?service=quickbook-import&window_opened=true&return_url=' + encodeURIComponent(window.location.href) + 'quickbooks','dataSync','height=1000,width=500');
           return;
+        }else if(sync_type=='OFFICE365'){
+            
         }
     },
 
@@ -101,7 +101,8 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
     /**
      * For adding new case
      */
-        googleContactsSyncTypeChange: function(e) {
+    googleContactsSyncTypeChange: function(e) {
+
         e.preventDefault();
         var ele = $(e.currentTarget);
 
@@ -121,6 +122,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             $("#my_contacts_sync_group").hide();
         }
     },
+
     syncGoogleContacts: function(e) {
 
         var ele = $(e.currentTarget);
@@ -159,9 +161,6 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
                 }
             });
         });
-
-
-
     },
 
     importStripePrefsDelete: function(e) {
@@ -216,8 +215,6 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
                 }
             });
         });
-
-
     },
 
     syncQuickbooks: function(e) {
@@ -254,8 +251,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
     },
 
-
-     syncFreshbooks: function(e) {
+    syncFreshbooks: function(e) {
         e.preventDefault();
         var ele = $(e.currentTarget);
 
@@ -345,7 +341,4 @@ binds all click events  for google calendar model
 		} });
 
     }
-
-
-
-});
+}); 
