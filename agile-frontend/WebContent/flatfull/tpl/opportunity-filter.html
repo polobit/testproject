@@ -269,20 +269,22 @@
 <div class="wrapper-md">
 	<div class="row">
     	<div class="col-md-9"> 
-			<div id="slate"></div>
-        	{{#if this.length}}
-				<div class="table-responsive">
-        			<table class="table table-bordered showCheckboxes agile-table panel table-layout-mob-view" url="core/api/deal/filters/bulk" id="deal-filter-list">  
-            			<thead>
-                			<tr>   
-                    			<th style="width:50%">Name</th>
-                    			<th style="width:50%"></th>
-                			</tr>
-            			</thead>
-            			<tbody id='deal-filter-model-list' route='deal-filter-edit/'></tbody>
-        			</table>
+	        {{#if this.length}}
+	        	<div class="panel panel-default">
+					<div class="table-responsive">
+	        			<table class="table table-bordered showCheckboxes agile-table panel table-layout-mob-view" url="core/api/deal/filters/bulk" id="deal-filter-list">  
+	            			<thead>
+	                			<tr>   
+	                    			<th style="width:50%">Name</th>
+	                    			<th style="width:50%"></th>
+	                			</tr>
+	            			</thead>
+	            			<tbody id='deal-filter-model-list' route='deal-filter-edit/'></tbody>
+	        			</table>
+					</div>
 				</div>
 			{{/if}}
+			<div id="slate"></div>
     	</div>
     	<div class='col-md-3'>
         	<div class="wrapper" id='addview'>
