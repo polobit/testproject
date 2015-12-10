@@ -71,7 +71,7 @@ dataSync : function()
 
     google_calendar:function(el){
     	this.calendar_sync_google = new GoogleCalendar_Event_Modal_View({
-            url: 'core/api/calendar-prefs/get',
+            url: 'core/api/calendar-prefs/type/GOOGLE',
             template: 'import-google-calendar',
             postRenderCallback: function(el) {
                 initializeImportListeners();
