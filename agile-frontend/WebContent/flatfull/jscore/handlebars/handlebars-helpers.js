@@ -3597,7 +3597,8 @@ $(function()
 	Handlebars.registerHelper('if_domain', function(value, options)
 	{
 
-		if (typeof value == "undefined")
+
+		if (typeof value === "undefined")
 			return options.inverse(this);
 
 		var domainName = CURRENT_DOMAIN_USER.domain;

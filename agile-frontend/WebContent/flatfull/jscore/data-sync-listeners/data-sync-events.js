@@ -230,6 +230,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
         var quickbookPrefs = serializeForm("quickbook-form");
         quickbookPrefs['inProgress'] = true;
 
+
           getSyncModelFromName('QUICKBOOK', function(mod) {
 
             var model = new Backbone.Model(mod);
@@ -306,7 +307,7 @@ binds all click events  for google calendar model
         e.preventDefault();
 
        // URL to return, after fetching token and secret key from LinkedIn
-		var callbackURL = window.location.href;
+		var callbackURL = window.location.origin + "/#sync/calendar-setup";
 
 		// For every request of import, it will ask to grant access
 		window.open("/scribe?service=google_calendar&window_opened=true&return_url=" + encodeURIComponent(callbackURL),'dataSync','height=1000,width=500');
@@ -329,15 +330,14 @@ binds all click events  for google calendar model
 		$(ele).attr("disabled", "disabled");
 
 		$(ele).after(getRandomLoadingImg());
-		App_Datasync.calendar_sync_google.model.url = "/core/api/calendar-prefs"
+		App_Datasync.calendar_sync_google.model.url = "/core/api/calendar-prefs/type/GOOGLE"
 		App_Datasync.calendar_sync_google.model.destroy({ success : function()
 		{
 
 			App_Datasync.calendar_sync_google.model.clear();
-			App_Datasync.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
 			App_Datasync.calendar_sync_google.render(true);
 			erase_google_calendar_prefs_cookie();
-
+            _resetGAPI();
 		} });
 
     }
