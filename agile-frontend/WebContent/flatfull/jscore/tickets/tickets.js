@@ -1,9 +1,9 @@
 var Group_ID = null, Current_Ticket_ID = null, Ticket_Filter_ID = null, Tickets_Util = {}, Sort_Field = '-last_updated_time';
 var popoverFunction = undefined;
 
-$("body").bind('click', function(ev) {
-	/*Tickets.hideDropDowns(ev);
-	Ticket_Tags.hideTicketTagField(ev);*/
+$("body").bind('click', function(e) {
+
+	Tickets.clearSelection(e);
 });
 
 var Tickets = {
@@ -54,6 +54,9 @@ var Tickets = {
 				//Reset custom filters
 				Ticket_Custom_Filters.reset();
 
+				//Initialize custom filters and render layout with filter conditions selected
+				Ticket_Custom_Filters.init(Ticket_Custom_Filters.renderLayout);
+				
 				//Fetching selected filter ticket collection
 				Tickets.fetchTicketsCollection();
 			}	
@@ -84,7 +87,6 @@ var Tickets = {
 		var isSingleRowView = (CURRENT_DOMAIN_USER.helpdeskSettings && CURRENT_DOMAIN_USER.helpdeskSettings.ticket_view_type == 'SINGLELINE')
 								 ? true : false;
 
-		$('a.refresh-tickets').addClass('fa-spin');
 		Ticket_Labels.fetchCollection(function() {
 
 				App_Ticket_Module.ticketsCollection = new Base_Collection_View({
@@ -93,9 +95,9 @@ var Tickets = {
 				sort_collection: false,
 				templateKey : isSingleRowView ? 'ticket-single-row' : 'ticket',
 				customLoader: true,
-				custom_scrollable_element: 'ul#ticket-model-list',
-				customLoaderTemplate: 'ticket-notes-loader',
-				individual_tag_name : isSingleRowView ? 'tr' : 'div',
+				custom_scrollable_element: '#ticket-model-list',
+				customLoaderTemplate: 'ticket-collection-loader',
+				individual_tag_name : 'tr',
 				cursor : true,
 				page_size : 20,
 				slateKey : 'no-tickets',
@@ -124,7 +126,16 @@ var Tickets = {
 						$('ul.ul-select-assignee').html(getTemplate('ticket-model-change-assignee', model.toJSON()))
 					}});
 
-					$('a.refresh-tickets').removeClass('fa-spin');
+					if(!App_Ticket_Module.ticketsCollection || 
+						!App_Ticket_Module.ticketsCollection.collection || 
+						App_Ticket_Module.ticketsCollection.collection.length == 0)
+						return;
+
+					var last_model = App_Ticket_Module.ticketsCollection.collection.last().toJSON();
+
+					var count = (last_model.count) ? last_model.count : App_Ticket_Module.ticketsCollection.collection.length;
+					
+					$('.ticket-count-text').html(count + ' tickets found');
 				}
 			});
 
@@ -179,24 +190,46 @@ var Tickets = {
 
 				case 'status':
 					url += "/change-status?id=" + ticket_id + "&status=" + action_value;
-					message = 'Status has been updated to ' + action_value;
+					message = 'Status has been updated to ' + action_value.toLowerCase();
 					break;
 				case 'priority':
 					url += "/change-priority?id=" + ticket_id + "&priority=" + action_value;
-					message = 'Priority has been updated to ' + action_value;
+					message = 'Priority has been updated to ' + action_value.toLowerCase();
 					break;
 				case 'assignee':
-				    url += "/assign-ticket?ticket_id=" + ticket_id + "&assignee_id=" + action_value + 
-		                     '&group_id=' + $(this).data('group-id');
-					message = 'Assignee has been changed to ' + action_value;		                     
-					break;		
+				{
+					var group_id = $that.data('group-id');
+
+					url += "/assign-ticket?ticket_id=" + ticket_id + "&assignee_id=" + action_value + 
+			                     '&group_id=' + group_id;
+
+					if(action_value == 0){
+						 message = 'Ticket group has been changed to ' + $that.data('name');
+					}
+					else{
+			            message = 'Assignee has been changed to ' + $that.data('name');
+			        }
+
+			        action_value = $that.data('name');
+			    }
 			}
 
 			Tickets.updateModel(url, function(){
 
 				showNotyPopUp('information', message, 'bottomRight', 3000);
 				$that.closest('tr').find('a.' + action_type).html(action_value);
-				$that.closest('div').removeClass('open');
+				$that.closest('div').find('.dropdown-menu').dropdown('toggle');
+
+				if(action_type == 'priority'){
+					if(action_value == 'HIGH')
+						$('td#'+ticket_id).addClass('b-l b-l-3x high-priority');
+					else
+						$('td#'+ticket_id).removeClass('b-l b-l-3x high-priority');
+				}
+
+				//Clearing selections
+				$that.closest('div').removeClass('bg-light');
+				$that.closest('div').find('.caret-btn').removeClass('inline-block').addClass('display-none');
 
 			}, null, ticket_id);
 		});
@@ -204,8 +237,8 @@ var Tickets = {
 		/**
 		 * Initializing click event on ticket checkboxes
 		 */
-		$('ul#ticket-model-list', el).off('change'); 
-		$('ul#ticket-model-list', el).on('change', "input.ticket-checkbox", function(e){
+		$('#ticket-model-list', el).off('change'); 
+		$('#ticket-model-list', el).on('change', "input.ticket-checkbox", function(e){
 			e.stopPropagation();
 			e.preventDefault();
 
@@ -298,16 +331,16 @@ var Tickets = {
 					}
 			});
 
-		$(el)
-			.on('mouseover mouseout', 'div.show-caret',
-				function(event) {
-					if (event.type == 'mouseover'){
-						$(this).find('a.dropdown-toggle').addClass('inline-block');
-					} else {
-						$(this).find('a.dropdown-toggle').removeClass('inline-block');
-					}
-				}
-			);
+		//Initialization click event on refresh button
+		$('.show-caret').off('click');
+		$(el).on('click', '.show-caret', function(e){
+			e.preventDefault();
+			e.stopPropagation();
+
+			$(this).find('.dropdown-menu').dropdown('toggle');
+			$(this).addClass('bg-light');
+			$(this).find('.caret-btn').addClass('inline-block');
+		});
 
 		//Initialization click event on refresh button
 		$('.tickets-toolbar').off('click');
@@ -738,6 +771,19 @@ var Tickets = {
 
 			//App_Contacts.contactDetailView.render(true).el;
 		}
+	},
+
+	clearSelection: function(e){
+
+		var container = $('div.show-caret');
+
+		if (!container.is(e.target) // if the target of the click isn't the container...
+	        && container.has(e.target).length === 0) // ... nor a descendant of the container
+	    {
+	        container.find('.dropdown-menu').dropdown('toggle');
+			container.removeClass('bg-light');
+			container.find('.caret-btn').removeClass('inline-block').addClass('display-none');
+	    }
 	}
 };
 

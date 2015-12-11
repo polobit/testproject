@@ -76,7 +76,7 @@ var Ticket_Custom_Filters = {
 							case 'priority':
 								condition.CONDITION = 'TICKET_PRIORITY_IS';
 								break;
-							case 'type':
+							case 'ticket_type':
 								condition.CONDITION = 'TICKET_TYPE_IS';
 								break;
 							case 'assignee_id':
@@ -100,7 +100,7 @@ var Ticket_Custom_Filters = {
 					}
 
 					//Re-render collection with customized filters
-					App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
+					Tickets.fetchTicketsCollection();
 				});
 			});
 		});	
@@ -171,7 +171,7 @@ var Ticket_Custom_Filters = {
 					}
 
 					break;
-				case 'type':
+				case 'ticket_type':
 					
 					if(condition.CONDITION == 'TICKET_TYPE_IS'){
 

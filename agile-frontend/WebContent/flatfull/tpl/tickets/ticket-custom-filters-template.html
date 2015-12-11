@@ -5,7 +5,7 @@
         <div class="col-md-12 p-n m-b-xs">Assignee</div>
             <div class="col-md-12 p-n assignee-select">
             </div>
-            <div class="col-md-12 p-n m-t m-b-xs">Group</div>
+            <div class="col-md-12 p-n m-t-xs m-b-xs">Group</div>
             <div class="col-md-12 p-n group-select">
             </div>
       </div>
@@ -101,13 +101,13 @@
           <div class="col-md-12 p-n">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="type" name="type" value="INCIDENT" {{#contains_string 'INCIDENT' type}}checked{{/contains_string}} type="checkbox">
+              <input class="ticket_type" name="ticket_type" value="INCIDENT" {{#contains_string 'INCIDENT' type}}checked{{/contains_string}} type="checkbox">
               <i></i>
             </label> Incident
           </div>
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="type" name="type" value="PROBLEM" {{#contains_string 'PROBLEM' type}}checked{{/contains_string}} type="checkbox">
+              <input class="ticket_type" name="ticket_type" value="PROBLEM" {{#contains_string 'PROBLEM' type}}checked{{/contains_string}} type="checkbox">
               <i></i>
             </label> Problem
           </div>
@@ -115,13 +115,13 @@
         <div class="col-md-12 p-n">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="type" name="type" value="TASK" {{#contains_string 'TASK' type}}checked{{/contains_string}} type="checkbox">
+              <input class="ticket_type" name="ticket_type" value="TASK" {{#contains_string 'TASK' type}}checked{{/contains_string}} type="checkbox">
               <i></i>
             </label> Task
           </div>
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="type" name="type" value="QUESTION" {{#contains_string 'QUESTION' type}}checked{{/contains_string}} type="checkbox">
+              <input class="ticket_type" name="ticket_type" value="QUESTION" {{#contains_string 'QUESTION' type}}checked{{/contains_string}} type="checkbox">
               <i></i>
             </label> Question
           </div>

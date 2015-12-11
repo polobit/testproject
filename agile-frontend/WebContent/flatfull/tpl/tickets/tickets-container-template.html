@@ -1,48 +1,13 @@
 <script id="tickets-container-template" type="text/html">
 <div id="tickets-container" class="hbox hbox-auto-xs hbox-auto-sm">
 	<div class="col w-lg bg-light dk b-r bg-auto">
-		<div id="custom-filters-container">
-
-		</div>
-        <!--
-		<div class="wrapper hidden-sm hidden-xs">
-			<div id="filters-list-container">
-
-			</div>
-			<div class="wrapper">Labels</div>
-			<ul class="nav nav-pills nav-stacked nav-sm labels-list">
-		        
-		    </ul>
-		    <div class="wrapper">
-		        <form name="label" class="ng-pristine ng-invalid ng-invalid-required">
-		          <div class="input-group">
-		            <input type="text" class="form-control input-sm" placeholder="New label" aria-required="true" aria-invalid="true">
-		            <span class="input-group-btn">
-		              <button class="btn btn-sm btn-default" type="button" aria-disabled="true" disabled="disabled">
-		              	Add
-		              </button>
-		            </span>
-		          </div>
-		        </form>
-		    </div>
-		</div>-->
-		<!--<div class="wrapper hidden-sm hidden-xs" id="filters-list-container"></div>-->
+		<div id="custom-filters-container"></div>
 	</div>
-	<div class="col">
-		<div id="right-pane">
-		</div>
+	<div class="col bg-white">
+		<div id="right-pane"></div>
 		<div class="tickets-collection-pane">
+			
 		</div>
 	</div>
 </div>
-</script>
-<script id="ticket-label-template" type="text/html">
-{{#each this}}
-<li>
-  <a href="#/tickets/label/inbox/{{label}}">
-    <i class="fa fa-fw fa-circle text-muted" color="#23b7e5" style="color: {{color_code}};"></i>
-    {{label}}
-  </a>
-</li>
-{{/each}}
 </script>

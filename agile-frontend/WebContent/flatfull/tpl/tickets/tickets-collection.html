@@ -1,24 +1,44 @@
 <script id="ticket-collection-template" type="text/html">
-	<div class="tickets-div">
-		{{#unless this.length}}
-			<div class="text-center padder-v">
-				<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
-				<div class="m-b-xs">
-					Configure your help desk system to answer customer queries from your Agile Dashboard.
-				</div>
-				<div>
-					<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-						Configure Help Desk
-					</a>
+	{{#unless this.length}}
+		<div class="text-center padder-v b-t">
+			<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
+			<div class="m-b-xs">
+				Configure your help desk system to answer customer queries from your Agile Dashboard.
+			</div>
+			<div>
+				<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+					Configure Help Desk
+				</a>
+			</div>
+		</div>
+	{{else}}
+		<div class="tickets-div">
+			<div class="wrapper p-n">
+	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+					<div class="panel-heading no-shadow" style="border-bottom: 0;">
+				      	<label class="i-checks i-checks-sm" style="margin-left: 3px;">
+					      <input class="ticket-checkbox select-all" type="checkbox"><i></i>
+					    </label>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">Add labels</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Remove labels</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Delete</button>
+				    </div>
+				    <div class="form-inline no-footer">
+			    		<div class="row m-n">
+			    			<div class="col-sm-12 p-n ticket-collection-container">
+			    				<table class="table table-striped m-b-none">
+									<tbody id="ticket-model-list" route="ticket/" url="core/api/tickets/bulk">
+									</tbody>
+								</table>
+			    			</div>
+			    		</div>
+			    	</div>
 				</div>
 			</div>
-	    {{/unless}}
-	    {{#if this.length}}
-	    	<ul id="ticket-model-list" route="ticket/" class="list-group list-group-lg no-radius m-b-none m-t-n-xxs" url="core/api/tickets/bulk">
-
-			</ul>
-	    {{/if}}
-	</div>
+		</div>
+	{{/unless}}
 </script>
 <script id="ticket-single-row-collection-template" type="text/html">
 	<div class="tickets-div">
@@ -60,4 +80,30 @@
 			</div>
 		{{/if}}
 	</div>
+</script>
+<script  id="ticket-collection-loader-template" type="text/html">
+<div class="tickets-div">
+	<div class="wrapper p-n">
+		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0; height: 200px;">
+			<div class="panel-heading no-shadow" style="border-bottom: 0;">
+		      	<label class="i-checks i-checks-sm m-l-xs">
+			      <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}">
+			      <i></i>
+			    </label>
+			    <button class="btn btn-default btn-sm m-l-sm m-r-xs disabled">Add labels</button>
+			    <button class="btn btn-default btn-sm m-r-xs disabled">Remove labels</button>
+			    <button class="btn btn-default btn-sm m-r-xs disabled">Assignee</button>
+			    <button class="btn btn-default btn-sm m-r-xs disabled">Workflow</button>
+			    <button class="btn btn-default btn-sm m-r-xs disabled">Delete</button>
+		    </div>
+		    <div class="form-inline no-footer">
+	    		<div class="row m-n">
+	    			<div class="col-sm-12 p-t">
+	    				Loading tickets...
+	    			</div>
+	    		</div>
+	    	</div>
+		</div>
+	</div>
+</div>
 </script>
