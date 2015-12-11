@@ -101,7 +101,8 @@ public class TicketFiltersUtil
 		for (Map.Entry<String, List<SearchRule>> entry : conditionsMap.entrySet())
 		{
 			List<SearchRule> groupedConditions = entry.getValue();
-
+			
+			query.append("(");
 			for (SearchRule condition : groupedConditions)
 			{
 				String LHS = condition.LHS.toString(), operator = String.valueOf(condition.CONDITION).toLowerCase(), RHS = (condition.RHS == null ? ""
@@ -110,7 +111,7 @@ public class TicketFiltersUtil
 				switch (LHS)
 				{
 				case "status":
-				case "type":
+				case "ticket_type":
 				case "priority":
 				case "source":
 				case "tags":
@@ -118,15 +119,15 @@ public class TicketFiltersUtil
 				case "group_id":
 				{
 					if (operator != null && operator.contains("not"))
-						query.append("NOT " + LHS + " = " + RHS);
+						query.append("NOT " + LHS + "=" + RHS);
 					else
-						query.append(LHS + " = " + RHS);
+						query.append(LHS + "=" + RHS);
 
 					break;
 				}
 				case "ticket_last_updated_by":
 				{
-					query.append("last_updated_by = "
+					query.append("last_updated_by="
 							+ (operator.equalsIgnoreCase("LAST_UPDATED_BY_AGENT") ? "AGENT" : "REQUESTER"));
 					break;
 				}
@@ -134,9 +135,9 @@ public class TicketFiltersUtil
 				case "notes":
 				{
 					if (operator != null && operator.contains("not"))
-						query.append("NOT " + condition.LHS + " = (" + condition.RHS + ")");
+						query.append("NOT " + condition.LHS + "=(" + condition.RHS + ")");
 					else
-						query.append(LHS + " = " + RHS);
+						query.append(LHS + "=" + RHS);
 
 					break;
 				}
@@ -155,9 +156,9 @@ public class TicketFiltersUtil
 					Long rhsEpoch = (currentEpoch - millis) / 1000;
 
 					if (operator != null && operator.equalsIgnoreCase("IS_GREATER_THAN"))
-						query.append(fieldsMap.get(LHS) + " <= " + rhsEpoch);
+						query.append(fieldsMap.get(LHS) + "<=" + rhsEpoch);
 					else
-						query.append(fieldsMap.get(LHS) + " >= " + rhsEpoch + " AND " + fieldsMap.get(LHS) + " <= "
+						query.append(fieldsMap.get(LHS) + ">=" + rhsEpoch + " AND " + fieldsMap.get(LHS) + "<="
 								+ currentEpoch / 1000);
 
 					break;
@@ -166,9 +167,9 @@ public class TicketFiltersUtil
 
 				query.append(" OR ");
 			}
-
+			
 			query = new StringBuffer(query.substring(0, query.lastIndexOf("OR")));
-			query.append(" AND ");
+			query.append(") AND ");
 		}
 
 		return query.substring(0, query.lastIndexOf("AND"));

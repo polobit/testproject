@@ -199,51 +199,6 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
 	background-color: #FBFBFB; 
 }
 
-.sort-link{
-	color: #337ab7 !important;
-	text-decoration: none !important;
-}
-
-.sort-link:HOVER{
-	text-decoration: none;
-}
-
-a.sort-by-desc:after{
-	-webkit-font-smoothing: antialiased;
-	box-sizing: border-box;
-	color: rgb(88, 102, 110);
-	display: inline-block;
-	font-family: FontAwesome;
-	content: "\f0d7";
-	font-size: 12px;
-	font-stretch: normal;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: normal;
-	height: 12px;
-	line-height: 12px;
-	margin-left: 5px;
-	text-rendering: auto;
-}
-
-a.sort-by-asc:after{
-	-webkit-font-smoothing: antialiased;
-	box-sizing: border-box;
-	color: rgb(88, 102, 110);
-	display: inline-block;
-	font-family: FontAwesome;
-	content: "\f0d8";
-	font-size: 12px;
-	font-stretch: normal;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: normal;
-	height: 12px;
-	line-height: 12px;
-	margin-left: 5px;
-	text-rendering: auto;
-}
-
 #sortable1, #sortable2 {
 	width: 100%;
     list-style-type: none;
@@ -265,4 +220,17 @@ a.sort-by-asc:after{
 
   .width-15em {
   	width: 15em;
+  }
+
+  div.show-caret{
+  	padding-left: 5px;
+  	padding-right: 5px;
+  }
+
+  div.show-caret:hover,  div.show-caret:hover > a[aria-expanded="true"]{
+  	background-color: #edf1f2;
+  }
+
+  div.show-caret:hover > a.caret-btn{
+  	display: inline-block;
   }

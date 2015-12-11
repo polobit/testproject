@@ -679,12 +679,14 @@ public class TicketsUtil
 
 		// Verifying if ticket is assigned to Group. This happens only if ticket
 		// is NEW.
-		if (assignee_id == null)
+		if (assignee_id == null || assignee_id == 0)
 		{
 			// Assigning new group to ticket
 			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
 			ticket.groupID = group_id;
-
+			
+			ticket.assigned_to_group = true;
+			
 			// Updating ticket entity
 			Tickets.ticketsDao.put(ticket);
 

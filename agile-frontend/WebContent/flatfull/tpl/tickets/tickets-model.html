@@ -1,165 +1,127 @@
 <script id="ticket-model-template" type="text/html">
-	<li id="{{id}}" class="p-l-xxl list-group-item clearfix b-l {{#if_equals priority 'HIGH'}}b-l-3x {{toLowerCase priority}}-priority{{/if_equals}} data ticket"  data-id="{{id}}" style="padding-bottom: 7px; padding-top: 7px;">
-    <div class="checkbox-st">
-      <label class="i-checks i-checks-sm">
-        <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}">
-        <i></i>
-      </label>
-    </div>
-    <a class="avatar thumb pull-left m-r-sm m-l-sm b b-l cursor-pointer open-ticket" href="javascript:void(0);" style="margin-top: 3px;">
+	<td id="{{id}}" class="{{#if_equals priority 'HIGH'}}b-l b-l-3x {{toLowerCase priority}}-priority{{/if_equals}} data ticket no-border v-middle" data-id="{{id}}" 
+      style="width: 5%;">
+    <label class="i-checks i-checks-sm">
+      <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}">
+      <i></i>
+    </label>
+  </td>
+  <td class="v-middle p-l-none p-r-none" style="width: 8%;">
+    <a class="avatar thumb b b-l cursor-pointer open-ticket" href="javascript:void(0);">
       {{#if contact.properties}}
         <img data-name="{{dataNameAvatar contact.properties 42}}" src="{{gravatarurl contact.properties 24}}">
       {{else}}    
         <img src="{{emailGravatarurl 42 requester_email}}">
       {{/if}}  
     </a>
-    <div class="pull-right text-sm text-muted p-l-sm b-l" style="min-width: 20%;">
-      <table class="onlySorting txt-small">
-        <tr>
-          <td><span class="text-muted">Assignee: </span></td>
-          <td class="p-l-sm">
+  </td>
+  <td class="v-middle p-l-none p-r-none" style="width: 60%;">
+     <table style="background-color: inherit;">
+      <tr>
+        <td>
+          <div class="text-ellipsis">
+            <div class="text-ellipsis pull-left" style="max-width: 20em;">{{#if subject}}{{subject}}{{else}}-{{/if}}</div>
+            <div class="text-muted pull-left">, #{{id}}</div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="subject-row text-ellipsis"><span class="text-muted">Requester:</span> 
+            {{requester_name}}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {{#if_equals status 'NEW'}}
+            Created: 
+            <time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">
+              {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
+            </time>
+          {{else}}
+            {{#if_equals status 'CLOSED'}}
+              Closed: 
+              <time class="time-ago" datetime="{{epochToHumanDate "" closed_time}}">
+                {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" closed_time}}
+              </time>
+            {{else}}
+              {{#if_equals last_updated_by 'AGENT'}}
+                Assignee replied: 
+              {{else}}
+                Customer responded: 
+              {{/if_equals}}
+              <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">
+                {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}
+              </time>
+            {{/if_equals}}
+          {{/if_equals}}
+          {{#if_equals status 'CLOSED'}}
+          {{else}}
+            {{#if due_time}}
+              , {{calculate_due_date due_time}}
+            {{/if}}
+          {{/if_equals}}
+          {{#if attachments_exists}}
+            <i class="fa fa-paperclip m-l-sm" aria-hidden="false"></i>
+          {{/if}}
+        </td>
+      </tr>
+    </table>
+  </td>
+  <td class="v-middle p-l-none" style="width: 27%;">
+    <table class="txt-small full-width" style="background-color: inherit;">
+      <tr>
+        <td style="width: 20%;"><span class="text-muted">Assignee: </span></td>
+        <td class="p-l-sm" style="width: 80%;">
+          <div class="assignee-change pos-rlt show-caret">
+            <a class="btn btn-sm p-n b-n first-letter-cap inline-block m-r-xs txt-small assignee" data-toggle="dropdown">
+              {{#if assigneeID}}{{assignee.name}}{{else}}{{#if assigned_to_group}}{{group.group_name}}{{else}}-{{/if}}{{/if}}
+            </a>
+            <a class="btn btn-sm p-n dropdown-toggle b-n caret-btn pull-right display-none" data-toggle="dropdown" aria-expanded="false">
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-right ul-select ul-select-assignee" data-ticket-id="{{id}}">  
+            </ul>
+          </div>
+        </td>
+      </tr>
+      <tr><td style="width: 20%;"><span class="text-muted">Status: </span></td>
+          <td class="p-l-sm" style="width: 80%;">
             <div class="assignee-change pos-rlt show-caret">
-              <a class="btn btn-sm p-n b-n first-letter-cap inline-block m-r-xs txt-small assignee" data-toggle="dropdown">
-                {{#if assigneeID}}{{assignee.name}}{{else}}-{{/if}}
+              <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs status" data-toggle="dropdown">
+                {{status}}
               </a>
-              <a class="btn btn-sm p-n dropdown-toggle b-n display-none" data-toggle="dropdown" aria-expanded="false">
+              <a class="btn btn-sm p-n dropdown-toggle b-n caret-btn pull-right display-none" data-btn="caret-btn" data-toggle="dropdown" aria-expanded="false">
                 <span class="caret"></span>
               </a>
-              <ul class="dropdown-menu dropdown-menu-right ul-select ul-select-assignee" data-ticket-id="{{id}}">  
+              <ul class="dropdown-menu dropdown-menu-right ul-select" data-ticket-id="{{id}}">
+                <li><a href="javascript:void(0);" value="OPEN" data-field="status">Open</a></li>
+                <li><a href="javascript:void(0);" value="PENDING" data-field="status">Pending</a></li>
+                <li><a href="javascript:void(0);" value="CLOSED" data-field="status">Closed</a></li>
               </ul>
             </div>
           </td>
-        </tr>
-        <tr><td><span class="text-muted">Status: </span></td>
-            <td class="p-l-sm">
-              <div class="assignee-change pos-rlt show-caret">
-                <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs status" data-toggle="dropdown">
-                  {{status}}
-                </a>
-                <a class="btn btn-sm p-n dropdown-toggle b-n display-none" data-toggle="dropdown" aria-expanded="false">
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-right ul-select" data-ticket-id="{{id}}">
-                  <li><a href="javascript:void(0);" value="OPEN" data-field="status">Open</a></li>
-                  <li><a href="javascript:void(0);" value="PENDING" data-field="status">Pending</a></li>
-                  <li><a href="javascript:void(0);" value="CLOSED" data-field="status">Closed</a></li>
-                </ul>
-              </div>
-            </td>
-        </tr>
-        <tr><td><span class="text-muted">Priority: </span></td>
-            <td class="p-l-sm">
-              <div class="assignee-change pos-rlt show-caret">
-                <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs priority" data-toggle="dropdown">
-                  {{priority}}
-                </a>
-                <a class="btn btn-sm p-n dropdown-toggle b-n display-none" data-toggle="dropdown" aria-expanded="false">
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-right ul-select" data-ticket-id="{{id}}">
-                  <li><a href="javascript:void(0);" value="LOW" data-field="priority">Low</a></li>
-                  <li><a href="javascript:void(0);" value="MEDIUM" data-field="priority">Medium</a></li>
-                  <li><a href="javascript:void(0);" value="HIGH" data-field="priority">High</a></li>
-                </ul>
-              </div>
-            </td>
-        </tr>
-      </table>
-    </div>
-    <div class="pull-right cursor-pointer open-ticket text-sm text-muted text-right m-r-sm">
-      <table class="onlySorting txt-small">
-        <tr>
-          <td style="height: 19px;">
-            {{#if_equals status 'NEW'}}
-              Created: 
-              <time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">
-                {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
-              </time>
-            {{else}}
-              {{#if_equals status 'CLOSED'}}
-                Closed: 
-                <time class="time-ago" datetime="{{epochToHumanDate "" closed_time}}">
-                  {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" closed_time}}
-                </time>
-              {{else}}
-                {{#if_equals last_updated_by 'AGENT'}}
-                  Assignee replied: 
-                {{else}}
-                  Customer responded: 
-                {{/if_equals}}
-                <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">
-                  {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}
-                </time>
-              {{/if_equals}}
-            {{/if_equals}}
-            {{#if attachments_exists}}
-              <i class="fa fa-paperclip m-l-sm" aria-hidden="false"></i>
-            {{/if}}
+      </tr>
+      <tr><td style="width: 20%;"><span class="text-muted">Priority: </span></td>
+          <td class="p-l-sm" style="width: 80%;">
+            <div class="assignee-change pos-rlt show-caret">
+              <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs priority" data-toggle="dropdown">
+                {{priority}}
+              </a>
+              <a class="btn btn-sm p-n dropdown-toggle b-n caret-btn pull-right display-none" data-toggle="dropdown" aria-expanded="false">
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-right ul-select" data-ticket-id="{{id}}">
+                <li><a href="javascript:void(0);" value="LOW" data-field="priority">Low</a></li>
+                <li><a href="javascript:void(0);" value="MEDIUM" data-field="priority">Medium</a></li>
+                <li><a href="javascript:void(0);" value="HIGH" data-field="priority">High</a></li>
+              </ul>
+            </div>
           </td>
-        </tr>
-        <tr>
-          <td class="due-text txt-small" style="height: 19px;">
-            {{#if_equals status 'CLOSED'}}
-            {{else}}
-              {{#if due_time}}
-                {{calculate_due_date due_time}}
-              {{else}}
-                Due in 5 days
-              {{/if}}
-            {{/if_equals}}
-          </td>
-        </tr>
-        <tr>
-          <td class="group-text" style="height: 19px;">
-            <span class="label bg-primary first-letter-cap font-bold inline-block" style="padding-bottom: 4px;">{{group.group_name}}</span>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div class="clear cursor-pointer open-ticket">
-      <div class="text-ellipsis text-sm">#{{id}}, <span class="text-muted">{{subject}}</span></div>
-      <div class="subject-row text-ellipsis text-sm">{{requester_name}}</div>
-      <div class="text-ellipsis">
-        {{#get_ticket_labels_from_ids labels this}}{{/get_ticket_labels_from_ids}}
-        {{#if labelsJSON}}
-            {{#each labelsJSON}}<span class="label bg-light m-r-xs font-bold" style="background-color: {{color_code}}; color: white; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;">{{label}}</span>
-            {{/each}}
-        {{/if}}
-      </div>
-    </div>
-    <div id="ticket-last-notes" class="ticket-last-notes" 
-      style="min-height: {{#if_equals status 'NEW'}}130px;{{else}}230px;{{/if_equals}}">
-      <div class="row m-n mar-btm-md last-notes-drp-dwn p-t">
-        <div class="col-md-12 pad-all-sm">
-          <span>Last Reply</span>
-          <span class="text-light txt-small pull-right">
-            {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}&nbsp;
-            <!--<span class="label label-primary first-letter-cap inline-block {{toLowerCase priority}}-priority-bg">
-              {{priority}}
-            </span>-->
-          </span>
-        </div>
-        <div id="recent-reply-notes" class="col-md-12 p-t-sm p-b recent-reply-notes">
-          {{{last_reply_text}}}  
-        </div>
-      </div>
-      {{#if_equals status 'NEW'}}
-      {{else}}
-        <div class="row m-n mar-btm-md last-notes-drp-dwn">  
-          <div class="col-md-12 pad-all-sm">
-            <hr class="m-t m-b">
-            <span>First Reply</span>
-            <span class="text-light txt-small pull-right">
-              {{epochToHumanDate "mmm dd, yyyy HH:MM" created_time}}&nbsp;
-            </span>
-          </div>
-          <div id="recent-reply-notes" class="col-md-12 p-t-sm p-b recent-reply-notes">
-            {{{first_notes_text}}}
-          </div>
-        </div>
-      {{/if_equals}}
-    </div>
-  </li>
+      </tr>
+    </table>
+  </td>
 </script>
 <script id="ticket-single-row-model-template" type="text/html">
   <td class="data select_checkbox c-p pos-rlt" data="{{id}}">
@@ -203,10 +165,16 @@
 </script>
 <script  id="ticket-model-change-assignee-template" type="text/html">
   {{#each this}}
+    <li class="dropdown-header">{{group_name}}</li>
+    <li>
+      <a href="javascript:void(0);" data-field="assignee" data-group-id="{{id}}" data-name="{{group_name}}" value="0">
+        Assign to group
+      </a>
+    </li>
     {{#group_users}}
       <li>
-        <a href="javascript:void(0);" data-group-name="{{../group_name}}" data-group-id="{{../id}}" value="{{id}}">
-          {{../group_name}}/{{name}}
+        <a href="javascript:void(0);" data-field="assignee" data-name="{{name}}" data-group-name="{{../group_name}}" data-group-id="{{../id}}" value="{{id}}">
+          {{name}}
         </a>
       </li>
     {{/group_users}}
