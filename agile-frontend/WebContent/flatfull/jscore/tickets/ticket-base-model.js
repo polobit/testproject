@@ -11,6 +11,8 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .delete-ticket" : "deleteTicket",
 		"click .close-ticket" : "closeTicket",
 		"click .show-workflows" : "workflows",
+		"click #workflows_list li a" : "executeWorkflows",
+
 		"click .toggle-timeline" : "toggleTimeline",
 		"click #change-sla" : "changeSla",
 		"click .contact-deals" : "showContactDeals",
@@ -171,8 +173,10 @@ var Ticket_Base_Model = Base_Model_View.extend({
 	},
 	repltBtn: function(e){
 		e.preventDefault();
+
+		var $this = $(e.target);
 		
-		Tickets_Notes.repltBtn(e);
+		Tickets_Notes.repltBtn($this.attr('rel'));
 	},
 
 	appendCannedResponseMessage : function(e){
@@ -262,7 +266,13 @@ var Ticket_Base_Model = Base_Model_View.extend({
 	workflows: function(e){
 		e.preventDefault();
 		
-		Tickets.showWorkflows();
+		Tickets.showWorkflows(e);
+	},
+
+	executeWorkflows :  function(e){
+		e.preventDefault();
+		
+		Tickets_Notes.executeWorkflow(e);
 	},
 
 	showEditIcon: function(e){

@@ -47,27 +47,25 @@ var Tickets_Notes = {
 		Ticket_Bulk_Ops.initEvents();
 	},
 
-	repltBtn : function(e) {
+	repltBtn : function(reply_type, el) {
 
 		var ticketModel = App_Ticket_Module.ticketView.model;
 		var data = ticketModel.toJSON();
 
-		var $this = $(e.target);
-
-		data.reply_type = $this.attr('rel');
-
-		if(data.reply_type && data.reply_type == 'forward')
+		data.reply_type = (reply_type) ? reply_type : "reply";
+			
+		if(data.reply_type == 'forward')
 			data.notes = this.constructTextComments(App_Ticket_Module.notesCollection.collection.toJSON());
 
-		$('#reply-editor').html(
-				getTemplate('create-ticket-notes', data));
-		$('#send-reply-container').hide();
+		var $container = (el) ?  $('#send-reply-container', el): $('#send-reply-container');
+
+		$container.html(getTemplate('create-ticket-notes', data));
 
 		// Scroll to bottom of page
 		// $("html, body").animate({ scrollTop: $(document).height() }, 1000);
 
 		// Initialize tooltips
-		$('[data-toggle="tooltip"]', $('#reply-editor')).tooltip();
+		// $('[data-toggle="tooltip"]', $('#reply-editor')).tooltip();
 	},
 
 	constructTextComments : function(notesCollection) {
@@ -138,12 +136,24 @@ var Tickets_Notes = {
 
 	executeWorkflow : function(e) {
 
-		var $that = $(e.target);
+		var workflowId = $(e.target).attr('id');
 
-		console.log($that.data('id'));
+		if(!workflowId)
+			return;
 
-		$('#ticket_id').val(Current_Ticket_ID);
-		$('#workflow_id').val($that.data('id'));
-		$that.closest('form').submit();
+		var json = {};
+		json.workflow_id = workflowId;
+		json.ticket_id = Current_Ticket_ID;
+
+
+		// Send req to trigger campaign
+		var newTicketModel = new BaseModel();
+		newTicketModel.url = "core/api/tickets/execute-workflow";
+		newTicketModel.save(json, 
+			{	success: function(model){
+
+			}}
+		);
+
 	}
 };

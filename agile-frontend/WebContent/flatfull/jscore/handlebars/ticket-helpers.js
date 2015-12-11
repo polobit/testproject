@@ -257,3 +257,16 @@ Handlebars.registerHelper('get_ticket_rows', function(ticket_model, options) {
 
 	return tr_ele;
 });
+
+Handlebars.registerHelper('is_ticket_reply_activity', function(activityType, options) {
+
+	var replyActivity = ['TICKET_CREATED', 'TICKET_REQUESTER_REPLIED', 'TICKET_ASSIGNEE_REPLIED'];
+
+	if(activityType && $.inArray(activityType, replyActivity) != -1)
+		return options.fn(this);
+
+	return options.inverse(this);
+
+});
+
+/** End of ticketing handlebars* */

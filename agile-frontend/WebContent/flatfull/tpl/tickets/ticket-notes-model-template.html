@@ -1,87 +1,83 @@
 <script id="ticket-notes-model-template" type="text/html">
 
 {{#if_equals note_type 'PUBLIC'}}
-		
-<div class="m">
 
-	 {{#if_equals created_by 'REQUESTER'}}
-	 	<a href="" class="{{#if_equals created_by 'REQUESTER'}}pull-right{{else}}pull-left{{/if_equals}} thumb-sm avatar">
-	 	<img src="{{emailGravatarurl 34 requester_email}}" class="img-circle" alt="...">
-	    </a>
-	   {{else}}
-	 	<a href="" class="{{#if_equals created_by 'REQUESTER'}}pull-right{{else}}pull-left{{/if_equals}} thumb-sm avatar">
-	 	<img src="{{domain_user.ownerPic}}" class="img-circle" alt="...">
-	 	</a>
-	 {{/if_equals}}
+<div class="p-t p-b">
+	<span class="pull-left thumb-sm">
+			{{#if_equals created_by 'REQUESTER'}}
+		 		<img src="{{emailGravatarurl 34 requester_email}}" class="img-circle" alt="...">
+		    {{else}}
+		 		<img src="{{domain_user.ownerPic}}" class="img-circle" alt="...">
+		 	{{/if_equals}}
+	</span>
 
-    
+	<div class="m-l-xl p-l">
+	 
+	  <div>
 
-    <div class="{{#if_equals created_by 'REQUESTER'}}m-r-xxl{{else}}m-l-xxl {{/if_equals}}">
+	  	{{#if_equals created_by 'REQUESTER'}}
 
-      <div class="pos-rlt panel b-light {{#if_equals created_by 'REQUESTER'}}bg-light {{else}} {{/if_equals}} r r-2x">
+	              	<span><b class="text-sm">{{requester_name}}</b></span>
+	              	<span class="txt-small text-xs text-muted pull-right">
+			   					Received on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+			   				</span>
+	             
+			   	{{else}}
+			   		<span><b class="text-sm">{{domain_user.name}}</b></span>
+	              	<span class="txt-small text-xs text-muted pull-right">
+			   					Replied on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+			   		</span>
+			   	{{/if_equals}}
+	  </div>
 
-      	<div class="panel-heading pos-rlt {{#if_equals created_by 'REQUESTER'}}b-b {{else}}b-light{{/if_equals}}">
-              <span class="arrow {{#if_equals created_by 'REQUESTER'}}right arrow-light{{else}}left{{/if_equals}} pull-up "></span>
+	  <span class="block m-t-sm text-sm">{{{html_text}}}</span>
 
-            {{#if_equals created_by 'REQUESTER'}}
+	   {{#if attachments_list}}
+		  		<div class="wrapper">
+		  			<h5>Attachments</h5>
+		  			 <ul class="inline v-top m-b-sm p-n attachments-list">
+		  			 	{{#each attachments_list}}
+			  				<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" file-name="{{name}}" url="{{url}}" size="{{size}}">
+							    <span>
+							      <i class="fa fa-paperclip"></i> <a class="anchor m-r-xs" href="{{url}}">{{name}}</a>
+							      <a class="close remove-attachment text-lg">×</a>
+							    </span>
+							  </li>
+			  			{{/each}}
+		        	</ul>
+		  		</div>
+		  	{{/if}}	
 
-              	<a href="javascript:void(0);">{{requester_name}} ({{requester_email}})</a>
-              	<span class="txt-small text-xs text-muted pull-right">
-		   					Received on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
-		   				</span>
-             
-		   	{{else}}
-		   		<a href="javascript:void(0);">{{domain_user.name}} ({{domain_user.email}})</a>
-              	<span class="txt-small text-xs text-muted pull-right">
-		   					Replied on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
-		   		</span>
-		   	{{/if_equals}}
-             
-        </div>
-        <div class="panel-body">
-              <div>{{{html_text}}}</div>
-        </div>
-
-        {{#if attachments_list}}
-	  		<div class="wrapper">
-	  			<h5>Attachments</h5>
-	  			 <ul class="inline v-top m-b-sm p-n attachments-list">
-	  			 	{{#each attachments_list}}
-		  				<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" file-name="{{name}}" url="{{url}}" size="{{size}}">
-						    <span>
-						      <i class="fa fa-paperclip"></i> <a class="anchor m-r-xs" href="{{url}}">{{name}}</a>
-						      <a class="close remove-attachment text-lg">×</a>
-						    </span>
-						  </li>
-		  			{{/each}}
-	        	</ul>
-	  		</div>
-	  	{{/if}}	
-
-      </div>
-      
-    </div>
-
+	</div>
 </div>
 
 {{else}}
-		<div class="wrapper b-t m-t-xs">
-		    <img class="m-r-sm v-inherit" src="{{domain_user.ownerPic}}"  width="34px" height="34px">
-		    <div class="inline-block">
-		   		<a href="javascript:void(0);">
-	   				{{domain_user.name}} ({{domain_user.email}})
-	   			</a>
-	   			<div>
-	   				Notes added on 
-	   				<span class="text-xs text-muted">
-						{{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
-					</span>
-	   				<span class="label label-warning m-l-xs">Private Notes</span>
-	   			</div>
-		   	</div>
-		</div>
-		<div class="wrapper">
-	    	{{{html_text}}}
-	  	</div>
-	{{/if_equals}}  	
+
+<div class="p-t p-b">
+	<span class="pull-left thumb-sm">
+			
+		 <img src="{{domain_user.ownerPic}}" class="img-circle" alt="...">
+	</span>
+		 	
+	<div class="m-l-xl p-l">
+	   
+	  <span>
+	  	<b class="text-sm">{{domain_user.name}}</b>
+
+	  	<span class="txt-small text-xs text-muted pull-right">
+				{{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+		</span>
+	  </span>
+
+	  <small class="block"><a href="" class="">Private Notes</a></small>
+
+	  <span class="block m-t-sm text-sm">{{{html_text}}}</span>
+
+	</div>
+</div>
+
+{{/if_equals}}  
+
+<div class="border-highlight m-l m-r m-t-sm m-b-sm"></div>
+
 </script>
