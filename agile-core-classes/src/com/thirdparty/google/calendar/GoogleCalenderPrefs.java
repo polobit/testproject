@@ -27,151 +27,142 @@ import com.thirdparty.google.GoogleServiceUtil;
 
 @XmlRootElement
 @Cached
-public class GoogleCalenderPrefs
-{
-    @Id
-    public Long id;
-
-    /**
-     * Refresh token. Annotated with JSON Ignore to avoid sending refresh_token
-     * to client.
-     */
-    @JsonIgnore
-    @NotSaved(IfDefault.class)
-    public String refresh_token = null;
-
-    /**
-     * Expiry time of access token
-     */
-    // Expiry time in milliseconds
-    @NotSaved
-    public Long expires_at = 0l;
-
-    /**
-     * Access token is generated based on refresh token.
-     */
-    @NotSaved
-    public String access_token = null;
-
-    public enum CALENDAR_TYPE
-    {
-	GOOGLE, OFFICE;
-    }
-
-    public CALENDAR_TYPE calendar_type;
-
-    @NotSaved(IfDefault.class)
-    public String prefs = null;
-
-    // domain user key
-    @JsonIgnore
-    private Key<DomainUser> domainUserKey = null;
-
-    @NotSaved
-    public List<String> calendarList = new ArrayList<String>();
-
-    public static ObjectifyGenericDao<GoogleCalenderPrefs> dao = new ObjectifyGenericDao<GoogleCalenderPrefs>(
-	    GoogleCalenderPrefs.class);
-
-    public GoogleCalenderPrefs()
-    {
-
-    }
-
-    public GoogleCalenderPrefs(String refresh_token, String access_token)
-    {
-	this.refresh_token = refresh_token;
-	this.access_token = access_token;
-    }
-
-    /**
-     * Sets expiry time according to expires in attribute set when access token
-     * is fetched using refresh token/
-     * 
-     * @param time
-     */
-    @JsonIgnore
-    public void setExpiryTime(Integer time)
-    {
-	expires_at = System.currentTimeMillis() + (time - 120) * 1000;
-    }
-
-    /**
-     * After expiry of existing token, new token is fetched.
-     * 
-     * @throws JsonParseException
-     * @throws JsonMappingException
-     * @throws IOException
-     */
-    public void refreshToken() throws JsonParseException, JsonMappingException, IOException
-    {
-
-	if (refresh_token == null)
-	    return;
+public class GoogleCalenderPrefs {
+	@Id
+	public Long id;
 
 	/**
-	 * Fethches new access token using refresh token
+	 * Refresh token. Annotated with JSON Ignore to avoid sending refresh_token
+	 * to client.
 	 */
-	String response = GoogleServiceUtil.refreshTokenInGoogle(refresh_token);
+	@JsonIgnore
+	@NotSaved(IfDefault.class)
+	public String refresh_token = null;
 
-	// Creates HashMap from response JSON string
-	HashMap<String, Object> properties = new ObjectMapper().readValue(response,
-		new TypeReference<HashMap<String, Object>>()
-		{
-		});
-	System.out.println(properties.toString());
+	/**
+	 * Expiry time of access token
+	 */
+	// Expiry time in milliseconds
+	@NotSaved
+	public Long expires_at = 0l;
 
-	if (properties.containsKey("access_token"))
-	{
-	    access_token = String.valueOf(properties.get("access_token"));
-	    setExpiryTime(Integer.parseInt(String.valueOf(properties.get("expires_in"))));
-	    save();
-	}
-    }
+	/**
+	 * Access token is generated based on refresh token.
+	 */
+	@NotSaved
+	public String access_token = null;
 
-    @PostLoad
-    void postLoad()
-    {
-	if (System.currentTimeMillis() >= expires_at)
-	    try
-	    {
-		refreshToken();
-	    }
-	    catch (IOException e)
-	    {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-
-	if (calendar_type == null)
-	{
-	    calendar_type = CALENDAR_TYPE.GOOGLE;
-	    this.save();
+	public enum CALENDAR_TYPE {
+		GOOGLE, OFFICE365;
 	}
 
-	calendarList.add("primary");
-	// calendarList.add("ak02hkb2ef10q40ccd1kro94f8@group.calendar.google.com");
+	public CALENDAR_TYPE calendar_type;
 
-	System.out.println("Calendars : " + calendarList);
+	@NotSaved(IfDefault.class)
+	public String prefs = null;
 
-    }
+	// domain user key
+	@JsonIgnore
+	private Key<DomainUser> domainUserKey = null;
 
-    @PrePersist
-    void prePersist()
-    {
-	if (domainUserKey == null)
-	    domainUserKey = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
+	@NotSaved
+	public List<String> calendarList = new ArrayList<String>();
 
-    }
+	public static ObjectifyGenericDao<GoogleCalenderPrefs> dao = new ObjectifyGenericDao<GoogleCalenderPrefs>(
+			GoogleCalenderPrefs.class);
 
-    public void save()
-    {
-	dao.put(this);
-    }
+	public GoogleCalenderPrefs() {
 
-    public void delete()
-    {
-	dao.delete(this);
-    }
+	}
+
+	public String getPrefs() {
+		return prefs;
+	}
+
+	public GoogleCalenderPrefs(String refresh_token, String access_token) {
+		this.refresh_token = refresh_token;
+		this.access_token = access_token;
+	}
+
+	/**
+	 * Sets expiry time according to expires in attribute set when access token
+	 * is fetched using refresh token/
+	 * 
+	 * @param time
+	 */
+	@JsonIgnore
+	public void setExpiryTime(Integer time) {
+		expires_at = System.currentTimeMillis() + (time - 120) * 1000;
+	}
+
+	/**
+	 * After expiry of existing token, new token is fetched.
+	 * 
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
+	public void refreshToken() throws JsonParseException, JsonMappingException,
+			IOException {
+
+		if (refresh_token == null)
+			return;
+
+		/**
+		 * Fethches new access token using refresh token
+		 */
+		String response = GoogleServiceUtil.refreshTokenInGoogle(refresh_token);
+
+		// Creates HashMap from response JSON string
+		HashMap<String, Object> properties = new ObjectMapper().readValue(
+				response, new TypeReference<HashMap<String, Object>>() {
+				});
+		System.out.println(properties.toString());
+
+		if (properties.containsKey("access_token")) {
+			access_token = String.valueOf(properties.get("access_token"));
+			setExpiryTime(Integer.parseInt(String.valueOf(properties
+					.get("expires_in"))));
+			save();
+		}
+	}
+
+	@PostLoad
+	void postLoad() {
+		if (System.currentTimeMillis() >= expires_at)
+			try {
+				refreshToken();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		if (calendar_type == null) {
+			calendar_type = CALENDAR_TYPE.GOOGLE;
+			this.save();
+		}
+
+		calendarList.add("primary");
+		// calendarList.add("ak02hkb2ef10q40ccd1kro94f8@group.calendar.google.com");
+
+		System.out.println("Calendars : " + calendarList);
+
+	}
+
+	@PrePersist
+	void prePersist() {
+		if (domainUserKey == null)
+			domainUserKey = new Key<DomainUser>(DomainUser.class,
+					SessionManager.get().getDomainId());
+
+	}
+
+	public void save() {
+		dao.put(this);
+	}
+
+	public void delete() {
+		dao.delete(this);
+	}
 
 }

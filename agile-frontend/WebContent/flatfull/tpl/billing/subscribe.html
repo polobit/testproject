@@ -389,7 +389,7 @@ Proceed to Pay
 {{#getSubscriptionBasedOnPlan billingData emailPlan}} 
           <form class="bs-example form-horizontal">
             <div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none">One Time Free Emails</label>
+              <label class="col-sm-6 control-label p-t-none">Free Emails</label>
               <div class="col-sm-6">
                 -
               </div>
@@ -440,7 +440,7 @@ Proceed to Pay
 {{else}}
           <form class="bs-example form-horizontal">
             <div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none">One Time Free Emails</label>
+              <label class="col-sm-6 control-label p-t-none">Free Emails</label>
               <div class="col-sm-6">
                 5000 
               </div>
@@ -695,7 +695,7 @@ users.
 <form class="form-horizontal" id="email-plan-form">
 <div class="email-selected-plan panel" style="background: rgb(246, 247, 249);" id="email-div" onclick="focus()">
 
-<div class="p-t-md text-center m-b" style="">
+<div class="p-t-md text-center m-b p-b-sm" style="">
    <img src="{{getS3ImagePath '/flatfull/img/mail.png'}}" style="width: 132px;">
 </div>
 <div  class="price-panel wrapper text-center b-b b-light m-t bg-white">
@@ -709,9 +709,8 @@ users.
 </div>
    
 </div>
-<div class="text-center m-t">One Time FREE</div>
-<div class="text-center">5000 Emails</div>
-<div id="email_validation_container">
+
+<div id="email_validation_container" class="p-t">
 <div class="m-t" style="
     margin: 15px auto 0;
     width: 67%;
@@ -728,8 +727,7 @@ users.
 </div>
 <div class="text-center text-xs">Emails to be purchased</div>
 
-<div class="text-center m-t-lg m-b-md">
-
+<div class="text-center m-t-lg m-b-xs">
 <a id="purchase-email-plan" class="btn pricing-btn text-center w-full  b-n btn-lg btn-primary" href="#purchase-email"> Proceed to Pay </a>
 
 </div>                    

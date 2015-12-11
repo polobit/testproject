@@ -243,7 +243,17 @@
 				<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
 {{else}}
 
-<p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p><form id="reportsForm">
+<p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p>
+<form id="reportsForm">
+
+<input name="scope"  id="scope" value="{{prefs.scope}}" hidden/>
+<input name="stripe_publishable_key"  id="stripe_publishable_key" value="{{prefs.stripe_publishable_key}}" hidden/>
+<input name="token_type"  id="token_type" value="{{prefs.token_type}}" hidden/>
+<input name="livemode"  id="livemode" value="{{prefs.livemode}}" hidden/>
+<input name="refresh_token"  id="refresh_token" value="{{prefs.refresh_token}}" hidden/>
+<input name="stripe_user_id"  id="stripe_user_id" value="{{prefs.stripe_user_id}}" hidden/>
+<input name="access_token"  id="access_token" value="{{prefs.access_token}}" hidden/>
+
 <fieldset class="m-l-md">
 		<div class="control-group m-l-n-md">
 				<label class="control-label">Current custom field</label>
