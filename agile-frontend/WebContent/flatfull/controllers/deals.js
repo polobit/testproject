@@ -30,7 +30,7 @@ var DealsRouter = Backbone.Router.extend({
 			isMobile = true;
 		}
 		// Depending on cookie shows list or milestone view
-		if (!readCookie("agile_deal_view"))
+		if ((!readCookie("agile_deal_view")) && (isMobile))
 		{
 			template_key = "opportunities-by-milestones";
 

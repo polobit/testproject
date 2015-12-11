@@ -62,7 +62,7 @@
         
         <br />
 			<div>
-				<div class="btn-group pull-left" id="bulk-actions">
+				<div class="btn-group pull-left" id="bulk-actions" style="display:none;">
 					<div class="btn btn-sm btn-default">Bulk Actions</div>
 					<a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
@@ -351,8 +351,8 @@
 	</div>
 </td>
 <td>
-<div class="text-ellipsis" style="width:10em">
-	<div class="inline-block text-ellipsis" style="width:9em">
+<div  style="width:10em">
+	<div class="inline-block no-wrap overflow-hidden" style="width:9em;">
 	{{#each contacts}}
        {{#if_contact_type "PERSON"}}
         	<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
