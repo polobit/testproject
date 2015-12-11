@@ -17,8 +17,11 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.Trigger.Type;
 import com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.campaignio.servlets.util.TrackClickUtil;
 import com.campaignio.urlshortener.URLShortener;
+import com.campaignio.urlshortener.URLShortener.ShortenURLType;
 import com.campaignio.urlshortener.util.URLShortenerUtil;
 import com.google.appengine.api.NamespaceManager;
 
@@ -156,8 +159,14 @@ public class RedirectServlet extends HttpServlet
 	    Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));
 	    if (workflow != null)
 	    {
-		// Add log
-		TrackClickUtil.addEmailClickedLog(campaignId, subscriberId, originalURL, workflow.name);
+		
+	    // Add log
+	    if(urlShortener != null && urlShortener.getURLShortenerType().equals(ShortenURLType.SMS))
+	    	CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, subscriberId, workflow.name, "SMS link clicked " + originalURL + " of campaign " + workflow.name,
+	    	        LogType.SMS_LINK_CLICKED.toString());
+	    else
+	    	TrackClickUtil.addEmailClickedLog(campaignId, subscriberId, originalURL, workflow.name);
+		
 
 		// Show notification
 		TrackClickUtil.showEmailClickedNotification(contact, workflow.name, originalURL);
@@ -167,7 +176,8 @@ public class RedirectServlet extends HttpServlet
 	    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId);
 
 	    // Link clicked trigger
-	    EmailTrackingTriggerUtil.executeTrigger(subscriberId, campaignId, originalURL, Type.EMAIL_LINK_CLICKED);
+	    if(urlShortener == null)
+	    	EmailTrackingTriggerUtil.executeTrigger(subscriberId, campaignId, originalURL, Type.EMAIL_LINK_CLICKED);
 	}
 	catch (Exception e)
 	{

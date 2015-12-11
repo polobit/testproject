@@ -37,7 +37,6 @@ public class TrackClickUtil
      */
     public static void addEmailClickedLog(String campaignId, String subscriberId, String longURL, String workflowName)
     {
-	System.out.println("In email clicked log...");
 
 	LogUtil.addLogToSQL(campaignId, subscriberId, "Email link clicked " + longURL + " of campaign " + workflowName,
 	        LogType.EMAIL_CLICKED.toString());
@@ -47,6 +46,7 @@ public class TrackClickUtil
 	    EmailOpenServlet.addEmailOpenedLog(campaignId, subscriberId, workflowName);
     }
 
+    
     /**
      * Shows email clicked notification to the contact.
      * 

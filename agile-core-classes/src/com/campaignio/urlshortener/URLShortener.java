@@ -42,6 +42,13 @@ public class URLShortener
      * Campaign Id
      */
     public String campaign_id;
+    
+    public enum ShortenURLType
+    {
+    	SMS, EMAIL
+    };
+    
+    private ShortenURLType type = ShortenURLType.EMAIL;
 
     /**
      * Shortener Url - "https://click.agilecrm.com/backend/click"
@@ -78,6 +85,15 @@ public class URLShortener
 	this.campaign_id = campaignId;
     }
 
+    public void setURLShortenerType(ShortenURLType type)
+    {
+    	this.type = type;
+    }
+    
+    public ShortenURLType getURLShortenerType()
+    {
+    	return type;
+    }
     /**
      * Saves URLShortener Object in empty namespace.
      */

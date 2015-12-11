@@ -2,6 +2,8 @@ package com.campaignio.tasklets.sms;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
@@ -15,6 +17,7 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.campaignio.urlshortener.util.URLShortenerUtil;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
@@ -58,6 +61,12 @@ public class SendMessage extends TaskletAdapter
 	 * Body of the message
 	 */
 	public static String MESSAGE = "message";
+	
+	 /**
+     * Click event tracking id
+     */
+    public static String SMS_CLICK_TRACKING_ID = "sms_click_tracking_id";
+    public static String SMS_ = "sms_";
 
 	public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
 			throws Exception
@@ -99,7 +108,11 @@ public class SendMessage extends TaskletAdapter
 				return;
 			}
 
-			SMSGatewayUtil.sendSMS(SMS_API, from, to, message, ACCOUNT_ID, AUTH_TOKEN);
+			data.put(SMS_CLICK_TRACKING_ID,System.currentTimeMillis());
+			
+			message = shortenLongURLs(message, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+			
+//			SMSGatewayUtil.sendSMS(SMS_API, from, to, message, ACCOUNT_ID, AUTH_TOKEN);
 
 			// Creates log for sending sms
 			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
@@ -168,6 +181,34 @@ public class SendMessage extends TaskletAdapter
 			System.err.println("NumberParseException was thrown: " + e.toString());
 		}
 		return false;
+	}
+	
+	public static String shortenLongURLs(String message, String subscriberId, String campaignId)
+	{
+		String regex = "\\(?\\b(http://|www[.]|https://|HTTP://|HTTPS://)[-A-Za-z0-9+&amp;@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&amp;@#/%=~_()|]";
+		Pattern p = Pattern.compile(regex);
+		Matcher m  = p.matcher(message);
+		
+		boolean result = m.find();
+		
+		while(result){
+			
+			for(int i=0; i < m.groupCount(); i++)
+			{
+				try
+				{
+					message = message.replace(m.group(i), URLShortenerUtil.getShortURL(m.group(i), "sms", subscriberId, SMS_ + System.currentTimeMillis(), campaignId));
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+			
+			result = m.find();
+		}
+		
+		return message;
 	}
 
 }
