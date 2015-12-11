@@ -373,7 +373,7 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 				//_init_gcal_options();
 				addGoogleCalendarEvents();
 			}else{
-				removeEventSource('google');
+				removeGoogleEventSource();
 			}
 		}	
 
