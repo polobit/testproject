@@ -21,7 +21,8 @@ var Tickets_Notes = {
 
 			success : function(model) {
 
-				Tickets_Notes.discardReply();
+				Tickets_Notes.repltBtn('reply');
+
 				App_Ticket_Module.notesCollection.collection.add(model);
 				App_Ticket_Module.notesCollection.render(true);
 			},
@@ -108,11 +109,6 @@ var Tickets_Notes = {
 
 		// Initialize tooltips
 		$('[data-toggle="tooltip"]', $('#reply-editor')).tooltip();
-	},
-
-	discardReply : function(e) {
-		$('#reply-editor').html('');
-		$('#send-reply-container').show();
 	},
 
 	showCannedMessages : function(e) {
