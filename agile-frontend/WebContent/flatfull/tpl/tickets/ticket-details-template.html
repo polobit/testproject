@@ -147,7 +147,7 @@
               </div>
             </div>
 
-            {{#get_allowed_canned_responses_array labels this}}{{/get_allowed_canned_responses_array}}
+            {{#get_allowed_canned_responses_array labels this}}{{/get_allowed_canned_responses_array}}   
             {{#if allowed_canned_responses}}
             <div class="panel panel-default m-t-md">
               <div class="panel-body">
@@ -368,12 +368,19 @@
                       <a href="javascript:void(0);" class="btn btn-default btn-sm m-l-xs pull-right">
                       <i class="fa fa-paperclip" data-toggle="tooltip" data-placement="top" data-original-title="Attachments"></i>
                     </a>
-                    <a href="javascript:void(0);" class="btn btn-default btn-sm m-l-xs canned-messages pull-right">
-                      <i data-toggle="tooltip" data-placement="top" data-original-title="Canned Responses" class="fa fa-reorder"></i>
-                    </a>
-                   
-                      
-                  </div>
+
+                    {{#if canned_responses}}
+                    <div class="btn-group dropdown m-l-xs pull-right">
+                      <button class="btn btn-sm w-xxs btn-default" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" data-original-title="Canned Responses"><i class="fa fa-reorder"></i></button>
+                      <ul id="workflows_list" class="dropdown-menu">
+                        {{#each canned_responses}}
+                        <li><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>
+                        {{/each}}
+                      </ul>
+                    </div>
+                    {{/if}}
+
+                    </div>
 
                   <div id="reply-editor" class="m-t-sm b-a">
 
