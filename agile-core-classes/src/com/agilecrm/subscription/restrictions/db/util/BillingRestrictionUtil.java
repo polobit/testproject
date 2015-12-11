@@ -114,21 +114,24 @@ public class BillingRestrictionUtil {
 			return restriction;
 		}
 		// Set one_time_emails_count to '0' per every 30 days for free users(Free 5000 emails)
+		Subscription subscription = SubscriptionUtil.getSubscription();
 		System.out.println("max emails count::"+restriction.max_emails_count);
-		if(restriction.max_emails_count == null || restriction.max_emails_count == 0){
+		if(restriction.max_emails_count == null || restriction.max_emails_count == 0 || (restriction.one_time_emails_count != null && restriction.one_time_emails_count <= 0 && subscription != null && subscription.emailPlan == null)){
 			System.out.println("last renewal time::"+restriction.last_renewal_time);
 			if(restriction.last_renewal_time == null){
 				if(restriction.created_time == null){
-					System.out.println("saving BillingRestriction");
+					restriction.last_renewal_time = new DateUtil().addDays(31).getTime().getTime()/1000;
 					restriction.save();
 				}
-				restriction.last_renewal_time = restriction.created_time/1000;
+				else
+					restriction.last_renewal_time = restriction.created_time/1000;
 			}
 			Long currentDate = new DateUtil().getTime().getTime()/1000;
 			if(currentDate - restriction.last_renewal_time >= 2592000){
 				System.out.println("Updating free 5000 emails");
 				System.out.println("last renewal time is:: "+restriction.last_renewal_time);
 				restriction.one_time_emails_count = 0;
+				restriction.max_emails_count = 0;
 				restriction.last_renewal_time = System.currentTimeMillis()/1000;
 				restriction.save();
 			}
