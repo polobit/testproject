@@ -15,6 +15,7 @@ routes : {
             "sync/stripe-import": "stripe_sync",
             "sync/shopify": "shopify",
             "sync/officeCalendar" : "office365_calendar_sync",
+            "sync/officeCalendar/:id" : "office365_calendar_sync",
             "sync/salesforce": "salesforce",
             "sync/zoho-import": "zoho_sync",
             "sync/quickbook": "quickbook_import",
@@ -55,7 +56,7 @@ dataSync : function()
                         localStorage.setItem('datasync_tab', temp[1]);
                 });
             	that.google_calendar(el);
-                that.office_calendar();
+                that.office_calendar(el);
                 initializeDataSyncListners();
 
             }
@@ -82,12 +83,12 @@ dataSync : function()
         $('#calendar-prefs').html(this.calendar_sync_google.render().el);
     },
 
-    office_calendar: function(){
+    office_calendar: function(el){
 
          var calendar_settings_view = new Calendar_Sync_Settings_View({
-                        url : "core/api/calendar-prefs/type/OFFICE365",
-                        template : "admin-settings-import-office365-sync-details"
-                    });
+            url : "core/api/calendar-prefs/type/OFFICE365",
+            template : "admin-settings-import-office365-sync-details"
+         });
         $('#office365').html(calendar_settings_view.render().el);
     },
 
