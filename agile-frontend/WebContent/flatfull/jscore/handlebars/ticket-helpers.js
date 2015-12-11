@@ -260,7 +260,6 @@ Handlebars.registerHelper('get_ticket_rows', function(ticket_model, options) {
 
 Handlebars.registerHelper('is_ticket_reply_activity', function(activityType, options) {
 
-/** End of ticketing handlebars* */
 	var replyActivity = ['TICKET_CREATED', 'TICKET_REQUESTER_REPLIED', 'TICKET_ASSIGNEE_REPLIED'];
 
 	if(activityType && $.inArray(activityType, replyActivity) != -1)
@@ -269,3 +268,5 @@ Handlebars.registerHelper('is_ticket_reply_activity', function(activityType, opt
 	return options.inverse(this);
 
 });
+
+/** End of ticketing handlebars* */
