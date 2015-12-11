@@ -221,16 +221,14 @@ var WorkflowsRouter = Backbone.Router
 						return;
 					$('#workflows-listener-container').html($(template_ui));
 					// initializeWorkflowsListeners();
-					var activetab = localStorage.getItem("workflows_tab");
+					var activetab = _agile_get_prefs("workflows_tab");
 					if(!activetab || activetab == null) {
-						if(islocalStorageHasSpace())
-							localStorage.setItem('workflows_tab', "general");
+						_agile_set_prefs('workflows_tab', "general");
 						activetab = "general";
 					}
 					$("#workflows-tab-container").on("click",".tab-container ul li",function(){
 						var temp = $(this).find("a").attr("href").split("#");
-						if(islocalStorageHasSpace())
-							localStorage.setItem('workflows_tab', temp[1]);
+						_agile_set_prefs('workflows_tab', temp[1]);
 					});
 					
 					$('#workflows-tab-container a[href="#'+activetab+'"]').tab('show');
@@ -471,17 +469,15 @@ var WorkflowsRouter = Backbone.Router
 
 						initializeTriggerEventListners(campaign_id);
 						
-						var activetab = localStorage.getItem("triggers_tab");
+						var activetab = _agile_get_prefs("triggers_tab");
 						if(!activetab || activetab == null) {
-							if(islocalStorageHasSpace())
-								localStorage.setItem('triggers_tab', "contact");
+							_agile_set_prefs('triggers_tab', "contact");
 						}
 						$("#triggers-tab-container",el).on("click",".tab-container ul li",function(){
 							var temp = $(this).find("a").attr("href").split("#");
-							if(islocalStorageHasSpace())
-								localStorage.setItem('triggers_tab', temp[1]);
+							_agile_set_prefs('triggers_tab', temp[1]);
 						});
-						activetab = localStorage.getItem("triggers_tab");
+						activetab = _agile_get_prefs("triggers_tab");
 						$('#triggers-tab-container a[href="#'+activetab+'"]').tab('show');
 					}
 				

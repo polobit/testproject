@@ -116,7 +116,7 @@ $(function(){
 		
 		if (Current_Route == 'deals')
 			deal_bulk_actions.toggle_deals_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
-		/*else if(Current_Route=='contacts' && readCookie("agile_contact_view"))
+		/*else if(Current_Route=='contacts' && _agile_get_prefs("agile_contact_view"))
 			toggle_contacts_bulk_actions_dropdown(this,true,$(this).parents('table').attr("id"));*/
 		else
 			toggle_contacts_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));

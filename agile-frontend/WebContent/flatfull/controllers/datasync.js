@@ -44,16 +44,14 @@ dataSync : function()
             postRenderCallback: function(el) {
                 var dataSyncTab = localStorage.getItem("datasync_tab");
                 if(!dataSyncTab || dataSyncTab == null) {
-                    if(islocalStorageHasSpace())
-                        localStorage.setItem('datasync_tab', "google-tab");
+                    _agile_set_prefs('datasync_tab', "google-tab");
                     dataSyncTab = "google-tab";
                 }
                 $('#prefs-tabs-content a[href="#'+dataSyncTab+'"]').tab('show');
                 $("#prefs-tabs-content .tab-container ul li").off("click");
                 $("#prefs-tabs-content").on("click",".tab-container ul li",function(){
                     var temp = $(this).find("a").attr("href").split("#");
-                    if(islocalStorageHasSpace())
-                        localStorage.setItem('datasync_tab', temp[1]);
+                   _agile_set_prefs('datasync_tab', temp[1]);
                 });
             	that.google_calendar(el);
                 that.office_calendar(el);
@@ -106,7 +104,7 @@ dataSync : function()
                         if(!template_ui1)
                             return;
                         $("#prefs-tabs-content").html(template_ui1);
-                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        var dataSynctTab = _agile_get_prefs("datasync_tab");
                         $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
                         initializeTabListeners("datasync_tab", "sync");
     	                getSyncModelFromName("GOOGLE", function(model){
@@ -135,7 +133,7 @@ dataSync : function()
                         if(!template_ui1)
                             return;
                         $("#prefs-tabs-content").html(template_ui1);
-                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        var dataSynctTab = _agile_get_prefs("datasync_tab");
                         $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
                         initializeTabListeners("datasync_tab", "sync");
 
@@ -226,7 +224,7 @@ dataSync : function()
                         if(!template_ui1)
                             return;
                         $("#prefs-tabs-content").html(template_ui1);
-                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        var dataSynctTab = _agile_get_prefs("datasync_tab");
                         $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
                         initializeTabListeners("datasync_tab", "sync");
     			       getSyncModelFromName("STRIPE", function(model){
@@ -313,7 +311,7 @@ dataSync : function()
                         if(!template_ui1)
                             return;
                         $("#prefs-tabs-content").html(template_ui1);
-                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        var dataSynctTab = _agile_get_prefs("datasync_tab");
                         $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
                         initializeTabListeners("datasync_tab", "sync");
                    getSyncModelFromName("SHOPIFY", function(model){
@@ -342,7 +340,7 @@ dataSync : function()
                         if(!template_ui1)
                             return;
                         $("#prefs-tabs-content").html(template_ui1);
-                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        var dataSynctTab = _agile_get_prefs("datasync_tab");
                         $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
                         initializeTabListeners("datasync_tab", "sync");
                 getSyncModelFromName("FRESHBOOKS", function(model){
@@ -370,7 +368,7 @@ dataSync : function()
                         if(!template_ui1)
                             return;
                         $("#prefs-tabs-content").html(template_ui1);
-                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        var dataSynctTab = _agile_get_prefs("datasync_tab");
                         $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
                         initializeTabListeners("datasync_tab", "sync");
                   getSyncModelFromName("FRESHBOOKS", function(model){
@@ -401,7 +399,7 @@ dataSync : function()
                         if(!template_ui1)
                             return;
                         $("#prefs-tabs-content").html(template_ui1);
-                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        var dataSynctTab = _agile_get_prefs("datasync_tab");
                         $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
                         initializeTabListeners("datasync_tab", "sync");
 
@@ -431,7 +429,7 @@ dataSync : function()
                         if(!template_ui1)
                             return;
                         $("#prefs-tabs-content").html(template_ui1);
-                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        var dataSynctTab = _agile_get_prefs("datasync_tab");
                         $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
                         initializeTabListeners("datasync_tab", "sync");
 
@@ -460,7 +458,7 @@ dataSync : function()
                         if(!template_ui1)
                             return;
                         $("#prefs-tabs-content").html(template_ui1);
-                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        var dataSynctTab = _agile_get_prefs("datasync_tab");
                         $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
                         initializeTabListeners("datasync_tab", "sync");
                  getSyncModelFromName("ZOHO", function(model){

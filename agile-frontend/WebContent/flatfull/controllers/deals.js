@@ -22,9 +22,9 @@ var DealsRouter = Backbone.Router.extend({
 	deals : function()
 	{
 		pipeline_id = 0;
-		if (readCookie("agile_deal_track"))
-			pipeline_id = readCookie("agile_deal_track");
-		/*var deal_filters = readCookie('deal-filters');
+		if (_agile_get_prefs("agile_deal_track"))
+			pipeline_id = _agile_get_prefs("agile_deal_track");
+		/*var deal_filters = _agile_get_prefs('deal-filters');
 		if(deal_filters)
 		{
 			var filtersJSON = $.parseJSON(deal_filters);
@@ -35,7 +35,7 @@ var DealsRouter = Backbone.Router.extend({
 		}*/
 		$('#content').html("<div id='opportunity-listners'>&nbsp;</div>");
 		// Depending on cookie shows list or milestone view
-		if (!readCookie("agile_deal_view"))
+		if (!_agile_get_prefs("agile_deal_view"))
 		{
 			template_key = "opportunities-by-milestones";
 
@@ -68,7 +68,7 @@ var DealsRouter = Backbone.Router.extend({
 			setupNewDealFilters(function(){
 				DEALS_LIST_COLLECTION = null;
 				var query = ''
-				if (readCookie('deal-filters'))
+				if (_agile_get_prefs('deal-filters'))
 				{
 					query = '&filters=' + encodeURIComponent(getDealFilters());
 				}
@@ -234,7 +234,7 @@ var DealsRouter = Backbone.Router.extend({
 	{
 		var deal_filter = App_Deals.deal_filters.collection.get(id);
 		var deal_filter_json = deal_filter.toJSON();
-		createCookie('deal-filters', JSON.stringify(deal_filter_json));
+		_agile_set_prefs('deal-filters', JSON.stringify(deal_filter_json));
 		App_Deals.deals();
 	},
 

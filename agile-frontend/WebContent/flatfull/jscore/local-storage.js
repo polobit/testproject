@@ -39,7 +39,7 @@ function readData(name)
 	if(typeof(Storage) !== "undefined") {
 		return localStorage.getItem(name);
 	} else {
-	    return raedCookie(name);
+	    return readCookie(name);
 	}
 }
 
@@ -113,3 +113,29 @@ function islocalStorageHasSpace(){
 (function($) {
 	clearLocalStorage();
 })(jQuery);
+
+
+// New localstorage prefs 
+function _agile_get_prefs(key){
+
+    //  Checks in cookie first. If it is present delete from cookie and reset to localstorage and returns the value
+    var value = readCookie(key);
+    if(value != null && value != undefined && value != "null"){
+
+    	// Remove value from cookie and 
+    	eraseCookie(key);
+
+    	// Set in localstorage
+    	storeData(key, value);
+    }
+
+    return readData(key);
+}
+
+function _agile_set_prefs(key, value, days){
+        storeData(key, value, days);
+}
+
+function _agile_delete_prefs(key){
+        eraseData(key);
+}
