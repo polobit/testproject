@@ -33,23 +33,26 @@ var Ticket_Timeline = {
 
 	render_individual_ticket_timeline: function(){
 
-		var timeLineView = new Ticket_Base_Model({
-			isNew : false,
-			url : 'core/api/tickets/activity?id=' + Current_Ticket_ID,
-			template : 'ticket-timeline',
-			postRenderCallback: function(el){
 
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$("time", el).timeago();		
-				});
+		//Fetching users collection
+		var collection_def = Backbone.Collection.extend({url : 'core/api/tickets/activity?id=' + Current_Ticket_ID});
+		var collection = new collection_def();
 
-				//Initialize tooltips
-				$('[data-toggle="tooltip"]', el).tooltip();
-			}
-		});
+		collection.fetch({ success : function(){
 
-		$('#notes-collection-container').html(timeLineView.render().el);
+			// To timeline in sorting(dec) order
+			var data = new BaseCollection(collection.toJSON(), {sortKey : "created_time",descending:false}).toJSON();
+
+			var $template = $(getTemplate("ticket-timeline", data));
+
+			//Initialize tooltips
+			$('[data-toggle="tooltip"]', $template).tooltip();
+
+			$('#notes-collection-container').html($template);
+			
+		}}
+		);
+
 	}
 };	
 

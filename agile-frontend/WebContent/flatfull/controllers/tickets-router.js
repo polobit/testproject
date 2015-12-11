@@ -345,6 +345,9 @@ $("#right-pane").html(ticketView.render().el);
 	 		url : "/core/api/tickets/" + id,
 	 		postRenderCallback : function(el, data) {
 
+	 			// Append reply container
+	 			Tickets_Notes.repltBtn("reply", el);
+
 	 			//Initialize tooltips
 				$('[data-toggle="tooltip"]', el).tooltip();
 
@@ -854,7 +857,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
 	 		sortKey:"created_time",
 	 		customLoader: true,
 	 		customLoaderTemplate: "ticket-notes-loader",
-	 		descending:false,
+	 		descending:true,
 	 		individual_tag_name : 'div',
 	 		postRenderCallback : function(el) {
 

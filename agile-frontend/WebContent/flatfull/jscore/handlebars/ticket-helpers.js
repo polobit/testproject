@@ -157,5 +157,20 @@ Handlebars.registerHelper('compile_template', function(source, data, options) {
 });
 
 
+Handlebars.registerHelper('is_ticket_reply_activity', function(activityType, options) {
+
+	var replyActivity = ['TICKET_CREATED', 'TICKET_REQUESTER_REPLIED', 'TICKET_ASSIGNEE_REPLIED'];
+
+	if(activityType && $.inArray(activityType, replyActivity) != -1)
+		return options.fn(this);
+
+	return options.inverse(this);
+
+});
+
+
+
+
+
 
 /** End of ticketing handlebars* */

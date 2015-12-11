@@ -646,29 +646,22 @@ var Tickets = {
 
 	showWorkflows: function(e){
 
-		//Rendering root template
-		getTemplate("ticket-show-workflows-modal", {}, undefined, function(template_ui){
+		var $this = $(e.target);
 
-			if(!template_ui)
-		  		return;
+		$this.siblings("#workflows_list").html('<li><a href="javascript:void(0);">Loading...</a></li>');
 
-			$('#ticket-modals').html($(template_ui));
-			$('#show-workflows-modal').modal('show');
-
-			var workflowsView = new Ticket_Base_Model({
-				isNew : false,
-				url : "core/api/tickets/execute-workflow",
-				template : "ticket-show-workflows-form",
-				saveCallback : function(){
-					$('#show-workflows-modal').modal('hide');
-				},
-				postRenderCallback: function(el){
-					$('#ticket_id',el).val(Current_Ticket_ID);
-				}
-			});
-
-			$('#modal-body').html(workflowsView.render().el);
+		var workflows = Backbone.Collection.extend({
+			url : 'core/api/tickets/execute-workflow'
 		});
+
+		new workflows().fetch({
+			success : function(Collection) {
+
+				$('#workflows_list').html(getTemplate("ticket-show-workflows-list", Collection.toJSON()));
+
+			}
+		});
+
 	},
 
 	loadWidgets: function(){
