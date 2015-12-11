@@ -10,7 +10,12 @@
 			    </label>
 			{{/if}}
 
-			<div class="filters-drp-down btn-group dropdown" style="float: none;">
+			<a href="javascript:void(0);" class="btn btn-sm btn-default m-l-none refresh-tickets no-shadow b-n" 
+	        	data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh" style="background-color: #EDF1F2;">
+	        	<i class="fa fa-refresh"></i>
+	        </a>
+
+			<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
 				
 		    </div>
 
@@ -35,12 +40,8 @@
 	    		Delete
 	    	</a>
 	    	<div id="tickets-bulk-select" class="inline-block m-l-sm"></div>
-
-			<a href="javascript:void(0);" class="btn btn-sm btn-default refresh-tickets pull-right" 
-	        	data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh">
-	        	<i class="fa fa-refresh"></i>
-	        </a>
-		    <div class="sort-by-div btn-group m-t-xs m-r-sm pull-right txt-small">
+			
+			<div class="sort-by-div btn-group m-t-xs pull-right txt-small">
 		    	<span>Sort by:&nbsp;</span>
 		    	<a class="sort-link sort-by sort-by-desc" href="javascript:void(0);" data-sort-key="last_updated_time">
 		    		Updated time

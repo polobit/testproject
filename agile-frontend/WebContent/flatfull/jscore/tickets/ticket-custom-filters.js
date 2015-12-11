@@ -1,11 +1,12 @@
 var Ticket_Custom_Filters = {
 
+	customFilters: new Array(),
 	assignees: [],
 	groups: [],
 	filters: [],
-	customFilters: {},
+
 	reset: function(){
-		customFilters = {};
+		this.customFilters = new Array();
 	},
 	init: function(callback){
 
@@ -46,44 +47,60 @@ var Ticket_Custom_Filters = {
 			  	$container.html($(template_ui));
 			  	Tickets.initDateTimePicker($('#datetimepicker'), function(){});
 
-			  	head.js('/lib/chosen.jquery.min.js', function()
-				{	
-					//Initializing Priority, Labels, Status, Ticket type multi select
-					$(".chosen-select").chosen();
+			  	//Initializing Priority, Labels, Status, Ticket type multi select
+				//$(".chosen-select").chosen();
 
-					var tempAssignees = {all_assignees: Ticket_Custom_Filters.assignees, selected_assignees: dataJSON.assignees};
-					var tempGroups = {all_groups: Ticket_Custom_Filters.groups, selected_groups: dataJSON.groups};
+				var tempAssignees = {all_assignees: Ticket_Custom_Filters.assignees, selected_assignees: dataJSON.assignees};
+				var tempGroups = {all_groups: Ticket_Custom_Filters.groups, selected_groups: dataJSON.groups};
 
-					$('.assignee-select').html(getTemplate('ticket-filter-assignee', tempAssignees)).chosen();
-					$('.group-select').html(getTemplate('ticket-filter-group', tempGroups)).chosen();
+				$('.assignee-select').html(getTemplate('ticket-filter-assignee', tempAssignees));
+				$('.group-select').html(getTemplate('ticket-filter-group', tempGroups));
 
-					//Initializing on change events on all select dropdowns in custom filters
-					$('select', $container).off('change');
-					$('select', $container).on('change', function(evt, params) {
+				//Initializing on change events on all select dropdowns in custom filters
+				$('[type="checkbox"]', $container).off('change');
+				$('[type="checkbox"]', $container).on('change', function(evt) {
 
-						var attributeName = $(evt.target).data('name');
+					var isSelected = $(this).is(':checked');
+					var attributeName = $(this).attr('name');
+					
+					//Remove value from custom json if value is deselected
+					if (isSelected) {
+						var condition = {};
+						condition.LHS = attributeName;
+						condition.RHS = $(this).val();
 
-						var valueArray = new Array();
-
-						if(Ticket_Custom_Filters.customFilters[attributeName])
-							valueArray = Ticket_Custom_Filters.customFilters[attributeName];
-
-						//Remove value from custom json if value is deselected
-						if (params && params.deselected) {
-							
-							var index = valueArray.indexOf(params.deselected);
-
-							if (index > -1)
-								valueArray.splice(index, 1);
-						}else{
-							valueArray.push(params.selected);
+						switch(condition.LHS){
+							case 'status':
+								condition.CONDITION = 'TICKET_STATUS_IS';
+								break;
+							case 'priority':
+								condition.CONDITION = 'TICKET_PRIORITY_IS';
+								break;
+							case 'type':
+								condition.CONDITION = 'TICKET_TYPE_IS';
+								break;
+							case 'assignee_id':
+							case 'group_id':
+								condition.CONDITION = 'EQUALS';
+								break;
 						}
 
-						Ticket_Custom_Filters.customFilters[attributeName] = valueArray;
+						Ticket_Custom_Filters.customFilters.push(condition);
+					}else{
+						for(var i=0; i< Ticket_Custom_Filters.customFilters.length; i++){
 
-						//Re-render collection with customized filters
-						App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
-					});
+							var condition = Ticket_Custom_Filters.customFilters[i];
+
+							if(condition.LHS == attributeName && condition.RHS == $(this).val()){
+
+								Ticket_Custom_Filters.customFilters.splice(i, 1);
+								break;
+							}
+						}
+					}
+
+					//Re-render collection with customized filters
+					App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
 				});
 			});
 		});	
@@ -91,7 +108,7 @@ var Ticket_Custom_Filters = {
 
 	prepareConditions: function(callback){
 
-		var statusArray = ['NEW','OPEN','PENDING', 'CLOSED'], 
+		var statusArray = ['NEW', 'OPEN', 'PENDING', 'CLOSED'], 
 			priorityArray = ['LOW', 'MEDIUM','HIGH'], 
 			typeArray = ['PROBLEM','INCIDENT','TASK','QUESTION'], assigneesArray = [], groupsArray = [];
 		
@@ -110,14 +127,7 @@ var Ticket_Custom_Filters = {
 
 			var condition = filterJSON.conditions[i];
 
-			var valueArray = new Array();
-
-			if(Ticket_Custom_Filters.customFilters[condition.LHS])
-				valueArray = Ticket_Custom_Filters.customFilters[condition.LHS];
-
-			valueArray.push(condition.RHS);
-
-			Ticket_Custom_Filters.customFilters[condition.LHS] = valueArray;
+			Ticket_Custom_Filters.customFilters.push(condition);
 
 			switch(condition.LHS){
 				case 'status':{
@@ -219,8 +229,6 @@ var Ticket_Custom_Filters = {
 								_groups.push(group);
 						}
 					}
-
-					break;
 			}
 		}
 

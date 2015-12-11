@@ -38,7 +38,10 @@
 		/*Ticket Canned Responses CRUD*/
 		"canned-responses" : "cannedResponses",
 		"add-canned-response" : "addCannedResponse",
-		"edit-canned-response/:id" : "editCannedResponse"
+		"edit-canned-response/:id" : "editCannedResponse",
+
+		/*Ticket collection view type*/
+		"ticket-collection-view" : "ticketsCollectionView"
 	},
 
 	tickets: function(){
@@ -845,6 +848,46 @@ $('#content').find('.helpdesk-tab').addClass('select');
  			$('#content').find('.helpdesk-tab').addClass('select');
 });
 },
+
+	ticketsCollectionView: function(){
+
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+
+	 		if(!template_ui)
+	 			return;
+
+	 		$('#content').html($(template_ui));	
+
+	 		getTemplate("ticket-settings-nav-tab", {view_type: true}, undefined, function(tab_template_ui){
+
+	 			if(!tab_template_ui)
+	 				return;
+
+	 			$('#admin-prefs-tabs-content').html($(tab_template_ui));
+
+		 		var view = new Base_Model_View({
+	 				isNew : false,
+	 				template : "ticket-collection-view",
+	 				saveCallback : function(data){
+	 					CURRENT_DOMAIN_USER.helpdeskSettings = data;
+					},
+	 				url : '/core/api/users/helpdesk-settings',
+	 				postRenderCallback: function(el){
+	 					head.js('/lib/jquery-ui.min.js', 'css/designer/start/jquery-ui-1.8.5.custom.css', function()
+ 						{	
+ 							$( "#sortable1, #sortable2" ).sortable({
+						      connectWith: ".connectedSortable"
+						    }).disableSelection();
+ 						});
+	 				}
+	 			});
+
+	 			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(view.render().el);
+	 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+	 			$('#content').find('.helpdesk-tab').addClass('select');
+	 		});
+	 	});
+	},
 
 	/**
 	 * Fetches all notes related to given ticket id and renders html to provided element.

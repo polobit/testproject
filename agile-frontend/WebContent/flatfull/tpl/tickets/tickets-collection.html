@@ -37,20 +37,18 @@
 	    {{/unless}}
 	    {{#if this.length}}
 			<div class="data">
-				<div class="panel-heading">Tickets List</div>
 				<div class="dta-contatiner table-responsive">
 					<div class="panel panel-default" style="overflow-x:auto; border-left:none; border-top: none;">
-						<table class="table table-striped showCheckboxes no-sorting panel"
+						<table class="table table-striped no-sorting panel"
 							url="core/api/bulk/update?action_type=DELETE" style="table-layout: auto;">
 							<thead>
 								<tr>
-									<th>Subject</th>
-									<th>Requester</th>
-									<th>Labels</th>
-									<th>Assignee</th>
-									<th>Due Date</th>
-									<th>Priority</th>
-									<th>Status</th>
+									<th class="data select_checkbox c-p" data="{{id}}">
+									  <label class="i-checks i-checks-sm">
+									    <input type="checkbox" class="tbody_check"><i></i>                
+									  </label>
+									 </th>
+									{{{get_ticket_headers}}}
 								</tr>
 							</thead>
 							<tbody id="ticket-single-row-model-list" class="ticket-single-row-model-list"

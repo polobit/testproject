@@ -1,0 +1,124 @@
+<script id="ticket-collection-view-template" type="text/html">
+<div class="wrapper">
+    <div class="row">
+    	<div class="col-md-12 col-sm-12">
+		    <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
+		        <fieldset class="wrapper"><br/>
+		            <div class="control-group form-group">
+		                <div class="col-md-6">
+		                    <div class="controls">
+		                        <label class="i-checks">
+					                <input type="radio" name="ticket_view_type" value="MULTILINE" {{#if_equals ticket_view_type 'MULTILINE'}}checked{{/if_equals}}>
+					                <i></i>
+					                Multiline view
+					              </label>
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="control-group form-group">
+		                <div class="col-md-6">
+		                    <div class="controls">
+		                        <label class="i-checks">
+					                <input type="radio" name="ticket_view_type" value="SINGLELINE" {{#if_equals ticket_view_type 'SINGLELINE'}}checked{{/if_equals}}>
+					                <i></i>
+					                Single line view
+					              </label>
+		                    </div>
+		                </div>
+		                <div class="col-md-8 m-l-lg p-l-sm">
+		                	<div class="col-md-5 p-n">
+		                		<span class="m-l-xs">Columns not included in table</span>
+			                	<ul id="sortable1" class="connectedSortable">
+			                		{{#array_contains selected_columns 'ID'}}
+			                		{{else}}
+			                	  		<li class="ui-state-highlight" id="ID">Id</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'SUBJECT'}}
+			                		{{else}}
+			                	  		<li class="ui-state-highlight" id="SUBJECT">Subject</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'REQUSTER_NAME'}}
+			                		{{else}}
+			                	  		<li class="ui-state-highlight" id="REQUSTER_NAME">Requester name</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'DUE_DATE'}}
+			                		{{else}}
+			                	  		<li class="ui-state-highlight" id="DUE_DATE">Due Date</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'PRIORITY'}}
+			                		{{else}}
+			                	  		<li class="ui-state-highlight" id="PRIORITY">priority</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'STATUS'}}
+			                		{{else}}
+			                	  		<li class="ui-state-highlight" id="STATUS">Status</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'ASSIGNEE'}}
+			                		{{else}}
+			                	  		 <li class="ui-state-highlight" id="ASSIGNEE">Assignee</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'GROUP'}}
+			                		{{else}}
+			                	  		 <li class="ui-state-highlight" id="GROUP">Group</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'ASSIGNED_DATE'}}
+			                		{{else}}
+			                	  		<li class="ui-state-highlight" id="ASSIGNED_DATE">Assigned date</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'REQUESTER_EMAIL'}}
+			                		{{else}}
+			                	  		  <li class="ui-state-highlight" id="REQUESTER_EMAIL">Requester email</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'TYPE'}}
+			                		{{else}}
+			                	  		  <li class="ui-state-highlight" id="TYPE">Ticket type</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'LAST_UPDATED_DATE'}}
+			                		{{else}}
+			                	  		 <li class="ui-state-highlight" id="LAST_UPDATED_DATE">Last updated date</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'ORGANIZATION'}}
+			                		{{else}}
+			                	  		<li class="ui-state-highlight" id="ORGANIZATION">Organization</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'CLOSED_DATE'}}
+			                		{{else}}
+			                	  		<li class="ui-state-highlight" id="CLOSED_DATE">Closed date</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'CONTACT_DETAILS'}}
+			                		{{else}}
+			                	  		<li class="ui-state-highlight" id="CONTACT_DETAILS">Contact details</li>
+			                		{{/array_contains}}
+			                		{{#array_contains selected_columns 'CREATED_DATE'}}
+			                		{{else}}
+			                	  		<li class="ui-state-highlight" id="CREATED_DATE">Created date</li>
+			                		{{/array_contains}}
+								</ul>
+							</div>
+							<div class="col-md-5 p-n m-l-sm">
+								<span class="m-l-xs">Columns included in table</span>
+								<ul name="selected_columns" id="sortable2" class="connectedSortable selected_columns">
+									{{#selected_columns}}
+									  <li class="ui-state-default first-letter-cap" id="{{this}}">{{this}}</li>
+									{{/selected_columns}}
+								</ul>	
+							</div>
+		                </div>
+		            </div>
+		            <div class="row">
+		                <div class="col-md-12"><hr></div>
+		            </div>
+		            <div class="form-group">
+		                <div class="form-actions col-sm-offset-3 col-md-9">
+		                    <div class="form-actions">
+		                        <a type="reset" href='#ticket-groups' class="btn btn-default btn-sm">Cancel</a>
+		                        <button type="submit" class="save btn btn-sm btn-primary m-l-xs">Save Changes</button>
+		                    </div>
+		                </div>
+		            </div>
+		        </fieldset>
+		    </form>
+		</div>
+    </div>
+</div>
+</script>

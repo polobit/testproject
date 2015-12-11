@@ -76,6 +76,13 @@ Handlebars.registerHelper('contains_string', function(value, target, options) {
 	return options.inverse(this);
 });
 
+Handlebars.registerHelper('array_contains', function(array, obj, options) {
+	if (array.indexOf(obj) != -1)
+		return options.fn(this);
+
+	return options.inverse(this);
+});
+
 Handlebars.registerHelper('get_ticket_labels_from_ids', function(labels,
 		object, options) {
 
@@ -157,8 +164,103 @@ Handlebars.registerHelper('compile_template', function(source, data, options) {
 });
 
 
+Handlebars.registerHelper('get_ticket_headers', function(options) {
+
+	var selected_columns = CURRENT_DOMAIN_USER.helpdeskSettings.selected_columns;
+	var template = '<th>{{col_name}}</th>', html = '';
+
+	for(var i=0; i< selected_columns.length; i++){
+
+		var col_name = selected_columns[i].replace(/_/g, ' ').replace(/ /g, '&nbsp;');
+
+		html += template.replace('{{col_name}}', (col_name[0].toUpperCase() + col_name.slice(1).toLowerCase()));
+	}
+
+	return html;
+});
+
+Handlebars.registerHelper('get_ticket_rows', function(ticket_model, options) {
+
+	var selected_columns = CURRENT_DOMAIN_USER.helpdeskSettings.selected_columns, tr_ele = '';
+
+	for(var i=0; i< selected_columns.length; i++){
+
+		var td_ele = '<td  class="first-letter-cap">';
+		switch(selected_columns[i]){
+
+			case 'ID':
+				td_ele += '<div class="row m-n text-ellipsis">'+ ticket_model.id +'</div>';
+				break;
+			case 'SUBJECT':
+				td_ele += '<div class="row m-n text-ellipsis width-15em">'+ ticket_model.subject +'</div>';
+				break;
+			case 'REQUSTER_NAME':
+				td_ele += '<div class="row m-n text-ellipsis width-15em">'+ ticket_model.requester_name +'</div>';
+				break;
+			case 'REQUESTER_EMAIL':
+				td_ele += '<div class="row m-n text-ellipsis width-15em">'+ ticket_model.requester_email +'</div>';
+				break;
+			case 'CREATED_DATE':
+				td_ele += '<div class="row m-n">'+ ticket_model.created_date +'</div>';
+				break;
+			case 'DUE_DATE':{
+
+				var due_date = ticket_model.due_date, due_txt = '-';
+				var currentEpoch = new Date().getTime();
+
+				if(due_date && due_date > 0)
+					if (due_date < currentEpoch)
+						due_txt = 'Overdue by ' + Ticket_Utils.dateDiff(currentEpoch, due_date);
+					else
+						due_txt = 'Due in ' + Ticket_Utils.dateDiff(currentEpoch, due_date);
+
+				td_ele += '<div class="row m-n">'+ due_txt +'</div>';
+				
+				break;
+			}
+			case 'ASSIGNED_DATE':
+				td_ele += '<div class="row m-n">'+ ticket_model.assigned_time +'</div>';
+				break;
+			case 'LAST_UPDATED_DATE':
+				td_ele += '<div class="row m-n">'+ ticket_model.last_updated_time +'</div>';
+				break;
+			case 'CLOSED_DATE':
+				td_ele += '<div class="row m-n">'+ ticket_model.closed_time +'</div>';
+				break;
+			case 'ASSIGNEE':
+				td_ele += '<div class="row m-n">'+ ((ticket_model.assignee) ? ticket_model.assignee.name : "-") +'</div>';
+				break;
+			case 'GROUP':
+				td_ele += '<div class="row m-n">'+ ((ticket_model.group) ? ticket_model.group.group_name : "-") +'</div>';
+				break;
+			case 'LAST_UPDATED_BY':
+				td_ele += '<div class="row m-n">'+ ticket_model.last_updated_by +'</div>';
+				break;
+			case 'ORGANIZATION':
+				break;
+			case 'CONTACT_DETAILS':
+				break;
+			case 'PRIORITY':
+				td_ele += '<div class="row m-n">'+ ticket_model.priority +'</div>';
+				break;
+			case 'TYPE':
+				td_ele += '<div class="row m-n">'+ ticket_model.type +'</div>';
+				break;
+			case 'STATUS':
+				td_ele += '<div class="row m-n">'+ ticket_model.status +'</div>';
+				break;
+		}
+
+		td_ele += '</td>';
+		tr_ele += td_ele;
+	}
+
+	return tr_ele;
+});
+
 Handlebars.registerHelper('is_ticket_reply_activity', function(activityType, options) {
 
+/** End of ticketing handlebars* */
 	var replyActivity = ['TICKET_CREATED', 'TICKET_REQUESTER_REPLIED', 'TICKET_ASSIGNEE_REPLIED'];
 
 	if(activityType && $.inArray(activityType, replyActivity) != -1)
@@ -167,10 +269,3 @@ Handlebars.registerHelper('is_ticket_reply_activity', function(activityType, opt
 	return options.inverse(this);
 
 });
-
-
-
-
-
-
-/** End of ticketing handlebars* */

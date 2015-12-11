@@ -19,6 +19,8 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.type.TypeFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +31,7 @@ import org.jsoup.nodes.Document;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketsDocument;
+import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
@@ -164,7 +167,7 @@ public class TicketsRest
 	@Path("/filter")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Tickets> getFilteredTickets(@QueryParam("filter_id") Long filterID,
-			@QueryParam("custom_filters") String customFilters, @QueryParam("cursor") String cursor,
+			@QueryParam("custom_filters") String customFiltersString, @QueryParam("cursor") String cursor,
 			@QueryParam("page_size") Integer pageSize, @QueryParam("global_sort_key") String sortField)
 	{
 		try
@@ -174,20 +177,12 @@ public class TicketsRest
 
 			TicketFilters filter = TicketFiltersUtil.getFilterById(filterID);
 
-			JSONObject customFilterJSON = null;
+			List<SearchRule> customFilters = new ObjectMapper().readValue(customFiltersString,
+					TypeFactory.collectionType(List.class, SearchRule.class));
 
-			try
-			{
-				customFilterJSON = new JSONObject(customFilters);
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-
-			String queryString = (customFilterJSON == null || customFilterJSON.length() == 0) ? TicketFiltersUtil
-					.getQueryFromConditions(filter.conditions) : TicketFiltersUtil.getCustomFilterQuery(
-					filter.conditions, customFilterJSON);
+			String queryString = (customFilters == null || customFilters.size() == 0) ? TicketFiltersUtil
+					.getQueryFromConditions(filter.conditions) : TicketFiltersUtil
+					.getQueryFromConditions(customFilters);
 
 			if (StringUtils.isBlank(sortField))
 				sortField = "last_updated_time";

@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.ticket.entitys.HelpdeskSettings;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -27,6 +28,7 @@ import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.ReferenceUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 
 /**
  * <code>UsersAPI</code> includes REST calls to interact with {@link DomainUser}
@@ -316,6 +318,58 @@ public class UsersAPI
 	    return null;
 	}
 	return null;
+    }
+    
+    // Get helpdesk settings
+    @GET
+    @Path("/helpdesk-settings")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public HelpdeskSettings getHelpdeskSettings()
+    {
+    	HelpdeskSettings settings = null;
+    	
+		try
+		{
+		    String domain = NamespaceManager.get();
+		    
+		    if (StringUtils.isNotEmpty(domain) || SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+		    {
+		    	settings = DomainUserUtil.getCurrentDomainUser().helpdeskSettings;
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+		
+		return settings;
+    }
+    
+    // Update helpdesk settings
+    @POST
+    @Path("/helpdesk-settings")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public HelpdeskSettings updateHelpdeskSettings(HelpdeskSettings helpdeskSettings)
+    {
+		try
+		{
+		    String domain = NamespaceManager.get();
+		    
+		    if (StringUtils.isNotEmpty(domain) || SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+		    {
+		    	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+		    	domainUser.helpdeskSettings = helpdeskSettings;
+		    	domainUser.save();
+		    	
+				return helpdeskSettings;
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+		
+		return helpdeskSettings;
     }
 
 }

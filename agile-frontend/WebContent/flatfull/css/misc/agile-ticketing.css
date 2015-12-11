@@ -191,11 +191,11 @@ ul#ticket-model-list > div > li{
 	border-bottom: none;
 }
 
-ul#ticket-model-list div li, ul#ticket-model-list div li div table{ 
+ul#ticket-model-list > div > li, ul#ticket-model-list > div > li > div > table{ 
 	background-color: #FFFFFF; 
 }
 
-ul#ticket-model-list div:nth-child(odd) li, ul#ticket-model-list div:nth-child(odd) li div table{ 
+ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-child(odd) > li > div > table{ 
 	background-color: #FBFBFB; 
 }
 
@@ -243,3 +243,26 @@ a.sort-by-asc:after{
 	margin-left: 5px;
 	text-rendering: auto;
 }
+
+#sortable1, #sortable2 {
+	width: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px 0 0 0;
+    float: left;
+    margin-right: 10px;
+  }
+  #sortable1 li, #sortable2 li {
+    margin: 5px;
+    padding: 5px;
+    border: 1px dashed #A8A8A8;
+    color: rgb(85, 85, 85);
+    font-weight: normal;
+    background: #F7F7F7 !important;
+    /*font-size: 1.2em;
+    width: 120px;*/
+  }
+
+  .width-15em {
+  	width: 15em;
+  }
