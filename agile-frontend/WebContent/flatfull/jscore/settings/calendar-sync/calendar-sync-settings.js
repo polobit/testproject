@@ -7,10 +7,9 @@ var Calendar_Sync_Settings_View = Base_Model_View.extend({
 	save_calendar_prefs : function (e, data)
 	{
 		e.preventDefault();
-
 		this.options.prePersist = this.prePersist;
-
 		this.save(e);
+		App_Datasync.dataSync();
 	},
 	delete_calendar_prefs : function(e, data)
 	{
