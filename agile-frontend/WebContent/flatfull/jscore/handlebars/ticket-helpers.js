@@ -110,9 +110,6 @@ Handlebars.registerHelper('get_ticket_labels_from_ids', function(labels,
 
 Handlebars.registerHelper('get_allowed_canned_responses_array', function(labels, object, options) {
 
-	console.log("get_allowed_canned_responses_array");
-	console.log(labels);
-
 	var allowedCannedResponses = [];
 
 	if(!Ticket_Canned_Response.cannedResponseCollection)

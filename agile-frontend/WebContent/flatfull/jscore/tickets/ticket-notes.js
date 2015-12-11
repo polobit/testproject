@@ -57,6 +57,10 @@ var Tickets_Notes = {
 		if(data.reply_type == 'forward')
 			data.notes = this.constructTextComments(App_Ticket_Module.notesCollection.collection.toJSON());
 
+		if(Ticket_Canned_Response.cannedResponseCollection.toJSON() 
+			&& Ticket_Canned_Response.cannedResponseCollection.toJSON().length > 0)
+			data.canned_responses = Ticket_Canned_Response.cannedResponseCollection.toJSON();
+
 		var $container = (el) ?  $('#send-reply-container', el): $('#send-reply-container');
 
 		$container.html(getTemplate('create-ticket-notes', data));
