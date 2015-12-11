@@ -6746,3 +6746,7 @@ Handlebars.registerHelper('is_mobile', function(options)
 		else
 		return options.inverse(this);
 	});
+function agile_is_mobile_browser(){
+    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+
+}
