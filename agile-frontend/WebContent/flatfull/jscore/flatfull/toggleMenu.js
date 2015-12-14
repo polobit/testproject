@@ -48,6 +48,9 @@ $(document).ready(function(){
 		$('#aside').on('touchstart','li a',function(){
 			$(this).css('padding-left', 25);
 		});
+		$('#aside').on('touchleave touchend','li a',function(){
+			$(this).css('padding-left', 20);
+		});
 	}
 	
 
