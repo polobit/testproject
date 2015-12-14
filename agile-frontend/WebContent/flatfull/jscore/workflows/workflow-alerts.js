@@ -57,10 +57,10 @@ function workflow_alerts(title, message , template, callback){
 	}, null);
 }
 
-function send_verify_email()
+function send_verify_email(el)
 {
 	// On Enter Key
-	var $input = $('#verify-email-form').find('input');
+	var $input = $('#verify-email-form', el).find('input');
 
 	$input.off('keypress');
 	$input.on('keypress', function(e){
@@ -75,8 +75,8 @@ function send_verify_email()
 		$('#verify-email-send').trigger('click');
 	});
 
-	$('#verify-email-send').off('click');
-	$('#verify-email-send').on('click', function(e){
+	$('#verify-email-send', el).off('click');
+	$('#verify-email-send', el).on('click', function(e){
 		
 		e.preventDefault();
 

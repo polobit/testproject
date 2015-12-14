@@ -18,7 +18,7 @@ $(function()
 	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
 	{
 		e.preventDefault();
-		$('#archived', $('#opportunityUpdateForm')).attr('checked', 'checked');
+		$('#archived', $('#opportunityUpdateForm')).prop('checked', 'checked');
 		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
 	});
 	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_unarchive', function(e)
@@ -332,9 +332,7 @@ function getDealFilters()
 
 
 
-//listenrs
-
-
+// Deal Listeners
 function initializeDealListners(el){
 	
 $('#opportunity-listners').off('click', ".deals-list-view");

@@ -202,40 +202,7 @@ $.fn.removeClassPrefix = function(prefix) {
 
 
 
-/*funda for contact details*/
-
-
-  $('body').on('click', '#contacts-inner-tabs #next', function(e){
-	  console.log("next clicked");
-    var target = $("#contactDetailsTab");
-    target.animate({ scrollLeft : (target.scrollLeft() + 270)},1000);
-  });
-  
-  $('body').on('click', '#contacts-inner-tabs #prev', function(e){
-	   console.log("prev clicked");
-    var target = $("#contactDetailsTab");
-    target.animate({ scrollLeft : (target.scrollLeft() - 270)},1000);
-  }); 
-
 });
-
-//funda for contact details
-
-/*function contactInnerTabsInvoke(el) {
-	
-	
-	
-	if ( ($("#contacts-inner-tabs .tab-container",el).width()) >= 689 ) {
-		    $("#prev,#next",el).css("display","none");
-			$("#contactDetailsTab",el).css('width','100%');
-			
-	  }
-	  else 
-	  {
-		  $("#prev,#next",el).css("display","block");
-		  $("#contactDetailsTab",el).removeAttr('style');
-	   }
-	 }*/
 	 
 
 

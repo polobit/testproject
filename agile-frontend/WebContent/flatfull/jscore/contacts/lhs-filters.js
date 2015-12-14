@@ -150,7 +150,7 @@ function contactFiltersListeners(container_id){
 	$('[data-toggle="tooltip"]').tooltip();
 
 if(!container_id)
-	  container_id = 'conatcts-listeners-conatainer';
+	  container_id = 'contacts-listener-container';
 
 $('#' + container_id).on('click', 'a.filter-multiple-add-lhs', function(e)
 {
