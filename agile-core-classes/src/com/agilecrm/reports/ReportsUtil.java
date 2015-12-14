@@ -22,12 +22,9 @@ import org.json.JSONObject;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Call;
 import com.agilecrm.activities.util.ActivityUtil;
-<<<<<<< HEAD
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.util.CaseUtil;
-=======
->>>>>>> sandbox_flatfull_modules
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
@@ -456,7 +453,6 @@ public class ReportsUtil
     {
 	return Reports.dao.count();
     }
-<<<<<<< HEAD
 
     public static JSONObject userPerformanceForReports(Long ownerId, long minTime,
 			long maxTime){
@@ -468,7 +464,7 @@ public class ReportsUtil
 			Integer soldCount=0;
 			Double avgValue=0d;
 			Double avgDealsClosure=0d;
-			Double callsDuration=0d;
+			//Double callsDuration=0d;
 
 			if(wonDealsList!=null){
 				for(Opportunity opportunity : wonDealsList){
@@ -496,19 +492,12 @@ public class ReportsUtil
 			}
 			
 			dataJson.put("avgDealClosetime", avgDealsClosure);
-			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",ownerId,minTime,maxTime);
-		/*	for(Activity activity : callActivitiesList){
-				if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null) 
-						&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
-					callsDuration+=Long.valueOf(activity.custom4);
-			}
-			if(callActivitiesList.size()!=0)
-			 callsDuration=(double) Math.round(callsDuration/callActivitiesList.size());
-			dataJson.put("avgCallDuration", callsDuration);*/
+			//List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",ownerId,minTime,maxTime);
+
 			
-			dataJson.put("taskcreated",TaskUtil.getUserCreatedTasks(minTime, maxTime, ownerId));
+		/*	dataJson.put("taskcreated",TaskUtil.getUserCreatedTasks(minTime, maxTime, ownerId));
 			dataJson.put("taskCompleted",TaskUtil.getCompletedTasksOfUser(minTime, maxTime, ownerId));
-			dataJson.put("notes",NoteUtil.getNotesCountforUser(minTime, maxTime,ownerId));
+			dataJson.put("notes",NoteUtil.getNotesCountforUser(minTime, maxTime,ownerId));*/
 
 			dataJson.put("userName", DomainUserUtil.getDomainUser(ownerId).name);
 			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(ownerId);
@@ -522,9 +511,9 @@ public class ReportsUtil
 			else
 				dataJson.put("userPic","");
 			
-			dataJson.put("events",EventUtil.getEventsCountforOwner(minTime,maxTime,ownerId));
+			/*dataJson.put("events",EventUtil.getEventsCountforOwner(minTime,maxTime,ownerId));
 			dataJson.put("workflows",WorkflowUtil.getWorkflowCountOfCurrentUser(minTime, maxTime, ownerId));
-			dataJson.put("cases",CaseUtil.getCasesOfUser(minTime, maxTime, ownerId));
+			dataJson.put("cases",CaseUtil.getCasesOfUser(minTime, maxTime, ownerId));*/
 			return dataJson;
 			
 		}
@@ -536,7 +525,6 @@ public class ReportsUtil
 		}
 
 	}
-=======
     
     /**
      * 
@@ -727,5 +715,4 @@ public class ReportsUtil
 	        }
 	        return final_json;
     }
->>>>>>> sandbox_flatfull_modules
 }

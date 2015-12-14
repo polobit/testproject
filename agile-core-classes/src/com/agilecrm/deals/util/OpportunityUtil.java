@@ -2296,4 +2296,114 @@ public class OpportunityUtil
 		}
 
 	}
+	
+	public static JSONObject getPipelineConversionData(Long ownerId, long minTime,
+			long maxTime)
+	{
+
+		JSONObject Track_conversion = new JSONObject();
+		CategoriesUtil categoriesUtil = new CategoriesUtil();
+		
+
+		List<Opportunity> opportunitiesList=getConversionDeals(ownerId, minTime,
+				maxTime);
+		List<Milestone> milestones=MilestoneUtil.getMilestonesList();
+		for(Milestone milestone:milestones)
+		{
+			JSONObject milestoneValue=new JSONObject();
+			Opportunity.MILESTONES=milestone.milestones.split(",");
+			for(String milestone_data : Opportunity.MILESTONES)
+			{
+				milestoneValue.put(milestone_data, 0);
+			}
+			Track_conversion.put(milestone.name, milestoneValue);
+			
+		}
+		if(opportunitiesList!=null && opportunitiesList.size()!=0){
+			
+			for(Opportunity opp : opportunitiesList)
+			{
+				//int count=0;
+				Long pipeline_id = opp.getPipeline_id();
+				
+				Milestone mile=MilestoneUtil.getMilestone(pipeline_id);
+
+				if (Track_conversion.containsKey(mile.name))
+				{
+					JSONObject mileObject = Track_conversion.getJSONObject(mile.name);
+					if(mileObject.containsKey(opp.milestone))
+					{
+						Iterator keys=mileObject.keys();
+						while(keys.hasNext()){
+							String key=(String) keys.next();
+							int count=mileObject.getInt(key);
+							count++;
+							mileObject.put(key,count);
+							if(key.equalsIgnoreCase(opp.milestone))
+								break;
+						}
+						Track_conversion.put(mile.name, mileObject);
+					}
+					
+				}
+			}
+			
+		}
+		return Track_conversion;
+	}
+	
+	public static List<Opportunity> getConversionDeals(Long ownerId,
+			long minTime, long maxTime)
+			{
+		UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
+		Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
+		Map<String, Object> conditionsMap2 = new HashMap<String, Object>();
+		List<Opportunity> conversionList = new ArrayList<Opportunity>();
+		
+		Set<Opportunity> ownDealsSet = new TreeSet<Opportunity>(new Comparator<Opportunity>()
+				{
+					@Override  
+		            public int compare(Opportunity o1, Opportunity o2){
+						return o1.id.equals(o2.id) ? 0 : -1;
+		            }
+				});
+		if (ownerId != null){
+			conditionsMap1.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+			conditionsMap2.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+		}
+			conditionsMap2.put("archived", false);
+			conditionsMap2.put("created_time >= ", minTime);
+			conditionsMap2.put("created_time <= ", maxTime);
+		conditionsMap1.put("milestone_changed_time >= ", minTime);
+		conditionsMap1.put("milestone_changed_time <= ", maxTime);
+		conditionsMap1.put("archived", false);
+		try
+		{
+			
+					List<Opportunity> list = dao.listByProperty(conditionsMap1);
+					List<Opportunity> list2 = dao.listByProperty(conditionsMap2);
+					if (list != null)
+					{
+						ownDealsSet.addAll(list);
+					}
+					if (list2 != null)
+					{
+						ownDealsSet.addAll(list2);
+					}
+				
+			
+			conversionList=new ArrayList<>(ownDealsSet);
+			return conversionList;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+			}
+			
+	
+	
+	
+		
 }

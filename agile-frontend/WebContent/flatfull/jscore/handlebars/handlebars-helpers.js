@@ -3804,6 +3804,14 @@ $(function()
 
 	});
 
+		Handlebars.registerHelper('month-range', function(options)
+	{
+		var from_date = Date.today().moveToFirstDayOfMonth();
+		var to_date = Date.today().moveToLastDayOfMonth();
+		return from_date.toString('MMMM d, yyyy') + " - " + to_date.toString('MMMM d, yyyy');
+
+	});
+
 	Handlebars.registerHelper("extractEmail", function(content, options)
 	{
 

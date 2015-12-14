@@ -340,9 +340,86 @@ user_reports :function(callReportUrl){
 				portlet_graph_utility.callsByPersonPieGraph(selector,pieGraphRegions,CompleteCallsCount);
 			
 		});
-	
-	
 },
+
+	Goal_report : function(url)
+	{
+		var selector1="count_goals_chart";
+		var selector2="amount_goals_chart";
+		var colors1=[ '#ffffff', '#27C24C' ];
+		var colors2= ['#ffffff','#fad733'];
+		portlet_graph_data_utility.fetchPortletsGraphData(url,function(data){
+					if(data["goalCount"]==0)
+					{
+						$('#' + selector1)
+										.html(
+												'<div class="portlet-error-message" style=" font-size: 14px;font-style: normal;padding-top: 174px;padding-bottom : 203px">No Deals Goals set </div>');
+								
+					}
+					else{
+
+					 showGuage(selector1,data["dealcount"],data["goalCount"],'Won Deals','',true);
+					}
+					if(data["goalAmount"]==0)
+					{
+						$('#' + selector2)
+										.html(
+												'<div class="portlet-error-message" style="font-size: 14px;font-style: normal;padding-top: 174px;padding-bottom : 203px">No Amount Goals set </div>');
+								
+					}
+					else{
+
+					 showGuage(selector2,data["dealAmount"],data["goalAmount"],'Revenue','',true);
+					}
+		});
+
+	},
+	
+		conversion_report : function(url)
+		{
+			portlet_graph_data_utility.fetchPortletsGraphData(url,function(data){
+
+				console.log(data);
+				var div='';
+				 $.each(data,function(k,v){
+				 	div=div.concat('<div id='+k+' class="col-sm-4 panel wrapper"><b>'+k+'</b>');
+				 	//var innerdiv='';
+				 	var index=0;
+
+				 	var percent='';
+				 	var value;
+				 	$.each(v,function(k1,v1){
+				 		var percent='';
+				 		if(index==0){
+				 				if(v1!=0)
+				 				percent=100;
+				 				else
+				 					percent=0;
+				 			}
+				 			else
+				 			{
+				 				if(value!=0)
+				 				percent=(v1*100)/value;
+				 				else
+				 					percent=0;
+				 			}
+				 				
+				 			value=v1;
+				 		index++;
+				 			div=div.concat('<div class="">'+
+              '<span class="pull-right text-primary">'+Math.round(percent)+'% ('+v1+')</span>'+
+              '<span>'+k1+'</span>'+
+           ' </div>'+
+            '<div class="progress progress-xs m-t-sm bg-light">'+
+              '<div class="progress-bar bg-primary" data-toggle="tooltip" data-original-title="'+Math.round(percent)+'%" style="width: '+Math.round(percent)+'%"></div>'+
+            '</div>');
+				 	});
+				 	div=div.concat('</div>');
+				 	
+				 });
+				 $(".converionsPipeline").html(div);
+			});
+		},
 
 getRepPerformanceLog : function(url) {
 		fetchReportData(url, function(data)
@@ -356,7 +433,7 @@ getRepPerformanceLog : function(url) {
 				
 				showLossReasonGraphForUserReports();
 
-								var callReportUrl='core/api/portlets/calls-per-person/' + getSelectedDates();
+								/*var callReportUrl='core/api/portlets/calls-per-person/' + getSelectedDates();
 							
 							if ($('#owner').length > 0)
 							{
@@ -367,7 +444,23 @@ getRepPerformanceLog : function(url) {
 							}
 							}
 							
-							report_utility.user_reports(callReportUrl);
+							report_utility.user_reports(callReportUrl);*/
+
+							var goal_url = '/core/api/portlets/goals/';
+							var user;
+							if ($('#owner').length > 0)
+							{
+								if ($("#owner").val() != ""){
+									user=$("#owner").val();
+								//var user=CURRENT_DOMAIN_USER.id;
+								goal_url=goal_url+user;
+							}
+							}
+							goal_url=goal_url+ getSelectedDates();
+							report_utility.Goal_report(goal_url);
+
+							var conversion_url='/core/api/opportunity/conversionRate/'+user+getSelectedDates();
+							report_utility.conversion_report(conversion_url);
 			}, "#rep-performance-reports");
 			}
 			else

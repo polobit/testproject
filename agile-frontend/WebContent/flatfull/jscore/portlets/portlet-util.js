@@ -1117,10 +1117,10 @@ var portlet_utility = {
 					var that=portlet_ele;
 			   selector= portlet_ele.attr('id');
 			var url = '/core/api/portlets/goals/'+CURRENT_DOMAIN_USER.id
-						+ '?start_time='
+						+ '?start-date='
 								+ portlet_utility
 										.getStartAndEndDatesOnDue(start_date_str)
-								+ '&end_time='
+								+ '&end-date='
 								+ portlet_utility
 										.getStartAndEndDatesOnDue(end_date_str);
 			portlet_graph_data_utility
