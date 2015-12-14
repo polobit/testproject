@@ -5235,6 +5235,24 @@ $(function()
 		return getPendingEmails();
 	});
 
+	Handlebars.registerHelper('getLastPurchasedCount', function()
+	{
+		var max = getMaxEmailsLimit();
+		if(max == 0)
+			return getPendingEmails();
+		else
+			return "-";
+	});
+
+	Handlebars.registerHelper('getFreeEmailsCount', function()
+	{
+		var max = getMaxEmailsLimit();
+		if(max == 0)
+			return "-";
+		else
+			return "5000";
+	});
+
 	// helper function to return agile bcc special email for inbound mail event
 	// trigger
 	Handlebars.registerHelper('inboundMail', function()
