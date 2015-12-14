@@ -316,7 +316,7 @@ function show_model(id)
 	}
 	else
 	{
-		$('#updateActivityModal').modal('show');
+		$("#updateActivityModal").html(getTemplate("update-activity-modal")).modal('show');
 
 		var event = eventCollectionView.collection.get(id).toJSON();
 		console.log("clicked event " + event);

@@ -264,7 +264,18 @@ public class UsersAPI
 	{
 	    public int compare(AgileUser one, AgileUser other)
 	    {
-		return one.getDomainUser().name.toLowerCase().compareTo(other.getDomainUser().name.toLowerCase());
+	    	try {
+				
+	    		if(one.getDomainUser().name == null || other.getDomainUser().name == null)
+		    		  return 0;
+		    	
+			return one.getDomainUser().name.toLowerCase().compareTo(other.getDomainUser().name.toLowerCase());
+			
+			} catch (Exception e) {
+			}
+	    	
+	    	 return 0;
+	    	
 	    }
 	});
 	return agileWithDomain;
