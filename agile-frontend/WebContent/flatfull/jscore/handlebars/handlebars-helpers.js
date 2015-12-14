@@ -5239,18 +5239,18 @@ $(function()
 	{
 		var max = getMaxEmailsLimit();
 		if(max == 0)
-			return getPendingEmails();
-		else
 			return "-";
+		else
+			return getPendingEmails();
 	});
 
 	Handlebars.registerHelper('getFreeEmailsCount', function()
 	{
 		var max = getMaxEmailsLimit();
 		if(max == 0)
-			return "-";
-		else
 			return "5000";
+		else
+			return "-";
 	});
 
 	// helper function to return agile bcc special email for inbound mail event
