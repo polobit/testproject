@@ -664,12 +664,23 @@ function initializeSubscriptionListeners()
 
 	$("#subscribe_plan_change").on("click","#cancel_email_plan",function(e){
 		e.preventDefault();
-		if (!confirm("Are you sure you want cancel your Email Subscription?"))
-			return;
+		getTemplate("cancel-email-conformation-modal",{} , undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$(template_ui).modal('show');
+		}, null);
+	});
+
+	//From modal popup
+	$("body").on("click","#cancel_email_plan_conform",function(e){
+		e.preventDefault();
 		$.ajax({url:'core/api/subscription/cancel/email',
 			type:'GET',
 			success:function(data){
-				document.location.reload();				
+				document.location.reload();
+				setTimeout(function(){ 
+					showNotyPopUp("information", "Email subscription has been cancelled successfully.", "top"); 
+				}, 5000);				
 			},error: function(){
 				alert("Error occured, Please try again");
 			}
