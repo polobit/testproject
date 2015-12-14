@@ -182,7 +182,7 @@
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
-  <target>agile-export</target>
+  <target>agile-normal-bulk</target>
   </queue>
    <queue>
     <name>deals-upload-queue</name>
@@ -213,7 +213,7 @@
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
-  <target>agile-export</target>
+  <target>agile-normal-bulk</target>
   </queue>
   <queue>
     <name>deals-export-queue</name>
@@ -262,16 +262,34 @@
   </queue>
   
   <queue>
-    <name>tickets-queue</name>
+    <name>ticket-bulk-actions</name>
     <rate>10/s</rate>
-    <bucket-size>10</bucket-size>
-    <max-concurrent-requests>40</max-concurrent-requests>
+    <max-concurrent-requests>30</max-concurrent-requests>
+  <target>agile-normal-bulk</target>
   </queue>
 
   <queue>
     <name>update-workflows-queue</name>
     <rate>20/s</rate>
     <max-concurrent-requests>20</max-concurrent-requests>
+    <retry-parameters>
+    <task-retry-limit>2</task-retry-limit>
+  </retry-parameters>
+  </queue>
+  
+  <queue>
+  <name>activity-mail-queue</name>
+  <rate>10/s</rate>
+  <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+  </retry-parameters>
+  </queue>
+
+  <queue>
+    <name>cron-interrupt-queue</name>
+    <rate>20/s</rate>
+    <bucket-size>10</bucket-size>
+    <max-concurrent-requests>40</max-concurrent-requests>
     <retry-parameters>
     <task-retry-limit>2</task-retry-limit>
   </retry-parameters>
@@ -377,21 +395,10 @@
   
   <!-- Export queue -->
    <queue>
-    <name>export-pull-queue</name>
+    <name>contact-io-queue</name>
     <mode>pull</mode>
        <acl> 
       <user-email>naresh@faxdesk.com</user-email>
-    </acl>
-    <retry-parameters>
-      <task-retry-limit>2</task-retry-limit>
-    </retry-parameters>
-  </queue>
-
-   <queue>
-    <name>bulk-export-pull-queue</name>
-    <mode>pull</mode>
-       <acl> 
-      <user-email>yaswanth@agilecrm.com</user-email>
     </acl>
     <retry-parameters>
       <task-retry-limit>2</task-retry-limit>
@@ -402,7 +409,7 @@
     <name>contact-import-queue</name>
     <mode>pull</mode>
        <acl> 
-      <user-email>yaswanth@agilecrm.com</user-email>
+      <user-email>naresh@faxdesk.com</user-email>
     </acl>
     <retry-parameters>
       <task-retry-limit>2</task-retry-limit>
