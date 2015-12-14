@@ -316,8 +316,9 @@ var contact_details_documentandtasks_actions = {
 			}
 			else if (document_id == "new")
 			{
+				
+				$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
 				var el = $("#uploadDocumentForm");
-				$("#uploadDocumentModal").modal('show');
 
 				// Contacts type-ahead
 				agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
