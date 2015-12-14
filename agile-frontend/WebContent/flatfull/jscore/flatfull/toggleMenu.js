@@ -43,6 +43,14 @@ $(document).ready(function(){
    });
  
 
+	 $('#aside').off('li a');
+	if(agile_is_mobile_browser()){
+		$('#aside').on('touchstart','li a',function(){
+			$(this).css('padding-left', 25);
+		});
+	}
+	
+
 	if(( $(window).width() ) < 768 ) {
 
 	/*$('body').on('click','#mobile-dropdown-click-sort',function(){

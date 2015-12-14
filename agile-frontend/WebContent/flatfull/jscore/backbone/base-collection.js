@@ -310,7 +310,7 @@ var Base_Collection_View = Backbone.View
 					 */
 					onFetch : function()
 					{
-						alert('fetching infinite scroll data');
+						
 						var element="table"; 
 						if (that.options.scroll_symbol)
 							element="section";
