@@ -46,7 +46,7 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
     bulkActionCompaniesSortByName : function(e){
 
     	e.preventDefault();
-			createCookie('company_sort_field',$(this).attr('data'));
+			createCookie('company_sort_field',$(e.currentTarget).attr('data'));
 			COMPANIES_HARD_RELOAD=true;
 			App_Companies.companies();
     },
