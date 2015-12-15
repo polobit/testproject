@@ -110,8 +110,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html($(template_ui));	
 			var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
 			{
-				initializeAdminSettingsListeners();
-				initializeAccountSettingsListeners();
+				ACCOUNT_DELETE_REASON_JSON = undefined;
 			} });
 
 			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
@@ -148,7 +147,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html($(template_ui));	
 
 			that.usersListView = new Base_Collection_View({ url : '/core/api/users', restKey : "domainUser", templateKey : "admin-settings-users",
-			individual_tag_name : 'tr', postRenderCallback : function(el)
+			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
 			{
 
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
@@ -665,6 +664,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			{
 				acl_util.initTagACL(el);
 				initializeTagManagementListeners();
+				$(".allow_users_switch").tooltip({
+			        title: "<p>Allow all users to add New Tags.</p><p>Disable this option if you don't want users (non-admin) to add new tags on contacts or companies, apart from the tags listed here.</p>",  
+			        html: true,
+			        placement : 'bottom'
+			    }); 
 			} });
 			that.tagsview1.appendItem = append_tag_management;
 

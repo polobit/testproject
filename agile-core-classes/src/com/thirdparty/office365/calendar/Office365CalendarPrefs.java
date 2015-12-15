@@ -13,7 +13,6 @@ import com.googlecode.objectify.annotation.Cached;
 public class Office365CalendarPrefs {
 	@Id
 	public Long id;
-
 	public String username;
 	public String password;
 	public String serverUrl;
@@ -46,6 +45,66 @@ public class Office365CalendarPrefs {
 
 	public void delete() {
 		dao.delete(this);
+	}
+
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @return the serverUrl
+	 */
+	public String getServerUrl() {
+		return serverUrl;
+	}
+
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param username
+	 *            the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	/**
+	 * @param password
+	 *            the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	/**
+	 * @param serverUrl
+	 *            the serverUrl to set
+	 */
+	public void setServerUrl(String serverUrl) {
+		this.serverUrl = serverUrl;
 	}
 
 }

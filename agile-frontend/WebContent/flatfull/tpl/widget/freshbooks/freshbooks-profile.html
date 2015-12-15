@@ -98,7 +98,7 @@
 	</div>
 	<ul class="list-group m-b-none text-base" id="freshbooks_invoice_panel">
 		<li class="list-group-item r-none b-l-none b-r-none">
-			<center><img id="freshbooks_invoice_load" src="img/ajax-loader-cursor.gif" class="m-t m-b-sm"></img></center>
+			<center><img id="freshbooks_invoice_load" src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}" class="m-t m-b-sm"></img></center>
 		</li>
 	</ul>
 {{/if_equals}}
@@ -110,11 +110,6 @@
 	    	No invoices			
 		</li>		
 	{{else}}
-		<li class="list-group-item r-none b-l-none b-r-none">
-			<div class="pull-left text-base">Status</div>
-			<div class="pull-right text-base text-right">Amount</div>
-			<div class="clearfix"></div>
-		</li>
 		{{#isArray invoice}}
 			{{#each invoice}}
 				<li class="row-fluid list-group-item r-none b-l-none b-r-none text-base">
@@ -155,7 +150,7 @@
 							<div class="pull-right">{{discount}}%</div><br>
 						{{/if}}
 					</div>
-					<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago pull-left" datetime="{{updated}}">{{updated}}</time></small>
+					<small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xs"></i><time class="time-ago" datetime="{{updated}}">{{updated}}</time></small>
 				</li>
 			{{/each}}
 		{{else}}
@@ -197,10 +192,13 @@
 							<div class="pull-right">{{invoice.discount}}%</div><br>
 						{{/if}}
 					</div>
-					<small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xs"></i><time class="time-ago pull-left" datetime="{{invoice.updated}}">{{invoice.updated}}</time><div class="clearfix"></div></small>
+					<small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xs"></i><time class="time-ago" datetime="{{invoice.updated}}">{{invoice.updated}}</time><div class="clearfix"></div></small>
 			</li>
 		{{/isArray}}
 	{{/if_equals}}
+	<div class="widget_tab_footer freshdesk_show_more hide" align="center">
+		<a class="c-p text-info" id="freshdesk_show_more" rel="tooltip" title="Click to see more tickets">Show More</a>
+	</div>
 </script>
 
 <script id="freshbooks-items-template" type="text/html">
@@ -220,7 +218,7 @@
 					<div class="pull-left" rel="tooltip" title="{{description}}">{{name}}</div>
 					<div class="pull-right">{{unit_cost}}</div><br>
 					<ul class="widget_tab_link m-n text-base" style="float:left;">
-						<li><small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago pull-left l_border" datetime="{{updated}}">{{updated}}</time></small></li>
+						<li><small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xs"></i><time class="time-ago l_border" datetime="{{updated}}">{{updated}}</time></small></li>
 					</ul>
 				</li>
 			{{/each}}
@@ -228,9 +226,9 @@
 			<li class="list-group-item r-none b-l-none b-r-none">
 				<div class="pull-left" rel="tooltip" title="{{item.description}}">{{item.name}}</div>
 				<div class="pull-right">{{item.unit_cost}}</div><br>
-				<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago pull-left" datetime="{{item.updated}}">{{item.updated}}</time></small>
+				<small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xs"></i><time class="time-ago" datetime="{{item.updated}}">{{item.updated}}</time></small>
 				<ul class="widget_tab_link m-n text-base" style="float:left;">
-					<li><small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xs"></i><time class="time-ago pull-left l_border" datetime="{{item.updated}}">{{item.updated}}</time></small></li>
+					<li><small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xs"></i><time class="time-ago l_border" datetime="{{item.updated}}">{{item.updated}}</time></small></li>
 				</ul>
 			</li>
 		{{/isArray}}

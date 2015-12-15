@@ -49,8 +49,20 @@ public class IcalendarUtil
 	iCal.getProperties().add(Version.VERSION_2_0);
 	if (StringUtils.isNotEmpty(name))
 	    iCal.getProperties().add(net.fortuna.ical4j.model.property.Method.REQUEST);
-	else
-	    iCal.getProperties().add(net.fortuna.ical4j.model.property.Method.PUBLISH);
+	else{
+	    if(StringUtils.isNotBlank(email)){
+		    String emailDomainSubstring = email.split("@")[1];
+		    String emailDomain = emailDomainSubstring.split("\\.")[0];
+		    if(StringUtils.isNotBlank(emailDomain)){
+		    	emailDomain=emailDomain.toLowerCase();
+		    	if("yahoo".equals(emailDomain)){
+		    		 iCal.getProperties().add(net.fortuna.ical4j.model.property.Method.REQUEST);
+		    	}
+		    	else
+		    		iCal.getProperties().add(net.fortuna.ical4j.model.property.Method.PUBLISH);
+		    }
+		   }
+	}
 	// Iterates through each event and constructs VEvents
 
 	if (event.start == null || event.end == null)

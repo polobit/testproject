@@ -14,10 +14,6 @@ function getEpochTimeFromDate(selectedDate)
 function getGMTTimeFromDate(date)
 {
 	var current_sys_date = new Date();
-	console.log(new Date().getHours());
-	console.log(new Date().getMinutes());
-	console.log(new Date().getSeconds());
-	console.log(date.getYear() + "," + date.getMonth() + "," + date.getDate());
 	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
 
 	// Adding offset to date returns GMT time
@@ -96,21 +92,12 @@ function createNormalTime(slotTime)
 	return result.join('');
 }
 
-
-/**
- * gets date in 2014-09-03 format
- */
 function getSelectedTimeFromDate(date)
 {
 	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
 	return date.getTime();
 }
 
-/**
- * 
- * @param epoch 
- * @returns
- */
 function getConvertedTimeFromEpoch(epoch)
 {
 	// var dateVal = 1395184260;
@@ -119,12 +106,6 @@ function getConvertedTimeFromEpoch(epoch)
 	return time;
 }
 
-
-/**
- * 
- * @param hr
- * @returns {String}
- */
 function getNormalBusinessHouts(hr)
 {
 	var hrs = hr;
@@ -138,12 +119,6 @@ function getNormalBusinessHouts(hr)
 		return parseInt(hr) + ":" + min + "am";
 }
 
-
-/**
- * converts to 12 hour format from 24 hour format
- * @param hr
- * @returns
- */
 function getNormalTimeAMPM(hr)
 {
 	var name_json = { "12" : "12", "13" : "1", "14" : "2", "15" : "3", "16" : "4", "17" : "5", "18" : "6", "19" : "7", "20" : "8", "21" : "9", "22" : "10",
@@ -169,12 +144,6 @@ function convertWeekDayToArray(day)
 		return 6;
 }
 
-/**
- * get the offset -330 for india
- * @param timezonename
- * @returns
- */
-
 function getTimezoneOffset(timezonename)
 {
 
@@ -197,12 +166,6 @@ function getMidnightEpoch(current_date)
 	return d;
 }
 
-
-/**
- * changes the unix time stam to specific timezone
- * @param timezone
- * @returns
- */
 function getUnixTimeStampInSpecificTimezone(timezone)
 {
 	var m = moment().tz(SELECTED_TIMEZONE);

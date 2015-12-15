@@ -31,10 +31,58 @@ var ReportsRouter = Backbone.Router
 						return;
 					$('#reports-listerners-container').html($(template_ui));
 
+						preloadImages([
+							'flatfull/img/reports_images/Growth-graph.png',
+							'flatfull/img/reports_images/ratio.png',
+							'flatfull/img/reports_images/funnel-graph.png',
+							'flatfull/img/reports_images/Campaign-stats.png',
+							'flatfull/img/reports_images/Calls-By-User.png',
+							'flatfull/img/reports_images/averageofcall.png',
+							'flatfull/img/reports_images/user-activities-call.png',
+							'flatfull/img/reports_images/Incoming-Deals.png',
+							'flatfull/img/reports_images/Lost-Deal-Analysis.png',
+							'flatfull/img/reports_images/Revenue.png',
+							'flatfull/img/reports_images/Sales-forecast.png',
+							'flatfull/img/reports_images/User-reports.png',
+							'flatfull/img/reports_images/Call-Outcomes.png',
+							'flatfull/img/reports_images/contact.png',
+							'flatfull/img/reports_images/user-activities.png',
+							'flatfull/img/reports_images/Daily-reports.png',
+							'flatfull/img/reports_images/Call_Report_Time.png',
+							]);
 				initializeReportsListeners();
 				hideTransitionBar();
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				/*if($("#dealstab").length>0){
+					$("#dealstab").addClass("active");
+					$("#deals-tab").addClass("active");
+				}
+				else
+				{
+					$("#callstab").addClass("active");
+					$("#calls-tab").addClass("active");
+				}*/
+
+					var reportsTab = localStorage.getItem("reports_tab");
+				if(!reportsTab || reportsTab == null) {
+					var tabTemp;
+					if(islocalStorageHasSpace()){
+						if($("#dealstab").length>0)
+							tabTemp="deals-tab";
+						else
+							tabTemp="calls-tab";
+							localStorage.setItem('reports_tab', tabTemp);	
+					}
+					reportsTab = tabTemp;
+				}
+				$('#reports-tab-container a[href="#'+reportsTab+'"]').tab('show');
+				$("#reports-tab-container ul li").off("click");
+				$("#reports-tab-container").on("click",".tab-container ul li",function(){
+					var temp = $(this).find("a").attr("href").split("#");
+					if(islocalStorageHasSpace())
+						localStorage.setItem('reports_tab', temp[1]);
+				});
 
 					$('[data-toggle="tooltip"]').tooltip();
 
@@ -214,10 +262,9 @@ var ReportsRouter = Backbone.Router
 				$("#reports-listerners-container").html(getRandomLoadingImg());
 
 				SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
-				var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "contact-reports", isNew : true,
+				var report_add = new Report_Filters_Event_View({ url : 'core/api/reports', template : "reports-add", window : "contact-reports", isNew : true,
 					postRenderCallback : function(el)
 					{
-						initializeContactFiltersListeners();
 						initializeReportsListeners();
 						// Counter to set when script is loaded. Used to avoid
 						// flash in
@@ -250,7 +297,7 @@ var ReportsRouter = Backbone.Router
 
 				// Gets a report to edit, from reports collection, based on id
 				var report = this.reports.collection.get(id);
-				var report_model = new Base_Model_View({
+				var report_model = new Report_Filters_Event_View({
 					url : 'core/api/reports',
 					change : false,
 					model : report,
@@ -259,7 +306,6 @@ var ReportsRouter = Backbone.Router
 					id : "reports-listerners-container",
 					postRenderCallback : function(el)
 					{
-						initializeContactFiltersListeners();
 						initializeReportsListeners();
 
 						if (count != 0)
@@ -459,6 +505,8 @@ var ReportsRouter = Backbone.Router
 						templateId=templateId+"-piechart";
 						
 					}
+					if(reportType == 'timebased')
+						templateId=templateId+"-timeGraph";
 					
 					getTemplate(templateId, {}, undefined, function(template_ui){
 						if(!template_ui)
@@ -496,7 +544,15 @@ var ReportsRouter = Backbone.Router
 						options += ("start-date=" + start_time + "&end-date=" + end_time);
 						
 						var url='core/api/portlets/calls-per-person/' + options;
-						
+						if(reportType == 'timebased'){
+										if ($('#frequency').length > 0)
+									{
+									// Get Frequency
+									var frequency = $("#frequency").val();
+									options += ("&frequency=" + frequency);
+								}
+							url='core/api/reports/calls-time-based/' + options;
+						}
 						graphOn=$("#typeCall option:selected").val();
 					    
 					    var userDropDown=$('#users option:selected').val();

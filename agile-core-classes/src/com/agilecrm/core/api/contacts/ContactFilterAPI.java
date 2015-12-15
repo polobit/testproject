@@ -183,10 +183,15 @@ public class ContactFilterAPI
 	    @FormParam("global_sort_key") String sortKey)
     {
 	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(filterJson);
+
+	// Modification to sort based on company name. This is required as
+	// company name lower is saved in different field in text search
+	sortKey = (sortKey != null ? ((sortKey.equals("name") || sortKey.equals("-name")) ? sortKey.replace("name",
+		"name_lower") : sortKey) : null);
+
 	// Sets ACL condition
 	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
 		UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules, null);
 	return new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt(count), cursor, sortKey));
     }
-
 }

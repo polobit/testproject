@@ -899,14 +899,6 @@
 	<servlet-mapping>
 		<servlet-name>FacebookPageTab</servlet-name>
 		<url-pattern>/facebookpagetab</url-pattern>
-	</servlet-mapping>	
-	<servlet>
-		<servlet-name>FacebookFormLoadServlet</servlet-name>
-		<servlet-class>com.agilecrm.facebookpage.FacebookFormLoadServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>FacebookFormLoadServlet</servlet-name>
-		<url-pattern>/fbformload</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>FacebookPageServlet</servlet-name>
@@ -954,5 +946,30 @@
         <servlet-name>BriaInformUserServlet</servlet-name>
         <url-pattern>/InformUser</url-pattern>
     </servlet-mapping>
+	
+	<servlet>
+		<servlet-name>LandingPagesTemplateServlet</servlet-name>
+		<servlet-class>com.agilecrm.landingpages.TemplateServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LandingPagesTemplateServlet</servlet-name>
+		<url-pattern>/landingpages/get-template</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>LandingPagesCustomElementServlet</servlet-name>
+		<servlet-class>com.agilecrm.landingpages.CustomElementServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LandingPagesCustomElementServlet</servlet-name>
+		<url-pattern>/landingpages/custom-elements</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>LandingPageServingServlet</servlet-name>
+		<servlet-class>com.agilecrm.landingpages.LandingPageServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LandingPageServingServlet</servlet-name>
+		<url-pattern>/landing/*</url-pattern>
+	</servlet-mapping>
 	
 </web-app>

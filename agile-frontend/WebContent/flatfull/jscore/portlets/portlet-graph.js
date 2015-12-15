@@ -1,3 +1,5 @@
+var callschart=new Array();
+var taskReport=new Array();
 var portlet_graph_utility = {
 
 	/**
@@ -521,17 +523,25 @@ var portlet_graph_utility = {
 	callsPerPersonBarGraph : function(selector, domainUsersList, series,
 			totalCallsCountList, callsDurationList, text, colors,
 			domainUserImgList) {
+			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
+		var pos = '' + column_position + '' + row_position;
+		var	height=domainUsersList.length*30+($('#'+selector).height()-30);
+		if(selector=='calls-chart')
+			height=domainUsersList.length*30+120;
+		
 		head
 				.js(
 						LIB_PATH + 'lib/flot/highcharts-3.js',
 						function() {
 							
-							$('#'+selector).highcharts({
+							callschart[parseInt(pos)]=new Highcharts.Chart({
 								chart: {
+									renderTo : selector,
 						            type: 'bar',
 						            marginRight: 100,
 						            plotBorderWidth: 1,
-						            plotBorderColor: '#F4F4F5'
+						            plotBorderColor: '#F4F4F5',
+						            height:height,
 						        },
 						        title: {
 						            text: ''
@@ -556,7 +566,7 @@ var portlet_graph_utility = {
 						    				color : '#98a6ad',
 						    				fontSize : '11px'
 						    			},
-						                useHTML: true
+						                useHTML: true,
 						            },
 						            gridLineWidth : 0,
 						    		gridLineColor : '#F4F4F5',
@@ -578,11 +588,12 @@ var portlet_graph_utility = {
 						    			}
 						    		}
 						        },
-						        tooltip: {
+						       tooltip: {
 						        	formatter: function(){
 						        		var tt = '';
 						        		if(text=="Calls Duration (Mins)")
 						        			tt = '<table>' + 
+						        					'<tr><td  class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>'+	
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
 					        		              '<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(callsDurationList[this.points[0].point.x])+'</b></td></tr>' +
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls:&nbsp; </td>' + 
@@ -592,13 +603,14 @@ var portlet_graph_utility = {
 						        			
 						        			tt += '<table>';
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
+						        				tt += 	'<tr><td class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>'+	
+						        							'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(Math.round(this.points[0].point.y))+'</b></td></tr>';
 						        			}
 						        			tt += '</table>';
 						        			
 						        		}else{
-						        			tt += '<table>';
+						        			tt += '<table><tr><td class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>';
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
 						        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[0].point.y+'</b></td></tr>';
@@ -615,7 +627,7 @@ var portlet_graph_utility = {
 						        				tt += 	'<tr><td style="color:'+this.points[3].series.color+';padding:0">'+this.points[3].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[3].point.y+'</b></td></tr>';
 						        			}
-						        			tt += '</table>';
+						        			tt += '<tr><td>Total:&nbsp; </td><td class="b-b-none">'+totalCallsCountList[this.points[0].point.x]+'</td></tr></table>';
 						        		}
 						        		return tt;
 						        	},
@@ -637,7 +649,7 @@ var portlet_graph_utility = {
 						                borderWidth : 0
 						            },
 						            column: {
-						                pointPadding: 0.2,
+						                pointPadding: 0.5,
 						                borderWidth: 0
 						            },
 						            bar : {
@@ -679,10 +691,10 @@ var portlet_graph_utility = {
 		});
 		if(categoryList.length==0 || emptyFlag){
 			if(selector == 'calls-chart-user'){
-				$('#'+selector).html('<div class="portlet-error-message" style="font-size: 14px;font-style: normal;padding-top: 50%">No Calls Found</div>');	
+				$('#'+selector).html('<div class="portlet-error-message" style="font-size: 14px;font-style: normal;padding-top: 174px">No Calls Found</div>');	
 			}
 			else if(selector === 'calls-chart'){
-				$('#'+selector).html('<div class="portlet-error-message" style="padding: 190px">No Calls Found</div>');	
+				$('#'+selector).html('<div class="portlet-error-message" style="padding: 190px;font-style: normal">No Calls Found</div>');	
 			}
 			else{
 				$('#'+selector).html('<div class="portlet-error-message">No Calls Found</div>');
@@ -762,13 +774,14 @@ var portlet_graph_utility = {
 	 */
 	taskReportBarGraph : function(selector, groupByList, series, text,
 			base_model, domainUserNamesList) {
+			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
+		var pos = '' + column_position + '' + row_position;
+
 		head
 				.js(
 						LIB_PATH + 'lib/flot/highcharts-3.js',
 						function() {
-							$('#' + selector)
-									.highcharts(
-											{
+							taskReport[parseInt(pos)]=new Highcharts.Chart({
 												colors : [ "#23b7e5",
 														"#27c24c", "#7266ba",
 														"#fad733", "#f05050",
@@ -776,8 +789,10 @@ var portlet_graph_utility = {
 														"#eeaaee", "#55BF3B",
 														"#DF5353" ],
 												chart : {
+													renderTo:selector,
 													type : 'bar',
-													marginRight : 20
+													marginRight : 20,
+													height:groupByList.length*30+($('#'+selector).height()-30),
 												},
 												title : {
 													text : ''
@@ -896,9 +911,7 @@ var portlet_graph_utility = {
 																	userIndex = i;
 															}
 															return '<div>'
-																	+ '<div class="p-n" style="color:'
-																	+ this.series.color
-																	+ ';">'
+																	+ '<div class="p-n">'
 																	+ domainUserNamesList[userIndex]
 																	+ ' </div>'
 																	+ '<div class="p-n" style="color:'

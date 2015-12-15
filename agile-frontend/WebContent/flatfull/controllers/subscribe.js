@@ -6,7 +6,9 @@
  * @author Yaswanth
  */
 var _data = null;
+var IS_TRIAL = false;
 _IS_EMAIL_PLAN_ACTIVE = false;
+var IS_CANCELLED_USER = false;
 var SubscribeRouter = Backbone.Router
 		.extend({
 
@@ -15,6 +17,8 @@ var SubscribeRouter = Backbone.Router
 			/* Subscription page */
 
 			"subscribe" : "subscribe",
+
+			"trial-subscribe" : "trialSubscribe",
 
 			"subscribe/:id/:plan" : "subscribe",
 
@@ -44,7 +48,7 @@ var SubscribeRouter = Backbone.Router
 
 			"invoice" : "invoice",
 
-			"invoice/:id" : "getInvoiceDetails",
+			"invoice/:id" : "invoiceDetails",
 
 			"getInvoiceDetails/:id" : "getInvoiceDetails",
 
@@ -217,17 +221,9 @@ var SubscribeRouter = Backbone.Router
 			{
 
 				IS_HAVING_MANDRILL = false;
+				if(window.location.href.split("#")[1] == "subscribe")
+            		IS_TRIAL = false;
 				$("#content").html("<div id='subscribe_plan_change'></div>");
-
-				/*// Set it in local machine
-				if(_plan_on_signup && _plan_on_signup.plan_type){
-					localStorage.setItem("registered_plan" + CURRENT_DOMAIN_USER.id,localStorage.setItem("registered_plan" + CURRENT_DOMAIN_USER.id, JSON.stringify(_plan_on_signup)));
-				}
-				else {
-					_plan_on_signup = localStorage.getItem("registered_plan" + CURRENT_DOMAIN_USER.id);
-					if(_plan_on_signup)
-						   _plan_on_signup = JSON.parse(_plan_on_signup);
-				}*/	
 
 				if (IS_NEW_USER && _plan_on_signup && _plan_on_signup.plan_type && _plan_on_signup.plan_type == "FREE")
 				{
@@ -450,9 +446,7 @@ var SubscribeRouter = Backbone.Router
 			 */
 			invoiceDetails : function(id)
 			{
-				var invoicedata;
-				var companydata;
-				var obj;
+
 				// Checks whether invoice list is defined, if list is not
 				// defined get the list of invoices
 
@@ -470,21 +464,9 @@ var SubscribeRouter = Backbone.Router
 					var invoice_detail_model = new Base_Model_View({ url : "core/api/subscription/getinvoice", model : model, template : "invoice-detail",
 						postRenderCallback : function(el)
 						{
-							var company_detail = new Base_Model_View({ url : "core/api/account-prefs", model : model, template : "invoice-detail",
-								postRenderCallback : function(el)
-								{
-									companydata = data;
-									obj = { "invoice" : invoicedata, "company" : companydata }
-									getTemplate('invoice-detail', obj, undefined, function(template_ui)
-											{
-												if (!template_ui)
-													return;
-												$('#billing-settings-tab-content').html($(template_ui));
-											}, "#billing-settings-tab-content");
-								} });
 						} });
-//					$("#billing-settings-tab-content").html("");
-//					$("#billing-settings-tab-content").html(invoice_detail_model.render().el);
+					$("#billing-settings-tab-content").html("");
+					$("#billing-settings-tab-content").html(invoice_detail_model.render().el);
 				}
 				else
 					return;
@@ -526,6 +508,7 @@ var SubscribeRouter = Backbone.Router
 								// Discount
 								showCouponDiscountAmount(plan_json, el);
 								card_expiry(el);
+								
 							},
 							saveCallback : function(data)
 							{
@@ -665,6 +648,36 @@ var SubscribeRouter = Backbone.Router
 
 			},
 
+			trialSubscribe: function()
+			{
+				IS_TRIAL = true;
+				var that = this;
+				if(!IS_CANCELLED_USER)
+				{
+					$.ajax({ url : "core/api/subscription/agileTags?email="+CURRENT_DOMAIN_USER.email,
+					 type : "GET",
+					 dataType: "json",
+					 contentType : "application/json; charset=utf-8",
+					 success : function(data)
+						{
+							console.log(data);
+							if(data && data.tags)
+							{
+								if ( $.inArray('Cancellation Request', data.tags) > -1 || $.inArray('Cancelled Trial', data.tags) > -1) {
+								    IS_CANCELLED_USER = true;
+								}
+							}
+							that.subscribe();
+						},error : function(){
+							alert("Error occured. Please Reload the page.")
+						}
+					});	
+				}
+				else{
+					that.subscribe();
+				}
+			}
+
 		});
 
 function getPendingEmails()
@@ -753,22 +766,4 @@ function removeStyleForAPlan(id)
 	if (($('selected-plan')) != ($('#email-div')))
 		$(".plan-collection-in").removeClass('selected-plan');
 
-}
-
-function emailClickEvent() {
-	$('ul.nav.nav-tabs').removeClass("hide");
-	$("#email").addClass("hide");
-	$("#currentPlan").addClass("p-t-md");
-	$("#usertab").removeClass("active");
-	$("#emailtab").addClass("active");
-	$("#users-content").removeClass("active");
-	$("#email-content").addClass("active");
-}
-
-function printPage() {
-	$("#print-div").addClass("hide");
-	//document.getElementById('header').style.display = 'none';
-    //document.getElementById('footer').style.display = 'none';
-	window.print();
-	$("#print-div").removeClass("hide");
 }

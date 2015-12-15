@@ -16,7 +16,7 @@
 				<div class="panel panel-default b-a" style"height:200px;">
 				<div class="panel-heading">
 					<center>
-						<img  src="img/crm-plugins/form-builder.png" style="height:47px;"  class="img-responsive thumb-xl">
+						<img  src="{{getS3ImagePath 'img/crm-plugins/form-builder.png'}}" style="height:47px;"  class="img-responsive thumb-xl">
 					</center>
 				</div>
 				<div class="panel-body">
@@ -31,7 +31,7 @@
 				<div class="panel panel-default b-a" style="height:200px;">
 				<div class="panel-heading">
 					<center>
-						<img src="img/crm-plugins/js-api.png" style="height:47px;" class="img-responsive thumb-xl">
+						<img src="{{getS3ImagePath 'img/crm-plugins/js-api.png'}}" style="height:47px;" class="img-responsive thumb-xl">
 					</center>
 				</div>
 				<div class="panel-body">
@@ -47,7 +47,7 @@
 				<div class="panel-heading">
 					<a href="https://www.agilecrm.com/wufoo.html" target="_blank" class="t-l-none square-thumb ">
 	                 <center>
-						<img alt="wufoo-integration" src="img/crm-plugins/wufoo.png" class="img-responsive thumb-xl">
+						<img alt="wufoo-integration" src="{{getS3ImagePath 'img/crm-plugins/wufoo.png'}}" class="img-responsive thumb-xl">
 					</center>
 	                  </a>
 	             </div>
@@ -67,7 +67,7 @@
 				<div class="panel-heading">
 					<a href="https://www.agilecrm.com/unbounce.html" target="_blank" class="t-l-none square-thumb">
 	                <center>
-						<img alt="unbounce-integration" src="img/crm-plugins/unbounce.png" class="img-responsive thumb-xl">
+						<img alt="unbounce-integration" src="{{getS3ImagePath 'img/crm-plugins/unbounce.png'}}" class="img-responsive thumb-xl">
 	                 </center>
 					</a>
 				</div>
@@ -86,7 +86,7 @@
 							<span class="label label-danger pos-abs pos-r-0">Beta</span>
 							<a href="https://www.agilecrm.com/gravity-forms" target="_blank" class="t-l-none square-thumb">
 								<center>
-								<img alt="gravity-forms-integration" src="img/crm-plugins/gravity-forms.png" style="height:47px;" class="img-responsive thumb-xl ">
+								<img alt="gravity-forms-integration" src="{{getS3ImagePath 'img/crm-plugins/gravity-forms.png'}}" style="height:47px;" class="img-responsive thumb-xl ">
 								</center>
 							</a>
 						<div class="clearfix"></div>
@@ -100,23 +100,26 @@
 				</div>
 			</div>
 			
-			<!-- <div class="col-md-4 col-sm-6 col-xs-12 text-center">
-				<div class="panel wrapper text-center b-a">
+			<div class="col-md-4 col-sm-6 col-xs-12">
+				<div class="panel panel-default b-a"  style="height:200px;">
+				<div class="panel-heading">
 					<div class="pos-rlt">
 							<span class="label label-danger pos-abs pos-r-0">Beta</span>
-							<a href="https://www.agilecrm.com/gravity-forms" target="_blank" class="t-l-none square-thumb">
+							<a href="#facebook-integration" class="t-l-none square-thumb">
 								<center>
-								<img alt="facebook page tab" src="img/crm-plugins/facebook.png" class="img-responsive thumb-xl ">
+								<img alt="facebook integration" src="{{getS3ImagePath 'img/crm-plugins/facebook.png'}}" style="height:47px;" class="img-responsive thumb-xl ">
 								</center>
 							</a>
 						<div class="clearfix"></div>
 					</div>
-					<br/>
-					<div class="ellipsis-multiline m-t-sm" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 45px !important;"  rel="tooltip" title="Add a form to your Facebook page and gather leads.">
-						Add a form to your Facebook page and gather leads.
-					</div><br/><a href="#fbpagetab" class="btn btn-sm btn-default">Enable</a>
+					</div>
+					<div class="panel-body">
+					<div class="text-flow-ellipsis line-clamp line-clamp-3 widget-text m-b" style="height:60px"  rel="tooltip" title="Capture leads directly from your Facebook page.">
+						Capture leads directly from your Facebook page.
+					</div><div class="text-center"><a href="#facebook-integration" class="text-info">Manage Pages</a></div>
 				</div>
-			</div> -->
+				</div>
+			</div>
 			
 			</div>
 		</div>
@@ -127,7 +130,7 @@
 			<div class="panel-heading">
 				<a href="https://www.agilecrm.com/shopify-integration" target="_blank" class="t-l-none">
                 <center>
-					<img alt="shopify-integration" src="img/crm-plugins/shopify.png" class="img-responsive thumb-xl"  style="height: 47px;">
+					<img alt="shopify-integration" src="{{getS3ImagePath 'img/crm-plugins/shopify.png'}}" class="img-responsive thumb-xl"  style="height: 47px;">
                  </center>
 				</a>
 			</div>
@@ -147,7 +150,7 @@
 						<span class="label label-danger pos-abs pos-r-0">Beta</span>
 						<a href="https://www.agilecrm.com/magento-crm" target="_blank" style="text-decoration:none;">
 							<center>		
-           						 <img alt="magento-integration" src="img/crm-plugins/Magento.png" class="img-responsive thumb-xl"  style="height: 47px;">
+           						 <img alt="magento-integration" src="{{getS3ImagePath 'img/crm-plugins/Magento.png'}}" class="img-responsive thumb-xl"  style="height: 47px;">
            					</center>
 						</a>
 					<div class="clearfix"></div>
@@ -168,7 +171,7 @@
 						<span class="label label-danger pos-abs pos-r-0">Beta</span>
 						<a href="https://www.agilecrm.com/woocommerce-crm" target="_blank" style="text-decoration:none;">
 							<center>
-							<img alt="woocommerce-integration" src="img/crm-plugins/woocommerce.png" class="img-responsive thumb-xl" style="height: 47px;">
+							<img alt="woocommerce-integration" src="{{getS3ImagePath 'img/crm-plugins/woocommerce.png'}}" class="img-responsive thumb-xl" style="height: 47px;">
 							</center>
 						</a>
 						<div class="clearfix"></div>
@@ -192,7 +195,7 @@
 			<div class="panel panel-default b-a">
 			<div class="panel-heading">
 				<center>	
-              		<img alt="cms-integration" src="img/crm-plugins/wordpress.png" class="img-responsive thumb-xl" style="height:47px;">
+              		<img alt="cms-integration" src="{{getS3ImagePath 'img/crm-plugins/wordpress.png'}}" class="img-responsive thumb-xl" style="height:47px;">
                 </center>
 				</div>
 				<div class="panel-body">
@@ -212,7 +215,7 @@
 			<div class="panel panel-default b-a  style="height: 220px;"">
 			<div class="panel-heading">
 				<center>	
-                	<img alt="cms-integration" src="img/crm-plugins/zapier.png" style="height:47px;" class="img-responsive thumb-xl">
+                	<img alt="cms-integration" src="{{getS3ImagePath 'img/crm-plugins/zapier.png'}}" style="height:47px;" class="img-responsive thumb-xl">
                 </center>
             </div>
             <div class="panel-body">
@@ -234,7 +237,7 @@
 					<div class="pos-rlt">
 						<!--<span class="label label-danger pos-abs pos-r-0">Beta</span>-->
                         <center>
-							<img alt="cms-integration" src="img/crm-plugins/mandrill_logo.png" class="thumb-xl img-responsive">
+							<img alt="cms-integration" src="{{getS3ImagePath 'img/crm-plugins/mandrill_logo.png?v=v1'}}" class="thumb-xl img-responsive">
 						</center>	
                         <div class="clearfix"></div>
 					</div>
@@ -297,7 +300,7 @@
 				<div class="panel panel-default b-a" style="height:230px;">
 				<div class="panel-heading">
 					<div class="pos-rlt">
-						<center><img alt="sms-integration" src="img/crm-plugins/sendgrid_logo.png" class=" thumb-xl img-responsive">
+						<center><img alt="sms-integration" src="{{getS3ImagePath 'img/crm-plugins/sendgrid_logo.png'}}" class=" thumb-xl img-responsive">
                 	</center>
 					<div class="clearfix"></div>
 				</div>
@@ -359,7 +362,7 @@
 				<div class="panel panel-default b-a" style="height:230px;">
 				<div class="panel-heading">
 					<div class="pos-rlt">
-						<center><img alt="sms-integration" style="height:47px;" src="img/crm-plugins/ses_logo.png" class=" thumb-xl img-responsive">
+						<center><img alt="sms-integration" style="height:47px;" src="{{getS3ImagePath 'img/crm-plugins/ses_logo.png'}}" class=" thumb-xl img-responsive">
                 	</center>
 					<div class="clearfix"></div>
 				</div>
@@ -425,7 +428,7 @@
 			<div class="panel-heading">
 				<div class="pos-rlt">
 	                <center>
-						<img alt="sms-integration" src="/img/plugins/twilio.png" class=" thumb-xl img-responsive">
+						<img alt="sms-integration" src="{{getS3ImagePath '/img/plugins/twilio.png'}}" class=" thumb-xl img-responsive">
 	                 </center>
 					 <div class="clearfix"></div>
 				</div>
@@ -483,7 +486,7 @@
 			<div class="panel panel-default b-a" style="height:230px;">
 			<div class="panel-heading">
 				<div class="pos-rlt">
-					<center><img alt="sms-integration" style="height:47px;" src="/img/plugins/plivo.png" class=" thumb-xl img-responsive"></center>
+					<center><img alt="sms-integration" style="height:47px;" src="{{getS3ImagePath '/img/plugins/plivo.png'}}" class=" thumb-xl img-responsive"></center>
 					<div class="clearfix"></div>
 				</div>
 				</div>
@@ -576,7 +579,7 @@
 			<div class="panel wrapper text-center b-a" >
 				<a href="https://www.agilecrm.com/wufoo.html" target="_blank" class="t-l-none square-thumb ">
                  <center>
-					<img alt="wufoo-integration" src="img/crm-plugins/wufoo.png" class="m-b-md img-responsive thumb-xl">
+					<img alt="wufoo-integration" src="{{getS3ImagePath 'img/crm-plugins/wufoo.png'}}" class="m-b-md img-responsive thumb-xl">
 				</center>
                   </a>
     			<div  rel="tooltip" title="Push form submissions in Wufoo as a contact in Agile.">
@@ -593,7 +596,7 @@
 			<div class="panel wrapper text-center b-a" >
 				<a href="https://www.agilecrm.com/unbounce.html" target="_blank" class="t-l-none square-thumb">
                 <center>
-					<img alt="unbounce-integration" src="img/crm-plugins/unbounce.png" class="img-responsive m-b-md thumb-xl">
+					<img alt="unbounce-integration" src="{{getS3ImagePath 'img/crm-plugins/unbounce.png'}}" class="img-responsive m-b-md thumb-xl">
                  </center>
 				</a>
 				<div rel="tooltip" title="Push Unbounce landing page form data as a contact in Agile.">
@@ -610,7 +613,7 @@
 						<span class="label label-danger pos-abs pos-r-0">Beta</span>
 						<a href="https://www.agilecrm.com/gravity-forms" target="_blank" class="t-l-none square-thumb">
 							<center>
-							<img alt="gravity-forms-integration" src="img/crm-plugins/gravity-forms.png" class="img-responsive thumb-xl ">
+							<img alt="gravity-forms-integration" src="{{getS3ImagePath 'img/crm-plugins/gravity-forms.png'}}" class="img-responsive thumb-xl ">
 							</center>
 						</a>
 					<div class="clearfix"></div>
@@ -628,7 +631,7 @@
 						<span class="label label-danger pos-abs pos-r-0">Beta</span>
 						<a href="https://www.agilecrm.com/gravity-forms" target="_blank" class="t-l-none square-thumb">
 							<center>
-							<img alt="facebook page tab" src="img/crm-plugins/facebook.png" class="img-responsive thumb-xl ">
+							<img alt="facebook page tab" src="{{getS3ImagePath 'img/crm-plugins/facebook.png'}}" class="img-responsive thumb-xl ">
 							</center>
 						</a>
 					<div class="clearfix"></div>
@@ -652,7 +655,7 @@
 			<div class="panel wrapper text-center b-a">
 				<a href="https://www.agilecrm.com/shopify-integration" target="_blank" class="t-l-none">
                 <center>
-					<img alt="shopify-integration" src="img/crm-plugins/shopify.png" class="img-responsive thumb-xl">
+					<img alt="shopify-integration" src="{{getS3ImagePath 'img/crm-plugins/shopify.png'}}" class="img-responsive thumb-xl">
                  </center>
 				</a>
 				<br/><br/>
@@ -668,7 +671,7 @@
 						<span class="label label-danger pos-abs pos-r-0">Beta</span>
 						<a href="https://www.agilecrm.com/magento-crm" target="_blank" style="text-decoration:none;">
 							<center>		
-           						 <img alt="magento-integration" src="img/crm-plugins/Magento.png" class="img-responsive thumb-xl">
+           						 <img alt="magento-integration" src="{{getS3ImagePath 'img/crm-plugins/Magento.png'}}" class="img-responsive thumb-xl">
            					</center>
 						</a>
 					<div class="clearfix"></div>
@@ -688,7 +691,7 @@
 						<span class="label label-danger pos-abs pos-r-0">Beta</span><br/>
 						<a href="https://www.agilecrm.com/woocommerce-crm" target="_blank" style="text-decoration:none;">
 							<center>
-							<img alt="woocommerce-integration" src="img/crm-plugins/woocommerce.png" class="img-responsive thumb-xl">
+							<img alt="woocommerce-integration" src="{{getS3ImagePath 'img/crm-plugins/woocommerce.png'}}" class="img-responsive thumb-xl">
 							</center>
 						</a>
 						<div class="clearfix"></div>
@@ -714,7 +717,7 @@
 			<div class="panel wrapper text-center b-a">
 				<!--<a href="https://www.agilecrm.com/cms.html" target="_blank" style="text-decoration:none;"></a>-->
 				<center>	
-              <img alt="cms-integration" src="img/crm-plugins/wordpress.png" class="img-responsive thumb-xl">
+              <img alt="cms-integration" src="{{getS3ImagePath 'img/crm-plugins/wordpress.png'}}" class="img-responsive thumb-xl">
                 </center>
 				<br/><br/>
 				<div  rel="tooltip" title="WordPress is a free and open source blogging tool and a content management system (CMS) based on PHP and MySQL, which runs on a web hosting service.">
@@ -733,7 +736,7 @@
 			<div class="panel wrapper text-center b-a">
 				<!--<a href="" target="_blank" style="text-decoration:none;"></a>-->
 				<center>	
-                <img alt="cms-integration" src="img/crm-plugins/zapier.png" class="img-responsive thumb-xl">
+                <img alt="cms-integration" src="{{getS3ImagePath 'img/crm-plugins/zapier.png'}}" class="img-responsive thumb-xl">
                 </center>
 				<br/><br/>
 				<div rel="tooltip" title="Zapier is the easiest way to connect hundreds of SaaS apps you use to easily move your data and automate tedious tasks.">
@@ -755,7 +758,7 @@
 					<div class="pos-rlt">
 						<!--<span class="label label-danger pos-abs pos-r-0">Beta</span>-->
                         <center>
-						<img alt="cms-integration" src="img/crm-plugins/mandrill_logo.png" class="thumb-lg img-responsive">
+						<img alt="cms-integration" src="{{getS3ImagePath 'img/crm-plugins/mandrill_logo.png?v=v1'}}" class="thumb-lg img-responsive">
 						</center>	
                         <div class="clearfix"></div>
 					</div>
@@ -815,7 +818,7 @@
 			<div class="col-md-4 col-sm-6 col-xs-12 text-center" id="mandrill-email-api-integration">
 				<div class="panel wrapper text-center b-a">
 					<div class="pos-rlt">
-					<center><img alt="sms-integration" src="img/crm-plugins/sendgrid_logo.png" class=" thumb-xl img-responsive">
+					<center><img alt="sms-integration" src="{{getS3ImagePath 'img/crm-plugins/sendgrid_logo.png'}}" class=" thumb-xl img-responsive">
                 	</center>
 					<div class="clearfix"></div>
 				</div>
@@ -874,7 +877,7 @@
 			<div class="col-md-4 col-sm-6 col-xs-12 text-center">
 				<div class="panel wrapper text-center b-a">
 					<div class="pos-rlt">
-					<center><img alt="sms-integration" src="img/crm-plugins/ses_logo.png" class=" thumb-xl img-responsive">
+					<center><img alt="sms-integration" src="{{getS3ImagePath 'img/crm-plugins/ses_logo.png'}}" class=" thumb-xl img-responsive">
                 	</center>
 					<div class="clearfix"></div>
 				</div>
@@ -941,7 +944,7 @@
 			<div class="panel wrapper text-center b-a">
 				<div class="pos-rlt">
                 <center>
-					<img alt="sms-integration" src="/img/plugins/twilio.png" class=" thumb-xl img-responsive">
+					<img alt="sms-integration" src="{{getS3ImagePath '/img/plugins/twilio.png'}}" class=" thumb-xl img-responsive">
                  </center>
 						<div class="clearfix">
 						</div>
@@ -997,7 +1000,7 @@
 		<div class="col-md-4 col-sm-6 col-xs-12 text-center" id="plivo-sms-api-integration">
 			<div class="panel wrapper text-center b-a">
 				<div class="pos-rlt">
-				<center><img alt="sms-integration" src="/img/plugins/plivo.png" class=" thumb-xl img-responsive">
+				<center><img alt="sms-integration" src="{{getS3ImagePath '/img/plugins/plivo.png'}}" class=" thumb-xl img-responsive">
                 </center>
 						<div class="clearfix">
 						</div>

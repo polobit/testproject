@@ -33,7 +33,7 @@ function displaySettings()
 }
 
 // Load and display slider in update task modal of task for progress.
-function loadProgressSlider(el)
+function loadProgressSlider(el, callback)
 {
 	head.load(LIB_PATH + 'lib/jquery.slider.min.js', function()
 	{
@@ -46,6 +46,9 @@ function loadProgressSlider(el)
 				changeProgress(value, $(".status", el).val(), el);
 			}
 		});
+
+		if(callback)
+			  callback(el);
 	});
 }
 
@@ -122,15 +125,23 @@ function setForm(formToSet)
 
 	if (isComplete == "true")
 	{
-		// Show slider for progress
-		showProgressSlider(100, COMPLETED, formToSet);
+		// loadProgressSlider(formToSet, function(formToSet){
+				// Show slider for progress
+				showProgressSlider(100, COMPLETED, formToSet);
+		// });
 	}
 	else
 	{
-		// Show slider for progress
-		showProgressSlider($('#progress', formToSet).val(), $('#status', formToSet).val(), formToSet);
+		// loadProgressSlider(formToSet, function(formToSet){
 
-		$(".progress_slider", formToSet).slider("value", $('#progress', formToSet).val());
+			// Show slider for progress
+			showProgressSlider($('#progress', formToSet).val(), $('#status', formToSet).val(), formToSet);
+
+			$(".progress_slider", formToSet).slider("value", $('#progress', formToSet).val());
+
+		// });
+
+		
 	}
 }
 
@@ -518,7 +529,8 @@ function addTasklListDetails(addTaskElement)
 	{		
 		var epochTime = getNewDueDate($(addTaskElement).attr("heading"));
 		var startDate = getDateInFormatFromEpoc(epochTime);
-		$("#taskForm").find("input.date").val(startDate).datepicker('update');		
+		$("#taskForm").find("input.date").val(startDate);
+		// .datepicker('update');		
 	}
 		break;		
 	case "PRIORITY":

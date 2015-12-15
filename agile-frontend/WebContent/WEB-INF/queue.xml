@@ -6,9 +6,9 @@
     <bucket-size>10</bucket-size>
     <max-concurrent-requests>40</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>0</task-retry-limit>
-	</retry-parameters>
-	<target>agile-normal-bulk</target>
+    <task-retry-limit>0</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
   <queue>
     <name>bulk-campaign-queue</name>
@@ -16,9 +16,9 @@
     <bucket-size>10</bucket-size>
     <max-concurrent-requests>40</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>0</task-retry-limit>
-	</retry-parameters>
-	<target>agile-campaigns-bulk</target>
+    <task-retry-limit>0</task-retry-limit>
+  </retry-parameters>
+  <target>agile-campaigns-bulk</target>
   </queue>
   <queue>
     <name>normal-campaign-queue</name>
@@ -26,9 +26,9 @@
     <bucket-size>10</bucket-size>
     <max-concurrent-requests>40</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>0</task-retry-limit>
-	</retry-parameters>
-	<target>agile-campaigns-normal</target>
+    <task-retry-limit>0</task-retry-limit>
+  </retry-parameters>
+  <target>agile-campaigns-normal</target>
   </queue>
   <queue>
     <name>notification-queue</name>
@@ -36,8 +36,8 @@
     <bucket-size>10</bucket-size>
     <max-concurrent-requests>40</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
   </queue>
   <queue>
     <name>reports-queue</name>
@@ -47,36 +47,36 @@
     </acl>
     <max-concurrent-requests>20</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-normal-bulk</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
   <queue>
     <name>periodic-triggers-queue</name>
     <rate>2/s</rate>
     <max-concurrent-requests>5</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-normal-bulk</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
    <queue>
     <name>email-attachment-queue</name>
     <rate>2/s</rate>
     <max-concurrent-requests>5</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-normal-bulk</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
     <queue>
     <name>contact-sync-queue</name>
     <rate>2/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-sync</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-sync</target>
   </queue>
      <queue>
     <name>contact-sync-now-queue</name>
@@ -92,109 +92,109 @@
     <rate>2/s</rate>
     <max-concurrent-requests>5</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-normal-bulk</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
    <queue>
     <name>bulk-actions-queue</name>
     <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>0</task-retry-limit>
-	</retry-parameters>
-	<target>agile-normal-bulk</target>
+    <task-retry-limit>0</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
   <queue>
     <name>event-notifier</name>
     <rate>20/s</rate>
     <max-concurrent-requests>20</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
   </queue>
   <queue>
     <name>due-task-reminder</name>
     <rate>10/s</rate>
     <max-concurrent-requests>20</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
   </queue>
   <queue>
-  	<name>cron-queue</name>
+    <name>cron-queue</name>
     <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
   </queue>
    <queue>
-  	<name>contacts-delete-queue</name>
+    <name>contacts-delete-queue</name>
     <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-normal-bulk</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
   <queue>
-  	<name>owner-change-queue</name>
+    <name>owner-change-queue</name>
     <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-normal-bulk</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
    <queue>
-  	<name>campaign-subscribe-queue</name>
+    <name>campaign-subscribe-queue</name>
     <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-normal-bulk</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
   
    <queue>
-  	<name>campaign-subscribe-subtask-queue</name>
+    <name>campaign-subscribe-subtask-queue</name>
     <rate>10/s</rate>
     <max-concurrent-requests>40</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
   </queue>
 
    <queue>
-  	<name>bulk-tags-queue</name>
+    <name>bulk-tags-queue</name>
     <rate>10/s</rate>
     <max-concurrent-requests>20</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
     <target>agile-normal-bulk</target>
   </queue>
    <queue>
-  	<name>contacts-upload-queue</name>
+    <name>contacts-upload-queue</name>
     <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-export</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
    <queue>
-  	<name>deals-upload-queue</name>
+    <name>deals-upload-queue</name>
     <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-normal-bulk</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
    <queue>
-  	<name>bulk-emails-queue</name>
+    <name>bulk-emails-queue</name>
     <acl> 
       <user-email>yaswanth@agilecrm.com</user-email>
     </acl>
@@ -202,44 +202,44 @@
     
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-normal-bulk</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
    <queue>
-  	<name>contacts-export-queue</name>
+    <name>contacts-export-queue</name>
     <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-export</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
   <queue>
-  	<name>deals-export-queue</name>
+    <name>deals-export-queue</name>
     <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-export</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-export</target>
   </queue>
    <queue>
-  	<name>workflows-related-queue</name>
+    <name>workflows-related-queue</name>
     <rate>10/s</rate>
     <max-concurrent-requests>30</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>3</task-retry-limit>
-	</retry-parameters>
-	<target>agile-normal-bulk</target>
+    <task-retry-limit>3</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
   <queue>
-  	<name>tag-entity-queue</name>
+    <name>tag-entity-queue</name>
     <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
   </queue>
   
   <queue>
@@ -247,9 +247,9 @@
     <rate>10/s</rate>
     <max-concurrent-requests>20</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-temp-bulk</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-temp-bulk</target>
   </queue>
   
   <queue>
@@ -257,15 +257,15 @@
     <rate>10/s</rate>
     <max-concurrent-requests>20</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
   </queue>
   
   <queue>
-    <name>tickets-queue</name>
+    <name>ticket-bulk-actions</name>
     <rate>10/s</rate>
-    <bucket-size>10</bucket-size>
-    <max-concurrent-requests>40</max-concurrent-requests>
+    <max-concurrent-requests>30</max-concurrent-requests>
+  <target>agile-normal-bulk</target>
   </queue>
 
   <queue>
@@ -273,8 +273,26 @@
     <rate>20/s</rate>
     <max-concurrent-requests>20</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>2</task-retry-limit>
-	</retry-parameters>
+    <task-retry-limit>2</task-retry-limit>
+  </retry-parameters>
+  </queue>
+  
+  <queue>
+  <name>activity-mail-queue</name>
+  <rate>10/s</rate>
+  <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+  </retry-parameters>
+  </queue>
+
+  <queue>
+    <name>cron-interrupt-queue</name>
+    <rate>20/s</rate>
+    <bucket-size>10</bucket-size>
+    <max-concurrent-requests>40</max-concurrent-requests>
+    <retry-parameters>
+    <task-retry-limit>2</task-retry-limit>
+  </retry-parameters>
   </queue>
   
   <!-- pull queues -->
@@ -282,7 +300,7 @@
   <name>normal-campaign-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
-  		<task-retry-limit>2</task-retry-limit>
+      <task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
   
@@ -290,7 +308,7 @@
   <name>bulk-campaign-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
-  		<task-retry-limit>2</task-retry-limit>
+      <task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
   
@@ -301,7 +319,7 @@
     </acl>
   <mode>pull</mode>
   <retry-parameters>
-  		<task-retry-limit>2</task-retry-limit>
+      <task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
   
@@ -312,7 +330,7 @@
     <user-email>yaswanth@agilecrm.com</user-email>
   </acl>
   <retry-parameters>
-  		<task-retry-limit>2</task-retry-limit>
+      <task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
 
@@ -332,7 +350,7 @@
     </acl>
   <mode>pull</mode>
   <retry-parameters>
-      <task-retry-limit>2</task-retry-limit>	  
+      <task-retry-limit>2</task-retry-limit>    
   </retry-parameters>
   </queue>
   
@@ -343,7 +361,7 @@
     </acl>
   <mode>pull</mode>
   <retry-parameters>
-  		<task-retry-limit>2</task-retry-limit>
+      <task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
   
@@ -354,16 +372,16 @@
   <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-	<target>agile-normal-bulk</target>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
   </queue>
 
   <queue>
   <name>normal-sms-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
+      <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
   </queue>
   
@@ -371,32 +389,43 @@
   <name>bulk-sms-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
+      <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
   </queue>
   
   <!-- Export queue -->
    <queue>
-  	<name>export-pull-queue</name>
-  	<mode>pull</mode>
+    <name>contact-io-queue</name>
+    <mode>pull</mode>
        <acl> 
       <user-email>yaswanth@agilecrm.com</user-email>
     </acl>
-  	<retry-parameters>
-  		<task-retry-limit>2</task-retry-limit>
-  	</retry-parameters>
+    <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+    </retry-parameters>
+  </queue>
+
+    <queue>
+    <name>contact-import-queue</name>
+    <mode>pull</mode>
+       <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+    </acl>
+    <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+    </retry-parameters>
   </queue>
   
   <!-- Notification Pull Queue -->
   <queue>
-  	<name>notification-pull-queue</name>
-  	<mode>pull</mode>
+    <name>notification-pull-queue</name>
+    <mode>pull</mode>
        <acl> 
       <user-email>yaswanth@agilecrm.com</user-email>
     </acl>
-  	<retry-parameters>
-  		<task-retry-limit>2</task-retry-limit>
-  	</retry-parameters>
+    <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+    </retry-parameters>
   </queue>
 
   <queue>

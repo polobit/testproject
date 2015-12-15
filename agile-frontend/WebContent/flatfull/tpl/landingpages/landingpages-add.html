@@ -1,0 +1,107 @@
+<script id="landingpages-add-template" type="text/html">
+<div class="custom-animated custom-fadeInUp hide-rainbow">
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel wrapper">
+            <form id="landingPageBuilderForm">
+                <fieldset>
+                    <div class="control-group form-group">
+                        <label class="control-label"><b>Name of page:</b> <span class="field_req">*</span></label>
+                        <div class="controls">
+							<div class="row">
+								<div class="col-md-5 col-sm-4 col-xs-4">
+									<input name="landingpagename" type="text" id="landingpagename" class="col-md-3 form-control required w-md m-r-xs" placeholder="Name of page"/>
+                                    <span for="landingpagename" generated="true" class="help-inline" style="display: block;padding: 6px;padding-left: 10px;"></span>
+								</div>
+								<div class="col-md-3 col-sm-3 col-xs-4">
+									<span id="landingpagename-msg" class="text-center"></span>
+								</div>
+								<div class="col-md-4 col-sm-5 col-xs-4">
+									<button class="btn btn-primary btn-sm  right pos-rlt m-r-xs saveLandingPageButton" >Save Page</button>
+								</div>
+                           		<div class="save-workflow-img right m-r-xs m-t-sm pos-rlt inline-block"></div>
+							</div>
+						</div>
+                    </div>
+					<div id="landingPageBuilderHolder">
+
+                    <div class="row">
+                        <div class="col-md-12" id="landingPageBuilderMenuNav" style="display:none;">
+            <ul class="nav nav-tabs lp-menu-nav">
+                <li class="lpBuilderMenuItem" id="elementsBuilderMenuItem" data-id="elements"><a href="#"><i class="fa fa-puzzle-piece"></i> Elements</a></li>
+                <li class="lpBuilderMenuItem" id="inspectorBuilderMenuItem" data-id="inspector"><a href="#"><i class="fa fa-paint-brush"></i> Inspector</a></li>
+                <li class="lpCodeEditorMenuItem"><a href="#" ><i class="fa fa-code"></i> Code Editor</a></li>
+            </ul>
+                        </div>
+                    </div>
+
+                    <IFRAME SRC="misc/landingpage/index.jsp?tmpid={{templateId}}&action={{action}}" id="landingPageBuilder" frameBorder="0" name="landingPageBuilder" WIDTH="100%" HEIGHT="900px"></IFRAME>
+                    </div>
+                    <br />
+                    <br />
+                    <div>
+                        <a id="builderPageOptionsLink" href="#" class="text-info">
+                            <i class="icon-plus"></i> Page Options
+                        </a>
+                    </div>
+                    <br/>
+                    <div id="builderPageOptions" style="display:none;">
+                        
+                        <div class="row">
+                         <div class="control-group form-group">
+                            <label class="control-label col-sm-2">
+                                <b>Meta Title:</b>
+                            </label>
+                            <div class="controls col-sm-4">
+                                <input type="text" name="metatitle" id="metatitle" placeholder="Which appear on the browser tab and in search results" class="form-control">
+                            </div>
+                        </div>
+                        </div>
+                        <div class="text-sm text-light"></div>
+                        <br/>
+                        <br/>
+
+                        <div class="row">
+                         <div class="control-group form-group">
+                            <label class="control-label col-sm-2">
+                                <b>Meta Description:</b>
+                            </label>
+                            <div class="controls col-sm-4">
+                                <textarea class="form-control" name="metadesc" id="metadesc" placeholder="Here is a description of the landing page. This will often show up in search results"></textarea>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="text-sm text-light"></div>
+                        <br/>
+                        <br>
+
+                        <div class="row">
+                         <div class="control-group form-group">
+                            <label class="control-label col-sm-2">
+                                <b>Meta Keywords:</b>
+                            </label>
+                            <div class="controls col-sm-4">
+                                <input type="text" name="metakeywords" id="metakeywords" placeholder="Separate keywords with comma" class="form-control">
+                            </div>
+                        </div>
+                        </div>
+                        <div class="text-sm text-light"></div>
+                        <br/>
+                        <br>
+
+
+                    </div>
+                    <br />
+					<br />
+					<button class="btn btn-sm btn-primary saveLandingPageButton" >Save Page</button>
+                    <div class="save-workflow-img inline-block"></div>
+                    <br />
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</script>

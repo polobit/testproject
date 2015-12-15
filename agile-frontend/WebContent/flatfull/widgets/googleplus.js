@@ -10,8 +10,8 @@ function showMatchedPeople(search)
 
 	getMatchingPeople(search, function(retData){
 
-		if (typeof retData.errors == "undefined")
-		{
+		if (typeof retData.errors == "undefined"){
+
 			var data = retData.items;
 			// If no matches found display message
 			if (data.length == 0)
@@ -28,10 +28,12 @@ function showMatchedPeople(search)
 			}
 
 			var el;
-			if (searchDetails['keywords'] && searchDetails['keywords'] != "")
+
+			if (searchDetails['keywords'] && searchDetails['keywords'] != ""){
 				el = "<div class='panel-body text-base'><p>Search results for " + "<a href='#' class='peoplesearch'>" + searchDetails['keywords'] + "</a></p>";
-			else
+			} else {
 				el = "<div class='panel-body text-base'><p>Search results. " + "<a href='#' class='peoplesearch'>Modify search</a></p>";
+			}
 
 			el = el.concat(getTemplate("googleplus-search-result", data));
 			el = el + "</div></div><div class='clearfix'></div>";
