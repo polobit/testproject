@@ -311,9 +311,9 @@ function showsalesReportGraphs()
 		options += ("&frequency=" + frequency);
 	}
 	// If Frequency is present - send frequency too
-	
+	var frequency = $( "#frequency:visible").val();
 
-	showDealAreaSpline('core/api/opportunity/stats/details/'+options,'revenue-chart','','',true);
+	showDealAreaSpline('core/api/opportunity/stats/details/'+options,'revenue-chart','','',true,frequency);
 
 }
 
