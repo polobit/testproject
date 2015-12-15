@@ -40,6 +40,7 @@ import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.bulk.ContactBulkSave;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
@@ -169,6 +170,7 @@ public class CSVUtil
      */
     private List<String[]> getCSVDataFromStream(InputStream blobStream, String encoding_type)
     {
+	long start = System.currentTimeMillis();
 	List<String[]> data = new ArrayList<String[]>();
 
 	// Reads blob data line by line upto first 10 line of file
@@ -216,6 +218,7 @@ public class CSVUtil
 	    }
 	}
 
+	System.out.println("Time taken to read data : " + (System.currentTimeMillis() - start));
 	return data;
 
     }
@@ -321,7 +324,11 @@ public class CSVUtil
 		    ContactField field = null;
 		    if (j < properties.size())
 		    {
-			field = properties.get(j);
+			ContactField newField = properties.get(j);
+			field = new ContactField();
+			System.out.println(newField.hashCode());
+			field.updateField(newField);
+			System.out.println("updated object " + field.hashCode());
 		    }
 		    else
 		    {
@@ -453,23 +460,30 @@ public class CSVUtil
 
 		// If contact is duplicate, it fetches old contact and updates
 		// data.
+		long startTimeMerging = System.currentTimeMillis();
+
+		Contact oldContact = null;
 		if (ContactUtil.isDuplicateContact(tempContact))
 		{
 		    // Checks if user can update the contact
 
 		    // Sets current object to check scope
 
-		    tempContact = ContactUtil.mergeContactFields(tempContact);
-		    accessControl.setObject(tempContact);
-		    if (!accessControl.canDelete())
+		    oldContact = ContactUtil.getDuplicateContact(tempContact);
+		    if (oldContact != null)
 		    {
-			accessDeniedToUpdate++;
-			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-				"Access denied to update contact"));
+			accessControl.setObject(tempContact);
+			if (!accessControl.canDelete())
+			{
+			    accessDeniedToUpdate++;
+			    failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+				    "Access denied to update contact"));
 
-			continue;
+			    continue;
+			}
+			isMerged = true;
 		    }
-		    isMerged = true;
+
 		}
 		else
 		{
@@ -498,8 +512,15 @@ public class CSVUtil
 		    }
 		}
 
+		System.out
+			.println("Checking and merging contacts : " + (System.currentTimeMillis() - startTimeMerging));
+
 		tempContact.bulkActionTracker = bulk_action_tracker;
-		tempContact.save(false);
+
+		System.out.println("email to save : " + tempContact.getContactFieldValue(Contact.EMAIL));
+
+		save(oldContact, tempContact, false);
+
 	    }// end of try
 	    catch (InvalidTagException e)
 	    {
@@ -565,6 +586,8 @@ public class CSVUtil
 
 	}// end of for loop
 
+	save(null, null, true);
+
 	if (failedContacts.size() > 0)
 	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContacts.size());
 
@@ -603,6 +626,46 @@ public class CSVUtil
 	if (savedContacts != 0 || mergedContacts != 0)
 	    ActivityUtil.createLogForImport(ActivityType.CONTACT_IMPORT, EntityType.CONTACT, savedContacts,
 		    mergedContacts);
+
+    }
+
+    ContactBulkSave bulkSaver = new ContactBulkSave();
+
+    /**
+     * This method will save contacts in bulk. Developer can pass force persist
+     * flag to save contacts
+     * 
+     * @param contact
+     * @param forcePersist
+     */
+    private final void save(Contact oldContact, Contact contact, boolean forcePersist)
+    {
+	bulkSaver.save(oldContact, contact);
+
+	// Force persist is usually called at the end
+	if (forcePersist)
+	    bulkSaver.finalize();
+
+    }
+
+    private Map<CustomFieldDef.SCOPE, List<CustomFieldDef>> customFields = new HashMap<CustomFieldDef.SCOPE, List<CustomFieldDef>>();
+
+    private CustomFieldDef getCustomField(String name, CustomFieldDef.SCOPE scope, CustomFieldDef.Type type)
+    {
+	if (!customFields.containsKey(scope))
+	{
+	    List<CustomFieldDef> fields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(scope, type.toString());
+	    customFields.put(scope, fields);
+	}
+
+	List<CustomFieldDef> fields = customFields.get(scope);
+	for (CustomFieldDef field : fields)
+	{
+	    if (field.field_label.equalsIgnoreCase(name))
+		return field;
+	}
+
+	return null;
 
     }
 

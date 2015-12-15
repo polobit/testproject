@@ -10,7 +10,7 @@ public class APIStats
     private static int counter = 0;
     private static boolean isInterrupted = false;
     private static final int MAX_LIMIT = 10000;
-    private static final int MAX_NUMBER_OF_HOURS = 1;
+    private static final int MAX_NUMBER_OF_HOURS = 3;
     private static final Long START_TIME = System.currentTimeMillis();
 
     public static synchronized void incrementCounter()
@@ -42,7 +42,9 @@ public class APIStats
 	catch (Exception e)
 	{
 	    System.err.println("Unable to interrupt thread : " + thread.getName());
-
+	    Mailgun.sendMail("campaigns@agile.com", "Email Observer", "yaswanth@agilecrm.com",
+		    "naresh@agilecrm.com,raja@agilecrm.com", null, "EC2 Error while interrupting thread", null,
+		    "Hi Yaswanth " + "EC2 Error while interrupting thread", null);
 	}
 
 	try
@@ -51,9 +53,6 @@ public class APIStats
 		    "Restarting Current thread : " + thread.getName() + " , " + thread.getId() + " at time : "
 			    + System.currentTimeMillis());
 
-	    Mailgun.sendMail("campaigns@agile.com", "Email Observer", "yaswanth@agilecrm.com",
-		    "naresh@agilecrm.com,raja@agilecrm.com", null, "EC2 Error while interrupting thread", null,
-		    "Hi Yaswanth " + "EC2 Error while interrupting thread", null);
 	}
 	catch (Exception e)
 	{

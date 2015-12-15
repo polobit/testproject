@@ -136,7 +136,7 @@ public class TagUtil
 	    try
 	    {
 		System.out.println("tag name : " + tagName);
-		queue.add(TaskOptions.Builder.withPayload(task).taskName(tagName));
+		queue.addAsync(TaskOptions.Builder.withPayload(task).taskName(tagName));
 	    }
 	    catch (TaskAlreadyExistsException e)
 	    {

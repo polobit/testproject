@@ -70,7 +70,7 @@ public class ThreadPool
     private void setUpRemoteAPIOnAllThreads()
     {
 	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
-		.credentials(Globals.USER_ID, Globals.PASSWORD);
+		.useApplicationDefaultCredential();
 
 	RemoteApiInstaller installer = new RemoteApiInstaller();
 
@@ -182,7 +182,8 @@ class ThreadTester extends Thread
 
 	System.out.println("----------------- active threads : " + pool.getActiveCount());
 
-	wait(20000);
+	// Prints status every 10 minutes
+	wait(600000);
 	System.out.println("*********************************************************************" + " Thread name : "
 		+ testerThreadName);
 	System.out.println("----------------- active threads : " + pool.getActiveCount());
@@ -240,9 +241,9 @@ class RemoteAPISetupThread extends Thread
 	TriggerFutureHook.completeAllPendingFutures();
 	try
 	{
-	    installer.serializeCredentials();
+	    // installer.serializeCredentials();
 
-	    installer.uninstall();
+	    // installer.uninstall();
 	}
 	catch (Exception e)
 	{
@@ -258,7 +259,7 @@ class RemoteAPISetupThread extends Thread
     {
 	// System.out.println("((((((((((((((((((((____))))))))))))))))))) installing");
 	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
-		.credentials(Globals.USER_ID, Globals.PASSWORD);
+		.useApplicationDefaultCredential();
 
 	try
 	{
