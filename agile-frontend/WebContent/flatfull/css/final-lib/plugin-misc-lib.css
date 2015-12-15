@@ -2041,7 +2041,7 @@ border-radius: 2px;
  .portlet-error-message{
  	padding: 11px 15px;
 	font-size: 15px;
-	font-style: italic;
+	font-style: normal;
 	color: #98a6ad;
  }
  .portlet-error-privilege-message{

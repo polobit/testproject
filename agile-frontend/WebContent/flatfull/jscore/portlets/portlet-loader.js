@@ -418,7 +418,6 @@ function initBlogPortletSync(el)
 							}
 						});
 		});
-
 }
 
 $('body').on('click', '.onboarding-skip', function(e) {

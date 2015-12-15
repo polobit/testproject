@@ -273,11 +273,11 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			$('#pipeline',el).closest('div').find('.loading-img').hide();
 			
 			// Hide the Tracks select box when there is only one pipeline.
-			if(jsonModel.length==1){
+			/*if(jsonModel.length==1){
 				$('#pipeline',el).closest('div.control-group').hide();
 				$('#milestone',el).closest('div.control-group').css("margin-left","0px");
 				$('#dealsFilterForm #pipeline',el).closest('div.control-group').show();
-			}
+			}*/
 			
 			if (callback && typeof (callback) === "function") {
 				// execute the callback, passing parameters as necessary
@@ -372,7 +372,9 @@ function setupDealsTracksList(cel){
 		if (readCookie("agile_deal_view"))
 			$('#deals-tracks .dropdown-menu').append('<li><a id="1" class="pipeline" data="All" style="cursor: pointer;">All</a></li>');
 		else{
-			startGettingDeals();
+			setupNewDealFilters(function(){
+				startGettingDeals();
+			});
 		}
 		// Hide the track list if there is only one pipeline.
 		if(tracksArray.length<=1)

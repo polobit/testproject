@@ -671,17 +671,19 @@ border-radius: 2px;
  {
  	overflow:hidden!important;
  }
- .portlet-error-message{
+ .portlet-error-message,.portlet-error-privilege-message{
  	padding: 50px 15px;
 	font-size: 14px;
 	text-align: center;
 	color: #98a6ad;
+	font-weight: normal!important;
+	font-style: normal;
  }
- .portlet-error-privilege-message{
+/* .portlet-error-privilege-message{
  	font-weight: normal!important;
  	font-size: 15px;
 	font-style: italic;
- }
+ }*/
  .gridster-portlets .gs-w{
  	border: none;
  }

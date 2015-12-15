@@ -73,6 +73,12 @@ public class BillingRestriction
     public Integer companies_count;
 
     public Long created_time = null;
+    
+    /**
+     * Last renewal time of emails for free users.
+     */
+    @NotSaved(IfDefault.class)
+    public Long last_renewal_time = null;
 
     /**
      * New limits
@@ -215,7 +221,7 @@ public class BillingRestriction
 	if (one_time_emails_count != null && one_time_emails_count > 0)
 	    return true;
 
-	return true;
+	return false;
     }
 
     public boolean isEmailPlanPaid()
@@ -321,7 +327,7 @@ public class BillingRestriction
 	if (created_time != null && created_time > 0)
 	    return;
 
-	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+	DomainUser user = DomainUserUtil.getDomainOwner(NamespaceManager.get());
 
 	if (user == null)
 	{
@@ -390,6 +396,7 @@ public class BillingRestriction
 
     public void save()
     {
+    setCreatedTime();
 	dao.put(this);
     }
 

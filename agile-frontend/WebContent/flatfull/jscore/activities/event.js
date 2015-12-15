@@ -367,19 +367,24 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 			}
 
 		}
-		if(calendar == 'google')
-		{
-			if (this.checked == true)
-			{
+
+		if(calendar == 'google'){
+			if (this.checked == true){
 				//_init_gcal_options();
 				addGoogleCalendarEvents();
-			}
-			else
-			{
-				
-				removeEventSource('google');
+			}else{
+				removeGoogleEventSource();
 			}
 		}	
+
+		if(calendar == 'office'){
+			if(this.checked == true){
+				addOffice365CalendarEvents();
+			}else{
+				removeEventSource('office');
+			}
+		}
+
 	});
 
 	$("#calendar-listers").on('click', '.calendar_user_check', function(e)

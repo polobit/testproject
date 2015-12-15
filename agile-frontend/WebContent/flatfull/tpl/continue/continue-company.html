@@ -9,7 +9,7 @@
         <form id="continueCompanyForm" class="form-horizontal">
             <fieldset>                
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Organization</label>
+                    <label class="control-label col-sm-3">Company <span class="field_req">*</span></label>
                     <div class="controls col-sm-9">                     
                         <input name="name" type="text" class="required form-control field_length" max_len="100" id="company_name" value="{{getPropertyValue properties "name"}}"/>
                     </div>
@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Url</label>
+                    <label class="control-label col-sm-3">URL</label>
                     <div class="controls col-sm-9">
                         <input class="form-control field_length" max_len="500" name="url" placeholder="http://www." type="text" id="company_url" value="{{getPropertyValue properties "url"}}"/>
                     </div>
@@ -183,7 +183,7 @@
                         <div class="address multiple-template" data="address">
 
 							<div class="pull-left w-half">
-                        <input class="form-control field_length" max_len="350" type="text" name="address" id="address" placeholder="address" />
+                        <input class="form-control field_length" max_len="350" type="text" name="address" id="address" placeholder="Address" />
 
 							</div> 
                             <div class="pull-left  w-half">
@@ -196,9 +196,9 @@
                             </div>
                             <div class="clearfix m-b-sm"></div>
                             
-                            <input class="form-control m-b-sm field_length" max_len="30" type="text" name="city" id="city" placeholder="city" />
-                            <input class="form-control m-b-sm field_length"  max_len="30" type="text" name="state" id="state" placeholder="state" /> 
-                            <input class="form-control m-b-sm field_length" max_len="12"  type="text" name="zip" id="zip" placeholder="zip" />
+                            <input class="form-control m-b-sm field_length" max_len="30" type="text" name="city" id="city" placeholder="City" />
+                            <input class="form-control m-b-sm field_length"  max_len="30" type="text" name="state" id="state" placeholder="State" /> 
+                            <input class="form-control m-b-sm field_length" max_len="12"  type="text" name="zip" id="zip" placeholder="ZIP" />
 
                             <select class="styled form-control inline-block m-b-sm" id="country" name="country">
                                 <option value=""></option>

@@ -139,6 +139,11 @@ function isValidForm(form) {
 			return !/Invalid|NaN/.test(new Date(value));
 	}," Please enter a valid date.");
 
+	jQuery.validator.addMethod("isHttpsURL", function(value, element){
+		var urlregex = new RegExp("^(https:\/\/){1}([0-9A-Za-z]+\.)");
+  		return urlregex.test(value);		
+	}," Please enter a valid https URL");
+
 	jQuery.validator.addMethod("date_input", function(value, element){
 		if(value=="")
 			return true;
@@ -163,6 +168,24 @@ function isValidForm(form) {
 		  return 'Maximum length is ' + $(element).attr("max_len") + ' chars only.'
 		}
 	);
+
+	//Positive Number validation
+	jQuery.validator.addMethod("positive_number", function(value, element){
+		
+		if(value=="")
+			return true;
+
+		if(isNaN(value))
+		{
+			return false;
+		}
+		if(!isNaN(value) && parseFloat(value) >= 0)
+		{
+			return true;
+		}
+
+	}," Please enter a value greater than or equal to 0.");
+
 	$(form).validate({
 		rules : {
 			atleastThreeMonths : true,

@@ -19,6 +19,7 @@
 	    <div class="m-t-md text-center">
 				{{#if id}}
 	    			<a class="btn btn-sm btn-danger" id="sync-google-calendar-delete">Disable</a>
+	    				<a href="#sync/calendar-setup" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
 	    		{{else}}
 	    				<a class="btn btn-sm btn-default" id="sync-google-calendar">Enable</a>
 	    		{{/if}}
@@ -28,29 +29,60 @@
 </script>
 
 
+
+
 <script id="import-google-calendar-setup-template" type="text/html">
-	<div class="well">
- 	<!-- <legend>Contacts <span class="label label-important">Beta</span>{{#if id}}<span class="text-base" style="float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs c-p text-l-none" href="#" sync = "true" id="google-import-sync"></a></span>{{/if}}</legend> -->
-   <center> <img class="thumbnail m-b-none img-responsive thumb-xl bg-transparent" src="{{getS3ImagePath '/img/icons/google-calendar-sync.png'}}"  /></center>
-	<br />
-    <div class="m-b-md">
-		{{#if id}}
-			<p class="p-t-xs">By enabling access to your Google Calendar, we'll automatically sync your events in your Google Calendar with Agile.</p>
-			{{else}}
-			<p class="p-t-xs">You have successfully associated your Google Calendar with Agile. Your events will be popped up automatically in the calendar.</p>
-				
-		{{/if}}
+	<div class="row">
+
+<div class="col-md-6 col-sm-6 col-xs-12">
+	<div class="panel panel-default" >
+ 	<!-- <legend>Contacts <span class="label label-danger m-b-sm">Beta</span>{{#if id}}<span style="font-size:14px;float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span>{{/if}}</legend> -->
+	<div class="panel-heading">
+   <center> <img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="/img/icons/google-calendar-sync.png" /></center>
 	</div>
-sdfsdfsdfsfdf
-<hr/>
-<div align="center">
-	{{#if id}}
-			<a class="btn btn-sm btn-danger" href="#sync">Close</a>
-		{{else}}		
-			<a class="btn btn-sm btn-primary" id="sync-google-calendar">Enable</a>
+	<div class="panel-body">
+	<form id="dummy">
+		{{#if id}}
+				<input class="hide" name="id" value={{id}}></input>
+		{{/if}}
+		
+	</form>
+    <form id="google-contacts-import-form" name="prefs">
+        <fieldset>
+            <div class="control-group form-group">
+				<label class="control-label">Select Calendars To Display</label> 
+			</div>
+
+        	<div class="control-group form-group" id="sync_from_group_controlgroup">
+           <div class="controls" id="multi-select-calendars-container">
+				
+        		
+			</div>
 		</div>
-	{{/if}}
+        </fieldset>
+          <div class="form-actions col-md-7 text-right">
+			<a href="#sync" class="btn btn-default btn-sm ml_5 m-r-xs">Cancel</a>
+			<div class="btn btn-sm btn-primary save inline-block">Save</div>
+		</div>
+
+    </form>
+    
+    </div>
 </div>
 </div>
-</div>
+</script>
+
+<script id="dynamic-multi-calendar-template" type="text/html">
+<select multiple id="multi-select-calendars" name="fields" class="multi-select required"> 
+	{{#each items}}
+		{{#if primary}}
+				<option value={{id}}>Primary</option>	
+			{{else}}
+				<option value={{id}}>{{summary}}</option>			
+		{{/if}}
+
+
+		
+	{{/each}}
+</select>
 </script>
