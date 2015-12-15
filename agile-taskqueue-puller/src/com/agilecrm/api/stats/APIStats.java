@@ -1,6 +1,7 @@
 package com.agilecrm.api.stats;
 
 import com.agilecrm.logger.AgileAPILogger;
+import com.agilecrm.threads.ThreadPool;
 import com.thirdparty.Mailgun;
 
 public class APIStats
@@ -12,6 +13,8 @@ public class APIStats
     private static final int MAX_LIMIT = 10000;
     private static final int MAX_NUMBER_OF_HOURS = 3;
     private static final Long START_TIME = System.currentTimeMillis();
+
+    private static boolean isThreadPoolRunning = false;
 
     public static synchronized void incrementCounter()
     {
@@ -72,11 +75,25 @@ public class APIStats
 
     public static boolean shouldContinue()
     {
-	if (isInterrupted() || counter >= MAX_LIMIT || runningSinceDays() >= MAX_NUMBER_OF_HOURS)
+	if (canInterruptThreadPool()
+		&& (isInterrupted() || counter >= MAX_LIMIT || runningSinceDays() >= MAX_NUMBER_OF_HOURS))
 	{
 	    return false;
 	}
 
 	return true;
+    }
+
+    private static boolean canInterruptThreadPool()
+    {
+	if (!isThreadPoolRunning)
+	    return true;
+
+	return ThreadPool.isRunning();
+    }
+
+    public static void setThreadPoolFlag(boolean flag)
+    {
+	isThreadPoolRunning = flag;
     }
 }

@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import com.Globals;
+import com.agilecrm.api.stats.APIStats;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -36,6 +39,9 @@ public class ThreadPool
 
     public static ThreadPoolExecutor getThreadPoolExecutor(String poolName, int minPoolSize, int maxPoolSize)
     {
+	// Setting thread pool flag to stop thread interruption scheduled.
+	APIStats.setThreadPoolFlag(true);
+
 	if (threadPoolMap.containsKey(poolName))
 	    return threadPoolMap.get(poolName);
 
@@ -92,6 +98,22 @@ public class ThreadPool
 	ThreadTester t = new ThreadTester(executor, threadPool);
 	t.setName(threadPool);
 	poolExecutorTemp.execute(t);
+    }
+
+    public static boolean isRunning()
+    {
+
+	for (Entry<String, ThreadPoolExecutor> entry : threadPoolMap.entrySet())
+	{
+	    BlockingQueue<Runnable> queue = entry.getValue().getQueue();
+	    if (queue.size() > 0)
+		return true;
+
+	    if (entry.getValue().getActiveCount() > 0)
+		return true;
+	}
+
+	return false;
     }
 
     public synchronized static void main(String[] args)
