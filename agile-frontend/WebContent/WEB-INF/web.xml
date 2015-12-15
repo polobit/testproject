@@ -29,6 +29,15 @@
 		<servlet-name>Scribe</servlet-name>
 		<url-pattern>/scribe</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>PaypalScribe</servlet-name>
+		<servlet-class>com.agilecrm.scribe.PaypalScribeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PaypalScribe</servlet-name>
+		<url-pattern>/paypal</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Shopify</servlet-name>
@@ -471,6 +480,7 @@
 		<url-pattern>/</url-pattern>
 		<url-pattern>/core/*</url-pattern>
 		<url-pattern>/scribe</url-pattern>
+		<url-pattern>/paypal</url-pattern>
 		<url-pattern>/upload.jsp</url-pattern>
 		<url-pattern>/import_shopify.jsp</url-pattern>
 		<url-pattern>/upload-contacts.jsp</url-pattern>

@@ -106,6 +106,7 @@ public class JerseyApplication extends Application
 	// Email Unsubscription
 	s.add(com.agilecrm.core.api.campaigns.UnsubscribeEmailAPI.class);
 	s.add(com.agilecrm.core.api.landingpages.LandingPagesAPI.class);
+	s.add(com.agilecrm.core.api.widgets.PaypalWidgetApi.class);
 
 	return s;
     }
