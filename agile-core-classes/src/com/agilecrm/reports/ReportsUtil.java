@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -464,6 +466,7 @@ public class ReportsUtil
 			Integer soldCount=0;
 			Double avgValue=0d;
 			Double avgDealsClosure=0d;
+			List<JSONObject> cateList = new ArrayList<JSONObject>();
 			//Double callsDuration=0d;
 
 			if(wonDealsList!=null){
@@ -510,6 +513,55 @@ public class ReportsUtil
 				dataJson.put("userPic",userPrefs.pic);
 			else
 				dataJson.put("userPic","");
+			//List<DomainUser> usersList = new ArrayList<DomainUser>();
+			List<DomainUser> domainUsersList = null;
+				DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+				if(dUser!=null)
+					domainUsersList=DomainUserUtil.getUsers(dUser.domain);
+			for(DomainUser domainUser : domainUsersList){
+				JSONObject cateJson = new JSONObject();
+				cateJson.put("name", "Revenue");
+				List<Opportunity> wonDealList = OpportunityUtil.getWonDealsListOfUser(minTime, maxTime, domainUser.id);
+				Double milestoneValues = 0d;
+				if(wonDealList!=null){
+					for(Opportunity opportunity : wonDealList){
+						milestoneValues += opportunity.expected_value;
+					}
+				}
+				cateJson.put("value", Math.round(milestoneValues));
+				cateJson.put("id", domainUser.id);
+				
+				//AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+				
+
+				cateList.add(cateJson);
+				Collections.sort(cateList,new Comparator<JSONObject>(){
+					@Override  
+	                public int compare(JSONObject o1, JSONObject o2){
+						try
+						{
+							return Double.valueOf(o2.getDouble("value")).compareTo(Double.valueOf(o1.getDouble("value")));
+						}
+						catch (JSONException e)
+						{
+							// TODO Auto-generated catch block
+
+							e.printStackTrace();
+							return 0;
+						}  
+	                }
+	            });
+			}
+			//JSONObject obj=new JSONObject();
+			int index=1;
+			for(JSONObject obj:cateList)
+			{
+					if(obj.getLong("id")!=ownerId);
+					index++;
+			}
+			dataJson.put("Rank", index);
+			//dataJson.put("revenue", true);
+			//categoryCount++;
 			
 			/*dataJson.put("events",EventUtil.getEventsCountforOwner(minTime,maxTime,ownerId));
 			dataJson.put("workflows",WorkflowUtil.getWorkflowCountOfCurrentUser(minTime, maxTime, ownerId));
