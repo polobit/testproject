@@ -23,9 +23,10 @@ function insertSelectedMergeField(ele, target_id)
 {
 	// current value
 	var curValue = $(ele).find(':selected').val();
-
+	
 	// inserts text based on cursor.
 	insertAtCaret(target_id, curValue)
+	
 }
 
 /**
@@ -551,9 +552,14 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 
 	options["Custom Fields"] = custom_fields;
 	
-	var selectoption="<select style='position:relative;float:right;cursor:pointer;width: 145px;margin-right: -5px' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
+		var selectoption;
+	    
+	    if(uiFieldDefinition.style)
+	    	selectoption= "<select '"+ getStyleAttribute(uiFieldDefinition.style) +"' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
+	    else
+	    	selectoption= "<select style='position:relative;float:right;cursor:pointer;width: 145px;margin-right: -5px' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
 
-	$.each(options, function(name, option_value) {
+	    $.each(options, function(name, option_value) {
 		if(typeof(option_value)== 'object')
 			{
 				var optgroup ="<optgroup></optgroup>";
@@ -564,6 +570,7 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 						subtype_key = subtype_key.substr(0,15)+"..." ;
 					$(optgroup).append("<option value='" + subtype_value + "' title = '"+title+"'>" + subtype_key + "</option>");
 				});
+			
 				selectoption = $(selectoption).append(optgroup);
 			}
 		else
@@ -726,4 +733,14 @@ function show_templates(ele, target_id)
 
 	// inserts text based on cursor.
 	load_email_templates(curValue);
+}
+
+function insertSelectedOption(ele ,target_id)
+{
+	var curValue = $(ele).find(':selected').val();
+	insertAtCaret(target_id, curValue)
+	var text = $('#new_field').val();
+	if(text && text.indexOf("{{")!=-1)
+	$('#new_field').val($(ele).find(':selected').val());
+
 }

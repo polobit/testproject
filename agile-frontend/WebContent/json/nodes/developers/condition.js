@@ -28,10 +28,26 @@
             "type": "select" 
         },
         {
-            "label": "of",
-            "required": "required",
+        	"label": "of",
             "category": "Settings",
-            "value": "",
+            "name": "condition_merge",
+            "id": "condition_merge",
+            "title": "Select required merge field.",
+            "fieldType": "merge_fields",
+            "target_type": "new_field",
+            "type": "select",
+            "event": "onchange",
+            "eventHandler": "insertSelectedOption",
+            "style": {
+                "float": "none"
+            }
+            	
+        },
+        
+        {
+        	
+            "category": "Settings",
+            "id": "new_field",
             "name": "variable_1",
             "title": "E.g. {{score}}, {{company}}, <br>{{your custom field}}",
             "fieldType": "input",

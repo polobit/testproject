@@ -124,15 +124,10 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	var eventHandler = uiFieldDefinition.eventHandler;
 	var event = uiFieldDefinition.event;
 
-    var attr = "";
-
-	if(type == "multiselect")
-		attr = "multiple";
-
-	var selectContainer = $("<select "+ attr +" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
+	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
 
 	if(event && eventHandler)
-		selectContainer = $("<select "+ attr +" id='"+uiFieldDefinition.id+"' "+getStyleAttribute(uiFieldDefinition.style)+" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"' type='"+(type == undefined ? 'select' : type)+"'></select>");
+		selectContainer = $("<select id='"+uiFieldDefinition.id+"' "+getStyleAttribute(uiFieldDefinition.style)+" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"' type='"+(type == undefined ? 'select' : type)+"'></select>");
 	
 	// For From Email select, options need to rearranged
 	if(uiFieldDefinition.id == "from_email" && uiFieldDefinition.name == "from_email")
@@ -201,7 +196,7 @@ function fetchAndFillSelect(url, keyField, valField, appendNameField, options, s
 				
 				var appendName = eval("json."+ appendNameField);
 				
-				// Append name to email like Naresh <naresh@agilecrm.com>
+				// Append name to email like Naresh <naresh@agilecrm.com  >
 				if(key!= undefined && appendName != undefined)
 					key = appendName + " &lt;"+key+"&gt;";
 				
@@ -693,7 +688,7 @@ function _generateUIFields(selector, ui) {
           
            // Target element to insert merge field on option selected
            if("target_type" in uiFieldDefinition)
-        	   uiField = generateSelectUI(uiFieldDefinition,"insertSelectedMergeField");
+        	   uiField = generateSelectUI(uiFieldDefinition,uiFieldDefinition.eventHandler);
            
            else
         	   uiField = generateSelectUI(uiFieldDefinition);
