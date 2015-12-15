@@ -107,10 +107,17 @@ public class ThreadPool
 	{
 	    BlockingQueue<Runnable> queue = entry.getValue().getQueue();
 	    if (queue.size() > 0)
+	    {
+		System.out.println("tasks size greater that zero");
 		return true;
+	    }
 
 	    if (entry.getValue().getActiveCount() > 0)
+	    {
+		System.out.println("Active cores greater that zero");
 		return true;
+	    }
+
 	}
 
 	return false;

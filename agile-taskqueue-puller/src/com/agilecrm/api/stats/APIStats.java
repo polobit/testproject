@@ -11,7 +11,7 @@ public class APIStats
     private static int counter = 0;
     private static boolean isInterrupted = false;
     private static final int MAX_LIMIT = 10000;
-    private static final int MAX_NUMBER_OF_HOURS = 3;
+    private static final int MAX_NUMBER_OF_HOURS = 1;
     private static final Long START_TIME = System.currentTimeMillis();
 
     private static boolean isThreadPoolRunning = false;
