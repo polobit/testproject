@@ -1297,14 +1297,46 @@
 	<div id="dashlet_heading" class="row">
     	<div class="col-md-12">
 			<div class="pull-left">
-				<h1 class="m-n font-thin h3 text-black">Dashboard</h1>
-				<small class="text-muted">Welcome to Agile CRM</small>
+			{{#is_mobile}}
+	<span class="mobile-main-icons">	
+	<a  href="#contacts" class="btn btn-default btn-sm">
+      <i class="fa fa-user"></i>
+    
+    </a>
+ 	<a  href="#companies" class="btn btn-default btn-sm">
+      <i class="icon icon-building"></i>
+      
+    </a>
+  	<a  href="#deals" class="btn btn-default btn-sm">
+      <i class="fa fa-money"></i>
+     
+    </a>
+
+	<a href="#tasks" class="btn btn-default btn-sm"><i class="icon-tasks"></i>
+	</a>
+
+	 <a  href="#workflows" class="btn btn-default btn-sm">
+      <i class="icon icon-sitemap"></i>
+      
+    </a>
+	<a href="#calendar" class="btn btn-default btn-sm"><i class="fa fa-calendar"></i> </a>
+	<a  href="#web-rules" class="btn btn-default btn-sm">
+      <i class="fa fa-globe"></i>
+      
+    </a>
+	</span>	
+	{{else}}
+				<h1 class="m-n font-thin h3 text-black hidden">Dashboard</h1>
+				<small class="text-muted hidden">Welcome to Agile CRM</small>
+		{{/is_mobile}}		
 			</div>
 			<div class="pull-right">
-
+{{#is_mobile}}
+{{else}}
 <a id="chrome-extension-button" href="https://chrome.google.com/webstore/detail/agile-crm/eofoblinhpjfhkjlfckmeidagfogclib" data-toggle="tooltip" data-placement="bottom" title="" data-original-title=" Agile CRM Chrome Extension is available now. Please click here to install the extension." class="hide  text-info inline-block dashboart_tooltip" target="_blank">
 					 <img src = "{{getS3ImagePath '../flatfull/img/dashboard/google.png'}}">
 				</a>
+{{/is_mobile}}				
 				<a href="#" id="tutotial_modal" class="btn btn-default btn-sm  pos-rlt  dashboart_tooltip" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Help">
 					<i class="fa fa-graduation-cap"></i>
 				</a>
