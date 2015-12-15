@@ -149,7 +149,6 @@ public class ContactBulkSave
 	    }
 
 	    contacts.add(newContact);
-	    builderObjects.add(contactDocuments.buildDocument(newContact));
 
 	}
 
@@ -158,10 +157,11 @@ public class ContactBulkSave
 	    return;
 
 	Contact.dao.putAll(contacts);
-	search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
 
 	for (Contact contact : contacts)
 	{
+	    builderObjects.add(contactDocuments.buildDocument(contact));
+
 	    if (savedContactsMap.containsKey(contact.id))
 	    {
 		contact.postSave(savedContactsMap.get(contact.id), false);
@@ -169,6 +169,8 @@ public class ContactBulkSave
 	    else
 		contact.postSave(null, false);
 	}
+
+	search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
 
 	System.out.println("Time taken to create contact to save" + contacts.size() + " : "
 		+ (System.currentTimeMillis() - start));
