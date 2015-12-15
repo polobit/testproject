@@ -437,10 +437,9 @@ public class SubscriptionApi {
 				String restrictionsJSONString = new Gson().toJson(restrictions);
 				return restrictionsJSONString;
 			}
-			Map<String, Boolean> restrictions = new HashMap<String, Boolean>();
-			restrictions.put("is_allowed_plan", true);
-			String restrictionsJSONString = new Gson().toJson(restrictions);
-			return restrictionsJSONString;
+			Invoice invoice = subscription.getUpcomingInvoice(plan);
+			String invoiceJSONString = new Gson().toJson(invoice);
+			return invoiceJSONString;
 		} catch (Exception e) {
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())

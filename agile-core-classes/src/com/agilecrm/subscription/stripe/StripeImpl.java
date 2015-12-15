@@ -616,5 +616,28 @@ public class StripeImpl implements AgileBilling {
 			e.printStackTrace();
 		}
 	}
+	public Invoice getUpcomingInvoice(JSONObject stripeCustomer, Plan plan) throws StripeException{
+		Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
+		Map<String, Object> invoiceParams = new HashMap<String, Object>();
+		System.out.println("cust id:: "+customer.getId());
+		List<com.stripe.model.Subscription> subs = customer.getSubscriptions().getData();
+		for(com.stripe.model.Subscription sub : subs){
+			if(!sub.getPlan().getId().contains("email")){
+				invoiceParams.put("subscription", sub.getId());
+				System.out.println("sub id:: "+sub.getId());
+			}
+		}
+		invoiceParams.put("customer", customer.getId());
+		invoiceParams.put("subscription_quantity", plan.quantity);
+		invoiceParams.put("subscription_prorate", true);
+		invoiceParams.put("subscription_plan", plan.plan_id);
+		RequestOptionsBuilder builder = new RequestOptionsBuilder();
+		builder.setApiKey(Globals.STRIPE_API_KEY);
+		builder.setStripeVersion("2015-10-16");
+		RequestOptions options = builder.build();
+		Invoice invoice = Invoice.upcoming(invoiceParams, options);
+		System.out.println("Invoice===  "+invoice);
+		return invoice;
+	}
 
 }

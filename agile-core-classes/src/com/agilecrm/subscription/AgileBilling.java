@@ -124,5 +124,6 @@ public interface AgileBilling
      * @throws Exception
      */
     public void cancelEmailSubscription(JSONObject billingData) throws Exception;
+    public Invoice getUpcomingInvoice(JSONObject billingData, Plan plan) throws Exception;
 
 }

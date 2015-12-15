@@ -401,6 +401,17 @@ public class Subscription {
 		return subscription.getAgileBilling().getInvoices(
 				subscription.billing_data);
 	}
+	
+	public Invoice getUpcomingInvoice(Plan plan)
+			throws Exception {
+		Subscription subscription = SubscriptionUtil.getSubscription(true);
+
+		// If current domain has subscription object get invoices for that
+		// domain
+		if (subscription == null)
+			return null;
+		return subscription.getAgileBilling().getUpcomingInvoice(subscription.billing_data, plan);
+	}
 
 	/**
 	 * Cancels the subscription in its respective gateway

@@ -343,6 +343,7 @@ function initializeSubscriptionListeners()
 			function(e)
 			{
 				e.preventDefault();
+				plan_json = {};
 				var buttonText = $(this).html();
 				$(this).text("Loading...");
 				$(this).attr("disabled","disabled");
@@ -505,7 +506,23 @@ function initializeSubscriptionListeners()
 									  return;
 								$(template_ui).modal('show');
 							}, null);
-						}else if(data.is_allowed_plan){
+						}else if(data.lines){
+							
+							$.each( JSON.parse(USER_BILLING_PREFS.billingData).subscriptions.data, function( key, value ) {
+							  if(value.plan.id.indexOf("email") == -1)
+							  {
+							  	if((cost * months).toFixed(2) > value.quantity*(value.plan.amount/100))
+							  	{
+							  		plan_json.unUsedCost = data.lines.data[0].amount*(-1)/100;
+							  		plan_json.remainingCost = data.lines.data[1].amount/100;
+							  		plan_json.cost = (plan_json.remainingCost - plan_json.unUsedCost).toFixed(2);
+							  	}else
+							  	{
+							  		plan_json.unUsedCost = undefined;
+							  		plan_json.remainingCost = undefined;
+							  	}
+							  }
+							});
 							Backbone.history.navigate("purchase-plan", { trigger : true });
 						}else{
 							if(data.contacts.count > data.contacts.limit)
