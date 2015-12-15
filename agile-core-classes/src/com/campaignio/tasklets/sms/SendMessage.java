@@ -15,8 +15,10 @@ import com.agilecrm.widgets.Widget;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.SendEmail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.campaignio.urlshortener.URLShortener.ShortenURLType;
 import com.campaignio.urlshortener.util.URLShortenerUtil;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -66,7 +68,6 @@ public class SendMessage extends TaskletAdapter
      * Click event tracking id
      */
     public static String SMS_CLICK_TRACKING_ID = "sms_click_tracking_id";
-    public static String SMS_ = "sms_";
 
 	public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
 			throws Exception
@@ -76,6 +77,8 @@ public class SendMessage extends TaskletAdapter
 		String from = getStringValue(nodeJSON, subscriberJSON, data, FROM_NUMBER);
 		String to = getStringValue(nodeJSON, subscriberJSON, data, TO_NUMBER);
 		String message = getStringValue(nodeJSON, subscriberJSON, data, MESSAGE);
+		String trackClicks = getStringValue(nodeJSON, subscriberJSON, data, SendEmail.TRACK_CLICKS);
+		
 		try
 		{
 			if (StringUtils.isEmpty(to) || StringUtils.isEmpty(from))
@@ -108,11 +111,19 @@ public class SendMessage extends TaskletAdapter
 				return;
 			}
 
-			data.put(SMS_CLICK_TRACKING_ID,System.currentTimeMillis());
+			data.put(SMS_CLICK_TRACKING_ID, System.currentTimeMillis());
 			
-			message = shortenLongURLs(message, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+			if(trackClicks != null
+			        && (trackClicks.equalsIgnoreCase(SendEmail.TRACK_CLICKS_YES) || trackClicks
+			                .equalsIgnoreCase(SendEmail.TRACK_CLICKS_YES_AND_PUSH)))
+			{	
+				message = shortenLongURLs(message, AgileTaskletUtil.getId(subscriberJSON), 
+						AgileTaskletUtil.getId(campaignJSON), data.getString(SMS_CLICK_TRACKING_ID), trackClicks.equalsIgnoreCase(SendEmail.TRACK_CLICKS_YES_AND_PUSH));
+			}
 			
-//			SMSGatewayUtil.sendSMS(SMS_API, from, to, message, ACCOUNT_ID, AUTH_TOKEN);
+			System.out.println("Message is...." + message);
+
+			SMSGatewayUtil.sendSMS(SMS_API, from, to, message, ACCOUNT_ID, AUTH_TOKEN);
 
 			// Creates log for sending sms
 			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
@@ -183,7 +194,7 @@ public class SendMessage extends TaskletAdapter
 		return false;
 	}
 	
-	public static String shortenLongURLs(String message, String subscriberId, String campaignId)
+	public static String shortenLongURLs(String message, String subscriberId, String campaignId, String trackingId, boolean doPush)
 	{
 		String regex = "\\(?\\b(http://|www[.]|https://|HTTP://|HTTPS://)[-A-Za-z0-9+&amp;@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&amp;@#/%=~_()|]";
 		Pattern p = Pattern.compile(regex);
@@ -197,10 +208,15 @@ public class SendMessage extends TaskletAdapter
 			{
 				try
 				{
-					message = message.replace(m.group(i), URLShortenerUtil.getShortURL(m.group(i), "sms", subscriberId, SMS_ + System.currentTimeMillis(), campaignId));
+					String shortURL = URLShortenerUtil.getShortURL(m.group(i), "sms", 
+							subscriberId, trackingId, campaignId, ShortenURLType.SMS, doPush);
+					
+					if(shortURL != null)
+						message = message.replace(m.group(i), shortURL);
 				}
 				catch (Exception e)
 				{
+					System.out.println("Exception occured while replacing long urls..." + e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -210,5 +226,5 @@ public class SendMessage extends TaskletAdapter
 		
 		return message;
 	}
-
+	
 }

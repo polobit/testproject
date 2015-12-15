@@ -17,6 +17,7 @@ import com.campaignio.servlets.EmailOpenServlet;
 import com.campaignio.servlets.deferred.EmailClickDeferredTask;
 import com.campaignio.tasklets.agile.SendEmail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.campaignio.urlshortener.URLShortener.ShortenURLType;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -163,18 +164,35 @@ public class TrackClickUtil
      * @param longURL
      *            - Original url to show as custom-data in clicked log.
      */
-    public static void interruptCronTasksOfClicked(String clickTrackingId, String campaignId, String subscriberId)
+    public static void interruptCronTasksOfClicked(String clickTrackingId, String campaignId, String subscriberId, ShortenURLType type)
     {
 
 	try
 	{
-	    JSONObject interruptedData = new JSONObject();
-	    interruptedData.put(SendEmail.EMAIL_CLICK, true);
-	    interruptedData.put(SendEmail.EMAIL_OPEN, true);
+		 EmailClickDeferredTask emailClickDeferredTask = null;
 
-	    // Interrupt clicked in DeferredTask
-	    EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, campaignId,
-		    subscriberId, interruptedData.toString());
+		if(type.equals(ShortenURLType.EMAIL))
+		{
+	    	JSONObject interruptedData = new JSONObject();
+		    interruptedData.put(SendEmail.EMAIL_CLICK, true);
+		    interruptedData.put(SendEmail.EMAIL_OPEN, true);
+	
+		    // Interrupt clicked in DeferredTask
+		    emailClickDeferredTask   = new EmailClickDeferredTask(clickTrackingId, campaignId,
+			    subscriberId, interruptedData.toString());
+	    }
+	    
+	    if(type.equals(ShortenURLType.SMS))
+	    {
+	    	emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, null);
+	    }
+	    
+	    if(emailClickDeferredTask == null)
+	    {
+	    	System.err.println("EmailClickDeferred task is null...");
+	    	return;
+	    }
+	    
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.addAsync(TaskOptions.Builder.withPayload(emailClickDeferredTask));
 	}

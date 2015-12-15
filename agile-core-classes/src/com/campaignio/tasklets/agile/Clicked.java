@@ -106,7 +106,7 @@ public class Clicked extends TaskletAdapter
 			else if (data.has(SendMessage.SMS_CLICK_TRACKING_ID))
 			{
 				CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout,
-					SendMessage.SMS_ + AgileTaskletUtil.getId(campaignJSON), null, null);
+					data.getString(SendMessage.SMS_CLICK_TRACKING_ID), "SMS", null);
 			}
 			else
 			{

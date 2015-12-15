@@ -3,9 +3,11 @@ package com.campaignio.urlshortener.util;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.util.EmailLinksConversion;
 import com.campaignio.urlshortener.URLShortener;
 import com.campaignio.urlshortener.URLShortener.ShortenURLType;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 
 /**
  * <code>URLShortenerUtil</code> is the class to convert urls from long urls to
@@ -85,7 +87,7 @@ public class URLShortenerUtil
 	return buildShortURL(keyword, urlShortener);
     }
 
-	private static String buildShortURL(String keyword, URLShortener urlShortener)
+	public static String buildShortURL(String keyword, URLShortener urlShortener)
 	{
 		// Get Key
 		long keyNumber = urlShortener.id;
@@ -95,6 +97,10 @@ public class URLShortenerUtil
 
 		// Gets current namespace to append url
 		String domain = NamespaceManager.get();
+		
+		// For localhost
+		if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+			domain = "localhost";
 
 		if (StringUtils.isEmpty(domain))
 		    return null;
@@ -114,10 +120,14 @@ public class URLShortenerUtil
 		return URLShortener.SHORTENER_URL + keyword + domainKey + "-" + urlKey;
 	}
     
-    public static String getShortURL(String url, String keyword, String subscriberId, String trackingId, String campaignId, ShortenURLType type) throws Exception
+    public static String getShortURL(String url, String keyword, String subscriberId, String trackingId, String campaignId, ShortenURLType type, boolean doPush) throws Exception
     {
     	URLShortener urlShortener = new URLShortener(url, subscriberId, trackingId, campaignId);
     	urlShortener.setURLShortenerType(type);
+    	
+    	if(doPush)
+    		urlShortener.setPushParameter(EmailLinksConversion.AGILE_EMAIL_PUSH);
+    	
     	urlShortener.save();
     	
     	return buildShortURL(keyword, urlShortener);
