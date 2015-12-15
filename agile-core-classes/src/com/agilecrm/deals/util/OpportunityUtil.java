@@ -2349,6 +2349,7 @@ public class OpportunityUtil
 			}
 			
 		}
+		System.out.println(Track_conversion);
 		return Track_conversion;
 	}
 	
@@ -2393,6 +2394,7 @@ public class OpportunityUtil
 				
 			
 			conversionList=new ArrayList<>(ownDealsSet);
+			System.out.println(conversionList);
 			return conversionList;
 		}
 		catch (Exception e)
