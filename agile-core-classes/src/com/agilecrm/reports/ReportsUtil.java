@@ -557,7 +557,7 @@ public class ReportsUtil
 			for(JSONObject obj:cateList)
 			{
 				index++;
-					if(obj.getLong("id")==ownerId);
+					if(ownerId.equals(obj.getLong("id")))
 							break;
 					
 			}
