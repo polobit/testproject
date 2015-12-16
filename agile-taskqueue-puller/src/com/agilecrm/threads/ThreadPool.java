@@ -16,6 +16,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import com.google.apphosting.api.ApiProxy;
@@ -125,10 +126,10 @@ public class ThreadPool
 
     public synchronized static void main(String[] args)
     {
-	for (int i = 1; i < 200; i++)
+	for (int i = 1; i < 10; i++)
 	{
 
-	    ThreadPool.getThreadPoolExecutor("bulk-exporter-queue", 1, 15).execute(new Runnable()
+	    ThreadPool.getThreadPoolExecutor("bulk-exporter-queue", 1, 1).execute(new Runnable()
 	    {
 
 		@Override
@@ -137,7 +138,10 @@ public class ThreadPool
 		    try
 		    {
 			System.out.println("waiting in thread :" + Thread.currentThread().getName());
+			NamespaceManager.set("local");
 			wait(10000);
+			List<Contact> contacts = ContactUtil.getAll(5, null);
+			contacts.get(0).save(false);
 
 		    }
 		    catch (InterruptedException e)
@@ -289,10 +293,11 @@ class RemoteAPISetupThread extends Thread
 	// System.out.println("((((((((((((((((((((____))))))))))))))))))) installing");
 	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
 		.useApplicationDefaultCredential();
-
 	try
 	{
+	    System.out.println(SystemProperty.environment.value());
 	    ClassLoader.getSystemClassLoader().loadClass(TriggerFutureHook.class.getName());
+
 	}
 	catch (ClassNotFoundException e)
 	{
@@ -308,12 +313,24 @@ class RemoteAPISetupThread extends Thread
 
 	    installer.install(options);
 
-	    environment = ApiProxy.getCurrentEnvironment();
-	    threadLocalDelegate = (ApiProxy.Delegate<ApiProxy.Environment>) ApiProxy.getDelegate();
 	}
 	catch (IOException e)
 	{
 	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	try
+	{
+	    // Install delegate with objectify
+	    TriggerFutureHook.install();
+	    System.out.println(ApiProxy.getDelegate());
+	    System.out.println(ApiProxy.getDelegate() instanceof TriggerFutureHook);
+
+	    environment = ApiProxy.getCurrentEnvironment();
+	    threadLocalDelegate = (ApiProxy.Delegate<ApiProxy.Environment>) ApiProxy.getDelegate();
+	}
+	catch (Exception e)
+	{
 	    e.printStackTrace();
 	}
 	// threadLocalDelegate = ApiProxy.getDelegate();

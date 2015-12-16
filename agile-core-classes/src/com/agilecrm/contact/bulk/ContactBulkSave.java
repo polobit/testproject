@@ -178,6 +178,7 @@ public class ContactBulkSave
 	builderObjects.clear();
 	contacts.clear();
 	savedContactsMap.clear();
+	contactsMap.clear();
     }
 
     private boolean isNull(List<Trigger> triggerList)
