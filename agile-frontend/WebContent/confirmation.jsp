@@ -335,6 +335,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			    String email = request.getParameter("email");
 			    String campaign_name = request.getParameter("c_name");
 			    String unsubscribeEmail = request.getParameter("unsubscribe_email");
+			    String unsubscribeName = request.getParameter("unsubscribe_name");
 			    
 			    // Used to send as from name in confirmation email
 			    String company = request.getParameter("company");
