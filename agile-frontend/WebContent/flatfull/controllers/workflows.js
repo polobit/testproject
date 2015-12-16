@@ -51,6 +51,7 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
 					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
 					{
+						var data = this;
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
 							$("time.campaign-created-time", el).timeago();
@@ -75,12 +76,14 @@ var WorkflowsRouter = Backbone.Router
 									el.find('#campaign_logs').attr('href','#workflows');
 									return;
 								}
+
 						}
 						else
 						{
 							el.find('#campaign_logs').attr('href','#workflows');
 							return;
 						}
+
 					}, appendItemCallback : function(el)
 					{
 						$("time.campaign-created-time", el).timeago();
@@ -187,9 +190,26 @@ var WorkflowsRouter = Backbone.Router
 				this.is_disabled = this.workflow_model.get("is_disabled");
 				var that = this;
 
-				getTemplate('workflow-add', {"is_disabled" : ""+that.is_disabled}, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
+
+				var workflowModal = new Workflow_Model_Events({
+					url : 'core/api/workflow', 
+					template : 'workflow-add',
+					isNew : 'true',
+					data :  {"is_disabled" : ""+that.is_disabled},
+					postRenderCallback : function(el){
+						// Set the name
+						$('#workflow-name', el).val(that.workflow_model.get("name"));
+
+						var unsubscribe = that.workflow_model.get("unsubscribe");
+
+						$('#unsubscribe-email', el).val(unsubscribe.unsubscribe_email);
+						$('#unsubscribe-name', el).val(unsubscribe.unsubscribe_name);
+						$('#unsubscribe-tag', el).val(unsubscribe.tag);
+						$('#unsubscribe-action', el).val(unsubscribe.action);
+						$('#unsubscribe-action', el).trigger('change');
+
+						if(that.is_disabled)
+								$('#designer-tour', el).addClass("blur").removeClass("anti-blur");
 
 					var el = $(template_ui);
 
