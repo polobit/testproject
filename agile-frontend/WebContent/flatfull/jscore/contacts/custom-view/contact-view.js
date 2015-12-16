@@ -476,4 +476,100 @@ function attachEvents(tr) {
          
     	agile_type_ahead("note_related_to", el, contacts_typeahead);
      });
+
+
+$('.popover').on('click', '#add-score', function(e){
+	    e.preventDefault();
+	    var that=$(this);
+	    // Convert string type to int
+	    var add_score = parseInt($('#lead-score').text());
+	    
+	    add_score = add_score + 1;
+	    
+	    // Changes score in UI
+	    $('#lead-score').text(add_score);
+       
+       var temp_model= App_Contacts.contact_custom_view.collection.get($(that).parents('.data').attr('data'));
+	    temp_model.set({'lead_score': add_score});
+		var contact_model =  temp_model.toJSON();
+	    
+	  /* // Refreshing the view ({silent: true} not working)
+	    contact_model.url = 'core/api/contacts';
+	    contact_model.set('lead_score', add_score, {silent: true});
+	
+	    // Save model
+	    contact_model.save();*/
+	    
+		var new_model = new Backbone.Model();
+		new_model.url = 'core/api/contacts';
+		new_model.save(contact_model,{
+			success: function(model){
+
+			}
+		});
+		          
+	});
+
+
+$('.popover').on('click', '#minus-score', function(e){
+	    e.preventDefault();
+	    var that=$(this);
+	    // Convert string type to int
+	    var sub_score = parseInt($('#lead-score').text());
+		
+		if(sub_score <= 0)
+			return;
+		
+		sub_score = sub_score - 1;
+		
+		// Changes score in UI
+		$('#lead-score').text(sub_score);
+		
+       
+       var temp_model= App_Contacts.contact_custom_view.collection.get($(that).parents('.data').attr('data'));
+	    temp_model.set({'lead_score': sub_score}, {silent: true});
+		var contact_model =  temp_model.toJSON();
+	    
+	  /* // Refreshing the view ({silent: true} not working)
+	    contact_model.url = 'core/api/contacts';
+	    contact_model.set('lead_score', add_score, {silent: true});
+	
+	    // Save model
+	    contact_model.save();*/
+	    
+		var new_model = new Backbone.Model();
+		new_model.url = 'core/api/contacts';
+		new_model.save(contact_model,{
+			success: function(model){
+
+			}
+		});
+		          
+	});
+}
+
+function agile_crm_get_List_contact_properties_list(propertyName,id)
+{
+	// Reads current contact model form the contactDetailView
+	var contact_model = App_Contacts.contact_custom_view.collection.get(id);
+
+	// Gets properties list field from contact
+	var properties = contact_model.get('properties');
+	var property_list = [];
+
+	/*
+	 * Iterates through each property in contact properties and checks for the
+	 * match in it for the given property name and retrieves value of the
+	 * property if it matches
+	 */
+	$.each(properties, function(index, property)
+	{
+		if (property.name == propertyName)
+		{
+			property_list.push(property);
+		}
+	});
+
+	// If property is defined then return property value list
+	return property_list;
 }

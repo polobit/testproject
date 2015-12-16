@@ -6854,14 +6854,11 @@ function agile_is_mobile_browser(){
 
 }
 
-Handlebars.registerHelper('checkProperties', function(properties,type,options)
-{
-	var name=getPropertyValue(properties,type);
+Handlebars.registerHelper('multiple_Property_Element_List', function(name, properties,id, options)
+		{
 
-	if(name)
-		return options.fn(this);
-	else
-		return options.inverse(this);
-
-});
+			var matching_properties_list = agile_crm_get_List_contact_properties_list(name,id);
+			if (matching_properties_list.length > 0)
+				return options.fn(matching_properties_list);
+		});
 

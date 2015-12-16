@@ -268,9 +268,9 @@
 							{{#canEditContact owner.id}}
 								<span class="contact-score-control m-l-xs">
 									<ul class="inline-block list-none m-n p-n">
-										<li style="height: 9px"><i class="icon-sort-up c-p" id="add"
+										<li style="height: 9px"><i class="icon-sort-up c-p" id="add-score"
 											style="height: 10px;"></i></li>
-										<li><i class="icon-sort-down c-p" id="minus"
+										<li><i class="icon-sort-down c-p" id="minus-score"
 											style="height: 10px;"></i></li>
 									</ul>
 								</span>
@@ -278,16 +278,54 @@
 							</div>
 						</div>
 
-       		  {{#checkProperties properties "phone"}} 
-	   	  		<i class="icon-call-end"></i>
-	   	  		{{/checkProperties}}
+       		{{#property_is_exists "phone" properties}}
+							<div>
+								{{#multiple_Property_Element_List "phone" properties id}}
 
-	   	   {{#checkProperties properties "email"}}
+												
+								<div class="contact-phone">
+									{{#each this}}
+									<div class="pull-left contact-phone-icon hide">
+									<i class="icon icon-call-end text-sm m-r-xs v-middle"></i>
+									</div>
+									<div class="text-sm">
+	   	  		<i class="icon-call-end"></i><span class="contact-call-button-div"  data-toggle="tooltip" data-placement="top" title="">
+										<a href="tel:{{remove_spaces value}}" class="contact-make-call contact-call-button" phone="{{value}}">{{value}}</a> 
+                                        {{#if subtype}}<span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
+										</span>
+	   	  				</div>
+									<div class="clearfix"></div>
+									{{/each}}
+								</div>
+								{{/multiple_Property_Element_List}}
+							</div>
+							<div class="clearfix"></div>
+							{{/property_is_exists}}
+
+
+					{{#property_is_exists "email" properties}}
+							
+								{{#multiple_Property_Element_List "email" properties id}}
+
+								<div class="contact-email text-sm l-h"> 
+									{{#each this}}
+
+<div class="pull-left contact-email-icon m-r-xs hide"><i class="icon icon-envelope text-sm v-middle"></i></div>
+										<div class="text-ellipsis">
+											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
+										</div>
+
+<div class="clearfix"></div>
+									{{/each}}
+									</div>
+									
+									
+								
+									{{/multiple_Property_Element_List}}
+								
+
+								{{/property_is_exists}}
 	   	 
-	   	  		<a href='#send-email/{{getPropertyValue properties "email"}}'>
-	   	  		 	<i class="icon-envelope m-l-md"></i></a> 
-	   	  	
-	   	   {{/checkProperties}}
        <br> {{#hasMenuScope 'DEALS'}}
    <a href="#" class="contact-list-add-deal btn btn-sm btn-default pos-rlt btn-addon"><span><i class='icon-plus-sign'/></span> Add Deal</a> 
 {{/hasMenuScope}}
