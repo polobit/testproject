@@ -47,6 +47,7 @@
         {
         	
             "category": "Settings",
+            "required": "required",
             "id": "new_field",
             "name": "variable_1",
             "title": "E.g. {{score}}, {{company}}, <br>{{your custom field}}",
