@@ -232,7 +232,7 @@ public class TicketsUtil
 			new TicketsDocument().add(ticket);
 
 			// Logging ticket created activity
-			new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "", "", "").save();
+			new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "", plain_text, "last_reply_text").save();
 
 			// Execute triggers
 			TicketTriggerUtil.executeTriggerForNewTicket(ticket);
