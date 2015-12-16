@@ -485,6 +485,7 @@ var Base_Collection_View = Backbone.View
 					this.infiniScroll.destroy();
 				}
 
+				this.delegateEvents();
 				return this;
 			}, buildCollectionUI : function(result)
 			{

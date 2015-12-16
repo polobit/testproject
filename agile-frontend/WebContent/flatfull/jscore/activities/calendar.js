@@ -240,7 +240,7 @@ function showCalendar(users)
 											//Office
 											var inArray = type_of_cal.indexOf("office");
 											if(inArray >= 0){
-												loadOfficeEvents(start.getTime(), end.getTime());
+												addOffice365CalendarEvents();
 											}
 											
 											//Agile
@@ -492,9 +492,11 @@ function showCalendar(users)
 																 '</div>' + '</div>';
 											$(this).after(popoverElement);
 										}else{
+											try{	
 											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
 													.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
 											$(this).after(popoverElement);
+											}catch(e){}
 										}
 										
 										$(this).parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : "11px" });
@@ -577,7 +579,7 @@ function showCalendar(users)
 						select : function(start, end, allDay)
 						{
 							// Show a new event
-							$('#activityModal').modal('show');
+							$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 							highlight_event();
 
 							// Set Date for Event
@@ -674,6 +676,11 @@ function showCalendar(users)
 
 							if (isNaN(event.id))
 								return;
+
+							// Show edit modal for the event
+							$("#updateActivityModal").html(getTemplate("update-activity-modal")).modal("show");
+
+
 							// Deserialize
 							deserializeForm(event, $("#updateActivityForm"));
 
@@ -733,8 +740,7 @@ function showCalendar(users)
 								var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none " id="addEventDescription">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
 								$("#event_desc").html(desc);
 							}
-							// Show edit modal for the event
-							$("#updateActivityModal").modal('show');
+							
 							
 							agile_type_ahead("event_relates_to_deals", $('#updateActivityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 

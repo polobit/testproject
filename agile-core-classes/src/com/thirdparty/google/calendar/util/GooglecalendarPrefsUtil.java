@@ -92,7 +92,7 @@ public class GooglecalendarPrefsUtil
     public static GoogleCalenderPrefs getPrefsAndRefreshToken()
     {
 	// Current user calendar prefs
-	GoogleCalenderPrefs prefs = getCalendarPref();
+	GoogleCalenderPrefs prefs = getCalendarPrefsByType(CALENDAR_TYPE.GOOGLE);
 	System.out.println(prefs);
 	if (prefs == null)
 	    return prefs;

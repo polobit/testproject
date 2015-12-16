@@ -11,12 +11,15 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
+import com.thirdparty.google.calendar.GoogleCalenderPrefs;
+import com.thirdparty.google.calendar.util.GooglecalendarPrefsUtil;
 import com.thirdparty.office365.calendar.Office365CalendarPrefs;
 import com.thirdparty.office365.calendar.OfficeCalendarTemplate;
 
@@ -24,22 +27,40 @@ public class Office365CalendarUtil {
 
 	private static String backgroundColor = "#C0E9FF";
 	private static String type = "officeCalendar";
-	//private static String server = "http://54.87.153.50:8080/";
-	private static String server = "http://localhost:8080/";
-	private static String appName = "exchange-app-beta";
+	private static String server = "http://54.87.153.50:8080/";
+	// private static String server = "http://localhost:8080/";
+	private static String appName = "exchange-app";
 	private static String serveltName = "appointment";
 
 	public static String getOfficeURL(String startDate, String endDate) {
+
+		String appointments = null;
 		// Get Office Exchange Prefs
-		Objectify ofy = ObjectifyService.begin();
-		Office365CalendarPrefs calendarPrefs = ofy.query(
-				Office365CalendarPrefs.class).get();
+		GoogleCalenderPrefs calendarPrefs = GooglecalendarPrefsUtil
+				.getCalendarPrefsByType(GoogleCalenderPrefs.CALENDAR_TYPE.OFFICE365);
+		if (calendarPrefs != null) {
+			try {
+				Office365CalendarPrefs officeCalendarPrefs = new Office365CalendarPrefs();
+				JSONObject propertyJSON = new JSONObject(
+						calendarPrefs.getPrefs());
+				
+				officeCalendarPrefs.setUsername(propertyJSON.get("office365-calendar-usrname")
+						
+						.toString());
+				officeCalendarPrefs.setPassword(propertyJSON.get("office365-calendar-pwd")
+						.toString());
+				officeCalendarPrefs.setServerUrl(propertyJSON.get("office365-calendar-outlook-url")
+						.toString());
 
-		if (calendarPrefs == null)
-			return null;
+				appointments = Office365CalendarUtil.getOfficeURLCalendarPrefs(
+						officeCalendarPrefs, startDate, endDate);
 
-		return Office365CalendarUtil.getOfficeURLCalendarPrefs(calendarPrefs,
-				startDate, endDate);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return appointments;
 	}
 
 	/**
@@ -130,13 +151,15 @@ public class Office365CalendarUtil {
 				JSONObject resultObj = new JSONObject(obj);
 
 				String pattern = "EE MMM dd HH:mm:ss z yyyy";
-				
+
 				SimpleDateFormat parsedFormat = new SimpleDateFormat(pattern,
 						Locale.ENGLISH);
-				parsedFormat.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil.getTimeZone()));
+				parsedFormat.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil
+						.getTimeZone()));
 				SimpleDateFormat reqFormat = new SimpleDateFormat(
-						"MMM d, yyyy HH:mm:ss");			
-				reqFormat.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil.getTimeZone()));
+						"MMM d, yyyy HH:mm:ss");
+				reqFormat.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil
+						.getTimeZone()));
 				System.out.println("test");
 				Date parsedDate;
 				String start = resultObj.getString("startDate");
@@ -151,7 +174,7 @@ public class Office365CalendarUtil {
 					parsedDate = parsedFormat.parse(end);
 					Calendar cal = Calendar.getInstance();
 					cal.setTime(parsedDate);
-					//cal.add(Calendar.DATE, -1);
+					// cal.add(Calendar.DATE, -1);
 					Date extactDate = cal.getTime();
 					end = reqFormat.format(extactDate);
 				}

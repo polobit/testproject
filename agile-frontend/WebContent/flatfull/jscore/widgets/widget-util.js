@@ -133,6 +133,7 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				msg = ("Error occurred while saving "+displayName);
 			}
 
+			// if (pluginName != "CallScript")
 			showNotyPopUp(msgType , msg, "bottomRight");
 
 			if (callback && typeof (callback) === "function") {
@@ -259,6 +260,12 @@ function addWidgetProfile(widgetId, widgetName, template, url) {
 						return;
 						// Loading Stripe profile
 					} else if (widgetName == "Stripe") {
+						console.log('stripe add widget');
+						console.log(model);
+					
+						if(model)
+						model["prefs"] = JSON.parse(model["prefs"]);
+
 						$.getJSON("core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT", function(data) {
 							model["custom_data"] = data;
 
@@ -342,7 +349,7 @@ function addConfigurableWidget(widgetId, widgetName, templateName) {
 			// Create a view modal for widgets
 			renderWidgetView(templateName, 'core/api/widgets',model, '#widget-settings');
 			
-			if (model.name == "TwilioIO") {
+			if (model.name == "TwilioIO" && model.is_added) {
 				fill_twilioio_numbers();
 			}
 

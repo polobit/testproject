@@ -18,7 +18,7 @@ $(function()
 	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
 	{
 		e.preventDefault();
-		$('#archived', $('#opportunityUpdateForm')).attr('checked', 'checked');
+		$('#archived', $('#opportunityUpdateForm')).prop('checked', 'checked');
 		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
 	});
 	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_unarchive', function(e)
@@ -186,7 +186,7 @@ function setNewDealFilters(data){
 		deal_filter_json['owner_id'] = "";
 		deal_filter_json['pipeline_id'] = readCookie('agile_deal_track');
 		deal_filter_json['milestone'] = "";
-		deal_filter_json['archived'] = "all";
+		deal_filter_json['archived'] = "false";
 		deal_filter_json['value_filter'] = "equals";
 		createCookie('deal-filters', JSON.stringify(deal_filter_json));
 	}
@@ -316,6 +316,13 @@ function getDealFilters()
 		if (!readCookie("agile_deal_view")){
 			var json = {};
 			json.pipeline_id = readCookie('agile_deal_track');
+			json.value_filter = "equals";
+			json.archived = "false";
+			return JSON.stringify(json);
+		}else if(readCookie("agile_deal_view")){
+			var json = {};
+			json.value_filter = "equals";
+			json.archived = "false";
 			return JSON.stringify(json);
 		}else{
 			return '';
@@ -325,9 +332,7 @@ function getDealFilters()
 
 
 
-//listenrs
-
-
+// Deal Listeners
 function initializeDealListners(el){
 	
 $('#opportunity-listners').off('click', ".deals-list-view");

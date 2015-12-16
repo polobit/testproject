@@ -1,3 +1,4 @@
+
 /**
  * validate.js is used to validate the forms in the application, isValidFom
  * method validates the form element
@@ -63,7 +64,7 @@ function isValidForm(form) {
 		
 		return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
 	}," Please enter a valid email.");
-	
+
 	// Phone number validation
 	jQuery.validator.addMethod("phone", function(value, element){
 		
@@ -132,21 +133,24 @@ function isValidForm(form) {
 	jQuery.validator.addMethod("date", function(value, element){
 		if(value=="")
 			return true;
-		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-		{
-			return !/Invalid|NaN/.test(new Date(convertDateFromUKtoUS(value))); 
-		}else
-			return !/Invalid|NaN/.test(new Date(value));
+
+		return !/Invalid|NaN/.test(getFormattedDateObjectWithString(value));
+
+			
 	}," Please enter a valid date.");
+
+	jQuery.validator.addMethod("isHttpsURL", function(value, element){
+		var urlregex = new RegExp("^(https:\/\/){1}([0-9A-Za-z]+\.)");
+  		return urlregex.test(value);		
+	}," Please enter a valid https URL");
 
 	jQuery.validator.addMethod("date_input", function(value, element){
 		if(value=="")
 			return true;
-		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-		{
-			return !/Invalid|NaN/.test(new Date(convertDateFromUKtoUS(value))); 
-		}else
-			return !/Invalid|NaN/.test(new Date(value));
+
+		return !/Invalid|NaN/.test(getFormattedDateObjectWithString(value));
+
+		
 	}," Please enter a valid date.");
 
 	jQuery.validator.addMethod("field_length", function(value, element){

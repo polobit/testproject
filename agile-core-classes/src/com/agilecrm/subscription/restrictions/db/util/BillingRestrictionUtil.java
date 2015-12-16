@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
-
+import org.apache.commons.lang.exception.ExceptionUtils;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
@@ -416,6 +416,7 @@ public class BillingRestrictionUtil {
 			return billingRestriction;
 		} catch (Exception e) {
 			System.out.println("got exception while retrieving billing restriction");
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			return null;
 		}
 	}

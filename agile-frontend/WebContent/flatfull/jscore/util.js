@@ -19,7 +19,7 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-r
  * Default image shown for contacts if image is not available
  */
 
-var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/flatfull/user-default.jpg";
+var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
 
 var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi,Sandeep";
 
@@ -548,6 +548,9 @@ function convertDateFromUKtoUS(ukDate)
 		date = ukDate.split(".");
 	if(date.length == 3)
 	{	
+		if(date[2].length == 2)
+			  date[2] = "20" + date[2];
+
 		var returnDate = new Date(date[1]+"/"+date[0]+"/"+date[2]);
 		if(!/Invalid|NaN/.test(returnDate))
 			return returnDate.format("mm/dd/yyyy");
@@ -558,4 +561,23 @@ function convertDateFromUKtoUS(ukDate)
 		return "";
 }
 
+/**
+* Retuns date with supportable format
+*/
+function getFormattedDateObjectWithString(value){
+
+		if(!value)
+			   return new Date("");
+
+        value = value.replace(/\./g,'/');
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("yyyy") == -1){
+			value = value.substring(0, value.length - 2) + "20" + value.substring(value.length - 2);
+		}
+
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+			value = convertDateFromUKtoUS(value);
+
+		return new Date(value);
+	
+}
 
