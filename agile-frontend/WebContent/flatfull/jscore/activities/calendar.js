@@ -105,7 +105,7 @@ function get_google_calendar_prefs(callback)
 			return;
 
 		// Creates cookie
-		storeData(google_calendar_cookie_name, JSON.stringify(prefs));
+		_agile_set_prefs(google_calendar_cookie_name, JSON.stringify(prefs));
 		return get_google_calendar_event_source(prefs, callback);
 	});
 }

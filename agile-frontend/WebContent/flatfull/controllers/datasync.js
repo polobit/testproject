@@ -42,7 +42,7 @@ dataSync : function()
             individual_tag_name: 'div',
             templateKey: 'data-sync',
             postRenderCallback: function(el) {
-                var dataSyncTab = localStorage.getItem("datasync_tab");
+                var dataSyncTab = _agile_get_prefs("datasync_tab");
                 if(!dataSyncTab || dataSyncTab == null) {
                     _agile_set_prefs('datasync_tab', "google-tab");
                     dataSyncTab = "google-tab";
@@ -255,7 +255,7 @@ dataSync : function()
                         if(!template_ui1)
                             return;
                         $("#prefs-tabs-content").html(template_ui1);
-                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        var dataSynctTab = _agile_get_prefs("datasync_tab");
                         $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
                         initializeTabListeners("datasync_tab", "sync");
 

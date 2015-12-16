@@ -128,7 +128,7 @@ function submitLhsFilter()
 		_agile_delete_prefs('dynamic_company_filter');
 		if (formData != null && formData.rules.length > 0)
 		{
-			storeData('dynamic_company_filter', JSON.stringify(formData));
+			_agile_set_prefs('dynamic_company_filter', JSON.stringify(formData));
 			//_agile_set_prefs('company_filter', "Companies");
 		}
 		COMPANIES_HARD_RELOAD=true;
@@ -138,7 +138,7 @@ function submitLhsFilter()
 		_agile_delete_prefs('contact_filter_type');
 		_agile_delete_prefs('dynamic_contact_filter');
 		if (formData != null && formData.rules.length > 0)
-			storeData('dynamic_contact_filter', JSON.stringify(formData));
+			_agile_set_prefs('dynamic_contact_filter', JSON.stringify(formData));
 		CONTACTS_HARD_RELOAD=true;
 		App_Contacts.contacts(undefined, undefined, undefined, true);
 	}

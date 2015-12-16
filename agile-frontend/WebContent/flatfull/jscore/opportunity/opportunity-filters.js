@@ -319,7 +319,7 @@ function getDealFilters()
 			json.value_filter = "equals";
 			json.archived = "false";
 			return JSON.stringify(json);
-		}else if(readCookie("agile_deal_view")){
+		}else if(_agile_get_prefs("agile_deal_view")){
 			var json = {};
 			json.value_filter = "equals";
 			json.archived = "false";
