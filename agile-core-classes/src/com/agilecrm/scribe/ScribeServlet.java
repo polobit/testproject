@@ -305,6 +305,7 @@ public class ScribeServlet extends HttpServlet {
 
 			} catch (Exception e) {
 				// TODO: handle exception
+				System.out.println(e.getMessage());
 				if (linkType.equalsIgnoreCase("widget")) {
 					req.getSession().setAttribute("widgetMsgType", "error");
 					req.getSession().setAttribute("widgetMsg",
