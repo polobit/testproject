@@ -5,78 +5,63 @@
 <div id="contact-dtl" class="app-content-full  h-full dock-view-fixing">
   <div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
     <!-- first column in details view -->
-    <div class="col bg-light lter b-r" style="width:299px;">
+    <div class="col bg-light lter b-r w-lg" style="width:299px;">
       <div class="vbox">
         <div class="row-row">
 
-          <div class="wrapper p-t-sm" style="width:299px;">
+          <div class="wrapper p-t-sm">
 
             <div class="panel panel-default m-t-sm">
               <div class="panel-body">
-                <a class="anchor back-to-tickets" href="javascript:void(0);">Tickets</a> / 
-                <span>Tickets #{{id}}</span>
-              </div>
-            </div>
 
-                <div class="panel panel-default ">
-              <div class="panel-body">
+                <div>
+                    <a class="text-info back-to-tickets" href="javascript:void(0);">Tickets</a> / 
+                    <span> #{{id}}</span>
+                </div>
 
-                  <a class="pull-left thumb-sm avatar">
-                    <img src="{{gravatarurl contact.properties 24}}" class="img-circle" alt="User Image">
-                  </a>
+                <div class="m-t-xs">
+                  <span class="label bg-light dk text-tiny first-letter-cap inline-block">
+                    {{status}}
+                  </span>&nbsp;
+                  <span class="label {{toLowerCase priority}}-priority-bg text-tiny first-letter-cap inline-block">
+                    {{priority}}
+                  </span>
 
-                  <div class="m-l-xxl bg-white">
+                   <span class="label bg-light dk text-tiny first-letter-cap inline-block">
+                    {{group.group_name}}
+                  </span>
+                 
+                </div>
 
-                      <div>
-                        <span class="first-letter-cap inline-block">
-                          <i class="fa fa-user fa-fw text-muted"></i> {{getPropertyValue contact.properties "first_name"}}
-                          {{getPropertyValue contact.properties "last_name"}} 
-                        </span>
-                      </div>
+                 <div class="text-right m-t-xs">
 
-                      <div>
-                        <span class="first-letter-cap inline-block">
-                          {{getPropertyValue contact.properties "company"}}
-                        </span>
-                      </div>
+                    {{#next_prev_ticket_exists 'previous'}}
+                    <a onclick="clearContactWidetQueues({{contactID}})" href="{{#is_filtered_ticket}}
+                      #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'previous'}}{{get_ticket_id 'previous'}}{{/next_prev_ticket_exists}}
+                      {{/is_filtered_ticket}}" class="text-info">
+                      << Previous
+                    </a>
+                    {{/next_prev_ticket_exists}}
 
-                      <div>
-                       <i class="fa fa-envelope fa-fw text-muted"></i>
-                          {{getPropertyValue contact.properties "email"}}
-                      </div>
+                    {{#next_prev_ticket_exists 'previous'}}{{#next_prev_ticket_exists 'next'}}
+                      <span> | </span>
+                    {{/next_prev_ticket_exists}}{{/next_prev_ticket_exists}}
 
-                       <div>
-                         <i class="fa fa-phone fa-fw text-muted"></i>
-                            <a href="tel:{{getPropertyValue contact.properties "phone"}}" class="contact-make-call contact-call-button" phone="{{getPropertyValue contact.properties "phone"}}">
-                              {{getPropertyValue contact.properties "phone"}}
-                            </a>
-                        </div>  
-
-                        <div class="col-md-12 p-n m-t-xs">
-                          <a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Website" href="/{{getPropertyValueBytype contact.properties 'website' '' 'URL'}}" 
-                            class="text-l-none tooltip_info">
-                            <i class="{{get_social_icon URL}} text-base text-muted tooltip_info"></i>
-                          </a>
-                          <a target="_blank" data-toggle="tooltip" data-placement="bottom" 
-                            data-original-title="Twitter" href="https://twitter.com/{{getPropertyValueBytype contact.properties 'website' '' 'TWITTER'}}" class="m-l-xs">
-                              <i class="{{get_social_icon "TWITTER"}} text-base text-muted tooltip_info"></i>
-                          </a>
-                          <a target="_blank" class="text-l-none tooltip_info m-l-xs" data-toggle="tooltip" data-placement="bottom" data-original-title="Facebook" href="https://www.facebook.com/{{getPropertyValueBytype contact.properties 'website' '' 'FACEBOOK'}}">
-                            <i class="{{get_social_icon "FACEBOOK"}} text-base text-muted tooltip_info"></i>
-                          </a>
-                          <a class="text-l-none tooltip_info m-l-xs" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Skype" href="skype:{{getPropertyValueBytype contact.properties 'website' '' 'SKYPE'}}"> 
-                            <i class="{{get_social_icon "SKYPE"}}   text-base text-muted tooltip_info"></i>
-                          </a>
-                        </div>
+                    {{#next_prev_ticket_exists 'next'}}
+                    <a onclick="clearContactWidetQueues({{contactID}})" href="{{#is_filtered_ticket}}
+                      #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'next'}}{{get_ticket_id 'next'}}{{/next_prev_ticket_exists}}
+                      {{/is_filtered_ticket}}" class="text-info" >
+                      Next >>
+                    </a>
+                    {{/next_prev_ticket_exists}}
 
                   </div>
 
+              </div>
             </div>
-       </div>
 
             <div class="panel panel-default m-t-md">
               <div class="panel-body sla-due-date">
-                <span class="text-md first-letter-cap inline-block">{{status}}</span>
                 <div class="m-t-xs txt-small"><i class="fa fa-clock-o"></i> 
                   <span class="sla-text">Due in next 5 days &nbsp;</span>
                   <a id="change-sla" href="javascript:void(0);" class="link-color">Change</a>
@@ -90,7 +75,7 @@
             <div class="panel panel-default m-t-md">
               <div class="panel-body">
                 <div class="row m-n">
-                  <div class="col-md-12 p-n">Assignee</div>
+                  <div class="col-md-12 p-n m-b-xs">Assignee</div>
                   <div class="col-md-12 assignee_name ticket_assignee_name ticket-details-value hover-edit text-xs m-t-xs p-xs b-a" style="border-radius: 2px;">
                     <i class="fa fa-user"></i>&nbsp;
                     {{#if assigneeID}}
@@ -109,9 +94,38 @@
                       </select>
                   </div>
                 </div>
-                <div class="row m-l-n m-r-n m-t-sm text-sm">
+
+                <div class="row m-n p-t-sm">
+                  <div class="col-md-12 p-n m-b-xs">CCs</div>
+                  <div class="col-md-12  ticket-email b-a p-xs p-b-none r">
+                    <div class="v-top" >
+                      <ul class="cc-emails m-n p-n" name="cc_emails">
+                          {{#each cc_emails}}
+                            <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{this}}" >
+                              <span>
+                                <a class="m-r-xs" href="javascript:void(0);" >{{this}}</a>
+                                <a class="close remove-ticket-cc-emails text-lg">&times</a>
+                              </span>
+                            </li>
+                          {{/each}}
+                          <li class="tag m-r-xs m-b-xs inline-block">
+                            <input type="text" placeholder="Add CC Email" id="cc_email_field" class="cc_emails_st" autocomplete="off">
+                          </li>
+                      </ul>
+                    </div>  
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+                
+            <div class="panel panel-default m-t-md">
+              <div class="panel-body">
+
+              <div class="row m-l-n m-r-n">
                   <div class="col-md-6 p-l-n">
-                    Type<br>
+                    <div class="p-n m-b-xs">Type</div>
                     <select id="type" name="type" class="form-control text-xs ticket_type" style="height: 28px;padding: 3px 6px;">
                       <option value="QUESTION" {{#if_equals type "QUESTION"}}selected{{/if_equals}}>
                         Question
@@ -124,7 +138,7 @@
                     </select>
                   </div>
                   <div class="col-md-6 p-r-n">
-                    Priority<br>
+                    <div class="p-n m-b-xs">Priority</div>
                     <select name="priority" class="form-control text-xs ticket_priority" style="height: 28px;padding: 3px 6px;">
                       <option value="LOW" {{#if_equals priority "LOW"}}selected{{/if_equals}}>Low</option>
                       <option value="MEDIUM" {{#if_equals priority "MEDIUM"}}selected{{/if_equals}}>Medium</option>
@@ -132,42 +146,16 @@
                     </select>
                   </div>
                 </div>
-              </div>
-            </div>
-            
-            <div class="panel panel-default m-t-md">
-              <div class="panel-body">
-                <div class="row m-n">
-                  <div class="col-md-12 p-n">Labels<hr class="m-t-xs m-b-xs"></div>
-                  <div class="col-md-12 p-n m-t-xs">
+              
+                <div class="row m-n p-t-sm">
+                  <div class="col-md-12 p-n m-b-xs">Labels</div>
+                  <div class="col-md-12 p-n">
                     <select data-placeholder="Labels" class="chosen-select form-control" multiple class="w-md">
                     </select>
                   </div>
                 </div>
               </div>
             </div>
-
-            {{#get_allowed_canned_responses_array labels this}}{{/get_allowed_canned_responses_array}}   
-            {{#if allowed_canned_responses}}
-            <div class="panel panel-default m-t-md">
-              <div class="panel-body">
-                <div class="row m-n">
-                <div class="col-md-12 p-n">Matched Canned Responses<hr class="m-t-xs m-b-xs"></div>
-                {{#each allowed_canned_responses}}
-                  <div id="ticket_canned_response" class="col-md-12 p-n cursor-pointer ticket-canned-response">
-                    <div class="edit-hover div-max-width">{{title}}</div>
-                    <div id="message" class="edit-hover text-muted div-max-width" title="{{compile_template message ../this}}">{{compile_template message ../this}}</div>
-
-                    {{#unless @last}} <div class="m-t-xs m-b-xs border-highlight text-muted"></div>{{/unless}}
-                    
-                  </div>
-
-                {{/each}}
-                 
-                </div>
-              </div>
-            </div>
-            {{/if}}
 
             <div class="m-t-sm">
               
@@ -217,54 +205,33 @@
           <!-- Start of ticket notes -->
           <div class="wrapper bg-light p-t-sm p-b-sm pos-rlt b-b">
             <h3 class="font-thin m-t-none m-b-none inline-block" style="width: 88%;">
-              {{subject}} 
-              <div class="inline-block m-l-sm text-sm">
-                <span class="label bg-light dk text-tiny first-letter-cap inline-block">
-                  {{status}}
-                </span>&nbsp;
-                <span class="label {{toLowerCase priority}}-priority-bg text-tiny first-letter-cap inline-block">
-                  {{priority}}
-                </span>
-              </div>
+
+               <i class="fa {{#if_equals is_favorite "true"}}fa-star text-warning {{else}}fa-star-o text-light{{/if_equals}} toggle-favorite" style="font-size: 20px;"></i>  {{subject}} 
             </h3>
              
             <div class="pos-abs" style="right: 15px; top: 10px;">
 
             <div class="btn-group dropdown m-l-xs">
-              <button class="btn btn-sm w-xxs btn-default show-workflows" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" data-original-title="Workflows"><i class="fa fa-sitemap"></i></button>
+              <button class="fa fa-sitemap btn btn-sm w-xxs btn-default show-workflows" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" data-original-title="Workflows"></button>
+
               <ul id="workflows_list" class="dropdown-menu">
                 <li><a href="javascript:void(0);">Loading...</a></li>
               </ul>
             </div>
 
-            <div class="btn-group m-l-xs">
-              <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle toggle-timeline" data-toggle="tooltip" data-placement="bottom" data-original-title="Timeline"><i class="fa fa-th-large"></i></button>
-              <button class="btn btn-sm btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-placement="bottom" data-original-title="Delete Ticket"><i class="fa fa-trash-o"></i></button>
+            <button class="fa fa-th-large btn btn-sm btn-default w-xxs m-l-xs toggle-timeline" data-toggle="tooltip" data-placement="bottom" data-original-title="Timeline"></button>
 
-              <button class="btn btn-sm btn-default w-xxs w-auto-xs close-ticket" data-toggle="tooltip" data-placement="bottom" data-original-title="Close Ticket"><i class="fa fa-folder"></i></button>
+            <div class="btn-group m-l-xs">
+
+              <button class="fa fa-ban btn btn-sm {{#if_equals is_spam "true"}}btn-danger{{else}}btn-default{{/if_equals}} w-xxs w-auto-xs toggle-spam" data-toggle="tooltip" data-placement="bottom" data-original-title="{{#if_equals is_spam "true"}}not spam{{else}}Mark as Spam{{/if_equals}}"></button>
+              
+              <button class="fa fa-trash-o btn btn-sm btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-placement="bottom" data-original-title="Delete Ticket"></button>
+
+              <button class="fa fa-folder btn btn-sm btn-default w-xxs w-auto-xs close-ticket" data-toggle="tooltip" data-placement="bottom" data-or wfeiginal-title="Close Ticket"></button>
             </div> 
 
-              <div class="btn-group">
-
-                {{#next_prev_ticket_exists 'previous'}}
-                <a onclick="clearContactWidetQueues({{contactID}})" href="{{#is_filtered_ticket}}
-                  #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'previous'}}{{get_ticket_id 'previous'}}{{/next_prev_ticket_exists}}
-                  {{/is_filtered_ticket}}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" data-original-title="Previous">
-                  <i class="icon icon-chevron-left"></i>
-                </a>
-                {{/next_prev_ticket_exists}}
-
-                {{#next_prev_ticket_exists 'next'}}
-                <a onclick="clearContactWidetQueues({{contactID}})" href="{{#is_filtered_ticket}}
-                  #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'next'}}{{get_ticket_id 'next'}}{{/next_prev_ticket_exists}}
-                  {{/is_filtered_ticket}}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" data-original-title="Next">
-                  <i class="icon icon-chevron-right"></i>
-                </a>
-                {{/next_prev_ticket_exists}}
-
-              </div>
-
-
+            <button class="fa fa-dedent btn btn-sm btn-default m-l-xs toggle-widgets" data-toggle="tooltip" data-placement="bottom" data-original-title="Toggle Widgets"></button>
+             
             </div>
           </div>
           
@@ -296,6 +263,58 @@
       <div class="vbox block">
         <div class="row-row" style="display: block !important;">
           <div class="wrapper">
+
+              <div class="panel">
+                  <div class="panel-body">
+                    <div class="clearfix text-center m-t">
+                      <div class="inline">
+                        <div class="thumb-md">
+                            <img src="{{gravatarurl contact.properties 24}}" class="img-circle" alt="...">
+                          </div>
+                        <div class="h4 m-t m-b-xs"> <span class="first-letter-cap inline-block">
+                              {{getPropertyValue contact.properties "first_name"}}
+                              {{getPropertyValue contact.properties "last_name"}} 
+                            </span>
+                        </div>
+                        <small class="text-muted m-b"><span class="first-letter-cap">
+                              {{getPropertyValue contact.properties "company"}}
+                            </span>
+                        </small>
+
+                         <div>
+                              {{getPropertyValue contact.properties "email"}}
+                          </div>
+
+                           <div>
+                               <a href="tel:{{getPropertyValue contact.properties "phone"}}" class="contact-make-call contact-call-button" phone="{{getPropertyValue contact.properties "phone"}}">
+                                  {{getPropertyValue contact.properties "phone"}}
+                                </a>
+                            </div>  
+
+                            <div class="col-md-12 p-n m-t-xs">
+                              <a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Website" href="/{{getPropertyValueBytype contact.properties 'website' '' 'URL'}}" 
+                                class="text-l-none tooltip_info">
+                                <i class="{{get_social_icon URL}} text-base text-muted tooltip_info"></i>
+                              </a>
+                              <a target="_blank" data-toggle="tooltip" data-placement="bottom" 
+                                data-original-title="Twitter" href="https://twitter.com/{{getPropertyValueBytype contact.properties 'website' '' 'TWITTER'}}" class="m-l-xs">
+                                  <i class="{{get_social_icon "TWITTER"}} text-base text-muted tooltip_info"></i>
+                              </a>
+                              <a target="_blank" class="text-l-none tooltip_info m-l-xs" data-toggle="tooltip" data-placement="bottom" data-original-title="Facebook" href="https://www.facebook.com/{{getPropertyValueBytype contact.properties 'website' '' 'FACEBOOK'}}">
+                                <i class="{{get_social_icon "FACEBOOK"}} text-base text-muted tooltip_info"></i>
+                              </a>
+                              <a class="text-l-none tooltip_info m-l-xs" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Skype" href="skype:{{getPropertyValueBytype contact.properties 'website' '' 'SKYPE'}}"> 
+                                <i class="{{get_social_icon "SKYPE"}}   text-base text-muted tooltip_info"></i>
+                              </a>
+                            </div>
+
+                      </div>                      
+                    </div>
+                  </div>
+                  
+                </div>
+
+               
             <div id="widgets" class="contact_{{contactID}}">
             </div>  
           </div>  
@@ -371,10 +390,10 @@
 
                     {{#if canned_responses}}
                     <div class="btn-group dropdown m-l-xs pull-right">
-                      <button class="btn btn-sm w-xxs btn-default" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" data-original-title="Canned Responses"><i class="fa fa-reorder"></i></button>
+                      <button class="btn btn-sm btn-default" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" data-original-title="Canned Responses"><i class="fa fa-reorder"></i></button>
                       <ul id="workflows_list" class="dropdown-menu">
                         {{#each canned_responses}}
-                        <li><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>
+                        <li id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>
                         {{/each}}
                       </ul>
                     </div>
@@ -385,18 +404,36 @@
                   <div id="reply-editor" class="m-t-sm b-a">
 
                     {{#if_equals reply_type "forward"}} 
-                      <div class="panel-heading ticket-email b-b b-light" contenteditable="true" data-name="html_text">
+                      <div class="panel-heading ticket-email b-b b-light " contenteditable="true" data-name="html_text">
                         <span class="text-muted">To: </span>
                       </div>
                      {{/if_equals}}
 
-                     <div id="reply_textarea" class="wrapper" contenteditable="true" data-name="html_text" style="min-height:130px">
+                     <div id="reply_textarea" class="wrapper {{#if_equals reply_type "comment"}} bg-lightyellow{{/if_equals}}" contenteditable="true" data-name="html_text" style="min-height:130px;max-height: 150px;overflow-y: scroll;">
                         <br/><br/>{{#if_equals reply_type "forward"}} {{{notes}}} {{/if_equals}}{{#getCurrentUserPrefs}}{{{signature}}}{{/getCurrentUserPrefs}}
                     </div>
             
                   </div>
                   
                   <div class="error-msg" style="color:#B94A48; font-size:14px"></div>
+
+                  {{#if label_matched_canned_responses}}
+                  <div class="panel panel-default m-t-md">
+                    <div class="panel-heading">Matched Canned Responses</div>
+                    <table class="table table-striped table-responsive m-b-none">
+                      <tbody>
+                        {{#each label_matched_canned_responses}}
+                        <tr id="ticket_canned_response" rel="{{id}}" class="ticket-canned-response text-sm">                    
+                          <td>{{title}}</td>
+                          <td>
+                            <div id="message" class="edit-hover text-muted div-max-width" style="max-width: 50%;" title="{{compile_template message ../this}}">{{compile_template message ../this}}</div>
+                          </td>
+                        </tr>
+                        {{/each}}
+                      </tbody>
+                    </table>
+                   </div>
+                  {{/if}}
 
               </div>
               

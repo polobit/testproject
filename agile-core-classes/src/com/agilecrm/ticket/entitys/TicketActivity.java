@@ -21,7 +21,6 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -113,7 +112,7 @@ public class TicketActivity extends Cursor
 	 */
 	public enum TicketActivityType
 	{
-		TICKET_CREATED, TICKET_DELETED, TICKET_ASSIGNED, TICKET_ASSIGNEE_CHANGED, TICKET_GROUP_CHANGED, TICKET_STATUS_CHANGE, TICKET_PRIORITY_CHANGE, TICKET_TYPE_CHANGE, TICKET_LABEL_ADD, TICKET_LABEL_REMOVE, TICKET_ASSIGNEE_REPLIED, TICKET_REQUESTER_REPLIED, TICKET_PRIVATE_NOTES_ADD, TICKET_MARKED_FAVORITE, TICKET_MARKED_UNFAVORITE, BULK_ACTION_MANAGE_LABELS, BULK_ACTION_CHANGE_ASSIGNEE, BULK_ACTION_EXECUTE_WORKFLOW, BULK_ACTION_CLOSE_TICKETS, BULK_ACTION_DELETE_TICKETS, TICKET_TAG_ADD, TICKET_TAG_REMOVE, DUE_DATE_CHANGED
+		TICKET_CREATED, TICKET_DELETED, TICKET_ASSIGNED, TICKET_ASSIGNEE_CHANGED, TICKET_GROUP_CHANGED, TICKET_STATUS_CHANGE, TICKET_PRIORITY_CHANGE, TICKET_TYPE_CHANGE, TICKET_LABEL_ADD, TICKET_LABEL_REMOVE, TICKET_ASSIGNEE_REPLIED, TICKET_REQUESTER_REPLIED, TICKET_PRIVATE_NOTES_ADD, TICKET_MARKED_FAVORITE, TICKET_MARKED_UNFAVORITE, BULK_ACTION_MANAGE_LABELS, BULK_ACTION_CHANGE_ASSIGNEE, BULK_ACTION_EXECUTE_WORKFLOW, BULK_ACTION_CLOSE_TICKETS, BULK_ACTION_DELETE_TICKETS, TICKET_TAG_ADD, TICKET_TAG_REMOVE, DUE_DATE_CHANGED, TICKET_CC_EMAIL_ADD, TICKET_CC_EMAIL_REMOVE
 	};
 
 	public TicketActivityType ticket_activity_type;
@@ -312,7 +311,13 @@ public class TicketActivity extends Cursor
 				break;
 			case DUE_DATE_CHANGED:
 				this.activity_title = "Due date changed";
-				break;	
+				break;
+			case TICKET_CC_EMAIL_ADD:
+				this.activity_title = "CC email added";
+				break;
+			case TICKET_CC_EMAIL_REMOVE:
+				this.activity_title = "CC email removed";
+				break;
 			default:
 				this.activity_title = "";
 			}

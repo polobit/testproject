@@ -25,7 +25,8 @@
 	position: absolute;
 	width: 450px;
 	max-height: 230px;
-	top: 70px;
+	top: 60px;
+	left: 25%;
 	background-color: white;
 	z-index: 10;
 	border: 1px solid rgba(0, 0, 0, 0.2);
@@ -233,6 +234,51 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
   div.show-caret:hover > a.caret-btn{
   	display: inline-block;
   }
+
+  .bg-lightyellow{
+  	background-color: #FFFFE0;
+  }
+
+  .b-a-lightyellow{
+  	border: 1px solid #F7ECC2;
+  }
+
+  .bg-f6f8f8{
+  	background-color: #f6f8f8;
+  }
+
+  .arrow.left.arrow-lightyellow:after {
+    border-right-color: #FFFFE0;
+  }
+
+  .arrow.right.arrow-lightyellow:after {
+	border-left-color: #FFFFE0;
+  }
+
+  .arrow.left.arrow-light.lter:after{
+  	border-right-color: #f6f8f8;
+  }
+
+  .arrow.right.arrow-light.lter:after{
+  	border-left-color: #f6f8f8;
+  }
+
+  .chosen-container .chosen-drop {
+  	    border: none !important;
+  }
+
+  .chosen-container-active.chosen-with-drop .chosen-choices {
+    border-bottom-right-radius: 4px !important;
+    border-bottom-left-radius: 4px !important;
+ }
+
+ .select-assignee .chosen-container-single .chosen-single span {
+ 	margin-top: -5px !important;
+ }
+
+ .select-assignee .chosen-container-single>a.chosen-single>div>b {
+    margin-top: -1px;
+}
 
   div.chosen-container > ul.chosen-choices > li{
   	background-color: white !important;

@@ -793,6 +793,33 @@ public class TicketsRest
 	}
 
 	/**
+	 * To update cc emails
+	 * 
+	 * @param ticket_id
+	 * @return
+	 */
+	@PUT
+	@Path("/update-cc-emails")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Tickets updateCCEmails(@QueryParam("command") String command, @QueryParam("email") String email,
+			@QueryParam("id") Long ticketID)
+	{
+		try
+		{
+			if (ticketID == null || email == null || command == null)
+				throw new Exception("Required parameter missing.");
+
+			return TicketsUtil.updateCCEmails(ticketID, email, command);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
 	 * 
 	 * @param ticket_id
 	 * @return
@@ -810,6 +837,71 @@ public class TicketsRest
 			TicketsUtil.deleteTicket(ticketID);
 
 			return new JSONObject().put("status", "success").toString();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+	}
+
+	/**
+	 * changes ticket favorite
+	 * 
+	 * @param ticketID
+	 * @return returns success json
+	 */
+	@PUT
+	@Path("/toggle-favorite")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Tickets toggleFavorite(@QueryParam("id") Long ticketID)
+	{
+		try
+		{
+			if (ticketID == null)
+				throw new Exception("Required parameters missing.");
+
+			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
+
+			ticket.is_favorite = (ticket.is_favorite != null && ticket.is_favorite) ? false : true;
+
+			Tickets.ticketsDao.put(ticket);
+
+			return ticket;
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
+	 * changes ticket spam
+	 * 
+	 * @param ticketID
+	 * @return returns success json
+	 */
+	@PUT
+	@Path("/toggle-spam")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Tickets toggleSpam(@QueryParam("id") Long ticketID)
+	{
+		try
+		{
+			if (ticketID == null)
+				throw new Exception("Required parameters missing.");
+
+			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
+
+			ticket.is_spam = (ticket.is_spam != null && ticket.is_spam) ? false : true;
+
+			Tickets.ticketsDao.put(ticket);
+
+			return ticket;
 		}
 		catch (Exception e)
 		{

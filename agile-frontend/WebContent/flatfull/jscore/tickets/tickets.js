@@ -1,4 +1,4 @@
-var Group_ID = null, Current_Ticket_ID = null, Ticket_Filter_ID = null, Tickets_Util = {}, Sort_By = "-", Sort_Field = 'last_updated_time';
+var Group_ID = null, Current_Ticket_ID = null, Ticket_Filter_ID = null, Tickets_Util = {}, Sort_Field = '-last_updated_time';
 var popoverFunction = undefined;
 
 $("body").bind('click', function(e) {
@@ -22,8 +22,11 @@ var Tickets = {
 
 				$('#content').html($(template_ui));	
 
+				var isSingleRowView = (CURRENT_DOMAIN_USER.helpdeskSettings && CURRENT_DOMAIN_USER.helpdeskSettings.ticket_view_type == 'SINGLELINE')
+								 ? true : false;
+
 				//Fetching ticket toolbar template
-				getTemplate("tickets-toolbar-container", {isSingleRowView: Tickets.isSingleRowView()}, undefined, function(toolbar_ui){
+				getTemplate("tickets-toolbar-container", {isSingleRowView: isSingleRowView}, undefined, function(toolbar_ui){
 
 					if(!toolbar_ui)
 			  			return;
@@ -81,13 +84,16 @@ var Tickets = {
 	//Fetches new ticket collection
 	fetchTicketsCollection: function(){
 
+		var isSingleRowView = (CURRENT_DOMAIN_USER.helpdeskSettings && CURRENT_DOMAIN_USER.helpdeskSettings.ticket_view_type == 'SINGLELINE')
+								 ? true : false;
+
 		Ticket_Labels.fetchCollection(function() {
 
 				App_Ticket_Module.ticketsCollection = new Base_Collection_View({
 				url : '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID + '&custom_filters=' + encodeURI(JSON.stringify(Ticket_Custom_Filters.customFilters)),
-				global_sort_key: Sort_By + Sort_Field,
+				global_sort_key: Sort_Field,
 				sort_collection: false,
-				templateKey : Tickets.isSingleRowView() ? 'ticket-single-row' : 'ticket',
+				templateKey : isSingleRowView ? 'ticket-single-row' : 'ticket',
 				customLoader: true,
 				custom_scrollable_element: '#ticket-model-list',
 				customLoaderTemplate: 'ticket-collection-loader',
@@ -122,11 +128,8 @@ var Tickets = {
 
 					if(!App_Ticket_Module.ticketsCollection || 
 						!App_Ticket_Module.ticketsCollection.collection || 
-						App_Ticket_Module.ticketsCollection.collection.length == 0){
-
-						$('.ticket-count-text').html('');
+						App_Ticket_Module.ticketsCollection.collection.length == 0)
 						return;
-					}
 
 					var last_model = App_Ticket_Module.ticketsCollection.collection.last().toJSON();
 
@@ -247,14 +250,14 @@ var Tickets = {
 		 * Initializing click event on each ticket list item
 		 */
 		$('#ticket-model-list', el).off('click');
-		$('#ticket-model-list', el).on('click', 'tr > td.open-ticket', function(e){
+		$('#ticket-model-list', el).on('click', 'tr', function(e){
 
 			if($(e.target).hasClass('ticket-checkbox'))
 				return;
 
 			var url = '#tickets/filter/' + Ticket_Filter_ID + '/ticket/';
 
-			Backbone.history.navigate(url + $(this).closest('tr').find('td.data').attr('data-id'), {trigger : true});
+			Backbone.history.navigate(url + $(this).find('td.data').attr('data-id'), {trigger : true});
 		});
 
 		/*
@@ -262,26 +265,37 @@ var Tickets = {
 		 */
 		$(el).off('mouseover mouseout');
 		$(el)
-			.on('mouseover mouseout', 'td.show-notes',
+			.on('mouseover mouseout', '.open-ticket',
 				function(event) {
 
 					clearTimeout(popoverFunction);
-
-					var top = '70px';
 					if (event.type == 'mouseover'){
 
-						var $tr = $(this).closest('tr'), $that = $(this);
+						var $closest_li = $(this).closest('li');
 
-						popoverFunction = setTimeout(function(){
+						var top_offset = $('#' + $closest_li.attr('data-id'))
+								.offset().top;
 
-							if (window.innerHeight - $tr.offset().top < 210)
-								top = '-' + $that.find('#ticket-last-notes').height() + 'px'
+						if (window.innerHeight - top_offset >= 210)
 
-							$that.find('#ticket-last-notes').css('top', top).css('display', 'block');
+							popoverFunction = setTimeout(function(){
 
-						},1000);
+								$closest_li.find('#ticket-last-notes').css(
+									'display', 'block');
+							},1000);
+						else
+							popoverFunction = setTimeout(function(){
+
+								$closest_li.find('#ticket-last-notes').css(
+										'display', 'block').css('top','-'
+												+ $closest_li.find(
+														'#ticket-last-notes')
+														.height() + 'px');
+								},1000);
 					} else {
-						$('.ticket-last-notes').css('display', 'none').css('top', top);
+						
+						$('.ticket-last-notes').css('display',
+								'none').css('top', '60px');
 					}
 				}
 			);
@@ -294,40 +308,30 @@ var Tickets = {
 				function(event) {
 
 					clearTimeout(popoverFunction);
-					
 					if (event.type == 'mouseover'){
 
-						var $that = $(this);
-						var ticketID = $that.find('td.data').data('id');
-						var ticketJSON = App_Ticket_Module.ticketsCollection.collection.get(ticketID).toJSON();
+						var $tr = $(this), $table = $tr.closest('table')
 
-						getTemplate("ticket-single-row-popup", ticketJSON, undefined, function(template_ui){
-
-							if(!template_ui)
-						  		return;
-
-							$('body').append($(template_ui));
+						if (window.innerHeight - $tr.offset().top >= 210)
 
 							popoverFunction = setTimeout(function(){
 
-								//Get closest div with row class to set left alignment. Table row left doesn't work as table have scrolling.
-								var $closest_div = $that.closest('div.row');
-								var top = 0, left = $closest_div.offset().left + 70 + 'px';
-
-								if (window.innerHeight - $that.offset().top >= 210)
-									top = $that.offset().top + 40 + 'px';
-								else
-									top = $that.offset().top - $('#ticket-last-notes').height() + 'px';
-
-								$('#ticket-last-notes').css('top', top).css('left', left).css('display', 'block');
+								$tr.find('td.data').find('#ticket-last-notes').css(
+									'display', 'block').css('top', '50px').css('left', '335%');
 							},1000);
-						});
-					}else{
-						$('div.ticket-last-notes').remove();
+						else
+							popoverFunction = setTimeout(function(){
+
+								$tr.find('td.data').find('#ticket-last-notes').css(
+									'display', 'block').css('top', ($tr.offset().top - $tr.find('td.data').find('#ticket-last-notes').height() - 40) + 'px').css('left', '335%');
+							},1000);
+					} else {
+						
+						$('.ticket-last-notes').css('display','none');
 					}
 			});
 
-		//Initialization click event on inline dropdown to change assingee, status or priority
+		//Initialization click event on refresh button
 		$('.show-caret').off('click');
 		$(el).on('click', '.show-caret', function(e){
 			e.preventDefault();
@@ -351,75 +355,32 @@ var Tickets = {
 			Ticket_Bulk_Ops.clearSelection();
 		});
 
-		//Initialization click event on toggle custom filters btn
-		$('.tickets-toolbar').on('click', '.toggle-custom-filters', function(e){
-			e.preventDefault();
-
-			$('div#custom-filters-container').closest('div.col').toggle('slow');
-			var $icon = $(this).find('i');
-
-			if($icon.hasClass('fa-dedent')){
-
-				$(this).attr('data-original-title', 'Show filters');
-				$icon.removeClass('fa-dedent').addClass('fa-indent');
-			}else{
-
-				$(this).attr('data-original-title', 'Hide filters');
-				$icon.removeClass('fa-indent').addClass('fa-dedent');
-			}
-		});
-
 		//Initialization click event on sort filters
-		$('.tickets-toolbar').on('click', 'a.sort-field', function(e){
-			e.preventDefault();
-
-			if($(this).data('sort-key') == Sort_Field)
-				return;
-
-			Sort_Field = $(this).data('sort-key');
-
-			$('.sort-field-check').addClass('display-none');
-			$(this).find('i').removeClass('display-none');
-
-			$('.sort-field-txt').html($(this).text());
-
-			App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
-		});
-
-		//Initialization click event on sort by filter
 		$('.tickets-toolbar').on('click', 'a.sort-by', function(e){
 			e.preventDefault();
 
-			if($(this).data('sort-key') == Sort_By)
-				return;
+			var sortField = $(this).data('sort-key');
 
-			Sort_By = $(this).data('sort-by');
+			if(Sort_Field.indexOf(sortField) >= 0){
 
-			$('.sort-by-check').addClass('display-none');
-			$(this).find('i').removeClass('display-none');
+				// Minus(-) represents desc order
+				if(Sort_Field.startsWith('-')){
+					Sort_Field = sortField;
+
+					$(this).removeClass('sort-by-desc').addClass('sort-by-asc');
+				}else{
+					Sort_Field = ('-' + sortField);
+					$(this).removeClass('sort-by-asc').addClass('sort-by-desc');
+				}
+			}else{
+
+				Sort_Field = ('-' + sortField);;
+
+				$('a.sort-by').removeClass('sort-link sort-by-desc sort-by-asc');
+				$(this).addClass('sort-link sort-by-desc');
+			}
 
 			App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
-		});
-
-		/**
-		 * Initializing click event on toggle view button
-		 */
-		$('.toggle-collection-view').off('click');
-		$(el).on('click', ".toggle-collection-view", function(e){
-			e.preventDefault();
-
-			//Toggle view types
-			var view_type = Tickets.isSingleRowView() ? 'MULTILINE' : 'SINGLELINE', $that = $(this);
-
-			//Updating user preferences
-			$.post("/core/api/users/helpdesk-settings/toggle-view?view_type=" + view_type, {}, function(){
-
-				CURRENT_DOMAIN_USER.helpdeskSettings.ticket_view_type = view_type;
-
-				showNotyPopUp('information', 'Default view changed to ' + ((view_type == 'MULTILINE') ? 'Multi line' : 'Single line'), 'bottomRight', 3000);
-
-				Tickets.renderExistingCollection();
-			});
 		});
 	},
 	
@@ -654,9 +615,31 @@ var Tickets = {
         	
         	var err_email = !Tickets.isValidEmail(email);
 
-        	$('ul[name="cc_emails"]').prepend(getTemplate('cc-email-li', {email: email, err_email: err_email}));
+        	$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email, err_email: err_email}));
         	$('#cc_email_field').val('');
+
+        	// Save cc emails to the
+        	if(!err_email)
+        	  Tickets.updateCCEmails(email, 'add');
     	}
+	},
+
+	removeCCEmails: function(e){
+
+		Tickets.updateCCEmails($(e.target).closest('li').attr('data'), 'remove');
+		$(e.target).closest('li').remove();
+	},
+
+	updateCCEmails : function(email, command){
+
+		var newTicketModel = new BaseModel();
+		newTicketModel.url = "/core/api/tickets/update-cc-emails?command="
+				+ command + "&email=" + email + '&id=' + Current_Ticket_ID;
+		newTicketModel.save({'id': Current_Ticket_ID}, 
+			{success: function(model){
+					
+				}
+			});
 	},
 
 	//Return true if provided email is valid
@@ -824,11 +807,54 @@ var Tickets = {
 			container.find('.caret-btn').removeClass('inline-block').addClass('display-none');
 	    }
 	},
-
+	
 	isSingleRowView: function(){
 		return (CURRENT_DOMAIN_USER.helpdeskSettings && CURRENT_DOMAIN_USER.helpdeskSettings.ticket_view_type == 'SINGLELINE')
 								 ? true : false;
+	},
+	toggleFavorite : function(e){
+
+		var newTicketModel = new BaseModel();
+		newTicketModel.url = "/core/api/tickets/toggle-favorite?id=" + Current_Ticket_ID;
+		newTicketModel.save({'id': Current_Ticket_ID}, 
+			{	
+				success: function(model){
+					if(model.toJSON().is_favorite)
+						$(e.target).addClass("fa-star text-warning").removeClass("fa-star-o text-light");
+					else
+						$(e.target).removeClass("fa-star text-warning").addClass("fa-star-o text-light");
+
+				}
+			});
+		
+	},
+
+	toggleSpam : function(e){
+
+		var newTicketModel = new BaseModel();
+		newTicketModel.url = "/core/api/tickets/toggle-spam?id=" + Current_Ticket_ID;
+		newTicketModel.save({'id': Current_Ticket_ID}, 
+			{	
+				success: function(model){
+					if(model.toJSON().is_spam)
+						$(e.target).addClass("btn-danger").removeClass("btn-default");
+					else
+						$(e.target).removeClass("btn-danger").addClass("btn-default");
+
+				}
+			});
+	},
+
+	toggleWidgets : function(e){
+
+		$('.contact-right-widgetsview').toggle('slow');
+
+		if($(e.target).hasClass('fa-dedent'))
+			$(e.target).addClass('fa-indent').removeClass('fa-dedent');
+		else
+			$(e.target).addClass('fa-dedent').removeClass('fa-indent');
 	}
+
 };
 
 function tickets_typeahead(data){

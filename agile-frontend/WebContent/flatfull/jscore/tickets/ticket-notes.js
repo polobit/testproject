@@ -58,19 +58,78 @@ var Tickets_Notes = {
 		if(data.reply_type == 'forward')
 			data.notes = this.constructTextComments(App_Ticket_Module.notesCollection.collection.toJSON());
 
-		if(Ticket_Canned_Response.cannedResponseCollection.toJSON() 
+		if(Ticket_Canned_Response.cannedResponseCollection && Ticket_Canned_Response.cannedResponseCollection.toJSON() 
 			&& Ticket_Canned_Response.cannedResponseCollection.toJSON().length > 0)
 			data.canned_responses = Ticket_Canned_Response.cannedResponseCollection.toJSON();
+
+		data.label_matched_canned_responses = this.getMatchedCannedResponses(data.labels);
 
 		var $container = (el) ?  $('#send-reply-container', el): $('#send-reply-container');
 
 		$container.html(getTemplate('create-ticket-notes', data));
+
+		$($container).on('click', '#ticket_canned_response', function() {
+
+			var ticketModel = App_Ticket_Module.ticketView.model;
+
+			var cannedResponseId = $(this).attr('rel');
+
+			var message;
+
+			var cannedResponseArray = (Ticket_Canned_Response.cannedResponseCollection) ? Ticket_Canned_Response.cannedResponseCollection.toJSON() : [];
+
+			for (var i = 0; i < cannedResponseArray.length; i++) {
+				if(cannedResponseArray[i].id == cannedResponseId){
+					var template = Handlebars.compile(cannedResponseArray[i].message);
+					message = template(data);;
+					break;
+				}
+			};
+
+			if(!message)
+				return;
+
+			// Get canned response
+			var cannedMessage =  message + "<br><br>";
+			
+			$container.find("#reply_textarea").html(
+					cannedMessage + $container.find("#reply_textarea").text());
+
+		})
 
 		// Scroll to bottom of page
 		// $("html, body").animate({ scrollTop: $(document).height() }, 1000);
 
 		// Initialize tooltips
 		// $('[data-toggle="tooltip"]', $('#reply-editor')).tooltip();
+	},
+
+	getMatchedCannedResponses : function(labels){
+
+		var allowedCannedResponses = [];
+
+		if(!Ticket_Canned_Response.cannedResponseCollection)
+			return;
+
+		$.each(Ticket_Canned_Response.cannedResponseCollection.toJSON(), function(index, eachCannedResponse){
+
+			     cannedResponseLabels = eachCannedResponse.labels;
+
+			     var isAllowed = (cannedResponseLabels.length == 0) ? false : true;
+
+			     for (var i = 0; i < cannedResponseLabels.length; i++) {
+					if($.inArray(cannedResponseLabels[i], labels) == -1){
+			     		isAllowed = false;
+			     		break;
+			     	}
+				}
+
+			     if(isAllowed)
+			     	allowedCannedResponses.push(eachCannedResponse);
+		});
+
+		return allowedCannedResponses;
+
 	},
 
 	constructTextComments : function(notesCollection) {
@@ -90,6 +149,7 @@ var Tickets_Notes = {
 
 	},
 
+	/**
 	appendCannedResponseMessage : function(e) {
 
 		var ticketModel = App_Ticket_Module.ticketView.model;
@@ -108,8 +168,9 @@ var Tickets_Notes = {
 		// $("html, body").animate({ scrollTop: $(document).height() }, 1000);
 
 		// Initialize tooltips
-		$('[data-toggle="tooltip"]', $('#reply-editor')).tooltip();
+		// $('[data-toggle="tooltip"]', $('#reply-editor')).tooltip();
 	},
+	*/
 
 	showCannedMessages : function(e) {
 

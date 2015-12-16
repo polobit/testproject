@@ -284,23 +284,15 @@ $("#right-pane").html(ticketView.render().el);
 	 	if(App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection)
 	 		ticketModal = App_Ticket_Module.ticketsCollection.collection.get(id);
 
+	 	if(ticketModal != null){
+	 		App_Ticket_Module.ticketDetails(id);
+	 		return;
+	 	}
 
 	 	Ticket_Canned_Response.fetchCollection(function(){
-
-	 		//Verifying ticket exists in collection or not
-			if(!ticketModal)
-			{	
-				//Rendering the whole layout
-				Tickets.renderLayout(function(){
-
-					App_Ticket_Module.ticketDetails(id);		
-				});
-			}else{
-				
-				//If model exists renders the view directly
-				App_Ticket_Module.ticketDetails(id);
-			}
-	 		
+	 		Tickets.renderLayout(function(){
+				App_Ticket_Module.ticketDetails(id);		
+			});
 	 	});
 
 		
@@ -901,6 +893,11 @@ $('#content').find('.helpdesk-tab').addClass('select');
 	 		descending:true,
 	 		individual_tag_name : 'div',
 	 		postRenderCallback : function(el) {
+
+	 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					$("time", el).timeago();
+				});
 
 	 			if(callback)
 	 				callback();
