@@ -6,27 +6,22 @@
 </script>
 
 <script id="tag-management-collection-template" type="text/html">
+<div class='row'>
+<div class="pull-right m-b-md m-r-md">
+	<div class=" pull-left m-r-xs" style="display:inline;">
+		<label class="i-switch m-t-xs m-r allow_users_switch">
+            <input type="checkbox" id="new_tag_acl" class="left" name="new_tag_acl" value="true">
+	 	 	<i></i>
+		</label>
 
 
 
-<div align="right"> 
-		<div class="checkbox m-r-xl" style="display:inline;">
-                    <label class="i-checks i-checks-sm">
-                    <input id="new_tag_acl" type="checkbox" name="new_tag_acl" value="true" /><i></i>
-					Allow all users to add New Tags
-					<img border="0" src="/img/help.png" class="question-tag m-t-n-xs " rel="popover" data-placement="bottom" data-title="Lead Score" data-content="Disable this option if you don't want users (non-admin) to add new tags on contacts or companies, apart from the tags listed here." id="element" data-trigger="hover" data-original-title="">
-                    </label>
-		</div>
-<div style="display:inline;"><a href="#" id="add-new-tag" class="btn btn-default btn-addon btn-sm"><i class="icon-plus-sign" ></i> Add Tag</a></div>
-<div id="new_tag_field_block" style="display:none;" class="inline pull-right"><input id="new_tag" type="text" class="form-control pull-left m-r-sm w" placeholder="New Tag"/><a class="btn btn-info pull-left v-top  btn-sm" id="add_new_tag" href="#">Add</a></div>
-   		</div>
-<div class="clearfix"></div>
-<!--<div class="alert alert-warning m-t-sm" role="alert">
-  				Important: We have made some changes to Tag management. Tag names can no longer have special characters except space and underscore. Please go through your tags below and rename them accordingly.
-			</div>
-
-<div class="clearfix"></div> -->
-
+	</div>
+	<div class="pull-left"><a href="#" id="add-new-tag" class="btn btn-default btn-addon btn-sm"><i class="icon-plus-sign" ></i> Add Tag</a></div>
+	<div id="new_tag_field_block" style="display:none;" class="inline pull-right"><input id="new_tag" type="text" class="form-control pull-left m-r-sm w" placeholder="New Tag"/><a class="btn btn-info pull-left v-top  btn-sm" id="add_new_tag" href="#">Add</a></div>
+	<div class="clearfix"></div>
+</div>
+</div>
 
 <div class="control-group form-group">  
 {{tagManagementCollectionSetup this}}	 
@@ -63,23 +58,25 @@
 </script>
 
 <script id="tag-management-model-template" type="text/html">
+<div class="tag_tooltip">
 <span>
 
 <div id="tag-solid-state">
-<a class="anchor text-ellipsis v-middle text-sm p-l-xs text-sm pull-left inline-block"  style="width:140px" href="#tags/{{this.tag}}" >{{this.tag}}</a>  
+<a class="anchor text-ellipsis v-middle text-sm p-l-xs text-sm pull-left inline-block p-r-xs" href="#tags/{{this.tag}}" >{{this.tag}}</a>  
 <span id="actions" class="agile-custom-hide text-xs">
-<div class="pull-right tag-management-actions">
-	<a class="details" href="#"><i class="icon-file-text"></i></a>
-	<a class="edit" href="#" ><i class="icon-pencil"></i></a>
-	<a class="delete" href="#" ><i class="icon-trash"></i></a>
+<div class="pull-right tag-management-actions" data-trigger="click">
+	<a class="edit" href="#" ><i class="fa fa-pencil-square"></i></a>
+	<a class="delete" href="#" ><i class="fa fa-trash"></i></a>
+	<a class="details" href="#"><i class="fa fa-user"></i></a>
 </div>
 <div class="clearfix"></div>
 </div>
-<div class="agile-custom-hide pull-left m-b-sm m-l-sm" id="editing">
-	<input type="text" class="edit-input w-200 pull-left form-control m-r-sm" style="height:30px;" value='{{this.tag}}'>  
+<div class="agile-custom-hide pull-left m-t-sm m-l-sm" id="editing">
+	<input type="text" class="edit-input pull-left form-control m-r-sm" style="height:22px;font-size: 12px;margin-bottom: 11px;" value='{{this.tag}}'>  
 	
 </div>
 </span>
+</div>
 </script>
 
 

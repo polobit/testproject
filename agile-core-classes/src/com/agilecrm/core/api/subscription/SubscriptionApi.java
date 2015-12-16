@@ -1,6 +1,7 @@
 package com.agilecrm.core.api.subscription;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -18,12 +19,15 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import net.sf.json.JSONObject;
+
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
+import com.agilecrm.subscription.limits.plan.FreePlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
-import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.StripeUtil;
@@ -31,6 +35,9 @@ import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.webrules.util.WebRuleUtil;
+import com.agilecrm.workflows.triggers.util.TriggerUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -346,6 +353,47 @@ public class SubscriptionApi {
 	}
 	
 	/**
+	 * Cancels trial from gateway
+	 */
+	@Path("/cancel/trial")
+	@GET
+	public String cancelTrial() {
+		try {
+			JSONObject json = new JSONObject();
+			int webrulecount = WebRuleUtil.getCount();
+			int contactcount = ContactUtil.getCount();
+			int compaigncount = WorkflowUtil.getCount();
+			int triggerscount = TriggerUtil.getCount();
+			int userscount = DomainUserUtil.count();
+			FreePlanLimits limits = new FreePlanLimits();
+			if(webrulecount > limits.getWebRuleLimit() || contactcount > limits.getContactLimit() || compaigncount > limits.getWorkflowLimit() || triggerscount > limits.getTriggersLimit() || userscount > 2)
+			{
+				json.put("is_success", false);
+				json.put("webrulecount", webrulecount);
+				json.put("contactcount", contactcount);
+				json.put("compaigncount", compaigncount);
+				json.put("triggerscount", triggerscount);
+				json.put("userscount", userscount);
+				json.put("webrulelimit", limits.getWebRuleLimit());
+				json.put("contactlimit", limits.getContactLimit());
+				json.put("compaignlimit", limits.getWorkflowLimit());
+				json.put("triggerslimit", limits.getTriggersLimit());
+				json.put("userslimit", 2);
+				System.out.println("Cancelling free trial failed::"+json.toString());
+			}else{
+				json.put("is_success", true);
+				cancelSubscription();
+				System.out.println("Cancelling free trial success::");
+			}
+			return json.toString();	
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
+	/**
 	 * get the plan restrictions
 	 */
 	@Path("/planRestrictions")
@@ -378,6 +426,31 @@ public class SubscriptionApi {
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
+		}
+	}
+	
+	/**
+	 * get the plan restrictions
+	 */
+	@Path("/agileTags")
+	@GET
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String getAgileTags(@QueryParam("email") String email) {
+		String oldNameSpace = NamespaceManager.get();
+		try {
+			NamespaceManager.set("our");
+			Contact contact = ContactUtil.searchContactByEmail(email);
+			JSONObject json =  new JSONObject();
+			if(contact != null)
+			{
+				LinkedHashSet<String> tagsList = contact.tags;
+				System.out.println("Tags in our domain::: "+tagsList.toArray());
+				json.put("tags", tagsList.toArray());
+			}
+			return json.toString();
+		}finally{
+			NamespaceManager.set(oldNameSpace);
 		}
 	}
 

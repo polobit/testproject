@@ -1,9 +1,9 @@
 <script id="contact-documents-collection-template" type="text/html">
 		{{#unless this.length}}
         <div class="wrapper p-t-none">
-            <div class="slate-content">
+            <div class="slate-content mobile-pad-content">
                 <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">You have no documents for {{contactShortName}}.</h4>
@@ -13,7 +13,7 @@
                     </div>
                     {{/hasMenuScope}}
 					<div>{{#hasMenuScope 'DOCUMENT'}}<a href="#" class="btn btn-default btn-sm add-document-select m-t-xs"><i class='icon-plus-sign'/></i> Add Document</a>{{/hasMenuScope}}
-						<span class="contact-document-select" style="display:none;">
+						<span class="contact-document-select upload-doc-field" style="display:none;">
 							<select id="document-select" class="form-control inline-block">
 								<option value="">Select...</option>
 							</select>
@@ -47,7 +47,7 @@
 			</ul>
 		</div>-->
 		<div>{{#hasMenuScope 'DOCUMENT'}}<a href="#" class="add-document-select btn btn-default btn-sm btn-addon"><i class='icon-plus-sign'/></i> Add Document</a>{{/hasMenuScope}}
-			<span class="contact-document-select" style="display:none;">
+			<span class="contact-document-select upload-doc-field" style="display:none;">
 				<select id="document-select" class="form-control inline-block m-r-sm p-t-xs w-xl"> 
 					<option value="">Select...</option>
 				</select>
@@ -95,10 +95,10 @@
 
 					{{else}}
 						{{#if_contact_type "PERSON"}}	
-							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		

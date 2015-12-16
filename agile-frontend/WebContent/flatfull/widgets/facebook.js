@@ -8,6 +8,7 @@ function showFacebookMatchingProfile(contact_id, first_name)
 	console.log("am in facebook show")
 	queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/facebook/contacts/" + FACEBOOK_PLUGIN_ID + "?searchKey=" + first_name, 'json', function success(data)
 	{
+		$('#facebook_profile_load').remove();
 		console.log('Facebook');
 		// console.log(data)
 		// If data is not defined return
@@ -93,7 +94,7 @@ function showFacebookMatchingProfile(contact_id, first_name)
 
 	}, function error(data)
 	{
-
+		$('#facebook_profile_load').remove();
 		facebookError(data.responseText);
 
 	});
@@ -151,6 +152,7 @@ function showFacebookProfile(facebookid, contact_id)
 	console.log("am in facbook profile");
 	queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/facebook/userProfile/" + FACEBOOK_PLUGIN_ID + "/" + facebookid, 'json', function success(data)
 	{
+		$('#facebook_profile_load').remove();
 		console.log('Facebook');
 		console.log(data)
 		// If data is not defined return
@@ -185,6 +187,7 @@ function showFacebookProfile(facebookid, contact_id)
 	}, function error(data)
 	{
 
+		$('#facebook_profile_load').remove();
 		facebookError(data.responseText);
 
 	});
@@ -203,7 +206,8 @@ function getUserNameOrUserID(url) {
  */
 function startFacebookWidget(contact_id)
 {
-	console.log("in facebook.js")
+	
+	$('#spinner-facebook-search').show();
 	// Facebook widget name as a global variable
 	FACEBOOK_PLUGIN_NAME = "Facebook";
 
@@ -235,8 +239,11 @@ function startFacebookWidget(contact_id)
 	web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
 	console.log(web_url);
 
+	$('#Facebook').html(FACEBOOK_PROFILE_LOAD_IMAGE);
+
 	if (web_url)
 	{
+
 		// Get Twitter id from URL and show profile
 		console.log("profile attched" + web_url)
 		var fbProfileLink = buildFacebookProfileURL(web_url);

@@ -13,6 +13,7 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -73,6 +74,12 @@ public class BillingRestriction
     public Integer companies_count;
 
     public Long created_time = null;
+    
+    /**
+     * Last renewal time of emails for free users.
+     */
+    @NotSaved(IfDefault.class)
+    public Long last_renewal_time = null;
 
     /**
      * New limits
@@ -215,7 +222,7 @@ public class BillingRestriction
 	if (one_time_emails_count != null && one_time_emails_count > 0)
 	    return true;
 
-	return true;
+	return false;
     }
 
     public boolean isEmailPlanPaid()
@@ -321,7 +328,7 @@ public class BillingRestriction
 	if (created_time != null && created_time > 0)
 	    return;
 
-	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+	DomainUser user = DomainUserUtil.getDomainOwner(NamespaceManager.get());
 
 	if (user == null)
 	{
@@ -370,26 +377,31 @@ public class BillingRestriction
 	    this.one_time_emails_backup = one_time_emails_count;
 	    return;
 	}
-
-	BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
-
-	// Just to avoid null pointer exception
-	if (this.one_time_emails_backup == null)
-	    this.one_time_emails_backup = this.one_time_emails_count;
-
-	// Substracting from existing db count
-	restriction.one_time_emails_count -= (this.one_time_emails_backup - this.one_time_emails_count);
-
-	// Updating one time count from that of DB entity
-	this.one_time_emails_count = restriction.one_time_emails_count;
-
-	// Updating backup count from that of DB entity
-	this.one_time_emails_backup = one_time_emails_count;
+	try{
+		BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
+	
+		// Just to avoid null pointer exception
+		if (this.one_time_emails_backup == null)
+		    this.one_time_emails_backup = this.one_time_emails_count;
+	
+		// Substracting from existing db count
+		restriction.one_time_emails_count -= (this.one_time_emails_backup - this.one_time_emails_count);
+	
+		// Updating one time count from that of DB entity
+		this.one_time_emails_count = restriction.one_time_emails_count;
+	
+		// Updating backup count from that of DB entity
+		this.one_time_emails_backup = one_time_emails_count;
+	}catch(Exception e){
+		System.out.println("Exception in BillingRestriction prepersist:: "+ExceptionUtils.getFullStackTrace(e));
+		e.printStackTrace();
+	}
 
     }
 
     public void save()
     {
+    setCreatedTime();
 	dao.put(this);
     }
 

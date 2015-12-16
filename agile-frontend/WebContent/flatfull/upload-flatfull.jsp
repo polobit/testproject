@@ -1,13 +1,15 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="java.util.Date"%>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
-
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
 <title>Upload Image</title>
 <%-- <link rel="stylesheet" type="text/css" href="css/bootstrap-<%= UserPrefsUtil.getCurrentUserPrefs().template%>.min.css" /> --%>
 <link rel="stylesheet" type="text/css" href="/css/bootstrap.v3.min.css" />
@@ -104,6 +106,18 @@ function isValid(){
 	label.error {
 		color:red;
 	}
+	@media all and (max-width: 767px) {	
+	.mobile-popup {
+    min-height: 50vh;
+  }
+  .mobile-popup * {
+    text-align: center;
+    font-size: 20px;
+  }
+  .mobile-popup input {
+  	display: inline-block;
+  }
+}
 </style>
 
 </head>
@@ -113,11 +127,11 @@ function isValid(){
 
 <br/>
 <div class="row">
-<div class="col-md-3 col-sm-6 col-xs-12">
-<div class="panel panel-default">
+<div class="col-md-12 col-sm-12 col-xs-12">
+<div class="panel panel-default mobile-popup">
 <div class="panel-heading">Upload your image file</div>
 <div class="panel-body">
-<p>For best results, we recommend you upload png files. You can also upload jpg or gif files also.</i></p>
+<p>For best results, we recommend that you upload .png files. We even support .jpg and .gif formats.</i></p>
 
 <br/>
 <form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 

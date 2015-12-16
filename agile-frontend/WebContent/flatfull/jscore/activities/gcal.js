@@ -7,15 +7,24 @@
 // or better
 
 
-function loadUserEventsfromGoogle(users, start, end){
+function loadUserEventsfromGoogle(start, end, callback){
 
-		load_events_from_google(function(data)
+	showLoadingOnCalendar(true);
+		var isConfigured = load_events_from_google(function(data)
 						{
 							if (!data)
+							{
+
 								return;
+							}
 
 							return agile_transform_options(data, start, end);
 						});
+
+		if(!isConfigured)
+			showLoadingOnCalendar(false);
+
+	//	return;
 }
 
 function isDefined(x)
@@ -29,27 +38,39 @@ function _init_gcal_options(users)
 	var fc = $.fullCalendar;
 	fc.sourceFetchers = [];
 	// Transforms the event sources to Google Calendar Events
-	fc.sourceFetchers.push(function(sourceOptions, start, end)
-	{
-		if (sourceOptions.dataType == 'agile-gcal')
+	fc.sourceFetchers.push(_googleEventFetcher);
+}
+
+function _googleEventFetcher(sourceOptions, start, end, callback)
+{	
+	if (sourceOptions.dataType == 'agile-gcal')
 		{
+			
+				loadUserEventsfromGoogle(start, end);
 
-			if(users){
+			return	{};
 
-				loadUserEventsfromGoogle(users, start, end);
-				return;
+			//	callback([]);
+		}
+	else if (sourceOptions.dataType == "agile-events")
+		{
+			addEventsToCalendar(sourceOptions.events(start, end, function(test){}));
 
-			}
-			// Check whether to show the google calendar events or not.
-
-			$.getJSON('/core/api/users/agileusers', function(users)
-				{
-					loadUserEventsfromGoogle(users, start, end);
-				});
+			return {};
+			//return true;
+		//	callback([]);
 
 		}
-	});
 
+		console.log("--------------- Events -----------------------");
+		console.log(sourceOptions.className)
+		if($.isFunction(sourceOptions.events))
+		{
+			//	return sourceOptions.events(start, end, callback);
+		//	sourceOptions.events(start, end, callback);
+				return;
+		}		
+		return;
 }
 
 // Tranform agile
@@ -64,14 +85,19 @@ function agile_transform_options(sourceOptions, start, end)
 		return;
 	}
 
-	head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
+	_load_gapi(function()
 	{
-		setupGC(function()
-		{
-			_fetchGCAndAddEvents(sourceOptions, start, end);
-		});
+		_fetchGCAndAddEvents(sourceOptions, start, end);
 		return;
 	});
+}
+
+function _load_gapi(callback)
+{
+	head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
+		{
+			setupGC(callback);
+		});
 }
 
 // Setup Google Calendar
@@ -85,31 +111,128 @@ function setupGC(callback)
 	gapi_helper.when('calendarLoaded', callback);
 }
 
+function _set_token_from_session(callback)
+{
+	if(typeof gapi === 'undefined')
+	{
+		_load_gapi(function()
+		{
+			get_google_calendar_prefs(function(sourceOptions){
+				// Set the access token
+				gapi.auth.setToken({ access_token : sourceOptions.token, state : "https://www.googleapis.com/auth/calendar" });
+					callback();
+				});
+		});
+
+		return;
+	}
+
+	// Set the access token
+	var token = gapi.auth.getToken();
+
+	if(token == null || token.access_token == null)
+	{
+		get_google_calendar_prefs(function(sourceOptions){
+			// Set the access token
+			gapi.auth.setToken({ access_token : sourceOptions.token, state : "https://www.googleapis.com/auth/calendar" });
+			callback();
+		});
+		return;
+	}
+	return callback(gapi.auth.getToken());
+}
+
+function _resetGAPI()
+{
+	if(typeof gapi != 'undefined')
+	{
+		gapi.auth.setToken(undefined);
+	}
+}
+function _fetchGoogleCalendarList(callback, retryCount)
+{
+	if(!retryCount)
+			retryCount = 0;
+	try
+	{
+		_set_token_from_session(function(data){
+			var request = gapi.client.calendar.calendarList.list();
+			request.execute(function(response){
+				if(!response || response.code == '401')
+				{
+					if(retryCount < 2)
+					{
+						erase_google_calendar_prefs_cookie();
+						gapi.auth.setToken(undefined);
+						
+						_set_token_from_session(function(){
+							_fetchGoogleCalendarList(callback, ++retryCount)
+						});
+						return;
+						//return _fetchGoogleCalendarList(callback, ++retryCount);
+					}
+				}
+				else
+					callback(response);
+			});
+		});
+
+		return;
+	}
+	catch(err)
+	{
+	/*	console.log(err);
+				if(retryCount > 2)
+			return;
+
+		return _fetchGoogleCalendarList(callback, ++retryCount);*/
+	}
+}
+
 function _fetchGCAndAddEvents(sourceOptions, start, end)
 {
+	console.log(sourceOptions);
 	// Set the access token
 	gapi.auth.setToken({ access_token : sourceOptions.token, state : "https://www.googleapis.com/auth/calendar" });
 
-	// Retrieve the events from primary
-	var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', timeMin : ts2googleDate(start), timeMax : ts2googleDate(end),
-		maxResults : 10000, // max results causes problems: http://goo.gl/FqwIFh
-		singleEvents : true });
-
-	request.execute(function(resp)
+	if(!sourceOptions.calendarIds)
 	{
-		var google_events = [];
-		for (var i = 0; i < resp.items.length; i++)
+		sourceOptions.calendarIds = ["primary"];
+	}
+
+	showLoadingOnCalendar(false);
+	$.each(sourceOptions.calendarIds, function(index, calendarId)
+	{
+		showLoadingOnCalendar(true);
+		// Retrieve the events from primary
+		var request = gapi.client.calendar.events.list({ 'calendarId' : calendarId, timeMin : ts2googleDate(start), timeMax : ts2googleDate(end),
+			maxResults : 10000, // max results causes problems: http://goo.gl/FqwIFh
+			singleEvents : true });
+
+		request.execute(function(resp)
 		{
-			var fc_event = google2fcEvent(resp.items[i]);
+			var google_events = [];
+			for (var i = 0; i < resp.items.length; i++)
+			{
+				var fc_event = google2fcEvent(resp.items[i]);
 
-			if (fc_event)
+				if (fc_event)
+					google_events.push(fc_event);
+				renderEventBasedOnOwner(fc_event);
+				//$('#calendar_event').fullCalendar('renderEvent', fc_event);		
+			}
+
+
+			//$('#calendar_event').fullCalendar('renderEvents', google_events);
+			addEventSourceToCalendar("google_" + calendarId, google_events);
+			showLoadingOnCalendar(false);
+
+			
+			//$('#calendar_event').fullCalendar('removeEvents', function(value, i) {return false;});
 			// Add event
-			$('#calendar_event').fullCalendar( 'renderEvent', fc_event  )
-				
-		}
-
-		
-	});
+			//$('#calendar_event').fullCalendar('renderEvents', google_events);
+		});
+	})
 }
 
 // Convert a timestamp into google date format
@@ -143,14 +266,14 @@ function google2fcEvent(google)
 		if (fc.end.length > 10)
 		{
 			end = $.fullCalendar.parseDate(fc.end);
-			fc.end = $.fullCalendar.formatDate(end, 'yyyy-MM-dd');
+			fc.end = $.fullCalendar.formatDate(end, 'yyyy-mm-dd');
 		}
 		else
 		{
 			end = new Date(fc.end);
 		}
 		end.setDate(end.getDate() - 1);
-		fc.end = end.format('yyyy-MM-dd');
+		fc.end = end.format('yyyy-mm-dd');
 
 	}
 	return fc;

@@ -2,6 +2,7 @@ package com.agilecrm.user;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -55,6 +56,11 @@ public class RegisterVerificationServlet extends HttpServlet
 	String domain = request.getParameter("domain");
 	String oauth = request.getParameter("oauth");
 	String email = request.getParameter("email");
+	
+	try {
+		email = URLDecoder.decode(email, "UTF-8");
+	} catch (Exception e) {
+	}
 
 	String userAgent = request.getHeader("User-Agent");
 
@@ -109,7 +115,13 @@ public class RegisterVerificationServlet extends HttpServlet
 
 	else if (!StringUtils.isEmpty(email))
 	{
-	    String emailDomainSubstring = email.split("@")[1];
+		String emailDomainSubstring = "";
+		try {
+			emailDomainSubstring = email.split("@")[1];
+		} catch (Exception e) {
+		}
+		
+	    // String emailDomainSubstring = email.split("@")[1];
 	    System.out.println(emailDomainSubstring);
 	    if (StringUtils.isEmpty(emailDomainSubstring))
 	    {

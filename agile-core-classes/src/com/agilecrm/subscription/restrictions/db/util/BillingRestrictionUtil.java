@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
-
+import org.apache.commons.lang.exception.ExceptionUtils;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
@@ -17,6 +17,7 @@ import com.agilecrm.subscription.limits.PlanLimits.PlanClasses;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.NamespaceManager;
 
 @XmlRootElement
@@ -83,8 +84,7 @@ public class BillingRestrictionUtil {
 
 	public static BillingRestriction getBillingRestrictionFromDB() {
 		System.out.println(NamespaceManager.get());
-		BillingRestriction restriction = BillingRestriction.dao.ofy()
-				.query(BillingRestriction.class).get();
+		BillingRestriction restriction = getRestrictionFromDB();
 
 		// Gets respective PlanLimits class based on plan.
 		restriction.planDetails = PlanLimits
@@ -97,16 +97,43 @@ public class BillingRestrictionUtil {
 	}
 
 	public static BillingRestriction getBillingRestrictionFromDbWithoutSubscription() {
-		BillingRestriction restriction = BillingRestriction.dao.ofy()
-				.query(BillingRestriction.class).get();
+		BillingRestriction restriction = getRestrictionFromDB();
 
+		return restriction;
+	}
+	
+	
+	public static BillingRestriction getRestrictionFromDB(){
+		System.out.println("Fetching restriction from db");
+		BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
+		System.out.println("Done fetching restriction from db");
 		if (restriction == null) {
 			restriction = BillingRestriction.getInstance(null, null);
 			restriction.refresh(true);
 			restriction.save();
-
+			return restriction;
 		}
-
+		// Set one_time_emails_count to '0' per every 30 days for free users(Free 5000 emails)
+		System.out.println("max emails count::"+restriction.max_emails_count);
+		if(restriction.max_emails_count == null || restriction.max_emails_count == 0){
+			System.out.println("last renewal time::"+restriction.last_renewal_time);
+			if(restriction.last_renewal_time == null){
+				if(restriction.created_time == null){
+					System.out.println("saving BillingRestriction");
+					restriction.save();
+				}
+				restriction.last_renewal_time = restriction.created_time/1000;
+			}
+			Long currentDate = new DateUtil().getTime().getTime()/1000;
+			if(currentDate - restriction.last_renewal_time >= 2592000){
+				System.out.println("Updating free 5000 emails");
+				System.out.println("last renewal time is:: "+restriction.last_renewal_time);
+				restriction.one_time_emails_count = 0;
+				restriction.last_renewal_time = System.currentTimeMillis()/1000;
+				restriction.save();
+			}
+		}
+		System.out.println("restriction obj:: "+restriction);	
 		return restriction;
 	}
 
@@ -388,6 +415,8 @@ public class BillingRestrictionUtil {
 
 			return billingRestriction;
 		} catch (Exception e) {
+			System.out.println("got exception while retrieving billing restriction");
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			return null;
 		}
 	}

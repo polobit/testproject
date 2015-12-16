@@ -1,7 +1,7 @@
 /**
  * Loading spinner shown while loading
  */
-var LOADING_HTML = '<img class="loading" style="padding-left:10px;padding-right:5px;opacity:0.5;" src= "/flatfull/img/ajax-loader-cursor.gif"></img>';
+var LOADING_HTML = '<img class="loading" style="padding-left:10px;padding-right:5px;opacity:0.5;" src= "'+updateImageS3Path("/flatfull/img/ajax-loader-cursor.gif")+'"></img>';
 
 /**
  * Set of loading images
@@ -13,13 +13,13 @@ LOADING_HTML_IMAGES = [
 /**
  * Loading images shown which contacts are being fetched on page scroll
  */
-var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-right:5px" src= "img/ajax-loader-cursor.gif"></img>';
+var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-right:5px" src= "'+updateImageS3Path("img/ajax-loader-cursor.gif")+'"></img>';
 
 /**
  * Default image shown for contacts if image is not available
  */
 
-var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/flatfull/user-default.jpg";
+var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
 
 var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi,Sandeep";
 
@@ -85,7 +85,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 	});
 
 	// Prepend Loading
-	$loading = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "../flatfull/img/ajax-loader-cursor.gif"></img>';
+	$loading = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "'+updateImageS3Path("../flatfull/img/ajax-loader-cursor.gif")+'"></img>';
 	if ($("#" + selectId, el).next().hasClass("select-loading"))
 		$("#" + selectId, el).next().html($loading);
 	else
@@ -548,6 +548,9 @@ function convertDateFromUKtoUS(ukDate)
 		date = ukDate.split(".");
 	if(date.length == 3)
 	{	
+		if(date[2].length == 2)
+			  date[2] = "20" + date[2];
+
 		var returnDate = new Date(date[1]+"/"+date[0]+"/"+date[2]);
 		if(!/Invalid|NaN/.test(returnDate))
 			return returnDate.format("mm/dd/yyyy");
@@ -558,4 +561,23 @@ function convertDateFromUKtoUS(ukDate)
 		return "";
 }
 
+/**
+* Retuns date with supportable format
+*/
+function getFormattedDateObjectWithString(value){
+
+		if(!value)
+			   return new Date("");
+
+        value = value.replace(/\./g,'/');
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("yyyy") == -1){
+			value = value.substring(0, value.length - 2) + "20" + value.substring(value.length - 2);
+		}
+
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+			value = convertDateFromUKtoUS(value);
+
+		return new Date(value);
+	
+}
 

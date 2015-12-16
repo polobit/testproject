@@ -44,7 +44,7 @@ public class VersioningUtil
 	}
 	else
 	{
-	    APP_ID = "agilecrmbeta";
+	    APP_ID = "agile-crm-cloud";
 	    IS_LOCAL_DEVELOPMENT_SERVER = true;
 	    IS_PRODUCTION_APP = "agile-crm-cloud".equals(APP_ID);
 	    RELEASE_VERSION = "default";
@@ -165,6 +165,11 @@ public class VersioningUtil
 	    return "https://" + domain + "-dot-sandbox-dot-agilesanbox.appspot.com/";
 
 	return VersioningUtil.getDefaultLoginUrl(domain);
+    }
+    
+    public static String getBaseServerURL()
+    {
+	return CLOUDFRONT_SERVER_URL;
     }
 
     public static boolean isBackgroundThread()

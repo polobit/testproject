@@ -293,13 +293,13 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("facebookpage.js");
 	}
+	if (templateName.indexOf("landingpages") == 0)
+	{
+		template_relative_urls.push("landingpages.js");
+	}
 	if (templateName.indexOf("ticket") == 0)
 	{
 		template_relative_urls.push("tickets.js");
-	}
-	if (templateName.indexOf("webpages") == 0)
-	{
-		template_relative_urls.push("webpages.js");
 	}
 	if (templateName.indexOf("billing-settings") == 0 || templateName.indexOf("creditcard-update") == 0)
 	{

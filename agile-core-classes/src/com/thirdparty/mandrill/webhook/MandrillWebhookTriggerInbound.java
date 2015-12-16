@@ -1,6 +1,7 @@
 package com.thirdparty.mandrill.webhook;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,14 +38,14 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
     public static final String INBOUND_MAIL_EVENT = "INBOUND_MAIL_EVENT";
 
-    public static final Map<String, String> confirmationSubjects;
+    public static final List<String> confirmationEmails;
 
     static
     {
-	confirmationSubjects = new HashMap<String, String>();
-	confirmationSubjects.put("forwarding-noreply@google.com", "Forwarding Confirmation");
-	confirmationSubjects.put("no-reply@cc.yahoo-inc.com", "Forwarding Email Confirmation");
-	confirmationSubjects.put("noreply@zoho.com", "Email forwarding confirmation");
+	confirmationEmails = new ArrayList<String>();
+	confirmationEmails.add("forwarding-noreply@google.com");
+	confirmationEmails.add("no-reply@cc.yahoo-inc.com");
+	confirmationEmails.add("noreply@zoho.com");
     }
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -289,12 +290,11 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	Boolean isConfirmationEmail = false;
 	try
 	{
-	    String messageSubject = message.getString("subject");
 	    String fromEmail = message.getString("from_email");
 
-	    for (Map.Entry<String, String> entry : confirmationSubjects.entrySet())
+	    for (String entry : confirmationEmails)
 	    {
-		if (StringUtils.equals(entry.getKey(), fromEmail) && messageSubject.indexOf(entry.getValue()) != -1)
+		if (StringUtils.equals(entry, fromEmail))
 		{
 		    isConfirmationEmail = true;
 		    break;

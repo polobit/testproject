@@ -969,7 +969,7 @@
                                   {{#if pic}}
                                     <img class="w-full"  src="{{pic}}"  />
                                   {{else}}
-                                    <img class="w-full"  src="https://contactuswidget.appspot.com/images/pic.png"  />
+                                    <img class="w-full"  src="{{getS3ImagePath '/images/pic.png'}}"  />
                                   {{/if}}
 								</div></a>												
                                 <p>
@@ -1082,9 +1082,10 @@
                          <p class="help-block p-t-xs">Recommended image size: 50px*50px.</p>
                      </td>
 		 		  </tr>
+		 		  	</tbody>
+		</table>
 				  {{{get_avatars_template}}}
-		 	</tbody>
-		</table>		   
+		 		   
 	</div>
 </div>
 </div>

@@ -1,5 +1,7 @@
 package com.agilecrm.user.util;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -153,7 +155,18 @@ public class DomainUserUtil
 
 	try
 	{
-	    return dao.listByProperty("domain", domain);
+	    List<DomainUser> domainUsers = dao.listByProperty("domain", domain);
+
+	    // Now sort by name.
+	    Collections.sort(domainUsers, new Comparator<DomainUser>()
+	    {
+		public int compare(DomainUser one, DomainUser other)
+		{
+		    return one.name.toLowerCase().compareTo(other.name.toLowerCase());
+		}
+	    });
+
+	    return domainUsers;
 	}
 	finally
 	{

@@ -103,7 +103,11 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.RestAPI.class);
 	s.add(com.agilecrm.core.api.OfficeCalendar365API.class);
 	s.add(com.agilecrm.core.api.calendar.CategoriesAPI.class);
+	// Email Unsubscription
+	s.add(com.agilecrm.core.api.campaigns.UnsubscribeEmailAPI.class);
+	s.add(com.agilecrm.core.api.landingpages.LandingPagesAPI.class);
 	// s.add(com.agilecrm.core.api.webpage.WebPageAPI.class);
+	s.add(com.agilecrm.core.api.deals.DealFilterAPI.class);
 	
 	// Ticket Rest classes
 	s.add(com.agilecrm.ticket.rest.TicketsRest.class);
@@ -117,6 +121,6 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.ticket.rest.TicketBulkActionsBackendsRest.class);
 	s.add(com.agilecrm.ticket.rest.TicketLabelsRest.class);
 
-		return s;
-	}
+	return s;
+    }
 }

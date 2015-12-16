@@ -18,7 +18,6 @@ import com.agilecrm.util.HttpClientUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.mandrill.EmailContentLengthLimitExceededException;
 import com.thirdparty.mandrill.Mandrill;
-import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
 /**
@@ -120,7 +119,7 @@ public class MandrillUtil
 	System.out.println("API key obtained is..." + apiKey);
 	
 	// Verifies if subaccount exists
-	checkSubAccountExists(firstMailDefferedTask.domain, apiKey);
+	MandrillSubAccounts.checkSubAccountExists(firstMailDefferedTask.domain, apiKey);
 	
 	// Initialize mailJSON with common fields
 	JSONObject mailJSON = getMandrillMailJSON(apiKey, firstMailDefferedTask.domain,
@@ -601,34 +600,5 @@ public class MandrillUtil
 	    // }
 	}
 	return true;
-    }
-    
-    /**
-     * Verifies whether subaccount exists, if not creates
-     * 
-     * @param subaccountId
-     * @param apiKey
-     */
-    private static void checkSubAccountExists(String subaccountId, String apiKey){
-    	
-    	if(StringUtils.isBlank(subaccountId) || StringUtils.isBlank(apiKey))
-    		return;
-    	
-    	// To get the response
-    	String response = MandrillSubAccounts.updateMandrillSubAccount(subaccountId, apiKey, "");
-    	
-    	 if (StringUtils.contains(response, "Unknown_Subaccount"))
-		 {
-			try 
-			{
-				// throw retry exception and create new subaccount
-				throw new RetryException("Unknown Mandrill Subaccount");
-			} 
-			catch (RetryException e) {
-				
-				 // Creates new subaccount
-			    MandrillSubAccounts.createMandrillSubAccount(subaccountId, apiKey);
-			}
-		 }
     }
 }

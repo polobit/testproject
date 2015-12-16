@@ -248,7 +248,7 @@ $(document).ready(function(){
 <script id="campaign-voicemail-template" type="text/html">
 {{#if this}}
 <div class="btn-group dropdown pull-left">
-<button class="btn btn-xs btn-default" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}" style="padding-left: 2px;padding-right: 2px;padding-bottom: 1px;padding-top: 0px;height: 22px;"><img src="/img/voicemail.png" width="17px" height="17px"></img></button>
+<button class="btn btn-xs btn-default" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}" style="padding-left: 2px;padding-right: 2px;padding-bottom: 1px;padding-top: 0px;height: 22px;"><img src="{{getS3ImagePath '/img/voicemail.png'}}" width="17px" height="17px"></img></button>
 {{#ifCond length "greaterthan" 1}}
 <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" onclick="voiceMailDropAction()" id="splitButtonVoicemail" style="padding-right:3px;padding-left:3px;padding-bottom:1px;height: 22px;"><span class="caret"></span></button>
 <ul class="dropdown-menu text-left text-base" style="top:20px;">

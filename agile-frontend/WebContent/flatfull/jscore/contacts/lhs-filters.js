@@ -147,8 +147,10 @@ function submitLhsFilter()
 
 function contactFiltersListeners(container_id){
 
+	$('[data-toggle="tooltip"]').tooltip();
+
 if(!container_id)
-	  container_id = 'conatcts-listeners-conatainer';
+	  container_id = 'contacts-listener-container';
 
 $('#' + container_id).on('click', 'a.filter-multiple-add-lhs', function(e)
 {
@@ -481,6 +483,28 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
 			}
 
 		});
+
+     $('body #companies-left-filters-toggle').off('click');
+ 	$('body').on('click', '#companies-left-filters-toggle', function(e)
+		{
+
+			e.preventDefault();
+
+			if ($('#companies-lhs-filters-toggle').is(':visible'))
+			{
+				$('#companies-lhs-filters-toggle').hide();
+				localStorage.setItem('companiesFilterStatus','display:none');
+				e.preventDefault();
+			}
+			else
+			{
+				$('#companies-lhs-filters-toggle').show();
+				localStorage.setItem('companiesFilterStatus','');
+				e.preventDefault();
+			}
+
+		});
+     	
 
 
       $('#' + container_id).on('click', '.contacts-view', function(e)

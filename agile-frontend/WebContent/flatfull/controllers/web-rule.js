@@ -53,10 +53,10 @@ var WebreportsRouter = Backbone.Router.extend({
 	{
 		if(!tight_acl.checkPermission('WEBRULE'))
 			return;
-		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', template : "webrules-add", window : "web-rules", isNew : true,
+		var web_reports_add = new Web_Rules_Event_View({ url : 'core/api/webrule', template : "webrules-add", window : "web-rules", isNew : true,
 			postRenderCallback : function(el)
 			{
-				head.js('lib/agile.jquery.chained.min.js', function()
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
 
 					chainFilters(el, undefined, function()
@@ -91,12 +91,12 @@ var WebreportsRouter = Backbone.Router.extend({
 
 		// Default template is webrule-add. If rule is of type shopify template is changed accordingly
 		var template = "webrules-add";
-		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', model : webrule, template : template, window : "web-rules",
+		var web_reports_add = new Web_Rules_Event_View({ url : 'core/api/webrule', model : webrule, template : template, window : "web-rules",
 			postRenderCallback : function(el)
 			{
 				if (count > 0)
 					return;
-				head.js('lib/agile.jquery.chained.min.js', function()
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
 					chainFilters(el, webrule.toJSON(), function()
 					{

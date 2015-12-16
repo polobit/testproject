@@ -1,6 +1,6 @@
 $(function(){
 	
-   $("#choose-avatar-modal").on('click', 'table td a', function(e) {
+   $("#choose-avatar-modal").on('click', '.thumb-avatar-wrapper', function(e) {
 	
 			e.preventDefault();
 	
@@ -14,9 +14,10 @@ $(function(){
 			$(this).trigger('choose-image')
 	});
 	
-	$("#choose-avatar-modal").on('choose-image', 'table td a', function(e) {
+	$("#choose-avatar-modal").on('choose-image', '.thumb-avatar-wrapper', function(e) {
 	
-			var selectedSource = $(this).closest('tbody').find("input[type='hidden']").val();
+			//var selectedSource = $(this).closest('tbody').find("input[type='hidden']").val();
+			var selectedSource = $(this).attr('src');
 			
 			if(selectedSource)
 			{

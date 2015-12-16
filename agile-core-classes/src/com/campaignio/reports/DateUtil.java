@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.db.util.GoogleSQLUtil;
 
 /**
@@ -151,6 +153,10 @@ public class DateUtil
 
 	public static String getDateInGivenFormat(long timestamp, String dateFormat, String timezone)
 	{
+		// If null or empty
+		if(StringUtils.isBlank(timezone))
+			timezone = "UTC";
+		
 		Date date = new Date(timestamp);
 		DateFormat format = new SimpleDateFormat(dateFormat);
 		format.setTimeZone(TimeZone.getTimeZone(timezone));

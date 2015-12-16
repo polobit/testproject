@@ -49,7 +49,7 @@ $(function(){
 						return;
 					
 					
-					$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+					$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 					
 					var url = $(table).attr('url');
 					if(SELECT_ALL == true)
@@ -114,7 +114,7 @@ $(function(){
 					return;
 				
 				
-				$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+				$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 				
 				var url = $(table).attr('url');
 				if(SELECT_ALL && SELECT_ALL == true)

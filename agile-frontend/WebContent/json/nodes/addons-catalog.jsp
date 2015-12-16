@@ -89,7 +89,7 @@
 			path = application.getRealPath("/")+ "/" + path;
 		
         // Read each path locally from context
-        File f = new File(path);
+        File f = new File(application.getRealPath("/")+ "/" + path);
 		is = new FileInputStream(f);
 		    
 		contents = IOUtils.toString(is, "UTF-8");
