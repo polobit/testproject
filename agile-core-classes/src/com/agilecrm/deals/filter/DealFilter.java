@@ -160,8 +160,12 @@ public class DealFilter {
 			created_time = System.currentTimeMillis() / 1000;
 		}
     	
-    	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-	    filter_owner_id = domainUser.id.toString();
+    	if (filter_owner_id == null)
+    	{
+    		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+    	    filter_owner_id = domainUser.id.toString();
+    	}
+    	
 
 	    // Saves domain user key
 	    if (filter_owner_id != null)
