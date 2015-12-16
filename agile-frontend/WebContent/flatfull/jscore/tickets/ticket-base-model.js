@@ -29,8 +29,10 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .show-tags-field" : "showTagsField",
 		"click .remove-ticket-tags" : "removeTicketTags",
 
+		"click .remove-ticket-cc-emails" : "removeTicketCCEmails",
+
 		//New ticket events
-		"click .show_cc_emails_field" : "showCCEmailsField",
+		// "click .show_cc_emails_field" : "showCCEmailsField",
 		"change .status" : "toggleGroupAssigneeFields",
 		"click .nt-reqester_email" : "showContactTypeAhead",
 		"click .toggle-options" : "toggleOptions",
@@ -48,7 +50,11 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .discard-reply" : "discardReply",
 		"click .timeline" : "renderTicketTimeline",
 		"click .canned-messages" : "showCannedMessages",
-		"click .ticket-canned-response" : "appendCannedResponseMessage"
+		// "click .ticket-canned-response" : "appendCannedResponseMessage"
+
+		"click .toggle-favorite" : "toggleFavorite",
+		"click .toggle-spam" : "toggleSpam",
+		"click .toggle-widgets" : "toggleWidgets"
 	},
 
 	changeStatus: function(e){
@@ -110,6 +116,13 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		Ticket_Tags.removeTag(e);
 	},
+
+	removeTicketCCEmails : function(e){
+		e.preventDefault();
+
+		Tickets.removeCCEmails(e);
+	},
+
 
 	showCCEmailsField: function(e){
 		e.preventDefault();
@@ -179,11 +192,13 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		Tickets_Notes.repltBtn($this.attr('rel'));
 	},
 
+	/**
 	appendCannedResponseMessage : function(e){
 		e.preventDefault();
 		
 		Tickets_Notes.appendCannedResponseMessage(e);
 	},
+	*/
 
 	discardReply: function(e){
 		e.preventDefault();
@@ -250,6 +265,25 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		Tickets_Notes.showCannedMessages(e);
 	},
+
+	toggleFavorite : function(e){
+		e.preventDefault();
+		
+		Tickets.toggleFavorite(e);
+	},
+
+	toggleSpam : function(e){
+		e.preventDefault();
+		
+		Tickets.toggleSpam(e);
+	},
+
+	toggleWidgets : function(e){
+		e.preventDefault();
+		
+		Tickets.toggleWidgets(e);
+	},
+
 
 	deleteTicket: function(e){
 		e.preventDefault();

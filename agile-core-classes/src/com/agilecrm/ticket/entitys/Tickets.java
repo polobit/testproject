@@ -254,6 +254,11 @@ public class Tickets extends Cursor
 	public Boolean is_favorite = false;
 
 	/**
+	 * Stores true if ticket is spam
+	 */
+	public Boolean is_spam = false;
+
+	/**
 	 * Stores true if ticket is deleted from client
 	 */
 	public String requester_ip_address = "";

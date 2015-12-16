@@ -45,6 +45,11 @@ var Ticket_Timeline = {
 
 			var $template = $(getTemplate("ticket-timeline", data));
 
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+			{
+				$("time", $template).timeago();
+			});
+
 			//Initialize tooltips
 			$('[data-toggle="tooltip"]', $template).tooltip();
 

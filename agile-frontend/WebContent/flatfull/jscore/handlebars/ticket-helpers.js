@@ -83,6 +83,16 @@ Handlebars.registerHelper('array_contains', function(array, obj, options) {
 	return options.inverse(this);
 });
 
+Handlebars.registerHelper('is_labels_collection_empty', function(options) {
+
+	if (!Ticket_Labels.labelsCollection || Ticket_Labels.labelsCollection.toJSON().length == 0 )
+		return options.fn(this);
+
+	return options.inverse(this);
+
+});
+
+
 Handlebars.registerHelper('get_ticket_labels_from_ids', function(labels,
 		object, options) {
 
@@ -108,6 +118,7 @@ Handlebars.registerHelper('get_ticket_labels_from_ids', function(labels,
 
 });
 
+/**
 Handlebars.registerHelper('get_allowed_canned_responses_array', function(labels, object, options) {
 
 	var allowedCannedResponses = [];
@@ -136,6 +147,7 @@ Handlebars.registerHelper('get_allowed_canned_responses_array', function(labels,
 	return options.fn(object);
 
 });
+*/
 
 Handlebars.registerHelper('get_label_from_label_id', function(id, options) {
 

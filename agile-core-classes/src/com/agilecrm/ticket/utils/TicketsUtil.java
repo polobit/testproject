@@ -31,11 +31,7 @@ import com.agilecrm.util.email.SendMail;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.Query.SortDirection;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.KeyRange;
-import com.googlecode.objectify.Query;
 
 /**
  * <code>TicketUtil</code> is a utility class to provide CRUD operations on
@@ -303,15 +299,15 @@ public class TicketsUtil
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
-		if(ticket.status == status)
+		if (ticket.status == status)
 			return ticket;
-		
+
 		Status oldStatus = ticket.status;
 		ticket.status = status;
-		
-		if(status == Status.CLOSED)
+
+		if (status == Status.CLOSED)
 			ticket.closed_time = Calendar.getInstance().getTimeInMillis();
-		
+
 		Tickets.ticketsDao.put(ticket);
 
 		// Updating search document
@@ -539,6 +535,43 @@ public class TicketsUtil
 		return ticket;
 	}
 
+	/**
+	 * To Update cc emails
+	 * 
+	 * @param ticket_id
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	public static Tickets updateCCEmails(Long ticket_id, String email, String command) throws EntityNotFoundException
+	{
+		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+
+		List<String> CCEmails = ticket.cc_emails;
+
+		TicketActivityType ticketActivityType = null;
+
+		if ("add".equalsIgnoreCase(command))
+		{
+			CCEmails.add(email.trim());
+			ticketActivityType = TicketActivityType.TICKET_CC_EMAIL_ADD;
+		}
+		else
+		{
+			CCEmails.remove(email);
+			ticketActivityType = TicketActivityType.TICKET_CC_EMAIL_REMOVE;
+		}
+
+		ticket.cc_emails = CCEmails;
+		Tickets.ticketsDao.put(ticket);
+
+		new TicketsDocument().edit(ticket);
+
+		// Logging activity
+		new TicketActivity(ticketActivityType, ticket.contactID, ticket.id, "", email, "cc_emails").save();
+
+		return ticket;
+	}
+
 	public static void updateLabels(String ticketId, String[] labelsArray, String type) throws Exception
 	{
 		for (String label : labelsArray)
@@ -684,9 +717,9 @@ public class TicketsUtil
 			// Assigning new group to ticket
 			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
 			ticket.groupID = group_id;
-			
+
 			ticket.assigned_to_group = true;
-			
+
 			// Updating ticket entity
 			Tickets.ticketsDao.put(ticket);
 

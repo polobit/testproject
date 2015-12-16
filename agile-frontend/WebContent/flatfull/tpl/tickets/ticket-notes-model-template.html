@@ -18,14 +18,22 @@
 	  	{{#if_equals created_by 'REQUESTER'}}
 
 	              	<span><b class="text-sm">{{requester_name}}</b></span>
+
+
 	              	<span class="txt-small text-xs text-muted pull-right">
-			   					Received on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
-			   				</span>
+	              		<i class="fa fa-clock-o"></i>
+			            	<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
+			              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
+			              	</time>
+	   				</span>
 	             
 			   	{{else}}
 			   		<span><b class="text-sm">{{domain_user.name}}</b></span>
 	              	<span class="txt-small text-xs text-muted pull-right">
-			   					Replied on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+	              		<i class="fa fa-clock-o"></i>
+		   					<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
+		              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
+		              	</time>
 			   		</span>
 			   	{{/if_equals}}
 	  </div>
@@ -65,13 +73,15 @@
 	  	<b class="text-sm">{{domain_user.name}}</b>
 
 	  	<span class="txt-small text-xs text-muted pull-right">
-				{{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
-		</span>
+      		<i class="fa fa-clock-o"></i>
+				<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
+          		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
+          	</time>
+   		</span>
+
 	  </span>
 
-	  <small class="block"><a href="" class="">Private Notes</a></small>
-
-	  <span class="block m-t-sm text-sm">{{{html_text}}}</span>
+	  <span class="block p-md text-sm m-t-sm bg-lightyellow b-a-lightyellow">{{{html_text}}}</span>
 
 	</div>
 </div>

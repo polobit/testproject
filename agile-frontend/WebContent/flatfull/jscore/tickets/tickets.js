@@ -615,9 +615,31 @@ var Tickets = {
         	
         	var err_email = !Tickets.isValidEmail(email);
 
-        	$('ul[name="cc_emails"]').prepend(getTemplate('cc-email-li', {email: email, err_email: err_email}));
+        	$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email, err_email: err_email}));
         	$('#cc_email_field').val('');
+
+        	// Save cc emails to the
+        	if(!err_email)
+        	  Tickets.updateCCEmails(email, 'add');
     	}
+	},
+
+	removeCCEmails: function(e){
+
+		Tickets.updateCCEmails($(e.target).closest('li').attr('data'), 'remove');
+		$(e.target).closest('li').remove();
+	},
+
+	updateCCEmails : function(email, command){
+
+		var newTicketModel = new BaseModel();
+		newTicketModel.url = "/core/api/tickets/update-cc-emails?command="
+				+ command + "&email=" + email + '&id=' + Current_Ticket_ID;
+		newTicketModel.save({'id': Current_Ticket_ID}, 
+			{success: function(model){
+					
+				}
+			});
 	},
 
 	//Return true if provided email is valid
@@ -784,7 +806,51 @@ var Tickets = {
 			container.removeClass('bg-light');
 			container.find('.caret-btn').removeClass('inline-block').addClass('display-none');
 	    }
+	},
+
+	toggleFavorite : function(e){
+
+		var newTicketModel = new BaseModel();
+		newTicketModel.url = "/core/api/tickets/toggle-favorite?id=" + Current_Ticket_ID;
+		newTicketModel.save({'id': Current_Ticket_ID}, 
+			{	
+				success: function(model){
+					if(model.toJSON().is_favorite)
+						$(e.target).addClass("fa-star text-warning").removeClass("fa-star-o text-light");
+					else
+						$(e.target).removeClass("fa-star text-warning").addClass("fa-star-o text-light");
+
+				}
+			});
+		
+	},
+
+	toggleSpam : function(e){
+
+		var newTicketModel = new BaseModel();
+		newTicketModel.url = "/core/api/tickets/toggle-spam?id=" + Current_Ticket_ID;
+		newTicketModel.save({'id': Current_Ticket_ID}, 
+			{	
+				success: function(model){
+					if(model.toJSON().is_spam)
+						$(e.target).addClass("btn-danger").removeClass("btn-default");
+					else
+						$(e.target).removeClass("btn-danger").addClass("btn-default");
+
+				}
+			});
+	},
+
+	toggleWidgets : function(e){
+
+		$('.contact-right-widgetsview').toggle('slow');
+
+		if($(e.target).hasClass('fa-dedent'))
+			$(e.target).addClass('fa-indent').removeClass('fa-dedent');
+		else
+			$(e.target).addClass('fa-dedent').removeClass('fa-indent');
 	}
+
 };
 
 function tickets_typeahead(data){
