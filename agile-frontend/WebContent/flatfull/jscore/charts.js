@@ -177,6 +177,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 	// Shows loading image
 	$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 
+
 	// Builds graph with the obtained json data.
 	setupCharts(function()
 	{
@@ -187,14 +188,23 @@ function showBar(url, selector, name, yaxis_name, stacked)
 
 			// Names on X-axis
 			var categories = [];
+			var tempcategories = [];
+			var colors=[];
 
+			if(selector!='calls-chart')
+				colors=['#23b7e5','#27c24c','#7266ba','#fad733'];
+			else
+				colors=['#27c24c','#23b7e5','#f05050','#7266ba'];
+			var dataLength = 0;
+				var frequency= $("#frequency:visible").val();
 			// Data to map with X-axis and Y-axis.
 			var series;
 
 			// Iterates through data and add all keys as categories
 			$.each(data, function(k, v)
 			{
-				categories.push(k);
+				if(selector!='calls-chart')
+				  categories.push(k);
 
 				// Initializes series with names with the first
 				// data point
@@ -220,21 +230,25 @@ function showBar(url, selector, name, yaxis_name, stacked)
 					var series_data = find_series_with_name(series, k1);
 					series_data.data.push(v1);
 				});
-
+				tempcategories.push(k*1000);
+				dataLength++;
+	
 			});
-
+					var cnt=0;
+					if(selector=='calls-chart'){
+					$.each(data, function(k, v)
+			{
+						dateRangeonXaxis(tempcategories,categories,frequency,dataLength,cnt);
+						                 cnt++;
+						});
+						}
 			// Draw the graph
 			chart = new Highcharts.Chart({
 			    chart: {
 			        renderTo: selector,
 			        type: 'column'
 			    },
-			   /* colors: [
-			        '#4365AD',
-			        '#D52A3E',
-			        'gray',
-			        '#1E995C'
-			    ],*/
+			    colors: colors,
 			    title: {
 			        text: name
 			    },
@@ -245,7 +259,12 @@ function showBar(url, selector, name, yaxis_name, stacked)
 		                // to overcome x-axis labels overlapping
 			        	if(this.options.categories.length > 30)
 		                {
-		                    this.options.minTickInterval = 5;
+		                   // this.options.minTickInterval = 5;
+		                    this.options.minTickInterval = Math.ceil(this.options.categories.length/10);
+               					 if(this.options.minTickInterval==3)
+               					 {
+                   					 this.options.minTickInterval = 4;
+                				}
 		                }
 		            },
 			        labels:
@@ -254,6 +273,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			        }
 			    },
 			    yAxis: {
+			    	allowDecimals: false,
 			        min: 0,
 			        title: {
 			            text: yaxis_name
@@ -280,8 +300,14 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			    },
 			    tooltip: {
 			        formatter: function(){
-			            return'<b>'+this.x+'</b><br/>'+this.series.name+': '+this.y;
-			        }
+			        	if(selector=='calls-chart'){
+			        		return'<b>'+this.x+'</b><br/><font color='+this.series.color+'>'+this.series.name+'</font>: '+this.y;
+			        		
+			        	}
+			        	else
+			            	return'<b>'+this.x+'</b><br/>'+this.series.name+': '+this.y;
+			        },
+			        useHTML : true,
 			    },
 			    plotOptions: {
 			        column: {
@@ -439,6 +465,7 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 			}
 			$.each(sortedData, function(k, v)
 			{
+				 var dt = new Date(k * 1000);
 				var dte = new Date(tempcategories[cnt]);
 				if(frequency!=undefined)
 				{
@@ -1535,95 +1562,7 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
 				var cnt=0;
 				$.each(sortedData, function(k, v)
 			{
-                var dt = new Date(k * 1000);
-                var dte = new Date(tempcategories[cnt]);
-                if(frequency=="daily")
-					{
-						categories.push(Highcharts.dateFormat('%e.%b',Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+'');
-					}
-				else if(frequency=="weekly")
-					{
-						if(cnt!=dataLength-1)
-						{
-							var next_dte = new Date(tempcategories[cnt+1]);
-							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1)));
-						}
-						else
-						{
-							var end_date = new Date(Date.parse($.trim($('#range').html().split("-")[1])).valueOf());
-							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate())));
-						}
-					}
-				else if(frequency=="monthly")
-					{
-						if(cnt!=dataLength-1)
-						{
-							var next_dte = new Date(tempcategories[cnt+1]);
-							var current_date = new Date();
-							var from_date = '';
-							var to_date = '';
-							if(cnt!=0)
-							{
-								if(current_date.getFullYear()!=dte.getFullYear())
-								{
-									from_date = Highcharts.dateFormat('%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
-								}
-								else
-								{
-									from_date = Highcharts.dateFormat('%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
-								
-								}
-							
-								categories.push(from_date);
-							}
-							else
-							{
-								var start_date=new Date(Date.parse($.trim($('#range').html().split("-")[0])).valueOf());
-								if(current_date.getFullYear()!=dte.getFullYear())
-								{
-									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
-								}
-								else
-								{
-									from_date = Highcharts.dateFormat('%e.%b', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
-								
-								}
-								//if(current_date.getFullYear()!=next_dte.getFullYear())
-								
-									to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1));
-								
-								categories.push(from_date+' - '+to_date);
-							}
-						}
-						else
-						{
-							var current_date = new Date();
-							var from_date ='';
-							var start_date=new Date(Date.parse($.trim($('#range').html().split("-")[0])).valueOf());
-							var to_date = '';
-							var end_date = new Date(Date.parse($.trim($('#range').html().split("-")[1])).valueOf());
-							if(current_date.getFullYear()!=dte.getFullYear())
-							{
-								if(cnt==0)
-									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
-								else
-									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
-							
-								to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
-							}
-							else
-							{
-								if(cnt==0)
-								  from_date = Highcharts.dateFormat('%e.%b', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
-								else
-									from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
-								
-								to_date = Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
-								
-							}
-							categories.push(from_date+' - '+to_date);
-						}
-					}
+                dateRangeonXaxis(tempcategories,categories,frequency,dataLength,cnt);
                  cnt++;
             });
 
@@ -1933,4 +1872,98 @@ if(selector == 'lossreasonpie-chart-users'){
 				 } );
 
 
+	}
+
+	/* x axis label categorization based on frequency */
+	function dateRangeonXaxis(tempcategories,categories,frequency,dataLength,cnt)
+	{
+		var dte = new Date(tempcategories[cnt]);
+
+						if(frequency=="daily")
+					{
+						categories.push(Highcharts.dateFormat('%e.%b',Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+'');
+					}
+				else if(frequency=="weekly")
+					{
+						if(cnt!=dataLength-1)
+						{
+							var next_dte = new Date(tempcategories[cnt+1]);
+							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1)));
+						}
+						else
+						{
+							var end_date = new Date(Date.parse($.trim($('#range').html().split("-")[1])).valueOf());
+							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate())));
+						}
+					}
+				else if(frequency=="monthly")
+					{
+						if(cnt!=dataLength-1)
+						{
+							var next_dte = new Date(tempcategories[cnt+1]);
+							var current_date = new Date();
+							var from_date = '';
+							var to_date = '';
+							if(cnt!=0)
+							{
+								if(current_date.getFullYear()!=dte.getFullYear())
+								{
+									from_date = Highcharts.dateFormat('%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								}
+								else
+								{
+									from_date = Highcharts.dateFormat('%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								
+								}
+							
+								categories.push(from_date);
+							}
+							else
+							{
+								var start_date=new Date(Date.parse($.trim($('#range').html().split("-")[0])).valueOf());
+								if(current_date.getFullYear()!=dte.getFullYear())
+								{
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								}
+								else
+								{
+									from_date = Highcharts.dateFormat('%e.%b', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								
+								}
+								//if(current_date.getFullYear()!=next_dte.getFullYear())
+								
+									to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1));
+								
+								categories.push(from_date+' - '+to_date);
+							}
+						}
+						else
+						{
+							var current_date = new Date();
+							var from_date ='';
+							var start_date=new Date(Date.parse($.trim($('#range').html().split("-")[0])).valueOf());
+							var to_date = '';
+							var end_date = new Date(Date.parse($.trim($('#range').html().split("-")[1])).valueOf());
+							if(current_date.getFullYear()!=dte.getFullYear())
+							{
+								if(cnt==0)
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								else
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+							
+								to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+							}
+							else
+							{
+								if(cnt==0)
+								  from_date = Highcharts.dateFormat('%e.%b', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								else
+									from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								
+								to_date = Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+								
+							}
+							categories.push(from_date+' - '+to_date);
+						}
+					}
 	}

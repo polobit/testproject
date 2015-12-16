@@ -1,8 +1,11 @@
-<script id="deal-filter-template" type="text/html">
+<script id="deal-filter-old-template" type="text/html">
 <div class="widget-box" id="widget-box">
 	<div id="deal-filters" class="btn-group helpdesk-filters">
-		<a id="show-filter-button" class="btn btn-sm btn-default dropdown-toggle" title="Filters">
+		<a id="" class="btn btn-sm btn-default" title="Filters">
 			<i id="icon-filter" class="icon-filter icon-white"></i>
+		</a>
+		<a id="show-filter-button" class="btn btn-sm btn-default dropdown-toggle" title="Filters">
+			<i id="icon-filter" class="caret"></i>
 		</a>
 		<div class="dropdown-menu btn-sm btn-default pull-right m-t-xs p-n" id="filter_options"
 			style="background-color: #cad2dd;right:-10px;">
@@ -230,4 +233,82 @@
 			</div>
 			{{/if_equals}}
 		{{/each}}
+</script>
+
+<script id="deal-filter-template" type="text/html">
+<div class="btn-group inline-block m-r-xs" id="filter-list">
+	<div>
+		<div class="btn-group" id="filters-tour-step">
+			<button class="btn btn-default btn-sm filter-dropdown ">
+				<i class="icon-filter" style="margin-right:3px"></i>
+			</button>
+			<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    			<span class="caret"></span>
+  			</button>
+			<ul id="deal-filter-list-model-list" class="pull-right dropdown-menu">
+				<li>
+					<a href="#deal-filters">Add/Edit Filter</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+</script>
+
+<script id="deal-filter-collection-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+	<div class="row">
+    	<div class="col-md-12">
+        	<h3 class="pull-left font-thin h3">Deal Filters</h3>
+            <a href="#deal-filter-add" class="btn btn-sm btn-default right" id="addFilter"><span><i class='icon-plus-sign'/></span>  Add Filter</a>
+            <div class="clearfix"></div>
+           
+        </div>
+	</div>
+</div>
+<div class="wrapper-md">
+	<div class="row">
+    	<div class="col-md-9"> 
+	        {{#if this.length}}
+	        	<div class="panel panel-default">
+					<div class="table-responsive">
+	        			<table class="table table-bordered showCheckboxes agile-table panel table-layout-mob-view" url="core/api/deal/filters/bulk" id="deal-filter-list">  
+	            			<thead>
+	                			<tr>   
+	                    			<th style="width:50%">Name</th>
+	                    			<th style="width:50%"></th>
+	                			</tr>
+	            			</thead>
+	            			<tbody id='deal-filter-model-list' route='deal-filter-edit/'></tbody>
+	        			</table>
+					</div>
+				</div>
+			{{/if}}
+			<div id="slate"></div>
+    	</div>
+    	<div class='col-md-3'>
+        	<div class="wrapper" id='addview'>
+             	<h4 class="m-t-none m-b-sm">
+              		What are Filters?
+             	</h4>
+            	<p>Filters are used to sort deals with a specific criteria to find patterns. You can save your preferred filters and fetch the deals based on saved preferences.</p>
+        	</div>
+    	</div>
+	</div>
+</div>
+</script>
+
+<script id="deal-filter-model-template" type="text/html">
+<td data='{{id}}' class='data c-p'>
+  <div>
+    {{name}} 
+  </div>
+</td>
+<td> 
+  {{#if created_time}}
+      <div>
+         Created <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="created_time time-ago border-highlight text-muted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{filterOwner.name}}
+      </div>
+  {{/if}}
+</td>
 </script>

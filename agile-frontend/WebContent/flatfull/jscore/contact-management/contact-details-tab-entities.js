@@ -713,7 +713,7 @@ function contact_detail_page_infi_scroll(element_id, targetCollection)
 function showMailsInfoMessages()
 {
 	showMailsErrorMessages();
-	if(mailsView.collection.length > 0)
+	if(mailsView.collection.length > 20)
 	{
 		if(($('#all-emails-info',App_Contacts.contactDetailView.el).length === 0))
 		{

@@ -147,6 +147,9 @@ function getCriteria()
 	if (!criteria)
 		criteria = "DUE";
 
+	if(agile_is_mobile_browser())
+		criteria = "LIST";
+
 	return criteria;
 }
 

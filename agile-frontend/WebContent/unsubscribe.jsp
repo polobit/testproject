@@ -426,7 +426,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 <script id="ask-the-user-template" type="text/html">
 <input type="radio" name="status" id="current" value="current"/> Remove me from this campaign - <%= workflow.name %>
 <br/>
-<input type="radio" name="status" value="all" id="all" required checked/> Stop ALL communication from this sender.
+<input type="radio" name="status" value="all" id="all"/> Stop ALL communication from this sender.
 <label for="status" class="error">Please select any one of the options</label>			
 </script>
 

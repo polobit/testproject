@@ -18,7 +18,7 @@ String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
 if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 {
-	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;pla
+	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
 	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
 	  CSS_PATH = FLAT_FULL_PATH;
 }
@@ -184,7 +184,7 @@ This is where you and your users will log in to your account
 
 <input type='hidden' id="login_email" name='email' value=<%=request.getParameter("email")%>></input>
 <input type='hidden' id="" name='name' value=<%=request.getParameter("name")%>></input>
-
+<input type='hidden' id="account_timezone" name='account_timezone' value=<%=request.getParameter("account_timezone")%>></input>
 <input type="password" class="hide" name='password' id="password" value="<%=request.getParameter("password")%>"></input>
 	<input type='hidden' name='type' value='agile'></input>
 <div class="line line-lg b-b" style="margin-top:25px;"></div>

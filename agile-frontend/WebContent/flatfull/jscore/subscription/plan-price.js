@@ -650,6 +650,17 @@ function initializeSubscriptionListeners()
 		});
 	});
 
+	$('#subscribe_plan_change').on('mouseenter', '.show_limits', function(e)
+	{
+		e.preventDefault();
+		$(this).closest(".plan-collection-in").find(".plan_features").css("display","block");
+		
+	});
+	$('#subscribe_plan_change').on('mouseleave', '.show_limits', function(e)
+	{
+		e.preventDefault();
+		$(this).closest(".plan-collection-in").find(".plan_features").css("display","none");
+	});
 }
 
 function is_new_signup_payment()

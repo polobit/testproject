@@ -20,7 +20,7 @@ function isArray(a)
 function load_events_from_google(callback)
 {
 
-	var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+	var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
 	var agile_event = false;
 	if (eventFilters)
 	{
@@ -45,7 +45,7 @@ function load_events_from_google(callback)
 				if(inArray >= 0){
 					//continue
 				}else{
-					return
+					return;
 				}
 			}
 			else{
@@ -61,13 +61,19 @@ function load_events_from_google(callback)
 //		}
 	}
 
-	// Name of the cookie to store/ calendar prefs. Current user id is set
+	get_google_calendar_prefs(callback);
+
+}
+
+function get_google_calendar_prefs(callback)
+{
+		// Name of the cookie to store/ calendar prefs. Current user id is set
 	// in cookie name to avoid
 	// showing tasks in different users calendar if logged in same browser
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
 
 	// Reads existing cookie
-	var _agile_calendar_prefs_cookie = readCookie(google_calendar_cookie_name);
+	var _agile_calendar_prefs_cookie = _agile_get_prefs(google_calendar_cookie_name);
 
 	// If cookie is not null, then it check it token is still valid; checks
 	// based on expiry time.
@@ -75,13 +81,14 @@ function load_events_from_google(callback)
 	{
 		var prefs = JSON.parse(_agile_calendar_prefs_cookie);
 
+
 		// Checks if token expired. It considers expire before 2 minutes window
 		// of actual expiry time.
 		if (prefs.expires_at - (2 * 60 * 1000) >= new Date().getTime())
 		{
 			// Returns token to the callback accoring to specification of gcal
-			get_google_calendar_event_source(prefs, callback);
-			return;
+			return get_google_calendar_event_source(prefs, callback);
+			
 		}
 
 		// Erases cookie if token is expired and sends request to backend to
@@ -98,8 +105,8 @@ function load_events_from_google(callback)
 			return;
 
 		// Creates cookie
-		createCookie(google_calendar_cookie_name, JSON.stringify(prefs));
-		get_google_calendar_event_source(prefs, callback);
+		storeData(google_calendar_cookie_name, JSON.stringify(prefs));
+		return get_google_calendar_event_source(prefs, callback);
 	});
 }
 
@@ -109,7 +116,40 @@ function load_events_from_google(callback)
 function erase_google_calendar_prefs_cookie()
 {
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
-	eraseCookie(google_calendar_cookie_name);
+	_agile_delete_prefs(google_calendar_cookie_name);
+	_agile_delete_prefs(google_calendar_cookie_name);
+}
+
+function get_calendar_ids_form_prefs(data)
+{
+
+		if(!data)
+			return;
+
+		var calendar_ids = ["primary"];
+
+		if(data.prefs)
+		{
+			
+
+			try
+			{
+				var prefs;
+				if(typeof data.prefs != 'object')
+					prefs = JSON.parse(data.prefs);
+				else
+					prefs = data.prefs;
+
+				if(prefs.fields != null)
+				calendar_ids = prefs.fields;		
+			}
+			catch (err)
+			{
+				console.log(err);
+			}
+		}
+
+		return calendar_ids;
 }
 
 // Returns token in to gcal callback in specified format
@@ -117,7 +157,10 @@ function get_google_calendar_event_source(data, callback)
 {
 
 	if (callback && typeof (callback) === "function")
-		callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal" });
+	{
+		callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal", calendarIds : get_calendar_ids_form_prefs(data)});
+	}
+	return true;
 }
 
 /**
@@ -128,10 +171,9 @@ function showCalendar(users)
 {
 
 	_init_gcal_options(users);
-	putGoogleCalendarLink();
-	putOfficeCalendarLink();
+	put_thirdparty_calendar_links();
 	
-	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
+	var calendarView = (!_agile_get_prefs('calendarDefaultView')) ? 'month' : _agile_get_prefs('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
 	var contentHeight = 400;
 	if (calendarView == "agendaDay" || calendarView == "agendaWeek")
@@ -160,10 +202,10 @@ function showCalendar(users)
 						 */
 
 						eventSources : [
-								{ events : function(start, end, callback)
+								{ 	
+									events : function(start, end, callback)
 								{
-
-									var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+									var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
 									var agile_event_owners = '';
 									if (eventFilters)
 									{
@@ -198,20 +240,21 @@ function showCalendar(users)
 											//Office
 											var inArray = type_of_cal.indexOf("office");
 											if(inArray >= 0){
-												loadOfficeEvents(start.getTime(), end.getTime());
+												addOffice365CalendarEvents();
 											}
-											
-											$("#loading_calendar_events").hide();
 											
 											//Agile
 											var inArray = type_of_cal.indexOf("agile");
-											if(inArray >= 0){
+											if(inArray >= 0 ||( owners && owners.length > 0)){
 												//continue
 											}else{
+												callback([]);
 												return;
 											}
 										}
 										
+										
+
 //										if ((type_of_cal.length == 1 && type_of_cal[0] == 'google' && owners.length == 1 && owners[0] == CURRENT_AGILE_USER.id) || type_of_cal.length == 0 && owners.length == 0)
 //										{
 //											$("#loading_calendar_events").hide();
@@ -220,7 +263,7 @@ function showCalendar(users)
 									}
 
 									/*
-									 * if (readCookie('event-filters') &&
+									 * if (_agile_get_prefs('event-filters') &&
 									 * eventFilters.type == 'google') {
 									 * $("#loading_calendar_events").hide();
 									 * return; }
@@ -229,50 +272,42 @@ function showCalendar(users)
 									start_end_array.startTime = start.getTime() / 1000;
 									start_end_array.endTime = end.getTime() / 1000;
 									console.log(start_end_array.startTime+" : "+start_end_array.endTime);
-									createCookie('fullcalendar_start_end_time', JSON.stringify(start_end_array));
+									_agile_set_prefs('fullcalendar_start_end_time', JSON.stringify(start_end_array));
 
 									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
 									
+
 									eventsURL += '&owner_id=' + agile_event_owners;
 									console.log('-----------------', eventsURL);
+									//callback([]);
+									return eventsURL
+
+								//		return true;
+
+								},
+								dataType: 'agile-events'
+
+								},
+								{
+									dataType : 'agile-gcal',
 									
-									$.getJSON(eventsURL, function(doc)
-									{
-										try{
-										$.each(doc, function(index, data)
-										{
-											// decides the color of event based
-											// on owner id
-											console.log(data);
-											data = renderEventBasedOnOwner(data);
-										});
-
-										if (doc)
-										{
-
-											callback(doc);
-
-										}
-										}
-										catch(err){
-												$("#loading_calendar_events").hide();
-										}
-									});
-								} }, { dataType : 'agile-gcal' }
+								},
+								
+							
 						],
 						header : { left : 'prev', center : 'title', right : 'next' },
 						defaultView : calendarView,
 						slotEventOverlap : false,
 						viewDisplay : function(view)
 						{
-							createCookie('calendarDefaultView', view.name, 90);
+							_agile_set_prefs('calendarDefaultView', view.name, 90);
 							$(".fc-agenda-axis").addClass('bg-light lter');
 						},
 						loading : function(bool)
 						{
 							if (bool)
 							{
-
+								pushLoading();
 								$("#loading_calendar_events").remove();
 								$('.fc-header-left')
 										.append(
@@ -283,9 +318,13 @@ function showCalendar(users)
 							}
 							else
 							{
-								// $('#loading').hide();
-								$("#loading_calendar_events").hide();
-								start_tour('calendar');
+								if(popLoading() <= 0)
+								{
+									// $('#loading').hide();
+									$("#loading_calendar_events").hide();
+									start_tour('calendar');	
+								}
+								
 							}
 							$(".fc-agenda-axis").addClass('bg-light lter');
 							$(".ui-resizable-handle").hide();
@@ -301,7 +340,7 @@ function showCalendar(users)
 						eventMouseover : function(event, jsEvent, view)
 						{
 
-							calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
+							calendarView = (!_agile_get_prefs('calendarDefaultView')) ? 'month' : _agile_get_prefs('calendarDefaultView');
 							var reletedContacts = '';
 							var meeting_type = '';
 							 	
@@ -453,9 +492,11 @@ function showCalendar(users)
 																 '</div>' + '</div>';
 											$(this).after(popoverElement);
 										}else{
+											try{	
 											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
 													.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
 											$(this).after(popoverElement);
+											}catch(e){}
 										}
 										
 										$(this).parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : "11px" });
@@ -538,7 +579,7 @@ function showCalendar(users)
 						select : function(start, end, allDay)
 						{
 							// Show a new event
-							$('#activityModal').modal('show');
+							$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 							highlight_event();
 
 							// Set Date for Event
@@ -611,8 +652,11 @@ function showCalendar(users)
 								_contacts.push(jsoncontacts[i].id);
 
 							}
+							if(event.owner)
+							event.owner_id = event.owner.id;
 							delete event.contacts;
 							delete event.owner;
+							event
 							event.contacts = _contacts;
 							var eventModel = new Backbone.Model();
 							eventModel.url = 'core/api/events';
@@ -632,6 +676,11 @@ function showCalendar(users)
 
 							if (isNaN(event.id))
 								return;
+
+							// Show edit modal for the event
+							$("#updateActivityModal").html(getTemplate("update-activity-modal")).modal("show");
+
+
 							// Deserialize
 							deserializeForm(event, $("#updateActivityForm"));
 
@@ -691,11 +740,8 @@ function showCalendar(users)
 								var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none " id="addEventDescription">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
 								$("#event_desc").html(desc);
 							}
-							// Show edit modal for the event
-							$("#updateActivityModal").modal('show');
-
-							App_Calendar.current_event = event;
 							
+							App_Calendar.current_event = event;
 							agile_type_ahead("event_relates_to_deals", $('#updateActivityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
 							// Fills owner select element
@@ -712,14 +758,14 @@ function showEventFilters()
 {
 	$('#filter_options').show();
 
-	if (readCookie("agile_calendar_view"))
+	if (_agile_get_prefs("agile_calendar_view"))
 		$('#filter_options .calendar-view').hide();
 	else
 		$('#filter_options .list-view').hide();
 
-	if (readCookie('event-filters'))
+	if (_agile_get_prefs('event-filters'))
 	{
-		var eventFilters = JSON.parse(readCookie('event-filters'));
+		var eventFilters = JSON.parse(_agile_get_prefs('event-filters'));
 		$('#event-owner').val(eventFilters.owner_id);
 		$('#event_type').val(eventFilters.type);
 	}
@@ -753,7 +799,7 @@ function loadDefaultFilters(callback)
 {
 	// Create a cookie with default option, if there is no cookie related to
 	// event filter.
-	if (!readCookie('event-filters'))
+	if (!_agile_get_prefs('event-filters'))
 	{
 		$.getJSON('/core/api/users/agileusers', function(users)
 		{
@@ -766,7 +812,7 @@ function loadDefaultFilters(callback)
 						var json = {};
 						json.owner_id = user.id.toString();
 						json.type = '';
-						createCookie('event-filters', JSON.stringify(json));
+						_agile_set_prefs('event-filters', JSON.stringify(json));
 					}
 				});
 			}
@@ -837,9 +883,7 @@ function getCalendarUsersDetails(callback)
 				json_user.id = user.id;
 				json_user.name = user.domainUser.name;
 				json_user.domain_user_id = user.domainUser.id;
-				if(hasScope("VIEW_CALENDAR")){
-					json_users.push(json_user);
-				}
+				json_users.push(json_user);
 			}
 		});
 		return callback(json_users);

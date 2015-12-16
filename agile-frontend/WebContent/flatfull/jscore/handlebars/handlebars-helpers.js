@@ -18,6 +18,17 @@ $(function()
 	});
 
 
+	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
+	{
+		if(amount == 0){
+			return (amount);
+		}else if(amount > 0){
+			return ("-"+ parseFloat(amount/100));
+		}else{
+			return (Math.abs(parseFloat(amount/100)));
+		}
+	});
+
 	
 	/**
 	 * displays , in between 2 conatct fields.
@@ -3578,6 +3589,31 @@ $(function()
 		else
 			return options.inverse(this);
 	});
+
+	/**
+	 * Compares the arguments (value and target) and executes the template based
+	 * on the result (used in contacts typeahead)
+	 */
+	Handlebars.registerHelper('if_domain', function(value, options)
+	{
+
+
+		if (typeof value === "undefined")
+			return options.inverse(this);
+
+		var domainName = CURRENT_DOMAIN_USER.domain;
+
+		if(domainName){
+			if (value.toString().trim().toLowerCase() == domainName.toLowerCase()){
+				return options.fn(this);
+			}else{
+				return options.inverse(this);
+			}
+		}else{
+			return options.inverse(this);
+		}
+	});
+
 	Handlebars.registerHelper('if_not_equals', function(value, target, options)
 	{
 
@@ -6752,11 +6788,12 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 
 Handlebars.registerHelper('is_mobile', function(options)
 	{
-		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )
+		if(agile_is_mobile_browser())
 		return options.fn(this);
 		else
 		return options.inverse(this);
 	});
+
 
 /**
  * Returns a S3 image url .
@@ -6811,4 +6848,10 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 		else
 			return options.fn(this);
 	});
+
+
+function agile_is_mobile_browser(){
+    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+
+}
 

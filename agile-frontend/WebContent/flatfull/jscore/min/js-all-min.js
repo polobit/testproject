@@ -49,7 +49,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 
                     renderActivityView(getActivityFilterParameters(true));
                     
-                    $(".activity-log-button").hide();
+                    $(".activity-log-button").css('display','none');
 
                     var activityFilters = JSON.parse(readCookie(ACTIVITY_FILTER));
 
@@ -67,7 +67,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 
                         }
 
-                        $(".activity-log-button").show();
+                        $(".activity-log-button").css('display','inline-block');
 
 
                     }, optionsTemplate, true);
@@ -84,7 +84,7 @@ var ActivitylogRouter = Backbone.Router.extend({
     },
     contactActivities: function(id) { // begin contact activities
 
-            head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function() {
+            head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, function() {
 
 
                 getTemplate('contact-activity-header', {}, undefined, function(template_ui) {
@@ -658,8 +658,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html($(template_ui));	
 			var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
 			{
-				initializeAdminSettingsListeners();
-				initializeAccountSettingsListeners();
+				ACCOUNT_DELETE_REASON_JSON = undefined;
 			} });
 
 			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
@@ -2033,7 +2032,7 @@ function show_model(id)
 	}
 	else
 	{
-		$('#updateActivityModal').modal('show');
+		$("#updateActivityModal").html(getTemplate("update-activity-modal")).modal('show');
 
 		var event = eventCollectionView.collection.get(id).toJSON();
 		console.log("clicked event " + event);
@@ -2657,7 +2656,7 @@ var CompaniesRouter = Backbone.Router
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.companiesListView = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
+		this.companiesListView = new Contacts_Events_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
 			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
@@ -2794,7 +2793,7 @@ var CompaniesRouter = Backbone.Router
 		add_recent_view(company);
 
 		// If contact is of type company , go to company details page
-		this.companyDetailView = new Base_Model_View({ model : company, isNew : true, template : "company-detail",
+		this.companyDetailView = new Contact_Details_Model_Events({ model : company, isNew : true, template : "company-detail",
 			postRenderCallback : function(el)
 			{
 				fill_company_related_contacts(id, 'company-contacts');
@@ -3150,7 +3149,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 	contactFilterAdd : function()
 	{
 
-		var contacts_filter = new Base_Model_View({ url : 'core/api/filters', template : "filter-contacts", isNew : "true", window : "contact-filters",
+		var contacts_filter = new Report_Filters_Event_View({ url : 'core/api/filters', template : "filter-contacts", isNew : "true", window : "contact-filters",
 			postRenderCallback : function(el)
 			{
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
@@ -3180,7 +3179,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 
 		$("#content").html(LOADING_HTML);
 		var contact_filter = this.contactFiltersList.collection.get(id);
-		var ContactFilter = new Base_Model_View({ url : 'core/api/filters', model : contact_filter, template : "filter-contacts",
+		var ContactFilter = new Report_Filters_Event_View({ url : 'core/api/filters', model : contact_filter, template : "filter-contacts",
 			window : 'contact-filters', postRenderCallback : function(el)
 			{
 				$(el).on('agile_model_loaded', function(e) {
@@ -3553,8 +3552,8 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			this.contactsListView.collection.url = url;
 
-			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
-			$('#conatcts-listeners-conatainer').html(this.contactsListView.render(true).el);
+			$('#content').html('<div id="contacts-listener-container"></div>');
+			$('#contacts-listener-container').html(this.contactsListView.render(true).el);
 
 			$(".active").removeClass("active");
 			$("#contactsmenu").addClass("active");
@@ -3584,7 +3583,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.contactsListView = new Base_Collection_View({ url : url,custom_scrollable_element:custom_scrollable_element, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
+		this.contactsListView = new  Contacts_Events_Collection_View({ url : url,custom_scrollable_element:custom_scrollable_element, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
 			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
 			{
 		
@@ -3623,11 +3622,11 @@ var ContactsRouter = Backbone.Router.extend({
 		// Contacts are fetched when the app loads in the initialize
 		this.contactsListView.collection.fetch();
 		if(!is_lhs_filter) {
-			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
-			$('#conatcts-listeners-conatainer').html(this.contactsListView.render().el);
+			$('#content').html('<div id="contacts-listener-container"></div>');
+			$('#contacts-listener-container').html(this.contactsListView.render().el);
 			contactFiltersListeners();
 		} else {
-			$('#conatcts-listeners-conatainer').find('.contacts-div').html(this.contactsListView.render().el);
+			$('#contacts-listener-container').find('.contacts-div').html(this.contactsListView.render().el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
@@ -3666,7 +3665,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.duplicateContactsListView = new Base_Collection_View({ url : url, templateKey : template_key, individual_tag_name : 'tr', cursor : true,
+		this.duplicateContactsListView = new Contacts_Events_Collection_View({ url : url, templateKey : template_key, individual_tag_name : 'tr', cursor : true,
 			page_size : 25, sort_collection : collection_is_reverse, slateKey : null, postRenderCallback : function(el)
 			{
 				// this.duplicateContactsListView.collection.forEach(function(model,
@@ -3732,7 +3731,7 @@ var ContactsRouter = Backbone.Router.extend({
 		// Contact Edit - take him to continue-contact form
 		add_custom_fields_to_form(bigObject, function(contact)
 		{
-			this.mergeContactsView = new Base_Model_View({ template : template_key, data : bigObject, postRenderCallback : function(el)
+			this.mergeContactsView = new Contact_Details_Model_Events({ template : template_key, data : bigObject, postRenderCallback : function(el)
 			{
 				// g_id_array.length = 0;
 			} });
@@ -3771,7 +3770,7 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		//For getting custom fields
 		if(App_Contacts.customFieldsList == null || App_Contacts.customFieldsList == undefined){
-			App_Contacts.customFieldsList = new Base_Collection_View({ url : '/core/api/custom-fields/position', sort_collection : false, restKey : "customFieldDefs",
+			App_Contacts.customFieldsList = new Contacts_Events_Collection_View({ url : '/core/api/custom-fields/position', sort_collection : false, restKey : "customFieldDefs",
 				templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
 			App_Contacts.customFieldsList.collection.fetch();
 		}
@@ -3850,10 +3849,10 @@ var ContactsRouter = Backbone.Router.extend({
 			return;
 		}
 
-		this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
+		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
-			$("#mobile-menu-settings").trigger('click');
+			//$("#mobile-menu-settings").trigger('click');
 			// Clone contact model, to avoid render and post-render fell
 			// in to
 			// loop while changing attributes of contact
@@ -4360,8 +4359,8 @@ var ContactsRouter = Backbone.Router.extend({
 		if (this.contact_custom_view && this.contact_custom_view.collection.url == url)
 		{
 			var el = App_Contacts.contact_custom_view.render(true).el;
-			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
-			$('#conatcts-listeners-conatainer').html(el);
+			$('#content').html('<div id="contacts-listener-container"></div>');
+			$('#contacts-listener-container').html(el);
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
 			contactFiltersListeners();
@@ -4416,7 +4415,7 @@ var ContactsRouter = Backbone.Router.extend({
 		    }
 		}	
 		
-		this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
+		this.contact_custom_view = new Contacts_Events_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
 			templateKey : template_key,custom_scrollable_element:custom_scrollable_element, individual_tag_name : individual_tag_name, slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
@@ -4468,11 +4467,11 @@ var ContactsRouter = Backbone.Router.extend({
 				});
 		
 		if(!is_lhs_filter) {
-			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
-			$('#conatcts-listeners-conatainer').html(this.contact_custom_view.el);
+			$('#content').html('<div id="contacts-listener-container"></div>');
+			$('#contacts-listener-container').html(this.contact_custom_view.el);
 			contactFiltersListeners();
 		} else {
-			$('#conatcts-listeners-conatainer').find('.contacts-div').html(this.contact_custom_view.el);
+			$('#contacts-listener-container').find('.contacts-div').html(this.contact_custom_view.el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
@@ -4557,14 +4556,6 @@ var ContactsRouter = Backbone.Router.extend({
 			$(".butterbar").hide();
 			$("#content").html($(template_ui));	
 			$('[data-toggle="tooltip"]').tooltip();
-
-
-
-
-
-
-
-
 
 		}, "#content"); 
 
@@ -4920,7 +4911,7 @@ var DealDetailsRouter = Backbone.Router.extend({
 			App_Deals.customFieldsList.collection.fetch();
 		}
 
-		this.dealDetailView = new Base_Model_View({ url : '/core/api/opportunity/' + id, template : "deal-detail", postRenderCallback : function(el)
+		this.dealDetailView = new Deal_Modal_Event_View({ url : '/core/api/opportunity/' + id, template : "deal-detail", postRenderCallback : function(el)
 		{
 			/**
 			 * gets the tracks count when user comes to deals page and stores in
@@ -5141,8 +5132,6 @@ function initializeDealTabWithCount(id, el){
 	if (deal_collection != null && readCookie("agile_deal_view"))
 		deal_detail_view_navigation(id, deal_collection, el);
 
-	initializeDealDetailsListners(el);
-
 }
 
 /**
@@ -5289,34 +5278,25 @@ var DocumentsRouter = Backbone.Router.extend({
 	 */
 	documents : function()
 	{
-		 $('#content').html("<div id='documents-listners'></div>");
-
-		// Fetches documents as list
-		this.DocumentCollectionView = new Base_Collection_View({ url : 'core/api/documents', templateKey : "documents", cursor : true, page_size : 20,
+		 // Fetches documents as list
+		this.DocumentCollectionView = new Document_Collection_Events({ url : 'core/api/documents', templateKey : "documents", cursor : true, page_size : 20,
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
-				// Show timeago for models appended by infini scroll
 				includeTimeAgo(el);
-
-				// Initialize events
-				initializeDocumentsListner(el);
 				
 			}, appendItemCallback : function(el)
 			{
-				// Show timeago for models appended by infini scroll
+				// To show timeago for models appended by infini scroll
 				includeTimeAgo(el);
-
 			} });
 
-		// 
 		this.DocumentCollectionView.collection.fetch();
 
 		// Shows deals as list view
-		$('#documents-listners').html(this.DocumentCollectionView.render().el);
+		$('#content').html(this.DocumentCollectionView.render().el);
 
 		$(".active").removeClass("active");
 		$("#documentsmenu").addClass("active");
-
 	} });
 var FacebookPageTabRouter = Backbone.Router.extend({
 
@@ -5562,8 +5542,15 @@ function displayTimeAgo(elmnt)
 
 function updateImageS3Path(imageUrl){
 
-	if(imageUrl) 
-		  imageUrl = imageUrl.replace("flatfull/", "").replace(/\.{2}/g, '');
+	if(!imageUrl)
+		  imageUrl = "";
+	
+	try{
+		if(imageUrl){
+			imageUrl = imageUrl.replace("flatfull/", "").replace(/\.{2}/g, '');
+	    }	
+	}catch(e){}
+		  
 
 	if(!S3_STATIC_IMAGE_PATH)
 		S3_STATIC_IMAGE_PATH = "//doxhze3l6s7v9.cloudfront.net/beta/static/";
@@ -5630,10 +5617,57 @@ var ReportsRouter = Backbone.Router
 						return;
 					$('#reports-listerners-container').html($(template_ui));
 
+						preloadImages([
+							'flatfull/img/reports_images/Growth-graph.png',
+							'flatfull/img/reports_images/ratio.png',
+							'flatfull/img/reports_images/funnel-graph.png',
+							'flatfull/img/reports_images/Campaign-stats.png',
+							'flatfull/img/reports_images/Calls-By-User.png',
+							'flatfull/img/reports_images/averageofcall.png',
+							'flatfull/img/reports_images/user-activities-call.png',
+							'flatfull/img/reports_images/Incoming-Deals.png',
+							'flatfull/img/reports_images/Lost-Deal-Analysis.png',
+							'flatfull/img/reports_images/Revenue.png',
+							'flatfull/img/reports_images/Sales-forecast.png',
+							'flatfull/img/reports_images/User-reports.png',
+							'flatfull/img/reports_images/Call-Outcomes.png',
+							'flatfull/img/reports_images/contact.png',
+							'flatfull/img/reports_images/user-activities.png',
+							'flatfull/img/reports_images/Daily-reports.png',
+							]);
 				initializeReportsListeners();
 				hideTransitionBar();
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				/*if($("#dealstab").length>0){
+					$("#dealstab").addClass("active");
+					$("#deals-tab").addClass("active");
+				}
+				else
+				{
+					$("#callstab").addClass("active");
+					$("#calls-tab").addClass("active");
+				}*/
+
+					var reportsTab = localStorage.getItem("reports_tab");
+				if(!reportsTab || reportsTab == null) {
+					var tabTemp;
+					if(islocalStorageHasSpace()){
+						if($("#dealstab").length>0)
+							tabTemp="deals-tab";
+						else
+							tabTemp="calls-tab";
+							localStorage.setItem('reports_tab', tabTemp);	
+					}
+					reportsTab = tabTemp;
+				}
+				$('#reports-tab-container a[href="#'+reportsTab+'"]').tab('show');
+				$("#reports-tab-container ul li").off("click");
+				$("#reports-tab-container").on("click",".tab-container ul li",function(){
+					var temp = $(this).find("a").attr("href").split("#");
+					if(islocalStorageHasSpace())
+						localStorage.setItem('reports_tab', temp[1]);
+				});
 
 					$('[data-toggle="tooltip"]').tooltip();
 
@@ -5813,10 +5847,9 @@ var ReportsRouter = Backbone.Router
 				$("#reports-listerners-container").html(getRandomLoadingImg());
 
 				SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
-				var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "contact-reports", isNew : true,
+				var report_add = new Report_Filters_Event_View({ url : 'core/api/reports', template : "reports-add", window : "contact-reports", isNew : true,
 					postRenderCallback : function(el)
 					{
-						initializeContactFiltersListeners();
 						initializeReportsListeners();
 						// Counter to set when script is loaded. Used to avoid
 						// flash in
@@ -5849,7 +5882,7 @@ var ReportsRouter = Backbone.Router
 
 				// Gets a report to edit, from reports collection, based on id
 				var report = this.reports.collection.get(id);
-				var report_model = new Base_Model_View({
+				var report_model = new Report_Filters_Event_View({
 					url : 'core/api/reports',
 					change : false,
 					model : report,
@@ -5858,7 +5891,6 @@ var ReportsRouter = Backbone.Router
 					id : "reports-listerners-container",
 					postRenderCallback : function(el)
 					{
-						initializeContactFiltersListeners();
 						initializeReportsListeners();
 
 						if (count != 0)
@@ -6555,15 +6587,13 @@ var SettingsRouter = Backbone.Router
 					$('#content').html($(template_ui));
 
 					var data = { "service" : "linkedin" };
-					var itemView = new Base_Model_View({ url : '/core/api/social-prefs/LINKEDIN', template : "settings-social-prefs", data : data, postRenderCallback : function(el){
-						initializeSettingsListeners();
+					var itemView = new Settings_Modal_Events({ url : '/core/api/social-prefs/LINKEDIN', template : "settings-social-prefs", data : data, postRenderCallback : function(el){
 					} });
 
 					$('#prefs-tabs-content').html(itemView.render().el);
 
 					data = { "service" : "twitter" };
-					var itemView2 = new Base_Model_View({ url : '/core/api/social-prefs/TWITTER', template : "settings-social-prefs", data : data , postRenderCallback : function(el){
-						initializeSettingsListeners();
+					var itemView2 = new Settings_Modal_Events({ url : '/core/api/social-prefs/TWITTER', template : "settings-social-prefs", data : data , postRenderCallback : function(el){
 					} });
 
 					$('#prefs-tabs-content').append(itemView2.render().el);
@@ -6599,12 +6629,15 @@ var SettingsRouter = Backbone.Router
 							that.officeListView = {};
 							that.gmailListView = {};
 
+							$('#PrefsTab .select').removeClass('select');
+							$('.email-tab').addClass('select');
+							$(".active").removeClass("active");
+
 					}, "#prefs-tabs-content");
 
 					var socialHeight = 0;
 					$.getJSON("/core/api/emails/synced-accounts", function(data)
 					{
-						initializeSettingsListeners();
 						if (typeof data !== undefined && data.hasOwnProperty('emailAccountsLimitReached') && data.emailAccountsLimitReached)
 							HAS_EMAIL_ACCOUNT_LIMIT_REACHED = true;
 						else
@@ -6616,9 +6649,6 @@ var SettingsRouter = Backbone.Router
 						load_imap_widgets(limit);
 						load_office365_widgets(limit);
 
-						$('#PrefsTab .select').removeClass('select');
-						$('.email-tab').addClass('select');
-						$(".active").removeClass("active");
 					});
 
 				}, "#content");
@@ -6641,10 +6671,9 @@ var SettingsRouter = Backbone.Router
 
 					var imapmodel = App_Settings.imapListView.collection.get(imap_id);
 					// Gets IMAP Prefs
-					var itemView2 = new Base_Model_View({ url : '/core/api/imap/', model : imapmodel, template : "settings-imap-prefs", change : false,
+					var itemView2 = new Settings_Modal_Events({ url : '/core/api/imap/', model : imapmodel, template : "settings-imap-prefs", change : false,
 						postRenderCallback : function(el)
 						{
-							initializeSettingsListeners();
 							var model = itemView2.model;
 							var id = model.id;
 							itemView2.model.set("password", "");
@@ -6673,10 +6702,9 @@ var SettingsRouter = Backbone.Router
 						  return;
 					$('#content').html($(template_ui));	
 					// Gets IMAP Prefs
-					var itemView2 = new Base_Model_View({ url : '/core/api/imap/', template : "settings-imap-prefs", change : false, isNew : true,
+					var itemView2 = new Settings_Modal_Events({ url : '/core/api/imap/', template : "settings-imap-prefs", change : false, isNew : true,
 						postRenderCallback : function(el)
 						{
-							initializeSettingsListeners();
 						}, saveCallback : function()
 						{
 							var model = itemView2.model;
@@ -6711,10 +6739,9 @@ var SettingsRouter = Backbone.Router
 					$('#content').html($(template_ui));	
 
 					// Gets Office Prefs
-					var itemView3 = new Base_Model_View({ url : '/core/api/office', template : "settings-office-prefs", isNew : true, change : false,
+					var itemView3 = new Settings_Modal_Events({ url : '/core/api/office', template : "settings-office-prefs", isNew : true, change : false,
 						postRenderCallback : function(el)
 						{
-							initializeSettingsListeners();
 							itemView3.model.set("password", "");
 						}, saveCallback : function()
 						{
@@ -6750,10 +6777,9 @@ var SettingsRouter = Backbone.Router
 					var office_model = App_Settings.officeListView.collection.get(id);
 
 					// Gets Office Prefs
-					var itemView3 = new Base_Model_View({ url : '/core/api/office/', model : office_model, template : "settings-office-prefs",
+					var itemView3 = new Settings_Modal_Events({ url : '/core/api/office/', model : office_model, template : "settings-office-prefs",
 						postRenderCallback : function(el)
 						{
-							initializeSettingsListeners();
 							itemView3.model.set("password", "");
 						}, saveCallback : function()
 						{
@@ -6788,11 +6814,10 @@ var SettingsRouter = Backbone.Router
 					}
 					var gmail_model = App_Settings.gmailListView.collection.get(id);
 					// Gets GMAIL Prefs
-					var gmailShareView = new Base_Model_View({ url : 'core/api/social-prefs/share/' + id, model : gmail_model,
+					var gmailShareView = new Settings_Modal_Events({ url : 'core/api/social-prefs/share/' + id, model : gmail_model,
 						template : "settings-gmail-prefs-share", postRenderCallback : function(el)
 						{
-							initializeSettingsListeners();
-
+							
 						}, saveCallback : function()
 						{
 							App_Settings.navigate("email", { trigger : true });
@@ -6821,7 +6846,6 @@ var SettingsRouter = Backbone.Router
 					that.emailTemplatesListView = new Base_Collection_View({ url : '/core/api/email/templates', restKey : "emailTemplates",
 					templateKey : "settings-email-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
 					{
-						initializeSettingsListeners();
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
 							console.log("In email tmplt postrender");
@@ -6850,10 +6874,9 @@ var SettingsRouter = Backbone.Router
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));
-					var view = new Base_Model_View({ url : '/core/api/email/templates', isNew : true, template : "settings-email-template-add",
+					var view = new Email_Template_Events({ url : '/core/api/email/templates', isNew : true, template : "settings-email-template-add",
 					window : 'email-templates', postRenderCallback : function()
 					{
-						initializeEmailTemplateAddListeners();
 					} });
 
 					$('#prefs-tabs-content').html(view.render().el);
@@ -6901,10 +6924,9 @@ var SettingsRouter = Backbone.Router
 					// Gets the template form its collection
 					var currentTemplate = that.emailTemplatesListView.collection.get(id);
 
-					var view = new Base_Model_View({ url : '/core/api/email/templates', model : currentTemplate, template : "settings-email-template-add",
+					var view = new Email_Template_Events({ url : '/core/api/email/templates', model : currentTemplate, template : "settings-email-template-add",
 						window : 'email-templates', postRenderCallback : function()
 						{
-							initializeEmailTemplateAddListeners();
 						} });
 
 					$('#prefs-tabs-content').html(view.render().el);
@@ -6958,14 +6980,12 @@ var SettingsRouter = Backbone.Router
 						  return;
 					$('#content').html($(template_ui));	
 
-					var view = new Base_Model_View({
+					var view = new Settings_Modal_Events({
 					url : 'core/api/notifications',
 					template : 'settings-notification-prefs',
 					reload : true,
 					postRenderCallback : function(el)
 					{
-						initializeSettingsListeners();
-
 						// Update Notification prefs
 						notification_prefs = view.model.toJSON();
 
@@ -7553,7 +7573,7 @@ var SubscribeRouter = Backbone.Router
 
 			"invoice" : "invoice",
 
-			"invoice/:id" : "getInvoiceDetails",
+			"invoice/:id" : "invoiceDetails",
 
 			"getInvoiceDetails/:id" : "getInvoiceDetails",
 
@@ -7727,16 +7747,6 @@ var SubscribeRouter = Backbone.Router
 
 				IS_HAVING_MANDRILL = false;
 				$("#content").html("<div id='subscribe_plan_change'></div>");
-
-				/*// Set it in local machine
-				if(_plan_on_signup && _plan_on_signup.plan_type){
-					localStorage.setItem("registered_plan" + CURRENT_DOMAIN_USER.id,localStorage.setItem("registered_plan" + CURRENT_DOMAIN_USER.id, JSON.stringify(_plan_on_signup)));
-				}
-				else {
-					_plan_on_signup = localStorage.getItem("registered_plan" + CURRENT_DOMAIN_USER.id);
-					if(_plan_on_signup)
-						   _plan_on_signup = JSON.parse(_plan_on_signup);
-				}*/	
 
 				if (IS_NEW_USER && _plan_on_signup && _plan_on_signup.plan_type && _plan_on_signup.plan_type == "FREE")
 				{
@@ -7959,9 +7969,7 @@ var SubscribeRouter = Backbone.Router
 			 */
 			invoiceDetails : function(id)
 			{
-				var invoicedata;
-				var companydata;
-				var obj;
+
 				// Checks whether invoice list is defined, if list is not
 				// defined get the list of invoices
 
@@ -7979,21 +7987,9 @@ var SubscribeRouter = Backbone.Router
 					var invoice_detail_model = new Base_Model_View({ url : "core/api/subscription/getinvoice", model : model, template : "invoice-detail",
 						postRenderCallback : function(el)
 						{
-							var company_detail = new Base_Model_View({ url : "core/api/account-prefs", model : model, template : "invoice-detail",
-								postRenderCallback : function(el)
-								{
-									companydata = data;
-									obj = { "invoice" : invoicedata, "company" : companydata }
-									getTemplate('invoice-detail', obj, undefined, function(template_ui)
-											{
-												if (!template_ui)
-													return;
-												$('#billing-settings-tab-content').html($(template_ui));
-											}, "#billing-settings-tab-content");
-								} });
 						} });
-//					$("#billing-settings-tab-content").html("");
-//					$("#billing-settings-tab-content").html(invoice_detail_model.render().el);
+					$("#billing-settings-tab-content").html("");
+					$("#billing-settings-tab-content").html(invoice_detail_model.render().el);
 				}
 				else
 					return;
@@ -8262,24 +8258,6 @@ function removeStyleForAPlan(id)
 	if (($('selected-plan')) != ($('#email-div')))
 		$(".plan-collection-in").removeClass('selected-plan');
 
-}
-
-function emailClickEvent() {
-	$('ul.nav.nav-tabs').removeClass("hide");
-	$("#email").addClass("hide");
-	$("#currentPlan").addClass("p-t-md");
-	$("#usertab").removeClass("active");
-	$("#emailtab").addClass("active");
-	$("#users-content").removeClass("active");
-	$("#email-content").addClass("active");
-}
-
-function printPage() {
-	$("#print-div").addClass("hide");
-	//document.getElementById('header').style.display = 'none';
-    //document.getElementById('footer').style.display = 'none';
-	window.print();
-	$("#print-div").removeClass("hide");
 }/**
  * task timeline plugin
  * 
@@ -8690,26 +8668,34 @@ function save_task_tab_position_in_cookie(tab_href)
 function update_task(value)
 {
 
-	deserializeForm(value, $("#updateTaskForm"));
-	$("#updateTaskModal").modal('show');
-	categories.getCategoriesHtml(value,function(catsHtml){
-		$('#type',$("#updateTaskForm")).html(catsHtml);
-		// Fills owner select element
-		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
-		{
-			$("#updateTaskForm").find("#owners-list").html(data);
-			if (value.taskOwner)
+	$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
+
+	loadProgressSlider($("#updateTaskForm"), function(el){
+
+		deserializeForm(value, $("#updateTaskForm"));
+	
+		categories.getCategoriesHtml(value,function(catsHtml){
+			$('#type',$("#updateTaskForm")).html(catsHtml);
+			// Fills owner select element
+			populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
 			{
-				$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
-			}
-			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+				$("#updateTaskForm").find("#owners-list").html(data);
+				if (value.taskOwner)
+				{
+					$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
+				}
+				$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+			});
 		});
+
+	    activateSliderAndTimerToTaskModal();
+
+		// Add notes in task modal
+		showNoteOnForm("updateTaskForm", value.notes);
+
 	});
 
-    activateSliderAndTimerToTaskModal();
-
-	// Add notes in task modal
-	showNoteOnForm("updateTaskForm", value.notes);
+	
 }
 
 /**
@@ -8835,7 +8821,7 @@ initialize : function()
 
 loadGmap : function()
 {
-	head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION,LIB_PATH + 'lib/markerclusterer.js', CSS_PATH + "css/misc/date-picker.css",  function()
+	head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION,LIB_PATH + 'lib/markerclusterer.js', function()
 	{
 
 		var view = new Base_Model_View({ model : new BaseModel(), template : "gmap-html-page",
@@ -9101,7 +9087,7 @@ var WebreportsRouter = Backbone.Router.extend({
 	{
 		if(!tight_acl.checkPermission('WEBRULE'))
 			return;
-		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', template : "webrules-add", window : "web-rules", isNew : true,
+		var web_reports_add = new Web_Rules_Event_View({ url : 'core/api/webrule', template : "webrules-add", window : "web-rules", isNew : true,
 			postRenderCallback : function(el)
 			{
 				head.js('lib/agile.jquery.chained.min.js', function()
@@ -9139,7 +9125,7 @@ var WebreportsRouter = Backbone.Router.extend({
 
 		// Default template is webrule-add. If rule is of type shopify template is changed accordingly
 		var template = "webrules-add";
-		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', model : webrule, template : template, window : "web-rules",
+		var web_reports_add = new Web_Rules_Event_View({ url : 'core/api/webrule', model : webrule, template : template, window : "web-rules",
 			postRenderCallback : function(el)
 			{
 				if (count > 0)
@@ -9616,7 +9602,7 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_list_view.collection.fetch();
 
 				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(this.workflow_list_view.el);
-				initializeWorkflowsListeners();
+				// initializeWorkflowsListeners();
 
 				$(".active").removeClass("active");
 				$("#workflowsmenu").addClass("active");
@@ -9638,18 +9624,20 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_json = undefined;
 				this.workflow_model = undefined;
 
-				$("#content").html('<div id="workflows-listener-container"></div>');
-				getTemplate('workflow-add', { "is_new" : true, "is_disabled" : "false", "was_disabled" : "false" }, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					$('#workflows-listener-container').html($(template_ui));	
-					initializeWorkflowsListeners();
-					initiate_tour("workflows-add", $('#content'));
-					
-					// Init SendVerify Email
-					send_verify_email();
-				}, "#workflows-listener-container");
+				var workflowModal = new Workflow_Model_Events({
+					url : 'core/api/workflow', 
+					template : 'workflow-add',
+					isNew : 'true',
+					data : {  "is_new" : true, "is_disabled" : "false", "was_disabled" : "false" },
+					postRenderCallback : function(el){
+						initiate_tour("workflows-add", $('#content'));						
+						// Init SendVerify Email
+						send_verify_email(el);
+					}
 
+				});
+
+				$("#content").html(workflowModal.render().el);
 			},
 
 			/**
@@ -9709,32 +9697,33 @@ var WorkflowsRouter = Backbone.Router
 				this.is_disabled = this.workflow_model.get("is_disabled");
 				var that = this;
 
-				getTemplate('workflow-add', {"is_disabled" : ""+that.is_disabled}, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
+				var workflowModal = new Workflow_Model_Events({
+					url : 'core/api/workflow', 
+					template : 'workflow-add',
+					isNew : 'true',
+					data :  {"is_disabled" : ""+that.is_disabled},
+					postRenderCallback : function(el){
+						// Set the name
+						$('#workflow-name', el).val(that.workflow_model.get("name"));
 
-					var el = $(template_ui);
+						var unsubscribe = that.workflow_model.get("unsubscribe");
 
-					$("#content").html('<div id="workflows-listener-container"></div>');
-					$('#workflows-listener-container').html(el);
-					initializeWorkflowsListeners();
+						$('#unsubscribe-email', el).val(unsubscribe.unsubscribe_email);
+						$('#unsubscribe-tag', el).val(unsubscribe.tag);
+						$('#unsubscribe-action', el).val(unsubscribe.action);
+						$('#unsubscribe-action', el).trigger('change');
 
-					if(that.is_disabled)
-						$('#designer-tour').addClass("blur").removeClass("anti-blur");
-                    
-					// Set the name
-					$('#workflow-name').val(that.workflow_model.get("name"));
+						if(that.is_disabled)
+								$('#designer-tour', el).addClass("blur").removeClass("anti-blur");
 
-					var unsubscribe = that.workflow_model.get("unsubscribe");
+						// Init SendVerify Email
+						send_verify_email(el);
+					}
 
-					$('#unsubscribe-email').val(unsubscribe.unsubscribe_email);
-					$('#unsubscribe-tag').val(unsubscribe.tag);
-					$('#unsubscribe-action').val(unsubscribe.action);
-					$('#unsubscribe-action').trigger('change');
+				});
 
-					// Init SendVerify Email
-					send_verify_email();
-				}, "#content");
+				$("#content").html(workflowModal.render().el);
+
 			},
 
 			/**
@@ -9757,7 +9746,7 @@ var WorkflowsRouter = Backbone.Router
 					if (!template_ui)
 						return;
 					$('#workflows-listener-container').html($(template_ui));
-					initializeWorkflowsListeners();
+					// initializeWorkflowsListeners();
 				}, "#workflows-listener-container");
 			},
 
@@ -9793,17 +9782,20 @@ var WorkflowsRouter = Backbone.Router
 					that.workflow_json = JSON.stringify(data);
 				} });
 
-				$("#content").html('<div id="workflows-listener-container"></div>');
+				var workflowModal = new Workflow_Model_Events({
+					url : 'core/api/workflow', 
+					template : 'workflow-add',
+					isNew : 'true',
+					data : { "is_new" : true, "is_disabled" : false, "was_disabled" : false  },
+					postRenderCallback : function(el){
+						// Init SendVerify Email
+						send_verify_email(el);
+					}
 
-				getTemplate('workflow-add', { "is_new" : true, "is_disabled" : false, "was_disabled" : false }, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					$('#workflows-listener-container').html($(template_ui));
-					initializeWorkflowsListeners();
-					// Init SendVerify Email
-					send_verify_email();
+				});
 
-				}, "#workflows-listener-container");
+				$("#content").html(workflowModal.render().el);
+
 			},
 
 			/**
@@ -9821,48 +9813,54 @@ var WorkflowsRouter = Backbone.Router
 			logsToCampaign : function(id, log_type, log_filter_title)
 			{
 
-				getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui)
-				{
-					if (!template_ui)
-						return;
+				this.render_email_reports_select_ui(id, function(){
 
-					// Render tabs
-					$('#campaign-analysis-tabs').html($(template_ui));
-
-					if (log_type == undefined || log_type == "ALL")
-						log_type = "";
-					else
-						log_type = '?log-type=' + log_type;
-
-					var logsListView = new Base_Collection_View({ url : '/core/api/campaigns/logs/' + id + log_type, templateKey : "campaign-logs",
-						cursor : true, page_size : 20, individual_tag_name : 'tr', sort_collection : false, postRenderCallback : function(el)
+						getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui)
 						{
-							initializeTriggersListeners();
-							head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+							if (!template_ui)
+								return;
+
+							// Render tabs
+							$('#campaign-analysis-tabs').html($(template_ui));
+
+							if (log_type == undefined || log_type == "ALL")
+								log_type = "";
+							else
+								log_type = '?log-type=' + log_type;
+
+							var logsListView = new Workflow_Reports_Events({ url : '/core/api/campaigns/logs/' + id + log_type, templateKey : "campaign-logs",
+								cursor : true,page_size :20, individual_tag_name : 'tr', sort_collection :false, postRenderCallback : function(el)
+								{
+									initializeTriggersListeners();
+									head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+									{
+										$("time.log-created-time", el).timeago();
+									});
+
+									$('#log-filter-title').html(log_filter_title);
+									
+								},appendItemCallback : function(el)
+								{
+									includeTimeAgo(el);
+								}  
+								});
+
+							logsListView.collection.fetch({ success : function(collection)
 							{
-								$("time.log-created-time", el).timeago();
-							});
+								if (collection.length === 0)
+									fill_logs_slate('logs-slate', log_type.split('=')[1]);
+							} });
 
-							// $('#logs-campaign-name').text(workflowName);
+							$('#campaign-analysis-tabs-content').html(logsListView.el);
 
-							$('#log-filter-title').html(log_filter_title);
-						}, appendItemCallback : function(el)
-						{
-							includeTimeAgo(el);
-						} });
+							$('#campaign-tabs .select').removeClass('select');
+							$('.campaign-logs-tab').addClass('select');
 
-					logsListView.collection.fetch({ success : function(collection)
-					{
-						if (collection.length === 0)
-							fill_logs_slate('logs-slate', log_type.split('=')[1]);
-					} });
+						}, "#campaign-analysis-tabs");
 
-					$('#campaign-analysis-tabs-content').html(logsListView.el);
+				});
 
-					$('#campaign-tabs .select').removeClass('select');
-					$('.campaign-logs-tab').addClass('select');
-
-				}, "#campaign-analysis-tabs");
+				
 			},
 
 			/** Gets list of campaign-stats * */
@@ -9870,11 +9868,10 @@ var WorkflowsRouter = Backbone.Router
 			{
 				hideTransitionBar();
 				// Load Reports Template
-				getTemplate("campaign-stats-chart", {}, undefined, function(template_ui)
-				{
-					if (!template_ui)
-						return;
-					$('#content').html($(template_ui));
+				getTemplate("campaign-stats-chart", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
 
 					// Show bar graph for campaign stats
 					showBar('/core/api/campaign-stats/stats/', 'campaign-stats-chart', 'Campaigns Comparison', 'Email Stats', null);
@@ -9894,119 +9891,54 @@ var WorkflowsRouter = Backbone.Router
 			{
 				showTransitionBar();
 
-				// Fetches workflows if not filled
-				if ($('#campaign-reports-select').html() === null || $('#campaign-reports-select').html() === undefined)
-				{
-					getTemplate('campaign-analysis', {}, undefined, function(template_ui)
+				this.render_email_reports_select_ui(id, function(){
+
+					getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui)
 					{
 						if (!template_ui)
 							return;
-						$('#content').html($(template_ui));
-						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
-						// fill workflows
-						fillSelect('campaign-reports-select', '/core/api/workflows', 'workflow', function fillCampaign()
+						// Render tabs with id
+						$('#campaign-analysis-tabs').html($(template_ui));
+						// Hide bulk subscribers block
+						$('#subscribers-block').hide();
+
+						initReportLibs(function()
 						{
-							$('#campaign-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
-
-						}, optionsTemplate);
-
-						getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui)
-				{
-					if (!template_ui)
-						return;
-
-					// Render tabs with id
-					$('#campaign-analysis-tabs').html($(template_ui));
-					// Hide bulk subscribers block
-					$('#subscribers-block').hide();
-
-					initReportLibs(function()
-					{
-						// Load Reports Template
-						getTemplate('campaign-email-reports', {}, undefined, function(template_ui1)
-						{
-							if (!template_ui1)
-								return;
-							
-							$('#campaign-analysis-tabs-content').html($(template_ui1));
-							
-							// Set the name
-							// $('#reports-campaign-name').text(workflowName);
-							initChartsUI(function()
+							// Load Reports Template
+							getTemplate('campaign-email-reports', {}, undefined, function(template_ui1)
 							{
-								// Updates table data
-								get_email_table_reports(id);
+								if (!template_ui1)
+									return;
+								
+								$('#campaign-analysis-tabs-content').html($(template_ui1));
+								
+								// Set the name
+								// $('#reports-campaign-name').text(workflowName);
+								initChartsUI(function()
+								{
+									// Updates table data
+									get_email_table_reports(id);
 
-								// shows graphs by default week date range.
-								showEmailGraphs(id);
-							});
-						}, "#campaign-analysis-tabs-content");
+									// shows graphs by default week date range.
+									showEmailGraphs(id);
+								});
+							}, "#campaign-analysis-tabs-content");
 
-					});
+						});
 
-					$(".active").removeClass("active");
-					$("#workflowsmenu").addClass("active");
+						$(".active").removeClass("active");
+						$("#workflowsmenu").addClass("active");
 
-					$('#campaign-tabs .select').removeClass('select');
-					$('.campaign-stats-tab').addClass('select');
+						$('#campaign-tabs .select').removeClass('select');
+						$('.campaign-stats-tab').addClass('select');
 
-					hideTransitionBar();
+						hideTransitionBar();
 
-				}, "#campaign-analysis-tabs");
-					}, "#content");
-
-					
-
-				}
-
-				else
-				{
-					getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui)
-				{
-					if (!template_ui)
-						return;
-
-					// Render tabs with id
-					$('#campaign-analysis-tabs').html($(template_ui));
-					// Hide bulk subscribers block
-					$('#subscribers-block').hide();
-
-					initReportLibs(function()
-					{
-						// Load Reports Template
-						getTemplate('campaign-email-reports', {}, undefined, function(template_ui1)
-						{
-							if (!template_ui1)
-								return;
-							
-							$('#campaign-analysis-tabs-content').html($(template_ui1));
-							
-							// Set the name
-							// $('#reports-campaign-name').text(workflowName);
-							initChartsUI(function()
-							{
-								// Updates table data
-								get_email_table_reports(id);
-
-								// shows graphs by default week date range.
-								showEmailGraphs(id);
-							});
-						}, "#campaign-analysis-tabs-content");
-
-					});
-
-					$(".active").removeClass("active");
-					$("#workflowsmenu").addClass("active");
-
-					$('#campaign-tabs .select').removeClass('select');
-					$('.campaign-stats-tab').addClass('select');
-
-					hideTransitionBar();
-
-				}, "#campaign-analysis-tabs");
-				}
+					}, "#campaign-analysis-tabs");
 				
+				});
+
 			},
 
 			/** Gets list of triggers */
@@ -10081,7 +10013,6 @@ var WorkflowsRouter = Backbone.Router
 				 */
 				postRenderCallback : function(el)
 				{
-					initializeAccountSettingsListeners();
 
 					initializeTriggerListEventListners(id,trigger_type);
 
@@ -10566,26 +10497,31 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			allSubscribers : function(id)
 			{
-				// Render tabs
-				getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui)
-				{
-					if (!template_ui)
-						return;
-					$('#campaign-analysis-tabs').html($(template_ui));
-					var all_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/all-subscribers/' + id,
-							'workflow-other-subscribers');
-					all_subscribers_collection.collection.fetch({ success : function(collection)
-					{
-						if (collection.length === 0)
-							fill_subscribers_slate('subscribers-slate', "all-subscribers");
-					} });
-					$("#campaign-analysis-tabs-content").html(all_subscribers_collection.el);
-					// Hide bulk subscribers block
-					$('#subscribers-block').hide();
 
-					$('#campaign-tabs .select').removeClass('select');
-					$('.campaign-subscribers-tab').addClass('select');
-				}, "#campaign-analysis-tabs");
+				this.render_email_reports_select_ui(id, function(){
+
+					// Render tabs
+					getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui)
+					{
+						if (!template_ui)
+							return;
+						$('#campaign-analysis-tabs').html($(template_ui));
+						var all_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/all-subscribers/' + id,
+								'workflow-other-subscribers');
+						all_subscribers_collection.collection.fetch({ success : function(collection)
+						{
+							if (collection.length === 0)
+								fill_subscribers_slate('subscribers-slate', "all-subscribers");
+						} });
+						$("#campaign-analysis-tabs-content").html(all_subscribers_collection.el);
+						// Hide bulk subscribers block
+						$('#subscribers-block').hide();
+
+						$('#campaign-tabs .select').removeClass('select');
+						$('.campaign-subscribers-tab').addClass('select');
+					}, "#campaign-analysis-tabs");
+
+				});
 			},
 
 			/**
@@ -10598,30 +10534,36 @@ var WorkflowsRouter = Backbone.Router
 			activeSubscribers : function(id)
 			{
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+				var that = this;
+				that.render_email_reports_select_ui(id, function(){
+                    
+					if (!that.workflow_list_view || that.workflow_list_view.collection.length == 0)
+					{
+						that.navigate("workflows", { trigger : true });
+						return;
+					}
 
-				this.active_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/active-subscribers/' + id,
-						'workflow-active-contacts');
+					that.active_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/active-subscribers/' + id,
+							'workflow-active-contacts');
 
-				this.active_subscribers_collection.collection.fetch({ success : function(collection)
-				{
+					that.active_subscribers_collection.collection.fetch({ success : function(collection)
+					{
 
-					// show pad content
-					if (collection.length === 0)
-						fill_subscribers_slate('subscribers-slate', "active-subscribers");
-				} });
+						// show pad content
+						if (collection.length === 0)
+							fill_subscribers_slate('subscribers-slate', "active-subscribers");
+					} });
 
-				$("#campaign-analysis-tabs-content").html(this.active_subscribers_collection.el);
+					$("#campaign-analysis-tabs-content").html(that.active_subscribers_collection.el);
 
-				// Hide bulk subscribers block
-				$('#subscribers-block').hide();
+					// Hide bulk subscribers block
+					$('#subscribers-block').hide();
 
-				$('#campaign-tabs .select').removeClass('select');
-				$('.campaign-subscribers-tab').addClass('select');
+					$('#campaign-tabs .select').removeClass('select');
+					$('.campaign-subscribers-tab').addClass('select');
+
+			    });
+				
 
 			},
 
@@ -10635,30 +10577,34 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			completedSubscribers : function(id)
 			{
+				var that = this;
+				that.render_email_reports_select_ui(id, function(){
+					if (!that.workflow_list_view || that.workflow_list_view.collection.length == 0)
+					{
+						that.navigate("workflows", { trigger : true });
+						return;
+					}
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+					var completed_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/completed-subscribers/' + id,
+							'workflow-other-subscribers');
 
-				var completed_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/completed-subscribers/' + id,
-						'workflow-other-subscribers');
+					completed_subscribers_collection.collection.fetch({ success : function(collection)
+					{
 
-				completed_subscribers_collection.collection.fetch({ success : function(collection)
-				{
+						// show pad content
+						if (collection.length === 0)
+							fill_subscribers_slate('subscribers-slate', "completed-subscribers");
+					} });
+					$("#campaign-analysis-tabs-content").html(completed_subscribers_collection.el);
 
-					// show pad content
-					if (collection.length === 0)
-						fill_subscribers_slate('subscribers-slate', "completed-subscribers");
-				} });
-				$("#campaign-analysis-tabs-content").html(completed_subscribers_collection.el);
+					// Hide bulk subscribers block
+					$('#subscribers-block').hide();
 
-				// Hide bulk subscribers block
-				$('#subscribers-block').hide();
+					$('#campaign-tabs .select').removeClass('select');
+					$('.campaign-subscribers-tab').addClass('select');
 
-				$('#campaign-tabs .select').removeClass('select');
-				$('.campaign-subscribers-tab').addClass('select');
+				});
+				
 			},
 
 			/**
@@ -10669,150 +10615,199 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			removedSubscribers : function(id)
 			{
+				var that = this;
+				that.render_email_reports_select_ui(id, function(){
+					if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+					{
+						this.navigate("workflows", { trigger : true });
+						return;
+					}
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+					var removed_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/removed-subscribers/' + id,
+							'workflow-other-subscribers');
 
-				var removed_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/removed-subscribers/' + id,
-						'workflow-other-subscribers');
+					removed_subscribers_collection.collection.fetch({ success : function(collection)
+					{
 
-				removed_subscribers_collection.collection.fetch({ success : function(collection)
-				{
+						// show pad content
+						if (collection.length === 0)
+							fill_subscribers_slate('subscribers-slate', "removed-subscribers");
+					} });
 
-					// show pad content
-					if (collection.length === 0)
-						fill_subscribers_slate('subscribers-slate', "removed-subscribers");
-				} });
+					$("#campaign-analysis-tabs-content").html(removed_subscribers_collection.el);
 
-				$("#campaign-analysis-tabs-content").html(removed_subscribers_collection.el);
+					// Hide bulk subscribers block
+					$('#subscribers-block').hide();
 
-				// Hide bulk subscribers block
-				$('#subscribers-block').hide();
+					$('#campaign-tabs .select').removeClass('select');
+					$('.campaign-subscribers-tab').addClass('select');
 
-				$('#campaign-tabs .select').removeClass('select');
-				$('.campaign-subscribers-tab').addClass('select');
+				});
 			},
 			unsubscribedSubscribers : function(id)
 			{
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+				var that = this;
+				that.render_email_reports_select_ui(id, function(){
 
-				var unsubscribed_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/unsubscribed-subscribers/' + id,
-						'workflow-other-subscribers');
+					if (!that.workflow_list_view || that.workflow_list_view.collection.length == 0)
+					{
+						that.navigate("workflows", { trigger : true });
+						return;
+					}
 
-				unsubscribed_subscribers_collection.collection.fetch({ success : function(collection)
-				{
+					var unsubscribed_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/unsubscribed-subscribers/' + id,
+							'workflow-other-subscribers');
 
-					// show pad content
-					if (collection.length === 0)
-						fill_subscribers_slate('subscribers-slate', "unsubscribe-subscribers");
-				} });
+					unsubscribed_subscribers_collection.collection.fetch({ success : function(collection)
+					{
 
-				$("#campaign-analysis-tabs-content").html(unsubscribed_subscribers_collection.el);
+						// show pad content
+						if (collection.length === 0)
+							fill_subscribers_slate('subscribers-slate', "unsubscribe-subscribers");
+					} });
 
-				// Hide bulk subscribers block
-				$('#subscribers-block').hide();
+					$("#campaign-analysis-tabs-content").html(unsubscribed_subscribers_collection.el);
 
-				$('#campaign-tabs .select').removeClass('select');
-				$('.campaign-subscribers-tab').addClass('select');
+					// Hide bulk subscribers block
+					$('#subscribers-block').hide();
+
+					$('#campaign-tabs .select').removeClass('select');
+					$('.campaign-subscribers-tab').addClass('select');
+				});
 			},
 
 			hardBouncedSubscribers : function(id)
 			{
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+				var that = this;
+				that.render_email_reports_select_ui(id, function(){
 
-				var hardbounced_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/hardbounced-subscribers/' + id,
-						'workflow-other-subscribers');
+					if (!that.workflow_list_view || that.workflow_list_view.collection.length == 0)
+					{
+						that.navigate("workflows", { trigger : true });
+						return;
+					}
 
-				hardbounced_subscribers_collection.collection.fetch({ success : function(collection)
-				{
+					var hardbounced_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/hardbounced-subscribers/' + id,
+							'workflow-other-subscribers');
 
-					// show pad content
-					if (collection.length === 0)
-						fill_subscribers_slate('subscribers-slate', "hardbounced-subscribers");
-				} });
+					hardbounced_subscribers_collection.collection.fetch({ success : function(collection)
+					{
 
-				$("#campaign-analysis-tabs-content").html(hardbounced_subscribers_collection.el);
-				// Hide bulk subscribers block
-				$('#subscribers-block').hide();
+						// show pad content
+						if (collection.length === 0)
+							fill_subscribers_slate('subscribers-slate', "hardbounced-subscribers");
+					} });
 
-				$('#campaign-tabs .select').removeClass('select');
-				$('.campaign-subscribers-tab').addClass('select');
+					$("#campaign-analysis-tabs-content").html(hardbounced_subscribers_collection.el);
+					// Hide bulk subscribers block
+					$('#subscribers-block').hide();
+
+					$('#campaign-tabs .select').removeClass('select');
+					$('.campaign-subscribers-tab').addClass('select');
+				});
 			},
 
 			softBouncedSubscribers : function(id)
 			{
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+				var that = this;
+				that.render_email_reports_select_ui(id, function(){
 
-				var softbounced_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/softbounced-subscribers/' + id,
-						'workflow-other-subscribers');
+					if (!that.workflow_list_view || that.workflow_list_view.collection.length == 0)
+					{
+						that.navigate("workflows", { trigger : true });
+						return;
+					}
 
-				softbounced_subscribers_collection.collection.fetch({ success : function(collection)
-				{
+					var softbounced_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/softbounced-subscribers/' + id,
+							'workflow-other-subscribers');
 
-					// show pad content
-					if (collection.length === 0)
-						fill_subscribers_slate('subscribers-slate', "softbounced-subscribers");
-				} });
+					softbounced_subscribers_collection.collection.fetch({ success : function(collection)
+					{
 
-				$("#campaign-analysis-tabs-content").html(softbounced_subscribers_collection.el);
-				// Hide bulk subscribers block
-				$('#subscribers-block').hide();
+						// show pad content
+						if (collection.length === 0)
+							fill_subscribers_slate('subscribers-slate', "softbounced-subscribers");
+					} });
 
-				$('#campaign-tabs .select').removeClass('select');
-				$('.campaign-subscribers-tab').addClass('select');
+					$("#campaign-analysis-tabs-content").html(softbounced_subscribers_collection.el);
+					// Hide bulk subscribers block
+					$('#subscribers-block').hide();
+
+					$('#campaign-tabs .select').removeClass('select');
+					$('.campaign-subscribers-tab').addClass('select');
+				});
 			},
 
 			spamReportedSubscribers : function(id)
 			{
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+				var that = this;
+				that.render_email_reports_select_ui(id, function(){
+
+					if (!that.workflow_list_view || that.workflow_list_view.collection.length == 0)
+					{
+						that.navigate("workflows", { trigger : true });
+						return;
+					}
+
+					var spam_reported_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/spam-reported-subscribers/' + id,
+							'workflow-other-subscribers');
+
+					spam_reported_subscribers_collection.collection.fetch({ success : function(collection)
+					{
+
+						// show pad content
+						if (collection.length === 0)
+							fill_subscribers_slate('subscribers-slate', "spam-reported-subscribers");
+					} });
+
+					$("#campaign-analysis-tabs-content").html(spam_reported_subscribers_collection.el);
+					// Hide bulk subscribers block
+					$('#subscribers-block').hide();
+
+					$('#campaign-tabs .select').removeClass('select');
+					$('.campaign-subscribers-tab').addClass('select');
+				});
+			},
+
+			render_email_reports_select_ui : function(id, callback){
+
+				 // Fetches workflows if not filled
+				if (!$('#campaign-reports-select').html())
 				{
-					this.navigate("workflows", { trigger : true });
+					getTemplate('campaign-analysis', {}, undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+
+						$('#content').html($(template_ui)); 
+						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+
+						// fill workflows
+						fillSelect('campaign-reports-select', '/core/api/workflows', 'workflow', function fillCampaign()
+						{
+							if(id)
+							$('#campaign-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
+
+						}, optionsTemplate);
+
+						initializeLogReportHandlers();
+
+						if(callback)
+							  callback();
+						
+					}, "#content");
+
 					return;
 				}
 
-				var spam_reported_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/spam-reported-subscribers/' + id,
-						'workflow-other-subscribers');
+				if(callback)
+					callback(); 		
 
-				spam_reported_subscribers_collection.collection.fetch({ success : function(collection)
-				{
-
-					// show pad content
-					if (collection.length === 0)
-						fill_subscribers_slate('subscribers-slate', "spam-reported-subscribers");
-				} });
-
-				$("#campaign-analysis-tabs-content").html(spam_reported_subscribers_collection.el);
-				// Hide bulk subscribers block
-				$('#subscribers-block').hide();
-
-				$('#campaign-tabs .select').removeClass('select');
-				$('.campaign-subscribers-tab').addClass('select');
-			} });
-
-function initializeWorkflowsListeners()
-{
-
-}
-// To Enable Console in IE - MC
+			},
+});// To Enable Console in IE - MC
 $(function(){
 	var alertFallback = false;
 	
@@ -12780,7 +12775,7 @@ function pie(url, selector, name)
 										], exporting : { enabled : false } }, function(chart)
 									{ // on complete
 
-										chart.renderer.image('img/donut-tooltip-frame.png', 14, 5, 200, 80).add();
+										chart.renderer.image(updateImageS3Path('img/donut-tooltip-frame.png'), 14, 5, 200, 80).add();
 										chart.renderer.text(this.options.tooltip.message, 50, 40).attr("class", 'tooltip-default-message').add();
 
 									});
@@ -12819,7 +12814,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 	var chart;
 
 	// Shows loading image
-	$('#' + selector).html(getRandomLoadingImg());
+	$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 
 	// Builds graph with the obtained json data.
 	setupCharts(function()
@@ -12999,7 +12994,7 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html(getRandomLoadingImg());
+		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	
 	
 	var chart;
@@ -13260,8 +13255,7 @@ function showFunnel(url, selector, name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html(getRandomLoadingImg());
-
+		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	var chart;
 
 	// Loads Highcharts plugin using setupCharts and sets up line chart in the
@@ -13466,7 +13460,7 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html(getRandomLoadingImg());
+		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	
 	
 	var chart;
@@ -13731,7 +13725,7 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,freque
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html(getRandomLoadingImg());
+		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	
 	
 	var chart;
@@ -14102,7 +14096,7 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
         // Old calls were not showing loading image..
     }
     else
-        $('#' + selector).html(getRandomLoadingImg());
+        $('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
     
     
     var chart;
@@ -14417,7 +14411,7 @@ function pieforReports(url, selector, name,show_loading)
         // Old calls were not showing loading image..
     }
     else
-        $('#' + selector).html(getRandomLoadingImg());
+        $('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 
 	var chart;
 	var AllData=[];
@@ -14578,7 +14572,8 @@ if(selector == 'lossreasonpie-chart-users'){
 				 } );
 
 
-	}$(function(){
+	}
+$(function(){
 	
    $("#choose-avatar-modal").on('click', 'table td a', function(e) {
 	
@@ -15777,7 +15772,7 @@ function enableKeyboardShotcuts()
 		// New event
 		Mousetrap.bind('shift+v',function(){
 			if(!isModalVisible()){
-				$('#activityModal').modal('show'); 
+				$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 				highlight_event();
 			}
 		});
@@ -15903,7 +15898,7 @@ function enableKeyboardShotcuts()
 				showTaskModal("");
 			else if(isRoute('calendar'))
 				{
-				  $('#activityModal').modal('show');
+				  $('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 				  highlight_event();
 				}
 		});
@@ -18172,7 +18167,7 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-r
  * Default image shown for contacts if image is not available
  */
 
-var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/flatfull/user-default.jpg";
+var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
 
 var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi,Sandeep";
 
@@ -18701,6 +18696,9 @@ function convertDateFromUKtoUS(ukDate)
 		date = ukDate.split(".");
 	if(date.length == 3)
 	{	
+		if(date[2].length == 2)
+			  date[2] = "20" + date[2];
+
 		var returnDate = new Date(date[1]+"/"+date[0]+"/"+date[2]);
 		if(!/Invalid|NaN/.test(returnDate))
 			return returnDate.format("mm/dd/yyyy");
@@ -18711,6 +18709,25 @@ function convertDateFromUKtoUS(ukDate)
 		return "";
 }
 
+/**
+* Retuns date with supportable format
+*/
+function getFormattedDateObjectWithString(value){
+
+		if(!value)
+			   return new Date("");
+
+        value = value.replace(/\./g,'/');
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("yyyy") == -1){
+			value = value.substring(0, value.length - 2) + "20" + value.substring(value.length - 2);
+		}
+
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+			value = convertDateFromUKtoUS(value);
+
+		return new Date(value);
+	
+}
 
 /**
  * wysihtml.js is used to embed beautiful html editors to email body. Inserts
@@ -19028,6 +19045,19 @@ function canRunBulkOperations()
 				tight_acl.DEAL_PER = true;
 				App_ACL.notAllowed(obj);
 			}
+		if(Current_Route.indexOf('tasks') > -1 && !(CURRENT_DOMAIN_USER.menu_scopes.indexOf('CALENDAR') > -1))
+		  {
+		   obj.entity = 'Tasks';
+		   tight_acl.ACTIVITY_PER = true;
+		   App_ACL.notAllowed(obj);
+		  }
+
+		  if(Current_Route.indexOf('calendar') > -1 && !(CURRENT_DOMAIN_USER.menu_scopes.indexOf('CALENDAR') > -1))
+		  {
+		   obj.entity = 'Calendar';
+		   tight_acl.ACTIVITY_PER = true;
+		   App_ACL.notAllowed(obj);
+		  }
 		if(Current_Route.indexOf('activit') > -1 && !(CURRENT_DOMAIN_USER.menu_scopes.indexOf('ACTIVITY') > -1))
 		{
 			obj.entity = 'Acivities';
@@ -19284,13 +19314,14 @@ function getActivityObject(id)
 
 function update_event_activity(ele)
 {
+	$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+	
 	var value = JSON.parse(ele);
 	deserializeForm(value, $("#updateActivityForm"));
-	$("#updateActivityModal").modal('show');
-
 	$('.update-start-timepicker').val(fillTimePicker(value.start));
-
 	$('.update-end-timepicker').val(fillTimePicker(value.end));
+
+	$("#updateActivityModal").modal('show');
 
 	if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
 	{
@@ -19336,21 +19367,29 @@ function getModal()
 function updateactivity__task(ele)
 {
 	var value = JSON.parse(ele);
-	deserializeForm(value, $("#updateTaskForm"));
-	$("#updateTaskModal").modal('show');
-	// Fills owner select element
-	populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
-	{
-		$("#updateTaskForm").find("#owners-list").html(data);
-		if (value.taskOwner)
+
+	$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
+
+	loadProgressSlider($("#updateTaskForm"), function(el){
+
+		deserializeForm(value, $("#updateTaskForm"));
+		// Fills owner select element
+		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
 		{
-			$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
-		}
-		$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+			$("#updateTaskForm").find("#owners-list").html(data);
+			if (value.taskOwner)
+			{
+				$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
+			}
+			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+		});
+
+		// Add notes in task modal
+		showNoteOnForm("updateTaskForm", value.notes);
+
 	});
 
-	// Add notes in task modal
-	showNoteOnForm("updateTaskForm", value.notes);
+	
 }
 
 function updatedeals(ele)
@@ -19723,11 +19762,36 @@ function initActivitiesDateRange()
  */
 $(function() {
 
+	$("#activityTaskModal,#activityModal,#updateActivityModal").on("click", "#activityForm #allDay, #updateActivityForm #allDay", function(e){
+
+			if($(this).is(':checked'))
+			{	
+				$('#activityForm #event-time-1').closest('.control-group').hide();
+				$('#activityForm #event-date-2').closest('.row').hide();
+			}
+			else 
+			{
+				$('#activityForm #event-time-1').closest('.control-group').show();
+				$('#activityForm #event-date-2').closest('.row').show();
+			}
+			
+			if($(this).is(':checked'))
+			{
+				$('#updateActivityForm #update-event-time-1').closest('.control-group').hide();
+				$('#updateActivityForm #update-event-date-2').closest('.row').hide();
+			}
+			else 
+			{
+				$('#updateActivityForm #update-event-time-1').closest('.control-group').show();
+				$('#updateActivityForm #update-event-date-2').closest('.row').show();
+			}
+	});
+
 	/**
 	 * Saves the content of activity modal by verifying whether it is a task or
 	 * event
 	 */
-	$('body').on('click', '#task_event_validate', function(e) {
+	$("#activityTaskModal,#activityModal").on('click', '#task_event_validate', function(e) {
 		e.preventDefault();
 
 		console.log(this);
@@ -19747,70 +19811,6 @@ $(function() {
 		}
 	}); // End of Task and Event Validation function
 
-	// Hide event of activity modal
-	/**
-	 * Removes appended contacts from related-to field of task form and
-	 * validation error messages if any.
-	 * when timepicker editing it will be return
-	 */
-	$('#activityTaskModal').on('hidden.bs.modal', function(e) {
-
-		if ($(this).hasClass('in'))
-		{
-			return;
-		}
-		// Remove appended contacts from related-to
-		$("#taskForm").find("li").remove();
-
-		// Remove validation error messages
-		remove_validation_errors('activityTaskModal');
-		
-		resetForm($("#taskForm"));
-
-		// Removes note from from task form
-		$('#taskForm #forNoteForm').html("");
-
-		// Hide + Add note link
-		$(".task-add-note", $("#taskForm")).show();
-		/*$('#activityTaskModal').find('#new-task-related-contacts-label').parent().removeClass('hide');
-		$('#activityTaskModal').find('.new-task-related-contacts-input').addClass('hide');
-		$('#activityTaskModal').find('.new-task-related-contacts-label').addClass('hide');
-		$('#activityTaskModal').find('#new-task-related-deals-label').parent().removeClass('hide');
-		$('#activityTaskModal').find('.new-task-related-deals-input').addClass('hide');
-		$('#activityTaskModal').find('.new-task-related-deals-label').addClass('hide');*/
-		
-	});
-	
-	/**
-	 * Hide end-date & time for all day events.
-	 */
-	$('body').on('click', '#activityForm #allDay', function(e) {
-		
-		if($(this).is(':checked'))
-		{	
-			$('#activityForm #event-time-1').closest('.control-group').hide();
-			$('#activityForm #event-date-2').closest('.row').hide();
-		}
-		else 
-		{
-			$('#activityForm #event-time-1').closest('.control-group').show();
-			$('#activityForm #event-date-2').closest('.row').show();
-		}
-	});
-	
-	$('body').on('click', '#updateActivityForm #allDay', function(e) { 
-		
-		if($(this).is(':checked'))
-		{
-			$('#updateActivityForm #update-event-time-1').closest('.control-group').hide();
-			$('#updateActivityForm #update-event-date-2').closest('.row').hide();
-		}
-		else 
-		{
-			$('#updateActivityForm #update-event-time-1').closest('.control-group').show();
-			$('#updateActivityForm #update-event-date-2').closest('.row').show();
-		}
-	});
 });/**
  * 
  * Describes the given object is an array or not
@@ -20351,7 +20351,7 @@ function showCalendar(users)
 						select : function(start, end, allDay)
 						{
 							// Show a new event
-							$('#activityModal').modal('show');
+							$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 							highlight_event();
 
 							// Set Date for Event
@@ -20445,6 +20445,11 @@ function showCalendar(users)
 
 							if (isNaN(event.id))
 								return;
+
+							// Show edit modal for the event
+							$("#updateActivityModal").html(getTemplate("update-activity-modal")).modal("show");
+
+
 							// Deserialize
 							deserializeForm(event, $("#updateActivityForm"));
 
@@ -20504,8 +20509,7 @@ function showCalendar(users)
 								var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none " id="addEventDescription">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
 								$("#event_desc").html(desc);
 							}
-							// Show edit modal for the event
-							$("#updateActivityModal").modal('show');
+							
 							
 							agile_type_ahead("event_relates_to_deals", $('#updateActivityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
@@ -21426,14 +21430,6 @@ $("#updateActivityModal").on(
 function initializeEventListners(el)
 {
 
-
-/*$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
-{
-	event.preventDefault();
-	set_api_key();
-});*/
-
-
 /**
  * When Send Mail is clicked from Ical Modal, it hides the ical modal and shows
  * the ical-send email modal.
@@ -21525,16 +21521,10 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 	{
 		e.preventDefault();
 
-		$('#activityModal').modal('show');
+		$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
+
 		agile_type_ahead("event_relates_to_deals", $('#activityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 		highlight_event();
-
-		/*
-		 * $('#task-date-1').val(new Date().format('mm/dd/yyyy'));
-		 * $("#event-date-1").val(new Date().format('mm/dd/yyyy'));
-		 * $("#event-date-2").val(new Date().format('mm/dd/yyyy'));
-		 */
-
 		return;
 	});
 
@@ -21629,146 +21619,12 @@ $(function()
 	 * 
 	 */
 	
-	  $("body").on('click', '#show-activity', function(e) { e.preventDefault();
-	  highlight_event();
-	  
-	  $("#activityModal").modal('show'); });
-	 
+	  $("body").on('click', '#show-activity', function(e) { 
+	  		e.preventDefault();
 
-	/**
-	 * Activates the date picker to the corresponding fields in activity modal
-	 * and activity-update modal
-	 */
-
-	var eventDate = $('#event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
-	{
-		// If event start date is changed and end date is less than start date,
-		// change the value of the end date to start date.
-		var eventDate2;
-		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-			eventDate2 = new Date(convertDateFromUKtoUS($('#event-date-2').val()));
-		else
-		 	eventDate2 = new Date($('#event-date-2').val());
-		if (ev.date.valueOf() > eventDate2.valueOf())
-		{
-			$('#event-date-2').val($('#event-date-1').val());
-		}
-
-	});
-
-
-	$('#event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
-	$('#update-event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
-
-	{
-		// If event start date is changed and end date is less than start date,
-		// change the value of the end date to start date.
-		var eventDate2;
-		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-			eventDate2 = new Date(convertDateFromUKtoUS($('#update-event-date-2').val()));
-		else
-		 	eventDate2 = new Date($('#update-event-date-2').val());
-		if (ev.date.valueOf() > eventDate2.valueOf())
-		{
-			$('#update-event-date-2').val($('#update-event-date-1').val());
-		}
-
-	});
-
-	$('#update-event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
-
-
-	/**
-	 * Activates time picker for start time to the fields with class
-	 * start-timepicker
-	 */
-	$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false }).on('hide.timepicker', function(e)
-	{
-		if ($('#activityModal #allDay').is(':checked'))
-		{
-			$('#event-time-1').closest('.control-group').hide();
-			$('#event-date-2').closest('.row').hide();
-		}
-
-		// ChangeTime event is not working, so need to invoke user method.
-		var endTime = changeEndTime($('.start-timepicker').val().split(":"), $('.end-timepicker').val().split(":"));
-		$('.end-timepicker').val(endTime);
-
-		e.stopImmediatePropagation();
-		return false;
-	});
-	$('.start-timepicker').timepicker().on('show.timepicker', function(e)
-	{
-		if ($('.start-timepicker').prop('value') != "" && $('.start-timepicker').prop('value') != undefined)
-		{
-			if ($('.start-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.hours = $('.start-timepicker').prop('value').split(":")[0];
-			if ($('.start-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.minutes = $('.start-timepicker').prop('value').split(":")[1];
-		}
-		$('.bootstrap-timepicker-hour').val(e.time.hours);
-		$('.bootstrap-timepicker-minute').val(e.time.minutes);
-	});
-
-	/**
-	 * Activates time picker for end time to the fields with class
-	 * end-timepicker
-	 */
-	$('.end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-	console.log(get_hh_mm(true));
-	$('.end-timepicker').timepicker().on('show.timepicker', function(e)
-	{
-		if ($('.end-timepicker').prop('value') != "" && $('.end-timepicker').prop('value') != undefined)
-		{
-			if ($('.end-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.hours = $('.end-timepicker').prop('value').split(":")[0];
-			if ($('.end-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.minutes = $('.end-timepicker').prop('value').split(":")[1];
-		}
-		$('.bootstrap-timepicker-hour').val(e.time.hours);
-		$('.bootstrap-timepicker-minute').val(e.time.minutes);
-	});
-
-	/**
-	 * Activates time picker for start time to the fields with class
-	 * update-start-timepicker
-	 */
-	$('.update-start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false }).on('hide.timepicker', function(e)
-	{
-		// ChangeTime event is not working, so need to invoke user method.
-		var endTime = changeEndTime($('.update-start-timepicker').val().split(":"), $('.update-end-timepicker').val().split(":"));
-		$('.update-end-timepicker').val(endTime); 
-	});
-	$('.update-start-timepicker').timepicker().on('show.timepicker', function(e)
-	{
-		if ($('.update-start-timepicker').prop('value') != "" && $('.update-start-timepicker').prop('value') != undefined)
-		{
-			if ($('.update-start-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.hours = $('.update-start-timepicker').prop('value').split(":")[0];
-			if ($('.update-start-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.minutes = $('.update-start-timepicker').prop('value').split(":")[1];
-		}
-		$('.bootstrap-timepicker-hour').val(e.time.hours);
-		$('.bootstrap-timepicker-minute').val(e.time.minutes);
-	});
-
-	/**
-	 * Activates time picker for end time to the fields with class
-	 * update-end-timepicker
-	 */
-	$('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-	$('.update-end-timepicker').timepicker().on('show.timepicker', function(e)
-	{
-		if ($('.update-end-timepicker').prop('value') != "" && $('.update-end-timepicker').prop('value') != undefined)
-		{
-			if ($('.update-end-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.hours = $('.update-end-timepicker').prop('value').split(":")[0];
-			if ($('.update-end-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.minutes = $('.update-end-timepicker').prop('value').split(":")[1];
-		}
-		$('.bootstrap-timepicker-hour').val(e.time.hours);
-		$('.bootstrap-timepicker-minute').val(e.time.minutes);
-	});
+	 		highlight_event();
+	  		$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
+	  });
 
 	/**
 	 * Sets the start time with current time and end time half an hour more than
@@ -21778,73 +21634,40 @@ $(function()
 	{
 		// Show related to contacts list
 		var el = $("#activityForm");
+		$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+		$('#task-date-1').datepicker('update');
+
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
 
 		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
+		$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
+		$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
+		{
+			if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
+			{
+				if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
+				if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		});
+	
 		/**
 		 * Fills current time only when there is no time in the fields
 		 */
-		if ($('.start-timepicker').val() == '')
-			$('.start-timepicker').val(get_hh_mm());
+		if ($('.start-timepicker', el).val() == '')
+			$('.start-timepicker', el).val(get_hh_mm());
 
-		if ($('.end-timepicker').val() == '')
-			$('.end-timepicker').val(get_hh_mm(true));
+		if ($('.end-timepicker', el).val() == '')
+			$('.end-timepicker', el).val(get_hh_mm(true));
 		// sets the time in time picker if it is empty
-		if ($('.new-task-timepicker').val() == '')
-			$('.new-task-timepicker').val("12:00");
-		// Update will highlight the date of in date picker
-		$("input.date").datepicker('update');
+		if ($('.new-task-timepicker', el).val() == '')
+			$('.new-task-timepicker', el).val("12:00");
 
-		/*if($('#activityTaskModal').find('.new-task-related-contacts-input').find('ul').find('li').length>0)
-		{
-			$('#activityTaskModal').find('#new-task-related-contacts-label').parent().addClass('hide');
-			$('#activityTaskModal').find('.new-task-related-contacts-input').removeClass('hide');
-			$('#activityTaskModal').find('.new-task-related-contacts-label').removeClass('hide');
-		}
-		else
-		{
-			$('#activityTaskModal').find('#new-task-related-contacts-label').parent().removeClass('hide');
-			$('#activityTaskModal').find('.new-task-related-contacts-input').addClass('hide');
-			$('#activityTaskModal').find('.new-task-related-contacts-label').addClass('hide');
-		}
-		if($('#activityTaskModal').find('.new-task-related-deals-input').find('ul').find('li').length>0)
-		{
-			$('#activityTaskModal').find('#new-task-related-deals-label').parent().addClass('hide');
-			$('#activityTaskModal').find('.new-task-related-deals-input').removeClass('hide');
-			$('#activityTaskModal').find('.new-task-related-deals-label').removeClass('hide');
-		}
-		else
-		{
-			$('#activityTaskModal').find('#new-task-related-deals-label').parent().removeClass('hide');
-			$('#activityTaskModal').find('.new-task-related-deals-input').addClass('hide');
-			$('#activityTaskModal').find('.new-task-related-deals-label').addClass('hide');
-		}
-
-		if($('#activityModal').find('.new-event-related-contacts-input').find('ul').find('li').length>0)
-		{
-			$('#activityModal').find('#new-event-related-contacts-label').parent().addClass('hide');
-			$('#activityModal').find('.new-event-related-contacts-input').removeClass('hide');
-			$('#activityModal').find('.new-event-related-contacts-label').removeClass('hide');
-		}
-		else
-		{
-			$('#activityModal').find('#new-event-related-contacts-label').parent().removeClass('hide');
-			$('#activityModal').find('.new-event-related-contacts-input').addClass('hide');
-			$('#activityModal').find('.new-event-related-contacts-label').addClass('hide');
-		}
-		if($('#activityModal').find('.new-event-related-deals-input').find('ul').find('li').length>0)
-		{
-			$('#activityModal').find('#new-event-related-deals-label').parent().addClass('hide');
-			$('#activityModal').find('.new-event-related-deals-input').removeClass('hide');
-			$('#activityModal').find('.new-event-related-deals-label').removeClass('hide');
-		}
-		else
-		{
-			$('#activityModal').find('#new-event-related-deals-label').parent().removeClass('hide');
-			$('#activityModal').find('.new-event-related-deals-input').addClass('hide');
-			$('#activityModal').find('.new-event-related-deals-label').addClass('hide');
-		}*/
+		activateSliderAndTimerToTaskModal(el);
 
 	});
 
@@ -21859,10 +21682,10 @@ $(function()
 		
 		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
-		if ($('#updateActivityModal #allDay').is(':checked'))
+		if ($('#updateActivityModal #allDay', el).is(':checked'))
 		{
-			$('#update-event-time-1').closest('.control-group').hide();
-			$('#update-event-date-2').closest('.row').hide();
+			$('#update-event-time-1', el).closest('.control-group').hide();
+			$('#update-event-date-2', el).closest('.row').hide();
 		}
 
 		// Removes alert message of error related date and time.
@@ -21871,40 +21694,28 @@ $(function()
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
 
-		$("input.date").datepicker('update');
-
-		/*if($('#updateActivityModal').find('.update-event-related-contacts-input').find('ul').find('li').length>0)
-		{
-			$('#updateActivityModal').find('#update-event-related-contacts-label').parent().addClass('hide');
-			$('#updateActivityModal').find('.update-event-related-contacts-input').removeClass('hide');
-			$('#updateActivityModal').find('.update-event-related-contacts-label').removeClass('hide');
-		}
-		else
-		{
-			$('#updateActivityModal').find('#update-event-related-contacts-label').parent().removeClass('hide');
-			$('#updateActivityModal').find('.update-event-related-contacts-input').addClass('hide');
-			$('#updateActivityModal').find('.update-event-related-contacts-label').addClass('hide');
-		}
-		if($('#updateActivityModal').find('.update-event-related-deals-input').find('ul').find('li').length>0)
-		{
-			$('#updateActivityModal').find('#update-event-related-deals-label').parent().addClass('hide');
-			$('#updateActivityModal').find('.update-event-related-deals-input').removeClass('hide');
-			$('#updateActivityModal').find('.update-event-related-deals-label').removeClass('hide');
-		}
-		else
-		{
-			$('#updateActivityModal').find('#update-event-related-deals-label').parent().removeClass('hide');
-			$('#updateActivityModal').find('.update-event-related-deals-input').addClass('hide');
-			$('#updateActivityModal').find('.update-event-related-deals-label').addClass('hide');
-		}*/
+		// $("input.date", el).datepicker('update');
 
 	});
 
+	$('#activityModal, #activityTaskModal, #updateActivityModal').on('shown.bs.modal', function(e)
+	{
+		if($(e.target).hasClass("date"))
+			   return;
+
+		// Update will highlight the date of in date picker
+		$("input.date").each(function(index, ele){$(ele).datepicker('update');});
+
+	});
+		
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#activityModal, #activityTaskModal').on('show.bs.modal', function(e)
+	$('#activityModal, #activityTaskModal, #updateActivityModal').on('show.bs.modal', function(e)
 	{
+		if($(e.target).hasClass("date"))
+			   return;
+
 		$(".event_discription").addClass("hide");
 		$("textarea#description").val('');
 		// Removes alert message of error related date and time.
@@ -21913,17 +21724,154 @@ $(function()
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
 
-		var isOwnerListUploded = $("#event-owners-list", $("#activityForm")).val();
-		if (isOwnerListUploded == null)
-		{
-			// Fills owner select element
-			populateUsers("event-owners-list", $("#activityForm"), undefined, undefined, function(data)
+		if($("#activityForm").length  > 0){
+			var isOwnerListUploded = $("#event-owners-list", $("#activityForm")).val();
+			if (isOwnerListUploded == null)
 			{
-				$("#activityForm").find("#event-owners-list").html(data);
-				$("#event-owners-list", $("#activityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
-				$("#event-owners-list", $("#activityForm")).closest('div').find('.loading-img').hide();
-			});
+				// Fills owner select element
+				populateUsers("event-owners-list", $("#activityForm"), undefined, undefined, function(data)
+				{
+					$("#activityForm").find("#event-owners-list").html(data);
+					$("#event-owners-list", $("#activityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
+					$("#event-owners-list", $("#activityForm")).closest('div').find('.loading-img').hide();
+				});
+			}
 		}
+		
+		/**
+		 * Activates the date picker to the corresponding fields in activity modal
+		 * and activity-update modal
+		 */
+
+		var eventDate = $('#event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+		{
+			// If event start date is changed and end date is less than start date,
+			// change the value of the end date to start date.
+			var eventDate2;
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				eventDate2 = new Date(convertDateFromUKtoUS($('#event-date-2').val()));
+			else
+			 	eventDate2 = new Date($('#event-date-2').val());
+			if (ev.date.valueOf() > eventDate2.valueOf())
+			{
+				$('#event-date-2').val($('#event-date-1').val());
+			}
+
+		});
+
+
+		$('#event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+		$('#update-event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+
+		{
+			// If event start date is changed and end date is less than start date,
+			// change the value of the end date to start date.
+			var eventDate2;
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				eventDate2 = new Date(convertDateFromUKtoUS($('#update-event-date-2').val()));
+			else
+			 	eventDate2 = new Date($('#update-event-date-2').val());
+			if (ev.date.valueOf() > eventDate2.valueOf())
+			{
+				$('#update-event-date-2').val($('#update-event-date-1').val());
+			}
+
+		});
+
+		$('#update-event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
+
+
+		/**
+		 * Activates time picker for start time to the fields with class
+		 * start-timepicker
+		 */
+		$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false }).on('hide.timepicker', function(e)
+		{
+			if ($('#activityModal #allDay').is(':checked'))
+			{
+				$('#event-time-1').closest('.control-group').hide();
+				$('#event-date-2').closest('.row').hide();
+			}
+
+			// ChangeTime event is not working, so need to invoke user method.
+			var endTime = changeEndTime($('.start-timepicker').val().split(":"), $('.end-timepicker').val().split(":"));
+			$('.end-timepicker').val(endTime);
+
+			e.stopImmediatePropagation();
+			return false;
+		});
+		$('.start-timepicker').timepicker().on('show.timepicker', function(e)
+		{
+			if ($('.start-timepicker').prop('value') != "" && $('.start-timepicker').prop('value') != undefined)
+			{
+				if ($('.start-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.start-timepicker').prop('value').split(":")[0];
+				if ($('.start-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.start-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		});
+
+		/**
+		 * Activates time picker for end time to the fields with class
+		 * end-timepicker
+		 */
+		$('.end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
+		console.log(get_hh_mm(true));
+		$('.end-timepicker').timepicker().on('show.timepicker', function(e)
+		{
+			if ($('.end-timepicker').prop('value') != "" && $('.end-timepicker').prop('value') != undefined)
+			{
+				if ($('.end-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.end-timepicker').prop('value').split(":")[0];
+				if ($('.end-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.end-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		});
+
+		/**
+		 * Activates time picker for start time to the fields with class
+		 * update-start-timepicker
+		 */
+		$('.update-start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false }).on('hide.timepicker', function(e)
+		{
+			// ChangeTime event is not working, so need to invoke user method.
+			var endTime = changeEndTime($('.update-start-timepicker').val().split(":"), $('.update-end-timepicker').val().split(":"));
+			$('.update-end-timepicker').val(endTime); 
+		});
+		$('.update-start-timepicker').timepicker().on('show.timepicker', function(e)
+		{
+			if ($('.update-start-timepicker').prop('value') != "" && $('.update-start-timepicker').prop('value') != undefined)
+			{
+				if ($('.update-start-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.update-start-timepicker').prop('value').split(":")[0];
+				if ($('.update-start-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.update-start-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		});
+
+		/**
+		 * Activates time picker for end time to the fields with class
+		 * update-end-timepicker
+		 */
+		$('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
+		$('.update-end-timepicker').timepicker().on('show.timepicker', function(e)
+		{
+			if ($('.update-end-timepicker').prop('value') != "" && $('.update-end-timepicker').prop('value') != undefined)
+			{
+				if ($('.update-end-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.update-end-timepicker').prop('value').split(":")[0];
+				if ($('.update-end-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.update-end-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		});
 
 	});
 
@@ -21950,32 +21898,7 @@ $(function()
 		$('#update-event-time-1').closest('.control-group').show();
 		$('#update-event-date-2').closest('.row').show();
 	});
-	$('#activityModal').on('hidden.bs.modal', function()
-	{
-		$("#add_event_desctiption").show();
-
-		$(".event_discription").addClass("hide");
-
-		if ($(this).hasClass('in'))
-		{
-			return;
-		}
-
-		// Remove validation error messages
-		remove_validation_errors('activityModal');
-
-		$("#activityForm").find("li").remove();
-		$('#event-time-1').closest('.control-group').show();
-		$('#event-date-2').closest('.row').show();
-
-		/*$('#activityModal').find('#new-event-related-contacts-label').parent().removeClass('hide');
-		$('#activityModal').find('.new-event-related-contacts-input').addClass('hide');
-		$('#activityModal').find('.new-event-related-contacts-label').addClass('hide');
-		$('#activityModal').find('#new-event-related-deals-label').parent().removeClass('hide');
-		$('#activityModal').find('.new-event-related-deals-input').addClass('hide');
-		$('#activityModal').find('.new-event-related-deals-label').addClass('hide');*/
-	});
-
+	
 	$('#webEventCancelModel').on('hidden.bs.modal', function()
 	{
 		$("#webEventCancelForm").each(function()
@@ -21983,34 +21906,6 @@ $(function()
 			this.reset();
 		});
 	});
-
-	/*$('#activityModal').on('click', '#new-event-related-contacts-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.new-event-related-contacts-input').removeClass('hide');
-		$(this).parent().parent().find('.new-event-related-contacts-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#activityModal').on('click', '#new-event-related-deals-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.new-event-related-deals-input').removeClass('hide');
-		$(this).parent().parent().find('.new-event-related-deals-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#updateActivityModal').on('click', '#update-event-related-contacts-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.update-event-related-contacts-input').removeClass('hide');
-		$(this).parent().parent().find('.update-event-related-contacts-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#updateActivityModal').on('click', '#update-event-related-deals-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.update-event-related-deals-input').removeClass('hide');
-		$(this).parent().parent().find('.update-event-related-deals-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});*/
 
 });
 
@@ -22596,14 +22491,14 @@ function google2fcEvent(google)
 		if (fc.end.length > 10)
 		{
 			end = $.fullCalendar.parseDate(fc.end);
-			fc.end = $.fullCalendar.formatDate(end, 'yyyy-MM-dd');
+			fc.end = $.fullCalendar.formatDate(end, 'yyyy-mm-dd');
 		}
 		else
 		{
 			end = new Date(fc.end);
 		}
 		end.setDate(end.getDate() - 1);
-		fc.end = end.format('yyyy-MM-dd');
+		fc.end = end.format('yyyy-mm-dd');
 
 	}
 	return fc;
@@ -22841,6 +22736,17 @@ $( document ).ready(function() {
 	});
 
 	/**
+	 * When clicked on update button of task-update-modal, the task will get
+	 * updated by calling save_task function
+	 */
+	$('#updateTaskModal #update_task_validate').off('click');
+	$("#updateTaskModal").on("click", '#update_task_validate', function(e)
+	{
+		e.preventDefault();
+		save_task('updateTaskForm', 'updateTaskModal', true, this);
+	});	
+
+	/**
 	 * Shows activity modal with all the task create fields.
 	 */
 	$("body").on("click", '.add-task', function(e)
@@ -22850,9 +22756,8 @@ $( document ).ready(function() {
 		// Show task modal with owners list.
 		showTaskModal(this);
 	});
-	/**
-	 * Show event of update task modal Activates typeahead for task-update-modal
-	 */
+	
+
 	$('#updateTaskModal').on('shown.bs.modal', function()
 	{
 
@@ -22861,84 +22766,33 @@ $( document ).ready(function() {
 
 		agile_type_ahead("update_task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
+		$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
+		$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
+		{
+			if ($('.update-task-timepicker').prop('value') != "" && $('.update-task-timepicker').prop('value') != undefined)
+			{
+				if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.update-task-timepicker').prop('value').split(":")[0];
+				if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.update-task-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		});
+
 		// Fill details in form
 		setForm(el);
-
-		/*if($('#updateTaskModal').find('.update-task-related-contacts-input').find('ul').find('li').length>0 
-			|| (Current_Route.indexOf("task")==0 && readCookie("task_tab_position")=="contacts"))
-		{
-			$('#updateTaskModal').find('#update-task-related-contacts-label').parent().addClass('hide');
-			$('#updateTaskModal').find('.update-task-related-contacts-input').removeClass('hide');
-			$('#updateTaskModal').find('.update-task-related-contacts-label').removeClass('hide');
-		}
-		else
-		{
-			$('#updateTaskModal').find('#update-task-related-contacts-label').parent().removeClass('hide');
-			$('#updateTaskModal').find('.update-task-related-contacts-input').addClass('hide');
-			$('#updateTaskModal').find('.update-task-related-contacts-label').addClass('hide');
-		}
-		if($('#updateTaskModal').find('.update-task-related-deals-input').find('ul').find('li').length>0 
-			|| (Current_Route.indexOf("task")==0 && readCookie("task_tab_position")=="deals"))
-		{
-			$('#updateTaskModal').find('#update-task-related-deals-label').parent().addClass('hide');
-			$('#updateTaskModal').find('.update-task-related-deals-input').removeClass('hide');
-			$('#updateTaskModal').find('.update-task-related-deals-label').removeClass('hide');
-		}
-		else
-		{
-			$('#updateTaskModal').find('#update-task-related-deals-label').parent().removeClass('hide');
-			$('#updateTaskModal').find('.update-task-related-deals-input').addClass('hide');
-			$('#updateTaskModal').find('.update-task-related-deals-label').addClass('hide');
-		}*/
-
 	});
 
-	/*$('#activityTaskModal').on('click', '#new-task-related-contacts-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.new-task-related-contacts-input').removeClass('hide');
-		$(this).parent().parent().find('.new-task-related-contacts-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#activityTaskModal').on('click', '#new-task-related-deals-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.new-task-related-deals-input').removeClass('hide');
-		$(this).parent().parent().find('.new-task-related-deals-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#updateTaskModal').on('click', '#update-task-related-contacts-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.update-task-related-contacts-input').removeClass('hide');
-		$(this).parent().parent().find('.update-task-related-contacts-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#updateTaskModal').on('click', '#update-task-related-deals-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.update-task-related-deals-input').removeClass('hide');
-		$(this).parent().parent().find('.update-task-related-deals-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});*/
+	
 
 });
 
 
-function activateSliderAndTimerToTaskModal(){
+function activateSliderAndTimerToTaskModal(el){
 
-	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-	$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
-	{
-		if ($('.update-task-timepicker').prop('value') != "" && $('.update-task-timepicker').prop('value') != undefined)
-		{
-			if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.hours = $('.update-task-timepicker').prop('value').split(":")[0];
-			if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.minutes = $('.update-task-timepicker').prop('value').split(":")[1];
-		}
-		$('.bootstrap-timepicker-hour').val(e.time.hours);
-		$('.bootstrap-timepicker-minute').val(e.time.minutes);
-	});
+	console.log("activateSliderAndTimerToTaskModal");
+	
 	$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
 	$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
 	{
@@ -22953,6 +22807,8 @@ function activateSliderAndTimerToTaskModal(){
 		$('.bootstrap-timepicker-minute').val(e.time.minutes);
 	});
 
+	console.log("loadProgressSlider");
+
 	// Loads progress slider in add task / update modal.
 	loadProgressSlider($("#taskForm"));
 	loadProgressSlider($("#updateTaskForm"));
@@ -22961,7 +22817,7 @@ function activateSliderAndTimerToTaskModal(){
 	 * Date Picker Activates datepicker for task due element
 	 */
 
-	$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+	// $('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
 	$('#update-task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
 
 
@@ -22974,30 +22830,7 @@ function activateSliderAndTimerToTaskModal(){
 	{
 		e.preventDefault();
 		save_task('updateTaskForm', 'updateTaskModal', true, this);
-	});
-
-	/**
-	 * initialises task time picker
-	 */
-	$('#updateTaskModal').off('hidden.bs.modal');
-	$('#updateTaskModal').on('hidden.bs.modal', function()
-	{
-
-		if ($(this).hasClass('in'))
-		{
-			return;
-		}
-
-		$("#updateTaskForm").find("li").remove();
-
-		resetForm($("#updateTaskForm"));
-
-		// Removes note from from task form
-		$('#updateTaskForm #forNoteForm').html("");
-
-		// Hide + Add note link
-		$(".task-add-note", $("#updateTaskForm")).show();
-	});
+	});	
 
 }
 
@@ -23108,7 +22941,8 @@ function highlight_task()
 				$("#activityForm").find("#event_related_to").closest(".controls").find("ul").children());
 
 	// Date().format('mm/dd/yyyy'));
-	$('input.date').val(getDateInFormat(new Date())).datepicker('update');
+	$('input.date').val(getDateInFormat(new Date()));
+	// datepicker('update');
 }
 
 /**
@@ -23628,12 +23462,15 @@ function getDueTasksCount(callback)
  */
 function showTaskModal(forAddTask)
 {
+
+	$('#activityTaskModal').html(getTemplate("new-task-modal")).modal('show');
+
 	var el = $("#taskForm");
 
 	agile_type_ahead("task_related_to", el, contacts_typeahead);
 	// Deals type-ahead
 	agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-	$('#activityTaskModal').modal('show');
+	
 	highlight_task();
 	categories.getCategoriesHtml(undefined,function(catsHtml){
 		$('#type',el).html(catsHtml);
@@ -24976,6 +24813,7 @@ var Base_Collection_View = Backbone.View
 					this.infiniScroll.destroy();
 				}
 
+				this.delegateEvents();
 				return this;
 			}, buildCollectionUI : function(result)
 			{
@@ -26075,41 +25913,741 @@ var _BULK_CONTACTS = undefined;
 var current_view_contacts_count = 0;
 var SELECT_ALL = false;
 var _BULKACTION_FILTER = undefined;
-$(function()
-{
+
+/** 
+* Bulk actions collection view
+*/
+var Contacts_Events_Collection_View = Base_Collection_View.extend({
+    events: {
+    	/** Contacts bulk actions */
+    	'click #bulk-owner' : 'bulkActionAddOwner',
+    	'click #bulk-campaigns' : 'bulkActionAssignToCampaign',
+    	'click #bulk-tags' : 'bulkActionAddTags',
+    	'click #bulk-tags-remove' : 'bulkActionRemoveTags',
+    	'click #bulk-email' : 'bulkActionSendEmail',
+    	'click #bulk-contacts-export' : 'bulkActionExportContacts',
+    	'click #bulk-companies-export' : 'bulkActionExportCompanies',
+    	'click #select-all-available-contacts' : 'bulkActionSelectAvailContacts',
+    	'click #select-all-revert' : 'bulkActionRevertAvailContacts',
+
+    	/** Company bulk actions */
+    	'click .default_company_filter' : 'bulkActionCompanyDefaultFilter',
+    	'click #companies-filter' : 'bulkActionCompaniesFilter',
+    	'click .company_static_filter' : 'bulkActionCompaniesStaticFilter',
+    	'click #comp-sort-by-created_time-desc' : 'bulkActionCompaniesSortonTimeDesc',
+    	'click #comp-sort-by-created_time-asc' : 'bulkActionCompaniesSortonTimeAsec',
+    	'click .comp-sort-by-name' : 'bulkActionCompaniesSortByName',
+    	'click #contact-actions-grid-delete' : 'contactActionsGridDelete',
+    	
+    	'click .filter' : 'filterResults',
+    	'click .default_filter' : 'defaultFilterResults',
+    	// 'click #companies-filter' : 'companyFilterResults',
+    	'click .default_contact_remove_tag' : 'defaultContactRemoveTag',
+    	
+    },
+
+    bulkActionCompaniesSortByName : function(e){
+
+    	e.preventDefault();
+			createCookie('company_sort_field',$(this).attr('data'));
+			COMPANIES_HARD_RELOAD=true;
+			App_Companies.companies();
+    },
+
+	defaultContactRemoveTag: function(e)
+	{
+		e.preventDefault();
+		// Navigate to show form
+		Backbone.history.navigate("contacts", { trigger : true });
+	},
+
+    // Fetch filter result without changing route on click
+	filterResults:  function(e)
+	{
+
+		contact_filters_util.filterResults(e);
+	},
+
+	/*
+	 * If default filter is selected, removes filter cookies an load contacts
+	 * with out any query condition
+	 */
+	defaultFilterResults:  function(e)
+	{
+		e.preventDefault();
+		revertToDefaultContacts();
+	},
+
+	companyFilterResults: function(e)
+	{
+		contact_filters_util.companyFilterResults(e);
+		
+	},
+    
+	contactActionsGridDelete: function(e){
+		
+		e.preventDefault();
+		var contact_id=$(e.currentTarget).attr('con_id');
+    	var model=App_Contacts.contactsListView.collection.get(contact_id);
+		$('#deleteGridContactModal').modal('show');
+
+		$('#deleteGridContactModal').on("shown.bs.modal", function(){
+
+				// If Yes clicked
+		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_yes', function(e) {
+				e.preventDefault();
+				// Delete Contact.
+				$.ajax({
+    					url: 'core/api/contacts/' + contact_id,
+       					type: 'DELETE',
+       					success: function()
+       					{
+       						$('#deleteGridContactModal').modal('hide');
+       						App_Contacts.contactsListView.collection.remove(model);
+       						if(App_Contacts.contact_custom_view)
+       						App_Contacts.contact_custom_view.collection.remove(model);
+       						CONTACTS_HARD_RELOAD=true;
+       						App_Contacts.contacts();
+       					}
+       				});
+			});
+
+
+		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_no', function(e) {
+				e.preventDefault();
+				if($(this).attr('disabled'))
+			   	     return;
+				$('#deleteGridContactModal').modal('hide');
+			});
+
+		});
+
+    		
+	},
+	/*
+	 * If default filter is selected, removes filter cookies an load contacts
+	 * with out any query condition
+	 */
+	bulkActionCompanyDefaultFilter :  function(e)
+	{
+		e.preventDefault();
+		company_list_view.revertToDefaultCompanies();
+	},
+	
+	bulkActionCompaniesFilter : function(e)
+	{
+
+		e.preventDefault();
+		eraseCookie('company_filter');
+		//eraseCookie('contact_filter_type');
+
+		//createCookie('company_filter', "Companies");
+		COMPANIES_HARD_RELOAD = true;
+		App_Companies.companies(); // /Show Companies list, explicitly hard
+		// reload
+		return;
+	},
+
+	bulkActionCompaniesStaticFilter :  function(e)
+	{
+
+		e.preventDefault();
+		eraseCookie('company_filter');
+		//eraseData('dynamic_contact_filter');
+		eraseData('dynamic_company_filter');
+
+		var filter_id = $(e.currentTarget).attr('id');
+		var filter_type = $(e.currentTarget).attr('filter_type');
+
+		// Saves Filter in cookie
+		createCookie('company_filter', filter_id)
+		//createCookie('company_filter_type', filter_type)
+
+		// Gets name of the filter, which is set as data
+		// attribute in filter
+		filter_name = $(e.currentTarget).attr('data');
+
+		COMPANIES_HARD_RELOAD=true;
+		App_Companies.companies();
+		return;
+		// /removed old code from below,
+		// now filters will work only on contact, not company
+	},
+	
+	bulkActionCompaniesSortonTimeDesc : function(e)
+	{
+		e.preventDefault();
+		createCookie('company_sort_field',$(e.currentTarget).attr('data'));
+		COMPANIES_HARD_RELOAD=true;
+		App_Companies.companies();
+	},
+	
+	bulkActionCompaniesSortonTimeAsec : function(e){
+		e.preventDefault();
+		createCookie('company_sort_field',$(e.currentTarget).attr('data'));
+		COMPANIES_HARD_RELOAD=true;
+		App_Companies.companies();
+	},
+
+    bulkActionAddOwner : function(e){
+    	e.preventDefault();
+    	contacts_bulk_actions.change_owner(e);
+    },
+
+    bulkActionAssignToCampaign : function(e){
+    	e.preventDefault();
+    	contacts_bulk_actions.assign_to_campaigns(e);
+    },
+
+    bulkActionAddTags :  function(e){
+    	e.preventDefault();
+    	contacts_bulk_actions.add_tags(e);
+    },
+
+    bulkActionRemoveTags :  function(e){
+    	e.preventDefault();
+    	contacts_bulk_actions.remove_tags(e);
+    },
+    bulkActionSendEmail : function(e){
+    	e.preventDefault();
+    	contacts_bulk_actions.send_email(e);
+    },
+
+    bulkActionExportContacts : function(e){
+    	e.preventDefault();
+    	contacts_bulk_actions.export_contacts(e);
+    },
+
+    bulkActionExportCompanies : function(e){
+    	e.preventDefault();
+    	contacts_bulk_actions.export_companies(e);
+    },
+
+    bulkActionSelectAvailContacts : function(e){
+    	e.preventDefault();
+    	contacts_bulk_actions.select_contacts(e);
+    },
+
+    bulkActionRevertAvailContacts : function(e){
+    	e.preventDefault();
+
+    	SELECT_ALL = false;
+		_BULK_CONTACTS = undefined;
+		
+		var html = '';
+		
+		if(company_util.isCompany())
+			html = "Selected " + App_Companies.companiesListView.collection.length + " companies. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " companies</a>";
+		else
+			html = "Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " contacts</a>";
+
+		$('body').find('#bulk-select').html(html);
+    }   
+
+   
+});
+
+var contacts_bulk_actions = {
+
 	/**
 	 * Bulk operations - Change owner Shows all the users as drop down list to
 	 * select one of them as the owner for the selected contacts.
 	 */
-	$("body").on("click", "#bulk-owner", function(e)
+	change_owner : function(e){
+			load_bulk_operations_template(function(){
+
+					if (!canRunBulkOperations())
 					{
-						e.preventDefault();
-
-						load_bulk_operations_template(function(){
-
-								if (!canRunBulkOperations())
+						showModalConfirmation(
+								"Bulk Change Owner",
+								"You may not have permission to update some of the contacts selected. " + "Proceeding with this operation will change the owner for only the contacts " + "you are allowed to update.<br/><br/> Do you want to proceed?",
+								show_bulk_owner_change_page, function()
 								{
-									showModalConfirmation(
-											"Bulk Change Owner",
-											"You may not have permission to update some of the contacts selected. " + "Proceeding with this operation will change the owner for only the contacts " + "you are allowed to update.<br/><br/> Do you want to proceed?",
-											show_bulk_owner_change_page, function()
-											{
-												// No callback
-												return;
-											}, function()
-											{
+									// No callback
+									return;
+								}, function()
+								{
 
-											});
+								});
+					}
+					else
+					{
+						show_bulk_owner_change_page();
+					}
+
+			});
+	},
+
+	/**
+	 * Bulk operations - Adds to campaign Shows all the workflows as drop down
+	 * list to select one of them to subscribe the selected contacts
+	 */
+	assign_to_campaigns : function(e){
+		// Selected Contact ids
+		var id_array = get_contacts_bulk_ids();
+
+		// when SELECT_ALL is true i.e., all contacts are
+		// selected.
+		if (id_array.length === 0)
+			count = getAvailableContacts();
+		else
+			count = id_array.length;
+
+		var continueAction = true;
+		if (!canRunBulkOperations())
+		{
+			continueAction = false;
+			showModalConfirmation(
+					"Bulk Assign Campaign",
+					"You may not have permission to update some of the contacts selected. Proceeding with this operation will add only your contacts to the campaign.<br/><br/>Do you want to proceed?",
+					show_bulk_campaign_assign_page, function()
+					{
+						// No callback
+					}, function()
+					{
+						return;
+					});
+		}
+		if (is_free_plan() && has_more_than_limit())
+		{
+			continueAction = false;
+			showModalConfirmation(
+					"Add to Campaign",
+					"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
+					function()
+					{
+						Backbone.history.navigate("subscribe", { trigger : true });
+					}, function()
+					{
+						// No callback
+						return;
+					}, function()
+					{
+						return;
+					}, "Upgrade", "Close");
+		}
+		if (!canSendEmails(count))
+		{
+			continueAction = false;
+			var pendingEmails = getPendingEmails();
+
+			var yes = "Yes";
+			var no = "No"
+
+			var message = "";
+			var upgrade_link = ' You may <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">purchase more emails </a> if this does not suffice your bulk action.';
+			var title = "Low on emails"
+			if (pendingEmails <= 0)
+			{
+				title = "Low on emails";
+				yes = "";
+				no = "Ok"
+				message = "You have used up all emails in your quota. " + upgrade_link;
+			}
+			else
+				message = "You have only " + pendingEmails + " emails left as per your quota. " + upgrade_link + " Continuing with this operation will stop sending emails once it crosses the quota.<br/><br/>" + "Do you want to proceed?";
+
+			showModalConfirmation(title, message, show_bulk_campaign_assign_page, function(element)
+			{
+
+				// No callback
+				if (!element)
+					return;
+
+				if ($(element).attr('subscribe'))
+					Backbone.history.navigate("subscribe", { trigger : true });
+				return;
+			}, function(element)
+			{
+			}, yes, no);
+			return;
+		}
+		else if (continueAction)
+		{
+			show_bulk_campaign_assign_page()
+		}
+	},
+
+	/**
+	 * Bulk operations - Adds tags' Shows the existing tags with help of
+	 * typeahead to add tags to the selected contacts. Also we can add new tags.
+	 */
+	add_tags : function(e){
+
+		load_bulk_operations_template(function(){
+
+						if (!canRunBulkOperations())
+						{
+							showModalConfirmation(
+									"Bulk Add Tag",
+									"You may not have permission to update some of the contacts selected. Proceeding with this operation will add tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?",
+
+									show_add_tag_bulkaction_form, function()
+									{
+										// No callback
+										return;
+									}, function()
+									{
+										return;
+									});
+						}
+						if (is_free_plan() && has_more_than_limit())
+						{
+							continueAction = false;
+							showModalConfirmation(
+									"Add tags",
+									"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
+									function()
+									{
+										Backbone.history.navigate("subscribe", { trigger : true });
+									}, function()
+									{
+										// No callback
+										return;
+									}, function()
+									{
+										return;
+									}, "Upgrade", "Close");
+						}
+						else
+						{
+							show_add_tag_bulkaction_form()
+						}
+					});
+	},
+
+	/**
+	 * Bulk operations - Adds tags' Shows the existing tags with help of
+	 * typeahead to add tags to the selected contacts. Also we can add new tags.
+	 */
+     remove_tags : function(e){
+     	load_bulk_operations_template(function(){
+
+					if (!canRunBulkOperations())
+					{
+						showModalConfirmation(
+								"Bulk Remove Tag",
+								"You may not have permission to update some of the contacts selected. Proceeding with this operation will delete tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?",
+
+								show_remove_tag_bulkaction_form, function()
+								{
+									// No callback
+									return;
+								}, function()
+								{
+									return;
+								});
+					}
+					if (is_free_plan() && has_more_than_limit())
+					{
+						continueAction = false;
+						showModalConfirmation(
+								"Remove tags",
+								"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
+								function()
+								{
+									Backbone.history.navigate("subscribe", { trigger : true });
+								}, function()
+								{
+									// No callback
+									return;
+								}, function()
+								{
+									return;
+								}, "Upgrade", "Close");
+					}
+					else
+					{
+						show_remove_tag_bulkaction_form()
+					}
+				});
+     },
+
+     /**
+	 * Bulk operations - Sends email to the bulk of contacts by filling up the
+	 * send email details like from, subject and body.
+	 */
+     send_email : function(e){
+     		load_bulk_operations_template(function(){
+
+						// Selected Contact ids
+						var id_array = get_contacts_bulk_ids();
+
+						if (!canRunBulkOperations())
+						{
+							showModalConfirmation(
+									"Bulk Email",
+									"You may not be the owner for some of the contacts selected. Proceeding with this operation will send email to only your contacts.<br/><br/> Do you want to proceed?",
+									function()
+									{
+										show_bulk_email_form(id_array)
+									},
+									function()
+									{
+										// No callback
+										return;
+									}, function()
+									{
+										return;
+									});
+						}
+						if (is_free_plan() && has_more_than_limit())
+						{
+							showModalConfirmation(
+									"Send Email",
+									"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
+									function()
+									{
+										Backbone.history.navigate("subscribe", { trigger : true });
+									}, function()
+									{
+										// No callback
+										return;
+									}, function()
+									{
+										return;
+									}, "Upgrade", "Close");
+						}
+						else
+						{
+
+							// when SELECT_ALL is true i.e., all contacts are
+							// selected.
+							if (id_array.length === 0)
+								count = getAvailableContacts();
+							else
+								count = id_array.length;
+
+							if (!canSendEmails(count))
+							{
+								var pendingEmails = getPendingEmails();
+
+								var yes = "Yes";
+								var no = "No"
+
+								var message = "";
+								var upgrade_link = 'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
+								var title = "Not enough emails left"
+								if (pendingEmails <= 0)
+								{
+									title = "Emails limit";
+									yes = "";
+									no = "Ok"
+									message = "You have used up all emails in your quota. " + upgrade_link;
 								}
 								else
+									message = "You have only " + pendingEmails + " emails remaining as per your quota. " + upgrade_link + " Continuing with this operation may not send the email to some contacts. <br/><br/>" + "Do you want to proceed?";
+
+								showModalConfirmation(title, message, show_bulk_email_form, function(element)
 								{
-									show_bulk_owner_change_page();
-								}
 
-						});
+									// No callback
+									if (!element)
+										return;
+
+									if ($(element).attr('subscribe'))
+										Backbone.history.navigate("subscribe", { trigger : true });
+								}, function(element)
+								{
+								}, yes, no);
+								return;
+							}
+
+							show_bulk_email_form(id_array)
+						}
 					});
+     },
 
-	function show_bulk_owner_change_page()
+
+	/**
+	 * Bulk Operations - Exports selected contacts in a CSV file as an
+	 * attachment to email of current domain user.
+	 */
+     export_contacts : function(e){
+
+     				e.preventDefault();
+
+						// Removes if previous modals exist.
+						if ($('#contacts-export-csv-modal').size() != 0)
+						{
+							$('#contacts-export-csv-modal').remove();
+						}
+
+						// Selected Contact ids
+						var id_array = get_contacts_bulk_ids();
+
+						var count = 0;
+
+						// when SELECT_ALL is true i.e., all contacts are
+						// selected.
+						if (id_array.length === 0)
+							count = getAvailableContacts();
+						else
+							count = id_array.length;
+
+
+						getTemplate('contacts-export-csv-modal', {}, undefined, function(template_ui){
+							if(!template_ui)
+								  return;
+							var contacts_csv_modal = $(template_ui);
+							contacts_csv_modal.modal('show');
+
+							contacts_csv_modal.on('shown.bs.modal', function(){
+									// If Yes clicked
+									$("#contacts-export-csv-modal").on("click",'#contacts-export-csv-confirm', function(e)
+									{
+										e.preventDefault();
+
+										if ($(this).attr('disabled'))
+											return;
+
+										$(this).attr('disabled', 'disabled');
+
+										// Shows message
+										$save_info = $('<img src="' + updateImageS3Path("img/1-0.gif") +'" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
+										$(this).parent('.modal-footer').find('.contacts-export-csv-message').append($save_info);
+										$save_info.show();
+
+										var url = '/core/api/contacts/export?action_type=EXPORT_CONTACTS_CSV';
+
+										var json = {};
+										json.contact_ids = id_array;
+										json.data = JSON.stringify(CURRENT_DOMAIN_USER);
+										postBulkOperationData(url, json, undefined, undefined, function()
+										{
+
+											// hide modal after 3 secs
+											setTimeout(function()
+											{
+												contacts_csv_modal.modal('hide');
+											}, 3000);
+
+											// Uncheck contacts table and
+											// hide bulk actions button.
+											$('body').find('#bulk-actions').css('display', 'none');
+											$('body').find('#bulk-select').css('display', 'none');
+											$('table#contacts-table').find('.thead_check').removeAttr('checked');
+											$('table#contacts-table').find('.tbody_check').removeAttr('checked');
+											$(".grid-checkboxes").find(".thead_check").removeAttr("checked");
+                                            $(".contacts-grid-view-temp").find(".tbody_check").removeAttr("checked");
+
+										}, "no_noty");
+									});
+							});			
+
+
+						}, null);
+						
+     },
+
+     /**
+	 * Bulk Operations - Exports selected contacts in a CSV file as an
+	 * attachment to email of current domain user.
+	 */
+	export_companies : function(e)
+			{
+				e.preventDefault();
+
+				// Removes if previous modals exist.
+				if ($('#companies-export-csv-modal').size() != 0)
+				{
+					$('#companies-export-csv-modal').remove();
+				}
+
+				// Selected Contact ids
+				var id_array = get_contacts_bulk_ids();
+
+				var count = 0;
+
+				// when SELECT_ALL is true i.e., all contacts are
+				// selected.
+				if (id_array.length === 0)
+					count = getAvailableContacts();
+				else
+					count = id_array.length;
+
+				
+				getTemplate('companies-export-csv-modal', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					var companies_csv_modal = $(template_ui);
+					companies_csv_modal.modal('show');
+
+					companies_csv_modal.on('shown.bs.modal', function(){
+						// If Yes clicked
+						$("#companies-export-csv-modal").on("click", '#companies-export-csv-confirm', function(e)
+										{
+											e.preventDefault();
+
+											if ($(this).attr('disabled'))
+												return;
+
+											$(this).attr('disabled', 'disabled');
+
+											// Shows message
+											$save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
+											$(this).parent('.modal-footer').find('.companies-export-csv-message').append($save_info);
+											$save_info.show();
+
+											var url = '/core/api/bulk/update?action_type=EXPORT_COMPANIES_CSV';
+
+											var json = {};
+											json.contact_ids = id_array;
+											json.data = JSON.stringify(CURRENT_DOMAIN_USER);
+											postBulkOperationData(url, json, undefined, undefined, function()
+											{
+
+												// hide modal after 3 secs
+												setTimeout(function()
+												{
+													companies_csv_modal.modal('hide');
+												}, 3000);
+
+												// Uncheck contacts table and
+												// hide bulk actions button.
+												$('body').find('#bulk-actions').css('display', 'none');
+												$('body').find('#bulk-select').css('display', 'none');
+												$('table#companies,table#contacts-table').find('.thead_check').removeAttr('checked');
+												$('table#companies,table#contacts-table').find('.tbody_check').removeAttr('checked');
+
+											}, "no_noty");
+										});
+						});
+				}, null);
+			},
+
+
+select_contacts :  function(e)
+			{
+				e.preventDefault();
+				SELECT_ALL = true;
+				_BULK_CONTACTS = window.location.hash;
+				
+				var html = '';
+				
+				if(company_util.isCompany())
+					html = ' Selected All ' + getAvailableContacts() + ' companies. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen companies only</a>';
+				else
+					html = ' Selected All ' + getAvailableContacts() + ' contacts. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen contacts only</a>';
+
+				
+				$('body')
+						.find('#bulk-select')
+						.css('display', 'inline-block')
+						.html(html);
+
+				// On choosing select all option, all the visible
+				// checkboxes in the table should be checked
+				$.each($('.tbody_check'), function(index, element)
+				{
+					$(element).attr('checked', "checked");
+				});
+			},
+
+};
+
+
+function show_bulk_owner_change_page()
 	{
 		var filter, id_array = [];
 		if (SELECT_ALL == true)
@@ -26167,100 +26705,6 @@ $(function()
 
 	}
 
-	/**
-	 * Bulk operations - Adds to campaign Shows all the workflows as drop down
-	 * list to select one of them to subscribe the selected contacts
-	 */
-	$("body").on("click", "#bulk-campaigns", function(e)
-					{
-						e.preventDefault();
-
-						// Selected Contact ids
-						var id_array = get_contacts_bulk_ids();
-
-						// when SELECT_ALL is true i.e., all contacts are
-						// selected.
-						if (id_array.length === 0)
-							count = getAvailableContacts();
-						else
-							count = id_array.length;
-
-						var continueAction = true;
-						if (!canRunBulkOperations())
-						{
-							continueAction = false;
-							showModalConfirmation(
-									"Bulk Assign Campaign",
-									"You may not have permission to update some of the contacts selected. Proceeding with this operation will add only your contacts to the campaign.<br/><br/>Do you want to proceed?",
-									show_bulk_campaign_assign_page, function()
-									{
-										// No callback
-									}, function()
-									{
-										return;
-									});
-						}
-						if (is_free_plan() && has_more_than_limit())
-						{
-							continueAction = false;
-							showModalConfirmation(
-									"Add to Campaign",
-									"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
-									function()
-									{
-										Backbone.history.navigate("subscribe", { trigger : true });
-									}, function()
-									{
-										// No callback
-										return;
-									}, function()
-									{
-										return;
-									}, "Upgrade", "Close");
-						}
-						if (!canSendEmails(count))
-						{
-							continueAction = false;
-							var pendingEmails = getPendingEmails();
-
-							var yes = "Yes";
-							var no = "No"
-
-							var message = "";
-							var upgrade_link = ' You may <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">purchase more emails </a> if this does not suffice your bulk action.';
-							var title = "Low on emails"
-							if (pendingEmails <= 0)
-							{
-								title = "Low on emails";
-								yes = "";
-								no = "Ok"
-								message = "You have used up all emails in your quota. " + upgrade_link;
-							}
-							else
-								message = "You have only " + pendingEmails + " emails left as per your quota. " + upgrade_link + " Continuing with this operation will stop sending emails once it crosses the quota.<br/><br/>" + "Do you want to proceed?";
-
-							showModalConfirmation(title, message, show_bulk_campaign_assign_page, function(element)
-							{
-
-								// No callback
-								if (!element)
-									return;
-
-								if ($(element).attr('subscribe'))
-									Backbone.history.navigate("subscribe", { trigger : true });
-								return;
-							}, function(element)
-							{
-							}, yes, no);
-							return;
-						}
-						else if (continueAction)
-						{
-							show_bulk_campaign_assign_page()
-						}
-
-					});
-
 	function show_bulk_campaign_assign_page()
 	{
 
@@ -26278,7 +26722,7 @@ $(function()
 	        $("body").off('fill_campaigns').on("fill_campaigns", function(event)
 			{
 				var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
-				fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
+ 				fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
 			});
 
 			// Navigate to show form
@@ -26319,57 +26763,6 @@ $(function()
 		});
 		
 	}
-
-	/**
-	 * Bulk operations - Adds tags' Shows the existing tags with help of
-	 * typeahead to add tags to the selected contacts. Also we can add new tags.
-	 */
-	$("body").on("click", "#bulk-tags", function(e)
-			{
-					e.preventDefault();
-
-					load_bulk_operations_template(function(){
-
-						if (!canRunBulkOperations())
-						{
-							showModalConfirmation(
-									"Bulk Add Tag",
-									"You may not have permission to update some of the contacts selected. Proceeding with this operation will add tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?",
-
-									show_add_tag_bulkaction_form, function()
-									{
-										// No callback
-										return;
-									}, function()
-									{
-										return;
-									});
-						}
-						if (is_free_plan() && has_more_than_limit())
-						{
-							continueAction = false;
-							showModalConfirmation(
-									"Add tags",
-									"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
-									function()
-									{
-										Backbone.history.navigate("subscribe", { trigger : true });
-									}, function()
-									{
-										// No callback
-										return;
-									}, function()
-									{
-										return;
-									}, "Upgrade", "Close");
-						}
-						else
-						{
-							show_add_tag_bulkaction_form()
-						}
-					});
-
-			});
 
 	function show_add_tag_bulkaction_form()
 	{
@@ -26474,56 +26867,6 @@ $(function()
 		});
 	}
 
-	/**
-	 * Bulk operations - Adds tags' Shows the existing tags with help of
-	 * typeahead to add tags to the selected contacts. Also we can add new tags.
-	 */
-	$("body").on("click", "#bulk-tags-remove", function(e)
-					{
-						e.preventDefault();
-
-						load_bulk_operations_template(function(){
-
-							if (!canRunBulkOperations())
-							{
-								showModalConfirmation(
-										"Bulk Remove Tag",
-										"You may not have permission to update some of the contacts selected. Proceeding with this operation will delete tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?",
-
-										show_remove_tag_bulkaction_form, function()
-										{
-											// No callback
-											return;
-										}, function()
-										{
-											return;
-										});
-							}
-							if (is_free_plan() && has_more_than_limit())
-							{
-								continueAction = false;
-								showModalConfirmation(
-										"Remove tags",
-										"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
-										function()
-										{
-											Backbone.history.navigate("subscribe", { trigger : true });
-										}, function()
-										{
-											// No callback
-											return;
-										}, function()
-										{
-											return;
-										}, "Upgrade", "Close");
-							}
-							else
-							{
-								show_remove_tag_bulkaction_form()
-							}
-						});
-					});
-
 	function show_remove_tag_bulkaction_form()
 	{
 		var id_array = get_contacts_bulk_ids();
@@ -26618,105 +26961,6 @@ $(function()
 						});
 	}
 
-	/**
-	 * Bulk operations - Sends email to the bulk of contacts by filling up the
-	 * send email details like from, subject and body.
-	 */
-	$("body #bulk-email").off("click");
-	$("body").on("click", "#bulk-email", function(e)
-					{
-						e.preventDefault();
-
-					load_bulk_operations_template(function(){
-
-						// Selected Contact ids
-						var id_array = get_contacts_bulk_ids();
-
-						if (!canRunBulkOperations())
-						{
-							showModalConfirmation(
-									"Bulk Email",
-									"You may not be the owner for some of the contacts selected. Proceeding with this operation will send email to only your contacts.<br/><br/> Do you want to proceed?",
-									function()
-									{
-										show_bulk_email_form(id_array)
-									},
-									function()
-									{
-										// No callback
-										return;
-									}, function()
-									{
-										return;
-									});
-						}
-						if (is_free_plan() && has_more_than_limit())
-						{
-							showModalConfirmation(
-									"Send Email",
-									"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
-									function()
-									{
-										Backbone.history.navigate("subscribe", { trigger : true });
-									}, function()
-									{
-										// No callback
-										return;
-									}, function()
-									{
-										return;
-									}, "Upgrade", "Close");
-						}
-						else
-						{
-
-							// when SELECT_ALL is true i.e., all contacts are
-							// selected.
-							if (id_array.length === 0)
-								count = getAvailableContacts();
-							else
-								count = id_array.length;
-
-							if (!canSendEmails(count))
-							{
-								var pendingEmails = getPendingEmails();
-
-								var yes = "Yes";
-								var no = "No"
-
-								var message = "";
-								var upgrade_link = 'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
-								var title = "Not enough emails left"
-								if (pendingEmails <= 0)
-								{
-									title = "Emails limit";
-									yes = "";
-									no = "Ok"
-									message = "You have used up all emails in your quota. " + upgrade_link;
-								}
-								else
-									message = "You have only " + pendingEmails + " emails remaining as per your quota. " + upgrade_link + " Continuing with this operation may not send the email to some contacts. <br/><br/>" + "Do you want to proceed?";
-
-								showModalConfirmation(title, message, show_bulk_email_form, function(element)
-								{
-
-									// No callback
-									if (!element)
-										return;
-
-									if ($(element).attr('subscribe'))
-										Backbone.history.navigate("subscribe", { trigger : true });
-								}, function(element)
-								{
-								}, yes, no);
-								return;
-							}
-
-							show_bulk_email_form(id_array)
-						}
-					});
-
-				});
 
 	function show_bulk_email_form(id_array)
 	{
@@ -26815,212 +27059,6 @@ $(function()
 		});
 	}
 
-	/**
-	 * Bulk Operations - Exports selected contacts in a CSV file as an
-	 * attachment to email of current domain user.
-	 */
-	// $("body #bulk-contacts-export").off("click");
-	$("body").on("click", "#bulk-contacts-export", function(e)
-					{
-						e.preventDefault();
-
-						// Removes if previous modals exist.
-						if ($('#contacts-export-csv-modal').size() != 0)
-						{
-							$('#contacts-export-csv-modal').remove();
-						}
-
-						// Selected Contact ids
-						var id_array = get_contacts_bulk_ids();
-
-						var count = 0;
-
-						// when SELECT_ALL is true i.e., all contacts are
-						// selected.
-						if (id_array.length === 0)
-							count = getAvailableContacts();
-						else
-							count = id_array.length;
-
-
-						getTemplate('contacts-export-csv-modal', {}, undefined, function(template_ui){
-							if(!template_ui)
-								  return;
-							var contacts_csv_modal = $(template_ui);
-							contacts_csv_modal.modal('show');
-
-							contacts_csv_modal.on('shown.bs.modal', function(){
-									// If Yes clicked
-									$("#contacts-export-csv-modal").on("click",'#contacts-export-csv-confirm', function(e)
-									{
-										e.preventDefault();
-
-										if ($(this).attr('disabled'))
-											return;
-
-										$(this).attr('disabled', 'disabled');
-
-										// Shows message
-										$save_info = $('<img src="' + updateImageS3Path("img/1-0.gif") +'" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
-										$(this).parent('.modal-footer').find('.contacts-export-csv-message').append($save_info);
-										$save_info.show();
-
-										var url = '/core/api/contacts/export?action_type=EXPORT_CONTACTS_CSV';
-
-										var json = {};
-										json.contact_ids = id_array;
-										json.data = JSON.stringify(CURRENT_DOMAIN_USER);
-										postBulkOperationData(url, json, undefined, undefined, function()
-										{
-
-											// hide modal after 3 secs
-											setTimeout(function()
-											{
-												contacts_csv_modal.modal('hide');
-											}, 3000);
-
-											// Uncheck contacts table and
-											// hide bulk actions button.
-											$('body').find('#bulk-actions').css('display', 'none');
-											$('body').find('#bulk-select').css('display', 'none');
-											$('table#contacts-table').find('.thead_check').removeAttr('checked');
-											$('table#contacts-table').find('.tbody_check').removeAttr('checked');
-											$(".grid-checkboxes").find(".thead_check").removeAttr("checked");
-                                            $(".contacts-grid-view-temp").find(".tbody_check").removeAttr("checked");
-
-										}, "no_noty");
-									});
-							});			
-
-
-						}, null);
-
-					});
-	
-	/**
-	 * Bulk Operations - Exports selected contacts in a CSV file as an
-	 * attachment to email of current domain user.
-	 */
-	$("body #bulk-companies-export").off("click");
-	$("body").on("click", "#bulk-companies-export", function(e)
-					{
-						e.preventDefault();
-
-						// Removes if previous modals exist.
-						if ($('#companies-export-csv-modal').size() != 0)
-						{
-							$('#companies-export-csv-modal').remove();
-						}
-
-						// Selected Contact ids
-						var id_array = get_contacts_bulk_ids();
-
-						var count = 0;
-
-						// when SELECT_ALL is true i.e., all contacts are
-						// selected.
-						if (id_array.length === 0)
-							count = getAvailableContacts();
-						else
-							count = id_array.length;
-
-						
-						getTemplate('companies-export-csv-modal', {}, undefined, function(template_ui){
-							if(!template_ui)
-								  return;
-							var companies_csv_modal = $(template_ui);
-							companies_csv_modal.modal('show');
-
-							companies_csv_modal.on('shown.bs.modal', function(){
-								// If Yes clicked
-								$("#companies-export-csv-modal").on("click", '#companies-export-csv-confirm', function(e)
-												{
-													e.preventDefault();
-
-													if ($(this).attr('disabled'))
-														return;
-
-													$(this).attr('disabled', 'disabled');
-
-													// Shows message
-													$save_info = $('<img src="' + updateImageS3Path("img/1-0.gif")+'" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
-													$(this).parent('.modal-footer').find('.companies-export-csv-message').append($save_info);
-													$save_info.show();
-
-													var url = '/core/api/bulk/update?action_type=EXPORT_COMPANIES_CSV';
-
-													var json = {};
-													json.contact_ids = id_array;
-													json.data = JSON.stringify(CURRENT_DOMAIN_USER);
-													postBulkOperationData(url, json, undefined, undefined, function()
-													{
-
-														// hide modal after 3 secs
-														setTimeout(function()
-														{
-															companies_csv_modal.modal('hide');
-														}, 3000);
-
-														// Uncheck contacts table and
-														// hide bulk actions button.
-														$('body').find('#bulk-actions').css('display', 'none');
-														$('body').find('#bulk-select').css('display', 'none');
-														$('table#companies,table#contacts-table').find('.thead_check').removeAttr('checked');
-														$('table#companies,table#contacts-table').find('.tbody_check').removeAttr('checked');
-
-													}, "no_noty");
-												});
-								});
-						}, null);
-					});
-
-	$("body #select-all-available-contacts").off("click");
-    $("body").on("click", "#select-all-available-contacts", function(e)
-					{
-						e.preventDefault();
-						SELECT_ALL = true;
-						_BULK_CONTACTS = window.location.hash;
-						
-						var html = '';
-						
-						if(company_util.isCompany())
-							html = ' Selected All ' + getAvailableContacts() + ' companies. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen companies only</a>';
-						else
-							html = ' Selected All ' + getAvailableContacts() + ' contacts. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen contacts only</a>';
-
-						
-						$('body')
-								.find('#bulk-select')
-								.css('display', 'inline-block')
-								.html(html);
-
-						// On choosing select all option, all the visible
-						// checkboxes in the table should be checked
-						$.each($('.tbody_check'), function(index, element)
-						{
-							$(element).attr('checked', "checked");
-						});
-					});
-
-    $("body #select-all-available-contacts").off("click");
-    $("body").on("click", "#select-all-revert", function(e) 
-					{
-						e.preventDefault();
-						SELECT_ALL = false;
-						_BULK_CONTACTS = undefined;
-						
-						var html = '';
-						
-						if(company_util.isCompany())
-							html = "Selected " + App_Companies.companiesListView.collection.length + " companies. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " companies</a>";
-						else
-							html = "Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " contacts</a>";
-
-						$('body').find('#bulk-select').html(html);
-					});
-
-});
-
 /**
  * Gets an array of contact ids to perform bulk operations
  * 
@@ -27097,7 +27135,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 					.css('display', 'block')
 					.html(
 							"Selected " + App_Companies.companiesListView.collection.length + " companies. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + total_available_contacts + " companies</a>");
-			$('#bulk-select').css("display","inline");
+			$('#bulk-select').css("display","block");
 			}
 		} else {
 			if (isBulk && total_available_contacts != App_Contacts.contactsListView.collection.length)
@@ -27107,7 +27145,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 					.css('display', 'block')
 					.html(
 							"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + total_available_contacts + " contacts</a>");
-			$('#bulk-select').css("display","inline");
+			$('#bulk-select').css("display","block");
 			}
 		}
 
@@ -27751,78 +27789,32 @@ function sort_filters(table)
  * 
  * @author Chandan
  */
-
-// handle popover
-
-
 $(function(){
 
-
-/**
-	 * To avoid showing previous errors of the modal.
-	 */
-	$('#casesModal, #casesUpdateModal').on('show.bs.modal', function(data)
-	{
-
-		// Removes alert message of error related date and time.
-		$('#' + this.id).find('.alert').css('display', 'none');
-
-		// Removes error class of input fields
-		$('#' + this.id).find('.error').removeClass('error');
-		var taget = $(data.target);
-		add_custom_fields_to_form({}, function(data)
+	$("#casesModal").on("show.bs.modal", function(c) {
+        add_custom_fields_to_form({}, function(data)
 		{
-			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], [
-				"modal"
-			]);
-			$("#custom-field-case", taget).html($(el_custom_fields));
+			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], ["modal"]);
+			$("#custom-field-case", $("#casesModal")).html($(el_custom_fields));
 
 		}, "CASE");
-
-	});
+    });	
 
 	$('#casesModal, #casesUpdateModal').on("shown.bs.modal", function()
 	{
 		// Add placeholder and date picker to date custom fields
-
 		$('.date_input').attr("placeholder","Select Date");
-    
-		$('.date_input').datepicker({
+    	$('.date_input').datepicker({
 			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
 		});
 
+		// Enable the datepicker
+		$('#close_date').datepicker({
+			format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+		});
+	
 	});
-
-	/**
-	 * "Hide" event of note modal to remove contacts appended to related to
-	 * field and validation errors
-	 */
-	$('#casesModal').on('hidden.bs.modal', function()
-	{
-
-		// Removes appended contacts from related-to field
-		$("#casesForm").find("li").remove();
-
-		// Removes validation error messages
-		remove_validation_errors('casesModal');
-
-	});
-
-	/**
-	 * "Hide" event of note modal to remove contacts appended to related to
-	 * field and validation errors
-	 */
-	$('#casesUpdateModal').on('hidden.bs.modal', function()
-	{
-
-		// Removes appended contacts from related-to field
-		$("#casesUpdateForm").find("li").remove();
-
-		// Removes validation error messages
-		remove_validation_errors('casesUpdateModal');
-	});
-
-
+	
 	$('#casesModal,#casesUpdateModal').on('click', '#cases_validate', function(e) 
 	{
 		e.preventDefault();
@@ -27834,8 +27826,6 @@ $(function(){
 		savecases(form_id, modal_id, this, json);
 	});
 
-
-
 });
 
 
@@ -27844,27 +27834,22 @@ function initializeCasesListeners(el){
 	
 	$('#cases-listners').off();
 	// $("#cases-listners #cases-model-list > tr").off('mouseenter');
-	$("#cases-listners").on('mouseenter',
-			'#cases-model-list > tr',
-			function()
-			{
+	$("#cases-listners").on('mouseenter','#cases-model-list > tr', function(){
 
-				var data = $(this).find('.data').attr('data');
-				var currentCase = App_Cases.casesCollectionView.collection.get(data);
-				var that = this;
-				getTemplate('cases-detail-popover', currentCase.toJSON(), undefined, function(template_ui){
-			 		if(!template_ui)
-			    		return;
-			    	var ele = $(template_ui);
-					$(that).popover(
-							{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
-								"html" : true, });
-					$(that).popover('show');
-				}, null);
+		var data = $(this).find('.data').attr('data');
+		var currentCase = App_Cases.casesCollectionView.collection.get(data);
+		var that = this;
+		getTemplate('cases-detail-popover', currentCase.toJSON(), undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+	    	var ele = $(template_ui);
+			$(that).popover(
+					{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
+						"html" : true, });
+			$(that).popover('show');
+		}, null);
 
-
-					
-			});
+	});
 
 	/**
 	 * On mouse out on the row hides the popover.
@@ -27897,27 +27882,23 @@ function initializeCasesListeners(el){
  * @param ele
  */
 function updatecases(ele)
-{
+{	
+	$("#casesUpdateModal").html(getTemplate("cases-update-modal", {})).modal("show");
 	var value = ele.toJSON();
 
 	add_recent_view(new BaseModel(value));
 
 	var casesForm = $("#casesUpdateForm");
-
-	deserializeForm(value, $("#casesUpdateForm"));
+	deserializeForm(value, casesForm);
 
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("contacts-typeahead-input", casesForm, contacts_typeahead);
-	$("#casesUpdateModal").modal("show");
 
 	add_custom_fields_to_form(value, function(data)
 	{
 		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], [
 			"modal"
 		]);
-		console.log(value);
-		console.log(el_custom_fields);
-		console.log(value["custom_data"]);
 		fill_custom_fields_values_generic($(el_custom_fields), value["custom_data"])
 		$("#custom-field-case", casesForm).html(fill_custom_fields_values_generic($(el_custom_fields), value["custom_data"]));
 
@@ -27938,14 +27919,12 @@ function updatecases(ele)
 // Show new cases popup
 function showCases()
 {
+
+	$("#casesModal").html(getTemplate("cases-new-modal", {}));
 	var el = $("#casesForm");
 
-	add_custom_fields_to_form({}, function(data)
-	{
-		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
-		$("#custom-field-case", $("#casesModal")).html($(el_custom_fields));
-
-	}, "CASE");
+	// Contacts type-ahead
+	agile_type_ahead("contacts-typeahead-input", el, contacts_typeahead);
 
 	// Fills owner select element
 	populateUsers("owners-list", el, undefined, undefined, function(data)
@@ -27953,18 +27932,10 @@ function showCases()
 
 		$("#casesForm").find("#owners-list").html(data);
 		$("#owners-list", $("#casesForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
-		// Contacts type-ahead
-		agile_type_ahead("contacts-typeahead-input", el, contacts_typeahead);
-	});
-
-	// Enable the datepicker
-
-	$('#close_date', el).datepicker({
-		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
-	});
 		
+	});
 
-	$("#casesModal").modal('show');
+	$("#casesModal").modal("show");
 }
 
 // Updates or Saves a cases
@@ -28513,9 +28484,9 @@ function savecases(formId, modalId, saveBtn, json)
 				// Shows in contacts list
 				$('#filter-list', cel).html(companyFiltersListView.render().el);
 				
-	}
+	};
 	
-	var revertToDefaultCompanies = function(){
+	company_list_view.revertToDefaultCompanies = function(){
 		// Erase filter cookie. Erases both contact and company filter
 		//eraseCookie('contact_filter');
 		//eraseCookie('contact_filter_type');
@@ -28531,87 +28502,18 @@ function savecases(formId, modalId, saveBtn, json)
 		App_Companies.companies();
 	};
 	
-	var initEvents = function(){
-		/*
-		 * If default filter is selected, removes filter cookies an load contacts
-		 * with out any query condition
-		 */
-		$("body").on('click', '.default_company_filter', function(e)
-		{
-			e.preventDefault();
-			revertToDefaultCompanies();
-		});
-		
-		$("body").on('click', '#companies-filter', function(e)
-		{
-
-			e.preventDefault();
-			eraseCookie('company_filter');
-			//eraseCookie('contact_filter_type');
-
-			//createCookie('company_filter', "Companies");
-			COMPANIES_HARD_RELOAD = true;
-			App_Companies.companies(); // /Show Companies list, explicitly hard
-			// reload
-			return;
-		});
-
-		$("body").on('click', '.company_static_filter', function(e)
-		{
-
-			e.preventDefault();
-			eraseCookie('company_filter');
-			//eraseData('dynamic_contact_filter');
-			eraseData('dynamic_company_filter');
-
-			var filter_id = $(this).attr('id');
-			var filter_type = $(this).attr('filter_type');
-
-			// Saves Filter in cookie
-			createCookie('company_filter', filter_id)
-			//createCookie('company_filter_type', filter_type)
-
-			// Gets name of the filter, which is set as data
-			// attribute in filter
-			filter_name = $(this).attr('data');
-
-			COMPANIES_HARD_RELOAD=true;
-			App_Companies.companies();
-			return;
-			// /removed old code from below,
-			// now filters will work only on contact, not company
-		});
-		
-		$("body").on('click', '#comp-sort-by-created_time-desc', function(e)
-		{
-			e.preventDefault();
-			createCookie('company_sort_field',$(this).attr('data'));
-			COMPANIES_HARD_RELOAD=true;
-			App_Companies.companies();
-		});
-		
-		$("body").on('click', '#comp-sort-by-created_time-asc', function(e){
-			e.preventDefault();
-			createCookie('company_sort_field',$(this).attr('data'));
-			COMPANIES_HARD_RELOAD=true;
-			App_Companies.companies();
-		});
-	};
-	
 	company_list_view.init = function(cel){
-		// initEvents();
 		setupCompanyFilterList(cel);
 		setupCompanyViews(cel);
 	};
-	
-	initEvents();
+
 }(window.company_list_view = window.company_list_view || {}, $));
 
 /*****Company Details view******/
 
 (function(company_detail_tab, $, undefined) {
 	
-	var activateCurrentTab = function(ele){
+	company_detail_tab.activateCurrentTab = function(ele){
 		$('#contact-tab-content .tab-pane').removeClass('active');
 		ele.addClass('active');
 	};
@@ -28620,7 +28522,7 @@ function savecases(formId, modalId, saveBtn, json)
 	 * Changes, owner of the contact, when an option of change owner drop down
 	 * is selected.   
 	 */
-	var changeOwner = function(that){
+	company_detail_tab.changeOwner = function(that){
 		
 		// Reads the owner id from the selected option
 		var new_owner_id = that.attr('data');
@@ -28651,7 +28553,7 @@ function savecases(formId, modalId, saveBtn, json)
    	};
 	
 	// Deletes a contact from database
-	var deleteCurrentCompany = function(){
+	company_detail_tab.deleteCurrentCompany = function(){
 		
 		if(!confirm("Do you want to delete the company?"))
     		return;
@@ -28663,7 +28565,7 @@ function savecases(formId, modalId, saveBtn, json)
 	};
 	
 	
-	var addTagsToCompany = function(){
+	company_detail_tab.addTagsToCompany = function(){
 		 // Add Tags
 		var new_tags = get_new_tags('companyAddTags');
 		if(new_tags)new_tags=new_tags.trim();
@@ -28726,7 +28628,7 @@ function savecases(formId, modalId, saveBtn, json)
 		}
 	};
 	
-	var load_company_deals = function ()
+	company_detail_tab.load_company_deals = function ()
 	{
 		id = App_Companies.companyDetailView.model.id;
 		dealsView = new Base_Collection_View({
@@ -28744,10 +28646,10 @@ function savecases(formId, modalId, saveBtn, json)
         });
         dealsView.collection.fetch();
         $('#deals', App_Companies.companyDetailView.el).html(dealsView.el);
-        activateCurrentTab($('#deals'));
+        company_detail_tab.activateCurrentTab($('#deals'));
         
 	};
-	var load_company_cases = function()
+	company_detail_tab.load_company_cases = function()
 	{
 		id = App_Companies.companyDetailView.model.id;
 		casesView = new Base_Collection_View({
@@ -28765,10 +28667,10 @@ function savecases(formId, modalId, saveBtn, json)
         });
 		casesView.collection.fetch();
         $('#cases', App_Companies.companyDetailView.el).html(casesView.el);
-        activateCurrentTab($('#cases'));
+        company_detail_tab.activateCurrentTab($('#cases'));
 	};
 	
-	var load_company_notes = function()
+	company_detail_tab.load_company_notes = function()
 	{
 	    var id = App_Companies.companyDetailView.model.id;
 	    notesView = new Base_Collection_View({
@@ -28786,10 +28688,10 @@ function savecases(formId, modalId, saveBtn, json)
         });
         notesView.collection.fetch();
         $('#notes', App_Companies.companyDetailView.el).html(notesView.el);
-        activateCurrentTab($('#notes'));
+        company_detail_tab.activateCurrentTab($('#notes'));
 	};
 	
-	var load_company_documents = function()
+	company_detail_tab.load_company_documents = function()
 	{
 		 id = App_Companies.companyDetailView.model.id;
 		 documentsView = new Base_Collection_View({
@@ -28808,525 +28710,260 @@ function savecases(formId, modalId, saveBtn, json)
 	        });
 		    documentsView.collection.fetch();
 	        $('#documents', App_Companies.companyDetailView.el).html(documentsView.el);
-	        activateCurrentTab($('#documents'));
+	        company_detail_tab.activateCurrentTab($('#documents'));
 	};
 	
-	company_detail_tab.initEvents = function(){
-		
-		$("body").on('click', '#contactDetailsTab a[href="#company-contacts"]', function(e)
-				{
-					e.preventDefault();
-					fill_company_related_contacts(App_Companies.companyDetailView.model.id, 'company-contacts');
-				});
-		
-		/**
-		 * Fetches all the deals related to the contact and shows the deals
-		 * collection as a table in its tab-content, when "Deals" tab is clicked.
-		 */
-		$("body").on('click', '#contactDetailsTab a[href="#company-deals"]', function(e)
-		{
-			e.preventDefault();
-			save_contact_tab_position_in_cookie("deals");
-			load_company_deals();
-		});
-
-		/**
-		 * Fetches all the cases related to the contact and shows the collection.
-		 */
-		$("body").on('click', '#contactDetailsTab a[href="#company-cases"]', function(e)
-		{
-			e.preventDefault();
-			save_contact_tab_position_in_cookie("cases");
-
-			load_company_cases();
-		});
-		
-		/**
-		 * Fetches all the notes related to the contact and shows the notes
-		 * collection as a table in its tab-content, when "Notes" tab is clicked.
-		 */
-		$("body").on('click', '#contactDetailsTab a[href="#company-notes"]', function(e)
-		{
-			e.preventDefault();
-			save_contact_tab_position_in_cookie("notes");
-			load_company_notes();
-		});
-		
-		/**
-		 * Fetches all the documents related to the contact and shows the documents
-		 * collection as a table in its tab-content, when "Documents" tab is
-		 * clicked.
-		 */
-		$("body").on('click', '#contactDetailsTab a[href="#company-documents"]', function(e)
-		{
-			e.preventDefault();
-			save_contact_tab_position_in_cookie("documents");
-			load_company_documents();
-		});
-		
-		/**
-		 * "click" event of add button of tags form in contact detail view
-		 * Pushes the added tags into tags array attribute of the contact and saves it
-		 */ 
-		$("body").on('click', '#company-add-tags', function(e)
-		{	e.preventDefault();
-			
-		   addTagsToCompany();
-		});
-		
-		$("body").on('keydown', "#companyAddTags",function(e) {
-		//$("#companyAddTags").die().live('keydown',function(e) {
-	    	if(e.which == 13 && !isTagsTypeaheadActive){
-	    		addTagsToCompany();
-	    		}
-	    	});
-		
-		// Deletes a contact from database
-		$("body").on('click', '#company-actions-delete', function(e)
-		{	
-			e.preventDefault();
-			deleteCurrentCompany();
-		});
-		
-		/**
-		 * Changes, owner of the contact, when an option of change owner drop down
-		 * is selected.   
-		 */
-		$("body").on('click', '.company-owner-list', function(e){
-		
-			$('#change-owner-ul').css('display', 'none');
-			
-			changeOwner($(this));
-		});
-		
-		/**
-		 * Deletes a tag of a contact (removes the tag from the contact and saves the contact)
-		 */ 
-		$("body").on('click', '.remove-company-tags', function(e){
-			e.preventDefault();
-			
-			var tag = $(this).attr("tag");
-			//removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
-			console.log($(this).closest("li").parent('ul').append(getRandomLoadingImg()));
-			
-	     	var json = App_Companies.companyDetailView.model.toJSON();
-	     	
-	     	// Returns contact with deleted tag value
-	     	json = delete_contact_tag(json, tag);
-	     	var that = this;
-	     	
-	     	// Unbinds click so user cannot select delete again
-	     	$(this).unbind("click");
-	     	
-	        var contact = new Backbone.Model();
-	        contact.url = 'core/api/contacts';
-	        contact.save(json, {
-	       		success: function(data)
-	       			{ 	      		
-	       				$(that).closest("li").parent('ul').find('.loading').remove();
-	       				$(that).closest("li").remove();
-	       				
-	       			// Updates to both model and collection
-	       				App_Companies.companyDetailView.model.set(data.toJSON(), {silent : true});
-		       			
-		       		//	App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
-	       				
-	       				// Also deletes from Tag class if no more contacts are found with this tag
-	       				$.ajax({
-	       					url: 'core/api/tags/' + tag,
-	       					type: 'DELETE',
-	       					success: function()
-	       					{
-	       						if(tagsCollection)
-	       							tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
-	       					}
-	       				});
-	       			}
-	        });
-		});
-	};
-
-	company_detail_tab.initEvents();
 
 }(window.company_detail_tab = window.company_detail_tab || {}, $));
 
-/** 
-*Initialize events once
-*/
-$(function(){
 
-});
+
+
 var existingDocumentsView;
 
-$(function()
-{
-	$('body').on('click', '.task-edit-contact-tab', function(e)
-	{
-		e.preventDefault();
-		var id = $(this).attr('data');
-		var value = tasksView.collection.get(id).toJSON();
+// Documents actions
+var contact_details_documentandtasks_actions = {
 
-		deserializeForm(value, $("#updateTaskForm"));
+	    // Edit task
+        edit_task : function(e){
+        	var targetEl = $(e.currentTarget);
 
-		$("#updateTaskModal").modal('show');
+        	var id = $(targetEl).attr('data');
+			var value = tasksView.collection.get(id).toJSON();
 
-		$('.update-task-timepicker').val(fillTimePicker(value.due));
-		categories.getCategoriesHtml(value,function(catsHtml){
-			$('#type',$("#updateTaskForm")).html(catsHtml);
+			$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
+
+				loadProgressSlider($("#updateTaskForm"), function(el){
+
+				deserializeForm(value, $("#updateTaskForm"));
+				
+				$('.update-task-timepicker').val(fillTimePicker(value.due));
+				categories.getCategoriesHtml(value,function(catsHtml){
+					$('#type',$("#updateTaskForm")).html(catsHtml);
+					// Fills owner select element
+					populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
+					{
+						$("#updateTaskForm").find("#owners-list").html(data);
+						if (value.taskOwner)
+							$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
+			
+						$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+					});
+				});
+
+				// Add notes in task modal
+				showNoteOnForm("updateTaskForm", value.notes);
+			});
+			// activateSliderAndTimerToTaskModal();
+        },
+
+        // Event edit in contact details tab
+        edit_event : function(e){
+        	var targetEl = $(e.currentTarget);
+
+        	$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+        	
+        	var id = $(targetEl).attr('data');
+			var value = eventsView.collection.get(id).toJSON();
+			deserializeForm(value, $("#updateActivityForm"));
+			$('.update-start-timepicker').val(fillTimePicker(value.start));
+			$('.update-end-timepicker').val(fillTimePicker(value.end));
+
+			$("#updateActivityModal").modal('show');
+			
+			if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
+			{
+				$("[id='event_delete']").attr("id", "delete_web_event");
+				web_event_title = value.title;
+				if (value.contacts.length > 0)
+				{
+					var firstname = getPropertyValue(value.contacts[0].properties, "first_name");
+					if (firstname == undefined)
+						firstname = "";
+					var lastname = getPropertyValue(value.contacts[0].properties, "last_name");
+					if (lastname == undefined)
+						lastname = "";
+					web_event_contact_name = firstname + " " + lastname;
+				}
+			}
+			else
+			{
+				$("[id='delete_web_event']").attr("id", "event_delete");
+			}
+			if (value.description)
+			{
+				var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+				$("#event_desc").html(description);
+				$("textarea#description").val(value.description);
+			}
+			else
+			{
+				var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+				$("#event_desc").html(desc);
+			}
 			// Fills owner select element
-			populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
+			populateUsersInUpdateActivityModal(value);
+        },
+
+        complete_task : function(e){
+        	var targetEl = $(e.currentTarget);
+
+        	if ($(targetEl).is(':checked'))
 			{
-				$("#updateTaskForm").find("#owners-list").html(data);
-				if (value.taskOwner)
-					$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
-	
-				$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
-			});
-		});
-
-		// Add notes in task modal
-		showNoteOnForm("updateTaskForm", value.notes);
-
-		activateSliderAndTimerToTaskModal();
-
-	});
-
-	// Event edit in contact details tab
-	$('body').on('click', '.event-edit-contact-tab', function(e)
-					{
-						e.preventDefault();
-						var id = $(this).attr('data');
-						var value = eventsView.collection.get(id).toJSON();
-						deserializeForm(value, $("#updateActivityForm"));
-						$("#updateActivityModal").modal('show');
-
-						$('.update-start-timepicker').val(fillTimePicker(value.start));
-						$('.update-end-timepicker').val(fillTimePicker(value.end));
-
-		if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
-		{
-			$("[id='event_delete']").attr("id", "delete_web_event");
-			web_event_title = value.title;
-			if (value.contacts.length > 0)
-			{
-				var firstname = getPropertyValue(value.contacts[0].properties, "first_name");
-				if (firstname == undefined)
-					firstname = "";
-				var lastname = getPropertyValue(value.contacts[0].properties, "last_name");
-				if (lastname == undefined)
-					lastname = "";
-				web_event_contact_name = firstname + " " + lastname;
-			}
-		}
-		else
-		{
-			$("[id='delete_web_event']").attr("id", "event_delete");
-		}
-		if (value.description)
-		{
-			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
-			$("#event_desc").html(description);
-			$("textarea#description").val(value.description);
-		}
-		else
-		{
-			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
-			$("#event_desc").html(desc);
-		}
-		// Fills owner select element
-		populateUsersInUpdateActivityModal(value);
-	});
-
-	$('body').on('click', '.complete-task', function(e)
-	{
-		e.preventDefault();
-		if ($(this).is(':checked'))
-		{
-			var id = $(this).attr('data');
-			var that = this;
-			complete_task(id, tasksView.collection, undefined, function(data)
-			{
-				$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
-				console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
-				$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
-				tasksView.collection.add(data, { silent : true });
-			});
-		}
-	});
-
-	// For adding new deal from contact-details
-	$('body').on('click', '.contact-add-deal', function(e)
-	{
-		e.preventDefault();
-		var el = $("#opportunityForm");
-		$("#opportunityModal").modal('show');
-
-		add_custom_fields_to_form({}, function(data)
-		{
-			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], [
-				"modal"
-			]);
-			$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
-
-		}, "DEAL");
-
-		// Fills owner select element
-		populateUsers("owners-list", el, undefined, undefined, function(data)
-		{
-
-			$("#opportunityForm").find("#owners-list").html(data);
-			$("#owners-list", $("#opportunityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
-			$("#owners-list", $("#opportunityForm")).closest('div').find('.loading-img').hide();
-		});
-		// Contacts type-ahead
-		agile_type_ahead("relates_to", el, contacts_typeahead);
-
-		// Fills the pipelines list in select box.
-		populateTrackMilestones(el, undefined, undefined, function(pipelinesList)
-		{
-			console.log(pipelinesList);
-			$.each(pipelinesList, function(index, pipe)
-			{
-				if (pipe.isDefault)
+				var id = $(targetEl).attr('data');
+				var that = targetEl;
+				complete_task(id, tasksView.collection, undefined, function(data)
 				{
-					var val = pipe.id + '_';
-					if (pipe.milestones.length > 0)
+					$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
+					console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
+					$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
+					tasksView.collection.add(data, { silent : true });
+				});
+			}
+        },
+
+        // For adding new deal from contact-details
+        add_deal : function(e){
+        		var targetEl = $(e.currentTarget);
+
+        		var el = $("#opportunityForm");
+				$("#opportunityModal").modal('show');
+
+				add_custom_fields_to_form({}, function(data)
+				{
+					var el_custom_fields = show_custom_fields_helper(data["custom_fields"], [
+						"modal"
+					]);
+					$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
+
+				}, "DEAL");
+
+				// Fills owner select element
+				populateUsers("owners-list", el, undefined, undefined, function(data)
+				{
+
+					$("#opportunityForm").find("#owners-list").html(data);
+					$("#owners-list", $("#opportunityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
+					$("#owners-list", $("#opportunityForm")).closest('div').find('.loading-img').hide();
+				});
+				// Contacts type-ahead
+				agile_type_ahead("relates_to", el, contacts_typeahead);
+
+				// Fills the pipelines list in select box.
+				populateTrackMilestones(el, undefined, undefined, function(pipelinesList)
+				{
+					console.log(pipelinesList);
+					$.each(pipelinesList, function(index, pipe)
 					{
-						val += pipe.milestones.split(',')[0];
-						$('#pipeline_milestone', el).val(val);
-						$('#pipeline', el).val(pipe.id);
-						$('#milestone', el).val(pipe.milestones.split(',')[0]);
+						if (pipe.isDefault)
+						{
+							var val = pipe.id + '_';
+							if (pipe.milestones.length > 0)
+							{
+								val += pipe.milestones.split(',')[0];
+								$('#pipeline_milestone', el).val(val);
+								$('#pipeline', el).val(pipe.id);
+								$('#milestone', el).val(pipe.milestones.split(',')[0]);
+							}
+
+						}
+					});
+				});
+
+				populateLostReasons(el, undefined);
+
+				populateDealSources(el, undefined);
+
+				// Enable the datepicker
+
+				$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+
+
+				var json = null;
+				if(company_util.isCompany()){
+					json = App_Companies.companyDetailView.model.toJSON();
+				} else {
+					json = App_Contacts.contactDetailView.model.toJSON();
+				}
+				var contact_name = getContactName(json);
+				$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
+
+        },
+
+       add_case : function(e){
+       		var targetEl = $(e.currentTarget);
+
+       		$("#casesModal").html(getTemplate("cases-new-modal", {}));
+			var el = $("#casesForm");
+
+			// Fills owner select element
+			populateUsers("owners-list", el, undefined, undefined, function(data)
+			{
+
+				$("#casesForm").find("#owners-list").html(data);
+				$("#owners-list", $("#casesForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
+				// Contacts type-ahead
+				agile_type_ahead("contacts-typeahead-input", el, contacts_typeahead);
+
+				var json = null;
+				if(company_util.isCompany()){
+					json = App_Companies.companyDetailView.model.toJSON();
+				} else {
+					json = App_Contacts.contactDetailView.model.toJSON();
+				}
+				var contact_name = getContactName(json);
+				$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
+
+				$("#casesModal").modal('show');
+			});
+       },
+
+       add_contact : function(e){
+       		// This is a hacky method. ( See jscore/contact-management/modals.js for
+			// its use )
+			// 'forceCompany' is a global variable. It is used to enforce Company
+			// name on Add Contact modal.
+			// Prevents user from removing this company from the modal that is
+			// shown.
+			// Disables typeahead, as it won't be needed as there will be no Company
+			// input text box.
+			var json = {};
+
+			if(Current_Route.indexOf("company") > -1)
+				 json = App_Companies.companyDetailView.model.toJSON();
+			else 
+				 json = App_Contacts.contactDetailView.model.toJSON();
+
+			forceCompany.name = getContactName(json); // name of Company
+			forceCompany.id = json.id; // id of Company
+			forceCompany.doit = true; // yes force it. If this is false the
+			// Company won't be forced.
+			// Also after showing modal, it is set to false internally, so
+			// Company is not forced otherwise.
+			//$('#personModal').modal('show');
+			$.ajax({
+				url : 'core/api/custom-fields/scope?scope=CONTACT',
+				type : 'GET',
+				dataType : 'json',
+				success : function(data){
+					if(data.length > 0)
+					{
+						Backbone.history.navigate("contact-add" , {trigger: true});
+						setTimeout(function(){ 
+						$("#continueform").find("ul[name=contact_company_id]").html('<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="'+forceCompany.id+'"><span><a class="text-white m-r-xs" href="#contact/'+forceCompany.id+'">'+forceCompany.name+'</a><a class="close text-white" id="remove_tag">×</a></span></li>')
+						}, 800);
 					}
-
+					else
+						$("#personModal").modal("show");
 				}
 			});
-		});
+       },
 
-		populateLostReasons(el, undefined);
+       add_document : function(e){
 
-		populateDealSources(el, undefined);
-
-		// Enable the datepicker
-
-		$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
-
-
-		var json = null;
-		if(company_util.isCompany()){
-			json = App_Companies.companyDetailView.model.toJSON();
-		} else {
-			json = App_Contacts.contactDetailView.model.toJSON();
-		}
-		var contact_name = getContactName(json);
-		$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
-
-	});
-
-	// For updating a deal from contact-details
-	$('body').on('click', '.deal-edit-contact-tab', function(e)
-	{
-		e.preventDefault();
-		var id = $(this).attr('data');
-		updateDeal(dealsView.collection.get(id));
-	});
-
-	// For Adding new case from contacts/cases
-	$('body').on('click', '.contact-add-case', function(e)
-	{
-		e.preventDefault();
-		var el = $("#casesForm");
-
-		// Fills owner select element
-		populateUsers("owners-list", el, undefined, undefined, function(data)
-		{
-
-			$("#casesForm").find("#owners-list").html(data);
-			$("#owners-list", $("#casesForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
-			// Contacts type-ahead
-			agile_type_ahead("contacts-typeahead-input", el, contacts_typeahead);
-
-			// Enable the datepicker
-
-			$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
-
-
-			var json = null;
-			if(company_util.isCompany()){
-				json = App_Companies.companyDetailView.model.toJSON();
-			} else {
-				json = App_Contacts.contactDetailView.model.toJSON();
-			}
-			var contact_name = getContactName(json);
-			$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
-
-			$("#casesModal").modal('show');
-		});
-	});
-
-	// For updating a case from contact-details
-	$('body').on('click', '.cases-edit-contact-tab', function(e)
-	{
-		e.preventDefault();
-		var id = $(this).attr('data');
-		updatecases(casesView.collection.get(id));
-	});
-
-	// Adding contact when user clicks Add contact button under Contacts tab in
-	// Company Page
-	$('body').on('click', '.contact-add-contact', function(e)
-	{
-		e.preventDefault();
-
-		// This is a hacky method. ( See jscore/contact-management/modals.js for
-		// its use )
-		// 'forceCompany' is a global variable. It is used to enforce Company
-		// name on Add Contact modal.
-		// Prevents user from removing this company from the modal that is
-		// shown.
-		// Disables typeahead, as it won't be needed as there will be no Company
-		// input text box.
-		var json = {};
-
-		if(Current_Route.indexOf("company") > -1)
-			 json = App_Companies.companyDetailView.model.toJSON();
-		else 
-			 json = App_Contacts.contactDetailView.model.toJSON();
-
-		forceCompany.name = getContactName(json); // name of Company
-		forceCompany.id = json.id; // id of Company
-		forceCompany.doit = true; // yes force it. If this is false the
-		// Company won't be forced.
-		// Also after showing modal, it is set to false internally, so
-		// Company is not forced otherwise.
-		//$('#personModal').modal('show');
-		$.ajax({
-			url : 'core/api/custom-fields/scope?scope=CONTACT',
-			type : 'GET',
-			dataType : 'json',
-			success : function(data){
-				if(data.length > 0)
-				{
-					Backbone.history.navigate("contact-add" , {trigger: true});
-					setTimeout(function(){ 
-					$("#continueform").find("ul[name=contact_company_id]").html('<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="'+forceCompany.id+'"><span><a class="text-white m-r-xs" href="#contact/'+forceCompany.id+'">'+forceCompany.name+'</a><a class="close text-white" id="remove_tag">×</a></span></li>')
-					}, 800);
-				}
-				else
-					$("#personModal").modal("show");
-			}
-		});
-	});
-
-	// For adding new document from contact-details
-	$('body').on('click', '.contact-add-document', function(e)
-	{
-		e.preventDefault();
-		var el = $("#uploadDocumentForm");
-		$("#uploadDocumentModal").modal('show');
-
-		// Contacts type-ahead
-		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
-
-		// Deals type-ahead
-		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false, null, null, "core/api/search/deals", false, true);
-
-		var json = null;
-		if(company_util.isCompany()){
-			json = App_Companies.companyDetailView.model.toJSON();
-		} else {
-			json = App_Contacts.contactDetailView.model.toJSON();
-		}
-		var contact_name = getContactName(json);
-		$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
-	});
-
-	// For updating document from contact-details
-	$('body').on('click', '.document-edit-contact-tab', function(e)
-	{
-		e.preventDefault();
-		var id = $(this).attr('data');
-		updateDocument(documentsView.collection.get(id));
-	});
-
-	// For unlinking document from contact-details
-	$('body').on('click', '.document-unlink-contact-tab', function(e)
-	{
-		e.preventDefault();
-		var id = $(this).attr('data');
-		var json = documentsView.collection.get(id).toJSON();
-
-		// To get the contact id and converting into string
-		var contact_id = "";
+       		$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
 		
-		if(company_util.isCompany())
-			contact_id = App_Companies.companyDetailView.model.id + "";
-		else
-			contact_id = App_Contacts.contactDetailView.model.id + "";
-
-		// Removes the contact id from related to contacts
-		json.contact_ids.splice(json.contact_ids.indexOf(contact_id), 1);
-
-		// Updates the document object and hides
-		var newDocument = new Backbone.Model();
-		newDocument.url = 'core/api/documents';
-		newDocument.save(json, { success : function(data)
-		{
-			documentsView.collection.remove(json);
-			documentsView.render(true);
-		} });
-	});
-
-	/**
-	 * For showing new/existing documents
-	 */
-	$('body').on('click', '.add-document-select', function(e)
-	{
-		e.preventDefault();
-		var el = $(this).closest("div");
-		$(this).css("display", "none");
-		el.find(".contact-document-select").css("display", "inline");
-		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-		fillSelect('document-select', 'core/api/documents', 'documents', function fillNew()
-		{
-			el.find("#document-select").append("<option value='new'>Add New Doc</option>");
-
-		}, optionsTemplate, false, el);
-	});
-
-	/**
-	 * To cancel the add documents request
-	 */
-	$('body').on('click', '.add-document-cancel', function(e)
-	{
-		e.preventDefault();
-		var el = $("#documents");
-		el.find(".contact-document-select").css("display", "none");
-		el.find(".add-document-select").css("display", "inline-block");
-	});
-
-	/**
-	 * For adding existing document to current contact
-	 */
-	$('body').on('click', '.add-document-confirm', function(e)
-	{
-		e.preventDefault();
-
-		var document_id = $(this).closest(".contact-document-select").find("#document-select").val();
-
-		var saveBtn = $(this);
-
-		// To check whether the document is selected or not
-		if (document_id == "")
-		{
-			saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
-			saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
-			return;
-		}
-		else if (document_id == "new")
-		{
 			var el = $("#uploadDocumentForm");
-			$("#uploadDocumentModal").modal('show');
-
 			// Contacts type-ahead
 			agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
 
@@ -29341,24 +28978,98 @@ $(function()
 			}
 			var contact_name = getContactName(json);
 			$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
-		}
-		else if (document_id != undefined && document_id != null)
-		{
-			if (!existingDocumentsView)
-			{
-				existingDocumentsView = new Base_Collection_View({ url : 'core/api/documents', restKey : "documents", });
-				existingDocumentsView.collection.fetch({ success : function(data)
-				{
-					existing_document_attach(document_id, saveBtn);
-				} });
-			}
+       },
+
+       document_unlink : function(e){
+       		var targetEl = $(e.currentTarget);
+
+       		var id = $(targetEl).attr('data');
+			var json = documentsView.collection.get(id).toJSON();
+
+			// To get the contact id and converting into string
+			var contact_id = "";
+			
+			if(company_util.isCompany())
+				contact_id = App_Companies.companyDetailView.model.id + "";
 			else
-				existing_document_attach(document_id, saveBtn);
-		}
+				contact_id = App_Contacts.contactDetailView.model.id + "";
 
-	});
+			// Removes the contact id from related to contacts
+			json.contact_ids.splice(json.contact_ids.indexOf(contact_id), 1);
 
-});
+			// Updates the document object and hides
+			var newDocument = new Backbone.Model();
+			newDocument.url = 'core/api/documents';
+			newDocument.save(json, { success : function(data)
+			{
+				documentsView.collection.remove(json);
+				documentsView.render(true);
+			} });
+       },
+
+       show_document_list : function(e){
+       		var targetEl = $(e.currentTarget);
+
+       		var el = $(targetEl).closest("div");
+			$(targetEl).css("display", "none");
+			el.find(".contact-document-select").css("display", "inline");
+			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+			fillSelect('document-select', 'core/api/documents', 'documents', function fillNew()
+			{
+				el.find("#document-select").append("<option value='new'>Add New Doc</option>");
+
+			}, optionsTemplate, false, el);
+	    },
+
+       add_selected_document : function(e){
+       		var targetEl = $(e.currentTarget);
+
+       		var document_id = $(targetEl).closest(".contact-document-select").find("#document-select").val();
+
+			var saveBtn = $(targetEl);
+
+			// To check whether the document is selected or not
+			if (document_id == "")
+			{
+				saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
+				saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
+				return;
+			}
+			else if (document_id == "new")
+			{
+				var el = $("#uploadDocumentForm");
+				$("#uploadDocumentModal").modal('show');
+
+				// Contacts type-ahead
+				agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+
+				// Deals type-ahead
+				agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false, null, null, "core/api/search/deals", false, true);
+
+				var json = null;
+				if(company_util.isCompany()){
+					json = App_Companies.companyDetailView.model.toJSON();
+				} else {
+					json = App_Contacts.contactDetailView.model.toJSON();
+				}
+				var contact_name = getContactName(json);
+				$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
+			}
+			else if (document_id != undefined && document_id != null)
+			{
+				if (!existingDocumentsView)
+				{
+					existingDocumentsView = new Base_Collection_View({ url : 'core/api/documents', restKey : "documents", });
+					existingDocumentsView.collection.fetch({ success : function(data)
+					{
+						existing_document_attach(document_id, saveBtn);
+					} });
+				}
+				else
+					existing_document_attach(document_id, saveBtn);
+			}
+		},
+};
 
 /**
  * To attach the document to a contact
@@ -29401,100 +29112,103 @@ function existing_document_attach(document_id, saveBtn)
  * @module Contact management
  * @author Rammohan
  */
-$(function(){ 
-	
-	/**
-	 * Displays activity modal with all task features,  to add a task 
-	 * related to the contact in contact detail view. Also prepends the 
-	 * contact name to related to field of activity modal.
-	 */ 
-	$('body').on('click', '.contact-add-task', function(e){ 
-    	e.preventDefault();
-
-    	var	el = $("#taskForm");
-		$('#activityTaskModal').modal('show');
-		highlight_task();
-		// Displays contact name, to indicate the task is related to the contact
-		fill_relation(el);
-		agile_type_ahead("task_related_to", el, contacts_typeahead);
-		
-		agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-
-		categories.getCategoriesHtml(undefined,function(catsHtml){
-			$('#type',el).html(catsHtml);
-			// Fills owner select element
-			populateUsers("owners-list", $("#taskForm"), undefined, undefined,
-					function(data) {
-						$("#taskForm").find("#owners-list").html(data);
-						$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-						$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();					
-			});
-		});
-
-       activateSliderAndTimerToTaskModal();
-    });
-	
-	/**
-	 * Displays activity modal with all event features,  to add a event 
-	 * related to the contact in contact detail view. Also prepends the 
-	 * contact name to related to field of activity modal.
-	 */ 
-    $('body').on('click', '.contact-add-event', function(e){ 
-    	e.preventDefault();
-
-    	var	el = $("#activityForm");
-		$('#activityModal').modal('show');
-		highlight_event();
-		// Displays contact name, to indicate the task is related to the contact
-		fill_relation(el);
-		agile_type_ahead("event_related_to", el, contacts_typeahead);
-        agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-
-    });
-    
+ var contact_detail_tab_actions = {
     /**
+     * Displays activity modal with all task features,  to add a task 
+     * related to the contact in contact detail view. Also prepends the 
+     * contact name to related to field of activity modal.
+     */ 
+      add_task : function(e){
+
+            
+            $('#activityTaskModal').html(getTemplate("new-task-modal")).modal('show');
+
+            var el = $("#taskForm");
+            highlight_task();
+            // Displays contact name, to indicate the task is related to the contact
+            fill_relation(el);
+            agile_type_ahead("task_related_to", el, contacts_typeahead);
+            
+            agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+
+            categories.getCategoriesHtml(undefined,function(catsHtml){
+                $('#type',el).html(catsHtml);
+                // Fills owner select element
+                populateUsers("owners-list", $("#taskForm"), undefined, undefined,
+                        function(data) {
+                            $("#taskForm").find("#owners-list").html(data);
+                            $("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+                            $("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();                   
+                });
+            });
+
+           activateSliderAndTimerToTaskModal();
+      },
+
+      /**
+     * Displays activity modal with all event features,  to add a event 
+     * related to the contact in contact detail view. Also prepends the 
+     * contact name to related to field of activity modal.
+     */ 
+      add_event : function(e){
+
+            
+            $('#activityModal').html(getTemplate("new-event-modal")).modal('show');
+
+            var el = $("#activityForm");
+            highlight_event();
+
+            // Displays contact name, to indicate the task is related to the contact
+            fill_relation(el);
+            agile_type_ahead("event_related_to", el, contacts_typeahead);
+            agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+      },
+
+      /**
      * Displays note modal, to add a note related to the contact in contact 
      * detail view. Also prepends the contact name to related to field of 
      * activity modal.  
      */ 
-    $('body').on('click', '.contact-add-note', function(e){ 
-    	e.preventDefault();
-        console.log("execution");
-    	var	el = $("#noteForm");
-    	
-    	// Displays contact name, to indicate the note is related to the contact
-    	fill_relation(el);
+      add_note : function(e){
+            console.log("execution");
+            var targetEl = $(e.currentTarget);
+            
+            var el = $("#noteForm");
+            
+            // Displays contact name, to indicate the note is related to the contact
+            fill_relation(el);
 
-        if(!$(this).attr("data-toggle"))
-             $('#noteModal').modal('show');
-         
-    	agile_type_ahead("note_related_to", el, contacts_typeahead);
-     });
-    
+            if(!$(targetEl).attr("data-toggle"))
+                 $('#noteModal').modal('show');
+             
+            agile_type_ahead("note_related_to", el, contacts_typeahead);
+      },
+
+
     /**
      * Subscribes contact to a campaign. First loads a form with campaigns select 
      * option and then fills the select drop down with all the campaigns by triggering
      * a custom event (fill_campaigns_contact).
-     */ 
-	$('body').on('click', '.contact-add-campaign, .add-to-campaign', function(e){ 
-    		e.preventDefault();
-    	
-    		var contact_id = App_Contacts.contactDetailView.model.id;
-    		
-    		// Navigate to Add Campaigns page
-    		if($(this).hasClass('contact-add-campaign'))
-    		{
-   			
-	    		/*
-	    		 * Custom event to fill campaigns. This is triggered from the controller
-	    		 * on loading of the form. 
-	    		 * This event is died to avoid execution of its functionality multiple
-	    		 * times, if it is clicked multiple times (when it is clicked first time 
-	    		 * it executes once, if again it is clicked it executes twice and so on).  
-	    		 */
-    		
-	    		$('body').off('fill_campaigns_contact').on('fill_campaigns_contact', function(event){
-	    			var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+     */
+      add_to_campaign : function(e){
+            var targetEl = $(e.currentTarget);
+
+            var contact_id = App_Contacts.contactDetailView.model.id;
+            
+            // Navigate to Add Campaigns page
+            if($(targetEl).hasClass('contact-add-campaign'))
+            {
+            
+                /*
+                 * Custom event to fill campaigns. This is triggered from the controller
+                 * on loading of the form. 
+                 * This event is died to avoid execution of its functionality multiple
+                 * times, if it is clicked multiple times (when it is clicked first time 
+                 * it executes once, if again it is clicked it executes twice and so on).  
+                 */
+            
+                $('body').off('fill_campaigns_contact').on('fill_campaigns_contact', function(event){
+                    var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (disabled){{else}}>{{name}}{{/if}}</option>";
                     fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
 	    		});
 	    		
@@ -29510,139 +29224,154 @@ $(function(){
     		{
     			$(this).css('display','none');
     			
-    			$('.show_campaigns_list').css('display','inline-block');
+    			$('.show_campaigns_list').css('display','block');
     			
     			var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
                 
-    		    fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
-    		}
-    		
-    		
-    		/*
-    		 * Subscribes the contact to selected campaign from the drop down, when
-    		 * the Add button is clicked
-    		 */
-			$('body').on('click', '#subscribe-contact-campaign, #add-to-campaign', function(e){
-    			e.preventDefault();
-
-    			var $form;
-    			
-    			// Add Campaigns form in another page.
-    			if($(this).attr('id') === 'subscribe-contact-campaign')
-    				$form = $('#contactCampaignForm');
-    			
-    			// For within Campaigns tab, campaigns list form
-    			if($(this).attr('id') === 'add-to-campaign')
-    				$form = $('#add-to-campaign-form');
-    			
-    			// Verify form validation
-    			if(!isValidForm($form))
-    				return;
-
-    			// Button disabled || Validate Form fails
-    		    if($(this).attr('disabled') == 'disabled')
-    		    	return;
-    			
-    		    var saveButton=$(this);
-    		    disable_save_button(saveButton);
-    		    
-    		    // Temporary variable to hide Campaigns list form within
-    		    // Campaigns tab.
-    		    var $add_to_campaign = $(this).attr('id');
-    		    
-    			// Show loading symbol until model get saved
-    		    //$('#contactCampaignForm').find('span.save-status').html(getRandomLoadingImg());
-    		    
-    			var workflow_id = $('#campaign-select option:selected').prop('value');
-    			var workflow_name = $('#campaign-select option:selected').text();
-    			
-    			// If Active, don't add to campaign
-    			if(is_subscriber_active(workflow_id))
-    			{
-    				var properties = App_Contacts.contactDetailView.model.get('properties');
-    				
-    				var name = "Contact";
-    				
-    				if(properties)
-    				    name = getPropertyValue(properties, "first_name");
-    				
-    				var message = name + " is already active in Campaign '" + workflow_name+"'.";
-    				
-    				showNotyPopUp("information", message, "top", 10000);
-    				
-    				enable_save_button(saveButton);
-    				
-    				return;
-    			}
-    						
-    			var url = '/core/api/campaigns/enroll/' + agile_crm_get_contact()['id'] + '/' + workflow_id;
-    			
-    			$.ajax({
-    				url: url,
-    				type: 'GET',
-    				success: function(){
-   				
-    					// Remove loading image
-    					//$('#contactCampaignForm').find('span.save-status img').remove();
-    	    		    enable_save_button(saveButton);
-    	    		    
-    					// Hides form and shows link within Campaigns tab.
-    	    		    if($add_to_campaign === 'add-to-campaign')
-    					{
-    	    		    	// Temp Flag inorder to show Active campaigns immediately.
-        	    		    // if true, downloads contact rather than fetching from collection
-        	    		    CONTACT_ASSIGNED_TO_CAMPAIGN = true;
-    						
-        	    		    $('.show_campaigns_list').css('display','none');
-    						
-    						$('.add-to-campaign').css('display','inline-block');
-    						
-    						// Triggers Campaigns tab click, to update contact model
-    						$('#contactDetailsTab a[href="#campaigns"]').trigger('click');
-    						
-    						return;
-    						
-    					}
-    					
-    					// Navigate back to contact detail view
-    					Backbone.history.navigate("contact/" + agile_crm_get_contact()['id'], {
-    						trigger: true
-    					});
-    				}
-    		   });
-    		}); // End of Add button of form Event Handler
-    		
-    		// Click event of campaigns form close button
-			$('body').on('click', '#contact-close-campaign, #cancel-to-add-campaign', function(e){
-    			e.preventDefault();
-    			
-    			// Campaigns tab form
-    			if($(this).attr('id') === 'cancel-to-add-campaign')
-    			{
-    				var $form = $('#add-to-campaign-form');
-    				
-    				// Reset form if any errors
-    				var validator = $('form#add-to-campaign-form').validate();
-    				validator.resetForm();
-    				$form.find('div.controls').removeClass('single-error');
-    				
-    				// Hides form and show link
-    				$('.show_campaigns_list').css('display','none');
-    				$('.add-to-campaign').css('display','inline-block');
-    				
-    				return;
-    			}
-    			
-    			// Navigate back to contact detail view
-    			Backbone.history.navigate("contact/" + contact_id, {
-       	            trigger: true
-       	        });
-    			
-    	    }); // End of Close button of form Event Handler
+                // Navigate to controller to show the form and then to trigger the custom event
+                Backbone.history.navigate("add-campaign", {
+                    trigger: true
+                });
+                
+            }
             
-    	}); // End of Add to Campaign Event Handler
-    
-});
+            // If link clicked is within Campaigns tab, hide link and show form.
+            if($(targetEl).hasClass('add-to-campaign'))
+            {
+                $(targetEl).css('display','none');
+                
+                $('.show_campaigns_list').css('display','inline-block');
+                
+                var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+                
+                fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
+            }
+
+            /*
+             * Subscribes the contact to selected campaign from the drop down, when
+             * the Add button is clicked
+             */
+            $('#subscribe-contact-campaign, #add-to-campaign').click(function(e){
+                e.preventDefault();
+
+                var $form;
+                
+                // Add Campaigns form in another page.
+                if($(this).attr('id') === 'subscribe-contact-campaign')
+                    $form = $('#contactCampaignForm');
+                
+                // For within Campaigns tab, campaigns list form
+                if($(this).attr('id') === 'add-to-campaign')
+                    $form = $('#add-to-campaign-form');
+                
+                // Verify form validation
+                if(!isValidForm($form))
+                    return;
+
+                // Button disabled || Validate Form fails
+                if($(this).attr('disabled') == 'disabled')
+                    return;
+                
+                var saveButton=$(this);
+                disable_save_button(saveButton);
+                
+                // Temporary variable to hide Campaigns list form within
+                // Campaigns tab.
+                var $add_to_campaign = $(this).attr('id');
+                
+                // Show loading symbol until model get saved
+                //$('#contactCampaignForm').find('span.save-status').html(getRandomLoadingImg());
+                
+                var workflow_id = $('#campaign-select option:selected').prop('value');
+                var workflow_name = $('#campaign-select option:selected').text();
+                
+                // If Active, don't add to campaign
+                if(is_subscriber_active(workflow_id))
+                {
+                    var properties = App_Contacts.contactDetailView.model.get('properties');
+                    
+                    var name = "Contact";
+                    
+                    if(properties)
+                        name = getPropertyValue(properties, "first_name");
+                    
+                    var message = name + " is already active in Campaign '" + workflow_name+"'.";
+                    
+                    showNotyPopUp("information", message, "top", 10000);
+                    
+                    enable_save_button(saveButton);
+                    
+                    return;
+                }
+                            
+                var url = '/core/api/campaigns/enroll/' + agile_crm_get_contact()['id'] + '/' + workflow_id;
+                
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(){
+                
+                        // Remove loading image
+                        //$('#contactCampaignForm').find('span.save-status img').remove();
+                        enable_save_button(saveButton);
+                        
+                        // Hides form and shows link within Campaigns tab.
+                        if($add_to_campaign === 'add-to-campaign')
+                        {
+                            // Temp Flag inorder to show Active campaigns immediately.
+                            // if true, downloads contact rather than fetching from collection
+                            CONTACT_ASSIGNED_TO_CAMPAIGN = true;
+                            
+                            $('.show_campaigns_list').css('display','none');
+                            
+                            $('.add-to-campaign').css('display','inline-block');
+                            
+                            // Triggers Campaigns tab click, to update contact model
+                            $('#contactDetailsTab a[href="#campaigns"]').trigger('click');
+                            
+                            return;
+                            
+                        }
+                        
+                        // Navigate back to contact detail view
+                        Backbone.history.navigate("contact/" + agile_crm_get_contact()['id'], {
+                            trigger: true
+                        });
+                    }
+               });
+            }); // End of Add button of form Event Handler
+
+            // Click event of campaigns form close button
+            $('#contact-close-campaign, #cancel-to-add-campaign').click(function(e){
+                e.preventDefault();
+                
+                // Campaigns tab form
+                if($(this).attr('id') === 'cancel-to-add-campaign')
+                {
+                    var $form = $('#add-to-campaign-form');
+                    
+                    // Reset form if any errors
+                    var validator = $('form#add-to-campaign-form').validate();
+                    validator.resetForm();
+                    $form.find('div.controls').removeClass('single-error');
+                    
+                    // Hides form and show link
+                    $('.show_campaigns_list').css('display','none');
+                    $('.add-to-campaign').css('display','inline-block');
+                    
+                    return;
+                }
+                
+                // Navigate back to contact detail view
+                Backbone.history.navigate("contact/" + contact_id, {
+                    trigger: true
+                });
+                
+            }); // End of Close button of form Event Handler
+      },
+
+ };
+
 
 /**
  * Prepends the name of the contact (which is in contact detail view),
@@ -30644,69 +30373,49 @@ function fill_company_related_contacts(companyId, htmlId)
 
 	$('#' + htmlId).html(companyContactsView.render().el);
 }
-$(function()
-{
 
-	var id;
+var Contact_Details_Tab_Actions = {
 
-	/**
+	 /**
 	 * Activates the Timeline tab-content to show the time-line with all
 	 * details, which are already added to time-line, when the contact is
 	 * getting to its detail view.
 	 */
-	$('body').on('click', '#contactDetailsTab a[href="#timeline"]', function(e)
-	{
-		e.preventDefault();
+	  openTimeLine : function(e){
+	  		
+			save_contact_tab_position_in_cookie("timeline");
 
-		save_contact_tab_position_in_cookie("timeline");
+			contact_details_tab.load_timeline();
+	  },
 
-		contact_details_tab.load_timeline();
-	});
+	  onEmailSubjectClick : function(e){
+	  		
+	  		var targetEl = $(e.currentTarget);
 
-	$('body').on('click', '.email-subject', function(e)
-	{
-		e.preventDefault();
-		var href = $(this).attr("href");
-		var id = $(this).attr('id');
-		$(".collapse-" + id).hide();
-		$(href).collapse('toggle');
+			var href = $(targetEl).attr("href");
+			var id = $(targetEl).attr('id');
+			$(".collapse-" + id).hide();
+			$(href).collapse('toggle');
 
-		$(href).on("hidden.bs.collapse", function()
-		{
-			$(".collapse-" + id).show();
-		})
+			$(href).on("hidden.bs.collapse", function()
+			{
+				$(".collapse-" + id).show();
+			})
+	  },
 
-	});
+	  // Hide More link and truncated webstats and show complete web stats.
+	  showPageViews : function(e){
+		   $(e.currentTarget).closest('.activity-text-block').find('#complete-webstats').toggle();	  	
+	  },
 
-	// Hide More link and truncated webstats and show complete web stats.
-	/*
-	 * $('#more-page-urls').die().live('click', function(e) {
-	 * e.preventDefault();
-	 * 
-	 * $(this).css('display', 'none');
-	 * $(this).parent().parent().find('#truncated-webstats').css('display',
-	 * 'none');
-	 * 
-	 * $(this).parent().parent().find('#complete-webstats').removeAttr('style');
-	 * });
-	 */
+	  // to remove contact from active campaign.
+	  removeActiveCampaigns : function(e){
+	  	var targetEl = $(e.currentTarget);
 
-	$('body').on('click', '#show-page-views', function(e)
-	{
-		e.preventDefault();
+  		if (!confirm("Are you sure to remove " + $(targetEl).attr("contact_name") + " from " + $(targetEl).attr("campaign_name") + " campaign?"))
+		return;
 
-		$(this).closest('.activity-text-block').find('#complete-webstats').toggle();
-	});
-
-	// to remove contact from active campaign.
-	$('body').on('click', '.remove-active-campaign', function(e)
-	{
-		e.preventDefault();
-
-		if (!confirm("Are you sure to remove " + $(this).attr("contact_name") + " from " + $(this).attr("campaign_name") + " campaign?"))
-			return;
-
-		var $active_campaign = $(this).closest('span#active-campaign');
+		var $active_campaign = $(targetEl).closest('span#active-campaign');
 		var campaign_id = $active_campaign.attr('data');
 		var contact_id;
 
@@ -30742,154 +30451,34 @@ $(function()
 			$active_campaign.remove();
 
 		} });
+	  },
 
-	});
-	/*
-	 * $('.ativity-block-ul > li') .live('mouseenter',function(){
-	 * console.log("hover"); }) .live('mouseleave',function(){
-	 * console.log("hout"); });
-	 */
-
-	/**
+	  /**
 	 * Fetches all the notes related to the contact and shows the notes
 	 * collection as a table in its tab-content, when "Notes" tab is clicked.
 	 */
-	$('body').on('click', '#contactDetailsTab a[href="#notes"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("notes");
-		contact_details_tab.load_notes();
-	});
+	  showNotes : function(e){
+		   save_contact_tab_position_in_cookie("notes");
+		   contact_details_tab.load_notes();
+	  
+	  },
 
-	/**
+	  /**
 	 * Fetches all the events related to the contact and shows the events
 	 * collection as a table in its tab-content, when "Events" tab is clicked.
 	 */
-	$('body').on('click', '#contactDetailsTab a[href="#events"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("events");
+	  showEvents : function(e){
+		   save_contact_tab_position_in_cookie("events");
 		contact_details_tab.load_events();
-	});
+	  },
 
-	/**
-	 * Fetches all the documents related to the contact and shows the documents
-	 * collection as a table in its tab-content, when "Documents" tab is
-	 * clicked.
-	 */
-	$('body').on('click', '#contactDetailsTab a[href="#documents"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("documents");
-		contact_details_tab.load_documents();
-	});
+	   replyToEmail : function(e){
+		   
+		   var targetEl = $(e.currentTarget);
 
-	/**
-	 * Fetches all the notes related to the contact and shows the tasks
-	 * collection as a table in its tab-content, when "Tasks" tab is clicked.
-	 */
-	$('body').on('click', '#contactDetailsTab a[href="#tasks"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("tasks");
-		contact_details_tab.load_tasks();
-	});
+				var from = $(targetEl).data('from');
 
-	/**
-	 * Fetches all the deals related to the contact and shows the deals
-	 * collection as a table in its tab-content, when "Deals" tab is clicked.
-	 */
-	$('body').on('click', '#contactDetailsTab a[href="#deals"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("deals");
-		contact_details_tab.load_deals();
-	});
-
-	/**
-	 * Fetches all the cases related to the contact and shows the collection.
-	 */
-	$('body').on('click', '#contactDetailsTab a[href="#cases"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("cases");
-
-		contact_details_tab.load_cases();
-	});
-
-	/**
-	 * Gets every conversation of the contact (if it has email) with the
-	 * associated email (gmail or imap) in Email-preferences of this CRM, when
-	 * "Mail" tab is clicked.
-	 */
-	$('body').on('click', '#contactDetailsTab a[href="#mail"]', function(e)
-	{
-		e.preventDefault();
-		email_server_type = "agilecrm"
-		save_contact_tab_position_in_cookie("mail");
-		contact_details_tab.load_mail();
-	});
-
-	/**
-	 * Gets the activities of a contact from browsing history, using its email.
-	 * To do so the email should be run in analytics script provided by
-	 * agileCRM.
-	 */
-	 $('body').on('click', '#contactDetailsTab a[href="#stats"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("stats");
-		contact_details_tab.load_stats();
-
-	});
-
-	/**
-	 * Fetches all the logs of the campaigns that the contact is subscribed to
-	 * and shows them in a table. Also shows a campaigns drop down list to
-	 * subscribe the contact to the selected campaign.
-	 */
-	$('body').on('click', '#contactDetailsTab a[href="#campaigns"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("campaigns");
-		contact_details_tab.load_campaigns();
-	});
-
-    /*$('body').on('click', '#contactDetailsTab a[href="#company-contacts"]', function(e)
-	{
-		e.preventDefault();
-		fill_company_related_contacts(App_Contacts.contactDetailView.model.id, 'company-contacts');
-	});*/
-
-	/**
-	 * Sets cookie when user changes email dropdown under mail tab. Cookie
-	 * contains email server, email name from next time application loads from
-	 * emails from this email server and email
-	 */
-	$('body').on('click', '.agile-emails', function(e)
-	{
-		e.preventDefault();
-		var email_server = $(this).attr('email-server');
-		var url = $(this).attr('data-url');
-		$('#email-type-select', App_Contacts.contactDetailView.el).html($(this).html());
-		// Here email_server_type means email/username of mail account
-		email_server_type = $(this).attr('email-server-type');
-		if (email_server && url && (email_server != 'agile'))
-			url = url.concat(email_server_type);
-		var cookie_value = email_server_type + '|' + email_server;
-		save_email_server_type_in_cookie(cookie_value);
-		contact_details_tab.load_mail(url, email_server);
-	});
-
-	
-
-    $('body').on('click', '#email-reply', function(e)
-			{
-				e.preventDefault();
-
-				var from = $(this).data('from');
-
-				var $parent_element = $(this).closest('#email-reply-div');
+				var $parent_element = $(targetEl).closest('#email-reply-div');
 
 				var to_emails = $parent_element.find('.to-emails').data('to');
 				var cc_emails = $parent_element.find('.cc-emails').data('cc');
@@ -30942,90 +30531,91 @@ $(function()
 						'<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">' + $parent_element.find('.email-body')
 								.html() + '</blockquote>', cc_emails, bcc_emails);
 
-			});
+	  },
 
-	/**
+	  /**
 	 * Delete functionality for activity blocks in contact details
 	 */
-	$('body').on('click', '.activity-delete', function(e)
-	{
-		e.preventDefault();
+	   deleteActivity : function(e){
+		  	
+		  	var targetEl = $(e.currentTarget);
 
-		var model = $(this).parents('li').data();
+		  	var model = $(targetEl).parents('li').data();
 
-		if (model && model.toJSON().type != "WEB_APPOINTMENT")
-		{
-			if (!confirm("Are you sure you want to delete?"))
-				return;
-		}
-		else if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
-		{
-			if (!confirm("Are you sure you want to delete?"))
-				return;
-		}
-
-		if (model && model.collection)
-		{
-			model.collection.remove(model);
-		}
-
-		// Gets the id of the entity
-		var entity_id = $(this).attr('id');
-
-		if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
-		{
-			web_event_title = model.toJSON().title;
-			if (model.toJSON().contacts.length > 0)
+			if (model && model.toJSON().type != "WEB_APPOINTMENT")
 			{
-				var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
-				if (firstname == undefined)
-					firstname = "";
-				var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
-				if (lastname == undefined)
-					lastname = "";
-				web_event_contact_name = firstname + " " + lastname;
+				if (!confirm("Are you sure you want to delete?"))
+					return;
 			}
-			$("#webEventCancelModel").modal('show');
-			$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
-			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
-			return;
-		}
-
-		// Gets the url to which delete request is to be sent
-		var entity_url = $(this).attr('url');
-
-		if (!entity_url)
-			return;
-
-		var id_array = [];
-		var id_json = {};
-
-		// Create array with entity id.
-		id_array.push(entity_id);
-
-		// Set entity id array in to json object with key ids,
-		// where ids are read using form param
-		id_json.ids = JSON.stringify(id_array);
-		var that = this;
-
-		// Add loading. Adds loading only if there is no loaded image added
-		// already i.e.,
-		// to avoid multiple loading images on hitting delete multiple times
-		if ($(this).find('.loading').length == 0)
-			$(this).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
-
-		$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
-		{
-			// Removes activity from list
-			$(that).parents(".activity").fadeOut(400, function()
+			else if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
 			{
-				$(this).remove();
-			});
-			removeItemFromTimeline($("#" + entity_id, $("#timeline")));
-		} });
-	});
+				if (!confirm("Are you sure you want to delete?"))
+					return;
+			}
 
-});
+			if (model && model.collection)
+			{
+				model.collection.remove(model);
+			}
+
+			// Gets the id of the entity
+			var entity_id = $(targetEl).attr('id');
+
+			if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
+			{
+				web_event_title = model.toJSON().title;
+				if (model.toJSON().contacts.length > 0)
+				{
+					var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
+					if (firstname == undefined)
+						firstname = "";
+					var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
+					if (lastname == undefined)
+						lastname = "";
+					web_event_contact_name = firstname + " " + lastname;
+				}
+				$("#webEventCancelModel").modal('show');
+				$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
+				$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
+				return;
+			}
+
+			// Gets the url to which delete request is to be sent
+			var entity_url = $(targetEl).attr('url');
+
+			if (!entity_url)
+				return;
+
+			var id_array = [];
+			var id_json = {};
+
+			// Create array with entity id.
+			id_array.push(entity_id);
+
+			// Set entity id array in to json object with key ids,
+			// where ids are read using form param
+			id_json.ids = JSON.stringify(id_array);
+			var that = targetEl;
+
+			// Add loading. Adds loading only if there is no loaded image added
+			// already i.e.,
+			// to avoid multiple loading images on hitting delete multiple times
+			if ($(targetEl).find('.loading').length == 0)
+				$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+
+			$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
+			{
+				// Removes activity from list
+				$(that).parents(".activity").fadeOut(400, function()
+				{
+					$(targetEl).remove();
+				});
+				removeItemFromTimeline($("#" + entity_id, $("#timeline")));
+			} });
+	  },
+
+	 
+};
 
 /**
  * Returns contact properties in a json
@@ -32976,10 +32566,8 @@ function starify(el) {
     		 return;
     	}
     	
-    	
     	// Set URL - is this required?
-    	// contact_model.url = 'core/api/contacts';
-    	
+    	// contact_model.url = 'core/api/contacts';    	
     	$('#star', el).raty({
     		
     		/**
@@ -32987,13 +32575,7 @@ function starify(el) {
     		 * the contact and saved.    
     		 */
         	click: function(score, evt) {
-        	   
-        		/*// (commented- reloading as silent:true is not effecting) 
-        		  // alert('ID: ' + $(this).attr('id') + '\nscore: ' + score + '\nevent: ' + evt);
-        		contact_model.set('star_value', score, {silent: true});
-        	
-        		// Save model
-           		contact_model.save();*/
+        	         		
            		
         		App_Contacts.contactDetailView.model.set({'star_value': score}, {silent : true});
         		contact_model =  App_Contacts.contactDetailView.model.toJSON();
@@ -33026,7 +32608,7 @@ function checkContactUpdated(){
 	var contact_id = contact_model.id;
 	var updated_time = contact_model.attributes.updated_time;
 
-		queueGetRequest("contact_queue_"+contact_id, "/core/api/contacts/" + contact_id + "/isUpdated?updated_time=" + updated_time, "", function success(data)
+		queueGetRequest("contact_queue" + contact_id, "/core/api/contacts/" + contact_id + "/isUpdated?updated_time=" + updated_time, "", function success(data)
 		{
 			// If true show refresh contact button.
 			if (data == 'true')
@@ -33089,271 +32671,6 @@ function show_owner(){
 }
 
 /**
- * This script file (contact-details.js) performs some actions (delete contact, add 
- * and remove tags, change owner and change score etc...) on a contact when it is in 
- * its detail view.
- * 
- * @module Contact management
- * @author Rammohan
- */
-$(function(){
-	
-	// Deletes a contact from database
-	$('body').on('click', '#contact-actions-delete', function(e){
-		
-		e.preventDefault();
-		if(!confirm("Do you want to delete the contact?"))
-    		return;
-		
-		App_Contacts.contactDetailView.model.url = "core/api/contacts/" + App_Contacts.contactDetailView.model.id;
-		App_Contacts.contactDetailView.model.destroy({success: function(model, response) {
-			  Backbone.history.navigate("contacts",{trigger: true});
-		}});
-
-		
-		/* Removing from collection did not work - to do later
-		console.log("Deleting");
-		
-		var model =  App_Contacts.contactDetailView.model;
-		console.log(model);
-		App_Contacts.contactsListView.collection.remove(model);
-		
-		Backbone.history.navigate("contacts", {trigger: true});
-		*/
-	});
-
-
-	$('body').on('click', '#contact-actions-grid-delete', function(e){
-		
-		e.preventDefault();
-		var contact_id=$(this).attr('con_id');
-    	var model=App_Contacts.contactsListView.collection.get(contact_id);
-		$('#deleteGridContactModal').modal('show');
-
-
-		$('#deleteGridContactModal').on("shown.bs.modal", function(){
-
-				// If Yes clicked
-		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_yes', function(e) {
-				e.preventDefault();
-				// Delete Contact.
-				$.ajax({
-    					url: 'core/api/contacts/' + contact_id,
-       					type: 'DELETE',
-       					success: function()
-       					{
-       						$('#deleteGridContactModal').modal('hide');
-       						App_Contacts.contactsListView.collection.remove(model);
-       						if(App_Contacts.contact_custom_view)
-       						App_Contacts.contact_custom_view.collection.remove(model);
-       						CONTACTS_HARD_RELOAD=true;
-       						App_Contacts.contacts();
-       					}
-       				});
-			});
-
-
-		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_no', function(e) {
-				e.preventDefault();
-				if($(this).attr('disabled'))
-			   	     return;
-				$('#deleteGridContactModal').modal('hide');
-			});
-
-		});
-
-    		
-	});
-	
-	/**
-	 * Deletes a tag of a contact (removes the tag from the contact and saves the contact)
-	 */ 
-	$('body').on('click', '.remove-tags', function(e){
-		e.preventDefault();
-		
-		var tag = $(this).attr("tag");
-		removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
-		console.log($(this).closest("li").parent('ul').append(getRandomLoadingImg()));
-		
-     	var json = App_Contacts.contactDetailView.model.toJSON();
-     	
-     	// Returns contact with deleted tag value
-     	json = delete_contact_tag(json, tag);
-     	var that = this;
-     	
-     	// Unbinds click so user cannot select delete again
-     	$(this).unbind("click");
-     	
-        var contact = new Backbone.Model();
-        contact.url = 'core/api/contacts';
-        contact.save(json, {
-       		success: function(data)
-       			{ 	      		
-       				$(that).closest("li").parent('ul').find('.loading').remove();
-       				$(that).closest("li").remove();
-       				
-       			// Updates to both model and collection
-	       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
-	       			
-	       		//	App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
-       				
-       				// Also deletes from Tag class if no more contacts are found with this tag
-       				$.ajax({
-       					url: 'core/api/tags/' + tag,
-       					type: 'DELETE',
-       					success: function()
-       					{
-       						if(tagsCollection)
-       							tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
-       					}
-       				});
-       			}
-        });
-	});
-	
-	/**
-	 * Shows a form to add tags with typeahead option
-	 */ 
-	$('body').on('click', '#add-tags', function(e){
-		e.preventDefault();
-		$(this).css("display", "none");
-		$("#addTagsForm").css("display", "block");
-		$("#addTags").focus();
-		setup_tags_typeahead();
-	});
-	
-	/**
-	 * "click" event of add button of tags form in contact detail view
-	 * Pushes the added tags into tags array attribute of the contact and saves it
-	 */ 
-	$('body').on('click', '#contact-add-tags', function(e){
-		e.preventDefault();
-		
-	    // Add Tags
-		var new_tags = get_new_tags('addTags');
-		if(new_tags)new_tags=new_tags.trim();
-		
-		if(!new_tags || new_tags.length<=0 || (/^\s*$/).test(new_tags))
-		{
-			console.log(new_tags);
-			return;
-		}
-		if (!isValidTag(new_tags, true)) {
-			return;
-		}
-		$('#add-tags').css("display", "block");
-		$("#addTagsForm").css("display", "none");
-		console.log(new_tags);
-		
-		if(new_tags) {
-			var json = App_Contacts.contactDetailView.model.toJSON();
-	    		
-	    	
-	    	// Reset form
-	    	$('#addTagsForm input').each (function(){
-   		  	  	$(this).val("");
-   		  	});
-	    	
-	    	// Checks if tag already exists in contact
-			if($.inArray(new_tags, json.tags) >= 0)
-				return;
-			acl_util.canAddTag(new_tags.toString(),function(respnse){
-		    	json.tagsWithTime.push({"tag" : new_tags.toString()});
-	   			
-		    	// Save the contact with added tags
-		    	var contact = new Backbone.Model();
-		        contact.url = 'core/api/contacts';
-		        contact.save(json,{
-		       		success: function(data){
-		       			
-		       			addTagToTimelineDynamically(new_tags, data.get("tagsWithTime"));
-		       			
-		       			// Get all existing tags of the contact to compare with the added tags
-		       			var old_tags = [];
-		       			$.each($('#added-tags-ul').children(), function(index, element){
-		       				old_tags.push($(element).attr('data'));
-	       				});
-		       			
-		       			// Updates to both model and collection
-		       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
-		       			
-		       			// Append to the list, when no match is found 
-		       			if ($.inArray(new_tags, old_tags) == -1) 
-		       				$('#added-tags-ul').append('<li  class="tag inline-block btn btn-xs btn-default m-r-xs m-b-xs" style="color:#363f44" data="' + new_tags + '"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
-		       			
-		       			console.log(new_tags);
-		       			// Adds the added tags (if new) to tags collection
-		       			tagsCollection.add(new BaseModel({"tag" : new_tags}));
-		       		},
-		       		error: function(model,response){
-		       			console.log(response);
-		       			alert(response.responseText);
-		       		}
-		        });
-			});
-		}
-	});
-	
-	/**
-	 * Changes, owner of the contact, when an option of change owner drop down
-	 * is selected.   
-	 */
-	$('body').on('click', '.contact-owner-list', function(e){
-	
-		$('#change-owner-ul').css('display', 'none');
-		
-		// Reads the owner id from the selected option
-		var new_owner_id = $(this).attr('data');
-		var new_owner_name = $(this).text();
-		var current_owner_id = $('#contact-owner').attr('data');
-		
-		// Returns, if same owner is selected again 
-		if(new_owner_id == current_owner_id)
-			{
-			  // Showing updated owner
-			  show_owner();
-			  return;
-			}
-		
-		  var contactModel = new BaseModel();
-		    contactModel.url = '/core/api/contacts/change-owner/' + new_owner_id + "/" + App_Contacts.contactDetailView.model.get('id');
-		    contactModel.save(App_Contacts.contactDetailView.model.toJSON(), {success: function(model){
-
-		    	// Replaces old owner details with changed one
-				$('#contact-owner').text(new_owner_name);
-				$('#contact-owner').attr('data', new_owner_id);
-				
-				// Showing updated owner
-				show_owner(); 
-				App_Contacts.contactDetailView.model = model;
-				
-		    }});
-   	});
-	
-	/**
-	 * Get the updated details of the contact and update the model.
-	 */
-	$('body').on('click', '#action_refresh_contact', function(e){
-			var id =  App_Contacts.contactDetailView.model.id;
-		var contact_details_model = Backbone.Model.extend({ url : function()
-			{
-				return '/core/api/contacts/' + this.id;
-			} });
-
-			var model = new contact_details_model();
-			model.id = id;
-			model.fetch({ success : function(data)
-			{
-				
-				// Call Contact Details again
-				App_Contacts.contactDetails(id, model);
-				$('#refresh_contact').hide();
-
-			} });
-	});
-	
-});
-/**
  * To download vcard
  */
 function qr_load(){
@@ -33389,7 +32706,7 @@ function qr_load(){
  * To navigate from one contact detail view to other
  */
 function contact_detail_view_navigation(id, contact_list_view, el){
-	console.log("collection >>>>>>>>>>>>>>>>" + id);
+	console.log("collection >>>>>>>>>>>>>>>>");
 	console.log(contact_collection);
 	var contact_collection = contact_list_view.collection;
 	var collection_length = contact_collection.length;
@@ -33433,21 +32750,552 @@ function clearContactWidetQueues(contactId){
 }
 
 $(function(){
-
-	$('body').on('mouseenter', '.tooltip_info', function(e){
+   $('body').on('mouseenter', '.tooltip_info', function(e){
 		 $(this).tooltip({
 			 html : true
 		 });
 		 $(this).tooltip('show');
 	});
+
+   // Makes the score section unselectable, when clicked on it
+	$('#score').children().attr('unselectable', 'on');
 	
+});
+
+/**
+*  Contact detailed view event listeners
+*/
+var Contact_Details_Model_Events = Base_Model_View.extend({
+   
+    events: {
+    	'click #change-owner-element>#contact-owner' : 'onChangeOwner',
+    	'click .contact-owner-list' : 'onChangeOwnerSelected',
+    	'click #change-owner-element>.contact-owner-add' : 'onAddContactOwner',
+    	'click #contact-actions-delete' : 'onContactDelete',
+    	'click .remove-tags' : 'onRemoveContactTag',
+    	'click #add-tags' : 'onAddContactTag',
+    	'click #contact-add-tags' : 'onAddContactTags',
+    	'click #disable_map_view' : 'onDisableMapView',
+    	'click #enable_map_view' : 'onEnableMapView',
+    	'click #add' : 'onAddScore',
+    	'click #minus' : 'onRemoveScore',
+    	
+    	
+    	'click .email-subject' : 'onEmailSubjectClick',
+    	'click #show-page-views' : 'openPageViews',
+    	'click .remove-active-campaign' : 'onRemoveCampaigns',
+    	'click #contactDetailsTab a[href="#timeline"]' : 'onTimeLineOpen',
+    	'click #contactDetailsTab a[href="#notes"]' : 'openNotes',
+    	'click #contactDetailsTab a[href="#events"]' : 'openEvents',
+    	'click #contactDetailsTab a[href="#documents"]' : 'openDocuments',
+    	'click #contactDetailsTab a[href="#tasks"]' : 'openTasks',
+    	'click #contactDetailsTab a[href="#deals"]' : 'openDeals',
+    	'click #contactDetailsTab a[href="#cases"]' : 'openCases',
+    	'click #contactDetailsTab a[href="#mail"]' : 'openMails',
+    	'click #contactDetailsTab a[href="#stats"]' : 'openWebStats',
+    	'click #contactDetailsTab a[href="#campaigns"]' : 'openCampaigns',
+    	'click .agile-emails' : 'openEmails',
+    	'click #email-reply' : 'repltToEmails',
+    	'click .activity-delete' : 'deleteActivity',
+    	'click #action_refresh_contact' : 'reloadContact',
+
+    	'click .contact-add-task' : 'addTask',
+    	'click .contact-add-event' : 'addEvent',
+    	'click .contact-add-note' : 'addNote',
+    	'click .contact-add-campaign,.add-to-campaign' : 'addToCampaign',
+
+    	'click .task-edit-contact-tab' : 'editTask',
+    	'click .event-edit-contact-tab' : 'editEvent',
+    	'click .complete-task' : 'completeTask',
+    	'click .contact-add-deal' : 'addDeal',
+    	'click .deal-edit-contact-tab' : 'editDeal',
+    	'click .contact-add-case' : 'addCase',
+    	'click .cases-edit-contact-tab' : 'editCase',
+    	'click .contact-add-contact' : 'addContact',
+    	'click .contact-add-document' : 'addDocument',
+    	'click .document-edit-contact-tab' : 'editDocument',
+    	'click .document-unlink-contact-tab' : 'unlinkDocument',
+    	'click .add-document-select' : 'listDocuments',
+    	'click .add-document-cancel' : 'cancelDocuments',
+    	'click .add-document-confirm' : 'addSelectedDocument',
+
+    	'click #contacts-inner-tabs #next' : 'tabViewNext',
+    	'click #contacts-inner-tabs #prev' : 'tabViewPrev',
+
+    	/** Company events **/
+    	'click #contactDetailsTab a[href="#company-contacts"]' : 'listCompanyContacts',
+    	'click #contactDetailsTab a[href="#company-deals"]' : 'listCompanyDeals',
+    	'click #contactDetailsTab a[href="#company-cases"]' : 'listCompanyCases',
+    	'click #contactDetailsTab a[href="#company-notes"]' : 'listCompanyNotes',
+    	'click #contactDetailsTab a[href="#company-documents"]' : 'listCompanyDocuments',
+    	'click #company-add-tags' : 'addCompanytags',
+    	'keydown #companyAddTags' : 'companyAddTags',
+    	'click #company-actions-delete' : 'companyDelete',
+    	'click .company-owner-list' : 'companyOwnerList',
+    	'click .remove-company-tags' : 'removeCmpanyTags',
+
+    	'click #contact-actions-grid-delete' : 'contactActionsGridDelete',
+    },
+
+
+	contactActionsGridDelete: function(e){
+		
+		e.preventDefault();
+		var contact_id=$(e.currentTarget).attr('con_id');
+    	var model=App_Contacts.contactsListView.collection.get(contact_id);
+		$('#deleteGridContactModal').modal('show');
+
+		$('#deleteGridContactModal').on("shown.bs.modal", function(){
+
+				// If Yes clicked
+		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_yes', function(e) {
+				e.preventDefault();
+				// Delete Contact.
+				$.ajax({
+    					url: 'core/api/contacts/' + contact_id,
+       					type: 'DELETE',
+       					success: function()
+       					{
+       						$('#deleteGridContactModal').modal('hide');
+       						App_Contacts.contactsListView.collection.remove(model);
+       						if(App_Contacts.contact_custom_view)
+       						App_Contacts.contact_custom_view.collection.remove(model);
+       						CONTACTS_HARD_RELOAD=true;
+       						App_Contacts.contacts();
+       					}
+       				});
+			});
+
+
+		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_no', function(e) {
+				e.preventDefault();
+				if($(this).attr('disabled'))
+			   	     return;
+				$('#deleteGridContactModal').modal('hide');
+			});
+
+		});
+
+    		
+	},
+
+	/**
+	 * Get the updated details of the contact and update the model.
+	 */
+	reloadContact :  function(e){
+			var id =  App_Contacts.contactDetailView.model.id;
+		var contact_details_model = Backbone.Model.extend({ url : function()
+			{
+				return '/core/api/contacts/' + this.id;
+			} });
+
+			var model = new contact_details_model();
+			model.id = id;
+			model.fetch({ success : function(data)
+			{
+				
+				// Call Contact Details again
+				App_Contacts.contactDetails(id, model);
+				$('#refresh_contact').hide();
+
+			} });
+	},
+
+   	/**
+	 * Sets cookie when user changes email dropdown under mail tab. Cookie
+	 * contains email server, email name from next time application loads from
+	 * emails from this email server and email
+	 */
+	openEmails :  function(e)
+	{
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
+
+		var email_server = $(targetEl).attr('email-server');
+		var url = $(targetEl).attr('data-url');
+		$('#email-type-select', App_Contacts.contactDetailView.el).html($(targetEl).html());
+		// Here email_server_type means email/username of mail account
+		email_server_type = $(targetEl).attr('email-server-type');
+		if (email_server && url && (email_server != 'agile'))
+			url = url.concat(email_server_type);
+
+		var cookie_value = email_server_type + '|' + email_server;
+		save_email_server_type_in_cookie(cookie_value);
+		contact_details_tab.load_mail(url, email_server);
+	},
+
+	
+
+    repltToEmails :  function(e)
+			{
+				e.preventDefault();
+				Contact_Details_Tab_Actions.replyToEmail(e);
+			},
+
+	
+	deleteActivity : function(e)
+	{
+		e.preventDefault();
+
+		Contact_Details_Tab_Actions.deleteActivity(e);
+	},
+
+
+	/**
+	 * Gets every conversation of the contact (if it has email) with the
+	 * associated email (gmail or imap) in Email-preferences of this CRM, when
+	 * "Mail" tab is clicked.
+	 */
+	openMails : function(e)
+	{
+		e.preventDefault();
+		email_server_type = "agilecrm"
+		save_contact_tab_position_in_cookie("mail");
+		contact_details_tab.load_mail();
+	},
+
+	/**
+	 * Gets the activities of a contact from browsing history, using its email.
+	 * To do so the email should be run in analytics script provided by
+	 * agileCRM.
+	 */
+	 openWebStats : function(e)
+	{
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("stats");
+		contact_details_tab.load_stats();
+
+	},
+
+	/**
+	 * Fetches all the logs of the campaigns that the contact is subscribed to
+	 * and shows them in a table. Also shows a campaigns drop down list to
+	 * subscribe the contact to the selected campaign.
+	 */
+	openCampaigns : function(e)
+	{
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("campaigns");
+		contact_details_tab.load_campaigns();
+	},
+
+
+	/**
+	 * Fetches all the deals related to the contact and shows the deals
+	 * collection as a table in its tab-content, when "Deals" tab is clicked.
+	 */
+	openDeals : function(e)
+	{
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("deals");
+		contact_details_tab.load_deals();
+	},
+
+	/**
+	 * Fetches all the cases related to the contact and shows the collection.
+	 */
+	openCases :  function(e)
+	{
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("cases");
+
+		contact_details_tab.load_cases();
+	},
+
+	/**
+	 * Fetches all the notes related to the contact and shows the tasks
+	 * collection as a table in its tab-content, when "Tasks" tab is clicked.
+	 */
+	openTasks :  function(e)
+	{
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("tasks");
+		contact_details_tab.load_tasks();
+	},
+
+
+	/**
+	 * Fetches all the documents related to the contact and shows the documents
+	 * collection as a table in its tab-content, when "Documents" tab is
+	 * clicked.
+	 */
+	openDocuments : function(e){
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("documents");
+		contact_details_tab.load_documents();
+	},
+
+	onTimeLineOpen : function(e){
+		e.preventDefault();
+		Contact_Details_Tab_Actions.openTimeLine(e);
+	},
+	onEmailSubjectClick : function(e){
+		e.preventDefault();
+		Contact_Details_Tab_Actions.onEmailSubjectClick(e);	
+	},
+	openPageViews : function(e){
+		e.preventDefault();
+		Contact_Details_Tab_Actions.showPageViews(e);	
+	},
+	onRemoveCampaigns : function(e){
+		e.preventDefault();
+		Contact_Details_Tab_Actions.removeActiveCampaigns(e);		
+
+	},
+	openNotes : function(e){
+		e.preventDefault();
+		Contact_Details_Tab_Actions.showNotes(e);	
+	},
+	openEvents : function(e){
+		e.preventDefault();
+		Contact_Details_Tab_Actions.showEvents(e);
+	},
+
+    // Change owner of the contact
+    onChangeOwner : function(e){
+         e.preventDefault();
+         fill_owners(undefined, undefined, function(){
+
+	    	$('#contact-owner').css('display', 'none');
+
+	    	$('#change-owner-ul').css('display', 'inline-block');
+	    	if($('#change-owner-element > #change-owner-ul').css('display') == 'inline-block')
+	             $("#change-owner-element").find(".loading").remove();
+		});
+    },
+
+    /**
+	 * Changes, owner of the contact, when an option of change owner drop down
+	 * is selected.   
+	 */
+    onChangeOwnerSelected : function(e){
+      	e.preventDefault();
+    	var targetEl = $(e.currentTarget);
+
+    	$('#change-owner-ul').css('display', 'none');
+		
+		// Reads the owner id from the selected option
+		var new_owner_id = $(targetEl).attr('data');
+		var new_owner_name = $(targetEl).text();
+		var current_owner_id = $('#contact-owner').attr('data');
+		
+		// Returns, if same owner is selected again 
+		if(new_owner_id == current_owner_id)
+			{
+			  // Showing updated owner
+			  show_owner();
+			  return;
+			}
+		
+		  var contactModel = new BaseModel();
+		    contactModel.url = '/core/api/contacts/change-owner/' + new_owner_id + "/" + App_Contacts.contactDetailView.model.get('id');
+		    contactModel.save(App_Contacts.contactDetailView.model.toJSON(), {success: function(model){
+
+		    	// Replaces old owner details with changed one
+				$('#contact-owner').text(new_owner_name);
+				$('#contact-owner').attr('data', new_owner_id);
+				
+				// Showing updated owner
+				show_owner(); 
+				App_Contacts.contactDetailView.model = model;
+				
+		    }});
+    	   
+    },
+
+    // Deletes a contact from database
+    onContactDelete : function(e){
+
+    	e.preventDefault();
+		if(!confirm("Do you want to delete the contact?"))
+    		return;
+		
+		App_Contacts.contactDetailView.model.url = "core/api/contacts/" + App_Contacts.contactDetailView.model.id;
+		App_Contacts.contactDetailView.model.destroy({success: function(model, response) {
+			  Backbone.history.navigate("contacts",{trigger: true});
+		}});
+    },
+
+    /**
+	 * Deletes a tag of a contact (removes the tag from the contact and saves the contact)
+	 */ 
+    onRemoveContactTag : function(e){
+
+    	e.preventDefault();
+    	var targetEl = $(e.currentTarget);
+
+		var tag = $(targetEl).attr("tag");
+		removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
+		console.log($(targetEl).closest("li").parent('ul').append(getRandomLoadingImg()));
+		
+     	var json = App_Contacts.contactDetailView.model.toJSON();
+     	
+     	// Returns contact with deleted tag value
+     	json = delete_contact_tag(json, tag);
+     	var that = targetEl;
+     	
+     	// Unbinds click so user cannot select delete again
+     	$(targetEl).unbind("click");
+     	
+        var contact = new Backbone.Model();
+        contact.url = 'core/api/contacts';
+        contact.save(json, {
+       		success: function(data)
+       			{ 	      		
+       				$(that).closest("li").parent('ul').find('.loading').remove();
+       				$(that).closest("li").remove();
+       				
+       			// Updates to both model and collection
+	       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
+	       			
+	       		//	App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
+       				
+       				// Also deletes from Tag class if no more contacts are found with this tag
+       				$.ajax({
+       					url: 'core/api/tags/' + tag,
+       					type: 'DELETE',
+       					success: function()
+       					{
+       						if(tagsCollection)
+       							tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
+       					}
+       				});
+       			}
+        });
+	
+    },
+
+    /**
+	 * Shows a form to add tags with typeahead option
+	 */ 
+    onAddContactTag : function(e){
+    	e.preventDefault();
+
+		$(e.currentTarget).css("display", "none");
+		$("#addTagsForm").css("display", "block");
+		$("#addTags").focus();
+		setup_tags_typeahead();
+	
+    },
+
+    /**
+	 * "click" event of add button of tags form in contact detail view
+	 * Pushes the added tags into tags array attribute of the contact and saves it
+	 */ 
+	 onAddContactTags : function(e){
+	 	e.preventDefault();
+		
+	    // Add Tags
+		var new_tags = get_new_tags('addTags');
+		if(new_tags)new_tags=new_tags.trim();
+		
+		if(!new_tags || new_tags.length<=0 || (/^\s*$/).test(new_tags))
+		{
+			console.log(new_tags);
+			return;
+		}
+		if (!isValidTag(new_tags, true)) {
+			return;
+		}
+		$('#add-tags').css("display", "block");
+		$("#addTagsForm").css("display", "none");
+		console.log(new_tags);
+		
+		if(new_tags) {
+			var json = App_Contacts.contactDetailView.model.toJSON();
+	    		
+	    	
+	    	// Reset form
+	    	$('#addTagsForm input').each (function(){
+   		  	  	$(e.currentTarget).val("");
+   		  	});
+	    	
+	    	// Checks if tag already exists in contact
+			if($.inArray(new_tags, json.tags) >= 0)
+				return;
+			acl_util.canAddTag(new_tags.toString(),function(respnse){
+		    	json.tagsWithTime.push({"tag" : new_tags.toString()});
+	   			
+		    	// Save the contact with added tags
+		    	var contact = new Backbone.Model();
+		        contact.url = 'core/api/contacts';
+		        contact.save(json,{
+		       		success: function(data){
+		       			
+		       			addTagToTimelineDynamically(new_tags, data.get("tagsWithTime"));
+		       			
+		       			// Get all existing tags of the contact to compare with the added tags
+		       			var old_tags = [];
+		       			$.each($('#added-tags-ul').children(), function(index, element){
+		       				old_tags.push($(element).attr('data'));
+	       				});
+		       			
+		       			// Updates to both model and collection
+		       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
+		       			
+		       			// Append to the list, when no match is found 
+		       			if ($.inArray(new_tags, old_tags) == -1) 
+		       				$('#added-tags-ul').append('<li  class="tag inline-block btn btn-xs btn-default m-r-xs m-b-xs" style="color:#363f44" data="' + new_tags + '"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
+		       			
+		       			console.log(new_tags);
+		       			// Adds the added tags (if new) to tags collection
+		       			tagsCollection.add(new BaseModel({"tag" : new_tags}));
+		       		},
+		       		error: function(model,response){
+		       			console.log(response);
+		       			alert(response.responseText);
+		       		}
+		        });
+			});
+		}
+	 },
+
+	 onAddContactOwner :  function(e){
+         e.preventDefault();
+
+    	fill_owners(undefined, undefined, function(){
+
+        	$('.contact-owner-add').css('display', 'none');
+
+        	$('#change-owner-ul').css('display', 'inline-block');
+        	$('#change-owner-ul').addClass("open");
+        	
+        	if($('#change-owner-element > #change-owner-ul').css('display') == 'inline-block')
+        		 $("#change-owner-element").find(".loading").remove();
+    	});
+    },
+
+    onDisableMapView : function(e){
+		e.preventDefault();
+		if(islocalStorageHasSpace()){
+			localStorage.setItem('MAP_VIEW','disabled');
+		}
+		$("#map").css('display', 'none');
+		$("#contacts-local-time").hide();
+		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
+		
+    },
+
+	onEnableMapView :  function(e){
+		e.preventDefault();
+		if(islocalStorageHasSpace()){
+			localStorage.setItem('MAP_VIEW','enabled');
+		}
+		if(company_util.isCompany())
+			company_util.show_map();
+		else
+			show_map();
+		
+		
+	},
+
 	/**
 	 * Adds score to a contact (both in UI and back end)
 	 * When '+' symbol is clicked in contact detail view score section, the score
 	 * gets increased by one, both in UI and back end
 	 * 
 	 */  
-	$('body').on('click', '#add', function(e){
+	onAddScore :  function(e){
 	    e.preventDefault();
 	    
 	    // Convert string type to int
@@ -33476,7 +33324,7 @@ $(function(){
 			}
 		});
 		          
-	});
+	},
 	
 	   
 	/**
@@ -33485,7 +33333,7 @@ $(function(){
 	 * gets decreased by one, both in UI and back end
 	 * 
 	 */
-	$('body').on('click', '#minus', function(e){
+	onRemoveScore :  function(e){
 		e.preventDefault();
 		
 		// Converts string type to Int
@@ -33510,86 +33358,300 @@ $(function(){
 
 			}
 		});
-	});
-	
-	// Makes the score section unselectable, when clicked on it
-	$('#score').children().attr('unselectable', 'on');
-	
-	// Popover for help in contacts,tasks etc
-	$('body').on('mouseenter', '#element', function(e){
-    	e.preventDefault();
-        $(this).popover({
-        	template:'<div class="popover" style="width:400px"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
-        });
-        $(this).popover('show');
-    });
-	$('body').on('mouseenter', '#element-title', function(e){
-    	e.preventDefault();
-        $(this).popover('show');
-    });
-/*	   
-    $('.change-owner-element').live('mouseenter',function(e){
-    	e.preventDefault();
-    	$('#change-owner-ul').css('display', 'none');
-        $(this).popover({
-        	template:'<div class="popover"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
-        });
-        $(this).popover('show');
-    });*/
-    
-	$('body').on('click', '#change-owner-element > #contact-owner', function(e){
-    	e.preventDefault();
-    	
-    	fill_owners(undefined, undefined, function(){
+	},
 
-        	$('#contact-owner').css('display', 'none');
 
-        	$('#change-owner-ul').css('display', 'inline-block');
-        	
-        	 if($('#change-owner-element > #change-owner-ul').css('display') == 'inline-block')
-                 $("#change-owner-element").find(".loading").remove();
-    	});
-    });
-    
-	$('body').on('click', '#change-owner-element > .contact-owner-add', function(e){
+    addTask : function(e){
     	e.preventDefault();
-    	
-    	fill_owners(undefined, undefined, function(){
+        contact_detail_tab_actions.add_task(e);
+    },
+    addEvent : function(e){
+    	e.preventDefault();
+        contact_detail_tab_actions.add_event(e);
+    }, 
+    addNote :  function(e){
+    	e.preventDefault();
+         contact_detail_tab_actions.add_note(e);       
+    }, 
+    addToCampaign :  function(e){
+    	e.preventDefault();
+         contact_detail_tab_actions.add_to_campaign(e);
+    }, 
 
-        	$('.contact-owner-add').css('display', 'none');
-
-        	$('#change-owner-ul').css('display', 'inline-block');
-        	$('#change-owner-ul').addClass("open");
-        	
-        	 if($('#change-owner-element > #change-owner-ul').css('display') == 'inline-block')
-        		 $("#change-owner-element").find(".loading").remove();
-    	});
-    });
-    
-	$('body').on('click', '#disable_map_view', function(e){
+    editTask : function(e)
+	{
 		e.preventDefault();
-		if(islocalStorageHasSpace()){
-			localStorage.setItem('MAP_VIEW','disabled');
-		}
-		$("#map").css('display', 'none');
-		$("#contacts-local-time").hide();
-		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
-		
-    });
-	$('body').on('click', '#enable_map_view', function(e){
+		contact_details_documentandtasks_actions.edit_task(e);
+	},
+
+	editEvent : function(e)
+	{
 		e.preventDefault();
-		if(islocalStorageHasSpace()){
-			localStorage.setItem('MAP_VIEW','enabled');
-		}
-		if(company_util.isCompany())
-			company_util.show_map();
-		else
-			show_map();
+		contact_details_documentandtasks_actions.edit_event(e);
 		
+	},
+
+	completeTask :  function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.complete_task(e);
 		
-	});
-    
-});/**
+	},
+	
+	addDeal : function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.add_deal(e);
+
+	},
+
+	// For updating a deal from contact-details
+	editDeal :  function(e)
+	{
+		e.preventDefault();
+		var id = $(e.currentTarget).attr('data');
+		updateDeal(dealsView.collection.get(id));
+	},
+
+	// For Adding new case from contacts/cases
+	addCase :  function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.add_case(e);
+	},
+
+	// For updating a case from contact-details
+	editCase : function(e)
+	{
+		e.preventDefault();
+		var id = $(e.currentTarget).attr('data');
+		updatecases(casesView.collection.get(id));
+	},
+
+	// Adding contact when user clicks Add contact button under Contacts tab in
+	// Company Page
+	addContact : function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.add_contact(e);
+		
+	},
+
+	// For adding new document from contact-details
+	addDocument :  function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.add_document(e);
+	},
+
+	// For updating document from contact-details
+	editDocument : function(e)
+	{
+		e.preventDefault();
+		var id = $(e.currentTarget).attr('data');
+		updateDocument(documentsView.collection.get(id));
+	},
+
+	// For unlinking document from contact-details
+	unlinkDocument :  function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.document_unlink(e);
+		
+	},
+
+	/**
+	 * For showing new/existing documents
+	 */
+	listDocuments :  function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.show_document_list(e);
+	},
+
+	/**
+	 * To cancel the add documents request
+	 */
+	cancelDocuments :  function(e)
+	{
+		e.preventDefault();
+		var el = $("#documents");
+		el.find(".contact-document-select").css("display", "none");
+		el.find(".add-document-select").css("display", "inline-block");
+	},
+
+	/**
+	 * For adding existing document to current contact
+	 */
+	addSelectedDocument : function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.add_selected_document(e);
+
+	},
+
+	tabViewNext :  function(e){
+	  console.log("next clicked");
+	    var target = $("#contactDetailsTab");
+	    target.animate({ scrollLeft : (target.scrollLeft() + 270)},1000);
+	  },
+	  
+	  tabViewPrev :  function(e){
+		   console.log("prev clicked");
+	    var target = $("#contactDetailsTab");
+	    target.animate({ scrollLeft : (target.scrollLeft() - 270)},1000);
+	  },
+
+	  listCompanyContacts :  function(e)
+	{
+		e.preventDefault();
+		fill_company_related_contacts(App_Companies.companyDetailView.model.id, 'company-contacts');
+	},
+
+	/**
+	 * Fetches all the deals related to the contact and shows the deals
+	 * collection as a table in its tab-content, when "Deals" tab is clicked.
+	 */
+	listCompanyDeals : function(e)
+	{
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("deals");
+		company_detail_tab.load_company_deals();
+	},
+
+	/**
+	 * Fetches all the cases related to the contact and shows the collection.
+	 */
+	listCompanyCases :  function(e)
+	{
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("cases");
+
+		company_detail_tab.load_company_cases();
+	},
+		
+	/**
+	 * Fetches all the notes related to the contact and shows the notes
+	 * collection as a table in its tab-content, when "Notes" tab is clicked.
+	 */
+	listCompanyNotes :  function(e)
+	{
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("notes");
+		company_detail_tab.load_company_notes();
+	},
+	
+	/**
+	 * Fetches all the documents related to the contact and shows the documents
+	 * collection as a table in its tab-content, when "Documents" tab is
+	 * clicked.
+	 */
+	listCompanyDocuments : function(e)
+	{
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("documents");
+		company_detail_tab.load_company_documents();
+	},
+	
+	/**
+	 * "click" event of add button of tags form in contact detail view
+	 * Pushes the added tags into tags array attribute of the contact and saves it
+	 */ 
+	addCompanytags :  function(e)
+	{	e.preventDefault();
+		
+	   company_detail_tab.addTagsToCompany();
+	},
+	
+	companyAddTags : function(e) {
+	 	if(e.which == 13 && !isTagsTypeaheadActive){
+    		company_detail_tab.addTagsToCompany();
+    		}
+    	},
+	
+	// Deletes a contact from database
+	companyDelete :  function(e)
+	{	
+		e.preventDefault();
+		company_detail_tab.deleteCurrentCompany();
+	},
+	
+	/**
+	 * Changes, owner of the contact, when an option of change owner drop down
+	 * is selected.   
+	 */
+	companyOwnerList :  function(e){
+		var targetEl = $(e.currentTarget);
+
+		$('#change-owner-ul').css('display', 'none');
+		
+		company_detail_tab.changeOwner($(targetEl));
+	},
+	
+	/**
+	 * Deletes a tag of a contact (removes the tag from the contact and saves the contact)
+	 */ 
+	removeCmpanyTags :  function(e){
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
+
+		var tag = $(targetEl).attr("tag");
+		//removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
+		console.log($(targetEl).closest("li").parent('ul').append(getRandomLoadingImg()));
+		
+     	var json = App_Companies.companyDetailView.model.toJSON();
+     	
+     	// Returns contact with deleted tag value
+     	json = delete_contact_tag(json, tag);
+     	var that = targetEl;
+     	
+     	// Unbinds click so user cannot select delete again
+     	$(targetEl).unbind("click");
+     	
+        var contact = new Backbone.Model();
+        contact.url = 'core/api/contacts';
+        contact.save(json, {
+       		success: function(data)
+       			{ 	      		
+       				$(that).closest("li").parent('ul').find('.loading').remove();
+       				$(that).closest("li").remove();
+       				
+       			// Updates to both model and collection
+       				App_Companies.companyDetailView.model.set(data.toJSON(), {silent : true});
+	       			
+	       		//	App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
+       				
+       				// Also deletes from Tag class if no more contacts are found with this tag
+       				$.ajax({
+       					url: 'core/api/tags/' + tag,
+       					type: 'DELETE',
+       					success: function()
+       					{
+       						if(tagsCollection)
+       							tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
+       					}
+       				});
+       			}
+        });
+	},
+});
+
+$(function(){
+	$("body").on("mouseenter", "#element", function(b) {
+        b.preventDefault();
+        $(this).popover({
+            template: '<div class="popover" style="width:400px"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
+        });
+        $(this).popover("show")
+    }
+    );
+    $("body").on("mouseenter", "#element-title", function(b) {
+        b.preventDefault();
+        $(this).popover("show")
+    }
+    );
+});
+/**
  * Shows error text, providing support for custom validation. Shows error
  * message in .errorClass, filling it with htmlText
  * 
@@ -34149,13 +34211,14 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 
 				// App_Contacts.contactDetails(data.id,data);
 				// App_Contacts.navigate("contact/"+data.id);
-				if(!CALL_CAMPAIGN.start)
+				if(!CALL_CAMPAIGN.start && Current_Route != "contact/" + data.id)
 				App_Contacts.navigate("contact/" + data.id, { trigger : true });
 			} else {
 				// update contacts-details view
 				if (App_Companies.companyDetailView)
 					App_Companies.companyDetailView.model = data;
 
+				if(Current_Route != "company/" + data.id)
 				App_Companies.navigate("company/" + data.id, { trigger : true });
 			}
 		}
@@ -34190,6 +34253,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 					
 				}
 				
+				if(Current_Route != "contact/" + id)
 				Backbone.history.navigate("contact/" + id, { trigger : true });	
 				$( window ).scrollTop( 0 );
 				
@@ -34422,7 +34486,7 @@ $(function()
 		e.preventDefault();
 
 		// Clone the template
-		$(this).parents("div.control-group").append($(this).parents().siblings("div.controls:first").clone().removeClass('hide'));
+		$(this).parents("div.control-group").append($(this).parents().siblings("div.controls:first").clone().removeClass('hide').addClass('col-sm-offset-3'));
 	});
 
 	// Removes multiple fields
@@ -35028,8 +35092,6 @@ $(function()
 		    	$('#emailForm').find(".attachment-document-select").css('display','none');
 		    	$('#emailForm').find('#eattachment_key').attr('name',"document_key");
 		    	$('#emailForm').find('#eattachment_key').attr('value',document_id);
-		    	$('#emailForm').find('#agile_attachment_name').attr('value',docName);
-		    	$('#emailForm').find('#agile_attachment_url').attr('value',$( "#attachment-select option:selected").attr('url'));
 		    }
 	    }
 	});
@@ -35057,8 +35119,6 @@ $(function()
 		$('#emailForm').find(".add-attachment-select").css("display", "inline");
 		$('#emailForm').find('#eattachment_key').attr("name","name");
     	$('#emailForm').find('#eattachment_key').attr("value","value");
-    	$('#emailForm').find('#agile_attachment_name').attr('value','');
-    	$('#emailForm').find('#agile_attachment_url').attr('value','');
 	});
 	
 	}
@@ -35949,6 +36009,7 @@ function initializeCustomFieldsListeners(){
 
 function showCustomFieldModel(data)
 {
+	var modelViewCount = 0;
 	var isNew = false;
 	isNew = !data.id;
 	// Creating model for bootstrap-modal
@@ -35964,7 +36025,10 @@ function showCustomFieldModel(data)
 			console.log($("#custom-field-add-modal", el));
 			//This code will scroll to top to see the modal.
 			
-			$("#custom-field-add-modal", el).modal('show');
+			if(!modelViewCount){
+				modelViewCount++;	
+				$("#custom-field-add-modal", el).modal('show');
+			}
 			
 			//Customizing the style to display the custom field modal in center for screen.
 			var modalWidth = $('#custom-field-add-modal').width();
@@ -36021,7 +36085,7 @@ function showCustomFieldModel(data)
 				if(App_Admin_Settings.customFieldsListView.collection.length == 1)
 					App_Admin_Settings.customFieldsListView.render(true);*/
 			}
-			$("#custom-field-add-modal").modal('hide');
+
 			$("#custom-field-add-modal").modal('hide');
 		}
 	});
@@ -37947,8 +38011,10 @@ function submitLhsFilter()
 
 function contactFiltersListeners(container_id){
 
+	$('[data-toggle="tooltip"]').tooltip();
+
 if(!container_id)
-	  container_id = 'conatcts-listeners-conatainer';
+	  container_id = 'contacts-listener-container';
 
 $('#' + container_id).on('click', 'a.filter-multiple-add-lhs', function(e)
 {
@@ -38281,6 +38347,28 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
 			}
 
 		});
+
+     $('body #companies-left-filters-toggle').off('click');
+ 	$('body').on('click', '#companies-left-filters-toggle', function(e)
+		{
+
+			e.preventDefault();
+
+			if ($('#companies-lhs-filters-toggle').is(':visible'))
+			{
+				$('#companies-lhs-filters-toggle').hide();
+				localStorage.setItem('companiesFilterStatus','display:none');
+				e.preventDefault();
+			}
+			else
+			{
+				$('#companies-lhs-filters-toggle').show();
+				localStorage.setItem('companiesFilterStatus','');
+				e.preventDefault();
+			}
+
+		});
+     	
 
 
       $('#' + container_id).on('click', '.contacts-view', function(e)
@@ -40338,86 +40426,131 @@ function existing_deal_document_attach(document_id, saveBtn)
 var deal_tab_position_cookie_name = "deal_tab_position";
 var id;
 
-function initializeDealDetailsListners(el)
-{	
-}
+/**
+* Deal modal actions
+*/
+var Deal_Modal_Event_View = Base_Model_View.extend({
+    events: {
+    	'click #deal-details-tab a[href="#dealnotes"]' : 'openDealNotes',
+    	'click #deal-details-tab a[href="#dealrelated"]' : 'openDealContacts',
+    	'click #deal-details-tab a[href="#dealactivities"]' : 'openDealActivities',
+    	'click #deal-details-tab a[href="#dealdocs"]' : 'openDealDocs',
+    	'click #deal-details-tab a[href="#dealtasks"]' : 'openDealTasks',
+    	'click #deal-details-tab a[href="#dealevents"]' : 'openDealEvents',
+    	'click #deal-owner' : 'showOwnerList',
 
-$(function(){
+    	'click #opportunity-actions-delete' : 'opportunityDelete',
+    	'click .deal-edit-note' : 'dealNoteEdit',
+    	'click .activity-delete': 'deleteActivity',
+
+    	'click #dealshow-note' : 'dealShowNoteModal',
+    	'click .deal-owner-list' : 'openDealOwnersList',
+    	'click .deal-add-contact' : 'addDealContact',
+    	'click .deal-detail-edit-deal' : 'editDeal',
+    	'click .deal-note' : 'showDealNote',
+    	'click #dealdetail-archive' : 'dealArchive',
+    	'click .deal-restore-detail-view' : 'dealRestoreView',
+    	'click .document-edit-deal-tab' : 'dealDocumentEdit',
+    	'click .document-unlink-deal-tab' : 'dealUnlinkDocument',
+    	'click .add-deal-document-select' : 'dealDocumentsList',
+    	'click .add-deal-document-confirm' : 'dealAddDocumentConfirm',
+    	'click .add-deal-document-cancel' : 'dealAddDocumentCancel',
+    	'click .deal-add-task' : 'dealAddtask',
+    	'click .task-edit-deal-tab' : 'dealEditTask',
+    	'click .deal-task-delete' : 'dealDeleteTask',
+    	'click .complete-deal-task' : 'dealCompleteTask',
+    	'click .deal-add-event' : 'dealAddEvent',
+    	'click .event-edit-deal-tab' : 'dealEditEvent',
+		'click .deal-event-delete' : 'dealEditDelete', 
+		'click .activity-delete' : 'deleteActivity',  	
+    	
+    },
+
 	/**
 	 * Fetches all the notes related to the deal and shows the notes collection
 	 * as a table in its tab-content, when "Notes" tab is clicked.
 	 */
-	$('#content').on('click', '#deal-details-tab a[href="#dealnotes"]', function(e)
+	openDealNotes :  function(e)
 	{
 		e.preventDefault();
+
 		save_deal_tab_position_in_cookie("dealnotes");
 		deal_details_tab.load_deal_notes();
-	});
+	},
+	deleteActivity : function(e)
+	{
+		e.preventDefault();
+
+		Contact_Details_Tab_Actions.deleteActivity(e);
+	},
 
 	/**
 	 * Fetches all the contacts related to the deal and shows the contacts
 	 * collection as a table in its tab-content, when "contacts" tab is clicked.
 	 */
-	$('#content').on('click', '#deal-details-tab a[href="#dealrelated"]', function(e)
+	openDealContacts : function(e)
 	{
 		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealrelated");
 		deal_details_tab.loadDealRelatedContactsView();
-	});
+	},
 
 	/**
 	 * Fetches all the notes related to the contact and shows the tasks
 	 * collection as a table in its tab-content, when "Tasks" tab is clicked.
 	 */
-	$('#content').on('click', '#deal-details-tab a[href="#dealactivities"]', function(e)
+	openDealActivities : function(e)
 	{
 		e.preventDefault();
+
 		save_deal_tab_position_in_cookie("dealactivities");
 		deal_details_tab.load_deal_activities();
-	});
+	},
 
 	/**
 	 * Fetches all the docs related to the deal and shows the docs collection as
 	 * a table in its tab-content, when "Documents" tab is clicked.
 	 */
-	$('#content').on('click', '#deal-details-tab a[href="#dealdocs"]', function(e)
+	openDealDocs : function(e)
 	{		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealdocs");
 		deal_details_tab.load_deal_docs();
-	});
+	},
 	
 	/**
 	 * Fetches all the tasks related to the deal and shows the docs collection as
 	 * a table in its tab-content, when "Tasks" tab is clicked.
 	 */
-	$('#content').on('click', '#deal-details-tab a[href="#dealtasks"]', function(e)
+	openDealTasks: function(e)
 	{
 		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealtasks");
 		deal_details_tab.load_deal_tasks();
-	});
+	},
 
 	/**
 	 * Fetches all the events related to the deal and shows the docs collection as
 	 * a table in its tab-content, when "Events" tab is clicked.
 	 */
-	$('#content').on('click', '#deal-details-tab a[href="#dealevents"]', function(e)
+	openDealEvents : function(e)
 	{
 		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealevents");
 		deal_details_tab.load_deal_events();
-	});
+	},
 
-
-	$("#content").on('click', "#deal-owner", function(e)
-
+	deleteActivity: function(b) {
+        b.preventDefault();
+        Contact_Details_Tab_Actions.deleteActivity(b)
+    },
+    
+	showOwnerList: function(e)
 	{
 		e.preventDefault();
 		fill_deal_owners(undefined, undefined, function()
 		{
 
 			$('#deal-owner').css('display', 'none');
-
 			$('#change-deal-owner-ul').css('display', 'inline-block');
 
 			if ($('#change-deal-owner-ul').css('display') == 'inline-block')
@@ -40425,18 +40558,18 @@ $(function(){
 
 		});
 
-	});
+	},
 
 
-	$("#content").on('click', "#opportunity-actions-delete", function(e)
-
+	opportunityDelete : function(e)
 	{
 		e.preventDefault();
 
 		if (!confirm("Are you sure you want to delete?"))
 			return;
 
-		var id = $(this).closest('.deal_detail_delete').attr('data');
+		var targetEl = $(e.currentTarget);
+		var id = $(targetEl).closest('.deal_detail_delete').attr('data');
 
 		$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function(data)
 		{
@@ -40445,102 +40578,49 @@ $(function(){
 		{
 			alert("some exception occured please try again");
 		} });
-	});
+	},
 
-	$('#content').on('click', '.deal-edit-note', function(e)
+	dealNoteEdit:  function(e)
 	{
 
 		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-		var note = dealNotesView.collection.get($(this).attr('data'));
+		var note = dealNotesView.collection.get($(targetEl).attr('data'));
 		console.log(note);
 		deserializeForm(note.toJSON(), $("#dealnoteUpdateForm", $('#dealnoteupdatemodal')));
 		fill_relation_deal($('#dealnoteUpdateForm'));
 		$('#dealnoteupdatemodal').modal('show');
-	});
 
-	$('body').on('click', '#dealnote_update', function(e)
-	{
-		e.preventDefault();
-
-		// Returns, if the save button has disabled attribute
-		if ($(this).attr('disabled'))
-			return;
-
-		// Disables save button to prevent multiple click event issues
-		disable_save_button($(this));// $(this).attr('disabled', 'disabled');
-
-		if (!isValidForm('#dealnoteUpdateForm'))
-		{
-
-			// Removes disabled attribute of save button
-			enable_save_button($(this));
-			return;
-		}
-
-		// Shows loading symbol until model get saved
-		// $('#noteUpdateModal').find('span.save-status').html(getRandomLoadingImg());
-
-		var json = serializeForm("dealnoteUpdateForm");
-
-		saveDealUpdateNote($("#dealnoteUpdateForm"), $("#dealnoteupdatemodal"), this, json);
-	});
-	/**
-	 * Saves note model using "Bcakbone.Model" object, and adds saved data to
-	 * time-line if necessary.
-	 */
-	$('#deal-note-modal').on('click', '#dealnote_validate', function(e)
-	{
-
-		e.preventDefault();
-
-		// Returns, if the save button has disabled attribute
-		if ($(this).attr('disabled'))
-			return;
-
-		if (!isValidForm('#dealnoteForm'))
-		{
-			return;
-		}
-
-		disable_save_button($(this));
-
-		// Shows loading symbol until model get saved
-		// $('#noteModal').find('span.save-status').html(getRandomLoadingImg());
-
-		var json = serializeForm("dealnoteForm");
-
-		console.log(json);
-
-		saveDealNote($("#dealnoteForm"), $("#deal-note-modal"), this, json);
-	});
+	},
+	
 
 	/**
 	 * Shows note modal and activates contacts typeahead to its related to field
 	 */
-	$('#content').on('click', '#dealshow-note', function(e)
+	dealShowNoteModal: function(e)
 	{
 		if (App_Deal_Details.dealDetailView.model.get('archived') == true)
 			return;
+
 		e.preventDefault();
 		$("#deal-note-modal").modal('show');
 
-		var el = $("#dealnoteForm");
-
-	});
+	},
 
 	/**
 	 * Changes, owner of the contact, when an option of change owner drop down
 	 * is selected.
 	 */
-	$("#content").on('click', ".deal-owner-list", function(e)
+	openDealOwnersList: function(e)
 	{
 
 		$('#change-deal-owner-ul').css('display', 'none');
+		var targetEl = $(e.currentTarget);
 
 		// Reads the owner id from the selected option
-		var new_owner_id = $(this).attr('data');
-		var new_owner_name = $(this).text();
+		var new_owner_id = $(targetEl).attr('data');
+		var new_owner_name = $(targetEl).text();
 		var current_owner_id = $('#deal-owner').attr('data');
 		// Returns, if same owner is selected again
 		if (new_owner_id == current_owner_id)
@@ -40566,9 +40646,9 @@ $(function(){
 
 		} });
 
-	});
+	},
 
-	$("#content").on('click', ".deal-add-contact", function(e)
+	addDealContact: function(e)
 	{
 		e.preventDefault();
 		console.log(App_Deal_Details.dealDetailView.model.toJSON());
@@ -40580,18 +40660,18 @@ $(function(){
 			$('#opportunityUpdateForm').find("input[name='relates_to']").focus();
 		}, 800);
 
-	});
+	},
 
-	$("#content").on('click', ".deal-detail-edit-deal", function(e)
+	editDeal:  function(e)
 	{
 		e.preventDefault();
 		console.log(App_Deal_Details.dealDetailView.model.toJSON());
 		var currentdeal = App_Deal_Details.dealDetailView.model;
 		updateDeal(currentdeal);
 
-	});
+	},
 
-	$("#content").on('click', ".deal-note", function(e)
+	showDealNote: function(e)
 	{
 		e.preventDefault();
 
@@ -40600,9 +40680,9 @@ $(function(){
 		// Displays contact name, to indicate the note is related to the contact
 		fill_relation_deal(el1);
 		$('#deal-note-modal').modal('show');
-	});
+	},
 
-	$("#content").on('click', "#dealdetail-archive", function(e)
+	dealArchive: function(e)
 	{
 		e.preventDefault();
 
@@ -40611,9 +40691,9 @@ $(function(){
 		$("#archived-deal-milestone", $("#deal_archive_confirm_modal")).val(currentDeal.milestone);
 		$("#deal_archive_confirm_modal").modal('show');
 
-	});
+	},
 
-	$("#content").on('click', ".deal-restore-detail-view", function(e)
+	dealRestoreView: function(e)
 	{
 		e.preventDefault();
 
@@ -40623,121 +40703,130 @@ $(function(){
 		$("#restored-deal-milestone", $("#deal_restore_confirm_modal")).val(currentDeal.milestone);
 		$("#deal_restore_confirm_modal").modal('show');
 
-	});
+	},
 
 	//For updating document from contact-details
-$('#content').on('click', '.document-edit-deal-tab', function(e){
-	e.preventDefault();
-	var id = $(this).attr('data');
-	updateDocument(dealDocsView.collection.get(id));
-});
+	dealDocumentEdit: function(e){
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-// For unlinking document from contact-details
-$('#content').on('click', '.document-unlink-deal-tab', function(e){
-	e.preventDefault();
-	var id = $(this).attr('data');
-	var json = dealDocsView.collection.get(id).toJSON();
-	
-	// To get the contact id and converting into string
-	var deal_id = App_Deal_Details.dealDetailView.model.id + "";
-	
-    // Removes the contact id from related to contacts
-	json.deal_ids.splice(json.deal_ids.indexOf(deal_id),1);
-	
-	// Updates the document object and hides 
-	var newDocument = new Backbone.Model();
-	newDocument.url = 'core/api/documents';
-	newDocument.save(json, {
-		success : function(data) {
-			dealDocsView.collection.remove(json);
-			dealDocsView.render(true);
-		}
-	});
-});
+		var id = $(targetEl).attr('data');
+		updateDocument(dealDocsView.collection.get(id));
+	},
 
-/**
- * For showing new/existing documents
- */
-$('#content').on('click', '.add-deal-document-select', function(e){
-	e.preventDefault();
-	var el = $(this).closest("div");
-	$(this).css("display", "none");
-	el.find(".deal-document-select").css("display", "inline");
-	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-    fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
-	{
-		el.find("#document-select").append("<option value='new'>Add New Doc</option>");
+	// For unlinking document from contact-details
+	dealUnlinkDocument: function(e){
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-	}, optionsTemplate, false, el); 
-});
-
-/**
- * For adding existing document to current contact
- */
-$('#content').on('click', '.add-deal-document-confirm', function(e){
-	e.preventDefault();
-	
-    var document_id = $(this).closest(".deal-document-select").find("#document-select").val();
-
-    var saveBtn = $(this);
-	
-		// To check whether the document is selected or not
-    if(document_id == "")
-    {
-    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
-    	saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
-    	return;
-    }	    	
-    else if(document_id == "new")
-    {
-    	var el = $("#uploadDocumentForm");
-		$("#uploadDocumentModal").modal('show');
+		var id = $(targetEl).attr('data');
+		var json = dealDocsView.collection.get(id).toJSON();
 		
-		// Contacts type-ahead
-		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+		// To get the contact id and converting into string
+		var deal_id = App_Deal_Details.dealDetailView.model.id + "";
 		
-		// Deals type-ahead
-		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+	    // Removes the contact id from related to contacts
+		json.deal_ids.splice(json.deal_ids.indexOf(deal_id),1);
+		
+		// Updates the document object and hides 
+		var newDocument = new Backbone.Model();
+		newDocument.url = 'core/api/documents';
+		newDocument.save(json, {
+			success : function(data) {
+				dealDocsView.collection.remove(json);
+				dealDocsView.render(true);
+			}
+		});
+	},
 
-    	var deal_json = App_Deal_Details.dealDetailView.model.toJSON();
-    	var deal_name = deal_json.name;
-    	$('.deal_tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ deal_json.id +'">'+deal_name+'</li>');
-    }
-    else if(document_id != undefined && document_id != null)
-    {
-		if(!existingDealDocumentsView)
+	/**
+	 * For showing new/existing documents
+	 */
+	dealDocumentsList: function(e){
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
+
+		var el = $(targetEl).closest("div");
+		$(targetEl).css("display", "none");
+		el.find(".deal-document-select").css("display", "inline");
+		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	    fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
 		{
-			existingDealDocumentsView = new Base_Collection_View({ 
-				url : 'core/api/documents',
-				restKey : "documents",
-			});
-			existingDealDocumentsView.collection.fetch({
-			    success: function(data){
-			    		existing_deal_document_attach(document_id, saveBtn);
-			    	}
-		        });
-		}
-		else
-			existing_deal_document_attach(document_id, saveBtn);
-    }
+			el.find("#document-select").append("<option value='new'>Add New Doc</option>");
 
-});
+		}, optionsTemplate, false, el); 
+	},
 
-/**
- * To cancel the add documents request
- */
-$('#content').on('click', '.add-deal-document-cancel', function(e){
-	e.preventDefault();
-	var el = $(this).closest("div");
-	el.find(".deal-document-select").css("display", "none");
-	el.find(".add-deal-document-select").css("display", "inline");
-});
+	/**
+	 * For adding existing document to current contact
+	 */
+	dealAddDocumentConfirm: function(e){
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-	$('#content').on('click', '.deal-add-task', function(e){ 
+	    var document_id = $(targetEl).closest(".deal-document-select").find("#document-select").val();
+		var saveBtn = $(targetEl);
+		
+			// To check whether the document is selected or not
+	    if(document_id == "")
+	    {
+	    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
+	    	saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
+	    	return;
+	    }	    	
+	    else if(document_id == "new")
+	    {
+	    	
+	    	$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
+			
+			var el = $("#uploadDocumentForm");
+			// Contacts type-ahead
+			agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+			
+			// Deals type-ahead
+			agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+
+	    	var deal_json = App_Deal_Details.dealDetailView.model.toJSON();
+	    	var deal_name = deal_json.name;
+	    	$('.deal_tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ deal_json.id +'">'+deal_name+'</li>');
+	    }
+	    else if(document_id != undefined && document_id != null)
+	    {
+			if(!existingDealDocumentsView)
+			{
+				existingDealDocumentsView = new Base_Collection_View({ 
+					url : 'core/api/documents',
+					restKey : "documents",
+				});
+				existingDealDocumentsView.collection.fetch({
+				    success: function(data){
+				    		existing_deal_document_attach(document_id, saveBtn);
+				    	}
+			        });
+			}
+			else
+				existing_deal_document_attach(document_id, saveBtn);
+	    }
+
+	},
+
+	/**
+	 * To cancel the add documents request
+	 */
+	dealAddDocumentCancel: function(e){
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
+
+		var el = $(targetEl).closest("div");
+		el.find(".deal-document-select").css("display", "none");
+		el.find(".add-deal-document-select").css("display", "inline");
+	},
+
+	dealAddtask:  function(e){ 
     	e.preventDefault();
+    	$('#activityTaskModal').html(getTemplate("new-task-modal")).modal('show');
 
-    	var	el = $("#taskForm");
-		$('#activityTaskModal').modal('show');
+		var	el = $("#taskForm");
 		highlight_task();
 		// Displays contact name, to indicate the task is related to the contact
 		fill_relation_deal_task(el);
@@ -40755,44 +40844,48 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		});
 
        activateSliderAndTimerToTaskModal();
-    });
+    },
 
-    $('#content').on('click', '.task-edit-deal-tab', function(e)
+    dealEditTask: function(e)
 	{
 		e.preventDefault();
-		var id = $(this).attr('data');
+		var targetEl = $(e.currentTarget);
+
+		var id = $(targetEl).attr('data');
 		var value = dealTasksView.collection.get(id).toJSON();
 
-		deserializeForm(value, $("#updateTaskForm"));
+		$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
+			loadProgressSlider($("#updateTaskForm"), function(el){
+			deserializeForm(value, $("#updateTaskForm"));
+			
+			$('.update-task-timepicker').val(fillTimePicker(value.due));
+			// Fills owner select element
+			populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
+			{
+				$("#updateTaskForm").find("#owners-list").html(data);
+				if (value.taskOwner)
+					$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
 
-		$("#updateTaskModal").modal('show');
+				$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+			});
 
-		$('.update-task-timepicker').val(fillTimePicker(value.due));
-		// Fills owner select element
-		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
-		{
-			$("#updateTaskForm").find("#owners-list").html(data);
-			if (value.taskOwner)
-				$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
-
-			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+			// Add notes in task modal
+			showNoteOnForm("updateTaskForm", value.notes);
 		});
+			
+		// activateSliderAndTimerToTaskModal();
 
-		// Add notes in task modal
-		showNoteOnForm("updateTaskForm", value.notes);
-
-		activateSliderAndTimerToTaskModal();
-
-	});
+	},
 
 	/**
 	 * Delete functionality for tasks blocks in deal details
 	 */
-	$('#content').on('click', '.deal-task-delete', function(e)
+	dealDeleteTask: function(e)
 	{
 		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-		var model = $(this).parents('li').data();
+		var model = $(targetEl).parents('li').data();
 
 		if (model && model.toJSON().type != "WEB_APPOINTMENT")
 		{
@@ -40811,7 +40904,7 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		}
 
 		// Gets the id of the entity
-		var entity_id = $(this).attr('id');
+		var entity_id = $(targetEl).attr('id');
 
 		if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
 		{
@@ -40833,7 +40926,7 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		}
 
 		// Gets the url to which delete request is to be sent
-		var entity_url = $(this).attr('url');
+		var entity_url = $(targetEl).attr('url');
 
 		if (!entity_url)
 			return;
@@ -40847,35 +40940,37 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		// Set entity id array in to json object with key ids,
 		// where ids are read using form param
 		id_json.ids = JSON.stringify(id_array);
-		var that = this;
+		var that = targetEl;
 
 		// Add loading. Adds loading only if there is no loaded image added
 		// already i.e.,
 		// to avoid multiple loading images on hitting delete multiple times
-		if ($(this).find('.loading').length == 0)
-			$(this).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+		if ($(targetEl).find('.loading').length == 0)
+			$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
 
 		$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
 		{
 			// Removes activity from list
 			$(that).parents(".activity").parent().fadeOut(400, function()
 			{
-				$(this).remove();
+				$(targetEl).remove();
 			});
 			if(dealTasksView && dealTasksView.collection.length==0)
 			{
 				$('#dealtasks').html(dealTasksView.render(true).el);
 			}
 		} });
-	});
+	},
 
-	$('#content').on('click', '.complete-deal-task', function(e)
+	dealCompleteTask: function(e)
 	{
 		e.preventDefault();
-		if ($(this).is(':checked'))
+		var targetEl = $(e.currentTarget);
+
+		if ($(targetEl).is(':checked'))
 		{
-			var id = $(this).attr('data');
-			var that = this;
+			var id = $(targetEl).attr('data');
+			var that = targetEl;
 			complete_task(id, dealTasksView.collection, undefined, function(data)
 			{
 				$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
@@ -40884,37 +40979,46 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 				dealTasksView.collection.add(data, { silent : true });
 			});
 		}
-	});
+	},
 
 	/**
 	 * Displays activity modal with all event features,  to add a event 
 	 * related to the deal in deal detail view. Also prepends the 
 	 * deal name to related to field of activity modal.
 	 */ 
-    $('#content').on('click', '.deal-add-event', function(e){ 
+    dealAddEvent: function(e){ 
     	e.preventDefault();
 
+    	$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
+
     	var	el = $("#activityForm");
-		$('#activityModal').modal('show');
+
 		highlight_event();
 		// Displays contact name, to indicate the task is related to the contact
 		fill_relation_deal_task(el);
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
         agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
-    });
+    },
 
     // Event edit in contact details tab
-	$('#content').on('click', '.event-edit-deal-tab', function(e)
+	dealEditEvent: function(e)
 					{
 						e.preventDefault();
-						var id = $(this).attr('data');
+						var targetEl = $(e.currentTarget);
+
+						$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+						
+						var id = $(targetEl).attr('data');
 						var value = dealEventsView.collection.get(id).toJSON();
 						deserializeForm(value, $("#updateActivityForm"));
-						$("#updateActivityModal").modal('show');
 
 						$('.update-start-timepicker').val(fillTimePicker(value.start));
 						$('.update-end-timepicker').val(fillTimePicker(value.end));
+
+						$("#updateActivityModal").modal('show');
+
+						
 
 		if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
 		{
@@ -40948,16 +41052,17 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		}
 		// Fills owner select element
 		populateUsersInUpdateActivityModal(value);
-	});
+	},
 
 	/**
 	 * Delete functionality for events blocks in deal details
 	 */
-	$('#content').on('click', '.deal-event-delete', function(e)
+	dealEditDelete: function(e)
 	{
 		e.preventDefault();
+		var targetEl = $(e.currentTarget)
 
-		var model = $(this).parents('li').data();
+		var model = $(targetEl).parents('li').data();
 
 		if (model && model.toJSON().type != "WEB_APPOINTMENT")
 		{
@@ -40976,7 +41081,7 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		}
 
 		// Gets the id of the entity
-		var entity_id = $(this).attr('id');
+		var entity_id = $(targetEl).attr('id');
 
 		if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
 		{
@@ -40998,7 +41103,7 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		}
 
 		// Gets the url to which delete request is to be sent
-		var entity_url = $(this).attr('url');
+		var entity_url = $(targetEl).attr('url');
 
 		if (!entity_url)
 			return;
@@ -41012,31 +41117,29 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		// Set entity id array in to json object with key ids,
 		// where ids are read using form param
 		id_json.ids = JSON.stringify(id_array);
-		var that = this;
+		var that = targetEl;
 
 		// Add loading. Adds loading only if there is no loaded image added
 		// already i.e.,
 		// to avoid multiple loading images on hitting delete multiple times
-		if ($(this).find('.loading').length == 0)
-			$(this).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+		if ($(targetEl).find('.loading').length == 0)
+			$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
 
 		$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
 		{
 			// Removes activity from list
 			$(that).parents(".activity").parent().fadeOut(400, function()
 			{
-				$(this).remove();
+				$(targetEl).remove();
 			});
 			if(dealEventsView && dealEventsView.collection.length==0)
 			{
 				$('#dealevents').html(dealEventsView.render(true).el);
 			}
 		} });
-	});
+	},
 
 });
-
-// }
 
 function save_deal_tab_position_in_cookie(tab_href)
 {
@@ -41101,6 +41204,69 @@ function load_deal_tab(el, dealJSON)
 	}
 
 }
+
+
+$(function(){
+ 	/**
+	 * Saves note model using "Bcakbone.Model" object, and adds saved data to
+	 * time-line if necessary.
+	 */
+	$('#deal-note-modal').on('click', '#dealnote_validate', function(e)
+	{
+
+		e.preventDefault();
+
+		// Returns, if the save button has disabled attribute
+		if ($(this).attr('disabled'))
+			return;
+
+		if (!isValidForm('#dealnoteForm'))
+		{
+			return;
+		}
+
+		disable_save_button($(this));
+
+		// Shows loading symbol until model get saved
+		// $('#noteModal').find('span.save-status').html(getRandomLoadingImg());
+
+		var json = serializeForm("dealnoteForm");
+
+		console.log(json);
+
+		saveDealNote($("#dealnoteForm"), $("#deal-note-modal"), this, json);
+	});
+
+	$('#dealnoteupdatemodal').on('click', '#dealnote_update', function(e)
+	{
+
+		e.preventDefault();
+
+		// Returns, if the save button has disabled attribute
+		if ($(this).attr('disabled'))
+			return;
+
+		// Disables save button to prevent multiple click event issues
+		disable_save_button($(this));// $(this).attr('disabled', 'disabled');
+
+		if (!isValidForm('#dealnoteUpdateForm'))
+		{
+
+			// Removes disabled attribute of save button
+			enable_save_button($(this));
+			return;
+		}
+
+		// Shows loading symbol until model get saved
+		// $('#noteUpdateModal').find('span.save-status').html(getRandomLoadingImg());
+
+		var json = serializeForm("dealnoteUpdateForm");
+
+		saveDealUpdateNote($("#dealnoteUpdateForm"), $("#dealnoteupdatemodal"), this, json);
+
+	});
+
+});
 	
 		/**
 		 * "Hide" event of note modal to remove contacts appended to related to
@@ -41391,40 +41557,7 @@ $.fn.removeClassPrefix = function(prefix) {
 
 
 
-/*funda for contact details*/
-
-
-  $('body').on('click', '#contacts-inner-tabs #next', function(e){
-	  console.log("next clicked");
-    var target = $("#contactDetailsTab");
-    target.animate({ scrollLeft : (target.scrollLeft() + 270)},1000);
-  });
-  
-  $('body').on('click', '#contacts-inner-tabs #prev', function(e){
-	   console.log("prev clicked");
-    var target = $("#contactDetailsTab");
-    target.animate({ scrollLeft : (target.scrollLeft() - 270)},1000);
-  }); 
-
 });
-
-//funda for contact details
-
-/*function contactInnerTabsInvoke(el) {
-	
-	
-	
-	if ( ($("#contacts-inner-tabs .tab-container",el).width()) >= 689 ) {
-		    $("#prev,#next",el).css("display","none");
-			$("#contactDetailsTab",el).css('width','100%');
-			
-	  }
-	  else 
-	  {
-		  $("#prev,#next",el).css("display","block");
-		  $("#contactDetailsTab",el).removeAttr('style');
-	   }
-	 }*/
 	 
 
 
@@ -41472,21 +41605,60 @@ $('#app-aside-folded').on('click', function(e) {
 	
 $(document).ready(function(){
 
-	$(".person").on("click", function(e){
-		e.preventDefault();
-		addContactBasedOnCustomfields();
-		
-	});
-
-
-    $("#contact-results li").click(function(){
+	 $("#contact-results li").click(function(){
    $("#mobile-menu-settings").trigger('click');
    });
  
 
 	if(( $(window).width() ) < 768 ) {
+
+	/*$('body').on('click','#mobile-dropdown-click-sort',function(){
+			$("#contact-sort-views").css("display","block");
+   	return false;
+	});
+
+	 $('body').on('click','#view-list .dropdown-toggle' , function(){
+         $("#contact-sort-views").css("display","none");
+    });
+   	
+   	$('body').on('click','#contact-sort-views',function(){
+        $(this).css('display','none');
+    });	*/
+
+	$('body').on('touchstart','.magicMenu .i-checks',function(e){
+		e.preventDefault();
+		$(this).find('input[type="radio"]').trigger('click');
+	});
+
+   $('body').on('touchstart','.i-checks',function(e){
+   	e.preventDefault();
+   $(this).find('input[type="checkbox"]').trigger('click');
+   });
+
+   $('body').on('click','#mobile-menu-settings',function(){
+    if($('#navbar').hasClass('show')){
+    	$('body').css('overflow-y','hidden');
+    }
+    else {
+    	$('body').css('overflow-y','auto');
+    }
+	});
+
+    $('.agile-menu .fa-history').removeClass('text-md  text-muted');
+   
+   	$('body').on('click','#navbar li a:not(".dropdown-toggle")',function(){
+   		$('body').css('overflow-y','auto');
+   	});
+   
+
+
+	$('body').on('click','.navbar-brand',function(){
+     $("#navbar").removeClass('show');
+     $("#aside").removeClass('off-screen');
+     $('body').css('overflow-y','auto');
+	});	
 	
-	$(".nav li a").click(function(){
+	$(".navi-wrap li a").click(function(){
 	  $("#mobile-menu").delay(2000).trigger("click");
 	});
 	
@@ -41509,10 +41681,11 @@ $(document).ready(function(){
    $("#mobile-menu").on("click",function(){
    if( $("#navbar").hasClass("show")) {
    	$("#navbar").removeClass("show");
+   	$('body').css('overflow-y','auto');
    }
    });
 
-   $("#navbar li a").on("click" , function(){
+   $("#navbar li a:not(.dropdown-menu)").on("click" , function(){
    if($(this).hasClass("dropdown-toggle")) {
 	
     }
@@ -41520,10 +41693,34 @@ $(document).ready(function(){
    	$("#navbar").removeClass("show");
    }
    });
+
+   $("#documentsmenu span").text("Documents");
    
    }
 
+	$(".person").on("click", function(e){
+		e.preventDefault();
+		addContactBasedOnCustomfields();
+		
+	});
+    $('body').on('click', function (e) {
+	    $('.popover').each(function () {
+	        //the 'is' for buttons that trigger popups
+	        //the 'has' for icons within a button that triggers a popup
+	        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0 && !e.target.closest(".need_help")) {
+	            $(this).popover('hide');
+	        }
+	    });
+	});
+	// initializing need help popover for header page
+   $(".need_help").popover({ placement : 'left',
+					html:true,
+					container: 'body'
+				}).on("click", function(){
+						var $this = $('.popover').find("#need_help_header");
+						$this.closest(".popover").addClass("custom_popover");
 
+    			   }); 
 
    });
 
@@ -42255,12 +42452,12 @@ function serializeForm(form_id) {
 		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
 			return {
 				"name" : this.name,
-				"value" : new Date(convertDateFromUKtoUS(this.value)).getTime() / 1000
+				"value" : getFormattedDateObjectWithString(this.value).getTime() / 1000
 			};
 		else
 			return {
 				"name" : this.name,
-				"value" : new Date(this.value).getTime() / 1000
+				"value" : getFormattedDateObjectWithString(this.value).getTime() / 1000
 			};
 	}).get());
 	
@@ -42373,11 +42570,8 @@ function serializeChainedElement(element)
 
 		// If type of the field is "date" then return epoch time
 		if ($(data).hasClass("date")) {
-			var date;
-			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-				date = new Date(convertDateFromUKtoUS($(data).val()));
-			else
-				date = new Date($(data).val());
+			var date = getFormattedDateObjectWithString($(data).val());
+
 			value = getGMTEpochFromDate(date);
 		}
 
@@ -42437,20 +42631,14 @@ function serializeLhsFilters(element)
 			RHS_VALUE = $(RHS_ELEMENT).val().trim();
 		}
 		if ($(RHS_ELEMENT).hasClass("date") && RHS_VALUE && RHS_VALUE != "") {
-			var date;
-			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-				date = new Date(convertDateFromUKtoUS($(RHS_ELEMENT).val()));
-			else
-				date = new Date($(RHS_ELEMENT).val());
+			var date = getFormattedDateObjectWithString($(RHS_ELEMENT).val());
+
 			RHS_VALUE = getGMTEpochFromDate(date);
 		}
 		RHS_NEW_VALUE = $(RHS_NEW_ELEMENT).val();
 		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
-			var date;
-			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-				date = new Date(convertDateFromUKtoUS($(RHS_NEW_ELEMENT).val()));
-			else
-				date = new Date($(RHS_NEW_ELEMENT).val());
+			var date = getFormattedDateObjectWithString($(RHS_ELEMENT).val());
+			
 			RHS_NEW_VALUE = getGMTEpochFromDate(date);
 		}
 		if(RHS_NEW_VALUE && typeof RHS_NEW_VALUE == "string") {
@@ -42484,6 +42672,7 @@ function serializeLhsFilters(element)
 	filters["contact_type"] = $(element).find('#contact_type').val();
 	return filters;
 }
+
 /**
  * validate.js is used to validate the forms in the application, isValidFom
  * method validates the form element
@@ -42549,7 +42738,7 @@ function isValidForm(form) {
 		
 		return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
 	}," Please enter a valid email.");
-	
+
 	// Phone number validation
 	jQuery.validator.addMethod("phone", function(value, element){
 		
@@ -42618,21 +42807,19 @@ function isValidForm(form) {
 	jQuery.validator.addMethod("date", function(value, element){
 		if(value=="")
 			return true;
-		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-		{
-			return !/Invalid|NaN/.test(new Date(convertDateFromUKtoUS(value))); 
-		}else
-			return !/Invalid|NaN/.test(new Date(value));
+
+		return !/Invalid|NaN/.test(getFormattedDateObjectWithString(value));
+
+			
 	}," Please enter a valid date.");
 
 	jQuery.validator.addMethod("date_input", function(value, element){
 		if(value=="")
 			return true;
-		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-		{
-			return !/Invalid|NaN/.test(new Date(convertDateFromUKtoUS(value))); 
-		}else
-			return !/Invalid|NaN/.test(new Date(value));
+
+		return !/Invalid|NaN/.test(getFormattedDateObjectWithString(value));
+
+		
 	}," Please enter a valid date.");
 
 	jQuery.validator.addMethod("field_length", function(value, element){
@@ -43208,7 +43395,7 @@ function capitalizeFirstLetter(string) {
 function gmap_set_icons(email,width){
 	
 	if (email == undefined || email == "")
-		return LIB_PATH_FLATFULL + 'images/flatfull/anonymous_visitor.png';
+		return LIB_PATH_FLATFULL + 'images/anonymous_visitor.png';
 	return prepareLettergravatar(email);
 	
 }
@@ -45530,11 +45717,15 @@ function getDealCustomProperties(items)
 		var el = "";
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
 		{
-			if (element.indexOf("custom_") == 0)
-				element = element.split("custom_")[1];
+			
+			if (element.indexOf("CUSTOM_") == 0) {
+				element = element.split("_")[1];
+				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
+			}
+			else {
 			element = element.replace("_", " ")
-
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
+			}	
 
 		});
 
@@ -47152,15 +47343,14 @@ function getDealCustomProperties(items)
 	 */
 	Handlebars.registerHelper('capFirstLetter', function(data)
 	{
-		if (data === "DEFAULT")
-		{
-			// console.log("return empty");
-			return "";
-		}
-		else
-		{
-			var temp = data.toLowerCase();
-			return temp.charAt(0).toUpperCase() + temp.slice(1);
+		if(data){
+			if (data === "DEFAULT"){
+				// console.log("return empty");
+				return "";
+			}else{
+				var temp = data.toLowerCase();
+				return temp.charAt(0).toUpperCase() + temp.slice(1);
+			}
 		}
 	});
 
@@ -49288,15 +49478,17 @@ function getDealCustomProperties(items)
 	 */
 	Handlebars.registerHelper('capFirstLetter', function(data)
 	{
-		if (data === "DEFAULT")
-		{
-			// console.log("return empty");
-			return "";
-		}
-		else
-		{
-			var temp = data.toLowerCase();
-			return temp.charAt(0).toUpperCase() + temp.slice(1);
+		if(data){
+			if (data === "DEFAULT")
+			{
+				// console.log("return empty");
+				return "";
+			}
+			else
+			{
+				var temp = data.toLowerCase();
+				return temp.charAt(0).toUpperCase() + temp.slice(1);
+			}
 		}
 	});
 
@@ -50861,12 +51053,14 @@ function getDealCustomProperties(items)
 		var el = "";
 		$.each(App_Companies.companyViewModel[item], function(index, element)
 		{
-			if (element.indexOf("custom_") == 0)
-				element = element.split("custom_")[1];
+			if (element.indexOf("CUSTOM_") == 0) {
+				element = element.split("_")[1];
+				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
+			}
+			else {
 			element = element.replace("_", " ")
-
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
-
+			}	
 		});
 
 		return new Handlebars.SafeString(el);
@@ -51137,12 +51331,14 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	    	
 			});
 	
-	Handlebars.registerHelper('toggle_contacts_filter', function(options)
+	
+	Handlebars.registerHelper('toggle_companies_filter', function(options)
 			{	        
-		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
-		    	return "none";
-	       	}
+		   return  localStorage.getItem('companiesFilterStatus');
+		    
 			});
+
+	
 
 	Handlebars.registerHelper('totalTimeFormat', function(timeInSec)
 			{
@@ -51249,6 +51445,13 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
                return options.inverse(this);
         });
 
+Handlebars.registerHelper('is_mobile', function(options)
+	{
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )
+		return options.fn(this);
+		else
+		return options.inverse(this);
+	});
 
 /**
  * Returns a S3 image url .
@@ -53193,7 +53396,7 @@ $(function()
 	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
 	{
 		e.preventDefault();
-		$('#archived', $('#opportunityUpdateForm')).attr('checked', 'checked');
+		$('#archived', $('#opportunityUpdateForm')).prop('checked', 'checked');
 		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
 	});
 	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_unarchive', function(e)
@@ -53425,9 +53628,7 @@ function getDealFilters()
 
 
 
-//listenrs
-
-
+// Deal Listeners
 function initializeDealListners(el){
 	
 $('#opportunity-listners').off('click', ".deals-list-view");
@@ -54608,7 +54809,9 @@ function deal_infi_scroll(element_id, targetCollection)
     
 		$('.date_input').datepicker({
 			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
-		});
+		}).datepicker('update');
+
+		$("input.date").each(function(index, ele){$(ele).datepicker('update');});
 	})
 
 	/**
@@ -54637,7 +54840,7 @@ function deal_infi_scroll(element_id, targetCollection)
 	 * "Hide" event of note modal to remove contacts appended to related to
 	 * field and validation errors
 	 */
-	$('#opportunityUpdateModal').on('hidden.bs.modal', function()
+	$('#opportunityUpdateModal').on('hide.bs.modal', function()
 	{
 
 		// Removes appended contacts from related-to field
@@ -54915,10 +55118,8 @@ function deal_infi_scroll(element_id, targetCollection)
 		$(this).text('Saving...');
 		var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : App_Deals.newMilestone });
 		var dealModel = dealPipelineModel[0].get('dealCollection').get(App_Deals.lost_reason_milesone_id);
-		if ($(this).closest('.modal').find('form').find('#lost_reason').val()){
-			dealModel.collection.get(App_Deals.lost_reason_milesone_id).set({ "lost_reason_id" : $(this).closest('.modal').find('form').find('#lost_reason').val() });
-			update_milestone(App_Deals.dealModel, App_Deals.lost_reason_milesone_id, App_Deals.newMilestone, App_Deals.old_milestone, false, $(this).closest('.modal').find('form').find('#lost_reason').val());
-		}
+		dealModel.collection.get(App_Deals.lost_reason_milesone_id).set({ "lost_reason_id" : $(this).closest('.modal').find('form').find('#lost_reason').val() });
+		update_milestone(App_Deals.dealModel, App_Deals.lost_reason_milesone_id, App_Deals.newMilestone, App_Deals.old_milestone, false, $(this).closest('.modal').find('form').find('#lost_reason').val());
 		$('#dealLostReasonModal').modal('hide');
 	});
 
@@ -56802,7 +57003,9 @@ function populateDealSources(el, value){
 							portlet_utility.addWidgetToGridster(base_model);
 						});
 	},
-};var portlet_graph_utility = {
+};var callschart=new Array();
+var taskReport=new Array();
+var portlet_graph_utility = {
 
 	/**
 	 * To display deals by milestone portlet as pie graph
@@ -57325,17 +57528,25 @@ function populateDealSources(el, value){
 	callsPerPersonBarGraph : function(selector, domainUsersList, series,
 			totalCallsCountList, callsDurationList, text, colors,
 			domainUserImgList) {
+			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
+		var pos = '' + column_position + '' + row_position;
+		var	height=domainUsersList.length*30+($('#'+selector).height()-30);
+		if(selector=='calls-chart')
+			height=domainUsersList.length*30+120;
+		
 		head
 				.js(
 						LIB_PATH + 'lib/flot/highcharts-3.js',
 						function() {
 							
-							$('#'+selector).highcharts({
+							callschart[parseInt(pos)]=new Highcharts.Chart({
 								chart: {
+									renderTo : selector,
 						            type: 'bar',
 						            marginRight: 100,
 						            plotBorderWidth: 1,
-						            plotBorderColor: '#F4F4F5'
+						            plotBorderColor: '#F4F4F5',
+						            height:height,
 						        },
 						        title: {
 						            text: ''
@@ -57360,7 +57571,7 @@ function populateDealSources(el, value){
 						    				color : '#98a6ad',
 						    				fontSize : '11px'
 						    			},
-						                useHTML: true
+						                useHTML: true,
 						            },
 						            gridLineWidth : 0,
 						    		gridLineColor : '#F4F4F5',
@@ -57382,11 +57593,12 @@ function populateDealSources(el, value){
 						    			}
 						    		}
 						        },
-						        tooltip: {
+						       tooltip: {
 						        	formatter: function(){
 						        		var tt = '';
 						        		if(text=="Calls Duration (Mins)")
 						        			tt = '<table>' + 
+						        					'<tr><td  class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>'+	
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
 					        		              '<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(callsDurationList[this.points[0].point.x])+'</b></td></tr>' +
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls:&nbsp; </td>' + 
@@ -57396,13 +57608,14 @@ function populateDealSources(el, value){
 						        			
 						        			tt += '<table>';
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
+						        				tt += 	'<tr><td class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>'+	
+						        							'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(Math.round(this.points[0].point.y))+'</b></td></tr>';
 						        			}
 						        			tt += '</table>';
 						        			
 						        		}else{
-						        			tt += '<table>';
+						        			tt += '<table><tr><td class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>';
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
 						        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[0].point.y+'</b></td></tr>';
@@ -57419,7 +57632,7 @@ function populateDealSources(el, value){
 						        				tt += 	'<tr><td style="color:'+this.points[3].series.color+';padding:0">'+this.points[3].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[3].point.y+'</b></td></tr>';
 						        			}
-						        			tt += '</table>';
+						        			tt += '<tr><td>Total:&nbsp; </td><td class="b-b-none">'+totalCallsCountList[this.points[0].point.x]+'</td></tr></table>';
 						        		}
 						        		return tt;
 						        	},
@@ -57441,7 +57654,7 @@ function populateDealSources(el, value){
 						                borderWidth : 0
 						            },
 						            column: {
-						                pointPadding: 0.2,
+						                pointPadding: 0.5,
 						                borderWidth: 0
 						            },
 						            bar : {
@@ -57566,13 +57779,14 @@ function populateDealSources(el, value){
 	 */
 	taskReportBarGraph : function(selector, groupByList, series, text,
 			base_model, domainUserNamesList) {
+			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
+		var pos = '' + column_position + '' + row_position;
+
 		head
 				.js(
 						LIB_PATH + 'lib/flot/highcharts-3.js',
 						function() {
-							$('#' + selector)
-									.highcharts(
-											{
+							taskReport[parseInt(pos)]=new Highcharts.Chart({
 												colors : [ "#23b7e5",
 														"#27c24c", "#7266ba",
 														"#fad733", "#f05050",
@@ -57580,8 +57794,10 @@ function populateDealSources(el, value){
 														"#eeaaee", "#55BF3B",
 														"#DF5353" ],
 												chart : {
+													renderTo:selector,
 													type : 'bar',
-													marginRight : 20
+													marginRight : 20,
+													height:groupByList.length*30+($('#'+selector).height()-30),
 												},
 												title : {
 													text : ''
@@ -57700,9 +57916,7 @@ function populateDealSources(el, value){
 																	userIndex = i;
 															}
 															return '<div>'
-																	+ '<div class="p-n" style="color:'
-																	+ this.series.color
-																	+ ';">'
+																	+ '<div class="p-n">'
 																	+ domainUserNamesList[userIndex]
 																	+ ' </div>'
 																	+ '<div class="p-n" style="color:'
@@ -58865,6 +59079,8 @@ function initializePortletsListeners() {
 							if (isNaN(id))
 								return;
 
+							$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+       
 							// Deserialize
 							deserializeForm(model.toJSON(),
 									$("#updateActivityForm"));
@@ -59100,7 +59316,7 @@ function initializeAddPortletsListeners() {
 				clickfunction($(this),url,forAll);
 			});
 	$('#portlets-add-listener').on(
-			"click",
+			"click touchstart",
 			'.add_to_all',
 			function() {
 				var forAll=true;
@@ -59168,7 +59384,8 @@ function clickfunction(that,url,forAll){
 						alert("Failed to add.");
 					}
 				});
-				}var Portlets_View, gridster;
+				}
+var Portlets_View, gridster;
 
 /** If CURRENT_AGILE_USER is not set, set it from user.domain **/
 $(function()
@@ -59438,7 +59655,22 @@ function set_up_portlets(el, portlets_el){
 						$(el).find('.fc-day-number').css('top',top);
 
         			}
-        		
+        			else if(tempModel.get("name")=="Calls Per Person")
+        			{
+
+        				var pos = '' + this.$resized_widget.attr('data-col')+''+this.$resized_widget.attr('data-row');
+        				var height = this.$resized_widget.find('.portlet_body').height();
+        				var width=this.$resized_widget.find('.portlet_body').width()
+        				callschart[parseInt(pos)].setSize(width,callschart[parseInt(pos)].xAxis[0].categories.length*30+(height-30),false);
+        			}
+        			else if(tempModel.get("name")=="Task Report")
+        			{
+
+        				var pos = '' + this.$resized_widget.attr('data-col')+''+this.$resized_widget.attr('data-row');
+        				var height = this.$resized_widget.find('.portlet_body').height();
+        				var width=this.$resized_widget.find('.portlet_body').width()
+        				taskReport[parseInt(pos)].setSize(width,taskReport[parseInt(pos)].xAxis[0].categories.length*30+(height-30),false);
+        			}
 
 				var models = [];
 
@@ -59483,6 +59715,14 @@ function set_up_portlets(el, portlets_el){
     	if($(window).width()<768 && gridster!=undefined){
     		gridster.disable();
     		gridster.disable_resize();
+    		if($('.portlet_body_calendar').is(':visible'))
+    		{
+    			$('.portlet_body_calendar').each(function(){
+					var that=$(this);
+					if($("#calendar_container").find('.fc-widget-header').length!=0)
+					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
+				});
+    		}
     	}
     	else if(gridster!=undefined)
     	{
@@ -59494,6 +59734,9 @@ function set_up_portlets(el, portlets_el){
 		if($(window).width()<975 && $(window).width()>768 && $('.portlet_body_calendar').is(':visible'))
 		{
 				$('.portlet_body_calendar').each(function(){
+					var that=$(this);
+					if($("#calendar_container").find('.fc-widget-header').length!=0)
+					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
 				$(this).find('#calendar_container').find('.fc-widget-header').each(function(){
 				$(this).text($(this).text().substring(0, 1));
 				});
@@ -59503,6 +59746,9 @@ function set_up_portlets(el, portlets_el){
 		{
 				$('.portlet_body_calendar').each(function()
 				{
+					var that=$(this);
+					if($("#calendar_container").find('.fc-widget-header').length!=0)
+					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
 					var weeksArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 					$(this).find('#calendar_container').find('.fc-widget-header').each(function(index)
 					{
@@ -59704,6 +59950,10 @@ function minicalendar(el)
 		selectable: true,
 		header : { left : 'prev',right:'next', center :'title'  },
 		weekMode:'liquid',
+		titleFormat :
+		{
+			month : 'MMM yyyy',
+		},
 
 		eventSources :[
 		               {
@@ -63074,6 +63324,15 @@ function initializeReportsListeners(){
 		var el = $("#report_advanced span i");
 		el.toggleClass("fa-minus").toggleClass("fa-plus");
 			});
+
+		$('.col-md-3')
+			.on(
+					"mouseenter",
+					'.show_screenshot',
+					function(e) {
+
+						$('.show_screenshot').popover();
+					});
 }
 
 function reportsContactTableView(base_model, customDatefields, view)
@@ -63330,16 +63589,34 @@ function scramble_input_names(el)
 }
 SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
 COMPANY_CUSTOM_FIELDS = undefined;
-function initializeContactFiltersListeners()
-{
-}
-$(function(){
+
+/**
+*  Contact Reports filters event view
+*/
+var Report_Filters_Event_View = Base_Model_View.extend({
+    events: {
+    	'click .filter-contacts-multiple-add' : 'contactsFilterMultipleAdd',
+    	'click .filter-contacts-multiple-add-or-rules' : 'contactsFilterAddOrRules',
+    	'click .filter-companies-multiple-add' : 'companiesFilterMultipleAdd',
+    	'click .filter-companies-multiple-add-or-rules' : 'companiesFilterAddOrRules',
+    	'click i.filter-contacts-multiple-remove' : 'contactsFilterRemove',
+    	'click .filter' : 'filterResults',
+    	'click .default_filter' : 'defaultFilterResults',
+
+    	'click #companies-filter' : 'companyFilterResults',
+    	'change .lhs_chanined_parent' : 'onParentLHSChanged',
+    	'change #condition > select' : 'onConditionChanged',
+    	'change #contact_type' : 'onChangeContactType',
+    	
+    },
 
 	// Filter Contacts- Clone Multiple
-	$('body').on('click', '.filter-contacts-multiple-add', function(e)
+	contactsFilterMultipleAdd: function(e)
 	{
 		e.preventDefault();
-		var that = this;
+		var targetEl = $(e.currentTarget);
+
+		var that = targetEl;
 		// To solve chaining issue when cloned
 
 		getTemplate("filter-contacts", {}, undefined, function(template_ui){
@@ -63362,13 +63639,15 @@ $(function(){
 			$(that).prev('table').find("tbody").append(htmlContent);
 
 		}, null);
-	});
+	},
 	
 	// Filter Contacts- Clone Multiple
-	$('body').on('click', '.filter-contacts-multiple-add-or-rules', function(e)
+	contactsFilterAddOrRules: function(e)
 	{
 		e.preventDefault();
-		var that = this;
+		var targetEl = $(e.currentTarget);
+
+		var that = targetEl;
 		// To solve chaining issue when cloned
 		getTemplate("filter-contacts", {}, undefined, function(template_ui){
 			if(!template_ui)
@@ -63391,14 +63670,16 @@ $(function(){
 
 		}, null);
 		
-	});
+	},
 	
 	// Filter Contacts- Clone Multiple
-	$('body').on('click', '.filter-companies-multiple-add', function(e)
+	companiesFilterMultipleAdd: function(e)
 	{
 		e.preventDefault();
+		var targetEl = $(e.currentTarget);
+
 		// To solve chaining issue when cloned
-		var that = this;
+		var that = targetEl;
 		getTemplate("filter-contacts", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
@@ -63418,13 +63699,15 @@ $(function(){
 
 		}, null);
 		
-	});
+	},
 	
 	// Filter Contacts- Clone Multiple
-	$('body').on('click', '.filter-companies-multiple-add-or-rules', function(e)
+	companiesFilterAddOrRules: function(e)
 	{
 		e.preventDefault();
-		var that = this;
+		var targetEl = $(e.currentTarget);
+		
+		var that = targetEl;
 		// To solve chaining issue when cloned
 		getTemplate("filter-contacts", {}, undefined, function(template_ui){
 			if(!template_ui)
@@ -63446,102 +63729,75 @@ $(function(){
 		}, null);
 
 		
-	});
+	},
 
 	// Filter Contacts- Remove Multiple
-	$('body').on('click', 'i.filter-contacts-multiple-remove', function(e)
+	contactsFilterRemove: function(e)
 	{
-		$(this).closest("tr").remove();
-	});
+		var targetEl = $(e.currentTarget);
+		$(targetEl).closest("tr").remove();
+	},
 
 	// Fetch filter result without changing route on click
-	$('body').on('click', '.filter', function(e)
+	filterResults:  function(e)
 	{
 
-		e.preventDefault();
-		eraseData('dynamic_contact_filter');
+		contact_filters_util.filterResults(e);
+	},
 
-		var filter_id = $(this).attr('id');
-		var filter_type = $(this).attr('filter_type');
-
-		// Saves Filter in cookie
-		createCookie('contact_filter', filter_id)
-		createCookie('contact_filter_type', filter_type)
-
-		// Gets name of the filter, which is set as data
-		// attribute in filter
-		filter_name = $(this).attr('data');
-
-		CONTACTS_HARD_RELOAD=true;
-		App_Contacts.contacts();
-		return;
-		// /removed old code from below,
-		// now filters will work only on contact, not company
-	});
 	/*
 	 * If default filter is selected, removes filter cookies an load contacts
 	 * with out any query condition
 	 */
-	$('body').on('click', '.default_filter', function(e)
+	defaultFilterResults:  function(e)
 	{
 		e.preventDefault();
 		revertToDefaultContacts();
-	});
+	},
 
-	$('body').on('click', '.default_contact_remove_tag', function(e)
+	companyFilterResults: function(e)
 	{
-		e.preventDefault();
-		// Navigate to show form
-		Backbone.history.navigate("contacts", { trigger : true });
-	});
-
-	$('body').on('click', '#companies-filter', function(e)
-	{
-
-		e.preventDefault();
-		eraseCookie('contact_filter');
-		eraseCookie('contact_filter_type');
-
-		createCookie('company_filter', "Companies");
-		CONTACTS_HARD_RELOAD = true;
-		App_Contacts.contacts(); // /Show Companies list, explicitly hard
-		// reload
-		return;
+		contact_filters_util.companyFilterResults(e);
 		
-	});
+	},
+	
 
-	$('body').on('change', '.lhs_chanined_parent', function(e)
+	onParentLHSChanged:  function(e)
 	{
 		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-		if (($(this).val()).indexOf('tags') != -1)
+		if (($(targetEl).val()).indexOf('tags') != -1)
 		{
-			var element = $(this).closest('tr').find('div#RHS');
+			var element = $(targetEl).closest('tr').find('div#RHS');
 			addTagsDefaultTypeahead(element);
 		}
-	});
+	},
 	
-	$('body').on('change', '#condition > select', function(e){
+	onConditionChanged: function(e){
 		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-		if ($(this).find("option:selected").hasClass('tags'))
+		if ($(targetEl).find("option:selected").hasClass('tags'))
 		{
-			var element = $(this).parents().closest('tr').find('div#RHS');
+			var element = $(targetEl).parents().closest('tr').find('div#RHS');
 			addTagsDefaultTypeahead(element);
 		}
 		
-	})
+	},
 	
-	$('body').on('change', '#contact_type', function(e)
+	onChangeContactType: function(e)
 	{
-		if($(this).val() == 'COMPANY') {
+		var targetEl = $(e.currentTarget);
+
+		if($(targetEl).val() == 'COMPANY') {
 			$('#companies-filter-wrapper').show();
 			$('#contacts-filter-wrapper').hide();
 		} else {
 			$('#companies-filter-wrapper').hide();
 			$('#contacts-filter-wrapper').show();
 		}
-	});
+	},
 	
 });
 
@@ -63812,7 +64068,7 @@ function show_chained_fields(el, data, forceShow)
  * 
  * @param element
  */
-function addTagsDefaultTypeahead(element, applyCustomCSS)
+function addTagsDefaultTypeahead(element)
 {
 	var tags_array = [];
 
@@ -63827,7 +64083,7 @@ function addTagsDefaultTypeahead(element, applyCustomCSS)
 		tagsCollection.fetch({ success : function(data)
 		{
 			TAGS = tagsCollection.models;
-			addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element, applyCustomCSS);
+			addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element);
 
 		} });
 		return;
@@ -63835,11 +64091,11 @@ function addTagsDefaultTypeahead(element, applyCustomCSS)
 	
 
 	// Adds typeahead to given element
-	addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element, applyCustomCSS);
+	addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element);
 }
 
 // With tags JSON sent type ahead is built on input fields
-function addTagsArrayasTypeaheadSource(tagsJSON, element, applyCustomCSS)
+function addTagsArrayasTypeaheadSource(tagsJSON, element)
 {
 	var tags_array = [];
 
@@ -63849,10 +64105,7 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element, applyCustomCSS)
 	});
 
 	// $("input", element).attr("data-provide","typeahead");
-	if(applyCustomCSS)
-		$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag");
-	else
-		$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag").width("92%");
+	$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag").width("92%");
 }
 
 
@@ -64009,7 +64262,54 @@ function setUpContactView(cel,tagExists){
 		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='Grid View' class='btn btn-default btn-sm contacts-view' data='grid'><i class='fa fa-th-large' style='margin-right:3px'></i></a>");
 	}
 	
-}/**
+}
+
+
+var contact_filters_util = {
+
+	// Fetch filter result without changing route on click
+	filterResults:  function(e)
+	{
+
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
+
+		eraseData('dynamic_contact_filter');
+
+		var filter_id = $(targetEl).attr('id');
+		var filter_type = $(targetEl).attr('filter_type');
+
+		// Saves Filter in cookie
+		createCookie('contact_filter', filter_id)
+		createCookie('contact_filter_type', filter_type)
+
+		// Gets name of the filter, which is set as data
+		// attribute in filter
+		filter_name = $(targetEl).attr('data');
+
+		CONTACTS_HARD_RELOAD=true;
+		App_Contacts.contacts();
+		return;
+		// /removed old code from below,
+		// now filters will work only on contact, not company
+	},
+
+	companyFilterResults: function(e)
+	{
+
+		e.preventDefault();
+		eraseCookie('contact_filter');
+		eraseCookie('contact_filter_type');
+
+		createCookie('company_filter', "Companies");
+		CONTACTS_HARD_RELOAD = true;
+		App_Contacts.contacts(); // /Show Companies list, explicitly hard
+		// reload
+		return;
+		
+	},
+
+};/**
  * Search.js is a used to show typeahead results in different page and also
  * initialized typeahead on search field in navbar client side.
  * 
@@ -64161,7 +64461,7 @@ function load_imap_folders(el, model) {
 
 function load_gmail_widgets(limit) {
 	// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
-	gmailListView1 = new Base_Collection_View({
+	gmailListView1 = new Settings_Collection_Events({
 		url : 'core/api/social-prefs/GMAIL/list',
 		templateKey : "settings-social-prefs",
 		individual_tag_name : 'div',
@@ -64190,7 +64490,7 @@ function load_gmail_widgets(limit) {
 }
 function load_imap_widgets(limit) {
 	// Gets imap prefs
-	imapListView1 = new Base_Collection_View({
+	imapListView1 = new Settings_Collection_Events({
 		url : 'core/api/imap/',
 		templateKey : "settings-imap-access",
 		individual_tag_name : 'div',
@@ -64216,7 +64516,7 @@ function load_imap_widgets(limit) {
 
 function load_office365_widgets(limit) {
 	// Gets office prefs list
-	officeListView1 = new Base_Collection_View({
+	officeListView1 = new Settings_Collection_Events({
 		url : 'core/api/office/',
 		templateKey : "settings-office-access",
 		individual_tag_name : 'div',
@@ -64272,147 +64572,197 @@ function load_imap_properties(model, el) {
 }
 
 
-function initializeSettingsListeners(){
+/**
+*  Settings modal event listeners
+*/
+var Settings_Modal_Events = Base_Model_View.extend({
 
-	$('#prefs-tabs-content').on('click', '.gmail-share-settings-select', function(e)
-	{
-						e.preventDefault();
-						var id = $(this).attr("oid");
-						var el = $(this).closest("div");
-						$(this).css("display", "none");
-						el.find(".gmail-share-select").css("display", "inline");
-						el.find(".gmail-share-settings-txt").css("display",
-								"none");
-						var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
-						fillSelect(
-								'gmail-share-user-select',
-								'core/api/social-prefs/shared-to-users?id='
-										+ id,
-								'users',
-								function fillNew() {
-									$(
-											"#gmail-share-user-select .default-select",
-											el).remove();
-								}, optionsTemplate, false, el);
-					});
 	/**
+	 * For adding new document
+	 */
+	onGmailShareOptionsSelect: function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+
+		var id = $(target_el).attr("oid");
+		var el = $(target_el).closest("div");
+
+		$(target_el).css("display", "none");
+		el.find(".gmail-share-select").css("display", "inline");
+		el.find(".gmail-share-settings-txt").css("display",
+				"none");
+		var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+		fillSelect(
+				'gmail-share-user-select',
+				'core/api/social-prefs/shared-to-users?id='
+						+ id,
+				'users',
+				function fillNew() {
+					$(
+							"#gmail-share-user-select .default-select",
+							el).remove();
+				}, optionsTemplate, false, el);
+	},
+
+	 /**
 	 * To cancel the imap share settings event
 	 */
-	$('#prefs-tabs-content').on('click', '.gmail-share-settings-cancel', function(e){
-		e.preventDefault();
-		var el = $(this).closest("div");
-		var name = $(this).attr('name');
-		el.find(".gmail-share-select").css("display", "none");
-		el.find(".gmail-share-settings-select").css("display", "inline");
-		el.find(".gmail-share-settings-txt").css("display", "inline");
-	});
+	onGmailShareOptionsCancel : function(e){
+
+		if(e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
+     		e.preventDefault();
+     		var target_el = $(e.currentTarget);
+
+     	 	var el = $(target_el).closest("div");
+			var name = $(target_el).attr('name');
+			el.find(".gmail-share-select").css("display", "none");
+			el.find(".gmail-share-settings-select").css("display", "inline");
+			el.find(".gmail-share-settings-txt").css("display", "inline");
+	     }
+	},
 
 	/**
 	 * Share imap settings with othe users
 	 */
-	$('#prefs-tabs-content').on('click', '.imap-share-settings-select', function(e){
-						e.preventDefault();
-						var id = $(this).attr("oid");
-						var el = $(this).closest("div");
-						$(this).css("display", "none");
-						el.find(".imap-share-settings-txt").css("display",
-								"none");
-						el.find(".imap-share-select").css("display", "inline");
-						var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
-						fillSelect(
-								'imap-share-user-select',
-								'core/api/imap/shared-to-users?id=' + id,
-								'users',
-								function fillNew() {
-									$(
-											"#imap-share-user-select .default-select",
-											el).remove();
-								}, optionsTemplate, false, el);
-					});
+	onImapShareOptionsSelect : function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+
+		var id = $(target_el).attr("oid");
+		var el = $(target_el).closest("div");
+		$(target_el).css("display", "none");
+		el.find(".imap-share-settings-txt").css("display",
+				"none");
+		el.find(".imap-share-select").css("display", "inline");
+		var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+		fillSelect(
+				'imap-share-user-select',
+				'core/api/imap/shared-to-users?id=' + id,
+				'users',
+				function fillNew() {
+					$(
+							"#imap-share-user-select .default-select",
+							el).remove();
+				}, optionsTemplate, false, el);
+	},
 
 	/**
 	 * To cancel the imap share settings event
 	 */
-	$('#prefs-tabs-content').on('click', '.imap-share-settings-cancel', function(e){
+	onImapShareOptionsCancel : function(e){
 		e.preventDefault();
-		var el = $(this).closest("div");
-		var name = $(this).attr('name');
+		var target_el = $(e.currentTarget);
+
+		var el = $(target_el).closest("div");
+		var name = $(target_el).attr('name');
 		el.find("#imap-share-user-select").empty();
 		el.find(".imap-share-select").css("display", "none");
 		el.find(".imap-share-settings-select").css("display", "inline");
 		el.find(".imap-share-settings-txt").css("display", "inline");
-	});
+	},
 
 	/**
 	 * Select imap server folder, will fetch mails from these folders
 	 */
-	$('#prefs-tabs-content').on('click', '.imap-folders-settings-click', function(e){
-				e.preventDefault();
-				var el = $(this).closest("div");
-				var id = $(this).attr("oid");
-				$(this).css("display", "none");
-				el.find(".imap-folders-select").css("display", "inline");
-				var optionsTemplate = "<option {{selected}}>{{name}}</option>";
-				fillSelect('imap-folders-multi-select', 'core/api/imap/' + id
-						+ '/imap-folders', 'folders', function fillNew() {
-					$("#imap-folders-multi-select .default-select", el)
-							.remove();
-				}, optionsTemplate, false, el);
-			});
+	onImapFoldersOptionsSelect :  function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+
+		var el = $(target_el).closest("div");
+		var id = $(target_el).attr("oid");
+		$(target_el).css("display", "none");
+		el.find(".imap-folders-select").css("display", "inline");
+		var optionsTemplate = "<option {{selected}}>{{name}}</option>";
+		fillSelect('imap-folders-multi-select', 'core/api/imap/' + id
+				+ '/imap-folders', 'folders', function fillNew() {
+			$("#imap-folders-multi-select .default-select", el)
+					.remove();
+		}, optionsTemplate, false, el);
+	},
 
 	/**
 	 * To cancel the imap folder settings
 	 */
-	$('#prefs-tabs-content').on('click', '.imap-folders-settings-cancel', function(e){
+	onImapFoldersOptionsCancel :  function(e){
 		e.preventDefault();
-		var el = $(this).closest("div");
+		var target_el = $(e.currentTarget);
+
+		var el = $(target_el).closest("div");
 		el.find('#imap-folders-multi-select').empty();
 		el.find(".imap-folders-select").css("display", "none");
 		el.find(".imap-folders-settings-click").css("display", "inline");
-	});
+	},
+
 
 	/**
 	 * Share office settings with other users
 	 */
-	$('#prefs-tabs-content').on('click', '.office-share-settings-select', function(e){
-						e.preventDefault();
-						var el = $(this).closest("div");
-						$(this).css("display", "none");
-						var id = $(this).attr("oid");
-						el.find(".office-share-settings-txt").css("display",
-								"none");
-						el.find(".office-share-select")
-								.css("display", "inline");
-						var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
-						fillSelect(
-								'office-share-user-select',
-								'core/api/office/shared-to-users?id=' + id,
-								'users',
-								function fillNew() {
-									$(
-											"#office-share-user-select .default-select",
-											el).remove();
-								}, optionsTemplate, false, el);
-					});
+	onOfficeShareOptionsSelect : function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+
+		var el = $(target_el).closest("div");
+		$(target_el).css("display", "none");
+		var id = $(target_el).attr("oid");
+		el.find(".office-share-settings-txt").css("display",
+				"none");
+		el.find(".office-share-select")
+				.css("display", "inline");
+		var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+		fillSelect(
+				'office-share-user-select',
+				'core/api/office/shared-to-users?id=' + id,
+				'users',
+				function fillNew() {
+					$(
+							"#office-share-user-select .default-select",
+							el).remove();
+				}, optionsTemplate, false, el);
+	},
 
 	/**
 	 * To cancel the imap share settings event
 	 */
-	$('#prefs-tabs-content').on('click', '.office-share-settings-cancel', function(e){
+	onOfficeShareOptionsCancel : function(e){
 		e.preventDefault();
-		var el = $(this).closest("div");
-		var name = $(this).attr('name');
+		var target_el = $(e.currentTarget);
+
+		var el = $(target_el).closest("div");
+		var name = $(target_el).attr('name');
 		el.find(".office-share-select").css("display", "none");
 		el.find(".office-share-settings-select").css("display", "inline");
 		el.find(".office-share-settings-txt").css("display", "inline");
-	});
+	},
 
-	$('#prefs-tabs-content').on('click', '#gmail-prefs-delete', function(e){
 
+	events: {
+		'click .gmail-share-settings-select': 'onGmailShareOptionsSelect',
+		'click .gmail-share-settings-cancel': 'onGmailShareOptionsCancel',		
+		'click .imap-share-settings-select': 'onImapShareOptionsSelect',		
+		'click .imap-share-settings-cancel': 'onImapShareOptionsCancel',	
+		'click .imap-folders-settings-click': 'onImapFoldersOptionsSelect',	
+		'click .imap-folders-settings-cancel': 'onImapFoldersOptionsCancel',	
+		'click .office-share-settings-select': 'onOfficeShareOptionsSelect',	
+		'click .office-share-settings-cancel': 'onOfficeShareOptionsCancel',	
+	},
+
+});
+
+/**
+*  Settings modal event listeners
+*/
+var Settings_Collection_Events = Base_Collection_View.extend({
+	events: {
+		'click #gmail-prefs-delete': 'onGmailPrefsDelete',	
+		'click #office-prefs-delete,#imap-prefs-delete': 'onImapOfficePrefsDelete',	
+	},
+
+	
+	onGmailPrefsDelete : function(e){
 		e.preventDefault();
+		var target_el = $(e.currentTarget);
 
-		var saveBtn = $(this);
-
+		var saveBtn = $(target_el);
 		var id = $(saveBtn).attr("oid");
 
 		// Returns, if the save button has disabled attribute
@@ -64434,14 +64784,13 @@ function initializeSettingsListeners(){
 				return;
 			}
 		});
-	});
-	
-	$('#prefs-tabs-content').on('click', '#office-prefs-delete, #imap-prefs-delete', function(e){
+	},
 
+	onImapOfficePrefsDelete : function(e){
 		e.preventDefault();
-		
-		var saveBtn = $(this);
-		
+		var target_el = $(e.currentTarget);
+
+		var saveBtn = $(target_el);		
 		var id = $(saveBtn).attr("oid");
 
 		// Returns, if the save button has disabled attribute
@@ -64466,190 +64815,13 @@ function initializeSettingsListeners(){
 				return;
 			}
 		});
-	});
 
-	$("#prefs-tabs-content .widgets_inner ul li").off("click");
-	$("#prefs-tabs-content").on("click",".widgets_inner ul li",function(){
-		var temp = $(this).find("a").attr("href").split("#");
-		if(islocalStorageHasSpace())
-			localStorage.setItem('widget_tab', temp[1]);
-		Backbone.history.navigate('add-widget', { trigger : true });
-	});
+	},
+});
 
-}
-
-function initializeAdminSettingsListeners(){
-
-	 $('#upload-container .upload_s3').off('click');
-	 $('#upload-container').on('click', '.upload_s3', function (e) {
-		e.preventDefault();
-		uploadImage("upload-container");
-	});
-
-	ACCOUNT_DELETE_REASON_JSON = undefined;
-	/**
-	 * If user clicks on confirm delete the modal is hidden and
-	 * delete request is sent to "core/api/delete/account"
-	 */
-		
-	// Cancellation for free users
-	$('#accountPrefs #cancel-account').off('click');
-	$('#accountPrefs').on('click', '#cancel-account', function(e) {
-	
-			e.preventDefault();
-			
-			$("#warning-deletion-feedback").remove();
-			// Shows account stats warning template with stats(data used)
-			
-			getTemplate("warning-feedback", {}, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-				var el = $(template_ui);
-
-				// Appends to content, warning is modal can call show if
-				// appended in content
-				$('#content').append(el);
-
-				// Shows warning modal
-				$("#warning-deletion-feedback").modal('show');
-
-				// Undefines delete reason, if use chose not to delete account in delete process
-				$("#warning-deletion-feedback").on('hidden.bs.modal', function(){
-					ACCOUNT_DELETE_REASON_JSON = undefined;
-				});
-
-				$('body').on('click', '#warning-feedback-save', function(e) {
-					e.preventDefault();
-					
-					var form = $("#cancelation-feedback-form");
-					
-					if(!isValidForm(form))
-					{
-						return;
-					}
-					
-					var input =  $("input[name=cancellation_reason]:checked");
-				
-					ACCOUNT_DELETE_REASON_JSON = {};
-					ACCOUNT_DELETE_REASON_JSON["reason"] = $(input).val();
-					ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
-					$(".modal-body").html(getRandomLoadingImg());
-					var delete_step1_el = "";
-					if(ACCOUNT_STATS){
-						getTemplate('warning', ACCOUNT_STATS, undefined, function(template_ui1){
-					 		if(!template_ui1)
-					    		return;
-					    	delete_step1_el = $(template_ui1);
-							
-						}, null);
-
-					}
-					else
-						{
-							set_up_account_stats(el, function(data){
-								getTemplate('warning', data, undefined, function(template_ui){
-							 		if(!template_ui)
-							    		return;
-							    	delete_step1_el = $(template_ui);
-									$('#content').html($(template_ui)); 
-									$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
-									$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
-								}, null);
-
-							})
-							return;
-						}
-						 
-					$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
-					$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
-					
-				});
-			}, null);
-	});
-	
-	// Cancellation for paid users
-	$('#accountPrefs #cancel-account-request').off('click');
-	$('#accountPrefs').on('click', '#cancel-account-request', function(e) {
-	
-			e.preventDefault();
-			
-			$("#send-cancellation").remove();
-			
-			// Shows cancellation modal
-			getTemplate('send-cancellation-request', {}, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-				var el = $(template_ui);	
-				$('#content').append(el);
-				$("#send-cancellation").modal('show');
-			
-				// Undefines delete reason, if use chose not to delete account in delete process
-				$("#send-cancellation").on('hidden.bs.modal', function(){
-					$("#account_cancel_reason").val()
-				});
-
-				$('body').on('click', '#send-delete-request', function(e) {
-
-						e.preventDefault();
-
-						if($(this).attr('disabled'))
-					   	     return;
-						
-						// If not a valid form return else serialize form data to parse
-						if(!isValidForm($("#cancelation-request-form")))
-							return;
-						
-						// Disables send button and change text to Sending...
-						disable_send_button($(this));
-						
-						var json = serializeForm("cancelation-request-form");
-						
-						var info = json.account_cancel_reason;
-						
-						// Replace \r\n with <br> tags as email is sent as text/html
-						var reason = info.replace(/\r\n/g,"<br/>");
-						
-						// Build url
-						var url =  'core/api/emails/send-email?from=' + encodeURIComponent(CURRENT_DOMAIN_USER.email) + '&to=' + 
-						encodeURIComponent("care@agilecrm.com") + '&subject=' + encodeURIComponent("Cancellation Request") + '&body=' + 
-						encodeURIComponent(reason);
-
-						$.post(url,function(){
-
-							// Reset form fields after sending email
-							$("#cancelation-request-form").each(function () {
-								this.reset();
-							});
-							
-							// Adds "Cancellation Request" tag in "Our" domain
-							add_tag_our_domain("Cancellation Request");
-							
-							// Adds note in "Our" domain
-							var note = {};
-							note.subject = "Cancellation Request";
-							note.description = info;
-							
-							agile_addNote(note,'', CURRENT_DOMAIN_USER.email);
-							
-							$("#send-cancellation .modal-title").html($("#send-delete-request-step2 .modal-title").html());		    
-						    $("#send-cancellation .modal-body").html($("#send-delete-request-step2 .modal-body").html());
-							$("#send-cancellation .modal-footer").html($("#send-delete-request-step2 .modal-footer").html());
-							
-							// Enables Send Email button.
-							enable_send_button($('#send-delete-request'));
-						});
-						
-					});
-
-			}, null);
-
-			
-	});
-
-}
 
 $(function(){
-
+	
 	$("#content").on("click", '#email-gateway-delete', function(e) {
 		e.preventDefault();
 		
@@ -64696,6 +64868,14 @@ $(function(){
 		});
 	});
 
+	$("#prefs-tabs-content .widgets_inner ul li").off("click");
+	$("#prefs-tabs-content").on("click",".widgets_inner ul li",function(){
+		var temp = $(this).find("a").attr("href").split("#");
+		if(islocalStorageHasSpace())
+			localStorage.setItem('widget_tab', temp[1]);
+		Backbone.history.navigate('add-widget', { trigger : true });
+	});
+	
 });
 
 
@@ -67233,14 +67413,11 @@ function set_up_account_stats(el, callback)
 
 }
 
+
 /**
  * Handles events on delete account at stats and confirmation, sends delete
  * request on confirmation
  */
-function initializeAccountSettingsListeners(){
-
-}
-
 $(function(){
 
 /**
@@ -67267,6 +67444,7 @@ $(function(){
 					add_account_canceled_info(ACCOUNT_DELETE_REASON_JSON, function(data){
 						
 						$("#warning-deletion-feedback").modal('hide');	
+
 						// Show loading in content
 						$("#content").html(getRandomLoadingImg());
 						// Navigate to login page after delete
@@ -67280,173 +67458,131 @@ $(function(){
 	// Cancellation for free users
 	$("#content #cancel-account").off("click");
 	$('#content').on('click', '#cancel-account', function(e) {
-	
-			e.preventDefault();
-			
-			$("#warning-deletion-feedback").remove();
+			e.preventDefault();		
+
 			// Shows account stats warning template with stats(data used)
-			getTemplate('warning-feedback', {}, undefined, function(template_ui){
-		 		if(!template_ui)
-		    		return;
-		    	var el = $(template_ui);
-		    	// Appends to content, warning is modal can call show if
-				// appended in content
-				$('#content').append(el);
-
-				// Shows warning modal
-				$("#warning-deletion-feedback").modal('show');
-
-				// Undefines delete reason, if use chose not to delete account in delete process
-				$("#warning-deletion-feedback").on('hidden.bs.modal', function(){
-					ACCOUNT_DELETE_REASON_JSON = undefined;
-				});
-				
-				$('#warning-deletion-feedback').on('click', '#warning-feedback-save', function(e) {
-					e.preventDefault();
-					
-					var form = $("#cancelation-feedback-form");
-					
-					if(!isValidForm(form))
-					{
-						return;
-					}
-					
-					var input =  $("input[name=cancellation_reason]:checked");
-				
-					ACCOUNT_DELETE_REASON_JSON = {};
-					ACCOUNT_DELETE_REASON_JSON["reason"] = $(input).val();
-					ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
-					$(".modal-body").html(getRandomLoadingImg());
-					var delete_step1_el = "";
-					if(ACCOUNT_STATS){
-						getTemplate('warning', ACCOUNT_STATS, undefined, function(template_ui){
-					 		if(!template_ui)
-					    		return;
-					    	delete_step1_el = $(template_ui);
-							
-						}, null);
-
-					}
-					else
-						{
-							set_up_account_stats(el, function(data){
-								getTemplate('warning', data, undefined, function(template_ui){
-							 		if(!template_ui)
-							    		return;
-							    	delete_step1_el = $(template_ui);
-									$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
-									$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
-								}, null);
-									
-							})
-							return;
-						}
-						 
-					$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
-					$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
-					
-				});
-				
-			}, null);
-
-
-				
+			$("#warning-deletion-feedback").html(getTemplate('warning-feedback', {})).modal('show');	
+			
 			
 	});
 	
 	// Cancellation for paid users
 	$("#content #cancel-account-request").off("click");
 	$('#content').on('click', '#cancel-account-request', function(e) {
-	
 			e.preventDefault();
 			
-			$("#send-cancellation").remove();
-			
 			// Shows cancellation modal
-			var el = getTemplate('send-cancellation-request', {});
-			$('#content').append(el);
-			
-			$("#send-cancellation").modal('show');
-			
-			// Undefines delete reason, if use chose not to delete account in delete process
-			$("#send-cancellation").on('hidden.bs.modal', function(){
-				$("#account_cancel_reason").val()
-			});
-			
-			$('#send-cancellation').on('click', '#send-delete-request', function(e) {
-
-				e.preventDefault();
-
-				if($(this).attr('disabled'))
-			   	     return;
-				
-				// If not a valid form return else serialize form data to parse
-				if(!isValidForm($("#cancelation-request-form")))
-					return;
-				
-				// Disables send button and change text to Sending...
-				disable_send_button($(this));
-				
-				var json = serializeForm("cancelation-request-form");
-				
-				var info = json.account_cancel_reason;
-				
-				// Replace \r\n with <br> tags as email is sent as text/html
-				var reason = info.replace(/\r\n/g,"<br/>");
-				
-				// Build url
-				var url =  'core/api/emails/send-email?from=' + encodeURIComponent(CURRENT_DOMAIN_USER.email) + '&to=' + 
-				encodeURIComponent("care@agilecrm.com") + '&subject=' + encodeURIComponent("Cancellation Request") + '&body=' + 
-				encodeURIComponent(reason);
-
-				$.post(url,function(){
-
-					// Reset form fields after sending email
-					$("#cancelation-request-form").each(function () {
-						this.reset();
-					});
-					
-					// Adds "Cancellation Request" tag in "Our" domain
-					add_tag_our_domain("Cancellation Request");
-					
-					// Adds note in "Our" domain
-					var note = {};
-					note.subject = "Cancellation Request";
-					note.description = info;
-					
-					agile_addNote(note,'', CURRENT_DOMAIN_USER.email);
-					
-					/**
-					 * Sends cancel request to cancel subscription
-					 */
-					/*$.ajax({
-						type : "DELETE",
-						url : "core/api/subscription/delete/account",
-						success : function()
-						{
-							// Enables Send Email button.
-						    enable_send_button($('#send-delete-request'));
-						    $("#send-cancellation").modal('hide');	
-						    
-						    // Showing Noty
-						    showNotyPopUp("information", "Cancellation request sent. You should hear back from us in one working day.", "top", 3000);
-						}
-					});*/
-					
-					$("#send-cancellation .modal-title").html($("#send-delete-request-step2 .modal-title").html());		    
-				    $("#send-cancellation .modal-body").html($("#send-delete-request-step2 .modal-body").html());
-					$("#send-cancellation .modal-footer").html($("#send-delete-request-step2 .modal-footer").html());
-					
-					// Enables Send Email button.
-					enable_send_button($('#send-delete-request'));
-				});
-				
-			});
+			$("#send-cancellation").html(getTemplate('send-cancellation-request', {})).modal('show');	
 			
 	});
 
 });
-	function getSubscription(customer, plan)
+	
+
+$('#send-cancellation').on('click', '#send-delete-request', function(e) {
+
+		e.preventDefault();
+
+		if($(this).attr('disabled'))
+	   	     return;
+		
+		// If not a valid form return else serialize form data to parse
+		if(!isValidForm($("#cancelation-request-form")))
+			return;
+		
+		// Disables send button and change text to Sending...
+		disable_send_button($(this));
+		
+		var json = serializeForm("cancelation-request-form");
+		
+		var info = json.account_cancel_reason;
+		
+		// Replace \r\n with <br> tags as email is sent as text/html
+		var reason = info.replace(/\r\n/g,"<br/>");
+		
+		// Build url
+		var url =  'core/api/emails/send-email?from=' + encodeURIComponent(CURRENT_DOMAIN_USER.email) + '&to=' + 
+		encodeURIComponent("care@agilecrm.com") + '&subject=' + encodeURIComponent("Cancellation Request") + '&body=' + 
+		encodeURIComponent(reason);
+
+		$.post(url,function(){
+
+			// Reset form fields after sending email
+			$("#cancelation-request-form").each(function () {
+				this.reset();
+			});
+			
+			// Adds "Cancellation Request" tag in "Our" domain
+			add_tag_our_domain("Cancellation Request");
+			
+			// Adds note in "Our" domain
+			var note = {};
+			note.subject = "Cancellation Request";
+			note.description = info;
+			
+			agile_addNote(note,'', CURRENT_DOMAIN_USER.email);
+								
+			$("#send-cancellation .modal-title").html($("#send-delete-request-step2 .modal-title").html());		    
+		    $("#send-cancellation .modal-body").html($("#send-delete-request-step2 .modal-body").html());
+			$("#send-cancellation .modal-footer").html($("#send-delete-request-step2 .modal-footer").html());
+			
+			// Enables Send Email button.
+			enable_send_button($('#send-delete-request'));
+		});
+		
+	});
+
+$('#warning-deletion-feedback').on('click', '#warning-feedback-save', function(e) {
+		e.preventDefault();
+		
+		var form = $("#cancelation-feedback-form");
+		
+		if(!isValidForm(form))
+		{
+			return;
+		}
+		
+		var input =  $("input[name=cancellation_reason]:checked");
+	
+		ACCOUNT_DELETE_REASON_JSON = {};
+		ACCOUNT_DELETE_REASON_JSON["reason"] = $(input).val();
+		ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
+		$(".modal-body").html(getRandomLoadingImg());
+		var delete_step1_el = "";
+		if(ACCOUNT_STATS){
+			getTemplate('warning', ACCOUNT_STATS, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+		    	delete_step1_el = $(template_ui);
+				
+			}, null);
+
+		}
+		else
+			{
+				set_up_account_stats(el, function(data){
+					getTemplate('warning', data, undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+				    	delete_step1_el = $(template_ui);
+						$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
+						$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+					}, null);
+						
+				})
+				return;
+			}
+			 
+		$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
+		$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+		
+	});
+
+// Undefines delete reason, if use chose not to delete account in delete process
+$("#warning-deletion-feedback").on('hidden.bs.modal', function(){
+	ACCOUNT_DELETE_REASON_JSON = undefined;
+});
+				function getSubscription(customer, plan)
 {
 	if(!plan)
 		return null;
@@ -70323,31 +70459,35 @@ function editTask(taskId, taskListId, taskListOwnerId)
 	taskJson["taskListId"] = taskListId;
 	taskJson["taskListOwnerId"] = taskListOwnerId;
 
-	// Fill form
-	deserializeForm(taskJson, $("#updateTaskForm"));
-	$('.update-task-timepicker').val(fillTimePicker(taskJson.due));
-
 	// Show modal
-	$("#updateTaskModal").modal('show');
-	categories.getCategoriesHtml(taskJson,function(catsHtml){
-		$('#type',$("#updateTaskForm")).html(catsHtml);
-		// Fills owner select element
-		populateUsers("owners-list", $("#updateTaskForm"), taskJson, 'taskOwner', function(data)
-		{
-			$("#updateTaskForm").find("#owners-list").html(data);
-			if (taskJson.taskOwner)
-			{
-				$("#owners-list", $("#updateTaskForm")).find('option[value=' + taskJson['taskOwner'].id + ']').attr("selected", "selected");
-			}
+	$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
 	
-			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+	loadProgressSlider($("#updateTaskForm"), function(el){
+		// Fill form
+		deserializeForm(taskJson, $("#updateTaskForm"));
+		$('.update-task-timepicker').val(fillTimePicker(taskJson.due));
+
+		categories.getCategoriesHtml(taskJson,function(catsHtml){
+			$('#type',$("#updateTaskForm")).html(catsHtml);
+			// Fills owner select element
+			populateUsers("owners-list", $("#updateTaskForm"), taskJson, 'taskOwner', function(data)
+			{
+				$("#updateTaskForm").find("#owners-list").html(data);
+				if (taskJson.taskOwner)
+				{
+					$("#owners-list", $("#updateTaskForm")).find('option[value=' + taskJson['taskOwner'].id + ']').attr("selected", "selected");
+				}
+		
+				$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+			});
 		});
+
+		showNoteOnForm("updateTaskForm", taskJson.notes);
+
+		// Creates normal time.
+		displayTimeAgo($(".task-trello-list"));
 	});
 
-	showNoteOnForm("updateTaskForm", taskJson.notes);
-
-	// Creates normal time.
-	displayTimeAgo($(".task-trello-list"));
 }
 
 // Update edited task
@@ -70605,7 +70745,7 @@ function displaySettings()
 }
 
 // Load and display slider in update task modal of task for progress.
-function loadProgressSlider(el)
+function loadProgressSlider(el, callback)
 {
 	head.load(LIB_PATH + 'lib/jquery.slider.min.js', function()
 	{
@@ -70618,6 +70758,9 @@ function loadProgressSlider(el)
 				changeProgress(value, $(".status", el).val(), el);
 			}
 		});
+
+		if(callback)
+			  callback(el);
 	});
 }
 
@@ -70694,15 +70837,23 @@ function setForm(formToSet)
 
 	if (isComplete == "true")
 	{
-		// Show slider for progress
-		showProgressSlider(100, COMPLETED, formToSet);
+		// loadProgressSlider(formToSet, function(formToSet){
+				// Show slider for progress
+				showProgressSlider(100, COMPLETED, formToSet);
+		// });
 	}
 	else
 	{
-		// Show slider for progress
-		showProgressSlider($('#progress', formToSet).val(), $('#status', formToSet).val(), formToSet);
+		// loadProgressSlider(formToSet, function(formToSet){
 
-		$(".progress_slider", formToSet).slider("value", $('#progress', formToSet).val());
+			// Show slider for progress
+			showProgressSlider($('#progress', formToSet).val(), $('#status', formToSet).val(), formToSet);
+
+			$(".progress_slider", formToSet).slider("value", $('#progress', formToSet).val());
+
+		// });
+
+		
 	}
 }
 
@@ -71090,7 +71241,8 @@ function addTasklListDetails(addTaskElement)
 	{		
 		var epochTime = getNewDueDate($(addTaskElement).attr("heading"));
 		var startDate = getDateInFormatFromEpoc(epochTime);
-		$("#taskForm").find("input.date").val(startDate).datepicker('update');		
+		$("#taskForm").find("input.date").val(startDate);
+		// .datepicker('update');		
 	}
 		break;		
 	case "PRIORITY":
@@ -71527,12 +71679,7 @@ function stopCallCampaign()
 	// step3:
 	campaignVariableToInitialState();
 	// step4:
-	if (window.location.hash.indexOf("#contacts") != -1)
-	{
-		return;
-	}else{
-		routeToPage("contacts");
-	}
+	routeToPage("contacts");
 
 }
 
@@ -71571,6 +71718,8 @@ function showSettingPage()
  */
 function routeToPage(url)
 {
+	if(window.location.hash == ("#" + url))
+        return;
 
 	if (window.location.hash.indexOf("#" + url) != -1)
 	{
@@ -71943,14 +72092,8 @@ function getContact(contactId)
 {
 	console.log("In getContact");
 
-	try
-	{
-		return App_Contacts.contactsListView.collection.where({ id : contactId })[0].toJSON();
+	return App_Contacts.contactsListView.collection.where({ id : contactId })[0].toJSON();
 
-	}catch(err){
-		return App_Contacts.contactsListView.collection.get(contactId).toJSON();
-	}
-	
 	// var json = $.parseJSON($.ajax({ url : '/core/api/contacts/' + contactId,
 	// async : false, dataType : 'json' }).responseText);
 
@@ -72509,7 +72652,7 @@ $(function(){
 					// Disabled the buttons and fields......
 					$("#bulk-start-call-campaign").attr("disabled","disabled");
 					$("#bulk-start-call-campaign").html("Loading...");
-					$("input:radio[name='call_campaign_autodial']").attr("disabled",'disabled');
+					$("#call_campaign_autodial").attr("disabled","disabled");
 					$("#addTag").attr("disabled","disabled");
 					$("#rampTimeButton").attr("disabled","disabled");
 					
@@ -72536,10 +72679,12 @@ $(function(){
 							$('#correctTag').modal('show');
 							$("#bulk-start-call-campaign").removeAttr('disabled');
 							$("#bulk-start-call-campaign").html("Start Campaign");
-							$("input:radio[name='call_campaign_autodial']").removeAttr("disabled",'disabled');
+							$("#call_campaign_autodial").removeAttr('disabled');
 							$("#addTag").removeAttr('disabled');
 							$("#addTag").val("");
-							$("#rampTimeButton").removeAttr('disabled');
+							if(CALL_CAMPAIGN.autodial == true){
+								$("#rampTimeButton").removeAttr('disabled');
+							}
 							return;
 						}
 						CALL_CAMPAIGN.tag = tag;
@@ -72575,11 +72720,11 @@ $(function(){
 											
 											$("#bulk-start-call-campaign").removeAttr('disabled');
 											$("#bulk-start-call-campaign").html("Start Campaign");
-											$("input:radio[name='call_campaign_autodial']").removeAttr("disabled",'disabled');
+											$("#call_campaign_autodial").removeAttr('disabled');
 											$("#addTag").removeAttr('disabled');
-											$("#rampTimeButton").removeAttr('disabled');
-											CALL_CAMPAIGN.tag = null;
-											CALL_CAMPAIGN.has_tag = false;	
+											if(CALL_CAMPAIGN.autodial == true){
+												$("#rampTimeButton").removeAttr('disabled');
+											}
 											$('#hitRefreshModel').modal('show');
 										}
 									}
@@ -72598,11 +72743,11 @@ $(function(){
 			CALL_CAMPAIGN.last_clicked = null;
 			$("#bulk-start-call-campaign").removeAttr('disabled');
 			$("#bulk-start-call-campaign").html("Start Campaign");
-			$("input:radio[name='call_campaign_autodial']").removeAttr("disabled",'disabled');
+			$("#call_campaign_autodial").removeAttr('disabled');
 			$("#addTag").removeAttr('disabled');
-			$("#rampTimeButton").removeAttr('disabled');
-			CALL_CAMPAIGN.tag = null;
-			CALL_CAMPAIGN.has_tag = false;
+			if(CALL_CAMPAIGN.autodial == true){
+				$("#rampTimeButton").removeAttr('disabled');
+			}
 		}
 	   });
 	
@@ -74857,7 +75002,14 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							else
 							{
 								// If tag already exists returns
-								$.each($('.tags', el).children('li'), function(index, tag)
+								var targetContainer = this.$menu.closest("div.controls").find('.tags');
+								if(targetContainer.length == 0){
+									targetContainer = this.$menu.closest("div.control-group").find('.tags'); 
+								} else if(targetContainer.length == 0){
+									targetContainer = this.$menu.closest("div.form-group").find('.tags'); 	
+								}
+									
+								$.each(targetContainer.children('li'), function(index, tag)
 								{
 
 									if ($(tag).attr('data') == TYPEHEAD_TAGS[items])
@@ -74869,7 +75021,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 
 								// add tag
 								if (tag_not_exist)
-									$('.tags', el)
+									targetContainer
 											.append(
 													'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="' + TYPEHEAD_TAGS[items] + '"><a href="'+TYPEHEAD_TYPE[items] + TYPEHEAD_TAGS[items] + '" class="text-white v-middle">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
 							}
@@ -75686,50 +75838,49 @@ $(function(){
 		});
 	});
 });
-
-$(function(){
-
 /**
-	 * To avoid showing previous errors of the modal.
-	 */
-	$('#uploadDocumentModal, #uploadDocumentUpdateModal').on('show.bs.modal', function() {
-
-		// Removes alert message of error related date and time.
-		$('#' + this.id).find('.alert').css('display', 'none');
-		
-		// Removes error class of input fields
-		$('#' + this.id).find('.error').removeClass('error');
-	});
+*  Document collection event listeners
+*/
+var Document_Collection_Events = Base_Collection_View.extend({
 	
-    /**
-     * "Hide" event of document modal to remove contacts appended to related to field
-     * and validation errors
-     */ 
-    $('#uploadDocumentModal').on('hidden.bs.modal', function () {
-    	// Removes appended contacts from related-to field
-    	$(this).find('form').find("li").remove();    	
-    	$(this).find('form').find('#error').html("");
-		
-		// Removes validation error messages
-		remove_validation_errors('uploadDocumentModal');
+	events: {
+		'click .documents-add': 'onAddDocument',
+		'click #documents-model-list > tr > td:not(":first-child")': 'onDocumentListSelect',		
+	},
 
-    });
-    
-    /**
-     * "Hide" event of document modal to remove contacts appended to related to field
-     * and validation errors
-     */ 
-    $('#uploadDocumentUpdateModal').on('hidden.bs.modal', function () {
-    	// Removes appended contacts from related-to field
-    	$(this).find('form').find("li").remove();
-    	$(this).find('form').find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
-    	$(this).find('form').find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
-    	$(this).find('form').find('#error').html("");
-		
-		// Removes validation error messages
-		remove_validation_errors('uploadDocumentUpdateModal');
+	/**
+	 * For adding new document
+	 */
+	onAddDocument: function(e){
+		e.preventDefault();
 
-    });
+		// Show modal
+		$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
+	
+		// Add type a head actions
+		var el = $("#uploadDocumentForm");
+		// Contacts type-ahead
+		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+		
+		// Deals type-ahead
+		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+	},
+
+	 /** 
+     * Document list view edit
+     */
+	onDocumentListSelect : function(e){
+		if(e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
+     		e.preventDefault();
+
+     	 	updateDocument($(e.currentTarget).closest('tr').data());
+     	 }
+	},
+
+});
+  
+/** Modal event initializer **/
+$(function(){
 
     /** 
      * When clicked on choose network type
@@ -75764,52 +75915,20 @@ $(function(){
     	
     	// serialize form.
     	var json = serializeForm(form_id);
-    console.log(json);
+    	console.log(json);
+
     	if(form_id == "uploadDocumentForm")
     		saveDocument(form_id, modal_id, this, false, json);
     	else
     		saveDocument(form_id, modal_id, this, true, json);
 	});
 
+	$('#uploadDocumentModal').on('hidden.bs.modal', function(e){
+		$('#GOOGLE',$('#uploadDocumentModal')).parent().show();
+	});
+
 });
 
-
-
-
-
-function initializeDocumentsListner(el){	
-	/**
-	 * For adding new document
-	 */
-	$('#documents-listners').off();
-	$('#documents-listners').on('click', '.documents-add', function(e){
-		e.preventDefault();
-		var el = $("#uploadDocumentForm");
-		$("#uploadDocumentModal").modal('show');
-
-		// Contacts type-ahead
-		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
-		
-		// Deals type-ahead
-		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-	});
-	
-	
-    
-    /** 
-     * Document list view edit
-     */
-    // $('#documents-listners #documents-model-list > tr > td:not(":first-child")').off();
-	$('#documents-listners').on('click', '#documents-model-list > tr > td:not(":first-child")', function(e){
-
-    	 if(e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
-     		e.preventDefault();
-
-     	 	updateDocument($(this).closest('tr').data());
-     	 }
- 	});
-
-}
 
 /**
  * Show document popup for updating
@@ -75820,14 +75939,15 @@ function updateDocument(ele) {
 	
 	add_recent_view(new BaseModel(value));
 
+	var uploadModal = $('#uploadDocumentUpdateModal');
+	uploadModal.html(getTemplate("upload-document-update-modal", {}));
+	uploadModal.modal('show');
+	
 	var documentUpdateForm = $("#uploadDocumentUpdateForm");
-
 	deserializeForm(value, $("#uploadDocumentUpdateForm"));
 	$('#uploadDocumentUpdateForm').find("#" + value.network_type).closest(".link").find(".icon-ok").css("display", "inline");
 	$('#uploadDocumentUpdateForm').find("#" + value.network_type).closest(".link").css("background-color", "#EDEDED");
-	//$('#uploadDocumentUpdateForm').find('#url').html('<a href="'+ value.url +'" target="_blank">'+ value.url +'</a>');
-	$('#uploadDocumentUpdateModal').modal('show');
-	
+
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("document_relates_to_contacts", documentUpdateForm, contacts_typeahead);
 	
@@ -76053,6 +76173,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 		}
 	});
 }
+
+
 function saveAttachmentBlobKey(blobKey,fileName)
 {
 	var el = $("#uploadAttachmentForm");
@@ -76064,7 +76186,6 @@ function saveAttachmentBlobKey(blobKey,fileName)
 	$('#emailForm').find('#attachment-select').find('option:first').attr('selected', 'selected');
 	var el = $('#emailForm').find(".attachment-document-select");
 	$('#emailForm').find(".attachment-document-select").css('display','none');
-	$('#emailForm').find('#agile_attachment_name').val(fileName);
 }
 
 $(function(){
@@ -76242,10 +76363,6 @@ function getEpochTimeFromDate(selectedDate)
 function getGMTTimeFromDate(date)
 {
 	var current_sys_date = new Date();
-	console.log(new Date().getHours());
-	console.log(new Date().getMinutes());
-	console.log(new Date().getSeconds());
-	console.log(date.getYear() + "," + date.getMonth() + "," + date.getDate());
 	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
 
 	// Adding offset to date returns GMT time
@@ -76324,21 +76441,12 @@ function createNormalTime(slotTime)
 	return result.join('');
 }
 
-
-/**
- * gets date in 2014-09-03 format
- */
 function getSelectedTimeFromDate(date)
 {
 	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
 	return date.getTime();
 }
 
-/**
- * 
- * @param epoch 
- * @returns
- */
 function getConvertedTimeFromEpoch(epoch)
 {
 	// var dateVal = 1395184260;
@@ -76347,12 +76455,6 @@ function getConvertedTimeFromEpoch(epoch)
 	return time;
 }
 
-
-/**
- * 
- * @param hr
- * @returns {String}
- */
 function getNormalBusinessHouts(hr)
 {
 	var hrs = hr;
@@ -76366,12 +76468,6 @@ function getNormalBusinessHouts(hr)
 		return parseInt(hr) + ":" + min + "am";
 }
 
-
-/**
- * converts to 12 hour format from 24 hour format
- * @param hr
- * @returns
- */
 function getNormalTimeAMPM(hr)
 {
 	var name_json = { "12" : "12", "13" : "1", "14" : "2", "15" : "3", "16" : "4", "17" : "5", "18" : "6", "19" : "7", "20" : "8", "21" : "9", "22" : "10",
@@ -76397,12 +76493,6 @@ function convertWeekDayToArray(day)
 		return 6;
 }
 
-/**
- * get the offset -330 for india
- * @param timezonename
- * @returns
- */
-
 function getTimezoneOffset(timezonename)
 {
 
@@ -76425,12 +76515,6 @@ function getMidnightEpoch(current_date)
 	return d;
 }
 
-
-/**
- * changes the unix time stam to specific timezone
- * @param timezone
- * @returns
- */
 function getUnixTimeStampInSpecificTimezone(timezone)
 {
 	var m = moment().tz(SELECTED_TIMEZONE);
@@ -76678,8 +76762,6 @@ function updateUserBusinessHoursInVisitorTimezone(dates){
 		$(".timezone1").text(SELECTED_TIMEZONE);
 		$('.timezone1').show();
 		$("#hidetimezone").addClass("hide");
-		$('.user_in_visitor_timezone').html(SELECTED_TIMEZONE);
-		updateUserBusinessHoursInVisitorTimezone();
 
 		if (!selecteddate || !Selected_Time)
 			return;
@@ -76732,7 +76814,7 @@ function change_availability_date(selected_date)
 
 	var date = new Date(selected_date);
 
-	$('.availability').html("Availability on " + date.getDayName() + ", " + date.getMonthName() + " " + date.getDate());
+	$('.availability').html("Availability on " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 }
 
 // Get slot details time n description
@@ -76922,7 +77004,7 @@ function displayNoSlotsMsg()
 
 	var date = new Date(selecteddate);
 
-	$('.availability').html("No slots available for " + date.getDayName() + ", " + date.getMonthName() + " " + date.getDate());
+	$('.availability').html("No slots available for " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 
 	// Add msg
 	// $('.checkbox-main-grid').append('<label for="no-slots"
@@ -78186,10 +78268,21 @@ function chainWebRules(el, data, isNew, actions)
 	scramble_input_names($(".reports-condition-table", element_clone))
 }
 
-$(function()
-		{
+/**
+*  WebRules event view
+*/
+var Web_Rules_Event_View = Base_Model_View.extend({
+		    events: {
+		 		'click .web-rule-multiple-add' : 'ruleMultipleAdd',
+		 		'click i.webrule-multiple-remove' : 'ruleMultipleRemove',
+		 		'click i.filter-contacts-web-rule-multiple-add' : 'webruleMultipleAdd',
+		 		'click i.filter-contacts-web-rule-multiple-remove' : 'webruleMultipleRemove',
+		 		'click .web-rule-preview' : 'webrulePreview',
+		 		'click #tiny_mce_webrules_link' : 'tinymceWebruleLink',
+		    },
+
 			// Filter Contacts- Clone Multiple
-			$('body').on('click', '.web-rule-multiple-add', function(e)
+			ruleMultipleAdd: function(e)
 			{
 				e.preventDefault();
 
@@ -78206,19 +78299,19 @@ $(function()
 
 				}, null);
 
-			});
+			},
 			
 			// Filter Contacts- Remove Multiple
-			$('body').on('click', 'i.webrule-multiple-remove', function(e)
+			ruleMultipleRemove: function(e)
 			{
-				$(this).closest(".chained-table > div").remove();
-			});
+				$(e.currentTarget).closest(".chained-table > div").remove();
+			},
 			
 			// Filter Contacts- Clone Multiple
-			$('body').on('click', 'i.filter-contacts-web-rule-multiple-add', function(e)
+			webruleMultipleAdd: function(e)
 			{
 				// To solve chaining issue when cloned
-				var that = this;
+				var that = $(e.currentTarget);
 				getTemplate('webrules-add', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
@@ -78228,25 +78321,23 @@ $(function()
 
 					chainFilters(htmlContent, undefined, undefined, true);
 
-					// var htmlContent = $(this).closest("tr").clone();
 					$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 					$(that).parents("tbody").append(htmlContent);
 
 				}, null);
 				
-			});
-			
-			
-			/*$("#noty-type > select").live('change', function(){
-				console.log($(this).attr('class'));
-				var isHtml = $(this).val() ? $(this).val() == 'custom_html' : false;
-				if(isHtml)
-					setupHTMLEditor($("#noty-message > textarea"));
-			})*/
-			
-			$('body').on('click', '.web-rule-preview', function(e){
+			},
+
+			// Filter Contacts- Remove Multiple
+			webruleMultipleRemove: function(e)
+			{
+				var targetEl = $(e.currentTarget);
+				$(targetEl).closest("tr").remove();
+			},
+
+			webrulePreview: function(e){
 				e.preventDefault();
-				var that = this;
+				var that = $(e.currentTarget);
 				_agile_require_js("https://s3.amazonaws.com/agilewebgrabbers/scripts/agile-webrules-min.js", function(){
 
 					// Serializes webrule action to show preview
@@ -78259,7 +78350,32 @@ $(function()
 					
 						_agile_execute_action(action);
 					});
-			});
+			},
+
+			tinymceWebruleLink: function(e){
+				e.preventDefault();
+
+				// If not empty, redirect to tinymce
+				if($('#tinyMCEhtml_email').val() !== "")
+				{
+					if($('.custom_html').length > 1){
+						alert("Only one popup is allowed per webrule. You have already set a popup action for this webrule.");
+						$($(e.currentTarget)).closest(".alert").remove();
+						return;
+					}
+					loadTinyMCE("tinyMCEhtml_email");
+					return;
+				}
+				var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
+				var new_window = window.open('templates.jsp?id=tinyMCEhtml_email&t=web_rules', 'name', strWindowFeatures);
+				
+				if(window.focus)
+					{
+						new_window.focus();
+					}
+				return false;
+			},
+
 		});
 
 
@@ -78274,30 +78390,6 @@ function loadTinyMCE(name)
 	return false;
 	
 }
-
-$('body').on('click', '#tiny_mce_webrules_link', function(e){
-	e.preventDefault();
-
-	// If not empty, redirect to tinymce
-	if($('#tinyMCEhtml_email').val() !== "")
-	{
-		if($('.custom_html').length > 1){
-			alert("Only one popup is allowed per webrule. You have already set a popup action for this webrule.");
-			$(this).closest(".alert").remove();
-			return;
-		}
-		loadTinyMCE("tinyMCEhtml_email");
-		return;
-	}
-	var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
-	var new_window = window.open('templates.jsp?id=tinyMCEhtml_email&t=web_rules', 'name', strWindowFeatures);
-	
-	if(window.focus)
-		{
-			new_window.focus();
-		}
-	return false;
-});
 
 function tinyMCECallBack(name, htmlVal)
 {
@@ -81772,13 +81864,15 @@ function widgetBindingsLoader(){
 		if (is_collapsed)
 		{
 			$("#" + widget_name).collapse('show');
-		}else{
+		}else{			
 			queueGetRequest("_widgets_", "flatfull/"+widget.get('url'), "script", function(data, queueName){
 					try{
 					console.log("start" + model.get('name') + "Widget");
 					  eval("start" + model.get('name') + "Widget")(queueName.replace("_widgets_", ""));	
 					  $("#" + widget_name).collapse('show');
-					}catch(err){console.log(err);}		
+					}catch(err){ 						
+						console.log(err);
+					}		
 			}, undefined, 'true');
 		}
 
@@ -82293,6 +82387,7 @@ function initializeWidgetSettingsListeners(){
 			return;
 		
 		delete_widget(widget_name);
+
 		if(widget_name == "Linkedin")
 			$('#Linkedin-container').hide();
 		
@@ -82365,6 +82460,7 @@ function delete_widget(widget_name)
 
 		App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name })[0].set({'is_added': false}, {silent : true}).unset("prefs");
 		update_collection(widget_name);
+		location.reload();
 		
 	}, dataType : 'json' });
 
@@ -82516,6 +82612,7 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				msg = ("Error occurred while saving "+displayName);
 			}
 
+			// if (pluginName != "CallScript")
 			showNotyPopUp(msgType , msg, "bottomRight");
 
 			if (callback && typeof (callback) === "function") {
@@ -82725,7 +82822,7 @@ function addConfigurableWidget(widgetId, widgetName, templateName) {
 			// Create a view modal for widgets
 			renderWidgetView(templateName, 'core/api/widgets',model, '#widget-settings');
 			
-			if (model.name == "TwilioIO") {
+			if (model.name == "TwilioIO" && model.is_added) {
 				fill_twilioio_numbers();
 			}
 
@@ -82776,7 +82873,8 @@ function deserializeWidget(widget, el) {
 		return;
 	}
 	deserializeForm(JSON.parse(widget.prefs), $(el).find("form"));
-}/**
+}
+/**
  * triggers.js is a script file that sets tags typeahead when Tag options are
  * selected
  * 
@@ -83246,12 +83344,16 @@ function initializeTriggerEventListners()
 function initializeTriggerListEventListners(id,trigger_type)
 {
 
-	$('#trigger-selector').on('click', '#trigger-cancel', function(e)
+	$('#trigger-selector, #trigger-edit-selector').on('click', '#trigger-cancel', function(e)
  	{
 		e.preventDefault();
 
-		if (history !== undefined)
+		if (!history)
+			   return;
+
+		if($(this).closest("#trigger-edit-selector").length == 0)
 			Backbone.history.loadUrl();
+		else history.back(-1);
 	});
 
 
@@ -83408,8 +83510,7 @@ function initializeTriggerListEventListners(id,trigger_type)
 
 	});
 }
- 
-/**
+ /**
  * workflow-alerts deals with the alerts inside a campaign.
  * Ex- If the node limit is reached
  */
@@ -83468,10 +83569,10 @@ function workflow_alerts(title, message , template, callback){
 	}, null);
 }
 
-function send_verify_email()
+function send_verify_email(el)
 {
 	// On Enter Key
-	$('#verify-email-form').find('input').on('keypress', function(e){
+	$('#verify-email-form', el).find('input').on('keypress', function(e){
 		
 		// Enter key
 		if(e.type== 'keypress' && e.which != 13)
@@ -83483,7 +83584,7 @@ function send_verify_email()
 		$('#verify-email-send').trigger('click');
 	});
 
-	$('#verify-email-send').on('click', function(e){
+	$('#verify-email-send', el).on('click', function(e){
 		
 		e.preventDefault();
 
@@ -83905,88 +84006,111 @@ function fill_subscribers_slate(id, type)
  * 
  * 
  */
-function initializeWorkflowsListeners(){
-}
+ /**
+*  Workflow event listeners
+*/
+var Workflow_Model_Events = Base_Model_View.extend({
+   
+    events: {
+        'click #save-workflow-top,#save-workflow-bottom,#duplicate-workflow-top,#duplicate-workflow-bottom,.is-disabled-top': 'saveCampaignClick',
+        'click #workflow-unsubscribe-option': 'unsubscribeCampaign',
+        'click #workflow-designer-help': 'helpCampaign',
+        'change #unsubscribe-action': 'unsubscribeCampaignOptionSelect',
+    },
 
-$(function(){
+    unsubscribeCampaignOptionSelect : function(e){
 
-	// To stop propagation to edit page
-	$('body').on('click', '.stop-propagation', function (e) {
-        e.stopPropagation();
-    });
-	
-	// Show logs of selected filter
-	$('body').on('click', '.log-filters', function (e) {
-		e.preventDefault();
-		
-		var log_type = $(this).data('log-type');
-		var id = $(this).data('campaign-id');
-		
-		App_Workflows.logsToCampaign(id, log_type, $(this).text());
-	});
-	
-	// Show stats of selected campaign
-	$('body').on('change', '#campaign-reports-select', function (e) {
-		
-		e.preventDefault();
-		
-		var active_tab = $('#campaign-tabs .select').data('campaign-tab-active');
-		
-		if(active_tab == "STATS")
-			Backbone.history.navigate("email-reports/"+$(this).val() , {
-                trigger: true
-            });
-		
-		if(active_tab == "SUBSCRIBERS")
-			Backbone.history.navigate("workflow/all-subscribers/"+$(this).val() , {
-                trigger: true
-            });
-		
-		if(active_tab == "LOGS")
-			Backbone.history.navigate("workflows/logs/"+$(this).val() , {
-                trigger: true
-            });
-		
-	});
+        var targetEl = $(e.currentTarget);
+        
+        var all_text = "Contact will not receive any further emails from any campaign (i.e., the 'Send Email' option will not work. However, other actions in" 
+                       + " campaign will work as expected)";
+        
+        var this_text = "Contact will be removed from this campaign";
+        
+        var ask_text = "Prompts the user with options to either unsubscribe from this campaign or all communication";
+        
+        var $p_ele = $(this).closest('div.controls').parent().find('small');
+        
+        if($(targetEl).val() == "UNSUBSCRIBE_FROM_ALL")
+            $p_ele.html(all_text);
+        
+        if($(targetEl).val() == "UNSUBSCRIBE_FROM_THIS_CAMPAIGN")
+            $p_ele.html(this_text);
+        
+        if($(targetEl).val() == "ASK_USER")
+            $p_ele.html(ask_text);
+          
+    },
+    /**
+     * Script to show workflow video tutorial in bootstrap modal.
+     **/
+    helpCampaign : function(e){
+        e.preventDefault();
 
-	/**
-	 * Saves the content of workflow if the form is valid. Verifies for duplicate workflow names.
-	 * Separate ids are given for buttons (as IDs are unique in html) but having same functionality, 
-	 * so ids are separated by comma in click event.
-	 * 
-	 **/
-	$('body').on('click', '#save-workflow-top, #save-workflow-bottom, #duplicate-workflow-top, #duplicate-workflow-bottom, .is-disabled-top', function (e, trigger_data) {
-           e.preventDefault();
+        getTemplate('workflow-designer-help-modal', {}, undefined, function(template_ui){
+            if(!template_ui)
+                  return;           
+
+            $("#workflow-designer-help-modal").html($(template_ui)).modal('show');
+
+            // Stops video on modal hide
+            $("#workflow-designer-help-modal").on("hide.bs.modal", function(){
+                $(this).html("");
+            });
+
+        }, null);
+    },
+
+    unsubscribeCampaign : function(e){
+        e.preventDefault();
+        var targetEl = $(e.currentTarget);
+
+        if($(targetEl).hasClass('collapsed'))
+        {
+            $('#workflow-unsubscribe-option').html('<span><i class="icon-plus"></i></span> Manage Unsubscription');
+            return;
+        }
+        
+        $('#workflow-unsubscribe-option').html('<span><i class="icon-minus"></i></span> Manage Unsubscription')
+        
+    },
+
+   /**
+     * Saves the content of workflow if the form is valid. Verifies for duplicate workflow names.
+     * Separate ids are given for buttons (as IDs are unique in html) but having same functionality, 
+     * so ids are separated by comma in click event.
+     * 
+     **/
+    saveCampaignClick: function(e, trigger_data){
+        e.preventDefault();
+        var targetEl = $(e.currentTarget);
+
+        // Temporary variable to hold clicked button, either top or bottom. $ is preceded, just to show 
+       // it is holding jQuery object
+       var $clicked_button = $(targetEl);
+       
+       if(!window.frames.designer.checkWorkflowSize())
+           return;
+       
+       if($(targetEl).attr('disabled'))
+        return;
            
-           // Temporary variable to hold clicked button, either top or bottom. $ is preceded, just to show 
-           // it is holding jQuery object
-           var $clicked_button = $(this);
-           
-           if(!window.frames.designer.checkWorkflowSize())
-        	   return;
-           
-           if($(this).attr('disabled'))
-   			return;
-           
-    	// Check if the form is valid
-    	if (!isValidForm('#workflowform')) {
-    		$('#workflowform').find("span.help-inline").not(':hidden').prev('input').focus();
-    		return false;
-    	}
-    	
+        // Check if the form is valid
+        if (!isValidForm('#workflowform')) {
+            $('#workflowform').find("span.help-inline").not(':hidden').prev('input').focus();
+            return false;
+        }
+        
         // Gets Designer JSON
         var designerJSON = window.frames.designer.serializePhoneSystem();
-        
         /**
          * Checks if start node is connected to any other node.
-         */
-              
+         */      
         if(!is_start_active(designerJSON)){
-        	var $save_info = '<span style="color: red;">Please connect the \'Start\' node to another node in the campaign</span>';
-        	$("#workflow-msg").html($save_info).show().fadeOut(3000);
-        	return false;
+            var $save_info = '<span style="color: red;">Please connect the \'Start\' node to another node in the campaign</span>';
+            $("#workflow-msg").html($save_info).show().fadeOut(3000);
+            return false;
         }
-        	
 
         var name = $('#workflow-name').val();
         
@@ -83994,15 +84118,14 @@ $(function(){
         var unsubscribe_action = $('#unsubscribe-action').val();
         var unsubscribe_email = $('#unsubscribe-email').val().trim();
         var is_disabled = $('.is-disabled-top').attr("data");
-        
         if($clicked_button.attr("class") == "is-disabled-top" && is_disabled)
             is_disabled = !JSON.parse(is_disabled);
 
         var unsubscribe_json ={
-        		               		"tag":unsubscribe_tag,
-        		               		"action":unsubscribe_action,
-        		               		"unsubscribe_email": unsubscribe_email
-        		               }
+                                    "tag":unsubscribe_tag,
+                                    "action":unsubscribe_action,
+                                    "unsubscribe_email": unsubscribe_email
+                               }
         
         // Check for valid name
         if (isNotValid(name)) {
@@ -84011,20 +84134,14 @@ $(function(){
         }
 
         // Disables save button to prevent multiple save on click event issues
-        disable_save_button($(this));
-        //$('#workflowform').find('#save-workflow').attr('disabled', 'disabled');
+        disable_save_button($(targetEl));
         
-        // Load image while saving
-		// $save_info = $('<div style="display:inline-block"><img src="img/1-0.gif" height="15px" width="15px"></img></div>');
-		// $(".save-workflow-img").html($save_info);
-		// $save_info.show();
-
         var workflowJSON = {};
 
         // New Workflow or Copy Workflow
-        if (App_Workflows.workflow_model === undefined || $(this).attr('id') === 'duplicate-workflow-top' || $(this).attr('id') === 'duplicate-workflow-bottom') 
+        if (App_Workflows.workflow_model === undefined || $(targetEl).attr('id') === 'duplicate-workflow-top' || $(targetEl).attr('id') === 'duplicate-workflow-bottom') 
         {
-        	create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled);
+            create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled);
         }
         // Update workflow
         else
@@ -84035,28 +84152,33 @@ $(function(){
             App_Workflows.workflow_model.set("unsubscribe", unsubscribe_json);
             App_Workflows.workflow_model.set("is_disabled", is_disabled);
             App_Workflows.workflow_model.save({}, {success: function(){
-            	
-            	enable_save_button($clicked_button);
-            	
-            	// Hide message
-            	$('#workflow-edit-msg').hide();
+                
+                enable_save_button($clicked_button);
+                
+                show_campaign_save();
+                
+                // Adds tag in our domain
+                add_tag_our_domain(CAMPAIGN_TAG);
+                
+                // Hide message
+                $('#workflow-edit-msg').hide();
 
                 //toggle disable dropdown
                  if($clicked_button.attr("class") == "is-disabled-top"){
-                	 var disabled = $(".is-disabled-top");
+                     var disabled = $(".is-disabled-top");
                  
                     if (is_disabled) {
-                    	disabled.attr("data", true);
-                    	disabled.find('i').toggleClass('fa-lock').toggleClass('fa-unlock');
-                    	disabled.find('div').text("Enable Workflow");
+                        disabled.attr("data", true);
+                        disabled.find('i').toggleClass('fa-lock').toggleClass('fa-unlock');
+                        disabled.find('div').text("Enable Workflow");
                         $('#designer-tour').addClass("blur").removeClass("anti-blur");;
                         window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
                         window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
                         show_campaign_save("Campaign has been disabled successfully.","red");
                     } else {
-                    	disabled.attr("data", false);
-                    	disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
-                    	disabled.find('div').text("Disable Workflow"); 
+                        disabled.attr("data", false);
+                        disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
+                        disabled.find('div').text("Disable Workflow"); 
                         $('#designer-tour').addClass("anti-blur").removeClass("blur");;
                         window.frames[0].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
                         window.frames[0].$('#toolbartabs').removeClass("disable-iframe");
@@ -84066,21 +84188,19 @@ $(function(){
 
                     }
                 }
-            	
-            	// Boolean data used on clicking on Done
-    	    	if(trigger_data && trigger_data["navigate"])
-    	    	{
-    	    		Backbone.history.navigate("workflows", {
+
+                
+                // Boolean data used on clicking on Done
+                if(trigger_data && trigger_data["navigate"])
+                {
+                    Backbone.history.navigate("workflows", {
                       trigger: true
                   });
-    	    	}
-    	    	
-                // Adds tag in our domain
+                }
+
+                 // Adds tag in our domain
                 add_tag_our_domain(CAMPAIGN_TAG);
-            	//$('#workflowform').find('#save-workflow').removeAttr('disabled');
-               
-               //$(".save-workflow-img").remove();
-            	
+                
             },
             
             error: function(jqXHR, status, errorThrown){ 
@@ -84104,109 +84224,95 @@ $(function(){
             });        
             
         } 
+    },
 
-        /**/
-        
-        // Since we do save it back in collection, we are reloading the view
-       // location.reload(true);
+});
 
+function initializeLogReportHandlers(){
+
+    // Show stats of selected campaign
+    $("#campaign-reports-select").change(function(e){
+      
+       e.preventDefault();
+        var targetEl = $(e.currentTarget);
+
+        var active_tab = $('#campaign-tabs .select').data('campaign-tab-active');
         
+        if(active_tab == "STATS")
+            Backbone.history.navigate("email-reports/"+$(targetEl).val() , {
+                trigger: true
+            });
+        
+        if(active_tab == "SUBSCRIBERS")
+            Backbone.history.navigate("workflow/all-subscribers/"+$(targetEl).val() , {
+                trigger: true
+            });
+        
+        if(active_tab == "LOGS")
+            Backbone.history.navigate("workflows/logs/"+$(targetEl).val() , {
+                trigger: true
+            });
     });
-	
-    /**
+}
+/**
+* Report Collection event handlers
+*/
+var Workflow_Reports_Events = Base_Collection_View.extend({
+   
+    events: {
+        'click #delete_campaign_logs': 'onDeleteAllCampaignLogs',
+        'click .log-filters': 'onChangeLogFilter',       
+    },
+
+     /**
      *  Deletes all logs of campaign
      *      
      **/
-	$('body').on('click', '#delete_campaign_logs', function (e) {
-    	e.preventDefault();
-    	
-    	// Gets campaign id
-    	var campaign_id = $("#logs-table").find("input.campaign").val();
-    	
-    	if(!campaign_id)
-    		return;
-    	
-    	if(!confirm("Are you sure you want to delete all logs?"))
-    		return;
-    	
-    	// Sends delete request to CampaignsAPI for deletion of logs
-    	$.ajax({
-    	    url: 'core/api/campaigns/logs/' + campaign_id,
-    	    type: 'DELETE',
-    	    success: function(){
-    	    	App_Workflows.logsToCampaign(campaign_id);
-    	    	//location.reload(true);
-    	    }
-    	});
+    onDeleteAllCampaignLogs : function(e){
+
+        e.preventDefault();
+        
+        // Gets campaign id
+        var campaign_id = $("#logs-table").find("input.campaign").val();
+        
+        if(!campaign_id)
+            return;
+        
+        if(!confirm("Are you sure you want to delete all logs?"))
+            return;
+        
+        // Sends delete request to CampaignsAPI for deletion of logs
+        $.ajax({
+            url: 'core/api/campaigns/logs/' + campaign_id,
+            type: 'DELETE',
+            success: function(){
+                App_Workflows.logsToCampaign(campaign_id);
+                //location.reload(true);
+            }
+        });
+    },
+
+    // Show logs of selected filter
+    onChangeLogFilter : function(e){
+        e.preventDefault();
+        var targetEl = $(e.currentTarget);
+
+        var log_type = $(targetEl).data('log-type');
+        var id = $(targetEl).data('campaign-id');
+        
+        App_Workflows.logsToCampaign(id, log_type, $(targetEl).text());
+
+    },
+
+});
+
+$(function(){
+
+	// To stop propagation to edit page
+	$('body').on('click', '.stop-propagation', function (e) {
+        e.stopPropagation();
     });
-
-	/**
-	 * Script to show workflow video tutorial in bootstrap modal.
-	 **/
-	$('body').on('click', '#workflow-designer-help', function (e) {
-		e.preventDefault();
-
-		// Removes if previous modals exist.
-		if ($('#workflow-designer-help-modal').size() != 0)
-        {
-        	$('#workflow-designer-help-modal').remove();
-        }
-
-        getTemplate('workflow-designer-help-modal', {}, undefined, function(template_ui){
-            if(!template_ui)
-                  return;
-
-            var workflow_help_modal = $(template_ui);
-            workflow_help_modal.modal('show');
-
-            // Plays video on modal shown
-            $(workflow_help_modal).on("shown.bs.modal", function(){
-                $(this).children('div.modal-dialog').find('div#workflow-help-detail').html('<h3 style="margin-left:165px">Easy. Peasy.</h3><iframe width="420" height="345" src="//www.youtube.com/embed/0Z-oqK6mWiE?enablejsapi=10&amp;autoplay=1" frameborder="0" allowfullscreen></iframe>');
-            });
-
-            // Stops video on modal hide
-            $(workflow_help_modal).on("hide.bs.modal", function(){
-                $(this).find("iframe").removeAttr("src");
-            });
-
-        }, null);
-	});
 	
-	$('body').on('click', '#workflow-unsubscribe-option', function (e) {
-		e.preventDefault();
-
-		if($(this).hasClass('collapsed'))
-		{
-			$('#workflow-unsubscribe-option').html('<span><i class="icon-plus"></i></span> Manage Unsubscription');
-			return;
-		}
-		
-		$('#workflow-unsubscribe-option').html('<span><i class="icon-minus"></i></span> Manage Unsubscription')
-		
-	});
-	
-	$('body').on('change', '#unsubscribe-action', function (e) {
-		e.preventDefault();
-		
-		var all_text = "Contact will not receive any further emails from any campaign (i.e., the 'Send Email' option will not work. However, other actions in" 
-			           + " campaign will work as expected)";
-		
-		var this_text = "Contact will be removed from this campaign";
-		
-		var ask_text = "Prompts the user with options to either unsubscribe from this campaign or all communication";
-		
-		var $p_ele = $(this).closest('div.controls').parent().find('small');
-		
-		if($(this).val() == "UNSUBSCRIBE_FROM_ALL")
-			$p_ele.html(all_text);
-		
-		if($(this).val() == "UNSUBSCRIBE_FROM_THIS_CAMPAIGN")
-			$p_ele.html(this_text);
-		
-		if($(this).val() == "ASK_USER")
-			$p_ele.html(ask_text);
-		
-	});
 });
 
 /**
@@ -84226,6 +84332,7 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
     workflowJSON.unsubscribe = unsubscribe_json;
     workflowJSON.is_disabled = is_disabled;
     workflowJSON.was_disabled = was_disabled;
+    
     var workflow = new Backbone.Model(workflowJSON);
     App_Workflows.workflow_list_view.collection.create(workflow,{
     	    success:function(){  
@@ -84364,26 +84471,26 @@ function show_campaign_save(message,color)
 }
 
 function is_start_active(designerJSON){
-	
-	var nodes  = JSON.parse(designerJSON).nodes;
-	var is_active = true;
-	try{
-	$.each(nodes,function(node_name,node_value){
-		if(node_value.displayname == "Start"){
-		var start_states= node_value.States;
-		$.each(start_states,function(start_name,start_node){
-		if(start_node.start == "hangup"){
-			is_active = false;
-			return true
-		}
-		});
-		}
-		});
-	}
-	catch(err){
-		return is_active;
-	}
-	return is_active;
+    
+    var nodes  = JSON.parse(designerJSON).nodes;
+    var is_active = true;
+    try{
+    $.each(nodes,function(node_name,node_value){
+        if(node_value.displayname == "Start"){
+        var start_states= node_value.States;
+        $.each(start_states,function(start_name,start_node){
+        if(start_node.start == "hangup"){
+            is_active = false;
+            return true
+        }
+        });
+        }
+        });
+    }
+    catch(err){
+        return is_active;
+    }
+    return is_active;
 }
 
 function populate_workflows_list(id, el, callback)
@@ -84393,4 +84500,216 @@ function populate_workflows_list(id, el, callback)
 
      var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
      fillSelect(id, '/core/api/workflows', 'workflow', callback , optionsTemplate, undefined, el);
+}
+
+
+function initializeWorkflowsListeners() {}
+/**
+ * wysihtml.js is used to embed beautiful html editors to email body. Inserts
+ * merge fields into email body. wysihtml makes use of wysihtml5 which is a
+ * javascript plugin that makes it easy to create simple, beautiful wysiwyg
+ * editors with the help of wysihtml5 and Twitter Bootstrap.
+ */
+var Email_Template_Events = Base_Model_View.extend({
+	
+	events: {
+		'click .merge-field': 'onMergeFieldSelect',
+		'click .add-attachment-select': 'onAddAttachmentSelect',
+		'click .add-attachment-confirm': 'onAddAttachmentConfirm',
+		'click .add-attachment-cancel': 'onAddAttachmentCancel',				
+		'click .add-tpl-attachment-confirm': 'onTemplateAddAttachmentConfirm',
+		'click .add-tpl-attachment-cancel': 'onTemplateAddAttachmentCancel',
+		'change #attachment-select': 'onChangedAttachment',					
+	},
+
+	// Code for Merge fields in Email Template
+	onMergeFieldSelect: function(e){
+		e.preventDefault();
+
+		// Get Selected Value
+		var fieldContent = $(e.currentTarget).attr("name");
+
+		// Get Current HTML
+		var val = $('#email-template-html').val();
+
+		// Set New HTML
+		var wysihtml5 = $('#email-template-html').data('wysihtml5');
+		if (wysihtml5) {
+			
+			// wysihtml5.editor.setValue(fieldcontent + " " + val,
+			// true);
+		    editor.focus();
+			wysihtml5.editor.composer.commands.exec("insertHTML", '{{'
+					+ fieldContent + '}}');
+		}
+	},
+
+	onAddAttachmentSelect : function(e){
+		e.preventDefault();
+		var target_ele = $(e.currentTarget);
+
+		var el = $(target_ele).closest("div");
+		$(target_ele).css("display", "none");
+		el.find(".attachment-document-select").css("display", "inline");
+		var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}'>{{name}}</option>";
+        fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
+		{
+			el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
+
+		}, optionsTemplate, false, el);
+        $('#enable_tracking').css("margin-top", "-7px");
+
+	},
+	
+	/**
+	 * For adding existing document to current contact
+	 */
+	onAddAttachmentConfirm : function(e){
+		e.preventDefault();
+		var target_ele = $(e.currentTarget);
+
+		var network_type = $('#attachment-select').find(":selected").attr('network_type');
+		var document_size = $('#attachment-select').find(":selected").attr('size');
+		if(typeof network_type !=='undefined' && network_type.toUpperCase() === 'GOOGLE')
+		{
+			$(target_ele).closest("span").find(".attachment-status").html("<span style='color:#df382c;margin-top:10px; display:block'>Can not attach Google Drive doc to email. You can add a link instead in the email.</span>");
+			$(target_ele).css({'border': '1px solid #df382c','outline': 'none'   });				             	            
+		}
+		else if(document_size >= 5242880){
+			$(target_ele).closest("span").find(".attachment-status").html("<span style='color:#df382c;margin-top:10px; display:block'>Document size exceeds the 5MB limit.</span>");
+			$(target_ele).css({'border': '1px solid #df382c','outline': 'none'   });
+		}
+		else
+		{
+			$('#attachment-select').closest("span").find('.attachment-status').find("span").fadeOut(0);
+			$('#attachment-select').css({"border":"1px solid #bbb"});
+		    var document_id = $(target_ele).closest(".attachment-document-select").find("#attachment-select").val();
+		    var saveBtn = $(target_ele);
+			
+	  		// To check whether the document is selected or not
+		    if(document_id == "")
+		    {
+		    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
+		    	saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
+		    	return;
+		    }	    	
+		    else if(document_id == "new")
+		    {	
+		    	e.preventDefault();
+				$(target_ele).closest('form').find('#error').html("");
+				var form_id = $(target_ele).closest('form').attr("id");
+				var id = $(target_ele).find("a").attr("id");
+				
+				var newwindow = window.open("upload-attachment.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain, 'name','height=310,width=500');
+				
+				if (window.focus)
+				{
+					newwindow.focus();
+				}
+		    }
+		    else if(document_id != undefined && document_id != null)
+		    {
+		    	var docName = $( "#attachment-select option:selected").text();
+		    	$('#emailForm').find('#eattachment').css('display','block');
+		    	$('#emailForm').find('#attachment_id').find("#attachment_fname").text(docName);
+		    	$('#emailForm').find(".attachment-document-select").css('display','none');
+		    	$('#emailForm').find('#eattachment_key').attr('name',"document_key");
+		    	$('#emailForm').find('#eattachment_key').attr('value',document_id);
+		    }
+	    }
+		$('#enable_tracking').css("margin-top", "-47px");
+
+	},
+
+	/**
+	 * To cancel the add attachment request in send-email form
+	 */
+	onAddAttachmentCancel : function(e){
+		e.preventDefault();
+		var target_ele = $(e.currentTarget);
+
+		var blobKey = $('#emailForm').find('#attachment_id').attr('name');
+		if(typeof blobKey !== typeof undefined)
+	    {
+			if(blobKey.toLowerCase() === 'blob_key')
+			{
+				var blobKeyValue = $('#emailForm').find('#eattachment_key').attr("value");
+				deleteBlob(blobKeyValue);
+			}
+	    }
+		$('#attachment-select').closest("span").find('.attachment-status').find("span").fadeOut(0);
+		$('#attachment-select').css({"border":"1px solid #bbb"});	 
+		$('#attachment-select').find('option:first').attr('selected', 'selected');
+		var el = $(target_ele).closest("div");
+		$('#emailForm').find('.attachment-document-select').css('display','none');
+		$('#emailForm').find('#eattachment').css('display','none');
+		$('#emailForm').find(".add-attachment-select").css("display", "inline");
+		$('#emailForm').find('#eattachment_key').attr("name","name");
+    	$('#emailForm').find('#eattachment_key').attr("value","value");
+    	$('#enable_tracking').css("margin-top", "-7px");
+
+	},
+
+	onTemplateAddAttachmentConfirm : function(e){
+		e.preventDefault();
+		var target_ele = $(e.currentTarget);
+
+		if($(target_ele).parent().find('select').val()=="new"){
+
+			$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
+			$('#GOOGLE',$('#uploadDocumentModal')).parent().hide();
+
+		}else if($(target_ele).parent().find('select').val()!=""){
+			$('#tpl-attachment-select').hide();
+			$('#tpl-attachment-name').show();
+			$('#attachment_id',$('#tpl-attachment-name')).val($(target_ele).parent().find('select').val());
+			$('#tpl_attachment_fname',$('#tpl-attachment-name')).html('<a href='+$(target_ele).parent().find('option:selected').attr('url')+'>'+$(target_ele).parent().find('option:selected').text()+'</a>');
+		}else if($(target_ele).parent().find('select').val()==""){
+			$('#attachment-select-required').show();
+		}
+
+	},
+
+	onTemplateAddAttachmentCancel : function(e){
+		e.preventDefault();
+		var target_ele = $(e.currentTarget);
+
+		$('#tpl-attachment-select').show();
+		$('#tpl-attachment-name').hide();
+		$('.add-attachment-select').show();
+		$('.attachment-document-select').hide();
+		$('#attachment_id',$('#tpl-attachment-name')).val("");
+
+	},
+
+	onChangedAttachment : function(e){
+		e.preventDefault();
+		var target_ele = $(e.currentTarget);
+
+		if($(target_ele).val()==""){
+			$('#attachment-select-required').show();
+		}else{
+			$('#attachment-select-required').hide();
+		}
+
+	},
+
+});
+
+/**
+ * Sets HTML Editor for UserPrefs, EmailTemplates etc.
+ **/
+function setupHTMLEditor(selector, data) {
+	head.js(LIB_PATH + 'lib/wysihtml5-0.3.0-min.js', LIB_PATH + 'lib/bootstrap-wysihtml5-min.js',
+			function() {
+				console.log('setting up text');
+				console.log(selector.html());
+				
+				if(!$(selector).data('wysihtml5'))
+					selector.wysihtml5();
+				
+				if(data)
+					selector.data("wysihtml5").editor.setValue(data, false);
+				
+			});
 }

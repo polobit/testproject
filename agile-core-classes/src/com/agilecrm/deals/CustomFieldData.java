@@ -15,4 +15,10 @@ public class CustomFieldData implements Serializable
     {
 
     }
+
+    public void updateField(CustomFieldData dealField)
+    {
+	name = dealField.name;
+	value = dealField.value;
+    }
 }

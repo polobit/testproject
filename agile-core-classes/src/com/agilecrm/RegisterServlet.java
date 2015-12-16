@@ -222,8 +222,11 @@ public class RegisterServlet extends HttpServlet
 	request.getSession().setAttribute("account_timezone", timezone);
 	try
 	{
-	    // Creates contact in our domain
-	    createUserInOurDomain(request, domainUser);
+		String emailType = (email.split("@")[1]).split("\\.")[0];
+		System.out.println("email:: "+email+" and emailType :: "+emailType);
+	    // Creates contact in our domain if it is not yopmail
+		if(!StringUtils.equalsIgnoreCase("yopmail", emailType))
+	    	createUserInOurDomain(request, domainUser);
 	}
 	catch (Exception e)
 	{
@@ -231,7 +234,7 @@ public class RegisterServlet extends HttpServlet
 	}
 
 	String redirectionURL = VersioningUtil.getURL(domainUser.domain, request);
-	redirectionURL+= "/#subscribe";
+	redirectionURL+= "#subscribe";
 	// Redirect to home page
 	response.sendRedirect(redirectionURL);
     }

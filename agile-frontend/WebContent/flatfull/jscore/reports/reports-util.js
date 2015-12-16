@@ -122,6 +122,12 @@ edit_contacts : function(el, report)
 call_reports : function(url,reportType,graphOn){
 	var selector="calls-chart";
 
+
+		if(reportType == 'timebased'){
+			showBar(url,selector,null,"","");
+			//report_utility.call_timeBased(selector,data);
+			return;
+		}
 	var answeredCallsCountList=[];
 	var busyCallsCountList=[];
 	var failedCallsCountList=[];
@@ -142,6 +148,7 @@ call_reports : function(url,reportType,graphOn){
 			$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 			return;
 		}
+
 		answeredCallsCountList=data["answeredCallsCountList"];
 		busyCallsCountList=data["busyCallsCountList"];
 		failedCallsCountList=data["failedCallsCountList"];
@@ -330,7 +337,7 @@ user_reports :function(callReportUrl){
 		});
 	
 	
-}
+},
 
 
  };
