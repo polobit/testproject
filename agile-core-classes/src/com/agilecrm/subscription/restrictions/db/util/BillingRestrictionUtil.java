@@ -410,6 +410,7 @@ public class BillingRestrictionUtil {
 
 			return billingRestriction;
 		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			return null;
 		}
 	}
