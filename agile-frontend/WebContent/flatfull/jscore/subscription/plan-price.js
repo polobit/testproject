@@ -432,7 +432,6 @@ function initializeSubscriptionListeners()
 					plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
 
 				
-				plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
 				plan_json.new_signup = is_new_signup_payment();
 				plan_json.price = update_price();
 				plan_json.cost = (cost * months).toFixed(2);
@@ -677,10 +676,10 @@ function initializeSubscriptionListeners()
 		$.ajax({url:'core/api/subscription/cancel/email',
 			type:'GET',
 			success:function(data){
-				document.location.reload();
+				showNotyPopUp("information", "Email subscription has been cancelled successfully.", "top"); 
 				setTimeout(function(){ 
-					showNotyPopUp("information", "Email subscription has been cancelled successfully.", "top"); 
-				}, 5000);				
+					document.location.reload();
+				}, 1000);				
 			},error: function(){
 				alert("Error occured, Please try again");
 			}
