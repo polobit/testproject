@@ -371,5 +371,28 @@ public class UsersAPI
 		
 		return helpdeskSettings;
     }
+    
+    // Update ticket collection view in helpdesk settings
+    @POST
+    @Path("/helpdesk-settings/toggle-view")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void updateHelpdeskSettings(@QueryParam("view_type") HelpdeskSettings.TicketViewType viewType)
+    {
+		try
+		{
+		    String domain = NamespaceManager.get();
+		    
+		    if (StringUtils.isNotEmpty(domain) || SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+		    {
+		    	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+		    	domainUser.helpdeskSettings.ticket_view_type = viewType;
+		    	domainUser.save();
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+    }
 
 }

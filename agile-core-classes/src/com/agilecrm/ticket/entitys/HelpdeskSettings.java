@@ -25,9 +25,11 @@ public class HelpdeskSettings
 
 	public HelpdeskSettings defaultSettings()
 	{
-		this.ticket_view_type = TicketViewType.SINGLELINE;
+		this.ticket_view_type = TicketViewType.MULTILINE;
 		this.selected_columns = new ArrayList<TableColumns>()
 		{
+			private static final long serialVersionUID = 1L;
+
 			{
 				add(TableColumns.ID);
 				add(TableColumns.SUBJECT);

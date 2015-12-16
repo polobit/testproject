@@ -56,8 +56,10 @@ public class TicketsDocument implements BuilderInterface
 
 			Document.Builder document = Document.newBuilder();
 
+			String ticketID = (ticket.id <= 9 ? "0" + ticket.id : ticket.id) + "";
+
 			// Set ticket id as doc id
-			document.setId(ticket.id + "");
+			document.setId(ticketID);
 
 			// Set ticket group id
 			document.addField(Field.newBuilder().setName("group_id").setText(ticket.getGroup_id().getId() + ""));
@@ -126,7 +128,6 @@ public class TicketsDocument implements BuilderInterface
 			String requesterName = ticket.requester_name;
 			String requesterEmail = ticket.requester_email;
 			String plainText = ticket.last_reply_text;
-			String shortTicketID = ticket.short_id;
 
 			// Set requester name
 			document.addField(Field.newBuilder().setName("requester_name").setText(requesterName));
@@ -145,7 +146,7 @@ public class TicketsDocument implements BuilderInterface
 			List<TicketLabels> labels = TicketLabels.dao.fetchAllByKeys(ticket.labels_keys_list);
 
 			for (TicketLabels label : labels)
-				labelsString.append(label.label + " ");
+				labelsString.append(label.id + " ");
 
 			// Set tags
 			document.addField(Field.newBuilder().setName("labels").setText(labelsString.toString().trim()));
@@ -156,7 +157,7 @@ public class TicketsDocument implements BuilderInterface
 					.setName("search_tokens")
 					.setText(
 							StringUtils2.breakdownFragments(plainText).toString() + " " + requesterName + " "
-									+ requesterEmail + " " + shortTicketID));
+									+ requesterEmail + " " + ticketID));
 
 			System.out.println(getIndex().put(document));
 
@@ -168,7 +169,7 @@ public class TicketsDocument implements BuilderInterface
 					.setName("search_tokens")
 					.setText(
 							StringUtils2.breakdownFragments(requesterName + " " + requesterEmail).toString() + " "
-									+ shortTicketID));
+									+ ticketID));
 
 			document.addField(Field.newBuilder().setName("type").setText("TICKETS"));
 
@@ -284,6 +285,7 @@ public class TicketsDocument implements BuilderInterface
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 		}
 
 		for (ScoredDocument document : results)

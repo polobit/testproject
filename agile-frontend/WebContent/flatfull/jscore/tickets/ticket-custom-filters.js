@@ -47,10 +47,67 @@ var Ticket_Custom_Filters = {
 			  	$container.html($(template_ui));
 			  	Tickets.initDateTimePicker($('#datetimepicker'), function(){});
 
-			  	//Initializing Priority, Labels, Status, Ticket type multi select
-				//$(".chosen-select").chosen();
+			  	//Initializes chosen dropdown, fetches labels collection and renders selected labels
+			  	Ticket_Labels.fetchCollection(function(labelsCollection){
 
-				var tempAssignees = {all_assignees: Ticket_Custom_Filters.assignees, selected_assignees: dataJSON.assignees};
+			  		head.js('/lib/chosen.jquery.min.js', function() {
+				  		var optionList = "";
+						$.each(labelsCollection.toJSON(), function(index, label) {
+							optionList += "<option value='" + label.id + "'>"
+										+ label.label + "</option>";
+						});
+
+						var $select = $(".chosen-select");
+
+						$select.html(optionList);
+
+						$.each(dataJSON.labels, function(index, label) {
+							
+							var $option = $select.find('option[value="'+ label.RHS +'"]');
+							if($option && $option.length){
+
+								$option.attr('selected', 'selected');
+
+								if(label.CONDITION == 'TICKET_LABEL_IS_NOT')
+									$option.html('!' + $option.html());
+							}
+						});
+
+						// Initliazing multi select drop down
+						$select.chosen({no_results_text: "No labels found"});
+
+						$select.off('change');
+						$select.on('change', function(evt, params) {
+
+							if (params && params.deselected) {
+								
+								for(var i=0; i< Ticket_Custom_Filters.customFilters.length; i++){
+
+									var condition = Ticket_Custom_Filters.customFilters[i];
+
+									if(condition.LHS != 'labels' || condition.RHS != params.deselected)
+										continue;
+
+									Ticket_Custom_Filters.customFilters.splice(i, 1);
+									break;
+								}
+							}
+							else{
+								var condition = {};
+								condition.LHS = 'labels';
+								condition.RHS = params.selected;
+								condition.CONDITION = 'TICKET_LABEL_IS';
+
+								Ticket_Custom_Filters.customFilters.push(condition);
+							}
+
+							//Re-render collection with customized filters
+							Tickets.fetchTicketsCollection();
+						});
+					});
+			  	});
+
+			  	var tempAssignees = {all_assignees: Ticket_Custom_Filters.assignees, selected_assignees: dataJSON.assignees};
 				var tempGroups = {all_groups: Ticket_Custom_Filters.groups, selected_groups: dataJSON.groups};
 
 				$('.assignee-select').html(getTemplate('ticket-filter-assignee', tempAssignees));
@@ -118,7 +175,7 @@ var Ticket_Custom_Filters = {
 		for(var i=0; i<this.groups.length; i++)
 			groupsArray.push(this.groups[i].id);
 
-		var filterJSON = {}, dataJSON = {}, _status=[], _priority=[], _type=[], _assignees=[], _groups=[];
+		var filterJSON = {}, dataJSON = {}, _status=[], _priority=[], _type=[], _assignees=[], _groups=[], _labels = [];
 
 		if(Ticket_Filter_ID)
 			filterJSON = App_Ticket_Module.ticketFiltersList.collection.get(Ticket_Filter_ID).toJSON();
@@ -130,6 +187,10 @@ var Ticket_Custom_Filters = {
 			Ticket_Custom_Filters.customFilters.push(condition);
 
 			switch(condition.LHS){
+				case 'labels':{
+					_labels.push(condition);
+					break;
+				}
 				case 'status':{
 
 					if(condition.CONDITION == 'TICKET_STATUS_IS'){
@@ -237,6 +298,8 @@ var Ticket_Custom_Filters = {
 		dataJSON.type = _type.toString();
 		dataJSON.assignees = _assignees.toString();
 		dataJSON.groups = _groups.toString();
+		dataJSON.labels = _labels;
+
 
 		if(callback)
 			callback(dataJSON);

@@ -40,7 +40,7 @@
                                                             <option value="priority">Priority</option>
                                                         <!--<option value="requester">Requester</option>-->
                                                         <!--<option value="company">Company</option>-->
-                                                            <option value="labels">Labels</option>
+                                                            <option value="labels">Label</option>
                                                             <option value="assignee_id">Assignee</option>
                                                             <option value="group_id">Group</option>
                                                             <option value="source">Source</option>
@@ -71,6 +71,9 @@
 
                                                             <option value="TICKET_PRIORITY_IS" class="priority">is</option>
                                                             <option value="TICKET_PRIORITY_IS_NOT" class="priority">isn&#39;t</option>
+
+                                                            <option value="TICKET_LABEL_IS" class="labels" related="RHS" url="/core/api/tickets/labels" parse_key="id" parse_value="label">is</option>
+                                                            <option value="TICKET_LABEL_IS_NOT" class="labels" related="RHS" url="/core/api/tickets/labels" parse_key="id" parse_value="label">isn&#39;t</option>
 
                                                             <option value="IS" class="requester company tags">is</option>
                                                             <option value="IS_NOT" class="requester company tags">isn&#39;t</option>

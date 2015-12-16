@@ -13,12 +13,13 @@
 	<button class="btn btn-sm dropdown-toggle no-shadow bg-transparent b-n" data-toggle="dropdown" aria-expanded="false" style="padding-left: 5px;">
 		<span class="caret"></span>
 	</button>
-	<a href="javascript:void(0);" class="btn btn-sm m-l-none bg-transparent refresh-tickets no-shadow b-n p-l-none" data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh">
-    	<i class="fa fa-refresh"></i>
+	<a href="javascript:void(0);" class="btn btn-sm m-l-none bg-transparent refresh-tickets no-shadow b-n p-l-none">
+    	<i class="fa fa-refresh text-base" data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh"></i>
     </a>
-    <ul id="ticket-filters-list-model-list" class="dropdown-menu ticket-types">
-
-	</ul>
+    <a href="javascript:void(0);" class="btn btn-sm m-l-none bg-transparent toggle-custom-filters no-shadow b-n p-l-none">
+    	<i class="fa fa-dedent text-base" data-toggle="tooltip" data-placement="bottom" data-original-title="Hide filters"></i>
+    </a>
+    <ul id="ticket-filters-list-model-list" class="dropdown-menu ticket-types"></ul>
 {{/unless}}
 </script>
 <script id="ticket-filters-list-model-template" type="text/html">

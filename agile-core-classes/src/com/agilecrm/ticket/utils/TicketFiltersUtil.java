@@ -114,7 +114,7 @@ public class TicketFiltersUtil
 				case "ticket_type":
 				case "priority":
 				case "source":
-				case "tags":
+				case "labels":
 				case "assignee_id":
 				case "group_id":
 				{

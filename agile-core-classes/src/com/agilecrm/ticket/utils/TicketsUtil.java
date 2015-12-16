@@ -31,11 +31,7 @@ import com.agilecrm.util.email.SendMail;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.Query.SortDirection;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.KeyRange;
-import com.googlecode.objectify.Query;
 
 /**
  * <code>TicketUtil</code> is a utility class to provide CRUD operations on
@@ -218,8 +214,6 @@ public class TicketsUtil
 
 			Key<Tickets> key = Tickets.ticketsDao.put(ticket);
 
-			ticket.short_id = getTicketShortID(key.getId()) + "";
-
 			/**
 			 * Checking if new ticket requester is exists in Contacts
 			 */
@@ -230,8 +224,9 @@ public class TicketsUtil
 
 			ticket.contact_key = new Key<Contact>(Contact.class, contact.id);
 			ticket.contactID = contact.id;
-
-			Tickets.ticketsDao.put(ticket);
+			
+			ticket.save();
+			//Tickets.ticketsDao.put(ticket);
 
 			// Create search document
 			new TicketsDocument().add(ticket);

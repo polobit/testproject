@@ -1,12 +1,16 @@
 package com.agilecrm.ticket.entitys;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.ws.rs.WebApplicationException;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
@@ -15,6 +19,10 @@ import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.CacheUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Transaction;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -118,11 +126,6 @@ public class Tickets extends Cursor
 
 	@NotSaved
 	public Long contactID = null;
-
-	/**
-	 * Stores contact id of customer
-	 */
-	public String short_id = "";
 
 	/**
 	 * Stores ticket subject
@@ -306,8 +309,91 @@ public class Tickets extends Cursor
 		this.id = id;
 	}
 
+	/**
+	 * Saves the ticket object.
+	 */
+	public void save() throws WebApplicationException
+	{
+		String namespace = NamespaceManager.get();
+
+		Transaction txn = DatastoreServiceFactory.getDatastoreService().beginTransaction();
+
+		// Get tickets count from cache
+		Long ticketsCount = (Long) CacheUtil.getCache(namespace + "_tickets_count"), unmodifiedTicketsCount = ticketsCount;
+
+		try
+		{
+			// Checking ticket counts exits in memcache. If it is null, get
+			// last ticket id and set in memcache.
+			if (ticketsCount == null)
+			{
+				List<Tickets> tickets = ticketsDao.fetchAllByOrder(1, "", null, false, true, "-created_time");
+
+				ticketsCount = (tickets == null || tickets.size() == 0) ? 0l : tickets.get(0).id;
+			}
+
+			// Increment ticket id and assign to new ticket
+			this.id = ++ticketsCount;
+
+			// Update new value in memcache
+			CacheUtil.setCache(namespace + "_tickets_count", ticketsCount);
+
+			try
+			{
+				// Checking if any ticket exists with same id
+				ticketsDao.get(ticketsCount);
+
+				System.out.println("Ticket exists with id " + ticketsCount + ". Increment by 1....");
+
+				// No exception means ticket exists with same id
+
+				// Increment ticket id and assign to new ticket
+				this.id = ++ticketsCount;
+
+				// Update new value in memcache
+				CacheUtil.setCache(namespace + "_tickets_count", ticketsCount);
+
+				ticketsDao.put(this);
+			}
+			catch (Exception e)
+			{
+				System.out.println("No ticket exists with id " + ticketsCount + ". Creating ticket....");
+				ticketsDao.put(this);
+			}
+
+			txn.commit();
+		}
+		catch (ConcurrentModificationException e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			e.printStackTrace();
+		}
+		finally
+		{
+			if (txn.isActive())
+			{
+				txn.rollback();
+
+				// Update old value in memcache
+				CacheUtil.setCache(namespace + "_tickets_count", unmodifiedTicketsCount);
+			}
+		}
+	}
+
+	/**
+	 * Sets entity id if it is null.
+	 */
+	@PrePersist
+	private void prePersist()
+	{
+		if (id != null)
+		{
+
+		}
+	}
+
 	@javax.persistence.PostLoad
-	private void PostLoad()
+	private void postLoad()
 	{
 		if (group_id != null)
 			groupID = group_id.getId();
