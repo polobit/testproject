@@ -249,15 +249,15 @@ var Tickets = {
 		/**
 		 * Initializing click event on each ticket list item
 		 */
-		$('ul#ticket-model-list', el).off('click');
-		$('ul#ticket-model-list', el).on('click', 'li > .open-ticket', function(e){
+		$('#ticket-model-list', el).off('click');
+		$('#ticket-model-list', el).on('click', 'tr', function(e){
 
 			if($(e.target).hasClass('ticket-checkbox'))
 				return;
 
 			var url = '#tickets/filter/' + Ticket_Filter_ID + '/ticket/';
 
-			Backbone.history.navigate(url + $(this).closest('li').attr('data-id'), {trigger : true});
+			Backbone.history.navigate(url + $(this).find('td.data').attr('data-id'), {trigger : true});
 		});
 
 		/*
