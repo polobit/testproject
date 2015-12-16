@@ -1,0 +1,70 @@
+{
+    "templates": [
+        {
+            "category": "General",
+            "description": "Category description here",
+            "list": [
+				{
+                    "id": "bolt",
+                    "displayname": "bolt free",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "flatapp",
+                    "displayname": "Flat App",
+                    "description": "this is sample text"
+                },
+				{
+                    "id": "flatty",
+                    "displayname": "Flatty free",
+                    "description": "this is sample text"
+                },
+				{
+                    "id": "pratt",
+                    "displayname": "Pratt free",
+                    "description": "this is sample text"
+                },
+				{
+                    "id": "cloud-soft",
+                    "displayname": "cloud soft",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "freelancer",
+                    "displayname": "Freelancer",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "landing-page",
+                    "displayname": "Landing Page",
+                    "description": "this is sample text"
+                },
+				{
+                    "id": "lugada",
+                    "displayname": "Lugada",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "sleek",
+                    "displayname": "Sleek",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "squad",
+                    "displayname": "Squad",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "stylish-portfolio",
+                    "displayname": "Stylish Portfolio",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "superawesome",
+                    "displayname": "Super Awesome",
+                    "description": "this is sample text"
+                }
+            ]
+        }
+    ]
+}

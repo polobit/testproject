@@ -31,6 +31,7 @@ import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.OpportunityDocument;
 import com.agilecrm.session.SessionManager;
@@ -1805,48 +1806,7 @@ public class OpportunityUtil
         sourcecount.put(source.getId().toString(), type.equalsIgnoreCase("deals")?0:0.0);
         }
         System.out.println(sources.get(0).getId());
-        Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-        startCalendar.setTimeInMillis(minTime * 1000);
-        
-
-        // Sets calendar with end time.
-        Calendar endCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-        endCalendar.setTimeInMillis(maxTime * 1000);
-        if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
-		 {
-        	startCalendar.set(Calendar.DAY_OF_MONTH, 1);
-        	endCalendar.set(Calendar.DAY_OF_MONTH, 1);
-		 }
-        long startTimeMilli = startCalendar.getTimeInMillis();
-        long endTimeMilli = endCalendar.getTimeInMillis();
-        
-        
-        while (startTimeMilli <= endTimeMilli)
-        {
-            //JSONObject dealsCount = new JSONObject();
-            //JSONObject sourcedealsCount = new JSONObject();
-            //dealsCount.put("count", 0);
-            String createdTime = (startCalendar.getTimeInMillis() / 1000) + "";
-            newDealsObject.put(createdTime, sourcecount);
-            if (StringUtils.equalsIgnoreCase(frequency, "daily"))
-			{
-			startCalendar.add(Calendar.DAY_OF_MONTH, 1);
-			}
-            if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
-            {
-			startCalendar.add(Calendar.MONTH, 1);
-			startCalendar.set(Calendar.DAY_OF_MONTH, 1);
-            }
-            if (StringUtils.equalsIgnoreCase(frequency, "weekly"))
-            {
-            startCalendar.add(Calendar.WEEK_OF_YEAR, 1);
-            }
-            startCalendar.set(Calendar.HOUR_OF_DAY, 0);
-            startCalendar.set(Calendar.MINUTE, 0);
-            startCalendar.set(Calendar.SECOND, 0);
-            startCalendar.set(Calendar.MILLISECOND, 0);
-            startTimeMilli = startCalendar.getTimeInMillis();
-        }
+        newDealsObject=ReportsUtil.initializeFrequencyForReports(minTime, maxTime, frequency, timeZone, sourcecount);
 
         System.out.println("Total opportunitite....."+opportunitiesList.size());
         for (Opportunity opportunity : opportunitiesList)

@@ -56,6 +56,7 @@ public class Plan implements Serializable {
 	public String coupon = null;
 	public Integer count = 0;
 	public String version = VERSION_2;
+	public String trialStatus = null;
 
 	public Plan(String plan_type, Integer quantity) {
 		this.plan_type = PlanType.valueOf(plan_type);

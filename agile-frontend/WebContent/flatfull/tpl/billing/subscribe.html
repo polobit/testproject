@@ -11,14 +11,14 @@
 	<div class="col-md-9">
 		<div class="tab-container">
 {{#check_plan "FREE"}}
-<div style="font-size: 13px; /* line-height: 16px; *//* padding: 8px 8px 8px; *//* width: auto; */ position: relative;
-/* top: -49px; */margin: 0 auto;z-index: 9;width: 202px;bottom: 9px;"><span style="padding: 5px 15px 5px 15px;border: 1px solid #E2E29C;background-color: #F7F7D0;">You are currently on FREE plan</span></div>
+<div class="" style="font-size: 13px; /* line-height: 16px; *//* padding: 8px 8px 8px; *//* width: auto; */ position: relative;
+/* top: -49px; */margin: 0 auto;z-index: 9;width: 202px;bottom: -8px;"><span style="padding: 5px 15px 5px 15px;border: 1px solid #E2E29C;background-color: #F7F7D0;">You are currently on FREE plan</span></div>
 
-			<ul class="nav nav-tabs hide" id="subTab" style="margin-top: -18px;">
+			<ul class="nav nav-tabs" id="subTab" style="margin-top: -18px;">
 {{else}}
 <ul class="nav nav-tabs" id="subTab">
 {{/check_plan}}
-										    <li role="presentation" id="usertab" class="active" data-tab="1">
+										    <li role="presentation" class="active" data-tab="1">
 												<a href="#users-content" role="tab" name="users-content" data-toggle="tab" aria-control="users-content" id="users">Plans</a>
 											</li>
 											<li role="presentation" id="emailtab" data-tab="2">
@@ -34,10 +34,21 @@
   
                      <div class="plan-collection-in panel  liteplan" style="background: rgb(246, 247, 249);">
                        
-                        <div class="p-t-sm text-center m-b" style="">
-                           <img src="/flatfull/img/lite-plan.png" style="width: 132px;">
+                        <div class="p-t-sm text-center show_limits" style="padding-bottom:30px;">
+                           <img src="{{getS3ImagePath '/flatfull/img/lite-plan.png'}}" style="width: 132px;">
                         </div>
-                        <div style="" class="price-panel wrapper text-center b-b b-light m-t bg-white p-b-none">
+
+                        <div style="position: relative;" class="show_limits price-panel wrapper m-t-none text-center b-b b-light bg-white p-b-none">
+                        	<div  class="plan_features w-full h-full text-white p-t-xs pos-abs" style="display:none;top: 0px;left: 0px;background-color:black;opacity:0.75;">
+                        		<ul class="p-l-none" style="list-style-type:none">
+                        			<li>10,000 Contacts</li>
+                        			<li>5 Campaigns</li>
+                        			<li>1,000 Pageviews</li>
+                        			<li>5 Web Rules</li>
+                        		</ul>
+                        	</div>
+                        	<div class="price_per_month" style="opacity:1;">
+                        	
                            <h4 class="m-b-none m-t-none" title="Lite Plan" id="plan_name">Starter</h4>
                            <div class="p-t-xs" id="propricebox">
                               <h2 class="m-none" style="line-height: 1 !important;">
@@ -48,8 +59,11 @@
                                  </div>
                               </h2>
                            </div>
+                           </div>
                         </div>
-                        <div class="plan-collection-content text-base text-center p" style="height:104px;" id="basic_plan_statement">
+
+
+                        <div class="plan-collection-content show_limits text-base text-center p" style="height:104px;" id="basic_plan_statement">
                            Ideal for startups with lean sales teams for sales tracking & basic marketing automation. 
                         </div>
 
@@ -64,10 +78,20 @@
 {{else}}
  <div class="plan-collection-in panel  proplan " style="background: rgb(246, 247, 249);">
   {{/check_plan}}
-                        <div class="p-t-sm text-center m-b">
-                           <img src="/flatfull/img/pro-plan.png" height="110" width="132">
+                        <div class="p-t-sm text-center show_limits" style="padding-bottom:30px;">
+                           <img src="{{getS3ImagePath '/flatfull/img/pro-plan.png'}}" height="110" width="132">
                         </div>
-                        <div class="price-panel wrapper text-center b-b b-light m-t p-b-none">
+                        <div style="position: relative;" class="price-panel wrapper text-center m-t-none b-b b-light m-t p-b-none show_limits">
+                        <div  class="plan_features w-full h-full text-white p-t-xs pos-abs" style="display:none;top: 0px;left: 0px;background-color:black;opacity:0.75;">
+                        		<ul class="p-l-none" style="list-style-type:none">
+                        			<li>50,000 Contacts</li>
+                        			<li>10 Campaigns</li>
+                        			<li>10,000 Pageviews</li>
+                        			<li>10 Web Rules</li>
+                        		</ul>
+                        	</div>
+                        	<div class="price_per_month" style="opacity:1;">
+                        	
                            <h4 class="m-b-none m-t-none" title="Pro Plan" id="plan_name">Regular</h4>
                            <div class="p-t-xs" id="propricebox">
                               <h2 class="m-none" style="line-height: 1 !important;">
@@ -78,25 +102,45 @@
                                  </div>
                               </h2>
                            </div>
+                           </div>
                         </div>
-                        <div class="plan-collection-content text-base text-center p" style="height:104px" id="pro_plan_statement">
+                        <div class="plan-collection-content text-base text-center p show_limits" style="height:104px" id="pro_plan_statement">
                            Popular option for growing businesses looking 
                            for sales & marketing automation.
                         </div>
 
 
-<button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-regular">Choose</button>
+<button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-regular">
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+Choose
+{{else}}
+7 Day Trial
+{{/is_cancelled_user}}
+{{else}}
+Choose
+{{/check_plan}}
+</button>
 
                      </div>
                   </div>
                   <!--End of regular-->
-<div id="pro_plan" class="col-lg-4 col-md-6 col-sm-12 p-n" style="opacity: 1;">
+<div id="pro_plan" class="col-md-4 col-sm-12 col-xs-12 p-n" style="opacity: 1;">
                      <div class="plan-collection-in panel  customplan" style="background: rgb(246, 247, 249);cursor: pointer;">
-                        <div class="p-t-sm text-center m-b">
-                           <img src="/flatfull/img/enterprise-plan.png" style="width: 132px;">
+                        <div class="p-t-sm text-center p-b show_limits" style="padding-bottom:30px;">
+                           <img src="{{getS3ImagePath '/flatfull/img/enterprise-plan.png'}}" style="width: 132px;">
                         </div>
-                        <div class="price-panel wrapper text-center b-b b-light p-b-none" style="/* border-radius: 4px; *//* background: white; *//* width: 80%; *//* margin: 0 auto; */
-/* margin-top: 15px; */">
+                        <div style="position: relative;" class="price-panel wrapper m-t-none text-center b-b b-light p-b-none show_limits">
+                        <div  class="plan_features w-full h-full text-white p-t-xs pos-abs" style="display:none;top: 0px;left: 0px;background-color:black;opacity:0.75;">
+                        		<ul class="p-l-none" style="list-style-type:none">
+                        			<li>Unlimited Contacts</li>
+                        			<li>Unlimited Campaigns</li>
+                        			<li>20,000 Pageviews</li>
+                        			<li>Unlimited Web Rules</li>
+                        		</ul>
+                        	</div>
+                        	<div class="price_per_month" style="opacity:1;">
+                        	
                            <h4 class="m-b-none m-t-none" title="Enterprise" id="plan_name">Enterprise</h4>
                            <div class="p-t-xs" id="propricebox">
                               <h2 class="m-none" style="line-height: 1 !important;">
@@ -107,12 +151,23 @@
                                  </div>
                               </h2>
                            </div>
+                           </div>
                         </div>
-                        <div class="plan-collection-content text-base p text-center" style="height: 104px;">
+                        <div class="plan-collection-content text-base p text-center show_limits" style="height: 104px;">
                            Best choice for businesses trying to scale, with process-centric sales & marketing automation.
                         </div>
 
-<button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-pro">Choose</button>
+<button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-pro">
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+Choose
+{{else}}
+7 Day Trial
+{{/is_cancelled_user}}
+{{else}}
+Choose
+{{/check_plan}}
+</button>
                   </div>
                   </div>
                   <!-- End of pro-->
@@ -294,7 +349,17 @@
 	<div class="row p-l-xxl p-t-sm">
 		<div class="col-sm-offset-4 col-sm-8 p-l-xxl">
 
-<a href="#purchase-plan" id="purchase-plan"	class="btn btn-large btn-primary">Proceed to Pay</a>
+<a href="#purchase-plan" id="purchase-plan"	class="btn btn-large btn-primary">
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+Proceed to Pay
+{{else}}
+Proceed to Trial
+{{/is_cancelled_user}}
+{{else}}
+Proceed to Pay
+{{/check_plan}}
+</a>
 
 
 			
@@ -324,7 +389,7 @@
 {{#getSubscriptionBasedOnPlan billingData emailPlan}} 
           <form class="bs-example form-horizontal">
             <div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none">One Time Free Emails</label>
+              <label class="col-sm-6 control-label p-t-none">Free Emails</label>
               <div class="col-sm-6">
                 -
               </div>
@@ -375,7 +440,7 @@
 {{else}}
           <form class="bs-example form-horizontal">
             <div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none">One Time Free Emails</label>
+              <label class="col-sm-6 control-label p-t-none">Free Emails</label>
               <div class="col-sm-6">
                 5000 
               </div>
@@ -437,7 +502,7 @@
       <div class="carousel-inner">
          <div class="item">
             <div class="pull-left tweet-img-pricing">
-               <img title="Nicolas Woirhaye" src="../../img/testimonial-nicolas.png">
+               <img title="Nicolas Woirhaye" src="{{getS3ImagePath '../../img/testimonial-nicolas.png'}}">
             </div>
             <div class="pull-left tweet-txt">
                <span class="tweet-arrow"></span>
@@ -452,7 +517,7 @@
             </div>
          </div>
          <div class="item">
-            <div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="../../img/testimonial-ron.png"></div>
+            <div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="{{getS3ImagePath '../../img/testimonial-ron.png'}}"></div>
             <div class="pull-left tweet-txt">
                <span class="tweet-arrow"></span>
                <div class="tweet-head">
@@ -465,7 +530,7 @@
             </div>
          </div>
          <div class="item active">
-            <div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="../../img/testimonial-gary.png"></div>
+            <div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="{{getS3ImagePath '../../img/testimonial-gary.png'}}"></div>
             <div class="pull-left tweet-txt">
                <span class="tweet-arrow"></span>
                <div class="tweet-head">
@@ -478,7 +543,7 @@
             </div>
          </div>
          <div class="item">
-            <div class="pull-left tweet-img-pricing"><img title="Mark Valles" src="../../img/testimonial-mark.png"></div>
+            <div class="pull-left tweet-img-pricing"><img title="Mark Valles" src="{{getS3ImagePath '../../img/testimonial-mark.png'}}"></div>
             <div class="pull-left tweet-txt">
                <span class="tweet-arrow"></span>
                <div class="tweet-head">
@@ -492,7 +557,7 @@
             </div>
          </div>
          <div class="item">
-            <div class="pull-left tweet-img-pricing"><img title="Paul Singh" src="../../img/testimonial-paulsingh.png"></div>
+            <div class="pull-left tweet-img-pricing"><img title="Paul Singh" src="{{getS3ImagePath '../../img/testimonial-paulsingh.png'}}"></div>
             <div class="pull-left tweet-txt">
                <span class="tweet-arrow"></span>
                <div class="tweet-head">
@@ -529,22 +594,9 @@
         </div> <!-- End of tab container -->
 		
     </div> <!-- End of col-md-9 -->
-{{#check_plan "FREE"}}
-<div class="col-md-3 p-t-sm m-t-xs" id="email">
-	
-		<div class="panel panel-default wrapper-md m-b-none">
-		<p class="b-b b-light p-b-xs">Emails<a onclick='emailClickEvent()' style="font-size: 12px;" class="text-info pull-right">Purchase</a></p>
-		<div>
-Your current plan provides 5000 emails (branded). 
-</div>
-		</div>
-	
-	</div>
-{{else}}
-{{/check_plan}}   
+       
      
-  <div class="col-md-3" id="currentPlan">
-
+  <div class="col-md-3">
 {{#getSubscriptionBasedOnPlan billingData plan}}
    <div class="panel panel-default wrapper-md m-t-xl">
       <p class="b-b b-light p-b-xs">
@@ -565,7 +617,7 @@ users.
 <div class="row">
 	<div class="col-md-12">
 {{#check_plan "FREE"}}
-        <div class="panel panel-default wrapper-md m-t-md">
+        <div class="panel panel-default wrapper-md m-t-xl">
 {{else}}
 		<div class="panel panel-default wrapper-md">
 {{/check_plan}}
@@ -605,9 +657,11 @@ users.
 		</div>
 	{{#check_plan "FREE"}}
 	{{else}}
-	<div>
+	{{#is_trial_exist billingData}}
+	<a href="#"  id="cancel_free_trial" class="pull-right text-lg text-info" style="font-size:12px;">Cancel your Trial</a>
+	{{else}}
 	<a href="#"  id="cancel-account-request" class="pull-right text-lg text-info" style="font-size:12px;">Cancel Subscription</a>
-	</div>
+	{{/is_trial_exist}}
 	{{/check_plan}}
 	</div>  <!-- End of col-md-3 -->
 {{/if}}
@@ -628,8 +682,8 @@ users.
 <form class="form-horizontal" id="email-plan-form">
 <div class="email-selected-plan panel" style="background: rgb(246, 247, 249);" id="email-div" onclick="focus()">
 
-<div class="p-t-md text-center m-b" style="">
-   <img src="/flatfull/img/mail.png" style="width: 132px;">
+<div class="p-t-md text-center m-b p-b-sm" style="">
+   <img src="{{getS3ImagePath '/flatfull/img/mail.png'}}" style="width: 132px;">
 </div>
 <div  class="price-panel wrapper text-center b-b b-light m-t bg-white">
   <h4 class="m-b-none">Emails</h4>
@@ -642,9 +696,8 @@ users.
 </div>
    
 </div>
-<div class="text-center m-t">One Time FREE</div>
-<div class="text-center">5000 Emails</div>
-<div id="email_validation_container">
+
+<div id="email_validation_container" class="p-t">
 <div class="m-t" style="
     margin: 15px auto 0;
     width: 67%;
@@ -661,8 +714,7 @@ users.
 </div>
 <div class="text-center text-xs">Emails to be purchased</div>
 
-<div class="text-center m-t-lg m-b-md">
-
+<div class="text-center m-t-lg m-b-xs">
 <a id="purchase-email-plan" class="btn pricing-btn text-center w-full  b-n btn-lg btn-primary" href="#purchase-email"> Proceed to Pay </a>
 
 </div>                    
@@ -706,6 +758,45 @@ users.
 			{{/if}}
 			<br/>
 			<div class="text-danger">Please adjust your current plan accordingly and proceed to process your new subscription.</div>
+			
+		</div>
+		<div class="modal-footer">
+			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">Close</a>
+		</div>
+	</div>
+</div>
+</div>
+</script>
+
+<script id="trial-error-modal-template" type="text/html">
+	<div class="modal" data-backdrop="static">
+<div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-header">
+            <button class="close" data-dismiss="modal">x</button>
+			<h3 class="modal-title">Plan Restrictions</h3>
+		</div>
+		<div class="modal-body help-text">
+			<strong>Sorry, we are unable to cancel your trial subscription due to the following reasons:</strong><br/><br/>
+			
+				{{#is_greater userscount userslimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{userslimit}} users.</div></div>
+				{{/is_greater}}
+				{{#is_greater contactcount contactlimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{contactlimit}} contacts.</div></div>
+				{{/is_greater}}
+				{{#is_greater compaigncount compaignlimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{compaignlimit}} campaign{{#is_greater compaignlimit 1}}s{{/is_greater}}.</div></div>
+				{{/is_greater}}
+				{{#is_greater webrulecount webrulelimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{webrulelimit}} web rule{{#is_greater webrulelimit 1}}s{{/is_greater}}.</div></div>
+				{{/is_greater}}
+				{{#is_greater triggerscount triggerslimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{triggerslimit}} trigger{{#is_greater triggerslimit 1}}s{{/is_greater}}.</div></div>
+				{{/is_greater}}
+			
+			<br/>
+			<div class="text-danger">Please reset your account with the help of the above mentioned features and then proceed to cancel your trial subscription</div>
 			
 		</div>
 		<div class="modal-footer">

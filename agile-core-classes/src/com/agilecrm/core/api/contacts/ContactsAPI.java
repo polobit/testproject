@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.contacts;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -28,6 +30,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -1270,6 +1274,253 @@ public class ContactsAPI
 	    contact.update();
 
 	}
+	return contact;
+    }
+
+    /**
+     * Updates the existing contact (Partial update)
+     * 
+     * @param contactJson
+     * 
+     * @return updated contact
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
+     * @throws JSONException
+     * @throws JsonParseException
+     */
+    @Path("/edit-properties")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Contact updatePropertiesById(String contactJson) throws JSONException, JsonParseException,
+	    JsonMappingException, IOException
+    {
+	// Get data and check if id is present
+	JSONObject obj = new JSONObject(contactJson);
+
+	ObjectMapper mapper = new ObjectMapper();
+	if (!obj.has("id"))
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Please check id value should not be null.").build());
+	}
+
+	// Search contact if id is present else throw exception
+	Contact contact = ContactUtil.getContact(obj.getLong("id"));
+	if (contact == null)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Contact is not availabe for given id.").build());
+	}
+
+	// Iterate data by keys ignore email key value pair
+	Iterator<?> keys = obj.keys();
+
+	while (keys.hasNext())
+	{
+	    String key = (String) keys.next();
+
+	    if (key.equals("properties"))
+	    {
+		JSONArray propertiesJSONArray = new JSONArray(obj.getString(key));
+		for (int i = 0; i < propertiesJSONArray.length(); i++)
+		{
+		    // Create and add contact field to contact
+		    JSONObject json = new JSONObject();
+		    json.put("name", propertiesJSONArray.getJSONObject(i).getString("name"));
+		    json.put("value", propertiesJSONArray.getJSONObject(i).getString("value"));
+		    ContactField field = mapper.readValue(json.toString(), ContactField.class);
+		    contact.addProperty(field);
+		}
+	    }
+	}
+
+	return contact;
+    }
+
+    /**
+     * Updates the existing contact (Partial update)
+     * 
+     * @param contactJson
+     * 
+     * @return updated contact
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
+     * @throws JSONException
+     */
+    @Path("/edit/add-star")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Contact updateStarValueById(String contactJson) throws JSONException
+    {
+	// Get data and check if id is present
+	JSONObject obj = new JSONObject(contactJson);
+
+	ObjectMapper mapper = new ObjectMapper();
+	if (!obj.has("id"))
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Please check id value passed.").build());
+	}
+
+	// Search contact if id is present else throw exception
+	Contact contact = ContactUtil.getContact(obj.getLong("id"));
+	if (contact == null)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Contact is not availabe for given id.").build());
+	}
+
+	// Iterate data by keys ignore email key value pair
+	Iterator<?> keys = obj.keys();
+
+	while (keys.hasNext())
+	{
+	    String key = (String) keys.next();
+
+	    if (key.equals("star_value"))
+	    {
+		if ((short) obj.getInt(key) > 5 || (short) obj.getInt(key) < 0)
+		{
+		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Star value should be less then or equal to 5.").build());
+		}
+		contact.star_value = (short) obj.getInt(key);
+	    }
+
+	}
+
+	contact.save();
+
+	return contact;
+    }
+
+    /**
+     * Updates the existing contact (Partial update)
+     * 
+     * @param contactJson
+     * 
+     * @return updated contact
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
+     * @throws JSONException
+     */
+    @Path("/edit/lead-score")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Contact updateLeadScoreById(String contactJson) throws JSONException
+    {
+	// Get data and check if id is present
+	JSONObject obj = new JSONObject(contactJson);
+
+	ObjectMapper mapper = new ObjectMapper();
+	if (!obj.has("id"))
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Please check id value passed.").build());
+	}
+
+	// Search contact if id is present else throw exception
+	Contact contact = ContactUtil.getContact(obj.getLong("id"));
+	if (contact == null)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Contact is not availabe for given id.").build());
+	}
+
+	// Iterate data by keys ignore email key value pair
+	Iterator<?> keys = obj.keys();
+
+	while (keys.hasNext())
+	{
+	    String key = (String) keys.next();
+
+	    if (key.equals("lead_score"))
+		contact.lead_score = obj.getInt(key);
+	}
+
+	contact.save();
+
+	return contact;
+    }
+
+    /**
+     * Updates the existing contact (Partial update)
+     * 
+     * @param tagJson
+     * 
+     * @return updated contact
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
+     * @throws JSONException
+     * @throws JsonParseException
+     */
+    @Path("/edit/tags")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Contact updateTagsById(String tagJson) throws JSONException, JsonParseException, JsonMappingException,
+	    IOException
+    {
+	// Get data and check if id is present
+	JSONObject obj = new JSONObject(tagJson);
+	Tag[] tagsArray = null;
+	ObjectMapper mapper = new ObjectMapper();
+	if (!obj.has("id"))
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Please check id value passed.").build());
+	}
+
+	// Search contact if id is present else throw exception
+	Contact contact = ContactUtil.getContact(obj.getLong("id"));
+	if (contact == null)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Contact is not availabe for given id.").build());
+	}
+
+	// Iterate data by keys ignore email key value pair
+	Iterator<?> keys = obj.keys();
+
+	while (keys.hasNext())
+	{
+	    String key = (String) keys.next();
+
+	    if (key.equals("tags"))
+	    {
+		String tagString = obj.getString(key);
+		if (StringUtils.isEmpty(tagString))
+		{
+		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry, tag input is empty").build());
+		}
+		JSONArray tagsJSONArray = new JSONArray(tagString);
+		tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(), Tag[].class);
+	    }
+
+	}
+
+	if (tagsArray != null)
+	{
+	    try
+	    {
+		contact.addTags(tagsArray);
+	    }
+	    catch (WebApplicationException e)
+	    {
+		return null;
+	    }
+	}
+	else
+	    contact.save();
+
 	return contact;
     }
 

@@ -1,9 +1,9 @@
 <script id="stats-collection-template" type="text/html">
 {{#unless this.length}}
         <div class="wrapper p-t-none">
-            <div class="slate-content">
+            <div class="slate-content mobile-pad-content">
                 <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">{{contactShortName}} has no web activity.</h4>
@@ -22,7 +22,7 @@
 <div class="m-l">
 	<span>
 		<h5 class="m-t-none">
-	  	    <a class="text-l-none"><b>Initial Referrer URL</b></a><img border="0" src="/img/help.png"
+	  	    <a class="text-l-none"><b>Initial Referrer URL</b></a><img border="0" src="{{getS3ImagePath '/img/help.png'}}"
 		    style="height: 6px; vertical-align: text-top" rel="popover"
 			data-placement="bottom" data-title="Referrer URL"
 			data-content="This is the web page from where this contact has come to your website the very first time."
@@ -125,7 +125,7 @@
                 	<img class="inline m-r-xs r r-2x" src="/img/web-stats/os/{{normalize_os os}}.png" title="{{os}}">
 				{{/if}}
 				{{#if browser_name}}
-		      		<img class="inline m-r-xs r r-2x" src="/img/web-stats/browsers/{{browser_name}}.png"  title="{{browser_name}}">
+		      		<img class="inline m-r-xs r r-2x" src="img/web-stats/browsers/{{browser_name}}.png"  title="{{browser_name}}">
 				{{/if}}
         	</div>
        		{{/stringToJSON}}

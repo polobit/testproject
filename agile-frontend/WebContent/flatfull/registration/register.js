@@ -72,7 +72,7 @@ function submitForm(form, submit_button)
 
 function getRegisterURL(domain)
 {
-	if(version == null || version === "null")
+	if(typeof version === "undefined" || version == null || version === "null")
 	{
 		return  "https://" + domain + ".agilecrm.com/register";
 	}

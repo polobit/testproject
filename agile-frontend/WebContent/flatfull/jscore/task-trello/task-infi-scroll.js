@@ -36,7 +36,7 @@ function initialize_infinite_scrollbar(element_id, targetCollection)
 
 			// Add loading icon
 			$(targetCollection.infiniScroll.options.target.nextElementSibling).html(
-					'<div class="scroll-loading"> <img src="/img/ajax-loader.gif" style="margin-left: 44%;"> </div>');
+					'<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader.gif")+'" style="margin-left: 44%;"> </div>');
 		} });
 }
 

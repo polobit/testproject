@@ -224,6 +224,8 @@ function initActivitiesDateRange()
 			var to_date = Date.today().add({ days : parseInt(-6) });
 			$('#activities_date_range #range').html(to_date.toString('MMMM d, yyyy') + " - " + from_date.toString('MMMM d, yyyy'));
 			renderActivityView(getActivityFilterParameters());
+
+			$('.daterangepicker > .ranges > ul > li.active').removeClass("active");
 		}
 	});
 	$('.daterangepicker > .ranges > ul').on("click", "li", function(e)

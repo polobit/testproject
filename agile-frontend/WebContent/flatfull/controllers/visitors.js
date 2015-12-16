@@ -9,7 +9,7 @@ initialize : function()
 
 loadGmap : function()
 {
-	head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION,LIB_PATH + 'lib/markerclusterer.js', CSS_PATH + "css/misc/date-picker.css",  function()
+	head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION,LIB_PATH + 'lib/markerclusterer.js', function()
 	{
 
 		var view = new Base_Model_View({ model : new BaseModel(), template : "gmap-html-page",

@@ -23,7 +23,7 @@ pageEncoding="UTF-8"%>
 <head>
 <meta charset="utf-8">
 <title>Agile CRM Dashboard</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
 <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
@@ -99,6 +99,10 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 
   CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
+  
+  // Static images s3 path
+  String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
+  
   if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
   {
 	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
@@ -249,12 +253,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Web Rules</span>
     </a>
   </li>
-  <!-- <li id="web-pages-menu">
-    <a href="#webpages">
+  <li id="landing-pages-menu">
+    <a href="#landing-pages">
       <i class="fa fa-file-code-o"></i>
-      <span>Web Pages</span>
+      <span>Landing Pages</span>
     </a>
-  </li> -->
+  </li>
     <li id="activitiesmenu">
     <a  href="#activities">
       <i class="icon-cogs icon-white"></i>
@@ -314,6 +318,9 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 %>
 
  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
+ 
+  <!-- Include bootstrap modal divs-->
+ <%@ include file="flatfull/modals.html"%>
 </div>
 <!-- Including Footer page -->
 <jsp:include page="flatfull/footer.jsp" />
@@ -321,6 +328,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
 
+var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
 //var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = '<%=CLOUDFRONT_STATIC_FILES_PATH%>';

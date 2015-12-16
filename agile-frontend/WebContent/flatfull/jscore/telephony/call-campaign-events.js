@@ -101,7 +101,7 @@ $(function(){
 					// Disabled the buttons and fields......
 					$("#bulk-start-call-campaign").attr("disabled","disabled");
 					$("#bulk-start-call-campaign").html("Loading...");
-					$("input:radio[name='call_campaign_autodial']").attr("disabled",'disabled');
+					$("#call_campaign_autodial").attr("disabled","disabled");
 					$("#addTag").attr("disabled","disabled");
 					$("#rampTimeButton").attr("disabled","disabled");
 					
@@ -128,10 +128,12 @@ $(function(){
 							$('#correctTag').modal('show');
 							$("#bulk-start-call-campaign").removeAttr('disabled');
 							$("#bulk-start-call-campaign").html("Start Campaign");
-							$("input:radio[name='call_campaign_autodial']").removeAttr("disabled",'disabled');
+							$("#call_campaign_autodial").removeAttr('disabled');
 							$("#addTag").removeAttr('disabled');
 							$("#addTag").val("");
-							$("#rampTimeButton").removeAttr('disabled');
+							if(CALL_CAMPAIGN.autodial == true){
+								$("#rampTimeButton").removeAttr('disabled');
+							}
 							return;
 						}
 						CALL_CAMPAIGN.tag = tag;
@@ -167,11 +169,11 @@ $(function(){
 											
 											$("#bulk-start-call-campaign").removeAttr('disabled');
 											$("#bulk-start-call-campaign").html("Start Campaign");
-											$("input:radio[name='call_campaign_autodial']").removeAttr("disabled",'disabled');
+											$("#call_campaign_autodial").removeAttr('disabled');
 											$("#addTag").removeAttr('disabled');
-											$("#rampTimeButton").removeAttr('disabled');
-											CALL_CAMPAIGN.tag = null;
-											CALL_CAMPAIGN.has_tag = false;	
+											if(CALL_CAMPAIGN.autodial == true){
+												$("#rampTimeButton").removeAttr('disabled');
+											}
 											$('#hitRefreshModel').modal('show');
 										}
 									}
@@ -190,11 +192,11 @@ $(function(){
 			CALL_CAMPAIGN.last_clicked = null;
 			$("#bulk-start-call-campaign").removeAttr('disabled');
 			$("#bulk-start-call-campaign").html("Start Campaign");
-			$("input:radio[name='call_campaign_autodial']").removeAttr("disabled",'disabled');
+			$("#call_campaign_autodial").removeAttr('disabled');
 			$("#addTag").removeAttr('disabled');
-			$("#rampTimeButton").removeAttr('disabled');
-			CALL_CAMPAIGN.tag = null;
-			CALL_CAMPAIGN.has_tag = false;
+			if(CALL_CAMPAIGN.autodial == true){
+				$("#rampTimeButton").removeAttr('disabled');
+			}
 		}
 	   });
 	
@@ -449,7 +451,7 @@ $(function(){
 				console.log("Twilio call noty_add_phone from noty");
 				CALL_CAMPAIGN.last_clicked = "ADD-PHONE";
 				// Add loading img till contact update
-				$(".noty_new_phone").html('<img src="/img/ajax-loader.gif">');
+				$(".noty_new_phone").html('<img src="'+updateImageS3Path("/img/ajax-loader.gif")+'">');
 
 				CALL_CAMPAIGN.contact_update = true;
 

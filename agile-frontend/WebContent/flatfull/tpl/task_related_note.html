@@ -1,16 +1,16 @@
 <script id="task_notes-collection-template" type="text/html">
 {{#unless this.length}}
         <div class="wrapper p-t-none">
-            <div class="slate-content">
+            <div class="slate-content mobile-pad-content">
                 <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">You have no notes for this task.</h4>
                     <div class="text">
                         You can save specific information about task as a Note.
                     </div>
-                    <a href="#new-task-modal" data-toggle="modal" class="btn btn-default btn-sm blue btn-slate-action task-add-note m-t-xs"><i class="icon-plus-sign"></i>  Add Note</a>
+                    <a href="#new-task-modal" data-toggle="modal" class="m-r-none btn btn-default btn-sm blue btn-slate-action task-add-note m-t-xs"><i class="icon-plus-sign"></i>  Add Note</a>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -41,7 +41,7 @@
 		<span class="owner-name hide">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
 	</div>
 	<div class="pull-left rightThumbView pos-rlt">
-<div class="pull-left contact-title-dynamic">	
+<div class="pull-left contact-title-dynamic text-ellipsis">	
 	<a class="text-md text-cap custom-color">{{subject}}</a>
 	</div>
 	<div class="pull-right">
@@ -70,7 +70,7 @@
        	{{/each}}
 		</div>
 		
-		<div class="actions pos-abs pos-r-0 pos-b-0">
+		<div class="actions pos-abs pos-r-0" style="bottom:-7px;">
 <a title="Edit"  data="{{id}}" data-toggle="modal" class="task-note-edit p-r-sm c-p text-l-none"> <i class="icon-pencil"></i> </a>
             <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash inline"  id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
         </div>

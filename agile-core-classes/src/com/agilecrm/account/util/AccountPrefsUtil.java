@@ -66,7 +66,7 @@ public class AccountPrefsUtil
 	{
 		AccountPrefs prefs = getAccountPrefs();
 
-		if (prefs == null)
+		if (prefs == null || prefs.timezone == null)
 			return "UTC";
 
 		return prefs.timezone;

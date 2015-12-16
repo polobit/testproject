@@ -120,6 +120,7 @@ padding: 0 8px 0 0;
 	border-right: 1px solid #ddd;*/
 	color: #58666e!important;
 	background-color: #fff!important;
+	position: relative;
 }
 .portlet_header_name{
 	width: 80%;
@@ -670,17 +671,19 @@ border-radius: 2px;
  {
  	overflow:hidden!important;
  }
- .portlet-error-message{
+ .portlet-error-message,.portlet-error-privilege-message{
  	padding: 50px 15px;
 	font-size: 14px;
 	text-align: center;
 	color: #98a6ad;
+	font-weight: normal!important;
+	font-style: normal;
  }
- .portlet-error-privilege-message{
+/* .portlet-error-privilege-message{
  	font-weight: normal!important;
  	font-size: 15px;
 	font-style: italic;
- }
+ }*/
  .gridster-portlets .gs-w{
  	border: none;
  }
@@ -750,7 +753,7 @@ border-radius: 2px;
 	border: 2px solid #61abb4;
 	background-color: #61abb4;
 }
-.leader-board-view li div.p-sm:nth-of-type(1) .agile-img:after{
+.leader-board-view li div.p-sm:nth-of-type(2) .agile-img:after{
 	content: "1";
   	position: absolute;
   	bottom: 0;
@@ -764,7 +767,7 @@ border-radius: 2px;
   	color: white;
   	font-weight: bold;
 }
-.leader-board-view li div.p-sm:nth-of-type(2) .agile-img:after{
+.leader-board-view li div.p-sm:nth-of-type(3) .agile-img:after{
 	content: "2";
   	position: absolute;
   	bottom: 0;
@@ -778,7 +781,7 @@ border-radius: 2px;
   	color: white;
   	font-weight: bold;
 }
-.leader-board-view li div.p-sm:nth-of-type(3) .agile-img:after{
+.leader-board-view li div.p-sm:nth-of-type(4) .agile-img:after{
 	content: "3";
   	position: absolute;
   	bottom: 0;
@@ -792,7 +795,7 @@ border-radius: 2px;
   	color: white;
   	font-weight: bold;
 }
-.leader-board-view li div.p-sm:nth-of-type(n+4) .agile-img:after{
+.leader-board-view li div.p-sm:nth-of-type(n+5) .agile-img:after{
 	content: attr(data-line);
   	position: absolute;
   	bottom: 0;
@@ -806,12 +809,12 @@ border-radius: 2px;
   	color: white;
   	font-weight: bold;
 }
-.portlet-category-ms-container{
+/*.portlet-category-ms-container{
 	background: transparent url('../../img/switch.png') no-repeat 164px 40px!important;
 }
 .portlet-user-ms-container{
 	background: transparent url('../../img/switch.png') no-repeat 164px 50px!important;
-}
+}*/
 .leaderboard_portlet_header{
 	border-bottom: 1px solid #edf1f2!important;
 }

@@ -41,6 +41,8 @@ function showXeroClient(contact_id)
 				if($.isArray(data.invoice.Invoice)){
 					data.invoice.Invoice = data.invoice.Invoice.reverse();
 					XEROObj.invoice = data.invoice.Invoice;
+				}else{
+					XEROObj.invoice = data.invoice.Invoice;	
 				}
 			}	
 			
@@ -110,7 +112,11 @@ function loadInvoices(offSet){
 
 		var result = {};
 		if(data){
-			result.invoice = data.slice(0, 5);
+			if($.isArray(data)){
+				result.invoice = data.slice(0, 5);
+			}else{
+				result.invoice = data;
+			}
 		}
 
 		getTemplate('xero-invoice', result, undefined, function(template_ui){

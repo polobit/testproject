@@ -333,7 +333,11 @@
 	<ul class="m-n p-n leader-board-{{categoryCount}} leader-board-view">
 		{{#if revenue}}
 		<li class="pull-left">
-			{{#each revenueJson}}
+		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
+				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">Revenue</span>
+				</div>
+				</div>
+		    {{#each revenueJson}}
 			{{#if isDomainUser}}
 				<div class="p-sm p-b-none bg-light pos-rlt" style="top:-1px;">
 					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
@@ -370,6 +374,10 @@
 		{{/if}}
 		{{#if dealsWon}}
 		<li class="pull-left">
+		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
+				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">Deals</span>
+				</div>
+				</div>
 			{{#each dealsWonJson}}
 				{{#if isDomainUser}}
 				<div class="p-sm p-b-none bg-light pos-rlt" style="top:-1px;">
@@ -407,6 +415,12 @@
 		{{/if}}
 		{{#if calls}}
 		<li class="pull-left">
+		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
+				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">Calls</span>
+				
+				</div>
+				
+			</div>
 			{{#each callsJson}}
 				{{#if isDomainUser}}
 				<div class="p-sm p-b-none bg-light pos-rlt" style="top:-1px;">
@@ -444,6 +458,10 @@
 		{{/if}}
 		{{#if tasks}}
 		<li class="pull-left">
+		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
+				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">Tasks</span>
+				</div>
+				</div>
 			{{#each tasksJson}}
 				{{#if isDomainUser}}
 				<div class="p-sm p-b-none bg-light pos-rlt" style="top:-1px;">
@@ -489,8 +507,8 @@
 				<span class="pull-left inline-block text-ellipsis flitered_contact_portlet_header" style="width:90%;"></span>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>			
 		</div>
         <div class="portlet_body panel-body p-n  b-n"></div>
@@ -508,8 +526,8 @@
 				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
         <div class="portlet_body panel-body p-n  b-n">
@@ -529,8 +547,8 @@
 				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
         <div class="portlet_body panel-body p-n  b-n"></div>
@@ -547,8 +565,8 @@
 				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
         <div class="portlet_body panel-body p-n b-n">
@@ -571,8 +589,8 @@
 				</span>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
         <div class="portlet_body panel-body p-n b-n"></div>
@@ -595,8 +613,8 @@
 				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>			
 		</div>
         <div class="portlet_body panel-body p-n b-n deals-by-milestone-portlet-body"></div>
@@ -610,8 +628,8 @@
 				<span class="pull-left inline-block text-ellipsis" style="width:90%;">Closures per Person</span>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>			
 		</div>
         <div class="portlet_body panel-body p-n b-n"></div>
@@ -628,8 +646,8 @@
 				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
         <div class="portlet_body panel-body p-n b-n"></div>
@@ -652,8 +670,8 @@
 				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>			
 		</div>
         <div class="portlet_body panel-body p-n b-n"></div>
@@ -671,8 +689,8 @@
 				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
         <div class="portlet_body panel-body p-n b-n"></div>
@@ -689,8 +707,8 @@
 				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
         <div class="portlet_body panel-body p-n b-n"></div>
@@ -707,8 +725,8 @@
 				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
         <div class="portlet_body panel-body p-n b-n">
@@ -728,8 +746,8 @@
 				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
         <div class="portlet_body panel-body p-n b-n"></div>
@@ -743,7 +761,7 @@
 				<span class="pull-left inline-block text-ellipsis" style="width:90%;">Agile CRM Blog</span>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
         <div class="portlet_body panel-body p-n b-n">
@@ -762,8 +780,8 @@
 				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
         <div class="portlet_body"></div>
@@ -787,11 +805,11 @@
 	<div class="col-xs-6">
 		<div class="block panel padder-v bg-primary item m-l-none p-t-none stats-report-settings pos-rlt overflow-hidden portlet-panel" style="cursor:auto;">
 			<div class="clearfix"></div>
-			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0 bigger-font-mobile">
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
-			<span class="text-white font-thin h1 block p-t" id="won-deal-value">&nbsp;</span>
+			<span class="text-white font-thin h1 block p-t text-ellipsis" id="won-deal-value">&nbsp;</span>
 			<span class="text-muted text-xs text-ellipsis" id="won-deal-count">&nbsp;</span>
 			<span class="bottom text-right w-full">
 				<!-- <i class="fa fa-cloud-upload text-muted m-r-sm"></i> -->
@@ -809,8 +827,8 @@
 	</div>
 	<div class="col-xs-6">
 		<div class="panel padder-v item m-l-none overflow-hidden portlet-panel" style="cursor:auto;">
-			<div class="font-thin h1" id="new-deal-value">&nbsp;</div>
-			<span class="text-muted text-xs text-ellipsis" id="new-deal-count">&nbsp;</span>
+			<div class="font-thin h1 text-ellipsis" id="new-deal-value">&nbsp;</div>
+			<span class="text-muted text-xs text-ellipsis block" id="new-deal-count">&nbsp;</span>
 			<div class="bottom text-left">
 				<!-- <i class="fa fa-caret-up text-warning m-l-sm"></i> -->
 			</div>
@@ -829,7 +847,7 @@
 			<span class="pull-left inline-block text-ellipsis" style="width:90%;">Getting Started</span>
 		</h4>
 		<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-			<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 		</div>
 	</div>
 	<div class="portlet_body  text-lg getting-started-body bg-white ">
@@ -999,7 +1017,7 @@
 			<span class="pull-left inline-block text-ellipsis" style="width:90%;">Getting Started</span>
 		</h4>
 		<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-			<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 		</div>
 	</div>
 	<div class="portlet_body m-l text-lg getting-started-body bg-white">
@@ -1127,8 +1145,8 @@
 								{{get_portlet_duration settings.duration}}
 							</small></h4>
 							<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs" style="visibility: hidden;">
-								<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-								<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+								<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+								<i id="{{id}}-close" class="c-p fa fa-times StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
 							</div>
 						{{/if}}
 					{{/if}}
@@ -1150,8 +1168,8 @@
 							{{get_portlet_duration settings.duration}}
 						</small></h4>
 						<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs" style="visibility: hidden;">
-							<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-							<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+							<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+							<i id="{{id}}-close" class="c-p fa fa-times StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
 						</div>
 					{{/if}}
 				{{/if}}
@@ -1169,23 +1187,24 @@
 					{{get_portlet_duration settings.duration}}
 				</small></h4>
 				<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs" style="visibility: hidden;">
-					<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-					<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+					<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+					<i id="{{id}}-close" class="c-p fa fa-times StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
 				</div>
 				{{/if}}
 			</div>
 		</li>
 		{{/if}}
 		{{#if settings.category.tasks}}
-		<li class="pull-left">
-			<div class="panel-heading">
-				<h4 class="h4 text-ellipsis"><span class="pull-left inline-block" style="width:50px;">Tasks</span>
+		<li class="pull-left leader-board-text-mobile">
+			<div class="panel-heading" style='min-height:39px'>
+			   <h4 class="h4 text-ellipsis visible-xs"><span class="pull-left inline-block">Leader Board</span></h4>
+				<h4 class="h4 text-ellipsis hidden-xs"><span class="pull-left inline-block" style="width:50px;">Tasks</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width:calc(100% - 50px);">
 					{{get_portlet_duration settings.duration}}
 				</small></h4>
 				<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs" style="visibility: hidden;">
-					<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-					<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+					<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+					<i id="{{id}}-close" class="c-p fa fa-times StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
 				</div>
 			</div>
 		</li>
@@ -1208,8 +1227,8 @@
 				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
         <div class="portlet_body panel-body p-n b-n">
@@ -1223,7 +1242,7 @@
 <div class="alert-info alert" id="no-portlets" style="display:none">
     <div class="slate-content">
        <div class="box-left pull-left m-r-md">
-            <img alt="Clipboard" src="/img/clipboard.png" />
+            <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
        </div>
        <div class="box-right pull-left">
             <h4 class="m-t-none">You do not have any dashlets currently.</h4>
@@ -1243,7 +1262,7 @@
   <div class="alert-info alert" id="zero-portlets">
     <div class="slate-content">
        <div class="box-left pull-left m-r-md">
-            <img alt="Clipboard" src="/img/clipboard.png" />
+            <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
        </div>
        <div class="box-right pull-left">
             <h4 class="m-t-none">You do not have any dashlets currently.</h4>
@@ -1283,15 +1302,16 @@
 			</div>
 			<div class="pull-right">
 
-<a id="chrome-extension-button" href="https://chrome.google.com/webstore/detail/agile-crm/eofoblinhpjfhkjlfckmeidagfogclib" data-toggle="tooltip" data-placement="bottom" title="" data-original-title=" Agile CRM Chrome Extension is available now. Please click here to install the extension." class="hide m-r-xs text-info inline-block dashboart_tooltip" target="_blank">
-					 <img src = "../flatfull/img/dashboard/google.png">
+<a id="chrome-extension-button" href="https://chrome.google.com/webstore/detail/agile-crm/eofoblinhpjfhkjlfckmeidagfogclib" data-toggle="tooltip" data-placement="bottom" title="" data-original-title=" Agile CRM Chrome Extension is available now. Please click here to install the extension." class="hide  text-info inline-block dashboart_tooltip" target="_blank">
+					 <img src = "{{getS3ImagePath '../flatfull/img/dashboard/google.png'}}">
 				</a>
-				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab right pos-rlt">
-					<i class="icon icon-plus-sign"></i> Add Dashlet
-				</a> 
-				<a href="#" id="tutotial_modal" class="btn btn-default btn-sm right pos-rlt m-r-xs dashboart_tooltip" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Help">
+				<a href="#" id="tutotial_modal" class="btn btn-default btn-sm  pos-rlt  dashboart_tooltip" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Help">
 					<i class="fa fa-graduation-cap"></i>
 				</a>
+				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
+					<i class="icon icon-plus-sign"></i> Add Dashlet
+				</a> 
+				
 			</div>
 			<div class="clearfix"></div>      	
     	</div>
@@ -1370,7 +1390,7 @@
 				<span class="pull-left inline-block text-ellipsis" style="width:90%;">Account Information</span>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>	
 		</div>
         <div class="portlet_body panel-body p b-n " style=" height: 155px; max-height: 155px; overflow-x: hidden;overflow-y:auto;padding: 10px;">
@@ -2206,7 +2226,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				<span class="pull-left inline-block text-ellipsis" style="width:90%;">Activities</span>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>			
 </div>
         <div class="portlet_body panel-body p-n b-n activity_body"></div>
@@ -2224,7 +2244,7 @@ Deleted  {{custom1}} Campaigns<br/>
 			<div id="calendar_container" class="pull-right" style="width:70%"></div>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0 vis-hide">
 				
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
@@ -2244,8 +2264,8 @@ Deleted  {{custom1}} Campaigns<br/>
 				</small> 
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
         <div class="portlet_body">

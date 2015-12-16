@@ -23,7 +23,9 @@ $(function()
     
 		$('.date_input').datepicker({
 			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
-		});
+		}).datepicker('update');
+
+		$("input.date").each(function(index, ele){$(ele).datepicker('update');});
 	})
 
 	/**
@@ -52,7 +54,7 @@ $(function()
 	 * "Hide" event of note modal to remove contacts appended to related to
 	 * field and validation errors
 	 */
-	$('#opportunityUpdateModal').on('hidden.bs.modal', function()
+	$('#opportunityUpdateModal').on('hide.bs.modal', function()
 	{
 
 		// Removes appended contacts from related-to field
@@ -339,10 +341,8 @@ $(function()
 		$(this).text('Saving...');
 		var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : App_Deals.newMilestone });
 		var dealModel = dealPipelineModel[0].get('dealCollection').get(App_Deals.lost_reason_milesone_id);
-		if ($(this).closest('.modal').find('form').find('#lost_reason').val()){
-			dealModel.collection.get(App_Deals.lost_reason_milesone_id).set({ "lost_reason_id" : $(this).closest('.modal').find('form').find('#lost_reason').val() });
-			update_milestone(App_Deals.dealModel, App_Deals.lost_reason_milesone_id, App_Deals.newMilestone, App_Deals.old_milestone, false, $(this).closest('.modal').find('form').find('#lost_reason').val());
-		}
+		dealModel.collection.get(App_Deals.lost_reason_milesone_id).set({ "lost_reason_id" : $(this).closest('.modal').find('form').find('#lost_reason').val() });
+		update_milestone(App_Deals.dealModel, App_Deals.lost_reason_milesone_id, App_Deals.newMilestone, App_Deals.old_milestone, false, $(this).closest('.modal').find('form').find('#lost_reason').val());
 		$('#dealLostReasonModal').modal('hide');
 	});
 

@@ -1,9 +1,9 @@
 <script id="notes-collection-template" type="text/html">
 {{#unless this.length}}
         <div class="wrapper p-t-none">
-            <div class="slate-content">
+            <div class="slate-content mobile-pad-content">
                 <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">You have no notes for {{contactShortName}}.</h4>
@@ -60,12 +60,12 @@
            	{{#if id}}
 				{{#isDuplicateContactProperty properties "email"}}
 					{{else}}	
-<div class="inline-block">
+<div class="inline-block word-break-all">
 					{{#if_contact_type "PERSON"}}
-						<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+						<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
 					{{/if_contact_type}}
 					{{#if_contact_type "COMPANY"}}
-        				<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        		<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         			{{/if_contact_type}}
 </div>
 				{{/isDuplicateContactProperty}}

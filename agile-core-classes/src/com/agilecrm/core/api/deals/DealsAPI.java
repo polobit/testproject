@@ -1,5 +1,8 @@
 package com.agilecrm.core.api.deals;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -13,18 +16,22 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.activities.Activity;
-import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
@@ -34,6 +41,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.deferred.DealsDeferredTask;
 import com.agilecrm.deals.util.MilestoneUtil;
@@ -422,7 +430,7 @@ public class DealsAPI
     public String getDealsDetailsByPipeline(@PathParam("pipeline-id") Long pipelineId, @QueryParam("min") Long min,
 	    @QueryParam("max") Long max)
     {
-	return OpportunityUtil.getDealsDetailsByPipeline(null,pipelineId,null, min, max,null).toString();
+	return OpportunityUtil.getDealsDetailsByPipeline(null, pipelineId, null, min, max, null).toString();
     }
 
     /**
@@ -942,7 +950,6 @@ public class DealsAPI
 	}
     }
 
-    
     /**
      * fetches tasks of a deal in deal details page
      * 
@@ -958,16 +965,19 @@ public class DealsAPI
     public List<Task> getTasksOfDeal(@PathParam("dealid") Long dealId, @QueryParam("cursor") String cursor,
 	    @QueryParam("page_size") String count) throws Exception
     {
-    	List<Task> taskList = null;
-    	try {
-    		taskList = TaskUtil.getDealSortedTasks(null, dealId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	List<Task> taskList = null;
+	try
+	{
+	    taskList = TaskUtil.getDealSortedTasks(null, dealId);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
 
 	return taskList;
     }
-    
+
     /**
      * Events of a deal, which is in deal detail view
      * 
@@ -990,88 +1000,199 @@ public class DealsAPI
 	    return null;
 	}
     }
-    /*fetches deals for specified time
+
+    /*
+     * fetches deals for specified time
      * 
      * @param min
+     * 
      * @param max
+     * 
      * @return deals
+     * 
      * @throws JSONException
      */
-     @Path("details/{owner-Id}")
+    @Path("details/{owner-Id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getNewDeals(@PathParam("owner-Id") Long ownerId,@QueryParam("min") Long min, @QueryParam("max") Long max,@QueryParam("frequency") String frequency,@QueryParam("type") String type)
+    public String getNewDeals(@PathParam("owner-Id") Long ownerId, @QueryParam("min") Long min,
+	    @QueryParam("max") Long max, @QueryParam("frequency") String frequency, @QueryParam("type") String type)
     {
-    	 ReportsUtil.check(min*1000,max*1000);
-     return OpportunityUtil.getIncomingDealsList(ownerId,min,max,frequency,type).toString();
+	ReportsUtil.check(min * 1000, max * 1000);
+	return OpportunityUtil.getIncomingDealsList(ownerId, min, max, frequency, type).toString();
     }
-     
-     /**
-      * Gets sum of expected values and pipeline values of the deals having
-      * closed date within the month of given time period. Deals Stats - Details.
-      * 
-      * @param min
-      *            - Given time less than closed date.
-      * @param max
-      *            - Given time more than closed date.
-      * @return string having sum of expected values and pipeline values of the
-      *         deals of same month.
-      */
-     @Path("stats/details/{owner-id}/{pipeline-id}/{source}")
-     @GET
-     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-     public String getDealsDetailsByPipelineandOwner(@PathParam("owner-id") Long ownerId,@PathParam("pipeline-id") Long pipelineId,
-     		@PathParam("source") Long source,@QueryParam("min") Long min, @QueryParam("max") Long max,@QueryParam("frequency") String frequency)
-     {
-     	ReportsUtil.check(min*1000,max*1000);
- 	return OpportunityUtil.getDealsDetailsByPipeline(ownerId,pipelineId,source, min, max,frequency).toString();
-     }
-     /**
- 	 * fetches deals for specified time for loss reason pie chart
- 	 * 
- 	 * @param min
- 	 * 
- 	 * @param max
- 	 * 
- 	 * @param ownerId
- 	 * 
- 	 * @param pipelineId
- 	 * 
- 	 * @param sourceId
- 	 * 
- 	 * @return deals
- 	 * 
- 	 * @throws JSONException
- 	 */
- 	@Path("/details/{owner-id}/{pipeline-id}/{source-id}")
- 	@GET
- 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
- 	public String getDealsbyLossReason(@PathParam("owner-id") Long ownerId, @PathParam("pipeline-id") Long pipelineId,
- 			@PathParam("source-id") Long sourceId, @QueryParam("min") Long min, @QueryParam("max") Long max)
- 	{
- 		ReportsUtil.check(min*1000, max*1000);
- 		return OpportunityUtil.getDealswithLossReason(ownerId, pipelineId, sourceId, min, max).toString();
- 	}
- 	
- 	/**
- 	 * fetches won deals for specified time for WonDeals pie chart
- 	 * 
- 	 * @param min
- 	 * 
- 	 * @param max
- 	 * 
- 	 * @param ownerId
- 	 * 
- 	 * @return deals
- 	 */
- 	@Path("/wonDetails/{owner-id}")
- 	@GET
- 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
- 	public String getDealsWonforReports(@PathParam("owner-id") Long ownerId, 
- 			@QueryParam("min") Long min, @QueryParam("max") Long max)
- 	{
- 		ReportsUtil.check(min*1000, max*1000);
- 		return OpportunityUtil.getWonDealsforpiechart(ownerId, min, max).toString();
- 	}
+
+    /**
+     * Gets sum of expected values and pipeline values of the deals having
+     * closed date within the month of given time period. Deals Stats - Details.
+     * 
+     * @param min
+     *            - Given time less than closed date.
+     * @param max
+     *            - Given time more than closed date.
+     * @return string having sum of expected values and pipeline values of the
+     *         deals of same month.
+     */
+    @Path("stats/details/{owner-id}/{pipeline-id}/{source}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getDealsDetailsByPipelineandOwner(@PathParam("owner-id") Long ownerId,
+	    @PathParam("pipeline-id") Long pipelineId, @PathParam("source") Long source, @QueryParam("min") Long min,
+	    @QueryParam("max") Long max, @QueryParam("frequency") String frequency)
+    {
+	ReportsUtil.check(min * 1000, max * 1000);
+	return OpportunityUtil.getDealsDetailsByPipeline(ownerId, pipelineId, source, min, max, frequency).toString();
+    }
+
+    /**
+     * fetches deals for specified time for loss reason pie chart
+     * 
+     * @param min
+     * 
+     * @param max
+     * 
+     * @param ownerId
+     * 
+     * @param pipelineId
+     * 
+     * @param sourceId
+     * 
+     * @return deals
+     * 
+     * @throws JSONException
+     */
+    @Path("/details/{owner-id}/{pipeline-id}/{source-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getDealsbyLossReason(@PathParam("owner-id") Long ownerId, @PathParam("pipeline-id") Long pipelineId,
+	    @PathParam("source-id") Long sourceId, @QueryParam("min") Long min, @QueryParam("max") Long max)
+    {
+	ReportsUtil.check(min * 1000, max * 1000);
+	return OpportunityUtil.getDealswithLossReason(ownerId, pipelineId, sourceId, min, max).toString();
+    }
+
+    /**
+     * fetches won deals for specified time for WonDeals pie chart
+     * 
+     * @param min
+     * 
+     * @param max
+     * 
+     * @param ownerId
+     * 
+     * @return deals
+     */
+    @Path("/wonDetails/{owner-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getDealsWonforReports(@PathParam("owner-id") Long ownerId, @QueryParam("min") Long min,
+	    @QueryParam("max") Long max)
+    {
+	ReportsUtil.check(min * 1000, max * 1000);
+	return OpportunityUtil.getWonDealsforpiechart(ownerId, min, max).toString();
+    }
+
+    /**
+     * Updates opportunity.
+     * 
+     * @param opportunity
+     *            - Opportunity object that is updated.
+     * @return - updated opportunity.
+     * @throws JSONException
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonParseException
+     */
+
+    @Path("/partial-update")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Opportunity updateOpportunityForDeveloper(String opportunity1) throws JSONException, JsonParseException,
+	    JsonMappingException, IOException
+    {
+
+	// Get data and check if id is present
+	org.json.JSONObject obj = new org.json.JSONObject(opportunity1);
+	List<String> contact_idList = new ArrayList<String>();
+	ObjectMapper mapper = new ObjectMapper();
+
+	if (!obj.has("id"))
+	    return null;
+
+	Opportunity opportunity = OpportunityUtil.getOpportunity(obj.getLong("id"));
+
+	System.out.println(opportunity);
+
+	if (opportunity == null)
+	    return null;
+
+	Iterator<?> keys = obj.keys();
+
+	while (keys.hasNext())
+	{
+	    String key = (String) keys.next();
+
+	    if (key.equals("name"))
+		opportunity.name = obj.getString(key);
+
+	    if (key.equals("description"))
+		opportunity.description = obj.getString(key);
+
+	    if (key.equals("expected_value"))
+		opportunity.expected_value = obj.getDouble(key);
+
+	    if (key.equals("probability"))
+		opportunity.probability = obj.getInt(key);
+
+	    if (key.equals("pipeline_id"))
+		opportunity.pipeline_id = obj.getLong(key);
+
+	    if (key.equals("milestone"))
+		opportunity.milestone = obj.getString(key);
+
+	    if (key.equals("contact_ids"))
+	    {
+
+		// contact_ids = contact_idString.split(",");
+		JSONArray contact_idJSONArray = new JSONArray(obj.getString(key));
+		for (int i = 0; i < contact_idJSONArray.length(); i++)
+		{
+		    contact_idList.add(contact_idJSONArray.getString(i));
+
+		}
+	    }
+
+	    if (key.equals("custom_data"))
+	    {
+		JSONArray custom_dataJSONArray = new JSONArray(obj.getString(key));
+		for (int i = 0; i < custom_dataJSONArray.length(); i++)
+		{
+		    // Create and add contact field to contact
+		    JSONObject json = new JSONObject();
+		    json.put("name", custom_dataJSONArray.getJSONObject(i).getString("name"));
+		    json.put("value", custom_dataJSONArray.getJSONObject(i).getString("value"));
+		    CustomFieldData field = mapper.readValue(json.toString(), CustomFieldData.class);
+		    opportunity.addCustomData(field);
+		}
+	    }
+	}
+
+	if (contact_idList.size() > 0)
+	{
+	    try
+	    {
+		opportunity.addContactIdsToDeal(contact_idList);
+	    }
+	    catch (WebApplicationException e)
+	    {
+		return null;
+	    }
+	}
+	else
+	    opportunity.save();
+
+	return opportunity;
+    }
 
 }

@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.agilecrm.util.email.SendMail"%>
 <%@page import="com.agilecrm.util.email.AppengineMail"%>
 <%@page import="com.agilecrm.util.EncryptDecryptUtil"%>
@@ -55,6 +56,8 @@ else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
 	System.out.println(error + " " + success);
 }
 
+//Static images s3 path
+String S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL().replace("flatfull/", "");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -80,8 +83,10 @@ else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
 
 <style>
 
+
+
 body {
-background-image:url('..<%=flatfull_path%>/images/flatfull/buildings-low.jpg');
+background-image:url('<%=S3_STATIC_IMAGE_PATH%>/images/buildings-low.jpg');
 background-repeat:no-repeat;
 background-position:center center;
 background-size:100% 100%;
@@ -115,7 +120,18 @@ text-decoration:underline;
 	  color: #3c763d !important;
 }
 
+ 
+@media all and (max-width: 767px) {
+
+body {
+  background-size: cover;
+
+}
+  
+}
+
 <!-- 
+
 @media (min-width: 900px) {
 body {
 	padding-top: 30px;
@@ -131,7 +147,7 @@ body {
 	margin: 8px 0px !important;
 	padding-left: 10px !important;
 }
-	-->
+ -->	
 
 
 </style> 
@@ -210,7 +226,7 @@ jQuery.validator.setDefaults({
 				<!--  <h3><small>Enter Your Email </small></h3>	 -->
 				<div class="list-group list-group-sm">
 					<div class="list-group-item">
-                   	 <input class="input-xlarge field required email form-control no-border" name='email' maxlength="50" minlength="6" type="email" required placeholder="Email" autocapitalize="off">
+                   	 <input class="input-xlarge  required email form-control no-border" name='email' maxlength="50" minlength="6" type="email" required placeholder="Email" autocapitalize="off">
 					</div>
 				</div>	
 					  <input type='submit' value="Submit" class='btn btn-lg btn-primary btn-block forgot_password_btn'>
@@ -259,7 +275,7 @@ jQuery.validator.setDefaults({
       	newImg.onload = function() {
     	$("body").css("background-image","url('"+this.src+"')");
   		 }
-		newImg.src = 'flatfull/images/flatfull/buildings.jpg';
+		newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/buildings.jpg';
 
 
 		  //form is self submitted

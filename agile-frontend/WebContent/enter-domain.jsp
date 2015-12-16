@@ -42,6 +42,7 @@ if(redirectTo  != null)
 
 <style>
 body {
+
   background-image:url('..<%=flatfull_path%>/images/flatfull/buildings-low.jpg');
   background-repeat: no-repeat;
   background-position: center center;
