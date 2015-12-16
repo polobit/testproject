@@ -1027,7 +1027,6 @@ $(function()
 	{
 
 		var el = "";
-		el=el.concat('<th></th>');
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
 		{
 			

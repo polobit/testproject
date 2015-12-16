@@ -288,8 +288,11 @@
 	   	  		 	<i class="icon-envelope m-l-md"></i></a> 
 	   	  	
 	   	   {{/checkProperties}}
-       <br> <span>Add Deal</span>
-	   	   <span>Add Note</span>
+       <br> {{#hasMenuScope 'DEALS'}}
+   <a href="#" class="contact-list-add-deal btn btn-sm btn-default pos-rlt btn-addon"><span><i class='icon-plus-sign'/></span> Add Deal</a> 
+{{/hasMenuScope}}
+	   	    <a href="#noteModal" data-toggle="modal" class="btn btn-sm btn-default m-t-xs blue btn-slate-action contact-list-add-note"><i class="icon-plus-sign"></i>  Add Note</a>
+             
 
 	   	          </div>
 	</td>
