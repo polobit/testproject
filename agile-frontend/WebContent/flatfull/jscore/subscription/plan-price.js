@@ -671,6 +671,7 @@ function initializeSubscriptionListeners()
 	});
 
 	//From modal popup
+	$("#cancel_email_plan_conform").off("click");
 	$("body").on("click","#cancel_email_plan_conform",function(e){
 		e.preventDefault();
 		$.ajax({url:'core/api/subscription/cancel/email',

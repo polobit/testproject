@@ -366,7 +366,16 @@ Proceed to Pay
 <small class="help-block" id="subscribe_plan_tooltext">
 		<i class="fa fa-lock"></i> All transactions are secure and encrypted, and we never store your credit card information
 </small>
-		</div> <!-- End of col-sm-offset-4 col-sm-8 -->
+		</div>
+	{{#check_plan "FREE"}}
+	{{else}}
+	{{#is_trial_exist billingData}}
+	<a href="#"  id="cancel_free_trial" class="pull-right text-xs text-info p-r">Cancel your Trial</a>
+	{{else}}
+	<a href="#"  id="cancel-account-request" class="pull-right text-xs text-info p-r">Cancel Subscription</a>
+	{{/is_trial_exist}}
+	{{/check_plan}}
+		 <!-- End of col-sm-offset-4 col-sm-8 -->
 	</div> <!-- End of row -->
 
 	
@@ -584,13 +593,13 @@ Proceed to Pay
 </div>
 <!-- Detailed Info div end -->
 </div>
+{{#getSubscriptionBasedOnPlan billingData emailPlan}}
+	<a href="#" class="text-info text-xs pull-right p-r" id="cancel_email_plan">Cancel Email Subscription</a> 
+{{/getSubscriptionBasedOnPlan}}
 </div> 
 <!-- End of email pane -->
             </div>  <!-- End of tab-content -->
-{{#check_plan "FREE"}}
-<div class="pull-right"><a href="#" id="cancel-account" class="text-info" style="font-size:12px;">Cancel Account</a></div>
-<div class="clearfix"></div>
-{{/check_plan}}
+
         </div> <!-- End of tab container -->
 		
     </div> <!-- End of col-md-9 -->
@@ -655,14 +664,7 @@ users.
 		<div id="recent_invoice">
 		</div>
 		</div>
-	{{#check_plan "FREE"}}
-	{{else}}
-	{{#is_trial_exist billingData}}
-	<a href="#"  id="cancel_free_trial" class="pull-right text-lg text-info" style="font-size:12px;">Cancel your Trial</a>
-	{{else}}
-	<a href="#"  id="cancel-account-request" class="pull-right text-lg text-info" style="font-size:12px;">Cancel Subscription</a>
-	{{/is_trial_exist}}
-	{{/check_plan}}
+	
 	</div>  <!-- End of col-md-3 -->
 {{/if}}
 		
@@ -714,15 +716,13 @@ users.
 </div>
 <div class="text-center text-xs">Emails to be purchased</div>
 
-<div class="text-center m-t-lg m-b-xs">
+<div class="text-center m-t-lg m-b-lg">
 <a id="purchase-email-plan" class="btn pricing-btn text-center w-full  b-n btn-lg btn-primary" href="#purchase-email"> Proceed to Pay </a>
 
 </div> 
-<div class="text-center m-b">
-{{#getSubscriptionBasedOnPlan billingData emailPlan}}
-	<a href="#" class="text-info" id="cancel_email_plan" style="font-size:11px;">Cancel Email Subscription</a> 
-{{/getSubscriptionBasedOnPlan}}    
-</div>             
+
+    
+           
 </div>
 </form>
 </script>
