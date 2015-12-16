@@ -219,7 +219,7 @@ function serializeLhsFilters(element)
 		}
 		RHS_NEW_VALUE = $(RHS_NEW_ELEMENT).val();
 		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
-			var date = getFormattedDateObjectWithString($(RHS_ELEMENT).val());
+			var date = getFormattedDateObjectWithString($(RHS_NEW_ELEMENT).val());
 			
 			RHS_NEW_VALUE = getGMTEpochFromDate(date);
 		}
