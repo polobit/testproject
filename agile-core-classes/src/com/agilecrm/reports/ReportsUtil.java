@@ -553,11 +553,13 @@ public class ReportsUtil
 	            });
 			}
 			//JSONObject obj=new JSONObject();
-			int index=1;
+			int index=0;
 			for(JSONObject obj:cateList)
 			{
-					if(obj.getLong("id")!=ownerId);
-					index++;
+				index++;
+					if(obj.getLong("id")==ownerId);
+							break;
+					
 			}
 			dataJson.put("Rank", index);
 			//dataJson.put("revenue", true);
