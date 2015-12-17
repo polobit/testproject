@@ -170,6 +170,7 @@ var DealsRouter = Backbone.Router.extend({
 						{
 							$('#pipeline').find('option[value=""]').attr("selected","selected")
 						}
+						$('input[name=name]').trigger('focus');
 					});
 				});	
 			} });
@@ -192,10 +193,20 @@ var DealsRouter = Backbone.Router.extend({
 		var deal_filter = this.dealFiltersList.collection.get(id);
 		var deal_filter_json = deal_filter.toJSON();
 		var dealFilter = new Base_Model_View({ url : 'core/api/deal/filters', model : deal_filter, template : "filter-deals",
-			window : 'deal-filters', postRenderCallback : function(el)
+			window : 'deal-filters', prePersist : function(model){
+				model.set({ 
+							'pipeline_id' : $('#pipeline', $("#dealsFilterForm")).val(), 
+							'milestone' : $('#milestone', $("#dealsFilterForm")).val(),
+							'owner_id' : $('#owners-list-filters', $("#dealsFilterForm")).val() 
+						}, 
+						{ 
+							silent : true 
+						});
+			}, 
+			postRenderCallback : function(el)
 			{
 				initializeDealListners();
-				populateUsers('owners-list-filters', el, undefined, undefined, function(){
+				populateUsers('owners-list-filters', el, deal_filter_json, 'owner_id', function(){
 					populateTracks(el, undefined, undefined, function(){
 						if(deal_filter.get('pipeline_id')){
 							deserializeForm(deal_filter_json, $("#dealsFilterForm"));
@@ -218,6 +229,7 @@ var DealsRouter = Backbone.Router.extend({
 							$('#milestone').find('option[value=""]').text('Any');
 							$('#value_filter', $('#opportunity-listners')).trigger('change');
 							deserializeForm(deal_filter_json, $("#dealsFilterForm"));
+							$('input[name=name]').trigger('focus');
 						}
 					});
 				});
