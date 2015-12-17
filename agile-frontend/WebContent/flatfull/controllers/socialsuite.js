@@ -149,7 +149,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		var noOfModels = Streams_List_View.collection.length;
     	for(var index = 0; length < noOfModels; index++) {
     		var StreamJson = Streams_List_View.collection.models[index];
-    		if(parseInt(StreamJson.get('stream_version')) == 1) {
+    		if(parseInt(StreamJson.get('stream_version')) != 2) {
     			$("#streamsMessageBox").show();
     			break;
     		}
