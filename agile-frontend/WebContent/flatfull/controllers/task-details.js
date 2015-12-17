@@ -277,7 +277,7 @@ function initializeTaskDetailListeners(){
 					$('#due_tasks_count').html("");
 			});
 			
-		} })
+		} });
 	});
 
 	/**

@@ -179,11 +179,9 @@ function checkBothCalWhenNoCalSelected()
  * 
  * if google calendar sync is enabled then disappears link addtocalednar in lhs filters
  */
-function putGoogleCalendarLink()
+function putGoogleCalendarLink(calEnable)
 {
-	$.ajax({ url : 'core/api/calendar-prefs/get', success : function(response)
-	{
-		if (response)
+		if (calEnable)
 		{
 			$("#google_cal").removeClass('hide');
 			$("#google_cal_link").addClass('hide');
@@ -193,29 +191,31 @@ function putGoogleCalendarLink()
 			$("#google_cal").addClass('hide');
 			$("#google_cal_link").removeClass('hide');
 		}
-
-	} });
 }
 
-function putOfficeCalendarLink()
+function put_thirdparty_calendar_links()
 {
-	var calEnable = false;
+	putOfficeCalendarLink(false);
+	putGoogleCalendarLink(false);
+	$.getJSON('core/api/calendar-prefs/list', function(data){
+		console.log(data);
+		$.each(data, function(index, preference){
+			console.log(preference);
+			if(preference.calendar_type == 'GOOGLE')
+				putGoogleCalendarLink(true);
+			else if(preference.calendar_type == 'OFFICE365')
+				putOfficeCalendarLink(true)
+		});
+	})
+}
 
-	$.ajax({ url : 'core/api/officecalendar', async : false, success : function(response)
-	{
-		if (response)
-			calEnable = true;
 
-	} });
-
-	if (calEnable)
-	{
+function putOfficeCalendarLink(calEnable)
+{
+	if (calEnable){
 		$("#office_cal").removeClass('hide');
 		$("#office_cal_link").addClass('hide');
-	}
-
-	else
-	{
+	} else {
 		$("#office_cal").addClass('hide');
 		$("#office_cal_link").removeClass('hide');
 	}
@@ -307,6 +307,17 @@ function addEventSourceToCalendar(key, eventArray)
 			eventArray = [];
 }
 
+function removeGoogleEventSource()
+{
+	$.each(functions, function(key, value){
+		if(key.indexOf('event_google') == 0)
+		{
+			//if(addScource)
+			$('#calendar_event').fullCalendar('removeEventSource', functions[key]);
+		}
+	})	
+}
+
 function removeEventSource(key)
 {
 	//if(addScource)
@@ -318,6 +329,10 @@ function addGoogleCalendarEvents()
 	addAsyncCalendarEvents(loadUserEventsfromGoogle);
 //	$('#calendar_event').fullCalendar('removeEventSource', tempFunction);
 
+}
+
+function addOffice365CalendarEvents(){
+	addAsyncCalendarEvents(loadOfficeEvents);
 }
 
 function addAsyncCalendarEvents(asyncCallbackFunction)
@@ -601,6 +616,12 @@ function showLoadingOnCalendar(loading)
 		pushLoading();
 
 		$("#loading_calendar_events").remove();
+		$("#user_calendars *").attr('disabled','disabled');
+		$("#user_cal_sub *").attr('disabled','disabled');
+
+		$("#user_calendars *").addClass('disable-cp');
+		$("#user_cal_sub *").addClass('disable-cp');
+
 		$('.fc-header-left').append(
 				'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
 				.show();
@@ -608,6 +629,11 @@ function showLoadingOnCalendar(loading)
 	}
 	else if(popLoading() <= 0)
 	{
-		$("#loading_calendar_events").hide();
+		$("#loading_calendar_events").hide();		
+		$("#user_calendars *").removeAttr('disabled');
+		$("#user_cal_sub *").removeAttr('disabled');
+
+		$("#user_calendars *").removeClass('disable-cp');
+		$("#user_cal_sub *").removeClass('disable-cp');
 	}
 }

@@ -16,6 +16,8 @@ function organize_sync_widgets(base_model)
 		$('#stripe', this.el).append($(itemView.render().el));
 	if (sync_type == "FRESHBOOKS")
 		$('#freshbook', this.el).append($(itemView.render().el));
+	if (sync_type == "OFFICE365")
+		$('#office365', this.el).append($(itemView.render().el));
 	if (sync_type == "SHOPIFY")
 		$('#shopify', this.el).append($(itemView.render().el));
 	if (sync_type == "QUICKBOOK")
@@ -29,8 +31,7 @@ function organize_sync_widgets(base_model)
 
 single click for all data sync collection events
 */
-function initializeDataSyncListners(){
-
+function initializeDataSyncListners(){	   
 
 	$('#prefs-tabs-content #data-sync-type').off();
     $('#prefs-tabs-content').on('click', '#data-sync-type', function(e){
@@ -64,6 +65,11 @@ function initializeDataSyncListners(){
 		}
 		if(sync_type=="FRESHBOOKS"){
 			Backbone.history.navigate("#sync/freshbooks" , {
+                trigger: true
+            });
+		}
+		if(sync_type=="OFFICE365"){
+			Backbone.history.navigate("#sync/officeCalendar" , {
                 trigger: true
             });
 		}
@@ -197,12 +203,11 @@ renders inner sync view and binds all model events to DataSync_Event_Modal_View
 */
 
   function renderInnerSyncView(url,templateName,data,callback){
-
   		 var data_sync = new DataSync_Event_Modal_View({
 			                    url: url,
 			                    template: templateName,
 			                    data:data,
-			                    saveCallback: function(model) {
+			                    saveCallback: function(model) {			                      
 			                       callback(model);
 			                    }
 			                });

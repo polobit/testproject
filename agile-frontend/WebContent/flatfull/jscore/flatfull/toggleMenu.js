@@ -134,7 +134,7 @@ $(document).ready(function(){
 	    $('.popover').each(function () {
 	        //the 'is' for buttons that trigger popups
 	        //the 'has' for icons within a button that triggers a popup
-	        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0 && !e.target.closest(".need_help")) {
+	        if ((!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0 && !e.target.closest(".need_help")) || e.target.hasAttribute("rep")) {
 	            $(this).popover('hide');
 	        }
 	    });

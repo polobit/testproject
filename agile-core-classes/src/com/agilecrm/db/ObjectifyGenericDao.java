@@ -37,6 +37,7 @@ import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.document.Document;
 import com.agilecrm.facebookpage.FacebookPage;
 import com.agilecrm.forms.Form;
@@ -209,6 +210,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(VerifiedEmails.class);
 	
 	ObjectifyService.register(Office365CalendarPrefs.class);
+	
+	ObjectifyService.register(DealFilter.class);
 
     ObjectifyService.register(LandingPage.class);
     ObjectifyService.register(LandingPageCNames.class);

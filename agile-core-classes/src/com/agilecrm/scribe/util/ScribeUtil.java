@@ -50,6 +50,7 @@ import com.stripe.model.Account;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.GoogleServiceUtil;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
+import com.thirdparty.google.calendar.GoogleCalenderPrefs.CALENDAR_TYPE;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 import com.thirdparty.shopify.ShopifyAccessURLBuilder;
 
@@ -438,6 +439,7 @@ public class ScribeUtil {
 		Map<String, String> properties = new HashMap<String, String>();
 		properties.put("token", accessToken.getToken());
 		properties.put("secret", accessToken.getSecret());
+		properties.put("version", "v2");
 		properties.put("time", String.valueOf(System.currentTimeMillis()));
 		properties.put("isForAll", isForAll);
 
@@ -613,6 +615,7 @@ public class ScribeUtil {
 				access_token);
 		// Sets expiry time and saves prefs
 		pref.setExpiryTime(Integer.valueOf(result.get("expires_in").toString()));
+		pref.calendar_type = CALENDAR_TYPE.GOOGLE;
 		pref.save();
 	}
 
