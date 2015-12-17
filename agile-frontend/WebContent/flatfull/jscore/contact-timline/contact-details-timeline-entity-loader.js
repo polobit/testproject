@@ -108,7 +108,9 @@ var timeline_entity_loader = {
 
 												// Add these log-types in
 												// timeline
-												if (model.log_type == 'EMAIL_SENT' || model.log_type == 'EMAIL_OPENED' || model.log_type == 'EMAIL_CLICKED' || model.log_type == 'SET_OWNER' || model.log_type == 'SCORE' || model.log_type == 'ADD_DEAL' || model.log_type == 'TWEET')
+												if (model.log_type == 'EMAIL_SENT' || model.log_type == 'EMAIL_OPENED' || model.log_type == 'EMAIL_CLICKED' || model.log_type == 'SET_OWNER' || model.log_type == 'SCORE' || model.log_type == 'ADD_DEAL' || model.log_type == 'TWEET' 
+													|| model.log_type == 'SMS_SENT' || model.log_type == 'SMS_FAILED' 
+													|| model.log_type == 'SMS_LINK_CLICKED')
 												{
 													log_models.push(model);
 												}
