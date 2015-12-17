@@ -64,7 +64,9 @@
 </div>
 </div>
 
-    <div class="hbox hbox-auto-xs hbox-auto-sm ">
+    <div class="{{#is_mobile}} wrapper-md {{else}} hbox hbox-auto-xs hbox-auto-sm {{/is_mobile}}">
+    {{#is_mobile}}
+    {{else}}
     <div class="col w-md b-r" id="contacts-lhs-filters-toggle" style="display:{{toggle_contacts_filter}}">
 		<div class="data-block">
 			<div  id="lhs_filters_conatiner">
@@ -72,25 +74,31 @@
 			</div>
 		</div>
     </div>
-    <div class="col contacts-div">
+    {{/is_mobile}}
+    <div class="{{#is_mobile}} {{else}} col contacts-div {{/is_mobile}}">
 		{{#unless this.length}}
 			
 			<div class="filter-criteria">
 					
 			</div>
 			<div class="panel-heading" style="background:#f6f8f8;">Contacts List
-
+			{{#is_mobile}}
+			{{else}}
 			<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
 			<i id="icon-filter" class="fa fa-bars icon-white"></i>
-		</a>
+			</a>
+			{{/is_mobile}}
 </div>
 			<div id="slate"></div>
 		{{else}}
-        <div class="data">
+        <div class="data {{#is_mobile}} panel panel-default {{else}}  {{/is_mobile}}">
          <div class="panel-heading" style="background:#f6f8f8;">Contacts List
-<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+       {{#is_mobile}}
+       {{else}}  
+		<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
 			<i id="icon-filter" class="fa fa-bars icon-white"></i>
 		</a>
+		{{/is_mobile}}
 </div>
             <div class="dta-contatiner table-responsive">
 				<div class="panel panel-default" style="overflow-x:auto;border-left:none;">
