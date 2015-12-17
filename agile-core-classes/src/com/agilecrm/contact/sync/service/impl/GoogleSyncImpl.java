@@ -447,6 +447,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	int limit = 0;
 	int contacts_list_size = contacts.size();
 	
+	boolean contactCreate = true;
+	
 	for (int i = 0; i < contacts_list_size; i++)
 	{
 
@@ -454,7 +456,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    
 	    // Create google supported contact entry based on current contact
 	    // data
-	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs);
+	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs,contactCreate);
 
 	    // Check if contact saving should be skipped. It is required if last
 	    // contact is null then to avoid rest of contacts to being saved
@@ -538,12 +540,14 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	int limit = 0;
 	int contacts_list_size = contacts.size();
 	
+	boolean contactCreate = false;
+	
 	for (int i = 0; i < contacts_list_size; i++)
 	{
 	    Contact contact = contacts.get(i);	    
 	    // Create google supported contact entry based on current contact
 	    // data
-	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs);
+	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs,contactCreate);
 
 	    // Check if contact saving should be skipped. It is required if last
 	    // contact is null then to avoid rest of contacts to being saved
