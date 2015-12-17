@@ -101,7 +101,7 @@
 		{{/is_mobile}}
 </div>
             <div class="dta-contatiner table-responsive">
-				<div class="panel panel-default" style="overflow-x:auto;border-left:none;">
+				<div class="panel panel-default" style="{{#is_mobile}} overflow-x:hidden; {{else}} overflow-x:auto; {{/is_mobile}} border-left:none;">
 			    
                 <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
