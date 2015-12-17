@@ -78,33 +78,33 @@ $(function () {
 	
 	$('#opportunity-listners').on('click', '#deal-milestone-regular', function(e) {
     	e.preventDefault();
-    	eraseCookie('deal-milestone-view');
+    	_agile_delete_prefs('deal-milestone-view');
     	App_Deals.deals();
     });
 	
 	$('body').on('click', '#deal-milestone-compact', function(e) {
     	e.preventDefault();
-    	createCookie('deal-milestone-view','compact');
+    	_agile_set_prefs('deal-milestone-view','compact');
     	App_Deals.deals();
     });
 	
 	$('body').on('click', '#deal-milestone-fit', function(e) {
     	e.preventDefault();
-    	createCookie('deal-milestone-view','fit');
+    	_agile_set_prefs('deal-milestone-view','fit');
     	App_Deals.deals();
     });
 	
 	//Check the archived filter for the first time and set it to false as default.
-	if(readCookie('deal-filters')){
-		var json = $.parseJSON(readCookie('deal-filters'));
+	if(_agile_get_prefs('deal-filters')){
+		var json = $.parseJSON(_agile_get_prefs('deal-filters'));
 		if(!json.archived){
 			json.archived="false";
-			createCookie('deal-filters',JSON.stringify(json));
+			_agile_set_prefs('deal-filters',JSON.stringify(json));
 		}
 	} else {
 		var json = {"owner_id":"","pipeline_id":"","milestone":"","value_filter":"equals","value":"","value_start":"","value_end":"","archived":"false","":false,"contact_ids":[]};
 		json.archived="false";
-		createCookie('deal-filters',JSON.stringify(json));
+		_agile_set_prefs('deal-filters',JSON.stringify(json));
 	}
 	
 });
@@ -361,7 +361,7 @@ function setupDealsTracksList(cel){
 			if(pipeline_id == 0 && value.toJSON().isDefault){
 				pipeline_id = value.id;
 				console.log('default pipeline set.');
-				createCookie('agile_deal_track',pipeline_id);
+				_agile_set_prefs('agile_deal_track',pipeline_id);
 			}
 				
 			if(value.id == pipeline_id)
@@ -369,7 +369,7 @@ function setupDealsTracksList(cel){
 		});
 		
 		// Add all option for the deals in the list view.
-		if (readCookie("agile_deal_view"))
+		if (_agile_get_prefs("agile_deal_view"))
 			$('#deals-tracks .dropdown-menu').append('<li><a id="1" class="pipeline" data="All" style="cursor: pointer;">All</a></li>');
 		else{
 			setupNewDealFilters(function(){

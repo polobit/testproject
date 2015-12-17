@@ -1,6 +1,6 @@
 $("body").on('click', '.agent-popup-alert-dismiss', function(event)
 {
-	createCookie('CHORME_EXTENSION_DOWNLOAD', false);
+	_agile_set_prefs('CHORME_EXTENSION_DOWNLOAD', false);
 	$("#chrome_extension").remove();
 });
 
@@ -41,12 +41,12 @@ $("body").on('click', '.agent-popup-alert-dismiss', function(event)
  * $('a').click(function(event) { var herfLogout = $(this).attr("href"); if
  * (herfLogout == "/login") { // erasefield
  * 
- * eraseCookie("agile_chrome_extension"); } });
+ * _agile_delete_prefs("agile_chrome_extension"); } });
  * 
- * console.log("readCookie: " + readCookie("agile_chrome_extension") + " " +
- * readCookie("prevent_extension_request")); // Read cookie to notify once per
- * session if (readCookie("agile_chrome_extension") ||
- * readCookie("prevent_extension_request")) { console.log("return now"); return; } //
+ * console.log("_agile_get_prefs: " + _agile_get_prefs("agile_chrome_extension") + " " +
+ * _agile_get_prefs("prevent_extension_request")); // Read cookie to notify once per
+ * session if (_agile_get_prefs("agile_chrome_extension") ||
+ * _agile_get_prefs("prevent_extension_request")) { console.log("return now"); return; } //
  * Detect extension Detect_Chrome_Extension(Toggle_Extension_Request_Ui); },
  * function(err) { console.log("it seems like you are in incognito mode");
  * return false; }); } } });
@@ -62,7 +62,7 @@ $("body").on('click', '.agent-popup-alert-dismiss', function(event)
  * if (document.getElementById('agilecrm_extension')) { console.log("crome
  * extension installed."); if (callback) callback(true); } else {
  * console.log("crome extension is not installed."); // Create visit type cookie
- * to notify once per session // createCookie("agile_chrome_extension",
+ * to notify once per session // _agile_set_prefs("agile_chrome_extension",
  * "notified");
  * 
  * if (callback) callback(false);
@@ -111,7 +111,7 @@ $("body").on('click', '.agent-popup-alert-dismiss', function(event)
 		e.stopPropagation();
 
 		// To prevent notify user permanantly
-		createCookie("prevent_extension_request", "true");
+		_agile_set_prefs("prevent_extension_request", "true");
 
 		Toggle_Extension_Request_Ui(true);
 	});
@@ -123,7 +123,7 @@ $("body").on('click', '.agent-popup-alert-dismiss', function(event)
 	{
 
 		// To prevent notify user permanantly
-		createCookie("prevent_extension_request", "true");
+		_agile_set_prefs("prevent_extension_request", "true");
 
 		Toggle_Extension_Request_Ui(true);
 	});

@@ -120,8 +120,8 @@ var ContactsRouter = Backbone.Router.extend({
 		SELECT_ALL = false;
 		
 		//campaign filters are disabled for time being.
-		/*if(readData('dynamic_contact_filter') &&readData('dynamic_contact_filter').indexOf('campaign_status') >= 0 ) {
-			eraseData('dynamic_contact_filter');
+		/*if(_agile_get_prefs('dynamic_contact_filter') &&_agile_get_prefs('dynamic_contact_filter').indexOf('campaign_status') >= 0 ) {
+			_agile_delete_prefs('dynamic_contact_filter');
 		}*/
 		//custom scroll element for grid view
 		var custom_scrollable_element=null;
@@ -129,15 +129,15 @@ var ContactsRouter = Backbone.Router.extend({
 		var is_company = false;
 		var template_key = "contacts";
 		var individual_tag_name = "tr";
-		var sort_key = readCookie("sort_by_name");
+		var sort_key = _agile_get_prefs("sort_by_name");
 		if(!sort_key || sort_key == null) {
 			sort_key = '-created_time';
 			// Saves Sort By in cookie
-			createCookie('sort_by_name', sort_key);
+			_agile_set_prefs('sort_by_name', sort_key);
 		}
 		
 		// Checks if user is using custom view. It check for grid view
-		if (grid_view || readCookie("agile_contact_view"))
+		if (grid_view || _agile_get_prefs("agile_contact_view"))
 		{
 			template_key = "contacts-grid";
 			individual_tag_name = "div";
@@ -159,10 +159,10 @@ var ContactsRouter = Backbone.Router.extend({
 
 			
 			// erase filter cookie
-			eraseCookie('contact_filter');
-			//eraseCookie('company_filter');
-			//eraseCookie('contact_filter_type');
-			eraseData('dynamic_contact_filter');
+			_agile_delete_prefs('contact_filter');
+			//_agile_delete_prefs('company_filter');
+			//_agile_delete_prefs('contact_filter_type');
+			_agile_delete_prefs('dynamic_contact_filter');
 
 			if (this.contactsListView && this.contactsListView.collection)
 			{
@@ -173,7 +173,7 @@ var ContactsRouter = Backbone.Router.extend({
 				}
 			}
 
-			this.customView(readCookie("contact_view"), undefined, 'core/api/tags/list/' + tag_id, tag_id);
+			this.customView(_agile_get_prefs("contact_view"), undefined, 'core/api/tags/list/' + tag_id, tag_id);
 			return;
 			
 		}
@@ -192,32 +192,32 @@ var ContactsRouter = Backbone.Router.extend({
 
 		// If contact-filter cookie is defined set url to fetch
 		// respective filter results
-		if (filter_id || (filter_id = readCookie('contact_filter')))
+		if (filter_id || (filter_id = _agile_get_prefs('contact_filter')))
 		{
 			collection_is_reverse = false;
 			url = "core/api/filters/query/list/" + filter_id;
 		}
 
 		// If view is set to custom view, load the custom view
-		if (!readCookie("agile_contact_view"))
+		if (!_agile_get_prefs("agile_contact_view"))
 		{
-			if(readData('dynamic_contact_filter')) {
+			if(_agile_get_prefs('dynamic_contact_filter')) {
 				// Then call customview function with filter url
-				this.customView(readCookie("contact_view"), undefined, 'core/api/filters/filter/dynamic-filter', undefined,  is_lhs_filter, readData('dynamic_contact_filter'));
+				this.customView(_agile_get_prefs("contact_view"), undefined, 'core/api/filters/filter/dynamic-filter', undefined,  is_lhs_filter, _agile_get_prefs('dynamic_contact_filter'));
 				return;
 			}
 			// If there is a filter saved in cookie then show filter
 			// results in custom view saved
-			if (readCookie('contact_filter'))
+			if (_agile_get_prefs('contact_filter'))
 			{
 				// Then call customview function with filter url
-				this.customView(readCookie("contact_view"), undefined, "core/api/filters/query/list/" + readCookie('contact_filter'), tag_id);
+				this.customView(_agile_get_prefs("contact_view"), undefined, "core/api/filters/query/list/" + _agile_get_prefs('contact_filter'), tag_id);
 				return;
 			}
 
 			// Else call customView function fetches results from
 			// default url : "core/api/contacts/list"
-			this.customView(readCookie("contact_view"), undefined, undefined, undefined, is_lhs_filter);
+			this.customView(_agile_get_prefs("contact_view"), undefined, undefined, undefined, is_lhs_filter);
 			return;
 		}
 
@@ -246,9 +246,9 @@ var ContactsRouter = Backbone.Router.extend({
 			contactFiltersListeners();
 			return;
 		}
-		if(readData('dynamic_contact_filter')) {
+		if(_agile_get_prefs('dynamic_contact_filter')) {
 			url = 'core/api/filters/filter/dynamic-filter';
-			postData = readData('dynamic_contact_filter');
+			postData = _agile_get_prefs('dynamic_contact_filter');
 		} 
 
 		var slateKey = getContactPadcontentKey(url);
@@ -256,7 +256,7 @@ var ContactsRouter = Backbone.Router.extend({
 		if(is_lhs_filter) {
 			template_key = "contacts-table";
 			
-			if (grid_view || readCookie("agile_contact_view"))
+			if (grid_view || _agile_get_prefs("agile_contact_view"))
 			{
 				template_key = "contacts-grid-table";
 				individual_tag_name = "div";
@@ -286,7 +286,7 @@ var ContactsRouter = Backbone.Router.extend({
 						count = collection.models[0].attributes.count || collection.models.length;
 					}
 					var count_message;
-					if (count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
+					if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
 						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 					else
 						count_message = "<small> (" + count + " Total) </small>";
@@ -626,7 +626,7 @@ var ContactsRouter = Backbone.Router.extend({
 		// Check updates in the contact.
 		checkContactUpdated();
 
-		if(localStorage.getItem('MAP_VIEW')=="disabled")
+		if(_agile_get_prefs('MAP_VIEW')=="disabled")
 				$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
 		else
 				$("#map_view_action").html("<i class='icon-minus text-sm c-p' title='Hide map' id='disable_map_view'></i>");
@@ -1022,7 +1022,7 @@ var ContactsRouter = Backbone.Router.extend({
 					{
 						// Erase custom_view cookie, since
 						// view object with given id is not available
-						eraseCookie("contact_view");
+						_agile_delete_prefs("contact_view");
 
 						// Loads default contact view
 						App_Contacts.contacts();
@@ -1050,7 +1050,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 			contactFiltersListeners();
 
-			if (readCookie('company_filter'))
+			if (_agile_get_prefs('company_filter'))
 				$('#contact-heading', el).text('Companies');
 
 			//setup_tags(el);
@@ -1066,18 +1066,18 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		var slateKey = getContactPadcontentKey(url);
-		var sort_key = readCookie("sort_by_name");
+		var sort_key = _agile_get_prefs("sort_by_name");
 		if(!sort_key || sort_key == null) {
 			sort_key = '-created_time';
 			// Saves Sort By in cookie
-			createCookie('sort_by_name', sort_key);
+			_agile_set_prefs('sort_by_name', sort_key);
 		}
 		var template_key = "contacts-custom-view";
 		var individual_tag_name='tr';
 		var custom_scrollable_element=null;
 
 		// Checks if user is using custom view. It check for grid view
-		if (readCookie("agile_contact_view"))
+		if (_agile_get_prefs("agile_contact_view"))
 		{
 			template_key = "contacts-grid";
 			individual_tag_name = "div";
@@ -1085,14 +1085,14 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 		//if directly called the method, i.e on click of custom view link, 
 		//the url will be updated if any filter conditions are selected.
-		if(readData('dynamic_contact_filter')) {
+		if(_agile_get_prefs('dynamic_contact_filter')) {
 			url = 'core/api/filters/filter/dynamic-filter';
-			postData=readData('dynamic_contact_filter');
+			postData=_agile_get_prefs('dynamic_contact_filter');
 		}
 		if(is_lhs_filter) {
 			template_key = "contacts-custom-view-table";
 
-			if (readCookie("agile_contact_view"))
+			if (_agile_get_prefs("agile_contact_view"))
 		    {
 			template_key = "contacts-grid-table";
 			individual_tag_name = "div";
@@ -1128,7 +1128,7 @@ var ContactsRouter = Backbone.Router.extend({
 						count = collection.models[0].attributes.count || collection.models.length;
 					}
 					var count_message;
-					if (count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
+					if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
 						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+ updateImageS3Path("/img/help.png") +'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 					else
 						count_message = "<small> (" + count + " Total) </small>";

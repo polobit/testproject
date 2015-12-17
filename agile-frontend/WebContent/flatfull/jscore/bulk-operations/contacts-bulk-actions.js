@@ -46,7 +46,7 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
     bulkActionCompaniesSortByName : function(e){
 
     	e.preventDefault();
-			createCookie('company_sort_field',$(e.currentTarget).attr('data'));
+			_agile_set_prefs('company_sort_field',$(e.currentTarget).attr('data'));
 			COMPANIES_HARD_RELOAD=true;
 			App_Companies.companies();
     },
@@ -135,10 +135,10 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 	{
 
 		e.preventDefault();
-		eraseCookie('company_filter');
-		//eraseCookie('contact_filter_type');
+		_agile_delete_prefs('company_filter');
+		//_agile_delete_prefs('contact_filter_type');
 
-		//createCookie('company_filter', "Companies");
+		//_agile_set_prefs('company_filter', "Companies");
 		COMPANIES_HARD_RELOAD = true;
 		App_Companies.companies(); // /Show Companies list, explicitly hard
 		// reload
@@ -149,16 +149,16 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 	{
 
 		e.preventDefault();
-		eraseCookie('company_filter');
-		//eraseData('dynamic_contact_filter');
-		eraseData('dynamic_company_filter');
+		_agile_delete_prefs('company_filter');
+		//_agile_delete_prefs('dynamic_contact_filter');
+		_agile_delete_prefs('dynamic_company_filter');
 
 		var filter_id = $(e.currentTarget).attr('id');
 		var filter_type = $(e.currentTarget).attr('filter_type');
 
 		// Saves Filter in cookie
-		createCookie('company_filter', filter_id)
-		//createCookie('company_filter_type', filter_type)
+		_agile_set_prefs('company_filter', filter_id)
+		//_agile_set_prefs('company_filter_type', filter_type)
 
 		// Gets name of the filter, which is set as data
 		// attribute in filter
@@ -174,14 +174,14 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 	bulkActionCompaniesSortonTimeDesc : function(e)
 	{
 		e.preventDefault();
-		createCookie('company_sort_field',$(e.currentTarget).attr('data'));
+		_agile_set_prefs('company_sort_field',$(e.currentTarget).attr('data'));
 		COMPANIES_HARD_RELOAD=true;
 		App_Companies.companies();
 	},
 	
 	bulkActionCompaniesSortonTimeAsec : function(e){
 		e.preventDefault();
-		createCookie('company_sort_field',$(e.currentTarget).attr('data'));
+		_agile_set_prefs('company_sort_field',$(e.currentTarget).attr('data'));
 		COMPANIES_HARD_RELOAD=true;
 		App_Companies.companies();
 	},
@@ -1218,7 +1218,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 
 	var total_available_contacts = getAvailableContacts();
 
-	console.log(readCookie('contact_filter'));
+	console.log(_agile_get_prefs('contact_filter'));
 	$('body').find('#bulk-select').css('display', 'none')
 	if ($(clicked_ele).is(':checked'))
 	{

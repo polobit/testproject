@@ -722,9 +722,8 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 
     onDisableMapView : function(e){
 		e.preventDefault();
-		if(islocalStorageHasSpace()){
-			localStorage.setItem('MAP_VIEW','disabled');
-		}
+		_agile_set_prefs('MAP_VIEW','disabled');
+		
 		$("#map").css('display', 'none');
 		$("#contacts-local-time").hide();
 		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
@@ -733,9 +732,8 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 
 	onEnableMapView :  function(e){
 		e.preventDefault();
-		if(islocalStorageHasSpace()){
-			localStorage.setItem('MAP_VIEW','enabled');
-		}
+		_agile_set_prefs('MAP_VIEW','enabled');
+		
 		if(company_util.isCompany())
 			company_util.show_map();
 		else

@@ -116,6 +116,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 				{
 					// User have streams so register all of them on server
 					registerAll(0);
+					console.log(Streams_List_View.collection);
 				} });
 
 			// Creates new default function of collection
@@ -143,6 +144,15 @@ var SocialSuiteRouter = Backbone.Router.extend({
 
 			// Check for new tweets and show notification.
 			showNotification(null);
+		}
+		
+		var noOfModels = Streams_List_View.collection.length;
+    	for(var index = 0; length < noOfModels; index++) {
+    		var StreamJson = Streams_List_View.collection.models[index];
+    		if(parseInt(StreamJson.get('stream_version')) != 2) {
+    			$("#streamsMessageBox").show();
+    			break;
+    		}
 		}
 
 		// Remove deleted tweet element from ui

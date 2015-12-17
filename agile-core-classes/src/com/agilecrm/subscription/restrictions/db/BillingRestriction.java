@@ -377,25 +377,16 @@ public class BillingRestriction
 	    this.one_time_emails_backup = one_time_emails_count;
 	    return;
 	}
-	try{
-		BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
-	
-		// Just to avoid null pointer exception
-		if (this.one_time_emails_backup == null)
-		    this.one_time_emails_backup = this.one_time_emails_count;
-	
-		// Substracting from existing db count
-		restriction.one_time_emails_count -= (this.one_time_emails_backup - this.one_time_emails_count);
-	
-		// Updating one time count from that of DB entity
-		this.one_time_emails_count = restriction.one_time_emails_count;
-	
-		// Updating backup count from that of DB entity
-		this.one_time_emails_backup = one_time_emails_count;
-	}catch(Exception e){
-		System.out.println("Exception in BillingRestriction prepersist:: "+ExceptionUtils.getFullStackTrace(e));
-		e.printStackTrace();
-	}
+
+	// Just to avoid null pointer exception
+	if (this.one_time_emails_backup == null)
+	    this.one_time_emails_backup = this.one_time_emails_count;
+
+	// Updating one time count from that of DB entity
+	this.one_time_emails_count -= (this.one_time_emails_backup - this.one_time_emails_count);
+
+	// Updating backup count from that of DB entity
+	this.one_time_emails_backup = one_time_emails_count;
 
     }
 

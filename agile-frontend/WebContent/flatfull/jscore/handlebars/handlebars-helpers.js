@@ -3441,7 +3441,7 @@ $(function()
 						if (this[0] && this[0].count && (this[0].count != -1))
 						{
 
-							if (this[0].count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
+							if (this[0].count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
 								count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 
 							else
@@ -5235,6 +5235,24 @@ $(function()
 		return getPendingEmails();
 	});
 
+	Handlebars.registerHelper('getLastPurchasedCount', function()
+	{
+		var max = getMaxEmailsLimit();
+		if(max == 0)
+			return "-";
+		else
+			return getPendingEmails();
+	});
+
+	Handlebars.registerHelper('getFreeEmailsCount', function()
+	{
+		var max = getMaxEmailsLimit();
+		if(max == 0)
+			return "5000";
+		else
+			return "-";
+	});
+
 	// helper function to return agile bcc special email for inbound mail event
 	// trigger
 	Handlebars.registerHelper('inboundMail', function()
@@ -6416,7 +6434,7 @@ $(function()
 				if (this[0] && this[0].count && (this[0].count != -1))
 				{
 
-					if (this[0].count > 9999 && (readCookie('company_filter') || readData('dynamic_company_filter')))
+					if (this[0].count > 9999 && (_agile_get_prefs('company_filter') || _agile_get_prefs('dynamic_company_filter')))
 						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 
 					else
@@ -6666,7 +6684,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 			});
 	Handlebars.registerHelper('toggle_contacts_filter', function(options)
 			{	        
-		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
+		    if(_agile_get_prefs(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
 			return "none";
 	       	}
 	    	
@@ -6675,7 +6693,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	
 	Handlebars.registerHelper('toggle_companies_filter', function(options)
 			{	        
-		   return  localStorage.getItem('companiesFilterStatus');
+		   return  _agile_get_prefs('companiesFilterStatus');
 		    
 			});
 
