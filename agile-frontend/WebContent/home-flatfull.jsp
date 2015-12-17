@@ -249,7 +249,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
    <li id="web-rules-menu">
     <a  href="#web-rules">
-      <i class="fa fa-globe"></i>
+      <i class="icon icon-globe"></i>
       <span>Web Rules</span>
     </a>
   </li>
@@ -318,7 +318,8 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 %>
 
  
-  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
+ <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
+ 
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
 </div>
