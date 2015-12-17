@@ -2,17 +2,17 @@
 {{#if_equals num.length "0"}}
 		<div class="wrapper-sm">
 
-			<div class="wrapper-md b-n text-center text-xs" id="skype_no_phone">
+			<div class="word-break p-n text-base" id="skype_no_phone">
 				There is no phone number associated.
 			</div>
 
 		</div>
 
 {{else}}
-  <div style="background-color:#f6f6f6;margin:1px;">
-	<div class="wrapper-sm">
+  <div>
 			{{#if_equals num.length "1"}}<div id="skype_contact_number"></div>
 			{{else}}
+			<div class="wrapper-sm">
 			<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs">To&nbsp;:</h4></div>
 			<div class="pull-right">
 				<select name="skype_number" id="skype_contact_number" class="required form-control" style="height:27px;padding-top:2px;">

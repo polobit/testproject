@@ -368,10 +368,13 @@ function handleCallRequest(message)
 			saveCallActivitySkype(call);
 			try
 			{
+				
+				var contact = agile_crm_get_contact();
+
 				var phone = $("#skype_contact_number").val();
 				if (!phone || phone == "")
 				{
-					phone = agile_crm_get_contact_properties_list("phone")[0].value;
+					phone = getPhoneWithSkypeInArray(contact.properties)[0];
 				}
 				if (phone == num)
 				{

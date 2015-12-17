@@ -276,6 +276,7 @@ function _getMessageSkype(message, callback){
 		if(($("#skype_contact_number").val() == number)){
 			getLogsForSkype(number);	
 		}
+
 		resetglobalCallVariables();
 		
 	}else if(state == "refused"){
@@ -420,8 +421,9 @@ function getLogsForSkype(num){
 	
 	var logNumber;
 	var parameter = {};
+	
+	parameter['error_message'] = "There is no phone number associated with this contact. <a href='#contact-edit' class='text-info block m-t-xs' style='color:#23b7e5'>Add phone number</a>";
 	var contact = agile_crm_get_contact();
-	parameter['error_message'] = "There is no phone number associated. <a href='#contact-edit' class='text-info block m-t-xs' style='color:#23b7e5'>Add phone number</a>";
 	parameter['num'] = getPhoneWithSkypeInArray(contact.properties);
 
 	if($("#skype-logs-panel").length > 0){
@@ -456,7 +458,7 @@ function getLogsForSkype(num){
 	
 		if(parameter['num'].length > 0){
 			if(!logNumber){
-				logNumber = parameter['num'][0].value;
+				logNumber = parameter['num'][0];
 			}
 			var command = "getLogs";
 			var number =  logNumber;
