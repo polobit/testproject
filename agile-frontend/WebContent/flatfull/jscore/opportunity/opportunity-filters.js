@@ -814,7 +814,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 			deal_filter_json['owner_id'] = CURRENT_DOMAIN_USER.id;
 			deal_filter_json['pipeline_id'] = readCookie('agile_deal_track');
 			deal_filter_json['milestone'] = "";
-			deal_filter_json['archived'] = "all";
+			deal_filter_json['archived'] = "false";
 			deal_filter_json['value_filter'] = "equals";
 		}else{
 			deal_filter = App_Deals.deal_filters.collection.get(filter_id);
