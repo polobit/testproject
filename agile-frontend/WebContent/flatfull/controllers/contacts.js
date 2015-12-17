@@ -585,7 +585,7 @@ var ContactsRouter = Backbone.Router.extend({
 			start_tour("contact-details", el);
 			
 
-			// Sequence of calling option 1) BRIA 2) Twilio 3) SIP in contact phone option
+/*			// Sequence of calling option 1) BRIA 2) Twilio 3) SIP in contact phone option
 			if(default_call_type == "Bria"){
 				if(callFromBria == true){
 					$(".contact-call-button",el).removeAttr('disabled');
@@ -616,7 +616,7 @@ var ContactsRouter = Backbone.Router.extend({
 							    .tooltip('fixTitle');
 							}
 				}
-
+*/
 			} });
 
 		var el = this.contactDetailView.render(true).el;

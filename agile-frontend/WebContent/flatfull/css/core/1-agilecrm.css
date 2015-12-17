@@ -2997,3 +2997,8 @@ width: 915px;
 	max-width: none;
 	
 }
+
+.c-progress
+{
+	cursor: progress;
+}

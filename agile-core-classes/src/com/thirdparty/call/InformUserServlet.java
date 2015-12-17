@@ -1,4 +1,4 @@
-package com.thirdparty.bria;
+package com.thirdparty.call;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,15 +17,15 @@ import com.thirdparty.PubNub;
 
 
 /**
- * Servlet implementation class BriaInformUserServlet
+ * Servlet implementation class InformUserServlet
  */
-public class BriaInformUserServlet extends HttpServlet {
+public class InformUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BriaInformUserServlet() {
+    public InformUserServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

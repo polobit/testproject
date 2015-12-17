@@ -6849,6 +6849,18 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 			return options.fn(this);
 	});
 
+// the epoch time is in milisecond.
+// jquery uses isostring format to implement timeago function on date...
+Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) {
+	try
+	{
+		return new Date(dateInepoch).toISOString();
+	}
+	catch (e)
+	{
+	}
+	return dateInepoch;
+});
 
 function agile_is_mobile_browser(){
     return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));

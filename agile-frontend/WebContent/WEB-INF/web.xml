@@ -936,16 +936,7 @@
 		<servlet-name>RemoteApiServlet</servlet-name>
 		<url-pattern>/remote_api</url-pattern>
 	</servlet-mapping>
-	<servlet>
-        <servlet-name>BriaInformUserServlet</servlet-name>
-        <servlet-class>com.thirdparty.bria.BriaInformUserServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>  
- 
-    <servlet-mapping>
-        <servlet-name>BriaInformUserServlet</servlet-name>
-        <url-pattern>/InformUser</url-pattern>
-    </servlet-mapping>
+
 	
 	<servlet>
 		<servlet-name>LandingPagesTemplateServlet</servlet-name>
@@ -972,4 +963,14 @@
 		<url-pattern>/landing/*</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+        <servlet-name>InformUserServlet</servlet-name>
+        <servlet-class>com.thirdparty.call.InformUserServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>InformUserServlet</servlet-name>
+        <url-pattern>/InformUser</url-pattern>
+    </servlet-mapping>
 </web-app>

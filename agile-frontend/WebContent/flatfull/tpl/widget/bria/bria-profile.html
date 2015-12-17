@@ -1,12 +1,79 @@
-<script id="bria-profile-template" type="text/html">
-<div class="widget_content">
-  <div class="row-fluid">  
-     <div>
-        <p>{{msg}}</p>
-     </div>  
-  </div>
-<div>
+<script id="bria-logs-template" type="text/html">
+{{#if_equals num.length "0"}}
+		<div class="wrapper-sm">
+
+			<div class="wrapper-md b-n text-center text-xs" id="bria_no_phone">
+				There is no phone number associated.
+			</div>
+
+		</div>
+{{else}}
+  <div style="background-color:#f6f6f6;margin:1px;">
+	<div class="wrapper-sm" >
+			{{#if_equals num.length "1"}}<div id="bria_contact_number"></div>
+			{{else}}
+			<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs">To&nbsp;:</h4></div>
+			<div class="pull-right">
+				<select name="bria_number" id="bria_contact_number" class="required form-control" style="height:27px;padding-top:2px;">
+					{{#each num}}
+						<option value="{{value}}">{{value}} 
+							{{#if subtype}}({{subtype}}){{/if}}
+						</option>
+					{{/each}}
+				</select>
+			</div>
+			<div class="clearfix"></div>
+			{{/if_equals}}
+	</div>
+
+
+	<div>
+	<ul id="bria-logs-panel" class="list-group m-b-none text-xs">
+		<li class="list-group-item b-n" id="bria_logs_load">
+			<center><img src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
+		</li>
+	</ul>
+
+	</div>
+{{/if_equals}}
 </script>
+
+<script id="bria-logs-fetch-template" type="text/html">
+		<li class="list-group-item b-n " style="display:none;" id="bria_logs_load">
+			<center><img src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
+		</li>
+
+{{#if this}}
+
+		{{#each this}}          
+			<li class="list-group-item b-n bg-light-gray m-xs">
+					{{#if_equals duration "0"}}
+						<i class="icon pull-left icon-phone text-white text-md m-r-xs m-t-xxs v-middle twilio-widget-unanswer"></i>
+					{{else}}
+						<i class="icon pull-left icon-phone text-white text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
+					{{/if_equals}}
+				
+<div class="pull-left text-sm">{{#if_equals duration "0"}}{{#if_equals direction "Missed"}}Call missed {{else}}Call unanswered{{/if_equals}}{{else}}Call connected{{/if_equals}}</div>
+				
+<div class="pull-right"><span class="label bg-light dk text-tiny">{{#is_string duration}}{{toProperFormat duration}}{{else}}0s{{/is_string}}</span></div>
+				
+<div class="clearfix"></div>
+	
+<small class="text-muted block pos-rlt" style="top:-3px;margin-left:21px;"><time class="time-ago pull-left" datetime="{{convert_toISOString startTime}}">{{toLocalTimezone startTime}}</time></small>
+				
+<div class="clearfix"></div>
+			</li>
+		{{/each}}
+	{{else}}
+		<li class="list-group-item wrapper-md r-none b-l-none b-r-none text-center">
+	    	Sorry, we could not find any call data
+		</li>
+	{{/if}}
+
+
+
+</script>
+
 
 <script id="bria-login-template" type="text/html">
 <div>
@@ -16,25 +83,28 @@
                    Make and receive calls from your contacts using your Bria account.
               </p>
 			  
-				<label><b>Select your Bria </b></label>
-                <label id="bria_reg_status"></label>
-				<div class="control-group form-group">
-                     <select name="bria_type" id="bria_type" class="form-control" placeholder="Bria Client Name">
-						<option value="" disabled selected>Select</option>
-						<option value="X-Lite">X-Lite</option>
-						<option value="Bria4">Bria4</option>
-						<option value="Bria3">Bria3</option>
-					</select>
-                </div>
-         
-				<div class="controls ">
-  						<label class="i-checks i-checks-sm"><input type="checkbox" id="make_bria_default_call" class="form-control" name="make_bria_default_call"><i></i></label>
-						  <label>Set Bria as default phone</label>
-                     	</div>	
+				<p class="m-t-sm m-b-none">
+					Download executable and run it in your system to establish a connection between your Bria client and Agile CRM."
+				Download <a href="#" class="text-info" target="_blank" id="downloadCallJar" widget-name="Bria"> executable </a>
 
-              	<div class="m-t-xl">
-			  
-			  <a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">Save</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+				</p>
+
+
+
+			  	<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">Save</a>
 				<a href="#add-widget" class="btn btn-default btn-sm ml_5">Cancel</a>
 				</div>
               

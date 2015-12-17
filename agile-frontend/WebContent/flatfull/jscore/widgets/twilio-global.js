@@ -182,8 +182,8 @@ $(function(){
 		$("#error-number-not-selected").hide();
 	});
 
-    $('body').off('click', '.contact-make-twilio-call');
-	$('body').on('click', '.contact-make-twilio-call', function(e)
+    $('body').off('click', '.contact-make-twilio-call,.TwilioIO_call');
+	$('body').on('click', '.contact-make-twilio-call, .TwilioIO_call', function(e)
 	{
 		e.preventDefault();
 		TWILIO_CALLTYPE = "Outgoing";
@@ -196,13 +196,13 @@ $(function(){
 		TWILIO_CONTACT_ID = contactDetailsObj.id;
 //		alert(TWILIO_CONTACT_ID);
 
-		if (Twilio.Device.status() == "busy")
+		if (Twilio.Device.status() == "busy"  || checkForActiveCall())
 		{
 			alert("Already on call.");
 			return;
 		}
 
-		console.log("phone: " + $(this).attr("phone"));
+		console.log("phone: " + $(this).closest(".contact-make-call").attr("phone"));
 
 		if(CALL_CAMPAIGN.start )
 			  {
@@ -212,7 +212,7 @@ $(function(){
 				}
 				CALL_CAMPAIGN.state = "PAUSE" ;
 			  }
-		twiliocall($(this).attr("phone"), getContactName(contactDetailsObj));
+		twiliocall($(this).closest(".contact-make-call").attr("phone"), getContactName(contactDetailsObj));
 	});
 
 	$('body').off('click', '#twilio_acc_sid, #twilio_auth_token');
@@ -731,6 +731,7 @@ function setUpGlobalTwilio()
 			console.log("in twilio ready Twilio_Setup_Called: " + Twilio_Setup_Called);
 			Twilio_Setup_Called = false;
 
+/*
 			// Make call option visible on contact detail page
 			// Sequence of calling option 1) BRIA 2) Twilio 3) SIP
 			if(default_call_type == "Bria"){
@@ -762,6 +763,7 @@ function setUpGlobalTwilio()
 							changeTooltipTo(selector,text);
 						}
 			}
+*/			
 		});
 
 		Twilio.Device.error(function(error)

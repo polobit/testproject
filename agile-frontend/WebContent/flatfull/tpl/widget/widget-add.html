@@ -13,19 +13,34 @@
     {{else}}
 			{{#if_equals name "Bria"}}
 				<center>  
-  				<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;color: #4A4A4A;" class="thumbnail m-b-xs"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria</span></span>
+  				<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria</span></span>
+				</center>  
+        	{{else}}
+			{{#if_equals name "Skype"}}
+				<center>  
+  				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Skype</span></span>
 				</center>  
         	{{else}}
       <center> 
         <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{logo_url}}" />
       </center>   
 			 {{/if_equals}}
+		{{/if_equals}}
    {{/if_equals}}
    {{/if_equals}}
   </div>
   <div class="panel-body">
 	
-    <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip" title="{{description}}">
+	{{#if_equals name "Bria"}}
+  		 <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{description}}">
+    {{else}}
+	{{#if_equals name "Skype"}}
+		<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{description}}">
+ 	{{else}}
+		<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip" title="{{description}}">
+	{{/if_equals}}
+	{{/if_equals}}
+   
 		{{description}}
 	</div>
     <div class="text-center">
@@ -57,12 +72,20 @@
                         {{/if_equals}}
                 {{/if_equals}}
     			<a class="btn btn-sm btn-danger m-r-xs" id="delete-widget" widget-name="{{name}}">Delete</a>
-				
 				{{#if_equals name "Bria"}}
 					<div class="text-center m-t-sm ">
 							Download
-							<a href="https://s3.amazonaws.com/agilecrm/website/bria.jar" class="text-info" target="_blank" id="downloadBria" widget-name="Bria"> jar file </a>
-							<i class="icon-question-sign m-l-xs" style="color:#A09898;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download jar file and run it in your system to establish a connection between your Bria client and Agile CRM. Please note that you should already be logged in with selected Bria client before running this jar file."></i>
+							<a href="#" class="text-info" target="_blank" id="downloadCallJar"> executable </a>
+							<i class="icon-question-sign m-l-xs" style="color:#A09898;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download executable and run it in your system to establish a connection between your Bria client and Agile CRM. Please note that you should already be logged in with selected Bria client before running this executable file."></i>
+					</div>
+				{{/if_equals}}
+				
+				{{#if_equals name "Skype"}}
+
+					<div class="text-center m-t-sm ">
+							Download
+							<a href="#" class="text-info" target="_blank" id="downloadCallJar" widget-name="Skype"> executable </a>
+							<i class="icon-question-sign m-l-xs" style="color:#A09898;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download executable and run it in your system to establish a connection between your Skype client and Agile CRM. Please note that you should already be logged in with Skype client before running this executable file."></i>
 					</div>
 				{{/if_equals}}
 
@@ -79,7 +102,10 @@
 								{{else}}	
 									{{#if_equals name "Bria"}}
 										<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
-									{{else}}										
+									{{else}}
+										{{#if_equals name "Skype"}}
+												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+											{{else}}
 								<div class="btn-group pos-abs m-l-n-lg">
   									<a type="button" class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -90,6 +116,7 @@
     									<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
   									</ul>
 								</div>
+										{{/if_equals}}
 									{{/if_equals}}
 							 {{/if_equals}}
 						  {{/if_equals}}
@@ -106,7 +133,13 @@
 									{{else}}
 										{{#if_equals name "TwilioIO"}}
 											<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
-										{{else}}																			
+											{{else}}	
+												{{#if_equals name "Bria"}}
+													<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
+												{{else}}	
+												{{#if_equals name "Skype"}}
+												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
+											{{else}}																			
 											<div class="btn-group pos-abs m-l-n-lg">
   												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
   												<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -117,6 +150,8 @@
     												<li><a class="btn btn-sm add_to_all" href="#callscript" widget-name="{{name}}">Add for all users</a></li>    									
   												</ul>
 											</div>
+												{{/if_equals}}
+											{{/if_equals}}
 										{{/if_equals}}
 									{{/if_equals}}
 									{{else}}
@@ -132,7 +167,13 @@
 											{{else}}
 												{{#if_equals name "TwilioIO"}}
 													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
-											{{else}}								
+											{{else}}		
+												{{#if_equals name "Bria"}}
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+											{{else}}
+												{{#if_equals name "Skype"}}
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+											{{else}}											
 												<div class="btn-group pos-abs m-l-n-lg">
   													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
   													<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -143,6 +184,8 @@
     													<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
   													</ul>
 												</div>
+												{{/if_equals}}
+												{{/if_equals}}
 											{{/if_equals}}
 										{{/if_equals}}
 											{{else}}
@@ -158,7 +201,13 @@
 									{{else}}
 										{{#if_equals name "TwilioIO"}}
 											<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
-										{{else}}										
+									{{else}}	
+										{{#if_equals name "Bria"}}
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+									{{else}}
+												{{#if_equals name "Skype"}}
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+									{{else}}	
 											<div class="btn-group pos-abs m-l-n-lg">										
   												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
   												<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -169,6 +218,8 @@
     												<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
   												</ul>
 											</div>
+												{{/if_equals}}
+											{{/if_equals}}
 										{{/if_equals}}
 									{{/if_equals}}
 								{{else}}
@@ -200,7 +251,14 @@
 						{{else}}
 							{{#if_equals name "TwilioIO"}}
 								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
-							{{else}}											
+						{{else}}	
+							{{#if_equals name "Bria"}}
+								<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+						{{else}}
+							{{#if_equals name "Skype"}}
+								<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+								{{else}}	
+									
 								<div class="btn-group pos-abs m-l-n-lg">										
   									<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -211,6 +269,8 @@
 										<li><a class="btn btn-sm _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add for all users</a></li>    									
   									</ul>
 								</div>
+								{{/if_equals}}
+							{{/if_equals}}
 							{{/if_equals}}
 						{{/if_equals}}
 					{{else}}
@@ -462,10 +522,16 @@
 			    {{else}}
 					{{#if_equals name "Bria"}}
 						<center>
-							<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;color: #4A4A4A;" class="thumbnail m-b-xs"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria</span></span>
+							<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria</span></span>
 						</center>
-			        {{else}}
+			     {{else}}
+					{{#if_equals name "Skype"}}
+							<center>
+								<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Skype</span></span>
+							</center>
+			        	{{else}}
 			        <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{logo_url}}" /></center>
+					{{/if_equals}}
 					{{/if_equals}}
 			    {{/if_equals}}
 			{{/if_equals}}

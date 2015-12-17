@@ -50,7 +50,9 @@ var WidgetsRouter = Backbone.Router
                 // Custom widget
                 "Custom-widget" : "Custom",
                 "Custom-widget/:id" : "Custom",
-                "Bria" : "Bria", "Bria/:id" : "Bria"
+				"Bria" : "Bria", "Bria/:id" : "Bria",
+				"Skype" : "Skype", "Skype/:id" : "Skype"
+
                 	
             },
 
@@ -138,10 +140,17 @@ var WidgetsRouter = Backbone.Router
 			/**
 			 * Manages Bria widget
 			 */
-			// Bria : function(id) {
-			// 	addConfigurableWidget(id, "Bria", 'bria-login');
-			// },
-
+			 Bria : function(id) {
+			 	addConfigurableWidget(id, "Bria", 'bria-login');
+			 },
+			 
+			 /**
+			 * Manages Skype widget
+			 */
+			 Skype : function(id) {
+			 	addConfigurableWidget(id, "Skype", 'skype-login');
+			 },
+			 
             /**
              * Manages Rapleaf widget
              */
