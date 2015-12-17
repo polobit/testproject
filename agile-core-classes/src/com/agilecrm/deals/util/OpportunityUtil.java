@@ -2368,6 +2368,7 @@ public class OpportunityUtil
 						return o1.id.equals(o2.id) ? 0 : -1;
 		            }
 				});
+		
 		if (ownerId != null){
 			conditionsMap1.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
 			conditionsMap2.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));

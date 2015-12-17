@@ -388,8 +388,10 @@ user_reports :function(callReportUrl){
 
 				 	var percent='';
 				 	var value;
+				 	var total=0;
 				 	$.each(v,function(k1,v1){
 				 		var percent='';
+				 		total=total+v1;
 				 		if(index==0){
 				 				if(v1!=0)
 				 				percent=100;
@@ -414,10 +416,16 @@ user_reports :function(callReportUrl){
               '<div class="progress-bar bg-primary" data-toggle="tooltip" data-original-title="'+Math.round(percent)+'%" style="width: '+Math.round(percent)+'%"></div>'+
             '</div>');
 				 	});
+
+				 	if(total==0)
+				 		div=div.concat('<div class="hidden"></div>');
 				 	div=div.concat('</div>');
+				 	
+				 		//$('.conversion_track').hide();
 				 	
 				 });
 				 $(".converionsPipeline").html(div);
+				 $('.hidden').parents('.conversion_track').hide();
 			});
 		},
 
@@ -461,6 +469,7 @@ getRepPerformanceLog : function(url) {
 
 							var conversion_url='/core/api/opportunity/conversionRate/'+user+getSelectedDates();
 							report_utility.conversion_report(conversion_url);
+							
 			}, "#rep-performance-reports");
 			}
 			else
