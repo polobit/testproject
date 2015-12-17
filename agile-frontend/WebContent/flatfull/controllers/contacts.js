@@ -302,6 +302,43 @@ var ContactsRouter = Backbone.Router.extend({
 				}
 				$('[data-toggle="tooltip"]').tooltip();
 				start_tour("contacts", el);
+
+				//loadWidgets(el, contact.toJSON());
+			
+			
+
+			// Sequence of calling option 1) BRIA 2) Twilio 3) SIP in contact phone option
+			if(default_call_type == "Bria"){
+				if(callFromBria == true){
+					$(".contact-call-button",el).removeAttr('disabled');
+					$(".contact-make-call",el).removeAttr("href");
+					$(".contact-call-button",el).addClass('contact-make-bria-call');
+					$(".contact-call-button-div",el).tooltip('hide')
+					  .attr('data-original-title', "Call from Bria")
+				    .tooltip('fixTitle');
+					}
+				}else{
+					if(Twilio_Start == true)
+						//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
+						{
+							$(".contact-call-button",el).removeAttr('disabled');
+							$(".contact-make-call",el).removeAttr("href");
+							$(".contact-call-button",el).addClass('contact-make-twilio-call');
+							$(".contact-call-button-div",el).tooltip('hide')
+							  .attr('data-original-title', "Call from Twilio")
+						    .tooltip('fixTitle');
+
+						}else if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+							{
+								$(".contact-call-button",el).removeAttr('disabled');
+								$(".contact-make-call",el).removeAttr("href");
+								$(".contact-call-button",el).addClass('contact-make-sip-call');
+								$(".contact-call-button-div",el).tooltip('hide')
+								  .attr('data-original-title', "Call from SIP")
+							    .tooltip('fixTitle');
+							}
+				}
+
 			} });
 
 		// Contacts are fetched when the app loads in the initialize
@@ -1106,6 +1143,37 @@ var ContactsRouter = Backbone.Router.extend({
 			{
 				
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
+
+				if(default_call_type == "Bria"){
+				if(callFromBria == true){
+					$(".contact-call-button",el).removeAttr('disabled');
+					$(".contact-make-call",el).removeAttr("href");
+					$(".contact-call-button",el).addClass('contact-make-bria-call');
+					$(".contact-call-button-div",el).tooltip('hide')
+					  .attr('data-original-title', "Call from Bria")
+				    .tooltip('fixTitle');
+					}
+				}else{
+					if(Twilio_Start == true)
+						//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
+						{
+							$(".contact-call-button",el).removeAttr('disabled');
+							$(".contact-make-call",el).removeAttr("href");
+							$(".contact-call-button",el).addClass('contact-make-twilio-call');
+							$(".contact-call-button-div",el).tooltip('hide')
+							  .attr('data-original-title', "Call from Twilio")
+						    .tooltip('fixTitle');
+
+						}else if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+							{
+								$(".contact-call-button",el).removeAttr('disabled');
+								$(".contact-make-call",el).removeAttr("href");
+								$(".contact-call-button",el).addClass('contact-make-sip-call');
+								$(".contact-call-button-div",el).tooltip('hide')
+								  .attr('data-original-title', "Call from SIP")
+							    .tooltip('fixTitle');
+							}
+				}
 
 				// To set chats and view when contacts are fetch by
 				// infiniscroll

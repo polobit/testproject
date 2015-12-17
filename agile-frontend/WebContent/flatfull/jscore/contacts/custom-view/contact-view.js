@@ -334,6 +334,7 @@ $(function() {
 
 function contactListener()
 {
+	$('#contacts-table').off('mouseenter','tr');
 		$('#contacts-table').on('mouseenter','tr',function(){
 			var that=$(this);
 
@@ -361,6 +362,7 @@ function contactListener()
 		 	}
 		 }, 1000);
 });
+		$('#contacts-table').off('mouseleave','tr');
 	$('#contacts-table').on('mouseleave','tr',function(){
 		var that=$(this);
 	setTimeout(function() {
@@ -477,7 +479,7 @@ function attachEvents(tr) {
     	agile_type_ahead("note_related_to", el, contacts_typeahead);
      });
 
-
+$('.popover').off('click', '#add-score')
 $('.popover').on('click', '#add-score', function(e){
 	    e.preventDefault();
 	    var that=$(this);
@@ -489,7 +491,7 @@ $('.popover').on('click', '#add-score', function(e){
 	    // Changes score in UI
 	    $('#lead-score').text(add_score);
        
-       var temp_model= App_Contacts.contact_custom_view.collection.get($(that).parents('.data').attr('data'));
+       var temp_model= App_Contacts.contactsListView.collection.get($(that).parents('.data').attr('data'));
 	    temp_model.set({'lead_score': add_score});
 		var contact_model =  temp_model.toJSON();
 	    
@@ -510,7 +512,7 @@ $('.popover').on('click', '#add-score', function(e){
 		          
 	});
 
-
+$('.popover').off('click', '#minus-score')
 $('.popover').on('click', '#minus-score', function(e){
 	    e.preventDefault();
 	    var that=$(this);
@@ -529,6 +531,8 @@ $('.popover').on('click', '#minus-score', function(e){
        var temp_model= App_Contacts.contact_custom_view.collection.get($(that).parents('.data').attr('data'));
 	    temp_model.set({'lead_score': sub_score}, {silent: true});
 		var contact_model =  temp_model.toJSON();
+
+		$(this.el).html(getTemplate(this.options.template,contact_model));
 	    
 	  /* // Refreshing the view ({silent: true} not working)
 	    contact_model.url = 'core/api/contacts';
