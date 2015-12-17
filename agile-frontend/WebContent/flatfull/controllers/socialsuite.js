@@ -122,6 +122,8 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			// Creates new default function of collection
 			Streams_List_View.appendItem = this.socialSuiteAppendItem;
 
+			Streams_List_View.collection.fetch();
+
 			$('#socialsuite-tabs-content').append(Streams_List_View.render().el);			
 
 			return;
