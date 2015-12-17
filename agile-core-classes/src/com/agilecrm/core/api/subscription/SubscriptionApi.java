@@ -430,6 +430,10 @@ public class SubscriptionApi {
 					json.put("is_more_users", true);
 					json.put("count", count);
 					return json.toString();
+				}else{
+					JSONObject json =  new JSONObject();
+					json.put("is_allowed_plan", true);
+					return json.toString();
 				}
 			}else if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)) {
 				System.out.println("plan upgrade not possible");
