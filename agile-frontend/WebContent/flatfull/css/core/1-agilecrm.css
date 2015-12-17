@@ -3033,3 +3033,17 @@ width : 100px;
 {
 	height: 241px;
 }
+
+.conversion_track::-webkit-scrollbar-thumb {
+ background: #bebebe;
+}
+.conversion_track::-webkit-scrollbar {
+ width: 5px;
+ margin-right: 4px !important;
+ background:#eee;
+}
+
+.conversion_track{
+	height:332px;
+	overflow-y:auto;
+}

@@ -382,7 +382,7 @@ user_reports :function(callReportUrl){
 				console.log(data);
 				var div='';
 				 $.each(data,function(k,v){
-				 	div=div.concat('<div id='+k+' class="col-sm-4 panel wrapper"><b>'+k+'</b>');
+				 	div=div.concat('<div id='+k+' class="conversion_track col-sm-4 panel wrapper"><b>'+k+'</b>');
 				 	//var innerdiv='';
 				 	var index=0;
 
