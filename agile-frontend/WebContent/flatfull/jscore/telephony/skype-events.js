@@ -420,8 +420,9 @@ function getLogsForSkype(num){
 	
 	var logNumber;
 	var parameter = {};
+	var contact = agile_crm_get_contact();
 	parameter['error_message'] = "There is no phone number associated. <a href='#contact-edit' class='text-info block m-t-xs' style='color:#23b7e5'>Add phone number</a>";
-	parameter['num'] = agile_crm_get_contact_properties_list("phone");
+	parameter['num'] = getPhoneWithSkypeInArray(contact.properties);
 
 	if($("#skype-logs-panel").length > 0){
 			$("#skype_logs_load").show();

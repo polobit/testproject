@@ -1,8 +1,8 @@
 var default_call_option = { "callOption" : [] };
-var callOptionDiv ;
+var callOptionDiv;
 var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null };
 var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false }
-var widgetCallName={"Sip":"Sip","TwilioIO" : "Twilio","Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
+var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
 $(function()
 {
 	initToPubNub();
@@ -61,7 +61,7 @@ function globalCallWidgetSet()
 						}
 
 						callOptionDiv = "<span class='inner-call-option m-l-sm'>";
-						
+
 						$
 								.each(
 										call_widget,
@@ -71,9 +71,9 @@ function globalCallWidgetSet()
 											{
 												var temp = { "name" : widget.name, "logo" : widget.mini_logo_url };
 												addtoCallOption(temp);
-												var name = 	widget.name;	
+												var name = widget.name;
 												callOptionDiv = callOptionDiv
-														.concat("<img class ='" + name + "_call c-p active' src='" + widget.mini_logo_url + "' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='"+widgetCallName[name]+"'>");
+														.concat("<img class ='" + name + "_call c-p active' src='" + widget.mini_logo_url + "' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" + widgetCallName[name] + "'>");
 
 											}
 										});
@@ -91,17 +91,22 @@ function globalCallWidgetSet()
 
 						$('body').on({ mouseenter : function(e)
 						{
-								if(!Pubnub){
+							if (!Pubnub)
+							{
+								return;
+							}
+							else
+							{
+								if (!Pubnub.is_connected_call)
+								{
 									return;
-								}else {
-									if(!Pubnub.is_connected_call){
-										return;
-									}
-								} 
-								
-							if($(".contact-make-call").hasClass("c-progress")){
+								}
+							}
+
+							if ($(".contact-make-call").hasClass("c-progress"))
+							{
 								$(".contact-make-call").removeClass("c-progress");
-							}	
+							}
 							$(".inner-call-option").remove();
 							$(this).append(callOptionDiv);
 							$('[data-toggle="tooltip"]').tooltip();
@@ -109,7 +114,7 @@ function globalCallWidgetSet()
 							{
 								$(".TwilioIO_call").removeClass("active");
 								$(".TwilioIO_call").addClass("disable");
-								
+
 							}
 							if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
 							{
@@ -123,40 +128,47 @@ function globalCallWidgetSet()
 
 						} }, '.contact-make-call');
 
-						
-						$('body').on({ mouseenter : function(e)
-							{
-									if(!Pubnub){
-										return;
-									}else {
-										if(!Pubnub.is_connected_call){
-											return;
-										}
-									} 
-								
-									if($(".contact-make-skype-call").hasClass("c-progress")){
-										$(".contact-make-call").removeClass("c-progress");
-									}	
-								$(".inner-call-option").remove();
-								
-								var array = default_call_option.callOption;
-								var index = containsOption(array,"name","Skype");
-								
-								if(index != -1){
-									var ele = "<span class='inner-call-option m-l-sm'>";
-									ele = ele.concat("<img class ='" + array[index].name + "_call c-p active' src='" + array[index].logo + "' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='"+array[index].name+"'>");
-									ele = ele.concat("</span>")
-									$(this).append(ele);
-								}
-								$('[data-toggle="tooltip"]').tooltip();
-							}, mouseleave : function()
-							{
-								$(".inner-call-option").remove();
+						$('body')
+								.on(
+										{
+											mouseenter : function(e)
+											{
+												if (!Pubnub)
+												{
+													return;
+												}
+												else
+												{
+													if (!Pubnub.is_connected_call)
+													{
+														return;
+													}
+												}
 
-							} }, '.contact-make-skype-call');
-						
-						
-						
+												if ($(".contact-make-skype-call").hasClass("c-progress"))
+												{
+													$(".contact-make-skype-call").removeClass("c-progress");
+												}
+												$(".inner-call-option").remove();
+
+												var array = default_call_option.callOption;
+												var index = containsOption(array, "name", "Skype");
+
+												if (index != -1)
+												{
+													var ele = "<span class='inner-call-option m-l-sm'>";
+													ele = ele
+															.concat("<img class ='" + array[index].name + "_call c-p active' src='" + array[index].logo + "' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" + array[index].name + "'>");
+													ele = ele.concat("</span>")
+													$(this).append(ele);
+												}
+												$('[data-toggle="tooltip"]').tooltip();
+											}, mouseleave : function()
+											{
+												$(".inner-call-option").remove();
+
+											} }, '.contact-make-skype-call');
+
 					}).error(function(data)
 			{
 				console.log("error in fetching the default call widget name");
@@ -186,9 +198,9 @@ function removeFromCallOption(name)
 		return;
 	}
 	default_call_option.callOption.splice(index, 1); // this will remove the
-														// index value and leave
-														// the remaining
-														// variable with change
+	// index value and leave
+	// the remaining
+	// variable with change
 }
 
 function addtoCallOption(option)
@@ -204,10 +216,9 @@ function addtoCallOption(option)
 	default_call_option.callOption.push(option);
 }
 
-
 function containsOption(array, property, name)
 {
-var result = -1;
+	var result = -1;
 	$.each(array, function(i, obj)
 	{
 		if (obj[property] == name)
@@ -218,8 +229,6 @@ var result = -1;
 	});
 	return result;
 }
-
-
 
 function sendTestCommand()
 {
@@ -263,7 +272,8 @@ function resetglobalCallVariables()
 	globalCall.callStatus = "Ideal";
 	globalCall.callId = null;
 	globalCall.callNumber = null;
-	if(globalCall.timeObject != null){
+	if (globalCall.timeObject != null)
+	{
 		clearTimeout(globalCall.timeObject);
 		globalCall.timeObject = null;
 	}
@@ -292,17 +302,22 @@ function handleCallRequest(message)
 			var num = globalCallForActivity.callNumber;
 			saveCallNoteBria();
 			saveCallActivityBria(call);
-			try{
+			try
+			{
 				var phone = $("#bria_contact_number").val();
-				if(!phone || phone == ""){
+				if (!phone || phone == "")
+				{
 					phone = agile_crm_get_contact_properties_list("phone")[0].value;
 				}
-				if(phone == num){
+				if (phone == num)
+				{
 					getLogsForBria(num);
 				}
-			}catch(e){
 			}
-						
+			catch (e)
+			{
+			}
+
 		}
 		else if (message.state == "error")
 		{
@@ -351,15 +366,20 @@ function handleCallRequest(message)
 			console.log("last called : " + call);
 			saveCallNoteSkype();
 			saveCallActivitySkype(call);
-			try{
+			try
+			{
 				var phone = $("#skype_contact_number").val();
-				if(!phone || phone == ""){
+				if (!phone || phone == "")
+				{
 					phone = agile_crm_get_contact_properties_list("phone")[0].value;
 				}
-				if(phone == num){
+				if (phone == num)
+				{
 					getLogsForSkype(num);
 				}
-			}catch(e){
+			}
+			catch (e)
+			{
 			}
 		}
 		else if (message.state == "error")
@@ -399,43 +419,71 @@ function handleCallRequest(message)
 	}
 }
 
-
-//this is to download the jar file....
-$('body').on('click', '#downloadCallJar', function(e)	{
+// this is to download the jar file....
+$('body').on('click', '#downloadCallJar', function(e)
+{
 	e.preventDefault();
 	window.location.href = 'https://s3.amazonaws.com/agilecrm/website/widgetCall.jar';
 });
 
-
-function checkForActiveCall(){
+function checkForActiveCall()
+{
 	var flag = false;
-	try{
+	try
+	{
 		if (Twilio.Device.status() == "busy")
 		{
 			flag = true;
 		}
-	}catch(e){
+	}
+	catch (e)
+	{
 
 	}
-	try{
-		if(globalCall.callStatus != "Ideal"){
+	try
+	{
+		if (globalCall.callStatus != "Ideal")
+		{
 			flag = true;
 		}
-	}catch(e){
-		
 	}
-return flag;
+	catch (e)
+	{
+
+	}
+	return flag;
 }
 
-
-
-function setTimerToCheckDialing(name){
+function setTimerToCheckDialing(name)
+{
 	globalCall.timeObject = setTimeout(function()
 	{
-		if(globalCall.callStatus == "dialing"){
-			 $('#'+name+'CallId').parents("ul").last().remove();
-				resetglobalCallVariables();
-				resetglobalCallForActivityVariables();
+		if (globalCall.callStatus == "dialing")
+		{
+			$('#' + name + 'CallId').parents("ul").last().remove();
+			resetglobalCallVariables();
+			resetglobalCallForActivityVariables();
 		}
 	}, 15000);
+}
+
+/**
+ * It will return the phone and skype phone in array having more than one
+ * contact
+ */
+function getPhoneWithSkypeInArray(items)
+{
+	var va = [];
+	var phone = "phone";
+	var skype = "skypePhone";
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == phone || items[i].name == skype)
+		{
+			// If phone number has value only then add to array
+			if (items[i].value != "" || items[i].value != null)
+				va[va.length] = items[i].value;
+		}
+	}
+	return va;
 }
