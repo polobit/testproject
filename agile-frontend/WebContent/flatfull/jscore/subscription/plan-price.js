@@ -506,6 +506,8 @@ function initializeSubscriptionListeners()
 									  return;
 								$(template_ui).modal('show');
 							}, null);
+						}else if(data.is_allowed_plan){
+							Backbone.history.navigate("purchase-plan", { trigger : true });
 						}else if(data.lines){
 							
 							$.each( JSON.parse(USER_BILLING_PREFS.billingData).subscriptions.data, function( key, value ) {
