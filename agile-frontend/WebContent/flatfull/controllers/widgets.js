@@ -70,10 +70,9 @@ var WidgetsRouter = Backbone.Router
                         sort_collection : false,
                         individual_tag_name : 'div',
                         postRenderCallback : function(el) {
-                            var widgetTab = localStorage.getItem("widget_tab");
+                            var widgetTab = _agile_get_prefs("widget_tab");
                             if(!widgetTab || widgetTab == null) {
-                                if(islocalStorageHasSpace())
-                                   localStorage.setItem('widget_tab', "call-tab");
+                                _agile_set_prefs('widget_tab', "call-tab");
                                 widgetTab = "call-tab";
                             }
                             $('#prefs-tabs-content a[href="#'+widgetTab+'"]').tab('show');
@@ -81,8 +80,7 @@ var WidgetsRouter = Backbone.Router
                             $("#prefs-tabs-content .tab-container ul li").off("click");
                             $("#prefs-tabs-content").on("click",".tab-container ul li",function(){
                                 var temp = $(this).find("a").attr("href").split("#");
-                                if(islocalStorageHasSpace())
-                                    localStorage.setItem('widget_tab', temp[1]);
+                                _agile_set_prefs('widget_tab', temp[1]);
                             });
                             build_custom_widget_form(el);
                             /*setTimeout(function() {
@@ -371,7 +369,7 @@ function renderWidgetView(templateName, url, model, renderEle){
         data : model,
         postRenderCallback : function(el) {
             deserializeWidget(model, el);
-            var widgetTab = localStorage.getItem("widget_tab");
+            var widgetTab = _agile_get_prefs("widget_tab");
             $("#prefs-tabs-content").find('a[href="#'+widgetTab+'"]').closest("li").addClass("active");
             initializeTabListeners("widget_tab", "add-widget");
         }

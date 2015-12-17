@@ -438,8 +438,8 @@ function applyDetailsFromGroupView()
 {
 	console.log("In applyDetailsFromGroupView");
 	
-	var task_criteria_forgroupview = readCookie("task_criteria_forgroupview");
-	var task_owner_forgroupview = readCookie("task_owner_forgroupview");
+	var task_criteria_forgroupview = _agile_get_prefs("task_criteria_forgroupview");
+	var task_owner_forgroupview = _agile_get_prefs("task_owner_forgroupview");
 
 	console.log(task_criteria_forgroupview + " " + task_owner_forgroupview);
 			

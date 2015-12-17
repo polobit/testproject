@@ -729,18 +729,18 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 function save_deal_tab_position_in_cookie(tab_href)
 {
 
-	var position = readCookie(deal_tab_position_cookie_name);
+	var position = _agile_get_prefs(deal_tab_position_cookie_name);
 
 	if (position == tab_href)
 		return;
 
-	createCookie(deal_tab_position_cookie_name, tab_href);
+	_agile_set_prefs(deal_tab_position_cookie_name, tab_href);
 }
 
 function load_deal_tab(el, dealJSON)
 {
 	// timeline_collection_view = null;
-	var position = readCookie(deal_tab_position_cookie_name);
+	var position = _agile_get_prefs(deal_tab_position_cookie_name);
 	if (position)
 	{
 		if (position == "dealactivities")

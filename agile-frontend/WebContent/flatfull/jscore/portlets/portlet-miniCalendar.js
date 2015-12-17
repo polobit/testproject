@@ -13,7 +13,7 @@ var jso=[];
  */
 function minicalendar(el)
 {
-	eraseCookie('current_date_calendar');
+	_agile_delete_prefs('current_date_calendar');
 	init_cal(el);
 	var totalEvents = 0;
 	var eventsCount = 0;
@@ -47,10 +47,10 @@ function minicalendar(el)
 		            		   var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 		            		   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
 		            		   var todayDiv='<div class="show p-t-xs text-md text-center">Today </div><ul class="list"></ul>';
-		            		   if(readCookie('current_date_calendar')!=null)
+		            		   if(_agile_get_prefs('current_date_calendar')!=null)
 		            		   {
 		            			   var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-		            			   var cookie_date=new Date(readCookie('current_date_calendar'));
+		            			   var cookie_date=new Date(_agile_get_prefs('current_date_calendar'));
 		            			   if(cookie_date.getTime()!=todayDate.getTime()){
 		            				   todayDate=cookie_date;
 		            				   endDate=new Date(cookie_date.getFullYear(), cookie_date.getMonth(), cookie_date.getDate(),23,59,59);
@@ -418,7 +418,7 @@ function loadingGoogleEvents(el,startTime,endTime){
 					$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
 				}
 			},5000);
-			eraseCookie('current_date_calendar');
+			_agile_delete_prefs('current_date_calendar');
 		}
 		console.log(response);
 		if (response)
@@ -489,9 +489,9 @@ function googledata(el,response,startTime,endTime)
 			var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 			var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
 
-			if(readCookie('current_date_calendar')!=null)
+			if(_agile_get_prefs('current_date_calendar')!=null)
 			{
-				var cookie_date=new Date(readCookie('current_date_calendar'));
+				var cookie_date=new Date(_agile_get_prefs('current_date_calendar'));
 				todayDate=cookie_date;
 				endDate=new Date(cookie_date.getFullYear(), cookie_date.getMonth(), cookie_date.getDate(),23,59,59);
 
@@ -514,9 +514,9 @@ function googledata(el,response,startTime,endTime)
 					$(el).find('.list').append(event_list);
 			}
 		});
-		eraseCookie('current_date_calendar');
+		_agile_delete_prefs('current_date_calendar');
 		setTimeout(function(){
-			//eraseCookie('current_date_calendar');
+			//_agile_delete_prefs('current_date_calendar');
 			if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
 			{
 				$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');

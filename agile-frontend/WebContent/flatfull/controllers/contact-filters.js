@@ -96,7 +96,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 				})
 			}, saveCallback : function(data)
 			{
-				var filterValue = readCookie('contact_filter');
+				var filterValue = _agile_get_prefs('contact_filter');
 				if (filterValue && filterValue == data.id)
 					CONTACTS_HARD_RELOAD = true;
 			} });
