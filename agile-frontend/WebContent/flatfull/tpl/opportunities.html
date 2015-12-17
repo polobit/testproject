@@ -78,7 +78,7 @@
 			<div class="panel panel-default">
 			<div class="panel-heading">Deals</div>
 			<div class="table-responsive">
-                <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/opportunity/delete" id="deal-list" style="table-layout: auto;">
+                <table class="table table-striped showCheckboxes m-b-none agile-table panel {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/delete" id="deal-list" style="table-layout: auto;">
 					<thead>
                         <tr>
                             <th>Opportunity</th>
