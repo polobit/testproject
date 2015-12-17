@@ -47,6 +47,7 @@ var WorkflowsRouter = Backbone.Router
 			workflows : function()
 			{
 
+
 				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
 					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
 					{
@@ -61,7 +62,25 @@ var WorkflowsRouter = Backbone.Router
 						// If workflows not empty, show triggers
 						if (App_Workflows.workflow_list_view && !(App_Workflows.workflow_list_view.collection.length === 0))
 							show_triggers_of_each_workflow(el);
-
+						
+						if (App_Workflows.workflow_list_view && !(App_Workflows.workflow_list_view.collection.length === 0))
+						{
+								if(App_Workflows.workflow_list_view.collection.toJSON()[0])
+								{
+									el.find('#campaign_logs').attr('href','#email-reports/' + App_Workflows.workflow_list_view.collection.toJSON()[0].id);
+									return;
+								}
+								else
+								{
+									el.find('#campaign_logs').attr('href','#workflows');
+									return;
+								}
+						}
+						else
+						{
+							el.find('#campaign_logs').attr('href','#workflows');
+							return;
+						}
 					}, appendItemCallback : function(el)
 					{
 						$("time.campaign-created-time", el).timeago();
@@ -72,13 +91,12 @@ var WorkflowsRouter = Backbone.Router
 					} });
 
 				this.workflow_list_view.collection.fetch();
-
+			
 				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(this.workflow_list_view.el);
 				// initializeWorkflowsListeners();
 				
 				$(".active").removeClass("active");
 				$("#workflowsmenu").addClass("active");
-
 				
 			},
 
