@@ -141,8 +141,6 @@ public class CSVUtil
 	// Reads the first line
 	String csv = iterator.nextLine();
 
-	System.out.println(csv);
-
 	// Creates csv reader from headings
 	CSVReader reader = new CSVReader(new StringReader(csv.trim()));
 
@@ -280,9 +278,6 @@ public class CSVUtil
 
 	System.out.println(csvData.size());
 
-	System.out.println("available scopes for user " + domainUser.email + ", scopes = "
-		+ accessControl.getCurrentUserScopes());
-
 	// Counters to count number of contacts saved contacts
 	int savedContacts = 0;
 	int mergedContacts = 0;
@@ -326,9 +321,7 @@ public class CSVUtil
 		    {
 			ContactField newField = properties.get(j);
 			field = new ContactField();
-			System.out.println(newField.hashCode());
 			field.updateField(newField);
-			System.out.println("updated object " + field.hashCode());
 		    }
 		    else
 		    {
@@ -516,8 +509,6 @@ public class CSVUtil
 			.println("Checking and merging contacts : " + (System.currentTimeMillis() - startTimeMerging));
 
 		tempContact.bulkActionTracker = bulk_action_tracker;
-
-		System.out.println("email to save : " + tempContact.getContactFieldValue(Contact.EMAIL));
 
 		save(oldContact, tempContact, false);
 
@@ -975,7 +966,6 @@ public class CSVUtil
 
 	for (Object o : status.values())
 	{
-	    System.out.println(o);
 	    if (o.equals("Companies") || o.equals("Contacts"))
 	    {
 		continue;

@@ -130,7 +130,6 @@ public class ContactBulkSave
     private void persistData()
     {
 	Long start = System.currentTimeMillis();
-	System.out.println(contactsMap);
 	// Saves contacts
 
 	List<Contact> contacts = new ArrayList<Contact>(contactsMap.size());
