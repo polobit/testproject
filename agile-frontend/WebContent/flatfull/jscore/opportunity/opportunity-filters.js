@@ -297,7 +297,7 @@ function getDealFilters()
 			}
 		}
 		// Remove the milestone field in the filters if it is milestone view.
-		if (filterJSON && !_agile_get_prefs("agile_deal_view")){
+		if (filterJSON && !_agile_get_prefs("agile_deal_view")){ 
 			var json = filterJSON;
 			//if (!json.pipeline_id)
 			json.pipeline_id = _agile_get_prefs('agile_deal_track');

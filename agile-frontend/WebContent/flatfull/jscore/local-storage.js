@@ -112,6 +112,7 @@ function islocalStorageHasSpace(){
 
 (function($) {
 	clearLocalStorage();
+    releaseAllAgileCookies();
 })(jQuery);
 
 
@@ -138,4 +139,35 @@ function _agile_set_prefs(key, value, days){
 
 function _agile_delete_prefs(key){
         eraseData(key);
+}
+
+// Release all cookies for first time
+function releaseAllAgileCookies(){
+
+    // Get release prefs cookie
+    if(_agile_get_prefs("agileReleasedAllCookies"))
+          return;
+
+    var sessionCookieName = "JSESSIONID";
+
+    // Split document.cookie into array at each ";" and iterate through it
+    var ca = document.cookie.split(';');
+    for ( var i = 0; i < ca.length; i++)
+    {
+        var c = ca[i];
+
+        // Check for ' ' and remove to get string from c
+        while (c.charAt(0) == ' ')
+            c = c.substring(1, c.length);
+
+        // check if nameEQ starts with c, if yes unescape and return its value
+        if (c.indexOf(sessionCookieName) == 0)
+             continue;
+         
+        // Remove from cookie
+        eraseCookie(c);
+    }
+
+    _agile_set_prefs("agileReleasedAllCookies", "done");
+
 }
