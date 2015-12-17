@@ -437,7 +437,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
         <%= workflow.name %>
          <%}%>
 <br/>
-<input type="radio" name="status" value="all" id="all" required checked/> Stop ALL communication from this sender.
+<input type="radio" name="status" value="all" id="all"/> Stop ALL communication from this sender.
 <label for="status" class="error">Please select any one of the options</label>			
 </script>
 
