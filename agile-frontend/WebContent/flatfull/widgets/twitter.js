@@ -1335,6 +1335,13 @@ function startTwitterWidget(contact_id){
 		return;
 	}
 
+	var version = JSON.parse(twitter_widget.prefs).version;	
+	if(version == undefined || version != "v2"){
+	 	$('#widget_load_img').remove();
+	 	$('#Twitter', agile_crm_get_current_view()).html('<div class="wrapper-sm"><a class="link" href="#add-widget">Please reconfigure widget</a></div>');
+	 	return;
+	}
+
 	// Get website URL for Twitter from contact to get profile based on it
 	web_url = agile_crm_get_contact_property_by_subtype('website', 'TWITTER');
 	console.log(web_url);
