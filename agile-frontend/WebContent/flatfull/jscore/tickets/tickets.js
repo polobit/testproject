@@ -528,7 +528,7 @@ var Tickets = {
 				if(assignee_id && assignee_id == CURRENT_AGILE_USER.domainUser.id)
 					$('.assign-to-me').hide();
 				else
-					$('.assign-to-me').hide();
+					$('.assign-to-me').show();
 
 				App_Ticket_Module.ticketView.model.set(model, {silent: true});
 			}}
