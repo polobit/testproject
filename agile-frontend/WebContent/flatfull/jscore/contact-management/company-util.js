@@ -219,7 +219,7 @@
 		
 		//reads the value from cookie or local store if the value is no it will return from here
 		
-		var map_view=localStorage.getItem('MAP_VIEW');
+		var map_view=_agile_get_prefs('MAP_VIEW');
 		if(map_view=="disabled"){
 			$("#map_view_action",el).html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
 			return;
@@ -332,7 +332,7 @@
 	}
 	
 	var updateSelectedSortKey = function(el) {
-		var sort_key = readCookie("company_sort_field");
+		var sort_key = _agile_get_prefs("company_sort_field");
 		if(sort_key && sort_key != null) {
 			var idSuffix = '-asc';
 			if(sort_key.indexOf('-') == 0) {
@@ -374,7 +374,7 @@
 					{
 						var filter_name;
 						// Set saved filter name on dropdown button
-						if (filter_name = readCookie('company_filter'))
+						if (filter_name = _agile_get_prefs('company_filter'))
 						{
 							// If is not system type get the name of the filter from
 							// id(from cookie)
@@ -412,10 +412,8 @@
 	
 	company_list_view.revertToDefaultCompanies = function(){
 		// Erase filter cookie. Erases both contact and company filter
-		//eraseCookie('contact_filter');
-		//eraseCookie('contact_filter_type');
-		eraseCookie('company_filter');
-		eraseData('dynamic_filter');
+		_agile_delete_prefs('company_filter');
+		_agile_delete_prefs('dynamic_filter');
 	
 		if (App_Companies.companiesListView)
 			App_Companies.companiesListView = undefined;

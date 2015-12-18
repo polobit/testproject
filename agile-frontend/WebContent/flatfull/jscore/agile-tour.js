@@ -158,7 +158,7 @@ function start_tour(key, el)
 function initiate_tour(key, el)
 {
 	// Reads cookie which is set in Homeservlet when new user is created
-	var tour_status_cookie = readCookie("agile_tour");
+	var tour_status_cookie = _agile_get_prefs("agile_tour");
 
 	// If cookies is not preset it returns back
 	if (!tour_status_cookie)
@@ -201,7 +201,7 @@ function initiate_tour(key, el)
 
 				if ($.isEmptyObject(tour_status_cookie))
 				{
-					eraseCookie("agile_tour");
+					_agile_delete_prefs("agile_tour");
 					return;
 				}
 
@@ -209,7 +209,7 @@ function initiate_tour(key, el)
 				 * Stringified it twice to maintain consistency with the cookie
 				 * set from backend. Creates JSON with current step removed.
 				 */
-				createCookie("agile_tour", JSON.stringify(JSON.stringify(tour_status_cookie)));
+				_agile_set_prefs("agile_tour", JSON.stringify(JSON.stringify(tour_status_cookie)));
 			} });
 
 			tour.addSteps(Agile_Tour[key]);
@@ -231,7 +231,7 @@ function reinitialize_tour_on_current_route()
 	console.log(tour);
 
 	// Return of tour is already enabled on that route
-	var tour_status_cookie = readCookie("agile_tour");
+	var tour_status_cookie = _agile_get_prefs("agile_tour");
 	var key = Current_Route;
 
 	// If current view is contact details page we cannot initialize
@@ -247,7 +247,7 @@ function reinitialize_tour_on_current_route()
 
 		if (tour_status_cookie[key] == true)
 			return;
-		localStorage.removeItem(key + "-tour_current_step");
+		_agile_delete_prefs(key + "-tour_current_step");
 	}
 
 	else
@@ -259,10 +259,10 @@ function reinitialize_tour_on_current_route()
 	console.log(JSON.stringify(tour_status_cookie));
 
 	// Removes the current step from localstorage, it is set by bootstrap tour
-	localStorage.removeItem(key + "-tour_current_step");
+	_agile_delete_prefs(key + "-tour_current_step");
 
 	// Creates a new tour cookie
-	createCookie("agile_tour", JSON.stringify(JSON.stringify(tour_status_cookie)));
+	_agile_set_prefs("agile_tour", JSON.stringify(JSON.stringify(tour_status_cookie)));
 
 	// Initialize tour
 	initiate_tour(key);

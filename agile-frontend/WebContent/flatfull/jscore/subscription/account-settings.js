@@ -159,6 +159,7 @@ $('#send-cancellation').on('click', '#send-delete-request', function(e) {
 			
 			// Enables Send Email button.
 			enable_send_button($('#send-delete-request'));
+			$("#send-cancellation").modal("hide");
 		});
 		
 	});
