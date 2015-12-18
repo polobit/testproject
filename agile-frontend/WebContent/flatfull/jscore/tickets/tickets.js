@@ -163,6 +163,12 @@ var Tickets = {
 
 					$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
 					
+					var last_model = App_Ticket_Module.ticketsCollection.collection.last().toJSON();
+
+					var count = (last_model.count) ? last_model.count : App_Ticket_Module.ticketsCollection.collection.length;
+					
+					$('.ticket-count-text').html(count + ' tickets found');
+
 					//Initialize click event on each ticket li
 					Tickets.initEvents(App_Ticket_Module.ticketsCollection.el);
 
@@ -280,6 +286,9 @@ var Tickets = {
 
 						popoverFunction = setTimeout(function(){
 
+							if(Current_Ticket_ID)
+								return;
+
 							if (window.innerHeight - $tr.offset().top < 250)
 								top = '-' + $that.find('#ticket-last-notes').height() + 'px'
 
@@ -317,6 +326,9 @@ var Tickets = {
 
 								$('body').append($(template_ui));
 								
+								if(Current_Ticket_ID)
+									return;
+
 								//Get closest div with row class to set left alignment. Table row left doesn't work as table have scrolling.
 								var $closest_div = $that.closest('div.row');
 								var top = 0, left = $closest_div.offset().left + 70 + 'px';
