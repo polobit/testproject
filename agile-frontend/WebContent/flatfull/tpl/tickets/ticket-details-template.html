@@ -2,6 +2,9 @@
 
 </script>
 <script id="ticket-details-template" type="text/html">
+
+{{#get_current_user_prefs this}}{{get_current_user_prefs}}
+
 <div id="contact-dtl" class="app-content-full  h-full dock-view-fixing">
   <div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
     <!-- first column in details view -->
@@ -134,7 +137,9 @@
             <div class="panel panel-default m-t-md">
               <div class="panel-body">
                 <div class="row m-n">
-                  <div class="col-md-12 p-n m-b-xs">Assignee</div>
+                  <div class="col-md-12 p-n m-b-xs">Assignee
+                    <a class="assign-to-me text-info pull-right {{#if_equals current_logged_in_user.id assigneeID}} none {{/if_equals}}" href="javascript:void(0);">Take It</a>
+                  </div>
                   <div class="col-md-12 assignee_name ticket_assignee_name ticket-details-value hover-edit text-xs m-t-xs p-xs b-a" style="border-radius: 2px;">
                     <i class="fa fa-user"></i>&nbsp;
                     {{#if assigneeID}}
@@ -293,7 +298,7 @@
           </div>
           
         <div class="clearfix m-b-lg m-md">
-            <a class="pull-left thumb-sm"><img src="{{assignee.ownerPic}}" class="r-5x" alt="User Image"></a>
+            <a class="pull-left thumb-sm"><img src="{{current_logged_in_user.ownerPic}}" class="r-5x" alt="User Image"></a>
             <div class="m-l-xxl bg-white">
                <div id="send-reply-container">
                </div>

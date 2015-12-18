@@ -33,7 +33,7 @@ var Tickets_Notes = {
 				App_Ticket_Module.notesCollection.render(true);
 
 				// If in time line add event to timeline
-				if($('#notes-collection-container').length > 0){
+				if($('.ticket-timeline-container').length > 0){
 					Ticket_Timeline.render_individual_ticket_timeline()
 				}
 			},
@@ -61,7 +61,7 @@ var Tickets_Notes = {
 				Tickets_Notes.repltBtn('reply');
 
 				// If in time line add event to timeline
-				if($('#notes-collection-container').length > 0){
+				if($('.ticket-timeline-container').length > 0){
 					Ticket_Timeline.render_individual_ticket_timeline()
 				}
 			},

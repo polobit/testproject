@@ -505,6 +505,11 @@ var Tickets = {
 				//Show new group name and assignee name
 				$('.ticket_assignee_name').show();
 
+				if(assignee_id && assignee_id == CURRENT_AGILE_USER.domainUser.id)
+					$('.assign-to-me').hide();
+				else
+					$('.assign-to-me').hide();
+
 				App_Ticket_Module.ticketView.model.set(model, {silent: true});
 			}}
 		);
@@ -678,7 +683,7 @@ var Tickets = {
 			{success: function(model){
 
 					// If in time line add event to timeline
-					if($('#notes-collection-container').length > 0){
+					if($('.ticket-timeline-container').length > 0){
 						Ticket_Timeline.render_individual_ticket_timeline()
 					}
 
@@ -870,7 +875,7 @@ var Tickets = {
 						$(e.target).removeClass("fa-star text-warning").addClass("fa-star-o text-light");
 
 					// If in time line add event to timeline
-					if($('#notes-collection-container').length > 0){
+					if($('.ticket-timeline-container').length > 0){
 						Ticket_Timeline.render_individual_ticket_timeline()
 					}
 
@@ -892,7 +897,7 @@ var Tickets = {
 						$(e.target).removeClass("btn-danger").addClass("btn-default");
 
 					// If in time line add event to timeline
-					if($('#notes-collection-container').length > 0){
+					if($('.ticket-timeline-container').length > 0){
 						Ticket_Timeline.render_individual_ticket_timeline()
 					}
 
