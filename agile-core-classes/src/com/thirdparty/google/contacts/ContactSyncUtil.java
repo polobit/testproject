@@ -104,7 +104,7 @@ public class ContactSyncUtil
 	 * @param prefs
 	 * @return
 	 */
-	public static ContactEntry createContactEntry(Contact contact, GoogleGroupDetails groupEntry, ContactPrefs prefs,boolean contactCreate)
+	public static ContactEntry createContactEntry(Contact contact, GoogleGroupDetails groupEntry, ContactPrefs prefs)
 	{
 		ContactField googleContactfield = contact.getContactFieldByName("Contact type");
 
@@ -125,14 +125,14 @@ public class ContactSyncUtil
 		if (entries.size() > 0)
 		{
 			createContact = entries.get(0);
-			if(contactCreate)
-			{
+//			if(contactCreate)
+//			{
 				//if contact already present in google then we are updating there instead 
 				//of creating.
-				contact.updated_time = System.currentTimeMillis()/1000;
-				contact.update();
-				return null;
-			}
+//				contact.updated_time = System.currentTimeMillis()/1000;
+//				contact.update();
+//				return null;
+//			}
 		}
 		else
 			createContact = new ContactEntry();
