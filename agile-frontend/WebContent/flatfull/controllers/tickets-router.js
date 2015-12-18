@@ -359,6 +359,26 @@ $("#right-pane").html(ticketView.render().el);
 
 				//Initializing event on SLA date picket
 				Tickets.initDateTimePicker($('#datetimepicker', el), Tickets.changeSLA);
+
+				//Initializing type ahead for cc emails
+				agile_type_ahead("cc_email_field", el, tickets_typeahead, function(arg1, arg2){
+
+					arg2 = arg2.split(" ").join("");
+
+					var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
+
+					if(!email || email == 'No email')
+						return;
+
+					$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
+        			$('#cc_email_field').val('');
+        	  		Tickets.updateCCEmails(email, 'add');
+
+				},undefined, undefined, 'core/api/search/');
+
+				// initialize events on cc input
+				Tickets.initCCEmailsListeners();
+				
 			}
 		});
 

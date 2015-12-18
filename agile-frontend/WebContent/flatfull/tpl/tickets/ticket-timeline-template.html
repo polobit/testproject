@@ -1,8 +1,20 @@
 <script id="ticket-timeline-template" type="text/html">
-<div class="ticket-timeline-container bg-light lter m-md">      
+<div class="ticket-timeline-container bg-light lter m-md"> 
+     
     <div class="m-b b-l m-l-md streamline">
 
     	{{#each this}} 
+
+    		{{#get_template "ticket-model-timeline" this}}{{/get_template}}
+
+    	{{/each}}
+
+    </div>
+
+</div>
+
+</script>                    
+<script id="ticket-model-timeline-template" type="text/html">
 
     		{{#is_ticket_reply_activity ticket_activity_type}}
 
@@ -134,6 +146,23 @@
 		                        <span class="first-letter-cap inline-block">{{user.name}}</span>  added a note
 		                    {{/if_equals}}
 
+		                    {{#if_equals ticket_activity_type 'TICKET_MARKED_FAVORITE'}}
+		                        <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as favorite
+		                    {{/if_equals}}
+
+		                    {{#if_equals ticket_activity_type 'TICKET_MARKED_UNFAVORITE'}}
+		                        <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as unfavorite
+		                    {{/if_equals}}
+
+		                    {{#if_equals ticket_activity_type 'TICKET_MARKED_SPAM'}}
+		                        <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as spam
+		                    {{/if_equals}}
+
+		                    {{#if_equals ticket_activity_type 'TICKET_MARKED_UNSPAM'}}
+		                        <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as unspam
+		                    {{/if_equals}}
+
+
 				        </a>
 			            <span class="text-muted m-l-sm pull-right">
 			                <i class="fa fa-clock-o"></i>
@@ -154,11 +183,5 @@
 	        </div>
 
     		{{/is_ticket_reply_activity}}
-
-    	{{/each}}
-
-    </div>
-
-</div>
 
 </script>                    

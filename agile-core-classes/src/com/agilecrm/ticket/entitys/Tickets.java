@@ -1,7 +1,9 @@
 package com.agilecrm.ticket.entitys;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -40,6 +42,7 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class Tickets extends Cursor
 {
+	
 	// Key
 	@Id
 	public Long id;

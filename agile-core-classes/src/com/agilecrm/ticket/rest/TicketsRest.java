@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -865,11 +866,10 @@ public class TicketsRest
 
 			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
 
-			ticket.is_favorite = (ticket.is_favorite != null && ticket.is_favorite) ? false : true;
+			boolean isFavorite = (ticket.is_favorite != null && ticket.is_favorite) ? false : true;
 
-			Tickets.ticketsDao.put(ticket);
+			return TicketsUtil.markFavorite(ticketID, isFavorite);
 
-			return ticket;
 		}
 		catch (Exception e)
 		{
@@ -897,11 +897,42 @@ public class TicketsRest
 
 			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
 
-			ticket.is_spam = (ticket.is_spam != null && ticket.is_spam) ? false : true;
+			boolean isSpam = (ticket.is_spam != null && ticket.is_spam) ? false : true;
 
-			Tickets.ticketsDao.put(ticket);
+			return TicketsUtil.markSpam(ticketID, isSpam);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 
-			return ticket;
+	/**
+	 * Forward ticket
+	 * 
+	 * @param notes
+	 * @return
+	 */
+	@POST
+	@Path("/forward-ticket")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Tickets forwardTicket(@FormParam("ticket_id") Long ticketId, @FormParam("email") String email,
+			@FormParam("html_text") String HTMLcontent)
+	{
+
+		try
+		{
+			if (ticketId == null || email == null || HTMLcontent == null)
+				throw new Exception("Required parameters missing.");
+
+			// Converting html text to plain with jsoup
+			Document doc = Jsoup.parse(HTMLcontent, "UTF-8");
+			String plain_text = new HtmlToPlainText().getPlainText(doc);
+
+			return TicketsUtil.forwardTicket(ticketId, plain_text, email);
 		}
 		catch (Exception e)
 		{
