@@ -5667,6 +5667,9 @@ $(function()
 		case "failed":
 			return "Failed";
 			break;
+		case "missed":
+			return "Call Missed";
+			break;	
 		case "in-progress":
 		case "voicemail":
 			return "Left voicemail";

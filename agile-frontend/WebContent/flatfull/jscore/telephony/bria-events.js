@@ -250,7 +250,7 @@ function _getMessageBria(message, callback){
 		});
 				
 	}else if(state == "connected"){
-		getContactImage(number,"Outgoing",function(contact_Image){
+		getContactImage(number,globalCall.callDirection,function(contact_Image){
 			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>On Call &nbsp;&nbsp;&nbsp; </b>'+'<span id="briaCallId" class="text-xs" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
 			if(callback)
 				callback(message);
@@ -335,7 +335,6 @@ function saveCallNoteBria(){
 	var callId = globalCallForActivity.callId;
 	var duration = globalCallForActivity.duration;
 	var contact;
-	var id;
 	var desc;
 	resetglobalCallForActivityVariables();
 	
@@ -350,12 +349,11 @@ function saveCallNoteBria(){
 	    	if(!responseJson){
 	    		return showNewContactModal(number);
 	    	}
-	    	id = responseJson.id;
-	    	contact = getContact(id);
+	    	contact = responseJson;
 	    	contact_name = getContactName(contact);
 	    	if(callStatus == "Completed"){
 				var el = $('#noteForm');
-			 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ id +'">'+contact_name+'</li>');
+			 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+contact_name+'</li>');
 			 	$("#noteForm #subject").val(noteSub);
 					$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(duration));
 					$("#noteForm").find("#description").focus();

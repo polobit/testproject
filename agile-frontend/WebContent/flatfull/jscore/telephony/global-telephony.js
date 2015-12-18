@@ -31,16 +31,18 @@ function getContactImage(number, type, callback)
 			{
 				if (!currentContact)
 				{
-					return callback("");
+					 callback("");
+					 return;
 				}
 				getTemplate('contact-image', currentContact, undefined, function(image)
 				{
-					if (!image)
+					if (!image){
 						callback("");
+						return;
+					}
 					callback(image);
 				});
 			});
-
 		}
 	}
 

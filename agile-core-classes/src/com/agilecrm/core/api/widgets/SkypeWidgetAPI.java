@@ -55,7 +55,7 @@ public class SkypeWidgetAPI
 
 	    		if (direction.equalsIgnoreCase("Incoming"))
 	    		{
-	    		    ActivityUtil.createLogForCalls("Skype", phone, Call.INBOUND, status.toLowerCase(), duration, contact);
+	    		    ActivityUtil.createLogForCalls("Skype", phone, Call.INBOUND, status.toLowerCase(), duration);
 
 	    		    // Trigger for inbound
 	    		    CallTriggerUtil.executeTriggerForCall(contact,  "Skype", Call.INBOUND, status.toLowerCase(), duration);

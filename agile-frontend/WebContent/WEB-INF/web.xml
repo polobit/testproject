@@ -966,7 +966,6 @@
 	<servlet>
         <servlet-name>InformUserServlet</servlet-name>
         <servlet-class>com.thirdparty.call.InformUserServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
     </servlet>  
  
     <servlet-mapping>

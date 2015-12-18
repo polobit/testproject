@@ -53,9 +53,9 @@ public class BriaWidgetAPI
 	    		    CallTriggerUtil.executeTriggerForCall(contact, "Bria", Call.OUTBOUND, status.toLowerCase(), duration);
 	    		}
 
-	    		if (direction.equalsIgnoreCase("Incoming"))
+	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("Missed"))
 	    		{
-	    		    ActivityUtil.createLogForCalls("Bria", phone, Call.INBOUND, status.toLowerCase(), duration, contact);
+	    		    ActivityUtil.createLogForCalls("Bria", phone, Call.INBOUND, status.toLowerCase(), duration);
 
 	    		    // Trigger for inbound
 	    		    CallTriggerUtil.executeTriggerForCall(contact,  "Bria", Call.INBOUND, status.toLowerCase(), duration);
