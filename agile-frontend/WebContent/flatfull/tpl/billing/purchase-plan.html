@@ -105,7 +105,12 @@
 									Cost : </label>
 								<div class="controls col-sm-6">
 									<span style="font-size: 22px;color: #FA782D;font-weight: bold;">$</span>
-<b style="font-size: 22px;color: #FA782D;">{{cost}}</b>
+									<b class="p-r-xs" style="font-size: 22px;color: #FA782D;">{{cost}}</b>
+									{{#if remainingCost}}{{#if unUsedCost}}
+									<span class="pos-rlt" style="top:-3px;">
+									(<span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Total Amount">${{remainingCost}}</span> - <span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Prorated Amount">${{unUsedCost}}</span>)
+									</span>
+									{{/if}}{{/if}}
 									<p class="help-block m-b-none">
 										{{quantity}} 
 

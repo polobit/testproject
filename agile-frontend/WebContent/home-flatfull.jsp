@@ -331,6 +331,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 %>
 
+ 
  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
  
   <!-- Include bootstrap modal divs-->

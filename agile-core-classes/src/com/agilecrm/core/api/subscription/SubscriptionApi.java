@@ -353,6 +353,25 @@ public class SubscriptionApi {
 	}
 	
 	/**
+	 * Cancels subscription from gateway but never delete {@link Subscription}
+	 * entity
+	 */
+	@Path("/cancel/email")
+	@GET
+	public void cancelEmailSubscription() {
+		try {
+			Subscription subscription = SubscriptionUtil.getSubscription();
+			subscription.cancelEmailSubscription();
+			System.out.println("Cancelled Email Subscription");
+			SubscriptionUtil.deleteEmailSubscription();
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
+	/**
 	 * Cancels trial from gateway
 	 */
 	@Path("/cancel/trial")
@@ -411,6 +430,10 @@ public class SubscriptionApi {
 					json.put("is_more_users", true);
 					json.put("count", count);
 					return json.toString();
+				}else{
+					JSONObject json =  new JSONObject();
+					json.put("is_allowed_plan", true);
+					return json.toString();
 				}
 			}else if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)) {
 				System.out.println("plan upgrade not possible");
@@ -418,10 +441,9 @@ public class SubscriptionApi {
 				String restrictionsJSONString = new Gson().toJson(restrictions);
 				return restrictionsJSONString;
 			}
-			Map<String, Boolean> restrictions = new HashMap<String, Boolean>();
-			restrictions.put("is_allowed_plan", true);
-			String restrictionsJSONString = new Gson().toJson(restrictions);
-			return restrictionsJSONString;
+			Invoice invoice = subscription.getUpcomingInvoice(plan);
+			String invoiceJSONString = new Gson().toJson(invoice);
+			return invoiceJSONString;
 		} catch (Exception e) {
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())

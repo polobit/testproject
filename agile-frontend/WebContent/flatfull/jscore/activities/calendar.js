@@ -20,7 +20,7 @@ function isArray(a)
 function load_events_from_google(callback)
 {
 
-	var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+	var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
 	var agile_event = false;
 	if (eventFilters)
 	{
@@ -73,7 +73,7 @@ function get_google_calendar_prefs(callback)
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
 
 	// Reads existing cookie
-	var _agile_calendar_prefs_cookie = readData(google_calendar_cookie_name);
+	var _agile_calendar_prefs_cookie = _agile_get_prefs(google_calendar_cookie_name);
 
 	// If cookie is not null, then it check it token is still valid; checks
 	// based on expiry time.
@@ -105,7 +105,7 @@ function get_google_calendar_prefs(callback)
 			return;
 
 		// Creates cookie
-		storeData(google_calendar_cookie_name, JSON.stringify(prefs));
+		_agile_set_prefs(google_calendar_cookie_name, JSON.stringify(prefs));
 		return get_google_calendar_event_source(prefs, callback);
 	});
 }
@@ -116,8 +116,8 @@ function get_google_calendar_prefs(callback)
 function erase_google_calendar_prefs_cookie()
 {
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
-	eraseCookie(google_calendar_cookie_name);
-	eraseData(google_calendar_cookie_name);
+	_agile_delete_prefs(google_calendar_cookie_name);
+	_agile_delete_prefs(google_calendar_cookie_name);
 }
 
 function get_calendar_ids_form_prefs(data)
@@ -173,7 +173,7 @@ function showCalendar(users)
 	_init_gcal_options(users);
 	put_thirdparty_calendar_links();
 	
-	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
+	var calendarView = (!_agile_get_prefs('calendarDefaultView')) ? 'month' : _agile_get_prefs('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
 	var contentHeight = 400;
 	if (calendarView == "agendaDay" || calendarView == "agendaWeek")
@@ -205,7 +205,7 @@ function showCalendar(users)
 								{ 	
 									events : function(start, end, callback)
 								{
-									var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+									var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
 									var agile_event_owners = '';
 									if (eventFilters)
 									{
@@ -263,7 +263,7 @@ function showCalendar(users)
 									}
 
 									/*
-									 * if (readCookie('event-filters') &&
+									 * if (_agile_get_prefs('event-filters') &&
 									 * eventFilters.type == 'google') {
 									 * $("#loading_calendar_events").hide();
 									 * return; }
@@ -272,7 +272,7 @@ function showCalendar(users)
 									start_end_array.startTime = start.getTime() / 1000;
 									start_end_array.endTime = end.getTime() / 1000;
 									console.log(start_end_array.startTime+" : "+start_end_array.endTime);
-									createCookie('fullcalendar_start_end_time', JSON.stringify(start_end_array));
+									_agile_set_prefs('fullcalendar_start_end_time', JSON.stringify(start_end_array));
 
 									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
 									
@@ -300,7 +300,7 @@ function showCalendar(users)
 						slotEventOverlap : false,
 						viewDisplay : function(view)
 						{
-							createCookie('calendarDefaultView', view.name, 90);
+							_agile_set_prefs('calendarDefaultView', view.name, 90);
 							$(".fc-agenda-axis").addClass('bg-light lter');
 						},
 						loading : function(bool)
@@ -340,7 +340,7 @@ function showCalendar(users)
 						eventMouseover : function(event, jsEvent, view)
 						{
 
-							calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
+							calendarView = (!_agile_get_prefs('calendarDefaultView')) ? 'month' : _agile_get_prefs('calendarDefaultView');
 							var reletedContacts = '';
 							var meeting_type = '';
 							 	
@@ -758,14 +758,14 @@ function showEventFilters()
 {
 	$('#filter_options').show();
 
-	if (readCookie("agile_calendar_view"))
+	if (_agile_get_prefs("agile_calendar_view"))
 		$('#filter_options .calendar-view').hide();
 	else
 		$('#filter_options .list-view').hide();
 
-	if (readCookie('event-filters'))
+	if (_agile_get_prefs('event-filters'))
 	{
-		var eventFilters = JSON.parse(readCookie('event-filters'));
+		var eventFilters = JSON.parse(_agile_get_prefs('event-filters'));
 		$('#event-owner').val(eventFilters.owner_id);
 		$('#event_type').val(eventFilters.type);
 	}
@@ -799,7 +799,7 @@ function loadDefaultFilters(callback)
 {
 	// Create a cookie with default option, if there is no cookie related to
 	// event filter.
-	if (!readCookie('event-filters'))
+	if (!_agile_get_prefs('event-filters'))
 	{
 		$.getJSON('/core/api/users/agileusers', function(users)
 		{
@@ -812,7 +812,7 @@ function loadDefaultFilters(callback)
 						var json = {};
 						json.owner_id = user.id.toString();
 						json.type = '';
-						createCookie('event-filters', JSON.stringify(json));
+						_agile_set_prefs('event-filters', JSON.stringify(json));
 					}
 				});
 			}

@@ -646,7 +646,7 @@ function loading_img(el){
  *//*function get_stats(email, contact, el)
 {
 	// If there are no web-stats - return
-	if(!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && get_web_stats_count_for_domain() == '0'))
+	if(!(_agile_get_prefs('_agile_jsapi') != null && _agile_get_prefs('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && get_web_stats_count_for_domain() == '0'))
 	{
 		is_mails_fetched = true;
 		is_logs_fetched = false;

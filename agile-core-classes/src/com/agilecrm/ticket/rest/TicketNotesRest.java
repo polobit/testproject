@@ -112,25 +112,38 @@ public class TicketNotesRest
 						ticketUpdatedTime, null, ticketUpdatedTime,
 						(notes.attachments_list != null && notes.attachments_list.size() > 0) ? true : false);
 
+				Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
+
 				if (ticket.status == Status.NEW)
 				{
 					ticket.status = Status.OPEN;
 
-					Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
-
 					ticket.assignee_id = domainUserKey;
 					ticket.assigneeID = domainUserKey.getId();
 
-					// Updating ticket entity
-					Tickets.ticketsDao.put(ticket);
-
-					// updating text search data
-					new TicketsDocument().edit(ticket);
-
 					// Logging status changed activity
-					new TicketActivity(TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id, "NEW",
-							"OPEN", "status").save();
+					new TicketActivity(TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+							Status.NEW.toString(), Status.OPEN.toString(), "status").save();
 				}
+				else
+				{
+					// Check if another assignee is replied to ticket
+					if (ticket.assignee_id != domainUserKey)
+					{
+						// Logging ticket assignee changed activity
+						new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
+								ticket.assigneeID + "", domainUserKey.getId() + "", "assigneeID").save();
+
+						ticket.assignee_id = domainUserKey;
+						ticket.assigneeID = domainUserKey.getId();
+					}
+				}
+
+				// Updating ticket entity
+				Tickets.ticketsDao.put(ticket);
+
+				// updating text search data
+				new TicketsDocument().edit(ticket);
 
 				// Creating new Notes in TicketNotes table
 				ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, ticket.groupID, ticket.assigneeID,
@@ -138,6 +151,10 @@ public class TicketNotesRest
 						notes.note_type, new ArrayList<TicketDocuments>());
 
 				TicketNotesUtil.sendReplyToRequester(ticket);
+
+				// Logging status changed activity
+				new TicketActivity(TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+						Status.OPEN.toString(), Status.PENDING.toString(), "status").save();
 
 				// Logging private notes activity
 				new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id, html_text,

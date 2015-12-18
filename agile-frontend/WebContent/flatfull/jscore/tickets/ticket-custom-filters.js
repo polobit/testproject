@@ -47,6 +47,43 @@ var Ticket_Custom_Filters = {
 			  	$container.html($(template_ui));
 			  	Tickets.initDateTimePicker($('#datetimepicker'), function(){});
 
+			  	var options = [];
+
+			  	//Initializing click event due date dropdown
+			  	$container.off('click');
+			  	$container.on('click','ul.due-date-dropdown li a', function(event){
+
+			  		var $target = $(event.currentTarget);
+			  		$(event.target).blur();
+
+			  		if($target.hasClass("due-date-custom")){
+
+			  			$('input.due-date-input').trigger('click');
+			  			return false;
+			  		}else if($target.hasClass("clear-due-dates")){
+
+			  			options = [];
+			  			$('input.due-date-input').val('');
+			  			$('.due-date-chbx').prop('checked', false);
+
+			  			return false;
+			  		}
+
+			  		var val = $target.attr('data-value'),
+       					$chbx = $target.find('input[type="checkbox"]'), idx;
+
+       				if((idx = options.indexOf(val)) > -1){
+				      options.splice(idx, 1);
+				      setTimeout(function(){$chbx.prop('checked', false)}, 0);
+				   	}else{
+				      options.push(val);
+				      setTimeout(function(){$chbx.prop('checked', true)}, 0);
+				   	}
+					
+					$('input.due-date-input').val(options);
+					return false;
+			  	});
+
 			  	//Initializes chosen dropdown, fetches labels collection and renders selected labels
 			  	Ticket_Labels.fetchCollection(function(labelsCollection){
 

@@ -424,8 +424,7 @@ $(function(){
 	$("#prefs-tabs-content .widgets_inner ul li").off("click");
 	$("#prefs-tabs-content").on("click",".widgets_inner ul li",function(){
 		var temp = $(this).find("a").attr("href").split("#");
-		if(islocalStorageHasSpace())
-			localStorage.setItem('widget_tab', temp[1]);
+		_agile_set_prefs('widget_tab', temp[1]);
 		Backbone.history.navigate('add-widget', { trigger : true });
 	});
 	

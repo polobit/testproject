@@ -217,7 +217,7 @@ var contact_details_tab = {
 			get_web_stats_count_for_domain(function(count){
 
 				// To avoid unnecessary JSAPI count, first verify in cookie
-				if(!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && count == '0'))
+				if(!(_agile_get_prefs('_agile_jsapi') != null && _agile_get_prefs('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && count == '0'))
 				{
 					$('#stats', App_Contacts.contactDetailView.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
 					return;
@@ -533,7 +533,7 @@ function loadAllMailsView(contact_details_tab_scope,has_email_configured,fetched
  */
 function fetch_mailserverurl_from_cookie(model)
 {
-	var cookie_value = readCookie(email_server_type_cookie_name);
+	var cookie_value = _agile_get_prefs(email_server_type_cookie_name);
 	var final_url = "";
 	var cookie_info = [];
 	if(cookie_value)
