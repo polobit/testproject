@@ -228,6 +228,9 @@ public class ContactsSynctoGoogle
 	 * Iterates through each contacts and adds a batch request based on
 	 * whether it is new contact or updated contact
 	 */
+	
+	boolean contactCreate = true;
+	
 	for (int i = 0; i < contacts_list_size; i++)
 	{
 
@@ -235,7 +238,7 @@ public class ContactsSynctoGoogle
 
 	    // Create google supported contact entry based on current contact
 	    // data
-	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs);
+	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs,true);
 
 	    // Check if contact saving should be skipped. It is required if last
 	    // contact is null then to avoid rest of contacts to being saved
