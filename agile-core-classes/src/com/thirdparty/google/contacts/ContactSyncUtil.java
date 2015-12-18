@@ -400,7 +400,7 @@ public class ContactSyncUtil
 		// Creates a query string with emails
 		for (ContactField email : emails)
 		{
-			query_text = query_text + " " + email.value;
+			query_text = " " + email.value;
 		}
 
 		try
