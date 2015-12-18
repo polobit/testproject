@@ -238,7 +238,7 @@ public class ContactsSynctoGoogle
 
 	    // Create google supported contact entry based on current contact
 	    // data
-	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs,true);
+	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs);
 
 	    // Check if contact saving should be skipped. It is required if last
 	    // contact is null then to avoid rest of contacts to being saved
