@@ -1,7 +1,6 @@
 package com.agilecrm.api.stats;
 
 import com.agilecrm.logger.AgileAPILogger;
-import com.agilecrm.threads.ThreadPool;
 import com.thirdparty.Mailgun;
 
 public class APIStats
@@ -89,7 +88,7 @@ public class APIStats
 	if (!isThreadPoolRunning)
 	    return true;
 
-	return ThreadPool.isRunning();
+	return false;
     }
 
     public static void setThreadPoolFlag(boolean flag)
