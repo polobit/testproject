@@ -651,9 +651,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
 	 				templateKey : "ticket-filters",
 	 				individual_tag_name : 'tr',
 	 				slateKey : "no-ticket-filters",
-	 				postRenderCallback : function(el) {
-
-	 				}
+	 				postRenderCallback : function(el) {}
 	 			});
 
 	 			App_Ticket_Module.ticketFiltersCollection.collection.fetch();

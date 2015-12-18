@@ -24,6 +24,7 @@ import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.deferred.CompanyDeleteDeferredTask;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.email.deferred.LastContactedDeferredTask;
@@ -820,6 +821,38 @@ public class ContactUtil
 		.order("-viewed.viewed_time").limit(Integer.parseInt(page_size)).list();
     }
 
+    /**
+     * If contacts are associated with a company, on deletion of company,
+     * referece of company is removed from all its related contacts
+     * 
+     * @param company
+     */
+    public static void removeCompanyReferenceFromContacts(Contact company)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	Key<Contact> companyKey = new Key<Contact>(Contact.class, company.id);
+	searchMap.put("contact_company_key", companyKey);
+	int count = Contact.dao.getCountByProperty(searchMap);
+
+	// If count is 0, then there are no contacts related to it.
+	if (count == 0)
+	    return;
+
+	CompanyDeleteDeferredTask task = new CompanyDeleteDeferredTask(company.name, company.id, NamespaceManager.get());
+	Queue defaultQueue = QueueFactory.getDefaultQueue();
+	defaultQueue.addAsync(TaskOptions.Builder.withPayload(task));
+    }
+
+    public static void removeCompanyReferenceFromBulk(List<Contact> companies)
+    {
+	for (Contact company : companies)
+	{
+	    CompanyDeleteDeferredTask task = new CompanyDeleteDeferredTask(company.name, company.id,
+		    NamespaceManager.get());
+	    task.run();
+	}
+    }
+
     public static void deleteContactsbyList(List<Contact> contacts)
     {
 	for (Contact contact : contacts)
@@ -1242,8 +1275,10 @@ public class ContactUtil
     public static boolean isValidEmail(final String hex)
     {
 
-	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	/*String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";*/
+	
+    String EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
 
 	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 

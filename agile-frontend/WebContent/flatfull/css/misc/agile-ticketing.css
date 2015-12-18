@@ -278,7 +278,14 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
 
  .select-assignee .chosen-container-single>a.chosen-single>div>b {
     margin-top: -1px;
+}
+
+  div.chosen-container > ul.chosen-choices > li{
+  	background-color: white !important;
+    border-radius: 1px !important;
+    box-shadow: 0 1px 1px rgba(90,90,90,0.1) !important;
   }
+
 
   .border-highlight-light {
       border-bottom: dotted 1px #ddd;

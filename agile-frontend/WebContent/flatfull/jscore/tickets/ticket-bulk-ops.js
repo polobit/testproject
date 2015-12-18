@@ -1,11 +1,11 @@
 var Ticket_Bulk_Ops = {
 
-	selected_collection_tickets : false,
 	selected_all_filter_tickets : false,
 	selected_ticket_ids : new Array(),
 	initEvents: function(){
 
 		var $el = $('.tickets-div');
+		$el.off('change').off('click');
 
 		/**
 		 * Initializing click event on top ticket checkbox
@@ -42,9 +42,24 @@ var Ticket_Bulk_Ops = {
 
 			Ticket_Bulk_Ops.renderTemplate('delete-tickets');
 		});
+
+		/**
+		 * Initializing click event on bulk action delete tickets
+		 */
+		$el.on('click', "a#select-all-tickets", function(e){
+			e.preventDefault();
+
+			Ticket_Bulk_Ops.selected_all_filter_tickets = true;
+
+			//Check all tickets
+			$('.ticket-checkbox').prop('checked', true);
+
+			//Rendering suggestion text
+			$('#tickets-bulk-select').html(getTemplate('ticket-bulk-ops-text', {total_tickets_selected : true}));
+		});
 	},
 
-	checkAllTickets: function($el){
+	checkAllTickets: function(){
 
 		//Iterating through all ticket checkboxes
 		$('.each-ticket.ticket-checkbox').each(function(){
@@ -65,7 +80,6 @@ var Ticket_Bulk_Ops = {
 		//Show bulk actions and hide ticket filters dropdown
 		$('.bulk-action-btn').removeClass('disabled');
 
-		Ticket_Bulk_Ops.selected_collection_tickets = true;
 		Ticket_Bulk_Ops.showText();
 	},
 
@@ -74,48 +88,42 @@ var Ticket_Bulk_Ops = {
 		//Unchecking all tickets
 		$('.ticket-checkbox').prop('checked', false);
 
-		//Hiding bulk action button group
+		//disabling bulk action button group
 		$('.bulk-action-btn').addClass('disabled');
 		$('#tickets-bulk-select').html('');
-
-		//Hiding suggestion text
-		//$('#tickets-bulk-select').html('');
+		Ticket_Bulk_Ops.selected_all_filter_tickets = false;
 
 		//Initializing tickets array to empty
 		Ticket_Bulk_Ops.selected_ticket_ids = [];
-
-		//Set selected all tickets to false
-		Ticket_Bulk_Ops.selected_collection_tickets = false;
 	},
 
 	showText: function(){
 
 		var selected_tickets_count = Ticket_Bulk_Ops.selected_ticket_ids.length;
-		var collection_count = App_Ticket_Module.ticketsCollection.collection.length;
 
 		//Checking if total selected tickets count is equal to tickets collection
-		if(selected_tickets_count == collection_count){
-			$('.ticket-checkbox.select-all').prop('checked', true);
-
+		if(selected_tickets_count > 0){
 			var total_tickets_count = Tickets_Count.ticketsCount[Ticket_Filter_ID];
 
-			if(collection_count == total_tickets_count)
-				total_tickets_count = 0;
+			var json = {};
 
+			if(selected_tickets_count == total_tickets_count){
+				Ticket_Bulk_Ops.selected_all_filter_tickets = true;
+				$('.ticket-checkbox.select-all').prop('checked', true);
+				json.total_tickets_selected = true;
+			}
+			else{
+				Ticket_Bulk_Ops.selected_all_filter_tickets = false;
+				$('.ticket-checkbox.select-all').prop('checked', false);
+				json.total_tickets_count = total_tickets_count;
+			}
+
+			$('.bulk-action-btn').removeClass('disabled');
+			
 			//Rendering suggestion text
-			$('#tickets-bulk-select').html(getTemplate('ticket-bulk-ops-text', 
-				{selected_tickets_count: collection_count, total_tickets_count : total_tickets_count}));
+			$('#tickets-bulk-select').html(getTemplate('ticket-bulk-ops-text', json));
 		}else{
-
-			$('.ticket-checkbox.select-all').prop('checked', false);
-			$('#tickets-bulk-select').html('');
-
-			if(selected_tickets_count == 0){
-				
-				$('.bulk-action-btn').addClass('disabled');
-			}else{
-				$('.bulk-action-btn').removeClass('disabled');
-			}	
+			Ticket_Bulk_Ops.clearSelection();
 		}
 	},
 

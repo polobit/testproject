@@ -360,6 +360,9 @@ function initializePortletsListeners() {
 													model.color = "#36C";
 												else
 													model.color = "green";
+
+												$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+												
 												// Deserialize
 												deserializeForm(
 														model,
@@ -490,7 +493,7 @@ function initializePortletsListeners() {
 								.trim();
 				App_Portlets.currentPortletName = 'Mini Calendar';
 				var start = new Date(parseInt($(this).attr('id')));
-				$('#activityModal').modal('show');
+				$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 				highlight_event();
 
 				// Set Date for Event
@@ -675,6 +678,8 @@ function initializePortletsListeners() {
 							if (isNaN(id))
 								return;
 
+							$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+       
 							// Deserialize
 							deserializeForm(model.toJSON(),
 									$("#updateActivityForm"));
@@ -853,24 +858,24 @@ function initializeAddPortletsListeners() {
 						var image;
 						var placement = "right";
 						var image_url_json = {
-							"FilterBased" : "flatfull/img/dashboard_images/My-contacts.png",
-							"EmailsOpened" : "flatfull/img/dashboard_images/Email-opened.png",
-							"GrowthGraph" : "flatfull/img/dashboard_images/Tag-Graph.png",
-							"PendingDeals" : "flatfull/img/dashboard_images/Pending-Deals.png",
-							"DealsByMilestone" : "flatfull/img/dashboard_images/Milestone.png",
-							"DealsFunnel" : "flatfull/img/dashboard_images/Deals-Funnel.png",
-							"Agenda" : "flatfull/img/dashboard_images/Events.png",
-							"TodayTasks" : "flatfull/img/dashboard_images/Task.png",
-							"CallsPerPerson" : "flatfull/img/dashboard_images/Calls.png",
-							"AgileCRMBlog" : "flatfull/img/dashboard_images/Agile-Blog.png",
-							"TaskReport" : "flatfull/img/dashboard_images/Task-report.png",
-							"StatsReport" : "flatfull/img/dashboard_images/stats.png",
-							"Leaderboard" : "flatfull/img/dashboard_images/Leaderboard.png",
-							"RevenueGraph" : "flatfull/img/dashboard_images/Revenue-graph.png",
-							"AccountDetails" : "flatfull/img/dashboard_images/account-information.png",
-							"MiniCalendar" : "flatfull/img/dashboard_images/Mini-Calendar.jpg",
-							"UserActivities" : "flatfull/img/dashboard_images/User-Activities.png",
-							"Campaignstats" : "flatfull/img/dashboard_images/Campaign-stats.jpg"
+							"FilterBased" : updateImageS3Path("flatfull/img/dashboard_images/My-contacts.png"),
+							"EmailsOpened" : updateImageS3Path("flatfull/img/dashboard_images/Email-opened.png"),
+							"GrowthGraph" : updateImageS3Path("flatfull/img/dashboard_images/Tag-Graph.png"),
+							"PendingDeals" : updateImageS3Path("flatfull/img/dashboard_images/Pending-Deals.png"),
+							"DealsByMilestone" : updateImageS3Path("flatfull/img/dashboard_images/Milestone.png"),
+							"DealsFunnel" : updateImageS3Path("flatfull/img/dashboard_images/Deals-Funnel.png"),
+							"Agenda" : updateImageS3Path("flatfull/img/dashboard_images/Events.png"),
+							"TodayTasks" : updateImageS3Path("flatfull/img/dashboard_images/Task.png"),
+							"CallsPerPerson" : updateImageS3Path("flatfull/img/dashboard_images/Calls.png"),
+							"AgileCRMBlog" : updateImageS3Path("flatfull/img/dashboard_images/Agile-Blog.png"),
+							"TaskReport" : updateImageS3Path("flatfull/img/dashboard_images/Task-report.png"),
+							"StatsReport" : updateImageS3Path("flatfull/img/dashboard_images/stats.png"),
+							"Leaderboard" : updateImageS3Path("flatfull/img/dashboard_images/Leaderboard.png"),
+							"RevenueGraph" : updateImageS3Path("flatfull/img/dashboard_images/Revenue-graph.png"),
+							"AccountDetails" : updateImageS3Path("flatfull/img/dashboard_images/account-information.png"),
+							"MiniCalendar" : updateImageS3Path("flatfull/img/dashboard_images/Mini-Calendar.jpg"),
+							"UserActivities" : updateImageS3Path("flatfull/img/dashboard_images/User-Activities.png"),
+							"Campaignstats" : updateImageS3Path("flatfull/img/dashboard_images/Campaign-stats.jpg")
 						};
 						var placements_json = {
 							"GrowthGraph" : "left",
@@ -910,7 +915,7 @@ function initializeAddPortletsListeners() {
 				clickfunction($(this),url,forAll);
 			});
 	$('#portlets-add-listener').on(
-			"click",
+			"click touchstart",
 			'.add_to_all',
 			function() {
 				var forAll=true;

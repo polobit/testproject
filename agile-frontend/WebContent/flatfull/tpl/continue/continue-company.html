@@ -4,12 +4,12 @@
 </div>
 <div class="wrapper-md">
     <div class="row">
-	 <div class="col-md-8">
-      <div class="panel wrapper">
+	 <div class="col-md-8 col-md-offset-2">
+      <div class="panel wrapper-lg b bg-white">
         <form id="continueCompanyForm" class="form-horizontal">
             <fieldset>                
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Organization</label>
+                    <label class="control-label col-sm-3">Company <span class="field_req">*</span></label>
                     <div class="controls col-sm-9">                     
                         <input name="name" type="text" class="required form-control field_length" max_len="100" id="company_name" value="{{getPropertyValue properties "name"}}"/>
                     </div>
@@ -28,90 +28,108 @@
                     </div>
                 </div>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Url</label>
+                    <label class="control-label col-sm-3">URL</label>
                     <div class="controls col-sm-9">
                         <input class="form-control field_length" max_len="500" name="url" placeholder="http://www." type="text" id="company_url" value="{{getPropertyValue properties "url"}}"/>
                     </div>
                 </div>
 				 {{show_custom_fields custom_fields properties}}
-                <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Add Email <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
-                    <div class="controls col-sm-9 pull-right hide">
-                        <div class="email multiple-template" data="email">
-							<div style="display:inline-table; width:210px; ">
-								<input type="text" id="email" class="email form-control inline-block field_length" max_len="500" name="email" placeholder="Email" />
+                <div class="control-group form-group addField">
+                    <label class="control-label col-sm-3">Add Email <span><a href="#" class="multiple-add"><i class="fa fa-plus m-l-xs"></i></a></span></label>
+                    <div class="controls col-sm-9  hide">
+                        <div class="email multiple-template m-t-sm" data="email">
+
+							<div class="pull-left w-half">
+							<input type="text" id="email" class="email form-control field_length" max_len="500" name="email" placeholder="Email" />
+
 							</div>
-							<div style="display:inline-table; ">
-                            	<select class="email-select form-control inline-block m-b-sm" name="email-select" style="width:100px">
+							<div class="pull-left w-half">
+                <select class="email-select form-control inline-block m-l-sm" name="email-select" style="width:calc(100% - 32px);">
                                 	<option></option>
                                 	<option value="primary">Primary</option>
                                 	<option value="alternate">Alternate</option>
                             	</select>
-								&nbsp;
-                            	<a href="#" class="multiple-remove"><i class="icon-remove-circle"></i></a>
+								
+                            	<a href="#" class="multiple-remove m-l-xs"><i class="fa fa-remove"></i></a>
                         	</div>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
-                    <div class="controls col-sm-9 second pull-right">
-                        <div class="email multiple-template" data="email">
-                            <div style="display:inline-table; width:210px; ">
-								<input type="text" id="email" class="email form-control inline-block field_length" max_len="500" name="email" placeholder="Email" />
+                    <div class="controls col-sm-9 second">
+                        <div class="email multiple-template m-t-sm" data="email">
+
+                            <div class="pull-left w-half">
+			<input type="text" id="email" class="email form-control field_length" name="email" max_len="500" placeholder="Email" />
+
 							</div>
-							<div style="display:inline-table; ">
-                            	<select class="email-select form-control inline-block m-b-sm" name="email-select" style="width:100px">
+							<div class="pull-left w-half">
+            <select class="email-select form-control inline-block m-l-sm" name="email-select" style="width:calc(100% - 32px);">
                                 	<option></option>
                                 	<option value="primary">Primary</option>
                                 	<option value="alternate">Alternate</option>
                             	</select>
-								&nbsp;
-                            	<a href="#" class="multiple-remove"><i class="icon-remove-circle"></i></a>
+							
+                            	<a href="#" class="multiple-remove m-l-xs"><i class="fa fa-remove"></i></a>
                         	</div>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
-                <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Add Phone <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
-                    <div class="controls col-sm-9 hide pull-right">
-                        <div class="phone multiple-template" data="phone">
-						    <div style="display:inline-table;">
+                <div class="control-group form-group addField">
+                    <label class="control-label col-sm-3">Add Phone <span><a href="#" class="multiple-add"><i class="fa fa-plus m-l-xs"></i></a></span></label>
+                    <div class="controls col-sm-9  hide ">
+                        <div class="phone multiple-template m-t-sm" data="phone">
+
+						    <div class="pull-left w-half">
                             	<input class="form-control inline-block field_length" max_len="500" type="text" id="phone" name="phone" placeholder="Phone number" />
+
 						    </div>
-                            <select class="phone-select form-control inline-block m-b-sm" name="phone-select" style="width:100px">
+                            <div class="pull-left w-half">
+                 <select class="phone-select form-control inline-block m-l-sm" name="phone-select" style="width:calc(100% - 32px);">
                                 <option></option>
                                 <option value="primary">Primary</option>
                                 <option value="alternate">Alternate</option>
                                 <option value="fax">Fax</option>
                                 <option value="other">Other</option>
                             </select>
-                            <a href="#" class="multiple-remove"><i class="icon-remove-circle"></i></a>
+                            <a href="#" class="multiple-remove"><i class="fa fa-remove m-l-xs"></i></a>
+                        </div>
+                        <div class="clearfix"></div>
                         </div>
                     </div>
-                    <div class="controls col-sm-9 second pull-right">
-                        <div class="phone multiple-template" data="phone">
-							<div style="display:inline-table;">
-                            	<input class="form-control inline-block field_length" max_len="500" type="text" id="phone" name="phone" placeholder="Phone number" />
+                    <div class="controls col-sm-9 second">
+                        <div class="phone multiple-template m-t-sm" data="phone">
+
+							<div class="pull-left w-half">
+            <input class="form-control inline-block field_length" max_len="500" type="text" id="phone" name="phone" placeholder="Phone number" />
+
 							</div>
-                            <select class="phone-select form-control inline-block m-b-sm" name="phone-select" style="width:100px">
+                            <div class="pull-left w-half">
+                <select class="phone-select form-control inline-block m-l-sm" name="phone-select" style="width:calc(100% - 32px);">
                                <option></option>
                                 <option value="primary">Primary</option>
                                 <option value="alternate">Alternate</option>
                                 <option value="fax">Fax</option>
                                 <option value="other">Other</option>
                             </select>
-                            <a href="#" class="multiple-remove"><i class="icon-remove-circle"></i></a>
+                            <a href="#" class="multiple-remove"><i class="fa fa-remove m-l-xs"></i></a>
+                        </div>
+                        <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
                 <!-- End of phone template -->
-                <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Website <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
-                    <div class="controls col-sm-9 hide pull-right">
-                        <div class="website multiple-template style=" display:none" data="website">
-                            <div style="display:inline-table;">
-                                <input class="form-control inline-block field_length" max_len="500" type="text" id="website" name="website"  placeholder="Website" />
+                <div class="control-group form-group addField">
+
+                    <label class="control-label col-sm-3">Website <span><a href="#" class="multiple-add"><i class="fa fa-plus m-l-xs"></i></a></span></label>
+                    <div class="controls col-sm-9  hide">
+                        <div class="m-t-sm website multiple-template style=" display:none" data="website">
+                        <div class="pull-left w-half">
+                            <input class="form-control inline-block field_length"  max_len="500" type="text" id="website" name="website"  placeholder="Website" /> 
                             </div>
-                             
-                            <select class="website-select form-control inline-block m-b-sm" name="website-select" style="width:100px">
+                        <div class="pull-left w-half">    
+            <select class="website-select form-control inline-block m-l-sm" name="website-select" style="width:calc(100% - 32px);">
+
                                 <option></option>
                                 <option value="URL">Website</option>
                                 <option value="SKYPE">Skype</option>
@@ -125,15 +143,20 @@
                                 <option value="GITHUB">GitHub</option>
                                 <option value="YOUTUBE">YouTube</option>
                             </select>
-                            &nbsp;<a href="#" class="multiple-remove"><i class="icon-remove-circle"></i></a>
+                <a href="#" class="multiple-remove m-l-xs"><i class="fa fa-remove"></i></a>
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
-                    <div class="controls col-sm-9 second pull-right">
-                        <div class="website multiple-template style=" display:none" data="website">
-                            <div style="display:inline-table;">
-                            	<input class="form-control inline-block field_length" max_len="500" type="text" id="website" name="website" placeholder="Website" /> 
+
+                    <div class="controls col-sm-9 second">
+                        <div class="website multiple-template m-t-sm"  data="website">
+                        <div class="pull-left w-half">
+                            <input class="form-control field_length" max_len="500" type="text" id="website"  name="website" placeholder="Website" />
                             </div>
-                            <select class="website-select form-control inline-block m-b-sm" name="website-select" style="width:100px">
+                            <div class="pull-left w-half"> 
+         <select class="website-select form-control m-l-sm inline-block" name="website-select" style="width:calc(100% - 32px);">
+
                                 <option></option>
                                 <option value="URL">Website</option>
                                 <option value="SKYPE">Skype</option>
@@ -147,28 +170,36 @@
                                 <option value="GITHUB">GitHub</option>
                                 <option value="YOUTUBE">YouTube</option>
                             </select>
-                            &nbsp;<a href="#" class="multiple-remove"><i class="icon-remove-circle"></i></a>
+                        <a href="#" class="multiple-remove m-l-xs"><i class="fa fa-remove"></i></a>
                         </div>
+                        <div class="clearfix"></div>
                     </div>
                 </div>
+            </div>
                 <!-- End of website template -->
                 <div class="control-group form-group second">
                     <label class="control-label col-sm-3">Add Address</label>
                     <div class="controls col-sm-9">
                         <div class="address multiple-template" data="address">
-							<div style="display:inline-table;">
-                            	<input class="form-control inline-block field_length" max_len="350" type="text" name="address" id="address" placeholder="address" />
+
+							<div class="pull-left w-half">
+                        <input class="form-control field_length" max_len="350" type="text" name="address" id="address" placeholder="Address" />
+
 							</div> 
-                            <select class="address-type form-control inline-block m-b-sm" name="address-type" style="width:100px">
+                            <div class="pull-left  w-half">
+                            <select class="address-type form-control inline-block m-l-sm" name="address-type" style="width:calc(100% - 32px);">
                                 <option></option>
                                 <option value="home">Home</option>
                                 <option value="postal">Postal</option>
                                 <option value="office">Office</option>
                             </select>
-                            <br />
-                            <input class="form-control field_length" max_len="30" type="text" name="city" id="city" placeholder="city" /> <br />
-                            <input class="form-control field_length" max_len="30" type="text" name="state" id="state" placeholder="state" /> <br />
-                            <input class="form-control field_length" max_len="12" type="text" name="zip" id="zip" placeholder="zip" /><br /> 
+                            </div>
+                            <div class="clearfix m-b-sm"></div>
+                            
+                            <input class="form-control m-b-sm field_length" max_len="30" type="text" name="city" id="city" placeholder="City" />
+                            <input class="form-control m-b-sm field_length"  max_len="30" type="text" name="state" id="state" placeholder="State" /> 
+                            <input class="form-control m-b-sm field_length" max_len="12"  type="text" name="zip" id="zip" placeholder="ZIP" />
+
                             <select class="styled form-control inline-block m-b-sm" id="country" name="country">
                                 <option value=""></option>
                                 <option value="AF">Afghanistan</option>
@@ -422,10 +453,11 @@
                 </div>
                 <input type="text" name="id" class="hide form-control" value="{{id}}" />
                 <input type="text" name="type" class="hide form-control" value="COMPANY" />
+                <div class="line  b-b line-lg"></div>
                 <div class="form-actions">
 				<div class="row">
 	            	<div class="controls col-sm-9 pull-right">
-						<a onclick="history.back();" class="btn btn-sm btn-default">Close</a>
+						<a onclick="history.back();" class="btn btn-sm btn-default m-r-xs">Close</a>
                     	<a href="#" type="submit" class="save btn-sm btn btn-primary" id="company-update">Update</a>
 						<span class="form-action-error"></span>
                     	<span class="save-status"></span>

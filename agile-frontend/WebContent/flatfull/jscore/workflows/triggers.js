@@ -468,12 +468,16 @@ function initializeTriggerEventListners()
 function initializeTriggerListEventListners(id,trigger_type)
 {
 
-	$('#trigger-selector').on('click', '#trigger-cancel', function(e)
+	$('#trigger-selector, #trigger-edit-selector').on('click', '#trigger-cancel', function(e)
  	{
 		e.preventDefault();
 
-		if (history !== undefined)
+		if (!history)
+			   return;
+
+		if($(this).closest("#trigger-edit-selector").length == 0)
 			Backbone.history.loadUrl();
+		else history.back(-1);
 	});
 
 

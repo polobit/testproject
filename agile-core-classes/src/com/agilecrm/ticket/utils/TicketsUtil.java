@@ -214,8 +214,6 @@ public class TicketsUtil
 
 			Key<Tickets> key = Tickets.ticketsDao.put(ticket);
 
-			ticket.short_id = getTicketShortID(key.getId()) + "";
-
 			/**
 			 * Checking if new ticket requester is exists in Contacts
 			 */
@@ -226,14 +224,15 @@ public class TicketsUtil
 
 			ticket.contact_key = new Key<Contact>(Contact.class, contact.id);
 			ticket.contactID = contact.id;
-
-			Tickets.ticketsDao.put(ticket);
+			
+			ticket.save();
+			//Tickets.ticketsDao.put(ticket);
 
 			// Create search document
 			new TicketsDocument().add(ticket);
 
 			// Logging ticket created activity
-			new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "", "", "").save();
+			new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "", plain_text, "last_reply_text").save();
 
 			// Execute triggers
 			TicketTriggerUtil.executeTriggerForNewTicket(ticket);

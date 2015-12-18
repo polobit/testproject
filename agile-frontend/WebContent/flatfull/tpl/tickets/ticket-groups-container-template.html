@@ -8,31 +8,36 @@
 	    	<div class="btn-group dropdown m-l-none" style="float: none;">
 	    		<button class="btn btn-sm no-shadow p-n b-n bg-transparent" data-toggle="dropdown" 
 					style="font-size: 11px; color: rgb(88, 102, 110);">
-					Sort by <span class="p-r-xs" style="color: #0b1014;">Last updated time</span>
+					Sort by <span class="p-r-xs sort-field-txt" style="color: #0b1014;">Last updated time</span>
 				</button>
 				<button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none" data-toggle="dropdown" aria-expanded="false" style="padding-left: 5px;">
 					<span class="caret"></span>
 				</button>
 			    <ul class="dropdown-menu">
 			    	<li>
-			    		<a class="sort-link sort-by sort-by-desc" href="javascript:void(0);" data-sort-key="		last_updated_time">Updated time <i class="fa fa-check pull-right txt-small m-t-xs"></i> 
+			    		<a class="sort-link sort-field" href="javascript:void(0);" data-sort-key="last_updated_time">Updated time <i class="fa fa-check pull-right txt-small m-t-xs sort-field-check"></i> 
 		    			</a>
 		    		</li>
 			    	<li>
-			    		<a class="sort-by" href="javascript:void(0);" data-sort-key="created_time">
-				    		Created time
+			    		<a class="sort-field" href="javascript:void(0);" data-sort-key="created_time">
+				    		Created time <i class="fa fa-check pull-right txt-small m-t-xs display-none sort-field-check"></i> 
 				    	</a>
 				    </li>
 			    	<li>
-			    		<a class="sort-by" href="javascript:void(0);" data-sort-key="priority_code">
-				    		Priority
+			    		<a class="sort-field" href="javascript:void(0);" data-sort-key="priority_code">
+				    		Priority <i class="fa fa-check pull-right txt-small m-t-xs display-none sort-field-check"></i> 
+				    	</a>
+			    	</li>
+			    	<li>
+			    		<a class="sort-field" href="javascript:void(0);" data-sort-key="due_date">
+				    		Due Date <i class="fa fa-check pull-right txt-small m-t-xs display-none sort-field-check"></i> 
 				    	</a>
 			    	</li>
 			    	<li class="divider"></li>
 			    	<li>
-			    		<a class="sort-by sort-by-desc" href="javascript:void(0);">Descending <i class="fa fa-check pull-right txt-small m-t-xs"></i> </a>
+			    		<a class="sort-by" data-sort-by="-" href="javascript:void(0);">Descending <i class="fa fa-check pull-right txt-small m-t-xs sort-by-check"></i> </a>
 			    	</li>
-			    	<li><a class="sort-by sort-by-asc" href="javascript:void(0);">Ascending</a></li>
+			    	<li><a class="sort-by"  data-sort-by="" href="javascript:void(0);">Ascending <i class="fa fa-check pull-right txt-small m-t-xs sort-by-check display-none"></i> </a></li>
 				</ul>
 	    	</div>
 	    	<span class="pull-right ticket-count-text"></span>
@@ -58,9 +63,10 @@
 </div>
 </script>
 <script id="ticket-bulk-ops-text-template" type="text/html">
-Selected {{selected_tickets_count}} tickets.
-{{#if total_tickets_count}}
-	<a id="select-all-available-contacts" class="c-p text-info" href="javascript:void(0);">
+{{#if total_tickets_selected}}
+	Selected all tickets
+{{else}}
+	<a id="select-all-tickets" class="c-p text-info link-color" href="javascript:void(0);">
 		Select all {{total_tickets_count}} tickets
 	</a>
 {{/if}}

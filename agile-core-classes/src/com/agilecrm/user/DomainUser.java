@@ -225,6 +225,11 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public static final String CITY = "city";
 	public static final String LAT_LONG = "lat_long";
 	public static final String IP_ADDRESS = "ip_address";
+	
+	/**
+	 * Is form db updated 
+	 */
+	public boolean is_forms_updated = false;
 
 	/** Helpdesk settings */
 
@@ -548,7 +553,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 				sendNotification();
 			}
 
-			sendPasswordChangedNotification(domainUser.encrypted_password);
+			//sendPasswordChangedNotification(domainUser.encrypted_password);
 		}
 		else if (id != null && !is_account_owner)
 		{

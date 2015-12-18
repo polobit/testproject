@@ -33,7 +33,7 @@
 	<div class="panel-body">
 		<div class="form-horizontal">
           <div class="p-t-lg text-center m-b">
- <img src="/flatfull/img/free-plan.png" height="110" width="115">
+ <img src="{{getS3ImagePath '/flatfull/img/free-plan.png'}}" height="110" width="115">
                         </div>
 
 		{{#check_plan "FREE"}}
@@ -92,7 +92,7 @@
 {{#stringToJSON this "billingData"}}{{/stringToJSON}}
 {{#if billingData}}
  <div class="p-t-lg text-center m-b">
-                           <img src="/flatfull/img/credit-card.png" height="110" width="115">
+                           <img src="{{getS3ImagePath '/flatfull/img/credit-card.png'}}" height="110" width="115">
                         </div>
 	<div class="card-details">
 <div class="control-group p-b-md p-t-xs"></div>
@@ -111,7 +111,7 @@
 </div>
 {{else}}
  <div class="p-t-lg text-center m-b">
-                           <img src="/flatfull/img/no-credit-card.png" height="110" width="115">
+                           <img src="{{getS3ImagePath '/flatfull/img/no-credit-card.png'}}" height="110" width="115">
                         </div>
 <div class="p-b p-t-md">
 <div style="width: 100%; text-align: center;">
@@ -200,18 +200,19 @@ You can upgrade your account at any time.
 					<div class="control-group form-group">
 						<label class="control-label col-sm-3">Expiry<span class="field_req">*</span></label>
 						<div class="controls col-sm-6">
-							<select name="exp_month" id="exp_month" class="input form-control exp_month inline-block m-r" style="width: 48%;" placeholder="Expiry Month"></select>
-							 <select name="exp_year" id="exp_year" class="input required form-control digits exp_year atleastThreeMonths inline-block" style="width: 47%;" placeholder="Expiry Year"></select>
+							<select name="exp_month" id="exp_month" class="input form-control exp_month inline-block" style="width: 50%;" placeholder="Expiry Month"></select>
+							<select name="exp_year" id="exp_year" class="input required form-control  digits  exp_year atleastThreeMonths inline-block" style="width: 49%;" placeholder="Expiry Year"></select>
 						</div>
 					</div>
 				
 				<div class="control-group form-group">
-					<label class="control-label col-sm-3">CVC<span class="field_req">*</span></label>
-					<div class="controls col-sm-6" style="width: 42%;">
-						<input type="text" name="cvc" class="input required  digits form-control" placeholder="Card Security Code">
-
+					<label class="control-label col-sm-3 col-xs-12">CVC<span class="field_req">*</span></label>
+					<div class="controls col-sm-6 col-xs-12">
+<input type="text" name="cvc" class="input required  digits form-control pull-left" placeholder="Card Security Code" style="width: calc(100% - 75px);">
+ <img src="{{getS3ImagePath '/flatfull/img/cvc.png'}}" class="pull-left m-l-sm" style="width: 60px;">
+<div class="clearfix"></div>
 					</div>
- <img src="/flatfull/img/cvc.png" style="width: 60px;">
+
 				</div>
 
 				<div class="control-group form-group">

@@ -60,7 +60,7 @@ function enableKeyboardShotcuts()
 		// New event
 		Mousetrap.bind('shift+v',function(){
 			if(!isModalVisible()){
-				$('#activityModal').modal('show'); 
+				$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 				highlight_event();
 			}
 		});
@@ -186,7 +186,7 @@ function enableKeyboardShotcuts()
 				showTaskModal("");
 			else if(isRoute('calendar'))
 				{
-				  $('#activityModal').modal('show');
+				  $('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 				  highlight_event();
 				}
 		});

@@ -158,13 +158,15 @@ function widgetBindingsLoader(){
 		if (is_collapsed)
 		{
 			$("#" + widget_name).collapse('show');
-		}else{
+		}else{			
 			queueGetRequest("_widgets_", "flatfull/"+widget.get('url'), "script", function(data, queueName){
 					try{
 					console.log("start" + model.get('name') + "Widget");
 					  eval("start" + model.get('name') + "Widget")(queueName.replace("_widgets_", ""));	
 					  $("#" + widget_name).collapse('show');
-					}catch(err){console.log(err);}		
+					}catch(err){ 						
+						console.log(err);
+					}		
 			}, undefined, 'true');
 		}
 
@@ -315,7 +317,7 @@ function enableWidgetSoring(el)
 		$('.widget-sortable', el).sortable();
 
 		// Makes icon-cursor-move on widgets panel as handle for sorting
-		$('.widget-sortable', el).sortable("option", "handle", ".icon-cursor-move");
+		$('.widget-sortable', el).sortable("option", "handle", ".icon-widget-move");
 
 		/*
 		 * This event is called after sorting stops to save new positions of

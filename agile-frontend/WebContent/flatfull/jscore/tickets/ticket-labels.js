@@ -8,7 +8,7 @@ var Ticket_Labels = {
 			var $select = $(".chosen-select", el);
 
 			// Initliazing multi select drop down
-			$select.chosen();
+			$select.chosen({no_results_text: "No labels found"});
 
 			$select.off('change');
 			$select.on('change', function(evt, params) {
@@ -26,7 +26,7 @@ var Ticket_Labels = {
 	fetchCollection : function(callback) {
 
 		if(this.labelsCollection && this.labelsCollection.toJSON() && callback){
-			callback(this.labelsCollection.toJSON());
+			callback(this.labelsCollection);
 			return;
 		}
 

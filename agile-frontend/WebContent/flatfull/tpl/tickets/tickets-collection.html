@@ -1,14 +1,39 @@
 <script id="ticket-collection-template" type="text/html">
 	{{#unless this.length}}
-		<div class="text-center padder-v b-t">
-			<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
-			<div class="m-b-xs">
-				Configure your help desk system to answer customer queries from your Agile Dashboard.
-			</div>
-			<div>
-				<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-					Configure Help Desk
-				</a>
+		<div class="tickets-div">
+			<div class="wrapper p-n">
+	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+					<div class="panel-heading no-shadow" style="border-bottom: 0;">
+				      	<label class="i-checks i-checks-sm" style="margin-left: 3px;">
+					      <input class="ticket-checkbox select-all" type="checkbox" disabled><i></i>
+					    </label>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">Add labels</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Remove labels</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Close</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Delete</button>
+
+					    <button class="btn btn-default btn-sm pull-right disabled">Toggle view</button>
+				    </div>
+				    <div class="form-inline no-footer">
+			    		<div class="row m-n">
+			    			<div class="col-sm-12 p-n">
+			    				<div class="text-center padder-v b-t">
+									<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
+									<div class="m-b-xs">
+										Configure your help desk system to answer customer queries from your Agile Dashboard.
+									</div>
+									<div>
+										<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+											Configure Help Desk
+										</a>
+									</div>
+								</div>
+			    			</div>
+			    		</div>
+			    	</div>
+				</div>
 			</div>
 		</div>
 	{{else}}
@@ -19,18 +44,20 @@
 				      	<label class="i-checks i-checks-sm" style="margin-left: 3px;">
 					      <input class="ticket-checkbox select-all" type="checkbox"><i></i>
 					    </label>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">Add labels</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Remove labels</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Delete</button>
+					    <a href="#tickets/bulk-actions/add-labels" class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">Add labels</a>
+					    <a href="#tickets/bulk-actions/remove-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Remove labels</a>
+					    <a href="#tickets/bulk-actions/change-assignee" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</a>
+					    <a href="#tickets/bulk-actions/execute-workflows" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</a>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">Close</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-delete">Delete</button>
+					    <span id="tickets-bulk-select"></span>
+					    <button class="btn btn-default btn-sm pull-right toggle-collection-view" data-toggle="tooltip" data-placement="top" data-original-title="{{#is_single_row_view}}Switch to multi line view{{else}}Switch to single line view{{/is_single_row_view}}">Toggle view</button>
 				    </div>
 				    <div class="form-inline no-footer">
 			    		<div class="row m-n">
 			    			<div class="col-sm-12 p-n ticket-collection-container">
 			    				<table class="table table-striped m-b-none">
-									<tbody id="ticket-model-list" route="ticket/" url="core/api/tickets/bulk">
-									</tbody>
+									<tbody id="ticket-model-list" route="ticket/" url="core/api/tickets/bulk"></tbody>
 								</table>
 			    			</div>
 			    		</div>
@@ -43,40 +70,76 @@
 <script id="ticket-single-row-collection-template" type="text/html">
 	<div class="tickets-div">
 		{{#unless this.length}}
-			<div class="text-center padder-v">
-				<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
-				<div class="m-b-xs">
-					Configure your help desk system to answer customer queries from your Agile Dashboard.
-				</div>
-				<div>
-					<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-						Configure Help Desk
-					</a>
+			<div class="tickets-div">
+				<div class="wrapper p-n">
+		    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+						<div class="panel-heading no-shadow" style="border-bottom: 0;">
+					      	<!-- <label class="i-checks i-checks-sm" style="margin-left: 3px;">
+						      <input class="ticket-checkbox select-all" type="checkbox" disabled><i></i>
+						    </label> -->
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Add labels</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Remove labels</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Close</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Delete</button>
+
+						    <button class="btn btn-default btn-sm pull-right disabled">Toggle view</button>
+					    </div>
+					    <div class="form-inline no-footer">
+				    		<div class="row m-n">
+				    			<div class="col-sm-12 p-n">
+				    				<div class="text-center padder-v b-t">
+										<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
+										<div class="m-b-xs">
+											Configure your help desk system to answer customer queries from your Agile Dashboard.
+										</div>
+									</div>
+				    			</div>
+				    		</div>
+				    	</div>
+					</div>
 				</div>
 			</div>
 	    {{/unless}}
 	    {{#if this.length}}
-			<div class="data">
-				<div class="dta-contatiner table-responsive">
-					<div class="panel panel-default" style="overflow-x:auto; border-left:none; border-top: none;">
-						<table class="table table-striped no-sorting panel"
-							url="core/api/bulk/update?action_type=DELETE" style="table-layout: auto;">
-							<thead>
-								<tr>
-									<th class="data select_checkbox c-p" data="{{id}}">
-									  <label class="i-checks i-checks-sm">
-									    <input type="checkbox" class="tbody_check"><i></i>                
-									  </label>
-									 </th>
-									{{{get_ticket_headers}}}
-								</tr>
-							</thead>
-							<tbody id="ticket-single-row-model-list" class="ticket-single-row-model-list"
-								route="tickets/filter/{{get_current_ticket_filter}}/ticket/">
-							</tbody>
-						</table>	
+	    	<div class="tickets-div">
+				<div class="wrapper p-n">
+		    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+						<div class="panel-heading no-shadow" style="border-bottom: 0;">
+					      	<a href="#tickets/bulk-actions/add-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Add labels</a>
+						    <a href="#tickets/bulk-actions/remove-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Remove labels</a>
+						    <a href="#tickets/bulk-actions/change-assignee" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</a>
+						    <a href="#tickets/bulk-actions/execute-workflows" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</a>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">Close</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-delete">Delete</button>
+						    <span id="tickets-bulk-select"></span>
+						    <button class="btn btn-default btn-sm pull-right toggle-collection-view" data-toggle="tooltip" 
+						    	data-placement="top" data-original-title="{{#is_single_row_view}}Switch to multi line view{{else}}Switch to  single line view{{/is_single_row_view}}">Toggle view</button>
+					    </div>
+					    <div class="form-inline no-footer">
+				    		<div class="row m-n" style="overflow-x:auto;">
+				    			<div class="col-sm-12 p-n ticket-collection-container">
+				    				<table class="table table-striped m-b-none no-sorting">
+										<thead>
+											<tr>
+												<th class="data select_checkbox c-p" data="{{id}}">
+												  <label class="i-checks i-checks-sm">
+												    <input type="checkbox" class="tbody_check"><i></i>                
+												  </label>
+												 </th>
+												{{{get_ticket_headers}}}
+											</tr>
+										</thead>
+										<tbody id="ticket-single-row-model-list" class="ticket-single-row-model-list"
+											route="tickets/filter/{{get_current_ticket_filter}}/ticket/">
+										</tbody>
+									</table>
+				    			</div>
+				    		</div>
+				    	</div>
 					</div>
-            	</div>
+				</div>
 			</div>
 		{{/if}}
 	</div>
@@ -86,15 +149,19 @@
 	<div class="wrapper p-n">
 		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0; height: 200px;">
 			<div class="panel-heading no-shadow" style="border-bottom: 0;">
-		      	<label class="i-checks i-checks-sm m-l-xs">
-			      <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}">
-			      <i></i>
-			    </label>
-			    <button class="btn btn-default btn-sm m-l-sm m-r-xs disabled">Add labels</button>
+				{{#is_single_row_view}}
+				{{else}}
+					<label class="i-checks i-checks-sm m-l-xs m-r-sm ">
+				      <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}"><i></i>
+				    </label>
+				{{/is_single_row_view}}
+		      	<button class="btn btn-default btn-sm m-r-xs disabled">Add labels</button>
 			    <button class="btn btn-default btn-sm m-r-xs disabled">Remove labels</button>
 			    <button class="btn btn-default btn-sm m-r-xs disabled">Assignee</button>
 			    <button class="btn btn-default btn-sm m-r-xs disabled">Workflow</button>
 			    <button class="btn btn-default btn-sm m-r-xs disabled">Delete</button>
+
+			    <button class="btn btn-default btn-sm pull-right disabled">Toggle view</button>
 		    </div>
 		    <div class="form-inline no-footer">
 	    		<div class="row m-n">

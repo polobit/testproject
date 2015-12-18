@@ -34,13 +34,6 @@ public class ThreadPool
 
     private ThreadFactoryImpl timpl = new ThreadFactoryImpl();
 
-    static
-    {
-	ThreadPool.getThreadPoolExecutor("bulk-export-executor", 1, 5);
-	ThreadPool.getThreadPoolExecutor("export-executor", 1, 5);
-	ThreadPool.getThreadPoolExecutor("import-executor", 1, 15);
-    }
-
     public static ThreadPoolExecutor getThreadPoolExecutor(String poolName, int minPoolSize, int maxPoolSize)
     {
 	if (threadPoolMap.containsKey(poolName))

@@ -5,7 +5,9 @@
     <div class="col-sm-12 col-md-12">
         
             <h3 class="pull-left font-thin h3">Web Rules</h3>
-            <a href="#webrules-add" class="btn btn-sm btn-default btn-addon pull-right" id="addWebrule"><span><i class="fa fa-plus-circle"></i></span>  Add Web Rule</a>
+            <div class="pull-right">
+   <a href="#webrules-add" class="btn btn-sm btn-default btn-addon" id="addWebrule"><span><i class="fa fa-plus-circle"></i></span>  Add Web Rule</a>
+            </div>
 			<div class="clearfix"></div>
         
     </div>
@@ -38,11 +40,11 @@
 			<div class="panel wrapper">
    				<div class="slate-content">
 					<div class="box-left pull-left m-r-md">
- 	           			<img alt="Clipboard" src="/img/clipboard.png">
+ 	           			<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
 					</div>
 					<div class="box-right">
             			<h4 class="m-t-none font-thin">Engage visitors on website</h4>
-            			<div class="text">Define web rules and enagage your website visitors with smart popups, or perform automatic actions when contacts do (or don't do) something in your application or website. Checkout the <a href="https://github.com/agilecrm/agile-popups">documentation</a></div>
+            			<div class="text">Define web rules and engage your website visitors with smart popups, or perform automatic actions when contacts do (or don't do) something in your application or website. Checkout the <a href="https://github.com/agilecrm/agile-popups">documentation</a></div>
             			<a href="#webrules-add" class="m-t-xs btn blue btn-slate-action btn-info btn-addon btn-sm"><i class="fa fa-plus-circle"></i>  Add Web Rule</a><br><br>
 						<p>For Web Rules to work, please copy and paste the code below on your web pages before the <code class="text-black">&lt;/body&gt;</code> tag.</p>
 						<div id="whitelist-disabled"><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
@@ -86,7 +88,7 @@
 			<p>
 
 <a href="https://www.youtube.com/watch?v=XGouq0B_7G8" target="_blank">
-<img src="../../img/web-rule-info.png" class="img-responsive w-full">
+<img src="{{getS3ImagePath '../../img/web-rule-info.png'}}" class="img-responsive w-full">
 </a>
 </p>
 
@@ -99,7 +101,7 @@
 Web rules allow you to perform certain actions when people visit your website - like showing a popup or increase score. <br><br>
 For example, when visitors are about to leave your website, show them a sign-up popup. When contacts in Agile visit a specific product page, send them an email asking if they need a demo.</p>
 <p></p>
-<img src="/img/web-rules/web-grabbers-demo.png" class="img-responsive">
+<img src="{{getS3ImagePath '/img/web-rules/web-grabbers-demo.png'}}" class="img-responsive">
 <div class="p-t-sm"><center><a href="https://github.com/agilecrm/agile-popups" target="_blank" class="text-info">Get Started</a></center></div>
         </div>
     </div>

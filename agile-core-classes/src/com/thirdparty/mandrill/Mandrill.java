@@ -237,6 +237,9 @@ public class Mandrill
 	    String messageJSONString = messageJSON.toString();
 	    String response = null;
 
+	    // Checks whether subaccount exists or not
+	    MandrillSubAccounts.checkSubAccountExists(subaccount, mailJSON.getString(MANDRILL_API_KEY));
+	    
 	    if (documentIds != null && documentIds.size() > 0)
 		sendDocumentAsMailAttachment(documentIds.get(0), mailJSONString, messageJSONString);
 	    else if (blobKeys != null && blobKeys.size() > 0)

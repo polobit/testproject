@@ -178,7 +178,6 @@ Handlebars.registerHelper('get_template', function(templateName, context, option
 
 });
 
-
 Handlebars.registerHelper('get_ticket_headers', function(options) {
 
 	var selected_columns = CURRENT_DOMAIN_USER.helpdeskSettings.selected_columns;
@@ -204,19 +203,19 @@ Handlebars.registerHelper('get_ticket_rows', function(ticket_model, options) {
 		switch(selected_columns[i]){
 
 			case 'ID':
-				td_ele += '<div class="row m-n text-ellipsis">'+ ticket_model.id +'</div>';
+				td_ele += '<div class="text-ellipsis">'+ ticket_model.id +'</div>';
 				break;
 			case 'SUBJECT':
-				td_ele += '<div class="row m-n text-ellipsis width-15em">'+ ticket_model.subject +'</div>';
+				td_ele += '<div class="text-ellipsis width-15em">'+ ticket_model.subject +'</div>';
 				break;
 			case 'REQUSTER_NAME':
-				td_ele += '<div class="row m-n text-ellipsis width-15em">'+ ticket_model.requester_name +'</div>';
+				td_ele += '<div class="text-ellipsis width-15em">'+ ticket_model.requester_name +'</div>';
 				break;
 			case 'REQUESTER_EMAIL':
-				td_ele += '<div class="row m-n text-ellipsis width-15em">'+ ticket_model.requester_email +'</div>';
+				td_ele += '<div class="text-ellipsis width-15em">'+ ticket_model.requester_email +'</div>';
 				break;
 			case 'CREATED_DATE':
-				td_ele += '<div class="row m-n">'+ ticket_model.created_date +'</div>';
+				td_ele += ticket_model.created_date;
 				break;
 			case 'DUE_DATE':{
 
@@ -229,40 +228,47 @@ Handlebars.registerHelper('get_ticket_rows', function(ticket_model, options) {
 					else
 						due_txt = 'Due in ' + Ticket_Utils.dateDiff(currentEpoch, due_date);
 
-				td_ele += '<div class="row m-n">'+ due_txt +'</div>';
+				td_ele += due_txt;
 				
 				break;
 			}
 			case 'ASSIGNED_DATE':
-				td_ele += '<div class="row m-n">'+ ticket_model.assigned_time +'</div>';
+				td_ele += ticket_model.assigned_time;
 				break;
 			case 'LAST_UPDATED_DATE':
-				td_ele += '<div class="row m-n">'+ ticket_model.last_updated_time +'</div>';
+				td_ele += ticket_model.last_updated_time;
 				break;
 			case 'CLOSED_DATE':
-				td_ele += '<div class="row m-n">'+ ticket_model.closed_time +'</div>';
+				td_ele += ticket_model.closed_time;
 				break;
 			case 'ASSIGNEE':
-				td_ele += '<div class="row m-n">'+ ((ticket_model.assignee) ? ticket_model.assignee.name : "-") +'</div>';
+				td_ele += '<div class="text-ellipsis width-15em">' + ((ticket_model.assignee) ? ticket_model.assignee.name : "-") +'</div>';
 				break;
 			case 'GROUP':
-				td_ele += '<div class="row m-n">'+ ((ticket_model.group) ? ticket_model.group.group_name : "-") +'</div>';
+				td_ele += '<div class="text-ellipsis width-15em">'+ ((ticket_model.group) ? ticket_model.group.group_name : "-") +'</div>';
 				break;
 			case 'LAST_UPDATED_BY':
-				td_ele += '<div class="row m-n">'+ ticket_model.last_updated_by +'</div>';
+				td_ele += ticket_model.last_updated_by;
 				break;
 			case 'ORGANIZATION':
 				break;
 			case 'CONTACT_DETAILS':
 				break;
-			case 'PRIORITY':
-				td_ele += '<div class="row m-n">'+ ticket_model.priority +'</div>';
+			case 'PRIORITY':{
+				td_ele = '<td>';
+
+				if(ticket_model.priority == 'HIGH')
+					td_ele += '<span class="label bg-danger first-letter-cap inline-block">'+ ticket_model.priority +'</span>';
+				else
+					td_ele += ticket_model.priority;
+
 				break;
+			}
 			case 'TYPE':
-				td_ele += '<div class="row m-n">'+ ticket_model.type +'</div>';
+				td_ele += ticket_model.type;
 				break;
 			case 'STATUS':
-				td_ele += '<div class="row m-n">'+ ticket_model.status +'</div>';
+				td_ele += ticket_model.status;
 				break;
 		}
 
@@ -282,6 +288,15 @@ Handlebars.registerHelper('is_ticket_reply_activity', function(activityType, opt
 
 	return options.inverse(this);
 
+});
+
+
+Handlebars.registerHelper('is_single_row_view', function(options) {
+
+	if(Tickets.isSingleRowView())
+		return options.fn(this);
+
+	return options.inverse(this);
 });
 
 Handlebars.registerHelper('get_palin_text_from_html', function(html, options) {

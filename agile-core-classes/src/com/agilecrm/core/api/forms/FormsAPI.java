@@ -50,6 +50,11 @@ public class FormsAPI
 	    JSONObject formJson = new JSONObject(formString);
 	    String name = formJson.getString("formName");
 	    String json = formJson.getString("formJson");
+	    String html = null;
+	    if(formJson.has("formHtml"))
+	    {
+	    html = formJson.getString("formHtml");
+	    }
 
 	    if (StringUtils.isBlank(name) || !Character.isLetter(name.charAt(0)))
 	    {
@@ -77,6 +82,7 @@ public class FormsAPI
 	    {
 		form.formName = name;
 		form.formJson = json;
+		form.formHtml = html;
 		form.save();
 		response.setStatus(HttpServletResponse.SC_OK);
 		return;

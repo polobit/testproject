@@ -315,18 +315,23 @@ function our_domain_sync() {
 					first_name.length + 1).trim() : '';
 
 			// Creates a new contact and assigns it to global value
-			_agile.create_contact({
-				"email" : CURRENT_DOMAIN_USER['email'],
-				"first_name" : first_name,
-				"last_name" : last_name
-			}, function(data) {
-				Agile_Contact = data;
-				// Shows noty
-				// set_profile_noty();
-				add_custom_fields_to_our_domain();
+			var email = CURRENT_DOMAIN_USER['email'];
+			var emailType = email.split("@")[1].split(".")[0];
+			if(emailType != "yopmail")
+			{
+				_agile.create_contact({
+					"email" : CURRENT_DOMAIN_USER['email'],
+					"first_name" : first_name,
+					"last_name" : last_name
+				}, function(data) {
+					Agile_Contact = data;
+					// Shows noty
+					// set_profile_noty();
+					add_custom_fields_to_our_domain();
 
-				initWebrules();
-			});
+					initWebrules();
+				});
+			}
 
 		})
 		// Gets contact based on the the email of the user logged in

@@ -138,6 +138,7 @@ function initializeWidgetSettingsListeners(){
 			return;
 		
 		delete_widget(widget_name);
+
 		if(widget_name == "Linkedin")
 			$('#Linkedin-container').hide();
 		
@@ -210,6 +211,7 @@ function delete_widget(widget_name)
 
 		App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name })[0].set({'is_added': false}, {silent : true}).unset("prefs");
 		update_collection(widget_name);
+		location.reload();
 		
 	}, dataType : 'json' });
 

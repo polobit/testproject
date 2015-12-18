@@ -27,6 +27,10 @@ function minicalendar(el)
 		selectable: true,
 		header : { left : 'prev',right:'next', center :'title'  },
 		weekMode:'liquid',
+		titleFormat :
+		{
+			month : 'MMM yyyy',
+		},
 
 		eventSources :[
 		               {

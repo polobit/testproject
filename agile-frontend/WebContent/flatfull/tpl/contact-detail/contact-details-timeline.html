@@ -133,13 +133,13 @@
 									{{#if user_agent}}
 										{{#stringToJSON this "parsedUserAgent"}}
 										{{#if device_type}}
-											<img src="img/web-stats/devices/{{device_type}}.png" title="{{device_type}}">
+											<img src="{{getS3ImagePath 'img/web-stats/devices/{{device_type}}.png'}}" title="{{device_type}}">
 									    {{/if}}
 										{{#if os}}
-											<img src="img/web-stats/os/{{normalize_os os}}.png" title="{{os}}">
+											<img src="{{getS3ImagePath 'img/web-stats/os/{{normalize_os os}}.png'}}" title="{{os}}">
 										{{/if}}
 										{{#if browser_name}}
-                                        	<img src="img/web-stats/browsers/{{browser_name}}.png" title="{{browser_name}}">
+                                        	<img src="{{getS3ImagePath 'img/web-stats/browsers/{{browser_name}}.png'}}" title="{{browser_name}}">
 										{{/if}}
                                         {{/stringToJSON}}
 									{{/if}}
@@ -450,13 +450,13 @@
 									{{#if user_agent}}
 										{{#stringToJSON this "parsedUserAgent"}}
 										{{#if device_type}}
-											<img src="img/web-stats/devices/{{device_type}}.png" title="{{device_type}}">
+											<img src="{{getS3ImagePath 'img/web-stats/devices/{{device_type}}.png'}}" title="{{device_type}}">
 										{{/if}}
 										{{#if os}}
-											<img src="img/web-stats/os/{{normalize_os os}}.png" title="{{os}}">
+											<img src="{{getS3ImagePath 'img/web-stats/os/{{normalize_os os}}.png'}}" title="{{os}}">
 										{{/if}}
 										{{#if browser_name}}
-                                        <img src="img/web-stats/browsers/{{browser_name}}.png" title="{{browser_name}}">
+                                        <img src="{{getS3ImagePath 'img/web-stats/browsers/{{browser_name}}.png'}}" title="{{browser_name}}">
 										{{/if}}
                                         {{/stringToJSON}}
 									{{/if}}
