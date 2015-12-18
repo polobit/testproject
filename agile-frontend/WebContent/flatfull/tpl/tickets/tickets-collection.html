@@ -7,12 +7,14 @@
 				      	<label class="i-checks i-checks-sm" style="margin-left: 3px;">
 					      <input class="ticket-checkbox select-all" type="checkbox" disabled><i></i>
 					    </label>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">Add labels</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Remove labels</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">Manage labels</button>
 					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</button>
 					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</button>
 					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Close</button>
 					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Delete</button>
+					    <div class="btn-group dropdown">
+				          <button class="btn btn-default btn-sm bulk-action-btn disabled" data-toggle="dropdown" aria-expanded="false">More <span class="caret"></span></button>
+				        </div>
 
 					    <button class="btn btn-default btn-sm pull-right disabled">Toggle view</button>
 				    </div>
@@ -41,15 +43,22 @@
 			<div class="wrapper p-n">
 	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
 					<div class="panel-heading no-shadow" style="border-bottom: 0;">
-				      	<label class="i-checks i-checks-sm" style="margin-left: 3px;">
+				      	<label class="i-checks i-checks-sm" style="margin-left: 3px;vertical-align: text-top;">
 					      <input class="ticket-checkbox select-all" type="checkbox"><i></i>
 					    </label>
-					    <a href="#tickets/bulk-actions/add-labels" class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">Add labels</a>
-					    <a href="#tickets/bulk-actions/remove-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Remove labels</a>
+					    <a href="#tickets/bulk-actions/add-labels" class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">Manage labels</a>
 					    <a href="#tickets/bulk-actions/change-assignee" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</a>
 					    <a href="#tickets/bulk-actions/execute-workflows" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</a>
 					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">Close</button>
 					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-delete">Delete</button>
+					    <div class="btn-group dropdown m-r-xs">
+				          <button class="btn btn-default btn-sm bulk-action-btn" data-toggle="dropdown" aria-expanded="false">More  <span class="caret"></span></button>
+				          <ul class="dropdown-menu dropdown-menu-right">
+				            <li><a href="">Mark as favorite</a></li>
+				            <li><a href="">Mark as spam</a></li>
+				          </ul>
+				        </div>
+					    
 					    <span id="tickets-bulk-select"></span>
 					    <button class="btn btn-default btn-sm pull-right toggle-collection-view" data-toggle="tooltip" data-placement="top" data-original-title="{{#is_single_row_view}}Switch to multi line view{{else}}Switch to single line view{{/is_single_row_view}}">Toggle view</button>
 				    </div>
@@ -57,7 +66,7 @@
 			    		<div class="row m-n">
 			    			<div class="col-sm-12 p-n ticket-collection-container">
 			    				<table class="table table-striped m-b-none">
-									<tbody id="ticket-model-list" route="ticket/" url="core/api/tickets/bulk"></tbody>
+									<tbody id="ticket-model-list" route="ticket/" class="tickets-collection"></tbody>
 								</table>
 			    			</div>
 			    		</div>
@@ -70,75 +79,82 @@
 <script id="ticket-single-row-collection-template" type="text/html">
 	<div class="tickets-div">
 		{{#unless this.length}}
-			<div class="tickets-div">
-				<div class="wrapper p-n">
-		    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
-						<div class="panel-heading no-shadow" style="border-bottom: 0;">
-					      	<!-- <label class="i-checks i-checks-sm" style="margin-left: 3px;">
-						      <input class="ticket-checkbox select-all" type="checkbox" disabled><i></i>
-						    </label> -->
-						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Add labels</button>
-						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Remove labels</button>
-						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</button>
-						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</button>
-						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Close</button>
-						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Delete</button>
+			<div class="wrapper p-n">
+	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+					<div class="panel-heading no-shadow" style="border-bottom: 0;">
+				      	<!-- <label class="i-checks i-checks-sm" style="margin-left: 3px;">
+					      <input class="ticket-checkbox select-all" type="checkbox" disabled><i></i>
+					    </label> -->
+					    <button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">Manage labels</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Close</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Delete</button>
+					    <div class="btn-group dropdown">
+				          <button class="btn btn-default btn-sm bulk-action-btn disabled" data-toggle="dropdown" aria-expanded="false">More <span class="caret"></span></button>
+				        </div>
 
-						    <button class="btn btn-default btn-sm pull-right disabled">Toggle view</button>
-					    </div>
-					    <div class="form-inline no-footer">
-				    		<div class="row m-n">
-				    			<div class="col-sm-12 p-n">
-				    				<div class="text-center padder-v b-t">
-										<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
-										<div class="m-b-xs">
-											Configure your help desk system to answer customer queries from your Agile Dashboard.
-										</div>
+
+					    <button class="btn btn-default btn-sm pull-right disabled">Toggle view</button>
+				    </div>
+				    <div class="form-inline no-footer">
+			    		<div class="row m-n">
+			    			<div class="col-sm-12 p-n">
+			    				<div class="text-center padder-v b-t">
+									<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
+									<div class="m-b-xs">
+										Configure your help desk system to answer customer queries from your Agile Dashboard.
 									</div>
-				    			</div>
-				    		</div>
-				    	</div>
-					</div>
+								</div>
+			    			</div>
+			    		</div>
+			    	</div>
 				</div>
 			</div>
 	    {{/unless}}
 	    {{#if this.length}}
-	    	<div class="tickets-div">
-				<div class="wrapper p-n">
-		    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
-						<div class="panel-heading no-shadow" style="border-bottom: 0;">
-					      	<a href="#tickets/bulk-actions/add-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Add labels</a>
-						    <a href="#tickets/bulk-actions/remove-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Remove labels</a>
-						    <a href="#tickets/bulk-actions/change-assignee" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</a>
-						    <a href="#tickets/bulk-actions/execute-workflows" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</a>
-						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">Close</button>
-						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-delete">Delete</button>
-						    <span id="tickets-bulk-select"></span>
-						    <button class="btn btn-default btn-sm pull-right toggle-collection-view" data-toggle="tooltip" 
-						    	data-placement="top" data-original-title="{{#is_single_row_view}}Switch to multi line view{{else}}Switch to  single line view{{/is_single_row_view}}">Toggle view</button>
-					    </div>
-					    <div class="form-inline no-footer">
-				    		<div class="row m-n" style="overflow-x:auto;">
-				    			<div class="col-sm-12 p-n ticket-collection-container">
-				    				<table class="table table-striped m-b-none no-sorting">
-										<thead>
-											<tr>
-												<th class="data select_checkbox c-p" data="{{id}}">
-												  <label class="i-checks i-checks-sm">
-												    <input type="checkbox" class="tbody_check"><i></i>                
-												  </label>
-												 </th>
-												{{{get_ticket_headers}}}
-											</tr>
-										</thead>
-										<tbody id="ticket-single-row-model-list" class="ticket-single-row-model-list"
-											route="tickets/filter/{{get_current_ticket_filter}}/ticket/">
-										</tbody>
-									</table>
-				    			</div>
-				    		</div>
-				    	</div>
-					</div>
+	    	<div class="wrapper p-n">
+	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+					<div class="panel-heading no-shadow" style="border-bottom: 0;">
+				      	<a href="#tickets/bulk-actions/add-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Add labels</a>
+					    <!--<a href="#tickets/bulk-actions/remove-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Remove labels</a> -->
+					    <a href="#tickets/bulk-actions/change-assignee" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</a>
+					    <a href="#tickets/bulk-actions/execute-workflows" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</a>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">Close</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-delete">Delete</button>
+					    <div class="btn-group dropdown m-r-xs">
+				          <button class="btn btn-default btn-sm bulk-action-btn" data-toggle="dropdown" aria-expanded="false">More  <span class="caret"></span></button>
+				          <ul class="dropdown-menu dropdown-menu-right">
+				            <li><a href="">Mark as favorite</a></li>
+				            <li><a href="">Mark as spam</a></li>
+				          </ul>
+				        </div>
+					    <span id="tickets-bulk-select"></span>
+					    <button class="btn btn-default btn-sm pull-right toggle-collection-view" data-toggle="tooltip" 
+					    	data-placement="top" data-original-title="{{#is_single_row_view}}Switch to multi line view{{else}}Switch to  single line view{{/is_single_row_view}}">Toggle view</button>
+				    </div>
+				    <div class="form-inline no-footer">
+			    		<div class="row m-n ticket-collection-row" style="overflow-x:auto;">
+			    			<div class="col-sm-12 p-n ticket-collection-container">
+			    				<table class="table table-striped m-b-none b-t b-b no-sorting">
+									<thead>
+										<tr>
+											<th class="data select_checkbox c-p" data="{{id}}">
+											  <label class="i-checks i-checks-sm m-b-none">
+											    <input type="checkbox" class="ticket-checkbox select-all"><i></i>
+											  </label>
+											 </th>
+											 <th></th>
+											{{{get_ticket_headers}}}
+										</tr>
+									</thead>
+									<tbody id="ticket-single-row-model-list" class="tickets-collection ticket-single-row-model-list"
+										route="tickets/filter/{{get_current_ticket_filter}}/ticket/">
+									</tbody>
+								</table>
+			    			</div>
+			    		</div>
+			    	</div>
 				</div>
 			</div>
 		{{/if}}

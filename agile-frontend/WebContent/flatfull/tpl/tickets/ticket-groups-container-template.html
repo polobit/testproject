@@ -1,14 +1,20 @@
 <script id="tickets-toolbar-container-template" type="text/html">
 <div class="tickets-toolbar">
 	<div class="wrapper bg-light padder-md padder-v">
-	    <div class="btn-toolbar m-l-none">
+	    <div class="btn-toolbar m-l-none pos-rlt">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"></div>
+	    	<div class="left-toolbar pos-abs" style="right: 0; top: 12px;">
+	    		<span class="ticket-count-text m-r-xs" style="color:#58666e;"></span>
+		    	<a href="javascript:void(0);" class="btn btn-sm m-l-none bg-transparent refresh-tickets no-shadow b-n p-n" style"margin-top: -1px;">
+			    	<i class="fa fa-refresh text-base" data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh"></i>
+			    </a>
+			</div>
 	    </div>
 	    <div class="btn-toolbar m-l-none" style="margin-top: -5px;">
 	    	<div class="btn-group dropdown m-l-none" style="float: none;">
 	    		<button class="btn btn-sm no-shadow p-n b-n bg-transparent" data-toggle="dropdown" 
 					style="font-size: 11px; color: rgb(88, 102, 110);">
-					Sort by <span class="p-r-xs sort-field-txt" style="color: #0b1014;">Last updated time</span>
+					<span class="text-muted">Sort by</span> <span class="p-r-xs sort-field-txt">Last updated time</span>
 				</button>
 				<button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none" data-toggle="dropdown" aria-expanded="false" style="padding-left: 5px;">
 					<span class="caret"></span>
@@ -40,7 +46,6 @@
 			    	<li><a class="sort-by"  data-sort-by="" href="javascript:void(0);">Ascending <i class="fa fa-check pull-right txt-small m-t-xs sort-by-check display-none"></i> </a></li>
 				</ul>
 	    	</div>
-	    	<span class="pull-right ticket-count-text"></span>
 	    </div>
 	</div>
 </div>

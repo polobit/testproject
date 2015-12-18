@@ -194,20 +194,20 @@ Handlebars.registerHelper('get_ticket_rows', function(ticket_model, options) {
 
 	for(var i=0; i< selected_columns.length; i++){
 
-		var td_ele = '<td  class="first-letter-cap">';
+		var td_ele = '<td  class="first-letter-cap open-ticket">';
 		switch(selected_columns[i]){
 
 			case 'ID':
-				td_ele += '<div class="text-ellipsis">'+ ticket_model.id +'</div>';
+				td_ele += '<div class="text-ellipsis">#'+ ticket_model.id +'</div>';
 				break;
 			case 'SUBJECT':
 				td_ele += '<div class="text-ellipsis width-15em">'+ ticket_model.subject +'</div>';
 				break;
 			case 'REQUSTER_NAME':
-				td_ele += '<div class="text-ellipsis width-15em">'+ ticket_model.requester_name +'</div>';
+				td_ele += '<div class="text-ellipsis width-9em">'+ ticket_model.requester_name +'</div>';
 				break;
 			case 'REQUESTER_EMAIL':
-				td_ele += '<div class="text-ellipsis width-15em">'+ ticket_model.requester_email +'</div>';
+				td_ele += '<div class="text-ellipsis width-9em">'+ ticket_model.requester_email +'</div>';
 				break;
 			case 'CREATED_DATE':
 				td_ele += ticket_model.created_date;
@@ -237,10 +237,10 @@ Handlebars.registerHelper('get_ticket_rows', function(ticket_model, options) {
 				td_ele += ticket_model.closed_time;
 				break;
 			case 'ASSIGNEE':
-				td_ele += '<div class="text-ellipsis width-15em">' + ((ticket_model.assignee) ? ticket_model.assignee.name : "-") +'</div>';
+				td_ele += '<div class="text-ellipsis width-9em">' + ((ticket_model.assignee) ? ticket_model.assignee.name : "-") +'</div>';
 				break;
 			case 'GROUP':
-				td_ele += '<div class="text-ellipsis width-15em">'+ ((ticket_model.group) ? ticket_model.group.group_name : "-") +'</div>';
+				td_ele += '<div class="text-ellipsis width-9em">'+ ((ticket_model.group) ? ticket_model.group.group_name : "-") +'</div>';
 				break;
 			case 'LAST_UPDATED_BY':
 				td_ele += ticket_model.last_updated_by;
@@ -255,7 +255,7 @@ Handlebars.registerHelper('get_ticket_rows', function(ticket_model, options) {
 				if(ticket_model.priority == 'HIGH')
 					td_ele += '<span class="label bg-danger first-letter-cap inline-block">'+ ticket_model.priority +'</span>';
 				else
-					td_ele += ticket_model.priority;
+					td_ele += '<span class="first-letter-cap inline-block">'+ ticket_model.priority +'</span>';
 
 				break;
 			}
@@ -292,6 +292,24 @@ Handlebars.registerHelper('is_single_row_view', function(options) {
 		return options.fn(this);
 
 	return options.inverse(this);
+});
+
+Handlebars.registerHelper('get_status_label', function(status, options) {
+
+	switch(status){
+		case 'NEW':
+			return '<span class="label label-warning">n</span>';
+			break;
+		case 'OPEN':
+			return '<span class="label label-danger">o</span>';
+			break;
+		case 'PENDING':
+			return '<span class="label label-info">p</span>';
+			break;
+		case 'CLOSED':
+			return '<span class="label label-success">c</span>';
+			break;
+	}
 });
 
 /** End of ticketing handlebars* */

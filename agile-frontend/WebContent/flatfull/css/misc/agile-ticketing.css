@@ -24,7 +24,7 @@
 	display: none;
 	position: absolute;
 	width: 450px;
-	max-height: 230px;
+	max-height: 320px;
 	top: 60px;
 	left: 25%;
 	background-color: white;
@@ -36,11 +36,13 @@
 	text-overflow: ellipsis;
 	cursor: default !important;
 	pointer-events: none;
+  padding-bottom: 15px;
+  padding-top: 15px;
 }
 
 #recent-reply-notes {
 	display: -webkit-box;
-	max-height: 70px;
+	max-height: 65px;
 	margin: 0 auto;
 	line-height: 1.5;
 	-webkit-line-clamp: 3;
@@ -52,7 +54,7 @@
 
 .last-notes-drp-dwn {
 	overflow: hidden;
-	max-height: 135px;
+	max-height: 165px;
 }
 
 .div-max-width {
@@ -222,6 +224,10 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
   	width: 15em;
   }
 
+  .width-9em {
+    width: 9em;
+  }
+
   div.show-caret{
   	padding-left: 5px;
   	padding-right: 5px;
@@ -284,4 +290,24 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
   	background-color: white !important;
     border-radius: 1px !important;
     box-shadow: 0 1px 1px rgba(90,90,90,0.1) !important;
+  }
+
+  tbody#ticket-single-row-model-list tr td{
+    vertical-align: middle;
+  }
+
+  .bg-new{
+    background-color: #f0ad4e;
+  }
+
+  .bg-open{
+    background-color: #d9534f;
+  }
+
+  .bg-pending{
+    background-color: #5bc0de;
+  }
+
+  .bg-closed{
+    background-color: #5cb85c;
   }

@@ -124,7 +124,7 @@ var Tickets = {
 						!App_Ticket_Module.ticketsCollection.collection || 
 						App_Ticket_Module.ticketsCollection.collection.length == 0){
 
-						$('.ticket-count-text').html('');
+						$('.ticket-count-text').html('0 tickets found');
 						return;
 					}
 
@@ -133,6 +133,9 @@ var Tickets = {
 					var count = (last_model.count) ? last_model.count : App_Ticket_Module.ticketsCollection.collection.length;
 					
 					$('.ticket-count-text').html(count + ' tickets found');
+
+					if(Tickets.isSingleRowView())
+						Tickets.setMinHeight();
 				}
 			});
 
@@ -234,8 +237,8 @@ var Tickets = {
 		/**
 		 * Initializing click event on ticket checkboxes
 		 */
-		$('#ticket-model-list', el).off('change'); 
-		$('#ticket-model-list', el).on('change', "input.ticket-checkbox", function(e){
+		$('.tickets-collection', el).off('change'); 
+		$('.tickets-collection', el).on('change', "input.ticket-checkbox", function(e){
 			e.stopPropagation();
 			e.preventDefault();
 
@@ -246,15 +249,18 @@ var Tickets = {
 		/**
 		 * Initializing click event on each ticket list item
 		 */
-		$('#ticket-model-list', el).off('click');
-		$('#ticket-model-list', el).on('click', 'tr > td.open-ticket', function(e){
+		$('.tickets-collection', el).off('click');
+		$('.tickets-collection', el).on('click', 'tr > td.open-ticket', function(e){
 
-			if($(e.target).hasClass('ticket-checkbox'))
-				return;
+			//Remove popovers when opening a ticket
+			if(Tickets.isSingleRowView())
+				$('div.ticket-last-notes').remove();
+			else
+				$('.ticket-last-notes').css('display', 'none').css('top', top);
 
 			var url = '#tickets/filter/' + Ticket_Filter_ID + '/ticket/';
 
-			Backbone.history.navigate(url + $(this).closest('tr').find('td.data').attr('data-id'), {trigger : true});
+			Backbone.history.navigate(url + $(this).closest('tr').find('td.data').data('id'), {trigger : true});
 		});
 
 		/*
@@ -274,10 +280,10 @@ var Tickets = {
 
 						popoverFunction = setTimeout(function(){
 
-							if (window.innerHeight - $tr.offset().top < 210)
+							if (window.innerHeight - $tr.offset().top < 250)
 								top = '-' + $that.find('#ticket-last-notes').height() + 'px'
 
-							$that.find('#ticket-last-notes').css('top', top).css('display', 'block');
+							$that.find('#ticket-last-notes').css('top', top).css('left','0').css('display', 'block');
 
 						},1000);
 					} else {
@@ -298,30 +304,32 @@ var Tickets = {
 					if (event.type == 'mouseover'){
 
 						var $that = $(this);
-						var ticketID = $that.find('td.data').data('id');
-						var ticketJSON = App_Ticket_Module.ticketsCollection.collection.get(ticketID).toJSON();
+						
+						popoverFunction = setTimeout(function(){
 
-						getTemplate("ticket-single-row-popup", ticketJSON, undefined, function(template_ui){
+							var ticketID = $that.find('td.data').data('id');
+							var ticketJSON = App_Ticket_Module.ticketsCollection.collection.get(ticketID).toJSON();
 
-							if(!template_ui)
-						  		return;
+							getTemplate("ticket-single-row-popup", ticketJSON, undefined, function(template_ui){
 
-							$('body').append($(template_ui));
+								if(!template_ui)
+							  		return;
 
-							popoverFunction = setTimeout(function(){
-
+								$('body').append($(template_ui));
+								
 								//Get closest div with row class to set left alignment. Table row left doesn't work as table have scrolling.
 								var $closest_div = $that.closest('div.row');
 								var top = 0, left = $closest_div.offset().left + 70 + 'px';
 
-								if (window.innerHeight - $that.offset().top >= 210)
+								if (window.innerHeight - $that.offset().top >= 250)
 									top = $that.offset().top + 40 + 'px';
 								else
 									top = $that.offset().top - $('#ticket-last-notes').height() + 'px';
 
 								$('#ticket-last-notes').css('top', top).css('left', left).css('display', 'block');
-							},1000);
-						});
+							});
+						},1000);
+						
 					}else{
 						$('div.ticket-last-notes').remove();
 					}
@@ -560,25 +568,12 @@ var Tickets = {
 
 	initDateTimePicker: function($input, callback){
 
-		head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', "/flatfull/css/final-lib/date-picker.css",  function()
+		head.load(LIB_PATH + '/lib/web-calendar-event/moment.min.js', '/lib/date-range-picker2.min.js', "/flatfull/css/final-lib/date-range-picker2.css",  function()
 		{
-			$('.daterangepicker').remove();
-
-			$('#reportrange').daterangepicker({
-			    "timePicker": true,
-			    "startDate": "12/03/2015",
-			    "endDate": "12/09/2015",
-			    "drops": "up"
+			$('.due-date-input').daterangepicker({
+			    "timePicker": true,"startDate": moment(),"endDate": moment().add('days', 3)
 			}, function(start, end, label) {
 			  	callback();
-			});
-			
-			$('.daterangepicker > .ranges > ul').on("click", "li", function(e)
-			{
-				$('.daterangepicker > .ranges > ul > li').each(function(){
-					$(this).removeClass("active");
-				});
-				$(this).addClass("active");
 			});
 		});
 	},
@@ -893,6 +888,13 @@ var Tickets = {
 			$(e.target).addClass('fa-indent').removeClass('fa-dedent');
 		else
 			$(e.target).addClass('fa-dedent').removeClass('fa-indent');
+	},
+
+	setMinHeight: function(){
+
+		var $row = $('.ticket-collection-row');
+
+		$row.css('min-height', window.innerHeight - $row.offset().top + 'px');
 	}
 };
 

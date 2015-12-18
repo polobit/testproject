@@ -160,13 +160,16 @@ var Ticket_Labels = {
 		}
 
 		head.js('lib/jquery.colorpicker.min.js', function() {
-			$.fn.colorPicker.defaults.colors = colors;
-			$('#color_code').val(color);
 
-			$('#color_code').colorPicker();
+			if($('#color_code').is(':visible')){
+				$.fn.colorPicker.defaults.colors = colors;
+				$('#color_code').val(color);
 
-			// Disable color input field
-			$('.colorPicker-palette').find('input').attr('disabled', 'disabled');
+				$('#color_code').colorPicker();
+
+				// Disable color input field
+				$('.colorPicker-palette').find('input').attr('disabled', 'disabled');
+			}
 		});
 	}
 };
