@@ -46,11 +46,11 @@ public abstract class TwoWaySyncService extends ContactSyncService implements IT
 	if (prefs.sync_type == SYNC_TYPE.TWO_WAY)
 	{
 	    syncContactFromClient();
-	    uploadContactsToClient();
+	    //uploadContactsToClient();
 	}
 	else if (prefs.sync_type == SYNC_TYPE.AGILE_TO_CLIENT)
 	{
-	    uploadContactsToClient();
+	    //uploadContactsToClient();
 	}
 	else if (prefs.sync_type == SYNC_TYPE.CLIENT_TO_AGILE)
 	{

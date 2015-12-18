@@ -24,14 +24,14 @@
                 {{/if_equals}}
         {{/if_equals}}
 			<div class="widget_header_icons pull-right text-base" style="display:none;">
-				<ul class="customWidgets text-base">
-					<li class="m-t-xs m-r-sm"><i id="{{remove_spaces name}}-move" class="text-muted c-p fa fa-arrows icon-widget-move text-xs {{remove_spaces name}}-move"></i></li>
+				<div class="customWidgets text-base">
+					<span class="m-t-xs m-r-sm"><i id="{{remove_spaces name}}-move" class="text-muted c-p fa fa-arrows icon-widget-move text-xs {{remove_spaces name}}-move"></i></span>
 					{{#if is_minimized}}
-						<li class="m-t-xs m-r-sm"><a><i widget="{{remove_spaces name}}" class="widget-maximize fa fa-plus text-muted c-p"></i></a></li>
+						<span class="m-t-xs m-r-sm"><a><i widget="{{remove_spaces name}}" class="widget-maximize fa fa-plus text-muted c-p"></i></a></span>
 					{{else}}
-						<li class="m-t-xs m-r-sm"><a><i widget="{{remove_spaces name}}" class="widget-minimize text-muted fa fa-minus c-p"></i></a></li>
+						<span class="m-t-xs m-r-sm"><a><i widget="{{remove_spaces name}}" class="widget-minimize text-muted fa fa-minus c-p"></i></a></span>
 					{{/if}}
-					<li class="m-t-xs m-r-sm">
+					<span class="m-t-xs m-r-sm">
 					{{#if_equals name "Linkedin"}}
 	<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted fa fa-wrench c-p"></i></a>
 					{{else}}
@@ -49,8 +49,8 @@
 						{{/if_equals}}
 					{{/if_equals}}
 				{{/if_equals}}
-					</li>
-				</ul>
+					</span>
+				</div>
 			</div>
 			<div style="width:12%;float:left;">
                 {{#if_equals name "CallScript"}}

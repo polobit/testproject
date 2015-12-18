@@ -277,7 +277,7 @@ function initializeTaskDetailListeners(){
 					$('#due_tasks_count').html("");
 			});
 			
-		} })
+		} });
 	});
 
 	/**
@@ -394,13 +394,13 @@ function save_task_tab_position_in_cookie(tab_href)
 
 	var position = '';
 
-	if (readCookie(task_tab_position_cookie_name))
-		position = readCookie(task_tab_position_cookie_name);
+	if (_agile_get_prefs(task_tab_position_cookie_name))
+		position = _agile_get_prefs(task_tab_position_cookie_name);
 
 	if (position == tab_href)
 		return;
 
-	createCookie(task_tab_position_cookie_name, tab_href);
+	_agile_set_prefs(task_tab_position_cookie_name, tab_href);
 }
 
 
@@ -408,26 +408,34 @@ function save_task_tab_position_in_cookie(tab_href)
 function update_task(value)
 {
 
-	deserializeForm(value, $("#updateTaskForm"));
-	$("#updateTaskModal").modal('show');
-	categories.getCategoriesHtml(value,function(catsHtml){
-		$('#type',$("#updateTaskForm")).html(catsHtml);
-		// Fills owner select element
-		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
-		{
-			$("#updateTaskForm").find("#owners-list").html(data);
-			if (value.taskOwner)
+	$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
+
+	loadProgressSlider($("#updateTaskForm"), function(el){
+
+		deserializeForm(value, $("#updateTaskForm"));
+	
+		categories.getCategoriesHtml(value,function(catsHtml){
+			$('#type',$("#updateTaskForm")).html(catsHtml);
+			// Fills owner select element
+			populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
 			{
-				$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
-			}
-			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+				$("#updateTaskForm").find("#owners-list").html(data);
+				if (value.taskOwner)
+				{
+					$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
+				}
+				$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+			});
 		});
+
+	    activateSliderAndTimerToTaskModal();
+
+		// Add notes in task modal
+		showNoteOnForm("updateTaskForm", value.notes);
+
 	});
 
-    activateSliderAndTimerToTaskModal();
-
-	// Add notes in task modal
-	showNoteOnForm("updateTaskForm", value.notes);
+	
 }
 
 /**

@@ -117,7 +117,11 @@ function _set_token_from_session(callback)
 	{
 		_load_gapi(function()
 		{
-			_set_token_from_session(callback)
+			get_google_calendar_prefs(function(sourceOptions){
+				// Set the access token
+				gapi.auth.setToken({ access_token : sourceOptions.token, state : "https://www.googleapis.com/auth/calendar" });
+					callback();
+				});
 		});
 
 		return;
@@ -126,7 +130,7 @@ function _set_token_from_session(callback)
 	// Set the access token
 	var token = gapi.auth.getToken();
 
-	if(token == null)
+	if(token == null || token.access_token == null)
 	{
 		get_google_calendar_prefs(function(sourceOptions){
 			// Set the access token
@@ -135,13 +139,16 @@ function _set_token_from_session(callback)
 		});
 		return;
 	}
-
-	
-
 	return callback(gapi.auth.getToken());
-
 }
 
+function _resetGAPI()
+{
+	if(typeof gapi != 'undefined')
+	{
+		gapi.auth.setToken(undefined);
+	}
+}
 function _fetchGoogleCalendarList(callback, retryCount)
 {
 	if(!retryCount)
@@ -155,9 +162,11 @@ function _fetchGoogleCalendarList(callback, retryCount)
 				{
 					if(retryCount < 2)
 					{
+						erase_google_calendar_prefs_cookie();
 						gapi.auth.setToken(undefined);
+						
 						_set_token_from_session(function(){
-							_fetchGoogleCalendarList(callback, retryCount)
+							_fetchGoogleCalendarList(callback, ++retryCount)
 						});
 						return;
 						//return _fetchGoogleCalendarList(callback, ++retryCount);

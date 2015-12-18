@@ -22,7 +22,7 @@ var ifFromRender=false;
 function contactTableView(base_model,customDatefields,view) {
 	
 	var templateKey = 'contacts-custom-view-model';
-	var gridViewEl = readCookie("agile_contact_view");
+	var gridViewEl = _agile_get_prefs("agile_contact_view");
 	if (gridViewEl) {
 		templateKey = 'contacts-grid';
 	}
@@ -175,7 +175,7 @@ function setupViews(cel, button_name) {
 			//updates the selected sort item to bold
 			updateSelectedSortKey($("#view-list", cel));
 			addClickEventsForSorting($("#view-list", cel));
-			if(readCookie('company_filter') || readCookie('contact_filter_type') == 'COMPANY')
+			if(_agile_get_prefs('company_filter') || _agile_get_prefs('contact_filter_type') == 'COMPANY')
 			{
 				$('#contact-view-model-list>li').css('display','none');
 				$('#contact-view-model-list>li:first').css('display','list-item');
@@ -186,7 +186,7 @@ function setupViews(cel, button_name) {
 }
 
 function updateSelectedSortKey(el) {
-	var sort_key = readCookie("sort_by_name");
+	var sort_key = _agile_get_prefs("sort_by_name");
 	if(sort_key && sort_key != null) {
 		var idSuffix = '-asc';
 		if(sort_key.indexOf('-') == 0) {
@@ -204,14 +204,14 @@ function updateSelectedSortKey(el) {
 		{
 
 			e.preventDefault();
-			eraseCookie('sort_by_name');
+			_agile_delete_prefs('sort_by_name');
 
 			// Gets name of the attribut to sort, which is set as data
 			// attribute in the link
 			sort_by = $(this).attr('data');
 			
 			// Saves Sort By in cookie
-			createCookie('sort_by_name', sort_by);
+			_agile_set_prefs('sort_by_name', sort_by);
 			$('.sort').removeClass('bold-text');
 			$(this).addClass('bold-text');
 
@@ -260,7 +260,7 @@ $(function() {
 				// Saves contact_view id as cookie, so on refreshing shows the
 				// custom view based on the cookie, and cookie deleted if
 				// default view is selected
-				createCookie("contact_view", id);
+				_agile_set_prefs("contact_view", id);
 
 				/*
 				 * Even when custom view is selected, have to check if user sets
@@ -270,15 +270,15 @@ $(function() {
 				 * filter id from cookie, then results are fetched from custom
 				 * views
 				 */
-				if (filter_id = readCookie('contact_filter')) {
+				if (filter_id = _agile_get_prefs('contact_filter')) {
 					App_Contacts.customView(id, undefined,
 							'core/api/filters/query/' + filter_id);
 					return;
 				}
 				
-				if(readCookie('company_filter'))
+				if(_agile_get_prefs('company_filter'))
       			{
-					//App_Contacts.customView(readCookie("contact_view"), undefined, "core/api/contacts/companies")
+					//App_Contacts.customView(_agile_get_prefs("contact_view"), undefined, "core/api/contacts/companies")
       				App_Contacts.contacts();
 					return;
       			}
@@ -305,8 +305,8 @@ $(function() {
 			return;
 
 		// Erases the cookie
-		eraseCookie("contact_view");
-		eraseCookie("agile_contact_view");
+		_agile_delete_prefs("contact_view");
+		_agile_delete_prefs("agile_contact_view");
 		
 		// Undefines current global view object
 		if(App_Contacts.contactViewModel)
@@ -334,9 +334,9 @@ $(function() {
 		e.preventDefault();
 		
 		// Erases the cookie
-		eraseCookie("contact_view");
+		_agile_delete_prefs("contact_view");
 		// Creates the cookie
-		createCookie("agile_contact_view", "grid_view");
+		_agile_set_prefs("agile_contact_view", "grid_view");
 		
 		if(App_Contacts.contactsListView)
 			App_Contacts.contactsListView = undefined;

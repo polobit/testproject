@@ -26,13 +26,13 @@ function addDetailsInCookie(elmnt)
 	taskFieldValueForGroupView = name + "_" + id;
 
 	// Creates the cookie
-	createCookie(taskField, taskFieldValue);
+	_agile_set_prefs(taskField, taskFieldValue);
 	
 	// Save setting for group view	
 	if(getCriteria() != "LIST")
 		{
 		 // Creates the cookie
-		 createCookie(taskFieldForGroupView, taskFieldValueForGroupView);
+		 _agile_set_prefs(taskFieldForGroupView, taskFieldValueForGroupView);
 		}	
 }
 
@@ -40,8 +40,8 @@ function readDetailsFromCookie()
 {
 	console.log("In readDetailsFromCookie");
 
-	var task_criteria = readCookie("task_criteria");
-	var task_owner = readCookie("task_owner");
+	var task_criteria = _agile_get_prefs("task_criteria");
+	var task_owner = _agile_get_prefs("task_owner");
 
 	console.log(task_criteria + " " + task_owner);
 	

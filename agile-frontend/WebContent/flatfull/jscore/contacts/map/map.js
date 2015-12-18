@@ -37,7 +37,7 @@ function show_map(el) {
 	
 	//reads the value from cookie or local store if the value is no it will return from here
 	
-	var map_view=localStorage.getItem('MAP_VIEW');
+	var map_view=_agile_get_prefs('MAP_VIEW');
 	if(map_view=="disabled"){
 		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
 		return;

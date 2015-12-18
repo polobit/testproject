@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.contact.sync.SyncServiceBuilder;
@@ -107,6 +108,7 @@ public class ContactUtilServlet extends HttpServlet
 	}
 	catch (Exception e)
 	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    e.printStackTrace();
 	}
 

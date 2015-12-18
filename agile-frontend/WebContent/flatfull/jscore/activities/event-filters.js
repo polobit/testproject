@@ -25,7 +25,7 @@ function createRequestUrlBasedOnFilter()
 		}
 
 	});
-	if (readCookie("agile_calendar_view"))
+	if (_agile_get_prefs("agile_calendar_view"))
 	{
 
 		event_list_type = $("#event_time").val();
@@ -45,7 +45,7 @@ function createRequestUrlBasedOnFilter()
 	/*
 	 * if (event_list_type) json_obj.event_type = event_list_type;
 	 */
-	createCookie('event-lhs-filters', JSON.stringify(json_obj));
+	_agile_set_prefs('event-lhs-filters', JSON.stringify(json_obj));
 
 }
 
@@ -53,7 +53,7 @@ function createRequestUrlBasedOnFilter()
 // cookie with default values
 function buildCalendarLhsFilters()
 {
-	var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+	var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
 	if (eventFilters)
 	{
 		var type_of_cal = eventFilters.cal_type;
@@ -88,7 +88,7 @@ function buildCalendarLhsFilters()
 		}
 
 		/*
-		 * if (readCookie("agile_calendar_view")) {
+		 * if (_agile_get_prefs("agile_calendar_view")) {
 		 * 
 		 * if (list_event_type) $("#event_time").val(list_event_type); }
 		 */
@@ -106,7 +106,7 @@ function buildCalendarLhsFilters()
 		});
 
 		/*
-		 * if (readCookie("agile_calendar_view")) { $("#event_time").val(""); }
+		 * if (_agile_get_prefs("agile_calendar_view")) { $("#event_time").val(""); }
 		 */
 	}
 
@@ -115,27 +115,27 @@ function buildCalendarLhsFilters()
 // this function will be called to load full calendar based on filters
 function loadFullCalednarOrListView()
 {
-	if (readCookie("agile_calendar_view"))
+	if (_agile_get_prefs("agile_calendar_view"))
 	{
-		var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+		var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
 		if (eventFilters)
 		{
 			if (eventFilters.event_type == "future")
 			{
-				createCookie("agile_calendar_view", "calendar_list_view_future");
+				_agile_set_prefs("agile_calendar_view", "calendar_list_view_future");
 			}
 			else
 			{
-				createCookie("agile_calendar_view", "calendar_list_view");
+				_agile_set_prefs("agile_calendar_view", "calendar_list_view");
 			}
 		}
 		else
-			createCookie("agile_calendar_view", "calendar_list_view");
+			_agile_set_prefs("agile_calendar_view", "calendar_list_view");
 
 	}
 
 	// if list view
-	if (!readCookie("agile_calendar_view"))
+	if (!_agile_get_prefs("agile_calendar_view"))
 	{
 		$('#calendar_event').html('');
 		showCalendar();
@@ -203,23 +203,19 @@ function put_thirdparty_calendar_links()
 			console.log(preference);
 			if(preference.calendar_type == 'GOOGLE')
 				putGoogleCalendarLink(true);
-			else if(preference.calendar_type == 'OFFICE')
+			else if(preference.calendar_type == 'OFFICE365')
 				putOfficeCalendarLink(true)
 		});
 	})
 }
 
+
 function putOfficeCalendarLink(calEnable)
 {
-
-	if (calEnable)
-	{
+	if (calEnable){
 		$("#office_cal").removeClass('hide');
 		$("#office_cal_link").addClass('hide');
-	}
-
-	else
-	{
+	} else {
 		$("#office_cal").addClass('hide');
 		$("#office_cal_link").removeClass('hide');
 	}
@@ -231,7 +227,7 @@ function putOfficeCalendarLink(calEnable)
  */
 function renderFullCalenarEvents(ownerid)
 {
-	var start_end_time = JSON.parse(readCookie('fullcalendar_start_end_time'));
+	var start_end_time = JSON.parse(_agile_get_prefs('fullcalendar_start_end_time'));
 
 	var eventsURL = '/core/api/events?start=' + start_end_time.startTime + "&end=" + start_end_time.endTime;
 
@@ -335,6 +331,10 @@ function addGoogleCalendarEvents()
 
 }
 
+function addOffice365CalendarEvents(){
+	addAsyncCalendarEvents(loadOfficeEvents);
+}
+
 function addAsyncCalendarEvents(asyncCallbackFunction)
 {
 	if(!asyncCallbackFunction || typeof asyncCallbackFunction != 'function')
@@ -401,7 +401,7 @@ function removeFullCalendarEvents(domain_user_id)
  */
 function getOwnerIdsFromCookie(uncheckedagile)
 {
-	var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+	var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
 	var agile_event_owners = '';
 	if (eventFilters)
 	{
@@ -430,13 +430,13 @@ function getOwnerIdsFromCookie(uncheckedagile)
  */
 function loadGoogleEventsandRender()
 {
-	var start_end_time = JSON.parse(readCookie('fullcalendar_start_end_time'));
+	var start_end_time = JSON.parse(_agile_get_prefs('fullcalendar_start_end_time'));
 	$.getJSON('core/api/calendar-prefs/get', function(response)
 	{
 		console.log(response);
 		if (response)
 		{
-			createCookie('google_event_token', response.access_token);
+			_agile_set_prefs('google_event_token', response.access_token);
 
 			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js',
 					function()
@@ -488,7 +488,7 @@ function renderAddedEventToFullCalenarBasedOnCookie(data)
 	{
 		var renderEvent = false;
 		var current_user_checked = false;
-		var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+		var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
 
 		if (eventFilters)
 		{
@@ -616,6 +616,12 @@ function showLoadingOnCalendar(loading)
 		pushLoading();
 
 		$("#loading_calendar_events").remove();
+		$("#user_calendars *").attr('disabled','disabled');
+		$("#user_cal_sub *").attr('disabled','disabled');
+
+		$("#user_calendars *").addClass('disable-cp');
+		$("#user_cal_sub *").addClass('disable-cp');
+
 		$('.fc-header-left').append(
 				'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
 				.show();
@@ -623,6 +629,11 @@ function showLoadingOnCalendar(loading)
 	}
 	else if(popLoading() <= 0)
 	{
-		$("#loading_calendar_events").hide();
+		$("#loading_calendar_events").hide();		
+		$("#user_calendars *").removeAttr('disabled');
+		$("#user_cal_sub *").removeAttr('disabled');
+
+		$("#user_calendars *").removeClass('disable-cp');
+		$("#user_cal_sub *").removeClass('disable-cp');
 	}
 }

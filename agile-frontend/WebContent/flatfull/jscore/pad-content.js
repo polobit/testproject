@@ -186,7 +186,7 @@ var CONTENT_JSON = {
 	/*"web-rules" : {/All_Activities
 		
 		"title" : "Engage visitors on website",
-		"description" : "Define web rules and enagage your website visitors with smart popups, or perform automatic actions when contacts do (or don't do) something in your application or website. Checkout the <a href='https://github.com/agilecrm/agile-popups'>documentation</a>",
+		"description" : "Define web rules and engage your website visitors with smart popups, or perform automatic actions when contacts do (or don't do) something in your application or website. Checkout the <a href='https://github.com/agilecrm/agile-popups'>documentation</a>",
 		"button_text" : "Add Web Rule",
 		"route" : "#webrules-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
@@ -212,7 +212,7 @@ function fill_slate(id, el, key) {
 
 		var template_name = "", json = {};
 
-		if((route_path == "contacts") && readCookie('company_filter')){
+		if((route_path == "contacts") && _agile_get_prefs('company_filter')){
 			template_name = "empty-collection-model";
 			json = CONTENT_JSON["companies"];
 		} 	

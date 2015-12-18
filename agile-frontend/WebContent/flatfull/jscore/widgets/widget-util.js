@@ -5,8 +5,7 @@ function initializeTabListeners(localStorageItem, navigateURL){
 	$("#prefs-tabs-content .widgets_inner ul li").off("click");
 	$("#prefs-tabs-content").on("click",".tab-container ul li",function(){
 		var temp = $(this).find("a").attr("href").split("#");
-		if(islocalStorageHasSpace())
-			localStorage.setItem(localStorageItem, temp[1]);
+		_agile_set_prefs(localStorageItem, temp[1]);
 		Backbone.history.navigate(navigateURL, { trigger : true });
 	});
 }
@@ -133,6 +132,7 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				msg = ("Error occurred while saving "+displayName);
 			}
 
+			// if (pluginName != "CallScript")
 			showNotyPopUp(msgType , msg, "bottomRight");
 
 			if (callback && typeof (callback) === "function") {
@@ -205,7 +205,7 @@ function set_up_access(widget_name, template_id, data, url, model){
 		 		if(!template_ui1)
 		    		return;
 				el = $(template_ui1);
-				var widgetTab = localStorage.getItem("widget_tab");
+				var widgetTab = _agile_get_prefs("widget_tab");
 				el.find('a[href="#'+widgetTab+'"]').closest("li").addClass("active");
 				initializeTabListeners("widget_tab", "add-widget");
 				json = model; 
@@ -259,6 +259,12 @@ function addWidgetProfile(widgetId, widgetName, template, url) {
 						return;
 						// Loading Stripe profile
 					} else if (widgetName == "Stripe") {
+						console.log('stripe add widget');
+						console.log(model);
+					
+						if(model)
+						model["prefs"] = JSON.parse(model["prefs"]);
+
 						$.getJSON("core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT", function(data) {
 							model["custom_data"] = data;
 
@@ -342,7 +348,7 @@ function addConfigurableWidget(widgetId, widgetName, templateName) {
 			// Create a view modal for widgets
 			renderWidgetView(templateName, 'core/api/widgets',model, '#widget-settings');
 			
-			if (model.name == "TwilioIO") {
+			if (model.name == "TwilioIO" && model.is_added) {
 				fill_twilioio_numbers();
 			}
 

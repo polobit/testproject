@@ -1,5 +1,6 @@
 package com.agilecrm.core.api;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -249,16 +250,35 @@ public class UsersAPI
     public List<AgileUser> getAgileUsers()
     {
 	List<AgileUser> agileUser = AgileUser.getUsers();
+	List<AgileUser> agileWithDomain = new ArrayList<AgileUser>();
+
+	for (AgileUser auser : agileUser)
+	{
+	    if (auser.getDomainUser() == null)
+		continue;
+	    agileWithDomain.add(auser);
+	}
 
 	// Now sort by name.
-	Collections.sort(agileUser, new Comparator<AgileUser>()
+	Collections.sort(agileWithDomain, new Comparator<AgileUser>()
 	{
 	    public int compare(AgileUser one, AgileUser other)
 	    {
-		return one.getDomainUser().name.toLowerCase().compareTo(other.getDomainUser().name.toLowerCase());
+	    	try {
+				
+	    		if(one.getDomainUser().name == null || other.getDomainUser().name == null)
+		    		  return 0;
+		    	
+			return one.getDomainUser().name.toLowerCase().compareTo(other.getDomainUser().name.toLowerCase());
+			
+			} catch (Exception e) {
+			}
+	    	
+	    	 return 0;
+	    	
 	    }
 	});
-	return agileUser;
+	return agileWithDomain;
     }
 
     // Get all refered people based on reference code

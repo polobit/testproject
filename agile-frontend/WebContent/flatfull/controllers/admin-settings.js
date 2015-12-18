@@ -110,8 +110,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html($(template_ui));	
 			var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
 			{
-				initializeAdminSettingsListeners();
-				initializeAccountSettingsListeners();
+				ACCOUNT_DELETE_REASON_JSON = undefined;
 			} });
 
 			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
@@ -614,18 +613,16 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			that.integrations = new Base_Collection_View({ url : 'core/api/widgets/integrations', templateKey : 'admin-settings-web-to-lead-new',
 			postRenderCallback : function(el)
 			{
-				var integrationsTab = localStorage.getItem("integrations_tab");
+				var integrationsTab = _agile_get_prefs("integrations_tab");
 				if(!integrationsTab || integrationsTab == null) {
-					if(islocalStorageHasSpace())
-						localStorage.setItem('integrations_tab', "web-to-lead-tab");
+					_agile_set_prefs('integrations_tab', "web-to-lead-tab");
 					integrationsTab = "web-to-lead-tab";
 				}
 				$('#admin-prefs-tabs-content a[href="#'+integrationsTab+'"]').tab('show');
 				$("#admin-prefs-tabs-content .tab-container ul li").off("click");
 				$("#admin-prefs-tabs-content").on("click",".tab-container ul li",function(){
 					var temp = $(this).find("a").attr("href").split("#");
-					if(islocalStorageHasSpace())
-						localStorage.setItem('integrations_tab', temp[1]);
+					_agile_set_prefs('integrations_tab', temp[1]);
 				});
 
 			} });
@@ -700,7 +697,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				if(!template_ui1)
 					return;
 				$('#admin-prefs-tabs-content').html($(template_ui1));
-				var integrationsTab = localStorage.getItem("integrations_tab");
+				var integrationsTab = _agile_get_prefs("integrations_tab");
 				$("#admin-prefs-tabs-content").find('a[href="#'+integrationsTab+'"]').closest("li").addClass("active");	
 				// On Reload, navigate to integrations
 				if (!that.integrations || that.integrations.collection == undefined)
@@ -830,7 +827,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				if(!template_ui1)
 					return;
 				$('#admin-prefs-tabs-content').html($(template_ui1));
-				var integrationsTab = localStorage.getItem("integrations_tab");
+				var integrationsTab = _agile_get_prefs("integrations_tab");
 				$("#admin-prefs-tabs-content").find('a[href="#'+integrationsTab+'"]').closest("li").addClass("active");
 
 				// On Reload, navigate to integrations

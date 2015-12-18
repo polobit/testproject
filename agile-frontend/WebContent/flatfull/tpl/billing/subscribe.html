@@ -11,14 +11,14 @@
 	<div class="col-md-9">
 		<div class="tab-container">
 {{#check_plan "FREE"}}
-<div style="font-size: 13px; /* line-height: 16px; *//* padding: 8px 8px 8px; *//* width: auto; */ position: relative;
-/* top: -49px; */margin: 0 auto;z-index: 9;width: 202px;bottom: 9px;"><span style="padding: 5px 15px 5px 15px;border: 1px solid #E2E29C;background-color: #F7F7D0;">You are currently on FREE plan</span></div>
+<div class="" style="font-size: 13px; /* line-height: 16px; *//* padding: 8px 8px 8px; *//* width: auto; */ position: relative;
+/* top: -49px; */margin: 0 auto;z-index: 9;width: 202px;bottom: -8px;"><span style="padding: 5px 15px 5px 15px;border: 1px solid #E2E29C;background-color: #F7F7D0;">You are currently on FREE plan</span></div>
 
-			<ul class="nav nav-tabs hide" id="subTab" style="margin-top: -18px;">
+			<ul class="nav nav-tabs" id="subTab" style="margin-top: -18px;">
 {{else}}
 <ul class="nav nav-tabs" id="subTab">
 {{/check_plan}}
-										    <li role="presentation" id="usertab" class="active" data-tab="1">
+										    <li role="presentation" class="active" data-tab="1">
 												<a href="#users-content" role="tab" name="users-content" data-toggle="tab" aria-control="users-content" id="users">Plans</a>
 											</li>
 											<li role="presentation" id="emailtab" data-tab="2">
@@ -366,7 +366,16 @@ Proceed to Pay
 <small class="help-block" id="subscribe_plan_tooltext">
 		<i class="fa fa-lock"></i> All transactions are secure and encrypted, and we never store your credit card information
 </small>
-		</div> <!-- End of col-sm-offset-4 col-sm-8 -->
+		</div>
+	{{#check_plan "FREE"}}
+	{{else}}
+	{{#is_trial_exist billingData}}
+	<a href="#"  id="cancel_free_trial" class="pull-right text-xs text-info p-r">Cancel your Trial</a>
+	{{else}}
+	<a href="#"  id="cancel-account-request" class="pull-right text-xs text-info p-r">Cancel Subscription</a>
+	{{/is_trial_exist}}
+	{{/check_plan}}
+		 <!-- End of col-sm-offset-4 col-sm-8 -->
 	</div> <!-- End of row -->
 
 	
@@ -387,19 +396,14 @@ Proceed to Pay
         <div class="panel-heading ">Detailed Information</div>
         <div class="panel-body">
 {{#getSubscriptionBasedOnPlan billingData emailPlan}} 
-          <form class="bs-example form-horizontal">
+          <form class="bs-example form-horizontal p-b-lg">
             <div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none">One Time Free Emails</label>
+              <label class="col-sm-6 control-label p-t-none">Free Emails</label>
               <div class="col-sm-6">
                 -
               </div>
             </div>
-			<div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none ">Purchased Emails</label>
-              <div class="col-sm-6">
-                {{numeric_operation ../emailPlan.quantity 1000 "*"}}
-              </div>
-            </div>
+			
 
 			<div class="form-group m-b-sm">
               <label class="col-sm-6 control-label p-t-none ">Emails Remaining</label>
@@ -407,13 +411,7 @@ Proceed to Pay
                 {{getRemaininaEmails}}
               </div>
             </div>
-			<div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none ">Last Billed Date</label>
-              <div class="col-sm-6">
-              {{epochToHumanDate "mmm dd, yyyy" currentPeriodStart}}
-                
-              </div>
-            </div>
+			
 			<div class="form-group m-b-sm">
               <label class="col-sm-6 control-label p-t-none ">Last Purchased Emails</label>
               <div class="col-sm-6">
@@ -438,32 +436,21 @@ Proceed to Pay
     
           </form>
 {{else}}
-          <form class="bs-example form-horizontal">
+          <form class="bs-example form-horizontal p-b-lg">
             <div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none">One Time Free Emails</label>
+              <label class="col-sm-6 control-label p-t-none">Free Emails</label>
               <div class="col-sm-6">
-                5000 
+                {{getFreeEmailsCount}} 
               </div>
             </div>
-<div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none ">Purchased Emails</label>
-              <div class="col-sm-6">
-                0 
-              </div>
-            </div>
+
 <div class="form-group m-b-sm">
               <label class="col-sm-6 control-label p-t-none ">Emails Remaining</label>
               <div class="col-sm-6">
                {{getRemaininaEmails}}
               </div>
             </div>
-<div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none ">Last Billed Date</label>
-              <div class="col-sm-6">
-              -
-                
-              </div>
-            </div>
+
 <div class="form-group m-b-sm">
               <label class="col-sm-6 control-label p-t-none ">Last Purchased Emails</label>
               <div class="col-sm-6">
@@ -492,7 +479,7 @@ Proceed to Pay
 
 <!-- Start of Testimonials -->
 
-<div class="agile-testimonial  p-t-none b-n" style="box-shadow: none;height:145px; border: 0;">
+<div class="agile-testimonial  p-t-none b-n m-t-lg" style="box-shadow: none;height:145px; border: 0;">
    <div id="myCarousel" class="carousel slide" style="width: 90%;margin: 0 auto;">
       <ol class="carousel-indicators">
          <li data-target="#myCarousel" data-slide-to="0" class=""></li>
@@ -583,33 +570,21 @@ Proceed to Pay
 </div>
 </div>
 <!-- Detailed Info div end -->
+{{#getSubscriptionBasedOnPlan billingData emailPlan}}
+	<a href="#" class="text-info text-xs pull-right p-r" id="cancel_email_plan">Cancel Email Subscription</a> 
+{{/getSubscriptionBasedOnPlan}}
 </div>
+
 </div> 
 <!-- End of email pane -->
             </div>  <!-- End of tab-content -->
-{{#check_plan "FREE"}}
-<div class="pull-right"><a href="#" id="cancel-account" class="text-info" style="font-size:12px;">Cancel Account</a></div>
-<div class="clearfix"></div>
-{{/check_plan}}
+
         </div> <!-- End of tab container -->
 		
     </div> <!-- End of col-md-9 -->
-{{#check_plan "FREE"}}
-<div class="col-md-3 p-t-sm m-t-xs" id="email">
-	
-		<div class="panel panel-default wrapper-md m-b-none">
-		<p class="b-b b-light p-b-xs">Emails<a onclick='emailClickEvent()' style="font-size: 12px;" class="text-info pull-right">Purchase</a></p>
-		<div>
-Your current plan provides 5000 emails (branded). 
-</div>
-		</div>
-	
-	</div>
-{{else}}
-{{/check_plan}}   
+       
      
-  <div class="col-md-3" id="currentPlan">
-
+  <div class="col-md-3">
 {{#getSubscriptionBasedOnPlan billingData plan}}
    <div class="panel panel-default wrapper-md m-t-xl">
       <p class="b-b b-light p-b-xs">
@@ -630,7 +605,7 @@ users.
 <div class="row">
 	<div class="col-md-12">
 {{#check_plan "FREE"}}
-        <div class="panel panel-default wrapper-md m-t-md">
+        <div class="panel panel-default wrapper-md m-t-xl">
 {{else}}
 		<div class="panel panel-default wrapper-md">
 {{/check_plan}}
@@ -668,14 +643,7 @@ users.
 		<div id="recent_invoice">
 		</div>
 		</div>
-	{{#check_plan "FREE"}}
-	{{else}}
-	{{#is_trial_exist billingData}}
-	<a href="#"  id="cancel_free_trial" class="pull-right text-lg text-info" style="font-size:12px;">Cancel your Trial</a>
-	{{else}}
-	<a href="#"  id="cancel-account-request" class="pull-right text-lg text-info" style="font-size:12px;">Cancel Subscription</a>
-	{{/is_trial_exist}}
-	{{/check_plan}}
+	
 	</div>  <!-- End of col-md-3 -->
 {{/if}}
 		
@@ -695,7 +663,7 @@ users.
 <form class="form-horizontal" id="email-plan-form">
 <div class="email-selected-plan panel" style="background: rgb(246, 247, 249);" id="email-div" onclick="focus()">
 
-<div class="p-t-md text-center m-b" style="">
+<div class="text-center m-b p-b-sm" style="">
    <img src="{{getS3ImagePath '/flatfull/img/mail.png'}}" style="width: 132px;">
 </div>
 <div  class="price-panel wrapper text-center b-b b-light m-t bg-white">
@@ -709,9 +677,8 @@ users.
 </div>
    
 </div>
-<div class="text-center m-t">One Time FREE</div>
-<div class="text-center">5000 Emails</div>
-<div id="email_validation_container">
+
+<div id="email_validation_container" class="p-t">
 <div class="m-t" style="
     margin: 15px auto 0;
     width: 67%;
@@ -728,11 +695,13 @@ users.
 </div>
 <div class="text-center text-xs">Emails to be purchased</div>
 
-<div class="text-center m-t-lg m-b-md">
-
+<div class="text-center m-t-lg m-b-lg">
 <a id="purchase-email-plan" class="btn pricing-btn text-center w-full  b-n btn-lg btn-primary" href="#purchase-email"> Proceed to Pay </a>
 
-</div>                    
+</div> 
+
+    
+           
 </div>
 </form>
 </script>
@@ -819,5 +788,26 @@ users.
 		</div>
 	</div>
 </div>
+</div>
+</script>
+
+<script id="cancel-email-conformation-modal-template" type="text/html">
+<div class="modal" data-backdrop="static">
+	<div class="modal-dialog">
+	    <div class="modal-content">
+			<div class="modal-header">
+	            <button class="close" data-dismiss="modal">x</button>
+				<h3 class="modal-title">Cancel Email Subscription</h3>
+			</div>
+			<div class="modal-body help-text">
+				<p>Are you sure you want to cancel your Email subscription?</p>
+				<p>Please note that the free emails will be added to your account once the paid email quota has been completed.</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" data-dismiss="modal" class="btn btn-sm btn-default">No</a>
+				<a href="#" data-dismiss="modal" id="cancel_email_plan_conform" class="btn btn-sm btn-primary">Yes</a>
+			</div>
+		</div>
+	</div>
 </div>
 </script>

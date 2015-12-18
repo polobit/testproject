@@ -742,7 +742,7 @@ public class PortletUtil {
 			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
 			try{
 				for(Activity activity : callActivitiesList){
-					if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED))
+					if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.ANSWERED) || activity.custom3.equalsIgnoreCase("completed")))
 						answeredCallsCount++;
 					else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
 						busyCallsCount++;

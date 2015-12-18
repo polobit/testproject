@@ -59,8 +59,8 @@ public class GoogleCalendarPrefsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void saveCalendarPrefsBasedOnType(@PathParam("type") CALENDAR_TYPE calendar_type, GoogleCalenderPrefs prefs)
     {
-	prefs.calendar_type = calendar_type;
-	prefs.save();
+    	prefs.calendar_type = calendar_type;
+    	prefs.save();
     }
 
     /**
@@ -72,9 +72,9 @@ public class GoogleCalendarPrefsAPI
     @Path("/type/{type}")
     @PUT
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void updateCalendarPrefsBasedOnType(@PathParam("type") String calendar_type, GoogleCalenderPrefs prefs)
+    public void updateCalendarPrefsBasedOnType(@PathParam("type") CALENDAR_TYPE calendar_type, GoogleCalenderPrefs prefs)
     {
-	CALENDAR_TYPE.valueOf(calendar_type);
+	prefs.calendar_type = calendar_type;
 	GooglecalendarPrefsUtil.updatePrefs(prefs);
     }
 
@@ -126,6 +126,9 @@ public class GoogleCalendarPrefsAPI
     {
 	System.out.println("delete");
 	GoogleCalenderPrefs prefs = GooglecalendarPrefsUtil.getCalendarPrefsByType(calendar_type);
+	
+	System.out.println("prefs = " + prefs);
+	
 	if (prefs != null)
 	    prefs.delete();
     }

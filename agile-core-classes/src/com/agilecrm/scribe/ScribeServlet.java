@@ -266,7 +266,7 @@ public class ScribeServlet extends HttpServlet {
 			if (query != null) {
 				req.getSession().setAttribute("query", query);
 			}
-			
+
 			System.out.println("In setup of scribe response: " + resp);
 			req.getSession().setAttribute("isForAll", isForAll);
 
@@ -305,12 +305,13 @@ public class ScribeServlet extends HttpServlet {
 
 			} catch (Exception e) {
 				// TODO: handle exception
+				System.out.println(e.getMessage());
 				if (linkType.equalsIgnoreCase("widget")) {
 					req.getSession().setAttribute("widgetMsgType", "error");
-					req.getSession().setAttribute(
-							"widgetMsg",
-							"Error occured while doing authentication : "
-									+ e.getMessage());
+					req.getSession().setAttribute("widgetMsg",
+							"Error occured while doing authentication ");
+					System.out.println(e);
+					System.out.println(e.getMessage());
 					url = "/#add-widget";
 				} else {
 					req.getSession().setAttribute("widgetMsgType", "error");
@@ -443,7 +444,8 @@ public class ScribeServlet extends HttpServlet {
 			}
 
 			if (serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)) {
-				returnURL = (String) req.getSession().getAttribute("return_url");
+				returnURL = (String) req.getSession()
+						.getAttribute("return_url");
 			}
 
 		} catch (Exception e) {
