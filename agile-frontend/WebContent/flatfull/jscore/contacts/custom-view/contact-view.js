@@ -17,6 +17,8 @@
  */
 var CURRENT_VIEW_OBJECT;
 
+
+var ifFromRender=false;
 function contactTableView(base_model,customDatefields,view) {
 	
 	var templateKey = 'contacts-custom-view-model';
@@ -32,6 +34,10 @@ function contactTableView(base_model,customDatefields,view) {
 		tagName : view.options.individual_tag_name
 	});
 
+
+	itemView.model.unbind('change')
+	itemView.renderRow = function(el, isFromRender)
+	{
 	// Reads the modelData (customView object)
 	var modelData = view.options.modelData;
 
@@ -50,7 +56,8 @@ function contactTableView(base_model,customDatefields,view) {
 		
 		// Iterates through, each field name and appends the field according to
 		// order of the fields
-		
+		if(isFromRender!=true)
+			$(el).html($(el).find('td').first());
 		$.each(fields, function(index, field_name) {
 			if(field_name.indexOf("CUSTOM_") != -1)
 			{
@@ -106,13 +113,24 @@ function contactTableView(base_model,customDatefields,view) {
 			}, null);
 	}
 				
+	
+	//contactListener();
+	}
+	itemView.render = function(el)
+	{
+		isFromRender=true;
+		this.renderRow(el,isFromRender);
+	}
+
+	itemView.model.bind('change', itemView.renderRow, itemView);
+	itemView.render();
 	// Appends model to model-list template in collection template
-	$(('#'+view.options.templateKey+'-model-list'), view.el).append(el);
+	$(('#'+view.options.templateKey+'-model-list'), view.el).append(itemView.el);
 
 	// Sets data to tr
 	$(('#'+view.options.templateKey+'-model-list'), view.el).find('tr:last').data(
 			base_model);
-	contactListener();
+	
 }
 
 // Check whether the given fields list has the property name.
@@ -334,8 +352,8 @@ $(function() {
 
 function contactListener()
 {
-	$('#contacts-table').off('mouseenter','tr');
-		$('#contacts-table').on('mouseenter','tr',function(){
+	$('#contacts-custom-view-model-list').off('mouseenter','tr');
+		$('#contacts-custom-view-model-list').on('mouseenter','tr',function(){
 			var that=$(this);
 
 			var html=""
@@ -362,8 +380,8 @@ function contactListener()
 		 	}
 		 }, 1000);
 });
-		$('#contacts-table').off('mouseleave','tr');
-	$('#contacts-table').on('mouseleave','tr',function(){
+		$('#contacts-custom-view-model-list').off('mouseleave','tr');
+	$('#contacts-custom-view-model-list').on('mouseleave','tr',function(){
 		var that=$(this);
 	setTimeout(function() {
 		if (!insidePopover)
@@ -383,7 +401,7 @@ function attachEvents(tr) {
 		insidePopover=false;
 		$(tr).popover('hide');
 	});
-
+	$('.popover').off('click', '.contact-list-add-deal')
 	$('.popover').on('click', '.contact-list-add-deal', function(e)
 	{
 		var that=$(this);
@@ -453,6 +471,7 @@ function attachEvents(tr) {
 
 	});
 
+	$('.popover').off('click', '.contact-list-add-note');
 	$('.popover').on('click', '.contact-list-add-note', function(e){ 
     	e.preventDefault();
         console.log("execution");
@@ -491,22 +510,21 @@ $('.popover').on('click', '#add-score', function(e){
 	    // Changes score in UI
 	    $('#lead-score').text(add_score);
        
-       var temp_model= App_Contacts.contactsListView.collection.get($(that).parents('.data').attr('data'));
-	    temp_model.set({'lead_score': add_score});
+   var temp_model= App_Contacts.contact_custom_view.collection.get($(that).parents('.data').attr('data')).set('lead_score', add_score);
 		var contact_model =  temp_model.toJSON();
+
 	    
 	  /* // Refreshing the view ({silent: true} not working)
 	    contact_model.url = 'core/api/contacts';
 	    contact_model.set('lead_score', add_score, {silent: true});
 	
-	    // Save model
-	    contact_model.save();*/
+	    */// Save model
+	   //contact_model.save();
 	    
 		var new_model = new Backbone.Model();
 		new_model.url = 'core/api/contacts';
 		new_model.save(contact_model,{
 			success: function(model){
-
 			}
 		});
 		          
@@ -528,28 +546,26 @@ $('.popover').on('click', '#minus-score', function(e){
 		$('#lead-score').text(sub_score);
 		
        
-       var temp_model= App_Contacts.contact_custom_view.collection.get($(that).parents('.data').attr('data'));
-	    temp_model.set({'lead_score': sub_score}, {silent: true});
+       var temp_model= App_Contacts.contact_custom_view.collection.get($(that).parents('.data').attr('data')).set('lead_score', sub_score);
 		var contact_model =  temp_model.toJSON();
 
-		$(this.el).html(getTemplate(this.options.template,contact_model));
 	    
 	  /* // Refreshing the view ({silent: true} not working)
 	    contact_model.url = 'core/api/contacts';
 	    contact_model.set('lead_score', add_score, {silent: true});
 	
-	    // Save model
-	    contact_model.save();*/
+	    */// Save model
+	   //contact_model.save();
 	    
 		var new_model = new Backbone.Model();
 		new_model.url = 'core/api/contacts';
 		new_model.save(contact_model,{
 			success: function(model){
-
 			}
 		});
 		          
 	});
+
 }
 
 function agile_crm_get_List_contact_properties_list(propertyName,id)

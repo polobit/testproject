@@ -108,6 +108,7 @@ var ContactsRouter = Backbone.Router.extend({
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
 	{
 		
+		insidePopover=false;
 		if(SCROLL_POSITION)
 		{
 			$('html, body').animate({ scrollTop : SCROLL_POSITION  },1000);
@@ -244,6 +245,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$("#contactsmenu").addClass("active");
 
 			contactFiltersListeners();
+
 			return;
 		}
 		if(readData('dynamic_contact_filter')) {
@@ -305,7 +307,6 @@ var ContactsRouter = Backbone.Router.extend({
 
 				//loadWidgets(el, contact.toJSON());
 			
-			
 
 			// Sequence of calling option 1) BRIA 2) Twilio 3) SIP in contact phone option
 			if(default_call_type == "Bria"){
@@ -347,6 +348,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
 			$('#conatcts-listeners-conatainer').html(this.contactsListView.render().el);
 			contactFiltersListeners();
+			contactListener();
 		} else {
 			$('#conatcts-listeners-conatainer').find('.contacts-div').html(this.contactsListView.render().el);
 			$('#bulk-actions').css('display', 'none');
@@ -356,6 +358,7 @@ var ContactsRouter = Backbone.Router.extend({
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
 		$('[data-toggle="tooltip"]').tooltip();
+
 	
 
 	},
@@ -1086,6 +1089,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
 			contactFiltersListeners();
+			contactListener();
 
 			if (readCookie('company_filter'))
 				$('#contact-heading', el).text('Companies');
@@ -1143,6 +1147,7 @@ var ContactsRouter = Backbone.Router.extend({
 			{
 				
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
+				contactListener();
 
 				if(default_call_type == "Bria"){
 				if(callFromBria == true){
