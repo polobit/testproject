@@ -311,3 +311,28 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
   .bg-closed{
     background-color: #5cb85c;
   }
+
+
+  .border-highlight-light {
+      border-bottom: dotted 1px #ddd;
+  }
+
+  .position-relative{
+    position: relative;
+  }
+
+  .position-absolute{
+    position: absolute;
+  }
+
+  .cursor-pointer{
+    cursor: pointer;
+  }
+
+  .toggle-favorite:hover{
+    color: #fad733 !important;
+  }
+
+  .toggle-favorite:hover:before{
+    content: "\f005";
+  }

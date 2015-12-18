@@ -56,6 +56,7 @@ var Ticket_Timeline = {
 			$('#notes-collection-container').html($template);
 			
 		}}
+
 		);
 
 	}

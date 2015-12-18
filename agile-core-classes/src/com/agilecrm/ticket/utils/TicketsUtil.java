@@ -467,6 +467,47 @@ public class TicketsUtil
 		return ticket;
 	}
 
+	public static Tickets markSpam(Long ticket_id, Boolean is_spam) throws EntityNotFoundException
+	{
+		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+		ticket.is_spam = is_spam;
+
+		Tickets.ticketsDao.put(ticket);
+
+		// Update search document
+		new TicketsDocument().edit(ticket);
+
+		// Logging activity
+		new TicketActivity((is_spam ? TicketActivityType.TICKET_MARKED_SPAM : TicketActivityType.TICKET_MARKED_UNSPAM),
+				ticket.contactID, ticket.id, "", "", "is_spam").save();
+
+		return ticket;
+	}
+
+	public static Tickets forwardTicket(Long ticket_id, String content, String email) throws EntityNotFoundException
+	{
+		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+
+		try
+		{
+			String agentName = DomainUserUtil.getDomainUser(ticket.assigneeID).name;
+
+			String fromAddress = DomainUserUtil.getDomainUser(ticket.assigneeID).email;
+
+			// Send email
+			TicketNotesUtil.sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress, ticket.cc_emails,
+					SendMail.TICKET_REPLY, new JSONObject());
+		}
+		catch (Exception e)
+		{
+		}
+
+		// Logging activity
+		new TicketActivity(TicketActivityType.TICKET_NOTES_FORWARD, ticket.contactID, ticket.id, "", email, "").save();
+
+		return ticket;
+	}
+
 	/**
 	 * 
 	 * @param ticket_id

@@ -671,7 +671,12 @@ var Tickets = {
 				+ command + "&email=" + email + '&id=' + Current_Ticket_ID;
 		newTicketModel.save({'id': Current_Ticket_ID}, 
 			{success: function(model){
-					
+
+					// If in time line add event to timeline
+					if($('#notes-collection-container').length > 0){
+						Ticket_Timeline.render_individual_ticket_timeline()
+					}
+
 				}
 			});
 	},
@@ -859,6 +864,11 @@ var Tickets = {
 					else
 						$(e.target).removeClass("fa-star text-warning").addClass("fa-star-o text-light");
 
+					// If in time line add event to timeline
+					if($('#notes-collection-container').length > 0){
+						Ticket_Timeline.render_individual_ticket_timeline()
+					}
+
 				}
 			});
 		
@@ -875,6 +885,11 @@ var Tickets = {
 						$(e.target).addClass("btn-danger").removeClass("btn-default");
 					else
 						$(e.target).removeClass("btn-danger").addClass("btn-default");
+
+					// If in time line add event to timeline
+					if($('#notes-collection-container').length > 0){
+						Ticket_Timeline.render_individual_ticket_timeline()
+					}
 
 				}
 			});
@@ -924,3 +939,31 @@ function tickets_typeahead(data){
 	// Returns list of contact/company names
 	return contact_names_list;
 }
+
+function tickets_cc_emails_typeahead(data){
+
+	if (data == null)
+		return;
+
+	// To store contact names list
+	var contact_names_list = [];
+
+	/*
+	 * Iterates through all the contacts and get name property
+	 */
+	$.each(data, function(index, contact)
+	{
+		var contact_name;
+
+		// Appends first and last name to push in to a list
+		contact_name = getContactName(contact) + "-" + contact.id;
+
+		// Spaces are removed from the name, name should be used as a key in map
+		// "TYPEHEAD_TAGS"
+		contact_names_list.push(contact_name.split(" ").join(""));
+	});
+
+	// Returns list of contact/company names
+	return contact_names_list;
+}
+

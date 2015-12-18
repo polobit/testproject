@@ -172,6 +172,11 @@ Handlebars.registerHelper('compile_template', function(source, data, options) {
 
 });
 
+Handlebars.registerHelper('get_template', function(templateName, context, options) {
+
+	return getTemplate(templateName, context);
+
+});
 
 Handlebars.registerHelper('get_ticket_headers', function(options) {
 
@@ -310,6 +315,14 @@ Handlebars.registerHelper('get_status_label', function(status, options) {
 			return '<span class="label label-success">c</span>';
 			break;
 	}
+});
+
+Handlebars.registerHelper('get_palin_text_from_html', function(html, options) {
+
+	var tmp = document.createElement("DIV");
+   tmp.innerHTML = html;
+   return tmp.textContent || tmp.innerText || "";
+
 });
 
 /** End of ticketing handlebars* */

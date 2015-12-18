@@ -9,12 +9,18 @@ var Tickets_Notes = {
 
 		var json = serializeForm("send-reply");
 
+		if($(e.target).hasClass('forward')){
+			this.forwardTicket(json, $save_btn);
+			return;
+		}
+
 		var note_type = $(e.target).hasClass('private') ? 'PRIVATE' : 'PUBLIC';
 		json.note_type = note_type;
 
 		if($(e.target).hasClass('close-ticket'))
 			json.close_ticket="true";
 
+		
 		var newTicketNotesModel = new BaseModel();
 		newTicketNotesModel.url = '/core/api/tickets/notes';
 		newTicketNotesModel.save(json, {
@@ -25,6 +31,11 @@ var Tickets_Notes = {
 
 				App_Ticket_Module.notesCollection.collection.add(model);
 				App_Ticket_Module.notesCollection.render(true);
+
+				// If in time line add event to timeline
+				if($('#notes-collection-container').length > 0){
+					Ticket_Timeline.render_individual_ticket_timeline()
+				}
 			},
 			error : function(data, response) {
 
@@ -37,6 +48,36 @@ var Tickets_Notes = {
 				}, 3000);
 			}
 		});
+	},
+
+	forwardTicket : function(data, targetEle){
+
+		var newTicketNotesModel = new BaseModel();
+		newTicketNotesModel.url = '/core/api/tickets/forward-ticket';
+		newTicketNotesModel.save(data, {
+
+			success : function(model) {
+
+				Tickets_Notes.repltBtn('reply');
+
+				// If in time line add event to timeline
+				if($('#notes-collection-container').length > 0){
+					Ticket_Timeline.render_individual_ticket_timeline()
+				}
+			},
+			error : function(data, response) {
+
+				$('.error-msg').html(response.responseText);
+
+				enable_save_button(targetEle);
+
+				setTimeout(function() {
+					$('.error-msg').html('');
+				}, 3000);
+			}
+		});
+
+
 	},
 
 	backToTickets : function(e) {
@@ -68,6 +109,16 @@ var Tickets_Notes = {
 
 		$container.html(getTemplate('create-ticket-notes', data));
 
+		head.js('/flatfull/lib/jquery.autogrow.js', function()
+		{	
+			try{
+				$('textarea#reply_textarea', $container).autogrow();
+			}catch(e){}
+			
+		});
+
+		$('textarea#reply_textarea', $container).focus();
+
 		$($container).on('click', '#ticket_canned_response', function() {
 
 			var ticketModel = App_Ticket_Module.ticketView.model;
@@ -92,7 +143,7 @@ var Tickets_Notes = {
 			// Get canned response
 			var cannedMessage =  message + "<br><br>";
 			
-			$container.find("#reply_textarea").html(
+			$container.find("#reply_textarea").val(
 					cannedMessage + $container.find("#reply_textarea").text());
 
 		})
@@ -140,7 +191,7 @@ var Tickets_Notes = {
 			return notesText;
 
 		$.each(notesCollection, function(index, note){
-			notesText += note.original_html_text + "<br><br>-----------------------------------------<br><br>";
+			notesText += note.original_plain_text + "\n\n-----------------------------------------\n\n";
 		})
 
 		console.log("notesText = " + notesText);

@@ -208,7 +208,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 	toggleTimeline: function(e){
 
-		var tooltip_text = 'Timeline';
+		var tooltip_text = 'Show all events';
 		if($('.ticket-timeline-container').is(':visible'))
 		{
 			//Rendering ticket notes
@@ -216,10 +216,10 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		}
 		else{
 			Ticket_Timeline.render_individual_ticket_timeline();
-			tooltip_text = 'Notes';
+			tooltip_text = 'Show notes only';
 		}
 
-		$('.toggle-timeline').attr('data-original-title', tooltip_text);
+		$('.toggle-timeline').text(tooltip_text);
 	},
 
 	changeSla: function(e){

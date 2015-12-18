@@ -2,12 +2,12 @@
 
 {{#if_equals note_type 'PUBLIC'}}
 
-<div class="p-t p-b">
+<div class="p-t-sm p-b-sm">
 	<span class="pull-left thumb-sm">
 			{{#if_equals created_by 'REQUESTER'}}
-		 		<img src="{{emailGravatarurl 34 requester_email}}" class="img-circle" alt="...">
+		 		<img src="{{emailGravatarurl 34 requester_email}}" class="r-5x" alt="...">
 		    {{else}}
-		 		<img src="{{domain_user.ownerPic}}" class="img-circle" alt="...">
+		 		<img src="{{domain_user.ownerPic}}" class="r-5x" alt="...">
 		 	{{/if_equals}}
 	</span>
 
@@ -20,18 +20,16 @@
 	              	<span><b class="text-sm">{{requester_name}}</b></span>
 
 
-	              	<span class="txt-small text-xs text-muted pull-right">
-	              		<i class="fa fa-clock-o"></i>
-			            	<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
+	              	<span class="txt-small text-xs text-muted text-capitalize m-l-xs">
+	              		<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
 			              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
 			              	</time>
 	   				</span>
 	             
 			   	{{else}}
 			   		<span><b class="text-sm">{{domain_user.name}}</b></span>
-	              	<span class="txt-small text-xs text-muted pull-right">
-	              		<i class="fa fa-clock-o"></i>
-		   					<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
+	              	<span class="txt-small text-xs text-muted text-capitalize m-l-xs">
+	              			<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
 		              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
 		              	</time>
 			   		</span>
@@ -61,10 +59,10 @@
 
 {{else}}
 
-<div class="p-t p-b">
+<div class="p-t-sm p-b-sm">
 	<span class="pull-left thumb-sm">
 			
-		 <img src="{{domain_user.ownerPic}}" class="img-circle" alt="...">
+		 <img src="{{domain_user.ownerPic}}" class="r-5x" alt="...">
 	</span>
 		 	
 	<div class="m-l-xl p-l">
@@ -72,22 +70,21 @@
 	  <span>
 	  	<b class="text-sm">{{domain_user.name}}</b>
 
-	  	<span class="txt-small text-xs text-muted pull-right">
-      		<i class="fa fa-clock-o"></i>
-				<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
+	  	<span class="txt-small text-xs text-muted text-capitalize m-l-xs">
+      			<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
           		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
           	</time>
    		</span>
 
 	  </span>
 
-	  <span class="block p-md text-sm m-t-sm bg-lightyellow b-a-lightyellow">{{{html_text}}}</span>
+	  <span class="block p-sm text-sm m-t-sm bg-lightyellow b-a-lightyellow">{{{html_text}}}</span>
 
 	</div>
 </div>
 
 {{/if_equals}}  
 
-<div class="border-highlight m-l m-r m-t-sm m-b-sm"></div>
+<div class="border-highlight-light m-t-xs m-b-xs"></div>
 
 </script>
