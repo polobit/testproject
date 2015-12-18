@@ -513,8 +513,8 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 
 		// Remove social search results from local storage after editing a
 		// contact
-		localStorage.removeItem("Agile_linkedin_matches_" + data.get('id'));
-		localStorage.removeItem("Agile_twitter_matches_" + data.get('id'));
+		_agile_delete_prefs("Agile_linkedin_matches_" + data.get('id'));
+		_agile_delete_prefs("Agile_twitter_matches_" + data.get('id'));
 
 		// Removes disabled attribute of save button
 		enable_save_button($(saveBtn));
@@ -918,9 +918,9 @@ function add_contact_to_view(appView, model, isUpdate)
 	}
 	else
 	{
-		if (!readCookie('company_filter')) // check if in contacts view
+		if (!_agile_get_prefs('company_filter')) // check if in contacts view
 		{
-			if (!readCookie('contact_filter')) // add model only if its in
+			if (!_agile_get_prefs('contact_filter')) // add model only if its in
 			// plain contact view, otherwise
 			// always hard reload
 			{

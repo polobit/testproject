@@ -394,13 +394,13 @@ function save_task_tab_position_in_cookie(tab_href)
 
 	var position = '';
 
-	if (readCookie(task_tab_position_cookie_name))
-		position = readCookie(task_tab_position_cookie_name);
+	if (_agile_get_prefs(task_tab_position_cookie_name))
+		position = _agile_get_prefs(task_tab_position_cookie_name);
 
 	if (position == tab_href)
 		return;
 
-	createCookie(task_tab_position_cookie_name, tab_href);
+	_agile_set_prefs(task_tab_position_cookie_name, tab_href);
 }
 
 

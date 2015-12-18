@@ -343,6 +343,7 @@ function initializeSubscriptionListeners()
 			function(e)
 			{
 				e.preventDefault();
+				plan_json = {};
 				var buttonText = $(this).html();
 				$(this).text("Loading...");
 				$(this).attr("disabled","disabled");
@@ -432,7 +433,6 @@ function initializeSubscriptionListeners()
 					plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
 
 				
-				plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
 				plan_json.new_signup = is_new_signup_payment();
 				plan_json.price = update_price();
 				plan_json.cost = (cost * months).toFixed(2);
@@ -507,6 +507,24 @@ function initializeSubscriptionListeners()
 								$(template_ui).modal('show');
 							}, null);
 						}else if(data.is_allowed_plan){
+							Backbone.history.navigate("purchase-plan", { trigger : true });
+						}else if(data.lines){
+							
+							$.each( JSON.parse(USER_BILLING_PREFS.billingData).subscriptions.data, function( key, value ) {
+							  if(value.plan.id.indexOf("email") == -1)
+							  {
+							  	if((cost * months).toFixed(2) > value.quantity*(value.plan.amount/100))
+							  	{
+							  		plan_json.unUsedCost = data.lines.data[0].amount*(-1)/100;
+							  		plan_json.remainingCost = data.lines.data[1].amount/100;
+							  		plan_json.cost = (plan_json.remainingCost - plan_json.unUsedCost).toFixed(2);
+							  	}else
+							  	{
+							  		plan_json.unUsedCost = undefined;
+							  		plan_json.remainingCost = undefined;
+							  	}
+							  }
+							});
 							Backbone.history.navigate("purchase-plan", { trigger : true });
 						}else{
 							if(data.contacts.count > data.contacts.limit)
@@ -660,6 +678,32 @@ function initializeSubscriptionListeners()
 	{
 		e.preventDefault();
 		$(this).closest(".plan-collection-in").find(".plan_features").css("display","none");
+	});
+
+	$("#subscribe_plan_change").on("click","#cancel_email_plan",function(e){
+		e.preventDefault();
+		getTemplate("cancel-email-conformation-modal",{} , undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$(template_ui).modal('show');
+		}, null);
+	});
+
+	//From modal popup
+	$("#cancel_email_plan_conform").off("click");
+	$("body").on("click","#cancel_email_plan_conform",function(e){
+		e.preventDefault();
+		$.ajax({url:'core/api/subscription/cancel/email',
+			type:'GET',
+			success:function(data){
+				showNotyPopUp("information", "Email subscription has been cancelled successfully.", "top"); 
+				setTimeout(function(){ 
+					document.location.reload();
+				}, 1000);				
+			},error: function(){
+				alert("Error occured, Please try again");
+			}
+		});
 	});
 }
 

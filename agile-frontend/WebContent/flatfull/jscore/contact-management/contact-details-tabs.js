@@ -386,18 +386,18 @@ function get_web_stats_count_for_domain(callback)
 function save_contact_tab_position_in_cookie(tab_href)
 {
 
-	var position = readCookie(contact_tab_position_cookie_name);
+	var position = _agile_get_prefs(contact_tab_position_cookie_name);
 
 	if (position == tab_href)
 		return;
 
-	createCookie(contact_tab_position_cookie_name, tab_href);
+	_agile_set_prefs(contact_tab_position_cookie_name, tab_href);
 }
 
 function load_contact_tab(el, contactJSON)
 {
 	timeline_collection_view = null;
-	var position = readCookie(contact_tab_position_cookie_name);
+	var position = _agile_get_prefs(contact_tab_position_cookie_name);
 	if (position == null || position == undefined || position == "")
 		position = "timeline";
 
@@ -454,10 +454,10 @@ function save_email_server_type_in_cookie(cookie_value)
 {
 	if (cookie_value)
 	{
-		var previous_cookie_value = readCookie(email_server_type_cookie_name);
+		var previous_cookie_value = _agile_get_prefs(email_server_type_cookie_name);
 		if (previous_cookie_value === cookie_value)
 			return;
-		createCookie(email_server_type_cookie_name, cookie_value, 30);
+		_agile_set_prefs(email_server_type_cookie_name, cookie_value, 30);
 	}
 }
 

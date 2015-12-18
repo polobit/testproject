@@ -535,6 +535,7 @@ var SubscribeRouter = Backbone.Router
 
 				// Prepend Loading
 				$('#content').html(upgrade_plan.render().el);
+				$('[data-toggle="tooltip"]').tooltip();
 				$(".active").removeClass("active");
 				$("#planView").addClass("active");
 			},
