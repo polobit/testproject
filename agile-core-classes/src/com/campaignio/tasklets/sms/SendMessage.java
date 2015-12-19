@@ -81,6 +81,8 @@ public class SendMessage extends TaskletAdapter
 		
 		try
 		{
+			data.remove(SendEmail.CLICK_TRACKING_ID);
+			
 			if (StringUtils.isEmpty(to) || StringUtils.isEmpty(from))
 			{
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
