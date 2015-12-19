@@ -2383,19 +2383,23 @@ public class OpportunityUtil
 		{
 			
 					List<Opportunity> list = dao.listByProperty(conditionsMap1);
+					System.out.println("list1--"+list);
 					List<Opportunity> list2 = dao.listByProperty(conditionsMap2);
+					System.out.println("list2--"+list2);
 					if (list != null)
 					{
 						ownDealsSet.addAll(list);
+						System.out.println("set1--"+ownDealsSet);
 					}
 					if (list2 != null)
 					{
 						ownDealsSet.addAll(list2);
+						System.out.println("set2--"+ownDealsSet);
 					}
 				
 			
 			conversionList=new ArrayList<>(ownDealsSet);
-			System.out.println(conversionList);
+			System.out.println("main list"+conversionList);
 			return conversionList;
 		}
 		catch (Exception e)

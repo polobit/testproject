@@ -59,15 +59,17 @@
             <div class="hbox text-center b-t b-light">          
               <div class="col padder-v text-muted b-r b-light text-ellipsis">
                 <div class="h4">{{currencySymbol}}{{numberWithCommasForActivities sales}}</div>
-                <span>Total Sales  <div style="margin-right:-260px;"> Rank : {{Rank}} in the team</div></span>
+                <span>Total Sales (Team :{{currencySymbol}}{{numberWithCommasForActivities Team_Revenue}})</span>
+                <div> Rank : {{Rank}} in the team</div>
               </div>
               <div class="col padder-v text-muted b-r b-light text-ellipsis">
                 <div class="h4">{{numberWithCommasForActivities soldDeals}}</div>
-                <span>Won Deals</span>
+                <span>Won Deals (Team :{{numberWithCommasForActivities Team_Deals}})</span>
+                <div> Rank : {{won_Rank}} in the team</div>
               </div>
               <div class="col padder-v text-muted text-ellipsis">
                 <div class="h4">{{currencySymbol}}{{numberWithCommasForActivities avgSalesValue}}</div>
-                <span>Avg. Deal Size</span>
+                <span>Avg. Deal Size (Team :{{currencySymbol}}{{numberWithCommasForActivities Team_average}})</span>
               </div>
             </div>
           </div>

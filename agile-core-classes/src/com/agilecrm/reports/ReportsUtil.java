@@ -465,8 +465,10 @@ public class ReportsUtil
 			Double milestoneValue = 0d;
 			Integer soldCount=0;
 			Double avgValue=0d;
+			Double team_average=0d;
 			Double avgDealsClosure=0d;
 			List<JSONObject> cateList = new ArrayList<JSONObject>();
+			List<JSONObject> countCateList=new ArrayList<JSONObject>();
 			//Double callsDuration=0d;
 
 			if(wonDealsList!=null){
@@ -518,29 +520,53 @@ public class ReportsUtil
 				DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
 				if(dUser!=null)
 					domainUsersList=DomainUserUtil.getUsers(dUser.domain);
+				Double total_milestoneValues = 0d;
+				int total_count=0;
 			for(DomainUser domainUser : domainUsersList){
 				JSONObject cateJson = new JSONObject();
 				cateJson.put("name", "Revenue");
 				List<Opportunity> wonDealList = OpportunityUtil.getWonDealsListOfUser(minTime, maxTime, domainUser.id);
 				Double milestoneValues = 0d;
+				int count=0;
 				if(wonDealList!=null){
 					for(Opportunity opportunity : wonDealList){
 						milestoneValues += opportunity.expected_value;
+						count++;
 					}
 				}
+				total_milestoneValues=total_milestoneValues+milestoneValues;
+				total_count=total_count+count;
 				cateJson.put("value", Math.round(milestoneValues));
 				cateJson.put("id", domainUser.id);
+				cateJson.put("count", count);
 				
 				//AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
 				
 
 				cateList.add(cateJson);
+				countCateList.add(cateJson);
 				Collections.sort(cateList,new Comparator<JSONObject>(){
 					@Override  
 	                public int compare(JSONObject o1, JSONObject o2){
 						try
 						{
 							return Double.valueOf(o2.getDouble("value")).compareTo(Double.valueOf(o1.getDouble("value")));
+						}
+						catch (JSONException e)
+						{
+							// TODO Auto-generated catch block
+
+							e.printStackTrace();
+							return 0;
+						}  
+	                }
+	            });
+				Collections.sort(countCateList,new Comparator<JSONObject>(){
+					@Override  
+	                public int compare(JSONObject o1, JSONObject o2){
+						try
+						{
+							return Double.valueOf(o2.getDouble("count")).compareTo(Double.valueOf(o1.getDouble("count")));
 						}
 						catch (JSONException e)
 						{
@@ -562,6 +588,20 @@ public class ReportsUtil
 					
 			}
 			dataJson.put("Rank", index);
+			
+			int won_index=0;
+			for(JSONObject obj:countCateList)
+			{
+				won_index++;
+					if(ownerId.equals(obj.getLong("id")))
+							break;
+					
+			}
+			team_average=(double) Math.round(total_milestoneValues/total_count);
+			dataJson.put("won_Rank", won_index);
+			dataJson.put("Team_Revenue",total_milestoneValues);
+			dataJson.put("Team_Deals",total_count);
+			dataJson.put("Team_average",team_average);
 			//dataJson.put("revenue", true);
 			//categoryCount++;
 			

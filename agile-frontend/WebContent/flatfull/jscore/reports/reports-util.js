@@ -425,7 +425,9 @@ user_reports :function(callReportUrl){
 				 	
 				 });
 				 $(".converionsPipeline").html(div);
-				 $('.hidden').parents('.conversion_track').hide();
+				 $('.hidden').parents('.conversion_track').remove();
+				 if($('.converionsPipeline').children().length==0)
+				 	$('.converionsPipeline').parents('.row').hide();
 			});
 		},
 
