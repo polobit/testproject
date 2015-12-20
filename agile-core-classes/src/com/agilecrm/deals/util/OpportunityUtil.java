@@ -2359,16 +2359,8 @@ public class OpportunityUtil
 		UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
 		Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
 		Map<String, Object> conditionsMap2 = new HashMap<String, Object>();
-		List<Opportunity> conversionList = new ArrayList<Opportunity>();
 		
-		Set<Opportunity> ownDealsSet = new TreeSet<Opportunity>(new Comparator<Opportunity>()
-				{
-					@Override  
-		            public int compare(Opportunity o1, Opportunity o2){
-						return o1.id.equals(o2.id) ? 0 : -1;
-		            }
-				});
-		
+		System.out.println("insdie conversion");
 		if (ownerId != null){
 			conditionsMap1.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
 			conditionsMap2.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
@@ -2386,7 +2378,7 @@ public class OpportunityUtil
 					System.out.println("list1--"+list);
 					List<Opportunity> list2 = dao.listByProperty(conditionsMap2);
 					System.out.println("list2--"+list2);
-					if (list != null)
+				/*	if (list != null)
 					{
 						ownDealsSet.addAll(list);
 						System.out.println("set1--"+ownDealsSet);
@@ -2395,12 +2387,26 @@ public class OpportunityUtil
 					{
 						ownDealsSet.addAll(list2);
 						System.out.println("set2--"+ownDealsSet);
+					}*/
+				boolean flag=false;
+			for(Opportunity list_it:list){
+				for(Opportunity list_it2:list2){
+					if(!list_it.id.equals(list_it2.id)){
+						flag=true;
+						continue;
 					}
-				
-			
-			conversionList=new ArrayList<>(ownDealsSet);
-			System.out.println("main list"+conversionList);
-			return conversionList;
+					else {
+						flag=false;
+						break;
+					}
+				}
+				if(flag)
+					list2.add(list_it);
+			}
+			//conversionList=new ArrayList<>(ownDealsSet);
+			System.out.println("list2"+list2);
+			//System.out.println("main list"+conversionList);
+			return list2;
 		}
 		catch (Exception e)
 		{
