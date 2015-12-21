@@ -92,7 +92,7 @@ public class PaypalScribeServlet extends HttpServlet {
 
 				req.getSession().setAttribute("return_url", reqReturnUrl);
 			} else {
-				returnUrl = "/paypal";
+				returnUrl = "/#Paypal";
 			}
 			resp.sendRedirect(returnUrl);
 		}

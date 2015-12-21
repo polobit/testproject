@@ -197,6 +197,6 @@ public class Globals {
 
 	public static final String PAYPAL = "Paypal";
 	public static final String PAYPAL_CLIENT_ID = "AdinLitMf9_3K9nwxTQEs5KyBom16l6EuR4FHy8vefth7Lup57d07e80Rz1tbt6gABT-l9jgEykvOVhr";
-	public static final String PAYPAL_SECRET_ID = "EHv3ABkVCNdNgBdvt2lC5W-DSgfVtg35zPoWMWzMV0SsO14hLgReyEGNvIkvYZtO_6LHo4HX3IL8f3Py";
+	public static final String PAYPAL_SECRET_ID = "EGyp6P-kmdaDsoNUK2F2nYs5-RifRg3nhPJkmzai-TRqpRmTpj3lm4NG6pw_B08IJSdpv5pfGfWQF1Bb";
 
 }

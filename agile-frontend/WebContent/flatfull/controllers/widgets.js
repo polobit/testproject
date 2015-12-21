@@ -264,7 +264,7 @@ var WidgetsRouter = Backbone.Router
                     addOAuthWidget(
                             "Paypal",
                             "paypal-login",
-                            ('/paypal?isForAll=' + isForAll + '&return_url='
+                            ('/paypalScribe?isForAll=' + isForAll + '&return_url='
                                     + encodeURIComponent(window.location.href)));
                 } else {
                     addWidgetProfile(id, "Paypal", "paypal-revoke-access",

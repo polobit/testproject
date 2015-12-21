@@ -25,18 +25,17 @@ public class PaypalWidgetApi {
 	 *            {@link String} email of the contact
 	 * @return {@link String} form of {@link JSONObject}
 	 */
-	@Path("profile/{widget-id}/{email}")
+	@Path("profile/{widget-id}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN + "; charset=UTF-8;")
 	public String getPaypalProfileAndInvoices(
-			@PathParam("widget-id") Long widgetId,
-			@PathParam("email") String email) {
+			@PathParam("widget-id") Long widgetId) {
 		try {
 			// Retrieves widget based on its id
 			Widget widget = WidgetUtil.getWidget(widgetId);
 			if (widget != null) {
 				// Retrieves user information from zendesk.
-				return PaypalUtil.getPaypalProfile(widget, email);
+				return PaypalUtil.getPaypalAccess(widget);
 			}
 		} catch (Exception e) {
 			throw ExceptionUtil.catchWebException(e);
