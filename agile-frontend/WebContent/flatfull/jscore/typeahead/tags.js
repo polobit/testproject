@@ -20,7 +20,7 @@ var tagsCollectionView;
  * @method setup_tags_typeahead
  * 
  */
-function setup_tags_typeahead() {
+function setup_tags_typeahead(callback) {
 	var tags_list = [];
 	
 	
@@ -82,7 +82,8 @@ function setup_tags_typeahead() {
     		if((this.$element).closest(".control-group").hasClass('save-tag')){
     			
     			var json = null;
-    			
+    			if(callback!=undefined)
+                callback(tag);
     			if(company_util.isCompany())
     				json = App_Companies.companyDetailView.model.toJSON();
     			else

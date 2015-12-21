@@ -249,13 +249,13 @@
 	</td>
 </script>
 
-<script id = "contacts-custom-view-addData-template" type="text/html">
-	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis" style="width:15em;">
+<script id = "contacts-custom-view-popover-template" type="text/html">
+       <div class="text-ellipsis data" data={{id}}>
 	   
 
-	   	  
-	   	  <div class="unselectable m-t-n-xs pull-left" id="score" unselectable="on" onselectstart="return false">
+	   	  <div>Score:
+	   	  <div class="pull-right m-r-lg">
+	   	  <div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
 							<div  class="text-lg score-view">
 								<img src="{{getS3ImagePath '../../img/flame.png'}}" style="width:13px;"> 
 								
@@ -277,34 +277,13 @@
 							{{/canEditContact}}
 							</div>
 						</div>
-
-       		{{#property_is_exists "phone" properties}}
-							<div>
-								{{#multiple_Property_Element_List "phone" properties id}}
-
-												
-								<div class="contact-phone">
-									{{#each this}}
-									<div class="pull-left contact-phone-icon hide">
-									<i class="icon icon-call-end text-sm m-r-xs v-middle"></i>
-									</div>
-									<div class="text-sm">
-	   	  		<i class="icon-call-end"></i><span class="contact-call-button-div"  data-toggle="tooltip" data-placement="top" title="">
-										<a href="tel:{{remove_spaces value}}" class="contact-make-call contact-call-button" phone="{{value}}">{{value}}</a> 
-                                        {{#if subtype}}<span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
-										</span>
-	   	  				</div>
-									<div class="clearfix"></div>
-									{{/each}}
-								</div>
-								{{/multiple_Property_Element_List}}
+						</div>
 							</div>
-							<div class="clearfix"></div>
-							{{/property_is_exists}}
-
+       		
 
 					{{#property_is_exists "email" properties}}
 							
+							<div>Mail:</div>
 								{{#multiple_Property_Element_List "email" properties id}}
 
 								<div class="contact-email text-sm l-h"> 
@@ -325,14 +304,31 @@
 								
 
 								{{/property_is_exists}}
+
+								<div class="m-t-xs">
+						<div id="addTagsForm" style="display: none;" class="m-b-none">
+							<div class="control-group save-tag m-b-none">
+								<input name="" type="text" id="addTags"
+									class="tags-typeahead ignore-comma-keydown form-control inline-block"
+									style="width: 60%" placeholder="Enter tag" />
+								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags">Add</a></span>
+							</div>
+						</div>
+						{{#canEditContact owner.id}}
+			<a href="#" id="add-tags" rel="tooltip"
+							data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i
+							class="icon-plus"></i> <span >Add Tag</span></a>
+						{{/canEditContact}}
+
+						
+					</div>
 	   	 
        <br> {{#hasMenuScope 'DEALS'}}
-   <a href="#" class="contact-list-add-deal btn btn-sm btn-default pos-rlt btn-addon"><span><i class='icon-plus-sign'/></span> Add Deal</a> 
+   <a href="#" class="contact-list-add-deal btn btn-sm btn-default pos-rlt "><span><i class='icon-plus-sign'></i></span> Add Deal</a> 
 {{/hasMenuScope}}
-	   	    <a href="#noteModal" data-toggle="modal" class="btn btn-sm btn-default m-t-xs blue btn-slate-action contact-list-add-note"><i class="icon-plus-sign"></i>  Add Note</a>
+	   	    <a href="#noteModal" data-toggle="modal" class="btn btn-sm btn-default blue btn-slate-action contact-list-add-note"><i class="icon-plus-sign"></i>  Add Note</a>
              
 
 	   	          </div>
-	</td>
 </script>
 
