@@ -23,7 +23,7 @@ routes : {
             "sync/freshbooks": "freshbooks_sync",
             "sync/freshbooks/setting": "freshbooks_sync_setting",
 
-            "import" : "importFromCRMS",
+            "importcrm" : "importFromCRMS",
 
  },
 
@@ -91,6 +91,8 @@ salesforce : function(el){
                                   template= 'admin-settings-import-salesforce-prefs';
                                         renderInnerSyncView(url,template,model,function(model){
                                         showNotyPopUp("information", "Salesforce import initiated", "top", 1000);
+                                        // Navigate to back
+                                        Backbone.history.navigate("importcrm", { trigger : true });
                                         });
                                
                              });

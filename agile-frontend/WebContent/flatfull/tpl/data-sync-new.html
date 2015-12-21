@@ -210,8 +210,11 @@
     		{{#if_equals type "SALESFORCE"}}
 			{{#if id}}
     			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
+    			<a href="#sync/salesforce" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    		{{else}}
+    			<a href="#sync/salesforce" class="btn btn-sm btn-default" id="setting-widget">Enable</a>
     		{{/if}}
-    		<a href="#sync/salesforce" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    		
 
     		{{/if_equals}}
 
