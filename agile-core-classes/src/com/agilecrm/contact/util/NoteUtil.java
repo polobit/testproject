@@ -226,17 +226,4 @@ public class NoteUtil
 	Note.dao.deleteAll(list);
     }
     
-    public static int getNotesCountforUser(long startTime,long endTime,Long ownerId)
-    {
-    	try{
-	return dao.ofy().query(Note.class)
-		.filter("domain_owner", new Key<DomainUser>(DomainUser.class, ownerId))
-		.filter("created_time >=", startTime).filter("created_time <", endTime).count();
-    	}
-    	catch (Exception e)
-		{
-		    e.printStackTrace();
-		    return 0;
-		}
-    	}
 }

@@ -385,7 +385,11 @@ user_reports :function(callReportUrl){
 				 	div=div.concat('<div id='+k+' class="conversion_track col-sm-4 panel wrapper"><b>'+k+'</b>');
 				 	//var innerdiv='';
 				 	var index=0;
-
+				 	/*	$.ajax({ url : 'core/api/milestone/pipelinesByName/'+k, type : 'GET', success : function(data)
+					{
+							console.log(data);
+					}
+				 });*/
 				 	var percent='';
 				 	var value;
 				 	var total=0;

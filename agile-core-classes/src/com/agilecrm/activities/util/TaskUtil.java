@@ -937,18 +937,4 @@ public class TaskUtil
 		return query.list();
 	}
 	
-	   public static int getUserCreatedTasks(Long startTime, Long endTime, Long ownerId)
-	    {
-		try
-		{
-		    return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, ownerId))
-			    .filter("created_time >=", startTime).filter("created_time <", endTime)
-			   .count();
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
-		    return 0;
-		}
-	    }
 }
