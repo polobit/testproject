@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,9 +86,11 @@ public class InvoicePdfServlet extends HttpServlet {
 			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
+			System.out.println(ExceptionUtils.getMessage(e));
 			e.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			System.out.println(ExceptionUtils.getMessage(e));
 			e.printStackTrace();
 		}
 		
