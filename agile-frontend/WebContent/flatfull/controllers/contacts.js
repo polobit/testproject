@@ -1057,7 +1057,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#contacts-listener-container').html(el);
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 			if(agile_is_mobile_browser()) {
-			$('#contacts-custom-view-model-list tr td:nth-of-type(2)',el).after('<td><div class="contact-actions-delete-mobile text-xlg text-muted">&times;</div></td>');
+			$('#contacts-table tbody tr td:nth-of-type(2)',el).after('<td><div class="contact-actions-delete-mobile text-xlg text-muted">&times;</div></td>');
 			}
 			
 
@@ -1154,7 +1154,7 @@ var ContactsRouter = Backbone.Router.extend({
 				if(agile_is_mobile_browser()) {
 				
 					var $nextEle = $('<td><div class="contact-actions-delete-mobile text-xlg text-muted">&times;</div></td>');
-					$('#contacts-custom-view-model-list tr td.data',el).after($nextEle);
+					$('#contacts-table tbody tr td.data',el).after($nextEle);
 				}
 				else {
 					$('.contact-actions-delete-mobile').remove();
