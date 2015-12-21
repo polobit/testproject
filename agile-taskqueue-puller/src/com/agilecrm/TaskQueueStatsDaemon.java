@@ -186,7 +186,7 @@ public class TaskQueueStatsDaemon extends Thread
      * 
      * @throws IOException
      */
-    private void setRemoteAPI() throws IOException
+    protected void setRemoteAPI() throws IOException
     {
 	System.out.println("setting remote api in thread " + Thread.currentThread().getName());
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -14,11 +15,11 @@ import com.agilecrm.api.stats.APIStats;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.threads.pool.RemoteAPIThreadPoolExecutor;
-import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import com.google.apphosting.api.ApiProxy;
+import com.googlecode.objectify.cache.TriggerFutureHook;
 
 /**
  * 
@@ -27,6 +28,8 @@ import com.google.apphosting.api.ApiProxy;
  */
 public class ThreadPool
 {
+    private boolean isRemoteAPIInstalled = false;
+
     // private static ThreadPoolExecutor poolExecutor = null;
     private String poolName = null;
 
@@ -50,8 +53,9 @@ public class ThreadPool
 
 	ScalingAgileQueue<Runnable> blockingQueue = new ScalingAgileQueue<Runnable>(100);
 
-	RemoteAPIThreadPoolExecutor poolExecutor = new RemoteAPIThreadPoolExecutor(minPoolSize, maxPoolSize, 5,
-		TimeUnit.MILLISECONDS, blockingQueue);
+	// Executor poolExecutor = Executors.newFixedThreadPool(maxPoolSize);
+	RemoteAPIThreadPoolExecutor poolExecutor = new RemoteAPIThreadPoolExecutor(maxPoolSize, maxPoolSize, 10,
+		TimeUnit.MINUTES, blockingQueue);
 
 	blockingQueue.setThreadPool(poolExecutor);
 
@@ -65,12 +69,20 @@ public class ThreadPool
 
 	// setUpThreadPool(poolName, poolExecutor);
 
-	// poolExecutor.allowCoreThreadTimeOut(true);
+	poolExecutor.allowCoreThreadTimeOut(true);
+
+	if (!isRemoteAPIInstalled)
+	{
+	    // SystemProperty.environment.set(SystemProperty.Environment.Value.Production);
+	    setUpRemoteAPIOnAllThreads();
+
+	    isRemoteAPIInstalled = true;
+	}
+
     }
 
-    private void setUpRemoteAPIOnAllThreads()
+    private static void setUpRemoteAPIOnAllThreads()
     {
-
 	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
 		.useApplicationDefaultCredential();
 
@@ -78,7 +90,24 @@ public class ThreadPool
 
 	try
 	{
+
 	    installer.installOnAllThreads(options);
+
+	    /**
+	     * This is a work around to make new version of remote api to work
+	     * with old version of Objectify (3.1). We wrap the class to its
+	     * parrent class to trick objectify to work as it is working on
+	     * independent thread
+	     */
+	    com.agilecrm.remote.api.hook.TriggerFutureHook hook = new com.agilecrm.remote.api.hook.TriggerFutureHook(ApiProxy.getDelegate());
+
+	    ApiProxy.setDelegate(hook);
+
+	    TriggerFutureHook.install();
+	    System.out.println("Proxy : " + ApiProxy.getDelegate());
+	    // TriggerFutureHook hook = new
+	    // TriggerFutureHook(ApiProxy.getDelegate());
+
 	}
 	catch (IOException e)
 	{
@@ -89,7 +118,8 @@ public class ThreadPool
 
     private void setUpThreadPool(String threadPool, ThreadPoolExecutor executor)
     {
-	ThreadPoolExecutor poolExecutorTemp = new ThreadPoolExecutor(1, 1, 10, TimeUnit.MINUTES,
+
+	ThreadPoolExecutor poolExecutorTemp = new ThreadPoolExecutor(1, 1, 5, TimeUnit.DAYS,
 		new ScalingAgileQueue<Runnable>(10));
 	ThreadTester t = new ThreadTester(executor, threadPool);
 	t.setName(threadPool);
@@ -121,48 +151,8 @@ public class ThreadPool
 
     public synchronized static void main(String[] args)
     {
-	for (int i = 1; i < 10; i++)
-	{
 
-	    ThreadPool.getThreadPoolExecutor("bulk-exporter-queue", 1, 5).execute(new Runnable()
-	    {
-
-		@Override
-		public synchronized void run()
-		{
-		    try
-		    {
-			System.out.println("waiting in thread :" + Thread.currentThread().getName());
-			NamespaceManager.set("local");
-			List<Contact> contacts = ContactUtil.getAll(5, null);
-			// wait(1800000);
-			wait(10000);
-			System.out.println("waiting completed in thread :" + Thread.currentThread().getName());
-			contacts.get(0).save(false);
-
-		    }
-		    catch (Exception e)
-		    {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    }
-		    // TODO Auto-generated method stub
-
-		}
-	    });
-	    /*
-	     * ThreadExample t = new ThreadExample(); if (i % 2 == 0)
-	     * ThreadPool.getThreadPoolExecutor("bulk-exporter-queue", 1,
-	     * 15).execute(t); else
-	     * ThreadPool.getThreadPoolExecutor("exporter-queue", 1,
-	     * 30).execute(t);
-	     */
-	}
-
-	/*
-	 * new ThreadPool("tester", 1, 1).setUpThreadPool("tester",
-	 * ThreadPool.getThreadPoolExecutor("bulk-exporter-queue", 1, 5));
-	 */
+	new ThreadExample().run();
 
     }
 }
@@ -238,23 +228,67 @@ class ThreadExample implements Runnable
 {
     public String s;
 
+    private synchronized void test()
+    {
+	ThreadPoolExecutor pool = ThreadPool.getThreadPoolExecutor("bulk-exporter-queue", 1, 2);
+	for (int i = 1; i < 30; i++)
+	{
+
+	    Future future = pool.submit(new Runnable()
+	    {
+
+		@Override
+		public synchronized void run()
+		{
+		    try
+		    {
+			System.out.println("waiting in thread :" + Thread.currentThread().getName());
+			NamespaceManager.set("local");
+			List<Contact> contacts = ContactUtil.getAll(5, null);
+			// wait(1800000);
+			// wait(10000);
+			System.out.println("waiting completed in thread :" + Thread.currentThread().getName());
+			// contacts.get(0).save(false);
+
+		    }
+		    catch (Exception e)
+		    {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		    // TODO Auto-generated method stub
+
+		}
+	    });
+
+	    /*
+	     * try { future. } catch (InterruptedException e) { // TODO
+	     * Auto-generated catch block e.printStackTrace(); } catch
+	     * (ExecutionException e) { // TODO Auto-generated catch block
+	     * e.printStackTrace(); }
+	     */
+	    /*
+	     * System.out.println("Task completed " + i); try {
+	     * System.out.println("waiting"); System.gc(); if (i / 2 == 0)
+	     * wait(2 * 1000); System.gc();
+	     * System.out.println("wait completed"); } catch
+	     * (InterruptedException e) { // TODO Auto-generated catch block
+	     * e.printStackTrace(); }
+	     */
+	    /*
+	     * ThreadExample t = new ThreadExample(); if (i % 2 == 0)
+	     * ThreadPool.getThreadPoolExecutor("bulk-exporter-queue", 1,
+	     * 15).execute(t); else
+	     * ThreadPool.getThreadPoolExecutor("exporter-queue", 1,
+	     * 30).execute(t);
+	     */
+	}
+    }
+
     @Override
     public void run()
     {
-	// System.out.println("test " + Thread.currentThread().getName() +
-	// " time " + System.currentTimeMillis());
-	System.out.println(Thread.currentThread());
-	System.out.println("namespace from thread : " + NamespaceManager.get());
-	// System.out.println(s);
-	NamespaceManager.set("local");
-	System.out.println(ContactUtil.getAllCompanies(2, null));
-	List<Contact> contacts = ContactUtil.getAllContacts(1, null);
-	contacts.get(0).save(true);
-
-	System.out.println(ContactUtil.getAllCompanies(2, null));
-	System.out.println(ContactUtil.getAllCompanies(2, null));
-	System.out.println(WorkflowUtil.getAllWorkflows(1, null));
-	NamespaceManager.set(null);
+	test();
     }
 
 }

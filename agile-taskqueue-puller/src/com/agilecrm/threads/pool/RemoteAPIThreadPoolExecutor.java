@@ -27,7 +27,8 @@ public class RemoteAPIThreadPoolExecutor extends ThreadPoolExecutor
     @Override
     protected void beforeExecute(Thread t, Runnable r)
     {
-	setup(t);
+	System.out.println("Delegate in thread " + t.getName() + " is : " + ApiProxy.getDelegate());
+	// setup(t);
 	// TODO Auto-generated method stub
 	super.beforeExecute(t, r);
     }
@@ -35,12 +36,25 @@ public class RemoteAPIThreadPoolExecutor extends ThreadPoolExecutor
     protected void afterExecute(Runnable r, Throwable t)
     {
 	super.afterExecute(r, t);
+	completePendingRequests();
     };
+
+    private void throwException()
+    {
+	int i = 0;
+	if (i + 3 == 3)
+	    throw new NumberFormatException("intentional");
+    }
 
     private void completePendingRequests()
     {
 	// ApiProxy.setDelegate(threadLocalDelegate);
+
 	System.out.println("Doing nothing as of now");
+	// Delegate delegate = state.getDelegate();
+	// ApiProxy.setDelegate(delegate);
+	// state.getInstaller().uninstall();
+	// installerState.remove();
     }
 
     Runnable r;
@@ -97,7 +111,7 @@ public class RemoteAPIThreadPoolExecutor extends ThreadPoolExecutor
 		System.out.println(ApiProxy.getDelegate());
 
 		// Install delegate with objectify
-		TriggerFutureHook.install();
+		// TriggerFutureHook.install();
 		System.out.println(ApiProxy.getDelegate() instanceof TriggerFutureHook);
 
 		threadLocalDelegate = ApiProxy.getDelegate();
@@ -130,6 +144,16 @@ public class RemoteAPIThreadPoolExecutor extends ThreadPoolExecutor
 	    this.installedEnv = installedEnv;
 	    this.installedTime = System.currentTimeMillis();
 	    this.options = options;
+	}
+
+	RemoteApiInstaller getInstaller()
+	{
+	    return remoteApiInstaller;
+	}
+
+	Delegate getDelegate()
+	{
+	    return remoteApiDelegate;
 	}
 
 	boolean isInstalled()
