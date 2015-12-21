@@ -1811,7 +1811,7 @@ input[type=file] {
   width: 100%;
 }
 #aside li a:active {
-  opacity: 0.5;
+  /*opacity: 0.5;*/
 }
 .pos-abs.pos-r.pos-t > ul > li > a {
 color:#727272;
