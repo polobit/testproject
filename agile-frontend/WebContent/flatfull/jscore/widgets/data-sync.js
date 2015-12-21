@@ -23,6 +23,9 @@ function organize_sync_widgets(base_model)
 	if (sync_type == "QUICKBOOK")
 		$('#quickbook', this.el).append($(itemView.render().el));
 
+	if (sync_type == "SALESFORCE")
+		$('#salesforce', this.el).append($(itemView.render().el));
+
 }
 
 
@@ -90,6 +93,7 @@ function initializeDataSyncListners(){
 
 		if(!sync_widget_type)
 			return;
+
 		var deleteSyncUrl="core/api/contactprefs/delete/"+sync_widget_type+"/"+sync_widget_id;
 		$.ajax({
  				url : deleteSyncUrl,
@@ -97,7 +101,10 @@ function initializeDataSyncListners(){
 				success : function(){
 					console.log("success");
 					
-					App_Datasync.dataSync();
+					if(sync_widget_type == "SALESFORCE")
+						App_Datasync.importFromCRMS();
+					else
+						App_Datasync.dataSync();
 				}
 			});
 		
@@ -212,7 +219,11 @@ renders inner sync view and binds all model events to DataSync_Event_Modal_View
 			                    }
 			                });
 
-			   $("#data-sync-settings-tab-content").html(data_sync.render().el);
+  		 var el = $("#data-sync-settings-tab-content");
+  		 if(el.length == 0)
+			el = $("#data-import-settings-tab-content");  		 	 
+
+		el.html(data_sync.render().el);
   }
 
 

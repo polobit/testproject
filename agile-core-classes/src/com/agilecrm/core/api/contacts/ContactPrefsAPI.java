@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -16,6 +17,8 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.contact.sync.Type;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactsImportUtil;
+import com.thirdparty.google.calendar.GoogleCalenderPrefs;
+import com.thirdparty.google.calendar.GoogleCalenderPrefs.CALENDAR_TYPE;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
@@ -81,6 +84,10 @@ public class ContactPrefsAPI
 	 System.out.println("in update prefs and prefs id are same before saving ");
 		updatedPrefs.save();
 	}
+	
+	if(updatedPrefs.type.toString().equals("SALESFORCE")){
+		ContactsImportUtil.initilaizeImportBackend(updatedPrefs, true);
+	}
 
 	if (!StringUtils.isEmpty(sync) && !updatedPrefs.inProgress)
 	{
@@ -90,14 +97,28 @@ public class ContactPrefsAPI
 	    System.out.println("updated prefs and prefs are same while syncing");
 	    	updatedPrefs.save();
 	    }
+	    
 	    ContactsImportUtil.initilaizeImportBackend(updatedPrefs, true);
 	    return;
 	}
-	if(updatedPrefs.id==prefs.id){
-		 System.out.println("in update prefs and prefs id are same before saving ");
-			updatedPrefs.save();
-		}
+	
 
+    }
+    
+    /**
+     * Returns calendar prefs with out access token. It is used for showing
+     * settings in prefs page.
+     * 
+     * @return
+     */
+    @Path("/{type}")
+    @POST
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void saveCalendarPrefsBasedOnType(ContactPrefs prefs)
+    {
+    	prefs.save();
+    	
+    	ContactsImportUtil.initilaizeImportBackend(prefs, true);
     }
 
     /**
@@ -148,6 +169,8 @@ public class ContactPrefsAPI
             	ContactPrefsUtil.deleteSyncwidgetById(Type.QUICKBOOK,id);
         	if(type==Type.FRESHBOOKS)
             ContactPrefsUtil.deleteSyncwidgetById(Type.FRESHBOOKS,id);
+        	if(type==Type.SALESFORCE)
+                ContactPrefsUtil.deleteSyncwidgetById(Type.SALESFORCE,id);
 
     }
     

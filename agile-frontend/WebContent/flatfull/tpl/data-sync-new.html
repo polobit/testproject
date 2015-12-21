@@ -1,3 +1,32 @@
+ <script id="data-import-collection-template" type="html/text">
+        
+    <div class="tab-container m-b-none">
+       <ul class="nav nav-tabs">
+         <li><a href="#salesforce-tab" data-toggle="tab"  class="b-l-none">Salesforce</a></li>
+       </ul>
+	</div>
+
+	<div class="tab-content wrapper-md panel" id="settings-data-import-tab-content">
+		<div class="tab-pane" id="salesforce-tab">
+			<div class="row">
+				<div id="salesforce" class="col-md-4 col-sm-6 col-xs-12"></div>
+			</div>
+		</div>
+	</div>
+
+</script>
+
+<script id="data-import-settings-template" type="text/html">
+	<div class="tab-container m-b-none widgets_inner">
+       <ul class="nav nav-tabs">
+         <li><a href="#salesforce-tab" data-toggle="tab"  class="b-l-none">Salesforce</a></li>
+       </ul>
+	</div>
+
+	<div class="tab-content wrapper-md panel">
+		<div class="tab-pane active" id="data-import-settings-tab-content"></div>
+	</div>
+</script>
 
  <script id="data-sync-collection-template" type="html/text">
         
@@ -43,11 +72,8 @@
 	</div>
 
 </script>
+
 <script id="data-sync-model-template" type="text/html">	
-
-
-
-
 </script>
 
 <script id="data-sync-settings-template" type="text/html">
@@ -180,6 +206,15 @@
 				{{/canSyncContacts}}
     		{{/if}}
     		{{/if_equals}}
+
+    		{{#if_equals type "SALESFORCE"}}
+			{{#if id}}
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
+    		{{/if}}
+    		<a href="#sync/salesforce" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+
+    		{{/if_equals}}
+
 	</div>
 	</div>
 </div>

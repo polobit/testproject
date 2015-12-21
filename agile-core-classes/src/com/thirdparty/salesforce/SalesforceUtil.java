@@ -44,6 +44,9 @@ public class SalesforceUtil
 		SalesforceAPI salesforce = new SalesforceAPI(contactPrefs.userName, contactPrefs.password, contactPrefs.apiKey);
 
 		JSONArray result = salesforce.retrieveEntities(query);
+		System.out.println("result = " + result);
+		
+		
 		salesforce.logout();
 
 		return result.toString();
@@ -81,8 +84,15 @@ public class SalesforceUtil
 
 	public static String getContactsFromSalesForce(ContactPrefs prefs) throws Exception
 	{
-		String query = "SELECT  FirstName, LastName, Email, Title, Description,Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet, LeadSource FROM Contact";
+		String query = "SELECT  Id, FirstName, LastName, Email, Title, Description,Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet, LeadSource FROM Contact";
 		System.out.println("In contacts------------------------------------");
+		return SalesforceUtil.getEntities(prefs, query);
+	}
+	
+	public static String getTasksFromSalesForce(ContactPrefs prefs) throws Exception
+	{
+		String query = "select Id, OwnerId, whoId, whatId, Subject, Description, ActivityDate, Priority, Status, Who.Type, Who.Name, Who.Id From Task";
+		System.out.println("In tasks------------------------------------");
 		return SalesforceUtil.getEntities(prefs, query);
 	}
 
@@ -140,6 +150,7 @@ public class SalesforceUtil
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			throw new Exception("Invalid login. Please try again");
 		}
 	}
@@ -147,17 +158,24 @@ public class SalesforceUtil
 	public static void main(String[] args)
 	{
 		ContactPrefs prefs = new ContactPrefs();
-		prefs.userName = "tejaswitest@gmail.com";
+		/*prefs.userName = "tejaswitest@gmail.com";
 		prefs.password = "agile1234";
-		prefs.apiKey = "CgBv3oy3GAY7eoNNQnx7yb2e";
+		prefs.apiKey = "CgBv3oy3GAY7eoNNQnx7yb2e";*/
+		
+		prefs.userName = "govindarajulu3@gmail.com";
+		prefs.password = "govind8706!";
+		prefs.apiKey = "VvFIXLZJOSHrCwXYoV6HaxQzp";
+		
 
 		try
 		{
 			System.out.println(SalesforceUtil.checkSalesforcePrefs(prefs));
 
+			System.out.println(SalesforceUtil.getTasksFromSalesForce(prefs));
+			
 			System.out.println(SalesforceUtil.getContactsFromSalesForce(prefs));
 
-			System.out.println(SalesforceUtil.getLeadsFromSalesForce(prefs));
+			/*System.out.println(SalesforceUtil.getLeadsFromSalesForce(prefs));
 
 			System.out.println(SalesforceUtil.getAccountsFromSalesForce(prefs));
 
@@ -165,7 +183,7 @@ public class SalesforceUtil
 
 			System.out.println(SalesforceUtil.getopportunitiesFromSalesForce(prefs));
 
-			System.out.println(SalesforceUtil.getAccountByAccountIdFromSalesForce(prefs, "0019000000U5pTDAAZ"));
+			System.out.println(SalesforceUtil.getAccountByAccountIdFromSalesForce(prefs, "0019000000U5pTDAAZ"));*/
 
 		}
 		catch (WebApplicationException e)

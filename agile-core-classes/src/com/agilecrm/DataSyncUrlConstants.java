@@ -28,6 +28,8 @@ public class DataSyncUrlConstants
 	public static String OFFICE365_IMAGE_URL="/img/plugins/office356-calendar.png";
 	public static String OFFICE365_CONTENT="By configuring access to your Office365 Calendar, we'll automatically sync your events in your Office365 Calendar with Agile calendar.";
 			
+	public static String SALESFORCE_IMAGE_URL="/img/plugins/Salesforce.gif";
+	public static String SALESFORCE_CONTENT="By configuring access to your Salesforce, we'll automatically import your Contacts and Tasks to AgileCRM.";
 	
 	
 	private static DataSyncUrlConstants dataSyncUrlConstants;
@@ -47,6 +49,8 @@ public class DataSyncUrlConstants
 		dataSyncTypes.add("QUICKBOOK");
 		dataSyncTypes.add("FRESHBOOKS");
 		dataSyncTypes.add("OFFICE365");
+		
+		dataSyncTypes.add("SALESFORCE");
 		return dataSyncTypes;
 	}
 	
@@ -92,6 +96,11 @@ public class DataSyncUrlConstants
         	  contactPrefs.type=Type.OFFICE365;
         	  contactPrefs.imageUrl=OFFICE365_IMAGE_URL;
         	  contactPrefs.content=OFFICE365_CONTENT; 
+                   break;
+          case "SALESFORCE":
+        	  contactPrefs.type=Type.SALESFORCE;
+        	  contactPrefs.imageUrl=SALESFORCE_IMAGE_URL;
+        	  contactPrefs.content=SALESFORCE_CONTENT; 
                    break;
       }
 		 return contactPrefs;
