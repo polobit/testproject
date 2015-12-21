@@ -1821,7 +1821,7 @@ table td .thumb img {
 .contacts-div .panel {
     border-left: auto!important;
 }
-#contacts-table tr th:nth-of-type(n+3), #contacts-table tr td:nth-of-type(n+3) {
+#contacts-table tr td:nth-of-type(n+4), #contacts-table tr th:nth-of-type(n+3) {
     display: none;
 }
 }

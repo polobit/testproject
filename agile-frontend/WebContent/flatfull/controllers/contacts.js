@@ -107,7 +107,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
 	{
-		
+
 		if(SCROLL_POSITION)
 		{
 			$('html, body').animate({ scrollTop : SCROLL_POSITION  },1000);
@@ -271,6 +271,8 @@ var ContactsRouter = Backbone.Router.extend({
 		this.contactsListView = new  Contacts_Events_Collection_View({ url : url,custom_scrollable_element:custom_scrollable_element, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
 			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
 			{
+
+		  alert("1");
 		
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
@@ -302,6 +304,9 @@ var ContactsRouter = Backbone.Router.extend({
 				}
 				$('[data-toggle="tooltip"]').tooltip();
 				start_tour("contacts", el);
+
+				
+
 			} });
 
 		// Contacts are fetched when the app loads in the initialize
@@ -310,16 +315,20 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(this.contactsListView.render().el);
 			contactFiltersListeners();
+			
 		} else {
 			$('#contacts-listener-container').find('.contacts-div').html(this.contactsListView.render().el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
+			
 		}
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
 		$('[data-toggle="tooltip"]').tooltip();
 	
+		
+
 
 	},
 	
@@ -1047,6 +1056,10 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(el);
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
+			if(agile_is_mobile_browser()) {
+			$('#contacts-custom-view-model-list tr td:nth-of-type(2)',el).after('<td><div class="contact-actions-delete-mobile text-xlg text-muted">&times;</div></td>');
+			}
+			
 
 			contactFiltersListeners();
 
@@ -1114,6 +1127,7 @@ var ContactsRouter = Backbone.Router.extend({
 				//pieTags(el);
 				setupViews(el, view_data.name);
 				$("#contacts-view-options").css( 'pointer-events', 'auto' );
+				
 
 
 				// show list of filters dropdown in contacts list
@@ -1136,6 +1150,18 @@ var ContactsRouter = Backbone.Router.extend({
 				} else {					
 					setupLhsFilters(el);
 				}
+
+				if(agile_is_mobile_browser()) {
+				
+					var $nextEle = $('<td><div class="contact-actions-delete-mobile text-xlg text-muted">&times;</div></td>');
+					$('#contacts-custom-view-model-list tr td.data',el).after($nextEle);
+				}
+				else {
+					$('.contact-actions-delete-mobile').remove();
+				}
+
+				
+
 			} });
 
 		var _that = this;
