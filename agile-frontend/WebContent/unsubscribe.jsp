@@ -415,12 +415,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 <script id="remove-from-this-campaign-template" type="text/html">
 <input type="hidden" name="status" value="current">
 
-<p>You are about to be removed from the Campaign - 
-<%if (!workflow.unsubscribe.unsubscribe_name.isEmpty()) {%>
-        <%= workflow.unsubscribe.unsubscribe_name %>
-         <%} else {%>
-         <%= workflow.name %>
-         <%}%>
+<p>You are about to be removed from the Campaign - <%= workflow.unsubscribe.unsubscribe_name %>
 </p>
 </script>
 
@@ -431,11 +426,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 </script>
 
 <script id="ask-the-user-template" type="text/html">
-<input type="radio" name="status" id="current" value="current"/> Remove me from this campaign - <%if (!workflow.unsubscribe.unsubscribe_name.isEmpty())  {%>
-        <%= workflow.unsubscribe.unsubscribe_name%>
-         <%} else {%>
-        <%= workflow.name %>
-         <%}%>
+<input type="radio" name="status" id="current" value="current"/> Remove me from this campaign - <%= workflow.unsubscribe.unsubscribe_name %>
 <br/>
 <input type="radio" name="status" value="all" id="all"/> Stop ALL communication from this sender.
 <label for="status" class="error">Please select any one of the options</label>			
