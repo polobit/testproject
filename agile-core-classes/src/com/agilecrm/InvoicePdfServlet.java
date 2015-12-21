@@ -100,7 +100,7 @@ public class InvoicePdfServlet extends HttpServlet {
 		System.out.println("converting invoice to json");
 		JSONObject invoiceObj = new JSONObject();
 		
-		String userId = DomainUserUtil.getCurrentDomainUser().email;
+		String userId = request.getParameter("email");
 		System.out.println("userId = " + userId);
 		if (StringUtils.isBlank(userId))
 			throw new Exception("Invalid User.");
