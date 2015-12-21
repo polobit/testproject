@@ -471,5 +471,17 @@
         <property name="contact_id" direction="asc"/>
         <property name="date_secs" direction="desc"/>
     </datastore-index>
+    
+        <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="archived" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
+        <property name="milestone_changed_time" direction="asc"/>
+    </datastore-index>
+    
+        <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="archived" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
+        <property name="created_time" direction="asc"/>
+    </datastore-index>
 	
 </datastore-indexes>
