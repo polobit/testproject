@@ -89,7 +89,7 @@
 				{{numeric_operation this.quantity 1000 "*"}} Emails
 				<br>
        			 <small>(charged @ ${{numeric_operation plan.amount 100 "/"}}/1000)</small>
-        		{{else}}
+        		{{else}} 
 				{{#if description}}
                	 {{invoice_description description}}
 				{{else}}
@@ -137,7 +137,7 @@ ${{numeric_operation ../../amountDue 100 "/"}}
 	  	<div class="col-md-10 text-center">
 			<div class="m-b-sm" style="height: 35px;">
 					<a class="btn btn-default" href="#invoice-details">Back</a>
-					<input class="print_btn btn btn btn-primary" type="button" value="Print" onclick="window.print()">
+					<a href="/invoice?inv_id={{invoice.id}}" class="btn btn btn-primary">Print</a>
 						
 			</div>
 		</div>
