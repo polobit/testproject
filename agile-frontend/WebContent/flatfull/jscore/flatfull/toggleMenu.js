@@ -45,11 +45,10 @@ $(document).ready(function(){
 
 	 $('#aside').off('li a');
 	if(agile_is_mobile_browser()){
-		$('#aside').on('touchstart','li a',function(){
-			$(this).css('padding-left', 25);
-		});
-		$('#aside').on('touchleave touchend','li a',function(){
-			$(this).css('padding-left', 20);
+		$('body').on('touchstart','.nav li',function(e){
+		e.preventDefault();
+		$('.nav li').removeClass('active');
+		$(this).addClass('active');
 		});
 	}
 	
