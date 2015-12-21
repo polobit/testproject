@@ -70,7 +70,7 @@ public class InvoicePdfServlet extends HttpServlet {
 			String invoiceTemplate = MustacheUtil.templatize("invoice_pdf_html.html", invoiceJSON);
 			response.setContentType("application/pdf");
 			SimpleDateFormat invoiceMonthFormat = new SimpleDateFormat("MMM");
-			response.setHeader("Content-Disposition","attachment; filename="+invoiceMonthFormat.format(new Date(invoice.getDate()))+"-Invoice.pdf");
+			response.setHeader("Content-Disposition","attachment; filename="+invoiceMonthFormat.format(new Date(invoice.getDate()*1000))+"-Invoice.pdf");
 			Document document = new Document();
 			PdfWriter writer = PdfWriter.getInstance(document, response.getOutputStream());
 			document.open();
@@ -109,12 +109,12 @@ public class InvoicePdfServlet extends HttpServlet {
 		if(companNname != null && !companNname.equals("My company"))
 			invoiceObj.put("company_name", companNname);
 		invoiceObj.put("cust_id", invoice.getCustomer());
-		invoiceObj.put("cust_id", invoice.getId());
+		invoiceObj.put("id", invoice.getId());
 		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yy");
 		
 		invoiceObj.put("payment_date", format.format(new Date(invoice.getDate() * 1000)));
 		invoiceObj.put("detailed_collection", formatInvoiceCollections(invoice));
-		invoiceObj.put("total", convertAmountToReadable(invoice.getTotal()/100));
+		invoiceObj.put("total", convertAmountToReadable(invoice.getTotal()));
 		
 		return invoiceObj;
 	}
@@ -132,7 +132,7 @@ public class InvoicePdfServlet extends HttpServlet {
 			if(plan.getName().toLowerCase().contains("email")){
 				json.put("plan_type", "Emails");
 				json.put("description", lines.getQuantity()*1000+" Emails");
-				json.put("description2", "(charged @ "+convertAmountToReadable(plan.getAmount()/100)+"/1000)");
+				json.put("description2", "(charged @ $"+convertAmountToReadable(plan.getAmount())+"/1000)");
 			}else {
 				json.put("plan_type", plan.getName()+" ("+plan.getAmount()/100+"/"+plan.getInterval()+")");
 				String description = lines.getDescription();
@@ -146,7 +146,7 @@ public class InvoicePdfServlet extends HttpServlet {
 				}
 				
 			}
-			json.put("amount", convertAmountToReadable(lines.getAmount()/100));
+			json.put("amount", convertAmountToReadable(lines.getAmount()));
 			
 		payments_desp_JSON.put(json);
 		}
@@ -155,8 +155,9 @@ public class InvoicePdfServlet extends HttpServlet {
 	}
 	String convertAmountToReadable(Integer amount)
 	{
-
-		String str = amount + "";
+		Float floatedAmount = new Float(amount);
+		
+		String str = floatedAmount/100 + "";
 
 		System.out.println("str = " + str);
 
