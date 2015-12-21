@@ -65,6 +65,7 @@ public class InvoicePdfServlet extends HttpServlet {
 				throw new Exception("Invoice Not found.");
 			System.out.println(invoice);
 			JSONObject invoiceJSON = getInvoiceJSON(request, invoice);
+			System.out.println("Invoice JSON::: "+invoiceJSON);
 			String invoiceTemplate = MustacheUtil.templatize("invoice_pdf_html.html", invoiceJSON);
 			response.setContentType("application/pdf");
 			SimpleDateFormat invoiceMonthFormat = new SimpleDateFormat("MMM");
@@ -93,7 +94,8 @@ public class InvoicePdfServlet extends HttpServlet {
 	}
 	public JSONObject getInvoiceJSON(HttpServletRequest request, Invoice invoice) throws Exception
 	{
-	JSONObject invoiceObj = new JSONObject();
+		System.out.println("converting invoice to json");
+		JSONObject invoiceObj = new JSONObject();
 		
 		String userId = DomainUserUtil.getCurrentDomainUser().email;
 		System.out.println("userId = " + userId);
