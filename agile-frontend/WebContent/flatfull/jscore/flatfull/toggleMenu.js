@@ -45,8 +45,7 @@ $(document).ready(function(){
 
 	 $('#aside').off('li a');
 	if(agile_is_mobile_browser()){
-		$('body').on('touchstart','.nav li',function(e){
-		e.preventDefault();
+		$('body').on('touchstart','.nav li',function(){
 		$('.nav li').removeClass('active');
 		$(this).addClass('active');
 		});
