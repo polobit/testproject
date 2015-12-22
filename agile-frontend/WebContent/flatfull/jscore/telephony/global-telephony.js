@@ -374,6 +374,7 @@ function handleCallRequest(message)
 	}
 	else if ((message || {}).callType == "Skype")
 	{
+		/*
 		// start from here
 		if (message.state == "lastCallDetail")
 		{
@@ -439,7 +440,8 @@ function handleCallRequest(message)
 		}
 		showSkypeCallNoty(message);
 		return;
-	}
+	*/
+		}
 }
 
 // this is to download the jar file....
