@@ -124,6 +124,9 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	var eventHandler = uiFieldDefinition.eventHandler;
 	var event = uiFieldDefinition.event;
 
+	// Useful for changes after select list loaded
+	var callback = uiFieldDefinition.callback;
+
     var attr = "";
 
 	if(type == "multiselect")
@@ -155,7 +158,20 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	}
 
 	// Fetches data and fill select
-	fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type)
+	fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type, function($select, data)
+			{
+				try
+				{
+					if(callback)
+						{
+							window[callback]($select, data);
+						}
+				}
+				catch(err)
+				{
+					console.log('error occured...' + err);
+				}
+			});
 	
 	return selectContainer;
 }
