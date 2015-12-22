@@ -1,6 +1,14 @@
 <script id="invoice-detail-template" type="html/text">
-<div class="col-md-2"></div>
-<div class="col-md-8 p-t">
+<div class="row p-t-xs">
+<div class="col-md-9 p-r-xs">
+  <div class="pull-right">
+    <a href="#invoice-details" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Back"><i class="fa fa-arrow-left"></i></a>
+    <a href="/invoice?inv_id={{this.id}}&email={{get_current_domain_email}}" class="btn btn-default m-l-xs" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Download"><i class="fa fa-download"></i></a>
+  </div>
+</div>
+</div>
+<div class="col-md-1"></div>
+<div class="col-md-8 p-t-xs">
    <div class="row" style="background-color: whitesmoke;" id="row-div">
       <table width="100%" id="sort-table">
          <colgroup>
@@ -134,13 +142,6 @@ ${{numeric_operation ../../amountDue 100 "/"}}
          </div><!-- end of panel -->
       </div> <!-- end of col-md-12 -->
 
-	  	<div class="col-md-10 text-center">
-			<div class="m-b-sm" style="height: 35px;">
-					<a class="btn btn-default" href="#invoice-details">Back</a>
-					<a href="/invoice?inv_id={{this.id}}&email={{get_current_domain_email}}" class="btn btn btn-primary">Print</a>
-						
-			</div>
-		</div>
 
    </div><!--end of row -->
 </div> <!-- end of col-md-11 -->

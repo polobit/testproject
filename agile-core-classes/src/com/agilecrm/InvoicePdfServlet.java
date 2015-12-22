@@ -134,7 +134,7 @@ public class InvoicePdfServlet extends HttpServlet {
 				json.put("description", lines.getQuantity()*1000+" Emails");
 				json.put("description2", "(charged @ $"+convertAmountToReadable(plan.getAmount())+"/1000)");
 			}else {
-				json.put("plan_type", plan.getName()+" ("+plan.getAmount()/100+"/"+plan.getInterval()+")");
+				json.put("plan_type", plan.getName()+" ($"+convertAmountToReadable(plan.getAmount())+"/"+plan.getInterval()+")");
 				String description = lines.getDescription();
 				if(description != null && !description.equals("")){
 					if(description.toLowerCase().contains("unused time on"))

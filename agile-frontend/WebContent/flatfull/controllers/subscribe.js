@@ -378,6 +378,7 @@ var SubscribeRouter = Backbone.Router
 								if (!template_ui)
 									return;
 								$('#content').html($(template_ui));
+								$('[data-toggle="tooltip"]').tooltip();
 							}, "#content");
 						});
 
