@@ -731,39 +731,7 @@ function setUpGlobalTwilio()
 			console.log("in twilio ready Twilio_Setup_Called: " + Twilio_Setup_Called);
 			Twilio_Setup_Called = false;
 
-/*
-			// Make call option visible on contact detail page
-			// Sequence of calling option 1) BRIA 2) Twilio 3) SIP
-			if(default_call_type == "Bria"){
-				if(callFromBria == true){
-					$(".contact-call-button").removeAttr('disabled');
-					$(".contact-make-call").removeAttr("href");
-					$(".contact-call-button").addClass('contact-make-bria-call');
-					var selector = '.contact-call-button-div';
-					var text = "Call from Bria";
-					changeTooltipTo(selector,text);
-				}
-			}else{
-				if(Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
-					//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
-					{
-						$(".contact-call-button").removeAttr('disabled');
-						$(".contact-make-call").removeAttr("href");
-						$(".contact-call-button").addClass('contact-make-twilio-call');
-						var selector = '.contact-call-button-div';
-						var text = "Call from Twilio";
-						changeTooltipTo(selector,text);
-					}else if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-						{
-							$(".contact-call-button").removeAttr('disabled');
-							$(".contact-make-call").removeAttr("href");
-							$(".contact-call-button").addClass('contact-make-sip-call');
-							var selector = '.contact-call-button-div';
-							var text = "Call from SIP";
-							changeTooltipTo(selector,text);
-						}
-			}
-*/			
+	
 		});
 
 		Twilio.Device.error(function(error)
