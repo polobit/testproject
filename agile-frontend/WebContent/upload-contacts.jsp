@@ -120,24 +120,24 @@ function isValid(){
 	    return $("#form").valid();
     } 
 
+    function agile_is_mobile_browser(){
+   return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+   }
+
+  (function()
+  {
+    if(agile_is_mobile_browser()){
+   $( "<style>@media all and (max-width: 767px) { .mobile-popup {min-height: 50vh; } .mobile-popup * {text-align: center;font-"+"size: 20px;}.mobile-popup input {display: inline-block;}}</style>" ).appendTo( "head" );
+    }
+  })();
+
 
 </script>
 <style>
 	label.error {
 		color:red;
 	}
-@media all and (max-width: 767px) {	
-	.mobile-popup {
-    min-height: 50vh;
-  }
-  .mobile-popup * {
-    text-align: center;
-    font-size: 20px;
-  }
-  .mobile-popup input {
-  	display: inline-block;
-  }
-}
+
 </style>
 
 </head>
