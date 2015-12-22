@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.appengine.tools.remoteapi.RemoteApiException;
 import com.google.apphosting.api.ApiProxy;
@@ -21,6 +22,7 @@ import com.google.apphosting.api.ApiProxy.Delegate;
 import com.google.apphosting.api.ApiProxy.Environment;
 import com.google.apphosting.api.ApiProxy.LogRecord;
 import com.googlecode.objectify.cache.Pending;
+import com.thirdparty.Mailgun;
 
 /**
  * <p>
@@ -209,7 +211,24 @@ public class TriggerFutureHook implements Delegate<Environment>
 		e.printStackTrace();
 		System.out.println("Exception remote sync custom writer " + retry);
 		if (retry >= MAX_RETRIES)
+		{
+		    try
+		    {
+			Mailgun.sendMail(
+				"campaigns@agile.com",
+				"Remote API Observer",
+				"yaswanth@agilecrm.com",
+				"naresh@agilecrm.com",
+				null,
+				"Error in remote api. Namespace : " + NamespaceManager.get() + " Exception is \n "
+					+ e.getStackTrace(), null, "Hi Yaswanth " + "Retry in remote api failure", null);
+		    }
+		    catch (Exception e1)
+		    {
+			e1.printStackTrace();
+		    }
 		    throw (e);
+		}
 
 		retry++;
 		synchronized (this)
@@ -217,6 +236,21 @@ public class TriggerFutureHook implements Delegate<Environment>
 
 		    try
 		    {
+			if (retry > 1)
+			{
+			    try
+			    {
+				Mailgun.sendMail("campaigns@agile.com", "Remote API Observer", "yaswanth@agilecrm.com",
+					"naresh@agilecrm.com", null, "Error in remote api. Namespace : "
+						+ NamespaceManager.get() + " Exception is \n " + e.getStackTrace(),
+					null, "Hi Yaswanth " + "Retry in remote api", null);
+			    }
+			    catch (Exception e1)
+			    {
+				e1.printStackTrace();
+			    }
+
+			}
 			wait(MAX_INTERVAL);
 		    }
 		    catch (InterruptedException e1)
