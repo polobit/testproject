@@ -19,7 +19,6 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import com.google.apphosting.api.ApiProxy;
-import com.googlecode.objectify.cache.TriggerFutureHook;
 
 /**
  * 
@@ -43,7 +42,7 @@ public class ThreadPool
 	if (threadPoolMap.containsKey(poolName))
 	    return threadPoolMap.get(poolName);
 
-	ThreadPool pool = new ThreadPool(poolName, minPoolSize, maxPoolSize);
+	new ThreadPool(poolName, minPoolSize, maxPoolSize);
 
 	return threadPoolMap.get(poolName);
     }
@@ -99,11 +98,12 @@ public class ThreadPool
 	     * parrent class to trick objectify to work as it is working on
 	     * independent thread
 	     */
-	    com.agilecrm.remote.api.hook.TriggerFutureHook hook = new com.agilecrm.remote.api.hook.TriggerFutureHook(ApiProxy.getDelegate());
+	    com.agilecrm.remote.api.hook.TriggerFutureHook hook = new com.agilecrm.remote.api.hook.TriggerFutureHook(
+		    ApiProxy.getDelegate());
 
 	    ApiProxy.setDelegate(hook);
-
-	    TriggerFutureHook.install();
+	    System.out.println(ApiProxy.getDelegate().getClass().getDeclaredMethods().length);
+	    com.agilecrm.remote.api.hook.TriggerFutureHook.install();
 	    System.out.println("Proxy : " + ApiProxy.getDelegate());
 	    // TriggerFutureHook hook = new
 	    // TriggerFutureHook(ApiProxy.getDelegate());

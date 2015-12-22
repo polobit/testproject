@@ -19,6 +19,7 @@ public class TaskDaemonInitializer
 	pooledQueues.add("export-pull-queue");
 	pooledQueues.add("bulk-export-pull-queue");
 	pooledQueues.add("contact-import-queue");
+	pooledQueues.add("dummy-pull-queue");
     };
 
     public static void runMultiplethreads(String queue, int numberOfThreadsInt)

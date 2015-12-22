@@ -5,9 +5,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 import com.google.appengine.api.utils.SystemProperty;
+import com.google.appengine.tools.remoteapi.RemoteApiException;
 import com.google.apphosting.api.ApiProxy;
 import com.google.apphosting.api.ApiProxy.ApiConfig;
 import com.google.apphosting.api.ApiProxy.ApiProxyException;
@@ -41,6 +47,10 @@ public class TriggerFutureHook implements Delegate<Environment>
 {
     /** */
     Delegate<Environment> parent;
+
+    private static final int MAX_RETRIES = 3;
+    private static final int MAX_INTERVAL = 10 * 1000;
+    private ExecutorService executor = Executors.newFixedThreadPool(5);
 
     /** The thread local value will be removed (null) if there are none pending */
     private static ThreadLocal<Pending> pending = new ThreadLocal<Pending>();
@@ -159,24 +169,76 @@ public class TriggerFutureHook implements Delegate<Environment>
      * byte[], com.google.apphosting.api.ApiProxy.ApiConfig)
      */
     @Override
-    public Future<byte[]> makeAsyncCall(Environment arg0, String arg1, String arg2, byte[] arg3, ApiConfig arg4)
+    public Future<byte[]> makeAsyncCall(final Environment arg0, final String arg1, final String arg2,
+	    final byte[] arg3, final ApiConfig arg4)
     {
 	this.checkPendingFutures();
-	return this.parent.makeAsyncCall(arg0, arg1, arg2, arg3, arg4);
+
+	return executor.submit(new Callable<byte[]>()
+	{
+	    @Override
+	    public byte[] call() throws Exception
+	    {
+		// TODO Auto-generated method stub
+		return TriggerFutureHook.this.makeSyncCall(arg0, arg1, arg2, arg3);
+	    }
+	});
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.google.apphosting.api.ApiProxy.Delegate#makeSyncCall(com.google.
-     * apphosting.api.ApiProxy.Environment, java.lang.String, java.lang.String,
-     * byte[])
+    /**
+     * This is a customization of future hook to retry if something goes wrong
+     * in Remote API
      */
     @Override
     public byte[] makeSyncCall(Environment arg0, String arg1, String arg2, byte[] arg3) throws ApiProxyException
     {
 	this.checkPendingFutures();
-	return this.parent.makeSyncCall(arg0, arg1, arg2, arg3);
+	int retry = 0;
+
+	// Reties max number of times with interval
+	while (retry < MAX_RETRIES)
+	{
+	    try
+	    {
+		byte[] data = this.parent.makeSyncCall(arg0, arg1, arg2, arg3);
+		return data;
+
+	    }
+	    catch (RemoteApiException e)
+	    {
+		e.printStackTrace();
+		System.out.println("Exception remote sync custom writer " + retry);
+		if (retry >= MAX_RETRIES)
+		    throw (e);
+
+		retry++;
+		synchronized (this)
+		{
+
+		    try
+		    {
+			wait(MAX_INTERVAL);
+		    }
+		    catch (InterruptedException e1)
+		    {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		    }
+		}
+
+		continue;
+	    }
+	    catch (ApiProxyException e)
+	    {
+		e.printStackTrace();
+		System.out.println("Exception customer writer");
+		throw (e);
+	    }
+
+	}
+
+	return null;
+
     }
 
     /**
@@ -284,4 +346,42 @@ public class TriggerFutureHook implements Delegate<Environment>
     {
 	return parent.getRequestThreads(paramE);
     }
+}
+
+class RemoteAPIAsynFuture extends FutureTask<byte[]>
+{
+    public RemoteAPIAsynFuture(Callable<byte[]> r)
+    {
+	super(r);
+    }
+
+    protected void done()
+    {
+	try
+	{
+	    if (!isCancelled())
+		get();
+	}
+	catch (RemoteApiException e)
+	{
+	    System.out.println("remote api exception");
+	    // Exception occurred, deal with it
+	    System.out.println("Exception: " + e.getCause());
+	}
+	catch (ApiProxyException e)
+	{
+	    // Shouldn't happen, we're invoked when computation is finished
+	    throw new AssertionError(e);
+	}
+	catch (InterruptedException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	catch (ExecutionException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+    };
 }
