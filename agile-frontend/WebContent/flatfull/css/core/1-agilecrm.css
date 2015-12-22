@@ -2997,3 +2997,7 @@ width: 915px;
 	max-width: none;
 	
 }
+
+#contacts-custom-view-model-list .popover{
+	border-radius: 0px;
+}
