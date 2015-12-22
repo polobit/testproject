@@ -48,18 +48,17 @@
 		{{#each this}}          
 			<li class="list-group-item r-none b-l-none b-r-none">
 					{{#if_equals duration "0"}}
-						<i class="icon pull-left icon-phone text-white text-md m-r-xs m-t-xxs v-middle twilio-widget-unanswer"></i>
+						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-unanswer"></i>
 					{{else}}
-						<i class="icon pull-left icon-phone text-white text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
+						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
 					{{/if_equals}}
 				
 <div class="pull-left text-sm">{{#if_equals duration "0"}}{{#if_equals direction "Missed"}}Call missed {{else}}Call unanswered{{/if_equals}}{{else}}Call connected{{/if_equals}}</div>
 				
-<div class="pull-right"><span class="label bg-light dk text-tiny">{{#is_string duration}}{{toProperFormat duration}}{{else}}0s{{/is_string}}</span></div>
+<div class="pull-right">{{#is_string duration}}{{toProperFormat duration}}{{else}}0s{{/is_string}}</div>
 				
 <div class="clearfix"></div>
-	
-<small class="text-muted block pos-rlt" style="top:-3px;margin-left:21px;"><time class="time-ago pull-left" datetime="{{convert_toISOString startTime}}">{{toLocalTimezone startTime}}</time></small>
+<small class="text-muted block pos-rlt"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{convert_toISOString startTime}}">{{toLocalTimezone startTime}}</time></small>
 				
 <div class="clearfix"></div>
 			</li>
@@ -79,32 +78,33 @@
 <div>
 	<form class="p-xs" id="bria_login_form" name="bria_login_form" method="post">
     	<fieldset>
-				<p class="m-t-sm" style=" border-bottom: 1px solid #DEE5E7;font-weight: bolder; margin: 0px;margin-bottom: 15px;">
-                    Make and receive calls from your contacts using your Bria client
+				<p class="m-t-sm" style=" margin: 0px;margin-bottom: 20px;">
+                    Make & receive calls using your Bria client
 			  </p>	
 
 			  
-			<p style="font-size: 13px;">
-				Please follow these steps to make Bria call from Agile				
+			<p style="font-size: 13px;margin-bottom: 15px">
+				Please follow these steps 			
 			</p>
 
 				<div class="m-t-sm m-b-none text-sm" style="font-size: 12px;">
-				<p>1) Download the Executable from <a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;"> here </a> </p>
-  				<p>2) Save the widget by clicking on the save button below </p>
-				<p>3) Open Bria client in your system and log into your account </p>
-				<p>4) Run the executable by double clicking on it</p>
-				<p>5) Go to contact page whom you want to make call and click on the contact number </p>
+				<p>1) Agile needs an executable on your Windows PC to communicate with Bria. You can download it <a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;"> here.</a> </p>
+  				<p>2) Save the widget by clicking on the save button below. </p>
+				<p>3) Open Brian executable and follow the steps.</p>
 				</div>
 
-              	<div class="m-t-xl text-center">
+
+
+              	<div style="margin-top: 18px">
+			<p style="font-size: 13px; margin-top:5px;">
+				You should be able to now make and receive calls using Bria.	
+			</p>
+				<div class="text-center">
 				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
 				<a href="#add-widget" class="btn btn-default btn-sm ">Cancel</a>
 				</div>
-              
-              <p class="m-t-sm m-b-none">
-                  Don't have Bria client? Download
-                  <a href="http://www.counterpath.com/bria" target="_blank" class="text-info"> here </a>
-              </p>
+              </div>
+
 		 </fieldset>
     </form>
 </div>
