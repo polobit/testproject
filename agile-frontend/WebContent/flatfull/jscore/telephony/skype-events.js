@@ -422,7 +422,7 @@ function getLogsForSkype(num){
 	var logNumber;
 	var parameter = {};
 	
-	parameter['error_message'] = "There is no phone number associated with this contact. <a href='#contact-edit' class='text-info block m-t-xs' style='color:#23b7e5'>Add phone number</a>";
+	parameter['error_message'] = "There is no phone number associated with this contact. <a href='#contact-edit' class='text-info' style='color:#23b7e5'>Add phone number</a>";
 	var contact = agile_crm_get_contact();
 	parameter['num'] = getPhoneWithSkypeInArray(contact.properties);
 

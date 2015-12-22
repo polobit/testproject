@@ -74,22 +74,29 @@
 <div>
 	<form class="p-xs" id="skype_login_form" name="skype_login_form" method="post">
     	<fieldset>
-		      <p class="m-t-sm">
-                   Make and receive calls from your contacts using your Skype account.
-              </p>
-			  
-				<p class="m-t-sm m-b-none">
-					Download executable and run it in your system to establish a connection between your Skype client and Agile CRM."
-				Download <a href="#" class="text-info" target="_blank" id="downloadCallJar" > executable </a>
-				</p>
+ 			<p class="m-t-sm" style=" border-bottom: 1px solid #DEE5E7;font-weight: bolder; margin: 0px;margin-bottom: 15px;">
+                   Make and receive calls from your contacts using your Skype client.
+			  </p>
+				
+			<p style="font-size: 13px;">
+				Please follow these steps to make Skype call from Agile				
+			</p>
 
-              	<div class="m-t-xl">
-			  
-			  <a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">Save</a>
-				<a href="#add-widget" class="btn btn-default btn-sm ml_5">Cancel</a>
+				<div class="m-t-sm m-b-none text-sm" style="font-size: 12px;">
+				<p>1) Download the Executable from <a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;"> here </a> </p>
+  				<p>2) Save the widget by clicking on the save button below </p>
+				<p>3) Open Skype client in your system and log into your account </p>
+				<p>4) Run the executable by double clicking on it</p>
+				<p>5) Go to contact page whom you want to make call and click on the contact number </p>
+				</div>
+
+              	<div class="m-t-xl text-center">
+				<a href="#add-widget" class="btn btn-default btn-sm ">Cancel</a>
+			  	<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
+				
 				</div>
               
-              <p class="m-t-sm m-b-none">
+              <p class="m-t-sm m-b-none ">
                   Don't have Skype client? Download
                   <a href="http://www.skype.com/en/download-skype/skype-for-computer" target="_blank" class="text-info"> here </a>
               </p>
@@ -100,7 +107,7 @@
 
 
 <script id="skypeDialpad-template" type="text/html">
-<div id="skypeDialpad_btns" class="dialpad_btns" style="border: none;position: relative;top: 55px;left: 180px;"> 
+<div id="skypeDialpad_btns" class="dialpad_btns" style="border: none;position: relative;top: 55px;left: 180px;z-index:1"> 
   <div  class"campaign_dialpad_bg" style="border-left: 1px solid #EEEEEE;" >
      <div class="campaign_dialpad_row">
        <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="1" class="button1" id="button1" onclick="skypeSendDTMF('1');"></div>

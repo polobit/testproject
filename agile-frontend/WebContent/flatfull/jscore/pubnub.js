@@ -35,7 +35,7 @@ function initToPubNub(callback)
  */
 function subscribeClientChannel(callback)
 {
-	Pubnub.subscribe({ channel : CURRENT_DOMAIN_USER.id + "_Channel", restore : true, message : function(message, env, channel)
+	Pubnub.subscribe({ channel : CURRENT_DOMAIN_USER.id + "_Channel", restore : false, message : function(message, env, channel)
 	{
 		//console.log(message);
 		

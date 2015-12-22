@@ -584,6 +584,11 @@ var ContactsRouter = Backbone.Router.extend({
 			//fill_owners(el, contact.toJSON());
 			start_tour("contact-details", el);
 			
+			// this part is to remove the progress cursor from contact number shown in contact detail page
+			if(default_call_option.callOption.length == 0){
+				$(".contact-make-call",el).removeClass("c-progress");
+				$(".contact-make-skype-call",el).removeClass("c-progress");
+			}
 
 /*			// Sequence of calling option 1) BRIA 2) Twilio 3) SIP in contact phone option
 			if(default_call_type == "Bria"){

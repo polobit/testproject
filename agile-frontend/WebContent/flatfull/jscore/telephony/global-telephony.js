@@ -1,6 +1,6 @@
 var default_call_option = { "callOption" : [] };
-var callOptionDiv;
-var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null };
+var callOptionDiv = "" ;
+var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null };
 var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false }
 var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
 $(function()
@@ -57,7 +57,7 @@ function globalCallWidgetSet()
 					{
 						console.log("default call option selected is :" + call_widget);
 
-						if (!call_widget)
+						if (call_widget.length == 0)
 						{
 							return;
 						}
@@ -234,26 +234,42 @@ function containsOption(array, property, name)
 
 function sendTestCommand()
 {
-	var image = new Image();
+		setTimeout(function()
+				{
+					if(!Pubnub){
+						sendTestCommand();
+						return;
+					}
+					if(!Pubnub.is_connected_call){
+						sendTestCommand();
+						return;
+					}
+					
+					var image = new Image();
 
-	var domain = CURRENT_DOMAIN_USER['domain'];
-	var id = CURRENT_DOMAIN_USER['id'];
+					var domain = CURRENT_DOMAIN_USER['domain'];
+					var id = CURRENT_DOMAIN_USER['id'];
 
-	var command = "testConnection";
-	var number = "";
-	var callid = "";
+					var command = "testConnection";
+					var number = "";
+					var callid = "";
 
-	image.onload = function(png)
-	{
-		console.log("bria sucess");
-		window.focus();
-	};
-	image.onerror = function(png)
-	{
-		showNotyPopUp("error", ("Executable file is not running to call"), "bottomRight")
-	};
-	image.src = "http://localhost:33333/" + new Date().getTime() + "?command=" + command + ";number=" + number + ";callid=" + callid + ";domain=" + domain + ";userid=" + id + ";type=test?";
-}
+					image.onload = function(png)
+					{
+						console.log("bria sucess");
+						window.focus();
+					};
+					image.onerror = function(png)
+					{
+						showNotyPopUp("error", ("Executable file is not running to call"), "bottomRight")
+					};
+					image.src = "http://localhost:33333/" + new Date().getTime() + "?command=" + command + ";number=" + number + ";callid=" + callid + ";domain=" + domain + ";userid=" + id + ";type=test?";
+
+					
+				}, 5000);
+		
+	
+	}
 
 function replicateglobalCallVariable()
 {
@@ -274,6 +290,7 @@ function resetglobalCallVariables()
 	globalCall.callStatus = "Ideal";
 	globalCall.callId = null;
 	globalCall.callNumber = null;
+	globalCall.lastReceived = null;
 	if (globalCall.timeObject != null)
 	{
 		clearTimeout(globalCall.timeObject);
@@ -319,7 +336,7 @@ function handleCallRequest(message)
 			catch (e)
 			{
 			}
-
+			return;
 		}
 		else if (message.state == "error")
 		{
@@ -386,6 +403,7 @@ function handleCallRequest(message)
 			catch (e)
 			{
 			}
+			return;
 		}
 		else if (message.state == "error")
 		{

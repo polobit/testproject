@@ -422,7 +422,7 @@ function getLogsForBria(num){
 	
 	var logNumber;
 	var parameter = {};
-	parameter['error_message'] = "There is no phone number associated with this contact. <a href='#contact-edit' class='text-info block m-t-xs' style='color:#23b7e5'>Add phone number</a>";
+	parameter['error_message'] = "There is no phone number associated with this contact. <a href='#contact-edit' class='text-info' style='color:#23b7e5'>Add phone number</a>";
 	parameter['num'] = agile_crm_get_contact_properties_list("phone");
 
 	if($("#bria-logs-panel").length > 0){
