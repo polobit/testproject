@@ -1,0 +1,139 @@
+<script id="bria-logs-template" type="text/html">
+{{#if_equals num.length "0"}}
+		<div class="wrapper-sm">
+
+			<div class="word-break p-n text-base" id="bria_no_phone">
+				There is no phone number associated.
+			</div>
+
+		</div>
+{{else}}
+  <div>
+			{{#if_equals num.length "1"}}<div id="bria_contact_number"></div>
+			{{else}}
+		<div class="wrapper-sm">
+			<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs">To&nbsp;:</h4></div>
+			<div class="pull-right">
+				<select name="bria_number" id="bria_contact_number" class="required form-control" style="height:27px;padding-top:2px;">
+					{{#each num}}
+						<option value="{{value}}">{{value}} 
+							{{#if subtype}}({{subtype}}){{/if}}
+						</option>
+					{{/each}}
+				</select>
+			</div>
+			<div class="clearfix"></div>
+			{{/if_equals}}
+	</div>
+
+
+	<div>
+	<ul id="bria-logs-panel" class="list-group m-b-none text-xs">
+		<li class="list-group-item b-n" id="bria_logs_load">
+			<center><img src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
+		</li>
+	</ul>
+
+	</div>
+{{/if_equals}}
+</script>
+
+<script id="bria-logs-fetch-template" type="text/html">
+		<li class="list-group-item r-none b-l-none b-r-none" style="display:none;" id="bria_logs_load">
+			<center><img src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
+		</li>
+
+{{#if this}}
+
+		{{#each this}}          
+			<li class="list-group-item r-none b-l-none b-r-none">
+					{{#if_equals duration "0"}}
+						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-unanswer"></i>
+					{{else}}
+						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
+					{{/if_equals}}
+				
+<div class="pull-left text-sm">{{#if_equals duration "0"}}{{#if_equals direction "Missed"}}Call missed {{else}}Call unanswered{{/if_equals}}{{else}}Call connected{{/if_equals}}</div>
+				
+<div class="pull-right">{{#is_string duration}}{{toProperFormat duration}}{{else}}0s{{/is_string}}</div>
+				
+<div class="clearfix"></div>
+<small class="text-muted block pos-rlt"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{convert_toISOString startTime}}">{{toLocalTimezone startTime}}</time></small>
+				
+<div class="clearfix"></div>
+			</li>
+		{{/each}}
+	{{else}}
+		<li class="list-group-item wrapper-md r-none b-l-none b-r-none text-center">
+	    	Sorry, we could not find any call data
+		</li>
+	{{/if}}
+
+
+
+</script>
+
+
+<script id="bria-login-template" type="text/html">
+<div>
+	<form class="p-xs" id="bria_login_form" name="bria_login_form" method="post">
+    	<fieldset>
+				<p class="m-t-sm" style=" margin: 0px;margin-bottom: 20px;">
+                    Make & receive calls using your Bria client
+			  </p>	
+
+			  
+			<p style="font-size: 13px;margin-bottom: 15px">
+				Please follow these steps 			
+			</p>
+
+				<div class="m-t-sm m-b-none text-sm" style="font-size: 12px;">
+				<p>1) Agile needs an executable on your Windows PC to communicate with Bria. You can download it <a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;"> here.</a> </p>
+  				<p>2) Save the widget by clicking on the save button below. </p>
+				<p>3) Open Brian executable and follow the steps.</p>
+				</div>
+
+
+
+              	<div style="margin-top: 18px">
+			<p style="font-size: 13px; margin-top:5px;">
+				You should be able to now make and receive calls using Bria.	
+			</p>
+				<div class="text-center">
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
+				<a href="#add-widget" class="btn btn-default btn-sm ">Cancel</a>
+				</div>
+              </div>
+
+		 </fieldset>
+    </form>
+</div>
+</script>
+
+
+
+
+<script id="briaDialpad-template" type="text/html">
+<div id="briaDialpad_btns" class="dialpad_btns" style="border: none;position: relative;top: 55px;left: 180px;z-index:1"> 
+  <div  class"campaign_dialpad_bg" style="border-left: 1px solid #EEEEEE;" >
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="1" class="button1" id="button1" onclick="briaSendDTMF('1');"></div>
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="2" class="button2" id="button2" onclick="briaSendDTMF('2');"></div>
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="3" class="button3" id="button3" onclick="briaSendDTMF('3');"></div>
+ 	   <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="4" class="button4" id="button4" onclick="briaSendDTMF('4');"></div>   
+ 	 </div>
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell"><input type="button" value="5" class="button5" id="button5" onclick="briaSendDTMF('5');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="6" class="button6" id="button6" onclick="briaSendDTMF('6');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="7" class="button7" id="button7" onclick="briaSendDTMF('7');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="8" class="button8" id="button8" onclick="briaSendDTMF('8');"></div>
+	 </div>
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell" ><input type="button" value="9" class="button9" id="button9" onclick="briaSendDTMF('9');"></div>
+	   <div class="campaign_dialpad_cell"><input type="button" value="0" class="button0" id="button0" onclick="briaSendDTMF('0');"></div>    
+	   <div class="campaign_dialpad_cell"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="briaSendDTMF('*');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="briaSendDTMF('#');"></div> 	
+	 </div>
+  </div>
+</div>
+</script>

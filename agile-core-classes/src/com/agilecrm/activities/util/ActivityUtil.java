@@ -1370,7 +1370,12 @@ public class ActivityUtil
 	// Search contact
 	if (toOrFromNumber != null)
 	{
-	    Contact contact = QueryDocumentUtil.getContactsByPhoneNumber(toOrFromNumber);
+		Contact contact;
+		try{
+			contact = QueryDocumentUtil.getContactsByPhoneNumber(toOrFromNumber);
+		}catch(Exception e){
+			contact = ContactUtil.searchContactByPhoneNumber(toOrFromNumber);
+		}
 	    System.out.println("contact: " + contact);
 	    if (contact != null)
 	    {
