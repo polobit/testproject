@@ -48,7 +48,8 @@ public class Globals
 
     // GMAIL
     public static final String GOOGLE_CLIENT_ID = "661717543880-elcdgrfs73tl9mbimhmkiqcgic7lqu3i.apps.googleusercontent.com";
-    public static final String GOOGLE_SECRET_KEY = "qExl7mLlRlE_fjnw0YkxAeW5";// "21kj3QAnEAkCJs6fmrcDghAI";
+    public static final String GOOGLE_SECRET_KEY = "qExl7mLlRlE_fjnw0YkxAeW5";
+    // "21kj3QAnEAkCJs6fmrcDghAI";
 
     // GMAIL
     public static final String GOOGLE_CALENDAR_CLIENT_ID = GOOGLE_CLIENT_ID;// "391091478365.apps.googleusercontent.com";
