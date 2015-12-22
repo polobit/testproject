@@ -42,6 +42,13 @@ $(document).ready(function(){
    $("#mobile-menu-settings").trigger('click');
    });
  
+ 	 $('.aside-wrap').off('ul li');
+	 if(agile_is_mobile_browser()){
+	 	$('body').on('touchstart','.aside-wrap ul li',function(){
+ 		$('.aside-wrap ul li').removeClass('active');
+ 		$(this).addClass('active');
+ 		});
+	 }
 
 	
 	
