@@ -282,19 +282,27 @@ var DealsRouter = Backbone.Router.extend({
 						success : function(data){
 							var json = data.toJSON();
 							var milestones = json.milestones;
-							milestonesList = milestones.split(",");
-							$('#milestone').html('');
-							if(milestonesList.length > 1)
+							if(milestones)
 							{
-								$('#milestone', el).html('<option value="">Any</option>');
+								milestonesList = milestones.split(",");
+								$('#milestone').html('');
+								if(milestonesList.length > 1)
+								{
+									$('#milestone', el).html('<option value="">Any</option>');
+								}
+								$.each(milestonesList, function(index, milestone){
+									$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
+								});
+								if(deal_filter_json && deal_filter_json.milestone)
+								{
+									$('#milestone').find('option[value="'+deal_filter_json.milestone+'"]').attr("selected", "selected");
+								}
 							}
-							$.each(milestonesList, function(index, milestone){
-								$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
-							});
-							if(deal_filter_json && deal_filter_json.milestone)
+							else
 							{
-								$('#milestone').find('option[value="'+deal_filter_json.milestone+'"]').attr("selected", "selected");
+								$('#filter_pipeline').trigger('change');
 							}
+							
 							$('#milestone', el).parent().find('img').hide();
 							hideTransitionBar();
 						} 
