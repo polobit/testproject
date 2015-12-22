@@ -83,6 +83,7 @@ public class GoogleWidgetsAPI {
 					System.out.println(response.toString());
 					JSONObject newObj = new JSONObject(response.toString());
 					newObj.put("time", epoch);
+					newObj.put("refresh_token", refreshToken);
 					widget.prefs = newObj.toString();
 					widget.save();
 					System.out.println(newObj.names().toString());
