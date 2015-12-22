@@ -1,0 +1,97 @@
+<script id="admin-settings-products-collection-template" type="text/html">
+
+<div class="panel panel-default">
+ <div class="panel-heading">
+	<div class="pull-left  m-t-xs">Products</div>
+	<div class="pull-right">
+		<a href="#product-add" class="btn btn-sm btn-default btn-addon" id="addProduct"><span><i class='icon-plus-sign'/></span> Add Product</a>
+	</div>
+	<div class="clearfix"></div>
+ </div>
+<div class="row">
+<div class="col-md-12 col-sm-12">
+            <div class=" table-responsive"> 
+            <table class="table table-striped agile-table panel table-layout-mob-view showCheckboxes" url="core/api/products/bulk?action_type=DELETE">
+                <thead>
+                    <tr>
+                        <th style="width:25%" class="header">Name</th>
+						<th style="width:25%" class="header">Description</th>
+						<th style="width:25%" class="header">Price</th>
+                        <th style="width:25%" class="header">Created On</th>
+                        <!-- <th style="width:20%" class="header">&nbsp;</th> -->
+                    </tr>
+                 </thead>
+                 <tbody id='admin-settings-products-model-list' route='product-edit/'>
+                 </tbody>
+            </table>
+            </div>
+    </div>
+</div>
+</div>
+</script>
+<script id="admin-settings-products-model-template" type="text/html">
+    <td class='data' data='{{id}}'>
+    {{name}}
+	</td>
+	<td class='data'>
+    {{description}}
+	</td>
+
+	<td class='data'>
+    {{price}}
+	</td>
+    <td>
+		<div class="table-resp">
+		{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
+		</div>
+	</td>
+    
+   
+</script>
+<script id="admin-settings-product-add-template" type="text/html">
+    <div class="row">
+    	<div class="span9">
+    	<div class="well">
+    
+    		<form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
+    			<fieldset>
+    				{{#if id}}
+                		<legend>Edit Product Details</legend>
+    					<input type="text" name="id" class="hide" value={{id}} >
+					{{else}}
+						<legend>New Product Details</legend>
+    				{{/if}}
+    				<br/>
+                   	<div class="control-group">
+    					<label class="control-label" for="pname">Name <span class="field_req">*</span></label> 
+                   		<div class="controls">
+    						<input type="text" id="pname" name="name" class="required" placeholder="Name" autocapitalize="off"/>
+    					</div>
+    				</div> 
+    			  	<div class="control-group">
+    					<label class="control-label" for="pdescription">Description <span class="field_req">*</span></label> 
+                   		<div class="controls">
+    						<textarea id="pdescription" rows="3" name="description" class="" placeholder="Description"></textarea>
+    					</div>
+    				</div>
+    				<div class="control-group">
+    					<label class="control-label" for="pprice">Price </label> 
+                   		<div class="controls">
+    						<input type="text" id="pprice" class="" name='price' placeholder="Price" autocapitalize="off"/> 
+    					</div>
+    				</div>
+    			</div>
+					</div>
+					</div>
+
+                    <div class="form-actions">
+               			<button type="submit" class="save btn btn-primary">Save Changes</button>
+               			<a type="reset" href='#products' class="btn">Cancel</a>
+             			</div>
+    			</fieldset>
+    		</form>
+    	</div>
+    </div>
+    </div>
+</script>
+

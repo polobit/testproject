@@ -305,6 +305,7 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("bria.js");
 	}
+	
 	return template_relative_urls;
 }
 

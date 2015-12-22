@@ -1,0 +1,36 @@
+<script id="deal-products-collection-template" type="text/html">
+<table id="" class="  table table-bordered checkbox dealproducts_table noDelete agile-table panel table-layout-mob-view" url="core/api/products">  
+            <thead>
+                <tr>
+					<th style="width:5%;"><label class="i-checks i-checks-sm m-b-none "><input type="checkbox" class=" dealproducts_th_checkbox thead_check" value=""><i></i></label></th>	   
+                    <th  style="width:25%" class="header">Name</th>
+					<th  style="width:25%" class="header">Description</th>
+					<th  style="width:25%" class="header">Qty</th>
+                    <th  style="width:25%" class="header">Price</th>
+					<th style="width:25%" class="header">Total</th>
+                </tr>
+            </thead>
+			<tbody id='deal-products-model-list' ></tbody>            
+        </table>
+</script>
+
+<script id="deal-products-model-template" type="text/html">
+	<td class="v-middle checkbox dealproducts_td" style="cursor:default;" data='{{id}}' >
+		<label class="i-checks i-checks-sm"><input data='{{id}}' type="checkbox" {{#if isChecked}}checked{{/if}} class="dealproducts_td_checkbox" value=""><i></i></label>
+	</td>
+	<td class='data' data='{{id}}' >
+    	{{name}}
+	</td>
+	<td class='data'>
+    	{{description}}
+	</td>
+	<td class='data dealproducts_td_qty'>
+    	<span class="dealproducts_td_qty_span">{{#if qty}}{{qty}}{{else}}1{{/if}}</span><input class="hide dealproducts_qty_input"  type="text"  value={{#if qty}}"{{qty}}"{{else}}1{{/if}} />
+	</td>
+	<td class='data'>
+    	{{price}}
+	</td>
+	<td  class='data'>
+		{{total}}
+	</td>
+</script>

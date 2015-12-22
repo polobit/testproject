@@ -409,6 +409,8 @@ function updateDeal(ele, editFromMilestoneView)
 
 	}, "DEAL")
 
+	populate_deal_products(dealForm,value,"#opportunityUpdateForm");
+
 	populateLostReasons(dealForm, value);
 
 	populateDealSources(dealForm, value);
@@ -444,6 +446,8 @@ function show_deal()
 	// Contacts type-ahead
 	agile_type_ahead("relates_to", el, contacts_typeahead);
 
+	populate_deal_products(el, undefined,"#opportunityForm");
+	
 	// Fills the pipelines list in select box.
 	populateTrackMilestones(el, undefined, undefined, function(pipelinesList)
 	{
