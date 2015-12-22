@@ -48,7 +48,7 @@ var SubscribeRouter = Backbone.Router
 
 			"invoice" : "invoice",
 
-			"invoice/:id" : "invoiceDetails",
+			"invoice/:id" : "getInvoiceDetails",
 
 			"getInvoiceDetails/:id" : "getInvoiceDetails",
 
