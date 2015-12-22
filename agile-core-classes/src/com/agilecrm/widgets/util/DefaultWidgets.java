@@ -112,8 +112,8 @@ public class DefaultWidgets {
 		widgets.add(new Widget("Bria", "Make and receive calls from your contacts using your Bria Account.",
 		"/widgets/bria.js", "/img/plugins/bria-call.png", "/img/plugins/bria-call.png", null,
 		WidgetType.CALL));
-		widgets.add(new Widget("Skype", "Make and receive calls from your contacts using your Skype Account.",
-		"/widgets/skype.js", "/img/plugins/skype-call.png", "/img/plugins/skype-call.png", null,WidgetType.CALL));
+/*		widgets.add(new Widget("Skype", "Make and receive calls from your contacts using your Skype Account.",
+		"/widgets/skype.js", "/img/plugins/skype-call.png", "/img/plugins/skype-call.png", null,WidgetType.CALL));*/
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);

@@ -51,7 +51,7 @@ var WidgetsRouter = Backbone.Router
                 "Custom-widget" : "Custom",
                 "Custom-widget/:id" : "Custom",
 				"Bria" : "Bria", "Bria/:id" : "Bria",
-				"Skype" : "Skype", "Skype/:id" : "Skype"
+				//"Skype" : "Skype", "Skype/:id" : "Skype"
 
                 	
             },
@@ -147,9 +147,9 @@ var WidgetsRouter = Backbone.Router
 			 /**
 			 * Manages Skype widget
 			 */
-			 Skype : function(id) {
+	/*		 Skype : function(id) {
 			 	addConfigurableWidget(id, "Skype", 'skype-login');
-			 },
+			 },*/
 			 
             /**
              * Manages Rapleaf widget
