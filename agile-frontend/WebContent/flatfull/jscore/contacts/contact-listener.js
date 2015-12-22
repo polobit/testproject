@@ -1,7 +1,8 @@
 function contactListener()
 {
-	$('#contacts-custom-view-model-list').off('mouseenter','tr');
-		$('#contacts-custom-view-model-list').on('mouseenter','tr',function(e){
+	$('#contacts-custom-view-model-list').off('click','tr');
+		$('#contacts-custom-view-model-list').on('click','tr',function(e){
+			e.stopPropagation();
 			var that=$(this);
 			//var top=e.pageY-40;
 			var left=e.pageX-30;
@@ -13,6 +14,7 @@ function contactListener()
             "placement": "top",
             "html": "true",
             "content": "hello",
+            "title" : "Edit"
             });
 			setTimeout(function() {
 				if (!insidePopover)	{
@@ -30,7 +32,7 @@ function contactListener()
 		 	}
 		 }, 1000);
 });
-		$('#contacts-custom-view-model-list').off('mouseleave','tr');
+	/*	$('#contacts-custom-view-model-list').off('mouseleave','tr');
 	$('#contacts-custom-view-model-list').on('mouseleave','tr',function(){
 		var that=$(this);
 	setTimeout(function() {
@@ -38,19 +40,19 @@ function contactListener()
 				$(that).popover('hide');	
 	}, 1000);
 		
-	});
+	});*/
 }
 
 var insidePopover=false;
 
 function attachEvents(tr,Contact_collection) {
-	$('.popover').on('mouseenter', function() {
+	/*$('.popover').on('mouseenter', function() {
 		insidePopover=true;
 	});
 	$('.popover').on('mouseleave', function() {
 		insidePopover=false;
 		$(tr).popover('hide');
-	});
+	});*/
 	$('.popover').off('click', '.contact-list-add-deal')
 	$('.popover').on('click', '.contact-list-add-deal', function(e)
 	{
