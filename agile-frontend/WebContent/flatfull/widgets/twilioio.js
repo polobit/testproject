@@ -1,3 +1,40 @@
+$(function(){
+
+	$("body").on("click", '.twilio_outgoing_logs', function(e)
+	{
+		$(this).addClass("active");
+		$(".twilio_incoming_logs").removeClass("active");
+		$("#incoming_log_details").hide();
+		$("#outgoing_log_details").show();
+		
+		$('#twilio-outgoing-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
+			var to = $('#contact_number').val();
+		if(to == "" || !to)
+		  	{
+		  		to = TwilioIONumbers[0].value;
+			}
+			getTwilioIOLogs(to);
+					
+	});
+
+
+	$("body").on("click", '.twilio_incoming_logs', function(e)
+	{
+		$(this).addClass("active");
+		$(".twilio_outgoing_logs").removeClass("active");
+		$("#outgoing_log_details").hide();
+		$("#incoming_log_details").show();
+		
+		$('#twilio-incoming-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
+			var to = $('#contact_number').val();
+		if(to == "" || !to)
+	  		{
+	  			to = TwilioIONumbers[0].value;
+			}
+			getTwilioIOLogs(to,"incoming");
+	});
+	
+});
 function startTwilioIOWidget(contact_id){	// Twilio io widget name as a global variable
 
 	TwilioIO_PLUGIN_NAME = "TwilioIO";
@@ -45,6 +82,7 @@ function startTwilioIOWidget(contact_id){	// Twilio io widget name as a global v
 		var page = $(this).attr("page");
 		var pageToken = $(this).attr("pageToken");
 		var to = $('#contact_number').val();
+		var dir = $(this).attr("direction");
 
 		// Append loading img to btn
 		$(this).append('<img src="img/ajax-loader.gif" style="margin-left: 10px;"></img>');
@@ -54,7 +92,7 @@ function startTwilioIOWidget(contact_id){	// Twilio io widget name as a global v
 			to = TwilioIONumbers[0].value;
 
 		// Get next 10 logs
-		getNextLogs(to, page, pageToken);
+		getNextLogs(to, page, pageToken, dir);
 	});
 }
 
@@ -86,9 +124,15 @@ function showListOfContactNumbers()
 		 */
 		$("body").on("change", '#contact_number', function(e)
 		{
-			$('#twilio-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
-			var to = $('#contact_number').val();
-			getTwilioIOLogs(to);
+			if($(".twilio_outgoing_logs").hasClass("active")){
+				$('#twilio-outgoing-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
+					var to = $('#contact_number').val();
+					getTwilioIOLogs(to);
+			}else{
+				$('#twilio-incoming-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
+				var to = $('#contact_number').val();
+				getTwilioIOLogs(to,"incoming");
+			}
 		});
 	}, '#TwilioIO');
 	
@@ -101,8 +145,16 @@ function showListOfContactNumbers()
  * @param to
  *            {@link String} number to which calls are made
  */
-function getTwilioIOLogs(to)
+function getTwilioIOLogs(to, direction)
 {
+
+	var dir = "outgoing";
+	
+	if(direction){
+		if(direction == "incoming"){
+			dir = "incoming";
+		}
+	}
 	console.log("In getTwilioIOLogs:" + to);
 
 	// When contact added from API, it may have empty number.
@@ -114,15 +166,15 @@ function getTwilioIOLogs(to)
 	  }		
 	
 	// If call logs are not added then only shows loading until logs are fetched
-	var callLogPresent = $("#twilio-logs-panel li")[0];
+	var callLogPresent = $("#twilio-"+dir+"-logs-panel li")[0];
 	if (!$(callLogPresent).hasClass("row-fluid"))
-		$('#twilio-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
+		$("#twilio-"+dir+"-logs-panel").html(TWILIOIO_LOGS_LOAD_IMAGE);
 
 	/*
 	 * Sends GET request to the URL "/core/api/widgets/twilio/call/logs/" with
 	 * Twilio_Plugin_Id and to as path parameters
 	 */
-	$.get("/core/api/widgets/twilio/call/logs/" + TwilioIO_Plugin_Id + "/" + to, function(logs)
+	$.get("/core/api/widgets/twilio/call/logs/" + TwilioIO_Plugin_Id + "/" + to + "/" + dir, function(logs)
 	{
 		console.log('In TwilioIO logs ');
 
@@ -138,7 +190,7 @@ function getTwilioIOLogs(to)
  		if(!template_ui)
     		return;
     	var twilio_logs_template = $(template_ui);
-		$('#twilio-logs-panel').html(twilio_logs_template);
+		$("#twilio-"+dir+"-logs-panel").html(twilio_logs_template);
 
 			// Load jquery time ago function to show time ago in logs
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
@@ -147,7 +199,7 @@ function getTwilioIOLogs(to)
 			});
 
 			// Add more button if more than 10 call logs present
-			addMoreButton(pageInfo);
+			addMoreButton(pageInfo, dir);
 
 			/*
 			 * On click of play button in Twilio logs, call conversaion is played
@@ -207,13 +259,20 @@ function getTwilioIOLogs(to)
 		$('#logs_load').remove();
 
 		// Shows error if error occurs in Twilio widget panel
-		twilioIOError('twilio-logs-panel', data.responseText);
+		twilioIOError("twilio-"+dir+"-logs-panel", data.responseText);
 	});
 }
 
 // add more button at end of call logs if more call logs are prsent
-function addMoreButton(pageInfo)
+function addMoreButton(pageInfo, direction)
 {
+
+	var dir = "outgoing";
+	if(direction){
+		if(direction == "incoming"){
+			dir = "incoming";
+		}
+	}
 	if (!pageInfo)
 		return;
 
@@ -224,21 +283,27 @@ function addMoreButton(pageInfo)
 
 	// If page and pageToken is present then only add more button else hide it
 	if (pageInfo.page)
-		$("#twilio-logs-panel")
+		$("#twilio-"+dir+"-logs-panel")
 				.append(
-						'<div class="widget_tab_footer" id="twilioio_show_more" align="center" style="float:none"><a href="#" class="text-info" id="twilioio_more_call_logs" page="' + pageInfo.page + '" pageToken="' + pageInfo.pageToken + '" style="margin-bottom: 10px;"  title="Click to see more call logs">Show More</a></div>');
+						'<div class="widget_tab_footer" id="twilioio_show_more" align="center" style="float:none"><a href="#" class="text-info" id="twilioio_more_call_logs" page="' + pageInfo.page + '" pageToken="' + pageInfo.pageToken + '" style="margin-bottom: 10px;"  title="Click to see more call logs" direction="' + dir + '">Show More</a></div>');
 }
 
 // Get next 10 calls, add in UI, do "More" btn settings
-function getNextLogs(to, page, pageToken)
+function getNextLogs(to, page, pageToken, direction)
 {
 	console.log("In getNextLogs:" + to);
+	var dir = "outgoing";
+	if(direction){
+		if(direction == "incoming"){
+			dir = "incoming";
+		}
+	}
 
 	/*
 	 * Sends GET request to the URL "/core/api/widgets/twilio/call/logs/" with
 	 * Twilio_Plugin_Id and to as path parameters
 	 */
-	$.get("/core/api/widgets/twilio/call/nextlogs/" + TwilioIO_Plugin_Id + "/" + to + "/" + page + "/" + pageToken, function(logs)
+	$.get("/core/api/widgets/twilio/call/nextlogs/" + TwilioIO_Plugin_Id + "/" + to + "/" + page + "/" + pageToken + "/" + dir, function(logs)
 	{
 		console.log('In TwilioIO next logs ');
 
@@ -254,7 +319,7 @@ function getNextLogs(to, page, pageToken)
 	 		if(!template_ui)
 	    		return;
 	    	var twilio_logs_template = $(template_ui);
-	    	$('#twilio-logs-panel').append(twilio_logs_template);
+	    	$("#twilio-"+dir+"-logs-panel").append(twilio_logs_template);
 
 			// Load jquery time ago function to show time ago in logs
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
@@ -263,7 +328,7 @@ function getNextLogs(to, page, pageToken)
 			});
 
 			// Add more button if more than 10 call logs present
-			addMoreButton(pageInfo);
+			addMoreButton(pageInfo, dir);
 			
 		}, null);
 			

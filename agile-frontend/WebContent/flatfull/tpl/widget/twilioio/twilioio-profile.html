@@ -1,5 +1,5 @@
 <script id="twilioio-profile-template" type="text/html">
-{{#if_equals to.length "1"}}<div></div>
+{{#if_equals to.length "1"}}<div id="contact_number"></div>
 {{else}}
 	<div class="wrapper-sm">
 			{{#if_equals to.length "1"}}<div><!-- <input type="hidden" id="contact_number" value="{{to.0.value}}"/>Call {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}} on {{to.0.value}} --></div>
@@ -18,11 +18,29 @@
 			{{/if_equals}}
 	{{/if_equals}}
 	</div>
-	<ul id="twilio-logs-panel" class="list-group m-b-none text-base">
-		<li class="list-group-item r-none b-l-none b-r-none">
+<div class="nav-tabs-alt">
+
+<ul class="nav nav-tabs twilioTab text-base" id="myTwilioTab">
+	<li class="text-center active twilio_outgoing_logs c-p" style="width:48%; margin-left: 2%;" align="center"><a data-toggle="tab"  aria-expanded="false"><h4 class="h4 text-base">Outgoing</h4><small></small></a></li>
+	<li class="text-center twilio_incoming_logs c-p" style="width:48%;" align="center"><a data-toggle="tab" aria-expanded="true"><h4 class="h4 text-base">Incoming</h4><small></small></a></li>
+</ul>
+</div>
+<div id="outgoing_log_details">
+	<ul id="twilio-outgoing-logs-panel" class="list-group m-b-none text-base">
+
+		<li>
 			<center><img id="logs_load" src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}" class="m-t"></img></center>
 		</li>
 	</ul>
+</div>
+
+<div id="incoming_log_details" style="display:none;">
+	<ul id="twilio-incoming-logs-panel" class="list-group m-b-none text-base>
+		<li>
+			<center><img id="logs_load" src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}" class="m-t"></img></center>
+		</li>
+	</ul>
+</div>
 </script>
 
 <script id="twilioio-login-template" type="text/html">
