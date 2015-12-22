@@ -6884,7 +6884,8 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 });
 
 function agile_is_mobile_browser(){
-    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+   return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+   
 
 
 }

@@ -1818,6 +1818,12 @@ table td .thumb img {
 .portlet_header_icons i {
   font-size: 14px;
 }
+.contacts-div .panel {
+    border-left: auto!important;
+}
+#contacts-table tr td:nth-of-type(n+4), #contacts-table tr th:nth-of-type(n+3) {
+    display: none;
+}
 }
 
 @media all and (min-width: 768px) {
