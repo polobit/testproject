@@ -272,7 +272,7 @@ var ContactsRouter = Backbone.Router.extend({
 			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
 			{
 
-		  alert("1");
+		  
 		
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
