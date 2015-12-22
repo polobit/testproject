@@ -48,8 +48,8 @@ public class TriggerFutureHook implements Delegate<Environment>
     /** */
     Delegate<Environment> parent;
 
-    private static final int MAX_RETRIES = 3;
-    private static final int MAX_INTERVAL = 10 * 1000;
+    private static final int MAX_RETRIES = 4;
+    private static final int MAX_INTERVAL = 15 * 1000;
     private ExecutorService executor = Executors.newFixedThreadPool(5);
 
     /** The thread local value will be removed (null) if there are none pending */
