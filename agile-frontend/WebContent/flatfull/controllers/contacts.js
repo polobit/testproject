@@ -1162,7 +1162,11 @@ var ContactsRouter = Backbone.Router.extend({
 
 				
 
-			} });
+			}, appendItemCallback: function(el){
+				if(agile_is_mobile_browser()) {
+					$('#contacts-table tbody tr td:nth-of-type(2)',el).after('<td><div class="contact-actions-delete-mobile text-xlg text-muted">&times;</div></td>');
+				}
+			}, });
 
 		var _that = this;
 		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
