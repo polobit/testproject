@@ -159,7 +159,7 @@ function setNewDealFilters(data){
 	var filters_ui = "<li><a class='default_deal_filter'>All</a></li>" +
 					 "<li><a class='deal-filter' id='my-deals'>My Deals</a></li>" + 
 					 "<li class='divider'></li>" + 
-					 "<li><a href='#deal-filters'>Add/Edit Filter</a></li>";
+					 "<li><a href='#deal-filters'>Add/Edit Filter&nbsp;&nbsp;<span class='label bg-danger'>Beta</span></a></li>";
 	if (filters_list && filters_list.length > 0)
 	{
 		filters_ui += "<li class='divider'></li>";
@@ -396,6 +396,42 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 				$('#milestone',el).find('option[value=""]').text("Any");
 			},500);
 		}
+	});
+	/**
+	 * Update the milestones list when the pipeline is changed in the modal.
+	 */
+	$('#opportunity-listners').off('change', '#filter_pipeline');
+	$('#opportunity-listners').on('change', '#filter_pipeline', function(e)
+	{
+		var el = $(this).closest('form');
+		var track = $('#filter_pipeline', el).val();
+		if (track)
+		{
+			var milestoneModel = Backbone.Model.extend({ url : '/core/api/milestone/'+track });
+			var model = new milestoneModel();
+			model.fetch({ 
+				success : function(data){
+					var json = data.toJSON();
+					var milestones = json.milestones;
+					milestonesList = milestones.split(",");
+					$('#milestone').html('');
+					if(milestonesList.length > 1)
+					{
+						$('#milestone', el).html('<option value="">Any</option>');
+					}
+					$.each(milestonesList, function(index, milestone){
+						$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
+					});
+					$('#milestone', el).parent().find('img').hide();
+					hideTransitionBar();
+				} 
+			});
+		}
+		else
+		{
+			$('#milestone', el).html('<option value="">Any</option>');
+		}
+		
 	});
 	/**
 	 * If Pipelined View is selected, deals are loaded with pipelined view and 
@@ -790,6 +826,9 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
     			$('.'+$(this).val()).removeClass('hide');
     		}else{
     			$('.'+$(this).val()).addClass('hide');
+    			$('.'+$(this).val()).each(function(){
+    				$(this).find('input').val("");
+    			});
     		} 
     	});
     });
