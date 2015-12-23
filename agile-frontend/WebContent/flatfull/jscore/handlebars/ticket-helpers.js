@@ -341,6 +341,10 @@ Handlebars.registerHelper('is_column_selected', function(field_name, options) {
 
 	var selected_columns = CURRENT_DOMAIN_USER.helpdeskSettings.choosed_columns;
 
+	if(!selected_columns || !selected_columns.length){
+		selected_columns = ['id','subject','requester_name','due_date','priority','status','assignee','group',];
+	}
+
 	if(selected_columns.indexOf(field_name) != -1)
 		return options.fn(this);
 
