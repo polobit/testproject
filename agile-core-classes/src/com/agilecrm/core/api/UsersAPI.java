@@ -106,6 +106,13 @@ public class UsersAPI
 
 	try
 	{
+		if(domainUser.is_account_owner == true){
+	    	if(domainUser.is_admin == false)
+			{
+				throw new Exception("Owner should be an admin");
+			}
+	    	DomainUserUtil.removeOwner(domainUser);
+	    }
 	    domainUser.save();
 	    return domainUser;
 	}
@@ -144,7 +151,13 @@ public class UsersAPI
 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Invalid User")
 			.build());
 	    }
-
+	    if(domainUser.is_account_owner == true){
+	    	if(domainUser.is_admin == false)
+			{
+				throw new Exception("Owner should be an admin");
+			}
+	    	DomainUserUtil.removeOwner(domainUser);
+	    }
 	    domainUser.save();
 	    return domainUser;
 	}

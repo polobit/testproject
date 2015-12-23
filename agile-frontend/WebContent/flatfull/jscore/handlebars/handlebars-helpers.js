@@ -6866,6 +6866,14 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 			return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('is_domain_owner', function(options)
+	{
+		if (CURRENT_DOMAIN_USER.is_account_owner)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
+
 	Handlebars.registerHelper('is_not_allowed_trial', function(options)
 	{
 		if(IS_TRIAL && IS_ALLOWED_TRIAL)
