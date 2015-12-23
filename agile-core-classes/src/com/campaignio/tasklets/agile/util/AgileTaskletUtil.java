@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -219,7 +220,7 @@ public class AgileTaskletUtil {
 			// System.out.println("Field name is " + field.name);
 
 			JSONObject subscriberJSON = new JSONObject();
-			
+
 			// Added contact id. For new contact, id doesn't exist
 			subscriberJSON.put("id", contact.id);
 
@@ -271,7 +272,9 @@ public class AgileTaskletUtil {
 									fieldValue = (fieldValue / 100000000000L > 1) ? fieldValue
 											: fieldValue * 1000;
 
-									field.value =  DateUtil.getDateInGivenFormat(fieldValue, "dd MMM yyyy", timezone);
+									field.value = DateUtil
+											.getDateInGivenFormat(fieldValue,
+													"dd MMM yyyy", timezone);
 								}
 							}
 						} catch (Exception e) {
@@ -369,11 +372,14 @@ public class AgileTaskletUtil {
 			subscriberJSON.put("score", contact.lead_score);
 
 			// Returns Created and Updated date with given format.
-			subscriberJSON.put("created_date", DateUtil.getDateInGivenFormat(contact.created_time * 1000, "MM/dd/yyyy", timezone));
+			subscriberJSON.put("created_date", DateUtil.getDateInGivenFormat(
+					contact.created_time * 1000, "MM/dd/yyyy", timezone));
 
 			// If contact is updated
 			if (contact.updated_time != 0L) {
-				subscriberJSON.put("modified_date", DateUtil.getDateInGivenFormat(contact.updated_time * 1000, "MM/dd/yyyy", timezone));
+				subscriberJSON.put("modified_date", DateUtil
+						.getDateInGivenFormat(contact.updated_time * 1000,
+								"MM/dd/yyyy", timezone));
 
 				// Contact updated time
 				subscriberJSON.put("modified_time", contact.updated_time);
@@ -388,10 +394,12 @@ public class AgileTaskletUtil {
 			// Add Id and data
 			JSONObject subscriberJSONWithAddedParams = new JSONObject();
 
-			subscriberJSONWithAddedParams.put("data", subscriberJSON)
+			subscriberJSONWithAddedParams
+					.put("data", subscriberJSON)
 					.put("id", contact.id)
 					.put("isUnsubscribedAll", isUnsubscribedAll(contact))
-					.put("unsubscribeStatus", UnsubscribeStatusUtil.getUnsubscribeStatus(contact));
+					.put("unsubscribeStatus",
+							UnsubscribeStatusUtil.getUnsubscribeStatus(contact));
 
 			// If isBounce not null
 			EmailBounceType bounceType = isBounce(contact, subscriberJSON);
@@ -455,7 +463,7 @@ public class AgileTaskletUtil {
 
 			// Added contact id. For new contact, id doesn't exist
 			subscriberJSON.put("id", contact.id);
-						
+
 			List<ContactField> properties = contact.getProperties();
 
 			// Contact Properties
@@ -503,9 +511,8 @@ public class AgileTaskletUtil {
 			subscriberJSON.put("owner", owner);
 
 			// Returns Created and Updated date in GMT with given format.
-			subscriberJSON.put("created_date", DateUtil
-					.getDateInGivenFormat(contact.created_time * 1000,
-							"MM/dd/yyyy", timezone));
+			subscriberJSON.put("created_date", DateUtil.getDateInGivenFormat(
+					contact.created_time * 1000, "MM/dd/yyyy", timezone));
 
 			// Insert only if updated
 			if (contact.updated_time != 0L) {
@@ -633,6 +640,21 @@ public class AgileTaskletUtil {
 		calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(days));
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		return calendar.getTimeInMillis() / 1000;
+	}
+
+	public static Long getDateInEpoch(String days, String timezone, String at) {
+
+		Calendar calendar = Calendar
+				.getInstance(TimeZone.getTimeZone(timezone));
+
+		// Add duration and make time set to midnight of that day.
+		calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(days));
+		calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(at.substring(0, 2)));
+		calendar.set(Calendar.MINUTE, Integer.parseInt(at.substring(3)));
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
 
@@ -811,11 +833,10 @@ public class AgileTaskletUtil {
 			JSONObject data = subscriberJSON.getJSONObject("data");
 
 			// If no modified time
-			if(!data.has("modified_time"))
-			{
+			if (!data.has("modified_time")) {
 				return getUpdatedSubscriberJSON(subscriberJSON, 0L);
 			}
-				
+
 			// Compares updated time of subscriber json and current contact
 			if (data.has("modified_time")
 					&& data.getLong("modified_time") != 0L)
@@ -940,43 +961,37 @@ public class AgileTaskletUtil {
 	 * @return list of campaigns to be unsubscribed
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> List<T> getListOfCampaignIDs(JSONObject nodeJSON, JSONObject subscriberJSON,
-			JSONObject campaignJSON, String keyName) 
-	{
+	public static <T> List<T> getListOfCampaignIDs(JSONObject nodeJSON,
+			JSONObject subscriberJSON, JSONObject campaignJSON, String keyName) {
 		List<T> campaignIDs = new ArrayList<T>();
 		JSONArray jsonArray;
-		try
-		{
+		try {
 			// This array consists of selected campaigns
 			jsonArray = nodeJSON.getJSONArray(TaskletAdapter.JSON_VALUES);
-	
+
 			int jsonArrayLength = jsonArray.length();
-	
+
 			// Iterate through name/value pairs. First one is the select option
 			// ID and multi select ID
-	
-			for (int i = 1; i < jsonArrayLength; i++)
-			{
+
+			for (int i = 1; i < jsonArrayLength; i++) {
 				// Get the each JSON data
-	
+
 				JSONObject json = jsonArray.getJSONObject(i);
-	
+
 				// For Serialized data from ui - you will get name, value
 				// pairs
-				if (json.has("name"))
-				{
-					
-					if(keyName == null || json.get("name").equals(keyName))
+				if (json.has("name")) {
+
+					if (keyName == null || json.get("name").equals(keyName))
 						campaignIDs.add((T) json.get("value"));
 				}
-	
+
 			}
-		}
-		catch (JSONException e)
-		{
+		} catch (JSONException e) {
 			return new ArrayList<T>();
 		}
-	
+
 		return campaignIDs;
 	}
 }

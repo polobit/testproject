@@ -87,20 +87,33 @@
             "id": "timezone",
             "title": "Select the time zone of your location.",
             "options": {
-                <%@pageimport="java.util.Arrays"%>
+                <%@page import="com.agilecrm.user.AgileUser"%>
+<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
+<%@page import="com.agilecrm.session.UserInfo"%>
+<%@page import="com.agilecrm.session.SessionManager"%>
+<%@pageimport="java.util.Arrays"%>
                 <%@pageimport="java.util.TimeZone"%>
                 <%@pageimport="com.agilecrm.account.util.AccountPrefsUtil"%>
+                <%@pageimport="com.agilecrm.user.util.UserPrefsUtil"%>
+                <%@pageimport="com.agilecrm.user.UserPrefs"%>
+                <%@pageimport="com.agilecrm.user.AgileUser"%>
                 <%@pageimport="org.apache.commons.lang.StringUtils"%>
+                <%@pageimport="com.agilecrm.session.UserInfo"%>
+                
                 <%
                 
                 String[] allTimeZones = TimeZone.getAvailableIDs();    
 				Arrays.sort(allTimeZones);  
 				
-                String timeZone = AccountPrefsUtil.getAccountPrefs().timezone;
+				UserInfo userInfo = (UserInfo) request.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+					
+                AgileUser user = AgileUser.getCurrentAgileUserFromDomainUser(userInfo.getDomainId());
+                 
+                String timeZone = UserPrefsUtil.getUserPrefs(user).timezone;
                 
                 if(StringUtils.isEmpty(timeZone))
                 	
-                	out.println("\""+"*Select time zone"+"\":\""+"empty_timezone"+"\",");
+                	out.println("\""+"*Select time zone"+"\":\""+"empty_timezone"+"\","); 
                 
                 for(int i=0; i< allTimeZones.length; i++){
                     String option= allTimeZones[i];
