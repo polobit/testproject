@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.sforce.soap.partner.FieldType;
 import com.thirdparty.google.ContactPrefs;
 
 /**
@@ -169,9 +170,12 @@ public class SalesforceUtil
 
 		try
 		{
-			System.out.println(SalesforceUtil.checkSalesforcePrefs(prefs));
+			
+			// describeSObjectsSample();
+			
+			// System.out.println(SalesforceUtil.checkSalesforcePrefs(prefs));
 
-			// System.out.println(SalesforceUtil.getTasksFromSalesForce(prefs));
+			 System.out.println(SalesforceUtil.getTasksFromSalesForce(prefs));
 			
 			// System.out.println(SalesforceUtil.getContactsFromSalesForce(prefs));
 
@@ -200,4 +204,89 @@ public class SalesforceUtil
 		}
 
 	}
+	
+	public static void describeSObjectsSample() throws Exception 
+    {
+		
+      try {
+    	  
+    	 ContactPrefs contactPrefs = new ContactPrefs();
+  		
+    	 contactPrefs.userName = "ragaqt@gmail.com";
+    	 contactPrefs.password = "mantra123";
+    	 contactPrefs.apiKey = "Zovgoz4alO2SrDg0Fnf0Fy0Z";
+  		
+    	 SalesforceAPI salesforce = new SalesforceAPI(contactPrefs.userName, contactPrefs.password, contactPrefs.apiKey);
+
+  		
+        // Call describeSObjectResults and pass it an array with
+        // the names of the objects to describe.
+        com.sforce.soap.partner.DescribeSObjectResult[] describeSObjectResults = 
+        		salesforce.connection.describeSObjects(
+                            new String[] { "task" });
+
+        //  "account", "contact", "lead"
+        // Iterate through the list of describe sObject results
+        for (int i=0;i < describeSObjectResults.length; i++)
+        {
+            com.sforce.soap.partner.DescribeSObjectResult desObj = describeSObjectResults[i];
+            // Get the name of the sObject
+            String objectName = desObj.getName();
+            System.out.println("sObject name: " + objectName);
+
+            // For each described sObject, get the fields
+            com.sforce.soap.partner.Field[] fields = desObj.getFields();
+                            
+            // Get some other properties
+            if (desObj.getActivateable()) System.out.println("\tActivateable");
+            
+            // Iterate through the fields to get properties for each field
+            for(int j=0;j < fields.length; j++)
+            {                        
+                com.sforce.soap.partner.Field field = fields[j];
+                System.out.println("\tField: " + field.getName());
+                System.out.println("\t\tLabel: " + field.getLabel());
+                if (field.isCustom()) 
+                    System.out.println("\t\tThis is a custom field.");
+                System.out.println("\t\tType: " + field.getType());
+                if (field.getLength() > 0)
+                    System.out.println("\t\tLength: " + field.getLength());
+                if (field.getPrecision() > 0)
+                    System.out.println("\t\tPrecision: " + field.getPrecision());
+                
+                // Determine whether this is a picklist field
+                if (field.getType() == FieldType.picklist)
+                {                            
+                    // Determine whether there are picklist values
+                    com.sforce.soap.partner.PicklistEntry[] picklistValues = field.getPicklistValues();
+                    if (picklistValues != null && picklistValues[0] != null)
+                    {
+                        System.out.println("\t\tPicklist values = ");
+                        for (int k = 0; k < picklistValues.length; k++)
+                        {
+                            System.out.println("\t\t\tItem: " + picklistValues[k].getLabel());
+                        }
+                    }
+                }
+
+                // Determine whether this is a reference field
+                if (field.getType() == FieldType.reference)
+                {                            
+                    // Determine whether this field refers to another object
+                    String[] referenceTos = field.getReferenceTo();
+                    if (referenceTos != null && referenceTos[0] != null)
+                    {
+                        System.out.println("\t\tField references the following objects:");
+                        for (int k = 0; k < referenceTos.length; k++)
+                        {
+                            System.out.println("\t\t\t" + referenceTos[k]);
+                        }
+                    }
+                }
+            }            
+        }
+      } catch(com.sforce.ws.ConnectionException ce) {
+        ce.printStackTrace();  
+      }
+    }
 }

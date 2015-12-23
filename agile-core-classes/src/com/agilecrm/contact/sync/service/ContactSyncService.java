@@ -52,7 +52,7 @@ public abstract class ContactSyncService implements IContactSyncService
     /**
      * To check if it contacts limit is exceeded in current plan
      */
-    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(true);
+    protected BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(true);
 
     /** contact restriction. */
     DaoBillingRestriction contactRestriction = DaoBillingRestriction.getInstace(
