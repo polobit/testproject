@@ -28,7 +28,7 @@ public class DataSyncUrlConstants
 	public static String OFFICE365_IMAGE_URL="/img/plugins/office356-calendar.png";
 	public static String OFFICE365_CONTENT="By configuring access to your Office365 Calendar, we'll automatically sync your events in your Office365 Calendar with Agile calendar.";
 			
-	public static String SALESFORCE_IMAGE_URL="/img/plugins/Salesforce.gif";
+	public static String SALESFORCE_IMAGE_URL="/img/plugins/salesforce.png";
 	public static String SALESFORCE_CONTENT="By configuring access to your Salesforce, we'll automatically import your Contacts and Tasks to AgileCRM.";
 	
 	
