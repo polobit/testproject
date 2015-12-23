@@ -333,13 +333,15 @@ public class ActivitySave
      * @param subject
      * @param body
      */
-    public static void createEmailSentActivityToContact(String to, String subject, String body)
+    public static void createEmailSentActivityToContact(String to, String subject, String body, Contact contact)
     {
 	String emailbody = html2text(body);
 	System.out.println(emailbody);
-	Contact contact = ContactUtil.searchContactByEmail(to);
+	
+	if(contact == null)
+		contact = ContactUtil.searchContactByEmail(to);
+	
 	if (contact != null)
-
 	    ActivityUtil.createContactActivity(ActivityType.EMAIL_SENT, contact, to, emailbody, subject);
 
     }

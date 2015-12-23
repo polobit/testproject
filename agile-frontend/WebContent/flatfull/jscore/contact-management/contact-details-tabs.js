@@ -308,7 +308,7 @@ function populate_send_email_details(el)
 {
 
 	$("#emailForm", el).find('input[name="from_name"]').val(CURRENT_DOMAIN_USER.name);
-	$("#emailForm", el).find('input[name="from_email"]').val(CURRENT_DOMAIN_USER.email);
+	$("#emailForm", el).find('input[name="from"]').val(CURRENT_DOMAIN_USER.email);
 
 	// Fill hidden signature field using userprefs
 	// $("#emailForm").find( 'input[name="signature"]'
@@ -485,7 +485,7 @@ function initializeSendEmailListeners(){
 
 			set_tinymce_content('email-body', '');
 
-			$("#emailForm").find('textarea[name="body"]').val("");
+			$("#emailForm").find('textarea[name="message"]').val("");
 			
 			$('.add-attachment-cancel').trigger("click");
 
@@ -647,7 +647,9 @@ function initializeSendEmailListeners(){
 						$
 								.ajax({
 									type : 'POST',
-									data : json,
+									data : JSON.stringify(json),
+									dataType: 'json',
+									contentType: "application/json",
 									url : 'core/api/emails/contact/send-email',
 									success : function()
 									{
