@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 import javax.persistence.Embedded;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -289,21 +290,39 @@ public class SalesForceContactWrapperImpl extends ContactWrapper
     	// Note
 		if (entry.has("Description"))
 		{
-			Note note = new Note("Salesforce Contact Notes",JSONUtil.getJSONValue(entry, "Description"));
-			note.addRelatedContacts(String.valueOf(contact.id));
-			note.save();
-			System.out.println(note.id);
+			addNote("Salesforce Contact Notes",JSONUtil.getJSONValue(entry, "Description"));
 		}
 
 		if (entry.has("Department"))
 		{
-			Note note = new Note("Salesforce Contact Notes",JSONUtil.getJSONValue(entry, "Department"));
-			note.addRelatedContacts(String.valueOf(contact.id));
-			note.save();
-			System.out.println("In note " + note.id);
+			addNote("Salesforce Contact Notes",JSONUtil.getJSONValue(entry, "Department"));
 		}
-
+		
+		// Get notes from Salesforce
+		String contactId = JSONUtil.getJSONValue(entry, "Id");
+		if(StringUtils.isNotBlank(contactId)){
+			try {
+				JSONArray notesArray = new JSONArray(SalesforceUtil.getNotesByContactIdFromSalesForce(prefs, contactId));
+				for (int i = 0; i < notesArray.length(); i++) {
+					JSONObject noteEntry = notesArray.getJSONObject(i);
+					
+					addNote(JSONUtil.getJSONValue(noteEntry, "Title") ,JSONUtil.getJSONValue(noteEntry, "Body"));
+				}
+			} catch (Exception e) {
+			}
+		}
+		
     }
+    
+	public void addNote(String title, String subject) {
+    	
+		// TODO Auto-generated method stub
+    	Note note = new Note(title,subject);
+		note.addRelatedContacts(String.valueOf(contact.id));
+		note.save();
+		System.out.println("In note " + note.id);
+	}
+    
 
 	@Override
 	public List<String> getTags() {

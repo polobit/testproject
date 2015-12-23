@@ -179,7 +179,7 @@ public abstract class ContactSyncService implements IContactSyncService
      *            the object
      * @return the contact
      */
-    private Contact wrapContactToAgileSchema(Object object)
+    protected Contact wrapContactToAgileSchema(Object object)
     {
 	if (contactWrapper == null)
 	    try

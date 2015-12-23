@@ -7,6 +7,7 @@ import java.net.SocketTimeoutException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -16,10 +17,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.Task;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.sync.wrapper.impl.SalesForceContactWrapperImpl;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.JSONUtil;
@@ -33,6 +37,9 @@ import com.thirdparty.salesforce.SalesforceUtil;
 public class SalesforceSync extends OneWaySyncService
 {
 
+	Map<String, String> contactIdsMap = new HashMap<String, String>();
+	boolean contactsfetched = false;
+	
     @Override
     public void initSync()
     {
@@ -58,7 +65,6 @@ public class SalesforceSync extends OneWaySyncService
         if(importOptions.contains("tasks")){
         	System.out.println("Importing tasks");
         	importSalesforceTasks();
-        	// SalesforceImportUtil.importSalesforceTasks(prefs);
         }
         
 	} catch (Exception e) {
@@ -76,8 +82,10 @@ public class SalesforceSync extends OneWaySyncService
 			JSONArray jsonArray = new JSONArray(getContactsFromSalesForce());
 			System.out.println(jsonArray);
 			
+			storeContactIdAndEmailsInList(jsonArray);
+			
 			saveContactsInAgile(jsonArray);
-			// SalesforceContactToAgileContact.saveSalesforceContactsInAgile(contactPrefs, json);
+			
 		}
 		catch (SocketTimeoutException e)
 		{
@@ -87,10 +95,23 @@ public class SalesforceSync extends OneWaySyncService
 
 	}
     
+    private void storeContactIdAndEmailsInList(JSONArray entries){
+    	try {
+    		 for (int i = 0; i < entries.length(); i++) {
+    			 JSONObject entryJSON = entries.getJSONObject(i);
+    			 contactIdsMap.put(entryJSON.getString("Id"), entryJSON.getString("Email"));
+    			}
+		} catch (Exception e) {
+		}
+       	
+    }
+    
     private String getContactsFromSalesForce() throws Exception
 	{
 		String query = "SELECT  Id, FirstName, LastName, Email, Title, Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet FROM Contact";
 		System.out.println("In contacts------------------------------------");
+		
+		this.contactsfetched = true;
 		return SalesforceUtil.getEntities(prefs, query);
 	}
     
@@ -179,6 +200,11 @@ public class SalesforceSync extends OneWaySyncService
 		
 		try
 		{
+			if(!this.contactsfetched)
+			{
+				storeContactIdAndEmailsInList(new JSONArray(getContactsFromSalesForce()));
+			}
+			
 			JSONArray json = getTasksFromSalesForce();
 			System.out.println(json);
 			saveSalesforceTasksInAgile(json);
@@ -216,6 +242,7 @@ public class SalesforceSync extends OneWaySyncService
 	protected void wrapTaskToAgileSchemaAndSave(JSONObject entry){
 
 		try {
+			
 				System.out.println("In task contact of agile");
 				Task agileTask = new Task();
 				
@@ -271,6 +298,24 @@ public class SalesforceSync extends OneWaySyncService
 					}
 				} else {
 					agileTask.due = System.currentTimeMillis() / 1000;
+				}
+				
+				if(entry.has("WhoId")){
+					String contactId = entry.getString("WhoId");
+					if(contactIdsMap.containsKey(contactId)){
+						
+						List<String> contactList = new ArrayList<String>();
+						// Get agile contact with associated email
+						String emailid = contactIdsMap.get(contactId);
+						if(StringUtils.isNotBlank(emailid))
+						{
+							Contact agileContact =  ContactUtil.searchContactByEmailAndType(emailid, Type.PERSON);
+							contactList.add(agileContact.id + "");
+						}
+						
+						agileTask.contacts = contactList;
+						
+					}
 				}
 	
 				agileTask.save();

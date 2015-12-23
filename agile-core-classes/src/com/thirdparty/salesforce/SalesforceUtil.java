@@ -140,6 +140,14 @@ public class SalesforceUtil
 		System.out.println("In Contact by id ------------------------------------");
 		return new JSONArray(getEntities(prefs, query)).getJSONObject(0).toString();
 	}
+	
+	public static String getNotesByContactIdFromSalesForce(ContactPrefs prefs, String id) throws Exception
+	{
+		String query = "SELECT Title, Body FROM Note WHERE ParentId = '"
+				+ id + "'";
+		System.out.println("In Note by id ------------------------------------");
+		return new JSONArray(getEntities(prefs, query)).getJSONObject(0).toString();
+	}
 
 	public static String checkSalesforcePrefs(ContactPrefs prefs) throws Exception
 	{
@@ -171,11 +179,11 @@ public class SalesforceUtil
 		try
 		{
 			
-			// describeSObjectsSample();
+			 describeSObjectsSample();
 			
 			// System.out.println(SalesforceUtil.checkSalesforcePrefs(prefs));
 
-			 System.out.println(SalesforceUtil.getTasksFromSalesForce(prefs));
+			// System.out.println(SalesforceUtil.getTasksFromSalesForce(prefs));
 			
 			// System.out.println(SalesforceUtil.getContactsFromSalesForce(prefs));
 
@@ -223,7 +231,7 @@ public class SalesforceUtil
         // the names of the objects to describe.
         com.sforce.soap.partner.DescribeSObjectResult[] describeSObjectResults = 
         		salesforce.connection.describeSObjects(
-                            new String[] { "task" });
+                            new String[] { "note" });
 
         //  "account", "contact", "lead"
         // Iterate through the list of describe sObject results
