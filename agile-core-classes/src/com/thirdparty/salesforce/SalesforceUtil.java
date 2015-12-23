@@ -141,12 +141,12 @@ public class SalesforceUtil
 		return new JSONArray(getEntities(prefs, query)).getJSONObject(0).toString();
 	}
 	
-	public static String getNotesByContactIdFromSalesForce(ContactPrefs prefs, String id) throws Exception
+	public static JSONArray getNotesByContactIdFromSalesForce(ContactPrefs prefs, String id) throws Exception
 	{
 		String query = "SELECT Title, Body FROM Note WHERE ParentId = '"
 				+ id + "'";
 		System.out.println("In Note by id ------------------------------------");
-		return new JSONArray(getEntities(prefs, query)).getJSONObject(0).toString();
+		return new JSONArray(getEntities(prefs, query));
 	}
 
 	public static String checkSalesforcePrefs(ContactPrefs prefs) throws Exception
@@ -179,7 +179,7 @@ public class SalesforceUtil
 		try
 		{
 			
-			 describeSObjectsSample();
+			 // describeSObjectsSample();
 			
 			// System.out.println(SalesforceUtil.checkSalesforcePrefs(prefs));
 

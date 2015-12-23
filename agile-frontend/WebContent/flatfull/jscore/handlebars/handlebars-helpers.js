@@ -392,6 +392,9 @@ $(function()
 	Handlebars.registerHelper('icons', function(item)
 	{
 
+		if(!item)
+			  return "";
+			
 		item = item.toLowerCase().trim();
 		console.log(item);
 		if (item == "email")

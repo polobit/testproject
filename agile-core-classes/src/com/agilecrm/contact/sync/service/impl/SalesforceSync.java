@@ -96,13 +96,18 @@ public class SalesforceSync extends OneWaySyncService
 	}
     
     private void storeContactIdAndEmailsInList(JSONArray entries){
-    	try {
-    		 for (int i = 0; i < entries.length(); i++) {
-    			 JSONObject entryJSON = entries.getJSONObject(i);
-    			 contactIdsMap.put(entryJSON.getString("Id"), entryJSON.getString("Email"));
-    			}
-		} catch (Exception e) {
-		}
+    	
+    	if(entries == null || entries.length() == 0)
+    		  return;
+    	
+		 for (int i = 0; i < entries.length(); i++) {
+    			 try {
+	    			 JSONObject entryJSON = entries.getJSONObject(i);
+	    			 contactIdsMap.put(entryJSON.getString("Id"), entryJSON.getString("Email"));
+    			 } catch (Exception e) {
+    			 		e.printStackTrace();
+    			 }
+			}
        	
     }
     
@@ -204,6 +209,8 @@ public class SalesforceSync extends OneWaySyncService
 			{
 				storeContactIdAndEmailsInList(new JSONArray(getContactsFromSalesForce()));
 			}
+			
+			System.out.println("contactIdsMap = " + contactIdsMap);
 			
 			JSONArray json = getTasksFromSalesForce();
 			System.out.println(json);

@@ -302,13 +302,14 @@ public class SalesForceContactWrapperImpl extends ContactWrapper
 		String contactId = JSONUtil.getJSONValue(entry, "Id");
 		if(StringUtils.isNotBlank(contactId)){
 			try {
-				JSONArray notesArray = new JSONArray(SalesforceUtil.getNotesByContactIdFromSalesForce(prefs, contactId));
+				JSONArray notesArray = SalesforceUtil.getNotesByContactIdFromSalesForce(prefs, contactId);
 				for (int i = 0; i < notesArray.length(); i++) {
 					JSONObject noteEntry = notesArray.getJSONObject(i);
 					
 					addNote(JSONUtil.getJSONValue(noteEntry, "Title") ,JSONUtil.getJSONValue(noteEntry, "Body"));
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		
