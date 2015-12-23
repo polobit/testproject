@@ -23,6 +23,7 @@ import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Transaction;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -335,6 +336,9 @@ public class Tickets extends Cursor
 				List<Tickets> tickets = ticketsDao.fetchAllByOrder(1, "", null, false, true, "-created_time");
 
 				ticketsCount = (tickets == null || tickets.size() == 0) ? 0l : tickets.get(0).id;
+
+				if ((ticketsCount + "").length() > 10)
+					ticketsCount = 0l;
 			}
 
 			// Increment ticket id and assign to new ticket
@@ -383,6 +387,44 @@ public class Tickets extends Cursor
 				CacheUtil.setCache(namespace + "_tickets_count", unmodifiedTicketsCount);
 			}
 		}
+	}
+
+	public static boolean acquireLock(String broadcastId)
+	{
+		boolean lockAcquired = true;
+		try
+		{
+			while (increment(broadcastId) != 1)
+			{
+				decrement(broadcastId);
+				Thread.sleep(500);
+			}
+		}
+		catch (Throwable t)
+		{
+			lockAcquired = false;
+		}
+
+		return lockAcquired;
+	}
+
+	public static void releaseLock(String key)
+	{
+		decrement(key);
+	}
+
+	public static void decrement(String key)
+	{
+		System.out.println("decrement");
+
+		MemcacheServiceFactory.getMemcacheService().increment(key, -1, 0L);
+	}
+
+	public static Long increment(String key)
+	{
+		System.out.println("increment");
+
+		return MemcacheServiceFactory.getMemcacheService().increment(key, 1, 0L);
 	}
 
 	/**

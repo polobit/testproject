@@ -49,6 +49,7 @@
                                                             </option>
                                                             <option value="subject" placeholder="Enter Text">Subject</option>
                                                             <option value="notes" placeholder="Enter Text">Notes</option>
+                                                            <option value="ticket_is" placeholder="Enter Text">Ticket</option>
                                                             <option value="hrs_since_created" placeholder="Enter Hours">Hours Since Created</option>
                                                             <option value="hrs_since_opened" placeholder="Enter Hours">Hours Since Open</option>
                                                             <option value="hrs_since_closed" placeholder="Enter Hours">Hours Since Closed</option>
@@ -101,7 +102,9 @@
                                                                 hrs_since_due_date hrs_untill_due_date">Less Than</option>
 
                                                             <option value="LAST_UPDATED_BY_AGENT" class="ticket_last_updated_by">Agent</option>
-                                                            <option value="LAST_UPDATED_BY_REQUESTER" class="ticket_last_updated_by">Requester</option> 
+                                                            <option value="LAST_UPDATED_BY_REQUESTER" class="ticket_last_updated_by">Requester</option>
+                                                            <option value="TICKET_IS" class="ticket_is">is</option>
+                                                            <option value="TICKET_IS_NOT" class="ticket_is">isn&#39;t</option>
                                                         </select>
                                                     </div>
                                                 </td>
@@ -123,6 +126,8 @@
 
                                                             <option value="EMAIL" class="TICKET_SOURCE_IS TICKET_SOURCE_IS_NOT">Email</option>
                                                             <option value="WEBFORM" class="TICKET_SOURCE_IS TICKET_SOURCE_IS_NOT">Web Form</option>
+                                                            <option value="TICKET_STARRED" class="TICKET_IS TICKET_IS_NOT">Starred</option>
+                                                            <option value="TICKET_SPAM" class="TICKET_IS TICKET_IS_NOT">Spam</option>
                                                         </select>
                                                         <input type="text" name="temp" class="IS IS_NOT CONTAINS NOT_CONTAINS STARTS_WITH ENDS_WITH IS_GREATER_THAN IS_LESS_THAN form-control"/>
                                                     </div>

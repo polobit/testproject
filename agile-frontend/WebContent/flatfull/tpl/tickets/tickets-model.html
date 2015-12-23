@@ -7,9 +7,9 @@
     </label>
   </td>
   <td class="v-middle p-l-none p-r-none open-ticket" style="width: 8%;">
-    <a class="avatar thumb b b-l cursor-pointer" href="javascript:void(0);">
+    <a class="thumb cursor-pointer" href="javascript:void(0);">
       {{#if contact.properties}}
-        <img data-name="{{dataNameAvatar contact.properties 42}}" src="{{gravatarurl contact.properties 24}}">
+        <img data-name="{{dataNameAvatar contact.properties 42}}" src="{{gravatarurl contact.properties 24}}" class="r-5x">
       {{else}}    
         <img src="{{emailGravatarurl 42 requester_email}}">
       {{/if}}  
@@ -27,30 +27,30 @@
         </tr>
         <tr>
           <td>
-            <div class="subject-row text-ellipsis">{{requester_name}}</div>
+            <div class="subject-row text-ellipsis text-xs">{{requester_name}}</div>
           </td>
         </tr>
         <tr>
           <td>
             <small class="text-muted m-t-xs">
               {{#if_equals status 'NEW'}}
-                Created: 
-                <time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">
+                Created 
+                <time class="time-ago txt-color-light" datetime="{{epochToHumanDate "" created_time}}">
                   {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
                 </time>
               {{else}}
                 {{#if_equals status 'CLOSED'}}
-                  Closed: 
-                  <time class="time-ago" datetime="{{epochToHumanDate "" closed_time}}">
+                  Closed 
+                  <time class="time-ago txt-color-light" datetime="{{epochToHumanDate "" closed_time}}">
                     {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" closed_time}}
                   </time>
                 {{else}}
                   {{#if_equals last_updated_by 'AGENT'}}
-                    Assignee replied: 
+                    Assignee replied 
                   {{else}}
-                    Customer responded: 
+                    Customer responded 
                   {{/if_equals}}
-                  <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">
+                  <time class="time-ago txt-color-light" datetime="{{epochToHumanDate "" last_updated_time}}">
                     {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}
                   </time>
                 {{/if_equals}}
@@ -58,7 +58,7 @@
               {{#if_equals status 'CLOSED'}}
               {{else}}
                 {{#if due_time}}
-                  , {{calculate_due_date due_time}}
+                  , <span class="txt-color-light">{{calculate_due_date due_time}}</span>
                 {{/if}}
               {{/if_equals}}
               {{#if attachments_exists}}
@@ -79,10 +79,13 @@
         </div>
         <div class="col-md-12 pad-all-sm">
           <span class="text-muted">Last reply</span>
+          <hr class="m-t-xs m-b-xs">
+        </div>
+        <div class="col-md-12 pad-all-sm">
+          <span>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</span>
           <span class="text-light txt-small pull-right">
             {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}
           </span>
-          <hr class="m-t-xs m-b-xs">
         </div>
         <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
           {{{last_reply_text}}}  
@@ -111,7 +114,7 @@
         <td style="width: 20%;"><span class="text-muted cursor-default">Assignee: </span></td>
         <td class="p-l-sm cursor-pointer" style="width: 80%;">
           <div class="assignee-change pos-rlt show-caret">
-            <a class="btn btn-sm p-n b-n first-letter-cap inline-block m-r-xs txt-small assignee" data-toggle="dropdown">
+            <a class="btn btn-sm p-n b-n first-letter-cap inline-block m-r-xs txt-small assignee txt-color-light" data-toggle="dropdown">
               {{#if assigneeID}}{{assignee.name}}{{else}}{{#if assigned_to_group}}{{group.group_name}}{{else}}-{{/if}}{{/if}}
             </a>
             <a class="btn btn-sm p-n dropdown-toggle b-n caret-btn pull-right display-none" data-toggle="dropdown" aria-expanded="false">
@@ -125,7 +128,7 @@
       <tr><td style="width: 20%;"><span class="text-muted cursor-default">Status: </span></td>
           <td class="p-l-sm cursor-pointer" style="width: 80%;">
             <div class="assignee-change pos-rlt show-caret">
-              <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs status" data-toggle="dropdown">
+              <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs status txt-color-light" data-toggle="dropdown">
                 {{status}}
               </a>
               <a class="btn btn-sm p-n dropdown-toggle b-n caret-btn pull-right display-none" data-btn="caret-btn" data-toggle="dropdown" aria-expanded="false">
@@ -142,7 +145,7 @@
       <tr><td style="width: 20%;"><span class="text-muted cursor-default">Priority: </span></td>
           <td class="p-l-sm cursor-pointer" style="width: 80%;">
             <div class="assignee-change pos-rlt show-caret">
-              <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs priority" data-toggle="dropdown">
+              <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs priority txt-color-light" data-toggle="dropdown">
                 {{priority}}
               </a>
               <a class="btn btn-sm p-n dropdown-toggle b-n caret-btn pull-right display-none" data-toggle="dropdown" aria-expanded="false">
@@ -165,10 +168,61 @@
        <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}"><i></i>
     </label>
   </td>
-  <td  style="padding: 8px; padding-left: 0px;">
+  <td  style="padding: 8px; padding-top: 2px;padding-left: 0px;">
     {{{get_status_label status}}}
   </td>
-  {{{get_ticket_rows this}}}
+  <td class="first-letter-cap open-ticket id {{#is_column_selected 'id'}}{{else}}display-none{{/is_column_selected}}">
+    <div class="text-ellipsis">#{{id}}</div>
+  </td>
+  <td class="first-letter-cap open-ticket subject {{#is_column_selected 'subject'}}{{else}}display-none{{/is_column_selected}}">
+    <div class="text-ellipsis width-15em">{{subject}}</div>
+  </td>
+   <td class="first-letter-cap open-ticket requester_name {{#is_column_selected 'requester_name'}}{{else}}display-none{{/is_column_selected}}">
+    <div class="text-ellipsis width-9em">{{requester_name}}</div>
+  </td>
+  <td class="first-letter-cap open-ticket requester_email {{#is_column_selected 'requester_email'}}{{else}}display-none{{/is_column_selected}}">
+    <div class="text-ellipsis">{{requester_email}}</div>
+  </td>
+  <td class="first-letter-cap open-ticket created_date {{#is_column_selected 'created_date'}}{{else}}display-none{{/is_column_selected}}">
+    {{created_date}}
+  </td>
+  <td class="first-letter-cap open-ticket due_date {{#is_column_selected 'due_date'}}{{else}}display-none{{/is_column_selected}}">
+    {{due_date}}
+  </td>
+  <td class="first-letter-cap open-ticket assigned_date {{#is_column_selected 'assigned_time'}}{{else}}display-none{{/is_column_selected}}">
+    {{assigned_time}}
+  </td>
+  <td class="first-letter-cap open-ticket last_updated_date {{#is_column_selected 'last_updated_time'}}{{else}}display-none{{/is_column_selected}}">
+    {{last_updated_time}}
+  </td>
+  <td class="first-letter-cap open-ticket closed_date {{#is_column_selected 'closed_time'}}{{else}}display-none{{/is_column_selected}}">
+    {{closed_time}}
+  </td>
+  <td class="first-letter-cap open-ticket assignee {{#is_column_selected 'assignee'}}{{else}}display-none{{/is_column_selected}}">
+    <div class="text-ellipsis width-9em">{{#if assignee}}{{assignee.name}}{{else}}-{{/if}}</div>
+  </td>
+  <td class="first-letter-cap open-ticket group {{#is_column_selected 'group'}}{{else}}display-none{{/is_column_selected}}">
+    <div class="text-ellipsis width-9em">{{#if group}}{{group.group_name}}{{else}}-{{/if}}</div>
+  </td>
+  <td class="first-letter-cap open-ticket organization {{#is_column_selected 'organization'}}{{else}}display-none{{/is_column_selected}}">
+    {{organization}}
+  </td>
+  <td class="first-letter-cap open-ticket contact_details {{#is_column_selected 'contact_details'}}{{else}}display-none{{/is_column_selected}}">
+    {{contact_details}}
+  </td>
+  <td class="open-ticket priority {{#is_column_selected 'priority'}}{{else}}display-none{{/is_column_selected}}">
+    {{#if_equals priority 'HIGH'}}
+      <span class="label bg-danger first-letter-cap inline-block">HIGH</span>
+    {{else}}
+      <span class="first-letter-cap inline-block">{{priority}}</span>
+  {{/if_equals}}
+  </td>
+  <td class="first-letter-cap open-ticket ticket_type {{#is_column_selected 'ticket_type'}}{{else}}display-none{{/is_column_selected}}">
+    {{type}}
+  </td>
+  <td class="first-letter-cap open-ticket status {{#is_column_selected 'status'}}{{else}}display-none{{/is_column_selected}}">
+    {{status}}
+  </td>
 </script>
 <script id="ticket-model-change-assignee-template" type="text/html">
   {{#each this}}

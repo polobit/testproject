@@ -13,8 +13,8 @@
 	<button class="btn btn-sm dropdown-toggle no-shadow bg-transparent b-n" data-toggle="dropdown" aria-expanded="false" style="padding-left: 5px;">
 		<span class="caret"></span>
 	</button>
-    <a href="javascript:void(0);" class="btn btn-sm m-l-none bg-transparent toggle-custom-filters no-shadow b-n p-l-none">
-    	<i class="fa fa-dedent text-base" data-toggle="tooltip" data-placement="bottom" data-original-title="Hide filters"></i>
+    <a href="javascript:void(0);" class="btn btn-sm m-l-none bg-transparent toggle-custom-filters no-shadow b-n p-l-none" style="color: rgb(88, 102, 110);">
+    	<i class="fa fa-filter text-base" data-toggle="tooltip" data-placement="bottom" data-original-title="{{#is_lhs_filter_disabled}}Show filters{{else}}Hide filters{{/is_lhs_filter_disabled}}"></i>
     </a>
     <ul id="ticket-filters-list-model-list" class="dropdown-menu ticket-types"></ul>
 {{/unless}}

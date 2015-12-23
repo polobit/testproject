@@ -29,10 +29,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.examples.HtmlToPlainText;
 import org.jsoup.nodes.Document;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
@@ -51,10 +54,16 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import com.googlecode.objectify.Key;
 
 /**
@@ -942,6 +951,38 @@ public class TicketsRest
 		}
 	}
 
+	/**
+	 * Forward ticket
+	 * 
+	 * @param notes
+	 * @return
+	 */
+	@GET
+	@Path("/import/zendesk")
+	public void importZendeskTickets()
+	{
+		try
+		{
+			Queue queue = QueueFactory.getQueue(AgileQueues.TICKET_BULK_ACTIONS_QUEUE);
+
+			String bulk_action_tracker = String.valueOf(BulkActionUtil.randInt(1, 10000));
+			
+			Widget zendesk = WidgetUtil.getWidgetByNameAndType("Zendesk", null);
+			JSONObject json = new JSONObject(zendesk.prefs);
+
+			TaskOptions taskOptions = TaskOptions.Builder.withUrl("/core/api/bulk-actions/tickets/imports/zendesk").param("data", json.toString())
+					.param("domain_user_id", SessionManager.get().getClaimedId()).param("tracker", bulk_action_tracker)
+					.header("Content-Type", "application/x-www-form-urlencoded").method(Method.POST);
+
+			queue.addAsync(taskOptions);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 	/**
 	 * 
 	 * @return
