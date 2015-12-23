@@ -40,7 +40,6 @@ import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
-import com.agilecrm.contact.bulk.ContactBulkSave;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
@@ -141,6 +140,8 @@ public class CSVUtil
 	// Reads the first line
 	String csv = iterator.nextLine();
 
+	System.out.println(csv);
+
 	// Creates csv reader from headings
 	CSVReader reader = new CSVReader(new StringReader(csv.trim()));
 
@@ -168,7 +169,6 @@ public class CSVUtil
      */
     private List<String[]> getCSVDataFromStream(InputStream blobStream, String encoding_type)
     {
-	long start = System.currentTimeMillis();
 	List<String[]> data = new ArrayList<String[]>();
 
 	// Reads blob data line by line upto first 10 line of file
@@ -216,7 +216,6 @@ public class CSVUtil
 	    }
 	}
 
-	System.out.println("Time taken to read data : " + (System.currentTimeMillis() - start));
 	return data;
 
     }
@@ -278,6 +277,9 @@ public class CSVUtil
 
 	System.out.println(csvData.size());
 
+	System.out.println("available scopes for user " + domainUser.email + ", scopes = "
+		+ accessControl.getCurrentUserScopes());
+
 	// Counters to count number of contacts saved contacts
 	int savedContacts = 0;
 	int mergedContacts = 0;
@@ -285,6 +287,9 @@ public class CSVUtil
 	int accessDeniedToUpdate = 0;
 	Map<Object, Object> status = new HashMap<Object, Object>();
 	status.put("type", "Contacts");
+
+	List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE");
+	List<CustomFieldDef> imagefield = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "text");
 
 	/**
 	 * Iterates through all the records from blob
@@ -319,9 +324,7 @@ public class CSVUtil
 		    ContactField field = null;
 		    if (j < properties.size())
 		    {
-			ContactField newField = properties.get(j);
-			field = new ContactField();
-			field.updateField(newField);
+			field = properties.get(j);
 		    }
 		    else
 		    {
@@ -400,8 +403,6 @@ public class CSVUtil
 
 		    if (field.type.equals(FieldType.CUSTOM))
 		    {
-			List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(
-				SCOPE.CONTACT, "DATE");
 			for (CustomFieldDef customFieldDef : customFields)
 			{
 			    if (field.name.equalsIgnoreCase(customFieldDef.field_label))
@@ -419,8 +420,6 @@ public class CSVUtil
 			// set image in custom fields
 			if (field.name.equalsIgnoreCase(Contact.IMAGE))
 			{
-			    List<CustomFieldDef> imagefield = CustomFieldDefUtil.getCustomFieldsByScopeAndType(
-				    SCOPE.CONTACT, "text");
 
 			    for (CustomFieldDef customFieldDef : imagefield)
 			    {
@@ -453,30 +452,23 @@ public class CSVUtil
 
 		// If contact is duplicate, it fetches old contact and updates
 		// data.
-		long startTimeMerging = System.currentTimeMillis();
-
-		Contact oldContact = null;
 		if (ContactUtil.isDuplicateContact(tempContact))
 		{
 		    // Checks if user can update the contact
 
 		    // Sets current object to check scope
 
-		    oldContact = ContactUtil.getDuplicateContact(tempContact);
-		    if (oldContact != null)
+		    tempContact = ContactUtil.mergeContactFields(tempContact);
+		    accessControl.setObject(tempContact);
+		    if (!accessControl.canDelete())
 		    {
-			accessControl.setObject(tempContact);
-			if (!accessControl.canDelete())
-			{
-			    accessDeniedToUpdate++;
-			    failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-				    "Access denied to update contact"));
+			accessDeniedToUpdate++;
+			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+				"Access denied to update contact"));
 
-			    continue;
-			}
-			isMerged = true;
+			continue;
 		    }
-
+		    isMerged = true;
 		}
 		else
 		{
@@ -505,13 +497,8 @@ public class CSVUtil
 		    }
 		}
 
-		System.out
-			.println("Checking and merging contacts : " + (System.currentTimeMillis() - startTimeMerging));
-
 		tempContact.bulkActionTracker = bulk_action_tracker;
-
-		save(oldContact, tempContact, false);
-
+		tempContact.save(false);
 	    }// end of try
 	    catch (InvalidTagException e)
 	    {
@@ -577,8 +564,6 @@ public class CSVUtil
 
 	}// end of for loop
 
-	save(null, null, true);
-
 	if (failedContacts.size() > 0)
 	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContacts.size());
 
@@ -617,46 +602,6 @@ public class CSVUtil
 	if (savedContacts != 0 || mergedContacts != 0)
 	    ActivityUtil.createLogForImport(ActivityType.CONTACT_IMPORT, EntityType.CONTACT, savedContacts,
 		    mergedContacts);
-
-    }
-
-    ContactBulkSave bulkSaver = new ContactBulkSave();
-
-    /**
-     * This method will save contacts in bulk. Developer can pass force persist
-     * flag to save contacts
-     * 
-     * @param contact
-     * @param forcePersist
-     */
-    private final void save(Contact oldContact, Contact contact, boolean forcePersist)
-    {
-	bulkSaver.save(oldContact, contact);
-
-	// Force persist is usually called at the end
-	if (forcePersist)
-	    bulkSaver.finalize();
-
-    }
-
-    private Map<CustomFieldDef.SCOPE, List<CustomFieldDef>> customFields = new HashMap<CustomFieldDef.SCOPE, List<CustomFieldDef>>();
-
-    private CustomFieldDef getCustomField(String name, CustomFieldDef.SCOPE scope, CustomFieldDef.Type type)
-    {
-	if (!customFields.containsKey(scope))
-	{
-	    List<CustomFieldDef> fields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(scope, type.toString());
-	    customFields.put(scope, fields);
-	}
-
-	List<CustomFieldDef> fields = customFields.get(scope);
-	for (CustomFieldDef field : fields)
-	{
-	    if (field.field_label.equalsIgnoreCase(name))
-		return field;
-	}
-
-	return null;
 
     }
 
@@ -966,6 +911,7 @@ public class CSVUtil
 
 	for (Object o : status.values())
 	{
+	    System.out.println(o);
 	    if (o.equals("Companies") || o.equals("Contacts"))
 	    {
 		continue;
