@@ -926,12 +926,15 @@ public class TicketsRest
 	 */
 	@POST
 	@Path("/forward-ticket")
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Tickets forwardTicket(@FormParam("ticket_id") Long ticketId, @FormParam("email") String email,
 			@FormParam("html_text") String HTMLcontent)
 	{
 
+		
+		
+		
+		
 		try
 		{
 			if (ticketId == null || email == null || HTMLcontent == null)

@@ -87,7 +87,7 @@ public class TicketCannedMessagesRest
 			cannedMessage.title = title;
 			cannedMessage.setOwner_key(domainUser);
 
-			List<Long> label_keys = cannedMessage.labels;
+			List<Long> label_keys = (cannedMessage.labels == null) ? new ArrayList<Long>() : cannedMessage.labels;
 
 			System.out.println("label_keys = " + label_keys);
 

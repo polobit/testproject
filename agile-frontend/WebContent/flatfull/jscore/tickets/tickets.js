@@ -545,13 +545,9 @@ var Tickets = {
 		//Re-initalize to disable select box
 		$('#ticket-assignee-list').trigger('chosen:updated');
 
-		var newTicketModel = new BaseModel();
-		newTicketModel.url = "/core/api/tickets/assign-ticket?ticket_id=" + Current_Ticket_ID + "&assignee_id=" + assignee_id + 
-		                     '&group_id=' + group_id;
-		newTicketModel.save(ticketModel, 
-			{	success: function(model){
+		this.sendReqToChangeAssignee(assignee_id, group_id, ticketModel, function(model){
 
-				//Enable select box
+			//Enable select box
 				$('select#ticket-assignee-list').attr('disabled', false);
 
 				//Re-initalize to disable select box
@@ -575,6 +571,25 @@ var Tickets = {
 					$('.assign-to-me').show();
 
 				App_Ticket_Module.ticketView.model.set(model, {silent: true});
+
+		});
+
+		
+	},
+
+	sendReqToChangeAssignee : function(assignee_id, group_id, ticketModel, callback){
+
+		var newTicketModel = new BaseModel();
+
+		newTicketModel.url = "/core/api/tickets/assign-ticket?ticket_id=" + Current_Ticket_ID + "&assignee_id=" + assignee_id + 
+		                     '&group_id=' + group_id;
+
+		newTicketModel.save(ticketModel, 
+			{	success: function(model){
+
+				if(callback)
+					callback(model);
+				
 			}}
 		);
 	},
@@ -691,19 +706,20 @@ var Tickets = {
 			Tickets.ccEmailsList(e);
 		});
 
-		$(el).on('focusout', '#cc_email_field', function(e){
-			e.stopImmediatePropagation();
-			Tickets.ccEmailsList(e, true);
-		});
+		//$(el).on('focusout', '#cc_email_field', function(e){
+			//e.stopImmediatePropagation();
+			//Tickets.ccEmailsList(e, true);
+		//});
 	},
 
 	//Appends email as list item in cc emails list
 	ccEmailsList: function(e, force_allow){
 
 		e.stopImmediatePropagation();
+
 		if(e.which == 13 || force_allow) {
 
-        	var email = $('#cc_email_field').val();
+			var email = $('#cc_email_field').val();
 
         	if(!email)
         		return;
@@ -958,12 +974,21 @@ var Tickets = {
 
 	toggleWidgets : function(e){
 
-		$('.contact-right-widgetsview').toggle('slow');
+		$('.contact-right-widgetsview').toggle('slow', function(){
 
-		if($(e.target).hasClass('fa-dedent'))
+			var widgetStatus = true;
+			if($('.contact-right-widgetsview').is(':visible'))
+				widgetStatus = false;
+
+			_agile_set_prefs('hide_ticket_details_widgets', widgetStatus);
+
+			if($(e.target).hasClass('fa-dedent'))
 			$(e.target).addClass('fa-indent').removeClass('fa-dedent');
-		else
+			else
 			$(e.target).addClass('fa-dedent').removeClass('fa-indent');
+
+		});
+
 	},
 
 	setMinHeight: function(){

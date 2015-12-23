@@ -40,6 +40,14 @@
 			        <div class="m-l-lg panel b-a bg-f6f8f8">
 			          <div class="panel-heading pos-rlt b-b b-light">
 			            <span class="arrow left arrow-light arrow-light lter"></span>
+
+			            <span class="text-muted m-l-sm pull-right">
+			                <i class="fa fa-clock-o"></i>
+			            	<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
+			              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
+			              	</time>
+			            </span>
+
 			            <a href="javascript:;">
 
 			           	 {{#if_equals ticket_activity_type 'TICKET_ASSIGNEE_REPLIED'}}
@@ -62,12 +70,6 @@
 				    	 {{/if_equals}}
 
 			            </a>
-			            <span class="text-muted m-l-sm pull-right">
-			                <i class="fa fa-clock-o"></i>
-			            	<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
-			              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
-			              	</time>
-			            </span>
 			            
 			          </div>
 			          
@@ -93,6 +95,13 @@
 			        <div class="m-l-lg panel b-a {{#if_equals ticket_activity_type 'TICKET_PRIVATE_NOTES_ADD'}}bg-lightyellow{{/if_equals}} ">
 			          <div class="panel-heading pos-rlt b-b b-light ">
 			            <span class="arrow left {{#if_equals ticket_activity_type 'TICKET_PRIVATE_NOTES_ADD'}}arrow-lightyellow{{/if_equals}} "></span>
+
+			            <span class="text-muted m-l-sm pull-right">
+			                <i class="fa fa-clock-o"></i>
+			            	<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
+			              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
+			              	</time>
+			            </span>
 			            <a href="javascript:;">
 
 			               {{#if_equals ticket_activity_type 'TICKET_ASSIGNED'}}
@@ -164,12 +173,7 @@
 
 
 				        </a>
-			            <span class="text-muted m-l-sm pull-right">
-			                <i class="fa fa-clock-o"></i>
-			            	<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
-			              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
-			              	</time>
-			            </span>
+			            
 
 			          </div>
 			          
