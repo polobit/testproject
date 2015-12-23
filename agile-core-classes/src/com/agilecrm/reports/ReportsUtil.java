@@ -34,7 +34,9 @@ import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.GoalsUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.reports.deferred.ReportsInstantEmailDeferredTask;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -516,13 +518,20 @@ public class ReportsUtil
 			else
 				dataJson.put("userPic","");
 			//List<DomainUser> usersList = new ArrayList<DomainUser>();
+			List<DomainUser> usersList = new ArrayList<DomainUser>();
 			List<DomainUser> domainUsersList = null;
-				DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
-				if(dUser!=null)
-					domainUsersList=DomainUserUtil.getUsers(dUser.domain);
+			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+			if(dUser!=null)
+				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
+			List<Long> users=GoalsUtil.getAllGoalsForTime(minTime, maxTime);
+			for(DomainUser domainUser : domainUsersList){
+				if(users.contains(domainUser.id))
+					usersList.add(domainUser);
+			}
+		
 				Double total_milestoneValues = 0d;
 				int total_count=0;
-			for(DomainUser domainUser : domainUsersList){
+			for(DomainUser domainUser : usersList){
 				JSONObject cateJson = new JSONObject();
 				cateJson.put("name", "Revenue");
 				List<Opportunity> wonDealList = OpportunityUtil.getWonDealsListOfUser(minTime, maxTime, domainUser.id);
@@ -580,28 +589,39 @@ public class ReportsUtil
 			}
 			//JSONObject obj=new JSONObject();
 			int index=0;
+			boolean flag=false;
+			boolean rev_flag=false;
 			for(JSONObject obj:cateList)
 			{
 				index++;
 					if(ownerId.equals(obj.getLong("id")))
+							{
+						flag=true;
 							break;
+							}
 					
 			}
+			if(flag)
 			dataJson.put("Rank", index);
 			
 			int won_index=0;
 			for(JSONObject obj:countCateList)
 			{
 				won_index++;
-					if(ownerId.equals(obj.getLong("id")))
-							break;
+					if(ownerId.equals(obj.getLong("id"))){
+						rev_flag=true;
+						break;
+					}
+							
 					
 			}
 			team_average=(double) Math.round(total_milestoneValues/total_count);
+			if(rev_flag){
 			dataJson.put("won_Rank", won_index);
 			dataJson.put("Team_Revenue",total_milestoneValues);
 			dataJson.put("Team_Deals",total_count);
 			dataJson.put("Team_average",team_average);
+			}
 			//dataJson.put("revenue", true);
 			//categoryCount++;
 			

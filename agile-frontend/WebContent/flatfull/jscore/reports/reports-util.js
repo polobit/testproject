@@ -381,15 +381,24 @@ user_reports :function(callReportUrl){
 
 				console.log(data);
 				var div='';
+				var pipeline_json=[];
 				 $.each(data,function(k,v){
 				 	div=div.concat('<div id='+k+' class="conversion_track col-sm-4 panel wrapper"><b>'+k+'</b>');
 				 	//var innerdiv='';
 				 	var index=0;
-				 	/*	$.ajax({ url : 'core/api/milestone/pipelinesByName/'+k, type : 'GET', success : function(data)
+				 		$.ajax({ url : 'core/api/milestone/pipelinesbyName/'+k, type : 'GET', success : function(data)
 					{
 							console.log(data);
+							pipeline_json.push(k,data[0].won_milestone);
+							 $('.conversion_track ').each(function(index)
+								 {
+								 		var id=$(this).attr('id');
+								 		var won_class=pipeline_json.pop(id);
+								 		$(this).find('.'+won_class);
+
+								 });
 					}
-				 });*/
+				 });
 				 	var percent='';
 				 	var value;
 				 	var total=0;
@@ -401,6 +410,7 @@ user_reports :function(callReportUrl){
 				 				percent=100;
 				 				else
 				 					percent=0;
+				 				var class_name="first";
 				 			}
 				 			else
 				 			{
@@ -412,7 +422,7 @@ user_reports :function(callReportUrl){
 				 				
 				 			value=v1;
 				 		index++;
-				 			div=div.concat('<div class="">'+
+				 			div=div.concat('<div id="'+class_name+'" class="'+k1+'">'+
               '<span class="pull-right text-primary">'+Math.round(percent)+'% ('+v1+')</span>'+
               '<span>'+k1+'</span>'+
            ' </div>'+
@@ -432,7 +442,10 @@ user_reports :function(callReportUrl){
 				 $('.hidden').parents('.conversion_track').remove();
 				 if($('.converionsPipeline').children().length==0)
 				 	$('.converionsPipeline').parents('.row').hide();
+
+				
 			});
+				
 		},
 
 getRepPerformanceLog : function(url) {
