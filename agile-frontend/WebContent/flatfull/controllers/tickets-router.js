@@ -374,7 +374,8 @@ $("#right-pane").html(ticketView.render().el);
         			$('#cc_email_field').val('');
         	  		Tickets.updateCCEmails(email, 'add');
 
-				},undefined, undefined, 'core/api/search/');
+
+        	  	},undefined, undefined, 'core/api/search/');
 
 				// initialize events on cc input
 				Tickets.initCCEmailsListeners();

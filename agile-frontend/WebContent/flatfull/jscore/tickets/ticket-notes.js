@@ -4,6 +4,9 @@ var Tickets_Notes = {
 
 		e.preventDefault();
 
+		if(!$("#send-reply #reply_textarea").val())
+			return;
+
 		var $save_btn = $(e.target);
 		disable_save_button($save_btn);
 

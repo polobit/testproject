@@ -271,6 +271,7 @@
 </div>
 </script>
 <script id="trigger-categories-template" type="text/html">
+
 <div class="custom-animated custom-fadeInUp">
     <div class="wrapper-md lter bg-light b-b">
         <div class="row">
@@ -312,6 +313,10 @@
 
 											<li role="presentation" data-tab="8">
 												<a href="#form" name="tab8" aria-control="tab8" role="tab" data-toggle="tab" id="tab8">Form</a>
+											</li>
+
+											<li role="presentation" data-tab="9">
+												<a href="#service" name="tab9" aria-control="tab9" role="tab" data-toggle="tab" id="tab9">Service</a>
 											</li>
 </ul>
 
@@ -812,186 +817,190 @@
 
                 </div>  <!-- End of tab-pane - form -->
 
+
+
+                <!-- Start of tab-pane - service -->
+				<div class="tab-pane" role="tab-panel" id="service">
+
+					<div id="general" class="row">
+			            <div class="col-md-3 col-sm-6 col-xs-12">
+			                <div class="panel wrapper text-center b-a">
+			                    <!-- Icon and Title -->
+			                    <div>
+			                        <div>
+			                            <i class="fa-ticket icon-3x"></i>
+			                        </div>
+			                        <b>Ticket Added</b>
+			                    </div>
+			                    <br/>
+			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+			                        Runs a Campaign on a contact When new ticket is added.
+			                    </div>
+			                    <!-- Add button -->
+			                    <div>
+			                        <a class="btn btn-sm btn-default add-trigger" data="NEW_TICKET_IS_ADDED">Go</a>
+			                    </div>
+			                </div>
+			            </div>
+			        
+			            <div class="col-md-3 col-sm-6 col-xs-12">
+			                <div class="panel wrapper text-center b-a">
+			                    <!-- Icon and Title -->
+			                    <div>
+			                        <div>
+			                            <i class="fa-folder icon-3x"></i>
+			                        </div>
+			                        <b>Ticket Closed</b>
+			                    </div>
+			                    <br/>
+			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+			                        Runs a Campaign on a contact When ticket is closed.
+			                    </div>
+			                    <!-- Add button -->
+			                    <div>
+			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_IS_CLOSED">Go</a>
+			                    </div>
+			                </div>
+			            </div>
+
+			            <div class="col-md-3 col-sm-6 col-xs-12">
+			                <div class="panel wrapper text-center b-a">
+			                    <!-- Icon and Title -->
+			                    <div>
+			                        <div>
+			                            <i class="fa-user icon-3x"></i>
+			                        </div>
+			                        <b>Note Added by User</b>
+			                    </div>
+			                    <br/>
+			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+			                        Runs a Campaign on a contact When new note is added by user.
+			                    </div>
+			                    <!-- Add button -->
+			                    <div>
+			                        <a class="btn btn-sm btn-default add-trigger" data="NOTE_ADDED_BY_USER">Go</a>
+			                    </div>
+			                </div>
+			            </div>
+
+			            <div class="col-md-3 col-sm-6 col-xs-12">
+			                <div class="panel wrapper text-center b-a">
+			                    <!-- Icon and Title -->
+			                    <div>
+			                        <div>
+			                            <i class="fa-users icon-3x"></i>
+			                        </div>
+			                        <b>Note Added by Customer</b>
+			                    </div>
+			                    <br/>
+			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+			                        Runs a Campaign on a contact When new note is added by customer.
+			                    </div>
+			                    <!-- Add button -->
+			                    <div>
+			                        <a class="btn btn-sm btn-default add-trigger" data="NOTE_ADDED_BY_CUSTOMER">Go</a>
+			                    </div>
+			                </div>
+			            </div>
+
+				  <div class="col-md-3 col-sm-6 col-xs-12">
+			                <div class="panel wrapper text-center b-a">
+			                    <!-- Icon and Title -->
+			                    <div>
+			                        <div>
+			                            <i class="fa-cog icon-3x"></i>
+			                        </div>
+			                        <b>SLA Reached</b>
+			                    </div>
+			                    <br/>
+			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+			                        Runs a Campaign on a contact When ticket SLA Reached.
+			                    </div>
+			                    <!-- Add button -->
+			                    <div>
+			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_SLA_REACHED">Go</a>
+			                    </div>
+			                </div>
+			            </div>
+
+
+					<div class="col-md-3 col-sm-6 col-xs-12">
+			                <div class="panel wrapper text-center b-a">
+			                    <!-- Icon and Title -->
+			                    <div>
+			                        <div>
+			                            <i class="fa-user icon-3x"></i>
+			                        </div>
+			                        <b>Assignee Changed</b>
+			                    </div>
+			                    <br/>
+			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+			                        Runs a Campaign on a contact When ticket assignee is changed.
+			                    </div>
+			                    <!-- Add button -->
+			                    <div>
+			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_ASSIGNEE_CHANGED">Go</a>
+			                    </div>
+			                </div>
+			            </div>
+
+
+						<div class="col-md-3 col-sm-6 col-xs-12">
+			                <div class="panel wrapper text-center b-a">
+			                    <!-- Icon and Title -->
+			                    <div>
+			                        <div>
+			                            <i class="fa-tag icon-3x"></i>
+			                        </div>
+			                        <b>Label Added</b>
+			                    </div>
+			                    <br/>
+			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+			                        Runs a Campaign on a contact When ticket label is added.
+			                    </div>
+			                    <!-- Add button -->
+			                    <div>
+			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_LABEL_IS_ADDED">Go</a>
+			                    </div>
+			                </div>
+			            </div>
+
+						<div class="col-md-3 col-sm-6 col-xs-12">
+			                <div class="panel wrapper text-center b-a">
+			                    <!-- Icon and Title -->
+			                    <div>
+			                        <div>
+			                            <i class="fa-tag icon-3x"></i>
+			                        </div>
+			                        <b>Label Deleted</b>
+			                    </div>
+			                    <br/>
+			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+			                        Runs a Campaign on a contact When ticket label is deleted.
+			                    </div>
+			                    <!-- Add button -->
+			                    <div>
+			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_LABEL_IS_DELETED">Go</a>
+			                    </div>
+			                </div>
+			            </div>
+			            
+			         </div>
+
+					<!-- End of Ticket Triggers --> 
+
+                </div>  
+                <!-- End of tab-pane - service -->
+
             </div>  <!-- End of tab-content -->
 
         </div>
-       </div><!--End of triggers-tab-container --> 
-
-
-		<!-- Ticket Triggers -->
-		 <div class="row">
-            <div class="col-md-12">
-                <h4 class="m-t-md">Ticket</h4>
-            </div>
-        </div>
-		 <div id="general" class="row">
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="panel wrapper text-center">
-                    <!-- Icon and Title -->
-                    <div>
-                        <div>
-                            <i class="fa-ticket icon-3x"></i>
-                        </div>
-                        <b>Ticket Added</b>
-                    </div>
-                    <br/>
-                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Runs a Campaign on a contact When new ticket is added.
-                    </div>
-                    <!-- Add button -->
-                    <div>
-                        <a class="btn btn-sm btn-default add-trigger" data="NEW_TICKET_IS_ADDED">Go</a>
-                    </div>
-                </div>
-            </div>
         
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="panel wrapper text-center">
-                    <!-- Icon and Title -->
-                    <div>
-                        <div>
-                            <i class="fa-folder icon-3x"></i>
-                        </div>
-                        <b>Ticket Closed</b>
-                    </div>
-                    <br/>
-                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Runs a Campaign on a contact When ticket is closed.
-                    </div>
-                    <!-- Add button -->
-                    <div>
-                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_IS_CLOSED">Go</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="panel wrapper text-center">
-                    <!-- Icon and Title -->
-                    <div>
-                        <div>
-                            <i class="fa-user icon-3x"></i>
-                        </div>
-                        <b>Note Added by User</b>
-                    </div>
-                    <br/>
-                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Runs a Campaign on a contact When new note is added by user.
-                    </div>
-                    <!-- Add button -->
-                    <div>
-                        <a class="btn btn-sm btn-default add-trigger" data="NOTE_ADDED_BY_USER">Go</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="panel wrapper text-center">
-                    <!-- Icon and Title -->
-                    <div>
-                        <div>
-                            <i class="fa-users icon-3x"></i>
-                        </div>
-                        <b>Note Added by Customer</b>
-                    </div>
-                    <br/>
-                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Runs a Campaign on a contact When new note is added by customer.
-                    </div>
-                    <!-- Add button -->
-                    <div>
-                        <a class="btn btn-sm btn-default add-trigger" data="NOTE_ADDED_BY_CUSTOMER">Go</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-	  <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="panel wrapper text-center">
-                    <!-- Icon and Title -->
-                    <div>
-                        <div>
-                            <i class="fa-cog icon-3x"></i>
-                        </div>
-                        <b>SLA Reached</b>
-                    </div>
-                    <br/>
-                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Runs a Campaign on a contact When ticket SLA Reached.
-                    </div>
-                    <!-- Add button -->
-                    <div>
-                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_SLA_REACHED">Go</a>
-                    </div>
-                </div>
-            </div>
-
-
-		<div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="panel wrapper text-center">
-                    <!-- Icon and Title -->
-                    <div>
-                        <div>
-                            <i class="fa-user icon-3x"></i>
-                        </div>
-                        <b>Assignee Changed</b>
-                    </div>
-                    <br/>
-                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Runs a Campaign on a contact When ticket assignee is changed.
-                    </div>
-                    <!-- Add button -->
-                    <div>
-                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_ASSIGNEE_CHANGED">Go</a>
-                    </div>
-                </div>
-            </div>
-
-
-			<div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="panel wrapper text-center">
-                    <!-- Icon and Title -->
-                    <div>
-                        <div>
-                            <i class="fa-tag icon-3x"></i>
-                        </div>
-                        <b>Label Added</b>
-                    </div>
-                    <br/>
-                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Runs a Campaign on a contact When ticket label is added.
-                    </div>
-                    <!-- Add button -->
-                    <div>
-                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_LABEL_IS_ADDED">Go</a>
-                    </div>
-                </div>
-            </div>
-
-			<div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="panel wrapper text-center">
-                    <!-- Icon and Title -->
-                    <div>
-                        <div>
-                            <i class="fa-tag icon-3x"></i>
-                        </div>
-                        <b>Label Deleted</b>
-                    </div>
-                    <br/>
-                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Runs a Campaign on a contact When ticket label is deleted.
-                    </div>
-                    <!-- Add button -->
-                    <div>
-                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_LABEL_IS_DELETED">Go</a>
-                    </div>
-                </div>
-            </div>
-
-		<!-- End of Ticket Triggers --> 
+       </div><!--End of triggers-tab-container --> 
 
 
     </div>
     <!-- End of row -->
 </div>
+
 </script>

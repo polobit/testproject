@@ -332,4 +332,15 @@ Handlebars.registerHelper('get_current_user_prefs', function(object, options) {
 
 });
 
+Handlebars.registerHelper('agile_compare_prefs', function(key, value, options) {
+
+	var prefs = _agile_get_prefs(key);
+	console.log(prefs == value);
+	if(prefs && prefs == value)
+		return options.fn(this);
+
+	return options.inverse(this);
+
+});
+
 /** End of ticketing handlebars* */

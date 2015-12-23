@@ -17,8 +17,6 @@
             <div class="panel panel-default m-t-sm">
                   <div class="panel-body text-center">
 
-                  {{#next_prev_ticket_exists 'previous'}}{{#next_prev_ticket_exists 'next'}}
-
                   <div class="pos-rlt w-full">
                     <div class="contact-navigation-view">
 
@@ -27,22 +25,29 @@
                       {{#next_prev_ticket_exists 'previous'}}
                       <a style="float:left;" href="{{#is_filtered_ticket}}
                       #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'previous'}}{{get_ticket_id 'previous'}}{{/next_prev_ticket_exists}}
-                      {{/is_filtered_ticket}}" class=""><i class="icon icon-chevron-left"></i></a>
+                      {{/is_filtered_ticket}}" class="" title="Previous Ticket"><i class="icon icon-chevron-left"></i></a>
                       {{/next_prev_ticket_exists}}
 
                       {{#next_prev_ticket_exists 'next'}}
                       <a style="float:right;" href="{{#is_filtered_ticket}}
                       #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'next'}}{{get_ticket_id 'next'}}{{/next_prev_ticket_exists}}
-                      {{/is_filtered_ticket}}" class=""><i class="icon icon-chevron-right"></i></a>
+                      {{/is_filtered_ticket}}" class="" title="Next Ticket"><i class="icon icon-chevron-right"></i></a>
                       {{/next_prev_ticket_exists}}
 
 
                     </span></div>
 
                   </div>
-                  {{/next_prev_ticket_exists}}{{/next_prev_ticket_exists}}
+                  
+                   <div>
+                        <a class="text-info back-to-tickets" href="javascript:void(0);">Tickets</a> / 
+                        <span> #{{id}}</span>
+                    </div>
 
-                  <div class="clearfix">
+                    <div class="b-b b-light m-t-sm m-b-sm"></div>
+
+                  <div class="clearfix cursor-pointer" onclick="window.open('#contact/{{contact.id}}', '_blank')">
+
                       <div class="inline">
                         <div class="thumb-sm">
                             <img src="{{gravatarurl contact.properties 24}}" class="r-5x" alt="...">
@@ -96,28 +101,6 @@
 
                       </div>                      
                     </div>
-
-                    <div class="b-b b-light m-t-sm m-b-sm"></div>
-
-                    <div>
-                        <a class="text-info back-to-tickets" href="javascript:void(0);">Tickets</a> / 
-                        <span> #{{id}}</span>
-                    </div>
-
-                <div class="m-t-xs">
-                  <span class="label bg-light dk text-tiny first-letter-cap inline-block">
-                    {{status}}
-                  </span>&nbsp;
-                  <span class="label {{toLowerCase priority}}-priority-bg text-tiny first-letter-cap inline-block">
-                    {{priority}}
-                  </span>
-
-                   <span class="label bg-light dk text-tiny first-letter-cap inline-block">
-                    {{group.group_name}}
-                  </span>
-                 
-                </div>
-
               </div>
                   
             </div>
@@ -304,8 +287,8 @@
                </div>
             </div>
 
-            <div class="b-b b-light m-b-sm m-t-lg position-relative">
-              <span class="label label-default toggle-timeline position-absolute cursor-pointer" style="bottom: -8px;">Show all events</span>
+            <div class="b-b b-light m-b-sm position-relative">
+              <span class="label label-default toggle-timeline position-absolute cursor-pointer" style="bottom: -8px;">Show timeline</span>
             </div>
 
           <!-- End of ticket notes -->
@@ -323,7 +306,7 @@
     <!-- End of second column in details view -->
 
     <!-- third column in details view -->
-    <div class="contact-right-widgetsview box-border b-l col w-lg bg-light lter b-l bg-auto">
+    <div class="contact-right-widgetsview box-border b-l col w-lg bg-light lter b-l bg-auto" style="{{#agile_compare_prefs "hide_ticket_details_widgets" "true"}}display: none;{{/agile_compare_prefs}}">
       <div class="vbox block">
         <div class="row-row" style="display: block !important;">
           <div class="wrapper">
@@ -371,48 +354,19 @@
         {{/if_equals}}
         
         
-        {{#if_equals reply_type "reply"}}
-          <div class="btn-group dropdown pull-right p-none m-l-xs">
-              <button class="btn btn-primary btn-sm send-reply">Send Reply</button>
-              <button class="btn btn-primary btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
-              <ul class="dropdown-menu">
-                <li><a href="javascript:void(0);" class="send-reply close-ticket">Send Reply &amp; Close Ticket</a></li>
-              </ul>
-            </div>
-            {{/if_equals}}
-            
-            {{#if_equals reply_type "comment"}} 
+        
+        {{#if canned_responses}}
+        <div class="btn-group dropdown m-l-xs pull-right">
+          <button class="btn btn-sm btn-default" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" data-original-title="Canned Responses"><i class="fa fa-reorder"></i></button>
+          <ul id="workflows_list" class="dropdown-menu">
+            {{#each canned_responses}}
+            <li id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>
+            {{/each}}
+          </ul>
+        </div>
+        {{/if}}
 
-            <div class="btn-group dropdown p-none pull-right m-l-xs">
-              <button class="btn btn-dark btn-sm send-reply private">Add Comment</button>
-              <button class="btn btn-dark btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
-              <ul class="dropdown-menu">
-                <li><a href="javascript:void(0);" class="send-reply private close-ticket">Add Comment & Close Ticket</a></li>
-              </ul>
-            </div> 
-            {{/if_equals}} 
-
-
-            {{#if_equals reply_type "forward"}} 
-              <button class="btn btn-sm btn-info pull-right m-l-xs send-reply forward">Forward</button>
-            {{/if_equals}}
-
-                      <a href="javascript:void(0);" class="btn btn-default btn-sm m-l-xs pull-right">
-                      <i class="fa fa-paperclip" data-toggle="tooltip" data-placement="top" data-original-title="Attachments"></i>
-                    </a>
-
-                    {{#if canned_responses}}
-                    <div class="btn-group dropdown m-l-xs pull-right">
-                      <button class="btn btn-sm btn-default" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" data-original-title="Canned Responses"><i class="fa fa-reorder"></i></button>
-                      <ul id="workflows_list" class="dropdown-menu">
-                        {{#each canned_responses}}
-                        <li id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>
-                        {{/each}}
-                      </ul>
-                    </div>
-                    {{/if}}
-
-                    </div>
+        </div>
 
                   <div id="reply-editor" class="m-t-sm">
 
@@ -427,9 +381,42 @@
             
                   </div>
                   
-                  <div class="m-b-lg">
-                    <span class="error-msg text-sm pull-left" style="color: #d9534f;"></span>
-                    {{#if label_matched_canned_responses}}<span onclick="$('.matched-canned-responses-list').toggle();" class="text-info pull-right text-sm cursor-pointer border-highlight-light">Show matched canned Responses</span>{{/if}}
+                  <div class="m-t-xs clearfix m-b-sm">
+
+                   <span class="error-msg text-sm" style="color: #d9534f;"></span>
+                    {{#if label_matched_canned_responses}}<span onclick="$('.matched-canned-responses-list').toggle();" class="text-info text-sm cursor-pointer border-highlight-light">Show matched canned Responses</span>{{/if}}
+
+                    {{#if_equals reply_type "reply"}}
+                    <div class="btn-group dropdown dropup pull-right p-none m-l-xs">
+                        <button class="btn btn-primary btn-sm send-reply">Send Reply</button>
+                        <button class="btn btn-primary btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                          <li><a href="javascript:void(0);" class="send-reply close-ticket">Send Reply &amp; Close Ticket</a></li>
+                        </ul>
+                      </div>
+                      {{/if_equals}}
+                      
+                      {{#if_equals reply_type "comment"}} 
+
+                      <div class="btn-group dropdown dropup p-none pull-right m-l-xs">
+                        <button class="btn btn-dark btn-sm send-reply private">Add Comment</button>
+                        <button class="btn btn-dark btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                          <li><a href="javascript:void(0);" class="send-reply private close-ticket">Add Comment & Close Ticket</a></li>
+                        </ul>
+                      </div> 
+                      {{/if_equals}} 
+
+
+                      {{#if_equals reply_type "forward"}} 
+                        <button class="btn btn-sm btn-info pull-right m-l-xs send-reply forward">Forward</button>
+                      {{/if_equals}}
+
+                      <a href="javascript:void(0);" class="btn btn-default btn-sm m-l-xs pull-right">
+                        <i class="fa fa-paperclip" data-toggle="tooltip" data-placement="top" data-original-title="Attachments"></i>
+                      </a>
+
+
                   </div>
 
                   {{#if label_matched_canned_responses}}

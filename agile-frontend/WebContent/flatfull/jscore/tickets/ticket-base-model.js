@@ -6,6 +6,8 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		/*"click .ticket_group_name" : "changeGroup",*/
 		"click .ticket_status" : "changeStatus",
 		"click .ticket_assignee_name" : "changeAssignee",
+		"click .assign-to-me" : "assignToMe",
+
 		"change .ticket_type" : "changeTicketType",
 		"change .ticket_priority" : "changeTicketPriority",
 		"click .delete-ticket" : "deleteTicket",
@@ -73,6 +75,25 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		e.preventDefault();
 
 		Tickets.changeAssignee(e);
+	},
+
+	assignToMe : function(e){
+
+		e.preventDefault();
+
+		var $selected_option = $('select#ticket-assignee-list').find('option:selected');
+
+		var assignee_name = $selected_option.text();
+		var group_id = $selected_option.data('group-id');
+
+		Tickets.sendReqToChangeAssignee(CURRENT_AGILE_USER.domainUser.id, "", App_Ticket_Module.ticketView.model.toJSON(), function(model){
+
+				$('.assign-to-me').hide();
+				
+				App_Ticket_Module.ticketView.model.set(model, {silent: true});
+
+		});
+
 	},
 
 	changeTicketType: function(e){
@@ -208,7 +229,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 	toggleTimeline: function(e){
 
-		var tooltip_text = 'Show all events';
+		var tooltip_text = 'Show timeline';
 		if($('.ticket-timeline-container').is(':visible'))
 		{
 			//Rendering ticket notes
@@ -216,7 +237,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		}
 		else{
 			Ticket_Timeline.render_individual_ticket_timeline();
-			tooltip_text = 'Show notes only';
+			tooltip_text = 'Show comments';
 		}
 
 		$('.toggle-timeline').text(tooltip_text);
