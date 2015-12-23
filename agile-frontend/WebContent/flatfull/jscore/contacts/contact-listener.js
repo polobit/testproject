@@ -18,13 +18,12 @@ function contactListener()
 				if (!insidePopover)	{
 		 $(that).popover('show');
 		 $('.popover').css('left',left);
-		var id=that.find('.data').attr('data');
-		 var contact=App_Contacts.contact_custom_view.collection.get(id).toJSON();
-		 		getTemplate("contacts-custom-view-popover", contact, undefined, function(template_ui){
+		 App_Contacts.contact_popover=$(that).data();
+		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
 						if(!template_ui)
 							  return;
 						$('.popover').html($(template_ui));	
-						attachEvents(that,App_Contacts.contact_custom_view.collection);
+						attachEvents(that,App_Contacts.contact_popover);
 					});
 		 		that.find('.data').attr('data');
 		 	}
@@ -112,7 +111,7 @@ function attachEvents(tr,Contact_collection) {
 		var json = null;
 
 
-			json = Contact_collection.get($(that).parents('.data').attr('data')).toJSON();
+			json = Contact_collection.toJSON();
 		var contact_name = getContactName(json);
 		$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
 
@@ -129,7 +128,7 @@ function attachEvents(tr,Contact_collection) {
     	//fill_relation(el);
     		var json = null;
 
-		json = Contact_collection.get($(that).parents('.data').attr('data')).toJSON();
+		json = Contact_collection.toJSON();
  	var contact_name = getContactName(json);//getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name");
  	
  	// Adds contact name to tags ul as li element
@@ -154,7 +153,7 @@ $('.popover').on('click', '#add-score', function(e){
 	    // Changes score in UI
 	    $('#lead-score').text(add_score);
        
-   var temp_model= Contact_collection.get($(that).parents('.data').attr('data')).set('lead_score', add_score);
+   var temp_model= Contact_collection.set('lead_score', add_score);
 		var contact_model =  temp_model.toJSON();
 
 	    
@@ -190,7 +189,7 @@ $('.popover').on('click', '#minus-score', function(e){
 		$('#lead-score').text(sub_score);
 		
        
-       var temp_model= Contact_collection.get($(that).parents('.data').attr('data')).set('lead_score', sub_score);
+       var temp_model= Contact_collection.set('lead_score', sub_score);
 		var contact_model =  temp_model.toJSON();
 
 	    
@@ -218,7 +217,7 @@ $('.popover').on('click', '#add-tags', function(e){
 		$("#addTagsForm").css("display", "block");
 		$("#addTags").focus();
 		setup_tags_typeahead(function(e){
-    				json = Contact_collection.get($(that).parents('.data').attr('data')).toJSON();
+    				json = Contact_collection.toJSON();
     			
     			// Checks if tag already exists in contact
     			if($.inArray(e, json.tags) >= 0)
@@ -231,7 +230,7 @@ $('.popover').on('click', '#add-tags', function(e){
     				$("#addTagsForm").css("display", "none");
         		    $("#add-tags").css("display", "block");
         		    
-        		    Contact_collection.get($(that).parents('.data').attr('data')).set(data.toJSON());
+        		    Contact_collection.set(data.toJSON());
     	     		
 	       			
     			});
@@ -261,7 +260,7 @@ e.preventDefault();
 		console.log(new_tags);
 		
 		if(new_tags) {
-			var json = Contact_collection.get($(that).parents('.data').attr('data')).toJSON();
+			var json = Contact_collection.toJSON();
 	    		
 	    	
 	    	// Reset form
@@ -282,7 +281,7 @@ e.preventDefault();
 		       		success: function(data){
 		       			
 		       			// Updates to both model and collection
-		       			Contact_collection.get($(that).parents('.data').attr('data')).set(data.toJSON());
+		       			Contact_collection.set(data.toJSON());
 		       			
 
 		       			console.log(new_tags);
