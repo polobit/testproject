@@ -535,17 +535,23 @@ function populateLostReasons(el, value){
 
 function serialize_deal_products(form_id)
 {
+				if(!App_Deal_Details.deal_products_collection_view)
+					return App_Deal_Details.savedproducts;
 				var arr = [];
-				var arrCheckedProdcts=App_Deal_Details.deal_products.collection.where({"isChecked":true});
-				$.each(arrCheckedProdcts,function(index,value){
-					arr.push(value.toJSON());	
-				});
+				if(App_Deal_Details.deal_products_collection_view && App_Deal_Details.deal_products_collection_view.collection)
+				{
+					var arrCheckedProdcts=App_Deal_Details.deal_products_collection_view.collection.where({"isChecked":true});
+					$.each(arrCheckedProdcts,function(index,value){
+						arr.push(value.toJSON());	
+					});
+				}
 				return arr;
 }
 function populate_deal_products(el, value,form_id){
 	var me=this;
 	me._el=el;
 	me._value=value;
+	App_Deal_Details.savedproducts=value?value.products:null;
 	me._form_id=form_id;
 
 	//Reset 
@@ -555,16 +561,17 @@ function populate_deal_products(el, value,form_id){
 	$(form_id).off('blur');
 	
 	$("#deal_products_div",el).html("");
-	App_Deal_Details.deal_products=null;
+	App_Deal_Details.deal_products_collection_view=null;
 
-	
+	$(".discounttype-input-group-btn ul",form_id).html("<li><a >Percent</a></li><li><a >Value</a></li>")
 	if($(".toggleHead i[class='icon-minus-sign']",form_id))
 	{
-		
-	$(".toggleHead",form_id).find('i').removeClass('icon-minus-sign');	
+		$(".toggleHead",form_id).find('i').removeClass('icon-minus-sign');	
 	}
-		$(".toggleHead",form_id).next().addClass("hide");
-		$(".toggleHead",form_id).find('i').addClass('icon-plus-sign');	
+
+	$(".toggleHead",form_id).next().addClass("hide");
+	$(".toggleHead",form_id).find('i').addClass('icon-plus-sign');	
+
 	if($("#discount_type",form_id).val()!=""  )
 	{
 		$("#discount_type_btn span:first-child",form_id).text($("#discount_type").val());
@@ -581,9 +588,9 @@ function populate_deal_products(el, value,form_id){
 			});
 		this.Process=function()
 		{
-			if(App_Deal_Details.deal_products !=null)
+			if(App_Deal_Details.deal_products_collection_view !=null)
 				return;
-				App_Deal_Details.deal_products=new Base_Collection_View({ url : '/core/api/products', 
+				App_Deal_Details.deal_products_collection_view=new Base_Collection_View({ url : '/core/api/products', 
 					templateKey : "deal-products",
 					individual_tag_name : 'tr',className:'deal-products_tr',sort_collection : false,
 					errorCallback:function(e)
@@ -641,7 +648,7 @@ function populate_deal_products(el, value,form_id){
 								});
 						
 					}});
-					App_Deal_Details.deal_products.collection.fetch({
+					App_Deal_Details.deal_products_collection_view.collection.fetch({
 					success : function(data)
 					{
 						for(var key in data.models)
@@ -709,8 +716,8 @@ function populate_deal_products(el, value,form_id){
 					}
 				});
 				
-				App_Deal_Details.deal_products.render(); 
-				$("#deal_products_div",el).append(App_Deal_Details.deal_products.el);
+				App_Deal_Details.deal_products_collection_view.render(); 
+				$("#deal_products_div",el).append(App_Deal_Details.deal_products_collection_view.el);
 			}	
 						
 				this.toggleAllProducts=function(e)
@@ -752,8 +759,8 @@ function populate_deal_products(el, value,form_id){
 					var sText=$(source).text();
 					var objButtonGroup=$(source).closest(".discounttype-input-group-btn")
 
-					var objButtonInput=objButtonGroup.children().eq(0);
-					var objButton=objButtonGroup.children().eq(1);
+					var objButtonInput=objButtonGroup.children().eq(2);
+					var objButton=objButtonGroup.children().eq(0);
 					var objButtonSpan=objButton.children().eq(0);
 					objButtonSpan.text(sText);
 					objButtonInput.val(sText);	
@@ -769,7 +776,7 @@ function populate_deal_products(el, value,form_id){
 					var objTR=$(source).closest('tr');
 					var objData=objTR.data();
 					var _id=$(source).attr("data")
-					var objModel= App_Deal_Details.deal_products.collection.get(_id)
+					var objModel= App_Deal_Details.deal_products_collection_view.collection.get(_id)
 			
 					if($(source).is(':checked'))
 					{
@@ -808,7 +815,7 @@ function populate_deal_products(el, value,form_id){
 						objTD.children().eq(0).removeClass('hide').addClass('block');
 						var objTR=$(source).closest('tr');
 						var objData=objTR.data();
-						var objModel= App_Deal_Details.deal_products.collection.get(objData.id)
+						var objModel= App_Deal_Details.deal_products_collection_view.collection.get(objData.id)
 						var inputCheckbox=objTD.parent().children().eq(0).children().eq(0).children().eq(0);
 						if(!$(inputCheckbox).is(':checked'))
 						{	
@@ -842,12 +849,12 @@ function populate_deal_products(el, value,form_id){
 				{
 				//	var currentDeal = App_Deal_Details.dealDetailView.model	
 					var iTotal=0;
-					for(var key in App_Deal_Details.deal_products.collection.models)
+					for(var key in App_Deal_Details.deal_products_collection_view.collection.models)
 					{
-						var iQtyPriceTotal= parseFloat( App_Deal_Details.deal_products.collection.models[key].get("qty")) *parseFloat( App_Deal_Details.deal_products.collection.models[key].get("price"))
-						App_Deal_Details.deal_products.collection.models[key].set("total",iQtyPriceTotal)
-						var sId=App_Deal_Details.deal_products.collection.models[key].get("id")
-						if(App_Deal_Details.deal_products.collection.models[key].get("isChecked"))
+						var iQtyPriceTotal= parseFloat( App_Deal_Details.deal_products_collection_view.collection.models[key].get("qty")) *parseFloat( App_Deal_Details.deal_products_collection_view.collection.models[key].get("price"))
+						App_Deal_Details.deal_products_collection_view.collection.models[key].set("total",iQtyPriceTotal)
+						var sId=App_Deal_Details.deal_products_collection_view.collection.models[key].get("id")
+						if(App_Deal_Details.deal_products_collection_view.collection.models[key].get("isChecked"))
 							iTotal+=iQtyPriceTotal;		
 					}
 					var iDiscountAmt=0
