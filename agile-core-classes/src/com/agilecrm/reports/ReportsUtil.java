@@ -32,6 +32,7 @@ import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Goals;
@@ -499,12 +500,8 @@ public class ReportsUtil
 			}
 			
 			dataJson.put("avgDealClosetime", avgDealsClosure);
-			//List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",ownerId,minTime,maxTime);
-
-			
-		/*	dataJson.put("taskcreated",TaskUtil.getUserCreatedTasks(minTime, maxTime, ownerId));
-			dataJson.put("taskCompleted",TaskUtil.getCompletedTasksOfUser(minTime, maxTime, ownerId));
-			dataJson.put("notes",NoteUtil.getNotesCountforUser(minTime, maxTime,ownerId));*/
+			int contact_count=ContactUtil.getContactsCountForOwner(ownerId,minTime,maxTime);
+			dataJson.put("contactCount", contact_count);
 
 			dataJson.put("userName", DomainUserUtil.getDomainUser(ownerId).name);
 			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(ownerId);
@@ -622,12 +619,6 @@ public class ReportsUtil
 			dataJson.put("Team_Deals",total_count);
 			dataJson.put("Team_average",team_average);
 			}
-			//dataJson.put("revenue", true);
-			//categoryCount++;
-			
-			/*dataJson.put("events",EventUtil.getEventsCountforOwner(minTime,maxTime,ownerId));
-			dataJson.put("workflows",WorkflowUtil.getWorkflowCountOfCurrentUser(minTime, maxTime, ownerId));
-			dataJson.put("cases",CaseUtil.getCasesOfUser(minTime, maxTime, ownerId));*/
 			return dataJson;
 			
 		}

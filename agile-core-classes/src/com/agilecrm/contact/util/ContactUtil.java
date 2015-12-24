@@ -1757,4 +1757,20 @@ public class ContactUtil
 	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask));
     }
     
+    public static int getContactsCountForOwner(Long owner_id,Long minTime, Long maxTime)
+    {
+	int contactsCount = 0;
+	try
+	{
+	    contactsCount = dao.ofy().query(Contact.class).filter("type", Contact.Type.PERSON).filter("owner_key",new Key<DomainUser>(DomainUser.class,owner_id))
+		    .filter("created_time >= ", minTime).filter("created_time <= ", maxTime).count();
+	    return contactsCount;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return 0;
+
+    }
 }
