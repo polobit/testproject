@@ -548,7 +548,7 @@ var SubscribeRouter = Backbone.Router
 				IS_HAVING_MANDRILL = false;
 				$.ajax({ url : "core/api/email-gateway", type : "GET", success : function(data)
 				{
-					if (data && data.email_api == "MANDRILL")
+					if (data && data.email_api)
 						IS_HAVING_MANDRILL = true;
 
 				}
