@@ -322,6 +322,15 @@ public class BillingRestriction
 	// pageviews =
 	// AnalyticsSQLUtil.getPageViewsCountForGivenDomain(NamespaceManager.get());
     }
+    
+    //sets emails to 5000(for free customers)
+  	public void refreshEmails()
+  	{
+  		this.one_time_emails_count = 0;
+  		this.max_emails_count = 0;
+  		this.last_renewal_time = System.currentTimeMillis()/1000;
+  		this.save();
+  	}
 
     private void setCreatedTime()
     {
@@ -378,12 +387,17 @@ public class BillingRestriction
 	    return;
 	}
 
+	BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
+
 	// Just to avoid null pointer exception
 	if (this.one_time_emails_backup == null)
 	    this.one_time_emails_backup = this.one_time_emails_count;
 
+	// Substracting from existing db count
+	restriction.one_time_emails_count -= (this.one_time_emails_backup - this.one_time_emails_count);
+
 	// Updating one time count from that of DB entity
-	this.one_time_emails_count -= (this.one_time_emails_backup - this.one_time_emails_count);
+	this.one_time_emails_count = restriction.one_time_emails_count;
 
 	// Updating backup count from that of DB entity
 	this.one_time_emails_backup = one_time_emails_count;
@@ -441,7 +455,6 @@ public class BillingRestriction
 	if (one_time_emails_count > 0 && (max_emails_count == null || max_emails_count == 0))
 	{
 	    max_emails_count = one_time_emails_count;
-	    this.save();
 	}
 
 	one_time_emails_backup = one_time_emails_count;

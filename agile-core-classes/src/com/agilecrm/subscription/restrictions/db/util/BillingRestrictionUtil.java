@@ -124,16 +124,12 @@ public class BillingRestrictionUtil {
 					restriction.save();
 				}
 				else
-					restriction.last_renewal_time = restriction.created_time/1000;
+					restriction.last_renewal_time = restriction.created_time;
 			}
 			Long currentDate = new DateUtil().getTime().getTime()/1000;
 			if(currentDate - restriction.last_renewal_time >= 2592000){
 				System.out.println("Updating free 5000 emails");
-				System.out.println("last renewal time is:: "+restriction.last_renewal_time);
-				restriction.one_time_emails_count = 0;
-				restriction.max_emails_count = 0;
-				restriction.last_renewal_time = System.currentTimeMillis()/1000;
-				restriction.save();
+				restriction.refreshEmails();
 			}
 		}
 		System.out.println("restriction obj:: "+restriction);	
