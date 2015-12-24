@@ -1,13 +1,12 @@
 package com.agilecrm.ticket.entitys;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
-import javax.ws.rs.WebApplicationException;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -21,8 +20,7 @@ import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Transaction;
+import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -47,8 +45,13 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
-public class Tickets extends Cursor
+public class Tickets extends Cursor implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	// Key
 	@Id
 	public Long id;
@@ -316,28 +319,32 @@ public class Tickets extends Cursor
 	}
 
 	/**
-	 * Saves the ticket object.
+	 * Saves the ticket object with a id which is just +1 increment to last
+	 * ticket id.
 	 */
-	public void save() throws WebApplicationException
+	public Key<Tickets> saveWithNewID() throws Exception
 	{
-		String namespace = NamespaceManager.get();
+		if (this.id != null)
+			return ticketsDao.put(this);
 
-		Transaction txn = DatastoreServiceFactory.getDatastoreService().beginTransaction();
+		String namespace = NamespaceManager.get(), syncKey = namespace + "_tickets_lock";
 
-		// Get tickets count from cache
-		Long ticketsCount = (Long) CacheUtil.getCache(namespace + "_tickets_count"), unmodifiedTicketsCount = ticketsCount;
+		boolean lockAcquired = false;
+
+		Long ticketsCount = (Long) CacheUtil.getCache(namespace + "_tickets_count");
 
 		try
 		{
-			// Checking ticket counts exits in memcache. If it is null, get
-			// last ticket id and set in memcache.
+			lockAcquired = acquireLock(syncKey);
+
+			// Checking if ticket count is null or not
 			if (ticketsCount == null)
 			{
 				List<Tickets> tickets = ticketsDao.fetchAllByOrder(1, "", null, false, true, "-created_time");
 
 				ticketsCount = (tickets == null || tickets.size() == 0) ? 0l : tickets.get(0).id;
 
-				if ((ticketsCount + "").length() > 10)
+				if ((ticketsCount + "").length() > 14)
 					ticketsCount = 0l;
 			}
 
@@ -347,84 +354,57 @@ public class Tickets extends Cursor
 			// Update new value in memcache
 			CacheUtil.setCache(namespace + "_tickets_count", ticketsCount);
 
-			try
-			{
-				// Checking if any ticket exists with same id
-				ticketsDao.get(ticketsCount);
-
-				System.out.println("Ticket exists with id " + ticketsCount + ". Increment by 1....");
-
-				// No exception means ticket exists with same id
-
-				// Increment ticket id and assign to new ticket
-				this.id = ++ticketsCount;
-
-				// Update new value in memcache
-				CacheUtil.setCache(namespace + "_tickets_count", ticketsCount);
-
-				ticketsDao.put(this);
-			}
-			catch (Exception e)
-			{
-				System.out.println("No ticket exists with id " + ticketsCount + ". Creating ticket....");
-				ticketsDao.put(this);
-			}
-
-			txn.commit();
+			// Saving ticket
+			return ticketsDao.put(this);
 		}
-		catch (ConcurrentModificationException e)
+		catch (Exception e)
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
 		}
 		finally
 		{
-			if (txn.isActive())
-			{
-				txn.rollback();
+			if (lockAcquired)
+				decrement(syncKey);
+		}
+		
+		return null;
+	}
 
-				// Update old value in memcache
-				CacheUtil.setCache(namespace + "_tickets_count", unmodifiedTicketsCount);
+	/**
+	 * Enabling lock on memcache key
+	 * 
+	 * Source:
+	 * http://stackoverflow.com/questions/14907908/google-app-engine-how-
+	 * to-make-synchronized-actions-using-memcache-or-datastore
+	 * 
+	 * @param syncKey
+	 * @return
+	 */
+	public boolean acquireLock(String syncKey)
+	{
+		MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
+
+		while (true)
+		{
+			if (memcacheService.increment(syncKey, 1L, 0L) == 1L)
+				return true;
+
+			try
+			{
+				Thread.sleep(500L);
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
 			}
 		}
 	}
 
-	public static boolean acquireLock(String broadcastId)
+	public static void decrement(String syncKey)
 	{
-		boolean lockAcquired = true;
-		try
-		{
-			while (increment(broadcastId) != 1)
-			{
-				decrement(broadcastId);
-				Thread.sleep(500);
-			}
-		}
-		catch (Throwable t)
-		{
-			lockAcquired = false;
-		}
-
-		return lockAcquired;
-	}
-
-	public static void releaseLock(String key)
-	{
-		decrement(key);
-	}
-
-	public static void decrement(String key)
-	{
-		System.out.println("decrement");
-
-		MemcacheServiceFactory.getMemcacheService().increment(key, -1, 0L);
-	}
-
-	public static Long increment(String key)
-	{
-		System.out.println("increment");
-
-		return MemcacheServiceFactory.getMemcacheService().increment(key, 1, 0L);
+		// If sync key exists decrement by -1 else set its value to 0
+		MemcacheServiceFactory.getMemcacheService().increment(syncKey, -1, 0L);
 	}
 
 	/**

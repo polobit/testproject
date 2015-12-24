@@ -11,9 +11,11 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketsDocument;
+import com.agilecrm.ticket.deferred.ZendeskFetchAudits;
 import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.TicketGroups;
@@ -25,7 +27,9 @@ import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 
 public class ZendeskImport
@@ -52,6 +56,7 @@ public class ZendeskImport
 		Map<Long, DomainUser> domainUsersMap = new HashMap<Long, DomainUser>();
 		Map<Long, Contact> contactsMap = new HashMap<Long, Contact>();
 
+		// Preparing domain users and contacts map
 		for (int i = 0; i < users.length(); i++)
 		{
 			JSONObject user = users.getJSONObject(i);
@@ -84,17 +89,24 @@ public class ZendeskImport
 		}
 
 		System.out.println("domainUsersMap count: " + domainUsersMap.size());
+		TicketGroups supportGroup = TicketGroupUtil.getDefaultTicketGroup();
 
 		for (int i = 0; i < tickets.length(); i++)
 		{
 			JSONObject ticketJSON = tickets.getJSONObject(i);
 
 			Tickets ticket = new Tickets();
-			ticket.id = ticketJSON.getLong("id");
 			ticket.subject = ticketJSON.getString("subject");
-			ticket.type = Type.valueOf(ticketJSON.getString("type"));
 
-			TicketGroups supportGroup = TicketGroupUtil.getDefaultTicketGroup();
+			if (ticketJSON.has("type"))
+				try
+				{
+					ticket.type = Type.valueOf(ticketJSON.getString("type").toUpperCase());
+				}
+				catch (Exception e)
+				{
+				}
+
 			ticket.group_id = new Key<>(TicketGroups.class, supportGroup.id);
 			ticket.groupID = supportGroup.id;
 
@@ -102,8 +114,21 @@ public class ZendeskImport
 			ticket.last_reply_text = ticketJSON.getString("description");
 
 			Contact contact = contactsMap.get(ticketJSON.getLong("requester_id"));
+
+			// Requester can be domain user in Zendesk. So if contact is null
+			// then create a contact with the domain id.
+			if (contact == null)
+			{
+				DomainUser user = domainUsersMap.get(ticketJSON.getLong("requester_id"));
+				contact = ContactUtil.createContact(user.name, user.email);
+				
+				contactsMap.put(ticketJSON.getLong("requester_id"), contact);
+			}
+
 			ticket.requester_name = contact.first_name;
 			ticket.requester_email = contact.getContactFieldValue("email");
+			ticket.contact_key = new Key<>(Contact.class, contact.id);
+			ticket.contactID = contact.id;
 
 			String priority = ticketJSON.getString("priority");
 			switch (priority)
@@ -169,10 +194,7 @@ public class ZendeskImport
 				ticket.cc_emails = ccEmailsList;
 			}
 
-			ticket.contact_key = new Key<>(Contact.class, contact.id);
-			ticket.contactID = contact.id;
-
-			Tickets.ticketsDao.put(ticket);
+			ticket.saveWithNewID();
 
 			// Create search document
 			new TicketsDocument().add(ticket);
@@ -181,8 +203,10 @@ public class ZendeskImport
 			new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "",
 					ticketJSON.getString("description"), "last_reply_text").save();
 
-			// Execute triggers
-			TicketTriggerUtil.executeTriggerForNewTicket(ticket);
+			ZendeskFetchAudits fetchAudits = new ZendeskFetchAudits(ticket, json.toString());
+			TaskOptions options = TaskOptions.Builder.withPayload(fetchAudits);
+			Queue queue = QueueFactory.getQueue(AgileQueues.TICKET_BULK_ACTIONS_QUEUE);
+			queue.add(options);
 		}
 	}
 }

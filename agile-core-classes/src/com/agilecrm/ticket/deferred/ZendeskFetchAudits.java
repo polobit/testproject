@@ -62,8 +62,7 @@ public class ZendeskFetchAudits implements DeferredTask
 
 			JSONObject responseJSON = new JSONObject(response);
 
-			JSONArray audits = new JSONArray(responseJSON.getJSONArray("audits")), users = new JSONArray(
-					responseJSON.getJSONArray("users"));
+			JSONArray audits = responseJSON.getJSONArray("audits"), users = responseJSON.getJSONArray("users");
 
 			Map<Long, DomainUser> domainUsersMap = new HashMap<Long, DomainUser>();
 			Map<Long, Contact> contactsMap = new HashMap<Long, Contact>();
@@ -107,12 +106,6 @@ public class ZendeskFetchAudits implements DeferredTask
 
 				Long id = auditJSON.getLong("author_id");
 
-				if (domainUsersMap.containsKey(id))
-					continue;
-
-				if (contactsMap.containsKey(id))
-					continue;
-
 				JSONArray eventsArray = auditJSON.getJSONArray("events");
 
 				for (int j = 0; j < eventsArray.length(); j++)
@@ -120,7 +113,7 @@ public class ZendeskFetchAudits implements DeferredTask
 					JSONObject eventJSON = eventsArray.getJSONObject(j);
 					id = auditJSON.getLong("author_id");
 
-					boolean repliedByEndUser = (domainUsersMap.get(id) != null) ? false : true;
+					boolean repliedByEndUser = (domainUsersMap.get(id) == null) ? true : false;
 
 					if (eventJSON.getString("type").equalsIgnoreCase("Comment"))
 					{
@@ -131,13 +124,18 @@ public class ZendeskFetchAudits implements DeferredTask
 							if (repliedByEndUser)
 							{
 								// Creating new Notes in TicketNotes table
-								TicketNotesUtil.createTicketNotes(ticket.id, ticket.groupID, 0l, CREATED_BY.REQUESTER,
+								TicketNotes notes = TicketNotesUtil.createTicketNotes(ticket.id, ticket.groupID, 0l, CREATED_BY.REQUESTER,
 										ticket.requester_name, ticket.requester_email, body, body, NOTE_TYPE.PUBLIC,
 										new ArrayList<TicketDocuments>());
-
+								
+								notes.created_time = date.getTime();
+								TicketNotes.ticketNotesDao.put(notes);
+								
 								// Logging private notes activity
-								new TicketActivity(TicketActivityType.TICKET_REQUESTER_REPLIED, ticket.contactID,
-										ticket.id, body, body, "html_text").save();
+								TicketActivity activity = new TicketActivity(TicketActivityType.TICKET_REQUESTER_REPLIED, ticket.contactID,
+										ticket.id, body, body, "html_text");
+								activity.created_time = date.getTime();
+								activity.save();
 							}
 							else
 							{
@@ -146,8 +144,10 @@ public class ZendeskFetchAudits implements DeferredTask
 										NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>());
 
 								// Logging private notes activity
-								new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID,
-										ticket.id, body, body, "html_text").save();
+								TicketActivity activity = new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID,
+										ticket.id, body, body, "html_text");
+								activity.created_time = date.getTime();
+								activity.save();
 							}
 						}
 						else
@@ -159,9 +159,13 @@ public class ZendeskFetchAudits implements DeferredTask
 									new ArrayList<TicketDocuments>());
 
 							// Logging private notes activity
-							new TicketActivity(TicketActivityType.TICKET_PRIVATE_NOTES_ADD, ticket.contactID,
-									ticket.id, body, body, "html_text").save();
+							TicketActivity activity = new TicketActivity(TicketActivityType.TICKET_PRIVATE_NOTES_ADD, ticket.contactID,
+									ticket.id, body, body, "html_text");
+							activity.created_time = date.getTime();
+							activity.save();
 						}
+					}else{
+						
 					}
 				}
 			}

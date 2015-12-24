@@ -4,10 +4,9 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.ticket.imports.ZendeskImport;
@@ -26,9 +25,8 @@ public class TicketImportsRest
 		}
 		catch (Exception e)
 		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
 		}
 	}
 }
