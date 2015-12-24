@@ -212,8 +212,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		if (isValidField(form_id + ' #phone'))
 			properties.push(property_JSON('phone', form_id + ' #phone'));
 		
-/*		if (isValidField(form_id + ' #skypePhone'))
-			properties.push(property_JSON('skypePhone', form_id + ' #skypePhone'));*/
+		if (isValidField(form_id + ' #skypePhone'))
+			properties.push(property_JSON('skypePhone', form_id + ' #skypePhone'));
 
 		if (isValidField(form_id + ' #job_title'))
 			properties.push(property_JSON('title', form_id + ' #job_title'));
