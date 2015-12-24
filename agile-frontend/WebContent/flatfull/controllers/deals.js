@@ -271,47 +271,41 @@ var DealsRouter = Backbone.Router.extend({
 						}
 						$('#filter_pipeline').parent().find('img').hide();
 						hideTransitionBar();
+
+						var track = $('#filter_pipeline').val();
+						if (track)
+						{
+							var milestoneModel = Backbone.Model.extend({ url : '/core/api/milestone/'+track });
+							var model = new milestoneModel();
+							model.fetch({ 
+								success : function(data){
+									var json = data.toJSON();
+									var milestones = json.milestones;
+									milestonesList = milestones.split(",");
+									$('#milestone').html('');
+									if(milestonesList.length > 1)
+									{
+										$('#milestone', el).html('<option value="">Any</option>');
+									}
+									$.each(milestonesList, function(index, milestone){
+										$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
+									});
+									if(deal_filter_json && deal_filter_json.milestone && track == deal_filter_json.pipeline_id)
+									{
+										$('#milestone').find('option[value="'+deal_filter_json.milestone+'"]').attr("selected", "selected");
+									}
+									
+									$('#milestone', el).parent().find('img').hide();
+									hideTransitionBar();
+								} 
+							});
+						}
+						else
+						{
+							$('#milestone', el).html('<option value="">Any</option>');
+						}
 					}
 				});
-				var track = deal_filter_json.pipeline_id;
-				if (track)
-				{
-					var milestoneModel = Backbone.Model.extend({ url : '/core/api/milestone/'+track });
-					var model = new milestoneModel();
-					model.fetch({ 
-						success : function(data){
-							var json = data.toJSON();
-							var milestones = json.milestones;
-							if(milestones)
-							{
-								milestonesList = milestones.split(",");
-								$('#milestone').html('');
-								if(milestonesList.length > 1)
-								{
-									$('#milestone', el).html('<option value="">Any</option>');
-								}
-								$.each(milestonesList, function(index, milestone){
-									$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
-								});
-								if(deal_filter_json && deal_filter_json.milestone)
-								{
-									$('#milestone').find('option[value="'+deal_filter_json.milestone+'"]').attr("selected", "selected");
-								}
-							}
-							else
-							{
-								$('#filter_pipeline').trigger('change');
-							}
-							
-							$('#milestone', el).parent().find('img').hide();
-							hideTransitionBar();
-						} 
-					});
-				}
-				else
-				{
-					$('#milestone', el).html('<option value="">Any</option>');
-				}
 			} });
 
 		$("#opportunity-listners").html(dealFilter.render().el);
