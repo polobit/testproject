@@ -13,11 +13,11 @@
 <div class="panel panel-default">
 			<div class="panel-heading">Confirm your plan
 	{{#check_plan "FREE"}}
-	{{#is_cancelled_user}}
+	{{#is_not_allowed_trial}}
 	<a href="#subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">Change Plan</a>
 	{{else}}
 	<a href="#trial-subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">Change Plan</a>
-	{{/is_cancelled_user}}
+	{{/is_not_allowed_trial}}
 	{{else}}
 	<a href="#subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">Change Plan</a>
 	{{/check_plan}}
@@ -132,10 +132,10 @@ Months
 							</div>
 {{#if billingData}}
 {{#check_plan "FREE"}}
-{{#is_cancelled_user}}
+{{#is_not_allowed_trial}}
 {{else}}
 {{#if_equals plan "starter"}}{{else}}<p class="m-b-none text-danger col-sm-offset-3 col-sm-9" style="font-size:13px;padding-left:8px;"> Please note that the account will be charged for the selected plan <span style="font-weight: 600;">after the 7day trial.</span></p>{{/if_equals}}
-{{/is_cancelled_user}}
+{{/is_not_allowed_trial}}
 {{else}}
 {{/check_plan}}	
 {{/if}}		  
@@ -185,10 +185,10 @@ Months
  <img src="{{getS3ImagePath '/flatfull/img/cvc.png'}}" style="width: 60px;">
 				</div>
 				{{#check_plan "FREE"}}
-				{{#is_cancelled_user}}
+				{{#is_not_allowed_trial}}
 				{{else}}
 				{{#if_equals plan "starter"}}{{else}}<p class="m-b-none text-danger col-sm-offset-3 col-sm-9" style="font-size:13px;padding-left:8px;"> Please note that the account will be charged for the selected plan <span style="font-weight: 600;">after the 7day trial.</span></p>{{/if_equals}}
-				{{/is_cancelled_user}}
+				{{/is_not_allowed_trial}}
 				{{else}}
 				{{/check_plan}}	
 				<!-- <div class="control-group form-group">	
@@ -214,11 +214,11 @@ Months
 
 <a href="#" type="submit" id="updatecard" data-loading-text="Proceeding..." class="save btn btn-sm btn-primary" >
 {{#check_plan "FREE"}}
-{{#is_cancelled_user}}
+{{#is_not_allowed_trial}}
 Pay Now
 {{else}}
 {{#if_equals plan "starter"}}Pay Now{{else}}Start Trial{{/if_equals}}
-{{/is_cancelled_user}}
+{{/is_not_allowed_trial}}
 {{else}}
 Pay Now
 {{/check_plan}}
@@ -255,11 +255,11 @@ Pay Now
 									plan.
 								</p>
 	{{#check_plan "FREE"}}
-	{{#is_cancelled_user}}
+	{{#is_not_allowed_trial}}
 	<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
 	{{else}}
 	<a href="#trial-subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
-	{{/is_cancelled_user}}
+	{{/is_not_allowed_trial}}
 	{{else}}
 	<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
 	{{/check_plan}}
@@ -276,11 +276,11 @@ Pay Now
 									year plan.
 								</p>
 {{#check_plan "FREE"}}
-{{#is_cancelled_user}}
+{{#is_not_allowed_trial}}
 <a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
 {{else}}
 <a href="#trial-subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
-{{/is_cancelled_user}}
+{{/is_not_allowed_trial}}
 {{else}}
 <a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
 {{/check_plan}}

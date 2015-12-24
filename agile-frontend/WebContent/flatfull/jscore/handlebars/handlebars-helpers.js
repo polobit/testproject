@@ -6866,11 +6866,9 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 			return options.inverse(this);
 	});
 
-	Handlebars.registerHelper('is_cancelled_user', function(options)
+	Handlebars.registerHelper('is_not_allowed_trial', function(options)
 	{
-		if(IS_CANCELLED_USER)
-			return options.fn(this);
-		else if(IS_TRIAL)
+		if(IS_TRIAL && IS_ALLOWED_TRIAL)
 			return options.inverse(this);
 		else
 			return options.fn(this);

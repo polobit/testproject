@@ -8,7 +8,7 @@
 var _data = null;
 var IS_TRIAL = false;
 _IS_EMAIL_PLAN_ACTIVE = false;
-var IS_CANCELLED_USER = false;
+var IS_ALLOWED_TRIAL = false;
 var SubscribeRouter = Backbone.Router
 		.extend({
 
@@ -654,7 +654,7 @@ var SubscribeRouter = Backbone.Router
 			{
 				IS_TRIAL = true;
 				var that = this;
-				if(!IS_CANCELLED_USER)
+				if(!IS_ALLOWED_TRIAL)
 				{
 					$.ajax({ url : "core/api/subscription/agileTags?email="+CURRENT_DOMAIN_USER.email,
 					 type : "GET",
@@ -665,8 +665,8 @@ var SubscribeRouter = Backbone.Router
 							console.log(data);
 							if(data && data.tags)
 							{
-								if ( $.inArray('Cancellation Request', data.tags) > -1 || $.inArray('Cancelled Trial', data.tags) > -1) {
-								    IS_CANCELLED_USER = true;
+								if ( $.inArray('Cancellation Request', data.tags) == -1 && $.inArray('Cancelled Trial', data.tags) == -1 && $.inArray('Trial', data.tags) != -1) {
+								    IS_ALLOWED_TRIAL = true;
 								}
 							}
 							that.subscribe();
