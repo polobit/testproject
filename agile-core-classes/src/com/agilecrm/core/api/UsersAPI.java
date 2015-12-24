@@ -109,7 +109,7 @@ public class UsersAPI
 		if(domainUser.is_account_owner == true){
 	    	if(domainUser.is_admin == false)
 			{
-				throw new Exception("Owner should be an admin");
+				throw new Exception("Owner should always be an administrator. Please select administrator option and try again.");
 			}
 	    	DomainUserUtil.removeOwner(domainUser);
 	    }
@@ -154,7 +154,7 @@ public class UsersAPI
 	    if(domainUser.is_account_owner == true){
 	    	if(domainUser.is_admin == false)
 			{
-				throw new Exception("Owner should be an admin");
+				throw new Exception("Owner should always be an administrator. Please select administrator option and try again.");
 			}
 	    	DomainUserUtil.removeOwner(domainUser);
 	    }
