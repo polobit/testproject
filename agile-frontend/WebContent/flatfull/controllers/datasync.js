@@ -29,13 +29,10 @@ routes : {
 
 importFromCRMS : function(){
     var that = this;
-    getTemplate('settings', {}, undefined, function(template_ui) {
+    getTemplate('import-from-crm', {}, undefined, function(template_ui) {
         if (!template_ui)
             return;
         $('#content').html($(template_ui));
-
-        $('#PrefsTab .select').removeClass('select');
-        $('.contact-import-tab').addClass('select');
 
         that.agile_sync_collection_view = new Base_Collection_View({
             url: 'core/api/contactprefs/allPrefs',
@@ -70,13 +67,10 @@ importFromCRMS : function(){
 salesforce : function(el){
 
         var that = this;
-            getTemplate('settings', {}, undefined, function(template_ui) {
+            getTemplate('import-from-crm', {}, undefined, function(template_ui) {
                 if (!template_ui)
                     return;
                 $('#content').html($(template_ui));
-
-                $('#PrefsTab .select').removeClass('select');
-                $('.contact-import-tab').addClass('select');
 
                getTemplate('data-import-settings', {}, undefined, function(template_ui1){
                         if(!template_ui1)
