@@ -16,7 +16,7 @@ import com.google.api.client.util.Base64;
 public class Paypal2Api extends DefaultApi20 {
 
 	// "https://www.sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize?client_id=%s&response_type=code&redirect_uri=%s&scope=%s";
-	static String AUTHORIZE_URL = "https://www.sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize?client_id=%s&response_type=code&redirect_uri=%s&scope=%s";
+	static String AUTHORIZE_URL = "https://www.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize?client_id=%s&response_type=code&redirect_uri=%s&scope=%s";
 
 	private static String GRANT_TYPE = "grant_type";
 	private static String AUTHORIZATION_CODE = "authorization_code";
@@ -25,7 +25,7 @@ public class Paypal2Api extends DefaultApi20 {
 	public static String SCOPE = "openid profile email address phone https://uri.paypal.com/services/invoicing";
 	
 	//"https://www.sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/tokenservice";
-	private static String ACCESS_TOKEN_URL = "https://www.sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/tokenservice";
+	private static String ACCESS_TOKEN_URL = "https://www.paypal.com/webapps/auth/protocol/openidconnect/v1/tokenservice";
 
 	public String getAccessTokenEndpoint() {
 		// TODO Auto-generated method stub

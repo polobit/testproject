@@ -2,10 +2,8 @@ package com.agilecrm.social;
 
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.widgets.Widget;
-import com.paypal.api.payments.Invoices;
-import com.paypal.api.payments.Search;
-import com.paypal.base.rest.PayPalRESTException;
 
 public class PaypalUtil {
 
@@ -22,20 +20,26 @@ public class PaypalUtil {
 	 */
 	public static String getPaypalAccess(Widget widget) throws Exception {
 
+		String refreshURL = "https://api.paypal.com/v1/identity/openidconnect/tokenservice";
 		String prefs = widget.prefs;
 		JSONObject obj = new JSONObject(prefs);
-		String accessToken = obj.getString("access_token");
-		return accessToken;
-	}
 
-	public Invoices search() throws PayPalRESTException {
-		Search search = new Search();
-		search.setStartInvoiceDate("2010-05-10 PST");
-		search.setEndInvoiceDate("2014-04-10 PST");
-		search.setPage(1);
-		search.setPageSize(20);
-		search.setTotalCountRequired(true);
-		//return invoice.search(accessToken, search);
-		return null;
+		long epoch = System.currentTimeMillis() / 1000;
+		long exprieTime = (Long.parseLong(obj.getString("time")) / 1000)
+				+ Long.parseLong(obj.getString("expires_in"));
+
+		String accessToken = obj.getString("access_token");
+		String refreshToken = obj.getString("refresh_token");
+
+		if (epoch > exprieTime) {
+			RefreshToken rt = new RefreshToken(Globals.PAYPAL_CLIENT_ID,
+					Globals.PAYPAL_SECRET_ID, refreshURL, refreshToken);
+			accessToken = rt.getAccessToken();
+			obj.put("access_token", accessToken);
+			obj.put("time", (epoch) * 1000);
+			widget.prefs = obj.toString();
+			widget.save();
+		}
+		return accessToken;
 	}
 }

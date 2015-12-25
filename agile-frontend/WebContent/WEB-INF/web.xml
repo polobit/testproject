@@ -36,7 +36,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>PaypalScribe</servlet-name>
-		<url-pattern>/paypal</url-pattern>
+		<url-pattern>/paypalScribe</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -480,7 +480,7 @@
 		<url-pattern>/</url-pattern>
 		<url-pattern>/core/*</url-pattern>
 		<url-pattern>/scribe</url-pattern>
-		<url-pattern>/paypal</url-pattern>
+		<url-pattern>/paypalScribe</url-pattern>
 		<url-pattern>/upload.jsp</url-pattern>
 		<url-pattern>/import_shopify.jsp</url-pattern>
 		<url-pattern>/upload-contacts.jsp</url-pattern>

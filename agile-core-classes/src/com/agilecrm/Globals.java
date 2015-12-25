@@ -196,7 +196,9 @@ public class Globals {
 	public static final String TAG_VALIDATION_REGEX = "^[A-Za-z][A-Za-z0-9_ :-]*$";
 
 	public static final String PAYPAL = "Paypal";
-	public static final String PAYPAL_CLIENT_ID = "AdinLitMf9_3K9nwxTQEs5KyBom16l6EuR4FHy8vefth7Lup57d07e80Rz1tbt6gABT-l9jgEykvOVhr";
-	public static final String PAYPAL_SECRET_ID = "EGyp6P-kmdaDsoNUK2F2nYs5-RifRg3nhPJkmzai-TRqpRmTpj3lm4NG6pw_B08IJSdpv5pfGfWQF1Bb";
+	public static final String PAYPAL_CLIENT_ID = "AW5CGJaZFFKCyzQNOWc1mCNOPlAAbpVzPiryIX5g3RkeHooTMJ6OjNoPnK0f3LqFgYDXogBMnMAgA0tZ";
+	public static final String PAYPAL_SECRET_ID = "ENhaCvQqx2-_8QE2MDTjdcTYMr6d-wxF9y7Udu0v5hmLEm5eRdWtWrspETJDeDi-RmhEYs-2grGtCM9W";
+//	public static final String PAYPAL_CLIENT_ID = "AdinLitMf9_3K9nwxTQEs5KyBom16l6EuR4FHy8vefth7Lup57d07e80Rz1tbt6gABT-l9jgEykvOVhr";
+//	public static final String PAYPAL_SECRET_ID = "EGyp6P-kmdaDsoNUK2F2nYs5-RifRg3nhPJkmzai-TRqpRmTpj3lm4NG6pw_B08IJSdpv5pfGfWQF1Bb";
 
 }
