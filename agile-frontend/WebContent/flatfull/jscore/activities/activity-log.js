@@ -23,7 +23,7 @@ function buildActivityFilters(name,valueid,clickedFrom){
 		ACTIVITY_FILTER_JSON.userId=valueid;
 		}
 
-		createCookie(ACTIVITY_FILTER,JSON.stringify(ACTIVITY_FILTER_JSON));
+		_agile_set_prefs(ACTIVITY_FILTER,JSON.stringify(ACTIVITY_FILTER_JSON));
 
 
 }
@@ -104,7 +104,7 @@ function getActivityFilterParameters(loadingFirstTime)
 	
 
 	if(loadingFirstTime){
-		var activityFilters=JSON.parse(readCookie(ACTIVITY_FILTER));
+		var activityFilters=JSON.parse(_agile_get_prefs(ACTIVITY_FILTER));
 		if(activityFilters){
 			user=activityFilters.userId;
 			if(activityFilters.entityId)

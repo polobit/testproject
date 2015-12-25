@@ -112,7 +112,8 @@ public class ContactsAPI
 	}
 
 	System.out.println("Fetching page by page");
-	return ContactUtil.getAllContactsByOrder(Integer.parseInt(count), cursor, sortKey);
+	List<Contact> contacts = ContactUtil.getAllContactsByOrder(Integer.parseInt(count), cursor, sortKey);
+	return contacts;
 
     }
 
@@ -936,8 +937,15 @@ public class ContactsAPI
 
 	System.out.println("In searchContactByPhoneNumber : " + phoneNumber);
 
-	return QueryDocumentUtil.getContactsByPhoneNumber(phoneNumber);
-    }
+	try
+	{
+	    return QueryDocumentUtil.getContactsByPhoneNumber(phoneNumber);
+	}
+	catch (Exception e)
+	{
+	    return ContactUtil.searchContactByPhoneNumber(phoneNumber);
+	}
+   }
 
     /**
      * Add score to the contact. Searches contact based on the email sent and

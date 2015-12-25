@@ -109,12 +109,11 @@ public class DefaultWidgets {
 		 * , "/widgets/linkedin.js", "/img/plugins/linkedin.png",
 		 * "/widgets/linkedin-logo-small.png", null, WidgetType.SOCIAL));
 		 */
-//		widgets.add(new Widget("Bria", "Make and receive calls from your contacts using your Bria Account.",
-//
-//		"/widgets/bria.js", "/img/plugins/bria-call.png", "/img/plugins/bria-call.png", null,
-//
-//
-//		WidgetType.CALL));
+		widgets.add(new Widget("Bria", "Make and receive calls from your contacts using your Bria Account.",
+		"/widgets/bria.js", "/img/plugins/bria-call.png", "/img/plugins/bria-call.png", null,
+		WidgetType.CALL));
+/*		widgets.add(new Widget("Skype", "Make and receive calls from your contacts using your Skype Account.",
+		"/widgets/skype.js", "/img/plugins/skype-call.png", "/img/plugins/skype-call.png", null,WidgetType.CALL));*/
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);
@@ -137,7 +136,7 @@ public class DefaultWidgets {
 				.contains(widgetName)) {
 			return WidgetType.SUPPORT;
 		} else if (Arrays.asList(
-				new String[] { "Twilio", "Sip", "TwilioIO", "CallScript" })
+				new String[] { "Twilio", "Sip", "TwilioIO", "CallScript", "Bria","Skype"})
 				.contains(widgetName)) {
 			return WidgetType.CALL;
 		} else if (Arrays.asList(new String[] { "FreshBooks", "Stripe" })

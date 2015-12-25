@@ -40,13 +40,21 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
     	'click .default_filter' : 'defaultFilterResults',
     	// 'click #companies-filter' : 'companyFilterResults',
     	'click .default_contact_remove_tag' : 'defaultContactRemoveTag',
+
+    	'click .contact-actions-delete-mobile' : 'onContactDelete'
     	
     },
+
+    /*onContactDeleteAction : function(e){
+    	e.preventDefault();
+    	event.stopPropagation();
+    	contact_delete_action.onContactDelete(e);
+	},*/
 
     bulkActionCompaniesSortByName : function(e){
 
     	e.preventDefault();
-			createCookie('company_sort_field',$(e.currentTarget).attr('data'));
+			_agile_set_prefs('company_sort_field',$(e.currentTarget).attr('data'));
 			COMPANIES_HARD_RELOAD=true;
 			App_Companies.companies();
     },
@@ -135,10 +143,10 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 	{
 
 		e.preventDefault();
-		eraseCookie('company_filter');
-		//eraseCookie('contact_filter_type');
+		_agile_delete_prefs('company_filter');
+		//_agile_delete_prefs('contact_filter_type');
 
-		//createCookie('company_filter', "Companies");
+		//_agile_set_prefs('company_filter', "Companies");
 		COMPANIES_HARD_RELOAD = true;
 		App_Companies.companies(); // /Show Companies list, explicitly hard
 		// reload
@@ -149,16 +157,16 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 	{
 
 		e.preventDefault();
-		eraseCookie('company_filter');
-		//eraseData('dynamic_contact_filter');
-		eraseData('dynamic_company_filter');
+		_agile_delete_prefs('company_filter');
+		//_agile_delete_prefs('dynamic_contact_filter');
+		_agile_delete_prefs('dynamic_company_filter');
 
 		var filter_id = $(e.currentTarget).attr('id');
 		var filter_type = $(e.currentTarget).attr('filter_type');
 
 		// Saves Filter in cookie
-		createCookie('company_filter', filter_id)
-		//createCookie('company_filter_type', filter_type)
+		_agile_set_prefs('company_filter', filter_id)
+		//_agile_set_prefs('company_filter_type', filter_type)
 
 		// Gets name of the filter, which is set as data
 		// attribute in filter
@@ -174,14 +182,14 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 	bulkActionCompaniesSortonTimeDesc : function(e)
 	{
 		e.preventDefault();
-		createCookie('company_sort_field',$(e.currentTarget).attr('data'));
+		_agile_set_prefs('company_sort_field',$(e.currentTarget).attr('data'));
 		COMPANIES_HARD_RELOAD=true;
 		App_Companies.companies();
 	},
 	
 	bulkActionCompaniesSortonTimeAsec : function(e){
 		e.preventDefault();
-		createCookie('company_sort_field',$(e.currentTarget).attr('data'));
+		_agile_set_prefs('company_sort_field',$(e.currentTarget).attr('data'));
 		COMPANIES_HARD_RELOAD=true;
 		App_Companies.companies();
 	},
@@ -239,10 +247,37 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 			html = "Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " contacts</a>";
 
 		$('body').find('#bulk-select').html(html);
-    }   
+    },
+
+    onContactDelete : function(e){
+	e.preventDefault();
+	e.stopPropagation();
+
+	var contactId = $(e.currentTarget).closest("tr").find("td.data").attr("data");
+	$('#deleteContactModal').html(getTemplate("delete-contact-modal", {"contactId" : contactId})).modal('show');
+
+				
+	}   
 
    
 });
+
+$(function(){
+	 $('#deleteContactModal').on("click", ".delete-confirmed", function(e){
+
+	 		var contactId = $(this).attr("data");
+            var contactModel = App_Contacts.contactsListView.collection.get(contactId);
+
+            contactModel.url = "core/api/contacts/" + contactId;		
+			contactModel.destroy({success: function(model, response) {
+				  Backbone.history.navigate("contacts",{trigger: true});
+			}});
+	 });
+});
+
+
+	
+
 
 var contacts_bulk_actions = {
 
@@ -605,7 +640,7 @@ var contacts_bulk_actions = {
 										$(this).parent('.modal-footer').find('.contacts-export-csv-message').append($save_info);
 										$save_info.show();
 
-										var url = '/core/api/contacts/export?action_type=EXPORT_CONTACTS_CSV';
+										var url = '/core/api/bulk/update?action_type=EXPORT_CONTACTS_CSV';
 
 										var json = {};
 										json.contact_ids = id_array;
@@ -1218,7 +1253,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 
 	var total_available_contacts = getAvailableContacts();
 
-	console.log(readCookie('contact_filter'));
+	console.log(_agile_get_prefs('contact_filter'));
 	$('body').find('#bulk-select').css('display', 'none')
 	if ($(clicked_ele).is(':checked'))
 	{

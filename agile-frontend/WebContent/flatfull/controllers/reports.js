@@ -54,17 +54,8 @@ var ReportsRouter = Backbone.Router
 				hideTransitionBar();
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
-				/*if($("#dealstab").length>0){
-					$("#dealstab").addClass("active");
-					$("#deals-tab").addClass("active");
-				}
-				else
-				{
-					$("#callstab").addClass("active");
-					$("#calls-tab").addClass("active");
-				}*/
-
-					var reportsTab = localStorage.getItem("reports_tab");
+				
+				var reportsTab = _agile_get_prefs("reports_tab");
 				if(!reportsTab || reportsTab == null) {
 					var tabTemp;
 					if(islocalStorageHasSpace()){
@@ -72,7 +63,7 @@ var ReportsRouter = Backbone.Router
 							tabTemp="deals-tab";
 						else
 							tabTemp="calls-tab";
-							localStorage.setItem('reports_tab', tabTemp);	
+							_agile_set_prefs('reports_tab', tabTemp);	
 					}
 					reportsTab = tabTemp;
 				}
@@ -80,8 +71,7 @@ var ReportsRouter = Backbone.Router
 				$("#reports-tab-container ul li").off("click");
 				$("#reports-tab-container").on("click",".tab-container ul li",function(){
 					var temp = $(this).find("a").attr("href").split("#");
-					if(islocalStorageHasSpace())
-						localStorage.setItem('reports_tab', temp[1]);
+					_agile_set_prefs('reports_tab', temp[1]);
 				});
 
 					$('[data-toggle="tooltip"]').tooltip();

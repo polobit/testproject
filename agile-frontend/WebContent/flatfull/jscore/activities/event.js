@@ -120,10 +120,10 @@ $("#updateActivityModal").on(
 									      {
 												var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
 												a.setHours(0,0,0,0);
-												createCookie("current_date_calendar",a);
+												_agile_set_prefs("current_date_calendar",a);
 										       $('#calendar_container').fullCalendar( 'refetchEvents' );
 										       App_Portlets.refetchEvents = true;
-										       //eraseCookie('current_date_calendar');
+										       //_agile_delete_prefs('current_date_calendar');
 									      }
 										else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
 										{
@@ -155,7 +155,7 @@ $("#updateActivityModal").on(
 										}, 2000);
 										console.log('-----------------', err.responseText);
 									} });
-						if (readCookie("agile_calendar_view"))
+						if (_agile_get_prefs("agile_calendar_view"))
 						{
 							var eventModel = eventCollectionView.collection.get(event_id);
 							eventModel.set(eventModel, { remove : true });
@@ -232,7 +232,7 @@ $("#updateActivityModal").on(
 
 										$('#calendar_event').fullCalendar('removeEvents', event_id);
 									} });
-						if (readCookie("agile_calendar_view"))
+						if (_agile_get_prefs("agile_calendar_view"))
 						{
 							var eventModel = eventCollectionView.collection.get(event_id);
 							eventModel.set(eventModel, { remove : true });
@@ -913,7 +913,7 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 						// $('#calendar').fullCalendar( 'refetchEvents' );
 						var event = data.toJSON();
 						event = renderEventBasedOnOwner(event);
-						if (Current_Route == 'calendar' && !readCookie("agile_calendar_view"))
+						if (Current_Route == 'calendar' && !_agile_get_prefs("agile_calendar_view"))
 						{
 
 							// When updating an event remove the old event from
@@ -986,16 +986,16 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 							if($('.minical-portlet-event').attr('data-date')!=undefined){
 								var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
 								a.setHours(0,0,0,0);
-								createCookie("current_date_calendar",a);
+								_agile_set_prefs("current_date_calendar",a);
 							}
 							else{
 								var a=new Date(parseInt($('.minical-portlet-event-add').attr('data-date')));	
 								a.setHours(0,0,0,0);
-								createCookie("current_date_calendar",a);
+								_agile_set_prefs("current_date_calendar",a);
 							}
 							$('#calendar_container').fullCalendar( 'refetchEvents' );
 						       App_Portlets.refetchEvents = true;
-						       //eraseCookie('current_date_calendar');
+						       //_agile_delete_prefs('current_date_calendar');
 					      }
 						else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
 						{

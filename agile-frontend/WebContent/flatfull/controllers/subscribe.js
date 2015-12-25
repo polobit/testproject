@@ -48,7 +48,7 @@ var SubscribeRouter = Backbone.Router
 
 			"invoice" : "invoice",
 
-			"invoice/:id" : "invoiceDetails",
+			"invoice/:id" : "getInvoiceDetails",
 
 			"getInvoiceDetails/:id" : "getInvoiceDetails",
 
@@ -378,6 +378,7 @@ var SubscribeRouter = Backbone.Router
 								if (!template_ui)
 									return;
 								$('#content').html($(template_ui));
+								$('[data-toggle="tooltip"]').tooltip();
 							}, "#content");
 						});
 
@@ -535,6 +536,7 @@ var SubscribeRouter = Backbone.Router
 
 				// Prepend Loading
 				$('#content').html(upgrade_plan.render().el);
+				$('[data-toggle="tooltip"]').tooltip();
 				$(".active").removeClass("active");
 				$("#planView").addClass("active");
 			},

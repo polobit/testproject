@@ -727,3 +727,18 @@ function show_templates(ele, target_id)
 	// inserts text based on cursor.
 	load_email_templates(curValue);
 }
+
+function update_list_with_disabled($select, workflows_json)
+{
+	if(!$select || !workflows_json)
+		return;
+
+	var disabled_ids = [];
+
+	for(var i=0; i < workflows_json.length; i++)
+	{
+		if(workflows_json[i].is_disabled)
+			 $select.find("option[value='"+workflows_json[i].id+"']").attr('disabled', 'disabled').text(workflows_json[i].name + ' (Disabled)');
+			
+	}
+}

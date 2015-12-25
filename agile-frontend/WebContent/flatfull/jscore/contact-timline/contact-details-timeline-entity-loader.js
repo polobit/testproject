@@ -108,7 +108,9 @@ var timeline_entity_loader = {
 
 												// Add these log-types in
 												// timeline
-												if (model.log_type == 'EMAIL_SENT' || model.log_type == 'EMAIL_OPENED' || model.log_type == 'EMAIL_CLICKED' || model.log_type == 'SET_OWNER' || model.log_type == 'SCORE' || model.log_type == 'ADD_DEAL' || model.log_type == 'TWEET')
+												if (model.log_type == 'EMAIL_SENT' || model.log_type == 'EMAIL_OPENED' || model.log_type == 'EMAIL_CLICKED' || model.log_type == 'SET_OWNER' || model.log_type == 'SCORE' || model.log_type == 'ADD_DEAL' || model.log_type == 'TWEET' 
+													|| model.log_type == 'SMS_SENT' || model.log_type == 'SMS_FAILED' 
+													|| model.log_type == 'SMS_LINK_CLICKED' || model.log_type == 'EMAIL_REPLIED')
 												{
 													log_models.push(model);
 												}
@@ -175,7 +177,7 @@ var timeline_entity_loader = {
 		get_web_stats_count_for_domain(function(count){
 
 			// If there are no web-stats - return
-			if (!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && count == '0'))
+			if (!(_agile_get_prefs('_agile_jsapi') != null && _agile_get_prefs('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && count == '0'))
 			{
 				// Remove loading image of mails
 				$('#time-line', el).find('.loading-img-stats').remove();
@@ -185,7 +187,7 @@ var timeline_entity_loader = {
 
 			// Made global variable false and set cookie
 			NO_WEB_STATS_SETUP = false;
-			createCookie('_agile_jsapi', true, 500);
+			_agile_set_prefs('_agile_jsapi', true, 500);
 
 			var StatsCollection = Backbone.Collection.extend({});
 

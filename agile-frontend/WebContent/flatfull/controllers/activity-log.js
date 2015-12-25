@@ -36,7 +36,7 @@ var ActivitylogRouter = Backbone.Router.extend({
                     
                     $(".activity-log-button").css('display','none');
 
-                    var activityFilters = JSON.parse(readCookie(ACTIVITY_FILTER));
+                    var activityFilters = JSON.parse(_agile_get_prefs(ACTIVITY_FILTER));
 
                     var optionsTemplate = "<li><a  href='{{id}}'>{{name}}</li>";
 

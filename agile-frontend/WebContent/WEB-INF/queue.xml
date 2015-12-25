@@ -69,6 +69,14 @@
   </retry-parameters>
   <target>agile-normal-bulk</target>
   </queue>
+  <queue>
+    <name>email-reply-queue</name>
+    <rate>5/s</rate>
+    <max-concurrent-requests>50</max-concurrent-requests>
+    <retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  </queue>
     <queue>
     <name>contact-sync-queue</name>
     <rate>2/s</rate>
@@ -182,7 +190,7 @@
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
-  <target>agile-normal-bulk</target>
+  <target>agile-export</target>
   </queue>
    <queue>
     <name>deals-upload-queue</name>
@@ -213,7 +221,7 @@
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
-  <target>agile-normal-bulk</target>
+  <target>agile-export</target>
   </queue>
   <queue>
     <name>deals-export-queue</name>
@@ -296,6 +304,29 @@
   </queue>
   
   <!-- pull queues -->
+   <!-- Export queue -->
+   <queue>
+    <name>export-pull-queue</name>
+    <mode>pull</mode>
+       <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+    </acl>
+    <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+    </retry-parameters>
+  </queue>
+
+   <queue>
+    <name>bulk-export-pull-queue</name>
+    <mode>pull</mode>
+       <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+    </acl>
+    <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+    </retry-parameters>
+  </queue>
+  
   <queue>
   <name>normal-campaign-pull-queue</name>
   <mode>pull</mode>

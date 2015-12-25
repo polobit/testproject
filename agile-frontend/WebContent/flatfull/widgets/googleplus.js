@@ -202,14 +202,24 @@ function getWidgetDetails(callback) {
 }
 
 function googlePlusApiCall(apiURL, reqData, callback) {
-
 	$.ajax({ 
-		type : "GET", 
-		url : apiURL, 
-		data : reqData + "&access_token=" + widgetPref['access_token'],
-		dataType : "json",
+		type : "GET",
+		url : "/core/api/widgets/googlewidgetsapi/"+pluginId,
 		success: function(data){
-			callback(data);
+			$.ajax({ 
+				type : "GET", 
+				url : apiURL, 
+				data : reqData + "&access_token=" + data,
+				dataType : "json",
+				success: function(data){
+					callback(data);
+				},error:function(data){
+					var errorObj = JSON.parse(data.responseText);
+					if(errorObj){
+						displayError(WIDGET_NAME, errorObj.error.message);
+					}
+				}
+			});
 		},error:function(data){
 			var errorObj = JSON.parse(data.responseText);
 			if(errorObj){

@@ -478,8 +478,8 @@ function show_deal()
 function checkPipeline(pipeId)
 {
 	var presentPipe = 0;
-	if (readCookie("agile_deal_track"))
-		presentPipe = readCookie("agile_deal_track");
+	if (_agile_get_prefs("agile_deal_track"))
+		presentPipe = _agile_get_prefs("agile_deal_track");
 
 	if (presentPipe == pipeId)
 		return true;
@@ -489,9 +489,9 @@ function checkPipeline(pipeId)
 function removeArchive(deal)
 {
 	var result = false;
-	if (readCookie('deal-filters'))
+	if (_agile_get_prefs('deal-filters'))
 	{
-		var arch = $.parseJSON(readCookie('deal-filters')).archived;
+		var arch = $.parseJSON(_agile_get_prefs('deal-filters')).archived;
 		if (arch == 'false' && deal.archived == true)
 			return true;
 		else if (arch == 'true' && deal.archived == false)
@@ -606,7 +606,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		else if (Current_Route == 'deals')
 		{
 
-			if (!readCookie("agile_deal_view"))
+			if (!_agile_get_prefs("agile_deal_view"))
 			{
 
 				var newMilestone = deal.milestone;
@@ -667,7 +667,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 						console.log('Updating html - ', deal);
 						var dealsTemplate = 'deals-by-paging-model';
 
-						if (!readCookie('deal-milestone-view'))
+						if (!_agile_get_prefs('deal-milestone-view'))
 						{
 							dealsTemplate = 'deals-by-paging-relax-model';
 						}
@@ -695,7 +695,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 					var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
 					if (!dealPipelineModel)
 						return;
-					var filterJSON = $.parseJSON(readCookie('deal-filters'));
+					var filterJSON = $.parseJSON(_agile_get_prefs('deal-filters'));
 					console.log(deal.owner.id.toString() != filterJSON.owner_id, deal.owner.id.toString(), filterJSON.owner_id);
 					if (filterJSON.owner_id.length > 0 && deal.owner.id.toString() != filterJSON.owner_id)
 						return;

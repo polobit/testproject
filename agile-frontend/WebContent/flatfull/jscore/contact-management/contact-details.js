@@ -226,7 +226,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #change-owner-element>#contact-owner' : 'onChangeOwner',
     	'click .contact-owner-list' : 'onChangeOwnerSelected',
     	'click #change-owner-element>.contact-owner-add' : 'onAddContactOwner',
-    	'click #contact-actions-delete' : 'onContactDelete',
+    	'click #contact-actions-delete' : 'onContactDetailsDelete',
     	'click .remove-tags' : 'onRemoveContactTag',
     	'click #add-tags' : 'onAddContactTag',
     	'click #contact-add-tags' : 'onAddContactTags',
@@ -559,7 +559,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     },
 
     // Deletes a contact from database
-    onContactDelete : function(e){
+    onContactDetailsDelete : function(e){
 
     	e.preventDefault();
 		if(!confirm("Do you want to delete the contact?"))
@@ -569,6 +569,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		App_Contacts.contactDetailView.model.destroy({success: function(model, response) {
 			  Backbone.history.navigate("contacts",{trigger: true});
 		}});
+		
     },
 
     /**
@@ -722,9 +723,8 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 
     onDisableMapView : function(e){
 		e.preventDefault();
-		if(islocalStorageHasSpace()){
-			localStorage.setItem('MAP_VIEW','disabled');
-		}
+		_agile_set_prefs('MAP_VIEW','disabled');
+		
 		$("#map").css('display', 'none');
 		$("#contacts-local-time").hide();
 		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
@@ -733,9 +733,8 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 
 	onEnableMapView :  function(e){
 		e.preventDefault();
-		if(islocalStorageHasSpace()){
-			localStorage.setItem('MAP_VIEW','enabled');
-		}
+		_agile_set_prefs('MAP_VIEW','enabled');
+		
 		if(company_util.isCompany())
 			company_util.show_map();
 		else
