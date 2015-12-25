@@ -40,5 +40,8 @@ public enum ImportStatus
     TOTAL_TASKS,
     SAVED_TASKS,
     
-
+    TOTAL_ACCOUNTS,
+    SAVED_ACCOUNTS,
+    MERGED_ACCOUNTS,
+    
 }

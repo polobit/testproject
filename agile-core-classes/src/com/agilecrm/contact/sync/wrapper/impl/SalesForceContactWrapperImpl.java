@@ -1,6 +1,7 @@
 package com.agilecrm.contact.sync.wrapper.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -15,9 +16,18 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.ImportStatus;
+import com.agilecrm.contact.sync.service.impl.SalesforceSync;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
+import com.agilecrm.contact.sync.wrapper.impl.SalesforceImportDeferred.ACTION_TYPE;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.JSONUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.gdata.data.TextContent;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.GroupMembershipInfo;
@@ -30,6 +40,7 @@ import com.google.gdata.data.extensions.PhoneNumber;
 import com.google.gdata.data.extensions.StructuredPostalAddress;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
+import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.groups.GoogleGroupDetails;
 import com.thirdparty.salesforce.SalesforceUtil;
@@ -54,6 +65,9 @@ public class SalesForceContactWrapperImpl extends ContactWrapper
 	if (!(object instanceof JSONObject))
 	    return;
 	entry = (JSONObject) object;
+	
+	System.out.println("entry = " + entry);
+
 	return;
     }
 
@@ -152,18 +166,15 @@ public class SalesForceContactWrapperImpl extends ContactWrapper
     public ContactField getOrganization()
     {
     	
-	if (!entry.has("AccountId"))
+	if (!entry.has("CompanyName"))
 		  return null;
 	
 	ContactField field = null;
 	try {
-	
-		JSONObject accountJSON = new JSONObject(SalesforceUtil.getAccountByAccountIdFromSalesForce(prefs,
-				entry.getString("AccountId")));
 		
-		if (accountJSON.has("Name"))
+		if (entry.has("CompanyName"))
 		{
-			return new ContactField(Contact.COMPANY, accountJSON.getString("Name"), null);
+			return new ContactField(Contact.COMPANY, entry.getString("CompanyName"), null);
 		}
 		
 	} catch (Exception e) {
@@ -208,7 +219,6 @@ public class SalesForceContactWrapperImpl extends ContactWrapper
     	
     	try {
 			
-    		
     		JSONObject json = new JSONObject();
     		
     		if (entry.has("MailingStreet"))
@@ -231,10 +241,8 @@ public class SalesForceContactWrapperImpl extends ContactWrapper
     		
 		} catch (Exception e) {
 		}
-	
 				
 		return field;		
-				
     }
 
     /*
@@ -299,29 +307,25 @@ public class SalesForceContactWrapperImpl extends ContactWrapper
 		}
 		
 		// Get notes from Salesforce
-		String contactId = JSONUtil.getJSONValue(entry, "Id");
-		if(StringUtils.isNotBlank(contactId)){
-			try {
-				JSONArray notesArray = SalesforceUtil.getNotesByContactIdFromSalesForce(prefs, contactId);
-				for (int i = 0; i < notesArray.length(); i++) {
-					JSONObject noteEntry = notesArray.getJSONObject(i);
-					
-					addNote(JSONUtil.getJSONValue(noteEntry, "Title") ,JSONUtil.getJSONValue(noteEntry, "Body"));
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		SalesforceImportDeferred def =  new SalesforceImportDeferred(NamespaceManager.get(), entry.toString(), ACTION_TYPE.ADD_NOTES, contact.id);
+		
+		Queue queue = QueueFactory.getDefaultQueue();
+		queue.add(TaskOptions.Builder.withPayload(def));
+		
 		
     }
     
 	public void addNote(String title, String subject) {
     	
-		// TODO Auto-generated method stub
-    	Note note = new Note(title,subject);
-		note.addRelatedContacts(String.valueOf(contact.id));
-		note.save();
-		System.out.println("In note " + note.id);
+		try {
+			// TODO Auto-generated method stub
+	    	Note note = new Note(title,subject);
+			note.addRelatedContacts(String.valueOf(contact.id));
+			note.save();
+			System.out.println("In note " + note.id);
+		} catch (Exception e) {
+		}
+		
 	}
     
 
@@ -331,4 +335,74 @@ public class SalesForceContactWrapperImpl extends ContactWrapper
 		return null;
 	}
 
+}
+
+
+class SalesforceImportDeferred implements DeferredTask {
+
+	public enum ACTION_TYPE {
+		ADD_NOTES
+	}
+	
+	public ACTION_TYPE actionType;
+	public String domainName;
+	public String contactEntry;
+	
+	public Long contactId;
+	
+	public SalesforceImportDeferred(String domainName, String contactEntry, ACTION_TYPE actionType, Long contactId){
+		this.domainName = domainName;
+		this.actionType = actionType;
+		this.contactEntry = contactEntry;
+		this.contactId = contactId;
+	}
+	
+	@Override
+	public void run() {
+		
+		System.out.println("SalesforceImportDeferred = " + domainName + " : " + actionType + " : " + contactEntry);
+		
+		if(StringUtils.isBlank(contactEntry))
+			  return;
+		
+		System.out.println("contactId = " + contactId);
+		
+		try {
+			
+			JSONObject contactJSON = new JSONObject(contactEntry);
+			
+			JSONArray notesArray = new JSONArray(contactJSON.getString(SalesforceSync.CONTACTS_NOTES_KEY));
+			
+			NamespaceManager.set(domainName);
+			
+			for (int i = 0; i < notesArray.length(); i++) {
+				JSONObject noteEntry = notesArray.getJSONObject(i);
+				
+				try {
+					addNote(JSONUtil.getJSONValue(noteEntry, "Title") ,JSONUtil.getJSONValue(noteEntry, "Body"));	
+				} catch (Exception e) {
+				} finally{
+				}
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void addNote(String title, String subject) {
+    	
+		try {
+			
+	    	Note note = new Note(title,subject);
+			note.addRelatedContacts(String.valueOf(contactId));
+			note.save();
+			System.out.println("In note " + note.id);
+			
+		} catch (Exception e) {
+		}
+		
+	}
+	
 }

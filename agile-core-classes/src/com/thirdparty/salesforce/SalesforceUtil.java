@@ -106,7 +106,7 @@ public class SalesforceUtil
 
 	public static String getAccountsFromSalesForce(ContactPrefs prefs) throws Exception
 	{
-		String query = "SELECT Name, Website, Phone, Fax, Industry, Description, Type, NumberOfEmployees, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
+		String query = "SELECT Id, ParentId, Name, Website, Phone, Fax, Industry, Description, Type, NumberOfEmployees, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
 		System.out.println("In accounts------------------------------------");
 		return SalesforceUtil.getEntities(prefs, query);
 	}
@@ -135,7 +135,7 @@ public class SalesforceUtil
 
 	public static String getContactByContactIdFromSalesForce(ContactPrefs prefs, String id) throws Exception
 	{
-		String query = "SELECT FirstName, LastName, Email, Title, Description,Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet, LeadSource FROM Contact WHERE Id = '"
+		String query = "SELECT FirstName, LastName, Email, Title, Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet, LeadSource FROM Contact WHERE Id = '"
 				+ id + "'";
 		System.out.println("In Contact by id ------------------------------------");
 		return new JSONArray(getEntities(prefs, query)).getJSONObject(0).toString();
@@ -149,6 +149,13 @@ public class SalesforceUtil
 		return new JSONArray(getEntities(prefs, query));
 	}
 
+	public static JSONArray getNotesFromSalesForce(ContactPrefs prefs) throws Exception
+	{
+		String query = "SELECT Title, Body FROM Note";
+		System.out.println("In Notes ------------------------------------");
+		return new JSONArray(getEntities(prefs, query));
+	}
+	
 	public static String checkSalesforcePrefs(ContactPrefs prefs) throws Exception
 	{
 		try
@@ -179,7 +186,11 @@ public class SalesforceUtil
 		try
 		{
 			
-			 // describeSObjectsSample();
+			describeSObjectsSample();
+			
+			// System.out.println(SalesforceUtil.getAccountsFromSalesForce(prefs));
+			
+		    // System.out.println(SalesforceUtil.getNotesFromSalesForce(prefs));
 			
 			// System.out.println(SalesforceUtil.checkSalesforcePrefs(prefs));
 
@@ -231,7 +242,7 @@ public class SalesforceUtil
         // the names of the objects to describe.
         com.sforce.soap.partner.DescribeSObjectResult[] describeSObjectResults = 
         		salesforce.connection.describeSObjects(
-                            new String[] { "note" });
+                            new String[] { "contact" });
 
         //  "account", "contact", "lead"
         // Iterate through the list of describe sObject results

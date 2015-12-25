@@ -14,10 +14,12 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
@@ -37,7 +39,12 @@ import com.thirdparty.salesforce.SalesforceUtil;
 public class SalesforceSync extends OneWaySyncService
 {
 
+	public static final String CONTACTS_NOTES_KEY = "contact_notes";
+	
 	Map<String, String> contactIdsMap = new HashMap<String, String>();
+	Map<String, String> contactAccountIdssMap = new HashMap<String, String>();
+	Map<String, JSONArray> contactNotesMap = new HashMap<String, JSONArray>();
+	
 	boolean contactsfetched = false;
 	
     @Override
@@ -57,6 +64,11 @@ public class SalesforceSync extends OneWaySyncService
     
     try {
     	
+    	 if(importOptions.contains("accounts")){
+         	System.out.println("Importing accounts");
+         	importSalesforceAccounts();
+         }
+    	 
     	if(importOptions.contains("contacts")){
         	System.out.println("Importing contacts");
         	importSalesforceContacts();
@@ -75,6 +87,29 @@ public class SalesforceSync extends OneWaySyncService
     
     }
     
+    private String getAccountsFromSalesForce() throws Exception{
+
+		String query = "SELECT Id, ParentId, Name, Website, Phone, Industry, Description, Type, NumberOfEmployees, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
+		System.out.println("In accounts------------------------------------");
+		return SalesforceUtil.getEntities(prefs, query);
+	
+    }
+    private void importSalesforceAccounts() throws JSONException, Exception{
+    	try
+		{
+			JSONArray jsonArray = new JSONArray(getAccountsFromSalesForce());
+			System.out.println(jsonArray);
+			
+			saveSalesforceAccountsInAgile(jsonArray);
+			
+		}
+		catch (SocketTimeoutException e)
+		{
+			System.out.println("In exception ");
+			importSalesforceAccounts();
+		}
+    }
+    
     private void importSalesforceContacts() throws Exception
 	{
 		try
@@ -83,6 +118,12 @@ public class SalesforceSync extends OneWaySyncService
 			System.out.println(jsonArray);
 			
 			storeContactIdAndEmailsInList(jsonArray);
+			
+			// Get accounts list
+			getAccountssFromSalesForceAndCategorizeOnAccountIdAndName();
+			
+			// Get notes from salesforce
+			getNotesFromSalesForceAndCategorizeOnParentId();
 			
 			saveContactsInAgile(jsonArray);
 			
@@ -95,6 +136,64 @@ public class SalesforceSync extends OneWaySyncService
 
 	}
     
+    private void getNotesFromSalesForceAndCategorizeOnParentId(){
+    	
+    	try {
+    		
+    		JSONArray notesArray = new JSONArray(getNotesFromSalesForce());
+        	if(notesArray == null || notesArray.length() == 0)
+        		  return;
+        	
+        	for (int i = 0; i < notesArray.length(); i++) {
+        		try {
+        			JSONObject noteJSON = notesArray.getJSONObject(i);
+        			JSONArray contactNotesArray = new JSONArray();
+        			
+        			String parentId = JSONUtil.getJSONValue(noteJSON, "ParentId");
+        			if(contactNotesMap.containsKey(parentId))
+        				contactNotesArray = contactNotesMap.get(parentId);
+        			
+        			contactNotesArray = contactNotesArray.put(noteJSON);
+        			
+        			// Reset
+        			contactNotesMap.put(parentId, contactNotesArray);
+        			
+    			} catch (Exception e) {
+    				e.printStackTrace();
+    			}
+        	}	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    }
+    
+    
+    private void getAccountssFromSalesForceAndCategorizeOnAccountIdAndName(){
+    	
+    	try {
+    		
+    		JSONArray accountsArray = new JSONArray(getAccountsFromSalesForce());
+        	if(accountsArray == null || accountsArray.length() == 0)
+        		  return;
+        	
+        	for (int i = 0; i < accountsArray.length(); i++) {
+        		try {
+        			JSONObject accountJSON = accountsArray.getJSONObject(i);
+        			
+        			String parentId = JSONUtil.getJSONValue(accountJSON, "Id");
+        			contactAccountIdssMap.put(parentId, JSONUtil.getJSONValue(accountJSON, "Name"));
+        			
+    			} catch (Exception e) {
+    				e.printStackTrace();
+    			}
+        	}	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    }
+    
     private void storeContactIdAndEmailsInList(JSONArray entries){
     	
     	if(entries == null || entries.length() == 0)
@@ -105,7 +204,6 @@ public class SalesforceSync extends OneWaySyncService
 	    			 JSONObject entryJSON = entries.getJSONObject(i);
 	    			 contactIdsMap.put(entryJSON.getString("Id"), entryJSON.getString("Email"));
     			 } catch (Exception e) {
-    			 		e.printStackTrace();
     			 }
 			}
        	
@@ -113,10 +211,18 @@ public class SalesforceSync extends OneWaySyncService
     
     private String getContactsFromSalesForce() throws Exception
 	{
-		String query = "SELECT  Id, FirstName, LastName, Email, Title, Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet FROM Contact";
+		String query = "SELECT  Id, AccountId, FirstName, LastName, Email, Title, Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet FROM Contact";
 		System.out.println("In contacts------------------------------------");
 		
 		this.contactsfetched = true;
+		return SalesforceUtil.getEntities(prefs, query);
+	}
+    
+    private String getNotesFromSalesForce() throws Exception
+	{
+		String query = "SELECT Title, Body, ParentId FROM Note";
+		System.out.println("In notes------------------------------------");
+		
 		return SalesforceUtil.getEntities(prefs, query);
 	}
     
@@ -129,6 +235,7 @@ public class SalesforceSync extends OneWaySyncService
     private void saveContactsInAgile(JSONArray entries)
     {
     	
+    	System.out.println("contactNotesMap = " + contactNotesMap);
 		for (int i = 0; i < entries.length(); i++)
 		{
 			try {
@@ -141,11 +248,21 @@ public class SalesforceSync extends OneWaySyncService
 			    // allows contacts without email
 			    if (emails == null || emails.size() == 0)
 			    {
-				syncStatus.put(ImportStatus.EMAIL_REQUIRED, syncStatus.get(ImportStatus.EMAIL_REQUIRED) + 1);
-				syncStatus.put(ImportStatus.TOTAL_FAILED, syncStatus.get(ImportStatus.TOTAL_FAILED) + 1);
-				continue;
+				// syncStatus.put(ImportStatus.EMAIL_REQUIRED, syncStatus.get(ImportStatus.EMAIL_REQUIRED) + 1);
+				// syncStatus.put(ImportStatus.TOTAL_FAILED, syncStatus.get(ImportStatus.TOTAL_FAILED) + 1);
+				// continue;
 			    }
 	
+			    // Set notes to contacts if any 
+			    String SFcontactId = JSONUtil.getJSONValue(entry, "Id"); 
+			    if(contactNotesMap.containsKey(SFcontactId))
+			    	entry = entry.put(CONTACTS_NOTES_KEY, contactNotesMap.get(SFcontactId).toString());
+			    
+			    // Set company name
+			    String accountId = JSONUtil.getJSONValue(entry, "AccountId");
+			    if(contactAccountIdssMap.containsKey(accountId))
+			    	entry = entry.put("CompanyName", contactAccountIdssMap.get(accountId).toString());
+			    
 			   wrapContactToAgileSchemaAndSave(entry);
 			   
 			} catch (Exception e) {
@@ -212,9 +329,10 @@ public class SalesforceSync extends OneWaySyncService
 			
 			System.out.println("contactIdsMap = " + contactIdsMap);
 			
-			JSONArray json = getTasksFromSalesForce();
-			System.out.println(json);
-			saveSalesforceTasksInAgile(json);
+			JSONArray tasksArrayJSON = getTasksFromSalesForce();
+			System.out.println(tasksArrayJSON);
+			
+			saveSalesforceTasksInAgile(tasksArrayJSON);
 		}
 		catch (SocketTimeoutException e)
 		{
@@ -327,6 +445,77 @@ public class SalesforceSync extends OneWaySyncService
 	
 				agileTask.save();
 				syncStatus.put(ImportStatus.SAVED_TASKS, (syncStatus.get(ImportStatus.SAVED_TASKS) + 1));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+	}
+	
+	protected void saveSalesforceAccountsInAgile(JSONArray entries){
+    	
+		syncStatus.put(ImportStatus.TOTAL_ACCOUNTS, entries.length());
+		
+		for (int i = 0; i < entries.length(); i++)
+		{
+			try {
+				wrapAccountToAgileSchemaAndSave(entries.getJSONObject(i));
+			} catch (Exception e) {
+			}
+			
+		}
+	}
+	
+	protected void wrapAccountToAgileSchemaAndSave(JSONObject entry){
+
+		try {
+			
+				System.out.println("In account of salesforce");
+				Contact agileCompany = new Contact();
+				
+				// Set type as company
+				agileCompany.type = Type.COMPANY;
+				
+				String companyName = JSONUtil.getJSONValue(entry, "Name"); 
+				agileCompany.properties.add(new ContactField(Contact.NAME, companyName, null));
+				
+				if(entry.has("Website"))
+					agileCompany.properties.add(new ContactField(Contact.WEBSITE, JSONUtil.getJSONValue(entry, "Website"), null));
+				
+				if(entry.has("Phone"))
+					agileCompany.properties.add(new ContactField(Contact.PHONE, JSONUtil.getJSONValue(entry, "Phone"), "main"));
+				
+				if (entry.has("Fax"))
+					agileCompany.properties.add(new ContactField(Contact.PHONE, JSONUtil.getJSONValue(entry, "Fax"), "home fax"));
+				
+				if (entry.has("Industry"))
+					agileCompany.properties.add(new ContactField(Contact.TITLE, JSONUtil.getJSONValue(entry, "Industry"), null));
+				
+					
+	    		JSONObject json = new JSONObject();
+	    		if (entry.has("BillingStreet"))
+	    			json.put("address", entry.getString("BillingStreet"));
+	    		if (entry.has("BillingCity"))
+	    			json.put("city", entry.getString("BillingCity"));
+	    		if (entry.has("BillingState"))
+	    			json.put("state", entry.getString("BillingState"));
+	    		if (entry.has("BillingCountry"))
+	    			json.put("country", entry.getString("BillingCountry"));
+	    		if (entry.has("BillingPostalCode"))
+	    			json.put("zip", entry.getString("BillingPostalCode"));
+	    		
+	    		// default subtype is postal
+	    		agileCompany.properties.add(new ContactField(Contact.ADDRESS, json.toString(), "postal"));
+	
+	    		// Check the existance
+				if(ContactUtil.isCompanyExist(companyName)){
+					agileCompany = ContactUtil.mergeCompanyFields(agileCompany);
+					syncStatus.put(ImportStatus.MERGED_ACCOUNTS, (syncStatus.get(ImportStatus.MERGED_ACCOUNTS) + 1));
+				} else {
+					syncStatus.put(ImportStatus.SAVED_ACCOUNTS, (syncStatus.get(ImportStatus.SAVED_ACCOUNTS) + 1));
+				}
+				
+	    		agileCompany.save();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
