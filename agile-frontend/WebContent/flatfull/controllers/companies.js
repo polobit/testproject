@@ -60,7 +60,7 @@ var CompaniesRouter = Backbone.Router
 			App_Companies.companyViewModel = undefined;
 		}
 		
-		// If id is defined get the respective custom view object
+		// If id is definesd get the respective custom view object
 		if (!view_data)
 		{
 			// Once view id fetched we use it without fetching it.

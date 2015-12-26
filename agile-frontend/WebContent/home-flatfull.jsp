@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.contact.CustomFieldDef.SCOPE"%>
+<%@page import="com.agilecrm.contact.util.CustomFieldDefUtil"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.agilecrm.subscription.SubscriptionUtil"%>
 <%@page import="com.agilecrm.subscription.ui.serialize.Plan"%>
@@ -374,6 +376,9 @@ var ACCOUNT_PREFS = <%=mapper.writeValueAsString(accountPrefs)%>;
 // Get current domain user json
 var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
 
+// Get 
+var CONTACTS_DATE_FIELDS = <%=mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE"))%>;
+
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;
 
@@ -395,7 +400,7 @@ head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", 
 // , LIB_PATH + 'lib/backbone-route-filter.js'
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(HANDLEBARS_LIB, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
+head.js(HANDLEBARS_LIB, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _AGILE_VERSION);
 else
 	head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION);
 
@@ -408,9 +413,13 @@ var Agile_Contact = {};
 
 head.ready(function() {
 	
-if(!HANDLEBARS_PRECOMPILATION)
-    downloadTemplate("tpl.js", function(){		         
+if(!HANDLEBARS_PRECOMPILATION){
+    downloadTemplate("tpl.js", function(){             
     });
+    downloadTemplate("contact-view.js", function(){             
+    });
+}
+    
 	
 // Remove the loadinng
 $('body').css('background-image', 'none');

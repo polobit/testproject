@@ -973,6 +973,8 @@ var ContactsRouter = Backbone.Router.extend({
 	// availabel, url = filter url if there is any filter
 	customView : function(id, view_data, url, tag_id, is_lhs_filter, postData)
 	{
+		console.log("customView");
+
 		SELECT_ALL = false;
 		App_Contacts.tag_id = tag_id;
 
@@ -988,7 +990,7 @@ var ContactsRouter = Backbone.Router.extend({
 			this.contact_custom_view = undefined;
 			CONTACTS_HARD_RELOAD = false;
 			view_data = undefined;
-			App_Contacts.contactViewModel = undefined;
+			// App_Contacts.contactViewModel = undefined;
 		}
 
 		// If id is defined get the respective custom view object
@@ -1046,6 +1048,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 			//setup_tags(el);
 			//pieTags(el);
+
 			setupViews(el, view_data.name);
 			setupContactFilterList(el, tag_id);
 			setUpContactView(el);
@@ -1105,11 +1108,10 @@ var ContactsRouter = Backbone.Router.extend({
 				//pieTags(el);
 				setupViews(el, view_data.name);
 				$("#contacts-view-options").css( 'pointer-events', 'auto' );
-				
-
 
 				// show list of filters dropdown in contacts list
 				setupContactFilterList(el, App_Contacts.tag_id);
+
 				if(tag_id)
 				setUpContactView(el,true);
 			    else
@@ -1145,18 +1147,31 @@ var ContactsRouter = Backbone.Router.extend({
 			}, });
 
 		var _that = this;
-		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
+		App_Contacts.contactDateFields = CONTACTS_DATE_FIELDS;
+
+		if(!App_Contacts.contactDateFields){
+				$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
 				{
-					// Defines appendItem for custom view
+					App_Contacts.contactDateFields = customDatefields;
 					
+					// Defines appendItem for custom view
 					_that.contact_custom_view.appendItem = function(base_model){
-						contactTableView(base_model,customDatefields,this);
+						contactTableView(base_model,App_Contacts.contactDateFields,this);
 					};
 					// Fetch collection
 					_that.contact_custom_view.collection.fetch();
-					
 				});
-		
+
+		} else{
+
+				// Defines appendItem for custom view
+				_that.contact_custom_view.appendItem = function(base_model){
+					contactTableView(base_model,App_Contacts.contactDateFields,this);
+				};
+				// Fetch collection
+				_that.contact_custom_view.collection.fetch();
+		}
+
 		if(!is_lhs_filter) {
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(this.contact_custom_view.el);
