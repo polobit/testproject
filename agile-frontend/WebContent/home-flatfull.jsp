@@ -376,8 +376,10 @@ var ACCOUNT_PREFS = <%=mapper.writeValueAsString(accountPrefs)%>;
 // Get current domain user json
 var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
 
-// Get 
+// Get Contact Date Fields
 var CONTACTS_DATE_FIELDS = <%=mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE"))%>;
+// Get Contact Date Fields
+var COMPANY_DATE_FIELDS = <%=mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "DATE"))%>;
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;

@@ -57,7 +57,7 @@ var CompaniesRouter = Backbone.Router
 			this.companiesListView = undefined;
 			COMPANIES_HARD_RELOAD = false;
 			view_data = undefined;
-			App_Companies.companyViewModel = undefined;
+			// App_Companies.companyViewModel = undefined;
 		}
 		
 		// If id is definesd get the respective custom view object
@@ -104,13 +104,6 @@ var CompaniesRouter = Backbone.Router
 			// Saves Sort By in cookie
 			_agile_set_prefs('company_sort_field', sort_key);
 		}
-
-		// Checks if user is using custom view. It check for grid view
-		/*if (grid_view || _agile_get_prefs("agile_contact_view"))
-		{
-			template_key = "contacts-grid";
-			individual_tag_name = "div";
-		}*/
 
 		// Default url for contacts route
 		var url = '/core/api/contacts/companies/list';
@@ -227,8 +220,13 @@ var CompaniesRouter = Backbone.Router
 			} });
 		
 		var _that = this;
-		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=COMPANY", function(customDatefields)
+		App_Companies.companyDateFields = COMPANY_DATE_FIELDS;
+
+		if(!App_Companies.companyDateFields){
+			$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=COMPANY", function(customDatefields)
 				{
+					App_Companies.companyDateFields = customDatefields;
+
 					// Defines appendItem for custom view
 					_that.companiesListView.appendItem = function(base_model){
 						contactTableView(base_model,customDatefields,this);
@@ -238,6 +236,16 @@ var CompaniesRouter = Backbone.Router
 					_that.companiesListView.collection.fetch();
 					
 				});
+		} else {
+			// Defines appendItem for custom view
+			_that.companiesListView.appendItem = function(base_model){
+				contactTableView(base_model,customDatefields,this);
+			};
+	
+			// Fetch collection
+			_that.companiesListView.collection.fetch();
+		}
+		
 
 		if (!is_lhs_filter)
 		{
@@ -389,6 +397,8 @@ var CompaniesRouter = Backbone.Router
 			{
 				COMPANIES_HARD_RELOAD = true;
 				App_Companies.navigate("companies", { trigger : true });
+				App_Companies.companyViewModel = data.toJSON();
+
 			} });
 
 		$("#content").html(companyView.render().el);

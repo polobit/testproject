@@ -360,8 +360,9 @@
 					.html(
 							'<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li  class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="m-l-xs pull-left">' + decodeURI(tag_id) + '</span><a class="close default_contact_remove_tag m-l-xs pull-left">&times</a></li></ul>').attr("_filter", tag_id);
 							
-
-		var filter_id = null;
+		setTimeout(function(){
+					
+			var filter_id = null;
 			companyFiltersListView = new Base_Collection_View(
 				{
 					url : '/core/api/filters?type=COMPANY',
@@ -407,6 +408,7 @@
 			
 				// Shows in contacts list
 				$('#filter-list', cel).html(companyFiltersListView.render().el);
+		}, 500);
 				
 	};
 	
