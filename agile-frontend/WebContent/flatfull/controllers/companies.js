@@ -239,7 +239,7 @@ var CompaniesRouter = Backbone.Router
 		} else {
 			// Defines appendItem for custom view
 			_that.companiesListView.appendItem = function(base_model){
-				contactTableView(base_model,customDatefields,this);
+				contactTableView(base_model,App_Companies.companyDateFields,this);
 			};
 	
 			// Fetch collection

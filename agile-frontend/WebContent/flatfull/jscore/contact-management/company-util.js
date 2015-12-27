@@ -371,6 +371,7 @@
 					templateKey : "company-filter-list",
 					individual_tag_name : 'li',
 					sort_collection : false,
+					no_transition_bar : true,
 					postRenderCallback : function(el)
 					{
 						var filter_name;
