@@ -1828,6 +1828,9 @@ color:#727272;
 .label {
   font-size: 74%;
 } 
+#contacts-table tr td:nth-of-type(n+4), #contacts-table tr th:nth-of-type(n+3) {
+    display: none;
+}
 }
 
 @media all and (min-width: 768px) {
