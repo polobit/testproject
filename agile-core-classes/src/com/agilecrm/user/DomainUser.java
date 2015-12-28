@@ -573,7 +573,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		{
 			if (checkMaxUsersInPlan())
 				return;
-
+			checkAdminDisabled();
 			sendWelcomeEmail();
 		}
 
