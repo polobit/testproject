@@ -649,6 +649,11 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
 		var model = $(targetEl).parents('li').data();
 
+		if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != model.get("owner_id"))){
+			$("#deleteEventErrorModal").html(getTemplate("delete-event-error-modal")).modal('show');
+			return;
+		}
+
 		if (model && model.toJSON().type != "WEB_APPOINTMENT")
 		{
 			if (!confirm("Are you sure you want to delete?"))
