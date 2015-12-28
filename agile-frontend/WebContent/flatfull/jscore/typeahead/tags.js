@@ -83,7 +83,9 @@ function setup_tags_typeahead(callback) {
     			
     			var json = null;
     			if(callback!=undefined)
-                callback(tag);
+    			{ callback(tag);
+    				return;
+    			}
     			if(company_util.isCompany())
     				json = App_Companies.companyDetailView.model.toJSON();
     			else

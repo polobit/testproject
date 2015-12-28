@@ -2,6 +2,7 @@ function contactListener()
 {
 	$('#contacts-custom-view-model-list').off('mouseenter','tr');
 		$('#contacts-custom-view-model-list').on('mouseenter','tr',function(e){
+			e.stopPropagation();
 			var that=$(this);
 			//var top=e.pageY-40;
 			var left=e.pageX-30;
@@ -23,6 +24,7 @@ function contactListener()
 						if(!template_ui)
 							  return;
 						$('.popover').html($(template_ui));	
+						contact_list_starify('.popover');
 						attachEvents(that,App_Contacts.contact_popover);
 					});
 		 		that.find('.data').attr('data');
@@ -231,6 +233,14 @@ $('.popover').on('click', '#add-tags', function(e){
         		    $("#add-tags").css("display", "block");
         		    
         		    Contact_collection.set(data.toJSON());
+        		    	    var old_tags = [];
+	       			$.each($('#added-tags').children(), function(index, element){
+       					
+	       				old_tags.push($(element).html());
+       				});
+       				if ($.inArray(e, old_tags) == -1) 
+		       				$('#added-tags').append('<span class="label bg-light dk text-tiny">'+e+'</span>');
+	    			
     	     		
 	       			
     			});
@@ -282,7 +292,13 @@ e.preventDefault();
 		       			
 		       			// Updates to both model and collection
 		       			Contact_collection.set(data.toJSON());
-		       			
+		       				 var old_tags = [];
+	       			$.each($('#added-tags').children(), function(index, element){
+       					
+	       				old_tags.push($(element).html());
+       				});
+       				if ($.inArray(e, old_tags) == -1) 
+		       				$('#added-tags').append('<span class="label bg-light dk text-tiny">'+new_tags+'</span>');
 
 		       			console.log(new_tags);
 		       			// Adds the added tags (if new) to tags collection
@@ -297,12 +313,55 @@ e.preventDefault();
 		}
 	});
 
+	$('.popover').off('click', '#contact-owner');
+$('.popover').on('click', '#contact-owner', function(e){
+	  e.preventDefault();
+         fill_owners(undefined, undefined, function(){
+	    	$('#contact-owner').css('display', 'none');
+	    	$('#change-owner-ul').css('display', 'inline-block');
+	    	if($('#change-owner-element > #change-owner-ul').css('display') == 'inline-block')
+	             $("#change-owner-element").find(".loading").remove();
+		});
+});
+$('.popover').off('click', '.contact-owner-list');
+$('.popover').on('click', '.contact-owner-list', function(e){
+	e.preventDefault();
+    	var targetEl = $(e.currentTarget);
+    	$('#change-owner-ul').css('display', 'none');
+		
+		// Reads the owner id from the selected option
+		var new_owner_id = $(targetEl).attr('data');
+		var new_owner_name = $(targetEl).text();
+		var current_owner_id = $('#contact-owner').attr('data');
+		
+		// Returns, if same owner is selected again 
+		if(new_owner_id == current_owner_id)
+			{
+			  // Showing updated owner
+			  show_owner();
+			  return;
+			}
+		
+		  var contactModel = new BaseModel();
+		    contactModel.url = '/core/api/contacts/change-owner/' + new_owner_id + "/" + Contact_collection.get('id');
+		    contactModel.save( Contact_collection.toJSON(), {success: function(model){
+		    	// Replaces old owner details with changed one
+				$('#contact-owner').text(new_owner_name);
+				$('#contact-owner').attr('data', new_owner_id);
+				
+				// Showing updated owner
+				show_owner(); 
+				Contact_collection.set(model.toJSON());
+				
+		    }});
+});
+
 }
 
-function agile_crm_get_List_contact_properties_list(propertyName,id)
+function agile_crm_get_List_contact_properties_list(propertyName)
 {
 	// Reads current contact model form the contactDetailView
-	var contact_model = App_Contacts.contact_custom_view.collection.get(id);
+	var contact_model = App_Contacts.contact_popover;
 
 	// Gets properties list field from contact
 	var properties = contact_model.get('properties');
@@ -323,4 +382,51 @@ function agile_crm_get_List_contact_properties_list(propertyName,id)
 
 	// If property is defined then return property value list
 	return property_list;
+}
+
+
+function contact_list_starify(el) {
+    head.js(LIB_PATH + 'lib/jquery.raty.min.js', function(){
+    	
+    	var contact_model  =  App_Contacts.contact_popover;
+    	
+    	// If contact update is not allowed then start rating does not allow user to change it
+    	if(App_Contacts.contact_popover.get('owner') && !canEditContact(App_Contacts.contact_popover.get('owner').id))
+    	{
+    			$('#star', el).raty({
+    			 'readOnly': true,
+    			  score: App_Contacts.contact_popover.get('star_value')
+    			 });
+    		 return;
+    	}
+    	
+    	// Set URL - is this required?
+    	// contact_model.url = 'core/api/contacts';    	
+    	$('#star', el).raty({
+    		
+    		/**
+    		 * When a star is clicked, the position of the star is set as star_value of
+    		 * the contact and saved.    
+    		 */
+        	click: function(score, evt) {
+        	         		
+           		
+        		App_Contacts.contact_popover.set({'star_value': score});
+        		contact_model =  App_Contacts.contact_popover.toJSON();
+        		var new_model = new Backbone.Model();
+        		new_model.url = 'core/api/contacts';
+        		new_model.save(contact_model, {
+        			success: function(model){
+        			}
+        		});
+},
+        	
+        	/**
+        	 * Highlights the stars based on star_value of the contact
+        	 */
+        	score: contact_model.get('star_value')
+            
+        });
+    });
+    
 }

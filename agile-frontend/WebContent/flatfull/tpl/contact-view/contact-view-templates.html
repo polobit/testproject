@@ -253,8 +253,9 @@
        <div class="text-ellipsis data" data={{id}}>
 	   
        	<div class="text-cap panel-heading"><div class="text-ellipsis inline-block" style="width:80%">{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}}(<a class="text-cap">{{getPropertyValue properties "title"}}</a>)</div>
-        		<div class="pull-right" style="width:20%">
+        		{{getPropertyValue properties "last_name"}}</div>
+				 <div class="pull-left" style="width:80%"><div id='star' class="contact-star"></div></div>
+        		<div>
 	   	  <div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
 							<div  class="text-lg score-view">
 								<img src="{{getS3ImagePath '../../img/flame.png'}}" style="width:13px;"> 
@@ -278,19 +279,52 @@
 						</div>
         		</div>
         		<div class="panel-body">
-       		
+       		<div class="b-b b-light p-b-xs"><div class="pull-left"><i class="icon icon-user text-sm v-middle"></i></div>
+       			<!--<div class="pull-right owners" style="padding:0px 8px 10px; display:none">
+				<select name="owner" id="owner" class="required form-control">
+                </select></div>
+       		  <div class="text-ellipsis m-l-md editable" style="width:15em;" contentEditable="true">
+	   {{owner.name}}
+       </div>-->
+       	<div class="contact-owner text-base m-l-md" id="change-owner-element">
+        	
+		{{#canEditContact owner.id}}
+        	<a id="contact-owner" class="custom-color" data={{owner.id}}>{{owner.name}}</a>
+
+        	{{else}}
+        		<a id="contact-owner-static" class="custom-color" data={{owner.id}}>{{owner.name}}</a>
+
+        {{/canEditContact}}
+        	{{#canEditContact owner.id}}
+        	<div class="dropdown" id="change-owner-ul"  style="display: none">
+        		 <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
+        		 <ul id='contact-detail-owner' class="dropdown-menu"></ul>
+        	</div> 
+			{{/canEditContact}}
+       </div>
+       </div>
+       		{{#property_is_exists "company" properties}}
        		<div class="b-b b-light p-b-xs">
        		<div class="pull-left"><i class="icon icon-building text-sm v-middle"></i></div>
-       		<div class="text-ellipsis m-l-md" style="width:15em;">
+       		<div class="text-ellipsis m-l-sm text-cap pull-left" >
+       		<a class="text-cap">{{getPropertyValue properties "title"}}</a> , </div>
+       		<div class="text-ellipsis m-l-md text-cap" >
       		<a class="text-cap">{{getPropertyValue properties "company"}}</a>
      		 </div>
        		</div>
+       		{{/property_is_exists}}
+       			{{#property_is_exists "phone" properties}}
         					<div class="b-b b-light p-b-xs">
         					<div class="pull-left"><i class="icon icon-call-end text-sm v-middle"></i></div>
+        					{{#multiple_Property_Element_List "phone" properties id}}
+        					{{#each this}}
        					<div class="text-ellipsis m-l-md" style="width:15em;">
-    		<a class="text-cap">{{getPropertyValue properties "phone"}}</a>
-        </div></div>
-
+    		<a class="text-cap">{{value}}</a>
+        </div>
+        {{/each}}
+        {{/multiple_Property_Element_List}}
+        					</div>
+        					{{/property_is_exists}}
 					{{#property_is_exists "email" properties}}
 							<div class="b-b b-light p-b-xs">
 							<div class="pull-left"><i class="icon icon-envelope text-sm v-middle"></i></div>
@@ -315,7 +349,7 @@
 								{{/property_is_exists}}
 
 								<div class="m-t-xs">
-								 <div class="overflow-hidden line-clamp line-clamp-2" style="width:15em;"> 	
+								 <div id="added-tags" class="text-ellipsis" style="width:15em;"> 	
 				{{#each tags}}
 	    			<span class="label bg-light dk text-tiny">{{this}}</span>	
 							{{/each}}
@@ -335,12 +369,12 @@
 
 						
 					</div>
-	 <div class="b-t b-light m-t-xs p-t-xs">  	 
+	<!-- <div class="b-t b-light m-t-xs p-t-xs">  	 
        {{#hasMenuScope 'DEALS'}}
    <a href="#" class="contact-list-add-deal text-info pos-rlt "><i class="fa fa-plus"></i>Deal</a> 
 {{/hasMenuScope}}
 	   	    <a href="#noteModal" data-toggle="modal" class="pull-right text-info blue btn-slate-action contact-list-add-note"><i class="fa fa-plus"></i>Note</a>
-             </div>
+             </div>-->
 	   	    </div>
 	   	          </div>
 </script>
