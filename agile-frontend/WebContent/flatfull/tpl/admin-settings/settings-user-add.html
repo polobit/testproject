@@ -98,7 +98,11 @@
                         <div class="controls">
                             <div class="checkbox">
 <label class="i-checks i-checks-sm">
+                                {{#if is_account_owner}}
+                                <input type="checkbox" name='is_account_owner' disabled="disabled" value='true'/><i></i>
+                                {{else}}
                                 <input type="checkbox" name='is_account_owner' value='true'/><i></i> 
+                                {{/is_account_owner}}
                                 Owner<br/><div style="margin-left:6px;"><small>Transfer ownership</small></div>
                             </label>
 </div>

@@ -207,6 +207,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 						add_created_user_info_as_note_to_owner(data);
 					}
+					location.reload(true);
 				});
 			} });
 
@@ -282,7 +283,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				}
 				else
 				{
-					Backbone.history.navigate('users', { trigger : true });
+					//Backbone.history.navigate('users', { trigger : true });
+					location.reload(true);
 				}
 
 			}, postRenderCallback : function(el)
