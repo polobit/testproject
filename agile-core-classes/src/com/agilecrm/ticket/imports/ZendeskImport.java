@@ -200,8 +200,10 @@ public class ZendeskImport
 			new TicketsDocument().add(ticket);
 
 			// Logging ticket created activity
-			new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "",
-					ticketJSON.getString("description"), "last_reply_text").save();
+			TicketActivity activity = new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "",
+					ticketJSON.getString("description"), "last_reply_text");
+			activity.created_time = date.getTime();
+			activity.save();
 
 			ZendeskFetchAudits fetchAudits = new ZendeskFetchAudits(ticket, json.toString());
 			TaskOptions options = TaskOptions.Builder.withPayload(fetchAudits);

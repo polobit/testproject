@@ -20,12 +20,14 @@ import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
+import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
+import com.googlecode.objectify.Key;
 
 public class ZendeskFetchAudits implements DeferredTask
 {
@@ -115,7 +117,9 @@ public class ZendeskFetchAudits implements DeferredTask
 
 					boolean repliedByEndUser = (domainUsersMap.get(id) == null) ? true : false;
 
-					if (eventJSON.getString("type").equalsIgnoreCase("Comment"))
+					String eventType = eventJSON.getString("type");
+
+					if ("Comment".equalsIgnoreCase(eventType))
 					{
 						String body = eventJSON.getString("body");
 
@@ -124,16 +128,17 @@ public class ZendeskFetchAudits implements DeferredTask
 							if (repliedByEndUser)
 							{
 								// Creating new Notes in TicketNotes table
-								TicketNotes notes = TicketNotesUtil.createTicketNotes(ticket.id, ticket.groupID, 0l, CREATED_BY.REQUESTER,
-										ticket.requester_name, ticket.requester_email, body, body, NOTE_TYPE.PUBLIC,
-										new ArrayList<TicketDocuments>());
-								
+								TicketNotes notes = TicketNotesUtil.createTicketNotes(ticket.id, ticket.groupID, null,
+										CREATED_BY.REQUESTER, ticket.requester_name, ticket.requester_email, body,
+										body, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>());
+
 								notes.created_time = date.getTime();
 								TicketNotes.ticketNotesDao.put(notes);
-								
+
 								// Logging private notes activity
-								TicketActivity activity = new TicketActivity(TicketActivityType.TICKET_REQUESTER_REPLIED, ticket.contactID,
-										ticket.id, body, body, "html_text");
+								TicketActivity activity = new TicketActivity(
+										TicketActivityType.TICKET_REQUESTER_REPLIED, ticket.contactID, ticket.id, body,
+										body, "html_text");
 								activity.created_time = date.getTime();
 								activity.save();
 							}
@@ -144,8 +149,10 @@ public class ZendeskFetchAudits implements DeferredTask
 										NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>());
 
 								// Logging private notes activity
-								TicketActivity activity = new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID,
-										ticket.id, body, body, "html_text");
+								TicketActivity activity = new TicketActivity(
+										TicketActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id, body,
+										body, "html_text");
+								activity.setUser(new Key<>(DomainUser.class, ticket.assigneeID));
 								activity.created_time = date.getTime();
 								activity.save();
 							}
@@ -154,18 +161,83 @@ public class ZendeskFetchAudits implements DeferredTask
 						{
 							DomainUser domainUser = domainUsersMap.get(id);
 
-							TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, null, domainUser.id,
-									CREATED_BY.AGENT, "", "", body, body, NOTE_TYPE.PRIVATE,
-									new ArrayList<TicketDocuments>());
+							TicketNotesUtil.createTicketNotes(ticket.id, null, domainUser.id, CREATED_BY.AGENT, "", "",
+									body, body, NOTE_TYPE.PRIVATE, new ArrayList<TicketDocuments>());
 
 							// Logging private notes activity
-							TicketActivity activity = new TicketActivity(TicketActivityType.TICKET_PRIVATE_NOTES_ADD, ticket.contactID,
-									ticket.id, body, body, "html_text");
+							TicketActivity activity = new TicketActivity(TicketActivityType.TICKET_PRIVATE_NOTES_ADD,
+									ticket.contactID, ticket.id, body, body, "html_text");
+							activity.setUser(new Key<>(DomainUser.class, domainUser.id));
 							activity.created_time = date.getTime();
 							activity.save();
 						}
-					}else{
-						
+					}
+					else
+					{
+						if ("Change".equalsIgnoreCase(eventType))
+						{
+							String fieldName = eventJSON.getString("field_name");
+
+							switch (fieldName)
+							{
+							case "assignee_id":
+								TicketActivity activity = new TicketActivity(
+										TicketActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
+										eventJSON.getString("previous_value"), eventJSON.getString("value"),
+										"assigneeID");
+								activity.setUser(new Key<>(DomainUser.class, eventJSON.getLong("value")));
+								activity.created_time = date.getTime();
+								activity.save();
+								break;
+							case "status":
+							{
+								String oldStatus = eventJSON.getString("value"), newStatus = eventJSON
+										.getString("previous_value");
+
+								Map<String, String> statusMap = new HashMap<String, String>()
+								{
+									private static final long serialVersionUID = 1L;
+
+									{
+										put("new", Status.NEW.toString());
+										put("open", Status.OPEN.toString());
+										put("pending", Status.PENDING.toString());
+										put("hold", Status.PENDING.toString());
+										put("closed", Status.CLOSED.toString());
+										put("solved", Status.CLOSED.toString());
+									}
+								};
+
+								// Logging activity
+								TicketActivity statusActivity = new TicketActivity(
+										TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+										statusMap.get(oldStatus), statusMap.get(newStatus), "status");
+								statusActivity.setUser(new Key<>(DomainUser.class, ticket.assigneeID));
+								statusActivity.created_time = date.getTime();
+								statusActivity.save();
+								break;
+							}
+							}
+						}
+						else
+						{
+							if ("Create".equalsIgnoreCase(eventType))
+							{
+								String fieldName = eventJSON.getString("field_name");
+
+								if ("assignee_id".equalsIgnoreCase(fieldName))
+								{
+									Long agentID = eventJSON.getLong("value");
+
+									// Logging private notes activity
+									TicketActivity activity = new TicketActivity(TicketActivityType.TICKET_ASSIGNED,
+											ticket.contactID, ticket.id, "", agentID + "", "assigneeID");
+									activity.setUser(new Key<>(DomainUser.class, agentID));
+									activity.created_time = date.getTime();
+									activity.save();
+								}
+							}
+						}
 					}
 				}
 			}
