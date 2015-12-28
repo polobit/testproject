@@ -6,6 +6,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.social.BrainTreeUtil;
@@ -26,7 +27,6 @@ public class BrainTreeWidgetAPI {
 			Widget widget = WidgetUtil.getWidget(widgetId);
 
 			if (widget != null) {
-				// Calls ZendeskUtil to retrieve tickets for contacts email
 				JSONObject prefsObj = new JSONObject(widget.prefs);
 				String merchantId = prefsObj.getString("merchant_id");
 				String publicKey = prefsObj.getString("public_key");
@@ -34,7 +34,7 @@ public class BrainTreeWidgetAPI {
 
 				BrainTreeUtil bUtil = new BrainTreeUtil(merchantId, publicKey,
 						privateKey);
-				JSONObject resultObj = bUtil.getTransactions(email);
+				JSONArray resultObj = bUtil.getTransactions(email);
 				return resultObj.toString();
 			}
 		} catch (Exception e) {

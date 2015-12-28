@@ -62,7 +62,7 @@ public class DefaultWidgets {
 		widgets.add(new Widget(
 				"BrainTree",
 				"Brain Tree enables individuals and businesses to accept payments over the internet.",
-				"/widgets/BrainTree.js", "/img/plugins/BrainTree.png",
+				"/widgets/brainTree.js", "/img/plugins/BrainTree.png",
 				"/widgets/braintree-small-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"HelpScout",

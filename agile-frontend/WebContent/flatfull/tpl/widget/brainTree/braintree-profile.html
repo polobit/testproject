@@ -7,7 +7,7 @@
 				<label>Enter your BrainTree details </label>
 				<div class="control-group form-group">
 					<div class="controls">
-						<input type="url" id="merchant_id" placeholder="merchant id" class="input-medium required widget_input_box form-control" value="" name="merchant_id">
+						<input type="text" id="merchant_id" placeholder="merchant id" class="input-medium required widget_input_box form-control" value="" name="merchant_id">
 						</input>
 					</div>
 				</div>
@@ -30,4 +30,27 @@
 			 </fieldset>
 	    </form>
 	</div>
+</script>
+
+<script id="braintree-transactions-template" type="text/html">
+{{#if transaction.length}}
+	{{#each transaction}}
+		<li class="list-group-item r-none b-l-none b-r-none">
+			<div class="clear">					
+				<a class="pull-left" data-toggle="collapse" href="#collapse-{{orderId}}" >
+					{{orderId}}
+				</a>
+				<div class="pull-right font-bold">$ {{amount}}</div>	
+				<div class="clearfix"></div>	
+			</div>		
+			<div class="clearfix"></div>					
+			<div id="collapse-{{orderId}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
+				
+			</div>
+			//<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date}}</time></small>
+		</li>
+	{{/each}}
+{{else}}
+	<li class="list-group-item r-none b-l-none b-r-none"> No Transactions </li>
+{{/if}}
 </script>

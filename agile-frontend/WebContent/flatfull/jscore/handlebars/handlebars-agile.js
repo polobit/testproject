@@ -247,6 +247,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("xero.js");
 	}
+	else if (templateName.indexOf("braintree") == 0)
+	{
+		template_relative_urls.push("brainTree.js");
+	}
 	else if (templateName.indexOf("quickbooks") == 0)
 	{
 		template_relative_urls.push("quickbooks.js");

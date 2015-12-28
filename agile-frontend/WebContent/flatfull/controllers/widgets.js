@@ -307,7 +307,7 @@ var WidgetsRouter = Backbone.Router
              * Manages Stripe widget
              */
             BrainTree : function(id) {
-               addConfigurableWidget(id, "BrainTree", "zendesk-login");
+               addConfigurableWidget(id, "BrainTree", "braintree-login");
             },
 
             /**

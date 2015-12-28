@@ -1,5 +1,6 @@
 package com.agilecrm.social;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.braintreegateway.BraintreeGateway;
@@ -18,8 +19,8 @@ public class BrainTreeUtil {
 				privateKey);
 	}
 
-	public JSONObject getTransactions(String email) {
-		JSONObject jObj = null;
+	public JSONArray getTransactions(String email) {
+		JSONArray jArray = null;
 		try {
 
 			TransactionSearchRequest request = new TransactionSearchRequest()
@@ -27,16 +28,19 @@ public class BrainTreeUtil {
 
 			ResourceCollection<Transaction> collection = gateway.transaction()
 					.search(request);
-
+			jArray = new JSONArray();
 			for (Transaction transaction : collection) {
-				System.out.println(transaction.getAmount());
-				System.out.println(transaction.getOrderId());
+				JSONObject jObj = null;
+				jObj = new JSONObject();
+				jObj.put("amount", transaction.getAmount());
+				jObj.put("orderId", transaction.getOrderId());
+				jArray.put(jObj);
 			}
 		} catch (Exception e) {
 			System.out.println("Gateway not found");
 		}
 
-		return jObj;
+		return jArray;
 	}
 
 }
