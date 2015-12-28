@@ -1101,6 +1101,12 @@ var ContactsRouter = Backbone.Router.extend({
 				
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
 
+				// Send request if count is not present
+				if(App_Contacts.contact_custom_view.collection.length > 0 && !App_Contacts.contact_custom_view.collection.models[0].attributes.count){
+					$("#contacts-count", el).html("Loading...");
+					
+				}
+
 				// To set chats and view when contacts are fetch by
 				// infiniscroll
 				//setup_tags(el);

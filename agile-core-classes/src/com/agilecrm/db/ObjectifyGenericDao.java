@@ -654,16 +654,22 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		if (result instanceof com.agilecrm.cursor.Cursor)
 		{
 
+			System.out.println("this.clazz.getSimpleName() = " + this.clazz.getSimpleName());
+			
 		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
 		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
 			    + NamespaceManager.get() + "_count");
 
-		    if (object != null)
-			agileCursor.count = (Integer) object;
+		    if (object != null){
+		    	// agileCursor.count = (Integer) object;	
+		    }
+			
 		    else
 		    {
 			long startTime = System.currentTimeMillis();
-			agileCursor.count = query.count();
+			
+				// agileCursor.count = query.count();
+			
 			long endTime = System.currentTimeMillis();
 			if ((endTime - startTime) > 15 * 1000 && cache)
 			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
