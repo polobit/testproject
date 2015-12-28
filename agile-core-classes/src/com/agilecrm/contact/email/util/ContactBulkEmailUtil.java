@@ -107,7 +107,7 @@ public class ContactBulkEmailUtil
 						
 						if (trackClicks){
 							
-							if(PushParams.YES_AND_PUSH.equals(pushParam))
+							if(PushParams.YES_AND_PUSH.toString().equals(pushParam))
 								doPush = true;
 						
 							replacedBody = EmailLinksConversion.convertLinksUsingJSOUP(replacedBody,

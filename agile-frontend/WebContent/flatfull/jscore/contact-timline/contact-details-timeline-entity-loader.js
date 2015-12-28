@@ -84,6 +84,12 @@ var timeline_entity_loader = {
 						});
 					if(App_Contacts.contactDetailView.model.get('id') == contact.id)
 					timeline_collection_view.addItems(array);
+
+					// Add open tracking
+					var emails_opened = timeline_entity_loader.getOpenedEmailsFromEmails(stats["emails"]);
+
+					if(emails_opened)
+						timeline_collection_view.addItems(emails_opened);
 				}
 			})
 		}
