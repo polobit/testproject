@@ -40,6 +40,8 @@ var WidgetsRouter = Backbone.Router
                 "FreshBooks/:id" : "FreshBooks",
                 "Stripe" : "Stripe",
                 "Stripe/:id" : "Stripe",
+                "BrainTree" : "BrainTree",
+                "BrainTree/:id" : "BrainTree",
                 "Xero" : "Xero",
                 "Xero/:id" : "Xero",
                 "QuickBooks" : "QuickBooks",
@@ -299,6 +301,13 @@ var WidgetsRouter = Backbone.Router
                             "core/api/widgets/Stripe");
                 }
 
+            },
+
+            /**
+             * Manages Stripe widget
+             */
+            BrainTree : function(id) {
+               addConfigurableWidget(id, "BrainTree", "zendesk-login");
             },
 
             /**

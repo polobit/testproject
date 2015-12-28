@@ -60,6 +60,11 @@ public class DefaultWidgets {
 				"/widgets/stripe.js", "/img/plugins/Stripe.png",
 				"/widgets/stripe-small-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
+				"BrainTree",
+				"Brain Tree enables individuals and businesses to accept payments over the internet.",
+				"/widgets/BrainTree.js", "/img/plugins/BrainTree.png",
+				"/widgets/braintree-small-logo.png", null, WidgetType.BILLING));
+		widgets.add(new Widget(
 				"HelpScout",
 				"Help Scout is a help desk for teams that insist on a delightful customer experience without exposing to ticket numbers, portals or robotic emails.",
 				"/widgets/helpscout.js", "/img/plugins/helpscout-logo.png",
@@ -109,12 +114,14 @@ public class DefaultWidgets {
 		 * , "/widgets/linkedin.js", "/img/plugins/linkedin.png",
 		 * "/widgets/linkedin-logo-small.png", null, WidgetType.SOCIAL));
 		 */
-//		widgets.add(new Widget("Bria", "Make and receive calls from your contacts using your Bria Account.",
-//
-//		"/widgets/bria.js", "/img/plugins/bria-call.png", "/img/plugins/bria-call.png", null,
-//
-//
-//		WidgetType.CALL));
+		// widgets.add(new Widget("Bria",
+		// "Make and receive calls from your contacts using your Bria Account.",
+		//
+		// "/widgets/bria.js", "/img/plugins/bria-call.png",
+		// "/img/plugins/bria-call.png", null,
+		//
+		//
+		// WidgetType.CALL));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);

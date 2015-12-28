@@ -1,0 +1,33 @@
+<script id="braintree-login-template" type="text/html">
+	<div>
+		<form  id="braintree_login_form" name="braintree_login_form" method="post">
+	    	<fieldset>
+				<p>Get the Transactions from BrainTree</p>
+				
+				<label>Enter your BrainTree details </label>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="url" id="merchant_id" placeholder="merchant id" class="input-medium required widget_input_box form-control" value="" name="merchant_id">
+						</input>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="public_key" class="input-medium required widget_input_box form-control"  placeholder="public key" value="" name="public_key">
+						</input>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="private_key" class="input-medium required widget_input_box form-control"  placeholder="Private Key" value="" name="private_key">
+						</input>
+					</div>
+				</div>	
+				<div class="text-center">		
+				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
+				</div>
+			 </fieldset>
+	    </form>
+	</div>
+</script>
