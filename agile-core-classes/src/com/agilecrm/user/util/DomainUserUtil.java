@@ -701,19 +701,5 @@ public class DomainUserUtil
 	}
     }
     
-    public static void removeOwner(DomainUser currentUser){
-    	DomainUser owner = getDomainOwner(NamespaceManager.get());
-    	if(currentUser.id != null && currentUser.id.equals(owner.id))
-    		return;
-    	owner.is_account_owner = false;
-    	try {
-			owner.save();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			System.out.println("Error occured while removing owner");
-			System.out.println(ExceptionUtils.getMessage(e));
-			e.printStackTrace();
-		}
-    }
 
 }
