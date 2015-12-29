@@ -99,9 +99,9 @@
                             <div class="checkbox">
 <label class="i-checks i-checks-sm">
                                 {{#if is_account_owner}}
-                                <input type="checkbox" name='is_account_owner' disabled="disabled" value='true'/><i></i>
+                                <input type="checkbox" id="owner" name='is_account_owner' disabled="disabled" value='true'/><i></i>
                                 {{else}}
-                                <input type="checkbox" name='is_account_owner' value='true'/><i></i> 
+                                <input type="checkbox" id="owner" name='is_account_owner' value='true'/><i></i> 
                                 {{/if}}
                                 Owner<br/><div style="margin-left:6px;"><small>Transfer ownership</small></div>
                             </label>
@@ -110,7 +110,7 @@
                     </div>
 </div>
 {{else}}
-<input type="hidden" name='is_account_owner' value=''/><i></i> 
+<input type="hidden" id="owner" name='is_account_owner' value=''/><i></i> 
 {{/is_domain_owner}}
 <div class="col-sm-offset-3 col-md-9 p-l-xs">
 					<div id="accordion">
@@ -340,7 +340,7 @@
 
     				<div class="form-actions">
 						<a type="reset" href='#users' class="btn btn-default btn-sm">Cancel</a>
-               			<button type="submit" class="save btn btn-sm btn-primary">Save Changes</button>
+               			<button type="submit" class="save saveAuth btn btn-sm btn-primary">Save Changes</button>
              			</div>
 </div>
 </div>
@@ -349,5 +349,26 @@
     	</div>
     </div>
     </div>
+    <div class="modal" data-backdrop="static" id="saveUserAuthentication"></div>
+    </div>
+</script>
+
+<script id="conform-owner-change-model-template" type="text/html">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">x</button>
+                <h3 class="modal-title">Transfer Ownership</h3>
+            </div>
+            <div class="modal-body help-text">
+                <p>Are you sure you want to transfer the ownership to the selected user?</p>
+                <p>Transferring ownership will disable all privileges for you and will allow the selected user to receive the same.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-sm btn-default">No</a>
+                <a href="#" data-dismiss="modal" class="saveAuthConform btn btn-sm btn-primary">Yes</a>
+            </div>
+        </div>
     </div>
 </script>

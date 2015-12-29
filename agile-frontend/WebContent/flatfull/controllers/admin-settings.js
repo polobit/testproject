@@ -209,7 +209,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					}
 					location.reload(true);
 				});
-			} });
+			}, saveAuth : function(el){
+				if(CURRENT_DOMAIN_USER.is_account_owner && $("#userForm", el).find("#owner:checked").length == 1 && $("#userForm", el).find("#eaddress").val() != CURRENT_DOMAIN_USER.email)
+				{
+					$("#saveUserAuthentication", el).html(getTemplate("conform-owner-change-model",{}));
+					$("#saveUserAuthentication", el).modal("show");
+					return true;
+				}
+				else{
+					return false;
+				}
+			}  });
 
 			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
@@ -291,6 +301,16 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			{
 
 				bindAdminChangeAction(el, view.model.toJSON());
+			}, saveAuth : function(el){
+				if(CURRENT_DOMAIN_USER.is_account_owner && $("#userForm", el).find("#owner:checked").length == 1 && $("#userForm", el).find("#eaddress").val() != CURRENT_DOMAIN_USER.email)
+				{
+					$("#saveUserAuthentication", el).html(getTemplate("conform-owner-change-model",{}));
+					$("#saveUserAuthentication", el).modal("show");
+					return true;
+				}
+				else{
+					return false;
+				}
 			} });
 
 			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);

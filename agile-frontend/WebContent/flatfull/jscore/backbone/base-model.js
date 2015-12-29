@@ -43,6 +43,7 @@ var Base_Model_View = Backbone.View
 			 */
 			events : {
 				"click .save" : "save",
+				"click .saveAuthConform" : "save",
 				"click .delete" : "deleteItem"
 			},
 
@@ -189,6 +190,19 @@ var Base_Model_View = Backbone.View
 			 */
 			save : function(e) {
 				e.preventDefault();
+
+				// Check if target contains before_save class
+				// If exist call saveAuth function
+				if($(e.currentTarget).hasClass("saveAuth"))
+				{
+					var saveAuth = this.options.saveAuth;
+					if (saveAuth && typeof (saveAuth) === "function") {
+						var isReturn = saveAuth(this.el);
+						if(isReturn)
+							return;
+					}
+
+				}
 				
 				// Saves tinymce content back to 
 				// textarea before form serialization
@@ -439,7 +453,7 @@ var Base_Model_View = Backbone.View
 
 										// Appends error info to form actions
 										// block.
-										$(e.currentTarget).closest(".form-actions", this.el).append(
+										$form.find('.save').closest(".form-actions", this.el).append(
 												$save_info);
 
 										// Hides the error message after 3
