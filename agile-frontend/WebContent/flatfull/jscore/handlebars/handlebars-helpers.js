@@ -1275,6 +1275,23 @@ $(function()
 	});
 
 	/**
+	 * Counts the existence of property name which occurred multiple times.
+	 */
+	Handlebars.registerHelper('property_json_is_not_empty', function(name, properties, options)
+	{
+
+        var value = getPropertyValue(properties, name);
+        try{
+        	value = JSON.parse(value);
+        }catch(e){}
+
+		if (Object.keys(value).length > 0)
+			return options.fn(this);
+		
+		return options.inverse(this);
+	});
+
+	/**
 	 * returns online scheduling url of current user
 	 */
 	Handlebars.registerHelper('online_schedule_URL', function()

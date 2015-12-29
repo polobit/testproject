@@ -162,7 +162,7 @@
  
    <div class="new-task-footer">
 <div class="pull-left w-half text-ellipsis text-muted" style="margin-left:35px;">
-     <i class="fa fa-clock-o text-muted"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time>
+     <i class="fa fa-clock-o text-muted" style="{{#unless due}}visibility: hidden;{{/unless}}"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time>
 </div>    
 <div class="pull-right"> 
  <div class="task-actions">

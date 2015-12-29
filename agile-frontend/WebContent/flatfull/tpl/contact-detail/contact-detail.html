@@ -518,8 +518,9 @@
 									{{/getContactCustomPropertiesExclusively}}
 									
 									<div class="clearfix"></div>
-									{{#property_is_exists "address" properties}}
-<div class="m-t-sm"><small class="text-xs text-muted">Location</small></div>
+									{{#property_is_exists "address" properties}} 
+									 {{#property_json_is_not_empty "address" properties}}
+									<div class="m-t-sm"><small class="text-xs text-muted">Location</small></div>
 										<div >{{#address_Element properties}}{{/address_Element}}</div>
                                         <div class="clearfix"></div>
 										
@@ -534,6 +535,7 @@
 										</div> 
                            	            <div class="clearfix"></div> 
                                      </div>                                       
+                                     {{/property_json_is_not_empty}}
 									{{/property_is_exists}}
 
 							
