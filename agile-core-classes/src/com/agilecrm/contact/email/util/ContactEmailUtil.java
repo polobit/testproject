@@ -140,14 +140,14 @@ public class ContactEmailUtil
 		Set<String> toEmailSet = getToEmailSet(to);
 
 		// Personal Email open tracking id
-		long openTrackerId = System.currentTimeMillis();
+		contactEmailWrapper.setTrackerId(String.valueOf(System.currentTimeMillis()));
 		
 		// Appends tracking image to body if only one email. It is not
 		// possible to append image at the same time to show all given
 		// emails to the recipient.
 		if (toEmailSet.size() == 1  && contactEmailWrapper.isTrack_clicks())
 		{
-			body = EmailUtil.appendTrackingImage(body, null, String.valueOf(openTrackerId));
+			body = EmailUtil.appendTrackingImage(body, null, contactEmailWrapper.getTrackerId());
 
 			// Get contactId for link tracking
 			for(String email: toEmailSet)
@@ -160,7 +160,7 @@ public class ContactEmailUtil
 				if(contactEmailWrapper.getPush_param().equals(PushParams.YES_AND_PUSH))
 					doPush = true;
 				
-				body = EmailLinksConversion.convertLinksUsingJSOUP(body, contact.id.toString(), null, doPush);
+				body = EmailLinksConversion.convertLinksUsingJSOUP(body, contact.id.toString(), null, contactEmailWrapper.getTrackerId(), doPush);
 			}
 		}
 
@@ -176,7 +176,7 @@ public class ContactEmailUtil
 		if (contact != null)
 		{
 			saveContactEmail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), emailBody, signature, contact.id,
-					openTrackerId, documentIds, contactEmailWrapper.getAttachment_name(), contactEmailWrapper.getAttachment_url());
+					Long.parseLong(contactEmailWrapper.getTrackerId()), documentIds, contactEmailWrapper.getAttachment_name(), contactEmailWrapper.getAttachment_url());
 			
 			contact.setLastEmailed(System.currentTimeMillis() / 1000);
 			contact.update();
@@ -199,7 +199,7 @@ public class ContactEmailUtil
 				if (contact != null)
 				{
 					saveContactEmail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), emailBody, signature, contact.id,
-							openTrackerId, documentIds, contactEmailWrapper.getAttachment_name(), contactEmailWrapper.getAttachment_url());
+							Long.parseLong(contactEmailWrapper.getTrackerId()), documentIds, contactEmailWrapper.getAttachment_name(), contactEmailWrapper.getAttachment_url());
 
 					contact.setLastEmailed(System.currentTimeMillis() / 1000);
 					contact.update();

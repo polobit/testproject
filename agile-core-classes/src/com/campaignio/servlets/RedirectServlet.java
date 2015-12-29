@@ -2,6 +2,7 @@ package com.campaignio.servlets;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.email.ContactEmail;
+import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.NamespaceUtil;
@@ -53,6 +56,7 @@ public class RedirectServlet extends HttpServlet
 	String campaignId = req.getParameter("c");
 	String originalURL = req.getParameter("u");
 	String push = req.getParameter("p");
+	String personalEmailTrackerId = req.getParameter("t");
 
 	// To get namespace
 	String url = req.getRequestURL().toString();
@@ -144,12 +148,27 @@ public class RedirectServlet extends HttpServlet
 	    // For personal emails campaign-id is blank
 	    if (StringUtils.isBlank(campaignId) && contact != null)
 	    {
-		TrackClickUtil.showEmailClickedNotification(contact, null, originalURL);
+	    	
+	    	// Save link clicked time
+	    	if(StringUtils.isNotBlank(personalEmailTrackerId))
+	    	{
+	    		List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmailsBasedOnTrackerId(Long
+	    			    .parseLong(personalEmailTrackerId));
 
-		// Link clicked trigger
-		EmailTrackingTriggerUtil.executeTrigger(subscriberId, null, originalURL, Type.EMAIL_LINK_CLICKED);
-
-		return;
+    		    for (ContactEmail contactEmail : contactEmails)
+    		    {
+	    			contactEmail.is_email_opened = true;
+	    			contactEmail.email_link_clicked_at = System.currentTimeMillis() / 1000;
+	    			contactEmail.save();
+    		    }
+	    	}
+	    	
+			TrackClickUtil.showEmailClickedNotification(contact, null, originalURL);
+	
+			// Link clicked trigger
+			EmailTrackingTriggerUtil.executeTrigger(subscriberId, null, originalURL, Type.EMAIL_LINK_CLICKED);
+	
+			return;
 	    }
 
 	    // Get Workflow to add to log (campaign name) and show notification

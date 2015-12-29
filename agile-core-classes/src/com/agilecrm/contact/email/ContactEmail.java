@@ -117,6 +117,13 @@ public class ContactEmail
 	 **/
 	@NotSaved(IfDefault.class)
 	public long email_opened_at = 0L;
+	
+	/**
+	 * To store email link clicked time
+	 **/
+	@NotSaved(IfDefault.class)
+	public long email_link_clicked_at = 0L;
+	
 
 	/**
 	 * who sent this mail. as per subramanya requirement we are storing user id

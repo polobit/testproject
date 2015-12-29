@@ -173,6 +173,7 @@ public class ContactEmailWrapper extends Cursor
     private String trackerId;
     private String is_email_opened;
     private String email_opened_at;
+    private long email_link_clicked_at;
     private String user_id_from_email;
     private List<String> attachment_ids;
     
@@ -279,6 +280,16 @@ public class ContactEmailWrapper extends Cursor
 	public void setPush_param(PushParams pushParam)
 	{
 		this.push_param = pushParam;
+	}
+
+	public long getEmail_link_clicked_at()
+	{
+		return email_link_clicked_at;
+	}
+
+	public void setEmail_link_clicked_at(long email_link_clicked_at)
+	{
+		this.email_link_clicked_at = email_link_clicked_at;
 	}
 
 }
