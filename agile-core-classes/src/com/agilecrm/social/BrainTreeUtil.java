@@ -1,5 +1,7 @@
 package com.agilecrm.social;
 
+import java.util.Calendar;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,28 +21,31 @@ public class BrainTreeUtil {
 				privateKey);
 	}
 
-	public JSONArray getTransactions(String email) {
+	public JSONArray getTransactions(String email) throws Exception {
 		JSONArray jArray = null;
-		try {
 
-			TransactionSearchRequest request = new TransactionSearchRequest()
-					.customerEmail().is(email);
+		TransactionSearchRequest request = new TransactionSearchRequest()
+				.customerEmail().is(email);
 
-			ResourceCollection<Transaction> collection = gateway.transaction()
-					.search(request);
-			jArray = new JSONArray();
-			for (Transaction transaction : collection) {
-				JSONObject jObj = null;
-				jObj = new JSONObject();
-				jObj.put("amount", transaction.getAmount());
-				jObj.put("orderId", transaction.getOrderId());
-				jArray.put(jObj);
-			}
-		} catch (Exception e) {
-			System.out.println("Gateway not found");
+		ResourceCollection<Transaction> collection = gateway.transaction()
+				.search(request);
+		jArray = new JSONArray();
+		for (Transaction transaction : collection) {
+			JSONObject jObj = null;
+
+			jObj = new JSONObject();
+			jObj.put("id", transaction.getId());
+			jObj.put("purchaseId", transaction.getPurchaseOrderNumber());
+			jObj.put("amount", transaction.getAmount());
+			jObj.put("orderId", transaction.getOrderId());
+			jObj.put("status", transaction.getStatus());
+			jObj.put("taxAmount", transaction.getTaxAmount());
+
+			Calendar calendar = transaction.getCreatedAt();
+			jObj.put("createdDate", calendar.getTimeInMillis());
+
+			jArray.put(jObj);
 		}
-
 		return jArray;
 	}
-
 }

@@ -24,7 +24,7 @@ function getTransactions(callback, contact_id){
 
 	}, function error(data){
 		console.log("Brain tree failed ");
-		console.log(data);
+		$('#BrainTree').html('<div class="wrapper-sm">Please Configure Widget Properly</div>');
 	});
 }
 
@@ -85,4 +85,12 @@ function startBrainTreeWidget(contact_id){
 		loadTransaction(0);
 	}, contact_id);
 
+	$("#widgets").off("click", "#braintree_trans_show_more");
+	$("#widgets").on("click", "#braintree_trans_show_more", function(e)
+	{
+		e.preventDefault();
+		var offSet = transactionCount * 5;
+		loadTransaction(offSet);
+		++transactionCount;
+	});
 }

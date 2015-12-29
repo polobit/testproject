@@ -35,19 +35,32 @@
 <script id="braintree-transactions-template" type="text/html">
 {{#if transaction.length}}
 	{{#each transaction}}
-		<li class="list-group-item r-none b-l-none b-r-none">
+		<li class="list-group-item r-none b-l-none b-r-none" style="width:249px;">
 			<div class="clear">					
-				<a class="pull-left" data-toggle="collapse" href="#collapse-{{orderId}}" >
-					{{orderId}}
+				<a class="pull-left c-p" data-toggle="collapse" href="#collapse-{{id}}" >
+					#{{orderId}}
 				</a>
-				<div class="pull-right font-bold">$ {{amount}}</div>	
+				<div class="pull-right">$ {{amount}}</div>	
+				<div class="clearfix"></div>	
+				<div class="pull-left">Status</div>
+				<div class="pull-right text-ellipsis text-right" style="width: 165px;" title="{{status}}">{{status}}</div>
 				<div class="clearfix"></div>	
 			</div>		
 			<div class="clearfix"></div>					
-			<div id="collapse-{{orderId}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
-				
+			<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
+				<div class="pull-left">Tax Amount</div>
+				<div class="pull-right">{{taxAmount}}</div>
+				<div class="clearfix"></div>
+
+				<div class="pull-left">Order Id</div>
+				<div class="pull-right">{{orderId}}</div>
+				<div class="clearfix"></div>
+
+				<div class="pull-left">Purchase Id</div>
+				<div class="pull-right">{{purchaseId}}</div>
+				<div class="clearfix"></div>								
 			</div>
-			//<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date}}</time></small>
+			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" createdDate}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" createdDate}}</time></small>
 		</li>
 	{{/each}}
 {{else}}
