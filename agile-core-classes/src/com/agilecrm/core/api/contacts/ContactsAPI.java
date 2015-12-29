@@ -945,7 +945,7 @@ public class ContactsAPI
 	{
 	    return ContactUtil.searchContactByPhoneNumber(phoneNumber);
 	}
-   }
+    }
 
     /**
      * Add score to the contact. Searches contact based on the email sent and
@@ -1530,6 +1530,88 @@ public class ContactsAPI
 	    contact.save();
 
 	return contact;
+    }
+
+    /**
+     * Delete the existing tags to a contact (Partial update)
+     * 
+     * @param tagJson
+     * 
+     * @return tag list
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
+     * @throws JSONException
+     * @throws JsonParseException
+     */
+    @Path("/delete/tags")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public ArrayList<Tag> deleteTagsById(String tagJson) throws JSONException, JsonParseException,
+	    JsonMappingException, IOException
+    {
+	// Get data and check if id is present
+	JSONObject obj = new JSONObject(tagJson);
+	Tag[] tagsArray = null;
+	ObjectMapper mapper = new ObjectMapper();
+	if (!obj.has("id"))
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Please check id value passed.").build());
+	}
+
+	// Search contact if id is present else throw exception
+	Contact contact = ContactUtil.getContact(obj.getLong("id"));
+	if (contact == null)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Contact is not availabe for given id.").build());
+	}
+
+	// Iterate data by keys ignore email key value pair
+	Iterator<?> keys = obj.keys();
+
+	while (keys.hasNext())
+	{
+	    String key = (String) keys.next();
+
+	    if (key.equals("tags"))
+	    {
+		String tagString = obj.getString(key);
+		System.out.println(tagString.length() == 0);
+		if (StringUtils.isEmpty(tagString))
+		{
+		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry, tag input is empty").build());
+		}
+		JSONArray tagsJSONArray = new JSONArray(tagString);
+		tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(), Tag[].class);
+		if (tagsArray.length == 0)
+		{
+		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry, tag input is empty").build());
+		}
+	    }
+
+	}
+
+	if (tagsArray != null)
+	{
+	    try
+	    {
+		contact.removeTags(tagsArray, true);
+
+	    }
+	    catch (WebApplicationException e)
+	    {
+		return null;
+	    }
+	}
+	else
+	    return null;
+
+	return contact.getTagsList();
     }
 
 }
