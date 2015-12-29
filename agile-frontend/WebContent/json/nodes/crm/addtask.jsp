@@ -111,20 +111,19 @@
                  
                 String timeZone = UserPrefsUtil.getUserPrefs(user).timezone;
                 
-                if(StringUtils.isEmpty(timeZone))
-                	
-                	out.println("\""+"*Select time zone"+"\":\""+"empty_timezone"+"\","); 
+                timeZone = (timeZone == null) ? "UTC" : timeZone;
                 
                 for(int i=0; i< allTimeZones.length; i++){
-                    String option= allTimeZones[i];
                     
-                    if( !StringUtils.isEmpty(timeZone) && timeZone.equals(option))
-                    	option = "*" + option;
+                	String key = allTimeZones[i], value = allTimeZones[i];
+                    
+                    // To get prefs timezone selected
+                    key = (key.equals(timeZone)) ? "*"+key : key;
                     
                     if( i == allTimeZones.length-1)
-                    	out.println("\""+option+"\":\""+option+"\"");
+                    	out.println("\""+key+"\":\""+value+"\"");
                     else
-                    	out.println("\""+option+"\":\""+option+"\",");
+                    	out.println("\""+key+"\":\""+value+"\",");
                 }%>
             },
             "fieldType": "timezone",
