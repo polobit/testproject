@@ -24,7 +24,7 @@ function getTransactions(callback, contact_id){
 
 	}, function error(data){
 		console.log("Brain tree failed ");
-		$('#BrainTree').html('<div class="wrapper-sm">Please Configure Widget Properly</div>');
+		$('#Braintree').html('<div class="wrapper-sm">Please Configure Widget Properly</div>');
 	});
 }
 
@@ -42,27 +42,27 @@ function loadTransaction(offSet){
 		result.transaction = BrainTreeObj.transaction.slice(0, 5);
 
 		getTemplate('braintree-transactions', result, undefined, function(template){					
-			$('#BrainTree').html(template);
+			$('#Braintree').html(template);
 		},null);
 
 		if(BrainTreeObj.transaction.length > 5){
-			$('#BrainTree').append(showMoreBraintreeTrans);
+			$('#Braintree').append(showMoreBraintreeTrans);
 		}
 	}else if(offSet > 0  && (offSet+5) < BrainTreeObj.transaction.length){
 		var result = {};
 		result.transaction = BrainTreeObj.transaction.slice(offSet, (offSet+5));
 		$('.braintree_trans_show_more').remove();
-		$('#BrainTree').apped(getTemplate('braintree-transactions', result));
-		$('#BrainTree').append(showMoreBraintreeTrans);
+		$('#Braintree').apped(getTemplate('braintree-transactions', result));
+		$('#Braintree').append(showMoreBraintreeTrans);
 	}else{
 		var result = {};
 		result.transaction = BrainTreeObj.transaction.slice(offSet, BrainTreeObj.transaction.length);
 		$('.braintree_trans_show_more').remove();
-		$('#BrainTree').append(getTemplate('braintree-transactions', result));
+		$('#Braintree').append(getTemplate('braintree-transactions', result));
 	}
 }
 
-function startBrainTreeWidget(contact_id){
+function startBraintreeWidget(contact_id){
 	console.log("brain tree loaded : "+contact_id);
 
 	BrainTreeObj = {};
@@ -72,7 +72,7 @@ function startBrainTreeWidget(contact_id){
 
 	var braintree_widget = agile_crm_get_widget(BRAINTREE_PLUGIN_NAME);
 
-	console.log('In BrainTree');
+	console.log('In Braintree');
 	console.log(braintree_widget);
 
 	BRAINTREE_Plugin_Id = braintree_widget.id;
