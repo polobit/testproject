@@ -307,7 +307,7 @@ function _getMessageSkype(message, callback){
 		callback("");
 		
 		if(globalCall.callStatus && globalCall.callStatus == "Connected"){
-			globalCall.callStatus = "Completed";
+			globalCall.callStatus = "Answered";
 		}else if(globalCall.callStatus && globalCall.callStatus == "Connecting"){
 			globalCall.callStatus = "Busy";
 		}else if(globalCall.callStatus == "Failed" || globalCall.callStatus == "REFUSED" || globalCall.callStatus == "Incoming" || globalCall.callStatus == "Missed"){
@@ -361,7 +361,7 @@ function saveCallNoteSkype(){
 	var id;
 	var desc;
 	resetglobalCallForActivityVariables();
-	if(callStatus == "Completed"){
+	if(callStatus == "Answered"){
 		desc = "Done";
 	}
 	
@@ -375,7 +375,7 @@ function saveCallNoteSkype(){
 	    	id = responseJson.id;
 	    	contact = getContact(id);
 	    	contact_name = getContactName(contact);
-	    	if(callStatus == "Completed"){
+	    	if(callStatus == "Answered"){
 				var el = $('#noteForm');
 			 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ id +'">'+contact_name+'</li>');
 			 	$("#noteForm #subject").val(noteSub);
@@ -394,7 +394,7 @@ function saveCallNoteSkype(){
 		var id = App_Contacts.contactDetailView.model.get('id');
 		contact = agile_crm_get_contact();
 		contact_name = getContactName(contact);
-		if( callStatus == "Completed"){
+		if( callStatus == "Answered"){
 			var el = $('#noteForm');
 		 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ id +'">'+contact_name+'</li>');
 		 	$("#noteForm #subject").val(noteSub);

@@ -44,20 +44,20 @@
 {{#if this}}
 
 		{{#each this}}          
-			<li class="list-group-item b-n bg-light-gray m-xs">
+			<li class="list-group-item r-none b-l-none b-r-none">
 					{{#if_equals duration "0"}}
-						<i class="icon pull-left icon-phone text-white text-md m-r-xs m-t-xxs v-middle twilio-widget-unanswer"></i>
+						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-unanswer"></i>
 					{{else}}
-						<i class="icon pull-left icon-phone text-white text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
+						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
 					{{/if_equals}}
 				
 <div class="pull-left text-sm">{{#if_equals duration "0"}}Call unaswered{{else}}Call connected{{/if_equals}}</div>
 				
-<div class="pull-right"><span class="label bg-light dk text-tiny">{{#is_string duration}}{{toProperFormat duration}}{{else}}0s{{/is_string}}</span></div>
+<div class="pull-right">{{#is_string duration}}{{toProperFormat duration}}{{else}}0s{{/is_string}}</div>
 				
 <div class="clearfix"></div>
 	
-<small class="text-muted block pos-rlt" style="top:-3px;margin-left:21px;"><time class="time-ago pull-left" datetime="{{convert_toISOString startTime}}">{{toLocalTimezone startTime}}</time></small>
+<small class="text-muted block pos-rlt"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{convert_toISOString startTime}}">{{toLocalTimezone startTime}}</time></small>
 				
 <div class="clearfix"></div>
 			</li>

@@ -374,7 +374,7 @@ function handleCallRequest(message)
 	}
 	else if ((message || {}).callType == "Skype")
 	{
-		/*
+		
 		// start from here
 		if (message.state == "lastCallDetail")
 		{
@@ -440,7 +440,7 @@ function handleCallRequest(message)
 		}
 		showSkypeCallNoty(message);
 		return;
-	*/
+	
 		}
 }
 
@@ -489,7 +489,7 @@ function setTimerToCheckDialing(name)
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
 		}
-	}, 15000);
+	}, 20000);
 }
 
 /**

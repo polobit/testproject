@@ -301,7 +301,7 @@ function _getMessageBria(message, callback){
 	}else if(state == "ended"){
 		callback("");
 		if(globalCall.callStatus && globalCall.callStatus == "Connected"){
-			globalCall.callStatus = "Completed";
+			globalCall.callStatus = "Answered";
 		}else if(globalCall.callStatus && globalCall.callStatus == "Connecting"){
 			globalCall.callStatus = "Busy";
 		}else if(globalCall.callStatus && globalCall.callStatus == "Ringing"){
@@ -338,7 +338,7 @@ function saveCallNoteBria(){
 	var desc;
 	resetglobalCallForActivityVariables();
 	
-	if(callStatus == "Completed"){
+	if(callStatus == "Answered"){
 		desc = "Done";
 	}
 	
@@ -351,7 +351,7 @@ function saveCallNoteBria(){
 	    	}
 	    	contact = responseJson;
 	    	contact_name = getContactName(contact);
-	    	if(callStatus == "Completed"){
+	    	if(callStatus == "Answered"){
 				var el = $('#noteForm');
 			 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+contact_name+'</li>');
 			 	$("#noteForm #subject").val(noteSub);
@@ -368,7 +368,7 @@ function saveCallNoteBria(){
 		var id = App_Contacts.contactDetailView.model.get('id');
 		contact = agile_crm_get_contact();
 		contact_name = getContactName(contact);
-		if( callStatus == "Completed"){
+		if( callStatus == "Answered"){
 			var el = $('#noteForm');
 		 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ id +'">'+contact_name+'</li>');
 		 	$("#noteForm #subject").val(noteSub);
