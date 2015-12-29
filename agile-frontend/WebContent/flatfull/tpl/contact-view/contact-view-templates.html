@@ -318,7 +318,7 @@
         					<div class="pull-left"><i class="icon icon-call-end text-sm v-middle"></i></div>
         					{{#multiple_Property_Element_List "phone" properties id}}
         					{{#each this}}
-       					<div class="text-ellipsis m-l-md" style="width:15em;">
+       					<div class="text-ellipsis m-l-md" style="width:13em;">
     		<a class="text-cap">{{value}}</a>
         </div>
         {{/each}}
@@ -349,7 +349,7 @@
 								{{/property_is_exists}}
 
 								<div class="m-t-xs">
-								 <div id="added-tags" class="text-ellipsis" style="width:15em;"> 	
+								 <div id="added-tags" class="text-ellipsis pull-left" style="width:13em;"> 	
 				{{#each tags}}
 	    			<span class="label bg-light dk text-tiny">{{this}}</span>	
 							{{/each}}
@@ -363,8 +363,8 @@
 							</div>
 						</div>
 						{{#canEditContact owner.id}}
-			<a href="#" id="add-tags" rel="tooltip"
-							data-original-title="addtag" data-placement="top" class="text-xs text-info"> <i class="fa fa-plus"></i><span >Tag</span></a>
+			<div class="pull-left"><a href="#" id="add-tags" rel="tooltip"
+							data-original-title="addtag" data-placement="top" class="text-xs text-info pull-left"> <i class="fa fa-plus"></i><span >Tag</span></a></div>
 						{{/canEditContact}}
 
 						

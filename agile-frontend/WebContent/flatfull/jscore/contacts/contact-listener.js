@@ -3,19 +3,9 @@ function contactListener()
 {
 	$('#contacts-custom-view-model-list').off('mouseenter','tr');
 		$('#contacts-custom-view-model-list').on('mouseenter','tr',function(e){
-			//e.stopPropagation();
-			var that=$(this);
-			//var top=e.pageY-40;
-			var left=e.pageX-30;
-			var html=""
-			$(this).popover(
-        {
-            "rel": "popover",
-            "trigger": "manual",
-            "placement": "top",
-            "html": "true",
-            "content": "hello",
-            });
+			
+		
+            var that=$(this);
 
 
  
@@ -25,15 +15,23 @@ function contactListener()
 						 		
 				if (!insidePopover)	{
 		
-					 $(that).popover('show');
+					 //$(that).popover('show');
 		 App_Contacts.contact_popover=$(that).data();
 		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
 						if(!template_ui)
 							  return;
-						$('.popover').html($(template_ui));	
-							 $('.popover').css('left',e.pageX+"px");
-							 var top=e.pageY-30- $('.popover').height();
-							 $('.popover').css('top',top+"px");
+								$(that).popover(
+        {
+            "rel": "popover",
+            "trigger": "manual",
+            "placement": "top",
+            "html": "true",
+            "content": template_ui,
+            });
+							//$(that).attr('data-content',template_ui);
+							$(that).popover('show');
+						//$('.popover').html($(template_ui));	
+							 $('.popover').css('left',(e.pageX-$('.popover').width())+"px");
 						contact_list_starify('.popover');
 						attachEvents(that,App_Contacts.contact_popover);
 					});
@@ -228,7 +226,7 @@ $('.popover').on('click', '#add-tags', function(e){
 	e.preventDefault();
 		  var that=$(this);
 		$(e.currentTarget).css("display", "none");
-		$("#addTagsForm").css("display", "block");
+		$("#addTagsForm").css("display", "table");
 		$("#addTags").focus();
 		setup_tags_typeahead(function(e){
     				json = Contact_collection.toJSON();
