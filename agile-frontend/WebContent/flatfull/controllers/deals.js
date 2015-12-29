@@ -34,6 +34,11 @@ var DealsRouter = Backbone.Router.extend({
 			}
 		}*/
 		$('#content').html("<div id='opportunity-listners'>&nbsp;</div>");
+		
+		//fix for mobile view showing only list view 
+		if(agile_is_mobile_browser())
+			createCookie("agile_deal_view", "list_view"); 
+		
 		// Depending on cookie shows list or milestone view
 		if (!_agile_get_prefs("agile_deal_view"))
 		{

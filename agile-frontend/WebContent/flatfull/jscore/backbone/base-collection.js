@@ -310,6 +310,7 @@ var Base_Collection_View = Backbone.View
 					 */
 					onFetch : function()
 					{
+						
 						var element="table"; 
 						if (that.options.scroll_symbol)
 							element="section";

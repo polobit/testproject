@@ -1,7 +1,7 @@
 <script id="deal-notes-collection-template" type="text/html">
 {{#unless this.length}}
         <div class="wrapper p-t-none">
-            <div class="slate-content">
+            <div class="slate-content mobile-pad-content">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="/{{getS3ImagePath 'img/clipboard.png'}}" />
                 </div>
@@ -40,7 +40,7 @@
 	</div>
 	
 	<div class="pull-left rightThumbView pos-rlt">
-	<div class="pull-left contact-title-dynamic"><a class="text-md text-cap custom-color">{{subject}}</a></div>
+	<div class="pull-left contact-title-dynamic text-ellipsis"><a class="text-md text-cap custom-color">{{subject}}</a></div>
 	<div class="pull-right">
 	<small class="edit-hover  text-muted"> 
 			<i class="fa fa-clock-o m-r-xs "></i>
@@ -68,7 +68,7 @@
            	{{/if}}
        	{{/each}}
 		</div>
-		<div class="pos-abs pos-r-0 pos-b-0" id="deal-hover-actions">
+		<div class="pos-abs pos-r-0 pos-b-n-sm" id="deal-hover-actions">
 		<span class="actions">
 <a title="Edit"  data="{{id}}" data-toggle="modal" class="deal-edit-note c-p text-l-none-hover p-r-sm"> <i class="icon-pencil"></i> </a>
             <a title="Delete" class="c-p text-l-none-hover"><span class="activity-delete icon-trash inline"  id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
