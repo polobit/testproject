@@ -213,6 +213,10 @@ public class Note extends Cursor
 			this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id.toString())));
 	}
 
+	// Store Created Time
+	if (created_time == 0L)
+	    created_time = System.currentTimeMillis() / 1000;
+		
 	/**
 	 * Commented because not to fill AgileUser as owner for new notes.
 	 */
@@ -233,10 +237,7 @@ public class Note extends Cursor
 
 	// Saves domain user key
 	domain_owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
-
-	// Store Created Time
-	if (created_time == 0L)
-	    created_time = System.currentTimeMillis() / 1000;
+	
     }
 
     /**
