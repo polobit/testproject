@@ -111,7 +111,7 @@ public class ContactBulkEmailUtil
 								doPush = true;
 						
 							replacedBody = EmailLinksConversion.convertLinksUsingJSOUP(replacedBody,
-										contact.id.toString(), null, doPush);
+										contact.id.toString(), null, String.valueOf(openTrackerId), doPush);
 
 							replacedBody = EmailUtil.appendTrackingImage(replacedBody, null, String.valueOf(openTrackerId));
 						}
