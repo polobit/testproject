@@ -7,6 +7,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
 import com.agilecrm.core.api.ObjectMapperProvider;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -39,9 +40,10 @@ public abstract class CSVImporter<T> implements CSVImportable
     private InputStream blobStream;
     protected int currentEntityCount;
     protected final Class<T> clazz;
+    protected ImportStatusDAO importDAO;
 
     public CSVImporter(String domain, BlobKey blobKey, Long domainUserId, String entityMapper, Class<T> clazz,
-	    int currentEntityCount)
+	    int currentEntityCount, ImportStatusDAO importDAO)
     {
 	this.domain = domain;
 	this.blobKey = blobKey;
@@ -49,6 +51,7 @@ public abstract class CSVImporter<T> implements CSVImportable
 	this.clazz = clazz;
 	this.entityMapper = entityMapper;
 	this.currentEntityCount = currentEntityCount;
+	this.importDAO = importDAO;
     }
 
     protected T getMapperEntity() throws JsonParseException, JsonMappingException, IOException

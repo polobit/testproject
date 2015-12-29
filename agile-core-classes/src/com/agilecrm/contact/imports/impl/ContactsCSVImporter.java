@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.imports.CSVImporter;
+import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.util.CSVUtil;
@@ -18,9 +19,9 @@ public class ContactsCSVImporter extends CSVImporter<Contact>
     private static final long serialVersionUID = 1L;
 
     public ContactsCSVImporter(String domain, BlobKey blobKey, Long domainUseId, String entityMapper,
-	    Class<Contact> contactClass, int currentEntityCount)
+	    Class<Contact> contactClass, int currentEntityCount, ImportStatusDAO importDAO)
     {
-	super(domain, blobKey, domainUseId, entityMapper, contactClass, currentEntityCount);
+	super(domain, blobKey, domainUseId, entityMapper, contactClass, currentEntityCount, importDAO);
 	// TODO Auto-generated constructor stub
     }
 
@@ -36,8 +37,8 @@ public class ContactsCSVImporter extends CSVImporter<Contact>
 	    // it gives is 1000)
 	    restriction.contacts_count = currentEntityCount;
 
-	    new CSVUtil(restriction, getUserAccessControl()).createContactsFromCSV(getInputStream(), getMapperEntity(),
-		    String.valueOf(domainUserId));
+	    new CSVUtil(restriction, getUserAccessControl(), importDAO).createContactsFromCSV(getInputStream(),
+		    getMapperEntity(), String.valueOf(domainUserId));
 	}
 	catch (PlanRestrictedException e)
 	{

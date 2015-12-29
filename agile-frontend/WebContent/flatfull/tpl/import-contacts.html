@@ -38,10 +38,17 @@
 		<input type="hidden" id="type" value="contacts" class="form-control">
         <fieldset>
 			{{#canSyncContacts}}
-           		<div class="btn btn-sm upload btn-default inline-block">Upload CSV file</div>
+				{{#if ../type}}
+						<span class="btn btn-sm btn-default inline-block" disabled="">Upload CSV file</span>
+					{{else}}
+           				<div class="btn btn-sm upload btn-default inline-block">Upload CSV file</div>
+           		{{/if}}
 					{{else}}
            				<span class="btn btn-sm btn-default inline-block" disabled="">Upload CSV file</span>
 						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+           		}
+           		}
+				}
 			{{/canSyncContacts}}
            
         </fieldset>

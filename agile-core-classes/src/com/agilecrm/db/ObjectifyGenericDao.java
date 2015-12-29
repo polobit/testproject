@@ -36,6 +36,7 @@ import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.deals.Goals;
+import com.agilecrm.contact.upload.blob.status.ImportStatus;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.filter.DealFilter;
@@ -213,14 +214,21 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(FacebookPage.class);
 
 	ObjectifyService.register(VerifiedEmails.class);
-	
+
 	ObjectifyService.register(Office365CalendarPrefs.class);
-	
+
 	ObjectifyService.register(DealFilter.class);
+
 
     ObjectifyService.register(LandingPage.class);
     ObjectifyService.register(LandingPageCNames.class);
 	ObjectifyService.register(Goals.class);
+
+	// CSV Import status
+	ObjectifyService.register(ImportStatus.class);
+
+	ObjectifyService.register(LandingPage.class);
+	ObjectifyService.register(LandingPageCNames.class);
 
     }
 

@@ -766,7 +766,16 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	importContacts : function()
 	{
-		$('#content').html('<div id="import-contacts-event-listener"></div>');
+
+		var view = new CONTACTS_IMPORT_VIEW({
+			url : 'core/api/upload/status/CONTACTS',
+			template : "import-contacts"
+
+		});
+
+		$('#content').html(view.render().el);
+
+/*		$('#content').html('<div id="import-contacts-event-listener"></div>');
 		getTemplate("import-contacts", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
@@ -774,7 +783,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#import-contacts-event-listener').html($(template_ui));	
 			initializeImportEvents('import-contacts-event-listener');
 
-		}, "#import-contacts-event-listener");       
+		}, "#import-contacts-event-listener");  */     
 	},
 	
 

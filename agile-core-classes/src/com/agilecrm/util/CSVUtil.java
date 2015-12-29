@@ -40,6 +40,7 @@ import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
@@ -91,13 +92,15 @@ public class CSVUtil
     private UserAccessControl accessControl = null;
     private GCSServiceAgile service;
     private CSVWriter failedContactsWriter = null;
+    private ImportStatusDAO importStatusDAO = null;
 
     private CSVUtil()
     {
 
     }
 
-    public CSVUtil(BillingRestriction billingRestriction, UserAccessControl accessControl)
+    public CSVUtil(BillingRestriction billingRestriction, UserAccessControl accessControl,
+	    ImportStatusDAO importStatusDAO)
     {
 	this.billingRestriction = billingRestriction;
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
@@ -111,6 +114,8 @@ public class CSVUtil
 		options);
 
 	this.accessControl = accessControl;
+
+	this.importStatusDAO = importStatusDAO;
 
     }
 
@@ -195,7 +200,8 @@ public class CSVUtil
 	try
 	{
 	    data = reader.readAll();
-
+	    if (importStatusDAO != null && ownerKey != null)
+		importStatusDAO.createNewImportStatus(ownerKey, data.size(), null);
 	}
 	catch (IOException e)
 	{
@@ -236,12 +242,14 @@ public class CSVUtil
      * @param ownerId
      * @throws IOException
      */
+    private Key<DomainUser> ownerKey = null;
+
     public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
 	    throws PlanRestrictedException, IOException
     {
 
 	// Creates domain user key, which is set as a contact owner
-	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
+	this.ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
 	DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
 
@@ -292,10 +300,31 @@ public class CSVUtil
 	List<CustomFieldDef> imagefield = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "text");
 
 	/**
+	 * Processed contacts count.
+	 */
+	int processedContacts = 0;
+	int resettedProcessedcontacts = 0;
+	/**
 	 * Iterates through all the records from blob
 	 */
 	for (String[] csvValues : csvData)
 	{
+	    processedContacts++;
+	    resettedProcessedcontacts++;
+	    if (resettedProcessedcontacts >= 1000)
+	    {
+		try
+		{
+		    resettedProcessedcontacts = 0;
+		    importStatusDAO.updateStatus(processedContacts);
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+
+	    }
+
 	    // Set to hold the notes column positions so they can be created
 	    // after a contact is created.
 	    Set<Integer> notes_positions = new TreeSet<Integer>();
@@ -562,7 +591,18 @@ public class CSVUtil
 		e.printStackTrace();
 	    }
 
+	    processedContacts++;
+
 	}// end of for loop
+
+	try
+	{
+	    importStatusDAO.deleteStatus();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
 
 	if (failedContacts.size() > 0)
 	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContacts.size());

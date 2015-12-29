@@ -1,26 +1,30 @@
 BLOB_KEY = undefined;
-function initializeImportEvents(id){
 
-if(!id)
-	  id = "content";
-
-$('#' + id  + " .upload").off('click');
-$('#' + id).on('click', '.upload', function(e)
+var CONTACTS_IMPORT_VIEW = Base_Model_View.extend({
+	events : {
+		"click .upload" :  "initializeImportButton",
+	},
+	initializeImportButton : function(e)
 	{
+		e.preventDefault();
+		var element = e.target;
 
 		// get hidden value file type
-		var type = $(this).parents('form').children("#type").val();
+		var type = $(element).parents('form').children("#type").val();
 
-		e.preventDefault();
 		var newwindow = window.open("upload-contacts.jsp?type=" + type + "", 'name', 'height=310,width=500');
 
 		if (window.focus)
 		{
 			newwindow.focus();
 		}
-		return false;
-	});
+	}
+});
 
+function initializeImportEvents(id){
+
+if(!id)
+	  id = "content";
 
 // Cancels import, removes the contacts uploaded in to
 	// table, still calls
