@@ -1386,9 +1386,9 @@ var portlet_graph_utility = {
 	dealGoalsPieGraph : function(selector, data1,data2,colors)
 	{
 			var series = [];
-							series.push([ "count",
+							series.push([ "Goal Left",
 									data2 - data1 ]);
-							series.push([ "Goal", data1 ]);
+							series.push([ "Won", data1 ]);
 							//portlet_graph_utility.emailsOpenedPieChart(selector,series,data1,data2);
 							head
 				.js(
@@ -1417,7 +1417,8 @@ var portlet_graph_utility = {
 													},*/
 													enabled : true,
 													formatter:  function(){
-													return  '<div class="p-n"> <b><font color='+this.point.color+'>'+Math.round(this.point.percentage).toString()+'%</font></b></div>';
+														
+													return  '<div class="p-n"><b><font color='+this.point.color+'>'+ this.point.name +' '+ Math.round(this.point.percentage).toString()+'%</font></b></div>';
 					                        
 												},
 												useHTML : true,
@@ -1437,7 +1438,7 @@ var portlet_graph_utility = {
 													symbolRadius: 0,
 																	labelFormatter : function()
 											{
-												if(this.name=="Goal"){
+												if(this.name=="Won"){
 												var s = '<div> ' + (this.percentage)
 														.toFixed(2) + '%<b></div>';
 												return s;

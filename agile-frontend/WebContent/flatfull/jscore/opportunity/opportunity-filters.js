@@ -1198,7 +1198,7 @@ function initializeMilestoneListners(el){
 					flag=false;
 					return false;
 				}
-				if(($(this).find('.count').val().trim())!="" && ((parseFloat($(this).find('.count').val().trim())<0) || !(/^[0-9-_ ]*$/).test($(this).find('.count').val().trim()))){
+				if(($(this).find('.count').val().trim())!="" && ((parseFloat($(this).find('.count').val().trim())<0) || !(/^[0-9]*$/).test($(this).find('.count').val().trim()))){
 					$(this).find('#goal_count_error').show();
 					flag=false;
 					return false;
@@ -1208,11 +1208,13 @@ function initializeMilestoneListners(el){
 				if($(this).find("#goal_count_error").is(':visible'))
 					$(this).find('#goal_count_error').hide();
 			var goal_single_user={};
-					if($(this).attr('id')!=null)
+					if($(this).attr('id')!=null && ($(this).attr('data')==start/1000))
 						goal_single_user.id=$(this).attr('id');
 					goal_single_user.domain_user_id=$(this).find('.goal').attr('id');
-					goal_single_user.amount=$(this).find('.amount').val();
-					goal_single_user.count=$(this).find('.count').val();
+					//if($(this).find('.amount').val().trim()!="")
+					goal_single_user.amount=$(this).find('.amount').val().trim();
+					//if($(this).find('.count').val().trim()!="")
+					goal_single_user.count=$(this).find('.count').val().trim();
 					goal_single_user.start_time=start/1000;
 					//goal_single_user.end_time=end/1000;
 					goals_json.push(goal_single_user);
@@ -1234,12 +1236,13 @@ function initializeMilestoneListners(el){
 								$.each(e,function(index,jsond){
 									if(jsond.domain_user_id==that.find('div').attr('id')){
 										that.attr('id',jsond.id);
+										that.attr('data',jsond.start_time);
 
 					}
 				});
-								if(that.find('.count').val()!="")
+								if(that.find('.count').val().trim()!="")
 									count=count+parseInt(that.find('.count').val());
-								if(that.find('.amount').val()!="")
+								if(that.find('.amount').val().trim()!="")
 									amount=amount+parseFloat(that.find('.amount').val());
 							
 							});

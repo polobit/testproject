@@ -2972,7 +2972,7 @@ width: 915px;
 
 .width-goal
 {
-width : 100px;
+width : 150px;
 }
 
 .padder-portlet
@@ -2984,4 +2984,14 @@ width : 100px;
 #portlets-add-listener #deals > div:nth-of-type(4)
 {
 	height: 241px;
+}
+
+.goal
+{
+	width:calc(100% - 420px);
+}
+
+.datepicker-months
+{
+		width : 233px;
 }
