@@ -249,7 +249,7 @@ function getTemplateUrls(templateName)
 	}
 	else if (templateName.indexOf("braintree") == 0)
 	{
-		template_relative_urls.push("brainTree.js");
+		template_relative_urls.push("braintree.js");
 	}
 	else if (templateName.indexOf("quickbooks") == 0)
 	{
