@@ -58,6 +58,16 @@ public class EmailTemplates
 	 */
 	@NotSaved(IfDefault.class)
 	public String text = null;
+	
+	/**
+	 * Email HTML compatible to builder.
+	 */
+	@NotSaved(IfDefault.class)
+	public String html_for_builder = null;
+	
+	public boolean is_template_built_using_builder = false;
+	
+	public int builder_version;
 
 	/******************************** New Field ********************/
 	/**
@@ -225,6 +235,9 @@ public class EmailTemplates
 	@PrePersist
 	private void PrePersist()
 	{
+		is_template_built_using_builder = true;
+		builder_version = 1;
+		
 		if (id != null)
 		{
 			EmailTemplates et = EmailTemplatesUtil.getEmailTemplate(id);

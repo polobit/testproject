@@ -1,0 +1,67 @@
+<script id="emailbuilder-add-template" type="text/html">
+<div class="custom-animated custom-fadeInUp hide-rainbow">
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel wrapper">
+            <form id="emailBuilderForm">
+                <fieldset>
+                    <div class="control-group form-group">
+                        <label class="control-label"><b>Name of template:</b> <span class="field_req">*</span></label>
+                        <div class="controls">
+							<div class="row">
+								<div class="col-md-5 col-sm-4 col-xs-4">
+									<input name="name" type="text" id="nameoftemplate" class="col-md-3 form-control required w-md m-r-xs" placeholder="Name of template"/>
+                                    <span for="nameoftemplate" generated="true" class="help-inline" style="display: block;padding: 6px;padding-left: 10px;"></span>
+								</div>
+								<div class="col-md-3 col-sm-3 col-xs-4">
+									<span id="nameoftemplate-msg" class="text-center"></span>
+								</div>
+								<div class="col-md-4 col-sm-5 col-xs-4">
+									<button class="btn btn-primary btn-sm right pos-rlt m-r-xs saveEmailBuilderButton" >Save</button>
+                                    <button type="button" class="btn btn-default btn-sm right pos-rlt m-r-xs" id="mainsourcepreview"><i class="glyphicon-eye-open glyphicon"></i> Preview</button>
+								</div>
+                           		<div class="save-workflow-img right m-r-xs m-t-sm pos-rlt inline-block"></div>
+							</div>
+						</div>
+                    </div>
+					<div id="emailBuilderHolder">
+
+                    <iframe src="misc/emailbuilder/index.jsp?tmpid={{templateId}}&action={{action}}" id="emailBuilderFrame" frameBorder="0" name="landingPageBuilder" width="100%" height="680px"></iframe>
+                    </div>
+                    <br />
+                    <div>
+                        <a id="emailBuilderOptionsLink" href="#" class="text-info">
+                            <i class="icon-plus"></i> Template Options
+                        </a>
+                    </div>
+                    <br/>
+                    <div id="emailBuilderOptions" style="display:none;">
+                        
+                        <div class="row">
+                         <div class="control-group form-group">
+                            <label class="control-label col-sm-2">
+                                <b>Subject:</b>
+                            </label>
+                            <div class="controls col-sm-4">
+                                <input type="text" name="subject" id="subject" placeholder="enter subject of email" class="form-control">
+                            </div>
+                        </div>
+                        </div>
+                        <div class="text-sm text-light"></div>
+                        <br/>
+                        <br/>
+
+                    </div>
+                    <br />
+					<button class="btn btn-sm btn-primary saveEmailBuilderButton" >Save</button>
+                    <div class="save-workflow-img inline-block"></div>
+                    <br />
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</script>
