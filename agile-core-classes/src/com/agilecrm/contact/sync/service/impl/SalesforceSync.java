@@ -21,6 +21,7 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Contact.Type;
+import com.agilecrm.contact.deferred.SalesforceImportNoteDeferredTask;
 import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.IContactWrapper;
@@ -32,6 +33,10 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.JSONUtil;
 import com.agilecrm.util.email.SendMail;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.thirdparty.salesforce.SalesforceUtil;
 
 /**
@@ -102,6 +107,9 @@ public class SalesforceSync extends OneWaySyncService
 			JSONArray jsonArray = new JSONArray(getAccountsFromSalesForce());
 			System.out.println(jsonArray);
 			
+			// Get notes from salesforce
+			getNotesFromSalesForceAndCategorizeOnParentId();
+						
 			saveSalesforceAccountsInAgile(jsonArray);
 			
 			if(syncStatus.get(ImportStatus.SAVED_ACCOUNTS) > 0)
@@ -471,7 +479,15 @@ public class SalesforceSync extends OneWaySyncService
 		for (int i = 0; i < entries.length(); i++)
 		{
 			try {
-				wrapAccountToAgileSchemaAndSave(entries.getJSONObject(i));
+				
+				JSONObject entry = entries.getJSONObject(i);
+				
+				// Set notes to contacts if any 
+			    String SFcontactId = JSONUtil.getJSONValue(entry, "Id"); 
+			    if(contactNotesMap.containsKey(SFcontactId))
+			    	entry = entry.put(CONTACTS_NOTES_KEY, contactNotesMap.get(SFcontactId).toString());
+			    
+				wrapAccountToAgileSchemaAndSave(entry);
 			} catch (Exception e) {
 			}
 			
@@ -528,6 +544,12 @@ public class SalesforceSync extends OneWaySyncService
 				}
 				
 	    		agileCompany.save();
+	    		
+	    		// Get notes from Salesforce
+	    		SalesforceImportNoteDeferredTask task =  new SalesforceImportNoteDeferredTask(NamespaceManager.get(), entry.toString(), SalesforceImportNoteDeferredTask.ACTION_TYPE.ADD_NOTES, agileCompany.id);
+	    		
+	    		Queue defaultQueue = QueueFactory.getDefaultQueue();
+	    		defaultQueue.addAsync(TaskOptions.Builder.withPayload(task));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

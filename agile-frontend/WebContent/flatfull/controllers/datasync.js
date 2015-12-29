@@ -93,11 +93,11 @@ salesforce : function(el){
 
                                         }, function(){
 
-                                            $(".checkedMultiCheckbox").find(".error").remove();
+                                            $(".checkedMultiCheckbox").find(".help-inline").remove();
                                             if($(".checkedMultiCheckbox").find('input:checked').length > 0)
                                                   return true;
                                             else{
-                                                $(".checkedMultiCheckbox").append("<label generated='true' class='error'>Please select atleast one option.</label>"); 
+                                                $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline' style='display: block;'>Please select atleast one option.</span>"); 
                                             }
                                             
                                              return false;
