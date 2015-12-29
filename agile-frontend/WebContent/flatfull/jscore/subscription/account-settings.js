@@ -192,7 +192,7 @@ $('#warning-deletion-feedback').on('click', '#warning-feedback-save', function(e
 		}
 		else
 			{
-				set_up_account_stats(el, function(data){
+				set_up_account_stats($('#warning-deletion-feedback'), function(data){
 					getTemplate('warning', data, undefined, function(template_ui){
 				 		if(!template_ui)
 				    		return;
