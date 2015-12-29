@@ -1498,9 +1498,8 @@ color: #98a6ad;
 .activity_time {
   position: static;
 }
+}
 
-}
-}
 /* ending hack for new ui contact details big tag will come down  */
 
 a#email-reply{
@@ -1555,11 +1554,19 @@ a#email-reply{
   position: absolute;
 }*/
 
-.details-mobile-view {
+.details-mobile-view,.company-details-mobile-view {
   width: 299px;
 }
 
-@media all and (max-width: 990px) {
+.company-star-view {
+    width: auto!important;
+}
+
+@media all and (max-width: 767px) {
+.company-details-mobile-view {
+  width: 97.0vw;
+  }
+
 .details-mobile-view {
   width: 100%;
 }
