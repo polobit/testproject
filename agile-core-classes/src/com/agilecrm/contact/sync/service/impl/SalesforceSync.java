@@ -45,6 +45,8 @@ import com.thirdparty.salesforce.SalesforceUtil;
  */
 public class SalesforceSync extends OneWaySyncService
 {
+	
+	final String NOTIFICATION_TEMPLATE = "salesforce_import_notification_template";
 
 	public static final String CONTACTS_NOTES_KEY = "contact_notes";
 	
