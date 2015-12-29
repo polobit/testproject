@@ -1129,14 +1129,14 @@ var portlet_utility = {
 							function(data) {
 								that.find('.deal_count').html(
 									portlet_utility.getNumberWithCommasForPortlets(data["dealcount"]));
-								that.find('.goal_count').html('from '+
-									portlet_utility.getNumberWithCommasForPortlets(data["goalCount"])+'<br>Won Deals');
+								that.find('.goal_count').html('Won Deals <br> from '+
+										portlet_utility.getNumberWithCommasForPortlets(data["goalCount"])+' Goals');
 								that.find('.deal_amount').html(portlet_utility.getPortletsCurrencySymbol()+
 									'' +
 									portlet_utility.getNumberWithCommasForPortlets(data["dealAmount"]));
-								that.find('.goal_amount').html('from '+portlet_utility.getPortletsCurrencySymbol()+
+								that.find('.goal_amount').html('Revenue <br> from '+portlet_utility.getPortletsCurrencySymbol()+
 									'' +
-									portlet_utility.getNumberWithCommasForPortlets(data["goalAmount"])+' <br> Revenue');
+									portlet_utility.getNumberWithCommasForPortlets(data["goalAmount"])+' Goals');
 									portlet_graph_data_utility.dealGoalsGraphData(selector,data,column_position,row_position);
 							});
 			setPortletContentHeight(base_model);

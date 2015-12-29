@@ -1193,12 +1193,12 @@ function initializeMilestoneListners(el){
 				//var end=(new Date(d.getFullYear(), d.getMonth()+1, d.getDate()-1,23,59,59)).getTime();
 					
 			$('#deal-sources-table').find('td').each(function(index){
-				if(($(this).find('.amount').val().trim())!="" && ((parseFloat($(this).find('.amount').val().trim())<0) || !(/^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/).test($(this).find('.amount').val().trim()))){
+				if(($(this).find('.amount').val().trim())!="" && ((parseFloat($(this).find('.amount').val().trim())<0) || !(/^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/).test($(this).find('.amount').val()))){
 					$(this).find('#goal_amount_error').show();
 					flag=false;
 					return false;
 				}
-				if(($(this).find('.count').val().trim())!="" && ((parseFloat($(this).find('.count').val().trim())<0) || !(/^[0-9]*$/).test($(this).find('.count').val().trim()))){
+				if(($(this).find('.count').val().trim())!="" && ((parseFloat($(this).find('.count').val().trim())<0) || !(/^[0-9]*$/).test($(this).find('.count').val()))){
 					$(this).find('#goal_count_error').show();
 					flag=false;
 					return false;
