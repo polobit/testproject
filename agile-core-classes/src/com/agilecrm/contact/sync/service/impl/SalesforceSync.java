@@ -26,6 +26,8 @@ import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.sync.wrapper.impl.SalesForceContactWrapperImpl;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.JSONUtil;
@@ -102,6 +104,9 @@ public class SalesforceSync extends OneWaySyncService
 			
 			saveSalesforceAccountsInAgile(jsonArray);
 			
+			if(syncStatus.get(ImportStatus.SAVED_ACCOUNTS) > 0)
+				BulkActionNotifications.publishconfirmation(BulkAction.COMPANIES_CSV_IMPORT, String.valueOf(syncStatus.get(ImportStatus.SAVED_ACCOUNTS)));
+			
 		}
 		catch (SocketTimeoutException e)
 		{
@@ -126,6 +131,9 @@ public class SalesforceSync extends OneWaySyncService
 			getNotesFromSalesForceAndCategorizeOnParentId();
 			
 			saveContactsInAgile(jsonArray);
+			
+			if(syncStatus.get(ImportStatus.SAVED_CONTACTS) > 0)
+				BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(syncStatus.get(ImportStatus.SAVED_CONTACTS)));
 			
 		}
 		catch (SocketTimeoutException e)
@@ -333,6 +341,9 @@ public class SalesforceSync extends OneWaySyncService
 			System.out.println(tasksArrayJSON);
 			
 			saveSalesforceTasksInAgile(tasksArrayJSON);
+			
+			if(syncStatus.get(ImportStatus.SAVED_TASKS) > 0)
+				BulkActionNotifications.publishconfirmation(BulkAction.TASKS_CSV_IMPORT, String.valueOf(syncStatus.get(ImportStatus.SAVED_TASKS)));
 		}
 		catch (SocketTimeoutException e)
 		{
@@ -422,7 +433,7 @@ public class SalesforceSync extends OneWaySyncService
 					} catch (Exception e) {
 					}
 				} else {
-					agileTask.due = System.currentTimeMillis() / 1000;
+					// agileTask.due = System.currentTimeMillis() / 1000;
 				}
 				
 				if(entry.has("WhoId")){
@@ -435,7 +446,8 @@ public class SalesforceSync extends OneWaySyncService
 						if(StringUtils.isNotBlank(emailid))
 						{
 							Contact agileContact =  ContactUtil.searchContactByEmailAndType(emailid, Type.PERSON);
-							contactList.add(agileContact.id + "");
+							if(agileContact != null)
+								contactList.add(agileContact.id + "");
 						}
 						
 						agileTask.contacts = contactList;
@@ -543,6 +555,9 @@ public class SalesforceSync extends OneWaySyncService
 	// Saves limits
 	restriction.save();
 
+	if(syncStatus.get(ImportStatus.TOTAL_ACCOUNTS) == 0 && syncStatus.get(ImportStatus.SAVED_CONTACTS) == 0 && syncStatus.get(ImportStatus.TOTAL_TASKS) == 0)
+		  return;
+	
 	buildNotificationStatus();
 
 	System.out.println("----Synced contacts------" + syncStatus.get(ImportStatus.TOTAL));
@@ -569,6 +584,8 @@ public class SalesforceSync extends OneWaySyncService
      */
     private Map<ImportStatus, Integer> buildNotificationStatus()
     {
+    	System.out.println("buildNotificationStatus in sync class");
+    	
 	Integer fail = syncStatus.get(ImportStatus.TOTAL_FAILED);
 	Integer total = syncStatus.get(ImportStatus.TOTAL);
 	Integer totalSaved = syncStatus.get(ImportStatus.SAVED_CONTACTS);
@@ -602,6 +619,15 @@ public class SalesforceSync extends OneWaySyncService
 		syncStatus.put(ImportStatus.SAVED_TASKS, syncStatus.get(ImportStatus.SAVED_TASKS));
 	}
 
+	// Accounts
+	if(syncStatus.get(ImportStatus.TOTAL_ACCOUNTS) > 0){
+		syncStatus.put(ImportStatus.TOTAL_ACCOUNTS, syncStatus.get(ImportStatus.TOTAL_ACCOUNTS));
+		syncStatus.put(ImportStatus.SAVED_ACCOUNTS, syncStatus.get(ImportStatus.SAVED_ACCOUNTS));
+		syncStatus.put(ImportStatus.MERGED_ACCOUNTS, syncStatus.get(ImportStatus.MERGED_ACCOUNTS));
+	}
+	
+	System.out.println("syncStatus = " + syncStatus.toString());
+	
 	return syncStatus;
     }
 	

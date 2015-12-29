@@ -24,6 +24,8 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		"import" : "importContacts",
 
+		"import/salesforce" : "salesforceImport",
+
 		//add contact when customfields are there
 		"contact-edit" : "editContact",
 		
@@ -62,6 +64,10 @@ var ContactsRouter = Backbone.Router.extend({
 		 * $("#content").html(getTemplate('dashboard-timline', {}));
 		 * setup_dashboardTimeline();
 		 */
+	},
+
+	salesforceImport : function(){
+         App_Datasync.salesforce();
 	},
 
 	dashboard : function()

@@ -303,6 +303,12 @@ var Base_Model_View = Backbone.View
 					return;
 				}
 
+				var form_custom_validate_cb = this.options.form_custom_validate;
+				if(form_custom_validate_cb && !form_custom_validate_cb()){
+					enable_save_button($(e.currentTarget));
+					return;
+				}
+
 				// Clears all the fields in the form before saving
 				this.model.clear({
 					silent : true

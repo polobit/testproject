@@ -19,7 +19,7 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
         
-            <h3 class="font-thin h3">Import From CSV <small></small>	</h3>
+            <h3 class="font-thin h3">Import Contacts <small></small>	</h3>
         
     </div>
 </div>
@@ -76,17 +76,17 @@
 
 <div class="col-sm-6 col-xs-12 col-md-4">
 <div class="panel panel-default">
-	<div class="panel-heading">Contacts/Companies Import From CRM<span class="label label-important">Beta</span></div>
+	<div class="panel-heading">Import from Salesforce <span class="label label-sm bg-danger">Beta</span></div>
 	<div class="panel-body">
     <form id="imap-prefs-form">
         
 		<div class="p-b-sm">
-			Import contacts/companies from your CRM
+			Import Contacts, Accounts, and Tasks
 		</div>
 		<input type="hidden" id="type" value="contacts" class="form-control">
         <fieldset>
 			{{#canSyncContacts}}
-           		<a href="#importcrm" class="btn btn-sm btn-default inline-block">Import From CRM</a>
+           		<a href="#import/salesforce" class="btn btn-sm btn-default inline-block">Import</a>
 			{{/canSyncContacts}}
            
         </fieldset>

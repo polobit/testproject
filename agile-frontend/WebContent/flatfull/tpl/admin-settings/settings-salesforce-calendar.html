@@ -4,7 +4,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <center> 
-                    <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="img/icons/salesforce.png">
+                    <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="img/icons/logo-salesforce.png">
                 </center>
             </div>
             <div class="panel-body">            
@@ -16,7 +16,7 @@
                           
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input type="text" required="required" class="form-control" id="username" name="userName" placeholder="Email" value="{{username}}">
+                            <input type="text" required="required" class="form-control" id="username" name="userName" placeholder="Username" value="{{username}}">
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
@@ -27,8 +27,8 @@
                             <input id="apiKey" required="required" name="apiKey" class="form-control"  type="text" placeholder="API Key" value="{{apiKey}}">
                         </div>
 
-                        <div class="control-group form-group multiple-checkbox" name="importOptions">
-                            <label class="control-label">Import Options</label>
+                        <div class="control-group form-group multiple-checkbox checkedMultiCheckbox" name="importOptions">
+                            <label class="control-label">Select Below List Items to Import</label>
                             <div class="controls">
                                 <div class="checkbox">
                                     <label class="i-checks i-checks-sm">
@@ -55,7 +55,11 @@
 
                 </form>
                 <div class="form-actions text-center">
-                    <a type="reset" class="btn btn-default btn-sm" href="#importcrm">Cancel</a>
+                   {{#if id}}
+                    <a class="btn btn-sm btn-danger " data_sync_type="SALESFORCE" data_sync_id="{{id}}" id="sync-import-prefs-delete">Disable</a>
+                   {{else}}
+                     <a type="reset" class="btn btn-default btn-sm" href="#import">Cancel</a>
+                   {{/if}}
                     <a type="submit" class="save btn btn-sm btn-primary">Import</a>
                 </div>  
             </div>

@@ -101,8 +101,11 @@ function initializeDataSyncListners(){
 				success : function(){
 					console.log("success");
 					
-					if(sync_widget_type == "SALESFORCE")
-						App_Datasync.importFromCRMS();
+					if(sync_widget_type == "SALESFORCE"){
+						DATA_SYNC_FORCE_FETCH=true;
+						App_Datasync.salesforce();
+					}
+						
 					else
 						App_Datasync.dataSync();
 				}
@@ -209,11 +212,12 @@ name is type i.e GOOGLE or STRIPE or SHOPIFY etc
 renders inner sync view and binds all model events to DataSync_Event_Modal_View
 */
 
-  function renderInnerSyncView(url,templateName,data,callback){
+  function renderInnerSyncView(url,templateName,data,callback,form_custom_validate_callback){
   		 var data_sync = new DataSync_Event_Modal_View({
 			                    url: url,
 			                    template: templateName,
 			                    data:data,
+			                    form_custom_validate : form_custom_validate_callback,
 			                    saveCallback: function(model) {			                      
 			                       callback(model);
 			                    }

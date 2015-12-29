@@ -79,6 +79,7 @@ salesforce : function(el){
                         var dataSynctTab = _agile_get_prefs("dataimport_tab");
                         $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
                         initializeTabListeners("dataimport_tab", "sync");
+                        initializeDataSyncListners();
                        getSyncModelFromName("SALESFORCE", function(model){
 
                         var url= 'core/api/contactprefs/SALESFORCE',
@@ -86,7 +87,21 @@ salesforce : function(el){
                                         renderInnerSyncView(url,template,model,function(model){
                                         showNotyPopUp("information", "Salesforce import initiated", "top", 1000);
                                         // Navigate to back
-                                        Backbone.history.navigate("importcrm", { trigger : true });
+                                        // Backbone.history.navigate("importcrm", { trigger : true });
+                                        DATA_SYNC_FORCE_FETCH=true;
+                                        App_Datasync.salesforce();
+
+                                        }, function(){
+
+                                            $(".checkedMultiCheckbox").find(".error").remove();
+                                            if($(".checkedMultiCheckbox").find('input:checked').length > 0)
+                                                  return true;
+                                            else{
+                                                $(".checkedMultiCheckbox").append("<label generated='true' class='error'>Please select atleast one option.</label>"); 
+                                            }
+                                            
+                                             return false;
+                                            
                                         });
                                
                              });
