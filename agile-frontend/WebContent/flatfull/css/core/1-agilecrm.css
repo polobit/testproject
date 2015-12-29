@@ -3000,4 +3000,13 @@ width: 915px;
 
 #contacts-custom-view-model-list .popover{
 	border-radius: 0px;
+	width : 260px;
+}
+
+#contacts-custom-view-model-list .popover-content{
+	padding: 0px;
+}
+
+#contacts-custom-view-model-list .popover .arrow{
+	display: none;
 }
