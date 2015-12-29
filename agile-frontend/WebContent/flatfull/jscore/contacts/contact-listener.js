@@ -1,8 +1,9 @@
+var timer = undefined;
 function contactListener()
 {
 	$('#contacts-custom-view-model-list').off('mouseenter','tr');
 		$('#contacts-custom-view-model-list').on('mouseenter','tr',function(e){
-			e.stopPropagation();
+			//e.stopPropagation();
 			var that=$(this);
 			//var top=e.pageY-40;
 			var left=e.pageX-30;
@@ -15,15 +16,24 @@ function contactListener()
             "html": "true",
             "content": "hello",
             });
-			setTimeout(function() {
+
+
+ 
+      clearTimeout(timer);
+
+			timer=setTimeout(function() {
+						 		
 				if (!insidePopover)	{
-		 $(that).popover('show');
-		 $('.popover').css('left',left);
+		
+					 $(that).popover('show');
 		 App_Contacts.contact_popover=$(that).data();
 		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
 						if(!template_ui)
 							  return;
 						$('.popover').html($(template_ui));	
+							 $('.popover').css('left',e.pageX+"px");
+							 var top=e.pageY-30- $('.popover').height();
+							 $('.popover').css('top',top+"px");
 						contact_list_starify('.popover');
 						attachEvents(that,App_Contacts.contact_popover);
 					});
@@ -45,9 +55,11 @@ function contactListener()
 var insidePopover=false;
 
 function attachEvents(tr,Contact_collection) {
+	$('.popover').off('mouseenter');
 	$('.popover').on('mouseenter', function() {
 		insidePopover=true;
 	});
+	$('.popover').off('mouseleave');
 	$('.popover').on('mouseleave', function() {
 		insidePopover=false;
 		$(tr).popover('hide');
