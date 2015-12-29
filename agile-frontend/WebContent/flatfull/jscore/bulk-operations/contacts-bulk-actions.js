@@ -39,9 +39,9 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
     	'click .filter' : 'filterResults',
     	'click .default_filter' : 'defaultFilterResults',
     	// 'click #companies-filter' : 'companyFilterResults',
-    	'click .default_contact_remove_tag' : 'defaultContactRemoveTag',
+    	'click .default_contact_remove_tag' : 'defaultContactRemoveTag'
 
-    	'click .contact-actions-delete-mobile' : 'onContactDelete'
+    	//'click .contact-actions-delete-mobile' : 'onContactDelete'
     	
     },
 
@@ -247,17 +247,7 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 			html = "Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " contacts</a>";
 
 		$('body').find('#bulk-select').html(html);
-    },
-
-    onContactDelete : function(e){
-	e.preventDefault();
-	e.stopPropagation();
-
-	var contactId = $(e.currentTarget).closest("tr").find("td.data").attr("data");
-	$('#deleteContactModal').html(getTemplate("delete-contact-modal", {"contactId" : contactId})).modal('show');
-
-				
-	}   
+    } 
 
    
 });
