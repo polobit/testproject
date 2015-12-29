@@ -742,3 +742,12 @@ function update_list_with_disabled($select, workflows_json)
 			
 	}
 }
+function insertSelectedOption(ele ,target_id)
+{
+	var curValue = $(ele).find(':selected').val();
+	insertAtCaret(target_id, curValue)
+	var text = $('#new_field').val();
+	if(text && text.indexOf("{{")!=-1)
+	$('#new_field').val($(ele).find(':selected').val());
+
+}
