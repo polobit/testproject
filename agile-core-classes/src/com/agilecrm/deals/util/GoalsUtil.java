@@ -54,8 +54,14 @@ public class GoalsUtil
 		if(goals!=null && goals.size()!=0){
 		for(Goals goal:goals)
 		{
-			if(goal.start_time>=start_time && goal.start_time<end_time)
-				user_goals.add(goal);
+			try{
+				if(goal.start_time>=start_time && goal.start_time<end_time)
+					user_goals.add(goal);
+				}
+				catch (Exception e)
+			    {
+				System.out.println("Exception :" + e);
+			    }
 		}
 		}
 		return user_goals;
