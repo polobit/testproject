@@ -392,6 +392,9 @@ $(function()
 	Handlebars.registerHelper('icons', function(item)
 	{
 
+		if(!item)
+			  return "";
+			
 		item = item.toLowerCase().trim();
 		console.log(item);
 		if (item == "email")
@@ -1272,6 +1275,23 @@ $(function()
 	});
 
 	/**
+	 * Counts the existence of property name which occurred multiple times.
+	 */
+	Handlebars.registerHelper('property_json_is_not_empty', function(name, properties, options)
+	{
+
+        var value = getPropertyValue(properties, name);
+        try{
+        	value = JSON.parse(value);
+        }catch(e){}
+
+		if (Object.keys(value).length > 0)
+			return options.fn(this);
+		
+		return options.inverse(this);
+	});
+
+	/**
 	 * returns online scheduling url of current user
 	 */
 	Handlebars.registerHelper('online_schedule_URL', function()
@@ -1284,6 +1304,11 @@ $(function()
 	Handlebars.registerHelper('get_current_domain', function()
 	{
 		return CURRENT_DOMAIN_USER.domain;
+	});
+
+	Handlebars.registerHelper('get_current_domain_email', function()
+	{
+		return CURRENT_DOMAIN_USER.email;
 	});
 
 	
@@ -5685,6 +5710,9 @@ $(function()
 		case "failed":
 			return "Failed";
 			break;
+		case "missed":
+			return "Call Missed";
+			break;	
 		case "in-progress":
 		case "voicemail":
 			return "Left voicemail";
@@ -6813,6 +6841,7 @@ Handlebars.registerHelper('is_mobile', function(options)
 	});
 
 
+
 /**
  * Returns a S3 image url .
  * 
@@ -6857,20 +6886,37 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 			return options.inverse(this);
 	});
 
-	Handlebars.registerHelper('is_cancelled_user', function(options)
+	Handlebars.registerHelper('is_domain_owner', function(options)
 	{
-		if(IS_CANCELLED_USER)
+		if (CURRENT_DOMAIN_USER.is_account_owner)
 			return options.fn(this);
-		else if(IS_TRIAL)
+		else
+			return options.inverse(this);
+	});
+
+	Handlebars.registerHelper('is_not_allowed_trial', function(options)
+	{
+		if(IS_TRIAL && IS_ALLOWED_TRIAL)
 			return options.inverse(this);
 		else
 			return options.fn(this);
 	});
 
+// the epoch time is in milisecond.
+// jquery uses isostring format to implement timeago function on date...
+Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) {
+	try
+	{
+		return new Date(dateInepoch).toISOString();
+	}
+	catch (e)
+	{
+	}
+	return dateInepoch;
+});
 
 function agile_is_mobile_browser(){
-    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+   return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+ }
 
-
-}
 

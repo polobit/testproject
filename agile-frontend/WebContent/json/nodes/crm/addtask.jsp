@@ -71,6 +71,7 @@
             "fieldType": "dynamicselect",
             "type": "select"
         },
+
         {
             "label": "Add a task related to a contact in the CRM.<br/><br/>For example, if a contact opens and clicks a link in your email, then you might want to add a task to your list for Calling him/her. <br/><br/>When this task is created, the contact is automatically added to the 'Related to' field in the task.",
             "category": "Help",

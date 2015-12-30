@@ -3,8 +3,11 @@ package com.campaignio.urlshortener.util;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.util.EmailLinksConversion;
 import com.campaignio.urlshortener.URLShortener;
+import com.campaignio.urlshortener.URLShortener.ShortenURLType;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 
 /**
  * <code>URLShortenerUtil</code> is the class to convert urls from long urls to
@@ -81,31 +84,53 @@ public class URLShortenerUtil
 	URLShortener urlShortener = new URLShortener(url, subscriberId, trackingId, campaignId);
 	urlShortener.save();
 
-	// Get Key
-	long keyNumber = urlShortener.id;
+	return buildShortURL(keyword, urlShortener);
+    }
 
-	// Let's convert into base62
-	String urlKey = Base62.fromDecimalToOtherBase(62, keyNumber);
-
-	// Gets current namespace to append url
-	String domain = NamespaceManager.get();
-
-	if (StringUtils.isEmpty(domain))
-	    return null;
-
-	// Converts domain using Rot13.
-	String domainKey = Rot13.convertStringUsingRot13(domain);
-
-	// When keyword is null initialize with space
-	if (keyword == null || keyword.trim().length() == 0)
-	    keyword = "";
-	else
+	public static String buildShortURL(String keyword, URLShortener urlShortener)
 	{
-	    keyword = keyword.replace(" ", "_");
-	    keyword = keyword + "/";
-	}
+		// Get Key
+		long keyNumber = urlShortener.id;
 
-	return URLShortener.SHORTENER_URL + keyword + domainKey + "-" + urlKey;
+		// Let's convert into base62
+		String urlKey = Base62.fromDecimalToOtherBase(62, keyNumber);
+
+		// Gets current namespace to append url
+		String domain = NamespaceManager.get();
+		
+		// For localhost
+		if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+			domain = "localhost";
+
+		if (StringUtils.isEmpty(domain))
+		    return null;
+
+		// Converts domain using Rot13.
+		String domainKey = Rot13.convertStringUsingRot13(domain);
+
+		// When keyword is null initialize with space
+		if (keyword == null || keyword.trim().length() == 0)
+		    keyword = "";
+		else
+		{
+		    keyword = keyword.replace(" ", "_");
+		    keyword = keyword + "/";
+		}
+
+		return URLShortener.SHORTENER_URL + keyword + domainKey + "-" + urlKey;
+	}
+    
+    public static String getShortURL(String url, String keyword, String subscriberId, String trackingId, String campaignId, ShortenURLType type, boolean doPush) throws Exception
+    {
+    	URLShortener urlShortener = new URLShortener(url, subscriberId, trackingId, campaignId);
+    	urlShortener.setURLShortenerType(type);
+    	
+    	if(doPush)
+    		urlShortener.setPushParameter(EmailLinksConversion.AGILE_EMAIL_PUSH);
+    	
+    	urlShortener.save();
+    	
+    	return buildShortURL(keyword, urlShortener);
     }
 
     /**

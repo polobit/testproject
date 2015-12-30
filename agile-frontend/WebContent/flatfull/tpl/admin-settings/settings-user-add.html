@@ -92,6 +92,26 @@
     					</div>
     				</div>
 </div>
+{{#is_domain_owner}}
+<div class="control-group form-group">
+<div class="col-sm-offset-3 col-md-9">
+                        <div class="controls">
+                            <div class="checkbox">
+<label class="i-checks i-checks-sm">
+                                {{#if is_account_owner}}
+                                <input type="checkbox" name='is_account_owner' disabled="disabled" value='true'/><i></i>
+                                {{else}}
+                                <input type="checkbox" name='is_account_owner' value='true'/><i></i> 
+                                {{/if}}
+                                Owner<br/><div style="margin-left:6px;"><small>Transfer ownership</small></div>
+                            </label>
+</div>
+                        </div>
+                    </div>
+</div>
+{{else}}
+<input type="hidden" name='is_account_owner' value=''/><i></i> 
+{{/is_domain_owner}}
 <div class="col-sm-offset-3 col-md-9 p-l-xs">
 					<div id="accordion">
 					  <div class="controls">

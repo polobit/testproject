@@ -201,6 +201,7 @@ var WorkflowsRouter = Backbone.Router
 						var unsubscribe = that.workflow_model.get("unsubscribe");
 
 						$('#unsubscribe-email', el).val(unsubscribe.unsubscribe_email);
+						$('#unsubscribe-name', el).val(unsubscribe.unsubscribe_name);
 						$('#unsubscribe-tag', el).val(unsubscribe.tag);
 						$('#unsubscribe-action', el).val(unsubscribe.action);
 						$('#unsubscribe-action', el).trigger('change');
@@ -240,6 +241,7 @@ var WorkflowsRouter = Backbone.Router
 					$('#workflows-listener-container').html($(template_ui));
 					// initializeWorkflowsListeners();
 					var activetab = _agile_get_prefs("workflows_tab");
+
 					if(!activetab || activetab == null) {
 						_agile_set_prefs('workflows_tab', "general");
 						activetab = "general";
@@ -607,6 +609,9 @@ var WorkflowsRouter = Backbone.Router
 
 					// To get newly added trigger in triggers list
 					App_Workflows.triggersCollectionView = undefined;
+					workflow_alerts("Alert", "The Trigger will take a few minutes to initiate" , "workflow-alert-modal"
+
+					        ,function(modal){});
 				}
 
 				});
@@ -1324,3 +1329,4 @@ var WorkflowsRouter = Backbone.Router
 
 			},
 });
+

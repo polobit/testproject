@@ -24,6 +24,8 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		"import" : "importContacts",
 
+		"import/salesforce" : "salesforceImport",
+
 		//add contact when customfields are there
 		"contact-edit" : "editContact",
 		
@@ -62,6 +64,10 @@ var ContactsRouter = Backbone.Router.extend({
 		 * $("#content").html(getTemplate('dashboard-timline', {}));
 		 * setup_dashboardTimeline();
 		 */
+	},
+
+	salesforceImport : function(){
+         App_Datasync.salesforce();
 	},
 
 	dashboard : function()
@@ -107,7 +113,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
 	{
-		
+
 		if(SCROLL_POSITION)
 		{
 			$('html, body').animate({ scrollTop : SCROLL_POSITION  },1000);
@@ -271,6 +277,8 @@ var ContactsRouter = Backbone.Router.extend({
 		this.contactsListView = new  Contacts_Events_Collection_View({ url : url,custom_scrollable_element:custom_scrollable_element, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
 			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
 			{
+
+		  
 		
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
@@ -302,6 +310,9 @@ var ContactsRouter = Backbone.Router.extend({
 				}
 				$('[data-toggle="tooltip"]').tooltip();
 				start_tour("contacts", el);
+
+				
+
 			} });
 
 		// Contacts are fetched when the app loads in the initialize
@@ -310,16 +321,20 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(this.contactsListView.render().el);
 			contactFiltersListeners();
+			
 		} else {
 			$('#contacts-listener-container').find('.contacts-div').html(this.contactsListView.render().el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
+			
 		}
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
 		$('[data-toggle="tooltip"]').tooltip();
 	
+		
+
 
 	},
 	
@@ -584,39 +599,11 @@ var ContactsRouter = Backbone.Router.extend({
 			//fill_owners(el, contact.toJSON());
 			start_tour("contact-details", el);
 			
-
-			// Sequence of calling option 1) BRIA 2) Twilio 3) SIP in contact phone option
-			if(default_call_type == "Bria"){
-				if(callFromBria == true){
-					$(".contact-call-button",el).removeAttr('disabled');
-					$(".contact-make-call",el).removeAttr("href");
-					$(".contact-call-button",el).addClass('contact-make-bria-call');
-					$(".contact-call-button-div",el).tooltip('hide')
-					  .attr('data-original-title', "Call from Bria")
-				    .tooltip('fixTitle');
-					}
-				}else{
-					if(Twilio_Start == true)
-						//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
-						{
-							$(".contact-call-button",el).removeAttr('disabled');
-							$(".contact-make-call",el).removeAttr("href");
-							$(".contact-call-button",el).addClass('contact-make-twilio-call');
-							$(".contact-call-button-div",el).tooltip('hide')
-							  .attr('data-original-title', "Call from Twilio")
-						    .tooltip('fixTitle');
-
-						}else if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-							{
-								$(".contact-call-button",el).removeAttr('disabled');
-								$(".contact-make-call",el).removeAttr("href");
-								$(".contact-call-button",el).addClass('contact-make-sip-call');
-								$(".contact-call-button-div",el).tooltip('hide')
-								  .attr('data-original-title', "Call from SIP")
-							    .tooltip('fixTitle');
-							}
-				}
-
+			// this part is to remove the progress cursor from contact number shown in contact detail page
+			if(default_call_option.callOption.length == 0){
+				$(".contact-make-call",el).removeClass("c-progress");
+				$(".contact-make-skype-call",el).removeClass("c-progress");
+			}
 			} });
 
 		var el = this.contactDetailView.render(true).el;
@@ -1047,6 +1034,10 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(el);
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
+			if(agile_is_mobile_browser()) {
+			$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+			}
+			
 
 			contactFiltersListeners();
 
@@ -1114,6 +1105,7 @@ var ContactsRouter = Backbone.Router.extend({
 				//pieTags(el);
 				setupViews(el, view_data.name);
 				$("#contacts-view-options").css( 'pointer-events', 'auto' );
+				
 
 
 				// show list of filters dropdown in contacts list
@@ -1136,7 +1128,21 @@ var ContactsRouter = Backbone.Router.extend({
 				} else {					
 					setupLhsFilters(el);
 				}
-			} });
+
+				if(agile_is_mobile_browser()) {
+				
+					var $nextEle = $('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+					$('#contacts-table tbody tr .icon-append-mobile',el).after($nextEle);
+				}
+				
+
+				
+
+			}, appendItemCallback: function(el){
+				if(agile_is_mobile_browser()) {
+					$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+				}
+			}, });
 
 		var _that = this;
 		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)

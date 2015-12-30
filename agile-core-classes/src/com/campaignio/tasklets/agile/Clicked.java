@@ -9,6 +9,7 @@ import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.campaignio.tasklets.sms.SendMessage;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -101,6 +102,11 @@ public class Clicked extends TaskletAdapter
 			{
 				CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, null,
 						AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON));
+			}
+			else if (data.has(SendMessage.SMS_CLICK_TRACKING_ID))
+			{
+				CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout,
+					data.getString(SendMessage.SMS_CLICK_TRACKING_ID), "SMS", null);
 			}
 			else
 			{

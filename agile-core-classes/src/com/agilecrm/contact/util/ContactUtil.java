@@ -541,6 +541,17 @@ public class ContactUtil
 		.filter("properties.value = ", email.toLowerCase()).filter("type", type).count();
 
     }
+    
+    /**
+     * Get Count of contact by Email and Type i.e PERSON or COMPANY
+     */
+
+    public static Contact searchContactByEmailAndType(String email, Type type)
+    {
+	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+		.filter("properties.value = ", email.toLowerCase()).filter("type", type).get();
+
+    }
 
     /**
      * Get Count of company by Name and Type i.e PERSON or COMPANY

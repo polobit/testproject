@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
@@ -17,6 +18,7 @@ import com.campaignio.servlets.EmailOpenServlet;
 import com.campaignio.servlets.deferred.EmailClickDeferredTask;
 import com.campaignio.tasklets.agile.SendEmail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.campaignio.urlshortener.URLShortener.ShortenURLType;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -37,7 +39,6 @@ public class TrackClickUtil
      */
     public static void addEmailClickedLog(String campaignId, String subscriberId, String longURL, String workflowName)
     {
-	System.out.println("In email clicked log...");
 
 	LogUtil.addLogToSQL(campaignId, subscriberId, "Email link clicked " + longURL + " of campaign " + workflowName,
 	        LogType.EMAIL_CLICKED.toString());
@@ -47,6 +48,7 @@ public class TrackClickUtil
 	    EmailOpenServlet.addEmailOpenedLog(campaignId, subscriberId, workflowName);
     }
 
+    
     /**
      * Shows email clicked notification to the contact.
      * 
@@ -163,19 +165,36 @@ public class TrackClickUtil
      * @param longURL
      *            - Original url to show as custom-data in clicked log.
      */
-    public static void interruptCronTasksOfClicked(String clickTrackingId, String campaignId, String subscriberId)
+    public static void interruptCronTasksOfClicked(String clickTrackingId, String campaignId, String subscriberId, ShortenURLType type)
     {
 
 	try
 	{
-	    JSONObject interruptedData = new JSONObject();
-	    interruptedData.put(SendEmail.EMAIL_CLICK, true);
-	    interruptedData.put(SendEmail.EMAIL_OPEN, true);
+		EmailClickDeferredTask emailClickDeferredTask = null;
 
-	    // Interrupt clicked in DeferredTask
-	    EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, campaignId,
-		    subscriberId, interruptedData.toString());
-	    Queue queue = QueueFactory.getDefaultQueue();
+	    if(type.equals(ShortenURLType.EMAIL))
+		{
+	    	JSONObject interruptedData = new JSONObject();
+		    interruptedData.put(SendEmail.EMAIL_CLICK, true);
+		    interruptedData.put(SendEmail.EMAIL_OPEN, true);
+	
+		    // Interrupt clicked in DeferredTask
+		    emailClickDeferredTask   = new EmailClickDeferredTask(clickTrackingId, campaignId,
+			    subscriberId, interruptedData.toString());
+	    }
+	    
+	    if(type.equals(ShortenURLType.SMS))
+	    {
+	    	emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, null);
+	    }
+	    
+	    if(emailClickDeferredTask == null)
+	    {
+	    	System.err.println("EmailClickDeferred task is null...");
+	    	return;
+	    }
+	    
+	    Queue queue = QueueFactory.getQueue(AgileQueues.CRON_INTERRUPT_QUEUE);
 	    queue.addAsync(TaskOptions.Builder.withPayload(emailClickDeferredTask));
 	}
 	catch (Exception e)

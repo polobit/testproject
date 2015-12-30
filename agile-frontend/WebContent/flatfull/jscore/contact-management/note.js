@@ -166,12 +166,12 @@ $(function()
 			var note = data.toJSON();
 
 			console.log(note);
-			console.log(notesView.collection.toJSON());
 			// Add model to collection. Disabled sort while adding and called
 			// sort explicitly, as sort is not working when it is called by add
 			// function
 			if (notesView && notesView.collection)
 			{
+			console.log(notesView.collection.toJSON());
 				if(notesView.collection.get(note.id))
 				{
 					notesView.collection.get(note.id).set(new BaseModel(note));

@@ -1194,7 +1194,10 @@ display:flex;
 {
 	bottom:0;
 }
-
+.pos-b-n-sm 
+{
+  bottom: -10px;
+}
 .pos-b-xs
 {
 	bottom:5px;

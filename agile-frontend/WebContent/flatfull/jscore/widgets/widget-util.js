@@ -113,19 +113,23 @@ function save_widget_prefs(pluginName, prefs, callback) {
 					}
 					// Register on Sip.
 					sipStart();
+					globalCallWidgetSet();
 				}
 
 				if (pluginName == "TwilioIO") {
 					Twilio_Setup_Called = false;
 					// Get widget, Create token and set twilio device
 					globalTwilioIOSetup();
+					globalCallWidgetSet();
 				}
-				/*if (pluginName == "Bria"){
-					callFromBria = true;
 
-					// Get widget,set bria device
-					globalBriaSetup();
-				}*/
+				if (pluginName == "Bria"){
+					globalCallWidgetSet();
+				}
+				
+				if (pluginName == "Skype"){
+					globalCallWidgetSet();
+				}
 
 			}else{
 				msgType = "error";
