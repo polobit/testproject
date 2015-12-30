@@ -178,46 +178,31 @@ Handlebars.registerHelper('get_template', function(templateName, context, option
 
 });
 
-Handlebars.registerHelper('get_ticket_headers', function(options) {
-
-	var selected_columns = CURRENT_DOMAIN_USER.helpdeskSettings.selected_columns;
-	var template = '<th>{{col_name}}</th>', html = '';
-
-	for(var i=0; i< selected_columns.length; i++){
-
-		var col_name = selected_columns[i].replace(/_/g, ' ').replace(/ /g, '&nbsp;');
-
-		html += template.replace('{{col_name}}', (col_name[0].toUpperCase() + col_name.slice(1).toLowerCase()));
-	}
-
-	return html;
-});
-
 Handlebars.registerHelper('get_ticket_rows', function(ticket_model, options) {
 
-	var selected_columns = CURRENT_DOMAIN_USER.helpdeskSettings.selected_columns, tr_ele = '';
+	var selected_columns = CURRENT_DOMAIN_USER.helpdeskSettings.choosed_columns, tr_ele = '';
 
 	for(var i=0; i< selected_columns.length; i++){
 
 		var td_ele = '<td  class="first-letter-cap open-ticket">';
 		switch(selected_columns[i]){
 
-			case 'ID':
+			case 'id':
 				td_ele += '<div class="text-ellipsis">#'+ ticket_model.id +'</div>';
 				break;
-			case 'SUBJECT':
+			case 'subject':
 				td_ele += '<div class="text-ellipsis width-15em">'+ ticket_model.subject +'</div>';
 				break;
-			case 'REQUSTER_NAME':
+			case 'requester_name':
 				td_ele += '<div class="text-ellipsis width-9em">'+ ticket_model.requester_name +'</div>';
 				break;
-			case 'REQUESTER_EMAIL':
+			case 'requester_email':
 				td_ele += '<div class="text-ellipsis width-9em">'+ ticket_model.requester_email +'</div>';
 				break;
-			case 'CREATED_DATE':
+			case 'created_date':
 				td_ele += ticket_model.created_date;
 				break;
-			case 'DUE_DATE':{
+			case 'due_date':{
 
 				var due_date = ticket_model.due_date, due_txt = '-';
 				var currentEpoch = new Date().getTime();
@@ -232,29 +217,31 @@ Handlebars.registerHelper('get_ticket_rows', function(ticket_model, options) {
 				
 				break;
 			}
-			case 'ASSIGNED_DATE':
+			case 'assigned_date':
 				td_ele += ticket_model.assigned_time;
 				break;
-			case 'LAST_UPDATED_DATE':
+			case 'last_updated_date':
 				td_ele += ticket_model.last_updated_time;
 				break;
-			case 'CLOSED_DATE':
+			case 'closed_date':
 				td_ele += ticket_model.closed_time;
 				break;
-			case 'ASSIGNEE':
+			case 'assignee':
 				td_ele += '<div class="text-ellipsis width-9em">' + ((ticket_model.assignee) ? ticket_model.assignee.name : "-") +'</div>';
 				break;
-			case 'GROUP':
+			case 'group':
 				td_ele += '<div class="text-ellipsis width-9em">'+ ((ticket_model.group) ? ticket_model.group.group_name : "-") +'</div>';
 				break;
 			case 'LAST_UPDATED_BY':
 				td_ele += ticket_model.last_updated_by;
 				break;
-			case 'ORGANIZATION':
+			case 'organization':
+				td_ele += '-';
 				break;
-			case 'CONTACT_DETAILS':
+			case 'contact_details':
+				td_ele += '-';
 				break;
-			case 'PRIORITY':{
+			case 'priority':{
 				td_ele = '<td>';
 
 				if(ticket_model.priority == 'HIGH')
@@ -264,10 +251,10 @@ Handlebars.registerHelper('get_ticket_rows', function(ticket_model, options) {
 
 				break;
 			}
-			case 'TYPE':
+			case 'ticket_type':
 				td_ele += ticket_model.type;
 				break;
-			case 'STATUS':
+			case 'status':
 				td_ele += ticket_model.status;
 				break;
 		}
@@ -303,16 +290,16 @@ Handlebars.registerHelper('get_status_label', function(status, options) {
 
 	switch(status){
 		case 'NEW':
-			return '<span class="label label-warning">n</span>';
+			return '<span class="label label-warning cus-pad">n</span>';
 			break;
 		case 'OPEN':
-			return '<span class="label label-danger">o</span>';
+			return '<span class="label label-danger cus-pad">o</span>';
 			break;
 		case 'PENDING':
-			return '<span class="label label-info">p</span>';
+			return '<span class="label label-info cus-pad">p</span>';
 			break;
 		case 'CLOSED':
-			return '<span class="label label-success">c</span>';
+			return '<span class="label label-success cus-pad">c</span>';
 			break;
 	}
 });
@@ -341,6 +328,27 @@ Handlebars.registerHelper('agile_compare_prefs', function(key, value, options) {
 
 	return options.inverse(this);
 
+});
+Handlebars.registerHelper('is_lhs_filter_disabled', function(options) {
+
+	if(_agile_get_prefs('hide_ticket_lhs_filter'))
+		return options.fn(this);
+
+	return options.inverse(this);
+});
+
+Handlebars.registerHelper('is_column_selected', function(field_name, options) {
+
+	var selected_columns = CURRENT_DOMAIN_USER.helpdeskSettings.choosed_columns;
+
+	if(!selected_columns || !selected_columns.length){
+		selected_columns = ['id','subject','requester_name','due_date','priority','status','assignee','group',];
+	}
+
+	if(selected_columns.indexOf(field_name) != -1)
+		return options.fn(this);
+
+	return options.inverse(this);
 });
 
 Handlebars.registerHelper('is_ticket_collection_available', function(options) {

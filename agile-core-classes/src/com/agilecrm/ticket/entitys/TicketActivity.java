@@ -214,6 +214,11 @@ public class TicketActivity extends Cursor
 		return null;
 	}
 
+	public void setUser(Key<DomainUser> user)
+	{
+		this.user = user;
+	}
+
 	/**
 	 * Deletes entity from database
 	 */

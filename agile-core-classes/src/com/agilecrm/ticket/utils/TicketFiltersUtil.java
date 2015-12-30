@@ -125,6 +125,23 @@ public class TicketFiltersUtil
 
 					break;
 				}
+				case "ticket_is":{
+					
+						switch (RHS)
+						{
+						case "TICKET_STARRED":
+							RHS = "is_favorite";
+							break;
+						case "TICKET_SPAM":
+							RHS = "is_spam";
+							break;
+						}
+					if (operator != null && operator.contains("not"))
+						query.append(RHS + "=" + false);
+					else
+						query.append(RHS + "=" + true);
+					break;
+				}
 				case "ticket_last_updated_by":
 				{
 					query.append("last_updated_by="

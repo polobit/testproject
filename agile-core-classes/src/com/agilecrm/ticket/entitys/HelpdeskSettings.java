@@ -12,12 +12,7 @@ public class HelpdeskSettings
 
 	public TicketViewType ticket_view_type = null;
 
-	public enum TableColumns
-	{
-		ID, SUBJECT, REQUSTER_NAME, REQUESTER_EMAIL, CREATED_DATE, DUE_DATE, ASSIGNED_DATE, LAST_UPDATED_DATE, CLOSED_DATE, ASSIGNEE, GROUP, LAST_UPDATED_BY, ORGANIZATION, CONTACT_DETAILS, PRIORITY, TYPE, STATUS
-	}
-
-	public List<TableColumns> selected_columns = null;
+	public List<String> choosed_columns = null;
 
 	public HelpdeskSettings()
 	{
@@ -26,29 +21,22 @@ public class HelpdeskSettings
 	public HelpdeskSettings defaultSettings()
 	{
 		this.ticket_view_type = TicketViewType.MULTILINE;
-		this.selected_columns = new ArrayList<TableColumns>()
+		this.choosed_columns = new ArrayList<String>()
 		{
 			private static final long serialVersionUID = 1L;
 
 			{
-				add(TableColumns.ID);
-				add(TableColumns.SUBJECT);
-				add(TableColumns.REQUSTER_NAME);
-				add(TableColumns.DUE_DATE);
-				add(TableColumns.PRIORITY);
-				add(TableColumns.STATUS);
-				add(TableColumns.ASSIGNEE);
-				add(TableColumns.GROUP);
+				add("id");
+				add("subject");
+				add("requester_name");
+				add("due_date");
+				add("priority");
+				add("status");
+				add("assignee");
+				add("group");
 			}
 		};
-		
-		return this;
-	}
 
-	@Override
-	public String toString()
-	{
-		return "HelpdeskSettings [ticket_view_type=" + ticket_view_type + ", selected_columns=" + selected_columns
-				+ "]";
+		return this;
 	}
 }

@@ -260,7 +260,7 @@ var Ticket_Bulk_Ops = {
 			case 'delete-tickets':
 
 				var view = new Ticket_Base_Model({
-					isNew : true, 
+					isNew : true,
 					template : "ticket-bulk-actions-delete-tickets",
 					url : "/core/api/tickets/bulk-actions/delete-tickets",
 					saveCallback: function(){

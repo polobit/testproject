@@ -864,7 +864,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
 });
 },
 
-	ticketsCollectionView: function(){
+	/*ticketsCollectionView: function(){
 
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 
@@ -902,7 +902,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
 	 			$('#content').find('.helpdesk-tab').addClass('select');
 	 		});
 	 	});
-	},
+	},*/
 
 	/**
 	 * Fetches all notes related to given ticket id and renders html to provided element.

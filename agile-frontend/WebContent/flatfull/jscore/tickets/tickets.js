@@ -375,18 +375,19 @@ var Tickets = {
 		$('.tickets-toolbar').on('click', '.toggle-custom-filters', function(e){
 			e.preventDefault();
 
-			$('div#custom-filters-container').closest('div.col').toggle('slow');
-			var $icon = $(this).find('i');
+			var $container = $('div#custom-filters-container').closest('div.col');
 
-			if($icon.hasClass('fa-dedent')){
+			if(_agile_get_prefs('hide_ticket_lhs_filter')){
 
-				$(this).attr('data-original-title', 'Show filters');
-				$icon.removeClass('fa-dedent').addClass('fa-indent');
+				_agile_delete_prefs('hide_ticket_lhs_filter');
+				$(this).find('i').attr('data-original-title', 'Hide filters');
+
 			}else{
-
-				$(this).attr('data-original-title', 'Hide filters');
-				$icon.removeClass('fa-indent').addClass('fa-dedent');
+				_agile_set_prefs('hide_ticket_lhs_filter', true);
+				$(this).find('i').attr('data-original-title', 'Show filters');
 			}
+
+			$container.toggle('slow');
 		});
 
 		//Initialization click event on sort filters
@@ -428,6 +429,10 @@ var Tickets = {
 		$(el).on('click', ".toggle-collection-view", function(e){
 			e.preventDefault();
 
+			if(($(this).hasClass('single-line') && Tickets.isSingleRowView()) || 
+				($(this).hasClass('multi-line') && !Tickets.isSingleRowView()))
+				return;
+
 			//Toggle view types
 			var view_type = Tickets.isSingleRowView() ? 'MULTILINE' : 'SINGLELINE', $that = $(this);
 
@@ -441,6 +446,45 @@ var Tickets = {
 				Tickets.renderExistingCollection();
 			});
 		});
+
+		//Initializing click event due date dropdown
+	  	$(el).on('click','li.single-line-view > ul > li > a', function(event){
+
+	  		var $target = $(event.currentTarget);
+	  		$(event.target).blur();
+
+	  		var $chbx = $target.find('input[type="checkbox"]');
+	  		var isChecked = $chbx.is(':checked') ? false : true;
+			$chbx.prop('checked', isChecked);
+
+			var field_name = $chbx.attr('name');
+
+			if(isChecked){
+				$('table.single-row').find('th.' + field_name + '').show();
+				$('table.single-row').find('td.' + field_name + '').show();
+			}else{
+				$('table.single-row').find('th.' + field_name + '').hide();
+				$('table.single-row').find('td.' + field_name + '').hide();
+			}
+
+			var selected_columns = $('.choose-column-chbx:checked'), column_names = [];
+
+			for(var i=0; i<selected_columns.length; i++)
+				column_names.push($(selected_columns[i]).attr('name'));
+
+			var json = {};
+			json.choosed_columns= column_names;
+
+			var baseModel = new BaseModel();
+			baseModel.url = '/core/api/users/helpdesk-settings/choose-columns';
+			baseModel.save(json, 
+			{	success: function(model){
+					CURRENT_DOMAIN_USER.helpdeskSettings = model.toJSON();
+				}
+			});
+
+			return false;
+	  	});
 	},
 
 	fillAssigneeAndGroup : function(el){

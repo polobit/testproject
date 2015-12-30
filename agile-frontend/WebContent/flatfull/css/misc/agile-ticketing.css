@@ -54,7 +54,7 @@
 
 .last-notes-drp-dwn {
 	overflow: hidden;
-	max-height: 165px;
+	max-height: 175px;
 }
 
 .div-max-width {
@@ -285,11 +285,24 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
  .select-assignee .chosen-container-single>a.chosen-single>div>b {
     margin-top: -1px;
 }
+  
+  div.chosen-container > ul.chosen-choices{
+    border-radius: 1px;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 30px !important;
+    box-shadow: none;
+  }
+
+  div.chosen-container > ul.chosen-choices > li.search-field > input{
+    height: 22px !important;
+  }
 
   div.chosen-container > ul.chosen-choices > li{
   	background-color: white !important;
     border-radius: 1px !important;
     box-shadow: 0 1px 1px rgba(90,90,90,0.1) !important;
+    margin: 3px 3px !important;
   }
 
   tbody#ticket-single-row-model-list tr td{
@@ -335,4 +348,17 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
 
   .toggle-favorite:hover:before{
     content: "\f005";
+  }
+
+  .txt-color-light{
+    color: rgb(88, 102, 110) !important;
+  }
+
+  .cus-pad{
+      padding: .1em .5em .2em !important;
+  }
+
+  li.single-line-view.dropdown-submenu > ul.dropdown-menu{
+    left: -101%;
+    top: 5px;
   }

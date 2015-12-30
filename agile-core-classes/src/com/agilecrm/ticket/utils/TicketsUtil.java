@@ -211,9 +211,7 @@ public class TicketsUtil
 			ticket.last_updated_by = LAST_UPDATED_BY.REQUESTER;
 			ticket.requester_ip_address = ipAddress;
 			ticket.user_replies_count = 1;
-
-			Key<Tickets> key = Tickets.ticketsDao.put(ticket);
-
+			
 			/**
 			 * Checking if new ticket requester is exists in Contacts
 			 */
@@ -225,8 +223,8 @@ public class TicketsUtil
 			ticket.contact_key = new Key<Contact>(Contact.class, contact.id);
 			ticket.contactID = contact.id;
 			
-			ticket.save();
-			//Tickets.ticketsDao.put(ticket);
+			//Save ticket 
+			ticket.saveWithNewID();
 
 			// Create search document
 			new TicketsDocument().add(ticket);
