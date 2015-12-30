@@ -157,7 +157,12 @@ public class RedirectServlet extends HttpServlet
 
     		    for (ContactEmail contactEmail : contactEmails)
     		    {
-	    			contactEmail.is_email_opened = true;
+    		    	contactEmail.is_email_opened = true;
+    		    	
+    		    	// If images blocked, set email_opened_at too
+    		    	if(contactEmail.email_opened_at == 0l)
+    		    		contactEmail.email_opened_at = System.currentTimeMillis() / 1000;
+    		    	
 	    			contactEmail.email_link_clicked_at = System.currentTimeMillis() / 1000;
 	    			contactEmail.save();
     		    }
