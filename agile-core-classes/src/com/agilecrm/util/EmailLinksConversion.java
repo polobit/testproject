@@ -51,7 +51,7 @@ public class EmailLinksConversion
 	        && !StringUtils.equals(str, EmailUtil.getPoweredByAgileURL("campaign"))
 	        && (StringUtils.startsWith(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(
 	                ".agilecrm.com")) && !str.toLowerCase().contains("www.w3.org")
-	        && !str.toLowerCase().startsWith("http://goo.gl") && !str.toLowerCase().startsWith("http://agle.cc")
+	        && !str.toLowerCase().startsWith("http://agle.cc")
 	        && !str.toLowerCase().startsWith("http://unscr.be"))
 	    return true;
 
