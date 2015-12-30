@@ -6,7 +6,7 @@ $(function(){
 		$(".twilio_incoming_logs").removeClass("active");
 		$("#incoming_log_details").hide();
 		$("#outgoing_log_details").show();
-		
+		$("#contentLeftLabel").html("To :");
 		$('#twilio-outgoing-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
 			var to = $('#contact_number').val();
 		if(to == "" || !to)
@@ -24,7 +24,7 @@ $(function(){
 		$(".twilio_outgoing_logs").removeClass("active");
 		$("#outgoing_log_details").hide();
 		$("#incoming_log_details").show();
-		
+		$("#contentLeftLabel").html("From :");
 		$('#twilio-incoming-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
 			var to = $('#contact_number').val();
 		if(to == "" || !to)
