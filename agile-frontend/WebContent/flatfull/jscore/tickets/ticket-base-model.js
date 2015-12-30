@@ -4,7 +4,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		//Ticket operations change group, assignee, priority etc
 		/*"click .ticket_group_name" : "changeGroup",*/
-		"click .ticket_status" : "changeStatus",
+		"change .ticket_status" : "changeStatus",
 		"click .ticket_assignee_name" : "changeAssignee",
 		"click .assign-to-me" : "assignToMe",
 
@@ -63,7 +63,18 @@ var Ticket_Base_Model = Base_Model_View.extend({
 	changeStatus: function(e){
 		e.preventDefault();
 
-		Tickets.changeStatus(e);
+		var status = $(e.target).val();
+
+		Tickets.changeStatus(status, function(){
+
+				showNotyPopUp('information', "Ticket status has been changed to "+status, 'bottomRight', 3000);
+
+				var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
+					'/' + (Ticket_Status ? Ticket_Status : 'new');
+
+				Backbone.history.navigate(url, {trigger : true});
+
+			});
 	},
 
 	changeGroup: function(e){

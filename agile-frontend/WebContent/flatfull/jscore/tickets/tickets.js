@@ -791,11 +791,24 @@ var Tickets = {
 		return ticket_collection.at(current_ticket_index).id;
 	},
 
+	changeStatus : function(status, callback){
+
+		var url = "/core/api/tickets/change-status?status="+status+"&id=" + Current_Ticket_ID;
+
+		Tickets.updateModel(url, function(model){
+
+				if(callback)
+					callback(model.toJSON());
+
+			}, null, Current_Ticket_ID);
+
+		
+	},
+
 	closeTicket : function(e){
 
-		var url = "/core/api/tickets/change-status?status=CLOSED&id=" + Current_Ticket_ID;
 
-		Tickets.updateModel(url, function(){
+		this.changeStatus("CLOSED", function(){
 
 				showNotyPopUp('information', "Ticket has been closed", 'bottomRight', 3000);
 
@@ -804,8 +817,7 @@ var Tickets = {
 
 				Backbone.history.navigate(url, {trigger : true});
 
-			}, null, Current_Ticket_ID);
-
+			});
 		
 	},
 
