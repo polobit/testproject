@@ -301,7 +301,7 @@ function _getMessageBria(message, callback){
 	}else if(state == "ended"){
 		callback("");
 		if(globalCall.callStatus && globalCall.callStatus == "Connected"){
-			globalCall.callStatus = "Answered";
+			globalCall.callStatus = "Answered"; //change form completed
 		}else if(globalCall.callStatus && globalCall.callStatus == "Connecting"){
 			globalCall.callStatus = "Busy";
 		}else if(globalCall.callStatus && globalCall.callStatus == "Ringing"){

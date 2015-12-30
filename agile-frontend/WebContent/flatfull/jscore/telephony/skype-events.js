@@ -307,7 +307,7 @@ function _getMessageSkype(message, callback){
 		callback("");
 		
 		if(globalCall.callStatus && globalCall.callStatus == "Connected"){
-			globalCall.callStatus = "Answered";
+			globalCall.callStatus = "Answered"; //change form completed
 		}else if(globalCall.callStatus && globalCall.callStatus == "Connecting"){
 			globalCall.callStatus = "Busy";
 		}else if(globalCall.callStatus == "Failed" || globalCall.callStatus == "REFUSED" || globalCall.callStatus == "Incoming" || globalCall.callStatus == "Missed"){
