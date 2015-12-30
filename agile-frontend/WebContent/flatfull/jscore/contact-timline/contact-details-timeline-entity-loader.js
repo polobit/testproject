@@ -174,7 +174,7 @@ var timeline_entity_loader = {
 				json.agile_email = "agile_email";
 
 				json.subject = model.subject;
-				json.email_clicked_at = (model.email_clicked_at) * 1000;
+				json.email_link_clicked_at = (model.email_link_clicked_at) * 1000;
 				json.trackerId = model.trackerId;
 
 				// // To avoid merging with emails template having date entity
