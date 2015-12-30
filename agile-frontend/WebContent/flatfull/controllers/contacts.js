@@ -1101,12 +1101,6 @@ var ContactsRouter = Backbone.Router.extend({
 				
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
 
-				// Send request if count is not present
-				if(App_Contacts.contact_custom_view.collection.length > 0 && !App_Contacts.contact_custom_view.collection.models[0].attributes.count){
-					$("#contacts-count", el).html("Loading...");
-					
-				}
-
 				// To set chats and view when contacts are fetch by
 				// infiniscroll
 				//setup_tags(el);
@@ -1133,7 +1127,21 @@ var ContactsRouter = Backbone.Router.extend({
 					else
 						count_message = "<small> (" + count + " Total) </small>";
 					$('#contacts-count').html(count_message);
-				} else {					
+				} else {	
+
+				    // Call to get Count 
+				    if(collection.models.length > 0 && !collection.models[0].get("count"))
+				    {
+				    	var count_message = "<small> (" + LOADING_HTML + ") </small>";
+				    	$("#contacts-count", el).html(count_message);
+				    	$.get(App_Contacts.contact_custom_view.options.url + "/count", {}, function(data){
+                                    count_message = "<small> (" + data + " Total) </small>";
+									$('#contacts-count').html(count_message);
+									// Reset collection
+									App_Contacts.contactsListView.collection.models[0].set("count", data, {silent: true});
+				    	});
+				    }
+
 					setupLhsFilters(el);
 				}
 

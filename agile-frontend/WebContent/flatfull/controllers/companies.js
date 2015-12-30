@@ -213,7 +213,21 @@ var CompaniesRouter = Backbone.Router
 					else
 						count_message = "<small> (" + count + " Total) </small>";
 					$('#contacts-count').html(count_message);
-				} else {					
+				} else {
+
+					// Call to get Count 
+				    if(collection.models.length > 0 && !collection.models[0].get("count"))
+				    {
+				    	var count_message = "<small> (" + LOADING_HTML + ") </small>";
+				    	$("#contacts-count", el).html(count_message);
+				    	$.get(App_Companies.companiesListView.options.url + "/count", {}, function(data){
+                                    count_message = "<small> (" + data + " Total) </small>";
+									$('#contacts-count').html(count_message);
+									// Reset collection
+									App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
+				    	});
+				    }
+				    					
 					setupLhsFilters(el,true);
 					contactFiltersListeners("lhs_filters_conatiner");
 				}

@@ -68,6 +68,7 @@ import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.util.JSONUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
@@ -115,6 +116,28 @@ public class ContactsAPI
 	List<Contact> contacts = ContactUtil.getAllContactsByOrder(Integer.parseInt(count), cursor, sortKey);
 	return contacts;
 
+    }
+    
+    /**
+     * Fetches all the contacts (of type person). Activates infiniScroll, if
+     * no.of contacts are more than count and cursor is not null. This method is
+     * called if TEXT_PLAIN is request
+     * 
+     * If count is null fetches all the contacts at once
+     * 
+     * @param cursor
+     *            activates infiniScroll
+     * @param count
+     *            no.of contacts to be fetched at once (if more contacts are
+     *            there)
+     * @return list of contacts
+     */
+    @Path("/list/count")
+    @GET
+    public int getContactsCount()
+    {
+	System.out.println("Fetching count int");
+	return ContactUtil.getContactsCount(null, null);
     }
 
     /**
@@ -206,6 +229,28 @@ public class ContactsAPI
 	}
 
 	return ContactUtil.getAllCompaniesByOrder(sortKey);
+    }
+    
+    /**
+     * Fetches all the contacts (of type person). Activates infiniScroll, if
+     * no.of contacts are more than count and cursor is not null. This method is
+     * called if TEXT_PLAIN is request
+     * 
+     * If count is null fetches all the contacts at once
+     * 
+     * @param cursor
+     *            activates infiniScroll
+     * @param count
+     *            no.of contacts to be fetched at once (if more contacts are
+     *            there)
+     * @return list of contacts
+     */
+    @Path("/companies/list/count")
+    @GET
+    public int getCompaniesCount()
+    {
+	System.out.println("Fetching count of companies");
+	return ContactUtil.getCompaniesCount(null, null);
     }
 
     /**
