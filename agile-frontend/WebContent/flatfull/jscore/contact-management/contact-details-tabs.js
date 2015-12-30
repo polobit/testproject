@@ -202,7 +202,7 @@ var Contact_Details_Tab_Actions = {
 
 		  	var model = $(targetEl).parents('li').data();
 
-		  	if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != model.get("owner_id"))){
+		  	if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != model.get("owner_id")) && model.get("entity_type") && model.get("entity_type") == "event"){
 				$("#deleteEventErrorModal").html(getTemplate("delete-event-error-modal")).modal('show');
 				return;
 			}

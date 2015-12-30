@@ -6,6 +6,7 @@ function bindAdminChangeAction(el, data)
 		$("input[type=checkbox]", $('div[name="newscopes"]', el)).removeAttr("disabled");
 	else
 		$("input[type=checkbox]", $('div[name="newscopes"]', el)).prop("checked", "checked" ).attr("disabled", "disabled");
+	$('#calendar-privilege', el).trigger("change");
 	})
 	
 	$("input[type=checkbox]", $('div[name="newscopes"]', el)).on('change', function(e){
