@@ -223,6 +223,9 @@
 		deleteDeals = $('#deal-bulk-delete');
 		dealConAddTag = $('#deal-contact-add-tag');
 		dealConAddCamp = $('#deal-contact-add-camp');
+		bulkChangeToMilestones = $('#bulk_deals_milestone_change');
+		bulkArchive = $('#bulk_deals_archive');
+		bulkRestore = $('#bulk_deals_restore');
 		filterJSON = $.parseJSON(readCookie('deal-filters'));
 		
 		changeOwner.on('click',function(e){
@@ -253,6 +256,51 @@
 		dealConAddCamp.on('click',function(e){
 			e.preventDefault();
 			bulkAddDealContactsToCamp($(this));
+		});
+
+		bulkChangeToMilestones.on('click',function(e){
+			e.preventDefault();
+			if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+			{
+				showModalConfirmation("Bulk Update", 
+						"You may not have permission to update some of the deals selected. Proceeding with this operation will update only the deals that you are permitted to update.<br/><br/> Do you want to proceed?", 
+						function (){
+							$('#deal_mile_change_modal').modal('show');
+						});
+			}else
+			{
+				$('#deal_mile_change_modal').modal('show');
+			}
+		});
+
+		bulkArchive.on('click',function(e){
+			e.preventDefault();
+			if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+			{
+				showModalConfirmation("Bulk Update", 
+						"You may not have permission to archive some of the deals selected. Proceeding with this operation will archive only the deals that you are permitted to update.<br/><br/> Do you want to proceed?", 
+						function (){
+							$('#deal_bulk_archive_modal').modal('show');
+						});
+			}else
+			{
+				$('#deal_bulk_archive_modal').modal('show');
+			}
+		});
+
+		bulkRestore.on('click',function(e){
+			e.preventDefault();
+			if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+			{
+				showModalConfirmation("Bulk Update", 
+						"You may not have permission to restore some of the deals selected. Proceeding with this operation will restore only the deals that you are permitted to update.<br/><br/> Do you want to proceed?", 
+						function (){
+							$('#deal_bulk_restore_modal').modal('show');
+						});
+			}else
+			{
+				$('#deal_bulk_restore_modal').modal('show');
+			}
 		});
 		
 		$('body').on('change', '#pipeline-list-bulk', function(e) {

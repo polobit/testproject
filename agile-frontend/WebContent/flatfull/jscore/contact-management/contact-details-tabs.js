@@ -202,6 +202,11 @@ var Contact_Details_Tab_Actions = {
 
 		  	var model = $(targetEl).parents('li').data();
 
+		  	if(!hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != model.get("owner").id) && model.get("entity_type") && model.get("entity_type") == "deal"){
+		  		$('#deal_delete_privileges_error_modal').modal('show');
+		  		return;
+		  	}
+
 			if (model && model.toJSON().type != "WEB_APPOINTMENT")
 			{
 				if (!confirm("Are you sure you want to delete?"))

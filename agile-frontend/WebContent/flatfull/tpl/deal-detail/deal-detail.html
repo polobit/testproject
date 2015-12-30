@@ -81,11 +81,12 @@
         	<div><small class="text-xs text-muted">Owner:&nbsp;&nbsp;</small></div>
 		
         	<div id="deal-owner" data={{owner.id}} class="deal-owner-name contact-owner-name c-p">{{owner.name}}</div>
-        
+          {{#hasScope "MANAGE_DEALS"}}
         	<div class="btn-group v-middle" id="change-deal-owner-ul" style="display: none">
         		 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
         		 <ul id='deal-detail-owner' class="dropdown-menu"></ul>
-        	</div> 
+        	</div>
+          {{/hasScope}} 
        </div>
     </div>
 	</div>
