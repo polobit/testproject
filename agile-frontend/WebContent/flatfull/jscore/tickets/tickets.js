@@ -172,7 +172,9 @@ var Tickets = {
 					//Initialize click event on each ticket li
 					Tickets.initEvents(App_Ticket_Module.ticketsCollection.el);
 
-					Backbone.history.navigate('#tickets/filter/' + Ticket_Filter_ID,{render:false});
+					Ticket_Bulk_Ops.clearSelection();
+					
+					Backbone.history.navigate('#tickets/filter/' + Ticket_Filter_ID, {render:false});
 				});
 			});
 		}
@@ -425,13 +427,9 @@ var Tickets = {
 		/**
 		 * Initializing click event on toggle view button
 		 */
-		$('.toggle-collection-view').off('click');
+		$('.toggle-collection-view').off('click mouseover mouseout');
 		$(el).on('click', ".toggle-collection-view", function(e){
 			e.preventDefault();
-
-			if(($(this).hasClass('single-line') && Tickets.isSingleRowView()) || 
-				($(this).hasClass('multi-line') && !Tickets.isSingleRowView()))
-				return;
 
 			//Toggle view types
 			var view_type = Tickets.isSingleRowView() ? 'MULTILINE' : 'SINGLELINE', $that = $(this);
@@ -441,14 +439,27 @@ var Tickets = {
 
 				CURRENT_DOMAIN_USER.helpdeskSettings.ticket_view_type = view_type;
 
-				showNotyPopUp('information', 'Default view changed to ' + ((view_type == 'MULTILINE') ? 'Multi line' : 'Single line'), 'bottomRight', 3000);
-
 				Tickets.renderExistingCollection();
 			});
 		});
 
+		/**
+		 * Initializing hover event on toggle view button
+		 */
+		$(el).on('mouseover mouseout', ".toggle-collection-view.single-line, ul.choose-columns", function(e){
+			e.preventDefault();
+			
+			if (event.type == 'mouseover'){
+
+				$('ul.choose-columns').closest('div').addClass('open');
+				return;
+			}
+
+			$('ul.choose-columns').closest('div').removeClass('open');
+		});
+
 		//Initializing click event due date dropdown
-	  	$(el).on('click','li.single-line-view > ul > li > a', function(event){
+	  	$(el).on('click','ul.choose-columns > li > a', function(event){
 
 	  		var $target = $(event.currentTarget);
 	  		$(event.target).blur();
@@ -647,9 +658,9 @@ var Tickets = {
 		head.load(LIB_PATH + '/lib/web-calendar-event/moment.min.js', '/lib/date-range-picker2.min.js', "/flatfull/css/final-lib/date-range-picker2.css",  function()
 		{
 			$('.due-date-input').daterangepicker({
-			    "timePicker": true,"startDate": moment(),"endDate": moment().add('days', 3)
+			    "singleDatePicker": true,"drops": "up","timePicker": true,"startDate": moment(),"endDate": moment().add('days', 3)
 			}, function(start, end, label) {
-			  	callback();
+			  	callback(start);
 			});
 		});
 	},

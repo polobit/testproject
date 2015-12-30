@@ -69,10 +69,13 @@
 </script>
 <script id="ticket-bulk-ops-text-template" type="text/html">
 {{#if total_tickets_selected}}
-	Selected all tickets
+	Selected all {{total_tickets_count}} tickets
 {{else}}
+	{{#if tickets_count}}
+		Selected {{tickets_count}} ticket{{#if_equals tickets_count "1"}}{{else}}s{{/if_equals}}. 
+	{{/if}}
 	<a id="select-all-tickets" class="c-p text-info link-color" href="javascript:void(0);">
-		Select all {{total_tickets_count}} tickets
+		Select all {{total_tickets_count}} ticket{{#if_equals total_tickets_count "1"}}{{else}}s{{/if_equals}}
 	</a>
 {{/if}}
 </script>

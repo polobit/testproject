@@ -2,12 +2,13 @@ package com.agilecrm.ticket.utils;
 
 import java.net.URLDecoder;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.filter.ContactFilterIdsResultFetcher;
-import com.agilecrm.ticket.entitys.TicketFilters;
+import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.google.appengine.api.search.Cursor;
 import com.google.appengine.api.search.Index;
@@ -28,27 +29,21 @@ import com.googlecode.objectify.Key;
 public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	Integer fetchedCount = 0;
 	String cursor = null;
 	Long totalCount = null;
+	List<SearchRule> conditions;
 
-	Long ticketFilterID = null;
-	TicketFilters filter = null;
 	String queryString = null;
 
-	public FilterTicketIdsFetcher(Long ticketFilterID)
+	public FilterTicketIdsFetcher(List<SearchRule> conditions)
 	{
 		super();
-		this.ticketFilterID = ticketFilterID;
 
 		try
 		{
-			if (ticketFilterID != null)
-				filter = TicketFiltersUtil.getFilterById(ticketFilterID);
-
-			queryString = TicketFiltersUtil.getQueryFromConditions(filter.conditions);
-			queryString = queryString.substring(0, queryString.lastIndexOf("AND"));
+			queryString = TicketFiltersUtil.getQueryFromConditions(conditions);
 		}
 		catch (Exception e)
 		{
@@ -71,7 +66,7 @@ public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 
 		return true;
 	}
-	
+
 	@Override
 	public Set<Key<Tickets>> next()
 	{
@@ -96,7 +91,7 @@ public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 			if (this.totalCount == null)
 			{
 				this.totalCount = results.getNumberFound();
-				System.out.println("this.totalCount: " + this.totalCount );
+				System.out.println("this.totalCount: " + this.totalCount);
 			}
 
 			this.cursor = results.getCursor().toWebSafeString();

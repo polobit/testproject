@@ -10,9 +10,9 @@
     <a class="thumb cursor-pointer" href="javascript:void(0);">
       {{#if contact.properties}}
         <img data-name="{{dataNameAvatar contact.properties 42}}" src="{{gravatarurl contact.properties 24}}" class="r-5x">
-      {{else}}    
+      {{else}}
         <img src="{{emailGravatarurl 42 requester_email}}">
-      {{/if}}  
+      {{/if}}
     </a>
   </td>
   <td class="v-middle p-l-none p-r-none open-ticket show-notes pos-rlt" style="width: 60%;">
@@ -21,7 +21,7 @@
           <td>
             <div class="text-ellipsis">
               <div class="text-ellipsis pull-left text-md" style="max-width: 20em;">{{#if subject}}{{subject}}{{else}}-{{/if}}</div>
-              <div class="text-muted pull-left">&nbsp;#{{id}}</div>
+              <div class="text-muted pull-left text-md">&nbsp;#{{id}}</div>
             </div>
           </td>
         </tr>
@@ -68,45 +68,38 @@
           </td>
         </tr>
       </table>
-      <div id="ticket-last-notes" class="ticket-last-notes" style="min-height: {{#if_equals status 'NEW'}}170px;{{else}}270px;{{/if_equals}};">
-      <div class="row m-n mar-btm-md last-notes-drp-dwn">
-        <div class="col-md-12 p-b-sm">
-          <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;
-          <span class="text-muted">Ticket #{{id}}</span>
-        </div>
-        <div class="col-md-12 p-b-sm">
-          <strong>{{subject}}</strong>
-        </div>
-        <div class="col-md-12 pad-all-sm">
-          <span class="text-muted">Last reply</span>
-          <hr class="m-t-xs m-b-xs">
-        </div>
-        <div class="col-md-12 pad-all-sm">
-          <span>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</span>
-          <span class="text-light txt-small pull-right">
-            {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}
-          </span>
-        </div>
-        <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
-          {{{last_reply_text}}}  
+      <div id="ticket-last-notes" class="ticket-last-notes" style="max-height: {{#if_equals status 'NEW'}}170px;{{else}}270px;{{/if_equals}};">
+        <div class="row m-n mar-btm-md">
+          <div class="col-md-12 p-b-sm">
+            <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;
+            <span class="text-muted">Ticket #{{id}}</span>
+          </div>
+          <div class="col-md-12 p-b-sm">
+            <strong>{{subject}}</strong>
+          </div>
+          <div class="col-md-12 last-notes-drp-dwn p-b-sm">  
+            <div id="recent-reply-notes" class="recent-reply-notes">
+              {{{first_notes_text}}}
+            </div>
+          </div>
+          {{#if_equals status 'NEW'}}
+          {{else}}
+            <div class="col-md-12 pad-all-sm">
+              <span class="text-muted">Last comment</span>
+              <hr class="m-t-xs m-b-xs">
+            </div>
+            <div class="col-md-12 pad-all-sm">
+              <span>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</span>
+              <span class="text-light txt-small pull-right">
+                {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}
+              </span>
+            </div>
+            <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
+              {{{last_reply_text}}}  
+            </div>
+          {{/if_equals}}
         </div>
       </div>
-      {{#if_equals status 'NEW'}}
-      {{else}}
-        <div class="last-notes-drp-dwn m-t-md">  
-          <div class="col-md-12 pad-all-sm">
-            <span class="text-muted">First reply</span>
-            <span class="text-light txt-small pull-right">
-              {{epochToHumanDate "mmm dd, yyyy HH:MM" created_time}}&nbsp;
-            </span>
-            <hr class="m-t-xs m-b-none">
-          </div>
-          <div id="recent-reply-notes" class="col-md-12 p-t-sm p-b recent-reply-notes">
-            {{{first_notes_text}}}
-          </div>
-        </div>
-      {{/if_equals}}
-    </div>
   </td>
   <td class="v-middle p-l-none cursor-default" style="width: 27%;">
     <table class="txt-small full-width" style="background-color: inherit;">
@@ -243,7 +236,7 @@
 </script>
 <script id="ticket-single-row-popup-template" type="text/html">
 <div id="ticket-last-notes" class="ticket-last-notes" style="min-height: {{#if_equals status 'NEW'}}170px;{{else}}270px;{{/if_equals}};">
-    <div class="row m-n mar-btm-md last-notes-drp-dwn">
+    <div class="row m-n mar-btm-md">
       <div class="col-md-12 p-b-sm">
         <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;
         <span class="text-muted">Ticket #{{id}}</span>
@@ -251,31 +244,27 @@
       <div class="col-md-12 p-b-sm">
         <strong>{{subject}}</strong>
       </div>
-      <div class="col-md-12 pad-all-sm">
-        <span class="text-muted">Last reply</span>
-        <span class="text-light txt-small pull-right">
-          {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}
-        </span>
-        <hr class="m-t-xs m-b-xs">
-      </div>
-      <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
-        {{{last_reply_text}}}  
-      </div>
-    </div>
-    {{#if_equals status 'NEW'}}
-    {{else}}
-      <div class="last-notes-drp-dwn m-t-md">  
-        <div class="col-md-12 pad-all-sm">
-          <span class="text-muted">First reply</span>
-          <span class="text-light txt-small pull-right">
-            {{epochToHumanDate "mmm dd, yyyy HH:MM" created_time}}&nbsp;
-          </span>
-          <hr class="m-t-xs m-b-none">
-        </div>
-        <div id="recent-reply-notes" class="col-md-12 p-t-sm p-b recent-reply-notes">
+      <div class="col-md-12 last-notes-drp-dwn p-b-sm">  
+        <div id="recent-reply-notes" class="recent-reply-notes">
           {{{first_notes_text}}}
         </div>
       </div>
-    {{/if_equals}}
+      {{#if_equals status 'NEW'}}
+      {{else}}
+        <div class="col-md-12 pad-all-sm">
+          <span class="text-muted">Last comment</span>
+          <hr class="m-t-xs m-b-xs">
+        </div>
+        <div class="col-md-12 pad-all-sm">
+          <span>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</span>
+          <span class="text-light txt-small pull-right">
+            {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}
+          </span>
+        </div>
+        <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
+          {{{last_reply_text}}}  
+        </div>
+      {{/if_equals}}
+    </div>
   </div>
 </script>

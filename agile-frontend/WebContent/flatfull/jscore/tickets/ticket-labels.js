@@ -53,8 +53,7 @@ var Ticket_Labels = {
 				Ticket_Labels.prepareOptionsList(labels, el);
 			});
 
-			return;
-
+		return;
 	},
 
 	prepareOptionsList : function(labels, el) {

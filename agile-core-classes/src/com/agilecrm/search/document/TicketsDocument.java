@@ -193,9 +193,24 @@ public class TicketsDocument implements BuilderInterface
 			Tickets ticket = (Tickets) entity;
 			Document document = getIndex().get(ticket.id + "");
 
-			String existingMailContent = document.getOnlyField("mail_content").getText();
+			String existingMailContent = "";
+
+			try
+			{
+				existingMailContent = document.getOnlyField("mail_content").getText();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 
 			System.out.println("existingMailContent: " + existingMailContent);
+
+			if (StringUtils.isBlank(existingMailContent))
+			{
+				add(ticket);
+				return;
+			}
 
 			ticket.last_reply_text += existingMailContent;
 

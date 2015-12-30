@@ -10,19 +10,13 @@ var Ticket_Bulk_Ops = {
 		/**
 		 * Initializing click event on top ticket checkbox
 		 */
-		$el.on('change', ".ticket-checkbox", function(e){
+		$el.on('change', ".select-all", function(e){
 			// e.stopPropagation();
 			
-			var $this = $(this);
+			var selected_all = $(this).is(':checked');
 
-			if($this.hasClass('select-all')){
-
-				//Checking if select all checkbox is selected
-				var selected_all = $this.is(':checked');
-
-				//Checking/unchecking checkboxes
-				selected_all ? Ticket_Bulk_Ops.checkAllTickets($el) : Ticket_Bulk_Ops.clearSelection();
-			}
+			//Checking/unchecking checkboxes
+			selected_all ? Ticket_Bulk_Ops.checkAllTickets($el) : Ticket_Bulk_Ops.clearSelection();
 		});
 
 		/**
@@ -54,7 +48,7 @@ var Ticket_Bulk_Ops = {
 			//Check all tickets
 			$('.ticket-checkbox').prop('checked', true);
 
-			//Rendering suggestion text
+			//Rendering suggestion text.Template incl. in tickets-groups-container-template.html
 			$('#tickets-bulk-select').html(getTemplate('ticket-bulk-ops-text', {total_tickets_selected : true}));
 		});
 	},
@@ -103,24 +97,24 @@ var Ticket_Bulk_Ops = {
 
 		//Checking if total selected tickets count is equal to tickets collection
 		if(selected_tickets_count > 0){
-			var total_tickets_count = Tickets_Count.ticketsCount[Ticket_Filter_ID];
-
-			var json = {};
+			var total_tickets_count = Tickets_Count.ticketsCount[Ticket_Filter_ID], json = {};
 
 			if(selected_tickets_count == total_tickets_count){
 				Ticket_Bulk_Ops.selected_all_filter_tickets = true;
 				$('.ticket-checkbox.select-all').prop('checked', true);
 				json.total_tickets_selected = true;
+				json.total_tickets_count = total_tickets_count;
 			}
 			else{
 				Ticket_Bulk_Ops.selected_all_filter_tickets = false;
-				$('.ticket-checkbox.select-all').prop('checked', false);
+				//$('.ticket-checkbox.select-all').prop('checked', false);
+				json.tickets_count = selected_tickets_count;
 				json.total_tickets_count = total_tickets_count;
 			}
 
 			$('.bulk-action-btn').removeClass('disabled');
 			
-			//Rendering suggestion text
+			//Rendering suggestion text. Template incl. tickets-groups-container-template.html
 			$('#tickets-bulk-select').html(getTemplate('ticket-bulk-ops-text', json));
 		}else{
 			Ticket_Bulk_Ops.clearSelection();
@@ -155,42 +149,14 @@ var Ticket_Bulk_Ops = {
 			Backbone.history.navigate("tickets", { trigger : true });
 
 		switch(action_type){
-			case 'add-labels':{
+			case 'manage-labels':{
 
 				var view = new Ticket_Base_Model({
 					isNew : true, 
 					template : "ticket-bulk-actions-add-labels",
-					url : "/core/api/tickets/bulk-actions/manage-labels?command=add",
-					postRenderCallback : function(el){
-
-						Ticket_Labels.showSelectedLabels(new Array(), "", $(el));
-					}
-				});
-
-				$('#content').html(view.render(true).el);
-				break;
-			}
-			case 'remove-labels':
-				var view = new Ticket_Base_Model({
-					isNew : false, 
-					template : "ticket-bulk-actions-remove-labels",
 					url : "/core/api/tickets/bulk-actions/manage-labels",
-					postRenderCallback : function(el){
-
-						Ticket_Labels.showSelectedLabels(new Array(), "", $(el));
-					}
-				});
-
-				$('#content').html(view.render(true).el);
-				break;
-			case 'change-assignee':{
-
-				var view = new Ticket_Base_Model({
-					isNew : false, 
-					template : "ticket-bulk-actions-change-assignee",
-					url : "/core/api/tickets/bulk-actions/change-assignee",
 					saveCallback: function(){
-						Backbone.history.navigate('#tickets/filter/' + Ticket_Filter_ID,{render:false});
+						Tickets.renderExistingCollection();
 					},
 					prePersist : function(model)
 					{
@@ -198,7 +164,38 @@ var Ticket_Bulk_Ops = {
 						json.ticketIDs = Ticket_Bulk_Ops.getSelectedTickesObj();
 
 						if(Ticket_Bulk_Ops.selected_all_filter_tickets)
-							json.filterID =  Ticket_Filter_ID;
+							json.conditions = Ticket_Custom_Filters.customFilters;
+
+						model.set(json, { silent : true });
+					},
+					postRenderCallback : function(el){
+
+						Ticket_Labels.showSelectedLabels(new Array(), $(el));
+					}
+				});
+
+				$('#content').html(view.render(true).el);
+				break;
+			}
+			case 'change-assignee':{
+
+				var view = new Ticket_Base_Model({
+					isNew : false, 
+					template : "ticket-bulk-actions-change-assignee",
+					url : "/core/api/tickets/bulk-actions/change-assignee",
+					saveCallback: function(){
+						//Backbone.history.navigate('#tickets/filter/' + Ticket_Filter_ID,{render:true});
+						Tickets.renderExistingCollection();
+					},
+					prePersist : function(model)
+					{
+						var json = {};
+						json.ticketIDs = Ticket_Bulk_Ops.getSelectedTickesObj();
+
+						if(Ticket_Bulk_Ops.selected_all_filter_tickets){
+							json.conditions = Ticket_Custom_Filters.customFilters;
+							//json.filterID =  Ticket_Filter_ID;
+						}
 						
 						json.groupID = $('[name="assigneeID"]').find('option:selected').data('group-id');
 
@@ -216,15 +213,18 @@ var Ticket_Bulk_Ops = {
 					template : "ticket-bulk-actions-execute-workflow",
 					url : "/core/api/tickets/bulk-actions/execute-workflow",
 					saveCallback: function(){
-						Backbone.history.navigate('#tickets/filter/' + Ticket_Filter_ID,{render:false});
+						//Backbone.history.navigate('#tickets/filter/' + Ticket_Filter_ID,{render:true});
+						Tickets.renderExistingCollection();
 					},
 					prePersist : function(model)
 					{
 						var json = {};
 						json.ticketIDs = Ticket_Bulk_Ops.getSelectedTickesObj();
 
-						if(Ticket_Bulk_Ops.selected_all_filter_tickets)
-							json.filterID =  Ticket_Filter_ID;
+						if(Ticket_Bulk_Ops.selected_all_filter_tickets){
+							json.conditions = Ticket_Custom_Filters.customFilters;
+							//json.filterID =  Ticket_Filter_ID;
+						}
 
 						model.set(json, { silent : true });
 					}
@@ -248,8 +248,8 @@ var Ticket_Bulk_Ops = {
 						json.ticketIDs = Ticket_Bulk_Ops.getSelectedTickesObj();
 
 						if(Ticket_Bulk_Ops.selected_all_filter_tickets)
-							json.filterID =  Ticket_Filter_ID;
-						
+							json.conditions = Ticket_Custom_Filters.customFilters;
+
 						model.set(json, { silent : true });
 					}
 				});
@@ -273,7 +273,7 @@ var Ticket_Bulk_Ops = {
 						json.ticketIDs = Ticket_Bulk_Ops.getSelectedTickesObj();
 
 						if(Ticket_Bulk_Ops.selected_all_filter_tickets)
-							json.filterID =  Ticket_Filter_ID;
+							json.conditions = Ticket_Custom_Filters.customFilters;
 						
 						model.set(json, { silent : true });
 					}
@@ -281,6 +281,56 @@ var Ticket_Bulk_Ops = {
 
 				$('#ticket-modals').html(view.render().el);
 				$('#delete-tickets-modal').modal('show');
+				break;
+			case 'mark-spam':
+
+				var view = new Ticket_Base_Model({
+					isNew : true,
+					template : "ticket-bulk-actions-spam-tickets",
+					url : "/core/api/tickets/bulk-actions/spam-tickets",
+					saveCallback: function(){
+						Ticket_Bulk_Ops.clearSelection();
+						$('#spam-tickets-modal').modal('hide');
+					},
+					prePersist : function(model)
+					{
+						var json = {};
+						json.ticketIDs = Ticket_Bulk_Ops.getSelectedTickesObj();
+
+						if(Ticket_Bulk_Ops.selected_all_filter_tickets)
+							json.conditions = Ticket_Custom_Filters.customFilters;
+						
+						model.set(json, { silent : true });
+					}
+				});
+
+				$('#ticket-modals').html(view.render().el);
+				$('#spam-tickets-modal').modal('show');
+				break;
+			case 'mark-favorite':
+
+				var view = new Ticket_Base_Model({
+					isNew : true,
+					template : "ticket-bulk-actions-favorite-tickets",
+					url : "/core/api/tickets/bulk-actions/favorite-tickets",
+					saveCallback: function(){
+						Ticket_Bulk_Ops.clearSelection();
+						$('#favorite-tickets-modal').modal('hide');
+					},
+					prePersist : function(model)
+					{
+						var json = {};
+						json.ticketIDs = Ticket_Bulk_Ops.getSelectedTickesObj();
+
+						if(Ticket_Bulk_Ops.selected_all_filter_tickets)
+							json.conditions = Ticket_Custom_Filters.customFilters;
+						
+						model.set(json, { silent : true });
+					}
+				});
+
+				$('#ticket-modals').html(view.render().el);
+				$('#favorite-tickets-modal').modal('show');
 				break;
 		}
 	},

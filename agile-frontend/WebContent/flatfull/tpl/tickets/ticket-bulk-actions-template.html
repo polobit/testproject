@@ -3,13 +3,13 @@
     <div class="col-md-8">
         <div class="tab-content wrapper-md">
             <div class="panel panel-default">
-                <div class="panel-heading"><h4 class="h4">Add labels to selected tickets</h4></div>
+                <div class="panel-heading"><h4 class="h4">Manage labels</h4></div>
                     <div class="panel-body">
                         <form id="bulk-labels" class="form-horizontal" onsubmit="return false;">
                             <fieldset>
                                 <div class="control-group form-group">         
-                                    <label class="control-label col-sm-2 m-t-xs">
-                                        Add labels <span class="field_req">*</span>
+                                    <label class="control-label col-sm-2">
+                                        Select labels <span class="field_req">*</span>
                                     </label>
                                     <div class="controls col-sm-7">
                                         <select name="labels" data-placeholder="Labels" class="chosen-select form-control" multiple class="w-md">
@@ -24,9 +24,11 @@
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <div class="form-actions">       
                                             <a href="#tickets" class="btn btn-default btn-sm">Close</a>   
-                                            <a href="javascript:void(0);"
-                                                class="btn btn-primary btn-sm save m-l-xs">
-                                                    Add Labels
+                                            <a href="javascript:void(0);" class="btn btn-primary btn-sm save m-l-xs">
+                                                Remove Labels
+                                            </a>
+                                            <a href="javascript:void(0);" class="btn btn-primary btn-sm save m-l-xs">
+                                                Add Labels
                                             </a> 
                                             <span class="save-status"></span>
                                         </div>
@@ -88,7 +90,7 @@
     <div class="col-md-8">
         <div class="tab-content wrapper-md">
             <div class="panel panel-default">
-                <div class="panel-heading"><h4 class="h4">Add labels to selected tickets</h4></div>
+                <div class="panel-heading"><h4 class="h4">Change assignee</h4></div>
                     <div class="panel-body">
                         <form id="bulk-labels" class="form-horizontal" onsubmit="return false;">
                             <fieldset>
@@ -106,7 +108,7 @@
                                                         </option>
                                                     {{/group_users}}
                                                 </optgroup>    
-                                              {{/each}}  
+                                            {{/each}}  
                                         </select>
                                     </div>
                                 </div>
@@ -171,50 +173,50 @@
     </div>
 </div>          
 </script>
-<script id="ticket-bulk-actions-close-tickets-template" type="text/html">
-<div id="close-tickets-modal" class="modal fade">
+<script id="ticket-bulk-actions-spam-tickets-template" type="text/html">
+<div id="spam-tickets-modal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal">x</button>
-                <h3 class="modal-title"><i class="icon icon-copyright"></i> Close Tickets</h3>
-            </div>
-            <div class="modal-body">
-                <form name="closeTicketsForm" class="form-horizontal">
-                    Are you sure, you want to close selected tickets?<br/><br/>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
-                <a href="javascript:void(0);" data-loading-text="Close Tickets" class="save btn btn-sm btn-primary m-l-xs">
-                    Close Tickets
-                </a>
-                &nbsp;&nbsp;<span id="msg"></span>
-            </div>
+            <form id="closeTicketsForm" name="closeTicketsForm" class="form-horizontal">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">x</button>
+                    <h3 class="modal-title"><i class="icon icon-copyright"></i> Spam Tickets</h3>
+                </div>
+                <div class="modal-body">
+                    Are you sure, you want to mark selected tickets as spam?<br/><br/>
+                </div>
+                <div class="modal-footer">
+                    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+                    <a href="javascript:void(0);" data-loading-text="Mark spam" class="save btn btn-sm btn-primary m-l-xs">
+                        Mark spam
+                    </a>
+                    &nbsp;&nbsp;<span id="msg"></span>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 </script>
-<script id="ticket-bulk-actions-delete-tickets-template" type="text/html">
-<div id="delete-tickets-modal" class="modal fade">
+<script id="ticket-bulk-actions-favorite-tickets-template" type="text/html">
+<div id="favorite-tickets-modal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal">x</button>
-                <h3 class="modal-title"><i class="icon icon-trash"></i> Delete Tickets</h3>
-            </div>
-            <div class="modal-body">
-                <form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
-                    Are you sure, you want to delete selected tickets?<br/><br/>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
-                <a href="javascript:void(0);" data-loading-text="Delete Tickets" class="save btn btn-sm btn-primary">
-                    Delete Tickets
-                </a>
-                &nbsp;&nbsp;<span id="msg"></span>
-            </div>
+            <form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">x</button>
+                    <h3 class="modal-title"><i class="icon icon-star"></i> Favorite Tickets</h3>
+                </div>
+                <div class="modal-body">
+                    Are you sure, you want to favorite selected tickets?<br/><br/>
+                </div>
+                <div class="modal-footer">
+                    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+                    <a href="javascript:void(0);" data-loading-text="Mark favorite" class="save btn btn-sm btn-primary">
+                        Mark favorite
+                    </a>
+                    &nbsp;&nbsp;<span id="msg"></span>
+                </div>
+            </form>
         </div>
     </div>
 </div>

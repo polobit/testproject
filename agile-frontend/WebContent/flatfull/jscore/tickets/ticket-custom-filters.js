@@ -45,7 +45,13 @@ var Ticket_Custom_Filters = {
 			  	var $container = $('#custom-filters-container');
 
 			  	$container.html($(template_ui));
-			  	Tickets.initDateTimePicker($('#datetimepicker'), function(){});
+			  	Tickets.initDateTimePicker($('#datetimepicker'), function(start){
+			  		
+			  		//Calculate date differences between them
+			  		var duration = moment.duration((moment(start).diff(moment(new Date()))));
+
+			  		Ticket_Custom_Filters.changeDueDate(duration.asHours());
+			  	});
 
 			  	var options = [];
 
@@ -82,6 +88,36 @@ var Ticket_Custom_Filters = {
 					
 					$('input.due-date-input').val(options);
 					return false;
+			  	});
+
+			  	//Initializing click event on due date button
+			  	$container.on('click','a.choose-due-date', function(event){
+
+			  		var value = $(this).data('value'), current_date = new Date();
+
+			  		switch(value){
+			  			case 'tomorrow':
+			  				current_date.setDate(current_date.getDate() + 1);
+			  				break;
+			  			case 'next_two_days':
+			  				current_date.setDate(current_date.getDate() + 2);
+			  				break;
+			  			case 'next_three_days':
+			  				current_date.setDate(current_date.getDate() + 3);
+			  				break;
+			  			case 'next_five_days':
+			  				current_date.setDate(current_date.getDate() + 5);
+			  				break;
+			  		}
+
+			  		//Set selected date in input field
+			  		$('input.due-date-input').val(moment(current_date).format('MM/DD/YYYY'));
+
+			  		//Calculate date differences between them
+			  		var duration = moment.duration((moment(current_date).diff(moment(new Date()))));
+
+			  		//Re-render collection with updated filter conditions
+			  		Ticket_Custom_Filters.changeDueDate(duration.asHours());
 			  	});
 
 			  	//Initializes chosen dropdown, fetches labels collection and renders selected labels
@@ -340,5 +376,30 @@ var Ticket_Custom_Filters = {
 
 		if(callback)
 			callback(dataJSON);
+	},
+
+	changeDueDate: function(hrs){
+
+		//Removing existing due date conditions from custom filters
+  		for(var i=0; i< Ticket_Custom_Filters.customFilters.length; i++){
+
+			var condition = Ticket_Custom_Filters.customFilters[i];
+
+			if(condition.LHS != 'hrs_since_due_date')
+				continue;
+
+			Ticket_Custom_Filters.customFilters.splice(i, 1);
+			break;
+		}
+
+  		var condition = {};
+		condition.LHS = 'hrs_since_due_date';
+		condition.CONDITION = 'IS_LESS_THAN';
+		condition.RHS = parseInt(hrs);
+
+		Ticket_Custom_Filters.customFilters.push(condition);
+
+		//Re-render collection with customized filters
+		Tickets.fetchTicketsCollection();
 	}
 };

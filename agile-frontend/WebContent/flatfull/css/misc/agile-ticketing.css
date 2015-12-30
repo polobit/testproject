@@ -274,8 +274,7 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
   }
 
   .chosen-container-active.chosen-with-drop .chosen-choices {
-    border-bottom-right-radius: 4px !important;
-    border-bottom-left-radius: 4px !important;
+    border-radius: 1px !important;
  }
 
  .select-assignee .chosen-container-single .chosen-single span {
@@ -361,4 +360,9 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
   li.single-line-view.dropdown-submenu > ul.dropdown-menu{
     left: -101%;
     top: 5px;
+  }
+
+  div.ticket-collection-container > table > thead > tr > th{
+    /*font-weight: normal;*/
+    color: #98a6ad;
   }
