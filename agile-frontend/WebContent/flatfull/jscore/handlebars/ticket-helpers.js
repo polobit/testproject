@@ -343,4 +343,14 @@ Handlebars.registerHelper('agile_compare_prefs', function(key, value, options) {
 
 });
 
+Handlebars.registerHelper('is_ticket_collection_available', function(options) {
+
+	try{
+		if(App_Ticket_Module.ticketFiltersList && App_Ticket_Module.ticketFiltersList.collection.toJSON().length > 0)
+		  return options.fn(this);
+	}catch(e){}
+	
+	return options.inverse(this);
+
+});
 /** End of ticketing handlebars* */

@@ -442,97 +442,45 @@ var Tickets = {
 			});
 		});
 	},
-	
-	changeAssignee: function(event){
+
+	fillAssigneeAndGroup : function(el){
 
 		var groupsAssignees = Backbone.Model.extend({urlRoot : '/core/api/tickets/groups'});
 		new groupsAssignees().fetch({success: function(model, response, options){
 		
-			$('.ticket_assignee_name').css('display', 'none');
+			var html = getTemplate('ticket-change-assignee', model.toJSON());
 
-      		var html = getTemplate('ticket-change-assignee', model.toJSON());
+			var selectedAssignee = App_Ticket_Module.ticketView.model.toJSON().assigneeID;
+			var selectedGroup = App_Ticket_Module.ticketView.model.toJSON().groupID;
 
-      		var $select = $('#ticket-assignee-list');
-      		$select.closest('div').show();
-      		$select.html(html);
+			$(html).find("optgroup[data-group-id='"+selectedGroup+"']").find("option[value='"+selectedAssignee+"']").attr('selected', 'selected');
 
-      		head.js('/lib/chosen.jquery.min.js', function()
+      		$('#ticket-assignee', el).html(html);
+
+      		$(el).on('change', '#ticket-assignee', function ()
 			{
-				//Initliazing multi select drop down
-				$select.chosen();
+				var assigneeId = $(this).val();
+			    var groupId = $(this.options[this.selectedIndex]).closest('optgroup').attr('data-group-id');
+			    
+			    Tickets.sendReqToChangeAssignee(assigneeId, groupId, App_Ticket_Module.ticketView.model.toJSON(), function(model){
 
-				$select.off('change');
-				$select.on('change', function(evt, params) {
-				   
-				   console.log(evt);
-				   console.log(params);
+					if(assigneeId && assigneeId == CURRENT_AGILE_USER.domainUser.id)
+						$('.assign-to-me').hide();
+					else
+						$('.assign-to-me').show();
 
-				   Tickets.initChangeAssigneeEvent(evt, params);
+					App_Ticket_Module.ticketView.model.set(model, {silent: true});
+
 				});
+
+
 			});
 
 		}, error: function(){
 
 		}});
 	},
-
-	initChangeAssigneeEvent: function(evt, params){
-
-		var assignee_id = params.selected;
-		var $selected_option = $('select#ticket-assignee-list').find('option:selected');
-
-		var assignee_name = $selected_option.text();
-		var group_id = $selected_option.data('group-id');
-		var group_name = $selected_option.data('group-name');
-
-		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
-
-		// Returns, if same owner is selected again 
-		if(assignee_id == ticketModel.assigneeID && group_id == ticketModel.groupID)
-		{	
-			$('#ticket-assignee-list').closest('div').hide();
-			$('.ticket_assignee_name').show();
-			return;
-		}
-
-		//Disable select box while updating
-		$('select#ticket-assignee-list').attr('disabled', true);
-
-		//Re-initalize to disable select box
-		$('#ticket-assignee-list').trigger('chosen:updated');
-
-		this.sendReqToChangeAssignee(assignee_id, group_id, ticketModel, function(model){
-
-			//Enable select box
-				$('select#ticket-assignee-list').attr('disabled', false);
-
-				//Re-initalize to disable select box
-				$('#ticket-assignee-list').trigger('chosen:updated');
-
-				//Set new assignee details on view
-				$('#assignee_name').html(assignee_name).attr('data-id', assignee_id);
-
-				//Set new assignee details on view
-				$('#group_name').html(group_name).attr('data-id', group_id);
-
-				//Hide select dropdown
-				$('#ticket-assignee-list').closest('div').hide();
-
-				//Show new group name and assignee name
-				$('.ticket_assignee_name').show();
-
-				if(assignee_id && assignee_id == CURRENT_AGILE_USER.domainUser.id)
-					$('.assign-to-me').hide();
-				else
-					$('.assign-to-me').show();
-
-				App_Ticket_Module.ticketView.model.set(model, {silent: true});
-
-		});
-
-		
-	},
-
+	
 	sendReqToChangeAssignee : function(assignee_id, group_id, ticketModel, callback){
 
 		var newTicketModel = new BaseModel();
@@ -691,13 +639,33 @@ var Tickets = {
     	}
 	},
 
+	addMeToCC: function(){
+
+		var email = App_Ticket_Module.ticketView.model.toJSON().requester_email;
+		$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
+		$('#cc_email_field').val('');
+		Tickets.updateCCEmails(email, 'add');
+		$('.add-me-to-cc').hide();
+
+	},
+
 	removeCCEmails: function(e){
 
-		Tickets.updateCCEmails($(e.target).closest('li').attr('data'), 'remove');
+		Tickets.updateCCEmails($(e.target).closest('li').attr('data'), 'remove', function(model){
+
+			var email = App_Ticket_Module.ticketView.model.toJSON().requester_email;
+			
+			var updated_cc_emails = (model) ? model.toJSON().cc_emails : [];
+
+			if(!updated_cc_emails || updated_cc_emails.length == 0 || $.inArray(email, updated_cc_emails) == -1)
+				$('.add-me-to-cc').show();
+
+		});
+
 		$(e.target).closest('li').remove();
 	},
 
-	updateCCEmails : function(email, command){
+	updateCCEmails : function(email, command, callback){
 
 		var newTicketModel = new BaseModel();
 		newTicketModel.url = "/core/api/tickets/update-cc-emails?command="
@@ -709,6 +677,9 @@ var Tickets = {
 					if($('.ticket-timeline-container').length > 0){
 						Ticket_Timeline.render_individual_ticket_timeline()
 					}
+
+					if(callback)
+						callback(model);
 
 				}
 			});
@@ -952,7 +923,40 @@ var Tickets = {
 		var $row = $('.ticket-collection-row');
 
 		$row.css('min-height', window.innerHeight - $row.offset().top + 'px');
+	},
+
+	initializeTicketSLA : function(el){
+		
+		 head.load(LIB_PATH + '/lib/web-calendar-event/moment.min.js', '/lib/date-range-picker2.min.js', "/flatfull/css/final-lib/date-range-picker2.css",  function()
+		  {
+		   $('#datetimepicker', el).daterangepicker({
+		       "singleDatePicker": true,"drops": "up","timePicker": true,"startDate": moment(),"endDate": moment().add('days', 3)
+		   }, function(start, end, label) {
+
+		      	// Apply SLA to the ticket
+		     	var timeInMilli = moment(start).valueOf();
+
+		      	var json = {};
+				json.due_time = timeInMilli;
+				json.id = App_Ticket_Module.ticketView.model.toJSON().id;
+
+
+				// Send req to trigger campaign
+				var newTicketModel = new BaseModel();
+				newTicketModel.url = "core/api/tickets/change-due-date?due_time="
+				+ timeInMilli + "&id=" + Current_Ticket_ID;
+				newTicketModel.save(json, 
+					{	success: function(model){
+
+					}}
+				);
+
+
+
+		   });
+		  });
 	}
+
 };
 
 function tickets_typeahead(data){
