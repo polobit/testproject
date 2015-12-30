@@ -360,6 +360,10 @@ $("#right-pane").html(ticketView.render().el);
 				//Initializing event on SLA date picket
 				Tickets.initDateTimePicker($('#datetimepicker', el), Tickets.changeSLA);
 
+				Tickets.fillAssigneeAndGroup(el);
+
+				Tickets.initializeTicketSLA(el);
+
 				//Initializing type ahead for cc emails
 				agile_type_ahead("cc_email_field", el, tickets_typeahead, function(arg1, arg2){
 

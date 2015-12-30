@@ -12,6 +12,8 @@ var Tickets_Notes = {
 
 		var json = serializeForm("send-reply");
 
+		json.html_text = json.html_text + "<br><br>" +CURRENT_USER_PREFS.signature;
+
 		if($(e.target).hasClass('forward')){
 			this.forwardTicket(json, $save_btn);
 			return;
@@ -112,15 +114,58 @@ var Tickets_Notes = {
 
 		$container.html(getTemplate('create-ticket-notes', data));
 
-		head.js('/flatfull/lib/jquery.autogrow.js', function()
+		head.js('/flatfull/lib/jquery.textarea-expander.js', function()
 		{	
 			try{
-				$('textarea#reply_textarea', $container).autogrow();
+				$('textarea#reply_textarea', $container).TextAreaExpander();
 			}catch(e){}
 			
 		});
 
-		$('textarea#reply_textarea', $container).focus();
+		//Initializing type ahead for cc emails
+		$($container).on('keypress', '#forward_email_input', function(e){
+
+			e.stopImmediatePropagation();
+			
+			if(e.which == 13) {
+
+				var email = $('#forward_email_input').val();
+
+	        	if(!email)
+	        		return;
+	        	
+	        	var err_email = !Tickets.isValidEmail(email);
+
+	        	$('ul.forward-emails').prepend(getTemplate('forward-email-li', {email: email, err_email: err_email}));
+	        	$('#forward_email_input').val('');
+
+	        	return false;
+
+	    	}
+		});
+
+		if($("#forward_email_input", $container).length > 0){
+			agile_type_ahead("forward_email_input", $container, tickets_typeahead, function(arg1, arg2){
+
+				arg2 = arg2.split(" ").join("");
+
+				var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
+
+				if(!email || email == 'No email')
+					return;
+
+				$('ul.forward-emails').prepend(getTemplate('forward-email-li', {email: email}));
+				$('#forward_email_input').val('');
+		  		
+		  	},undefined, undefined, 'core/api/search/');
+		}
+
+		$($container).on('click', '.remove-ticket-forward-emails', function() {
+			$(this).closest('li').remove();
+		});
+
+		
+		// $('textarea#reply_textarea', $container).focus();
 
 		$($container).on('click', '#ticket_canned_response', function() {
 

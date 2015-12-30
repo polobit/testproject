@@ -4,7 +4,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		//Ticket operations change group, assignee, priority etc
 		/*"click .ticket_group_name" : "changeGroup",*/
-		"click .ticket_status" : "changeStatus",
+		"change .ticket_status" : "changeStatus",
 		"click .ticket_assignee_name" : "changeAssignee",
 		"click .assign-to-me" : "assignToMe",
 
@@ -16,7 +16,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click #workflows_list li a" : "executeWorkflows",
 
 		"click .toggle-timeline" : "toggleTimeline",
-		"click #change-sla" : "changeSla",
+		// "click #change-sla" : "changeSla",
 		"click .contact-deals" : "showContactDeals",
 		"mouseover .hover-edit" : "showEditIcon",
 		"mouseout  .hover-edit" : "hideEditIcon",
@@ -32,6 +32,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .remove-ticket-tags" : "removeTicketTags",
 
 		"click .remove-ticket-cc-emails" : "removeTicketCCEmails",
+		"click .add-me-to-cc" : "addMeToCC",
 
 		//New ticket events
 		// "click .show_cc_emails_field" : "showCCEmailsField",
@@ -62,7 +63,18 @@ var Ticket_Base_Model = Base_Model_View.extend({
 	changeStatus: function(e){
 		e.preventDefault();
 
-		Tickets.changeStatus(e);
+		var status = $(e.target).val();
+
+		Tickets.changeStatus(status, function(){
+
+				showNotyPopUp('information', "Ticket status has been changed to "+status, 'bottomRight', 3000);
+
+				var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
+					'/' + (Ticket_Status ? Ticket_Status : 'new');
+
+				Backbone.history.navigate(url, {trigger : true});
+
+			});
 	},
 
 	changeGroup: function(e){
@@ -83,17 +95,21 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		var $selected_option = $('select#ticket-assignee-list').find('option:selected');
 
-		var assignee_name = $selected_option.text();
-		var group_id = $selected_option.data('group-id');
+		var groupId = App_Ticket_Module.ticketView.model.toJSON().groupID;
 
-		Tickets.sendReqToChangeAssignee(CURRENT_AGILE_USER.domainUser.id, "", App_Ticket_Module.ticketView.model.toJSON(), function(model){
+		Tickets.sendReqToChangeAssignee(CURRENT_AGILE_USER.domainUser.id, groupId, App_Ticket_Module.ticketView.model.toJSON(), function(model){
 
-				$('.assign-to-me').hide();
-				
-				App_Ticket_Module.ticketView.model.set(model, {silent: true});
-
+			$('.assign-to-me').hide();
+		
+			App_Ticket_Module.ticketView.model.set(model, {silent: true});
 		});
+		
 
+	},
+
+	addMeToCC : function(e){
+		e.preventDefault();
+		Tickets.addMeToCC();
 	},
 
 	changeTicketType: function(e){
@@ -241,17 +257,6 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		}
 
 		$('.toggle-timeline').text(tooltip_text);
-	},
-
-	changeSla: function(e){
-		e.preventDefault();
-
-		$('#datetimepicker').show();
-
-		var ticketJSON = App_Ticket_Module.ticketView.model.toJSON();
-		var defaultDate = (ticketJSON.due_time) ? moment.unix(Math.floor(ticketJSON.due_time/1000)) : false;
-		
-		$('#datetimepicker').data("DateTimePicker").defaultDate(defaultDate);
 	},
 
 	showContactDeals: function(e){

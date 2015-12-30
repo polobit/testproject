@@ -307,14 +307,25 @@
     </span>
   </li>
 </script>
+
 <script id="cc-email-li-template" type="text/html">
   <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{email}}">
     <span>
       <a class="anchor m-r-xs {{#if err_email}}boder-btm-dot{{/if}}" href="javascript:void(0);" >{{email}}</a>
-      <a class="close remove-ticket-tags text-lg">&times</a>
+      <a class="close remove-ticket-cc-emails text-lg">&times</a>
     </span>
   </li>
 </script>
+
+<script id="forward-email-li-template" type="text/html">
+  <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{email}}">
+    <span>
+      <a class="anchor m-r-xs {{#if err_email}}boder-btm-dot{{/if}}" href="javascript:void(0);" >{{email}}</a>
+      <a class="close remove-ticket-forward-emails text-lg">&times</a>
+    </span>
+  </li>
+</script>
+
 <script id="ticket-attachment-li-template" type="text/html">
   <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" file-name="{{name}}" url="{{url}}" size="{{size}}">
     <span>

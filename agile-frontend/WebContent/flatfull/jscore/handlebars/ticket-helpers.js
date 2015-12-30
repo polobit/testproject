@@ -350,4 +350,15 @@ Handlebars.registerHelper('is_column_selected', function(field_name, options) {
 
 	return options.inverse(this);
 });
+
+Handlebars.registerHelper('is_ticket_collection_available', function(options) {
+
+	try{
+		if(App_Ticket_Module.ticketFiltersList && App_Ticket_Module.ticketFiltersList.collection.toJSON().length > 0)
+		  return options.fn(this);
+	}catch(e){}
+	
+	return options.inverse(this);
+
+});
 /** End of ticketing handlebars* */
