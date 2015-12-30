@@ -42,13 +42,13 @@ function loadProfile(contact_id, callback){
 			callback(data);
 	}, 
 	function error(data){
-		console.log("Error : "+data);
+		$('#Paypal').html('<div class="wrapper-sm">Error Occured while fetching invoices</div>');
 	});
 }
 
 function getInvoices(accessToken){	
 	var tok = "Bearer " + accessToken;
-	var obj = {email : "prem.agilecrm@gmail.com"};
+	var obj = {email : Email};
 
 	$.ajax({
 		headers : {
