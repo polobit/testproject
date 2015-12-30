@@ -2995,3 +2995,11 @@ width : 150px;
 {
 		width : 233px;
 }
+@-moz-document url-prefix() { 
+
+.mozilla-addon
+{
+	position:relative; top :-2px;
+
+}
+}
