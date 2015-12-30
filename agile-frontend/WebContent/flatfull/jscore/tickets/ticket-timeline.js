@@ -33,6 +33,7 @@ var Ticket_Timeline = {
 
 	render_individual_ticket_timeline: function(){
 
+		$('#notes-collection-container').html(getRandomLoadingImg());
 
 		//Fetching users collection
 		var collection_def = Backbone.Collection.extend({url : 'core/api/tickets/activity?id=' + Current_Ticket_ID});
