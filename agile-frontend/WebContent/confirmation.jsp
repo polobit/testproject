@@ -335,6 +335,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			    String email = request.getParameter("email");
 			    String campaign_name = request.getParameter("c_name");
 			    String unsubscribeEmail = request.getParameter("unsubscribe_email");
+			    String unsubscribeName = request.getParameter("unsubscribe_name");
 			    
 			    // Used to send as from name in confirmation email
 			    String company = request.getParameter("company");
@@ -432,7 +433,11 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    
 					    if("current".equals(status))
 						{
-							map.put("campaign_name", campaign_name);
+					    	/* if(StringUtils.isNotBlank(unsubscribeName) && !StringUtils.equalsIgnoreCase(unsubscribeName, "null"))
+					    		map.put("campaign_name", unsubscribeName);
+					    	else
+					    		map.put("campaign_name", campaign_name); */
+							map.put("campaign_name", unsubscribeName);
 							subjectMessage = "Unsubscribed successfully from Campaign";
 							
 							// Add unsubscribe log

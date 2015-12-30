@@ -249,6 +249,7 @@ public class Contact extends Cursor
     public static final String WEBSITE = "website";
     public static final String ADDRESS = "address";
     public static final String PHONE = "phone";
+	public static final String SKYPEPHONE = "skypePhone";
     public static final String IMAGE = "image";
 
     /**
@@ -333,7 +334,7 @@ public class Contact extends Cursor
 	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(EMAIL)
 		|| fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
 		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
-		|| fieldName.equals(NAME))
+		|| fieldName.equals(NAME) || fieldName.equals(SKYPEPHONE))
 	    type = FieldType.SYSTEM;
 
 	// If field is null then new contact field is added to properties.

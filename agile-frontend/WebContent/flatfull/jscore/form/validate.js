@@ -130,6 +130,19 @@ function isValidForm(form) {
 		return true;
 	},"Please select atleast one option.");
 
+	jQuery.validator.addMethod("checkedMultiCheckbox", function(value, element){
+		
+		console.log("value = " + value);
+		console.log("element = " + element);
+
+		var counter = $(element).find('input:checked').length;
+		
+		if(counter == 0)
+			return false;
+
+		return true;
+	},"Please select atleast one option.");
+
 	jQuery.validator.addMethod("date", function(value, element){
 		if(value=="")
 			return true;

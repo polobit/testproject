@@ -12,9 +12,14 @@
 			<div class="pull-right">
 			<div class="btn-group  hidden m-r-xs inline-block" id="deals-tracks">
 			</div>
+      {{#is_mobile}}
+      {{else}}
 			<div id="deal-list-filters" class="btn-group m-r-xs inline-block">
 				 <img class="loading_img p-r-xs"  height="32px" width="32px" src= "{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
 			</div>
+      {{/is_mobile}}
+      {{#is_mobile}}
+              {{else}}
 			<div class="btn-group m-r-xs inline-block" id="deals-view">
 					<div class="btn btn-sm btn-default"><i class="icon-list m-r-xs"></i></div>
 					<a class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown" href="#">
@@ -22,9 +27,12 @@
 					</a>
 					<ul class="dropdown-menu pull-right">
 							<li><a href="#" class="deals-list-view" onclick="return false;">List View</a></li>
+              
 						<li><a href="#" class="deals-pipelined-view">Milestone View</a></li>
+            
 					</ul>
 			</div>
+      {{/is_mobile}}
 			<div class="btn-group m-r-xs inline-block" id="deals-action">
 					<a href="#deals-add" class="deals-add btn btn-default btn-sm"><i class="icon-plus-sign" /> Add Deal
 					</a>
@@ -48,10 +56,13 @@
         <div id="slate">
         </div>
         {{#if this.length}}
+        {{#is_mobile}}
+        {{else}}
         <div id="total-pipeline-chart" class="w-full bg-white" style="height:300px"></div>
+        
         <br />
 			<div>
-				<div class="btn-group pull-left" id="bulk-actions" style="display: none;">
+				<div class="btn-group pull-left" id="bulk-actions" style="display:none;">
 					<div class="btn btn-sm btn-default">Bulk Actions</div>
 					<a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
@@ -73,12 +84,16 @@
 					</ul>
 				</div>
 				<div class="btn-group pull-left m-t-xs" style="display: none;left: 10px;" id="bulk-select"></div>
-				<br><br>
+        <div class="clearfix"></div>
+				<br>
 			</div>
+      {{/is_mobile}}
 			<div class="panel panel-default">
 			<div class="panel-heading">Deals</div>
 			<div class="table-responsive">
-                <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/opportunity/delete" id="deal-list" style="table-layout: auto;">
+
+                <table class="table table-striped showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/delete" id="deal-list" style="table-layout:auto;">
+
 					<thead>
                         <tr>
                             <th>Opportunity</th>
@@ -97,16 +112,22 @@
         
         {{/if}}
         </div>
+        
     <div class="col-md-3">
         <div class="data-block">
+        {{#is_mobile}}
+        {{else}}
+        
             <div class="panel wrapper m-b-none">
                 <header>
                     <h4 class="m-t-none font-thin"><span><i class="icon-flag"></i></span> Milestones</h4>
                 </header>
                 <div id="pie-deals-chart" class="w-full" style="height:400px"></div>
 			</div>
+      {{/is_mobile}}
+
 			<div class="m-t-md">
-                <h4 class="m-t-none m-b-sm h4">
+                <h4 class="m-t-none m-b-sm h4 text-center-xs">
                     What are Milestones?
                 </h4>
                 
@@ -117,7 +138,7 @@
                     e.g. Use 'Won' in case of a successfully completed deal or 'New' for a newly added deal. You can define custom milestones.
                 </p>
                 
-                <h4 class="m-t-none m-b-sm h4">
+                <h4 class="m-t-none m-b-sm h4 text-center-xs">
                     What are Deals?
                 </h4>
                 
@@ -129,6 +150,7 @@
     </div>
 </div>
 </div>
+
 </div>
 
 <!-- Deal bulk milestone and pipeline change modal. -->
@@ -331,8 +353,8 @@
 	</div>
 </td>
 <td>
-<div class="text-ellipsis" style="width:10em">
-	<div class="inline-block text-ellipsis" style="width:9em">
+<div  style="width:10em">
+	<div class="inline-block no-wrap overflow-hidden" style="width:9em;">
 	{{#each contacts}}
        {{#if_contact_type "PERSON"}}
         	<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>

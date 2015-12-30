@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
@@ -698,6 +699,21 @@ public class DomainUserUtil
 
 	    NamespaceManager.set(oldnamespace);
 	}
+    }
+    
+    public static void removeOwner(DomainUser currentUser){
+    	DomainUser owner = getDomainOwner(NamespaceManager.get());
+    	if(currentUser.id != null && currentUser.id.equals(owner.id))
+    		return;
+    	owner.is_account_owner = false;
+    	try {
+			owner.save();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error occured while removing owner");
+			System.out.println(ExceptionUtils.getMessage(e));
+			e.printStackTrace();
+		}
     }
 
 }

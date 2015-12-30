@@ -192,7 +192,13 @@ $(function(){
 	}
 	
 	$('.modal').on('shown.bs.modal', function(event){
+		var modalClassLength =  event.target.classList.length;
+		if(event.target.classList[modalClassLength - 2] == "focusRelatedTo"){
+			$('#opportunityUpdateForm').find("input[name='relates_to']").focus();
+		}
+		else {
 		$('form', this).focus_first();
+		}	
 	});
 });
 

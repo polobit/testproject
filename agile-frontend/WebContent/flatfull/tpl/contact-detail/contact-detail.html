@@ -322,6 +322,9 @@
 			 {{#property_is_exists "phone" properties}}
 			<div class="widget_container contact-rightpanel phone m-t-sm" id="{{name}}-container">
 				{{else}} 
+					{{#property_is_exists "skypePhone" properties}}
+						<div class="widget_container contact-rightpanel skypePhone m-t-sm" id="{{name}}-container">
+						{{else}} 
 					{{#property_is_exists "email" properties}}
 						<div class="widget_container contact-rightpanel email m-t-sm" id="{{name}}-container">
 						{{else}} 
@@ -335,6 +338,7 @@
 										{{/getContactCustomProperties }}
 							{{/property_is_exists}} 
 					{{/property_is_exists}}
+			{{/property_is_exists}} 
 		{{/property_is_exists}}
 						<h4 class="m-t-xs m-b-xs hide">
 							
@@ -374,6 +378,7 @@
 									</div>
 									<div class="text-sm">
 
+<!--
                                         <a href='#' class="contact-make-sip-call" style="display:none;" phone="{{value}}">
                                            {{value}}
                                         </a>            
@@ -386,6 +391,14 @@
 										<a href="tel:{{remove_spaces value}}" class="contact-make-call contact-call-button" phone="{{value}}">{{value}}</a> 
                                         {{#if subtype}}<span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
 										</span>
+-->
+<div class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
+			<a class="contact-make-call c-progress" phone="{{value}}" >{{value}}   {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}} </a>
+
+
+			
+
+ </div>
 
 									</div>
 									<div class="clearfix"></div>
@@ -395,6 +408,47 @@
 							</div>
 							<div class="clearfix"></div>
 							{{/property_is_exists}}
+<!-- added by prakash for skype field.. -->
+
+							{{#property_is_exists "skypePhone" properties}}
+							<div>
+								{{#multiple_Property_Element "skypePhone" properties}}
+								  
+								{{#property_is_exists "phone" ../properties}}
+									{{else}}
+										<div class="m-t-sm"><small class="text-muted text-xs">Contact Info</small></div>	
+								{{/property_is_exists}}
+			
+								<div class="contact-phone">
+									{{#each this}}
+									<div class="pull-left contact-phone-icon hide">
+									<i class="icon icon-call-end text-sm m-r-xs v-middle"></i>
+									</div>
+									<div class="text-sm">
+
+
+
+
+
+
+
+
+
+										<span class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
+										<a class="contact-make-skype-call c-progress" phone="{{value}}">{{value}}</a> 
+
+                                        </span>
+
+									</div>
+									<div class="clearfix"></div>
+									{{/each}}
+								</div>
+								{{/multiple_Property_Element}}
+							</div>
+							<div class="clearfix"></div>
+							{{/property_is_exists}}
+
+<!-- editing done for skype-->
  							{{#property_is_exists "email" properties}}
 							
 								{{#multiple_Property_Element "email" properties}}
@@ -464,8 +518,9 @@
 									{{/getContactCustomPropertiesExclusively}}
 									
 									<div class="clearfix"></div>
-									{{#property_is_exists "address" properties}}
-<div class="m-t-sm"><small class="text-xs text-muted">Location</small></div>
+									{{#property_is_exists "address" properties}} 
+									 {{#property_json_is_not_empty "address" properties}}
+									<div class="m-t-sm"><small class="text-xs text-muted">Location</small></div>
 										<div >{{#address_Element properties}}{{/address_Element}}</div>
                                         <div class="clearfix"></div>
 										
@@ -480,6 +535,7 @@
 										</div> 
                            	            <div class="clearfix"></div> 
                                      </div>                                       
+                                     {{/property_json_is_not_empty}}
 									{{/property_is_exists}}
 
 							

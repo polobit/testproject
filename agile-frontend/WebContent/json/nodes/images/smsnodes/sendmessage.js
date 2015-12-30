@@ -32,7 +32,22 @@
             "rows": "10",
 			"fieldType": "textarea",
 			"type": "textarea" 
-         },{
+         },
+         {
+             "label": "Track Clicks:",
+             "required": "No",
+             "category": "More Settings",
+             "name": "track_clicks",
+             "title": "Enable tracking for sms link clicks. Use \"Yes &amp; Push\" if you want to push contact data to your website (to enable web activity tracking)",
+             "options": {
+                 "*No": "no",
+                 "Yes": "yes",
+                 "Yes & Push": "yes_and_push"
+             },
+             "fieldType": "select",
+             "type": "select"
+         },
+         {
             "label": "You can send your message form here.",
             "category": "Help",
             "fieldType": "label",

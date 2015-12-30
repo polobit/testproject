@@ -112,11 +112,11 @@
 
 <button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-regular">
 {{#check_plan "FREE"}}
-{{#is_cancelled_user}}
+{{#is_not_allowed_trial}}
 Choose
 {{else}}
 7 Day Trial
-{{/is_cancelled_user}}
+{{/is_not_allowed_trial}}
 {{else}}
 Choose
 {{/check_plan}}
@@ -159,11 +159,11 @@ Choose
 
 <button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-pro">
 {{#check_plan "FREE"}}
-{{#is_cancelled_user}}
+{{#is_not_allowed_trial}}
 Choose
 {{else}}
 7 Day Trial
-{{/is_cancelled_user}}
+{{/is_not_allowed_trial}}
 {{else}}
 Choose
 {{/check_plan}}
@@ -351,11 +351,11 @@ Choose
 
 <a href="#purchase-plan" id="purchase-plan"	class="btn btn-large btn-primary">
 {{#check_plan "FREE"}}
-{{#is_cancelled_user}}
+{{#is_not_allowed_trial}}
 Proceed to Pay
 {{else}}
 Proceed to Trial
-{{/is_cancelled_user}}
+{{/is_not_allowed_trial}}
 {{else}}
 Proceed to Pay
 {{/check_plan}}

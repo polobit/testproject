@@ -122,9 +122,9 @@ function update_price()
 	var plan_name = $("#plan_type").val();
 	if(_billing_restriction.currentLimits.planName == "FREE")
 	{
-		if(plan_name == "starter" || IS_CANCELLED_USER)
+		if(plan_name == "starter")
 			$("#purchase-plan").text("Proceed to Pay");
-		else if(IS_TRIAL)
+		else if(IS_TRIAL && IS_ALLOWED_TRIAL)
 			$("#purchase-plan").text("Proceed to Trial");
 		else
 			$("#purchase-plan").text("Proceed to Pay");
@@ -423,9 +423,9 @@ function initializeSubscriptionListeners()
 
 				if(_billing_restriction.currentLimits.planName == "FREE")
 				{
-					if(plan_name == "starter" || IS_CANCELLED_USER)
+					if(plan_name == "starter")
 						plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
-					else if(IS_TRIAL)
+					else if(IS_TRIAL && IS_ALLOWED_TRIAL)
 						plan_json.date = currentDate.setHours(currentDate.getHours()+168);
 					else
 						plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;

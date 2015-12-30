@@ -1,7 +1,7 @@
 <script id="deal-docs-collection-template" type="text/html">
 {{#unless this.length}}
         <div class="wrapper p-t-none">
-            <div class="slate-content">
+            <div class="slate-content mobile-pad-content">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
@@ -12,7 +12,7 @@
                         You can add a document related to a Deal.
                     </div>
 					<div><a href="#" class="btn btn-default btn-sm add-deal-document-select"><i class='icon-plus-sign'/></i> Add Document</a>
-						<span class="deal-document-select" style="display:none;">
+						<span class="deal-document-select upload-doc-field" style="display:none;">
 							<select class="form-control m-b-sm inline-block w-lg m-r-sm" id="document-select">
 								<option value="">Select...</option>
 							</select>
@@ -73,7 +73,7 @@
 		<span class="owner-name hide">{{owner.name}}</span>
 	</div>
 <div class="pull-left rightThumbView pos-rlt">
-<div class="pull-left contact-title-dynamic">
+<div class="pull-left contact-title-dynamic text-ellipsis">
 <a class="document-title text-md text-cap custom-color">{{name}}</a>
 </div>
 <div class="pull-right">
@@ -85,8 +85,20 @@
 <div class="clearfix"></div>
  
 
-	<div>
-		{{network network_type}}&nbsp;&nbsp;<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>
+	<div class="pos-rlt">
+		{{network network_type}}&nbsp;&nbsp;<a href="{{url}}" target="_blank" class="pull-left"><i class="icon-external-link" title="Open Document"></i></a>
+		<span class="pull-right">{{#is_mobile}}{{#hasMenuScope 'DOCUMENT'}}
+	  <div class="pos-abs pos-r-0 " >
+		<span class="actions">
+			<a title="Edit"  data="{{id}}" class="document-edit-deal-tab  m-r-sm"> <i class="icon-pencil"></i> </a>
+			<a title="Detach"  data="{{id}}" class="document-unlink-deal-tab"> <i class="icon-unlink"></i> </a>
+            <!--<a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>-->
+        </span>
+        </div>
+		{{/hasMenuScope}}
+		{{/is_mobile}}
+		</span>
+		<div class="clearfix"></div>
 	</div>
 	
 		<div>
@@ -103,9 +115,10 @@
        	{{/each}}
 		{{{getDealNames deals}}}
 		</div>
-		
+		{{#is_mobile}}
+		{{else}}
 		{{#hasMenuScope 'DOCUMENT'}}
-	  <div class="pos-abs pos-r-0 pos-b-0">
+	  <div class="pos-abs pos-r-0 pos-b-0" style="bottom:-7px">
 		<span class="actions">
 			<a title="Edit"  data="{{id}}" class="document-edit-deal-tab  m-r-sm"> <i class="icon-pencil"></i> </a>
 			<a title="Detach"  data="{{id}}" class="document-unlink-deal-tab"> <i class="icon-unlink"></i> </a>
@@ -113,7 +126,7 @@
         </span>
         </div>
 		{{/hasMenuScope}}
-	
+		{{/is_mobile}}
   </div>
   <div class="clearfix"></div>
 </div>

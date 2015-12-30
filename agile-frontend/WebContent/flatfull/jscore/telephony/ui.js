@@ -56,13 +56,13 @@ $(function()
 	 * On click of telephone icon on contact page before phone number at top
 	 * right panel, will make SIP call to same number.
 	 */
-	$('body').on('click', '.contact-make-sip-call', function(e)
+	$('body').on('click', '.contact-make-sip-call, .Sip_call', function(e)
 	{
 		e.preventDefault();
 
 		// Get details from UI
-		var userid = $(this).attr('userid');
-		var phone = $(this).attr('phone');
+		var userid = $(this).closest(".contact-make-call").attr('userid');
+		var phone = $(this).closest(".contact-make-call").attr('phone');
 
 		// Check number is available.
 		if (phone == "" || phone == null)
