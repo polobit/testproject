@@ -68,8 +68,12 @@
 
 <!-- Ticket Result -->
 {{#if_equals entity_type "tickets"}}
-	<div class="thumb-sm agile-img m-r-xs">
-		<img class="img-inital r r-2x" src="{{emailGravatarurl 40 requester_email}}"/>
+	<div class="thumb-sm agile-img m-r-xs m-t-xs">
+		{{#if contact.properties}}
+	    	<img data-name="{{dataNameAvatar contact.properties 42}}" src="{{gravatarurl contact.properties 24}}" class="r-5x">
+      	{{else}}
+        	<img src="{{emailGravatarurl 42 requester_email}}">
+      	{{/if}}
 	</div>
 	<div class="agile-thumb text-ellipsis">
 		{{subject}}
