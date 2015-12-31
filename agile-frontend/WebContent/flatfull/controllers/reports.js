@@ -13,7 +13,7 @@ var ReportsRouter = Backbone.Router
 				"activity-report-edit/:id" : "activityReportEdit", "contact-reports" : "emailReports", "report-add" : "reportAdd",
 				"report-edit/:id" : "reportEdit", "report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts",
 				"report-funnel/:tags" : "showFunnelReport", "report-growth/:tags" : "showGrowthReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-sales":"showrevenuegraph","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport","user-reports": "showUserReports",
-				"report-lossReason":"showDealsLossReason","reports-wonDeals":"showDealsWonChart" },
+				"report-lossReason":"showDealsLossReason","reports-wonDeals":"showDealsWonChart","report-comparison":"showComparisonReport" },
 
 
 			/**
@@ -761,6 +761,26 @@ var ReportsRouter = Backbone.Router
 							initSalesCharts(function()
 							{
 								showsalesReportGraphs();
+					});
+						}, "#content");
+					});
+			},
+
+			showComparisonReport : function()
+			{
+					hideTransitionBar();
+				initReportLibs(function()
+				{
+							// Load Reports Template
+						getTemplate("report-comparison", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+							// Set the name
+
+							initComparisonReports(function()
+							{
+								showComparisonReportGraph();
 					});
 						}, "#content");
 					});

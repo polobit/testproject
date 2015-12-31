@@ -606,3 +606,42 @@ function initDateRange(callback)
 
 }
 
+
+
+function initComparisonReports(callback){
+	
+	initDateRange(callback);
+
+	
+	// Init the callback when the track selector changes too
+		fillSelect("track", "/core/api/milestone/pipelines", undefined, function()
+		{
+			if (_agile_get_prefs("agile_deal_track"))
+            pipeline_id = _agile_get_prefs("agile_deal_track");
+
+			$('select[id="track"]').find('option[value="'+pipeline_id+'"]').attr("selected",true);
+			        	callback();
+			$('#track').change(function()
+			{
+				callback();
+			});
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "");
+
+	}
+function showComparisonReportGraph()
+{
+		url='/core/api/opportunity/conversionRate/0';
+		url=url+getSelectedDates();
+		if ($('#track').length > 0)
+	{
+		// Get owner
+		var track_id=0;
+		if ($("#track").val() != ""){
+			track_id=$("#track").val();
+			url += '&track-id='+track_id;
+			pieforReports(url,'comparison-chart','',true);
+		}
+	}
+	
+}
+

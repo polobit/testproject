@@ -38,6 +38,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.search.Document.Builder;
@@ -2296,4 +2297,175 @@ public class OpportunityUtil
 		}
 
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static JSONObject getPipelineConversionData(Long ownerId, long minTime,
+			long maxTime,Long Track)
+	{
+
+		JSONObject Track_conversion = new JSONObject();
+		JSONObject Track_conversion_User = new JSONObject();
+		List<DomainUser> domainUsersList=null;
+		if(ownerId!=null && ownerId==0)
+			ownerId=null;
+		else
+			{
+			domainUsersList=(List<DomainUser>) DomainUserUtil.getDomainUser(ownerId);
+			}
+		List<Opportunity> opportunitiesList_main=getConversionDeals(ownerId, minTime,
+				maxTime);
+		List<Opportunity> opportunitiesList = new ArrayList<Opportunity>();
+		List<Milestone> milestones=new ArrayList<Milestone>();
+		
+		try{
+			
+			
+		if(Track!=null){
+			Milestone milestone=MilestoneUtil.getMilestone(Track);
+			milestones.add(milestone);
+			for(Opportunity opp:opportunitiesList_main){
+				if(opp.getPipeline_id().equals(Track))
+					opportunitiesList.add(opp);
+			}
+		}
+		else
+		{
+			opportunitiesList=opportunitiesList_main;
+		System.out.println("Opportunity list"+ opportunitiesList);
+		milestones=MilestoneUtil.getMilestonesList();
+		}
+		
+	
+		for(Milestone milestone:milestones)
+		{
+			JSONObject milestoneValue=new JSONObject();
+			Opportunity.MILESTONES=milestone.milestones.split(",");
+			for(String milestone_data : Opportunity.MILESTONES)
+			{
+				milestoneValue.put(milestone_data, 0);
+			}
+			Track_conversion.put(milestone.name, milestoneValue);
+			
+		}
+		if(ownerId==null){
+			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+			if(dUser!=null)
+				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
+		for(DomainUser domainuser:domainUsersList)
+		{
+			Track_conversion_User.put(domainuser.name, Track_conversion);
+		}
+		}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+		if(opportunitiesList!=null && opportunitiesList.size()!=0){
+			
+			for(Opportunity opp : opportunitiesList)
+			{
+				try{
+				//int count=0;
+				Long pipeline_id = opp.getPipeline_id();
+				
+				Milestone mile=MilestoneUtil.getMilestone(pipeline_id);
+				
+				if(Track_conversion_User.containsKey(opp.getOwner().name))
+				{
+					JSONObject conversion = Track_conversion_User.getJSONObject(opp.getOwner().name);
+				if (conversion.containsKey(mile.name))
+				{
+					JSONObject mileObject = conversion.getJSONObject(mile.name);
+					if(mileObject.containsKey(opp.milestone))
+					{
+						Iterator keys=mileObject.keys();
+						while(keys.hasNext()){
+							String key=(String) keys.next();
+							int count=mileObject.getInt(key);
+							count++;
+							mileObject.put(key,count);
+							if(key.equalsIgnoreCase(opp.milestone))
+								break;
+						}
+						conversion.put(mile.name, mileObject);
+					}
+					Track_conversion_User.put(opp.getOwner().name, conversion);
+				}
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				return null;
+			}
+			}
+		}
+		System.out.println("Tracks"+Track_conversion);
+		return Track_conversion_User;
+	}
+	
+	public static List<Opportunity> getConversionDeals(Long ownerId,
+			long minTime, long maxTime)
+			{
+		UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
+		Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
+		Map<String, Object> conditionsMap2 = new HashMap<String, Object>();
+		
+		System.out.println("insdie conversion");
+		if (ownerId != null){
+			conditionsMap1.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+			conditionsMap2.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+		}
+			conditionsMap2.put("archived", false);
+			conditionsMap2.put("created_time >= ", minTime);
+			conditionsMap2.put("created_time <= ", maxTime);
+		conditionsMap1.put("milestone_changed_time >= ", minTime);
+		conditionsMap1.put("milestone_changed_time <= ", maxTime);
+		conditionsMap1.put("archived", false);
+		try
+		{
+			
+					List<Opportunity> list = dao.listByProperty(conditionsMap1);
+					System.out.println("list1--"+list);
+					List<Opportunity> list2 = dao.listByProperty(conditionsMap2);
+					System.out.println("list2--"+list2);
+				/*	if (list != null)
+					{
+						ownDealsSet.addAll(list);
+						System.out.println("set1--"+ownDealsSet);
+					}
+					if (list2 != null)
+					{
+						ownDealsSet.addAll(list2);
+						System.out.println("set2--"+ownDealsSet);
+					}*/
+				boolean flag=false;
+			for(Opportunity list_it:list){
+				for(Opportunity list_it2:list2){
+					if(!list_it.id.equals(list_it2.id)){
+						flag=true;
+						continue;
+					}
+					else {
+						flag=false;
+						break;
+					}
+				}
+				if(flag)
+					list2.add(list_it);
+			}
+			//conversionList=new ArrayList<>(ownDealsSet);
+			System.out.println("list2"+list2);
+			//System.out.println("main list"+conversionList);
+			
+			return list2;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+			}
 }

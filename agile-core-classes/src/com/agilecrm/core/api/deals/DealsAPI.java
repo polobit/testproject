@@ -1188,5 +1188,15 @@ public class DealsAPI
 
 	return opportunity;
     }
+    
+    @Path("/conversionRate/{owner-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getConvertedDeals(@PathParam("owner-id") Long ownerId, @QueryParam("track-id") Long trackId,@QueryParam("start-date") Long min,
+	    @QueryParam("end-date") Long max)
+    {
+	ReportsUtil.check(min * 1000, max * 1000);
+	return OpportunityUtil.getPipelineConversionData(ownerId, min, max,trackId).toString();
+    }
 
 }
