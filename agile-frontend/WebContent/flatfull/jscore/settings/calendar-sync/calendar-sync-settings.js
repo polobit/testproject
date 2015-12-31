@@ -3,7 +3,11 @@ var Calendar_Sync_Settings_View = Base_Model_View.extend({
 		'click .save' : "save_calendar_prefs",
 		'click .delete' : "delete_calendar_prefs",
 	},
-
+	options :{
+		errorCallback : function(data){									
+			showNotyPopUp("error", "Invalid Details", "bottomRight", 1000);
+		}
+	},
 	save_calendar_prefs : function (e, data)
 	{
 		e.preventDefault();
@@ -12,9 +16,9 @@ var Calendar_Sync_Settings_View = Base_Model_View.extend({
 		this.save(e);
 	},
 	saveCallback : function(data)
-	{
-		 App_Datasync.dataSync();
-		 Backbone.history.navigate('sync');
+	{		
+		App_Datasync.dataSync();
+		Backbone.history.navigate('sync');
 	},
 	delete_calendar_prefs : function(e, data)
 	{
