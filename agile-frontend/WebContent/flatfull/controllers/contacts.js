@@ -904,7 +904,7 @@ var ContactsRouter = Backbone.Router.extend({
 				// Appends zoomifier link to attach their documents.
 				head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
 				{
-					$("#emailForm", el).find('textarea[name="body"]').closest(".controls")
+					$("#emailForm", el).find('textarea[name="count_message"]').closest(".controls")
 							.append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
 				});
 			}
@@ -918,13 +918,13 @@ var ContactsRouter = Backbone.Router.extend({
 			if(cc)
 			{
 				$("#emailForm",el).find('#email_cc').closest('.control-group').show();
-				$("#emailForm",el).find('input[name="email_cc"]').val(cc);
+				$("#emailForm",el).find('input[name="cc"]').val(cc);
 			}
 			
 			if(bcc)
 			{
 				$("#emailForm",el).find('#email_bcc').closest('.control-group').show();
-				$("#emailForm",el).find('input[name="email_bcc"]').val(bcc);
+				$("#emailForm",el).find('input[name="bcc"]').val(bcc);
 			}
 			
 			// Setup HTML Editor
