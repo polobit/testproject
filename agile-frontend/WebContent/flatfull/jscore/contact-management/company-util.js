@@ -641,6 +641,3 @@
 
 }(window.company_detail_tab = window.company_detail_tab || {}, $));
 
-
-
-
