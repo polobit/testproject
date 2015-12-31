@@ -52,9 +52,9 @@ public class GoalsAPI
     }
     
     /**
-     * Saves repots
+     * Saves Goals
      * 
-     * @param Report
+     * @param List<Goals>
      * @return
      */
     @POST
@@ -73,6 +73,13 @@ public class GoalsAPI
     	return GoalsUtil.saveGoal(goal_new);
     	
     }
+    
+    /**
+     * Fetches Goals
+     * 
+     * @param owner-id
+     * @return Goals
+     */
     @Path("{owner-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })

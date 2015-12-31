@@ -65,6 +65,7 @@ var PortletsRouter = Backbone.Router
 										'flatfull/img/dashboard_images/Task.png',
 										'flatfull/img/dashboard_images/User-Activities.png',
 										'flatfull/img/dashboard_images/Campaign-stats.jpg',
+										'flatfull/img/dashboard_images/Quota.png',
 
 								]);
 								// Event initializers

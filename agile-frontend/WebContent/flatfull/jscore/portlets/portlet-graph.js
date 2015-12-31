@@ -1386,7 +1386,7 @@ var portlet_graph_utility = {
 	dealGoalsPieGraph : function(selector, data1,data2,colors)
 	{
 			var series = [];
-							series.push([ "Goal Left",
+							series.push([ "Goals Left",
 									data2 - data1 ]);
 							series.push([ "Won", data1 ]);
 							//portlet_graph_utility.emailsOpenedPieChart(selector,series,data1,data2);

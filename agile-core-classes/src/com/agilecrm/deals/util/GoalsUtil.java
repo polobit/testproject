@@ -25,7 +25,9 @@ import com.googlecode.objectify.Key;
 public class GoalsUtil
 {
 
-	
+	/*
+	 * Saves the Goals for all the user
+	 */
 	 public static List<Goals> saveGoal(List<Goals> goals)
 	    {
 		 	Goals new_goal;
@@ -35,6 +37,10 @@ public class GoalsUtil
 	    	}
 		 	return goals;
 	    }
+	 /*
+	  * 
+	  * Fetches all the goals with resprect to time
+	  */
 	public static List<Goals> fetchAllGoals(Long start_time)
 	    {
 		  
@@ -44,7 +50,9 @@ public class GoalsUtil
 		  List<Goals> list = Goals.dao.listByProperty(conditionsMap);
 		return list;
 	    }
-	
+	/*
+	 * Get Goals for a User based on duration
+	 */
 	public static List<Goals> getAllGoalsForUser(Long onwner_id,Long start_time,Long end_time){
 		
 		Map<String, Object> conditionsMap = new HashMap<String, Object>();

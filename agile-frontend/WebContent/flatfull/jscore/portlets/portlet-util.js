@@ -1090,26 +1090,6 @@ var portlet_utility = {
 
 		case "Deal Goals" : {
 
-			/*App_Portlets.dealGoals[parseInt(pos)] = new Base_Model_View({
-				url : '/core/api/portlets/goals/'+CURRENT_DOMAIN_USER.id
-						+ '?start_time='
-								+ portlet_utility
-										.getStartAndEndDatesOnDue(start_date_str)
-								+ '&end_time='
-								+ portlet_utility
-										.getStartAndEndDatesOnDue(end_date_str),
-				template : "portlets-dealGoals-body-model",
-				postRenderCallback : function(p_el) {
-
-					data=App_Portlets.dealGoals[parseInt(pos)].model.toJSON();
-					portlet_graph_data_utility.dealGoalsGraphData(selector,data);
-					portlet_utility.addWidgetToGridster(base_model);
-				}
-			});
-			portlet_ele.html(getRandomLoadingImg());
-			portlet_ele
-					.html($(App_Portlets.dealGoals[parseInt(pos)].render().el));*/
-
 					portlet_ele = $('#ui-id-' + column_position + '-' + row_position,
 					el).find('.goals_portlet_body');
 					portlet_ele

@@ -883,7 +883,8 @@ function initializeAddPortletsListeners() {
 							"AccountDetails" : "flatfull/img/dashboard_images/account-information.png",
 							"MiniCalendar" : "flatfull/img/dashboard_images/Mini-Calendar.jpg",
 							"UserActivities" : "flatfull/img/dashboard_images/User-Activities.png",
-							"Campaignstats" : "flatfull/img/dashboard_images/Campaign-stats.jpg"
+							"Campaignstats" : "flatfull/img/dashboard_images/Campaign-stats.jpg",
+							"DealGoals" : "flatfull/img/dashboard_images/Quota.png",
 						};
 						var placements_json = {
 							"GrowthGraph" : "left",
