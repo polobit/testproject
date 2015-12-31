@@ -399,7 +399,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 					try
 					{
-						if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO")
+						if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE")
 							$("#tracking-webrules, .tracking-webrules-tab").hide();
 						else
 							$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
