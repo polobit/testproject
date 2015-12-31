@@ -1133,20 +1133,20 @@ var ContactsRouter = Backbone.Router.extend({
 
 					if(collection.models.length > 0 && !collection.models[0].get("count")){
 						// Call to get Count 
-						getAndUpdateCollectionCount("contacts", el);						
-					    return;	
+						getAndUpdateCollectionCount("contacts", el);
+					} else {
+						var count = 0;
+						if(collection.models.length > 0) {
+							count = collection.models[0].attributes.count || collection.models.length;
+						}
+						var count_message;
+						if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
+							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+ updateImageS3Path("/img/help.png") +'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+						else
+							count_message = "<small> (" + count + " Total) </small>";
+						$('#contacts-count').html(count_message);
 					}
-
-					var count = 0;
-					if(collection.models.length > 0) {
-						count = collection.models[0].attributes.count || collection.models.length;
-					}
-					var count_message;
-					if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
-						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+ updateImageS3Path("/img/help.png") +'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
-					else
-						count_message = "<small> (" + count + " Total) </small>";
-					$('#contacts-count').html(count_message);
+					
 				} else {	
 
 					if(collection.models.length > 0 && !collection.models[0].get("count")){
@@ -1308,6 +1308,8 @@ function getAndUpdateCollectionCount(type, el){
     	else
     		countURL = App_Companies.companiesListView.options.url + "/count";
 
+    	// Hide bulk action checkbox
+    	$(".thead_check", el).closest("label").css("visibility", "hidden");
     	$.get(countURL, {}, function(data){
                     count_message = "<small> (" + data + " Total) </small>";
 					$('#contacts-count').html(count_message);
@@ -1318,6 +1320,7 @@ function getAndUpdateCollectionCount(type, el){
 					else{
 						App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
 					}
-						
+
+					$(".thead_check", el).closest("label").css("visibility", "visible");	
     	});
 }
