@@ -1967,3 +1967,166 @@ if(selector == 'lossreasonpie-chart-users'){
 						}
 					}
 	}
+
+function LineforComparison()
+	{
+		// Show loading image if required
+	if(typeof show_loading === 'undefined')
+	{
+		// Old calls were not showing loading image..
+	}
+	else
+		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+	
+	
+	var chart;
+
+	// Loads Highcharts plugin using setupCharts and sets up line chart in the
+	// callback
+	setupCharts(function()
+	{
+		if (reportDataRequest && reportDataRequest.readyState==1 && reportDataRequest.state()=="pending")
+		{
+			reportDataRequest.abort();
+		}
+
+		// Loads statistics details from backend i.e.,[{closed
+		// date:{total:value, pipeline: value},...]
+		fetchReportData(url, function(data)
+		{
+
+			// Categories are closed dates
+			var categories = [];
+			var tempcategories = [];
+			var dataLength = 0;
+			var min_tick_interval = 1;
+			
+			// Data with total and pipeline values
+			var series;
+			
+			var sortedKeys = [];
+			$.each(data,function(k,v){
+				sortedKeys.push(k);
+			});
+			sortedKeys.sort();
+			var sortedData = {};
+			$.each(sortedKeys,function(index,value){
+				sortedData[''+value] = data[''+value];
+			});
+
+			// Iterates through data and adds keys into
+			// categories
+			$.each(sortedData, function(k, v)
+			{
+					temp_category=[];
+					
+				// Initializes series with names with the first
+				// data point
+				if (series == undefined)
+				{
+					var index = 0;
+					series = [];
+					$.each(v, function(k1, v1)
+					{
+						var series_data = {};
+						series_data.name = k1;
+						series_data.data = [];
+						series[index++] = series_data;
+					});
+				}
+
+				// Fill Data Values with series data
+				$.each(v, function(k1, v1)
+				{
+
+					// Find series with the name k1 and to that,
+					// push v1
+					var series_data = find_series_with_name(series, k1);
+					series_data.data.push(v1);
+				});
+				tempcategories.push(k*1000);
+				dataLength++;
+
+			});
+
+			var cnt = 0;
+			if(Math.ceil(dataLength/10)>0)
+			{
+				min_tick_interval = Math.ceil(dataLength/10);
+				if(min_tick_interval==3)
+				{
+					min_tick_interval = 4;
+				}
+			}
+			$.each(sortedData, function(k, v)
+			{
+				 var dt = new Date(k * 1000);
+				var dte = new Date(tempcategories[cnt]);
+
+			});
+
+			// After loading and processing all data, highcharts are initialized
+			// setting preferences and data to show
+			chart = new Highcharts.Chart({
+			    chart: {
+			        renderTo: selector,
+			        type: 'line',
+			        marginRight: 130,
+			        marginBottom: 50
+			    },
+			    title: {
+			        text: name,
+			        x: -20//center
+			    },
+			    xAxis: {
+			        /*type: 'datetime',
+			        dateTimeLabelFormats: {
+			            //don't display the dummy year  month: '%e.%b',
+			            year: '%b',
+			            month: '%e.%b \'%y',
+			        },
+			        minTickInterval: min_interval,
+			        startOfWeek: startOfWeek*/
+			        categories: categories,
+			        tickmarkPlacement: 'on',
+			        minTickInterval: min_tick_interval,
+			        tickWidth: 1
+			    },
+			    yAxis: {
+			        title: {
+			            text: yaxis_name
+			        },
+			        plotLines: [
+			            {
+			                value: 0,
+			                width: 1,
+			                color: '#808080'
+			            }
+			        ],
+			        min: 0
+			    },
+			    //Tooltip to show details,
+			    /*ongraphtooltip: {
+			        formatter: function(){
+			            return'<b>'+this.series.name+'</b><br/>'+Highcharts.dateFormat('%e.%b',
+			            this.x)+': '+this.y.toFixed(2);
+			        }
+			    },*/
+			    legend: {
+			        layout: 'vertical',
+			        align: 'right',
+			        verticalAlign: 'top',
+			        x: -10,
+			        y: 100,
+			        borderWidth: 0
+			    },
+			    //Sets the series of data to be shown in the graph,shows total 
+			    //and pipeline
+			    series: series,
+			    exporting: {
+			        enabled: false
+			    }
+			});
+		});
+	});
+	}
