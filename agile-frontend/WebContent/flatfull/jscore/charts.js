@@ -1996,13 +1996,14 @@ function LineforComparison(url, selector, name,show_loading)
 		{
 
 			// Categories are closed dates
-			var categories = [];
+			var categories ;
 			var tempcategories = [];
 			var dataLength = 0;
 			var min_tick_interval = 1;
 			
 			// Data with total and pipeline values
-			var series;
+			var series=[];
+			var index=0;
 			
 			var sortedKeys = [];
 			$.each(data,function(k,v){
@@ -2012,65 +2013,83 @@ function LineforComparison(url, selector, name,show_loading)
 			var sortedData = {};
 			$.each(sortedKeys,function(index,value){
 				sortedData[''+value] = data[''+value];
+
 			});
 
 			// Iterates through data and adds keys into
 			// categories
 			$.each(sortedData, function(k, v)
 			{
-					temp_category=[];
 					
 				// Initializes series with names with the first
 				// data point
-				if (series == undefined)
-				{
-					var index = 0;
-					series = [];
+				
+					//var index = 0;
+					//series = [];
+					//series_data.name = k;
 					$.each(v, function(k1, v1)
 					{
+
 						var series_data = {};
-						series_data.name = k1;
+						series_data.name = k;
 						series_data.data = [];
 						series[index++] = series_data;
 					});
-				}
 
 				// Fill Data Values with series data
-				$.each(v, function(k1, v1)
-				{
 
 					// Find series with the name k1 and to that,
 					// push v1
-					var series_data = find_series_with_name(series, k1);
-					series_data.data.push(v1);
+					$.each(v, function(k1, v1)
+					{
+						var total=0;
+						var value;
+						$.each(v1, function(k2, v2)
+					{
+					var series_data = find_series_with_name(series, k);
+					var percent='';
+				 		total=total+v2;
+				 		if(index==0){
+				 				if(v2!=0)
+				 				percent=100;
+				 				else
+				 					percent=0;
+				 				
+				 			}
+				 			else
+				 			{
+				 				if(value!=0)
+				 				percent=(v2*100)/value;
+				 				else
+				 					percent=0;
+				 			}
+				 				
+				 			value=v1;
+				 		index++;
+					series_data.data.push(percent);
 				});
-				tempcategories.push(k*1000);
-				dataLength++;
+					});
 
-			});
-
-			var cnt = 0;
-			if(Math.ceil(dataLength/10)>0)
-			{
-				min_tick_interval = Math.ceil(dataLength/10);
-				if(min_tick_interval==3)
+				if(categories==undefined){
+					categories=[];
+				$.each(v, function(k1, v1)
 				{
-					min_tick_interval = 4;
-				}
+					$.each(v1,function(k2,v2){
+						categories.push(k2);
+					});
+				});
 			}
-			$.each(sortedData, function(k, v)
-			{
-				 var dt = new Date(k * 1000);
-				var dte = new Date(tempcategories[cnt]);
-
 			});
+
+			
+			
 
 			// After loading and processing all data, highcharts are initialized
 			// setting preferences and data to show
 			chart = new Highcharts.Chart({
 			    chart: {
 			        renderTo: selector,
-			        type: 'line',
+			        type: 'area',
 			        marginRight: 130,
 			        marginBottom: 50
 			    },
@@ -2078,15 +2097,13 @@ function LineforComparison(url, selector, name,show_loading)
 			        text: name,
 			        x: -20//center
 			    },
+			    plotOptions :{
+			    	area :{
+			    		//stacking : 'percent',
+			    	}
+			    },
 			    xAxis: {
-			        /*type: 'datetime',
-			        dateTimeLabelFormats: {
-			            //don't display the dummy year  month: '%e.%b',
-			            year: '%b',
-			            month: '%e.%b \'%y',
-			        },
-			        minTickInterval: min_interval,
-			        startOfWeek: startOfWeek*/
+
 			        categories: categories,
 			        tickmarkPlacement: 'on',
 			        minTickInterval: min_tick_interval,
