@@ -618,10 +618,10 @@ function initializeSendEmailListeners(){
 							json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
 
 						if ((json.contact_cc_ids).join())
-							json.email_cc += ((json.email_cc != "") ? "," : "") + (json.contact_cc_ids).join();
+							json.cc += ((json.cc != "") ? "," : "") + (json.contact_cc_ids).join();
 
 						if ((json.contact_bcc_ids).join())
-							json.email_bcc += ((json.email_bcc != "") ? "," : "") + (json.contact_bcc_ids).join();
+							json.bcc += ((json.bcc != "") ? "," : "") + (json.contact_bcc_ids).join();
 
 						if (json.to == "" || json.to == null || json.to == undefined)
 						{
