@@ -1968,7 +1968,7 @@ if(selector == 'lossreasonpie-chart-users'){
 					}
 	}
 
-function LineforComparison()
+function LineforComparison(url, selector, name,show_loading)
 	{
 		// Show loading image if required
 	if(typeof show_loading === 'undefined')
@@ -2094,7 +2094,7 @@ function LineforComparison()
 			    },
 			    yAxis: {
 			        title: {
-			            text: yaxis_name
+			            text: ""
 			        },
 			        plotLines: [
 			            {
