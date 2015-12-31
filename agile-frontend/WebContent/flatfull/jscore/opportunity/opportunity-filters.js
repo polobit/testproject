@@ -36,12 +36,18 @@ $(function()
 	{
 		e.preventDefault();
 
+		var color = {"#ee82ee":"VIOLET","#4b0082":"INDIGO","#0000ff":"BLUE","#00ff00":"GREEN","#ffff00":"YELLOW"
+		               ,"#ff6600":"ORANGE","#ff0000":"RED","#000000":"BLACK","#ffffff":"WHITE","#808080":"GREY"}; 
+       
+                    
 		// To know updated or added deal form names
 		var modal_id = $(this).closest('.opportunity-modal').attr("id");
 		var form_id = $(this).closest('.opportunity-modal').find('form').attr("id");
+		var colorcode = $(this).closest('.opportunity-modal').find('form').find("#color1").val();
 
 		var json = serializeForm(form_id);
 		json["custom_data"] = serialize_custom_fields(form_id);
+		json["colorName"]  = color[colorcode];
 
 		console.log(json);
 		if (form_id == "opportunityForm")
@@ -609,7 +615,23 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 			var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
 			if (!dealPipelineModel)
 				return;
+
+			var dealRemoveModel = dealPipelineModel[0].get('dealCollection').get(id);
+			
+			var dealRemoveValue = dealRemoveModel.attributes.expected_value;
+			
+			var removeDealValue = parseFloat($('#'+milestone.replace(/ +/g, '')+'_totalvalue').text())-parseFloat(dealRemoveValue); 
+            
+
+
+            $('#'+milestone.replace(/ +/g, '')+'_totalvalue').text(removeDealValue.toFixed(2).replace(/\.00$/, ""));
+          
+           $('#'+ milestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()) - 1);			
+           
+
 			dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+
+
 
 			// Removes deal from list
 			$(that).closest('li').css("display", "none");

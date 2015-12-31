@@ -357,7 +357,25 @@ function updateDeal(ele, editFromMilestoneView)
 
 	deserializeForm(value, $("#opportunityUpdateForm"));
 
-	$("#opportunityUpdateModal").modal('show');
+   if($('#color1' , dealForm).is(':hidden')){
+   	$('.colorPicker-picker', dealForm).remove();
+    $('#color1' , dealForm).colorPicker();
+	} 
+    // Disable color input field
+    $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
+
+
+ var color = {"VIOLET":"#ee82ee","INDIGO":"#4b0082","BLUE":"#0000ff","GREEN":"#00ff00","YELLOW":"#ffff00"
+		               ,"ORANGE":"#ff6600","RED":"#ff0000","BLACK":"#000000","WHITE":"#ffffff","GREY":"#808080"};
+
+    var colorcode = color[value.colorName];
+
+      $('#color1' , dealForm).attr('value', colorcode);
+      $('.colorPicker-picker', dealForm).css("background-color", colorcode);
+
+
+
+    $("#opportunityUpdateModal").modal('show');
 
 	// Hide archive button, if the is already archived.
 	if (value.archived)
@@ -419,10 +437,21 @@ function updateDeal(ele, editFromMilestoneView)
  */
 function show_deal()
 {
+   $( "#opportunityForm" )[ 0 ].reset();
+   
+   var el = $("#opportunityForm");
 
-	var el = $("#opportunityForm");
+    if($('#color1', el).is(':hidden')){
 
-	$("#opportunityModal").modal('show');
+    $('.colorPicker-picker', el).remove();
+
+    $('#color1', el).colorPicker();
+	} 
+    // Disable color input field
+    $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
+
+
+    $("#opportunityModal").modal('show');
 
 	add_custom_fields_to_form({}, function(data)
 	{
@@ -649,8 +678,21 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 
 						try
 						{
-							$('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
-							$('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+
+                           var dealchangevalue = deal.expected_value;
+                           var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text())-parseFloat(dealchangevalue); 
+                           var newdealvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text())+parseFloat(dealchangevalue);
+
+
+		                  $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(newdealvalue.toFixed(2).replace(/\.00$/, ""));
+		                  $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(olddealvalue.toFixed(2).replace(/\.00$/, ""));
+
+
+						  $('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
+						  $('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+						
+                          
+
 						}
 						catch (err)
 						{
@@ -709,7 +751,13 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 
 					dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel, deal));
 					try
-					{
+					{    
+						var newdealvairable = deal.expected_value;
+
+                        var newdealeditvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text())+parseFloat(newdealvairable);
+                        
+                        $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(newdealeditvalue.toFixed(2).replace(/\.00$/, ""));
+
 						$('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
 					}
 					catch (err)
