@@ -564,6 +564,25 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 				if(!CALL_CAMPAIGN.start && Current_Route != "contact/" + data.id)
 				App_Contacts.navigate("contact/" + data.id, { trigger : true });
 			} else {
+				//Update all the existed contacts with mapped this company
+				var companyJSON = data.toJSON();
+				if(App_Contacts.contactsListView)
+				{
+					var realetd_contats = App_Contacts.contactsListView.collection.where({ contact_company_id : ""+companyJSON.id });
+					$.each(realetd_contats, function(index, contactModel){
+						$.each(contactModel.get("properties"), function(index, property){
+							if(property.name == "company" && property.type == "SYSTEM")
+							{
+								$.each(companyJSON.properties, function(index, companyProperty){
+									if (companyProperty.name == "name" && companyProperty.type == "SYSTEM"){
+										property.value = companyProperty.value;
+									}
+								});
+							}
+						});
+					});
+				}
+
 				// update contacts-details view
 				if (App_Companies.companyDetailView)
 					App_Companies.companyDetailView.model = data;
