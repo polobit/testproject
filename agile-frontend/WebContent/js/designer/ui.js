@@ -711,8 +711,12 @@ function _generateUIFields(selector, ui) {
           
            // Target element to insert merge field on option selected
            if("target_type" in uiFieldDefinition)
+           {
+           	if(!uiFieldDefinition.eventHandler)
+           	   uiFieldDefinition.eventHandler = "insertSelectedMergeField";
+           	
         	   uiField = generateSelectUI(uiFieldDefinition,uiFieldDefinition.eventHandler);
-           
+           }
            else
         	   uiField = generateSelectUI(uiFieldDefinition);
            
