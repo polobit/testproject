@@ -285,6 +285,8 @@ var ContactsRouter = Backbone.Router.extend({
 				var cel = App_Contacts.contactsListView.el;
 				var collection = App_Contacts.contactsListView.collection;
 
+				abortCountQueryCall();
+				
 				// To set heading in template
 				if(is_lhs_filter) {
 
@@ -1129,6 +1131,9 @@ var ContactsRouter = Backbone.Router.extend({
 				setUpContactView(el,true);
 			    else
 				setUpContactView(el);
+
+				abortCountQueryCall();
+
 				if(is_lhs_filter) {
 
 					if(collection.models.length > 0 && !collection.models[0].get("count")){
@@ -1310,7 +1315,10 @@ function getAndUpdateCollectionCount(type, el){
 
     	// Hide bulk action checkbox
     	$(".thead_check", el).closest("label").css("visibility", "hidden");
-    	$.get(countURL, {}, function(data){
+
+    	abortCountQueryCall();
+
+    	Count_XHR_Call = $.get(countURL, {}, function(data){
                     count_message = "<small> (" + data + " Total) </small>";
 					$('#contacts-count').html(count_message);
 
@@ -1323,4 +1331,10 @@ function getAndUpdateCollectionCount(type, el){
 
 					$(".thead_check", el).closest("label").css("visibility", "visible");	
     	});
+}
+
+function abortCountQueryCall(){
+	try{
+		Count_XHR_Call.abort();
+	}catch(e){}
 }

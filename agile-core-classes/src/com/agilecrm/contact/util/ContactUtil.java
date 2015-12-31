@@ -104,7 +104,7 @@ public class ContactUtil
 
 	return dao.listByPropertyAndOrder(searchMap, orderBy);
     }
-
+    
     /**
      * Fetches a contact based on its id
      * 

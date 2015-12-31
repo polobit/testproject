@@ -201,6 +201,8 @@ var CompaniesRouter = Backbone.Router
 				//setup_tags(el);
 
 				company_list_view.init(el);
+
+				abortCountQueryCall();
 				
 				if(is_lhs_filter) {
 
