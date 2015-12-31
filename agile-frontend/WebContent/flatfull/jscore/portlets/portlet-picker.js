@@ -55,7 +55,7 @@ function set_p_portlets(base_model) {
  * Sets the portlet content height based on it's size-y attribute.
  */
 function setPortletContentHeight(base_model) {
-	if (base_model.get("name") == "Stats Report") {
+	if (base_model.get("name") == "Stats Report" || base_model.get("name") == "Deal Goals") {
 
 		var $resize_ele = $('#' + base_model.get("id")).parent().find(
 				'.stats_report_portlet');
