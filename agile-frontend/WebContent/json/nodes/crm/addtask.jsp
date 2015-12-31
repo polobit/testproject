@@ -71,13 +71,6 @@
             "fieldType": "dynamicselect",
             "type": "select"
         },
-
-        {
-            "label": "Add a task related to a contact in the CRM.<br/><br/>For example, if a contact opens and clicks a link in your email, then you might want to add a task to your list for Calling him/her. <br/><br/>When this task is created, the contact is automatically added to the 'Related to' field in the task.",
-            "category": "Help",
-            "fieldType": "label",
-            "type": "label"
-        },
         {
             "label": "Time zone",
             "required": "No",
@@ -88,10 +81,10 @@
             "title": "Select the time zone of your location.",
             "options": {
                 <%@page import="com.agilecrm.user.AgileUser"%>
-<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
-<%@page import="com.agilecrm.session.UserInfo"%>
-<%@page import="com.agilecrm.session.SessionManager"%>
-<%@pageimport="java.util.Arrays"%>
+				<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
+				<%@page import="com.agilecrm.session.UserInfo"%>
+				<%@page import="com.agilecrm.session.SessionManager"%>
+				<%@pageimport="java.util.Arrays"%>
                 <%@pageimport="java.util.TimeZone"%>
                 <%@pageimport="com.agilecrm.account.util.AccountPrefsUtil"%>
                 <%@pageimport="com.agilecrm.user.util.UserPrefsUtil"%>
@@ -129,7 +122,6 @@
             "fieldType": "timezone",
             "type": "select"
         },
-         
         {
             "label": "At",
             "required": "required",
@@ -190,6 +182,12 @@
             },
             "fieldType": "select",
             "type": "select"
+        },
+        {
+            "label": "Add a task related to a contact in the CRM.<br/><br/>For example, if a contact opens and clicks a link in your email, then you might want to add a task to your list for Calling him/her. <br/><br/>When this task is created, the contact is automatically added to the 'Related to' field in the task.",
+            "category": "Help",
+            "fieldType": "label",
+            "type": "label"
         }
     ]
 }
