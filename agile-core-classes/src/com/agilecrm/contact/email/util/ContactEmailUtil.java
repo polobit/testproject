@@ -153,15 +153,9 @@ public class ContactEmailUtil
 			for(String email: toEmailSet)
 				contact = ContactUtil.searchContactByEmail(EmailUtil.getEmail(email));
 			
-			if (contact != null){
-				
-				boolean doPush = false;
-				
-				if(contactEmailWrapper.getPush_param().equals(PushParams.YES_AND_PUSH))
-					doPush = true;
-				
-				body = EmailLinksConversion.convertLinksUsingJSOUP(body, contact.id.toString(), null, contactEmailWrapper.getTrackerId(), doPush);
-			}
+			if (contact != null)
+				body = EmailLinksConversion.convertLinksUsingJSOUP(body, contact.id.toString(), null, contactEmailWrapper.getTrackerId(), contactEmailWrapper.getPush_param().toString());
+
 		}
 
 		// combined body and signature. Inorder to avoid link tracking in

@@ -11,6 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.campaignio.tasklets.agile.SendEmail;
 import com.google.appengine.api.NamespaceManager;
 
 public class EmailLinksConversion
@@ -33,6 +34,7 @@ public class EmailLinksConversion
      * Flag whether to append contact data to clicked url or not
      */
     public static String AGILE_EMAIL_PUSH = "1";
+    public static String AGILE_EMAIL_PUSH_EMAIL_ONLY = "2";
 
     /**
      * Validates links present in the email body (either in text or html)
@@ -58,9 +60,9 @@ public class EmailLinksConversion
 	return false;
     }
 
-    public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, boolean doPush)
+    public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, String pushParam)
     {
-    	return convertLinksUsingJSOUP(input, subscriberId, campaignId, null, doPush);
+    	return convertLinksUsingJSOUP(input, subscriberId, campaignId, null, pushParam);
     }
     
     /**
@@ -76,7 +78,7 @@ public class EmailLinksConversion
      *            - boolean value to push contact data
      * @return String
      */
-    public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, String personalEmailTrackerId, boolean doPush)
+    public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, String personalEmailTrackerId, String pushParam)
     {
 	// If empty return
 	if (StringUtils.isBlank(input))
@@ -111,8 +113,16 @@ public class EmailLinksConversion
 	    if(!StringUtils.isBlank(personalEmailTrackerId))
 	    	tid = "&t=" + URLEncoder.encode(personalEmailTrackerId, "UTF-8");
 
-	    if (doPush)
-		push = "&p=" + URLEncoder.encode(AGILE_EMAIL_PUSH, "UTF-8");
+	    // Push parameter
+	    if (StringUtils.isNotBlank(pushParam) && StringUtils.containsIgnoreCase(pushParam, "yes_and_push"))
+	    {
+	    	String param = AGILE_EMAIL_PUSH;
+	    	
+	    	if(StringUtils.equalsIgnoreCase(pushParam, SendEmail.TRACK_CLICKS_YES_AND_PUSH_AND_EMAIL_ONLY))
+	    		param = AGILE_EMAIL_PUSH_EMAIL_ONLY;
+	    		
+	    	push = "&p=" + URLEncoder.encode(param, "UTF-8");
+	    }
 
 	    // All href links
 	    for (Element link : links)

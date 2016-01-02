@@ -103,15 +103,10 @@ public class ContactBulkEmailUtil
 						// conversion.
 						replacedBody = replacedBody.replace("</body>", "<div><br/>" + signature + "</div></body>");
 						
-						boolean doPush = false;
-						
 						if (trackClicks){
 							
-							if(PushParams.YES_AND_PUSH.toString().equals(pushParam))
-								doPush = true;
-						
 							replacedBody = EmailLinksConversion.convertLinksUsingJSOUP(replacedBody,
-										contact.id.toString(), null, String.valueOf(openTrackerId), doPush);
+										contact.id.toString(), null, String.valueOf(openTrackerId), pushParam);
 
 							replacedBody = EmailUtil.appendTrackingImage(replacedBody, null, String.valueOf(openTrackerId));
 						}

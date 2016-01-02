@@ -120,13 +120,14 @@ public class URLShortenerUtil
 		return URLShortener.SHORTENER_URL + keyword + domainKey + "-" + urlKey;
 	}
     
-    public static String getShortURL(String url, String keyword, String subscriberId, String trackingId, String campaignId, ShortenURLType type, boolean doPush) throws Exception
+    public static String getShortURL(String url, String keyword, String subscriberId, String trackingId, String campaignId, ShortenURLType type, String typeOfPush) throws Exception
     {
     	URLShortener urlShortener = new URLShortener(url, subscriberId, trackingId, campaignId);
     	urlShortener.setURLShortenerType(type);
     	
-    	if(doPush)
-    		urlShortener.setPushParameter(EmailLinksConversion.AGILE_EMAIL_PUSH);
+    	// Set push parameter only for Yes&Push options
+    	if(StringUtils.containsIgnoreCase(typeOfPush, "yes_and_push"))
+    		urlShortener.setPushParameter(typeOfPush);
     	
     	urlShortener.save();
     	
