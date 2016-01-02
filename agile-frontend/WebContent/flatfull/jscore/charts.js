@@ -2003,6 +2003,7 @@ function LineforComparison(url, selector, name,show_loading)
 			
 			// Data with total and pipeline values
 			var series=[];
+			var Data=[];
 			var index=0;
 			
 			var sortedKeys = [];
@@ -2031,9 +2032,14 @@ function LineforComparison(url, selector, name,show_loading)
 					{
 
 						var series_data = {};
+						var extra_data={};
+						extra_data.name = k;
+						extra_data.data = [];
 						series_data.name = k;
 						series_data.data = [];
-						series[index++] = series_data;
+						series[index] = series_data;
+						Data[index]=extra_data;
+						index++;
 					});
 
 				// Fill Data Values with series data
@@ -2044,16 +2050,20 @@ function LineforComparison(url, selector, name,show_loading)
 					{
 						var total=0;
 						var value;
+						var i=0;
 						$.each(v1, function(k2, v2)
 					{
 					var series_data = find_series_with_name(series, k);
+					var extra=find_series_with_name(Data, k);
+					extra.data.push(v2);
 					var percent='';
 				 		total=total+v2;
-				 		if(index==0){
+				 		if(i==0){
 				 				if(v2!=0)
 				 				percent=100;
 				 				else
 				 					percent=0;
+				 				value=v2;
 				 				
 				 			}
 				 			else
@@ -2064,8 +2074,7 @@ function LineforComparison(url, selector, name,show_loading)
 				 					percent=0;
 				 			}
 				 				
-				 			value=v1;
-				 		index++;
+				 		i++;
 					series_data.data.push(percent);
 				});
 					});
@@ -2122,13 +2131,25 @@ function LineforComparison(url, selector, name,show_loading)
 			        ],
 			        min: 0
 			    },
-			    //Tooltip to show details,
-			    /*ongraphtooltip: {
-			        formatter: function(){
-			            return'<b>'+this.series.name+'</b><br/>'+Highcharts.dateFormat('%e.%b',
-			            this.x)+': '+this.y.toFixed(2);
-			        }
-			    },*/
+			    tooltip :{
+			    		formatter:  function(){
+			    			var that=this;
+			    			var d;
+						$.each(Data,function(i,v){
+							if(Data[i]["name"]==that.series.name)
+							{d= Data[i];
+							return false;}
+						});
+			    				
+						return  '<div>' + 
+                              
+                                '<div class="p-n">'+this.series.name+': <b>'+Math.round(this.point.y)+'</b></div>' +
+                                '</div><br>'+
+                                '<div class="p-n">Total Deals: <b>'+getNumberWithCommasForCharts(d["data"][this.point.x])+'</b></div>';
+                        
+						}
+			    },
+
 			    legend: {
 			        layout: 'vertical',
 			        align: 'right',
