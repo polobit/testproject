@@ -389,12 +389,13 @@ function handleCallRequest(message)
 			try
 			{
 				
-				var contact = agile_crm_get_contact();
+				//var contact = agile_crm_get_contact();
 
 				var phone = $("#skype_contact_number").val();
 				if (!phone || phone == "")
 				{
-					phone = getPhoneWithSkypeInArray(contact.properties)[0];
+					phone = agile_crm_get_contact_properties_list("phone")[0].value;
+					//phone = getPhoneWithSkypeInArray(contact.properties)[0];
 				}
 				if (phone == num)
 				{
@@ -404,6 +405,7 @@ function handleCallRequest(message)
 			catch (e)
 			{
 			}
+			globalCallForActivity.requestedLogs = false;
 			return;
 		}
 		else if (message.state == "error")

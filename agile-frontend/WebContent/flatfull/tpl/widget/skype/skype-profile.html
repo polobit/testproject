@@ -13,11 +13,11 @@
 			{{#if_equals num.length "1"}}<div id="skype_contact_number"></div>
 			{{else}}
 			<div class="wrapper-sm">
-			<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs">To&nbsp;:</h4></div>
-			<div class="pull-right">
-				<select name="skype_number" id="skype_contact_number" class="required form-control" style="height:27px;padding-top:2px;">
+			<!--<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs">To&nbsp;:</h4></div>-->
+			<div class="pull-left" style="width:100%;">
+				<select name="skype_number" id="skype_contact_number" class="required form-control" style="height:27px;padding-top:2px;width:100%;">
 					{{#each num}}
-						<option value="{{this}}">{{this}} 
+						<option value="{{value}}">{{value}} 
 							{{#if subtype}}({{subtype}}){{/if}}
 						</option>
 					{{/each}}
@@ -121,8 +121,8 @@
      <div class="campaign_dialpad_row">
        <div class="campaign_dialpad_cell" ><input type="button" value="9" class="button9" id="button9" onclick="skypeSendDTMF('9');"></div>
 	   <div class="campaign_dialpad_cell"><input type="button" value="0" class="button0" id="button0" onclick="skypeSendDTMF('0');"></div>    
-	   <div class="campaign_dialpad_cell"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="skypeSendDTMF('*');"></div>
-       <div class="campaign_dialpad_cell"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="skypeSendDTMF('#');"></div> 	
+	   <div class="campaign_dialpad_cell"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="skypeSendDTMF('star');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="skypeSendDTMF('hash');"></div> 	
 	 </div>
   </div>
 </div>

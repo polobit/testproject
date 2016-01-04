@@ -12,9 +12,9 @@
 			{{#if_equals num.length "1"}}<div id="bria_contact_number"></div>
 			{{else}}
 		<div class="wrapper-sm">
-			<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs">To&nbsp;:</h4></div>
-			<div class="pull-right">
-				<select name="bria_number" id="bria_contact_number" class="required form-control" style="height:27px;padding-top:2px;">
+			<!--<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs">To&nbsp;:</h4></div>-->
+			<div class="pull-left" style="width:100%;">
+				<select name="bria_number" id="bria_contact_number" class="required form-control" style="height:27px;padding-top:2px;width:100%;">
 					{{#each num}}
 						<option value="{{value}}">{{value}} 
 							{{#if subtype}}({{subtype}}){{/if}}
@@ -131,8 +131,8 @@
      <div class="campaign_dialpad_row">
        <div class="campaign_dialpad_cell" ><input type="button" value="9" class="button9" id="button9" onclick="briaSendDTMF('9');"></div>
 	   <div class="campaign_dialpad_cell"><input type="button" value="0" class="button0" id="button0" onclick="briaSendDTMF('0');"></div>    
-	   <div class="campaign_dialpad_cell"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="briaSendDTMF('*');"></div>
-       <div class="campaign_dialpad_cell"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="briaSendDTMF('#');"></div> 	
+	   <div class="campaign_dialpad_cell"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="briaSendDTMF('star');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="briaSendDTMF('hash');"></div> 	
 	 </div>
   </div>
 </div>
