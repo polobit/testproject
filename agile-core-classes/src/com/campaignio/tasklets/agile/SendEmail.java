@@ -25,6 +25,7 @@ import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.campaignio.tasklets.sms.SendMessage;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.sendgrid.SendGrid;
@@ -234,6 +235,8 @@ public class SendEmail extends TaskletAdapter
     	// Get From, Message
     	String fromEmail = getStringValue(nodeJSON, subscriberJSON, data, FROM_EMAIL);
     	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
+    	
+    	data.remove(SendMessage.SMS_CLICK_TRACKING_ID);
     	
     	// If From email empty
     	if(StringUtils.isBlank(fromEmail))

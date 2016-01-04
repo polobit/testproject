@@ -799,14 +799,14 @@ public class BulkOperationsAPI
 	{
 	    // message = fetcher.getAvailableContacts() + " Contacts deleted";
 	    ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "SEND_EMAIL",
-		    ActivitySave.html2text(emailData.getString("body")), "contacts",
+		    ActivitySave.html2text(emailData.getString("message")), "contacts",
 		    ActivitySave.html2text(emailData.getString("subject")));
 	}
 	else if (fetcher.getAvailableCompanies() > 0)
 	{
 	    // message = fetcher.getAvailableCompanies() + " Companies deleted";
 	    ActivitySave.createBulkActionActivity(fetcher.getAvailableCompanies(), "SEND_EMAIL",
-		    ActivitySave.html2text(emailData.getString("body")), "companies",
+		    ActivitySave.html2text(emailData.getString("message")), "companies",
 		    ActivitySave.html2text(emailData.getString("subject")));
 	}
 

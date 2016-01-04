@@ -124,12 +124,17 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	var eventHandler = uiFieldDefinition.eventHandler;
 	var event = uiFieldDefinition.event;
 
+
+	// Useful for changes after select list loaded
+	var callback = uiFieldDefinition.callback;
+
     var attr = "";
 
 	if(type == "multiselect")
 		attr = "multiple";
 
 	var selectContainer = $("<select "+ attr +" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
+
 
 	if(event && eventHandler)
 		selectContainer = $("<select "+ attr +" id='"+uiFieldDefinition.id+"' "+getStyleAttribute(uiFieldDefinition.style)+" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"' type='"+(type == undefined ? 'select' : type)+"'></select>");
@@ -155,7 +160,20 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	}
 
 	// Fetches data and fill select
-	fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type)
+	fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type, function($select, data)
+			{
+				try
+				{
+					if(callback)
+						{
+							window[callback]($select, data);
+						}
+				}
+				catch(err)
+				{
+					console.log('error occured...' + err);
+				}
+			});
 	
 	return selectContainer;
 }
@@ -201,7 +219,7 @@ function fetchAndFillSelect(url, keyField, valField, appendNameField, options, s
 				
 				var appendName = eval("json."+ appendNameField);
 				
-				// Append name to email like Naresh <naresh@agilecrm.com>
+				// Append name to email like Naresh <naresh@agilecrm.com    >
 				if(key!= undefined && appendName != undefined)
 					key = appendName + " &lt;"+key+"&gt;";
 				
@@ -693,8 +711,12 @@ function _generateUIFields(selector, ui) {
           
            // Target element to insert merge field on option selected
            if("target_type" in uiFieldDefinition)
-        	   uiField = generateSelectUI(uiFieldDefinition,"insertSelectedMergeField");
-           
+           {
+           	if(!uiFieldDefinition.eventHandler)
+           	   uiFieldDefinition.eventHandler = "insertSelectedMergeField";
+           	
+        	   uiField = generateSelectUI(uiFieldDefinition,uiFieldDefinition.eventHandler);
+           }
            else
         	   uiField = generateSelectUI(uiFieldDefinition);
            

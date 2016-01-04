@@ -99,6 +99,12 @@ public class ContactPrefsUtil
 		for(ContactPrefs prefs:contactPrefs){
 			if(prefs.type!=null)
 			prefsTyes.add(prefs.type.toString());
+			
+			if(prefs.type.toString().equals("SALESFORCE")){
+				prefs.imageUrl=DataSyncUrlConstants.SALESFORCE_IMAGE_URL;
+				prefs.content=DataSyncUrlConstants.SALESFORCE_CONTENT; 
+	        	  
+			}
 		}
 		
 		return addSyncTemplates(prefsTyes,contactPrefs);
@@ -111,7 +117,7 @@ public class ContactPrefsUtil
     	for(String defaults:defaultSyncTemplates){
     		if(!configuredSync.contains(defaults)){
     			finalSyncPrefs.add(dataSyncUrls.getDataSyncWidget(defaults));
-    		}
+    		} 
     	}
     	return finalSyncPrefs;
     }

@@ -8,8 +8,13 @@ var Calendar_Sync_Settings_View = Base_Model_View.extend({
 	{
 		e.preventDefault();
 		this.options.prePersist = this.prePersist;
+		this.options.saveCallback = this.saveCallback;
 		this.save(e);
-		App_Datasync.dataSync();
+	},
+	saveCallback : function(data)
+	{
+		 App_Datasync.dataSync();
+		 Backbone.history.navigate('sync');
 	},
 	delete_calendar_prefs : function(e, data)
 	{

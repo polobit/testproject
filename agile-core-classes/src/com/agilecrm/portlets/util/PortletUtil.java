@@ -35,8 +35,10 @@ import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.GoalsUtil;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.portlets.Portlet;
@@ -101,6 +103,7 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("Deals Funnel",PortletType.DEALS));
 				//allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
 				allPortlets.add(new Portlet("Revenue Graph",PortletType.DEALS));
+				allPortlets.add(new Portlet("Deal Goals",PortletType.DEALS));
 			}
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR)){
@@ -742,7 +745,7 @@ public class PortletUtil {
 			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
 			try{
 				for(Activity activity : callActivitiesList){
-					if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED))
+					if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.ANSWERED) || activity.custom3.equalsIgnoreCase("completed")))
 						answeredCallsCount++;
 					else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
 						busyCallsCount++;
@@ -1604,6 +1607,45 @@ public class PortletUtil {
 		System.out.println("Size of List"+list.size());
 		System.out.println(list);
 		return list;
+	}
+	
+	/*
+	 * Gives the goal set for user and goal attained from it.
+	 * 
+	 * @param owner_id,minTime and maxTime
+	 * 
+	 * @returns JSONObject
+	 * 
+	 */
+	public static JSONObject getGoalsAttainedData(Long owner_id,Long minTime,Long maxTime)
+	{
+		int count=0;
+		Long count_goal=0L;
+		Double value=0.0;
+		Double amount_goal=0.0;
+		JSONObject json=new JSONObject();;
+		List<Opportunity> opportunities=OpportunityUtil.getWonDealsListWithOwner(minTime, maxTime, owner_id);
+		if(opportunities!=null){
+			for(Opportunity opp:opportunities){
+			value = value+opp.expected_value;
+			count++;
+		}
+		}
+		json.put("dealcount", count);
+		json.put("dealAmount", value);
+		List<Goals> goals=GoalsUtil.getAllGoalsForUser(owner_id, minTime, maxTime);
+		if(goals!=null)
+		{
+			for(Goals goal:goals){
+				if(goal.count!=null)
+			count_goal+=goal.count;
+				if(goal.amount!=null)
+			amount_goal+=goal.amount;
+		}
+			json.put("goalCount",count_goal);
+			json.put("goalAmount", amount_goal);
+	}
+		return json;
 	}
 
 }

@@ -392,6 +392,9 @@ $(function()
 	Handlebars.registerHelper('icons', function(item)
 	{
 
+		if(!item)
+			  return "";
+			
 		item = item.toLowerCase().trim();
 		console.log(item);
 		if (item == "email")
@@ -1272,6 +1275,23 @@ $(function()
 	});
 
 	/**
+	 * Counts the existence of property name which occurred multiple times.
+	 */
+	Handlebars.registerHelper('property_json_is_not_empty', function(name, properties, options)
+	{
+
+        var value = getPropertyValue(properties, name);
+        try{
+        	value = JSON.parse(value);
+        }catch(e){}
+
+		if (Object.keys(value).length > 0)
+			return options.fn(this);
+		
+		return options.inverse(this);
+	});
+
+	/**
 	 * returns online scheduling url of current user
 	 */
 	Handlebars.registerHelper('online_schedule_URL', function()
@@ -1284,6 +1304,11 @@ $(function()
 	Handlebars.registerHelper('get_current_domain', function()
 	{
 		return CURRENT_DOMAIN_USER.domain;
+	});
+
+	Handlebars.registerHelper('get_current_domain_email', function()
+	{
+		return CURRENT_DOMAIN_USER.email;
 	});
 
 	
@@ -3441,7 +3466,7 @@ $(function()
 						if (this[0] && this[0].count && (this[0].count != -1))
 						{
 
-							if (this[0].count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
+							if (this[0].count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
 								count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 
 							else
@@ -5235,6 +5260,24 @@ $(function()
 		return getPendingEmails();
 	});
 
+	Handlebars.registerHelper('getLastPurchasedCount', function()
+	{
+		var max = getMaxEmailsLimit();
+		if(max == 0)
+			return "-";
+		else
+			return getPendingEmails();
+	});
+
+	Handlebars.registerHelper('getFreeEmailsCount', function()
+	{
+		var max = getMaxEmailsLimit();
+		if(max == 0)
+			return "5000";
+		else
+			return "-";
+	});
+
 	// helper function to return agile bcc special email for inbound mail event
 	// trigger
 	Handlebars.registerHelper('inboundMail', function()
@@ -5667,6 +5710,9 @@ $(function()
 		case "failed":
 			return "Failed";
 			break;
+		case "missed":
+			return "Call Missed";
+			break;	
 		case "in-progress":
 		case "voicemail":
 			return "Left voicemail";
@@ -5783,6 +5829,8 @@ $(function()
 			icon_name = 'icon-graph';
 		else if (p_name == 'Campaign stats')
 			icon_name = 'icon-sitemap';
+		else if (p_name == 'Deal Goals')
+			icon_name = 'icon-flag';
 		return icon_name;
 	});
 	
@@ -6416,7 +6464,7 @@ $(function()
 				if (this[0] && this[0].count && (this[0].count != -1))
 				{
 
-					if (this[0].count > 9999 && (readCookie('company_filter') || readData('dynamic_company_filter')))
+					if (this[0].count > 9999 && (_agile_get_prefs('company_filter') || _agile_get_prefs('dynamic_company_filter')))
 						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 
 					else
@@ -6564,6 +6612,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'A mini calendar with an overview of your agenda for the day.'
 	else if (p_name == 'Campaign stats')
 		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
+	else if(p_name == 'Deal Goals')
+		description = 'See how much sales target you have achieved.'
 	return description;
 			});
 
@@ -6666,7 +6716,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 			});
 	Handlebars.registerHelper('toggle_contacts_filter', function(options)
 			{	        
-		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
+		    if(_agile_get_prefs(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
 			return "none";
 	       	}
 	    	
@@ -6675,7 +6725,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	
 	Handlebars.registerHelper('toggle_companies_filter', function(options)
 			{	        
-		   return  localStorage.getItem('companiesFilterStatus');
+		   return  _agile_get_prefs('companiesFilterStatus');
 		    
 			});
 
@@ -6795,6 +6845,7 @@ Handlebars.registerHelper('is_mobile', function(options)
 	});
 
 
+
 /**
  * Returns a S3 image url .
  * 
@@ -6839,19 +6890,37 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 			return options.inverse(this);
 	});
 
-	Handlebars.registerHelper('is_cancelled_user', function(options)
+	Handlebars.registerHelper('is_domain_owner', function(options)
 	{
-		if(IS_CANCELLED_USER)
+		if (CURRENT_DOMAIN_USER.is_account_owner)
 			return options.fn(this);
-		else if(IS_TRIAL)
+		else
+			return options.inverse(this);
+	});
+
+	Handlebars.registerHelper('is_not_allowed_trial', function(options)
+	{
+		if(IS_TRIAL && IS_ALLOWED_TRIAL)
 			return options.inverse(this);
 		else
 			return options.fn(this);
 	});
 
+// the epoch time is in milisecond.
+// jquery uses isostring format to implement timeago function on date...
+Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) {
+	try
+	{
+		return new Date(dateInepoch).toISOString();
+	}
+	catch (e)
+	{
+	}
+	return dateInepoch;
+});
 
 function agile_is_mobile_browser(){
-    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+   return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+ }
 
-}
 

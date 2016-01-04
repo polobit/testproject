@@ -311,9 +311,9 @@ function showsalesReportGraphs()
 		options += ("&frequency=" + frequency);
 	}
 	// If Frequency is present - send frequency too
-	
+	var frequency = $( "#frequency:visible").val();
 
-	showDealAreaSpline('core/api/opportunity/stats/details/'+options,'revenue-chart','','',true);
+	showDealAreaSpline('core/api/opportunity/stats/details/'+options,'revenue-chart','','',true,frequency);
 
 }
 
@@ -560,7 +560,7 @@ function initDateRange(callback)
 							Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() : 
 							(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() :
 							(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(9)).moveToFirstDayOfMonth(), 
-							Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(2).moveToLastDayOfMonth()) : 
+							Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(2)).moveToLastDayOfMonth() : 
 							(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() :
 							(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(8)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
 					], 'Last Quarter' : [

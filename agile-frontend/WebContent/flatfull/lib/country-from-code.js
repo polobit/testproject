@@ -155,7 +155,7 @@ function getCode (code) {
 	   case "MV": code = "Maldives"; break;
        case "MW": code = "Malawi"; break;
 	   case "MX": code = "Mexico"; break;
-       case "MY": code = "Maylaysia"; break;
+       case "MY": code = "Malaysia"; break;
        case "MZ": code = "Mozambique"; break;
 	   case "NA": code = "Namibia"; break;
        case "NC": code = "New Caledonia"; break;

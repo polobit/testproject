@@ -35,30 +35,46 @@ public class CallTriggerUtil
 
 	try
 	{
-	    // Status according to Activity
-	    callStatus = ActivityUtil.getEnumValueOfTwilioStatus(callStatus);
-	    
-	    System.out.println("Service type: " + serviceType + ", call type: " + callType + " and call status: "
-		    + callStatus + " duration: " + duration);
+		Type type;
 
-	    // If not Twilio, return
-	    if (!serviceType.equalsIgnoreCase(Call.SERVICE_TWILIO))
-	    {
-		System.out.println("Service type is not twilio..." + serviceType);
-		return;
-	    }
-
+	    // If not Contact, return
 	    if (contact == null)
 	    {
 		System.out.println("Contact obtained in trigger call is null...");
 		return;
 	    }
+	    
+	    
+	    if (serviceType.equalsIgnoreCase(Call.SERVICE_TWILIO))
+	    {
+		    // Status according to Activity
+		    callStatus = ActivityUtil.getEnumValueOfTwilioStatus(callStatus);
+		    
+		    System.out.println("Service type: " + serviceType + ", call type: " + callType + " and call status: "
+			    + callStatus + " duration: " + duration);
+		    // Default
+		    type = Trigger.Type.INBOUND_CALL;
 
-	    // Default
-	    Type type = Trigger.Type.INBOUND_CALL;
+		    if (callType.equalsIgnoreCase(Call.OUTBOUND))
+			type = Trigger.Type.OUTBOUND_CALL;
+		    
+	    }else if(serviceType.equalsIgnoreCase("Bria")){
+			System.out.println("Service type is not twilio..." + serviceType);
 
-	    if (callType.equalsIgnoreCase(Call.OUTBOUND))
-		type = Trigger.Type.OUTBOUND_CALL;
+			type = Trigger.Type.INBOUND_CALL;
+		    if (callType.equalsIgnoreCase("Outgoing"))
+			type = Trigger.Type.OUTBOUND_CALL;
+			
+	    }else if(serviceType.equalsIgnoreCase("Skype")){
+			System.out.println("Service type is not twilio..." + serviceType);
+
+			type = Trigger.Type.INBOUND_CALL;
+		    if (callType.equalsIgnoreCase("Outgoing"))
+			type = Trigger.Type.OUTBOUND_CALL;
+			
+	    }else{
+			return;
+	    }
 
 	    // Get call triggers
 	    List<Trigger> triggers = TriggerUtil.getTriggersByCondition(type);

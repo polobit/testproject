@@ -548,8 +548,8 @@ public class ReportsUtil
 			            if (callsPerPersonJSON.containsKey(createdTime))
 			            {
 			            	net.sf.json.JSONObject count = callsPerPersonJSON.getJSONObject(createdTime);
-		                    if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED))
-		                    	{
+		                    if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.ANSWERED) || activity.custom3.equalsIgnoreCase("completed")))
+		                    	{	
 		                    	
 		                    		int count1=count.getInt("Answered");
 		                    		count1++;

@@ -41,7 +41,12 @@ public class EmailClickDeferredTask implements DeferredTask
      * custom data to pass to respective tasklet
      */
     String interruptedData = null;
-
+    
+    /**
+     * SMS node click tracking id 
+     */
+    String smsClickTrackingId = null;
+    
     /**
      * Constructs a new {@link EmailClickDeferredTask}.
      * 
@@ -59,6 +64,18 @@ public class EmailClickDeferredTask implements DeferredTask
 	this.subscriberId = subscriberId;
 	this.interruptedData = interruptedData;
     }
+    
+    /**
+     * Constructs a new {@link EmailClickDeferredTask}
+     * 
+     * @param smsClickTrackingId - tracking Id
+     * @param interruptedData - data passed 
+     */
+    public EmailClickDeferredTask(String smsClickTrackingId, String interruptedData)
+    {
+    	this.smsClickTrackingId = smsClickTrackingId;
+    	this.interruptedData = interruptedData;
+    }
 
     public void run()
     {
@@ -69,6 +86,16 @@ public class EmailClickDeferredTask implements DeferredTask
 
 	try
 	{
+		if(StringUtils.isNotBlank(smsClickTrackingId))
+		{
+		
+			if(interruptedData == null)
+				interruptedData = "{}";
+			
+			CronUtil.interrupt(smsClickTrackingId, "SMS", null, new JSONObject(interruptedData));
+			return;
+		}
+		
 	    if (StringUtils.isBlank(clickTrackingId))
 	    {
 		// Wakeup Clicked node - campaignId and subscriberId as LAST two

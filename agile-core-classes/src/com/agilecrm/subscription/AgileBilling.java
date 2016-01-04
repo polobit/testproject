@@ -113,5 +113,17 @@ public interface AgileBilling
     public void cancelSubscription(JSONObject billingData) throws Exception;
     
     public JSONObject addSubscriptionAddon(Plan plan) throws Exception;
+    
+    /**
+     * Cancels customer Email Subscription
+     * 
+     * @param billingData
+     *            as {@link JSONObject}
+     * 
+     * 
+     * @throws Exception
+     */
+    public void cancelEmailSubscription(JSONObject billingData) throws Exception;
+    public Invoice getUpcomingInvoice(JSONObject billingData, Plan plan) throws Exception;
 
 }

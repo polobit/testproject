@@ -78,7 +78,7 @@ var CompaniesRouter = Backbone.Router
 					{
 						// Erase custom_view cookie, since
 						// view object with given id is not available
-						eraseCookie("contact_view");
+						_agile_delete_prefs("contact_view");
 
 						// Loads default contact view
 						App_Companies.companies();
@@ -97,16 +97,16 @@ var CompaniesRouter = Backbone.Router
 
 		var template_key = "companies-custom-view";
 		var individual_tag_name = "tr";
-		var sort_key = readCookie("company_sort_field");
+		var sort_key = _agile_get_prefs("company_sort_field");
 		if (!sort_key || sort_key == null)
 		{
 			sort_key = '-created_time';
 			// Saves Sort By in cookie
-			createCookie('company_sort_field', sort_key);
+			_agile_set_prefs('company_sort_field', sort_key);
 		}
 
 		// Checks if user is using custom view. It check for grid view
-		/*if (grid_view || readCookie("agile_contact_view"))
+		/*if (grid_view || _agile_get_prefs("agile_contact_view"))
 		{
 			template_key = "contacts-grid";
 			individual_tag_name = "div";
@@ -126,11 +126,8 @@ var CompaniesRouter = Backbone.Router
 			tag_id = decodeURI(tag_id);
 
 			// erase filter cookie
-			//eraseCookie('contact_filter');
-			eraseCookie('company_filter');
-			//eraseCookie('contact_filter_type');
-			//eraseData('dynamic_contact_filter');
-
+			_agile_delete_prefs('company_filter');
+			
 			if (this.companiesListView && this.companiesListView.collection)
 			{
 
@@ -140,7 +137,7 @@ var CompaniesRouter = Backbone.Router
 				}
 			}
 
-			this.customView(readCookie("contact_view"), undefined, 'core/api/tags/list/' + tag_id, tag_id);
+			this.customView(_agile_get_prefs("contact_view"), undefined, 'core/api/tags/list/' + tag_id, tag_id);
 			return;
 
 		}
@@ -159,7 +156,7 @@ var CompaniesRouter = Backbone.Router
 
 		// If contact-filter cookie is defined set url to fetch
 		// respective filter results
-		if (company_filter_id || (company_filter_id = readCookie('company_filter')))
+		if (company_filter_id || (company_filter_id = _agile_get_prefs('company_filter')))
 		{
 			collection_is_reverse = false;
 			url = "core/api/filters/query/list/" + company_filter_id;
@@ -181,17 +178,17 @@ var CompaniesRouter = Backbone.Router
 			$("#companiesmenu").addClass("active");
 			return;
 		}
-		if (readData('dynamic_company_filter'))
+		if (_agile_get_prefs('dynamic_company_filter'))
 		{
 			url = 'core/api/filters/filter/dynamic-filter';
-			postData = readData('dynamic_company_filter');
+			postData = _agile_get_prefs('dynamic_company_filter');
 		}
 
 		var slateKey = getCompanyPadcontentKey(url);
 		if (is_lhs_filter)
 		{
 			template_key = "companies-custom-view-table";
-			/*if (grid_view || readCookie("agile_contact_view"))
+			/*if (grid_view || _agile_get_prefs("agile_contact_view"))
 			{
 				template_key = "contacts-grid-table";
 				individual_tag_name = "div";
@@ -202,7 +199,7 @@ var CompaniesRouter = Backbone.Router
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.companiesListView = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
+		this.companiesListView = new Contacts_Events_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
 			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
@@ -218,7 +215,7 @@ var CompaniesRouter = Backbone.Router
 						count = collection.models[0].attributes.count || collection.models.length;
 					}
 					var count_message;
-					if (count > 9999 && (readCookie('company_filter') || readData('dynamic_company_filter')))
+					if (count > 9999 && (_agile_get_prefs('company_filter') || _agile_get_prefs('dynamic_company_filter')))
 						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png")+ '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 					else
 						count_message = "<small> (" + count + " Total) </small>";
@@ -339,7 +336,7 @@ var CompaniesRouter = Backbone.Router
 		add_recent_view(company);
 
 		// If contact is of type company , go to company details page
-		this.companyDetailView = new Base_Model_View({ model : company, isNew : true, template : "company-detail",
+		this.companyDetailView = new Contact_Details_Model_Events({ model : company, isNew : true, template : "company-detail",
 			postRenderCallback : function(el)
 			{
 				fill_company_related_contacts(id, 'company-contacts');

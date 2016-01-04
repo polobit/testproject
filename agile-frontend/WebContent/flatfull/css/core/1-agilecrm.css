@@ -1276,7 +1276,6 @@ ul.tags-management li.tag a {/*color:#ffffff;*/
 	/*color: #000;*/
 	font-size: 12px;
 	width: 100%;
-	max-width:100px;
 }
 .tag-management-actions a {
 	cursor: pointer;
@@ -2996,4 +2995,42 @@ width: 915px;
 {
 	max-width: none;
 	
+}
+
+.c-progress
+{
+	cursor: progress;
+}
+.width-goal
+{
+width : 150px;
+}
+
+.padder-portlet
+{
+	padding-top: 9px;
+	padding-bottom:9px;
+}
+
+#portlets-add-listener #deals > div:nth-of-type(4)
+{
+	height: 243px;
+}
+
+.goal
+{
+	width:calc(100% - 420px);
+}
+
+.datepicker-months
+{
+		width : 233px;
+}
+@-moz-document url-prefix() { 
+
+.mozilla-addon
+{
+	position:relative; top :-2px;
+
+}
 }

@@ -423,6 +423,7 @@ public class ScribeUtil
 	Map<String, String> properties = new HashMap<String, String>();
 	properties.put("token", accessToken.getToken());
 	properties.put("secret", accessToken.getSecret());
+	properties.put("version","v2");
 	properties.put("time", String.valueOf(System.currentTimeMillis()));
 	properties.put("isForAll", isForAll);
 

@@ -507,6 +507,7 @@ a.list-group-item.hover {
 .table > tfoot > tr > td {
   padding: 8px 15px;
   border-top: 1px solid #eaeff0;
+  border-bottom: none;
 }
 
 .table > thead > tr > th {
