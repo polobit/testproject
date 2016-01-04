@@ -147,8 +147,8 @@
 		<div class="clearfix"></div>
 	</div>
 	<div class="agile-overflow-ellipsis" style="white-space:initial;">
-{{#if expected_value}}
-		<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
+{{#if currency_conversion_value}}
+		<span>{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}</span>
 {{/if}}
 	</div>
 	{{#if this.contacts}}
@@ -202,11 +202,11 @@
 		<div class="clearfix"></div>
 	</div>
 	<div class="agile-overflow-ellipsis" style="white-space:initial;">
-{{#if expected_value}}
-		<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
+{{#if currency_conversion_value}}
+		<span>{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}</span>
 {{/if}}
 		{{#if this.contacts}}
-			{{#if expected_value}}
+			{{#if currency_conversion_value}}
 				<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #d5d5d5"></span>
 			{{/if}}
 			{{#related_to_one contacts}}{{/related_to_one}}

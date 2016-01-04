@@ -520,6 +520,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 	{
 		var container = $('#' + formId).closest('.modal');
 		var ele = $('#' + formId).find('.single-error').first();
+		if(ele && ele.offset())
 		container.scrollTop(ele.offset().top - container.offset().top + container.scrollTop());
 		// Removes disabled attribute of save button
 		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');

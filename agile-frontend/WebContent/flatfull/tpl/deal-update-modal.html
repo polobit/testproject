@@ -1,4 +1,5 @@
 <!-- Edit (Deal) Modal views -->
+
 <div class="modal  fade opportunity-modal" id="opportunityUpdateModal">
 <div class="modal-dialog">
     <div class="modal-content">
@@ -35,21 +36,209 @@
 					<div class="control-group form-group col-md-6">
 						<label class="control-label"><b>Value </b><span
 							class="field_req">*</span></label>
+
 						<div class="controls">
-							<span id="milestone_val"><input type="text" name="expected_value"
-								class="required  number form-control" min="0" max="1000000000000"
+
+              <div class="ccw_unit_selector_cnt" id="currencies-list">
+               <select  class="required form-control" name="currency_type">
+
+                          <option value="USD-$" selected="1">USD-$</option>
+                          <option value="AED-د.إ">AED-د.إ</option>
+                          <option value="AFN-؋">AFN-؋</option>
+                          <option value="ALL-Lek">ALL-Lek</option>
+                          <option value="AMD-AMD">AMD-AMD</option>
+                          <option value="ANG-ƒ">ANG-ƒ</option>
+                          <option value="AOA-Kz">AOA-Kz</option>
+                          <option value="ARS-$">ARS-$</option>
+                          <option value="AUD-$">AUD-$</option>
+                          <option value="AWG-ƒ">AWG-ƒ</option>
+                          <option value="AZN-ман">AZN-ман</option>
+                          <option value="BAM-KM">BAM-KM</option>
+                          <option value="BBD-$">BBD-$</option>
+                          <option value="BDT-৳">BDT-৳</option>
+                          <option value="BGN-лв">BGN-лв</option>
+                          <option value="BHD-BD">BHD-BD</option>
+                          <option value="BIF-BIF">BIF-BIF</option>
+                          <option value="BMD-$">BMD-$</option>
+                          <option value="BND-$">BND-$</option>
+                          <option value="BOB-$b">BOB-$b</option>
+                          <option value="BRL-R$">BRL-R$</option>
+                          <option value="BSD-$">BSD-$</option>
+                          <option value="BTC-฿">BTC-฿</option>
+                          <option value="BTN-BTN">BTN-BTN</option>
+                          <option value="BWP-P">BWP-P</option>
+                          <option value="BYR-p.">BYR-p.</option>
+                          <option value="BZD-BZ$">BZD-BZ$</option>
+                          <option value="CAD-$">CAD-$</option>
+                          <option value="CDF-FC">CDF-FC</option>
+                          <option value="CHF-CHF">CHF-CHF</option>
+                          <option value="CLF-CLF">CLF-CLF</option>
+                          <option value="CLP-$">CLP-$</option>
+                          <option value="CNY-¥">CNY-¥</option>
+                          <option value="COP-$">COP-$</option>
+                          <option value="CRC-₡">CRC-₡</option>
+                          <option value="CUC-CUC$">CUC-CUC$</option>
+                          <option value="CUP-₱">CUP-₱</option>
+                          <option value="CVE-$">CVE-$</option>
+                          <option value="CZK-Kč">CZK-Kč</option>
+                          <option value="DJF-DJF">DJF-DJF</option>
+                          <option value="DKK-kr">DKK-kr</option>
+                          <option value="DOP-RD$">DOP-RD$</option>
+                          <option value="DZD-DA">DZD-DA</option>
+                          <option value="EEK-kr">EEK-kr</option>
+                          <option value="EGP-£">EGP-£</option>
+                          <option value="ERN-ERN">ERN-ERN</option>
+                          <option value="ETB-Br">ETB-Br</option>
+                          <option value="EUR-€">EUR-€</option>
+                          <option value="FJD-$">FJD-$</option>
+                          <option value="FKP-£">FKP-£</option>
+                          <option value="GBR-£">GBR-£</option>
+                          <option value="GEL-ლ">GEL-ლ</option>
+                          <option value="GGP-£">GGP-£</option>
+                          <option value="GHS-GH¢">GHS-GH¢</option>
+                          <option value="GIP-£">GIP-£</option>
+                          <option value="GMD-D">GMD-D</option>
+                          <option value="GNF-FG">GNF-FG</option>
+                          <option value="GTQ-Q">GTQ-Q</option>
+                          <option value="GYD-$">GYD-$</option>
+                          <option value="HKD-$">HKD-$</option>
+                          <option value="HNL-L">HNL-L</option>
+                          <option value="HRK-kn">HRK-kn</option>
+                          <option value="HTG-G">HTG-G</option>
+                          <option value="HUF-Ft">HUF-Ft</option>
+                          <option value="IDR-Rp">IDR-Rp</option>
+                          <option value="ILS-₪">ILS-₪</option>
+                          <option value="IMP-£">IMP-£</option>
+                          <option value="INR-र">INR-र</option>
+                          <option value="IQD-د.ع.">IQD-د.ع.</option>
+                          <option value="IRR-﷼">IRR-﷼</option>
+                          <option value="ISK-kr">ISK-kr</option>
+                          <option value="JEP-£">JEP-£</option>
+                          <option value="JMD-J$">JMD-J$</option>
+                          <option value="JOD-JOD">JOD-JOD</option>
+                          <option value="JPY-¥">JPY-¥</option>
+                          <option value="KES-KSh">KES-KSh</option>
+                          <option value="KGS-лв">KGS-лв</option>
+                          <option value="KHR-៛">KHR-៛</option>
+                          <option value="KMF-CF">KMF-CF</option>
+                          <option value="KPW-₩">KPW-₩</option>
+                          <option value="KRW-₩">KRW-₩</option>
+                          <option value="KWD-د.ك">KWD-د.ك</option>
+                          <option value="KYD-$">KYD-$</option>
+                          <option value="KZT-лв">KZT-лв</option>
+                          <option value="LAK-₭">LAK-₭</option>
+                          <option value="LBP-£">LBP-£</option>
+                          <option value="LKR-₨">LKR-₨</option>
+                          <option value="LRD-$">LRD-$</option>
+                          <option value="LSL-L">LSL-L</option>
+                          <option value="LTL-Lt">LTL-Lt</option>
+                          <option value="LVL-Ls">LVL-Ls</option>
+                          <option value="LYD-ل.د">LYD-ل.د</option>
+                          <option value="MAD-MAD">MAD-MAD</option>
+                          <option value="MDL-MDL">MDL-MDL</option>
+                          <option value="MGA-Ar">MGA-Ar</option>
+                          <option value="MKD-ден">MKD-ден</option>
+                          <option value="MMK-K">MMK-K</option>
+                          <option value="MNT-₮">MNT-₮</option>
+                          <option value="MOP-MOP$">MOP-MOP$</option>
+                          <option value="MRO-UM">MRO-UM</option>
+                          <option value="MTL-Lm">MTL-Lm</option>
+                          <option value="MUR-₨">MUR-₨</option>
+                          <option value="MVR-ރ">MVR-ރ</option>
+                          <option value="MWK-MK">MWK-MK</option>
+                          <option value="MXN-Mex$">MXN-Mex$</option>
+                          <option value="MYR-RM">MYR-RM</option>
+                          <option value="MZN-MT">MZN-MT</option>
+                          <option value="NAD-N$">NAD-N$</option>
+                          <option value="NGN-₦">NGN-₦</option>
+                          <option value="NIO-C$">NIO-C$</option>
+                          <option value="NOK-kr">NOK-kr</option>
+                          <option value="NPR-रू">NPR-रू</option>
+                          <option value="NZD-$">NZD-$</option>
+                          <option value="OMR-﷼">OMR-﷼</option>
+                          <option value="PAB-B/">PAB-B/</option>
+                          <option value="PEN-S/">PEN-S/</option>
+                          <option value="PGK-K">PGK-K</option>
+                          <option value="PHP-₱">PHP-₱</option>
+                          <option value="PKR-PKR">PKR-PKR</option>
+                          <option value="PLN-zł">PLN-zł</option>
+                          <option value="PYG-₲">PYG-₲</option>
+                          <option value="QAR-ر.ق">QAR-ر.ق</option>
+                          <option value="RON-RON">RON-RON</option>
+                          <option value="RSD-РСД">RSD-РСД</option>
+                          <option value="RUB-руб">RUB-руб</option>
+                          <option value="RWF-FRw">RWF-FRw</option>
+                          <option value="SAR-﷼">SAR-﷼</option>
+                          <option value="SBD-SI$">SBD-SI$</option>
+                          <option value="SCR-SRe">SCR-SRe</option>
+                          <option value="SDG-ج.س.">SDG-ج.س.</option>
+                          <option value="SEK-kr">SEK-kr</option>
+                          <option value="SGD-$">SGD-$</option>
+                          <option value="SHP-£">SHP-£</option>
+                          <option value="SLL-Le">SLL-Le</option>
+                          <option value="SOS-Sh.So.">SOS-Sh.So.</option>
+                          <option value="SRD-$">SRD-$</option>
+                          <option value="STD-Db">STD-Db</option>
+                          <option value="SVC-$">SVC-$</option>
+                          <option value="SYP-£S">SYP-£S</option>
+                          <option value="SZL-pl.">SZL-pl.</option>
+                          <option value="THB-฿">THB-฿</option>
+                          <option value="TJS-TJS">TJS-TJS</option>
+                          <option value="TMT-T">TMT-T</option>
+                          <option value="TND-د.ت">TND-د.ت</option>
+                          <option value="TOP-T$">TOP-T$</option>
+                          <option value="TRY-₺">TRY-₺</option>
+                          <option value="TTD-TT$">TTD-TT$</option>
+                          <option value="TWD-塊">TWD-塊</option>
+                          <option value="TZS-x/y">TZS-x/y</option>
+                          <option value="UAH-₴">UAH-₴</option>
+                          <option value="UGX-USh">UGX-USh</option>
+                          <option value="UYU-$U">UYU-$U</option>
+                          <option value="UZS-лв">UZS-лв</option>
+                          <option value="VEF-Bs">VEF-Bs</option>
+                          <option value="VND-₫">VND-₫</option>
+                          <option value="VUV-Vt">VUV-Vt</option>
+                          <option value="WST-WS$">WST-WS$</option>
+                          <option value="XAF-FCFA">XAF-FCFA</option>
+                          <option value="XAG-XAG">XAG-XAG</option>
+                          <option value="XAU-XAU">XAU-XAU</option>
+                          <option value="XCD-$">XCD-$</option>
+                          <option value="XDR-XDR">XDR-XDR</option>
+                          <option value="XOF-XOF">XOF-XOF</option>
+                          <option value="XPD-XPD">XPD-XPD</option>
+                          <option value="XPF-F">XPF-F</option>
+                          <option value="XPT-XPT">XPT-XPT</option>
+                          <option value="YER-﷼">YER-﷼</option>
+                          <option value="ZAR-R">ZAR-R</option>
+                          <option value="ZMK-ZMW">ZMK-ZMW</option>
+                          <option value="ZMW-ZMW">ZMW-ZMW</option>
+                          <option value="ZWL-Z$">ZWL-Z$</option>
+                       </select> <div class="ccw_selector_bg"></div><div class="ccw_selector_arrows"></div></div>
+
+							<span id="milestone_val"><input type="text" name="currency_conversion_value"
+								class="required  number form-control val-deal" min="0" max="1000000000000"
 								placeholder="Value of Deal" /></span>
+
+                
+
+
 						</div>
-					</div>
+            </div>
 					<div class="control-group form-group col-md-6">
-						<label class="control-label"><b>Probability (%) </b><span
-							class="field_req">*</span></label>
-						<div class="controls ">
-							<span><input type="text" id="probability"
-								name="probability" class=" required digits form-control" max="100"
-								placeholder="Probability %" /></span>
-						</div>
-					</div>
+            <label class="control-label"><b>Probability (%) </b><span
+              class="field_req">*</span></label>
+            <div class="controls">
+
+          <div class="form-group row" style="margin-left:0;margin-right:0">
+            
+            <div class="col-md-10 p-n" style="width:90%">
+              <input type="text" value="20" class="form-control digits error deal-pro required positive_number" id="probability" name="probability" placeholder="Probability %" max="100">
+              
+            </div>
+            <span class="col-md-1 form-control input-group-addon" style="border-left:none;border-radius:0px 5px 5px 0px;">%</span>
+            </div>
+           </div>  
+          </div>
 				</div>
 				<div class="row">
 					<div class="control-group form-group col-md-6">
@@ -82,7 +271,10 @@
 							</select></span><img class="loading-img" src="img/21-0.gif" style="display:none;"></img>
 						</div>
 					</div>
-					<div class="control-group form-group col-md-6 hidden" id="deal_lost_reason">
+
+                       
+
+                        <div class="control-group form-group col-md-6 hidden" id="deal_lost_reason">
 						<label class="control-label"><b>Loss Reason</b></label>
 						<div class="controls">
 							<span><select id="lost_reason" name="lost_reason_id"

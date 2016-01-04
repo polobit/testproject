@@ -1,19 +1,26 @@
 package com.agilecrm.deals;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivitySave;
@@ -65,6 +72,7 @@ import com.googlecode.objectify.condition.IfDefault;
 @Cached
 public class Opportunity extends Cursor implements Serializable
 {
+	
     /**
      * Opportunity Id.
      */
@@ -239,17 +247,74 @@ public class Opportunity extends Cursor implements Serializable
 
     /**
      * ObjectifyDao of Opportunity.
+     * @throws JSONException 
+     * @throws IOException 
+     * @throws MalformedURLException 
      */
-    public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
+    
+    // Currency is converted with respect to the admin preferred currency.
+    /*
+  public double currencyConversionValue() throws JSONException, IOException{
+	 String s = "https://openexchangerates.org/api/latest.json?app_id=2e2f1446f9b7407091f10a515dc8ad65";
+	  
+		URL url = new URL(s);
+	
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		      
+			   Scanner scan = new Scanner(con.getInputStream());
+			    String string = new String();
+			    while (scan.hasNext()){
+			        string += scan.nextLine();
+			    }
+			    scan.close();
+			    JSONObject jsonObject = new JSONObject(string);
+			    JSONObject listOfRates =  (JSONObject) jsonObject.get("rates");
+			    double currency_conversion = (double) listOfRates.get("AUD");
+	
+	  
+	   return currency_conversion;
+	  
+	  }
+	  */
+    
+   //Value of the currency converted at the time of deal created
+    private double currency_conversion_value = 0.00;
+    
+    
+    public double getCurrency_conversion_value() {
+		return currency_conversion_value;
+	}
+
+	public void setCurrency_conversion_value(double currency_conversion_value) {
+		this.currency_conversion_value = currency_conversion_value;
+	}
+  
+    
+ // Type of the currency used for the particular deal
+    private String currency_type = null;
+	
+	 public String getCurrency_type() {
+			return currency_type;
+		}
+
+		public void setCurrency_type(String currency_type) {
+			this.currency_type = currency_type;
+		}
+
+	public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
 
     /**
      * Default Constructor.
      */
+    
+    
     public Opportunity()
     {
     }
 
-    /**
+    
+
+	/**
      * Constructs a new {@link Opportunity}.
      * 
      * @param name
@@ -266,22 +331,28 @@ public class Opportunity extends Cursor implements Serializable
      *            - Track.
      * @param ownerId
      *            - Owner id.
+	 * @throws IOException 
+	 * @throws JSONException 
      */
     public Opportunity(String name, String description, Double expectedValue, String milestone, int probability,
-	    String track, String ownerId)
+	    String track, String ownerId) throws IOException, JSONException
     {
-	this.name = name;
+
+    this.name = name;
 	this.description = description;
 	this.expected_value = expectedValue;
 	this.milestone = milestone;
 	this.probability = probability;
 	this.track = track;
 	this.owner_id = ownerId;
+   
+    
     }
 
     public Opportunity(String name, String description, Double expectedValue, Long pipelineId, String milestone,
-	    int probability, String track, String ownerId)
+	    int probability, String track, String ownerId) throws IOException, JSONException
     {
+  
 	this.name = name;
 	this.description = description;
 	this.expected_value = expectedValue;
@@ -290,7 +361,24 @@ public class Opportunity extends Cursor implements Serializable
 	this.probability = probability;
 	this.track = track;
 	this.owner_id = ownerId;
+	
     }
+    
+    public Opportunity(String name, String description, Double expectedValue, Long pipelineId, String milestone,
+    	    int probability, String track, String ownerId, String currency_type, double currency_conversion_value) throws IOException, JSONException
+        {
+      
+    	this.name = name;
+    	this.description = description;
+    	this.expected_value = expectedValue;
+    	this.pipeline_id = pipelineId;
+    	this.milestone = milestone;
+    	this.probability = probability;
+    	this.track = track;
+    	this.owner_id = ownerId;
+    	this.currency_type = currency_type;
+    	this.currency_conversion_value =  currency_conversion_value ;
+        }
 
     /**
      * Gets contacts related with deals.
@@ -582,10 +670,50 @@ public class Opportunity extends Cursor implements Serializable
     /**
      * Sets created time, owner key and agile user. PrePersist is called each
      * time before object gets saved.
+     * @throws IOException 
+     * @throws JSONException 
      */
     @PrePersist
-    private void PrePersist()
+    private void PrePersist() throws IOException, JSONException
     {
+    	
+    	
+    // Sets the currency conversion value
+    	
+    	 try {
+			String s = "https://openexchangerates.org/api/latest.json?app_id=2e2f1446f9b7407091f10a515dc8ad65";
+			URL url = new URL(s);
+	
+		    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			      
+				Scanner scan = new Scanner(con.getInputStream());
+				String string = new String();
+				while (scan.hasNext()){
+				    string += scan.nextLine();
+			     }
+				   scan.close();
+			    JSONObject jsonObject = new JSONObject(string);
+				JSONObject listOfRates =  (JSONObject) jsonObject.get("rates");
+			    String userpref_currency_type =UserPrefsUtil.getCurrentUserPrefs().currency.substring(0,3).toUpperCase();
+				String  deal_currency_type = currency_type.substring(0,3);
+			    if(deal_currency_type == null)
+				    deal_currency_type =  userpref_currency_type ;
+			    double pre_conversion_value_numerator =  (double) listOfRates.getDouble(deal_currency_type); 
+			    double pre_conversion_value_denominator = (double) listOfRates.getDouble(userpref_currency_type);
+ 
+              if(userpref_currency_type.equalsIgnoreCase(deal_currency_type))
+			       { 
+			         expected_value = currency_conversion_value;
+			   }else{   
+				
+                 expected_value = (pre_conversion_value_denominator/pre_conversion_value_numerator)*currency_conversion_value;
+			 }
+		   } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		   }
+    	
+     
 	// Initializes created Time
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
@@ -702,6 +830,24 @@ public class Opportunity extends Cursor implements Serializable
 	// Setting note_ids from api calls
 	setRelatedNotes();
 
+    }
+    
+    @PostLoad
+    public void postLoad(){
+    	
+    	String userpref_currency_type = UserPrefsUtil.getCurrentUserPrefs().currency.substring(0,3).toUpperCase();
+    	 
+    	if(userpref_currency_type == null)
+		        userpref_currency_type =  "USD" ;
+    	if(currency_type == null || currency_type.isEmpty() )
+    	         currency_type = userpref_currency_type ; 
+    	
+    	String  deal_currency_type = currency_type.substring(0,3);
+    	
+	    if(userpref_currency_type.equalsIgnoreCase(deal_currency_type))
+	       { 
+	          currency_conversion_value =  expected_value;
+	       }
     }
 
     @XmlElement(name = "note_ids")
