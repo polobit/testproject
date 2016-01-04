@@ -382,7 +382,8 @@ user_reports :function(callReportUrl){
 				console.log(data);
 				var div='';
 				var pipeline_json=[];
-				 $.each(data,function(k,v){
+				$.each(data,function(index,data1){
+				 	 $.each(data1,function(k,v){
 				 	div=div.concat('<div id='+k+' class="conversion_track col-sm-4 panel wrapper"><b>'+k+'</b>');
 				 	//var innerdiv='';
 				 	var index=0;
@@ -438,7 +439,7 @@ user_reports :function(callReportUrl){
 				 		//$('.conversion_track').hide();
 				 	
 				 });
-				 $(".converionsPipeline").html(div);
+});				 $(".converionsPipeline").html(div);
 				 $('.hidden').parents('.conversion_track').remove();
 				 if($('.converionsPipeline').children().length==0)
 				 	$('.converionsPipeline').parents('.row').hide();
