@@ -608,6 +608,13 @@ var portlet_graph_data_utility = {
 		var busyCallsCountList = [];
 		var failedCallsCountList = [];
 		var voiceMailCallsCountList = [];
+		var missedCallsCountList= [];
+		var inquiryCallsCountList= [];
+		var interestCallsCountList= [];
+		var noInterestCallsCountList= [];
+		var incorrectReferralCallsCountList= [];
+		var newOpportunityCallsCountList= [];
+		var meetingScheduledCallsCountList = [];
 		var callsDurationList = [];
 		var totalCallsCountList = [];
 		var domainUsersList = [];
@@ -635,6 +642,13 @@ var portlet_graph_data_utility = {
 							busyCallsCountList = data["busyCallsCountList"];
 							failedCallsCountList = data["failedCallsCountList"];
 							voiceMailCallsCountList = data["voiceMailCallsCountList"];
+							missedCallsCountList = data["missedCallsCountList"];
+							inquiryCallsCountList = data["inquiryCallsCountList"];
+							interestCallsCountList = data["interestCallsCountList"];
+							noInterestCallsCountList = data["noInterestCallsCountList"];
+							incorrectReferralCallsCountList = data["incorrectReferralCallsCountList"];
+							meetingScheduledCallsCountList = data["meetingScheduledCallsCountList"];
+							newOpportunityCallsCountList = data["newOpportunityCallsCountList"];
 							callsDurationList = data["callsDurationList"];
 							totalCallsCountList = data["totalCallsCountList"];
 							domainUsersList = data["domainUsersList"];
@@ -664,6 +678,41 @@ var portlet_graph_data_utility = {
 								tempData.name = "Voicemail";
 								tempData.data = voiceMailCallsCountList;
 								series[3] = tempData;
+
+								tempData = {};
+								tempData.name = "Missed ";
+								tempData.data = missedCallsCountList;
+								series[2] = tempData;
+
+								tempData = {};
+								tempData.name = "Inquiry";
+								tempData.data = inquiryCallsCountList;
+								series[2] = tempData;
+
+								tempData = {};
+								tempData.name = "Interest";
+								tempData.data = interestCallsCountList;
+								series[2] = tempData;
+
+								tempData = {};
+								tempData.name = "No Interest";
+								tempData.data = noInterestCallsCountList;
+								series[2] = tempData;
+
+								tempData = {};
+								tempData.name = "Incorrect Referral";
+								tempData.data = incorrectReferralCallsCountList;
+								series[2] = tempData;
+
+								tempData = {};
+								tempData.name = "Meeting Scheduled";
+								tempData.data = meetingScheduledCallsCountList;
+								series[2] = tempData;
+
+								tempData = {};
+								tempData.name = "New Opportunity";
+								tempData.data = newOpportunityCallsCountList;
+								series[2] = tempData;
 								text = "No. of Calls";
 								colors = [ 'green', 'blue', 'red', 'violet' ];
 							} else {

@@ -516,7 +516,7 @@ public class ReportsUtil
 				callsObject.put("inquiry",0);
 				callsObject.put("interest",0);
 				callsObject.put("no interest",0);
-				callsObject.put("interest referral",0);
+				callsObject.put("incorrect referral",0);
 				callsObject.put("meeting scheduled",0);
 				callsObject.put("new oppurtunity",0);
 
