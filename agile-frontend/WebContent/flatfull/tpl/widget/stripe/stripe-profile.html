@@ -19,23 +19,22 @@
 		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank">{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</a>
 	{{/if}}
 </div>
-nnnnnn
-{{#if_hasWriteAccess}}
-	<div class="b-t b-b wrapper-xs">
-		<div class="row">
-			<div class="col-md-1 p-r-none">
-				<p class="m-b-none c-p" id="add_credits"><i class="icon-plus-sign"></i></p>
-			</div>
-			<div class="col-md-5">
-				Credits<div class="pull-right"> :</div>
-			</div>
-			<div class="col-md-6">
-	  			<span>$ </span>
-	  			<span id="balance_credit">{{stripeCreditConvertion customer.accountBalance}}</span>
-			</div>
+<div class="b-t b-b wrapper-xs">
+	<div class="row">
+		<div class="col-md-1 p-r-none">
+			<p class="m-b-none c-p" id="add_credits"><i class="icon-plus-sign"></i></p>
+		</div>
+		<div class="col-md-5">
+			Credits<div class="pull-right"> :</div>
+		</div>
+		<div class="col-md-6">
+  			<span>$ </span>
+  			<span id="balance_credit">{{stripeCreditConvertion customer.accountBalance}}</span>
 		</div>
 	</div>
-	<div id="stripe_credits_panel" class="col-md-12 p-t-xs p-b-xs hide">
+</div>
+<div id="stripe_credits_panel" class="col-md-12 p-t-xs p-b-xs hide">
+{{#if_hasWriteAccess}}
 		<div class="col-md-6 p-l-none p-r-sm">
 			<input class="form-control input-sm" id="credit_amount" type="number" value="0" name="credit_amount">
 		</div>
@@ -45,9 +44,13 @@ nnnnnn
 		<div class="col-md-3 p-none">
 			<button href="#" class="btn btn-sm btn-default" id="stripe_credits_cancel" style="" name="stripe_credits_cancel">cancel</button>
 		</div>
-	</div>
-	<div class="clearfix"></div>
+	{{else}}
+		<div class="col-md-12 p-l-none p-r-sm">
+			<p>Please Reconfigure Stripe with Read & Write permissions to access Add credit feature </p>
+		</div>
 {{/if_hasWriteAccess}}
+</div>
+<div class="clearfix"></div>
 <div class="b-t">
 	<div class=" wrapper-xs">
 		<span>Subscription Details</span>
