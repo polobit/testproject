@@ -604,10 +604,14 @@ var Tickets = {
 	initDateTimePicker: function($input, callback){
 
 		head.load(LIB_PATH + '/lib/web-calendar-event/moment.min.js', '/lib/date-range-picker2.min.js', "/flatfull/css/final-lib/date-range-picker2.css",  function()
-		{
+		{	
 			$('.due-date-input').daterangepicker({
-			    "singleDatePicker": true,"drops": "up","timePicker": true,"startDate": moment(),"endDate": moment().add('days', 3)
+			    "singleDatePicker": true,"drops": "up","startDate": moment(),"endDate": moment().add('days', 3)
 			}, function(start, end, label) {
+				
+				//Show clear button
+				$('#clear-due-date').show();
+
 			  	callback(start);
 			});
 		});
@@ -811,9 +815,7 @@ var Tickets = {
 				if(callback)
 					callback(model.toJSON());
 
-			}, null, Current_Ticket_ID);
-
-		
+			}, null, Current_Ticket_ID);		
 	},
 
 	closeTicket : function(e){

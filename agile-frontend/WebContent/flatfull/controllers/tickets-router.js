@@ -54,14 +54,7 @@
 	 */
 	 newTicket : function(){
 
-	 	if($('#tickets-container').length == 0)
-	 	{
-	 		Tickets.initialize(DEFAULT_GROUP_ID, function(){
-	 			App_Ticket_Module.renderNewTicketModalView();
-	 		});
-	 	}else{
-	 		App_Ticket_Module.renderNewTicketModalView();
-	 	}
+	 	App_Ticket_Module.renderNewTicketModalView();
 	 },
 
 	 renderNewTicketModalView: function(){
@@ -80,12 +73,7 @@
 				template : "ticket-new-modal-form",
 				url : "/core/api/tickets/new-ticket",
 				saveCallback : function(ticket){
-
 					$('#new-ticket-modal').modal('hide');
-					
-					/*var url = 'tickets/group/'+ ticket.groupID +'/'+ ticket.status.toLowerCase() +'/' + ticket.id;
-
-					Backbone.history.navigate( url, { trigger : true });*/
 				},
 				postRenderCallback : function(el, data) {
 

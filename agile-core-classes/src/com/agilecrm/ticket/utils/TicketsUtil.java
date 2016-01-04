@@ -211,7 +211,7 @@ public class TicketsUtil
 			ticket.last_updated_by = LAST_UPDATED_BY.REQUESTER;
 			ticket.requester_ip_address = ipAddress;
 			ticket.user_replies_count = 1;
-			
+
 			/**
 			 * Checking if new ticket requester is exists in Contacts
 			 */
@@ -222,15 +222,16 @@ public class TicketsUtil
 
 			ticket.contact_key = new Key<Contact>(Contact.class, contact.id);
 			ticket.contactID = contact.id;
-			
-			//Save ticket 
+
+			// Save ticket
 			ticket.saveWithNewID();
 
 			// Create search document
 			new TicketsDocument().add(ticket);
 
 			// Logging ticket created activity
-			new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "", plain_text, "last_reply_text").save();
+			new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "", plain_text,
+					"last_reply_text").save();
 
 			// Execute triggers
 			TicketTriggerUtil.executeTriggerForNewTicket(ticket);
@@ -377,7 +378,7 @@ public class TicketsUtil
 
 		if (isNewTicket)
 			// Logging ticket assigned activity
-			new TicketActivity(TicketActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, "", assignee_id + "",
+			new TicketActivity(TicketActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, null, assignee_id + "",
 					"assigneeID").save();
 		else
 			// Logging ticket transfer activity

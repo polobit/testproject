@@ -161,7 +161,9 @@ public class ContactFullDetails
 	{
 		try
 		{
-			return new TicketActivity().getActivityByContactId(contact_id);
+			List<TicketActivity> activitys = new TicketActivity().getActivityByContactId(contact_id);
+
+			return TicketActivity.includeData(activitys);
 		}
 		catch (Exception e)
 		{

@@ -933,7 +933,6 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<display-name>TicketWebhook</display-name>
 		<servlet-name>TicketWebhook</servlet-name>
 		<servlet-class>com.agilecrm.ticket.servlets.TicketWebhook</servlet-class>
 	</servlet>
