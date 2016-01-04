@@ -304,32 +304,49 @@ function set_up_merge_fields(editor)
  * Returns merge fields that includes custom fields
  * 
  */
-function get_merge_fields()
+function get_merge_fields(callback)
 {
-	var options = {
-	"First Name": "{{first_name}}",
-	"Last Name": "{{last_name}}",
-	"Score": "{{score}}",
-	"Email": "{{email}}",
-	"Company": "{{company}}",
-	"Title": "{{title}}",
-	"Address": "{{location.address}}",
-	"City": "{{location.city}}",
-	"State":"{{location.state}}",
-	"Country":"{{location.country}}",
-	"Owner Name":"{{owner.name}}",
-	"Owner Email":"{{owner.email}}", 
-	"Calendar URL":"{{owner.calendar_url}}"
 	
+	var options = {
+			"First Name": "{{first_name}}",
+			"Last Name": "{{last_name}}",
+			"Score": "{{score}}",
+			"Email": "{{email}}",
+			"Company": "{{company}}",
+			"Title": "{{title}}",
+			"Address": "{{location.address}}",
+			"City": "{{location.city}}",
+			"State":"{{location.state}}",
+			"Country":"{{location.country}}",
+			"Owner Name":"{{owner.name}}",
+			"Owner Email":"{{owner.email}}", 
+			"Calendar URL":"{{owner.calendar_url}}"
+			
+			}
+	
+	if(!callback){
+		// Get Custom Fields in template format
+		var custom_fields = get_custom_merge_fields();
+
+		// Merges options json and custom fields json
+		var merged_json = merge_jsons({}, options, custom_fields);
+
+		return merged_json;
+	}else{
+		
+		// Get Custom Fields in template format
+		get_custom_merge_fields(function(custom_fields){
+			// Merges options json and custom fields json
+			var merged_json = merge_jsons({}, options, custom_fields);
+
+			return callback(merged_json);
+		});
+
+
 	}
 
-	// Get Custom Fields in template format
-	var custom_fields = get_custom_merge_fields();
 
-	// Merges options json and custom fields json
-	var merged_json = merge_jsons({}, options, custom_fields);
 
-	return merged_json;
 }
 
 /**
@@ -364,19 +381,37 @@ function get_custom_fields(callback)
 /**
  * Returns custom fields in format required for merge fields. E.g., Nick
  * Name:{{[Nick Name]}}. Handlebars need to have square brackets for json keys
- * having space
+ * having spaceaaa
  */
-function get_custom_merge_fields()
+function get_custom_merge_fields(callback)
 {
+	
 	var customfields = {};
 
-	// Iterate over data and get field labels of each custom field
-	$.each(get_custom_fields(), function(index, obj)
-	{
-		customfields[obj['field_label']] = "{{" + obj['field_label'] + "}}"
-	});
+	if(!callback){
+		// Iterate over data and get field labels of each custom field
+		var custom_fields = get_custom_fields();
+		
+		$.each(custom_fields, function(index, obj)
+					{
+						customfields[obj['field_label']] = "{{" + obj['field_label'] + "}}"
+					});
 
-	return customfields;
+		return customfields;
+	}else{
+		
+		// Iterate over data and get field labels of each custom field
+		get_custom_fields(function(custom_fields){
+			$.each(custom_fields, function(index, obj)
+					{
+						customfields[obj['field_label']] = "{{" + obj['field_label'] + "}}"
+					});
+
+					return callback(customfields);
+		});
+	}
+
+
 }
 /**
  * Returns merged json of two json objects
