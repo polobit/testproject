@@ -4,7 +4,7 @@ function contactListener()
 	$('#contacts-custom-view-model-list').off('mouseenter','tr');
 		$('#contacts-custom-view-model-list').on('mouseenter','tr',function(e){
 			
-		
+			var left=e.pageX;
             var that=$(this);
 
 
@@ -17,6 +17,7 @@ function contactListener()
 		
 					 //$(that).popover('show');
 		 App_Contacts.contact_popover=$(that).data();
+		 try{
 		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
 						if(!template_ui)
 							  return;
@@ -31,11 +32,16 @@ function contactListener()
 							//$(that).attr('data-content',template_ui);
 							$(that).popover('show');
 						//$('.popover').html($(template_ui));	
-							 $('.popover').css('left',(e.pageX-$('.popover').width())+"px");
+							 $('.popover').css('left',(left-$('.popover').width())+"px");
+							 attachEvents(that,App_Contacts.contact_popover);
 						contact_list_starify('.popover');
-						attachEvents(that,App_Contacts.contact_popover);
+						
 					});
 		 		that.find('.data').attr('data');
+		 	}
+		 	catch(e){
+		 		return false;
+		 	}
 		 	}
 		 }, 1000);
 });
@@ -43,8 +49,11 @@ function contactListener()
 	$('#contacts-custom-view-model-list').on('mouseleave','tr',function(){
 		var that=$(this);
 	setTimeout(function() {
-		if (!insidePopover)
-				$(that).popover('hide');	
+		if (!insidePopover){
+			if($('.popover').length!=0)
+			$(that).popover('hide');
+		}
+					
 	}, 1000);
 		
 	});
