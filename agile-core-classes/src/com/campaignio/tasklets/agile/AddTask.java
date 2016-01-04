@@ -136,8 +136,13 @@ public class AddTask extends TaskletAdapter {
 			System.out.println("mins:" + Integer.parseInt(at.substring(3)));
 			System.out.println("hrs:" + Integer.parseInt(at.substring(0, 2)));
 			
+			System.out.println("Updated code to fix for old task node...");
+			System.out.println("Timezone is " + timezone + " and at " + at);
+			
 			// Gets due date in epoch from dueDays
 			epochTime = AgileTaskletUtil.getDateInEpoch(dueDays, timezone, at);
+			
+			System.out.println("Epoch time obtained is " + epochTime);
 			
 			// Contact Id
 			String contactId = AgileTaskletUtil.getId(subscriberJSON);
@@ -151,7 +156,7 @@ public class AddTask extends TaskletAdapter {
 					givenOwnerId, contactOwnerId, timezone);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Exception occured while creating Task.");
+			System.out.println("Exception occured while creating Task."  + e.getMessage());
 		}
 
 		// Creates log for AddTask
