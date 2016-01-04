@@ -128,16 +128,20 @@ public class AddTask extends TaskletAdapter {
 		String timezone = getStringValue(nodeJSON, subscriberJSON, data,
 				TIMEZONE);
 		String at = getStringValue(nodeJSON, subscriberJSON, data, AT);
-		System.out.println("mins:" + Integer.parseInt(at.substring(3)));
-		System.out.println("hrs:" + Integer.parseInt(at.substring(0, 2)));
-		// Gets due date in epoch from dueDays
-		Long epochTime = AgileTaskletUtil.getDateInEpoch(dueDays, timezone, at);
-		// DateUtil.getCalendar(duration, timeZoneString, at).getTimeInMillis();
-
-		// Contact Id
-		String contactId = AgileTaskletUtil.getId(subscriberJSON);
-
+		
+		Long epochTime = 0l;
+		
 		try {
+			
+			System.out.println("mins:" + Integer.parseInt(at.substring(3)));
+			System.out.println("hrs:" + Integer.parseInt(at.substring(0, 2)));
+			
+			// Gets due date in epoch from dueDays
+			epochTime = AgileTaskletUtil.getDateInEpoch(dueDays, timezone, at);
+			
+			// Contact Id
+			String contactId = AgileTaskletUtil.getId(subscriberJSON);
+			
 			// Contact ownerId.
 			Long contactOwnerId = ContactUtil.getContactOwnerId(Long
 					.parseLong(contactId));
