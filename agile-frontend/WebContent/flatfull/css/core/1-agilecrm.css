@@ -3001,3 +3001,8 @@ width: 915px;
 {
 	cursor: progress;
 }
+
+.app-aside-fixed:not(.app-aside-dock) aside {
+	position: fixed;
+	height: 100vh;
+}
