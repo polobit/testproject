@@ -319,6 +319,7 @@ function addOAuthWidget(widgetName, template, url) {
 
 				// Create a view modal for widgets
 				renderWidgetView(template, 'core/api/widgets',model, '#widget-settings');
+				 $('[data-toggle="tooltip"]').tooltip();
 			});
 
 		});

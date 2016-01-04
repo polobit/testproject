@@ -300,9 +300,7 @@ var WidgetsRouter = Backbone.Router
                     addOAuthWidget(
                             "Stripe",
                             "stripe-login",
-                            ('/scribe?service=stripe&linkType=widget&isForAll=' + isForAll
-                                    + '&return_url='
-                                    + encodeURIComponent(window.location.href)));
+                            ('/scribe?service=stripe&linkType=widget&isForAll=' + isForAll));                   
                 } else {
                     addWidgetProfile(id, "Stripe", "stripe-revoke-access",
                             "core/api/widgets/Stripe");

@@ -19,8 +19,8 @@
 		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank">{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</a>
 	{{/if}}
 </div>
-
-{{#if_domain "our"}}
+nnnnnn
+{{#if_hasWriteAccess}}
 	<div class="b-t b-b wrapper-xs">
 		<div class="row">
 			<div class="col-md-1 p-r-none">
@@ -47,7 +47,7 @@
 		</div>
 	</div>
 	<div class="clearfix"></div>
-{{/if_domain}}
+{{/if_hasWriteAccess}}
 <div class="b-t">
 	<div class=" wrapper-xs">
 		<span>Subscription Details</span>
@@ -230,7 +230,18 @@
 <div class="m-t">
 	See the contact's subscriptions history and payments from your Stripe account.
 <br>
-	<div class="text-center"><a class="btn btn-sm btn-primary m-t-sm" href="{{url}}">Link Your Stripe</a></div>
+	<div class="col-sm-12 text-center m-t-sm">
+	    <div class="btn-group" data-toggle="buttons">
+	        <label class="btn btn-default active">
+	            <input type="radio" class="stripe_scopes" checked="checked" id="read_only" name="scope" value="read_only"/> Read
+	        </label> 
+	        <label class="btn btn-default">
+	            <input type="radio" class="stripe_scopes" id="read_write" name="scope" value="read_write"/> Read & Write
+	        </label> 	      
+	    </div>
+	   <i class="icon-question c-p" data-toggle="tooltip" data-placement="top" title="Give Read and Write permissions to enable features like Add credit etc." ></i>
+	</div>
+<div class="text-center"><button class="btn btn-sm btn-primary m-t-sm" url="{{url}}" id="stripe_url">Link Your Stripe</button></div>
 </div>
 </script>
 
