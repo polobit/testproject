@@ -133,9 +133,6 @@ public class AddTask extends TaskletAdapter {
 		
 		try {
 			
-			System.out.println("mins:" + Integer.parseInt(at.substring(3)));
-			System.out.println("hrs:" + Integer.parseInt(at.substring(0, 2)));
-			
 			System.out.println("Updated code to fix for old task node...");
 			System.out.println("Timezone is " + timezone + " and at " + at);
 			
