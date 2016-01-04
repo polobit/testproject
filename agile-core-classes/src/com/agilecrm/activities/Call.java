@@ -32,5 +32,14 @@ public final class Call
 	public static final String FAILED = "failed";
 	// voicemail is sent for incoming or outgoing call
 	public static final String VOICEMAIL = "voicemail";
+	
+	public static final String Missed = "missed";
+	public static final String Inquiry = "inquiry";
+	public static final String Interest = "interest";
+	public static final String NoInterest = "no interest";
+	public static final String IncorrectReferral = "incorrect referral";
+	public static final String MeetingScheduled = "meeting scheduled";
+	public static final String NewOppurtunity = "new oppurtunity";
+	
 
 }
