@@ -501,8 +501,15 @@ public class ReportsUtil
 			
 			dataJson.put("avgDealClosetime", avgDealsClosure);
 			int contact_count=ContactUtil.getContactsCountForOwner(ownerId,minTime,maxTime);
+			List<Activity> contact_created=ActivityUtil.getActivitiesByActivityType("CONTACT_CREATE",ownerId,minTime,maxTime);
 			dataJson.put("contactCount", contact_count);
-
+				int contactAssigned=0;
+			if(contact_created!=null && contact_created.size()!=0)
+			{
+				contactAssigned=contact_created.size();
+				
+			}
+			dataJson.put("contactAssigned",contact_created.size());
 			dataJson.put("userName", DomainUserUtil.getDomainUser(ownerId).name);
 			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(ownerId);
 			
