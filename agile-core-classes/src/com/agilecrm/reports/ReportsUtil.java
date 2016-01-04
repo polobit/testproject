@@ -511,7 +511,7 @@ public class ReportsUtil
 				callsObject.put("answered", 0);
 				callsObject.put("busy",0);
 				callsObject.put("failed",0);
-				callsObject.put("voicemails",0);
+				callsObject.put("voicemail",0);
 				callsObject.put("missed",0);
 				callsObject.put("inquiry",0);
 				callsObject.put("interest",0);
