@@ -4,13 +4,15 @@ var Calendar_Sync_Settings_View = Base_Model_View.extend({
 		'click .delete' : "delete_calendar_prefs",
 	},
 	options :{
-		errorCallback : function(data){									
+		errorCallback : function(data){							
+			$('.tab-content').removeClass('c-progress');		
 			showNotyPopUp("error", "Invalid Details", "bottomRight", 1000);
 		}
 	},
 	save_calendar_prefs : function (e, data)
 	{
 		e.preventDefault();
+		$('.tab-content').addClass('c-progress');
 		this.options.prePersist = this.prePersist;
 		this.options.saveCallback = this.saveCallback;
 		this.save(e);
@@ -19,10 +21,15 @@ var Calendar_Sync_Settings_View = Base_Model_View.extend({
 	{		
 		App_Datasync.dataSync();
 		Backbone.history.navigate('sync');
+		$('.tab-content').removeClass('c-progress');
 	},
 	delete_calendar_prefs : function(e, data)
 	{
 		e.preventDefault();
+
+		if(!confirm("Are you sure you want to delete?"))
+		   return false;
+		
 		var _that = this;
 		this.model.destroy({success: function(){
 			_that.model.clear();

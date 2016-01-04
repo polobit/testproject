@@ -99,8 +99,34 @@ public class GoogleCalendarPrefsAPI {
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public void updateCalendarPrefsBasedOnType(
 			@PathParam("type") CALENDAR_TYPE calendar_type,
-			GoogleCalenderPrefs prefs) {
+			GoogleCalenderPrefs prefs) throws Exception {
 		prefs.calendar_type = calendar_type;
+		
+		
+		if (calendar_type.equals(CALENDAR_TYPE.OFFICE365)) {
+			System.out.println("Office 365");
+
+			Calendar c = Calendar.getInstance();
+			String endDate = String.valueOf(c.getTimeInMillis());
+
+			c.add(Calendar.DATE, -30);
+			String startDate = String.valueOf(c.getTimeInMillis());
+
+			System.out.println("start date " + startDate);
+			System.out.println("end date " + endDate);
+			System.out.println(prefs.getPrefs());
+			String calendarPrefs = prefs.getPrefs();
+
+			String Url = Office365CalendarUtil.getOfficeAuthUrl(calendarPrefs,
+					startDate, endDate);
+
+			List<OfficeCalendarTemplate> appointments = Office365CalendarUtil
+					.getAppointmentsFromServer(Url);
+			System.out.println(appointments.size());
+
+		}
+		
+		
 		GooglecalendarPrefsUtil.updatePrefs(prefs);
 	}
 
