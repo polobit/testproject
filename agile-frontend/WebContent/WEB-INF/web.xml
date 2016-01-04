@@ -938,7 +938,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TicketWebhook</servlet-name>
-		<url-pattern>/ticket/webhook</url-pattern>
+		<url-pattern>/backend/ticket/webhook</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
