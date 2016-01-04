@@ -391,7 +391,6 @@ public class ReportsAPI
  	public String userPerformanceForReports(@PathParam("owner-id") Long ownerId, 
  			@QueryParam("min") Long min, @QueryParam("max") Long max)
  	{
- 		ReportsUtil.check(min*1000, max*1000);
  		return ReportsUtil.userPerformanceForReports(ownerId, min, max).toString();
  	}
 
