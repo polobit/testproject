@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -113,6 +115,31 @@ public class SearchUtil
 		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_number")
 			    .setNumber(Double.valueOf(contactField.value)));
 		    fields.put(normalizeTextSearchString(field_name) + "_number", contactField.value);
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+		continue;
+	    }
+	    else if (customField != null && (customField.field_type == CustomFieldDef.Type.CONTACT || customField.field_type == CustomFieldDef.Type.COMPANY))
+	    {
+		try
+		{
+			String contact_value = "";
+			if (contactField.value != null)
+		    {
+		    JSONArray jsonArray = new JSONArray(contactField.value);
+		    for (int i=0; i<jsonArray.length(); i++)
+		    {
+		    	contact_value += jsonArray.getString(i) + " ";
+		    }
+		    }
+		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name))
+			    .setText(contact_value));
+		    
+		    
+		    fields.put(normalizeTextSearchString(field_name), contact_value);
 		}
 		catch (Exception e)
 		{

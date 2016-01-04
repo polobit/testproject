@@ -445,11 +445,27 @@
 
 										
 										{{#if_equals index ../this.length}}
-											<span class="contact-custom-value text-sm word-break custom-color">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</span>
+											<span class="contact-custom-value text-sm word-break custom-color custom-value" name="{{name}}">
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>
+											{{else}}
+												{{#if custom_field_type}}
+													{{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
+												{{else}}
+													{{value}}
+												{{/if}}
+											{{/if_equals}}
+											</span>
 										{{else}}
-											<span class="contact-custom-value text-sm word-break custom-color">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</span>
+											<span class="contact-custom-value text-sm word-break custom-color custom-value" name="{{name}}">
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>
+											{{else}}
+												{{#if custom_field_type}}
+													{{getContactTypeCustomFields custom_field_type value name}}
+												{{else}}
+													{{value}}
+												{{/if}}
+											{{/if_equals}}
+											</span>
 										{{/if_equals}}
 										
 										

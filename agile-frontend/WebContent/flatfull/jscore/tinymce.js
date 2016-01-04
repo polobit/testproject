@@ -373,7 +373,10 @@ function get_custom_merge_fields()
 	// Iterate over data and get field labels of each custom field
 	$.each(get_custom_fields(), function(index, obj)
 	{
-		customfields[obj['field_label']] = "{{" + obj['field_label'] + "}}"
+		if(obj['field_type'] != "CONTACT" && obj['field_type'] != "COMPANY")
+		{
+			customfields[obj['field_label']] = "{{" + obj['field_label'] + "}}"
+		}
 	});
 
 	return customfields;

@@ -407,6 +407,54 @@ function updateDeal(ele, editFromMilestoneView)
 		// if(!value["custom_data"]) value["custom_data"] = [];
 		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
 
+		$('.contact_input', dealForm).each(function(){
+			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), dealForm), contacts_typeahead);
+		});
+
+		$('.contact_input', dealForm).each(function(){
+			var name = $(this).attr("name");
+			for (var i = 0; i < value.custom_data.length; ++i)
+			{
+				if (value.custom_data[i].name == name)
+				{
+					var valJSON = $.parseJSON(value.custom_data[i].value);
+					var referenceContactIds = "";
+					$.each(valJSON, function(index, value){
+						if(index != valJSON.length-1){
+							referenceContactIds += value + ",";
+						}else{
+							referenceContactIds += value;
+						}
+					});
+					setReferenceContacts(name, dealForm, valJSON, referenceContactIds);
+				}
+			}
+		});
+
+		$('.company_input', dealForm).each(function(){
+			agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), dealForm), contacts_typeahead, undefined, 'type=COMPANY');
+		});
+
+		$('.company_input', dealForm).each(function(){
+			var name = $(this).attr("name");
+			for (var i = 0; i < value.custom_data.length; ++i)
+			{
+				if (value.custom_data[i].name == name)
+				{
+					var valJSON = $.parseJSON(value.custom_data[i].value);
+					var referenceContactIds = "";
+					$.each(valJSON, function(index, value){
+						if(index != valJSON.length-1){
+							referenceContactIds += value + ",";
+						}else{
+							referenceContactIds += value;
+						}
+					});
+					setReferenceContacts(name, dealForm, valJSON, referenceContactIds);
+				}
+			}
+		});
+
 	}, "DEAL")
 
 	populateLostReasons(dealForm, value);
@@ -430,6 +478,14 @@ function show_deal()
 			"modal"
 		]);
 		$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
+
+		$('.contact_input', el).each(function(){
+			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), el), contacts_typeahead);
+		});
+
+		$('.company_input', el).each(function(){
+			agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=COMPANY');
+		});
 
 	}, "DEAL");
 

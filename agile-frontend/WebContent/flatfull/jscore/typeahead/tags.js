@@ -278,13 +278,15 @@ function get_tags(form_id) {
     var tags_json = $('#' + form_id + ' .tags').map(function () {
        	var values = [];
 
-       	$.each($(this).children(), function(index, data) { 
-       		values.push(($(data).attr("data")).toString())
-    	});
-        return {
-        	"name" : $(this).attr('name'),
-           	"value":values
-        };
+        if(!$(this).hasClass("custom_contact") && !$(this).hasClass("custom_company")) {
+            $.each($(this).children(), function(index, data) { 
+                values.push(($(data).attr("data")).toString())
+            });
+            return {
+                "name" : $(this).attr('name'),
+                "value":values
+            };
+        }
     }).get();
     
     // Reads input value from input field too.

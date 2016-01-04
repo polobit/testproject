@@ -560,7 +560,113 @@ function show_custom_fields_helper(custom_fields, properties){
 			//If custom field is formula we return without appending anything	
 			return;
 		}
-		
+		else if(field.field_type.toLowerCase() == "contact")
+		{
+			field_type = "contact";
+			if(field.is_required){
+				if(isModal){
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break-all"><b>'
+								+field.field_label
+								+'</b><span class="field_req">*</span></label><div class="controls">'
+								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
+								+'<input type="text" class="'
+								+field.field_type.toLowerCase()
+								+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
+								+field.id+' name="'+field.field_label
+								+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+				}else{
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'">	<label class="control-label '+label_style+'">'
+							+field.field_label
+							+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'">'
+							+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
+							+'<input type="text" class="'
+							+field.field_type.toLowerCase()
+							+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
+							+field.id+' name="'+field.field_label
+							+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+				}
+			}else{
+				if(isModal){
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break-all"><b>'
+								+field.field_label
+								+'</b></label><div class="controls">'
+								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
+								+'<input type="text" class="'
+								+field.field_type.toLowerCase()
+								+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
+								+field.id+' name="'
+								+field.field_label
+								+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+				}else{
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label '+label_style+'">'
+							+field.field_label
+							+'</label><div class="controls col-sm-9 '+div_col9_style+'">'
+							+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
+							+'<input type="text" class="'
+							+field.field_type.toLowerCase()
+							+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
+							+field.id+' name="'
+							+field.field_label
+							+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+				}
+			}
+				
+			return;
+		}
+		else if(field.field_type.toLowerCase() == "company")
+		{
+			field_type = "company";
+			if(field.is_required){
+				if(isModal){
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break-all"><b>'
+								+field.field_label
+								+'</b><span class="field_req">*</span></label><div class="controls">'
+								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
+								+'<input type="text" class="'
+								+field.field_type.toLowerCase()
+								+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
+								+field.id+' name="'+field.field_label
+								+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+				}else{
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'">	<label class="control-label '+label_style+'">'
+							+field.field_label
+							+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'">'
+							+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
+							+'<input type="text" class="'
+							+field.field_type.toLowerCase()
+							+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
+							+field.id+' name="'+field.field_label
+							+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+				}
+			}else{
+				if(isModal){
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break-all"><b>'
+								+field.field_label
+								+'</b></label><div class="controls">'
+								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
+								+'<input type="text" class="'
+								+field.field_type.toLowerCase()
+								+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
+								+field.id+' name="'
+								+field.field_label
+								+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+				}else{
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label '+label_style+'">'
+							+field.field_label
+							+'</label><div class="controls col-sm-9 '+div_col9_style+'">'
+							+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
+							+'<input type="text" class="'
+							+field.field_type.toLowerCase()
+							+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
+							+field.id+' name="'
+							+field.field_label
+							+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+				}
+			}
+				
+			return;
+		}
+
 		// If the field is not of type list or checkbox, create text field (plain text field or date field)
 		if(field.is_required){
 			if(isModal){
@@ -800,6 +906,15 @@ function serialize_custom_fields(form)
     		else
     			json.value = en.dateFormatter({raw: "MM/dd/yyyy"})(new Date(this.value));
     	
+    	if($(element).hasClass("contact_input") && isValidContactCustomField($(element).attr('id')))
+    	{
+    		var contact_values = [];
+			$('ul[name="'+name+'"]', $('#'+form)).find('li').each(function(index){
+				contact_values.push($(this).attr("data"));
+			});
+			json.value = JSON.stringify(contact_values);
+    	}
+
     	
     	if(!json.value)
     		return;

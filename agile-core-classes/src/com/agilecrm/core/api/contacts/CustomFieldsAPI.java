@@ -57,7 +57,7 @@ public class CustomFieldsAPI
 	    {
 	    	for (CustomFieldDef customFieldDef : cusList)
 	    	{
-	    		if (!customFieldDef.field_type.equals(CustomFieldDef.Type.FORMULA))
+	    		if (!customFieldDef.field_type.equals(CustomFieldDef.Type.FORMULA) && !customFieldDef.field_type.equals(CustomFieldDef.Type.CONTACT) && !customFieldDef.field_type.equals(CustomFieldDef.Type.COMPANY))
 	    		{
 	    			customFieldsList.add(customFieldDef);
 	    		}
@@ -154,7 +154,7 @@ public class CustomFieldsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<CustomFieldDef> getSearchableCustomFieldsByScope(@QueryParam("scope") String scope)
     {
-	try
+    try
 	{
 	    if (scope == null)
 		CustomFieldDefUtil.getSearchableCustomFields();

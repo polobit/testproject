@@ -224,6 +224,40 @@ $(function(){
 			var element = $(this).parents().closest('tr').find('div#RHS');
 			addTagsDefaultTypeahead(element);
 		}
+
+		if ($(this).closest('tr').find('td.lhs-block').find('option:selected').attr('field_type') == "CONTACT")
+		{
+			var that = this;
+			var custom_contact_display = function(data, item)
+			{
+				setTimeout(function(){
+					$('input', $(that).closest('tr').find('td.rhs-block')).val(item);
+					$('input', $(that).closest('tr').find('td.rhs-block')).attr("data", data);
+				},10);
+				
+			}
+			$('input', $(this).closest('tr').find('td.rhs-block')).attr("id", $(this).closest('tr').find('td.lhs-block').find('option:selected').attr("id"));
+			$('input', $(this).closest('tr').find('td.rhs-block')).attr("placeholder", "Contact Name");
+			$('input', $(this).closest('tr').find('td.rhs-block')).addClass("contact_custom_field");
+			agile_type_ahead($('input', $(this).closest('tr').find('td.rhs-block')).attr("id"), $(this).closest('tr').find('td.rhs-block'), contacts_typeahead, custom_contact_display);
+		}
+
+		if ($(this).closest('tr').find('td.lhs-block').find('option:selected').attr('field_type') == "COMPANY")
+		{
+			var that = this;
+			var custom_company_display = function(data, item)
+			{
+				setTimeout(function(){
+					$('input', $(that).closest('tr').find('td.rhs-block')).val(item);
+					$('input', $(that).closest('tr').find('td.rhs-block')).attr("data", data);
+				},10);
+				
+			}
+			$('input', $(this).closest('tr').find('td.rhs-block')).attr("id", $(this).closest('tr').find('td.lhs-block').find('option:selected').attr("id"));
+			$('input', $(this).closest('tr').find('td.rhs-block')).attr("placeholder", "Company Name");
+			$('input', $(this).closest('tr').find('td.rhs-block')).addClass("company_custom_field");
+			agile_type_ahead($('input', $(this).closest('tr').find('td.rhs-block')).attr("id"), $(this).closest('tr').find('td.rhs-block'), contacts_typeahead, custom_company_display, undefined, 'type=COMPANY');
+		}
 		
 	})
 	
@@ -489,7 +523,7 @@ function show_chained_fields(el, data, forceShow)
 
 	// If there is a change in lhs field, and it has tags in it then tags are
 	// loaded into its respective RHS block
-	$('.lhs', el).on('change', function(e)
+	$(el).on('change', '.lhs', function(e)
 	{
 		e.preventDefault();
 		var value = $(this).val();
@@ -499,7 +533,72 @@ function show_chained_fields(el, data, forceShow)
 			addTagsDefaultTypeahead($(this).closest('td').siblings('td.rhs-block'));
 		}
 
-	})
+		if ($(this).find('option:selected').attr("field_type") == "CONTACT")
+		{
+			var that = this;
+			var custom_contact_display = function(data, item)
+			{
+				setTimeout(function(){
+					$('input', $(that).closest('td').siblings('td.rhs-block')).val(item);
+					$('input', $(that).closest('td').siblings('td.rhs-block')).attr("data", data);
+				},10);
+				
+			}
+			$('input', $(this).closest('td').siblings('td.rhs-block')).attr("id", $(this).find("option:selected").attr("id"));
+			$('input', $(this).closest('td').siblings('td.rhs-block')).attr("placeholder", "Contact Name");
+			$('input', $(this).closest('td').siblings('td.rhs-block')).addClass("contact_custom_field");
+			agile_type_ahead($('input', $(this).closest('td').siblings('td.rhs-block')).attr("id"), $(this).closest('td').siblings('td.rhs-block'), contacts_typeahead, custom_contact_display);
+		}
+
+		if ($(this).find('option:selected').attr("field_type") == "COMPANY")
+		{
+			var that = this;
+			var custom_company_display = function(data, item)
+			{
+				setTimeout(function(){
+					$('input', $(that).closest('td').siblings('td.rhs-block')).val(item);
+					$('input', $(that).closest('td').siblings('td.rhs-block')).attr("data", data);
+				},10);
+				
+			}
+			$('input', $(this).closest('td').siblings('td.rhs-block')).attr("id", $(this).find("option:selected").attr("id"));
+			$('input', $(this).closest('td').siblings('td.rhs-block')).attr("placeholder", "Company Name");
+			$('input', $(this).closest('td').siblings('td.rhs-block')).addClass("company_custom_field");
+			agile_type_ahead($('input', $(this).closest('td').siblings('td.rhs-block')).attr("id"), $(this).closest('td').siblings('td.rhs-block'), contacts_typeahead, custom_company_display, undefined, 'type=COMPANY');
+		}
+
+	});
+
+	// If LHS selected is contact type custom field then contacts typeahead is enabled on rhs field
+	if ($(':selected', LHS).val() && $(':selected', LHS).attr("field_type") == "CONTACT")
+	{
+		var custom_contact_display = function(data, item)
+		{
+			setTimeout(function(){
+				$('input', RHS).val(item);
+				$('input', RHS).attr("data", data);
+			},10);
+		}
+		$('input', RHS).attr("id", LHS.find("option:selected").attr("id"));
+		$('input', RHS).attr("placeholder", "Contact Name");
+		$('input', RHS).addClass("contact_custom_field");
+		agile_type_ahead($('input', RHS).attr("id"), RHS, contacts_typeahead, custom_contact_display);
+	}
+
+	if ($(':selected', LHS).val() && $(':selected', LHS).attr("field_type") == "COMPANY")
+	{
+		var custom_company_display = function(data, item)
+		{
+			setTimeout(function(){
+				$('input', RHS).val(item);
+				$('input', RHS).attr("data", data);
+			},10);
+		}
+		$('input', RHS).attr("id", LHS.find("option:selected").attr("id"));
+		$('input', RHS).attr("placeholder", "Company Name");
+		$('input', RHS).addClass("company_custom_field");
+		agile_type_ahead($('input', RHS).attr("id"), RHS, contacts_typeahead, custom_company_display, undefined, 'type=COMPANY');
+	}
 }
 
 /**
@@ -618,6 +717,9 @@ function fillCustomFields(fields, el, callback, is_webrules)
 				condition.append('<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_number'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_number '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
 			}
 		
+		} else if(field.field_type == "CONTACT" || field.field_type == "COMPANY")
+		{
+			lhs_element.append('<option value="'+field.field_label+'" field_type="'+field.field_type+'" id="'+field.id+'">'+field.field_label+'</option>');
 		}
 		else
 		{

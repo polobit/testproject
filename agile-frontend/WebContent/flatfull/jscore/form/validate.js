@@ -257,3 +257,12 @@ function isAlphaNumeric(subdomain) {
     }
   return true;
 }
+
+function isValidContactCustomField(id) {
+    var name = $('#' + id).attr("name");
+    if($('ul[name="'+name+'"]').find("li").length == 0) {
+    	return false;
+    }else {
+    	return true;
+    }
+}

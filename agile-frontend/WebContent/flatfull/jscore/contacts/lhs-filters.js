@@ -113,6 +113,52 @@ function loadCustomFiledsFilters(fields, cel, is_company)
 			deserializeLhsFilters($('#lhs-contact-filter-form'), readData('dynamic_contact_filter'));
 		}
 
+		$.each(fields, function()
+		{
+			if(this.field_type == "CONTACT")
+			{
+				var id = this.id;
+				var fxn_display_contact = function(data, item)
+				{
+					$("ul[id='in_"+id+"']", cel)
+							.append(
+									'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_contact_in_lhs">&times</a></li>');
+							$("#in_"+id).parent().find("input").trigger('custom_blur');
+				}
+				agile_type_ahead($("#in_"+this.id).parent().find("input").attr("id"), cel, contacts_typeahead, fxn_display_contact);
+				var fxn_display_contact = function(data, item)
+				{
+					setTimeout(function(){
+						$("#is_"+id).parent().find("input").attr("data", data);
+						$("#is_"+id).parent().find("input").val(item);
+						$("#is_"+id).parent().find("input").trigger('custom_blur');
+					},10);
+				}
+				agile_type_ahead($("#is_"+this.id).parent().find("input").attr("id"), cel, contacts_typeahead, fxn_display_contact);
+			}
+			else if(this.field_type == "COMPANY")
+			{
+				var id = this.id;
+				var fxn_display_contact = function(data, item)
+				{
+					$("ul[id='in_"+id+"']", cel)
+							.append(
+									'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><a class="text-white m-r-xs" href="#company/' + data + '">' + item + '</a><a class="close" id="remove_contact_in_lhs">&times</a></li>');
+							$("#in_"+id).parent().find("input").trigger('custom_blur');
+				}
+				agile_type_ahead($("#in_"+this.id).parent().find("input").attr("id"), cel, contacts_typeahead, fxn_display_contact, 'type=COMPANY');
+				var fxn_display_contact = function(data, item)
+				{
+					setTimeout(function(){
+						$("#is_"+id).parent().find("input").attr("data", data);
+						$("#is_"+id).parent().find("input").val(item);
+						$("#is_"+id).parent().find("input").trigger('custom_blur');
+					},10);
+				}
+				agile_type_ahead($("#is_"+this.id).parent().find("input").attr("id"), cel, contacts_typeahead, fxn_display_contact, 'type=COMPANY');
+			}
+		});
+
 	}, $('#custom-filter-fields', cel));
 	
 }
@@ -137,7 +183,7 @@ function submitLhsFilter()
 		eraseCookie('contact_filter');
 		eraseCookie('contact_filter_type');
 		eraseData('dynamic_contact_filter');
-		if (formData != null && formData.rules.length > 0)
+		if (formData != null && (formData.rules.length > 0 || formData.or_rules.length > 0))
 			storeData('dynamic_contact_filter', JSON.stringify(formData));
 		CONTACTS_HARD_RELOAD=true;
 		App_Contacts.contacts(undefined, undefined, undefined, true);
@@ -182,12 +228,20 @@ $('#' + container_id).on('click', 'a.clear-filter-condition-lhs', function(e)
 	
 	$(this).addClass('hide');
 	var container = $(this).parents('.lhs-row-filter');
-	$(container).find('#RHS').children().val("").attr('prev-val', "");
+	$(container).find('#RHS').children().val("").attr('prev-val', "").attr('data', "");
 	$(container).find('#RHS_NEW').filter(visibleFilter).children().val("").attr('prev-val', "");
 	$(container).find('select[name="CONDITION"]').val($(container).find('select[name="CONDITION"] option:first').val()).attr('prev-val', "");
 	$(container).find('select[name="CONDITION"]').trigger('change');
 	$(container).find('a#lhs-filters-header').find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 	$(container).find('a#lhs-filters-header').next().addClass('hide');
+	if($(container).find('#RHS').find('ul.custom_contacts').find('li'))
+	{
+		$(container).find('#RHS').find('ul.custom_contacts').find('li').remove();
+	}
+	if($(container).find('#RHS').find('ul.custom_companies').find('li'))
+	{
+		$(container).find('#RHS').find('ul.custom_companies').find('li').remove();
+	}
 	submitLhsFilter();
 });
 
@@ -218,10 +272,33 @@ $('#' + container_id).on('click', '#lhs-filters-header', function(e)
 $('#' + container_id).on('change', '#lhs-contact-filter-form select[name="CONDITION"]', function(e)
 {
 	var selected = $(this).val();
+	if ($(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().hasClass('custom_contacts') || 
+		$(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().hasClass('custom_companies'))
+	{
+		$(this).parent().find("div.IN").removeClass("hide");
+		$(this).parent().find("div.EQUALS").addClass("hide");
+		$(this).parent().find("div.EQUALS").find("input").val("").attr("data", "");
+		return;
+	}
+	if ($(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().hasClass('custom_contact') || 
+		$(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().hasClass('custom_company'))
+	{
+		$(this).parent().find("div.IN").addClass("hide");
+		$(this).parent().find("div.EQUALS").removeClass("hide");
+		if (!$(this).parent().find("div.EQUALS").find("input").val())
+		{
+			return;
+		}
+	}
 	$(this).parent().find('div.condition_container').addClass('hide');
 	$(this).parent().find('div.condition_container.' + selected).removeClass('hide');
 	$(this).parent().find('div.condition_container.' + selected).find('#RHS :not(input.date)').focus();
 	var rhs = $(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().val();
+	if ($(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().hasClass('custom_contact') || 
+		$(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().hasClass('custom_company'))
+	{
+		rhs = $(this).parent().find('div.condition_container.' + selected).find('#RHS').find('input').attr("data");
+	}
 	var rhs_new_exist = false;
 	var rhs_new = "";
 	if ($(this).parent().find('div.condition_container.' + selected).find('#RHS_NEW') != undefined)
@@ -229,7 +306,7 @@ $('#' + container_id).on('change', '#lhs-contact-filter-form select[name="CONDIT
 		rhs_new_exist = true;
 		rhs_new = $(this).parent().find('div.condition_container.' + selected).find('#RHS_NEW').children().first().val();
 	}
-	if (rhs != "" && (!rhs_new_exist || rhs_new != ""))
+	if (rhs != "" && rhs != undefined && (!rhs_new_exist || rhs_new != ""))
 	{
 		submitLhsFilter();
 	}
@@ -272,7 +349,24 @@ $('#' + container_id).on('custom_blur keyup', '#lhs-contact-filter-form #RHS inp
 	}
 });
 
-$('#' + container_id).on('blur keyup', '#lhs-contact-filter-form #RHS input:not(.date,.filters-tags-typeahead)', function(e)
+$('#' + container_id).on('custom_blur', '#lhs-contact-filter-form #RHS input.typeahead_contacts:not(.date)', function(e)
+{
+	console.log("I am in blur " + $(this).val());
+	var prevVal = $(this).attr('prev-val');
+	var currVal = $(this).val().trim();
+	$(this).attr('prev-val', currVal);
+	submitLhsFilter();
+	$(this).blur();
+});
+
+// Filter Contacts- Remove Multiple
+$('#' + container_id).on('click', '#remove_contact_in_lhs', function(e)
+{
+	$(this).parent().remove();
+	submitLhsFilter();
+});
+
+$('#' + container_id).on('blur keyup', '#lhs-contact-filter-form #RHS input:not(.date,.filters-tags-typeahead,.typeahead_contacts)', function(e)
 {
 	console.log("I am in blur " + $(this).val());
 	if (e.type == 'focusout' || e.keyCode == '13')

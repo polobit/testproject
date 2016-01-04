@@ -1523,5 +1523,23 @@ public class ContactsAPI
 
 	return contact;
     }
+    
+    /* Fetch all reference contacts to a contact or company or deal or case */
+    @Path("/references")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getReferenceContacts(@QueryParam("references") String references)
+    {
+    List<Long> refContactIdsList = new ArrayList<Long>();
+    String[] refContactsArray = references.split(",");
+    for (String contactId : refContactsArray)
+    {
+    if(!contactId.equals(""))
+    {
+    refContactIdsList.add(Long.valueOf(contactId));
+    }
+    }
+	return ContactUtil.getContactsBulk(refContactIdsList);
+    }
 
 }

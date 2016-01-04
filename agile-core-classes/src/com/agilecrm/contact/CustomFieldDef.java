@@ -39,7 +39,7 @@ public class CustomFieldDef
      */
     public enum Type
     {
-	TEXT, DATE, LIST, CHECKBOX, TEXTAREA, NUMBER, FORMULA
+	TEXT, DATE, LIST, CHECKBOX, TEXTAREA, NUMBER, FORMULA, CONTACT, COMPANY
     };
 
     /**

@@ -60,6 +60,14 @@ $(function(){
 				$('.date_input', $(target)).datepicker({
 					format: CURRENT_USER_PREFS.dateFormat
 				});
+
+				$('.contact_input', $('#companyModal')).each(function(){
+					agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), $('#companyModal')), contacts_typeahead);
+				});
+
+				$('.company_input', $('#companyModal')).each(function(){
+					agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), $('#companyModal')), contacts_typeahead, undefined, 'type=COMPANY');
+				});
 				
 			}, "COMPANY")
 			

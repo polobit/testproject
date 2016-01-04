@@ -135,7 +135,13 @@
 
 										
 											<span class="contact-custom-value">
-											<span class="note-created-time" title="{{value}}">{{value}}</span>
+											<span class="note-created-time custom-value" title="{{value}}" name="{{name}}">
+                      {{#if custom_field_type}}
+                        {{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
+                      {{else}}
+                        {{value}}
+                      {{/if}}
+                      </span>
                                              </span><br/> 
 										{{/each_with_index}}
 									{{/getDealCustomProperties}}

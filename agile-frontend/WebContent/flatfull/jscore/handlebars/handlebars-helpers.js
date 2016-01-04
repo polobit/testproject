@@ -6849,6 +6849,41 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 			return options.fn(this);
 	});
 
+	Handlebars.registerHelper('getContactTypeCustomFields', function(type, value, custom_field_name, options)
+	{
+		var contact_values = "";
+		var contact_values_json = $.parseJSON(value);
+		var referenceContactIds = "";
+		$.each(contact_values_json, function(index, value){
+			if(index != contact_values_json.length-1){
+				referenceContactIds += value + ",";
+			}else{
+				referenceContactIds += value;
+			}
+		});
+		App_Contacts.referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+		App_Contacts.referenceContactsCollection.collection.fetch({
+			success : function(data){
+				if(data && data.length > 0)
+				{
+					if(type == "CONTACT")
+					{
+						$.each(contact_values_json, function(index, value){
+							contact_values += "<li class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'><a href='#contact/"+value+"' class='text-white'>"+getPropertyValue(data.get(value).get("properties"), "first_name")+"</a></li>";
+						});
+					}else if(type == "COMPANY")
+					{
+						$.each(contact_values_json, function(index, value){
+							contact_values += "<li class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'><a href='#company/"+value+"' class='text-white'>"+getPropertyValue(data.get(value).get("properties"), "name")+"</a></li>";
+						});
+					}
+				}
+				hideTransitionBar();
+				$('.custom-value[name="'+custom_field_name+'"]').html(contact_values);
+			}
+		});
+	});
+
 
 function agile_is_mobile_browser(){
     return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));

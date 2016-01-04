@@ -743,14 +743,28 @@ function getContactCustomProperties(items)
 				}else{
 					for(var j=0;j<fields.length;j++){
 						if(allCustomFields[i].name==fields[j].name){
-							if($.inArray(fields[j], finalFields)==-1)
+							if($.inArray(fields[j], finalFields)==-1){
+								for(var m=0;m<allCustomFields.length;m++){
+									if(fields[j].name == allCustomFields[m].name){
+										fields[j].custom_field_type = allCustomFields[m].field_type
+									}
+								}
 								finalFields.push(fields[j]);
+							}	
 							isFieldExist = true;
 							break;
 						}
 						if(!isFieldExist){
 							if($.inArray(fields[j], finalFields)==-1)
+							{
+								for(var m=0;m<allCustomFields.length;m++){
+									if(fields[j].name == allCustomFields[m].name){
+										fields[j].custom_field_type = allCustomFields[m].field_type
+									}
+								}
 								finalFields.push(fields[j]);
+							}
+								
 						}
 					}
 				}
@@ -858,6 +872,11 @@ function getCompanyCustomProperties(items)
 				}else{
 					for(var j=0;j<fields.length;j++){
 						if(allCustomFields[i].name==fields[j].name){
+							if(allCustomFields[i].field_type == "CONTACT"){
+								fields[j].custom_field_type = "CONTACT";
+							}else if(allCustomFields[i].field_type == "COMPANY"){
+								fields[j].custom_field_type = "COMPANY";
+							}
 							finalFields.push(fields[j]);
 							break;
 						}
@@ -1083,6 +1102,11 @@ function getDealCustomProperties(items)
 					{
 						if(allCustomFields[i].name==fields[j].name)
 						{
+							if(allCustomFields[i].field_type == "CONTACT"){
+								fields[j].custom_field_type = "CONTACT";
+							}else if(allCustomFields[i].field_type == "COMPANY"){
+								fields[j].custom_field_type = "COMPANY";
+							}
 							finalFields.push(fields[j]);
 							break;
 						}
