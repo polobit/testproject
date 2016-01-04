@@ -258,10 +258,10 @@ dataSync : function()
                                             $("#multi-select-calendars-container", el).html(template_ui);
                                             deserialize_multiselect(model.toJSON(), el);
                                             var select_field = $('#multi-select-calendars', el)
-                                             select_field.multiSelect(/*{
+                                             select_field.multiSelect({
                                                   selectableHeader: '<label class="control-label"><b>Google</b></label>',
                                                   selectedHeader: '<label class="control-label"><b>Agile</b></label>'
-                                             }*/);
+                                             });
 
                                              var calendars = get_calendar_ids_form_prefs(model.toJSON());
                                              if(calendars && calendars.length == 1 && calendars[0] == 'primary')

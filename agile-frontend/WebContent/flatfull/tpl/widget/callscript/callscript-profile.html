@@ -121,6 +121,22 @@
 						</div>
 					</div>
 
+					{{#if customFields}}
+					<div class="col-sm-12">
+  						<div class="col-sm-2"></div>
+  						<div class="col-sm-8" style="background: gainsboro;margin-left: -5px;width: calc(67.8%);border: 2px solid gainsboro;">
+							<a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
+						    	<button style="float: right;margin: 0px;position: relative;left: 15px;">
+									<span>Agile Contact Fields</span><span class="caret"></span>
+								</button>
+							</a>
+								<ul class="dropdown-menu callscript-customField" style="left: calc(76%);">
+									{{#eachkeys customFields}} <li><a id ="callscript-customField-li" href="" value = "{{value}}" > {{key}}</a></li>{{/eachkeys}}
+								</ul>
+						</div>
+					</div>
+					{{/if}}
+
                     <div class="control-group form-group">
 						<label class="control-label col-sm-2">Call Script<span class="field_req">*</span></label>
 						<div class="controls col-sm-8">

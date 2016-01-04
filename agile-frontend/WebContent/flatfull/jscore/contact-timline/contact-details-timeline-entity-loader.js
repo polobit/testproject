@@ -82,8 +82,20 @@ var timeline_entity_loader = {
 						array.push(data);
 						
 						});
-					if(App_Contacts.contactDetailView.model.get('id') == contact.id)
-					timeline_collection_view.addItems(array);
+
+					if(App_Contacts.contactDetailView.model.get('id') !== contact.id)
+						return;
+
+					var contact_emails = [];
+
+					// Add open tracking
+					var emails_opened = timeline_entity_loader.getOpenedEmailsFromEmails(stats["emails"]);
+
+					if(emails_opened)
+						contact_emails = emails_opened.concat(array);
+
+					if(contact_emails)
+						timeline_collection_view.addItems(contact_emails);
 				}
 			})
 		}
@@ -155,16 +167,22 @@ var timeline_entity_loader = {
 		{
 			if (model.email_opened_at && model.email_opened_at !== 0)
 			{
+				var json = {};
+
 				// Need createdTime key to sort in timeline.
-				model.createdTime = (model.email_opened_at) * 1000;
+				json.createdTime = (model.email_opened_at) * 1000;
 
 				// Temporary entity to identify timeline template
-				model.agile_email = "agile_email";
+				json.agile_email = "agile_email";
 
-				// To avoid merging with emails template having date entity
-				model.date = undefined;
+				json.subject = model.subject;
+				json.email_link_clicked_at = (model.email_link_clicked_at) * 1000;
+				json.trackerId = model.trackerId;
 
-				opened_emails.push(model);
+				// // To avoid merging with emails template having date entity
+				// json.date = undefined;
+
+				opened_emails.push(json);
 			}
 
 		});
