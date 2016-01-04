@@ -74,9 +74,10 @@ function globalCallWidgetSet()
 												var temp = { "name" : widget.name, "logo" : widget.mini_logo_url };
 												addtoCallOption(temp);
 												var name = widget.name;
-												callOptionDiv = callOptionDiv
-														.concat("<img class ='" + name + "_call c-p active' src='" + widget.mini_logo_url + "' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" + widgetCallName[name] + "'>");
-
+												if(name != "CallScript"){
+													callOptionDiv = callOptionDiv
+													.concat("<img class ='" + name + "_call c-p active' src='" + widget.mini_logo_url + "' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" + widgetCallName[name] + "'>");
+												}
 											}
 										});
 
