@@ -155,7 +155,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
 <!-- Including header(Navigation Bar) page -->
   <%@ include file="flatfull/header.html"%>
 
- <aside id="aside" class="app-aside hidden-xs 
+ <aside id="aside" class="app-aside hidden-xs pos-fix
  <%
   switch (Integer.parseInt(currentUserPrefs.theme)) {
     case 1:  out.print("bg-black ");
@@ -191,7 +191,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
  
   }
       
- %>">
+ %>" style="height:100vh;">
           <div class="aside-wrap">
         <div class="navi-wrap">
   
