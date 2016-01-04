@@ -648,8 +648,9 @@ public class AgileTaskletUtil {
 
 	public static Long getDateInEpoch(String days, String timezone, String at) {
 
-		if(StringUtils.isBlank(timezone))
-			timezone = "UTC";
+		// If both are null, return UTC
+		if(StringUtils.isBlank(timezone)&& StringUtils.isBlank(at))
+			return getDateInEpoch(days);
 		
 		Calendar calendar = Calendar
 				.getInstance(TimeZone.getTimeZone(timezone));
