@@ -627,6 +627,34 @@ var portlet_graph_utility = {
 						        				tt += 	'<tr><td style="color:'+this.points[3].series.color+';padding:0">'+this.points[3].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[3].point.y+'</b></td></tr>';
 						        			}
+						        			if(this.points[4]!=undefined && this.points[4].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[4].series.color+';padding:0">'+this.points[4].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[4].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[3]!=undefined && this.points[5].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[5].series.color+';padding:0">'+this.points[5].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[5].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[3]!=undefined && this.points[6].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[6].series.color+';padding:0">'+this.points[6].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[6].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[3]!=undefined && this.points[7].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[7].series.color+';padding:0">'+this.points[7].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[7].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[3]!=undefined && this.points[8].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[8].series.color+';padding:0">'+this.points[8].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[8].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[3]!=undefined && this.points[9].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[9].series.color+';padding:0">'+this.points[9].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[9].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[3]!=undefined && this.points[10].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[10].series.color+';padding:0">'+this.points[10].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[10].point.y+'</b></td></tr>';
+						        			}
 						        			tt += '<tr><td>Total:&nbsp; </td><td class="b-b-none">'+totalCallsCountList[this.points[0].point.x]+'</td></tr></table>';
 						        		}
 						        		return tt;

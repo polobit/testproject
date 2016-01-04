@@ -682,37 +682,37 @@ var portlet_graph_data_utility = {
 								tempData = {};
 								tempData.name = "Missed ";
 								tempData.data = missedCallsCountList;
-								series[2] = tempData;
+								series[4] = tempData;
 
 								tempData = {};
 								tempData.name = "Inquiry";
 								tempData.data = inquiryCallsCountList;
-								series[2] = tempData;
+								series[5] = tempData;
 
 								tempData = {};
 								tempData.name = "Interest";
 								tempData.data = interestCallsCountList;
-								series[2] = tempData;
+								series[6] = tempData;
 
 								tempData = {};
 								tempData.name = "No Interest";
 								tempData.data = noInterestCallsCountList;
-								series[2] = tempData;
+								series[7] = tempData;
 
 								tempData = {};
 								tempData.name = "Incorrect Referral";
 								tempData.data = incorrectReferralCallsCountList;
-								series[2] = tempData;
+								series[8] = tempData;
 
 								tempData = {};
 								tempData.name = "Meeting Scheduled";
 								tempData.data = meetingScheduledCallsCountList;
-								series[2] = tempData;
+								series[9] = tempData;
 
 								tempData = {};
 								tempData.name = "New Opportunity";
 								tempData.data = newOpportunityCallsCountList;
-								series[2] = tempData;
+								series[10] = tempData;
 								text = "No. of Calls";
 								colors = [ 'green', 'blue', 'red', 'violet' ];
 							} else {
