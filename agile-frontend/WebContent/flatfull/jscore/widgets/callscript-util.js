@@ -16,7 +16,11 @@ function initializeCallScriptListeners(){
 		e.preventDefault();
 		// To solve chaining issue when cloned
 		var that = this;
-		getTemplate('callscript-rule', {}, undefined, function(template_ui){
+		
+		var  contact_fields = {};
+		contact_fields['customFields'] = get_merge_fields();
+		
+		getTemplate('callscript-rule', contact_fields, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 
@@ -117,6 +121,14 @@ function initializeCallScriptListeners(){
 		// Saves call script preferences in callscript widget object
 		saveCallScriptWidgetPrefs();
 	});
+	
+	$('#prefs-tabs-content').on('click', '#callscript-customField-li', function(e)
+	{	
+		e.preventDefault();
+		var value = $(this).attr("value");
+		insertValueInAt("#displaytext", value);	
+	});
+	
 }
 
 // Get widget and make adjustment of buttons in widget form
@@ -328,32 +340,41 @@ function addCallScriptRule()
 	}
 	
 	makeWidgetTabActive();
-
-	var add_csr = new Base_Model_View({ template : "callscript-rule", isNew : "true", postRenderCallback : function(el)
-	{
-		
-		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
-		{
-			chainFilters(el, undefined, function()
+	var  contact_fields = {};
+	get_merge_fields(function(value){
+		contact_fields['customFields'] = value;
+		var add_csr = new Base_Model_View({ template : "callscript-rule", data : contact_fields,  isNew : "true", postRenderCallback : function(el)
 			{
-				$('#prefs-tabs-content').html(el);
-				initializeSubscriptionListeners();
-
-				// if this is first rule then set add-widget url on cancel btn
-				if (!isCallScriptAdded())
+				
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
-					$(".redirect-to-addwidget").show();
-					$(".redirect-to-showrules").hide();
-				}
-			});
-		})
-	} });
+					chainFilters(el, undefined, function()
+					{
+						$('#prefs-tabs-content').html(el);
+						initializeSubscriptionListeners();
 
-	// Shows loading image until data gets ready for displaying
-	$("#prefs-tabs-content").html(LOADING_HTML);
-	initializeCallScriptListeners();
+						// if this is first rule then set add-widget url on cancel btn
+						if (!isCallScriptAdded())
+						{
+							$(".redirect-to-addwidget").show();
+							$(".redirect-to-showrules").hide();
+						}
+					});
+				})
+			}
+		
+		});
+		// Shows loading image until data gets ready for displaying
+		$("#prefs-tabs-content").html(LOADING_HTML);
+		initializeCallScriptListeners();
+		add_csr.render();
+	});
 
-	add_csr.render();
+
+
+
+
+
 }
 
 // Get call script rule from widget and display in edit rule page
@@ -372,14 +393,16 @@ function editCallScriptRule(ruleCount)
 	{
 		// get rule from id as in rulecount of rule
 		var csrule = getRule(callscriptPrefsJson,ruleCount);
+		var  contact_fields = {};
+		contact_fields['customFields'] = get_merge_fields();
 
 		$("#prefs-tabs-content").html(LOADING_HTML);
 		initializeCallScriptListeners();
 		
 		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 		{
-
-			getTemplate('callscript-rule', {}, undefined, function(template_ui){
+					
+			getTemplate('callscript-rule', contact_fields, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$("#prefs-tabs-content").html($(template_ui));
@@ -654,4 +677,47 @@ function build_custom_widget_form(el)
 			$("#custom-widget").replaceWith(divClone); 
 		});
 	});
+}
+
+//It will insert the value at the cursor point of the given element(textarea)
+function insertValueInAt(element,text){
+    var txtarea = $(element);
+    
+    var currentValue = txtarea.val();
+    //javascript code to know the browser
+    var browser = document.selection ? "ie" : "other" ;
+    var scrollPos = txtarea.scrollTop;
+    var strPos = 0;
+    
+    if (browser == "ie") { 
+        txtarea.focus();
+        var range = document.selection.createRange();
+        range.moveStart ('character', -txtarea.value.length);
+        strPos = range.text.length;
+    }else{
+    	strPos = txtarea.prop("selectionStart");
+    }
+    
+    var front = (currentValue).substring(0,strPos);  
+    var back = (currentValue).substring(strPos,currentValue.length); 
+    var newValue = front+text+back;
+    txtarea.val(newValue);
+    
+    strPos = strPos + text.length;
+    
+    if (browser == "ie") { 
+        txtarea.focus();
+        var range = document.selection.createRange();
+        range.moveStart ('character', -txtarea.value.length);
+        range.moveStart ('character', strPos);
+        range.moveEnd ('character', 0);
+        range.select();
+    }else{
+    	txtarea.prop("selectionStart",strPos);
+    	txtarea.prop("selectionEnd",strPos);
+        txtarea.focus();
+    }
+    txtarea.scrollTop = scrollPos;
+    
+	
 }

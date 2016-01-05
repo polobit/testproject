@@ -106,14 +106,21 @@ public class UsersAPI
 
 	try
 	{
+		DomainUser owner = null;
 		if(domainUser.is_account_owner == true){
 	    	if(domainUser.is_admin == false)
 			{
 				throw new Exception("Owner should always be an administrator. Please select administrator option and try again.");
 			}
-	    	DomainUserUtil.removeOwner(domainUser);
+	    	owner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+	    	
 	    }
 	    domainUser.save();
+	    if(owner != null && domainUser.id != null && !domainUser.id.equals(owner.id))
+	    {
+	    	owner.is_account_owner = false;
+	    	owner.save();
+	    }
 	    return domainUser;
 	}
 	catch (Exception e)
@@ -146,6 +153,7 @@ public class UsersAPI
     {
 	try
 	{
+		DomainUser owner = null;
 	    if (domainUser.id == null)
 	    {
 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Invalid User")
@@ -156,9 +164,14 @@ public class UsersAPI
 			{
 				throw new Exception("Owner should always be an administrator. Please select administrator option and try again.");
 			}
-	    	DomainUserUtil.removeOwner(domainUser);
+	    	owner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
 	    }
 	    domainUser.save();
+	    if(owner != null && !domainUser.id.equals(owner.id))
+	    {
+	    	owner.is_account_owner = false;
+	    	owner.save();
+	    }
 	    return domainUser;
 	}
 	catch (Exception e)

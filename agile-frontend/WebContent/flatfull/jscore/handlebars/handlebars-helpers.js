@@ -5829,6 +5829,8 @@ $(function()
 			icon_name = 'icon-graph';
 		else if (p_name == 'Campaign stats')
 			icon_name = 'icon-sitemap';
+		else if (p_name == 'Deal Goals')
+			icon_name = 'icon-flag';
 		return icon_name;
 	});
 	
@@ -6610,6 +6612,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'A mini calendar with an overview of your agenda for the day.'
 	else if (p_name == 'Campaign stats')
 		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
+	else if(p_name == 'Deal Goals')
+		description = 'See how much sales target you have achieved.'
 	return description;
 			});
 

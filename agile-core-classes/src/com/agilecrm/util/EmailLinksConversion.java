@@ -58,6 +58,11 @@ public class EmailLinksConversion
 	return false;
     }
 
+    public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, boolean doPush)
+    {
+    	return convertLinksUsingJSOUP(input, subscriberId, campaignId, null, doPush);
+    }
+    
     /**
      * Converts all links within href in HTML
      * 
@@ -71,7 +76,7 @@ public class EmailLinksConversion
      *            - boolean value to push contact data
      * @return String
      */
-    public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, boolean doPush)
+    public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, String personalEmailTrackerId, boolean doPush)
     {
 	// If empty return
 	if (StringUtils.isBlank(input))
@@ -93,7 +98,7 @@ public class EmailLinksConversion
 		domainURL = domainURL.substring(0, domainURL.length() - 1);
 	    }
 
-	    String sid = "", cid = "", push = "", url = "";
+	    String sid = "", cid = "", push = "", url = "", tid = "";
 
 	    // Add contactId as param if not empty
 	    if (!StringUtils.isBlank(subscriberId))
@@ -102,6 +107,9 @@ public class EmailLinksConversion
 	    // Add campaign id as param if not empty
 	    if (!StringUtils.isBlank(campaignId))
 		cid = "&c=" + URLEncoder.encode(campaignId, "UTF-8");
+	    
+	    if(!StringUtils.isBlank(personalEmailTrackerId))
+	    	tid = "&t=" + URLEncoder.encode(personalEmailTrackerId, "UTF-8");
 
 	    if (doPush)
 		push = "&p=" + URLEncoder.encode(AGILE_EMAIL_PUSH, "UTF-8");
@@ -121,7 +129,7 @@ public class EmailLinksConversion
 		{
 		    link.attr("href",
 			    domainURL + "/click?u=" + URLEncoder.encode(StringEscapeUtils.unescapeXml(url), "UTF-8")
-			            + cid + sid + push);
+			            + cid + sid + tid + push);
 		}
 	    }
 
