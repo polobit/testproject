@@ -39,7 +39,7 @@ import com.thirdparty.salesforce.SalesforceUtil;
 public class ContactPrefsAPI {
 
 	/**
-	 * Fetches import contact preferences based on type and current user.
+	 * Fetches import contact preferences based on type and current user.e
 	 * 
 	 * 
 	 * @return {@link ContactPrefs}
@@ -85,7 +85,7 @@ public class ContactPrefsAPI {
 				System.out
 						.println("in update prefs and prefs id are same before saving ");
 				
-				if (prefs.type.toString().equals("SALESFORCE")) {
+				if (Type.SALESFORCE ==  prefs.type) {
 					
 					// Validate the prefs
 					SalesforceUtil.checkSalesforcePrefs(updatedPrefs);
@@ -95,7 +95,7 @@ public class ContactPrefsAPI {
 				updatedPrefs.save();
 			}
 	
-			if (updatedPrefs.type.toString().equals("SALESFORCE")) {
+			if (Type.SALESFORCE ==  updatedPrefs.type) {
 				ContactsImportUtil.initilaizeImportBackend(updatedPrefs, true);
 			}
 	
@@ -134,7 +134,7 @@ public class ContactPrefsAPI {
 
 		try {
 
-			if (prefs.type.toString().equals("SALESFORCE")) {
+			if (Type.SALESFORCE ==  prefs.type) {
 				// Validate the prefs
 				SalesforceUtil.checkSalesforcePrefs(prefs);
 
