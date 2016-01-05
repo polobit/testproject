@@ -366,3 +366,7 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
     /*font-weight: normal;*/
     color: #98a6ad;
   }
+
+  .text-disabled {
+    color: #DCDCDC;
+  }

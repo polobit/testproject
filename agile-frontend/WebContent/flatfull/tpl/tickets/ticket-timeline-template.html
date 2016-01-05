@@ -20,18 +20,18 @@
 
     			<div>
 
-			        <a class="pull-left thumb-sm avatar m-l-n-md">
+			        <a class="pull-left thumb-xs m-l-n-md">
 
 			        	{{#if_equals ticket_activity_type 'TICKET_CREATED'}}
-			        		<img class="img-inital img-circle" src="{{gravatarurl contact.properties 30}}" data-toggle="tooltip" data-placement="top" data-original-title="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}"/>
+			        		<img class="img-inital r-5x" src="{{gravatarurl contact.properties 30}}" data-toggle="tooltip" data-placement="top" data-original-title="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}"/>
 			        	{{/if_equals}}
 
 			        	{{#if_equals ticket_activity_type 'TICKET_REQUESTER_REPLIED'}}
-			        			<img class="img-inital img-circle" src="{{gravatarurl contact.properties 30}}" data-toggle="tooltip" data-placement="top" data-original-title="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}"/>
+			        			<img class="img-inital r-5x" src="{{gravatarurl contact.properties 30}}" data-toggle="tooltip" data-placement="top" data-original-title="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}"/>
 			        	{{/if_equals}}
 
 			        	{{#if_equals ticket_activity_type 'TICKET_ASSIGNEE_REPLIED'}}
-			        		<img class="img-circle" src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" 
+			        		<img class="r-5x" src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" 
 				        				data-original-title="{{user.name}}"/>
 
 			        	{{/if_equals}}
@@ -86,9 +86,9 @@
 
 	        	<div class=" m-l-lg">
 
-			        <a class="pull-left thumb-sm avatar m-l-n-md">
+			        <a class="pull-left thumb-xs m-l-n-md">
 
-		        		<img class="img-circle" src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" 
+		        		<img class="r-5x" src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" 
 			        				data-original-title="{{user.name}}"/>
 			        	
 			        </a>  
@@ -171,7 +171,12 @@
 		                        <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as unspam
 		                    {{/if_equals}}
 
+		                    {{#if_equals ticket_activity_type 'DUE_DATE_CHANGED'}}
+		                        <span class="first-letter-cap inline-block">{{user.name}}</span>  Changed due date to {{epochToHumanDate "mm/dd/yyyy" new_data}}
+			              		</span>
+		                    {{/if_equals}}
 
+		                    	
 				        </a>
 			            
 
