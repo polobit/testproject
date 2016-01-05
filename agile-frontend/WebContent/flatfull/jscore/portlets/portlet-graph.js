@@ -688,7 +688,7 @@ var portlet_graph_utility = {
 						        exporting: {
 							        enabled: false
 							    },
-							    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", "#fad733","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
+							    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF' ],
 							    legend : {
 									itemStyle : {
 										fontSize : '10px',
@@ -738,7 +738,7 @@ var portlet_graph_utility = {
 		            type: 'pie',
 		            marginRight: 20
 		        },
-		        colors : ['#7266ba','#23b7e5','#fad733','#27c24c','#f05050',"#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353", "#7798BF","#aaeeee"],
+		        colors : ["#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
 		        title: {
 		            text: ''
 		        },

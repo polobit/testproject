@@ -171,7 +171,8 @@ call_reports : function(url,reportType,graphOn){
 		totalCallsCountList=data["totalCallsCountList"];
 		domainUsersList=data["domainUsersList"];
 		domainUserImgList=data["domainUserImgList"];
-		pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls'];
+		pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls','Missed','Inquiry',
+		'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity'];
 		
 		var series=[];
 		var text='';
@@ -369,6 +370,13 @@ user_reports :function(callReportUrl){
 		var busyCallsCountList=[];
 		var failedCallsCountList=[];
 		var voiceMailCallsCountList=[];
+		var missedCallsCountList= [];
+		var inquiryCallsCountList= [];
+		var interestCallsCountList= [];
+		var noInterestCallsCountList= [];
+		var incorrectReferralCallsCountList= [];
+		var newOpportunityCallsCountList= [];
+		var meetingScheduledCallsCountList = [];
 		var callsDurationList=[];
 		var totalCallsCountList=[];
 		var domainUsersList=[];
@@ -393,7 +401,19 @@ user_reports :function(callReportUrl){
 			totalCallsCountList=data["totalCallsCountList"];
 			domainUsersList=data["domainUsersList"];
 			domainUserImgList=data["domainUserImgList"];
-			pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls'];
+			missedCallsCountList = data["missedCallsCountList"];
+			inquiryCallsCountList = data["inquiryCallsCountList"];
+			interestCallsCountList = data["interestCallsCountList"];
+			noInterestCallsCountList = data["noInterestCallsCountList"];
+			incorrectReferralCallsCountList = data["incorrectReferralCallsCountList"];
+			meetingScheduledCallsCountList = data["meetingScheduledCallsCountList"];
+			newOpportunityCallsCountList = data["newOpportunityCallsCountList"];
+			callsDurationList=data["callsDurationList"];
+			totalCallsCountList=data["totalCallsCountList"];
+			domainUsersList=data["domainUsersList"];
+			domainUserImgList=data["domainUserImgList"];
+			pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls','Missed','Inquiry',
+			'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity'];
 			
 			var series=[];
 			var text='';
@@ -422,6 +442,48 @@ user_reports :function(callReportUrl){
 					voicemailCallCount +=voicemailCall;
 				});
 				CompleteCallsCount.push(voicemailCallCount);
+
+				var missedCallsCount=0;
+				$.each(missedCallsCountList,function(index,missedCall){
+					missedCallsCountList +=missedCall;
+				});
+				CompleteCallsCount.push(missedCallsCount);
+
+				var inquiryCallsCount=0;
+				$.each(inquiryCallsCountList,function(index,inquiryCall){
+					inquiryCallsCount +=inquiryCall;
+				});
+				CompleteCallsCount.push(inquiryCallsCount);
+
+				var interestCallsCount=0;
+				$.each(interestCallsCountList,function(index,interestCall){
+					interestCallsCount +=interestCall;
+				});
+				CompleteCallsCount.push(interestCallsCount);
+
+				var noInterestCallsCount=0;
+				$.each(noInterestCallsCountList,function(index,noInterestCall){
+					noInterestCallsCount +=noInterestCall;
+				});
+				CompleteCallsCount.push(noInterestCallsCount);
+
+				var incorrectReferralCallsCount=0;
+				$.each(incorrectReferralCallsCountList,function(index,incorrectReferralCall){
+					incorrectReferralCallsCount +=incorrectReferralCall;
+				});
+				CompleteCallsCount.push(incorrectReferralCallsCount);
+
+				var newOpportunityCallsCount=0;
+				$.each(newOpportunityCallsCountList,function(index,newOpportunityCall){
+					newOpportunityCallsCount +=newOpportunityCall;
+				});
+				CompleteCallsCount.push(newOpportunityCallsCount);
+
+				var meetingScheduledCallsCount=0;
+				$.each(meetingScheduledCallsCountList,function(index,meetingScheduledCall){
+					meetingScheduledCallsCount +=meetingScheduledCall;
+				});
+				CompleteCallsCount.push(meetingScheduledCallsCount);
 				
 				
 				portlet_graph_utility.callsByPersonPieGraph(selector,pieGraphRegions,CompleteCallsCount);
