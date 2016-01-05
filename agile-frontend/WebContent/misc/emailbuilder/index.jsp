@@ -21,6 +21,28 @@ String content = "";
         <link href="css/template.editor.css" rel="stylesheet"/>
         <link href="css/responsive-table.css" rel="stylesheet"/>
 
+
+<%
+String templateId = request.getParameter("tmpid");
+String action = request.getParameter("action");
+%>
+
+<script>
+var AGILE_EB_ROOT = window.location.origin + "/";
+var AGILE_EB_OPTIONS = {};
+AGILE_EB_OPTIONS['action'] = "new";
+AGILE_EB_OPTIONS['templateId'] = "";
+
+<% if(action != null) { %>
+    AGILE_EB_OPTIONS['action'] = '<%=action%>';
+<% } %>
+
+<% if(templateId != null) { %>
+    AGILE_EB_OPTIONS['templateId'] = '<%=templateId%>';
+<% } %>
+
+</script>
+
         <!--[if lt IE 9]>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
         <![endif]-->
@@ -36,7 +58,11 @@ String content = "";
         <script type="text/javascript" src="js/colpick.js"></script>
         <script type="text/javascript" src="js/template.editor.js"></script>
 
-
+<style>
+.mce-btn button {
+    padding: 2px 4px !important;
+}
+</style>
     </head>
     <body class="edit" style="overflow-x: hidden;">
         <div class="navbar navbar-inverse navbar-fixed-top navbar-layoutit hidden">
@@ -63,6 +89,7 @@ String content = "";
                     </li>
                 </ul>
             </div><!--/.navbar-collapse -->
+            <textarea id="templateHtmlContent" class="hidden"><%@ include file="template.html" %></textarea>
         </div><!--/.navbar-fixed-top -->
 
         <div class="row">
@@ -712,7 +739,8 @@ String content = "";
                                     <input type="text" id="image-url" class="form-control" data-id="none"/>
                                 </div>
                                 <div class="col-xs-4">
-                                    <a id="popupimg" class="btn btn-default" data-toggle="modal" data-target="#previewimg">Browse</a>
+                                    <a class="btn btn-default" id="browseBtn" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
+                                    <input type="file" id="uploadImageToS3Btn" class="hidden">
                                 </div>
                             </div>
                         </div>
@@ -1028,7 +1056,7 @@ String content = "";
         <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
             <div class="modal-dialog" role="document">
                 <div class="modal-content" style="min-width:120px">
-                    <div class="modal-header">
+                    <div class="modal-header hidden">
                         <input id="httphref" type="text" name="href" value="http://" class="form-control" />
                     </div>
                     <div class="modal-body" align="center">

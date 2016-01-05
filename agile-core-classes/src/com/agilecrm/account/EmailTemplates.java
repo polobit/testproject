@@ -235,7 +235,6 @@ public class EmailTemplates
 	@PrePersist
 	private void PrePersist()
 	{
-		is_template_built_using_builder = true;
 		builder_version = 1;
 		
 		if (id != null)

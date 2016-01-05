@@ -872,46 +872,10 @@ function getIndex(itm, list) {
 $(document).ready(function () {
 
 
+    loadSavedTemplate();
 
-    tinymce.init({
-        menubar: false,
-        force_br_newlines: false,
-        force_p_newlines: true,
-        forced_root_block: '',
-        selector: "#html5editor",
-        plugins: [
-            "advlist autolink lists link charmap anchor",
-            "visualblocks code ",
-            "insertdatetime  table contextmenu paste textcolor colorpicker"
-        ],
-        toolbar: "undo redo  styleselect bold italic forecolor backcolor  alignleft | aligncenter alignright alignjustify | bullist numlist link",
-        setup: function (editor) {
-            editor.on('keyup', function (e) {
-                $('#' + $('#path').val()).find($('#selector').val()).html(tinyMCE.get('html5editor').getContent());
-            }),
-                    editor.on('change', function (e) {
-                        $('#' + $('#path').val()).find($('#selector').val()).html(tinyMCE.get('html5editor').getContent());
-                    });
-        }
-    });
-
-    tinymce.init({
-        menubar: false,
-        force_br_newlines: false,
-        force_p_newlines: false,
-        forced_handleObjectsroot_block: '',
-        selector: "#html5editorlite",
-        plugins: [
-        ],
-        toolbar: "alignleft aligncenter alignright alignjustify",
-        setup: function (editor) {
-            editor.on('keyup', function (e) {
-                $('#' + $('#path').val()).find($('#selector').val()).html(tinyMCE.get('html5editorlite').getContent());
-            }),
-                    editor.on('change', function (e) {
-                        $('#' + $('#path').val()).find($('#selector').val()).html(tinyMCE.get('html5editorlite').getContent());
-                    });
-        }
+    parent.get_custom_fields(function(data){
+        initializeEditor();
     });
                  /*
     var featherEditor = new Aviary.Feather({
@@ -1232,7 +1196,8 @@ $(document).ready(function () {
         downloadLayoutSrc();
 
         var save = $('#tosave');
-        var fullSource = $('#download').val();
+        var templateContent = $("#templateHtmlContent").val();
+        var fullSource = templateContent.replace("{body}",$('#download').val());
         var builderSource = save.html();
         parent.saveEmailTemplateFromBuilder(fullSource,builderSource);
         return;
@@ -1287,10 +1252,13 @@ $(document).ready(function () {
     $("#sourcepreview").click(function (i) {
         i.preventDefault();
         downloadLayoutSrc();
-        $.post(path + '/save.php', {html: $('#download').val(), id: $('#tosave').data('id')}, function (data) {
-            $('#httphref').val(data);
-            $('#previewFrame').attr('src', data);
-        }, 'html');
+        var templateContent = $("#templateHtmlContent").val();
+        document.getElementById('previewFrame').contentWindow.document.body.innerHTML = templateContent.replace("{body}",$('#download').val());
+
+        // $.post(path + '/save.php', {html: $('#download').val(), id: $('#tosave').data('id')}, function (data) {
+        //     $('#httphref').val(data);
+        //     $('#previewFrame').attr('src', data);
+        // }, 'html');
 
         $('#previewModal').modal('show');
         return false;
@@ -1311,6 +1279,10 @@ $(document).ready(function () {
         showSettings();
     });
 
+    $("#uploadImageToS3Btn").change(function(){
+        var fileInput = document.getElementById('uploadImageToS3Btn');
+        uploadImageToS3ThroughBtn(fileInput.files[0]);
+    });
     /*
      $(".nav-header").click(function () {
      $(".sidebar-nav .boxes, .sidebar-nav .rows").hide();
@@ -1331,3 +1303,111 @@ $(document).ready(function () {
 
 
 });
+
+
+function loadSavedTemplate() {
+    //this should be loaded first when dom is ready
+    if(AGILE_EB_OPTIONS['templateId'] && AGILE_EB_OPTIONS['action'] == "edit") {
+        $.ajax({
+            url: AGILE_EB_ROOT+"core/api/email/templates/"+AGILE_EB_OPTIONS['templateId'],
+            dataType: 'json',
+            async: false,
+            data: {},
+            success: function(data) {
+                if(!data['is_template_built_using_builder']) {
+                    parent.redirectToOldEditor(AGILE_EB_OPTIONS['templateId']);
+                    return;
+                }
+                $("#nameoftemplate",parent.document).val(data.name);
+                $("#subject",parent.document).val(data.subject);
+                parent.setAttachmentInTemplateEdit(data.attachment_id);
+                $("#tosave").html(data.html_for_builder);
+            }
+        });
+    }
+}
+
+function initializeEditor() {
+    
+    tinymce.init({
+        menubar: false,
+        force_br_newlines: false,
+        force_p_newlines: true,
+        forced_root_block: '',
+        selector: "#html5editor",
+        plugins: [
+            "advlist autolink lists link charmap anchor",
+            "visualblocks code ",
+            "insertdatetime  table contextmenu paste textcolor colorpicker"
+        ],
+        toolbar: "bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist link | code | forecolor backcolor | fontselect | merge_fields",
+        setup: function (editor) {
+            editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
+            editor.on('keyup', function (e) {
+                $('#' + $('#path').val()).find($('#selector').val()).html(tinyMCE.get('html5editor').getContent());
+            }),
+            editor.on('change', function (e) {
+                $('#' + $('#path').val()).find($('#selector').val()).html(tinyMCE.get('html5editor').getContent());
+            });
+        }
+    });
+
+    tinymce.init({
+        menubar: false,
+        force_br_newlines: false,
+        force_p_newlines: false,
+        forced_handleObjectsroot_block: '',
+        selector: "#html5editorlite",
+        plugins: [
+        ],
+        toolbar: "alignleft aligncenter alignright alignjustify | forecolor backcolor | merge_fields",
+        setup: function (editor) {
+            editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
+            editor.on('keyup', function (e) {
+                $('#' + $('#path').val()).find($('#selector').val()).html(tinyMCE.get('html5editorlite').getContent());
+            }),
+            editor.on('change', function (e) {
+                $('#' + $('#path').val()).find($('#selector').val()).html(tinyMCE.get('html5editorlite').getContent());
+            });
+        }
+    });
+}
+
+function uploadImageToS3ThroughBtn(file) {
+    if(typeof file != "undefined") {
+        $("#browseBtn").prop("disabled",true);
+        $("#browseBtn").text("uploading...");
+
+        var uploadedFileName = file.name;
+        var filename = uploadedFileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        filename = filename + "_" + new Date().getTime() + "." + uploadedFileName.split('.').pop();
+
+        formData = new FormData();
+        formData.append('key',  "editor/email/"+window.parent.CURRENT_DOMAIN_USER.domain+"/"+filename);
+        formData.append('AWSAccessKeyId', 'AKIAIBK7MQYG5BPFHSRQ');
+        formData.append('acl', 'public-read');
+        formData.append('content-type', 'image/png');
+        formData.append('policy', 'CnsKICAiZXhwaXJhdGlvbiI6ICIyMDI1LTAxLTAxVDEyOjAwOjAwLjAwMFoiLAogICJjb25kaXRpb25zIjogWwogICAgeyJidWNrZXQiOiAiYWdpbGVjcm0iIH0sCiAgICB7ImFjbCI6ICJwdWJsaWMtcmVhZCIgfSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJGtleSIsICJlZGl0b3IvIl0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRDb250ZW50LVR5cGUiLCAiaW1hZ2UvIl0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRzdWNjZXNzX2FjdGlvbl9zdGF0dXMiLCAiMjAxIl0sCiAgXQp9');
+        formData.append('signature', '59pSO5qgWElDA/pNt+mCxxzYC4g=');
+        formData.append('success_action_status', '201');
+        formData.append('file', file);
+
+        $.ajax({
+            data: formData,
+            dataType: 'xml',
+            type: "POST",
+            cache: false,
+            contentType: false,
+            processData: false,
+            url: "https://agilecrm.s3.amazonaws.com/",
+            success: function(data) {
+              // getting the url of the file from amazon and insert it into the editor
+              var url = $(data).find('Location').text();
+              $('#image-url').val(decodeURIComponent(url));
+              $('#change-image').trigger('click');
+              $("#browseBtn").prop("disabled",false);
+              $("#browseBtn").text("Browse");
+            }
+        });
+    }
+}
