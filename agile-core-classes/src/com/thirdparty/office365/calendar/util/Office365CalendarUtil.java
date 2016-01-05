@@ -32,6 +32,24 @@ public class Office365CalendarUtil {
 	private static String appName = "exchange-app";
 	private static String serveltName = "appointment";
 
+	public static String getOfficeAuthUrl(String prefs, String startDate,
+			String endDate) throws Exception {
+		String appointments = null;
+		Office365CalendarPrefs officeCalendarPrefs = new Office365CalendarPrefs();
+		JSONObject propertyJSON = new JSONObject(prefs);
+
+		officeCalendarPrefs.setUsername(propertyJSON
+				.getString("office365-calendar-usrname"));
+		officeCalendarPrefs.setPassword(propertyJSON
+				.getString("office365-calendar-pwd"));
+		officeCalendarPrefs.setServerUrl(propertyJSON
+				.getString("office365-calendar-outlook-url"));
+
+		appointments = Office365CalendarUtil.getOfficeURLCalendarPrefs(
+				officeCalendarPrefs, startDate, endDate);
+		return appointments;
+	}
+
 	public static String getOfficeURL(String startDate, String endDate) {
 
 		String appointments = null;
@@ -43,14 +61,15 @@ public class Office365CalendarUtil {
 				Office365CalendarPrefs officeCalendarPrefs = new Office365CalendarPrefs();
 				JSONObject propertyJSON = new JSONObject(
 						calendarPrefs.getPrefs());
-				
-				officeCalendarPrefs.setUsername(propertyJSON.get("office365-calendar-usrname")
-						
-						.toString());
-				officeCalendarPrefs.setPassword(propertyJSON.get("office365-calendar-pwd")
-						.toString());
-				officeCalendarPrefs.setServerUrl(propertyJSON.get("office365-calendar-outlook-url")
-						.toString());
+
+				officeCalendarPrefs.setUsername(propertyJSON.get(
+						"office365-calendar-usrname")
+
+				.toString());
+				officeCalendarPrefs.setPassword(propertyJSON.get(
+						"office365-calendar-pwd").toString());
+				officeCalendarPrefs.setServerUrl(propertyJSON.get(
+						"office365-calendar-outlook-url").toString());
 
 				appointments = Office365CalendarUtil.getOfficeURLCalendarPrefs(
 						officeCalendarPrefs, startDate, endDate);
@@ -81,9 +100,9 @@ public class Office365CalendarUtil {
 			Office365CalendarPrefs calendarPrefs, String startDate,
 			String endDate) {
 
-		String userName = calendarPrefs.username;
-		String host = calendarPrefs.serverUrl;
-		String password = calendarPrefs.password;
+		String userName = calendarPrefs.getUsername();
+		String host = calendarPrefs.getServerUrl();
+		String password = calendarPrefs.getPassword();
 
 		if (host != null) {
 			host = host + "/ews/exchange.asmx";
@@ -137,58 +156,53 @@ public class Office365CalendarUtil {
 	 * @return
 	 */
 	public static List<OfficeCalendarTemplate> getAppointmentsFromServer(
-			String url) {
+			String url) throws Exception {
 		List<OfficeCalendarTemplate> appointmentsList = new ArrayList<OfficeCalendarTemplate>();
 
-		try {
-			// Returns imap emails, usually in form of {emails:[]}, if not build
-			// result like that.
-			String jsonResult = HTTPUtil.accessURL(url);
-			JSONArray jsonArray = new JSONArray(jsonResult);
-			for (int i = 0; i < jsonArray.length(); i++) {
-				OfficeCalendarTemplate CalenderObj = new OfficeCalendarTemplate();
-				String obj = String.valueOf(jsonArray.get(i));
-				JSONObject resultObj = new JSONObject(obj);
+		// Returns imap emails, usually in form of {emails:[]}, if not build
+		// result like that.
+		String jsonResult = HTTPUtil.accessURL(url);
+		JSONArray jsonArray = new JSONArray(jsonResult);
+		for (int i = 0; i < jsonArray.length(); i++) {
+			OfficeCalendarTemplate CalenderObj = new OfficeCalendarTemplate();
+			String obj = String.valueOf(jsonArray.get(i));
+			JSONObject resultObj = new JSONObject(obj);
 
-				String pattern = "EE MMM dd HH:mm:ss z yyyy";
+			String pattern = "EE MMM dd HH:mm:ss z yyyy";
 
-				SimpleDateFormat parsedFormat = new SimpleDateFormat(pattern,
-						Locale.ENGLISH);
-				parsedFormat.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil
-						.getTimeZone()));
-				SimpleDateFormat reqFormat = new SimpleDateFormat(
-						"MMM d, yyyy HH:mm:ss");
-				reqFormat.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil
-						.getTimeZone()));
-				System.out.println("test");
-				Date parsedDate;
-				String start = resultObj.getString("startDate");
-				if (start != null) {
-					parsedDate = parsedFormat.parse(start);
-					start = reqFormat.format(parsedDate);
-				}
-				CalenderObj.setStart(start);
-
-				String end = resultObj.getString("endDate");
-				if (end != null) {
-					parsedDate = parsedFormat.parse(end);
-					Calendar cal = Calendar.getInstance();
-					cal.setTime(parsedDate);
-					// cal.add(Calendar.DATE, -1);
-					Date extactDate = cal.getTime();
-					end = reqFormat.format(extactDate);
-				}
-				CalenderObj.setEnd(end);
-
-				CalenderObj.setTitle(resultObj.getString("subject"));
-				CalenderObj.setType(type);
-				CalenderObj.setBackgroundColor(backgroundColor);
-
-				appointmentsList.add(CalenderObj);
+			SimpleDateFormat parsedFormat = new SimpleDateFormat(pattern,
+					Locale.ENGLISH);
+			parsedFormat.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil
+					.getTimeZone()));
+			SimpleDateFormat reqFormat = new SimpleDateFormat(
+					"MMM d, yyyy HH:mm:ss");
+			reqFormat.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil
+					.getTimeZone()));
+			System.out.println("test");
+			Date parsedDate;
+			String start = resultObj.getString("startDate");
+			if (start != null) {
+				parsedDate = parsedFormat.parse(start);
+				start = reqFormat.format(parsedDate);
 			}
-		} catch (Exception e) {
-			System.out
-					.println("while fetching office appointment error accorded");
+			CalenderObj.setStart(start);
+
+			String end = resultObj.getString("endDate");
+			if (end != null) {
+				parsedDate = parsedFormat.parse(end);
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(parsedDate);
+				// cal.add(Calendar.DATE, -1);
+				Date extactDate = cal.getTime();
+				end = reqFormat.format(extactDate);
+			}
+			CalenderObj.setEnd(end);
+
+			CalenderObj.setTitle(resultObj.getString("subject"));
+			CalenderObj.setType(type);
+			CalenderObj.setBackgroundColor(backgroundColor);
+
+			appointmentsList.add(CalenderObj);
 		}
 
 		return appointmentsList;

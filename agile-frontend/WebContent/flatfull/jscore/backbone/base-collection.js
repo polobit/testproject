@@ -190,7 +190,10 @@ var Base_Collection_View = Backbone.View
 			 */
 			initialize : function()
 			{
-				showTransitionBar();
+				// Do not show transition bar 
+				if(!this.options.no_transition_bar)
+				    showTransitionBar();
+
 				// Binds functions to view
 				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'buildCollectionUI');
 

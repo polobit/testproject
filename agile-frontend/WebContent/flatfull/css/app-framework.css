@@ -5,6 +5,9 @@
 {
 	cursor:default;
 }
+.c-progress{
+  cursor:progress;
+}
 .c-p
 {
 	cursor:pointer;
