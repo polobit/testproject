@@ -306,7 +306,7 @@ $('#' + container_id).on('change', '#lhs-contact-filter-form select[name="CONDIT
 		rhs_new_exist = true;
 		rhs_new = $(this).parent().find('div.condition_container.' + selected).find('#RHS_NEW').children().first().val();
 	}
-	if (rhs != "" && rhs != undefined && (!rhs_new_exist || rhs_new != ""))
+	if (rhs != "" && (rhs != undefined || selected == "DEFINED" || selected == "NOT_DEFINED") && (!rhs_new_exist || rhs_new != ""))
 	{
 		submitLhsFilter();
 	}
