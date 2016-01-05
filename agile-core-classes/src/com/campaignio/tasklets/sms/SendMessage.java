@@ -116,11 +116,10 @@ public class SendMessage extends TaskletAdapter
 			data.put(SMS_CLICK_TRACKING_ID, System.currentTimeMillis());
 			
 			if(trackClicks != null
-			        && (trackClicks.equalsIgnoreCase(SendEmail.TRACK_CLICKS_YES) || trackClicks
-			                .equalsIgnoreCase(SendEmail.TRACK_CLICKS_YES_AND_PUSH)))
+			        && (!trackClicks.equalsIgnoreCase(SendEmail.TRACK_CLICKS_NO)))
 			{	
 				message = shortenLongURLs(message, AgileTaskletUtil.getId(subscriberJSON), 
-						AgileTaskletUtil.getId(campaignJSON), data.getString(SMS_CLICK_TRACKING_ID), trackClicks.equalsIgnoreCase(SendEmail.TRACK_CLICKS_YES_AND_PUSH));
+						AgileTaskletUtil.getId(campaignJSON), data.getString(SMS_CLICK_TRACKING_ID), trackClicks);
 			}
 			
 			System.out.println("Message is...." + message);
@@ -196,7 +195,7 @@ public class SendMessage extends TaskletAdapter
 		return false;
 	}
 	
-	public static String shortenLongURLs(String message, String subscriberId, String campaignId, String trackingId, boolean doPush)
+	public static String shortenLongURLs(String message, String subscriberId, String campaignId, String trackingId, String typeOfPush)
 	{
 		String regex = "\\(?\\b(http://|www[.]|https://|HTTP://|HTTPS://)[-A-Za-z0-9+&amp;@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&amp;@#/%=~_()|]";
 		Pattern p = Pattern.compile(regex);
@@ -211,7 +210,7 @@ public class SendMessage extends TaskletAdapter
 				try
 				{
 					String shortURL = URLShortenerUtil.getShortURL(m.group(i), "sms", 
-							subscriberId, trackingId, campaignId, ShortenURLType.SMS, doPush);
+							subscriberId, trackingId, campaignId, ShortenURLType.SMS, typeOfPush);
 					
 					if(shortURL != null)
 						message = message.replace(m.group(i), shortURL);

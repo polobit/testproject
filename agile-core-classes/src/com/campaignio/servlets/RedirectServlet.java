@@ -135,10 +135,10 @@ public class RedirectServlet extends HttpServlet
 	    System.out.println("Push parameter is ............" + push);
 
 	    // Redirect url with push data
-	    if (StringUtils.isNotBlank(push) && push.equals(EmailLinksConversion.AGILE_EMAIL_PUSH))
+	    if (StringUtils.isNotBlank(push) && (push.equals(EmailLinksConversion.AGILE_EMAIL_PUSH) || push.equals(EmailLinksConversion.AGILE_EMAIL_PUSH_EMAIL_ONLY)))
 	    {
 		// Append Contact properties to params
-		params += TrackClickUtil.appendContactPropertiesToParams(contact);
+		params += TrackClickUtil.appendContactPropertiesToParams(contact, push);
 
 		System.out.println("Forwarding it to " + normalisedLongURL + " " + params);
 
