@@ -1315,6 +1315,7 @@ function getAndUpdateCollectionCount(type, el){
 
     	// Hide bulk action checkbox
     	$(".thead_check", el).closest("label").css("visibility", "hidden");
+    	$("table", el).addClass("hide-head-checkbox");
 
     	abortCountQueryCall();
 
@@ -1329,7 +1330,8 @@ function getAndUpdateCollectionCount(type, el){
 						App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
 					}
 
-					$(".thead_check", el).closest("label").css("visibility", "visible");	
+					$(".thead_check", el).closest("label").css("visibility", "visible");
+					$("table", el).removeClass("hide-head-checkbox");	
     	});
 }
 
