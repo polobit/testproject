@@ -45,10 +45,8 @@ public class TicketGroup extends TaskletAdapter
 				// Get group ID
 				String ticketGroupId = getStringValue(nodeJSON, subscriberJSON, data, TICKET_GROUP_ID);
 
-				String ticketId = ticketJSON.getString("id");
-
 				// Change Group and Assignee
-				TicketsUtil.changeGroup(Long.parseLong(ticketId), Long.parseLong(ticketGroupId));
+				TicketsUtil.changeGroup(ticketJSON.getLong("id"), Long.parseLong(ticketGroupId));
 			}
 
 		}

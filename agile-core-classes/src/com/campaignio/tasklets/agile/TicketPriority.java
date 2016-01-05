@@ -44,10 +44,11 @@ public class TicketPriority extends TaskletAdapter
 
 			JSONObject ticketJSON = data.getJSONObject(TICKET);
 
+			System.out.println("ticketJSON: " + ticketJSON);
+
 			if (ticketJSON != null)
 			{
-				String ticketId = ticketJSON.getString("id");
-				TicketsUtil.changePriority(Long.parseLong(ticketId), Tickets.Priority.valueOf(priority));
+				TicketsUtil.changePriority(ticketJSON.getLong("id"), Tickets.Priority.valueOf(priority));
 			}
 
 		}

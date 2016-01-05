@@ -46,8 +46,7 @@ public class TicketStatus extends TaskletAdapter
 
 			if (ticketJSON != null)
 			{
-				String ticketId = ticketJSON.getString("id");
-				TicketsUtil.changeStatus(Long.parseLong(ticketId), Tickets.Status.valueOf(status));
+				TicketsUtil.changeStatus(ticketJSON.getLong("id"), Tickets.Status.valueOf(status));
 			}
 
 		}

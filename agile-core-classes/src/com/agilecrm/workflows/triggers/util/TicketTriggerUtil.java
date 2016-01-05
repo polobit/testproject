@@ -159,7 +159,7 @@ public class TicketTriggerUtil
 			return;
 
 		// Gets triggers with Ticket condition.
-		List<Trigger> triggersList = new ArrayList();
+		List<Trigger> triggersList = new ArrayList<Trigger>();
 
 		triggersList = TriggerUtil.getTriggersByCondition(condition);
 
@@ -211,7 +211,7 @@ public class TicketTriggerUtil
 		{
 			// Run campaign
 			WorkflowSubscribeUtil.subscribeDeferred(contact, campaignId,
-					new JSONObject().put("ticket", new JSONObject(ticket)));
+					new JSONObject().put("ticket", new JSONObject(ticket.toString())));
 		}
 		catch (JSONException e)
 		{

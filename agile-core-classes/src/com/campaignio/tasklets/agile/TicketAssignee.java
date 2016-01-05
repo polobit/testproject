@@ -53,10 +53,8 @@ public class TicketAssignee extends TaskletAdapter
 				// Get assignee
 				String ticketAssigneeId = getStringValue(nodeJSON, subscriberJSON, data, TICKET_ASSIGNEE_ID);
 
-				String ticketId = ticketJSON.getString("id");
-
 				// Change Group and Assignee
-				TicketsUtil.changeGroupAndAssignee(Long.parseLong(ticketId), Long.parseLong(ticketGroupId),
+				TicketsUtil.changeGroupAndAssignee(ticketJSON.getLong("id"), Long.parseLong(ticketGroupId),
 						Long.parseLong(ticketAssigneeId));
 			}
 
