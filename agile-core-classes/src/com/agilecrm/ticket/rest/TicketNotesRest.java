@@ -78,10 +78,10 @@ public class TicketNotesRest
 		{
 			Long ticketID = notes.ticket_id;
 
-			String html_text = notes.html_text;
+			if (notes.html_text != null)
+				notes.html_text = notes.html_text.replaceAll("(\r\n|\n)", "<br />");
 
-			if (html_text != null)
-				html_text = html_text.replaceAll("(\r\n|\n)", "<br />");
+			String html_text = notes.html_text;
 
 			if (notes == null || notes.ticket_id == null)
 				throw new Exception("Ticket ID is missing.");
