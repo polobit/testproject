@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
@@ -367,7 +368,7 @@ public class Tickets extends Cursor implements Serializable
 			if (lockAcquired)
 				decrement(syncKey);
 		}
-		
+
 		return null;
 	}
 
@@ -463,4 +464,20 @@ public class Tickets extends Cursor implements Serializable
 
 		return null;
 	}
+
+	@Override
+	public String toString()
+	{
+		try
+		{
+			return new ObjectMapper().writeValueAsString(this);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return "Tickets []";
+	}
+
 }

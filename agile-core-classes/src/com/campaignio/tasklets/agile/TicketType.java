@@ -46,8 +46,7 @@ public class TicketType extends TaskletAdapter
 
 			if (ticketJSON != null)
 			{
-				String ticketId = ticketJSON.getString("id");
-				TicketsUtil.changeTicketType(Long.parseLong(ticketId), Tickets.Type.valueOf(ticketType));
+				TicketsUtil.changeTicketType(ticketJSON.getLong("id"), Tickets.Type.valueOf(ticketType));
 			}
 
 		}

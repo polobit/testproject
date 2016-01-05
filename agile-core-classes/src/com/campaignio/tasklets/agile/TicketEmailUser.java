@@ -62,8 +62,6 @@ public class TicketEmailUser extends TaskletAdapter
 				// Ticket body
 				String emailBody = getStringValue(nodeJSON, subscriberJSON, data, BODY);
 
-				String ticketId = ticketJSON.getString("id");
-
 				// Change Group and Assignee
 				TicketsUtil.sendEmailToUser(emailUserId, subject, emailBody);
 
