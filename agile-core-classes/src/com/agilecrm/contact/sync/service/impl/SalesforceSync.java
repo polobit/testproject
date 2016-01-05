@@ -579,8 +579,8 @@ public class SalesforceSync extends OneWaySyncService
 	// Saves limits
 	restriction.save();
 
-	if(syncStatus.get(ImportStatus.TOTAL_ACCOUNTS) == 0 && syncStatus.get(ImportStatus.SAVED_CONTACTS) == 0 && syncStatus.get(ImportStatus.TOTAL_TASKS) == 0)
-		  return;
+	/*if(syncStatus.get(ImportStatus.TOTAL_ACCOUNTS) == 0 && syncStatus.get(ImportStatus.SAVED_CONTACTS) == 0 && syncStatus.get(ImportStatus.TOTAL_TASKS) == 0)
+		  return;*/
 	
 	buildNotificationStatus();
 

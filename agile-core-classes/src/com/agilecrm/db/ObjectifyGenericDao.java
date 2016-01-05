@@ -89,6 +89,8 @@ import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
 import com.thirdparty.office365.calendar.Office365CalendarPrefs;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+
 /**
  * <code>ObjectifyGenericDao</code> is a generic class for all the entities,
  * which provides the facility to interact with the database (appengine) using
@@ -109,6 +111,8 @@ import com.thirdparty.office365.calendar.Office365CalendarPrefs;
 public class ObjectifyGenericDao<T> extends DAOBase
 {
 
+	static final String[] countRestrictedClassNames = new String[]{"contact", "activity"};
+	
     static final int BAD_MODIFIERS = Modifier.FINAL | Modifier.STATIC | Modifier.TRANSIENT;
 
     // Registers the classes with ObjectifyService
@@ -654,16 +658,24 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		if (result instanceof com.agilecrm.cursor.Cursor)
 		{
 
+			String className = this.clazz.getSimpleName().toLowerCase();
+			
 		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
 		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
 			    + NamespaceManager.get() + "_count");
 
-		    if (object != null)
-			agileCursor.count = (Integer) object;
+		    
+		    if (object != null){
+		    	if(!Arrays.asList(countRestrictedClassNames).contains(className))
+		    		agileCursor.count = (Integer) object;	
+		    }
+			
 		    else
 		    {
 			long startTime = System.currentTimeMillis();
-			agileCursor.count = query.count();
+			if(!Arrays.asList(countRestrictedClassNames).contains(className))
+					agileCursor.count = query.count();
+			
 			long endTime = System.currentTimeMillis();
 			if ((endTime - startTime) > 15 * 1000 && cache)
 			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",

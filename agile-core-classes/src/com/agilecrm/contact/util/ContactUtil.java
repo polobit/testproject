@@ -104,7 +104,7 @@ public class ContactUtil
 
 	return dao.listByPropertyAndOrder(searchMap, orderBy);
     }
-
+    
     /**
      * Fetches a contact based on its id
      * 
@@ -1745,12 +1745,17 @@ public class ContactUtil
      */
     public static int getContactsCount(Long minTime, Long maxTime)
     {
-	int contactsCount = 0;
 	try
 	{
-	    contactsCount = dao.ofy().query(Contact.class).filter("type", Contact.Type.PERSON)
-		    .filter("created_time >= ", minTime).filter("created_time <= ", maxTime).count();
-	    return contactsCount;
+		Query<Contact> query = dao.ofy().query(Contact.class).filter("type", Contact.Type.PERSON);
+		
+		if(minTime != null)
+			query.filter("created_time >= ", minTime);
+		if(maxTime != null)
+			query.filter("created_time <= ", maxTime);
+		
+	    return query.count();
+	    
 	}
 	catch (Exception e)
 	{
@@ -1760,6 +1765,36 @@ public class ContactUtil
 
     }
 
+    /**
+     * Get the companies count created in the specified duration.
+     * 
+     * @param minTime
+     *            Long object
+     * @param maxTime
+     *            Long object
+     */
+    public static int getCompaniesCount(Long minTime, Long maxTime)
+    {
+	try
+	{
+		Query<Contact> query = dao.ofy().query(Contact.class).filter("type", Contact.Type.COMPANY);
+		
+		if(minTime != null)
+			query.filter("created_time >= ", minTime);
+		if(maxTime != null)
+			query.filter("created_time <= ", maxTime);
+		
+	    return query.count();
+	    
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return 0;
+
+    }
+    
     public static void updateCampaignEmailedTime(Long contactId, Long lastCampaignEmailed, String toEmail)
     {
 	LastContactedDeferredTask lastContactDeferredtask = new LastContactedDeferredTask(contactId,
