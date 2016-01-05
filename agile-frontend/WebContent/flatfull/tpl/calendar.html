@@ -5,6 +5,8 @@
         <div class="col-md-12">
 		
         	 <h3 class="pull-left font-thin h3">Calendar <small></small></h3>
+        	 <button type="button" id="refrecal" class="btn btn-sm btn-default" onclick="refreshcal()" style="margin-left:10px;">
+                <span class="glyphicon glyphicon-refresh"></span></button>
      	
         <div class="pull-right">
         <!-- <div id="event-list-filters" class="btn-group inline-block m-r">
@@ -21,7 +23,7 @@
 				</ul>
 			</div> -->
 <div class="inline-block m-r" id="calendarAgendaButtons">
-				<button type="button" class="btn btn-sm btn-default" onclick="today()">Today</button>
+                	<button type="button" class="btn btn-sm btn-default" onclick="today()">Today</button>
 					<div class="btn-group m-l-xs">
 						<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >Day</button>
 						<button id="agendaWeek" class="btn btn-sm btn-default agendaDayWeekMonth" >Week</button>
@@ -69,6 +71,7 @@
 				<i class="fa fa-plus"></i>Add
 			</button>
 			<div class="pull-right">
+			
 				<button type="button" class="btn btn-sm btn-default" onclick="today()">today</button>
 					<div class="btn-group m-l-xs">
 						<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >Day</button>
