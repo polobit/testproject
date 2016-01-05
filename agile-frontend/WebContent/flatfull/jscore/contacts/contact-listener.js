@@ -3,7 +3,7 @@ function contactListener()
 {
 	$('#contacts-custom-view-model-list').off('mouseenter','tr');
 		$('#contacts-custom-view-model-list').on('mouseenter','tr',function(e){
-			
+			//e.stopPropagation();
 			var left=e.pageX;
             var that=$(this);
 
@@ -29,10 +29,21 @@ function contactListener()
             "html": "true",
             "content": template_ui,
             });
-							//$(that).attr('data-content',template_ui);
-							$(that).popover('show');
-						//$('.popover').html($(template_ui));	
-							 $('.popover').css('left',(left-$('.popover').width())+"px");
+								$(that).popover('show');
+						
+							$('.popover').css('left', ($('.dta-contatiner').offset().left + 90+"px"));
+							if (window.innerHeight - $(that).offset().top >= 400)
+                            $('.popover').css('top', ($(that).offset().top  + "px"));
+                        /*else{
+                        	$('.popover').css('top',($(that).offset().top+$('.dta-contatiner').offset().top+"px"));
+                        }*/
+                         //if( $('#contacts-table').offset().top > $('#contacts-table .popover').offset().top ) { $('#contacts-table .popover').offset({ top : $('#contacts-table').offset().top }); }
+
+                         else{
+                         	if($(window).scrollTop()>($('#contacts-table .popover').offset().top-$('#contacts-table .popover').height()))
+                         		$('#contacts-table .popover').offset({ top : $(that).offset().top+20 });
+                         }
+                        	
 							 attachEvents(that,App_Contacts.contact_popover);
 						contact_list_starify('.popover');
 						
@@ -71,7 +82,7 @@ function attachEvents(tr,Contact_collection) {
 		insidePopover=false;
 		$(tr).popover('hide');
 	});
-	$('.popover').off('click', '.contact-list-add-deal')
+	/*$('.popover').off('click', '.contact-list-add-deal')
 	$('.popover').on('click', '.contact-list-add-deal', function(e)
 	{
 		var that=$(this);
@@ -137,8 +148,8 @@ function attachEvents(tr,Contact_collection) {
 		$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
 
 	});
-
-	$('.popover').off('click', '.contact-list-add-note');
+*/
+	/*$('.popover').off('click', '.contact-list-add-note');
 	$('.popover').on('click', '.contact-list-add-note', function(e){ 
     	e.preventDefault();
         console.log("execution");
@@ -161,7 +172,7 @@ function attachEvents(tr,Contact_collection) {
          
     	agile_type_ahead("note_related_to", el, contacts_typeahead);
      });
-
+*/
 $('.popover').off('click', '#add-score')
 $('.popover').on('click', '#add-score', function(e){
 	    e.preventDefault();
