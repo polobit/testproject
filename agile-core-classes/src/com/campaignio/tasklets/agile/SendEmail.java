@@ -191,6 +191,7 @@ public class SendEmail extends TaskletAdapter
     public static String TRACK_CLICKS_NO = "no";
 
     public static String TRACK_CLICKS_YES_AND_PUSH = "yes_and_push";
+    public static String TRACK_CLICKS_YES_AND_PUSH_AND_EMAIL_ONLY = "yes_and_push_email_only";
 
     /**
      * Keyword that is added to url when Track Clicks yes is selected
@@ -528,8 +529,7 @@ public class SendEmail extends TaskletAdapter
 	
 	// Check if we need to convert links
 	if (trackClicks != null
-	        && (trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES) || trackClicks
-	                .equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH)))
+	        && (!trackClicks.equalsIgnoreCase(TRACK_CLICKS_NO)))
 	{
 	    try
 	    {
@@ -538,7 +538,7 @@ public class SendEmail extends TaskletAdapter
 		data.put(CLICK_TRACKING_ID, System.currentTimeMillis());
 
 		html = EmailLinksConversion.convertLinksUsingJSOUP(html, subscriberId, campaignId,
-		        trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
+		        trackClicks);
 
 	    }
 	    catch (Exception e)
