@@ -20,10 +20,10 @@
                "title": "Select email user",
                "url": "/core/api/users",
                "dynamicName": "email",
-               "dynamicValue": "id",
+               "dynamicValue": "email",
                "appendToDynamicName": "name",
                "options": {
-                   "(requester)": "{{requester}}",
+                   "(requester)": "{{ticket.requester}}",
                    "Ticket Assignee User": "{{ticket.assigneeID}}"
                },
                "fieldType": "dynamicselect",
