@@ -30,6 +30,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -54,6 +55,8 @@ import com.agilecrm.contact.ContactFullDetails;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
+import com.agilecrm.contact.imports.CSVImporter;
+import com.agilecrm.contact.imports.impl.ContactsCSVImporter;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
@@ -69,6 +72,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
@@ -1261,6 +1265,39 @@ public class ContactsAPI
 	// ContactExportType.CONTACT);
 	// ActivityUtil.createLogForImport(ActivityType.CONTACT_EXPORT,
 	// EntityType.CONTACT, count, 0);
+    }
+
+    @Path("/import/{key}/{type}")
+    @POST
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void contactsBulkSave(Contact contact, @PathParam("key") String key, @PathParam("type") String type)
+    {
+	// it gives is 1000)
+	int currentEntityCount = ContactUtil.getCount();
+
+	// Creates a blobkey object from blobkey string
+	BlobKey blobKey = new BlobKey(key);
+
+	// new CSVUtil(restrictions,
+	// accessControl).createContactsFromCSV(blobStream, contact,
+	// ownerId);
+	UserInfo info = SessionManager.get();
+
+	CSVImporter<Contact> importer;
+	try
+	{
+	    importer = new ContactsCSVImporter(NamespaceManager.get(), blobKey, info.getDomainId(),
+		    new ObjectMapper().writeValueAsString(contact), Contact.class, currentEntityCount);
+
+	    PullQueueUtil.addToPullQueue("contact-import-queue", importer, key);
+	}
+
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
     }
 
     @Path("/email/chrome/{email}")

@@ -102,7 +102,6 @@ public class ThreadPool
 		    ApiProxy.getDelegate());
 
 	    ApiProxy.setDelegate(hook);
-	    System.out.println(ApiProxy.getDelegate().getClass().getDeclaredMethods().length);
 	    com.agilecrm.remote.api.hook.TriggerFutureHook.install();
 	    System.out.println("Proxy : " + ApiProxy.getDelegate());
 	    // TriggerFutureHook hook = new
