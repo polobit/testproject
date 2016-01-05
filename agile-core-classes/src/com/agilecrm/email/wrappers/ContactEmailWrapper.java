@@ -187,7 +187,7 @@ public class ContactEmailWrapper extends Cursor
 
     public enum PushParams
     {
-    	NO, YES, YES_AND_PUSH
+    	NO, YES, YES_AND_PUSH, YES_AND_PUSH_EMAIL_ONLY
     };
     
     private PushParams push_param = PushParams.YES;

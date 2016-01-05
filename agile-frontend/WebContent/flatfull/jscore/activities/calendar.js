@@ -240,7 +240,7 @@ function showCalendar(users)
 											//Office
 											var inArray = type_of_cal.indexOf("office");
 											if(inArray >= 0){
-												addOffice365CalendarEvents();
+												//addOffice365CalendarEvents();
 											}
 											
 											//Agile
