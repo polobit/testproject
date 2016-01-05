@@ -240,12 +240,46 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 		_BULK_CONTACTS = undefined;
 		
 		var html = '';
-		
-		if(company_util.isCompany())
-			html = "Selected " + App_Companies.companiesListView.collection.length + " companies. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " companies</a>";
-		else
-			html = "Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " contacts</a>";
 
+		var resultCount = 0;
+		var appCount = 0;
+		var limitValue = 10000;		
+
+		if(company_util.isCompany()){
+
+			resultCount = App_Companies.companiesListView.collection.length;
+			appCount = getAvailableContacts();
+
+			if(localStorage.getItem("dynamic_company_filter") != null){				
+				
+				if(resultCount > limitValue){
+					resultCount = resultCount+ "+";
+				}
+
+				if(appCount > limitValue){
+					appCount = appCount+ "+";
+				}
+
+			}
+
+			html = "Selected " + App_Companies.companiesListView.collection.length + " companies. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " companies</a>";
+		}else{
+
+			resultCount = App_Contacts.contactsListView.collection.length;
+			appCount = getAvailableContacts();
+
+			if(localStorage.getItem("dynamic_contact_filter") != null){	
+				if(resultCount > limitValue){
+					resultCount = resultCount+ "+";
+				}
+
+				if(appCount > limitValue){
+					appCount = appCount+ "+";
+				}
+			}
+
+			html = "Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " contacts</a>";
+		}
 		$('body').find('#bulk-select').html(html);
     } 
 
