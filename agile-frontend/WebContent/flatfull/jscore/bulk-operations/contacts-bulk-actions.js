@@ -253,11 +253,11 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 			if(localStorage.getItem("dynamic_company_filter") != null){				
 				
 				if(resultCount > limitValue){
-					resultCount = resultCount+ "+";
+					resultCount = limitValue+ "+";
 				}
 
 				if(appCount > limitValue){
-					appCount = appCount+ "+";
+					appCount = limitValue+ "+";
 				}
 
 			}
@@ -270,11 +270,11 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 
 			if(localStorage.getItem("dynamic_contact_filter") != null){	
 				if(resultCount > limitValue){
-					resultCount = resultCount+ "+";
+					resultCount = limitValue+ "+";
 				}
 
 				if(appCount > limitValue){
-					appCount = appCount+ "+";
+					appCount = limitValue+ "+";
 				}
 			}
 
