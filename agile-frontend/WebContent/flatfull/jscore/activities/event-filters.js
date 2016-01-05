@@ -201,10 +201,12 @@ function put_thirdparty_calendar_links()
 		console.log(data);
 		$.each(data, function(index, preference){
 			console.log(preference);
-			if(preference.calendar_type == 'GOOGLE')
+			if(preference.calendar_type == 'GOOGLE'){
 				putGoogleCalendarLink(true);
-			else if(preference.calendar_type == 'OFFICE365')
-				putOfficeCalendarLink(true)
+			}else if(preference.calendar_type == 'OFFICE365'){
+				putOfficeCalendarLink(true);
+				addOffice365CalendarEvents;
+			}
 		});
 	})
 }
