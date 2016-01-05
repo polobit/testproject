@@ -330,7 +330,7 @@ function url_visited_select_callback(ele, target_id) {
  * into an array.
  */
 function get_labels() {
-	
+
 	var url = window.location.protocol + '//' + window.location.host;
 
 	// Sends GET request for labels.
@@ -344,7 +344,33 @@ function get_labels() {
 	// Parse stringify json
 	var data = JSON.parse(msg);
 
-	return get_tags_array(data);
+	return get_labels_array(data);
+}
+
+/**
+ * Returns array of tags. Separates tags from tag objects and inserts each tag
+ * into an array.
+ * 
+ * @param data -
+ *            Tag objects
+ */
+function get_labels_array(data) {
+	var labels = [];
+
+	// Iterate over data and insert label values into labels array.
+	$.each(data, function(index, obj) {
+		// Iterate over single label object to get labels value.
+		$.each(obj, function(key, value) {
+
+			// Needed only label values.
+			if (key == 'label')
+				labels[index] = value;
+
+		});
+	});
+
+	return labels;
+
 }
 
 /**

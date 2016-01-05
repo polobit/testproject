@@ -59,7 +59,7 @@
                         "dynamicValue": "email",
                         "appendToDynamicName": "name",
                         "options": {
-                            "(requester)": "{{ticket.requester}}",
+                            "(requester)": "{{ticket.requester_email}}",
                             "Ticket Assignee User": "{{ticket.assigneeID}}"
                         },
                         "fieldType": "dynamicselect",
@@ -83,6 +83,8 @@
                         "id": "email-body",
                         "title": "Write Email",
                         "fieldType": "textarea",
+                        "cols": "75",
+                        "rows": "13",
                         "type": "text"
                     },
                     {
@@ -104,7 +106,7 @@
                 },
                 {
                     "name": "email-user",
-                    "value": "{{ticket.requester}}"
+                    "value": "{{ticket.requester_email}}"
                 },
                 {
                     "name": "subject",

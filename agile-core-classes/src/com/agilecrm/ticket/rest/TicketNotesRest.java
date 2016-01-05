@@ -77,6 +77,10 @@ public class TicketNotesRest
 		try
 		{
 			Long ticketID = notes.ticket_id;
+
+			if (notes.html_text != null)
+				notes.html_text = notes.html_text.replaceAll("(\r\n|\n)", "<br />");
+
 			String html_text = notes.html_text;
 
 			if (notes == null || notes.ticket_id == null)

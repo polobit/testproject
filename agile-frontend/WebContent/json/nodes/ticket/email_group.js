@@ -46,6 +46,8 @@
                "id": "email-body",
                "title": "Write Email",
                "fieldType": "textarea",
+               "cols": "75",
+               "rows": "13",
                "type": "text"
            },
            {

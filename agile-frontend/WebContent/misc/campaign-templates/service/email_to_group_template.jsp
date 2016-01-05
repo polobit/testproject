@@ -29,7 +29,7 @@
             "JsonValues": [],
             "States": [
                 {
-                    "start": "PBXlveRmctG1X"
+                    "start": "PBXTZN4cXkWsG"
                 }
             ]
         },
@@ -82,6 +82,8 @@
                         "id": "email-body",
                         "title": "Write Email",
                         "fieldType": "textarea",
+                        "cols": "75",
+                        "rows": "13",
                         "type": "text"
                     },
                     {
@@ -92,7 +94,7 @@
                     }
                 ]
             },
-            "id": "PBXlveRmctG1X",
+            "id": "PBXTZN4cXkWsG",
             "xPosition": 477,
             "yPosition": 149,
             "displayname": "Email Group",
@@ -111,7 +113,7 @@
                 },
                 {
                     "name": "email-body",
-                    "value": "We have received an email from {{ticket.requester_name}},\r\n\r\nPlease respond within 24 hours"
+                    "value": "We have received an email from {{ticket.requester_name}},\r\n\r\nPlease respond within 24 hours."
                 }
             ],
             "States": [
