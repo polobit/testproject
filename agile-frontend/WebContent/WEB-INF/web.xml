@@ -933,13 +933,12 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<display-name>TicketWebhook</display-name>
 		<servlet-name>TicketWebhook</servlet-name>
 		<servlet-class>com.agilecrm.ticket.servlets.TicketWebhook</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TicketWebhook</servlet-name>
-		<url-pattern>/ticket/webhook</url-pattern>
+		<url-pattern>/backend/ticket/webhook</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>

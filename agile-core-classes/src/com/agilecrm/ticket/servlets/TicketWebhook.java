@@ -34,6 +34,7 @@ import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
@@ -221,8 +222,8 @@ public class TicketWebhook extends HttpServlet
 				Long ticketUpdatedTime = Calendar.getInstance().getTimeInMillis();
 
 				// Updating existing ticket
-				TicketsUtil.updateTicket(ticketID, ccEmails, msgJSON.getString("text"), LAST_UPDATED_BY.REQUESTER,
-						ticketUpdatedTime, ticketUpdatedTime, null, attachmentExists);
+				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, msgJSON.getString("text"),
+						LAST_UPDATED_BY.REQUESTER, ticketUpdatedTime, ticketUpdatedTime, null, attachmentExists);
 
 				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket(#" + ticket.id
 						+ ")");
@@ -232,6 +233,10 @@ public class TicketWebhook extends HttpServlet
 			TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, groupID, ticket.assigneeID,
 					CREATED_BY.REQUESTER, msgJSON.getString("from_name"), msgJSON.getString("from_email"),
 					msgJSON.getString("text"), msgJSON.getString("html"), NOTE_TYPE.PUBLIC, attachmentURLs);
+
+			if (!isNewTicket)
+				// Execute note created by customer trigger
+				TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
 
 			NamespaceManager.set(oldNamespace);
 		}

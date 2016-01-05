@@ -252,37 +252,7 @@
             <div class="control-group col-md-11">
               <label class="control-label"><b>Message</b></label>
               <span class="controls">
-                <div ui-jq="wysiwyg" class="form-control h-auto required html_text required" placeholder="Type your message here" data-name="html_text" style="min-height: 150px;" contenteditable="true">
-                  <br><br>{{#getCurrentUserPrefs}}{{{signature}}}{{/getCurrentUserPrefs}}
-                </div>
-              </span>
-            </div>
-            <div class="control-group col-md-1">
-            </div>
-        </div>
-      </div>
-      <div class="control-group form-group">
-        <div class="row">
-            <div class="control-group col-md-11">
-              <label class="control-label block"><b>Attachments</b></label>
-              <span class="controls">
-                <ul class="inline v-top m-b-sm p-n attachments-list">
-                </ul>
-                <div class="inline-block">
-                  <a href="javascript:void(0);" class="toggle-docs-dropdown text-info">
-                    <i class="fa fa-paperclip"></i> Attach file
-                  </a>
-                </div>  
-                <div class="docs-container display-none">
-                  <select class="form-control width33 inline-block choose-document" id="choose-document">
-                  </select>&nbsp;
-                  <a href="javascript:void(0);" class="add-document text-info text-xs  
-                    m-l-xs m-t-sm">Add</a> 
-                  <a href="javascript:void(0);" class="cancel-docs-dropdown text-info 
-                    text-xs m-l-xs m-t-sm">Cancel</a>
-                  <span class="attachment-status"></span>
-                  <span class="save-status"></span>
-                </div>  
+                <textarea id="reply_textarea" name="html_text" class="form-control" style="min-height:76px;max-height:400px;text-indent: 0px; overflow-y: hidden; resize: none;padding: 8px;"></textarea>
               </span>
             </div>
             <div class="control-group col-md-1">

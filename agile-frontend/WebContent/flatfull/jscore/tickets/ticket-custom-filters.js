@@ -90,10 +90,30 @@ var Ticket_Custom_Filters = {
 					return false;
 			  	});
 
+			  	//Initializing click event on clear due date button
+			  	$container.on('click','a#clear-due-date', function(event){
+
+			  		$(this).hide();
+
+			  		//Set date in daterange picker
+			  		$('input.due-date-input').data('daterangepicker').setStartDate(new Date());
+
+			  		//Set date in daterange picker
+			  		$('input.due-date-input').data('daterangepicker').setEndDate(new Date());
+
+			  		$('input.due-date-input').val('');
+			  		
+			  		//Re-render collection with updated filter conditions
+			  		Ticket_Custom_Filters.changeDueDate();
+			  	});
+
 			  	//Initializing click event on due date button
 			  	$container.on('click','a.choose-due-date', function(event){
 
 			  		var value = $(this).data('value'), current_date = new Date();
+
+			  		//Show clear button
+			  		$('#clear-due-date').show();
 
 			  		switch(value){
 			  			case 'tomorrow':
@@ -109,6 +129,12 @@ var Ticket_Custom_Filters = {
 			  				current_date.setDate(current_date.getDate() + 5);
 			  				break;
 			  		}
+
+			  		//Set date in daterange picker
+			  		$('input.due-date-input').data('daterangepicker').setStartDate(current_date);
+
+			  		//Set date in daterange picker
+			  		$('input.due-date-input').data('daterangepicker').setEndDate(current_date);
 
 			  		//Set selected date in input field
 			  		$('input.due-date-input').val(moment(current_date).format('MM/DD/YYYY'));
@@ -392,12 +418,15 @@ var Ticket_Custom_Filters = {
 			break;
 		}
 
-  		var condition = {};
-		condition.LHS = 'hrs_since_due_date';
-		condition.CONDITION = 'IS_LESS_THAN';
-		condition.RHS = parseInt(hrs);
+		if(hrs){
 
-		Ticket_Custom_Filters.customFilters.push(condition);
+			var condition = {};
+			condition.LHS = 'hrs_since_due_date';
+			condition.CONDITION = 'IS_LESS_THAN';
+			condition.RHS = parseInt(hrs);
+
+			Ticket_Custom_Filters.customFilters.push(condition);
+		}
 
 		//Re-render collection with customized filters
 		Tickets.fetchTicketsCollection();

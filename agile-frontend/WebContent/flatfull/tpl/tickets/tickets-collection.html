@@ -181,10 +181,7 @@
 			<div class="wrapper p-n">
 	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
 					<div class="panel-heading no-shadow" style="border-bottom: 0;">
-				      	<!-- <label class="i-checks i-checks-sm" style="margin-left: 3px;">
-					      <input class="ticket-checkbox select-all" type="checkbox" disabled><i></i>
-					    </label> -->
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</button>
+				      	<button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</button>
 					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</button>
 					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Manage labels</button>
 					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Close</button>
@@ -193,8 +190,7 @@
 				          <button class="btn btn-default btn-sm bulk-action-btn disabled" data-toggle="dropdown" aria-expanded="false">More <span class="caret"></span></button>
 				        </div>
 
-
-					    <div class="btn-group dropdown pull-right">
+						<div class="btn-group dropdown pull-right">
 				          <button class="btn btn-sm btn-default toggle-collection-view {{#is_single_row_view}}single-line{{else}}multi-line{{/is_single_row_view}}">
 					    		{{#is_single_row_view}}
 					    			<i class="fa fa-ellipsis-h"></i>
@@ -385,7 +381,7 @@
 					      <input class="ticket-checkbox select-all" type="checkbox"><i></i>
 					    </label>
 				{{/is_single_row_view}}
-				<button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">Assignee</button>
+				<button class="btn btn-default bulk-action-btn btn-sm {{#is_single_row_view}}{{else}}m-l-sm{{/is_single_row_view}} m-r-xs disabled">Assignee</button>
 				<button class="btn btn-default btn-sm m-r-xs disabled">Workflow</button>
 		      	<button class="btn btn-default btn-sm m-r-xs disabled">Manage labels</button>
 			    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">Close</button>

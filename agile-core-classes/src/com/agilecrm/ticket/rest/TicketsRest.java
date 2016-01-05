@@ -1,9 +1,7 @@
 package com.agilecrm.ticket.rest;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -354,98 +352,15 @@ public class TicketsRest
 	@GET
 	@Path("/activity")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<TicketActivity> listTicketActivitys(
-
-	@QueryParam("id") Long ticketID)
+	public List<TicketActivity> listTicketActivitys(@QueryParam("id") Long ticketID)
 	{
 		try
 		{
 			List<TicketActivity> activitys = new TicketActivity().getActivityByTicketId(ticketID);
 
-			if (activitys == null || activitys.size() == 0)
-				return new ArrayList<TicketActivity>();
+			activitys = TicketActivity.includeData(activitys);
 
 			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
-
-			Map<Long, TicketGroups> groupsList = new HashMap<Long, TicketGroups>();
-			Map<Long, DomainUser> assigneeList = new HashMap<Long, DomainUser>();
-
-			for (TicketActivity activity : activitys)
-			{
-				switch (activity.ticket_activity_type)
-				{
-				case TICKET_ASSIGNED:
-				{
-					Long assigneeID = Long.parseLong(activity.new_data);
-
-					if (!assigneeList.containsKey(assigneeID))
-					{
-
-						DomainUser temp = DomainUserUtil.getDomainUser(assigneeID);
-
-						if (temp != null)
-							assigneeList.put(assigneeID, temp);
-					}
-
-					activity.new_assignee = assigneeList.get(assigneeID);
-					break;
-				}
-				case TICKET_ASSIGNEE_CHANGED:
-				{
-					Long newAssigneeID = Long.parseLong(activity.new_data);
-					Long oldAssigneeID = Long.parseLong(activity.old_data);
-
-					if (!assigneeList.containsKey(newAssigneeID))
-					{
-
-						DomainUser temp = DomainUserUtil.getDomainUser(newAssigneeID);
-
-						if (temp != null)
-							assigneeList.put(newAssigneeID, temp);
-					}
-
-					if (!assigneeList.containsKey(oldAssigneeID))
-					{
-
-						DomainUser temp = DomainUserUtil.getDomainUser(oldAssigneeID);
-
-						if (temp != null)
-							assigneeList.put(oldAssigneeID, temp);
-					}
-
-					activity.new_assignee = assigneeList.get(newAssigneeID);
-					activity.old_assignee = assigneeList.get(oldAssigneeID);
-					break;
-				}
-				case TICKET_GROUP_CHANGED:
-
-					Long newGroupID = Long.parseLong(activity.new_data);
-					Long oldGroupID = Long.parseLong(activity.old_data);
-
-					if (activity.old_data != null)
-						if (!groupsList.containsKey(newGroupID))
-						{
-
-							TicketGroups group = TicketGroupUtil.getTicketGroupById(newGroupID);
-
-							if (group != null)
-								groupsList.put(newGroupID, group);
-						}
-
-					if (!groupsList.containsKey(oldGroupID))
-					{
-
-						TicketGroups group = TicketGroupUtil.getTicketGroupById(oldGroupID);
-
-						if (group != null)
-							groupsList.put(oldGroupID, group);
-					}
-
-					activity.new_group = groupsList.get(newGroupID);
-					activity.old_group = groupsList.get(oldGroupID);
-					break;
-				}
-			}
 
 			// Including contact in each activity
 			if (ticket.contactID != null)
@@ -766,7 +681,13 @@ public class TicketsRest
 			if (ticket == null || ticket.id == null)
 				throw new Exception("Required parameter missing.");
 
-			return TicketsUtil.closeTicket(ticket.id);
+			ticket = TicketsUtil.closeTicket(ticket.id);
+
+			// Execute closed ticket trigger. Do not execute trigger if updated
+			// status and current status is same.
+			TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
+
+			return ticket;
 		}
 		catch (Exception e)
 		{
@@ -792,7 +713,15 @@ public class TicketsRest
 			if (ticketID == null)
 				throw new Exception("Required parameter missing.");
 
-			return TicketsUtil.updateLabels(ticketID, new Key<TicketLabels>(TicketLabels.class, labelID), command);
+			Tickets ticket = TicketsUtil.updateLabels(ticketID, new Key<TicketLabels>(TicketLabels.class, labelID),
+					command);
+
+			if ("add".equalsIgnoreCase(command))
+				TicketTriggerUtil.executeTriggerForLabelAddedToTicket(ticket);
+			else
+				TicketTriggerUtil.executeTriggerForLabelDeletedToTicket(ticket);
+
+			return ticket;
 		}
 		catch (Exception e)
 		{
@@ -931,10 +860,6 @@ public class TicketsRest
 			@FormParam("html_text") String HTMLcontent)
 	{
 
-		
-		
-		
-		
 		try
 		{
 			if (ticketId == null || email == null || HTMLcontent == null)
@@ -969,13 +894,14 @@ public class TicketsRest
 			Queue queue = QueueFactory.getQueue(AgileQueues.TICKET_BULK_ACTIONS_QUEUE);
 
 			String bulk_action_tracker = String.valueOf(BulkActionUtil.randInt(1, 10000));
-			
+
 			Widget zendesk = WidgetUtil.getWidgetByNameAndType("Zendesk", null);
 			JSONObject json = new JSONObject(zendesk.prefs);
 
-			TaskOptions taskOptions = TaskOptions.Builder.withUrl("/core/api/bulk-actions/tickets/imports/zendesk").param("data", json.toString())
-					.param("domain_user_id", SessionManager.get().getClaimedId()).param("tracker", bulk_action_tracker)
-					.header("Content-Type", "application/x-www-form-urlencoded").method(Method.POST);
+			TaskOptions taskOptions = TaskOptions.Builder.withUrl("/core/api/bulk-actions/tickets/imports/zendesk")
+					.param("data", json.toString()).param("domain_user_id", SessionManager.get().getClaimedId())
+					.param("tracker", bulk_action_tracker).header("Content-Type", "application/x-www-form-urlencoded")
+					.method(Method.POST);
 
 			queue.addAsync(taskOptions);
 		}

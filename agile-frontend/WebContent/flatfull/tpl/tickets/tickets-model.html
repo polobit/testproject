@@ -27,7 +27,7 @@
         </tr>
         <tr>
           <td>
-            <div class="subject-row text-ellipsis text-xs">{{requester_name}}</div>
+            <div class="subject-row text-ellipsis">{{requester_name}}</div>
           </td>
         </tr>
         <tr>
@@ -73,6 +73,7 @@
           <div class="col-md-12 p-b-sm">
             <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;
             <span class="text-muted">Ticket #{{id}}</span>
+            <span class="text-muted pull-right">{{epochToHumanDate "mmm dd, yyyy HH:MM" created_time}}</span>
           </div>
           <div class="col-md-12 p-b-sm">
             <strong>{{subject}}</strong>
@@ -240,6 +241,7 @@
       <div class="col-md-12 p-b-sm">
         <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;
         <span class="text-muted">Ticket #{{id}}</span>
+        <span class="text-muted pull-right">{{epochToHumanDate "mmm dd, yyyy HH:MM" created_time}}</span>
       </div>
       <div class="col-md-12 p-b-sm">
         <strong>{{subject}}</strong>

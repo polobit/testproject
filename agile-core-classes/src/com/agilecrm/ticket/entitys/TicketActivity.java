@@ -1,5 +1,6 @@
 package com.agilecrm.ticket.entitys;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
@@ -98,6 +100,12 @@ public class TicketActivity extends Cursor
 	public TicketGroups old_group = null, new_group = null;
 
 	/**
+	 * Util attributes to send data to client when label added/removed
+	 */
+	@NotSaved
+	public TicketLabels ticket_label = null;
+
+	/**
 	 * Util attributes to send data to client when changed assignee
 	 */
 	@NotSaved
@@ -145,7 +153,7 @@ public class TicketActivity extends Cursor
 		this.old_data = old_data;
 		this.new_data = new_data;
 		this.changed_field = changed_field;
-		this.created_time = Calendar.getInstance().getTimeInMillis();
+		this.created_time = Calendar.getInstance().getTimeInMillis() / 1000;
 		this.ticket_activity_type = ticket_activity_type;
 
 		// switch (ticket_activity_type)
@@ -343,5 +351,111 @@ public class TicketActivity extends Cursor
 		searchMap.put("ticket_key", new Key<Tickets>(Tickets.class, ticket_id));
 
 		return dao.listByPropertyAndOrder(searchMap, "-created_time");
+	}
+
+	public static List<TicketActivity> includeData(List<TicketActivity> activitys) throws Exception
+	{
+		if (activitys == null || activitys.size() == 0)
+			return new ArrayList<TicketActivity>();
+
+		Map<Long, TicketGroups> groupsList = new HashMap<Long, TicketGroups>();
+		Map<Long, DomainUser> assigneeList = new HashMap<Long, DomainUser>();
+
+		for (TicketActivity activity : activitys)
+		{
+			switch (activity.ticket_activity_type)
+			{
+			case TICKET_LABEL_ADD:
+			case TICKET_LABEL_REMOVE:
+			{
+				Long labelID = Long.parseLong(activity.new_data);
+
+				activity.ticket_label = TicketLabels.dao.get(labelID);
+				break;
+			}
+			case TICKET_ASSIGNED:
+			{
+				Long assigneeID = Long.parseLong(activity.new_data);
+
+				if (!assigneeList.containsKey(assigneeID))
+				{
+
+					DomainUser temp = DomainUserUtil.getDomainUser(assigneeID);
+
+					if (temp != null)
+						assigneeList.put(assigneeID, temp);
+				}
+
+				activity.new_assignee = assigneeList.get(assigneeID);
+				break;
+			}
+			case TICKET_ASSIGNEE_CHANGED:
+			{
+				Long newAssigneeID = Long.parseLong(activity.new_data);
+
+				Long oldAssigneeID = null;
+
+				try
+				{
+					oldAssigneeID = Long.parseLong(activity.old_data);
+				}
+				catch (Exception e)
+				{
+				}
+
+				if (!assigneeList.containsKey(newAssigneeID))
+				{
+
+					DomainUser temp = DomainUserUtil.getDomainUser(newAssigneeID);
+
+					if (temp != null)
+						assigneeList.put(newAssigneeID, temp);
+				}
+
+				if (oldAssigneeID != null && !assigneeList.containsKey(oldAssigneeID))
+				{
+
+					DomainUser temp = DomainUserUtil.getDomainUser(oldAssigneeID);
+
+					if (temp != null)
+						assigneeList.put(oldAssigneeID, temp);
+				}
+
+				activity.new_assignee = assigneeList.get(newAssigneeID);
+				activity.old_assignee = assigneeList.get(oldAssigneeID);
+				break;
+			}
+			case TICKET_GROUP_CHANGED:
+			{
+				Long newGroupID = Long.parseLong(activity.new_data);
+				Long oldGroupID = Long.parseLong(activity.old_data);
+
+				if (activity.old_data != null)
+					if (!groupsList.containsKey(newGroupID))
+					{
+
+						TicketGroups group = TicketGroupUtil.getTicketGroupById(newGroupID);
+
+						if (group != null)
+							groupsList.put(newGroupID, group);
+					}
+
+				if (!groupsList.containsKey(oldGroupID))
+				{
+
+					TicketGroups group = TicketGroupUtil.getTicketGroupById(oldGroupID);
+
+					if (group != null)
+						groupsList.put(oldGroupID, group);
+				}
+
+				activity.new_group = groupsList.get(newGroupID);
+				activity.old_group = groupsList.get(oldGroupID);
+				break;
+			}
+			}
+		}
+
+		return activitys;
 	}
 }

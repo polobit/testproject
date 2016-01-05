@@ -25,11 +25,10 @@ var Ticket_Labels = {
 
 	fetchCollection : function(callback) {
 
-		if(this.labelsCollection && this.labelsCollection.toJSON() && callback){
+		if(this.labelsCollection && this.labelsCollection.length > 0 && this.labelsCollection.toJSON() && callback){
 			callback(this.labelsCollection);
 			return;
 		}
-
 
 		var Labels = Backbone.Collection.extend({
 			url : '/core/api/tickets/labels'
