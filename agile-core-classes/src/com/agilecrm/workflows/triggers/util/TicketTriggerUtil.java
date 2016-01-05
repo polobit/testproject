@@ -210,7 +210,8 @@ public class TicketTriggerUtil
 		try
 		{
 			// Run campaign
-			WorkflowSubscribeUtil.subscribeDeferred(contact, campaignId, new JSONObject().put("ticket", ticket));
+			WorkflowSubscribeUtil.subscribeDeferred(contact, campaignId,
+					new JSONObject().put("ticket", new JSONObject(ticket)));
 		}
 		catch (JSONException e)
 		{

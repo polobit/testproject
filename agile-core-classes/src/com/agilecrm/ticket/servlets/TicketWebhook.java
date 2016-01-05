@@ -203,7 +203,7 @@ public class TicketWebhook extends HttpServlet
 						attachmentExists, msgJSON.getJSONObject("headers").getString("X-Originating-Ip"),
 						new ArrayList<Key<TicketLabels>>());
 
-				BulkActionNotifications.publishNotification("New ticket(#" + ticket.id + ") has been received");
+				BulkActionNotifications.publishNotification("New ticket #" + ticket.id + " received");
 			}
 			else
 			{
