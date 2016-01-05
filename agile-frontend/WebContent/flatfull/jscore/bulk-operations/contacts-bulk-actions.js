@@ -262,7 +262,7 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 
 			}
 
-			html = "Selected " + App_Companies.companiesListView.collection.length + " companies. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " companies</a>";
+			html = "Selected " + resultCount + " companies. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + appCount + " companies</a>";
 		}else{
 
 			resultCount = App_Contacts.contactsListView.collection.length;
@@ -278,7 +278,7 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 				}
 			}
 
-			html = "Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " contacts</a>";
+			html = "Selected " + resultCount + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + appCount + " contacts</a>";
 		}
 		$('body').find('#bulk-select').html(html);
     } 
