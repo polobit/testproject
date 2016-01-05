@@ -879,9 +879,9 @@ public class TicketsUtil
 	 */
 	public static void sendEmailToUser(String email, String subject, String body) throws JSONException
 	{
-		JSONObject dataJSON = new JSONObject();
-		dataJSON.put("body", body);
+		Map<String, String> data = new HashMap<String, String>();
+		data.put("body", body);
 
-		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, dataJSON);
+		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data);
 	}
 }

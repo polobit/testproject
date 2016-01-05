@@ -156,7 +156,7 @@ public class TicketNotesRest
 				new TicketActivity(TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
 						Status.OPEN.toString(), Status.PENDING.toString(), "status").save();
 
-				// Logging private notes activity
+				// Logging public notes activity
 				new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id, html_text,
 						plain_text, "html_text").save();
 

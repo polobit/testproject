@@ -552,7 +552,15 @@ public class TicketsRest
 			if (ticketID == null || groupID == null)
 				throw new Exception("Required parameters missing.");
 
-			return TicketsUtil.changeGroupAndAssignee(ticketID, groupID, assigneeID);
+			// Fetching ticket object by its id
+			Tickets oldTicket = TicketsUtil.getTicketByID(ticketID);
+
+			Tickets updatedTicket = TicketsUtil.changeGroupAndAssignee(ticketID, groupID, assigneeID);
+
+			if (oldTicket.assigneeID != updatedTicket.assigneeID || (oldTicket.groupID != updatedTicket.groupID))
+				TicketTriggerUtil.executeTriggerForAssigneeChanged(updatedTicket);
+
+			return updatedTicket;
 		}
 		catch (Exception e)
 		{
