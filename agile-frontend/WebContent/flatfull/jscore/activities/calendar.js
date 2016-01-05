@@ -360,7 +360,8 @@ function showCalendar(users)
 													event.contacts[i].properties, "name") + '</a>';
 											else
 												reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
-														event.contacts[i].properties, "first_name") + ' ' + last_name + '</a>';
+														event.contacts[i].properties, "first_name") + ' ' + last_name + '</a><div>Email:'+ getPropertyValue(
+													event.contacts[i].properties, "email")+'</div>';
 										}else{
 											reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
 													event.contacts[i].properties, "name") + '</a>';
