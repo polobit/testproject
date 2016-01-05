@@ -28,11 +28,11 @@
                       {{#next_prev_ticket_exists 'previous'}}
                       <a href="{{#is_filtered_ticket}}
                       #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'previous'}}{{get_ticket_id 'previous'}}{{/next_prev_ticket_exists}}
-                      {{/is_filtered_ticket}}" class="pull-left text-info text-xs" title="Previous Ticket">
+                      {{/is_filtered_ticket}}" class="pull-left text-muted text-xs" title="Previous Ticket">
                         <i class="icon icon-chevron-left" style="vertical-align: middle;"></i>
                        </a>
                       {{else}}
-                       <span class="pull-left text-muted text-xs" title="Previous Ticket">
+                       <span class="pull-left text-disabled text-xs">
                         <i class="icon icon-chevron-left" style="vertical-align: middle;"></i>
                        </span>
                       {{/next_prev_ticket_exists}}
@@ -40,9 +40,9 @@
                       {{#next_prev_ticket_exists 'next'}}
                       <a href="{{#is_filtered_ticket}}
                       #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'next'}}{{get_ticket_id 'next'}}{{/next_prev_ticket_exists}}
-                      {{/is_filtered_ticket}}" class="pull-right text-info text-xs" title="Next Ticket"><i class="icon icon-chevron-right" style="vertical-align: middle;"></i></a>
+                      {{/is_filtered_ticket}}" class="pull-right text-muted text-xs" title="Next Ticket"><i class="icon icon-chevron-right" style="vertical-align: middle;"></i></a>
                        {{else}}
-                       <span class="pull-right text-muted text-xs" title="Previous Ticket">
+                       <span class="pull-right text-disabled text-xs">
                         <i class="icon icon-chevron-right" style="vertical-align: middle;"></i>
                        </span>
                       {{/next_prev_ticket_exists}}
@@ -54,7 +54,7 @@
                   </div>
                   
                    <div>
-                        <a class="text-info back-to-tickets" href="javascript:void(0);">Tickets</a> / 
+                        <a class="link-color back-to-tickets" href="javascript:void(0);">Tickets</a> / 
                         <span> #{{id}}</span>
                     </div>
 
@@ -103,11 +103,25 @@
                                 {{#if_equals name "website"}}
 
                                   {{#if subtype}}
-                                   <a target="_blank" href="https://twitter.com/{{value}}" class="m-l-xs">
+
+                                   <a target="_blank" href="
+                                     {{#if_equals subtype "URL"}}http://{{value}}{{/if_equals}}
+                                     {{#if_equals subtype "SKYPE"}}skype:{{value}}{{/if_equals}}
+                                     {{#if_equals subtype "TWITTER"}}https://twitter.com/{{value}}{{/if_equals}}
+                                     {{#if_equals subtype "LINKEDIN"}}http://{{value}}{{/if_equals}}
+                                     {{#if_equals subtype "FACEBOOK"}}https://www.facebook.com/{{value}}{{/if_equals}}
+                                     {{#if_equals subtype "XING"}}http://{{value}}{{/if_equals}}
+                                     {{#if_equals subtype "FEED"}}http://{{value}}{{/if_equals}}
+                                     {{#if_equals subtype "GOOGLE-PLUS"}}https://plus.google.com/{{value}}{{/if_equals}}
+                                     {{#if_equals subtype "FLICKR"}}http://{{value}}{{/if_equals}}
+                                     {{#if_equals subtype "GITHUB"}}http://{{value}}{{/if_equals}}
+                                     {{#if_equals subtype "YOUTUBE"}}http://{{value}}{{/if_equals}}
+                                   " class="m-l-xs">
                                     <i class="{{get_social_icon subtype}} text-base text-muted"></i>
                                    </a>
+
                                    {{else}}
-                                        <a target="_blank" href="/{{getPropertyValueBytype contact.properties 'website' '' 'URL'}}" 
+                                        <a target="_blank" href="http://{{value}}" 
                                         class="text-l-none">
                                         <i class="{{get_social_icon URL}} text-base text-muted"></i>
                                       </a>
@@ -132,7 +146,7 @@
                    <div class="row m-l-n m-r-n">
                     <div class="col-md-12 p-l-n">
                       <div class="p-n m-b-xxs">Assignee
-                      <a class="assign-to-me text-info pull-right" href="javascript:void(0);" style="{{#if_equals current_logged_in_user.id assigneeID}} display:none {{/if_equals}}">Take It</a>
+                      <a class="assign-to-me link-color pull-right text-xs" href="javascript:void(0);" style="{{#if_equals current_logged_in_user.id assigneeID}} display:none {{/if_equals}}">Take It</a>
                       </div>
                       <select id="ticket-assignee" class="form-control text-xs" name="assigneeID" style="height: 28px;padding: 3px 6px;">
                           
@@ -144,7 +158,7 @@
 
                 <div class="row m-n p-t-sm">
                   <div class="col-md-12 p-n m-b-xxs">CCs
-                    <a class="add-me-to-cc text-info pull-right" href="javascript:void(0);" style="{{#containsScope requester_email cc_emails}} display:none {{/containsScope}}">CC Me</a>
+                    <a class="add-me-to-cc link-color pull-right text-xs" href="javascript:void(0);" style="{{#containsScope requester_email cc_emails}} display:none {{/containsScope}}">CC Me</a>
                   </div>
                   <div class="col-md-12  ticket-email b-a p-xs p-b-none r text-xs">
                     <div class="v-top" >
@@ -169,13 +183,30 @@
                   <div class="col-md-12 p-n m-b-xs sla-due-date">
 
                     <div class="col-md-12 p-n m-b-xxs"> 
-                      <span class="sla-text">Due In</span>
+                      <span class="sla-text">Due Date</span>
                       <!-- <a id="change-sla" href="javascript:void(0);" class="text-info">Change</a> -->
                     </div>
                       
-                    <input type="text" class="form-control text-xs" id="datetimepicker" placeholder="Select date" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}"/>
-                     
+                    <input type="text" class="form-control text-xs" id="ticket_change_sla" placeholder="Select date" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}"/>
+
+                    <div class="col-md-12 p-n">
+                      <div class="col-md-3 p-n">
+                        <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="tomorrow">Tomorrow</a>
+                      </div>
+                      <div class="col-md-1 p-n text-center"> | </div>
+                      <div class="col-md-1 p-n text-center">
+                        <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="next_two_days">+2</a>
+                      </div>
+                      <div class="col-md-1 p-n text-center"> | </div>
+                      <div class="col-md-1 p-n text-center">
+                        <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="next_three_days">+3</a>
+                      </div>
+                      <div class="col-md-1 p-n text-center"> | </div>
+                      <div class="col-md-1 p-n text-center">
+                        <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="next_five_days">+5</a>
+                    </div>
                   </div>
+                 </div>
                 </div>
 
               </div>
@@ -285,7 +316,7 @@
                </div>
             </div>
 
-            <div class="b-b b-light m-b-sm position-relative">
+            <div class="b-b b-light m-b-xs position-relative">
               <span class="label label-default toggle-timeline cursor-pointer pull-right position-relative" style="bottom: 8px;">Show timeline</span>
             </div>
 
@@ -325,7 +356,22 @@
     <input type="hidden" name="attachment_urls" value=",">
     
       <div>
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-default btn-sm reply-btn {{#if_equals reply_type "reply"}}active{{/if_equals}}" rel="reply">Reply
+            {{#if_equals reply_type "reply"}}<span class="arrow bottom arrow-light" style="top:100%;"></span>{{/if_equals}}
+          </button>
+          <button type="button" class="btn btn-default btn-sm reply-btn {{#if_equals reply_type "comment"}}active{{/if_equals}}" rel="comment">Comment
+            {{#if_equals reply_type "comment"}}<span class="arrow bottom arrow-light" style="top:100%;"></span>{{/if_equals}}
+          </button>
+
+          <button type="button" class="btn btn-default btn-sm reply-btn {{#if_equals reply_type "forward"}}active{{/if_equals}}" rel="forward">Forward
+            {{#if_equals reply_type "forward"}}<span class="arrow bottom arrow-light" style="top:100%;"></span>{{/if_equals}}
+          </button>
+          
+        </div>
       
+      <!--
         {{#if_equals reply_type "reply"}}
           <button class="btn btn-primary reply-btn btn-sm" rel="reply" style="position: relative;">Reply
                       <i class="fa fa-caret-down text-primary" style="position: absolute;top: 80%;left: 44%;font-size: 18px;"></i>
@@ -351,11 +397,11 @@
           <button class="btn btn-default reply-btn btn-sm" rel="forward">Forward</button>
         {{/if_equals}}
         
-        
+        -->
         
         {{#if canned_responses}}
         <div class="btn-group dropdown m-l-xs pull-right">
-          <button class="btn btn-sm btn-default" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" data-original-title="Canned Responses"><i class="fa fa-reorder"></i></button>
+          <button class="btn btn-sm btn-default" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" data-original-title="Canned Responses"><i class="fa fa-share"></i></button>
           <ul id="workflows_list" class="dropdown-menu">
             {{#each canned_responses}}
             <li id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>
@@ -376,7 +422,7 @@
                       </ul> 
                     {{/if_equals}}
 
-                     <textarea id="reply_textarea" name="html_text" class="form-control {{#if_equals reply_type "comment"}} bg-lightyellow{{/if_equals}}" style="min-height:76px;max-height:400px;width:100%;text-indent: 0px; overflow-y: hidden; resize: none;padding: 8px;">{{#if_equals reply_type "forward"}} {{get_palin_text_from_html notes}} {{/if_equals}}</textarea>
+                     <textarea id="reply_textarea" name="html_text" class="form-control {{#if_equals reply_type "comment"}} bg-lightyellow{{/if_equals}}" style="min-height:60px;max-height:400px;width:100%;text-indent: 0px; overflow-y: hidden; resize: none;padding: 8px;">{{#if_equals reply_type "forward"}} {{get_palin_text_from_html notes}} {{/if_equals}}</textarea>
             
                   </div>
                   
@@ -386,9 +432,9 @@
                     {{#if label_matched_canned_responses}}<span onclick="$('.matched-canned-responses-list').toggle();" class="text-info text-sm cursor-pointer border-highlight-light pull-right">Show matched canned Responses</span>{{/if}}
 
                     {{#if_equals reply_type "reply"}}
-                    <div class="btn-group dropdown dropup p-none">
-                        <button class="btn btn-default btn-sm send-reply">Send Reply</button>
-                        <button class="btn btn-default btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                    <div class="btn-group dropdown p-none">
+                        <button class="btn btn-primary btn-sm send-reply">Send Reply</button>
+                        <button class="btn btn-primary btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                         <ul class="dropdown-menu">
                           <li><a href="javascript:void(0);" class="send-reply close-ticket">Send Reply &amp; Close Ticket</a></li>
                         </ul>
@@ -397,9 +443,9 @@
                       
                       {{#if_equals reply_type "comment"}} 
 
-                      <div class="btn-group dropdown dropup p-none">
-                        <button class="btn btn-default btn-sm send-reply private">Add Comment</button>
-                        <button class="btn btn-default btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                      <div class="btn-group dropdown p-none">
+                        <button class="btn btn-dark btn-sm send-reply private">Add Comment</button>
+                        <button class="btn btn-dark btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                         <ul class="dropdown-menu">
                           <li><a href="javascript:void(0);" class="send-reply private close-ticket">Add Comment & Close Ticket</a></li>
                         </ul>
@@ -408,7 +454,7 @@
 
 
                       {{#if_equals reply_type "forward"}} 
-                        <button class="btn btn-sm btn-default send-reply forward">Forward</button>
+                        <button class="btn btn-sm btn-info send-reply forward">Forward</button>
                       {{/if_equals}}
 
                     

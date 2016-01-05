@@ -362,3 +362,7 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
     left: -101%;
     top: 5px;
   }
+
+.text-disabled {
+    color: #DCDCDC;
+  }

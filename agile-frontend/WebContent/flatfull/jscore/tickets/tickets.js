@@ -994,21 +994,11 @@ var Tickets = {
 		$row.css('min-height', window.innerHeight - $row.offset().top + 'px');
 	},
 
-	initializeTicketSLA : function(el){
-		
-		 head.load(LIB_PATH + '/lib/web-calendar-event/moment.min.js', '/lib/date-range-picker2.min.js', "/flatfull/css/final-lib/date-range-picker2.css",  function()
-		  {
-		   $('#datetimepicker', el).daterangepicker({
-		       "singleDatePicker": true,"drops": "up","timePicker": true,"startDate": moment(),"endDate": moment().add('days', 3)
-		   }, function(start, end, label) {
+	updateDueDate : function(timeInMilli){
 
-		      	// Apply SLA to the ticket
-		     	var timeInMilli = moment(start).valueOf();
-
-		      	var json = {};
+		  	var json = {};
 				json.due_time = timeInMilli;
 				json.id = App_Ticket_Module.ticketView.model.toJSON().id;
-
 
 				// Send req to trigger campaign
 				var newTicketModel = new BaseModel();
@@ -1019,13 +1009,55 @@ var Tickets = {
 
 					}}
 				);
+	},
 
+	initializeTicketSLA : function(el){
+		
+		 head.load(LIB_PATH + '/lib/web-calendar-event/moment.min.js', '/lib/date-range-picker2.min.js', "/flatfull/css/final-lib/date-range-picker2.css",  function()
+		  {
+		   $('#ticket_change_sla', el).daterangepicker({
+		       "singleDatePicker": true,"drops": "up","timePicker": true,"startDate": moment(),"endDate": moment().add('days', 3)
+		   }, function(start, end, label) {
 
+		      	// Apply SLA to the ticket
+		     	var timeInMilli = moment(start).valueOf();
+
+		     	Tickets.updateDueDate(timeInMilli);
 
 		   });
 		  });
+
+		//Initializing click event on due date button
+	  	$(el).on('click','.choose-due-date', function(event){
+
+	  		var value = $(this).data('value'), current_date = new Date();
+
+	  		switch(value){
+	  			case 'tomorrow':
+	  				current_date.setDate(current_date.getDate() + 1);
+	  				break;
+	  			case 'next_two_days':
+	  				current_date.setDate(current_date.getDate() + 2);
+	  				break;
+	  			case 'next_three_days':
+	  				current_date.setDate(current_date.getDate() + 3);
+	  				break;
+	  			case 'next_five_days':
+	  				current_date.setDate(current_date.getDate() + 5);
+	  				break;
+	  		}
+
+	  		//Set selected date in input field
+	  		$('input#ticket_change_sla').val(moment(current_date).format('MM/DD/YYYY'));
+
+	  		Tickets.updateDueDate(moment(current_date).valueOf());
+
+	  	});
+
+
 	}
 
+		
 };
 
 function tickets_typeahead(data){

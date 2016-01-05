@@ -189,10 +189,8 @@ var Tickets_Notes = {
 				return;
 
 			// Get canned response
-			var cannedMessage =  message + "<br><br>";
-			
 			$container.find("#reply_textarea").val(
-					cannedMessage + $container.find("#reply_textarea").text());
+					message + $container.find("#reply_textarea").text());
 
 		})
 
