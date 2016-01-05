@@ -31,7 +31,7 @@ public class OfficeCalendar365API {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<OfficeCalendarTemplate> getOffice365Appointments(
 			@QueryParam("startDate") String startDate,
-			@QueryParam("endDate") String endDate) {
+			@QueryParam("endDate") String endDate) throws Exception {
 		List<OfficeCalendarTemplate> appointments = null;
 		String Url = Office365CalendarUtil.getOfficeURL(startDate, endDate);
 		appointments = Office365CalendarUtil.getAppointmentsFromServer(Url);
