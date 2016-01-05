@@ -70,6 +70,8 @@ public class ContactSavePreprocessor
 	    validateTags();
 	}
 
+	checkDuplicate(oldContact);
+
 	updateUpdatedTime();
 
 	newContact.convertEmailToLower();
@@ -78,6 +80,7 @@ public class ContactSavePreprocessor
 	checkBounceStatus();
 	checkCampaignStatus();
 	checkLastContactedFields();
+
     }
 
     protected void checkDuplicate(Contact oldContact)
