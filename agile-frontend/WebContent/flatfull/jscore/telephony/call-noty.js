@@ -318,8 +318,6 @@ function showSkypeCallNoty(message){
 				}else if(message.state == "connected"){
 					
 					Skype_Call_Noty = noty({ text : messageHtml, type : "success", layout : "bottomLeft", buttons : [
-		    { addClass : 'btn btn-sm btn-default noty_skype_mute', text : '<i class="fa fa-microphone"></i>' },
-		    { addClass : 'btn btn-sm btn-default noty_skype_unmute none', text : '<i class="fa fa-microphone-slash"></i>' },
 		    { addClass : 'btn btn-sm btn-default noty_skype_dialpad', text : '<i class="icon-th text-base" style="vertical-align: middle;"></i>' }, 
 			{ addClass : 'btn btn-sm btn-danger noty_skype_hangup', text : 'Hangup'}
 								] });

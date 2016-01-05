@@ -1,6 +1,6 @@
 var default_call_option = { "callOption" : [] };
 var callOptionDiv = "" ;
-var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null };
+var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "calledFrom":null };
 var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false }
 var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
 $(function()
@@ -292,6 +292,7 @@ function resetglobalCallVariables()
 	globalCall.callId = null;
 	globalCall.callNumber = null;
 	globalCall.lastReceived = null;
+	globalCall.calledFrom = null;
 	if (globalCall.timeObject != null)
 	{
 		clearTimeout(globalCall.timeObject);
@@ -349,6 +350,10 @@ function handleCallRequest(message)
 						try
 						{
 							$('#briaCallId').parents("ul").last().remove();
+							if(globalCall.calledFrom == "bria"){
+								resetglobalCallVariables();
+								resetglobalCallForActivityVariables();
+							}
 						}
 						catch (e)
 						{
@@ -365,9 +370,11 @@ function handleCallRequest(message)
 		}
 		else if (message.state == "closed")
 		{
-			showNotyPopUp("error", ("Bria is not running"), "bottomRight");
-			resetglobalCallVariables();
-			resetglobalCallForActivityVariables();
+			if(globalCall.calledFrom == "bria"){
+				showNotyPopUp("error", ("Bria is not running"), "bottomRight");
+				resetglobalCallVariables();
+				resetglobalCallForActivityVariables();
+			}
 			return;
 		}
 		showBriaCallNoty(message);
@@ -419,6 +426,10 @@ function handleCallRequest(message)
 						try
 						{
 							$('#skypeCallId').parents("ul").last().remove();
+							if(globalCall.calledFrom == "skype"){
+								resetglobalCallVariables();
+								resetglobalCallForActivityVariables();
+							}
 						}
 						catch (e)
 						{
@@ -436,9 +447,11 @@ function handleCallRequest(message)
 		}
 		else if (message.state == "closed")
 		{
-			showNotyPopUp("error", ("Skype is not running"), "bottomRight");
-			resetglobalCallVariables();
-			resetglobalCallForActivityVariables();
+			if(globalCall.calledFrom == "skype"){
+				showNotyPopUp("error", ("Skype is not running"), "bottomRight");
+				resetglobalCallVariables();
+				resetglobalCallForActivityVariables();
+			}
 			return;
 		}
 		showSkypeCallNoty(message);

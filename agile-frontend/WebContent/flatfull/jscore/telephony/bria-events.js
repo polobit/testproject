@@ -34,6 +34,7 @@ $(function()
 		
 		globalCall.callStatus = "dialing";
 		sendMessageToBriaClient(command,number,callId);
+		globalCall.calledFrom = "bria";
 		setTimerToCheckDialing("bria");
 
 	});

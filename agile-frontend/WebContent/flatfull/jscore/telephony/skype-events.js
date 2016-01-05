@@ -27,6 +27,7 @@ $(function()
 				
 				globalCall.callStatus = "dialing";
 				sendMessageToSkypeClient(command,number,callId);
+				globalCall.calledFrom = "skype";
 				setTimerToCheckDialing("skype");
 			});
 	
@@ -104,7 +105,7 @@ $(function()
 });
  
 //mute the current call	
-	$('body').on('click', '.noty_skype_mute', function(e)
+/*	$('body').on('click', '.noty_skype_mute', function(e)
 	{
 		
 		e.preventDefault();
@@ -116,10 +117,10 @@ $(function()
 		$('.noty_buttons').find('.noty_skype_unmute').toggle();
 		
 		sendMessageToSkypeClient(command,number,callId);
-	});
+	});*/
 	
 //unmute the call	
-	$('body').on('click', '.noty_skype_unmute', function(e)
+/*	$('body').on('click', '.noty_skype_unmute', function(e)
 	{
 		
 		e.preventDefault();
@@ -130,7 +131,7 @@ $(function()
 		$('.noty_buttons').find('.noty_skype_unmute').toggle();
 		$('.noty_buttons').find('.noty_skype_mute').toggle();
 		sendMessageToSkypeClient(command,number,callId);
-	});
+	});*/
 
 
 //function for sending DTMF
@@ -503,7 +504,7 @@ function getLogsForSkype(num){
 	
 		if(parameter['num'].length > 0){
 			if(!logNumber){
-				logNumber = parameter['num'][0];
+				logNumber = parameter['num'][0].value;
 			}
 			var command = "getLogs";
 			var number =  logNumber;
