@@ -288,6 +288,9 @@ public class CSVUtil
 	Map<Object, Object> status = new HashMap<Object, Object>();
 	status.put("type", "Contacts");
 
+	List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE");
+	List<CustomFieldDef> imagefield = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "text");
+
 	/**
 	 * Iterates through all the records from blob
 	 */
@@ -400,8 +403,6 @@ public class CSVUtil
 
 		    if (field.type.equals(FieldType.CUSTOM))
 		    {
-			List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(
-				SCOPE.CONTACT, "DATE");
 			for (CustomFieldDef customFieldDef : customFields)
 			{
 			    if (field.name.equalsIgnoreCase(customFieldDef.field_label))
@@ -419,8 +420,6 @@ public class CSVUtil
 			// set image in custom fields
 			if (field.name.equalsIgnoreCase(Contact.IMAGE))
 			{
-			    List<CustomFieldDef> imagefield = CustomFieldDefUtil.getCustomFieldsByScopeAndType(
-				    SCOPE.CONTACT, "text");
 
 			    for (CustomFieldDef customFieldDef : imagefield)
 			    {

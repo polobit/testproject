@@ -853,7 +853,11 @@ function today()
 {
 	fullCal.fullCalendar('today');
 }
-
+function refreshcal()
+{
+fullCal.fullCalendar('refetchEvents');
+document.getElementById("refrecal").style.backgroundColor = "#fcfdfd"
+}
 
 /**
  * gets the agileusers to build calendar filters

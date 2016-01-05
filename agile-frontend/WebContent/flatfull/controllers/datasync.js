@@ -363,7 +363,7 @@ dataSync : function()
                                     }
                                }
                             },
-                            saveCallback: function() {
+                            saveCallback: function() {                                
                                 App_Datasync.dataSync();
                                 showNotyPopUp("information", "Office365 calendar saved successfully", "top", 1000);
                             }
