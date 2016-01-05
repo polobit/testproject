@@ -116,10 +116,7 @@ public class EmailLinksConversion
 	    // Push parameter
 	    if (StringUtils.isNotBlank(pushParam) && StringUtils.containsIgnoreCase(pushParam, "yes_and_push"))
 	    {
-	    	String param = AGILE_EMAIL_PUSH;
-	    	
-	    	if(StringUtils.equalsIgnoreCase(pushParam, SendEmail.TRACK_CLICKS_YES_AND_PUSH_AND_EMAIL_ONLY))
-	    		param = AGILE_EMAIL_PUSH_EMAIL_ONLY;
+	    	String param = getPushParam(pushParam);
 	    		
 	    	push = "&p=" + URLEncoder.encode(param, "UTF-8");
 	    }
@@ -153,6 +150,16 @@ public class EmailLinksConversion
 
 	return input;
     }
+
+	public static String getPushParam(String typeOfPush)
+	{
+		String param = AGILE_EMAIL_PUSH;
+		
+		if(StringUtils.equalsIgnoreCase(typeOfPush, SendEmail.TRACK_CLICKS_YES_AND_PUSH_AND_EMAIL_ONLY))
+			param = AGILE_EMAIL_PUSH_EMAIL_ONLY;
+		
+		return param;
+	}
 
     /**
      * Replaces http urls with agile tracking urls

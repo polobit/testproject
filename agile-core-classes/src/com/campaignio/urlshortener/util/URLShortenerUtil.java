@@ -1,5 +1,6 @@
 package com.campaignio.urlshortener.util;
 
+
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -126,8 +127,8 @@ public class URLShortenerUtil
     	urlShortener.setURLShortenerType(type);
     	
     	// Set push parameter only for Yes&Push options
-    	if(StringUtils.containsIgnoreCase(typeOfPush, "yes_and_push"))
-    		urlShortener.setPushParameter(typeOfPush);
+    	if(StringUtils.isNotBlank(typeOfPush) && StringUtils.containsIgnoreCase(typeOfPush, "yes_and_push"))
+    		urlShortener.setPushParameter(EmailLinksConversion.getPushParam(typeOfPush));
     	
     	urlShortener.save();
     	
