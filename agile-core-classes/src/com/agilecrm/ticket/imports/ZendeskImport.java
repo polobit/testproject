@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -45,6 +46,8 @@ public class ZendeskImport
 		URI uri = new URI(json.getString("zendesk_url"));
 
 		String url = "https://" + uri.getHost() + "/api/v2/tickets.json?include=users";
+
+		System.out.println("url: " + url);
 
 		String response = HTTPUtil.accessURLUsingAuthentication(url, username, password, "GET", "", false,
 				"application/json", "application/json");
@@ -92,6 +95,7 @@ public class ZendeskImport
 		}
 
 		System.out.println("domainUsersMap count: " + domainUsersMap.size());
+
 		TicketGroups supportGroup = TicketGroupUtil.getDefaultTicketGroup();
 
 		for (int i = 0; i < tickets.length(); i++)
@@ -140,6 +144,10 @@ public class ZendeskImport
 			ticket.contactID = contact.id;
 
 			String priority = ticketJSON.getString("priority");
+
+			if (StringUtils.isBlank(priority))
+				priority = "low";
+
 			switch (priority)
 			{
 			case "urgent":
@@ -155,6 +163,10 @@ public class ZendeskImport
 			}
 
 			String status = ticketJSON.getString("status");
+
+			if (StringUtils.isBlank(priority))
+				status = "open";
+
 			switch (status)
 			{
 			case "new":

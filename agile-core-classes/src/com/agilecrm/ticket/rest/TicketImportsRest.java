@@ -25,6 +25,7 @@ public class TicketImportsRest
 		}
 		catch (Exception e)
 		{
+			System.out.println(e.getMessage());
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
 		}
