@@ -112,7 +112,7 @@ function navigateToDetailsPage(data, name)
 			return;
 		}*/
 
-		var url = '#tickets/group/'+ model.groupID + '/' + model.status.toLowerCase() + '/' + model.id;
+		var url = '#ticket/' +  model.id;
 
 		Backbone.history.navigate(url, {trigger : true});
 

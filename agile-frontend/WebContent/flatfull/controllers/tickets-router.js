@@ -18,6 +18,8 @@
 		"tickets/filter/:id" : "ticketsByFilter",
 		"tickets/filter/:id/ticket/:id" : "filteredTicketNotes",
 
+		"ticket/:id" : "ticketDetails",
+
 		/* Ticket bulk actions*/
 		"tickets/bulk-actions/:action_type" : "ticketsBulkActions",
 
@@ -282,8 +284,18 @@ $("#right-pane").html(ticketView.render().el);
 				App_Ticket_Module.ticketDetails(id);		
 			});
 	 	});
+	},
 
-		
+	/**
+	 * Shows individual filtered ticket details and notes collection
+	 **/
+	 ticketDetails: function(id){
+
+	 	Ticket_Canned_Response.fetchCollection(function(){
+	 		Tickets.renderLayout(function(){
+				App_Ticket_Module.ticketDetails(id);		
+			});
+	 	});
 	},
 
 	/**
