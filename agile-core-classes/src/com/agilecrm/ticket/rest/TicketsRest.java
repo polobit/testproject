@@ -887,6 +887,20 @@ public class TicketsRest
 		}
 	}
 
+	@GET
+	@Path("/delete/text-document")
+	public void deleteTextDocument(@QueryParam("id") Long ticketID)
+	{
+		try
+		{
+			new TicketsDocument().delete(ticketID + "");
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+	}
+
 	/**
 	 * Forward ticket
 	 * 
