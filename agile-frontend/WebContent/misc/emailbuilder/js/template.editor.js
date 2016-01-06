@@ -642,7 +642,7 @@ function handleObjects() {
                         break;
 
                     default:
-                        console.log(t);
+                        // console.log(t);
                         break;
                 }
                 // end of bind click function
@@ -793,7 +793,7 @@ function removeElm() {
     $(".demo").delegate(".remove", "click", function (e) {
         if(confirm('are you sure?')){
           //conta elem con lyrow
-              if($('#tosave .lyrow').length>3){
+              if($('#tosave .lyrow').length>1){
                 e.preventDefault();
                 $(this).parent().remove();
                 showElements();
@@ -830,9 +830,9 @@ function downloadLayoutSrc() {
 
     var clone = t.find('td#primary').parent().parent().parent();
 
-    console.log(clone);
+    //console.log(clone);
 
-    var preheader = t.find('td#primary .lyrow .view .row table.preheader').parent().html();
+    var preheader = ""; //t.find('td#primary .lyrow .view .row table.preheader').parent().html();
     var header = ""; //t.find('td#primary .lyrow .view .row table#header').parent().html();    <-- se si vogliono mettere header statici
     var body = '';
 
@@ -1324,7 +1324,18 @@ function loadSavedTemplate() {
                 $("#tosave").html(data.html_for_builder);
             }
         });
+    } else if(AGILE_EB_OPTIONS['templateId'] && AGILE_EB_OPTIONS['action'] == "new") {
+        $.ajax({
+            url: "templates/"+AGILE_EB_OPTIONS['templateId']+"/body_index.html",
+            async: false,
+            data: {},
+            success: function(data) {
+                $("#tosave").html(data);
+            }
+        });
     }
+
+
 }
 
 function initializeEditor() {

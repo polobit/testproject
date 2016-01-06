@@ -47,7 +47,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
         <![endif]-->
         <script type="text/javascript"> var path = '/';</script>
-        <script type="text/javascript" src="http://feather.aviary.com/js/feather.js"></script>
+       <!-- <script type="text/javascript" src="http://feather.aviary.com/js/feather.js"></script> -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/ui/1.9.2/jquery-ui.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
@@ -962,25 +962,6 @@ AGILE_EB_OPTIONS['templateId'] = "";
                         <td width="100%" id="primary" class="main demo" align="center" valign="top" >
                             <!-- inizio contentuto      -->
 
-                            <% if(content.isEmpty()) { %>
-                            <div class="lyrow">
-                                <div class="view">
-                                    <div class="row clearfix">
-                                        <!-- Content starts here-->
-                                        <table width="640" class="preheader" align="center" cellspacing="0" cellpadding="0" border="0">
-                                            <tr>
-                                                <td align="left" class="preheader-text" width="420" style="padding: 15px 0px; font-family: Arial; font-size: 11px; color: #666666"></td>
-                                                <td class="preheader-gap" width="20"></td>
-                                                <td class="preheader-link" align="right" width="200" style="padding: 15px 0px; font-family: Arial; font-size: 11px; color: #666666">
-                                                    Non vedi le immagini? [linkversioneonline]
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <% } %>
-
                             <div class="column">
 
                                <% if(content.isEmpty()) { %>
@@ -1015,24 +996,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 <% } else {
                                     out.print(content);
                                 }
-                                if(content.isEmpty()) { %>
-                                <div class="lyrow">
-                                    <div class="view">
-                                        <div class="row clearfix">
-                                            <!-- Content starts here-->
-                                            <table width="640" class="preheader" align="center" cellspacing="0" cellpadding="0" border="0">
-                                                <tr>
-                                                    <td align="left" class="preheader-text" width="420" style="padding: 15px 0px; font-family: Arial; font-size: 11px; color: #666666"></td>
-                                                    <td class="preheader-gap" width="20"></td>
-                                                    <td class="preheader-link" align="right" width="200" style="padding: 15px 0px; font-family: Arial; font-size: 11px; color: #666666">
-                                                        [linkcancellazione]
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <% } %>
+                                %>
 
                             </div>
 

@@ -1,0 +1,20 @@
+{
+    "templates": [
+        {
+            "category": "General",
+            "description": "Category description here",
+            "list": [
+				{
+                    "id": "layout1",
+                    "displayname": "sample layout 1",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "layout2",
+                    "displayname": "sample layout 2",
+                    "description": "this is sample text"
+                }
+            ]
+        }
+    ]
+}

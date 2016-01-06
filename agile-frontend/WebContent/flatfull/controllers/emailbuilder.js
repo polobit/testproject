@@ -2,6 +2,7 @@ var EmailBuilderRouter = Backbone.Router.extend({
 
 	routes : {
 	"emailbuilder-add" : "showEmailBuilder",
+    "emailbuilder-templates" : "getListOfTemplates",
 	"emailbuilder-add/:id" : "loadSelectedTemplate",
 	"emailbuilder/:id" : "loadSavedTemplate"
 	},
@@ -16,6 +17,31 @@ var EmailBuilderRouter = Backbone.Router.extend({
 	
         hideTransitionBar();
 	},
+
+    getListOfTemplates : function() {
+        $('#content').html("<link rel='stylesheet' type='text/css' href='flatfull/css/jquery.fancybox.css'><div id='emailbuilder-listeners'></div>");
+        
+        head.js('flatfull/lib/jquery.fancybox.js',function() {
+            $.getJSON("misc/emailbuilder/templates/templates.json", function(data) {
+
+                getTemplate("emailbuilder-categories", data.templates[0], undefined, function(ui){
+                    $("#emailbuilder-listeners").html($(ui));
+                }, "#emailbuilder-listeners");
+                
+                $(".lpt_fancybox").fancybox({
+                    'autoDimensions': false,
+                    'padding'       : 0,
+                    'autoScale'     : true,
+                    'width'         : "600px",
+                    'transitionIn'  : 'none',
+                    'transitionOut' : 'none',
+                    'type'          : 'iframe'
+                 });
+
+                hideTransitionBar();
+            });
+        });
+    },
 
 	loadSelectedTemplate : function(defaultTemplateId) {
 		$('#content').html("<div id='emailbuilder-listeners'></div>");
