@@ -50,27 +50,35 @@ public class TwitterSendMessage extends TaskletAdapter
 	String rateLimit = getStringValue(nodeJSON, subscriberJSON, data, RATE_LIMIT);
 	String trackClicks = getStringValue(nodeJSON, subscriberJSON, data, SendEmail.TRACK_CLICKS);
 
-	if (rateLimit.equalsIgnoreCase(RATE_LIMIT_10))
-	    rateLimit = TwitterJobQueue.TWITTER_DB_RATE_LIMIT_HOURLY_10;
-	else if (rateLimit.equalsIgnoreCase(RATE_LIMIT_20))
-	    rateLimit = TwitterJobQueue.TWITTER_DB_RATE_LIMIT_HOURLY_20;
-	else
-	    rateLimit = TwitterJobQueue.TWITTER_DB_RATE_LIMIT_HOURLY_5;
-
-	data.put(TWEET_CLICK_TRACKING_ID, System.currentTimeMillis());
+	try
+	{
+		if (rateLimit.equalsIgnoreCase(RATE_LIMIT_10))
+		    rateLimit = TwitterJobQueue.TWITTER_DB_RATE_LIMIT_HOURLY_10;
+		else if (rateLimit.equalsIgnoreCase(RATE_LIMIT_20))
+		    rateLimit = TwitterJobQueue.TWITTER_DB_RATE_LIMIT_HOURLY_20;
+		else
+		    rateLimit = TwitterJobQueue.TWITTER_DB_RATE_LIMIT_HOURLY_5;
 	
-	data.remove(SendMessage.SMS_CLICK_TRACKING_ID);
-	data.remove(SendEmail.CLICK_TRACKING_ID);
-	
-	if(trackClicks != null
-	        && (!trackClicks.equalsIgnoreCase(SendEmail.TRACK_CLICKS_NO)))
-	{	
-		message = SendMessage.shortenLongURLs(message, AgileTaskletUtil.getId(subscriberJSON), 
-				AgileTaskletUtil.getId(campaignJSON), data.getString(TWEET_CLICK_TRACKING_ID), "twt", ShortenURLType.TWEET, trackClicks);
+		data.put(TWEET_CLICK_TRACKING_ID, System.currentTimeMillis());
+		
+		data.remove(SendMessage.SMS_CLICK_TRACKING_ID);
+		data.remove(SendEmail.CLICK_TRACKING_ID);
+		
+		if(trackClicks != null
+		        && (!trackClicks.equalsIgnoreCase(SendEmail.TRACK_CLICKS_NO)))
+		{	
+			message = SendMessage.shortenLongURLs(message, AgileTaskletUtil.getId(subscriberJSON), 
+					AgileTaskletUtil.getId(campaignJSON), data.getString(TWEET_CLICK_TRACKING_ID), "twt", ShortenURLType.TWEET, trackClicks);
+		}
+		
+		
+		TwitterJobQueueUtil.addToTwitterQueue(account, token, tokenSecret, message, rateLimit, subscriberJSON, campaignJSON);
 	}
-	
-	
-	TwitterJobQueueUtil.addToTwitterQueue(account, token, tokenSecret, message, rateLimit, subscriberJSON, campaignJSON);
+	catch(Exception e)
+	{
+		e.printStackTrace();
+		System.err.println("Exception occured in TwitterSendMessage node - " + e.getMessage());
+	}
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
