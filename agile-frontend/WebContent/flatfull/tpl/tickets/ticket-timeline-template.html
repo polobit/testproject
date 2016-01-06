@@ -74,7 +74,7 @@
 			          </div>
 			          
 			          <div class="panel-body">
-			          	<div>{{{new_data}}}</div>
+			          	<div>{{convert_to_html new_data}}</div>
 			          </div>
 			          
 			      </div>
@@ -125,10 +125,6 @@
 			                {{#if_equals ticket_activity_type 'TICKET_PRIORITY_CHANGE'}}
 		                       Priority changed to <span class="first-letter-cap">{{new_data}}</span>
 		                    {{/if_equals}}
-
-		                    {{#if_equals ticket_activity_type 'TICKET_PRIORITY_CHANGE'}}
-		                       Priority changed to <span class="first-letter-cap">{{new_data}}</span>
-		                     {{/if_equals}}
 
 						    {{#if_equals ticket_activity_type 'TICKET_TYPE_CHANGE'}}
 		                        Type changed to <span class="first-letter-cap">{{new_data}}</span>
@@ -184,7 +180,7 @@
 			          
 			          {{#if_equals ticket_activity_type 'TICKET_PRIVATE_NOTES_ADD'}}
 			          <div class="panel-body">
-			          	<div>{{{new_data}}}</div>
+			          	<div>{{convert_to_html new_data}}</div>
 			          </div>
 			          {{/if_equals}}
 			          

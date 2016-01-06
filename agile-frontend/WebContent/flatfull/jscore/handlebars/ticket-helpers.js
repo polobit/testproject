@@ -361,4 +361,14 @@ Handlebars.registerHelper('is_ticket_collection_available', function(options) {
 	return options.inverse(this);
 
 });
+
+Handlebars.registerHelper('convert_to_html', function(text, options) {
+
+	if(!text)
+		return;
+
+	text = text.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+
+	return new Handlebars.SafeString(text);
+});
 /** End of ticketing handlebars* */
