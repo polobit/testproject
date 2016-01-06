@@ -159,9 +159,11 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 
                 show_campaign_save();
                 
+                try{
                 // Adds tag in our domain
                 add_tag_our_domain(CAMPAIGN_TAG);
-                
+                }catch(err){
+                }
                 // Hide message
                 $('#workflow-edit-msg').hide();
 
@@ -172,7 +174,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                     if (is_disabled) {
                         disabled.attr("data", true);
                         disabled.find('i').toggleClass('fa-lock').toggleClass('fa-unlock');
-                        disabled.find('div').text("Enable Workflow");
+                        disabled.find('div').text("Enable Campaign");
                         $('#designer-tour').addClass("blur").removeClass("anti-blur");;
                         window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
                         window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
@@ -180,7 +182,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                     } else {
                         disabled.attr("data", false);
                         disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
-                        disabled.find('div').text("Disable Workflow"); 
+                        disabled.find('div').text("Disable Campaign"); 
                         $('#designer-tour').addClass("anti-blur").removeClass("blur");;
                         window.frames[0].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
                         window.frames[0].$('#toolbartabs').removeClass("disable-iframe");

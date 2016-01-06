@@ -35,19 +35,20 @@
 														<i class="fa fa-clipboard" style="width: 20px;"></i> Create a Copy
 													</a>
 												</li>
-												<li>
-													<a href="#" data = "{{is_disabled}}" class="is-disabled-top" >
-														{{#if_equals "true" is_disabled}}
-															<i class="fa fa-lg fa-unlock" style="vertical-align: middle;width: 20px;"></i><div class="inline" style="vertical-align: middle;">&nbsp;Enable Workflow</div>
-														{{else}}
-															<i class="fa fa-lg fa-lock" style="vertical-align: middle;width: 20px;"></i><div class="inline" style="vertical-align: middle;">&nbsp;Disable Workflow</div>
-														{{/if_equals}}
-													</a>
-												</li>
 											</ul>
                            				</div>
                             		{{/if}}
+									<button class="btn btn-primary btn-sm btn-addon pull-right m-r-sm">
+											<a href="#" data = "{{is_disabled}}" class="is-disabled-top" style="color:white">
+											{{#if_equals "true" is_disabled}}
+											<div class="inline" style="vertical-align: middle;">&nbsp;Enable Campaign</div>
+											{{else}}
+											<div class="inline" style="vertical-align: middle;">&nbsp;Disable Campaign</div>
+											{{/if_equals}}
+											</a>
+									</button>
 								</div>
+								
                            		<div class="save-workflow-img right m-r-xs m-t-sm pos-rlt inline-block"></div>
 							</div>
 						</div>
@@ -140,20 +141,8 @@
 														<i class="fa fa-clipboard"></i> Create a Copy
 													</a>
 												</li>
-												<li>
-													<a href="#" class="is-disabled-top" data = "{{is_disabled}}" >
-														{{#if_equals "true" is_disabled}}
-															<i class="fa fa-lg fa-unlock" style="vertical-align: middle;width: 20px;"></i><div class="inline" style="vertical-align: middle;">&nbsp;Enable Workflow</div>
-														{{else}}
-															<i class="fa fa-lg fa-lock" style="vertical-align: middle;width: 20px;"></i><div class="inline" style="vertical-align: middle;">&nbsp;Disable Workflow</div>
-														{{/if_equals}}
-													</a>
-												</li>
 											</ul>
                            				</div>
-
-
-
 
                     {{/if}}
                     <div class="save-workflow-img inline-block"></div>
