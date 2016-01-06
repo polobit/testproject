@@ -141,12 +141,14 @@ public class RedirectServlet extends HttpServlet
 		params += TrackClickUtil.appendContactPropertiesToParams(contact, push);
 		
 		//Append url fragment(Prashannjeet)
-		normalisedLongURL=normalisedLongURL.replaceFirst("#", params+"#");
+		if(normalisedLongURL.contains("#"))
+			normalisedLongURL=normalisedLongURL.replaceFirst("#", params+"#");
+		else
+			normalisedLongURL+=params;
 
-		System.out.println("Forwarding it to " + normalisedLongURL + " " + params);
+			System.out.println("Forwarding it to " + normalisedLongURL + " " + params);
 		
-		resp.sendRedirect(normalisedLongURL);
-		//resp.sendRedirect(normalisedLongURL + params);
+			resp.sendRedirect(normalisedLongURL);
 	    }
 	    else
 	    {
