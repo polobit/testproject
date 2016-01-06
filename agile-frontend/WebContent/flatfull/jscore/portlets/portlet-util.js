@@ -445,6 +445,7 @@ var portlet_utility = {
 						sortKey : "-created_time",
 						postRenderCallback : function(p_el) {
 							portlet_utility.addWidgetToGridster(base_model);
+							contactListener();
 						}
 					});
 			portlet_utility.renderPortletsInnerCollection(

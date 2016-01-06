@@ -6923,4 +6923,10 @@ function agile_is_mobile_browser(){
    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
  }
 
+Handlebars.registerHelper('multiple_Property_Element_List', function(name, properties,id, options)
+		{
 
+			var matching_properties_list = agile_crm_get_List_contact_properties_list(name);
+			if (matching_properties_list.length > 0)
+				return options.fn(matching_properties_list);
+		});

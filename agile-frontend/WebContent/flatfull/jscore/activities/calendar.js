@@ -359,9 +359,21 @@ function showCalendar(users)
 												reletedContacts += '<a class="text-info" href="#company/' + event.contacts[i].id + '">' + getPropertyValue(
 													event.contacts[i].properties, "name") + '</a>';
 											else
-												reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
-														event.contacts[i].properties, "first_name") + ' ' + last_name + '</a><div>Email:'+ getPropertyValue(
-													event.contacts[i].properties, "email")+'</div>';
+												{reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
+														event.contacts[i].properties, "first_name") + ' ' + last_name + '</a>';
+											var email= getPropertyValue(
+													event.contacts[i].properties, "email");
+											if(email)
+												reletedContacts +='<div><i class="icon-envelope text-muted m-r-xs"></i><a>'+ email +'</a></div>';
+											var phone= getPropertyValue(
+													event.contacts[i].properties, "phone");
+											if(phone)
+												reletedContacts +='<div><i class="icon-call-end text-muted m-r-xs"></i><a>'+ phone+'</a></div>';
+											var score=event.contacts[i].lead_score;
+												reletedContacts +='<div class="pull-left m-l-md"><a>Score:'+ score+'</a></div>';
+												var star=event.contacts[i].star_value; 
+												reletedContacts+='<div class="pull-left m-l-xl">'+ setUpStarRating(star)+'</div>';
+										}
 										}else{
 											reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
 													event.contacts[i].properties, "name") + '</a>';
@@ -894,4 +906,46 @@ function getCalendarUsersDetails(callback)
 		return callback(json_users);
 
 	});
+}
+
+/*
+function multiple_property_list(item,propertyName)
+{
+	
+
+	// Gets properties list field from contact
+	var properties = item;
+	var property_list = [];
+
+	
+	 * Iterates through each property in contact properties and checks for the
+	 * match in it for the given property name and retrieves value of the
+	 * property if it matches
+	 
+	$.each(properties, function(index, property)
+	{
+		if (property.name == propertyName)
+		{
+			property_list.push(property);
+		}
+	});
+
+	// If property is defined then return property value list
+	return property_list;
+}*/
+
+function setUpStarRating(value){
+
+
+		var element = "";
+		for (var i = 0; i < 5; i++)
+		{
+			if (i < parseInt(value))
+			{
+				element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-on.png")+'" alt="' + i + '"></li>');
+				continue;
+			}
+			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-off.png")+'" alt="' + i + '"></li>');
+		}
+		return element;
 }

@@ -3034,3 +3034,16 @@ width : 150px;
 
 }
 }
+
+.contact_popover{
+	border-radius: 0px;
+	width : 260px;
+}
+
+.contact_popover .popover-content{
+	padding: 0px;
+}
+
+.contact_popover .arrow{
+	display: none;
+}
