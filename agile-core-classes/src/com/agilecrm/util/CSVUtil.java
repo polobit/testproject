@@ -41,6 +41,8 @@ import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
+import com.agilecrm.contact.upload.blob.status.specifications.StatusProcessor;
+import com.agilecrm.contact.upload.blob.status.specifications.StatusSender;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
@@ -93,6 +95,9 @@ public class CSVUtil
     private GCSServiceAgile service;
     private CSVWriter failedContactsWriter = null;
     private ImportStatusDAO importStatusDAO = null;
+    private StatusSender statusSender = null;
+
+    private StatusProcessor<?> statusProcessor = null;
 
     private CSVUtil()
     {
@@ -222,8 +227,39 @@ public class CSVUtil
 	    }
 	}
 
+	reportStatus(data.size());
+
 	return data;
 
+    }
+
+    /**
+     * Status sender is injected to import instance
+     * 
+     * @param statusSender
+     */
+    public void setStatusSender(StatusSender statusSender)
+    {
+	this.statusSender = statusSender;
+    }
+
+    /**
+     * Status processor is injected to import instance
+     * 
+     * @param statusProcessor
+     */
+    public void setStatusProcessor(StatusProcessor<?> statusProcessor)
+    {
+	this.statusProcessor = statusProcessor;
+    }
+
+    private void reportStatus(int numberOfContacts)
+    {
+	if (statusSender != null && statusProcessor != null)
+	{
+	    statusProcessor.setCount(numberOfContacts);
+	    statusSender.sendEmail("yaswanth@agilecrm.com", statusProcessor);
+	}
     }
 
     /**

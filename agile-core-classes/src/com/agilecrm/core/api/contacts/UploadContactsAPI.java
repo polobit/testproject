@@ -190,7 +190,7 @@ public class UploadContactsAPI
 
     @Path("/status/{type}")
     @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
     public ImportStatus getImportStatus(@PathParam("type") ImportType type)
     {
 	String namespace = NamespaceManager.get();

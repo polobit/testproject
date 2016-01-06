@@ -37,8 +37,9 @@ public class ContactsCSVImporter extends CSVImporter<Contact>
 	    // it gives is 1000)
 	    restriction.contacts_count = currentEntityCount;
 
-	    new CSVUtil(restriction, getUserAccessControl(), importDAO).createContactsFromCSV(getInputStream(),
-		    getMapperEntity(), String.valueOf(domainUserId));
+	    CSVUtil csvUtil = new CSVUtil(restriction, getUserAccessControl(), importDAO);
+	    csvUtil.createContactsFromCSV(getInputStream(), getMapperEntity(), String.valueOf(domainUserId));
+
 	}
 	catch (PlanRestrictedException e)
 	{

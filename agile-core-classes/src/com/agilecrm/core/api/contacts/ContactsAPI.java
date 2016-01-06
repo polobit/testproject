@@ -57,6 +57,8 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.imports.CSVImporter;
 import com.agilecrm.contact.imports.impl.ContactsCSVImporter;
+import com.agilecrm.contact.upload.blob.status.ImportStatus.ImportType;
+import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
@@ -67,14 +69,15 @@ import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.JSONUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.DeferredTask;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -121,7 +124,7 @@ public class ContactsAPI
 	return contacts;
 
     }
-    
+
     /**
      * Fetches all the contacts (of type person). Activates infiniScroll, if
      * no.of contacts are more than count and cursor is not null. This method is
@@ -238,7 +241,7 @@ public class ContactsAPI
 
 	return ContactUtil.getAllCompaniesByOrder(sortKey);
     }
-    
+
     /**
      * Fetches all the contacts (of type person). Activates infiniScroll, if
      * no.of contacts are more than count and cursor is not null. This method is
@@ -1339,8 +1342,12 @@ public class ContactsAPI
 	CSVImporter<Contact> importer;
 	try
 	{
+	    ImportStatusDAO statusDAO = new ImportStatusDAO(NamespaceManager.get(), ImportType.CONTACTS);
+	    Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class, info.getDomainId());
+
+	    statusDAO.createNewImportStatus(userKey, 1000, blobKey.getKeyString());
 	    importer = new ContactsCSVImporter(NamespaceManager.get(), blobKey, info.getDomainId(),
-		    new ObjectMapper().writeValueAsString(contact), Contact.class, currentEntityCount);
+		    new ObjectMapper().writeValueAsString(contact), Contact.class, currentEntityCount, statusDAO);
 
 	    PullQueueUtil.addToPullQueue("contact-import-queue", importer, key);
 	}
