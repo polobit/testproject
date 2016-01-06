@@ -19,7 +19,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
     },
 
     unsubscribeCampaignOptionSelect : function(e){
-
+        e.preventDefault();
         var targetEl = $(e.currentTarget);
         
         var all_text = "Contact will not receive any further emails from any campaign (i.e., the 'Send Email' option will not work. However, other actions in" 
