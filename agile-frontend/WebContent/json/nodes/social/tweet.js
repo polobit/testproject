@@ -80,7 +80,7 @@
          {
              "label": "Track Clicks:",
              "required": "No",
-             "category": "Settings",
+             "category": "Advanced",
              "name": "track_clicks",
              "title": "Enable tracking for tweet link clicks. Use \"Yes &amp; Push\" if you want to push contact data to your website (to enable web activity tracking)",
              "options": {
