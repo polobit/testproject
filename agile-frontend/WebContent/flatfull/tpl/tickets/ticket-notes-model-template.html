@@ -17,7 +17,7 @@
 
 	  	{{#if_equals created_by 'REQUESTER'}}
 
-	              	<span><b class="text-sm" style="vertical-align: top;">{{requester_name}}</b></span>
+	              	<span><b class="text-sm">{{requester_name}}</b></span>
 
 
 	              	<span class="txt-small text-xs text-muted first-letter-cap inline-block m-l-xs">
@@ -27,7 +27,7 @@
 	   				</span>
 	             
 			   	{{else}}
-			   		<span><b class="text-sm" style="vertical-align: top;">{{domain_user.name}}</b></span>
+			   		<span><b class="text-sm">{{domain_user.name}}</b></span>
 	              	<span class="txt-small text-xs text-muted first-letter-cap inline-block m-l-xs">
 	              			<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
 		              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
@@ -68,7 +68,7 @@
 	<div class="m-l-xl p-l">
 	   
 	  <span>
-	  	<b class="text-sm" style="vertical-align: top;">{{domain_user.name}}</b>
+	  	<b class="text-sm">{{domain_user.name}}</b>
 
 	  	<span class="txt-small text-xs text-muted first-letter-cap inline-block m-l-xs">
       			<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
