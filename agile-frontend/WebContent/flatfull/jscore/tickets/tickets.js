@@ -1,4 +1,4 @@
-var Group_ID = null, Current_Ticket_ID = null, Ticket_Filter_ID = null, Tickets_Util = {}, Sort_By = "-", Sort_Field = 'last_updated_time';
+var Group_ID = null, Current_Ticket_ID = null, Ticket_Filter_ID = null, Tickets_Util = {}, Sort_By = "-", Sort_Field = 'last_updated_time', Ticket_Position= null;
 var popoverFunction = undefined;
 
 $("body").bind('click', function(e) {
@@ -58,8 +58,6 @@ var Tickets = {
 				Tickets.fetchTicketsCollection();
 			}	
 		}
-
-		Current_Ticket_ID = null;
 	},
 
 	fetchTicketModel : function(ticket_id, callback){
@@ -75,7 +73,6 @@ var Tickets = {
 					callback(ticketModel);
 			}
 		});
-
 	},
 
 	//Fetches new ticket collection
@@ -175,6 +172,12 @@ var Tickets = {
 					Ticket_Bulk_Ops.clearSelection();
 					
 					Backbone.history.navigate('#tickets/filter/' + Ticket_Filter_ID, {render:false});
+
+					App_Ticket_Module.ticketsCollection.infiniScroll.enableFetch();
+
+					$(window).scrollTop(Ticket_Position);
+
+					Current_Ticket_ID = null;
 				});
 			});
 		}
@@ -267,6 +270,8 @@ var Tickets = {
 				$('.ticket-last-notes').css('display', 'none').css('top', top);
 
 			var url = '#tickets/filter/' + Ticket_Filter_ID + '/ticket/';
+
+			Ticket_Position = $(window).scrollTop();
 
 			Backbone.history.navigate(url + $(this).closest('tr').find('td.data').data('id'), {trigger : true});
 		});
