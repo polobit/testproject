@@ -6919,6 +6919,11 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 	return dateInepoch;
 });
 
+	Handlebars.registerHelper('emails_next_renewal_time', function(items, name)
+	{
+		return getEmailsNextRenewalTime();
+	});
+
 function agile_is_mobile_browser(){
    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
  }
