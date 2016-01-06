@@ -37,7 +37,7 @@ public class TwitterSendMessage extends TaskletAdapter
 	 /**
      * Click event tracking id
      */
-    public static String TWEET_CLICK_TRACKING_ID = "sms_click_tracking_id";
+    public static String TWEET_CLICK_TRACKING_ID = "tweet_click_tracking_id";
 
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
