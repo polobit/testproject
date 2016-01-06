@@ -76,8 +76,21 @@
 			          },
 			"fieldType": "select",
 			"type": "select" 
-         }
-		,
+         },
+         {
+             "label": "Track Clicks:",
+             "required": "No",
+             "category": "Settings",
+             "name": "track_clicks",
+             "title": "Enable tracking for tweet link clicks. Use \"Yes &amp; Push\" if you want to push contact data to your website (to enable web activity tracking)",
+             "options": {
+                 "*No": "no",
+                 "Yes": "yes",
+                 "Yes & Push": "yes_and_push"
+             },
+             "fieldType": "select",
+             "type": "select"
+         },
 		 {
             "label": "Automatically send tweets (@mention) to contacts using your/company twitter account.<br/><br/>You need to give access to Agile CRM to your account and provide a message to be posted. The message you provide will be preceded with a @contactTwitterId and posted as status message in your/company Twitter.",
             "category": "Help",
