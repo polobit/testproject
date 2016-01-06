@@ -694,10 +694,19 @@ public class TicketsUtil
 				map.put(domainUser.id, domainUser);
 
 			for (Tickets ticket : tickets)
-				ticket.assignee = map.get(ticket.assigneeID);
+				if (map.containsKey(ticket.assigneeID))
+					try
+					{
+						ticket.assignee = map.get(ticket.assigneeID);
+					}
+					catch (Exception e)
+					{
+						System.out.println(ExceptionUtils.getFullStackTrace(e));
+					}
 		}
 		catch (Exception e)
 		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
 		}
 		finally
