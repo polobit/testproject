@@ -3,6 +3,7 @@ package com.agilecrm.deals;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,6 +29,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.CustomFieldData;
+import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.search.AppengineSearch;
@@ -252,48 +255,23 @@ public class Opportunity extends Cursor implements Serializable
      * @throws MalformedURLException 
      */
     
-    // Currency is converted with respect to the admin preferred currency.
-    /*
-  public double currencyConversionValue() throws JSONException, IOException{
-	 String s = "https://openexchangerates.org/api/latest.json?app_id=2e2f1446f9b7407091f10a515dc8ad65";
-	  
-		URL url = new URL(s);
-	
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-		      
-			   Scanner scan = new Scanner(con.getInputStream());
-			    String string = new String();
-			    while (scan.hasNext()){
-			        string += scan.nextLine();
-			    }
-			    scan.close();
-			    JSONObject jsonObject = new JSONObject(string);
-			    JSONObject listOfRates =  (JSONObject) jsonObject.get("rates");
-			    double currency_conversion = (double) listOfRates.get("AUD");
-	
-	  
-	   return currency_conversion;
-	  
-	  }
-	  */
-    
    //Value of the currency converted at the time of deal created
-    private double currency_conversion_value = 0.00;
+    private Double currency_conversion_value = 0.00;
     
     
-    public double getCurrency_conversion_value() {
+    
+  // Type of the currency used for the particular deal
+    private String currency_type = null;
+	
+	 public Double getCurrency_conversion_value() {
 		return currency_conversion_value;
 	}
 
-	public void setCurrency_conversion_value(double currency_conversion_value) {
+	public void setCurrency_conversion_value(Double currency_conversion_value) {
 		this.currency_conversion_value = currency_conversion_value;
 	}
-  
-    
- // Type of the currency used for the particular deal
-    private String currency_type = null;
-	
-	 public String getCurrency_type() {
+
+	public String getCurrency_type() {
 			return currency_type;
 		}
 
@@ -695,6 +673,8 @@ public class Opportunity extends Cursor implements Serializable
 			    JSONObject jsonObject = new JSONObject(string);
 				JSONObject listOfRates =  (JSONObject) jsonObject.get("rates");
 			    String userpref_currency_type =UserPrefsUtil.getCurrentUserPrefs().currency.substring(0,3).toUpperCase();
+			    if(userpref_currency_type == null)
+			    	userpref_currency_type = "USD";
 				String  deal_currency_type = currency_type.substring(0,3);
 			    if(deal_currency_type == null)
 				    deal_currency_type =  userpref_currency_type ;
@@ -834,20 +814,31 @@ public class Opportunity extends Cursor implements Serializable
     
     @PostLoad
     public void postLoad(){
-    	
-    	String userpref_currency_type = UserPrefsUtil.getCurrentUserPrefs().currency.substring(0,3).toUpperCase();
-    	 
-    	if(userpref_currency_type == null)
-		        userpref_currency_type =  "USD" ;
-    	if(currency_type == null || currency_type.isEmpty() )
-    	         currency_type = userpref_currency_type ; 
-    	
-    	String  deal_currency_type = currency_type.substring(0,3);
-    	
-	    if(userpref_currency_type.equalsIgnoreCase(deal_currency_type))
-	       { 
-	          currency_conversion_value =  expected_value;
-	       }
+    	try {
+    		UserPrefs userPrefs  = null ;
+    	      userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+    	      String userpref_currency_type = null;
+    	      
+    	      if (userPrefs !=null && userPrefs.currency !=null)
+    	      {
+    	       userpref_currency_type = UserPrefsUtil.getCurrentUserPrefs().currency.substring(0,3).toUpperCase();
+    	      }
+    	       
+    	      if(userpref_currency_type == null)
+    	           userpref_currency_type =  "USD" ;
+    	      if(currency_type == null || currency_type.isEmpty() )
+    	               currency_type = userpref_currency_type ; 
+    	      
+    	      String  deal_currency_type = currency_type.substring(0,3);
+    	         	      
+    	      if(userpref_currency_type.equalsIgnoreCase(deal_currency_type))
+    	         { 
+    	            currency_conversion_value =  expected_value;
+    	         }
+    	      
+    	  } catch (Exception e) {
+    	   e.printStackTrace();
+    	  }
     }
 
     @XmlElement(name = "note_ids")
