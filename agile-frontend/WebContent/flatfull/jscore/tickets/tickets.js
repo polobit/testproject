@@ -601,18 +601,15 @@ var Tickets = {
 		});
 	},
 
-	initDateTimePicker: function($input, callback){
+	initDateTimePicker: function($input, singleDatePicker, callback){
 
 		head.load(LIB_PATH + '/lib/web-calendar-event/moment.min.js', '/lib/date-range-picker2.min.js', "/flatfull/css/final-lib/date-range-picker2.css",  function()
 		{	
-			$('.due-date-input').daterangepicker({
-			    "singleDatePicker": true,"drops": "up","startDate": moment(),"endDate": moment().add('days', 3)
+			$input.daterangepicker({
+			    "singleDatePicker": singleDatePicker, "drops": "up"
 			}, function(start, end, label) {
 				
-				//Show clear button
-				$('#clear-due-date').show();
-
-			  	callback(start);
+				callback(start, end);
 			});
 		});
 	},

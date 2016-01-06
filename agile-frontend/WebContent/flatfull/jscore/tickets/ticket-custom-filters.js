@@ -45,12 +45,26 @@ var Ticket_Custom_Filters = {
 			  	var $container = $('#custom-filters-container');
 
 			  	$container.html($(template_ui));
-			  	Tickets.initDateTimePicker($('#datetimepicker'), function(start){
+
+			  	//Initializaing due date picker
+			  	Tickets.initDateTimePicker($('.due-date-input'), true, function(start){
 			  		
+			  		//Show clear button
+					$('#clear-due-date').show();
+
 			  		//Calculate date differences between them
 			  		var duration = moment.duration((moment(start).diff(moment(new Date()))));
 
 			  		Ticket_Custom_Filters.changeDueDate(duration.asHours());
+			  	});
+
+			  	//Initializaing created date filter picker
+			  	Tickets.initDateTimePicker($('.created-date-input'), false, function(start, end){
+			  		
+			  		//Show clear button
+					$('#clear-created-date').show();
+
+			  		Ticket_Custom_Filters.changeCreatedDate(start, end);
 			  	});
 
 			  	var options = [];
@@ -95,13 +109,34 @@ var Ticket_Custom_Filters = {
 
 			  		$(this).hide();
 
+			  		var $input = $('input.due-date-input');
+			  		
 			  		//Set date in daterange picker
-			  		$('input.due-date-input').data('daterangepicker').setStartDate(new Date());
+			  		$input.data('daterangepicker').setStartDate(new Date());
 
 			  		//Set date in daterange picker
-			  		$('input.due-date-input').data('daterangepicker').setEndDate(new Date());
+			  		$input.data('daterangepicker').setEndDate(new Date());
 
-			  		$('input.due-date-input').val('');
+			  		$input.val('');
+			  		
+			  		//Re-render collection with updated filter conditions
+			  		Ticket_Custom_Filters.changeDueDate();
+			  	});
+
+			  	//Initializing click event on clear create date button
+			  	$container.on('click','a#clear-created-date', function(event){
+
+			  		$(this).hide();
+
+			  		var $input = $('input.created-date-input');
+
+			  		//Set date in daterange picker
+			  		$input.data('daterangepicker').setStartDate(new Date());
+
+			  		//Set date in daterange picker
+			  		$input.data('daterangepicker').setEndDate(new Date());
+
+			  		$input.val('');
 			  		
 			  		//Re-render collection with updated filter conditions
 			  		Ticket_Custom_Filters.changeDueDate();
@@ -424,6 +459,35 @@ var Ticket_Custom_Filters = {
 			condition.LHS = 'hrs_since_due_date';
 			condition.CONDITION = 'IS_LESS_THAN';
 			condition.RHS = parseInt(hrs);
+
+			Ticket_Custom_Filters.customFilters.push(condition);
+		}
+
+		//Re-render collection with customized filters
+		Tickets.fetchTicketsCollection();
+	},
+
+	changeCreatedDate: function(start, end){
+
+		//Removing existing due date conditions from custom filters
+  		for(var i=0; i< Ticket_Custom_Filters.customFilters.length; i++){
+
+			var condition = Ticket_Custom_Filters.customFilters[i];
+
+			if(condition.LHS != 'created_between')
+				continue;
+
+			Ticket_Custom_Filters.customFilters.splice(i, 1);
+			break;
+		}
+
+		if(start && end){
+
+			var condition = {};
+			condition.CONDITION = 'BETWEEN';
+			condition.LHS = "created_between";
+			condition.RHS = Math.floor(new Date(start).getTime()/1000);
+			condition.RHS_NEW =  Math.floor(new Date(end).getTime()/1000);
 
 			Ticket_Custom_Filters.customFilters.push(condition);
 		}

@@ -3,12 +3,8 @@ package com.agilecrm.ticket.utils;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
@@ -101,7 +97,7 @@ public class TicketFiltersUtil
 		for (Map.Entry<String, List<SearchRule>> entry : conditionsMap.entrySet())
 		{
 			List<SearchRule> groupedConditions = entry.getValue();
-			
+
 			query.append("(");
 			for (SearchRule condition : groupedConditions)
 			{
@@ -125,17 +121,18 @@ public class TicketFiltersUtil
 
 					break;
 				}
-				case "ticket_is":{
-					
-						switch (RHS)
-						{
-						case "TICKET_STARRED":
-							RHS = "is_favorite";
-							break;
-						case "TICKET_SPAM":
-							RHS = "is_spam";
-							break;
-						}
+				case "ticket_is":
+				{
+
+					switch (RHS)
+					{
+					case "TICKET_STARRED":
+						RHS = "is_favorite";
+						break;
+					case "TICKET_SPAM":
+						RHS = "is_spam";
+						break;
+					}
 					if (operator != null && operator.contains("not"))
 						query.append(RHS + "=" + false);
 					else
@@ -180,11 +177,15 @@ public class TicketFiltersUtil
 
 					break;
 				}
+				case "created_between":
+					query.append("created_time >=" + Long.parseLong(RHS) + " AND " + "created_time <="
+							+ Long.parseLong(condition.RHS_NEW));
+					break;
 				}
 
 				query.append(" OR ");
 			}
-			
+
 			query = new StringBuffer(query.substring(0, query.lastIndexOf("OR")));
 			query.append(") AND ");
 		}

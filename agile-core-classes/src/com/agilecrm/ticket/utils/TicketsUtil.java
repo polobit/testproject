@@ -611,12 +611,21 @@ public class TicketsUtil
 		return ticket;
 	}
 
-	public static void updateLabels(String ticketId, String[] labelsArray, String type) throws Exception
+	public static void updateLabels(Long ticketId, String[] labelsArray, String type) throws Exception
 	{
 		for (String label : labelsArray)
 		{
-			TicketsUtil.updateLabels(Long.parseLong(ticketId),
-					new Key<TicketLabels>(TicketLabels.class, Long.parseLong(label)), type.toLowerCase());
+			TicketLabels ticketLabel = TicketLabelsUtil.getLabelByName(label);
+
+			try
+			{
+				TicketsUtil.updateLabels(ticketId, new Key<TicketLabels>(TicketLabels.class, ticketLabel.id),
+						type.toLowerCase());
+			}
+			catch (Exception e)
+			{
+				System.out.println(e.getMessage());
+			}
 		}
 
 	}

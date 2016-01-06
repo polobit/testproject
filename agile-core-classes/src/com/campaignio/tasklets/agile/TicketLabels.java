@@ -58,15 +58,13 @@ public class TicketLabels extends TaskletAdapter
 
 			if (ticketJSON != null)
 			{
-				String ticketId = ticketJSON.getString("id");
-
 				String tags = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', labelNames);
 
 				System.out.println("Normalized labels are " + tags);
 
 				String[] labelsArray = tags.split(",");
 
-				TicketsUtil.updateLabels(ticketId, labelsArray, type);
+				TicketsUtil.updateLabels(ticketJSON.getLong("id"), labelsArray, type);
 
 			}
 

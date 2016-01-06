@@ -27,6 +27,7 @@ import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -36,6 +37,8 @@ public class ZendeskImport
 {
 	public static void fetchTickets(JSONObject json) throws Exception
 	{
+		DomainUser domainOwner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+
 		String username = json.getString("zendesk_username");
 		String password = json.getString("zendesk_password");
 
@@ -119,9 +122,15 @@ public class ZendeskImport
 			// then create a contact with the domain id.
 			if (contact == null)
 			{
-				DomainUser user = domainUsersMap.get(ticketJSON.getLong("requester_id"));
+				DomainUser user = null;
+
+				if (domainUsersMap.containsKey(ticketJSON.getLong("requester_id")))
+					user = domainUsersMap.get(ticketJSON.getLong("requester_id"));
+				else
+					user = domainOwner;
+
 				contact = ContactUtil.createContact(user.name, user.email);
-				
+
 				contactsMap.put(ticketJSON.getLong("requester_id"), contact);
 			}
 
@@ -166,7 +175,13 @@ public class ZendeskImport
 
 			if (ticket.status != Status.NEW)
 			{
-				DomainUser assignee = domainUsersMap.get(ticketJSON.getLong("assignee_id"));
+				DomainUser assignee = null;
+
+				if (domainUsersMap.containsKey(ticketJSON.getLong("assignee_id")))
+					assignee = domainUsersMap.get(ticketJSON.getLong("assignee_id"));
+				else
+					assignee = domainOwner;
+
 				ticket.assignee_id = new Key<DomainUser>(DomainUser.class, assignee.id);
 				ticket.assigneeID = assignee.id;
 				ticket.assigned_time = 0l;
@@ -200,8 +215,8 @@ public class ZendeskImport
 			new TicketsDocument().add(ticket);
 
 			// Logging ticket created activity
-			TicketActivity activity = new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "",
-					ticketJSON.getString("description"), "last_reply_text");
+			TicketActivity activity = new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID,
+					ticket.id, "", ticketJSON.getString("description"), "last_reply_text");
 			activity.created_time = date.getTime();
 			activity.save();
 
