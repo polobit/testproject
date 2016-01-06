@@ -112,7 +112,7 @@ public class Clicked extends TaskletAdapter
 			else if(data.has(TwitterSendMessage.TWEET_CLICK_TRACKING_ID))
 			{
 				CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout,
-						data.getString(SendMessage.SMS_CLICK_TRACKING_ID), ShortenURLType.TWEET.toString(), null);
+						data.getString(TwitterSendMessage.TWEET_CLICK_TRACKING_ID), ShortenURLType.TWEET.toString(), null);
 			}
 			else
 			{
@@ -121,7 +121,10 @@ public class Clicked extends TaskletAdapter
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception occured while saving clicked node" + e.getMessage());
+			System.out.println("Exception occured while saving clicked node " + e.getMessage());
+			
+			// Proceed to No
+			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);
 		}
 	}
 
