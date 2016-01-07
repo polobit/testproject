@@ -21,6 +21,7 @@ var Widget_Model_Events = Base_Model_View.extend({
 
    stripeUrl: function(){
      var url = $('#stripe_url').attr('url');
+     $('#stripe_url').attr('disabled', 'disabled');
      var scope = $("input:radio[name='scope']:checked").val();
      url += "&scope="+scope+"&return_url="+ encodeURIComponent(window.location.href);     
      window.location.assign(url);

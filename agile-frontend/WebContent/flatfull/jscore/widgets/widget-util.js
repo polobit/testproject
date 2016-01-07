@@ -134,6 +134,7 @@ function save_widget_prefs(pluginName, prefs, callback) {
 			}else{
 				msgType = "error";
 				msg = ("Error occurred while saving "+displayName);
+				$('#stripe_url').removeAttr('disabled');
 			}
 
 			// if (pluginName != "CallScript")
