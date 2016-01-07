@@ -774,7 +774,7 @@ function getEmailsNextRenewalTime()
 {
 	var last_renewal_time = _billing_restriction.last_renewal_time;
 	if(last_renewal_time == undefined || last_renewal_time == null){
-		$.get("core/api/users/current-owner", function(data){
+		$.getJSON("core/api/users/current-owner", function(data){
 		  return new Date((data.createdTime+2592000)*1000).format("mmm dd, yyyy");
 		});
 	}else{

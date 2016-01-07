@@ -6924,6 +6924,20 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 		return getEmailsNextRenewalTime();
 	});
 
+	Handlebars.registerHelper('is_paid_emails', function(options)
+	{
+		var max = getMaxEmailsLimit();
+		// if max is greater than zero, we consider user is subscrbed to email plan
+		if (max > 0)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+		if(IS_TRIAL && IS_ALLOWED_TRIAL)
+			return options.inverse(this);
+		else
+			return options.fn(this);
+	});
+
 function agile_is_mobile_browser(){
    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
  }
