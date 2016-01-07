@@ -211,7 +211,8 @@ var portlet_graph_utility = {
 											{
 												chart : {
 													type : 'funnel',
-													marginRight : 20,
+													marginLeft:-85,
+													marginBottom: 20,
 													className : 'deals-funnel-portlet'
 												},
 												colors : [ "#23b7e5",
@@ -228,7 +229,7 @@ var portlet_graph_utility = {
 														dataLabels : {
 															enabled : true,
 															useHTML : true,
-															format : '<div class="text-center"><span style="color:{point.color}"><b>{point.name}</b></span><br/>'
+															format : '<div class="text-center"><span style="color:{point.color}">{point.name}</span><br>'
 																	+ '<span style="color:{point.color}">('
 																	+ portlet_utility
 																			.getPortletsCurrencySymbol()
@@ -236,7 +237,7 @@ var portlet_graph_utility = {
 															softConnector : true
 														},
 														neckWidth : '20%',
-														neckHeight : '20%',
+														neckHeight : '25%',
 
 														// -- Other available
 														// options
