@@ -582,7 +582,7 @@ var contacts_bulk_actions = {
 								var no = "No"
 
 								var message = "";
-								var upgrade_link = 'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
+								var upgrade_link = 'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgrade your email subscription.</a>';
 								var title = "Not enough emails left"
 								if (pendingEmails <= 0)
 								{
