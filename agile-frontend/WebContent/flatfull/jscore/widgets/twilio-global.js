@@ -1203,16 +1203,27 @@ function showNoteAfterCall(callRespJson,messageObj)
 		//				phoneNumber = callRespJson.to;
 						phoneNumber = TWILIO_CALLED_NO;
 						TWILIO_CALLED_NO = "";
+						
+						$.post( "/core/api/widgets/twilio/savecallactivityById",{
+							id:TWILIO_CONTACT_ID,
+							direction: TWILIO_DIRECTION, 
+							phone: phoneNumber, 
+							status : callRespJson.status,
+							duration : callRespJson.duration 
+							});
 					}
-					else
+					else{
 						phoneNumber = callRespJson.from;
+						$.post( "/core/api/widgets/twilio/savecallactivity",{
+							direction: TWILIO_DIRECTION, 
+							phone: phoneNumber, 
+							status : callRespJson.status,
+							duration : callRespJson.duration 
+							});
+					}
+						
 					
-					$.post( "/core/api/widgets/twilio/savecallactivity",{
-						direction: TWILIO_DIRECTION, 
-						phone: phoneNumber, 
-						status : callRespJson.status,
-						duration : callRespJson.duration 
-						});
+
 					
 					switch(callStatus) {
 				    case "canceled":
@@ -1269,17 +1280,26 @@ function showNoteAfterCall(callRespJson,messageObj)
 			
 	} else {
 		var phoneNumber = "";
-		if(TWILIO_DIRECTION == "outbound-dial")
+		if(TWILIO_DIRECTION == "outbound-dial"){
 			phoneNumber = callRespJson.to;
-		else
+			$.post( "/core/api/widgets/twilio/savecallactivityById",{
+				id:TWILIO_CONTACT_ID,
+				direction: TWILIO_DIRECTION, 
+				phone: phoneNumber, 
+				status : callRespJson.status,
+				duration : callRespJson.duration 
+				});
+		}
+		else{
 			phoneNumber = callRespJson.from;
-		
-		$.post( "/core/api/widgets/twilio/savecallactivity",{
-			direction: TWILIO_DIRECTION, 
-			phone: phoneNumber, 
-			status : callRespJson.status,
-			duration : callRespJson.duration 
-			});
+			$.post( "/core/api/widgets/twilio/savecallactivity",{
+				direction: TWILIO_DIRECTION, 
+				phone: phoneNumber, 
+				status : callRespJson.status,
+				duration : callRespJson.duration 
+				});
+		}
+
 		return showNewContactModal(phoneNumber);
 	}
 	
@@ -1385,7 +1405,8 @@ function sendVoiceAndEndCall(fileSelected) {
 										});
 									
 									if(TWILIO_CALLED_NO != "") {
-										$.post( "/core/api/widgets/twilio/savecallactivity",{
+										$.post( "/core/api/widgets/twilio/savecallactivityById",{
+											id:TWILIO_CONTACT_ID,
 											direction: TWILIO_DIRECTION, 
 											phone: TWILIO_CALLED_NO, 
 											status : "voicemail",
