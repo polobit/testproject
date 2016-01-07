@@ -6932,10 +6932,6 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			return options.fn(this);
 		else
 			return options.inverse(this);
-		if(IS_TRIAL && IS_ALLOWED_TRIAL)
-			return options.inverse(this);
-		else
-			return options.fn(this);
 	});
 
 function agile_is_mobile_browser(){
