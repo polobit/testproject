@@ -1,9 +1,11 @@
 package com.agilecrm.subscription.deferred;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.agilecrm.user.DomainUser;
-import com.google.appengine.api.taskqueue.DeferredTask;
 import com.agilecrm.util.email.SendMail;
-import com.campaignio.tasklets.agile.SendEmail;
+import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
  * <code>EmailsAddedDeferredTask</code> is the class which sends 
@@ -26,7 +28,9 @@ public class EmailsAddedDeferredTask implements DeferredTask {
 	@Override
 	public void run() {
 		System.out.println("Domain is "+domainUser.domain+" and email is "+domainUser.email);
-		SendMail.sendMail(domainUser.email, SendMail.FREE_EMAILS_UPDATED_SUBJECT, SendMail.FREE_EMAILS_UPDATED, object)
+		Map<String, String> data = new HashMap<String, String>();
+		data.put("user_name",domainUser.name);
+		SendMail.sendMail(domainUser.email, SendMail.FREE_EMAILS_UPDATED_SUBJECT, SendMail.FREE_EMAILS_UPDATED, data);
 		
 		
 	}

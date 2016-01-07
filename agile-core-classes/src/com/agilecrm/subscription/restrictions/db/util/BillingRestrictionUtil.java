@@ -8,10 +8,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+
+import com.agilecrm.AgileQueues;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.deferred.EmailsAddedDeferredTask;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.PlanLimits.PlanClasses;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
@@ -21,6 +24,9 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 @XmlRootElement
 public class BillingRestrictionUtil {
@@ -131,6 +137,7 @@ public class BillingRestrictionUtil {
 			if(currentDate - restriction.last_renewal_time >= 2592000){
 				System.out.println("Updating free 5000 emails");
 				restriction.refreshEmails();
+				sendFreeEmailsUpdatedMail();
 			}
 		}
 		System.out.println("restriction obj:: "+restriction);	
@@ -419,6 +426,16 @@ public class BillingRestrictionUtil {
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			return null;
 		}
+	}
+	
+	public static void sendFreeEmailsUpdatedMail(){
+		DomainUser domain_user = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+		if(domain_user == null)
+			return;
+		EmailsAddedDeferredTask task = new EmailsAddedDeferredTask(domain_user);
+		// Add to queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.EMAILS_ADDED_QUEUE);
+		queue.add(TaskOptions.Builder.withPayload(task));
 	}
 	
 }
