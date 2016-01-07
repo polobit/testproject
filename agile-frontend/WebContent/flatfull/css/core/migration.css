@@ -1838,6 +1838,12 @@ color:#727272;
 #contacts-table tr td:nth-of-type(n+4), #contacts-table tr th:nth-of-type(n+3) {
     display: none;
 }
+.i-checks-sm > i {
+  margin-right: 0px;
+}
+.agile-edit-row tr td:nth-of-type(3) {
+    padding: 8px 15px 8px 5px;
+}
 }
 
 @media all and (min-width: 768px) {
