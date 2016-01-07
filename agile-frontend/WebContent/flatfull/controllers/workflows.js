@@ -609,7 +609,7 @@ var WorkflowsRouter = Backbone.Router
 
 					// To get newly added trigger in triggers list
 					App_Workflows.triggersCollectionView = undefined;
-					workflow_alerts("Alert", "The Trigger will take a few minutes to initiate" , "workflow-alert-modal"
+					workflow_alerts("Triggers may not run immediately", "Your new trigger will be saved shortly.<br><br>Please note that the triggers may not run immediately and may take few mins based on the pending campaigns at that point." , "workflow-alert-modal"
 
 					        ,function(modal){});
 				}
