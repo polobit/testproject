@@ -57,5 +57,7 @@ public class AgileQueues
 	public static final String NOTIFICATION_PULL_QUEUE = "notification-pull-queue";
 
 	public static final String CONTACTS_SCHEMA_CHANGE_QUEUE = "contacts-schema-change-queue";
-
+	
+	//Free Emails added
+	public static final String EMAILS_ADDED_QUEUE = "free-emails-added-queue";
 }
