@@ -3036,6 +3036,7 @@ width : 150px;
 }
 
 .contact_popover{
+
 	border-radius: 0px;
 	width : 260px;
 }
@@ -3047,3 +3048,4 @@ width : 150px;
 .contact_popover .arrow{
 	display: none;
 }
+

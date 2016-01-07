@@ -31,6 +31,7 @@ function contactListener()
             });
 								$(that).popover('show');
 							$('.popover').addClass("contact_popover");
+
 							$('.popover').css('left', ($('.dta-contatiner').offset().left + 90+"px"));
 							if (window.innerHeight - $(that).offset().top >= 400)
                             $('.popover').css('top', ($(that).offset().top  + "px"));
@@ -254,7 +255,7 @@ $('.popover').on('click', '#add-score', function(e){
 	    // Changes score in UI
 	    $('#lead-score').text(add_score);
        
-   var temp_model= Contact_collection.set('lead_score', add_score);
+   var temp_model= Contact_collection.set('lead_score', add_score,{silent: true});
 		var contact_model =  temp_model.toJSON();
 
 	    
@@ -529,4 +530,3 @@ function contact_list_starify(el) {
     });
     
 }
-
