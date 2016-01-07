@@ -199,7 +199,7 @@
 <script id="stripe-custom-field-template" type="text/html">
 <div class="wrapper-sm">
 {{#if_equals this.custom_fields.length "0"}}
-	<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
+	<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a class="text-info" href="#custom-fields">create one</a>.</p>
 {{else}}
 	<p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p>
 	<select name="stripe_field" id="stripe_custom_field_name" class="required form-control col-md-10 w-full">
