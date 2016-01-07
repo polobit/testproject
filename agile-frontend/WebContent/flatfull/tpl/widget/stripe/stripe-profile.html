@@ -46,7 +46,7 @@
 		</div>
 	{{else}}
 		<div class="col-md-12 p-l-none p-r-sm">
-			<p>Please Reconfigure Stripe with Read & Write permissions to access Add credit feature </p>
+			<p>Revoke stripe with write access to enable add credit feature.</p>
 		</div>
 {{/if_hasWriteAccess}}
 </div>
@@ -234,15 +234,15 @@
 	See the contact's subscriptions history and payments from your Stripe account.
 <br>
 	<div class="col-sm-12 text-center m-t-sm">
+		<p><b>Access <i class="icon-question c-p" data-toggle="tooltip" data-placement="top" title="Select the access mode to enable features. Ex- Give write access to enable add credit feature." ></i></b></p>
 	    <div class="btn-group" data-toggle="buttons">
 	        <label class="btn btn-default active">
 	            <input type="radio" class="stripe_scopes" checked="checked" id="read_only" name="scope" value="read_only"/> Read
 	        </label> 
 	        <label class="btn btn-default">
-	            <input type="radio" class="stripe_scopes" id="read_write" name="scope" value="read_write"/> Read & Write
+	            <input type="radio" class="stripe_scopes" id="read_write" name="scope" value="read_write"/> Write
 	        </label> 	      
-	    </div>
-	   <i class="icon-question c-p" data-toggle="tooltip" data-placement="top" title="Give Read and Write permissions to enable features like Add credit etc." ></i>
+	    </div>	   
 	</div>
 <div class="text-center"><button class="btn btn-sm btn-primary m-t-sm" url="{{url}}" id="stripe_url">Link Your Stripe</button></div>
 </div>
