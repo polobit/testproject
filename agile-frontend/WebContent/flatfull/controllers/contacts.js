@@ -1320,6 +1320,8 @@ function getAndUpdateCollectionCount(type, el){
     	abortCountQueryCall();
 
     	Count_XHR_Call = $.get(countURL, {}, function(data){
+    		        data = parseInt(data);
+    		        
                     count_message = "<small> (" + data + " Total) </small>";
 					$('#contacts-count').html(count_message);
 

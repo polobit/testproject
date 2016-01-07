@@ -975,10 +975,8 @@ function add_model_cursor(app_collection, mdl)
 	else
 		app_collection.add(mdl);
 
-	var collectionCount = app_collection.at(0).attributes.count;
-	if(collectionCount){
-		collectionCount = parseInt(collectionCount) + 1;
-		app_collection.at(0).attributes.count = collectionCount;
+	if(app_collection.at(0).attributes.count){
+		app_collection.at(0).attributes.count += 1;
 	}		
 }
 
