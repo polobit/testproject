@@ -119,7 +119,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         var unsubscribe_email = $('#unsubscribe-email').val().trim();
         var unsubscribe_name = $('#unsubscribe-name').val().trim();
         var is_disabled = $('.is-disabled-top').attr("data");
-        if($clicked_button.attr("class") == "is-disabled-top" && is_disabled)
+        if($clicked_button.hasClass("is-disabled-top") && is_disabled)
             is_disabled = !JSON.parse(is_disabled);
 
         var unsubscribe_json ={
@@ -168,7 +168,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 $('#workflow-edit-msg').hide();
 
                 //toggle disable dropdown
-                 if($clicked_button.attr("class") == "is-disabled-top"){
+                 if($clicked_button.hasClass("is-disabled-top")){
                      var disabled = $(".is-disabled-top");
                  
                     if (is_disabled) {
