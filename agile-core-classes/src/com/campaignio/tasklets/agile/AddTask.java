@@ -128,16 +128,22 @@ public class AddTask extends TaskletAdapter {
 		String timezone = getStringValue(nodeJSON, subscriberJSON, data,
 				TIMEZONE);
 		String at = getStringValue(nodeJSON, subscriberJSON, data, AT);
-		System.out.println("mins:" + Integer.parseInt(at.substring(3)));
-		System.out.println("hrs:" + Integer.parseInt(at.substring(0, 2)));
-		// Gets due date in epoch from dueDays
-		Long epochTime = AgileTaskletUtil.getDateInEpoch(dueDays, timezone, at);
-		// DateUtil.getCalendar(duration, timeZoneString, at).getTimeInMillis();
-
-		// Contact Id
-		String contactId = AgileTaskletUtil.getId(subscriberJSON);
-
+		
+		Long epochTime = 0l;
+		
 		try {
+			
+			System.out.println("Updated code to fix for old task node...");
+			System.out.println("Timezone is " + timezone + " and at " + at);
+			
+			// Gets due date in epoch from dueDays
+			epochTime = AgileTaskletUtil.getDateInEpoch(dueDays, timezone, at);
+			
+			System.out.println("Epoch time obtained is " + epochTime);
+			
+			// Contact Id
+			String contactId = AgileTaskletUtil.getId(subscriberJSON);
+			
 			// Contact ownerId.
 			Long contactOwnerId = ContactUtil.getContactOwnerId(Long
 					.parseLong(contactId));
@@ -147,7 +153,7 @@ public class AddTask extends TaskletAdapter {
 					givenOwnerId, contactOwnerId, timezone);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Exception occured while creating Task.");
+			System.out.println("Exception occured while creating Task."  + e.getMessage());
 		}
 
 		// Creates log for AddTask

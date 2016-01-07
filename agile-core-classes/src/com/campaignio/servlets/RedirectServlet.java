@@ -135,14 +135,20 @@ public class RedirectServlet extends HttpServlet
 	    System.out.println("Push parameter is ............" + push);
 
 	    // Redirect url with push data
-	    if (StringUtils.isNotBlank(push) && push.equals(EmailLinksConversion.AGILE_EMAIL_PUSH))
+	    if (StringUtils.isNotBlank(push) && (push.equals(EmailLinksConversion.AGILE_EMAIL_PUSH) || push.equals(EmailLinksConversion.AGILE_EMAIL_PUSH_EMAIL_ONLY)))
 	    {
 		// Append Contact properties to params
-		params += TrackClickUtil.appendContactPropertiesToParams(contact);
+		params += TrackClickUtil.appendContactPropertiesToParams(contact, push);
+		
+		//Append url fragment(Prashannjeet)
+		if(normalisedLongURL.contains("#"))
+			normalisedLongURL=normalisedLongURL.replaceFirst("#", params+"#");
+		else
+			normalisedLongURL+=params;
 
-		System.out.println("Forwarding it to " + normalisedLongURL + " " + params);
-
-		resp.sendRedirect(normalisedLongURL + params);
+			System.out.println("Forwarding it to " + normalisedLongURL + " " + params);
+		
+			resp.sendRedirect(normalisedLongURL);
 	    }
 	    else
 	    {
@@ -186,18 +192,33 @@ public class RedirectServlet extends HttpServlet
 	    {
 		
 		    // Add log
-		    if(urlShortener != null && urlShortener.getURLShortenerType().equals(ShortenURLType.SMS))
+		    if(urlShortener != null)
 		    {
-		    	CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, workflow.name, subscriberId, "SMS link clicked " + originalURL + " of campaign " + workflow.name,
-		    	        LogType.SMS_LINK_CLICKED.toString());
+		    	if(urlShortener.getURLShortenerType().equals(ShortenURLType.SMS))
+		    	{
+			    	CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, workflow.name, subscriberId, "SMS link clicked " + originalURL + " of campaign " + workflow.name,
+			    	        LogType.SMS_LINK_CLICKED.toString());
+			    	
+					// Interrupt cron tasks of clicked.
+				    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.SMS);
+					
+		    	}
+		    	
+		    	if(urlShortener.getURLShortenerType().equals(ShortenURLType.TWEET))
+		    	{
+		    		CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, workflow.name, subscriberId, "Tweet link clicked " + originalURL + " of campaign " + workflow.name,
+			    	        LogType.TWEET_LINK_CLICKED.toString());
+			    	
+					// Interrupt cron tasks of clicked.
+				    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.TWEET);
+					
+		    	}
 		    	
 		    	// Show notification
 				TrackClickUtil.showEmailClickedNotification(contact, workflow.name, originalURL);
 				
-				// Interrupt cron tasks of clicked.
-			    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.SMS);
-				
-		    	return;
+				return;
+		    	
 		    }
 
 		    TrackClickUtil.addEmailClickedLog(campaignId, subscriberId, originalURL, workflow.name);

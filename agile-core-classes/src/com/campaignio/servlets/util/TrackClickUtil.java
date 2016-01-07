@@ -11,6 +11,7 @@ import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
+import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -112,6 +113,29 @@ public class TrackClickUtil
 	return longURL;
     }
 
+    public static String appendContactPropertiesToParams(Contact contact, String typeOfPush)
+    {
+    	
+    	// Add email only for Yes&Push Email only
+    	if(StringUtils.equalsIgnoreCase(typeOfPush, EmailLinksConversion.AGILE_EMAIL_PUSH_EMAIL_ONLY))
+    	{
+    		 try
+    		 {
+    			 JSONObject contactJSON = new JSONObject();
+    			 contactJSON.put("data", new JSONObject().put("email", contact.getContactFieldValue(Contact.EMAIL)));
+    			 
+    			 return buildContactParams(contactJSON);
+    		 }
+    		 catch (Exception e)
+    		 {
+    			 e.printStackTrace();
+    		 }
+    	}
+    		
+    	return appendContactPropertiesToParams(contact);
+    	
+    }
+    
     /**
      * Appends contact-properties as params to the url before redirecting to
      * original url.
@@ -120,41 +144,47 @@ public class TrackClickUtil
      *            - Contact Object.
      * @return String
      */
-    @SuppressWarnings("unchecked")
     public static String appendContactPropertiesToParams(Contact contact)
     {
-	String params = "";
-
 	JSONObject contactJSON = AgileTaskletUtil.getSubscriberJSON(contact, true);
 
 	// if null returned due to exception, return empty
 	if (contactJSON == null)
-	    return params;
+	    return "";
 
-	// Remove unnecessary params like powered_by etc
-	contactJSON = removeAvoidableParams(contactJSON);
-
-	// Iterate through JSON and construct all params
-	Iterator<String> itr = contactJSON.keys();
-
-	while (itr.hasNext())
-	{
-	    // Get Property Name & Value
-	    String propertyName = itr.next();
-	    String value = "";
-	    try
-	    {
-		value = contactJSON.getString(propertyName);
-		params += ("&" + propertyName.trim() + "=" + URLEncoder.encode(value.trim(), "UTF-8"));
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-
-	}
-	return params;
+	return buildContactParams(contactJSON);
     }
+
+
+	@SuppressWarnings("unchecked")
+	private static String buildContactParams(JSONObject contactJSON)
+	{
+		String params = "";
+		
+		// Remove unnecessary params like powered_by etc
+		contactJSON = removeAvoidableParams(contactJSON);
+		
+		// Iterate through JSON and construct all params
+		Iterator<String> itr = contactJSON.keys();
+
+		while (itr.hasNext())
+		{
+		    // Get Property Name & Value
+		    String propertyName = itr.next();
+		    String value = "";
+		    try
+		    {
+			value = contactJSON.getString(propertyName);
+			params += ("&" + propertyName.trim() + "=" + URLEncoder.encode(value.trim(), "UTF-8"));
+		    }
+		    catch (Exception e)
+		    {
+			e.printStackTrace();
+		    }
+
+		}
+		return params;
+	}
 
     /**
      * Interrupts crons that are saved by Clicked Node of Campaigns.
@@ -183,9 +213,9 @@ public class TrackClickUtil
 			    subscriberId, interruptedData.toString());
 	    }
 	    
-	    if(type.equals(ShortenURLType.SMS))
+	    if(type.equals(ShortenURLType.SMS) || type.equals(ShortenURLType.TWEET))
 	    {
-	    	emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, null);
+	    	emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, type, null);
 	    }
 	    
 	    if(emailClickDeferredTask == null)

@@ -104,7 +104,7 @@ public class ContactUtil
 
 	return dao.listByPropertyAndOrder(searchMap, orderBy);
     }
-
+    
     /**
      * Fetches a contact based on its id
      * 
@@ -1220,6 +1220,22 @@ public class ContactUtil
 	if (emails.size() == 0)
 	    return contact;
 
+	Contact oldContact = getDuplicateContact(contact);
+
+	if (oldContact != null)
+	    return mergeContactFeilds(contact, oldContact);
+
+	return oldContact;
+
+    }
+
+    public static Contact getDuplicateContact(Contact contact)
+    {
+	List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
+
+	if (emails.size() == 0)
+	    return contact;
+
 	Contact oldContact = null;
 	for (ContactField field : emails)
 	{
@@ -1228,11 +1244,7 @@ public class ContactUtil
 		break;
 	}
 
-	if (oldContact != null)
-	    return mergeContactFeilds(contact, oldContact);
-
 	return oldContact;
-
     }
 
     public static Contact mergeCompanyFields(Contact contact)
@@ -1286,10 +1298,12 @@ public class ContactUtil
     public static boolean isValidEmail(final String hex)
     {
 
-	/*String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";*/
-	
-    String EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+	/*
+	 * String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
+	 * "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	 */
+
+	String EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
 
 	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 
@@ -1745,12 +1759,17 @@ public class ContactUtil
      */
     public static int getContactsCount(Long minTime, Long maxTime)
     {
-	int contactsCount = 0;
 	try
 	{
-	    contactsCount = dao.ofy().query(Contact.class).filter("type", Contact.Type.PERSON)
-		    .filter("created_time >= ", minTime).filter("created_time <= ", maxTime).count();
-	    return contactsCount;
+		Query<Contact> query = dao.ofy().query(Contact.class).filter("type", Contact.Type.PERSON);
+		
+		if(minTime != null)
+			query.filter("created_time >= ", minTime);
+		if(maxTime != null)
+			query.filter("created_time <= ", maxTime);
+		
+	    return query.count();
+	    
 	}
 	catch (Exception e)
 	{
@@ -1760,6 +1779,36 @@ public class ContactUtil
 
     }
 
+    /**
+     * Get the companies count created in the specified duration.
+     * 
+     * @param minTime
+     *            Long object
+     * @param maxTime
+     *            Long object
+     */
+    public static int getCompaniesCount(Long minTime, Long maxTime)
+    {
+	try
+	{
+		Query<Contact> query = dao.ofy().query(Contact.class).filter("type", Contact.Type.COMPANY);
+		
+		if(minTime != null)
+			query.filter("created_time >= ", minTime);
+		if(maxTime != null)
+			query.filter("created_time <= ", maxTime);
+		
+	    return query.count();
+	    
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return 0;
+
+    }
+    
     public static void updateCampaignEmailedTime(Long contactId, Long lastCampaignEmailed, String toEmail)
     {
 	LastContactedDeferredTask lastContactDeferredtask = new LastContactedDeferredTask(contactId,
@@ -1767,5 +1816,5 @@ public class ContactUtil
 	Queue queue = QueueFactory.getQueue(AgileQueues.LAST_CONTACTED_UPDATE_QUEUE);
 	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask));
     }
-    
+
 }

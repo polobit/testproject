@@ -276,9 +276,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 */
 		this.contactsListView = new  Contacts_Events_Collection_View({ url : url,custom_scrollable_element:custom_scrollable_element, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
 			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
-			{
-
-		  
+			{		  
 		
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
@@ -287,31 +285,48 @@ var ContactsRouter = Backbone.Router.extend({
 				var cel = App_Contacts.contactsListView.el;
 				var collection = App_Contacts.contactsListView.collection;
 
+				abortCountQueryCall();
+				
 				// To set heading in template
 				if(is_lhs_filter) {
-					var count = 0;
-					if(collection.models.length > 0) {
-						count = collection.models[0].attributes.count || collection.models.length;
-					}
-					var count_message;
-					if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
-						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
-					else
-						count_message = "<small> (" + count + " Total) </small>";
-					$('#contacts-count').html(count_message);
+
 					setupViews();
 					setupContactFilterList();
 					//setUpContactView();
-				} else {					
+
+					if(collection.models.length > 0 && !collection.models[0].get("count")){
+						// Call to get Count 
+						getAndUpdateCollectionCount("contacts", el);						
+					}
+					else {
+						var count = 0;
+						if(collection.models.length > 0) {
+							count = collection.models[0].attributes.count || collection.models.length;
+						}
+						var count_message;
+						if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
+							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+						else
+							count_message = "<small> (" + count + " Total) </small>";
+						$('#contacts-count').html(count_message);
+
+					}
+					
+				} else {
+
 					setupLhsFilters(cel, is_company);
 					setupViews(cel);
 					setupContactFilterList(cel, tag_id);
 					setUpContactView(cel);
+
+					if(collection.models.length > 0 && !collection.models[0].get("count")){
+						// Call to get Count 
+						getAndUpdateCollectionCount("contacts", el);						
+					}
 				}
+
 				$('[data-toggle="tooltip"]').tooltip();
 				start_tour("contacts", el);
-
-				
 
 			} });
 
@@ -973,6 +988,8 @@ var ContactsRouter = Backbone.Router.extend({
 	// availabel, url = filter url if there is any filter
 	customView : function(id, view_data, url, tag_id, is_lhs_filter, postData)
 	{
+		console.log("customView");
+
 		SELECT_ALL = false;
 		App_Contacts.tag_id = tag_id;
 
@@ -988,7 +1005,7 @@ var ContactsRouter = Backbone.Router.extend({
 			this.contact_custom_view = undefined;
 			CONTACTS_HARD_RELOAD = false;
 			view_data = undefined;
-			App_Contacts.contactViewModel = undefined;
+			// App_Contacts.contactViewModel = undefined;
 		}
 
 		// If id is defined get the respective custom view object
@@ -1046,6 +1063,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 			//setup_tags(el);
 			//pieTags(el);
+
 			setupViews(el, view_data.name);
 			setupContactFilterList(el, tag_id);
 			setUpContactView(el);
@@ -1105,27 +1123,42 @@ var ContactsRouter = Backbone.Router.extend({
 				//pieTags(el);
 				setupViews(el, view_data.name);
 				$("#contacts-view-options").css( 'pointer-events', 'auto' );
-				
-
 
 				// show list of filters dropdown in contacts list
 				setupContactFilterList(el, App_Contacts.tag_id);
+
 				if(tag_id)
 				setUpContactView(el,true);
 			    else
 				setUpContactView(el);
+
+				abortCountQueryCall();
+
 				if(is_lhs_filter) {
-					var count = 0;
-					if(collection.models.length > 0) {
-						count = collection.models[0].attributes.count || collection.models.length;
+
+					if(collection.models.length > 0 && !collection.models[0].get("count")){
+						// Call to get Count 
+						getAndUpdateCollectionCount("contacts", el);
+					} else {
+						var count = 0;
+						if(collection.models.length > 0) {
+							count = collection.models[0].attributes.count || collection.models.length;
+						}
+						var count_message;
+						if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
+							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+ updateImageS3Path("/img/help.png") +'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+						else
+							count_message = "<small> (" + count + " Total) </small>";
+						$('#contacts-count').html(count_message);
 					}
-					var count_message;
-					if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
-						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+ updateImageS3Path("/img/help.png") +'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
-					else
-						count_message = "<small> (" + count + " Total) </small>";
-					$('#contacts-count').html(count_message);
-				} else {					
+					
+				} else {	
+
+					if(collection.models.length > 0 && !collection.models[0].get("count")){
+						// Call to get Count 
+						getAndUpdateCollectionCount("contacts", el);						
+					}
+
 					setupLhsFilters(el);
 				}
 
@@ -1145,18 +1178,31 @@ var ContactsRouter = Backbone.Router.extend({
 			}, });
 
 		var _that = this;
-		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
+		App_Contacts.contactDateFields = CONTACTS_DATE_FIELDS;
+
+		if(!App_Contacts.contactDateFields){
+				$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
 				{
-					// Defines appendItem for custom view
+					App_Contacts.contactDateFields = customDatefields;
 					
+					// Defines appendItem for custom view
 					_that.contact_custom_view.appendItem = function(base_model){
-						contactTableView(base_model,customDatefields,this);
+						contactTableView(base_model,App_Contacts.contactDateFields,this);
 					};
 					// Fetch collection
 					_that.contact_custom_view.collection.fetch();
-					
 				});
-		
+
+		} else{
+
+				// Defines appendItem for custom view
+				_that.contact_custom_view.appendItem = function(base_model){
+					contactTableView(base_model,App_Contacts.contactDateFields,this);
+				};
+				// Fetch collection
+				_that.contact_custom_view.collection.fetch();
+		}
+
 		if(!is_lhs_filter) {
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(this.contact_custom_view.el);
@@ -1255,3 +1301,44 @@ var ContactsRouter = Backbone.Router.extend({
 	}
 		
 	});
+
+function getAndUpdateCollectionCount(type, el){
+
+		var count_message = "";
+    	$("#contacts-count").html(count_message);
+
+    	var countURL = "";
+    	if(type == "contacts")
+    		countURL = App_Contacts.contactsListView.options.url + "/count";
+    	else
+    		countURL = App_Companies.companiesListView.options.url + "/count";
+
+    	// Hide bulk action checkbox
+    	$(".thead_check", el).closest("label").css("visibility", "hidden");
+    	$("table", el).addClass("hide-head-checkbox");
+
+    	abortCountQueryCall();
+
+    	Count_XHR_Call = $.get(countURL, {}, function(data){
+    		        data = parseInt(data);
+    		        
+                    count_message = "<small> (" + data + " Total) </small>";
+					$('#contacts-count').html(count_message);
+
+					// Reset collection
+					if(type == "contacts")
+						App_Contacts.contactsListView.collection.models[0].set("count", data, {silent: true});
+					else{
+						App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
+					}
+
+					$(".thead_check", el).closest("label").css("visibility", "visible");
+					$("table", el).removeClass("hide-head-checkbox");	
+    	});
+}
+
+function abortCountQueryCall(){
+	try{
+		Count_XHR_Call.abort();
+	}catch(e){}
+}

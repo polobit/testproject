@@ -34,6 +34,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskAlreadyExistsException;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.apphosting.utils.config.ApplicationXml.Modules.Web;
 import com.googlecode.objectify.Key;
 
 /**
@@ -136,7 +137,7 @@ public class TagUtil
 	    try
 	    {
 		System.out.println("tag name : " + tagName);
-		queue.add(TaskOptions.Builder.withPayload(task).taskName(tagName));
+		queue.addAsync(TaskOptions.Builder.withPayload(task).taskName(tagName));
 	    }
 	    catch (TaskAlreadyExistsException e)
 	    {
@@ -452,7 +453,7 @@ public class TagUtil
 	return tagString;
     }
 
-    public static void validateTag(String tag)
+    public static void validateTag(String tag) throws WebApplicationException
     {
 	System.out.println("validating tag " + tag);
 	if (!TagValidator.getInstance().validate(tag))

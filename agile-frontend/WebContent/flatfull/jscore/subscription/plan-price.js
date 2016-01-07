@@ -755,3 +755,13 @@ function email_validation(form)
 				} });
 	return $(form).valid();
 }
+
+function emailClickEvent() {
+	$('ul.nav.nav-tabs').removeClass("hide");
+	$("#email").addClass("hide");
+	$("#currentPlan").addClass("p-t-md");
+	$("#usertab").removeClass("active");
+	$("#emailtab").addClass("active");
+	$("#users-content").removeClass("active");
+	$("#email-content").addClass("active");
+}

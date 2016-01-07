@@ -180,6 +180,60 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 			
 	}, contact_id);
 
+
+	$("#widgets").off("click", "#stripe_pay_show_more");
+	$("#widgets").on("click", "#stripe_pay_show_more", function(e)
+	{
+		e.preventDefault();
+		var offSet = stripePAYCount * 5;
+		loadStripePayments(offSet);
+		++stripePAYCount;
+	});
+
+	$("#widgets").off("click", "#stripe_inv_show_more");
+	$("#widgets").on("click", "#stripe_inv_show_more", function(e){
+		e.preventDefault();
+		var offSet = stripeINVCount * 5;
+		loadStripeInvoices(offSet);
+		++stripeINVCount;
+	});
+
+	$("#widgets").off("click", "#add_credits");
+	$("#widgets").on("click", "#add_credits", function(e){
+		$('#stripe_credits_panel').removeClass('hide');
+		$('#add_credits').addClass('hide');
+	});
+
+	$("#widgets").off("click", "#stripe_credits_cancel");
+	$("#widgets").on("click", "#stripe_credits_cancel", function(e){
+		$('#add_credits').removeClass('hide');
+		$('#stripe_credits_panel').addClass('hide');
+	});	 
+
+	$("#widgets").off("click", "#stripe_credits_add");
+	$("#widgets").on("click", "#stripe_credits_add", function(e){
+		var creditAmt = (parseFloat($('#credit_amount').val())*100);
+		if(creditAmt != 0){
+			$("#stripe_credits_panel *").attr("disabled", "disabled");
+			$.get("/core/api/widgets/stripe/credit/" +Stripe_Plugin_Id+ "/" +customer_id+ "/" +creditAmt , function(data){
+				console.log(data);
+				if(data){
+					var balance = $('#balance_credit').text();
+					balance = parseFloat(creditAmt/100) + parseFloat(balance);
+					$('#balance_credit').text(balance);					 
+					$('#add_credits').removeClass('hide');
+					$('#stripe_credits_panel').addClass('hide');
+					$('#credit_amount').val(0);
+				}else{
+					showNotyPopUp('warning', 'Stripe : Error occured while adding credits' , "bottomRight");
+				}
+				$("#stripe_credits_panel *").removeAttr("disabled");
+			});
+		}else{
+			alert('Please enter proper amount');
+		}
+	});	
+
 }
 
 function loadStripeInvoices(offSet){
@@ -358,58 +412,5 @@ function startStripeWidget(contact_id){
 	 * invoices from Stripe
 	 */
 	showStripeProfile(stripe_custom_field_name, contact_id);
-
-	$("#widgets").off("click", "#stripe_pay_show_more");
-	$("#widgets").on("click", "#stripe_pay_show_more", function(e)
-	{
-		e.preventDefault();
-		var offSet = stripePAYCount * 5;
-		loadStripePayments(offSet);
-		++stripePAYCount;
-	});
-
-	$("#widgets").off("click", "#stripe_inv_show_more");
-	$("#widgets").on("click", "#stripe_inv_show_more", function(e){
-		e.preventDefault();
-		var offSet = stripeINVCount * 5;
-		loadStripeInvoices(offSet);
-		++stripeINVCount;
-	});
-
-	$("#widgets").off("click", "#add_credits");
-	$("#widgets").on("click", "#add_credits", function(e){
-		$('#stripe_credits_panel').removeClass('hide');
-		$('#add_credits').addClass('hide');
-	});
-
-	$("#widgets").off("click", "#stripe_credits_cancel");
-	$("#widgets").on("click", "#stripe_credits_cancel", function(e){
-		$('#add_credits').removeClass('hide');
-		$('#stripe_credits_panel').addClass('hide');
-	});	 
-
-	$("#widgets").off("click", "#stripe_credits_add");
-	$("#widgets").on("click", "#stripe_credits_add", function(e){
-		var creditAmt = (parseFloat($('#credit_amount').val())*100);
-		if(creditAmt != 0){
-			$("#stripe_credits_panel *").attr("disabled", "disabled");
-			$.get("/core/api/widgets/stripe/credit/" +Stripe_Plugin_Id+ "/" +customer_id+ "/" +creditAmt , function(data){
-				console.log(data);
-				if(data){
-					var balance = $('#balance_credit').text();
-					balance = parseFloat(creditAmt/100) + parseFloat(balance);
-					$('#balance_credit').text(balance);					 
-					$('#add_credits').removeClass('hide');
-					$('#stripe_credits_panel').addClass('hide');
-					$('#credit_amount').val(0);
-				}else{
-					showNotyPopUp('warning', 'Stripe : Error occured while adding credits' , "bottomRight");
-				}
-				$("#stripe_credits_panel *").removeAttr("disabled");
-			});
-		}else{
-			alert('Please enter proper amount');
-		}
-	});	
 	
 }

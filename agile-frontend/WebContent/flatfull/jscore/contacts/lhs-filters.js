@@ -24,23 +24,25 @@ function setupLhsFilters(cel, is_company)
 
 			$('#lhs_filters_conatiner', cel).html($(template_ui));
 
-			fillSelect('owner_select', '/core/api/users', undefined, function()
-			{
-				if (!COMPANY_CUSTOM_FIELDS)
+			setTimeout(function(){
+				fillSelect('owner_select', '/core/api/users', undefined, function()
 				{
-					$.getJSON("core/api/custom-fields/searchable/scope?scope=COMPANY", function(fields)
+					if (!COMPANY_CUSTOM_FIELDS)
 					{
-						COMPANY_CUSTOM_FIELDS = fields;
-						loadCustomFiledsFilters(fields, cel, is_company);
-						return;
-					})
-				}
-				else
-				{
-					loadCustomFiledsFilters(COMPANY_CUSTOM_FIELDS, cel, is_company);
-				}
-			
-			}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
+						$.getJSON("core/api/custom-fields/searchable/scope?scope=COMPANY", function(fields)
+						{
+							COMPANY_CUSTOM_FIELDS = fields;
+							loadCustomFiledsFilters(fields, cel, is_company);
+							return;
+						})
+					}
+					else
+					{
+						loadCustomFiledsFilters(COMPANY_CUSTOM_FIELDS, cel, is_company);
+					}
+				
+				}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
+			}, 500);
 
 		}, $('#lhs_filters_conatiner', cel));
 
@@ -55,31 +57,33 @@ function setupLhsFilters(cel, is_company)
 				  return;
 			$('#lhs_filters_conatiner', cel).html($(template_ui));
 			
-			fillSelect('owner_select', '/core/api/users', undefined, function()
-			{
-				fillSelect('campaign_select_master', '/core/api/workflows', undefined, function()
+			setTimeout(function(){
+				fillSelect('owner_select', '/core/api/users', undefined, function()
 				{
-					// loading image is added to hidden select by fillselect
-					// remove it manually.
-					$('#campaign_select_master').next('.loading').remove();
-					$('#campaign_select').html($('#campaign_select_master').html());
-					if (!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
+					fillSelect('campaign_select_master', '/core/api/workflows', undefined, function()
 					{
-						$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields)
+						// loading image is added to hidden select by fillselect
+						// remove it manually.
+						$('#campaign_select_master').next('.loading').remove();
+						$('#campaign_select').html($('#campaign_select_master').html());
+						if (!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
 						{
-							SEARCHABLE_CONTACT_CUSTOM_FIELDS = fields;
-							loadCustomFiledsFilters(fields, cel, is_company);
-							return;
-						})
-					}
-					else
-					{
-						loadCustomFiledsFilters(SEARCHABLE_CONTACT_CUSTOM_FIELDS, cel, is_company);
-					}
-					$('[data-toggle="tooltip"]').tooltip();
-					//showDynamicFilters();
+							$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields)
+							{
+								SEARCHABLE_CONTACT_CUSTOM_FIELDS = fields;
+								loadCustomFiledsFilters(fields, cel, is_company);
+								return;
+							})
+						}
+						else
+						{
+							loadCustomFiledsFilters(SEARCHABLE_CONTACT_CUSTOM_FIELDS, cel, is_company);
+						}
+						$('[data-toggle="tooltip"]').tooltip();
+						//showDynamicFilters();
+					}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
 				}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
-			}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
+			}, 500);
 
 		}, $('#lhs_filters_conatiner', cel));
 
@@ -194,6 +198,8 @@ $('#' + container_id).on('click', 'a.clear-filter-condition-lhs', function(e)
 $('#' + container_id).on('click', '#clear-lhs-contact-filters', function(e)
 {
 	e.preventDefault();
+	console.log("clicked");
+
 	_agile_delete_prefs('dynamic_contact_filter');
 	CONTACTS_HARD_RELOAD = true;
 	App_Contacts.contacts();

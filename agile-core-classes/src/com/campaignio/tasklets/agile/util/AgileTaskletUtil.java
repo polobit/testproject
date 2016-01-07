@@ -648,6 +648,13 @@ public class AgileTaskletUtil {
 
 	public static Long getDateInEpoch(String days, String timezone, String at) {
 
+		// If both are null, return UTC
+		if(StringUtils.isBlank(at))
+			return getDateInEpoch(days);
+		
+		if(StringUtils.isBlank(timezone))
+			timezone = "UTC";
+		
 		Calendar calendar = Calendar
 				.getInstance(TimeZone.getTimeZone(timezone));
 
@@ -660,7 +667,7 @@ public class AgileTaskletUtil {
 
 		return calendar.getTimeInMillis() / 1000;
 	}
-
+	
 	/**
 	 * Checks whether contact's unsubscribeStatus contains ALL type, inorder to
 	 * avoid further sending emails through campaign. If contains ALL, return

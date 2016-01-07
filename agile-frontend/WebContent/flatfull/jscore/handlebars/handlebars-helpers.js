@@ -3619,22 +3619,27 @@ $(function()
 	 * Compares the arguments (value and target) and executes the template based
 	 * on the result (used in contacts typeahead)
 	 */
-	Handlebars.registerHelper('if_domain', function(value, options)
-	{
+	Handlebars.registerHelper('if_hasWriteAccess', function(options){
 
+		var status = false;
+		// Retrieves widget which is fetched using script API
+		var stripe_widget = agile_crm_get_widget("Stripe");
+		if(stripe_widget != undefined){
 
-		if (typeof value === "undefined")
-			return options.inverse(this);
-
-		var domainName = CURRENT_DOMAIN_USER.domain;
-
-		if(domainName){
-			if (value.toString().trim().toLowerCase() == domainName.toLowerCase()){
-				return options.fn(this);
-			}else{
-				return options.inverse(this);
+			if (stripe_widget.prefs != undefined)
+			{			
+				// Parse string Stripe widget preferences as JSON
+				var stripe_widget_prefs = JSON.parse(stripe_widget.prefs);
+				var scope = stripe_widget_prefs.scope;				
+				if(scope == "read_write"){					
+					status = true;
+				}
 			}
-		}else{
+		}
+
+		if(status){
+			return options.fn(this);			
+		}else{			
 			return options.inverse(this);
 		}
 	});
@@ -6918,6 +6923,21 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 	}
 	return dateInepoch;
 });
+
+	Handlebars.registerHelper('emails_next_renewal_time', function(items, name)
+	{
+		return getEmailsNextRenewalTime();
+	});
+
+	Handlebars.registerHelper('is_paid_emails', function(options)
+	{
+		var max = getMaxEmailsLimit();
+		// if max is greater than zero, we consider user is subscrbed to email plan
+		if (max > 0)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
 
 function agile_is_mobile_browser(){
    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));

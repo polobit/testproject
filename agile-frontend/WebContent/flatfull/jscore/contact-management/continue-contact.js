@@ -975,8 +975,9 @@ function add_model_cursor(app_collection, mdl)
 	else
 		app_collection.add(mdl);
 
-	if (app_collection.at(0).attributes.count)
+	if(app_collection.at(0).attributes.count){
 		app_collection.at(0).attributes.count += 1;
+	}		
 }
 
 /**
