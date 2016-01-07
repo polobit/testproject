@@ -198,7 +198,7 @@ function get_custom_fields(type)
 	// Iterate over data and get field labels of each custom field
 	$.each(data, function(index, obj)
 	{
-		if (obj['field_type'] != "FORMULA" && obj['field_type'] != "CONTACT" && obj['field_type'] != "COMPANY")
+		if (obj['field_type'] != "FORMULA")
 		{
 			// Iterate over single custom field to get field-label
 			$.each(obj, function(key, value)

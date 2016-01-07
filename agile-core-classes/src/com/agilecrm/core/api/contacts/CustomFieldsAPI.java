@@ -57,7 +57,7 @@ public class CustomFieldsAPI
 	    {
 	    	for (CustomFieldDef customFieldDef : cusList)
 	    	{
-	    		if (!customFieldDef.field_type.equals(CustomFieldDef.Type.FORMULA) && !customFieldDef.field_type.equals(CustomFieldDef.Type.CONTACT) && !customFieldDef.field_type.equals(CustomFieldDef.Type.COMPANY))
+	    		if (!customFieldDef.field_type.equals(CustomFieldDef.Type.FORMULA))
 	    		{
 	    			customFieldsList.add(customFieldDef);
 	    		}

@@ -130,9 +130,8 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		// populates the template using handlebars
 		$.each(data, function(index, model)
 		{
-			if (model && model.field_type && (model.field_type == "FORMULA" || model.field_type == "CONTACT" || model.field_type == "COMPANY"))
+			if (model && model.field_type && model.field_type == "FORMULA")
 			{
-				alert("model.field_type---"+model.field_type);
 				//If the model is Customfield and if it is formula type we won't add that.
 			}
 			else
