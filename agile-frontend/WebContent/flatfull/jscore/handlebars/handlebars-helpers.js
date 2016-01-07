@@ -3619,22 +3619,27 @@ $(function()
 	 * Compares the arguments (value and target) and executes the template based
 	 * on the result (used in contacts typeahead)
 	 */
-	Handlebars.registerHelper('if_domain', function(value, options)
-	{
+	Handlebars.registerHelper('if_hasWriteAccess', function(options){
 
+		var status = false;
+		// Retrieves widget which is fetched using script API
+		var stripe_widget = agile_crm_get_widget("Stripe");
+		if(stripe_widget != undefined){
 
-		if (typeof value === "undefined")
-			return options.inverse(this);
-
-		var domainName = CURRENT_DOMAIN_USER.domain;
-
-		if(domainName){
-			if (value.toString().trim().toLowerCase() == domainName.toLowerCase()){
-				return options.fn(this);
-			}else{
-				return options.inverse(this);
+			if (stripe_widget.prefs != undefined)
+			{			
+				// Parse string Stripe widget preferences as JSON
+				var stripe_widget_prefs = JSON.parse(stripe_widget.prefs);
+				var scope = stripe_widget_prefs.scope;				
+				if(scope == "read_write"){					
+					status = true;
+				}
 			}
-		}else{
+		}
+
+		if(status){
+			return options.fn(this);			
+		}else{			
 			return options.inverse(this);
 		}
 	});
