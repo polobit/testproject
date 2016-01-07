@@ -25,15 +25,15 @@
 										<button class="btn btn-primary btn-sm  right pos-rlt m-r-xs" id="save-workflow-top">Save Campaign</button>
 									{{else}}
 										<div class="btn-group right m-r-xs m-r-none">
-									<button class="btn btn-primary btn-sm btn-addon pull-right">
-											<a href="#" data = "{{is_disabled}}" class="is-disabled-top" style="color:white">
+									
+											<a href="#" data = "{{is_disabled}}" class="btn btn-primary btn-sm btn-addon pull-right is-disabled-top" style="color:white">
 											{{#if_equals "true" is_disabled}}
 											<div class="inline" style="vertical-align: middle;">&nbsp;Enable Campaign</div>
 											{{else}}
 											<div class="inline" style="vertical-align: middle;">&nbsp;Disable Campaign</div>
 											{{/if_equals}}
 											</a>
-									</button>
+									
 											<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> Save Campaign</button>
                             				<button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
             									<span class="caret"></span>
