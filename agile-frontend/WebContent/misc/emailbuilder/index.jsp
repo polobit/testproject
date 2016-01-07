@@ -64,7 +64,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
 }
 </style>
     </head>
-    <body class="edit" style="overflow-x: hidden;">
+    <body class="edit" style="overflow-x: hidden;" onload="parent.onEmailBuilderLoad()">
         <div class="navbar navbar-inverse navbar-fixed-top navbar-layoutit hidden">
             <div class="navbar-header">
                 <button data-target="navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">

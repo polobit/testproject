@@ -112,10 +112,6 @@ function redirectToOldEditor(templateId) {
     window.location.hash = "email-template/"+templateId;
 }
 
-function setAttachmentInTemplateEdit(selectedVal) {
-    if(selectedVal) {
-        $('#attachmentSelectBox').val(selectedVal);
-        $(".attachmentAddBtn","#emailbuilder-listeners").trigger("click");
-        $(".addAttachmentLink","#emailbuilder-listeners").hide();
-    }
+function onEmailBuilderLoad() {
+    $("#emailBuilderTopOptionsHolder").show();
 }

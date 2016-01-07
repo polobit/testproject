@@ -1320,7 +1320,9 @@ function loadSavedTemplate() {
                 }
                 $("#nameoftemplate",parent.document).val(data.name);
                 $("#subject",parent.document).val(data.subject);
-                parent.setAttachmentInTemplateEdit(data.attachment_id);
+                if(data.attachment_id) {
+                    setAttachmentInTemplateEdit(data.attachment_id);
+                }
                 $("#tosave").html(data.html_for_builder);
             }
         });
@@ -1421,4 +1423,15 @@ function uploadImageToS3ThroughBtn(file) {
             }
         });
     }
+}
+
+function setAttachmentInTemplateEdit(attachmentId) {
+    $('.addAttachmentLink',parent.document).hide();
+    $('#attachmentSelectBoxHolder',parent.document).hide();
+    $('#attachmentHolder',parent.document).show();
+
+    $('#attachment_id',parent.document).val(attachmentId);
+    $.getJSON(AGILE_EB_ROOT +"core/api/documents/"+attachmentId, function(data) {
+        $('#attachment_text',parent.document).html(data.name);
+    });
 }

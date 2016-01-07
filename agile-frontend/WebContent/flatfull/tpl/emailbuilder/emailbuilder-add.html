@@ -7,7 +7,7 @@
             <form id="emailBuilderForm">
                 <fieldset>
 
-<div class="row n-m">
+<div class="row n-m" id="emailBuilderTopOptionsHolder" style="display:none">
 
 <div class="col-md-2">
   <div class="form-group">
@@ -20,7 +20,7 @@
   <div class="form-group">
     Subject:<br>
     <input type="text" class="form-control required" name="subject" id="subject" placeholder="Enter subject">
-    <input type="hidden" class="form-control" id="templateid" value="{{templateId}}">
+    <input type="hidden" class="form-control" id="templateid" value="{{#if_equals action "edit"}}{{templateId}}{{/if_equals}}">
   </div>
 </div>
 
@@ -52,7 +52,10 @@
     <span id="nameoftemplate-msg" class="text-center"></span>
 </div>
 
-<div class="col-md-2">
+<div class="col-md-3">
+    <div class="form-group right">
+        <br>&nbsp;&nbsp;<a href="#email-templates" class="btn btn-default btn-sm">Cancel</a>
+    </div>
     <div class="form-group right">
         <br>&nbsp;&nbsp;<button class="btn btn-primary btn-sm saveEmailBuilderButton">Save</button>
     </div>
