@@ -67,7 +67,7 @@ String width = currentUserPrefs.width;
 boolean is_fluid = !width.isEmpty();
 
 BillingRestriction restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
-if(true){
+if(restriction.checkToUpdateFreeEmails()){
 	restriction.refreshEmails();
 	restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
 }

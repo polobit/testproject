@@ -410,10 +410,17 @@ public class BillingRestrictionUtil {
 	}
 	
 	public static void sendFreeEmailsUpdatedMail(){
-		EmailsAddedDeferredTask task = new EmailsAddedDeferredTask(NamespaceManager.get());
-		// Add to queue
-		Queue queue = QueueFactory.getQueue(AgileQueues.EMAILS_ADDED_QUEUE);
-		queue.add(TaskOptions.Builder.withTaskName(NamespaceManager.get()).payload(task));
+		try {
+			EmailsAddedDeferredTask task = new EmailsAddedDeferredTask(NamespaceManager.get());
+			// Add to queue
+			Queue queue = QueueFactory.getQueue(AgileQueues.EMAILS_ADDED_QUEUE);
+			queue.add(TaskOptions.Builder.withTaskName(NamespaceManager.get()).payload(task));
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Task already created with domain: "+NamespaceManager.get());
+			e.printStackTrace();
+		}
+		
 	}
 	
 }
