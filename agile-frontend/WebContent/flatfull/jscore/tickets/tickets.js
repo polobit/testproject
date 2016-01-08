@@ -507,28 +507,48 @@ var Tickets = {
 
 		var groupsAssignees = Backbone.Model.extend({urlRoot : '/core/api/tickets/groups'});
 		new groupsAssignees().fetch({success: function(model, response, options){
+
+			var groupsList = model.toJSON();
 		
-			var html = getTemplate('ticket-change-assignee', model.toJSON());
+			var html = getTemplate('ticket-change-assignee', groupsList);
+			html += "<option role='separator' disabled="">----------------------------------------------------------</option>";
+			$.each(groupsList, function(index, data){
+				html += "<option value='"+data.id+"'>"+data.group_name+"</option>";
+			});
 
 			var selectedAssignee = App_Ticket_Module.ticketView.model.toJSON().assigneeID;
 			var selectedGroup = App_Ticket_Module.ticketView.model.toJSON().groupID;
 
-			$(html).find("optgroup[data-group-id='"+selectedGroup+"']").find("option[value='"+selectedAssignee+"']").attr('selected', 'selected');
+			$('#ticket-assignee', el).html(html);
 
-      		$('#ticket-assignee', el).html(html);
+			if(!selectedAssignee)
+				$('#ticket-assignee', el).find("option[value='"+selectedGroup+"']").attr('selected', 'selected');
+			else
+      		 $('#ticket-assignee', el).find("optgroup[data-group-id='"+selectedGroup+"']").find("option[value='"+selectedAssignee+"']").attr('selected', 'selected');
+      		
+
+      		 // If current user not 
+      		if(selectedAssignee != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(selectedGroup, groupsList))
+      			$('.assign-to-me', el).show();
+      		else
+				$('.assign-to-me', el).hide();
 
       		$(el).on('change', '#ticket-assignee', function ()
 			{
 				var assigneeId = $(this).val();
 			    var groupId = $(this.options[this.selectedIndex]).closest('optgroup').attr('data-group-id');
-			    
+			    if(!groupId){
+			    	groupId = $(this).val();
+			    	assigneeId = "";
+			    }
+			    	
 			    Tickets.sendReqToChangeAssignee(assigneeId, groupId, App_Ticket_Module.ticketView.model.toJSON(), function(model){
 
-					if(assigneeId && assigneeId == CURRENT_AGILE_USER.domainUser.id)
-						$('.assign-to-me').hide();
+			    	if(assigneeId != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(groupId, groupsList))
+			    		$('.assign-to-me').show();
 					else
-						$('.assign-to-me').show();
-
+						$('.assign-to-me').hide();
+					
 					App_Ticket_Module.ticketView.model.set(model, {silent: true});
 
 				});
@@ -541,12 +561,34 @@ var Tickets = {
 		}});
 	},
 	
+	isCurrentUserExistInGroup : function(selectedGroupId, groupsList){
+
+			var isExist = false;
+
+				$.each(groupsList, function(index, data){
+
+					$.each(data.group_users, function(index2, userData){
+
+					if(data.id == selectedGroupId && userData.id == CURRENT_DOMAIN_USER.id)
+						isExist = true;
+
+					});
+					
+				});
+
+				return isExist;
+
+	},
+
 	sendReqToChangeAssignee : function(assignee_id, group_id, ticketModel, callback){
 
 		var newTicketModel = new BaseModel();
 
-		newTicketModel.url = "/core/api/tickets/assign-ticket?ticket_id=" + Current_Ticket_ID + "&assignee_id=" + assignee_id + 
-		                     '&group_id=' + group_id;
+		var url = "/core/api/tickets/assign-ticket?ticket_id=" + Current_Ticket_ID + '&group_id=' + group_id;
+		if(assignee_id)
+			url += "&assignee_id=" + assignee_id;
+
+		newTicketModel.url = url;
 
 		newTicketModel.save(ticketModel, 
 			{	success: function(model){
@@ -702,7 +744,7 @@ var Tickets = {
 
 	addMeToCC: function(){
 
-		var email = App_Ticket_Module.ticketView.model.toJSON().requester_email;
+		var email = CURRENT_DOMAIN_USER.email;
 		$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
 		$('#cc_email_field').val('');
 		Tickets.updateCCEmails(email, 'add');
@@ -714,7 +756,7 @@ var Tickets = {
 
 		Tickets.updateCCEmails($(e.target).closest('li').attr('data'), 'remove', function(model){
 
-			var email = App_Ticket_Module.ticketView.model.toJSON().requester_email;
+			var email = CURRENT_DOMAIN_USER.email;
 			
 			var updated_cc_emails = (model) ? model.toJSON().cc_emails : [];
 

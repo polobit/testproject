@@ -314,7 +314,7 @@ Handlebars.registerHelper('get_palin_text_from_html', function(html, options) {
 
 Handlebars.registerHelper('get_current_user_prefs', function(object, options) {
 
-	object['current_logged_in_user'] = CURRENT_AGILE_USER.domainUser;
+	object['current_logged_in_user'] = CURRENT_DOMAIN_USER;
 	return options.fn(object);
 
 });
