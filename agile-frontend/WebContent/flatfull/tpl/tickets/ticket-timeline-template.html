@@ -23,16 +23,18 @@
 			        <a class="pull-left thumb-xs m-l-n-md">
 
 			        	{{#if_equals ticket_activity_type 'TICKET_CREATED'}}
-			        		<img class="img-inital r-5x" src="{{gravatarurl contact.properties 30}}" data-toggle="tooltip" data-placement="top" data-original-title="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}"/>
+			        		<img class="r-5x" src="{{gravatarurl contact.properties 30}}" onerror="image_error(this);" 
+			        		_data-name="{{#if contact}}{{getPropertyValue contact.properties "first_name"}}{{getPropertyValue contact.properties "last_name"}}{{else}}Requester
+					                {{/if}}"/>
 			        	{{/if_equals}}
 
 			        	{{#if_equals ticket_activity_type 'TICKET_REQUESTER_REPLIED'}}
-			        			<img class="img-inital r-5x" src="{{gravatarurl contact.properties 30}}" data-toggle="tooltip" data-placement="top" data-original-title="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}"/>
+			        			<img class="img-inital r-5x" src="{{gravatarurl contact.properties 30}}" onerror="image_error(this);" _data-name="{{#if contact}}{{getPropertyValue contact.properties "first_name"}}{{getPropertyValue contact.properties "last_name"}}{{else}}Requester
+					                {{/if}}"/>
 			        	{{/if_equals}}
 
 			        	{{#if_equals ticket_activity_type 'TICKET_ASSIGNEE_REPLIED'}}
-			        		<img class="r-5x" src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" 
-				        				data-original-title="{{user.name}}"/>
+			        		<img class="r-5x" src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}"/>
 
 			        	{{/if_equals}}
 
@@ -74,7 +76,7 @@
 			          </div>
 			          
 			          <div class="panel-body">
-			          	<div>{{convert_to_html new_data}}</div>
+			          	<div class="word-break-full">{{convert_to_html new_data}}</div>
 			          </div>
 			          
 			      </div>
@@ -180,7 +182,7 @@
 			          
 			          {{#if_equals ticket_activity_type 'TICKET_PRIVATE_NOTES_ADD'}}
 			          <div class="panel-body">
-			          	<div>{{convert_to_html new_data}}</div>
+			          	<div class="word-break-full">{{convert_to_html new_data}}</div>
 			          </div>
 			          {{/if_equals}}
 			          

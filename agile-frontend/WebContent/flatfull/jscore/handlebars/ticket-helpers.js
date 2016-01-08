@@ -314,7 +314,7 @@ Handlebars.registerHelper('get_palin_text_from_html', function(html, options) {
 
 Handlebars.registerHelper('get_current_user_prefs', function(object, options) {
 
-	object['current_logged_in_user'] = CURRENT_AGILE_USER.domainUser;
+	object['current_logged_in_user'] = CURRENT_DOMAIN_USER;
 	return options.fn(object);
 
 });
@@ -368,6 +368,15 @@ Handlebars.registerHelper('convert_to_html', function(text, options) {
 		return;
 
 	text = text.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+
+	// Construct anchor links
+	try {
+		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+		text = text.replace(exp,
+				"<a href='$1' target='_blank' class='link-color'>$1</a>");
+
+	} catch (err) {
+	}
 
 	return new Handlebars.SafeString(text);
 });
