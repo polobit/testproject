@@ -56,7 +56,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
         <script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.2.6/plugins/colorpicker/plugin.min.js"></script>
         <script type="text/javascript" src="js/colpick.js"></script>
-        <script type="text/javascript" src="js/template.editor.js"></script>
+        <script type="text/javascript" src="js/template.editor.js?v=4"></script>
 
 <style>
 .mce-btn button {
@@ -193,7 +193,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                             <tbody>
                                                 <tr>
                                                     <td align="center" style="padding:15px 50px 15px 50px;" class="image">
-                                                        <img class=""  border="0"  align="one_image" style="display:block;max-width:540px" alt="" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150" tabindex="0">
+                                                        <img class=""  border="0"  align="one_image" style="display:block;max-width:540px" alt="" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" tabindex="0">
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -258,7 +258,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                 <tr>
                                                                     <td class="gap" width="30"></td>
                                                                     <td width="160">
-                                                                        <img  border="0"  align="left" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150" style="display: block;margin: 0px;max-width: 540px;padding:10px;">
+                                                                        <img  border="0"  align="left" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" style="display: block;margin: 0px;max-width: 540px;padding:10px;">
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -297,7 +297,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                 <tr>
                                                                     <td class="gap" width="30"></td>
                                                                     <td width="160">
-                                                                        <img  border="0"  align="left" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150" style="display: block;margin: 0px;max-width: 340px">
+                                                                        <img  border="0"  align="left" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" style="display: block;margin: 0px;max-width: 340px">
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -355,7 +355,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                 <tr>
                                                                     <td class="gap" width="30"></td>
                                                                     <td width="160">
-                                                                        <img  border="0"  align="left" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150" style="display: block;margin: 0px;max-width: 340px">
+                                                                        <img  border="0"  align="left" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" style="display: block;margin: 0px;max-width: 340px">
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -394,7 +394,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
-                                                                                        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150" alt="" style="display: block;" height="154" align="2" border="0" width="255">
+                                                                                        <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="255">
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -417,7 +417,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
-                                                                                        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150" alt="" style="display: block;" height="154" align="2" border="0" width="255">
+                                                                                        <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="255">
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -472,7 +472,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
-                                                                                               <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150" alt="" style="display: block;" height="154" align="2" border="0" width="160">
+                                                                                               <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="160">
                                                                                      </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -495,7 +495,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
-                                                                                             <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150" alt="" style="display: block;" height="154" align="2" border="0" width="160">
+                                                                                             <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="160">
                                                                                      </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -523,7 +523,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                 </tr>
                                                                 <tr>
                                                                     <td class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
-                                                                        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150" alt="" style="display: block;" height="154" align="2" border="0" width="160">
+                                                                        <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="160">
                                                                       </td>
                                                                 </tr>
                                                                 <tr>
@@ -563,24 +563,24 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                 <tr>
                                                     <td class="social" align="center" style="padding: 15px 50px 15px 50px;">
                                                         <a href="#" style="border: none;" class="facebook">
-                                                            <img border="0" src="img/builder/facebook.png" />
+                                                            <img border="0" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/facebook.png" />
 
                                                         </a>
                                                         <a href="#" style="border: none;" class="twitter">
 
-                                                            <img border="0" src="img/builder/twitter.png"/>
+                                                            <img border="0" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/twitter.png"/>
 
 
                                                         </a>
                                                         <a href="#" style="border: none;" class="linkedin">
 
-                                                            <img  border="0" src="img/builder/linkedin.png"/>
+                                                            <img  border="0" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/linkedin.png"/>
 
 
                                                         </a>
                                                         <a href="#" style="border: none;" class="youtube">
 
-                                                            <img border=0 src="img/builder/youtube.png"/>
+                                                            <img border=0 src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/youtube.png"/>
 
 
                                                         </a>
@@ -776,7 +776,13 @@ AGILE_EB_OPTIONS['templateId'] = "";
                         <div class="panel panel-body panel-default html5editor" id="html5editor"></div>
                     </form>
                     <form id="editorlite" style="margin-top:5px">
-                        <div class="panel panel-body panel-default html5editorlite" id="html5editorlite"></div>
+                        <input type="text" style="width:100%" class="panel panel-body panel-default html5editorlite" id="html5editorlite">
+                        Alignment: <select id="allineamento">
+                            <option value=""></option>
+                            <option value="left">left</option>
+                            <option value="right">right</option>
+                            <option value="center">center</option>
+                        </select>
                     </form>
 
                     <div id="social-links">
