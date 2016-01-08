@@ -60,6 +60,12 @@ public class EmailTemplates
 	public String text = null;
 	
 	/**
+	 * Plain text email.
+	 */
+	@NotSaved(IfDefault.class)
+	public String text_email = null;
+
+	/**
 	 * Email HTML compatible to builder.
 	 */
 	@NotSaved(IfDefault.class)

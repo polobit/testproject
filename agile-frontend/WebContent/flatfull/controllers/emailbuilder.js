@@ -20,6 +20,7 @@ var EmailBuilderRouter = Backbone.Router.extend({
 
     getListOfTemplates : function() {
         $('#content').html("<link rel='stylesheet' type='text/css' href='flatfull/css/jquery.fancybox.css'><div id='emailbuilder-listeners'></div>");
+        initializeEmailBuilderListeners();
         
         head.js('flatfull/lib/jquery.fancybox.js',function() {
             $.getJSON("misc/emailbuilder/templates/templates.json", function(data) {

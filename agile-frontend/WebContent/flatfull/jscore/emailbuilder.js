@@ -58,7 +58,7 @@ function initializeEmailBuilderListeners() {
         $('.addAttachmentLink').show();
         $('#attachmentHolder').hide();
         $('#attachmentSelectBoxHolder').hide();
-        $('#attachment_id').val("0");
+        $('#attachment_id').val("");
         $('#attachment_text').html("");
     });
 
@@ -69,6 +69,12 @@ function initializeEmailBuilderListeners() {
             $('#attachmentSelectBoxRequired').hide();
         }
     });
+
+    $('#emailbuilder-listeners').on('click', '#bringYourCodeBtn', function(e){
+        e.preventDefault();
+        BRING_YOUR_CODE_BTN = true;
+        window.location.hash = "#email-template-add";
+    });
 	
 }
 
@@ -78,6 +84,7 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
     "name": $("#nameoftemplate").val(),
     "subject": $("#subject").val(),
     "text": fullSource,
+    "text_email": $("#text_email").val(),
     "html_for_builder": builderSource,
     "is_template_built_using_builder": true,
     "attachment_id": ($("#attachment_id").val()) ? $("#attachment_id").val() : ""
@@ -113,5 +120,22 @@ function redirectToOldEditor(templateId) {
 }
 
 function onEmailBuilderLoad() {
-    $("#emailBuilderTopOptionsHolder").show();
+    $("#loadingImgHolder").hide();
+    $("#emailBuilderForm").show();
+}
+
+function setAttachmentInTemplateEdit(attachmentId) {
+    $('.addAttachmentLink').hide();
+    $('#attachmentSelectBoxHolder').hide();
+    $('#attachmentHolder').show();
+
+    $.getJSON("core/api/documents/"+attachmentId, function(data) {
+        if(data) {
+            $('#attachment_id').val(attachmentId);
+            $('#attachment_text').html(data.name);
+        } else {
+            $('#attachmentHolder').hide();
+            $('.addAttachmentLink').show();
+        }
+    });
 }
