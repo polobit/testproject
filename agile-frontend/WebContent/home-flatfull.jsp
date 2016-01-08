@@ -67,6 +67,10 @@ String width = currentUserPrefs.width;
 boolean is_fluid = !width.isEmpty();
 
 BillingRestriction restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
+if(true){
+	restriction.refreshEmails();
+	restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
+}
 boolean is_free_plan = false;
 
 if(restriction != null && restriction.planDetails != null)
@@ -321,7 +325,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 
  
- <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
+  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
