@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
@@ -175,6 +177,34 @@ public class EventUtil
 	}
     }
 
+    public static List<Event> getBlockedEvents(Long start, Long end, Long ownerId)
+    {
+
+   	     List<Event> startList = null;
+		 List<Event> endList = null;
+	try{
+		    if (ownerId != null){
+		    	startList = dao.ofy().query(Event.class).filter("search_range >=", start).filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
+				endList = dao.ofy().query(Event.class).filter("search_range >=", end).filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
+				 System.out.println(startList.size()+ "  :  "+ endList.size());
+				 startList.addAll(endList); 
+				 return EventUtil.getDuplicateList(startList); 
+		    }else{
+		    	  startList = dao.ofy().query(Event.class).filter("search_range >=", start).list();
+				  endList = dao.ofy().query(Event.class).filter("search_range >=", end).list();				    
+				  System.out.println(startList.size()+ "  :  "+ endList.size());
+				  startList.addAll(endList);				
+				  return EventUtil.getDuplicateList(startList);
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    return null;
+		}
+    }
+    
+    
     /**
      * Gets Events with respect to AgileUser.
      * 
@@ -627,5 +657,16 @@ public class EventUtil
     {
 	Key<Opportunity> dealKey = new Key<Opportunity>(Opportunity.class, dealId);
 	return dao.listByProperty("related_deals = ", dealKey);
+    }
+    
+    public static List<Event> getDuplicateList(List<Event> eventsList){
+    	List<Event> filteredEvents = new ArrayList<Event>();
+    	Set<List<Long>> uniqueStart = new HashSet<>();
+    	for( Event e : eventsList ) {
+    	    if( !uniqueStart.add( e.search_range) ) {
+    	    	filteredEvents.add( e );
+    	    }
+    	}
+		return filteredEvents;
     }
 }
