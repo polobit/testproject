@@ -295,6 +295,10 @@ public class CronUtil
 	{
 		System.out.println("Jobs dequeued - " + wakeupOrInterrupt + " [" + cronJobs.size() + "]" + cronJobs);
 
+		// If customData null
+		if(customData == null)
+			customData = new JSONObject();
+		
 		// Iterate through all tasks
 		for (Cron cron : cronJobs)
 		{
