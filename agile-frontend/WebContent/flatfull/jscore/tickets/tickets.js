@@ -511,7 +511,7 @@ var Tickets = {
 			var groupsList = model.toJSON();
 		
 			var html = getTemplate('ticket-change-assignee', groupsList);
-			html += "<option role='separator' disabled="">----------------------------------------------------------</option>";
+			html += "<option role='separator' disabled>----------------------------------------------------------</option>";
 			$.each(groupsList, function(index, data){
 				html += "<option value='"+data.id+"'>"+data.group_name+"</option>";
 			});
@@ -565,18 +565,18 @@ var Tickets = {
 
 			var isExist = false;
 
-				$.each(groupsList, function(index, data){
+			$.each(groupsList, function(index, data){
 
-					$.each(data.group_users, function(index2, userData){
+				$.each(data.group_users, function(index2, userData){
 
-					if(data.id == selectedGroupId && userData.id == CURRENT_DOMAIN_USER.id)
-						isExist = true;
+				if(data.id == selectedGroupId && userData.id == CURRENT_DOMAIN_USER.id)
+					isExist = true;
 
-					});
-					
 				});
+				
+			});
 
-				return isExist;
+			return isExist;
 
 	},
 
