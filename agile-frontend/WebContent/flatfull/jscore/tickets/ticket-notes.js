@@ -4,11 +4,23 @@ var Tickets_Notes = {
 
 		e.preventDefault();
 
-		if(!$("#send-reply #reply_textarea").val())
-			return;
-
 		var $save_btn = $(e.target);
-		disable_save_button($save_btn);
+		
+		$("#send-reply").validate({
+  			  debug : true,
+			  highlight : function(element, errorClass) {
+			   $(element).closest('div').addClass('has-error');
+			  },
+			 unhighlight : function(element, errorClass) {
+			   $(element).closest('div').removeClass('has-error');
+			  },
+			  errorPlacement: function(error, element) {
+				$(element).closest('div').addClass('has-error');
+			  }
+		});
+
+		if(!$("#send-reply").valid())
+		return;
 
 		var json = serializeForm("send-reply");
 
@@ -25,7 +37,8 @@ var Tickets_Notes = {
 		if($(e.target).hasClass('close-ticket'))
 			json.close_ticket="true";
 
-		
+		disable_save_button($save_btn);
+
 		var newTicketNotesModel = new BaseModel();
 		newTicketNotesModel.url = '/core/api/tickets/notes';
 		newTicketNotesModel.save(json, {

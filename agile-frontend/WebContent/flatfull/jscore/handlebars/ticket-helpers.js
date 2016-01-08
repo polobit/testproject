@@ -369,6 +369,15 @@ Handlebars.registerHelper('convert_to_html', function(text, options) {
 
 	text = text.replace(/(?:\r\n|\r|\n)/g, '<br/>');
 
+	// Construct anchor links
+	try {
+		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+		text = text.replace(exp,
+				"<a href='$1' target='_blank' class='link-color'>$1</a>");
+
+	} catch (err) {
+	}
+
 	return new Handlebars.SafeString(text);
 });
 /** End of ticketing handlebars* */

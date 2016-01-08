@@ -5,38 +5,38 @@
 <div class="p-t-xxs p-b-xxs">
 	<span class="pull-left thumb-sm">
 			{{#if_equals created_by 'REQUESTER'}}
-		 		<img src="{{emailGravatarurl 34 requester_email}}" class="r-5x" alt="...">
+		 		<img src="{{emailGravatarurl 34 requester_email}}" class="r-5x" alt="..." onerror="image_error(this);" _data-name="{{requester_name}}">
 		    {{else}}
 		 		<img src="{{domain_user.ownerPic}}" class="r-5x" alt="...">
 		 	{{/if_equals}}
 	</span>
 
-	<div class="m-l-xl p-l">
+	<div class="m-l-xl p-l-sm">
 	 
 	  <span>
 
 	  	{{#if_equals created_by 'REQUESTER'}}
 
-	              	<span><b class="text-sm">{{requester_name}}</b></span>
+	              	<span><b class="text-sm vertical-align-top">{{requester_name}}</b></span>
 
 
-	              	<span class="txt-small text-xs text-muted first-letter-cap inline-block m-l-xs">
-	              		<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
+	              	<span class="txt-small text-xs text-muted m-l-xs">
+	              		<time class="b-b-dotted vertical-align-top" datetime="{{epochToHumanDate "" created_time}}">
 			              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
 			              	</time>
 	   				</span>
 	             
 			   	{{else}}
-			   		<span><b class="text-sm">{{domain_user.name}}</b></span>
-	              	<span class="txt-small text-xs text-muted first-letter-cap inline-block m-l-xs">
-	              			<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
+			   		<span><b class="text-sm vertical-align-top">{{domain_user.name}}</b></span>
+	              	<span class="txt-small text-xs text-muted m-l-xs">
+	              			<time class="b-b-dotted vertical-align-top" datetime="{{epochToHumanDate "" created_time}}">
 		              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
 		              	</time>
 			   		</span>
 			   	{{/if_equals}}
 	  </span>
 
-	  <span class="block text-sm">{{convert_to_html html_text}}</span>
+	  <div class="block m-t-xxs word-break-full">{{convert_to_html plain_text}}</div>
 
 	   {{#if attachments_list}}
 		  		<div class="wrapper">
@@ -65,26 +65,26 @@
 		 <img src="{{domain_user.ownerPic}}" class="r-5x" alt="...">
 	</span>
 		 	
-	<div class="m-l-xl p-l">
+	<div class="m-l-xl p-l-sm">
 	   
 	  <span>
-	  	<b class="text-sm">{{domain_user.name}}</b>
+	  	<b class="text-sm vertical-align-top">{{domain_user.name}}</b>
 
-	  	<span class="txt-small text-xs text-muted first-letter-cap inline-block m-l-xs">
-      			<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
+	  	<span class="txt-small text-xs text-muted m-l-xs">
+      			<time class="b-b-dotted vertical-align-top" datetime="{{epochToHumanDate "" created_time}}">
           		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
           	</time>
    		</span>
 
 	  </span>
 
-	  <span class="block p-sm text-sm bg-lightyellow b-a-lightyellow">{{convert_to_html html_text}}</span>
+	  <div class="block p-sm m-t-xxs bg-lightyellow b-a-lightyellow word-break-full">{{convert_to_html plain_text}}</div>
 
 	</div>
 </div>
 
 {{/if_equals}}  
 
-<div class="border-highlight-light m-t-xs m-b-xs"></div>
+<div class="border-highlight-light m-t-sm m-b-sm"></div>
 
 </script>

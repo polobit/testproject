@@ -17,6 +17,8 @@
             <div class="panel panel-default m-t-sm">
                   <div class="panel-body text-center">
 
+                  <!--
+
                   <div class="pos-rlt w-full">
 
                    {{#is_ticket_collection_available}}
@@ -60,13 +62,15 @@
 
                     <div class="b-b b-light m-t-sm m-b-sm"></div>
 
+                    -->
+
                   <div class="clearfix cursor-pointer" onclick="window.open('#contact/{{contact.id}}', '_blank')">
 
                       <div class="inline">
                         <div class="thumb-sm">
-                            <img src="{{gravatarurl contact.properties 24}}" class="r-5x" alt="...">
+                            <img src="{{gravatarurl contact.properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{requester_name}}">
                           </div>
-                        <div class="h4 m-t m-b-xs"> <span class="first-letter-cap inline-block">
+                        <div class="text-md m-t-sm m-b-xxs"> <span class="first-letter-cap inline-block">
                               {{getPropertyValue contact.properties "first_name"}}
                               {{getPropertyValue contact.properties "last_name"}} 
                             </span>
@@ -270,7 +274,7 @@
            
         </div><!-- End of row-row-->
       </div><!-- End of vbox-->
-    </div>
+    </div>                                                    
     <!-- End of first column in details view -->
 
     <!-- second column in details view -->
@@ -280,15 +284,19 @@
 
           <!-- Start of ticket notes -->
           <div class="wrapper bg-light p-t-sm p-b-sm pos-rlt b-b">
-            <h3 class="font-thin m-t-none m-b-none inline-block" style="width: 88%;">
+            <h4 class="font-thin m-t-none m-b-none inline-block" style="width: 56%;">
 
-               <i class="fa {{#if_equals is_favorite "true"}}fa-star text-warning {{else}}fa-star-o text-light{{/if_equals}} toggle-favorite" style="font-size: 20px;"></i>  {{subject}} 
-            </h3>
+               <i class="fa {{#if_equals is_favorite "true"}}fa-star text-warning {{else}}fa-star-o text-light{{/if_equals}} toggle-favorite"></i>  
+
+               <a class="link-color back-to-tickets" href="javascript:void(0);">Tickets</a> / 
+                        <span> #{{id}}</span>
+
+            </h4>
              
-            <div class="pos-abs" style="right: 15px; top: 10px;">
+            <div class="pos-abs" style="right: 15px; top: 9px;">
 
             <div class="btn-group dropdown m-l-xs" data-toggle="tooltip" data-placement="bottom" data-original-title="Workflows">
-              <button class="fa fa-sitemap btn btn-sm w-xxs btn-default show-workflows" data-toggle="dropdown"></button>
+              <button class="fa fa-sitemap btn btn-sm btn-default show-workflows" data-toggle="dropdown"></button>
 
               <ul id="workflows_list" class="dropdown-menu">
                 <li><a href="javascript:void(0);">Loading...</a></li>
@@ -308,6 +316,40 @@
              
             </div>
           </div>
+
+          <div class="wrapper bg-light p-t-sm p-b-sm pos-rlt b-b">
+            
+                {{#is_ticket_collection_available}}
+
+                     {{#next_prev_ticket_exists 'previous'}}
+                      <a href="{{#is_filtered_ticket}}
+                      #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'previous'}}{{get_ticket_id 'previous'}}{{/next_prev_ticket_exists}}
+                      {{/is_filtered_ticket}}" class="pull-left text-muted text-xs pos-abs" style="left:15px;" title="Previous Ticket">
+                        <i class="icon icon-chevron-left font-15" style="vertical-align: middle;"></i>
+                       </a>
+                      {{else}}
+                       <span class="pull-left text-disabled text-xs pos-abs" style="left:15px;">
+                        <i class="icon icon-chevron-left font-15" style="vertical-align: middle;"></i>
+                       </span>
+                      {{/next_prev_ticket_exists}}
+
+                      {{#next_prev_ticket_exists 'next'}}
+                      <a href="{{#is_filtered_ticket}}
+                      #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'next'}}{{get_ticket_id 'next'}}{{/next_prev_ticket_exists}}
+                      {{/is_filtered_ticket}}" class="pull-right text-muted text-xs pos-abs" style="right:15px;" title="Next Ticket"><i class="icon icon-chevron-right font-15" style="vertical-align: middle;"></i></a>
+                       {{else}}
+                       <span class="pull-right text-disabled text-xs pos-abs" style="right:15px;">
+                        <i class="icon icon-chevron-right font-15" style="vertical-align: middle;"></i>
+                       </span>
+                      {{/next_prev_ticket_exists}}
+
+                    {{/is_ticket_collection_available}}
+
+            <div class="{{#is_ticket_collection_available}}m-l-md m-r-md{{/is_ticket_collection_available}} font-thin font-15 m-t-none m-b-none inline-block">
+              {{{subject}}} 
+            </div>
+
+          </div>
           
         <div class="clearfix m-b-lg m-md">
             <a class="pull-left thumb-sm"><img src="{{current_logged_in_user.ownerPic}}" class="r-5x" alt="User Image"></a>
@@ -316,7 +358,7 @@
                </div>
             </div>
 
-            <div class="b-b b-light m-b-xs position-relative">
+            <div class="b-b b-light m-b-sm position-relative">
               <span class="label label-default toggle-timeline cursor-pointer pull-right position-relative" style="bottom: 8px;">Show timeline</span>
             </div>
 
@@ -401,7 +443,7 @@
         
         {{#if canned_responses}}
         <div class="btn-group dropdown m-l-xs pull-right">
-          <button class="btn btn-sm btn-default" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" data-original-title="Canned Responses"><i class="fa fa-share"></i></button>
+          <button class="btn btn-sm btn-default" data-toggle="dropdown"><i class="fa fa-list-alt"></i></button>
           <ul id="workflows_list" class="dropdown-menu">
             {{#each canned_responses}}
             <li id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>
@@ -422,7 +464,7 @@
                       </ul> 
                     {{/if_equals}}
 
-                     <textarea id="reply_textarea" name="html_text" class="form-control {{#if_equals reply_type "comment"}} bg-lightyellow{{/if_equals}}" style="min-height:60px;max-height:400px;width:100%;text-indent: 0px; overflow-y: hidden; resize: none;padding: 8px;">{{#if_equals reply_type "forward"}} {{get_palin_text_from_html notes}} {{/if_equals}}</textarea>
+                     <textarea id="reply_textarea" name="html_text" class="form-control required {{#if_equals reply_type "comment"}} bg-lightyellow{{/if_equals}}" style="min-height:60px;max-height:400px;width:100%;text-indent: 0px; overflow-y: hidden; resize: none;padding: 8px;">{{#if_equals reply_type "forward"}} {{get_palin_text_from_html notes}} {{/if_equals}}</textarea>
             
                   </div>
                   
@@ -433,8 +475,8 @@
 
                     {{#if_equals reply_type "reply"}}
                     <div class="btn-group dropdown p-none">
-                        <button class="btn btn-primary btn-sm send-reply">Send Reply</button>
-                        <button class="btn btn-primary btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                        <button class="btn btn-default btn-sm send-reply">Send Reply</button>
+                        <button class="btn btn-default btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                         <ul class="dropdown-menu">
                           <li><a href="javascript:void(0);" class="send-reply close-ticket">Send Reply &amp; Close Ticket</a></li>
                         </ul>
@@ -444,8 +486,8 @@
                       {{#if_equals reply_type "comment"}} 
 
                       <div class="btn-group dropdown p-none">
-                        <button class="btn btn-dark btn-sm send-reply private">Add Comment</button>
-                        <button class="btn btn-dark btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                        <button class="btn btn-default btn-sm send-reply private">Add Comment</button>
+                        <button class="btn btn-default btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                         <ul class="dropdown-menu">
                           <li><a href="javascript:void(0);" class="send-reply private close-ticket">Add Comment & Close Ticket</a></li>
                         </ul>
@@ -454,7 +496,7 @@
 
 
                       {{#if_equals reply_type "forward"}} 
-                        <button class="btn btn-sm btn-info send-reply forward">Forward</button>
+                        <button class="btn btn-sm btn-default send-reply forward">Forward</button>
                       {{/if_equals}}
 
                     
