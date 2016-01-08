@@ -435,7 +435,7 @@ public class BillingRestrictionUtil {
 		EmailsAddedDeferredTask task = new EmailsAddedDeferredTask(domain_user);
 		// Add to queue
 		Queue queue = QueueFactory.getQueue(AgileQueues.EMAILS_ADDED_QUEUE);
-		queue.add(TaskOptions.Builder.withPayload(task));
+		queue.add(TaskOptions.Builder.withTaskName(domain_user.domain).payload(task));
 	}
 	
 }
