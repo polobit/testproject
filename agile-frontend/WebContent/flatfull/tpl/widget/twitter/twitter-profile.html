@@ -254,6 +254,7 @@
 
 <script id="twitter-revoke-access-template" type="text/html">
 <div class="m-t">
+	{{#if profile.picture}}
 		<div class="pull-left thumb-md thumb-wrapper">
 			<img src="{{profile.picture}}"  alt="" />
 		</div>
@@ -262,6 +263,9 @@
 			<p>{{profile.location}}</p>
 			<p class="word-break" style="word-break:normal;">{{show_link_in_statement profile.summary}}</p>
 		</div>
+	{{else}}
+		<div class="wrapper-sm"><p>Please reconfigure your Twitter widget</p></div>
+	{{/if}}
 	<div class="clearfix"></div>
 	<div class="m-t-md text-center">
 			<a class='btn revoke-widget btn-sm btn-danger text-l-none' widget-name="Twitter">Revoke Access</a>

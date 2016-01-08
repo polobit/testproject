@@ -214,11 +214,18 @@ function showMissedNotyPopUp(type, message,position,notyTimeout)
 
 // added by prakash for bria call notification
 function showBriaCallNoty(message){
-	if(message.type == "BRIA_CALL"){
+	
+			if(globalCall.lastReceived == message.state){
+				console.log("duplicate message recived");
+				return;
+			}
 
-		_getMessage(message, function(data) {
+					
+					globalCall.lastReceived =  message.state;
+		_getMessageBria(message, function(data) {
 			
 			var messageHtml = data;
+			
 			
 			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
 					LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
@@ -228,7 +235,7 @@ function showBriaCallNoty(message){
 				if (Bria_Call_Noty != undefined)
 					Bria_Call_Noty.close();
 				
-				if(message.state == "incoming"){
+				if(message.state == "ringing"){
 
 					Bria_Call_Noty = noty({ text : messageHtml, type : "confirm", layout : "bottomLeft", buttons : [
 			{ addClass : 'btn btn-primary noty_bria_answer', text : 'Answer'}, 
@@ -251,7 +258,7 @@ function showBriaCallNoty(message){
 					$('#noty_bottomLeft_layout_container').prepend(dialpad);
 					
 					
-				}else if(message.state == "missed-call"){
+				}else if(message.state == "missedCall"){
 					
 					Bria_Call_Noty = noty({ text : messageHtml, type : "information", layout : "bottomLeft"});
 				
@@ -271,6 +278,82 @@ function showBriaCallNoty(message){
 					Bria_Call_Noty = noty({ text : messageHtml, type : "error", layout : "bottomLeft"});
 					
 				}else if(message.state == "ended"){
+					
+					
+				}
+				
+					});
+		
+		
+		});
+
+
+}
+
+
+//added by prakash for skype call notification
+function showSkypeCallNoty(message){
+
+		_getMessageSkype(message, function(data) {
+			
+			var messageHtml = data;
+			
+			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
+					LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
+					{
+
+				
+				if (Skype_Call_Noty != undefined)
+					Skype_Call_Noty.close();
+				
+				if(message.state == "ringing"){
+
+					Skype_Call_Noty = noty({ text : messageHtml, type : "confirm", layout : "bottomLeft", buttons : [
+			{ addClass : 'btn btn-primary noty_skype_answer', text : 'Answer'}, 
+			{ addClass : 'btn btn-danger noty_skype_ignore', text : 'Ignore'}] });
+					
+					if (notification_prefs.notification_sound != 'no_sound')
+						play_sound(notification_prefs.notification_sound);
+					
+				}else if(message.state == "connected"){
+					
+					Skype_Call_Noty = noty({ text : messageHtml, type : "success", layout : "bottomLeft", buttons : [
+		    { addClass : 'btn btn-sm btn-default noty_skype_mute', text : '<i class="fa fa-microphone"></i>' },
+		    { addClass : 'btn btn-sm btn-default noty_skype_unmute none', text : '<i class="fa fa-microphone-slash"></i>' },
+		    { addClass : 'btn btn-sm btn-default noty_skype_dialpad', text : '<i class="icon-th text-base" style="vertical-align: middle;"></i>' }, 
+			{ addClass : 'btn btn-sm btn-danger noty_skype_hangup', text : 'Hangup'}
+								] });
+					
+					var dialpad = $(getTemplate("skypeDialpad"));
+					$('#noty_bottomLeft_layout_container').prepend(dialpad);
+					
+					
+				}else if(message.state == "missedCall"){
+					
+					Skype_Call_Noty = noty({ text : messageHtml, type : "information", layout : "bottomLeft", timeout : 3000});
+				
+					if (notification_prefs.notification_sound != 'no_sound')
+						play_sound(notification_prefs.notification_sound);
+				}else if(message.state == "connecting"){
+								
+					Skype_Call_Noty = noty({ text : messageHtml, type : "success", layout : "bottomLeft", buttons : [
+		           { addClass : 'btn btn-danger btn-sm noty_skype_cancel', text : 'Cancel'}
+					] });
+					
+					if (notification_prefs.notification_sound != 'no_sound')
+						play_sound(notification_prefs.notification_sound);
+				
+				}else if(message.state == "refused"){	
+					
+					Skype_Call_Noty = noty({ text : messageHtml, type : "information", layout : "bottomLeft", timeout : 3000});
+			
+					
+				}else if(message.state == "failed"){
+					
+					Skype_Call_Noty = noty({ text : messageHtml, type : "error", layout : "bottomLeft", timeout : 3000});
+					
+				}else if(message.state == "ended"){
+					
 
 					
 				}
@@ -281,5 +364,5 @@ function showBriaCallNoty(message){
 		});
 
 
-	}
+
 }

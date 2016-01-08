@@ -13,6 +13,7 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -321,6 +322,15 @@ public class BillingRestriction
 	// pageviews =
 	// AnalyticsSQLUtil.getPageViewsCountForGivenDomain(NamespaceManager.get());
     }
+    
+    //sets emails to 5000(for free customers)
+  	public void refreshEmails()
+  	{
+  		this.one_time_emails_count = 0;
+  		this.max_emails_count = 0;
+  		this.last_renewal_time = System.currentTimeMillis()/1000;
+  		this.save();
+  	}
 
     private void setCreatedTime()
     {
@@ -445,7 +455,6 @@ public class BillingRestriction
 	if (one_time_emails_count > 0 && (max_emails_count == null || max_emails_count == 0))
 	{
 	    max_emails_count = one_time_emails_count;
-	    this.save();
 	}
 
 	one_time_emails_backup = one_time_emails_count;

@@ -786,3 +786,37 @@
 </div>
 </div>
 </div>
+
+<div id="portletsGoalsSettingsModal" class="modal  fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Dashlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+			<form id="portletsGoalsSettingsForm" name="portletsGoalsSettingsForm" method="post" >
+			<div class="control-group form-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required form-control">
+						<option value="this-month" >This Month</option>
+						<option value="last-month" >Last Month</option>
+						<option value="this-quarter">This Quarter</option>
+						<option value="this-year">This Year</option>
+
+					</select>
+					
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+</div>
+</div>

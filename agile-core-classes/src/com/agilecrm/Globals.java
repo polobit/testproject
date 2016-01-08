@@ -48,7 +48,8 @@ public class Globals
 
     // GMAIL
     public static final String GOOGLE_CLIENT_ID = "661717543880-elcdgrfs73tl9mbimhmkiqcgic7lqu3i.apps.googleusercontent.com";
-    public static final String GOOGLE_SECRET_KEY = "qExl7mLlRlE_fjnw0YkxAeW5";// "21kj3QAnEAkCJs6fmrcDghAI";
+    public static final String GOOGLE_SECRET_KEY = "qExl7mLlRlE_fjnw0YkxAeW5";
+    // "21kj3QAnEAkCJs6fmrcDghAI";
 
     // GMAIL
     public static final String GOOGLE_CALENDAR_CLIENT_ID = GOOGLE_CLIENT_ID;// "391091478365.apps.googleusercontent.com";
@@ -59,8 +60,8 @@ public class Globals
     public static final String LINKED_IN_SECRET_KEY = "BPN9L6QQvWwum7kn";// "ZbgecRN4QI4HhAz4";
 
     // TWITTER
-    public static final String TWITTER_API_KEY = "BuHxUT4CouZKfLiX9bqDDw";
-    public static final String TWITTER_SECRET_KEY = "LJn5yqFu2hdzVgOpNJE7emKEOm4n6GZzdySFPq7A";
+    public static final String TWITTER_API_KEY = "DwCqQYK5oRCHBIAHc2c2CMVzO";
+    public static final String TWITTER_SECRET_KEY = "aC9YD03BzTftvDXhEfGJTwAEtil7n5qP62ma0IoTdNjO9dbbn6";
 
     // FRESHBOOKS
     public static final String FRESHBOOKS_API_KEY = "55b352b9e2c08f778c50c0de6f26f1ab";

@@ -551,7 +551,14 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 
 	options["Custom Fields"] = custom_fields;
 	
-	var selectoption="<select style='position:relative;float:right;cursor:pointer;width: 145px;margin-right: -5px' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
+
+	var selectoption;
+	    
+	    if(uiFieldDefinition.style)
+	    	selectoption= "<select '"+ getStyleAttribute(uiFieldDefinition.style) +"' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
+	    else
+	    	selectoption= "<select style='position:relative;float:right;cursor:pointer;width: 145px;margin-right: -5px' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
+
 
 	$.each(options, function(name, option_value) {
 		if(typeof(option_value)== 'object')
@@ -726,4 +733,28 @@ function show_templates(ele, target_id)
 
 	// inserts text based on cursor.
 	load_email_templates(curValue);
+}
+
+function update_list_with_disabled($select, workflows_json)
+{
+	if(!$select || !workflows_json)
+		return;
+
+	var disabled_ids = [];
+
+	for(var i=0; i < workflows_json.length; i++)
+	{
+		if(workflows_json[i].is_disabled)
+			 $select.find("option[value='"+workflows_json[i].id+"']").attr('disabled', 'disabled').text(workflows_json[i].name + ' (Disabled)');
+			
+	}
+}
+function insertSelectedOption(ele ,target_id)
+{
+	var curValue = $(ele).find(':selected').val();
+	insertAtCaret(target_id, curValue)
+	var text = $('#new_field').val();
+	if(text && text.indexOf("{{")!=-1)
+	$('#new_field').val($(ele).find(':selected').val());
+
 }

@@ -165,10 +165,10 @@ public class TwilioWidgetsAPI
 	 *            {@link String} widget id to get {@link Widget} preferences
 	 * @return {@link String} form of {@link JSONArray} of call logs
 	 */
-	@Path("call/logs/{widget-id}/{to}")
+	@Path("call/logs/{widget-id}/{to}/{direction}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getCallLogsOfTwilio(@PathParam("widget-id") Long widgetId, @PathParam("to") String to)
+	public String getCallLogsOfTwilio(@PathParam("widget-id") Long widgetId, @PathParam("to") String to, @PathParam("direction") String dir)
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
@@ -176,7 +176,7 @@ public class TwilioWidgetsAPI
 			try
 			{
 				// Calls TwilioUtil method to retrieve call logs for the "to" number
-				return TwilioUtil.getCallLogsWithRecordingsFromTwilioIO(widget, to).toString();
+				return TwilioUtil.getCallLogsWithRecordingsFromTwilioIO(widget, to, dir).toString();
 			}catch (Exception e)
 			{
 			    throw ExceptionUtil.catchWebException(e);
@@ -468,11 +468,11 @@ public class TwilioWidgetsAPI
 	 *            {@link String} widget id to get {@link Widget} preferences
 	 * @return {@link String} form of {@link JSONArray} of call logs
 	 */
-	@Path("call/nextlogs/{widget-id}/{to}/{page}/{pageToken}")
+	@Path("call/nextlogs/{widget-id}/{to}/{page}/{pageToken}/{direction}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getCallLogsByPage(@PathParam("widget-id") Long widgetId, @PathParam("to") String to,
-			@PathParam("page") String page, @PathParam("pageToken") String pageToken)
+			@PathParam("page") String page, @PathParam("pageToken") String pageToken, @PathParam("direction") String direction)
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
@@ -480,7 +480,7 @@ public class TwilioWidgetsAPI
 			try
 			{
 				// Calls TwilioUtil method to retrieve call logs for the "to" number
-				return TwilioUtil.getCallLogsByPage(widget, to, page, pageToken).toString();
+				return TwilioUtil.getCallLogsByPage(widget, to, page, pageToken, direction).toString();
 			}catch (Exception e)
 			{
 			    throw ExceptionUtil.catchWebException(e);

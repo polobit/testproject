@@ -23,7 +23,9 @@ $(function()
     
 		$('.date_input').datepicker({
 			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
-		});
+		}).datepicker('update');
+
+		$("input.date").each(function(index, ele){$(ele).datepicker('update');});
 	})
 
 	/**
@@ -52,7 +54,7 @@ $(function()
 	 * "Hide" event of note modal to remove contacts appended to related to
 	 * field and validation errors
 	 */
-	$('#opportunityUpdateModal').on('hidden.bs.modal', function()
+	$('#opportunityUpdateModal').on('hide.bs.modal', function()
 	{
 
 		// Removes appended contacts from related-to field
@@ -330,10 +332,8 @@ $(function()
 		$(this).text('Saving...');
 		var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : App_Deals.newMilestone });
 		var dealModel = dealPipelineModel[0].get('dealCollection').get(App_Deals.lost_reason_milesone_id);
-		if ($(this).closest('.modal').find('form').find('#lost_reason').val()){
-			dealModel.collection.get(App_Deals.lost_reason_milesone_id).set({ "lost_reason_id" : $(this).closest('.modal').find('form').find('#lost_reason').val() });
-			update_milestone(App_Deals.dealModel, App_Deals.lost_reason_milesone_id, App_Deals.newMilestone, App_Deals.old_milestone, false, $(this).closest('.modal').find('form').find('#lost_reason').val());
-		}
+		dealModel.collection.get(App_Deals.lost_reason_milesone_id).set({ "lost_reason_id" : $(this).closest('.modal').find('form').find('#lost_reason').val() });
+		update_milestone(App_Deals.dealModel, App_Deals.lost_reason_milesone_id, App_Deals.newMilestone, App_Deals.old_milestone, false, $(this).closest('.modal').find('form').find('#lost_reason').val());
 		$('#dealLostReasonModal').modal('hide');
 	});
 
@@ -478,8 +478,8 @@ function show_deal()
 function checkPipeline(pipeId)
 {
 	var presentPipe = 0;
-	if (readCookie("agile_deal_track"))
-		presentPipe = readCookie("agile_deal_track");
+	if (_agile_get_prefs("agile_deal_track"))
+		presentPipe = _agile_get_prefs("agile_deal_track");
 
 	if (presentPipe == pipeId)
 		return true;
@@ -489,9 +489,9 @@ function checkPipeline(pipeId)
 function removeArchive(deal)
 {
 	var result = false;
-	if (readCookie('deal-filters'))
+	if (_agile_get_prefs('deal-filters'))
 	{
-		var arch = $.parseJSON(readCookie('deal-filters')).archived;
+		var arch = $.parseJSON(_agile_get_prefs('deal-filters')).archived;
 		if (arch == 'false' && deal.archived == true)
 			return true;
 		else if (arch == 'true' && deal.archived == false)
@@ -606,7 +606,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		else if (Current_Route == 'deals')
 		{
 
-			if (!readCookie("agile_deal_view"))
+			if (!_agile_get_prefs("agile_deal_view"))
 			{
 
 				var newMilestone = deal.milestone;
@@ -667,7 +667,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 						console.log('Updating html - ', deal);
 						var dealsTemplate = 'deals-by-paging-model';
 
-						if (!readCookie('deal-milestone-view'))
+						if (!_agile_get_prefs('deal-milestone-view'))
 						{
 							dealsTemplate = 'deals-by-paging-relax-model';
 						}
@@ -695,7 +695,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 					var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
 					if (!dealPipelineModel)
 						return;
-					var filterJSON = $.parseJSON(readCookie('deal-filters'));
+					var filterJSON = $.parseJSON(_agile_get_prefs('deal-filters'));
 					console.log(deal.owner.id.toString() != filterJSON.owner_id, deal.owner.id.toString(), filterJSON.owner_id);
 					if (filterJSON.owner_id.length > 0 && deal.owner.id.toString() != filterJSON.owner_id)
 						return;

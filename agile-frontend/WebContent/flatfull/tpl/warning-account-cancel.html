@@ -1,5 +1,4 @@
 <script id="warning-template" type="text/html">
-<div id="warning-deletion" class="modal fade in">
  <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header warning-header bg-danger">
@@ -30,11 +29,9 @@
     </div>
 </div>
 </div>
-</div>
 </script>
 
 <script id="warning-feedback-template" type="text/html">
-<div id="warning-deletion-feedback" class="modal fade in">
  <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header warning-header bg-danger">
@@ -48,9 +45,9 @@
 		<form id="cancelation-feedback-form">
        		<ul  class="p-l-sm" style="list-style-type: none;">
             	<li class="p-b-xs">
-					<label for="Did not like it" class="inline i-checks i-checks-sm">
-						<input type="radio" name="cancellation_reason" value="No need"  class="inline"/><i></i>
-				        Was just checking it out. Don't need it.</label>
+					<label class="i-checks i-checks-sm">
+						<input type="radio" name="cancellation_reason" value="No need"  class="inline"/><i></i></label>
+				        <label for="Did not like it" class="inline">Was just checking it out. Don't need it.</label>
            		</li>
 				<li class="p-b-xs">
 					<label class="i-checks i-checks-sm">
@@ -89,11 +86,9 @@
     </div>
 </div>
 </div>
-</div>
 </script>
 
 <script id="send-cancellation-request-template" type="text/html">
-<div id="send-cancellation" class="modal fade in">
  <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
@@ -116,10 +111,9 @@
     </div>
 </div>
 </div>
-</div>
 </script>
 
-<div id="send-delete-request-step2" class="modal fade in">
+<script id="account-delete-step2-template" type="text/html">
  <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
@@ -136,5 +130,4 @@
     </div>
 </div>
 </div>
-</div>
-
+</script>

@@ -404,7 +404,7 @@ function update_entity_template(model)
 function get_stats(email, contact, el)
 {
 	// If there are no web-stats - return
-	if(!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && get_web_stats_count_for_domain() == '0'))
+	if(!(_agile_get_prefs('_agile_jsapi') != null && _agile_get_prefs('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && get_web_stats_count_for_domain() == '0'))
 	{
 		// Remove loading image of mails
 		$('#time-line', el).find('.loading-img-stats').remove();
@@ -414,7 +414,7 @@ function get_stats(email, contact, el)
 	
 	// Made global variable false and set cookie
 	NO_WEB_STATS_SETUP = false;
-	createCookie('_agile_jsapi',true, 500);
+	_agile_set_prefs('_agile_jsapi',true, 500);
 	
 	var StatsCollection = Backbone.Collection.extend({
 		                        url:'core/api/web-stats?e='+ encodeURIComponent(email)
