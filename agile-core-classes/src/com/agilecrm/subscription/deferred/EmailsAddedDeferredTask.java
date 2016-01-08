@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
@@ -21,16 +22,17 @@ public class EmailsAddedDeferredTask implements DeferredTask {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	DomainUser domainUser;
+	String domainUser;
 	
 	
 
 	@Override
 	public void run() {
-		System.out.println("Domain is "+domainUser.domain+" and email is "+domainUser.email);
+		DomainUser owner = DomainUserUtil.getDomainOwner(domainUser);
+		System.out.println("Domain is "+owner.domain+" and email is "+owner.email);
 		Map<String, String> data = new HashMap<String, String>();
-		data.put("user_name",domainUser.name);
-		SendMail.sendMail(domainUser.email, SendMail.FREE_EMAILS_UPDATED_SUBJECT, SendMail.FREE_EMAILS_UPDATED, data);
+		data.put("user_name",owner.name);
+		SendMail.sendMail(owner.email, SendMail.FREE_EMAILS_UPDATED_SUBJECT, SendMail.FREE_EMAILS_UPDATED, data);
 		
 		
 	}
@@ -39,7 +41,7 @@ public class EmailsAddedDeferredTask implements DeferredTask {
 	 * Sets domain name which can be used for a task to work
 	 * @param domain_user - domain user
 	 */
-	public EmailsAddedDeferredTask(DomainUser domain_user){
+	public EmailsAddedDeferredTask(String domain_user){
 		this.domainUser = domain_user;
 	}
 
