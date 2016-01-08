@@ -225,7 +225,7 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
   }
 
   .width-9em {
-    width: 9em;
+    max-width: 9em;
   }
 
   div.show-caret{

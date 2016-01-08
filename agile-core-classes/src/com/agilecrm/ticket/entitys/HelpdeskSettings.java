@@ -29,11 +29,8 @@ public class HelpdeskSettings
 				add("id");
 				add("subject");
 				add("requester_name");
-				add("due_date");
-				add("priority");
-				add("status");
-				add("assignee");
 				add("group");
+				// add("priority");
 			}
 		};
 

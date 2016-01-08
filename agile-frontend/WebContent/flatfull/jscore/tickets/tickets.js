@@ -106,16 +106,21 @@ var Tickets = {
 					});
 					
 					//Initializing checkbox events
-					Ticket_Bulk_Ops.initEvents();
+					Ticket_Bulk_Ops.initEvents(el);
 
 					//Clear bulk ops selections
 					Ticket_Bulk_Ops.clearSelection();
 
-					var Groups = Backbone.Collection.extend({url: '/core/api/tickets/groups'});
-					new Groups().fetch({success: function(model, response, options){
-						
-						$('ul.ul-select-assignee').html(getTemplate('ticket-model-change-assignee', model.toJSON()))
-					}});
+					//Show save as noty for filters
+					//Ticket_Custom_Filters.showCreateFilterNoty();
+
+					if(!Tickets.isSingleRowView()){
+						var Groups = Backbone.Collection.extend({url: '/core/api/tickets/groups'});
+						new Groups().fetch({success: function(model, response, options){
+							
+							$('ul.ul-select-assignee').html(getTemplate('ticket-model-change-assignee', model.toJSON()))
+						}});
+					}
 
 					if(!App_Ticket_Module.ticketsCollection || 
 						!App_Ticket_Module.ticketsCollection.collection || 
@@ -296,8 +301,10 @@ var Tickets = {
 							if(Current_Ticket_ID)
 								return;
 
-							if (window.innerHeight - $tr.offset().top < 250)
-								top = '-' + $that.find('#ticket-last-notes').height() + 'px'
+							var popup_height = $that.find('#ticket-last-notes').height();
+
+							if (window.innerHeight - ($tr.offset().top - $(window).scrollTop()) <= (popup_height + 100))
+								top = '-' + popup_height + 'px'
 
 							$that.find('#ticket-last-notes').css('top', top).css('left','0').css('display', 'block');
 
@@ -444,7 +451,9 @@ var Tickets = {
 
 				CURRENT_DOMAIN_USER.helpdeskSettings.ticket_view_type = view_type;
 
-				Tickets.renderExistingCollection();
+				App_Ticket_Module.ticketsCollection.options.templateKey = Tickets.isSingleRowView() ? 'ticket-single-row' : 'ticket';
+
+				App_Ticket_Module.ticketsCollection.render(true);
 			});
 		});
 
@@ -464,7 +473,10 @@ var Tickets = {
 		});
 
 		//Initializing click event due date dropdown
+		$('ul.choose-columns > li > a').off('click');
 	  	$(el).on('click','ul.choose-columns > li > a', function(event){
+	  		event.preventDefault();
+	  		event.stopPropagation();
 
 	  		var $target = $(event.currentTarget);
 	  		$(event.target).blur();
