@@ -441,6 +441,7 @@ var portlet_graph_utility = {
 								layout : 'vertical',
 								floating : true,
 								align : 'right',
+								enabled:false,
 								verticalAlign : 'top'
 							},
 							colors : [ "#23b7e5", "#27c24c", "#7266ba",
@@ -671,6 +672,7 @@ var portlet_graph_utility = {
 									layout : 'vertical',
 									floating : true,
 									align : 'right',
+									enabled:false,
 									verticalAlign : 'top'
 								}
 						    });
@@ -951,6 +953,7 @@ var portlet_graph_utility = {
 													floating : true,
 													align : 'right',
 													verticalAlign : 'top',
+													enabled:false,
 													labelFormatter : function() {
 														if (this.name.length > 12) {
 															return this.name
@@ -1088,6 +1091,7 @@ var portlet_graph_utility = {
 													layout : 'vertical',
 													floating : true,
 													align : 'right',
+													enabled:false,
 													verticalAlign : 'top'
 												},
 												colors : [ "#23b7e5",
