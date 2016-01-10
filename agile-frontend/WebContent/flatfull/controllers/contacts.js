@@ -53,6 +53,10 @@ var ContactsRouter = Backbone.Router.extend({
 			
 			/* CALL-with mobile number */
 			"contacts/call-lead/:first/:last/:mob" : "addLeadDirectly",
+			
+			/* CALL-with only mobile number */
+			"contacts/call-lead/:mob" : "addMobLead",
+			
 			"call-contacts" : "callcontacts"
 	},
 	
@@ -1237,6 +1241,13 @@ var ContactsRouter = Backbone.Router.extend({
 		$("#personModal").modal();
 	},
 
+	addMobLead : function(mob){
+		$("#personModal").on("shown", function(){
+			$(this).find("#phone").val(mob);
+		});
+		$("#personModal").modal();
+	},
+	
 	addContact : function(){
 		$.getJSON("core/api/custom-fields/scope?scope=CONTACT", function(data)
 		{
