@@ -4,5 +4,12 @@ public interface StatusProcessor<T>
 {
     public T getStatus();
 
-    public void setCount(int i);
+    public boolean shouldSendDelayMessage();
+
+    public void setCount(int totalEntities);
+
+    public void setTaskQueue(String taskName);
+
+    public String getTaskQueueName();
+
 }

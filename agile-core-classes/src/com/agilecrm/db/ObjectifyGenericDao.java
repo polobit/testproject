@@ -35,8 +35,8 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
-import com.agilecrm.deals.Goals;
 import com.agilecrm.contact.upload.blob.status.ImportStatus;
+import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.filter.DealFilter;
@@ -112,8 +112,8 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 public class ObjectifyGenericDao<T> extends DAOBase
 {
 
-	static final String[] countRestrictedClassNames = new String[]{"contact", "activity"};
-	
+    static final String[] countRestrictedClassNames = new String[] { "contact", "activity" };
+
     static final int BAD_MODIFIERS = Modifier.FINAL | Modifier.STATIC | Modifier.TRANSIENT;
 
     // Registers the classes with ObjectifyService
@@ -219,16 +219,12 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	ObjectifyService.register(DealFilter.class);
 
-
-    ObjectifyService.register(LandingPage.class);
-    ObjectifyService.register(LandingPageCNames.class);
+	ObjectifyService.register(LandingPage.class);
+	ObjectifyService.register(LandingPageCNames.class);
 	ObjectifyService.register(Goals.class);
 
 	// CSV Import status
 	ObjectifyService.register(ImportStatus.class);
-
-	ObjectifyService.register(LandingPage.class);
-	ObjectifyService.register(LandingPageCNames.class);
 
     }
 
@@ -666,24 +662,24 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		if (result instanceof com.agilecrm.cursor.Cursor)
 		{
 
-			String className = this.clazz.getSimpleName().toLowerCase();
-			
+		    String className = this.clazz.getSimpleName().toLowerCase();
+
 		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
 		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
 			    + NamespaceManager.get() + "_count");
 
-		    
-		    if (object != null){
-		    	if(!Arrays.asList(countRestrictedClassNames).contains(className))
-		    		agileCursor.count = (Integer) object;	
+		    if (object != null)
+		    {
+			if (!Arrays.asList(countRestrictedClassNames).contains(className))
+			    agileCursor.count = (Integer) object;
 		    }
-			
+
 		    else
 		    {
 			long startTime = System.currentTimeMillis();
-			if(!Arrays.asList(countRestrictedClassNames).contains(className))
-					agileCursor.count = query.count();
-			
+			if (!Arrays.asList(countRestrictedClassNames).contains(className))
+			    agileCursor.count = query.count();
+
 			long endTime = System.currentTimeMillis();
 			if ((endTime - startTime) > 15 * 1000 && cache)
 			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",

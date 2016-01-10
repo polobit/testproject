@@ -107,16 +107,20 @@ public class CSVUtil
     public CSVUtil(BillingRestriction billingRestriction, UserAccessControl accessControl,
 	    ImportStatusDAO importStatusDAO)
     {
+	int i = 0;
+
 	this.billingRestriction = billingRestriction;
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
 		Contact.class.getSimpleName(), this.billingRestriction);
 
-	GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
-		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+	if ((i + 1) != 1)
+	{
+	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
+		    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
-	service = new GCSServiceAgile(
-		NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate() + ".csv", "agile-exports",
-		options);
+	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
+		    + ".csv", "agile-exports", options);
+	}
 
 	this.accessControl = accessControl;
 
@@ -257,8 +261,9 @@ public class CSVUtil
     {
 	if (statusSender != null && statusProcessor != null)
 	{
+	    System.out.println(statusProcessor);
 	    statusProcessor.setCount(numberOfContacts);
-	    statusSender.sendEmail("yaswanth@agilecrm.com", statusProcessor);
+	    statusSender.sendEmail(domainUser, statusProcessor);
 	}
     }
 
@@ -279,6 +284,7 @@ public class CSVUtil
      * @throws IOException
      */
     private Key<DomainUser> ownerKey = null;
+    private DomainUser domainUser = null;
 
     public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
 	    throws PlanRestrictedException, IOException
@@ -287,7 +293,7 @@ public class CSVUtil
 	// Creates domain user key, which is set as a contact owner
 	this.ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
-	DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+	domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
 
 	BulkActionUtil.setSessionManager(domainUser);
 
@@ -304,6 +310,7 @@ public class CSVUtil
 	List<FailedContactBean> failedContacts = new ArrayList<FailedContactBean>();
 
 	List<String[]> csvData = getCSVDataFromStream(blobStream, "UTF-8");
+	reportStatus(csvData.size());
 
 	if (csvData.isEmpty())
 	    return;
@@ -1696,5 +1703,4 @@ public class CSVUtil
 	System.out.println("building failed contacts service");
 	return failedContactsWriter = new CSVWriter(service.getOutputWriter());
     }
-
 }
