@@ -23,6 +23,7 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.portlets.Portlet;
+import com.agilecrm.portlets.Portlet.PortletRoute;
 import com.agilecrm.portlets.util.PortletUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -61,9 +62,9 @@ public class PortletsAPI {
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Portlet> getPortlets()throws Exception{
+	public List<Portlet> getPortlets(@QueryParam("route") PortletRoute route)throws Exception{
 		// Returns list of portlets saved by current user
-		return PortletUtil.getAddedPortletsForCurrentUser();
+		return PortletUtil.getAddedPortletsForCurrentUser(route);
 	}
 	/**
 	 * Adding of new portlet
@@ -79,6 +80,8 @@ public class PortletsAPI {
 	public Portlet createPortlet(Portlet portlet) {
 		try {
 			if(portlet!=null){	
+				/*if(portlet.portlet_route.equals(Portlet.PortletRoute.DashBoard))
+					portlet.portlet_route=null;*/
 				portlet.save();
 				
 				if(portlet.prefs!=null){

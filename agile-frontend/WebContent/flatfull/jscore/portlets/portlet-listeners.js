@@ -977,7 +977,9 @@ function clickfunction(that,url,forAll){
 				portlet.url = url;
 				portlet.set({
 					"prefs" : JSON.stringify(json),
-					"isForAll" : forAll
+					"isForAll" : forAll,
+
+					"portlet_route" : "DashBoard",
 				}, {
 					silent : true
 				});

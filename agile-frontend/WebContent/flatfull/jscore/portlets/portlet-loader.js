@@ -45,7 +45,7 @@ function loadPortlets(el){
 	
 	// This flag is used to ensure portlet script are loaded only once in
 	// postrender. It is set to false after portlet setup is initialized
-	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets', sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
+	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets?route=DashBoard', sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 		postRenderCallback : function(portlets_el){
 			set_up_portlets(el, portlets_el);
 				if(App_Portlets.adminPortlets.length!=0)

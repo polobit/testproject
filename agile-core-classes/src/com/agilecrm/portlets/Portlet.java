@@ -13,6 +13,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.reports.Reports.ReportType;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
@@ -38,12 +39,22 @@ public class Portlet {
     public static enum PortletType{
     	CONTACTS, DEALS, TASKSANDEVENTS, USERACTIVITY, RSS, ACCOUNT 
     };
+    
 
     /**
      * Portlet type which stores info to categorize the portlets
      */
     @Indexed
     public PortletType portlet_type = null;
+    
+    public static enum PortletRoute
+    {
+	Deals, Contacts,Tasks,Activities,Calendar,DashBoard
+    };
+    
+    @Indexed
+    @NotSaved(IfDefault.class)
+    public PortletRoute portlet_route = null;
     
     @NotSaved(IfDefault.class)
     public String prefs = null;
@@ -102,13 +113,14 @@ public class Portlet {
     	this.portlet_type=type;
     }
     
-    public Portlet(String name,PortletType type,int column_position,int row_position,int size_x,int size_y){
+    public Portlet(String name,PortletType type,int column_position,int row_position,int size_x,int size_y,PortletRoute route){
     	this.name=name;
     	this.portlet_type=type;
     	this.column_position=column_position;
     	this.row_position=row_position;
     	this.size_x=size_x;
     	this.size_y=size_y;
+    	this.portlet_route=route;
     }
     
     public void save(){
