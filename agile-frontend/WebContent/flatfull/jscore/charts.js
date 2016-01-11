@@ -2089,8 +2089,15 @@ function LineforComparison(url, selector, name,show_loading)
 				});
 			}
 			});
-
-			
+				
+			if(Math.ceil(categories.length/10)>0)
+			{
+				min_tick_interval = Math.ceil(categories.length/10);
+				if(min_tick_interval==3)
+				{
+					min_tick_interval = 4;
+				}
+			}
 			
 
 			// After loading and processing all data, highcharts are initialized
@@ -2098,7 +2105,7 @@ function LineforComparison(url, selector, name,show_loading)
 			chart = new Highcharts.Chart({
 			    chart: {
 			        renderTo: selector,
-			        type: 'area',
+			        type: 'line',
 			        marginRight: 130,
 			        marginBottom: 50
 			    },
@@ -2116,11 +2123,26 @@ function LineforComparison(url, selector, name,show_loading)
 			        categories: categories,
 			        tickmarkPlacement: 'on',
 			        minTickInterval: min_tick_interval,
-			        tickWidth: 1
+			        tickWidth: 1,
+			              labels: {
+				    formatter: function () {
+					    var text = this.value;
+					    if(categories.length>10)
+						    var formatted = text.length > 8 ? text.substring(0, 8) + '...' : text;
+						else
+							formatted=text;
+
+                        return '<div style="width:50px; overflow:hidden" title="' + text + '">' + formatted + '</div>';
+				    },
+				    style: {
+					    width: '10px'
+				    },
+				    useHTML: true
+			}
 			    },
 			    yAxis: {
 			        title: {
-			            text: ""
+			            text: "Percentage"
 			        },
 			        plotLines: [
 			            {
@@ -2142,8 +2164,8 @@ function LineforComparison(url, selector, name,show_loading)
 						});
 			    				
 						return  '<div>' + 
-                              
-                                '<div class="p-n">'+this.series.name+': <b>'+Math.round(this.point.y)+'</b></div>' +
+                              	'<div class="p-n">'+this.x+'</div><br>'+
+                                '<div class="p-n">'+this.series.name+': <b>'+Math.round(this.point.y)+'%</b></div>' +
                                 '</div><br>'+
                                 '<div class="p-n">Total Deals: <b>'+getNumberWithCommasForCharts(d["data"][this.point.x])+'</b></div>';
                         
