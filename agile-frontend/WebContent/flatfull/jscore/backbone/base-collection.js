@@ -84,6 +84,8 @@ initialize : function()
 	this.model.bind("destroy", this.close, this);
 
 	this.model.bind("change", this.render, this);
+	this.model.bind("popoverChange", this.test,this);
+
 },
 /*
  * On click on ".delete" model representing the view is deleted, and removed
@@ -116,7 +118,31 @@ edit : function(e)
 	 * template: this.model.get("edit_template") }); var el =
 	 * editView.render().el; $('#content').html(el); }
 	 */
-}, render : function(callback)
+}, 
+test : function(callback)
+{
+		var async = false;
+	// if(callback && typeof (callback) == "function")
+	// async = true;
+	if (async)
+	{
+		var that = this
+		// console.log(this.model.toJSON());
+		getTemplate(that.options.template, that.model.toJSON(), undefined, function(el)
+		{
+			$(that.el).html(el);
+			$(that.el).data(that.model);
+			console.log($(that.el));
+			callback(that.el);
+		});
+		return this;
+	}
+
+	$(this.el).html(getTemplate(this.options.template, this.model.toJSON()));
+
+	return this;
+},
+render : function(callback)
 {
 	var async = false;
 	// if(callback && typeof (callback) == "function")

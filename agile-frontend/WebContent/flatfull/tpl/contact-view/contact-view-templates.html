@@ -250,7 +250,7 @@
 </script>
 
 <script id = "contacts-custom-view-popover-template" type="text/html">
-       <div class="data" data={{id}}>
+       <div class="data panel-default" data={{id}}>
 	   
        	<div class="text-cap panel-heading text-ellipsis"><div class="text-ellipsis inline-block" style="width:80%">{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}}</div>
@@ -280,25 +280,20 @@
         		</div>
         		<div class="panel-body">
        		<div class="b-b b-light p-b-xs"><div class="pull-left"><i class="icon icon-user text-sm v-middle"></i></div>
-       			<!--<div class="pull-right owners" style="padding:0px 8px 10px; display:none">
-				<select name="owner" id="owner" class="required form-control">
-                </select></div>
-       		  <div class="text-ellipsis m-l-md editable" style="width:15em;" contentEditable="true">
-	   {{owner.name}}
-       </div>-->
+       			
        	<div class="contact-owner text-base m-l-md" id="change-owner-element">
         	
 		{{#canEditContact owner.id}}
-        	<a id="contact-owner" class="custom-color" data={{owner.id}}>{{owner.name}}</a>
+        	<a id="contact-owner-popover" class="custom-color" data={{owner.id}}>{{owner.name}}</a>
 
         	{{else}}
         		<a id="contact-owner-static" class="custom-color" data={{owner.id}}>{{owner.name}}</a>
 
         {{/canEditContact}}
         	{{#canEditContact owner.id}}
-        	<div class="dropdown" id="change-owner-ul"  style="display: none">
+        	<div class="dropdown" id="change-owner-ul-popover"  style="display: none">
         		 <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
-        		 <ul id='contact-detail-owner' class="dropdown-menu"></ul>
+        		 <ul id='contact-detail-owner-popover' class="dropdown-menu"></ul>
         	</div> 
 			{{/canEditContact}}
        </div>
@@ -306,11 +301,11 @@
        		{{#property_is_exists "company" properties}}
        		<div class="b-b b-light p-b-xs">
        		<div class="pull-left"><i class="icon icon-building text-sm v-middle"></i></div>
-       		<div class="text-ellipsis m-l-sm text-cap pull-left" >
-       		<a class="text-cap">{{getPropertyValue properties "title"}}</a> , </div>
        		<div class="text-ellipsis m-l-md text-cap" >
-      		<a class="text-cap">{{getPropertyValue properties "company"}}</a>
-     		 </div>
+       		<a class="text-cap">{{getPropertyValue properties "title"}}</a> 
+       		
+      		<a class="text-cap" href="#company/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a></div>
+     		
        		</div>
        		{{/property_is_exists}}
        			{{#property_is_exists "phone" properties}}
@@ -349,32 +344,27 @@
 								{{/property_is_exists}}
 
 								<div class="m-t-xs">
-								 <div id="added-tags" class="text-ellipsis pull-left" style="width:13em;"> 	
+								 <div id="added-tags-popover" class="text-ellipsis pull-left" style="width:13em;"> 	
 				{{#each tags}}
-	    			<span class="label bg-light dk text-tiny">{{this}}</span>	
+	    			<span class="label bg-light text-tiny">{{this}}</span>	
 							{{/each}}
 						</div>
-						<div id="addTagsForm" style="display: none;" class="m-b-none">
+						<div id="addTagsForm-popover" style="display: none;" class="m-b-none">
 							<div class="control-group save-tag m-b-none">
 								<input name="" type="text" id="addTags"
 									class="tags-typeahead ignore-comma-keydown form-control inline-block"
 									style="width: 60%" placeholder="Enter tag" />
-								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags">Add</a></span>
+								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags-popover">Add</a></span>
 							</div>
 						</div>
 						{{#canEditContact owner.id}}
-			<div class="pull-left"><a href="#" id="add-tags" rel="tooltip"
-							data-original-title="addtag" data-placement="top" class="text-xs text-info pull-left"> <i class="fa fa-plus"></i><span >Tag</span></a></div>
+			<div class="pull-left"><a href="#" id="add-tags-popover" rel="tooltip"
+							data-original-title="addtag" data-placement="top" class="text-xs  pull-left"> <i class="fa fa-plus text-info"></i><span class="text-info" >Tag</span></a></div>
 						{{/canEditContact}}
 
 						
 					</div>
-	<!-- <div class="b-t b-light m-t-xs p-t-xs">  	 
-       {{#hasMenuScope 'DEALS'}}
-   <a href="#" class="contact-list-add-deal text-info pos-rlt "><i class="fa fa-plus"></i>Deal</a> 
-{{/hasMenuScope}}
-	   	    <a href="#noteModal" data-toggle="modal" class="pull-right text-info blue btn-slate-action contact-list-add-note"><i class="fa fa-plus"></i>Note</a>
-             </div>-->
+
 	   	    </div>
-	   	          </div>
+	   	          </div>	
 </script>

@@ -74,7 +74,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 	dashboard : function()
 	{
-
+		insidePopover=false;
 		$(".active").removeClass("active");
 		if(CURRENT_DOMAIN_USER.domain == "admin")
 		{
@@ -821,6 +821,7 @@ var ContactsRouter = Backbone.Router.extend({
 	sendEmailCustom : function(id, subject, body, cc, bcc,custom_view)
 	{
 		var that=this.contact_popover;
+		insidePopover=false;
 		sendMail(id,subject,body,cc,bcc,that,true);
 	
 	},

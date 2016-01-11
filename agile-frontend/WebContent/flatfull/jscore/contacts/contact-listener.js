@@ -30,23 +30,20 @@ function contactListener()
             "content": template_ui,
             });
 								$(that).popover('show');
-							$('.popover').addClass("contact_popover");
+							$('.popover').addClass("contact_popover fadeInLeft animated");
+							$('.popover-content').html(template_ui);
 
 							$('.popover').css('left', ($('.dta-contatiner').offset().left + 90+"px"));
 							if (window.innerHeight - $(that).offset().top >= 400)
                             $('.popover').css('top', ($(that).offset().top  + "px"));
-                        /*else{
-                        	$('.popover').css('top',($(that).offset().top+$('.dta-contatiner').offset().top+"px"));
-                        }*/
-                         //if( $('#contacts-table').offset().top > $('#contacts-table .popover').offset().top ) { $('#contacts-table .popover').offset({ top : $('#contacts-table').offset().top }); }
-
+                        
                          else{
                          	if($(window).scrollTop()>($('#contacts-table .popover').offset().top-$('#contacts-table .popover').height()))
                          		$('#contacts-table .popover').offset({ top : $(that).offset().top+20 });
                          }
                         	
-							 attachEvents(that,App_Contacts.contact_popover);
-						contact_list_starify('.popover');
+							 attachEvents(that,App_Contacts.contact_popover,true);
+						contact_list_starify('.popover',true);
 						
 					});
 		 		that.find('.data').attr('data');
@@ -100,22 +97,11 @@ function contactListener()
             "content": template_ui,
             });
 								$(that).popover('show');
-						$('.popover').addClass("contact_popover");
-							//$('.popover').css('left', ($('.dta-contatiner').offset().left + 90+"px"));
-							// if (window.innerHeight - $(that).offset().top >= 400)
-       //                      $('.popover').css('top', ($(that).offset().top  + "px"));
-       //                  /*else{
-       //                  	$('.popover').css('top',($(that).offset().top+$('.dta-contatiner').offset().top+"px"));
-       //                  }*/
-       //                   //if( $('#contacts-table').offset().top > $('#contacts-table .popover').offset().top ) { $('#contacts-table .popover').offset({ top : $('#contacts-table').offset().top }); }
+						$('.popover').addClass("contact_popover fadeInLeft animated");
+						$('.popover-content').html(template_ui);
 
-       //                   else{
-       //                   	if($(window).scrollTop()>($('#contacts-table .popover').offset().top-$('#contacts-table .popover').height()))
-       //                   		$('#contacts-table .popover').offset({ top : $(that).offset().top+20 });
-       //                   }
-                        	
-							 attachEvents(that,App_Contacts.contact_popover);
-						contact_list_starify('.popover');
+							 attachEvents(that,App_Contacts.contact_popover,undefined);
+						contact_list_starify('.popover',undefined);
 						
 					});
 		 		that.find('.data').attr('data');
@@ -138,11 +124,278 @@ function contactListener()
 	}, 1000);
 		
 	});
+
+	$('#company-contacts-model-list').off('mouseenter','tr');
+		$('#company-contacts-model-list').on('mouseenter','tr',function(e){
+			//e.stopPropagation();
+			var left=e.pageX;
+            var that=$(this);
+
+
+ 
+      clearTimeout(timer);
+
+			timer=setTimeout(function() {
+						 		
+				if (!insidePopover)	{
+		
+					 //$(that).popover('show');
+		 App_Contacts.contact_popover=$(that).data();
+		 try{
+		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+								$(that).popover(
+        {
+            "rel": "popover",
+            "trigger": "manual",
+            "placement": "top",
+            "html": "true",
+            "content": template_ui,
+            });
+								$(that).popover('show');
+						$('.popover').addClass("contact_popover fadeInLeft animated");
+						$('.popover-content').html(template_ui);
+							
+							if (window.innerHeight - $(that).offset().top >= 400)
+                            $('.popover').css('top', ($(that).offset().top  + "px"));
+                        
+                         else{
+                         	if($(window).scrollTop()>($('#contacts .popover').offset().top-$('#contacts .popover').height()))
+                         		$('#contacts .popover').offset({ top : $(that).offset().top+20 });
+                         }
+                        	
+							 attachEvents(that,App_Contacts.contact_popover,undefined);
+						contact_list_starify('.popover',undefined);
+						
+					});
+		 		that.find('.data').attr('data');
+		 	}
+		 	catch(e){
+		 		return false;
+		 	}
+		 	}
+		 }, 1000);
+});
+		$('#company-contacts-model-list').off('mouseleave','tr');
+	$('#company-contacts-model-list').on('mouseleave','tr',function(){
+		var that=$(this);
+	setTimeout(function() {
+		if (!insidePopover){
+			if($('.popover').length!=0)
+			$(that).popover('hide');
+		}
+					
+	}, 1000);
+		
+	});
+	$('#task-related-model-list').off('mouseenter','tr');
+		$('#task-related-model-list').on('mouseenter','tr',function(e){
+			//e.stopPropagation();
+			var left=e.pageX;
+            var that=$(this);
+
+
+ 
+      clearTimeout(timer);
+
+			timer=setTimeout(function() {
+						 		
+				if (!insidePopover)	{
+		
+					 //$(that).popover('show');
+		 App_Contacts.contact_popover=$(that).data();
+		 try{
+		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+								$(that).popover(
+        {
+            "rel": "popover",
+            "trigger": "manual",
+            "placement": "top",
+            "html": "true",
+            "content": template_ui,
+            });
+								$(that).popover('show');
+						$('.popover').addClass("contact_popover fadeInLeft animated");
+						$('.popover-content').html(template_ui);
+
+							if (window.innerHeight - $(that).offset().top >= 400)
+                            $('.popover').css('top', ($(that).offset().top  + "px"));
+                        
+                         else{
+                         	if($(window).scrollTop()>($('#contacts .popover').offset().top-$('#contacts .popover').height()))
+                         		$('#contacts .popover').offset({ top : $(that).offset().top+20 });
+                         }
+                        	
+							 attachEvents(that,App_Contacts.contact_popover,undefined);
+						contact_list_starify('.popover',undefined);
+						
+					});
+		 		that.find('.data').attr('data');
+		 	}
+		 	catch(e){
+		 		return false;
+		 	}
+		 	}
+		 }, 1000);
+});
+		$('#task-related-model-list').off('mouseleave','tr');
+	$('#task-related-model-list').on('mouseleave','tr',function(){
+		var that=$(this);
+	setTimeout(function() {
+		if (!insidePopover){
+			if($('.popover').length!=0)
+			$(that).popover('hide');
+		}
+					
+	}, 1000);
+		
+	});
+	
+	$('#deal-related-model-list').off('mouseenter','tr');
+		$('#deal-related-model-list').on('mouseenter','tr',function(e){
+			//e.stopPropagation();
+			var left=e.pageX;
+            var that=$(this);
+
+
+ 
+      clearTimeout(timer);
+
+			timer=setTimeout(function() {
+						 		
+				if (!insidePopover)	{
+		
+					 //$(that).popover('show');
+		 App_Contacts.contact_popover=$(that).data();
+		 try{
+		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+								$(that).popover(
+        {
+            "rel": "popover",
+            "trigger": "manual",
+            "placement": "top",
+            "html": "true",
+            "content": template_ui,
+            });
+								$(that).popover('show');
+						$('.popover').addClass("contact_popover fadeInLeft animated");
+							$('.popover-content').html(template_ui);
+
+							if (window.innerHeight - $(that).offset().top >= 400)
+                            $('.popover').css('top', ($(that).offset().top  + "px"));
+                        
+                         else{
+                         	if($(window).scrollTop()>($('#contacts .popover').offset().top-$('#contacts .popover').height()))
+                         		$('#contacts .popover').offset({ top : $(that).offset().top+20 });
+                         }
+                        	
+							 attachEvents(that,App_Contacts.contact_popover,undefined);
+						contact_list_starify('.popover',undefined);
+						
+					});
+		 		that.find('.data').attr('data');
+		 	}
+		 	catch(e){
+		 		return false;
+		 	}
+		 	}
+		 }, 1000);
+});
+		$('#deal-related-model-list').off('mouseleave','tr');
+	$('#deal-related-model-list').on('mouseleave','tr',function(){
+		var that=$(this);
+	setTimeout(function() {
+		if (!insidePopover){
+			if($('.popover').length!=0)
+			$(that).popover('hide');
+		}
+					
+	}, 1000);
+		
+	});
+
+	
+	$('#workflow-other-subscribers-model-list').off('mouseenter','td.data .table-resp');
+		$('#workflow-other-subscribers-model-list').on('mouseenter','td.data .table-resp',function(e){
+		
+			var left=e.pageX;
+            var that=$(this);
+
+
+ 		if(insidePopover==true){
+ 			insidePopover=false;
+ 			$("time.campaign-started-time").timeago();
+				$("time.campaign-completed-time").timeago();
+
+ 		}
+ 			
+      clearTimeout(timer);
+
+			timer=setTimeout(function() {
+						 		
+				if (!insidePopover)	{
+		
+					 //$(that).popover('show');
+		 App_Contacts.contact_popover=$(that).parents('tr').data();
+		 try{
+		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+								$(that).popover(
+        {
+            "rel": "popover",
+            "trigger": "manual",
+            "placement": "top",
+            "html": "true",
+            "animation" : "true",
+            "content": template_ui,
+            });
+								$(that).popover('show');
+						$('.popover').addClass("contact_popover fadeInLeft animated");
+							$('.popover-content').html(template_ui);
+
+							if (window.innerHeight - $(that).offset().top >= 400)
+                            $('.popover').css('top', ($(that).offset().top  + "px"));
+                        
+                         else{
+                         	if($(window).scrollTop()>($('.popover').offset().top-$('.popover').height()))
+                         		$('.popover').offset({ top : $(that).offset().top+20 });
+                         }
+                        	
+							 attachEvents(that,App_Contacts.contact_popover,undefined,true);
+						contact_list_starify('.popover',undefined);
+						
+					});
+		 		that.find('.data').attr('data');
+		 	}
+		 	catch(e){
+		 		return false;
+		 	}
+		 	}
+		 }, 1000);
+});
+		$('#workflow-other-subscribers-model-list').off('mouseleave','td.data .table-resp');
+	$('#workflow-other-subscribers-model-list').on('mouseleave','td.data .table-resp',function(){
+		var that=$(this);
+	setTimeout(function() {
+		if (!insidePopover){
+			if($('.popover').length!=0)
+			$(that).popover('hide');
+		}
+					
+	}, 1000);
+		
+	});
 }
 
 var insidePopover=false;
 
-function attachEvents(tr,Contact_collection) {
+function attachEvents(tr,Contact_collection,listView,campaigns_view) {
 	$('.popover').off('mouseenter');
 	$('.popover').on('mouseenter', function() {
 		insidePopover=true;
@@ -249,13 +502,17 @@ $('.popover').on('click', '#add-score', function(e){
 	    var that=$(this);
 	    // Convert string type to int
 	    var add_score = parseInt($('#lead-score').text());
-	    
+	    var temp_model;
 	    add_score = add_score + 1;
 	    
 	    // Changes score in UI
 	    $('#lead-score').text(add_score);
-       
-   var temp_model= Contact_collection.set('lead_score', add_score,{silent: true});
+     if(listView!=undefined) 
+     	temp_model= Contact_collection.set('lead_score', add_score);
+   else {
+   	temp_model= Contact_collection.set('lead_score', add_score,{silent: true});
+   temp_model.trigger('popoverChange');
+		}
 		var contact_model =  temp_model.toJSON();
 
 	    
@@ -279,6 +536,7 @@ $('.popover').off('click', '#minus-score')
 $('.popover').on('click', '#minus-score', function(e){
 	    e.preventDefault();
 	    var that=$(this);
+	     var temp_model;
 	    // Convert string type to int
 	    var sub_score = parseInt($('#lead-score').text());
 		
@@ -290,8 +548,12 @@ $('.popover').on('click', '#minus-score', function(e){
 		// Changes score in UI
 		$('#lead-score').text(sub_score);
 		
-       
-       var temp_model= Contact_collection.set('lead_score', sub_score);
+       if(listView!=undefined) 
+       	temp_model=Contact_collection.set('lead_score', sub_score);
+       else{
+       temp_model= Contact_collection.set('lead_score', sub_score,{silent:true});
+       temp_model.trigger('popoverChange');
+   }
 		var contact_model =  temp_model.toJSON();
 
 	    
@@ -311,14 +573,14 @@ $('.popover').on('click', '#minus-score', function(e){
 		          
 	});
 
-$('.popover').off('click', '#add-tags')
-$('.popover').on('click', '#add-tags', function(e){
+$('.popover').off('click', '#add-tags-popover')
+$('.popover').on('click', '#add-tags-popover', function(e){
 	e.preventDefault();
 		  var that=$(this);
 		$(e.currentTarget).css("display", "none");
-		$("#addTagsForm").css("display", "table");
-		$("#addTags").focus();
-		setup_tags_typeahead(function(e){
+		$("#addTagsForm-popover").css("display", "table");
+		$("#addTags-popover").focus();
+			(function(e){
     				json = Contact_collection.toJSON();
     			
     			// Checks if tag already exists in contact
@@ -329,17 +591,21 @@ $('.popover').on('click', '#add-tags', function(e){
     			
     			
     			saveEntity(json, 'core/api/contacts', function(data){
-    				$("#addTagsForm").css("display", "none");
-        		    $("#add-tags").css("display", "block");
-        		    
-        		    Contact_collection.set(data.toJSON());
+    				$("#addTagsForm-popover").css("display", "none");
+        		    $("#add-tags-popover").css("display", "block");
+        		   
+        		    if(listView!=undefined) 
+        		    	Contact_collection.set(data.toJSON());
+        		    else 
+        		    { Contact_collection.set(data.toJSON(),{silent:true});
+      				 Contact_collection.trigger('popoverChange'); }
         		    	    var old_tags = [];
-	       			$.each($('#added-tags').children(), function(index, element){
+	       			$.each($('#added-tags-popover').children(), function(index, element){
        					
 	       				old_tags.push($(element).html());
        				});
        				if ($.inArray(e, old_tags) == -1) 
-		       				$('#added-tags').append('<span class="label bg-light dk text-tiny">'+e+'</span>');
+		       				$('#added-tags-popover').append('<span class="label bg-light dk text-tiny">'+e+'</span>');
 	    			
     	     		
 	       			
@@ -347,8 +613,8 @@ $('.popover').on('click', '#add-tags', function(e){
     	        return;
 		});
 	});
-$('.popover').off('click', '#contact-add-tags')
-$('.popover').on('click', '#contact-add-tags', function(e){
+$('.popover').off('click', '#contact-add-tags-popover')
+$('.popover').on('click', '#contact-add-tags-popover', function(e){
 e.preventDefault();
 		
 		var that=$(this);
@@ -365,8 +631,8 @@ e.preventDefault();
 		if (!isValidTag(new_tags, true)) {
 			return;
 		}
-		$('#add-tags').css("display", "block");
-		$("#addTagsForm").css("display", "none");
+		$('#add-tags-popover').css("display", "block");
+		$("#addTagsForm-popover").css("display", "none");
 		console.log(new_tags);
 		
 		if(new_tags) {
@@ -374,7 +640,7 @@ e.preventDefault();
 	    		
 	    	
 	    	// Reset form
-	    	$('#addTagsForm input').each (function(){
+	    	$('#addTagsForm-popover input').each (function(){
    		  	  	$(e.currentTarget).val("");
    		  	});
 	    	
@@ -391,14 +657,20 @@ e.preventDefault();
 		       		success: function(data){
 		       			
 		       			// Updates to both model and collection
-		       			Contact_collection.set(data.toJSON());
+		       			 if(listView!=undefined) 
+		       			 	Contact_collection.set(data.toJSON());
+		       			 	else
+		       			 		{
+		       			Contact_collection.set(data.toJSON(),{silent:true});
+      				 Contact_collection.trigger('popoverChange');
+      				}
 		       				 var old_tags = [];
-	       			$.each($('#added-tags').children(), function(index, element){
+	       			$.each($('#added-tags-popover').children(), function(index, element){
        					
 	       				old_tags.push($(element).html());
        				});
        				if ($.inArray(e, old_tags) == -1) 
-		       				$('#added-tags').append('<span class="label bg-light dk text-tiny">'+new_tags+'</span>');
+		       				$('#added-tags-popover').append('<span class="label bg-light dk text-tiny">'+new_tags+'</span>');
 
 		       			console.log(new_tags);
 		       			// Adds the added tags (if new) to tags collection
@@ -413,32 +685,38 @@ e.preventDefault();
 		}
 	});
 
-	$('.popover').off('click', '#contact-owner');
-$('.popover').on('click', '#contact-owner', function(e){
+	$('.popover').off('click', '#contact-owner-popover');
+$('.popover').on('click', '#contact-owner-popover', function(e){
+	var that=$(this);
 	  e.preventDefault();
-         fill_owners(undefined, undefined, function(){
-	    	$('#contact-owner').css('display', 'none');
-	    	$('#change-owner-ul').css('display', 'inline-block');
-	    	if($('#change-owner-element > #change-owner-ul').css('display') == 'inline-block')
-	             $("#change-owner-element").find(".loading").remove();
-		});
+	  var optionsTemplate = "<li><a class='contact-owner-list-popover' data='{{id}}'>{{name}}</a></li>";
+         fillSelect('contact-detail-owner-popover','/core/api/users', 'domainUsers', function()
+			{
+									$(that).css('display', 'none');
+	    	$(that).parent().find('#change-owner-ul-popover').css('display', 'inline-block');
+	    	if($(that).parent().find('#change-owner-ul-popover').css('display') == 'inline-block')
+	             $(that).parent().find(".loading").remove();
+		}, optionsTemplate, true);
+	    
+		//});
 });
-$('.popover').off('click', '.contact-owner-list');
-$('.popover').on('click', '.contact-owner-list', function(e){
+$('.popover').off('click', '.contact-owner-list-popover');
+$('.popover').on('click', '.contact-owner-list-popover', function(e){
 	e.preventDefault();
+	var that=$(this);
     	var targetEl = $(e.currentTarget);
-    	$('#change-owner-ul').css('display', 'none');
+    	$('#change-owner-ul-popover').css('display', 'none');
 		
 		// Reads the owner id from the selected option
 		var new_owner_id = $(targetEl).attr('data');
 		var new_owner_name = $(targetEl).text();
-		var current_owner_id = $('#contact-owner').attr('data');
+		var current_owner_id = $('#contact-owner-popover').attr('data');
 		
 		// Returns, if same owner is selected again 
 		if(new_owner_id == current_owner_id)
 			{
 			  // Showing updated owner
-			  show_owner();
+			  $('#contact-owner-popover').css('display', 'inline-block');
 			  return;
 			}
 		
@@ -446,12 +724,18 @@ $('.popover').on('click', '.contact-owner-list', function(e){
 		    contactModel.url = '/core/api/contacts/change-owner/' + new_owner_id + "/" + Contact_collection.get('id');
 		    contactModel.save( Contact_collection.toJSON(), {success: function(model){
 		    	// Replaces old owner details with changed one
-				$('#contact-owner').text(new_owner_name);
-				$('#contact-owner').attr('data', new_owner_id);
+				$('#contact-owner-popover').text(new_owner_name);
+				$('#contact-owner-popover').attr('data', new_owner_id);
 				
 				// Showing updated owner
-				show_owner(); 
-				Contact_collection.set(model.toJSON());
+				$('#contact-owner-popover').css('display', 'inline-block'); 
+				 if(listView!=undefined) 
+				 	Contact_collection.set(model.toJSON());
+				 	else
+				 	{
+				Contact_collection.set(model.toJSON(),{silent:true});
+      				 Contact_collection.trigger('popoverChange');
+      				}
 				
 		    }});
 });
@@ -485,7 +769,7 @@ function agile_crm_get_List_contact_properties_list(propertyName)
 }
 
 
-function contact_list_starify(el) {
+function contact_list_starify(el,listView) {
     head.js(LIB_PATH + 'lib/jquery.raty.min.js', function(){
     	
     	var contact_model  =  App_Contacts.contact_popover;
@@ -510,8 +794,12 @@ function contact_list_starify(el) {
     		 */
         	click: function(score, evt) {
         	         		
-           		
+           		if(listView!=undefined) 
         		App_Contacts.contact_popover.set({'star_value': score});
+      				 else{
+      				 	App_Contacts.contact_popover.set({'star_value': score},{silent:true});
+      				 App_Contacts.contact_popover.trigger('popoverChange');
+      				 }
         		contact_model =  App_Contacts.contact_popover.toJSON();
         		var new_model = new Backbone.Model();
         		new_model.url = 'core/api/contacts';
