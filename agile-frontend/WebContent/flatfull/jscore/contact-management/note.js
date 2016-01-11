@@ -124,8 +124,9 @@ $(function()
 		var el = $("#noteForm");
 		agile_type_ahead("note_related_to", el, contacts_typeahead);
 	});
+	//when click on emailbutton automatically it takes contact details
 
-	$('body').on('click', '#send-mail', function(e)
+	$('body').on('click', '#send-email', function(e)
 	{
 		e.preventDefault();
 		var url = window.location.href;
