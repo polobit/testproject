@@ -2335,11 +2335,14 @@ public class OpportunityUtil
 			
 			
 		if(Track!=null){
+			System.out.println("Inside track check");
 			Milestone milestone=MilestoneUtil.getMilestone(Track);
 			milestones.add(milestone);
+			if(opportunitiesList_main!=null && opportunitiesList_main.size()>0){
 			for(Opportunity opp:opportunitiesList_main){
 				if(opp.getPipeline_id().equals(Track))
 					opportunitiesList.add(opp);
+			}
 			}
 		}
 		else
@@ -2352,6 +2355,7 @@ public class OpportunityUtil
 	
 		for(Milestone milestone:milestones)
 		{
+			System.out.println("Milestone check");
 			JSONObject milestoneValue=new JSONObject();
 			Opportunity.MILESTONES=milestone.milestones.split(",");
 			for(String milestone_data : Opportunity.MILESTONES)
@@ -2363,6 +2367,7 @@ public class OpportunityUtil
 		}
 
 		if(ownerId==null){
+			System.out.println("Owner check");
 			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
 			if(dUser!=null)
 				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
@@ -2382,7 +2387,7 @@ public class OpportunityUtil
 			
 			for(Opportunity opp : opportunitiesList)
 			{
-
+					
 				try{
 				//int count=0;
 				Long pipeline_id = opp.getPipeline_id();
@@ -2478,6 +2483,7 @@ public class OpportunityUtil
 			//conversionList=new ArrayList<>(ownDealsSet);
 			System.out.println("list2"+list2);
 			//System.out.println("main list"+conversionList);
+
 			return list2;
 		}
 		catch (Exception e)
