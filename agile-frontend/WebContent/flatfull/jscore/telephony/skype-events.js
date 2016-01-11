@@ -233,25 +233,6 @@ function _getMessageSkype(message, callback){
 		});
 		
 	
-	}else if(state == "missedCall"){
-		//To_Number = number;
-		getContactImage(number,"Incoming",function(contact_Image){		
-			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Missed Call &nbsp;&nbsp;&nbsp;  </b>'+ '<span id="skypeCallId" class="text-xs" value ='+callId+ '>' + number + '</span>' +'<br><br></span><div class="clearfix"></div>';
-		if(callback)
-			callback(message);
-		
-		globalCall.callDirection = "Incoming";
-		globalCall.callStatus = "Missed";
-		
-		globalCall.callId = callId;
-		globalCall.callNumber = number;
-		
-		var call = {"direction":"Outgoing", "phone":number, "status":"Missed", "duration":"0"};
-		saveCallActivitySkype(call);
-		resetglobalCallVariables();
-		
-		});
-		
 	}else if(state == "connecting"){
 		
 		getContactImage(number,"Outgoing",function(contact_Image){		
@@ -292,14 +273,7 @@ function _getMessageSkype(message, callback){
 		}
 		
 		sendMessageToSkypeClient("getLastCallDetail",globalCallForActivity.callNumber,globalCallForActivity.callId);
-	//	var call = {"direction":"Outgoing", "phone":number, "status":"Failed", "duration":"0"};
-	//	saveCallActivitySkype(call);
-/*		if(($("#skype_contact_number").val() == number)){
-			getLogsForSkype(number);	
-		}*/
-
-	//	resetglobalCallVariables();
-		
+	
 	}else if(state == "busy"){
 		getContactImage(number,"Outgoing",function(contact_Image){		
 			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Call Busy &nbsp;&nbsp;&nbsp; </b>'+'<span id="skypeCallId" class="text-xs" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
@@ -325,8 +299,7 @@ function _getMessageSkype(message, callback){
 			return;
 		}
 		sendMessageToSkypeClient("getLastCallDetail",globalCallForActivity.callNumber,globalCallForActivity.callId);
-	}else if(state == "refused"){
-		if(globalCall.callDirection == "incoming"){
+	}else if(state == "refused" || state == "missed"){
 			
 			globalCall.callStatus = "Missed";
 			globalCall.callId = callId;
@@ -343,33 +316,7 @@ function _getMessageSkype(message, callback){
 			}
 			sendMessageToSkypeClient("getLastCallDetail",globalCallForActivity.callNumber,globalCallForActivity.callId);
 			return;
-		}
-		getContactImage(number,"Outgoing",function(contact_Image){		
-			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Not Answered &nbsp;&nbsp;&nbsp; </b>'+'<span id="skypeCallId" class="text-xs" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
-		if(callback)
-			callback(message);
-		});
-		
-		if(globalCallForActivity.requestedLogs){
-			return;
-		}	
-		
-		globalCall.callStatus = "Busy";
-		globalCall.callId = callId;
-		globalCall.callNumber = number;
-		replicateglobalCallVariable();
-		resetglobalCallVariables();		
-		
-		//this is called to save the call activity of the user after the call
-		if(!callId){
-			consolee.log("call id not present...");
-			resetglobalCallForActivityVariables();
-			globalCallForActivity.requestedLogs = false;
-			return;
-		}
-		
-		sendMessageToSkypeClient("getLastCallDetail",globalCallForActivity.callNumber,globalCallForActivity.callId);
-		
+			
 	}else if(state == "ended"){
 		callback("");
 		
