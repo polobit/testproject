@@ -238,6 +238,7 @@ public class SendEmail extends TaskletAdapter
     	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
     	
     	data.remove(SendMessage.SMS_CLICK_TRACKING_ID);
+    	data.remove(TwitterSendMessage.TWEET_CLICK_TRACKING_ID);
     	
     	// If From email empty
     	if(StringUtils.isBlank(fromEmail))

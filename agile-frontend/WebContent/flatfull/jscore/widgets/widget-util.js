@@ -134,6 +134,7 @@ function save_widget_prefs(pluginName, prefs, callback) {
 			}else{
 				msgType = "error";
 				msg = ("Error occurred while saving "+displayName);
+				$('#stripe_url').removeAttr('disabled');
 			}
 
 			// if (pluginName != "CallScript")
@@ -262,10 +263,7 @@ function addWidgetProfile(widgetId, widgetName, template, url) {
 						});
 						return;
 						// Loading Stripe profile
-					} else if (widgetName == "Stripe") {
-						console.log('stripe add widget');
-						console.log(model);
-					
+					} else if (widgetName == "Stripe") {					
 						if(model)
 						model["prefs"] = JSON.parse(model["prefs"]);
 
@@ -277,7 +275,14 @@ function addWidgetProfile(widgetId, widgetName, template, url) {
 							return;
 
 						});
-						model["profile"] = jQuery.parseJSON(model.prefs);
+
+						try {		
+							model["profile"] = JSON.parse(model.prefs);				  							
+						}catch(err) {
+							console.log("stripe try error");
+						   	model["profile"] = model.prefs;
+						}
+						
 					} else {
 
 						if (data) {
@@ -292,10 +297,9 @@ function addWidgetProfile(widgetId, widgetName, template, url) {
 								model["profile"] = data;
 							}
 						}
+						// Create a view modal for widgets
+						renderWidgetView(template, url, model, '#widget-settings');
 					}
-					
-					// Create a view modal for widgets
-					renderWidgetView(template, url, model, '#widget-settings');
 					
 				});								
 			});
@@ -319,6 +323,7 @@ function addOAuthWidget(widgetName, template, url) {
 
 				// Create a view modal for widgets
 				renderWidgetView(template, 'core/api/widgets',model, '#widget-settings');
+				 $('[data-toggle="tooltip"]').tooltip();
 			});
 
 		});

@@ -11,6 +11,7 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.sms.SendMessage;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.campaignio.urlshortener.URLShortener.ShortenURLType;
 
 /**
  * <code>Clicked</code> represents Clicked node in a workflow. It takes duration
@@ -106,7 +107,12 @@ public class Clicked extends TaskletAdapter
 			else if (data.has(SendMessage.SMS_CLICK_TRACKING_ID))
 			{
 				CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout,
-					data.getString(SendMessage.SMS_CLICK_TRACKING_ID), "SMS", null);
+					data.getString(SendMessage.SMS_CLICK_TRACKING_ID), ShortenURLType.SMS.toString(), null);
+			}
+			else if(data.has(TwitterSendMessage.TWEET_CLICK_TRACKING_ID))
+			{
+				CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout,
+						data.getString(TwitterSendMessage.TWEET_CLICK_TRACKING_ID), ShortenURLType.TWEET.toString(), null);
 			}
 			else
 			{
@@ -115,7 +121,10 @@ public class Clicked extends TaskletAdapter
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception occured while saving clicked node" + e.getMessage());
+			System.out.println("Exception occured while saving clicked node " + e.getMessage());
+			
+			// Proceed to No
+			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);
 		}
 	}
 
