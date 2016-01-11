@@ -30,22 +30,20 @@ function contactListener()
             "content": template_ui,
             });
 								$(that).popover('show');
-						
+							$('.popover').addClass("contact_popover fadeInLeft animated");
+							$('.popover-content').html(template_ui);
+
 							$('.popover').css('left', ($('.dta-contatiner').offset().left + 90+"px"));
 							if (window.innerHeight - $(that).offset().top >= 400)
                             $('.popover').css('top', ($(that).offset().top  + "px"));
-                        /*else{
-                        	$('.popover').css('top',($(that).offset().top+$('.dta-contatiner').offset().top+"px"));
-                        }*/
-                         //if( $('#contacts-table').offset().top > $('#contacts-table .popover').offset().top ) { $('#contacts-table .popover').offset({ top : $('#contacts-table').offset().top }); }
-
+                        
                          else{
                          	if($(window).scrollTop()>($('#contacts-table .popover').offset().top-$('#contacts-table .popover').height()))
                          		$('#contacts-table .popover').offset({ top : $(that).offset().top+20 });
                          }
                         	
-							 attachEvents(that,App_Contacts.contact_popover);
-						contact_list_starify('.popover');
+							 attachEvents(that,App_Contacts.contact_popover,true);
+						contact_list_starify('.popover',true);
 						
 					});
 		 		that.find('.data').attr('data');
@@ -72,7 +70,7 @@ function contactListener()
 
 var insidePopover=false;
 
-function attachEvents(tr,Contact_collection) {
+function attachEvents(tr,Contact_collection,listView,campaigns_view) {
 	$('.popover').off('mouseenter');
 	$('.popover').on('mouseenter', function() {
 		insidePopover=true;
@@ -82,110 +80,24 @@ function attachEvents(tr,Contact_collection) {
 		insidePopover=false;
 		$(tr).popover('hide');
 	});
-	/*$('.popover').off('click', '.contact-list-add-deal')
-	$('.popover').on('click', '.contact-list-add-deal', function(e)
-	{
-		var that=$(this);
-		e.preventDefault();
-		var el = $("#opportunityForm");
-		$("#opportunityModal").modal('show');
-
-		add_custom_fields_to_form({}, function(data)
-		{
-			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], [
-				"modal"
-			]);
-			$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
-
-		}, "DEAL");
-
-		// Fills owner select element
-		populateUsers("owners-list", el, undefined, undefined, function(data)
-		{
-
-			$("#opportunityForm").find("#owners-list").html(data);
-			$("#owners-list", $("#opportunityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
-			$("#owners-list", $("#opportunityForm")).closest('div').find('.loading-img').hide();
-		});
-		// Contacts type-ahead
-		agile_type_ahead("relates_to", el, contacts_typeahead);
-
-		// Fills the pipelines list in select box.
-		populateTrackMilestones(el, undefined, undefined, function(pipelinesList)
-		{
-			console.log(pipelinesList);
-			$.each(pipelinesList, function(index, pipe)
-			{
-				if (pipe.isDefault)
-				{
-					var val = pipe.id + '_';
-					if (pipe.milestones.length > 0)
-					{
-						val += pipe.milestones.split(',')[0];
-						$('#pipeline_milestone', el).val(val);
-						$('#pipeline', el).val(pipe.id);
-						$('#milestone', el).val(pipe.milestones.split(',')[0]);
-					}
-
-				}
-			});
-		});
-
-		populateLostReasons(el, undefined);
-
-		populateDealSources(el, undefined);
-
-		// Enable the datepicker
-
-		$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
-
-
-		var json = null;
-
-
-			json = Contact_collection.toJSON();
-		var contact_name = getContactName(json);
-		$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
-
-	});
-*/
-	/*$('.popover').off('click', '.contact-list-add-note');
-	$('.popover').on('click', '.contact-list-add-note', function(e){ 
-    	e.preventDefault();
-        console.log("execution");
-    	var	el = $("#noteForm");
-    	var that=$(this);
-    	
-    	// Displays contact name, to indicate the note is related to the contact
-    	//fill_relation(el);
-    		var json = null;
-
-		json = Contact_collection.toJSON();
- 	var contact_name = getContactName(json);//getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name");
- 	
- 	// Adds contact name to tags ul as li element
- 	$('.tags',el).html('').html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ json.id +'">'+contact_name+'</li>');
-
-
-        if(!$(this).attr("data-toggle"))
-             $('#noteModal').modal('show');
-         
-    	agile_type_ahead("note_related_to", el, contacts_typeahead);
-     });
-*/
+	
 $('.popover').off('click', '#add-score')
 $('.popover').on('click', '#add-score', function(e){
 	    e.preventDefault();
 	    var that=$(this);
 	    // Convert string type to int
 	    var add_score = parseInt($('#lead-score').text());
-	    
+	    var temp_model;
 	    add_score = add_score + 1;
 	    
 	    // Changes score in UI
 	    $('#lead-score').text(add_score);
-       
-   var temp_model= Contact_collection.set('lead_score', add_score);
+     if(listView!=undefined) 
+     	temp_model= Contact_collection.set('lead_score', add_score);
+   else {
+   	temp_model= Contact_collection.set('lead_score', add_score,{silent: true});
+   temp_model.trigger('popoverChange');
+		}
 		var contact_model =  temp_model.toJSON();
 
 	    
@@ -209,6 +121,7 @@ $('.popover').off('click', '#minus-score')
 $('.popover').on('click', '#minus-score', function(e){
 	    e.preventDefault();
 	    var that=$(this);
+	     var temp_model;
 	    // Convert string type to int
 	    var sub_score = parseInt($('#lead-score').text());
 		
@@ -220,8 +133,12 @@ $('.popover').on('click', '#minus-score', function(e){
 		// Changes score in UI
 		$('#lead-score').text(sub_score);
 		
-       
-       var temp_model= Contact_collection.set('lead_score', sub_score);
+       if(listView!=undefined) 
+       	temp_model=Contact_collection.set('lead_score', sub_score);
+       else{
+       temp_model= Contact_collection.set('lead_score', sub_score,{silent:true});
+       temp_model.trigger('popoverChange');
+   }
 		var contact_model =  temp_model.toJSON();
 
 	    
@@ -241,14 +158,14 @@ $('.popover').on('click', '#minus-score', function(e){
 		          
 	});
 
-$('.popover').off('click', '#add-tags')
-$('.popover').on('click', '#add-tags', function(e){
+$('.popover').off('click', '#add-tags-popover')
+$('.popover').on('click', '#add-tags-popover', function(e){
 	e.preventDefault();
 		  var that=$(this);
 		$(e.currentTarget).css("display", "none");
-		$("#addTagsForm").css("display", "table");
-		$("#addTags").focus();
-		setup_tags_typeahead(function(e){
+		$("#addTagsForm-popover").css("display", "table");
+		$("#addTags-popover").focus();
+			(function(e){
     				json = Contact_collection.toJSON();
     			
     			// Checks if tag already exists in contact
@@ -259,17 +176,21 @@ $('.popover').on('click', '#add-tags', function(e){
     			
     			
     			saveEntity(json, 'core/api/contacts', function(data){
-    				$("#addTagsForm").css("display", "none");
-        		    $("#add-tags").css("display", "block");
-        		    
-        		    Contact_collection.set(data.toJSON());
+    				$("#addTagsForm-popover").css("display", "none");
+        		    $("#add-tags-popover").css("display", "block");
+        		   
+        		    if(listView!=undefined) 
+        		    	Contact_collection.set(data.toJSON());
+        		    else 
+        		    { Contact_collection.set(data.toJSON(),{silent:true});
+      				 Contact_collection.trigger('popoverChange'); }
         		    	    var old_tags = [];
-	       			$.each($('#added-tags').children(), function(index, element){
+	       			$.each($('#added-tags-popover').children(), function(index, element){
        					
 	       				old_tags.push($(element).html());
        				});
        				if ($.inArray(e, old_tags) == -1) 
-		       				$('#added-tags').append('<span class="label bg-light dk text-tiny">'+e+'</span>');
+		       				$('#added-tags-popover').append('<span class="label bg-light dk text-tiny">'+e+'</span>');
 	    			
     	     		
 	       			
@@ -277,8 +198,8 @@ $('.popover').on('click', '#add-tags', function(e){
     	        return;
 		});
 	});
-$('.popover').off('click', '#contact-add-tags')
-$('.popover').on('click', '#contact-add-tags', function(e){
+$('.popover').off('click', '#contact-add-tags-popover')
+$('.popover').on('click', '#contact-add-tags-popover', function(e){
 e.preventDefault();
 		
 		var that=$(this);
@@ -295,8 +216,8 @@ e.preventDefault();
 		if (!isValidTag(new_tags, true)) {
 			return;
 		}
-		$('#add-tags').css("display", "block");
-		$("#addTagsForm").css("display", "none");
+		$('#add-tags-popover').css("display", "block");
+		$("#addTagsForm-popover").css("display", "none");
 		console.log(new_tags);
 		
 		if(new_tags) {
@@ -304,7 +225,7 @@ e.preventDefault();
 	    		
 	    	
 	    	// Reset form
-	    	$('#addTagsForm input').each (function(){
+	    	$('#addTagsForm-popover input').each (function(){
    		  	  	$(e.currentTarget).val("");
    		  	});
 	    	
@@ -321,14 +242,20 @@ e.preventDefault();
 		       		success: function(data){
 		       			
 		       			// Updates to both model and collection
-		       			Contact_collection.set(data.toJSON());
+		       			 if(listView!=undefined) 
+		       			 	Contact_collection.set(data.toJSON());
+		       			 	else
+		       			 		{
+		       			Contact_collection.set(data.toJSON(),{silent:true});
+      				 Contact_collection.trigger('popoverChange');
+      				}
 		       				 var old_tags = [];
-	       			$.each($('#added-tags').children(), function(index, element){
+	       			$.each($('#added-tags-popover').children(), function(index, element){
        					
 	       				old_tags.push($(element).html());
        				});
        				if ($.inArray(e, old_tags) == -1) 
-		       				$('#added-tags').append('<span class="label bg-light dk text-tiny">'+new_tags+'</span>');
+		       				$('#added-tags-popover').append('<span class="label bg-light dk text-tiny">'+new_tags+'</span>');
 
 		       			console.log(new_tags);
 		       			// Adds the added tags (if new) to tags collection
@@ -343,32 +270,38 @@ e.preventDefault();
 		}
 	});
 
-	$('.popover').off('click', '#contact-owner');
-$('.popover').on('click', '#contact-owner', function(e){
+	$('.popover').off('click', '#contact-owner-popover');
+$('.popover').on('click', '#contact-owner-popover', function(e){
+	var that=$(this);
 	  e.preventDefault();
-         fill_owners(undefined, undefined, function(){
-	    	$('#contact-owner').css('display', 'none');
-	    	$('#change-owner-ul').css('display', 'inline-block');
-	    	if($('#change-owner-element > #change-owner-ul').css('display') == 'inline-block')
-	             $("#change-owner-element").find(".loading").remove();
-		});
+	  var optionsTemplate = "<li><a class='contact-owner-list-popover' data='{{id}}'>{{name}}</a></li>";
+         fillSelect('contact-detail-owner-popover','/core/api/users', 'domainUsers', function()
+			{
+									$(that).css('display', 'none');
+	    	$(that).parent().find('#change-owner-ul-popover').css('display', 'inline-block');
+	    	if($(that).parent().find('#change-owner-ul-popover').css('display') == 'inline-block')
+	             $(that).parent().find(".loading").remove();
+		}, optionsTemplate, true);
+	    
+		//});
 });
-$('.popover').off('click', '.contact-owner-list');
-$('.popover').on('click', '.contact-owner-list', function(e){
+$('.popover').off('click', '.contact-owner-list-popover');
+$('.popover').on('click', '.contact-owner-list-popover', function(e){
 	e.preventDefault();
+	var that=$(this);
     	var targetEl = $(e.currentTarget);
-    	$('#change-owner-ul').css('display', 'none');
+    	$('#change-owner-ul-popover').css('display', 'none');
 		
 		// Reads the owner id from the selected option
 		var new_owner_id = $(targetEl).attr('data');
 		var new_owner_name = $(targetEl).text();
-		var current_owner_id = $('#contact-owner').attr('data');
+		var current_owner_id = $('#contact-owner-popover').attr('data');
 		
 		// Returns, if same owner is selected again 
 		if(new_owner_id == current_owner_id)
 			{
 			  // Showing updated owner
-			  show_owner();
+			  $('#contact-owner-popover').css('display', 'inline-block');
 			  return;
 			}
 		
@@ -376,12 +309,18 @@ $('.popover').on('click', '.contact-owner-list', function(e){
 		    contactModel.url = '/core/api/contacts/change-owner/' + new_owner_id + "/" + Contact_collection.get('id');
 		    contactModel.save( Contact_collection.toJSON(), {success: function(model){
 		    	// Replaces old owner details with changed one
-				$('#contact-owner').text(new_owner_name);
-				$('#contact-owner').attr('data', new_owner_id);
+				$('#contact-owner-popover').text(new_owner_name);
+				$('#contact-owner-popover').attr('data', new_owner_id);
 				
 				// Showing updated owner
-				show_owner(); 
-				Contact_collection.set(model.toJSON());
+				$('#contact-owner-popover').css('display', 'inline-block'); 
+				 if(listView!=undefined) 
+				 	Contact_collection.set(model.toJSON());
+				 	else
+				 	{
+				Contact_collection.set(model.toJSON(),{silent:true});
+      				 Contact_collection.trigger('popoverChange');
+      				}
 				
 		    }});
 });
@@ -415,7 +354,7 @@ function agile_crm_get_List_contact_properties_list(propertyName)
 }
 
 
-function contact_list_starify(el) {
+function contact_list_starify(el,listView) {
     head.js(LIB_PATH + 'lib/jquery.raty.min.js', function(){
     	
     	var contact_model  =  App_Contacts.contact_popover;
@@ -440,8 +379,12 @@ function contact_list_starify(el) {
     		 */
         	click: function(score, evt) {
         	         		
-           		
+           		if(listView!=undefined) 
         		App_Contacts.contact_popover.set({'star_value': score});
+      				 else{
+      				 	App_Contacts.contact_popover.set({'star_value': score},{silent:true});
+      				 App_Contacts.contact_popover.trigger('popoverChange');
+      				 }
         		contact_model =  App_Contacts.contact_popover.toJSON();
         		var new_model = new Backbone.Model();
         		new_model.url = 'core/api/contacts';

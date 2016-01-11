@@ -2998,15 +2998,16 @@ width: 915px;
 	
 }
 
-#contacts-custom-view-model-list .popover{
+.contact_popover{
+
 	border-radius: 0px;
 	width : 260px;
 }
 
-#contacts-custom-view-model-list .popover-content{
+.contact_popover .popover-content{
 	padding: 0px;
 }
 
-#contacts-custom-view-model-list .popover .arrow{
+.contact_popover .arrow{
 	display: none;
 }
