@@ -98,15 +98,6 @@ var Tickets_Notes = {
 
 	},
 
-	backToTickets : function(e) {
-
-		Tickets.renderExistingCollection();
-		Ticket_Bulk_Ops.clearSelection();
-
-		// Initializing checkbox events
-		Ticket_Bulk_Ops.initEvents();
-	},
-
 	repltBtn : function(reply_type, el) {
 
 		var ticketModel = App_Ticket_Module.ticketView.model;

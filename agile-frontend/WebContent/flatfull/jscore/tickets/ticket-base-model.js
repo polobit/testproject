@@ -48,7 +48,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		//Ticket notes events
 		"click .send-reply" : "sendReply",
-		"click .back-to-tickets" : "backToTickets",
+		// "click .back-to-tickets" : "backToTickets",
 		"click .reply-btn" : "repltBtn",
 		"click .discard-reply" : "discardReply",
 		"click .timeline" : "renderTicketTimeline",
@@ -216,11 +216,6 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		Tickets_Notes.sendReply(e);	
 	},
 
-	backToTickets: function(e){
-		e.preventDefault();
-		
-		Tickets_Notes.backToTickets(e);
-	},
 	repltBtn: function(e){
 		e.preventDefault();
 
