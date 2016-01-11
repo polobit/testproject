@@ -300,7 +300,7 @@ function _getMessageSkype(message, callback){
 		}
 		sendMessageToSkypeClient("getLastCallDetail",globalCallForActivity.callNumber,globalCallForActivity.callId);
 	}else if(state == "refused" || state == "missed"){
-			
+			callback("");
 			globalCall.callStatus = "Missed";
 			globalCall.callId = callId;
 			globalCall.callNumber = number;
