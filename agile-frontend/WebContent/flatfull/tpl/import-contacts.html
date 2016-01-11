@@ -1,9 +1,25 @@
+<script id="import-from-crm-template" type="text/html">
+<div class="">
+	<div class="wrapper-md lter bg-light b-b">
+	<div class="row">
+	    <div class="col-md-12" id="document-add">
+	            <h3 class="pull-left font-thin h3">Import From CRM</h3>
+				<div class="clearfix"></div>
+	    </div>
+	</div>
+	</div>
+	<div class="tab-content wrapper-md">
+			<div class="tabs" id="prefs-tabs-content"><div>
+	</div>
+</div>
+</script>
+
 <script id="import-contacts-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-sm-12 col-md-12">
         
-            <h3 class="font-thin h3">Import From CSV <small></small>	</h3>
+            <h3 class="font-thin h3">Import <small></small>	</h3>
         
     </div>
 </div>
@@ -34,7 +50,6 @@
 </div>
 </div>
 
-
 <div class="col-sm-6 col-xs-12 col-md-4" style="height: 200px;">
 <div class="panel panel-default">
 	<div class="panel-heading">CSV Companies Import <span class="label label-sm bg-danger">Beta</span></div>
@@ -57,9 +72,33 @@
     </form>
     </div>
 </div>
-</div></div>
+</div>
+
+<div class="col-sm-6 col-xs-12 col-md-4">
+<div class="panel panel-default">
+	<div class="panel-heading">Import from Salesforce <span class="label label-sm bg-danger">Beta</span></div>
+	<div class="panel-body">
+    <form id="imap-prefs-form">
+        
+		<div class="p-b-sm">
+			Import Contacts, Accounts, and Tasks
+		</div>
+		<input type="hidden" id="type" value="contacts" class="form-control">
+        <fieldset>
+			{{#canSyncContacts}}
+           		<a href="#import/salesforce" class="btn btn-sm btn-default inline-block">Import</a>
+			{{/canSyncContacts}}
+           
+        </fieldset>
+    </form>
+    </div>
+</div>
+</div>
+
+</div>
 </div>
 </script>
+
 <script id="import-deals-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">

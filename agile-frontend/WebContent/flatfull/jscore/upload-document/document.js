@@ -1,47 +1,46 @@
-
-$(function(){
-
 /**
-	 * To avoid showing previous errors of the modal.
-	 */
-	$('#uploadDocumentModal, #uploadDocumentUpdateModal').on('show.bs.modal', function() {
-
-		// Removes alert message of error related date and time.
-		$('#' + this.id).find('.alert').css('display', 'none');
-		
-		// Removes error class of input fields
-		$('#' + this.id).find('.error').removeClass('error');
-	});
+*  Document collection event listeners
+*/
+var Document_Collection_Events = Base_Collection_View.extend({
 	
-    /**
-     * "Hide" event of document modal to remove contacts appended to related to field
-     * and validation errors
-     */ 
-    $('#uploadDocumentModal').on('hidden.bs.modal', function () {
-    	// Removes appended contacts from related-to field
-    	$(this).find('form').find("li").remove();    	
-    	$(this).find('form').find('#error').html("");
-		
-		// Removes validation error messages
-		remove_validation_errors('uploadDocumentModal');
+	events: {
+		'click .documents-add': 'onAddDocument',
+		'click #documents-model-list > tr > td:not(":first-child")': 'onDocumentListSelect',		
+	},
 
-    });
-    
-    /**
-     * "Hide" event of document modal to remove contacts appended to related to field
-     * and validation errors
-     */ 
-    $('#uploadDocumentUpdateModal').on('hidden.bs.modal', function () {
-    	// Removes appended contacts from related-to field
-    	$(this).find('form').find("li").remove();
-    	$(this).find('form').find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
-    	$(this).find('form').find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
-    	$(this).find('form').find('#error').html("");
-		
-		// Removes validation error messages
-		remove_validation_errors('uploadDocumentUpdateModal');
+	/**
+	 * For adding new document
+	 */
+	onAddDocument: function(e){
+		e.preventDefault();
 
-    });
+		// Show modal
+		$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
+	
+		// Add type a head actions
+		var el = $("#uploadDocumentForm");
+		// Contacts type-ahead
+		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+		
+		// Deals type-ahead
+		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+	},
+
+	 /** 
+     * Document list view edit
+     */
+	onDocumentListSelect : function(e){
+		if(e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
+     		e.preventDefault();
+
+     	 	updateDocument($(e.currentTarget).closest('tr').data());
+     	 }
+	},
+
+});
+  
+/** Modal event initializer **/
+$(function(){
 
     /** 
      * When clicked on choose network type
@@ -76,52 +75,20 @@ $(function(){
     	
     	// serialize form.
     	var json = serializeForm(form_id);
-    console.log(json);
+    	console.log(json);
+
     	if(form_id == "uploadDocumentForm")
     		saveDocument(form_id, modal_id, this, false, json);
     	else
     		saveDocument(form_id, modal_id, this, true, json);
 	});
 
+	$('#uploadDocumentModal').on('hidden.bs.modal', function(e){
+		$('#GOOGLE',$('#uploadDocumentModal')).parent().show();
+	});
+
 });
 
-
-
-
-
-function initializeDocumentsListner(el){	
-	/**
-	 * For adding new document
-	 */
-	$('#documents-listners').off();
-	$('#documents-listners').on('click', '.documents-add', function(e){
-		e.preventDefault();
-		var el = $("#uploadDocumentForm");
-		$("#uploadDocumentModal").modal('show');
-
-		// Contacts type-ahead
-		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
-		
-		// Deals type-ahead
-		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-	});
-	
-	
-    
-    /** 
-     * Document list view edit
-     */
-    // $('#documents-listners #documents-model-list > tr > td:not(":first-child")').off();
-	$('#documents-listners').on('click', '#documents-model-list > tr > td:not(":first-child")', function(e){
-
-    	 if(e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
-     		e.preventDefault();
-
-     	 	updateDocument($(this).closest('tr').data());
-     	 }
- 	});
-
-}
 
 /**
  * Show document popup for updating
@@ -132,14 +99,15 @@ function updateDocument(ele) {
 	
 	add_recent_view(new BaseModel(value));
 
+	var uploadModal = $('#uploadDocumentUpdateModal');
+	uploadModal.html(getTemplate("upload-document-update-modal", {}));
+	uploadModal.modal('show');
+	
 	var documentUpdateForm = $("#uploadDocumentUpdateForm");
-
 	deserializeForm(value, $("#uploadDocumentUpdateForm"));
 	$('#uploadDocumentUpdateForm').find("#" + value.network_type).closest(".link").find(".icon-ok").css("display", "inline");
 	$('#uploadDocumentUpdateForm').find("#" + value.network_type).closest(".link").css("background-color", "#EDEDED");
-	//$('#uploadDocumentUpdateForm').find('#url').html('<a href="'+ value.url +'" target="_blank">'+ value.url +'</a>');
-	$('#uploadDocumentUpdateModal').modal('show');
-	
+
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("document_relates_to_contacts", documentUpdateForm, contacts_typeahead);
 	
@@ -365,6 +333,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 		}
 	});
 }
+
+
 function saveAttachmentBlobKey(blobKey,fileName)
 {
 	var el = $("#uploadAttachmentForm");
@@ -376,5 +346,5 @@ function saveAttachmentBlobKey(blobKey,fileName)
 	$('#emailForm').find('#attachment-select').find('option:first').attr('selected', 'selected');
 	var el = $('#emailForm').find(".attachment-document-select");
 	$('#emailForm').find(".attachment-document-select").css('display','none');
-	$('#emailForm').find('#agile_attachment_name').val(fileName);
+	$("#emailForm").find("#agile_attachment_name").val(fileName);
 }

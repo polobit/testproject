@@ -18,6 +18,7 @@ public class AgileQueues
 
 	// Cron Push Queue
 	public static final String CRON_QUEUE = "cron-queue";
+	public static final String CRON_INTERRUPT_QUEUE = "cron-interrupt-queue";
 
 	public static final String ACCOUNT_STATS_UPDATE_QUEUE = "account-stats-update-queue";
 	public static final String CONTACTS_DELETE_QUEUE = "contacts-delete-queue";

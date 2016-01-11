@@ -286,7 +286,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TaskReminder</servlet-name>
-		<url-pattern> /backend/cron/tasks</url-pattern>
+		<url-pattern>/backend/cron/tasks</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -295,7 +295,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>EventReminder</servlet-name>
-		<url-pattern> /backend/cron/events</url-pattern>
+		<url-pattern>/backend/cron/events</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -304,7 +304,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ContactSchemaChange</servlet-name>
-		<url-pattern> /backend/cron/contact-schema-change</url-pattern>
+		<url-pattern>/backend/cron/contact-schema-change</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -313,7 +313,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>FailedDomainEventReminder</servlet-name>
-		<url-pattern> /backend/faileddomaineventreminder</url-pattern>
+		<url-pattern>/backend/faileddomaineventreminder</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -946,16 +946,7 @@
 		<servlet-name>RemoteApiServlet</servlet-name>
 		<url-pattern>/remote_api</url-pattern>
 	</servlet-mapping>
-	<servlet>
-        <servlet-name>BriaInformUserServlet</servlet-name>
-        <servlet-class>com.thirdparty.bria.BriaInformUserServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>  
- 
-    <servlet-mapping>
-        <servlet-name>BriaInformUserServlet</servlet-name>
-        <url-pattern>/InformUser</url-pattern>
-    </servlet-mapping>
+
 	
 	<servlet>
 		<servlet-name>LandingPagesTemplateServlet</servlet-name>
@@ -977,9 +968,38 @@
 		<servlet-name>LandingPageServingServlet</servlet-name>
 		<servlet-class>com.agilecrm.landingpages.LandingPageServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>InvoicePdfServlet</display-name>
+		<servlet-name>InvoicePdfServlet</servlet-name>
+		<servlet-class>com.agilecrm.InvoicePdfServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>LandingPageServingServlet</servlet-name>
 		<url-pattern>/landing/*</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>InvoicePdfServlet</servlet-name>
+		<url-pattern>/InvoicePdfServlet</url-pattern>
+	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>invoice</servlet-name>
+		<servlet-class>com.agilecrm.InvoicePdfServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>invoice</servlet-name>
+		<url-pattern>/invoice</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+        <servlet-name>InformUserServlet</servlet-name>
+        <servlet-class>com.thirdparty.call.InformUserServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>InformUserServlet</servlet-name>
+        <url-pattern>/InformUser</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.contact.sync.SyncServiceBuilder;
+import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.sync.service.IContactSyncService;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
@@ -107,6 +109,7 @@ public class ContactUtilServlet extends HttpServlet
 	}
 	catch (Exception e)
 	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    e.printStackTrace();
 	}
 
@@ -293,7 +296,10 @@ public class ContactUtilServlet extends HttpServlet
 	    {
 		contactPrefs.inProgress = false;
 		contactPrefs.save();
+		
+		if(Type.SALESFORCE != contactPrefs.type)
 		return;
+		
 	    }
 		
 	}

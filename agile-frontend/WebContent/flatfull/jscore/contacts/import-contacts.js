@@ -316,7 +316,7 @@ $('#' + id).on('click', '#import-contacts', function(e)
 						// Sends request to save the contacts uploaded from csv,
 						// present in the blobstore. Contact is sent to save
 						// each row in csv file in to a contact
-						$.ajax({ type : 'POST', url : "/core/api/upload/save?type=Contacts&key=" + BLOB_KEY, data : JSON.stringify(contact),
+						$.ajax({ type : 'POST', url : "/core/api/contacts/import/"+ BLOB_KEY + "/CONTACTS", data : JSON.stringify(contact),
 							contentType : "application/json", success : function(data)
 							{
 								// Navigate to contacts page

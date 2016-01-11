@@ -95,12 +95,7 @@ function stopCallCampaign()
 	// step3:
 	campaignVariableToInitialState();
 	// step4:
-	if (window.location.hash.indexOf("#contacts") != -1)
-	{
-		return;
-	}else{
-		routeToPage("contacts");
-	}
+	routeToPage("contacts");
 
 }
 
@@ -139,6 +134,8 @@ function showSettingPage()
  */
 function routeToPage(url)
 {
+	if(window.location.hash == ("#" + url))
+        return;
 
 	if (window.location.hash.indexOf("#" + url) != -1)
 	{
@@ -511,14 +508,8 @@ function getContact(contactId)
 {
 	console.log("In getContact");
 
-	try
-	{
-		return App_Contacts.contactsListView.collection.where({ id : contactId })[0].toJSON();
+	return App_Contacts.contactsListView.collection.where({ id : contactId })[0].toJSON();
 
-	}catch(err){
-		return App_Contacts.contactsListView.collection.get(contactId).toJSON();
-	}
-	
 	// var json = $.parseJSON($.ajax({ url : '/core/api/contacts/' + contactId,
 	// async : false, dataType : 'json' }).responseText);
 
@@ -573,12 +564,12 @@ function getNextContactsId(callback)
 	var url = null;
 
 	// Get sort key
-	var sortKey = readCookie("sort_by_name");
+	var sortKey = _agile_get_prefs("sort_by_name");
 	if (!sortKey || sortKey == null)
 	{
 		sortKey = '-created_time';
 		// Saves Sort By in cookie
-		createCookie('sort_by_name', sortKey);
+		_agile_set_prefs('sort_by_name', sortKey);
 	}
 
 	console.log("1. CALL_CAMPAIGN.cursor");
@@ -595,13 +586,13 @@ function getNextContactsId(callback)
 		return;
 
 	// If there is a filter saved in cookie then show filter results
-	if (readData('dynamic_contact_filter') && !readCookie('company_filter'))
-		url = 'core/api/filters/filter/dynamic-filter?data=' + encodeURIComponent(readData('dynamic_contact_filter')) + '&cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
-	else if (readData('dynamic_company_filter') && readCookie('company_filter'))
-		url = 'core/api/filters/filter/dynamic-filter?data=' + encodeURIComponent(readData('dynamic_company_filter')) + '&cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
-	else if (readCookie('contact_filter'))
-		url = 'core/api/filters/query/' + readCookie('contact_filter') + '?cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
-	else if (readCookie('company_filter'))
+	if (_agile_get_prefs('dynamic_contact_filter') && !_agile_get_prefs('company_filter'))
+		url = 'core/api/filters/filter/dynamic-filter?data=' + encodeURIComponent(_agile_get_prefs('dynamic_contact_filter')) + '&cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
+	else if (_agile_get_prefs('dynamic_company_filter') && _agile_get_prefs('company_filter'))
+		url = 'core/api/filters/filter/dynamic-filter?data=' + encodeURIComponent(_agile_get_prefs('dynamic_company_filter')) + '&cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
+	else if (_agile_get_prefs('contact_filter'))
+		url = 'core/api/filters/query/' + _agile_get_prefs('contact_filter') + '?cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
+	else if (_agile_get_prefs('company_filter'))
 		url = 'core/api/contacts/companies?cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
 	else
 		url = '/core/api/contacts?cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;

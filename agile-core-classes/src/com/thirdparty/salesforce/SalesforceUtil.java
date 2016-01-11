@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.sforce.soap.partner.FieldType;
 import com.thirdparty.google.ContactPrefs;
 
 /**
@@ -44,6 +45,9 @@ public class SalesforceUtil
 		SalesforceAPI salesforce = new SalesforceAPI(contactPrefs.userName, contactPrefs.password, contactPrefs.apiKey);
 
 		JSONArray result = salesforce.retrieveEntities(query);
+		System.out.println("result = " + result);
+		
+		
 		salesforce.logout();
 
 		return result.toString();
@@ -81,8 +85,15 @@ public class SalesforceUtil
 
 	public static String getContactsFromSalesForce(ContactPrefs prefs) throws Exception
 	{
-		String query = "SELECT  FirstName, LastName, Email, Title, Description,Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet, LeadSource FROM Contact";
+		String query = "SELECT  Id, FirstName, LastName, Email, Title, Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet FROM Contact";
 		System.out.println("In contacts------------------------------------");
+		return SalesforceUtil.getEntities(prefs, query);
+	}
+	
+	public static String getTasksFromSalesForce(ContactPrefs prefs) throws Exception
+	{
+		String query = "select Id, OwnerId, whoId, whatId, Subject, Description, ActivityDate, Priority, Status, Who.Type, Who.Name, Who.Id From Task";
+		System.out.println("In tasks------------------------------------");
 		return SalesforceUtil.getEntities(prefs, query);
 	}
 
@@ -95,7 +106,7 @@ public class SalesforceUtil
 
 	public static String getAccountsFromSalesForce(ContactPrefs prefs) throws Exception
 	{
-		String query = "SELECT Name, Website, Phone, Fax, Industry, Description, Type, NumberOfEmployees, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
+		String query = "SELECT Id, ParentId, Name, Website, Phone, Fax, Industry, Description, Type, NumberOfEmployees, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
 		System.out.println("In accounts------------------------------------");
 		return SalesforceUtil.getEntities(prefs, query);
 	}
@@ -124,12 +135,27 @@ public class SalesforceUtil
 
 	public static String getContactByContactIdFromSalesForce(ContactPrefs prefs, String id) throws Exception
 	{
-		String query = "SELECT FirstName, LastName, Email, Title, Description,Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet, LeadSource FROM Contact WHERE Id = '"
+		String query = "SELECT FirstName, LastName, Email, Title, Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet, LeadSource FROM Contact WHERE Id = '"
 				+ id + "'";
 		System.out.println("In Contact by id ------------------------------------");
 		return new JSONArray(getEntities(prefs, query)).getJSONObject(0).toString();
 	}
+	
+	public static JSONArray getNotesByContactIdFromSalesForce(ContactPrefs prefs, String id) throws Exception
+	{
+		String query = "SELECT Title, Body FROM Note WHERE ParentId = '"
+				+ id + "'";
+		System.out.println("In Note by id ------------------------------------");
+		return new JSONArray(getEntities(prefs, query));
+	}
 
+	public static JSONArray getNotesFromSalesForce(ContactPrefs prefs) throws Exception
+	{
+		String query = "SELECT Title, Body FROM Note";
+		System.out.println("In Notes ------------------------------------");
+		return new JSONArray(getEntities(prefs, query));
+	}
+	
 	public static String checkSalesforcePrefs(ContactPrefs prefs) throws Exception
 	{
 		try
@@ -140,6 +166,7 @@ public class SalesforceUtil
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			throw new Exception("Invalid login. Please try again");
 		}
 	}
@@ -147,17 +174,31 @@ public class SalesforceUtil
 	public static void main(String[] args)
 	{
 		ContactPrefs prefs = new ContactPrefs();
-		prefs.userName = "tejaswitest@gmail.com";
-		prefs.password = "agile1234";
-		prefs.apiKey = "CgBv3oy3GAY7eoNNQnx7yb2e";
+		
+		prefs.userName = "ragaqt@gmail.com";
+		prefs.password = "mantra123";
+		prefs.apiKey = "Zovgoz4alO2SrDg0Fnf0Fy0Z";
+		
+		/*prefs.userName = "govindarajulu3@gmail.com";
+		prefs.password = "govind8706!";
+		prefs.apiKey = "N8KPS4sZLuw31VYBZ1ZuPnVUx";*/
 
 		try
 		{
-			System.out.println(SalesforceUtil.checkSalesforcePrefs(prefs));
+			
+			describeSObjectsSample();
+			
+			// System.out.println(SalesforceUtil.getAccountsFromSalesForce(prefs));
+			
+		    // System.out.println(SalesforceUtil.getNotesFromSalesForce(prefs));
+			
+			// System.out.println(SalesforceUtil.checkSalesforcePrefs(prefs));
 
-			System.out.println(SalesforceUtil.getContactsFromSalesForce(prefs));
+			// System.out.println(SalesforceUtil.getTasksFromSalesForce(prefs));
+			
+			// System.out.println(SalesforceUtil.getContactsFromSalesForce(prefs));
 
-			System.out.println(SalesforceUtil.getLeadsFromSalesForce(prefs));
+			/*System.out.println(SalesforceUtil.getLeadsFromSalesForce(prefs));
 
 			System.out.println(SalesforceUtil.getAccountsFromSalesForce(prefs));
 
@@ -165,7 +206,7 @@ public class SalesforceUtil
 
 			System.out.println(SalesforceUtil.getopportunitiesFromSalesForce(prefs));
 
-			System.out.println(SalesforceUtil.getAccountByAccountIdFromSalesForce(prefs, "0019000000U5pTDAAZ"));
+			System.out.println(SalesforceUtil.getAccountByAccountIdFromSalesForce(prefs, "0019000000U5pTDAAZ"));*/
 
 		}
 		catch (WebApplicationException e)
@@ -182,4 +223,89 @@ public class SalesforceUtil
 		}
 
 	}
+	
+	public static void describeSObjectsSample() throws Exception 
+    {
+		
+      try {
+    	  
+    	 ContactPrefs contactPrefs = new ContactPrefs();
+  		
+    	 contactPrefs.userName = "ragaqt@gmail.com";
+    	 contactPrefs.password = "mantra123";
+    	 contactPrefs.apiKey = "Zovgoz4alO2SrDg0Fnf0Fy0Z";
+  		
+    	 SalesforceAPI salesforce = new SalesforceAPI(contactPrefs.userName, contactPrefs.password, contactPrefs.apiKey);
+
+  		
+        // Call describeSObjectResults and pass it an array with
+        // the names of the objects to describe.
+        com.sforce.soap.partner.DescribeSObjectResult[] describeSObjectResults = 
+        		salesforce.connection.describeSObjects(
+                            new String[] { "contact" });
+
+        //  "account", "contact", "lead"
+        // Iterate through the list of describe sObject results
+        for (int i=0;i < describeSObjectResults.length; i++)
+        {
+            com.sforce.soap.partner.DescribeSObjectResult desObj = describeSObjectResults[i];
+            // Get the name of the sObject
+            String objectName = desObj.getName();
+            System.out.println("sObject name: " + objectName);
+
+            // For each described sObject, get the fields
+            com.sforce.soap.partner.Field[] fields = desObj.getFields();
+                            
+            // Get some other properties
+            if (desObj.getActivateable()) System.out.println("\tActivateable");
+            
+            // Iterate through the fields to get properties for each field
+            for(int j=0;j < fields.length; j++)
+            {                        
+                com.sforce.soap.partner.Field field = fields[j];
+                System.out.println("\tField: " + field.getName());
+                System.out.println("\t\tLabel: " + field.getLabel());
+                if (field.isCustom()) 
+                    System.out.println("\t\tThis is a custom field.");
+                System.out.println("\t\tType: " + field.getType());
+                if (field.getLength() > 0)
+                    System.out.println("\t\tLength: " + field.getLength());
+                if (field.getPrecision() > 0)
+                    System.out.println("\t\tPrecision: " + field.getPrecision());
+                
+                // Determine whether this is a picklist field
+                if (field.getType() == FieldType.picklist)
+                {                            
+                    // Determine whether there are picklist values
+                    com.sforce.soap.partner.PicklistEntry[] picklistValues = field.getPicklistValues();
+                    if (picklistValues != null && picklistValues[0] != null)
+                    {
+                        System.out.println("\t\tPicklist values = ");
+                        for (int k = 0; k < picklistValues.length; k++)
+                        {
+                            System.out.println("\t\t\tItem: " + picklistValues[k].getLabel());
+                        }
+                    }
+                }
+
+                // Determine whether this is a reference field
+                if (field.getType() == FieldType.reference)
+                {                            
+                    // Determine whether this field refers to another object
+                    String[] referenceTos = field.getReferenceTo();
+                    if (referenceTos != null && referenceTos[0] != null)
+                    {
+                        System.out.println("\t\tField references the following objects:");
+                        for (int k = 0; k < referenceTos.length; k++)
+                        {
+                            System.out.println("\t\t\t" + referenceTos[k]);
+                        }
+                    }
+                }
+            }            
+        }
+      } catch(com.sforce.ws.ConnectionException ce) {
+        ce.printStackTrace();  
+      }
+    }
 }

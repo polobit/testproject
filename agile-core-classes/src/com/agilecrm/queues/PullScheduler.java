@@ -12,6 +12,7 @@ import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.google.appengine.api.LifecycleManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.appengine.api.taskqueue.InternalFailureException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskHandle;
@@ -248,12 +249,21 @@ public class PullScheduler
 		}
 		else
 		{
-		    try
+		    
+			boolean deleted = false;
+			
+			try
 		    {
 			deferredTask.run();
 
 			// Delete task from Queue
-			queue.deleteTask(taskHandle);
+			deleted = queue.deleteTask(taskHandle);
+		    }
+		    catch(InternalFailureException fe)
+		    {
+		    	// Retries once again
+		    	if(!deleted)
+		    		queue.deleteTask(taskHandle);
 		    }
 		    catch (Exception e)
 		    {

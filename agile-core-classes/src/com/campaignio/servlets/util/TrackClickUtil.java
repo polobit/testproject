@@ -7,9 +7,11 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
+import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -17,6 +19,7 @@ import com.campaignio.servlets.EmailOpenServlet;
 import com.campaignio.servlets.deferred.EmailClickDeferredTask;
 import com.campaignio.tasklets.agile.SendEmail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.campaignio.urlshortener.URLShortener.ShortenURLType;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -37,7 +40,6 @@ public class TrackClickUtil
      */
     public static void addEmailClickedLog(String campaignId, String subscriberId, String longURL, String workflowName)
     {
-	System.out.println("In email clicked log...");
 
 	LogUtil.addLogToSQL(campaignId, subscriberId, "Email link clicked " + longURL + " of campaign " + workflowName,
 	        LogType.EMAIL_CLICKED.toString());
@@ -47,6 +49,7 @@ public class TrackClickUtil
 	    EmailOpenServlet.addEmailOpenedLog(campaignId, subscriberId, workflowName);
     }
 
+    
     /**
      * Shows email clicked notification to the contact.
      * 
@@ -110,6 +113,29 @@ public class TrackClickUtil
 	return longURL;
     }
 
+    public static String appendContactPropertiesToParams(Contact contact, String typeOfPush)
+    {
+    	
+    	// Add email only for Yes&Push Email only
+    	if(StringUtils.equalsIgnoreCase(typeOfPush, EmailLinksConversion.AGILE_EMAIL_PUSH_EMAIL_ONLY))
+    	{
+    		 try
+    		 {
+    			 JSONObject contactJSON = new JSONObject();
+    			 contactJSON.put("data", new JSONObject().put("email", contact.getContactFieldValue(Contact.EMAIL)));
+    			 
+    			 return buildContactParams(contactJSON);
+    		 }
+    		 catch (Exception e)
+    		 {
+    			 e.printStackTrace();
+    		 }
+    	}
+    		
+    	return appendContactPropertiesToParams(contact);
+    	
+    }
+    
     /**
      * Appends contact-properties as params to the url before redirecting to
      * original url.
@@ -118,41 +144,47 @@ public class TrackClickUtil
      *            - Contact Object.
      * @return String
      */
-    @SuppressWarnings("unchecked")
     public static String appendContactPropertiesToParams(Contact contact)
     {
-	String params = "";
-
 	JSONObject contactJSON = AgileTaskletUtil.getSubscriberJSON(contact, true);
 
 	// if null returned due to exception, return empty
 	if (contactJSON == null)
-	    return params;
+	    return "";
 
-	// Remove unnecessary params like powered_by etc
-	contactJSON = removeAvoidableParams(contactJSON);
-
-	// Iterate through JSON and construct all params
-	Iterator<String> itr = contactJSON.keys();
-
-	while (itr.hasNext())
-	{
-	    // Get Property Name & Value
-	    String propertyName = itr.next();
-	    String value = "";
-	    try
-	    {
-		value = contactJSON.getString(propertyName);
-		params += ("&" + propertyName.trim() + "=" + URLEncoder.encode(value.trim(), "UTF-8"));
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-
-	}
-	return params;
+	return buildContactParams(contactJSON);
     }
+
+
+	@SuppressWarnings("unchecked")
+	private static String buildContactParams(JSONObject contactJSON)
+	{
+		String params = "";
+		
+		// Remove unnecessary params like powered_by etc
+		contactJSON = removeAvoidableParams(contactJSON);
+		
+		// Iterate through JSON and construct all params
+		Iterator<String> itr = contactJSON.keys();
+
+		while (itr.hasNext())
+		{
+		    // Get Property Name & Value
+		    String propertyName = itr.next();
+		    String value = "";
+		    try
+		    {
+			value = contactJSON.getString(propertyName);
+			params += ("&" + propertyName.trim() + "=" + URLEncoder.encode(value.trim(), "UTF-8"));
+		    }
+		    catch (Exception e)
+		    {
+			e.printStackTrace();
+		    }
+
+		}
+		return params;
+	}
 
     /**
      * Interrupts crons that are saved by Clicked Node of Campaigns.
@@ -163,19 +195,36 @@ public class TrackClickUtil
      * @param longURL
      *            - Original url to show as custom-data in clicked log.
      */
-    public static void interruptCronTasksOfClicked(String clickTrackingId, String campaignId, String subscriberId)
+    public static void interruptCronTasksOfClicked(String clickTrackingId, String campaignId, String subscriberId, ShortenURLType type)
     {
 
 	try
 	{
-	    JSONObject interruptedData = new JSONObject();
-	    interruptedData.put(SendEmail.EMAIL_CLICK, true);
-	    interruptedData.put(SendEmail.EMAIL_OPEN, true);
+		EmailClickDeferredTask emailClickDeferredTask = null;
 
-	    // Interrupt clicked in DeferredTask
-	    EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, campaignId,
-		    subscriberId, interruptedData.toString());
-	    Queue queue = QueueFactory.getDefaultQueue();
+	    if(type.equals(ShortenURLType.EMAIL))
+		{
+	    	JSONObject interruptedData = new JSONObject();
+		    interruptedData.put(SendEmail.EMAIL_CLICK, true);
+		    interruptedData.put(SendEmail.EMAIL_OPEN, true);
+	
+		    // Interrupt clicked in DeferredTask
+		    emailClickDeferredTask   = new EmailClickDeferredTask(clickTrackingId, campaignId,
+			    subscriberId, interruptedData.toString());
+	    }
+	    
+	    if(type.equals(ShortenURLType.SMS) || type.equals(ShortenURLType.TWEET))
+	    {
+	    	emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, type, null);
+	    }
+	    
+	    if(emailClickDeferredTask == null)
+	    {
+	    	System.err.println("EmailClickDeferred task is null...");
+	    	return;
+	    }
+	    
+	    Queue queue = QueueFactory.getQueue(AgileQueues.CRON_INTERRUPT_QUEUE);
 	    queue.addAsync(TaskOptions.Builder.withPayload(emailClickDeferredTask));
 	}
 	catch (Exception e)

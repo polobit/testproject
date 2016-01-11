@@ -125,6 +125,14 @@ public class ContactSyncUtil
 		if (entries.size() > 0)
 		{
 			createContact = entries.get(0);
+//			if(contactCreate)
+//			{
+				//if contact already present in google then we are updating there instead 
+				//of creating.
+//				contact.updated_time = System.currentTimeMillis()/1000;
+//				contact.update();
+//				return null;
+//			}
 		}
 		else
 			createContact = new ContactEntry();
@@ -421,19 +429,11 @@ public class ContactSyncUtil
 			throws Exception
 	{
 		ContactsService service = GoogleServiceUtil.getService(prefs.token);
-		URL feelURL = new URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "contacts/default/full?access_token="
+		URL feedURL = new URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "contacts/default/full?access_token="
 				+ prefs.token);
 
-		Query query = new Query(feelURL);
+		Query query = new Query(feedURL);
 
-		/*
-		 * Checks if sync from group is specified and sets query to search in
-		 * that group. At this point of time sync from group will always be set.
-		 * Even if user did not set group, it gets set prefs in initial states
-		 * for saving contacts
-		 */
-		if (prefs.sync_from_group != null)
-			query.setStringCustomParameter("group", prefs.sync_to_group);
 		query.setStringCustomParameter("q", query_text);
 		query.setMaxResults(1);
 

@@ -104,6 +104,10 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
 		width:620,
         open: function(event, ui) {
 			$(this).css({'max-height': 610, 'overflow-y': 'auto'}); 
+			if(($(this).find('.inbound-help-text').length) > 0)
+			{
+				loadForwardingEmail($(this));
+			}
 		},
         autoOpen: true,        
         buttons: {
@@ -142,6 +146,24 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
 	//.removeClass('ui-button-text-only').addClass('ui-button-text-icon').append("<span class='ui-icon ui-icon-disk'></span>");        
 	
 }
+
+function loadForwardingEmail(element)
+{	
+	$.ajax({url : '/core/api/api-key',
+		type : 'GET',
+		async : true,
+		dataType : 'json',
+		success : function(agile_api)
+		{
+			var inbound_email = window.location.hostname.split('.')[0] + "-" + agile_api.api_key + "@agle.cc";
+			element.find('.inbound-help-text').text(inbound_email);
+		},
+		error : function(response)
+		{
+		} 
+	});
+}
+
 
 function serializeNodeForm()
 {

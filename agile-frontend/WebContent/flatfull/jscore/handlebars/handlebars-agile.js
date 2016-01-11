@@ -309,6 +309,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("bria.js");
 	}
+	if (templateName.indexOf("skype") == 0)
+	{
+		template_relative_urls.push("skype.js");
+	}
 	return template_relative_urls;
 }
 

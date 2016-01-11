@@ -191,7 +191,7 @@ This is where you and your users will log in to your account
 
 <div class="row">
                     <div class="col-sm-offset-3 col-sm-8">                      
-                       <input type='submit' id="confirm_registration" value="I'm Done"
+                       <input type='submit' id="confirm_registration" value="Get Started"
 											class='save btn btn-sm btn-primary' style="padding-left:15px;padding-right:15px;">
 
 

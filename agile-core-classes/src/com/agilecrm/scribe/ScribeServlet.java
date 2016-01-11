@@ -52,7 +52,7 @@ public class ScribeServlet extends HttpServlet {
 	public static final String SERVICE_TYPE_ZOHO = "zoho_import";
 
 	// Scopes
-	public static final String STRIPE_SCOPE = "read_write";
+	public static String STRIPE_SCOPE = "read_only";
 	public static final String GOOGLE_CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
 	public static final String GOOGLE_CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar";
 	public static final String GOOGLE_DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.readonly";
@@ -202,6 +202,10 @@ public class ScribeServlet extends HttpServlet {
 	public void setupOAuth(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
+		if (req.getParameter("scope") != null) {
+			ScribeServlet.STRIPE_SCOPE = req.getParameter("scope");
+		}
+
 		// handle facebook popup windows
 		if ("facebook".equalsIgnoreCase(req.getParameter("act"))) {
 			PrintWriter out = resp.getWriter();
@@ -261,6 +265,7 @@ public class ScribeServlet extends HttpServlet {
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_PLUS)) {
 			// After building service, redirects to authorization page
+
 			url = service.getAuthorizationUrl(null);
 
 			String query = req.getParameter("query");
@@ -310,10 +315,10 @@ public class ScribeServlet extends HttpServlet {
 				System.out.println(e.getMessage());
 				if (linkType.equalsIgnoreCase("widget")) {
 					req.getSession().setAttribute("widgetMsgType", "error");
-					req.getSession().setAttribute(
-							"widgetMsg",
-							"Error occured while doing authentication : "
-									+ e.getMessage());
+					req.getSession().setAttribute("widgetMsg",
+							"Error occured while doing authentication ");
+					System.out.println(e);
+					System.out.println(e.getMessage());
 					url = "/#add-widget";
 				} else {
 					req.getSession().setAttribute("widgetMsgType", "error");

@@ -190,7 +190,10 @@ var Base_Collection_View = Backbone.View
 			 */
 			initialize : function()
 			{
-				showTransitionBar();
+				// Do not show transition bar 
+				if(!this.options.no_transition_bar)
+				    showTransitionBar();
+
 				// Binds functions to view
 				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'buildCollectionUI');
 
@@ -310,6 +313,7 @@ var Base_Collection_View = Backbone.View
 					 */
 					onFetch : function()
 					{
+						
 						var element="table"; 
 						if (that.options.scroll_symbol)
 							element="section";
@@ -485,6 +489,7 @@ var Base_Collection_View = Backbone.View
 					this.infiniScroll.destroy();
 				}
 
+				this.delegateEvents();
 				return this;
 			}, buildCollectionUI : function(result)
 			{

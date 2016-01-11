@@ -28,6 +28,12 @@ public class BulkActionNotifications
 	 */
 	COMPANIES_CSV_IMPORT("%s companies imported"), EXPORT_COMPANIES_CSV(
 			"Companies export operation is complete. Email is sent to you with the CSV file."),
+			
+	/**
+	 * Import Tasks Bulk action notification
+	 */
+	TASKS_CSV_IMPORT("%s tasks imported"),
+			
 	/**
 	 * Import Deals Bulk action notification
 	 */
