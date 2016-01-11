@@ -5,7 +5,7 @@
 <div class="p-t-xxs p-b-xxs">
 	<span class="pull-left thumb-sm">
 			{{#if_equals created_by 'REQUESTER'}}
-		 		<img src="{{emailGravatarurl 34 requester_email}}" class="r-5x" alt="..." onerror="image_error(this);" _data-name="{{requester_name}}">
+		 		<img src="{{getGravatarFromEmail requester_email 24}}" class="r-5x" alt="..." onerror="image_error(this);" _data-name="{{requester_name}}">
 		    {{else}}
 		 		<img src="{{domain_user.ownerPic}}" class="r-5x" alt="...">
 		 	{{/if_equals}}

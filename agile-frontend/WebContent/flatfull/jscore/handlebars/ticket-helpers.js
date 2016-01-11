@@ -362,22 +362,39 @@ Handlebars.registerHelper('is_ticket_collection_available', function(options) {
 
 });
 
-Handlebars.registerHelper('convert_to_html', function(text, options) {
+Handlebars.registerHelper('convert_to_html', function(str, options) {
 
-	if(!text)
+	if(!str)
 		return;
 
-	text = text.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+	str = str.replace(/(?:\r\n|\r|\n)/g, '<br/>');
 
 	// Construct anchor links
 	try {
 		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-		text = text.replace(exp,
+		str = str.replace(exp,
 				"<a href='$1' target='_blank' class='link-color'>$1</a>");
 
 	} catch (err) {
 	}
 
-	return new Handlebars.SafeString(text);
+	return new Handlebars.SafeString(str);
 });
+
+Handlebars.registerHelper('get_current_filter_id', function(str, options) {
+	return Ticket_Filter_ID
+});
+
+/**
+  * CSS text avatars
+  */
+ Handlebars.registerHelper('getGravatarFromEmail', function(email, width)
+ {
+
+  if (email)
+     return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + '&d=404';
+  
+  return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '&d=404';
+
+ });
 /** End of ticketing handlebars* */

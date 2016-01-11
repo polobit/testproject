@@ -396,5 +396,25 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
     display: inline-block;
   }*/
   
+  .p-ver-2{
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+  }
 
+  .p-hor-2{
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+  }
+
+  .btn-gray {
+   color: #58666e!important;
+    background-color: #edf1f2;
+    border-color: #c7d3d6;
+}
+
+.btn-gray:hover, .btn-gray:focus, .btn-gray:active, .btn-gray.active, .open .dropdown-toggle.btn-gray {
+    color: #58666e!important;
+    background-color: #e6e6e6;
+    border-color: #C5C5C5;
+}
       

@@ -16,7 +16,7 @@
 
 		/* Tickets  by filter*/
 		"tickets/filter/:id" : "ticketsByFilter",
-		"tickets/filter/:id/ticket/:id" : "filteredTicketNotes",
+		"tickets/filter/:id/ticket/:id" : "ticketDetailsByFilter",
 
 		"ticket/:id" : "ticketDetails",
 
@@ -261,40 +261,9 @@ $("#right-pane").html(ticketView.render().el);
 		});
 	},
 
-	/**
-	 * Shows individual filtered ticket details and notes collection
-	 **/
-	 filteredTicketNotes: function(filter_id, id){
-
-	 	Ticket_Filter_ID = filter_id;
-
-	 	var ticketModal = null;
-
-	 	if(App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection)
-	 		ticketModal = App_Ticket_Module.ticketsCollection.collection.get(id);
-
-	 	if(ticketModal != null){
-	 		App_Ticket_Module.ticketDetails(id);
-	 		return;
-	 	}
-
-	 	Ticket_Canned_Response.fetchCollection(function(){
-	 		Tickets.renderLayout(function(){
-				App_Ticket_Module.ticketDetails(id);		
-			});
-	 	});
-	},
-
-	/**
-	 * Shows individual filtered ticket details and notes collection
-	 **/
-	 ticketDetails: function(id){
-
-	 	Ticket_Canned_Response.fetchCollection(function(){
-	 		Tickets.renderLayout(function(){
-				App_Ticket_Module.ticketDetails(id);		
-			});
-	 	});
+	ticketDetailsByFilter : function(filter_id, ticket_id){
+		Ticket_Filter_ID = filter_id;
+		App_Ticket_Module.ticketDetails(ticket_id);
 	},
 
 	/**
@@ -309,20 +278,25 @@ $("#right-pane").html(ticketView.render().el);
 	 
 	 	Current_Ticket_ID = id;
 
-	 	// Get ticket models
-	 	if(!ticketModel){
+	 	Ticket_Canned_Response.fetchCollection(function(){
 
-	 		// Fetch ticket details
-	 		Tickets.fetchTicketModel( id, function(model){
-	 			App_Ticket_Module.getTicketModelView(model);
-	 		});
+	 		// Get ticket models
+		 	if(!ticketModel){
 
-	 		return;
-	 	}
+		 		// Fetch ticket details
+		 		Tickets.fetchTicketModel( id, function(model){
+		 			App_Ticket_Module.getTicketModelView(model);
+		 		});
 
-	 	App_Ticket_Module.getTicketModelView(ticketModel);
-	 	return;
+		 		return;
+		 	}
 
+		 	App_Ticket_Module.getTicketModelView(ticketModel);
+		 	return;
+
+	 	});
+
+	 	
 	},
 
 	getTicketModelView: function(model){
