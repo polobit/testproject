@@ -11,7 +11,7 @@
 		{{#if_contact_type "PERSON"}}
         	<a class="text-cap custom-link">	{{getPropertyValue properties "first_name"}}
         	{{getPropertyValue properties "last_name"}} </a>
-        	<div>
+        	<div class="text-ellipsis">
 				<small class="text-muted m-t-xs">{{#if_propertyName "title"}}{{value}}, {{/if_propertyName}}{{getPropertyValue properties "company"}}</small>
 			</div>
         {{/if_contact_type}}
