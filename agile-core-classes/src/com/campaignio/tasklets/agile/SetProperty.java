@@ -44,6 +44,11 @@ public class SetProperty extends TaskletAdapter
 	 */
 	public static String UPDATED_FIELD = "updated_field";
 
+	//radio button 
+	public static String ACTION="action";
+	//radio button value
+	public static String SET_NULL="SET_NULL";
+	
 	/**
 	 * The value of the field which has to be updated.
 	 */
@@ -62,9 +67,10 @@ public class SetProperty extends TaskletAdapter
 
 		String updated_field = getStringValue(nodeJSON, subscriberJSON, data, UPDATED_FIELD);
 		String updated_value = getStringValue(nodeJSON, subscriberJSON, data, UPDATED_VALUE);
-
+		String action=getStringValue(nodeJSON,subscriberJSON,data,ACTION);
+		
 		// updates property
-		JSONObject new_subscriber_json = update(updated_field, updated_value, campaignJSON, subscriberJSON);
+		JSONObject new_subscriber_json = update(updated_field, updated_value, action, campaignJSON, subscriberJSON);
 
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, new_subscriber_json, data, nodeJSON, null);
@@ -77,6 +83,8 @@ public class SetProperty extends TaskletAdapter
 	 * 
 	 * @param updated_field
 	 *            - Contact's field which has to be updated
+	 * @param action
+	 *				-radio button value
 	 * @param updated_value
 	 *            - Value of the Contact's field
 	 * @param campaignJSON
@@ -84,10 +92,9 @@ public class SetProperty extends TaskletAdapter
 	 * @param subscriberJSON
 	 *            - contact json
 	 */
-	private JSONObject update(String updated_field, String updated_value, JSONObject campaignJSON,
+	private JSONObject update(String updated_field, String updated_value, String action, JSONObject campaignJSON,
 			JSONObject subscriberJSON)
 	{
-
 		try
 		{
 
@@ -97,9 +104,23 @@ public class SetProperty extends TaskletAdapter
 
 			if (contact == null)
 				return subscriberJSON;
+			
+			//When clicks radio button set to null
+			if(StringUtils.equalsIgnoreCase(SET_NULL, action))
+			{
+				contact.removeProperty(updated_field);
+				contact.save();	
+				
+				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+						"Property " + updated_field + " is updated to empty",
+						LogType.SET_PROPERTY.toString());
+				
+				return AgileTaskletUtil.getUpdatedSubscriberJSON(contact, subscriberJSON);
+
+			}
 
 			if (FieldType.SYSTEM == new ContactField(updated_field, updated_value, null).getFieldType())
-				return update_system_property(contact, updated_field, updated_value, campaignJSON, subscriberJSON);
+				return update_system_property(contact, updated_field, updated_value, action, campaignJSON, subscriberJSON);
 
 			// Get Custom field definition
 			CustomFieldDef customFieldDef = CustomFieldDefUtil.getFieldByName(updated_field, SCOPE.CONTACT);
@@ -183,7 +204,7 @@ public class SetProperty extends TaskletAdapter
 
 	}
 
-	private JSONObject update_system_property(Contact contact, String updated_field, String updated_value,
+	private JSONObject update_system_property(Contact contact, String updated_field, String updated_value, String click,
 			JSONObject campaignJSON, JSONObject subscriberJSON)
 	{
 		try
