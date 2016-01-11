@@ -1,5 +1,9 @@
 <script id="email-account-types-template" type="text/html">
     <div  class="m-b-md m-t-md m-r-sm" align="right">
+    	<a class="btn btn-default btn-sm" id="send-new-mail"
+    		href="#send-email/{{getCurrentContactProperty "email"}}"
+    		id="contact-send-email"><i class="icon-plus-sign"> Send Email </i>
+    	</a>
 	<div class="btn-group pos-rlt">
 	<button class="btn btn-sm btn-default filter-dropdown" id="email-type-select">Agile</button>
 	<button class="btn btn-sm btn-default dropdown-toggle" id="email-type-select-dropdown" data-toggle="dropdown">
