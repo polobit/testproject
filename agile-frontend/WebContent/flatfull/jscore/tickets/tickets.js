@@ -112,7 +112,7 @@ var Tickets = {
 					Ticket_Bulk_Ops.clearSelection();
 
 					//Show save as noty for filters
-					//Ticket_Custom_Filters.showCreateFilterNoty();
+					Ticket_Custom_Filters.showCreateFilterNoty();
 
 					if(!Tickets.isSingleRowView()){
 						var Groups = Backbone.Collection.extend({url: '/core/api/tickets/groups'});
@@ -294,7 +294,7 @@ var Tickets = {
 					var top = '70px';
 					if (event.type == 'mouseover'){
 
-						var $tr = $(this).closest('tr'), $that = $(this);
+						var $tr = $(this).closest('tr'), $that = $tr.find('td.notes-container');
 
 						popoverFunction = setTimeout(function(){
 
@@ -1000,7 +1000,6 @@ var Tickets = {
 
 				}
 			});
-		
 	},
 
 	toggleSpam : function(e){
@@ -1040,7 +1039,6 @@ var Tickets = {
 			$(e.target).addClass('fa-dedent').removeClass('fa-indent');
 
 		});
-
 	},
 
 	setMinHeight: function(){
@@ -1052,19 +1050,19 @@ var Tickets = {
 
 	updateDueDate : function(timeInMilli){
 
-		  	var json = {};
-				json.due_time = timeInMilli;
-				json.id = App_Ticket_Module.ticketView.model.toJSON().id;
+	  	var json = {};
+		json.due_time = timeInMilli;
+		json.id = App_Ticket_Module.ticketView.model.toJSON().id;
 
-				// Send req to trigger campaign
-				var newTicketModel = new BaseModel();
-				newTicketModel.url = "core/api/tickets/change-due-date?due_time="
-				+ timeInMilli + "&id=" + Current_Ticket_ID;
-				newTicketModel.save(json, 
-					{	success: function(model){
+		// Send req to trigger campaign
+		var newTicketModel = new BaseModel();
+		newTicketModel.url = "core/api/tickets/change-due-date?due_time="
+		+ timeInMilli + "&id=" + Current_Ticket_ID;
+		newTicketModel.save(json, 
+			{	success: function(model){
 
-					}}
-				);
+			}}
+		);
 	},
 
 	initializeTicketSLA : function(el){
@@ -1107,13 +1105,19 @@ var Tickets = {
 	  		$('input#ticket_change_sla').val(moment(current_date).format('MM/DD/YYYY'));
 
 	  		Tickets.updateDueDate(moment(current_date).valueOf());
-
 	  	});
+	},
 
+	removeTicketsFromCollection: function(ticketIDCSV){
 
+		var ticketIDArray = ticketIDCSV.split(",");
+
+		if(!ticketIDArray || ticketIDArray.length ==0)
+			return;
+
+		for(var i=0; i<ticketIDArray.length; i++)
+			$('td#' + ticketIDArray[i]).closest('tr').remove();
 	}
-
-		
 };
 
 function tickets_typeahead(data){

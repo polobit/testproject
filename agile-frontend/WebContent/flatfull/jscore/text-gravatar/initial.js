@@ -15,7 +15,7 @@ $(function ($) {
                 textColor: '#ffffff',
                 height: 100,
                 width: 100,
-                fontSize: 60,
+                fontSize: 40,
                 fontWeight: 400,
                 fontFamily: 'HelveticaNeue-Light,Helvetica Neue Light,Helvetica Neue,Helvetica, Arial,Lucida Grande, sans-serif'
             }, options);
@@ -73,7 +73,13 @@ function image_error(element)
 		
 		if(!name)
 			return;
-		$(element).attr("data-name", name);
+
+        var array = name.split(' '), data_name = '';
+
+        for(var i=0; i< array.length; i++)
+            data_name += array[i].charAt(0);
+
+		$(element).attr("data-name", data_name);
 		$(element).initial({charCount: 2, fontWeight : 'normal'});
 }
 

@@ -181,6 +181,9 @@
 			<div class="wrapper p-n">
 	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
 					<div class="panel-heading no-shadow" style="border-bottom: 0;">
+						<label class="i-checks i-checks-sm m-b-none select-all" style="margin-left: 1px;vertical-align: text-top;">
+							<input type="checkbox" class="ticket-checkbox select-all" disabled><i></i>
+						</label>
 				      	<button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</button>
 					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</button>
 					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Manage labels</button>
@@ -219,7 +222,10 @@
 	    	<div class="wrapper p-n">
 	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
 					<div class="panel-heading no-shadow" style="border-bottom: 0;">
-				      	 <a href="#tickets/bulk-actions/change-assignee" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Assignee</a>
+						<label class="i-checks i-checks-sm m-b-none select-all" style="margin-left: 1px;vertical-align: text-top;">
+							<input type="checkbox" class="ticket-checkbox select-all"><i></i>
+						</label>
+				      	<a href="#tickets/bulk-actions/change-assignee" class="btn btn-default bulk-action-btn btn-sm m-r-xs m-l-sm disabled">Assignee</a>
 					    <a href="#tickets/bulk-actions/execute-workflows" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</a>
 					    <a href="#tickets/bulk-actions/manage-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Manage labels</a>
 					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">Close</button>
@@ -334,12 +340,7 @@
 			    				<table class="table table-striped single-row m-b-none b-t b-b no-sorting">
 									<thead>
 										<tr>
-											<th class="data select_checkbox c-p" data="{{id}}">
-											  <label class="i-checks i-checks-sm m-b-none">
-											    <input type="checkbox" class="ticket-checkbox select-all"><i></i>
-											  </label>
-											 </th>
-											 <th></th>
+											<th></th>
 											<th class="id {{#is_column_selected 'id'}}{{else}}display-none{{/is_column_selected}}">Id</th>
 											<th class="subject {{#is_column_selected 'subject'}}{{else}}display-none{{/is_column_selected}}">Subject</th>
 											<th class="requester_name {{#is_column_selected 'requester_name'}}{{else}}display-none{{/is_column_selected}}">Requester&nbsp;name</th>
@@ -348,7 +349,7 @@
 											<th class="due_date {{#is_column_selected 'due_date'}}{{else}}display-none{{/is_column_selected}}">Due&nbsp;date</th>
 											<th class="assigned_date {{#is_column_selected 'assigned_date'}}{{else}}display-none{{/is_column_selected}}">Assigned&nbsp;date</th>
 											<th class="last_updated_date {{#is_column_selected 'last_updated_date'}}{{else}}display-none{{/is_column_selected}}">Last&nbsp;updated&nbsp;date</th>
-											<th class="closed_date {{#is_column_selected 'closed_date'}}{{else}}display-none{{/is_column_selected}}">Closed&nbsp;date</th>
+											<th class="closed_date {{#is_column_selected 'closed_time'}}{{else}}display-none{{/is_column_selected}}">Closed&nbsp;date</th>
 											<th class="assignee {{#is_column_selected 'assignee'}}{{else}}display-none{{/is_column_selected}}">Assignee</th>
 											<th class="group {{#is_column_selected 'group'}}{{else}}display-none{{/is_column_selected}}">Group</th>
 											<th class="organization {{#is_column_selected 'organization'}}{{else}}display-none{{/is_column_selected}}">Organization</th>
@@ -375,13 +376,10 @@
 	<div class="wrapper p-n">
 		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0; height: 200px;">
 			<div class="panel-heading no-shadow" style="border-bottom: 0;">
-				{{#is_single_row_view}}
-				{{else}}
-					<label class="i-checks i-checks-sm" style="margin-left: 1px;vertical-align: text-top;">
-					      <input class="ticket-checkbox select-all" type="checkbox"><i></i>
-					    </label>
-				{{/is_single_row_view}}
-				<button class="btn btn-default bulk-action-btn btn-sm {{#is_single_row_view}}{{else}}m-l-sm{{/is_single_row_view}} m-r-xs disabled">Assignee</button>
+				<label class="i-checks i-checks-sm" style="margin-left: 1px;vertical-align: text-top;">
+			      <input class="ticket-checkbox select-all" type="checkbox"><i></i>
+			    </label>
+				<button class="btn btn-default bulk-action-btn btn-sm {{#is_single_row_view}}{{else}}m-l-sm{{/is_single_row_view}} m-r-xs disabled m-l-sm">Assignee</button>
 				<button class="btn btn-default btn-sm m-r-xs disabled">Workflow</button>
 		      	<button class="btn btn-default btn-sm m-r-xs disabled">Manage labels</button>
 			    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">Close</button>

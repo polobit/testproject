@@ -264,6 +264,8 @@ var Ticket_Bulk_Ops = {
 					template : "ticket-bulk-actions-delete-tickets",
 					url : "/core/api/tickets/bulk-actions/delete-tickets",
 					saveCallback: function(){
+						
+						Tickets.removeTicketsFromCollection(Ticket_Bulk_Ops.getSelectedTickesObj());
 						Ticket_Bulk_Ops.clearSelection();
 						$('#delete-tickets-modal').modal('hide');
 					},

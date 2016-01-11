@@ -2,28 +2,28 @@
 <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
-        <div class="col-md-12 p-n m-b-xs">Assignee</div>
-        <div class="col-md-12 p-n assignee-select txt-small"></div>
-        <div class="col-md-12 p-n m-t-xs m-b-xs">Group</div>
-        <div class="col-md-12 p-n group-select txt-small"></div>
+        <div class="col-md-12 p-n m-b-xs txt-small">Assignee</div>
+        <div class="col-md-12 p-n assignee-select"></div>
+        <div class="col-md-12 p-n m-t-xs m-b-xs txt-small">Group</div>
+        <div class="col-md-12 p-n group-select"></div>
     </div>
   </div>
 </div>
 <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
-      <div class="col-md-12 p-n m-b-xs">Labels</div>
-      <div class="col-md-12 p-n m-b-xs cusom-filter-labels txt-small">
+      <div class="col-md-12 p-n m-b-xs txt-small">Labels</div>
+      <div class="col-md-12 p-n m-b-xs cusom-filter-labels">
         <select data-placeholder="&nbsp;" class="chosen-select form-control" multiple class="w-md"></select>
       </div>
-      <div class="col-md-12 p-n m-t-xs">
+      <div class="col-md-12 p-n m-t-xs txt-small">
         Created Date 
         <a class="pull-right txt-small display-none m-t-xs link-color" href="javascript:void(0);" id="clear-created-date" style="font-size: 10px;">Clear</a>
       </div>
       <div class="col-md-12 p-n m-t-xs txt-small">
         <input type="text" class="form-control input-sm created-date-input" placeholder="Choose date">
       </div>
-      <div class="col-md-12 p-n m-t-sm">
+      <div class="col-md-12 p-n m-t-sm txt-small">
         Due Date 
         <a class="pull-right txt-small display-none m-t-xs link-color" href="javascript:void(0);" id="clear-due-date" style="font-size: 10px;">Clear</a>
       </div>
@@ -31,13 +31,17 @@
         <input type="text" class="form-control input-sm due-date-input" placeholder="Choose date">
       </div>
       <div class="col-md-12 p-n">
+        <div class="col-md-2 p-n text-center">
+          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="overdue">Overdue</a>
+        </div>
+        <div class="col-md-1 p-n text-center m-l-xs"> | </div>
         <div class="col-md-3 p-n">
           <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="tomorrow">Tomorrow</a>
         </div>
-        <div class="col-md-1 p-n text-center"> | </div>
+        <!--<div class="col-md-1 p-n text-center"> | </div>
         <div class="col-md-1 p-n text-center">
           <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="next_two_days">+2</a>
-        </div>
+        </div>-->
         <div class="col-md-1 p-n text-center"> | </div>
         <div class="col-md-1 p-n text-center">
           <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="next_three_days">+3</a>
@@ -53,8 +57,8 @@
 <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
-        <div class="col-md-12 p-n m-b-xs">Status</div>
-        <div class="col-md-12 p-n txt-small">
+        <div class="col-md-12 p-n m-b-xs txt-small">Status</div>
+        <div class="col-md-12 p-n">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="status" name="status" value="NEW" {{#contains_string 'NEW' status}}checked{{/contains_string}} type="checkbox">
@@ -82,8 +86,8 @@
             </label> Closed
           </div>
         </div>
-        <div class="col-md-12 p-n m-t-xs m-b-xs">Priority</div>
-        <div class="col-md-12 p-n txt-small">
+        <div class="col-md-12 p-n m-t-xs m-b-xs txt-small">Priority</div>
+        <div class="col-md-12 p-n">
           <div class="col-md-4 p-n">
             <label class="i-checks i-checks-sm">
               <input class="priority" name="priority" value="LOW" {{#contains_string 'LOW' priority}}checked{{/contains_string}} type="checkbox"><i></i>
@@ -107,9 +111,9 @@
 <div class="wrapper bg-light hidden-sm hidden-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
-        <div class="col-md-12 p-n m-t m-b-xs">Type</div>
+        <div class="col-md-12 p-n m-t m-b-xs txt-small">Type</div>
         <div class="col-md-12 p-n">
-          <div class="col-md-12 p-n txt-small">
+          <div class="col-md-12 p-n">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="ticket_type" name="ticket_type" value="INCIDENT" {{#contains_string 'INCIDENT' type}}checked{{/contains_string}} type="checkbox">
@@ -123,7 +127,7 @@
             </label> Problem
           </div>
         </div>
-        <div class="col-md-12 p-n txt-small">
+        <div class="col-md-12 p-n">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="ticket_type" name="ticket_type" value="TASK" {{#contains_string 'TASK' type}}checked{{/contains_string}} type="checkbox">
@@ -137,7 +141,7 @@
             </label> Question
           </div>
         </div>
-        <div class="col-md-12 p-n txt-small">
+        <div class="col-md-12 p-n">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="favorite" name="favorite" type="checkbox">

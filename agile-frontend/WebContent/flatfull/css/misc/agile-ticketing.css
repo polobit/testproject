@@ -221,7 +221,7 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
   }
 
   .width-15em {
-  	width: 15em;
+  	max-width: 15em;
   }
 
   .width-9em {
@@ -381,6 +381,20 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
   .vertical-align-top {
     vertical-align: top;
   }
+
+  table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > td:first-child{
+    padding-left: 15px !important;
+    width: 20px;
+  }
+
+  table.single-row > thead > tr > th, table.single-row > tbody > tr > td{
+    padding-left: 0;
+  }
+
+  /*table.single-row > thead > tr > th.subject, table.single-row > tbody > tr > td.subject > div{
+    max-width: 250px;
+    display: inline-block;
+  }*/
   
 
       

@@ -177,14 +177,14 @@ Handlebars.registerHelper('get_template', function(templateName, context, option
 	return getTemplate(templateName, context);
 
 });
-
+/*
 Handlebars.registerHelper('get_ticket_rows', function(ticket_model, options) {
 
 	var selected_columns = CURRENT_DOMAIN_USER.helpdeskSettings.choosed_columns, tr_ele = '';
 
 	for(var i=0; i< selected_columns.length; i++){
 
-		var td_ele = '<td  class="first-letter-cap open-ticket">';
+		var td_ele = '<td  class="first-letter-cap open-ticket p-l-none">';
 		switch(selected_columns[i]){
 
 			case 'id':
@@ -242,7 +242,7 @@ Handlebars.registerHelper('get_ticket_rows', function(ticket_model, options) {
 				td_ele += '-';
 				break;
 			case 'priority':{
-				td_ele = '<td>';
+				td_ele = '<td class="p-l-none">';
 
 				if(ticket_model.priority == 'HIGH')
 					td_ele += '<span class="label bg-danger first-letter-cap inline-block">'+ ticket_model.priority +'</span>';
@@ -264,7 +264,7 @@ Handlebars.registerHelper('get_ticket_rows', function(ticket_model, options) {
 	}
 
 	return tr_ele;
-});
+});*/
 
 Handlebars.registerHelper('is_ticket_reply_activity', function(activityType, options) {
 

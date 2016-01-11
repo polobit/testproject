@@ -6,54 +6,55 @@
       <i></i>
     </label>
   </td>
-  <td class="v-middle p-l-none" style="width: 5%; padding-top: 2px;">
+  <td class="v-middle p-l-none show-notes" style="width: 5%; padding-top: 2px;">
     {{{get_status_label status}}}
   </td>
-  <td class="v-middle p-l-none p-r-none open-ticket" style="width: 8%;">
+  <td class="v-middle p-l-none p-r-none show-notes" style="width: 8%;">
     <a class="thumb cursor-pointer" href="javascript:void(0);">
       {{#if contact.properties}}
         <img src="{{nameAvatar contact.properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{requester_name}}">
       {{else}}
-        <img src="{{emailGravatarurl 42 requester_email}}" onerror="image_error(this);" _data-name="{{requester_name}}">
+        <img src="{{getGravatarFromEmail 42 requester_email}}" onerror="image_error(this);" 
+          _data-name="{{requester_name}}">
       {{/if}}
     </a>
   </td>
-  <td class="v-middle p-l-none p-r-none open-ticket show-notes pos-rlt" style="width: 55%;">
+  <td class="v-middle p-l-none p-r-none open-ticket show-notes pos-rlt notes-container" style="width: 55%;">
      <table style="background-color: inherit;">
         <tr>
           <td>
             <div class="text-ellipsis">
-              <div class="text-ellipsis first-letter-cap pull-left" style="max-width: 20em;">{{#if subject}}{{subject}}{{else}}-{{/if}}</div>
-              <div class="text-muted pull-left">&nbsp;#{{id}}</div>
+              <div class="text-ellipsis first-letter-cap pull-left text-cap custom-link" style="color: #697073;max-width: 20em;">{{#if subject}}{{subject}}{{else}}-{{/if}}</div>
+              <div class="pull-left">&nbsp;#{{id}}</div>
             </div>
           </td>
         </tr>
         <tr>
           <td>
-            <div class="subject-row text-ellipsis">{{requester_name}}</div>
+            <a class="text-cap custom-link subject-row text-ellipsis" style="color: #697073;">{{requester_name}}</a>
           </td>
         </tr>
         <tr>
           <td>
             <small class="text-muted">
               {{#if_equals status 'NEW'}}
-                Created 
-                <time class="time-ago txt-color-light" datetime="{{epochToHumanDate "" created_time}}">
+                created 
+                <time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">
                   {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
                 </time>
               {{else}}
                 {{#if_equals status 'CLOSED'}}
-                  Closed 
-                  <time class="time-ago txt-color-light" datetime="{{epochToHumanDate "" closed_time}}">
+                  closed 
+                  <time class="time-ago" datetime="{{epochToHumanDate "" closed_time}}">
                     {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" closed_time}}
                   </time>
                 {{else}}
                   {{#if_equals last_updated_by 'AGENT'}}
-                    Assignee replied 
+                    assignee replied 
                   {{else}}
-                    Customer responded 
+                    customer responded 
                   {{/if_equals}}
-                  <time class="time-ago txt-color-light" datetime="{{epochToHumanDate "" last_updated_time}}">
+                  <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">
                     {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}
                   </time>
                 {{/if_equals}}
@@ -61,7 +62,7 @@
               {{#if_equals status 'CLOSED'}}
               {{else}}
                 {{#if due_time}}
-                  , <span class="txt-color-light">{{calculate_due_date due_time}}</span>
+                  , <span class="">{{calculate_due_date due_time}}</span>
                 {{/if}}
               {{/if_equals}}
               {{#if attachments_exists}}
@@ -173,35 +174,35 @@
        <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}"><i></i>
     </label>
   </td>
-  <td  style="padding: 8px; padding-top: 5px;padding-left: 0px;">
+  <td style="padding: 8px; padding-top: 5px;padding-left: 0px;">
     {{{get_status_label status}}}
   </td>
   <td class="first-letter-cap open-ticket id {{#is_column_selected 'id'}}{{else}}display-none{{/is_column_selected}}">
     <div class="text-ellipsis">#{{id}}</div>
   </td>
   <td class="first-letter-cap open-ticket subject {{#is_column_selected 'subject'}}{{else}}display-none{{/is_column_selected}}">
-    <div class="text-ellipsis width-9em">{{subject}}</div>
+    <div class="text-ellipsis width-15em">{{subject}}</div>
   </td>
    <td class="first-letter-cap open-ticket requester_name {{#is_column_selected 'requester_name'}}{{else}}display-none{{/is_column_selected}}">
     <div class="text-ellipsis width-9em">{{requester_name}}</div>
   </td>
   <td class="first-letter-cap open-ticket requester_email {{#is_column_selected 'requester_email'}}{{else}}display-none{{/is_column_selected}}">
-    <div class="text-ellipsis">{{requester_email}}</div>
+    <div class="text-ellipsis width-9em">{{requester_email}}</div>
   </td>
   <td class="first-letter-cap open-ticket created_date {{#is_column_selected 'created_date'}}{{else}}display-none{{/is_column_selected}}">
-    {{created_date}}
+    {{epochToHumanDate 'mmm dd, yyyy' created_date}}
   </td>
   <td class="first-letter-cap open-ticket due_date {{#is_column_selected 'due_date'}}{{else}}display-none{{/is_column_selected}}">
-    {{due_date}}
+    {{#if due_date}}{{epochToHumanDate 'mmm dd, yyyy' due_date}}{{else}}-{{/if}}
   </td>
   <td class="first-letter-cap open-ticket assigned_date {{#is_column_selected 'assigned_time'}}{{else}}display-none{{/is_column_selected}}">
-    {{assigned_time}}
+    {{#if assigned_time}}{{epochToHumanDate 'mmm dd, yyyy' assigned_time}}{{else}}-{{/if}}
   </td>
   <td class="first-letter-cap open-ticket last_updated_date {{#is_column_selected 'last_updated_time'}}{{else}}display-none{{/is_column_selected}}">
-    {{last_updated_time}}
+    {{#if last_updated_time}}{{epochToHumanDate 'mmm dd, yyyy' last_updated_time}}{{else}}-{{/if}}
   </td>
   <td class="first-letter-cap open-ticket closed_date {{#is_column_selected 'closed_time'}}{{else}}display-none{{/is_column_selected}}">
-    {{closed_time}}
+    {{#if closed_time}}{{epochToHumanDate 'mmm dd, yyyy' closed_time}}{{else}}-{{/if}}
   </td>
   <td class="first-letter-cap open-ticket assignee {{#is_column_selected 'assignee'}}{{else}}display-none{{/is_column_selected}}">
     <div class="text-ellipsis width-9em">{{#if assignee}}{{assignee.name}}{{else}}-{{/if}}</div>

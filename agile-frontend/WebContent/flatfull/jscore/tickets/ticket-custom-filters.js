@@ -4,11 +4,16 @@ var Ticket_Custom_Filters = {
 	assignees: [],
 	groups: [],
 	filters: [],
+	modCount : 0,
 
 	reset: function(){
 		this.customFilters = new Array();
 	},
 	init: function(callback){
+
+		Array.observe(Ticket_Custom_Filters.customFilters, function(){
+			Ticket_Custom_Filters.modCount++;
+		});
 
 		if(this.assignees.length == 0 && this.groups.length == 0){
 
@@ -151,6 +156,9 @@ var Ticket_Custom_Filters = {
 			  		$('#clear-due-date').show();
 
 			  		switch(value){
+			  			case 'overdue':
+			  				current_date.setDate(current_date.getDate());
+			  				break;
 			  			case 'tomorrow':
 			  				current_date.setDate(current_date.getDate() + 1);
 			  				break;
@@ -494,5 +502,11 @@ var Ticket_Custom_Filters = {
 
 		//Re-render collection with customized filters
 		Tickets.fetchTicketsCollection();
+	},
+
+	showCreateFilterNoty: function(){
+
+		if(Ticket_Custom_Filters.modCount > 0)
+			showNotyPopUp("warning", "Save new filter <a class='link-color'>Disacrd</a>&nbsp;<a class='link-color'>Save as</a>", "top", "none");
 	}
 };

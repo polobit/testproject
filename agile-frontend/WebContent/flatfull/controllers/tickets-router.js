@@ -232,6 +232,12 @@ $("#right-pane").html(ticketView.render().el);
 	 **/
 	 ticketsByFilter : function(filter_id){
 
+	 	if(App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection.length > 0){
+
+	 		Tickets.renderExistingCollection();
+	 		return;
+	 	}
+
 	 	Ticket_Filter_ID = filter_id;
 
 		//Rendering the whole layout
@@ -252,14 +258,7 @@ $("#right-pane").html(ticketView.render().el);
 				//Fetching selected filter ticket collection
 				Tickets.fetchTicketsCollection();
 			});
-			
-			/*Ticket_Labels.fetchCollection(function(collection){
-
-				var array = collection.toJSON();
-
-				$('ul.labels-list').html(getTemplate('ticket-label', array));
-			});*/
-	});
+		});
 	},
 
 	/**
