@@ -341,7 +341,7 @@ function showSkypeCallNoty(message){
 					if (notification_prefs.notification_sound != 'no_sound')
 						play_sound(notification_prefs.notification_sound);
 				
-				}else if(message.state == "refused"){	
+				}else if(message.state == "refused" || message.state == "busy"){	
 					
 					Skype_Call_Noty = noty({ text : messageHtml, type : "information", layout : "bottomLeft", timeout : 3000});
 			

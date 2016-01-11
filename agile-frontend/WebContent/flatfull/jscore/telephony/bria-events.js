@@ -36,7 +36,11 @@ $(function()
 		sendMessageToBriaClient(command,number,callId);
 		globalCall.calledFrom = "bria";
 		setTimerToCheckDialing("bria");
-
+		try{
+			var contactDetailsObj = agile_crm_get_contact();
+			callerObjectId = contactDetailsObj.id;
+		}catch (e) {
+		}
 	});
 	
 // }
@@ -402,13 +406,27 @@ function autosaveNoteByUser(note){
  * This will save the activity for call 
  */
 function saveCallActivityBria(call){
-	
-	$.post( "/core/api/widgets/bria/savecallactivity",{
-		direction: call.direction, 
-		phone: call.phone, 
-		status : call.status,
-		duration : call.duration
-		});
+
+	if(call.direction == "Outgoing" || call.direction == "outgoing"){
+		if(!callerObjectId){
+			return;
+		}
+		$.post( "/core/api/widgets/bria/savecallactivityById",{
+			id:callerObjectId,
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration 
+			});
+		
+	}else{
+		$.post( "/core/api/widgets/bria/savecallactivity",{
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration
+			});
+	}
 }
 
 /*
