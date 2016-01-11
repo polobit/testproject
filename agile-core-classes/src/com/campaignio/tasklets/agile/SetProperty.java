@@ -120,7 +120,7 @@ public class SetProperty extends TaskletAdapter
 			}
 
 			if (FieldType.SYSTEM == new ContactField(updated_field, updated_value, null).getFieldType())
-				return update_system_property(contact, updated_field, updated_value, action, campaignJSON, subscriberJSON);
+				return update_system_property(contact, updated_field, updated_value, campaignJSON, subscriberJSON);
 
 			// Get Custom field definition
 			CustomFieldDef customFieldDef = CustomFieldDefUtil.getFieldByName(updated_field, SCOPE.CONTACT);
@@ -204,7 +204,7 @@ public class SetProperty extends TaskletAdapter
 
 	}
 
-	private JSONObject update_system_property(Contact contact, String updated_field, String updated_value, String click,
+	private JSONObject update_system_property(Contact contact, String updated_field, String updated_value,
 			JSONObject campaignJSON, JSONObject subscriberJSON)
 	{
 		try
