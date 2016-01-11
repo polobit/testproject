@@ -62,7 +62,7 @@ function init_acl_restriction()
 				return _plan_restrictions.plan.acl;
 			}, function() {
 				return {
-					"message" : " Please <a href=\"#subscribe-plan\" class='c-p text-info'>upgrade</a> to Regular or Pro plan to use this feature. "
+					"message" : " Please <a href=\"#subscribe-plan\" class='c-p text-info'>upgrade</a> to Regular or Enterprise plan to use this feature. "
 				}
 			} ],
 			is_calling_widget : [function(){

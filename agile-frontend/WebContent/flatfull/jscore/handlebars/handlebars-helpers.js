@@ -6948,6 +6948,14 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('is_acl_allowed', function(options)
+	{
+		if(!_plan_restrictions.is_ACL_allowed[0]())
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
+
 function agile_is_mobile_browser(){
    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
  }
