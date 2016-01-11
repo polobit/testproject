@@ -6,22 +6,25 @@
       <i></i>
     </label>
   </td>
+  <td class="v-middle p-l-none" style="width: 5%; padding-top: 2px;">
+    {{{get_status_label status}}}
+  </td>
   <td class="v-middle p-l-none p-r-none open-ticket" style="width: 8%;">
     <a class="thumb cursor-pointer" href="javascript:void(0);">
       {{#if contact.properties}}
-        <img data-name="{{dataNameAvatar contact.properties 42}}" src="{{gravatarurl contact.properties 24}}" class="r-5x">
+        <img src="{{nameAvatar contact.properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{requester_name}}">
       {{else}}
-        <img src="{{emailGravatarurl 42 requester_email}}">
+        <img src="{{emailGravatarurl 42 requester_email}}" onerror="image_error(this);" _data-name="{{requester_name}}">
       {{/if}}
     </a>
   </td>
-  <td class="v-middle p-l-none p-r-none open-ticket show-notes pos-rlt" style="width: 60%;">
+  <td class="v-middle p-l-none p-r-none open-ticket show-notes pos-rlt" style="width: 55%;">
      <table style="background-color: inherit;">
         <tr>
           <td>
             <div class="text-ellipsis">
-              <div class="text-ellipsis pull-left text-md" style="max-width: 20em;">{{#if subject}}{{subject}}{{else}}-{{/if}}</div>
-              <div class="text-muted pull-left text-md">&nbsp;#{{id}}</div>
+              <div class="text-ellipsis first-letter-cap pull-left" style="max-width: 20em;">{{#if subject}}{{subject}}{{else}}-{{/if}}</div>
+              <div class="text-muted pull-left">&nbsp;#{{id}}</div>
             </div>
           </td>
         </tr>
@@ -32,7 +35,7 @@
         </tr>
         <tr>
           <td>
-            <small class="text-muted m-t-xs">
+            <small class="text-muted">
               {{#if_equals status 'NEW'}}
                 Created 
                 <time class="time-ago txt-color-light" datetime="{{epochToHumanDate "" created_time}}">
@@ -72,8 +75,12 @@
         <div class="row m-n mar-btm-md">
           <div class="col-md-12 p-b-sm">
             <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;
-            <span class="text-muted">Ticket #{{id}}</span>
-            <span class="text-muted pull-right">{{epochToHumanDate "mmm dd, yyyy HH:MM" created_time}}</span>
+            <span class="v-middle txt-small">Ticket #{{id}}</span>
+            <span class="text-light pull-right" style="margin-top: 2px;">
+              <time class="time-ago txt-small" datetime="{{epochToHumanDate "" created_time}}">
+                  {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
+              </time>
+            </span>
           </div>
           <div class="col-md-12 p-b-sm">
             <strong>{{subject}}</strong>
@@ -90,9 +97,13 @@
               <hr class="m-t-xs m-b-xs">
             </div>
             <div class="col-md-12 pad-all-sm">
-              <span>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</span>
-              <span class="text-light txt-small pull-right">
-                {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}
+              <span class="v-middle txt-small">
+                <strong>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</strong>
+              </span>
+              <span class="text-light pull-right txt-small">
+                <time class="time-ago txt-small" datetime="{{epochToHumanDate "" last_updated_time}}">
+                  {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}
+                </time>
               </span>
             </div>
             <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
@@ -157,19 +168,19 @@
   </td>
 </script>
 <script id="ticket-single-row-model-template" type="text/html">
-  <td class="data select_checkbox c-p pos-rlt" data-id="{{id}}" style="padding-right: 7px;">
-    <label class="i-checks i-checks-sm">
+  <td class="data select_checkbox c-p pos-rlt" data-id="{{id}}">
+    <label class="i-checks i-checks-sm" style="vertical-align: sub;">
        <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}"><i></i>
     </label>
   </td>
-  <td  style="padding: 8px; padding-top: 2px;padding-left: 0px;">
+  <td  style="padding: 8px; padding-top: 5px;padding-left: 0px;">
     {{{get_status_label status}}}
   </td>
   <td class="first-letter-cap open-ticket id {{#is_column_selected 'id'}}{{else}}display-none{{/is_column_selected}}">
     <div class="text-ellipsis">#{{id}}</div>
   </td>
   <td class="first-letter-cap open-ticket subject {{#is_column_selected 'subject'}}{{else}}display-none{{/is_column_selected}}">
-    <div class="text-ellipsis width-15em">{{subject}}</div>
+    <div class="text-ellipsis width-9em">{{subject}}</div>
   </td>
    <td class="first-letter-cap open-ticket requester_name {{#is_column_selected 'requester_name'}}{{else}}display-none{{/is_column_selected}}">
     <div class="text-ellipsis width-9em">{{requester_name}}</div>
@@ -238,35 +249,43 @@
 <script id="ticket-single-row-popup-template" type="text/html">
 <div id="ticket-last-notes" class="ticket-last-notes" style="min-height: {{#if_equals status 'NEW'}}170px;{{else}}270px;{{/if_equals}};">
     <div class="row m-n mar-btm-md">
-      <div class="col-md-12 p-b-sm">
-        <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;
-        <span class="text-muted">Ticket #{{id}}</span>
-        <span class="text-muted pull-right">{{epochToHumanDate "mmm dd, yyyy HH:MM" created_time}}</span>
-      </div>
-      <div class="col-md-12 p-b-sm">
-        <strong>{{subject}}</strong>
-      </div>
-      <div class="col-md-12 last-notes-drp-dwn p-b-sm">  
-        <div id="recent-reply-notes" class="recent-reply-notes">
-          {{{first_notes_text}}}
+          <div class="col-md-12 p-b-sm">
+            <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;
+            <span class="v-middle txt-small">Ticket #{{id}}</span>
+            <span class="text-light pull-right" style="margin-top: 2px;">
+              <time class="time-ago txt-small" datetime="{{epochToHumanDate "" created_time}}">
+                  {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
+              </time>
+            </span>
+          </div>
+          <div class="col-md-12 p-b-sm">
+            <strong>{{subject}}</strong>
+          </div>
+          <div class="col-md-12 last-notes-drp-dwn p-b-sm">  
+            <div id="recent-reply-notes" class="recent-reply-notes">
+              {{{first_notes_text}}}
+            </div>
+          </div>
+          {{#if_equals status 'NEW'}}
+          {{else}}
+            <div class="col-md-12 pad-all-sm">
+              <span class="text-muted">Last comment</span>
+              <hr class="m-t-xs m-b-xs">
+            </div>
+            <div class="col-md-12 pad-all-sm">
+              <span class="v-middle txt-small">
+                <strong>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</strong>
+              </span>
+              <span class="text-light pull-right txt-small">
+                <time class="time-ago txt-small" datetime="{{epochToHumanDate "" last_updated_time}}">
+                  {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}
+                </time>
+              </span>
+            </div>
+            <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
+              {{{last_reply_text}}}  
+            </div>
+          {{/if_equals}}
         </div>
-      </div>
-      {{#if_equals status 'NEW'}}
-      {{else}}
-        <div class="col-md-12 pad-all-sm">
-          <span class="text-muted">Last comment</span>
-          <hr class="m-t-xs m-b-xs">
-        </div>
-        <div class="col-md-12 pad-all-sm">
-          <span>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</span>
-          <span class="text-light txt-small pull-right">
-            {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}
-          </span>
-        </div>
-        <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
-          {{{last_reply_text}}}  
-        </div>
-      {{/if_equals}}
-    </div>
   </div>
 </script>
