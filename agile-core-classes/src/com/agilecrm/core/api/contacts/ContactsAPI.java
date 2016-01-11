@@ -57,6 +57,7 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.imports.CSVImporter;
 import com.agilecrm.contact.imports.impl.ContactsCSVImporter;
+import com.agilecrm.contact.upload.blob.status.ImportStatus;
 import com.agilecrm.contact.upload.blob.status.ImportStatus.ImportType;
 import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
 import com.agilecrm.contact.util.ContactUtil;
@@ -146,9 +147,9 @@ public class ContactsAPI
 	System.out.println("Fetching count int");
 	Map searchMap = new HashMap();
 	searchMap.put("type", Contact.Type.PERSON);
-	
+
 	return Contact.dao.getCountByProperty(searchMap);
-	
+
     }
 
     /**
@@ -263,9 +264,9 @@ public class ContactsAPI
 	System.out.println("Fetching count of companies");
 	Map searchMap = new HashMap();
 	searchMap.put("type", Contact.Type.COMPANY);
-	
+
 	return Contact.dao.getCountByProperty(searchMap);
-	
+
     }
 
     /**
@@ -1326,7 +1327,8 @@ public class ContactsAPI
     @Path("/import/{key}/{type}")
     @POST
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void contactsBulkSave(Contact contact, @PathParam("key") String key, @PathParam("type") String type)
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ImportStatus contactsBulkSave(Contact contact, @PathParam("key") String key, @PathParam("type") String type)
     {
 	// it gives is 1000)
 	int currentEntityCount = ContactUtil.getCount();
@@ -1345,11 +1347,12 @@ public class ContactsAPI
 	    ImportStatusDAO statusDAO = new ImportStatusDAO(NamespaceManager.get(), ImportType.CONTACTS);
 	    Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class, info.getDomainId());
 
-	    statusDAO.createNewImportStatus(userKey, 1000, blobKey.getKeyString());
+	    statusDAO.createNewImportStatus(userKey, 0, blobKey.getKeyString());
 	    importer = new ContactsCSVImporter(NamespaceManager.get(), blobKey, info.getDomainId(),
 		    new ObjectMapper().writeValueAsString(contact), Contact.class, currentEntityCount, statusDAO);
 
 	    PullQueueUtil.addToPullQueue("contact-import-queue", importer, key);
+	    return statusDAO.getImportStatus(NamespaceManager.get());
 	}
 
 	catch (IOException e)
@@ -1357,6 +1360,8 @@ public class ContactsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+
+	return null;
 
     }
 

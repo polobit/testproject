@@ -767,13 +767,17 @@ var ContactsRouter = Backbone.Router.extend({
 	importContacts : function()
 	{
 
-		var view = new CONTACTS_IMPORT_VIEW({
+		App_Contacts.importContacts = new CONTACTS_IMPORT_VIEW({
 			url : 'core/api/upload/status/CONTACTS',
-			template : "import-contacts"
+			template : "import-contacts",
+			postRenderCallback: function(el)
+			{
+				initializeImportEvents("import-contacts-event-listener");
+			}
 
 		});
 
-		$('#content').html(view.render().el);
+		$('#content').html(App_Contacts.importContacts.render().el);
 
 /*		$('#content').html('<div id="import-contacts-event-listener"></div>');
 		getTemplate("import-contacts", {}, undefined, function(template_ui){

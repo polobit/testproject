@@ -3,6 +3,7 @@ BLOB_KEY = undefined;
 var CONTACTS_IMPORT_VIEW = Base_Model_View.extend({
 	events : {
 		"click .upload" :  "initializeImportButton",
+		"#import-cancel" : "importCancel"
 	},
 	initializeImportButton : function(e)
 	{
@@ -18,7 +19,15 @@ var CONTACTS_IMPORT_VIEW = Base_Model_View.extend({
 		{
 			newwindow.focus();
 		}
+	},
+	importCancel : function(e)
+	{
+		// Sends empty JSON to remove
+		// contact uploaded
+		App_Contacts.importContacts.render(true);
 	}
+
+
 });
 
 function initializeImportEvents(id){
@@ -36,14 +45,7 @@ if(!id)
 		// Sends empty JSON to remove
 		// contact uploaded
 		var $firstDiv = $('#content').children().first();
-		getTemplate('import-contacts', {}, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					$firstDiv.html($(template_ui));	
-					initializeImportEvents($firstDiv.attr('id'));
-
-				}, $firstDiv);
-		
+		App_Contacts.importContacts.render(true);
 	});
 	
 	// cancel option for deals import
@@ -328,6 +330,16 @@ $('#' + id).on('click', '#import-contacts', function(e)
 								// contact uploaded
 								var $firstDiv = $('#content').first();
 
+								App_Contacts.importContacts.model.fetch({
+									success : function(data)
+									{
+										showNotyPopUp('information', "Contacts are now being imported. You will be notified on email when it is done", "top", 5000);
+										addTagAgile(IMPORT_TAG);
+										console.log(data);
+									}
+
+								})
+/*
 								getTemplate("import-contacts", {}, undefined, function(template_ui){
 									if(!template_ui)
 										  return;
@@ -337,10 +349,10 @@ $('#' + id).on('click', '#import-contacts', function(e)
 									showNotyPopUp('information', "Contacts are now being imported. You will be notified on email when it is done", "top", 5000);
 									addTagAgile(IMPORT_TAG);
 
-								}, $firstDiv);
+								}, $firstDiv);*/
 
 								
-							}, });
+							}});
 
 					})
 
@@ -514,14 +526,8 @@ $('#' + id).on('click', '#import-comp', function(e)
 							// contact uploaded
 							var $firstDiv = $('#content').first();
 
-							getTemplate("import-contacts", {}, undefined, function(template_ui){
-									if(!template_ui)
-										  return;
-									$firstDiv.html($(template_ui));
-									initializeImportEvents($firstDiv.attr('id'));
-									showNotyPopUp('information', "Companies are now being imported. You will be notified on email when it is done", "top", 5000);
-							}, $firstDiv);	
-
+							App_Contacts.importContacts.render(true);
+							showNotyPopUp('information', "Companies are now being imported. You will be notified on email when it is done", "top", 5000);
 						}, });
 
 				});
