@@ -21,11 +21,11 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-r
 
 var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
 
-var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi,Sandeep";
+var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/khader,haaris_farooqi";
 
-var SALES_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Shravi_Sharma,stephen";
+var SALES_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Vikas,Mrudula,Shravi_Sharma,Bharat,Manish,Nick,Stephen";
 
-var SUPPORT_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Raja_Shekar,Natesh,Abhishek_Pandey";
+var SUPPORT_SCHEDULE_URL = "https://our.agilecrm.com/calendar/khader,haaris_farooqi";
 
 var CALENDAR_WEEK_START_DAY = CURRENT_USER_PREFS.calendar_wk_start_day;
 /**
