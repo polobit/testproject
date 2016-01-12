@@ -165,7 +165,7 @@ $('.popover').on('click', '#add-tags-popover', function(e){
 		$(e.currentTarget).css("display", "none");
 		$("#addTagsForm-popover").css("display", "table");
 		$("#addTags-popover").focus();
-			(function(e){
+			setup_tags_typeahead(function(e){
     				json = Contact_collection.toJSON();
     			
     			// Checks if tag already exists in contact
