@@ -273,6 +273,20 @@ function sendTestCommand()
 	
 	}
 
+function sendNotConfigured(widget)
+{
+			var command = "notConfigured";
+			var number =  "";
+			var callId = "";
+			if(widget == "Skype"){
+				sendMessageToSkypeClient(command,number,callId);
+			}else{
+				sendMessageToBriaClient(command,number,callId);
+			}
+			
+			return;
+}
+
 function replicateglobalCallVariable()
 {
 
@@ -316,6 +330,11 @@ function handleCallRequest(message)
 	// Display message in stream.
 	if ((message || {}).callType == "Bria")
 	{
+		var index = containsOption(default_call_option.callOption, "name", "Bria");
+		if( index == -1){
+			sendNotConfigured("Bria");
+			return;
+		}
 		if (message.state == "lastCallDetail")
 		{
 			globalCallForActivity.duration = message.duration;
@@ -383,7 +402,11 @@ function handleCallRequest(message)
 	}
 	else if ((message || {}).callType == "Skype")
 	{
-		
+		var index = containsOption(default_call_option.callOption, "name", "Skype");
+		if( index == -1){
+			sendNotConfigured("Skype");
+			return;
+		}
 		// start from here
 		if (message.state == "lastCallDetail")
 		{
