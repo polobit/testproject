@@ -791,6 +791,23 @@ $(function()
 		// 1000));
 	});
 
+	Handlebars.registerHelper('paypalInvoiceDate', function(format, date)
+	{
+		if (date){
+			// var data = new Date(date); 
+			// var time = data.getTime();
+			if(!format){
+			 	format = "mmm dd yyyy";
+			}
+			var d= new Date(date).format(format);
+			return d;			
+		}
+		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
+		// 1000));
+	});
+
+
+
 	// Helper function to return date in user selected format in  preferences.
 
 	Handlebars.registerHelper('epochToHumanDateInFormat', function(date)

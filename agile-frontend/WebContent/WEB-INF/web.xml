@@ -83,6 +83,7 @@
 		<servlet-name>OAuth2Servlet</servlet-name>
 		<url-pattern>/backend/googleservlet</url-pattern>
 		<url-pattern>/backend/StripeServlet</url-pattern>
+		<url-pattern>/backend/paypalRoute</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

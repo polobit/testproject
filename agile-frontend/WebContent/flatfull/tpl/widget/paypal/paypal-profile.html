@@ -1,6 +1,6 @@
 <script id="paypal-login-template" type="text/html">
 	<div class="m-t">
-		Link your paypal to access your invoices.
+		Configure your Paypal account to get ability to access invoices.
 		<br/>
 		<div class="text-center"><a href="{{url}}" class="btn btn-sm btn-primary m-t-sm" >Link Your Paypal</a></div>
 	</div>
@@ -11,17 +11,20 @@
 	{{#each invoices}}
 		<li class="list-group-item r-none b-l-none b-r-none">
 			<div class="clear">					
-				<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}">
-					#{{number}}
+				<a class="pull-left text-info" data-toggle="collapse" href="#collapse-{{id}}">
+					Invoice: {{number}}
 				</a>
 				<div class="pull-right font-bold">${{total_amount.value}}</div>	
-				<div class="clearfix"></div>	
-				<div class="pull-right">{{status}}</div>
+				<div class="clearfix"></div>
+				<div class="pull-left text-xs">Status</div>	
+				<div class="pull-right text-xs">{{status}}</div>
+				<div class="clearfix"></div>				
+				<div class="pull-left"><a class="btn btn-xs btn-default" target="_blank" href="{{metadata.payer_view_url}}">View</a></div>
 				<div class="clearfix"></div>
 			</div>		
 			<div class="clearfix"></div>					
 			<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
-				<span>Note :</span><p> {{note}} </p>
+				<span>Note: </span><p>{{note}} </p>
 				{{#each lines.data}}
 					// {{#if_equals type "invoiceitem"}}
 					// 	<div class="pull-left">{{description}}</div>					
@@ -41,7 +44,7 @@
 					// {{/if_equals}}	         
 				{{/each}}
 			</div>
-			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" invoice_date}}</time></small>
+			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{paypalInvoiceDate "" invoice_date}}">{{paypalInvoiceDate "ddd mmm dd yyyy" invoice_date}}</time></small>
 		</li>
 	{{/each}}
 {{else}}
@@ -50,6 +53,9 @@
 </script>
 
 <script id="paypal-revoke-access-template" type="text/html">
+	<div class="m-b-lg">
+		<p>Re-Configure your Paypal account to get access of invoices.</p>
+	</div>
 	<div class="m-t-sm m-r-none m-b-xs m-l-none text-center">
 		<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Stripe">Revoke Access</a>
 		<a href="#add-widget" class='btn btn-default btn-sm' widget-name="Stripe">Cancel</a>

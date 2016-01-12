@@ -87,8 +87,8 @@ public class PaypalScribeServlet extends HttpServlet {
 						.apiSecret(Globals.PAYPAL_SECRET_ID)
 						.scope(Paypal2Api.SCOPE)
 						.callback(Paypal2Api.REDIRECT_URL).build();
-
-				returnUrl = service.getAuthorizationUrl(null);
+				System.out.println(req.getRequestURL());
+				returnUrl = service.getAuthorizationUrl(null) + "&state="+req.getRequestURL();
 
 				req.getSession().setAttribute("return_url", reqReturnUrl);
 			} else {

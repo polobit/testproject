@@ -16,12 +16,12 @@ import com.google.api.client.util.Base64;
 public class Paypal2Api extends DefaultApi20 {
 
 	// "https://www.sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize?client_id=%s&response_type=code&redirect_uri=%s&scope=%s";
-	static String AUTHORIZE_URL = "https://www.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize?client_id=%s&response_type=code&redirect_uri=%s&scope=%s";
+	static String AUTHORIZE_URL = "https://www.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize?client_id=%s&response_type=code&scope=%s&redirect_uri=%s";
 
 	private static String GRANT_TYPE = "grant_type";
 	private static String AUTHORIZATION_CODE = "authorization_code";
 
-	public static String REDIRECT_URL = "https://phanisbox-dot-sandbox-dot-agilecrmbeta.appspot.com/paypalScribe";
+	public static String REDIRECT_URL = "https://my.agilecrm.com/backend/googleservlet";
 
 	public static String SCOPE = "openid profile email address phone https://uri.paypal.com/services/invoicing";
 
@@ -37,8 +37,7 @@ public class Paypal2Api extends DefaultApi20 {
 		// TODO Auto-generated method stub
 
 		return String.format(AUTHORIZE_URL, config.getApiKey(),
-				OAuthEncoder.encode(config.getCallback()),
-				OAuthEncoder.encode(config.getScope()));
+				OAuthEncoder.encode(config.getScope()),OAuthEncoder.encode(config.getCallback()));
 
 	}
 
