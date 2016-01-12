@@ -369,6 +369,15 @@ var portlet_graph_utility = {
 								marginRight : 20,
 							// plotBorderWidth: 1,
 							// plotBorderColor: '#F4F4F5'
+							   events: {
+							   		load: function(){
+							   			console.log("load");
+							   			portlet_utility.toggle_chart_legends(this, base_model);
+							   		}, redraw : function(){
+							   			console.log("redraw");
+							   			portlet_utility.toggle_chart_legends(this, base_model);
+							   		}
+							   },
 							},
 							title : {
 								text : ''
@@ -466,7 +475,16 @@ var portlet_graph_utility = {
 											{
 												chart : {
 													type : 'bar',
-													marginRight : 20
+													marginRight : 20,
+													events: {
+												   		load: function(){
+												   			console.log("load");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}, redraw : function(){
+												   			console.log("redraw");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}
+												   },
 												},
 												title : {
 													text : ''
@@ -545,6 +563,15 @@ var portlet_graph_utility = {
 						            plotBorderWidth: 1,
 						            plotBorderColor: '#F4F4F5',
 						            height:height,
+						            events: {
+								   		load: function(){
+								   			console.log("load");
+								   			portlet_utility.toggle_chart_legends(this, base_model);
+								   		}, redraw : function(){
+								   			console.log("redraw");
+								   			portlet_utility.toggle_chart_legends(this, base_model);
+								   		}
+								   },
 						        },
 						        title: {
 						            text: ''
@@ -797,6 +824,15 @@ var portlet_graph_utility = {
 													type : 'bar',
 													marginRight : 20,
 													height:groupByList.length*30+($('#'+selector).height()-30),
+													events: {
+												   		load: function(){
+												   			console.log("load");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}, redraw : function(){
+												   			console.log("redraw");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}
+												   },
 												},
 												title : {
 													text : ''
@@ -990,7 +1026,17 @@ var portlet_graph_utility = {
 											{
 												chart : {
 													type : 'areaspline',
-													marginRight : 20
+													marginRight : 20,
+													events: {
+												   		load: function(){
+												   			console.log("load");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}, redraw : function(){
+												   			console.log("redraw");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}
+												   },
+
 												},
 												title : {
 													text : ''

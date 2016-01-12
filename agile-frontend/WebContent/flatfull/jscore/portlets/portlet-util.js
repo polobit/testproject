@@ -2013,6 +2013,44 @@ var portlet_utility = {
 			}
 		});
 	
-	}
 
+	},
+
+	is_legend_enable_in_desktop : function(base_model){
+	        
+	        if(!base_model.get("size_x") || base_model.get("size_x") > 1)
+	        		return true;	
+
+	        return false;
+	},
+
+	is_legend_enable : function(base_model){
+		return (!agile_is_mobile_browser()) ? true : false;
+	},
+
+
+	toggle_chart_legends: function(chart, base_model){
+		if(!chart.series)
+			  return;
+
+		var items = chart.series; 
+		for (var i = 0; i < items.length; i++) {
+			this.toggle_legend_item(chart, items[i], base_model);
+		};
+
+	},
+	toggle_legend_item : function(chart, item, base_model){
+		if(this.is_legend_enable_in_desktop(base_model))
+		{
+			item.options.showInLegend = true;
+    		chart.legend.renderItem(item);	
+    		chart.legend.render();
+		}else {
+			item.options.showInLegend = false;
+    		item.legendItem = null;
+    		chart.legend.destroyItem(item);
+    		chart.legend.render();
+		}
+
+	}
 };
