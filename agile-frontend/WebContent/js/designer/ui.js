@@ -73,7 +73,7 @@ function generateRadioUI(uiFieldDefinition) {
         var input = "<input type=\"radio\""+ style  +" name=\"" + uiFieldDefinition.name + "\" value=\"" + key + "\" >" + value + "</input>";
  
         if(event && eventHandler){
-        	input = "<input type=\"radio\""+ style  +" name=\"" + uiFieldDefinition.name + "\" value=\"" + key + "\""+event+"="+eventHandler+"(this)"+">" + value + "</input>";
+        	input = "<input type=\"radio\""+ style  +" name=\"" + uiFieldDefinition.name + "\" value=\"" + key + "\""+event+"="+eventHandler+"(this,'"+ uiFieldDefinition.target_type +"')"+">" + value + "</input>";
         }
         
 

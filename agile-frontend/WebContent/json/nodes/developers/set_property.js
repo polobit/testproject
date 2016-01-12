@@ -28,6 +28,7 @@
             "id":"action",
             "event":"onclick",
             "eventHandler":"remove_property",
+            "target_type": "updated_value",
             "options": {
             "SET_NULL": "set to null (blank)"
             },
@@ -40,6 +41,7 @@
             "name": "action",
             "event":"onclick",
             "eventHandler":"add_property",
+            "target_type": "updated_value",
             "options": {
             "SET": "set"
             },

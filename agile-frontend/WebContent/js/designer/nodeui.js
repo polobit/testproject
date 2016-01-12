@@ -91,6 +91,7 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     
     if(nodeJSONDefinition["name"] == "Send Message" && (jsonData == undefined || jsonData == "json/nodes/sms/sendmessage.js"))
         $("#nodeui").find("[name=to]").val("{{phone}}");
+    
     //for set property node
     if(nodeJSONDefinition["name"] == "Set Property"){
     		setPropertyNode(jsonData);
