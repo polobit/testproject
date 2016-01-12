@@ -88,6 +88,7 @@
             var targetEl = $(e.currentTarget);
 
             var contact_id = App_Contacts.contactDetailView.model.id;
+            var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
             
             // Navigate to Add Campaigns page
             if($(targetEl).hasClass('contact-add-campaign'))
@@ -102,7 +103,6 @@
                  */
             
                 $('body').off('fill_campaigns_contact').on('fill_campaigns_contact', function(event){
-                    var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (disabled){{else}}>{{name}}{{/if}}</option>";
                     fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
 	    		});
 	    		
@@ -120,8 +120,6 @@
     			
     			$('.show_campaigns_list').css('display','block');
     			
-    			var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
-                
                 // Navigate to controller to show the form and then to trigger the custom event
                 Backbone.history.navigate("add-campaign", {
                     trigger: true
@@ -135,8 +133,6 @@
                 $(targetEl).css('display','none');
                 
                 $('.show_campaigns_list').css('display','inline-block');
-                
-                var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
                 
                 fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
             }
