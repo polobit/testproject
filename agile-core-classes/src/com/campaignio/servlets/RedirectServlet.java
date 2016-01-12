@@ -1,6 +1,8 @@
 package com.campaignio.servlets;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
@@ -118,10 +120,13 @@ public class RedirectServlet extends HttpServlet
 	    }
 
 	    // Add CD Params - IMPORTANT: agile js-api is dependent on these
-	    // params
-	    String params = "?fwd=cd";
+	    /*// params
+    	String params = "?fwd=cd";
 	    if (originalURL.contains("?"))
 		params = "&fwd=cd";
+	    */
+	    
+	    String params= "fwd=cd";
 
 	    // Get Contact
 	    Contact contact = ContactUtil.getContact(Long.parseLong(subscriberId));
@@ -139,10 +144,15 @@ public class RedirectServlet extends HttpServlet
 	    {
 		// Append Contact properties to params
 		params += TrackClickUtil.appendContactPropertiesToParams(contact, push);
-
-		System.out.println("Forwarding it to " + normalisedLongURL + " " + params);
-
-		resp.sendRedirect(normalisedLongURL + params);
+		
+		//Append url fragment(Prashannjeet)
+		
+			normalisedLongURL=appendURI(normalisedLongURL, params).toString();
+		
+			System.out.println("Forwarding it to " + normalisedLongURL);
+			
+			resp.sendRedirect(normalisedLongURL);
+		
 	    }
 	    else
 	    {
@@ -186,18 +196,33 @@ public class RedirectServlet extends HttpServlet
 	    {
 		
 		    // Add log
-		    if(urlShortener != null && urlShortener.getURLShortenerType().equals(ShortenURLType.SMS))
+		    if(urlShortener != null)
 		    {
-		    	CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, workflow.name, subscriberId, "SMS link clicked " + originalURL + " of campaign " + workflow.name,
-		    	        LogType.SMS_LINK_CLICKED.toString());
+		    	if(urlShortener.getURLShortenerType().equals(ShortenURLType.SMS))
+		    	{
+			    	CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, workflow.name, subscriberId, "SMS link clicked " + originalURL + " of campaign " + workflow.name,
+			    	        LogType.SMS_LINK_CLICKED.toString());
+			    	
+					// Interrupt cron tasks of clicked.
+				    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.SMS);
+					
+		    	}
+		    	
+		    	if(urlShortener.getURLShortenerType().equals(ShortenURLType.TWEET))
+		    	{
+		    		CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, workflow.name, subscriberId, "Tweet link clicked " + originalURL + " of campaign " + workflow.name,
+			    	        LogType.TWEET_LINK_CLICKED.toString());
+			    	
+					// Interrupt cron tasks of clicked.
+				    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.TWEET);
+					
+		    	}
 		    	
 		    	// Show notification
 				TrackClickUtil.showEmailClickedNotification(contact, workflow.name, originalURL);
 				
-				// Interrupt cron tasks of clicked.
-			    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.SMS);
-				
-		    	return;
+				return;
+		    	
 		    }
 
 		    TrackClickUtil.addEmailClickedLog(campaignId, subscriberId, originalURL, workflow.name);
@@ -222,5 +247,20 @@ public class RedirectServlet extends HttpServlet
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
+    }
+    
+    //Append URI Fragment with #(Hash sign)
+    
+    public URI appendURI(String uri, String appendQuery) throws URISyntaxException {
+        URI oldUri = new URI(uri);
+        String newQuery = oldUri.getQuery();
+        
+        if (newQuery == null) 
+            newQuery = appendQuery;
+        else 
+            newQuery += "&" + appendQuery;  
+        
+        URI newUri = new URI(oldUri.getScheme(), oldUri.getAuthority(), oldUri.getPath(), newQuery, oldUri.getFragment());
+        return newUri;
     }
 }

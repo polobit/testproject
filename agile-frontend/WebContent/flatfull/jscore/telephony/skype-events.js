@@ -27,7 +27,13 @@ $(function()
 				
 				globalCall.callStatus = "dialing";
 				sendMessageToSkypeClient(command,number,callId);
+				globalCall.calledFrom = "skype";
 				setTimerToCheckDialing("skype");
+				try{
+					var contactDetailsObj = agile_crm_get_contact();
+					callerObjectId = contactDetailsObj.id;
+				}catch (e) {
+				}
 			});
 	
 //	This function is to hide the information shown to the client when the user is not running skype client
@@ -104,7 +110,7 @@ $(function()
 });
  
 //mute the current call	
-	$('body').on('click', '.noty_skype_mute', function(e)
+/*	$('body').on('click', '.noty_skype_mute', function(e)
 	{
 		
 		e.preventDefault();
@@ -116,10 +122,10 @@ $(function()
 		$('.noty_buttons').find('.noty_skype_unmute').toggle();
 		
 		sendMessageToSkypeClient(command,number,callId);
-	});
+	});*/
 	
 //unmute the call	
-	$('body').on('click', '.noty_skype_unmute', function(e)
+/*	$('body').on('click', '.noty_skype_unmute', function(e)
 	{
 		
 		e.preventDefault();
@@ -130,7 +136,7 @@ $(function()
 		$('.noty_buttons').find('.noty_skype_unmute').toggle();
 		$('.noty_buttons').find('.noty_skype_mute').toggle();
 		sendMessageToSkypeClient(command,number,callId);
-	});
+	});*/
 
 
 //function for sending DTMF
@@ -140,7 +146,7 @@ function skypeSendDTMF(digit)
 			play_sound("dtmf");
 			var command = "sendDTMF";
 			var number =  digit;
-			var callId =  "";
+			var callId =  $("#skypeCallId").attr("value");
 			sendMessageToSkypeClient(command,number,callId);
 			return;
 	}
@@ -211,14 +217,14 @@ function _getMessageSkype(message, callback){
 				callback(message);
 			
 			globalCall.callDirection = "Incoming";
-			globalCall.callStatus = "Incoming";
+			globalCall.callStatus = "Ringing";
 			
 			globalCall.callId = callId;
 			globalCall.callNumber = number;
 		});
 				
 	}else if(state == "connected"){
-		getContactImage(number,globalCall.callStatus,function(contact_Image){
+		getContactImage(number,globalCall.callDirection,function(contact_Image){
 			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>On Call &nbsp;&nbsp;&nbsp; </b>'+'<span id="skypeCallId" class="text-xs" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
 			if(callback)
 				callback(message);
@@ -227,25 +233,6 @@ function _getMessageSkype(message, callback){
 		});
 		
 	
-	}else if(state == "missedCall"){
-		//To_Number = number;
-		getContactImage(number,"Incoming",function(contact_Image){		
-			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Missed Call &nbsp;&nbsp;&nbsp;  </b>'+ '<span id="skypeCallId" class="text-xs" value ='+callId+ '>' + number + '</span>' +'<br><br></span><div class="clearfix"></div>';
-		if(callback)
-			callback(message);
-		
-		globalCall.callDirection = "Incoming";
-		globalCall.callStatus = "Missed";
-		
-		globalCall.callId = callId;
-		globalCall.callNumber = number;
-		
-		var call = {"direction":"Outgoing", "phone":number, "status":"Missed", "duration":"0"};
-		saveCallActivitySkype(call);
-		resetglobalCallVariables();
-		
-		});
-		
 	}else if(state == "connecting"){
 		
 		getContactImage(number,"Outgoing",function(contact_Image){		
@@ -271,46 +258,73 @@ function _getMessageSkype(message, callback){
 			return;
 		}	
 		globalCall.callStatus = "Failed";
-		var call = {"direction":"Outgoing", "phone":number, "status":"Failed", "duration":"0"};
-		saveCallActivitySkype(call);
-		if(($("#skype_contact_number").val() == number)){
-			getLogsForSkype(number);	
-		}
-
-		resetglobalCallVariables();
 		
-	}else if(state == "refused"){
-		if(globalCall.callDirection == "incoming"){
-			var call = {"direction":"Incoming", "phone":number, "status":"No-Answer", "duration":"0"};
-			saveCallActivitySkype(call);
-			if(($("#skype_contact_number").val() == number)){
-				getLogsForSkype(number);	
-			}
-			resetglobalCallVariables();
+		globalCall.callId = callId;
+		globalCall.callNumber = number;
+		replicateglobalCallVariable();
+		resetglobalCallVariables();		
+		
+		//this is called to save the call activity of the user after the call
+		if(!callId){
+			consolee.log("call id not present...");
+			resetglobalCallForActivityVariables();
+			globalCallForActivity.requestedLogs = false;
 			return;
 		}
+		
+		sendMessageToSkypeClient("getLastCallDetail",globalCallForActivity.callNumber,globalCallForActivity.callId);
+	
+	}else if(state == "busy"){
 		getContactImage(number,"Outgoing",function(contact_Image){		
-			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Not Answered &nbsp;&nbsp;&nbsp; </b>'+'<span id="skypeCallId" class="text-xs" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
+			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Call Busy &nbsp;&nbsp;&nbsp; </b>'+'<span id="skypeCallId" class="text-xs" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
 		if(callback)
 			callback(message);
 		});
 		
-		globalCall.callStatus = "No-Answer";
-		var call = {"direction":"Outgoing", "phone":number, "status":"No-Answer", "duration":""};
-		saveCallActivitySkype(call);
-		if(($("#skype_contact_number").val() == number)){
-			getLogsForSkype(number);	
-		}
-		resetglobalCallVariables();
+		if(globalCallForActivity.requestedLogs){
+			return;
+		}	
+		globalCall.callStatus = "Busy";
 		
+		globalCall.callId = callId;
+		globalCall.callNumber = number;
+		replicateglobalCallVariable();
+		resetglobalCallVariables();		
+		
+		//this is called to save the call activity of the user after the call
+		if(!callId){
+			consolee.log("call id not present...");
+			resetglobalCallForActivityVariables();
+			globalCallForActivity.requestedLogs = false;
+			return;
+		}
+		sendMessageToSkypeClient("getLastCallDetail",globalCallForActivity.callNumber,globalCallForActivity.callId);
+	}else if(state == "refused" || state == "missed"){
+			callback("");
+			globalCall.callStatus = "Missed";
+			globalCall.callId = callId;
+			globalCall.callNumber = number;
+			replicateglobalCallVariable();
+			resetglobalCallVariables();	
+			
+			//this is called to save the call activity of the user after the call
+			if(!callId){
+				consolee.log("call id not present...");
+			resetglobalCallForActivityVariables();
+			globalCallForActivity.requestedLogs = false;
+				return;
+			}
+			sendMessageToSkypeClient("getLastCallDetail",globalCallForActivity.callNumber,globalCallForActivity.callId);
+			return;
+			
 	}else if(state == "ended"){
 		callback("");
 		
 		if(globalCall.callStatus && globalCall.callStatus == "Connected"){
-			globalCall.callStatus = "Completed";
+			globalCall.callStatus = "Answered"; //change form completed
 		}else if(globalCall.callStatus && globalCall.callStatus == "Connecting"){
 			globalCall.callStatus = "Busy";
-		}else if(globalCall.callStatus == "Failed" || globalCall.callStatus == "REFUSED" || globalCall.callStatus == "Incoming" || globalCall.callStatus == "Missed"){
+		}else if(globalCall.callStatus == "Failed" || globalCall.callStatus == "REFUSED" || globalCall.callStatus == "Ringing" || globalCall.callStatus == "Missed"){
 			return;
 		}
 		
@@ -332,18 +346,27 @@ function _getMessageSkype(message, callback){
 }
 
 
-
-
-
-
 function saveCallActivitySkype(call){
 	
-	$.post( "/core/api/widgets/skype/savecallactivity",{
-		direction: call.direction, 
-		phone: call.phone, 
-		status : call.status,
-		duration : call.duration
-		});
+	if(call.direction == "Outgoing" || call.direction == "outgoing"){
+		if(!callerObjectId){
+			return;
+		}
+		$.post( "/core/api/widgets/skype/savecallactivityById",{
+			id:callerObjectId,
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration 
+			});
+	}else{
+		$.post( "/core/api/widgets/skype/savecallactivity",{
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration
+			});
+	}
 }
 
 function saveCallNoteSkype(){
@@ -361,7 +384,7 @@ function saveCallNoteSkype(){
 	var id;
 	var desc;
 	resetglobalCallForActivityVariables();
-	if(callStatus == "Completed"){
+	if(callStatus == "Answered"){
 		desc = "Done";
 	}
 	
@@ -373,9 +396,9 @@ function saveCallNoteSkype(){
 	    		return showNewContactModal(number);
 	    	}
 	    	id = responseJson.id;
-	    	contact = getContact(id);
+	    	contact = responseJson;
 	    	contact_name = getContactName(contact);
-	    	if(callStatus == "Completed"){
+	    	if(callStatus == "Answered"){
 				var el = $('#noteForm');
 			 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ id +'">'+contact_name+'</li>');
 			 	$("#noteForm #subject").val(noteSub);
@@ -394,7 +417,7 @@ function saveCallNoteSkype(){
 		var id = App_Contacts.contactDetailView.model.get('id');
 		contact = agile_crm_get_contact();
 		contact_name = getContactName(contact);
-		if( callStatus == "Completed"){
+		if( callStatus == "Answered"){
 			var el = $('#noteForm');
 		 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ id +'">'+contact_name+'</li>');
 		 	$("#noteForm #subject").val(noteSub);
@@ -422,10 +445,10 @@ function getLogsForSkype(num){
 	var logNumber;
 	var parameter = {};
 	
-	parameter['error_message'] = "There is no phone number associated with this contact. <a href='#contact-edit' class='text-info' style='color:#23b7e5'>Add phone number</a>";
-	var contact = agile_crm_get_contact();
-	parameter['num'] = getPhoneWithSkypeInArray(contact.properties);
-
+	parameter['error_message'] = "There is no phone number or skype id associated with this contact. <a href='#contact-edit' class='text-info' style='color:#23b7e5'>Add phone number or skype id</a>";
+	//var contact = agile_crm_get_contact();
+	//parameter['num'] = getPhoneWithSkypeInArray(contact.properties);
+	parameter['num'] = agile_crm_get_contact_properties_list("phone");
 	if($("#skype-logs-panel").length > 0){
 			$("#skype_logs_load").show();
 		}else{
@@ -458,7 +481,7 @@ function getLogsForSkype(num){
 	
 		if(parameter['num'].length > 0){
 			if(!logNumber){
-				logNumber = parameter['num'][0];
+				logNumber = parameter['num'][0].value;
 			}
 			var command = "getLogs";
 			var number =  logNumber;

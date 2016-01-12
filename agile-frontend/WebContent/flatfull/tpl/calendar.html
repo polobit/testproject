@@ -4,10 +4,10 @@
 <div class="row">
         <div class="col-md-12">
 		
-        	 <h3 class="pull-left font-thin h3">Calendar <small></small></h3>
-        	 <button type="button" id="refrecal" class="btn btn-sm btn-default" onclick="refreshcal()" style="margin-left:10px;">
-                <span class="glyphicon glyphicon-refresh"></span></button>
-     	
+    	 <h3 class="pull-left font-thin h3">Calendar <small></small></h3>
+    	 <a id="refrecal" class="text-md btn m-l-none bg-transparent refresh-tickets no-shadow p-t-xs p-l-xs" onclick="refreshcal()">
+		    <i class="fa fa-refresh" data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh" style="vertical-align: text-top;"></i>
+		 </a>     	
         <div class="pull-right">
         <!-- <div id="event-list-filters" class="btn-group inline-block m-r">
 					 <img class="loading_img p-r-xs thumb-xs"  src= "{{getS3ImagePath 'img/21-0.gif'}}"></img>

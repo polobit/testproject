@@ -3001,6 +3001,7 @@ width: 915px;
 {
 	cursor: progress;
 }
+
 .width-goal
 {
 width : 150px;
@@ -3040,4 +3041,8 @@ table.hide-head-checkbox th label.i-checks {
 .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th,.table-striped>tbody>tr:hover>td{
   background-color: #f9f9f9 !important;
   
+}
+.app-aside-fixed:not(.app-aside-dock) aside {
+	position: fixed;
+	height: 100vh;
 }

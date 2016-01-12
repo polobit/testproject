@@ -1599,10 +1599,16 @@ public class ActivityUtil
 	else if (status.equalsIgnoreCase("voicemail"))
 	{
 	    return Call.VOICEMAIL;
+	}else if (status.equalsIgnoreCase("missed"))
+	{
+	    return Call.Missed;
+	}else if (status.equalsIgnoreCase("answered"))
+	{
+	    return Call.ANSWERED;
 	}
 	else
 	{
-	    return null;
+	    return status;
 	}
     }
 

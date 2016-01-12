@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.campaignio.cron.util.CronUtil;
+import com.campaignio.urlshortener.URLShortener.ShortenURLType;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
@@ -43,9 +44,11 @@ public class EmailClickDeferredTask implements DeferredTask
     String interruptedData = null;
     
     /**
-     * SMS node click tracking id 
+     * URL shortener click tracking id 
      */
-    String smsClickTrackingId = null;
+    String urlShortenerTrackerId = null;
+    
+    ShortenURLType type = ShortenURLType.SMS;
     
     /**
      * Constructs a new {@link EmailClickDeferredTask}.
@@ -68,12 +71,14 @@ public class EmailClickDeferredTask implements DeferredTask
     /**
      * Constructs a new {@link EmailClickDeferredTask}
      * 
-     * @param smsClickTrackingId - tracking Id
+     * @param urlShortenerTrackerId - tracking Id
+     * @param type - ShortenURLType
      * @param interruptedData - data passed 
      */
-    public EmailClickDeferredTask(String smsClickTrackingId, String interruptedData)
+    public EmailClickDeferredTask(String urlShortenerTrackerId, ShortenURLType type, String interruptedData)
     {
-    	this.smsClickTrackingId = smsClickTrackingId;
+    	this.urlShortenerTrackerId = urlShortenerTrackerId;
+    	this.type = type;
     	this.interruptedData = interruptedData;
     }
 
@@ -86,13 +91,13 @@ public class EmailClickDeferredTask implements DeferredTask
 
 	try
 	{
-		if(StringUtils.isNotBlank(smsClickTrackingId))
+		if(StringUtils.isNotBlank(urlShortenerTrackerId))
 		{
 		
 			if(interruptedData == null)
 				interruptedData = "{}";
 			
-			CronUtil.interrupt(smsClickTrackingId, "SMS", null, new JSONObject(interruptedData));
+			CronUtil.interrupt(urlShortenerTrackerId, type.toString(), null, new JSONObject(interruptedData));
 			return;
 		}
 		

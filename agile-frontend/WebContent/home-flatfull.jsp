@@ -67,6 +67,20 @@ String width = currentUserPrefs.width;
 boolean is_fluid = !width.isEmpty();
 
 BillingRestriction restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
+//Temp Code 
+//Can remove after 12 mar 2016 
+if(restriction.max_emails_count > 0 && restriction.max_emails_count <=100){
+  restriction.max_emails_count = 0;
+  restriction.one_time_emails_count = 0;
+  restriction.save();
+  restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
+}
+//End of temp code
+
+if(restriction.checkToUpdateFreeEmails()){
+	restriction.refreshEmails();
+	restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
+}
 boolean is_free_plan = false;
 
 if(restriction != null && restriction.planDetails != null)
@@ -321,7 +335,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 
  
- <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
+  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>

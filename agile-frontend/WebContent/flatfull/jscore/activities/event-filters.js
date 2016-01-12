@@ -201,11 +201,20 @@ function put_thirdparty_calendar_links()
 		console.log(data);
 		$.each(data, function(index, preference){
 			console.log(preference);
-			if(preference.calendar_type == 'GOOGLE')
+			if(preference.calendar_type == 'GOOGLE'){
 				putGoogleCalendarLink(true);
-			else if(preference.calendar_type == 'OFFICE365')
-				putOfficeCalendarLink(true);
-				addOffice365CalendarEvents();
+			}else if(preference.calendar_type == 'OFFICE365'){
+				var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
+				var filtterList = eventFilters.cal_type;
+				var display = false;
+				if(filtterList.indexOf("office") >= 0){
+					display = true;
+				}else{
+					display = false;
+				}				
+				$('input:checkbox[value="office"]').attr('checked', display);
+				putOfficeCalendarLink(true);				
+			}
 		});
 	})
 }

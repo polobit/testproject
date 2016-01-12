@@ -811,6 +811,11 @@ display:flex;
   width: 64px;
 }
 
+.thumb-55 {
+  display: inline-block;
+  width: 55px;
+}
+
 .thumb {
   display: inline-block;
   width: 50px;
@@ -1303,6 +1308,11 @@ border-collapse: separate;
 }
 
 /*ending table framework*/
+
+.thumb-55 img {
+  width: 55px;
+  height: 55px;
+}
 
 .thumb img{
 	height: 50px;

@@ -13,9 +13,18 @@ var Widget_Collection_Events = Base_Collection_View.extend({
 var Widget_Model_Events = Base_Model_View.extend({
 
    events : {
+        "click #stripe_url" : "stripeUrl",
    	  "click .save-agile-widget" : "saveWidgetPrefs",
    	  "click .connect_shopify" : "connectShopify",
    	  "click .revoke-widget" : "revokeWidget"
+   },
+
+   stripeUrl: function(){
+     var url = $('#stripe_url').attr('url');
+     $('#stripe_url').attr('disabled', 'disabled');
+     var scope = $("input:radio[name='scope']:checked").val();
+     url += "&scope="+scope+"&return_url="+ encodeURIComponent(window.location.href);     
+     window.location.assign(url);
    },
 
    revokeWidget : function(e){

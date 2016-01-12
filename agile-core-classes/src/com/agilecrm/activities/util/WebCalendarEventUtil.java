@@ -500,7 +500,7 @@ public class WebCalendarEventUtil
 		List<List<Long>> filledSlots = new ArrayList<List<Long>>();
 
 		// Get agile events on selected timings
-		List<Event> agileEvents = EventUtil.getEvents(startTime, endTime, userid);
+		List<Event> agileEvents = EventUtil.getBlockedEvents(startTime, endTime, userid);
 
 		// Add filled slot in nested list
 		for (Event e : agileEvents)

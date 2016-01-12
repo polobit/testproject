@@ -151,7 +151,7 @@ public class AgileForm extends HttpServlet
 
 	if (formJson.has("note") && StringUtils.isNotBlank(formJson.getString("note")))
 	{
-	    String[] noteDescriptions = formJson.getString("note").split(",");
+	   /* String[] noteDescriptions = formJson.getString("note").split(",");
 
 	    for (int i = 0; i < noteDescriptions.length; i++)
 	    {
@@ -160,7 +160,14 @@ public class AgileForm extends HttpServlet
 		note.addRelatedContacts(contact.id.toString());
 		note.created_time = System.currentTimeMillis() / 1000;
 		note.save();
-	    }
+	    }*/
+		
+		String formNote = formJson.getString("note");
+		Note note = new Note("form note", formNote);
+		note.setOwner(new com.googlecode.objectify.Key<AgileUser>(AgileUser.class, owner.getId()));
+		note.addRelatedContacts(contact.id.toString());
+		note.created_time = System.currentTimeMillis() / 1000;
+		note.save();
 	}
     }
 

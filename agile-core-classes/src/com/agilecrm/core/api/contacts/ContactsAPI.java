@@ -141,7 +141,11 @@ public class ContactsAPI
     public int getContactsCount()
     {
 	System.out.println("Fetching count int");
-	return ContactUtil.getContactsCount(null, null);
+	Map searchMap = new HashMap();
+	searchMap.put("type", Contact.Type.PERSON);
+	
+	return Contact.dao.getCountByProperty(searchMap);
+	
     }
 
     /**
@@ -254,7 +258,11 @@ public class ContactsAPI
     public int getCompaniesCount()
     {
 	System.out.println("Fetching count of companies");
-	return ContactUtil.getCompaniesCount(null, null);
+	Map searchMap = new HashMap();
+	searchMap.put("type", Contact.Type.COMPANY);
+	
+	return Contact.dao.getCountByProperty(searchMap);
+	
     }
 
     /**

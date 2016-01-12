@@ -51,7 +51,7 @@ var WidgetsRouter = Backbone.Router
                 "Custom-widget" : "Custom",
                 "Custom-widget/:id" : "Custom",
 				"Bria" : "Bria", "Bria/:id" : "Bria",
-				//"Skype" : "Skype", "Skype/:id" : "Skype"
+				"Skype" : "Skype", "Skype/:id" : "Skype"
 
                 	
             },
@@ -145,9 +145,9 @@ var WidgetsRouter = Backbone.Router
 			 /**
 			 * Manages Skype widget
 			 */
-	/*		 Skype : function(id) {
+			 Skype : function(id) {
 			 	addConfigurableWidget(id, "Skype", 'skype-login');
-			 },*/
+			 },
 			 
             /**
              * Manages Rapleaf widget
@@ -300,9 +300,7 @@ var WidgetsRouter = Backbone.Router
                     addOAuthWidget(
                             "Stripe",
                             "stripe-login",
-                            ('/scribe?service=stripe&linkType=widget&isForAll=' + isForAll
-                                    + '&return_url='
-                                    + encodeURIComponent(window.location.href)));
+                            ('/scribe?service=stripe&linkType=widget&isForAll=' + isForAll));                   
                 } else {
                     addWidgetProfile(id, "Stripe", "stripe-revoke-access",
                             "core/api/widgets/Stripe");
@@ -377,12 +375,14 @@ function renderWidgetView(templateName, url, model, renderEle){
         isNew : true,
         data : model,
         postRenderCallback : function(el) {
-            deserializeWidget(model, el);
+            if(model && model.name != "Stripe"){
+                deserializeWidget(model, el);
+            }
             var widgetTab = _agile_get_prefs("widget_tab");
             $("#prefs-tabs-content").find('a[href="#'+widgetTab+'"]').closest("li").addClass("active");
             initializeTabListeners("widget_tab", "add-widget");
         }
     });
-
-    $(renderEle).html(widgetModel.render().el);
+    var output = widgetModel.render().el;
+    $(renderEle).html(output);
 }
