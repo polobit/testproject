@@ -1,6 +1,8 @@
 package com.campaignio.servlets;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
@@ -118,10 +120,13 @@ public class RedirectServlet extends HttpServlet
 	    }
 
 	    // Add CD Params - IMPORTANT: agile js-api is dependent on these
-	    // params
-	    String params = "?fwd=cd";
+	    /*// params
+    	String params = "?fwd=cd";
 	    if (originalURL.contains("?"))
 		params = "&fwd=cd";
+	    */
+	    
+	    String params= "fwd=cd";
 
 	    // Get Contact
 	    Contact contact = ContactUtil.getContact(Long.parseLong(subscriberId));
@@ -141,14 +146,13 @@ public class RedirectServlet extends HttpServlet
 		params += TrackClickUtil.appendContactPropertiesToParams(contact, push);
 		
 		//Append url fragment(Prashannjeet)
-		if(normalisedLongURL.contains("#"))
-			normalisedLongURL=normalisedLongURL.replaceFirst("#", params+"#");
-		else
-			normalisedLongURL+=params;
-
-			System.out.println("Forwarding it to " + normalisedLongURL + " " + params);
 		
+			normalisedLongURL=appendURI(normalisedLongURL, params).toString();
+		
+			System.out.println("Forwarding it to " + normalisedLongURL);
+			
 			resp.sendRedirect(normalisedLongURL);
+		
 	    }
 	    else
 	    {
@@ -243,5 +247,20 @@ public class RedirectServlet extends HttpServlet
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
+    }
+    
+    //Append URI Fragment with #(Hash sign)
+    
+    public URI appendURI(String uri, String appendQuery) throws URISyntaxException {
+        URI oldUri = new URI(uri);
+        String newQuery = oldUri.getQuery();
+        
+        if (newQuery == null) 
+            newQuery = appendQuery;
+        else 
+            newQuery += "&" + appendQuery;  
+        
+        URI newUri = new URI(oldUri.getScheme(), oldUri.getAuthority(), oldUri.getPath(), newQuery, oldUri.getFragment());
+        return newUri;
     }
 }
