@@ -2028,7 +2028,6 @@ var portlet_utility = {
 		return (!agile_is_mobile_browser()) ? true : false;
 	},
 
-
 	toggle_chart_legends: function(chart, base_model){
 		if(!chart.series)
 			  return;
