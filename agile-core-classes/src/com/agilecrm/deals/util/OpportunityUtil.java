@@ -2374,7 +2374,7 @@ public class OpportunityUtil
 		}
 		for(DomainUser domainuser:domainUsersList)
 		{
-			Track_conversion_User.put(domainuser.name, Track_conversion);
+			Track_conversion_User.put(domainuser.name+'_'+domainuser.id, Track_conversion);
 		}
 		
 		}
@@ -2395,9 +2395,9 @@ public class OpportunityUtil
 				Milestone mile=MilestoneUtil.getMilestone(pipeline_id);
 
 				
-				if(Track_conversion_User.containsKey(opp.getOwner().name))
+				if(Track_conversion_User.containsKey(opp.getOwner().name+'_'+opp.getOwner().id))
 				{
-					JSONObject conversion = Track_conversion_User.getJSONObject(opp.getOwner().name);
+					JSONObject conversion = Track_conversion_User.getJSONObject(opp.getOwner().name+'_'+opp.getOwner().id);
 				if (conversion.containsKey(mile.name))
 				{
 					JSONObject mileObject = conversion.getJSONObject(mile.name);
@@ -2415,7 +2415,7 @@ public class OpportunityUtil
 
 						conversion.put(mile.name, mileObject);
 					}
-					Track_conversion_User.put(opp.getOwner().name, conversion);
+					Track_conversion_User.put(opp.getOwner().name+'_'+opp.getOwner().id, conversion);
 				}
 				}
 			}
