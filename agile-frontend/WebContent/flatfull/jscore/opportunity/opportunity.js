@@ -870,7 +870,8 @@ function populate_deal_products(el, value,form_id){
 							}
 					}
 					iTotal-=iDiscountAmt
-					$("input[name='expected_value']",$(me._form_id)).val(iTotal);
+					//$("input[name='expected_value']",$(me._form_id)).val(iTotal);
+					$("input[name='currency_conversion_value']",$(me._form_id)).val(iTotal);
 				}
 }
 

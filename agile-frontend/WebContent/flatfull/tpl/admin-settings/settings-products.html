@@ -49,49 +49,65 @@
    
 </script>
 <script id="admin-settings-product-add-template" type="text/html">
+<div class="wrapper">
     <div class="row">
-    	<div class="span9">
-    	<div class="well">
-    
-    		<form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
-    			<fieldset>
-    				{{#if id}}
-                		<legend>Edit Product Details</legend>
-    					<input type="text" name="id" class="hide" value={{id}} >
-					{{else}}
-						<legend>New Product Details</legend>
-    				{{/if}}
-    				<br/>
-                   	<div class="control-group">
-    					<label class="control-label" for="pname">Name <span class="field_req">*</span></label> 
-                   		<div class="controls">
-    						<input type="text" id="pname" name="name" class="required" placeholder="Name" autocapitalize="off"/>
-    					</div>
-    				</div> 
-    			  	<div class="control-group">
-    					<label class="control-label" for="pdescription">Description <span class="field_req">*</span></label> 
-                   		<div class="controls">
-    						<textarea id="pdescription" rows="3" name="description" class="" placeholder="Description"></textarea>
-    					</div>
-    				</div>
-    				<div class="control-group">
-    					<label class="control-label" for="pprice">Price </label> 
-                   		<div class="controls">
-    						<input type="text" id="pprice" class="" name='price' placeholder="Price" autocapitalize="off"/> 
-    					</div>
-    				</div>
-    			</div>
-					</div>
-					</div>
+    	<div class="col-md-9">
+    	   <div class="panel panel-default">
+                 <div class="panel-heading">
+                    {{#if id}}
+                       Edit Product Details
+                        
+                    {{else}}
+                        New Product Details
+                    {{/if}}
+                </div>
+        		<form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
+        			<fieldset class="wrapper">
+        				
+        				<br/>
+                       	<div class="control-group form-group">
+        					<label class="control-label col-md-3" for="pname">Name <span class="field_req">*</span></label> 
+                            <div class="col-md-9">
+                           		<div class="controls">
+            						<input type="text" id="pname" name="name" class="required form-control" placeholder="Name" autocapitalize="off"/>
+            					</div>
+                            </div>
+        				</div> 
+        			  	<div class="control-group form-group">
+        					<label class="control-label col-md-3" for="pdescription">Description </label> 
+                            <div class="col-md-9">
+                           		<div class="controls">
+            						<textarea id="pdescription" rows="3" name="description" class="form-control" placeholder="Description"></textarea>
+            					</div>
+                            </div>
+        				</div>
+        				<div class="control-group form-group">
+        					<label class="control-label col-md-3" for="pprice">Price <span class="field_req ">*</span></label> 
+                            <div class="col-md-9">
+                           		<div class="controls">
+            						<input type="number" id="pprice" name="price" class="required form-control" placeholder="Price" autocapitalize="off"/> 
+            					</div>
+                            </div>
+        				</div>
+                        <div class="row">
+                                <div class="col-md-12"><hr>
+                            </div>
+                        </div>    
 
-                    <div class="form-actions">
-               			<button type="submit" class="save btn btn-primary">Save Changes</button>
-               			<a type="reset" href='#products' class="btn">Cancel</a>
-             			</div>
-    			</fieldset>
-    		</form>
+        			    <div class="form-group">
+                             <div class="form-actions col-sm-offset-3 col-md-9">
+                       			
+                       			<a type="reset" href='#products' class="btn btn-default btn-sm">Cancel</a>
+                                <button type="submit" class="save btn btn-sm  btn-primary">Save Changes</button>
+                             </div>   
+                 		</div>
+
+        			</fieldset>
+        		</form>
+            </div>
     	</div>
     </div>
-    </div>
+</div>
+
 </script>
 
