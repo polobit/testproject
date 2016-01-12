@@ -2099,7 +2099,15 @@ function LineforComparison(url, selector, name,show_loading)
 				}
 			}
 			
+				$.each(series, function(k1, v1)
+					{
+						v1.name=v1.name.split("_")[0];
+					});
 
+				$.each(Data, function(k1, v1)
+					{
+						v1.name=v1.name.split("_")[0];
+					});
 			// After loading and processing all data, highcharts are initialized
 			// setting preferences and data to show
 			chart = new Highcharts.Chart({
@@ -2154,20 +2162,27 @@ function LineforComparison(url, selector, name,show_loading)
 			        min: 0
 			    },
 			    tooltip :{
+			    		useHTML : true,
 			    		formatter:  function(){
 			    			var that=this;
 			    			var d;
 						$.each(Data,function(i,v){
 							if(Data[i]["name"]==that.series.name)
-							{d= Data[i];
-							return false;}
+							{
+								d= Data[i];
+							return false;
+						}
 						});
+						var base_percent=0;
+						if(d["data"][0]!=0)
+						base_percent=(d["data"][this.point.x]/d["data"][0])*100;
 			    				
 						return  '<div>' + 
-                              	'<div class="p-n">'+this.x+'</div><br>'+
-                                '<div class="p-n">'+this.series.name+': <b>'+Math.round(this.point.y)+'%</b></div>' +
-                                '</div><br>'+
-                                '<div class="p-n">Total Deals: <b>'+getNumberWithCommasForCharts(d["data"][this.point.x])+'</b></div>';
+                              	'<div class="p-n">'+this.x+'</div>'+
+                                '<div class="p-n text-cap"><font color='+this.series.color+'>'+this.series.name+'</font>: <b>'+Math.round(this.point.y)+'%</b></div>' +
+                                
+                                '<div class="p-n">'+Math.round(base_percent)+'% of <b>'+categories[0]+'</b></div></div>' +
+                                '<div class="p-n">Deals: <b>'+getNumberWithCommasForCharts(d["data"][this.point.x])+'</b></div>';
                         
 						}
 			    },
