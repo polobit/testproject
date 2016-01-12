@@ -231,9 +231,7 @@ function serializeLhsFilters(element)
 			RHS_NEW_VALUE = getGMTEpochFromDate(date);
 		}
 		else {
-			date = new Date(date.getTime() + (24 * 60 * 60 * 1000) - 1);
-
-			date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+			date = new Date(getGMTEpochFromDate(date) + (24 * 60 * 60 * 1000) - 1);
 
 			RHS_NEW_VALUE = date.getTime();
 		}
