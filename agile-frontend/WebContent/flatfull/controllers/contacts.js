@@ -997,6 +997,7 @@ var ContactsRouter = Backbone.Router.extend({
 					};
 					// Fetch collection
 					_that.contact_custom_view.collection.fetch();
+					contactListener();
 					
 				});
 		
@@ -1008,6 +1009,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#contacts-listener-container').find('.contacts-div').html(this.contact_custom_view.el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
+
 			CONTACTS_HARD_RELOAD = true;
 		}
 		

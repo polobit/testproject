@@ -1,8 +1,8 @@
 var timer = undefined;
 function contactListener()
 {
-	$('#contacts-custom-view-model-list').off('mouseenter','tr');
-		$('#contacts-custom-view-model-list').on('mouseenter','tr',function(e){
+	$('#contacts-table').off('mouseenter','tr');
+		$('#contacts-table').on('mouseenter','tr',function(e){
 			//e.stopPropagation();
 			var left=e.pageX;
             var that=$(this);
@@ -54,8 +54,8 @@ function contactListener()
 		 	}
 		 }, 1000);
 });
-		$('#contacts-custom-view-model-list').off('mouseleave','tr');
-	$('#contacts-custom-view-model-list').on('mouseleave','tr',function(){
+		$('#contacts-table').off('mouseleave','tr');
+	$('#contacts-table').on('mouseleave','tr',function(){
 		var that=$(this);
 	setTimeout(function() {
 		if (!insidePopover){
