@@ -352,8 +352,8 @@ user_reports :function(callReportUrl){
 					if(data["goalCount"]==0)
 					{
 						$('#' + selector1)
-										.html(
-												'<div class="portlet-error-message" style=" font-size: 14px;font-style: normal;padding-top: 174px;padding-bottom : 203px">No Deals Goals set </div>');
+									.html(
+										'<div class="portlet-error-message" style=" font-size: 14px;font-style: normal;padding-top: 174px;padding-bottom : 203px">No Deals Goals set </div>');
 								
 					}
 					else{
@@ -383,7 +383,8 @@ user_reports :function(callReportUrl){
 				var div='';
 				var pipeline_json=[];
 				$.each(data,function(index,data1){
-				 	 $.each(data1,function(k,v){
+				$.each(data1,function(index,data2){
+				 	 $.each(data2,function(k,v){
 				 	div=div.concat('<div id='+k+' class="conversion_track col-sm-4 panel wrapper"><b>'+k+'</b>');
 				 	//var innerdiv='';
 				 	var index=0;
@@ -403,15 +404,20 @@ user_reports :function(callReportUrl){
 				 	var percent='';
 				 	var value;
 				 	var total=0;
+				 	var first_name;
+				 		var first;
 				 	$.each(v,function(k1,v1){
 				 		var percent='';
+				 		var percent_base='';
+				 		
 				 		total=total+v1;
 				 		if(index==0){
 				 				if(v1!=0)
 				 				percent=100;
 				 				else
 				 					percent=0;
-				 				var class_name="first";
+				 				first=v1;
+				 				first_name=k1;
 				 			}
 				 			else
 				 			{
@@ -419,14 +425,23 @@ user_reports :function(callReportUrl){
 				 				percent=(v1*100)/value;
 				 				else
 				 					percent=0;
+				 				if(first!=0)
+				 					percent_base=(v1*100)/first;
 				 			}
 				 				
 				 			value=v1;
 				 		index++;
-				 			div=div.concat('<div id="'+class_name+'" class="'+k1+'">'+
-              '<span class="pull-right text-primary">'+Math.round(percent)+'% ('+v1+')</span>'+
+				 		if(first_name==k1)
+				 			div=div.concat('<div class="'+k1+'">'+
+				 				'<span class="pull-right text-primary">(' +v1+')</span>'+
+				 				'<span>'+k1+'</span>'+
+           				' </div>')
+				 		else
+				 			div=div.concat('<div class="'+k1+'">'+
+              '<span class="pull-right text-primary">'+Math.round(percent)+'% ('+percent_base+'% of ' +first_name+')(' +v1+')</span>'+
               '<span>'+k1+'</span>'+
-           ' </div>'+
+           ' </div>');
+				 			div=div.concat(
             '<div class="progress progress-xs m-t-sm bg-light">'+
               '<div class="progress-bar bg-primary" data-toggle="tooltip" data-original-title="'+Math.round(percent)+'%" style="width: '+Math.round(percent)+'%"></div>'+
             '</div>');
@@ -439,7 +454,8 @@ user_reports :function(callReportUrl){
 				 		//$('.conversion_track').hide();
 				 	
 				 });
-});				 $(".converionsPipeline").html(div);
+});				
+}); $(".converionsPipeline").html(div);
 				 $('.hidden').parents('.conversion_track').remove();
 				 if($('.converionsPipeline').children().length==0)
 				 	$('.converionsPipeline').parents('.row').hide();

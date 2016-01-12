@@ -485,7 +485,7 @@ public class ReportsUtil
 			dataJson.put("soldDeals",soldCount);
 			dataJson.put("avgSalesValue",avgValue);
 			
-			List<Opportunity> closedDeals=OpportunityUtil.getDealsWithOwnerandPipeline(ownerId,null,minTime, maxTime);
+		/*	List<Opportunity> closedDeals=OpportunityUtil.getDealsWithOwnerandPipeline(ownerId,null,minTime, maxTime);
 			if(closedDeals!=null )
 			{
 				
@@ -499,7 +499,7 @@ public class ReportsUtil
 				avgDealsClosure=(double) Math.round(avgDealsClosure/closedDeals.size());
 			}
 			
-			dataJson.put("avgDealClosetime", avgDealsClosure);
+			dataJson.put("avgDealClosetime", avgDealsClosure);*/
 			/*int contact_count=ContactUtil.getContactsCountForOwner(ownerId,minTime,maxTime);
 			List<Activity> contact_created=ActivityUtil.getActivitiesByActivityType("CONTACT_CREATE",ownerId,minTime,maxTime);
 			dataJson.put("contactCount", contact_count);

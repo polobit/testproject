@@ -2318,6 +2318,7 @@ public class OpportunityUtil
 
 		JSONObject Track_conversion = new JSONObject();
 		JSONObject Track_conversion_User = new JSONObject();
+		JSONObject Track_user_pair = new JSONObject();
 		List<DomainUser> domainUsersList=new ArrayList<DomainUser>();
 		if(ownerId!=null && ownerId==0)
 			ownerId=null;
@@ -2365,7 +2366,7 @@ public class OpportunityUtil
 			Track_conversion.put(milestone.name, milestoneValue);
 			
 		}
-
+		
 		if(ownerId==null){
 			System.out.println("Owner check");
 			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
@@ -2374,7 +2375,8 @@ public class OpportunityUtil
 		}
 		for(DomainUser domainuser:domainUsersList)
 		{
-			Track_conversion_User.put(domainuser.name+'_'+domainuser.id, Track_conversion);
+			Track_user_pair.put(domainuser.name, Track_conversion);
+			Track_conversion_User.put(domainuser.id, Track_user_pair);
 		}
 		
 		}
@@ -2395,9 +2397,12 @@ public class OpportunityUtil
 				Milestone mile=MilestoneUtil.getMilestone(pipeline_id);
 
 				
-				if(Track_conversion_User.containsKey(opp.getOwner().name+'_'+opp.getOwner().id))
+				if(Track_conversion_User.containsKey(opp.getOwner().id.toString()))
 				{
-					JSONObject conversion = Track_conversion_User.getJSONObject(opp.getOwner().name+'_'+opp.getOwner().id);
+					JSONObject conversion_user = Track_conversion_User.getJSONObject(opp.getOwner().id.toString());
+					if(conversion_user.containsKey(opp.getOwner().name)){
+						
+						JSONObject conversion = conversion_user.getJSONObject(opp.getOwner().name);
 				if (conversion.containsKey(mile.name))
 				{
 					JSONObject mileObject = conversion.getJSONObject(mile.name);
@@ -2415,8 +2420,11 @@ public class OpportunityUtil
 
 						conversion.put(mile.name, mileObject);
 					}
-					Track_conversion_User.put(opp.getOwner().name+'_'+opp.getOwner().id, conversion);
+					conversion_user.put(opp.getOwner().name, conversion);
+					
 				}
+				Track_conversion_User.put(opp.getOwner().id, conversion_user);
+					}
 				}
 			}
 			catch(Exception e)
