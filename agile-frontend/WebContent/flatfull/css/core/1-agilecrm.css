@@ -3033,6 +3033,11 @@ width : 150px;
 	position:relative; top :-2px;
 
 }
+}
 table.hide-head-checkbox th label.i-checks {
       visibility: hidden;
+}
+.table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th,.table-striped>tbody>tr:hover>td{
+  background-color: #f9f9f9 !important;
+  
 }
