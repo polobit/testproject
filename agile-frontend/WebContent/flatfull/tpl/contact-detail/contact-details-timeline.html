@@ -204,6 +204,31 @@
 <div class="item post" id="id-{{@index}}">
 {{/if}}
     <div class="inner">
+
+	{{#if_entity "logPhone"}}
+
+            <div class="timestamp">{{created_time}}</div>
+            <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</div></div> -->
+			<div class="text-md text-cap">	
+				<div class="contact-job-title text-sm custom-color  wrapper-xs bg-light-color">
+					<i class="icon-list-alt text-muted p-r-xs"></i>{{subject}}
+				</div>
+			</div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body wrapper-sm">
+				<div class="text-sm">
+					{{#if_equals callType "inbound"}}Incoming{{else}}Outgoing{{/if_equals}} call {{status}} 
+					{{#if_equals status "completed"}}  - {{toProperFormat duration}} 
+					{{else}}
+						{{#if_equals status "answered"}}   - {{toProperFormat duration}} 
+						{{else}}
+						{{/if_equals}}	
+					{{/if_equals}}
+ 				</div>
+                <div class="text-sm">{{description}}</div>
+            </div>
+        {{/if_entity}}
+
         {{#if_entity "note"}}
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</div></div> -->
