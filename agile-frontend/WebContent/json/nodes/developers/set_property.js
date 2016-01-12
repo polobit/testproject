@@ -25,6 +25,7 @@
             "label": "Set",
             "category": "Settings",
             "name": "action",
+            "id":"action",
             "event":"onclick",
             "eventHandler":"remove_property",
             "options": {

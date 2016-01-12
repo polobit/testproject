@@ -758,13 +758,24 @@ function insertSelectedOption(ele ,target_id)
 	$('#new_field').val($(ele).find(':selected').val());
 
 }
-function remove_property(ele, target_id)
-{
- 	var curValue = $(ele).val();
- 	$("#updated_value").prop('disabled', true).val('');
-}
-function add_property(ele, target_id)
-{
-	var	curValue = $(ele).val();
-	$("#updated_value").prop('disabled', false);
+	function remove_property(ele, target_id)
+	{
+	 	$("#updated_value").prop('disabled', true).val('');
+	}
+	function add_property(ele, target_id)
+	{
+		$("#updated_value").prop('disabled', false);
+	}
+
+
+//for edit set_property_node
+function setPropertyNode(jsonData){
+	if(jsonData){
+    			for (var i=0;i<jsonData.length;i++){
+    				if(jsonData[i].name == "action" && jsonData[i].value == "SET_NULL")
+    					{
+    						$("#updated_value").prop('disabled', true);
+    					}
+    		}
+    	}
 }
