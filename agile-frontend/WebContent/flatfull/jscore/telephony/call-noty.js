@@ -318,8 +318,6 @@ function showSkypeCallNoty(message){
 				}else if(message.state == "connected"){
 					
 					Skype_Call_Noty = noty({ text : messageHtml, type : "success", layout : "bottomLeft", buttons : [
-		    { addClass : 'btn btn-sm btn-default noty_skype_mute', text : '<i class="fa fa-microphone"></i>' },
-		    { addClass : 'btn btn-sm btn-default noty_skype_unmute none', text : '<i class="fa fa-microphone-slash"></i>' },
 		    { addClass : 'btn btn-sm btn-default noty_skype_dialpad', text : '<i class="icon-th text-base" style="vertical-align: middle;"></i>' }, 
 			{ addClass : 'btn btn-sm btn-danger noty_skype_hangup', text : 'Hangup'}
 								] });
@@ -343,7 +341,7 @@ function showSkypeCallNoty(message){
 					if (notification_prefs.notification_sound != 'no_sound')
 						play_sound(notification_prefs.notification_sound);
 				
-				}else if(message.state == "refused"){	
+				}else if(message.state == "busy"){	
 					
 					Skype_Call_Noty = noty({ text : messageHtml, type : "information", layout : "bottomLeft", timeout : 3000});
 			
@@ -352,7 +350,7 @@ function showSkypeCallNoty(message){
 					
 					Skype_Call_Noty = noty({ text : messageHtml, type : "error", layout : "bottomLeft", timeout : 3000});
 					
-				}else if(message.state == "ended"){
+				}else if(message.state == "ended" || message.state == "refused" || message.state == "missed"){
 					
 
 					

@@ -1,8 +1,9 @@
 var default_call_option = { "callOption" : [] };
 var callOptionDiv = "" ;
-var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null };
+var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "calledFrom":null };
 var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false }
 var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
+var callerObjectId;
 $(function()
 {
 	initToPubNub();
@@ -74,9 +75,10 @@ function globalCallWidgetSet()
 												var temp = { "name" : widget.name, "logo" : widget.mini_logo_url };
 												addtoCallOption(temp);
 												var name = widget.name;
-												callOptionDiv = callOptionDiv
-														.concat("<img class ='" + name + "_call c-p active' src='" + widget.mini_logo_url + "' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" + widgetCallName[name] + "'>");
-
+												if(name != "CallScript"){
+													callOptionDiv = callOptionDiv
+													.concat("<img class ='" + name + "_call c-p active' src='" + widget.mini_logo_url + "' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" + widgetCallName[name] + "'>");
+												}
 											}
 										});
 
@@ -271,6 +273,20 @@ function sendTestCommand()
 	
 	}
 
+function sendNotConfigured(widget)
+{
+			var command = "notConfigured";
+			var number =  "";
+			var callId = "";
+			if(widget == "Skype"){
+				sendMessageToSkypeClient(command,number,callId);
+			}else{
+				sendMessageToBriaClient(command,number,callId);
+			}
+			
+			return;
+}
+
 function replicateglobalCallVariable()
 {
 
@@ -291,6 +307,7 @@ function resetglobalCallVariables()
 	globalCall.callId = null;
 	globalCall.callNumber = null;
 	globalCall.lastReceived = null;
+	globalCall.calledFrom = null;
 	if (globalCall.timeObject != null)
 	{
 		clearTimeout(globalCall.timeObject);
@@ -313,6 +330,11 @@ function handleCallRequest(message)
 	// Display message in stream.
 	if ((message || {}).callType == "Bria")
 	{
+		var index = containsOption(default_call_option.callOption, "name", "Bria");
+		if( index == -1){
+			sendNotConfigured("Bria");
+			return;
+		}
 		if (message.state == "lastCallDetail")
 		{
 			globalCallForActivity.duration = message.duration;
@@ -348,6 +370,10 @@ function handleCallRequest(message)
 						try
 						{
 							$('#briaCallId').parents("ul").last().remove();
+							if(globalCall.calledFrom == "bria"){
+								resetglobalCallVariables();
+								resetglobalCallForActivityVariables();
+							}
 						}
 						catch (e)
 						{
@@ -364,9 +390,11 @@ function handleCallRequest(message)
 		}
 		else if (message.state == "closed")
 		{
-			showNotyPopUp("error", ("Bria is not running"), "bottomRight");
-			resetglobalCallVariables();
-			resetglobalCallForActivityVariables();
+			if(globalCall.calledFrom == "bria"){
+				showNotyPopUp("error", ("Bria is not running"), "bottomRight");
+				resetglobalCallVariables();
+				resetglobalCallForActivityVariables();
+			}
 			return;
 		}
 		showBriaCallNoty(message);
@@ -374,7 +402,11 @@ function handleCallRequest(message)
 	}
 	else if ((message || {}).callType == "Skype")
 	{
-		/*
+		var index = containsOption(default_call_option.callOption, "name", "Skype");
+		if( index == -1){
+			sendNotConfigured("Skype");
+			return;
+		}
 		// start from here
 		if (message.state == "lastCallDetail")
 		{
@@ -389,12 +421,13 @@ function handleCallRequest(message)
 			try
 			{
 				
-				var contact = agile_crm_get_contact();
+				//var contact = agile_crm_get_contact();
 
 				var phone = $("#skype_contact_number").val();
 				if (!phone || phone == "")
 				{
-					phone = getPhoneWithSkypeInArray(contact.properties)[0];
+					phone = agile_crm_get_contact_properties_list("phone")[0].value;
+					//phone = getPhoneWithSkypeInArray(contact.properties)[0];
 				}
 				if (phone == num)
 				{
@@ -404,6 +437,7 @@ function handleCallRequest(message)
 			catch (e)
 			{
 			}
+			globalCallForActivity.requestedLogs = false;
 			return;
 		}
 		else if (message.state == "error")
@@ -416,6 +450,10 @@ function handleCallRequest(message)
 						try
 						{
 							$('#skypeCallId').parents("ul").last().remove();
+							if(globalCall.calledFrom == "skype"){
+								resetglobalCallVariables();
+								resetglobalCallForActivityVariables();
+							}
 						}
 						catch (e)
 						{
@@ -433,14 +471,16 @@ function handleCallRequest(message)
 		}
 		else if (message.state == "closed")
 		{
-			showNotyPopUp("error", ("Skype is not running"), "bottomRight");
-			resetglobalCallVariables();
-			resetglobalCallForActivityVariables();
+			if(globalCall.calledFrom == "skype"){
+				showNotyPopUp("error", ("Skype is not running"), "bottomRight");
+				resetglobalCallVariables();
+				resetglobalCallForActivityVariables();
+			}
 			return;
 		}
 		showSkypeCallNoty(message);
 		return;
-	*/
+	
 		}
 }
 
@@ -489,7 +529,7 @@ function setTimerToCheckDialing(name)
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
 		}
-	}, 15000);
+	}, 20000);
 }
 
 /**

@@ -34,8 +34,13 @@ $(function()
 		
 		globalCall.callStatus = "dialing";
 		sendMessageToBriaClient(command,number,callId);
+		globalCall.calledFrom = "bria";
 		setTimerToCheckDialing("bria");
-
+		try{
+			var contactDetailsObj = agile_crm_get_contact();
+			callerObjectId = contactDetailsObj.id;
+		}catch (e) {
+		}
 	});
 	
 // }
@@ -301,7 +306,7 @@ function _getMessageBria(message, callback){
 	}else if(state == "ended"){
 		callback("");
 		if(globalCall.callStatus && globalCall.callStatus == "Connected"){
-			globalCall.callStatus = "Completed";
+			globalCall.callStatus = "Answered"; //change form completed
 		}else if(globalCall.callStatus && globalCall.callStatus == "Connecting"){
 			globalCall.callStatus = "Busy";
 		}else if(globalCall.callStatus && globalCall.callStatus == "Ringing"){
@@ -338,7 +343,7 @@ function saveCallNoteBria(){
 	var desc;
 	resetglobalCallForActivityVariables();
 	
-	if(callStatus == "Completed"){
+	if(callStatus == "Answered"){
 		desc = "Done";
 	}
 	
@@ -351,7 +356,7 @@ function saveCallNoteBria(){
 	    	}
 	    	contact = responseJson;
 	    	contact_name = getContactName(contact);
-	    	if(callStatus == "Completed"){
+	    	if(callStatus == "Answered"){
 				var el = $('#noteForm');
 			 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+contact_name+'</li>');
 			 	$("#noteForm #subject").val(noteSub);
@@ -368,7 +373,7 @@ function saveCallNoteBria(){
 		var id = App_Contacts.contactDetailView.model.get('id');
 		contact = agile_crm_get_contact();
 		contact_name = getContactName(contact);
-		if( callStatus == "Completed"){
+		if( callStatus == "Answered"){
 			var el = $('#noteForm');
 		 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ id +'">'+contact_name+'</li>');
 		 	$("#noteForm #subject").val(noteSub);
@@ -401,13 +406,27 @@ function autosaveNoteByUser(note){
  * This will save the activity for call 
  */
 function saveCallActivityBria(call){
-	
-	$.post( "/core/api/widgets/bria/savecallactivity",{
-		direction: call.direction, 
-		phone: call.phone, 
-		status : call.status,
-		duration : call.duration
-		});
+
+	if(call.direction == "Outgoing" || call.direction == "outgoing"){
+		if(!callerObjectId){
+			return;
+		}
+		$.post( "/core/api/widgets/bria/savecallactivityById",{
+			id:callerObjectId,
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration 
+			});
+		
+	}else{
+		$.post( "/core/api/widgets/bria/savecallactivity",{
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration
+			});
+	}
 }
 
 /*
