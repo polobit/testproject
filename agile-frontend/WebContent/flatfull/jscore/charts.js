@@ -2005,15 +2005,22 @@ function LineforComparison(url, selector, name,show_loading)
 			var series=[];
 			var Data=[];
 			var index=0;
+			var actual_data=[];
 			
 			var sortedKeys = [];
 			$.each(data,function(k,v){
-				sortedKeys.push(k);
+				actual_data.push(v);
+			$.each(v,function(k1,v1){
+				sortedKeys.push(k1);
 			});
+		});
 			sortedKeys.sort();
 			var sortedData = {};
 			$.each(sortedKeys,function(index,value){
-				sortedData[''+value] = data[''+value];
+				$.each(actual_data,function(index1,val){
+					if(val[''+value]!=undefined)
+				sortedData[''+value] = val[''+value];
+			});
 
 			});
 
@@ -2089,6 +2096,7 @@ function LineforComparison(url, selector, name,show_loading)
 				});
 			}
 			});
+
 				
 			if(Math.ceil(categories.length/10)>0)
 			{
