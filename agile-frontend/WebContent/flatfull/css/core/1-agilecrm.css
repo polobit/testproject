@@ -3001,6 +3001,7 @@ width: 915px;
 {
 	cursor: progress;
 }
+
 .width-goal
 {
 width : 150px;
@@ -3037,4 +3038,8 @@ width : 150px;
 table.hide-head-checkbox th label.i-checks {
       visibility: hidden;
 }
+
+.app-aside-fixed:not(.app-aside-dock) aside {
+	position: fixed;
+	height: 100vh;
 }

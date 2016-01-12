@@ -446,7 +446,7 @@ Proceed to Pay
 <div class="form-group m-b-sm">
               <label class="col-sm-6 control-label p-t-none ">Emails Remaining</label>
               <div class="col-sm-6">
-               {{getRemaininaEmails}} {{#is_paid_emails}}{{else}}<span class="text-muted text-xs m-l-sm">(Next Renewal {{emails_next_renewal_time}})</span> {{/is_paid_emails}}
+               {{getRemaininaEmails}} {{#is_paid_emails}}{{else}}<span class="text-muted text-xs m-l-sm">(Next Renewal <span id="next_emails_renewal">{{emails_next_renewal_time}}</span>)</span> {{/is_paid_emails}}
               </div>
             </div>
 
