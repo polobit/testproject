@@ -626,6 +626,7 @@ var ContactsRouter = Backbone.Router.extend({
 			} });
 
 		var el = this.contactDetailView.render(true).el;
+		$(el).find('.content-tabs').tabCollapse(); 
 
 		$('#content').html(el);
 

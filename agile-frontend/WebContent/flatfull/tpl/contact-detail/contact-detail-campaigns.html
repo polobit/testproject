@@ -1,5 +1,5 @@
 <script id="campaigns-collection-template" type="text/html">
-<div class="wrapper p-t-none">
+<div class="wrapper">
 {{#contact_model}}
 	<div>
 		 {{#contact_campaigns this "campaignStatus"}}
@@ -75,7 +75,7 @@
 <div class="clearfix"></div>
 		{{#unless this.length}}
         <div class="wrapper p-t-none">
-            <div class="slate-content">
+            <div class="slate-content mobile-pad-content m-t-none">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
