@@ -30,7 +30,7 @@
             "eventHandler":"remove_property",
             "target_type": "updated_value",
             "options": {
-            "SET_NULL": "set to null (blank)"
+            "SET_NULL": "delete"
             },
             "style": {
                 "vertical-align": "-3px",
