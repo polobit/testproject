@@ -2305,7 +2305,6 @@ public class OpportunityUtil
 
 		JSONObject Track_conversion = new JSONObject();
 		JSONObject Track_conversion_User = new JSONObject();
-		//JSONObject Track_user_pair = new JSONObject();
 		List<DomainUser> domainUsersList=new ArrayList<DomainUser>();
 		if(ownerId!=null && ownerId==0)
 			ownerId=null;
@@ -2331,6 +2330,7 @@ public class OpportunityUtil
 				if(opp.getPipeline_id().equals(Track))
 					opportunitiesList.add(opp);
 			}
+			System.out.println("Inside list"+opportunitiesList);
 			}
 		}
 		else
@@ -2362,9 +2362,12 @@ public class OpportunityUtil
 		}
 		for(DomainUser domainuser:domainUsersList)
 		{
+			System.out.println("domainuser" + domainuser);
 			JSONObject Track_user_pair = new JSONObject();
 			Track_user_pair.put(domainuser.name, Track_conversion);
+			System.out.println("user pair"+Track_user_pair);
 			Track_conversion_User.put(domainuser.id, Track_user_pair);
+			System.out.println("Conversion Json" + 	Track_conversion_User);
 		}
 		
 		}
@@ -2377,7 +2380,7 @@ public class OpportunityUtil
 			
 			for(Opportunity opp : opportunitiesList)
 			{
-					
+					System.out.println("Inside deal List");
 				try{
 				//int count=0;
 				Long pipeline_id = opp.getPipeline_id();
@@ -2439,32 +2442,33 @@ public class OpportunityUtil
 			conditionsMap1.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
 			conditionsMap2.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
 		}
-			conditionsMap2.put("archived", false);
+			//conditionsMap2.put("archived", false);
 			conditionsMap2.put("created_time >= ", minTime);
 			conditionsMap2.put("created_time <= ", maxTime);
 		conditionsMap1.put("milestone_changed_time >= ", minTime);
 		conditionsMap1.put("milestone_changed_time <= ", maxTime);
-		conditionsMap1.put("archived", false);
+		//conditionsMap1.put("archived", false);
 		try
 		{
 			
-					List<Opportunity> list = dao.listByProperty(conditionsMap1);
+					List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap1,"-milestone_changed_time");
 					System.out.println("list1--"+list);
-					List<Opportunity> list2 = dao.listByProperty(conditionsMap2);
+					List<Opportunity> list2 = dao.listByPropertyAndOrder(conditionsMap2,"-created_time");
 					System.out.println("list2--"+list2);
-				/*	if (list != null)
-					{
-						ownDealsSet.addAll(list);
-						System.out.println("set1--"+ownDealsSet);
+					List<Opportunity> list_main = new ArrayList<Opportunity>();
+					List<Opportunity> list2_main = new ArrayList<Opportunity>();
+					for(Opportunity it1:list){
+						if(it1.archived==false)
+							list_main.add(it1);
 					}
-					if (list2 != null)
-					{
-						ownDealsSet.addAll(list2);
-						System.out.println("set2--"+ownDealsSet);
-					}*/
+					for(Opportunity it2:list2){
+						if(it2.archived==false)
+							list2_main.add(it2);
+					}
+				
 				boolean flag=false;
-			for(Opportunity list_it:list){
-				for(Opportunity list_it2:list2){
+			for(Opportunity list_it:list_main){
+				for(Opportunity list_it2:list2_main){
 					if(!list_it.id.equals(list_it2.id)){
 						flag=true;
 						continue;
@@ -2475,13 +2479,13 @@ public class OpportunityUtil
 					}
 				}
 				if(flag)
-					list2.add(list_it);
+					list2_main.add(list_it);
 			}
 			//conversionList=new ArrayList<>(ownDealsSet);
-			System.out.println("list2"+list2);
+			System.out.println("list2"+list2_main);
 			//System.out.println("main list"+conversionList);
 			
-			return list2;
+			return list2_main;
 		}
 		catch (Exception e)
 		{

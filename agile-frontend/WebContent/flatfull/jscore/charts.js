@@ -1985,11 +1985,7 @@ function LineforComparison(url, selector, name,show_loading)
 	// callback
 	setupCharts(function()
 	{
-		if (reportDataRequest && reportDataRequest.readyState==1 && reportDataRequest.state()=="pending")
-		{
-			reportDataRequest.abort();
-		}
-
+		
 		// Loads statistics details from backend i.e.,[{closed
 		// date:{total:value, pipeline: value},...]
 		fetchReportData(url, function(data)
@@ -2097,7 +2093,7 @@ function LineforComparison(url, selector, name,show_loading)
 			}
 			});
 
-				
+				if(categories!=undefined){
 			if(Math.ceil(categories.length/10)>0)
 			{
 				min_tick_interval = Math.ceil(categories.length/10);
@@ -2106,8 +2102,8 @@ function LineforComparison(url, selector, name,show_loading)
 					min_tick_interval = 4;
 				}
 			}
-			
-				$.each(series, function(k1, v1)
+			}
+			/*	$.each(series, function(k1, v1)
 					{
 						v1.name=v1.name.split("_")[0];
 					});
@@ -2115,7 +2111,7 @@ function LineforComparison(url, selector, name,show_loading)
 				$.each(Data, function(k1, v1)
 					{
 						v1.name=v1.name.split("_")[0];
-					});
+					});*/
 			// After loading and processing all data, highcharts are initialized
 			// setting preferences and data to show
 			chart = new Highcharts.Chart({
