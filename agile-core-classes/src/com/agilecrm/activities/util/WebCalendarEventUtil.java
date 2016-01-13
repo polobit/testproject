@@ -94,7 +94,8 @@ public class WebCalendarEventUtil
 		// Get all permutations possible based on selected slottime(duration) in
 		// 24 Hr.
 		List<List<Long>> possibleSlots = getAllPossibleSlots(slotTime, date, startTime, timezone, timezoneName);
-
+		//List<List<Long>>freeSlots = getAllFreeSlots(slotTime, date, startTime, timezone, timezoneName, endTime);
+		
 		// Get all filled slots from Agile calendar.
 		List<List<Long>> filledAgileSlots = getFilledAgileSlots(agileuserid, slotTime, startTime, endTime);
 
@@ -446,7 +447,9 @@ public class WebCalendarEventUtil
 		// Number of slots possible within 24Hrs with selected slot
 		// time(duration)
 		int itr = (60 / slotTime) * 24;
-
+		
+		// 3400 sec per hour. 86400 per day.
+		
 		// Make slots
 		for (int i = 1; i <= itr; i++)
 		{
@@ -477,7 +480,7 @@ public class WebCalendarEventUtil
 
 		return listOfLists;
 	}
-
+	
 	/**
 	 * Returns filled time slots on selected date from Agile calendar. Make
 	 * slots size of filled slots as per selected slot time(duration).
@@ -500,10 +503,12 @@ public class WebCalendarEventUtil
 		List<List<Long>> filledSlots = new ArrayList<List<Long>>();
 
 		// Get agile events on selected timings
-		List<Event> agileEvents = EventUtil.getEvents(startTime, endTime, userid);
+		//List<Event> agileEvents = EventUtil.getEvents(startTime, endTime, userid);
+		
+		List<Event> loadEvents = EventUtil.getBlockedEvents(startTime, endTime, userid);
 
 		// Add filled slot in nested list
-		for (Event e : agileEvents)
+		for (Event e : loadEvents)
 		{
 			/*
 			 * Make sub slot of filled slot as per selected duration(slot time)
@@ -1357,5 +1362,30 @@ public class WebCalendarEventUtil
 		}
 		return slots_array;
 	}
-
+	
+	public static void getBaseDetails() {
+		Long user_id = 5629499534213120L;
+		String date = "Wed Feb 03 2016 11:15:34 GMT 0530 (India Standard Time)";
+		int slot_time = 60;
+		String timezone_name = "Asia/Kolkata";
+		long epoch_time = 1453314600L;
+		long startTime = 1453314600L;
+		long endTime = 1453401000L;
+		// long agile_user_id = 5716606839685120L;
+		Long agile_user_id = null;
+		int timezone = -330;
+		try {
+			List<List<Long>> list = WebCalendarEventUtil.getSlots(user_id,
+					slot_time, date, timezone_name, epoch_time, startTime,
+					endTime, agile_user_id, timezone);
+			System.out.println(list);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }
