@@ -314,6 +314,7 @@ $('.popover').on('click', '.contact-owner-list-popover', function(e){
 		    	// Replaces old owner details with changed one
 				$('#contact-owner-popover').text(new_owner_name);
 				$('#contact-owner-popover').attr('data', new_owner_id);
+				$('#contact-owner-popover').attr('title' , new_owner_name);
 				
 				// Showing updated owner
 				$('#contact-owner-popover').css('display', 'inline-block'); 
