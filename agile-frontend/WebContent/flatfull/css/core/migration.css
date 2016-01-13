@@ -1656,6 +1656,10 @@ a#email-reply{
   #contact-view-model-list {
    left: 0px;
   }
+  .contact-view-sort-list {
+   left: 0px;
+  }
+
   #campaign-select,#document-select {
  display: block!important;
  margin: 0 auto 10px; 
