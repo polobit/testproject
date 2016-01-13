@@ -25,25 +25,13 @@
 
                     <span class="navigation">
 
-                      {{#next_prev_ticket_exists 'previous'}}
                       <a href="" class="pull-left text-muted text-xs previous-ticket" title="Previous Ticket">
                         <i class="icon icon-chevron-left" style="vertical-align: middle;"></i>
                        </a>
-                      {{else}}
-                       <span class="pull-left text-disabled text-xs">
-                        <i class="icon icon-chevron-left" style="vertical-align: middle;"></i>
-                       </span>
-                      {{/next_prev_ticket_exists}}
-
-                      {{#next_prev_ticket_exists 'next'}}
+                     
                       <a href="" class="pull-right text-muted text-xs next-ticket" title="Next Ticket"><i class="icon icon-chevron-right" style="vertical-align: middle;"></i></a>
-                       {{else}}
-                       <span class="pull-right text-disabled text-xs">
-                        <i class="icon icon-chevron-right" style="vertical-align: middle;"></i>
-                       </span>
-                      {{/next_prev_ticket_exists}}
-
-                    </span>
+                     
+                     </span>
                     </div>
                     {{/is_ticket_collection_available}}
 
@@ -350,6 +338,9 @@
           <div class="wrapper">
  
             <div id="widgets" class="contact_{{contactID}}">
+              <div class="text-center">
+                <img id="widget_load_img " src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/ajax-loader-cursor.gif" class="m-t-sm m-b">
+              </div>
             </div>  
           </div>  
         </div><!-- End of row-row-->

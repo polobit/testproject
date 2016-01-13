@@ -22,15 +22,6 @@ Handlebars.registerHelper('ticket_collection_exists', function(options) {
 	return options.inverse(this);
 });
 
-Handlebars.registerHelper('next_prev_ticket_exists', function(action_type,
-		options) {
-
-	if (Tickets.next_prev_ticket_exists(action_type))
-		return options.fn(this);
-
-	return options.inverse(this);
-});
-
 Handlebars.registerHelper('get_ticket_id', function(action_type, options) {
 	return Tickets.get_next_prev_ticket_id(action_type);
 });
