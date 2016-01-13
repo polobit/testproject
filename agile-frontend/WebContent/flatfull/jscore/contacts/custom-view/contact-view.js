@@ -152,6 +152,9 @@ function setupViews(cel, button_name) {
 			// the view is show in the custom view button.
 			if (button_name)
 				$("#view-list", cel).find('.custom_view').append(button_name);
+			
+			setUpContactSortFilters(cel);
+
 			//updates the selected sort item to bold
 			updateSelectedSortKey($("#view-list", cel));
 			addClickEventsForSorting($("#view-list", cel));
@@ -163,6 +166,39 @@ function setupViews(cel, button_name) {
 
 		}, $("#view-list", cel));
 	// });
+}
+
+var CUSTOM_SORT_VIEW = undefined;
+function setUpContactSortFilters(el)
+{
+	if(CUSTOM_SORT_VIEW)
+	{
+		$("#contact-sorter", el).html(CUSTOM_SORT_VIEW.render(true).el);
+		return;	
+	}
+
+	var view = CONTACT_SORT_FIELDS_VIEW.view();
+	CUSTOM_SORT_VIEW = new view ({
+		data : sort_configuration.getContactSortableFields(),
+		templateKey : "contact-view-sort",
+		individual_tag_name : "li",
+		sort_collection : false,
+		postRenderCallback: function(el)
+		{
+			updateSelectedSortKey(el);
+		}
+
+	});
+
+	$("#contact-sorter", el).html(CUSTOM_SORT_VIEW.render(true).el);
+	addContactCustomFields();
+}
+
+function addContactCustomFields()
+{
+	$.getJSON("core/api/custom-fields/scope?scope=CONTACT", function(data){
+		CUSTOM_SORT_VIEW.collection.add(data);
+	});
 }
 
 function updateSelectedSortKey(el) {
