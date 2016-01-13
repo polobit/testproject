@@ -50,24 +50,29 @@ function getInvoices(accessToken){
 	var tok = "Bearer " + accessToken;
 	var obj = {email : Email};
 
-	$.ajax({
-		headers : {
-			"Accept-Language" : "en_US",
-			"Authorization" : tok
-		},
-		url : "https://api.paypal.com/v1/invoicing/search",
-		type : "POST",
-		contentType : "application/json",
-		data : JSON.stringify(obj),
-		complete : function(result) {
-			console.log("Paypal *** Invoices");
-			console.log(result);		
-			paypalOBJ = {};	
-			paymentINVCount = 1;			
-			paypalOBJ.invoices = result.responseJSON.invoices;
-			loadPaypalInvoices(0);					
-		}
-	});
+	if(Email && Email != ""){
+		$.ajax({
+			headers : {
+				"Accept-Language" : "en_US",
+				"Authorization" : tok
+			},
+			url : "https://api.paypal.com/v1/invoicing/search",
+			type : "POST",
+			contentType : "application/json",
+			data : JSON.stringify(obj),
+			complete : function(result) {
+				console.log("Paypal *** Invoices");
+				console.log(result);		
+				paypalOBJ = {};	
+				paymentINVCount = 1;			
+				paypalOBJ.invoices = result.responseJSON.invoices;
+				loadPaypalInvoices(0);					
+			}
+		});
+	}else{
+		paypalOBJ = {};
+		loadPaypalInvoices(0);
+	}	
 }
 
 function startPaypalWidget(contact_id){
