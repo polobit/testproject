@@ -71,14 +71,17 @@ function contactListener()
 var insidePopover=false;
 
 function attachEvents(tr,Contact_collection,listView,campaigns_view) {
-	$('.popover').off('mouseenter');
-	$('.popover').on('mouseenter', function() {
+	$('.popover').off('mouseenter','.popover-content');
+	$('.popover').on('mouseenter', '.popover-content',function() {
+		
 		insidePopover=true;
+	
 	});
-	$('.popover').off('mouseleave');
-	$('.popover').on('mouseleave', function() {
+	$('.popover').off('mouseleave','.popover-content');
+	$('.popover').on('mouseleave','.popover-content', function() {
 		insidePopover=false;
 		$(tr).popover('hide');
+		$('.popover').remove();
 	});
 	
 $('.popover').off('click', '#add-score')
@@ -402,4 +405,4 @@ function contact_list_starify(el,listView) {
         });
     });
     
-}
+}1
