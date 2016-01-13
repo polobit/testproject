@@ -465,7 +465,7 @@ var portlet_graph_utility = {
 	/**
 	 * To display deals assigned portlet as bar graph
 	 */
-	dealsAssignedBarGraph : function(selector, catges, dealsCountList) {
+	dealsAssignedBarGraph : function(selector, catges, dealsCountList, base_model) {
 		head
 				.js(
 						LIB_PATH + 'lib/flot/highcharts-3.js',
@@ -543,7 +543,7 @@ var portlet_graph_utility = {
 	 */
 	callsPerPersonBarGraph : function(selector, domainUsersList, series,
 			totalCallsCountList, callsDurationList, text, colors,
-			domainUserImgList) {
+			domainUserImgList,base_model) {
 			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
 		var pos = '' + column_position + '' + row_position;
 		var	height=domainUsersList.length*30+($('#'+selector).height()-30);
