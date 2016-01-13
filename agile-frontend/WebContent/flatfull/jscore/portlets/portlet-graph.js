@@ -369,6 +369,15 @@ var portlet_graph_utility = {
 								marginRight : 20,
 							// plotBorderWidth: 1,
 							// plotBorderColor: '#F4F4F5'
+							   events: {
+							   		load: function(){
+							   			console.log("load");
+							   			portlet_utility.toggle_chart_legends(this, base_model);
+							   		}, redraw : function(){
+							   			console.log("redraw");
+							   			portlet_utility.toggle_chart_legends(this, base_model);
+							   		}
+							   },
 							},
 							title : {
 								text : ''
@@ -466,7 +475,16 @@ var portlet_graph_utility = {
 											{
 												chart : {
 													type : 'bar',
-													marginRight : 20
+													marginRight : 20,
+													events: {
+												   		load: function(){
+												   			console.log("load");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}, redraw : function(){
+												   			console.log("redraw");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}
+												   },
 												},
 												title : {
 													text : ''
@@ -545,6 +563,15 @@ var portlet_graph_utility = {
 						            plotBorderWidth: 1,
 						            plotBorderColor: '#F4F4F5',
 						            height:height,
+						            events: {
+								   		load: function(){
+								   			console.log("load");
+								   			portlet_utility.toggle_chart_legends(this, base_model);
+								   		}, redraw : function(){
+								   			console.log("redraw");
+								   			portlet_utility.toggle_chart_legends(this, base_model);
+								   		}
+								   },
 						        },
 						        title: {
 						            text: ''
@@ -797,6 +824,15 @@ var portlet_graph_utility = {
 													type : 'bar',
 													marginRight : 20,
 													height:groupByList.length*30+($('#'+selector).height()-30),
+													events: {
+												   		load: function(){
+												   			console.log("load");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}, redraw : function(){
+												   			console.log("redraw");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}
+												   },
 												},
 												title : {
 													text : ''
@@ -990,7 +1026,17 @@ var portlet_graph_utility = {
 											{
 												chart : {
 													type : 'areaspline',
-													marginRight : 20
+													marginRight : 20,
+													events: {
+												   		load: function(){
+												   			console.log("load");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}, redraw : function(){
+												   			console.log("redraw");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}
+												   },
+
 												},
 												title : {
 													text : ''
@@ -1394,6 +1440,105 @@ var portlet_graph_utility = {
 												series : [ {
 													// name: 'Deal',
 													data : data
+												} ],
+												exporting : {
+													enabled : false
+												}
+											});
+						});
+	},
+	dealGoalsPieGraph : function(selector, data1,data2,colors)
+	{
+			var series = [];
+							series.push([ "Goals Left",
+									data2 - data1 ]);
+							series.push([ "Won", data1 ]);
+							//portlet_graph_utility.emailsOpenedPieChart(selector,series,data1,data2);
+							head
+				.js(
+						LIB_PATH + 'lib/flot/highcharts-3.js',
+						LIB_PATH + 'lib/flot/no-data-to-display.js',
+						function() {
+
+							$('#' + selector)
+									.highcharts(
+											{
+												chart : {
+													type : 'pie',
+													backgroundColor:'transparent',
+
+												},
+												colors : colors,
+												title : {
+													text : ''
+												},
+												tooltip : {
+													backgroundColor : '#313030',
+													borderColor : '#000',
+													borderRadius : 3,
+													/*style : {
+														color : '#EFEFEF'
+													},*/
+													enabled : true,
+													formatter:  function(){
+														
+													return  '<div class="p-n"><b><font color='+this.point.color+'>'+ this.point.name +' '+ Math.round(this.point.percentage).toString()+'%</font></b></div>';
+					                        
+												},
+												useHTML : true,
+												},
+												legend : {
+													itemStyle : {
+														fontSize : '10px',
+														color : '#98a6ad'
+													},
+													borderWidth : 0,
+													layout : 'vertical',
+													floating : true,
+													align : 'right',
+													verticalAlign : 'top',
+													symbolHeight: 0,
+													symbolWidth: 0,
+													symbolRadius: 0,
+																	labelFormatter : function()
+											{
+												if(this.name=="Won"){
+												var s = '<div> ' + (this.percentage)
+														.toFixed(2) + '%<b></div>';
+												return s;
+											}
+											}, 
+												},
+												plotOptions : {
+													series : {
+														borderWidth : 0,
+														states : {
+															hover : {
+																enabled : false
+															}
+														}
+													},
+													pie : {
+														borderWidth : 0,
+														//innerSize : 50,
+														dataLabels : {
+															enabled : false,
+															
+														},
+														showInLegend : true,
+														//enableMouseTracking : false,
+														point : {
+															events : {
+																legendItemClick : function() {
+																	return false;
+																}
+															}
+														}
+													}
+												},
+												series : [ {
+													name : 'Goal',
+													data : series
 												} ],
 												exporting : {
 													enabled : false
