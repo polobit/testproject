@@ -793,6 +793,9 @@ var Tickets = {
 						Ticket_Timeline.render_individual_ticket_timeline()
 					}
 
+					if($("#ticket-activities-model-list").length > 0)
+						App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
+				
 					if(callback)
 						callback(model);
 
@@ -843,25 +846,51 @@ var Tickets = {
 		current_ticket_index = (action_type == "previous") ? --current_ticket_index
 				: ++current_ticket_index;
 
-		if(!ticket_collection.at(current_ticket_index))
+		var actual_index_count = App_Ticket_Module.ticketsCollection.collection.toJSON()[App_Ticket_Module.ticketsCollection.collection.toJSON().length - 1].count - 1;
+
+		if(current_ticket_index < 0 || current_ticket_index >= actual_index_count)
 			return false;
+		
+		// if(!ticket_collection.at(current_ticket_index))
+		// return false;
 
 		return true;
 	},
 
-	get_next_prev_ticket_id: function(action_type){
-		var ticket_collection = App_Ticket_Module.ticketsCollection.collection;
-		var current_ticket_index = ticket_collection.indexOf(ticket_collection.get(Current_Ticket_ID));
+	ticket_detail_view_navigation : function(id, el){
 
-		current_ticket_index = (action_type == "previous") ? --current_ticket_index
-				: ++current_ticket_index;
+			var ticket_list_view = App_Ticket_Module.ticketsCollection;
+			if(!ticket_list_view)
+				return;
+
+			var ticket_collection = ticket_list_view.collection;
+
+			var collection_length = ticket_collection.length;
+
+		    var current_index = ticket_collection.indexOf(ticket_collection.get(id));
+
+		    var previous_ticket_id;
+		    var next_ticket_id;
+
+		    //fetch next set so that next link will work further.
+		    if(collection_length <= current_index+5) {
+		    	App_Ticket_Module.ticketsCollection.infiniScroll.fetchNext();
+		    }
+		    if (collection_length > 1 && current_index < collection_length && ticket_collection.at(current_index + 1) && ticket_collection.at(current_index + 1).has("id")) {
+		     	next_ticket_id = ticket_collection.at(current_index + 1).id
+		    }
+
+		    if (collection_length > 0 && current_index != 0 && ticket_collection.at(current_index - 1) && ticket_collection.at(current_index - 1).has("id")) {
+		    	previous_ticket_id = ticket_collection.at(current_index - 1).id
+		    }
+
+		    if(previous_ticket_id != null)
+		    	$('.navigation .previous-ticket', el).attr("href", "#tickets/filter/"+Ticket_Filter_ID+"/ticket/"+previous_ticket_id);
+		    if(next_ticket_id != null)
+		    	$('.navigation .next-ticket', el).attr("href", "#tickets/filter/"+Ticket_Filter_ID+"/ticket/"+next_ticket_id);
 		
-		if(current_ticket_index == null)
-			return null;
-
-		return ticket_collection.at(current_ticket_index).id;
 	},
-
+	
 	changeStatus : function(status, callback){
 
 		var url = "/core/api/tickets/change-status?status="+status+"&id=" + Current_Ticket_ID;
@@ -931,6 +960,10 @@ var Tickets = {
 	},
 
 	loadWidgets: function(){
+
+		var widgetState = _agile_get_prefs("hide_ticket_details_widgets");
+		if(widgetState && widgetState == "true")
+			return;
 
 		var model_coun = 0;
 
@@ -1037,6 +1070,9 @@ var Tickets = {
 			$(e.target).addClass('fa-indent').removeClass('fa-dedent');
 			else
 			$(e.target).addClass('fa-dedent').removeClass('fa-indent');
+
+			if(widgetStatus == false && $("#widgets-model-list").length == 0)
+				Tickets.loadWidgets();
 
 		});
 	},

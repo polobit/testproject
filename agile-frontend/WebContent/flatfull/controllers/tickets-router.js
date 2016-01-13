@@ -337,6 +337,9 @@ $("#right-pane").html(ticketView.render().el);
 
 				Tickets.initializeTicketSLA(el);
 
+				// Fill next, Prev navigation
+				Tickets.ticket_detail_view_navigation(id, el)
+
 				//Initializing type ahead for cc emails
 				agile_type_ahead("cc_email_field", el, tickets_typeahead, function(arg1, arg2){
 
@@ -876,6 +879,33 @@ $('#content').find('.helpdesk-tab').addClass('select');
 	 		});
 	 	});
 	},*/
+
+	renderActivitiesCollection : function(ticket_id, $ele, callback){
+
+	 	App_Ticket_Module.notesCollection = new Base_Collection_View({
+	 		url : '/core/api/tickets/activity?id=' + ticket_id,
+	 		templateKey : "ticket-activities",
+	 		sortKey:"created_time",
+	 		customLoader: true,
+	 		customLoaderTemplate: "ticket-notes-loader",
+	 		descending:true,
+	 		individual_tag_name : 'div',
+	 		postRenderCallback : function(el) {
+
+	 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					$("time", el).timeago();
+				});
+
+	 			if(callback)
+	 				callback();
+	 		}
+	 	});
+
+	 	App_Ticket_Module.notesCollection.collection.fetch();
+
+	 	$ele.html(App_Ticket_Module.notesCollection.el);
+	 },
 
 	/**
 	 * Fetches all notes related to given ticket id and renders html to provided element.

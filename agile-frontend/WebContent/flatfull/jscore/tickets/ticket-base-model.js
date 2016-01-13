@@ -16,6 +16,8 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click #workflows_list li a" : "executeWorkflows",
 
 		"click .toggle-timeline" : "toggleTimeline",
+		"click .toggle-activities-notes" : "toggleActivitiesAndNotes",
+
 		// "click #change-sla" : "changeSla",
 		"click .contact-deals" : "showContactDeals",
 		"mouseover .hover-edit" : "showEditIcon",
@@ -93,14 +95,17 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		e.preventDefault();
 
-		var $selected_option = $('select#ticket-assignee-list').find('option:selected');
+		// var $selected_option = $('select#ticket-assignee-list').find('option:selected');
 
 		var groupId = App_Ticket_Module.ticketView.model.toJSON().groupID;
+		var assigneeId = CURRENT_AGILE_USER.domainUser.id;
 
-		Tickets.sendReqToChangeAssignee(CURRENT_AGILE_USER.domainUser.id, groupId, App_Ticket_Module.ticketView.model.toJSON(), function(model){
-
-			$('.assign-to-me').hide();
+		$('#ticket-assignee').find("optgroup[data-group-id='"+groupId+"']").find("option[value='"+assigneeId+"']").attr('selected', 'selected');
 		
+		$('.assign-to-me').hide();
+
+		Tickets.sendReqToChangeAssignee(assigneeId, groupId, App_Ticket_Module.ticketView.model.toJSON(), function(model){
+
 			App_Ticket_Module.ticketView.model.set(model, {silent: true});
 		});
 		
@@ -244,14 +249,37 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		if($('.ticket-timeline-container').is(':visible'))
 		{
 			//Rendering ticket notes
+			$(".toggle-activities-notes").show();
 			App_Ticket_Module.renderNotesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
 		}
 		else{
+			$(".toggle-activities-notes").hide();
 			Ticket_Timeline.render_individual_ticket_timeline();
 			tooltip_text = 'Show comments';
 		}
 
 		$('.toggle-timeline').text(tooltip_text);
+	},
+
+	toggleActivitiesAndNotes : function(e){
+
+		var targetEle = $(".toggle-activities-notes");
+		var currentType = targetEle.attr("rel");
+
+		if(currentType && currentType == "notes"){
+			App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
+			targetEle.attr("rel", "activities");
+			targetEle.attr("data-original-title", "Show notes");
+			targetEle.html("<i class='fa fa-ellipsis-v'></i>");
+		}
+		else{
+			//Rendering ticket notes
+			App_Ticket_Module.renderNotesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
+			targetEle.attr("rel", "notes");
+			targetEle.attr("data-original-title", "Show activities");
+			targetEle.html("<i class='fa fa-ellipsis-h'></i>");
+		}
+		
 	},
 
 	showContactDeals: function(e){

@@ -1,0 +1,133 @@
+<script id="ticket-activities-model-template" type="text/html">
+
+<div class="p-t-xxs p-b-xxs">
+	<span class="pull-left thumb-sm">
+
+		{{#is_ticket_requester_activity ticket_activity_type}}
+			<img class="img-inital r-5x" src="{{nameAvatar contact.properties 30}}" onerror="image_error(this);" _data-name="{{#if contact}}{{getPropertyValue contact.properties "first_name"}}{{getPropertyValue contact.properties "last_name"}}{{else}}Requester
+					                {{/if}}"/>
+		{{else}}
+
+			<img class="r-5x" alt="..." src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}"/>
+
+		{{/is_ticket_requester_activity}}
+
+	</span>
+
+	<div class="m-l-xl p-l-sm">
+	 
+	  <span>
+
+	  			{{#is_ticket_requester_activity ticket_activity_type}}
+
+	              	<span><b class="text-sm vertical-align-top">
+	              				{{#if contact}}
+					                {{getPropertyValue contact.properties "first_name"}} 
+					                    {{getPropertyValue contact.properties "last_name"}}
+					                 {{else}}
+					                    Requester
+					                {{/if}}
+					</b></span>
+
+			   	{{else}}
+
+			   		<span><b class="text-sm vertical-align-top">{{user.name}}</b></span>
+	              
+			   	{{/is_ticket_requester_activity}}
+
+			   	<span class="txt-small text-xs text-muted m-l-xs">
+              		<time class="b-b-dotted vertical-align-top" datetime="{{epochToHumanDate "" created_time}}">
+		              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
+		              	</time>
+   				</span>
+	  </span>
+
+	 <div class="block m-t-xxs word-break-full">
+
+	  		{{#if_equals ticket_activity_type 'TICKET_CREATED'}}
+		  		{{convert_to_html new_data}}
+		  	{{/if_equals}}
+
+		  	{{#if_equals ticket_activity_type 'TICKET_REQUESTER_REPLIED'}}
+		  		{{convert_to_html new_data}}
+		  	{{/if_equals}}
+
+		  	{{#if_equals ticket_activity_type 'TICKET_ASSIGNEE_REPLIED'}}
+		  		{{convert_to_html new_data}}
+		  	{{/if_equals}}
+
+		  	{{#if_equals ticket_activity_type 'TICKET_PRIVATE_NOTES_ADD'}}
+		  	<div class="p-sm bg-lightyellow b-a-lightyellow">{{convert_to_html new_data}}</div>
+		  	{{/if_equals}}
+
+		  	{{#if_equals ticket_activity_type 'TICKET_ASSIGNED'}}
+		        Ticket assigned to <span class="first-letter-cap">{{new_assignee.name}}</span>
+		    {{/if_equals}}
+
+		    {{#if_equals ticket_activity_type 'TICKET_ASSIGNEE_CHANGED'}}
+	        	Ticket assignee changed to <span class="first-letter-cap">
+		            	{{new_assignee.name}}
+		            </span>
+		    {{/if_equals}}
+
+		    {{#if_equals ticket_activity_type 'TICKET_GROUP_CHANGED'}}
+	                Ticket group changed to <span class="first-letter-cap">{{new_group.group_name}}</span>
+		    {{/if_equals}}
+
+		    {{#if_equals ticket_activity_type 'TICKET_STATUS_CHANGE'}}
+	            Status changed to <span class="first-letter-cap">{{new_data}}</span>
+	        {{/if_equals}}
+
+	        {{#if_equals ticket_activity_type 'TICKET_PRIORITY_CHANGE'}}
+	           Priority changed to <span class="first-letter-cap">{{new_data}}</span>
+	        {{/if_equals}}
+
+		    {{#if_equals ticket_activity_type 'TICKET_TYPE_CHANGE'}}
+	            Type changed to <span class="first-letter-cap">{{new_data}}</span>
+	         {{/if_equals}}
+		                        
+	        {{#if_equals ticket_activity_type 'TICKET_LABEL_ADD'}}
+	            Label added - <label class="label bg-success m-l-xs">{{get_label_from_label_id new_data}}</label>
+	         {{/if_equals}}
+
+	        {{#if_equals ticket_activity_type 'TICKET_LABEL_REMOVE'}}
+	            Label removed - <label class="label bg-info m-l-xs">{{get_label_from_label_id new_data}}</label>
+	         {{/if_equals}}
+
+	         {{#if_equals ticket_activity_type 'TICKET_CC_EMAIL_ADD'}}
+	            CC email added - <label class="label bg-success m-l-xs">{{new_data}}</label>
+	         {{/if_equals}}
+
+	        {{#if_equals ticket_activity_type 'TICKET_CC_EMAIL_REMOVE'}}
+	            CC email removed - <label class="label bg-info m-l-xs">{{new_data}}</label>
+	         {{/if_equals}}
+
+	        {{#if_equals ticket_activity_type 'TICKET_MARKED_FAVORITE'}}
+	            <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as favorite
+	        {{/if_equals}}
+
+	        {{#if_equals ticket_activity_type 'TICKET_MARKED_UNFAVORITE'}}
+	            <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as unfavorite
+	        {{/if_equals}}
+
+	        {{#if_equals ticket_activity_type 'TICKET_MARKED_SPAM'}}
+	            <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as spam
+	        {{/if_equals}}
+
+	        {{#if_equals ticket_activity_type 'TICKET_MARKED_UNSPAM'}}
+	            <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as unspam
+	        {{/if_equals}}
+
+	        {{#if_equals ticket_activity_type 'DUE_DATE_CHANGED'}}
+	            <span class="first-letter-cap inline-block">{{user.name}}</span>  Changed due date to {{epochToHumanDate "mm/dd/yyyy" new_data}}
+	      		</span>
+	        {{/if_equals}}
+
+		 </div>
+
+	</div>
+</div>
+
+<div class="border-highlight-light m-t-sm m-b-sm"></div>
+
+</script>

@@ -278,6 +278,17 @@ Handlebars.registerHelper('is_ticket_reply_activity', function(activityType, opt
 });
 
 
+Handlebars.registerHelper('is_ticket_requester_activity', function(activityType, options) {
+
+	var replyActivity = ['TICKET_CREATED', 'TICKET_REQUESTER_REPLIED'];
+
+	if(activityType && $.inArray(activityType, replyActivity) != -1)
+		return options.fn(this);
+
+	return options.inverse(this);
+
+});
+
 Handlebars.registerHelper('is_single_row_view', function(options) {
 
 	if(Tickets.isSingleRowView())

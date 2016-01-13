@@ -47,13 +47,19 @@ var Tickets_Notes = {
 
 				Tickets_Notes.repltBtn('reply');
 
-				App_Ticket_Module.notesCollection.collection.add(model);
-				App_Ticket_Module.notesCollection.render(true);
-
 				// If in time line add event to timeline
 				if($('.ticket-timeline-container').length > 0){
-					Ticket_Timeline.render_individual_ticket_timeline()
+					Ticket_Timeline.render_individual_ticket_timeline();
+					return;
 				}
+
+				if($("#ticket-activities-model-list").length > 0)
+						App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
+				else{
+					App_Ticket_Module.notesCollection.collection.add(model);
+					App_Ticket_Module.notesCollection.render(true);
+				}
+				
 			},
 			error : function(data, response) {
 
@@ -80,8 +86,15 @@ var Tickets_Notes = {
 
 				// If in time line add event to timeline
 				if($('.ticket-timeline-container').length > 0){
-					Ticket_Timeline.render_individual_ticket_timeline()
+					Ticket_Timeline.render_individual_ticket_timeline();
+					return;
 				}
+
+				if($("#ticket-activities-model-list").length > 0)
+					App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
+				
+
+				
 			},
 			error : function(data, response) {
 

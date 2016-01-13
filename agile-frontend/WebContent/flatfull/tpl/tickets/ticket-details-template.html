@@ -26,9 +26,7 @@
                     <span class="navigation">
 
                       {{#next_prev_ticket_exists 'previous'}}
-                      <a href="{{#is_filtered_ticket}}
-                      #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'previous'}}{{get_ticket_id 'previous'}}{{/next_prev_ticket_exists}}
-                      {{/is_filtered_ticket}}" class="pull-left text-muted text-xs" title="Previous Ticket">
+                      <a href="" class="pull-left text-muted text-xs previous-ticket" title="Previous Ticket">
                         <i class="icon icon-chevron-left" style="vertical-align: middle;"></i>
                        </a>
                       {{else}}
@@ -38,9 +36,7 @@
                       {{/next_prev_ticket_exists}}
 
                       {{#next_prev_ticket_exists 'next'}}
-                      <a href="{{#is_filtered_ticket}}
-                      #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'next'}}{{get_ticket_id 'next'}}{{/next_prev_ticket_exists}}
-                      {{/is_filtered_ticket}}" class="pull-right text-muted text-xs" title="Next Ticket"><i class="icon icon-chevron-right" style="vertical-align: middle;"></i></a>
+                      <a href="" class="pull-right text-muted text-xs next-ticket" title="Next Ticket"><i class="icon icon-chevron-right" style="vertical-align: middle;"></i></a>
                        {{else}}
                        <span class="pull-right text-disabled text-xs">
                         <i class="icon icon-chevron-right" style="vertical-align: middle;"></i>
@@ -326,6 +322,11 @@
 
             <div class="b-b b-light m-b-sm position-relative">
               <span class="label label-default toggle-timeline cursor-pointer pull-right position-relative" style="bottom: 8px;">Show timeline</span>
+
+              <span class="label label-default cursor-pointer pull-right position-relative toggle-activities-notes" style="bottom: 8px;right: 1px;" data-toggle="tooltip" data-placement="bottom" data-original-title="Show activities" rel="notes">
+                <i class="fa fa-ellipsis-h"></i>
+              </span>
+
             </div>
 
           <!-- End of ticket notes -->
@@ -475,8 +476,8 @@
   {{/if_equals}}
 </script>
 <script  id="ticket-notes-loader-template" type="text/html">
-<div class="b-b b-t p-md">
-  <img class="loading" src="/flatfull/img/ajax-loader-cursor.gif">
+<div>
+  <img class="loading" style="padding-left:10px;padding-right:5px;opacity:0.5;" src= "//doxhze3l6s7v9.cloudfront.net/beta/static/img/ajax-loader-cursor.gif"></img>
 </div>
 </script>
 <script  id="ticket-change-assignee-template" type="text/html">
