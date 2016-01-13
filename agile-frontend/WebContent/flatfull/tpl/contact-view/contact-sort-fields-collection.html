@@ -51,8 +51,8 @@
 
 <script id="contact-view-sort-model-template" type="text/html">
 {{#if this.scope}}
-	<a class="sort" id="sort-by-{{search_key}}-asc" data="{{search_key}}" href="#">{{field_label}} Asc</a>
-	<a class="sort" id="sort-by-{{search_key}}-desc" data="-{{search_key}}" href="#">{{field_label}} Desc</a>
+	<a class="sort" id="sort-by-{{search_key}}_AGILE_CUSTOM_{{field_type}}-asc" data="{{search_key}}_AGILE_CUSTOM_{{field_type}}" href="#">{{field_label}} Asc</a>
+	<a class="sort" id="sort-by-{{search_key}}-desc" data="-{{search_key}}_AGILE_CUSTOM_{{field_type}}" href="#">{{field_label}} Desc</a>
 {{else}}
 {{#each this}}
 	<a class="sort" id="sort-by-{{field_value}}-{{#if desc_order}}desc{{else}}asc{{/if}}" data="{{field_key}}" href="#">{{field_label}}</a>

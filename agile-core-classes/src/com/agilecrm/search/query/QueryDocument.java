@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.SearchFilter;
+import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.search.QueryInterface;
@@ -25,7 +26,6 @@ import com.google.appengine.api.search.ScoredDocument;
 import com.google.appengine.api.search.SortExpression;
 import com.google.appengine.api.search.SortExpression.SortDirection;
 import com.google.appengine.api.search.SortOptions;
-import com.google.appengine.api.search.checkers.SearchApiLimits;
 import com.googlecode.objectify.Key;
 
 /**
@@ -321,23 +321,57 @@ public class QueryDocument<T> implements QueryInterface
 	    SortExpression.Builder sortExpressionBuilder = SortExpression.newBuilder();
 	    if (orderBy.startsWith("-"))
 	    {
-	    orderBy = orderBy.substring(1);
-		sortExpressionBuilder = sortExpressionBuilder.setDirection(
-			SortDirection.DESCENDING);
+		orderBy = orderBy.substring(1);
+		sortExpressionBuilder = sortExpressionBuilder.setDirection(SortDirection.DESCENDING);
 	    }
 	    else
 	    {
-		sortExpressionBuilder = sortExpressionBuilder.setDirection(
-			SortDirection.ASCENDING);
+		sortExpressionBuilder = sortExpressionBuilder.setDirection(SortDirection.ASCENDING);
 	    }
 	    sortExpressionBuilder.setExpression(orderBy);
 	    if (orderBy.contains("time") || orderBy.contains("last_contacted"))
 	    {
-		sortExpressionBuilder.setExpression(orderBy+"_epoch").setDefaultValueNumeric(0.0);
+		sortExpressionBuilder.setExpression(orderBy + "_epoch").setDefaultValueNumeric(0.0);
 	    }
 	    else if (orderBy.contains("name"))
 	    {
 		sortExpressionBuilder.setDefaultValue("");
+	    }
+	    else if (ContactFilterUtil.isCustomField(orderBy))
+	    {
+		String[] fragments = orderBy.split("_AGILE_CUSTOM_");
+
+		if (fragments.length > 1)
+		{
+		    String type = fragments[1];
+		    com.agilecrm.contact.CustomFieldDef.Type field_type = null;
+		    try
+		    {
+			field_type = com.agilecrm.contact.CustomFieldDef.Type.valueOf(type);
+		    }
+		    catch (Exception e)
+		    {
+
+		    }
+		    orderBy = fragments[0];
+		    if (field_type == null)
+		    {
+			sortExpressionBuilder.setDefaultValueNumeric(0.0);
+		    }
+		    else if (field_type == com.agilecrm.contact.CustomFieldDef.Type.TEXT
+			    || field_type == com.agilecrm.contact.CustomFieldDef.Type.LIST
+			    || field_type == com.agilecrm.contact.CustomFieldDef.Type.TEXTAREA)
+		    {
+			sortExpressionBuilder.setDefaultValue("");
+		    }
+		    else if (field_type == com.agilecrm.contact.CustomFieldDef.Type.DATE
+			    || field_type == com.agilecrm.contact.CustomFieldDef.Type.NUMBER)
+		    {
+			sortExpressionBuilder.setDefaultValueNumeric(0.0);
+		    }
+
+		    sortExpressionBuilder.setExpression(orderBy);
+		}
 	    }
 	    else
 	    {

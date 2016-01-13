@@ -287,4 +287,16 @@ public class ContactFilterUtil
 	contact_filter.rules.add(rule);
 	return contact_filter;
     }
+
+    /**
+     * This is to check if field label is of custom field type when send from
+     * frontend to sort or query
+     * 
+     * @param field
+     * @return
+     */
+    public static boolean isCustomField(String field)
+    {
+	return StringUtils.containsIgnoreCase(field, "_AGILE_CUSTOM_");
+    }
 }
