@@ -1,6 +1,6 @@
 <script id="paypal-login-template" type="text/html">
 	<div class="m-t">
-		Configure your Paypal account to get ability to access invoices.
+		Configure your PayPal business account to get ability to access invoices.
 		<br/>
 		<div class="text-center"><a href="{{url}}" class="btn btn-sm btn-primary m-t-sm" >Link Your Paypal</a></div>
 	</div>
@@ -48,13 +48,13 @@
 		</li>
 	{{/each}}
 {{else}}
-	<li class="list-group-item r-none b-l-none b-r-none"> No invoices </li>
+	<li class="list-group-item r-none b-l-none b-r-none"> No invoices found.</li>
 {{/if}}
 </script>
 
 <script id="paypal-revoke-access-template" type="text/html">
 	<div class="m-b-lg">
-		<p>Re-Configure your Paypal account to get access of invoices.</p>
+		<p>Re-Configure your PayPal business account to get access of invoices.</p>
 	</div>
 	<div class="m-t-sm m-r-none m-b-xs m-l-none text-center">
 		<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Stripe">Revoke Access</a>
