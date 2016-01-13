@@ -134,7 +134,7 @@ var portlet_graph_utility = {
 	/**
 	 * To display closers per person portlet as bar graph
 	 */
-	closuresPerPersonBarGraph : function(selector, catges, data, text, name) {
+	closuresPerPersonBarGraph : function(selector, catges, data, text, name, base_model) {
 		head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function() {
 			$('#' + selector).highcharts(
 					{
@@ -156,7 +156,7 @@ var portlet_graph_utility = {
 							allowDecimals : false
 						},
 						legend : {
-							enabled : false
+							enabled : portlet_utility.is_legend_enable(base_model),
 						},
 						tooltip : {
 							formatter : function() {
@@ -451,7 +451,7 @@ var portlet_graph_utility = {
 								layout : 'vertical',
 								floating : true,
 								align : 'right',
-								enabled:false,
+								enabled:portlet_utility.is_legend_enable(base_model),
 								verticalAlign : 'top'
 							},
 							colors : [ "#23b7e5", "#27c24c", "#7266ba",
@@ -500,7 +500,7 @@ var portlet_graph_utility = {
 													allowDecimals : false
 												},
 												legend : {
-													enabled : false
+													enabled : portlet_utility.is_legend_enable(base_model),
 												},
 												tooltip : {
 													formatter : function() {
@@ -700,7 +700,7 @@ var portlet_graph_utility = {
 									layout : 'vertical',
 									floating : true,
 									align : 'right',
-									enabled:false,
+									enabled:portlet_utility.is_legend_enable(base_model),
 									verticalAlign : 'top'
 								}
 						    });
@@ -990,7 +990,7 @@ var portlet_graph_utility = {
 													floating : true,
 													align : 'right',
 													verticalAlign : 'top',
-													enabled:false,
+													enabled:portlet_utility.is_legend_enable(base_model),
 													labelFormatter : function() {
 														if (this.name.length > 12) {
 															return this.name
@@ -1138,7 +1138,7 @@ var portlet_graph_utility = {
 													layout : 'vertical',
 													floating : true,
 													align : 'right',
-													enabled:false,
+													enabled:portlet_utility.is_legend_enable(base_model),
 													verticalAlign : 'top'
 												},
 												colors : [ "#23b7e5",
@@ -1368,7 +1368,6 @@ var portlet_graph_utility = {
 												},
 												legend : {
 													enabled : false,
-
 												},
 												plotOptions : {
 													series : {
