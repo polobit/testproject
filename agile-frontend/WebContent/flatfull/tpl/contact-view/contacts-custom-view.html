@@ -32,93 +32,78 @@
 		<div id="custom-filters-container"><div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
-        <div class="col-md-12 p-n m-b-xs txt-small">Assignee</div>
-        <div class="col-md-12 p-n assignee-select">
+        <div>
+	<h4 class="m-b-md" style="margin-left:22px;">
+		<span class="pull-left"><span>Filter Contacts</span>
+		</span>
+<span class="pull-right m-r-sm">
+		<a id="clear-lhs-contact-filters" class="text-sm text-muted" href="#">
+			 Clear all
+			 </a>
+	</span>
+<div class="clearfix"></div>
+	</h4>
+	
+</div>
+<div class="col-md-12 p-n assignee-select">
   
-     <div>
-      <label class="i-checks i-checks-sm">
-        <input name="assignee_id" value="5499699452706816" type="checkbox">
-        <i></i>
-      </label> agile
-    </div>
-  
-     <div>
-      <label class="i-checks i-checks-sm">
-        <input name="assignee_id" value="6641423080226816" type="checkbox">
-        <i></i>
-      </label> automation
-    </div>
-  
-     <div>
-      <label class="i-checks i-checks-sm">
-        <input name="assignee_id" value="5629072646340608" type="checkbox">
-        <i></i>
-      </label> chintu
-    </div>
-  
-     <div>
-      <label class="i-checks i-checks-sm">
-        <input name="assignee_id" value="5599061239398400" type="checkbox">
-        <i></i>
-      </label> dis
-    </div>
-  
-     <div>
-      <label class="i-checks i-checks-sm">
-        <input name="assignee_id" value="5510504382464000" type="checkbox">
-        <i></i>
-      </label> Disable User
-    </div>
-  
-     <div>
-      <label class="i-checks i-checks-sm">
-        <input name="assignee_id" value="5512730920353792" type="checkbox">
-        <i></i>
-      </label> mantra
-    </div>
-  
-     <div>
-      <label class="i-checks i-checks-sm">
-        <input name="assignee_id" value="5548946084593664" type="checkbox">
-        <i></i>
-      </label> mogulla
-    </div>
-  
-     <div>
-      <label class="i-checks i-checks-sm">
-        <input name="assignee_id" value="6721134150025216" type="checkbox">
-        <i></i>
-      </label> sort
-    </div>
-  
-     <div>
-      <label class="i-checks i-checks-sm">
-        <input name="assignee_id" value="5515523173384192" type="checkbox">
-        <i></i>
-      </label> Sort test
-    </div>
-  
-     <div>
-      <label class="i-checks i-checks-sm">
-        <input name="assignee_id" value="5510652143599616" type="checkbox">
-        <i></i>
-      </label> spclchars
-    </div>
+     
     
 
 </div>
-        <div class="col-md-12 p-n m-t-xs m-b-xs txt-small">Group</div>
-        <div class="col-md-12 p-n group-select">
-  
-    <div>
-      <label class="i-checks i-checks-sm">
-        <input name="group_id" value="5665117697998848" type="checkbox">
-        <i></i>
-      </label> Support
-    </div>
-    
-
+        
+	
+	<div class="control-group form-group lhs-row-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Tags
+		<i class="fa inline pos-abs pos-r pos-t-xs fa-minus-square-o"></i></a>
+	<div class="controls m-t-xs" id="tags_div">
+		<div id="tags-lhs-filter-table" class="ignore-collection">
+				<div class="hide master-tags-add-div pos-rlt">
+					<input class="form-control" type="hidden" name="LHS" value="tags">
+					<select id="tags-filter" class="form-control" name="CONDITION">
+						<option value="EQUALS" class="tags">is</option>
+						<option value="NOTEQUALS" class="tags">isn't</option>
+					</select>
+					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
+						<span id="RHS">
+							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-43" id="temp-43">
+						</span>
+					</div>
+					
+				</div>
+				<div class="lhs-contact-filter-row pos-rlt m-t-xs">
+					<input type="hidden" name="LHS" value="tags">
+					<select id="tags-filter" class="form-control" name="CONDITION">
+						<option value="EQUALS" class="tags">is</option>
+						<option value="NOTEQUALS" class="tags">isn't</option>
+					</select>
+					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
+						<span id="RHS">
+							<input type="text" placeholder="Enter Tag" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-44" id="temp-44">
+						</span>
+					</div>
+					<div class="m-t-xs">
+						<a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+		</div>	
+		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-left text-muted pos-rlt" style="top:-10px" data-name="tags"><i class="icon-plus"></i> Add</a>
+		<div class="clearfix" style="height:10px"></div>	
+	</div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
     </div>
   </div>
 </div>
