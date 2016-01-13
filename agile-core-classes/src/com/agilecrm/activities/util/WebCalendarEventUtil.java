@@ -46,6 +46,7 @@ import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.IcalendarUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.googlecode.objectify.Key;
+import com.thirdparty.office365.calendar.util.Office365CalendarUtil;
 
 public class WebCalendarEventUtil
 {
@@ -94,7 +95,6 @@ public class WebCalendarEventUtil
 		// Get all permutations possible based on selected slottime(duration) in
 		// 24 Hr.
 		List<List<Long>> possibleSlots = getAllPossibleSlots(slotTime, date, startTime, timezone, timezoneName);
-		//List<List<Long>>freeSlots = getAllFreeSlots(slotTime, date, startTime, timezone, timezoneName, endTime);
 		
 		// Get all filled slots from Agile calendar.
 		List<List<Long>> filledAgileSlots = getFilledAgileSlots(agileuserid, slotTime, startTime, endTime);
@@ -120,6 +120,18 @@ public class WebCalendarEventUtil
 
 			// Remove all filled odd timing slots from available/possible slots.
 			possibleSlots = removeAllOddSlots(possibleSlots, filledGoogleSlots);
+		}
+		
+		// Get all filled slots from office calendar.
+		List<List<Long>> filledOfficeSlots = Office365CalendarUtil.getFilledOfficeSlots(userid, slotTime, timezone,
+				timezoneName, startTime, endTime);
+		
+		if(filledOfficeSlots != null){
+			// Remove all filled slots from available/possible slots.
+			possibleSlots.removeAll(filledOfficeSlots);
+
+			// Remove all filled odd timing slots from available/possible slots.
+			possibleSlots = removeAllOddSlots(possibleSlots, filledOfficeSlots);
 		}
 
 		if (possibleSlots != null && possibleSlots.size() > 0)

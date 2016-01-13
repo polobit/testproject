@@ -6,8 +6,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.json.JSONArray;
@@ -15,7 +17,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.activities.util.WebCalendarEventUtil;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.HTTPUtil;
+import com.google.gdata.data.DateTime;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
@@ -50,12 +56,10 @@ public class Office365CalendarUtil {
 		return appointments;
 	}
 
-	public static String getOfficeURL(String startDate, String endDate) {
+	public static String getOfficeURL(String startDate, String endDate,
+			GoogleCalenderPrefs calendarPrefs) {
 
 		String appointments = null;
-		// Get Office Exchange Prefs
-		GoogleCalenderPrefs calendarPrefs = GooglecalendarPrefsUtil
-				.getCalendarPrefsByType(GoogleCalenderPrefs.CALENDAR_TYPE.OFFICE365);
 		if (calendarPrefs != null) {
 			try {
 				Office365CalendarPrefs officeCalendarPrefs = new Office365CalendarPrefs();
@@ -220,5 +224,79 @@ public class Office365CalendarUtil {
 
 		return calendarPrefs;
 
+	}
+
+	/**
+	 * Returns filled time slots on selected date from Google calendar. Gets
+	 * prefs for authentication on google calendar. Gets primary calendar with
+	 * events for selected date. Make slots size as per selected slot
+	 * time(duration).
+	 * 
+	 * @param username
+	 *            Client's name
+	 * @param slotTime
+	 *            Selected duration (time slot)
+	 * @param timezone
+	 *            Selected date
+	 * @param timezoneName
+	 *            Client's time zone
+	 * @param startTime
+	 *            Client's time zone name
+	 * @param endTime
+	 *            Client's epoch time
+	 * @return List of filled slots from Google calendar on selected date
+	 */
+	public static List<List<Long>> getFilledOfficeSlots(Long userid,
+			int slotTime, int timezone, String timezoneName, Long startTime,
+			Long endTime) {
+		System.out.println("In getFilledGoogleSlots");
+
+		List<List<Long>> filledSlots = new ArrayList<List<Long>>();
+
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+		queryMap.put("domainUserKey", new Key<DomainUser>(DomainUser.class,
+				userid));
+		queryMap.put("calendar_type",
+				GoogleCalenderPrefs.CALENDAR_TYPE.OFFICE365);
+
+		// Getting office prefs
+		GoogleCalenderPrefs calendarPrefs = GoogleCalenderPrefs.dao
+				.getByProperty(queryMap);
+
+		System.out.println(calendarPrefs);
+
+		// If google calendar sync with Agile Calendar then Get calendar
+		if (calendarPrefs == null) {
+			return null;
+		} else {
+			String Url = null;
+			if (startTime != null && endTime !=null) {
+				startTime = startTime * 1000;
+				endTime = endTime *1000;
+				Url = Office365CalendarUtil.getOfficeURL(startTime.toString(),
+						endTime.toString(), calendarPrefs);
+			}
+			try {
+				List<OfficeCalendarTemplate> appointments = Office365CalendarUtil
+						.getAppointmentsFromServer(Url);
+				
+				for (int i = 0; i < appointments.size(); i++){
+					OfficeCalendarTemplate officeTemplate = appointments.get(i);
+					/*
+					 * Make sub slot of filled slot as per selected duration(slot time) and add in list
+					 */
+					if(officeTemplate != null){													
+						Date start =new Date(officeTemplate.getStart());
+						Date end =new Date(officeTemplate.getEnd());										
+					    filledSlots.addAll(WebCalendarEventUtil.makeSlots(slotTime, start.getTime()/1000, end.getTime()/1000));
+					}
+				}
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return filledSlots;
 	}
 }
