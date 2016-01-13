@@ -29,11 +29,15 @@
 
 <div id="tickets-container" class="hbox hbox-auto-xs hbox-auto-sm">
 	<div class="col w-lg bg-light dk b-r bg-auto" style="">
-		<div id="custom-filters-container"><div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+		<div id="custom-filters-container">
+
+
+
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
-    <div class="panel-body">
-        <div>
-	<h4 class="m-b-md" style="margin-left:22px;">
+  <header>
+<div>
+	<h4 style="margin-left: 17px;">
 		<span class="pull-left"><span>Filter Contacts</span>
 		</span>
 <span class="pull-right m-r-sm">
@@ -45,42 +49,38 @@
 	</h4>
 	
 </div>
-<div class="col-md-12 p-n assignee-select">
-  
-     
-    
-
-</div>
-        
-	
-	<div class="control-group form-group lhs-row-filter">
+</header>
+    <div class="panel-body">
+      <div class="control-group form-group" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;">
+      
 	<a data-toggle="collapse" id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
 		Tags
-		<i class="fa inline pos-abs pos-r pos-t-xs fa-minus-square-o"></i></a>
+		</a>
 	<div class="controls m-t-xs" id="tags_div">
 		<div id="tags-lhs-filter-table" class="ignore-collection">
 				<div class="hide master-tags-add-div pos-rlt">
 					<input class="form-control" type="hidden" name="LHS" value="tags">
-					<select id="tags-filter" class="form-control" name="CONDITION">
+					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px">
 						<option value="EQUALS" class="tags">is</option>
 						<option value="NOTEQUALS" class="tags">isn't</option>
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
-							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-43" id="temp-43">
+							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px">
 						</span>
 					</div>
-					
+					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
+					<div class="clearfix"></div>
 				</div>
 				<div class="lhs-contact-filter-row pos-rlt m-t-xs">
 					<input type="hidden" name="LHS" value="tags">
-					<select id="tags-filter" class="form-control" name="CONDITION">
+					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px">
 						<option value="EQUALS" class="tags">is</option>
 						<option value="NOTEQUALS" class="tags">isn't</option>
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
-							<input type="text" placeholder="Enter Tag" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-44" id="temp-44">
+							<input type="text" placeholder="Enter Tag" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px">
 						</span>
 					</div>
 					<div class="m-t-xs">
@@ -95,242 +95,428 @@
 </div>
 
 
-
-
-
-
-
-
-
-
-
     </div>
   </div>
 </div>
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
-  <div class="panel panel-default m-b-none">
-    <div class="panel-body">
-      <div class="col-md-12 p-n m-b-xs txt-small">Labels</div>
-      <div class="col-md-12 p-n m-b-xs cusom-filter-labels">
-        <select data-placeholder="&nbsp;" class="chosen-select form-control" multiple="" style="display: none;"></select><div class="chosen-container chosen-container-multi" style="width: 217px;" title=""><ul class="chosen-choices"><li class="search-field"><input type="text" value="&nbsp;" class="default" autocomplete="off" style="width: 28px;"></li></ul><div class="chosen-drop"><ul class="chosen-results"></ul></div></div>
-      </div>
-      <div class="col-md-12 p-n m-t-xs txt-small">
-        Created Date 
-        <a class="pull-right txt-small display-none m-t-xs link-color" href="javascript:void(0);" id="clear-created-date" style="font-size: 10px;">Clear</a>
-      </div>
-      <div class="col-md-12 p-n m-t-xs txt-small">
-        <input type="text" class="form-control input-sm created-date-input" placeholder="Choose date">
-      </div>
-      <div class="col-md-12 p-n m-t-sm txt-small">
-        Due Date 
-        <a class="pull-right txt-small display-none m-t-xs link-color" href="javascript:void(0);" id="clear-due-date" style="font-size: 10px;">Clear</a>
-      </div>
-      <div class="col-md-12 p-n m-t-xs txt-small">
-        <input type="text" class="form-control input-sm due-date-input" placeholder="Choose date">
-      </div>
-      <div class="col-md-12 p-n">
-        <div class="col-md-2 p-n text-center">
-          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="overdue">Overdue</a>
-        </div>
-        <div class="col-md-1 p-n text-center m-l-xs"> | </div>
-        <div class="col-md-3 p-n">
-          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="tomorrow">Tomorrow</a>
-        </div>
-        <!--<div class="col-md-1 p-n text-center"> | </div>
-        <div class="col-md-1 p-n text-center">
-          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="next_two_days">+2</a>
-        </div>-->
-        <div class="col-md-1 p-n text-center"> | </div>
-        <div class="col-md-1 p-n text-center">
-          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="next_three_days">+3</a>
-        </div>
-        <div class="col-md-1 p-n text-center"> | </div>
-        <div class="col-md-1 p-n text-center">
-          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="next_five_days">+5</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+
+
+
 <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
-        <div class="col-md-12 p-n m-b-xs txt-small">Status</div>
-        <div class="col-md-12 p-n">
-          <div class="col-md-6 p-n">
-            <label class="i-checks i-checks-sm">
-              <input class="status" name="status" value="NEW" checked="" type="checkbox">
-              <i></i>
-            </label> New
-          </div>
-          <div class="col-md-6 p-n">
-            <label class="i-checks i-checks-sm">
-              <input class="status" name="status" value="OPEN" checked="" type="checkbox">
-              <i></i>
-            </label> Open
-          </div>
-        </div>
-        <div class="col-md-12 p-n txt-small">
-          <div class="col-md-6 p-n">
-            <label class="i-checks i-checks-sm">
-              <input class="status" name="status" value="PENDING" checked="" type="checkbox">
-              <i></i>
-            </label> Pending
-          </div>
-          <div class="col-md-6 p-n">
-            <label class="i-checks i-checks-sm">
-              <input class="status" name="status" value="CLOSED" checked="" type="checkbox">
-              <i></i>
-            </label> Closed
-          </div>
-        </div>
-        <div class="col-md-12 p-n m-t-xs m-b-xs txt-small">Priority</div>
-        <div class="col-md-12 p-n">
-          <div class="col-md-4 p-n">
-            <label class="i-checks i-checks-sm">
-              <input class="priority" name="priority" value="LOW" type="checkbox"><i></i>
-            </label> Low
-          </div>
-          <div class="col-md-5 p-n">
-            <label class="i-checks i-checks-sm">
-              <input class="priority" name="priority" value="MEDIUM" type="checkbox"><i></i>
-            </label> Medium
-          </div>
-          <div class="col-md-3 p-n">
-            <label class="i-checks i-checks-sm">
-              <input class="priority" name="priority" value="HIGH" type="checkbox"><i></i>
-            </label> High
-          </div>
-        </div>
+        
+	<div class="control-group form-group " style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;>
+	<a data-toggle="collapse" id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Score
+		</a>
+	<div class="controls m-t-xs" id="lead_score_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" class="form-control" value="lead_score">
+		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px">
+			<option value="IS_GREATER_THAN">greater than</option>
+			<option value="IS_LESS_THAN">less than</option>
+			<option value="BETWEEN">between</option>
+		</select>
+		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
+			<span id="RHS">
+				<input type="number" min="0" placeholder="Value" prev-val="0" class="form-control required" name="temp-2" id="temp-2" style="height:30px">
+			</span>
+		</div>
+		<div class="BETWEEN condition_container hide m-t-xs">
+			<div class="clear"></div>
+			<span id="RHS">
+				<input type="number" min="0" class="required form-control" prev-val="" placeholder="Min Value" name="temp-3" id="temp-3" style="height:30px"> 
+			</span>
+			<span id="RHS_NEW">
+				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control" name="temp-4" id="temp-4" style="height:30px">
+			</span>
+		</div>
+		
+		<div class="clearfix"></div>
+		</div>
+	</div>
+</div>    
+        
+        
         
       </div>
     </div>
 </div>
+
+
+
 <div class="wrapper bg-light hidden-sm hidden-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
-        <div class="col-md-12 p-n m-t m-b-xs txt-small">Type</div>
-        <div class="col-md-12 p-n">
-          <div class="col-md-12 p-n">
-          <div class="col-md-6 p-n">
-            <label class="i-checks i-checks-sm">
-              <input class="ticket_type" name="ticket_type" value="INCIDENT" type="checkbox">
-              <i></i>
-            </label> Incident
-          </div>
-          <div class="col-md-6 p-n">
-            <label class="i-checks i-checks-sm">
-              <input class="ticket_type" name="ticket_type" value="PROBLEM" type="checkbox">
-              <i></i>
-            </label> Problem
-          </div>
-        </div>
-        <div class="col-md-12 p-n">
-          <div class="col-md-6 p-n">
-            <label class="i-checks i-checks-sm">
-              <input class="ticket_type" name="ticket_type" value="TASK" type="checkbox">
-              <i></i>
-            </label> Task
-          </div>
-          <div class="col-md-6 p-n">
-            <label class="i-checks i-checks-sm">
-              <input class="ticket_type" name="ticket_type" value="QUESTION" type="checkbox">
-              <i></i>
-            </label> Question
-          </div>
-        </div>
-        <div class="col-md-12 p-n">
-          <div class="col-md-6 p-n">
-            <label class="i-checks i-checks-sm">
-              <input class="favorite" name="favorite" type="checkbox">
-              <i></i>
-            </label> Favorite
-          </div>
-          <div class="col-md-6 p-n">
-            <label class="i-checks i-checks-sm">
-              <input class="spam" name="spam" type="checkbox">
-              <i></i>
-            </label> Spam
-          </div>
-        </div>
-      </div>
-    </div>
-</div></div></div>
+        <div class="control-group form-group" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;>
+	<a data-toggle="collapse" id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Star Value
+		</a>
+	<div class="controls m-t-xs" id="star_value_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" class="form-control" name="LHS" value="star_value">
+		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px">
+			<option value="IS_GREATER_THAN">greater than</option>
+			<option value="IS_LESS_THAN">less than</option>
+			<option value="BETWEEN">between</option>
+		</select>
+		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
+			<span id="RHS">
+				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="form-control required" name="temp-5" id="temp-5" style="height:30px">
+			</span>
+		</div>
+		<div class="BETWEEN condition_container hide m-t-xs">
+			<div class="clear"></div>
+			<span id="RHS">
+				<input type="number" min="0" max="5" class="required form-control" prev-val="" placeholder="Min Value" name="temp-6" id="temp-6" style="height:30px"> 
+			</span>
+			<span id="RHS_NEW">
+				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control" name="temp-7" id="temp-7" style="height:30px">
+			</span>
+		</div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="clearfix"></div>
+		</div>
 	</div>
-	<div class="col bg-white">
-		<div id="right-pane"><div class="tickets-toolbar">
-	<div class="wrapper bg-light padder-md padder-v">
-	    <div class="btn-toolbar m-l-none pos-rlt">
-	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div>
+</div>
+        
+     </div>
+  </div>
+</div>
 
-	<button class="btn btn-sm filter-name-btn no-shadow bg-transparent p-n b-n" data-toggle="dropdown" style="font-size: 18px;color: rgb(88, 102, 110);">All Tickets</button>
+
+<div class="wrapper bg-light hidden-sm hidden-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+       <div class="control-group form-group " style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;>
+	<a data-toggle="collapse" id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Campaign Status
+		</a>
+	<div class="controls m-t-xs" id="campaign_status_div">
+
+
+		<div id="campaign_status-lhs-filter-table" class="ignore-collection">
+			<div class="hide master-campaign_status-add-div pos-rlt">
+				<input type="hidden" class="form-control" name="LHS" value="campaign_status">
+				<select id="between_filter" name="CONDITION" class="form-control" style="height:30px">
+					<option value="NOT_ADDED">Never Added</option>
+					<option value="ACTIVE">Active</option>
+					<option value="DONE">Completed</option>
+					<option value="REMOVED">Removed</option>
+					<option value="BOUNCED">Bounced</option>
+					<option value="UNSUBSCRIBED">Unsubscribed</option>
+					<option value="SPAM">Spam Reported</option>
+				</select>
+		
+				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED BOUNCED SPAM condition_container m-t-xs">
+					<span id="RHS">
+						<select id="campaign_select_master" class="required form-control" name="temp1" prev-val="" style="height:30px"><option class="default-select" value="">Select...</option><option value="5638830484881408">Vinod Campaign</option></select>
+					</span>
+				</div>
+					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
+					<div class="clearfix"></div>
+			</div>
+			<div class="lhs-contact-filter-row pos-rlt m-t-xs">
+				<input type="hidden" class="form-control" name="LHS" value="campaign_status">
+				<select id="between_filter" name="CONDITION" class="form-control" style="height:30px">
+					<option value="NOT_ADDED">Never Added</option>
+					<option value="ACTIVE">Active</option>
+					<option value="DONE">Completed</option>
+					<option value="REMOVED">Removed</option>
+					<option value="HARDBOUNCED">Hard Bounced</option>
+					<option value="SOFTBOUNCED">Soft Bounced</option>
+					<option value="UNSUBSCRIBED">Unsubscribed</option>
+					<option value="SPAM">Spam Reported</option>
+				</select>
+		
+				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED HARDBOUNCED SOFTBOUNCED SPAM condition_container m-t-xs">
+					<span id="RHS">
+						<select id="campaign_select" class="required form-control" name="temp1" prev-val="" style="height:30px"><option class="default-select" value="">Select...</option><option value="5638830484881408">Vinod Campaign</option></select>
+					</span>
+				</div>
+				<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-left text-muted pos-rlt" style="top:-10px" data-name="campaign_status"><i class="icon-plus"></i> Add</a>
+	</div>
+</div>
+        
+     </div>
+  </div>
+</div>
+
+
+<div class="wrapper bg-light hidden-sm hidden-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="control-group form-group" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;>
+	<a data-toggle="collapse" id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Owner
+		</a>
+	<div class="controls m-t-xs" id="owner_id_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" class="form-control" name="LHS" value="owner_id">
+		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px">
+			<option value="EQUALS">is</option>
+			<option value="NOTEQUALS">isn't</option>
+		</select>
+		
+		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
+			<span id="RHS">
+				<select id="owner_select" class="required form-control" name="temp1" prev-val="" style="height:30px"><option class="default-select" value="">Select...</option><option value="6322974892752896">Vinod</option></select>
+			</span>
+		</div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+        
+     </div>
+  </div>
+</div>
+
+
+
+
+<div class="wrapper bg-light hidden-sm hidden-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="control-group form-group" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;>
+	<a data-toggle="collapse" id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Created Date
+		</a>
+	<div class="controls m-t-xs" id="created_time_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="created_time" class="form-control">
+		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px">
+			<option value="ON">on</option>
+			<option value="AFTER">is after</option>
+			<option value="BEFORE">is before</option>
+			<option value="BETWEEN">is between</option>
+			<option value="LAST">in last</option>
+			<option value="NEXT">in next</option>
+		</select>
+		<div class="AFTER BEFORE ON condition_container m-t-xs">
+			<span id="RHS">
+				<input type="text" data-date-format="Select Date" prev-val="" placeholder="Select Date" class="form-control required date" name="temp-8" id="temp-8" style="height:30px">
+			</span>
+		</div>
+		<div class="LAST NEXT condition_container hide m-t-xs">
+			<span id="RHS">
+				<input type="number" placeholder="Number of days" prev-val="" class="form-control required" name="temp-9" id="temp-9" style="height:30px">
+			</span>
+		</div>
+		<div class="BETWEEN condition_container hide m-t-xs">
+			<div class="clear"></div>
+			<span id="RHS">
+				<input type="text" data-date-format="Select Date" prev-val="" class="form-control date required" placeholder="Select Date" name="temp-10" id="temp-10" style="height:30px">
+			</span>
+			<span id="RHS_NEW"> 
+				<input type="text" data-date-format="Select Date" prev-val="" placeholder="Select Date" class="form-control date required" name="temp-11" id="temp-11" style="height:30px">
+			</span>
+		</div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+        
+     </div>
+  </div>
+</div>
+
+
+<div class="wrapper bg-light hidden-sm hidden-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="control-group form-group " style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;>
+	<a data-toggle="collapse" id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Last Contacted
+		</a>
+	<div class="controls m-t-xs" id="last_contacted_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="last_contacted" class="form-control">
+		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px">
+			<option value="ON">on</option>
+			<option value="AFTER">is after</option>
+			<option value="BEFORE">is before</option>
+			<option value="BETWEEN">is between</option>
+			<option value="LAST">in last</option>
+		</select>
+		<div class="AFTER BEFORE ON condition_container m-t-xs">
+			<span id="RHS">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="Select Date" class="form-control required date" name="temp-12" id="temp-12" style="height:30px">
+			</span>
+		</div>
+		<div class="LAST condition_container hide m-t-xs">
+			<span id="RHS">
+				<input type="number" placeholder="Number of days" prev-val="" class="form-control required" name="temp-13" id="temp-13" style="height:30px">
+			</span>
+		</div>
+		<div class="BETWEEN condition_container hide m-t-xs">
+			<div class="clear"></div>
+			<span id="RHS">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="form-control date required" placeholder="Select Date" name="temp-14" id="temp-14" style="height:30px">
+			</span>
+			<span id="RHS_NEW"> 
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="Select Date" class="form-control date required" name="temp-15" id="temp-15" style="height:30px">
+			</span>
+		</div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+        
+     </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+	</div>
+
+
+
+	<div class="col bg-white">
+		<div id="right-pane">
+		<div class="tickets-toolbar">
+	<div class="wrapper bg-light padder-md padder-v" style="padding-bottom:25px;">
+	    <div class="btn-toolbar m-l-none pos-rlt">
+	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
+	    	<div>
+
+	<button class="btn btn-sm filter-name-btn no-shadow bg-transparent p-n b-n" data-toggle="dropdown" style="font-size: 18px;color: rgb(88, 102, 110);">Bulk Actions</button>
 	<button class="btn btn-sm dropdown-toggle no-shadow bg-transparent b-n" data-toggle="dropdown" aria-expanded="false" style="padding-left: 5px;">
 		<span class="caret"></span>
 	</button>
     <a href="javascript:void(0);" class="btn btn-sm m-l-none bg-transparent toggle-custom-filters no-shadow b-n p-l-none" style="color: rgb(88, 102, 110);">
     	<i class="fa fa-filter text-base" data-toggle="tooltip" data-placement="bottom" data-original-title="Hide filters"></i>
     </a>
-    <ul id="ticket-filters-list-model-list" class="dropdown-menu ticket-types"><li class="active">
-	<a filter-id="5746120646983680" href="#tickets/filter/5746120646983680">
-		<badge class="badge pull-right">0</badge>
-		<span filter-id="5746120646983680" class="text-ellipsis p-r-lg">
-			All Tickets
-		</span>
-	</a>
+    <ul class="dropdown-menu" id="view-actions">
+						<li><a href="#" id="bulk-tags" class="_contact_bulk_action">Add Tags</a></li>
+						<li><a href="#" id="bulk-tags-remove" class="_contact_bulk_action">Remove Tags</a></li>
+                        <li class="divider"></li>  
+						
+						<li><a href="#" id="bulk-campaigns" class="_contact_bulk_action">Add to Campaign</a></li>
+						
+						<li><a href="#" id="show-callcampaignModal">Start Call Campaign<span class="label label-sm bg-danger" style="margin-left:2px;">Beta</span></a></li>
+						<li><a href="#" id="bulk-email" class="_contact_bulk_action">Send Email</a></li>
+                        <li class="divider"></li>
+						<li><a href="#" id="bulk-owner" class="_contact_bulk_action">Change Owner</a></li>
+                         
+                        <li><a href="#" id="bulk-contacts-export" class="_contact_bulk_action">Export Contacts as CSV</a></li>
+                         
+						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
+					</ul>
 
-</li><li>
-	<a filter-id="5759141041668096" href="#tickets/filter/5759141041668096">
-		<badge class="badge pull-right">0</badge>
-		<span filter-id="5759141041668096" class="text-ellipsis p-r-lg">
-			New Tickets
-		</span>
-	</a>
 
-</li></ul>
+</div>
+	</div>
+	    	<div class="left-toolbar pos-abs" style="right: 0; top: 12px;">
+	    		
+		    	
+			</div>
+	    </div>
+	    <div class="btn-toolbar m-l-none" style="margin-top: -5px;">
+	    	<div class="btn-group dropdown m-l-none pull-right" style="float: none;">
+	    		
+				<div class="pull-right">
+            <div class="btn-group pull-left m-r-xs" id="contacts-view-options" style="pointer-events: auto;"><a data-toggle="tooltip" data-placement="bottom" data-original-title="Grid View" class="btn btn-default btn-sm contacts-view" data="grid"><i class="fa fa-th-large" style="margin-right:3px"></i></a></div>
 
+			<div class="btn-group pull-left m-r-xs" id="filter-list"><div>
+<div class="btn-group" id="filters-tour-step">
+	<button class="btn btn-default btn-sm filter-dropdown "><i class="icon-filter" style="margin-right:3px"></i></button>
+	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+    	<span class="caret"></span>
+  	</button>
+	<ul id="contact-filter-list-model-list" class="pull-right dropdown-menu">
+		<li>
+			<a href="#contacts" class="default_filter">Contacts</a>
+		</li>
+		<li class="divider"></li>
+		<li>
+			<a href="#contact-filters">Add/Edit Filter</a>
+		</li>
+		<li class="divider"></li>
+		<!--<li><a class="filter" id="system-RECENT" data="Recent" href="#contact-filter/system-RECENT">Recent </a></li>-->
+		<li><a class="filter" id="system-CONTACTS" data="My Contacts" href="#contact-filter/system-CONTACTS">My Contacts</a></li>
+		<!--<li><a class="filter" id="system-LEADS"  data="Leads" href="#contact-filter/system-LEADS">Leads</a></li>-->
+	</ul>
+</div>
 
 </div></div>
+		
+            <div id="view-list" class="pull-left btn-group"><div class="btn-group m-r-sm">
+    	<button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
+    	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+    	
+    	
+    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs">
+        	<!--<li>
+            	<a href="#contacts" class="DefaultView">Default</a>
+				 a href="#contacts" class="GridView">Grid View</a 
+        	</li>
+			<li class="divider"></li>-->
+			<li class="dropdown-submenu"><a data-toggle="dropdown" id="mobile-dropdown-click-sort">Sort By</a>
+
+				<ul class="dropdown-menu" id="contact-sort-views">
+					<li><a class="sort bold-text" id="sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
+					<li><a class="sort" id="sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
+					<li class="divider"></li>
+					<li><a class="sort" id="sort-by-lead_score-desc" data="-lead_score" href="#">Highest Score</a></li>
+					<li><a class="sort" id="sort-by-lead_score-asc" data="lead_score" href="#">Lowest Score</a></li>
+					<li class="divider"></li>
+					<li><a class="sort" id="sort-by-star_value-desc" data="-star_value" href="#">Highest Starred</a></li>
+					<li><a class="sort" id="sort-by-star_value-asc" data="star_value" href="#">Lowest Starred</a></li>
+					<li class="divider"></li>
+					<li><a class="sort" id="sort-by-first_name-desc" data="-first_name" href="#">First Name Desc</a></li>
+					<li><a class="sort" id="sort-by-first_name-asc" data="first_name" href="#">First Name Asc</a></li>
+					<li class="divider"></li>
+					<li><a class="sort" id="sort-by-last_name-desc" data="-last_name" href="#">Last Name Desc</a></li>
+					<li><a class="sort" id="sort-by-last_name-asc" data="last_name" href="#">Last Name Asc</a></li>
+					<li class="divider"></li>
+					<li><a class="sort" id="sort-by-last_contacted-desc" data="-last_contacted" href="#">Contacted Date Desc</a></li>
+					<li><a class="sort" id="sort-by-last_contacted-asc" data="last_contacted" href="#">Contacted Date Asc</a></li>
+				</ul>
+			</li>
+        	<li class="divider"></li>
+        	<li>
+            	<a href="#contact-view-prefs">Add/Remove Columns</a>
+        	</li>
+    	</ul>
+    	
+	</div>
+    <div class="btn-group">
+        <a href="#contacts" onclick="$('.person').click();" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Contact</a>
+        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+		<ul class="dropdown-menu pull-right">
+			<li><a href="#import">Import from CSV</a></li>
+			<li><a href="#import">Import from Salesforce</a></li>
+		</ul>
+	</div></div>
+            </div>
+			    
+	    	</div>
+	    </div>
+	</div>
 	    	<div class="left-toolbar pos-abs" style="right: 0; top: 12px;">
-	    		<span class="ticket-count-text m-r-xs" style="color:#58666e;">0 tickets found</span>
-		    	<a href="javascript:void(0);" class="btn btn-sm m-l-none bg-transparent refresh-tickets no-shadow b-n p-n" style"margin-top:="" -1px;"="" style="color: rgb(88, 102, 110);">
-			    	<i class="fa fa-refresh" data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh" style="vertical-align: text-top;"></i>
-			    </a>
+	    		
+		    	
 			</div>
 	    </div>
 	    <div class="btn-toolbar m-l-none" style="margin-top: -5px;">
 	    	<div class="btn-group dropdown m-l-none" style="float: none;">
-	    		<button class="btn btn-sm no-shadow p-n b-n bg-transparent" data-toggle="dropdown" style="font-size: 11px; color: rgb(88, 102, 110);">
-					<span class="text-muted">Sort by</span> <span class="p-r-xs sort-field-txt">Last updated time</span>
-				</button>
-				<button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none" data-toggle="dropdown" aria-expanded="false" style="padding-left: 5px;">
-					<span class="caret"></span>
-				</button>
-			    <ul class="dropdown-menu">
-			    	<li>
-			    		<a class="sort-link sort-field" href="javascript:void(0);" data-sort-key="last_updated_time">Updated time <i class="fa fa-check pull-right txt-small m-t-xs sort-field-check"></i> 
-		    			</a>
-		    		</li>
-			    	<li>
-			    		<a class="sort-field" href="javascript:void(0);" data-sort-key="created_time">
-				    		Created time <i class="fa fa-check pull-right txt-small m-t-xs display-none sort-field-check"></i> 
-				    	</a>
-				    </li>
-			    	<li>
-			    		<a class="sort-field" href="javascript:void(0);" data-sort-key="priority_code">
-				    		Priority <i class="fa fa-check pull-right txt-small m-t-xs display-none sort-field-check"></i> 
-				    	</a>
-			    	</li>
-			    	<li>
-			    		<a class="sort-field" href="javascript:void(0);" data-sort-key="due_date">
-				    		Due Date <i class="fa fa-check pull-right txt-small m-t-xs display-none sort-field-check"></i> 
-				    	</a>
-			    	</li>
-			    	<li class="divider"></li>
-			    	<li>
-			    		<a class="sort-by" data-sort-by="-" href="javascript:void(0);">Descending <i class="fa fa-check pull-right txt-small m-t-xs sort-by-check"></i> </a>
-			    	</li>
-			    	<li><a class="sort-by" data-sort-by="" href="javascript:void(0);">Ascending <i class="fa fa-check pull-right txt-small m-t-xs sort-by-check display-none"></i> </a></li>
-				</ul>
+	    		
+				
+			    
 	    	</div>
 	    </div>
 	</div>
@@ -341,39 +527,19 @@
 			<div class="wrapper p-n">
 	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
 					<div class="panel-heading no-shadow" style="border-bottom: 0;">
-				      	<label class="i-checks i-checks-sm" style="margin-left: 3px;">
-					      <input class="ticket-checkbox select-all" type="checkbox" disabled=""><i></i>
-					    </label>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">Assignee</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Manage labels</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Close</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Delete</button>
-					    <div class="btn-group dropdown">
-				          <button class="btn btn-default btn-sm bulk-action-btn disabled" data-toggle="dropdown" aria-expanded="false">More <span class="caret"></span></button>
-				        </div>
+				      	
+					    
+					    
 
-					    <div class="btn-group dropdown pull-right">
-				          <button class="btn btn-sm btn-default toggle-collection-view multi-line">
-					    		
-					    			<i class="fa fa-navicon"></i>
-					    		
-					    	</button>
-				        </div>
+					    
 				    </div>
 				    <div class="form-inline no-footer">
 			    		<div class="row m-n">
 			    			<div class="col-sm-12 p-n">
 			    				<div class="text-center padder-v b-t">
-									<h4 class="m-t-none m-b-xs">You don't have any tickets</h4>
-									<div class="m-b-xs">
-										Configure your help desk system to answer customer queries from your Agile Dashboard.
-									</div>
-									<div>
-										<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-											Configure Help Desk
-										</a>
-									</div>
+									
+									
+									
 								</div>
 			    			</div>
 			    		</div>
