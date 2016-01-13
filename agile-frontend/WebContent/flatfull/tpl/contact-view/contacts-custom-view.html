@@ -25,7 +25,7 @@
 <div class="bg-light lter b-b wrapper-md ng-scope">
     <div>
       <div>
- <h1 class="m-n font-thin h3 pull-left"><span id="contact-heading">Contacts</span><span id="contacts-count" class="m-l-xs">{{contacts_count}}</span></h1>
+ <h1 class="m-n font-thin h3 pull-left"><span id="contact-heading">Contacts</span><span id="contacts-count" class="m-l-xs"></span></h1>
             <div class="pull-left"> <div class="btn-group m-l-lg m-r-sm pull-left" id="bulk-actions"
 				style="display: none;">
 
@@ -64,64 +64,166 @@
 </div>
 </div>
 
-    <div class="{{#is_mobile}} wrapper-md {{else}} hbox hbox-auto-xs hbox-auto-sm {{/is_mobile}}">
-    {{#is_mobile}}
-    {{else}}
-    <div class="col w-md b-r" id="contacts-lhs-filters-toggle" style="display:{{toggle_contacts_filter}}">
-		<div class="data-block">
-			<div  id="lhs_filters_conatiner">
-				
+
+
+<!-- Newly Added -->
+
+<div id="tickets-container" class="hbox hbox-auto-xs hbox-auto-sm">
+	<div class="col w-lg bg-light dk b-r bg-auto" style="">
+		<div id="custom-filters-container"><div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+        <h4 class="m-b-md" style="margin-left:22px;">
+		<span class="pull-left"><span>Filter Contacts</span>
+		</span>
+		<span class="pull-right m-r-sm">
+		<a id="clear-lhs-contact-filters" class="text-sm text-muted" href="#">
+			 Clear all
+			 </a>
+	</span>
+<div class="clearfix"></div>
+	</h4>
+        <div class="col-md-12 p-n assignee-select">
+  
+     
+    
+
+</div>
+        
+<div class="col-md-12 p-n group-select">
+  
+    
+    
+
+</div>
+    </div>
+  </div>
+</div>
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+      <div class="col-md-12 p-n m-b-xs txt-small">Labels</div>
+      
+      
+      
+      
+      
+      <div class="col-md-12 p-n">
+        
+      </div>
+    </div>
+  </div>
+</div>
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="col-md-12 p-n m-b-xs txt-small">Status</div>
+        <div class="col-md-12 p-n">
+          
+          
+        </div>
+        <div class="col-md-12 p-n txt-small">
+          
+          
+        </div>
+        
+        <div class="col-md-12 p-n">
+          
+          
+        </div>
+        
+      </div>
+    </div>
+</div>
+<div class="wrapper bg-light hidden-sm hidden-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="col-md-12 p-n m-t m-b-xs txt-small">Type</div>
+        <div class="col-md-12 p-n">
+          <div class="col-md-12 p-n">
+          
+          
+        </div>
+        <div class="col-md-12 p-n">
+          
+          
+        </div>
+        <div class="col-md-12 p-n">
+          
+          
+        </div>
+      </div>
+    </div>
+</div></div></div>
+	</div>
+	<div class="col bg-white">
+		<div id="right-pane"><div class="tickets-toolbar">
+	<div class="wrapper bg-light padder-md padder-v">
+	    <div class="btn-toolbar m-l-none pos-rlt">
+	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
+	    	<div>
+
+
+    
+    
+
+
+
+
 			</div>
 		</div>
-    </div>
-    {{/is_mobile}}
-    <div class="{{#is_mobile}} contacts-div {{else}} col contacts-div {{/is_mobile}}">
-		{{#unless this.length}}
-			
-			<div class="filter-criteria">
-					
+	    	<div class="left-toolbar pos-abs" style="right: 0; top: 12px;">
+	    		
+		    	
 			</div>
-			<div class="panel-heading" style="background:#f6f8f8;">Contacts List
-			{{#is_mobile}}
-			{{else}}
-			<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-			<i id="icon-filter" class="fa fa-bars icon-white"></i>
-			</a>
-			{{/is_mobile}}
-</div>
-			<div id="slate"></div>
-		{{else}}
-        <div class="data {{#is_mobile}} panel panel-default b-l {{else}}  {{/is_mobile}}" {{#is_mobile}} style ="border-left:1px solid #dee5e7;" {{/is_mobile}}>
-         <div class="panel-heading" style="background:#f6f8f8;">Contacts List
-       {{#is_mobile}}
-       {{else}}  
-		<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-			<i id="icon-filter" class="fa fa-bars icon-white"></i>
-		</a>
-		{{/is_mobile}}
-</div>
-            <div class="dta-contatiner table-responsive">
-				<div class="panel panel-default {{#is_mobile}} m-b-none {{/is_mobile}}" style="{{#is_mobile}} overflow-x:hidden; {{else}} overflow-x:auto; {{/is_mobile}} border-left:none;">
+	    </div>
+	    <div class="btn-toolbar m-l-none" style="margin-top: -5px;">
+	    	<div class="btn-group dropdown m-l-none" style="float: none;">
+	    		
+				
 			    
-                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
-					<div class="filter-criteria">
+	    	</div>
+	    </div>
+	</div>
+</div></div>
+		<div class="tickets-collection-pane"><div>
+	
+		<div class="tickets-div">
+			<div class="wrapper p-n">
+	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
 					
-					</div>
-					<thead>
-                        <tr style="text-transform: capitalize;">
-                            {{contactTableHeadings "fields_set"}}
-                        </tr>
-                    </thead>
-                    <tbody id="contacts-custom-view-model-list" route="contact/">
-                    </tbody>
-                </table>
+				    <div class="form-inline no-footer">
+			    		<div class="row m-n">
+			    			<div class="col-sm-12 p-n">
+			    				<div class="text-center padder-v b-t">
+									
+									
+									
+								</div>
+			    			</div>
+			    		</div>
+			    	</div>
 				</div>
-            </div>
-        </div>
-	{{/unless}}
-    </div>
+			</div>
+		</div>
+	
+
+</div></div>
+	</div>
 </div>
-</div>
+
+
+
+
+
+
+
+
+
+
+
+<!-- Newly Added -->
+    
 </script>
 <script id="contacts-custom-view-table-collection-template" type="text/html">
 {{#unless this.length}}
