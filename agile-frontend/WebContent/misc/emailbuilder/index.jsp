@@ -64,7 +64,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
 }
 </style>
     </head>
-    <body class="edit" style="overflow-x: hidden;" onload="parent.onEmailBuilderLoad()">
+    <body class="edit" style="overflow-x: hidden;" onload="parent.onEmailBuilderLoad()" id="builderFullBodyHolder">
         <div class="navbar navbar-inverse navbar-fixed-top navbar-layoutit hidden">
             <div class="navbar-header">
                 <button data-target="navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
@@ -1035,6 +1035,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                             <a class="btn btn-default btn-sm " href="#">smalltablet</a>
                             <a class="btn btn-default btn-sm " href="#">ipad</a>
                         </div>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <iframe id="previewFrame"  class="iphone"></iframe>
                     </div>
                     <div class="modal-footer">

@@ -121,7 +121,7 @@ function redirectToOldEditor(templateId) {
 
 function onEmailBuilderLoad() {
     $("#loadingImgHolder").hide();
-    $("#emailBuilderForm").show();
+    $("#emailBuilderTopOptionsHolder").show();
 }
 
 function setAttachmentInTemplateEdit(attachmentId) {
