@@ -28,6 +28,7 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.TagManagement;
 import com.agilecrm.contact.deferred.TagManagementDeferredTask;
 import com.agilecrm.contact.deferred.TagManagementDeferredTask.Action;
+import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.user.access.exception.AccessDeniedException;
@@ -98,6 +99,13 @@ public class TagsAPI
     {
 	try
 	{
+	    if (count == null)
+		count = "100";
+	    if (sortKey != null && ContactFilterUtil.isCustomField(sortKey))
+	    {
+		return ContactFilterUtil.getFilterContactsBySortKey(sortKey, Integer.parseInt(count), cursor);
+	    }
+
 	    if (count != null)
 		return ContactUtil.getContactsForTag(tag, Integer.parseInt(count), cursor, sortKey);
 
@@ -125,7 +133,7 @@ public class TagsAPI
     {
 	try
 	{
-		return ContactUtil.getContactsCountForTag(tag);
+	    return ContactUtil.getContactsCountForTag(tag);
 
 	}
 	catch (Exception e)
@@ -134,7 +142,7 @@ public class TagsAPI
 	    return 0;
 	}
     }
-    
+
     /**
      * Gets all the contacts which are associated with the given tag and returns
      * as list
