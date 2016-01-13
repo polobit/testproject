@@ -32,6 +32,10 @@
             "options": {
             "SET_NULL": "set to null (blank)"
             },
+            "style": {
+                "vertical-align": "-3px",
+                "margin-right": "3px"
+            },
             "title": "Select set button to set the Select Property <br/> Select Set to null(blank) button to remove the Select Property ",
             "type": "radio",
             "fieldType":"radio"   
@@ -44,6 +48,10 @@
             "target_type": "updated_value",
             "options": {
             "SET": "set"
+            },
+            "style": {
+                "vertical-align": "-3px",
+                "margin-right": "3px"
             },
             "title": "Select set button to add the Select Property <br/> Select Set to null(blank) button to remove the Select Property ",
             "type": "radio",
