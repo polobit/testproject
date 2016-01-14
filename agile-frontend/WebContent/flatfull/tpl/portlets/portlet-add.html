@@ -15,6 +15,17 @@
 					<!--<img class="show_screeshot v-top question-tag" id="{{remove_spaces name}}"
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"/>-->
 				</div>
+				<div class="controls col-sm-10">
+					<span class="m-xs block">
+						<a href="#" id="category-select-all" class="text-info">Select all</a> |
+						<a href="#" id="category-select-none" class="text-info">Select none</a>
+					</span>
+					<select id="category-list" name="category-list" class="required form-control" multiple="multiple">
+						<option value="DashBoard">DashBoard</option>
+						<option value="Deals">Deals</option>
+						
+					</select>
+				</div>
 
 			{{#if_equals "Mini Calendar" name}}
 			  {{#if is_added}}

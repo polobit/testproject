@@ -82,12 +82,14 @@ public class PortletsAPI {
 			if(portlet!=null){	
 				/*if(portlet.portlet_route.equals(Portlet.PortletRoute.DashBoard))
 					portlet.portlet_route=null;*/
+				//for(Portlet portlet:portlets)
 				portlet.save();
 				
 				if(portlet.prefs!=null){
 					JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
 					portlet.settings=json;
 				}
+				//}
 				//PortletUtil.setPortletContent(portlet);
 			}
 		} catch (Exception e) {

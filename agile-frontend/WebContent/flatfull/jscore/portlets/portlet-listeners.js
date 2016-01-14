@@ -861,6 +861,20 @@ function initializePortletsListeners() {
  */
 function initializeAddPortletsListeners() {
 
+	//$('#ms-category-list', elData).remove();
+			head.js(LIB_PATH + 'lib/jquery.multi-select.js', function() {
+				$('#category-list, #user-list' ).multiSelect();
+				$('#ms-category-list .ms-selection').children('ul')
+						.addClass('multiSelect').attr("name", "category-list")
+						.attr("id", "category");
+				$('#ms-category-list .ms-selectable .ms-list').css(
+						"height", "105px");
+				$('#ms-category-list .ms-selection .ms-list').css(
+						"height", "105px");
+				$('#ms-category-list').addClass(
+						'portlet-category-ms-container');
+			});
+
 	$('.col-md-3')
 			.on(
 					"mouseenter",
@@ -925,9 +939,19 @@ function initializeAddPortletsListeners() {
 			"click",
 			'.add-portlet',
 			function() {
+				var route=[];
 				var url='core/api/portlets/add';
+				$('#category-list', $(this).parent().parent())
+									.find('option')
+									.each(
+											function() {
+												if ($(this).is(':selected'))
+													route.push($(this).val());
+												/*else
+													route['' + $(this).val()] = false;*/
+											});
 				var forAll=false;
-				clickfunction($(this),url,forAll);
+				clickfunction($(this),url,forAll,route);
 			});
 	$('#portlets-add-listener').on(
 			"click touchstart",
@@ -939,8 +963,20 @@ function initializeAddPortletsListeners() {
 				
 			});
 
+		$('.panel').off("click").on('click', '#category-select-all',
+			function(e) {
+				e.preventDefault();
+				$('#category-list').multiSelect('select_all');
+			});
+
+	$('.panel').off("click").on('click', '#category-select-none',
+			function(e) {
+				e.preventDefault();
+				$('#category-list').multiSelect('deselect_all');
+			});
+
 }
-function clickfunction(that,url,forAll){
+function clickfunction(that,url,forAll,route){
 
 	var portlet_type = that.attr("portlet_type");
 				var p_name = that.attr("portlet_name");
@@ -972,17 +1008,20 @@ function clickfunction(that,url,forAll){
 						obj.row_position=obj.row_position+1;
 					}*/
 				}
-
-				var portlet = new BaseModel();
+				var models = [];
+				$.each(route,function(e){
+					var portlet = new BaseModel();
 				portlet.url = url;
 				portlet.set({
 					"prefs" : JSON.stringify(json),
 					"isForAll" : forAll,
 
-					"portlet_route" : "DashBoard",
+					"portlet_route" : this.toString(),
 				}, {
 					silent : true
 				});
+
+				
 				var model;
 				var scrollPosition;
 				portlet.save(obj, {
@@ -1000,4 +1039,5 @@ function clickfunction(that,url,forAll){
 						alert("Failed to add.");
 					}
 				});
+			});
 				}
