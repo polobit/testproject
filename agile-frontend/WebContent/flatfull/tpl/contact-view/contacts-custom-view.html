@@ -30,28 +30,20 @@
 <div id="tickets-container" class="hbox hbox-auto-xs hbox-auto-sm">
 	<div class="col w-lg bg-light dk b-r bg-auto" style="">
 		<div id="custom-filters-container">
-
-
-
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
-  <div class="panel panel-default m-b-none">
-  <header>
-<div>
-	<h4 style="margin-left: 17px;">
-		<span class="pull-left"><span>Filter Contacts</span>
+	<div>
+		<span class="pull-right m-r-sm">
+			<a id="clear-lhs-contact-filters" class="text-sm text-muted" href="#" style="margin-right: 6px;">
+				 Clear all
+			</a>
 		</span>
-<span class="pull-right m-r-sm">
-		<a id="clear-lhs-contact-filters" class="text-sm text-muted" href="#">
-			 Clear all
-			 </a>
-	</span>
-<div class="clearfix"></div>
-	</h4>
-	
-</div>
-</header>
+  </div>
+
+
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs" style="padding-top:20px">
+  <div class="panel panel-default m-b-none">
+  
     <div class="panel-body">
-      <div class="control-group form-group" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;">
+      <div class="control-group form-group" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
       
 	<a data-toggle="collapse" id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
 		Tags
@@ -84,13 +76,13 @@
 						</span>
 					</div>
 					<div class="m-t-xs">
-						<a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a>
+						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt" style="top: -7px;float: right;" data-name="tags"><i class="icon-plus"></i> Add</a>
 					</div>
 					<div class="clearfix"></div>
 				</div>
 		</div>	
-		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-left text-muted pos-rlt" style="top:-10px" data-name="tags"><i class="icon-plus"></i> Add</a>
-		<div class="clearfix" style="height:10px"></div>	
+		
+			
 	</div>
 </div>
 
@@ -145,7 +137,7 @@
 
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
         <div class="control-group form-group" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;>
@@ -185,7 +177,7 @@
 </div>
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
        <div class="control-group form-group " style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;>
@@ -247,7 +239,7 @@
 </div>
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
         <div class="control-group form-group" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;>
@@ -280,7 +272,7 @@
 
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
         <div class="control-group form-group" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;>
@@ -328,7 +320,7 @@
 </div>
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
         <div class="control-group form-group " style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;>
@@ -394,30 +386,10 @@
 	<div class="wrapper bg-light padder-md padder-v">
 	    <div class="btn-toolbar m-l-none pos-rlt">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
-
-	<button class="btn btn-sm filter-name-btn no-shadow bg-transparent p-n b-n" data-toggle="dropdown" style="font-size: 18px;color: rgb(88, 102, 110);" aria-expanded="false">Bulk Actions</button>
-	<button class="btn btn-sm dropdown-toggle no-shadow bg-transparent b-n" data-toggle="dropdown" aria-expanded="true" style="padding-left: 5px;">
-		<span class="caret"></span>
-	</button>
-    <a href="javascript:void(0);" class="btn btn-sm m-l-none bg-transparent toggle-custom-filters no-shadow b-n p-l-none" style="color: rgb(88, 102, 110);">
-    	<i class="fa fa-filter text-base" data-toggle="tooltip" data-placement="bottom" data-original-title="Hide filters"></i>
-    </a>
-    <ul class="dropdown-menu" id="view-actions">
-						<li><a href="#" id="bulk-tags" class="_contact_bulk_action">Add Tags</a></li>
-						<li><a href="#" id="bulk-tags-remove" class="_contact_bulk_action">Remove Tags</a></li>
-                        <li class="divider"></li>  
-						
-						<li><a href="#" id="bulk-campaigns" class="_contact_bulk_action">Add to Campaign</a></li>
-						
-						<li><a href="#" id="show-callcampaignModal">Start Call Campaign<span class="label label-sm bg-danger" style="margin-left:2px;">Beta</span></a></li>
-						<li><a href="#" id="bulk-email" class="_contact_bulk_action">Send Email</a></li>
-                        <li class="divider"></li>
-						<li><a href="#" id="bulk-owner" class="_contact_bulk_action">Change Owner</a></li>
-                         
-                        <li><a href="#" id="bulk-contacts-export" class="_contact_bulk_action">Export Contacts as CSV</a></li>
-                         
-						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
-					</ul>
+	    		<div style="font-size: 18px;color: rgb(88, 102, 110);">Contacts</div>
+	
+    
+    
 
 
 </div></div>
