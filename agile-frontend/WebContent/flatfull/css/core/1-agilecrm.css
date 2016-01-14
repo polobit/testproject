@@ -3047,3 +3047,10 @@ width : 100px;
 	height:332px;
 	overflow-y:auto;
 }
+
+
+#count_goals_chart .highcharts-tooltip , 
+#amount_goals_chart .highcharts-tooltip 
+{
+	z-index: 1;
+}

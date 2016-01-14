@@ -59,17 +59,17 @@
                     
               <div class="col padder-v text-muted b-r b-light text-ellipsis">
                 <div class="h4">{{currencySymbol}}{{numberWithCommasForActivities sales}}</div>
-                <span>Total Sales {{#if Team_Revenue}}(Team :{{currencySymbol}}{{numberWithCommasForActivities Team_Revenue}}){{/if}}</span>
-                {{#if Rank}}<div> Rank : {{Rank}} in the team</div>{{/if}}
+                <span>Total Sales </span>
+                {{#if Rank}}<div> Rank: {{Rank}} in the team {{#if Team_Revenue}}(Team: {{currencySymbol}}{{numberWithCommasForActivities Team_Revenue}}){{/if}}</div>{{/if}}
               </div>
               <div class="col padder-v text-muted b-r b-light text-ellipsis">
                 <div class="h4">{{numberWithCommasForActivities soldDeals}}</div>
-                <span>Won Deals {{#if Team_Revenue}}(Team :{{numberWithCommasForActivities Team_Deals}}){{/if}}</span>
-                {{#if won_Rank}} <div> Rank : {{won_Rank}} in the team</div>{{/if}}
+                <span>Won Deals </span>
+                {{#if won_Rank}} <div> Rank: {{won_Rank}} in the team {{#if Team_Revenue}}(Team: {{numberWithCommasForActivities Team_Deals}}){{/if}}</div>{{/if}}
               </div>
               <div class="col padder-v text-muted text-ellipsis">
                 <div class="h4">{{currencySymbol}}{{numberWithCommasForActivities avgSalesValue}}</div>
-                <span>Avg. Deal Size {{#if Team_average}}(Team :{{currencySymbol}}{{numberWithCommasForActivities Team_average}}){{/if}}</span>
+                <span>Avg. Deal Size {{#if Team_average}}(Team: {{currencySymbol}}{{numberWithCommasForActivities Team_average}}){{/if}}</span>
               </div>
             </div>
           </div>

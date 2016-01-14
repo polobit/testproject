@@ -1988,48 +1988,7 @@ function showGuage(selector, data,goal_data,name,show_loading)
 		{
 			
 			chart = new Highcharts.Chart({
-		       /* chart: {
-		            type: 'solidgauge',
-		            marginRight: 100,
-		            renderTo: selector
-		        },
-		        title: {
-		            text: name,
-		            x: -50
-		        },
-		        plotOptions: {
-		            series: {
-		                dataLabels: {
-		                    enabled: true,
-		                    format: '<b>{point.name}</b> ({point.y:,.0f})',
-		                    color: '#ccc',
-		                    softConnector: true
-		                },
-		                
-		                //-- Other available options
-		                // height: pixels or percent
-		                // width: pixels or percent
-		                borderWidth: 0
-		            }
-		        },
-		        tooltip : {
-		        	 headerFormat: '<span style="font-size: 12px">{point.key}</span><br/>'
-		        	},
-		        legend: {
-		            enabled: false
-		        },
-		        series: [{
-		            name: 'Contacts',
-		            data: data2
-		        }],
-		        noData: {
-									 style: {
-									   
-										fontSize: '14px',
-										fontWeight : 'normal',
-										color : '#98A6AD'
-											 },
-						},*/
+		      
 						chart: {
             type: 'solidgauge',
 		            renderTo: selector,
@@ -2091,6 +2050,8 @@ function showGuage(selector, data,goal_data,name,show_loading)
             },
                 min: 0,
             max: goal_data,
+
+             gridLineWidth: 0
         },
 
         plotOptions: {
@@ -2101,15 +2062,18 @@ function showGuage(selector, data,goal_data,name,show_loading)
                 			enabled : true,
                 			useHTML : true,
                 			borderWidth : 0,
-                			y:-20,
+                			y:-60,
                 			formatter : function()
                 			{
+                				var s=(data/goal_data)*100;
+                				var element='<div class="text-center m-b-lg" style="font-size:20px">'+Math.round(s)+'%</div>'
                 				if(selector=='amount_goals_chart')
-                						return '<div style="text-align:center"><span style="font-size:25px;color:' +
+                						element=element+ '<div class="text-center"><span style="font-size:25px;color:' +
                     	 'black' + '">'+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(data)+'</span></div>';
                 					else
-                				return '<div style="text-align:center"><span style="font-size:25px;color:' +
+                				element=element+ '<div class="text-center"><span style="font-size:25px;color:' +
                      		'black' + '">'+getNumberWithCommasForCharts(data)+'</span></div>';
+                     		return element;
                 			}
             },
         },
@@ -2127,4 +2091,95 @@ function showGuage(selector, data,goal_data,name,show_loading)
         }]
     });
 		    });
+}
+
+function showFunnelForConversion(selector, name, show_loading,v)
+{
+	
+	setupCharts(function()
+	{
+
+			
+			var funnel_data = [];
+			
+
+			
+					$.each(v,function(k1,v1){
+					var each_data = [];
+					each_data.push(k1, v1);
+					funnel_data.push(each_data);
+				});
+				
+			
+			console.log(funnel_data);
+			
+			chart = new Highcharts.Chart({
+		        chart: {
+		            type: 'funnel',
+		            marginRight: 100,
+		            renderTo: selector
+		        },
+		        title: {
+		            text: name,
+		            x: -50
+		        },
+		        plotOptions: {
+		            series: {
+		                dataLabels: {
+		                    enabled: true,
+		                    format: '<b>{point.name}</b> ({point.y:,.0f})',
+		                    color: '#ccc',
+		                    softConnector: true
+		                },
+		                neckWidth: '30%',
+		                neckHeight: '25%',
+		                
+		                //-- Other available options
+		                // height: pixels or percent
+		                // width: pixels or percent
+		                borderWidth: 0
+		            }
+		        },
+		        tooltip : {
+		        	 formatter:  function(){
+		        	 		var percent=0;
+		        	 		if(this.point.x==0)
+		        	 				percent=100;
+		        	 		if(this.point.x!=0 && funnel_data[this.point.x-1][1]!=0)
+		        	 			percent=(funnel_data[this.point.x][1]/funnel_data[this.point.x-1][1])*100;
+						return  '<div>' + 
+                              	'<div class="p-n">'+this.point.name+'</div>'+
+                                '<div class="p-n">'+this.series.name+': '+getNumberWithCommasForCharts(this.point.y)+'</div>' +
+                                
+                                '</div>'+
+                                '<div class="p-n">'+percent+'%</div>';
+                               
+                        
+						},
+							  shared: true,
+								  useHTML: true,
+
+		        	 //headerFormat: '<span style="font-size: 12px">{point.key}</span><br/>'
+		        	},
+		        legend: {
+		            enabled: false
+		        },
+		        exporting :{
+		        	enabled:false
+		        },
+		        series: [{
+		            name: 'Deals',
+		            data: funnel_data
+		        }],
+		        noData: {
+									 style: {
+									   
+										fontSize: '14px',
+										fontWeight : 'normal',
+										color : '#98A6AD'
+											 },
+						},
+		    });
+			
+		});
 }

@@ -377,16 +377,29 @@ user_reports :function(callReportUrl){
 	
 		conversion_report : function(url)
 		{
+
+			
 			portlet_graph_data_utility.fetchPortletsGraphData(url,function(data){
 
 				console.log(data);
-				var div='';
+				//var div='';
 				var pipeline_json=[];
 				$.each(data,function(index,data1){
 				$.each(data1,function(index,data2){
 				 	 $.each(data2,function(k,v){
-				 	div=div.concat('<div id='+k+' class="conversion_track col-sm-4 panel wrapper"><b>'+k+'</b>');
-				 	//var innerdiv='';
+				 	 	var total=0;
+				 	 	$.each(v,function(k1,v1){
+				 	 		total=total+v1;
+				 	 	});
+				 	 	if(total>0){
+				 	var div='<div id='+k+' class="conversion_track col-sm-4 panel wrapper"></div>';
+				 	
+				 	$(".converionsPipeline").append(div);
+
+				 	
+				 	showFunnelForConversion(k,k,true,v);
+				 }
+				 	/*//var innerdiv='';
 				 	var index=0;
 				 		$.ajax({ url : 'core/api/milestone/pipelinesbyName/'+k, type : 'GET', success : function(data)
 					{
@@ -451,12 +464,11 @@ user_reports :function(callReportUrl){
 				 		div=div.concat('<div class="hidden"></div>');
 				 	div=div.concat('</div>');
 				 	
-				 		//$('.conversion_track').hide();
+				 		//$('.conversion_track').hide();*/
 				 	
 				 });
 });				
-}); $(".converionsPipeline").html(div);
-				 $('.hidden').parents('.conversion_track').remove();
+}); 
 				 if($('.converionsPipeline').children().length==0)
 				 	$('.converionsPipeline').parents('.row').hide();
 
