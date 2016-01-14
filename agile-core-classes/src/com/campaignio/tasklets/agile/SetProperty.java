@@ -101,14 +101,17 @@ public class SetProperty extends TaskletAdapter
 			// Get Contact Id and Contact
 			String contactId = AgileTaskletUtil.getId(subscriberJSON);
 			Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
+			
 
 			if (contact == null)
 				return subscriberJSON;
 			
-			//When clicks radio button set to null
+			//When clicks radio button delete property
 			if(StringUtils.equalsIgnoreCase(SET_NULL, action))
 			{
 				contact.removeProperty(updated_field);
+				if(StringUtils.equalsIgnoreCase(updated_field, Contact.COMPANY))
+					contact.contact_company_id = null;
 				contact.save();	
 				
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
