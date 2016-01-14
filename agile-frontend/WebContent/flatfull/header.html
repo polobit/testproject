@@ -235,9 +235,9 @@
 							</li>
 							
 						</ul>
-
-						<ul class="nav  navbar-nav  navbar-right show_shortcuts">	
-							<li rel="popover" data-trigger="click" class="need_help hidden-xs" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'  style='color:#7D7474'>
+  
+ 			<ul class="nav  navbar-nav  navbar-right show_shortcuts">	
+						<!-- 	<li rel="popover" data-trigger="click" class="need_help hidden-xs" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'  style='color:#7D7474'>
 									<div class='col-md-12 text-sm p-b-xs'>Need Help? We are one click away.</div>
 								</div>
 								<div class='row m-none' style='color:#7D7474'>
@@ -256,10 +256,17 @@
 								 </div>
 								</div><div class='clearfix'></div>
 							    </div>">
-								
-								<a href="#" onclick='return false;'><i class="fa fa-question-circle"></i></a>
-		
-							</li>		
+							     -->
+							    
+							<!-- for full screen  -->
+						{{is_mobile}}
+
+
+						{{else}}
+							<li><a  class="enable-element-full-screen"><span class="fa fa-arrows-alt"></span></a></li>
+
+						{{/is_mobile}}
+									
 							<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 								data-toggle="dropdown" href="">New <b class="caret"></b></a>
 								<ul class="dropdown-menu animated fadeInRight">
