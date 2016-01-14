@@ -302,6 +302,7 @@ margin:0 10px -1px;
 .rightThumbView
 {
 	width:calc(100% - 50px);
+  white-space: normal;
 }
 .ativity-block-ul li .actions
 {
@@ -790,6 +791,16 @@ display: block!important;
   	left: -11px;
   	top: 8px;
 }
+#timeline .post.right .inner:after {
+    border-bottom: 12px solid transparent;
+    border-right: 12px solid #dee5e7;
+    border-top: 12px solid transparent;
+    content: "";
+    z-index: 8;
+    position: absolute;
+    left: -12px;
+    top: 8px;
+}
 /* #timeline .post.right.color1:before{
 	content: "";
   	padding-bottom: 67px;
@@ -1102,12 +1113,12 @@ font-size:16px;
 	width:calc(100% - 40px);
   word-break:break-all;
 }
-/*#contactDetailsTab li a
+#contactDetailsTab > li > a
 {
 	margin-right:0px;
 	padding:10px;
 }
-*/
+
 
 /*funda for responsive tab list in contact details*/
 
@@ -1855,9 +1866,12 @@ color:#727272;
 .hide-margin-mobile .mobile-pad-content {
   margin-top: 15px;
 }
-.timeline .text-xs {
+#timeline .text-xs,#timeline .contact-job-title {
   white-space: normal;
 }
+.content-tabs-show #mail #mails-span {
+  display: none;
+} 
 }
 
 @media all and (min-width: 768px) {
@@ -1932,12 +1946,14 @@ color:#727272;
     position: absolute;
     top: 9px;
     right: 15px;
+    color: #98a6ad !important;
 }
 .content-tabs-show .panel-heading a.collapsed:after {
     content: "\f107";
     position: absolute;
     top: 11px;
     right: 15px;
+    color: #98a6ad !important;
 }
 .content-tabs-show  .panel-heading + .panel-collapse .panel-body {
   border-top: none;
@@ -1947,13 +1963,16 @@ color:#727272;
     font-size: 11px;
     line-height: 1.5;
 }
-.content-tabs-show .btn i:not(#send-new-mail) {
+.content-tabs-show .btn:not(#send-new-mail) i {
   display: none;
 }
 .content-tabs-show .contact-desc-dynamic .word-break-all {
     word-break: break-all;
     float: left;
     white-space: normal;
+}
+.content-tabs-show .text-info {
+  white-space: normal;
 }
 .content-tabs-show .contact-title-dynamic {
     overflow: hidden;

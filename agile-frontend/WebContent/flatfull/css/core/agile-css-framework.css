@@ -678,6 +678,9 @@
 {
 	white-space:nowrap;
 }
+.space-normal {
+  white-space: normal;
+}
 
 .text-u-c {
   text-transform: uppercase;
