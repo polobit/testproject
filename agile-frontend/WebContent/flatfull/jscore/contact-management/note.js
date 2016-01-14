@@ -6,8 +6,19 @@
  * @module Contact management
  * @author Rammohan
  */
+ var Agile_Old_Hash;
 $(function()
 {
+
+	$(window).on("hashchange", function(e){
+
+		var oldUrl = e.originalEvent.oldURL;
+		if(!oldUrl)
+			 return;
+
+		Agile_Old_Hash = oldUrl.split("#")[1];
+
+	})​;
 
 	$('body').on('click', '.edit-note', function(e)
 	{
@@ -126,29 +137,7 @@ $(function()
 	});
 	//when click on emailbutton automatically it takes contact details
 
-	$('body').on('click', '#send-email', function(e)
-	{
-		e.preventDefault();
-		var url = window.location.href;
-     	var navigateUrl = "send-email";
-     	
-        var urlArray = url.split('/');
-		if(urlArray[3] == "#contact" && urlArray.length >= 5){
-		   var contactId = urlArray[4];
-		   var currentContactJson = App_Contacts.contactDetailView.model.toJSON();
-		   var properties = currentContactJson.properties;
-		   var email = null;
-		    $.each(properties,function(id, obj){
-				if(obj.name == "email"){
-					email = obj.value;
-					return false;
-				}
-			});
-		    navigateUrl += ("/"+email);
-		}
-
-		App_Contacts.navigate(navigateUrl, { trigger : true }); 	
-	});
+	
 
 	/**
 	 * "Hide" event of note modal to remove contacts appended to related to
