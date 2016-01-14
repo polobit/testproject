@@ -284,11 +284,18 @@
        	<div class="contact-owner text-base m-l-md" id="change-owner-element">
         	
 		{{#canEditContact owner.id}}
+		{{#if owner}}
         	<a id="contact-owner-popover" class="custom-color" data={{owner.id}} title="{{owner.name}}">{{owner.name}}</a>
-
         	{{else}}
+        		<a id="contact-owner-popover" class="custom-color" >Assign Owner</a>
+        		{{/if}}
+        	
+        	{{else}}
+        		{{#if owner}}
         		<span id="contact-owner-static" class="custom-color" data={{owner.id}} title="{{owner.name}}">{{owner.name}}</span>
-
+        		{{else}}
+        			<span id="contact-owner-static" class="custom-color" >Assign Owner</span>
+        		{{/if}}
         {{/canEditContact}}
         	{{#canEditContact owner.id}}
         	<div class="dropdown" id="change-owner-ul-popover"  style="display: none">
@@ -364,7 +371,7 @@
 						</div>
 						{{#canEditContact owner.id}}
 			<div class="pull-left"><a href="#" id="add-tags-popover" rel="tooltip"
-							data-original-title="addtag" data-placement="top" class="text-xs  pull-left"> <i class="fa fa-plus text-info"></i><span class="text-info" >Tag</span></a></div>
+							data-original-title="addtag" data-placement="top" class="text-xs  pull-left" style="padding:.2em"> <i class="fa fa-plus text-info"></i><span class="text-info" >Tag</span></a></div>
 						{{/canEditContact}}
 
 						

@@ -63,7 +63,7 @@ function contactListener()
 			$(that).popover('hide');
 		}
 					
-	}, 1000);
+	}, 200);
 		
 	});
 }
