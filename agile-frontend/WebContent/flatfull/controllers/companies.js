@@ -361,10 +361,10 @@ var CompaniesRouter = Backbone.Router
 		add_recent_view(company);
 
 		// If contact is of type company , go to company details page
-		this.companyDetailView = new Contact_Details_Model_Events({ model : company, isNew : true, template : "company-detail",
+		this.companyDetailView = new Contact_Details_Model_Events({ model : company, isNew : true, template : "company-detail", change : false,
 			postRenderCallback : function(el)
 			{
-				fill_company_related_contacts(id, 'company-contacts');
+				fill_company_related_contacts(id, 'company-contacts', el);
 				// Clone contact model, to avoid render and
 				// post-render fell in to
 				// loop while changing attributes of contact
@@ -384,7 +384,7 @@ var CompaniesRouter = Backbone.Router
 
 		var el = this.companyDetailView.render(true).el;
 		$('#content').html(el);
-		fill_company_related_contacts(id, 'company-contacts');
+	//	fill_company_related_contacts(id, 'company-contacts');
 		// company_detail_tab.initEvents();
 		return;
 	},
