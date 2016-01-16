@@ -639,7 +639,7 @@ function showComparisonReportGraph()
 		if ($("#track").val() != ""){
 			track_id=$("#track").val();
 			url += '&track-id='+track_id;
-			LineforComparison(url,'comparison-chart','',true);
+			BubbleChart(url,'comparison-chart','',true);
 		}
 	}
 	

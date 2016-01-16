@@ -2388,7 +2388,7 @@ public class OpportunityUtil
 				Milestone mile=MilestoneUtil.getMilestone(pipeline_id);
 
 				
-
+				if(opp.getOwner()!=null)
 				if(Track_conversion_User.containsKey(opp.getOwner().id.toString()))
 				{
 					JSONObject conversion_user = Track_conversion_User.getJSONObject(opp.getOwner().id.toString());

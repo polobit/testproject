@@ -1968,7 +1968,7 @@ if(selector == 'lossreasonpie-chart-users'){
 					}
 	}
 
-function LineforComparison(url, selector, name,show_loading)
+function BubbleChart(url, selector, name,show_loading)
 	{
 		// Show loading image if required
 	if(typeof show_loading === 'undefined')
@@ -2066,7 +2066,7 @@ function LineforComparison(url, selector, name,show_loading)
 				 				percent=100;
 				 				else
 				 					percent=0;
-				 				value=v2;
+				 				
 				 				
 				 			}
 				 			else
@@ -2076,6 +2076,7 @@ function LineforComparison(url, selector, name,show_loading)
 				 				else
 				 					percent=0;
 				 			}
+				 			value=v2;
 				 				
 				 		i++;
 					series_data.data.push(percent);
@@ -2117,32 +2118,36 @@ function LineforComparison(url, selector, name,show_loading)
 			chart = new Highcharts.Chart({
 			    chart: {
 			        renderTo: selector,
-			        type: 'line',
+			        type: 'scatter',
 			        marginRight: 130,
-			        marginBottom: 50
+			        marginBottom: 50,
+			        inverted : true,
 			    },
 			    title: {
 			        text: name,
 			        x: -20//center
 			    },
-			    plotOptions :{
-			    	area :{
-			    		//stacking : 'percent',
-			    	}
-			    },
+			     plotOptions: {
+            series: {
+                marker: {
+                    radius: 6
+                }
+            }
+        },
 			    xAxis: {
-
+			    	offset: 10,
+			    	lineWidth : 2,
 			        categories: categories,
 			        tickmarkPlacement: 'on',
-			        minTickInterval: min_tick_interval,
+			       // minTickInterval: min_tick_interval,
 			        tickWidth: 1,
 			              labels: {
 				    formatter: function () {
 					    var text = this.value;
-					    if(categories.length>10)
+					    //if(categories.length>10)
 						    var formatted = text.length > 8 ? text.substring(0, 8) + '...' : text;
-						else
-							formatted=text;
+						/*else
+							formatted=text;*/
 
                         return '<div style="width:50px; overflow:hidden" title="' + text + '">' + formatted + '</div>';
 				    },
@@ -2153,6 +2158,7 @@ function LineforComparison(url, selector, name,show_loading)
 			}
 			    },
 			    yAxis: {
+
 			        title: {
 			            text: "Percentage"
 			        },
