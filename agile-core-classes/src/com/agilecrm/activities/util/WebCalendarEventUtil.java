@@ -1380,9 +1380,9 @@ public class WebCalendarEventUtil
 		String date = "Wed Feb 03 2016 11:15:34 GMT 0530 (India Standard Time)";
 		int slot_time = 60;
 		String timezone_name = "Asia/Kolkata";
-		long epoch_time = 1453314600L;
-		long startTime = 1453314600L;
-		long endTime = 1453401000L;
+		long epoch_time = 1453055400L;
+		long startTime = 1453055400L;
+		long endTime = 1453141800L;
 		// long agile_user_id = 5716606839685120L;
 		Long agile_user_id = null;
 		int timezone = -330;

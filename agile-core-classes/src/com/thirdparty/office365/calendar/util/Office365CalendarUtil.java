@@ -20,12 +20,10 @@ import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.activities.util.WebCalendarEventUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.HTTPUtil;
-import com.google.gdata.data.DateTime;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
-import com.thirdparty.google.calendar.util.GooglecalendarPrefsUtil;
 import com.thirdparty.office365.calendar.Office365CalendarPrefs;
 import com.thirdparty.office365.calendar.OfficeCalendarTemplate;
 
@@ -285,10 +283,26 @@ public class Office365CalendarUtil {
 					/*
 					 * Make sub slot of filled slot as per selected duration(slot time) and add in list
 					 */
-					if(officeTemplate != null){													
+					if(officeTemplate != null){		
+						long starting =0L;
+						long ending = 0L;
+						
+						// Starting time.
 						Date start =new Date(officeTemplate.getStart());
-						Date end =new Date(officeTemplate.getEnd());										
-					    filledSlots.addAll(WebCalendarEventUtil.makeSlots(slotTime, start.getTime()/1000, end.getTime()/1000));
+						if(start.getTime()/1000 < startTime){
+							starting = startTime/1000;
+						}else{
+							starting = start.getTime()/1000;
+						}
+						
+						// Ending time.
+						Date end =new Date(officeTemplate.getEnd());	
+						if(end.getTime()/1000 < endTime){
+							ending = endTime/1000;
+						}else{
+							ending = end.getTime()/1000;
+						}
+					    filledSlots.addAll(WebCalendarEventUtil.makeSlots(slotTime, starting, ending));
 					}
 				}
 
