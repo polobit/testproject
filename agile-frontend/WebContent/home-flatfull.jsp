@@ -67,6 +67,20 @@ String width = currentUserPrefs.width;
 boolean is_fluid = !width.isEmpty();
 
 BillingRestriction restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
+//Temp Code 
+//Can remove after 12 mar 2016 
+if(restriction.max_emails_count != null && restriction.max_emails_count > 0 && restriction.max_emails_count <=100){
+  restriction.max_emails_count = 0;
+  restriction.one_time_emails_count = 0;
+  restriction.save();
+  restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
+}
+//End of temp code
+
+if(restriction != null && restriction.checkToUpdateFreeEmails()){
+	restriction.refreshEmails();
+	restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
+}
 boolean is_free_plan = false;
 
 if(restriction != null && restriction.planDetails != null)
@@ -321,7 +335,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 
  
- <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
+  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
@@ -420,8 +434,7 @@ if(!HANDLEBARS_PRECOMPILATION){
     });
     downloadTemplate("contact-view.js", function(){             
     });
-}
-    
+} 
 	
 // Remove the loadinng
 $('body').css('background-image', 'none');
@@ -448,60 +461,6 @@ function load_globalize()
 
 }
 
-/**
- * Downloads the template synchronously (stops other browsing actions) from the
- * given url and returns it
- * 
- * @param {String}
- *            url location to download the template
- * @returns down-loaded template content
- */
-function downloadTemplate(url, callback)
-{
-
-	var dataType = 'html', template_url = CLOUDFRONT_PATH;
-
-
-	// If Precompiled is enabled, we change the directory to precompiled. If
-	// pre-compiled flat is set true then template path is sent accordingly
-	if (HANDLEBARS_PRECOMPILATION)
-	{
-		url = "tpl/min/precompiled/" + FLAT_FULL_UI +  url;
-	}
-	else
-		url = "tpl/min/" + FLAT_FULL_UI +  url;
-
-	// If JS
-	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
-	{
-		dataType = 'script';
-		template_url = template_url.replace("flatfull/", "");
-		url = template_url + url;
-	}
-
-	url += "?_=" + _AGILE_VERSION;
-	
-	// If callback is sent to this method then template is fetched synchronously
-	var is_async = false;
-	if (callback && typeof (callback) === "function")
-		is_async = true;
-
-	console.log(url + " " + dataType + " " + is_async);
-
-	var is_cached = !LOCAL_SERVER;
-
-	jQuery.ajax({ url : url, dataType : dataType, cache:is_cached, success : function(result)
-	{
-		// If HTMl, add to body
-		if (dataType == 'html')
-			$('body').append((result));
-
-		if (is_async)
-			callback(result);
-	}, async : is_async });
-
-	return "";
-}
 </script>
 
 

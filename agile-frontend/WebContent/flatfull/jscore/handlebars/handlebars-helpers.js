@@ -5720,6 +5720,12 @@ $(function()
 		switch (status) {
 		case "completed":
 		case "answered":
+		case "inquiry":
+		case "interest":
+		case "no interest":
+		case "incorrect referral":
+		case "meeting scheduled":
+		case "new oppurtunity":
 			return "Call duration";
 			break;
 		case "busy":
@@ -5738,6 +5744,9 @@ $(function()
 		case "in-progress":
 		case "voicemail":
 			return "Left voicemail";
+			break;
+		case "missed":
+			return "Call missed";
 			break;
 		default:
 			return "";

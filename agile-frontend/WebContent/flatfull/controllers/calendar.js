@@ -72,9 +72,10 @@ calendar : function()
 						$('#grp_filter').css('display', 'none');
 						$('#event_tab').css('display', 'none');
 					
-
+						 $("[data-toggle=tooltip").tooltip();
+						 
 					}, $('#calendar-listers').find("#calendar-filters"));
-		});	
+		});			
 	}, "#calendar-listers");
 
 

@@ -32,13 +32,7 @@ $('#app-aside-folded').on('click', function(e) {
 	
 $(document).ready(function(){
 
-	$.getJSON('scope?scope=COMPANY' , function(result) {
-		$.each(result,function(i,data){
-			console.log(data);
-		});
-	}); 
-
-	 $("#contact-results li").click(function(){
+   $("#contact-results li").click(function(){
    $("#mobile-menu-settings").trigger('click');
    });
  

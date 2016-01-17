@@ -126,7 +126,7 @@ public class SubscriptionApi {
 			DomainUser user = DomainUserUtil.getCurrentDomainUser();
 			if (!user.is_admin)
 			{
-				throw new Exception("Sorry, it seems that you are not the authorised person. Please contact your account administrator for assistance.");
+				throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
 			}
 
 			/*
@@ -182,7 +182,7 @@ public class SubscriptionApi {
 			DomainUser user = DomainUserUtil.getCurrentDomainUser();
 			if (!user.is_admin)
 			{
-				throw new Exception("Sorry, it seems that you are not the authorised person. Please contact your account administrator for assistance.");
+				throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
 			}
 			Subscription subscribe = Subscription.updatePlan(plan);
 
@@ -221,7 +221,7 @@ public class SubscriptionApi {
 			DomainUser user = DomainUserUtil.getCurrentDomainUser();
 			if (!user.is_admin)
 			{
-				throw new Exception("Sorry, it seems that you are not the authorised person. Please contact your account administrator for assistance.");
+				throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
 			}
 			// Return updated subscription object
 			return SubscriptionUtil.createEmailSubscription(plan);

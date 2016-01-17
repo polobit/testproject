@@ -240,7 +240,7 @@ function showCalendar(users)
 											//Office
 											var inArray = type_of_cal.indexOf("office");
 											if(inArray >= 0){
-												//addOffice365CalendarEvents();
+												addOffice365CalendarEvents();
 											}
 											
 											//Agile
@@ -853,10 +853,8 @@ function today()
 {
 	fullCal.fullCalendar('today');
 }
-function refreshcal()
-{
-fullCal.fullCalendar('refetchEvents');
-document.getElementById("refrecal").style.backgroundColor = "#fcfdfd"
+function refreshcal(){
+	fullCal.fullCalendar('refetchEvents');
 }
 
 /**

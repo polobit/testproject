@@ -6,12 +6,12 @@
 		</div>
 	</div>
 </td>
-<td style="width:calc(65%-70px);" class="p-l-none">
-	<div class="table-resp m-l-n-xs">
+<td style="width:calc(75%-80px);" class="p-l-none">
+	<div class="table-resp m-l-n-xs" style="overflow:hidden;width:12em;text-overflow:ellipsis">
 		{{#if_contact_type "PERSON"}}
         	<a class="text-cap custom-link">	{{getPropertyValue properties "first_name"}}
         	{{getPropertyValue properties "last_name"}} </a>
-        	<div>
+        	<div class="text-ellipsis">
 				<small class="text-muted m-t-xs">{{#if_propertyName "title"}}{{value}}, {{/if_propertyName}}{{getPropertyValue properties "company"}}</small>
 			</div>
         {{/if_contact_type}}
@@ -20,8 +20,8 @@
 		{{/if_contact_type}}
 	</div>
 </td>
-<td style="width:35%">
-	<div class="table-resp text-right p-b-xs">
+<td style="width:25%">
+	<div class="overflow-hidden line-clamp line-clamp-2" style="-webkit-line-clamp:1">
 		{{#each tags}}
     		<span class="label bg-light dk text-tiny">{{this}}</span>	
 		{{/each}}
@@ -65,7 +65,7 @@
 	</div>
 </td>
 <td class="text-muted" style="width:50%">
-	<div class="table-resp text-right">
+	<div class="text-right">
 		<i class="fa fa-clock-o m-r-xs"></i>
 		<time class="time-ago" datetime="{{epochToHumanDate "" openedTime}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" openedTime}}</time>
 	</div>
@@ -2334,8 +2334,10 @@ Deleted  {{custom1}} Campaigns<br/>
 
         <div class="r bg-light hbox no-border p-t-none stats-report-settings p-b-md">
            <div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0">
+
 				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
 				<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+
 			</div>
         		<div class=" v-middle hidden-md bg-light dker portlet-panel dealGraph"  style="height:100%;cursor:auto;">
                 </div>
