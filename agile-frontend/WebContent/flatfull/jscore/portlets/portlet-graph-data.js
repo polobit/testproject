@@ -594,7 +594,7 @@ var portlet_graph_data_utility = {
 
 							portlet_graph_utility.dealsAssignedBarGraph(
 									selector, domainUsersList,
-									dealsAssignedCountList);
+									dealsAssignedCountList, base_model);
 
 							portlet_utility.addWidgetToGridster(base_model);
 						});
@@ -685,7 +685,7 @@ var portlet_graph_data_utility = {
 							portlet_graph_utility.callsPerPersonBarGraph(
 									selector, domainUsersList, series,
 									totalCallsCountList, callsDurationList,
-									text, colors, domainUserImgList);
+									text, colors, domainUserImgList,base_model);
 
 							portlet_utility.addWidgetToGridster(base_model);
 						});
