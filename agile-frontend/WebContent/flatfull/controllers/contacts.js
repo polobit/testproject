@@ -95,7 +95,7 @@ var ContactsRouter = Backbone.Router.extend({
 					$("#chrome-extension-button").removeClass('hide');
 				}
 
-				loadPortlets(el);
+				loadPortlets('DashBoard',el);
 
 		}, "#content");
 

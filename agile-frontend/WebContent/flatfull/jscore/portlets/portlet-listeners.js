@@ -941,14 +941,13 @@ function initializeAddPortletsListeners() {
 			function() {
 				var route=[];
 				var url='core/api/portlets/add';
-				$('#category-list', $(this).parent().parent())
+				$('#category-list', $(this).parents('.wrapper'))
 									.find('option')
 									.each(
 											function() {
 												if ($(this).is(':selected'))
 													route.push($(this).val());
-												/*else
-													route['' + $(this).val()] = false;*/
+												
 											});
 				var forAll=false;
 				clickfunction($(this),url,forAll,route);
@@ -957,9 +956,18 @@ function initializeAddPortletsListeners() {
 			"click touchstart",
 			'.add_to_all',
 			function() {
+				var route=[];
+				$('#category-list', $(this).parents('.wrapper'))
+									.find('option')
+									.each(
+											function() {
+												if ($(this).is(':selected'))
+													route.push($(this).val());
+												
+											});
 				var forAll=true;
 				var url='core/api/portlets/addforAll';
-				clickfunction($(this),url,forAll);
+				clickfunction($(this),url,forAll,route);
 				
 			});
 

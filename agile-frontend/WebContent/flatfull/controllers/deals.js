@@ -64,6 +64,7 @@ var DealsRouter = Backbone.Router.extend({
 				setupDealFilters();
 				//setupNewDealFilters();
 				initializeDealListners();
+				
 
 			}, "#opportunity-listners");
 		}
@@ -98,6 +99,7 @@ var DealsRouter = Backbone.Router.extend({
 						setupDealFilters(cel);
 						setNewDealFilters(App_Deals.deal_filters.collection);
 						initializeDealListners(el);
+						loadPortlets('Deals',el);
 					}, appendItemCallback : function(el)
 					{
 						appendCustomfields(el);
@@ -118,6 +120,7 @@ var DealsRouter = Backbone.Router.extend({
 		{
 			$('a.deal-notes').tooltip();
 			$('.deal_won_date').tooltip();
+			loadPortlets('Deals');
 		}, 2000);
 	},
 

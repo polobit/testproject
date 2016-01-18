@@ -20,7 +20,7 @@ $(function()
  * 
  * @param el
  */
-function loadPortlets(el){
+function loadPortlets(route,el){
 
 	App_Portlets.todayEventsCollection = new Array();
 	App_Portlets.tasksCollection = new Array();
@@ -37,6 +37,7 @@ function loadPortlets(el){
 	App_Portlets.campaignstats = new Array();
 	App_Portlets.dealGoals=new Array();
 	App_Portlets.adminPortlets = new Array();
+	App_Portlets.RoutePortlets=new Array();
 
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
@@ -45,9 +46,44 @@ function loadPortlets(el){
 	
 	// This flag is used to ensure portlet script are loaded only once in
 	// postrender. It is set to false after portlet setup is initialized
-	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets?route=DashBoard', sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
+	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets?route='+route, sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 		postRenderCallback : function(portlets_el){
 			set_up_portlets(el, portlets_el);
+				if(route!='DashBoard' && App_Portlets.RoutePortlets.length!=0){
+					var models = [];
+					$.each( App_Portlets.RoutePortlets, function(index,model) {
+
+					var obj={};
+					var next_position = gridster.next_position(1, 1);
+				obj.column_position = next_position.col;
+				obj.row_position = next_position.row;
+
+				
+				model.set({ 'column_position' : obj.column_position}, { silent : true });
+					model.set({ 'row_position' : obj.row_position  }, { silent : true });
+					model.set({'isForAll' : false});
+					//set_p_portlets(model,portlets_el);
+					portlet_utility.getOuterViewOfPortlet(model,portlets_el, function() {
+							portlet_utility.getInnerViewOfPortlet(model, portlets_el);
+						});
+					//set_up_portlets(el,$('#portlets > div'));
+					
+					portlet_utility.addWidgetToGridster(model);
+					var that=$('#'+model.id).parent();
+					if(!(that.attr('data-col')==model.get('column_position')) || !(that.attr('data-row')==model.get('row_position')))
+					{
+						model.set({ 'column_position' : parseInt(that.attr("data-col")) }, { silent : true });
+						model.set({ 'row_position' : parseInt(that.attr("data-row")) }, { silent : true });
+						that.attr('id','ui-id-'+that.attr("data-col")+'-'+that.attr("data-row"));
+					that.find('div.portlet_body').attr('id','p-body-'+that.attr("data-col")+'-'+that.attr("data-row"));
+					}
+					models.push({ id : model.get("id"), column_position : obj.column_position, row_position : obj.row_position,isForAll : false });
+			
+				});
+				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
+					contentType : "application/json; charset=utf-8", dataType : 'json' });
+					
+				}
 				if(App_Portlets.adminPortlets.length!=0)
 				{
 					var models = [];
@@ -58,14 +94,6 @@ function loadPortlets(el){
 				obj.column_position = next_position.col;
 				obj.row_position = next_position.row;
 
-				/*if (model.toJSON().portlet_type == "USERACTIVITY"
-										&& model.toJSON().name == "Leaderboard") {
-									if(obj.column_position==3)
-									{
-										obj.column_position=1;
-										obj.row_position=obj.row_position+1;
-					}
-				}*/
 				
 				model.set({ 'column_position' : obj.column_position}, { silent : true });
 					model.set({ 'row_position' : obj.row_position  }, { silent : true });

@@ -38,12 +38,18 @@ function organize_portlets(base_model) {
  * Appends the outer view and inner view of each portlet.
  */
 function set_p_portlets(base_model) {
+	
+	if(base_model.toJSON().portlet_route!='DashBoard'){
+		App_Portlets.RoutePortlets.push(base_model);
+		return;
+	}
 
 	if(base_model.toJSON().isForAll)
 	{
 		App_Portlets.adminPortlets.push(base_model);
 		return;
 	}
+	
 	var that = this;
 	portlet_utility.getOuterViewOfPortlet(base_model, this.el, function() {
 		portlet_utility.getInnerViewOfPortlet(base_model, that.el);

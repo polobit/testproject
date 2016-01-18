@@ -165,10 +165,10 @@ public class PortletUtil {
 			}
 		}
 		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route", route).list();
-		if(portlets!=null && portlets.size()==0)
-			addDefaultPortlets();
+		if(portlets!=null && portlets.size()==0 && route.equals(Portlet.PortletRoute.DashBoard))
+			{addDefaultPortlets();
 		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route",Portlet.PortletRoute.DashBoard ).list();
-		//}
+		}
 		for(Portlet portlet : portlets){
 			if(portlet.prefs!=null){
 				JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
