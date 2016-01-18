@@ -53,7 +53,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
 
-        <script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+        <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.2.6/plugins/colorpicker/plugin.min.js"></script>
         <script type="text/javascript" src="js/colpick.js"></script>
         <script type="text/javascript" src="js/template.editor.js?v=4"></script>
@@ -169,7 +169,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                             <tbody>
                                                 <tr>
                                                     <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;font-family:Arial;font-size:13px;color:#000000;line-height:22px">
-                                                        <p style="margin:0px 0px 10px 0px;line-height:22px">This is a Text Block! Click on this text to edit it. You can add content easily by dragging content blocks from the right sidebar. Drag this and other blocks around to re-order them.</p>
+                                                        <div style="margin:0px 0px 10px 0px;line-height:22px">This is a Text Block! Click on this text to edit it. You can add content easily by dragging content blocks from the right sidebar. Drag this and other blocks around to re-order them.</div>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -265,9 +265,9 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                             </tbody>
                                                         </table>
                                                         <h2 style="line-height: 30px; text-decoration: none; font-weight: normal;font-family: Arial; font-weight: normal; font-size: 20px; color: #34495E; margin: 0px 0px 10px 0px;"> this is a title </h2>
-                                                        <p style="margin: 0px 0px 10px 0px; line-height: 22px;">
+                                                        <div style="margin: 0px 0px 10px 0px; line-height: 22px;">
                                                             Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                                        </p>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -307,9 +307,9 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                             <tbody>
                                                                 <tr>
                                                                     <td class="text-block"  >
-                                                                        <p style="margin-left:10px; line-height: 22px;">
+                                                                        <div style="margin-left:10px; line-height: 22px;">
                                                                             Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                                                        </p>
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -343,9 +343,9 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                             <tbody>
                                                                 <tr>
                                                                     <td class="text-block"  >
-                                                                        <p style="line-height: 22px;">
+                                                                        <div style="line-height: 22px;">
                                                                             Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                                                        </p>
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -393,7 +393,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                     <td height="15" width="100%"></td>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
+                                                                                    <td align="center" class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
                                                                                         <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="255">
                                                                                     </td>
                                                                                 </tr>
@@ -402,7 +402,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                                        <p style="margin: 0px 0px 10px 0px;        line-height: 22px;"> Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </P>
+                                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;"> Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </div>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -416,7 +416,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                     <td class="image-caption-top-gap" height="15" width="100%"></td>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
+                                                                                    <td align="center" class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
                                                                                         <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="255">
                                                                                     </td>
                                                                                 </tr>
@@ -425,7 +425,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                                        <p style="margin: 0px 0px 10px 0px;        line-height: 22px;">  Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+                                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;">  Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </div>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -471,7 +471,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                     <td height="15" width="100%"></td>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
+                                                                                    <td align="center" class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
                                                                                                <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="160">
                                                                                      </td>
                                                                                 </tr>
@@ -480,7 +480,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                                          <p style="margin: 0px 0px 10px 0px;        line-height: 22px;">  Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+                                                                                          <div style="margin: 0px 0px 10px 0px;        line-height: 22px;">  Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </div>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -494,7 +494,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                     <td class="image-caption-top-gap" height="15" width="100%"></td>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
+                                                                                    <td align="center" class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
                                                                                              <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="160">
                                                                                      </td>
                                                                                 </tr>
@@ -503,7 +503,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                                        <p style="margin: 0px 0px 10px 0px;        line-height: 22px;">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -522,7 +522,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                     <td class="image-caption-top-gap" height="15" width="100%"></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
+                                                                    <td align="center" class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
                                                                         <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="160">
                                                                       </td>
                                                                 </tr>
@@ -531,7 +531,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                 </tr>
                                                                 <tr>
                                                                     <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                        <p style="margin: 0px 0px 10px 0px;        line-height: 22px;">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -734,6 +734,16 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
 
                         <div class="form-group">
+                            
+                            <div class="row">
+                                <div class="col-xs-11">
+<div class="input-group">
+<span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
+<input type="text" id="image-link" class="form-control" placeholder="Add link to image" aria-describedby="basic-addon11" data-id="none">
+</div><br>
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="col-xs-8">
                                     <input type="text" id="image-url" class="form-control" data-id="none"/>
@@ -1031,8 +1041,8 @@ AGILE_EB_OPTIONS['templateId'] = "";
                     </div>
                     <div class="modal-body" align="center">
                         <div class="btn-group  previewActions">
-                            <a class="btn btn-default btn-sm active" href="#">iphone</a>
-                            <a class="btn btn-default btn-sm " href="#">smalltablet</a>
+                            <a class="btn btn-default btn-sm active" href="#">smartphone</a>
+                            <a class="btn btn-default btn-sm " href="#">tablet</a>
                             <a class="btn btn-default btn-sm " href="#">ipad</a>
                         </div>
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

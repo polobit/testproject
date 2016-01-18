@@ -281,7 +281,6 @@ function handleObjects() {
                 $('#social-links').hide();
                 $('form#editorlite').hide();
 
-
                 $('#common-settings').show();
                 switch (t) {
                     case 'title':
@@ -349,11 +348,11 @@ function handleObjects() {
                     case 'text-block' :
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
                         var fontcolor = $('#' + $('#path').val() + ' tbody tr td').css('fontColor');
-                        var text = $('#' + $('#path').val()).find('p').html();
-                        var fontsize = $('#' + $('#path').val()).find('p').css('font-size');
-                        var fontfamily = $('#' + $('#path').val()).find('p').css('font-family');
+                        var text = $('#' + $('#path').val()).find('div').html();
+                        var fontsize = $('#' + $('#path').val()).find('div').css('font-size');
+                        var fontfamily = $('#' + $('#path').val()).find('div').css('font-family');
                         var background = $('#' + $('#path').val()).css('backgroundColor');
-                        $('#selector').val('p');
+                        $('#selector').val('div');
                         $('form#font-settings').show();
                         $('form#editor').show();
                         storeValues(self, fontcolor, text, fontsize, fontfamily, background);
@@ -376,6 +375,11 @@ function handleObjects() {
                         $('#image-w').val(img.css('width'));
                         $('#image-h').val(img.css('height'));
 
+                        $('#image-link').val("");
+                        if(img.parent('a').length) {
+                            $('#image-link').val(img.parent('a').attr('href'));
+                        }
+
                         $('#imageproperties').show();
 
                         img.filedrop({
@@ -389,7 +393,7 @@ function handleObjects() {
                         break;
                     case 'imgtxtcol':
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
-                        var textElement = self.find('tbody tr td p');
+                        var textElement = self.find('tbody tr td div');
                         var img = self.find('tbody tr td table tbody tr td img');
 
                         var imageid = img.attr('id');
@@ -406,6 +410,11 @@ function handleObjects() {
                         $('#image-w').val(img.css('width'));
                         $('#image-h').val(img.css('height'));
 
+                        $('#image-link').val("");
+                        if(img.parent('a').length) {
+                            $('#image-link').val(img.parent('a').attr('href'));
+                        }
+
                         $('#imageproperties').show();
 
 
@@ -419,7 +428,7 @@ function handleObjects() {
 
                         textElement.unbind('click');
                         textElement.bind('click', function () {
-                            $('#selector').val('tbody tr td p');
+                            $('#selector').val('tbody tr td div');
                             $('.selected-item').removeClass('selected-item').css('border', 'none');
                             textElement.css('border', '1px dotted red');
                             $(this).addClass('selected-item');
@@ -429,7 +438,7 @@ function handleObjects() {
                             var fontsize = textElement.css('font-size');
                             var fontfamily = textElement.css('font-family');
                             var background = $('#' + $('#path').val()).css('background-color');
-                            $('#selector').val('tbody tr td p');
+                            $('#selector').val('tbody tr td div');
                             storeValues($('#' + $('#path').val()), fontcolor, text, fontsize, fontfamily, background);
 
 
@@ -441,7 +450,7 @@ function handleObjects() {
                     case 'imgtxtincol':
 
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
-                        var textElement = self.find('td.text p');
+                        var textElement = self.find('td.text div');
 
                         var imgs = self.find('td.image img');
 
@@ -466,6 +475,10 @@ function handleObjects() {
 
                                 $('#image-w').val($(this).css('width'));
                                 $('#image-h').val($(this).css('height'));
+                                $('#image-link').val("");
+                                if(img.parent('a').length) {
+                                    $('#image-link').val(img.parent('a').attr('href'));
+                                }
 
 
                             });
@@ -488,7 +501,7 @@ function handleObjects() {
                         textElement.each(function (index) {
                             $(this).unbind('click');
                             $(this).bind('click', function () {
-                                $('#selector').val('tbody tr td.text:eq(' + index + ') p');
+                                $('#selector').val('tbody tr td.text:eq(' + index + ') div');
                                 $('.selected-item').removeClass('selected-item').css('border', 'none');
                                 $(this).css('border', '1px dotted red');
                                 $(this).addClass('selected-item');
@@ -513,7 +526,7 @@ function handleObjects() {
                         //    $('#'+$('#path').val()).unbind('click');
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         var titleElement = self.find('tbody tr td h2');
-                        var textElement = self.find('tbody tr td p');
+                        var textElement = self.find('tbody tr td div');
                         var img = self.find('tbody tr td table tbody tr td img');
                         // devi mettere un each perchè ci sono piu di un immagine.
 
@@ -532,6 +545,11 @@ function handleObjects() {
 
                         $('#image-w').val(img.css('width'));
                         $('#image-h').val(img.css('height'));
+
+                        $('#image-link').val("");
+                        if(img.parent('a').length) {
+                            $('#image-link').val(img.parent('a').attr('href'));
+                        }
 
                         $('#imageproperties').show();
 
@@ -564,7 +582,7 @@ function handleObjects() {
 
                         textElement.unbind('click');
                         textElement.bind('click', function () {
-                            $('#selector').val('tbody tr td p');
+                            $('#selector').val('tbody tr td div');
                             $('.selected-item').removeClass('selected-item').css('border', 'none');
                             textElement.css('border', '1px dotted red');
                             $(this).addClass('selected-item');
@@ -574,7 +592,7 @@ function handleObjects() {
                             var fontsize = textElement.css('font-size');
                             var fontfamily = textElement.css('font-family');
                             var background = $('#' + $('#path').val()).css('background-color');
-                            $('#selector').val('tbody tr td p');
+                            $('#selector').val('tbody tr td div');
                             storeValues($('#' + $('#path').val()), fontcolor, text, fontsize, fontfamily, background);
 
 
@@ -884,6 +902,13 @@ $(document).ready(function () {
         initializeEditor();
     });
 
+    $('#tosave').on('click', 'a', function(e) {
+        if(!$(this).hasClass("remove") || !$(this).hasClass("drag") || !$(this).hasClass("clone")) {
+            e.preventDefault();
+        }    
+    });
+
+
     //cambio del titolo
     $('#html5editorlite').on('keyup', function (e) {
         $('#' + $('#path').val()).find($('#selector').val()).html( $('#html5editorlite').val() );
@@ -919,6 +944,14 @@ $(document).ready(function () {
          $('#'+id).attr('src', $('#image-url').val()) ;
          $('#'+id).attr('width', $('#image-w').val()) ;
          $('#'+id).attr('height', $('#image-h').val()) ;
+         if($('#image-link').val()) {
+            if($('#'+id).parent("a").length) {
+                var anchorTag = $('#'+id).parent("a");
+                $(anchorTag).attr('href', $('#image-link').val()) ;
+            } else {
+                $('#'+id).wrap("<a target='_blank' class='imgLink' href='"+$('#image-link').val()+"'>");
+            }
+         }
     });
                        /*
     $('#editimage').on('click', function (e) {
@@ -1303,6 +1336,11 @@ $(document).ready(function () {
         var fileInput = document.getElementById('uploadImageToS3Btn');
         uploadImageToS3ThroughBtn(fileInput.files[0]);
     });
+
+    $(".imgLink").click(function(e){
+        e.preventDefault();
+    });
+    
     /*
      $(".nav-header").click(function () {
      $(".sidebar-nav .boxes, .sidebar-nav .rows").hide();
@@ -1363,18 +1401,29 @@ function initializeEditor() {
     
     tinymce.init({
         menubar: false,
-        force_br_newlines: true,
-        force_p_newlines: false,
-        forced_root_block: false,
+        force_br_newlines: false,
+        force_p_newlines: true,
+        forced_root_block: '',
         selector: "#html5editor",
         plugins: [
             "advlist autolink lists link charmap anchor",
             "visualblocks code ",
-            "insertdatetime  table contextmenu paste textcolor colorpicker"
+            "insertdatetime  table contextmenu paste textcolor colorpicker",
+            "paste"
         ],
-        toolbar: "bold italic underline | alignleft aligncenter alignright alignjustify | forecolor backcolor | bullist numlist link | merge_fields",
+        paste_as_text: true,
+       // paste_word_valid_elements: "h1,h2,h3,b,strong,i,em",
+        toolbar: "bold italic underline | alignleft aligncenter alignright alignjustify | forecolor backcolor | link | bullist numlist | merge_fields | calltoaction",
         setup: function (editor) {
-            editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
+            editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Merge Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
+
+            editor.addButton('calltoaction', {
+                text : 'Add Button',
+                onclick : function() {
+                    tinyMCE.execCommand('mceInsertContent',false, '<table><tbody><tr><td>&nbsp;</td><td class="button"><span style="font-size: 15px; line-height: 21px; display: block; border-radius: 6px; text-align: center; text-decoration: none; font-weight: bold; margin: 0px; padding: 12px 20px; color: #ffffff; background-color: #3498db;"><a href="http://example.com" class="button-1"><span style="color: #ffffff; background-color: #3498db;">Call to Action</span></a></span></td><td>&nbsp;</td></tr></tbody></table>'); 
+                }
+            });
+
             editor.on('keyup', function (e) {
                 $('#' + $('#path').val()).find($('#selector').val()).html(tinyMCE.get('html5editor').getContent());
             }),
