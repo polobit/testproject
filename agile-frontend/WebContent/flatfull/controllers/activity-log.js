@@ -142,6 +142,7 @@ var ActivitylogRouter = Backbone.Router.extend({
                         sort_collection: false,
                         postRenderCallback: function(el) {
                             // initDateRangePicker("contact_activities_date_range",el);
+                            contactListener();
                             head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
                                 $("time", el).timeago();
                                 console.log(id);

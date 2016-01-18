@@ -120,6 +120,7 @@ function loadPortlets(el){
 			
 
 			initializePortletsListeners();
+			contactListener();
 
 		} });
 

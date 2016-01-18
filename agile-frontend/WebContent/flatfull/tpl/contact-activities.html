@@ -56,9 +56,9 @@
 <div class="pos-rlt list-group-item data" data= "{{contact.id}}" >
 	<div  class="pull-left avatar thumb-xs m-r m-t-xs">
 			{{#if contact}}
-			    <a href="#contact/{{contact.id}}"><img class="user-img ref-roundedimg" src="{{gravatarurl contact.properties 36}}"/></a>
+			    <a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact"><img class="user-img ref-roundedimg" src="{{gravatarurl contact.properties 36}}"/></a>
 		{{else}}
-	            <a href="#contact/{{contact.id}}"><img class="user-img ref-roundedimg" src="{{defaultGravatarurl 40}}"/></a>
+	            <a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact"><img class="user-img ref-roundedimg" src="{{defaultGravatarurl 40}}"/></a>
 		{{/if}}	
     </div>
 
@@ -66,7 +66,7 @@
 		<div class="custom-link">
 			{{#if_equals "null" log_time}}
 				 {{#if contact}} 
-					<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</a> visited your website 
+					<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</a> visited your website 
 				{{else}}
 					Someone visited your website 
 				{{/if}}<br>
@@ -80,7 +80,7 @@
 			{{else}}
 				{{#if_equals "EMAIL_OPENED" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</a> opened an email
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</a> opened an email
 					{{else}}
 						Someone opened an email
 					{{/if}}<br>
@@ -94,7 +94,7 @@
 					
 				{{#if_equals "EMAIL_CLICKED" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> clicked an email
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> clicked an email
 					{{else}}
 						Someone clicked an email
 					{{/if}}<br>
@@ -108,7 +108,7 @@
 					
 				{{#if_equals "UNSUBSCRIBED" log_type}}
 					{{#if contact}} 
-			        	<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a>
+			        	<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a>
 					{{else}}
 						Someone 
 					{{/if}}
@@ -127,7 +127,7 @@
 	
 				{{#if_equals "EMAIL_SPAM" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> marked an email as Spam
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> marked an email as Spam
 					{{else}}
 						Someone marked an email as Spam
 					{{/if}}<br>
@@ -141,7 +141,7 @@
 		
 				{{#if_equals "EMAIL_HARD_BOUNCED" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> - Email bounced
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> - Email bounced
 						<br>
 						<span class="activities_second_line">  
 							<i class="icon-undo"></i> 
@@ -156,7 +156,7 @@
 
 				{{#if_equals "EMAIL_SOFT_BOUNCED" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> - Email bounced
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> - Email bounced
 						<br>
 						<span class="activities_second_line m-t-none">  
 						<i class="icon-undo"></i> 
@@ -171,7 +171,7 @@
 	
 				{{#unless log_time}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> visited your website
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> visited your website
 					{{else}}
 						Someone visited your website
 					{{/if}}<br>

@@ -1,5 +1,5 @@
 var timer = undefined;
-function contactListener()
+function contactListener(el)
 {
 	$('#contacts-custom-view-model-list').off('mouseenter','tr');
 		$('#contacts-custom-view-model-list').on('mouseenter','tr',function(e){
@@ -68,8 +68,8 @@ function contactListener()
 	});
 
 
-	$('#portlets-contacts-model-list').off('mouseenter','tr');
-		$('#portlets-contacts-model-list').on('mouseenter','tr',function(e){
+	$(el).off('mouseenter','tr');
+		$(el).on('mouseenter','tr',function(e){
 			//e.stopPropagation();
 			var left=e.pageX;
             var that=$(this);
@@ -112,8 +112,8 @@ function contactListener()
 		 	}
 		 }, 1000);
 });
-		$('#portlets-contacts-model-list').off('mouseleave','tr');
-	$('#portlets-contacts-model-list').on('mouseleave','tr',function(){
+		$(el).off('mouseleave','tr');
+	$(el).on('mouseleave','tr',function(){
 		var that=$(this);
 	setTimeout(function() {
 		if (!insidePopover){
@@ -391,111 +391,89 @@ function contactListener()
 	}, 1000);
 		
 	});
+
+	$('body').off('mouseover','.popover_contact');
+		$('body').on('mouseover','.popover_contact',function(e){
+			//e.stopPropagation();
+			var left=e.pageX;
+            var that=$(this);
+
+
+ 
+      clearTimeout(timer);
+
+			timer=setTimeout(function() {
+						 		
+		
+					var contact_id=$(that).attr('data')
+		 //App_Contacts.contact_popover=$(that).attr('data');
+		  $.ajax({
+				type : 'GET',
+				url :  '/core/api/contacts/' + contact_id,
+				dataType : 'json',
+				success : function(data) {
+					App_Contacts.contact_popover=new Backbone.Model(data);
+		 		getTemplate("contacts-custom-view-popover", data, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+								$(that).popover(
+        {
+            "rel": "popover",
+            "trigger": "manual",
+            "placement": "bottom",
+            "html": "true",
+            "content": template_ui,
+            });
+								$(that).popover('toggle');
+						$('.popover').addClass("contact_popover fadeInLeft animated");
+							$('.popover-content').html(template_ui);
+
+							/*if (window.innerHeight - $(that).offset().top >= 400)
+                            $('.popover').css('top', ($(that).offset().top  + "px"));
+                        
+                         else{
+                         	if($(window).scrollTop()>($('#contacts .popover').offset().top-$('#contacts .popover').height()))
+                         		$('#contacts .popover').offset({ top : $(that).offset().top+20 });
+                         }*/
+                        	
+							 //attachEvents(that,App_Contacts.contact_popover,undefined);
+						contact_list_starify('.popover',undefined);
+						
+					});
+		 		//that.find('.data').attr('data');
+		 	}
+		 	});
+		 	
+		 }, 1000);
+});
+
+	$('body').off('mouseout','.popover_contact');
+		$('body').on('mouseout','.popover_contact',function(e){
+				var that=$(this);
+			if($('.popover').length!=0){
+			$(that).popover('hide');
+			$('.popover').remove();
+		}
+			});
 }
 
 var insidePopover=false;
 
 function attachEvents(tr,Contact_collection,listView,campaigns_view) {
-	$('.popover').off('mouseenter');
-	$('.popover').on('mouseenter', function() {
+
+	$('.popover').off('mouseenter','.popover-content');
+	$('.popover').on('mouseenter', '.popover-content',function() {
+
 		insidePopover=true;
+	
 	});
-	$('.popover').off('mouseleave');
-	$('.popover').on('mouseleave', function() {
+	$('.popover').off('mouseleave','.popover-content');
+	$('.popover').on('mouseleave','.popover-content', function() {
 		insidePopover=false;
 		$(tr).popover('hide');
+		$('.popover').remove();
 	});
-	/*$('.popover').off('click', '.contact-list-add-deal')
-	$('.popover').on('click', '.contact-list-add-deal', function(e)
-	{
-		var that=$(this);
-		e.preventDefault();
-		var el = $("#opportunityForm");
-		$("#opportunityModal").modal('show');
-
-		add_custom_fields_to_form({}, function(data)
-		{
-			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], [
-				"modal"
-			]);
-			$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
-
-		}, "DEAL");
-
-		// Fills owner select element
-		populateUsers("owners-list", el, undefined, undefined, function(data)
-		{
-
-			$("#opportunityForm").find("#owners-list").html(data);
-			$("#owners-list", $("#opportunityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
-			$("#owners-list", $("#opportunityForm")).closest('div').find('.loading-img').hide();
-		});
-		// Contacts type-ahead
-		agile_type_ahead("relates_to", el, contacts_typeahead);
-
-		// Fills the pipelines list in select box.
-		populateTrackMilestones(el, undefined, undefined, function(pipelinesList)
-		{
-			console.log(pipelinesList);
-			$.each(pipelinesList, function(index, pipe)
-			{
-				if (pipe.isDefault)
-				{
-					var val = pipe.id + '_';
-					if (pipe.milestones.length > 0)
-					{
-						val += pipe.milestones.split(',')[0];
-						$('#pipeline_milestone', el).val(val);
-						$('#pipeline', el).val(pipe.id);
-						$('#milestone', el).val(pipe.milestones.split(',')[0]);
-					}
-
-				}
-			});
-		});
-
-		populateLostReasons(el, undefined);
-
-		populateDealSources(el, undefined);
-
-		// Enable the datepicker
-
-		$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
-
-
-		var json = null;
-
-
-			json = Contact_collection.toJSON();
-		var contact_name = getContactName(json);
-		$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
-
-	});
-*/
-	/*$('.popover').off('click', '.contact-list-add-note');
-	$('.popover').on('click', '.contact-list-add-note', function(e){ 
-    	e.preventDefault();
-        console.log("execution");
-    	var	el = $("#noteForm");
-    	var that=$(this);
-    	
-    	// Displays contact name, to indicate the note is related to the contact
-    	//fill_relation(el);
-    		var json = null;
-
-		json = Contact_collection.toJSON();
- 	var contact_name = getContactName(json);//getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name");
- 	
- 	// Adds contact name to tags ul as li element
- 	$('.tags',el).html('').html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ json.id +'">'+contact_name+'</li>');
-
-
-        if(!$(this).attr("data-toggle"))
-             $('#noteModal').modal('show');
-         
-    	agile_type_ahead("note_related_to", el, contacts_typeahead);
-     });
-*/
+	
 $('.popover').off('click', '#add-score')
 $('.popover').on('click', '#add-score', function(e){
 	    e.preventDefault();
@@ -580,7 +558,7 @@ $('.popover').on('click', '#add-tags-popover', function(e){
 		$(e.currentTarget).css("display", "none");
 		$("#addTagsForm-popover").css("display", "table");
 		$("#addTags-popover").focus();
-			(function(e){
+			setup_tags_typeahead(function(e){
     				json = Contact_collection.toJSON();
     			
     			// Checks if tag already exists in contact
@@ -726,6 +704,7 @@ $('.popover').on('click', '.contact-owner-list-popover', function(e){
 		    	// Replaces old owner details with changed one
 				$('#contact-owner-popover').text(new_owner_name);
 				$('#contact-owner-popover').attr('data', new_owner_id);
+				$('#contact-owner-popover').attr('title' , new_owner_name);
 				
 				// Showing updated owner
 				$('#contact-owner-popover').css('display', 'inline-block'); 
