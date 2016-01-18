@@ -59,7 +59,7 @@
      <div class="clearfix"></div>
  
 	<div><span class="{{#is_mobile}} {{else}} m-l-md p-l-xs {{/is_mobile}}">Due : <i class="fa fa-clock-o m-r-xs hide"></i><time class="task-created-time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span></div>
-    <div class=="{{#is_mobile}} {{else}} m-l-md p-l-xs {{/is_mobile}}">	
+    <div class="{{#is_mobile}} {{else}} m-l-md p-l-xs {{/is_mobile}}">	
 		{{#each contacts}}
            	{{#if id}}
 				{{#isDuplicateContactProperty properties "email"}}

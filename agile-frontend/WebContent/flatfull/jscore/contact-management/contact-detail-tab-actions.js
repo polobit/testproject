@@ -291,7 +291,12 @@ var contact_details_documentandtasks_actions = {
 
        		var el = $(targetEl).closest("div");
 			$(targetEl).css("display", "none");
-			el.find(".contact-document-select").css("display", "inline");
+			if(agile_is_mobile_browser()){
+			el.find(".contact-document-select").css("display", "block");
+			}
+			else {
+			el.find(".contact-document-select").css("display", "inline");	
+			}
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 			fillSelect('document-select', 'core/api/documents', 'documents', function fillNew()
 			{
