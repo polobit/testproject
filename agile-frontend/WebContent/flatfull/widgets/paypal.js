@@ -8,26 +8,34 @@ function loadPaypalInvoices(offSet){
 
 	if(offSet == 0){
 		var result = {};
-		result.invoices = paypalOBJ.invoices.slice(0, 5);
+		if(Email && Email != ""){			
+			if(paypalOBJ.invoices && paypalOBJ.invoices.length > 0){				
+				result.invoices = paypalOBJ.invoices.slice(0, 5);
+			}else{
+				result.content = "No invoices found.";
+			}
+		}else{
+			result.content = "Email not found for this contact.";
+		}
 
-		getTemplate('paypal-invoices', result, undefined, function(template_inv){			
-			$('#Paypal').html(template_inv);
+		getTemplate('paypal-invoices', result, undefined, function(template_inv){						
+			$('#PayPal').html(template_inv);
 		},null);
 
-		if(paypalOBJ.invoices.length > 5){
-			$('#Paypal').append(showMorePaypalINV);
+		if(paypalOBJ.invoices && paypalOBJ.invoices.length > 5){
+			$('#PayPal').append(showMorePaypalINV);
 		}
 	}else if(offSet > 0  && (offSet+5) < paypalOBJ.invoices.length){
 		var result = {};
 		result.invoices = paypalOBJ.invoices.slice(offSet, (offSet+5));
 		$('.paypal_inv_show_more').remove();
-		$('#Paypal').apped(getTemplate('paypal-invoices', result));
-		$('#Paypal').append(showMorePaypalINV);
+		$('#PayPal').apped(getTemplate('paypal-invoices', result));
+		$('#PayPal').append(showMorePaypalINV);
 	}else{
 		var result = {};
 		result.invoices = paypalOBJ.invoices.slice(offSet, paypalOBJ.invoices.length);
 		$('.paypal_inv_show_more').remove();
-		$('#Paypal').append(getTemplate('paypal-invoices', result));
+		$('#PayPal').append(getTemplate('paypal-invoices', result));
 	}
 
 }
@@ -42,15 +50,14 @@ function loadProfile(contact_id, callback){
 			callback(data);
 	}, 
 	function error(data){
-		$('#Paypal').html('<div class="wrapper-sm">Error Occured while fetching invoices</div>');
+		$('#PayPal').html('<div class="wrapper-sm">Error Occured while fetching invoices</div>');
 	});
 }
 
 function getInvoices(accessToken){	
-	var tok = "Bearer " + accessToken;
-	var obj = {email : Email};
-
 	if(Email && Email != ""){
+		var tok = "Bearer " + accessToken;
+		var obj = {email : Email};		
 		$.ajax({
 			headers : {
 				"Accept-Language" : "en_US",
@@ -69,14 +76,14 @@ function getInvoices(accessToken){
 				loadPaypalInvoices(0);					
 			}
 		});
-	}else{
+	}else{		
 		paypalOBJ = {};
 		loadPaypalInvoices(0);
 	}	
 }
 
-function startPaypalWidget(contact_id){
-	PAYPAL_PLUGIN_NAME = "Paypal";
+function startPayPalWidget(contact_id){
+	PAYPAL_PLUGIN_NAME = "PayPal";
 
 	paypalOBJ = {};
 	paymentINVCount =1;
