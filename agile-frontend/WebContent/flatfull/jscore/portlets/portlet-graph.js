@@ -631,27 +631,27 @@ var portlet_graph_utility = {
 						        				tt += 	'<tr><td style="color:'+this.points[4].series.color+';padding:0">'+this.points[4].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[4].point.y+'</b></td></tr>';
 						        			}
-						        			if(this.points[3]!=undefined && this.points[5].series!=undefined){
+						        			if(this.points[5]!=undefined && this.points[5].series!=undefined){
 						        				tt += 	'<tr><td style="color:'+this.points[5].series.color+';padding:0">'+this.points[5].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[5].point.y+'</b></td></tr>';
 						        			}
-						        			if(this.points[3]!=undefined && this.points[6].series!=undefined){
+						        			if(this.points[6]!=undefined && this.points[6].series!=undefined){
 						        				tt += 	'<tr><td style="color:'+this.points[6].series.color+';padding:0">'+this.points[6].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[6].point.y+'</b></td></tr>';
 						        			}
-						        			if(this.points[3]!=undefined && this.points[7].series!=undefined){
+						        			if(this.points[7]!=undefined && this.points[7].series!=undefined){
 						        				tt += 	'<tr><td style="color:'+this.points[7].series.color+';padding:0">'+this.points[7].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[7].point.y+'</b></td></tr>';
 						        			}
-						        			if(this.points[3]!=undefined && this.points[8].series!=undefined){
+						        			if(this.points[8]!=undefined && this.points[8].series!=undefined){
 						        				tt += 	'<tr><td style="color:'+this.points[8].series.color+';padding:0">'+this.points[8].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[8].point.y+'</b></td></tr>';
 						        			}
-						        			if(this.points[3]!=undefined && this.points[9].series!=undefined){
+						        			if(this.points[9]!=undefined && this.points[9].series!=undefined){
 						        				tt += 	'<tr><td style="color:'+this.points[9].series.color+';padding:0">'+this.points[9].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[9].point.y+'</b></td></tr>';
 						        			}
-						        			if(this.points[3]!=undefined && this.points[10].series!=undefined){
+						        			if(this.points[10]!=undefined && this.points[10].series!=undefined){
 						        				tt += 	'<tr><td style="color:'+this.points[10].series.color+';padding:0">'+this.points[10].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[10].point.y+'</b></td></tr>';
 						        			}
@@ -688,7 +688,7 @@ var portlet_graph_utility = {
 						        exporting: {
 							        enabled: false
 							    },
-							    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF' ],
+							    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
 							    legend : {
 									itemStyle : {
 										fontSize : '10px',
