@@ -778,7 +778,7 @@ public class PortletUtil {
 						noInterestCallsCount++;
 					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.IncorrectReferral))
 						incorrectReferralCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOppurtunity))
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
 						newOpportunityCallsCount++;
 					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
 						meetingScheduledCallsCount++;

@@ -518,7 +518,7 @@ public class ReportsUtil
 				callsObject.put("no interest",0);
 				callsObject.put("incorrect referral",0);
 				callsObject.put("meeting scheduled",0);
-				callsObject.put("new oppurtunity",0);
+				callsObject.put("new opportunity",0);
 
 				callsPerPersonJSON=initializeFrequencyForReports(minTime,maxTime,frequency,timeZone,callsObject);
 			        try{
@@ -578,9 +578,9 @@ public class ReportsUtil
 							{
 		                    	type=Call.Missed;
 	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOppurtunity))
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
 							{
-		                    	type=Call.NewOppurtunity;
+		                    	type=Call.NewOpportunity;
 	                    	}
 							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
 							{
