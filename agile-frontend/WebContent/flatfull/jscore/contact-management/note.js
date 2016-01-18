@@ -17,6 +17,7 @@ $(function()
 			 return;
 
 		Agile_Old_Hash = oldUrl.split("#")[1];
+	
 
 	})​;
 
