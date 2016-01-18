@@ -1871,7 +1871,16 @@ color:#727272;
 }
 .content-tabs-show #mail #mails-span {
   display: none;
-} 
+}
+#timeline pre {
+      font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#autoellipsis {
+  white-space: normal;
+}  
+.webstats-msg {
+  font-size: 14px;
+}
 }
 
 @media all and (min-width: 768px) {
