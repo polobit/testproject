@@ -24,79 +24,265 @@
     </div>
 </div>
 </div>
-<div class="wrapper-md">
-<div class="row">
-<div class="col-sm-6 col-xs-12 col-md-4">
-<div class="panel panel-default">
-	<div class="panel-heading">CSV Contacts Import<!--<span class="label label-important">Beta</span>--></div>
-	<div class="panel-body">
-    <form id="imap-prefs-form">
-        
-		<div class="p-b-sm">
-			Import upto 10,000 contacts from a CSV file
-		</div>
-		<input type="hidden" id="type" value="contacts" class="form-control">
-        <fieldset>
-			{{#canSyncContacts}}
-           		<div class="btn btn-sm upload btn-default inline-block">Upload CSV file</div>
-					{{else}}
-           				<span class="btn btn-sm btn-default inline-block" disabled="">Upload CSV file</span>
-						<span class="m-l-xs"><i>Needs import privilege.</i></span>
-			{{/canSyncContacts}}
-           
-        </fieldset>
-    </form>
-    </div>
+<div class="tab-content wrapper-md">
+			<div class="tabs" id="prefs-tabs-content">
+				<div class="tab-container m-b-none">
+			       <ul class="nav nav-tabs">
+			       		<li class="active"><a href="#csv-tab" data-toggle="tab" class="b-l-none" aria-expanded="true">Import from CSV</a></li>
+         				<li><a href="#salesforce-tab" data-toggle="tab">Import from Salesforce</a></li>
+         				<li><a href="#other-tab" data-toggle="tab">Import from Other</a></li>
+			       </ul>
+			    </div>
+			<div>
 </div>
+<div class="tab-content wrapper-md panel">
+		<div class="tab-pane active" id="csv-tab">
+			<div class="row">
+				<div  class="col-md-4 col-sm-6 col-xs-12">
+					<div class="panel panel-default widget-add" style="height: 230px;">
+						<div class="panel-heading">
+							CSV Contacts Import<!--<span class="label label-important">Beta</span>-->
+						</div>
+						<div class="panel-body">
+							<form id="imap-prefs-form">
+	        					<div class="p-b-sm">
+									Import upto 10,000 contacts from a CSV file
+								</div>
+								<input type="hidden" id="type" value="contacts" class="form-control">
+	        					<fieldset>
+								{{#canSyncContacts}}
+	           					<div class="btn btn-sm upload btn-default inline-block">Upload CSV file</div>
+								{{else}}
+	           					<span class="btn btn-sm btn-default inline-block" disabled="">Upload CSV fil>
+	           					</span>
+								<span class="m-l-xs"><i>Needs import privilege.</i></span>
+								{{/canSyncContacts}}
+	        					</fieldset>
+						    </form>
+						</div>
+					</div>
+				</div>
+
+				<div  class="col-md-4 col-sm-6 col-xs-12">
+				    <div>
+					<div class="panel panel-default widget-add" style="min-height: 230px;">
+						<div class="panel-heading">
+							CSV Companies Import <span class="label label-sm bg-danger">Beta</span>
+						</div>
+						<div class="panel-body">
+						<form id="company-import-form">
+        					<div class="p-b-sm">
+								Import upto 10,000 companies from a CSV file
+							</div>
+							<input type="hidden" id="type" value="company" class="form-control">
+        					<fieldset>
+							{{#canSyncContacts}}
+           					<div class="btn btn-sm upload btn-default inline-block">Upload CSV file</div>
+							{{else}}
+           					<span class="btn btn-sm btn-default inline-block"  disabled="">Upload CSV file</span>
+							<span style="margin-left:5px"><i>Needs import privilege.</i></span>
+							{{/canSyncContacts}}
+           					</fieldset>
+    					</form>
+						</div>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+<!-- For salesforce -->
+	<div class="tab-pane" id="salesforce-tab">
+	<div class="row">
+		<div class="col-md-4 col-sm-6 col-xs-12">
+		<div>
+			<div class="panel panel-default widget-add" style="height: 220px;">
+				<div class="panel-heading">
+					Import from Salesforce <span class="label label-sm bg-danger">Beta</span>
+				</div>
+				<div class="panel-body">
+					<form id="imap-prefs-form">
+        				<div class="p-b-sm">
+							Import Contacts, Accounts, and Tasks
+						</div>
+						<input type="hidden" id="type" value="contacts" class="form-control">
+        				<fieldset>
+						{{#canSyncContacts}}
+           				<a href="#import/salesforce" class="btn btn-sm btn-default inline-block">Import</a>
+						{{/canSyncContacts}}
+           				</fieldset>
+    				</form>
+				</div>
+			</div>
+		</div>
+		</div>
+	</div>
+	</div>
+
+	<div class="tab-pane" id="other-tab">
+
+		<div class="row">
+				<div  class="col-md-4 col-sm-6 col-xs-12">
+					<div class="panel panel-default widget-add" style="height: 230px;">
+						<div class="panel-heading">
+							<center>
+	    					<img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="/img/icons/google-contacts-sync.png">
+	    					</center>
+						</div>
+						<div class="panel-body">
+							<div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:80px" rel="tooltip" title="Agile can periodically sync your contacts in your CRM with your Google Contacts.">
+							Agile can periodically sync your contacts in your CRM with your Google Contacts.
+							</div>
+	
+    						<div class="text-center">
+							<div class="btn btn-sm btn-default inline-block m-t-md" sync_type="GOOGLE" id="data-sync-type">Enable</div>
+							</div>
+					
+						</div>
+					</div>
+				</div>
+
+				<div  class="col-md-4 col-sm-6 col-xs-12">
+				    <div>
+					<div class="panel panel-default widget-add" style="min-height: 230px;">
+						<div class="panel-heading">
+							<center>
+	    					<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/icons/google-calendar-sync.png">
+	    					</center>
+						</div>
+						<div class="panel-body">
+						<div class="line-clamp-6 " style="min-height:80px">
+						By enabling access to your Google Calendar, we will automatically sync your events in your Google Calendar with Agile
+						 <a href="#calendar">calendar</a>.
+	
+						<br>
+						<div>You can also <a href="#icalModal" data-toggle="modal" id="subscribe-ical">setup Agile calendar inside Google.</a></div> 
+
+						</div>
+	    				<div class="m-t-md text-center">
+						<a class="btn btn-sm btn-default" id="sync-google-calendar">Enable</a>
+	    				</div>
+	    				</div>
+						
+					</div>
+					</div>
+				</div>
+
+				<div  class="col-md-4 col-sm-6 col-xs-12">
+				    <div>
+					<div class="panel panel-default widget-add" style="min-height: 230px;">
+						<div class="panel-heading">
+							<center>
+	    					<img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="img/crm-plugins/shopify.png">
+	    					</center>
+						</div>
+						<div class="panel-body">
+						<div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="Sync customer data and Agile CRM as contacts along with purchase history.">
+								Sync customer data and Agile CRM as contacts along with purchase history.
+						</div>
+						<div class="text-center">
+						<div class="btn btn-sm btn-default inline-block" sync_type="SHOPIFY" id="data-sync-type">Enable</div></div>
+						</div>
+					</div>
+					</div>
+				</div>
+
+				<div  class="col-md-4 col-sm-6 col-xs-12">
+				    <div>
+					<div class="panel panel-default widget-add" style="min-height: 230px;">
+						<div class="panel-heading">
+						<center>
+            			<img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="/img/icons/office356-calendar.png">
+        				</center>
+						</div>
+						<div class="panel-body">
+						<div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="By configuring access to your Office365 Calendar, we'll automatically sync your events in your Office365 Calendar with Agile calendar.">
+            				By configuring access to your Office365 Calendar, we will automatically sync your events in your Office365 Calendar with Agile calendar.
+       					 </div>
+    					<div class="text-center"> 
+        				<a class="btn btn-sm btn-default inline-block" href="#sync/officeCalendar" id="data-sync-type">Enable</a> 
+ 						</div>
+						</div>
+					</div>
+					</div>
+				</div>
+
+				<div  class="col-md-4 col-sm-6 col-xs-12">
+				    <div>
+					<div class="panel panel-default widget-add" style="min-height: 230px;">
+						<div class="panel-heading">
+							<center>
+	    				 	<img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="/img/plugins/Stripe.png">
+	    					</center>
+						</div>
+						<div class="panel-body">
+						 <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="Sync customers in Stripe as Contacts in Agile CRM with their subscription &amp; payment data.">
+							Sync customers in Stripe as Contacts in Agile CRM with their subscription &amp; payment data.
+						 </div>
+	
+    					 <div class="text-center">
+						 <div class="btn btn-sm btn-default inline-block" sync_type="STRIPE" id="data-sync-type">Enable</div>
+						 </div>
+						</div>
+					</div>
+					</div>
+				</div>
+
+
+				<div  class="col-md-4 col-sm-6 col-xs-12">
+				    <div>
+					<div class="panel panel-default widget-add" style="min-height: 230px;">
+						<div class="panel-heading">
+							<center>
+	    					<img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="img/plugins/freshbooks-logo.png">
+	    					</center>
+						</div>
+						<div class="panel-body">
+						 <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.">
+							Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.
+						 </div>
+						<div class="text-center">
+						<div class="btn btn-sm btn-default inline-block" sync_type="FRESHBOOKS" id="data-sync-type">Enable</div>
+						</div>
+						</div>
+					</div>
+					</div>
+				</div>
+
+
+				<div  class="col-md-4 col-sm-6 col-xs-12">
+				    <div>
+					<div class="panel panel-default widget-add" style="min-height: 230px;">
+						<div class="panel-heading">
+							<center>
+	    				 	<img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="/widgets/QuickBooks210x70.png">
+	    					</center>
+						</div>
+						<div class="panel-body">
+						 <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="Sync customers in Quickbooks as Contacts in Agile CRM along with invoice and payment data.">
+							Sync customers in Quickbooks as Contacts in Agile CRM along with invoice and payment data.
+						</div>
+	
+    					 <div class="text-center">
+						 <div class="btn btn-sm btn-default inline-block" sync_type="QUICKBOOK" id="data-sync-type">Enable</div>
+						 </div>
+						</div>
+					</div>
+					</div>
+				</div>
+
+
+
+
+			</div>
+		
+	</div>
+
+
+
 </div>
 
-<div class="col-sm-6 col-xs-12 col-md-4" style="height: 200px;">
-<div class="panel panel-default">
-	<div class="panel-heading">CSV Companies Import <span class="label label-sm bg-danger">Beta</span></div>
-	<div class="panel-body">
-    <form id="company-import-form">
-        
-		<div class="p-b-sm">
-			Import upto 10,000 companies from a CSV file
-		</div>
-			<input type="hidden" id="type" value="company" class="form-control">
-        <fieldset>
-			{{#canSyncContacts}}
-           		<div class="btn btn-sm upload btn-default inline-block">Upload CSV file</div>
-					{{else}}
-           				<span class="btn btn-sm btn-default inline-block"  disabled="">Upload CSV file</span>
-						<span style="margin-left:5px"><i>Needs import privilege.</i></span>
-			{{/canSyncContacts}}
-           
-        </fieldset>
-    </form>
-    </div>
-</div>
-</div>
 
-<div class="col-sm-6 col-xs-12 col-md-4">
-<div class="panel panel-default">
-	<div class="panel-heading">Import from Salesforce <span class="label label-sm bg-danger">Beta</span></div>
-	<div class="panel-body">
-    <form id="imap-prefs-form">
-        
-		<div class="p-b-sm">
-			Import Contacts, Accounts, and Tasks
-		</div>
-		<input type="hidden" id="type" value="contacts" class="form-control">
-        <fieldset>
-			{{#canSyncContacts}}
-           		<a href="#import/salesforce" class="btn btn-sm btn-default inline-block">Import</a>
-			{{/canSyncContacts}}
-           
-        </fieldset>
-    </form>
-    </div>
-</div>
-</div>
-
-</div>
-</div>
 </script>
 
 <script id="import-deals-template" type="text/html">
