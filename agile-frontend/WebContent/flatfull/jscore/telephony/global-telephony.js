@@ -1,9 +1,8 @@
 var default_call_option = { "callOption" : [] };
 var callOptionDiv = "" ;
-var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "calledFrom":null };
-var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false }
+var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "calledFrom":null, "contactedId":null};
+var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null}; 
 var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
-var callerObjectId;
 $(function()
 {
 	initToPubNub();
@@ -258,12 +257,12 @@ function sendTestCommand()
 
 					image.onload = function(png)
 					{
-						console.log("bria sucess");
+						console.log("test sucess");
 						window.focus();
 					};
 					image.onerror = function(png)
 					{
-						showNotyPopUp("error", ("Executable file is not running to call"), "bottomRight")
+						showCallNotyMessage("Executable file is not running");
 					};
 					image.src = "http://localhost:33333/" + new Date().getTime() + "?command=" + command + ";number=" + number + ";callid=" + callid + ";domain=" + domain + ";userid=" + id + ";type=test?";
 
@@ -273,9 +272,9 @@ function sendTestCommand()
 	
 	}
 
-function sendNotConfigured(widget)
+function sendCommandToClient(command,widget)
 {
-			var command = "notConfigured";
+			var command = command;
 			var number =  "";
 			var callId = "";
 			if(widget == "Skype"){
@@ -332,7 +331,7 @@ function handleCallRequest(message)
 	{
 		var index = containsOption(default_call_option.callOption, "name", "Bria");
 		if( index == -1){
-			sendNotConfigured("Bria");
+			sendCommandToClient("notConfigured","Bria");
 			return;
 		}
 		if (message.state == "lastCallDetail")
@@ -391,7 +390,8 @@ function handleCallRequest(message)
 		else if (message.state == "closed")
 		{
 			if(globalCall.calledFrom == "bria"){
-				showNotyPopUp("error", ("Bria is not running"), "bottomRight");
+				showCallNotyMessage("Bria is not running");
+				$('#briaCallId').parents("ul").last().remove();
 				resetglobalCallVariables();
 				resetglobalCallForActivityVariables();
 			}
@@ -404,7 +404,7 @@ function handleCallRequest(message)
 	{
 		var index = containsOption(default_call_option.callOption, "name", "Skype");
 		if( index == -1){
-			sendNotConfigured("Skype");
+			sendCommandToClient("notConfigured","Skype");
 			return;
 		}
 		// start from here
@@ -472,7 +472,8 @@ function handleCallRequest(message)
 		else if (message.state == "closed")
 		{
 			if(globalCall.calledFrom == "skype"){
-				showNotyPopUp("error", ("Skype is not running"), "bottomRight");
+				$('#skypeCallId').parents("ul").last().remove();
+				showCallNotyMessage("Skype is not running");
 				resetglobalCallVariables();
 				resetglobalCallForActivityVariables();
 			}

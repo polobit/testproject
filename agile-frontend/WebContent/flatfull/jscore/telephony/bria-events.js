@@ -38,7 +38,7 @@ $(function()
 		setTimerToCheckDialing("bria");
 		try{
 			var contactDetailsObj = agile_crm_get_contact();
-			callerObjectId = contactDetailsObj.id;
+			globalCall.contactedId = contactDetailsObj.id;
 		}catch (e) {
 		}
 	});
@@ -219,7 +219,7 @@ function sendMessageToBriaClient(command, number, callid){
 			var message ={};
 			message["data"] = "";
 			handleLogsForBria(message);
-			showNotyPopUp("error", ("Executable file is not running"), "bottomRight");
+			showCallNotyMessage("Executable file is not running");
 			return;
 		}
 		$('#briaInfoModal').html(getTemplate("briaInfoModal"));
@@ -239,6 +239,14 @@ function _getMessageBria(message, callback){
 	var displayName = message.displayName;
 	var message="";
 
+	try{
+		var inValid = /^\s/;
+		var k = inValid.test(number);
+		if(k){
+			number = "+" + number.trimLeft()
+		}
+	}catch(e){
+	}
 	console.log("state--" + state + " number --" + number + "   briaCallId" + callId + "  displayName" + displayName);
 	
 	if (state == "ringing"){
@@ -252,6 +260,7 @@ function _getMessageBria(message, callback){
 			
 			globalCall.callId = callId;
 			globalCall.callNumber = number;
+			globalCallForActivity.justCalledId = callId;
 		});
 				
 	}else if(state == "connected"){
@@ -263,7 +272,7 @@ function _getMessageBria(message, callback){
 		});
 		
 	
-	}else if(state == "missed-call"){
+	}else if(state == "missed"){
 		//To_Number = number;
 		getContactImage(number,"Incoming",function(contact_Image){		
 			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Missed Call &nbsp;&nbsp;&nbsp;  </b>'+ '<span id="briaCallId" class="text-xs" value ='+callId+ '>' + number + '</span>' +'<br><br></span><div class="clearfix"></div>';
@@ -275,6 +284,7 @@ function _getMessageBria(message, callback){
 		
 		globalCall.callId = callId;
 		globalCall.callNumber = number;
+		globalCallForActivity.justCalledId = callId;
 		});
 		
 	}else if(state == "connecting"){
@@ -292,6 +302,7 @@ function _getMessageBria(message, callback){
 		
 		globalCall.callId = callId;
 		globalCall.callNumber = number;
+		globalCallForActivity.justCalledId = callId;
 		
 	}else if(state == "failed"){
 		getContactImage(number,"Outgoing",function(contact_Image){		
@@ -301,6 +312,7 @@ function _getMessageBria(message, callback){
 		});
 		
 		globalCall.callStatus = "Failed";
+		globalCallForActivity.justCalledId = callId;
 
 	
 	}else if(state == "ended"){
@@ -329,6 +341,11 @@ function _getMessageBria(message, callback){
  * This will show the note to the user after the call is completed sucessfully
  */
 function saveCallNoteBria(){
+	
+	if(	globalCallForActivity.justCalledId == globalCallForActivity.justSavedCalledIDForNote){
+		return;
+	}
+	globalCallForActivity.justSavedCalledIDForNote = globalCallForActivity.justCalledId;
 	
 	if(!globalCallForActivity.callDirection || !globalCallForActivity.callStatus  || !globalCallForActivity.callNumber){
 		return;
@@ -370,20 +387,32 @@ function saveCallNoteBria(){
 	    	}
 	    });
 	}else{
-		var id = App_Contacts.contactDetailView.model.get('id');
-		contact = agile_crm_get_contact();
-		contact_name = getContactName(contact);
-		if( callStatus == "Answered"){
-			var el = $('#noteForm');
-		 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ id +'">'+contact_name+'</li>');
-		 	$("#noteForm #subject").val(noteSub);
-		 	$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(duration));
-				$("#noteForm").find("#description").focus();
-			$('#noteModal').modal('show');
-			agile_type_ahead("note_related_to", el, contacts_typeahead);
-		}else{
-			var note = {"subject" : noteSub, "message" : "", "contactid" : id};
-			autosaveNoteByUser(note);
+		var cntId = globalCall.contactedId;
+		if(cntId){
+				if( callStatus == "Answered"){
+					accessUrlUsingAjax("core/api/contacts/"+cntId, function(resp){
+					var json = resp;
+					if(json == null) {
+						return;
+					}
+
+
+					contact_name = getContactName(json);
+				
+
+					var el = $('#noteForm');
+				 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ cntId +'">'+contact_name+'</li>');
+				 	$("#noteForm #subject").val(noteSub);
+				 	$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(duration));
+						$("#noteForm").find("#description").focus();
+					$('#noteModal').modal('show');
+					agile_type_ahead("note_related_to", el, contacts_typeahead);
+					});
+				}else{
+					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId};
+					autosaveNoteByUser(note);
+				}
+			
 		}
 	}
 	
@@ -406,8 +435,14 @@ function autosaveNoteByUser(note){
  * This will save the activity for call 
  */
 function saveCallActivityBria(call){
+	
+	if(	globalCallForActivity.justCalledId == globalCallForActivity.justSavedCalledIDForActivity){
+		return;
+	}
+	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 
 	if(call.direction == "Outgoing" || call.direction == "outgoing"){
+		var callerObjectId = globalCall.contactedId;
 		if(!callerObjectId){
 			return;
 		}
