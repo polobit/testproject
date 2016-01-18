@@ -198,7 +198,6 @@ function printSortNameByData(data){
 			e.preventDefault();
 			// Gets name of the attribut to sort, which is set as data
 			// attribute in the link
-			_agile_delete_prefs('sort_by_name');
 			var sort_field = $(this).attr('data');
 			printSortNameByData(sort_field);
 			var sort_key = _agile_get_prefs('sort_by_name');
