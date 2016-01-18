@@ -25,10 +25,10 @@
 </div>
 </div>
 <div class="tab-content wrapper-md">
-			<div class="tabs" id="prefs-tabs-content">
+			<div class="tabs" id="import-tabs-content">
 				<div class="tab-container m-b-none">
 			       <ul class="nav nav-tabs">
-			       		<li class="active"><a href="#csv-tab" data-toggle="tab" class="b-l-none" aria-expanded="true">Import from CSV</a></li>
+			       		<li><a href="#csv-tab" data-toggle="tab" >Import from CSV</a></li>
          				<li><a href="#salesforce-tab" data-toggle="tab">Import from Salesforce</a></li>
          				<li><a href="#other-tab" data-toggle="tab">Import from Other</a></li>
 			       </ul>
@@ -38,8 +38,8 @@
 <div class="tab-content wrapper-md panel">
 		<div class="tab-pane active" id="csv-tab">
 			<div class="row">
-				<div  class="col-md-4 col-sm-6 col-xs-12">
-					<div class="panel panel-default widget-add" style="height: 230px;">
+				<div  class="col-sm-6 col-xs-12 col-md-4">
+					<div class="panel panel-default">
 						<div class="panel-heading">
 							CSV Contacts Import<!--<span class="label label-important">Beta</span>-->
 						</div>
@@ -63,9 +63,9 @@
 					</div>
 				</div>
 
-				<div  class="col-md-4 col-sm-6 col-xs-12">
+				<div  class="col-sm-6 col-xs-12 col-md-4">
 				    <div>
-					<div class="panel panel-default widget-add" style="min-height: 230px;">
+					<div class="panel panel-default">
 						<div class="panel-heading">
 							CSV Companies Import <span class="label label-sm bg-danger">Beta</span>
 						</div>
@@ -94,9 +94,9 @@
 <!-- For salesforce -->
 	<div class="tab-pane" id="salesforce-tab">
 	<div class="row">
-		<div class="col-md-4 col-sm-6 col-xs-12">
+		<div class="col-sm-6 col-xs-12 col-md-4">
 		<div>
-			<div class="panel panel-default widget-add" style="height: 220px;">
+			<div class="panel panel-default">
 				<div class="panel-heading">
 					Import from Salesforce <span class="label label-sm bg-danger">Beta</span>
 				</div>
@@ -118,168 +118,125 @@
 		</div>
 	</div>
 	</div>
-
+<!-- For others -->
 	<div class="tab-pane" id="other-tab">
 
 		<div class="row">
-				<div  class="col-md-4 col-sm-6 col-xs-12">
-					<div class="panel panel-default widget-add" style="height: 230px;">
+				<div  class="col-sm-6 col-xs-12 col-md-4">
+					<div>
+					<div class="panel panel-default">
+						<a href="#sync" onclick='_agile_set_prefs("datasync_tab","google-tab");'>
 						<div class="panel-heading">
-							<center>
-	    					<img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="/img/icons/google-contacts-sync.png">
-	    					</center>
+							Import from Google
 						</div>
 						<div class="panel-body">
-							<div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:80px" rel="tooltip" title="Agile can periodically sync your contacts in your CRM with your Google Contacts.">
-							Agile can periodically sync your contacts in your CRM with your Google Contacts.
+							<div class="p-b-sm">
+							Import contacts from Google.
 							</div>
-	
-    						<div class="text-center">
-							<div class="btn btn-sm btn-default inline-block m-t-md" sync_type="GOOGLE" id="data-sync-type">Enable</div>
+							<div class="btn btn-sm btn-default inline-block" sync_type="GOOGLE" id="data-sync-type">Enable
 							</div>
-					
-						</div>
+						</div></a>
+					</div>
 					</div>
 				</div>
 
-				<div  class="col-md-4 col-sm-6 col-xs-12">
+				<div  class="col-sm-6 col-xs-12 col-md-4">
 				    <div>
-					<div class="panel panel-default widget-add" style="min-height: 230px;">
+					<div class="panel panel-default">
+					<a href="#sync" onclick='_agile_set_prefs("datasync_tab","accounting-tab");'>
 						<div class="panel-heading">
-							<center>
-	    					<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/icons/google-calendar-sync.png">
-	    					</center>
+							Import from Quickbooks
 						</div>
 						<div class="panel-body">
-						<div class="line-clamp-6 " style="min-height:80px">
-						By enabling access to your Google Calendar, we will automatically sync your events in your Google Calendar with Agile
-						 <a href="#calendar">calendar</a>.
-	
-						<br>
-						<div>You can also <a href="#icalModal" data-toggle="modal" id="subscribe-ical">setup Agile calendar inside Google.</a></div> 
-
+						<div class="p-b-sm">
+						 Import contacts from Quickbooks.
+						 </div>
+						<fieldset
+						 <div class="btn btn-sm btn-default inline-block" sync_type="QUICKBOOK" id="data-sync-type">Enable</fieldset>
+						 </div>
 						</div>
-	    				<div class="m-t-md text-center">
-						<a class="btn btn-sm btn-default" id="sync-google-calendar">Enable</a>
-	    				</div>
-	    				</div>
+					</div></a>
+					</div>
+				</div>
+
+				<div  class="col-sm-6 col-xs-12 col-md-4">
+				    <div>
+					<div class="panel panel-default">
+					<a href="#sync" onclick='_agile_set_prefs("datasync_tab","ecommerce-tab");'>
+						<div class="panel-heading">
 						
+							Import from Shopify
+						</div>
+						
+						<div class="panel-body">
+						<div class="p-b-sm">
+						Import contacts from Shopify.
+						</div>
+						
+						<div class="btn btn-sm btn-default inline-block" sync_type="SHOPIFY" id="data-sync-type">Enable
+						</div>
+						
+						</div>
+						</a>
 					</div>
 					</div>
 				</div>
 
-				<div  class="col-md-4 col-sm-6 col-xs-12">
+				<div  class="col-sm-6 col-xs-12 col-md-4">
 				    <div>
-					<div class="panel panel-default widget-add" style="min-height: 230px;">
+					<div class="panel panel-default">
+					<a href="#sync" onclick='_agile_set_prefs("datasync_tab","office365-tab");'>
 						<div class="panel-heading">
-							<center>
-	    					<img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="img/crm-plugins/shopify.png">
-	    					</center>
+						Import from Office365
 						</div>
 						<div class="panel-body">
-						<div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="Sync customer data and Agile CRM as contacts along with purchase history.">
-								Sync customer data and Agile CRM as contacts along with purchase history.
+						<div class="p-b-sm">
+						Import contacts from office 365.
 						</div>
-						<div class="text-center">
-						<div class="btn btn-sm btn-default inline-block" sync_type="SHOPIFY" id="data-sync-type">Enable</div></div>
-						</div>
-					</div>
-					</div>
-				</div>
-
-				<div  class="col-md-4 col-sm-6 col-xs-12">
-				    <div>
-					<div class="panel panel-default widget-add" style="min-height: 230px;">
-						<div class="panel-heading">
-						<center>
-            			<img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="/img/icons/office356-calendar.png">
-        				</center>
-						</div>
-						<div class="panel-body">
-						<div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="By configuring access to your Office365 Calendar, we'll automatically sync your events in your Office365 Calendar with Agile calendar.">
-            				By configuring access to your Office365 Calendar, we will automatically sync your events in your Office365 Calendar with Agile calendar.
-       					 </div>
-    					<div class="text-center"> 
-        				<a class="btn btn-sm btn-default inline-block" href="#sync/officeCalendar" id="data-sync-type">Enable</a> 
+ 						<a class="btn btn-sm btn-default inline-block" href="#" id="data-sync-type">Enable</a> 
  						</div>
-						</div>
-					</div>
+					</div></a>
 					</div>
 				</div>
 
-				<div  class="col-md-4 col-sm-6 col-xs-12">
+				<div  class="col-sm-6 col-xs-12 col-md-4">
 				    <div>
-					<div class="panel panel-default widget-add" style="min-height: 230px;">
+					<div class="panel panel-default">
+					<a href="#sync" onclick='_agile_set_prefs("datasync_tab","payment-tab");'>
 						<div class="panel-heading">
-							<center>
-	    				 	<img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="/img/plugins/Stripe.png">
-	    					</center>
+							Import from Stripe
 						</div>
 						<div class="panel-body">
-						 <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="Sync customers in Stripe as Contacts in Agile CRM with their subscription &amp; payment data.">
-							Sync customers in Stripe as Contacts in Agile CRM with their subscription &amp; payment data.
-						 </div>
-	
-    					 <div class="text-center">
-						 <div class="btn btn-sm btn-default inline-block" sync_type="STRIPE" id="data-sync-type">Enable</div>
-						 </div>
+						<div class="p-b-sm">
+						 Import contacts from Stripe.
 						</div>
-					</div>
+						 <div class="btn btn-sm btn-default inline-block" sync_type="STRIPE" id="data-sync-type">Enable</div> 
+						</div>
+					</div></a>
 					</div>
 				</div>
 
 
-				<div  class="col-md-4 col-sm-6 col-xs-12">
+				<div  class="col-sm-6 col-xs-12 col-md-4">
 				    <div>
-					<div class="panel panel-default widget-add" style="min-height: 230px;">
+					<div class="panel panel-default" >
+					<a href="#sync" onclick='_agile_set_prefs("datasync_tab","accounting-tab");'>
 						<div class="panel-heading">
-							<center>
-	    					<img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="img/plugins/freshbooks-logo.png">
-	    					</center>
+							Import from Freshbooks
 						</div>
 						<div class="panel-body">
-						 <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.">
-							Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.
+						 <div class="p-b-sm">
+							Import contacts from Freshbooks.
 						 </div>
-						<div class="text-center">
-						<div class="btn btn-sm btn-default inline-block" sync_type="FRESHBOOKS" id="data-sync-type">Enable</div>
+						 <div class="btn btn-sm btn-default inline-block" sync_type="FRESHBOOKS" id="data-sync-type">Enable</div>
 						</div>
-						</div>
+					</a>
 					</div>
 					</div>
 				</div>
-
-
-				<div  class="col-md-4 col-sm-6 col-xs-12">
-				    <div>
-					<div class="panel panel-default widget-add" style="min-height: 230px;">
-						<div class="panel-heading">
-							<center>
-	    				 	<img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="/widgets/QuickBooks210x70.png">
-	    					</center>
-						</div>
-						<div class="panel-body">
-						 <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="Sync customers in Quickbooks as Contacts in Agile CRM along with invoice and payment data.">
-							Sync customers in Quickbooks as Contacts in Agile CRM along with invoice and payment data.
-						</div>
-	
-    					 <div class="text-center">
-						 <div class="btn btn-sm btn-default inline-block" sync_type="QUICKBOOK" id="data-sync-type">Enable</div>
-						 </div>
-						</div>
-					</div>
-					</div>
-				</div>
-
-
-
-
+			
 			</div>
-		
-	</div>
-
-
-
+		</div>
 </div>
 
 
@@ -320,9 +277,7 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-sm-12 col-md-12">
-        
             <h3 class="font-thin h3">CSV Contacts Import <br><small> Field mapping </small></h3>
-       
     </div>
 </div>
 </div>
