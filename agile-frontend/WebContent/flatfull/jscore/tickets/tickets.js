@@ -88,6 +88,9 @@ var Tickets = {
 				customLoader: true,
 				custom_scrollable_element: '#ticket-model-list',
 				customLoaderTemplate: 'ticket-collection-loader',
+				infini_scroll_cbk: function(){
+					Tickets.setCountText();
+				},
 				individual_tag_name : 'tr',
 				cursor : true,
 				page_size : 20,
@@ -111,9 +114,6 @@ var Tickets = {
 					//Clear bulk ops selections
 					Ticket_Bulk_Ops.clearSelection();
 
-					//Show save as noty for filters
-					Ticket_Custom_Filters.showCreateFilterNoty();
-
 					if(!Tickets.isSingleRowView()){
 						var Groups = Backbone.Collection.extend({url: '/core/api/tickets/groups'});
 						new Groups().fetch({success: function(model, response, options){
@@ -122,19 +122,7 @@ var Tickets = {
 						}});
 					}
 
-					if(!App_Ticket_Module.ticketsCollection || 
-						!App_Ticket_Module.ticketsCollection.collection || 
-						App_Ticket_Module.ticketsCollection.collection.length == 0){
-
-						$('.ticket-count-text').html('0 tickets found');
-						return;
-					}
-
-					var last_model = App_Ticket_Module.ticketsCollection.collection.last().toJSON();
-
-					var count = (last_model.count) ? last_model.count : App_Ticket_Module.ticketsCollection.collection.length;
-					
-					$('.ticket-count-text').html(count + ' tickets found');
+					Tickets.setCountText();
 
 					if(Tickets.isSingleRowView())
 						Tickets.setMinHeight();
@@ -151,6 +139,23 @@ var Tickets = {
 		});
 	},
 
+	setCountText: function(){
+
+
+		if(!App_Ticket_Module.ticketsCollection || 
+			!App_Ticket_Module.ticketsCollection.collection || 
+			App_Ticket_Module.ticketsCollection.collection.length == 0){
+
+			$('.ticket-count-text').html('0 tickets found');
+			return;
+		}
+
+		var last_model = App_Ticket_Module.ticketsCollection.collection.last().toJSON();
+
+		var count = (last_model.count) ? last_model.count : App_Ticket_Module.ticketsCollection.collection.length;
+		
+		$('.ticket-count-text').html('Showing ' + App_Ticket_Module.ticketsCollection.collection.length + ' of ' + count);
+	},
 	renderExistingCollection: function(){
 
 		if(!App_Ticket_Module.ticketsCollection){
@@ -165,11 +170,7 @@ var Tickets = {
 
 					$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
 					
-					var last_model = App_Ticket_Module.ticketsCollection.collection.last().toJSON();
-
-					var count = (last_model.count) ? last_model.count : App_Ticket_Module.ticketsCollection.collection.length;
-					
-					$('.ticket-count-text').html(count + ' tickets found');
+					Tickets.setCountText();
 
 					//Initialize click event on each ticket li
 					Tickets.initEvents(App_Ticket_Module.ticketsCollection.el);
@@ -1064,7 +1065,8 @@ var Tickets = {
 
 		var $row = $('.ticket-collection-row');
 
-		$row.css('min-height', window.innerHeight - $row.offset().top + 'px');
+		if($row && $row.offset() && $row.offset().top)
+			$row.css('min-height', window.innerHeight - $row.offset().top + 'px');
 	},
 
 	updateDueDate : function(timeInMilli){

@@ -72,7 +72,7 @@
             </label> Open
           </div>
         </div>
-        <div class="col-md-12 p-n txt-small">
+        <div class="col-md-12 p-n">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="status" name="status" value="PENDING" {{#contains_string 'PENDING' status}}checked{{/contains_string}} type="checkbox">
@@ -179,4 +179,33 @@
       </label> {{this.group_name}}
     </div>
   {{/all_groups}}  
+</script>
+<script id="ticket-create-filter-modal-template" type="text/html">
+  <div id="create-filter-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">x</button>
+                <h3 class="modal-title"><i class="icon icon-save"></i> Save view</h3>
+            </div>
+            <div class="modal-body">
+              <form id="saveFilterForm" name="saveFilterForm" class="form-horizontal">
+                <div class="form-group">
+                  <label class="col-lg-3 control-label">
+                    View name<span class="field_req">*</span>
+                  </label>
+                  <div class="col-lg-7">
+                    <input type="text" name="name" class="form-control required"  placeholder="View name">
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+                <a href="javascript:void(0);" data-loading-text="Save" class="save btn btn-sm btn-primary">Save</a>
+                &nbsp;&nbsp;<span id="msg"></span>
+            </div>
+        </div>
+    </div>
+  </div>
 </script>

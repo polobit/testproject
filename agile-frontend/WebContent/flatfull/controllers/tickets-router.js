@@ -232,7 +232,8 @@ $("#right-pane").html(ticketView.render().el);
 	 **/
 	 ticketsByFilter : function(filter_id){
 
-	 	if(App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection.length > 0){
+	 	if(App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection.length > 0 
+	 		&& Ticket_Filter_ID == filter_id){
 
 	 		Tickets.renderExistingCollection();
 	 		return;

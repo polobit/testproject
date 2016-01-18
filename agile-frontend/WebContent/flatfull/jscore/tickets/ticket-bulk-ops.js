@@ -10,8 +10,9 @@ var Ticket_Bulk_Ops = {
 		/**
 		 * Initializing click event on top ticket checkbox
 		 */
-		$el.on('change', ".select-all", function(e){
-			// e.stopPropagation();
+		$('body').on('click', "input.select-all", function(e){
+			e.stopPropagation();
+			e.preventDefault();
 			
 			var selected_all = $(this).is(':checked');
 

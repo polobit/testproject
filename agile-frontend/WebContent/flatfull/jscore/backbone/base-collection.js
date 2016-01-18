@@ -303,6 +303,13 @@ var Base_Collection_View = Backbone.View
 						 * view
 						 */
 						$(".scroll-loading", that.el).remove();
+
+						/**
+						 *callback to be fired when next set is fetched. Added by Sasi on Jan/18/2016.
+						 */
+						if (that.options.infini_scroll_cbk)
+							that.options.infini_scroll_cbk();
+
 					}, untilAttr : 'cursor', param : 'cursor', strict : true, pageSize : this.page_size,
 
 					/*

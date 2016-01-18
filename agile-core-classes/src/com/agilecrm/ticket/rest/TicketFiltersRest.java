@@ -60,15 +60,18 @@ public class TicketFiltersRest
 	@POST
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String createFilter(TicketFilters newFilter)
+	public TicketFilters createFilter(TicketFilters newFilter)
 	{
 		try
 		{
+			if (newFilter.conditions.size() == 0)
+				throw new Exception("Atleast one condition is required.");
+
 			newFilter.setOwner_key(DomainUserUtil.getCurentUserKey());
 
 			TicketFilters.dao.put(newFilter);
 
-			return new JSONObject().put("status", "success").toString();
+			return newFilter;
 		}
 		catch (Exception e)
 		{
@@ -106,8 +109,8 @@ public class TicketFiltersRest
 	}
 
 	/**
-	 *  Deletes filters based on provided ticket ids
-	 *  
+	 * Deletes filters based on provided ticket ids
+	 * 
 	 * @param model_ids
 	 * @return
 	 */

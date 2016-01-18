@@ -4,16 +4,11 @@ var Ticket_Custom_Filters = {
 	assignees: [],
 	groups: [],
 	filters: [],
-	modCount : 0,
 
 	reset: function(){
 		this.customFilters = new Array();
 	},
 	init: function(callback){
-
-		Array.observe(Ticket_Custom_Filters.customFilters, function(){
-			Ticket_Custom_Filters.modCount++;
-		});
 
 		if(this.assignees.length == 0 && this.groups.length == 0){
 
@@ -243,6 +238,8 @@ var Ticket_Custom_Filters = {
 								Ticket_Custom_Filters.customFilters.push(condition);
 							}
 
+							Ticket_Custom_Filters.toggleCreateFilterNoty();
+
 							//Re-render collection with customized filters
 							Tickets.fetchTicketsCollection();
 						});
@@ -297,6 +294,8 @@ var Ticket_Custom_Filters = {
 							}
 						}
 					}
+
+					Ticket_Custom_Filters.toggleCreateFilterNoty();
 
 					//Re-render collection with customized filters
 					Tickets.fetchTicketsCollection();
@@ -471,6 +470,8 @@ var Ticket_Custom_Filters = {
 			Ticket_Custom_Filters.customFilters.push(condition);
 		}
 
+		Ticket_Custom_Filters.toggleCreateFilterNoty();
+
 		//Re-render collection with customized filters
 		Tickets.fetchTicketsCollection();
 	},
@@ -500,13 +501,72 @@ var Ticket_Custom_Filters = {
 			Ticket_Custom_Filters.customFilters.push(condition);
 		}
 
+		Ticket_Custom_Filters.toggleCreateFilterNoty();
+
 		//Re-render collection with customized filters
 		Tickets.fetchTicketsCollection();
 	},
 
-	showCreateFilterNoty: function(){
+	toggleCreateFilterNoty: function(){
+		if(Ticket_Custom_Filters.isFilterChanged()){
+			showNotyPopUp("warning", "Save new view <a class='link-color'>Discard</a>&nbsp;<a class='link-color save-new-filter'>Save as</a>", "top", "none");
+			
+			$('body').off('click', '.save-new-filter');
+			$('body').on('click', '.save-new-filter', function(e){
 
-		if(Ticket_Custom_Filters.modCount > 0)
-			showNotyPopUp("warning", "Save new filter <a class='link-color'>Disacrd</a>&nbsp;<a class='link-color'>Save as</a>", "top", "none");
+				var view = new Ticket_Base_Model({
+					isNew : true, 
+					template : "ticket-create-filter-modal",
+					url : '/core/api/tickets/filters',
+					saveCallback: function(model){
+						$('#create-filter-modal').modal('hide');
+						
+						App_Ticket_Module.ticketFiltersList.collection.add(model);
+						App_Ticket_Module.ticketsByFilter(model.id);
+					},
+					prePersist : function(model)
+					{
+						var json = {};
+						json.conditions = Ticket_Custom_Filters.customFilters;
+
+						model.set(json, { silent : true });
+					}
+				});
+
+				$('#ticket-modals').html(view.render().el);
+				$('#create-filter-modal').modal('show');
+			});
+		}
+		else
+			$.noty.closeAll();
+	},
+
+	isFilterChanged: function(){
+
+		var filterJSON = App_Ticket_Module.ticketFiltersList.collection.get(Ticket_Filter_ID).toJSON();
+		var conditions = filterJSON.conditions;
+
+		if(conditions.length != Ticket_Custom_Filters.customFilters.length)
+			return true;
+
+		for(var i=0; i<conditions.length; i++){
+
+			var condition = conditions[i];
+			var new_condition_exists = false;
+
+			for(var j=0; j<Ticket_Custom_Filters.customFilters.length; j++){
+
+				var changedCondition = Ticket_Custom_Filters.customFilters[j];
+
+				if(condition.CONDITION == changedCondition.CONDITION && 
+					condition.RHS == changedCondition.RHS)
+					new_condition_exists = true;
+			}
+
+			if(!new_condition_exists)
+				return true;
+		}
+
+		return false;
 	}
 };
