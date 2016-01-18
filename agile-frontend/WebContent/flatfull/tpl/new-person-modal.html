@@ -9,33 +9,34 @@
     <div class="modal-body">
         <form id="personForm" name="personForm" method="post">
             <fieldset>            
-                <div class="control-group form-group m-b-none">
-	                <label class="control-label"><b>Name</b> <span class="field_req">*</span></label>
-	                <div class="row">
-		                 <div class="control-group col-md-5 m-b-md">
+
+                <div class="control-group form-group">
+	                <label class="control-label col-sm-2">Name <span class="field_req">*</span></label>
+	                <div class="col-sm-9">
+		                 <div class="control-group">
 		                     <span class="controls">
 		                     <input name="first_name" type="text" class="required form-control field_length" max_len="500" id="fname" placeholder="First Name" />
 		                     </span>
 		                 </div>
-		                 <div class="control-group col-md-6 m-b-md">
+		             </div>
+		         </div>
+		                 <div class="control-group form-group">
+		                 	<div class="col-sm-offset-2 col-sm-9">
 		                     <span class="controls">
 		                     <input name="last_name" class="form-control field_length" max_len="500" type="text" id="lname" placeholder="Last Name" />
 		                     </span>
 		                 </div>
-	                </div>
-                </div>
-                <div class="form-group">
-                 <div class="row">
-	                <div class="control-group col-md-5">
-	                    <label class="control-label"><b>Title</b></label>
-	                    <div class="controls">
+		                 </div>
+	                	<div class="form-group control-group">
+	                    <label class="control-label col-sm-2">Title</label>
+	                    <div class="controls col-sm-9">
 	                        <input name="title" type="text" id="job_title" placeholder="Job Title" class="form-control field_length" max_len="500" />
 	                    </div>
 	                </div>
-	                <div class="control-group col-md-6" id='company_source_person_modal'>
-	                    <label class="control-label"><b>Company</b></label>
-	                    <div class="controls">
-							<div class="pull-left" style="display:inline-block;">
+	                <div class="control-group form-group" id='company_source_person_modal'>
+	                    <label class="control-label col-sm-2">Company</label>
+	                    <div class="controls col-sm-9">
+							<div class="pull-left" style="display:block;">
 								<ul name="contact_company_id" class="contacts tagsinput tags p-n"></ul>
 							</div>
 	                        <input type="text" id="contact_company" placeholder="Company Name" class="form-control field_length" max_len="100" />
@@ -44,10 +45,8 @@
                 </div>   
                 </div>            
                 <div class="control-group form-group">
-	                <div class="row">
-	                	<div class="col-md-5">
-		                    <label class="control-label"><b>Email</b> </label>
-		                    <div class="controls">
+		                    <label class="control-label col-sm-2">Email</label>
+		                    <div class="controls col-sm-9">
 		                        <span><input name="email" class="email form-control field_length" max_len="500" type="text" id="email" placeholder="Email" /></span>
 		                    </div>
 	                    </div>
@@ -81,19 +80,16 @@
                 <div class="row">
                     <div class="col-md-12 p-l  duplicate-email"></div>
                 </div>
-                <div class="row">
-	                <div class="control-group form-group col-md-5">
-	                    <label class="control-label"><b>Phone</b></label>
-	                    <div class="controls">
+	                <div class="control-group form-group">
+	                    <label class="control-label col-sm-2">Phone</label>
+	                    <div class="controls col-sm-9">
 	                        <input name="phone" class="phone form-control field_length" max_len="500" type="text" id="phone" placeholder="Phone Number" />
 	                    </div>
 	                </div>
 	            </div>
-                
-                <div class="row form-group"> 
-                <div class="col-md-12">               
-	                <div class="control-group " id='tags_source_person_modal'>
-	                    <label class="control-label"><b>Tags</b></label>
+	                <div class="control-group form-group" id='tags_source_person_modal'>
+	                    <label class="control-label col-sm-2">Tags</label>
+	                    <div class="col-sm-9">
 	                    <div>
 	                    <div class="pull-left">
 	                        <ul name="tags" class="tagsinput tags p-n">
@@ -110,10 +106,9 @@
                         <div style="color:red;">Tag name should start with an alphabet and can not contain special characters other than underscore and space.</div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-9 m-t-sm m-l-sm">
-                        <span class="inline"><i class="icon-arrow-right"></i></span>
-                        <a href="#import" data-dismiss="modal" id="import-link" class="text-info"> Click here to import your contacts from CSV and other CRMs</a>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-9 text-right">
+      					<a href="#import" data-dismiss="modal" id="import-link" class="text-info"> Import your contacts from CSV </a>
                     </div>
                 </div> 
             </fieldset>
