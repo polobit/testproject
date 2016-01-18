@@ -519,9 +519,11 @@ public class Mandrill
 	JSONObject headersJSON = new JSONObject();
 	try
 	{
-	    // insert replyTo if not empty and not equals to from.
-	    if (!StringUtils.isBlank(replyTo) && !fromEmail.equals(replyTo))
-		headersJSON.put(MANDRILL_REPLY_TO, replyTo);
+        //replyTo if empty and not equals to from.
+        if (StringUtils.isBlank(replyTo))
+            replyTo = fromEmail; 
+
+        headersJSON.put(MANDRILL_REPLY_TO, replyTo);
 
 	    headersJSON.put("Content-Type", "application/json; charset=UTF-8");
 
