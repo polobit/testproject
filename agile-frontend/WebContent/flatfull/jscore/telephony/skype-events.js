@@ -407,11 +407,8 @@ function saveCallNoteSkype(){
 	var id;
 	var desc;
 	resetglobalCallForActivityVariables();
-	if(callStatus == "Answered"){
-		desc = "Done";
-	}
 	
-	var noteSub = direction + " Call - " + number;
+	var noteSub = direction + " Call - " + callStatus;
 
 	if(direction == "Incoming"){
 	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){

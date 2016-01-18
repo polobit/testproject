@@ -360,11 +360,7 @@ function saveCallNoteBria(){
 	var desc;
 	resetglobalCallForActivityVariables();
 	
-	if(callStatus == "Answered"){
-		desc = "Done";
-	}
-	
-	var noteSub = direction + " Call - " + number;
+	var noteSub = direction + " Call - " + callStatus;
 
 	if(direction == "Incoming"){
 	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){
@@ -382,7 +378,7 @@ function saveCallNoteBria(){
 				$('#noteModal').modal('show');
 				agile_type_ahead("note_related_to", el, contacts_typeahead);
 	    	}else{
-				var note = {"subject" : noteSub, "message" : "", "contactid" : id};
+				var note = {"subject" : noteSub, "message" : "", "contactid" : contact.id};
 				autosaveNoteByUser(note);
 	    	}
 	    });
