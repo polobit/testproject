@@ -78,9 +78,7 @@ body {
 diplay:block!important;
 position:fixed!important;
 }
-.modal-body{
-	height:150px;
-}
+
 .progress-bar.animate {
    width: 100%;
 }
