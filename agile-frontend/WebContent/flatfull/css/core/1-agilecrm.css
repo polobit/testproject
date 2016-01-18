@@ -3075,7 +3075,7 @@ table.hide-head-checkbox th label.i-checks {
 	z-index:9999;
 	overflow-y:scroll;
 }
-.fullscreenwidjet .landingpagessmart{
+.fullscreenwidjet .landingpagessmart,.fullscreenwidjet .campaign-new-add{
 	position: relative;
     top: -20px;
     left: -20px;
