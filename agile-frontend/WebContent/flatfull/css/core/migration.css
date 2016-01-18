@@ -1874,12 +1874,16 @@ color:#727272;
 }
 #timeline pre {
       font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: inherit;
 }
 #autoellipsis {
   white-space: normal;
 }  
 .webstats-msg {
   font-size: 14px;
+}
+.ativity-block-ul {
+  margin-top: -10px;
 }
 }
 

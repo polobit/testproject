@@ -8,13 +8,14 @@
          
 		 {{#if this.done}}
          <div>
-           <div class="text-md inline-block m-r-xs pull-left">Completed Campaigns: </div> <div class="tagsinput">
+           <div class="text-md inline-block m-r-xs pull-left">Completed Campaigns: </div> <div class="tagsinput pull-left">
                    {{#each this.done}}
 						<span class="tag inline-block label bg-light" style="padding:7px 8px" data="{{campaign_id}}"><span>
 							<a class="anchor word-break space-normal block text-left" href="#workflow/{{campaign_id}}">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Done Campaign{{/if}}</a>
 						</span></span> 
 					{{/each}}
                     </div>
+                    <div class="clearfix"></div>
          </div>
          <br>
          {{/if}}
