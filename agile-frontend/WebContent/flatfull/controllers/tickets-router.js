@@ -882,7 +882,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
 
 	renderActivitiesCollection : function(ticket_id, $ele, callback){
 
-	 	App_Ticket_Module.notesCollection = new Base_Collection_View({
+	 	App_Ticket_Module.activitiesCollection = new Base_Collection_View({
 	 		url : '/core/api/tickets/activity?id=' + ticket_id,
 	 		templateKey : "ticket-activities",
 	 		sortKey:"created_time",
