@@ -7,6 +7,8 @@
 
 CONTACTS_HARD_RELOAD = true;
 
+var import_tab_Id;
+
 var ContactsRouter = Backbone.Router.extend({
 
 	routes : { 
@@ -782,6 +784,13 @@ var ContactsRouter = Backbone.Router.extend({
 
 			$('#import-contacts-event-listener').html($(template_ui));	
 			initializeImportEvents('import-contacts-event-listener');
+			if(import_tab_Id){
+				 $('#import-tabs-content a[href="#'+import_tab_Id+'"]').tab('show');
+				 import_tab_Id=undefined;
+			}
+			else{
+				$('#import-tabs-content a[href="#csv-tab"]').tab('show');
+			}
 
 		}, "#import-contacts-event-listener");       
 	},
