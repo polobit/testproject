@@ -2399,18 +2399,21 @@ public class OpportunityUtil
 				Long pipeline_id = opp.getPipeline_id();
 				
 				Milestone mile=MilestoneUtil.getMilestone(pipeline_id);
-
+					System.out.println("mile"+mile);
 				
-
+					System.out.println("ownerid"+opp.getOwner().id);
+					if(opp.getOwner()!=null)
 				if(Track_conversion_User.containsKey(opp.getOwner().id.toString()))
 				{
 					JSONObject conversion_user = Track_conversion_User.getJSONObject(opp.getOwner().id.toString());
 					if(conversion_user.containsKey(opp.getOwner().name)){
 						
 						JSONObject conversion = conversion_user.getJSONObject(opp.getOwner().name);
+						if(mile!=null)
 				if (conversion.containsKey(mile.name))
 				{
 					JSONObject mileObject = conversion.getJSONObject(mile.name);
+					System.out.println("Mileobject"+mileObject);
 					if(mileObject.containsKey(opp.milestone))
 					{
 						Iterator keys=mileObject.keys();
