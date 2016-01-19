@@ -195,8 +195,8 @@ public class Globals
     
     public static final String PAYPAL = "Paypal";
     // Live Keys Paypal.
-	public static final String PAYPAL_CLIENT_ID = "AW5CGJaZFFKCyzQNOWc1mCNOPlAAbpVzPiryIX5g3RkeHooTMJ6OjNoPnK0f3LqFgYDXogBMnMAgA0tZ";
-	public static final String PAYPAL_SECRET_ID = "ENhaCvQqx2-_8QE2MDTjdcTYMr6d-wxF9y7Udu0v5hmLEm5eRdWtWrspETJDeDi-RmhEYs-2grGtCM9W";
+	public static final String PAYPAL_CLIENT_ID = "Abxw5tgxf1RAaZuDTUUTeTkHUJ5HnVKIQ0aJ_kx6UOhGKOkbbgg2ziXOlQU4L9uineV7hb-DC38Gy3lW";
+	public static final String PAYPAL_SECRET_ID = "ENOWlqN3kIwW7VRDdB8yKGL64vP_rL4zjBnengt3uYcidReug2fqfi67PkRmVV-86S7qWBR9Ry4ywzJu";
     // Sandbox Keys Paypal.
 	//	public static final String PAYPAL_CLIENT_ID = "AdinLitMf9_3K9nwxTQEs5KyBom16l6EuR4FHy8vefth7Lup57d07e80Rz1tbt6gABT-l9jgEykvOVhr";
 	//	public static final String PAYPAL_SECRET_ID = "EGyp6P-kmdaDsoNUK2F2nYs5-RifRg3nhPJkmzai-TRqpRmTpj3lm4NG6pw_B08IJSdpv5pfGfWQF1Bb";
