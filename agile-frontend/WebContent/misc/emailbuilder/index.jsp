@@ -169,7 +169,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                             <tbody>
                                                 <tr>
                                                     <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;font-family:Arial;font-size:13px;color:#000000;line-height:22px">
-                                                        <div style="margin:0px 0px 10px 0px;line-height:22px">This is a Text Block! Click on this text to edit it. You can add content easily by dragging content blocks from the right sidebar. Drag this and other blocks around to re-order them.</div>
+                                                        <div style="margin:0px 0px 10px 0px;line-height:22px" class="textFix">This is a Text Block! Click on this text to edit it. You can add content easily by dragging content blocks from the right sidebar. Drag this and other blocks around to re-order them.</div>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -265,7 +265,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                             </tbody>
                                                         </table>
                                                         <h2 style="line-height: 30px; text-decoration: none; font-weight: normal;font-family: Arial; font-weight: normal; font-size: 20px; color: #34495E; margin: 0px 0px 10px 0px;"> this is a title </h2>
-                                                        <div style="margin: 0px 0px 10px 0px; line-height: 22px;">
+                                                        <div style="margin: 0px 0px 10px 0px; line-height: 22px;" class="textFix">
                                                             Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                                                         </div>
                                                     </td>
@@ -307,7 +307,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                             <tbody>
                                                                 <tr>
                                                                     <td class="text-block"  >
-                                                                        <div style="margin-left:10px; line-height: 22px;">
+                                                                        <div style="margin-left:10px; line-height: 22px;" class="textFix">
                                                                             Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                                                                         </div>
                                                                     </td>
@@ -343,7 +343,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                             <tbody>
                                                                 <tr>
                                                                     <td class="text-block"  >
-                                                                        <div style="line-height: 22px;">
+                                                                        <div style="line-height: 22px;" class="textFix">
                                                                             Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                                                                         </div>
                                                                     </td>
@@ -402,7 +402,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;"> Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </div>
+                                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;" class="textFix"> Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </div>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -425,7 +425,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;">  Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </div>
+                                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;" class="textFix">  Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </div>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -480,7 +480,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                                          <div style="margin: 0px 0px 10px 0px;        line-height: 22px;">  Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </div>
+                                                                                          <div style="margin: 0px 0px 10px 0px;        line-height: 22px;"  class="textFix">  Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </div>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -503,7 +503,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+                                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;" class="textFix">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -531,7 +531,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                                 </tr>
                                                                 <tr>
                                                                     <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;" class="textFix">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
