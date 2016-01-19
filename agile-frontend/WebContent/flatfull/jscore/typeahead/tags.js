@@ -391,6 +391,22 @@ function remove_tags(base_model)
 	console.log("removed");	
 }
 
+function renameTags(newTag, oldTag)
+{
+    if(!tagsCollection || !tagsCollection.models)
+        return;
+
+    var models = tagsCollection.where({"tag" : oldTag});
+    
+    if(models && models.length)
+    {
+        var model = models[0];
+        model.set({"tag" : newTag});    
+    }
+
+    
+}
+
 $(function(){
 
 	$('body').on('click', '#refresh-tags', function(e){
