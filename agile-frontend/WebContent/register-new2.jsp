@@ -110,6 +110,7 @@ if(isSafari && isWin)
             </div>
             <div class="modal-body">
             	<center>
+            	<img src = "/img/agile-logo.png">
                 <p>Thank you for using Agile CRM
 	      		<p>Please wait a moment while we set up your account...</p></center>
 	      		
@@ -264,12 +265,7 @@ var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
 <script>
 $(document).ready(function(){
 
-	$("#confirm_registration").click(function() {
-		//$("#username").html($("#user_name").val());
-		$("#loadingmodal").modal('show');
-	});
-
-  	
+	
 	// Pre load dashlet files when don is active
 	preload_dashlet_libs();
 
