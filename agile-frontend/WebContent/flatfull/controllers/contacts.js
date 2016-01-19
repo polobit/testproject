@@ -53,6 +53,10 @@ var ContactsRouter = Backbone.Router.extend({
 			
 			/* CALL-with mobile number */
 			"contacts/call-lead/:first/:last/:mob" : "addLeadDirectly",
+			
+			/* CALL-with only mobile number */
+			"contacts/call-lead/:mob" : "addMobLead",
+			
 			"call-contacts" : "callcontacts"
 	},
 	
@@ -567,6 +571,10 @@ var ContactsRouter = Backbone.Router.extend({
 		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
+
+			//mobile tabs
+			 $('.content-tabs').tabCollapse(); 
+
 			//$("#mobile-menu-settings").trigger('click');
 			// Clone contact model, to avoid render and post-render fell
 			// in to
@@ -622,6 +630,7 @@ var ContactsRouter = Backbone.Router.extend({
 			} });
 
 		var el = this.contactDetailView.render(true).el;
+		$(el).find('.content-tabs').tabCollapse(); 
 
 		$('#content').html(el);
 
@@ -1237,6 +1246,13 @@ var ContactsRouter = Backbone.Router.extend({
 		$("#personModal").modal();
 	},
 
+	addMobLead : function(mob){
+		$("#personModal").on("shown", function(){
+			$(this).find("#phone").val(mob);
+		});
+		$("#personModal").modal();
+	},
+	
 	addContact : function(){
 		$.getJSON("core/api/custom-fields/scope?scope=CONTACT", function(data)
 		{

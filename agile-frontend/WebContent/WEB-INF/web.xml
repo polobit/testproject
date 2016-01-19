@@ -992,4 +992,15 @@
         <servlet-name>InformUserServlet</servlet-name>
         <url-pattern>/InformUser</url-pattern>
     </servlet-mapping>
+    
+    	<servlet>
+        <servlet-name>GetInformUserServlet</servlet-name>
+        <servlet-class>com.thirdparty.call.GetInformUserServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>GetInformUserServlet</servlet-name>
+        <url-pattern>/GetInformUser</url-pattern>
+    </servlet-mapping>
+  
 </web-app>

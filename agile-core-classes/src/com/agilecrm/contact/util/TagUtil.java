@@ -34,7 +34,6 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskAlreadyExistsException;
 import com.google.appengine.api.taskqueue.TaskOptions;
-import com.google.apphosting.utils.config.ApplicationXml.Modules.Web;
 import com.googlecode.objectify.Key;
 
 /**
@@ -283,7 +282,7 @@ public class TagUtil
 	tags = TagUtil.getTags();
 
 	// Sets tags in memcache for with expiry of 1 hour
-	CacheUtil.setCache(NamespaceManager.get() + "_tags", tags, 2 * 60 * 60 * 1000);
+	CacheUtil.setCache(NamespaceManager.get() + "_tags", tags, 1 * 60 * 60 * 1000);
 
 	return tags;
     }

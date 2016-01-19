@@ -29,6 +29,16 @@ $('#app-aside-folded').on('click', function(e) {
 	
     
 	});
+
+
+
+
+
+
+
+
+
+
 	
 $(document).ready(function(){
 
@@ -48,6 +58,16 @@ $(document).ready(function(){
 	
 
 	if(( $(window).width() ) < 768 ) {
+
+
+	// if the tabs are in wide columns on larger viewports
+    $('.content-tabs').tabCollapse();
+
+    // initialize tab function
+    $('.nav-tabs a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
 
 	/*$('body').on('click','#mobile-dropdown-click-sort',function(){
 			$("#contact-sort-views").css("display","block");
