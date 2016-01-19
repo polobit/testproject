@@ -795,11 +795,12 @@ $(function()
 	{
 		if (date){
 			// var data = new Date(date); 
-			// var time = data.getTime();
+			// var time = data.getTime();			
+    		var din = date.replace(/-/g, "//");
 			if(!format){
-			 	format = "mmm dd yyyy";
+			 	format = "ddd mmm dd yyyy";
 			}
-			var d= new Date(date).format(format);
+			var d= new Date(din).format(format);
 			return d;			
 		}
 		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
