@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.widgets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -22,6 +23,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.Widget.IntegrationType;
 import com.agilecrm.widgets.Widget.WidgetType;
 import com.agilecrm.widgets.util.CustomWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -117,8 +119,20 @@ public class WidgetsAPI {
 			if (WidgetUtil.checkIfWidgetNameExists(customWidget.name)) {
 				return null;
 			}
-			System.out.println(customWidget);
+			
 			customWidget.save();
+			
+			Widget widget = new Widget();
+			widget.script = customWidget.script;
+			widget.logo_url = customWidget.logo_url;
+			widget.fav_ico_url = customWidget.fav_ico_url;
+			widget.description = customWidget.description;
+			widget.name =customWidget.name;
+			widget.widget_type = customWidget.widget_type;
+			widget.save();
+			
+			customWidget.is_added = true;
+			
 			return customWidget;
 		}
 		return null;
@@ -292,4 +306,35 @@ public class WidgetsAPI {
 		}
 		System.err.println("The widget is null and id is " + id);
 	}
+	
+/**
+ * return the default_call widget otherwise null
+ * 	
+ * name and default_call are the attribute to be ooked at ui side...
+ * 
+ * 
+ * @return null or widget 
+ */
+	
+	@Path("/availableCallWidgets")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	
+	public List<Widget> getDefaultCallWIdgetName(){
+		List<Widget> widgets = new ArrayList<Widget>();
+		//ArrayList<String> callOptionName = new ArrayList<>();
+
+		widgets.addAll(WidgetUtil.getWidget(WidgetType.CALL));
+		/*if(!widgets.isEmpty()){
+			for(Widget widget : widgets){
+				callOptionName.add(widget.name);
+			}
+			System.out.println("Available call options : " + callOptionName.toString());
+		}else{
+			System.out.println("No default call widget found sending null ...");
+		}*/
+		
+		return widgets;
+	}
+	
 }

@@ -508,6 +508,8 @@ var Ticket_Custom_Filters = {
 	},
 
 	toggleCreateFilterNoty: function(){
+
+		return;
 		if(Ticket_Custom_Filters.isFilterChanged()){
 			showNotyPopUp("warning", "Save new view <a class='link-color'>Discard</a>&nbsp;<a class='link-color save-new-filter'>Save as</a>", "top", "none");
 			

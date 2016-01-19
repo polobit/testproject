@@ -15,9 +15,6 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.UserPrefs;
-import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.user.util.UserPrefsUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
@@ -25,17 +22,16 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
 /**
- * <code>Activity</code> class represents the Activities performed by user 
+ * <code>Activity</code> class represents the Activities performed by user
  * <p>
- * The Activity entity includes time and username and user id and 
+ * The Activity entity includes time and username and user id and
  * </p>
  * <p>
  * This class implements {@link AgileUser} to create key and to store the key as
  * the User id as owner.
  * </p>
  * <p>
- * The <code>Activity</code> class provides methods to create
- *  the Activities.
+ * The <code>Activity</code> class provides methods to create the Activities.
  * </p>
  * 
  * @author Saikiran
@@ -139,15 +135,14 @@ public class Activity extends Cursor
     @Indexed
     public Long time = 0L;
 
-    
     /**
      * stores modified values
      */
     @NotSaved(IfDefault.class)
     public String custom1 = null;
-/**
- * stores old values
- */
+    /**
+     * stores old values
+     */
     @NotSaved(IfDefault.class)
     public String custom2 = null;
 
@@ -181,60 +176,39 @@ public class Activity extends Cursor
      * @JsonIgnore public void setUser(Key<DomainUser> user) { this.user = user;
      * }
      */
-    /**
+    /*  *//**
      * Gets domain user with respect to owner id if exists, otherwise null.
      * 
      * @return Domain user object.
      * @throws Exception
      *             when Domain User not exists with respect to id.
      */
-    @XmlElement(name = "user")
-    public DomainUser getUser() throws Exception
-    {
-	if (user != null)
-	{
-	    try
-	    {
-		// Gets Domain User Object
-		return DomainUserUtil.getDomainUser(user.getId());
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-	return null;
-    }
+    /*
+     * @XmlElement(name = "user") public DomainUser getUser() throws Exception {
+     * if (user != null) { try { // Gets Domain User Object return
+     * DomainUserUtil.getDomainUser(user.getId()); } catch (Exception e) {
+     * e.printStackTrace(); } } return null; }
+     */
 
-    
-  /*  *//**
+    /*  *//**
      * 
      * @return user pic of the user who performed activity
      * @throws Exception
      */
-   /* @XmlElement(name = "userPic")
-    public String getUserPic() throws Exception
-    {
-	AgileUser agileuser = null;
-	UserPrefs userprefs = null;
-
-	try
-	{
-	    // Get owner pic through agileuser prefs
-	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(user.getId());
-	    if (agileuser != null)
-		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
-	    if (userprefs != null)
-		return userprefs.pic;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-
-	}
-
-	return "";
-    }*/
+    /*
+     * @XmlElement(name = "userPic") public String getUserPic() throws Exception
+     * { AgileUser agileuser = null; UserPrefs userprefs = null;
+     * 
+     * try { // Get owner pic through agileuser prefs agileuser =
+     * AgileUser.getCurrentAgileUserFromDomainUser(user.getId()); if (agileuser
+     * != null) userprefs = UserPrefsUtil.getUserPrefs(agileuser); if (userprefs
+     * != null) return userprefs.pic; } catch (Exception e) {
+     * e.printStackTrace();
+     * 
+     * }
+     * 
+     * return ""; }
+     */
 
     /**
      * Deletes the task from database
@@ -254,8 +228,8 @@ public class Activity extends Cursor
 
     /**
      * 
-     * @return entity object based id of activity
-     * intracts with {@link DaoActivity} wrapper to get entities
+     * @return entity object based id of activity intracts with
+     *         {@link DaoActivity} wrapper to get entities
      * @throws Exception
      */
     @XmlElement
@@ -267,7 +241,6 @@ public class Activity extends Cursor
 	return obj;
     }
 
-    
     /**
      * called this method before activity getting saved
      */
@@ -300,9 +273,9 @@ public class Activity extends Cursor
     {
 	StringBuilder builder = new StringBuilder();
 	builder.append("Activity [id=").append(id).append(", user=").append(user).append(", user_name=")
-	        .append(user_name).append(", entity_type=").append(entity_type).append(", activity_type=")
-	        .append(activity_type).append(", entity_id=").append(entity_id).append(", label=").append(label)
-	        .append(", time=").append(time).append(", custom1=").append(custom1).append("]");
+		.append(user_name).append(", entity_type=").append(entity_type).append(", activity_type=")
+		.append(activity_type).append(", entity_id=").append(entity_id).append(", label=").append(label)
+		.append(", time=").append(time).append(", custom1=").append(custom1).append("]");
 	return builder.toString();
     }
 

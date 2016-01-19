@@ -542,7 +542,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 			// Checks if super user is disabled, and throws exception if super
 			// is disabled
-			checkSuperUserDisabled(domainUser);
+			//checkSuperUserDisabled(domainUser);
 
 			// Checks and throws exception if user is admin and disabled
 			checkAdminDisabled();
@@ -579,7 +579,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		{
 			if (checkMaxUsersInPlan())
 				return;
-
+			checkAdminDisabled();
 			sendWelcomeEmail();
 		}
 

@@ -17,9 +17,9 @@ import com.agilecrm.Globals;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
-import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
@@ -96,7 +96,7 @@ public class TicketNotesUtil
 		List<TicketNotes> notesList = getTicketNotes(ticket.id, "-created_time");
 
 		System.out.println("notesList size.." + notesList.size());
-		
+
 		TicketGroups group = TicketGroupUtil.getTicketGroupById(ticket.groupID);
 
 		String groupName = group.group_name;
@@ -108,7 +108,7 @@ public class TicketNotesUtil
 		json.put("tracking_img", appendTrackingImage(ticket.id, notesList.get(0).id));
 
 		System.out.println("notesList.get(0).id): " + notesList.get(0).id);
-		
+
 		JSONArray notesArray = new JSONArray();
 
 		// Add all notes
@@ -314,7 +314,7 @@ public class TicketNotesUtil
 
 		return text;
 	}
-	
+
 	/**
 	 * 
 	 * @param ticketID
@@ -334,7 +334,7 @@ public class TicketNotesUtil
 		TicketNotes notes = TicketNotes.ticketNotesDao.get(Long.parseLong(notesID));
 
 		System.out.println("notes id" + notes.id);
-		
+
 		if (notes.requester_viewed_time != 0l)
 			return;
 
@@ -367,5 +367,20 @@ public class TicketNotesUtil
 				+ " nosend=\"1\" style=\"display:none !important;\" width=\"1\" height=\"1\"></img></div>";
 
 		return trackingImage;
+	}
+
+	/**
+	 * Removes ticket notes for given ticket id
+	 * 
+	 * @param ticketID
+	 */
+	public static void deleteNotes(Long ticketID)
+	{
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("ticket_key", new Key<Tickets>(Tickets.class, ticketID));
+
+		List<Key<TicketNotes>> notes = TicketNotes.ticketNotesDao.listKeysByProperty(searchMap);
+
+		TicketNotes.ticketNotesDao.deleteKeys(notes);
 	}
 }

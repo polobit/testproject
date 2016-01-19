@@ -678,6 +678,9 @@
 {
 	white-space:nowrap;
 }
+.space-normal {
+  white-space: normal;
+}
 
 .text-u-c {
   text-transform: uppercase;
@@ -809,6 +812,11 @@ display:flex;
 .thumb-md {
   display: inline-block;
   width: 64px;
+}
+
+.thumb-55 {
+  display: inline-block;
+  width: 55px;
 }
 
 .thumb {
@@ -1194,7 +1202,10 @@ display:flex;
 {
 	bottom:0;
 }
-
+.pos-b-n-sm 
+{
+  bottom: -10px;
+}
 .pos-b-xs
 {
 	bottom:5px;
@@ -1300,6 +1311,11 @@ border-collapse: separate;
 }
 
 /*ending table framework*/
+
+.thumb-55 img {
+  width: 55px;
+  height: 55px;
+}
 
 .thumb img{
 	height: 50px;

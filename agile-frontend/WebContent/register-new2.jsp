@@ -68,8 +68,25 @@ body {
 	color: rgb(199, 73, 73);
 	display: none;
 }
+.modal-title {
+	line-height: 1.42857143;
+}
+.modal-content{
+	border-radius: 0px!important;
+}
+.modal{
+diplay:block!important;
+position:fixed!important;
+}
 
+.progress-bar.animate {
+   width: 100%;
+}
 </style>
+ 
+ <!--<script src ="/flatfull/lib/jquery-new/jquery-2.1.1.min.js"></script>
+
+<script src="/flatfull/lib/bootstrap.v3.min.js"></script>-->
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
 <link type="text/css" rel="stylesheet" href="/css/phonenumber-lib/intlTelInput.css" />
@@ -83,6 +100,30 @@ if(isSafari && isWin)
 
 </head>
 <body>
+
+
+<div class="modal fade" id="loadingmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" style="z-index:10000;top:20vh;">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:rgba(0,0,0,0.025);">
+			 <h3 class="modal-title " style="font-size:18px;" ><!--<span id="username"></span>!--> Please Wait...</h3>
+            </div>
+            <div class="modal-body">
+            	<center>
+                <p>Thank you for using Agile CRM
+	      		<p>Please wait a moment while we set up your account...</p></center>
+	      		
+            </div>
+           
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+
+
+
 	<div id="error-area" class="error-top-view"></div>
 	<div class="app-content-body">
 		<div class="bg-light lter b-b wrapper-md text-center">
@@ -183,7 +224,7 @@ This is where you and your users will log in to your account
 </div>
 
 <input type='hidden' id="login_email" name='email' value=<%=request.getParameter("email")%>></input>
-<input type='hidden' id="" name='name' value=<%=request.getParameter("name")%>></input>
+<input type='hidden' id="user_name" name='name' value=<%=request.getParameter("name")%>></input>
 <input type='hidden' id="account_timezone" name='account_timezone' value=<%=request.getParameter("account_timezone")%>></input>
 <input type="password" class="hide" name='password' id="password" value="<%=request.getParameter("password")%>"></input>
 	<input type='hidden' name='type' value='agile'></input>
@@ -191,7 +232,7 @@ This is where you and your users will log in to your account
 
 <div class="row">
                     <div class="col-sm-offset-3 col-sm-8">                      
-                       <input type='submit' id="confirm_registration" value="I'm Done"
+                       <input type='submit' id="confirm_registration" value="Get Started" 
 											class='save btn btn-sm btn-primary' style="padding-left:15px;padding-right:15px;">
 
 
@@ -206,7 +247,12 @@ This is where you and your users will log in to your account
 </div>
 </div>
 
+
+
+
+
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+<script src="/flatfull/lib/bootstrap.v3.min.js"></script>
 <script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
 <script src="/flatfull/registration/register.js?_v=<%=_AGILE_VERSION%>"   type="text/javascript"></script>
 <script type="text/javascript">
@@ -218,6 +264,12 @@ var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
 <script>
 $(document).ready(function(){
 
+	$("#confirm_registration").click(function() {
+		//$("#username").html($("#user_name").val());
+		$("#loadingmodal").modal('show');
+	});
+
+  	
 	// Pre load dashlet files when don is active
 	preload_dashlet_libs();
 

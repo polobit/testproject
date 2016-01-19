@@ -69,6 +69,14 @@
   </retry-parameters>
   <target>agile-normal-bulk</target>
   </queue>
+  <queue>
+    <name>email-reply-queue</name>
+    <rate>5/s</rate>
+    <max-concurrent-requests>50</max-concurrent-requests>
+    <retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  </queue>
     <queue>
     <name>contact-sync-queue</name>
     <rate>2/s</rate>
@@ -182,7 +190,7 @@
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
-  <target>agile-normal-bulk</target>
+  <target>agile-export</target>
   </queue>
    <queue>
     <name>deals-upload-queue</name>
@@ -213,7 +221,7 @@
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
-  <target>agile-normal-bulk</target>
+  <target>agile-export</target>
   </queue>
   <queue>
     <name>deals-export-queue</name>
@@ -288,6 +296,16 @@
   <queue>
     <name>cron-interrupt-queue</name>
     <rate>20/s</rate>
+    <bucket-size>10</bucket-size>
+    <max-concurrent-requests>40</max-concurrent-requests>
+    <retry-parameters>
+    <task-retry-limit>2</task-retry-limit>
+  </retry-parameters>
+  </queue>
+  
+   <queue>
+    <name>free-emails-added-queue</name>
+    <rate>10/s</rate>
     <bucket-size>10</bucket-size>
     <max-concurrent-requests>40</max-concurrent-requests>
     <retry-parameters>

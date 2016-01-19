@@ -226,7 +226,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #change-owner-element>#contact-owner' : 'onChangeOwner',
     	'click .contact-owner-list' : 'onChangeOwnerSelected',
     	'click #change-owner-element>.contact-owner-add' : 'onAddContactOwner',
-    	'click #contact-actions-delete' : 'onContactDelete',
+    	'click #contact-actions-delete' : 'onContactDetailsDelete',
     	'click .remove-tags' : 'onRemoveContactTag',
     	'click #add-tags' : 'onAddContactTag',
     	'click #contact-add-tags' : 'onAddContactTags',
@@ -559,7 +559,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     },
 
     // Deletes a contact from database
-    onContactDelete : function(e){
+    onContactDetailsDelete : function(e){
 
     	e.preventDefault();
 		if(!confirm("Do you want to delete the contact?"))
@@ -569,6 +569,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		App_Contacts.contactDetailView.model.destroy({success: function(model, response) {
 			  Backbone.history.navigate("contacts",{trigger: true});
 		}});
+		
     },
 
     /**

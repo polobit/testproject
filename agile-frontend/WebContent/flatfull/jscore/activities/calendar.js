@@ -853,7 +853,9 @@ function today()
 {
 	fullCal.fullCalendar('today');
 }
-
+function refreshcal(){
+	fullCal.fullCalendar('refetchEvents');
+}
 
 /**
  * gets the agileusers to build calendar filters

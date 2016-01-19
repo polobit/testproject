@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
@@ -701,5 +702,6 @@ public class DomainUserUtil
 	    NamespaceManager.set(oldnamespace);
 	}
     }
+    
 
 }

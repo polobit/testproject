@@ -7,6 +7,8 @@
 
 CONTACTS_HARD_RELOAD = true;
 
+var import_tab_Id;
+
 var ContactsRouter = Backbone.Router.extend({
 
 	routes : { 
@@ -23,6 +25,8 @@ var ContactsRouter = Backbone.Router.extend({
 		"contact/:id" : "contactDetails",
 		
 		"import" : "importContacts",
+
+		"import/salesforce" : "salesforceImport",
 
 		//add contact when customfields are there
 		"contact-edit" : "editContact",
@@ -51,6 +55,10 @@ var ContactsRouter = Backbone.Router.extend({
 			
 			/* CALL-with mobile number */
 			"contacts/call-lead/:first/:last/:mob" : "addLeadDirectly",
+			
+			/* CALL-with only mobile number */
+			"contacts/call-lead/:mob" : "addMobLead",
+			
 			"call-contacts" : "callcontacts"
 	},
 	
@@ -62,6 +70,10 @@ var ContactsRouter = Backbone.Router.extend({
 		 * $("#content").html(getTemplate('dashboard-timline', {}));
 		 * setup_dashboardTimeline();
 		 */
+	},
+
+	salesforceImport : function(){
+         App_Datasync.salesforce();
 	},
 
 	dashboard : function()
@@ -107,7 +119,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
 	{
-		
+
 		if(SCROLL_POSITION)
 		{
 			$('html, body').animate({ scrollTop : SCROLL_POSITION  },1000);
@@ -270,7 +282,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 */
 		this.contactsListView = new  Contacts_Events_Collection_View({ url : url,custom_scrollable_element:custom_scrollable_element, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
 			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
-			{
+			{		  
 		
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
@@ -279,29 +291,49 @@ var ContactsRouter = Backbone.Router.extend({
 				var cel = App_Contacts.contactsListView.el;
 				var collection = App_Contacts.contactsListView.collection;
 
+				abortCountQueryCall();
+				
 				// To set heading in template
 				if(is_lhs_filter) {
-					var count = 0;
-					if(collection.models.length > 0) {
-						count = collection.models[0].attributes.count || collection.models.length;
-					}
-					var count_message;
-					if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
-						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
-					else
-						count_message = "<small> (" + count + " Total) </small>";
-					$('#contacts-count').html(count_message);
+
 					setupViews();
 					setupContactFilterList();
 					//setUpContactView();
-				} else {					
+
+					if(collection.models.length > 0 && !collection.models[0].get("count")){
+						// Call to get Count 
+						getAndUpdateCollectionCount("contacts", el);						
+					}
+					else {
+						var count = 0;
+						if(collection.models.length > 0) {
+							count = collection.models[0].attributes.count || collection.models.length;
+						}
+						var count_message;
+						if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
+							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+						else
+							count_message = "<small> (" + count + " Total) </small>";
+						$('#contacts-count').html(count_message);
+
+					}
+					
+				} else {
+
 					setupLhsFilters(cel, is_company);
 					setupViews(cel);
 					setupContactFilterList(cel, tag_id);
 					setUpContactView(cel);
+
+					if(collection.models.length > 0 && !collection.models[0].get("count")){
+						// Call to get Count 
+						getAndUpdateCollectionCount("contacts", el);						
+					}
 				}
+
 				$('[data-toggle="tooltip"]').tooltip();
 				start_tour("contacts", el);
+
 			} });
 
 		// Contacts are fetched when the app loads in the initialize
@@ -310,16 +342,20 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(this.contactsListView.render().el);
 			contactFiltersListeners();
+			
 		} else {
 			$('#contacts-listener-container').find('.contacts-div').html(this.contactsListView.render().el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
+			
 		}
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
 		$('[data-toggle="tooltip"]').tooltip();
 	
+		
+
 
 	},
 	
@@ -537,6 +573,10 @@ var ContactsRouter = Backbone.Router.extend({
 		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
+
+			//mobile tabs
+			 $('.content-tabs').tabCollapse(); 
+
 			//$("#mobile-menu-settings").trigger('click');
 			// Clone contact model, to avoid render and post-render fell
 			// in to
@@ -584,42 +624,15 @@ var ContactsRouter = Backbone.Router.extend({
 			//fill_owners(el, contact.toJSON());
 			start_tour("contact-details", el);
 			
-
-			// Sequence of calling option 1) BRIA 2) Twilio 3) SIP in contact phone option
-			if(default_call_type == "Bria"){
-				if(callFromBria == true){
-					$(".contact-call-button",el).removeAttr('disabled');
-					$(".contact-make-call",el).removeAttr("href");
-					$(".contact-call-button",el).addClass('contact-make-bria-call');
-					$(".contact-call-button-div",el).tooltip('hide')
-					  .attr('data-original-title', "Call from Bria")
-				    .tooltip('fixTitle');
-					}
-				}else{
-					if(Twilio_Start == true)
-						//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
-						{
-							$(".contact-call-button",el).removeAttr('disabled');
-							$(".contact-make-call",el).removeAttr("href");
-							$(".contact-call-button",el).addClass('contact-make-twilio-call');
-							$(".contact-call-button-div",el).tooltip('hide')
-							  .attr('data-original-title', "Call from Twilio")
-						    .tooltip('fixTitle');
-
-						}else if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-							{
-								$(".contact-call-button",el).removeAttr('disabled');
-								$(".contact-make-call",el).removeAttr("href");
-								$(".contact-call-button",el).addClass('contact-make-sip-call');
-								$(".contact-call-button-div",el).tooltip('hide')
-								  .attr('data-original-title', "Call from SIP")
-							    .tooltip('fixTitle');
-							}
-				}
-
+			// this part is to remove the progress cursor from contact number shown in contact detail page
+			if(default_call_option.callOption.length == 0){
+				$(".contact-make-call",el).removeClass("c-progress");
+				$(".contact-make-skype-call",el).removeClass("c-progress");
+			}
 			} });
 
 		var el = this.contactDetailView.render(true).el;
+		$(el).find('.content-tabs').tabCollapse(); 
 
 		$('#content').html(el);
 
@@ -771,6 +784,13 @@ var ContactsRouter = Backbone.Router.extend({
 
 			$('#import-contacts-event-listener').html($(template_ui));	
 			initializeImportEvents('import-contacts-event-listener');
+			if(import_tab_Id){
+				 $('#import-tabs-content a[href="#'+import_tab_Id+'"]').tab('show');
+				 import_tab_Id=undefined;
+			}
+			else{
+				$('#import-tabs-content a[href="#csv-tab"]').tab('show');
+			}
 
 		}, "#import-contacts-event-listener");       
 	},
@@ -917,7 +937,7 @@ var ContactsRouter = Backbone.Router.extend({
 				// Appends zoomifier link to attach their documents.
 				head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
 				{
-					$("#emailForm", el).find('textarea[name="body"]').closest(".controls")
+					$("#emailForm", el).find('textarea[name="count_message"]').closest(".controls")
 							.append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
 				});
 			}
@@ -931,13 +951,13 @@ var ContactsRouter = Backbone.Router.extend({
 			if(cc)
 			{
 				$("#emailForm",el).find('#email_cc').closest('.control-group').show();
-				$("#emailForm",el).find('input[name="email_cc"]').val(cc);
+				$("#emailForm",el).find('input[name="cc"]').val(cc);
 			}
 			
 			if(bcc)
 			{
 				$("#emailForm",el).find('#email_bcc').closest('.control-group').show();
-				$("#emailForm",el).find('input[name="email_bcc"]').val(bcc);
+				$("#emailForm",el).find('input[name="bcc"]').val(bcc);
 			}
 			
 			// Setup HTML Editor
@@ -986,6 +1006,8 @@ var ContactsRouter = Backbone.Router.extend({
 	// availabel, url = filter url if there is any filter
 	customView : function(id, view_data, url, tag_id, is_lhs_filter, postData)
 	{
+		console.log("customView");
+
 		SELECT_ALL = false;
 		App_Contacts.tag_id = tag_id;
 
@@ -1001,7 +1023,7 @@ var ContactsRouter = Backbone.Router.extend({
 			this.contact_custom_view = undefined;
 			CONTACTS_HARD_RELOAD = false;
 			view_data = undefined;
-			App_Contacts.contactViewModel = undefined;
+			// App_Contacts.contactViewModel = undefined;
 		}
 
 		// If id is defined get the respective custom view object
@@ -1047,6 +1069,10 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(el);
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
+			if(agile_is_mobile_browser()) {
+			$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+			}
+			
 
 			contactFiltersListeners();
 
@@ -1055,6 +1081,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 			//setup_tags(el);
 			//pieTags(el);
+
 			setupViews(el, view_data.name);
 			setupContactFilterList(el, tag_id);
 			setUpContactView(el);
@@ -1115,42 +1142,85 @@ var ContactsRouter = Backbone.Router.extend({
 				setupViews(el, view_data.name);
 				$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
-
 				// show list of filters dropdown in contacts list
 				setupContactFilterList(el, App_Contacts.tag_id);
+
 				if(tag_id)
 				setUpContactView(el,true);
 			    else
 				setUpContactView(el);
+
+				abortCountQueryCall();
+
 				if(is_lhs_filter) {
-					var count = 0;
-					if(collection.models.length > 0) {
-						count = collection.models[0].attributes.count || collection.models.length;
+
+					if(collection.models.length > 0 && !collection.models[0].get("count")){
+						// Call to get Count 
+						getAndUpdateCollectionCount("contacts", el);
+					} else {
+						var count = 0;
+						if(collection.models.length > 0) {
+							count = collection.models[0].attributes.count || collection.models.length;
+						}
+						var count_message;
+						if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
+							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+ updateImageS3Path("/img/help.png") +'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+						else
+							count_message = "<small> (" + count + " Total) </small>";
+						$('#contacts-count').html(count_message);
 					}
-					var count_message;
-					if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
-						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+ updateImageS3Path("/img/help.png") +'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
-					else
-						count_message = "<small> (" + count + " Total) </small>";
-					$('#contacts-count').html(count_message);
-				} else {					
+					
+				} else {	
+
+					if(collection.models.length > 0 && !collection.models[0].get("count")){
+						// Call to get Count 
+						getAndUpdateCollectionCount("contacts", el);						
+					}
+
 					setupLhsFilters(el);
 				}
-			} });
+
+				if(agile_is_mobile_browser()) {
+				
+					var $nextEle = $('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+					$('#contacts-table tbody tr .icon-append-mobile',el).after($nextEle);
+				}
+				
+
+				
+
+			}, appendItemCallback: function(el){
+				if(agile_is_mobile_browser()) {
+					$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+				}
+			}, });
 
 		var _that = this;
-		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
+		App_Contacts.contactDateFields = CONTACTS_DATE_FIELDS;
+
+		if(!App_Contacts.contactDateFields){
+				$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
 				{
-					// Defines appendItem for custom view
+					App_Contacts.contactDateFields = customDatefields;
 					
+					// Defines appendItem for custom view
 					_that.contact_custom_view.appendItem = function(base_model){
-						contactTableView(base_model,customDatefields,this);
+						contactTableView(base_model,App_Contacts.contactDateFields,this);
 					};
 					// Fetch collection
 					_that.contact_custom_view.collection.fetch();
-					
 				});
-		
+
+		} else{
+
+				// Defines appendItem for custom view
+				_that.contact_custom_view.appendItem = function(base_model){
+					contactTableView(base_model,App_Contacts.contactDateFields,this);
+				};
+				// Fetch collection
+				_that.contact_custom_view.collection.fetch();
+		}
+
 		if(!is_lhs_filter) {
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(this.contact_custom_view.el);
@@ -1185,6 +1255,13 @@ var ContactsRouter = Backbone.Router.extend({
 		$("#personModal").modal();
 	},
 
+	addMobLead : function(mob){
+		$("#personModal").on("shown", function(){
+			$(this).find("#phone").val(mob);
+		});
+		$("#personModal").modal();
+	},
+	
 	addContact : function(){
 		$.getJSON("core/api/custom-fields/scope?scope=CONTACT", function(data)
 		{
@@ -1249,3 +1326,44 @@ var ContactsRouter = Backbone.Router.extend({
 	}
 		
 	});
+
+function getAndUpdateCollectionCount(type, el){
+
+		var count_message = "";
+    	$("#contacts-count").html(count_message);
+
+    	var countURL = "";
+    	if(type == "contacts")
+    		countURL = App_Contacts.contactsListView.options.url + "/count";
+    	else
+    		countURL = App_Companies.companiesListView.options.url + "/count";
+
+    	// Hide bulk action checkbox
+    	$(".thead_check", el).closest("label").css("visibility", "hidden");
+    	$("table", el).addClass("hide-head-checkbox");
+
+    	abortCountQueryCall();
+
+    	Count_XHR_Call = $.get(countURL, {}, function(data){
+    		        data = parseInt(data);
+    		        
+                    count_message = "<small> (" + data + " Total) </small>";
+					$('#contacts-count').html(count_message);
+
+					// Reset collection
+					if(type == "contacts")
+						App_Contacts.contactsListView.collection.models[0].set("count", data, {silent: true});
+					else{
+						App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
+					}
+
+					$(".thead_check", el).closest("label").css("visibility", "visible");
+					$("table", el).removeClass("hide-head-checkbox");	
+    	});
+}
+
+function abortCountQueryCall(){
+	try{
+		Count_XHR_Call.abort();
+	}catch(e){}
+}

@@ -35,8 +35,10 @@ import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.GoalsUtil;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.portlets.Portlet;
@@ -101,6 +103,7 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("Deals Funnel",PortletType.DEALS));
 				//allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
 				allPortlets.add(new Portlet("Revenue Graph",PortletType.DEALS));
+				allPortlets.add(new Portlet("Deal Goals",PortletType.DEALS));
 			}
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR)){
@@ -701,6 +704,14 @@ public class PortletUtil {
 		List<Integer> busyCallsCountList=new ArrayList<Integer>();
 		List<Integer> failedCallsCountList=new ArrayList<Integer>();
 		List<Integer> voiceMailCallsCountList=new ArrayList<Integer>();
+		List<Integer> missedCallsCountList=new ArrayList<Integer>();
+		List<Integer> inquiryCallsCountList=new ArrayList<Integer>();
+		List<Integer> interestCallsCountList=new ArrayList<Integer>();
+		List<Integer> noInterestCallsCountList=new ArrayList<Integer>();
+		List<Integer> incorrectReferralCallsCountList=new ArrayList<Integer>();
+		List<Integer> newOpportunityCallsCountList=new ArrayList<Integer>();
+		List<Integer> meetingScheduledCallsCountList=new ArrayList<Integer>();
+		
 		List<Integer> totalCallsCountList=new ArrayList<Integer>();
 		
 		List<Long> callsDurationList=new ArrayList<Long>();
@@ -734,6 +745,13 @@ public class PortletUtil {
 			int busyCallsCount=0;
 			int failedCallsCount=0;
 			int voiceMailCallsCount=0;
+			int missedCallsCount=0;
+			int inquiryCallsCount=0;
+			int interestCallsCount=0;
+			int noInterestCallsCount=0;
+			int incorrectReferralCallsCount=0;
+			int newOpportunityCallsCount=0;
+			int meetingScheduledCallsCount=0;
 			
 			int totalCallsCount=0;
 			
@@ -750,6 +768,20 @@ public class PortletUtil {
 						failedCallsCount++;
 					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
 						voiceMailCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Missed))
+						missedCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Inquiry))
+						inquiryCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Interest))
+						interestCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NoInterest))
+						noInterestCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.IncorrectReferral))
+						incorrectReferralCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
+						newOpportunityCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
+						meetingScheduledCallsCount++;
 					if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null) 
 							&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
 						callsDuration+=Long.valueOf(activity.custom4);
@@ -763,6 +795,14 @@ public class PortletUtil {
 			busyCallsCountList.add(busyCallsCount);
 			failedCallsCountList.add(failedCallsCount);
 			voiceMailCallsCountList.add(voiceMailCallsCount);
+			missedCallsCountList.add(missedCallsCount);
+			inquiryCallsCountList.add(inquiryCallsCount);
+			interestCallsCountList.add(interestCallsCount);
+			noInterestCallsCountList.add(noInterestCallsCount);
+			incorrectReferralCallsCountList.add(incorrectReferralCallsCount);
+			newOpportunityCallsCountList.add(newOpportunityCallsCount);
+			meetingScheduledCallsCountList.add(meetingScheduledCallsCount);
+			
 			totalCallsCountList.add(totalCallsCount);
 			
 			callsDurationList.add(callsDuration);
@@ -785,6 +825,14 @@ public class PortletUtil {
 		callsPerPersonJSON.put("busyCallsCountList",busyCallsCountList);
 		callsPerPersonJSON.put("failedCallsCountList",failedCallsCountList);
 		callsPerPersonJSON.put("voiceMailCallsCountList",voiceMailCallsCountList);
+		callsPerPersonJSON.put("missedCallsCountList",missedCallsCountList);
+		callsPerPersonJSON.put("inquiryCallsCountList",inquiryCallsCountList);
+		callsPerPersonJSON.put("interestCallsCountList",interestCallsCountList);
+		callsPerPersonJSON.put("noInterestCallsCountList",noInterestCallsCountList);
+		callsPerPersonJSON.put("incorrectReferralCallsCountList",incorrectReferralCallsCountList);
+		callsPerPersonJSON.put("newOpportunityCallsCountList",newOpportunityCallsCountList);
+		callsPerPersonJSON.put("meetingScheduledCallsCountList",meetingScheduledCallsCountList);
+
 		callsPerPersonJSON.put("callsDurationList",callsDurationList);
 		callsPerPersonJSON.put("totalCallsCountList",totalCallsCountList);
 		callsPerPersonJSON.put("domainUsersList",domainUserNamesList);
@@ -1604,6 +1652,45 @@ public class PortletUtil {
 		System.out.println("Size of List"+list.size());
 		System.out.println(list);
 		return list;
+	}
+	
+	/*
+	 * Gives the goal set for user and goal attained from it.
+	 * 
+	 * @param owner_id,minTime and maxTime
+	 * 
+	 * @returns JSONObject
+	 * 
+	 */
+	public static JSONObject getGoalsAttainedData(Long owner_id,Long minTime,Long maxTime)
+	{
+		int count=0;
+		Long count_goal=0L;
+		Double value=0.0;
+		Double amount_goal=0.0;
+		JSONObject json=new JSONObject();;
+		List<Opportunity> opportunities=OpportunityUtil.getWonDealsListWithOwner(minTime, maxTime, owner_id);
+		if(opportunities!=null){
+			for(Opportunity opp:opportunities){
+			value = value+opp.expected_value;
+			count++;
+		}
+		}
+		json.put("dealcount", count);
+		json.put("dealAmount", value);
+		List<Goals> goals=GoalsUtil.getAllGoalsForUser(owner_id, minTime, maxTime);
+		if(goals!=null)
+		{
+			for(Goals goal:goals){
+				if(goal.count!=null)
+			count_goal+=goal.count;
+				if(goal.amount!=null)
+			amount_goal+=goal.amount;
+		}
+			json.put("goalCount",count_goal);
+			json.put("goalAmount", amount_goal);
+	}
+		return json;
 	}
 
 }

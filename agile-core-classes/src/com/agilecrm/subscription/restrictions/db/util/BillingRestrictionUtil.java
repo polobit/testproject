@@ -8,17 +8,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+
+import com.agilecrm.AgileQueues;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.deferred.EmailsAddedDeferredTask;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.PlanLimits.PlanClasses;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 @XmlRootElement
 public class BillingRestrictionUtil {
@@ -97,8 +105,13 @@ public class BillingRestrictionUtil {
 	}
 
 	public static BillingRestriction getBillingRestrictionFromDbWithoutSubscription() {
-		BillingRestriction restriction = getRestrictionFromDB();
-
+		BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
+		if (restriction == null) {
+			restriction = BillingRestriction.getInstance(null, null);
+			restriction.refresh(true);
+			restriction.save();
+			return restriction;
+		}	
 		return restriction;
 	}
 	
@@ -107,36 +120,8 @@ public class BillingRestrictionUtil {
 		System.out.println("Fetching restriction from db");
 		BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
 		System.out.println("Done fetching restriction from db");
-		if (restriction == null) {
-			restriction = BillingRestriction.getInstance(null, null);
-			restriction.refresh(true);
-			restriction.save();
-			return restriction;
-		}
-		// Set one_time_emails_count to '0' per every 30 days for free users(Free 5000 emails)
-		Subscription subscription = SubscriptionUtil.getSubscription();
-		System.out.println("max emails count::"+restriction.max_emails_count);
-		if(restriction.max_emails_count == null || restriction.max_emails_count == 0 || (restriction.one_time_emails_count != null && restriction.one_time_emails_count <= 0 && subscription != null && subscription.emailPlan == null)){
-			System.out.println("last renewal time::"+restriction.last_renewal_time);
-			if(restriction.last_renewal_time == null){
-				if(restriction.created_time == null){
-					restriction.last_renewal_time = new DateUtil().addDays(31).getTime().getTime()/1000;
-					restriction.save();
-				}
-				else
-					restriction.last_renewal_time = restriction.created_time/1000;
-			}
-			Long currentDate = new DateUtil().getTime().getTime()/1000;
-			if(currentDate - restriction.last_renewal_time >= 2592000){
-				System.out.println("Updating free 5000 emails");
-				System.out.println("last renewal time is:: "+restriction.last_renewal_time);
-				restriction.one_time_emails_count = 0;
-				restriction.max_emails_count = 0;
-				restriction.last_renewal_time = System.currentTimeMillis()/1000;
-				restriction.save();
-			}
-		}
-		System.out.println("restriction obj:: "+restriction);	
+		if(restriction.checkToUpdateFreeEmails())
+			restriction.refreshEmails();
 		return restriction;
 	}
 
@@ -422,6 +407,20 @@ public class BillingRestrictionUtil {
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			return null;
 		}
+	}
+	
+	public static void sendFreeEmailsUpdatedMail(){
+		try {
+			EmailsAddedDeferredTask task = new EmailsAddedDeferredTask(NamespaceManager.get());
+			// Add to queue
+			Queue queue = QueueFactory.getQueue(AgileQueues.EMAILS_ADDED_QUEUE);
+			queue.add(TaskOptions.Builder.withTaskName(NamespaceManager.get()).payload(task));
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Task already created with domain: "+NamespaceManager.get());
+			e.printStackTrace();
+		}
+		
 	}
 	
 }

@@ -726,8 +726,13 @@ public class TicketsUtil
 	{
 		Tickets ticket = getTicketByID(ticket_id);
 
+		// Deleting ticket
 		Tickets.ticketsDao.deleteKey(new Key<Tickets>(Tickets.class, ticket_id));
 
+		// Deleting notes
+		TicketNotesUtil.deleteNotes(ticket_id);
+
+		// Deleting document from text search
 		new TicketsDocument().delete(ticket_id + "");
 
 		// Logging deleting ticket activity

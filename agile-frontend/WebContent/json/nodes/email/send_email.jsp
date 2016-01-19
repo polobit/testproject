@@ -149,7 +149,10 @@
             "title": "Select required merge field to insert into below HTML Field.",
             "fieldType": "merge_fields",
             "target_type": "tinyMCEhtml_email",
-            "type": "select"
+            "type": "select",
+            "event": "onchange",
+            "eventHandler": "insertSelectedMergeField"
+            
         },
         {
             "label": "HTML Editor",
@@ -196,6 +199,7 @@
             "options": {
                 "*No": "no",
                 "Yes": "yes",
+                "Yes & Push (Email only)": "yes_and_push_email_only",
                 "Yes & Push": "yes_and_push"
             },
             "fieldType": "select",

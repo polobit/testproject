@@ -22,6 +22,8 @@ function organize_sync_widgets(base_model)
 		$('#shopify', this.el).append($(itemView.render().el));
 	if (sync_type == "QUICKBOOK")
 		$('#quickbook', this.el).append($(itemView.render().el));
+	if (sync_type == "SALESFORCE")
+		$('#salesforce', this.el).append($(itemView.render().el));
 
 }
 
@@ -90,6 +92,7 @@ function initializeDataSyncListners(){
 
 		if(!sync_widget_type)
 			return;
+
 		var deleteSyncUrl="core/api/contactprefs/delete/"+sync_widget_type+"/"+sync_widget_id;
 		$.ajax({
  				url : deleteSyncUrl,
@@ -97,7 +100,13 @@ function initializeDataSyncListners(){
 				success : function(){
 					console.log("success");
 					
-					App_Datasync.dataSync();
+					if(sync_widget_type == "SALESFORCE"){
+						DATA_SYNC_FORCE_FETCH=true;
+						App_Datasync.salesforce();
+					}
+						
+					else
+						App_Datasync.dataSync();
 				}
 			});
 		
@@ -202,17 +211,22 @@ name is type i.e GOOGLE or STRIPE or SHOPIFY etc
 renders inner sync view and binds all model events to DataSync_Event_Modal_View
 */
 
-  function renderInnerSyncView(url,templateName,data,callback){
+  function renderInnerSyncView(url,templateName,data,callback,form_custom_validate_callback){
   		 var data_sync = new DataSync_Event_Modal_View({
 			                    url: url,
 			                    template: templateName,
 			                    data:data,
+			                    form_custom_validate : form_custom_validate_callback,
 			                    saveCallback: function(model) {			                      
 			                       callback(model);
 			                    }
 			                });
 
-			   $("#data-sync-settings-tab-content").html(data_sync.render().el);
+  		 var el = $("#data-sync-settings-tab-content");
+  		 if(el.length == 0)
+			el = $("#data-import-settings-tab-content");  		 	 
+
+		el.html(data_sync.render().el);
   }
 
 

@@ -1,0 +1,129 @@
+<script id="skype-logs-template" type="text/html">
+{{#if_equals num.length "0"}}
+		<div class="wrapper-sm">
+
+			<div class="word-break p-n text-base" id="skype_no_phone">
+				There is no phone number associated.
+			</div>
+
+		</div>
+
+{{else}}
+  <div>
+			{{#if_equals num.length "1"}}<div id="skype_contact_number"></div>
+			{{else}}
+			<div class="wrapper-sm">
+			<!--<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs">To&nbsp;:</h4></div>-->
+			<div class="pull-left" style="width:100%;">
+				<select name="skype_number" id="skype_contact_number" class="required form-control" style="height:27px;padding-top:2px;width:100%;">
+					{{#each num}}
+						<option value="{{value}}">{{value}} 
+							{{#if subtype}}({{subtype}}){{/if}}
+						</option>
+					{{/each}}
+				</select>
+			</div>
+			<div class="clearfix"></div>
+			{{/if_equals}}
+	</div>
+	<div>
+	<ul id="skype-logs-panel" class="list-group m-b-none text-xs">
+		<li class="list-group-item b-n" id="skype_logs_load">
+			<center><img src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
+		</li>
+	</ul>
+	</div>
+{{/if_equals}}
+</script>
+
+<script id="skype-logs-fetch-template" type="text/html">
+
+		<li class="list-group-item b-n " style="display:none;" id="skype_logs_load">
+			<center><img src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
+		</li>
+{{#if this}}
+
+		{{#each this}}          
+			<li class="list-group-item r-none b-l-none b-r-none">
+					{{#if_equals duration "0"}}
+						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-unanswer"></i>
+					{{else}}
+						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
+					{{/if_equals}}
+				
+<div class="pull-left text-sm">{{#if_equals duration "0"}}Call unanswered{{else}}Call connected{{/if_equals}}</div>
+				
+<div class="pull-right">{{#is_string duration}}{{toProperFormat duration}}{{else}}0s{{/is_string}}</div>
+				
+<div class="clearfix"></div>
+	
+<small class="text-muted block pos-rlt"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{convert_toISOString startTime}}">{{toLocalTimezone startTime}}</time></small>
+				
+<div class="clearfix"></div>
+			</li>
+		{{/each}}
+	{{else}}
+		<li class="list-group-item wrapper-md r-none b-l-none b-r-none text-center">
+	    	Sorry, we could not find any call data
+		</li>
+	{{/if}}
+
+</script>
+
+<script id="skype-login-template" type="text/html">
+<div>
+	<form class="p-xs" id="skype_login_form" name="skype_login_form" method="post">
+    	<fieldset>
+				<p class="m-t-sm" style=" margin: 0px;margin-bottom: 20px;">
+                    Make & receive calls using your Skype client
+			  </p>	
+				
+				<p style="font-size: 13px;margin-bottom: 15px">
+					Please follow these steps 			
+				</p>
+
+				<div class="m-t-sm m-b-none text-sm" style="font-size: 12px;">
+				<p>1) Agile needs an executable on your Windows PC to communicate with Skype. You can download it <a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;"> here.</a> </p>
+  				<p>2) Save the widget by clicking on the save button below. </p>
+				<p>3) Open Skype executable and follow the steps.</p>
+				</div>
+
+              	<div style="margin-top: 18px">
+					<p style="font-size: 13px; margin-top:5px;">
+						You should be able to now make and receive calls using Skype.	
+					</p>
+				<div class="text-center">
+				<a href="#add-widget" class="btn btn-default btn-sm ml_5">Cancel</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">Save</a>
+				</div>
+              </div>
+		 </fieldset>
+    </form>
+</div>
+</script>
+
+
+<script id="skypeDialpad-template" type="text/html">
+<div id="skypeDialpad_btns" class="dialpad_btns" style="border: none;position: relative;top: 55px;left: 180px;z-index:1"> 
+  <div  class"campaign_dialpad_bg" style="border-left: 1px solid #EEEEEE;" >
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="1" class="button1" id="button1" onclick="skypeSendDTMF('1');"></div>
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="2" class="button2" id="button2" onclick="skypeSendDTMF('2');"></div>
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="3" class="button3" id="button3" onclick="skypeSendDTMF('3');"></div>
+ 	   <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="4" class="button4" id="button4" onclick="skypeSendDTMF('4');"></div>   
+ 	 </div>
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell"><input type="button" value="5" class="button5" id="button5" onclick="skypeSendDTMF('5');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="6" class="button6" id="button6" onclick="skypeSendDTMF('6');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="7" class="button7" id="button7" onclick="skypeSendDTMF('7');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="8" class="button8" id="button8" onclick="skypeSendDTMF('8');"></div>
+	 </div>
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell" ><input type="button" value="9" class="button9" id="button9" onclick="skypeSendDTMF('9');"></div>
+	   <div class="campaign_dialpad_cell"><input type="button" value="0" class="button0" id="button0" onclick="skypeSendDTMF('0');"></div>    
+	   <div class="campaign_dialpad_cell"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="skypeSendDTMF('star');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="skypeSendDTMF('hash');"></div> 	
+	 </div>
+  </div>
+</div>
+</script>

@@ -2,17 +2,17 @@ var Ticket_Bulk_Ops = {
 
 	selected_all_filter_tickets : false,
 	selected_ticket_ids : new Array(),
-	initEvents: function(){
+	initEvents: function(el){
 
-		var $el = $('.tickets-div');
+		var $el = $('.tickets-div', el);
 		$el.off('change').off('click');
 
 		/**
 		 * Initializing click event on top ticket checkbox
 		 */
-		$('body').on('click', "input.select-all", function(e){
-			e.stopPropagation();
-			e.preventDefault();
+		$el.on('click', "input.select-all", function(e){
+			//e.stopPropagation();
+			//e.preventDefault();
 			
 			var selected_all = $(this).is(':checked');
 

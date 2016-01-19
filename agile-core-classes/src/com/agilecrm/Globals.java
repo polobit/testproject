@@ -48,7 +48,8 @@ public class Globals
 
     // GMAIL
     public static final String GOOGLE_CLIENT_ID = "661717543880-elcdgrfs73tl9mbimhmkiqcgic7lqu3i.apps.googleusercontent.com";
-    public static final String GOOGLE_SECRET_KEY = "qExl7mLlRlE_fjnw0YkxAeW5";// "21kj3QAnEAkCJs6fmrcDghAI";
+    public static final String GOOGLE_SECRET_KEY = "qExl7mLlRlE_fjnw0YkxAeW5";
+    // "21kj3QAnEAkCJs6fmrcDghAI";
 
     // GMAIL
     public static final String GOOGLE_CALENDAR_CLIENT_ID = GOOGLE_CLIENT_ID;// "391091478365.apps.googleusercontent.com";
@@ -67,8 +68,7 @@ public class Globals
     public static final String FRESHBOOKS_SECRET_KEY = "3gVEvFmv9eMCv6jMuBa4pyGmqey7iiHBzL";
 
     // Payment gateways
-    public static final String STRIPE = "Stripe";
-    public static final String PAYPAL = "Paypal";
+    public static final String STRIPE = "Stripe";    
 
     // development keys
     // public static final String DEV_STRIPE_API_KEY =
@@ -192,6 +192,14 @@ public class Globals
     public static final String COMPANY_DOMAIN = "our";
 
     public static final String TAG_VALIDATION_REGEX = "^[A-Za-z][A-Za-z0-9_ :-]*$";
+    
+    public static final String PAYPAL = "Paypal";
+    // Live Keys Paypal.
+	public static final String PAYPAL_CLIENT_ID = "Abxw5tgxf1RAaZuDTUUTeTkHUJ5HnVKIQ0aJ_kx6UOhGKOkbbgg2ziXOlQU4L9uineV7hb-DC38Gy3lW";
+	public static final String PAYPAL_SECRET_ID = "ENOWlqN3kIwW7VRDdB8yKGL64vP_rL4zjBnengt3uYcidReug2fqfi67PkRmVV-86S7qWBR9Ry4ywzJu";
+    // Sandbox Keys Paypal.
+	//	public static final String PAYPAL_CLIENT_ID = "AdinLitMf9_3K9nwxTQEs5KyBom16l6EuR4FHy8vefth7Lup57d07e80Rz1tbt6gABT-l9jgEykvOVhr";
+	//	public static final String PAYPAL_SECRET_ID = "EGyp6P-kmdaDsoNUK2F2nYs5-RifRg3nhPJkmzai-TRqpRmTpj3lm4NG6pw_B08IJSdpv5pfGfWQF1Bb";
 
 	// Inbound email address suffix
 	public static final String INBOUND_EMAIL_SUFFIX = "@helptor.com";

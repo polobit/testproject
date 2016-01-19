@@ -189,8 +189,8 @@
   <td class="first-letter-cap open-ticket requester_email {{#is_column_selected 'requester_email'}}{{else}}display-none{{/is_column_selected}}">
     <div class="text-ellipsis width-9em">{{requester_email}}</div>
   </td>
-  <td class="first-letter-cap open-ticket created_date {{#is_column_selected 'created_date'}}{{else}}display-none{{/is_column_selected}}">
-    {{epochToHumanDate 'mmm dd, yyyy' created_date}}
+  <td class="first-letter-cap open-ticket created_time {{#is_column_selected 'created_time'}}{{else}}display-none{{/is_column_selected}}">
+    {{epochToHumanDate 'mmm dd, yyyy' created_time}}
   </td>
   <td class="first-letter-cap open-ticket due_date {{#is_column_selected 'due_date'}}{{else}}display-none{{/is_column_selected}}">
     {{#if due_date}}{{epochToHumanDate 'mmm dd, yyyy' due_date}}{{else}}-{{/if}}

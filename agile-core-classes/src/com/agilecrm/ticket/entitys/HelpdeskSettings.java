@@ -29,7 +29,7 @@ public class HelpdeskSettings
 				add("id");
 				add("subject");
 				add("requester_name");
-				add("created_date");
+				add("created_time");
 				add("priority");
 				add("group");
 			}

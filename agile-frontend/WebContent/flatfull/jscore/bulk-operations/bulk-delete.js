@@ -293,6 +293,15 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			}
 			
 			$(".bulk-delete-loading").remove();	
+			if(url=='core/api/users/bulk')
+			{
+				var message;
+				if(count > 1)
+					message = "Users have been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted users.";
+				else
+					message = "User has been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted user.";
+				showNotyPopUp('information', message, "top", 10000);
+			}
 			if(count > 20 || count == 0)
 			{
 				if($(table).attr('id') == "contacts-table")

@@ -903,9 +903,9 @@ $('#content').find('.helpdesk-tab').addClass('select');
 	 		}
 	 	});
 
-	 	App_Ticket_Module.notesCollection.collection.fetch();
+	 	App_Ticket_Module.activitiesCollection.collection.fetch();
 
-	 	$ele.html(App_Ticket_Module.notesCollection.el);
+	 	$ele.html(App_Ticket_Module.activitiesCollection.el);
 	 },
 
 	/**

@@ -1,11 +1,6 @@
 var Group_ID = null, Current_Ticket_ID = null, Ticket_Filter_ID = null, Tickets_Util = {}, Sort_By = "-", Sort_Field = 'last_updated_time', Ticket_Position= null;
 var popoverFunction = undefined;
 
-$("body").bind('click', function(e) {
-
-	Tickets.clearSelection(e);
-});
-
 var Tickets = {
 
 	//Renders the basic ticketing layout on which every view will be constructed
@@ -88,13 +83,15 @@ var Tickets = {
 				customLoader: true,
 				custom_scrollable_element: '#ticket-model-list',
 				customLoaderTemplate: 'ticket-collection-loader',
-				infini_scroll_cbk: function(){
-					Tickets.setCountText();
-				},
 				individual_tag_name : 'tr',
 				cursor : true,
 				page_size : 20,
 				slateKey : 'no-tickets',
+				infini_scroll_cbk: function(){
+
+					//Updating "showing ticket count" text
+					Tickets.setCountText();
+				},
 				postRenderCallback: function(el){
 
 					//Initializing click event on each ticket li
@@ -103,16 +100,13 @@ var Tickets = {
 					//Initialize tooltips
 					$('[data-toggle="tooltip"]').tooltip();
 
-					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-					{
-						$("time", el).timeago();		
-					});
+					head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){$("time", el).timeago();});
 					
-					//Initializing checkbox events
-					Ticket_Bulk_Ops.initEvents(el);
-
 					//Clear bulk ops selections
 					Ticket_Bulk_Ops.clearSelection();
+
+					//Initializing checkbox events
+					Ticket_Bulk_Ops.initEvents(el);
 
 					if(!Tickets.isSingleRowView()){
 						var Groups = Backbone.Collection.extend({url: '/core/api/tickets/groups'});
@@ -369,7 +363,7 @@ var Tickets = {
 			e.stopPropagation();
 
 			$(this).find('.dropdown-menu').dropdown('toggle');
-			$(this).addClass('bg-light');
+			$(this).addClass('bg-light open');
 			$(this).find('.caret-btn').addClass('inline-block');
 		});
 
@@ -440,7 +434,7 @@ var Tickets = {
 		/**
 		 * Initializing click event on toggle view button
 		 */
-		$('.toggle-collection-view').off('click mouseover mouseout');
+		$(el).off('click mouseover mouseout', ".toggle-collection-view");
 		$(el).on('click', ".toggle-collection-view", function(e){
 			e.preventDefault();
 
@@ -474,7 +468,7 @@ var Tickets = {
 		});
 
 		//Initializing click event due date dropdown
-		$('ul.choose-columns > li > a').off('click');
+		$(el).off('click','ul.choose-columns > li > a');
 	  	$(el).on('click','ul.choose-columns > li > a', function(event){
 	  		event.preventDefault();
 	  		event.stopPropagation();
@@ -980,7 +974,7 @@ var Tickets = {
 		}
 	},
 
-	clearSelection: function(e){
+	/*clearSelection: function(e){
 
 		var container = $('div.show-caret');
 
@@ -991,7 +985,7 @@ var Tickets = {
 			container.removeClass('bg-light');
 			container.find('.caret-btn').removeClass('inline-block').addClass('display-none');
 	    }
-	},
+	},*/
 
 	isSingleRowView: function(){
 		return (CURRENT_DOMAIN_USER.helpdeskSettings && CURRENT_DOMAIN_USER.helpdeskSettings.ticket_view_type == 'SINGLELINE')
