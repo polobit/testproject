@@ -3046,3 +3046,8 @@ table.hide-head-checkbox th label.i-checks {
 	position: fixed;
 	height: 100vh;
 }
+
+#calls-chart .highcharts-legend , #calls-chart .highcharts-tooltip
+{
+	text-transform: capitalize;
+}

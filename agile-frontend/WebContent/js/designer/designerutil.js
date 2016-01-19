@@ -477,7 +477,7 @@ function getDate(selector)
 	if(!selector)
 		selector = '#duration';
 	
-	$(selector).datepicker({ changeMonth : true, changeYear : true, yearRange : "+0:+100]", constrainInput : false,
+	$(selector).datepicker({ changeMonth : true, changeYear : true, yearRange: "2010:2050",  constrainInput : false
 	// minDate: 0
 	});
 

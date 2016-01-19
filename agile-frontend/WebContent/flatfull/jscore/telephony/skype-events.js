@@ -31,7 +31,7 @@ $(function()
 				setTimerToCheckDialing("skype");
 				try{
 					var contactDetailsObj = agile_crm_get_contact();
-					callerObjectId = contactDetailsObj.id;
+					globalCall.contactedId = contactDetailsObj.id;
 				}catch (e) {
 				}
 			});
@@ -174,7 +174,7 @@ function sendMessageToSkypeClient(command, number, callid){
 			var message ={};
 			message["data"] = "";
 			handleLogsForSkype(message);
-			showNotyPopUp("error", ("Executable file is not running"), "bottomRight")
+			showCallNotyMessage("Executable file is not running");
 			return;
 		}
 		$('#skypeInfoModal').html(getTemplate("skypeInfoModal"));
@@ -205,6 +205,16 @@ function _getMessageSkype(message, callback){
 	var callId = message.callId;
 	var displayName = message.displayName;
 	var message="";
+	globalCallForActivity.justCalledId = callId;
+	
+	try{
+		var inValid = /^\s/;
+		var k = inValid.test(number);
+		if(k){
+			number = "+" + number.trimLeft()
+		}
+	}catch(e){
+	}
 
 	console.log("state--" + state + " number --" + number + "   skypeCallId" + callId + "  displayName" + displayName);
 	
@@ -348,7 +358,14 @@ function _getMessageSkype(message, callback){
 
 function saveCallActivitySkype(call){
 	
+	
+	if(	globalCallForActivity.justCalledId == globalCallForActivity.justSavedCalledIDForActivity){
+		return;
+	}
+	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
+	
 	if(call.direction == "Outgoing" || call.direction == "outgoing"){
+		var callerObjectId = globalCall.contactedId;
 		if(!callerObjectId){
 			return;
 		}
@@ -371,6 +388,12 @@ function saveCallActivitySkype(call){
 
 function saveCallNoteSkype(){
 	
+	
+	if(	globalCallForActivity.justCalledId == globalCallForActivity.justSavedCalledIDForNote){
+		return;
+	}
+	globalCallForActivity.justSavedCalledIDForNote = globalCallForActivity.justCalledId;
+	
 	if(!globalCallForActivity.callDirection || !globalCallForActivity.callStatus  || !globalCallForActivity.callNumber){
 		return;
 	}
@@ -384,11 +407,8 @@ function saveCallNoteSkype(){
 	var id;
 	var desc;
 	resetglobalCallForActivityVariables();
-	if(callStatus == "Answered"){
-		desc = "Done";
-	}
 	
-	var noteSub = direction + " Call - " + number;
+	var noteSub = direction + " Call - " + callStatus;
 
 	if(direction == "Incoming"){
 	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){
@@ -414,20 +434,30 @@ function saveCallNoteSkype(){
 	    
 	}else{
 		
-		var id = App_Contacts.contactDetailView.model.get('id');
-		contact = agile_crm_get_contact();
-		contact_name = getContactName(contact);
-		if( callStatus == "Answered"){
-			var el = $('#noteForm');
-		 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ id +'">'+contact_name+'</li>');
-		 	$("#noteForm #subject").val(noteSub);
-		 	$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(duration));
-				$("#noteForm").find("#description").focus();
-			$('#noteModal').modal('show');
-			agile_type_ahead("note_related_to", el, contacts_typeahead);
-		}else{
-			var note = {"subject" : noteSub, "message" : "", "contactid" : id};
-			autosaveNoteByUser(note);
+		var cntId = globalCall.contactedId;
+		if(cntId){
+				if( callStatus == "Answered"){
+					accessUrlUsingAjax("core/api/contacts/"+cntId, function(resp){
+						var json = resp;
+						if(json == null) {
+							return;
+						}
+
+
+						contact_name = getContactName(json);
+
+					var el = $('#noteForm');
+				 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ cntId +'">'+contact_name+'</li>');
+				 	$("#noteForm #subject").val(noteSub);
+				 	$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(duration));
+						$("#noteForm").find("#description").focus();
+					$('#noteModal').modal('show');
+					agile_type_ahead("note_related_to", el, contacts_typeahead);
+					});
+				}else{
+					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId};
+					autosaveNoteByUser(note);
+				}
 		}
 	}
 }

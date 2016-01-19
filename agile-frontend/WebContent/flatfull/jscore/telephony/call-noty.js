@@ -222,12 +222,18 @@ function showBriaCallNoty(message){
 
 					
 					globalCall.lastReceived =  message.state;
+			if(message.state == "ringing"){
+				if(checkForActiveCall()){
+					sendCommandToClient("busy","Bria");
+					return;
+				}
+			}
 		_getMessageBria(message, function(data) {
 			
 			var messageHtml = data;
 			
 			
-			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
+			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomLeft.js',
 					LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
 					{
 
@@ -258,7 +264,7 @@ function showBriaCallNoty(message){
 					$('#noty_bottomLeft_layout_container').prepend(dialpad);
 					
 					
-				}else if(message.state == "missedCall"){
+				}else if(message.state == "missed"){
 					
 					Bria_Call_Noty = noty({ text : messageHtml, type : "information", layout : "bottomLeft"});
 				
@@ -294,11 +300,17 @@ function showBriaCallNoty(message){
 //added by prakash for skype call notification
 function showSkypeCallNoty(message){
 
+		if(message.state == "ringing"){
+			if(checkForActiveCall()){
+				sendCommandToClient("busy","Skype");
+				return;
+			}
+		}
 		_getMessageSkype(message, function(data) {
 			
 			var messageHtml = data;
 			
-			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
+			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomLeft.js',
 					LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
 					{
 
@@ -326,12 +338,6 @@ function showSkypeCallNoty(message){
 					$('#noty_bottomLeft_layout_container').prepend(dialpad);
 					
 					
-				}else if(message.state == "missedCall"){
-					
-					Skype_Call_Noty = noty({ text : messageHtml, type : "information", layout : "bottomLeft", timeout : 3000});
-				
-					if (notification_prefs.notification_sound != 'no_sound')
-						play_sound(notification_prefs.notification_sound);
 				}else if(message.state == "connecting"){
 								
 					Skype_Call_Noty = noty({ text : messageHtml, type : "success", layout : "bottomLeft", buttons : [
@@ -363,4 +369,11 @@ function showSkypeCallNoty(message){
 
 
 
+}
+function showCallNotyMessage(message,type,position,timeout){
+	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
+			LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
+		{
+			noty({ text : message, type : "error", layout : "bottomRight", timeout : 3000});
+		});
 }
