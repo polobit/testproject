@@ -2,6 +2,12 @@
 
 	<div class="btn-group m-r-sm" id="contact-sorter">
     	{{#is_mobile}}
+    	<ul id="contact-view-model-list" class="pull-right dropdown-menu">
+    	   	<li>
+            	<a href="#contact-view-prefs">Add/Remove Columns</a>
+        	</li>
+    	</ul>
+    	{{else}}
     	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs">
         	<!--<li>
             	<a href="#contacts" class="DefaultView">Default</a>
