@@ -1,5 +1,8 @@
 <script id="email-account-types-template" type="text/html">
     <div  class="m-b-md m-t-md m-r-sm" align="right">
+   
+	<a href="#send-email/{{getCurrentContactProperty "email"}}" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none"><i class="icon-plus-sign"></i> Send Email
+	</a>
 	<div class="btn-group pos-rlt">
 	<button class="btn btn-sm btn-default filter-dropdown" id="email-type-select">Agile</button>
 	<button class="btn btn-sm btn-default dropdown-toggle" id="email-type-select-dropdown" data-toggle="dropdown">
@@ -94,6 +97,10 @@
                 <p>You have not yet configured your email. Please click <a href='#email'>here</a> to get started.</p>
                 </div>
             </div>
+        	 <div  class="m-b-md m-t-md m-r-sm" align="right">
+				<a href="#send-email/{{getCurrentContactProperty "email"}}" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none"><i class="icon-plus-sign"></i> Send Email
+				</a>
+			</div>
         </ul>
 	<ul id="email-social-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs"></ul>
 	<!--<table class="m-t-md">
