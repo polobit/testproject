@@ -29,6 +29,15 @@
 		<servlet-name>Scribe</servlet-name>
 		<url-pattern>/scribe</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>PaypalScribe</servlet-name>
+		<servlet-class>com.agilecrm.scribe.PaypalScribeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PaypalScribe</servlet-name>
+		<url-pattern>/paypalScribe</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Shopify</servlet-name>
@@ -74,6 +83,7 @@
 		<servlet-name>OAuth2Servlet</servlet-name>
 		<url-pattern>/backend/googleservlet</url-pattern>
 		<url-pattern>/backend/StripeServlet</url-pattern>
+		<url-pattern>/backend/paypalRoute</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -471,6 +481,7 @@
 		<url-pattern>/</url-pattern>
 		<url-pattern>/core/*</url-pattern>
 		<url-pattern>/scribe</url-pattern>
+		<url-pattern>/paypalScribe</url-pattern>
 		<url-pattern>/upload.jsp</url-pattern>
 		<url-pattern>/import_shopify.jsp</url-pattern>
 		<url-pattern>/upload-contacts.jsp</url-pattern>

@@ -3051,3 +3051,7 @@ table.hide-head-checkbox th label.i-checks {
 {
 	text-transform: capitalize;
 }
+
+.display-none{
+	display: none;
+}
