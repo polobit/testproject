@@ -106,24 +106,24 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsContactsGrowthGraphSettingsForm" name="portletsContactsGrowthGraphSettingsForm" method="post" >
+		<form id="portletsContactsGrowthGraphSettingsForm" name="portletsContactsGrowthGraphSettingsForm" method="post" class="form-horizontal">
 			<div class="control-group form-group">
-				<label class="control-label">Tags <span class="field_req">*</span></label>
-				<div class="controls">
-					<div  id="portlet-tags">
-						<ul id="portlet-ul-tags" name="tags" class= "tagsinput tags p-n"></ul>
-					</div>
-					<input name="tags" type="text" id="addPortletBulkTags" class="tags-typeahead multi-tags form-control" placeholder="Enter tags separated by comma" onkeyup="hidePortletErrors(this);" />      
-				</div>
-			</div>
-			<div class="control-group form-group">
-				<label class="control-label">Frequency</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Frequency</label>
+				<div class="controls col-sm-8">
 					<select name="frequency" id="frequency" class="required form-control">
 						<option value="daily">Daily</option>
 						<option value="weekly">Weekly</option>
 						<option value="monthly">Monthly</option>
 					</select>
+				</div>
+			</div>
+			<div class="control-group form-group" style="margin-bottom:0px;">
+				<label class="control-label col-sm-3">Tags <span class="field_req">*</span></label>
+				<div class="controls col-sm-8">
+					<input name="tags" type="text" id="addPortletBulkTags" class="tags-typeahead multi-tags form-control" placeholder="Enter tags separated by comma" onkeyup="hidePortletErrors(this);" style="margin-bottom:11px;"/>
+					<div  id="portlet-tags">
+						<ul id="portlet-ul-tags" name="tags" class= "tagsinput tags p-n"></ul>
+					</div>      
 				</div>
 			</div>
 			<!-- <div class="control-group">
@@ -136,8 +136,8 @@
 				</div>
 			</div>  -->
 			<div class="control-group form-group">
-				<label class="control-label">Duration</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Duration</label>
+				<div class="controls col-sm-8">
 					<select id="duration" name="duration" class="required form-control">
 						<!-- <option value="today" >Today</option>
 						<option value="yesterday">Yesterday</option> -->
