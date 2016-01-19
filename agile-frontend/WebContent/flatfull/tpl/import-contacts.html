@@ -101,17 +101,18 @@
 					Import from Salesforce <span class="label label-sm bg-danger">Beta</span>
 				</div>
 				<div class="panel-body">
-					<form id="imap-prefs-form">
-        				<div class="p-b-sm">
-							Import Contacts, Accounts, and Tasks
-						</div>
-						<input type="hidden" id="type" value="contacts" class="form-control">
-        				<fieldset>
-						{{#canSyncContacts}}
-           				<a href="#import/salesforce" class="btn btn-sm btn-default inline-block">Import</a>
-						{{/canSyncContacts}}
-           				</fieldset>
+					 <form id="imap-prefs-form">
+        			<div class="p-b-sm">
+						Import Contacts, Accounts, and Tasks
+					</div>
+					<input type="hidden" id="type" value="contacts" class="form-control">
+        			<fieldset>
+					{{#canSyncContacts}}
+           			<a href="#import/salesforce" class="btn btn-sm btn-default inline-block">Import</a>
+					{{/canSyncContacts}}
+           			</fieldset>
     				</form>
+
 				</div>
 			</div>
 		</div>
@@ -125,7 +126,7 @@
 				<div  class="col-sm-6 col-xs-12 col-md-4">
 					<div>
 					<div class="panel panel-default">
-						<a href="#sync" onclick='_agile_set_prefs("datasync_tab","google-tab");'>
+						
 						<div class="panel-heading">
 							Import from Google
 						</div>
@@ -133,9 +134,10 @@
 							<div class="p-b-sm">
 							Import contacts from Google.
 							</div>
+							<a href="#sync" onclick='_agile_set_prefs("datasync_tab","google-tab");'>
 							<div class="btn btn-sm btn-default inline-block" sync_type="GOOGLE" id="data-sync-type">Enable
-							</div>
-						</div></a>
+							</div></a>
+						</div>
 					</div>
 					</div>
 				</div>
@@ -143,7 +145,7 @@
 				<div  class="col-sm-6 col-xs-12 col-md-4">
 				    <div>
 					<div class="panel panel-default">
-					<a href="#sync" onclick='_agile_set_prefs("datasync_tab","accounting-tab");'>
+					
 						<div class="panel-heading">
 							Import from Quickbooks
 						</div>
@@ -151,18 +153,17 @@
 						<div class="p-b-sm">
 						 Import contacts from Quickbooks.
 						 </div>
-						<fieldset
-						 <div class="btn btn-sm btn-default inline-block" sync_type="QUICKBOOK" id="data-sync-type">Enable</fieldset>
+						<fieldset><a href="#sync" onclick='_agile_set_prefs("datasync_tab","accounting-tab");'>
+						 <div class="btn btn-sm btn-default inline-block" sync_type="QUICKBOOK" id="data-sync-type">Enable</a></fieldset>
 						 </div>
 						</div>
 					</div></a>
 					</div>
-				</div>
 
 				<div  class="col-sm-6 col-xs-12 col-md-4">
 				    <div>
 					<div class="panel panel-default">
-					<a href="#sync" onclick='_agile_set_prefs("datasync_tab","ecommerce-tab");'>
+					
 						<div class="panel-heading">
 						
 							Import from Shopify
@@ -172,37 +173,20 @@
 						<div class="p-b-sm">
 						Import contacts from Shopify.
 						</div>
-						
+						<a href="#sync" onclick='_agile_set_prefs("datasync_tab","ecommerce-tab");'>
 						<div class="btn btn-sm btn-default inline-block" sync_type="SHOPIFY" id="data-sync-type">Enable
-						</div>
+						</div></a>
 						
 						</div>
-						</a>
+						
 					</div>
 					</div>
 				</div>
-
+				
 				<div  class="col-sm-6 col-xs-12 col-md-4">
 				    <div>
 					<div class="panel panel-default">
-					<a href="#sync" onclick='_agile_set_prefs("datasync_tab","office365-tab");'>
-						<div class="panel-heading">
-						Import from Office365
-						</div>
-						<div class="panel-body">
-						<div class="p-b-sm">
-						Import contacts from office 365.
-						</div>
- 						<a class="btn btn-sm btn-default inline-block" href="#" id="data-sync-type">Enable</a> 
- 						</div>
-					</div></a>
-					</div>
-				</div>
-
-				<div  class="col-sm-6 col-xs-12 col-md-4">
-				    <div>
-					<div class="panel panel-default">
-					<a href="#sync" onclick='_agile_set_prefs("datasync_tab","payment-tab");'>
+					
 						<div class="panel-heading">
 							Import from Stripe
 						</div>
@@ -210,17 +194,16 @@
 						<div class="p-b-sm">
 						 Import contacts from Stripe.
 						</div>
-						 <div class="btn btn-sm btn-default inline-block" sync_type="STRIPE" id="data-sync-type">Enable</div> 
+						<a href="#sync" onclick='_agile_set_prefs("datasync_tab","payment-tab");'>
+						 <div class="btn btn-sm btn-default inline-block" sync_type="STRIPE" id="data-sync-type">Enable</div> </a>
 						</div>
-					</div></a>
+					</div>
 					</div>
 				</div>
-
-
 				<div  class="col-sm-6 col-xs-12 col-md-4">
 				    <div>
 					<div class="panel panel-default" >
-					<a href="#sync" onclick='_agile_set_prefs("datasync_tab","accounting-tab");'>
+					
 						<div class="panel-heading">
 							Import from Freshbooks
 						</div>
@@ -228,13 +211,15 @@
 						 <div class="p-b-sm">
 							Import contacts from Freshbooks.
 						 </div>
-						 <div class="btn btn-sm btn-default inline-block" sync_type="FRESHBOOKS" id="data-sync-type">Enable</div>
+						 <a href="#sync" onclick='_agile_set_prefs("datasync_tab","accounting-tab");'>
+						 <div class="btn btn-sm btn-default inline-block" sync_type="FRESHBOOKS" id="data-sync-type">Enable</div></a>
 						</div>
-					</a>
+					
 					</div>
 					</div>
 				</div>
-			
+				</div>
+
 			</div>
 		</div>
 </div>
