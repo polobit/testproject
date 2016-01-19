@@ -1881,6 +1881,8 @@ color:#727272;
 }  
 .webstats-msg {
   font-size: 14px;
+  color: #98a6ad!important;
+  text-align: center;
 }
 .ativity-block-ul {
   margin-top: -10px;
