@@ -19,7 +19,9 @@
 				<div class="pull-left text-xs">Status</div>	
 				<div class="pull-right text-xs">{{status}}</div>
 				<div class="clearfix"></div>				
-				<div class="pull-left"><a class="btn btn-xs btn-default" target="_blank" href="{{metadata.payer_view_url}}">View</a></div>
+				{{#if metadata.payer_view_url}}			
+					<div class="pull-left"><a class="btn btn-xs btn-default" target="_blank" href="{{metadata.payer_view_url}}">View</a></div>
+				{{/if}}
 				<div class="clearfix"></div>
 			</div>		
 			<div class="clearfix"></div>					
