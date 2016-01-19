@@ -21,26 +21,13 @@ var EmailBuilderRouter = Backbone.Router.extend({
     getListOfTemplates : function() {
         $('#content').html("<link rel='stylesheet' type='text/css' href='flatfull/css/jquery.fancybox.css'><div id='emailbuilder-listeners'></div>");
         initializeEmailBuilderListeners();
-        
-        head.js('flatfull/lib/jquery.fancybox.js',function() {
-            $.getJSON("misc/emailbuilder/templates/templates.json", function(data) {
+        $.getJSON("misc/emailbuilder/templates/templates.json", function(data) {
 
-                getTemplate("emailbuilder-categories", data.templates[0], undefined, function(ui){
-                    $("#emailbuilder-listeners").html($(ui));
-                }, "#emailbuilder-listeners");
-                
-                $(".lpt_fancybox").fancybox({
-                    'autoDimensions': false,
-                    'padding'       : 0,
-                    'autoScale'     : true,
-                    'width'         : "600px",
-                    'transitionIn'  : 'none',
-                    'transitionOut' : 'none',
-                    'type'          : 'iframe'
-                 });
-
-                hideTransitionBar();
-            });
+            getTemplate("emailbuilder-categories", data.templates[0], undefined, function(ui){
+                $("#emailbuilder-listeners").html($(ui));
+            }, "#emailbuilder-listeners");
+            
+            hideTransitionBar();
         });
     },
 
