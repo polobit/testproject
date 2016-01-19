@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
-import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
@@ -25,14 +24,11 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
-import com.campaignio.servlets.deferred.EmailOpenDeferredTask;
 import com.campaignio.tasklets.agile.SendEmail;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>EmailOpenServlet</code> is the servlet that track emails opened. The
@@ -304,22 +300,20 @@ public class EmailOpenServlet extends HttpServlet
      */
     private void interruptCronTasksOfOpened(String campaignId, String subscriberId)
     {
-	try
-	{
-	    // set email_open true
-	    JSONObject customData = new JSONObject();
-	    customData.put(SendEmail.EMAIL_OPEN, true);
-
-	    // Interrupt opened in DeferredTask
-	    EmailOpenDeferredTask emailOpenDeferredTask = new EmailOpenDeferredTask(campaignId, subscriberId,
-		    customData.toString());
-	    Queue queue = QueueFactory.getQueue(AgileQueues.CRON_INTERRUPT_QUEUE);
-	    queue.addAsync(TaskOptions.Builder.withPayload(emailOpenDeferredTask));
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+		try
+		{
+		    // set email_open true
+		    JSONObject customData = new JSONObject();
+		    customData.put(SendEmail.EMAIL_OPEN, true);
+	
+		    // Interrupt Opened node
+		    CronUtil.interrupt(campaignId, subscriberId, null, new JSONObject(customData));
+	
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
     }
 
     /**
