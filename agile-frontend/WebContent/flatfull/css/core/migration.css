@@ -1905,6 +1905,15 @@ color:#727272;
   overflow-y:auto;
   max-height: 300px;
 }
+#event-time-1{
+  width: 100% !important;
+}
+#event-time-2{
+  width: 100% !important;
+}
+#task_ending_time{
+  width: 100% !important;
+}
 }
 
 @media all and (min-width: 768px) {
