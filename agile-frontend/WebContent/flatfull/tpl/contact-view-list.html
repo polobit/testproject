@@ -2,13 +2,19 @@
 
 	<div class="btn-group m-r-sm" id="contact-sorter">
     	{{#is_mobile}}
+    	<ul id="contact-view-model-list" class="pull-right dropdown-menu">
+    	   	<li>
+            	<a href="#contact-view-prefs">Add/Remove Columns</a>
+        	</li>
+    	</ul>
+    	{{else}}
     	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs">
         	<!--<li>
             	<a href="#contacts" class="DefaultView">Default</a>
 				 a href="#contacts" class="GridView">Grid View</a 
         	</li>
 			<li class="divider"></li>-->
-		
+
         	<li>
             	<a href="#contact-view-prefs">Add/Remove Columns</a>
         	</li>
@@ -20,14 +26,20 @@
     <div class="btn-group">
         <a href="#contacts" onclick="$('.person').click();" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Contact</a>
         <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-
-	
-
-		<ul class="dropdown-menu pull-right">
+<ul class="dropdown-menu pull-right">
 			<li><a href="#import" onclick="import_tab_Id='csv-tab'">Import from CSV</a></li>
 			<li><a href="#import" onclick="import_tab_Id='salesforce-tab'">Import from Salesforce</a></li>
 			<li><a href="#import" onclick="import_tab_Id='other-tab'">Import from Other</a></li>
 		</ul>
+<!--
+{{#is_mobile}}
+
+{{else}}
+<div class="btn-group pull-left m-l-xs" style="padding-left:3px;">
+<button class="btn btn-default btn-sm m-l-xs fullscreenelement" style="height:30px;width:30px;" targetFullscreenElement="#content" >
+<i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
+{{/is_mobile}}
+-->
 	</div>
 </div>
 	
@@ -95,13 +107,18 @@
 			<li><a href="#import">Import from Salesforce</a></li>
 			<li><a href="#">Import from Other</a></li>
 		</ul>
+
+		<!--
+
 		{{#is_mobile}}
+
 
 		{{else}}
 			<div class="btn-group pull-left m-l-xs" style="padding-left:3px;">
 			<button class="btn btn-default btn-sm m-l-sm fullscreenelement" style="height:30px;width:30px;" targetFullscreenElement="#content" >
 			<i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
 		{{/is_mobile}}
+		-->
 	
 	</div>
 	
