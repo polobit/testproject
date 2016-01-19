@@ -93,57 +93,105 @@
                                     </select>
                                 </span>
                             </div>
-									
-					  </div>
-					  <div class="control-group form-group col-md-5 col-sm-offset-0 col-xs-offset-1 col-xs-10 hidden-xs">
-                            <div class="progress-slider controls progress_slider_width_bottom" title="Progress">
-							    <input id="progress_slider" type="slider" class="progress_slider" value="0" />
-							</div>								
-						</div>	
-					</div>	
-					<div class="row">
-					  <div class="congrol-group form-group col-md-12">
-						<!-- <label class="control-label"><a href="#" id="new-task-related-contacts-label"><i class="icon-plus"></i> Add Contacts</a></label> -->
-						<label class="control-label new-task-related-contacts-label"><b>Related Contacts</b></label>
-						<div class="controls new-task-related-contacts-input">
-							<div>
-								<div class="pull-left">
-									<ul name="contacts" class="contacts tags tagsinput p-n"></ul>
-								</div>
-								<div class="clearfix"></div>
-								<input type="text" id="task_related_to"
-									class="typeahead typeahead_contacts form-control" data-provide="typeahead"
-									placeholder="Related Contacts" data-mode="multiple" size="40" />
-							</div>
-						</div>
-					  </div>
-					 </div>
-					 <div class="row">
-					  <div class="control-group form-group col-md-12">
-							<!-- <label class="control-label"><a href="#" id="new-task-related-deals-label"><i class="icon-plus"></i> Add Deals</a></label>  -->
-							<label class="control-label new-task-related-deals-label"><b>Related Deals</b></label>
-							<div class="controls new-task-related-deals-input" id="dealTypeAhead">
-								<div>
-									<div>
-										<ul name="deal_ids" class="deals tagsinput deal_tags p-n"></ul>
-									</div>
-									<input type="text" id="task_relates_to_deals" 
-									placeholder="Related Deals" class="typeahead typeahead_deals form-control"
-									data-provide="typeahead" data-mode="multiple" />
-								</div>
-							</div>
-						</div>	
-					</div>					
-					<div class="row hide">
-					    <div class="congrol-group form-group ">
-							<label for="notes" class="control-label"><b>Notes</b></label>
-							<div class="controls pull-right task-add-note">
-								<a href="#"><i class="icon-plus" /> Add Note</a>
-							</div>
-							<div id="forNoteForm" class="controls"></div>
-							<ul id="notes" name="notes" class="notes"></ul>
-						</div>
-					</div>
+
+                       </div>
+
+                       <div class="control-group form-group">
+                            
+                            <div class="progress-slider controls progress_slider_width_bottom" title="Progress" style="padding-left:166px;width:89%;margin-top:-2px;">
+                                <input id="progress_slider" type="slider" class="progress_slider" value="0" />
+                            </div>                              
+                        
+                        </div>
+
+
+
+
+                    <div class="control-group form-group">
+                        <!-- <label class="control-label"><a href="#" id="new-event-related-contacts-label"><i class="icon-plus"></i> Add Contacts</a></label> -->
+                        <label class="control-label new-task-related-contacts-label col-sm-3">Related Contacts</label>
+                        <div class="controls new-task-related-contacts-input col-sm-8">
+                            <div>
+                                <div>
+                                    <ul name="contacts" class="contacts tags tagsinput p-n m-n"></ul>
+                                </div>
+                                <div class="clearfix"></div>
+                                <input type="text" id="task_related_to" class="typeahead typeahead_contacts form-control" placeholder="Related Contacts" data-provide="typeahead" data-mode="multiple" size="40" />
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!--<div class="row">
+                      <div class="congrol-group form-group col-md-12">
+                         <label class="control-label"><a href="#" id="new-task-related-contacts-label"><i class="icon-plus"></i> Add Contacts</a></label>
+                        <label class="control-label new-task-related-contacts-label"><b>Related Contacts</b></label>
+                        <div class="controls new-task-related-contacts-input">
+                            <div>
+                                <div class="pull-left">
+                                    <ul name="contacts" class="contacts tags tagsinput p-n"></ul>
+                                </div>
+                                <div class="clearfix"></div>
+                                <input type="text" id="task_related_to"
+                                    class="typeahead typeahead_contacts form-control" data-provide="typeahead"
+                                    placeholder="Related Contacts" data-mode="multiple" size="40" />
+                            </div>
+                        </div>
+                      </div>
+                     </div>  -->
+
+
+                     <div class="control-group form-group">
+                        <!-- <label class="control-label"><a href="#" id="new-event-related-deals-label"><i class="icon-plus"></i> Add Deals</a></label> -->
+                        <label class="control-label new-task-related-deals-label col-sm-3">Related Deals</label>
+                        <div class="controls new-task-related-deals-input col-sm-8" id="dealTypeAhead">
+                            <div>
+                                <div>
+                                    <ul name="deal_ids" class="deals tagsinput deal_tags p-n m-n"></ul>
+                                </div>
+                                <div class="clearfix"></div>
+                                <input type="text" id="task_relates_to_deals" 
+                                placeholder="Related Deals" class="typeahead typeahead_deals form-control"
+                                data-provide="typeahead" data-mode="multiple" />
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                     <!--<div class="row">
+                      <div class="control-group form-group col-md-12">
+                             <label class="control-label"><a href="#" id="new-task-related-deals-label"><i class="icon-plus"></i> Add Deals</a></label>  
+                            <label class="control-label new-task-related-deals-label"><b>Related Deals</b></label>
+                            <div class="controls new-task-related-deals-input" id="dealTypeAhead">
+                                <div>
+                                    <div>
+                                        <ul name="deal_ids" class="deals tagsinput deal_tags p-n"></ul>
+                                    </div>
+                                    <input type="text" id="task_relates_to_deals" 
+                                    placeholder="Related Deals" class="typeahead typeahead_deals form-control"
+                                    data-provide="typeahead" data-mode="multiple" />
+                                </div>
+                            </div>
+                        </div>  
+                    </div> -->
+
+
+
+
+
+                    <div class="row hide">
+                        <div class="congrol-group form-group ">
+                            <label for="notes" class="control-label"><b>Notes</b></label>
+                            <div class="controls pull-right task-add-note">
+                                <a href="#"><i class="icon-plus" /> Add Note</a>
+                            </div>
+                            <div id="forNoteForm" class="controls"></div>
+                            <ul id="notes" name="notes" class="notes"></ul>
+                        </div>
+                    </div>
                 </fieldset>
             </form>
         </div>
