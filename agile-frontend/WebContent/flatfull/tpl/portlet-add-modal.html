@@ -8,8 +8,17 @@
 		<div class="modal-body overflow-auto">
 			<form id="portletStreamDetail" name="portletStreamDetail" class="form-horizontal">
 				<fieldset>
-					<div id="portletstreamDetails">
-					</div>         					   			  
+					<div class="controls col-sm-10">
+					<span class="m-xs block">
+						<a href="#" id="category-select-all" class="text-info">Select all</a> |
+						<a href="#" id="category-select-none" class="text-info">Select none</a>
+					</span>
+					<select id="category-list" name="category-list" class="required form-control" multiple="multiple">
+						<option value="DashBoard">DashBoard</option>
+						<option value="Deals">Deals</option>
+						
+					</select>
+				</div>        					   			  
 				</fieldset>
 			</form>		   	
 		</div>

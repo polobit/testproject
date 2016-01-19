@@ -952,6 +952,11 @@ function initializeAddPortletsListeners() {
 				var forAll=false;
 				clickfunction($(this),url,forAll,route);
 			});
+		$('#portlets-add-listener').on(
+			"click touchstart",
+			'.configure-portlets',
+			function() {
+			});
 	$('#portlets-add-listener').on(
 			"click touchstart",
 			'.add_to_all',
