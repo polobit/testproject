@@ -34,12 +34,12 @@ public final class Call
 	public static final String VOICEMAIL = "voicemail";
 	public static final String Missed = "missed";
 	//new status added for logging call by prakash...
-
 	public static final String Inquiry = "inquiry";
 	public static final String Interest = "interest";
 	public static final String NoInterest = "no interest";
 	public static final String IncorrectReferral = "incorrect referral";
 	public static final String MeetingScheduled = "meeting scheduled";
-	public static final String NewOppurtunity = "new oppurtunity";
+	public static final String NewOpportunity = "new opportunity";
+	
 
 }

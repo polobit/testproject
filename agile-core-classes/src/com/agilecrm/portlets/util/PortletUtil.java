@@ -704,6 +704,14 @@ public class PortletUtil {
 		List<Integer> busyCallsCountList=new ArrayList<Integer>();
 		List<Integer> failedCallsCountList=new ArrayList<Integer>();
 		List<Integer> voiceMailCallsCountList=new ArrayList<Integer>();
+		List<Integer> missedCallsCountList=new ArrayList<Integer>();
+		List<Integer> inquiryCallsCountList=new ArrayList<Integer>();
+		List<Integer> interestCallsCountList=new ArrayList<Integer>();
+		List<Integer> noInterestCallsCountList=new ArrayList<Integer>();
+		List<Integer> incorrectReferralCallsCountList=new ArrayList<Integer>();
+		List<Integer> newOpportunityCallsCountList=new ArrayList<Integer>();
+		List<Integer> meetingScheduledCallsCountList=new ArrayList<Integer>();
+		
 		List<Integer> totalCallsCountList=new ArrayList<Integer>();
 		
 		List<Long> callsDurationList=new ArrayList<Long>();
@@ -737,6 +745,13 @@ public class PortletUtil {
 			int busyCallsCount=0;
 			int failedCallsCount=0;
 			int voiceMailCallsCount=0;
+			int missedCallsCount=0;
+			int inquiryCallsCount=0;
+			int interestCallsCount=0;
+			int noInterestCallsCount=0;
+			int incorrectReferralCallsCount=0;
+			int newOpportunityCallsCount=0;
+			int meetingScheduledCallsCount=0;
 			
 			int totalCallsCount=0;
 			
@@ -753,6 +768,20 @@ public class PortletUtil {
 						failedCallsCount++;
 					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
 						voiceMailCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Missed))
+						missedCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Inquiry))
+						inquiryCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Interest))
+						interestCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NoInterest))
+						noInterestCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.IncorrectReferral))
+						incorrectReferralCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
+						newOpportunityCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
+						meetingScheduledCallsCount++;
 					if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null) 
 							&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
 						callsDuration+=Long.valueOf(activity.custom4);
@@ -766,6 +795,14 @@ public class PortletUtil {
 			busyCallsCountList.add(busyCallsCount);
 			failedCallsCountList.add(failedCallsCount);
 			voiceMailCallsCountList.add(voiceMailCallsCount);
+			missedCallsCountList.add(missedCallsCount);
+			inquiryCallsCountList.add(inquiryCallsCount);
+			interestCallsCountList.add(interestCallsCount);
+			noInterestCallsCountList.add(noInterestCallsCount);
+			incorrectReferralCallsCountList.add(incorrectReferralCallsCount);
+			newOpportunityCallsCountList.add(newOpportunityCallsCount);
+			meetingScheduledCallsCountList.add(meetingScheduledCallsCount);
+			
 			totalCallsCountList.add(totalCallsCount);
 			
 			callsDurationList.add(callsDuration);
@@ -788,6 +825,14 @@ public class PortletUtil {
 		callsPerPersonJSON.put("busyCallsCountList",busyCallsCountList);
 		callsPerPersonJSON.put("failedCallsCountList",failedCallsCountList);
 		callsPerPersonJSON.put("voiceMailCallsCountList",voiceMailCallsCountList);
+		callsPerPersonJSON.put("missedCallsCountList",missedCallsCountList);
+		callsPerPersonJSON.put("inquiryCallsCountList",inquiryCallsCountList);
+		callsPerPersonJSON.put("interestCallsCountList",interestCallsCountList);
+		callsPerPersonJSON.put("noInterestCallsCountList",noInterestCallsCountList);
+		callsPerPersonJSON.put("incorrectReferralCallsCountList",incorrectReferralCallsCountList);
+		callsPerPersonJSON.put("newOpportunityCallsCountList",newOpportunityCallsCountList);
+		callsPerPersonJSON.put("meetingScheduledCallsCountList",meetingScheduledCallsCountList);
+
 		callsPerPersonJSON.put("callsDurationList",callsDurationList);
 		callsPerPersonJSON.put("totalCallsCountList",totalCallsCountList);
 		callsPerPersonJSON.put("domainUsersList",domainUserNamesList);
