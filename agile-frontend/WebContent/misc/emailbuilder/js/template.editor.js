@@ -348,11 +348,11 @@ function handleObjects() {
                     case 'text-block' :
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
                         var fontcolor = $('#' + $('#path').val() + ' tbody tr td').css('fontColor');
-                        var text = $('#' + $('#path').val()).find('div').html();
+                        var text = $('#' + $('#path').val()).find('div.textFix').html();
                         var fontsize = $('#' + $('#path').val()).find('div').css('font-size');
                         var fontfamily = $('#' + $('#path').val()).find('div').css('font-family');
                         var background = $('#' + $('#path').val()).css('backgroundColor');
-                        $('#selector').val('div');
+                        $('#selector').val('div.textFix');
                         $('form#font-settings').show();
                         $('form#editor').show();
                         storeValues(self, fontcolor, text, fontsize, fontfamily, background);
@@ -393,7 +393,7 @@ function handleObjects() {
                         break;
                     case 'imgtxtcol':
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
-                        var textElement = self.find('tbody tr td div');
+                        var textElement = self.find('tbody tr td div.textFix');
                         var img = self.find('tbody tr td table tbody tr td img');
 
                         var imageid = img.attr('id');
@@ -428,7 +428,7 @@ function handleObjects() {
 
                         textElement.unbind('click');
                         textElement.bind('click', function () {
-                            $('#selector').val('tbody tr td div');
+                            $('#selector').val('tbody tr td div.textFix');
                             $('.selected-item').removeClass('selected-item').css('border', 'none');
                             textElement.css('border', '1px dotted red');
                             $(this).addClass('selected-item');
@@ -438,7 +438,7 @@ function handleObjects() {
                             var fontsize = textElement.css('font-size');
                             var fontfamily = textElement.css('font-family');
                             var background = $('#' + $('#path').val()).css('background-color');
-                            $('#selector').val('tbody tr td div');
+                            $('#selector').val('tbody tr td div.textFix');
                             storeValues($('#' + $('#path').val()), fontcolor, text, fontsize, fontfamily, background);
 
 
@@ -450,7 +450,7 @@ function handleObjects() {
                     case 'imgtxtincol':
 
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
-                        var textElement = self.find('td.text div');
+                        var textElement = self.find('td.text div.textFix');
 
                         var imgs = self.find('td.image img');
 
@@ -501,7 +501,7 @@ function handleObjects() {
                         textElement.each(function (index) {
                             $(this).unbind('click');
                             $(this).bind('click', function () {
-                                $('#selector').val('tbody tr td.text:eq(' + index + ') div');
+                                $('#selector').val('tbody tr td.text:eq(' + index + ') div.textFix');
                                 $('.selected-item').removeClass('selected-item').css('border', 'none');
                                 $(this).css('border', '1px dotted red');
                                 $(this).addClass('selected-item');
@@ -526,7 +526,7 @@ function handleObjects() {
                         //    $('#'+$('#path').val()).unbind('click');
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         var titleElement = self.find('tbody tr td h2');
-                        var textElement = self.find('tbody tr td div');
+                        var textElement = self.find('tbody tr td div.textFix');
                         var img = self.find('tbody tr td table tbody tr td img');
                         // devi mettere un each perchè ci sono piu di un immagine.
 
@@ -582,7 +582,7 @@ function handleObjects() {
 
                         textElement.unbind('click');
                         textElement.bind('click', function () {
-                            $('#selector').val('tbody tr td div');
+                            $('#selector').val('tbody tr td div.textFix');
                             $('.selected-item').removeClass('selected-item').css('border', 'none');
                             textElement.css('border', '1px dotted red');
                             $(this).addClass('selected-item');
@@ -592,7 +592,7 @@ function handleObjects() {
                             var fontsize = textElement.css('font-size');
                             var fontfamily = textElement.css('font-family');
                             var background = $('#' + $('#path').val()).css('background-color');
-                            $('#selector').val('tbody tr td div');
+                            $('#selector').val('tbody tr td div.textFix');
                             storeValues($('#' + $('#path').val()), fontcolor, text, fontsize, fontfamily, background);
 
 
@@ -1413,9 +1413,9 @@ function initializeEditor() {
         ],
         paste_as_text: true,
        // paste_word_valid_elements: "h1,h2,h3,b,strong,i,em",
-        toolbar: "bold italic underline | alignleft aligncenter alignright alignjustify | forecolor backcolor | link | bullist numlist | merge_fields | calltoaction",
+        toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | link | bullist numlist | merge_fields | calltoaction",
         setup: function (editor) {
-            editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Merge Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
+            editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
 
             editor.addButton('calltoaction', {
                 text : 'Add Button',
