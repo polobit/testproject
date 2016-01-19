@@ -1225,7 +1225,8 @@ public class ContactsAPI
 		ContactUtil.getContact(Long.valueOf(id)).delete();
 		// save master reccord
 		contact.save();
-
+			if (contact.type.toString().equals(("PERSON")))
+				ActivityUtil.createContactActivity(ActivityType.MERGE_CONTACT,contact,null,null,null);
 	    }
 	    catch (Exception e)
 	    {
