@@ -237,7 +237,7 @@
 						</ul>
   
  			<ul class="nav  navbar-nav  navbar-right show_shortcuts">	
-						<!-- 	<li rel="popover" data-trigger="click" class="need_help hidden-xs" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'  style='color:#7D7474'>
+						 	<li rel="popover" data-trigger="click" class="need_help hidden-xs" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'  style='color:#7D7474'>
 									<div class='col-md-12 text-sm p-b-xs'>Need Help? We are one click away.</div>
 								</div>
 								<div class='row m-none' style='color:#7D7474'>
@@ -255,13 +255,20 @@
 								  </div>
 								 </div>
 								</div><div class='clearfix'></div>
-							    </div>">
-							     -->
+							    </div>" data-original-title="" title="">
+							     <a href="#" onclick="return false;"><i class="fa fa-question-circle"></i></a>			
+                                                        </li>
+							     
 							    
 							
-						
-							<li class="hidden-xs"><a  class="enable-element-full-screen"><span class="fa fa-arrows-alt"></span></a></li>
+						 <%
+                               if(request.getHeader("User-Agent").indexOf("Mobile") == -1) {
 
+                        %>
+                             <li class="hidden-xs" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Fullscreen"><a  class="enable-element-full-screen"><span class="fa fa-arrows-alt"></span></a></li>
+                        <%
+                               }
+						%>
 						
 									
 							<li class="dropdown" id="menu1"><a class="dropdown-toggle"
