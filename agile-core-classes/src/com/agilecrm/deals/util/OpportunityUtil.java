@@ -2075,8 +2075,8 @@ public class OpportunityUtil
 		Map<String, Object> conditionsMap = new HashMap<String, Object>();
 		Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
 		//List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
-		List<Opportunity> list=null;
-		List<Opportunity> list2 = null;
+		//List<Opportunity> list=null;
+		List<Opportunity> list2 = new ArrayList<Opportunity>();
 		Set<Opportunity> ownDealsSet = new TreeSet<Opportunity>(new Comparator<Opportunity>()
 		{
 			@Override  
@@ -2107,9 +2107,10 @@ public class OpportunityUtil
 				conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
 				conditionsMap1.put("milestone", milestone1.lost_milestone);
 				conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
-				list = dao.listByProperty(conditionsMap);
-				list2 = dao.listByProperty(conditionsMap1);
+				List<Opportunity>  list = dao.listByProperty(conditionsMap);
+				List<Opportunity> list2_temp = dao.listByProperty(conditionsMap1);
 				boolean flag=false;
+				list2.addAll(list2_temp);
 				for(Opportunity list_it:list){
 					for(Opportunity list_it2:list2){
 						if(!list_it.id.equals(list_it2.id)){
@@ -2131,9 +2132,10 @@ public class OpportunityUtil
 				conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
 				conditionsMap1.put("milestone", "Lost");
 				conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
-				list = dao.listByProperty(conditionsMap);
-				list2 = dao.listByProperty(conditionsMap1);
+				List<Opportunity> list = dao.listByProperty(conditionsMap);
+				List<Opportunity> list2_temp = dao.listByProperty(conditionsMap1);
 				boolean flag=false;
+				list2.addAll(list2_temp);
 				for(Opportunity list_it:list){
 					for(Opportunity list_it2:list2){
 						if(!list_it.id.equals(list_it2.id)){
@@ -2161,9 +2163,10 @@ public class OpportunityUtil
 					conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
 					conditionsMap1.put("milestone", milestone.lost_milestone);
 					conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
-					list = dao.listByProperty(conditionsMap);
-					list2 = dao.listByProperty(conditionsMap1);
+					List<Opportunity> list = dao.listByProperty(conditionsMap);
+					List<Opportunity> list2_temp = dao.listByProperty(conditionsMap1);
 					boolean flag=false;
+					list2.addAll(list2_temp);
 					for(Opportunity list_it:list){
 						for(Opportunity list_it2:list2){
 							if(!list_it.id.equals(list_it2.id)){
@@ -2186,9 +2189,10 @@ public class OpportunityUtil
 					conditionsMap1.put("milestone", "Lost");
 					conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
 					
-					list = dao.listByProperty(conditionsMap);
-					list2 = dao.listByProperty(conditionsMap1);
+					List<Opportunity> list = dao.listByProperty(conditionsMap);
+					List<Opportunity> list2_temp = dao.listByProperty(conditionsMap1);
 					boolean flag=false;
+					list2.addAll(list2_temp);
 					for(Opportunity list_it:list){
 						for(Opportunity list_it2:list2){
 							if(!list_it.id.equals(list_it2.id)){
@@ -2209,6 +2213,8 @@ public class OpportunityUtil
 		//ownDealsList=new ArrayList<>(ownDealsSet);
 		return list2;
 			}
+
+
 	/**
 	 * Returns JSONObject of won Deals divided by source. These are used for pie chart building.
 	 * 
@@ -2399,7 +2405,8 @@ public class OpportunityUtil
 			Opportunity.MILESTONES=milestone.milestones.split(",");
 			for(String milestone_data : Opportunity.MILESTONES)
 			{
-				milestoneValue.put(milestone_data, 0);
+				milestoneValue.put(" "+milestone_data.toString(), 0);
+				
 			}
 			Track_conversion.put(milestone.name, milestoneValue);
 			
@@ -2452,7 +2459,7 @@ public class OpportunityUtil
 				{
 					JSONObject mileObject = conversion.getJSONObject(mile.name);
 					System.out.println("Mileobject"+mileObject);
-					if(mileObject.containsKey(opp.milestone))
+					if(mileObject.containsKey(" "+opp.milestone))
 					{
 						Iterator keys=mileObject.keys();
 						while(keys.hasNext()){
@@ -2460,7 +2467,7 @@ public class OpportunityUtil
 							int count=mileObject.getInt(key);
 							count++;
 							mileObject.put(key,count);
-							if(key.equalsIgnoreCase(opp.milestone))
+							if(key.equalsIgnoreCase(" "+opp.milestone))
 								break;
 						}
 
@@ -2486,7 +2493,7 @@ public class OpportunityUtil
 	
 	/*
 	 * 
-	 * Returns List of Opportunities for pipeline conversion
+	 * Return List of Opportunities for pipeline conversion
 	 */
 	public static List<Opportunity> getConversionDeals(Long ownerId,
 			long minTime, long maxTime)

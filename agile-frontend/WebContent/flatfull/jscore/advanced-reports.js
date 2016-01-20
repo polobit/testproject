@@ -679,7 +679,7 @@ function initRepReports(callback){
 							new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
 					], 'Last Year' : [
 							new Date(Date.today().setMonth(0)).add({ years : -1 }).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).add({ years : -1 }).moveToLastDayOfMonth()
-					] }, locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', customRangeLabel : 'Custom', minViewMode : 'month', startDate:Date.today().moveToFirstDayOfMonth(),endDate:Date.today().moveToLastDayOfMonth(), daysOfWeek : [
+					] }, locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', customRangeLabel : 'Custom', minViewMode : 'month', dateLimit:'month', startDate:Date.today().moveToFirstDayOfMonth(),endDate:Date.today().moveToLastDayOfMonth(), daysOfWeek : [
 							'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
 					], monthNames : [
 							'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
@@ -706,6 +706,7 @@ function initRepReports(callback){
 						});
 						$(this).addClass("active");
 					});
+					$('.daterangepicker > .ranges > ul li:last-child' ).hide();
 
 	});
 
