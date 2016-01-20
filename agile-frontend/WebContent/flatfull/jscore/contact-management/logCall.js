@@ -344,3 +344,39 @@ function getPhoneWithSkypeInArray(items)
 	}
 	return va;
 }
+
+
+/**
+ * this method will dynamically populate the log call modal with the supplier params
+ * this will update the edited logPhone
+ *
+ *
+ */
+
+function showDynamicCallLogs(data)
+{
+	try{
+		console.log("parameter send" + data );
+		var logCallParam = {};
+		logCallParam['num'] = [data.number];
+		logCallParam['action'] = "add";
+		$("#globalModal").html(getTemplate("phoneLogModal",logCallParam));
+		
+		$("#phoneLogForm #callStatus").attr("value", data.status);
+		$("#phoneLogForm #callStatus").html(toTitleCase(data.status));
+		$("input[name=callType][value="+data.callType+"]").attr('checked', 'checked');
+		
+		$("#globalModal").modal('show');
+		$('#phoneLogForm #subject').val(data.status);
+		var time = getTimeInArray(data.duration); //[hours,miiutes,second]
+		$('#phoneLogForm #sec').val(time.pop());
+		$('#phoneLogForm #min').val(time.pop());
+		$('#phoneLogForm #hour').val(time.pop());
+		
+		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ data.contId +'">'+data.contact_name+'</li>');
+		$("#phoneLogForm").find("#description").focus();
+	}catch(e){
+		$('#globalModal').modal('hide');
+		console.log ("an error has occured");
+	}
+}

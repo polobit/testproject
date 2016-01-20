@@ -1251,12 +1251,16 @@ function showNoteAfterCall(callRespJson,messageObj)
 					}
 				 	// Adds contact name to tags ul as li element
 					if(callStatus == "completed") {
-					 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ json.id +'">'+contact_name+'</li>');
-					 	$("#noteForm #subject").val(noteSub);
-				 		$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(callRespJson.duration));
-				 		$("#noteForm").find("#description").focus();
-						$('#noteModal').modal('show');
-						agile_type_ahead("note_related_to", el, contacts_typeahead);
+						var data = {};
+						data.subject = noteSub;
+						data.number = To_Number;
+						data.callType = TWILIO_DIRECTION;
+						data.status = "answered";
+						data.duration = callRespJson.duration;
+						data.contId = json.id;
+						data.contact_name = contact_name;
+						showDynamicCallLogs(data);
+
 						//changed by prakash to add the last_called parameter and last_connected parameter of contact object on server side - 15/6/15
 							if(TWILIO_DIRECTION == "outbound-dial") {
 								twilioIOSaveContactedTime();	
