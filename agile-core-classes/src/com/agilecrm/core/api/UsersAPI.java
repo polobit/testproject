@@ -108,7 +108,23 @@ public class UsersAPI
 
 		try
 		{
+			DomainUser owner = null;
+			if (domainUser.is_account_owner == true)
+			{
+				if (domainUser.is_admin == false)
+				{
+					throw new Exception(
+							"Owner should always be an administrator. Please select administrator option and try again.");
+				}
+				owner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+
+			}
 			domainUser.save();
+			if (owner != null && domainUser.id != null && !domainUser.id.equals(owner.id))
+			{
+				owner.is_account_owner = false;
+				owner.save();
+			}
 			return domainUser;
 		}
 		catch (Exception e)
@@ -141,13 +157,27 @@ public class UsersAPI
 	{
 		try
 		{
+			DomainUser owner = null;
 			if (domainUser.id == null)
 			{
 				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Invalid User")
 						.build());
 			}
-
+			if (domainUser.is_account_owner == true)
+			{
+				if (domainUser.is_admin == false)
+				{
+					throw new Exception(
+							"Owner should always be an administrator. Please select administrator option and try again.");
+				}
+				owner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+			}
 			domainUser.save();
+			if (owner != null && !domainUser.id.equals(owner.id))
+			{
+				owner.is_account_owner = false;
+				owner.save();
+			}
 			return domainUser;
 		}
 		catch (Exception e)
@@ -178,12 +208,12 @@ public class UsersAPI
 			// Throws exception, if only one account exists
 			if (count == 1)
 				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-						.entity("Canâ€™t delete all users").build());
+						.entity("Can’t delete all users").build());
 
 			// Throws exception, if user is owner
 			if (domainUser.is_account_owner)
 				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-						.entity("Master account canâ€™t be deleted").build());
+						.entity("Master account can’t be deleted").build());
 		}
 		catch (Exception e)
 		{
@@ -355,6 +385,33 @@ public class UsersAPI
 		return null;
 	}
 
+	/**
+	 * When all forms are updated with html code, then we update
+	 * is_forms_updated to true
+	 */
+
+	@Path("/formsupdated")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
+	public DomainUser setFormUpdatedToTrue()
+	{
+		DomainUser user = DomainUserUtil.getCurrentDomainUser();
+		user.is_forms_updated = true;
+		try
+		{
+			user.save();
+			return user;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+	}
+
 	// Update helpdesk settings
 	@POST
 	@Path("/helpdesk-settings/choose-columns")
@@ -405,33 +462,6 @@ public class UsersAPI
 		{
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * When all forms are updated with html code, then we update
-	 * is_forms_updated to true
-	 */
-
-	@Path("/formsupdated")
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
-	public DomainUser setFormUpdatedToTrue()
-	{
-		DomainUser user = DomainUserUtil.getCurrentDomainUser();
-		user.is_forms_updated = true;
-		try
-		{
-			user.save();
-			return user;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-
 	}
 
 }

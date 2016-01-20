@@ -98,7 +98,6 @@ String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String _VERSION_ID = VersioningUtil.getVersion();
 
-Long default_group_id = TicketGroupUtil.getDefaultTicketGroup().id;
 %>
 
 
@@ -410,9 +409,6 @@ var COMPANY_DATE_FIELDS = <%=mapper.writeValueAsString(CustomFieldDefUtil.getCus
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;
-
-//default group id
-var DEFAULT_GROUP_ID = <%= default_group_id%> ;
 
 var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 

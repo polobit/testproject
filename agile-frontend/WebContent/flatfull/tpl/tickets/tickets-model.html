@@ -180,41 +180,17 @@
   <td class="first-letter-cap open-ticket id {{#is_column_selected 'id'}}{{else}}display-none{{/is_column_selected}}">
     <div class="text-ellipsis">#{{id}}</div>
   </td>
-  <td class="first-letter-cap open-ticket subject {{#is_column_selected 'subject'}}{{else}}display-none{{/is_column_selected}}">
-    <div class="text-ellipsis width-15em">{{subject}}</div>
+  <td class="first-letter-cap open-ticket subject max-width-250 text-ellipsis {{#is_column_selected 'subject'}}{{else}}display-none{{/is_column_selected}}">
+    <div class="text-ellipsis">{{subject}}</div>
   </td>
-   <td class="first-letter-cap open-ticket requester_name {{#is_column_selected 'requester_name'}}{{else}}display-none{{/is_column_selected}}">
-    <div class="text-ellipsis width-9em">{{requester_name}}</div>
+   <td class="first-letter-cap open-ticket requester_name width-9em text-ellipsis {{#is_column_selected 'requester_name'}}{{else}}display-none{{/is_column_selected}}">
+    <div class="text-ellipsis">{{requester_name}}</div>
   </td>
-  <td class="first-letter-cap open-ticket requester_email {{#is_column_selected 'requester_email'}}{{else}}display-none{{/is_column_selected}}">
-    <div class="text-ellipsis width-9em">{{requester_email}}</div>
-  </td>
-  <td class="first-letter-cap open-ticket created_time {{#is_column_selected 'created_time'}}{{else}}display-none{{/is_column_selected}}">
-    {{epochToHumanDate 'mmm dd, yyyy' created_time}}
+  <td class="first-letter-cap open-ticket requester_email width-9em text-ellipsis{{#is_column_selected 'requester_email'}}{{else}}display-none{{/is_column_selected}}">
+    <div class="text-ellipsis">{{requester_email}}</div>
   </td>
   <td class="first-letter-cap open-ticket due_date {{#is_column_selected 'due_date'}}{{else}}display-none{{/is_column_selected}}">
     {{#if due_date}}{{epochToHumanDate 'mmm dd, yyyy' due_date}}{{else}}-{{/if}}
-  </td>
-  <td class="first-letter-cap open-ticket assigned_date {{#is_column_selected 'assigned_time'}}{{else}}display-none{{/is_column_selected}}">
-    {{#if assigned_time}}{{epochToHumanDate 'mmm dd, yyyy' assigned_time}}{{else}}-{{/if}}
-  </td>
-  <td class="first-letter-cap open-ticket last_updated_date {{#is_column_selected 'last_updated_time'}}{{else}}display-none{{/is_column_selected}}">
-    {{#if last_updated_time}}{{epochToHumanDate 'mmm dd, yyyy' last_updated_time}}{{else}}-{{/if}}
-  </td>
-  <td class="first-letter-cap open-ticket closed_date {{#is_column_selected 'closed_time'}}{{else}}display-none{{/is_column_selected}}">
-    {{#if closed_time}}{{epochToHumanDate 'mmm dd, yyyy' closed_time}}{{else}}-{{/if}}
-  </td>
-  <td class="first-letter-cap open-ticket assignee {{#is_column_selected 'assignee'}}{{else}}display-none{{/is_column_selected}}">
-    <div class="text-ellipsis width-9em">{{#if assignee}}{{assignee.name}}{{else}}-{{/if}}</div>
-  </td>
-  <td class="first-letter-cap open-ticket group {{#is_column_selected 'group'}}{{else}}display-none{{/is_column_selected}}">
-    <div class="text-ellipsis width-9em">{{#if group}}{{group.group_name}}{{else}}-{{/if}}</div>
-  </td>
-  <td class="first-letter-cap open-ticket organization {{#is_column_selected 'organization'}}{{else}}display-none{{/is_column_selected}}">
-    {{organization}}
-  </td>
-  <td class="first-letter-cap open-ticket contact_details {{#is_column_selected 'contact_details'}}{{else}}display-none{{/is_column_selected}}">
-    {{contact_details}}
   </td>
   <td class="open-ticket priority {{#is_column_selected 'priority'}}{{else}}display-none{{/is_column_selected}}">
     {{#if_equals priority 'HIGH'}}
@@ -223,11 +199,35 @@
       <span class="first-letter-cap inline-block">{{priority}}</span>
   {{/if_equals}}
   </td>
+  <td class="first-letter-cap open-ticket status {{#is_column_selected 'status'}}{{else}}display-none{{/is_column_selected}}">
+    {{status}}
+  </td>
+  <td class="first-letter-cap open-ticket assignee {{#is_column_selected 'assignee'}}{{else}}display-none{{/is_column_selected}}">
+    <div class="text-ellipsis width-9em">{{#if assignee}}{{assignee.name}}{{else}}-{{/if}}</div>
+  </td>
+  <td class="first-letter-cap open-ticket group {{#is_column_selected 'group'}}{{else}}display-none{{/is_column_selected}}">
+    <div class="text-ellipsis width-9em">{{#if group}}{{group.group_name}}{{else}}-{{/if}}</div>
+  </td>
+  <td class="first-letter-cap open-ticket assigned_time {{#is_column_selected 'assigned_time'}}{{else}}display-none{{/is_column_selected}}">
+    {{#if assigned_time}}{{epochToHumanDate 'mmm dd, yyyy' assigned_time}}{{else}}-{{/if}}
+  </td>
   <td class="first-letter-cap open-ticket ticket_type {{#is_column_selected 'ticket_type'}}{{else}}display-none{{/is_column_selected}}">
     {{type}}
   </td>
-  <td class="first-letter-cap open-ticket status {{#is_column_selected 'status'}}{{else}}display-none{{/is_column_selected}}">
-    {{status}}
+   <td class="first-letter-cap open-ticket last_updated_date {{#is_column_selected 'last_updated_time'}}{{else}}display-none{{/is_column_selected}}">
+    {{#if last_updated_time}}{{epochToHumanDate 'mmm dd, yyyy' last_updated_time}}{{else}}-{{/if}}
+  </td>
+  <td class="first-letter-cap open-ticket organization {{#is_column_selected 'organization'}}{{else}}display-none{{/is_column_selected}}">
+    {{organization}}
+  </td>
+  <td class="first-letter-cap open-ticket closed_date {{#is_column_selected 'closed_time'}}{{else}}display-none{{/is_column_selected}}">
+    {{#if closed_time}}{{epochToHumanDate 'mmm dd, yyyy' closed_time}}{{else}}-{{/if}}
+  </td>
+  <td class="first-letter-cap open-ticket created_time {{#is_column_selected 'created_time'}}{{else}}display-none{{/is_column_selected}}">
+    {{epochToHumanDate 'mmm dd, yyyy' created_time}}
+  </td>
+  <td class="first-letter-cap open-ticket contact_details {{#is_column_selected 'contact_details'}}{{else}}display-none{{/is_column_selected}}">
+    {{contact_details}}
   </td>
 </script>
 <script id="ticket-model-change-assignee-template" type="text/html">

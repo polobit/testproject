@@ -220,7 +220,7 @@
 				                </li>
 				                <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
-				                        <input name="assigned_date" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'assigned_date'}}checked{{/is_column_selected}}><i></i></label> Assigned date
+				                        <input name="assigned_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'assigned_time'}}checked{{/is_column_selected}}><i></i></label> Assigned date
 				                    </a>
 				                </li>
 				               	<li><a href="javascript:void(0);" class="p-b-none">
@@ -270,18 +270,18 @@
 											<th class="subject {{#is_column_selected 'subject'}}{{else}}display-none{{/is_column_selected}}">Subject</th>
 											<th class="requester_name {{#is_column_selected 'requester_name'}}{{else}}display-none{{/is_column_selected}}">Requester&nbsp;name</th>
 											<th class="requester_email {{#is_column_selected 'requester_email'}}{{else}}display-none{{/is_column_selected}}">Requester&nbsp;email</th>
-											<th class="created_time {{#is_column_selected 'created_time'}}{{else}}display-none{{/is_column_selected}}">Created&nbsp;date</th>
 											<th class="due_date {{#is_column_selected 'due_date'}}{{else}}display-none{{/is_column_selected}}">Due&nbsp;date</th>
-											<th class="assigned_date {{#is_column_selected 'assigned_date'}}{{else}}display-none{{/is_column_selected}}">Assigned&nbsp;date</th>
-											<th class="last_updated_date {{#is_column_selected 'last_updated_date'}}{{else}}display-none{{/is_column_selected}}">Last&nbsp;updated&nbsp;date</th>
-											<th class="closed_date {{#is_column_selected 'closed_time'}}{{else}}display-none{{/is_column_selected}}">Closed&nbsp;date</th>
+											<th class="priority {{#is_column_selected 'priority'}}{{else}}display-none{{/is_column_selected}}">Priority</th>
+											<th class="status {{#is_column_selected 'status'}}{{else}}display-none{{/is_column_selected}}">Status</th>
 											<th class="assignee {{#is_column_selected 'assignee'}}{{else}}display-none{{/is_column_selected}}">Assignee</th>
 											<th class="group {{#is_column_selected 'group'}}{{else}}display-none{{/is_column_selected}}">Group</th>
-											<th class="organization {{#is_column_selected 'organization'}}{{else}}display-none{{/is_column_selected}}">Organization</th>
-											<th class="contact_details {{#is_column_selected 'contact_details'}}{{else}}display-none{{/is_column_selected}}">Contact&nbsp;details</th>
-											<th class="priority {{#is_column_selected 'priority'}}{{else}}display-none{{/is_column_selected}}">Priority</th>
+											<th class="assigned_time {{#is_column_selected 'assigned_time'}}{{else}}display-none{{/is_column_selected}}">Assigned&nbsp;date</th>
 											<th class="ticket_type {{#is_column_selected 'ticket_type'}}{{else}}display-none{{/is_column_selected}}">Ticket&nbsp;Type</th>
-											<th class="status {{#is_column_selected 'status'}}{{else}}display-none{{/is_column_selected}}">Status</th>
+											<th class="last_updated_date {{#is_column_selected 'last_updated_date'}}{{else}}display-none{{/is_column_selected}}">Last&nbsp;updated&nbsp;date</th>
+											<th class="organization {{#is_column_selected 'organization'}}{{else}}display-none{{/is_column_selected}}">Organization</th>
+											<th class="closed_date {{#is_column_selected 'closed_time'}}{{else}}display-none{{/is_column_selected}}">Closed&nbsp;date</th>
+											<th class="created_time {{#is_column_selected 'created_time'}}{{else}}display-none{{/is_column_selected}}">Created&nbsp;date</th>
+											<th class="contact_details {{#is_column_selected 'contact_details'}}{{else}}display-none{{/is_column_selected}}">Contact&nbsp;details</th>
 										</tr>
 									</thead>
 									<tbody id="ticket-single-row-model-list" class="tickets-collection ticket-single-row-model-list"

@@ -332,11 +332,13 @@ public class Tickets extends Cursor implements Serializable
 
 		boolean lockAcquired = false;
 
-		Long ticketsCount = (Long) CacheUtil.getCache(namespace + "_tickets_count");
+		Long ticketsCount = null;
 
 		try
 		{
 			lockAcquired = acquireLock(syncKey);
+
+			ticketsCount = (Long) CacheUtil.getCache(namespace + "_tickets_count");
 
 			// Checking if ticket count is null or not
 			if (ticketsCount == null)
@@ -344,9 +346,6 @@ public class Tickets extends Cursor implements Serializable
 				List<Tickets> tickets = ticketsDao.fetchAllByOrder(1, "", null, false, true, "-created_time");
 
 				ticketsCount = (tickets == null || tickets.size() == 0) ? 0l : tickets.get(0).id;
-
-				if ((ticketsCount + "").length() > 14)
-					ticketsCount = 0l;
 			}
 
 			// Increment ticket id and assign to new ticket
