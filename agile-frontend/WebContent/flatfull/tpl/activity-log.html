@@ -516,9 +516,9 @@ Created a new Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 
 {{#if_equals "MERGE_CONTACT" activity_type}}
 {{#if_equals "1" custom1}} 
-Merged {{custom1}} contact with {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+Merged {{custom1}} contact to {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 {{else}}
-Merged {{custom1}} contacts with {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+Merged {{custom1}} contacts to {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 {{/if_equals}}
 {{/if_equals}}
 
