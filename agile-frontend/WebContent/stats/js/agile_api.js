@@ -160,5 +160,9 @@ var _agile = {
 		update_deal : function(data, callback, email)
 		{
 			agile_updateDeal(data, callback, email);				// Update deal of contact
+		},
+		set_utm_params: function()
+		{
+			agile_setUtmParams();
 		}
 };
