@@ -1812,7 +1812,8 @@ if(selector == 'lossreasonpie-chart-users'){
 				 tooltip: {
 				formatter:  function(){
 						return  '<div>' + 
-                              
+                              	 '<div class="text-cap">' +
+    							'<font style="color:'+this.point.color+'"><b>'+this.point.name+'</b></font></div>'+
                                 '<div class="p-n">'+this.series.name+'s: <b>'+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</b></div>' +
                                 '</div>'+
                                 '<div class="p-n">Total Value: <b>'+getCurrencySymbolForCharts()+''+AllData[this.point.x][2].toLocaleString()+'</b></div>';
@@ -1839,7 +1840,7 @@ if(selector == 'lossreasonpie-chart-users'){
 						dataLabels : { enabled : true,useHTML: true,
 							formatter : function()
 							{
-								return 	'<div class="text-center text-cap"><span style="color:'+this.point.color+';display:block"><b>'+this.point.name+'</b></span>' +
+								return 	'<div class="text-center text-cap">' +
     			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
 							}, distance : 25 }, showInLegend : false,size:pieSize,innerSize :'65%',shadow : false, borderWidth : 0 },
 					series : { events : { mouseOver : function()
