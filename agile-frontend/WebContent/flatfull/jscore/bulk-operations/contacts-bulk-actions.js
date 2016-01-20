@@ -1046,7 +1046,7 @@ function show_bulk_owner_change_page()
 
 		setup_tags_typeahead();
 
-		$('#removeBulkTags')
+	/**	$('#removeBulkTags')
 				.on(
 						"focusout",
 						function(e)
@@ -1064,7 +1064,7 @@ function show_bulk_owner_change_page()
 							}
 
 						});
-		/**
+		
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
 		 */
@@ -1084,7 +1084,7 @@ function show_bulk_owner_change_page()
 										.closest(".control-group")
 										.find('ul.tags')
 										.append(
-												'<li class="tag" style="display: inline-block;" data="' + tag_input + '">' + tag_input + '<a class="close" id="remove_tag" tag="' + tag_input + '">&times</a></li>');
+												'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + tag_input + '">' + tag_input + '<a class="close" id="remove_tag" tag="' + tag_input + '">&times</a></li>');
 							}
 
 							// $('#addBulkTags').closest(".control-group").find('ul.tags').append('<li
