@@ -3081,4 +3081,8 @@ table.hide-head-checkbox th label.i-checks {
     left: -20px;
     width: 100vw;
 }
+.contacts-toolbar .sort-field-txt:hover {
+    color: rgb(88, 102, 110);
+}
+
 
