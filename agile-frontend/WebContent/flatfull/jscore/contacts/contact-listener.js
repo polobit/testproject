@@ -12,7 +12,8 @@ function contactListener()
       clearTimeout(timer);
 
 			timer=setTimeout(function() {
-						 		
+						 	
+						 	$('.popover').remove();	
 				if (!insidePopover)	{
 		
 					 //$(that).popover('show');
@@ -25,7 +26,7 @@ function contactListener()
         {
             "rel": "popover",
             "trigger": "manual",
-            "placement": "top",
+            "placement": "auto top",
             "html": "true",
             "content": template_ui,
             });
@@ -34,13 +35,13 @@ function contactListener()
 							$('.popover-content').html(template_ui);
 
 							$('.popover').css('left', ($('.dta-contatiner').offset().left + 90+"px"));
-							if (window.innerHeight - $(that).offset().top >= 400)
+							/*if (window.innerHeight - $(that).offset().top >= 400)
                             $('.popover').css('top', ($(that).offset().top  + "px"));
                         
                          else{
                          	if($(window).scrollTop()>($('#contacts-table .popover').offset().top-$('#contacts-table .popover').height()))
                          		$('#contacts-table .popover').offset({ top : $(that).offset().top+20 });
-                         }
+                         }*/
                         	
 							 attachEvents(that,App_Contacts.contact_popover,true);
 						contact_list_starify('.popover',true);
@@ -61,6 +62,7 @@ function contactListener()
 		if (!insidePopover){
 			if($('.popover').length!=0)
 			$(that).popover('hide');
+		$('.popover').remove();
 		}
 					
 	}, 200);

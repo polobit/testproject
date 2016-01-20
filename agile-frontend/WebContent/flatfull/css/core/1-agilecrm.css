@@ -3001,11 +3001,14 @@ width: 915px;
 .contact_popover{
 
 	border-radius: 0px;
-	width : 260px;
+	//width : 260px;
 }
 
-.contact_popover .popover-content{
+#contacts-table .popover-content{
 	padding: 0px;
+}
+#contacts-table .popover{
+	max-width:100%;
 }
 
 .contact_popover .arrow{
