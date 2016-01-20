@@ -1,7 +1,7 @@
 <script id="email-account-types-template" type="text/html">
     <div  class="m-b-md m-t-md m-r-sm" align="right">
    
-	<a href="#send-email/{{getCurrentContactProperty "email"}}" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none"><i class="icon-plus-sign"></i> Send Email
+	<a href="#send-email/{{getCurrentContactProperty "email"}}" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none"><i class="fa fa-envelope"></i> &nbsp; Send Email
 	</a>
 	<div class="btn-group pos-rlt">
 	<button class="btn btn-sm btn-default filter-dropdown" id="email-type-select">Agile</button>
@@ -80,7 +80,7 @@
                         You have no emails for {{contactShortName}} in {{read_global_var}} account.
                     </div>
                     {{#if_email_type_is_agile "agilecrm"}}
-                    <a href="#send-email/{{getCurrentContactProperty "email"}}" class="btn btn-default btn-sm blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i> Send Email</a>
+                    <a href="#send-email/{{getCurrentContactProperty "email"}}" class="btn btn-default btn-sm blue btn-slate-action m-t-xs"><i class="fa fa-envelope"></i>&nbsp; Send Email</a>
                     {{/if_email_type_is_agile}}
                 </div>
 				<div class="clearfix">
@@ -98,7 +98,7 @@
                 </div>
             </div>
         	 <div  class="m-b-md m-t-md m-r-sm" align="right">
-				<a href="#send-email/{{getCurrentContactProperty "email"}}" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none"><i class="icon-plus-sign"></i> Send Email
+				<a href="#send-email/{{getCurrentContactProperty "email"}}" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none"><i class="fa fa-envelope"></i>&nbsp; Send Email
 				</a>
 			</div>
         </ul>
