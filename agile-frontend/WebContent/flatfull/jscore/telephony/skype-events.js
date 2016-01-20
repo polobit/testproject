@@ -364,6 +364,10 @@ function saveCallActivitySkype(call){
 	}
 	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 	
+	if(callStatus == "Answered"){
+		return;
+	}
+	
 	if(call.direction == "Outgoing" || call.direction == "outgoing"){
 		var callerObjectId = globalCall.contactedId;
 		if(!callerObjectId){
@@ -419,7 +423,9 @@ function saveCallNoteSkype(){
 	    	contact = responseJson;
 	    	contact_name = getContactName(contact);
 	    	if(callStatus == "Answered"){
-	    		var data = {};
+
+				var data = {};
+				data.url = "/core/api/widgets/skype/";
 				data.subject = noteSub;
 				data.number = number;
 				data.callType = "inbound";
@@ -427,7 +433,9 @@ function saveCallNoteSkype(){
 				data.duration = duration;
 				data.contId = id;
 				data.contact_name = contact_name;
+				data.widget = "Skype";
 				showDynamicCallLogs(data);
+
 /*				var el = $('#noteForm');
 			 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ id +'">'+contact_name+'</li>');
 			 	$("#noteForm #subject").val(noteSub);
@@ -449,8 +457,10 @@ function saveCallNoteSkype(){
 						if(json == null) {
 							return;
 						}
+						
 						contact_name = getContactName(json);
 						var data = {};
+						data.url = "/core/api/widgets/skype/";
 						data.subject = noteSub;
 						data.number = number;
 						data.callType = "outbound-dial";
@@ -458,7 +468,9 @@ function saveCallNoteSkype(){
 						data.duration = duration;
 						data.contId = cntId;
 						data.contact_name = contact_name;
+						data.widget = "Skype";
 						showDynamicCallLogs(data);
+						
 /*					var el = $('#noteForm');
 				 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ cntId +'">'+contact_name+'</li>');
 				 	$("#noteForm #subject").val(noteSub);

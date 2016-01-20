@@ -371,7 +371,8 @@ function saveCallNoteBria(){
 	    	contact_name = getContactName(contact);
 	    	if(callStatus == "Answered"){
 	    		
-	    		var data = {};
+				var data = {};
+				data.url = "/core/api/widgets/bria/";
 				data.subject = noteSub;
 				data.number = number;
 				data.callType = "inbound";
@@ -379,6 +380,7 @@ function saveCallNoteBria(){
 				data.duration = duration;
 				data.contId = contact.id;
 				data.contact_name = contact_name;
+				data.widget = "Bria";
 				showDynamicCallLogs(data);
 /*				
 				var el = $('#noteForm');
@@ -406,6 +408,7 @@ function saveCallNoteBria(){
 
 					contact_name = getContactName(json);
 					var data = {};
+					data.url = "/core/api/widgets/bria/";
 					data.subject = noteSub;
 					data.number = number;
 					data.callType = "outbound-dial";
@@ -413,6 +416,7 @@ function saveCallNoteBria(){
 					data.duration = duration;
 					data.contId = cntId;
 					data.contact_name = contact_name;
+					data.widget = "Bria";
 					showDynamicCallLogs(data);
 					
 /*					var el = $('#noteForm');
@@ -453,6 +457,9 @@ function saveCallActivityBria(call){
 	}
 	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 
+	if(callStatus == "Answered"){
+		return;
+	}
 	if(call.direction == "Outgoing" || call.direction == "outgoing"){
 		var callerObjectId = globalCall.contactedId;
 		if(!callerObjectId){

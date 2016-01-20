@@ -1204,22 +1204,26 @@ function showNoteAfterCall(callRespJson,messageObj)
 						phoneNumber = TWILIO_CALLED_NO;
 						TWILIO_CALLED_NO = "";
 						
-						$.post( "/core/api/widgets/twilio/savecallactivityById",{
-							id:TWILIO_CONTACT_ID,
-							direction: TWILIO_DIRECTION, 
-							phone: phoneNumber, 
-							status : callRespJson.status,
-							duration : callRespJson.duration 
-							});
-					}
-					else{
+						if(callStatus != "completed") {
+							$.post( "/core/api/widgets/twilio/savecallactivityById",{
+								id:TWILIO_CONTACT_ID,
+								direction: TWILIO_DIRECTION, 
+								phone: phoneNumber, 
+								status : callRespJson.status,
+								duration : callRespJson.duration 
+								});
+						}
+					}else{
 						phoneNumber = callRespJson.from;
-						$.post( "/core/api/widgets/twilio/savecallactivity",{
-							direction: TWILIO_DIRECTION, 
-							phone: phoneNumber, 
-							status : callRespJson.status,
-							duration : callRespJson.duration 
-							});
+						
+						if(callStatus != "completed") {
+							$.post( "/core/api/widgets/twilio/savecallactivity",{
+								direction: TWILIO_DIRECTION, 
+								phone: phoneNumber, 
+								status : callRespJson.status,
+								duration : callRespJson.duration 
+								});
+						}
 					}
 						
 					
@@ -1252,6 +1256,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 				 	// Adds contact name to tags ul as li element
 					if(callStatus == "completed") {
 						var data = {};
+						data.url = "/core/api/widgets/twilio/";
 						data.subject = noteSub;
 						data.number = phoneNumber;
 						data.callType = TWILIO_DIRECTION;
@@ -1259,6 +1264,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 						data.duration = callRespJson.duration;
 						data.contId = json.id;
 						data.contact_name = contact_name;
+						data.widget = "Twilioio";
 						showDynamicCallLogs(data);
 
 						//changed by prakash to add the last_called parameter and last_connected parameter of contact object on server side - 15/6/15
@@ -1286,23 +1292,23 @@ function showNoteAfterCall(callRespJson,messageObj)
 		var phoneNumber = "";
 		if(TWILIO_DIRECTION == "outbound-dial"){
 			phoneNumber = callRespJson.to;
-			$.post( "/core/api/widgets/twilio/savecallactivityById",{
+/*			$.post( "/core/api/widgets/twilio/savecallactivityById",{
 				id:TWILIO_CONTACT_ID,
 				direction: TWILIO_DIRECTION, 
 				phone: phoneNumber, 
 				status : callRespJson.status,
 				duration : callRespJson.duration 
-				});
-		}
-		else{
+				});*/
+		}else{
 			phoneNumber = callRespJson.from;
+		}
 			$.post( "/core/api/widgets/twilio/savecallactivity",{
 				direction: TWILIO_DIRECTION, 
 				phone: phoneNumber, 
 				status : callRespJson.status,
 				duration : callRespJson.duration 
 				});
-		}
+		
 
 		return showNewContactModal(phoneNumber);
 	}
