@@ -2066,6 +2066,8 @@ function showGuage(selector, data,goal_data,name,show_loading)
                 			formatter : function()
                 			{
                 				var s=(data/goal_data)*100;
+                				if(s>100)
+                					s=100;
                 				var element='<div class="text-center m-b-lg" style="font-size:20px">'+Math.round(s)+'%</div>'
                 				if(selector=='amount_goals_chart')
                 						element=element+ '<div class="text-center"><span style="font-size:25px;color:' +

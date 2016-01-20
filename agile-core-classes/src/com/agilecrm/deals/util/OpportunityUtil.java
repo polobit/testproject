@@ -2074,8 +2074,9 @@ public class OpportunityUtil
 			{
 		Map<String, Object> conditionsMap = new HashMap<String, Object>();
 		Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
-		List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
-		//List<Opportunity> ownDealsList_2 = new ArrayList<Opportunity>();
+		//List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
+		List<Opportunity> list=null;
+		List<Opportunity> list2 = null;
 		Set<Opportunity> ownDealsSet = new TreeSet<Opportunity>(new Comparator<Opportunity>()
 		{
 			@Override  
@@ -2106,15 +2107,22 @@ public class OpportunityUtil
 				conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
 				conditionsMap1.put("milestone", milestone1.lost_milestone);
 				conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
-				List<Opportunity> list = dao.listByProperty(conditionsMap);
-				List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
-				if (list != null)
-				{
-					ownDealsSet.addAll(list);
-				}
-				if (list2 != null)
-				{
-					ownDealsSet.addAll(list2);
+				list = dao.listByProperty(conditionsMap);
+				list2 = dao.listByProperty(conditionsMap1);
+				boolean flag=false;
+				for(Opportunity list_it:list){
+					for(Opportunity list_it2:list2){
+						if(!list_it.id.equals(list_it2.id)){
+							flag=true;
+							continue;
+						}
+						else {
+							flag=false;
+							break;
+						}
+					}
+					if(flag)
+						list2.add(list_it);
 				}
 			}
 			else
@@ -2123,15 +2131,22 @@ public class OpportunityUtil
 				conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
 				conditionsMap1.put("milestone", "Lost");
 				conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
-				List<Opportunity> list = dao.listByProperty(conditionsMap);
-				List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
-				if (list != null)
-				{
-					ownDealsSet.addAll(list);
-				}
-				if (list2 != null)
-				{
-					ownDealsSet.addAll(list2);
+				list = dao.listByProperty(conditionsMap);
+				list2 = dao.listByProperty(conditionsMap1);
+				boolean flag=false;
+				for(Opportunity list_it:list){
+					for(Opportunity list_it2:list2){
+						if(!list_it.id.equals(list_it2.id)){
+							flag=true;
+							continue;
+						}
+						else {
+							flag=false;
+							break;
+						}
+					}
+					if(flag)
+						list2.add(list_it);
 				}
 			}
 		}
@@ -2146,16 +2161,22 @@ public class OpportunityUtil
 					conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
 					conditionsMap1.put("milestone", milestone.lost_milestone);
 					conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
-					List<Opportunity> list = dao.listByProperty(conditionsMap);
-					List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
-					if (list != null)
-					{
-						ownDealsSet.addAll(list);
-					}
-					if (list2 != null)
-					{
-						System.out.println("Adding another 2");
-						ownDealsSet.addAll(list2);
+					list = dao.listByProperty(conditionsMap);
+					list2 = dao.listByProperty(conditionsMap1);
+					boolean flag=false;
+					for(Opportunity list_it:list){
+						for(Opportunity list_it2:list2){
+							if(!list_it.id.equals(list_it2.id)){
+								flag=true;
+								continue;
+							}
+							else {
+								flag=false;
+								break;
+							}
+						}
+						if(flag)
+							list2.add(list_it);
 					}
 				}
 				else
@@ -2165,21 +2186,28 @@ public class OpportunityUtil
 					conditionsMap1.put("milestone", "Lost");
 					conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
 					
-					List<Opportunity> list = dao.listByProperty(conditionsMap);
-					List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
-					if (list != null)
-					{
-						ownDealsSet.addAll(list);
-					}
-					if (list2 != null)
-					{
-						ownDealsSet.addAll(list2);
+					list = dao.listByProperty(conditionsMap);
+					list2 = dao.listByProperty(conditionsMap1);
+					boolean flag=false;
+					for(Opportunity list_it:list){
+						for(Opportunity list_it2:list2){
+							if(!list_it.id.equals(list_it2.id)){
+								flag=true;
+								continue;
+							}
+							else {
+								flag=false;
+								break;
+							}
+						}
+						if(flag)
+							list2.add(list_it);
 					}
 				}
 			}
 		}
-		ownDealsList=new ArrayList<>(ownDealsSet);
-		return ownDealsList;
+		//ownDealsList=new ArrayList<>(ownDealsSet);
+		return list2;
 			}
 	/**
 	 * Returns JSONObject of won Deals divided by source. These are used for pie chart building.
@@ -2311,6 +2339,16 @@ public class OpportunityUtil
 
 	}
 	
+	
+	/*
+	 *  Returns list of deals based on ownerId or trackid   and mintime, maxtime  
+	 * @param ownerId
+	 *            - Owner Id  
+	 *  @param trackId
+	 *            - Track Id       
+	 * @return JSONObject
+	 * 
+	 */
 	@SuppressWarnings("unchecked")
 	public static JSONObject getPipelineConversionData(Long ownerId, long minTime,
 			long maxTime,Long Track)
@@ -2446,10 +2484,14 @@ public class OpportunityUtil
 		return Track_conversion_User;
 	}
 	
+	/*
+	 * 
+	 * Returns List of Opportunities for pipeline conversion
+	 */
 	public static List<Opportunity> getConversionDeals(Long ownerId,
 			long minTime, long maxTime)
 			{
-		UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
+		
 		Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
 		Map<String, Object> conditionsMap2 = new HashMap<String, Object>();
 		

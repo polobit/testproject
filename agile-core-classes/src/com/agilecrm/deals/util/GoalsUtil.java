@@ -70,6 +70,7 @@ public static List<Long> getAllGoalsForTime(Long start_time,Long end_time){
 		List<Long> users=new ArrayList<Long>();
 		for(Goals goal:goals)
 		{
+			if(goal.amount!=null || goal.count!=null)
 			users.add(goal.domain_user_id);
 		}
 		return users;
