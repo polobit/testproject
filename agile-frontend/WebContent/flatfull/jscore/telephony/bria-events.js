@@ -370,13 +370,25 @@ function saveCallNoteBria(){
 	    	contact = responseJson;
 	    	contact_name = getContactName(contact);
 	    	if(callStatus == "Answered"){
+	    		
+	    		var data = {};
+				data.subject = noteSub;
+				data.number = number;
+				data.callType = "inbound";
+				data.status = "answered";
+				data.duration = duration;
+				data.contId = contact.id;
+				data.contact_name = contact_name;
+				showDynamicCallLogs(data);
+/*				
 				var el = $('#noteForm');
 			 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+contact_name+'</li>');
 			 	$("#noteForm #subject").val(noteSub);
 					$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(duration));
 					$("#noteForm").find("#description").focus();
 				$('#noteModal').modal('show');
-				agile_type_ahead("note_related_to", el, contacts_typeahead);
+				agile_type_ahead("note_related_to", el, contacts_typeahead);*/
+				
 	    	}else{
 				var note = {"subject" : noteSub, "message" : "", "contactid" : contact.id};
 				autosaveNoteByUser(note);
@@ -392,28 +404,32 @@ function saveCallNoteBria(){
 						return;
 					}
 
-
 					contact_name = getContactName(json);
-				
-
-					var el = $('#noteForm');
+					var data = {};
+					data.subject = noteSub;
+					data.number = number;
+					data.callType = "outbound-dial";
+					data.status = "answered";
+					data.duration = duration;
+					data.contId = cntId;
+					data.contact_name = contact_name;
+					showDynamicCallLogs(data);
+					
+/*					var el = $('#noteForm');
 				 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ cntId +'">'+contact_name+'</li>');
 				 	$("#noteForm #subject").val(noteSub);
 				 	$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(duration));
 						$("#noteForm").find("#description").focus();
 					$('#noteModal').modal('show');
-					agile_type_ahead("note_related_to", el, contacts_typeahead);
+					agile_type_ahead("note_related_to", el, contacts_typeahead);*/
+					
 					});
 				}else{
 					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId};
 					autosaveNoteByUser(note);
 				}
-			
 		}
 	}
-	
-
-	
 }
 
 /*

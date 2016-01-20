@@ -367,7 +367,7 @@ function showDynamicCallLogs(data)
 		$("input[name=callType][value="+data.callType+"]").attr('checked', 'checked');
 		
 		$("#globalModal").modal('show');
-		$('#phoneLogForm #subject').val(data.status);
+		$('#phoneLogForm #subject').val(data.subject);
 		var time = getTimeInArray(data.duration); //[hours,miiutes,second]
 		$('#phoneLogForm #sec').val(time.pop());
 		$('#phoneLogForm #min').val(time.pop());

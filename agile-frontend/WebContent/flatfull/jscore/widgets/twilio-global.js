@@ -1253,7 +1253,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 					if(callStatus == "completed") {
 						var data = {};
 						data.subject = noteSub;
-						data.number = To_Number;
+						data.number = phoneNumber;
 						data.callType = TWILIO_DIRECTION;
 						data.status = "answered";
 						data.duration = callRespJson.duration;
