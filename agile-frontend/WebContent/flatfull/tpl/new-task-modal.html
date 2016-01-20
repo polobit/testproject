@@ -112,11 +112,11 @@
                         <label class="control-label new-task-related-contacts-label col-sm-3">Related Contacts</label>
                         <div class="controls new-task-related-contacts-input col-sm-8">
                             <div>
-                                <div>
+                                <input type="text" id="task_related_to" class="typeahead typeahead_contacts form-control" placeholder="Related Contacts" data-provide="typeahead" data-mode="multiple" size="40" />
+                                <div style="padding-top:5px;">
                                     <ul name="contacts" class="contacts tags tagsinput p-n m-n"></ul>
                                 </div>
                                 <div class="clearfix"></div>
-                                <input type="text" id="task_related_to" class="typeahead typeahead_contacts form-control" placeholder="Related Contacts" data-provide="typeahead" data-mode="multiple" size="40" />
                             </div>
                         </div>
                     </div>
@@ -147,13 +147,13 @@
                         <label class="control-label new-task-related-deals-label col-sm-3">Related Deals</label>
                         <div class="controls new-task-related-deals-input col-sm-8" id="dealTypeAhead">
                             <div>
-                                <div>
-                                    <ul name="deal_ids" class="deals tagsinput deal_tags p-n m-n"></ul>
-                                </div>
-                                <div class="clearfix"></div>
                                 <input type="text" id="task_relates_to_deals" 
                                 placeholder="Related Deals" class="typeahead typeahead_deals form-control"
                                 data-provide="typeahead" data-mode="multiple" />
+                                <div style="padding-top:5px;">
+                                    <ul name="deal_ids" class="deals tagsinput deal_tags p-n m-n"></ul>
+                                </div>
+                                <div class="clearfix"></div>
                             </div>
                         </div>
                     </div>
