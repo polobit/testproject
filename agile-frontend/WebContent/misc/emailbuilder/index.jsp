@@ -99,498 +99,33 @@ AGILE_EB_OPTIONS['templateId'] = "";
                 <div id="elements">
                     <ul class="nav nav-list accordion-group">
                         <li class="rows" id="estRows">
-                            <!-- TITOLO E SUBTITOLO  -->
-                            <div class="lyrow dragitem">
-                                <a href="#close" class="remove label label-danger"><i class="glyphicon-trash glyphicon"></i></a>
-                                <span class="drag label label-default hide"><i class="glyphicon glyphicon-move"></i></span>
-                                <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
-                                <div class="preview">
-                                    <div class="icon title-block"></div>
-                                    <label>Title</label>
-                                </div>
-                                <div class="view">
-                                    <div class="row clearfix">
-                                        <table width="640" class="main" cellspacing="0" cellpadding="0" border="0" align="center" style="background-color:#FFFFFF;" data-type="title">
-                                            <tbody>
-                                                <tr>
-                                                    <td align="left" class="title" style="padding:5px 50px 5px 50px">
-                                                        <h1 style="font-family:Arial"> Enter your Title here! </h1>
-                                                        <h4>Your Subtitle</h4>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                       
 
-                            <!-- filetto orizzontale -->
-                            <div class="lyrow dragitem">
-                                <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
-                                <span class="drag label label-default hide"><i class="glyphicon glyphicon-move"></i></span>
-                                <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
-
-                                <div class="preview">
-                                    <div class="icon divider-block"></div>
-                                    <label>Divider</label>
-                                </div>
-                                <div class="view">
-                                    <div class="row clearfix">
-                                        <table class="main" width="640" style="border:0px; background-color: #FFFFFF" cellspacing="0" cellpadding="0" border="0" align="center" data-type='line'>
-                                            <tr>
-                                                <td class="divider-simple" style="padding: 15px 50px 0px 50px;">
-                                                    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-top: 1px solid #DADFE1;">
-                                                        <tr>
-                                                            <td width="100%" height="15px"></td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- default element text -->
-                            <div class="lyrow dragitem">
-                                <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
-
-                                <span class="drag label label-default hide"><i class="glyphicon glyphicon-move"></i></span>
-                                <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
-
-                                <div class="preview">
-                                    <div class="icon text-block"></div>
-                                    <label>Text</label>
-                                </div>
-                                <div class="view">
-                                    <div class="row clearfix">
-                                        <table width="640" class="main" cellspacing="0" cellpadding="0" border="0" style="background-color:#FFFFFF" align="center" data-type='text-block'>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;font-family:Arial;font-size:13px;color:#000000;line-height:22px">
-                                                        <div style="margin:0px 0px 10px 0px;line-height:22px" class="textFix">This is a Text Block! Click on this text to edit it. You can add content easily by dragging content blocks from the right sidebar. Drag this and other blocks around to re-order them.</div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- immagine -->
-                            <div class="lyrow dragitem">
-                                <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
-                                <span class="drag label label-default hide"><i class="glyphicon glyphicon-move"></i></span>
-                                <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
-
-                                <div class="preview">
-                                    <div class="icon image-block"></div>
-                                    <label>Image</label>
-                                </div>
-                                <div class="view">
-                                    <div class="row clearfix">
-                                        <table width="640" class="main" cellspacing="0" cellpadding="0" border="0" align="center" style="background-color:#FFFFFF;" data-type="image">
-                                            <tbody>
-                                                <tr>
-                                                    <td align="center" style="padding:15px 50px 15px 50px;" class="image">
-                                                        <img class=""  border="0"  align="one_image" style="display:block;max-width:540px" alt="" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" tabindex="0">
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- buttons -->
-                            <div class="lyrow dragitem">
-                                <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
-                                <span class="drag label label-default hide"><i class="glyphicon glyphicon-move"></i></span>
-                                <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
-
-                                <div class="preview">
-                                    <div class="icon button-block"></div>
-                                    <label>Button</label>
-                                </div>
-                                <div class="view">
-                                    <div class="row clearfix">
-
-                                        <table width="640" class="main" cellspacing="0" cellpadding="0" border="0" bgcolor="#FFFFFF"  align="center"  style="background-color:#FFFFFF;" data-type="button">
-                                            <tbody>
-                                                <tr>
-                                                    <td style="padding: 15px 50px 15px 50px;" class="buttons-full-width">
-                                                        <table width="" cellspacing="0" cellpadding="0" border="0" align="center" class="button">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td style="padding: 10px 10px 10px 10px;" class="button" >
-                                                                        <a style="background-color: #3498DB;color: #FFFFFF;font-family: Arial;font-size: 15px;line-height:21px;display: inline-block;border-radius: 6px;text-align: center;text-decoration: none;font-weight: bold;display: block;margin: 0px 0px; padding: 12px 20px;" class="button-1" href="#" data-default="1">Click me</a>                   <!--[if mso]>             </center>           </v:roundrect>         <![endif]-->
-                                                                    </td>
-
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-
-
+                            <!-- title and subtitle -->
+                            <%@ include file="blocks/title-subtitle.html" %>
+                            <!-- horizontal rule -->
+                            <%@ include file="blocks/horizontal-rule.html" %>
+                            <!-- text -->
+                            <%@ include file="blocks/text.html" %>
+                            <!-- image -->
+                            <%@ include file="blocks/image.html" %>
+                            <!-- button -->
+                            <%@ include file="blocks/button.html" %>
                             <!--Image + Text -->
-                            <div class="lyrow dragitem">
-                                <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
-                                <span class="drag label label-default hide"><i class="glyphicon glyphicon-move"></i></span>
-                                <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
-
-                                <div class="preview">
-                                    <div class="icon image-text-block"></div>
-                                    <label>Image/Text</label>
-                                </div>
-                                <div class="view">
-                                    <div class="row clearfix">
-                                        <table class="main" width="640" cellspacing="0" cellpadding="0" border="0" bgcolor="#FFFFFF" align="center" style="background-color:#FFFFFF;" data-type="imgtxt">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="image-text" align="left" style="padding: 15px 50px 10px 50px; font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;">
-                                                        <table class="image-in-table" width="190" align="left" style="padding:5px">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="gap" width="30"></td>
-                                                                    <td width="160">
-                                                                        <img  border="0"  align="left" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" style="display: block;margin: 0px;max-width: 540px;padding:10px;">
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                            </tbody>
-                                                        </table>
-                                                        <h2 style="line-height: 30px; text-decoration: none; font-weight: normal;font-family: Arial; font-weight: normal; font-size: 20px; color: #34495E; margin: 0px 0px 10px 0px;"> this is a title </h2>
-                                                        <div style="margin: 0px 0px 10px 0px; line-height: 22px;" class="textFix">
-                                                            Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- TESTO E IMMAGINE IN COLONNA TEXT ON RIGHT SIDE-->
-
-                            <div class="lyrow dragitem">
-                                <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
-                                <span class="drag label label-default hide"><i class="glyphicon glyphicon-move"></i></span>
-                                <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
-
-                                <div class="preview">
-                                    <div class="icon image-text-col-2"></div>
-                                    <label>Image/Text</label>
-                                </div>
-                                <div class="view">
-                                    <div class="row clearfix">
-                                        <table class="main" width="640" cellspacing="0" cellpadding="0" border="0" bgcolor="#FFFFFF" align="center" style="background-color:#FFFFFF;" data-type="imgtxtcol">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="image-text" align="left" style="padding: 15px 50px 10px 50px; font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;">
-                                                        <table class="image-in-table" width="190" align="left">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="gap" width="30"></td>
-                                                                    <td width="160">
-                                                                        <img  border="0"  align="left" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" style="display: block;margin: 0px;max-width: 340px">
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-
-                                                        <table width="190">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="text-block"  >
-                                                                        <div style="margin-left:10px; line-height: 22px;" class="textFix">
-                                                                            Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <!-- TESTO E IMMAGINE IN COLONNA TEXT ON LEFT SIDE-->
-                            <div class="lyrow dragitem">
-                                <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
-                                <span class="drag label label-default hide"><i class="glyphicon glyphicon-move"></i></span>
-                                <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
-
-                                <div class="preview">
-                                    <div class="icon image-text-col-1"></div>
-                                    <label>Image/Text</label>
-                                </div>
-                                <div class="view">
-                                    <div class="row clearfix">
-                                        <table class="main" width="640" cellspacing="0" cellpadding="0" border="0" bgcolor="#FFFFFF" align="center" style="background-color:#FFFFFF;" data-type="imgtxtcol">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="image-text" align="left" style="padding: 15px 50px 10px 50px; font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;">
-                                                        <table width="190" align="left">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="text-block"  >
-                                                                        <div style="line-height: 22px;" class="textFix">
-                                                                            Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                        <table class="image-in-table" width="190" align="right">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="gap" width="30"></td>
-                                                                    <td width="160">
-                                                                        <img  border="0"  align="left" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" style="display: block;margin: 0px;max-width: 340px">
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                            <%@ include file="blocks/image-text.html" %>
+                            <!-- TEXT AND IMAGE IN COLUMN TEXT ON RIGHT SIDE -->
+                            <%@ include file="blocks/image-text-right.html" %>
+                            <!-- TEXT AND IMAGE IN COLUMN TEXT ON LEFT SIDE -->
+                            <%@ include file="blocks/image-text-left.html" %>
                             <!-- IMG + TEXT 2 columns -->
-                            <div class="lyrow dragitem">
-                                <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
-                                <span class="drag label label-default hide"><i class="glyphicon glyphicon-move"></i></span>
-                                <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
+                            <%@ include file="blocks/column-2-image-text.html" %>
 
-                                <div class="preview">
-                                    <div class="icon image-text-incol-2"></div>
-                                    <label>Image/Text</label>
-                                </div>
-                                <div class="view">
-                                    <div class="row clearfix">
-                                        <table class="main" width="640" cellspacing="0" cellpadding="0" border="0" bgcolor="#FFFFFF" align="center" style="background-color:#FFFFFF;" data-type="imgtxtincol">
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <table class="main" align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" width="640">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="image-caption" style="padding: 0px 50px 0px 50px;">
-                                                                        <table class="image-caption-column" align="left" border="0" cellpadding="0" cellspacing="0" width="255">
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td height="15" width="100%"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="center" class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
-                                                                                        <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="255">
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td height="15" width="100%"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;" class="textFix"> Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </div>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td class="image-caption-bottom-gap" height="5" width="100%"></td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                        <table class="image-caption-column" align="right" border="0" cellpadding="0" cellspacing="0" width="255">
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td class="image-caption-top-gap" height="15" width="100%"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="center" class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
-                                                                                        <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="255">
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td height="15" width="100%"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;" class="textFix">  Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </div>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td height="5" width="100%"></td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                            <%@ include file="blocks/column-2-text.html" %>
 
                             <!-- IMG +TEXT 3 columns -->
-                            <div class="lyrow dragitem">
-                                <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
-                                <span class="drag label label-default hide"><i class="glyphicon glyphicon-move"></i></span>
-                                <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
-
-                                <div class="preview">
-                                    <div class="icon image-text-incol-3"></div>
-                                    <label>Image/Text</label>
-                                </div>
-                                <div class="view">
-                                    <div class="row clearfix">
-                                        <table class="main" width="640" cellspacing="0" cellpadding="0" border="0" bgcolor="#FFFFFF" align="center" style="background-color:#FFFFFF;" data-type="imgtxtincol">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="image-caption" style="padding: 0px 50px 0px 50px;">
-                                                        <table class="image-caption-container" align="left" border="0" cellpadding="0" cellspacing="0" width="350">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        <table class="image-caption-column" align="left" border="0" cellpadding="0" cellspacing="0" width="160">
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td height="15" width="100%"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="center" class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
-                                                                                               <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="160">
-                                                                                     </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td height="15" width="100%"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                                          <div style="margin: 0px 0px 10px 0px;        line-height: 22px;"  class="textFix">  Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </div>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td class="image-caption-bottom-gap" height="5" width="100%"></td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                        <table class="image-caption-column" align="right" border="0" cellpadding="0" cellspacing="0" width="160">
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td class="image-caption-top-gap" height="15" width="100%"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="center" class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
-                                                                                             <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="160">
-                                                                                     </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td height="15" width="100%"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;" class="textFix">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td class="image-caption-bottom-gap" height="5" width="100%"></td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                        <table class="image-caption-column" align="right" border="0" cellpadding="0" cellspacing="0" width="160">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="image-caption-top-gap" height="15" width="100%"></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td align="center" class="image-caption-content image" style="font-family: Arial; font-size: 13px; color: #000000;">
-                                                                        <img src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/placeholder_350x150.png" alt="" style="display: block;" height="154" align="2" border="0" width="160">
-                                                                      </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td height="15" width="100%"></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td class="image-caption-content text" style="font-family: Arial; font-size: 13px; color: #000000; line-height: 22px;" align="left">
-                                                                        <div style="margin: 0px 0px 10px 0px;        line-height: 22px;" class="textFix">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td height="5" width="100%"></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                            <%@ include file="blocks/column-3-image-text.html" %>
                             <!-- SOCIAL LINKS -->
-                            <div class="lyrow dragitem">
-                                <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
-                                <span class="drag label label-default hide"><i class="glyphicon glyphicon-move"></i></span>
-                                <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
+                            <%@ include file="blocks/social-links.html" %>
 
-                                <div class="preview">
-                                    <div class="icon social-block"></div>
-                                    <label>Social Links</label>
-                                </div>
-                                <div class="view">
-                                    <div class="row clearfix">
-                                        <table class="main" align="center" width="640" cellspacing="0" cellpadding="0" border="0" style="background-color: #FFFFFF" data-type="social-links">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="social" align="center" style="padding: 15px 50px 15px 50px;">
-                                                        <a href="#" style="border: none;" class="facebook">
-                                                            <img border="0" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/facebook.png" />
-
-                                                        </a>
-                                                        <a href="#" style="border: none;" class="twitter">
-
-                                                            <img border="0" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/twitter.png"/>
-
-
-                                                        </a>
-                                                        <a href="#" style="border: none;" class="linkedin">
-
-                                                            <img  border="0" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/linkedin.png"/>
-
-
-                                                        </a>
-                                                        <a href="#" style="border: none;" class="youtube">
-
-                                                            <img border=0 src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/youtube.png"/>
-
-
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
                         </li>
                     </ul>
 
@@ -961,6 +496,128 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
                     </div>
 
+                                        <div id="buttonstxt" style="max-width: 400px">
+                        <ul id="buttonstxtlist" class="list-group">
+                            <li class="hide" style="padding:10px; border:1px solid #DADFE1; border-radius: 4px">
+                                <span class="pull-right trashbutton"><i class="fa fa-trash"></i></span>
+
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Enter Button Title" name="btn_title"/>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1"><i class="fa fa-paperclip"></i></span>
+                                    <input type="text" class="form-control"  placeholder="Add link to button" aria-describedby="basic-addon1" name="btn_link"/>
+                                </div>
+                                <div class="input-group" style="margin-top:10px">
+                                    <label for="buttonStyleTxt">Button Style</label>
+                                    <div   class="color-circle buttonStyleTxt" data-original-title="" title="">
+                                        <i class="fa fa-font"></i>
+                                    </div>
+                                    <div class="styleboxtxt hide" style="width:400px">
+                                        <!--
+                                     <div class="input-group " style="margin-bottom: 5px">
+                                         <span class="input-group-addon"><i class="fa fa-font"></i></span>
+                                         <input type="text" class="form-control fontstyle" name="fontstyle" readonly style="cursor:pointer;background-color: #fff"/>
+                                     </div>-->
+                                        <label> Button Size</label>
+                                        <div class="input-group " style="margin-bottom: 5px">
+                                            <span class="input-group-addon button"  ><i class="fa fa-plus" style="  cursor : pointer;"></i></span>
+                                            <input type="text" class="form-control text-center"  placeholder="Button Size"  name="ButtonSize"/>
+                                            <span class="input-group-addon button"  ><i class="fa fa-minus" style="  cursor : pointer;"></i></span>
+                                        </div>
+                                        <label> Font Size</label>
+                                        <div class="input-group " style="margin-bottom: 5px">
+
+                                            <span class="input-group-addon font"  ><i class="fa fa-plus" style="  cursor : pointer;"></i></span>
+                                            <input type="text" class="form-control text-center"  placeholder="Font Size"  name="FontSize"/>
+                                            <span class="input-group-addon font"  ><i class="fa fa-minus" style="  cursor : pointer;"></i></span>
+                                        </div>
+                                        <div class="input-group background" style="margin-bottom: 5px">
+                                            <span class="input-group-addon " style="width: 50px;">Background Color</span>
+                                            <span class="input-group-addon pickerTxt" data-color="bg"></span>
+                                        </div>
+
+                                        <div class="input-group fontcolor" style="margin-bottom: 5px" >
+                                            <span class="input-group-addon" style="width: 50px;">Font Color</span>
+                                            <span class="input-group-addon pickerTxt" data-color="font"></span>
+                                            
+                                            <script type="text/javascript">
+                                                $('.pickerTxt').colpick({
+                                                    layout: 'hex',
+                                                    // colorScheme: 'dark',
+                                                    onChange: function (hsb, hex, rgb, el, bySetColor) {
+                                                        if (!bySetColor)
+                                                            $(el).css('background-color', '#' + hex);
+                                                        var color = $(el).data('color');
+                                                        var indexBnt = getIndex($(el).parent().parent().parent().parent().parent(), $('#buttonstxtlist li')) - 1;
+                                                        if (color === 'bg') {
+                                                            $($('#' + $('#path').val()).find('table tbody tr td a:eq(' + indexBnt + ')')).css('background-color', '#' + hex);
+                                                            $(el).parent().parent().parent().parent().find('div.color-circle').css('background-color', '#' + hex);
+                                                        } else {
+                                                            $($('#' + $('#path').val()).find('table tbody tr td a:eq(' + indexBnt + ')')).css('color', '#' + hex);
+                                                            $(el).parent().parent().parent().parent().find('div.color-circle').css('color', '#' + hex);
+                                                        }
+
+                                                    },
+                                                    onSubmit: function (hsb, hex, rgb, el) {
+                                                        $(el).css('background-color', '#' + hex);
+                                                        $(el).colpickHide();
+                                                        var color = $(el).data('color');
+                                                        var indexBnt = getIndex($(el).parent().parent().parent().parent().parent(), $('#buttonstxtlist li')) - 1;
+                                                        if (color === 'bg') {
+                                                            $($('#' + $('#path').val()).find('table tbody tr td a:eq(' + indexBnt + ')')).css('background-color', '#' + hex);
+                                                        } else {
+                                                            $($('#' + $('#path').val()).find('table tbody tr td a:eq(' + indexBnt + ')')).css('color', '#' + hex);
+                                                        }
+
+
+                                                    }
+
+                                                }).keyup(function () {
+                                                    $(this).colpickSetColor(this.value);
+                                                });
+                                            </script>
+
+
+                                        </div>
+                                        <div class="text text-right">
+                                            <a href="#" class="btn btn-xs btn-default confirm">Ok</a>
+                                        </div>
+                                    </div>
+                                    <div class="fontselector" class="hide" style="min-width: 200px">
+                                        <ul class="list-group" style="overflow: auto ;display: block;max-height: 200px" >
+                                            <li class="list-group-item" style="font-family: arial">Arial</li>
+                                            <li class="list-group-item" style="font-family: verdana">Verdana</li>
+                                            <li class="list-group-item" style="font-family: helvetica">Helvetica</li>
+                                            <li class="list-group-item" style="font-family: times">Times</li>
+                                            <li class="list-group-item" style="font-family: georgia">Georgia</li>
+                                            <li class="list-group-item" style="font-family: tahoma">Tahoma</li>
+                                            <li class="list-group-item" style="font-family: pt sans">PT Sans</li>
+                                            <li class="list-group-item" style="font-family: Source Sans Pro">Source Sans Pro</li>
+                                            <li class="list-group-item" style="font-family: PT Serif">PT Serif</li>
+                                            <li class="list-group-item" style="font-family: Open Sans">Open Sans</li>
+                                            <li class="list-group-item" style="font-family: Josefin Slab">Josefin Slab</li>
+                                            <li class="list-group-item" style="font-family: Lato">Lato</li>
+                                            <li class="list-group-item" style="font-family: Arvo">Arvo</li>
+                                            <li class="list-group-item" style="font-family: Vollkorn">Vollkorn</li>
+                                            <li class="list-group-item" style="font-family: Abril Fatface">Abril Fatface</li>
+                                            <li class="list-group-item" style="font-family: Playfair Display">Playfair Display</li>
+                                            <li class="list-group-item" style="font-family: Yeseva One">Yeseva One</li>
+                                            <li class="list-group-item" style="font-family: Poiret One">Poiret One</li>
+                                            <li class="list-group-item" style="font-family: Comfortaa">Comfortaa</li>
+                                            <li class="list-group-item" style="font-family: Marck Script">Marck Script</li>
+                                            <li class="list-group-item" style="font-family: Pacifico">Pacifico</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+
+
+                            </li>
+                        </ul>
+
+                    </div>
+
                     <div class="text text-right" style="margin-top:5px">
                         <a href="#" id="saveElement" class="btn btn-info">done</a>
                     </div>
@@ -1041,9 +698,9 @@ AGILE_EB_OPTIONS['templateId'] = "";
                     </div>
                     <div class="modal-body" align="center">
                         <div class="btn-group  previewActions">
-                            <a class="btn btn-default btn-sm active" href="#">smartphone</a>
-                            <a class="btn btn-default btn-sm " href="#">tablet</a>
-                            <a class="btn btn-default btn-sm " href="#">ipad</a>
+                            <a class="btn btn-default btn-sm active" href="#" data-val="iphone">smartphone</a>
+                            <a class="btn btn-default btn-sm " href="#" data-val="smalltablet">tablet</a>
+                            <a class="btn btn-default btn-sm " href="#" data-val="ipad">ipad</a>
                         </div>
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <iframe id="previewFrame"  class="iphone"></iframe>

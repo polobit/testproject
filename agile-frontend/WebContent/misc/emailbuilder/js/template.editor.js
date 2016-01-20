@@ -185,6 +185,7 @@ function handleHeader() {
         $('form#font-settings').hide();
         $('form#editor').hide();
         $('#buttons').hide();
+        $('#buttonstxt').hide();
         $('#imageproperties').hide();
         $('#social-links').hide();
         $('form#editorlite').hide();
@@ -227,6 +228,7 @@ function handleFooter() {
         $('form#font-settings').hide();
         $('form#editor').hide();
         $('#buttons').hide();
+        $('#buttonstxt').hide();
         $('#imageproperties').hide();
         $('#social-links').hide();
         $('form#editorlite').hide();
@@ -277,6 +279,7 @@ function handleObjects() {
                 $('form#font-settings').hide();
                 $('form#editor').hide();
                 $('#buttons').hide();
+                $('#buttonstxt').hide();
                 $('#imageproperties').hide();
                 $('#social-links').hide();
                 $('form#editorlite').hide();
@@ -521,6 +524,7 @@ function handleObjects() {
                         $('form#font-settings').show();
                         $('form#editor').show();
                         $('form#font-settings').show();
+                        handleButtonsTxt(self);
                         break;
                     case 'imgtxt':
                         //    $('#'+$('#path').val()).unbind('click');
@@ -740,6 +744,60 @@ function handleButtons(obj) {
     });
 }
 
+function handleButtonsTxt(obj) {
+    var buttons = obj.find('table tbody tr td a');
+    $('#buttonstxt').show();
+    var btn_settings = $('#buttonstxtlist li');
+    var ul = $('#buttonstxtlist');
+    btn_settings.each(function () {
+        if (!$(this).hasClass('hide')) {
+            $(this).detach();
+        }
+    });
+
+    buttons.each(function () {
+        var clone = ul.find('li:first').clone(true);
+        // clone.next('div.form-group > input[value="btn_title"]').val("wsu");
+
+        var btn = $(this);
+
+        // if (btn.data('default') !== '1') {
+
+        clone.find('div.form-group > input[name="btn_title"]').val(btn.html())
+                .change(function () {
+                    btn.html($(this).val());
+                });
+        //}
+
+        clone.find('div.input-group > input[name="btn_link"]').val(btn.attr('href'))
+                .change(function () {
+                    btn.attr('href', addhttp($(this).val()));
+                    btn.unbind('click');
+                    btn.bind('click', function (e) {
+                        e.preventDefault()
+                    });
+                });
+
+        clone.find('div.buttonStyleTxt').popover({
+            title: 'Button Style',
+            html: true,
+            content: clone.find('div.styleboxtxt').html()
+        }).css('backgroundColor', btn.css('backgroundColor')).css('color', btn.css('fontColor'));
+
+        clone.find('.trashbutton').css('cursor', 'pointer').click(function () {
+            if (true) {
+                $(this).parent('li').slideUp(500);
+                $(this).parent('li').detach();
+                btn.parent('td').detach();
+            } else {
+                alert('You can\'t remove this element');
+            }
+        });
+
+        clone.appendTo(ul).removeClass('hide');
+
+    });
+}
 function storeValues(obj, fontcolor, text, fontsize, fontfamily, background) {
     // tinyMCE.activeEditor.setContent(text);
     var theeditor = tinyMCE.get('html5editor');
@@ -1112,6 +1170,74 @@ $(document).ready(function () {
 
     });
 
+$('div.buttonStyleTxt').on('shown.bs.popover', function () {
+        // carico le propieta dell'oggetto dal selettore.
+        var self = $(this);
+
+        var index = getIndex($(this).parent().parent(), $('#buttonstxtlist li')) - 1;
+
+        var bg = $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('background-color');
+        var font_color = $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('color');
+        var font_size = $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('font-size');
+        var btn_size = $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('width');
+
+        $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div.background span.picker').css('backgroundColor', bg);
+        $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div.fontcolor span.picker').css('backgroundColor', font_color);
+        $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div input[name="FontSize"]').val(font_size);
+        $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div input[name="ButtonSize"]').val(btn_size);
+
+        // font size
+
+        $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div input[name="FontSize"]').change(function (e) {
+            var fontSize = parseInt($(this).val());
+            $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('font-size', fontSize);
+        });
+
+
+        $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div span.font i.fa-plus').click(function (e) {
+            var fontSize = parseInt($(this).parent().next('input').val());
+            fontSize = fontSize + 1 + "px";
+            $(this).parent().next('input').val(fontSize);
+            $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('font-size', fontSize);
+        });
+
+        $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div span.font i.fa-minus').click(function (e) {
+            var fontSize = parseInt($(this).parent().prev('input').val());
+            fontSize = fontSize - 1 + "px";
+            $(this).parent().prev('input').val(fontSize);
+            $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('font-size', fontSize);
+        });
+
+        // button size
+
+        $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div input[name="ButtonSize"]').change(function (e) {
+            var btnsize = parseInt($(this).val());
+            $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('width', btnsize);
+        });
+
+
+        $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div span.button i.fa-plus').click(function (e) {
+            var btnsize = parseInt($(this).parent().next('input').val());
+            btnsize = btnsize + 1 + "px";
+            $(this).parent().next('input').val(btnsize);
+            $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('width', btnsize);
+        });
+
+        $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div span.button i.fa-minus').click(function (e) {
+            var btnsize = parseInt($(this).parent().prev('input').val());
+            btnsize = btnsize - 1 + "px";
+            $(this).parent().prev('input').val(btnsize);
+            $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('width', btnsize);
+        });
+
+
+
+        $(this).parent().find('div div.text a').click(function () {
+            self.popover('hide');
+        });
+
+    });
+
 
     // social links
 
@@ -1283,7 +1409,7 @@ $(document).ready(function () {
     $("#previewModal").on("show.bs.modal", function () {
         $('div.previewActions a').click(function (e) {
             e.preventDefault();
-            var t = $(this).text();
+            var t = $(this).data("val");
             $('div.previewActions a').removeClass('active');
             $(this).addClass('active');
 
@@ -1325,6 +1451,7 @@ $(document).ready(function () {
         $('#editorlite').hide();
         $('#social-links').hide();
         $('#buttons').hide();
+        $('#buttonstxt').hide();
         $('#path').val('tosave table:first');
 
         $('#bgcolor').css('background-color', $('#tosave table').css('backgroundColor'));
