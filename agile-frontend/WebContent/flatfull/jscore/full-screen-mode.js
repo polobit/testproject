@@ -3,11 +3,31 @@ $(function(){
   $("body").on("click", ".enable-element-full-screen", function(e){
 
       e.preventDefault();
+      document.addEventListener("fullscreenchange",Detection);
+      document.addEventListener("webkitfullscreenchange", Detection);
+      document.addEventListener("mozfullscreenchange", Detection);
+      document.addEventListener("MSFullscreenChange", Detection);
+
       screenfull.toggle();
     //$(this).closest("#content")[0] 
   });
   
 });
+
+ function Detection()
+ {
+      var isFullScreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || document.msFullscreenElement;
+          if(isFullScreen)
+          {
+              $("#toggle-fullscreen-icon").attr('class','icon-size-actual');
+          }
+          else
+          {
+              $("#toggle-fullscreen-icon").attr('class','icon-size-fullscreen');
+          }
+              
+
+}
 //cicking the fullscreen button for the contact page
 $("body").on("click",".fullscreenelement",function(elem){
 
@@ -140,10 +160,12 @@ $("body").on("click",".fullscreenelement",function(elem){
       if (this.isFullscreen) {
         
         this.exit();
-      } else {
+      } 
+      else
+       {
         $("#content").css("height",100+'vh');
-        this.request(elem);
-      }
+       this.request(elem);
+       }
       
     },
     raw: fn
