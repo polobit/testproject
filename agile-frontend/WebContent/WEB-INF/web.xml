@@ -157,6 +157,15 @@
 		<servlet-name>registration checker</servlet-name>
 		<url-pattern>backend/register-check</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>share campaign</servlet-name>
+		<servlet-class>com.agilecrm.CampaignShareServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>share campaign</servlet-name>
+		<url-pattern>/share</url-pattern>
+	</servlet-mapping>
 
 
 	<!-- Rest Easy -->
@@ -477,7 +486,8 @@
 		<url-pattern>/upload-google-document.jsp</url-pattern>
 		<url-pattern>/XeroServlet</url-pattern>
 		<url-pattern>/shopify</url-pattern>
-		<url-pattern>/auth/*</url-pattern>		
+		<url-pattern>/auth/*</url-pattern>
+			
 	</filter-mapping>
 
 	<filter-mapping>

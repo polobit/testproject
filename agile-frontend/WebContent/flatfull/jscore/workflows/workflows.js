@@ -504,5 +504,45 @@ function populate_workflows_list(id, el, callback)
      fillSelect(id, '/core/api/workflows', 'workflow', callback , optionsTemplate, undefined, el);
 }
 
+function shareCampaign()
+{
+    getTemplate('share-campaign-modal', {}, undefined, function(template_ui){
+                if(!template_ui)
+                    return;
+                var share_campaign_modal = $(template_ui);
+                share_campaign_modal.modal('show');
+                share_campaign_modal.on('shown.bs.modal', function(){
+                    window.history.back();
+                });
+    }, null);
+        
+}
+function createJSON() {
+        var shareCampaign_json = {};
+        // Getting the emailId entered by the user to share with
+        var value = $("#emailId").val();
+        if(!isValidForm('#verify-email'))
+            return;
+        var json = serializeForm("verify-email");
+        if(!json)
+            return;
+        shareCampaign_json.receiverEmail = value;
+        shareCampaign_json.campaignId = App_Workflows.workflow_model.id;
+
+        $.ajax({ url : "/core/api/workflows/share?type=Workflow&id="+App_Workflows.workflow_model.id+"&recEmail="+shareCampaign_json.receiverEmail,
+         type : "GET",
+         data: shareCampaign_json,
+         dataType: "json",
+         contentType : "application/json",
+         success : function()
+            {
+                $("#shareCampaign").modal('hide');
+                //Backbone.history.navigate("workflow/5946158883012608", { trigger : true });
+            },error : function(){
+                $("#shareCampaign").modal('hide');
+            }
+        });
+}
 
 function initializeWorkflowsListeners() {}
+

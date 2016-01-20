@@ -5,6 +5,7 @@
  * @module Campaigns
  * 
  */
+
 var WorkflowsRouter = Backbone.Router
 		.extend({
 			routes : {
@@ -28,6 +29,8 @@ var WorkflowsRouter = Backbone.Router
 			// form.
 			"trigger-add/:id" : "triggerNewUI",
 
+			"sharedCampaign" : "shareWorkflow",
+
 			"trigger-add" : "triggerNewUI", "trigger/:id" : "triggerEdit",
 
 			/* Subscribers */
@@ -46,7 +49,6 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			workflows : function()
 			{
-
 
 				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
 					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
@@ -141,46 +143,46 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			workflowEdit : function(id, workflow)
 			{
+				/*var view = new Base_Model_View({ url : '/core/api/workflows/'+id,
+				saveCallback : function()
+					{
+						alert('saveCallback');
+					},
+				 postRenderCallback : function(el)
+			{
+				
+				alert('postRenderCallback');
+			} });*/
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+				/* Set the designer JSON. This will be deserialized */
+				
+				try{
+					this.workflow_model = this.workflow_list_view.collection.get(id);
+				}catch(e){}
 
 				/* Set the designer JSON. This will be deserialized */
 				if (workflow)
 					this.workflow_model = workflow;
-				else
-					this.workflow_model = this.workflow_list_view.collection.get(id);
+				
+				if(!this.workflow_model){
 
-				// Download new one if undefined
-				if (this.workflow_model === undefined)
-				{
-					console.log("Downloading workflow.");
+					// if not in the collection, download new one.
+					var new_workflow_model = Backbone.Model.extend({ url : '/core/api/workflows/' + id });
 
-					// get count value from first attribute count
-					var total_count = this.workflow_list_view.collection.at(0).attributes.count;
+					var model = new new_workflow_model();
+					model.id = id;
 
-					if (this.workflow_list_view.collection.length !== total_count)
+					model.fetch({ success : function(data)
 					{
-						// if not in the collection, download new one.
-						var new_workflow_model = Backbone.Model.extend({ url : '/core/api/workflows/' + id });
-
-						var model = new new_workflow_model();
-						model.id = id;
-
-						model.fetch({ success : function(data)
+						// Call workflowEdit again if not Empty
+						if (!$.isEmptyObject(data.toJSON()))
 						{
-							// Call workflowEdit again if not Empty
-							if (!$.isEmptyObject(data.toJSON()))
-							{
-								App_Workflows.workflowEdit(id, model);
-								return;
-							}
-						} });
-					}
+							App_Workflows.workflowEdit(id, model);
+							return;
+						}
+					} });
 				}
+				
 
 				if (this.workflow_model === undefined)
 					return;
@@ -214,7 +216,7 @@ var WorkflowsRouter = Backbone.Router
 					}
 
 				});
-
+				
 				$("#content").html(workflowModal.render().el);
 
 			},
@@ -1327,6 +1329,55 @@ var WorkflowsRouter = Backbone.Router
 				if(callback)
 					callback(); 		
 
+			},
+			shareWorkflow : function(workflow){
+				if(!readCookie("sender_campaign_id"))
+					return;
+				else
+				{
+					var id = readCookie("sender_campaign_id");
+					var senderDomain = readCookie("sender_dom");
+				}		
+				
+				/* Set the designer JSON. This will be deserialized */
+				if (workflow)
+					this.workflow_model = workflow;
+				
+				if(!this.workflow_model){
+					// if not in the collection, download new one.
+					var new_workflow_model = Backbone.Model.extend({ url : '/core/api/workflows/shareCampAPI?id='+id+'&senderDomain='+senderDomain});
+					var model = new new_workflow_model();
+					model.id = id;
+					model.fetch({ success : function(data)
+					{
+						// Call workflowEdit again if not Empty
+						if (!$.isEmptyObject(data.toJSON()))
+						{
+							App_Workflows.shareWorkflow(id, model);
+							return;
+						}
+					} });
+				}
+				
+				if (this.workflow_model === undefined)
+					return;
+				
+				this.workflow_json = this.workflow_model.get("rules");
+				this.is_disabled = this.workflow_model.get("is_disabled");
+				var that = this;
+
+				var workflowModal = new Workflow_Model_Events({
+					url : 'core/api/workflow', 
+					template : 'workflow-add',
+					isNew : 'true',
+					data :  {"is_disabled" : ""+that.is_disabled},
+					postRenderCallback : function(el){
+						// Init SendVerify Email
+						send_verify_email(el);
+					}
+				});
+				
+				$("#content").html(workflowModal.render().el);
 			},
 });
 

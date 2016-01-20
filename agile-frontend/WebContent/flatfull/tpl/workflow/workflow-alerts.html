@@ -106,4 +106,37 @@
 </div>
 </script>
 
-
+<script id="share-campaign-modal-template" type="text/html">
+<div class="modal  fade" id="shareCampaign">
+<div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">x</button>
+			<h3 class="modal-title"><i class="icon-edit"></i> Share with</h3>
+		</div>
+		<div class="modal-body">
+				<form id="verify-email">
+					<fieldset>            
+                		<div class="control-group form-group">
+	                		<div class="row">
+	                			<div class="col-md-5">
+		                    		<label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
+		                    		<div class="controls">
+		                        		<span><input name="email" id="emailId" class="email form-control required" type="text" placeholder="Enter the email address" autofocus></span>
+		                    		</div>
+								</div>
+								<span id="alert-msg"></span>
+	                    	</div>
+						</div>
+					</fieldset>
+				</form>
+		</div>
+		<div class="modal-footer">
+			<span class="m-r-xs"></span>
+ 			<button type="button" class="btn btn-danger" data-dismiss="modal" id="verify-ignore" style="display:none;">Ignore</button>
+			<a href="#" class="btn btn-sm btn-primary" id="verify-email" onclick="createJSON()">Ok</a>
+		</div>
+	</div>
+</div>
+</div>
+</script>
