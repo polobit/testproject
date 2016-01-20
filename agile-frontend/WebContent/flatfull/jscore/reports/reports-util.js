@@ -469,8 +469,8 @@ user_reports :function(callReportUrl){
 				 });
 });				
 }); 
-				 if($('.converionsPipeline').children().length==0)
-				 	$('.converionsPipeline').parents('.row').hide();
+				 if($('.converionsPipeline').children().length!=0)
+				 	$('.converionsPipeline').parents('.row').show();
 
 				
 			});
