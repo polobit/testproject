@@ -1914,6 +1914,13 @@ color:#727272;
 #task_ending_time{
   width: 100% !important;
 }
+#update-event-time-1{
+  width: 100% !important;
+}
+#update-event-time-2{
+  width: 100% !important;
+}
+
 }
 
 @media all and (min-width: 768px) {
