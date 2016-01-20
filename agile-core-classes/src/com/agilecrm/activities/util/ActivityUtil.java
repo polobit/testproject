@@ -115,12 +115,11 @@ public class ActivityUtil
      *            is added. null if nothing.
      */
     
-    public static Activity mergeContactActivity(ActivityType activity_type,Contact contact,String old_data, String new_data, String changed_field){
+    public static Activity mergeContactActivity(ActivityType activity_type,Contact contact,int length){
     	String contact_name = "";
     	Activity activity = new Activity();
     	if (contact != null)
     	{
-
     	    ContactField firstname = contact.getContactFieldByName("first_name");
     	    ContactField lastname = contact.getContactFieldByName("last_name");
     	    if (firstname != null)
@@ -140,7 +139,7 @@ public class ActivityUtil
     	}
     	activity.activity_type = activity_type;
     	activity.entity_type = EntityType.CONTACT;
-    	
+    	activity.custom1 = String.valueOf(length);
     	activity.save();
     	return activity;
     }
