@@ -30,11 +30,12 @@
                     <label class="control-label col-sm-3">Related To<span class="field_req">*</span></label>
                     <div class="controls col-sm-8">
                         <div>
-                            <div class="pull-left">
-                                <ul id="note_relatedto_tag" name="contact_ids" class="contacts tags tagsinput p-none"></ul>
+                            <input type="text" placeholder="Contact Name" id="note_related_to" class="typeahead typeahead_contacts form-control" data-provide="typeahead" data-mode="multiple" size="40" />
+                            
+                            <div style="padding-top:5px;">
+                                <ul id="note_relatedto_tag" name="contact_ids" class="contacts tags tagsinput p-none m-n"></ul>
                             </div>
                             <div class="clearfix"></div>
-                            <input type="text" placeholder="Contact Name" id="note_related_to" class="typeahead typeahead_contacts form-control" data-provide="typeahead" data-mode="multiple" size="40" />
                             <span id="note_relatedto_error" style="color:#d9534f;display:none;">Please relate the note to a contact.</span>
                         </div>
                     </div>
