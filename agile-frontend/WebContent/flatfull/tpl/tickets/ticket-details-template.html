@@ -269,7 +269,7 @@
 
           <!-- Start of ticket notes -->
           <div class="wrapper bg-light p-t-sm p-b-sm pos-rlt b-b">
-            <div class="font-thin text-md m-t-none m-b-none inline-block" style="width: 56%;">
+            <div class="font-thin text-md m-t-none m-b-none" style="margin-right: 240px;">
 
                <i class="fa {{#if_equals is_favorite "true"}}fa-star text-warning {{else}}fa-star-o text-light{{/if_equals}} toggle-favorite"></i>  
 
@@ -373,7 +373,7 @@
       
         {{#if canned_responses}}
         <div class="btn-group dropdown m-l-xs pull-right">
-          <button class="btn btn-sm btn-default" data-toggle="dropdown"><i class="fa fa-list-alt"></i></button>
+          <a class="link-color text-sm" data-toggle="dropdown" aria-expanded="false">Macros <span class="caret"></span></a>
           <ul id="workflows_list" class="dropdown-menu">
             {{#each canned_responses}}
             <li id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>
@@ -394,14 +394,14 @@
                       </ul> 
                     {{/if_equals}}
 
-                     <textarea id="reply_textarea" name="html_text" class="form-control required {{#if_equals reply_type "comment"}} bg-lightyellow{{/if_equals}}" style="min-height:60px;max-height:400px;width:100%;text-indent: 0px; overflow-y: hidden; resize: none;padding: 8px;">{{#if_equals reply_type "forward"}} {{get_palin_text_from_html notes}} {{/if_equals}}</textarea>
+                     <textarea id="reply_textarea" name="html_text" class="form-control required {{#if_equals reply_type "comment"}} bg-lightyellow{{/if_equals}}" style="min-height: 49px;height: 60px;max-height:400px;width:100%;text-indent: 0px; resize: none;">{{#if_equals reply_type "forward"}} {{get_palin_text_from_html notes}} {{/if_equals}}</textarea>
             
                   </div>
                   
                   <div class="m-t-xs clearfix m-b-sm">
 
                    <span class="error-msg text-sm pull-right" style="color: #d9534f;"></span>
-                    {{#if label_matched_canned_responses}}<span onclick="$('.matched-canned-responses-list').toggle();" class="text-info text-sm cursor-pointer border-highlight-light pull-right">Show matched canned Responses</span>{{/if}}
+                    {{#if label_matched_canned_responses}}<span onclick="$('.matched-canned-responses-list').toggle();" class="text-info text-sm cursor-pointer border-highlight-light pull-right">Show matched Macros</span>{{/if}}
 
                     {{#if_equals reply_type "reply"}}
                     <div class="btn-group dropdown p-none">

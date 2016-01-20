@@ -249,11 +249,9 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		if($('.ticket-timeline-container').is(':visible'))
 		{
 			//Rendering ticket notes
-			$(".toggle-activities-notes").show();
 			App_Ticket_Module.renderNotesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
 		}
 		else{
-			$(".toggle-activities-notes").hide();
 			Ticket_Timeline.render_individual_ticket_timeline();
 			tooltip_text = 'Show comments';
 		}

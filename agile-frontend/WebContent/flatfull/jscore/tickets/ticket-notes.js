@@ -134,7 +134,8 @@ var Tickets_Notes = {
 		head.js('/flatfull/lib/jquery.textarea-expander.js', function()
 		{	
 			try{
-				$('textarea#reply_textarea', $container).TextAreaExpander();
+				$('textarea#reply_textarea', $container).TextAreaExpander({'padding' : '8px 8px 1px 8px' });
+				$('textarea#reply_textarea', $container).css({'height':'60px'});
 			}catch(e){}
 			
 		});

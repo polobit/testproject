@@ -33,6 +33,28 @@
 
 (function($) {
 
+	$.fn.TextAreaExpander = function(styleObj) {
+
+		styleObj = (!styleObj) ? {} : styleObj;
+		styleObj['height'] = 'auto';
+		styleObj['overflow-y'] = 'hidden';
+
+		function ResizeTextarea(e) {
+		    $(e).css(styleObj).height(e.scrollHeight);
+		}
+
+		this.each(function () {
+		  ResizeTextarea(this);
+		}).on('input', function () {
+		  ResizeTextarea(this);
+		});
+
+		return this;
+	}
+
+	if(true)
+		return;
+
 	// jQuery plugin definition
 	$.fn.TextAreaExpander = function(minHeight, maxHeight) {
 
