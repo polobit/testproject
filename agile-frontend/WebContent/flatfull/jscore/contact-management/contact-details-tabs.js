@@ -23,7 +23,7 @@ function fill_company_related_contacts(companyId, htmlId, context_el)
 	$('#' + htmlId).html(LOADING_HTML);
 
 	var companyContactsView = new Base_Collection_View({ url : 'core/api/contacts/related/' + companyId, templateKey : 'company-contacts',
-		individual_tag_name : 'tr', cursor : true, page_size : 25, sort_collection : false, scroll_target : "#infinite-scroller-company-details", postRenderCallback : function(el)
+		individual_tag_name : 'tr', cursor : true, page_size : 25, sort_collection : false, scroll_target : (context_el ? $("#infinite-scroller-company-details", context_el) : "#infinite-scroller-company-details"), postRenderCallback : function(el)
 		{
 			// var cel = App_Contacts.contactsListView.el;
 			// var collection = App_Contacts.contactsListView.collection;
