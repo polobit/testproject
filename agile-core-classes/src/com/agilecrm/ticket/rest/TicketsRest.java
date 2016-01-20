@@ -934,6 +934,54 @@ public class TicketsRest
 					.build());
 		}
 	}
+
+	/**
+	 * Forward ticket
+	 * 
+	 * @param notes
+	 * @return
+	 */
+	@GET
+	@Path("/remove-all-tickets")
+	public void clearAllTickets()
+	{
+		try
+		{
+			List<Key<Tickets>> keys = Tickets.ticketsDao.listAllKeys();
+
+			for (Key<Tickets> key : keys)
+				TicketsUtil.deleteTicket(key.getId());
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
+	 * Forward ticket
+	 * 
+	 * @param notes
+	 * @return
+	 */
+	@GET
+	@Path("/remove-all-text-documents")
+	public void clearTextDocuments()
+	{
+		try
+		{
+			new TicketsDocument().removeAllDocuments();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
 	/**
 	 * 
 	 * @return

@@ -307,6 +307,8 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
 
   tbody#ticket-single-row-model-list tr td{
     vertical-align: middle;
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
 
   .bg-new{

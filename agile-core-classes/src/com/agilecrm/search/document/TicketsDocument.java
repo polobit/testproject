@@ -17,6 +17,8 @@ import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.util.StringUtils2;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
+import com.google.appengine.api.search.GetRequest;
+import com.google.appengine.api.search.GetResponse;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.IndexSpec;
 import com.google.appengine.api.search.Query;
@@ -332,5 +334,38 @@ public class TicketsDocument implements BuilderInterface
 	public List getResults(List<Long> doc_ids)
 	{
 		return TicketsUtil.getTicketsBulk(doc_ids);
+	}
+
+	public void removeAllDocuments()
+	{
+		try
+		{
+			// looping because getRange by default returns up to 100 documents
+			// at a time
+			while (true)
+			{
+				List<String> docIds = new ArrayList<String>();
+
+				// Return a set of doc_ids.
+				GetRequest request = GetRequest.newBuilder().setReturningIdsOnly(true).build();
+				GetResponse<Document> response = getIndex().getRange(request);
+
+				if (response.getResults().isEmpty())
+				{
+					break;
+				}
+
+				for (Document doc : response)
+				{
+					docIds.add(doc.getId());
+				}
+
+				getIndex().delete(docIds);
+			}
+		}
+		catch (RuntimeException e)
+		{
+			ExceptionUtils.getFullStackTrace(e);
+		}
 	}
 }

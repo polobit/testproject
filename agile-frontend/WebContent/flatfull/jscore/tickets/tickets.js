@@ -449,6 +449,9 @@ var Tickets = {
 				App_Ticket_Module.ticketsCollection.options.templateKey = Tickets.isSingleRowView() ? 'ticket-single-row' : 'ticket';
 
 				App_Ticket_Module.ticketsCollection.render(true);
+
+				if(view_type == 'SINGLELINE')
+					$('ul.choose-columns').closest('div').addClass('open');
 			});
 		});
 
