@@ -439,7 +439,11 @@
         	    			<i class="icon-folder-open-alt text-muted p-r-xs" title="Email Opened"></i>
         				{{/if_equals}}
 					{{/if}}
+				{{#if subject}}
 					{{subject}}
+				{{else}}
+					no subject
+				{{/if}}
 				</div>
 			</div>
             <div class="date">{{epochToTaskDate date_secs}}</div>
