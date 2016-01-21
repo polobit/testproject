@@ -89,6 +89,9 @@ public class LoginServlet extends HttpServlet {
 			}
 			String type = request.getParameter("type");
 
+			// To store the CampaignId and sender domain in Cookie
+			setCookieForShareCampaign(request, response);
+
 			if (type != null) {
 				if (type.equalsIgnoreCase("oauth")) {
 					System.out.println("oauth form type");
@@ -100,8 +103,7 @@ public class LoginServlet extends HttpServlet {
 
 				// Updates account stats
 				updateEntityStats();
-				// To store the CampaignId and sender domain in Cookie
-				setCookieForShareCampaign(request, response);
+
 				return;
 			}
 		} catch (Exception e) {
@@ -149,10 +151,8 @@ public class LoginServlet extends HttpServlet {
 			Cookie senderDom = new Cookie("sender_dom", senderDomain);
 			response.addCookie(senderDom);
 
-			/*
-			 * request.getSession().removeAttribute(RETURN_PATH_SESSION_HASH);
-			 * response.sendRedirect("/#sharedCampaign");
-			 */
+			// request.getSession().removeAttribute(RETURN_PATH_SESSION_HASH);
+			response.sendRedirect("/#sharedCampaign/");
 
 		} catch (Exception e) {
 			System.err
@@ -286,6 +286,7 @@ public class LoginServlet extends HttpServlet {
 
 		hash = (String) request.getSession().getAttribute(
 				RETURN_PATH_SESSION_HASH);
+
 		if (!StringUtils.isEmpty(hash)) {
 			request.getSession().removeAttribute(RETURN_PATH_SESSION_HASH);
 			response.sendRedirect("/" + hash);
