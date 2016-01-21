@@ -15,7 +15,8 @@ if(redirectTo  != null)
 {
 	if(!StringUtils.isEmpty(domain))
 	{
-		response.sendRedirect("https://" + domain + ".agilecrm.com/" + redirectTo);
+		// Added for testing in beta
+		response.sendRedirect("https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/" + redirectTo);
 		return;
 	}
 }
