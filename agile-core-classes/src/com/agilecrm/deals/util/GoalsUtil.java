@@ -75,5 +75,19 @@ public class GoalsUtil
 		return user_goals;
 	}
 	
+public static List<Long> getAllGoalsForTime(Long start_time,Long end_time){
+		
+		Map<String, Object> conditionsMap = new HashMap<String, Object>();
+		conditionsMap.put("start_time >= ",start_time);
+		conditionsMap.put("start_time < ",end_time);
+		List<Goals> goals= Goals.dao.listByProperty(conditionsMap);
+		List<Long> users=new ArrayList<Long>();
+		for(Goals goal:goals)
+		{
+			if(goal.amount!=null || goal.count!=null)
+			users.add(goal.domain_user_id);
+		}
+		return users;
+	}
 }
 

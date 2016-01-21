@@ -10,7 +10,7 @@
 function setupCharts(callback)
 {
 
-	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', LIB_PATH + 'lib/flot/highcharts-exporting.js', LIB_PATH + 'lib/flot/funnel.js',LIB_PATH + 'lib/flot/highcharts-grid.js',
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/highcharts-more.js',LIB_PATH + 'lib/flot/solid-gauge.js', LIB_PATH + 'lib/flot/highcharts-exporting.js', LIB_PATH + 'lib/flot/funnel.js',LIB_PATH + 'lib/flot/highcharts-grid.js',
 	LIB_PATH + 'lib/flot/no-data-to-display.js', function()
 	{
 
@@ -1967,3 +1967,221 @@ if(selector == 'lossreasonpie-chart-users'){
 						}
 					}
 	}
+
+
+function showGuage(selector, data,goal_data,name,show_loading)
+{
+	// Show loading image if required
+	if(typeof show_loading === 'undefined')
+	{
+		// Old calls were not showing loading image..
+	}
+	else
+		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+	var chart;
+	var series=[];
+	if(data>goal_data)
+		series[0]=goal_data;
+		else
+	series[0]=data;
+		setupCharts(function()
+		{
+			
+			chart = new Highcharts.Chart({
+		      
+						chart: {
+            type: 'solidgauge',
+		            renderTo: selector,
+		            marginBottom:50
+
+        },
+
+        title: null,
+
+        pane: {
+            center: ['50%', '85%'],
+            size: '100%',
+            startAngle: -90,
+            endAngle: 90,
+            background: {
+                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc'
+            }
+        },
+
+        tooltip: {
+        	formatter : function(){
+           if(selector=='amount_goals_chart')
+
+           	return  '<div>' + 
+                              
+                                '<div class="p-n">Revenue: <b>'+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(data)+'</b></div>' +
+                                '</div>'+
+                                '<div class="p-n">Goals set: <b>'+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(goal_data)+'</b></div>';
+                  else
+
+                			return		'<div>' + 
+                              
+                                '<div class="p-n">Won Deals: <b>'+getNumberWithCommasForCharts(data)+'</b></div>' +
+                                '</div>'+
+                                '<div class="p-n">Goals set: <b>'+getNumberWithCommasForCharts(goal_data)+'</b></div>';
+                     	},
+                     	useHTML : true,
+        },
+
+        // the value axis
+        yAxis: {
+ 
+            lineWidth: 0,
+            minorTickInterval: null,
+            tickPixelInterval: null,
+            tickInterval : goal_data,
+            tickWidth: 0,
+            maxColor : "#000000",
+            title: {
+                y: -150,
+                text : name 
+
+            },
+            labels: {
+                y: 16
+            },
+                min: 0,
+            max: goal_data,
+
+             gridLineWidth: 0
+        },
+
+        plotOptions: {
+            series: {
+                //color: '#FF0000',
+               // cursor: 'pointer',
+                     dataLabels: {
+                			enabled : true,
+                			useHTML : true,
+                			borderWidth : 0,
+                			y:-60,
+                			formatter : function()
+                			{
+                				var s=(data/goal_data)*100;
+                				if(s>100)
+                					s=100;
+                				var element='<div class="text-center m-b-lg" style="font-size:20px">'+Math.round(s)+'%</div>'
+                				if(selector=='amount_goals_chart')
+                						element=element+ '<div class="text-center"><span style="font-size:25px;color:' +
+                    	 'black' + '">'+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(data)+'</span></div>';
+                					else
+                				element=element+ '<div class="text-center"><span style="font-size:25px;color:' +
+                     		'black' + '">'+getNumberWithCommasForCharts(data)+'</span></div>';
+                     		return element;
+                			}
+            },
+        },
+        },
+        exporting :{
+        	enabled : false,
+        },
+
+             series: [{
+            name: 'Goal',
+            data: series,
+       
+
+
+        }]
+    });
+		    });
+}
+
+function showFunnelForConversion(selector, name, show_loading,v)
+{
+	
+	setupCharts(function()
+	{
+
+			
+			var funnel_data = [];
+			
+
+			
+					$.each(v,function(k1,v1){
+					var each_data = [];
+					each_data.push(k1, v1);
+					funnel_data.push(each_data);
+				});
+				
+			
+			console.log(funnel_data);
+			
+			chart = new Highcharts.Chart({
+		        chart: {
+		            type: 'funnel',
+		            marginRight: 100,
+		            renderTo: selector
+		        },
+		        title: {
+		            text: name,
+		            x: -50
+		        },
+		        plotOptions: {
+		            series: {
+		                dataLabels: {
+		                    enabled: true,
+		                    format: '<b>{point.name}</b> ({point.y:,.0f})',
+		                    color: '#ccc',
+		                    softConnector: true
+		                },
+		                neckWidth: '30%',
+		                neckHeight: '25%',
+		                
+		                //-- Other available options
+		                // height: pixels or percent
+		                // width: pixels or percent
+		                borderWidth: 0
+		            }
+		        },
+		        tooltip : {
+		        	 formatter:  function(){
+		        	 		var percent=0;
+		        	 		if(this.point.x==0)
+		        	 				percent=100;
+		        	 		if(this.point.x!=0 && funnel_data[this.point.x-1][1]!=0)
+		        	 			percent=(funnel_data[this.point.x][1]/funnel_data[this.point.x-1][1])*100;
+						return  '<div>' + 
+                              	'<div class="p-n">'+this.point.name+'</div>'+
+                                '<div class="p-n">'+this.series.name+': '+getNumberWithCommasForCharts(this.point.y)+'</div>' +
+                                
+                                '</div>'+
+                                '<div class="p-n">'+Math.round(percent)+'%</div>';
+                               
+                        
+						},
+							  shared: true,
+								  useHTML: true,
+
+		        	 //headerFormat: '<span style="font-size: 12px">{point.key}</span><br/>'
+		        	},
+		        legend: {
+		            enabled: false
+		        },
+		        exporting :{
+		        	enabled:false
+		        },
+		        series: [{
+		            name: 'Deals',
+		            data: funnel_data
+		        }],
+		        noData: {
+									 style: {
+									   
+										fontSize: '14px',
+										fontWeight : 'normal',
+										color : '#98A6AD'
+											 },
+						},
+		    });
+			
+		});
+}
