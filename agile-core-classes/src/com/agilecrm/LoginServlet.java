@@ -128,6 +128,8 @@ public class LoginServlet extends HttpServlet {
 					CampaignShareServlet.SENDER_DOMAIN);
 			boolean shared = (boolean) request.getSession().getAttribute(
 					CampaignShareServlet.IS_SHARE_CAMPAIGN);
+			System.out.println("senderDomain" + senderDomain);
+			System.out.println("campaignId" + campaignId);
 
 			if (!shared)
 				return;
@@ -135,11 +137,9 @@ public class LoginServlet extends HttpServlet {
 			Cookie senderCampaignId = new Cookie("sender_campaign_id",
 					campaignId);
 			response.addCookie(senderCampaignId);
-			System.out.println("senderCampaignId" + senderCampaignId);
 
 			Cookie senderDom = new Cookie("sender_dom", senderDomain);
 			response.addCookie(senderDom);
-			System.out.println("senderDom" + senderDom);
 
 			request.getSession().removeAttribute(RETURN_PATH_SESSION_HASH);
 			response.sendRedirect("/#sharedCampaign");
