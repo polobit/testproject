@@ -470,7 +470,7 @@ user_reports :function(callReportUrl){
 });				
 }); 
 				 if($('.converionsPipeline').children().length!=0)
-				 	$('.converionsPipeline').parents('.row').show();
+				 	$('.converionsPipeline').parents('.row').find('.bg-primary').show();
 
 				
 			});
