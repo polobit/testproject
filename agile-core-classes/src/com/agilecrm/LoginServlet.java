@@ -126,9 +126,11 @@ public class LoginServlet extends HttpServlet {
 					CampaignShareServlet.CAMP_ID);
 			String senderDomain = (String) request.getSession().getAttribute(
 					CampaignShareServlet.SENDER_DOMAIN);
-			String shareFlag = (String) request.getSession().getAttribute(
-					CampaignShareServlet.IS_SHARE_CAMPAIGN);
-			boolean shared = shareFlag.equals("true");
+			/*
+			 * String shareFlag = (String) request.getSession().getAttribute(
+			 * CampaignShareServlet.IS_SHARE_CAMPAIGN); boolean shared =
+			 * shareFlag.equals("true");
+			 */
 			/*
 			 * Boolean shared = Boolean.valueOf((boolean) request.getSession()
 			 * .getAttribute(CampaignShareServlet.IS_SHARE_CAMPAIGN));
