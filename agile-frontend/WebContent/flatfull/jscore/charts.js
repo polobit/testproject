@@ -2154,7 +2154,7 @@ function showFunnelForConversion(selector, name, show_loading,v)
                                 '<div class="p-n">'+this.series.name+': '+getNumberWithCommasForCharts(this.point.y)+'</div>' +
                                 
                                 '</div>'+
-                                '<div class="p-n">'+percent+'%</div>';
+                                '<div class="p-n">'+Math.round(percent)+'%</div>';
                                
                         
 						},
