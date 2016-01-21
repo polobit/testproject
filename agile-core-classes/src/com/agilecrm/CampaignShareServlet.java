@@ -32,7 +32,8 @@ public class CampaignShareServlet extends HttpServlet {
 				SENDER_DOMAIN,
 				NamespaceUtil.getNamespaceFromURL(req.getRequestURL()
 						.toString()));
-
+		System.out.println("CAMP_ID" + CAMP_ID);
+		System.out.println("SENDER_DOMAIN" + SENDER_DOMAIN);
 		// To make LoginServlet know about Share servlet
 		req.getSession().setAttribute(IS_SHARE_CAMPAIGN, true);
 
