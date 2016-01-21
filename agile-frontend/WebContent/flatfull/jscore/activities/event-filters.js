@@ -42,10 +42,13 @@ function createRequestUrlBasedOnFilter()
 	json_obj.cal_type = calendars_val;
 	json_obj.owner_ids = calendars_user_val;
 	json_obj.domain_user_ids = calendars_domain_user_ids;
+	var result ={};
+	result[CURRENT_AGILE_USER.id] = json_obj;
+
 	/*
 	 * if (event_list_type) json_obj.event_type = event_list_type;
 	 */
-	_agile_set_prefs('event-lhs-filters', JSON.stringify(json_obj));
+	_agile_set_prefs('event-lhs-filters', JSON.stringify(result));
 
 }
 
@@ -54,6 +57,8 @@ function createRequestUrlBasedOnFilter()
 function buildCalendarLhsFilters()
 {
 	var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
+	eventFilters = eventFilters[CURRENT_AGILE_USER.id];
+
 	if (eventFilters)
 	{
 		var type_of_cal = eventFilters.cal_type;
@@ -118,6 +123,8 @@ function loadFullCalednarOrListView()
 	if (_agile_get_prefs("agile_calendar_view"))
 	{
 		var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
+		eventFilters = eventFilters[CURRENT_AGILE_USER.id];
+
 		if (eventFilters)
 		{
 			if (eventFilters.event_type == "future")
@@ -205,6 +212,8 @@ function put_thirdparty_calendar_links()
 				putGoogleCalendarLink(true);
 			}else if(preference.calendar_type == 'OFFICE365'){
 				var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
+				eventFilters = eventFilters[CURRENT_AGILE_USER.id];
+
 				var filtterList = eventFilters.cal_type;
 				var display = false;
 				if(filtterList.indexOf("office") >= 0){
@@ -412,6 +421,8 @@ function removeFullCalendarEvents(domain_user_id)
 function getOwnerIdsFromCookie(uncheckedagile)
 {
 	var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
+	eventFilters = eventFilters[CURRENT_AGILE_USER.id];
+
 	var agile_event_owners = '';
 	if (eventFilters)
 	{
@@ -499,6 +510,7 @@ function renderAddedEventToFullCalenarBasedOnCookie(data)
 		var renderEvent = false;
 		var current_user_checked = false;
 		var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
+		eventFilters = eventFilters[CURRENT_AGILE_USER.id];
 
 		if (eventFilters)
 		{

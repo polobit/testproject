@@ -832,6 +832,8 @@ var ContactsRouter = Backbone.Router.extend({
 
               if(tempContact && contactId == tempContact.id){
               	 var email;
+              	 var properties = App_Contacts.contactDetailView.model.attributes.properties;
+              	 
 				 $.each(properties,function(id, obj){
 				    if(obj.name == "email"){
 					   email = obj.value;

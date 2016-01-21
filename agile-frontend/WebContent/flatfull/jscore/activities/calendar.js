@@ -21,6 +21,8 @@ function load_events_from_google(callback)
 {
 
 	var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
+	eventFilters = eventFilters[CURRENT_AGILE_USER.id];
+
 	var agile_event = false;
 	if (eventFilters)
 	{
@@ -206,6 +208,8 @@ function showCalendar(users)
 									events : function(start, end, callback)
 								{
 									var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
+									eventFilters = eventFilters[CURRENT_AGILE_USER.id];
+									
 									var agile_event_owners = '';
 									if (eventFilters)
 									{
