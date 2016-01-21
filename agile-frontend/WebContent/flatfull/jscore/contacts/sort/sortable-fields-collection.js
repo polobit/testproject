@@ -1,6 +1,6 @@
 /**
 * This is just like an abstract class, doesn't
-contact all implementation; it is responsibility of child views to extend
+contain all implementation; it is responsibility of child views to extend
 */
 (function(contact_sort_configuration, $, undefined) {
 	
