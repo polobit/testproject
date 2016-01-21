@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -156,6 +157,7 @@ public class LoginServlet extends HttpServlet {
 					.println("Exception occured in Login Servlet setCookieForShareCampaign "
 							+ e.getMessage());
 			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 
