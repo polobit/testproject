@@ -109,7 +109,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 
 					chainFilters(htmlContent, undefined, undefined, true);
 
-					$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+					$(htmlContent).find("i.filter-contacts-web-rule-multiple-remove").css("display", "inline-block");
 					$(that).parents("tbody").append(htmlContent);
 
 				}, null);
