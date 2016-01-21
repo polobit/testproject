@@ -25,8 +25,7 @@ public class CampaignShareServlet extends HttpServlet {
 
 	public void service(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		String campaign_Id = req.getParameter("campaignId");
-
+		String campaign_Id = req.getParameter("cid");
 		req.getSession().setAttribute(CAMP_ID, campaign_Id);
 		req.getSession().setAttribute(
 				SENDER_DOMAIN,
