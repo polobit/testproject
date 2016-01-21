@@ -128,7 +128,7 @@ public class LoginServlet extends HttpServlet {
 					CampaignShareServlet.SENDER_DOMAIN);
 			String shareFlag = (String) request.getSession().getAttribute(
 					CampaignShareServlet.IS_SHARE_CAMPAIGN);
-			boolean shared = true;
+			boolean shared = shareFlag.equals("true");
 			/*
 			 * Boolean shared = Boolean.valueOf((boolean) request.getSession()
 			 * .getAttribute(CampaignShareServlet.IS_SHARE_CAMPAIGN));
@@ -136,7 +136,7 @@ public class LoginServlet extends HttpServlet {
 			System.out.println("senderDomain" + senderDomain);
 			System.out.println("campaignId" + campaignId);
 
-			if (!shared)
+			if (campaignId == null)
 				return;
 
 			Cookie senderCampaignId = new Cookie("sender_campaign_id",
