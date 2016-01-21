@@ -182,14 +182,6 @@ function handleHeader() {
 
         self.parent("div.row").addClass('active');
 
-        $('form#font-settings').hide();
-        $('form#editor').hide();
-        $('#buttons').hide();
-        $('#buttonstxt').hide();
-        $('#imageproperties').hide();
-        $('#social-links').hide();
-        $('form#editorlite').hide();
-
         var fontcolor = $('#' + $('#path').val()).find('tr td.header h1').css('fontColor');
         var text = $('#' + $('#path').val()).find('tr td.header h1').html();
         var fontsize = $('#' + $('#path').val()).find('tr td.header h1').css('font-size');
@@ -198,9 +190,7 @@ function handleHeader() {
 
 
         $('#selector').val('tr td.header h1');
-        $('form#font-settings').show();
-        $('form#editorlite').show();
-        $('form#font-settings').show();
+
         storeValues(self, fontcolor, text, fontsize, fontfamily, background);
         showSettings();
 
@@ -224,14 +214,6 @@ function handleFooter() {
         $('#pright').val(self.find('tr td').css('padding-right'));
 
         self.parent("div.row").addClass('active');
-
-        $('form#font-settings').hide();
-        $('form#editor').hide();
-        $('#buttons').hide();
-        $('#buttonstxt').hide();
-        $('#imageproperties').hide();
-        $('#social-links').hide();
-        $('form#editorlite').hide();
 
         var fontcolor = $('#' + $('#path').val()).find('tr td').css('fontColor');
         var text = $('#' + $('#path').val()).find('tr td').html();
@@ -276,13 +258,6 @@ function handleObjects() {
                 $('#pbottom').val(self.find('td').css('padding-bottom'));
                 $('#pleft').val(self.find('td').css('padding-left'));
                 $('#pright').val(self.find('td').css('padding-right'));
-                $('form#font-settings').hide();
-                $('form#editor').hide();
-                $('#buttons').hide();
-                $('#buttonstxt').hide();
-                $('#imageproperties').hide();
-                $('#social-links').hide();
-                $('form#editorlite').hide();
 
                 $('#common-settings').show();
                 switch (t) {
@@ -329,23 +304,6 @@ function handleObjects() {
 
                         });
 
-
-                         $('form#font-settings').show();
-                         $('form#editorlite').show();
-                         $('form#font-settings').show();
-                        /*
-                         var fontcolor = $('#' + $('#path').val()).find('h1').css('fontColor');
-                         var text = $('#' + $('#path').val()).find('h1').html();
-                         var fontsize = $('#' + $('#path').val()).find('h1').css('font-size');
-                         var fontfamily = $('#' + $('#path').val()).find('h1').css('font-family');
-                         var background = $('#' + $('#path').val()).css('background-color');
-
-                         $('#selector').val('h1');
-
-                         $('form#font-settings').show();
-                         $('form#editorlite').show();
-                         $('form#font-settings').show();
-                         storeValues(self, fontcolor, text, fontsize, fontfamily, background);*/
                         break;
 
                     case 'text-block' :
@@ -356,8 +314,6 @@ function handleObjects() {
                         var fontfamily = $('#' + $('#path').val()).find('div').css('font-family');
                         var background = $('#' + $('#path').val()).css('backgroundColor');
                         $('#selector').val('div.textFix');
-                        $('form#font-settings').show();
-                        $('form#editor').show();
                         storeValues(self, fontcolor, text, fontsize, fontfamily, background);
                         break;
 
@@ -383,6 +339,7 @@ function handleObjects() {
                             $('#image-link').val(img.parent('a').attr('href'));
                         }
 
+                        hideAllSettings();
                         $('#imageproperties').show();
 
                         img.filedrop({
@@ -418,6 +375,7 @@ function handleObjects() {
                             $('#image-link').val(img.parent('a').attr('href'));
                         }
 
+                        hideAllSettings("#editor");
                         $('#imageproperties').show();
 
 
@@ -446,60 +404,11 @@ function handleObjects() {
 
 
                         })
-                        $('form#font-settings').show();
-                        $('form#editor').show();
-                        $('form#font-settings').show();
                         break;
                     case 'imgtxtincol':
 
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         var textElement = self.find('td.text div.textFix');
-
-                        var imgs = self.find('td.image img');
-
-                        imgs.each(function (i) {
-                            var img = $(this);
-                            var imageid = img.attr('id');
-
-                            if (typeof imageid === typeof undefined || imageid === false) {
-                                img.attr('id', guid());
-
-                            }
-                            img.unbind('click');
-                            img.bind('click', function () {
-                                $('.selected-item').removeClass('selected-item').css('border', 'none');
-                                imageid = $(this).attr('id');
-                                $('#imageid').val(imageid);
-                                $(this).css('border', '1px dotted red');
-                                $(this).addClass('selected-item');
-
-                                $('#image-url').val($(this).attr('src'));
-                                $('#image-url').data('id', imageid );
-
-                                $('#image-w').val($(this).css('width'));
-                                $('#image-h').val($(this).css('height'));
-                                $('#image-link').val("");
-                                if(img.parent('a').length) {
-                                    $('#image-link').val(img.parent('a').attr('href'));
-                                }
-
-
-                            });
-
-
-                            $('#imageproperties').show();
-
-                            img.filedrop({
-                                callback: function (fileEncryptedData) {
-                                    img.hide();
-                                    img.attr('src', fileEncryptedData);
-                                    img.show('puff', {}, 500);
-                                }
-                            });
-
-
-                        });
-
 
                         textElement.each(function (index) {
                             $(this).unbind('click');
@@ -515,15 +424,19 @@ function handleObjects() {
                                 var fontfamily = $(this).css('font-family');
                                 var background = $('#' + $('#path').val()).css('background-color');
                                 storeValues($('#' + $('#path').val()), fontcolor, text, fontsize, fontfamily, background);
-
-                            })
-
+                            });
                         });
 
+                        var imgs = self.find('td.imageInColumn img');
 
-                        $('form#font-settings').show();
-                        $('form#editor').show();
-                        $('form#font-settings').show();
+                        imgs.each(function (i) {
+                            var img = $(this);
+                            var imageid = img.attr('id');
+                            if (typeof imageid === typeof undefined || imageid === false) {
+                                img.attr('id', guid());
+                            }
+                        });
+
                         handleButtonsTxt(self);
                         break;
                     case 'imgtxt':
@@ -555,6 +468,7 @@ function handleObjects() {
                             $('#image-link').val(img.parent('a').attr('href'));
                         }
 
+                        hideAllSettings("#editor");
                         $('#imageproperties').show();
 
 
@@ -601,20 +515,19 @@ function handleObjects() {
 
 
                         })
-                        $('form#font-settings').show();
-                        $('form#editor').show();
-                        $('form#font-settings').show();
 
                         break;
 
                     case 'line':
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        hideAllSettings();
                         break;
 
                     case 'button':
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        hideAllSettings();
                         handleButtons(self);
                         break;
 
@@ -658,6 +571,7 @@ function handleObjects() {
 
                         $('input.social-input [name="youtube"]').val(self.find('a.youtube').attr('href'));
 
+                        hideAllSettings();
                         $('#social-links').show();
 
 
@@ -745,7 +659,7 @@ function handleButtons(obj) {
 }
 
 function handleButtonsTxt(obj) {
-    var buttons = obj.find('table tbody tr td a');
+    var buttons = obj.find('table tbody tr td a.textbuttonsimg');
     $('#buttonstxt').show();
     var btn_settings = $('#buttonstxtlist li');
     var ul = $('#buttonstxtlist');
@@ -799,19 +713,13 @@ function handleButtonsTxt(obj) {
     });
 }
 function storeValues(obj, fontcolor, text, fontsize, fontfamily, background) {
+
     // tinyMCE.activeEditor.setContent(text);
     var theeditor = tinyMCE.get('html5editor');
     theeditor.setContent(text);
 
-
-    //CON TINYMCE
-    //var editorlite = tinyMCE.get('html5editorlite');
-    //editorlite.setContent(text);
-
-    //SENZA
-    var editorlite = $('#html5editorlite').val(text);
-
-
+    hideAllSettings();
+    $('#editor').show();
 
     $('#bgcolor').css('backgroundColor', background);
     obj.data('fontcolor', fontcolor);
@@ -951,6 +859,18 @@ function getIndex(itm, list) {
     return i >= list.length ? -1 : i;
 }
 
+function hideAllSettings(exceptThisElement) {
+    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links'];
+    if(typeof exceptThisElement != "undefined") {
+        var index = settingsHolderSelectors.indexOf(exceptThisElement);
+        if (index >= 0) {
+          settingsHolderSelectors.splice( index, 1 );
+        }
+    }
+    $(settingsHolderSelectors.join(',')).hide();
+}
+
+
 $(document).ready(function () {
 
 
@@ -966,19 +886,9 @@ $(document).ready(function () {
         }    
     });
 
-
-    //cambio del titolo
-    $('#html5editorlite').on('keyup', function (e) {
-        $('#' + $('#path').val()).find($('#selector').val()).html( $('#html5editorlite').val() );
-    }),
-            
-    $('#html5editorlite').on('change', function (e) {
-        $('#' + $('#path').val()).find($('#selector').val()).html( $('#html5editorlite').val() );
-    });
-
-    //allineamento
-    $('#allineamento').on('change', function (e) {
-        $('#' + $('#path').val()).find($('#selector').val()).css( 'text-align', $('#allineamento').val() );
+    $(document.getElementById('previewFrame').contentWindow.document.body).on('click', 'a', function(e) {
+        // e.preventDefault();  
+        $(this).attr("target","_blank");
     });
                  /*
     var featherEditor = new Aviary.Feather({
@@ -998,6 +908,7 @@ $(document).ready(function () {
     });                            */
 
     $('#change-image').on('click', function(e){
+        e.preventDefault();
          var id= $('#image-url').data('id');
          $('#'+id).attr('src', $('#image-url').val()) ;
          $('#'+id).attr('width', $('#image-w').val()) ;
@@ -1062,7 +973,8 @@ $(document).ready(function () {
     });
 
 
-    $('#add-button').click(function () {
+    $('#add-button').click(function (e) {
+        e.preventDefault();
         //$('#buttonslist').first();
 
         var obj = $('#' + $('#path').val());
@@ -1176,10 +1088,10 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
         var index = getIndex($(this).parent().parent(), $('#buttonstxtlist li')) - 1;
 
-        var bg = $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('background-color');
-        var font_color = $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('color');
-        var font_size = $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('font-size');
-        var btn_size = $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('width');
+        var bg = $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('background-color');
+        var font_color = $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('color');
+        var font_size = $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('font-size');
+        var btn_size = $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('width');
 
         $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div.background span.picker').css('backgroundColor', bg);
         $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div.fontcolor span.picker').css('backgroundColor', font_color);
@@ -1190,7 +1102,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
         $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div input[name="FontSize"]').change(function (e) {
             var fontSize = parseInt($(this).val());
-            $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('font-size', fontSize);
+            $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('font-size', fontSize);
         });
 
 
@@ -1198,21 +1110,21 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
             var fontSize = parseInt($(this).parent().next('input').val());
             fontSize = fontSize + 1 + "px";
             $(this).parent().next('input').val(fontSize);
-            $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('font-size', fontSize);
+            $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('font-size', fontSize);
         });
 
         $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div span.font i.fa-minus').click(function (e) {
             var fontSize = parseInt($(this).parent().prev('input').val());
             fontSize = fontSize - 1 + "px";
             $(this).parent().prev('input').val(fontSize);
-            $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('font-size', fontSize);
+            $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('font-size', fontSize);
         });
 
         // button size
 
         $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div input[name="ButtonSize"]').change(function (e) {
             var btnsize = parseInt($(this).val());
-            $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('width', btnsize);
+            $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('width', btnsize);
         });
 
 
@@ -1220,14 +1132,14 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
             var btnsize = parseInt($(this).parent().next('input').val());
             btnsize = btnsize + 1 + "px";
             $(this).parent().next('input').val(btnsize);
-            $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('width', btnsize);
+            $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('width', btnsize);
         });
 
         $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div span.button i.fa-minus').click(function (e) {
             var btnsize = parseInt($(this).parent().prev('input').val());
             btnsize = btnsize - 1 + "px";
             $(this).parent().prev('input').val(btnsize);
-            $('#' + $('#path').val()).find('table tbody tr td a:eq(' + index + ')').css('width', btnsize);
+            $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('width', btnsize);
         });
 
 
@@ -1372,6 +1284,10 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
 
     $("#save").click(function () {
+
+        $('div.row').removeClass('active');
+        $('.selected-item').removeClass('selected-item').css('border', 'none');
+
         downloadLayoutSrc();
 
         var save = $('#tosave');
@@ -1430,8 +1346,13 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
     $("#sourcepreview").click(function (i) {
         i.preventDefault();
+        $('div.row').removeClass('active');
+        $('.selected-item').removeClass('selected-item').css('border', 'none');
+        showElements();
+
         downloadLayoutSrc();
         var templateContent = $("#templateHtmlContent").val();
+
         document.getElementById('previewFrame').contentWindow.document.body.innerHTML = templateContent.replace("{body}",$('#download').val());
 
         // $.post(path + '/save.php', {html: $('#download').val(), id: $('#tosave').data('id')}, function (data) {
@@ -1448,7 +1369,6 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         $('#font-settings').hide();
         $('#editor').hide();
         $('#editimage').hide();
-        $('#editorlite').hide();
         $('#social-links').hide();
         $('#buttons').hide();
         $('#buttonstxt').hide();
@@ -1466,6 +1386,27 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
     $(".imgLink").click(function(e){
         e.preventDefault();
+    });
+
+    $('#tosave').on('click', 'td.imageInColumn img', function(e) {
+        $('.selected-item').removeClass('selected-item').css('border', 'none');
+        var img = $(this);
+        var imageid = $(this).attr('id');
+        $('#imageid').val(imageid);
+        $(this).css('border', '1px dotted red');
+        $(this).addClass('selected-item');
+
+        $('#image-url').val($(this).attr('src'));
+        $('#image-url').data('id', imageid );
+
+        $('#image-w').val($(this).css('width'));
+        $('#image-h').val($(this).css('height'));
+        $('#image-link').val("");
+        if(img.parent('a').length) {
+            $('#image-link').val(img.parent('a').attr('href'));
+        }
+        hideAllSettings();
+        $('#imageproperties').show();
     });
     
     /*
@@ -1485,6 +1426,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     /*  setInterval(function () {
      handleSaveLayout()
      }, timerSave)*/
+    hideAllSettings();
 
 
 });
@@ -1532,24 +1474,19 @@ function initializeEditor() {
         force_p_newlines: true,
         forced_root_block: '',
         selector: "#html5editor",
-        plugins: [
-            "advlist autolink lists link charmap anchor",
-            "visualblocks code ",
-            "insertdatetime  table contextmenu paste textcolor colorpicker",
-            "paste"
-        ],
+        plugins: "advlist autolink lists link charmap code paste textcolor colorpicker paste",
         paste_as_text: true,
        // paste_word_valid_elements: "h1,h2,h3,b,strong,i,em",
-        toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | link | bullist numlist | merge_fields | calltoaction",
+        toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | link | bullist numlist | merge_fields",
         setup: function (editor) {
             editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
 
-            editor.addButton('calltoaction', {
-                text : 'Add Button',
-                onclick : function() {
-                    tinyMCE.execCommand('mceInsertContent',false, '<table><tbody><tr><td>&nbsp;</td><td class="button"><span style="font-size: 15px; line-height: 21px; display: block; border-radius: 6px; text-align: center; text-decoration: none; font-weight: bold; margin: 0px; padding: 12px 20px; color: #ffffff; background-color: #3498db;"><a href="http://example.com" class="button-1"><span style="color: #ffffff; background-color: #3498db;">Call to Action</span></a></span></td><td>&nbsp;</td></tr></tbody></table>'); 
-                }
-            });
+            // editor.addButton('calltoaction', {
+            //     text : 'Add Button',
+            //     onclick : function() {
+            //         tinyMCE.execCommand('mceInsertContent',false, '<table><tbody><tr><td>&nbsp;</td><td class="button"><span style="font-size: 15px; line-height: 21px; display: block; border-radius: 6px; text-align: center; text-decoration: none; font-weight: bold; margin: 0px; padding: 12px 20px; color: #ffffff; background-color: #3498db;"><a href="http://example.com" class="button-1"><span style="color: #ffffff; background-color: #3498db;">Call to Action</span></a></span></td><td>&nbsp;</td></tr></tbody></table>'); 
+            //     }
+            // });
 
             editor.on('keyup', function (e) {
                 $('#' + $('#path').val()).find($('#selector').val()).html(tinyMCE.get('html5editor').getContent());

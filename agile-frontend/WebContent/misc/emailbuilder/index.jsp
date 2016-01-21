@@ -1,6 +1,7 @@
 <%
 Long id = (long)0;
 String content = "";
+long unixTime = System.currentTimeMillis() / 1000L;
 %>
 
 <!DOCTYPE html>
@@ -56,7 +57,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.2.6/plugins/colorpicker/plugin.min.js"></script>
         <script type="text/javascript" src="js/colpick.js"></script>
-        <script type="text/javascript" src="js/template.editor.js?v=4"></script>
+        <script type="text/javascript" src="js/template.editor.js?t=<%=unixTime%>"></script>
 
 <style>
 .mce-btn button {
@@ -123,6 +124,9 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
                             <!-- IMG +TEXT 3 columns -->
                             <%@ include file="blocks/column-3-image-text.html" %>
+
+                            <%@ include file="blocks/column-3-text.html" %>
+
                             <!-- SOCIAL LINKS -->
                             <%@ include file="blocks/social-links.html" %>
 
@@ -133,6 +137,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                 <!-- END DROP ELEMENTS -->
                 <!-- START ELEMENT -->
                 <div class="hide" id="settings">
+
                     <form class="form-inline" id="common-settings">
                         <h4 class="text text-info">Padding</h4>
                             <center>
@@ -189,13 +194,66 @@ AGILE_EB_OPTIONS['templateId'] = "";
                         </div>
                     </form>
 
-                    <form class="form-inline" id="font-settings" style="margin-top:5px">
+                    <div id="imageproperties" style="margin-top:5px">
+                         <h4 class="text text-info">Image</h4>
+                        <div class="form-group">
+                            
+                            <div class="row">
+                                <div class="col-xs-11">
+<div class="input-group">
+<span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
+<input type="text" id="image-link" class="form-control" placeholder="Add link to image" aria-describedby="basic-addon11" data-id="none">
+</div><br>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-8">
+                                    <input type="text" id="image-url" class="form-control" data-id="none"/>
+                                </div>
+                                <div class="col-xs-4">
+                                    <a class="btn btn-default" id="browseBtn" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
+                                    <input type="file" id="uploadImageToS3Btn" class="hidden">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-1">
+                                    W:
+                                </div>
+                                <div class="col-xs-3">
+                                    <input type="text" id="image-w" class="form-control" name="director" />
+                                </div>
+
+                                <div class="col-xs-1">
+                                    H:
+                                </div>
+
+                                <div class="col-xs-3">
+                                    <input type="text" id="image-h"class="form-control" name="writer" />
+                                </div>
+
+                                <div class="col-xs-4">
+
+                                    <a class="btn btn-warning" href="#" id="change-image"><i class="fa fa-edit"></i>&nbsp;Apply</a>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <form id="editor" style="margin-top:5px">
+                        <h4 class="text text-info">Text</h4>
+                    <div class="form-inline" id="font-settings" style="margin-top:5px">
                         <div class="form-group">
                             <label for="fontstyle">Font style</label>
                             <div id="fontstyle" class="color-circle"><i class="fa fa-font"></i></div>
 
                         </div>
-                    </form>
+                    </div>
 
                     <div class="hide" id='font-style'>
                         <div id="mainfontproperties" >
@@ -265,72 +323,11 @@ AGILE_EB_OPTIONS['templateId'] = "";
                             </ul>
                         </div>
                     </div>
-                    <div id="imageproperties" style="margin-top:5px">
-
-
-                        <div class="form-group">
-                            
-                            <div class="row">
-                                <div class="col-xs-11">
-<div class="input-group">
-<span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
-<input type="text" id="image-link" class="form-control" placeholder="Add link to image" aria-describedby="basic-addon11" data-id="none">
-</div><br>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-8">
-                                    <input type="text" id="image-url" class="form-control" data-id="none"/>
-                                </div>
-                                <div class="col-xs-4">
-                                    <a class="btn btn-default" id="browseBtn" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
-                                    <input type="file" id="uploadImageToS3Btn" class="hidden">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-xs-1">
-                                    W:
-                                </div>
-                                <div class="col-xs-3">
-                                    <input type="text" id="image-w" class="form-control" name="director" />
-                                </div>
-
-                                <div class="col-xs-1">
-                                    H:
-                                </div>
-
-                                <div class="col-xs-3">
-                                    <input type="text" id="image-h"class="form-control" name="writer" />
-                                </div>
-
-                                <div class="col-xs-4">
-
-                                    <a class="btn btn-warning" href="#" id="change-image"><i class="fa fa-edit"></i>&nbsp;Apply</a>
-                                </div>
-
-                            </div>
-                        </div>
-
-
-                    </div>
-                    <form id="editor" style="margin-top:5px">
                         <div class="panel panel-body panel-default html5editor" id="html5editor"></div>
-                    </form>
-                    <form id="editorlite" style="margin-top:5px">
-                        <input type="text" style="width:100%" class="panel panel-body panel-default html5editorlite" id="html5editorlite">
-                        Alignment: <select id="allineamento">
-                            <option value=""></option>
-                            <option value="left">left</option>
-                            <option value="right">right</option>
-                            <option value="center">center</option>
-                        </select>
                     </form>
 
                     <div id="social-links">
+                        <h4 class="text text-info">Social</h4>
                         <ul class="list-group" id="social-list">
                             <li>
                                 <div class="input-group">
@@ -364,6 +361,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                     </div>
 
                     <div id="buttons" style="max-width: 400px">
+                        <h4 class="text text-info">Buttons</h4>
                         <div class="form-group">
                             <select class="form-control">
                                 <option value="center">Align buttons to Center</option>
@@ -496,7 +494,8 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
                     </div>
 
-                                        <div id="buttonstxt" style="max-width: 400px">
+                    <div id="buttonstxt" style="max-width: 400px">
+                        <h4 class="text text-info">Buttons</h4>
                         <ul id="buttonstxtlist" class="list-group">
                             <li class="hide" style="padding:10px; border:1px solid #DADFE1; border-radius: 4px">
                                 <span class="pull-right trashbutton"><i class="fa fa-trash"></i></span>
@@ -551,10 +550,10 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                         var color = $(el).data('color');
                                                         var indexBnt = getIndex($(el).parent().parent().parent().parent().parent(), $('#buttonstxtlist li')) - 1;
                                                         if (color === 'bg') {
-                                                            $($('#' + $('#path').val()).find('table tbody tr td a:eq(' + indexBnt + ')')).css('background-color', '#' + hex);
+                                                            $($('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + indexBnt + ')')).css('background-color', '#' + hex);
                                                             $(el).parent().parent().parent().parent().find('div.color-circle').css('background-color', '#' + hex);
                                                         } else {
-                                                            $($('#' + $('#path').val()).find('table tbody tr td a:eq(' + indexBnt + ')')).css('color', '#' + hex);
+                                                            $($('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + indexBnt + ')')).css('color', '#' + hex);
                                                             $(el).parent().parent().parent().parent().find('div.color-circle').css('color', '#' + hex);
                                                         }
 
@@ -565,9 +564,9 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                         var color = $(el).data('color');
                                                         var indexBnt = getIndex($(el).parent().parent().parent().parent().parent(), $('#buttonstxtlist li')) - 1;
                                                         if (color === 'bg') {
-                                                            $($('#' + $('#path').val()).find('table tbody tr td a:eq(' + indexBnt + ')')).css('background-color', '#' + hex);
+                                                            $($('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + indexBnt + ')')).css('background-color', '#' + hex);
                                                         } else {
-                                                            $($('#' + $('#path').val()).find('table tbody tr td a:eq(' + indexBnt + ')')).css('color', '#' + hex);
+                                                            $($('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + indexBnt + ')')).css('color', '#' + hex);
                                                         }
 
 
