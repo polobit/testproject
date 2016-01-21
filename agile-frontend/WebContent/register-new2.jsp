@@ -94,7 +94,7 @@ position:fixed!important;
 #loading_img {
     position: relative;
     top: 15vh;
-    height: 10%;
+    
 }
 #loading_p {
     margin-top: 110px;
@@ -121,7 +121,7 @@ if(isSafari && isWin)
 </head>
 <body>
 <div class="loading-image hide">
-	<img id="loading_img" src="/img/loading_reg.png" >
+	<img id="loading_img" src="/img/registration_loading.png" >
 	<p id="loading_p">
 	 Please wait while we are setting up your account...</p>
 </div>
