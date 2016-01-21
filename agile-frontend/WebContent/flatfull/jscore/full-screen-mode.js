@@ -19,7 +19,7 @@ $(function(){
       var isFullScreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || document.msFullscreenElement;
           if(isFullScreen)
           {
-              $("#toggle-fullscreen-icon").attr('class','fa fa-compress');
+              $("#toggle-fullscreen-icon").attr('class','fa fa-compress ');
           }
           else
           {
