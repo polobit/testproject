@@ -125,7 +125,7 @@ function loadCustomFiledsFilters(fields, cel, is_company)
 									'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_contact_in_lhs">&times</a></li>');
 							$("#in_"+id).parent().find("input").trigger('custom_blur');
 				}
-				agile_type_ahead($("#in_"+this.id).parent().find("input").attr("id"), cel, contacts_typeahead, fxn_display_contact);
+				agile_type_ahead($("#in_"+this.id).parent().find("input").attr("id"), cel, contacts_typeahead, fxn_display_contact, 'type=PERSON');
 				var fxn_display_contact = function(data, item)
 				{
 					setTimeout(function(){
@@ -134,7 +134,7 @@ function loadCustomFiledsFilters(fields, cel, is_company)
 						$("#is_"+id).parent().find("input").trigger('custom_blur');
 					},10);
 				}
-				agile_type_ahead($("#is_"+this.id).parent().find("input").attr("id"), cel, contacts_typeahead, fxn_display_contact);
+				agile_type_ahead($("#is_"+this.id).parent().find("input").attr("id"), cel, contacts_typeahead, fxn_display_contact, 'type=PERSON');
 			}
 			else if(this.field_type == "COMPANY")
 			{

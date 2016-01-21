@@ -1215,7 +1215,7 @@ var ContactsRouter = Backbone.Router.extend({
 					agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
 
 					$('.contact_input', $('#content')).each(function(){
-						agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), $('#content')), contacts_typeahead);
+						agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=PERSON');
 					});
 
 					$('.company_input', $('#content')).each(function(){

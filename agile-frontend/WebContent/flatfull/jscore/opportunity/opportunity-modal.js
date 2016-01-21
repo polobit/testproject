@@ -408,7 +408,7 @@ function updateDeal(ele, editFromMilestoneView)
 		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
 
 		$('.contact_input', dealForm).each(function(){
-			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), dealForm), contacts_typeahead);
+			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), dealForm), contacts_typeahead, undefined, 'type=PERSON');
 		});
 
 		$('.contact_input', dealForm).each(function(){
@@ -480,7 +480,7 @@ function show_deal()
 		$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
 
 		$('.contact_input', el).each(function(){
-			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), el), contacts_typeahead);
+			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=PERSON');
 		});
 
 		$('.company_input', el).each(function(){

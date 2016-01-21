@@ -239,7 +239,7 @@ $(function(){
 			$('input', $(this).closest('tr').find('td.rhs-block')).attr("id", $(this).closest('tr').find('td.lhs-block').find('option:selected').attr("id"));
 			$('input', $(this).closest('tr').find('td.rhs-block')).attr("placeholder", "Contact Name");
 			$('input', $(this).closest('tr').find('td.rhs-block')).addClass("contact_custom_field");
-			agile_type_ahead($('input', $(this).closest('tr').find('td.rhs-block')).attr("id"), $(this).closest('tr').find('td.rhs-block'), contacts_typeahead, custom_contact_display);
+			agile_type_ahead($('input', $(this).closest('tr').find('td.rhs-block')).attr("id"), $(this).closest('tr').find('td.rhs-block'), contacts_typeahead, custom_contact_display, 'type=PERSON');
 		}
 
 		if ($(this).closest('tr').find('td.lhs-block').find('option:selected').attr('field_type') == "COMPANY")
@@ -256,7 +256,7 @@ $(function(){
 			$('input', $(this).closest('tr').find('td.rhs-block')).attr("id", $(this).closest('tr').find('td.lhs-block').find('option:selected').attr("id"));
 			$('input', $(this).closest('tr').find('td.rhs-block')).attr("placeholder", "Company Name");
 			$('input', $(this).closest('tr').find('td.rhs-block')).addClass("company_custom_field");
-			agile_type_ahead($('input', $(this).closest('tr').find('td.rhs-block')).attr("id"), $(this).closest('tr').find('td.rhs-block'), contacts_typeahead, custom_company_display, undefined, 'type=COMPANY');
+			agile_type_ahead($('input', $(this).closest('tr').find('td.rhs-block')).attr("id"), $(this).closest('tr').find('td.rhs-block'), contacts_typeahead, custom_company_display, 'type=COMPANY');
 		}
 		
 	})
@@ -547,7 +547,7 @@ function show_chained_fields(el, data, forceShow)
 			$('input', $(this).closest('td').siblings('td.rhs-block')).attr("id", $(this).find("option:selected").attr("id"));
 			$('input', $(this).closest('td').siblings('td.rhs-block')).attr("placeholder", "Contact Name");
 			$('input', $(this).closest('td').siblings('td.rhs-block')).addClass("contact_custom_field");
-			agile_type_ahead($('input', $(this).closest('td').siblings('td.rhs-block')).attr("id"), $(this).closest('td').siblings('td.rhs-block'), contacts_typeahead, custom_contact_display);
+			agile_type_ahead($('input', $(this).closest('td').siblings('td.rhs-block')).attr("id"), $(this).closest('td').siblings('td.rhs-block'), contacts_typeahead, custom_contact_display, 'type=PERSON');
 		}
 
 		if ($(this).find('option:selected').attr("field_type") == "COMPANY")
@@ -564,7 +564,7 @@ function show_chained_fields(el, data, forceShow)
 			$('input', $(this).closest('td').siblings('td.rhs-block')).attr("id", $(this).find("option:selected").attr("id"));
 			$('input', $(this).closest('td').siblings('td.rhs-block')).attr("placeholder", "Company Name");
 			$('input', $(this).closest('td').siblings('td.rhs-block')).addClass("company_custom_field");
-			agile_type_ahead($('input', $(this).closest('td').siblings('td.rhs-block')).attr("id"), $(this).closest('td').siblings('td.rhs-block'), contacts_typeahead, custom_company_display, undefined, 'type=COMPANY');
+			agile_type_ahead($('input', $(this).closest('td').siblings('td.rhs-block')).attr("id"), $(this).closest('td').siblings('td.rhs-block'), contacts_typeahead, custom_company_display, 'type=COMPANY');
 		}
 
 	});
@@ -582,7 +582,7 @@ function show_chained_fields(el, data, forceShow)
 		$('input', RHS).attr("id", LHS.find("option:selected").attr("id"));
 		$('input', RHS).attr("placeholder", "Contact Name");
 		$('input', RHS).addClass("contact_custom_field");
-		agile_type_ahead($('input', RHS).attr("id"), RHS, contacts_typeahead, custom_contact_display);
+		agile_type_ahead($('input', RHS).attr("id"), RHS, contacts_typeahead, custom_contact_display, 'type=PERSON');
 	}
 
 	if ($(':selected', LHS).val() && $(':selected', LHS).attr("field_type") == "COMPANY")
@@ -597,7 +597,7 @@ function show_chained_fields(el, data, forceShow)
 		$('input', RHS).attr("id", LHS.find("option:selected").attr("id"));
 		$('input', RHS).attr("placeholder", "Company Name");
 		$('input', RHS).addClass("company_custom_field");
-		agile_type_ahead($('input', RHS).attr("id"), RHS, contacts_typeahead, custom_company_display, undefined, 'type=COMPANY');
+		agile_type_ahead($('input', RHS).attr("id"), RHS, contacts_typeahead, custom_company_display, 'type=COMPANY');
 	}
 }
 

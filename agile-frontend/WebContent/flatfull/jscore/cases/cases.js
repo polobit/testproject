@@ -175,7 +175,7 @@ function updatecases(ele)
 		$("#custom-field-case", casesForm).html(fill_custom_fields_values_generic($(el_custom_fields), value["custom_data"]));
 
 		$('.contact_input', casesForm).each(function(){
-			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), casesForm), contacts_typeahead);
+			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), casesForm), contacts_typeahead, undefined, 'type=PERSON');
 		});
 
 		$('.contact_input', casesForm).each(function(){

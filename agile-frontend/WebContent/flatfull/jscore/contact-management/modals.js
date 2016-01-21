@@ -62,7 +62,7 @@ $(function(){
 				});
 
 				$('.contact_input', $('#companyModal')).each(function(){
-					agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), $('#companyModal')), contacts_typeahead);
+					agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), $('#companyModal')), contacts_typeahead, undefined, 'type=PERSON');
 				});
 
 				$('.company_input', $('#companyModal')).each(function(){

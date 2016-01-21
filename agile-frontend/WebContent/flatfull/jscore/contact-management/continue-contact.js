@@ -730,7 +730,7 @@ function deserialize_contact(contact, template)
 		// socialsuite_add_website();
 
 		$('.contact_input', $('#content')).each(function(){
-			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), $('#content')), contacts_typeahead);
+			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=PERSON');
 		});
 
 		$('.contact_input', $('#content')).each(function(){
