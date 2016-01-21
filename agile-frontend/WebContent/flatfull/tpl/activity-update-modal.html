@@ -62,7 +62,7 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                        <div class="control-group form-group">
+                        <div class="control-group form-group" style="margin-bottom:4px !important">
                             <label class="control-label col-sm-6">End Date <span class="field_req">*</span></label>
                             <div class="controls col-sm-5">
                                 <input type="text" name="end" placeholder="Select Date" id="update-event-date-2" class="required date form-control" />                                 
@@ -70,7 +70,7 @@
                         </div>
                         </div>
                         <div class="col-sm-6">
-                        <div class="control-group form-group">
+                        <div class="control-group form-group" style="margin-bottom:4px !important">
                             <label class="control-label col-sm-6">End Time <span class="field_req">*</span></label>
                             <div class="controls col-sm-6">                         
                                 <input type="text" name="end_time" class="update-end-timepicker timepicker required form-control" id="update-event-time-2"  placeholder="time" style="width:67px"/>      
@@ -97,7 +97,7 @@
                         <div class="controls update-event-related-contacts-input col-sm-8">
                             <div>
                                 <input type="text" id="event_related_to" class="typeahead typeahead_contacts form-control" placeholder="Related Contacts" data-provide="typeahead" data-mode="multiple" size="40" />
-                                <div style="padding-top:5px;">
+                                <div style="padding-top:2px;">
                                     <ul name="contacts" class="contacts tags tagsinput p-n m-n"></ul>
                                 </div>
                                 <div class="clearfix"></div>
@@ -114,7 +114,7 @@
                                 <input type="text" id="event_relates_to_deals" 
                                 placeholder="Related Deals" class="typeahead typeahead_deals form-control"
                                 data-provide="typeahead" data-mode="multiple" />
-                                <div style="padding-top:5px;">
+                                <div style="padding-top:2px;">
                                     <ul name="deal_ids" class="deals tagsinput deal_tags p-n m-n"></ul>
                                 </div>
                                 <div class="clearfix"></div>
@@ -124,13 +124,13 @@
                     
                     
                     <div class="control-group form-group" id="addEventDescription">
-                    <label class="control-label col-sm-3">  <a href="#" id="add_event_desctiption"><!--<i class="icon-plus"></i>--> Add Description </a></label>
-                        <div class="controls event_discription col-sm-8 hide">
-                            <textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>
-                        </div>
+                    <label class="control-label col-sm-3"> Add Description </label>
+                        <div class="controls col-sm-8"> 
+                            <textarea rows="3" class="input form-control-F-width form-control" placeholder="Add Description" name="description" id="description"></textarea> 
+                       </div>
                     </div>
 
-                    <div class="control-group form-group">
+                    <div class="text-muted">
                         <div class=" col-sm-offset-2 col-sm-10">
                              Note : Events are time based such as meetings. They show up in calendar.
                         </div>
