@@ -56,11 +56,11 @@ function createRequestUrlBasedOnFilter()
 // cookie with default values
 function buildCalendarLhsFilters()
 {
-	var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
-	eventFilters = eventFilters[CURRENT_AGILE_USER.id];
+	var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));	
 
 	if (eventFilters)
 	{
+		eventFilters = eventFilters[CURRENT_AGILE_USER.id];
 		var type_of_cal = eventFilters.cal_type;
 		var owners = eventFilters.owner_ids;
 		var event_time = eventFilters.events_time;
@@ -122,11 +122,12 @@ function loadFullCalednarOrListView()
 {
 	if (_agile_get_prefs("agile_calendar_view"))
 	{
-		var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
-		eventFilters = eventFilters[CURRENT_AGILE_USER.id];
+		var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));		
 
 		if (eventFilters)
 		{
+			eventFilters = eventFilters[CURRENT_AGILE_USER.id];
+
 			if (eventFilters.event_type == "future")
 			{
 				_agile_set_prefs("agile_calendar_view", "calendar_list_view_future");
@@ -509,11 +510,11 @@ function renderAddedEventToFullCalenarBasedOnCookie(data)
 	{
 		var renderEvent = false;
 		var current_user_checked = false;
-		var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
-		eventFilters = eventFilters[CURRENT_AGILE_USER.id];
+		var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));		
 
 		if (eventFilters)
 		{
+			eventFilters = eventFilters[CURRENT_AGILE_USER.id];
 			var type_of_cal = eventFilters.cal_type;
 			for ( var cal in type_of_cal)
 			{

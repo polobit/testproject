@@ -20,12 +20,13 @@ function isArray(a)
 function load_events_from_google(callback)
 {
 
-	var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
-	eventFilters = eventFilters[CURRENT_AGILE_USER.id];
+	var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));	
 
 	var agile_event = false;
 	if (eventFilters)
 	{
+
+		eventFilters = eventFilters[CURRENT_AGILE_USER.id];
 		var type_of_cal = eventFilters.cal_type;
 		var owners = eventFilters.owner_ids;
 		if (owners && owners.length > 0)
@@ -207,12 +208,12 @@ function showCalendar(users)
 								{ 	
 									events : function(start, end, callback)
 								{
-									var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
-									eventFilters = eventFilters[CURRENT_AGILE_USER.id];
+									var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));									
 									
 									var agile_event_owners = '';
 									if (eventFilters)
 									{
+										eventFilters = eventFilters[CURRENT_AGILE_USER.id];
 										var type_of_cal = eventFilters.cal_type;
 										var owners = eventFilters.owner_ids;
 
