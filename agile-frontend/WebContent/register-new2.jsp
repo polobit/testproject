@@ -123,7 +123,7 @@ if(isSafari && isWin)
 <div class="loading-image hide">
 	<img id="loading_img" src="/img/loading_reg.png" >
 	<p id="loading_p">Thank you for using Agile CRM<br>
-	 Don't go anywhere while we set up your account. This will be quick!</p>
+	 Please wait while we are setting up your account. This will be quick!</p>
 </div>
 
 <!--<<div class="modal fade" id="loadingmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
