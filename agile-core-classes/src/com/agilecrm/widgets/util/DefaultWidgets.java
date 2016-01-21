@@ -61,7 +61,7 @@ public class DefaultWidgets {
 				"/widgets/stripe-small-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"PayPal","PayPal is the faster, safer way for online invoicing  web and mobile payments. Configure your PayPal business account to view your PayPal invoices in Agile.",
-				"/widgets/paypal.js", "/img/plugins/paypal_logo.png",
+				"/widgets/paypal.js", "/img/plugins/paypal_logo_png.png",
 				"/widgets/paypal_icon.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"HelpScout",
