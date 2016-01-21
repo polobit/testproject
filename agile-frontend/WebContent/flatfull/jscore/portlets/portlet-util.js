@@ -2042,14 +2042,22 @@ var portlet_utility = {
 		if(this.is_legend_enable_in_desktop(base_model))
 		{
 			item.options.showInLegend = true;
-    		chart.legend.renderItem(item);	
-    		chart.legend.render();
+			try{
+				chart.legend.renderItem(item);	
+			}catch(e){}
+			try{
+				chart.legend.render();	
+			}catch(e){}
+    		
 		}else {
 			item.options.showInLegend = false;
     		item.legendItem = null;
-    		chart.legend.destroyItem(item);
-    		chart.legend.render();
+    		try{
+				chart.legend.destroyItem(item);	
+			}catch(e){}
+			try{
+				chart.legend.render();	
+			}catch(e){}
 		}
-
 	}
 };

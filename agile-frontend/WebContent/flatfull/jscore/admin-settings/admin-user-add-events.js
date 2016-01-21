@@ -2,11 +2,20 @@ function bindAdminChangeAction(el, data)
 {
 	$('input[name="is_admin"]', el).on('change', function(e){
 	var is_admin = $(this).is(":checked");
-	if(is_admin == false)
-		$("input[type=checkbox]", $('div[name="newscopes"]', el)).removeAttr("disabled");
-	else
-		$("input[type=checkbox]", $('div[name="newscopes"]', el)).attr("checked", "checked" ).attr("disabled", "disabled");
-	})
+	if(_plan_restrictions.is_ACL_allowed[0]())
+	{
+		if(is_admin == false)
+			$("input[type=checkbox]", $('div[name="newscopes"]', el)).removeAttr("disabled");
+		else
+			$("input[type=checkbox]", $('div[name="newscopes"]', el)).prop("checked", "checked" ).attr("disabled", "disabled");
+	}else{
+		if(is_admin == true)
+		{
+			$("input[type=checkbox]", $('div[name="newscopes"]', el)).prop("checked", "checked" )
+			$("input[type=checkbox]", $('div[name="newMenuScopes"]', el)).prop("checked", "checked" )
+		}
+	}
+	});
 	
 	$("input[type=checkbox]", $('div[name="newscopes"]', el)).on('change', function(e){
 		if(!this.checked){

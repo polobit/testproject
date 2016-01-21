@@ -210,7 +210,7 @@ var contact_details_tab = {
 			
 			// Shows an error alert, when there is no email to the contact 
 			if(!email){
-				$('#stats', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the stats.</div>');
+				$('#stats', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the stats.</div>');
 				return;	
 			}
 
@@ -219,7 +219,7 @@ var contact_details_tab = {
 				// To avoid unnecessary JSAPI count, first verify in cookie
 				if(!(_agile_get_prefs('_agile_jsapi') != null && _agile_get_prefs('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && count == '0'))
 				{
-					$('#stats', App_Contacts.contactDetailView.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
+					$('#stats', App_Contacts.contactDetailView.el).html('<h4 class="webstats-msg space-normal  wrapper-sm font-normal m-none"><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
 					return;
 				}
 
@@ -750,7 +750,7 @@ function killAllPreviousRequests()
 }
 function show_no_email_alert()
 {
-	$('#mail', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
+	$('#mail', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
 }
 
 function show_resubscribe_modal(){

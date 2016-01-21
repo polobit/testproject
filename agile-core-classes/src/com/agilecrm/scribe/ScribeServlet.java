@@ -33,6 +33,8 @@ import com.agilecrm.scribe.util.ScribeUtil;
  */
 @SuppressWarnings("serial")
 public class ScribeServlet extends HttpServlet {
+	public static final String SERVICE_TYPE_PAYPAL_IN = "Paypal";
+
 	public static final String SERVICE_TYPE_LINKED_IN = "linkedin";
 	public static final String SERVICE_TYPE_TWITTER = "twitter";
 	public static final String SERVICE_TYPE_GMAIL = "gmail";

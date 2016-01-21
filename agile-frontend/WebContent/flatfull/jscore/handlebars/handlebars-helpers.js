@@ -791,6 +791,24 @@ $(function()
 		// 1000));
 	});
 
+	Handlebars.registerHelper('paypalInvoiceDate', function(format, date)
+	{
+		if (date){
+			// var data = new Date(date); 
+			// var time = data.getTime();			
+    		var din = date.replace(/-/g, "//");
+			if(!format){
+			 	format = "ddd mmm dd yyyy";
+			}
+			var d= new Date(din).format(format);
+			return d;			
+		}
+		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
+		// 1000));
+	});
+
+
+
 	// Helper function to return date in user selected format in  preferences.
 
 	Handlebars.registerHelper('epochToHumanDateInFormat', function(date)
@@ -6943,6 +6961,14 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 		var max = getMaxEmailsLimit();
 		// if max is greater than zero, we consider user is subscrbed to email plan
 		if (max > 0)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
+
+	Handlebars.registerHelper('is_acl_allowed', function(options)
+	{
+		if(!_plan_restrictions.is_ACL_allowed[0]())
 			return options.fn(this);
 		else
 			return options.inverse(this);

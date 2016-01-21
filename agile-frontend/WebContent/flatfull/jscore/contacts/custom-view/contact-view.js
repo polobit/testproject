@@ -16,6 +16,7 @@
  * @param base_model
  */
 var CURRENT_VIEW_OBJECT;
+var CONTACTS_SORT_LIST={"created_time":"Created Date","lead_score":"Score","star_value":"Starred","first_name":"First Name","last_name":"Last Name","last_contacted":"Contacted Date",}
 
 function contactTableView(base_model,customDatefields,view) {
 	
@@ -156,7 +157,7 @@ function setupViews(cel, button_name) {
 			setUpContactSortFilters(cel);
 
 			//updates the selected sort item to bold
-			updateSelectedSortKey($("#view-list", cel));
+			updateSelectedSortKey($(".contacts-toolbar", cel));
 			addClickEventsForSorting($("#view-list", cel));
 			if(_agile_get_prefs('company_filter') || _agile_get_prefs('contact_filter_type') == 'COMPANY')
 			{
@@ -203,20 +204,88 @@ function addContactCustomFields()
 
 function updateSelectedSortKey(el) {
 	var sort_key = _agile_get_prefs("sort_by_name");
+	$('.sort-field-check').addClass('display-none');
+	$('.sort-by-check').addClass('display-none');
 	if(sort_key && sort_key != null) {
-		var idSuffix = '-asc';
-		if(sort_key.indexOf('-') == 0) {
-			sort_key = sort_key.substring(1);
-			idSuffix = '-desc'
-		}
-		var elementId = 'sort-by-'+sort_key+idSuffix;
-		$(el).find('#'+elementId).addClass('bold-text');
+		var sort = sort_key.split("-")
+		if(sort[0] == "")
+			$(".sort-by[data='-']").find('i').removeClass('display-none');
+		else
+			$(".sort-by[data='']").find('i').removeClass('display-none');
+		if(sort.length > 1)
+			sort_key = sort[1];
+		$(".sort-field[data='"+sort_key+"']").find('i').removeClass('display-none');
+		printSortNameByData(sort_key);
+		
+	}else{
+		$(".sort-by[data='']").find('i').removeClass('display-none');
+		$(".sort-field[data='created_time']").find('i').removeClass('display-none');
+		printSortNameByData('created_time');
 	}
+}
+
+function printSortNameByData(data){
+	 $(".contacts-toolbar").find(".sort-field-txt").html(CONTACTS_SORT_LIST[data]);
 }
 
 	function addClickEventsForSorting(el) {
 		// Fetch sort result without changing route on click
-		$(el).find('.sort').on("click", function(e)
+		$('.contacts-toolbar').on('click', 'a.sort-field', function(e){
+			e.preventDefault();
+			// Gets name of the attribut to sort, which is set as data
+			// attribute in the link
+			var sort_field = $(this).attr('data');
+			printSortNameByData(sort_field);
+			var sort_key = _agile_get_prefs('sort_by_name');
+			if(sort_key != undefined && sort_key != null && sort_key[0] == "-")
+				sort_field = "-"+sort_field;
+			_agile_set_prefs('sort_by_name', sort_field);
+			
+			CONTACTS_HARD_RELOAD=true;
+			// If filter is not set then show view on the default contacts
+			// list
+			if(!App_Contacts.tag_id)
+			{
+				App_Contacts.contacts(undefined, undefined, undefined, true);
+				return;
+			}
+			
+			// If tag filter is applied send tags fetch url and tag_id, which is tobe shown on contacts table.
+			App_Contacts.contacts(App_Contacts.tag_id, undefined, undefined, true);
+			return;
+			
+		});
+
+		$('.contacts-toolbar').on('click', 'a.sort-by', function(e){
+			e.preventDefault();
+
+
+			var sort_by = $(this).attr("data");
+			var sort_field = _agile_get_prefs('sort_by_name');
+			if(sort_field == null || sort_field == undefined)
+				sort_field = "created_time";
+			if(sort_field[0] == "-")
+				sort_field = sort_field.slice(1);
+			_agile_set_prefs('sort_by_name', sort_by+sort_field);
+			
+			CONTACTS_HARD_RELOAD=true;
+			// If filter is not set then show view on the default contacts
+			// list
+			if(!App_Contacts.tag_id)
+			{
+				App_Contacts.contacts(undefined, undefined, undefined, true);
+				return;
+			}
+			
+			// If tag filter is applied send tags fetch url and tag_id, which is tobe shown on contacts table.
+			App_Contacts.contacts(App_Contacts.tag_id, undefined, undefined, true);
+			return;
+
+			
+		});
+
+
+		/*$(el).find('.sort').on("click", function(e)
 		{
 
 			e.preventDefault();
@@ -243,7 +312,7 @@ function updateSelectedSortKey(el) {
 			// If tag filter is applied send tags fetch url and tag_id, which is tobe shown on contacts table.
 			App_Contacts.contacts(App_Contacts.tag_id, undefined, undefined, true);
 			return;
-		});
+		});*/
 
 	}
 

@@ -1,68 +1,37 @@
 <script id="contact-view-sort-collection-template" type="text/html">
-	<button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
-    	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-    	{{#is_mobile}}
-    	<ul id="" class="pull-right dropdown-menu">
-    	<li class="dropdown-submenu"><a data-toggle="dropdown" id="mobile-dropdown-click-sort">Sort By</a>
-    	<li class="divider"></li>
-    		<li><a class="sort" id="sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
-					<li><a class="sort" id="sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
-					
-					<li><a class="sort" id="sort-by-lead_score-desc" data="-lead_score" href="#">Highest Score</a></li>
-					<li><a class="sort" id="sort-by-lead_score-asc" data="lead_score" href="#">Lowest Score</a></li>
-					
-					<li><a class="sort" id="sort-by-star_value-desc" data="-star_value" href="#">Highest Starred</a></li>
-					<li><a class="sort" id="sort-by-star_value-asc" data="star_value" href="#">Lowest Starred</a></li>
-					
-					<li><a class="sort" id="sort-by-first_name-desc" data="-first_name" href="#">First Name Desc</a></li>
-					<li><a class="sort" id="sort-by-first_name-asc" data="first_name" href="#">First Name Asc</a></li>
-					
-					<li><a class="sort" id="sort-by-last_name-desc" data="-last_name" href="#">Last Name Desc</a></li>
-					<li><a class="sort" id="sort-by-last_name-asc" data="last_name" href="#">Last Name Asc</a></li>
-			
-					<li><a class="sort" id="sort-by-last_contacted-desc" data="-last_contacted" href="#">Contacted Date Desc</a></li>
-					<li><a class="sort" id="sort-by-last_contacted-asc" data="last_contacted" href="#">Contacted Date Asc</a></li>
-						<li class="divider"></li>
-        	<li>
-            	<a href="#contact-view-prefs">Add/Remove Columns</a>
-        	</li>
-    	</ul>
-    	{{else}}
-    	
-    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs">
-        	<!--<li>
-            	<a href="#contacts" class="DefaultView">Default</a>
-				 a href="#contacts" class="GridView">Grid View</a 
-        	</li>
-			<li class="divider"></li>-->
-			<li class="dropdown-submenu"><a data-toggle="dropdown" id="mobile-dropdown-click-sort">Sort By</a>
-
-				<ul class="dropdown-menu contact-view-sort-list" id="contact-view-sort-model-list">
-					
-				</ul>
-			</li>
-        	<li class="divider"></li>
-        	<li>
-            	<a href="#contact-view-prefs">Add/Remove Columns</a>
-        	</li>
-    	</ul>
-    	{{/is_mobile}}
+<div class="btn-group pull-left m-r-xs contacts-toolbar">
+	   <div class="btn-group dropdown m-l-none" style="float: none;">
+                <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="margin-top:3px;" data-toggle="dropdown" id="contact-sort" aria-expanded="false">
+                    <span>Sort by: </span>
+                    <span class="sort-field-txt text-muted"></span>
+                </button>
+                <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs m-t-xs" data-toggle="dropdown" aria-expanded="true">
+                    <i class="fa fa-sort"></i>
+                </button>
+                <ul class="pull-right dropdown-menu" id="contact-view-sort-model-list">
+                
+                    <li class="divider"></li>
+                    <li>
+                        <a class="sort-by pos-rlt" data="" href="javascript:void(0);">Ascending <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check "></i> </a>
+                    </li>
+                    <li><a class="sort-by pos-rlt" data="-" href="javascript:void(0);">Descending  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check "></i> </a></li>
+                </ul>
+            </div>
+        </div>
 </script>
 
 <script id="contact-view-sort-model-template" type="text/html">
-{{#if this.scope}}
-	<a class="sort" id="sort-by-{{search_key}}_AGILE_CUSTOM_{{field_type}}-asc" data="{{search_key}}_AGILE_CUSTOM_{{field_type}}" href="#">{{field_label}} Asc</a>
-	<a class="sort" id="sort-by-{{search_key}}_AGILE_CUSTOM_{{field_type}}-desc" data="-{{search_key}}_AGILE_CUSTOM_{{field_type}}" href="#">{{field_label}} Desc</a>
-{{else}}
-{{#each this}}
-	<a class="sort" id="sort-by-{{field_value}}-{{#if desc_order}}desc{{else}}asc{{/if}}" data="{{field_key}}" href="#">{{field_label}}</a>
-{{/each}}
-{{/if}}
-	{{#is_mobile}}
-				{{else}}
-					{{#unless is_last}}
-						<li class="divider"></li>
-					{{/unless}}
-		{{/is_mobile}}
 
+{{#if scope}}
+    <a class="sort-link sort-field pos-rlt" href="javascript:void(0);" data="{{search_key}}_AGILE_CUSTOM_{{field_type}}">
+        {{field_label}}
+        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check"></i> 
+    </a>
+    {{else}}
+
+    <a class="sort-link sort-field pos-rlt" href="javascript:void(0);" data="{{field_value}}">
+        {{field_label}}
+        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check"></i> 
+    </a>
+{{/if}}
 </script>

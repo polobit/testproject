@@ -302,6 +302,7 @@ margin:0 10px -1px;
 .rightThumbView
 {
 	width:calc(100% - 50px);
+  white-space: normal;
 }
 .ativity-block-ul li .actions
 {
@@ -790,6 +791,16 @@ display: block!important;
   	left: -11px;
   	top: 8px;
 }
+#timeline .post.right .inner:after {
+    border-bottom: 12px solid transparent;
+    border-right: 12px solid #dee5e7;
+    border-top: 12px solid transparent;
+    content: "";
+    z-index: 8;
+    position: absolute;
+    left: -12px;
+    top: 8px;
+}
 /* #timeline .post.right.color1:before{
 	content: "";
   	padding-bottom: 67px;
@@ -1102,7 +1113,7 @@ font-size:16px;
 	width:calc(100% - 40px);
   word-break:break-all;
 }
-#contactDetailsTab li a
+#contactDetailsTab > li > a
 {
 	margin-right:0px;
 	padding:10px;
@@ -1621,9 +1632,12 @@ a#email-reply{
     font-weight: normal;
     font-size: 16px;
     margin-bottom: 5px;
+    white-space: normal;
   }
   .mobile-pad-content .box-right .text {
- color:#98a6ad !important
+ color:#98a6ad !important;
+ white-space: normal;
+
   }
   #contact-filter-list-model-list.pull-right,#company-filter-list-model-list.pull-right {
     right: auto;
@@ -1848,6 +1862,36 @@ color:#727272;
 .agile-edit-row tr td:nth-of-type(3) {
     padding: 8px 15px 8px 5px;
 }
+#contacts-inner-tabs #contactDetailsTab {
+    width: calc(100% - 30px);
+}
+.hide-margin-mobile {
+  margin-bottom: 0px;
+}
+.hide-margin-mobile .mobile-pad-content {
+  margin-top: 15px;
+}
+#timeline .text-xs,#timeline .contact-job-title {
+  white-space: normal;
+}
+.content-tabs-show #mail #mails-span {
+  display: none;
+}
+#timeline pre {
+      font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: inherit;
+}
+#autoellipsis {
+  white-space: normal;
+}  
+.webstats-msg {
+  font-size: 14px;
+  color: #98a6ad!important;
+  text-align: center;
+}
+.ativity-block-ul {
+  margin-top: -10px;
+}
 }
 
 @media all and (min-width: 768px) {
@@ -1889,4 +1933,112 @@ color:#727272;
 #choose-avatar-modal .modal-dialog {
     width: 858px;
 }
+}
+
+/* css for tabs mobile */
+ 
+
+.content-tabs-show {
+  margin: 20px auto;
+}
+.content-tabs-show .panel-heading {
+    padding: 0
+}
+.content-tabs-show .panel-heading a {
+    display: block;
+    padding: 13px 10px;
+    position: relative;
+}
+.content-tabs-show .panel-heading a.collapsed {
+    background: #fff;
+    
+}
+.content-tabs-show .panel-heading a {
+    background: #f7f7f7;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: normal;
+}
+.content-tabs-show .panel-heading a:after {
+    
+    content: "\f106";
+    font-family: FontAwesome;
+    position: absolute;
+    top: 9px;
+    right: 15px;
+    color: #98a6ad !important;
+}
+.content-tabs-show .panel-heading a.collapsed:after {
+    content: "\f107";
+    position: absolute;
+    top: 11px;
+    right: 15px;
+    color: #98a6ad !important;
+}
+.content-tabs-show  .panel-heading + .panel-collapse .panel-body {
+  border-top: none;
+}
+.content-tabs-show .btn {
+      padding: 3px 7px;
+    font-size: 11px;
+    line-height: 1.5;
+}
+.content-tabs-show .btn:not(#send-new-mail) i {
+  display: none;
+}
+.content-tabs-show .contact-desc-dynamic .word-break-all {
+    word-break: break-all;
+    float: left;
+    white-space: normal;
+}
+.content-tabs-show .text-info {
+  white-space: normal;
+}
+.content-tabs-show .contact-title-dynamic {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.content-tabs-show .panel-body {
+  padding:0px;
+}
+
+
+/*.nav.nav-tabs li a,
+.nav.nav-tabs li.active > a:hover,
+.nav.nav-tabs li.active > a:active,
+.nav.nav-tabs li.active > a:focus {
+    border-bottom-width: 0px;
+    outline: none;
+}
+.nav.nav-tabs li a {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.tab-pane {
+    background: #fff;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-top: -1px;
+}
+
+*/
+
+
+/* used for sidebar tab/collapse*/
+@media (max-width: 991px) {
+  .visible-tabs {
+    display: none;
+  }
+}
+
+@media (min-width: 992px) {
+  .visible-tabs {
+    display: block !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .hidden-tabs {
+    display: none !important;
+  }
 }
