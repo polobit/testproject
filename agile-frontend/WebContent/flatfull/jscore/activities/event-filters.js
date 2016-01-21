@@ -93,22 +93,22 @@ function buildCalendarLhsFilters()
 		 * if (list_event_type) $("#event_time").val(list_event_type); }
 		 */
 	}
-	else
-	{
-		/*
-		 * $('.calendar_user_check').each(function() { // loop through each
-		 * checkbox if ($(this).val() == CURRENT_AGILE_USER.id) this.checked =
-		 * true; });
-		 */
-		$('.calendar_check').each(function()
-		{ // loop through each checkbox
-			this.checked = true;
-		});
+	// else
+	// {
+	// 	/*
+	// 	 * $('.calendar_user_check').each(function() { // loop through each
+	// 	 * checkbox if ($(this).val() == CURRENT_AGILE_USER.id) this.checked =
+	// 	 * true; });
+	// 	 */
+	// 	$('.calendar_check').each(function()
+	// 	{ // loop through each checkbox
+	// 		this.checked = true;
+	// 	});
 
-		/*
-		 * if (_agile_get_prefs("agile_calendar_view")) { $("#event_time").val(""); }
-		 */
-	}
+	// 	/*
+	// 	 * if (_agile_get_prefs("agile_calendar_view")) { $("#event_time").val(""); }
+	// 	 */
+	// }
 
 }
 
