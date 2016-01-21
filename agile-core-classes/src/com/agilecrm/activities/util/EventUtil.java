@@ -185,12 +185,12 @@ public class EventUtil
 	try{
 		    if (ownerId != null){
 		    	startList = dao.ofy().query(Event.class).filter("search_range >=", start).filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
-				endList = dao.ofy().query(Event.class).filter("search_range >=", end).filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
+				endList = dao.ofy().query(Event.class).filter("search_range <=", end).filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
 				 System.out.println(startList.size()+ "  :  "+ endList.size());
 				 startList.addAll(endList); 
 				 return EventUtil.getDuplicateList(startList); 
 		    }else{
-		    	  startList = dao.ofy().query(Event.class).filter("search_range >=", start).list();
+		    	  startList = dao.ofy().query(Event.class).filter("search_range <=", start).list();
 				  endList = dao.ofy().query(Event.class).filter("search_range >=", end).list();				    
 				  System.out.println(startList.size()+ "  :  "+ endList.size());
 				  startList.addAll(endList);				
@@ -203,7 +203,6 @@ public class EventUtil
 		    return null;
 		}
     }
-    
     
     /**
      * Gets Events with respect to AgileUser.

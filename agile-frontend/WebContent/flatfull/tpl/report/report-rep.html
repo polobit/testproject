@@ -1,0 +1,119 @@
+<script id="report-user-performance-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+                     
+             <div style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
+			border:1px solid #cfdadd;height:34px;padding:5px;" class="pull-right test-class" id="reportrange">
+                <i class="icon-calendar icon-large"></i>
+                <span id="range">{{month-range}}</span>
+              </div>
+
+			<div class="pull-right" style="padding:0px 8px 10px">
+				<select name="owner" id="owner" class="required form-control">
+                </select>
+			</div>
+			<div class="col-md-4 col-sm-6">
+            <h3 class="font-thin h3">User Performance
+            </h3>
+			
+			</div> 
+   
+        </div>
+
+</div>
+</div>
+
+<div id="rep-performance-reports" class="wrapper-md">
+</div>
+</div>
+</script>
+<script id="report-user-data-template" type="text/html">
+<div>	
+	<!-- Growth Reports -->
+		
+        <div class="row p-l p-r">
+
+        <div class="panel b-a">
+            <div class="panel-heading bg-info dk no-border wrapper-lg">
+            
+            </div>
+            <div class="text-center m-b clearfix">
+              <div class="thumb-lg avatar m-t-n-xxl">
+              {{#if userPic}}
+                        <img class="b b-3x b-white" src="{{userPic}}" />
+                        {{else}}
+                 
+                        <img class="b b-3x b-white" src="{{defaultGravatarurl 50}}" />
+                        {{/if}}
+                <div class="h4 font-thin m-t-sm">{{userName}}
+
+                 
+                </div>
+              </div>
+
+            </div>
+            
+            <div class="hbox text-center b-t b-light">   
+                    
+              <div class="col padder-v text-muted b-r b-light text-ellipsis">
+                <div class="h4">{{currencySymbol}}{{numberWithCommasForActivities sales}}</div>
+                <span>Total Sales </span>
+                {{#if Rank}}<div> Rank: {{Rank}} in the team {{#if Team_Revenue}}(Team: {{currencySymbol}}{{numberWithCommasForActivities Team_Revenue}}){{/if}}</div>{{/if}}
+              </div>
+              <div class="col padder-v text-muted b-r b-light text-ellipsis">
+                <div class="h4">{{numberWithCommasForActivities soldDeals}}</div>
+                <span>Won Deals </span>
+                {{#if won_Rank}} <div> Rank: {{won_Rank}} in the team {{#if Team_Revenue}}(Team: {{numberWithCommasForActivities Team_Deals}}){{/if}}</div>{{/if}}
+              </div>
+              <div class="col padder-v text-muted text-ellipsis">
+                <div class="h4">{{currencySymbol}}{{numberWithCommasForActivities avgSalesValue}}</div>
+                <span>Avg. Deal Size {{#if Team_average}}(Team: {{currencySymbol}}{{numberWithCommasForActivities Team_average}}){{/if}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+		
+
+		
+</div>
+<div class="row">
+        <div class="col-sm-4">
+			<div class="p-sm bg-primary lt">
+                <span class="h4 text-white">Loss Reasons</span>
+              </div>
+
+        <div class="panel wrapper">
+				<div id="lossreasonpie-chart-users"></div>
+                </div>
+		</div>
+		 <div class="col-sm-8">
+		<div class="p-sm bg-primary lt">
+                <span class="h4 text-white">Goals Attainment</span>
+              </div>
+        <div>
+        <div class="w-half pull-left panel wrapper">
+                <div id="count_goals_chart" ></div>
+                </div>
+                <div class="w-half pull-left panel wrapper">
+                <div id="amount_goals_chart" ></div>
+                </div>
+                </div>
+		
+      </div>
+
+
+           </div>  
+           <div class="row wrapper">
+
+      <div class="p-sm bg-primary lt" style="display:none">
+                <span class="h4 text-white">Pipeline Conversions</span>
+              </div>
+               <div>
+              <div class="converionsPipeline"></div>
+              </div>
+      </div>     
+	<!-- End of Growth Reports -->  
+</div>
+</script>

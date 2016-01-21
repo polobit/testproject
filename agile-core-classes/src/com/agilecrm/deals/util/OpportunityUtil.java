@@ -38,6 +38,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.search.Document.Builder;
@@ -47,6 +48,7 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>OpportunityUtil</code> is the utility class to fetch opportunities with
@@ -166,9 +168,8 @@ public class OpportunityUtil
      */
     public static List<Opportunity> getOpportunities(long minTime, long maxTime)
     {
-	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
-	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime)
-		.list();
+	Query<Opportunity> q =  dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime);
+	return dao.fetchAll(q);
     }
 
     /**
@@ -338,9 +339,9 @@ public class OpportunityUtil
      */
     public static int getTotalNumberOfMilestones(long minTime, long maxTime, String milestone)
     {
-	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
-	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime)
-		.filter("milestone", milestone).count();
+	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime)
+		.filter("milestone", milestone);
+    return dao.getCount(q);
     }
 
     /**
@@ -387,10 +388,10 @@ public class OpportunityUtil
      */
     public static JSONObject getConversionDetails(long minTime, long maxTime)
     {
-	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
 	// Gets total count of opportunities within the given period
-	int numOpportunities = dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime)
-		.filter("close_date <= ", maxTime).count();
+    Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime)
+    		.filter("close_date <= ", maxTime);
+	int numOpportunities = dao.getCount(q);
 
 	JSONObject conversionObject = new JSONObject();
 
@@ -405,20 +406,19 @@ public class OpportunityUtil
 
     public static List<Opportunity> getDealsRelatedToCurrentUser()
     {
-	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
-
-	return dao.ofy().query(Opportunity.class)
-		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		.filter("archived", false).order("-created_time").limit(10).list();
+	Query<Opportunity> q = dao.ofy().query(Opportunity.class)
+    		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+    		.filter("archived", false).order("-created_time").limit(10);
+	return dao.fetchAll(q);
     }
 
     public static List<Opportunity> getUpcomingDealsRelatedToCurrentUser(String pageSize)
     {
-	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
 	System.out.println("deals--------------------");
-	return dao.ofy().query(Opportunity.class)
-		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		.filter("archived", false).order("close_date").limit(Integer.parseInt(pageSize)).list();
+	Query<Opportunity> q = dao.ofy().query(Opportunity.class)
+			.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+			.filter("archived", false).order("close_date").limit(Integer.parseInt(pageSize));
+	return dao.fetchAll(q);
     }
 
     /**
@@ -581,10 +581,9 @@ public class OpportunityUtil
      */
     public static int getTotalNumberOfMilestonesByPipeline(Long pipelineId, long minTime, long maxTime, String milestone)
     {
-	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
-	return dao.ofy().query(Opportunity.class).filter("pipeline", new Key<Milestone>(Milestone.class, pipelineId))
-		.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone", milestone)
-		.count();
+	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("pipeline", new Key<Milestone>(Milestone.class, pipelineId))
+			.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone", milestone);
+	return dao.getCount(q);
     }
 
     /**
@@ -931,15 +930,15 @@ public class OpportunityUtil
 
     public static List<Opportunity> getPendingDealsRelatedToCurrentUser()
     {
-	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
 	List<String> milestoneList = new ArrayList<String>();
 	milestoneList.add("New");
 	milestoneList.add("Prospect");
 	milestoneList.add("Proposal");
-	return dao.ofy().query(Opportunity.class).filter("close_date <=", (new Date()).getTime() / 1000)
-		.filter("close_date !=", null).filter("milestone in", milestoneList)
-		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		.order("close_date").list();
+	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("close_date <=", (new Date()).getTime() / 1000)
+			.filter("close_date !=", null).filter("milestone in", milestoneList)
+			.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+			.order("close_date");
+	return dao.fetchAll(q);
     }
 
     /**
@@ -952,13 +951,13 @@ public class OpportunityUtil
 
     public static List<Opportunity> getPendingDealsRelatedToAllUsers()
     {
-	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
 	List<String> milestoneList = new ArrayList<String>();
 	milestoneList.add("New");
 	milestoneList.add("Prospect");
 	milestoneList.add("Proposal");
-	return dao.ofy().query(Opportunity.class).filter("close_date <=", (new Date()).getTime() / 1000)
-		.filter("close_date !=", null).filter("milestone in", milestoneList).order("close_date").list();
+	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("close_date <=", (new Date()).getTime() / 1000)
+			.filter("close_date !=", null).filter("milestone in", milestoneList).order("close_date");
+	return dao.fetchAll(q);
     }
 
     /**
@@ -1221,7 +1220,6 @@ public class OpportunityUtil
      */
     public static List<Opportunity> getPendingDealsRelatedToCurrentUser(long dueDate)
     {
-	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
 	List<Opportunity> pendingDealsList = new ArrayList<Opportunity>();
 	try
 	{
@@ -1250,10 +1248,11 @@ public class OpportunityUtil
 					}
 				}
 	    	}
-	    	List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class)
+	    	Query<Opportunity> q = dao.ofy().query(Opportunity.class)
 	    		    .filter("close_date <=", (new Date()).getTime() / 1000).filter("archived", false).limit(50)
 	    		    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-	    		    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).filter("milestone in", milestoneNamesList).order("close_date").list();
+	    		    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).filter("milestone in", milestoneNamesList).order("close_date");
+	    	List<Opportunity> allDealsList = dao.fetchAll(q);
 	    	pendingDealsList.addAll(allDealsList);
 	    }
 	}
@@ -1273,7 +1272,6 @@ public class OpportunityUtil
      */
     public static List<Opportunity> getPendingDealsRelatedToAllUsers(long dueDate)
     {
-	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
 	List<Opportunity> pendingDealsList = new ArrayList<Opportunity>();
 	try
 	{
@@ -1303,9 +1301,10 @@ public class OpportunityUtil
 					}
 				}
 	    	}
-	    	List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class)
+	    	Query<Opportunity> q = dao.ofy().query(Opportunity.class)
 	    		    .filter("close_date <=", (new Date()).getTime() / 1000).filter("archived", false).limit(50)
-	    		    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).filter("milestone in", milestoneNamesList).order("close_date").list();
+	    		    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).filter("milestone in", milestoneNamesList).order("close_date");
+	    	List<Opportunity> allDealsList = dao.fetchAll(q);
 	    	pendingDealsList.addAll(allDealsList);
 	    }
 	}
@@ -1326,7 +1325,6 @@ public class OpportunityUtil
     public static Map<Double, Integer> getTotalMilestoneValueAndNumber(String milestone, boolean owner, long dueDate,
 	    Long ownerId, Long trackId)
     {
-	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
 	Double totalMilestoneValue = 0.0d;
 	List<Opportunity> milestoneList = null;
 	Map<Double, Integer> map = new LinkedHashMap<Double, Integer>();
@@ -1334,26 +1332,32 @@ public class OpportunityUtil
 	{
 	    if (ownerId != null)
 	    {
-		milestoneList = dao.ofy().query(Opportunity.class).filter("milestone", milestone)
-			.filter("close_date <=", dueDate)
-			.filter("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId)).filter("archived", false)
-			.list();
+	    Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("milestone", milestone)
+				.filter("close_date <=", dueDate)
+				.filter("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId)).filter("archived", false);
+	    milestoneList = dao.fetchAll(q);
 	    }
 	    else
 	    {
 		if (owner)
-		    milestoneList = dao
-			    .ofy()
-			    .query(Opportunity.class)
-			    .filter("milestone", milestone)
-			    .filter("pipeline", new Key<Milestone>(Milestone.class, trackId))
-			    .filter("ownerKey",
-				    new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-			    .filter("archived", false).list();
+		{
+			Query<Opportunity> q = dao
+				    .ofy()
+				    .query(Opportunity.class)
+				    .filter("milestone", milestone)
+				    .filter("pipeline", new Key<Milestone>(Milestone.class, trackId))
+				    .filter("ownerKey",
+					    new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+				    .filter("archived", false);
+			milestoneList = dao.fetchAll(q);
+		}
 		else
-		    milestoneList = dao.ofy().query(Opportunity.class)
-			    .filter("pipeline", new Key<Milestone>(Milestone.class, trackId))
-			    .filter("milestone", milestone).filter("archived", false).list();
+		{
+			Query<Opportunity> q = dao.ofy().query(Opportunity.class)
+				    .filter("pipeline", new Key<Milestone>(Milestone.class, trackId))
+				    .filter("milestone", milestone).filter("archived", false);
+			milestoneList = dao.fetchAll(q);
+		}
 	    }
 	    for (Opportunity opportunity : milestoneList)
 	    {
@@ -1382,15 +1386,21 @@ public class OpportunityUtil
      */
     public static List<Opportunity> getOpportunitiesWon(Long ownerId)
     {
-	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
 	try
 	{
 	    if (ownerId != null)
-		return dao.ofy().query(Opportunity.class).filter("milestone", "Won")
-			.filter("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId)).filter("archived", false)
-			.list();
+	    {
+	    	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("milestone", "Won")
+	    			.filter("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId)).filter("archived", false);
+	    	return dao.fetchAll(q);
+	    }
+		
 	    else
-		return dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("archived", false).list();
+	    {
+	    	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("archived", false);
+	    	return dao.fetchAll(q);
+	    }
+		
 	}
 	catch (Exception e)
 	{
@@ -1408,9 +1418,9 @@ public class OpportunityUtil
      */
     public static List<Opportunity> getOpportunitiesAsignedToUser(Long ownerId)
     {
-	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
-	return dao.ofy().query(Opportunity.class).filter("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId))
-		.filter("archived", false).list();
+    Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId))
+    		.filter("archived", false);
+	return dao.fetchAll(q);
     }
 
     /**
@@ -1532,8 +1542,9 @@ public class OpportunityUtil
 		{
 			if (milestone.won_milestone != null)
 			{
-				List<Opportunity> list = dao.ofy().query(Opportunity.class).filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime)
-					    .filter("won_date <= ", maxTime).filter("archived", false).filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).list();
+				Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime)
+					    .filter("won_date <= ", maxTime).filter("archived", false).filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+				List<Opportunity> list = dao.fetchAll(q);
 				if (list != null)
 				{
 					ownDealsList.addAll(list);
@@ -1541,8 +1552,9 @@ public class OpportunityUtil
 			}
 			else
 			{
-				List<Opportunity> list = dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime)
-					    .filter("won_date <= ", maxTime).filter("archived", false).filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).list();
+				Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime)
+					    .filter("won_date <= ", maxTime).filter("archived", false).filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+				List<Opportunity> list = dao.fetchAll(q);
 				if (list != null)
 				{
 					ownDealsList.addAll(list);
@@ -1571,8 +1583,9 @@ public class OpportunityUtil
 	List<Opportunity> newDealsList = new ArrayList<Opportunity>();
 	try
 	{
-	    newDealsList = dao.ofy().query(Opportunity.class).filter("created_time >= ", minTime)
-		    .filter("created_time <= ", maxTime).list();
+		Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("created_time >= ", minTime)
+			    .filter("created_time <= ", maxTime);
+	    newDealsList = dao.fetchAll(q);
 	}
 	catch (Exception e)
 	{
@@ -1644,15 +1657,17 @@ public class OpportunityUtil
 		{
 			if (milestone.won_milestone != null)
 			{
-				count += dao.ofy().query(Opportunity.class).filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
+				Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
 					    .filter("archived", false).filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
-					    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).count();
+					    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+				count += dao.getCount(q);
 			}
 			else
 			{
-				count += dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
+				Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
 					    .filter("archived", false).filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
-					    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).count();
+					    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+				count += dao.getCount(q);
 			}
 		}
 	}
@@ -1684,9 +1699,10 @@ public class OpportunityUtil
 		{
 			if (milestone.won_milestone != null)
 			{
-				List<Opportunity> list = dao.ofy().query(Opportunity.class).filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
+				Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
 					    .filter("archived", false).filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
-					    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).list();
+					    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+				List<Opportunity> list = dao.fetchAll(q);
 				if (list != null)
 				{
 					ownDealsList.addAll(list);
@@ -1694,9 +1710,10 @@ public class OpportunityUtil
 			}
 			else
 			{
-				List<Opportunity> list = dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
+				Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
 					    .filter("archived", false).filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
-					    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).list();
+					    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+				List<Opportunity> list = dao.fetchAll(q);
 				if (list != null)
 				{
 					ownDealsList.addAll(list);
@@ -1875,8 +1892,9 @@ public class OpportunityUtil
 	List<Opportunity> newDealsList = new ArrayList<Opportunity>();
 	try
 	{
-	    newDealsList = dao.ofy().query(Opportunity.class).filter("ownerKey",new Key<DomainUser>(DomainUser.class, ownerId)).filter("created_time >= ", minTime)
-		    .filter("created_time <= ", maxTime).list();
+		Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("ownerKey",new Key<DomainUser>(DomainUser.class, ownerId)).filter("created_time >= ", minTime)
+			    .filter("created_time <= ", maxTime);
+	    newDealsList = dao.fetchAll(q);
 	}
 	catch (Exception e)
 	{
@@ -1900,8 +1918,6 @@ public class OpportunityUtil
 	
 	public static List<Opportunity> getDealsWithOwnerandPipeline(Long ownerId,
 			Long pipelineId, long minTime, long maxTime) {
-		UserAccessControlUtil
-				.checkReadAccessAndModifyQuery("Opportunity", null);
 		Map<String, Object> conditionsMap = new HashMap<String, Object>();
 		if (ownerId != null)
 			conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class,
@@ -2056,11 +2072,11 @@ public class OpportunityUtil
 	public static List<Opportunity> getLostDealsWithOwnerandPipeline(Long ownerId, Long pipelineId,
 			long minTime, long maxTime)
 			{
-		UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
 		Map<String, Object> conditionsMap = new HashMap<String, Object>();
 		Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
-		List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
-		//List<Opportunity> ownDealsList_2 = new ArrayList<Opportunity>();
+		//List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
+		//List<Opportunity> list=null;
+		List<Opportunity> list2 = new ArrayList<Opportunity>();
 		Set<Opportunity> ownDealsSet = new TreeSet<Opportunity>(new Comparator<Opportunity>()
 		{
 			@Override  
@@ -2091,15 +2107,23 @@ public class OpportunityUtil
 				conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
 				conditionsMap1.put("milestone", milestone1.lost_milestone);
 				conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
-				List<Opportunity> list = dao.listByProperty(conditionsMap);
-				List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
-				if (list != null)
-				{
-					ownDealsSet.addAll(list);
-				}
-				if (list2 != null)
-				{
-					ownDealsSet.addAll(list2);
+				List<Opportunity>  list = dao.listByProperty(conditionsMap);
+				List<Opportunity> list2_temp = dao.listByProperty(conditionsMap1);
+				boolean flag=false;
+				list2.addAll(list2_temp);
+				for(Opportunity list_it:list){
+					for(Opportunity list_it2:list2){
+						if(!list_it.id.equals(list_it2.id)){
+							flag=true;
+							continue;
+						}
+						else {
+							flag=false;
+							break;
+						}
+					}
+					if(flag)
+						list2.add(list_it);
 				}
 			}
 			else
@@ -2109,14 +2133,22 @@ public class OpportunityUtil
 				conditionsMap1.put("milestone", "Lost");
 				conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
 				List<Opportunity> list = dao.listByProperty(conditionsMap);
-				List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
-				if (list != null)
-				{
-					ownDealsSet.addAll(list);
-				}
-				if (list2 != null)
-				{
-					ownDealsSet.addAll(list2);
+				List<Opportunity> list2_temp = dao.listByProperty(conditionsMap1);
+				boolean flag=false;
+				list2.addAll(list2_temp);
+				for(Opportunity list_it:list){
+					for(Opportunity list_it2:list2){
+						if(!list_it.id.equals(list_it2.id)){
+							flag=true;
+							continue;
+						}
+						else {
+							flag=false;
+							break;
+						}
+					}
+					if(flag)
+						list2.add(list_it);
 				}
 			}
 		}
@@ -2132,15 +2164,22 @@ public class OpportunityUtil
 					conditionsMap1.put("milestone", milestone.lost_milestone);
 					conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
 					List<Opportunity> list = dao.listByProperty(conditionsMap);
-					List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
-					if (list != null)
-					{
-						ownDealsSet.addAll(list);
-					}
-					if (list2 != null)
-					{
-						System.out.println("Adding another 2");
-						ownDealsSet.addAll(list2);
+					List<Opportunity> list2_temp = dao.listByProperty(conditionsMap1);
+					boolean flag=false;
+					list2.addAll(list2_temp);
+					for(Opportunity list_it:list){
+						for(Opportunity list_it2:list2){
+							if(!list_it.id.equals(list_it2.id)){
+								flag=true;
+								continue;
+							}
+							else {
+								flag=false;
+								break;
+							}
+						}
+						if(flag)
+							list2.add(list_it);
 					}
 				}
 				else
@@ -2151,21 +2190,31 @@ public class OpportunityUtil
 					conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
 					
 					List<Opportunity> list = dao.listByProperty(conditionsMap);
-					List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
-					if (list != null)
-					{
-						ownDealsSet.addAll(list);
-					}
-					if (list2 != null)
-					{
-						ownDealsSet.addAll(list2);
+					List<Opportunity> list2_temp = dao.listByProperty(conditionsMap1);
+					boolean flag=false;
+					list2.addAll(list2_temp);
+					for(Opportunity list_it:list){
+						for(Opportunity list_it2:list2){
+							if(!list_it.id.equals(list_it2.id)){
+								flag=true;
+								continue;
+							}
+							else {
+								flag=false;
+								break;
+							}
+						}
+						if(flag)
+							list2.add(list_it);
 					}
 				}
 			}
 		}
-		ownDealsList=new ArrayList<>(ownDealsSet);
-		return ownDealsList;
+		//ownDealsList=new ArrayList<>(ownDealsSet);
+		return list2;
 			}
+
+
 	/**
 	 * Returns JSONObject of won Deals divided by source. These are used for pie chart building.
 	 * 
@@ -2253,7 +2302,6 @@ public class OpportunityUtil
 	 */
 	public static List<Opportunity> getWonDealsListWithOwner(long minTime, long maxTime, Long ownerId)
 	{
-		UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
 		Map<String, Object> conditionsMap = new HashMap<String, Object>();
 		List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
 		if (ownerId != null)
@@ -2296,4 +2344,220 @@ public class OpportunityUtil
 		}
 
 	}
+	
+	
+	/*
+	 *  Returns list of deals based on ownerId or trackid   and mintime, maxtime  
+	 * @param ownerId
+	 *            - Owner Id  
+	 *  @param trackId
+	 *            - Track Id       
+	 * @return JSONObject
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	public static JSONObject getPipelineConversionData(Long ownerId, long minTime,
+			long maxTime,Long Track)
+	{
+
+		JSONObject Track_conversion = new JSONObject();
+		JSONObject Track_conversion_User = new JSONObject();
+		List<DomainUser> domainUsersList=new ArrayList<DomainUser>();
+		if(ownerId!=null && ownerId==0)
+			ownerId=null;
+		else
+			{
+			if(DomainUserUtil.getDomainUser(ownerId)!=null)
+			domainUsersList.add(DomainUserUtil.getDomainUser(ownerId));
+			}
+		List<Opportunity> opportunitiesList_main=getConversionDeals(ownerId, minTime,
+				maxTime);
+		List<Opportunity> opportunitiesList = new ArrayList<Opportunity>();
+		List<Milestone> milestones=new ArrayList<Milestone>();
+		
+		try{
+			
+			
+		if(Track!=null){
+			System.out.println("Inside track check");
+			Milestone milestone=MilestoneUtil.getMilestone(Track);
+			milestones.add(milestone);
+			if(opportunitiesList_main!=null && opportunitiesList_main.size()>0){
+			for(Opportunity opp:opportunitiesList_main){
+				if(opp.getPipeline_id().equals(Track))
+					opportunitiesList.add(opp);
+			}
+			System.out.println("Inside list"+opportunitiesList);
+			}
+		}
+		else
+		{
+			opportunitiesList=opportunitiesList_main;
+		System.out.println("Opportunity list"+ opportunitiesList);
+		milestones=MilestoneUtil.getMilestonesList();
+		}
+		
+	
+		for(Milestone milestone:milestones)
+		{
+			System.out.println("Milestone check");
+			JSONObject milestoneValue=new JSONObject();
+			Opportunity.MILESTONES=milestone.milestones.split(",");
+			for(String milestone_data : Opportunity.MILESTONES)
+			{
+				milestoneValue.put(" "+milestone_data.toString(), 0);
+				
+			}
+			Track_conversion.put(milestone.name, milestoneValue);
+			
+		}
+		
+		if(ownerId==null){
+			System.out.println("Owner check");
+			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+			if(dUser!=null)
+				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
+		}
+		for(DomainUser domainuser:domainUsersList)
+		{
+			System.out.println("domainuser" + domainuser);
+			JSONObject Track_user_pair = new JSONObject();
+			Track_user_pair.put(domainuser.name, Track_conversion);
+			System.out.println("user pair"+Track_user_pair);
+			Track_conversion_User.put(domainuser.id, Track_user_pair);
+			System.out.println("Conversion Json" + 	Track_conversion_User);
+		}
+		
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+		if(opportunitiesList!=null && opportunitiesList.size()!=0){
+			
+			for(Opportunity opp : opportunitiesList)
+			{
+					System.out.println("Inside deal List");
+				try{
+				//int count=0;
+				Long pipeline_id = opp.getPipeline_id();
+				
+				Milestone mile=MilestoneUtil.getMilestone(pipeline_id);
+					System.out.println("mile"+mile);
+				
+					System.out.println("ownerid"+opp.getOwner().id);
+					if(opp.getOwner()!=null)
+				if(Track_conversion_User.containsKey(opp.getOwner().id.toString()))
+				{
+					JSONObject conversion_user = Track_conversion_User.getJSONObject(opp.getOwner().id.toString());
+					if(conversion_user.containsKey(opp.getOwner().name)){
+						
+						JSONObject conversion = conversion_user.getJSONObject(opp.getOwner().name);
+						if(mile!=null)
+				if (conversion.containsKey(mile.name))
+				{
+					JSONObject mileObject = conversion.getJSONObject(mile.name);
+					System.out.println("Mileobject"+mileObject);
+					if(mileObject.containsKey(" "+opp.milestone))
+					{
+						Iterator keys=mileObject.keys();
+						while(keys.hasNext()){
+							String key=(String) keys.next();
+							int count=mileObject.getInt(key);
+							count++;
+							mileObject.put(key,count);
+							if(key.equalsIgnoreCase(" "+opp.milestone))
+								break;
+						}
+
+						conversion.put(mile.name, mileObject);
+					}
+					conversion_user.put(opp.getOwner().name, conversion);
+					
+				}
+				Track_conversion_User.put(opp.getOwner().id, conversion_user);
+					}
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				return null;
+			}
+			}
+		}
+		System.out.println("Tracks"+Track_conversion);
+		return Track_conversion_User;
+	}
+	
+	/*
+	 * 
+	 * Return List of Opportunities for pipeline conversion
+	 */
+	public static List<Opportunity> getConversionDeals(Long ownerId,
+			long minTime, long maxTime)
+			{
+		
+		Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
+		Map<String, Object> conditionsMap2 = new HashMap<String, Object>();
+		
+		System.out.println("insdie conversion");
+		if (ownerId != null){
+			conditionsMap1.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+			conditionsMap2.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+		}
+			//conditionsMap2.put("archived", false);
+			conditionsMap2.put("created_time >= ", minTime);
+			conditionsMap2.put("created_time <= ", maxTime);
+		conditionsMap1.put("milestone_changed_time >= ", minTime);
+		conditionsMap1.put("milestone_changed_time <= ", maxTime);
+		//conditionsMap1.put("archived", false);
+		try
+		{
+			
+					List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap1,"-milestone_changed_time");
+					System.out.println("list1--"+list);
+					List<Opportunity> list2 = dao.listByPropertyAndOrder(conditionsMap2,"-created_time");
+					System.out.println("list2--"+list2);
+					List<Opportunity> list_main = new ArrayList<Opportunity>();
+					List<Opportunity> list2_main = new ArrayList<Opportunity>();
+					for(Opportunity it1:list){
+						if(it1.archived==false)
+							list_main.add(it1);
+					}
+					for(Opportunity it2:list2){
+						if(it2.archived==false)
+							list2_main.add(it2);
+					}
+				
+				boolean flag=false;
+			for(Opportunity list_it:list_main){
+				for(Opportunity list_it2:list2_main){
+					if(!list_it.id.equals(list_it2.id)){
+						flag=true;
+						continue;
+					}
+					else {
+						flag=false;
+						break;
+					}
+				}
+				if(flag)
+					list2_main.add(list_it);
+			}
+			//conversionList=new ArrayList<>(ownDealsSet);
+			System.out.println("list2"+list2_main);
+			//System.out.println("main list"+conversionList);
+
+			
+			return list2_main;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+			}
+	
 }

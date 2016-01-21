@@ -57,7 +57,7 @@
 	<span class="activity-block-owner hidden">
 <span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
 	</span>
-	<div class="pull-left contact-title-dynamic"><a class="text-md text-cap custom-color">{{subject}}</a></div>
+	<div class="pull-left contact-title-dynamic"><a class="text-md text-cap custom-color text-ellipsis block w-full">{{subject}}</a></div>
 	<div class="pull-right"><small class="edit-hover text-muted"> 
 			<i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time text-sm" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 		</small></div>
