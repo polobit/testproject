@@ -58,6 +58,14 @@
 					<ul class="dropdown-menu pull-right">
 						<li><a href="#campaign-stats" id="campaign-stats"><i class="icon-bar-chart"></i> Compare Campaigns</a></li>
 					</ul>
+                   <!-- {{#is_mobile}}
+
+                    {{else}}
+                    <div class="btn-group pull-left m-l-xs" style="padding-left:3px;">
+                         <button class="btn btn-default btn-sm m-l-xs fullscreenelement" style="height:30px;width:30px;" targetFullscreenElement="#content" >
+                <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
+                {{/is_mobile}}-->
+
 				</div>
             	<a href="#triggers" class="btn right btn-default btn-sm pos-rlt m-r-sm pull-right btn-addon" id="add-trigger"><i class="icon-cog"></i> Manage Triggers</a>
 			</div>
@@ -71,20 +79,7 @@
 </div>
 <div class="wrapper-md">
 <div class="row">
-      <!-- Pending Triggers Content -->
-        <div id="triggers-verification" class="m-t-n-sm" style="display:none;">
-            <div class="alert danger info-block alert-warning text-black">
-                <div>
-                	<i class="icon-warning-sign"></i>
-					<strong>PENDING TRIGGERS. 
-						<!--<a href="#trigger-add" style="float: right;cursor: pointer;font-weight: normal;">How to add trigger?</a>-->
-					</strong>
-                	<p>You have at least one campaign but no triggers yet. <br></p>
-                	<p>Campaigns can be manually run on contact(s) or you can setup a trigger to run the campaign automatically based on certain conditions. <a href="#trigger-add" class="block">Setup a new trigger.</a></p>
-                </div>
-            </div>
-        </div>
-        <!-- End of Pending Triggers Content -->
+     
 
         {{#unless this.length}}
 		<div class="col-md-9 col-sm-9">
@@ -95,6 +90,20 @@
         {{#if this.length}}
 			{{add_tag "Campaigns"}}
             <div class="col-md-9 col-sm-9">
+             <!-- Pending Triggers Content -->
+        <div id="triggers-verification" class="m-t-n-sm" style="display:none;">
+            <div class="alert danger info-block alert-warning text-black">
+                <div>
+                    <i class="icon-warning-sign"></i>
+                    <strong>PENDING TRIGGERS. 
+                        <!--<a href="#trigger-add" style="float: right;cursor: pointer;font-weight: normal;">How to add trigger?</a>-->
+                    </strong>
+                    <p>You have at least one campaign but no triggers yet. <br></p>
+                    <p>Campaigns can be manually run on contact(s) or you can setup a trigger to run the campaign automatically based on certain conditions. <a href="#trigger-add" class="block">Setup a new trigger.</a></p>
+                </div>
+            </div>
+        </div>
+        <!-- End of Pending Triggers Content -->
 			<div class="panel panel-default">
 			    <div class="panel-heading">Campaigns List</div>
                 <div class="table-responsive">

@@ -401,6 +401,9 @@ function load_contact_tab(el, contactJSON)
 	if (position == null || position == undefined || position == "")
 		position = "timeline";
 
+	if(position == "timeline" && agile_is_mobile_browser())
+			return;
+
 	$('#contactDetailsTab a[href="#' + position + '"]', el).tab('show');
 
 	if (!position || position == "timeline")

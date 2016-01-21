@@ -22,7 +22,6 @@ function organize_sync_widgets(base_model)
 		$('#shopify', this.el).append($(itemView.render().el));
 	if (sync_type == "QUICKBOOK")
 		$('#quickbook', this.el).append($(itemView.render().el));
-
 	if (sync_type == "SALESFORCE")
 		$('#salesforce', this.el).append($(itemView.render().el));
 

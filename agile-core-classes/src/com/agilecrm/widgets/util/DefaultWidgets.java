@@ -60,6 +60,10 @@ public class DefaultWidgets {
 				"/widgets/stripe.js", "/img/plugins/Stripe.png",
 				"/widgets/stripe-small-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
+				"PayPal","PayPal is the faster, safer way for Online invoicing  Web and Mobile payments. Configure your PayPal business account and get access of invoices.",
+				"/widgets/paypal.js", "/img/plugins/paypal_logo.png",
+				"/widgets/paypal_icon.png", null, WidgetType.BILLING));
+		widgets.add(new Widget(
 				"HelpScout",
 				"Help Scout is a help desk for teams that insist on a delightful customer experience without exposing to ticket numbers, portals or robotic emails.",
 				"/widgets/helpscout.js", "/img/plugins/helpscout-logo.png",

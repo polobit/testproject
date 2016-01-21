@@ -507,10 +507,19 @@ public class ReportsUtil
 		catch(Exception e){
 			e.printStackTrace();
 		}
-				callsObject.put("Answered", 0);
-				callsObject.put("Busy",0);
-				callsObject.put("Failed",0);
-				callsObject.put("Voicemails",0);
+			String type="";
+				callsObject.put("answered", 0);
+				callsObject.put("busy",0);
+				callsObject.put("failed",0);
+				callsObject.put("voicemail",0);
+				callsObject.put("missed",0);
+				callsObject.put("inquiry",0);
+				callsObject.put("interest",0);
+				callsObject.put("no interest",0);
+				callsObject.put("incorrect referral",0);
+				callsObject.put("meeting scheduled",0);
+				callsObject.put("new opportunity",0);
+
 				callsPerPersonJSON=initializeFrequencyForReports(minTime,maxTime,frequency,timeZone,callsObject);
 			        try{
 				for(Activity activity : activitieslist){
@@ -550,32 +559,52 @@ public class ReportsUtil
 			            	net.sf.json.JSONObject count = callsPerPersonJSON.getJSONObject(createdTime);
 		                    if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.ANSWERED) || activity.custom3.equalsIgnoreCase("completed")))
 		                    	{	
-		                    	
-		                    		int count1=count.getInt("Answered");
-		                    		count1++;
-		                    		count.put("Answered",count1);
+		                    		type=Call.ANSWERED;
 		                    	}
 							else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
 							{
-		                    	
-	                    		int count1=count.getInt("Busy");
-	                    		count1++;
-	                    		count.put("Busy",count1);
+								type=Call.BUSY;
+	                    		
 	                    	}
 							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
 							{
-		                    	
-	                    		int count1=count.getInt("Failed");
-	                    		count1++;
-	                    		count.put("Failed",count1);
+		                    	type=Call.FAILED;
 	                    	}
 							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
 							{
-		                    	
-	                    		int count1=count.getInt("Voicemails");
-	                    		count1++;
-	                    		count.put("Voicemails",count1);
+		                    	type=Call.VOICEMAIL;
 	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Missed))
+							{
+		                    	type=Call.Missed;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
+							{
+		                    	type=Call.NewOpportunity;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
+							{
+		                    	type=Call.MeetingScheduled;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Inquiry))
+							{
+		                    	type=Call.Inquiry;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.IncorrectReferral))
+							{
+		                    	type=Call.IncorrectReferral;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Interest))
+							{
+		                    	type=Call.Interest;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NoInterest))
+							{
+		                    	type=Call.NoInterest;
+	                    	}
+		                    int count1=count.getInt(type);
+                    		count1++;
+                    		count.put(type,count1);
 		                    callsPerPersonJSON.put(createdTime, count);
 			            }
 				}

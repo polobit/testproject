@@ -5,12 +5,10 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-public class JerseyApplication extends Application
-{
-    @Override
-    public Set<Class<?>> getClasses()
-    {
-	Set<Class<?>> s = new HashSet<Class<?>>();
+public class JerseyApplication extends Application {
+	@Override
+	public Set<Class<?>> getClasses() {
+		Set<Class<?>> s = new HashSet<Class<?>>();
 
 	s.add(org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider.class);
 	s.add(org.codehaus.jackson.jaxrs.JacksonJsonProvider.class);
@@ -112,7 +110,8 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.deals.DealFilterAPI.class);
 	s.add(com.agilecrm.core.api.widgets.GoogleWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.deals.GoalsAPI.class);
+	s.add(com.agilecrm.core.api.widgets.PaypalWidgetApi.class);
 
-	return s;
-    }
+		return s;
+	}
 }

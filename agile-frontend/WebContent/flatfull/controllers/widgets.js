@@ -44,6 +44,8 @@ var WidgetsRouter = Backbone.Router
                 "Xero/:id" : "Xero",
                 "QuickBooks" : "QuickBooks",
                 "QuickBooks/:id" : "QuickBooks",
+                "PayPal" : "PayPal",
+                "PayPal/:id" : "PayPal",
                 // Ecommerce widgets
                 "Shopify" : "Shopify",
                 "Shopify/:id" : "Shopify",
@@ -256,6 +258,24 @@ var WidgetsRouter = Backbone.Router
                     addWidgetProfile(id, "QuickBooks",
                             "quickbooks-revoke-access",
                             "core/api/widgets/QuickBooks");
+                }
+
+            },
+
+           /**
+            *
+            */
+            PayPal : function(id){
+
+               if (!id) {
+                    addOAuthWidget(
+                            "PayPal",
+                            "paypal-login",
+                            ('/paypalScribe?isForAll=' + isForAll + '&return_url='
+                                    + encodeURIComponent(window.location.href)));
+                } else {
+                    addWidgetProfile(id, "PayPal", "paypal-revoke-access",
+                            "core/api/widgets/paypal");
                 }
 
             },
