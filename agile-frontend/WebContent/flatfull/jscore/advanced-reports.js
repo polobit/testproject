@@ -311,9 +311,9 @@ function showsalesReportGraphs()
 		options += ("&frequency=" + frequency);
 	}
 	// If Frequency is present - send frequency too
-	
+	var frequency = $( "#frequency:visible").val();
 
-	showDealAreaSpline('core/api/opportunity/stats/details/'+options,'revenue-chart','','',true);
+	showDealAreaSpline('core/api/opportunity/stats/details/'+options,'revenue-chart','','',true,frequency);
 
 }
 
@@ -561,7 +561,7 @@ function initDateRange(callback)
 							Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() : 
 							(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() :
 							(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(9)).moveToFirstDayOfMonth(), 
-							Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(2).moveToLastDayOfMonth()) : 
+							Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(2)).moveToLastDayOfMonth() : 
 							(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() :
 							(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(8)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
 					], 'Last Quarter' : [
@@ -707,6 +707,8 @@ function initRepReports(callback){
 						$(this).addClass("active");
 					});
 					$('.daterangepicker > .ranges > ul li:last-child' ).hide();
+					$('.daterangepicker  .range_inputs').hide();
+					$('.daterangepicker > .ranges > ul li:last-child').prev().removeClass('b-b');
 
 	});
 
@@ -724,3 +726,41 @@ function initRepReports(callback){
 		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined);
 		
 	}
+
+function initComparisonReports(callback){
+	
+	initDateRange(callback);
+
+	
+	// Init the callback when the track selector changes too
+		fillSelect("track", "/core/api/milestone/pipelines", undefined, function()
+		{
+			if (_agile_get_prefs("agile_deal_track"))
+            pipeline_id = _agile_get_prefs("agile_deal_track");
+
+			$('select[id="track"]').find('option[value="'+pipeline_id+'"]').attr("selected",true);
+			        	callback();
+			$('#track').change(function()
+			{
+				callback();
+			});
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "");
+
+	}
+function showComparisonReportGraph()
+{
+		url='/core/api/opportunity/conversionRate/0';
+		url=url+getSelectedDates();
+		if ($('#track').length > 0)
+	{
+		// Get owner
+		var track_id=0;
+		if ($("#track").val() != ""){
+			track_id=$("#track").val();
+			url += '&track-id='+track_id;
+			BubbleChart(url,'comparison-chart','',true);
+		}
+	}
+	
+}
+
