@@ -152,7 +152,7 @@ public class LoginServlet extends HttpServlet {
 			response.addCookie(senderDom);
 
 			// request.getSession().removeAttribute(RETURN_PATH_SESSION_HASH);
-			response.sendRedirect("/#sharedCampaign/");
+			// response.sendRedirect("/#sharedCampaign/");
 
 		} catch (Exception e) {
 			System.err
