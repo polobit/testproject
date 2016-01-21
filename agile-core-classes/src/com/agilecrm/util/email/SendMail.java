@@ -122,7 +122,7 @@ public class SendMail {
 
 	// For campaign sharing
 	public static final String SHARE_CAMPAIGN_CONFIRMATION = "share_campaign_confirmation";
-	public static final String SHARE_CAMPAIGN_SUBJECT = " Campaign Workflow Shared - Agile CRM";
+	public static final String SHARE_CAMPAIGN_SUBJECT = " Campaign Shared - Agile CRM";
 
 	/**
 	 * From Name of email.

@@ -111,9 +111,21 @@ public class WorkflowsAPI {
 	public Workflow getWorkflowForSharedCampaign(
 			@QueryParam("id") String workflow_id,
 			@QueryParam("senderDomain") String senderDomain) {
-		NamespaceManager.set(senderDomain);
-		Workflow workflow = WorkflowUtil.getWorkflow(Long
-				.parseLong(workflow_id));
+
+		String oldNamespace = NamespaceManager.get();
+		Workflow workflow = null;
+		try {
+			NamespaceManager.set(senderDomain);
+			workflow = WorkflowUtil.getWorkflow(Long.parseLong(workflow_id));
+
+		} catch (Exception e) {
+			System.err
+					.println("Exception occurred in getWorkflowForSharedCampaign... "
+							+ e.getMessage());
+			e.printStackTrace();
+		} finally {
+			NamespaceManager.set(oldNamespace);
+		}
 		return workflow;
 	}
 
