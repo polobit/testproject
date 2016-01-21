@@ -826,10 +826,21 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 
 		// Check old hash and call same function
-		if(!force_reload && Agile_Old_Hash && Agile_Old_Hash.indexOf("contact/") > -1)
-		{
+		if(!force_reload && Agile_Old_Hash && Agile_Old_Hash.indexOf("contact/") > -1){
               var contactId = Agile_Old_Hash.split("/")[1];
-              this.sendEmail(contactId, subject, body, cc, bcc, true);
+              var tempContact = App_Contacts.contactDetailView.model;
+
+              if(tempContact && contactId == tempContact.id){
+              	 var email;
+				 $.each(properties,function(id, obj){
+				    if(obj.name == "email"){
+					   email = obj.value;
+					   return false;
+				    }
+				 });
+				
+             	 this.sendEmail(email, subject, body, cc, bcc, true);             	
+          	   }
               return;
 		}
 
