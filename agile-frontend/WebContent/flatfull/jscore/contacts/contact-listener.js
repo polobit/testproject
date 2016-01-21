@@ -61,8 +61,10 @@ function contactListener()
 	setTimeout(function() {
 		if (!insidePopover){
 			if($('.popover').length!=0)
+			{
 			$(that).popover('hide');
-		$('.popover').remove();
+			$('.popover').remove();
+			}
 		}
 					
 	}, 200);
