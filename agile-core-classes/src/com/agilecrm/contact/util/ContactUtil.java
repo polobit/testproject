@@ -1816,5 +1816,4 @@ public class ContactUtil
 	Queue queue = QueueFactory.getQueue(AgileQueues.LAST_CONTACTED_UPDATE_QUEUE);
 	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask));
     }
-
 }
