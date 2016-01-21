@@ -827,23 +827,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 		// Check old hash and call same function
 		if(!force_reload && Agile_Old_Hash && Agile_Old_Hash.indexOf("contact/") > -1){
-              var contactId = Agile_Old_Hash.split("/")[1];
-              var tempContact = App_Contacts.contactDetailView.model;
-
-              if(tempContact && contactId == tempContact.id){
-              	 var email;
-              	 var properties = App_Contacts.contactDetailView.model.attributes.properties;
-              	 
-				 $.each(properties,function(id, obj){
-				    if(obj.name == "email"){
-					   email = obj.value;
-					   return false;
-				    }
-				 });
-				
-             	 this.sendEmail(email, subject, body, cc, bcc, true);             	
-          	   }
-              return;
+              
 		}
 
 		var model = {};
