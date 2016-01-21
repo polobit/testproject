@@ -1621,24 +1621,7 @@ a#email-reply{
     text-align: center;
     word-break:break-all;
   }
-  .mobile-pad-content .box-left {
-    display: none;
-  }
-  .mobile-pad-content .box-right {
-    float: none!important;
-    text-align: center;
-  }
-  .mobile-pad-content .box-right h4 {
-    font-weight: normal;
-    font-size: 16px;
-    margin-bottom: 5px;
-    white-space: normal;
-  }
-  .mobile-pad-content .box-right .text {
- color:#98a6ad !important;
- white-space: normal;
 
-  }
   #contact-filter-list-model-list.pull-right,#company-filter-list-model-list.pull-right {
     right: auto;
   }
@@ -1931,6 +1914,7 @@ color:#727272;
 }
 }
 
+
 /* css for tabs mobile */
  
 
@@ -2038,3 +2022,20 @@ color:#727272;
     display: none !important;
   }
 }
+
+.slate-content .box-left {
+    display: none;
+  }
+  .slate-content .box-right {
+    float: none!important;
+    text-align: center;
+  }
+  .slate-content .box-right h4 {
+    font-weight: normal;
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+  .slate-content .box-right .text {
+ color:#98a6ad !important
+  }
+
