@@ -82,6 +82,26 @@ position:fixed!important;
 .progress-bar.animate {
    width: 100%;
 }
+
+.loading-image {
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    position: absolute;
+    z-index: 9;
+    text-align: center;
+}
+#loading_img {
+    position: relative;
+    top: 15vh;
+    height: 10%;
+}
+#loading_p {
+    margin-top: 110px;
+    font-size: 22px;
+    line-height: 1.873;
+    font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
 </style>
  
  <!--<script src ="/flatfull/lib/jquery-new/jquery-2.1.1.min.js"></script>
@@ -100,30 +120,30 @@ if(isSafari && isWin)
 
 </head>
 <body>
+<div class="loading-image hide">
+	<img id="loading_img" src="/img/loading_reg.png" >
+	<p id="loading_p">Thank you for using Agile CRM<br>
+	 Don't go anywhere while we set up your account. This will be quick!</p>
+</div>
 
-
-<div class="modal fade" id="loadingmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+<!--<<div class="modal fade" id="loadingmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
     <div class="modal-dialog" style="z-index:10000;top:20vh;">
         <div class="modal-content">
             <div class="modal-header" style="background-color:rgba(0,0,0,0.025);">
-			 <h3 class="modal-title " style="font-size:18px;" ><!--<span id="username"></span>!--> Please Wait...</h3>
+			 <h3 class="modal-title " style="font-size:18px;" >Please Wait...</h3>
             </div>
             <div class="modal-body">
             	<center>
-            	<img src = "/img/agile-logo.png">
+            	<img src = "/img/registration.jpg" width="50" height="50">
                 <p>Thank you for using Agile CRM
 	      		<p>Please wait a moment while we set up your account...</p></center>
 	      		
             </div>
            
-            
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+            </div>
 </div>
-
-
-
-
+        </div><!-- /.modal-content -->
+    
 
 	<div id="error-area" class="error-top-view"></div>
 	<div class="app-content-body">

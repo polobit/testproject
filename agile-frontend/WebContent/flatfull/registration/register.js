@@ -124,19 +124,16 @@ function initializeSubmitHandler(form, emailField, subdomainField, submit_button
 
 						var email = $("#" + emailField).val();
 						var domain = $("#" + subdomainField).val();
-
 						var url =  "/backend/register-check?email=" + encodeURIComponent(email) +"&domain="+ domain;
-						 
 						 $(submit_button).attr("disabled", "disabled");
-
+						 $('.loading-image').removeClass("hide");
 						isDuplicateAccount(url, form, function(data) {
 						 	 hideEmailErrorMessage();
 						 	  hideDomainErrorMessage();
-						 	$(submit_button).removeAttr("disabled");
-						 	 
-						 	 submitForm(form, submit_button);
+						 	$(submit_button).removeAttr("disabled"); 
+							 submitForm(form, submit_button);
 						 }, function(error){
-
+						 	$('.loading-image').removeClass("hide");
 						 	$(submit_button).removeAttr("disabled");
 
 						 	if(domain)
@@ -148,6 +145,7 @@ function initializeSubmitHandler(form, emailField, subdomainField, submit_button
 								showEmailErrorMessage(error);
 						 	}
 						 	console.log(error);
+						 	
 						 });
 						
 						 
