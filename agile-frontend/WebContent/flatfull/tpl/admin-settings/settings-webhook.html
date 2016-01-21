@@ -4,57 +4,37 @@
 	<div class="panel-body">
     <form id="webhookPrefs" class="form-horizontal">
         <fieldset>
-            <input name="id" class="form-control" type="hidden" value="{{id}}">
-            
+            {{#if id}}
+            <input name="id" class="form-control" type="hidden" value="">
+            {{/if}}
             <div class="row">
                 <div class="col-md-7 col-xs-12">
-                    <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">Name <span class="field_req">*</span></label> 
-                        <div class="controls col-sm-8 col-xs-8">
-                            <input name="webhook-name" id="webhook-name" class="input-medium required form-control" type="text" value="" placeholder="Webhook Name">
-                        </div>
-                    </div>
                     
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Notify URL <span class="field_req">*</span></label> 
                         <div class="controls col-sm-8 col-xs-8">
-                            <input name="webhook-url" id="webhook-url" class="input-medium required form-control" type="text" value="" placeholder="Notify URL">
+                            <input name="url" id="url" class="input-medium required form-control" type="url" value="" placeholder="Notify URL">
                         </div>
                     </div>
-
-
                     
 
 
-
-                    <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">Auth Token </label> 
-                        <div class="controls col-sm-8 col-xs-8">
-                        <input name="auth-pwd" id="auth-pwd" class="input-medium form-control" type="password" value="">
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
+                    <div class="form-group multiple-checkbox checkedMultiCheckbox" name="modules">
                         <label class="control-label col-sm-4 col-xs-4">Module<span class="field_req">*</span></label>
                         <div class="checkbox controls col-sm-8 col-xs-8">
                           <label class="i-checks i-checks-sm">
-                            <input type="checkbox" ><i></i> Contact 
+                          <input type="checkbox" value="Contact"><i></i> Contact 
                           </label>
                         </div>
-
                         <div class="col-sm-offset-4 col-xs-offset-4 checkbox controls col-sm-8 col-xs-8">
                         <label class="i-checks i-checks-sm">
-                            <input type="checkbox" ><i></i> Deal
+                            <input type="checkbox" value="Opportunity"><i></i> Deal
                         </label>
-                        </div>
-
+                        </div>                        
                     </div>
                 
 
                 </div>
-
-                    
 
 
                      
@@ -64,7 +44,10 @@
             <div class="row">
             <div class="col-md-7 col-xs-8">
             <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
-            
+                {{#if id}}
+                <a href="#" type="submit" class="delete btn btn-sm btn-danger">Delete</a>
+                {{/if}}
+
                 <a href="#" type="submit" class="save btn btn-sm btn-primary">Submit</a>
            
 
@@ -72,10 +55,7 @@
             </div>
             </div>
                 
-            </div>
-            
-        </fieldset>
-    </form>
+            </fieldset></form>
 </div>
 </div>
 </script>
