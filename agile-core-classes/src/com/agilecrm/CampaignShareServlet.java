@@ -1,6 +1,7 @@
 package com.agilecrm;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,12 +30,12 @@ public class CampaignShareServlet extends HttpServlet {
 		req.getSession().setAttribute(CAMP_ID, campaign_Id);
 		req.getSession().setAttribute(
 				SENDER_DOMAIN,
-				NamespaceUtil.getNamespaceFromURL(req.getRequestURL()
-						.toString()));
+				NamespaceUtil.getNamespaceFromURL(new URL(req.getRequestURL()
+						.toString())));
 		System.out.println("CAMP_ID" + campaign_Id);
 		System.out.println("SENDER_DOMAIN"
-				+ NamespaceUtil.getNamespaceFromURL(req.getRequestURL()
-						.toString()));
+				+ NamespaceUtil.getNamespaceFromURL(new URL(req.getRequestURL()
+						.toString())));
 		// To make LoginServlet know about Share servlet
 		req.getSession().setAttribute(IS_SHARE_CAMPAIGN, true);
 
