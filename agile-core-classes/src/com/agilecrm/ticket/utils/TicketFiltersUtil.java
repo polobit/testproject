@@ -186,7 +186,7 @@ public class TicketFiltersUtil
 				query.append(" OR ");
 			}
 
-			query = new StringBuffer(query.substring(0, query.lastIndexOf("OR")));
+			query = new StringBuffer(query.substring(0, query.lastIndexOf("OR")).trim());
 			query.append(") AND ");
 		}
 

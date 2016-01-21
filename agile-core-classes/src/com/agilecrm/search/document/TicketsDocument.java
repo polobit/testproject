@@ -15,6 +15,7 @@ import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.util.StringUtils2;
+import com.google.appengine.api.search.Cursor;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.GetRequest;
@@ -257,31 +258,50 @@ public class TicketsDocument implements BuilderInterface
 		System.out.println("searching Documents");
 
 		// Create the initial cursor
-		com.google.appengine.api.search.Cursor cursor = com.google.appengine.api.search.Cursor.newBuilder().build();
+		Cursor cursor = Cursor.newBuilder().setPerResult(true).build();
 
 		// Set cursor if you already have
 		if (StringUtils.isNotBlank(cursorString))
-			cursor = com.google.appengine.api.search.Cursor.newBuilder().build(URLDecoder.decode(cursorString));
+			cursor = Cursor.newBuilder().setPerResult(true).build(URLDecoder.decode(cursorString));
 
-		QueryOptions options = null;
-		com.google.appengine.api.search.Query query = null;
+		QueryOptions options = QueryOptions.newBuilder().setCursor(cursor).setLimit(limit).build();
+		Query query = null;
 
-		SortDirection direction = sortField.startsWith("-") ? SortExpression.SortDirection.DESCENDING
-				: SortExpression.SortDirection.ASCENDING;
+		// SortDirection direction = sortField.startsWith("-") ?
+		// SortExpression.SortDirection.DESCENDING
+		// : SortExpression.SortDirection.ASCENDING;
+		//
+		// sortField = sortField.replace("-", "");
+		//
+		// // Build the SortOptions with 2 sort keys
+		// SortOptions sortOptions = SortOptions
+		// .newBuilder()
+		// .addSortExpression(
+		// SortExpression.newBuilder().setExpression(sortField).setDirection(direction)
+		// .setDefaultValueNumeric(0)).setLimit(1000).build();
 
-		sortField = sortField.replace("-", "");
+		SortExpression.Builder sortExpressionBuilder = SortExpression.newBuilder();
+		if (sortField.startsWith("-"))
+		{
+			sortField = sortField.substring(1);
+			sortExpressionBuilder = sortExpressionBuilder.setDirection(SortDirection.DESCENDING);
+		}
+		else
+		{
+			sortExpressionBuilder = sortExpressionBuilder.setDirection(SortDirection.ASCENDING);
+		}
 
-		// Build the SortOptions with 2 sort keys
-		SortOptions sortOptions = SortOptions
-				.newBuilder()
-				.addSortExpression(
-						SortExpression.newBuilder().setExpression(sortField).setDirection(direction)
-								.setDefaultValueNumeric(0)).setLimit(1000).build();
+		sortExpressionBuilder.setExpression(sortField);
+		sortExpressionBuilder.setDefaultValueNumeric(0d);
+
+		SortOptions sortOptions = SortOptions.newBuilder().addSortExpression(sortExpressionBuilder.build()).build();
+
 		try
 		{
 			// Setting records fetching limit to 20
-			options = QueryOptions.newBuilder().setCursor(cursor).setLimit(limit).setSortOptions(sortOptions).build();
-			query = com.google.appengine.api.search.Query.newBuilder().setOptions(options).build(queryString);
+			options = QueryOptions.newBuilder(options).setSortOptions(sortOptions).build();
+
+			query = Query.newBuilder().setOptions(options).build(queryString);
 		}
 		catch (Exception e)
 		{
@@ -296,9 +316,6 @@ public class TicketsDocument implements BuilderInterface
 		try
 		{
 			totalResults = results.getNumberFound();
-			newCursor = results.getCursor().toWebSafeString();
-
-			System.out.println("Cursor: " + newCursor);
 		}
 		catch (Exception e)
 		{
@@ -306,7 +323,20 @@ public class TicketsDocument implements BuilderInterface
 		}
 
 		for (ScoredDocument document : results)
+		{
 			resultArticleIds.add(new Key<Tickets>(Tickets.class, Long.parseLong(document.getId())));
+
+			try
+			{
+				newCursor = document.getCursor().toWebSafeString();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		System.out.println("Cursor: " + newCursor);
 
 		return new JSONObject().put("cursor", newCursor).put("keys", resultArticleIds).put("count", totalResults);
 	}

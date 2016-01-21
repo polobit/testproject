@@ -39,11 +39,13 @@ import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
+import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.TicketWorkflow;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
+import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
@@ -193,7 +195,7 @@ public class TicketsRest
 					.getQueryFromConditions(customFilters);
 
 			if (StringUtils.isBlank(sortField))
-				sortField = "last_updated_time";
+				sortField = "-last_updated_time";
 
 			if (pageSize == null)
 				pageSize = 25;
@@ -209,6 +211,8 @@ public class TicketsRest
 
 			for (int i = 0; i < keysArray.length(); i++)
 				keys.add((Key<Tickets>) keysArray.get(i));
+
+			System.out.println("keys: " + keys);
 
 			List<Tickets> tickets = Tickets.ticketsDao.fetchAllByKeys(keys);
 
@@ -987,38 +991,37 @@ public class TicketsRest
 	 * @return
 	 * @throws JSONException
 	 */
-	// @GET
-	// @Path("/create-test-ticket")
-	// @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	// public String createTicket() throws JSONException
-	// {
-	// try
-	// {
-	// TicketGroups group = TicketGroupUtil.getDefaultTicketGroup();
-	//
-	// String message =
-	// "Hi!..\r\n\r\nThis is test message. Please ignore.\r\n\r\nThank you\r\nSasi Krishna";
-	//
-	// // Creating new Ticket in Ticket table
-	// Tickets ticket = TicketsUtil.createTicket(group.id, true, "Sasi",
-	// "sasi@clickdesk.com",
-	// "Test ticket created from rest method", "", message, Source.EMAIL, true,
-	// "[142.152.23.23]");
-	//
-	// // Creating new Notes in TicketNotes table
-	// TicketNotesUtil.createTicketNotes(ticket.id, group.id, ticket.assigneeID,
-	// CREATED_BY.REQUESTER, "Sasi",
-	// "sasi@clickdesk.com", message, message, NOTE_TYPE.PUBLIC, new
-	// ArrayList<String>());
-	// }
-	// catch (Exception e)
-	// {
-	// System.out.println(ExceptionUtils.getFullStackTrace(e));
-	// throw new
-	// WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-	// .build());
-	// }
-	//
-	// return new JSONObject().put("status", "success").toString();
-	// }
+	@GET
+	@Path("/create-test-ticket")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String createTicket() throws JSONException
+	{
+		try
+		{
+			for (int i = 0; i < 100; i++)
+			{
+				TicketGroups group = TicketGroupUtil.getDefaultTicketGroup();
+
+				String message = "Hi!..\r\n\r\nThis is test message. Please ignore.\r\n\r\nThank you\r\nSasi Krishna";
+
+				Tickets ticket = TicketsUtil.createTicket(group.id, null, "Sasi", "sasi@clickdesk.com",
+						"Test ticket created from rest method", new ArrayList<String>(), message, Status.NEW,
+						Type.PROBLEM, Priority.LOW, Source.EMAIL, true, "[142.152.23.23]",
+						new ArrayList<Key<TicketLabels>>());
+
+				// Creating new Notes in TicketNotes table
+				TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, group.id, ticket.assigneeID,
+						CREATED_BY.REQUESTER, "Sasi", "sasi@clickdesk.com", message, message, NOTE_TYPE.PUBLIC,
+						new ArrayList<TicketDocuments>());
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+		return new JSONObject().put("status", "success").toString();
+	}
 }
