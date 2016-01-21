@@ -108,6 +108,16 @@ function isValidForm(form) {
 		
 		return /^[0-9\-]+$/.test(value);
 	}," Please enter a valid number.");
+
+	//positive number validation
+	jQuery.validator.addMethod("positive_number", function(value, element){
+			
+		if(value=="")
+			return false;
+		
+		return /^\+?(0|[1-9]\d*)$/.test(value);
+	}," Please enter a positive number.");
+
 	
 	jQuery.validator.addMethod("multi-select", function(value, element){
 		var counter = 0;

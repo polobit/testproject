@@ -394,8 +394,9 @@ Proceed to Pay
 <div class="panel panel-default m-t-sm">
         <div class="panel-heading ">Detailed Information</div>
         <div class="panel-body">
+        <form class="bs-example form-horizontal p-b-lg">
 {{#getSubscriptionBasedOnPlan billingData emailPlan}} 
-          <form class="bs-example form-horizontal p-b-lg">
+         
             <div class="form-group m-b-sm">
               <label class="col-sm-6 control-label p-t-none">Free Emails</label>
               <div class="col-sm-6">
@@ -435,7 +436,7 @@ Proceed to Pay
     
           </form>
 {{else}}
-          <form class="bs-example form-horizontal p-b-lg">
+          
             <div class="form-group m-b-sm">
               <label class="col-sm-6 control-label p-t-none">Free Emails</label>
               <div class="col-sm-6">
@@ -471,9 +472,20 @@ Proceed to Pay
                 
               </div>
             </div>  
-          </form>
+          
 {{/getSubscriptionBasedOnPlan}} 
-
+{{#if billingData}}
+	<div class="form-group m-b-sm">
+      <label class="col-sm-6 control-label p-t-none ">Email Credits</label>
+      <div class="col-sm-6">
+        {{getEmailCreditsCount}}
+        <span class="m-l-xs">
+        	<a href="#" id="purchase_credits" class="text-info text-xs">Add</a>
+        </span>
+      </div>
+    </div>
+{{/if}}
+</form>
 <div class="line line-dashed b-b line-lg"></div>
 
 <!-- Start of Testimonials -->
@@ -823,4 +835,44 @@ users.
 		</div>
 	</div>
 </div>
+</script>
+
+<script id="purchase-credits-info-modal-template" type="text/html">
+	<div class="modal-dialog">
+	    <div class="modal-content">
+			<div class="modal-header">
+	            <button class="close" data-dismiss="modal">x</button>
+				<h3 class="modal-title">Email Credits</h3>
+			</div>
+			<div class="modal-body help-text">
+				<form id="purchaseCreditsForm" class="form-horizontal" novalidate="novalidate"> 
+			     <fieldset> 
+			      <div class="control-group form-group"> 
+			       <label class="control-label col-sm-3">Emails<span class="field_req">*</span></label> 
+			       <div class="controls col-sm-9"> 
+					<input type="text" id="email_credits_count" name="nextRechargeCount" value="" class="form-control required positive_number inline-block pull-left" style="width:25%;">
+			        <span class="input-group-addon form-control pull-left" style="width:25%;">× 1000</span>
+			        
+			       </div>
+			       <span for="email_credits_count" generated="true" class="help-inline col-sm-offset-3 p-l"></span> 
+			      </div>
+			      <div class="control-group form-group m-b-xs"> 
+			       <label class="control-label col-sm-3">Total Cost<span class="field_req">*</span></label> 
+			       <div class="controls col-sm-6 p-t-xs">
+			       	 $<span id="total_credits_cost">0</span>
+			       </div>
+			       </div>
+			     </fieldset> 
+			    </form>
+			    <div class="col-sm-offset-3 p-l-sm text-sm text-muted"> 
+				   You will be charged @ $10/1000 emails.
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<a href="#" data-dismiss="modal" class="btn btn-sm btn-default">Cancel</a>
+				<a href="#" id="purchase_credits_conform" class="btn btn-sm btn-primary">Pay Now</a>
+			</div>
+		</div>
+	</div>
 </script>

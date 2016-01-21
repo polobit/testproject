@@ -87,13 +87,18 @@
             <tr>
             
 			<td>
+       {{#if this.plan}}
 				{{#containString "Email" plan.name}}
 					Emails
 				{{else}}
 					{{plan.name}} (${{numeric_operation plan.amount 100 "/"}}/{{plan.interval}})
 				{{/containString}}
+      {{else}}
+        Credits
+      {{/if}}
 			</td>
 			<td>
+      {{#if this.plan}}
 				{{#containString "Email" plan.name}}
 				{{numeric_operation this.quantity 1000 "*"}} Emails
 				<br>
@@ -105,6 +110,10 @@
 				 Changed on {{epochToHumanDate "dd mmm yyyy" period.start}}
 				{{/if}}
 				{{/containString}}
+        {{else}}
+          {{description}}
+          <br> <small>(charged @ $10/1000)</small>
+       {{/if}}
 			</td>
             
             <td>{{#if_less_than amount 0}}-{{/if_less_than}}${{get_amount_with_possitive amount}}</td>

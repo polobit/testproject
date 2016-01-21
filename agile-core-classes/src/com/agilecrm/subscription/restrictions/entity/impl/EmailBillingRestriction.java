@@ -25,15 +25,15 @@ public class EmailBillingRestriction extends DaoBillingRestriction
 	@Override
 	public boolean check()
 	{
-
 		emails = restriction.one_time_emails_count;
-
+		if(restriction.email_credits_count > 0)
+			emails = restriction.email_credits_count + (emails < 0 ? 0 : emails);
 		// To avoid NullPointerException
-		max_allowed = Integer.valueOf(max_allowed) == null ? 0 : max_allowed;
+		max_allowed = (Integer.valueOf(max_allowed) == null ? 0 : max_allowed);
 		emails = emails == null ? 0 : emails;
 
 		System.out.println("Max allowed in EmailBillingRestriction check " + max_allowed);
-		System.out.println("Emails remaind " + emails);
+		System.out.println("Total Emails remaind " + emails);
 
 		// If reminder is set then tags are created and added in our domain
 		send_warning_message();
@@ -58,7 +58,7 @@ public class EmailBillingRestriction extends DaoBillingRestriction
 		restriction.sendReminder = true;
 
 		// Gets maximum allowed emails in current plan
-		max_allowed = restriction.max_emails_count == null ? 0 : restriction.max_emails_count;
+		max_allowed = (restriction.max_emails_count == null ? 0 : restriction.max_emails_count)+(restriction.email_credits_count == null ? 0 : restriction.email_credits_count);
 		emails = restriction.one_time_emails_count == null ? 0 : restriction.one_time_emails_count;
 	}
 
@@ -67,10 +67,14 @@ public class EmailBillingRestriction extends DaoBillingRestriction
 	{
 		int emailsSent = 0;
 		int local_max_allowed = max_allowed;
-		if (emails < 0 && local_max_allowed > 0)
+		int local_emails = emails;
+		if(restriction.email_credits_count > 0)
+			local_emails = restriction.email_credits_count + (emails < 0 ? 0 : emails);
+			
+		if (local_emails < 0 && local_max_allowed > 0)
 			emailsSent = local_max_allowed;
 		else
-			emailsSent = local_max_allowed - emails;
+			emailsSent = local_max_allowed - local_emails;
 
 		emailsSent = emailsSent < 0 ? 0 : emailsSent;
 

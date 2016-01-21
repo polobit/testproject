@@ -5283,6 +5283,11 @@ $(function()
 			return "-";
 	});
 
+	Handlebars.registerHelper('getEmailCreditsCount', function()
+	{
+		return getEmailCreditsCount();
+	});
+
 	// helper function to return agile bcc special email for inbound mail event
 	// trigger
 	Handlebars.registerHelper('inboundMail', function()

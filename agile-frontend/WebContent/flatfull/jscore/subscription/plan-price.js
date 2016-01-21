@@ -705,6 +705,24 @@ function initializeSubscriptionListeners()
 			}
 		});
 	});
+	$("#purchase_credits").off("click");
+	$("#email-content").on("click","#purchase_credits", function(e){
+		e.preventDefault();
+		getTemplate("purchase-credits-info-modal",{} , undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("#purchase-credits-info-modal").html($(template_ui)).modal('show');
+		}, null);
+			
+	});
+
+	$('#purchase-credits-info-modal').on("keyup", '#email_credits_count', function(e)
+	{
+		var quantity = $(this).val();
+		if (isNaN(quantity) || quantity <= 0)
+			return;
+		$("#total_credits_cost").html(quantity*10);
+	});
 }
 
 function is_new_signup_payment()
@@ -765,3 +783,31 @@ function emailClickEvent() {
 	$("#users-content").removeClass("active");
 	$("#email-content").addClass("active");
 }
+
+$(function(){
+
+  $("#purchase_credits_conform").off("click");
+	$("#purchase-credits-info-modal").on("click","#purchase_credits_conform",function(e){
+		e.preventDefault();
+		var $form = $("#purchaseCreditsForm");
+		if(!isValidForm($form))
+			return;
+		var $btn = $(this);
+		disable_save_button($btn);
+		var credits_count = $form.find("#email_credits_count").val();
+		$.ajax({url:'core/api/subscription/purchaseEmailCredits?quantity='+credits_count,
+			type:'POST',
+			success:function(data){
+				$form.closest(".modal").modal("hide");
+				showNotyPopUp("information", "Email credits have been added successfully.", "top"); 
+				setTimeout(function(){ 
+					document.location.reload();
+				}, 1000);				
+			},error: function(response){
+				$form.closest(".modal").modal("hide");
+				showNotyPopUp("warning", response.responseText, "top"); 
+			}
+		});
+	});
+
+});

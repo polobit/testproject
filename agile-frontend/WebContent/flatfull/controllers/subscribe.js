@@ -783,3 +783,13 @@ function getEmailsNextRenewalTime()
 	}
 
 }
+
+function getEmailCreditsCount()
+{
+	var count = _billing_restriction.email_credits_count;
+
+	if (count == undefined)
+		count = 0;
+
+	return count;
+}

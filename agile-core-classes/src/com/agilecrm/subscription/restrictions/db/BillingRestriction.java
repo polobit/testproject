@@ -97,6 +97,9 @@ public class BillingRestriction
     public Integer widgets_count = 0;
 
     public Integer one_time_emails_count = 0;
+    
+    // Life time emails
+    public Integer email_credits_count = 0;
 
     /**
      * This field is not saved in database, it is used to have a backup emails
@@ -105,6 +108,14 @@ public class BillingRestriction
      */
     @NotSaved
     private Integer one_time_emails_backup = 0;
+    
+    /**
+     * This field is not saved in database, it is used to have a backup email credits
+     * count we have got from DB. This field is used to compare before saving
+     * emails count
+     */
+    @NotSaved
+    private Integer email_credits_backup = 0;
 
     @NotSaved
     public boolean isNewEmailPlanUpgrade = false;
@@ -222,7 +233,7 @@ public class BillingRestriction
 
     public boolean isEmailWhiteLabelEnabled()
     {
-	if (one_time_emails_count != null && one_time_emails_count > 0)
+	if ((one_time_emails_count != null && one_time_emails_count > 0) || (email_credits_count != null && email_credits_count > 0))
 	    return true;
 
 	return false;
@@ -396,15 +407,20 @@ public class BillingRestriction
 	// Just to avoid null pointer exception
 	if (this.one_time_emails_backup == null)
 	    this.one_time_emails_backup = this.one_time_emails_count;
+	if (this.email_credits_backup == null)
+	    this.email_credits_backup = this.email_credits_count;
 
 	// Substracting from existing db count
 	restriction.one_time_emails_count -= (this.one_time_emails_backup - this.one_time_emails_count);
+	restriction.email_credits_count -= (this.email_credits_backup - this.email_credits_count);
 
 	// Updating one time count from that of DB entity
 	this.one_time_emails_count = restriction.one_time_emails_count;
+	this.email_credits_count = restriction.email_credits_count;
 
 	// Updating backup count from that of DB entity
 	this.one_time_emails_backup = one_time_emails_count;
+	this.email_credits_backup = email_credits_count;
 
     }
 
@@ -462,8 +478,9 @@ public class BillingRestriction
 	}
 
 	one_time_emails_backup = one_time_emails_count;
+	email_credits_backup = email_credits_count;
 
-	System.out.println("one time emails in domain : " + NamespaceManager.get() + " : " + one_time_emails_backup);
+	System.out.println("one time emails in domain : " + NamespaceManager.get() + " : " + one_time_emails_backup +" and email credits count : "+email_credits_backup);
     }
     
     public boolean checkToUpdateFreeEmails(){
@@ -486,5 +503,24 @@ public class BillingRestriction
 		}
 		System.out.println("restriction obj:: "+this);
 		return false;
+    }
+    
+    public boolean checkForEmailCredits(){
+    	if(this.one_time_emails_count != null && this.one_time_emails_count <= 5 && this.email_credits_count != null && this.email_credits_count > 0)
+    		return true;
+    	else
+    		return false;
+    }
+    
+    public void decrementEmailCreditsCount(){
+    	--this.email_credits_count;
+    }
+    
+    public void decrementEmailCreditsCount(int count){
+    	this.email_credits_count -= count;
+    }
+    
+    public void incrementEmailCreditsCount(int count){
+    	this.email_credits_count += count;
     }
 }
