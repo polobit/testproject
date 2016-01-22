@@ -719,7 +719,11 @@ function initializeSubscriptionListeners()
 	$('#purchase-credits-info-modal').on("keyup", '#email_credits_count', function(e)
 	{
 		var quantity = $(this).val();
-		if (isNaN(quantity) || quantity <= 0)
+		if(quantity == ""){
+			$("#total_credits_cost").html(quantity*10);
+			return;
+		}
+		if (isNaN(quantity) || quantity < 0)
 			return;
 		$("#total_credits_cost").html(quantity*10);
 	});
