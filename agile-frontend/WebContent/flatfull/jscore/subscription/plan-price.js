@@ -725,7 +725,7 @@ function initializeSubscriptionListeners()
 		}
 		if (isNaN(quantity) || quantity < 0)
 			return;
-		$("#total_credits_cost").html(quantity*10);
+		$("#total_credits_cost").html(quantity*30);
 	});
 }
 
@@ -796,8 +796,7 @@ $(function(){
 		var $form = $("#purchaseCreditsForm");
 		if(!isValidForm($form))
 			return;
-		var $btn = $(this);
-		disable_save_button($btn);
+		$(this).attr("disabled", "disabled").html("Processing...");
 		var credits_count = $form.find("#email_credits_count").val();
 		$.ajax({url:'core/api/subscription/purchaseEmailCredits?quantity='+credits_count,
 			type:'POST',

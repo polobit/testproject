@@ -434,7 +434,6 @@ Proceed to Pay
               </div>
             </div>
     
-          </form>
 {{else}}
           
             <div class="form-group m-b-sm">
@@ -851,22 +850,23 @@ users.
 			       <label class="control-label col-sm-3">Emails<span class="field_req">*</span></label> 
 			       <div class="controls col-sm-9"> 
 					<input type="text" id="email_credits_count" name="nextRechargeCount" value="" class="form-control required positive_number inline-block pull-left" style="width:25%;">
-			        <span class="input-group-addon form-control pull-left" style="width:25%;">× 1000</span>
+			        <span class="input-group-addon form-control pull-left" style="width:25%;padding-top:9px;">× 1000</span>
 			        
 			       </div>
+			       <div class="col-sm-offset-3 p-l help-block"> 
+				     You will be charged @ $30/1000 emails.
+				   </div>
 			       <span for="email_credits_count" generated="true" class="help-inline col-sm-offset-3 p-l"></span> 
 			      </div>
 			      <div class="control-group form-group m-b-xs"> 
 			       <label class="control-label col-sm-3">Total Cost<span class="field_req">*</span></label> 
-			       <div class="controls col-sm-6 p-t-xs">
+			       <div class="controls col-sm-6" style="padding-top:7px;">
 			       	 $<span id="total_credits_cost">0</span>
 			       </div>
 			       </div>
 			     </fieldset> 
 			    </form>
-			    <div class="col-sm-offset-3 p-l-sm text-sm text-muted"> 
-				   You will be charged @ $10/1000 emails.
-				</div>
+			    
 
 			</div>
 			<div class="modal-footer">
