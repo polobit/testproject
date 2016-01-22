@@ -662,7 +662,7 @@ var Tickets = {
 
 	initDateTimePicker: function($input, singleDatePicker, callback){
 
-		head.load(LIB_PATH + '/lib/web-calendar-event/moment.min.js', '/lib/date-range-picker2.min.js', "/flatfull/css/final-lib/date-range-picker2.css",  function()
+		head.load(LIB_PATH + '/lib/web-calendar-event/moment.min.js', '/lib/date-range-picker2.min.js?_=' + _AGILE_VERSION, '/flatfull/css/final-lib/date-range-picker2.css?_=' + _AGILE_VERSION,  function()
 		{	
 			$input.daterangepicker({
 			    "singleDatePicker": singleDatePicker, "drops": "up"
