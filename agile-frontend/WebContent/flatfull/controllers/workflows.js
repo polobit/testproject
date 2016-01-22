@@ -1330,12 +1330,13 @@ var WorkflowsRouter = Backbone.Router
 					callback(); 		
 
 			},
-			shareWorkflow : function(id, sender_domain){
-						
-				/* Reset the designer JSON */
-				this.workflow_json = undefined;
-				this.workflow_model = undefined;
+			shareWorkflow : function(id, sender_domain, workflow){
+				
+				if(workflow)
+					this.workflow_model = workflow;
 
+				if(!this.workflow_model)
+				{
 				// Get workflow template based on category and template name
 				var workflow_template_model = Backbone.Model.extend({
 
@@ -1348,9 +1349,15 @@ var WorkflowsRouter = Backbone.Router
 
 				model.fetch({ success : function(data)
 				{
-					//that.workflow_json = that.workflow_model.get("rules");
-					that.workflow_json = JSON.stringify(data).valueOf("rules");
+					if (!this.workflow_model || this.workflow_model === undefined)
+					{
+					App_Workflows.shareWorkflow(id, sender_domain, data);
+					}
 				} });
+				}
+				if(this.workflow_model)
+				{
+				this.workflow_json = this.workflow_model.get("rules");
 
 				var workflowModal = new Workflow_Model_Events({
 					url : 'core/api/workflow', 
@@ -1362,9 +1369,11 @@ var WorkflowsRouter = Backbone.Router
 						send_verify_email(el);
 					}
 				});
-				//that.workflow_json = that.workflow_model.get("rules");
+			
 				
 				$("#content").html(workflowModal.render().el);
+			}
+					
 			}
 });
 
