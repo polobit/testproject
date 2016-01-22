@@ -317,14 +317,18 @@ public class ContactUtil
 	if (StringUtils.isBlank(email))
 	    return null;
 
-	Map<String, Object> searchMap = new HashMap<String, Object>();
 
 	Query<Contact> q = dao.ofy().query(Contact.class);
 	q.filter("properties.name", Contact.EMAIL);
 	q.filter("type", Type.PERSON);
 	q.filter("properties.value", email.toLowerCase());
 
-	return q.get();
+	try {
+		return dao.get(q.getKey());
+	} catch (Exception e) {
+		return null;
+	}
+	
     }
 
     public static Contact searchContactByCompanyName(String companyName)
