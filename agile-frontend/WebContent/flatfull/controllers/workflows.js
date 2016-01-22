@@ -288,7 +288,7 @@ var WorkflowsRouter = Backbone.Router
 
 				model.fetch({ success : function(data)
 				{
-					that.workflow_json = JSON.stringify(data);
+					that.workflow_json = JSON.stringify(this.workflow_model.get("rules"));
 				} });
 
 				var workflowModal = new Workflow_Model_Events({
@@ -1348,7 +1348,8 @@ var WorkflowsRouter = Backbone.Router
 
 				model.fetch({ success : function(data)
 				{
-					that.workflow_json = JSON.stringify(data);
+					//that.workflow_json = that.workflow_model.get("rules");
+					that.workflow_json = JSON.stringify(data).valueOf("rules");
 				} });
 
 				var workflowModal = new Workflow_Model_Events({
@@ -1361,6 +1362,7 @@ var WorkflowsRouter = Backbone.Router
 						send_verify_email(el);
 					}
 				});
+				//that.workflow_json = that.workflow_model.get("rules");
 				
 				$("#content").html(workflowModal.render().el);
 			}
