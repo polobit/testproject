@@ -91,17 +91,79 @@ position:fixed!important;
     z-index: 9;
     text-align: center;
 }
-#loading_img {
-    position: relative;
-    top: 15vh;
-    
-}
-#loading_p {
-    margin-top: 110px;
-    font-size: 22px;
+
+/*Starting of the animation*/
+#loading_p1 {
+    /* margin-top: 255px; */
+    font-size: 15pt;
     line-height: 1.873;
     font-family: "Source Sans Pro","Helvetica Neue","Helvetica,Arial,sans-serif";
+    /* display: none; */
+    position: relative;
+    top: -100px;
+    left: -50%;
+    /* display: none; */
+    
 }
+.animationload {
+    background-color: #fff;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10000;
+    
+}
+.osahanloading {
+    animation: 1.5s linear 0s normal none infinite running osahanloading;
+    background: #fed37f none repeat scroll 0 0;
+    border-radius: 50px;
+    height: 50px;
+    /* left: 50%; */
+    margin-left: -25px;
+    margin-top: -25px;
+    position: absolute;
+    top: -165px;
+    width: 50px;
+}
+.osahanloading::after {
+    animation: 1.5s linear 0s normal none infinite running osahanloading_after;
+    border-color: #85d6de transparent;
+    border-radius: 80px;
+    border-style: solid;
+    border-width: 10px;
+    content: "";
+    height: 80px;
+    left: -15px;
+    position: absolute;
+    top: -15px;
+    width: 80px;
+}
+@keyframes osahanloading {
+0% {
+    transform: rotate(0deg);
+}
+50% {
+    background: #85d6de none repeat scroll 0 0;
+    transform: rotate(180deg);
+}
+100% {
+    transform: rotate(360deg);
+}
+}
+.animate {
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    margin: 0 auto;
+    position: absolute;
+
+}
+/*Ending of the animation*/
+
+
+
 </style>
  
  <!--<script src ="/flatfull/lib/jquery-new/jquery-2.1.1.min.js"></script>
@@ -121,28 +183,24 @@ if(isSafari && isWin)
 </head>
 <body>
 <div class="loading-image hide">
-	<img id="loading_img" src="/img/registration_loading.png" >
-	<p id="loading_p">
-	 Please wait while we are setting up your account...</p>
+	<!--starting of animation-->
+	<div class="container">
+	<div class="row">   
+        <div class="animationload">
+  		<div class="animate">
+            <div class="osahanloading">
+ 			
+        	</div>
+        	<p id="loading_p1">
+	 			Please wait while we are setting up your account...</p>
+    	</div>
+  		</div>
+	</div>
+	</div>
+	<!--ending of animation-->
+	
 </div>
 
-<!--<<div class="modal fade" id="loadingmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-    <div class="modal-dialog" style="z-index:10000;top:20vh;">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color:rgba(0,0,0,0.025);">
-			 <h3 class="modal-title " style="font-size:18px;" >Please Wait...</h3>
-            </div>
-            <div class="modal-body">
-            	<center>
-            	<img src = "/img/registration.jpg" width="50" height="50">
-                <p>Thank you for using Agile CRM
-	      		<p>Please wait a moment while we set up your account...</p></center>
-	      		
-            </div>
-           
-            </div>
-</div>
-        </div><!-- /.modal-content -->
     
 
 	<div id="error-area" class="error-top-view"></div>

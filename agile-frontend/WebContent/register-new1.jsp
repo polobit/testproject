@@ -15,7 +15,7 @@
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	} 
+	}
  
   String _source = request.getParameter("_source");
   
