@@ -246,6 +246,8 @@ public class LoginServlet extends HttpServlet {
 
 		String senderDomain = (String) request.getSession().getAttribute(
 				CampaignShareServlet.SENDER_DOMAIN);
+		System.out.println("campaignId in LoginServlet" + campaignId);
+		System.out.println("senderDomain in LoginServlet" + senderDomain);
 
 		if (StringUtils.isNotBlank(campaignId)
 				&& StringUtils.isNotBlank(senderDomain))

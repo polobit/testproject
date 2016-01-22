@@ -115,7 +115,10 @@ public class WorkflowsAPI {
 		String oldNamespace = NamespaceManager.get();
 		Workflow workflow = null;
 		try {
+			System.out.println("SenderDomain in workflowsAPI" + senderDomain);
 			NamespaceManager.set(senderDomain);
+			System.out.println("Domain in namespacemanager"
+					+ NamespaceManager.get());
 			workflow = WorkflowUtil.getWorkflow(Long.parseLong(workflow_id));
 
 		} catch (Exception e) {
