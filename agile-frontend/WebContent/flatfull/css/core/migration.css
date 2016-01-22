@@ -1653,12 +1653,12 @@ a#email-reply{
   #calendar_container .fc-header {
     width: 65%;
   }
-  #navbar 
+/*  #navbar 
   { 
     max-height: 80vh;
     overflow-y: auto;
     overflow-x: hidden;
-  }
+  }*/
   .dropdown-submenu:hover #contact-sort-views {
     display: none;
   }
@@ -1742,7 +1742,7 @@ box-shadow: 0 0 10px 0px #bbb;
 }*/
 
 #navbar {
-box-shadow: 0 5px 10px 0px #bbb;
+box-shadow: none;
 }
 
 #searchForm {
