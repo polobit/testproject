@@ -64,15 +64,21 @@ function buildCalendarLhsFilters(){
 
 	var eventFilters;
 	var eventData = JSON.parse(_agile_get_prefs('event-lhs-filters'));	
+	var prefs = {};
 
 	if(eventData){
 		eventFilters = eventData[CURRENT_AGILE_USER.id];
 		if(!eventFilters){			
-			eventFilters = defaultPrefs;			
-			eventData[CURRENT_AGILE_USER.id] = defaultPrefs;
-			_agile_set_prefs('event-lhs-filters', JSON.stringify(eventData));
+			eventFilters = defaultPrefs;						
+		    prefs[CURRENT_AGILE_USER.id] = defaultPrefs;
+		    _agile_set_prefs('event-lhs-filters', JSON.stringify(prefs));
+		}else{
+			 prefs[CURRENT_AGILE_USER.id] = eventFilters;
 		}
-	}	
+	}else{
+		 prefs[CURRENT_AGILE_USER.id] = defaultPrefs;
+		 _agile_set_prefs('event-lhs-filters', JSON.stringify(prefs));
+	}		
 
 	if (eventFilters)
 	{		
@@ -112,8 +118,6 @@ function buildCalendarLhsFilters(){
 		 * 
 		 * if (list_event_type) $("#event_time").val(list_event_type); }
 		 */
-	}else{			
-		_agile_set_prefs('event-lhs-filters', JSON.stringify(defaultPrefs));
 	}
 
 }
