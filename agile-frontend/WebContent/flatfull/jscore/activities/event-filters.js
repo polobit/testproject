@@ -42,13 +42,14 @@ function createRequestUrlBasedOnFilter()
 	json_obj.cal_type = calendars_val;
 	json_obj.owner_ids = calendars_user_val;
 	json_obj.domain_user_ids = calendars_domain_user_ids;
-	var result ={};
-	result[CURRENT_AGILE_USER.id] = json_obj;
+
+	var eventData = JSON.parse(_agile_get_prefs('event-lhs-filters'));	
+	eventData[CURRENT_AGILE_USER.id] = json_obj;
 
 	/*
 	 * if (event_list_type) json_obj.event_type = event_list_type;
 	 */
-	_agile_set_prefs('event-lhs-filters', JSON.stringify(result));
+	_agile_set_prefs('event-lhs-filters', JSON.stringify(eventData));
 
 }
 
@@ -61,7 +62,12 @@ function buildCalendarLhsFilters()
 
 	if(eventData){
 		eventFilters = eventData[CURRENT_AGILE_USER.id];
-	}		
+		if(!eventFilters){
+			eventFilters = eventData;				
+			eventData[CURRENT_AGILE_USER.id] = eventFilters;
+			_agile_set_prefs('event-lhs-filters', JSON.stringify(eventData));
+		}
+	}	
 
 	if (eventFilters)
 	{		

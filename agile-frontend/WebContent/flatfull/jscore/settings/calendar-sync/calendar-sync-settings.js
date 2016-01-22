@@ -45,9 +45,14 @@ var Calendar_Sync_Settings_View = Base_Model_View.extend({
 		        eventFilters.cal_type = $.grep(filtterList, function(value){
 		         return value != calendarItem;
 		       });
-		        var result = {};
-		        result[CURRENT_AGILE_USER.id] = eventFilters;
-		       _agile_set_prefs('event-lhs-filters', JSON.stringify(result));
+
+		        var eventData = JSON.parse(_agile_get_prefs('event-lhs-filters'));	
+				eventData[CURRENT_AGILE_USER.id] = eventFilters;
+
+				/*
+				 * if (event_list_type) json_obj.event_type = event_list_type;
+				 */
+				_agile_set_prefs('event-lhs-filters', JSON.stringify(eventData));		        
 			}
 		}
 
