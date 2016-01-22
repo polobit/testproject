@@ -55,21 +55,21 @@ function createRequestUrlBasedOnFilter()
 
 // this function will be called to read filters from cookie if not found creates
 // cookie with default values
-function buildCalendarLhsFilters()
-{
+function buildCalendarLhsFilters(){
+
+	var defaultPrefs = {};
+	defaultPrefs.cal_type = ["agile"];
+	defaultPrefs.owner_ids = [];
+	defaultPrefs.domain_user_ids = [];		
+
 	var eventFilters;
 	var eventData = JSON.parse(_agile_get_prefs('event-lhs-filters'));	
 
 	if(eventData){
 		eventFilters = eventData[CURRENT_AGILE_USER.id];
-		if(!eventFilters){
-			var json_obj = {};
-			json_obj.cal_type = ["agile"];
-			json_obj.owner_ids = [];
-			json_obj.domain_user_ids = [];
-			eventFilters = json_obj;	
-			
-			eventData[CURRENT_AGILE_USER.id] = json_obj;
+		if(!eventFilters){			
+			eventFilters = defaultPrefs;			
+			eventData[CURRENT_AGILE_USER.id] = defaultPrefs;
 			_agile_set_prefs('event-lhs-filters', JSON.stringify(eventData));
 		}
 	}	
@@ -112,23 +112,9 @@ function buildCalendarLhsFilters()
 		 * 
 		 * if (list_event_type) $("#event_time").val(list_event_type); }
 		 */
+	}else{			
+		_agile_set_prefs('event-lhs-filters', JSON.stringify(defaultPrefs));
 	}
-	// else
-	// {
-	// 	/*
-	// 	 * $('.calendar_user_check').each(function() { // loop through each
-	// 	 * checkbox if ($(this).val() == CURRENT_AGILE_USER.id) this.checked =
-	// 	 * true; });
-	// 	 */
-	// 	$('.calendar_check').each(function()
-	// 	{ // loop through each checkbox
-	// 		this.checked = true;
-	// 	});
-
-	// 	/*
-	// 	 * if (_agile_get_prefs("agile_calendar_view")) { $("#event_time").val(""); }
-	// 	 */
-	// }
 
 }
 
