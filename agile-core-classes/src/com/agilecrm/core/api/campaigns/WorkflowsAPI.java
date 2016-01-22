@@ -120,6 +120,7 @@ public class WorkflowsAPI {
 			System.out.println("Domain in namespacemanager"
 					+ NamespaceManager.get());
 			workflow = WorkflowUtil.getWorkflow(Long.parseLong(workflow_id));
+			System.out.println("Workflow rules" + workflow.rules);
 
 		} catch (Exception e) {
 			System.err
