@@ -41,7 +41,11 @@ public class CampaignShareServlet extends HttpServlet {
 
 		// Redirect to enter domain
 		resp.sendRedirect(VersioningUtil.getHostURLByApp("my")
-				+ "enter-domain?to=login");
+				+ "enter-domain?to=login#share-campaign/"
+				+ campaign_Id
+				+ "/"
+				+ NamespaceUtil.getNamespaceFromURL(new URL(req.getRequestURL()
+						.toString())));
 
 	}
 }
