@@ -526,7 +526,9 @@ public class WebCalendarEventUtil
 			 * Make sub slot of filled slot as per selected duration(slot time)
 			 * and add in list
 			 */
-			filledSlots.addAll(makeSlots(slotTime, e.start, e.end));
+			if(e.start != null && e.end !=null){
+				filledSlots.addAll(makeSlots(slotTime, e.start, e.end));
+			}
 		}
 
 		return filledSlots;
