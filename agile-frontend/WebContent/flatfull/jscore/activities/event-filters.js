@@ -76,6 +76,7 @@ function buildCalendarLhsFilters(){
 			 prefs[CURRENT_AGILE_USER.id] = eventFilters;
 		}
 	}else{
+		 eventFilters = defaultPrefs;
 		 prefs[CURRENT_AGILE_USER.id] = defaultPrefs;
 		 _agile_set_prefs('event-lhs-filters', JSON.stringify(prefs));
 	}		
