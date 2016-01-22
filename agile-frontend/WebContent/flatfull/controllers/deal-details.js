@@ -25,6 +25,7 @@ var DealDetailsRouter = Backbone.Router.extend({
 		{
 
 			$('.content-tabs',el).tabCollapse();
+			
 
 			/**
 			 * gets the tracks count when user comes to deals page and stores in
