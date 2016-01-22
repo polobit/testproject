@@ -68,10 +68,9 @@ function buildCalendarLhsFilters()
 			json_obj.owner_ids = [];
 			json_obj.domain_user_ids = [];
 			eventFilters = json_obj;	
-
-			var pres = {};
-			pres[CURRENT_AGILE_USER.id] = json_obj;
-			_agile_set_prefs('event-lhs-filters', JSON.stringify(pres));
+			
+			eventData[CURRENT_AGILE_USER.id] = json_obj;
+			_agile_set_prefs('event-lhs-filters', JSON.stringify(eventData));
 		}
 	}	
 
