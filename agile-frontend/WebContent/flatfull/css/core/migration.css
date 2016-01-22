@@ -2032,10 +2032,13 @@ color:#727272;
   }
   .slate-content .box-right h4 {
     font-weight: normal;
-    font-size: 16px;
+    font-size: 18px;
     margin-bottom: 5px;
+    opacity:0.8;
   }
   .slate-content .box-right .text {
+
  color:#98a6ad !important
   }
+
 

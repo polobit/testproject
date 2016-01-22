@@ -3093,6 +3093,7 @@ table.hide-head-checkbox th label.i-checks {
     left: -20px;
     width: 100vw;
 }
+
 .contacts-toolbar .sort-field-txt:hover {
     color: rgb(88, 102, 110)!important;
 }
@@ -3119,3 +3120,12 @@ table.hide-head-checkbox th label.i-checks {
 {
 	z-index: 1;
 }
+
+.slate-content h4{
+	font-size: 18px;
+	opacity:0.8;
+}
+.slate-content .text, .slate-content .text-base{
+	font-size: 15px;
+}
+
