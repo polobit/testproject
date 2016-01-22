@@ -279,6 +279,10 @@ $("#right-pane").html(ticketView.render().el);
 	 
 	 	Current_Ticket_ID = id;
 
+	 	App_Ticket_Module.getTicketModelView(ticketModel);
+		
+		return;
+
 	 	Ticket_Canned_Response.fetchCollection(function(){
 
 	 		// Get ticket models
@@ -305,7 +309,7 @@ $("#right-pane").html(ticketView.render().el);
 		if(!model || !model.toJSON().id)
 			return;
 
-	    var id = model.toJSON().id;
+		var id = model.toJSON().id;
 
 		App_Ticket_Module.ticketView = new Ticket_Base_Model({
 	 		model : model, 

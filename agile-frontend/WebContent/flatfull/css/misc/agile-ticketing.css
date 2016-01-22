@@ -423,3 +423,12 @@ ul#ticket-model-list > div:nth-child(odd) > li, ul#ticket-model-list > div:nth-c
 .max-width-250{
   max-width: 250px;
 }
+
+tbody.tickets-collection > tr > td{
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
+
+table.ticket-data > tbody > tr > td {
+  line-height: 15px;
+}

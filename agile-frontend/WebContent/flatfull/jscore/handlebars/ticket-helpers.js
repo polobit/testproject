@@ -399,4 +399,9 @@ Handlebars.registerHelper('get_current_filter_id', function(str, options) {
   return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '&d=404';
 
  });
+
+Handlebars.registerHelper('get_current_filter_name', function(options)
+{
+  return Ticket_Filters.getCurrentFilterName();
+});
 /** End of ticketing handlebars* */

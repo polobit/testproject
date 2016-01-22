@@ -5,14 +5,12 @@ var Ticket_Bulk_Ops = {
 	initEvents: function(el){
 
 		var $el = $('.tickets-div', el);
-		$el.off('change').off('click');
 
 		/**
 		 * Initializing click event on top ticket checkbox
 		 */
-		$el.on('click', "input.select-all", function(e){
-			//e.stopPropagation();
-			//e.preventDefault();
+		$('label.select-all', el).off('click', "input.select-all");
+		$('label.select-all', el).on('click', "input.select-all", function(e){
 			
 			var selected_all = $(this).is(':checked');
 
@@ -23,6 +21,7 @@ var Ticket_Bulk_Ops = {
 		/**
 		 * Initializing click event on bulk action close tickets
 		 */
+		 $el.off('click', ".bulk-ticket-close");
 		$el.on('click', ".bulk-ticket-close", function(e){
 			e.preventDefault();
 			
@@ -32,6 +31,7 @@ var Ticket_Bulk_Ops = {
 		/**
 		 * Initializing click event on bulk action delete tickets
 		 */
+		$el.off('click', ".bulk-ticket-delete");
 		$el.on('click', ".bulk-ticket-delete", function(e){
 			e.preventDefault();
 
@@ -41,6 +41,7 @@ var Ticket_Bulk_Ops = {
 		/**
 		 * Initializing click event on bulk action delete tickets
 		 */
+		$el.off('click', "a#select-all-tickets");
 		$el.on('click', "a#select-all-tickets", function(e){
 			e.preventDefault();
 

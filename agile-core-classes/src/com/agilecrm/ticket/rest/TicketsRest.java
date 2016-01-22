@@ -947,7 +947,7 @@ public class TicketsRest
 	 */
 	@GET
 	@Path("/remove-all-tickets")
-	public void clearAllTickets()
+	public void removeAllTickets()
 	{
 		try
 		{
@@ -972,7 +972,7 @@ public class TicketsRest
 	 */
 	@GET
 	@Path("/remove-all-text-documents")
-	public void clearTextDocuments()
+	public void removeAllTextDocuments()
 	{
 		try
 		{

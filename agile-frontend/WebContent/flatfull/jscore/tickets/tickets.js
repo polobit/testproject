@@ -389,11 +389,13 @@ var Tickets = {
 			if(_agile_get_prefs('hide_ticket_lhs_filter')){
 
 				_agile_delete_prefs('hide_ticket_lhs_filter');
-				$(this).find('i').attr('data-original-title', 'Hide filters');
+				$(this).find('i').attr('data-original-title', 'Hide filters').css(
+					'opacity', 1);
 
 			}else{
 				_agile_set_prefs('hide_ticket_lhs_filter', true);
-				$(this).find('i').attr('data-original-title', 'Show filters');
+				$(this).find('i').attr('data-original-title', 'Show filters').css(
+					'opacity', 0.7);
 			}
 
 			$container.toggle('slow');

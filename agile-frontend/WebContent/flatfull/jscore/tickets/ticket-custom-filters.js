@@ -522,6 +522,7 @@ var Ticket_Custom_Filters = {
 					url : '/core/api/tickets/filters',
 					saveCallback: function(model){
 
+						$('#create-filter-modal').modal('hide');
 						App_Ticket_Module.ticketFiltersList.collection.add(model);
 						App_Ticket_Module.ticketsByFilter(model.id);
 					},
@@ -529,6 +530,11 @@ var Ticket_Custom_Filters = {
 					{
 						var json = {};
 						json.conditions = Ticket_Custom_Filters.customFilters;
+
+						var formJSON = model.toJSON();
+
+						if(formJSON.type == 'replace')
+							json.id = Ticket_Filter_ID;
 
 						model.set(json, { silent : true });
 					}

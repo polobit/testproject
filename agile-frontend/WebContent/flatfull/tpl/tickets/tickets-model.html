@@ -1,26 +1,26 @@
 <script id="ticket-model-template" type="text/html">
 	<td id="{{id}}" class="{{#if_equals priority 'HIGH'}}b-l b-l-3x {{toLowerCase priority}}-priority{{/if_equals}} data ticket no-border v-middle cursor-default" data-id="{{id}}" 
-      style="width: 5%;">
+      style="width: 6%;">
     <label class="i-checks i-checks-sm">
       <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}">
       <i></i>
     </label>
   </td>
-  <td class="v-middle p-l-none show-notes" style="width: 5%; padding-top: 2px;">
+  <td class="v-middle p-l-none show-notes" style="width: 3%;padding-top: 0px !important;">
     {{{get_status_label status}}}
   </td>
-  <td class="v-middle p-l-none p-r-none show-notes" style="width: 8%;">
+  <td class="v-middle p-l-none p-r-none show-notes" style="width: 6%;">
     <a class="thumb cursor-pointer" href="javascript:void(0);">
       {{#if contact.properties}}
-        <img src="{{nameAvatar contact.properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{requester_name}}">
+        <img src="{{nameAvatar contact.properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{requester_name}}" style="height: 45px; width: 45px;">
       {{else}}
         <img src="{{getGravatarFromEmail 42 requester_email}}" onerror="image_error(this);" 
-          _data-name="{{requester_name}}">
+          _data-name="{{requester_name}}" style="height: 45px; width: 45px;">
       {{/if}}
     </a>
   </td>
   <td class="v-middle p-l-none p-r-none open-ticket show-notes pos-rlt notes-container" style="width: 55%;">
-     <table style="background-color: inherit;">
+     <table class="ticket-data" style="background-color: inherit;">
         <tr>
           <td>
             <div class="text-ellipsis">
@@ -31,7 +31,7 @@
         </tr>
         <tr>
           <td>
-            <a class="text-cap custom-link subject-row text-ellipsis" style="color: #697073;">{{requester_name}}</a>
+            <a class="text-cap custom-link subject-row text-ellipsis text-sm" style="color: #697073;">{{requester_name}}</a>
           </td>
         </tr>
         <tr>
@@ -115,7 +115,7 @@
       </div>
   </td>
   <td class="v-middle p-l-none cursor-default" style="width: 27%;">
-    <table class="txt-small full-width" style="background-color: inherit;">
+    <table class="ticket-data txt-small full-width" style="background-color: inherit;">
       <tr>
         <td style="width: 20%;"><span class="text-muted cursor-default">Assignee: </span></td>
         <td class="p-l-sm cursor-pointer" style="width: 80%;">

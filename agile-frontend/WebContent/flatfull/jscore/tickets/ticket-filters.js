@@ -152,5 +152,9 @@ var Ticket_Filters = {
 		$('ul.ticket-types').find('li').removeClass('active');
 		$('.filter-name-btn').text(filterJSON.name);
 		$('a[filter-id="' + Ticket_Filter_ID + '"]').closest('li').addClass('active');
+	},
+
+	getCurrentFilterName: function(){
+		return App_Ticket_Module.ticketFiltersList.collection.get(Ticket_Filter_ID).toJSON().name;
 	}
 };
