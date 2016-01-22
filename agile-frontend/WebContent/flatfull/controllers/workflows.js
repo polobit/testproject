@@ -29,7 +29,7 @@ var WorkflowsRouter = Backbone.Router
 			// form.
 			"trigger-add/:id" : "triggerNewUI",
 
-			"sharedCampaign" : "shareWorkflow",
+			"share-campaign/:c/:t" : "shareWorkflow",
 
 			"trigger-add" : "triggerNewUI", "trigger/:id" : "triggerEdit",
 
@@ -1330,47 +1330,31 @@ var WorkflowsRouter = Backbone.Router
 					callback(); 		
 
 			},
-			shareWorkflow : function(workflow){
-				if(!readCookie("sender_campaign_id"))
-					return;
-				else
-				{
-					var id = readCookie("sender_campaign_id");
-					var senderDomain = readCookie("sender_dom");
-				}		
-				
-				/* Set the designer JSON. This will be deserialized */
-				if (workflow)
-					this.workflow_model = workflow;
-				
-				if(!this.workflow_model){
-					// if not in the collection, download new one.
-					var new_workflow_model = Backbone.Model.extend({ url : '/core/api/workflows/shareCampAPI?id='+id+'&senderDomain='+senderDomain});
-					var model = new new_workflow_model();
-					model.id = id;
-					model.fetch({ success : function(data)
-					{
-						// Call workflowEdit again if not Empty
-						if (!$.isEmptyObject(data.toJSON()))
-						{
-							App_Workflows.shareWorkflow(id, model);
-							return;
-						}
-					} });
-				}
-				
-				if (this.workflow_model === undefined)
-					return;
-				
-				this.workflow_json = this.workflow_model.get("rules");
-				this.is_disabled = this.workflow_model.get("is_disabled");
+			shareWorkflow : function(campaign_id, sender_domain){
+						
+				/* Reset the designer JSON */
+				this.workflow_json = undefined;
+				this.workflow_model = undefined;
+
+				// Get workflow template based on category and template name
+				var workflow_template_model = Backbone.Model.extend({
+
+				url : '/core/api/workflows/shareCampAPI?id='+campaign_id+'&senderDomain='+sender_domain});
+
+				var model = new workflow_template_model();
+
 				var that = this;
+
+				model.fetch({ success : function(data)
+				{
+					that.workflow_json = JSON.stringify(data);
+				} });
 
 				var workflowModal = new Workflow_Model_Events({
 					url : 'core/api/workflow', 
 					template : 'workflow-add',
 					isNew : 'true',
-					data :  {"is_disabled" : ""+that.is_disabled},
+					data : { "is_new" : true, "is_disabled" : false, "was_disabled" : false  },
 					postRenderCallback : function(el){
 						// Init SendVerify Email
 						send_verify_email(el);
@@ -1378,6 +1362,6 @@ var WorkflowsRouter = Backbone.Router
 				});
 				
 				$("#content").html(workflowModal.render().el);
-			},
+			}
 });
 

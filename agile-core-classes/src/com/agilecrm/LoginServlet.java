@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -89,9 +87,6 @@ public class LoginServlet extends HttpServlet {
 			}
 			String type = request.getParameter("type");
 
-			// To store the CampaignId and sender domain in Cookie
-			setCookieForShareCampaign(request, response);
-
 			if (type != null) {
 				if (type.equalsIgnoreCase("oauth")) {
 					System.out.println("oauth form type");
@@ -120,47 +115,6 @@ public class LoginServlet extends HttpServlet {
 		// Return to Login Page
 		request.getRequestDispatcher("login.jsp").forward(request, response);
 
-	}
-
-	private void setCookieForShareCampaign(HttpServletRequest request,
-			HttpServletResponse response) {
-		try {
-			String campaignId = (String) request.getSession().getAttribute(
-					CampaignShareServlet.CAMP_ID);
-			String senderDomain = (String) request.getSession().getAttribute(
-					CampaignShareServlet.SENDER_DOMAIN);
-			/*
-			 * String shareFlag = (String) request.getSession().getAttribute(
-			 * CampaignShareServlet.IS_SHARE_CAMPAIGN); boolean shared =
-			 * shareFlag.equals("true");
-			 */
-			/*
-			 * Boolean shared = Boolean.valueOf((boolean) request.getSession()
-			 * .getAttribute(CampaignShareServlet.IS_SHARE_CAMPAIGN));
-			 */
-			System.out.println("senderDomain" + senderDomain);
-			System.out.println("campaignId" + campaignId);
-
-			if (campaignId == null)
-				return;
-
-			Cookie senderCampaignId = new Cookie("sender_campaign_id",
-					campaignId);
-			response.addCookie(senderCampaignId);
-
-			Cookie senderDom = new Cookie("sender_dom", senderDomain);
-			response.addCookie(senderDom);
-
-			// request.getSession().removeAttribute(RETURN_PATH_SESSION_HASH);
-			// response.sendRedirect("/#sharedCampaign/");
-
-		} catch (Exception e) {
-			System.err
-					.println("Exception occured in Login Servlet setCookieForShareCampaign "
-							+ e.getMessage());
-			e.printStackTrace();
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-		}
 	}
 
 	/**
@@ -286,6 +240,16 @@ public class LoginServlet extends HttpServlet {
 
 		hash = (String) request.getSession().getAttribute(
 				RETURN_PATH_SESSION_HASH);
+
+		String campaignId = (String) request.getSession().getAttribute(
+				CampaignShareServlet.CAMP_ID);
+
+		String senderDomain = (String) request.getSession().getAttribute(
+				CampaignShareServlet.SENDER_DOMAIN);
+
+		if (StringUtils.isNotBlank(campaignId)
+				&& StringUtils.isNotBlank(senderDomain))
+			hash = "/#share-campaign/" + campaignId + "/" + senderDomain;
 
 		if (!StringUtils.isEmpty(hash)) {
 			request.getSession().removeAttribute(RETURN_PATH_SESSION_HASH);
