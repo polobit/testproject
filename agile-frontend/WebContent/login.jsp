@@ -160,15 +160,19 @@ position: fixed;width: 100%;top: 0px;
 </style>
 
 <script>
+
+
+/*
 var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
 var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
-if(isIE || isIENew) 
-	window.location = '/error/not-supported.jsp';
+if(isIE || isIENew)
+ window.location = '/error/not-supported.jsp';
+*/
 
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
 var isWin = (window.navigator.userAgent.indexOf("Windows") != -1);
 if(isSafari && isWin) 
-	window.location = '/error/not-supported.jsp';
+ window.location = '/error/not-supported.jsp';
 
 </script>
 
