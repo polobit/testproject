@@ -19,6 +19,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.Trigger;
@@ -123,7 +124,7 @@ public class EmailOpenServlet extends HttpServlet
 	{
 	    // Interrupt Campaign cron tasks.
 	    if (!StringUtils.isBlank(campaignId) && !StringUtils.isBlank(trackerId))
-		interruptCronTasksOfOpened(campaignId, trackerId);
+		interruptCronTasksOfOpened(campaignId, trackerId, namespace);
 	}
     }
 
@@ -298,21 +299,34 @@ public class EmailOpenServlet extends HttpServlet
      * @param openTrackingId
      *            - Send Email open tracking id.
      */
-    private void interruptCronTasksOfOpened(String campaignId, String subscriberId)
+    private void interruptCronTasksOfOpened(String campaignId, String subscriberId, String namespace)
     {
+    	boolean lock = false;
+    	String cacheKey = namespace+"_"+campaignId+"_" + subscriberId;
+    	
 		try
 		{
-		    // set email_open true
+			lock = CacheUtil.acquireLock(cacheKey, 500);
+			
+			if(!lock)
+				return;
+
+			// set email_open true
 		    JSONObject customData = new JSONObject();
 		    customData.put(SendEmail.EMAIL_OPEN, true);
 	
 		    // Interrupt Opened node
 		    CronUtil.interrupt(campaignId, subscriberId, null, new JSONObject(customData));
-	
+			
 		}
 		catch (Exception e)
 		{
 		    e.printStackTrace();
+		}
+		finally
+		{
+			if(lock)
+				CacheUtil.deleteCache(cacheKey);
 		}
     }
 
