@@ -1330,7 +1330,7 @@ var WorkflowsRouter = Backbone.Router
 					callback(); 		
 
 			},
-			shareWorkflow : function(campaign_id, sender_domain){
+			shareWorkflow : function(id, sender_domain){
 						
 				/* Reset the designer JSON */
 				this.workflow_json = undefined;
@@ -1339,9 +1339,10 @@ var WorkflowsRouter = Backbone.Router
 				// Get workflow template based on category and template name
 				var workflow_template_model = Backbone.Model.extend({
 
-				url : '/core/api/workflows/shareCampAPI?id='+campaign_id+'&senderDomain='+sender_domain});
+				url : '/core/api/workflows/shareCampAPI?id='+id+'&senderDomain='+sender_domain});
 
 				var model = new workflow_template_model();
+				model.id = id;
 
 				var that = this;
 
