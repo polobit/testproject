@@ -1001,6 +1001,8 @@ $(function()
 	{
 		var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 		var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
+		if(symbol=='Rs')
+			symbol='Rs.';
 		return symbol;
 	});
 	Handlebars.registerHelper('mandrill_exist', function(options)
@@ -3847,6 +3849,14 @@ $(function()
 		var from_date = Date.parse(from_date_string);
 		var to_date = Date.today().add({ days : parseInt(no_of_days) });
 		return to_date.toString('MMMM d, yyyy') + " - " + from_date.toString('MMMM d, yyyy');
+
+	});
+
+		Handlebars.registerHelper('month-range', function(options)
+	{
+		var from_date = Date.today().moveToFirstDayOfMonth();
+		var to_date = Date.today().moveToLastDayOfMonth();
+		return from_date.toString('MMMM d, yyyy') + " - " + to_date.toString('MMMM d, yyyy');
 
 	});
 

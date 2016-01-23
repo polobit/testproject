@@ -551,6 +551,14 @@ Created a new Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 </small>  
 {{/if_equals}}
 
+{{#if_equals "MERGE_CONTACT" activity_type}}
+{{#if_equals "1" custom1}} 
+Merged {{custom1}} contact to {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+{{else}}
+Merged {{custom1}} contacts to {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+{{/if_equals}}
+{{/if_equals}}
+
 {{#if_equals "COMPANY_CREATE" activity_type}}
 Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>	
 <small class="activities_second_line m-t-none text-sm">

@@ -822,8 +822,14 @@ var ContactsRouter = Backbone.Router.extend({
 	 * populate_send_email_details is called from the
 	 * postRenderCallback.
 	 */
-	sendEmail : function(id, subject, body, cc, bcc)
+	sendEmail : function(id, subject, body, cc, bcc, force_reload)
 	{
+
+		// Check old hash and call same function
+		if(!force_reload && Agile_Old_Hash && Agile_Old_Hash.indexOf("contact/") > -1){
+              
+		}
+
 		var model = {};
 		
 		if(!canSendEmails(1))

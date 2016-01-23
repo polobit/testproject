@@ -295,7 +295,7 @@ var Base_Collection_View = Backbone.View
 					var that = this;
 
 					/**
-					 * Initiazlizes the infiniscroll on the collection created
+					 * Initiazlizes the infi$target : this.options.scroll_target ? tarniscroll on the collection created
 					 * in the view,
 					 */
 					this.infiniScroll = new Backbone.InfiniScroll(this.collection, { success : function()
@@ -306,7 +306,7 @@ var Base_Collection_View = Backbone.View
 						 * view
 						 */
 						$(".scroll-loading", that.el).remove();
-					}, untilAttr : 'cursor', param : 'cursor', strict : true, pageSize : this.page_size,
+					}, untilAttr : 'cursor', param : 'cursor', strict : true, pageSize : this.page_size, target : this.options.scroll_target ? this.options.scroll_target: $(window),
 
 					/*
 					 * Shows loading on fetch, at the bottom of the table
