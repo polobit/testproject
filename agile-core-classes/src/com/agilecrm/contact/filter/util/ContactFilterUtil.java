@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
@@ -21,6 +24,7 @@ import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.datastore.QueryResultIterable;
+import com.google.appengine.api.search.SearchException;
 import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -301,6 +305,7 @@ public class ContactFilterUtil
     }
 
     public static List<Contact> getFilterContactsBySortKey(String sortKey, Integer page_count, String cursor)
+
     {
 	ContactFilter contact_filter = new ContactFilter();
 	SearchRule rule = new SearchRule();
@@ -320,7 +325,16 @@ public class ContactFilterUtil
 	// Sets ACL condition
 	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
 		UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules, null);
-	return new ArrayList<Contact>(contact_filter.queryContacts(page_count, cursor, sortKey));
+	List<Contact> contacts = null;
+	try
+	{
+	    return contacts = new ArrayList<Contact>(contact_filter.queryContacts(page_count, cursor, sortKey));
+	}
+	catch (SearchException e)
+	{
+	    return new ArrayList<Contact>();
+	}
+
     }
 
 }

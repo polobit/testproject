@@ -22,8 +22,10 @@ var agile_contact_sort_configuration = [
 function buildProperty (field_label, field_value)
 {
 	var property = {
+		"id" : field_value,
 		"field_label" : field_label,
-		"field_value" : field_value
+		"field_value" : field_value,	
+		"search_key" : field_value
 	}
 
 	return property;

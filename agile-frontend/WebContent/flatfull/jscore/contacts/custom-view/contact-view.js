@@ -157,8 +157,8 @@ function setupViews(cel, button_name) {
 			setUpContactSortFilters(cel);
 
 			//updates the selected sort item to bold
-			updateSelectedSortKey($(".contacts-toolbar", cel));
-			addClickEventsForSorting($("#view-list", cel));
+			//updateSelectedSortKey($(".contacts-toolbar", cel));
+			//addClickEventsForSorting($("#view-list", cel));
 			if(_agile_get_prefs('company_filter') || _agile_get_prefs('contact_filter_type') == 'COMPANY')
 			{
 				$('#contact-view-model-list>li').css('display','none');
@@ -174,7 +174,9 @@ function setUpContactSortFilters(el)
 {
 	if(CUSTOM_SORT_VIEW)
 	{
-		$("#contact-sorter", el).html(CUSTOM_SORT_VIEW.render(true).el);
+		$("#contact-sorter", el).html(CUSTOM_SORT_VIEW.el);
+		//CUSTOM_SORT_VIEW.init();
+		//CUSTOM_SORT_VIEW.preSelectFields();
 		return;	
 	}
 
@@ -186,12 +188,14 @@ function setUpContactSortFilters(el)
 		sort_collection : false,
 		postRenderCallback: function(el)
 		{
-			updateSelectedSortKey(el);
+			CUSTOM_SORT_VIEW.postProcess();
 		}
-
 	});
 
+	
+	CUSTOM_SORT_VIEW.init();
 	$("#contact-sorter", el).html(CUSTOM_SORT_VIEW.render(true).el);
+	
 	addContactCustomFields();
 }
 

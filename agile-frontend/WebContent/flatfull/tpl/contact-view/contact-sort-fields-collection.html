@@ -10,11 +10,11 @@
                 </button>
                 <ul class="pull-right dropdown-menu" id="contact-view-sort-model-list">
                 
-                    <li class="divider"></li>
+                    <li class="divider" id="sort-divider"></li>
                     <li>
-                        <a class="sort-by pos-rlt" data="" href="javascript:void(0);">Ascending <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check "></i> </a>
+                        <a class="order-by pos-rlt" data="" href="javascript:void(0);">Ascending <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check "></i> </a>
                     </li>
-                    <li><a class="sort-by pos-rlt" data="-" href="javascript:void(0);">Descending  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check "></i> </a></li>
+                    <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">Descending  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check "></i> </a></li>
                 </ul>
             </div>
         </div>
@@ -23,15 +23,15 @@
 <script id="contact-view-sort-model-template" type="text/html">
 
 {{#if scope}}
-    <a class="sort-link sort-field pos-rlt" href="javascript:void(0);" data="{{search_key}}_AGILE_CUSTOM_{{field_type}}">
+    <a class="sort-link sort-field pos-rlt" href="javascript:void(0);" data="{{search_key}}_AGILE_CUSTOM_{{field_type}}" type="custom">
         {{field_label}}
-        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check"></i> 
+        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check {{selected}} {{#if selected}}{{else}}display-none{{/if}}" ></i> 
     </a>
     {{else}}
 
     <a class="sort-link sort-field pos-rlt" href="javascript:void(0);" data="{{field_value}}">
         {{field_label}}
-        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check"></i> 
+        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check {{selected}} {{#if selected}}{{else}}display-none{{/if}}"></i> 
     </a>
 {{/if}}
 </script>
