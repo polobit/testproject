@@ -296,7 +296,7 @@ var ContactsRouter = Backbone.Router.extend({
 				// To set heading in template
 				if(is_lhs_filter) {
 
-					setupViews();
+					setupViews(el);
 					setupContactFilterList();
 					//setUpContactView();
 
