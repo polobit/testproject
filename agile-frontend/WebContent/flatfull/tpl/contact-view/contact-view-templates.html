@@ -250,21 +250,10 @@
 </script>
 
 <script id = "contacts-custom-view-popover-template" type="text/html">
-       <div class="data panel-default" data={{id}} style="width:350px">
+       <div class="data panel-default" data={{id}} style="width:260px">
 	   
-       	<div class="text-cap panel-heading text-ellipsis"><div class="text-ellipsis text-center p-b-xs" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}}
+       	<div class="text-cap panel-heading text-ellipsis"><div class="text-ellipsis inline-block" style="width:80%" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}}</div>
-        		{{#property_is_exists "company" properties}}
-        		<div class="text-center">
-       		<span class="text-cap" title="{{getPropertyValue properties "title"}}">{{getPropertyValue properties "title"}}</span> 
-       		<span class="text-cap" href="#company/{{contact_company_id}}" title="{{getPropertyValue properties "company"}}">{{getPropertyValue properties "company"}}</span></div>
-       		{{else}}
-       			{{#property_is_exists "title" properties}}
-       			<div class="text-center">
-       		<span class="text-cap" title="{{getPropertyValue properties "title"}}">{{getPropertyValue properties "title"}}</span> 
-       		</div>
-       		{{/property_is_exists}}
-       			{{/property_is_exists}}
 				 <div class="pull-left" style="width:80%"><div id='star' class="contact-star"></div></div>
         		<div>
 	   	  <div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
@@ -290,7 +279,7 @@
 						</div>
         		</div>
         		<div class="panel-body">
-       		<div class="p-b-sm p-t-sm pull-left" style="width:60%"><div class="pull-left"><i class="icon icon-user text-sm v-middle"></i></div>
+       		<div class="b-b b-light p-b-xs"><div class="pull-left"><i class="icon icon-user text-sm v-middle"></i></div>
        			
        	<div class="contact-owner text-base m-l-md" id="change-owner-element">
         	
@@ -316,28 +305,27 @@
 			{{/canEditContact}}
        </div>
        </div>
-      
-       		<!--{{#property_is_exists "company" properties}}
-       		<div class="b-b b-light p-b-sm p-t-sm">
+       		{{#property_is_exists "company" properties}}
+       		<div class="b-b b-light p-b-xs">
        		<div class="pull-left"><i class="icon icon-building text-sm v-middle"></i></div>
        		<span class="text-cap m-l-sm" title="{{getPropertyValue properties "title"}}">{{getPropertyValue properties "title"}}</span> 
        		<span class="text-cap" href="#company/{{contact_company_id}}" title="{{getPropertyValue properties "company"}}">{{getPropertyValue properties "company"}}</span></div>
 
        		{{else}}
        			{{#property_is_exists "title" properties}}
-       		<div class="b-b b-light p-b-sm p-t-sm">
+       		<div class="b-b b-light p-b-xs">
        		<div class="pull-left"><i class="icon icon-building text-sm v-middle"></i></div>
        		<span class="text-cap m-l-sm" title="{{getPropertyValue properties "title"}}">{{getPropertyValue properties "title"}}</span> 
        		</div>
      		{{/property_is_exists}}
        		
-       		{{/property_is_exists}}-->
+       		{{/property_is_exists}}
        			{{#property_is_exists "phone" properties}}
-        					<div class="pull-left p-b-sm p-t-sm " style="width:40%">
+        					<div class="b-b b-light p-b-xs">
         					<div class="pull-left"><i class="icon icon-call-end text-sm v-middle"></i></div>
         					{{#multiple_Property_Element_List "phone" properties id}}
         					{{#each this}}
-       					<div class="text-ellipsis m-l-md">
+       					<div class="text-ellipsis m-l-md" style="width:13em;">
     		<span class="text-cap"title="{{value}}" >{{value}}</a>
         </div>
         {{/each}}
@@ -345,7 +333,7 @@
         					</div>
         					{{/property_is_exists}}
 					{{#property_is_exists "email" properties}}
-							<div class="pull-left p-b-sm p-t-sm">
+							<div class="b-b b-light p-b-xs">
 							<div class="pull-left"><i class="icon icon-envelope text-sm v-middle"></i></div>
 								{{#multiple_Property_Element_List "email" properties id}}
 
@@ -367,8 +355,8 @@
 										</div>
 								{{/property_is_exists}}
 
-								<div class="pull-left p-t-sm">
-								 <div id="added-tags-popover" class="text-ellipsis pull-left m-b-xs" style="width:18em;"> 	
+								<div class="m-t-xs">
+								 <div id="added-tags-popover" class="text-ellipsis pull-left m-b-xs" style="width:13em;"> 	
 				{{#each tags}}
 	    			<span class="label bg-light text-tiny">{{this}}</span>	
 							{{/each}}

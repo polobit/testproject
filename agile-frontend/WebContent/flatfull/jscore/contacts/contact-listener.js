@@ -13,10 +13,10 @@ function contactListener()
 
 			timer=setTimeout(function() {
 						 	
-						 	$('.popover').remove();	
+						 	
 				if (!insidePopover)	{
 		
-					 //$(that).popover('show');
+					 $('.popover').remove();	
 		 App_Contacts.contact_popover=$(that).data();
 		 try{
 		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
@@ -33,8 +33,8 @@ function contactListener()
 								$(that).popover('show');
 							$('.popover').addClass("contact_popover fadeInLeft animated");
 							$('.popover-content').html(template_ui);
-
-							$('.popover').css('left', ($('.dta-contatiner').offset().left + 90+"px"));
+							$('.popover').css('left', left-100 + "px");
+							//$('.popover').css('left', ($('.dta-contatiner').offset().left + 90+"px"));
 							/*if (window.innerHeight - $(that).offset().top >= 400)
                             $('.popover').css('top', ($(that).offset().top  + "px"));
                         
@@ -60,10 +60,10 @@ function contactListener()
 		var that=$(this);
 	setTimeout(function() {
 		if (!insidePopover){
-			if($('.popover').length!=0)
+			if($('.popover',that.parent()).length!=0)
 			{
 			$(that).popover('hide');
-			$('.popover').remove();
+			//$('.popover').remove();
 			}
 		}
 					
