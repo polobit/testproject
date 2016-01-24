@@ -49,7 +49,7 @@ public class Portlet {
     
     public static enum PortletRoute
     {
-	Deals, Contacts,Tasks,Activities,Calendar,DashBoard
+	Deals,Contacts,Tasks,Events,DashBoard
     };
     
     @Indexed
@@ -96,6 +96,9 @@ public class Portlet {
      */
     @NotSaved
     public boolean is_added = false;
+    
+    @NotSaved
+    public String is_routeadded = null;
     
     // Dao
     private static ObjectifyGenericDao<Portlet> dao = new ObjectifyGenericDao<Portlet>(Portlet.class);

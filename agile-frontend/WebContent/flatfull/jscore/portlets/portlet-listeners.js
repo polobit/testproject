@@ -853,6 +853,7 @@ function initializePortletsListeners() {
 							'.gs-resize-handle').remove();
 				}
 			});
+	
 
 }
 
@@ -862,18 +863,7 @@ function initializePortletsListeners() {
 function initializeAddPortletsListeners() {
 
 	//$('#ms-category-list', elData).remove();
-			head.js(LIB_PATH + 'lib/jquery.multi-select.js', function() {
-				$('#category-list, #user-list' ).multiSelect();
-				$('#ms-category-list .ms-selection').children('ul')
-						.addClass('multiSelect').attr("name", "category-list")
-						.attr("id", "category");
-				$('#ms-category-list .ms-selectable .ms-list').css(
-						"height", "105px");
-				$('#ms-category-list .ms-selection .ms-list').css(
-						"height", "105px");
-				$('#ms-category-list').addClass(
-						'portlet-category-ms-container');
-			});
+
 
 	$('.col-md-3')
 			.on(
@@ -935,13 +925,87 @@ function initializeAddPortletsListeners() {
 						$(this).popover('show');
 					});
 
-		$('#portlets-add-listener').on(
+
+	
+	$('#portlets-add-listener').on('click','.configure-portlets',function(e){
+		e.preventDefault();
+					var route=$(this).attr("route");
+					route=route.substr(1,route.length-2);
+					var routes=route.split(',');
+		var portlet_type = $(this).attr("portlet_type");
+				var p_name = $(this).attr("portlet_name");
+				
+				$("#portletStreamModal").html(getTemplate('portletStreamModalInfo'));
+				$("#portletStreamModal").modal('show');
+
+				if(p_name=='Mini Calendar')
+				{
+					$.each(routes,function(index,data)
+					{
+						$('#route-list>option', $('#portletStreamModal')).each(function(i,d)
+						{
+							if(d.value==data.trim())
+								this.remove();
+						})
+					});
+				}
+				if($('#route-list' , $('#portletStreamModal')).children().length==0){
+					$('.modal-body',$('#portletStreamModal')).text('Already Added');
+				$(".add-portlet").addClass('disabled');
+				$(".add_to_all").addClass('disabled');
+			}
+
+				head.js(LIB_PATH + 'lib/jquery.multi-select.js', function() {
+						$('#ms-route-list' ).remove();
+				$('#route-list' , $('#portletStreamModal')).multiSelect();
+				$('#ms-route-list .ms-selection').children('ul')
+						.addClass('multiSelect').attr("name", "route-list")
+						.attr("id", "route");
+				$('#ms-route-list .ms-selectable .ms-list').css(
+						"height", "105px");
+				$('#ms-route-list .ms-selection .ms-list').css(
+						"height", "105px");
+				$('#ms-route-list').addClass(
+						'portlet-category-ms-container');
+			});
+				$(".add-portlet").attr('portlet_type',
+				portlet_type);
+		$(".add-portlet").attr('portlet_name',p_name);
+		$(".add_to_all").attr('portlet_type',
+				portlet_type);
+		$(".add_to_all").attr('portlet_name',p_name);
+		
+	});
+
+	$('#portletStreamModal').on('shown.bs.modal', function(event){
+		insideAddListener();
+	});
+
+
+}
+
+function insideAddListener()
+{
+
+	$('.modal-content').off('click').on('click', '#route-select-all',
+			function(e) {
+				e.preventDefault();
+				$('#route-list').multiSelect('select_all');
+			});
+
+	$('.modal-content').on('click', '#route-select-none',
+			function(e) {
+				e.preventDefault();
+				$('#route-list').multiSelect('deselect_all');
+			});
+
+		$('.modal-content').on(
 			"click",
 			'.add-portlet',
 			function() {
 				var route=[];
 				var url='core/api/portlets/add';
-				$('#category-list', $(this).parents('.wrapper'))
+				$('#route-list', $(this).parents('.modal'))
 									.find('option')
 									.each(
 											function() {
@@ -952,17 +1016,13 @@ function initializeAddPortletsListeners() {
 				var forAll=false;
 				clickfunction($(this),url,forAll,route);
 			});
-		$('#portlets-add-listener').on(
-			"click touchstart",
-			'.configure-portlets',
-			function() {
-			});
-	$('#portlets-add-listener').on(
+		
+	$('#portletStreamModal').																																																																												off('click').on(
 			"click touchstart",
 			'.add_to_all',
 			function() {
 				var route=[];
-				$('#category-list', $(this).parents('.wrapper'))
+				$('#route-list', $(this).parents('.modal'))
 									.find('option')
 									.each(
 											function() {
@@ -975,22 +1035,11 @@ function initializeAddPortletsListeners() {
 				clickfunction($(this),url,forAll,route);
 				
 			});
-
-		$('.panel').off("click").on('click', '#category-select-all',
-			function(e) {
-				e.preventDefault();
-				$('#category-list').multiSelect('select_all');
-			});
-
-	$('.panel').off("click").on('click', '#category-select-none',
-			function(e) {
-				e.preventDefault();
-				$('#category-list').multiSelect('deselect_all');
-			});
-
 }
 function clickfunction(that,url,forAll,route){
 
+	$("#portletStreamModal").modal('hide');
+	$('.modal-backdrop').hide();
 	var portlet_type = that.attr("portlet_type");
 				var p_name = that.attr("portlet_name");
 

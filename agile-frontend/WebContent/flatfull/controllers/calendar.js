@@ -74,6 +74,8 @@ calendar : function()
 					
 
 					}, $('#calendar-listers').find("#calendar-filters"));
+					loadPortlets('Events');
+
 		});	
 	}, "#calendar-listers");
 
@@ -126,6 +128,7 @@ tasks_new : function()
 			readDetailsFromCookie();
 			// Bind dropdown events
 			bindDropdownEvents();
+			loadPortlets('Tasks');
 
 		}, "<li><a href='{{id}}' class='hide-on-owner'>My Tasks</a></li>", true);
 

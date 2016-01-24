@@ -173,7 +173,7 @@ function minicalendar(el)
 		            		   $(element).addClass(result);
 		            		   $(element).attr('id',event.id);
 		            		   dayClasses.push(result);
-		            		   $('.fc-event').find('.fc-event-inner').css('display','none');
+		            		    $('.fc-event','.portlet_body_calendar').find('.fc-event-inner').css('display','none');
 
 		            		   var count=$(el).find('.'+result).length;
 		            		   if(count>3){

@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -234,14 +235,32 @@ public class PortletUtil {
 	 * @return {@link List} of {@link Portlet}
 	 */
 	public static List<Portlet> setIsAddedStatus(List<Portlet> portlets)throws Exception{
-		List<Portlet> currentPortlets = getAddedPortletsForCurrentUser(Portlet.PortletRoute.DashBoard);
+		
 
-		for (Portlet portlet : portlets){
-			for (Portlet currentPortlet : currentPortlets){
-				if (currentPortlet.name.equals(portlet.name) && currentPortlet.portlet_type.equals(portlet.portlet_type))
-					portlet.is_added = true;
-			}
+			
+		List<Portlet> currentPortlets = getAddedPortletsForCurrentUser(Portlet.PortletRoute.DashBoard);
+		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Contacts));
+		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Deals));
+		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Tasks));
+		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Events));
+			for (Portlet portlet : portlets){
+				HashSet<String> s = new HashSet<String>();
+				for (Portlet currentPortlet : currentPortlets){
+					if (currentPortlet.name.equals(portlet.name) && currentPortlet.portlet_type.equals(portlet.portlet_type)){
+						portlet.is_added = true;
+						s.add(currentPortlet.portlet_route.toString());
+					}	
+				}
+				portlet.is_routeadded=s.toString();
+				
+			
 		}
+		/*List<Portlet> currentPortlets = getAddedPortletsForCurrentUser(Portlet.PortletRoute.DashBoard);
+		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Contacts));
+		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Deals));
+		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Tasks));
+		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Events));*/
+		
 		return portlets;
 	}
 	
