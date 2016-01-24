@@ -246,7 +246,24 @@ contact_sort_configuration.SORT_FIELDS_VIEW = function(sort_options, custom_opti
 				// added model
 				//if (append)
 			//	{
-					$("#sort-divider", this.el).before(this.createListView(base_model).render().el);
+
+					// Adds to respective div based on type of field
+					var el = this.createListView(base_model).render().el;
+
+					if(base_model.get("scope"))
+					{
+						this.custom_field_element = $("#sort-divider", this.el);
+						$("#custom-fields", this.el).removeClass("display-none");
+						$(this.custom_field_element).before(el);
+					}
+					else
+					{
+							$(!this.system_field_element)
+								this.system_field_element = $("#custom-fields", this.el);
+
+							$(this.system_field_element).before(el);
+					}
+					
 		//			return;
 		//		}
 

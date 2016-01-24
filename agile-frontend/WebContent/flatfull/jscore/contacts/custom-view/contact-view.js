@@ -174,7 +174,7 @@ function setUpContactSortFilters(el)
 {
 	if(CUSTOM_SORT_VIEW)
 	{
-		$("#contact-sorter", el).html(CUSTOM_SORT_VIEW.el);
+		$("#contact-sorter", el).html(CUSTOM_SORT_VIEW.render(true).el);
 		//CUSTOM_SORT_VIEW.init();
 		//CUSTOM_SORT_VIEW.preSelectFields();
 		return;	
