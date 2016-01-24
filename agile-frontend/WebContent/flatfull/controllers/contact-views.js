@@ -36,7 +36,7 @@ var ContactViewsRouter = Backbone.Router.extend({
 				CONTACTS_HARD_RELOAD = true;
 				App_Contacts.navigate("contacts", { trigger : true });
 
-				App_Contacts.contactViewModel = data.toJSON();
+				App_Contacts.contactViewModel = data;
 			} });
 
 		$("#content").html(contactView.render().el);
