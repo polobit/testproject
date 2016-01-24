@@ -2135,13 +2135,15 @@ function BubbleChart(url, selector, name,show_loading)
             }
         },
 			    xAxis: {
-			    	offset: 10,
+			    	//offset: 10,
 			    	lineWidth : 2,
+
 			        categories: categories,
 			        tickmarkPlacement: 'on',
 			       // minTickInterval: min_tick_interval,
 			        tickWidth: 1,
 			              labels: {
+			              	x:-20,
 				    formatter: function () {
 					    var text = this.value;
 					    //if(categories.length>10)
@@ -2151,9 +2153,9 @@ function BubbleChart(url, selector, name,show_loading)
 
                         return '<div style="width:50px; overflow:hidden" title="' + text + '">' + formatted + '</div>';
 				    },
-				    style: {
+				    /*style: {
 					    width: '10px'
-				    },
+				    },*/
 				    useHTML: true
 			}
 			    },
