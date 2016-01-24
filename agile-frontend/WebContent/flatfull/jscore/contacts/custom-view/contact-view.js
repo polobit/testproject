@@ -196,13 +196,75 @@ function setUpContactSortFilters(el)
 	CUSTOM_SORT_VIEW.init();
 	$("#contact-sorter", el).html(CUSTOM_SORT_VIEW.render(true).el);
 	
-	addContactCustomFields();
+
+	getSearchableCustomFields("CONTACT", function(data){
+		CUSTOM_SORT_VIEW.collection.add(data);
+	})
+	
 }
 
-function addContactCustomFields()
+function addCustomFieldToSearch(base_model)
 {
-	$.getJSON("core/api/custom-fields/scope?scope=CONTACT", function(data){
-		CUSTOM_SORT_VIEW.collection.add(data);
+	if(!CUSTOM_SORT_VIEW)
+		return;
+
+	if(!base_model)
+		return;
+
+	if(!base_model.get("searchable"))
+		return;
+
+	CUSTOM_SORT_VIEW.collection.add(base_model);
+}
+
+function updateModel (base_model)
+{
+	if(!CUSTOM_SORT_VIEW)
+		return;
+
+	if(!base_model)
+		return;
+
+	var searchable  = base_model.get("searchable");
+	var model = CUSTOM_SORT_VIEW.collection.get(base_model.get('id'));
+
+
+	if(!model)
+		return;
+
+	if(!searchable)
+		removeCustomFieldFromSortOptions(base_model);
+}
+
+function removeCustomFieldFromSortOptions(base_model)
+{
+	if(!base_model)
+		return;
+
+	if(!base_model.get("searchable"))
+		return;
+
+	if(!CUSTOM_SORT_VIEW)
+		return;
+	
+	var model = CUSTOM_SORT_VIEW.collection.get(base_model.get('id'));
+
+	if(model)
+	{
+		CUSTOM_SORT_VIEW.collection.remove(base_model.get('id'));
+
+		CUSTOM_SORT_VIEW.render(true);
+	}
+}
+
+function getSearchableCustomFields(scope, callback)
+{
+	if(!scope)
+	  scope = "CONTACT";
+
+	$.getJSON("core/api/custom-fields/scope?scope=" + scope, function(data){
+		if(callback && typeof callback === 'function')
+			callback(data);
 	});
 }
 
