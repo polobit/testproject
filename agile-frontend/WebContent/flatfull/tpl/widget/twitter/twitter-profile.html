@@ -159,16 +159,16 @@
 <div class="wrapper-sm">
 {{#if disable_check}}
 	<div class="word-break wrapper-sm text-base" style="line-height:160%;">
-		{{{message}}}
+		{{message}}
 	</div>
 {{else}}
 	{{#check_length message "140"}}
 		<div class="ellipsis-multiline word-break text-base" title="{{message}}" style="height: 100px !important;-webkit-line-clamp: 5;line-height:160%;word-break: normal;">
-			{{{message}}}
+			{{message}}
 		</div>
 	{{else}}
 		<div class="word-break p-t-none p-r-none p-b-sm p-l-none text-base" style="line-height:160%;">
-			{{{message}}}
+			{{message}}
 		</div>
 	{{/check_length}}	
 {{/if}}
