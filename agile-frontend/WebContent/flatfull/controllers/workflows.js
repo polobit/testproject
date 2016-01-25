@@ -1370,7 +1370,7 @@ var WorkflowsRouter = Backbone.Router
 						send_verify_email(el);
 						var mid = that.workflow_model.get("id");
 						if(mid)
-							that.workflow_model.id= "";
+							that.workflow_model.id= null;
 					}
 				});
 			
