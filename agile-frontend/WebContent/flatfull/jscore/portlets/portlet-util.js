@@ -1038,17 +1038,36 @@ var portlet_utility = {
 									.html(
 											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
+			var emailsSentCount = 0;
+			if (_agile_get_prefs('dashboard_campaign_count_'+CURRENT_DOMAIN_USER.id)) {
+				emailsSentCount = _agile_get_prefs('dashboard_campaign_count_'+CURRENT_DOMAIN_USER.id);
+			}
+			that.find('#emails-sent-count').text(portlet_utility.getNumberWithCommasForPortlets(emailsSentCount));
+			that.find('#emails-sent-label').text("Campaign emails sent");
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
 							campaignEmailsSentsurl,
 							function(data) {
-								that
+								if(emailsSentCount > data["emailsSentCount"]) {
+									that
 										.find('#emails-sent-count')
 										.text(
 												portlet_utility
 														.getNumberWithCommasForPortlets(data["emailsSentCount"]));
+								}
+								else {
+									that.find('#emails-sent-count')
+									  .prop('number', emailsSentCount)
+									  .animateNumber(
+									    {
+									      number: data["emailsSentCount"]
+									    },
+									    2000
+									  );
+								}
 								that.find('#emails-sent-label').text(
 										"Campaign emails sent");
+								_agile_set_prefs('dashboard_campaign_count_'+CURRENT_DOMAIN_USER.id, data["emailsSentCount"]);
 							});
 			setPortletContentHeight(base_model);
 			break;
