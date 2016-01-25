@@ -1889,6 +1889,10 @@ color:#727272;
 #contactDetailsTab .ativity-block-ul {
   margin-top: -10px;
 }
+.deal-detail-related-mobile-view tr th:nth-of-type(n+2),.deal-detail-related-mobile-view tr td:nth-of-type(n+2) {
+  display: none;
+}
+
 }
 
 @media all and (min-width: 768px) {
