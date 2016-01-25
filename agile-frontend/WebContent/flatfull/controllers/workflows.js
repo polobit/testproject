@@ -289,7 +289,7 @@ var WorkflowsRouter = Backbone.Router
 
 				model.fetch({ success : function(data)
 				{
-					that.workflow_json = JSON.stringify(this.workflow_model.get("rules"));
+					that.workflow_json = JSON.stringify(data);
 				} });
 
 				var workflowModal = new Workflow_Model_Events({
@@ -1331,53 +1331,42 @@ var WorkflowsRouter = Backbone.Router
 					callback(); 		
 
 			},
-			shareWorkflow : function(id, sender_domain, workflow){
+			shareWorkflow : function(sender_cid, sender_domain, workflow){
 				
-				if(workflow)
-					this.workflow_model = workflow;
+                this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', postRenderCallback : function(el)
+					{	
+					}});
 
-				if(!this.workflow_model)
-				{
 				// Get workflow template based on category and template name
 				var workflow_template_model = Backbone.Model.extend({
 
-				url : '/core/api/workflows/shareCampAPI?id='+id+'&senderDomain='+sender_domain});
+					url : '/core/api/workflows/shareCampAPI?id='+id+'&senderDomain='+sender_domain
+				});
 
 				var model = new workflow_template_model();
-				model.id = id;
+	
+        		var that = this;
 
-				var that = this;
-
-				model.fetch({ success : function(data)
-				{
-					if (!this.workflow_model || this.workflow_model === undefined)
-					{
-					App_Workflows.shareWorkflow(id, sender_domain, data);
-					}
-				} });
-				}
-				if(this.workflow_model)
-				{
-				this.workflow_json = this.workflow_model.get("rules");
-				var that = this;
-				var workflowModal = new Workflow_Model_Events({
-					url : 'core/api/workflow', 
-					template : 'workflow-add',
-					isNew : 'true',
-					data : { "is_new" : true, "is_disabled" : false, "was_disabled" : false  },
-					postRenderCallback : function(el){
-						// Init SendVerify Email
-						send_verify_email(el);
-						var mid = that.workflow_model.get("id");
-						if(mid)
-							that.workflow_model.id= null;
-					}
-				});
-			
+         		model.fetch({ success : function(data)
+		 			{
+	             		that.workflow_json = JSON.stringify(data.rules);
+	          		}
+         		});
 				
-				$("#content").html(workflowModal.render().el);
-			}
-					
+	
+		     var workflowModal = new Workflow_Model_Events({
+							url : 'core/api/workflow', 
+							template : 'workflow-add',
+							isNew : 'true',
+							data : { "is_new" : true, "is_disabled" : false, "was_disabled" : false  },
+							postRenderCallback : function(el){
+								// Init SendVerify Email
+								send_verify_email(el);
+							}
+
+						});
+
+			 $("#content").html(workflowModal.render().el);
 			}
 });
 
