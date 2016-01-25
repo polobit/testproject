@@ -558,7 +558,11 @@ function initializePortletsListeners() {
 						}, 500);
 
 						$('#' + portlet.get("id")).parent().remove();
-
+						if(portlet.get('portlet_route')!='DashBoard')
+						{
+							if ($('.gridster-portlets > div').length == 0)
+							$('#no-portlets').parents('.wrapper-md').hide();
+						}
 						if ($('.gridster-portlets > div').length == 0)
 							$('#no-portlets').show();
 

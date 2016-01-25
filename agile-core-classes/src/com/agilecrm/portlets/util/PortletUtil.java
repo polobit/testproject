@@ -271,7 +271,7 @@ public class PortletUtil {
 	 *            {@link String}. Name of the portlet
 	 * @return {@link Portlet}
 	 */
-	public static Portlet getPortlet(String name){
+	public static List<Portlet> getPortlet(String name){
 		try{
 			return getPortlet(name, AgileUser.getCurrentAgileUser().id);
 		}
@@ -289,7 +289,7 @@ public class PortletUtil {
 	 *            {@link Long} agile user id
 	 * @return {@link Portlet}
 	 */
-	public static Portlet getPortlet(String name, Long agileUserId){
+	public static List<Portlet> getPortlet(String name, Long agileUserId){
 		try{
 			Objectify ofy = ObjectifyService.begin();
 
@@ -297,7 +297,7 @@ public class PortletUtil {
 			Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, agileUserId);
 
 			// Queries on widget name, with current AgileUser Key
-			return ofy.query(Portlet.class).ancestor(userKey).filter("name", name).get();
+			return ofy.query(Portlet.class).ancestor(userKey).filter("name", name).list();
 		}
 		catch (Exception e){
 			e.printStackTrace();

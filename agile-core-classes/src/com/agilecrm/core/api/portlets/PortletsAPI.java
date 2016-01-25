@@ -110,15 +110,31 @@ public class PortletsAPI {
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Portlet createPortletforAll(Portlet portlet) {
 		try {
-			Portlet p=null;
+			List<Portlet> p=null;
+			
 			if(portlet!=null){
 				DomainUserUtil du=new DomainUserUtil();
 				List<DomainUser> domainusers=du.getUsers();
 				for(DomainUser domainuser:domainusers)	{
+					boolean flag=true;
 					if(portlet.name.equalsIgnoreCase("Mini Calendar"))	{
-					  p=PortletUtil.getPortlet(portlet.name,AgileUser.getCurrentAgileUserFromDomainUser(domainuser.id).id);
+						AgileUser aUser = AgileUser.getCurrentAgileUserFromDomainUser(domainuser.id);
+						if(aUser!=null)
+					  p=PortletUtil.getPortlet(portlet.name,aUser.id);
 					  if(p==null)
 						  portlet.saveAll(domainuser);
+					  else{
+						  for(Portlet po:p){
+						  if(po.portlet_route==portlet.portlet_route)
+						  {
+							  flag=false;
+							  break;
+						  }
+						  }
+						  if(flag)
+							  portlet.saveAll(domainuser);  
+						  
+					  }
 					  continue;
 					}
 					portlet.saveAll(domainuser);

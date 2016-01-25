@@ -384,15 +384,15 @@ function showCalendar(users)
 											
 									if (calendarView == "month")
 									{
-										popover_min_width = $('.fc-view-month').find('.fc-widget-content').eq(0).width() * 2;
+										popover_min_width = $(this).parents('.fc-view-month').find('.fc-widget-content').eq(0).width() * 2;
 										var left = jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10;
 										var top = jsEvent.currentTarget.offsetTop;
-										if ($('.fc-border-separate:visible').width() - left < popover_min_width)
+										if ($(this).parents('.fc-view-month').find('.fc-border-separate:visible').width() - left < popover_min_width)
 										{
 											left = jsEvent.currentTarget.offsetLeft - popover_min_width - 10;
 											leftorright = 'right';
 										}
-										if ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
+										if ($(this).parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
 										{
 											left = ((jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10) / 2) - (popover_min_width / 2);
 											top = jsEvent.currentTarget.offsetTop + jsEvent.currentTarget.offsetHeight + 10;
@@ -414,19 +414,19 @@ function showCalendar(users)
 											$(this).after(popoverElement);
 										}
 										
-										if ($('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw')
+										if ($(this).parents('.fc-view-month').find('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw')
 												.height())
 										{
 											$(this).parent().find('.fc-overlayw').css("top",
 													top - $(this).parent().find('.fc-overlayw').height() + jsEvent.currentTarget.offsetHeight + 20 + "px");
 											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 31 + "px");
 										}
-										if ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
+										if ($(this).parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
 										{
 											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", "-9px");
 										}
-										if (($('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop - jsEvent.currentTarget.offsetHeight - 10 < $(
-												this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth))
+										if (($(this).parents('.fc-view-month').find('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop - jsEvent.currentTarget.offsetHeight - 10 < $(
+												this).parent().find('.fc-overlayw').height() + 10) && ($(this).parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth))
 										{
 											$(this).parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
 											left = ((jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10) / 2) - (popover_min_width / 2);
