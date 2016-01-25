@@ -1097,10 +1097,10 @@ var portlet_utility = {
 					var that=portlet_ele;
 			   selector= portlet_ele.attr('id');
 			var url = '/core/api/portlets/goals/'+CURRENT_DOMAIN_USER.id
-						+ '?start_time='
+						+ '?start-date='
 								+ portlet_utility
 										.getStartAndEndDatesOnDue(start_date_str)
-								+ '&end_time='
+								+ '&end-date='
 								+ portlet_utility
 										.getStartAndEndDatesOnDue(end_date_str);
 			portlet_graph_data_utility
@@ -2013,6 +2013,51 @@ var portlet_utility = {
 			}
 		});
 	
-	}
 
+	},
+
+	is_legend_enable_in_desktop : function(base_model){
+	        
+	        if(!base_model.get("size_x") || base_model.get("size_x") > 1)
+	        		return true;	
+
+	        return false;
+	},
+
+	is_legend_enable : function(base_model){
+		return (!agile_is_mobile_browser()) ? true : false;
+	},
+
+	toggle_chart_legends: function(chart, base_model){
+		if(!chart.series)
+			  return;
+
+		var items = chart.series; 
+		for (var i = 0; i < items.length; i++) {
+			this.toggle_legend_item(chart, items[i], base_model);
+		};
+
+	},
+	toggle_legend_item : function(chart, item, base_model){
+		if(this.is_legend_enable_in_desktop(base_model))
+		{
+			item.options.showInLegend = true;
+			try{
+				chart.legend.renderItem(item);	
+			}catch(e){}
+			try{
+				chart.legend.render();	
+			}catch(e){}
+    		
+		}else {
+			item.options.showInLegend = false;
+    		item.legendItem = null;
+    		try{
+				chart.legend.destroyItem(item);	
+			}catch(e){}
+			try{
+				chart.legend.render();	
+			}catch(e){}
+		}
+	}
 };

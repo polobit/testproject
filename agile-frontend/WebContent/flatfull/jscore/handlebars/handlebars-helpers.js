@@ -791,6 +791,24 @@ $(function()
 		// 1000));
 	});
 
+	Handlebars.registerHelper('paypalInvoiceDate', function(format, date)
+	{
+		if (date){
+			// var data = new Date(date); 
+			// var time = data.getTime();			
+    		var din = date.replace(/-/g, "//");
+			if(!format){
+			 	format = "ddd mmm dd yyyy";
+			}
+			var d= new Date(din).format(format);
+			return d;			
+		}
+		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
+		// 1000));
+	});
+
+
+
 	// Helper function to return date in user selected format in  preferences.
 
 	Handlebars.registerHelper('epochToHumanDateInFormat', function(date)
@@ -983,6 +1001,8 @@ $(function()
 	{
 		var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 		var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
+		if(symbol=='Rs')
+			symbol='Rs.';
 		return symbol;
 	});
 	Handlebars.registerHelper('mandrill_exist', function(options)
@@ -3832,6 +3852,14 @@ $(function()
 
 	});
 
+		Handlebars.registerHelper('month-range', function(options)
+	{
+		var from_date = Date.today().moveToFirstDayOfMonth();
+		var to_date = Date.today().moveToLastDayOfMonth();
+		return from_date.toString('MMMM d, yyyy') + " - " + to_date.toString('MMMM d, yyyy');
+
+	});
+
 	Handlebars.registerHelper("extractEmail", function(content, options)
 	{
 
@@ -5703,6 +5731,12 @@ $(function()
 		switch (status) {
 		case "completed":
 		case "answered":
+		case "inquiry":
+		case "interest":
+		case "no interest":
+		case "incorrect referral":
+		case "meeting scheduled":
+		case "new oppurtunity":
 			return "Call duration";
 			break;
 		case "busy":
@@ -5721,6 +5755,9 @@ $(function()
 		case "in-progress":
 		case "voicemail":
 			return "Left voicemail";
+			break;
+		case "missed":
+			return "Call missed";
 			break;
 		default:
 			return "";
@@ -6934,6 +6971,14 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 		var max = getMaxEmailsLimit();
 		// if max is greater than zero, we consider user is subscrbed to email plan
 		if (max > 0)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
+
+	Handlebars.registerHelper('is_acl_allowed', function(options)
+	{
+		if(!_plan_restrictions.is_ACL_allowed[0]())
 			return options.fn(this);
 		else
 			return options.inverse(this);

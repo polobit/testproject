@@ -46,7 +46,7 @@
 				{{else}}
 					<i class="icon pull-left icon-play m-r-xs m-t-xxs c-p r" id="record_sound_play" sound_url="{{recording.Recording.Uri}}" style="color: white;background: rgba(130, 130, 130, 1);padding:1px;"></i>
 				{{/if_equals}}			
-				<div class="pull-left">{{#if_equals call.Status "no-answer"}}Call unaswered{{else}}Call connected{{/if_equals}}</div>
+				<div class="pull-left">{{#if_equals call.Status "no-answer"}}Call unanswered{{else}}Call connected{{/if_equals}}</div>
 				<div class="pull-right">{{#is_string call.Duration}}{{toProperFormat call.Duration}}{{else}}0 s{{/is_string}}</div>
 				<div class="clearfix"></div>
 				<small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time></small>

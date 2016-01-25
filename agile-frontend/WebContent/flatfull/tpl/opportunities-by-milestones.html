@@ -10,13 +10,13 @@
 			</div>
 			</h3>
 <div class="pull-right">
-            <div class="btn-group inline-block m-r-sm" id="deals-tracks">
+            <div class="btn-group inline-block m-l-xs" id="deals-tracks">
 			</div>
-			<div id="deal-list-filters" class="btn-group inline-block m-r-sm">
+			<div id="deal-list-filters" class="btn-group inline-block m-l-xs">
 				 <img class="loading_img p-r-xs" height="32px" width="32px" src= "{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
 			</div>
-			<div class="btn-group inline-block m-r-sm" id="deals-view">
-					<div class="btn btn-sm btn-default"><i class="icon-list m-r-xs"></i></div>
+			<div class="btn-group inline-block m-l-xs" id="deals-view">
+					<div class="btn btn-sm btn-default"><i class="icon-list m-l-xs"></i></div>
 					<a class="btn btn-sm btn-default  dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
 					</a>
@@ -31,7 +31,7 @@
 						</li>
 					</ul>
 			</div>
-			<div class="btn-group inline-block" id="deals-action">
+			<div class="btn-group inline-block m-l-xs" id="deals-action">
 					<a href="#deals-add" class="deals-add btn btn-sm  btn-default"><i class="icon-plus-sign" /> Add Deal
 					</a>
 					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
@@ -41,6 +41,18 @@
 						<li><a href="#import-deals" >Import from CSV</a></li>
 						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
 					</ul>
+					<!--
+					{{#is_mobile}}
+
+					{{else}}
+					<div class="btn-group pull-left m-l-xs" style="padding-left:3px;">
+						<button class="btn btn-default btn-sm m-l-sm fullscreenelement" style="height:30px;width:30px;" targetFullscreenElement="#content" >
+							<i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
+
+							{{/is_mobile}}
+							-->
+						
+	  		
 			</div>
 			</div>
         <div class="clearfix"></div>

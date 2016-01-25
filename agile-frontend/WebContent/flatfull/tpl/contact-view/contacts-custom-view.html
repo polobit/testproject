@@ -52,7 +52,63 @@
 			</div>
 			<div  class="btn-group inline-block pull-left m-t-xs" style="display: none;" id="bulk-select"></div>
 			</div>
+
 			<div class="pull-right">
+			<div class="btn-group pull-left m-r-xs contacts-toolbar">
+			<div class="btn-group dropdown m-l-none" style="float: none;">
+	    		<button class="btn btn-sm no-shadow p-n b-n bg-transparent m-t-xs text-base" data-toggle="dropdown" id="contact-sort" aria-expanded="false">
+					<span class="text-muted">Sort by </span>
+				    <span class="sort-field-txt"></span>
+				</button>
+				<button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs m-t-xs" data-toggle="dropdown" aria-expanded="true">
+					<i class="fa fa-sort-desc"></i>
+				</button>
+			    <ul class="pull-right dropdown-menu">
+			    	<li>
+			    		<a class="sort-link sort-field pos-rlt" href="javascript:void(0);" data="created_time">
+			    		Created Date
+			    		<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check"></i> 
+		    			</a>
+		    		</li>
+			    	<li>
+			    		<a class="sort-field pos-rlt" href="javascript:void(0);" data="lead_score">
+				    		Score
+						 <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check"></i>
+				    	</a>
+				    </li>
+			    	<li>
+			    		<a class="sort-field pos-rlt" href="javascript:void(0);" data="star_value">
+				    		Starred
+ 						<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check"></i>
+				    	</a>
+			    	</li>
+			    	<li>
+			    		<a class="sort-field pos-rlt" href="javascript:void(0);" data="first_name">
+				    		First Name
+ 							<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check"></i>
+				    	</a>
+			    	</li>
+			    	<li>
+			    		<a class="sort-field pos-rlt" href="javascript:void(0);" data="last_name">
+				    		Last Name
+								<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check"></i>
+				    	</a>
+			    	</li>
+			    	<li>
+			    		<a class="sort-field pos-rlt" href="javascript:void(0);" data="last_contacted">
+				    		Contacted Date
+ 								<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check"></i>
+				    	</a>
+			    	</li>
+			    	<li class="divider"></li>
+			    	<li>
+			    		<a class="sort-by pos-rlt" data="" href="javascript:void(0);">Ascending <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check "></i> </a>
+			    	</li>
+			    	<li><a class="sort-by pos-rlt" data="-" href="javascript:void(0);">Descending  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check "></i> </a></li>
+				</ul>
+	    	</div>
+
+			</div>
             <div class="btn-group pull-left m-r-xs" id="contacts-view-options"></div>
 
 			<div class="btn-group pull-left m-r-xs" id="filter-list"></div>

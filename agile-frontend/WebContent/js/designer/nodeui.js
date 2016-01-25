@@ -15,7 +15,7 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
 
     console.log("constructNodeFromDefinition "+nodeId);
 	console.log(nodeJSONDefinition);
-	
+
     // Remove old data
     $("#nodeui").removeData();
     $("#nodeui").empty();
@@ -42,7 +42,6 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     // Change Grid default values in nodeJSONDefinition
     // Clone
     var newJSONDefinition = JSON.parse(JSON.stringify(nodeJSONDefinition));
-    
     if(jsonData != undefined)
 	    newJSONDefinition = changeDefaultValues(newJSONDefinition, jsonData);
         
@@ -93,6 +92,11 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     if(nodeJSONDefinition["name"] == "Send Message" && (jsonData == undefined || jsonData == "json/nodes/sms/sendmessage.js"))
         $("#nodeui").find("[name=to]").val("{{phone}}");
     
+    //for set property node
+    if(nodeJSONDefinition["name"] == "Set Property"){
+    		setPropertyNode(jsonData);
+    }
+
     // Clear Global Operations Queues (for dynamic edit)
     clearGridOperations();
 

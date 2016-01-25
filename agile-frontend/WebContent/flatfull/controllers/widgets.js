@@ -44,6 +44,8 @@ var WidgetsRouter = Backbone.Router
                 "Xero/:id" : "Xero",
                 "QuickBooks" : "QuickBooks",
                 "QuickBooks/:id" : "QuickBooks",
+                "PayPal" : "PayPal",
+                "PayPal/:id" : "PayPal",
                 // Ecommerce widgets
                 "Shopify" : "Shopify",
                 "Shopify/:id" : "Shopify",
@@ -51,7 +53,7 @@ var WidgetsRouter = Backbone.Router
                 "Custom-widget" : "Custom",
                 "Custom-widget/:id" : "Custom",
 				"Bria" : "Bria", "Bria/:id" : "Bria",
-				//"Skype" : "Skype", "Skype/:id" : "Skype"
+				"Skype" : "Skype", "Skype/:id" : "Skype"
 
                 	
             },
@@ -145,9 +147,9 @@ var WidgetsRouter = Backbone.Router
 			 /**
 			 * Manages Skype widget
 			 */
-	/*		 Skype : function(id) {
+			 Skype : function(id) {
 			 	addConfigurableWidget(id, "Skype", 'skype-login');
-			 },*/
+			 },
 			 
             /**
              * Manages Rapleaf widget
@@ -256,6 +258,24 @@ var WidgetsRouter = Backbone.Router
                     addWidgetProfile(id, "QuickBooks",
                             "quickbooks-revoke-access",
                             "core/api/widgets/QuickBooks");
+                }
+
+            },
+
+           /**
+            *
+            */
+            PayPal : function(id){
+
+               if (!id) {
+                    addOAuthWidget(
+                            "PayPal",
+                            "paypal-login",
+                            ('/paypalScribe?isForAll=' + isForAll + '&return_url='
+                                    + encodeURIComponent(window.location.href)));
+                } else {
+                    addWidgetProfile(id, "PayPal", "paypal-revoke-access",
+                            "core/api/widgets/paypal");
                 }
 
             },

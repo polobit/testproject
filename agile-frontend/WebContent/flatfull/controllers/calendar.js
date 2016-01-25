@@ -72,9 +72,10 @@ calendar : function()
 						$('#grp_filter').css('display', 'none');
 						$('#event_tab').css('display', 'none');
 					
-
+						 $("[data-toggle=tooltip").tooltip();
+						 
 					}, $('#calendar-listers').find("#calendar-filters"));
-		});	
+		});			
 	}, "#calendar-listers");
 
 
@@ -197,6 +198,8 @@ function appendItem1(base_model)
 	}
 
 	var jsonObject = $.parseJSON(_agile_get_prefs('event-lhs-filters'));
+	jsonObject = jsonObject[CURRENT_AGILE_USER.id];
+
 	var owner = jsonObject ? jsonObject.owner_ids : null;// if no owner then
 	// its all
 	if (owner && owner.length == 1 && owner[0] == CURRENT_AGILE_USER.id)
@@ -230,6 +233,8 @@ function appendItem2(base_model)
 	// on landing of page
 
 	var jsonObject = $.parseJSON(_agile_get_prefs('event-lhs-filters'));
+	jsonObject = jsonObject[CURRENT_AGILE_USER.id];
+
 	var owner = jsonObject ? jsonObject.owner_ids : null; // if no owner then
 	// its all
 	if (owner && owner.length == 1 && owner[0] == CURRENT_AGILE_USER.id)
@@ -491,6 +496,8 @@ function loadAgileEvents()
 			calEnable = true;
 
 		var jsonObject = $.parseJSON(_agile_get_prefs('event-lhs-filters'));
+		jsonObject = jsonObject[CURRENT_AGILE_USER.id];
+
 		var agile_event_owners = '';
 		if (jsonObject)
 		{

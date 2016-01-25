@@ -1233,6 +1233,8 @@ public class ContactsAPI
 	    }
 
 	}
+	if (contact.type.toString().equals(("PERSON")))
+		ActivityUtil.mergeContactActivity(ActivityType.MERGE_CONTACT,contact,ids.length);
 	// merge notes
 	return contact;
     }

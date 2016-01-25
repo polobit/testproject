@@ -19,11 +19,16 @@ function isArray(a)
  */
 function load_events_from_google(callback)
 {
+	var eventFilters;
+	var eventData = JSON.parse(_agile_get_prefs('event-lhs-filters'));	
 
-	var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
+	if(eventData){
+		eventFilters = eventData[CURRENT_AGILE_USER.id];
+	}
+
 	var agile_event = false;
 	if (eventFilters)
-	{
+	{		
 		var type_of_cal = eventFilters.cal_type;
 		var owners = eventFilters.owner_ids;
 		if (owners && owners.length > 0)
@@ -205,10 +210,16 @@ function showCalendar(users)
 								{ 	
 									events : function(start, end, callback)
 								{
-									var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
+									var eventFilters;
+									var eventData = JSON.parse(_agile_get_prefs('event-lhs-filters'));	
+	
+									if(eventData){
+										eventFilters = eventData[CURRENT_AGILE_USER.id];
+									}																		
+									
 									var agile_event_owners = '';
 									if (eventFilters)
-									{
+									{										
 										var type_of_cal = eventFilters.cal_type;
 										var owners = eventFilters.owner_ids;
 
@@ -240,7 +251,7 @@ function showCalendar(users)
 											//Office
 											var inArray = type_of_cal.indexOf("office");
 											if(inArray >= 0){
-												//addOffice365CalendarEvents();
+												addOffice365CalendarEvents();
 											}
 											
 											//Agile
@@ -853,10 +864,8 @@ function today()
 {
 	fullCal.fullCalendar('today');
 }
-function refreshcal()
-{
-fullCal.fullCalendar('refetchEvents');
-document.getElementById("refrecal").style.backgroundColor = "#fcfdfd"
+function refreshcal(){
+	fullCal.fullCalendar('refetchEvents');
 }
 
 /**

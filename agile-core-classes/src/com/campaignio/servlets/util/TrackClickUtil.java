@@ -175,7 +175,7 @@ public class TrackClickUtil
 		    try
 		    {
 			value = contactJSON.getString(propertyName);
-			params += ("&" + propertyName.trim() + "=" + URLEncoder.encode(value.trim(), "UTF-8"));
+			params += ("&" + propertyName.trim() + "=" + value.trim());
 		    }
 		    catch (Exception e)
 		    {

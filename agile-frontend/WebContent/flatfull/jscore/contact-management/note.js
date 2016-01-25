@@ -9,6 +9,7 @@
  var Agile_Old_Hash;
 $(function()
 {
+
 	
 	$(window).on("hashchange", function(e){
 		var oldUrl = e.originalEvent.oldURL;
