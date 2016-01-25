@@ -213,6 +213,7 @@ var WorkflowsRouter = Backbone.Router
 
 						// Init SendVerify Email
 						send_verify_email(el);
+						
 					}
 
 				});
@@ -1358,7 +1359,7 @@ var WorkflowsRouter = Backbone.Router
 				if(this.workflow_model)
 				{
 				this.workflow_json = this.workflow_model.get("rules");
-
+				var that = this;
 				var workflowModal = new Workflow_Model_Events({
 					url : 'core/api/workflow', 
 					template : 'workflow-add',
@@ -1367,6 +1368,9 @@ var WorkflowsRouter = Backbone.Router
 					postRenderCallback : function(el){
 						// Init SendVerify Email
 						send_verify_email(el);
+						var mid = that.workflow_model.get("id");
+						if(mid)
+							that.workflow_model.id= "";
 					}
 				});
 			
