@@ -109,7 +109,7 @@ public class WorkflowsAPI {
 	@Path("shareCampAPI")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Workflow getWorkflowForSharedCampaign(
+	public String getWorkflowForSharedCampaign(
 			@QueryParam("id") String workflow_id,
 			@QueryParam("senderDomain") String senderDomain) {
 
@@ -131,7 +131,7 @@ public class WorkflowsAPI {
 		} finally {
 			NamespaceManager.set(oldNamespace);
 		}
-		return workflow;
+		return workflow.rules;
 	}
 
 	/**
