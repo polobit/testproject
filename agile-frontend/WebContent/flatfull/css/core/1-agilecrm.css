@@ -3123,7 +3123,7 @@ table.hide-head-checkbox th label.i-checks {
 @media screen and (-webkit-min-device-pixel-ratio:0) { 
 /* Safari and Chrome */
 .no-wrap {
- white-space: normal;
+ white-space: normal !important;
 }
 
 /* Safari only override */

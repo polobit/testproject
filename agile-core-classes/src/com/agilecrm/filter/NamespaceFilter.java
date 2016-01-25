@@ -2,6 +2,7 @@ package com.agilecrm.filter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Calendar;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -222,6 +223,10 @@ public class NamespaceFilter implements Filter
 	// Chain into the next request if not redirected
 	if (handled)
 	    chain.doFilter(request, response);
+	
+	  // For IE cache issue fix
+	  HttpServletResponse res = (HttpServletResponse) response;
+	  res.setDateHeader("Expires", Calendar.getInstance().getTimeInMillis());
     }
 
     @Override
