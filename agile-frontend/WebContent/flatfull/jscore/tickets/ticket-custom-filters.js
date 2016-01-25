@@ -70,7 +70,7 @@ var Ticket_Custom_Filters = {
 			  	var options = [];
 
 			  	//Initializing click event due date dropdown
-			  	$container.off('click');
+			  	$container.off('click','ul.due-date-dropdown li a');
 			  	$container.on('click','ul.due-date-dropdown li a', function(event){
 
 			  		var $target = $(event.currentTarget);
@@ -105,6 +105,7 @@ var Ticket_Custom_Filters = {
 			  	});
 
 			  	//Initializing click event on clear due date button
+			  	$container.off('click','a#clear-created-date');
 			  	$container.on('click','a#clear-due-date', function(event){
 
 			  		$(this).hide();
@@ -124,6 +125,7 @@ var Ticket_Custom_Filters = {
 			  	});
 
 			  	//Initializing click event on clear create date button
+			  	$container.off('click','a#clear-created-date');
 			  	$container.on('click','a#clear-created-date', function(event){
 
 			  		$(this).hide();
@@ -143,6 +145,7 @@ var Ticket_Custom_Filters = {
 			  	});
 
 			  	//Initializing click event on due date button
+			  	$container.off('click','a.choose-due-date');
 			  	$container.on('click','a.choose-due-date', function(event){
 
 			  		var value = $(this).data('value'), current_date = new Date();
@@ -238,11 +241,41 @@ var Ticket_Custom_Filters = {
 								Ticket_Custom_Filters.customFilters.push(condition);
 							}
 
-							Ticket_Custom_Filters.toggleCreateFilterNoty();
-
 							//Re-render collection with customized filters
 							Tickets.fetchTicketsCollection();
 						});
+					});
+					
+					//Initializing click event on 'Save as' button in LHS filters 
+					$container.off('click','.save-new-filter');
+					$container.on('click','.save-new-filter', function(e){
+
+						var view = new Ticket_Base_Model({
+							isNew : true, 
+							template : "ticket-create-filter-modal",
+							url : '/core/api/tickets/filters',
+							saveCallback: function(model){
+
+								$('#create-filter-modal').modal('hide');
+								App_Ticket_Module.ticketFiltersList.collection.add(model);
+								App_Ticket_Module.ticketsByFilter(model.id);
+							},
+							prePersist : function(model)
+							{
+								var json = {};
+								json.conditions = Ticket_Custom_Filters.customFilters;
+
+								var formJSON = model.toJSON();
+
+								if(formJSON['save-type'] == 'replace')
+									json.id = $('[name="filter-collection"]').val();
+
+								model.set(json, { silent : true });
+							}
+						});
+
+						$('#ticket-modals').html(view.render().el);
+						$('#create-filter-modal').modal('show');
 					});
 			  	});
 
@@ -294,8 +327,6 @@ var Ticket_Custom_Filters = {
 							}
 						}
 					}
-
-					Ticket_Custom_Filters.toggleCreateFilterNoty();
 
 					//Re-render collection with customized filters
 					Tickets.fetchTicketsCollection();
@@ -470,8 +501,6 @@ var Ticket_Custom_Filters = {
 			Ticket_Custom_Filters.customFilters.push(condition);
 		}
 
-		Ticket_Custom_Filters.toggleCreateFilterNoty();
-
 		//Re-render collection with customized filters
 		Tickets.fetchTicketsCollection();
 	},
@@ -501,51 +530,8 @@ var Ticket_Custom_Filters = {
 			Ticket_Custom_Filters.customFilters.push(condition);
 		}
 
-		Ticket_Custom_Filters.toggleCreateFilterNoty();
-
 		//Re-render collection with customized filters
 		Tickets.fetchTicketsCollection();
-	},
-
-	toggleCreateFilterNoty: function(){
-
-		if(Ticket_Custom_Filters.isFilterChanged()){
-
-			$('div.save-as-filter-container').show();
-
-			$('body').off('click', '.save-new-filter');
-			$('body').on('click', '.save-new-filter', function(e){
-
-				var view = new Ticket_Base_Model({
-					isNew : true, 
-					template : "ticket-create-filter-modal",
-					url : '/core/api/tickets/filters',
-					saveCallback: function(model){
-
-						$('#create-filter-modal').modal('hide');
-						App_Ticket_Module.ticketFiltersList.collection.add(model);
-						App_Ticket_Module.ticketsByFilter(model.id);
-					},
-					prePersist : function(model)
-					{
-						var json = {};
-						json.conditions = Ticket_Custom_Filters.customFilters;
-
-						var formJSON = model.toJSON();
-
-						if(formJSON.type == 'replace')
-							json.id = Ticket_Filter_ID;
-
-						model.set(json, { silent : true });
-					}
-				});
-
-				$('#ticket-modals').html(view.render().el);
-				$('#create-filter-modal').modal('show');
-			});
-		}
-		else
-			$('div.save-as-filter-container').hide();
 	},
 
 	isFilterChanged: function(){
@@ -575,5 +561,15 @@ var Ticket_Custom_Filters = {
 		}
 
 		return false;
+	},
+
+	toggleFields: function(){
+		$('div.choose-filter').toggle();
+	},
+
+	changViewName: function(){
+		var selectedFilterName = $('[name="filter-collection"] option:selected').text()
+
+		$('input[name="name"]', $('form#saveFilterForm')).val(selectedFilterName);
 	}
 };

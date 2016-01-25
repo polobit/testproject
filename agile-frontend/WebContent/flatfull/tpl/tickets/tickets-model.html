@@ -24,19 +24,19 @@
         <tr>
           <td>
             <div class="text-ellipsis">
-              <div class="text-ellipsis first-letter-cap pull-left text-cap custom-link" style="color: #697073;max-width: 20em;">{{#if subject}}{{subject}}{{else}}-{{/if}}</div>
-              <div class="pull-left">&nbsp;#{{id}}</div>
+              <div class="text-ellipsis first-letter-cap pull-left text-cap text-sm" style="color: #697073;max-width: 20em;">{{#if subject}}{{subject}}{{else}}-{{/if}}</div>
+              <div class="pull-left text-sm">&nbsp;#{{id}}</div>
             </div>
           </td>
         </tr>
         <tr>
           <td>
-            <a class="text-cap custom-link subject-row text-ellipsis text-sm" style="color: #697073;">{{requester_name}}</a>
+            <a class="text-cap custom-link subject-row text-ellipsis text-xs" style="color: #697073;">{{requester_name}}</a>
           </td>
         </tr>
         <tr>
           <td>
-            <small class="text-muted">
+            <small class="text-muted text-xs">
               {{#if_equals status 'NEW'}}
                 created 
                 <time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">
@@ -72,7 +72,7 @@
           </td>
         </tr>
       </table>
-      <div id="ticket-last-notes" class="ticket-last-notes animated fadeInUp" style="max-height: {{#if_equals status 'NEW'}}170px;{{else}}270px;{{/if_equals}};">
+      <div id="ticket-last-notes" class="ticket-last-notes animated popup-fadeInUp" style="max-height: {{#if_equals status 'NEW'}}170px;{{else}}270px;{{/if_equals}};">
         <div class="row m-n mar-btm-md">
           <div class="col-md-12 p-b-sm">
             <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;
@@ -248,7 +248,7 @@
   {{/each}}  
 </script>
 <script id="ticket-single-row-popup-template" type="text/html">
-<div id="ticket-last-notes" class="ticket-last-notes animated fadeInUp" style="min-height: {{#if_equals status 'NEW'}}170px;{{else}}270px;{{/if_equals}};">
+<div id="ticket-last-notes" class="ticket-last-notes animated popup-fadeInUp" style="min-height: {{#if_equals status 'NEW'}}170px;{{else}}270px;{{/if_equals}};">
     <div class="row m-n mar-btm-md">
           <div class="col-md-12 p-b-sm">
             <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;

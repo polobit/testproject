@@ -286,7 +286,7 @@ var Tickets = {
 
 					clearTimeout(popoverFunction);
 
-					var top = '70px';
+					var top = '60px';
 					if (event.type == 'mouseover'){
 
 						var $tr = $(this).closest('tr'), $that = $tr.find('td.notes-container');
@@ -303,7 +303,7 @@ var Tickets = {
 
 							$that.find('#ticket-last-notes').css('top', top).css('left','0').css('display', 'block');
 
-						},1000);
+						},600);
 					} else {
 						$('.ticket-last-notes').css('display', 'none').css('top', top);
 					}
@@ -343,13 +343,13 @@ var Tickets = {
 								var top = 0, left = $closest_div.offset().left + 70 + 'px';
 
 								if (window.innerHeight - $that.offset().top >= 250)
-									top = $that.offset().top + 40 + 'px';
+									top = $that.offset().top + 35 + 'px';
 								else
 									top = $that.offset().top - $('#ticket-last-notes').height() + 'px';
 
 								$('#ticket-last-notes').css('top', top).css('left', left).css('display', 'block');
 							});
-						},1000);
+						},600);
 						
 					}else{
 						$('div.ticket-last-notes').remove();

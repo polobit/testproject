@@ -158,7 +158,7 @@
       </div>
     </div>
 </div>
-<div class="save-as-filter-container display-none">
+<div class="save-as-filter-container">
   <a href="javascript:void(0);" class="c-p txt-small link-color">Clear</a>
   <a href="javascript:void(0);" class="c-p txt-small link-color pull-right save-new-filter">Save as</a>
 </div>
@@ -195,26 +195,34 @@
             <div class="modal-body">
               <form id="saveFilterForm" name="saveFilterForm" class="form-horizontal">
                 <div class="form-group">
-                  <label class="col-lg-3 control-label">
-                    View name<span class="field_req">*</span>
-                  </label>
-                  <div class="col-lg-7">
-                    <input type="text" name="name" class="form-control required"  placeholder="View name" value="{{#get_current_filter_name}}{{/get_current_filter_name}}">
+                  <div class="col-lg-3 col-md-offset-1">
+                    <div class="radio">
+                      <label class="i-checks">
+                        <input type="radio" class="create-new-filter" name="save-type" value="new" checked><i></i> Create new
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="radio">
+                      <label class="i-checks">
+                        <input type="radio" class="update-filter" name="save-type" value="replace"><i></i> Replace existing
+                      </label>
+                    </div>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-lg-3 control-label"></label>
+                  <label class="col-lg-3 control-label">View name<span class="field_req">*</span></label>
                   <div class="col-lg-7">
-                    <div class="btn-group full-width">
-                      <button type="button" class="btn btn-default" style="width: 92%;text-align: left;">
-                        Create new view
-                      </button>
-                      <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
-                      <ul class="dropdown-menu pull-right full-width">
-                        <li><a href="javascript:void(0);">Create new view</a></li>
-                        <li><a href="javascript:void(0);">Replace existing view</a></li>
-                      </ul>
-                    </div>
+                  <input type="text" name="name" class="form-control required"  placeholder="View name" 
+                    value="{{get_current_filter_name}}">
+                  </div>
+                </div>
+                <div class="form-group choose-filter display-none">
+                  <label class="col-lg-3 control-label">Replace <span class="field_req">*</span></label>
+                  <div class="col-lg-7">
+                    <select name="filter-collection" class="form-control required">
+                      {{{get_filters_select_options}}}
+                    </select>
                   </div>
                 </div>
               </form>

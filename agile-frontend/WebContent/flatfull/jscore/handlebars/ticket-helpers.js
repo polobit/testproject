@@ -404,4 +404,17 @@ Handlebars.registerHelper('get_current_filter_name', function(options)
 {
   return Ticket_Filters.getCurrentFilterName();
 });
+
+Handlebars.registerHelper('get_filters_select_options', function(options)
+{
+  var filtersArray = App_Ticket_Module.ticketFiltersList.collection.toJSON();
+  var optionHTML = '<option value="{{id}}">{{name}}</option>', resultHTML = '';
+
+  filtersArray.forEach(function(filter){
+  	resultHTML += optionHTML.replace('{{id}}', filter.id).replace('{{name}}', filter.name);
+  });
+
+  return resultHTML;
+});
+
 /** End of ticketing handlebars* */

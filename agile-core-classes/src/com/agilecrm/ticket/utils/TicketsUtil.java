@@ -907,15 +907,4 @@ public class TicketsUtil
 
 		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data);
 	}
-
-	public static void main(String[] args)
-	{
-		System.exit(1);
-	}
-
-	@Override
-	protected void finalize() throws Throwable
-	{
-		System.out.println("finally");
-	}
 }
