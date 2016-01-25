@@ -107,7 +107,7 @@ public class WorkflowsAPI {
 	 * 
 	 */
 	@Path("shareCampAPI")
-	@POST
+	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Workflow getWorkflowForSharedCampaign(
 			@QueryParam("id") String workflow_id,
