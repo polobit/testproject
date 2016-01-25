@@ -247,6 +247,8 @@ function handleObjects() {
             self.hide();
             self.unbind('click');
 
+            hideAllSettings();
+
             self.bind('click', function () {
 
                 $('div.row').removeClass('active');
@@ -660,7 +662,10 @@ function handleButtons(obj) {
 
 function handleButtonsTxt(obj) {
     var buttons = obj.find('table tbody tr td a.textbuttonsimg');
-    $('#buttonstxt').show();
+    if(buttons.length) {
+        $('#buttonstxt').show();
+    }
+    
     var btn_settings = $('#buttonstxtlist li');
     var ul = $('#buttonstxtlist');
     btn_settings.each(function () {
@@ -1474,10 +1479,10 @@ function initializeEditor() {
         force_p_newlines: true,
         forced_root_block: '',
         selector: "#html5editor",
-        plugins: "advlist autolink lists link charmap code paste textcolor colorpicker paste",
+        plugins: "autolink lists link charmap code paste textcolor colorpicker paste",
         paste_as_text: true,
        // paste_word_valid_elements: "h1,h2,h3,b,strong,i,em",
-        toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | link | bullist numlist | merge_fields",
+        toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | merge_fields",
         setup: function (editor) {
             editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
 
