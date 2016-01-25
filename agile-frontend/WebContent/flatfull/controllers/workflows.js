@@ -1340,7 +1340,7 @@ var WorkflowsRouter = Backbone.Router
 				// Get workflow template based on category and template name
 				var workflow_template_model = Backbone.Model.extend({
 
-					url : '/core/api/workflows/shareCampAPI?id='+id+'&senderDomain='+sender_domain
+					url : '/core/api/workflows/shareCampAPI?id='+ sender_cid +'&senderDomain='+sender_domain
 				});
 
 				var model = new workflow_template_model();
