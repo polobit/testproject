@@ -30,6 +30,7 @@ import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.agilecrm.workflows.Workflow;
@@ -468,9 +469,11 @@ public class WorkflowsAPI {
 
 			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 			map.put("campaignId", workflow_id);
-			map.put("recEmail", recEmail);
+			map.put("recEmail", MD5Util.getMD5HashedPassword(recEmail));
 			map.put("type", "Workflow");
 			map.put("senderName", domainUser.name);
+			map.put("senderId", domainUser.id.toString());
+			map.put("senderDomain", domainUser.domain);
 
 			SendMail.sendMail(recEmail, SendMail.SHARE_CAMPAIGN_SUBJECT,
 					SendMail.SHARE_CAMPAIGN_CONFIRMATION, map,
