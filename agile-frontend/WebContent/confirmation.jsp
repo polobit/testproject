@@ -329,7 +329,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 	<div class="wrapper rounded6" id="templateContainer">
 		<div id="templateBody" class="bodyContent rounded6">
 			<%
-			    String campaignId = request.getParameter("cid");
+			    String campaignId = request.getParameter("cid"); campaignId = StringUtils.isBlank(campaignId) ? "" : campaignId.trim(); // To avoid NPE
 			    String status = request.getParameter("status");
 			    String tag = request.getParameter("t");
 			    String email = request.getParameter("email"); email = StringUtils.isBlank(email) ? "" : email; // To avoid NPE
