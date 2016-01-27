@@ -243,8 +243,10 @@
 		<i class="fa fa-clock-o m-r-xs"></i>	
 		<time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" end}}" >{{get_duration start end}}</time>
 		</div>
+        <div class="clearfix"></div>
+        <div class="pull-left text-xs text-muted m-r-md" style="font-size:14px;">{{epochToHumanDate "mmmm dd" start}}</div>
 		{{#if this.contacts}}
-			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:79px;">
+			<div class="pull-left m-b-xxs text-ellipsis">
 				{{#related_to_one contacts}}{{/related_to_one}}
 			</div>
 		{{/if}}
@@ -275,8 +277,10 @@
 		<i class="fa fa-clock-o m-r-xs"></i>	
 		<time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" endEpoch}}" >{{get_duration startEpoch endEpoch}}</time>
 		</div>
+		 <div class="clearfix"></div>
+        <div class="pull-left text-xs text-muted m-r-md" style="font-size:14px;">{{epochToHumanDate "mmmm dd" start}}</div>
 		{{#if this.contacts}}
-			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:79px;">
+			<div class="pull-left m-b-xxs text-ellipsis">
 				{{#each contacts}}
 					<span class="label bg-light dk text-tiny">{{getContactDisplayValue this}}</span> 
 				{{/each}}
