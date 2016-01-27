@@ -506,6 +506,7 @@ function populate_workflows_list(id, el, callback)
 
 function shareCampaign()
 {
+    $("#shareCampaign").remove();
     getTemplate('share-campaign-modal', {}, undefined, function(template_ui){
                 if(!template_ui)
                     return;
