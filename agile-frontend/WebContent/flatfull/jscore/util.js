@@ -21,11 +21,15 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-r
 
 var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
 
-var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/rabinder,haaris_farooqi";
 
-var SALES_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Vikas,Mrudula,Shravi_Sharma,Bharat,Manish,Nick,Stephen";
+var ONBOARDING_SCHEDULE_URL = "http://supportcal.agilecrm.com";
 
-var SUPPORT_SCHEDULE_URL = "https://our.agilecrm.com/calendar/rabinder,haaris_farooqi";
+
+var SALES_SCHEDULE_URL = "http://salescal.agilecrm.com";
+
+
+var SUPPORT_SCHEDULE_URL = "http://supportcal.agilecrm.com";
+
 
 var CALENDAR_WEEK_START_DAY = CURRENT_USER_PREFS.calendar_wk_start_day;
 /**
