@@ -1228,27 +1228,32 @@ function showNoteAfterCall(callRespJson,messageObj)
 						
 					
 
-					
+					var noteStatus = "";
 					switch(callStatus) {
 				    case "canceled":
 				    	noteSub = TWILIO_CALLTYPE + " call - Declined";
 				    	friendlyStatus = "Declined";
+				    	noteStatus = "failed";
 				        break;
 				    case "completed":
 				    	noteSub = TWILIO_CALLTYPE + " call - Done";
 				    	friendlyStatus = "Done";
+				    	noteStatus = "answered";
 				    	break;
 				    case "busy":
 				    	noteSub = TWILIO_CALLTYPE + " call - Busy";
 				    	friendlyStatus = "Received busy tone on number "+ phoneNumber;
+				    	noteStatus = "busy";
 				    	break;
 				    case "failed":
 				    	noteSub = TWILIO_CALLTYPE + " call - Failed";
 				    	friendlyStatus = TWILIO_CALLTYPE + " call made to "+ phoneNumber +" has failed";
+				    	noteStatus = "failed";
 				    	break;
 				    case "no-answer":
 				    	noteSub = TWILIO_CALLTYPE + " call - No answer";
 				    	friendlyStatus = "No answer";
+				    	noteStatus = "busy";
 				    	break;
 				    default:
 				        return;
@@ -1282,7 +1287,11 @@ function showNoteAfterCall(callRespJson,messageObj)
 						$.post( "/core/api/widgets/twilio/autosavenote", {
 							subject: noteSub,
 							message: "",
-							contactid: TWILIO_CONTACT_ID
+							contactid: TWILIO_CONTACT_ID,
+							phone: phoneNumber,
+							callType: TWILIO_DIRECTION,
+							status: noteStatus,
+							duration: 0
 							});
 					}
 				}

@@ -392,7 +392,7 @@ function saveCallNoteBria(){
 				agile_type_ahead("note_related_to", el, contacts_typeahead);*/
 				
 	    	}else{
-				var note = {"subject" : noteSub, "message" : "", "contactid" : contact.id};
+	    		var note = {"subject" : noteSub, "message" : "", "contactid" : contact.id,"phone": number, "callType": "inbound", "status": callStatus, "duration" : 0 };
 				autosaveNoteByUser(note);
 	    	}
 	    });
@@ -429,7 +429,7 @@ function saveCallNoteBria(){
 					
 					});
 				}else{
-					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId};
+					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number,"callType": "outbound-dial", "status": callStatus, "duration" : 0 };
 					autosaveNoteByUser(note);
 				}
 		}
@@ -443,7 +443,11 @@ function autosaveNoteByUser(note){
 	$.post( "/core/api/widgets/twilio/autosavenote", {
 		subject: note.subject,
 		message: note.message,
-		contactid: note.contactid
+		contactid: note.contactid,
+		phone: note.phone,
+		callType: note.callType,
+		status: note.status,
+		duration: note.duration
 		});
 }
 

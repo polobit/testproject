@@ -80,7 +80,10 @@
 			{{else}}
 			{{#if_equals status "missed"}}
 			{{else}}
+			{{#if_equals status "no-answer"}}
+			{{else}}
 				Duration :  {{toProperFormat duration}} </br>
+			{{/if_equals}}
 			{{/if_equals}}
 			{{/if_equals}}
 			{{/if_equals}}

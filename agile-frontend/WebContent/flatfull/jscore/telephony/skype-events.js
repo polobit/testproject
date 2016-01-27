@@ -444,7 +444,7 @@ function saveCallNoteSkype(){
 				$('#noteModal').modal('show');
 				agile_type_ahead("note_related_to", el, contacts_typeahead);*/
 	    	}else{
-				var note = {"subject" : noteSub, "message" : "", "contactid" : id};
+	    		var note = {"subject" : noteSub, "message" : "", "contactid" : id,"phone": number, "callType": "inbound", "status": callStatus, "duration" : 0 };
 				autosaveNoteByUser(note);
 	    	}
 	    });
@@ -480,7 +480,7 @@ function saveCallNoteSkype(){
 					agile_type_ahead("note_related_to", el, contacts_typeahead);*/
 					});
 				}else{
-					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId};
+					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number, "callType": "outbound-dial", "status": callStatus, "duration" : 0 };
 					autosaveNoteByUser(note);
 				}
 		}
