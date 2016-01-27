@@ -473,7 +473,20 @@ $("#button_email_html").die().live("click", function(e){
     e.preventDefault();
    
     testMailButton("#button_email_html");
+
         });
+
+$("#spam_button_email").die().live("click", function(e){
+    e.preventDefault();
+   testMailButton("#spam_button_email");
+        });
+
+$("#spam_button_email_html").die().live("click", function(e){
+    e.preventDefault();
+      testMailButton("#spam_button_email_html");
+    
+        });
+
 
 
 function testMailButton(button){
@@ -513,9 +526,9 @@ function testMailButton(button){
     	    }
     	 
     // Verify email message
-    if($("#from_email").val() == "{{owner.email}}")
+   /* if($("#from_email").val() == "{{owner.email}}")
     {
-    	if(button == "#button_email")
+    	if(button == "#button_email" || button=="#spam_button_email")
     		margin = "margin:-6px 24px;";
     	else
     	    margin = "margin:-44px 29px 0px;";
@@ -531,7 +544,7 @@ function testMailButton(button){
     	});
     	
     	return;
-    }
+    }*/
 
     // Verifies merge fields and gives alert
     check_merge_fields_and_send(button);
@@ -540,15 +553,21 @@ function testMailButton(button){
 
 function check_merge_fields_and_send(button)
 {
-
+   
     var subject = $('#subject').val();
     var text_body = $("#text_email").val();
     var html_body = $("#tinyMCEhtml_email").val();
 
     if((subject && subject.indexOf('{{') != -1) || (text_body && text_body.indexOf('{{') != -1) || (html_body && html_body.indexOf('{{') != -1))
         show_test_email_alert(button);
-    else
-        send_test_email(button);
+    else if(button == "#spam_button_email_html" || button=="#spam_button_email")
+    {
+         window.parent.workflow_alerts("Score is loading...", "Please wait Spam score checking is in Progress" , "workflow-alert-modal",undefined);
+         check_spam_score(button);
+    }
+        else
+            send_test_email(button);
+    
 
 }
 
@@ -572,7 +591,6 @@ function send_test_email(button){
                  margin = "margin:-44px 29px 0px;";
                                  
              $(button).before("<span class='clearfix' id='confirmation-text'style='top: -49px;"+margin+"display: inline-block;text-align: center;float: left;width: 75%; color: red;font-style: italic;'>Email has been sent to "+email+"</span>");
-         
               $("#confirmation-text").fadeOut(8000,function(){
             
               $("#confirmation-text").remove();
@@ -580,6 +598,35 @@ function send_test_email(button){
             $(button).css('color','');
           });
         },
+        error: function(Error){
+            console.log(Error);
+            $(button).css('color','');
+        }
+    });
+}
+function check_spam_score(button){
+
+    var margin;
+    var jsonValues = serializeNodeForm();
+    $(button).css('color','gray');
+
+    $.ajax({
+          url: 'core/api/emails/check-spam-score',
+          type: "POST",
+          data:jsonValues,
+          async:true,
+          success: function (score) {//top": "-44px
+             
+             $('#errorsdiv').text("sfasd"+score);
+             if(button == "#spam_button_email")
+                 margin = "margin:-6px 24px;";
+                 else
+                 margin = "margin:-44px 29px 0px;";
+             var spamResult=JSON.parse(score);
+             window.parent.workflow_spam_alerts(spamResult['reason'], spamResult['score'], "workflow-spam-score-modal", undefined);
+             $(button).removeAttr('disabled', 'disabled');
+             $(button).css('color','');
+       },
         error: function(Error){
             console.log(Error);
             $(button).css('color','');
@@ -602,7 +649,10 @@ function show_test_email_alert(button){
                     // Disable and change text
                     $(this).attr('disabled', 'disabled').text("Sending");
 
-                    // send test email
+                    //Senda test mail and check spam score
+            if(button == "#spam_button_email_html" || button=="#spam_button_email")
+                    check_spam_score(button);
+                else
                     send_test_email(button);
                    
                 });

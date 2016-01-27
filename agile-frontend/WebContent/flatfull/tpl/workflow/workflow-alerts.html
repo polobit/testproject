@@ -106,4 +106,42 @@
 </div>
 </script>
 
-
+<script id="workflow-spam-score-modal-template" type="text/html">
+<div class="modal  fade" id="workflow-alert">
+	<div class="modal-dialog">
+    	<div class="modal-content"  style="width: 660px;">
+			<div class="modal-header" style="padding: 6px; padding-left: 12px;">
+				<button class="close" data-dismiss="modal">x</button>
+				<h3 class="modal-title"><i class="icon-file-text"></i> {{title}} </h3>
+			</div>
+				<div class="modal-body" style="padding: 6px;">
+					<div id="message-details">
+						<div class="panel panel-{{checkSpamScore score}}">
+      						<div class='panel-heading' ><strong>{{checkSpamMessage score}}<span class='pull-right badge'> Score = {{score}} </span></strong></div>
+  								<table  class="table table-condensed">
+    	 							<thead>
+							      		<th class="col-xs-1"> Points </h>
+							      		<th class="col-xs-1"> Rules Name </th>
+							      		<th class="col-xs-10"> Description </th>
+							    	 </thead>
+    								 <tbody>
+    	  								{{#each reason}}
+        									<tr>
+          										<td> <span class="label label-{{checkSpamScoreError this.[0]}} col-xs-12"><strong>{{this.[0]}}</strong></span> </td>
+          										<td> {{this.[1]}} </td>
+          										<td> {{this.[2]}}</td>
+        									</tr>
+      									{{/each}}
+    								 </tbody>
+  								</table>
+  	 						 </div>
+  	 					 </div>
+					</div>
+				<div class="modal-footer">
+					<span class="m-r-xs"></span>
+					<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">OK</a>
+				</div>
+			</div>
+		</div>
+	  </div>
+</script>

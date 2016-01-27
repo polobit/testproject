@@ -62,5 +62,5 @@ Handlebars.registerHelper( "checkSpamMessage", function ( score ){
         return "SpamAssassin Likes Your Email Templates....";
     }
     else return "SpamAssassin Partialy Likes Your Email Templates";
-});
+ });
 });
