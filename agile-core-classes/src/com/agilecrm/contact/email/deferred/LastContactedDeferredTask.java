@@ -41,7 +41,7 @@ public class LastContactedDeferredTask implements DeferredTask
 		{
 			
 			// To avoid campaign status completed bug
-			Thread.sleep(5000);
+			// Thread.sleep(5000);
 			
 			Contact contact = ContactUtil.getContact(contactId);
 
