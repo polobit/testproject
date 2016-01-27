@@ -768,6 +768,7 @@ function configurationElm(e, t) {
         //t.css('border', '4px solid red');
 
         clone.find('table.main').removeAttr('id');
+        clone.find("img").removeAttr("id");
         $(clone).insertAfter(t);
         handleObjects();
     });
