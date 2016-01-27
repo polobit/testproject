@@ -512,9 +512,9 @@ function shareCampaign()
                     return;
                 var share_campaign_modal = $(template_ui);
                 share_campaign_modal.modal('show');
-                share_campaign_modal.on('shown.bs.modal', function(){
+               /* share_campaign_modal.on('shown.bs.modal', function(){
                     window.history.back();
-                });
+                });*/
     }, null);
         
 }
@@ -538,7 +538,7 @@ function createJSON() {
          success : function()
             {
                 $("#shareCampaign").modal('hide');
-                Backbone.history.navigate("workflows", { trigger : true });
+                //Backbone.history.navigate("workflows", { trigger : true });
             },error : function(){
                 $("#shareCampaign").modal('hide');
             }
