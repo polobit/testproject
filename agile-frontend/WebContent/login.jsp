@@ -176,8 +176,11 @@ if(isSafari && isWin)
 
 </script>
 
+<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-<!--[if lt IE 9]>
+<!--[if lt IE 9]>	 
+	  <script src="https://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.jquery.min.js"></script>
       <script src="lib/ie/html5.js"></script>
     <![endif]-->
 
@@ -280,9 +283,10 @@ if(isSafari && isWin)
 	</div>
 	
 	<!-- JQUery Core and UI CDN -->
-	<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+	
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
+	
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
@@ -317,6 +321,9 @@ if(isSafari && isWin)
 				 $(this).closest('div').fadeOut('slow', function() {
 				   });
 				 });
+
+
+			// $('input, textarea').placeholder();
 			
 		});
 		
