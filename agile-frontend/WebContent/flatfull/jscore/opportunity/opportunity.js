@@ -572,10 +572,9 @@ function populate_deal_products(el, value,form_id){
 	$(".toggleHead",form_id).next().addClass("hide");
 	$(".toggleHead",form_id).find('i').addClass('icon-plus-sign');	
 
-	if($("#discount_type",form_id).val()!=""  )
-	{
-		$("#discount_type_btn span:first-child",form_id).text($("#discount_type").val());
-	}
+	if($("#discount_type",form_id).val()==""  )
+		$("#discount_type",form_id).val()="Value"
+	$("#discount_type_btn span:first-child",form_id).text($("#discount_type",form_id).val());
 	//Init
 	$(form_id).on(
 			"click",".toggleHead",
