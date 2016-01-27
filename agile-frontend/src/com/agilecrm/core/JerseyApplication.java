@@ -124,6 +124,7 @@ public class JerseyApplication extends Application {
 	s.add(com.agilecrm.ticket.rest.TicketBulkActionsBackendsRest.class);
 	s.add(com.agilecrm.ticket.rest.TicketImportsRest.class);
 	s.add(com.agilecrm.ticket.rest.TicketLabelsRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketReportsRest.class);
 
 		return s;
 	}

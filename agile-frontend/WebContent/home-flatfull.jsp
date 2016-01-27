@@ -301,6 +301,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <i class="icon icon-ticket"></i>
       <span>Help Desk</span>
     </a>
+  </li>
+  <li id="tickets">
+    <a  href="#ticket-reports">
+      <i class="icon-bar-chart icon-white"></i>
+      <span>Reports</span>
+    </a>
   </li>             
   </ul>
   </nav>

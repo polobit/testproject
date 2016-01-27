@@ -43,7 +43,10 @@
 		"edit-canned-response/:id" : "editCannedResponse",
 
 		/*Ticket collection view type*/
-		"ticket-collection-view" : "ticketsCollectionView"
+		"ticket-collection-view" : "ticketsCollectionView",
+
+		"ticket-reports" : "ticketReports",
+		"ticket-report/:report_type" : "ticketReport"
 	},
 
 	tickets: function(){
@@ -842,8 +845,51 @@ $('#content').find('.helpdesk-tab').addClass('select');
  			$('#admin-prefs-tabs-content').html(editCannedResponseView.render().el);
  			$('#content').find('#AdminPrefsTab .select').removeClass('select');
  			$('#content').find('.helpdesk-tab').addClass('select');
-});
-},
+		});
+	},
+
+	ticketReports: function(){
+		getTemplate("ticket-report-container", {}, undefined, function(template_ui){
+
+	 		if(!template_ui)
+	 			return;
+
+	 		$('#content').html($(template_ui));
+
+	 		hideTransitionBar();
+
+	 		$('#ticket-reports-tab-container a[href="#overview"]').tab('show');
+	 	});
+	},
+
+	ticketReport: function(report_type){
+
+		hideTransitionBar();
+		initReportLibs(function(){
+
+			var template = '', callback;
+
+			switch(report_type){
+				case 'daily-tickets':
+					template = 'ticket-daily-report';
+					callback = Ticket_Reports.dailyTickets;
+					break;
+			}
+			getTemplate(template, {}, undefined, function(template_ui){
+
+				if(!template_ui)
+					return;
+
+				$('#content').html($(template_ui));	
+
+				// Init the callback for daterange
+				initDateRange(callback);
+
+				callback();
+
+			}, "#content");
+		});
+	},
 
 	/*ticketsCollectionView: function(){
 

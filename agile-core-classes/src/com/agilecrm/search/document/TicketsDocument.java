@@ -341,6 +341,15 @@ public class TicketsDocument implements BuilderInterface
 		return new JSONObject().put("cursor", newCursor).put("keys", resultArticleIds).put("count", totalResults);
 	}
 
+	public int countRows(String queryString)
+	{
+		QueryOptions options = QueryOptions.newBuilder().setReturningIdsOnly(true).build();
+
+		Query query = Query.newBuilder().setOptions(options).build(queryString);
+
+		return getIndex().search(query).getResults().size();
+	}
+
 	public int getTicketsCount(String queryString)
 	{
 		QueryOptions options = QueryOptions.newBuilder().setNumberFoundAccuracy(10000).setLimit(1).build();
