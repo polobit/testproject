@@ -537,7 +537,7 @@ function createJSON() {
          success : function()
             {
                 $("#shareCampaign").modal('hide');
-                //Backbone.history.navigate("workflow/5946158883012608", { trigger : true });
+                Backbone.history.navigate("workflows", { trigger : true });
             },error : function(){
                 $("#shareCampaign").modal('hide');
             }
