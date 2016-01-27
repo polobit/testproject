@@ -272,12 +272,6 @@ public class RedirectServlet extends HttpServlet
     	   if (newQuery == null) 
             newQuery = appendQuery;
     	   else {
-    		     try {
-    		    	 newQuery=URLEncoder.encode(newQuery, "UTF-8");
-      	   		   } 
-    		     catch (UnsupportedEncodingException e) {
-      	   				e.printStackTrace();
-  		          	}
     		     newQuery += "&" + appendQuery; 
     	   }
         
