@@ -391,7 +391,10 @@ if(currentUserPrefs.menuPosition.equals("top")){
               </li> 
               --%>
               
-            
+              <li class="line dk"></li>
+            <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+                <span>More</span>
+              </li>
                 <li data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Calendar"><a href="#calendar"><i class="icon icon-calendar"></i> <span class="visible-xs">Calendar</span> </a></li>
                 <li id="due_tasks"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Tasks"><a class="pos-rlt" href="#tasks"><i class="icon-list"></i>
                   <span class="visible-xs">Tasks</span>
@@ -402,22 +405,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
                 <span class="visible-xs">Recent Activity</span>
               </a><ul class="dropdown-menu animated fadeInRight recent-view" style="width:23em; right:-11px;"></ul>
               </li> 
-              <li class="nav-bar-search">
-                <form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift">
-          <div class="input-group">
-              <input id="searchText" type="text"
-                    data-provide="typeahead"
-                    class="typeahead typeahead_contacts search-query form-control-custom input-sm bg-light no-border rounded padder"
-                    placeholder="Search">
-                    
-                     <!-- <input id="search-results" 
-                    type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
-            <span class="input-group-btn">
-                <button type="submit" class="btn btn-sm bg-light rounded" id="search-results" style="height:30px;"><i class="fa fa-search"></i></button>
-              </span>
-              </div>        
-                </form>
-              </li>
+              
               
             </ul>
   
@@ -456,29 +444,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
             %>
             
                   
-              <li class="dropdown" id="menu1"><a class="dropdown-toggle"
-                data-toggle="dropdown" href="">New <b class="caret"></b></a>
-                <ul class="dropdown-menu animated fadeInRight">
-                  <li><a href="#personModal"  class="person" id="person">
-                      <div class="pull-left">Contact</div><div class='pull-right shortcuts'>Shift + N</div><div class="clearfix"></div></a></li>
-                  <li><a href="#companyModal"  data-toggle="modal"
-                    id="company"> <div class="pull-left">Company</div><div class='pull-right shortcuts'>Shift + C</div><div class="clearfix"></div></a></li>
-                  <li><a href="#"  id="show-activity"> <div class="pull-left">Event</div><div class='pull-right shortcuts'>Shift + V</div><div class="clearfix"></div></a></li>
-                  <li><a href="#" class=" add-task"> <div class="pull-left">Task</div><div class='pull-right shortcuts'>Shift + T</div><div class="clearfix"></div></a></li>
+             
 
-                  <%
-                    if(domainUser.menu_scopes.contains(NavbarConstants.DEALS)){
-                  %>
-                  <li><a href="#" class="font-bold deals-add"> <div class="pull-left">Deal</div><div class='pull-right shortcuts'>Shift + D</div><div class="clearfix"></div></a></li>
-                  <%
-                    }
-                  %>
-                  <li><a href="#" id="show-note"> <div class="pull-left">Note</div><div class='pull-right shortcuts'>Shift + O</div><div class="clearfix"></div></a></li>
-                  <li><a href="#send-email"> <div class="pull-left">Email</div><div class='pull-right shortcuts'>Shift + M</div><div class="clearfix"></div></a></li>
-                </ul> <!-- 
-              <img style='display:hidden' id='ajax'
-                src='img/ajax-loader.gif' />
-                --></li>
+                <li class="line dk"></li>
+                <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+                <span>Profile</span>
+              </li>
 
               <li id="fat-menu" class="dropdown">
               <a href="" class="dropdown-toggle" data-toggle="dropdown"><!-- <i
