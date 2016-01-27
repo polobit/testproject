@@ -133,7 +133,7 @@ margin: 0px 0 15px;
 	display: none;
 }
 .nav-bar-search {
-	display: block!Important;
+	/*display: block!Important;*/
 }
 /*#searchText {
 	width: 155px;
@@ -1780,10 +1780,10 @@ width: 100%!Important;
   display: none!important;
 }
 .agile-menu .fa-history {
-  width: 15px;
+  /*width: 15px;
   font-size: 12px;
   position: relative;
-  left: 2px;
+  left: 2px;*/
 }
 .portlet_body_calendar {
   position: relative;
@@ -2038,3 +2038,21 @@ color:#727272;
     display: none !important;
   }
 }
+
+.search-mobile {
+  margin-top: -72px;
+  list-style: none;
+  transition:all 1s ease-in-out 0s;
+  position: relative;
+  z-index: -9;
+}
+
+.show-search-view-anim {
+  margin-top: 0px;
+  z-index: 9;
+}
+
+
+
+
+

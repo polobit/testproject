@@ -55,7 +55,10 @@ $(document).ready(function(){
 	 }
 
 	
-	
+	//show search bar in mobile 
+	$('#search-menu-mobile').on('click',function(){
+		$('.search-mobile').toggleClass('show-search-view-anim');
+	});
 
 	if(( $(window).width() ) < 768 ) {
 
