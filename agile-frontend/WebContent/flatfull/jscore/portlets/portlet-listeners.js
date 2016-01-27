@@ -198,6 +198,50 @@ function initializePortletsListeners() {
 							taskreportStatus.show();
 					});
 
+			$('#portletsPendingDealsSettingsModal').off('change', '#track');
+	$('#portletsPendingDealsSettingsModal').on('change', '#track', function(e)
+	{
+		var el = $(this).closest('form');
+		var track = $('#track', el).val();
+		if (track!='anyTrack')
+		{
+			
+			$.ajax({
+				type : 'GET',
+				url : '/core/api/milestone/'+track,
+				dataType : 'json',
+				success : function(data) {
+					var milestonesList=data.milestones.split(",");
+					$('#milestone').html('');
+					var lost=data.lost_milestone;
+					var won= data.won_milestone;
+					if(milestonesList.length > 1)
+					{
+						$('#milestone', el).html('<option value="anyMilestone">Any</option>');
+					}
+					$.each(milestonesList, function(index, milestone){
+						if(lost!=null && won!=null){
+							if(!(milestone==lost) && !(milestone==won) )
+							
+						$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
+					}
+						else
+						{
+							if(!(milestone=='Won') && !(milestone=='Lost') )
+							
+						$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
+						}
+					});
+				}
+			});
+		}
+		else
+		{
+			$('#milestone', el).html('<option value="anyMilestone">Any</option>');
+		}
+		
+	});
+
 	$('.gridster-portlets').off("mouseover").on(
 			'mouseover',
 			'.stats_report_portlet_body',
