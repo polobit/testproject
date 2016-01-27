@@ -1,87 +1,3 @@
-//permette a tutti gli elmenti con proprietà .filedrop di avere queste proprietà
-$.fn.extend({
-    filedrop: function (options) {
-        var defaults = {
-            callback: null
-        }
-        options = $.extend(defaults, options)
-        return this.each(function () {
-            var files = []
-            var $this = $(this)
-
-            //evita di fare multiple operatzioni di bind
-            $this.unbind('drop dragover dragleave');
-
-            // Stop default browser actions
-            $this.bind('dragover dragleave', function (event) {
-                event.stopPropagation()
-                event.preventDefault()
-            })
-
-            // Catch drop event
-            $this.bind('drop', function (event) {
-                // Stop default browser actions
-                event.stopPropagation();
-                event.preventDefault();
-
-                // Get all files that are dropped
-                files = event.originalEvent.target.files || event.originalEvent.dataTransfer.files
-
-                 var reader = new FileReader();
-                 reader.onload = function(event){
-                     var dataURL = event.target.result;
-
-                     //invia via post il file caricare
-                     $.post(
-                         'save-dropimg.php',
-                         {
-                             data: dataURL,
-                             filename: files[0].name
-                         }, function(response){
-                             //aggiorna img
-                             $this.attr('src', response.percorso);
-                             //aggiorna percorso
-                             $('#image-url').val(response.percorso);
-                         },'json'
-                     );
-
-                 };
-                 reader.readAsDataURL(files[0]);
-                 return false
-            })
-        })
-    }
-})
-
-
-jQuery.fn.extend({
-    getPath: function () {
-        var path, node = this;
-        while (node.length) {
-            var realNode = node[0], name = realNode.localName;
-            if (!name)
-                break;
-            name = name.toLowerCase();
-
-            var parent = node.parent();
-
-            var sameTagSiblings = parent.children(name);
-            if (sameTagSiblings.length > 1) {
-                allSiblings = parent.children();
-                var index = allSiblings.index(realNode) + 1;
-                if (index > 1) {
-                    name += ':nth-child(' + index + ')';
-                }
-            }
-
-            path = name + (path ? '>' + path : '');
-            node = parent;
-        }
-
-        return path;
-    }
-});
-
 $.cssHooks.backgroundColor = {
     get: function (elem) {
          $('#imageproperties').hide();
@@ -121,15 +37,14 @@ $.cssHooks.fontColor = {
     }
 }
 
-
-
-
-var selector = null;
-
-
-function handleSaveLayout() {
-    var e = $(".demo").html();
+function rgb2hex(rgb){
+ rgb = rgb.match(/^rgb?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+ return (rgb && rgb.length === 4) ? "#" +
+  ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+  ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+  ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
 }
+
 /* this generate the id of item */
 function guid() {
     function s4() {
@@ -141,13 +56,10 @@ function guid() {
             s4() + '-' + s4() + s4() + s4();
 }
 
-
 /* give the attribute id to item and build the function on event onclick */
-
 function showSettings() {
     var settings = $('#settings');
     var elements = $('#elements');
-
     if (settings.hasClass('hide')) {
         elements.slideUp(300);
         settings.removeClass('hide');
@@ -163,71 +75,6 @@ function showElements() {
         settings.addClass('hide');
         elements.slideDown(300);
     }
-
-}
-
-function handleHeader() {
-
-    var self = $('#header');
-    self.bind('click', function () {
-
-
-        $('#path').val('header');
-        $('div.row').removeClass('active');
-
-        $('#ptop').val(self.find('tr td').css('padding-top'));
-        $('#pbottom').val(self.find('tr td').css('padding-bottom'));
-        $('#pleft').val(self.find('tr td').css('padding-left'));
-        $('#pright').val(self.find('tr td').css('padding-right'));
-
-        self.parent("div.row").addClass('active');
-
-        var fontcolor = $('#' + $('#path').val()).find('tr td.header h1').css('fontColor');
-        var text = $('#' + $('#path').val()).find('tr td.header h1').html();
-        var fontsize = $('#' + $('#path').val()).find('tr td.header h1').css('font-size');
-        var fontfamily = $('#' + $('#path').val()).find('tr td.header h1').css('font-family');
-        var background = $('#' + $('#path').val()).css('background-color');
-
-
-        $('#selector').val('tr td.header h1');
-
-        storeValues(self, fontcolor, text, fontsize, fontfamily, background);
-        showSettings();
-
-    });
-
-}
-
-
-function handleFooter() {
-
-    var self = $('#footer');
-    self.bind('click', function () {
-
-
-        $('#path').val('footer');
-        $('div.row').removeClass('active');
-
-        $('#ptop').val(self.find('tr td').css('padding-top'));
-        $('#pbottom').val(self.find('tr td').css('padding-bottom'));
-        $('#pleft').val(self.find('tr td').css('padding-left'));
-        $('#pright').val(self.find('tr td').css('padding-right'));
-
-        self.parent("div.row").addClass('active');
-
-        var fontcolor = $('#' + $('#path').val()).find('tr td').css('fontColor');
-        var text = $('#' + $('#path').val()).find('tr td').html();
-        var fontsize = $('#' + $('#path').val()).find('tr td').css('font-size');
-        var fontfamily = $('#' + $('#path').val()).find('tr td').css('font-family');
-        var background = $('#' + $('#path').val()).css('background-color');
-
-        $('#selector').val('tr td.header h1');
-
-        storeValues(self, fontcolor, text, fontsize, fontfamily, background);
-        showSettings();
-
-    });
-
 }
 
 function handleObjects() {
@@ -344,14 +191,6 @@ function handleObjects() {
                         hideAllSettings();
                         $('#imageproperties').show();
 
-                        img.filedrop({
-                            callback: function (fileEncryptedData) {
-                                img.hide();
-                                img.attr('src', fileEncryptedData);
-                                img.show('puff', {}, 500);
-                            }
-                        });
-
                         break;
                     case 'imgtxtcol':
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
@@ -379,15 +218,6 @@ function handleObjects() {
 
                         hideAllSettings("#editor");
                         $('#imageproperties').show();
-
-
-                        img.filedrop({
-                            callback: function (fileEncryptedData) {
-                                img.hide();
-                                img.attr('src', fileEncryptedData);
-                                img.show('puff', {}, 500);
-                            }
-                        });
 
                         textElement.unbind('click');
                         textElement.bind('click', function () {
@@ -472,17 +302,6 @@ function handleObjects() {
 
                         hideAllSettings("#editor");
                         $('#imageproperties').show();
-
-
-                        img.filedrop({
-                            callback: function (fileEncryptedData) {
-                                img.hide();
-                                img.attr('src', fileEncryptedData);
-                                img.show('puff', {}, 500);
-                            }
-                        });
-
-
 
                         titleElement.unbind('click');
                         titleElement.bind('click', function () {
@@ -594,7 +413,6 @@ function handleObjects() {
     });
 }
 
-
 function addhttp(url) {
     // if (url.substr(0, 7) != 'http://') {
     //     url = 'http://' + url;
@@ -604,6 +422,7 @@ function addhttp(url) {
     // }
     return url;
 }
+
 function handleButtons(obj) {
     var buttons = obj.find('table tbody tr td a');
     $('#buttons').show();
@@ -717,6 +536,7 @@ function handleButtonsTxt(obj) {
 
     });
 }
+
 function storeValues(obj, fontcolor, text, fontsize, fontfamily, background) {
 
     // tinyMCE.activeEditor.setContent(text);
@@ -732,35 +552,9 @@ function storeValues(obj, fontcolor, text, fontsize, fontfamily, background) {
     obj.data('fontsize', fontsize);
     obj.data('fontfamily', fontfamily);
     obj.data('background', background);
-
 }
-
-function gridSystemGenerator() {
-    $(".lyrow .preview input").bind("keyup", function () {
-        var e = 0;
-        var t = "";
-        var n = false;
-        var r = $(this).val().split(" ", 12);
-        $.each(r, function (r, i) {
-            if (!n) {
-                if (parseInt(i) <= 0)
-                    n = true;
-                e = e + parseInt(i);
-                t += '<div class="col-md-' + i + ' column"></div>'
-            }
-        });
-        if (e == 12 && !n) {
-            $(this).parent().next().children().html(t);
-            $(this).parent().prev().show()
-        } else {
-            $(this).parent().prev().hide()
-        }
-    })
-}
-
 
 function configurationElm(e, t) {
-
     $(".demo").delegate(".configuration > a", "click", function (e) {
         e.preventDefault();
         var t = $(this).parent().parent();
@@ -772,18 +566,7 @@ function configurationElm(e, t) {
         $(clone).insertAfter(t);
         handleObjects();
     });
-
 }
-
-
-function addCol() {
-    $('.demo').delegate('.addcol', 'click', function (e) {
-        e.preventDefault();
-        var c = $(this).parent().find("[data-clonable='true']").first().clone();
-        $(this).parent().find("[data-clonable='true']").parent().append(c);
-    });
-}
-
 
 function removeElm() {
     $(".demo").delegate(".remove", "click", function (e) {
@@ -801,7 +584,7 @@ function removeElm() {
 function removeMenuClasses() {
     $("#menu-layoutit li button").removeClass("active")
 }
-function changeStructure(e, t) {
+/*function changeStructure(e, t) {
     $("#download-layout ." + e).removeClass(e).addClass(t)
 }
 function cleanHtml(e) {
@@ -811,7 +594,7 @@ function cleanHtml(e) {
 function cleanHtml(e) {
     $(e).parent().append($(e).children().html());
     $(e).remove();
-}
+}*/
 
 function downloadLayoutSrc() {
     var e = "";
@@ -843,18 +626,7 @@ function downloadLayoutSrc() {
     clone.find('td#primary').html(preheader + header + body + footer);
 
     $("#download").val(clone.parent().html());
-
 }
-
-
-var currentDocument = null;
-var timerSave = 2e3;
-var demoHtml = $(".demo").html();
-$(window).resize(function () {
-    $("body").css("min-height", $(window).height() - 90);
-    $(".demo").css("min-height", $(window).height() - 160);
-});
-
 
 function getIndex(itm, list) {
     var i;
@@ -876,9 +648,12 @@ function hideAllSettings(exceptThisElement) {
     $(settingsHolderSelectors.join(',')).hide();
 }
 
+$(window).resize(function () {
+    $("body").css("min-height", $(window).height() - 90);
+    $(".demo").css("min-height", $(window).height() - 160);
+});
 
 $(document).ready(function () {
-
 
     loadSavedTemplate();
 
@@ -896,22 +671,6 @@ $(document).ready(function () {
         // e.preventDefault();  
         $(this).attr("target","_blank");
     });
-                 /*
-    var featherEditor = new Aviary.Feather({
-        apiKey: '*cf5d8b90e5ef44de9abacb415ed29b3d',
-        apiVersion: 3,
-        tools: 'all',
-        theme: 'light', // Check out our new 'light' and 'dark' themes!
-        onSave: function (imageID, newURL) {
-            $('#' + $('#imageid').val()).attr('src', newURL);
-            $('#' + $('#imageid').val()).hide();
-            featherEditor.close();
-            $('#' + $('#imageid').val()).show('puff', {}, 500);
-        },
-        onError: function (errorObj) {
-            alert(errorObj.message);
-        }
-    });                            */
 
     $('#change-image').on('click', function(e){
         e.preventDefault();
@@ -928,15 +687,7 @@ $(document).ready(function () {
             }
          }
     });
-                       /*
-    $('#editimage').on('click', function (e) {
-        e.preventDefault();
-        featherEditor.launch({
-            image: $('#' + $('#imageid').val()),
-            url: $('#' + $('#imageid').val()).attr('src')
-        });
-    });
-              */
+
     // paddings functions;
     $(document).on('change', '#ptop,#pbottom,#pleft,#pright', function (e) {
 
@@ -954,8 +705,6 @@ $(document).ready(function () {
 
 
     var indexBefore = -1;
-
-
     $('#buttonslist').sortable({
         handle: '.orderbutton',
         start: function (event, ui) {
@@ -1010,8 +759,6 @@ $(document).ready(function () {
         $('#colortext').next('span.input-group-addon').css('backgroundColor', obj.data('fontcolor'));
         $('#fonttext').val(obj.data('fontfamily'));
         $('#sizetext').val(obj.data('fontsize'));
-
-
     });
 
     $('div#buttons .form-group select.form-control').change(function (e) {
@@ -1099,8 +846,8 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         var font_size = $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('font-size');
         var btn_size = $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('width');
 
-        $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div.background span.picker').css('backgroundColor', bg);
-        $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div.fontcolor span.picker').css('backgroundColor', font_color);
+        $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div.background span.pickerTxt').css('backgroundColor', bg);
+        $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div.fontcolor span.pickerTxt').css('backgroundColor', font_color);
         $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div input[name="FontSize"]').val(font_size);
         $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div input[name="ButtonSize"]').val(btn_size);
 
@@ -1370,9 +1117,9 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         return false;
     });
 
-    $('#edittamplate').click(function () {
+    $('#edittamplate').click(function (e) {
+        e.preventDefault();
         $('#common-settings').hide();
-        $('#font-settings').hide();
         $('#editor').hide();
         $('#editimage').hide();
         $('#social-links').hide();
@@ -1390,7 +1137,11 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         uploadImageToS3ThroughBtn(fileInput.files[0]);
     });
 
-    $(".imgLink").click(function(e){
+    $('#settings').on('click', '.confirm', function(e){
+        e.preventDefault();
+    });
+
+    $('#tosave').on('click', '.imgLink', function(e){
         e.preventDefault();
     });
 
@@ -1415,25 +1166,10 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         $('#imageproperties').show();
     });
     
-    /*
-     $(".nav-header").click(function () {
-     $(".sidebar-nav .boxes, .sidebar-nav .rows").hide();
-     $(this).next().slideDown()
-     });
-     */
-    addCol();
     handleObjects();
     removeElm();
-    handleHeader();
-    handleFooter();
     configurationElm();
-    //  configurationElm();
-    ///  gridSystemGenerator();
-    /*  setInterval(function () {
-     handleSaveLayout()
-     }, timerSave)*/
     hideAllSettings();
-
 
 });
 

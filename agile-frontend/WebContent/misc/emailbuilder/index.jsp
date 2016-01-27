@@ -19,7 +19,7 @@ long unixTime = System.currentTimeMillis() / 1000L;
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <link href="css/themes/default.css" rel="stylesheet" type="text/css"/>
-        <link href="css/template.editor.css" rel="stylesheet"/>
+        <link href="css/template.editor.css?t=<%=unixTime%>" rel="stylesheet"/>
         <link href="css/responsive-table.css" rel="stylesheet"/>
 
 
@@ -173,7 +173,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 $('#bgcolor').colpick({
                                     layout: 'hex',
                                     onBeforeShow: function () {
-                                        $(this).colpickSetColor($('#bgcolor').css('backgroundColor').replace('#', ''));
+                                        $(this).colpickSetColor(rgb2hex($('#bgcolor').css('backgroundColor')).replace("#",""));
                                     },
                                     onChange: function (hsb, hex, rgb, el, bySetColor) {
 
@@ -265,6 +265,9 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                     $('#colortext').colpick({
                                         layout: 'hex',
                                         // colorScheme: 'dark',
+                                        onBeforeShow: function () {
+                                            $(this).colpickSetColor(rgb2hex($('#colortext').val().replace("#","")));
+                                        },
                                         onChange: function (hsb, hex, rgb, el, bySetColor) {
                                             if (!bySetColor)
                                                 $(el).val('#' + hex);
@@ -417,6 +420,9 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                 $('.picker').colpick({
                                                     layout: 'hex',
                                                     // colorScheme: 'dark',
+                                                    onBeforeShow: function () {
+                                                        $(this).colpickSetColor(rgb2hex($(this).css('backgroundColor')).replace("#",""));
+                                                    },
                                                     onChange: function (hsb, hex, rgb, el, bySetColor) {
                                                         if (!bySetColor)
                                                             $(el).css('background-color', '#' + hex);
@@ -544,6 +550,9 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                 $('.pickerTxt').colpick({
                                                     layout: 'hex',
                                                     // colorScheme: 'dark',
+                                                    onBeforeShow: function () {
+                                                        $(this).colpickSetColor(rgb2hex($(this).css('backgroundColor')).replace("#",""));
+                                                    },
                                                     onChange: function (hsb, hex, rgb, el, bySetColor) {
                                                         if (!bySetColor)
                                                             $(el).css('background-color', '#' + hex);
