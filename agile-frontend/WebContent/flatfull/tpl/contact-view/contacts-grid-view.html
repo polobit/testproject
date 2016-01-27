@@ -47,8 +47,7 @@
 
 		</div>
 		<div class="clearfix"></div>
-		<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs no-wrap"
-			style="padding-left: 24px;">
+		<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs no-wrap" style="padding-left: 24px;">
 			{{#each tags}} <span
 				class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">{{this}}</span>
 			{{/each}}
@@ -71,7 +70,7 @@
 				class="tbody_check grid-view-checkbox" value=""> <i></i>
 			</label>
 		</div>
-		<div style="margin-left: 25px;height: 71px;">
+		<div style="margin-left: 25px; max-height: 71px;">
 			<div class="pull-left m-r-xs">
 				<a href="#contact/{{id}}"><img
 					title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}"
@@ -107,7 +106,7 @@
 			</div>
 			<div class="clearfix"></div>
 		</div>
-	<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs" style="padding-left: 27px;">
+	<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs no-wrap" style="padding-left: 27px;">
 				{{#each tags}} <span
 					class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">{{this}}</span>
 				{{/each}}
