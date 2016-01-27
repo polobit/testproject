@@ -5,7 +5,6 @@
  * @module Campaigns
  * 
  */
-
 var WorkflowsRouter = Backbone.Router
 		.extend({
 			routes : {
@@ -29,8 +28,6 @@ var WorkflowsRouter = Backbone.Router
 			// form.
 			"trigger-add/:id" : "triggerNewUI",
 
-			"share-campaign/:c/:t" : "shareWorkflow",
-
 			"trigger-add" : "triggerNewUI", "trigger/:id" : "triggerEdit",
 
 			/* Subscribers */
@@ -38,7 +35,9 @@ var WorkflowsRouter = Backbone.Router
 				"workflow/completed-subscribers/:id" : "completedSubscribers", "workflow/removed-subscribers/:id" : "removedSubscribers",
 
 				"workflow/unsubscribed-subscribers/:id" : "unsubscribedSubscribers", "workflow/hardbounced-subscribers/:id" : "hardBouncedSubscribers",
-				"workflow/softbounced-subscribers/:id" : "softBouncedSubscribers", "workflow/spam-reported-subscribers/:id" : "spamReportedSubscribers"
+				"workflow/softbounced-subscribers/:id" : "softBouncedSubscribers", "workflow/spam-reported-subscribers/:id" : "spamReportedSubscribers",
+				// Added for Campaign sharing
+				"share-campaign/:c/:t" : "shareWorkflow"
 
 			},
 
@@ -49,6 +48,7 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			workflows : function()
 			{
+
 
 				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
 					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
@@ -143,46 +143,46 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			workflowEdit : function(id, workflow)
 			{
-				/*var view = new Base_Model_View({ url : '/core/api/workflows/'+id,
-				saveCallback : function()
-					{
-						alert('saveCallback');
-					},
-				 postRenderCallback : function(el)
-			{
-				
-				alert('postRenderCallback');
-			} });*/
 
-				/* Set the designer JSON. This will be deserialized */
-				
-				try{
-					this.workflow_model = this.workflow_list_view.collection.get(id);
-				}catch(e){}
+				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+				{
+					this.navigate("workflows", { trigger : true });
+					return;
+				}
 
 				/* Set the designer JSON. This will be deserialized */
 				if (workflow)
 					this.workflow_model = workflow;
-				
-				if(!this.workflow_model){
+				else
+					this.workflow_model = this.workflow_list_view.collection.get(id);
 
-					// if not in the collection, download new one.
-					var new_workflow_model = Backbone.Model.extend({ url : '/core/api/workflows/' + id });
+				// Download new one if undefined
+				if (this.workflow_model === undefined)
+				{
+					console.log("Downloading workflow.");
 
-					var model = new new_workflow_model();
-					model.id = id;
+					// get count value from first attribute count
+					var total_count = this.workflow_list_view.collection.at(0).attributes.count;
 
-					model.fetch({ success : function(data)
+					if (this.workflow_list_view.collection.length !== total_count)
 					{
-						// Call workflowEdit again if not Empty
-						if (!$.isEmptyObject(data.toJSON()))
+						// if not in the collection, download new one.
+						var new_workflow_model = Backbone.Model.extend({ url : '/core/api/workflows/' + id });
+
+						var model = new new_workflow_model();
+						model.id = id;
+
+						model.fetch({ success : function(data)
 						{
-							App_Workflows.workflowEdit(id, model);
-							return;
-						}
-					} });
+							// Call workflowEdit again if not Empty
+							if (!$.isEmptyObject(data.toJSON()))
+							{
+								App_Workflows.workflowEdit(id, model);
+								return;
+							}
+						} });
+					}
 				}
-				
 
 				if (this.workflow_model === undefined)
 					return;
@@ -213,11 +213,10 @@ var WorkflowsRouter = Backbone.Router
 
 						// Init SendVerify Email
 						send_verify_email(el);
-						
 					}
 
 				});
-				
+
 				$("#content").html(workflowModal.render().el);
 
 			},
@@ -612,9 +611,7 @@ var WorkflowsRouter = Backbone.Router
 
 					// To get newly added trigger in triggers list
 					App_Workflows.triggersCollectionView = undefined;
-					workflow_alerts("Alert", "The Trigger will take a few minutes to initiate" , "workflow-alert-modal"
-
-					        ,function(modal){});
+					
 				}
 
 				});
@@ -1331,12 +1328,12 @@ var WorkflowsRouter = Backbone.Router
 					callback(); 		
 
 			},
+			
 			shareWorkflow : function(sender_cid, sender_domain, workflow){
 				
                 this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', postRenderCallback : function(el)
 					{	
 					}});
-
 
                 var workflowModal = new Workflow_Model_Events({
 							url : 'core/api/workflow', 
@@ -1350,7 +1347,6 @@ var WorkflowsRouter = Backbone.Router
 
 						});
 
-       	 
 				// Get workflow template based on category and template name
 				var workflow_template_model = Backbone.Model.extend({
 
@@ -1374,8 +1370,6 @@ var WorkflowsRouter = Backbone.Router
 	          		}
 
          		});		
-	
 		
 			}
 });
-
