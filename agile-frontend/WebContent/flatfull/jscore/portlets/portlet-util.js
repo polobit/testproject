@@ -185,6 +185,12 @@ var portlet_utility = {
 		}
 		else if (portlet_type == "DEALS" && p_name == "Deal Goals") {
 			json['duration'] = "this-month";
+		} else if (portlet_type == "DEALS" && p_name == "Incoming Deals") {
+			json['type'] = "deals";
+			json['frequency'] = "daily";
+			json['duration'] = "1-week";
+		} else if (portlet_type == "DEALS" && p_name == "Lost Deal Analysis") {
+			json['duration'] = "1-week";
 		}
 		return json;
 	},
@@ -305,6 +311,8 @@ var portlet_utility = {
 			"User Activities" : "portlets-activites",
 			"Campaign stats" : "portlets-campaign-stats-report",
 			"Deal Goals" : "portlets-deal-goals",
+			"Incoming Deals" : "portlets-incoming-deals",
+			"Lost Deal Analysis" : "portlets-lost-deal-analysis",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
@@ -1122,6 +1130,60 @@ var portlet_utility = {
 			setPortletContentHeight(base_model);
 			break;
 		}
+		case "Incoming Deals": {
+			var owner_id = 0;
+			if (base_model.get('settings').owner) {
+				owner_id = base_model.get('settings').owner;
+			}
+			var url = 'core/api/opportunity/details/'
+					+ owner_id
+					+ '?min='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ '&max='
+					+ (portlet_utility.getStartAndEndDatesOnDue(end_date_str) - 1)
+					+ '&frequency='
+					+ base_model.get('settings').frequency
+					+ '&type='
+					+ base_model.get('settings').type;
+			portlet_graph_data_utility.incomingDealsGraphData(base_model, selector, url);
+			setPortletContentHeight(base_model);
+			break;
+		}
+		case "Lost Deal Analysis": {
+			var owner_id = 0;
+			var track_id = 0;
+			var source_id = 0;
+			if (base_model.get('settings').owner) {
+				owner_id = base_model.get('settings').owner;
+			}
+			if (base_model.get('settings').track) {
+				track_id = base_model.get('settings').track;
+			}
+			if (base_model.get('settings').source) {
+				source_id = base_model.get('settings').source;
+			}
+			var url = 'core/api/opportunity/details/'
+					+ owner_id + '/'
+					+ track_id + '/'
+					+ source_id
+					+ '?min='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ '&max='
+					+ (portlet_utility.getStartAndEndDatesOnDue(end_date_str) - 1);
+
+			var sizey = parseInt($('#' + selector).parent().attr("data-sizey"));
+			var topPos = 50 * sizey;
+			if (sizey == 2 || sizey == 3)
+				topPos += 50;
+			$('#' + selector)
+					.html(
+							"<div class='text-center v-middle opa-half' style='margin-top:"
+									+ topPos
+									+ "px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+			pieforReports(url, selector, '', undefined, true);
+			setPortletContentHeight(base_model);
+			break;
+		}
 
 		}
 	},
@@ -1562,6 +1624,34 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+			break;
+		}
+		case "Incoming Deals": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsIncomingDealsSettingsModal");
+			elData = $('#portletsIncomingDealsSettingsModal');
+			$("#duration-incoming-deals", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			$("#split-by-incoming-deals", elData).find('option[value='+ base_model.get("settings")["type"] + ']').attr("selected", "selected");
+			$("#frequency-incoming-deals", elData).find('option[value='+ base_model.get("settings")["frequency"] + ']').attr("selected", "selected");
+			portlet_utility.setOwners("owner", base_model, elData);
+			break;
+		}
+		case "Lost Deal Analysis": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsLostDealAnalysisSettingsModal");
+			elData = $('#portletsLostDealAnalysisSettingsModal');
+			$("#duration-lost-deal-analysis", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			portlet_utility.setOwners("owner-lost-deal-analysis", base_model, elData);
+			portlet_utility.setTracks("track-lost-deal-analysis", base_model, elData);
+			portlet_utility.setSources("source-lost-deal-analysis", base_model, elData);
 			break;
 		}
 		}
@@ -2059,5 +2149,54 @@ var portlet_utility = {
 				chart.legend.render();	
 			}catch(e){}
 		}
+	},
+
+	/**
+	 * Set owners data in incoming deals and lost deal analysis portlet
+	 * settings.
+	 */
+	setOwners : function(ele_id, base_model, elData) {
+		var options = '<option value="">All</option>';
+		$.ajax({
+			type : 'GET',
+			url : '/core/api/users',
+			dataType : 'json',
+			success : function(data) {
+				$.each(data, function(index, domainUser) {
+					options += "<option value=" + domainUser.id + ">"
+								+ domainUser.name + "</option>";
+				});
+				$('#' + ele_id, elData).html(options);
+				$('#' + ele_id, elData).find("option[value="+base_model.get("settings")["owner"]+"]").attr("selected", "selected");
+				$('.loading-img').hide();
+			}
+		});
+	},
+
+	setSources : function(ele_id, base_model, elData) {
+		var sources = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_SOURCE', sort_collection: false});
+		sources.collection.fetch({
+			success: function(data){
+				var jsonModel = data.toJSON();
+				var html =  '<option class="default-select" value="">All Sources</option>' + 
+							'<option class="default-select" value="1">Unknown</option>';
+				
+				$.each(jsonModel,function(index,dealSource){
+					html+='<option class="default-select" value="'+dealSource.id+'">'+dealSource.label+'</option>';
+				});
+				$('#'+ele_id, elData).html(html);
+				$('#'+ele_id, elData).find('option[value='+base_model.get("settings")["source"]+']').attr("selected", "selected");
+
+				// Hide loading bar
+				hideTransitionBar();
+			}
+		});
+	},
+
+	setTracks : function(ele_id, base_model, elData) {
+		fillSelect(ele_id, "/core/api/milestone/pipelines", undefined, function()
+		{
+			$('#'+ele_id, elData).find('option[value='+base_model.get("settings")["track"]+']').attr("selected", "selected");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
 	}
 };

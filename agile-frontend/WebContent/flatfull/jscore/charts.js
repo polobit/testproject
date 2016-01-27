@@ -1603,7 +1603,11 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
     });
 }
 
-function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData){
+function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData,x_pos,y_pos){
+	if(x_pos == undefined)
+		x_pos = -10;
+	if(y_pos == undefined)
+		y_pos = 100; 
 	chart = new Highcharts.Chart({
                 chart: {
                     renderTo: selector,
@@ -1642,8 +1646,8 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                     layout: 'vertical',
                     align: 'right',
                     verticalAlign: 'top',
-                    x: -10,
-                    y: 100,
+                    x: x_pos,
+                    y: y_pos,
                     borderWidth: 0
                 },
                  plotOptions: {
@@ -1703,7 +1707,7 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                 }
             });
 }
-function pieforReports(url, selector, name,show_loading)
+function pieforReports(url, selector, name,show_loading, is_lost_analysis)
 {
 
 	    if(typeof show_loading === 'undefined')
@@ -1766,7 +1770,7 @@ function pieforReports(url, selector, name,show_loading)
 							console.log(pieData);
 							var animation = count > 20 ? false : true;
 							var url_path;
-							if(selector=="lossreasonpie-chart" || selector == "lossreasonpie-chart-users")
+							if(selector=="lossreasonpie-chart" || selector == "lossreasonpie-chart-users" || is_lost_analysis)
 								url_path='/core/api/categories?entity_type=DEAL_LOST_REASON';
 							else
 								url_path='/core/api/categories?entity_type=DEAL_SOURCE';
@@ -1806,7 +1810,7 @@ if(selector == 'lossreasonpie-chart-users'){
 	chart = new Highcharts.Chart(
 			{
 				chart : { renderTo : selector, type : 'pie', plotBackgroundColor : null, plotBorderWidth : null, plotShadow : false,
-					marginBottom:50},
+					marginBottom:30, marginTop:20, marginLeft: 70, marginRight: 70},
 				colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7'],
 				title : { text : name },
 				 tooltip: {

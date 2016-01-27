@@ -2369,3 +2369,43 @@ Deleted  {{custom1}} Campaigns<br/>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
+
+<script id="portlets-incoming-deals-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+			<h4 class="h4 text-ellipsis text-muted">
+				<span class="pull-left inline-block text-ellipsis" style="width:60%;">Incoming Deals</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 40%;">
+					{{get_portlet_duration settings.duration}}
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body panel-body p-n b-n">
+		</div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-lost-deal-analysis-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+			<h4 class="h4 text-ellipsis text-muted">
+				<span class="pull-left inline-block text-ellipsis" style="width:60%;">Lost Deal Analysis</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 40%;">
+					{{get_portlet_duration settings.duration}}
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body panel-body p-n b-n">
+		</div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
