@@ -103,10 +103,10 @@ function handleObjects() {
                 $('#path').val(id);
                 var t = self.data('type');
 
-                $('#ptop').val(self.find('td').css('padding-top'));
-                $('#pbottom').val(self.find('td').css('padding-bottom'));
-                $('#pleft').val(self.find('td').css('padding-left'));
-                $('#pright').val(self.find('td').css('padding-right'));
+                $('#ptop').val(self.find('td:first').css('padding-top'));
+                $('#pbottom').val(self.find('td:first').css('padding-bottom'));
+                $('#pleft').val(self.find('td:first').css('padding-left'));
+                $('#pright').val(self.find('td:first').css('padding-right'));
 
                 $('#common-settings').show();
                 switch (t) {
@@ -691,15 +691,10 @@ $(document).ready(function () {
     // paddings functions;
     $(document).on('change', '#ptop,#pbottom,#pleft,#pright', function (e) {
 
-        $('#' + $('#path').val()).data('ptop', $('#' + $('#path').val()).css('padding-top'));
-        $('#' + $('#path').val()).data('pbottom', $('#' + $('#path').val()).css('padding-bottom'));
-        $('#' + $('#path').val()).data('pleft', $('#' + $('#path').val()).css('padding-left'));
-        $('#' + $('#path').val()).data('pright', $('#' + $('#path').val()).css('padding-right'));
-
-        $('#' + $('#path').val()).find('td').css('padding-top', $('#ptop').val());
-        $('#' + $('#path').val()).find('td').css('padding-left', $('#pleft').val());
-        $('#' + $('#path').val()).find('td').css('padding-right', $('#pright').val());
-        $('#' + $('#path').val()).find('td').css('padding-bottom', $('#pbottom').val());
+        $('#' + $('#path').val()).find('td:first').css('padding-top', $('#ptop').val());
+        $('#' + $('#path').val()).find('td:first').css('padding-left', $('#pleft').val());
+        $('#' + $('#path').val()).find('td:first').css('padding-right', $('#pright').val());
+        $('#' + $('#path').val()).find('td:first').css('padding-bottom', $('#pbottom').val());
 
     });
 
