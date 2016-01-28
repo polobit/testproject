@@ -186,6 +186,9 @@ var portlet_utility = {
 		else if (portlet_type == "DEALS" && p_name == "Deal Goals") {
 			json['duration'] = "this-month";
 		}
+		else if (portlet_type == "TASKSANDEVENTS" && p_name == "Average Closure") {
+			json['duration'] = "1-day";
+		}
 		return json;
 	},
 
@@ -305,6 +308,7 @@ var portlet_utility = {
 			"User Activities" : "portlets-activites",
 			"Campaign stats" : "portlets-campaign-stats-report",
 			"Deal Goals" : "portlets-deal-goals",
+			"Average Closure" : "portlets-Tasks-closure",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
@@ -1122,6 +1126,18 @@ var portlet_utility = {
 			setPortletContentHeight(base_model);
 			break;
 		}
+			case "Average Closure": {
+			var url = '/core/api/portlets/taskClosure?start-date='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str)
+								+ '&end-date='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str);
+			portlet_graph_data_utility.dealsAssignedGraphData(base_model,
+					selector, url);
+			setPortletContentHeight(base_model);
+			break;
+		}
 
 		}
 	},
@@ -1564,6 +1580,18 @@ var portlet_utility = {
 					.attr("selected", "selected");
 			break;
 		}
+		case "Average Closure": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsTaskClosureSettingsModal");
+			elData = $('#portletsTaskClosureSettingsModal');
+			$("#duration", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			break;
+		}
+		portletsTaskClosureSettingsModal
 		}
 		if (base_model.get('name') == "Pending Deals"
 				|| base_model.get('name') == "Deals By Milestone"
