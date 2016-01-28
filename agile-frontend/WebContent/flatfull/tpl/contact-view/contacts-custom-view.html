@@ -20,344 +20,18 @@
 -->
 </script>
 	
+
+
+
 <script id="contacts-custom-view-collection-template" type="text/html">
-
-
-
 
 <!-- Newly Added -->
 
-<div id="tickets-container" class="hbox hbox-auto-xs hbox-auto-sm">
-	<div class="col w-lg bg-light dk b-r bg-auto" style="">
-		<div id="custom-filters-container">
-	<div>
-		<span class="pull-right m-r-sm">
-			<a id="clear-lhs-contact-filters" class="text-sm text-muted" href="#" style="margin-right: 6px;font-size:12px;">
-				 Clear all
-			</a>
-		</span>
-  </div>
-
-
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs" style="padding-top:20px">
-  <div class="panel panel-default m-b-none">
-  
-    <div class="panel-body">
-      <div class="control-group form-group" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
-      
-	<span style="font-size:10px;">Tags</span>
-	<div class="controls m-t-xs" id="tags_div">
-		<div id="tags-lhs-filter-table" class="ignore-collection">
-				<div class="hide master-tags-add-div pos-rlt">
-					<input class="form-control" type="hidden" name="LHS" value="tags">
-					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:10px;">
-						<option value="EQUALS" class="tags">is</option>
-						<option value="NOTEQUALS" class="tags">isn't</option>
-					</select>
-					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
-						<span id="RHS">
-							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;font-size:10px;
-							">
-						</span>
-					</div>
-					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
-					<div class="clearfix"></div>
-				</div>
-				<div class="lhs-contact-filter-row pos-rlt m-t-xs">
-					<input type="hidden" name="LHS" value="tags">
-					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:10px;">
-						<option value="EQUALS" class="tags">is</option>
-						<option value="NOTEQUALS" class="tags">isn't</option>
-					</select>
-					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
-						<span id="RHS">
-							<input type="text" placeholder="Enter Tag" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;font-size:10px;">
-						</span>
-					</div>
-					<div class="m-t-xs">
-						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt" style="top: -7px;float: right;font-size:10px;" data-name="tags"><i class="fa fa-plus-square"></i> Add</a>
-					</div>
-					<div class="clearfix"></div>
-				</div>
-		</div>	
-		
-			
-	</div>
-</div>
-
-
-    </div>
-  </div>
-</div>
-
-
-
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
-  <div class="panel panel-default m-b-none">
-      <div class="panel-body">
-        
-	<div class="control-group form-group " style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span style="font-size:10px;">Score</span>
-	<div class="controls m-t-xs" id="lead_score_div">
-		<div class="lhs-contact-filter-row pos-rlt">
-		<input type="hidden" name="LHS" class="form-control" value="lead_score">
-		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
-			<option value="IS_GREATER_THAN">greater than</option>
-			<option value="IS_LESS_THAN">less than</option>
-			<option value="BETWEEN">between</option>
-		</select>
-		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
-			<span id="RHS">
-				<input type="number" min="0" placeholder="Value" prev-val="0" class="form-control required" name="temp-2" id="temp-2" style="height:30px;font-size:10px;">
-			</span>
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+	<div class="col w-lg bg-light dk b-r bg-auto">
+		<div class="data-block">
+			<div id="lhs_filters_conatiner">
 		</div>
-		<div class="BETWEEN condition_container hide m-t-xs">
-			<div class="clear"></div>
-			<span id="RHS">
-				<input type="number" min="0" class="required form-control" prev-val="" placeholder="Min Value" name="temp-3" id="temp-3" style="height:30px;font-size:10px;"> 
-			</span>
-			<span id="RHS_NEW">
-				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control" name="temp-4" id="temp-4" style="height:30px;font-size:10px;">
-			</span>
-		</div>
-		
-		<div class="clearfix"></div>
-		</div>
-	</div>
-</div>    
-        
-        
-        
-      </div>
-    </div>
-</div>
-
-
-
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
-  <div class="panel panel-default m-b-none">
-      <div class="panel-body">
-        <div class="control-group form-group" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span style="font-size:10px;">Star Value</span>
-	<div class="controls m-t-xs" id="star_value_div">
-		<div class="lhs-contact-filter-row pos-rlt">
-		<input type="hidden" class="form-control" name="LHS" value="star_value">
-		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
-			<option value="IS_GREATER_THAN">greater than</option>
-			<option value="IS_LESS_THAN">less than</option>
-			<option value="BETWEEN">between</option>
-		</select>
-		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
-			<span id="RHS">
-				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="form-control required" name="temp-5" id="temp-5" style="height:30px;font-size:10px;">
-			</span>
-		</div>
-		<div class="BETWEEN condition_container hide m-t-xs">
-			<div class="clear"></div>
-			<span id="RHS">
-				<input type="number" min="0" max="5" class="required form-control" prev-val="" placeholder="Min Value" name="temp-6" id="temp-6" style="height:30px;font-size:10px;"> 
-			</span>
-			<span id="RHS_NEW">
-				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control" name="temp-7" id="temp-7" style="height:30px;font-size:10px;">
-			</span>
-		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
-		<div class="clearfix"></div>
-		</div>
-	</div>
-</div>
-        
-     </div>
-  </div>
-</div>
-
-
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
-  <div class="panel panel-default m-b-none">
-      <div class="panel-body">
-       <div class="control-group form-group " style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span style="font-size:10px;">Campaign Status</span>
-	<div class="controls m-t-xs" id="campaign_status_div">
-
-
-		<div id="campaign_status-lhs-filter-table" class="ignore-collection">
-			<div class="hide master-campaign_status-add-div pos-rlt">
-				<input type="hidden" class="form-control" name="LHS" value="campaign_status">
-				<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
-					<option value="NOT_ADDED">Never Added</option>
-					<option value="ACTIVE">Active</option>
-					<option value="DONE">Completed</option>
-					<option value="REMOVED">Removed</option>
-					<option value="BOUNCED">Bounced</option>
-					<option value="UNSUBSCRIBED">Unsubscribed</option>
-					<option value="SPAM">Spam Reported</option>
-				</select>
-		
-				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED BOUNCED SPAM condition_container m-t-xs">
-					<span id="RHS">
-						<select id="campaign_select_master" class="required form-control" name="temp1" prev-val="" style="height:30px"><option class="default-select" value="">Select...</option><option value="5638830484881408">Vinod Campaign</option></select>
-					</span>
-				</div>
-					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
-					<div class="clearfix"></div>
-			</div>
-			<div class="lhs-contact-filter-row pos-rlt m-t-xs">
-				<input type="hidden" class="form-control" name="LHS" value="campaign_status">
-				<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
-					<option value="NOT_ADDED">Never Added</option>
-					<option value="ACTIVE">Active</option>
-					<option value="DONE">Completed</option>
-					<option value="REMOVED">Removed</option>
-					<option value="HARDBOUNCED">Hard Bounced</option>
-					<option value="SOFTBOUNCED">Soft Bounced</option>
-					<option value="UNSUBSCRIBED">Unsubscribed</option>
-					<option value="SPAM">Spam Reported</option>
-				</select>
-		
-				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED HARDBOUNCED SOFTBOUNCED SPAM condition_container m-t-xs">
-					<span id="RHS">
-						<select id="campaign_select" class="required form-control" name="temp1" prev-val="" style="height:30px;font-size:10px;"><option class="default-select" value="">Select...</option><option value="5638830484881408">Vinod Campaign</option></select>
-					</span>
-				</div>
-				
-				<div class="clearfix"></div>
-			</div>
-		</div>
-		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt" style="top:-4px;font-size:10px;" data-name="campaign_status"><i class="fa fa-plus-square"></i> Add</a>
-	</div>
-</div>
-        
-     </div>
-  </div>
-</div>
-
-
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
-  <div class="panel panel-default m-b-none">
-      <div class="panel-body">
-        <div class="control-group form-group" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span style="font-size:10px;">Owner</span>
-	<div class="controls m-t-xs" id="owner_id_div">
-		<div class="lhs-contact-filter-row pos-rlt">
-		<input type="hidden" class="form-control" name="LHS" value="owner_id">
-		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
-			<option value="EQUALS">is</option>
-			<option value="NOTEQUALS">isn't</option>
-		</select>
-		
-		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
-			<span id="RHS">
-				<select id="owner_select" class="required form-control" name="temp1" prev-val="" style="height:30px;font-size:10px;"><option class="default-select" value="">Select...</option><option value="6322974892752896">Vinod</option></select>
-			</span>
-		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
-		<div class="clearfix"></div>
-		</div>
-	</div>
-</div>
-        
-     </div>
-  </div>
-</div>
-
-
-
-
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
-  <div class="panel panel-default m-b-none">
-      <div class="panel-body">
-        <div class="control-group form-group" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span style="font-size:10px;">Created Date </span>
-	<div class="controls m-t-xs" id="created_time_div">
-		<div class="lhs-contact-filter-row pos-rlt">
-		<input type="hidden" name="LHS" value="created_time" class="form-control">
-		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
-			<option value="ON">on</option>
-			<option value="AFTER">is after</option>
-			<option value="BEFORE">is before</option>
-			<option value="BETWEEN">is between</option>
-			<option value="LAST">in last</option>
-			<option value="NEXT">in next</option>
-		</select>
-		<div class="AFTER BEFORE ON condition_container m-t-xs">
-			<span id="RHS">
-				<input type="text" data-date-format="Select Date" prev-val="" placeholder="Select Date" class="form-control required date" name="temp-8" id="temp-8" style="height:30px;font-size:10px;">
-			</span>
-		</div>
-		<div class="LAST NEXT condition_container hide m-t-xs">
-			<span id="RHS">
-				<input type="number" placeholder="Number of days" prev-val="" class="form-control required" name="temp-9" id="temp-9" style="height:30px;font-size:10px;">
-			</span>
-		</div>
-		<div class="BETWEEN condition_container hide m-t-xs">
-			<div class="clear"></div>
-			<span id="RHS">
-				<input type="text" data-date-format="Select Date" prev-val="" class="form-control date required" placeholder="Select Date" name="temp-10" id="temp-10" style="height:30px;font-size:10px;">
-			</span>
-			<span id="RHS_NEW"> 
-				<input type="text" data-date-format="Select Date" prev-val="" placeholder="Select Date" class="form-control date required" name="temp-11" id="temp-11" style="height:30px;font-size:10px;">
-			</span>
-		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
-		<div class="clearfix"></div>
-		</div>
-	</div>
-</div>
-        
-     </div>
-  </div>
-</div>
-
-
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
-  <div class="panel panel-default m-b-none">
-      <div class="panel-body">
-        <div class="control-group form-group " style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span style="font-size:10px;">Last Contacted</span>
-	<div class="controls m-t-xs" id="last_contacted_div">
-		<div class="lhs-contact-filter-row pos-rlt">
-		<input type="hidden" name="LHS" value="last_contacted" class="form-control">
-		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
-			<option value="ON">on</option>
-			<option value="AFTER">is after</option>
-			<option value="BEFORE">is before</option>
-			<option value="BETWEEN">is between</option>
-			<option value="LAST">in last</option>
-		</select>
-		<div class="AFTER BEFORE ON condition_container m-t-xs">
-			<span id="RHS">
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="Select Date" class="form-control required date" name="temp-12" id="temp-12" style="height:30px;font-size:10px;">
-			</span>
-		</div>
-		<div class="LAST condition_container hide m-t-xs">
-			<span id="RHS">
-				<input type="number" placeholder="Number of days" prev-val="" class="form-control required" name="temp-13" id="temp-13" style="height:30px;font-size:10px;">
-			</span>
-		</div>
-		<div class="BETWEEN condition_container hide m-t-xs">
-			<div class="clear"></div>
-			<span id="RHS">
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="form-control date required" placeholder="Select Date" name="temp-14" id="temp-14" style="height:30px;font-size:10px;">
-			</span>
-			<span id="RHS_NEW"> 
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="Select Date" class="form-control date required" name="temp-15" id="temp-15" style="height:30px;font-size:10px;">
-			</span>
-		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
-		<div class="clearfix"></div>
-		</div>
-	</div>
-</div>
-        
-     </div>
-  </div>
-</div>
-
-
-
-
-
-
 
 </div>
 	</div>
@@ -366,18 +40,17 @@
 
 	<div class="col ">
 		<div id="right-pane">
-		
-
-
-			<div id="right-pane">
-			<div class="tickets-toolbar">
-	<div class="wrapper bg-light padder-md padder-v" style="
+	<div class="wrapper bg-light padder-md padder-v p-r-none" style="
     border-bottom: 1px solid rgba(140, 139, 139, 0.2);
-    width: 809px;>
+    width: 988px;>
 	    <div class="btn-toolbar m-l-none pos-rlt">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
-	    		<div style="font-size: 18px;color: rgb(88, 102, 110);">Contacts</div>
-	
+	    		<div class="inline-block pull-left" style="font-size: 18px;color: rgb(88, 102, 110);">Contacts
+	    			<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+            			<i id="icon-filter" class="fa fa-bars icon-white"></i>
+          			</a>
+	    		</div>
+				<div  class="btn-group inline-block pull-left m-t-xs p-l" style="display: none;" id="bulk-select"></div>
     
     
 
@@ -461,214 +134,97 @@
 	    </div>
 	    
 	</div>
-</div></div>
-<div class="panel-heading no-shadow m-r-md" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
-				      	<label class="i-checks i-checks-sm" style="margin-left: 3px;">
-					      <input class="ticket-checkbox select-all" type="checkbox" disabled=""><i></i>
-					    </label>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled" style="font-size:10px">Add Tags</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Remove Tags</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Add to Campaign</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Start Call Campaign</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Send Email</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Change Owner</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Export Contacts as CSV</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Delete</button>
+	<div class="contacts-div">
+<div id="bulk-action-btns" class="panel-heading no-shadow m-r-md" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
+				      	
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add Tags</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Remove Tags</button>
+					    {{#hasMenuScope 'CAMPAIGN'}}
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add to Campaign</button>
+					    {{/hasMenuScope}}
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Start Call Campaign</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Send Email</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Change Owner</button>
+					    {{#hasScope "EXPORT_CONTACTS"}}
+					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Export Contacts as CSV</button>
+					    {{/hasScope}}
+					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs disabled" style="font-size:10px">Delete</button>
 					    
 				    </div>
 
 
 <div class="dta-contatiner table-responsive m-r-md">
-				<div class="panel panel-default " style=" overflow-x:auto;  border-left:none;">
-			    
-                   <div class="filter-criteria">					
-					</div><table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table" url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">               
+				<div class="panel panel-default {{#is_mobile}} m-b-none {{/is_mobile}}" style="{{#is_mobile}} overflow-x:hidden; {{else}} overflow-x:auto; {{/is_mobile}} border-left:none;">
+			    {{#unless this.length}}
+		        <div class="m-l-sm" id="slate">
+		        </div>
+		        {{/unless}}
+		        {{#if this.length}}
+                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
+					<div class="filter-criteria">
 					
+					</div>
+
 					<thead>
-                        <tr class="text-cap" style="font-size:12px;"><th style="width:5%;"><label class="i-checks i-checks-sm m-b-none"><input type="checkbox" class="thead_check" value=""><i></i></label></th>
-                            <th>Basic info</th><th>Company</th><th>Tags</th><th>Lead score</th>
+                        <tr style="text-transform: capitalize;">
+                            {{contactTableHeadings "fields_set"}}
                         </tr>
                     </thead>
-                    <tbody id="contacts-custom-view-table-model-list" route="contact/" class="agile-edit-row" style="font-size:12px;">
-                    <tr><td class="v-middle checkbox" style="cursor:default;"><label class="i-checks i-checks-sm"><input type="checkbox" class="tbody_check" value=""><i></i></label></td><td class="data icon-append-mobile " data="5659313586569216">
-    	<div class="table-resp" style="width:15em;">
-    	<div class="agile-img m-r-sm  thumb-sm " style="margin-right:10px">
-        	
-        		<img class="img-inital r r-2x" title="Homer Simpson" data-name="HS" src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1395904537756?id=contact-container">
-        	
-        
-			
-    	</div>
-  		<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
-        	
-        		<a class="text-cap custom-link">Homer
-        		Simpson </a>
-        		<div><small class="text-muted  block text-ellipsis">homer@simpson.com</small></div>
-        	
-        
-			
-        	
-
-
-	</div>
-	</div>
-	</td><td class="data" data="5659313586569216">
-      <div class="text-ellipsis" style="width:15em;">
-      	<a class="text-cap">Springfield Nuclear Power Plant</a>
-      </div>
-	</td><td class="data" data="5659313586569216">
-	 <div class="overflow-hidden line-clamp line-clamp-2" style="width:15em;"> 	
-		
-	    	<span class="label bg-light dk text-tiny">Business guy</span>	
-		
-	    	<span class="label bg-light dk text-tiny">US</span>	
-		
-	    	<span class="label bg-light dk text-tiny">Donuts</span>	
-		
-	    	<span class="label bg-light dk text-tiny">sports</span>	
-		
-	</div>
-	</td><td class="data" data="5659313586569216">
-       <div style="width:15em;">
-		  50
-       </div>
-	</td></tr><tr><td class="v-middle checkbox" style="cursor:default;"><label class="i-checks i-checks-sm"><input type="checkbox" class="tbody_check" value=""><i></i></label></td><td class="data icon-append-mobile " data="5707702298738688">
-    	<div class="table-resp" style="width:15em;">
-    	<div class="agile-img m-r-sm  thumb-sm " style="margin-right:10px">
-        	
-        		<img class="img-inital r r-2x" title="Michael Jordan" data-name="MJ" src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1371205956656?id=contact-container">
-        	
-        
-			
-    	</div>
-  		<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
-        	
-        		<a class="text-cap custom-link">Michael
-        		Jordan </a>
-        		<div><small class="text-muted  block text-ellipsis">sixfeetsix@nba.com</small></div>
-        	
-        
-			
-        	
-
-
-	</div>
-	</div>
-	</td><td class="data" data="5707702298738688">
-      <div class="text-ellipsis" style="width:15em;">
-      	<a class="text-cap">NBA</a>
-      </div>
-	</td><td class="data" data="5707702298738688">
-	 <div class="overflow-hidden line-clamp line-clamp-2" style="width:15em;"> 	
-		
-	    	<span class="label bg-light dk text-tiny">Sports</span>	
-		
-	</div>
-	</td><td class="data" data="5707702298738688">
-       <div style="width:15em;">
-		  10
-       </div>
-	</td></tr></tbody>
-                </table><div><div class="select-none"></div></div><footer class="panel-footer"><a href="#" class="btn btn-danger btn-sm" id="delete-checked"> Delete</a></footer>
+                    <tbody id="contacts-custom-view-model-list" route="contact/">
+                    </tbody>
+                </table>
+                {{/if}}
 				</div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	    
-            </div>
+        </div>
+	 </div>
 			    
 	    	</div>
-	    </div>
-	</div>
-	    	<div class="left-toolbar pos-abs" style="right: 0; top: 12px;">
-	    		
-		    	
-			</div>
-	    </div>
-	    
-	</div>
-</div></div>
-		</div>
-	</div>
-</div>
-
-
-
-
-
-
-
-
-
-
 
 <!-- Newly Added -->
     
 </script>
 <script id="contacts-custom-view-table-collection-template" type="text/html">
-{{#unless this.length}}
-<div>
-<div class="panel-heading" style="background:#f6f8f8;">Contacts List
-		{{#is_mobile}}
-       {{else}}  
-		<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-			<i id="icon-filter" class="fa fa-bars icon-white"></i>
-		</a>
-		{{/is_mobile}}
-</div>
-			<div id="slate"></div>
-</div>
-		{{else}}
-        <div class="data {{#is_mobile}} panel panel-default b-l {{else}}  {{/is_mobile}}" {{#is_mobile}} style ="border-left:1px solid #dee5e7;" {{/is_mobile}}>
- <div class="panel-heading" style="background:#f6f8f8;">Contacts List
-	{{#is_mobile}}
-       {{else}}  
-<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-			<i id="icon-filter" class="fa fa-bars icon-white"></i>
-		</a>
-		{{/is_mobile}}
-</div>
-            <div class="dta-contatiner table-responsive">
+
+<div id="bulk-action-btns" class="panel-heading no-shadow m-r-md" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
+				      	
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add Tags</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Remove Tags</button>
+					    {{#hasMenuScope 'CAMPAIGN'}}
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add to Campaign</button>
+					    {{/hasMenuScope}}
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Start Call Campaign</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Send Email</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Change Owner</button>
+					    {{#hasScope "EXPORT_CONTACTS"}}
+					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Export Contacts as CSV</button>
+					    {{/hasScope}}
+					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs disabled" style="font-size:10px">Delete</button>
+					    
+				    </div>
+
+
+<div class="dta-contatiner table-responsive m-r-md">
 				<div class="panel panel-default {{#is_mobile}} m-b-none {{/is_mobile}}" style="{{#is_mobile}} overflow-x:hidden; {{else}} overflow-x:auto; {{/is_mobile}} border-left:none;">
-			    
-                   <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">               
-					<div class="filter-criteria">					
+			    {{#unless this.length}}
+		        <div class="m-l-sm" id="slate">
+		        </div>
+		        {{/unless}}
+		        {{#if this.length}}
+                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
+					<div class="filter-criteria">
+					
 					</div>
+
 					<thead>
-                        <tr class="text-cap">
+                        <tr style="text-transform: capitalize;">
                             {{contactTableHeadings "fields_set"}}
                         </tr>
                     </thead>
-                    <tbody id="contacts-custom-view-table-model-list" route="contact/" style="font-size:12px;">
+                    <tbody id="contacts-custom-view-table-model-list" route="contact/">
                     </tbody>
                 </table>
+                {{/if}}
 				</div>
             </div>
-        </div>
-	{{/unless}}
 </script>

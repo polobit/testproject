@@ -118,53 +118,37 @@
 
 	</script>
 
-<script id="contacts-grid-collection-template" type="text/html">
-<div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md lter bg-light b-b">
-<div class="row">
-    <div class="col-md-12">
 
-<div class="pull-left">
-			<h3 class="pull-left font-thin h3"><span id="contact-heading">Contacts</span><span id="contacts-count" class="m-l-xs">{{contacts_count}}</span></h3>
-<div class="pull-left">
-			<div class="btn-group m-l-lg m-r-sm pull-left" id="bulk-actions"
-				style="display: none;">
-					<div class="btn btn-sm btn-default">Bulk Actions</div>
-					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-						<span class="caret"></span>
-					</a>
-					{{#collection_contact_type "PERSON"}}
-					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#" id="bulk-tags" class="_BULKACTION_FILTER">Add Tags</a></li>
-						<li><a href="#" id="bulk-tags-remove" class="_contact_bulk_action">Remove Tags</a></li>
-                        <li class='divider' class="_BULKACTION_FILTER"></li>  
-						{{#hasMenuScope 'CAMPAIGN'}}
-						<li><a href="#" id="bulk-campaigns" class="_contact_bulk_action">Add to Campaign</a></li>
-						{{/hasMenuScope}}
-						<li><a href="#" id="show-callcampaignModal">Start Call Campaign<span class="label label-sm bg-danger" style="margin-left:2px;">Beta</span></a></li>
-						<li><a href="#" id="bulk-email" class="_contact_bulk_action">Send Email</a></li>
-                        <li class='divider'></li>
-						<li><a href="#" id="bulk-owner" class="_contact_bulk_action">Change Owner</a></li>
-                         {{#hasScope "EXPORT_CONTACTS"}}
-                        <li><a href="#" id="bulk-contacts-export" class="_contact_bulk_action">Export Contacts as CSV</a></li>
-                         {{/hasScope}}
-						<li><a href="#" id="delete-checked-grid">Delete</a></li>
-					</ul>
-					{{/collection_contact_type}}
-					{{#collection_contact_type "COMPANY"}}
-					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#" id="bulk-email">Send Email</a></li>
-                        <li class='divider'></li>
-						<li><a href="#" id="bulk-owner">Change Owner</a></li>
-						<li><a href="#" id="bulk-companies-export">Export Companies as CSV</a></li>
-						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
-					</ul>
-					{{/collection_contact_type}}
+<script id="contacts-grid-collection-template" type="text/html">
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+    <div class="col w-lg bg-light dk b-r bg-auto" id="contacts-lhs-filters-toggle" style="display:{{toggle_contacts_filter}}">
+        <div class="data-block">
+            <div  id="lhs_filters_conatiner">
+				
 			</div>
-			<div  class="btn-group pull-left m-t-xs" style="display: none;" id="bulk-select"></div>
-		</div>
-</div>
-<div class="pull-right">
+        </div>
+    </div>
+    <div class="col">
+	  <div id="right-pane">
+		
+	<div class="wrapper bg-light padder-md padder-v p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);width: 988px;>
+	    <div class="btn-toolbar m-l-none pos-rlt">
+		
+    	<div class="btn-toolbar m-l-none pos-rlt">
+	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
+	    		<div class="pull-left inline-block" style="font-size: 18px;color: rgb(88, 102, 110);">Contacts
+	    			<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+            			<i id="icon-filter" class="fa fa-bars icon-white"></i>
+          			</a>
+	    		</div>
+				<div  class="btn-group inline-block pull-left m-t-xs p-l" style="display: none;" id="bulk-select"></div>
+    
+    
+
+
+</div></div>
+      <div class="pull-right">
+			
             <div class="btn-group pull-left m-r-xs" id="contacts-view-options"></div>
             <div class="btn-group m-r-sm pull-left" id="filter-list"></div>
 			<div class="btn-group pull-left" id="view-list"></div>
@@ -175,29 +159,29 @@
     </div>
     </div>
     </div>
-<div class="hbox hbox-auto-xs hbox-auto-sm">
-    <div class="col w-md b-r" id="contacts-lhs-filters-toggle" style="display:{{toggle_contacts_filter}}">
-        <div class="data-block">
-            <div  id="lhs_filters_conatiner">
-				
-			</div>
-        </div>
-    </div>
-    <div class="col contacts-div">
-
-		
-    <div class="panel-heading grid-checkboxes" style="background:#f6f8f8;">Contacts List
-
-      <a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-            <i id="icon-filter" class="fa fa-bars icon-white"></i>
-          </a>
-{{#if this.length}}
-          <span class="pull-right m-r-sm"> <label class="i-checks i-checks-sm">
-                <input type="checkbox" id="select_grid_contacts1" class="thead_check" value="">
-                <i></i>                
-          </label>Select All</span>
-  {{/if}}
-      </div>
+    <div class="contacts-div">
+    <div id="bulk-action-btns" class="panel-heading no-shadow m-r-md" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
+				      	
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add Tags</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Remove Tags</button>
+					    {{#hasMenuScope 'CAMPAIGN'}}
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add to Campaign</button>
+					    {{/hasMenuScope}}
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Start Call Campaign</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Send Email</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Change Owner</button>
+					    {{#hasScope "EXPORT_CONTACTS"}}
+					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Export Contacts as CSV</button>
+					    {{/hasScope}}
+					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs disabled" style="font-size:10px">Delete</button>
+					    {{#if this.length}}
+				          <span style="margin: 5px 10px 5px 5px;"> <label class="i-checks i-checks-sm">
+				                <input type="checkbox" id="select_grid_contacts1" class="thead_check" value="">
+				                <i></i>                
+				          </label>Select All</span>
+				  		{{/if}}
+					    
+				    </div>
       <div class="m-l-sm filter-criteria"></div>
       {{#unless this.length}}
         <div class="m-l-sm" id="slate">
@@ -210,33 +194,46 @@
             </div>
         </div>
         {{/if}}
+       </div>
     </div>
-</div>
 </div>
 
 </script>
 	<script id="contacts-grid-table-collection-template" type="text/html">
-  <div class="panel-heading grid-checkboxes" style="background:#f6f8f8;">Contacts List
 
-      <a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-      <i id="icon-filter" class="fa fa-bars icon-white"></i>
-      </a>
-      {{#if this.length}}
-       <span class="pull-right m-r-sm"> <label class="i-checks i-checks-sm">
-                <input type="checkbox" id="select_grid_contacts1" class="thead_check" value="">
-                <i></i>                
-          </label>Select All</span>
-          {{/if}}
-      
-  </div>
-  <div class="filter-criteria"></div>
-        <div id="slate">
+	<div id="bulk-action-btns" class="panel-heading no-shadow m-r-md" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
+				      	
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add Tags</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Remove Tags</button>
+					    {{#hasMenuScope 'CAMPAIGN'}}
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add to Campaign</button>
+					    {{/hasMenuScope}}
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Start Call Campaign</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Send Email</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Change Owner</button>
+					    {{#hasScope "EXPORT_CONTACTS"}}
+					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Export Contacts as CSV</button>
+					    {{/hasScope}}
+					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs disabled" style="font-size:10px">Delete</button>
+					    {{#if this.length}}
+				          <span style="margin: 5px 10px 5px 5px;"> <label class="i-checks i-checks-sm">
+				                <input type="checkbox" id="select_grid_contacts1" class="thead_check" value="">
+				                <i></i>                
+				          </label>Select All</span>
+				  		{{/if}}
+					    
+				    </div>
+      <div class="m-l-sm filter-criteria"></div>
+      {{#unless this.length}}
+        <div class="m-l-sm" id="slate">
         </div>
+        {{/unless}}
         {{#if this.length}}
         <div class="data">
             <div class="data-container">
-                <div id="contacts-grid-table-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/bulk/update?action_type=DELETE" style="overflow:auto;margin-left:-20px;"></div>
+                <div id="contacts-grid-table-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/bulk/update?action_type=DELETE"></div>
             </div>
         </div>
         {{/if}}
+		
 </script>
