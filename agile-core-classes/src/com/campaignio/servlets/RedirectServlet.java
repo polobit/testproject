@@ -150,8 +150,8 @@ public class RedirectServlet extends HttpServlet
 		params += TrackClickUtil.appendContactPropertiesToParams(contact, push);
 		
 		//Append url fragment(Prashannjeet)
-		
-			   try{
+			   try
+			   {
 				    normalisedLongURL=appendURI(normalisedLongURL, params).toString();
 					
 					//url is already encoded in encoded format. 
@@ -161,7 +161,7 @@ public class RedirectServlet extends HttpServlet
 			   }
 			   catch(Exception e)
 			   {
-				   e.printStackTrace();
+				   System.err.println(e);
 				   resp.sendRedirect(normalisedLongURL);
 			   }
 		
