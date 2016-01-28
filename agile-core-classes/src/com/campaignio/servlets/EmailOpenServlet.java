@@ -321,6 +321,7 @@ public class EmailOpenServlet extends HttpServlet
 		}
 		catch (Exception e)
 		{
+			System.err.println("Exception occured while interrupting crons of opened - " + e.getMessage());
 		    e.printStackTrace();
 		}
 		finally
