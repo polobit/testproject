@@ -157,6 +157,7 @@ public class CacheUtil
     	try
     	{
     	    MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+    	    
     	    if (syncCache.contains(key))
     		syncCache.delete(key);
     	}
@@ -189,8 +190,9 @@ public class CacheUtil
 		      if (memcacheService.increment(syncKey, 1L, 0L) == 1L)
 		    	  return true;
 		      
+		      // If timeout return
 		      if (System.currentTimeMillis() - start > maxWait)
-		          return false;
+		          return true;
 		       
 		      try
 		      {
