@@ -493,31 +493,32 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
   </div>
 </div>
 
-<div class="control-group form-group lhs-row-filter" >
-	<a data-toggle="collapse" id="lhs-filters-header" 
-		class="c-p text-l-none text-l-none-hover" >
-		Star Value
-		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
-	<div class="controls hide m-t-xs" id="star_value_div">
+
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<span style="font-size:10px;">Star Value</span>
+	<div class="controls m-t-xs" id="star_value_div">
 		<div class="lhs-contact-filter-row pos-rlt">
-		<input type="hidden" name="LHS" class="form-control" value="star_value" />
-		<select id="between_filter" name="CONDITION" class="form-control" >
+		<input type="hidden" class="form-control" name="LHS" value="star_value">
+		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
 			<option value="IS_GREATER_THAN">greater than</option>
 			<option value="IS_LESS_THAN">less than</option>
 			<option value="BETWEEN">between</option>
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
-				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="form-control required">
+				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="form-control required" name="temp-5" id="temp-5" style="height:30px;font-size:10px;">
 			</span>
 		</div>
 		<div class="BETWEEN condition_container hide m-t-xs">
-			<div class="clear" />
+			<div class="clear"></div>
 			<span id="RHS">
-				<input type="number" min="0" max="5" class="required form-control" prev-val="" placeholder="Min Value"> 
+				<input type="number" min="0" max="5" class="required form-control" prev-val="" placeholder="Min Value" name="temp-6" id="temp-6" style="height:30px;font-size:10px;"> 
 			</span>
 			<span id="RHS_NEW">
-				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control">
+				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control" name="temp-7" id="temp-7" style="height:30px;font-size:10px;">
 			</span>
 		</div>
 		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
@@ -525,6 +526,16 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		</div>
 	</div>
 </div>
+        
+     </div>
+  </div>
+</div>
+
+
+
+
+
+
 <div class="control-group form-group lhs-row-filter" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
