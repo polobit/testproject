@@ -39,7 +39,7 @@ function isIE () {
 }
 
  if(isIE() && isIE() < 10)
- {window.location=‘/error/not-supported.jsp’; return;}
+ {window.location='/error/not-supported.jsp'; return;}
 
 </script>
 
