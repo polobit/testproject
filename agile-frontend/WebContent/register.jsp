@@ -112,7 +112,7 @@ label {
 <script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
 <script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
-<script src="https://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.jquery.min.js"></script>
+
 
 <script type="text/javascript">
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
