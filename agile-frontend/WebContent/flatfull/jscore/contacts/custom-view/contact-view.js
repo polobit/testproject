@@ -173,7 +173,7 @@ function setupViews(cel, button_name) {
 var COMPANY_CUSTOM_SORT_VIEW = undefined;
 function setUpCompanySortFilters(el)
 {
-	if(CUSTOM_SORT_VIEW)
+	if(COMPANY_CUSTOM_SORT_VIEW)
 	{
 		$("#contact-sorter", el).html(COMPANY_CUSTOM_SORT_VIEW.render(true).el);
 		//CUSTOM_SORT_VIEW.init();
@@ -181,10 +181,11 @@ function setUpCompanySortFilters(el)
 		return;	
 	}
 
-	var view = CONTACT_SORT_FIELDS_VIEW.view();
+	var view = COMPANY_SORT_FIELDS_VIEW.view();
 	COMPANY_CUSTOM_SORT_VIEW = new view ({
 		data : sort_company_configuration.getCompanySortableFields(),
 		templateKey : "contact-view-sort",
+		sortPrefsName : "sort_by_name",
 		individual_tag_name : "li",
 		sort_collection : false,
 		postRenderCallback: function(el)
@@ -219,6 +220,7 @@ function setUpContactSortFilters(el)
 	CUSTOM_SORT_VIEW = new view ({
 		data : sort_configuration.getContactSortableFields(),
 		templateKey : "contact-view-sort",
+		sortPrefsName : "sort_by_name",
 		individual_tag_name : "li",
 		sort_collection : false,
 		postRenderCallback: function(el)
