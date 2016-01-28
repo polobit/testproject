@@ -21,7 +21,7 @@
 					
 					<div id="updateTask" class="control-group form-group">
 							<label for="subject" class="control-label col-sm-3">Task <span class="field_req">*</span></label>
-							<div class="controls col-sm-8">
+							<div class="controls col-sm-7">
 								<span class="input "><input id="subject" type="text" name="subject" size="40" class="required form-control" />
 								</span>
 							</div>
@@ -30,7 +30,7 @@
 					<div id="task-category" class="control-group form-group">
 							<label for="type" class="control-label col-sm-3">Category 
 							<span class="field_req">*</span></label>
-							<div class="controls col-sm-8">
+							<div class="controls col-sm-7">
 								<span class="input"> <select name="type" id="type" size="1" class="input-medium form-control required">
 										<option></option>
 										<option value="CALL">Call</option>
@@ -55,10 +55,10 @@
                             </div>
                         </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-5">
                         <div class="control-group form-group">
-                            <label class="control-label col-sm-6"> Time <span class="field_req">*</span></label>
-                            <div class="controls col-sm-6">
+                            <label class="control-label col-sm-5"> Time <span class="field_req">*</span></label>
+                            <div class="controls col-sm-5">
                                 <input type="text" name="task_ending_time" class="new-task-timepicker required form-control" id="task_ending_time" style="width:67px" placeholder="time">     
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                 <div class="control-group form-group">
 							<label class="control-label col-sm-3">Owner<span
 								class="field_req">*</span></label>
-							<div class="controls col-sm-8" id="owners">
+							<div class="controls col-sm-7" id="owners">
 								<select id="owners-list" class="required form-control" name="owner_id"></select>
 								<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
 							</div>
@@ -77,7 +77,7 @@
 				<div class="control-group form-group">
 							<label for="priority_type" class="control-label col-sm-3">Priority
 							</label>
-							<div class="controls col-sm-8">
+							<div class="controls col-sm-7">
 								<span class="input "> <select name="priority_type"
 									id="priority_type" size="1" class="input-medium form-control">
 										<option value="HIGH">High</option>
@@ -90,7 +90,7 @@
 
 				<div class="control-group form-group">
                             <label for="status" class="control-label col-sm-3">Status</label>
-                            <div class="controls col-sm-8" >
+                            <div class="controls col-sm-7">
                                 <select name="status" id="status" size="1" class="status input-medium form-control">
                                         <option value="YET_TO_START" selected="selected">Yet to Start</option>
                                         <option value="IN_PROGRESS">In Progress</option>
@@ -102,7 +102,7 @@
 
                 <div class="control-group form-group">
                             
-                            <div class="progress-slider controls progress_slider_width_bottom" title="Progress" style="padding-left:166px;width:89%;margin-top:-2px;">
+                            <div class="progress-slider controls progress_slider_width_bottom hidden-xs" title="Progress" style="padding-left:166px;width:81%;margin-top:-2px;">
                                 <input id="progress_slider" type="slider" class="progress_slider" value="0" />
                             </div>                              
                         
@@ -111,7 +111,7 @@
                 <div class="control-group form-group">
                         <!-- <label class="control-label"><a href="#" id="new-event-related-contacts-label"><i class="icon-plus"></i> Add Contacts</a></label> -->
                         <label class="control-label update-task-related-contacts-label col-sm-3">Related Contacts</label>
-                        <div class="controls update-task-related-contacts-input col-sm-8">
+                        <div class="controls update-task-related-contacts-input col-sm-7">
                             <div>
                                 <input type="text" id="update_task_related_to" class="typeahead typeahead_contacts form-control" placeholder="Related Contacts" data-provide="typeahead" data-mode="multiple" size="40" />
                                 <div style="padding-top:2px;">
@@ -121,10 +121,10 @@
                             </div>
                         </div>
                 </div>
-                <div class="control-group form-group">
+                <div class="control-group form-group" style="margin-bottom:0px;">
 						<!-- <label class="control-label"><a href="#" id="update-task-related-deals-label"><i class="icon-plus"></i> Add Deals</a></label>  -->
 						<label class="control-label col-sm-3 update-task-related-deals-label">Related Deals</label>
-						<div class="controls col-sm-8 update-task-related-deals-input" id="dealTypeAhead">
+						<div class="controls col-sm-7 update-task-related-deals-input" id="dealTypeAhead">
 							<div>
 								
 								<input type="text" id="update_task_relates_to_deals" 
@@ -148,10 +148,11 @@
 							<ul id="notes" name="notes" class="notes"></ul>
 						</div>
 				</div>
-				<div style="font-size: 12px;" class="text-muted col-sm-offset-2">
-                    <p>Note: Tasks are like to-dos. Result
-                        oriented. You can assign a category such as call, email etc
-                    </p>
+				<div class="text-muted">
+                        <div class="col-sm-offset-3 col-sm-7" style="font-size:12px;padding-left: 5px;">
+                             Note: Tasks are like to-dos. Result
+                        oriented. You can assign a category such as call, email etc.
+                        </div>
                 </div>
 
 				</fieldset>
