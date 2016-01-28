@@ -282,20 +282,20 @@ function show_custom_fields_helper(custom_fields, properties){
 			modal_checkbox = "col-sm-offset-3";
 		}else if(field.scope == "COMPANY"){
 			label_style = "control-label col-sm-3 word-break-all";
-			modal_label_style = "control-label col-sm-2 word-break-all"; 
-			modal_control_style = "col-sm-10";
+			modal_label_style = "control-label col-sm-3 word-break-all"; 
+			modal_control_style = "col-sm-7";
 			checkbox_style = "col-sm-3";
-			modal_checkbox = "col-sm-offset-2";
+			modal_checkbox = "col-sm-offset-3";
 		}else if(field.scope == "DEAL"){
 			label_style = "control-label col-sm-3 word-break-all";
 			modal_label_style = "control-label col-sm-3 word-break-all";
-			modal_control_style = "col-sm-8";
+			modal_control_style = "col-sm-7";
 			checkbox_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3";
 		}else if(field.scope == "CASE"){
 			label_style = "control-label col-sm-3 word-break-all";
 			modal_label_style = "control-label col-sm-3 word-break-all";
-			modal_control_style = "col-sm-8";
+			modal_control_style = "col-sm-7";
 			checkbox_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3";
 		}
