@@ -448,8 +448,11 @@ if(!HANDLEBARS_PRECOMPILATION){
     });
     downloadTemplate("contact-view.js", function(){             
     });
-} 
-	
+}
+
+if(window.navigator.userAgent.indexOf("MSIE") == -1)
+   $('#ie_fullscreen').css('display', 'block');
+ 
 // Remove the loadinng
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
