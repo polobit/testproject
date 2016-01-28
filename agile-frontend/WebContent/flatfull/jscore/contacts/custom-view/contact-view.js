@@ -154,7 +154,6 @@ function setupViews(cel, button_name) {
 			if (button_name)
 				$("#view-list", cel).find('.custom_view').append(button_name);
 			
-			setUpContactSortFilters(cel);
 
 			//updates the selected sort item to bold
 			//updateSelectedSortKey($(".contacts-toolbar", cel));
@@ -166,6 +165,8 @@ function setupViews(cel, button_name) {
 			}
 
 		}, $("#view-list", cel));
+
+		setUpContactSortFilters(cel);
 	// });
 }
 
