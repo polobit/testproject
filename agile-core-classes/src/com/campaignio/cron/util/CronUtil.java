@@ -226,19 +226,38 @@ public class CronUtil
 		int count = query.count();
 
 		QueryResultIterator<Cron> iterator = query.iterator();
-
+		
+		Map<String, Boolean> cacheMap = new HashMap<String, Boolean>();
+		String key = null;
+		
 		while (iterator.hasNext())
 		{
 			Cron cron = iterator.next();
 			dao.delete(cron);
 
+			
+			// Key that identifies duplicate crons
+			key = cron.namespace + "_"+ cron.campaign_id + "_" + cron.subscriber_id + "_" + cron.custom1 + "_" + cron.custom2 + "_" + cron.custom3;
+			
+			// To avoid duplicates crons to execute
+			if(cacheMap.containsKey(key))
+			{
+				System.err.println("Duplicate cron obtained - " + key);
+				continue;
+			}
+			
 			// Temporary list
 			List<Cron> cronList = new ArrayList<Cron>();
 			cronList.add(cron);
 
 			// Run cron job
 			executeTasklets(cronList, Cron.CRON_TYPE_TIME_OUT, null, count);
+			
+			cacheMap.put(key, true);
 		}
+		
+		// Clears map
+		cacheMap.clear();
 
 		NamespaceManager.set(oldNamespace);
 	}
@@ -279,15 +298,41 @@ public class CronUtil
 	
 		
 			List<Cron> cronJobs = dao.listByProperty(searchMap);
-			dao.deleteAll(cronJobs);
 			
-			// Execute in another tasklet
-			executeTasklets(cronJobs, Cron.CRON_TYPE_INTERRUPT, interruptData, cronJobs.size());
-		
+			Map<String, Boolean> cacheMap = new HashMap<String, Boolean>();
+			String key = null;
+			
+			for(Cron cron : cronJobs)
+			{
+				cron.delete();
+				
+				// Key that identifies duplicate crons
+				key = cron.namespace + "_"+ cron.campaign_id + "_" + cron.subscriber_id + "_" + cron.custom1 + "_" + cron.custom2 + "_" + cron.custom3;
+				
+				// To avoid duplicates crons to execute
+				if(cacheMap.containsKey(key))
+				{
+					System.err.println("Duplicate cron obtained - " + key);
+					continue;
+				}
+				
+				// Temporary list
+				List<Cron> cronList = new ArrayList<Cron>();
+				cronList.add(cron);
+
+				// Execute in another tasklet
+				executeTasklets(cronList, Cron.CRON_TYPE_INTERRUPT, interruptData, cronJobs.size());
+				
+				cacheMap.put(key, true);
+			}
+
+			// Clear map
+			cacheMap.clear();
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
+			System.err.println("Exception occured in interrupt of CronUtil - " + e.getMessage());
 		}
 		finally
 		{
