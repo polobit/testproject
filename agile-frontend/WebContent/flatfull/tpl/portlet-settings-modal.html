@@ -8,7 +8,7 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsContactsFilterBasedSettingsForm" name="portletsContactsFilterBasedSettingsForm" method="post" >
+		<form id="portletsContactsFilterBasedSettingsForm" name="portletsContactsFilterBasedSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
 				<label class="control-label">Filter</label>
 				<div class="controls" id="filterControls">
@@ -39,7 +39,7 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsContactsEmailsOpenedSettingsForm" name="portletsContactsEmailsOpenedSettingsForm" method="post" >
+		<form id="portletsContactsEmailsOpenedSettingsForm" name="portletsContactsEmailsOpenedSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
 				<label class="control-label">Duration</label>
 				<div class="controls">
@@ -104,9 +104,19 @@
 		<h3 class="modal-title">Dashlet Settings</h3>
 	</div>
 	<div class="modal-body">
-		<input type="hidden" id="portlet-type" />
-		<input type="hidden" id="portlet-name" />
-		<form id="portletsContactsGrowthGraphSettingsForm" name="portletsContactsGrowthGraphSettingsForm" method="post" class="form-horizontal">
+		<input type="hidden" id="portlet-type"/>
+		<input type="hidden" id="portlet-name"/>
+		<form id="portletsContactsGrowthGraphSettingsForm" name="portletsContactsGrowthGraphSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
+			<div class="control-group form-group" style="margin-bottom:3px;">
+				<div  id="portlet-tags">
+						<ul id="portlet-ul-tags" name="tags" class= "tagsinput tags p-n"></ul>
+				</div>
+				<label class="control-label col-sm-3">Tags <span class="field_req">*</span></label>
+				
+				<div class="controls col-sm-8">
+					<input name="tags" type="text" id="addPortletBulkTags" class="tags-typeahead multi-tags form-control" placeholder="Enter tags separated by comma" onkeyup="hidePortletErrors(this);" style="margin-bottom:11px;"/>
+				</div>
+			</div>
 			<div class="control-group form-group">
 				<label class="control-label col-sm-3">Frequency</label>
 				<div class="controls col-sm-8">
@@ -117,15 +127,7 @@
 					</select>
 				</div>
 			</div>
-			<div class="control-group form-group" style="margin-bottom:0px;">
-				<label class="control-label col-sm-3">Tags <span class="field_req">*</span></label>
-				<div class="controls col-sm-8">
-					<input name="tags" type="text" id="addPortletBulkTags" class="tags-typeahead multi-tags form-control" placeholder="Enter tags separated by comma" onkeyup="hidePortletErrors(this);" style="margin-bottom:11px;"/>
-					<div  id="portlet-tags">
-						<ul id="portlet-ul-tags" name="tags" class= "tagsinput tags p-n"></ul>
-					</div>      
-				</div>
-			</div>
+			
 			<!-- <div class="control-group">
 				<label class="control-label">Duration</label>
 				<div style="box-shadow: 0 0px 2px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1);" class="pull-left p-t-xs p-b-xs p-l-sm p-r-sm" id="portlet-reportrange">
@@ -165,7 +167,7 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsPendingDealsSettingsForm" name="portletsPendingDealsSettingsForm" method="post" >
+		<form id="portletsPendingDealsSettingsForm" name="portletsPendingDealsSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<!-- <input type="text" class="hidden pull-right" /> -->
 			<div class="control-group form-group">
 				<label class="control-label">Deals</label>
@@ -214,7 +216,7 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsDealsByMilestoneSettingsForm" name="portletsDealsByMilestoneSettingsForm" method="post" >
+		<form id="portletsDealsByMilestoneSettingsForm" name="portletsDealsByMilestoneSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<!-- <input type="text" class="hidden pull-right" /> -->
 			<div class="control-group form-group" id="portletsDealsByMilestoneTrack" style="display:none;">
 				<label class="control-label">Track</label>
@@ -404,7 +406,7 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsCallsPerPersonSettingsForm" name="portletsCallsPerPersonSettingsForm" method="post" class="form-horizontal">
+		<form id="portletsCallsPerPersonSettingsForm" name="portletsCallsPerPersonSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
 				<label class="control-label col-sm-3">Duration</label>
 				<div class="controls col-sm-8">
@@ -460,7 +462,7 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsTaskReportSettingsForm" name="portletsTaskReportSettingsForm" method="post" >
+		<form id="portletsTaskReportSettingsForm" name="portletsTaskReportSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
 				<label class="control-label">Report by</label>
 				<div class="controls">
@@ -536,7 +538,7 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsStatsReportSettingsForm" name="portletsStatsReportSettingsForm" method="post" >
+		<form id="portletsStatsReportSettingsForm" name="portletsStatsReportSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
 				<label class="control-label">Duration</label>
 				<div class="controls">
@@ -573,7 +575,7 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsAgendaSettingsForm" name="portletsAgendaSettingsForm" method="post" >
+		<form id="portletsAgendaSettingsForm" name="portletsAgendaSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
 				<label class="control-label">Duration</label>
 				<div class="controls">
@@ -605,7 +607,7 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsTodayTasksSettingsForm" name="portletsTodayTasksSettingsForm" method="post" >
+		<form id="portletsTodayTasksSettingsForm" name="portletsTodayTasksSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
 				<label class="control-label">Duration</label>
 				<div class="controls">
@@ -769,7 +771,7 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsCampaignStatsSettingsForm" name="portletsCampaignStatsSettingsForm" method="post" class="form-horizontal">
+		<form id="portletsCampaignStatsSettingsForm" name="portletsCampaignStatsSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
 				<label class="control-label col-sm-3">Duration</label>
 				<div class="controls col-sm-8">
