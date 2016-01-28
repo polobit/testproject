@@ -1818,6 +1818,6 @@ public class ContactUtil
 	LastContactedDeferredTask lastContactDeferredtask = new LastContactedDeferredTask(contactId,
 		lastCampaignEmailed, toEmail);
 	Queue queue = QueueFactory.getQueue(AgileQueues.LAST_CONTACTED_UPDATE_QUEUE);
-	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask));
+	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).etaMillis(System.currentTimeMillis() + 5000));
     }
 }

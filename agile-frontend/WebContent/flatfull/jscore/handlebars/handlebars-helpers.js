@@ -301,7 +301,8 @@ $(function()
 		var initials = '';
 		try
 		{
-			// initials = text_gravatar_initials(items)
+			if(!isIE())
+			initials = text_gravatar_initials(items);
 		}
 		catch (e)
 		{
@@ -310,9 +311,11 @@ $(function()
 
 		if (initials.length == 0)
 			backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
-		var data_name = '';
-		// "onLoad=\"image_load(this)\" onError=\"image_error(this)\"
-		// _data-name=\"" + initials;
+
+		var data_name =  '';
+		if(!isIE())
+			data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
+		
 		var email = getPropertyValue(items, "email");
 		if (email)
 		{

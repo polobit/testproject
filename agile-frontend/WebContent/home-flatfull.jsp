@@ -32,6 +32,20 @@ pageEncoding="UTF-8"%>
 <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib">
 
 
+<script type="text/javascript">
+function isIE () {
+  var myNav = navigator.userAgent.toLowerCase();
+  return (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
+}
+
+ if(isIE() && isIE() < 10)
+ {window.location='/error/not-supported.jsp'; return;}
+
+</script>
+
+
+
+
 <%
     //Check if it is being access directly and not through servlet
 if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
@@ -434,8 +448,11 @@ if(!HANDLEBARS_PRECOMPILATION){
     });
     downloadTemplate("contact-view.js", function(){             
     });
-} 
-	
+}
+
+if(window.navigator.userAgent.indexOf("MSIE") == -1)
+   $('#ie_fullscreen').css('display', 'block');
+ 
 // Remove the loadinng
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
@@ -472,6 +489,8 @@ var glcpath = (('https:' == document.location.protocol) ? 'https://my.clickdesk.
 var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
 </script>
 <!-- End of ClickDesk -->
+
+ 
 
 </body>
 </html>

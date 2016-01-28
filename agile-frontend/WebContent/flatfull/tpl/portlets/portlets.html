@@ -21,7 +21,7 @@
 	</div>
 </td>
 <td style="width:25%">
-	<div class="overflow-hidden line-clamp line-clamp-2" style="-webkit-line-clamp:1">
+	<div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="-webkit-line-clamp:1">
 		{{#each tags}}
     		<span class="label bg-light dk text-tiny">{{this}}</span>	
 		{{/each}}
@@ -1243,8 +1243,8 @@
 </script>
 
 <script id="portlets-collection-template" type="text/html">
-<div class="alert-info alert" id="no-portlets" style="display:none">
-    <div class="slate-content">
+<div class="alert bg-white" id="no-portlets" style="display:none">
+    <div class="slate-content  p-md">
        <div class="box-left pull-left m-r-md">
             <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
        </div>
@@ -1263,8 +1263,8 @@
     </div>
 </div>
 {{#unless this.length}}
-  <div class="alert-info alert" id="zero-portlets">
-    <div class="slate-content">
+  <div class="alert bg-white" id="zero-portlets">
+    <div class="slate-content p-md">
        <div class="box-left pull-left m-r-md">
             <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
        </div>

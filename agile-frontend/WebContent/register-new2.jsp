@@ -334,6 +334,8 @@ This is where you and your users will log in to your account
 <script src="/flatfull/lib/bootstrap.v3.min.js"></script>
 <script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
 <script src="/flatfull/registration/register.js?_v=<%=_AGILE_VERSION%>"   type="text/javascript"></script>
+<script src="https://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.jquery.min.js"></script>
+
 <script type="text/javascript">
 var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
