@@ -48,13 +48,15 @@ $(document).ready(function(){
 	$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
 
 
-	/*$('body').on('click touchstart',function(e){
-
-		if(e.target.id != 'searchText' && e.target.classList[1] != 'search-menu-mobile'){
+	$('body').on('click touchstart',function(e){
+		if($(this).parentsUntil('.input-group').find('.typeahead.dropdown-menu').hasClass('.typeahead')) {
+			return;
+		}
+	else if(e.target.id != 'searchText' && e.target.classList[1] != 'search-menu-mobile'){
 		$('.search-mobile').addClass('hide');
 		$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
 		}
-	});*/
+	});
 
    $("#contact-results li").click(function(){
    $("#mobile-menu-settings").trigger('click');
