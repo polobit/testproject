@@ -327,7 +327,7 @@ public class EmailOpenServlet extends HttpServlet
 		finally
 		{
 			if(lock)
-				CacheUtil.deleteCache(cacheKey);
+				CacheUtil.deleteCacheWithinNamespace(cacheKey);
 		}
     }
 

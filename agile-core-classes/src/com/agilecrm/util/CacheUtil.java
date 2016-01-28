@@ -148,6 +148,26 @@ public class CacheUtil
     }
     
     /**
+     * Deletes key within namespace
+     * 
+     * @param key
+     */
+    public static void deleteCacheWithinNamespace(String key)
+    {
+    	try
+    	{
+    	    MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+    	    if (syncCache.contains(key))
+    		syncCache.delete(key);
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	    System.err.println("Exception occured while deleting from cache..." + e.getMessage());
+    	}
+    }
+    
+    /**
      * Enabling lock on memcache key
      * 
      * Source:
