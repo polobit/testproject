@@ -1,9 +1,12 @@
 package com.campaignio.servlets;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.mortbay.util.URIUtil;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
@@ -88,7 +92,7 @@ public class RedirectServlet extends HttpServlet
 	String oldNamespace = NamespaceManager.get();
 	try
 	{
-	    NamespaceManager.set(domain);
+		NamespaceManager.set(domain);
 
 	    // When requested from shorten url, get values from URLShortener
 	    if (StringUtils.equals(NamespaceUtil.getNamespaceFromURL(host), "click"))
@@ -146,12 +150,20 @@ public class RedirectServlet extends HttpServlet
 		params += TrackClickUtil.appendContactPropertiesToParams(contact, push);
 		
 		//Append url fragment(Prashannjeet)
-		
-			normalisedLongURL=appendURI(normalisedLongURL, params).toString();
-		
-			System.out.println("Forwarding it to " + normalisedLongURL);
-			
-			resp.sendRedirect(normalisedLongURL);
+			   try
+			   {
+				    normalisedLongURL=appendURI(normalisedLongURL, params).toString();
+					
+					//url is already encoded in encoded format. 
+					normalisedLongURL=URLDecoder.decode(normalisedLongURL,"UTF-8");
+					System.out.println("Forwarding it to.. " + normalisedLongURL);
+					resp.sendRedirect(normalisedLongURL);
+			   }
+			   catch(Exception e)
+			   {
+				   System.err.println(e);
+				   resp.sendRedirect(normalisedLongURL);
+			   }
 		
 	    }
 	    else
@@ -251,16 +263,20 @@ public class RedirectServlet extends HttpServlet
     
     //Append URI Fragment with #(Hash sign)
     
-    public URI appendURI(String uri, String appendQuery) throws URISyntaxException {
-        URI oldUri = new URI(uri);
-        String newQuery = oldUri.getQuery();
+    public URI appendURI(String uri, String appendQuery) throws URISyntaxException  {
+      
+    	   URI oldUri = new URI(uri);
+    	   String newQuery = oldUri.getQuery();
+    	  
         
-        if (newQuery == null) 
+    	   if (newQuery == null) 
             newQuery = appendQuery;
-        else 
-            newQuery += "&" + appendQuery;  
+    	   else {
+    		     newQuery += "&" + appendQuery; 
+    	   }
         
-        URI newUri = new URI(oldUri.getScheme(), oldUri.getAuthority(), oldUri.getPath(), newQuery, oldUri.getFragment());
-        return newUri;
+    	   URI newUri = new URI(oldUri.getScheme(), oldUri.getAuthority(), oldUri.getPath(), newQuery, oldUri.getFragment());
+    	   return newUri;
+      
     }
 }

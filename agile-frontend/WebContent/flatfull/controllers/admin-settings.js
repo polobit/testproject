@@ -523,6 +523,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#milestone-listner').find('#AdminPrefsTab .select').removeClass('select');
 			$('#milestone-listner').find('.milestones-tab').addClass('select');
 			$(".active").removeClass("active");
+			$('.settings-milestones').addClass('active');
+			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
 
 		}, "#milestone-listner");
 	
@@ -957,21 +959,28 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html(getTemplate('others-not-allowed',{}));
 			return;
 		}
+		var that = this;
 		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
-		$("#milestone-listner").html(getTemplate("admin-settings"), {});
-		$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
-		this.dealLostReasons = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_LOST_REASON', templateKey : "admin-settings-lost-reasons",
-			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
-			{
-				initializeMilestoneListners(el);
-			} });
-		this.dealLostReasons.collection.fetch();
-		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealLostReasons.render().el);
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.milestones-tab').addClass('select');
-		$(".active").removeClass("active");
-		$('.settings-lost-reasons').addClass('active');
-		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#milestone-listner').html($(template_ui));
+			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
+			that.dealLostReasons = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_LOST_REASON', templateKey : "admin-settings-lost-reasons",
+				individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+				{
+					initializeMilestoneListners(el);
+				} });
+			that.dealLostReasons.collection.fetch();
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(that.dealLostReasons.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.milestones-tab').addClass('select');
+			$(".active").removeClass("active");
+			$('.settings-lost-reasons').addClass('active');
+			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+			$('.settings-lost-reasons').parent().removeClass('b-b-none');
+
+		}, "#milestone-listner");
 	},
 
 	/**
@@ -984,96 +993,103 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html(getTemplate('others-not-allowed',{}));
 			return;
 		}
+		var that = this;
 		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
-		$("#milestone-listner").html(getTemplate("admin-settings"), {});
-		$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
-		this.dealSourcesView = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_SOURCE', templateKey : "admin-settings-deal-sources",
-			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
-			{
-				initializeMilestoneListners(el);
-			} });
-		this.dealSourcesView.collection.fetch();
-		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealSourcesView.render().el);
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.milestones-tab').addClass('select');
-		$(".active").removeClass("active");
-		$('.settings-deal-sources').addClass('active');
-		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#milestone-listner').html($(template_ui));
+			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
+			that.dealSourcesView = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_SOURCE', templateKey : "admin-settings-deal-sources",
+				individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+				{
+					initializeMilestoneListners(el);
+
+					//Enable sorting for sources
+					dealSourcesSorting();
+				} });
+			that.dealSourcesView.collection.fetch();
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(that.dealSourcesView.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.milestones-tab').addClass('select');
+			$(".active").removeClass("active");
+			$('.settings-deal-sources').addClass('active');
+			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+			$('.settings-deal-sources').parent().removeClass('b-b-none');
+
+		}, "#milestone-listner");
 	},
 
 	dealGoal : function()
 	{
-			if (!CURRENT_DOMAIN_USER.is_admin)
+		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
 			$('#content').html(getTemplate('others-not-allowed',{}));
 			return;
 		}
+		var that1 = this;
 		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
-			$("#milestone-listner").html(getTemplate("admin-settings"), {});
-		$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
-		
-/*		getTemplate("admin-settings-deal-goals-main", {}, undefined, function(template_ui){
-						if(!template_ui)
-							  return;*/
-							
-						
-		this.dealGoalsView = new Base_Collection_View({ url : '/core/api/users', templateKey : "admin-settings-deal-goals",
-			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
-			{
-				initQuota(function(){
-				initializeMilestoneListners(el);
-				
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#milestone-listner').html($(template_ui));
+			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
 
-						var d=$('#goal_duration span').html();
-				d=new Date(d);
-				var start=getUTCMidNightEpochFromDate(d);
+			that1.dealGoalsView = new Base_Collection_View({ url : '/core/api/users', templateKey : "admin-settings-deal-goals",
+				individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+				{
+					initQuota(function(){
+					initializeMilestoneListners(el);
+					
 
-					$.ajax({ type : 'GET', url : '/core/api/goals?start_time='+start/1000, 
-					contentType : "application/json; charset=utf-8", dataType : 'json' ,
-						success:function(data)
-						{
-							console.log(data);
-							var count=0,amount=0;
-							$('#deal-sources-table').find('td').each(function(index){
-								var that=$(this);
-								that.find('.count').val("");
-										that.find('.amount').val("");
-								$.each(data,function(index,jsond){
-									console.log(jsond);
-									if(jsond.domain_user_id==that.find('div').attr('id')){
-										that.find('.count').val(jsond.count);
-										that.find('.amount').val(jsond.amount);
-										that.attr('id',jsond.id);
-										that.attr('data',jsond.start_time);
-										//flag=true;
-									}
+							var d=$('#goal_duration span').html();
+					d=new Date(d);
+					var start=getUTCMidNightEpochFromDate(d);
 
-							});
-								if(that.find('.count').val()!="")
-								count=count+parseInt(that.find('.count').val());
-								if(that.find('.amount').val()!="")
-									amount=amount+parseFloat(that.find('.amount').val());
-							});
+						$.ajax({ type : 'GET', url : '/core/api/goals?start_time='+start/1000, 
+						contentType : "application/json; charset=utf-8", dataType : 'json' ,
+							success:function(data)
+							{
+								console.log(data);
+								var count=0,amount=0;
+								$('#deal-sources-table').find('td').each(function(index){
+									var that=$(this);
+									that.find('.count').val("");
+											that.find('.amount').val("");
+									$.each(data,function(index,jsond){
+										console.log(jsond);
+										if(jsond.domain_user_id==that.find('div').attr('id')){
+											that.find('.count').val(jsond.count);
+											that.find('.amount').val(jsond.amount);
+											that.attr('id',jsond.id);
+											that.attr('data',jsond.start_time);
+											//flag=true;
+										}
 
-							
-							percentCountAndAmount(count,amount);
-						}
-				});
-				});
-				
-			}  });	
-		this.dealGoalsView.collection.fetch();
-		//$('#settings-milestones-tab-content').html($(template_ui));
-		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealGoalsView.render().el);
-		
-		
-//});
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.milestones-tab').addClass('select');
-		$(".active").removeClass("active");
-		$('.settings-deal-goal').addClass('active');
-		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+								});
+									if(that.find('.count').val()!="")
+									count=count+parseInt(that.find('.count').val());
+									if(that.find('.amount').val()!="")
+										amount=amount+parseFloat(that.find('.amount').val());
+								});
 
+								
+								percentCountAndAmount(count,amount);
+							}
+					});
+					});
+					
+				}  });	
+			that1.dealGoalsView.collection.fetch();
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(that1.dealGoalsView.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.milestones-tab').addClass('select');
+			$(".active").removeClass("active");
+			$('.settings-deal-goal').addClass('active');
+			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+			$('.settings-deal-goal').parent().removeClass('b-b-none');
+
+		}, "#milestone-listner");
 	}
 
 });

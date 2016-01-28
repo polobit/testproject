@@ -21,7 +21,7 @@
 	</div>
 </td>
 <td style="width:25%">
-	<div class="overflow-hidden line-clamp line-clamp-2" style="-webkit-line-clamp:1">
+	<div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="-webkit-line-clamp:1">
 		{{#each tags}}
     		<span class="label bg-light dk text-tiny">{{this}}</span>	
 		{{/each}}
@@ -243,8 +243,10 @@
 		<i class="fa fa-clock-o m-r-xs"></i>	
 		<time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" end}}" >{{get_duration start end}}</time>
 		</div>
+        <div class="clearfix"></div>
+        <div class="pull-left text-xs text-muted m-r-md" style="font-size:14px;">{{epochToHumanDate "mmmm dd" start}}</div>
 		{{#if this.contacts}}
-			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:79px;">
+			<div class="pull-left m-b-xxs text-ellipsis">
 				{{#related_to_one contacts}}{{/related_to_one}}
 			</div>
 		{{/if}}
@@ -275,8 +277,10 @@
 		<i class="fa fa-clock-o m-r-xs"></i>	
 		<time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" endEpoch}}" >{{get_duration startEpoch endEpoch}}</time>
 		</div>
+		 <div class="clearfix"></div>
+        <div class="pull-left text-xs text-muted m-r-md" style="font-size:14px;">{{epochToHumanDate "mmmm dd" start}}</div>
 		{{#if this.contacts}}
-			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:79px;">
+			<div class="pull-left m-b-xxs text-ellipsis">
 				{{#each contacts}}
 					<span class="label bg-light dk text-tiny">{{getContactDisplayValue this}}</span> 
 				{{/each}}
@@ -2338,7 +2342,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
 				<i id="{{id}}-close" class="c-p fa fa-times StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
-        		<div class=" v-middle hidden-md bg-light dker portlet-panel dealGraph"  style="height:100%;cursor:auto;">
+        		<div class=" v-middle hidden-md bg-light dker portlet-panel dealGraph"  style="height:91px;max-height:91px;cursor:auto;">
                 </div>
                 <div class="col dk  r-r padder-portlet portlets-companies-model-list overflow-hidden" style="cursor:auto;">
              	<div class="pull-right clear-fix text-muted p-t-xs pos-abs goal_count_success" style="display:none">
@@ -2352,7 +2356,7 @@ Deleted  {{custom1}} Campaigns<br/>
         	</div>
         	<div style="margin-right: -1px">
         	<div class="r bg-light hbox no-border  p-t-none ">
-        	<div class="v-middle hidden-md bg-light dker portlet-panel revenueGraph" style="cursor:auto;height:100%">
+        	<div class="v-middle hidden-md bg-light dker portlet-panel revenueGraph" style="cursor:auto;max-height:91px;height:91px">
                 </div>
                 <div class="col dk  padder-portlet r-r portlet-panel overflow-hidden" style="cursor:auto;">
                 	<div class="pull-right clear-fix text-muted p-t-xs pos-abs goal_amount_success" style="display:none">

@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
-import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
@@ -20,19 +19,17 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
-import com.campaignio.servlets.deferred.EmailOpenDeferredTask;
 import com.campaignio.tasklets.agile.SendEmail;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>EmailOpenServlet</code> is the servlet that track emails opened. The
@@ -127,7 +124,7 @@ public class EmailOpenServlet extends HttpServlet
 	{
 	    // Interrupt Campaign cron tasks.
 	    if (!StringUtils.isBlank(campaignId) && !StringUtils.isBlank(trackerId))
-		interruptCronTasksOfOpened(campaignId, trackerId);
+		interruptCronTasksOfOpened(campaignId, trackerId, namespace);
 	}
     }
 
@@ -302,24 +299,36 @@ public class EmailOpenServlet extends HttpServlet
      * @param openTrackingId
      *            - Send Email open tracking id.
      */
-    private void interruptCronTasksOfOpened(String campaignId, String subscriberId)
+    private void interruptCronTasksOfOpened(String campaignId, String subscriberId, String namespace)
     {
-	try
-	{
-	    // set email_open true
-	    JSONObject customData = new JSONObject();
-	    customData.put(SendEmail.EMAIL_OPEN, true);
+    	boolean lock = false;
+    	String cacheKey = namespace+"_"+campaignId+"_" + subscriberId;
+    	
+		try
+		{
+			lock = CacheUtil.acquireLock(cacheKey, 500);
+			
+			if(!lock)
+				return;
 
-	    // Interrupt opened in DeferredTask
-	    EmailOpenDeferredTask emailOpenDeferredTask = new EmailOpenDeferredTask(campaignId, subscriberId,
-		    customData.toString());
-	    Queue queue = QueueFactory.getQueue(AgileQueues.CRON_INTERRUPT_QUEUE);
-	    queue.addAsync(TaskOptions.Builder.withPayload(emailOpenDeferredTask));
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+			// set email_open true
+		    JSONObject customData = new JSONObject();
+		    customData.put(SendEmail.EMAIL_OPEN, true);
+	
+		    // Interrupt Opened node
+		    CronUtil.interrupt(campaignId, subscriberId, null, new JSONObject(customData));
+			
+		}
+		catch (Exception e)
+		{
+			System.err.println("Exception occured while interrupting crons of opened - " + e.getMessage());
+		    e.printStackTrace();
+		}
+		finally
+		{
+			if(lock)
+				CacheUtil.deleteCache(cacheKey);
+		}
     }
 
     /**

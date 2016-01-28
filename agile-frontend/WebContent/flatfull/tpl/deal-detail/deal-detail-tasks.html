@@ -44,32 +44,32 @@
 <div class="pull-left rightThumbView">
 <div class="pull-left  text-md text-cap w-full">
     {{#if is_complete}}
-			<div class="m-t-n-sm"><span><i class="fa fa-check"></i></span><div class="task-subject text-ellipsis pos-rlt pos-t-xs inline-block text-l-t" style="max-width:75%;margin-left:9px"><a  href="#task/{{id}}" class="inline text-ellipsis  w-full">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+			<div class="m-t-n-sm">{{#is_mobile}} {{else}} <span><i class="fa fa-check"></i></span> {{/is_mobile}}<div class="task-subject text-ellipsis pos-rlt pos-t-xs inline-block text-l-t {{#is_mobile}} {{else}} m-l-sm {{/is_mobile}}" style="max-width:75%;"><a  href="#task/{{id}}" class="inline text-ellipsis  w-full">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
 					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
-                   <span class="block m-l-md p-l-xs m-t-n-xs"><label class="label bg-light text-tiny" style="font-size:11px;"><!-- <i class="fa {{icons type}} hide"></i>&nbsp; -->{{ucfirst type}}</label></span>
+                   <span class="block {{#is_mobile}} {{else}} m-l-md p-l-xs m-t-n-xs {{/is_mobile}} "><label class="label bg-light text-tiny" style="font-size:11px;"><!-- <i class="fa {{icons type}} hide"></i>&nbsp; -->{{ucfirst type}}</label></span>
 				</div>
 		{{else}}
-			<div class="m-t-n-sm"><label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-deal-task form-control" type="checkbox"/><i></i></label><div class="task-subject text-ellipsis pos-rlt  pos-t-xs inline-block" style="max-width:75%"><a class="inline text-ellipsis   w-full"  href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+			<div class="m-t-n-sm">{{#is_mobile}} {{else}} <label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-deal-task form-control" type="checkbox"/><i></i></label> {{/is_mobile}} <div class="task-subject text-ellipsis pos-rlt  pos-t-xs inline-block" style="max-width:75%"><a class="inline text-ellipsis   w-full"  href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
 					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
-                    <span class="block m-l-md p-l-xs m-t-n-xs"><label class="label bg-light text-tiny" style="font-size:11px;"><!-- <i class="fa {{icons type}}"></i>&nbsp; -->{{ucfirst type}}</label></span>
+                    <span class="block {{#is_mobile}} {{else}} m-l-md p-l-xs m-t-n-xs {{/is_mobile}}"><label class="label bg-light text-tiny" style="font-size:11px;"><!-- <i class="fa {{icons type}}"></i>&nbsp; -->{{ucfirst type}}</label></span>
 				</div>
 	{{/if}}
 </div>
     
      <div class="clearfix"></div>
  
-	<div><span class="m-l-md p-l-xs text-xs">Due: <i class="fa fa-clock-o m-r-xs hide"></i><time class="task-created-time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span></div>
-    <div class="m-l-md p-l-xs">	
+	<div><span class="{{#is_mobile}} {{else}} m-l-md p-l-xs {{/is_mobile}} text-xs">Due: <i class="fa fa-clock-o m-r-xs hide"></i><time class="task-created-time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span></div>
+    <div class="{{#is_mobile}} {{else}} m-l-md p-l-xs {{/is_mobile}} ">	
 		{{#each contacts}}
            	{{#if id}}
 				{{#isDuplicateContactProperty properties "email"}}
 
 					{{else}}
 						{{#if_contact_type "PERSON"}}	
-							<a  href="#contact/{{id}}" >{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+							<a  href="#contact/{{id}}" >{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a  href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        					<a  href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		
@@ -79,7 +79,7 @@
 		</div>
 		<div class="clearfix"></div>
  <div class="pull-left">
-     <small class="edit-hover text-muted m-l-md p-l-xs"> 
+     <small class="edit-hover text-muted {{#is_mobile}} {{else}} m-l-md p-l-xs {{/is_mobile}}"> 
           <i class="fa fa-clock-o m-r-xs"></i>
 			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 		</small>

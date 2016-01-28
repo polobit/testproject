@@ -329,18 +329,24 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 	<div class="wrapper rounded6" id="templateContainer">
 		<div id="templateBody" class="bodyContent rounded6">
 			<%
-			    String campaignId = request.getParameter("cid");
+			    String campaignId = request.getParameter("cid"); campaignId = StringUtils.isBlank(campaignId) ? "" : campaignId.trim(); // To avoid NPE
 			    String status = request.getParameter("status");
 			    String tag = request.getParameter("t");
-			    String email = request.getParameter("email");
+			    String email = request.getParameter("email"); email = StringUtils.isBlank(email) ? "" : email; // To avoid NPE
 			    String campaign_name = request.getParameter("c_name");
 			    String unsubscribeEmail = request.getParameter("unsubscribe_email");
 			    String unsubscribeName = request.getParameter("unsubscribe_name");
 			    
+			    String hiddenEmail = request.getParameter("he"); hiddenEmail = StringUtils.isBlank(hiddenEmail) ? "" : hiddenEmail;
+			    
+			    // To Fix trailing space email getting trimmed issue
+			    if(StringUtils.equalsIgnoreCase(email.trim(), hiddenEmail.trim()))
+			    	email = hiddenEmail;
+			    
 			    // Used to send as from name in confirmation email
 			    String company = request.getParameter("company");
 
-			    System.out.println(campaignId + ":" + status + ":" + tag + ":" + email);
+			    System.out.println(campaignId + ":" + status + ":" + tag + ":" + email + "_");
 
 			    Contact contact = ContactUtil.searchContactByEmail(email);
 

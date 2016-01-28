@@ -121,7 +121,7 @@ public class WebCalendarEventUtil
 			// Remove all filled odd timing slots from available/possible slots.
 			possibleSlots = removeAllOddSlots(possibleSlots, filledGoogleSlots);
 		}
-		
+//		
 //		// Get all filled slots from office calendar.
 //		List<List<Long>> filledOfficeSlots = Office365CalendarUtil.getFilledOfficeSlots(userid, slotTime, timezone,
 //				timezoneName, startTime, endTime);
@@ -526,7 +526,9 @@ public class WebCalendarEventUtil
 			 * Make sub slot of filled slot as per selected duration(slot time)
 			 * and add in list
 			 */
-			filledSlots.addAll(makeSlots(slotTime, e.start, e.end));
+			if(e.start != null && e.end !=null){
+				filledSlots.addAll(makeSlots(slotTime, e.start, e.end));
+			}
 		}
 
 		return filledSlots;
