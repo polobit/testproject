@@ -134,7 +134,7 @@ function initializeSubmitHandler(form, emailField, subdomainField, submit_button
 							 submitForm(form, submit_button);
 							 $('.loading-image').removeClass("hide");
 						 }, function(error){
-						 	$('.loading-image').removeClass("hide");
+						 	$('.loading-image').addClass("hide");
 						 	$(submit_button).removeAttr("disabled");
 
 						 	if(domain)
