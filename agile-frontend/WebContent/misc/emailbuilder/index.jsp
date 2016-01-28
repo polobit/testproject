@@ -1,6 +1,5 @@
 <%
 Long id = (long)0;
-String content = "";
 long unixTime = System.currentTimeMillis() / 1000L;
 %>
 
@@ -635,7 +634,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
             </div>
             <!--/span-->
 
-            <a href="#" class="btn btn-info btn-xs" id="edittamplate">Edit background</a>
+            <a href="#" class="btn btn-info btn-xs" id="edittamplate" style="margin-bottom: 2px;">Edit background</a>
             <div id="tosave" data-id="<%=id%>"  data-paramone="11" data-paramtwo="22" data-paramthree="33">
                 <!-- inizio parte html da salvare -->
                 <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee" >

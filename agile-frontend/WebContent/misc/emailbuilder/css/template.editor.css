@@ -300,6 +300,7 @@ div.mce-widget {
     /*min-height: 800px*/
     overflow-x: hidden;
     height: 100%;
+    padding-right: 5px;
 }
 .orderbutton {
     cursor: move;

@@ -480,6 +480,7 @@ function handleButtons(obj) {
 }
 
 function handleButtonsTxt(obj) {
+    $('#buttons').hide();
     var buttons = obj.find('table tbody tr td a.textbuttonsimg');
     if(buttons.length) {
         $('#buttonstxt').show();
