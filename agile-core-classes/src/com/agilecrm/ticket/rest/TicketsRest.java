@@ -892,6 +892,22 @@ public class TicketsRest
 	}
 
 	@GET
+	@Path("/email")
+	public List<Tickets> getTicketsByEmail(@QueryParam("email") String email)
+	{
+		try
+		{
+			return TicketsUtil.getTicketsByEmail(email);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	@GET
 	@Path("/delete/text-document")
 	public void deleteTextDocument(@QueryParam("id") Long ticketID)
 	{

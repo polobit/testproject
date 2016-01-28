@@ -907,4 +907,15 @@ public class TicketsUtil
 
 		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data);
 	}
+
+	/**
+	 * 
+	 */
+	public static List<Tickets> getTicketsByEmail(String email) throws JSONException
+	{
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("requester_email", email);
+
+		return Tickets.ticketsDao.listByProperty(map);
+	}
 }
