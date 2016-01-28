@@ -54,7 +54,6 @@ AGILE_EB_OPTIONS['templateId'] = "";
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
 
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.2.6/plugins/colorpicker/plugin.min.js"></script>
         <script type="text/javascript" src="js/colpick.js"></script>
         <script type="text/javascript" src="js/template.editor.js?t=<%=unixTime%>"></script>
 
@@ -635,7 +634,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
             <!--/span-->
 
             <a href="#" class="btn btn-info btn-xs" id="edittamplate" style="margin-bottom: 2px;">Edit background</a>
-            <div id="tosave" data-id="<%=id%>"  data-paramone="11" data-paramtwo="22" data-paramthree="33">
+            <div id="tosave" style="width:98%;" data-id="<%=id%>"  data-paramone="11" data-paramtwo="22" data-paramthree="33">
                 <!-- inizio parte html da salvare -->
                 <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee" >
                     <tr>
