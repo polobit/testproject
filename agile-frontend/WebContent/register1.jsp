@@ -101,6 +101,8 @@ margin-bottom:0px;
 <script type="text/javascript" src="/lib/bootstrap.min.js"></script>
 <script type='text/javascript' src='/lib/jquery-new/jquery.steps.min.js'></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
+<script src="https://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.jquery.min.js"></script>
+
 <script type="text/javascript">
 jQuery.validator.setDefaults({
 	debug: true,
