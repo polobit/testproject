@@ -9,9 +9,9 @@
 	</system-properties>
 
   <!--instance and scaling settings-->
-  <instance-class>B2</instance-class>
+  <instance-class>B4</instance-class>
   <basic-scaling>
-    <max-instances>4</max-instances>
+    <max-instances>8</max-instances>
   </basic-scaling>
   <use-google-connector-j>true</use-google-connector-j>
 </appengine-web-app>
