@@ -10,6 +10,15 @@
 $(function()
 {
 
+	
+	$(window).on("hashchange", function(e){
+		var oldUrl = e.originalEvent.oldURL;
+		if(!oldUrl){
+			 return;
+		}
+		Agile_Old_Hash = oldUrl.split("#")[1];
+	});
+
 	$('body').on('click', '.edit-note', function(e)
 	{
 		e.preventDefault();
