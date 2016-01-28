@@ -107,14 +107,13 @@
 		<input type="hidden" id="portlet-type"/>
 		<input type="hidden" id="portlet-name"/>
 		<form id="portletsContactsGrowthGraphSettingsForm" name="portletsContactsGrowthGraphSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
-			<div class="control-group form-group" style="margin-bottom:3px;">
-				<div  id="portlet-tags">
-						<ul id="portlet-ul-tags" name="tags" class= "tagsinput tags p-n"></ul>
-				</div>
+			<div class="control-group form-group">
 				<label class="control-label col-sm-3">Tags <span class="field_req">*</span></label>
-				
 				<div class="controls col-sm-8">
-					<input name="tags" type="text" id="addPortletBulkTags" class="tags-typeahead multi-tags form-control" placeholder="Enter tags separated by comma" onkeyup="hidePortletErrors(this);" style="margin-bottom:11px;"/>
+					<div  id="portlet-tags">
+						<ul id="portlet-ul-tags" name="tags" class= "tagsinput tags p-n"></ul>
+					</div>
+					<input name="tags" type="text" id="addPortletBulkTags" class="tags-typeahead multi-tags form-control" placeholder="Enter tags separated by comma" onkeyup="hidePortletErrors(this);" />      
 				</div>
 			</div>
 			<div class="control-group form-group">
@@ -473,6 +472,7 @@
 					</select>
 				</div>
 			</div>
+
 			<div class="control-group form-group" id="tasks-control-group">
 				<label class="control-label">Tasks</label>
 				<div class="controls">
@@ -482,6 +482,7 @@
 					</select>
 				</div>
 			</div>
+			
 			<div class="control-group form-group">
 				<label class="control-label">Split by</label>
 				<div class="controls">
