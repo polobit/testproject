@@ -2216,6 +2216,7 @@ li.error {
 	border-radius: 10px;
 }
 
+
 .list-bottom {
 /*	-webkit-border-radius: 0 0 3px 3px;
 	-moz-border-radius: 0 0 3px 3px;
@@ -3037,4 +3038,13 @@ width : 150px;
 table.hide-head-checkbox th label.i-checks {
       visibility: hidden;
 }
+
+#portlets::-webkit-scrollbar {
+    width: 5px;
+}
+#portlets::-webkit-scrollbar-thumb {
+	background: #999;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
 }
