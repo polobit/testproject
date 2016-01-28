@@ -103,22 +103,21 @@ function showCustomFieldModel(data)
 			if(custom_field_model_json)
 			{
 				//App_Admin_Settings.customFieldsListView.collection.remove(custom_field_model_json);
-				custom_field_model_json.set(new BaseModel(model),{silent:true});
-				if(model.scope=="CONTACT")
+				custom_field_model_json.set(model);
+			/*	if(model.scope=="CONTACT")
 					App_Admin_Settings.contactCustomFieldsListView.render(true);
 				else if(model.scope=="COMPANY")
 					App_Admin_Settings.companyCustomFieldsListView.render(true);
 				else if(model.scope=="DEAL")
 					App_Admin_Settings.dealCustomFieldsListView.render(true);
 				else if(model.scope=="CASE")
-					App_Admin_Settings.caseCustomFieldsListView.render(true);
+					App_Admin_Settings.caseCustomFieldsListView.render(true);*/
 			}
 			
 			else
 			{
 				if(model.scope=="CONTACT"){
 					App_Admin_Settings.contactCustomFieldsListView.collection.add(model);
-					App_Admin_Settings.contactCustomFieldsListView.render(true);
 				}else if(model.scope=="COMPANY"){
 					App_Admin_Settings.companyCustomFieldsListView.collection.add(model);
 					App_Admin_Settings.companyCustomFieldsListView.render(true);
@@ -400,6 +399,7 @@ function show_custom_fields_helper(custom_fields, properties){
 					}else{
 						if(isModal){
 							el = el.concat('<div class="control-group form-group modal-cbx-m-t"><div class="checkbox '+modal_checkbox+' col-sm-6"><label class="i-checks i-checks-sm">'
+
 									+'<input type="'
 									+field_type
 									+'" class="'
@@ -426,6 +426,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				if(field.is_required){
 					if(isModal){
 						el = el.concat('<div class="control-group form-group modal-cbx-m-t"><div class="checkbox '+modal_checkbox+' col-sm-6">'
+
 								+'<label class="i-checks i-checks-sm"><input type="'
 								+field_type
 								+'" class="'
@@ -450,6 +451,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				else{
 					if(isModal){
 						el = el.concat('<div class="control-group form-group modal-cbx-m-t"><div class="checkbox '+modal_checkbox+' col-sm-6"><label class="i-checks i-checks-sm">'
+
 								+'<input type="'
 								+field_type
 								+'" class="'
@@ -584,7 +586,113 @@ function show_custom_fields_helper(custom_fields, properties){
 			//If custom field is formula we return without appending anything	
 			return;
 		}
-		
+		else if(field.field_type.toLowerCase() == "contact")
+		{
+			field_type = "contact";
+			if(field.is_required){
+				if(isModal){
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break-all"><b>'
+								+field.field_label
+								+'</b><span class="field_req">*</span></label><div class="controls">'
+								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
+								+'<input type="text" class="'
+								+field.field_type.toLowerCase()
+								+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
+								+field.id+' name="'+field.field_label
+								+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+				}else{
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'">	<label class="control-label '+label_style+'">'
+							+field.field_label
+							+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'">'
+							+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
+							+'<input type="text" class="'
+							+field.field_type.toLowerCase()
+							+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
+							+field.id+' name="'+field.field_label
+							+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+				}
+			}else{
+				if(isModal){
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break-all"><b>'
+								+field.field_label
+								+'</b></label><div class="controls">'
+								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
+								+'<input type="text" class="'
+								+field.field_type.toLowerCase()
+								+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
+								+field.id+' name="'
+								+field.field_label
+								+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+				}else{
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label '+label_style+'">'
+							+field.field_label
+							+'</label><div class="controls col-sm-9 '+div_col9_style+'">'
+							+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
+							+'<input type="text" class="'
+							+field.field_type.toLowerCase()
+							+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
+							+field.id+' name="'
+							+field.field_label
+							+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+				}
+			}
+				
+			return;
+		}
+		else if(field.field_type.toLowerCase() == "company")
+		{
+			field_type = "company";
+			if(field.is_required){
+				if(isModal){
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break-all"><b>'
+								+field.field_label
+								+'</b><span class="field_req">*</span></label><div class="controls">'
+								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
+								+'<input type="text" class="'
+								+field.field_type.toLowerCase()
+								+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
+								+field.id+' name="'+field.field_label
+								+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+				}else{
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'">	<label class="control-label '+label_style+'">'
+							+field.field_label
+							+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'">'
+							+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
+							+'<input type="text" class="'
+							+field.field_type.toLowerCase()
+							+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
+							+field.id+' name="'+field.field_label
+							+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+				}
+			}else{
+				if(isModal){
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break-all"><b>'
+								+field.field_label
+								+'</b></label><div class="controls">'
+								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
+								+'<input type="text" class="'
+								+field.field_type.toLowerCase()
+								+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
+								+field.id+' name="'
+								+field.field_label
+								+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+				}else{
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label '+label_style+'">'
+							+field.field_label
+							+'</label><div class="controls col-sm-9 '+div_col9_style+'">'
+							+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
+							+'<input type="text" class="'
+							+field.field_type.toLowerCase()
+							+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
+							+field.id+' name="'
+							+field.field_label
+							+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+				}
+			}
+				
+			return;
+		}
+
 		// If the field is not of type list or checkbox, create text field (plain text field or date field)
 		if(field.is_required){
 			if(isModal){
@@ -824,6 +932,15 @@ function serialize_custom_fields(form)
     		else
     			json.value = en.dateFormatter({raw: "MM/dd/yyyy"})(new Date(this.value));
     	
+    	if($(element).hasClass("contact_input") && isValidContactCustomField($(element).attr('id')))
+    	{
+    		var contact_values = [];
+			$('ul[name="'+name+'"]', $('#'+form)).find('li').each(function(index){
+				contact_values.push($(this).attr("data"));
+			});
+			json.value = JSON.stringify(contact_values);
+    	}
+
     	
     	if(!json.value)
     		return;
@@ -838,7 +955,28 @@ function groupingCustomFields(base_model){
 			templateKey : templateKey, individual_tag_name : 'tr',
 			postRenderCallback : function(custom_el){
 				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
+				bindModelSearchable(App_Admin_Settings.contactCustomFieldsListView.collection)
 			}});
+		function bindModelSearchable(collection)
+		{
+			$.each(collection, function (i, m){
+				
+			})
+		}
+		function appendItem(base_model)
+		{
+			addCustomFieldToSearch(base_model);
+		};
+
+		function removeItem(base_model)
+		{
+			removeCustomFieldFromSortOptions(base_model);
+		};
+
+		App_Admin_Settings.contactCustomFieldsListView.collection.bind('add', appendItem);
+		App_Admin_Settings.contactCustomFieldsListView.collection.bind('remove', removeItem);
+		
+
 		App_Admin_Settings.contactCustomFieldsListView.collection.fetch();
 		$('#customfields-contacts-accordion', this.el).append($(App_Admin_Settings.contactCustomFieldsListView.render().el));
 	}else if(base_model.get("scope")=="COMPANY"){
