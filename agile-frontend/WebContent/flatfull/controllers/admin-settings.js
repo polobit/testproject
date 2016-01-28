@@ -1001,7 +1001,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#milestone-listner').html($(template_ui));
 			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
 			that.dealSourcesView = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_SOURCE', templateKey : "admin-settings-deal-sources",
-				individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+				individual_tag_name : 'tr', sort_collection : false, postRenderCallback : function(el)
 				{
 					initializeMilestoneListners(el);
 
