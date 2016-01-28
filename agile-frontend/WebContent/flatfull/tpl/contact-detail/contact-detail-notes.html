@@ -73,7 +73,7 @@
 
 	{{else}}
 			{{#if_equals callType "inbound"}}Incoming call from{{else}}Outgoing call to{{/if_equals}}  {{phone}} </br>
-			{{#if status}} status : {{status}} {{/if}}</br>
+			{{#if status}} Status: {{status}} {{/if}}</br>
 			{{#if_equals status "busy"}}
 			{{else}}
 			{{#if_equals status "failed"}}
@@ -82,7 +82,7 @@
 			{{else}}
 			{{#if_equals status "no-answer"}}
 			{{else}}
-				Duration :  {{toProperFormat duration}} </br>
+				Duration:  {{toProperFormat duration}} </br>
 			{{/if_equals}}
 			{{/if_equals}}
 			{{/if_equals}}

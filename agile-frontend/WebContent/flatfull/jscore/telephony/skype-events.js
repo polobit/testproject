@@ -364,7 +364,7 @@ function saveCallActivitySkype(call){
 	}
 	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 	
-	if(callStatus == "Answered"){
+	if(call.status == "Answered"){
 		return;
 	}
 	

@@ -1269,7 +1269,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 						data.duration = callRespJson.duration;
 						data.contId = json.id;
 						data.contact_name = contact_name;
-						data.widget = "Twilioio";
+						data.widget = "Twilio";
 						showDynamicCallLogs(data);
 
 						//changed by prakash to add the last_called parameter and last_connected parameter of contact object on server side - 15/6/15

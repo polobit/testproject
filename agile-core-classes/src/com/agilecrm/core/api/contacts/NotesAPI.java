@@ -115,11 +115,22 @@ public class NotesAPI
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String saveCallActivity(@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration,@FormParam("callWidget") String callWidget) {		
-	    
-	    	if (!(StringUtils.isBlank(phone))){
-	    		Contact contact = ContactUtil.searchContactByPhoneNumber(phone);
+	public String saveCallActivity(@FormParam("id") Long id, @FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration,@FormParam("callWidget") String callWidget) {		
 
+		Contact contact  = null;
+		
+		if (null != id ){
+    		contact = ContactUtil.getContact(id);
+		}else{
+			if(StringUtils.isBlank(phone)){
+				contact = ContactUtil.searchContactByPhoneNumber(phone);
+			}
+		}
+		
+		if(null == contact){
+			return "";
+		}
+		
 	    		if (direction.equalsIgnoreCase("outbound-dial"))
 	    		{
 	    			ActivityUtil.createLogForCalls(callWidget, phone, Call.OUTBOUND, status.toLowerCase(), duration);
@@ -136,9 +147,8 @@ public class NotesAPI
 	    		    // Trigger for inbound
 	    		    CallTriggerUtil.executeTriggerForCall(contact, callWidget, Call.INBOUND, status.toLowerCase(), duration);
 	    		}
-	    	}
-		return "";
+
+	   return "";
 	}
-    
   
 }

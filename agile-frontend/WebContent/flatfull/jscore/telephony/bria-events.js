@@ -461,7 +461,7 @@ function saveCallActivityBria(call){
 	}
 	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 
-	if(callStatus == "Answered"){
+	if(call.status == "Answered"){
 		return;
 	}
 	if(call.direction == "Outgoing" || call.direction == "outgoing"){
