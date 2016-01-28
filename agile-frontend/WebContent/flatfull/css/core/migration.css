@@ -1864,9 +1864,10 @@ color:#727272;
 .hide-margin-mobile {
   margin-bottom: 0px;
 }
-.hide-margin-mobile .mobile-pad-content {
+.hide-margin-mobile .mobile-pad-content,.mobile-pad-content {
   margin-top: 15px;
 }
+
 #timeline .text-xs,#timeline .contact-job-title {
   white-space: normal;
 }
@@ -1885,9 +1886,13 @@ color:#727272;
   color: #98a6ad!important;
   text-align: center;
 }
-.ativity-block-ul {
+#contactDetailsTab .ativity-block-ul {
   margin-top: -10px;
 }
+.deal-detail-related-mobile-view tr th:nth-of-type(n+3),.deal-detail-related-mobile-view tr td:nth-of-type(n+3) {
+  display: none;
+}
+
 }
 
 @media all and (min-width: 768px) {
