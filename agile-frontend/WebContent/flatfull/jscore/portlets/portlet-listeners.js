@@ -664,7 +664,7 @@ function initializePortletsListeners() {
 		});
 
 	});
-
+	$('.portlet_body #portlets-opportunities-model-list > tr').off();
 	$('.portlet_body').on(
 			"click",
 			'#portlets-opportunities-model-list > tr',
