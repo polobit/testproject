@@ -15,7 +15,7 @@ $(function ($) {
                 textColor: '#ffffff',
                 height: 100,
                 width: 100,
-                fontSize: 60,
+                fontSize: 40,
                 fontWeight: 400,
                 fontFamily: 'HelveticaNeue-Light,Helvetica Neue Light,Helvetica Neue,Helvetica, Arial,Lucida Grande, sans-serif'
             }, options);

@@ -1142,10 +1142,10 @@ public class ContactsAPI
      * @param companyName
      * @return
      */
-    @Path("/company/validate/{company-name}")
+    @Path("/company/validate")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public boolean isCompanyExist(@PathParam("company-name") String companyName)
+    public boolean isCompanyExist(@QueryParam("companyName") String companyName)
     {
 	return ContactUtil.isCompanyExist(companyName);
     }

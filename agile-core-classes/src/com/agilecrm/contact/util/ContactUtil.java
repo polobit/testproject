@@ -317,14 +317,18 @@ public class ContactUtil
 	if (StringUtils.isBlank(email))
 	    return null;
 
-	Map<String, Object> searchMap = new HashMap<String, Object>();
 
 	Query<Contact> q = dao.ofy().query(Contact.class);
 	q.filter("properties.name", Contact.EMAIL);
 	q.filter("type", Type.PERSON);
 	q.filter("properties.value", email.toLowerCase());
 
-	return q.get();
+	try {
+		return dao.get(q.getKey());
+	} catch (Exception e) {
+		return null;
+	}
+	
     }
 
     public static Contact searchContactByCompanyName(String companyName)
@@ -1814,6 +1818,6 @@ public class ContactUtil
 	LastContactedDeferredTask lastContactDeferredtask = new LastContactedDeferredTask(contactId,
 		lastCampaignEmailed, toEmail);
 	Queue queue = QueueFactory.getQueue(AgileQueues.LAST_CONTACTED_UPDATE_QUEUE);
-	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask));
+	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).etaMillis(System.currentTimeMillis() + 5000));
     }
 }

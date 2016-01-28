@@ -1,5 +1,6 @@
 package com.campaignio.servlets.util;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Iterator;
 
@@ -175,7 +176,7 @@ public class TrackClickUtil
 		    try
 		    {
 			value = contactJSON.getString(propertyName);
-			params += ("&" + propertyName.trim() + "=" + value.trim());
+			params += ("&" + propertyName.trim() + "=" + URLEncoder.encode(value.trim(), "UTF-8"));
 		    }
 		    catch (Exception e)
 		    {
