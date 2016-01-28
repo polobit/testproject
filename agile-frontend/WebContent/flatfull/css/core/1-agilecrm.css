@@ -3125,9 +3125,9 @@ table.hide-head-checkbox th label.i-checks {
 .no-wrap {
  white-space: normal !important;
 }
+ 
+} 
 
-/* Safari only override */
-/*::i-block-chrome,.no-wrap {
- white-space: normal;
-}*/
+.deals-nowrap .no-wrap {
+ white-space: nowrap !important;
 }
