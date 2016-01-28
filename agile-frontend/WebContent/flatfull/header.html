@@ -12,6 +12,7 @@
 <%@page import="com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil"%>
 <%@page import="com.agilecrm.subscription.restrictions.db.BillingRestriction"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
+<%@page import="com.agilecrm.util.MobileUADetector"%>
 <%
 
 			System.out.println("Domain user " + domainUser);
@@ -71,13 +72,9 @@
           <i class="glyphicon glyphicon-align-justify"></i>
         </button>
 
-        <button class="pull-right visible-xs" id="search-menu-mobile" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll-to="app">
-          <i class="fa fa-search"></i>
-        </button>
-
-         <li class="dropdown hide  visible-xs pull-right wrapper-sm p-t" id="menu1"><a class="dropdown-toggle"
+        <li class="dropdown hide add-modal-mobile visible-xs pull-right wrapper-sm p-t" id="menu1"><a class="dropdown-toggle"
                 data-toggle="dropdown" href=""><i class="fa fa-plus"></i></a>
-                <ul class="dropdown-menu animated fadeInRight">
+                <ul class="dropdown-menu  animated fadeInRight">
                   <li><a href="#personModal"  class="person" id="person">
                       <div class="pull-left">Contact</div><div class='pull-right shortcuts'>Shift + N</div><div class="clearfix"></div></a></li>
                   <li><a href="#companyModal"  data-toggle="modal"
@@ -99,22 +96,36 @@
                 src='img/ajax-loader.gif' />
                 --></li>
 
-                <li class="nav-bar-search  search-mobile pull-right wrapper-sm">
-                <form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift">
-          <div class="input-group">
-              <input id="searchText" type="text"
-                    data-provide="typeahead"
-                    class="typeahead typeahead_contacts search-query form-control-custom input-sm bg-light no-border rounded padder"
-                    placeholder="Search">
-                    
-                     <!-- <input id="search-results" 
-                    type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
-            <span class="input-group-btn">
+        <button class="pull-right hide visible-xs search-menu-mobile" id="search-menu-mobile" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll-to="app">
+          <i class="icon-magnifier search-menu-mobile"></i>
+        </button>
+
+         
+
+                <%
+						   if(MobileUADetector.isMobileOrTablet(request.getHeader("user-agent"))){
+						  %>
+							<li class="nav-bar-search pull-right  search-mobile hide">
+								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift">
+					<div class="input-group">
+							<input id="searchText" type="text"
+										data-provide="typeahead"
+										class="typeahead typeahead_contacts search-query form-control-custom input-sm bg-light no-border rounded padder"
+										placeholder="Search">
+										
+										 <!-- <input id="search-results" 
+										type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
+						<span class="input-group-btn">
                 <button type="submit" class="btn btn-sm bg-light rounded" id="search-results" style="height:30px;"><i class="fa fa-search"></i></button>
               </span>
-              </div>        
-                </form>
-              </li>
+              </div>				
+								</form>
+							</li>
+							<%}%>
+
+
+                 
+             
 
 
 				
@@ -266,6 +277,9 @@
 								<span class="visible-xs">Recent Activity</span>
 							</a><ul class="dropdown-menu animated fadeInRight recent-view" style="width:23em; right:-11px;"></ul>
 							</li>  -->
+                          <%
+						   if(!MobileUADetector.isMobileOrTablet(request.getHeader("user-agent"))){
+						  %>
 							<li class="nav-bar-search">
 								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift">
 					<div class="input-group">
@@ -282,7 +296,7 @@
               </div>				
 								</form>
 							</li>
-							
+							<%}%>
 						</ul>
   
  			<ul class="nav  navbar-nav  navbar-right show_shortcuts">	

@@ -42,23 +42,47 @@ $('#app-aside-folded').on('click', function(e) {
 	
 $(document).ready(function(){
 
+
+
+	$('.search-mobile').addClass('hide');
+	$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
+
+
+	$('body').on('click touchstart',function(e){
+		if(e.target.id != 'searchText' && e.target.classList[1] != 'search-menu-mobile'){
+		$('.search-mobile').addClass('hide');
+		$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
+		}
+	});
+
    $("#contact-results li").click(function(){
    $("#mobile-menu-settings").trigger('click');
    });
+
+   // search bar in mobile 
+		$('#search-menu-mobile').on('click',function(){
+		$('.search-mobile').toggleClass('hide');
+		$('.add-modal-mobile , #search-menu-mobile').toggleClass('visible-xs');
+		});
  
+
+
+
+
  	 $('.aside-wrap').off('ul li');
 	 if(agile_is_mobile_browser()){
 	 	$('body').on('touchstart','.aside-wrap ul li',function(){
  		$('.aside-wrap ul li').removeClass('active');
  		$(this).addClass('active');
  		});
-	 }
+
+ 		
+		}
+
+		
 
 	
-	//show search bar in mobile 
-	$('#search-menu-mobile').on('click',function(){
-		$('.search-mobile').toggleClass('show-search-view-anim');
-	});
+	
 
 	if(( $(window).width() ) < 768 ) {
 
@@ -138,9 +162,9 @@ $(document).ready(function(){
      $('body').css('overflow-y','auto');
 	});	
 	
-	/*$(".navi-wrap li a").click(function(){
+	$(".navi-wrap li a").click(function(){
 	  $("#mobile-menu").delay(2000).trigger("click");
-	});*/
+	});
 	
 
    $("#mobile-menu-settings").on("click",function(){

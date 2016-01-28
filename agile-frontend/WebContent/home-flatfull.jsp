@@ -21,6 +21,8 @@
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
+
+
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -400,11 +402,11 @@ if(currentUserPrefs.menuPosition.equals("top")){
                   <span class="visible-xs">Tasks</span>
 
                       <span title="Tasks due" class="navbar_due_tasks pull-right-xs"><span  id="due_tasks_count" class="badge badge-sm up bg-danger"></span></span></a></li>
-                <li id="recent-menu" class="dropdown" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Activity"><a
+               <!-- <li id="recent-menu" class="dropdown" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Activity"><a
                 class="dropdown-toggle" data-toggle="dropdown" href=""> <i class='fa fa-history' style="opacity:0.8"></i>
                 <span class="visible-xs">Recent Activity</span>
               </a><ul class="dropdown-menu animated fadeInRight recent-view" style="width:23em; right:-11px;"></ul>
-              </li> 
+              </li>  -->
               
               
             </ul>
@@ -451,10 +453,11 @@ if(currentUserPrefs.menuPosition.equals("top")){
                 <span>Profile</span>
               </li>
 
-              <li id="fat-menu" class="dropdown">
-              <a href="" class="dropdown-toggle" data-toggle="dropdown"><!-- <i
+              <li id="fat-menu" class="mobile-fat-menu">
+              <a href='#user-prefs'>
+              <span><!-- <i
                   class="agilecrm-profile-dropdown"></i> -->
-<span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
+<span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm" style="margin-top:5px;">
         <%  if (!StringUtils.isEmpty(currentUserPrefs.pic))
               out.println("<img src='"
               + currentUserPrefs.pic
@@ -465,11 +468,10 @@ if(currentUserPrefs.menuPosition.equals("top")){
                
                
               </span>
-              <div class="pull-left text-ellipsis w-auto hidden-sm hidden-md" style="max-width:150px;"><span class="hidden-sm hidden-md"><%=domainUser.name%></span></div>
-              <b class="caret"></b>                 
-                   </a>
-                <ul class="dropdown-menu animated fadeInRight w">
-                  <li><a href='#user-prefs' class="b-b">
+              <div class="text-ellipsis w-auto hidden-sm hidden-md" style="max-width:150px;"><span class="hidden-sm hidden-md"><%=domainUser.name%></span></div>
+             <!-- <b class="caret"></b> -->   
+
+             <div  class="">
                       <%-- <%
                           if (!StringUtils.isEmpty(currentUserPrefs.pic))
                                 out.println("<img src='"
@@ -477,9 +479,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
                                     + "'style='padding:2px !important' class='thumbnail m-b-none thumb-xxs m-r-xs inline'></img>");
                               else
                                 out.println("<img src='img/gravatar.png' style='padding:2px !important' class='thumbnail m-b-none thumb-xxs m-r-xs inline'></img>");
-                      %> --%> <span class="text-sm m-r-md"> <b><%=user.getEmail()%></b></span>
+                      %> --%> <span class="text-sm m-r-md"> <%=user.getEmail()%></span>
 
-                  </a></li>
+                  </div>
+                  </span>              
+                   </a>
+                </li>
+
+                  <li></li>
 
                   <li><a href="#user-prefs"><!-- <i class="icon-cog"></i> -->
 
@@ -494,7 +501,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
                   %>
                   <li><a href="#themeandlayout"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left">Theme & Layout</div><div class='pull-right shortcuts'>Shift + L</div><div class="clearfix"></div></a></li>
-                  <li class="divider"></li>
+                  
                   <li><a href="#subscribe"><!-- <i class="icon-cog"></i> -->
                       <div class="pull-left">Upgrade</div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
                   <li><a href="https://www.agilecrm.com/product-updates" target="_blank"><!-- <i class="icon-off"></i> -->
@@ -506,11 +513,11 @@ if(currentUserPrefs.menuPosition.equals("top")){
                   <li><a href="#" onclick="$('li#fat-menu').removeClass('open');clickdesk_show_livechat_popup();"><i class="icon-comment"></i> Live Chat</a></li>  -->
                   <!-- <li><a href="#help"><i class="icon-question"></i>
                       Help</a></li> -->
-                  <li class="divider"></li>
+                  
                   <li><a href="<%=logoutURL%>"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left">Logout</div><div class='pull-right shortcuts'>Shift + G</div><div class="clearfix"></div></a></li>
 
-                </ul></li>
+                </li>
               <%
                   }
               %>
@@ -559,7 +566,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 
  
- 
+  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>

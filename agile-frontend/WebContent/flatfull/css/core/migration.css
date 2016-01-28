@@ -609,6 +609,8 @@ left:0;
 
 }
 
+
+
 @media all and (max-width: 767px) {
 
 #searchText {
@@ -1747,7 +1749,7 @@ box-shadow: none;
 
 #searchForm {
   
-  padding: 10px 35px;
+  padding: 9px 35px;
 }
 
 .navbar-nav li a i+span {
@@ -1888,6 +1890,14 @@ color:#727272;
 .ativity-block-ul {
   margin-top: -10px;
 }
+/*.fat-menu li a {
+    display: block;
+    padding: 10px 55px 5px;
+}*/
+.hide-hover-mobile:hover {
+  background: none!Important;
+}
+
 }
 
 @media all and (min-width: 768px) {
@@ -2040,17 +2050,10 @@ color:#727272;
 }
 
 .search-mobile {
-  margin-top: -72px;
+  width: 66%;
   list-style: none;
-  transition:all 1s ease-in-out 0s;
-  position: relative;
-  z-index: -9;
 }
 
-.show-search-view-anim {
-  margin-top: 0px;
-  z-index: 9;
-}
 
 
 
