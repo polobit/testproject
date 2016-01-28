@@ -469,6 +469,7 @@ var portlet_utility = {
 						postRenderCallback : function(p_el) {
 							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 								$(".time-ago", p_el).timeago();
+								initializePortletsListeners();
 							});
 							portlet_utility.addWidgetToGridster(base_model);
 						}
@@ -519,6 +520,7 @@ var portlet_utility = {
 						postRenderCallback : function(p_el) {
 							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 								$(".time-ago", p_el).timeago();
+								initializePortletsListeners();
 							});
 							portlet_utility.addWidgetToGridster(base_model);
 						}
@@ -568,6 +570,7 @@ var portlet_utility = {
 											.getStartAndEndDatesOnDue(start_date_str),
 									portlet_utility
 											.getStartAndEndDatesOnDue(end_date_str));
+							initializePortletsListeners();
 						}
 					});
 			portlet_utility.renderPortletsInnerCollection(
@@ -591,6 +594,7 @@ var portlet_utility = {
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
 							portlet_utility.addWidgetToGridster(base_model);
+							initializePortletsListeners();
 						}
 					});
 			portlet_utility.renderPortletsInnerCollection(
