@@ -641,49 +641,34 @@ AGILE_EB_OPTIONS['templateId'] = "";
                 <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee" >
                     <tr>
                         <td width="100%" id="primary" class="main demo" align="center" valign="top" >
-                            <!-- inizio contentuto      -->
+                            <div class="column" style="min-height:150px;">
 
-                            <div class="column">
+<div class="lyrow dragitem">
+    <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
 
-                               <% if(content.isEmpty()) { %>
-                                <!-- default element text -->
-                                <div class="lyrow">
-                                    <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
-                                    <span class="drag label label-default"><i class="glyphicon glyphicon-move"></i></span>
-                                    <div class="view">
+    <span class="drag label label-default"><i class="glyphicon glyphicon-move"></i></span>
+    <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
 
-
-                                        <div class="row clearfix">
-                                            <table width="640" class="main" cellspacing="0" cellpadding="0" border="0" bgcolor="#FFFFFF" align="center" data-type='text-block' style="background-color: #FFFFFF;">
-                                                <tbody>
-                                                    <tr>
-                                                        <td  class="block-text" align="left" style="padding:10px 50px 10px 50px;font-family:Arial;font-size:13px;color:#000000;line-height:22px">
-                                                            <p style="margin:0px 0px 10px 0px;line-height:22px">
-                                                                <center>
-                                                                    <i class="fa fa-arrow-up fa-3x"></i> <br><br>
-                                                                Modify me or drag the content of email in top or bottom <br><br>
-                                                                <i class="fa fa-arrow-down fa-3x"></i>
-                                                                </center>
-                                                            </p>
-
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <% } else {
-                                    out.print(content);
-                                }
-                                %>
+    <div class="preview">
+        <div class="icon text-block"></div>
+        <label>Text</label>
+    </div>
+    <div class="view">
+        <div class="row clearfix">
+            <table width="640" class="main" cellspacing="0" cellpadding="0" border="0" style="background-color:#FFFFFF" align="center" data-type='text-block'>
+                <tbody>
+                    <tr>
+                        <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;font-family:Arial;font-size:13px;color:#000000;line-height:22px">
+                            <div style="margin:0px 0px 10px 0px;line-height:22px" class="textFix">This is a Text Block! Click on this text to edit it. You can add content easily by dragging content blocks from the right sidebar. Drag this and other blocks around to re-order them.</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
                             </div>
-
-
-
-
                         </td>
                     </tr>
                 </table>
