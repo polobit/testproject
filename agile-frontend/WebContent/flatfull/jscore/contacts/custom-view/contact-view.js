@@ -169,6 +169,41 @@ function setupViews(cel, button_name) {
 	// });
 }
 
+
+var COMPANY_CUSTOM_SORT_VIEW = undefined;
+function setUpCompanySortFilters(el)
+{
+	if(CUSTOM_SORT_VIEW)
+	{
+		$("#contact-sorter", el).html(COMPANY_CUSTOM_SORT_VIEW.render(true).el);
+		//CUSTOM_SORT_VIEW.init();
+		//CUSTOM_SORT_VIEW.preSelectFields();
+		return;	
+	}
+
+	var view = CONTACT_SORT_FIELDS_VIEW.view();
+	COMPANY_CUSTOM_SORT_VIEW = new view ({
+		data : sort_company_configuration.getCompanySortableFields(),
+		templateKey : "contact-view-sort",
+		individual_tag_name : "li",
+		sort_collection : false,
+		postRenderCallback: function(el)
+		{
+			COMPANY_CUSTOM_SORT_VIEW.postProcess();
+		}
+	});
+
+	
+	COMPANY_CUSTOM_SORT_VIEW.init();
+	$("#contact-sorter", el).html(COMPANY_CUSTOM_SORT_VIEW.render(true).el);
+	
+
+	getSearchableCustomFields("COMPANY", function(data){
+		COMPANY_CUSTOM_SORT_VIEW.collection.add(data);
+	})
+	
+}
+
 var CUSTOM_SORT_VIEW = undefined;
 function setUpContactSortFilters(el)
 {
