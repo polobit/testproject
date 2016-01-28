@@ -257,25 +257,42 @@ public class CronUtil
 	 */
 	public static void interrupt(String custom1, String custom2, String custom3, JSONObject interruptData)
 	{
-		if (custom1 == null && custom2 == null && custom3 == null)
+		String oldNamespace = NamespaceManager.get();
+		
+		NamespaceManager.set("");
+		
+		try
+		{
+			if (custom1 == null && custom2 == null && custom3 == null)
 			return;
 
-		Map<String, Object> searchMap = new HashMap<String, Object>();
-
-		if (custom1 != null)
-			searchMap.put("custom1", custom1);
-
-		if (custom2 != null)
-			searchMap.put("custom2", custom2);
-
-		if (custom3 != null)
-			searchMap.put("custom3", custom3);
-
-		List<Cron> cronJobs = dao.listByProperty(searchMap);
-		dao.deleteAll(cronJobs);
+			Map<String, Object> searchMap = new HashMap<String, Object>();
+	
+			if (custom1 != null)
+				searchMap.put("custom1", custom1);
+	
+			if (custom2 != null)
+				searchMap.put("custom2", custom2);
+	
+			if (custom3 != null)
+				searchMap.put("custom3", custom3);
+	
 		
-		// Execute in another tasklet
-		executeTasklets(cronJobs, Cron.CRON_TYPE_INTERRUPT, interruptData, cronJobs.size());
+			List<Cron> cronJobs = dao.listByProperty(searchMap);
+			dao.deleteAll(cronJobs);
+			
+			// Execute in another tasklet
+			executeTasklets(cronJobs, Cron.CRON_TYPE_INTERRUPT, interruptData, cronJobs.size());
+		
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+		    NamespaceManager.set(oldNamespace);
+		}
 	}
 
 	/**
