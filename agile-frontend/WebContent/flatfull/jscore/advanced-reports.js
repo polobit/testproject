@@ -147,7 +147,7 @@ function initSalesCharts(callback){
 
 		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
 
-		fillSelect("source", "/core/api/categories?entity_type=DEAL_SOURCE", undefined, function()
+		/*fillSelect("source", "/core/api/categories?entity_type=DEAL_SOURCE", undefined, function()
 		{
 			
 			$('#source option').eq(0).after($('<option class="default-select" value="1">Unknown</option>'));
@@ -156,7 +156,30 @@ function initSalesCharts(callback){
 				callback();
 			});
 
-		}, '<option class="default-select" value="{{id}}">{{label}}</option>', false, undefined, "All Sources");
+		}, '<option class="default-select" value="{{id}}">{{label}}</option>', false, undefined, "All Sources");*/
+
+		var sources = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_SOURCE', sort_collection: false});
+		sources.collection.fetch({
+			success: function(data){
+				var jsonModel = data.toJSON();
+				var html =  '<option class="default-select" value="">All Sources</option>' + 
+							'<option class="default-select" value="1">Unknown</option>';
+				
+				$.each(jsonModel,function(index,dealSource){
+					html+='<option class="default-select" value="'+dealSource.id+'">'+dealSource.label+'</option>';
+				});
+				$('#source', $('#content')).html(html);
+
+				// Hide loading bar
+				hideTransitionBar();
+
+				$('#source').change(function()
+				{
+					callback();
+				});
+			}
+		});
+		
 		callback();
 
 		
