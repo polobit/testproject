@@ -15,10 +15,15 @@
             <!--Event form  -->
             <form id="activityForm" name="activityForm" method="post">
                 <fieldset>
-                        <div id="addEvent" class="control-group form-group">
+                        <div id="addEvent" class="control-group form-group" style="margin-bottom:0px;">
                             <label class="control-label col-sm-3">Event Name<span class="field_req">*</span></label>
                             <div class="controls col-sm-7">
                                 <input id="title" placeholder="Name of Event" type="text" name="title" class="required form-control" />
+                            </div>
+                        </div>
+                        <div class="text-muted">
+                            <div class="col-sm-offset-3 col-sm-7" style="font-size:12px;padding-left: 9px;margin-bottom:10px;">
+                                 Note : Events are time based such as meetings. They show up in calendar.
                             </div>
                         </div>
                         <div class="control-group form-group">
@@ -41,32 +46,42 @@
 								<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/21-0-new.gif"></img>
 							</div>
 					   </div>
-                     </div>
-
-                        <div class="control-group form-group">
-                            <label class="control-label col-sm-3">Start Date <span class="field_req">*</span></label>
-                            <div class="controls col-sm-7">
+                    <div class="row">
+                        <div class="col-sm-6">
+                        <div class="control-group form-group" style="margin-bottom:15px;">
+                            <label class="control-label col-sm-6">Start Date <span class="field_req">*</span></label>
+                            <div class="controls col-sm-5">
                                 <input type="text" name="start" placeholder="Select Date" id="event-date-1" class="required date form-control" />							
                             </div>
                         </div>
-                        <div class="control-group form-group">
-                            <label class="control-label col-sm-3">Start Time <span class="field_req">*</span></label>
-                            <div class="controls col-sm-7">
-                                <input type="text" name="start_time" class="start-timepicker required form-control" id="event-time-1"  placeholder="Time" />		
+                        </div>
+                        <div class="col-sm-6">
+                        <div class="control-group form-group" style="margin-bottom:15px;">
+                            <label class="control-label col-sm-4" style="text-align:left;font-size:13.5px;">Start Time <span class="field_req">*</span></label>
+                            <div class="controls col-sm-6">
+                                <input type="text" name="start_time" class="start-timepicker required form-control" id="event-time-1" style="width:67px" placeholder="time" />		
                             </div>
                         </div>
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="col-sm-6">
                         <div class="control-group form-group" style="margin-bottom:4px !important">
-                            <label class="control-label col-sm-3">End Date <span class="field_req">*</span></label>
-                            <div class="controls col-sm-7" style="margin-bottom:10px;">
+                            <label class="control-label col-sm-6">End Date <span class="field_req">*</span></label>
+                            <div class="controls col-sm-5">
                                 <input type="text" name="end" placeholder="Select Date" id="event-date-2" class="required date form-control" />									
                             </div>
                         </div>
+                        </div>
+                        <div class="col-sm-6">
                         <div class="control-group form-group" style="margin-bottom:4px !important">
-                            <label class="control-label col-sm-3">End Time <span class="field_req">*</span></label>
-                            <div class="controls col-sm-7">							
-                                <input type="text" name="end_time" class="end-timepicker required form-control" id="event-time-2"  placeholder="Time"/>		
+                            <label class="control-label col-sm-4">End Time <span class="field_req">*</span></label>
+                            <div class="controls col-sm-6">							
+                                <input type="text" name="end_time" class="end-timepicker required form-control" id="event-time-2"  placeholder="time" style="width:67px"/>		
                             </div>
                         </div>
+                    </div>
+                </div>
                     
                     <div class="control-group form-group">
                         <div class="checkbox col-sm-offset-3 col-sm-6">
@@ -117,11 +132,6 @@
                        </div>
 					</div>
 					
-                    <div class="text-muted">
-                        <div class="col-sm-offset-3 col-sm-7" style="font-size:12px;padding-left: 5px;">
-                             Note: Events are time based such as meetings. They show up in calendar.
-                        </div>
-                    </div>
                 </fieldset>
             </form>
         </div>
