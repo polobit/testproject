@@ -70,7 +70,7 @@ var searchDropdown = false;
 
 	 	$('body').on('click touchstart',function(e){
 		setTimeout(function(){
-		if(e.target.id != 'searchText' && e.target.classList[1] != 'search-menu-mobile')  {
+		if(e.target.id != 'searchText' && e.target.parentElement.id != 'search-menu-mobile')  {
 		$('.search-mobile').addClass('hide');
 		$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
 		}
@@ -78,24 +78,28 @@ var searchDropdown = false;
 	});
 
 	 	$('body').on('click touchstart','.mobile-add-modals',function(){
+	 		
 		if($('#aside').hasClass('off-screen')) {
+			setTimeout(function(){
 			$("#mobile-menu").trigger('click');
+			},500);
 		}
-	});
+		
+		});
 
 
 	// search bar in mobile 
 		$('#search-menu-mobile').on('click touchstart',function(){
-		$('.search-mobile').toggleClass('hide');
-		$('.add-modal-mobile , #search-menu-mobile').toggleClass('visible-xs');
+		$('.search-mobile').removeClass('hide');
+		$('.add-modal-mobile , #search-menu-mobile').removeClass('visible-xs');
 		}); 	
 
 
 
-	 	/*$('body').on('touchstart','.aside-wrap ul li',function(){
+	 	$('body').on('touchend touchcancel','.aside-wrap ul li',function(){
  		$('.aside-wrap ul li').removeClass('active');
  		$(this).addClass('active');
- 		});*/
+ 		});
 
  		
 		}
