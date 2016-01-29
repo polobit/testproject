@@ -23,6 +23,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
@@ -249,6 +250,8 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			    mapContact.put(contactField.name, contactField);
 
 			mapContact.put("id", String.valueOf(contact.id));
+			if(contact.getContactFieldValue(contact.EMAIL)!=null)
+			mapContact.put("email_image", MD5Util.getMD5Code(contact.getContactFieldValue(contact.EMAIL)));
 			// save id of this contact for href
 
 			contactListMap.add(mapContact);
