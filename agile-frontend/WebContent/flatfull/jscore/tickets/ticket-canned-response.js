@@ -5,6 +5,14 @@ var Ticket_Canned_Response = {
 
 	fetchCollection: function(callback){
 
+		if(this.cannedResponseCollection){
+			if(callback)
+				callback(this.cannedResponseCollection);
+
+			return;
+
+		}
+
 		var cannedResponses = Backbone.Collection.extend({
 		  url: '/core/api/tickets/canned-messages'
 		});

@@ -1137,6 +1137,31 @@ var Tickets = {
 
 		for(var i=0; i<ticketIDArray.length; i++)
 			$('td#' + ticketIDArray[i]).closest('tr').remove();
+	},
+
+	showPreviousTickets : function(email, el){
+		
+		var previousTickets = Backbone.Model.extend({
+			url : '/core/api/tickets/email?email=' + email
+		});
+		new previousTickets().fetch({
+			success : function(tickets) {
+
+				if(tickets.toJSON().length == 0){
+					$(".previous-tickets-panel").hide();
+					return;
+				}
+
+				$("#previous_tickets_container").html(getTemplate('previous-tickets-list', tickets.toJSON()));
+
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					$("time", $("#previous_tickets_container")).timeago();
+				});
+
+			}
+		});
+
 	}
 };
 

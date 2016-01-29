@@ -17,6 +17,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		"click .toggle-timeline" : "toggleTimeline",
 		"click .toggle-activities-notes" : "toggleActivitiesAndNotes",
+		"click .toggle-timeline-notes" : "toggleTimelineNotes",
 
 		// "click #change-sla" : "changeSla",
 		"click .contact-deals" : "showContactDeals",
@@ -254,13 +255,38 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		{
 			//Rendering ticket notes
 			App_Ticket_Module.renderNotesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
+			$(".toggle-activities-notes").show();
+			$(".toggle-timeline-notes").hide();
 		}
 		else{
 			Ticket_Timeline.render_individual_ticket_timeline();
 			tooltip_text = 'Show comments';
+
+			$(".toggle-activities-notes").hide();
+			$(".toggle-timeline-notes").show();
 		}
 
 		$('.toggle-timeline').text(tooltip_text);
+	},
+
+	toggleTimelineNotes : function(e){
+
+		var targetEle = $(".toggle-timeline-notes");
+		var currentType = targetEle.attr("rel");
+
+		if(currentType && currentType == "notes"){
+			$(".ticket-timeline-container").find(".comment").show();
+			targetEle.attr("rel", "activities");
+			targetEle.attr("data-original-title", "Hide notes");
+			targetEle.html("<i class='fa fa-ellipsis-v'></i>");
+		}
+		else{
+			//Rendering ticket notes
+			$(".ticket-timeline-container").find(".comment").hide();
+			targetEle.attr("rel", "notes");
+			targetEle.attr("data-original-title", "Show notes");
+			targetEle.html("<i class='fa fa-ellipsis-h'></i>");
+		}
 	},
 
 	toggleActivitiesAndNotes : function(e){
@@ -271,7 +297,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		if(currentType && currentType == "notes"){
 			App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
 			targetEle.attr("rel", "activities");
-			targetEle.attr("data-original-title", "Show notes");
+			targetEle.attr("data-original-title", "Hide activities");
 			targetEle.html("<i class='fa fa-ellipsis-v'></i>");
 		}
 		else{

@@ -9,13 +9,13 @@
       <context-root>agile-frontend</context-root>
     </web>
   </module>
-  <module>
+  <!-- <module>
     <web>
       <web-uri>agile-normal-bulk.war</web-uri>
       <context-root>agile-normal-bulk</context-root>
     </web>
   </module>
-   <!-- <module>
+   <module>
     <web>
       <web-uri>agile-campaigns-normal.war</web-uri>
       <context-root>agile-campaigns-normal</context-root>
