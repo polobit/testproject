@@ -77,10 +77,13 @@ function image_error(element)
         console.log("image_error");
 		$(element).attr("data-name", name);
 
-        var initialCSS = {charCount: 2,fontWeight: 'normal',width:$(element).width(), height:$(element).height()};
+        var initialCSS = {charCount: 2,fontWeight: 'normal'};
 
-        if(isIE())
-            initialCSS.fontSize = 20;
+        if(isIE()){
+             initialCSS.fontSize = 20;
+             initialCSS.width = $(element).width();
+             initialCSS.height = $(element).height();
+        }
 
 		$(element).initial(initialCSS);
 }
