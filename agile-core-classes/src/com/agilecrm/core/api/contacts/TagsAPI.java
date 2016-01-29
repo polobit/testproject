@@ -28,9 +28,12 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.TagManagement;
 import com.agilecrm.contact.deferred.TagManagementDeferredTask;
 import com.agilecrm.contact.deferred.TagManagementDeferredTask.Action;
+import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.TagUtil;
+import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -101,9 +104,19 @@ public class TagsAPI
 	{
 	    if (count == null)
 		count = "100";
+
 	    if (sortKey != null && ContactFilterUtil.isCustomField(sortKey))
 	    {
-		return ContactFilterUtil.getFilterContactsBySortKey(sortKey, Integer.parseInt(count), cursor);
+		ContactFilter filter = ContactFilterUtil.getFilterByType(Contact.Type.PERSON);
+		// {"LHS":"tags","CONDITION":"EQUALS","RHS":"improve"}
+		SearchRule rule = new SearchRule();
+		rule.LHS = "tags";
+		rule.CONDITION = RuleCondition.EQUALS;
+		rule.RHS = tag;
+
+		filter.rules.add(rule);
+
+		return ContactFilterUtil.getFilterContacts(filter, Integer.parseInt(count), cursor, sortKey);
 	    }
 
 	    if (count != null)
