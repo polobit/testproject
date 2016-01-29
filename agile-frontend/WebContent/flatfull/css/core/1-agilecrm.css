@@ -3119,3 +3119,8 @@ table.hide-head-checkbox th label.i-checks {
 {
 	z-index: 1;
 }
+
+.companies_input{
+	height:30px;
+	font-size:12px;
+}
