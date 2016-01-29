@@ -279,19 +279,19 @@ function show_custom_fields_helper(custom_fields, properties){
 			field_style = "col-sm-10";
 			div_col9_style = "col-sm-9";
 			div_col3_style = "col-sm-3";
-			modal_checkbox = "col-sm-offset-3";
+			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}else if(field.scope == "COMPANY"){
 			label_style = "control-label col-sm-3 word-break-all";
 			modal_label_style = "control-label col-sm-3 word-break-all"; 
 			modal_control_style = "col-sm-7";
 			checkbox_style = "col-sm-3";
-			modal_checkbox = "col-sm-offset-3";
+			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}else if(field.scope == "DEAL"){
 			label_style = "control-label col-sm-3 word-break-all";
 			modal_label_style = "control-label col-sm-3 word-break-all";
 			modal_control_style = "col-sm-7";
 			checkbox_style = "col-sm-3";
-			modal_checkbox = "col-sm-offset-3";
+			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}else if(field.scope == "CASE"){
 			label_style = "control-label col-sm-3 word-break-all";
 			modal_label_style = "control-label col-sm-3 word-break-all";
@@ -377,7 +377,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				if(field.scope=="DEAL"){
 					if(field.is_required){
 						if(isModal){
-							el = el.concat('<div class="control-group form-group "><div class="checkbox '+modal_checkbox+' col-sm-6"><label class="i-checks i-checks-sm ">'
+							el = el.concat('<div class="control-group form-group modal-cbx-m-t"><div class="checkbox '+modal_checkbox+' col-sm-6"><label class="i-checks i-checks-sm ">'
 									+'<input type="'
 									+field_type
 									+'" class="'
@@ -399,7 +399,7 @@ function show_custom_fields_helper(custom_fields, properties){
 						}
 					}else{
 						if(isModal){
-							el = el.concat('<div class="control-group form-group "><div class="checkbox '+modal_checkbox+' col-sm-6"><label class="i-checks i-checks-sm">'
+							el = el.concat('<div class="control-group form-group modal-cbx-m-t"><div class="checkbox '+modal_checkbox+' col-sm-6"><label class="i-checks i-checks-sm">'
 									+'<input type="'
 									+field_type
 									+'" class="'
@@ -425,7 +425,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				
 				if(field.is_required){
 					if(isModal){
-						el = el.concat('<div class="control-group form-group "><div class="checkbox '+modal_checkbox+' col-sm-6">'
+						el = el.concat('<div class="control-group form-group modal-cbx-m-t"><div class="checkbox '+modal_checkbox+' col-sm-6">'
 								+'<label class="i-checks i-checks-sm"><input type="'
 								+field_type
 								+'" class="'
@@ -449,7 +449,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 				else{
 					if(isModal){
-						el = el.concat('<div class="control-group form-group "><div class="checkbox '+modal_checkbox+' col-sm-6"><label class="i-checks i-checks-sm">'
+						el = el.concat('<div class="control-group form-group modal-cbx-m-t"><div class="checkbox '+modal_checkbox+' col-sm-6"><label class="i-checks i-checks-sm">'
 								+'<input type="'
 								+field_type
 								+'" class="'
