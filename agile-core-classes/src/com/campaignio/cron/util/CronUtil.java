@@ -35,6 +35,8 @@ import com.googlecode.objectify.Query;
  */
 public class CronUtil
 {
+	
+	private Map<String, Boolean> cacheMap = new HashMap<String, Boolean>();
 	/**
 	 * Dao of Cron class.
 	 */
@@ -219,32 +221,23 @@ public class CronUtil
 		NamespaceManager.set("");
 
 		// Get all sessions with last_messg_rcvd_time
-		Long milliSeconds = Calendar.getInstance().getTimeInMillis();
+		Long milliSeconds = System.currentTimeMillis();
 		System.out.println(milliSeconds + " " + NamespaceManager.get());
 
+		CronUtil cronUtil = new CronUtil();
+		
 		Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", milliSeconds);
 		int count = query.count();
-
 		QueryResultIterator<Cron> iterator = query.iterator();
-		
-		Map<String, Boolean> cacheMap = new HashMap<String, Boolean>();
-		String key = null;
 		
 		while (iterator.hasNext())
 		{
 			Cron cron = iterator.next();
 			dao.delete(cron);
-
 			
-			// Key that identifies duplicate crons
-			key = cron.namespace + "_"+ cron.campaign_id + "_" + cron.subscriber_id + "_" + cron.custom1 + "_" + cron.custom2 + "_" + cron.custom3;
-			
-			// To avoid duplicates crons to execute
-			if(cacheMap.containsKey(key))
-			{
-				System.err.println("Duplicate cron obtained - " + key);
+			// Skips if duplicate cron got from Datastore in the same query
+			if(cronUtil.isCronExists(cron))
 				continue;
-			}
 			
 			// Temporary list
 			List<Cron> cronList = new ArrayList<Cron>();
@@ -253,12 +246,11 @@ public class CronUtil
 			// Run cron job
 			executeTasklets(cronList, Cron.CRON_TYPE_TIME_OUT, null, count);
 			
-			cacheMap.put(key, true);
 		}
 		
-		// Clears map
-		cacheMap.clear();
-
+		// clears cacheMap
+		cronUtil.cacheMap.clear();
+		
 		NamespaceManager.set(oldNamespace);
 	}
 
@@ -299,22 +291,15 @@ public class CronUtil
 		
 			List<Cron> cronJobs = dao.listByProperty(searchMap);
 			
-			Map<String, Boolean> cacheMap = new HashMap<String, Boolean>();
-			String key = null;
+			CronUtil cronUtil = new CronUtil();
 			
 			for(Cron cron : cronJobs)
 			{
 				cron.delete();
 				
-				// Key that identifies duplicate crons
-				key = cron.namespace + "_"+ cron.campaign_id + "_" + cron.subscriber_id + "_" + cron.custom1 + "_" + cron.custom2 + "_" + cron.custom3;
-				
-				// To avoid duplicates crons to execute
-				if(cacheMap.containsKey(key))
-				{
-					System.err.println("Duplicate cron obtained - " + key);
+				// If duplicate cron obtained, skip
+				if(cronUtil.isCronExists(cron))
 					continue;
-				}
 				
 				// Temporary list
 				List<Cron> cronList = new ArrayList<Cron>();
@@ -322,12 +307,10 @@ public class CronUtil
 
 				// Execute in another tasklet
 				executeTasklets(cronList, Cron.CRON_TYPE_INTERRUPT, interruptData, cronJobs.size());
-				
-				cacheMap.put(key, true);
 			}
 
-			// Clear map
-			cacheMap.clear();
+			// Clears map
+			cronUtil.cacheMap.clear();
 		}
 		catch(Exception e)
 		{
@@ -478,4 +461,28 @@ public class CronUtil
 
 		return calendar.getTimeInMillis();
 	}
+	
+	/**
+	 * Instance method to verifies duplicate cron in the query
+	 * 
+	 * @param cron - Cron object
+	 * 
+	 * @return boolean
+	 */
+	private boolean isCronExists(Cron cron)
+	{
+		// Key that identifies duplicate crons
+		String key = cron.namespace + "_"+ cron.campaign_id + "_" + cron.subscriber_id + "_" + cron.custom1 + "_" + cron.custom2 + "_" + cron.custom3;
+		
+		if(cacheMap.containsKey(key))
+		{
+			System.err.print("Duplicate cron exists..." + key);
+			return true;
+		}
+		
+		cacheMap.put(key, true);
+		
+		return false;
+	}
 }
+
