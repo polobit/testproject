@@ -302,7 +302,7 @@ public class EmailOpenServlet extends HttpServlet
     private void interruptCronTasksOfOpened(String campaignId, String subscriberId, String namespace)
     {
     	boolean lock = false;
-    	String cacheKey = namespace+"_"+campaignId+"_" + subscriberId;
+    	String cacheKey = "eop_"+campaignId+"_" + subscriberId;
     	
 		try
 		{
@@ -328,6 +328,9 @@ public class EmailOpenServlet extends HttpServlet
 		{
 			if(lock)
 				CacheUtil.deleteCacheWithinNamespace(cacheKey);
+			
+			// Deletes temporary fields saved. Need to be removed later
+			CacheUtil.deleteCacheWithinNamespace(namespace +"_"+campaignId+"_" + subscriberId);
 		}
     }
 
