@@ -888,7 +888,7 @@ function getCalendarUsersDetails(callback)
 				json_user.id = user.id;
 				json_user.name = user.domainUser.name;
 				json_user.domain_user_id = user.domainUser.id;
-				if(hasScope("VIEW_CALENDAR")){
+				if (hasScope("VIEW_CALENDAR")) {
 					json_users.push(json_user);
 				}
 			}
