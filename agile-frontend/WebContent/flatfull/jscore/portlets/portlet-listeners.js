@@ -903,7 +903,7 @@ function initializeAddPortletsListeners() {
 							"MiniCalendar" : "left",
 							"UserActivities" : "left",
 							"Campaignstats" : "",
-							"LostDealAnalysis" : ""
+							"LostDealAnalysis" : "left"
 						};
 						if (placements_json[p_name]) {
 							placement = "left";
