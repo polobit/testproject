@@ -112,47 +112,15 @@ function handleObjects() {
                 switch (t) {
                     case 'title':
 
-                        var titolo = self.find('h1');
-                        var subtitolo = self.find('h4');
-
-                        titolo.unbind('click');
-                        titolo.bind('click', function (e) {
-                            $('.selected-item').removeClass('selected-item').css('border', 'none');
-
-                            var fontcolor = $(this).css('fontColor');
-                            var text =        $(this).html();
-                            var fontsize =    $(this).css('font-size');
-                            var fontfamily =  $(this).css('font-family');
-                            var background =  $(this).css('background-color');
-
-                            $('#selector').val('h1');
-                            $(this).addClass('selected-item');
-                            $(this).css('border','1px dotted red');
-
-
-                            storeValues(self, fontcolor, text, fontsize, fontfamily, background);
-
-                        });
-
-                        subtitolo.unbind('click');
-                        subtitolo.bind('click', function (e) {
-                            $('.selected-item').removeClass('selected-item').css('border', 'none');
-
-                            var fontcolor = $(this).css('fontColor');
-                            var text =        $(this).html();
-                            var fontsize =    $(this).css('font-size');
-                            var fontfamily =  $(this).css('font-family');
-                            var background =  $(this).css('background-color');
-
-                            $('#selector').val('h4');
-
-                            $(this).addClass('selected-item');
-                            $(this).css('border','1px dotted red');
-
-                            storeValues(self, fontcolor, text, fontsize, fontfamily, background);
-
-                        });
-
+                        var titleElement = self.find('.title');
+                        $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        var fontcolor = titleElement.css('fontColor');
+                        var text =        titleElement.html();
+                        var fontsize =    titleElement.css('font-size');
+                        var fontfamily =  titleElement.css('font-family');
+                        var background =  titleElement.css('background-color');
+                        $('#selector').val('.title');
+                        storeValues(self, fontcolor, text, fontsize, fontfamily, background);
                         break;
 
                     case 'text-block' :
@@ -274,7 +242,6 @@ function handleObjects() {
                     case 'imgtxt':
                         //    $('#'+$('#path').val()).unbind('click');
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
-                        var titleElement = self.find('tbody tr td h2');
                         var textElement = self.find('tbody tr td div.textFix');
                         var img = self.find('tbody tr td table tbody tr td img');
                         // devi mettere un each perchè ci sono piu di un immagine.
@@ -302,22 +269,6 @@ function handleObjects() {
 
                         hideAllSettings("#editor");
                         $('#imageproperties').show();
-
-                        titleElement.unbind('click');
-                        titleElement.bind('click', function () {
-                            $('#selector').val('tbody tr td h2');
-                            $('.selected-item').removeClass('selected-item').css('border', 'none');
-                            titleElement.css('border', '1px dotted red');
-                            $(this).addClass('selected-item');
-
-                            var fontcolor = titleElement.css('fontColor');
-                            var text = titleElement.html();
-                            var fontsize = titleElement.css('font-size');
-                            var fontfamily = titleElement.css('font-family');
-                            var background = $('#' + $('#path').val()).css('background-color');
-
-                            storeValues($('#' + $('#path').val()), fontcolor, text, fontsize, fontfamily, background);
-                        });
 
                         textElement.unbind('click');
                         textElement.bind('click', function () {
@@ -826,7 +777,8 @@ $(document).ready(function () {
 
 
         $(this).parent().find('div div.text a').click(function () {
-            self.popover('hide');
+            // self.popover('hide');
+            self.click();
         });
 
     });
@@ -894,7 +846,8 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
 
         $(this).parent().find('div div.text a').click(function () {
-            self.popover('hide');
+            // self.popover('hide');
+            self.click();
         });
 
     });
@@ -1000,8 +953,8 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         obj.css('color', $('#colortext').val());
         obj.css('font-size', $('#sizetext').val());
 
-        $('#fontstyle').popover('hide');
-
+        //$('#fontstyle').popover('hide');
+        $('#fontstyle').click();
 
     });
     $('#fontstyle').on('hide.bs.popover', function () {
