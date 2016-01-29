@@ -1737,7 +1737,9 @@ public class PortletUtil {
 					l.add((long) tasksList.size());
 					Long Total_closure = 0L;
 					for(Task task:tasksList){
-						Long time_closure=task.task_completed_time-task.task_start_time;
+						Long time_closure=0L;
+						if(task.task_start_time!=0)
+						time_closure=(task.task_completed_time-task.task_start_time)/(60*60);
 						Total_closure+=time_closure;
 								}
 					l.add(Total_closure);

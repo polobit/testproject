@@ -869,6 +869,45 @@ var portlet_graph_utility = {
 													categories : groupByList,
 													labels : {
 														formatter : function() {
+															if(base_model.get('name')=='Average Closure')
+															{
+																var userIndex = 0;
+																for ( var i = 0; i < groupByList.length; i++) {
+																	if (this.value == groupByList[i]
+																			&& groupByList[i]
+																					.substring(
+																							0,
+																							8) != "no image")
+																		userIndex = i;
+																	else if (this.value == groupByList[i]
+																			&& groupByList[i]
+																					.substring(
+																							0,
+																							8) == "no image")
+																		userIndex = parseInt(groupByList[i]
+																				.substring(
+																						9,
+																						10));
+																}
+																if (this.value != undefined
+																		&& this.value != ""
+																		&& this.value
+																				.substring(
+																						0,
+																						8) != "no image")
+																	return '<img src="'
+																			+ this.value
+																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
+																			+ domainUserNamesList[userIndex]
+																			+ '"/>';
+																else
+																	return '<img src="'
+																			+ gravatarImgForPortlets(25)
+																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
+																			+ domainUserNamesList[userIndex]
+																			+ '"/>';
+															}
+																else{
 															if (base_model
 																	.get('settings')["group-by"] == "user") {
 																var userIndex = 0;
@@ -917,6 +956,7 @@ var portlet_graph_utility = {
 																	return this.value;
 																}
 															}
+														}
 														},
 														style : {
 															color : '#98a6ad',

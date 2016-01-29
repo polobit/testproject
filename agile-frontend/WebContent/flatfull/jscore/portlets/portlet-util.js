@@ -1133,7 +1133,7 @@ var portlet_utility = {
 								+ '&end-date='
 								+ portlet_utility
 										.getStartAndEndDatesOnDue(end_date_str);
-			portlet_graph_data_utility.dealsAssignedGraphData(base_model,
+			portlet_graph_data_utility.taskClosureGraphData(base_model,
 					selector, url);
 			setPortletContentHeight(base_model);
 			break;
