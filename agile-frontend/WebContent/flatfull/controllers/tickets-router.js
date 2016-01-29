@@ -874,6 +874,18 @@ $('#content').find('.helpdesk-tab').addClass('select');
 					template = 'ticket-daily-report';
 					callback = Ticket_Reports.dailyTickets;
 					break;
+				case 'hourly-tickets':
+					template = 'ticket-hourly-report';
+					callback = Ticket_Reports.hourlyTickets;
+					break;
+				case 'priority-report':
+					template = 'ticket-priority-report';
+					callback = Ticket_Reports.priorityReports;
+					break;
+				case 'status-report':
+					template = 'ticket-status-report';
+					callback = Ticket_Reports.statusReports;
+					break;
 			}
 			getTemplate(template, {}, undefined, function(template_ui){
 

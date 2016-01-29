@@ -250,6 +250,15 @@ public class TicketsDocument implements BuilderInterface
 		return SearchServiceFactory.getSearchService().getIndex(indexSpec);
 	}
 
+	/**
+	 * 
+	 * @param queryString
+	 * @param cursorString
+	 * @param sortField
+	 * @param limit
+	 * @return
+	 * @throws Exception
+	 */
 	public JSONObject searchDocuments(String queryString, String cursorString, String sortField, int limit)
 			throws Exception
 	{
@@ -264,7 +273,8 @@ public class TicketsDocument implements BuilderInterface
 		if (StringUtils.isNotBlank(cursorString))
 			cursor = Cursor.newBuilder().setPerResult(true).build(URLDecoder.decode(cursorString));
 
-		QueryOptions options = QueryOptions.newBuilder().setCursor(cursor).setLimit(limit).build();
+		QueryOptions options = QueryOptions.newBuilder().setCursor(cursor).setReturningIdsOnly(true).setLimit(limit)
+				.build();
 		Query query = null;
 
 		// SortDirection direction = sortField.startsWith("-") ?
@@ -341,13 +351,33 @@ public class TicketsDocument implements BuilderInterface
 		return new JSONObject().put("cursor", newCursor).put("keys", resultArticleIds).put("count", totalResults);
 	}
 
+	/**
+	 * 
+	 * @param queryString
+	 * @return
+	 */
 	public int countRows(String queryString)
 	{
-		QueryOptions options = QueryOptions.newBuilder().setReturningIdsOnly(true).build();
+		QueryOptions options = QueryOptions.newBuilder().setReturningIdsOnly(true).setLimit(1000).build();
 
 		Query query = Query.newBuilder().setOptions(options).build(queryString);
 
 		return getIndex().search(query).getResults().size();
+	}
+
+	/**
+	 * 
+	 * @param queryString
+	 * @param fields
+	 * @return text documents with provided field names
+	 */
+	public Collection<ScoredDocument> executeQuery(String queryString, String... fields)
+	{
+		QueryOptions options = QueryOptions.newBuilder().setFieldsToReturn(fields).setLimit(1000).build();
+
+		Query query = Query.newBuilder().setOptions(options).build(queryString);
+
+		return getIndex().search(query).getResults();
 	}
 
 	public int getTicketsCount(String queryString)

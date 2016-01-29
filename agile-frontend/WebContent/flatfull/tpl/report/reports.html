@@ -117,6 +117,9 @@
                                              <li role="presentation" data-tab="3">
                                                 <a href="#campaign-tab" role="tab" data-toggle="tab">Campaigns</a>
                                             </li>
+                                             <li role="presentation" data-tab="3">
+                                                <a href="#helpdesk-tab" role="tab" data-toggle="tab">Help Desk</a>
+                                            </li>
 
 </ul>
 
@@ -604,6 +607,90 @@
 </div>
 </div>
 
+<div class="tab-pane" id="helpdesk-tab">
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel wrapper text-center b-a">
+                <!-- Icon and Title -->
+                <div>
+                    <div>
+                        <i class="icon-tasks icon-3x"></i>
+                    </div>
+                    <b>Tickets</b>
+                </div>
+                <br />
+                <!-- Description -->
+                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+                    View new, open, pending and closed tickets for each hour, day and week.
+                </div>
+                <!-- Add button -->
+                <div>
+                    <a class="btn btn-sm btn-default" href="#ticket-report/daily-tickets">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel wrapper text-center b-a">
+                <!-- Icon and Title -->
+                <div>
+                    <div>
+                        <i class="fa fa-check-square-o fa-3x"></i>
+                    </div>
+                    <b>SLA report</b>
+                </div>
+                <br />
+                <!-- Description -->
+                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+                    View tickets closed in < 2 hrs, between 2-6 hrs, between 6-12 hrs etc.
+                </div>
+                <!-- Add button -->
+                <div>
+                    <a class="btn btn-sm btn-default" href="#contact-reports">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel wrapper text-center b-a">
+                <!-- Icon and Title -->
+                <div>
+                    <div>
+                        <i class="fa fa-star fa-3x"></i>
+                    </div>
+                    <b>Ticket priority</b>
+                </div>
+                <br />
+                <!-- Description -->
+                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+                    View tickets priority chart
+                </div>
+                <!-- Add button -->
+                <div>
+                    <a class="btn btn-sm btn-default" href="#ticket-report/priority-report">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel wrapper text-center b-a">
+                <!-- Icon and Title -->
+                <div>
+                    <div>
+                        <i class="fa fa-th-large fa-3x"></i>
+                    </div>
+                    <b>Ticket status</b>
+                </div>
+                <br />
+                <!-- Description -->
+                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+                    View tickets status chart
+                </div>
+                <!-- Add button -->
+                <div>
+                    <a class="btn btn-sm btn-default" href="#ticket-report/status-report">Go</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </div>
 

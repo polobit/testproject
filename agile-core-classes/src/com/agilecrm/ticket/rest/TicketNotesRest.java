@@ -120,14 +120,13 @@ public class TicketNotesRest
 
 				if (ticket.status == Status.NEW)
 				{
-					ticket.status = Status.OPEN;
-
 					ticket.assignee_id = domainUserKey;
 					ticket.assigneeID = domainUserKey.getId();
+					ticket.assigned_time = Calendar.getInstance().getTimeInMillis();
 
 					// Logging status changed activity
 					new TicketActivity(TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-							Status.NEW.toString(), Status.OPEN.toString(), "status").save();
+							Status.NEW.toString(), Status.PENDING.toString(), "status").save();
 				}
 				else
 				{
@@ -141,7 +140,15 @@ public class TicketNotesRest
 						ticket.assignee_id = domainUserKey;
 						ticket.assigneeID = domainUserKey.getId();
 					}
+
+					if (Status.OPEN == ticket.status)
+						// Logging status changed activity
+						new TicketActivity(TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+								Status.OPEN.toString(), Status.PENDING.toString(), "status").save();
 				}
+
+				// Set status to pending as it is replied by assignee
+				ticket.status = Status.PENDING;
 
 				// Updating ticket entity
 				Tickets.ticketsDao.put(ticket);
@@ -155,10 +162,6 @@ public class TicketNotesRest
 						notes.note_type, new ArrayList<TicketDocuments>());
 
 				TicketNotesUtil.sendReplyToRequester(ticket);
-
-				// Logging status changed activity
-				new TicketActivity(TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-						Status.OPEN.toString(), Status.PENDING.toString(), "status").save();
 
 				// Logging public notes activity
 				new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id, html_text,
