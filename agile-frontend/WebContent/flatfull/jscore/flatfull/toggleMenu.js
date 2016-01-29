@@ -42,10 +42,7 @@ $('#app-aside-folded').on('click', function(e) {
 	
 $(document).ready(function(){
 
-var searchDropdown = false;
 
-	$('.search-mobile').addClass('hide');
-	$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
 
 
 	
@@ -66,11 +63,11 @@ var searchDropdown = false;
 
 
  	 $('.aside-wrap').off('ul li');
-	 if(agile_is_mobile_browser()){
+	 if(!agile_is_mobile_browser()){
 
 	 	$('body').on('click',function(e){
 		setTimeout(function(){
-		if(e.target.id != 'searchText' && e.target.parentElement.id != 'search-menu-mobile' && e.target.id != 'search-menu-mobile')  {
+		if(e.target.id != 'searchText' && e.target.parentElement.id != 'search-menu-mobile')  {
 		$('.search-mobile').addClass('hide');
 		$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
 		}
