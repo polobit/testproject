@@ -50,6 +50,7 @@ import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
 import com.agilecrm.cases.Case;
 import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactFullDetails;
 import com.agilecrm.contact.Note;
@@ -120,7 +121,7 @@ public class ContactsAPI
 
 	if (sortKey != null && ContactFilterUtil.isCustomField(sortKey))
 	{
-	    return ContactFilterUtil.getFilterContactsBySortKey(sortKey, Integer.parseInt(count), cursor);
+	    return ContactFilterUtil.getFilterContactsBySortKey(sortKey, Integer.parseInt(count), cursor, Type.PERSON);
 	}
 	List<Contact> contacts = ContactUtil.getAllContactsByOrder(Integer.parseInt(count), cursor, sortKey);
 	return contacts;
@@ -239,7 +240,7 @@ public class ContactsAPI
     	{
     		
     		if (sortKey != null && ContactFilterUtil.isCustomField(sortKey)){
-    			return ContactFilterUtil.getFilterCompanyBySortKey(sortKey, Integer.parseInt(count), cursor);
+    			return ContactFilterUtil.getFilterContactsBySortKey(sortKey, Integer.parseInt(count), cursor, Type.COMPANY);
     		}
     		
     	    System.out.println("Fetching companies page by page");
