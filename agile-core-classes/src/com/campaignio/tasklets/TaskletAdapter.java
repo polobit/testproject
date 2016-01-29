@@ -1,15 +1,20 @@
 package com.campaignio.tasklets;
 
+import java.util.Date;
 import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
+import com.campaignio.reports.DateUtil;
+import com.campaignio.servlets.util.TrackClickUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.google.appengine.repackaged.com.google.protobuf.proto1api.Timestamp;
 
 /**
  * <code>TaskletAdapter</code> is an adapter class which implements Tasklet
@@ -141,9 +146,17 @@ public class TaskletAdapter implements Tasklet
      */
     public static String getStringValue(JSONObject nodeJSON, JSONObject subscriberJSON, JSONObject data, String keyName) throws Exception
     {
+        	JSONObject json=(JSONObject)subscriberJSON.get("data");
+        	Date date= new Date();
+        	json.put("current_date", DateUtil.getDateInGivenFormat(new java.sql.Timestamp(date.getTime()),"dd MMM yyyy",  AccountPrefsUtil.getTimeZone()));
+        	System.out.println("ddddddddddd "+json.toString());
+       
+        	
+    	
 	Object returnValue = getValue(nodeJSON, subscriberJSON, data, keyName);
 	if (returnValue == null)
 	    return null;
+	System.out.println("AAAAAAAAAAA" +data.toString());
 
 	return replaceTokens((String) returnValue, subscriberJSON, data);
     }
