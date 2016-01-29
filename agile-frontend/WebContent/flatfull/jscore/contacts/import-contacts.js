@@ -669,7 +669,7 @@ $('#' + id).on('click', '#import-deals', function(e)
 							// contact uploaded
 
 							showNotyPopUp('information', "Deals are now being imported. You will be notified on email when it is done", "top", 5000);
-							location.href = window.location.origin + "#deals";
+							location.href = agileWindowOrigin() + "#deals";
 							// Calls vefiryUploadStatus with data returned
 							// from the url i.e., key of the memcache
 							// verifyUploadStatus(data);
