@@ -195,7 +195,7 @@ function initializeTasksListeners(){
 	{
 		event.preventDefault();
 		console.log("group-view event");
-				
+
 		// Change UI and input field
 		applyDetailsFromGroupView();
 	});	
@@ -371,6 +371,33 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 
 								App_Calendar.allTasksListView.collection.add(data);
 								App_Calendar.allTasksListView.render(true);
+								return;
+							}
+
+							if (criteria == "CALENDAR")
+							{
+								if (isUpdate){
+									fullCalTasks.fullCalendar('removeEvents', task.id);
+								}
+								setCalendarTaskColors(task);
+								if ($('#new-owner-tasks').data("selected_item") == "all-pending-tasks"){
+									if(task["is_complete"] == false || task["is_complete"] == "false"){
+										fullCalTasks.fullCalendar('renderEvent', task);
+									}
+								}
+								else if ($('#new-owner-tasks').data("selected_item") == "my-pending-tasks"){
+									if((task["is_complete"] == false || task["is_complete"] == "false") && task.taskOwner.id == CURRENT_DOMAIN_USER.id){
+										fullCalTasks.fullCalendar('renderEvent', task);
+									}
+								}
+								else if ($('#new-owner-tasks').data("selected_item") == CURRENT_DOMAIN_USER.id){
+									if(task.taskOwner.id == CURRENT_DOMAIN_USER.id){
+										fullCalTasks.fullCalendar('renderEvent', task);
+									}
+								}
+								else{
+									fullCalTasks.fullCalendar('renderEvent', task);
+								}
 								return;
 							}
 
