@@ -13,16 +13,21 @@
                     <input name="id" type="hidden" value="{{id}}" /> 
                     <input type="hidden"  name="type" id="type" value="{{type}}"/>
                      <input type="hidden"  name="meeting_type" id="meeting_type"/>
-                    <div id="addEvent" class="control-group form-group">
+                    <div id="addEvent" class="control-group form-group" style="margin-bottom:0px;">
                             <label class="control-label col-sm-3">Event Name<span class="field_req">*</span></label>
-                            <div class="controls col-sm-8">
+                            <div class="controls col-sm-7">
                                 <input id="title" placeholder="Name of Event" type="text" name="title" class="required form-control" />
+                            </div>
+                    </div>
+                    <div class="text-muted">
+                            <div class="col-sm-offset-3 col-sm-7" style="font-size:12px;padding-left: 9px;margin-bottom:10px;">
+                                 Note : Events are time based such as meetings. They show up in calendar.
                             </div>
                     </div>
 
                     <div class="control-group form-group">
                             <label for="priority_type" class="control-label col-sm-3">Priority </label>
-                            <div class="controls col-sm-8">
+                            <div class="controls col-sm-7">
                                 <span class="input ">
                                     <select name="color" id="color" size="1" class="input-small form-control">
                                         <option value="red">High</option>
@@ -35,7 +40,7 @@
 
                     <div class="control-group form-group">
                             <label class="control-label col-sm-3">Owner<span class="field_req">*</span></label>
-                            <div class="controls col-sm-8" id="event-owners">
+                            <div class="controls col-sm-7" id="event-owners">
                                 <select id="event-owners-list" class="required form-control" name="owner_id"></select>
                                 <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
                             </div>
@@ -43,7 +48,7 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                        <div class="control-group form-group">
+                        <div class="control-group form-group style="margin-bottom:15px;"">
                             <label class="control-label col-sm-6">Start Date <span class="field_req">*</span></label>
                             <div class="controls col-sm-5">
                                 <input type="text" name="start" placeholder="Select Date" id="update-event-date-1" class="required date form-control" />                           
@@ -52,7 +57,7 @@
                         </div>
                         <div class="col-sm-6">
                         <div class="control-group form-group">
-                            <label class="control-label col-sm-6">Start Time <span class="field_req">*</span></label>
+                            <label class="control-label col-sm-4" style="text-align:left;font-size:13.5px;">Start Time <span class="field_req">*</span></label>
                             <div class="controls col-sm-6">
                                 <input type="text" name="start_time" class="update-start-timepicker timepicker required form-control" id="update-event-time-1" style="width:67px" placeholder="time" />      
                             </div>
@@ -71,7 +76,7 @@
                         </div>
                         <div class="col-sm-6">
                         <div class="control-group form-group" style="margin-bottom:4px !important">
-                            <label class="control-label col-sm-6">End Time <span class="field_req">*</span></label>
+                            <label class="control-label col-sm-4">End Time <span class="field_req">*</span></label>
                             <div class="controls col-sm-6">                         
                                 <input type="text" name="end_time" class="update-end-timepicker timepicker required form-control" id="update-event-time-2"  placeholder="time" style="width:67px"/>      
                             </div>
@@ -130,11 +135,7 @@
                        </div>
                     </div>
 
-                    <div class="text-muted">
-                        <div class="col-sm-offset-3 col-sm-10" style="font-size:12px;padding-left: 5px;">
-                             Note : Events are time based such as meetings. They show up in calendar.
-                        </div>
-                    </div>
+                    
 
                 </fieldset>
             </form>
