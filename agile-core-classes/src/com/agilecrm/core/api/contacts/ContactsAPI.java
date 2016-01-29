@@ -235,7 +235,6 @@ public class ContactsAPI
 	    @FormParam("global_sort_key") String sortKey)
     {
     	
-
     	if (count != null)
     	{
     		
@@ -248,23 +247,6 @@ public class ContactsAPI
     	}
 
     	return ContactUtil.getAllCompaniesByOrder(sortKey);
-    	
-//    	List<Contact> contacts = null;
-//		if (count != null){
-//			
-//			if (sortKey != null && ContactFilterUtil.isCustomField(sortKey)){
-//				contacts = 
-//			}else{
-//				contacts = ContactUtil.getAllCompaniesByOrder(Integer.parseInt(count), cursor, sortKey);
-//			}			  
-//			
-//		    System.out.println("Fetching companies page by page");
-//		    return contacts;
-//		}else{
-//			contacts = ContactUtil.getAllCompaniesByOrder(sortKey);
-//		}
-//    	
-//    	return contacts;
     }
 
     /**
