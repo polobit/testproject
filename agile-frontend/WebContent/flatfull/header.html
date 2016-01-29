@@ -103,7 +103,7 @@
          
 
                 <%
-						   if(!MobileUADetector.isMobileOrTablet(request.getHeader("user-agent"))){
+						   if(MobileUADetector.isMobileOrTablet(request.getHeader("user-agent"))){
 						  %>
 							<li class="nav-bar-search pull-right  search-mobile hide">
 								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift">
@@ -278,7 +278,7 @@
 							</a><ul class="dropdown-menu animated fadeInRight recent-view" style="width:23em; right:-11px;"></ul>
 							</li>  
                           <%
-						   if(MobileUADetector.isMobileOrTablet(request.getHeader("user-agent"))){
+						   if(!MobileUADetector.isMobileOrTablet(request.getHeader("user-agent"))){
 						  %>
 							<li class="nav-bar-search">
 								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift">

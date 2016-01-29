@@ -92,10 +92,10 @@ var searchDropdown = false;
 
 
 
-	 	$('body').on('touchstart','.aside-wrap ul li',function(){
+	 	/*$('body').on('touchstart','.aside-wrap ul li',function(){
  		$('.aside-wrap ul li').removeClass('active');
  		$(this).addClass('active');
- 		});
+ 		});*/
 
  		
 		}
