@@ -467,3 +467,7 @@ table.ticket-data > tbody > tr > td {
   -webkit-animation-name: popup-fadeInUp;
   animation-name: popup-fadeInUp;
 }
+
+body .app-content, #notes-collection-container {
+  line-height: 1.35;
+}

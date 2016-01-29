@@ -282,10 +282,6 @@ $("#right-pane").html(ticketView.render().el);
 	 
 	 	Current_Ticket_ID = id;
 
-	 	App_Ticket_Module.getTicketModelView(ticketModel);
-		
-		return;
-
 	 	Ticket_Canned_Response.fetchCollection(function(){
 
 	 		// Get ticket models
@@ -367,6 +363,9 @@ $("#right-pane").html(ticketView.render().el);
 
 				// initialize events on cc input
 				Tickets.initCCEmailsListeners();
+
+				// Get previous ticket 
+				Tickets.showPreviousTickets(data.requester_email, el);
 				
 			}
 		});
