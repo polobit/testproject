@@ -301,7 +301,7 @@ $(function()
 		var initials = '';
 		try
 		{
-			if(!isIE())
+			// if(!isIE())
 			initials = text_gravatar_initials(items);
 		}
 		catch (e)
@@ -313,7 +313,7 @@ $(function()
 			backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
 
 		var data_name =  '';
-		if(!isIE())
+		// if(!isIE())
 			data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
 		
 		var email = getPropertyValue(items, "email");
@@ -5772,7 +5772,7 @@ $(function()
 	{
 		var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
 		agile_api = JSON.parse(agile_api);
-		var shopify_webhook = window.location.origin + "/shopifytrigger?api-key=" + agile_api.api_key;
+		var shopify_webhook = agileWindowOrigin() + "/shopifytrigger?api-key=" + agile_api.api_key;
 		return new Handlebars.SafeString(shopify_webhook);
 	});
 

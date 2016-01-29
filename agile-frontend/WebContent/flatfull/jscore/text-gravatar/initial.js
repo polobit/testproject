@@ -73,8 +73,16 @@ function image_error(element)
 		
 		if(!name)
 			return;
+
+        console.log("image_error");
 		$(element).attr("data-name", name);
-		$(element).initial({charCount: 2, fontWeight : 'normal'});
+
+        var initialCSS = {charCount: 2,fontWeight: 'normal',width:$(element).width(), height:$(element).height()};
+
+        if(isIE())
+            initialCSS.fontSize = 20;
+
+		$(element).initial(initialCSS);
 }
 
 function image_load(element)
