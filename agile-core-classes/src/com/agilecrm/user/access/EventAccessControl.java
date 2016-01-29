@@ -9,6 +9,7 @@ import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
@@ -139,8 +140,13 @@ public class EventAccessControl extends UserAccessControl
 	if (info == null)
 	    return query;
 
-	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, info.getDomainId());
-	return query.filter("ownerKey", ownerKey);
+	AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(info.getDomainId());
+	Key<AgileUser> ownerKey = null;
+	if(agileUser !=null)
+	{
+		ownerKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	}
+	return query.filter("owner", ownerKey);
     }
 
     @Override
