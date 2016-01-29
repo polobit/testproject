@@ -3101,6 +3101,9 @@ table.hide-head-checkbox th label.i-checks {
     color: rgb(88, 102, 110)!important;
 }
 
+.modal-cbx-m-t{
+	margin-top: -9px;
+}
 
 
 .conversion_track::-webkit-scrollbar-thumb {
