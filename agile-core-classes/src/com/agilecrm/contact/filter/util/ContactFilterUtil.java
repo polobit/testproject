@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.query.QueryDocument;
@@ -304,17 +305,31 @@ public class ContactFilterUtil
     public static List<Contact> getFilterContactsBySortKey(String sortKey, Integer page_count, String cursor)
 
     {
-	ContactFilter contact_filter = new ContactFilter();
-	SearchRule rule = new SearchRule();
-	rule.LHS = "type";
-	rule.CONDITION = RuleCondition.EQUALS;
-	rule.RHS = Contact.Type.PERSON.toString();
-	contact_filter.rules.add(rule);
+	ContactFilter contact_filter = getFilterByType(Type.PERSON);
 
 	// Modification to sort based on company name. This is required as
 	// company name lower is saved in different field in text search
 	sortKey = (sortKey != null ? ((sortKey.equals("name") || sortKey.equals("-name")) ? sortKey.replace("name",
 		"name_lower") : sortKey) : null);
+
+	return getFilterContacts(contact_filter, page_count, cursor, sortKey);
+    }
+
+    public static ContactFilter getFilterByType(Type type)
+    {
+	ContactFilter contact_filter = new ContactFilter();
+	SearchRule rule = new SearchRule();
+	rule.LHS = "type";
+	rule.CONDITION = RuleCondition.EQUALS;
+	rule.RHS = type.toString();
+	contact_filter.rules.add(rule);
+
+	return contact_filter;
+    }
+
+    public static List<Contact> getFilterContacts(ContactFilter contact_filter, Integer page_count, String cursor,
+	    String sortKey)
+    {
 
 	if (page_count == null)
 	    page_count = 100;
@@ -322,6 +337,7 @@ public class ContactFilterUtil
 	// Sets ACL condition
 	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
 		UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules, null);
+
 	List<Contact> contacts = null;
 	try
 	{
@@ -331,7 +347,6 @@ public class ContactFilterUtil
 	{
 	    return new ArrayList<Contact>();
 	}
-
     }
 
 }
