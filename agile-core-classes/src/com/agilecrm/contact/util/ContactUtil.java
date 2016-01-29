@@ -225,11 +225,10 @@ public class ContactUtil
      *            Activates infiniScroll at client side
      * @return list of contacts (company)
      */
-    public static List<Contact> getAllCompaniesByOrder(int max, String cursor, String sortKey)
-    {
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("type", Type.COMPANY);
-	return dao.fetchAllByOrder(max, cursor, searchMap, false, false, sortKey);
+    public static List<Contact> getAllCompaniesByOrder(int max, String cursor, String sortKey){
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("type", Type.COMPANY);
+		return dao.fetchAllByOrder(max, cursor, searchMap, false, false, sortKey);
     }
 
     /**

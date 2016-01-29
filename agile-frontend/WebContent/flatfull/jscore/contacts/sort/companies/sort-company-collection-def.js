@@ -5,7 +5,7 @@
 		if(config)
 			return config;
 
-		config = company_sort_configuration.SORT_FIELDS_VIEW().extend ({
+		config = contact_sort_configuration.SORT_FIELDS_VIEW().extend ({
 			resetLocalStorage :function(e)
 			{
 				_agile_delete_prefs(this.options.sortPrefsName);
@@ -16,7 +16,8 @@
 			},
 			sort_collection : function(e)
 			{
-				
+				COMPANIES_HARD_RELOAD=true;						
+				App_Companies.companies();				
 			}
 		});
 

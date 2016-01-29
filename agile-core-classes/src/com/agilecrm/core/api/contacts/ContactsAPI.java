@@ -234,14 +234,37 @@ public class ContactsAPI
     public List<Contact> getCompaniesList(@FormParam("cursor") String cursor, @FormParam("page_size") String count,
 	    @FormParam("global_sort_key") String sortKey)
     {
-	if (count != null)
-	{
+    	
 
-	    System.out.println("Fetching companies page by page");
-	    return ContactUtil.getAllCompaniesByOrder(Integer.parseInt(count), cursor, sortKey);
-	}
+    	if (count != null)
+    	{
+    		
+    		if (sortKey != null && ContactFilterUtil.isCustomField(sortKey)){
+    			return ContactFilterUtil.getFilterCompanyBySortKey(sortKey, Integer.parseInt(count), cursor);
+    		}
+    		
+    	    System.out.println("Fetching companies page by page");
+    	    return ContactUtil.getAllCompaniesByOrder(Integer.parseInt(count), cursor, sortKey);
+    	}
 
-	return ContactUtil.getAllCompaniesByOrder(sortKey);
+    	return ContactUtil.getAllCompaniesByOrder(sortKey);
+    	
+//    	List<Contact> contacts = null;
+//		if (count != null){
+//			
+//			if (sortKey != null && ContactFilterUtil.isCustomField(sortKey)){
+//				contacts = 
+//			}else{
+//				contacts = ContactUtil.getAllCompaniesByOrder(Integer.parseInt(count), cursor, sortKey);
+//			}			  
+//			
+//		    System.out.println("Fetching companies page by page");
+//		    return contacts;
+//		}else{
+//			contacts = ContactUtil.getAllCompaniesByOrder(sortKey);
+//		}
+//    	
+//    	return contacts;
     }
 
     /**

@@ -53,7 +53,7 @@ var agile_company_sort_configuration = [
 	buildProperty("Created Date", "created_time"),
 
 	// Star value
-	buildProperty("Star Value", "star_value", "star_value"),
+	buildProperty("Star Value", "star_value"),
 
 	// Name
 	buildProperty("Name", "name")

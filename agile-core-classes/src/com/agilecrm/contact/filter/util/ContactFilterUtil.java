@@ -333,5 +333,38 @@ public class ContactFilterUtil
 	}
 
     }
+    
+    public static List<Contact> getFilterCompanyBySortKey(String sortKey, Integer page_count, String cursor)
+
+    {
+	ContactFilter contact_filter = new ContactFilter();
+	SearchRule rule = new SearchRule();
+	rule.LHS = "type";
+	rule.CONDITION = RuleCondition.EQUALS;
+	rule.RHS = Contact.Type.COMPANY.toString();
+	contact_filter.rules.add(rule);
+
+	// Modification to sort based on company name. This is required as
+	// company name lower is saved in different field in text search
+	sortKey = (sortKey != null ? ((sortKey.equals("name") || sortKey.equals("-name")) ? sortKey.replace("name",
+		"name_lower") : sortKey) : null);
+
+	if (page_count == null)
+	    page_count = 100;
+
+	// Sets ACL condition
+	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
+		UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules, null);
+	List<Contact> contacts = null;
+	try
+	{
+	    return contacts = new ArrayList<Contact>(contact_filter.queryContacts(page_count, cursor, sortKey));
+	}
+	catch (SearchException e)
+	{
+	    return new ArrayList<Contact>();
+	}
+
+    }
 
 }

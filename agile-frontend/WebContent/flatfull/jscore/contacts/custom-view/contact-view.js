@@ -185,7 +185,7 @@ function setUpCompanySortFilters(el)
 	COMPANY_CUSTOM_SORT_VIEW = new view ({
 		data : sort_company_configuration.getCompanySortableFields(),
 		templateKey : "contact-view-sort",
-		sortPrefsName : "sort_by_name",
+		sortPrefsName : "company_sort_field",
 		individual_tag_name : "li",
 		sort_collection : false,
 		postRenderCallback: function(el)
