@@ -63,7 +63,7 @@ $(document).ready(function(){
 
 
  	 $('.aside-wrap').off('ul li');
-	 if(!agile_is_mobile_browser()){
+	 if(agile_is_mobile_browser()){
 
 	 	$('body').on('click',function(e){
 		setTimeout(function(){
