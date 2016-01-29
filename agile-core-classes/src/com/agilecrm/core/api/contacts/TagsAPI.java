@@ -114,6 +114,8 @@ public class TagsAPI
 		rule.CONDITION = RuleCondition.EQUALS;
 		rule.RHS = tag;
 
+		filter.rules.add(rule);
+
 		return ContactFilterUtil.getFilterContacts(filter, Integer.parseInt(count), cursor, sortKey);
 	    }
 
