@@ -15,7 +15,7 @@
 									data-toggle="tooltip"
 									title="<i class='icon-edit icon-white icon'></i> Change Picture"
 									style='text-decoration: none;'> 
-								<img class='b-2x r-2x upload_pic imgholder submit' style="width:96px;height:96px" type="submit"
+								<img class='b-2x r-2x upload_pic imgholder submit' style="width:75px;height:75px" type="submit"
 									{{getCompanyImage "80" "display:inline;"}} /> 
 								</a> <input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
@@ -23,7 +23,7 @@
 <div class="pos-abs pos-r-0 pos-t-0">
 <div>
  
-								<a class="dropdown-toggle" data-toggle="dropdown"><span style="opacity:0.8;"class="caret text-lg"></span></a>
+								<a class="dropdown-toggle" data-toggle="dropdown"><span style="opacity:0.8;margin-top:93px;"class="caret text-lg"></span></a>
 								<ul class="dropdown-menu pull-right">
 <li> <a href="#company-edit"><i class="fa fa-pencil-square" style="margin-right:2px"></i> Edit</a></li>
 <li class="divider"></li>
@@ -44,14 +44,14 @@
 </div>
 						
 					
-							<div class="text-ellipsis  m-t-xs  h3 font-thin custom-color w-full">
+							<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-right:5px;">
 
 								{{getPropertyValue properties "name"}}
 								{{#if_propertyName "url"}}</br>
-									<a class="text-lg" href="{{getHyperlinkFromURL value}}" title="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
+									<a class="text-base" href="{{getHyperlinkFromURL value}}" title="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
 								{{/if_propertyName}}
 								
-								<div class="text-base text-center m-b-xs text-muted m-t-sm text-ellipsis">
+								<div class=" text-center m-b-xs text-muted  text-ellipsis" style="font-size:13px;">
 									{{#property_is_exists "website" properties}}
 									{{#multiple_Company_Property_Element "website" properties}} {{#each
 									this}} {{#if_equals subtype "TWITTER"}} <span class="m-r-xs"><a target="_blank"
@@ -93,7 +93,7 @@
 	<small class="text-muted text-base">Owner</small>				
 					<div class="change-owner-succes"></div>
      <div title="Owner" class="contact-owner-view">
-      	<div class="contact-owner text-base" id="change-owner-element">
+      	<div class="contact-owner text-xs" id="change-owner-element">
         	
 			{{#if owner}}
         	<span class="contact-owner-pic" style="visibility:visible;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span>
@@ -104,7 +104,7 @@
         
         	{{#canEditContact owner.id}}
         	<div class="dropdown" id="change-owner-ul" style="display: none">
-        		 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change owner <span class="caret"></span></a>
+        		 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change owner <span class="caret" ></span></a>
         		 <ul id='contact-detail-owner' class="dropdown-menu"></ul>
         	</div> 
 			{{/canEditContact}}
@@ -192,11 +192,14 @@
 
 
 							{{#property_is_exists "phone" properties}}
-							<small class="text-xs text-muted">Contact Info</small>
-							<div>
+							<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  								<div class="panel panel-default m-b-none">
+   							    <div class="panel-body">
+							<small class="text-base text-muted">Contact Info</small>
+							
 								{{#multiple_Company_Property_Element "phone" properties}}
 								
-								<div class="custom-color text-sm">
+								<div class="custom-color text-xs">
 									{{#each this}}
 									<div class="l-h-xs">
                                         <a href='#' class="contact-make-sip-call" style="display:none;"
@@ -213,16 +216,19 @@
 									{{/each}}
 								</div>
 								{{/multiple_Company_Property_Element}}
-							</div>
+							
 							{{/property_is_exists}}
  							{{#property_is_exists "email" properties}}
-							<div class="custom-color">
+							<div class="custom-color text-xs">
 								{{#multiple_Company_Property_Element "email" properties}}
 								
 								{{#property_is_exists "phone" ../properties}}
 								
 									{{else}}
-						<small class="text-xs text-muted">Contact Info</small>
+								<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  								<div class="panel panel-default m-b-none">
+   							    <div class="panel-body">
+						<small class="text-base text-muted">Contact Info</small>
 									
 										{{/property_is_exists}} 
 									{{#each this}}
@@ -235,12 +241,20 @@
 								</div>
 								{{/property_is_exists}}
 
+								{{#property_is_exists "phone" properties}}
+								</div></div></div>
+								{{else}}
+									{{#property_is_exists "email" ../properties}}
+									</div></div></div>
+									{{/property_is_exists}}
+								{{/property_is_exists}}
+
  <div class="custom-data"> {{#getCompanyCustomPropertiesExclusively properties}}
  <div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
   									<div class="panel panel-default m-b-none">
     								<div class="panel-body">
 <div class="clearfix"></div>
-<div class="m-t-sm"><small class="text-xs text-muted">Custom Info</small></div>
+<small class="text-base text-muted">Custom Info</small>
 
 								<div class="word-break-all">
 									{{#each_with_index this}}
@@ -250,10 +264,10 @@
 											<span class="text-muted"  title="{{name}}">{{name}}<span>
 										</div>
 										{{#if_equals index ../this.length}}
-											<div class="inline-block custom-color">
+											<div class="inline-block custom-color text-xs">
 											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
 										{{else}}
-											<div class="inline-block custom-color">
+											<div class="inline-block custom-color text-xs">
 											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
 
 										{{/if_equals}}
@@ -278,7 +292,7 @@
 										<div>
 											{{#address_Element properties}}{{/address_Element}}</div></div>
 
-										<div class="pull-left m-t-sm m-b-sm w-full">
+										<div class="pull-left m-t-sm m-b-sm w-full text-xs">
 											<div id="map" style="width: auto; height: 200px; display: none; margin: 10px">
 											</div>
 										</div>

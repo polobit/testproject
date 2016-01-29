@@ -1411,10 +1411,10 @@ $(function()
 								if (properties_count != 0)
 
 									el = el
-											.concat('<div class="contact-addressview"><div><div class="pull-left hide" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color">');
+											.concat('<div class="contact-addressview text-xs"><div><div class="pull-left hide text-xs" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color text-xs">');
 								else
 									el = el
-											.concat('<div class="contact-addressview"><div><div class="pull-left hide" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color">');
+											.concat('<div class="contact-addressview text-xs"><div><div class="pull-left hide text-xs" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color text-xs">');
 
 								if(address.address !== undefined)
 									el = el.concat(address.address+", ");
