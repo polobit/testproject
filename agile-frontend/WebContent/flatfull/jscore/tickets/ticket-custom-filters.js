@@ -565,6 +565,8 @@ var Ticket_Custom_Filters = {
 
 	toggleFields: function(){
 		$('div.choose-filter').toggle();
+		
+		$('div.update-name').toggle();
 	},
 
 	changViewName: function(){

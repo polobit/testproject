@@ -53,6 +53,16 @@ var Ticket_Bulk_Ops = {
 			//Rendering suggestion text.Template incl. in tickets-groups-container-template.html
 			$('#tickets-bulk-select').html(getTemplate('ticket-bulk-ops-text', {total_tickets_selected : true}));
 		});
+
+		/**
+		 * Initializing click event on clear selection tickets
+		 */
+		$el.off('click', "a#clear-ticket-selection");
+		$el.on('click', "a#clear-ticket-selection", function(e){
+			e.preventDefault();
+
+			Ticket_Bulk_Ops.clearSelection();
+		});
 	},
 
 	checkAllTickets: function(){
@@ -101,23 +111,29 @@ var Ticket_Bulk_Ops = {
 		if(selected_tickets_count > 0){
 			var total_tickets_count = Tickets_Count.ticketsCount[Ticket_Filter_ID], json = {};
 
+			//Checking if all tickets selected and is equal to tickets count
 			if(selected_tickets_count == total_tickets_count){
 				Ticket_Bulk_Ops.selected_all_filter_tickets = true;
 				$('.ticket-checkbox.select-all').prop('checked', true);
 				json.total_tickets_selected = true;
 				json.total_tickets_count = total_tickets_count;
+
+				//Rendering suggestion text. Template incl. in tickets-groups-container-template.html
+				$('#tickets-bulk-select').html(getTemplate('ticket-bulk-ops-text', json));
+			}
+			else if(selected_tickets_count == App_Ticket_Module.ticketsCollection.collection.length){
+
+				json.tickets_count = selected_tickets_count;
+				json.total_tickets_count = total_tickets_count;
+
+				//Rendering suggestion text. Template incl. in tickets-groups-container-template.html
+				$('#tickets-bulk-select').html(getTemplate('ticket-bulk-ops-text', json));
 			}
 			else{
 				Ticket_Bulk_Ops.selected_all_filter_tickets = false;
-				//$('.ticket-checkbox.select-all').prop('checked', false);
-				json.tickets_count = selected_tickets_count;
-				json.total_tickets_count = total_tickets_count;
 			}
 
 			$('.bulk-action-btn').removeClass('disabled');
-			
-			//Rendering suggestion text. Template incl. tickets-groups-container-template.html
-			$('#tickets-bulk-select').html(getTemplate('ticket-bulk-ops-text', json));
 		}else{
 			Ticket_Bulk_Ops.clearSelection();
 		}

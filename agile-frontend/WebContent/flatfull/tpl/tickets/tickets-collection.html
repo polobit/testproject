@@ -67,7 +67,6 @@
 				          </ul>
 				        </div>
 					    
-					    <span id="tickets-bulk-select" class="txt-color-light"></span>
 					    <div class="btn-group dropdown pull-right">
 					    	<button class="btn btn-sm btn-default toggle-collection-view {{#is_single_row_view}}single-line{{else}}multi-line{{/is_single_row_view}}">
 					    		{{#is_single_row_view}}
@@ -80,6 +79,7 @@
 				    </div>
 				    <div class="form-inline no-footer">
 			    		<div class="row m-n">
+			    			<div id="tickets-bulk-select" class="text-center"></div>
 			    			<div class="col-sm-12 p-n ticket-collection-container">
 			    				<table class="table table-striped onlySorting m-b-none t-l-fix">
 									<tbody id="ticket-model-list" route="ticket/" class="tickets-collection"></tbody>
@@ -161,7 +161,6 @@
 				            <li><a href="#tickets/bulk-actions/mark-spam">Mark as spam</a></li>
 				          </ul>
 				        </div>
-					    <span id="tickets-bulk-select" class="txt-color-light"></span>
 
 					    <div class="btn-group dropdown pull-right">
 				          <button class="btn btn-sm btn-default toggle-collection-view {{#is_single_row_view}}single-line{{else}}multi-line{{/is_single_row_view}}">
@@ -260,6 +259,7 @@
 				    </div>
 				    <div class="form-inline no-footer">
 			    		<div class="row m-n ticket-collection-row" style="overflow-x:auto;">
+			    			<div id="tickets-bulk-select" class="text-center"></div>
 			    			<div class="col-sm-12 p-n ticket-collection-container">
 			    				<table class="table table-striped single-row m-b-none b-t b-b no-sorting">
 									<thead>

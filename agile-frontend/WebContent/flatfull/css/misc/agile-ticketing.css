@@ -430,7 +430,7 @@ tbody.tickets-collection > tr > td{
 }
 
 table.ticket-data > tbody > tr > td {
-  line-height: 15px;
+  line-height: 17px;
 }
 
 @-webkit-keyframes popup-fadeInUp {
@@ -466,4 +466,10 @@ table.ticket-data > tbody > tr > td {
 .popup-fadeInUp {
   -webkit-animation-name: popup-fadeInUp;
   animation-name: popup-fadeInUp;
+}
+
+#tickets-bulk-select{
+    border: 1px solid #edf1f2;
+    background-color: #f6f8f8;
+    border-bottom: none;
 }

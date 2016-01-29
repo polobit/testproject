@@ -277,7 +277,7 @@ var Tickets = {
 		});
 
 		/*
-		 * Hover event on ticket subject
+		 * Hover event on ticket subject for multiline ticket collection view
 		 */
 		$(el).off('mouseover mouseout');
 		$(el)
@@ -293,7 +293,7 @@ var Tickets = {
 
 						popoverFunction = setTimeout(function(){
 
-							if(Current_Ticket_ID)
+							if(Current_Ticket_ID || Current_Route.indexOf('ticket') == -1)
 								return;
 
 							var popup_height = $that.find('#ticket-last-notes').height();
@@ -311,7 +311,7 @@ var Tickets = {
 			);
 
 		/*
-		 * Hover event on ticket subject
+		 * Hover event on ticket subject single line ticket collection view
 		 */
 		$(el)
 			.on('mouseover mouseout', 'tbody.ticket-single-row-model-list > tr',
@@ -335,7 +335,7 @@ var Tickets = {
 
 								$('body').append($(template_ui));
 								
-								if(Current_Ticket_ID)
+								if(Current_Ticket_ID || Current_Route.indexOf('ticket') == -1)
 									return;
 
 								//Get closest div with row class to set left alignment. Table row left doesn't work as table have scrolling.

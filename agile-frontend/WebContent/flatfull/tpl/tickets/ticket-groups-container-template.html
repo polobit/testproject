@@ -69,13 +69,18 @@
 </script>
 <script id="ticket-bulk-ops-text-template" type="text/html">
 {{#if total_tickets_selected}}
-	Selected all {{total_tickets_count}} tickets
-{{else}}
-	{{#if tickets_count}}
-		Selected {{tickets_count}} ticket{{#if_equals tickets_count "1"}}{{else}}s{{/if_equals}}. 
-	{{/if}}
-	<a id="select-all-tickets" class="c-p text-info link-color" href="javascript:void(0);">
-		Select all {{total_tickets_count}} ticket{{#if_equals total_tickets_count "1"}}{{else}}s{{/if_equals}}
+	All {{total_tickets_count}} tickets are selected.
+	<a id="clear-ticket-selection" class="c-p text-info link-color" href="javascript:void(0);">
+		Clear selection
 	</a>
+{{else}}
+	<div class="text-center">
+		<span>All <strong>{{tickets_count}}</strong> tickets on this page are selected.</span> 
+		<span>
+			<a id="select-all-tickets" class="c-p text-info link-color" href="javascript:void(0);">
+				Select all <strong>{{total_tickets_count}}</strong> tickets
+			</a>
+		</span>
+	</div>
 {{/if}}
 </script>
