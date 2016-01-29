@@ -473,3 +473,8 @@ table.ticket-data > tbody > tr > td {
     background-color: #f6f8f8;
     border-bottom: none;
 }
+body .app-content, #notes-collection-container {
+  line-height: 1.35;
+
+
+}

@@ -18,7 +18,7 @@
 
     		{{#is_ticket_reply_activity ticket_activity_type}}
 
-    			<div>
+    			<div class="comment">
 
 			        <a class="pull-left thumb-xs m-l-n-md">
 
@@ -86,7 +86,7 @@
 
 	        {{else}}
 
-	        	<div class=" m-l-lg">
+	        	<div class="{{#if_equals ticket_activity_type 'TICKET_PRIVATE_NOTES_ADD'}}comment{{/if_equals}} m-l-lg">
 
 			        <a class="pull-left thumb-xs m-l-n-md">
 
