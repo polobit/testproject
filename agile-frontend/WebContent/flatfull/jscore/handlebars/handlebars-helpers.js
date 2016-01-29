@@ -6404,6 +6404,10 @@ $(function()
 		{
 			time_period = 'Next Year';
 		}
+		else if (duration == 'last-year')
+		{
+			time_period = 'Last Year';
+		}
 		
 		return time_period;
 	});

@@ -2058,6 +2058,20 @@ var portlet_utility = {
 			d.setDate(1);
 		}
 
+		// last year start
+		if (duration == "last-year-start") {
+			d.setFullYear(d.getFullYear() - 1);
+			d.setMonth(d.getMonth() - d.getMonth());
+			d.setDate(1);
+		}
+
+		// last year end
+		if (duration == "last-year-end") {
+			d.setFullYear(d.getFullYear());
+			d.setMonth(d.getMonth() - d.getMonth());
+			d.setDate(1);
+		}
+
 		return (getGMTTimeFromDate(d) / 1000);
 	},
 
