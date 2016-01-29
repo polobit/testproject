@@ -662,15 +662,20 @@ var Tickets = {
 
 	initDateTimePicker: function($input, singleDatePicker, callback){
 
-		head.load(LIB_PATH + '/lib/web-calendar-event/moment.min.js', '/lib/date-range-picker2.min.js?_=' + _AGILE_VERSION, '/flatfull/css/final-lib/date-range-picker2.css?_=' + _AGILE_VERSION,  function()
-		{	
-			$input.daterangepicker({
-			    "singleDatePicker": singleDatePicker, "drops": "up"
-			}, function(start, end, label) {
-				
-				callback(start, end);
-			});
+		var eventDate = $input.datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+		{
+			callback($input.val(), end);
 		});
+
+		// head.load(LIB_PATH + '/lib/web-calendar-event/moment.min.js', '/lib/date-range-picker2.min.js?_=' + _AGILE_VERSION, '/flatfull/css/final-lib/date-range-picker2.css?_=' + _AGILE_VERSION,  function()
+		// {	
+		// 	$input.daterangepicker({
+		// 	    "singleDatePicker": singleDatePicker, "drops": "up"
+		// 	}, function(start, end, label) {
+				
+		// 		callback(start, end);
+		// 	});
+		// });
 	},
 
 	updateModel: function(url, success_cbk, err_cbk, ticket_id){
@@ -1087,18 +1092,24 @@ var Tickets = {
 
 	initializeTicketSLA : function(el){
 		
-		 head.load(LIB_PATH + '/lib/web-calendar-event/moment.min.js', '/lib/date-range-picker2.min.js', "/flatfull/css/final-lib/date-range-picker2.css",  function()
+		 head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css",  function()
 		  {
-		   $('#ticket_change_sla', el).daterangepicker({
-		       "singleDatePicker": true,"drops": "up","timePicker": true,"startDate": moment(),"endDate": moment().add('days', 3)
+
+		  	$('#ticket_change_sla', el).datepicker({ drops: "down", format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+			{
+				// Apply SLA to the ticket
+		     	//var timeInMilli = moment(start).valueOf();
+
+		     	Tickets.updateDueDate($('#ticket_change_sla', el).val());
+			});
+
+		   /*$('#ticket_change_sla', el).daterangepicker({
+		       "singleDatePicker": true,"drops": "up","timePicker": true
 		   }, function(start, end, label) {
 
-		      	// Apply SLA to the ticket
-		     	var timeInMilli = moment(start).valueOf();
+		      	
 
-		     	Tickets.updateDueDate(timeInMilli);
-
-		   });
+		   });*/
 		  });
 
 		//Initializing click event on due date button
