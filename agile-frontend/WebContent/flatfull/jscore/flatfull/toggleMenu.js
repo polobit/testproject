@@ -67,7 +67,7 @@ $(document).ready(function(){
 
 	 	$('body').on('click',function(e){
 		setTimeout(function(){
-		if(e.target.id != 'searchText' && e.target.parentElement.id != 'search-menu-mobile')  {
+		if(e.target.id != 'searchText' && !$(e.target).closest('button').hasClass('search-menu-mobile'))  {
 		$('.search-mobile').addClass('hide');
 		$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
 		}
