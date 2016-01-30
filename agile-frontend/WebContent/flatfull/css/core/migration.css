@@ -1897,6 +1897,10 @@ color:#727272;
 .hide-hover-mobile:hover {
   background: none!Important;
 }
+#searchForm .typeahead.dropdown-menu {
+  overflow-y:auto;
+  max-height: 400px;
+}
 
 }
 
@@ -2050,7 +2054,7 @@ color:#727272;
 }
 
 .search-mobile {
-  width: 66%;
+  width: 50%;
   list-style: none;
 }
 
