@@ -3,8 +3,8 @@
 <div class="wrapper-md">
 <div class="row">
     <div class="col-md-12">
-        <div class="panel wrapper">
-            <form id="workflowform">
+        <div class="panel wrapper campaign-new-add">
+            <form id="workflowform" >
                 <fieldset>
                     <div class="control-group form-group">
                         <label class="control-label"><b>Name of campaign:</b> <span class="field_req">*</span></label>
@@ -23,10 +23,19 @@
 									<input type="hidden" id="was-disabled" data = {{was_disabled}}>
 									{{#if is_new}}
 										<button class="btn btn-primary btn-sm  right pos-rlt m-r-xs" id="save-workflow-top">Save Campaign</button>
+									 <!--
+										{{#is_mobile}}
+
+												{{else}}
+											<div class="btn-group pull-left m-l-xs" style="padding-left:3px;">
+											<button class="btn btn-default btn-sm m-l-xs fullscreenelement" style="height:30px;width:30px;" targetFullscreenElement="#content" >
+											<i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
+										{{/is_mobile}}
+										-->
 									{{else}}
-										<div class="btn-group right m-r-xs">
+										<div class="btn-group right m-r-xs m-r-n-sm">									
 											<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> Save Campaign</button>
-                            				<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
+                            				<button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
             									<span class="caret"></span>
 											</button>
 											<ul class="dropdown-menu">
@@ -35,17 +44,15 @@
 														<i class="fa fa-clipboard" style="width: 20px;"></i> Create a Copy
 													</a>
 												</li>
-												<li>
-													<a href="#" data = "{{is_disabled}}" class="is-disabled-top" >
-														{{#if_equals "true" is_disabled}}
-															<i class="fa fa-lg fa-unlock" style="vertical-align: middle;width: 20px;"></i><div class="inline" style="vertical-align: middle;">&nbsp;Enable Workflow</div>
-														{{else}}
-															<i class="fa fa-lg fa-lock" style="vertical-align: middle;width: 20px;"></i><div class="inline" style="vertical-align: middle;">&nbsp;Disable Workflow</div>
-														{{/if_equals}}
-													</a>
-												</li>
 											</ul>
                            				</div>
+									<a href="#" data = "{{is_disabled}}" class="btn btn-default btn-sm m-r-sm btn-addon pull-right is-disabled-top" style="color:white">
+											{{#if_equals "true" is_disabled}}
+											<div class="inline" style="vertical-align: middle;">&nbsp;Enable Campaign</div>
+											{{else}}
+											<div class="inline" style="vertical-align: middle;">&nbsp;Disable Campaign</div>
+											{{/if_equals}}
+									</a>
                             		{{/if}}
 								</div>
                            		<div class="save-workflow-img right m-r-xs m-t-sm pos-rlt inline-block"></div>
@@ -94,6 +101,19 @@
 						<div class="text-sm text-light">Agile can add the tags automatically when your contact unsubscribes. You can run more campaigns against this tag in future.</div>
                         <br/>
                         <br>
+						<div class="row">
+                         <div class="control-group form-group">
+							<label class="control-label col-sm-2">
+								<b>Unsubscribe Name:</b>
+							</label>
+							<div class="controls col-sm-4">
+								<input type="text" name="unsubscribe_name" id="unsubscribe-name" class="form-control">
+							</div>
+                    	</div>
+                        </div>
+						<div class="text-sm text-light">When a contact unsubscribes from your campaign, this name will be displayed as campaign name in the confirmation screen.</div>
+						<br/>
+						<br/>
                     	<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
@@ -127,20 +147,8 @@
 														<i class="fa fa-clipboard"></i> Create a Copy
 													</a>
 												</li>
-												<li>
-													<a href="#" class="is-disabled-top" data = "{{is_disabled}}" >
-														{{#if_equals "true" is_disabled}}
-															<i class="fa fa-lg fa-unlock" style="vertical-align: middle;width: 20px;"></i><div class="inline" style="vertical-align: middle;">&nbsp;Enable Workflow</div>
-														{{else}}
-															<i class="fa fa-lg fa-lock" style="vertical-align: middle;width: 20px;"></i><div class="inline" style="vertical-align: middle;">&nbsp;Disable Workflow</div>
-														{{/if_equals}}
-													</a>
-												</li>
 											</ul>
                            				</div>
-
-
-
 
                     {{/if}}
                     <div class="save-workflow-img inline-block"></div>

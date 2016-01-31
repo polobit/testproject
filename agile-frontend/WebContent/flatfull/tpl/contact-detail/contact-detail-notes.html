@@ -10,7 +10,13 @@
                     <div class="text">
                         You can save specific information about {{#isCompany}}companies{{else}}contacts{{/isCompany}} as a Note.
                     </div>
-                    <a href="#noteModal" data-toggle="modal" class="btn btn-sm btn-default m-t-xs blue btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>  Add Note</a>
+					<div class="btn-group">
+            			<a href="#noteModal" data-toggle="modal" class="btn btn-default btn-sm btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>&nbsp;Add Note</a>
+            			<a class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+						<ul class="dropdown-menu pull-right" style="padding:2px">
+							<li style="padding:0px; text-align: center;"><a class="show-logPhone ">&nbsp;Add Call-log</a> </li>
+						</ul>
+					</div>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -19,9 +25,18 @@
         {{/unless}}
 {{#if this.length}}
 <div class="m-b-md m-t-md m-r-sm" align="right">
-   <a href="#noteModal" data-toggle="modal" class="btn btn-sm btn-default contact-add-note pos-rlt btn-addon"><span><i class='icon-plus-sign'/></span> Add Note</a> 
+<div class="btn-group" align="right">
+   <a href="#noteModal" data-toggle="modal" class="btn btn-default btn-sm btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>&nbsp;Add Note</a>
+               			<a class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+						<ul class="dropdown-menu pull-right" style="padding:2px">
+							<li style="padding:0px; text-align: center;"><a class="show-logPhone ">&nbsp;Add Call-log</a> </li>
+						</ul>
+						</div>
+						</div>
+
+<div>
+<ul id="notes-model-list" class="ativity-block-ul list-group list-group-lg m-b-none"></ul>
 </div>
-	<ul id="notes-model-list" class="ativity-block-ul list-group list-group-lg m-b-none"></ul>
 {{/if}}
 </script>
 <script id="notes-model-template" type="text/html">
@@ -42,7 +57,7 @@
 	<span class="activity-block-owner hidden">
 <span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
 	</span>
-	<div class="pull-left contact-title-dynamic"><a class="text-md text-cap custom-color">{{subject}}</a></div>
+	<div class="pull-left contact-title-dynamic"><a class="text-md text-cap custom-color text-ellipsis block w-full">{{subject}}</a></div>
 	<div class="pull-right"><small class="edit-hover text-muted"> 
 			<i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time text-sm" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 		</small></div>
@@ -52,6 +67,26 @@
 <pre style="white-space:pre-wrap">
 {{show_link_in_statement description}}
 </pre>
+{{#if callType}}
+
+	{{#if_equals callType ""}}
+
+	{{else}}
+			{{#if_equals callType "inbound"}}Incoming call from{{else}}Outgoing call to{{/if_equals}}  {{phone}} </br>
+			{{#if status}} status : {{status}} {{/if}}</br>
+			{{#if_equals status "busy"}}
+			{{else}}
+			{{#if_equals status "failed"}}
+			{{else}}
+			{{#if_equals status "missed"}}
+			{{else}}
+				Duration :  {{toProperFormat duration}} </br>
+			{{/if_equals}}
+			{{/if_equals}}
+			{{/if_equals}}
+	{{/if_equals}}
+
+{{/if}}
 	</div>	
 	 	
 			
@@ -75,8 +110,22 @@
 	
 </div>
 <div align="right" class="pos-abs pos-r-0 pos-b-0">
-	<span class="actions ">
-			<a title="Edit"  data="{{id}}" data-toggle="modal" class="edit-note c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+{{#if callType}}
+
+	{{#if_equals callType ""}}
+		
+	{{else}}
+
+		<span class="actions  text-sm">
+		<a title="Edit"  data="{{id}}" class="edit-logPhone c-p text-l-none p-r-sm">  <i class="icon-pencil"></i> </a>
+		
+	{{/if_equals}}
+
+{{else}}
+		<span class="actions  text-sm">
+		<a title="Edit"  data="{{id}}" data-toggle="modal" class="edit-note c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+
+{{/if}}
             <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
         </span>
 </div>

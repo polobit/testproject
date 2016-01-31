@@ -575,4 +575,16 @@ public class PortletsAPI {
 		json.put("campaigntype",campaigntype);
 		return PortletUtil.getCampaignstatsForPortlets(json);
 	}
+	
+	/*
+	 * 
+	 * @return JSONObject of goals and goalAttained in particular time.
+	 */
+	@Path("/goals/{owner-id}")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getDealsGoalsAttainmentForPortlets(@PathParam("owner-id") Long owner_id,@QueryParam("start-date") Long start_time,@QueryParam("end-date")Long end_time)
+	{
+		return PortletUtil.getGoalsAttainedData(owner_id, start_time, end_time);
+	}
 }

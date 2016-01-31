@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.campaignio.cron.util.CronUtil;
+import com.campaignio.urlshortener.URLShortener.ShortenURLType;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
@@ -41,7 +42,14 @@ public class EmailClickDeferredTask implements DeferredTask
      * custom data to pass to respective tasklet
      */
     String interruptedData = null;
-
+    
+    /**
+     * URL shortener click tracking id 
+     */
+    String urlShortenerTrackerId = null;
+    
+    ShortenURLType type = ShortenURLType.SMS;
+    
     /**
      * Constructs a new {@link EmailClickDeferredTask}.
      * 
@@ -59,6 +67,20 @@ public class EmailClickDeferredTask implements DeferredTask
 	this.subscriberId = subscriberId;
 	this.interruptedData = interruptedData;
     }
+    
+    /**
+     * Constructs a new {@link EmailClickDeferredTask}
+     * 
+     * @param urlShortenerTrackerId - tracking Id
+     * @param type - ShortenURLType
+     * @param interruptedData - data passed 
+     */
+    public EmailClickDeferredTask(String urlShortenerTrackerId, ShortenURLType type, String interruptedData)
+    {
+    	this.urlShortenerTrackerId = urlShortenerTrackerId;
+    	this.type = type;
+    	this.interruptedData = interruptedData;
+    }
 
     public void run()
     {
@@ -69,6 +91,16 @@ public class EmailClickDeferredTask implements DeferredTask
 
 	try
 	{
+		if(StringUtils.isNotBlank(urlShortenerTrackerId))
+		{
+		
+			if(interruptedData == null)
+				interruptedData = "{}";
+			
+			CronUtil.interrupt(urlShortenerTrackerId, type.toString(), null, new JSONObject(interruptedData));
+			return;
+		}
+		
 	    if (StringUtils.isBlank(clickTrackingId))
 	    {
 		// Wakeup Clicked node - campaignId and subscriberId as LAST two

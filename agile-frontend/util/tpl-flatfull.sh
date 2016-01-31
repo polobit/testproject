@@ -17,4 +17,5 @@ cat flatfull/tpl/contact-filter/*.html > tpl/min/flatfull/contact-filter.js
 cat flatfull/tpl/case/*.html > tpl/min/flatfull/case.js
 cat flatfull/tpl/document/*.html > tpl/min/flatfull/document.js
 cat flatfull/tpl/portlets/*.html > tpl/min/flatfull/portlets.js
+cat flatfull/tpl/landingpages/*.html > tpl/min/flatfull/landingpages.js
 cd ../util

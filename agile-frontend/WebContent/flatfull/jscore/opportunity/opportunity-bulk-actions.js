@@ -223,7 +223,7 @@
 		deleteDeals = $('#deal-bulk-delete');
 		dealConAddTag = $('#deal-contact-add-tag');
 		dealConAddCamp = $('#deal-contact-add-camp');
-		filterJSON = $.parseJSON(readCookie('deal-filters'));
+		filterJSON = $.parseJSON(_agile_get_prefs('deal-filters'));
 		
 		changeOwner.on('click',function(e){
 			e.preventDefault();
@@ -336,7 +336,7 @@
 	deal_bulk_actions.toggle_deals_bulk_actions_dropdown = function(clicked_ele, isBulk, isCampaign)
 	{
 		
-		if (!readCookie("agile_deal_view")){
+		if (!_agile_get_prefs("agile_deal_view")){
 			return;
 		}
 		

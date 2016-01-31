@@ -1,6 +1,14 @@
 <script id="invoice-detail-template" type="html/text">
-<div class="col-md-2"></div>
-<div class="col-md-8 p-t">
+<div class="row p-t-xs">
+<div class="col-md-9 p-r-xs">
+  <div class="pull-right">
+    <a href="#invoice-details" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Back"><i class="fa fa-arrow-left"></i></a>
+    <a href="/invoice?inv_id={{invoice.id}}&email={{get_current_domain_email}}" class="btn btn-default m-l-xs" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Download"><i class="fa fa-download"></i></a>
+  </div>
+</div>
+</div>
+<div class="col-md-1"></div>
+<div class="col-md-8 p-t-xs">
    <div class="row" style="background-color: whitesmoke;" id="row-div">
       <table width="100%" id="sort-table">
          <colgroup>
@@ -77,7 +85,7 @@
                   <tbody>
 			{{#each invoice.lines.data}}
             <tr>
-            {{#if this.plan}} 
+            
 			<td>
 				{{#containString "Email" plan.name}}
 					Emails
@@ -90,7 +98,7 @@
 				{{numeric_operation this.quantity 1000 "*"}} Emails
 				<br>
        			 <small>(charged @ ${{numeric_operation plan.amount 100 "/"}}/1000)</small>
-        		{{else}}
+        		{{else}} 
 				{{#if description}}
                	 {{invoice_description description}}
 				{{else}}
@@ -98,7 +106,7 @@
 				{{/if}}
 				{{/containString}}
 			</td>
-            {{/if}}
+            
             <td>{{#if_less_than amount 0}}-{{/if_less_than}}${{get_amount_with_possitive amount}}</td>
             </tr>
 			{{/each}}
@@ -135,13 +143,7 @@ ${{numeric_operation ../../amountDue 100 "/"}}
          </div><!-- end of panel -->
       </div> <!-- end of col-md-12 -->
 
-	  	<div class="col-md-10 text-center" id="print-div">
-			<div class="m-b-sm" style="height: 35px;">
-					<a class="btn btn-default" href="#invoice-details">Back</a>
-					<input class="print_btn btn btn btn-primary" type="button" value="Print" onclick="printPage()">
-						
-			</div>
-		</div>
+	  	
 
    </div><!--end of row -->
 </div> <!-- end of col-md-11 -->

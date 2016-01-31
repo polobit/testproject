@@ -18,6 +18,7 @@ public class AgileQueues
 
 	// Cron Push Queue
 	public static final String CRON_QUEUE = "cron-queue";
+	public static final String CRON_INTERRUPT_QUEUE = "cron-interrupt-queue";
 
 	public static final String ACCOUNT_STATS_UPDATE_QUEUE = "account-stats-update-queue";
 	public static final String CONTACTS_DELETE_QUEUE = "contacts-delete-queue";
@@ -56,5 +57,7 @@ public class AgileQueues
 	public static final String NOTIFICATION_PULL_QUEUE = "notification-pull-queue";
 
 	public static final String CONTACTS_SCHEMA_CHANGE_QUEUE = "contacts-schema-change-queue";
-
+	
+	//Free Emails added push queue
+	public static final String EMAILS_ADDED_QUEUE = "free-emails-added-queue";
 }

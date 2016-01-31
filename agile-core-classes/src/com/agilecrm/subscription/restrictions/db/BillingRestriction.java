@@ -13,6 +13,7 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -21,6 +22,8 @@ import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.cron.deferred.OurDomainSyncDeferredTask;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -29,6 +32,7 @@ import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.DateUtil;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.workflows.Workflow;
@@ -321,6 +325,16 @@ public class BillingRestriction
 	// pageviews =
 	// AnalyticsSQLUtil.getPageViewsCountForGivenDomain(NamespaceManager.get());
     }
+    
+    //sets emails to 5000(for free customers)
+  	public void refreshEmails()
+  	{
+  		this.one_time_emails_count = 0;
+  		this.max_emails_count = 0;
+  		this.last_renewal_time = System.currentTimeMillis()/1000;
+  		this.save();
+  		BillingRestrictionUtil.sendFreeEmailsUpdatedMail();
+  	}
 
     private void setCreatedTime()
     {
@@ -445,11 +459,32 @@ public class BillingRestriction
 	if (one_time_emails_count > 0 && (max_emails_count == null || max_emails_count == 0))
 	{
 	    max_emails_count = one_time_emails_count;
-	    this.save();
 	}
 
 	one_time_emails_backup = one_time_emails_count;
 
 	System.out.println("one time emails in domain : " + NamespaceManager.get() + " : " + one_time_emails_backup);
+    }
+    
+    public boolean checkToUpdateFreeEmails(){
+    	Subscription subscription = SubscriptionUtil.getSubscription();
+    	System.out.println("max emails count::"+this.max_emails_count);
+    	if(this.max_emails_count == null || this.max_emails_count == 0 || (this.one_time_emails_count != null && this.one_time_emails_count <= 0 && subscription != null && subscription.emailPlan == null)){
+			System.out.println("last renewal time::"+this.last_renewal_time);
+			if(this.last_renewal_time == null){
+				DomainUser owner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+				if (owner != null)
+					this.last_renewal_time = owner.getCreatedTime();
+				else
+					this.last_renewal_time = new DateUtil().getTime().getTime()/1000;
+			}
+			Long currentDate = new DateUtil().getTime().getTime()/1000;
+			if(currentDate - this.last_renewal_time >= 2592000){
+				System.out.println("Updating free 5000 emails");
+				return true;
+			}
+		}
+		System.out.println("restriction obj:: "+this);
+		return false;
     }
 }

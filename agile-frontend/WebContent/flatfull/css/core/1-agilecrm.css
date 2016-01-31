@@ -1276,7 +1276,6 @@ ul.tags-management li.tag a {/*color:#ffffff;*/
 	/*color: #000;*/
 	font-size: 12px;
 	width: 100%;
-	max-width:100px;
 }
 .tag-management-actions a {
 	cursor: pointer;
@@ -2986,6 +2985,18 @@ width: 915px;
  white-space:normal!important;
  } 
 
+ .thumb-m {
+	 display: inline-block;
+  width: 80px;
+}
+
+.rep-user-info
+{
+	background-color: rgb(240, 243, 244);
+    margin-top: 108px;
+    margin-left: 156px;
+}
+
 .custom_popover .popover-content{
 	padding-top: 5px;
 	padding-bottom:5px;
@@ -2997,3 +3008,138 @@ width: 915px;
 	max-width: none;
 	
 }
+
+.c-progress
+{
+	cursor: progress;
+}
+
+.width-goal
+{
+width : 150px;
+}
+
+.padder-portlet
+{
+	padding-top: 9px;
+	padding-bottom:9px;
+}
+
+#portlets-add-listener #deals > div:nth-of-type(4)
+{
+	height: 243px;
+}
+
+.goal
+{
+	width:calc(100% - 420px);
+}
+
+.datepicker-months
+{
+		width : 233px;
+}
+@-moz-document url-prefix() { 
+
+.mozilla-addon
+{
+	position:relative; top :-2px;
+
+}
+}
+table.hide-head-checkbox th label.i-checks {
+      visibility: hidden;
+}
+
+.table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th,.table-striped>tbody>tr:hover>td{
+  background-color: #f9f9f9 !important;
+  
+}
+.app-aside-fixed:not(.app-aside-dock) aside {
+	position: fixed;
+	height: 100vh;
+}
+
+#calls-chart .highcharts-legend , #calls-chart .highcharts-tooltip
+{
+	text-transform: capitalize;
+}
+
+.display-none{
+	display: none;
+}
+
+}
+.fullscreen{
+  width: 100%;
+  height: 100%;
+  background-color: #f0f3f4;
+}
+.fullscreenwidjet{
+
+	float: left!important;
+	width: 100%!important;
+	position: absolute!important;
+	font-size: 13px!important;
+	margin: 0!important;
+	left:0px;
+	top:0px;
+	z-index:9999;
+	overflow-y:scroll;
+}
+.fullscreenwidjet .landingpagessmart,.fullscreenwidjet .campaign-new-add{
+	position: relative;
+    top: -20px;
+    left: -20px;
+    width: 100vw;
+}
+
+.contacts-toolbar .sort-field-txt:hover {
+    color: rgb(88, 102, 110)!important;
+}
+
+
+
+.conversion_track::-webkit-scrollbar-thumb {
+ background: #bebebe;
+}
+.conversion_track::-webkit-scrollbar {
+ width: 5px;
+ margin-right: 4px !important;
+ background:#eee;
+}
+
+.conversion_track{
+	height:332px;
+	overflow-y:auto;
+}
+
+
+#count_goals_chart .highcharts-tooltip , 
+#amount_goals_chart .highcharts-tooltip 
+{
+	z-index: 1;
+}
+
+
+.slate-content h4{
+	font-size: 18px;
+	opacity:0.8;
+}
+.slate-content .text, .slate-content .text-base{
+	font-size: 15px;
+}
+
+
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+/* Safari and Chrome */
+.no-wrap {
+ white-space: normal !important;
+}
+ 
+} 
+
+.deals-nowrap .no-wrap {
+ white-space: nowrap !important;
+}
+

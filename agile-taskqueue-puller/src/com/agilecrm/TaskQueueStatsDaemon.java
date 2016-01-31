@@ -8,6 +8,8 @@ import org.apache.log4j.Level;
 
 import com.Globals;
 import com.agilecrm.api.stats.APIStats;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.logger.AgileAPILogger;
 import com.agilecrm.queues.PullScheduler;
 import com.agilecrm.threads.TaskExcecutorThreadPool;
@@ -17,6 +19,7 @@ import com.google.api.services.taskqueue.Taskqueue.Tasks.Lease;
 import com.google.api.services.taskqueue.model.Task;
 import com.google.api.services.taskqueue.model.TaskQueue;
 import com.google.api.services.taskqueue.model.TaskQueue.Stats;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import com.google.apphosting.api.ApiProxy;
@@ -183,7 +186,7 @@ public class TaskQueueStatsDaemon extends Thread
      * 
      * @throws IOException
      */
-    private void setRemoteAPI() throws IOException
+    protected void setRemoteAPI() throws IOException
     {
 	System.out.println("setting remote api in thread " + Thread.currentThread().getName());
 
@@ -225,7 +228,7 @@ public class TaskQueueStatsDaemon extends Thread
     {
 
 	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
-		.credentials(Globals.USER_ID, Globals.PASSWORD);
+		.useApplicationDefaultCredential();
 	installer.install(options);
 
 	threadLocalDelegate = ApiProxy.getDelegate();
@@ -346,14 +349,14 @@ public class TaskQueueStatsDaemon extends Thread
 		    try
 		    {
 			System.out.println("waiting");
-			wait(wairPeriodInMilliSeconds);
+			sleep(wairPeriodInMilliSeconds);
 		    }
 		    catch (InterruptedException e)
 		    {
 			logger.log(Level.WARN, e.getMessage() + ", " + Thread.currentThread().getName());
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			wait(wairPeriodInMilliSeconds);
+			sleep(wairPeriodInMilliSeconds);
 		    }
 		    continue;
 		}
@@ -439,5 +442,24 @@ public class TaskQueueStatsDaemon extends Thread
     private void closeResources() throws Exception
     {
 	uninstall();
+    }
+
+    public static void main(String[] args) throws IOException
+    {
+	TaskQueueStatsDaemon tqsd = new TaskQueueStatsDaemon("dummy");
+
+	tqsd.setRemoteAPI();
+
+	NamespaceManager.set("local");
+	List<Contact> contacts = ContactUtil.getAll(10, null);
+	for (int i = 0; i < contacts.size(); i++)
+	{
+	    Contact contact = contacts.get(i);
+	    Long start = System.currentTimeMillis();
+	    contact.save(true);
+	    System.out.println("**********************################");
+	    System.out.println("time : " + (System.currentTimeMillis() - start));
+	}
+
     }
 }

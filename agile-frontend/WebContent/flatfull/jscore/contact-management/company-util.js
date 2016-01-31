@@ -219,7 +219,7 @@
 		
 		//reads the value from cookie or local store if the value is no it will return from here
 		
-		var map_view=localStorage.getItem('MAP_VIEW');
+		var map_view=_agile_get_prefs('MAP_VIEW');
 		if(map_view=="disabled"){
 			$("#map_view_action",el).html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
 			return;
@@ -332,7 +332,7 @@
 	}
 	
 	var updateSelectedSortKey = function(el) {
-		var sort_key = readCookie("company_sort_field");
+		var sort_key = _agile_get_prefs("company_sort_field");
 		if(sort_key && sort_key != null) {
 			var idSuffix = '-asc';
 			if(sort_key.indexOf('-') == 0) {
@@ -360,8 +360,9 @@
 					.html(
 							'<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li  class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="m-l-xs pull-left">' + decodeURI(tag_id) + '</span><a class="close default_contact_remove_tag m-l-xs pull-left">&times</a></li></ul>').attr("_filter", tag_id);
 							
-
-		var filter_id = null;
+		setTimeout(function(){
+					
+			var filter_id = null;
 			companyFiltersListView = new Base_Collection_View(
 				{
 					url : '/core/api/filters?type=COMPANY',
@@ -370,11 +371,12 @@
 					templateKey : "company-filter-list",
 					individual_tag_name : 'li',
 					sort_collection : false,
+					no_transition_bar : true,
 					postRenderCallback : function(el)
 					{
 						var filter_name;
 						// Set saved filter name on dropdown button
-						if (filter_name = readCookie('company_filter'))
+						if (filter_name = _agile_get_prefs('company_filter'))
 						{
 							// If is not system type get the name of the filter from
 							// id(from cookie)
@@ -407,15 +409,14 @@
 			
 				// Shows in contacts list
 				$('#filter-list', cel).html(companyFiltersListView.render().el);
+		}, 500);
 				
-	}
+	};
 	
-	var revertToDefaultCompanies = function(){
+	company_list_view.revertToDefaultCompanies = function(){
 		// Erase filter cookie. Erases both contact and company filter
-		//eraseCookie('contact_filter');
-		//eraseCookie('contact_filter_type');
-		eraseCookie('company_filter');
-		eraseData('dynamic_filter');
+		_agile_delete_prefs('company_filter');
+		_agile_delete_prefs('dynamic_filter');
 	
 		if (App_Companies.companiesListView)
 			App_Companies.companiesListView = undefined;
@@ -426,94 +427,18 @@
 		App_Companies.companies();
 	};
 	
-	var initEvents = function(){
-		/*
-		 * If default filter is selected, removes filter cookies an load contacts
-		 * with out any query condition
-		 */
-		$("body").on('click', '.default_company_filter', function(e)
-		{
-			e.preventDefault();
-			revertToDefaultCompanies();
-		});
-		
-		$("body").on('click', '#companies-filter', function(e)
-		{
-
-			e.preventDefault();
-			eraseCookie('company_filter');
-			//eraseCookie('contact_filter_type');
-
-			//createCookie('company_filter', "Companies");
-			COMPANIES_HARD_RELOAD = true;
-			App_Companies.companies(); // /Show Companies list, explicitly hard
-			// reload
-			return;
-		});
-
-		$("body").on('click', '.company_static_filter', function(e)
-		{
-
-			e.preventDefault();
-			eraseCookie('company_filter');
-			//eraseData('dynamic_contact_filter');
-			eraseData('dynamic_company_filter');
-
-			var filter_id = $(this).attr('id');
-			var filter_type = $(this).attr('filter_type');
-
-			// Saves Filter in cookie
-			createCookie('company_filter', filter_id)
-			//createCookie('company_filter_type', filter_type)
-
-			// Gets name of the filter, which is set as data
-			// attribute in filter
-			filter_name = $(this).attr('data');
-
-			COMPANIES_HARD_RELOAD=true;
-			App_Companies.companies();
-			return;
-			// /removed old code from below,
-			// now filters will work only on contact, not company
-		});
-		
-		$("body").on('click', '#comp-sort-by-created_time-desc', function(e)
-		{
-			e.preventDefault();
-			createCookie('company_sort_field',$(this).attr('data'));
-			COMPANIES_HARD_RELOAD=true;
-			App_Companies.companies();
-		});
-		
-		$("body").on('click', '#comp-sort-by-created_time-asc', function(e){
-			e.preventDefault();
-			createCookie('company_sort_field',$(this).attr('data'));
-			COMPANIES_HARD_RELOAD=true;
-			App_Companies.companies();
-		});
-
-		$("body").on('click', '.comp-sort-by-name', function(e){
-			e.preventDefault();
-			createCookie('company_sort_field',$(this).attr('data'));
-			COMPANIES_HARD_RELOAD=true;
-			App_Companies.companies();
-		});
-	};
-	
 	company_list_view.init = function(cel){
-		// initEvents();
 		setupCompanyFilterList(cel);
 		setupCompanyViews(cel);
 	};
-	
-	initEvents();
+
 }(window.company_list_view = window.company_list_view || {}, $));
 
 /*****Company Details view******/
 
 (function(company_detail_tab, $, undefined) {
 	
-	var activateCurrentTab = function(ele){
+	company_detail_tab.activateCurrentTab = function(ele){
 		$('#contact-tab-content .tab-pane').removeClass('active');
 		ele.addClass('active');
 	};
@@ -522,7 +447,7 @@
 	 * Changes, owner of the contact, when an option of change owner drop down
 	 * is selected.   
 	 */
-	var changeOwner = function(that){
+	company_detail_tab.changeOwner = function(that){
 		
 		// Reads the owner id from the selected option
 		var new_owner_id = that.attr('data');
@@ -553,7 +478,7 @@
    	};
 	
 	// Deletes a contact from database
-	var deleteCurrentCompany = function(){
+	company_detail_tab.deleteCurrentCompany = function(){
 		
 		if(!confirm("Do you want to delete the company?"))
     		return;
@@ -565,7 +490,7 @@
 	};
 	
 	
-	var addTagsToCompany = function(){
+	company_detail_tab.addTagsToCompany = function(){
 		 // Add Tags
 		var new_tags = get_new_tags('companyAddTags');
 		if(new_tags)new_tags=new_tags.trim();
@@ -628,7 +553,7 @@
 		}
 	};
 	
-	var load_company_deals = function ()
+	company_detail_tab.load_company_deals = function ()
 	{
 		id = App_Companies.companyDetailView.model.id;
 		dealsView = new Base_Collection_View({
@@ -646,10 +571,10 @@
         });
         dealsView.collection.fetch();
         $('#deals', App_Companies.companyDetailView.el).html(dealsView.el);
-        activateCurrentTab($('#deals'));
+        company_detail_tab.activateCurrentTab($('#deals'));
         
 	};
-	var load_company_cases = function()
+	company_detail_tab.load_company_cases = function()
 	{
 		id = App_Companies.companyDetailView.model.id;
 		casesView = new Base_Collection_View({
@@ -667,10 +592,10 @@
         });
 		casesView.collection.fetch();
         $('#cases', App_Companies.companyDetailView.el).html(casesView.el);
-        activateCurrentTab($('#cases'));
+        company_detail_tab.activateCurrentTab($('#cases'));
 	};
 	
-	var load_company_notes = function()
+	company_detail_tab.load_company_notes = function()
 	{
 	    var id = App_Companies.companyDetailView.model.id;
 	    notesView = new Base_Collection_View({
@@ -688,10 +613,10 @@
         });
         notesView.collection.fetch();
         $('#notes', App_Companies.companyDetailView.el).html(notesView.el);
-        activateCurrentTab($('#notes'));
+        company_detail_tab.activateCurrentTab($('#notes'));
 	};
 	
-	var load_company_documents = function()
+	company_detail_tab.load_company_documents = function()
 	{
 		 id = App_Companies.companyDetailView.model.id;
 		 documentsView = new Base_Collection_View({
@@ -710,151 +635,9 @@
 	        });
 		    documentsView.collection.fetch();
 	        $('#documents', App_Companies.companyDetailView.el).html(documentsView.el);
-	        activateCurrentTab($('#documents'));
+	        company_detail_tab.activateCurrentTab($('#documents'));
 	};
 	
-	company_detail_tab.initEvents = function(){
-		
-		$("body").on('click', '#contactDetailsTab a[href="#company-contacts"]', function(e)
-				{
-					e.preventDefault();
-					fill_company_related_contacts(App_Companies.companyDetailView.model.id, 'company-contacts');
-				});
-		
-		/**
-		 * Fetches all the deals related to the contact and shows the deals
-		 * collection as a table in its tab-content, when "Deals" tab is clicked.
-		 */
-		$("body").on('click', '#contactDetailsTab a[href="#company-deals"]', function(e)
-		{
-			e.preventDefault();
-			save_contact_tab_position_in_cookie("deals");
-			load_company_deals();
-		});
-
-		/**
-		 * Fetches all the cases related to the contact and shows the collection.
-		 */
-		$("body").on('click', '#contactDetailsTab a[href="#company-cases"]', function(e)
-		{
-			e.preventDefault();
-			save_contact_tab_position_in_cookie("cases");
-
-			load_company_cases();
-		});
-		
-		/**
-		 * Fetches all the notes related to the contact and shows the notes
-		 * collection as a table in its tab-content, when "Notes" tab is clicked.
-		 */
-		$("body").on('click', '#contactDetailsTab a[href="#company-notes"]', function(e)
-		{
-			e.preventDefault();
-			save_contact_tab_position_in_cookie("notes");
-			load_company_notes();
-		});
-		
-		/**
-		 * Fetches all the documents related to the contact and shows the documents
-		 * collection as a table in its tab-content, when "Documents" tab is
-		 * clicked.
-		 */
-		$("body").on('click', '#contactDetailsTab a[href="#company-documents"]', function(e)
-		{
-			e.preventDefault();
-			save_contact_tab_position_in_cookie("documents");
-			load_company_documents();
-		});
-		
-		/**
-		 * "click" event of add button of tags form in contact detail view
-		 * Pushes the added tags into tags array attribute of the contact and saves it
-		 */ 
-		$("body").on('click', '#company-add-tags', function(e)
-		{	e.preventDefault();
-			
-		   addTagsToCompany();
-		});
-		
-		$("body").on('keydown', "#companyAddTags",function(e) {
-		//$("#companyAddTags").die().live('keydown',function(e) {
-	    	if(e.which == 13 && !isTagsTypeaheadActive){
-	    		addTagsToCompany();
-	    		}
-	    	});
-		
-		// Deletes a contact from database
-		$("body").on('click', '#company-actions-delete', function(e)
-		{	
-			e.preventDefault();
-			deleteCurrentCompany();
-		});
-		
-		/**
-		 * Changes, owner of the contact, when an option of change owner drop down
-		 * is selected.   
-		 */
-		$("body").on('click', '.company-owner-list', function(e){
-		
-			$('#change-owner-ul').css('display', 'none');
-			
-			changeOwner($(this));
-		});
-		
-		/**
-		 * Deletes a tag of a contact (removes the tag from the contact and saves the contact)
-		 */ 
-		$("body").on('click', '.remove-company-tags', function(e){
-			e.preventDefault();
-			
-			var tag = $(this).attr("tag");
-			//removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
-			console.log($(this).closest("li").parent('ul').append(getRandomLoadingImg()));
-			
-	     	var json = App_Companies.companyDetailView.model.toJSON();
-	     	
-	     	// Returns contact with deleted tag value
-	     	json = delete_contact_tag(json, tag);
-	     	var that = this;
-	     	
-	     	// Unbinds click so user cannot select delete again
-	     	$(this).unbind("click");
-	     	
-	        var contact = new Backbone.Model();
-	        contact.url = 'core/api/contacts';
-	        contact.save(json, {
-	       		success: function(data)
-	       			{ 	      		
-	       				$(that).closest("li").parent('ul').find('.loading').remove();
-	       				$(that).closest("li").remove();
-	       				
-	       			// Updates to both model and collection
-	       				App_Companies.companyDetailView.model.set(data.toJSON(), {silent : true});
-		       			
-		       		//	App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
-	       				
-	       				// Also deletes from Tag class if no more contacts are found with this tag
-	       				$.ajax({
-	       					url: 'core/api/tags/' + tag,
-	       					type: 'DELETE',
-	       					success: function()
-	       					{
-	       						if(tagsCollection)
-	       							tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
-	       					}
-	       				});
-	       			}
-	        });
-		});
-	};
-
-	company_detail_tab.initEvents();
 
 }(window.company_detail_tab = window.company_detail_tab || {}, $));
 
-/** 
-*Initialize events once
-*/
-$(function(){
-
-});

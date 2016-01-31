@@ -182,8 +182,8 @@ $(function(){
 		$("#error-number-not-selected").hide();
 	});
 
-    $('body').off('click', '.contact-make-twilio-call');
-	$('body').on('click', '.contact-make-twilio-call', function(e)
+    $('body').off('click', '.contact-make-twilio-call,.TwilioIO_call');
+	$('body').on('click', '.contact-make-twilio-call, .TwilioIO_call', function(e)
 	{
 		e.preventDefault();
 		TWILIO_CALLTYPE = "Outgoing";
@@ -196,13 +196,13 @@ $(function(){
 		TWILIO_CONTACT_ID = contactDetailsObj.id;
 //		alert(TWILIO_CONTACT_ID);
 
-		if (Twilio.Device.status() == "busy")
+		if (Twilio.Device.status() == "busy"  || checkForActiveCall())
 		{
 			alert("Already on call.");
 			return;
 		}
 
-		console.log("phone: " + $(this).attr("phone"));
+		console.log("phone: " + $(this).closest(".contact-make-call").attr("phone"));
 
 		if(CALL_CAMPAIGN.start )
 			  {
@@ -212,7 +212,7 @@ $(function(){
 				}
 				CALL_CAMPAIGN.state = "PAUSE" ;
 			  }
-		twiliocall($(this).attr("phone"), getContactName(contactDetailsObj));
+		twiliocall($(this).closest(".contact-make-call").attr("phone"), getContactName(contactDetailsObj));
 	});
 
 	$('body').off('click', '#twilio_acc_sid, #twilio_auth_token');
@@ -731,37 +731,7 @@ function setUpGlobalTwilio()
 			console.log("in twilio ready Twilio_Setup_Called: " + Twilio_Setup_Called);
 			Twilio_Setup_Called = false;
 
-			// Make call option visible on contact detail page
-			// Sequence of calling option 1) BRIA 2) Twilio 3) SIP
-			if(default_call_type == "Bria"){
-				if(callFromBria == true){
-					$(".contact-call-button").removeAttr('disabled');
-					$(".contact-make-call").removeAttr("href");
-					$(".contact-call-button").addClass('contact-make-bria-call');
-					var selector = '.contact-call-button-div';
-					var text = "Call from Bria";
-					changeTooltipTo(selector,text);
-				}
-			}else{
-				if(Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
-					//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
-					{
-						$(".contact-call-button").removeAttr('disabled');
-						$(".contact-make-call").removeAttr("href");
-						$(".contact-call-button").addClass('contact-make-twilio-call');
-						var selector = '.contact-call-button-div';
-						var text = "Call from Twilio";
-						changeTooltipTo(selector,text);
-					}else if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-						{
-							$(".contact-call-button").removeAttr('disabled');
-							$(".contact-make-call").removeAttr("href");
-							$(".contact-call-button").addClass('contact-make-sip-call');
-							var selector = '.contact-call-button-div';
-							var text = "Call from SIP";
-							changeTooltipTo(selector,text);
-						}
-			}
+	
 		});
 
 		Twilio.Device.error(function(error)
@@ -1233,16 +1203,27 @@ function showNoteAfterCall(callRespJson,messageObj)
 		//				phoneNumber = callRespJson.to;
 						phoneNumber = TWILIO_CALLED_NO;
 						TWILIO_CALLED_NO = "";
+						
+						$.post( "/core/api/widgets/twilio/savecallactivityById",{
+							id:TWILIO_CONTACT_ID,
+							direction: TWILIO_DIRECTION, 
+							phone: phoneNumber, 
+							status : callRespJson.status,
+							duration : callRespJson.duration 
+							});
 					}
-					else
+					else{
 						phoneNumber = callRespJson.from;
+						$.post( "/core/api/widgets/twilio/savecallactivity",{
+							direction: TWILIO_DIRECTION, 
+							phone: phoneNumber, 
+							status : callRespJson.status,
+							duration : callRespJson.duration 
+							});
+					}
+						
 					
-					$.post( "/core/api/widgets/twilio/savecallactivity",{
-						direction: TWILIO_DIRECTION, 
-						phone: phoneNumber, 
-						status : callRespJson.status,
-						duration : callRespJson.duration 
-						});
+
 					
 					switch(callStatus) {
 				    case "canceled":
@@ -1299,17 +1280,26 @@ function showNoteAfterCall(callRespJson,messageObj)
 			
 	} else {
 		var phoneNumber = "";
-		if(TWILIO_DIRECTION == "outbound-dial")
+		if(TWILIO_DIRECTION == "outbound-dial"){
 			phoneNumber = callRespJson.to;
-		else
+			$.post( "/core/api/widgets/twilio/savecallactivityById",{
+				id:TWILIO_CONTACT_ID,
+				direction: TWILIO_DIRECTION, 
+				phone: phoneNumber, 
+				status : callRespJson.status,
+				duration : callRespJson.duration 
+				});
+		}
+		else{
 			phoneNumber = callRespJson.from;
-		
-		$.post( "/core/api/widgets/twilio/savecallactivity",{
-			direction: TWILIO_DIRECTION, 
-			phone: phoneNumber, 
-			status : callRespJson.status,
-			duration : callRespJson.duration 
-			});
+			$.post( "/core/api/widgets/twilio/savecallactivity",{
+				direction: TWILIO_DIRECTION, 
+				phone: phoneNumber, 
+				status : callRespJson.status,
+				duration : callRespJson.duration 
+				});
+		}
+
 		return showNewContactModal(phoneNumber);
 	}
 	
@@ -1415,7 +1405,8 @@ function sendVoiceAndEndCall(fileSelected) {
 										});
 									
 									if(TWILIO_CALLED_NO != "") {
-										$.post( "/core/api/widgets/twilio/savecallactivity",{
+										$.post( "/core/api/widgets/twilio/savecallactivityById",{
+											id:TWILIO_CONTACT_ID,
 											direction: TWILIO_DIRECTION, 
 											phone: TWILIO_CALLED_NO, 
 											status : "voicemail",

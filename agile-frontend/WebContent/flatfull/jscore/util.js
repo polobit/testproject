@@ -19,13 +19,17 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-r
  * Default image shown for contacts if image is not available
  */
 
-var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/flatfull/user-default.jpg";
+var DEFAULT_GRAVATAR_url = agileWindowOrigin() + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
 
-var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi,Sandeep";
 
-var SALES_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Shravi_Sharma,stephen";
+var ONBOARDING_SCHEDULE_URL = "http://supportcal.agilecrm.com";
 
-var SUPPORT_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Raja_Shekar,Natesh,Abhishek_Pandey";
+
+var SALES_SCHEDULE_URL = "http://salescal.agilecrm.com";
+
+
+var SUPPORT_SCHEDULE_URL = "http://supportcal.agilecrm.com";
+
 
 var CALENDAR_WEEK_START_DAY = CURRENT_USER_PREFS.calendar_wk_start_day;
 /**
@@ -358,7 +362,9 @@ function showTextGravatar(selector, element)
 			return;
 
 		$(this).attr("data-name", name);
-		$(this).initial({ charCount : 2 });
+
+		// $(element).initial({charCount: 2,fontWeight: 'normal',fontSize:20, width:$(element).width(), height:$(element).height()});
+		$(element).initial({charCount: 2,fontWeight: 'normal'});
 	});
 }
 
@@ -548,6 +554,9 @@ function convertDateFromUKtoUS(ukDate)
 		date = ukDate.split(".");
 	if(date.length == 3)
 	{	
+		if(date[2].length == 2)
+			  date[2] = "20" + date[2];
+
 		var returnDate = new Date(date[1]+"/"+date[0]+"/"+date[2]);
 		if(!/Invalid|NaN/.test(returnDate))
 			return returnDate.format("mm/dd/yyyy");
@@ -558,4 +567,40 @@ function convertDateFromUKtoUS(ukDate)
 		return "";
 }
 
+/**
+* Retuns date with supportable format
+*/
+function getFormattedDateObjectWithString(value){
 
+		if(!value)
+			   return new Date("");
+
+        value = value.replace(/\./g,'/');
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("yyyy") == -1){
+			value = value.substring(0, value.length - 2) + "20" + value.substring(value.length - 2);
+		}
+
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+			value = convertDateFromUKtoUS(value);
+
+		return new Date(value);
+	
+}
+
+function isIE() {
+
+	var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
+	var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
+	if(isIE || isIENew)
+	 return true;
+
+	return false;
+}
+
+function agileWindowOrigin(){
+	if (!window.location.origin) {
+	   return window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+	}
+
+	return window.location.origin;
+}

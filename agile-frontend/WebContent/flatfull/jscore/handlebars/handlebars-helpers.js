@@ -301,7 +301,8 @@ $(function()
 		var initials = '';
 		try
 		{
-			// initials = text_gravatar_initials(items)
+			// if(!isIE())
+			initials = text_gravatar_initials(items);
 		}
 		catch (e)
 		{
@@ -310,9 +311,11 @@ $(function()
 
 		if (initials.length == 0)
 			backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
-		var data_name = '';
-		// "onLoad=\"image_load(this)\" onError=\"image_error(this)\"
-		// _data-name=\"" + initials;
+
+		var data_name =  '';
+		// if(!isIE())
+			data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
+		
 		var email = getPropertyValue(items, "email");
 		if (email)
 		{
@@ -392,6 +395,9 @@ $(function()
 	Handlebars.registerHelper('icons', function(item)
 	{
 
+		if(!item)
+			  return "";
+			
 		item = item.toLowerCase().trim();
 		console.log(item);
 		if (item == "email")
@@ -788,6 +794,24 @@ $(function()
 		// 1000));
 	});
 
+	Handlebars.registerHelper('paypalInvoiceDate', function(format, date)
+	{
+		if (date){
+			// var data = new Date(date); 
+			// var time = data.getTime();			
+    		var din = date.replace(/-/g, "//");
+			if(!format){
+			 	format = "ddd mmm dd yyyy";
+			}
+			var d= new Date(din).format(format);
+			return d;			
+		}
+		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
+		// 1000));
+	});
+
+
+
 	// Helper function to return date in user selected format in  preferences.
 
 	Handlebars.registerHelper('epochToHumanDateInFormat', function(date)
@@ -980,6 +1004,8 @@ $(function()
 	{
 		var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 		var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
+		if(symbol=='Rs')
+			symbol='Rs.';
 		return symbol;
 	});
 	Handlebars.registerHelper('mandrill_exist', function(options)
@@ -1272,6 +1298,23 @@ $(function()
 	});
 
 	/**
+	 * Counts the existence of property name which occurred multiple times.
+	 */
+	Handlebars.registerHelper('property_json_is_not_empty', function(name, properties, options)
+	{
+
+        var value = getPropertyValue(properties, name);
+        try{
+        	value = JSON.parse(value);
+        }catch(e){}
+
+		if (Object.keys(value).length > 0)
+			return options.fn(this);
+		
+		return options.inverse(this);
+	});
+
+	/**
 	 * returns online scheduling url of current user
 	 */
 	Handlebars.registerHelper('online_schedule_URL', function()
@@ -1284,6 +1327,11 @@ $(function()
 	Handlebars.registerHelper('get_current_domain', function()
 	{
 		return CURRENT_DOMAIN_USER.domain;
+	});
+
+	Handlebars.registerHelper('get_current_domain_email', function()
+	{
+		return CURRENT_DOMAIN_USER.email;
 	});
 
 	
@@ -3441,7 +3489,7 @@ $(function()
 						if (this[0] && this[0].count && (this[0].count != -1))
 						{
 
-							if (this[0].count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
+							if (this[0].count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
 								count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 
 							else
@@ -3594,22 +3642,27 @@ $(function()
 	 * Compares the arguments (value and target) and executes the template based
 	 * on the result (used in contacts typeahead)
 	 */
-	Handlebars.registerHelper('if_domain', function(value, options)
-	{
+	Handlebars.registerHelper('if_hasWriteAccess', function(options){
 
+		var status = false;
+		// Retrieves widget which is fetched using script API
+		var stripe_widget = agile_crm_get_widget("Stripe");
+		if(stripe_widget != undefined){
 
-		if (typeof value === "undefined")
-			return options.inverse(this);
-
-		var domainName = CURRENT_DOMAIN_USER.domain;
-
-		if(domainName){
-			if (value.toString().trim().toLowerCase() == domainName.toLowerCase()){
-				return options.fn(this);
-			}else{
-				return options.inverse(this);
+			if (stripe_widget.prefs != undefined)
+			{			
+				// Parse string Stripe widget preferences as JSON
+				var stripe_widget_prefs = JSON.parse(stripe_widget.prefs);
+				var scope = stripe_widget_prefs.scope;				
+				if(scope == "read_write"){					
+					status = true;
+				}
 			}
-		}else{
+		}
+
+		if(status){
+			return options.fn(this);			
+		}else{			
 			return options.inverse(this);
 		}
 	});
@@ -3799,6 +3852,14 @@ $(function()
 		var from_date = Date.parse(from_date_string);
 		var to_date = Date.today().add({ days : parseInt(no_of_days) });
 		return to_date.toString('MMMM d, yyyy') + " - " + from_date.toString('MMMM d, yyyy');
+
+	});
+
+		Handlebars.registerHelper('month-range', function(options)
+	{
+		var from_date = Date.today().moveToFirstDayOfMonth();
+		var to_date = Date.today().moveToLastDayOfMonth();
+		return from_date.toString('MMMM d, yyyy') + " - " + to_date.toString('MMMM d, yyyy');
 
 	});
 
@@ -5235,6 +5296,24 @@ $(function()
 		return getPendingEmails();
 	});
 
+	Handlebars.registerHelper('getLastPurchasedCount', function()
+	{
+		var max = getMaxEmailsLimit();
+		if(max == 0)
+			return "-";
+		else
+			return getPendingEmails();
+	});
+
+	Handlebars.registerHelper('getFreeEmailsCount', function()
+	{
+		var max = getMaxEmailsLimit();
+		if(max == 0)
+			return "5000";
+		else
+			return "-";
+	});
+
 	// helper function to return agile bcc special email for inbound mail event
 	// trigger
 	Handlebars.registerHelper('inboundMail', function()
@@ -5655,6 +5734,12 @@ $(function()
 		switch (status) {
 		case "completed":
 		case "answered":
+		case "inquiry":
+		case "interest":
+		case "no interest":
+		case "incorrect referral":
+		case "meeting scheduled":
+		case "new oppurtunity":
 			return "Call duration";
 			break;
 		case "busy":
@@ -5667,9 +5752,15 @@ $(function()
 		case "failed":
 			return "Failed";
 			break;
+		case "missed":
+			return "Call Missed";
+			break;	
 		case "in-progress":
 		case "voicemail":
 			return "Left voicemail";
+			break;
+		case "missed":
+			return "Call missed";
 			break;
 		default:
 			return "";
@@ -5681,7 +5772,7 @@ $(function()
 	{
 		var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
 		agile_api = JSON.parse(agile_api);
-		var shopify_webhook = window.location.origin + "/shopifytrigger?api-key=" + agile_api.api_key;
+		var shopify_webhook = agileWindowOrigin() + "/shopifytrigger?api-key=" + agile_api.api_key;
 		return new Handlebars.SafeString(shopify_webhook);
 	});
 
@@ -5783,6 +5874,8 @@ $(function()
 			icon_name = 'icon-graph';
 		else if (p_name == 'Campaign stats')
 			icon_name = 'icon-sitemap';
+		else if (p_name == 'Deal Goals')
+			icon_name = 'icon-flag';
 		return icon_name;
 	});
 	
@@ -6416,7 +6509,7 @@ $(function()
 				if (this[0] && this[0].count && (this[0].count != -1))
 				{
 
-					if (this[0].count > 9999 && (readCookie('company_filter') || readData('dynamic_company_filter')))
+					if (this[0].count > 9999 && (_agile_get_prefs('company_filter') || _agile_get_prefs('dynamic_company_filter')))
 						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 
 					else
@@ -6564,6 +6657,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'A mini calendar with an overview of your agenda for the day.'
 	else if (p_name == 'Campaign stats')
 		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
+	else if(p_name == 'Deal Goals')
+		description = 'See how much sales target you have achieved.'
 	return description;
 			});
 
@@ -6666,7 +6761,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 			});
 	Handlebars.registerHelper('toggle_contacts_filter', function(options)
 			{	        
-		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
+		    if(_agile_get_prefs(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
 			return "none";
 	       	}
 	    	
@@ -6675,7 +6770,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	
 	Handlebars.registerHelper('toggle_companies_filter', function(options)
 			{	        
-		   return  localStorage.getItem('companiesFilterStatus');
+		   return  _agile_get_prefs('companiesFilterStatus');
 		    
 			});
 
@@ -6795,6 +6890,7 @@ Handlebars.registerHelper('is_mobile', function(options)
 	});
 
 
+
 /**
  * Returns a S3 image url .
  * 
@@ -6839,11 +6935,17 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 			return options.inverse(this);
 	});
 
-	Handlebars.registerHelper('is_cancelled_user', function(options)
+	Handlebars.registerHelper('is_domain_owner', function(options)
 	{
-		if(IS_CANCELLED_USER)
+		if (CURRENT_DOMAIN_USER.is_account_owner)
 			return options.fn(this);
-		else if(IS_TRIAL)
+		else
+			return options.inverse(this);
+	});
+
+	Handlebars.registerHelper('is_not_allowed_trial', function(options)
+	{
+		if(IS_TRIAL && IS_ALLOWED_TRIAL)
 			return options.inverse(this);
 		else
 			return options.fn(this);
@@ -6903,9 +7005,44 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 		}
 	});
 
+// the epoch time is in milisecond.
+// jquery uses isostring format to implement timeago function on date...
+Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) {
+	try
+	{
+		return new Date(dateInepoch).toISOString();
+	}
+	catch (e)
+	{
+	}
+	return dateInepoch;
+});
+
+	Handlebars.registerHelper('emails_next_renewal_time', function(items, name)
+	{
+		return getEmailsNextRenewalTime();
+	});
+
+	Handlebars.registerHelper('is_paid_emails', function(options)
+	{
+		var max = getMaxEmailsLimit();
+		// if max is greater than zero, we consider user is subscrbed to email plan
+		if (max > 0)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
+
+	Handlebars.registerHelper('is_acl_allowed', function(options)
+	{
+		if(!_plan_restrictions.is_ACL_allowed[0]())
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
 
 function agile_is_mobile_browser(){
-    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+   return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+ }
 
-}
 

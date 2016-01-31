@@ -209,6 +209,8 @@ function initializePortletsListeners() {
 				}
 			});
 
+	
+
 	$('.portlet_body').off("change").on(
 			'change',
 			'.onboarding-check',
@@ -360,6 +362,9 @@ function initializePortletsListeners() {
 													model.color = "#36C";
 												else
 													model.color = "green";
+
+												$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+												
 												// Deserialize
 												deserializeForm(
 														model,
@@ -490,7 +495,7 @@ function initializePortletsListeners() {
 								.trim();
 				App_Portlets.currentPortletName = 'Mini Calendar';
 				var start = new Date(parseInt($(this).attr('id')));
-				$('#activityModal').modal('show');
+				$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 				highlight_event();
 
 				// Set Date for Event
@@ -675,6 +680,8 @@ function initializePortletsListeners() {
 							if (isNaN(id))
 								return;
 
+							$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+       
 							// Deserialize
 							deserializeForm(model.toJSON(),
 									$("#updateActivityForm"));
@@ -836,6 +843,17 @@ function initializePortletsListeners() {
 		portlet_utility.showPortletSettings(this.id);
 	});
 
+	$('.gridster-portlets').on(
+			'mouseover',
+			'.goals_portlet_body',
+			function(e) {
+				if ($('.goals_portlet_body').parent().find(
+						'.gs-resize-handle')) {
+					$('.goals_portlet_body').parent().find(
+							'.gs-resize-handle').remove();
+				}
+			});
+
 }
 
 /** 
@@ -870,7 +888,9 @@ function initializeAddPortletsListeners() {
 							"AccountDetails" : updateImageS3Path("flatfull/img/dashboard_images/account-information.png"),
 							"MiniCalendar" : updateImageS3Path("flatfull/img/dashboard_images/Mini-Calendar.jpg"),
 							"UserActivities" : updateImageS3Path("flatfull/img/dashboard_images/User-Activities.png"),
-							"Campaignstats" : updateImageS3Path("flatfull/img/dashboard_images/Campaign-stats.jpg")
+							"Campaignstats" : updateImageS3Path("flatfull/img/dashboard_images/Campaign-stats.jpg"),
+							"DealGoals" : updateImageS3Path("flatfull/img/dashboard_images/Quota.png"),
+
 						};
 						var placements_json = {
 							"GrowthGraph" : "left",

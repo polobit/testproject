@@ -18,7 +18,7 @@ routes : {
  */
 calendar : function()
 {
-	eraseCookie("agile_calendar_view");
+	_agile_delete_prefs("agile_calendar_view");
 	// read cookie for view if list_view is there then rendar list view else
 	// rendar default view
 	
@@ -40,7 +40,7 @@ calendar : function()
 
 						buildCalendarLhsFilters();
 						createRequestUrlBasedOnFilter();
-						var view = readCookie("agile_calendar_view");
+						var view = _agile_get_prefs("agile_calendar_view");
 
 						if (view)
 						{
@@ -72,9 +72,10 @@ calendar : function()
 						$('#grp_filter').css('display', 'none');
 						$('#event_tab').css('display', 'none');
 					
-
+						 $("[data-toggle=tooltip").tooltip();
+						 
 					}, $('#calendar-listers').find("#calendar-filters"));
-		});	
+		});			
 	}, "#calendar-listers");
 
 
@@ -196,7 +197,9 @@ function appendItem1(base_model)
 		}
 	}
 
-	var jsonObject = $.parseJSON(readCookie('event-lhs-filters'));
+	var jsonObject = $.parseJSON(_agile_get_prefs('event-lhs-filters'));
+	jsonObject = jsonObject[CURRENT_AGILE_USER.id];
+
 	var owner = jsonObject ? jsonObject.owner_ids : null;// if no owner then
 	// its all
 	if (owner && owner.length == 1 && owner[0] == CURRENT_AGILE_USER.id)
@@ -229,7 +232,9 @@ function appendItem2(base_model)
 	// check for all selected
 	// on landing of page
 
-	var jsonObject = $.parseJSON(readCookie('event-lhs-filters'));
+	var jsonObject = $.parseJSON(_agile_get_prefs('event-lhs-filters'));
+	jsonObject = jsonObject[CURRENT_AGILE_USER.id];
+
 	var owner = jsonObject ? jsonObject.owner_ids : null; // if no owner then
 	// its all
 	if (owner && owner.length == 1 && owner[0] == CURRENT_AGILE_USER.id)
@@ -316,7 +321,7 @@ function show_model(id)
 	}
 	else
 	{
-		$('#updateActivityModal').modal('show');
+		$("#updateActivityModal").html(getTemplate("update-activity-modal")).modal('show');
 
 		var event = eventCollectionView.collection.get(id).toJSON();
 		console.log("clicked event " + event);
@@ -490,7 +495,9 @@ function loadAgileEvents()
 		if (response)
 			calEnable = true;
 
-		var jsonObject = $.parseJSON(readCookie('event-lhs-filters'));
+		var jsonObject = $.parseJSON(_agile_get_prefs('event-lhs-filters'));
+		jsonObject = jsonObject[CURRENT_AGILE_USER.id];
+
 		var agile_event_owners = '';
 		if (jsonObject)
 		{
@@ -505,7 +512,7 @@ function loadAgileEvents()
 				});
 			}
 		}
-		var view = readCookie("agile_calendar_view");
+		var view = _agile_get_prefs("agile_calendar_view");
 		if (view == "calendar_list_view")
 		{
 			eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list?ownerId=' + agile_event_owners + '', templateKey : "events",
@@ -547,7 +554,7 @@ function loadGoogleEvents()
 		console.log(response);
 		if (response)
 		{
-			createCookie('google_event_token', response.access_token);
+			_agile_set_prefs('google_event_token', response.access_token);
 
 			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
 			{
@@ -557,7 +564,7 @@ function loadGoogleEvents()
 					gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
 
 					// Retrieve the events from primary
-					var view = readCookie("agile_calendar_view");
+					var view = _agile_get_prefs("agile_calendar_view");
 					if (view == "calendar_list_view")
 					{
 						var request = gapi.client.calendar.events
@@ -623,7 +630,7 @@ function loadGoogleEvents()
 
 function loadMoreEventsFromGoogle()
 {
-	var accessToken = readCookie('google_event_token');
+	var accessToken = _agile_get_prefs('google_event_token');
 	if (googleNextPageToken)
 	{
 		if (accessToken)
@@ -647,7 +654,7 @@ function loadMoreEventsFromGoogle()
 
 				}
 				googleNextPageToken = resp.nextPageToken;
-				var view = readCookie("agile_calendar_view");
+				var view = _agile_get_prefs("agile_calendar_view");
 				if (view == "calendar_list_view")
 				{
 					googleEventCollectionView.collection.add(events);
@@ -686,7 +693,7 @@ function loadMoreEventsFromGoogle()
 
 					}
 					googleNextPageToken = resp.nextSyncToken;
-					var view = readCookie("agile_calendar_view");
+					var view = _agile_get_prefs("agile_calendar_view");
 					if (view == "calendar_list_view")
 					{
 						googleEventCollectionView.collection.add(events);

@@ -43,7 +43,7 @@ import com.googlecode.objectify.Query;
  * entity_id, entity_type and activity_type.
  * </p>
  * 
- * @author 
+ * @author
  * 
  */
 public class ActivityUtil
@@ -101,7 +101,98 @@ public class ActivityUtil
 	activity.save();
 	return activity;
     }
+    
+    /**
+     * To merge contacts activity.
+     * 
+     * @param activity_type
+     *            the type of the activity performed on the Contact (MERGE)
+     * 
+     * @param contact
+     *            the contact object on which the activity is performed.
+     * @param data
+     *            extra information about the activity like Tag name when a tag
+     *            is added. null if nothing.
+     */
+    
+    public static Activity mergeContactActivity(ActivityType activity_type,Contact contact,int length){
+    	String contact_name = "";
+    	Activity activity = new Activity();
+    	if (contact != null)
+    	{
+    	    ContactField firstname = contact.getContactFieldByName("first_name");
+    	    ContactField lastname = contact.getContactFieldByName("last_name");
+    	    if (firstname != null)
+    	    {
+    		contact_name += firstname.value;
+    	    }
+    	    if (lastname != null)
+    	    {
+    		contact_name += " ";
+    		contact_name += lastname.value;
+    	    }
 
+    	    activity.label = contact_name;
+    	    activity.label = activity.label.trim();
+    	    contact_name = "";
+    	    activity.entity_id = contact.id;
+    	}
+    	activity.activity_type = activity_type;
+    	activity.entity_type = EntityType.CONTACT;
+    	activity.custom1 = String.valueOf(length);
+    	activity.save();
+    	return activity;
+    }
+
+	   /**
+     * To save save the contact activity.
+     * 
+     * @param activity_type
+     *            the type of the activity performed on the Contact (ADD, EDIT
+     *            etc..)
+     *            
+     *   @param custom4 : if we need to add all 4 activity fields         
+     */
+    public static Activity createContactActivity(ActivityType activity_type, Contact contact, String new_data,
+	    String old_data, String changed_field, String custom4)
+    {
+	String contact_name = "";
+	Activity activity = new Activity();
+	if (contact != null)
+	{
+
+	    ContactField firstname = contact.getContactFieldByName("first_name");
+	    ContactField lastname = contact.getContactFieldByName("last_name");
+	    if (firstname != null)
+	    {
+		contact_name += firstname.value;
+	    }
+	    if (lastname != null)
+	    {
+		contact_name += " ";
+		contact_name += lastname.value;
+	    }
+
+	    activity.label = contact_name;
+	    activity.label = activity.label.trim();
+	    contact_name = "";
+	    activity.entity_id = contact.id;
+	}
+	activity.activity_type = activity_type;
+	activity.entity_type = EntityType.CONTACT;
+
+	if (StringUtils.isNotEmpty(new_data))
+	    activity.custom1 = new_data;
+	if (StringUtils.isNotEmpty(old_data))
+	    activity.custom2 = old_data;
+	if (StringUtils.isNotEmpty(changed_field))
+	    activity.custom3 = changed_field;
+	if (StringUtils.isNotEmpty(custom4))
+	    activity.custom4 = custom4;
+	activity.save();
+	return activity;
+    }
+ 
     /**
      * To save the task activity.
      * 
@@ -353,7 +444,7 @@ public class ActivityUtil
 			obj.put("contactid", contactids.get(i));
 			obj.put("contactname", contactnames.get(i));
 			System.out.println("ContactIds  " + contactids.get(i) + "contact names   "
-			        + contactnames.get(i));
+				+ contactnames.get(i));
 			arr.put(obj);
 
 			obj = new JSONObject();
@@ -418,15 +509,20 @@ public class ActivityUtil
 	return activity;
     }
 
-    
     /**
      * creates bulk action activity when performed on Contact bulk actions
-     * @param new_data is changed data
-     * @param old_data  is old data
-     * @param changed_field is changed field
-     * @param label   
+     * 
+     * @param new_data
+     *            is changed data
+     * @param old_data
+     *            is old data
+     * @param changed_field
+     *            is changed field
+     * @param label
      * @param bulk_email_subject
-     * @param entityType   is to decide which action was perfomed i.e deal, contact or etc
+     * @param entityType
+     *            is to decide which action was perfomed i.e deal, contact or
+     *            etc
      * @return
      */
     public static Activity createBulkActionActivity(String new_data, String old_data, String changed_field,
@@ -489,7 +585,7 @@ public class ActivityUtil
 	    System.out.println("user " + new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
 	    Query<Activity> query = dao.ofy().query(Activity.class);
 	    query.filter("user =", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order(
-		    "time");
+		    "-time");
 	    if (max != null && max > 0)
 		dao.fetchAll(max, cursor);
 
@@ -558,9 +654,9 @@ public class ActivityUtil
 		searchMap.put("entity_id", entity_id);
 
 	    query.filter("user", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order(
-		    "time");
+		    "-time");
 	    if (max != null && max > 0)
-		dao.fetchAllByOrder(max, cursor, searchMap, true, false, "time");
+		dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
 
 	    return dao.listByProperty(searchMap);
 	}
@@ -572,12 +668,16 @@ public class ActivityUtil
     }
 
     /**
-     * fetches the activities based on 
-     * @param entitytype  TASK,EVENT,DEAL,CONTACT,DOCUMENT
-     * @param userid action performed by
-     * @param max  max records to fetch
-     * @param cursor 
-     * @return  list of activities
+     * fetches the activities based on
+     * 
+     * @param entitytype
+     *            TASK,EVENT,DEAL,CONTACT,DOCUMENT
+     * @param userid
+     *            action performed by
+     * @param max
+     *            max records to fetch
+     * @param cursor
+     * @return list of activities
      */
     public static List<Activity> getActivitites(String entitytype, Long userid, int max, String cursor)
     {
@@ -718,17 +818,22 @@ public class ActivityUtil
     }
 
     /**
-     * stores log for related contact changes  
-     * @param contacts  old contacts from db
-     * @param jsn  new contacts from user interface
-     * @param opportunity entity
+     * stores log for related contact changes
+     * 
+     * @param contacts
+     *            old contacts from db
+     * @param jsn
+     *            new contacts from user interface
+     * @param opportunity
+     *            entity
      * @throws JSONException
      */
     public static void getDealRelatedContacts(List<Contact> contacts, JSONArray jsn, Opportunity opportunity)
 	    throws JSONException
     {
 
-    	//fetches the contact ids from contacts to identify which contacts were removed and which are added
+	// fetches the contact ids from contacts to identify which contacts were
+	// removed and which are added
 	List<String> old_cont_ids = getContactIds(contacts);
 
 	if (jsn == null)
@@ -757,9 +862,11 @@ public class ActivityUtil
     /**
      * stores log for related_to filed change for events
      * 
-     * @param contacts old contacts
-     * @param jsn   new contact ids from user interface
-     * @param event 
+     * @param contacts
+     *            old contacts
+     * @param jsn
+     *            new contact ids from user interface
+     * @param event
      * @throws JSONException
      */
     public static void getEventRelatedContacts(List<Contact> contacts, JSONArray jsn, Event event) throws JSONException
@@ -793,9 +900,11 @@ public class ActivityUtil
     /**
      * stores log for related_to filed change
      * 
-     * @param contacts old contacts
-     * @param jsn  new contacts
-     * @param task 
+     * @param contacts
+     *            old contacts
+     * @param jsn
+     *            new contacts
+     * @param task
      * @throws JSONException
      */
     public static void getTaskRelatedContacts(List<Contact> contacts, JSONArray jsn, Task task) throws JSONException
@@ -844,8 +953,6 @@ public class ActivityUtil
 	return result;
 
     }
-
-    
 
     /**
      * 
@@ -1338,9 +1445,12 @@ public class ActivityUtil
 
     /**
      * creates log for each call activity i.e twillio or sip
-     * @param serviceType {out going or incoming}
-     * @param toOrFromNumber 
-     * @param callType {tw}
+     * 
+     * @param serviceType
+     *            {out going or incoming}
+     * @param toOrFromNumber
+     * @param callType
+     *            {tw}
      * @param callStatus
      * @param callDuration
      */
@@ -1351,7 +1461,12 @@ public class ActivityUtil
 	// Search contact
 	if (toOrFromNumber != null)
 	{
-	    Contact contact = QueryDocumentUtil.getContactsByPhoneNumber(toOrFromNumber);
+		Contact contact;
+		try{
+			contact = QueryDocumentUtil.getContactsByPhoneNumber(toOrFromNumber);
+		}catch(Exception e){
+			contact = ContactUtil.searchContactByPhoneNumber(toOrFromNumber);
+		}
 	    System.out.println("contact: " + contact);
 	    if (contact != null)
 	    {
@@ -1427,8 +1542,8 @@ public class ActivityUtil
 	    long maxTime)
     {
 	return dao.ofy().query(Activity.class).filter("activity_type", activityType)
-	        .filter("user", new Key<DomainUser>(DomainUser.class, ownerId)).filter("time >= ", minTime)
-	        .filter("time <= ", maxTime).list();
+		.filter("user", new Key<DomainUser>(DomainUser.class, ownerId)).filter("time >= ", minTime)
+		.filter("time <= ", maxTime).order("-time").list();
     }
 
     /**
@@ -1537,9 +1652,9 @@ public class ActivityUtil
 	    System.out.println("Search query --------" + searchMap);
 
 	    if (max != null && max > 0)
-		dao.fetchAllByOrder(max, cursor, searchMap, true, false, "time");
+		dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
 
-	    return dao.listByProperty(searchMap);
+	    return dao.listByPropertyAndOrder(searchMap, "-time");
 	}
 	catch (Exception e)
 	{
@@ -1549,7 +1664,8 @@ public class ActivityUtil
     }
 
     /**
-     * gets the  status of calls
+     * gets the status of calls
+     * 
      * @param status
      * @return
      */
@@ -1574,10 +1690,16 @@ public class ActivityUtil
 	else if (status.equalsIgnoreCase("voicemail"))
 	{
 	    return Call.VOICEMAIL;
+	}else if (status.equalsIgnoreCase("missed"))
+	{
+	    return Call.Missed;
+	}else if (status.equalsIgnoreCase("answered"))
+	{
+	    return Call.ANSWERED;
 	}
 	else
 	{
-	    return null;
+	    return status;
 	}
     }
 
@@ -1630,11 +1752,11 @@ public class ActivityUtil
 	{
 	    if (minTime != 0)
 		return dao.ofy().query(Activity.class).filter("entity_type", "DEAL")
-		        .filter("activity_type in", activityTypeList).filter("time >= ", minTime)
-		        .filter("time <= ", maxTime).order("-time").list();
+			.filter("activity_type in", activityTypeList).filter("time >= ", minTime)
+			.filter("time <= ", maxTime).order("-time").list();
 	    else
 		return dao.ofy().query(Activity.class).filter("entity_type", "DEAL")
-		        .filter("activity_type in", activityTypeList).filter("time <= ", maxTime).order("-time").list();
+			.filter("activity_type in", activityTypeList).filter("time <= ", maxTime).order("-time").list();
 
 	}
 	catch (Exception e)
@@ -1675,7 +1797,7 @@ public class ActivityUtil
 	if (max != 0)
 	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
 
-	return dao.listByProperty(searchMap);
+	return dao.listByPropertyAndOrder(searchMap, "-time");
     }
 
     /**
@@ -1761,7 +1883,7 @@ public class ActivityUtil
 	}
 	return str.toLowerCase();
     }
-    
+
     /**
      * Gets the count of answered calls.
      * 
@@ -1770,20 +1892,19 @@ public class ActivityUtil
      * 
      * @return list of activities based on activity type.
      */
-    public static int getCompletedCallsCountOfUser(Long ownerId, long minTime,
-	    long maxTime)
+    public static int getCompletedCallsCountOfUser(Long ownerId, long minTime, long maxTime)
     {
-    	try
-    	{
-    		return dao.ofy().query(Activity.class).filter("activity_type", ActivityType.CALL)
-    		        .filter("user", new Key<DomainUser>(DomainUser.class, ownerId)).filter("time >= ", minTime)
-    		        .filter("time <= ", maxTime).filter("custom3", Call.ANSWERED).count();
-    	}
-    	catch(Exception e)
-    	{
-    		e.printStackTrace();
-    		return 0;
-    	}
+	try
+	{
+	    return dao.ofy().query(Activity.class).filter("activity_type", ActivityType.CALL)
+		    .filter("user", new Key<DomainUser>(DomainUser.class, ownerId)).filter("time >= ", minTime)
+		    .filter("time <= ", maxTime).filter("custom3", Call.ANSWERED).count();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return 0;
+	}
     }
 
 }

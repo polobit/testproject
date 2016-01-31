@@ -28,10 +28,10 @@ public class CallNotification extends HttpServlet
     {
 	String apiKey = req.getParameter("api-key");
 	String phoneNumber = req.getParameter("number");
-	String firstName = req.getParameter("fname");
-	String lastName = req.getParameter("lname");
+	String firstName = req.getParameter("fname") == null ? "" : req.getParameter("fname");
+	String lastName = req.getParameter("lname") == null ? "" : req.getParameter("lname");
 	String namespace = NamespaceManager.get();
-
+	
 	if (StringUtils.isBlank(apiKey))
 	{
 	    res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Request: API Key is missing");
@@ -42,8 +42,24 @@ public class CallNotification extends HttpServlet
 	    res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Invalid API Key");
 	    return;
 	}
-	Contact contact = QueryDocumentUtil.getContactsByPhoneNumber(phoneNumber);
-	if (contact == null && !StringUtils.isBlank(firstName) && !StringUtils.isBlank(lastName))
+	if (null == phoneNumber ) 
+	{
+		 res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Request: Phone Number is missing");
+		    return;
+	}else{
+		if(StringUtils.isBlank(phoneNumber)){
+			res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Request: Phone Number is missing");
+				return;
+		}
+	}
+	
+	Contact contact = null;
+	try{
+		contact = QueryDocumentUtil.getContactsByPhoneNumber(phoneNumber);
+	}catch(Exception e){
+	}
+	
+	if (contact == null)
 	{
 	    try
 	    {
@@ -52,11 +68,18 @@ public class CallNotification extends HttpServlet
 		obj.put(Contact.LAST_NAME, lastName);
 		obj.put(Contact.PHONE, phoneNumber);
 		obj.put("type", "UNKNOWN_CALL");
-
 		PubNub.pubNubPush(namespace, obj);
-		String domain_url = VersioningUtil.getHostURLByApp(NamespaceManager.get());
-		String redire_link = domain_url + "#contacts/call-lead/" + firstName + "/" + lastName + "/"
-		        + phoneNumber;
+		String redire_link = "";
+		String domain_url = VersioningUtil.getHostURLByApp(namespace);
+		if(!StringUtils.isBlank(firstName) && !StringUtils.isBlank(lastName)){
+			redire_link = domain_url + "#contacts/call-lead/" + firstName + "/" + lastName + "/"
+			        + phoneNumber;			
+		}else if(!StringUtils.isBlank(firstName)){
+			redire_link = domain_url + "#contacts/call-lead/" + firstName + "/ "+ "/" + phoneNumber;	
+		}else{
+			redire_link = domain_url + "#contacts/call-lead/" + phoneNumber;	
+		}
+
 		res.sendRedirect(redire_link);
 		return;
 	    }

@@ -8,7 +8,7 @@
 <div id = "contact-dtl" class="app-content-full  h-full dock-view-fixing">
 <div class="hbox hbox-auto-xs hbox-auto-sm bg-light" >
   
-  <div class="col bg-light lter b-r details-mobile-view">
+  <div class="col  details-mobile-view {{#is_mobile}} m-t m-l m-r bg-white {{else}} b-r bg-light lter {{/is_mobile}}">
   <div class="vbox">
   <div class="row-row">
   <div>
@@ -90,7 +90,7 @@
 						
                            
 						
-						<div class="w-full  m-t-xs  h3 font-thin custom-color" style="padding-bottom:1px;">
+						<div class="w-full  m-t-xs  h3 font-thin custom-color p-r-sm" style="padding-bottom:1px;">
 								{{getPropertyValue properties
 										"first_name"}} {{getPropertyValue properties "last_name"}}
 								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
@@ -211,7 +211,7 @@
 						<!--  starting section 3  -->
                      
 <div class="btn-group btn-group-justified m-b hide"> <a class="btn btn-primary btn-rounded" data-toggle="button"> <span class="text"> <i class="fa fa-phone"></i> Call </span> </a> <a class="btn btn-info btn-rounded"> <i class="fa fa-envelope-o"></i> Email </a> </div>
-                    <div class="panel wrapper panel-middle-align-mobile">	
+                    <div class="panel wrapper panel-middle-align-mobile {{#is_mobile}} p-t-none p-b-sm {{/is_mobile}}">	
 					<div class="row">
 					<div class="col-xs-12 col-sm-7">			
 					 <div id='star' class="contact-star"></div>
@@ -322,6 +322,9 @@
 			 {{#property_is_exists "phone" properties}}
 			<div class="widget_container contact-rightpanel phone m-t-sm" id="{{name}}-container">
 				{{else}} 
+					{{#property_is_exists "skypePhone" properties}}
+						<div class="widget_container contact-rightpanel skypePhone m-t-sm" id="{{name}}-container">
+						{{else}} 
 					{{#property_is_exists "email" properties}}
 						<div class="widget_container contact-rightpanel email m-t-sm" id="{{name}}-container">
 						{{else}} 
@@ -335,6 +338,7 @@
 										{{/getContactCustomProperties }}
 							{{/property_is_exists}} 
 					{{/property_is_exists}}
+			{{/property_is_exists}} 
 		{{/property_is_exists}}
 						<h4 class="m-t-xs m-b-xs hide">
 							
@@ -373,6 +377,7 @@
 									<i class="icon icon-call-end text-sm m-r-xs v-middle"></i>
 									</div>
 									<div class="text-sm">
+
 <!--
                                         <a href='#' class="contact-make-sip-call" style="display:none;" phone="{{value}}">
                                            {{value}}
@@ -381,11 +386,19 @@
                                            phone="{{value}}">
                                            {{value}}
                                         </a>    
--->		
+                                        	
 										<span class="contact-call-button-div"  data-toggle="tooltip" data-placement="top" title="">
 										<a href="tel:{{remove_spaces value}}" class="contact-make-call contact-call-button" phone="{{value}}">{{value}}</a> 
-                                        {{#if subtype}}<span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
+                                        {{#if subtype}}<span class="label bg-light  text-tiny">{{subtype}}</span> {{/if}}
 										</span>
+-->
+<div class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
+			<a class="contact-make-call c-progress" phone="{{value}}" >{{value}}   {{#if subtype}} <span class="label bg-light  text-tiny">{{subtype}}</span> {{/if}} </a>
+
+
+			
+
+ </div>
 
 									</div>
 									<div class="clearfix"></div>
@@ -395,6 +408,47 @@
 							</div>
 							<div class="clearfix"></div>
 							{{/property_is_exists}}
+<!-- added by prakash for skype field.. -->
+<!--
+							{{#property_is_exists "skypePhone" properties}}
+							<div>
+								{{#multiple_Property_Element "skypePhone" properties}}
+								  
+								{{#property_is_exists "phone" ../properties}}
+									{{else}}
+										<div class="m-t-sm"><small class="text-muted text-xs">Contact Info</small></div>	
+								{{/property_is_exists}}
+			
+								<div class="contact-phone">
+									{{#each this}}
+									<div class="pull-left contact-phone-icon hide">
+									<i class="icon icon-call-end text-sm m-r-xs v-middle"></i>
+									</div>
+									<div class="text-sm">
+
+
+
+
+
+
+
+
+
+										<span class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
+										<a class="contact-make-skype-call c-progress" phone="{{value}}">{{value}}</a> 
+
+                                        </span>
+
+									</div>
+									<div class="clearfix"></div>
+									{{/each}}
+								</div>
+								{{/multiple_Property_Element}}
+							</div>
+							<div class="clearfix"></div>
+							{{/property_is_exists}}
+-->
+<!-- editing done for skype-->
  							{{#property_is_exists "email" properties}}
 							
 								{{#multiple_Property_Element "email" properties}}
@@ -415,7 +469,7 @@
 
 <div class="pull-left contact-email-icon m-r-xs hide"><i class="icon icon-envelope text-sm v-middle"></i></div>
 										<div class="text-ellipsis">
-											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
+											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light  text-tiny">{{subtype}}</span> {{/if}}
 										</div>
 
 <div class="clearfix"></div>
@@ -480,8 +534,9 @@
 									{{/getContactCustomPropertiesExclusively}}
 									
 									<div class="clearfix"></div>
-									{{#property_is_exists "address" properties}}
-<div class="m-t-sm"><small class="text-xs text-muted">Location</small></div>
+									{{#property_is_exists "address" properties}} 
+									 {{#property_json_is_not_empty "address" properties}}
+									<div class="m-t-sm"><small class="text-xs text-muted">Location</small></div>
 										<div >{{#address_Element properties}}{{/address_Element}}</div>
                                         <div class="clearfix"></div>
 										
@@ -496,6 +551,7 @@
 										</div> 
                            	            <div class="clearfix"></div> 
                                      </div>                                       
+                                     {{/property_json_is_not_empty}}
 									{{/property_is_exists}}
 
 							
@@ -527,19 +583,19 @@
 		
 		<!--  starting time line view -->
 		<div  id="contacts-inner-tabs">
-        <div class="tab-container bg-light">
-<div class="pull-left p-sm bg-light text-xs text-muted" id="prev"><i class="fa fa-chevron-left"></i></div>
-			<ul class="nav nav-tabs bg-light pull-left b-n" id="contactDetailsTab">
-				<li class=""><a data-toggle="tab" href="#timeline">Timeline</a></li>
-				<li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
-				<li class=""><a data-toggle="tab" href="#events">Events</a></li>
-				<li class=""><a data-toggle="tab" href="#tasks">Tasks</a></li>
-				<li class=""><a data-toggle="tab" href="#deals">Deals</a></li>
-				<li class=""><a data-toggle="tab" href="#cases">Cases</a></li>
-				<li class=""><a data-toggle="tab" href="#campaigns">Campaigns</a></li>
-				<li class=""><a data-toggle="tab" href="#stats">Web Stats</a></li>
-				<li class=""><a data-toggle="tab" href="#mail">Mail</a></li>
-				<li id="custom-contact-document" class=""><a data-toggle="tab" href="#documents">Documents</a></li>
+        <div class="tab-container bg-light hide-margin-mobile">
+<div class="pull-left p-sm bg-light text-xs text-muted hidden-sm hidden-xs" id="prev"><i class="fa fa-chevron-left"></i></div>
+			<ul class="nav nav-tabs bg-light pull-left b-n content-tabs"  role="tablist" id="contactDetailsTab">
+		<li class=""><a data-toggle="tab" role="tab" href="#timeline" onclick="setTimeout(function(){$(window).resize()}, 1000)">Timeline</a></li>
+				<li class=""><a data-toggle="tab" role="tab"  href="#notes">Notes</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#events">Events</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#tasks">Tasks</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#deals">Deals</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#cases">Cases</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#campaigns">Campaigns</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#stats">Web Stats</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#mail">Mail</a></li>
+				<li id="custom-contact-document" class=""><a data-toggle="tab" role="tab" href="#documents">Documents</a></li>
               <!--  <li role="presentation" class="dropdown custom-contact-menu">
         <a id="drop6" href="#" class="dropdown-toggle" data-toggle="dropdown">
           
@@ -552,10 +608,10 @@
          </ul> 
          </li>  -->
 			</ul> 
-<div class="pull-left p-sm bg-light text-xs text-muted" id="next"><i class="fa fa-chevron-right"></i></div>
+<div class="pull-left p-sm bg-light text-xs text-muted hidden-xs hidden-sm" id="next"><i class="fa fa-chevron-right"></i></div>
 <div class="clearfix"></div>
            </div>
-			<div class="tab-content no-tab-cell" id="contact-tab-content">
+			<div class="tab-content no-tab-cell hidden-xs" id="contact-tab-content">
 				<div class="tab-pane" id="time-line">
 					<div class="timeline-loading-img overflow-hidden" style="width:35px;max-height:30px;">
 						<!-- <img class="loading-img" src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img> -->
@@ -565,7 +621,7 @@
 						<img class="loading-img-stats" src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img> -->
 					</div>
 
-					<div class="alert-info alert" id="timeline-slate"
+					<div class="alert<" id="timeline-slate"
 						style="display: none">
 						<div class="slate-content">
 							<div class="box-left pull-left m-r-md">
@@ -586,7 +642,7 @@
 					</div>
 
 					<div class="m-auto">
-						<div id="timeline">
+						<div id="timeline" style="float:left;">
 							<div id="line-container">
 								<div id="line"></div>
 							</div>
@@ -614,7 +670,8 @@
   </div>
   </div>
 	<!--  starting right panel view -->
-	<div class="contact-right-widgetsview box-border b-l col w-lg bg-light lter b-l bg-auto">
+	<div class="contact-right-widgetsview box-border  col w-lg   bg-auto {{#is_mobile}} p-t-none bg-white m-b m-l m-r {{else}}
+    b-l bg-light lter {{/is_mobile}}">
 	 <div class="vbox">
   <div class="row-row">
   <div>

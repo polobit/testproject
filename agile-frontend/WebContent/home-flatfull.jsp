@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.contact.CustomFieldDef.SCOPE"%>
+<%@page import="com.agilecrm.contact.util.CustomFieldDefUtil"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.agilecrm.subscription.SubscriptionUtil"%>
 <%@page import="com.agilecrm.subscription.ui.serialize.Plan"%>
@@ -28,6 +30,20 @@ pageEncoding="UTF-8"%>
 <meta name="author" content="">
 <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
 <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib">
+
+
+<script type="text/javascript">
+function isIE () {
+  var myNav = navigator.userAgent.toLowerCase();
+  return (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
+}
+
+ if(isIE() && isIE() < 10)
+ {window.location='/error/not-supported.jsp'; return;}
+
+</script>
+
+
 
 
 <%
@@ -65,6 +81,20 @@ String width = currentUserPrefs.width;
 boolean is_fluid = !width.isEmpty();
 
 BillingRestriction restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
+//Temp Code 
+//Can remove after 12 mar 2016 
+if(restriction.max_emails_count != null && restriction.max_emails_count > 0 && restriction.max_emails_count <=100){
+  restriction.max_emails_count = 0;
+  restriction.one_time_emails_count = 0;
+  restriction.save();
+  restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
+}
+//End of temp code
+
+if(restriction != null && restriction.checkToUpdateFreeEmails()){
+	restriction.refreshEmails();
+	restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
+}
 boolean is_free_plan = false;
 
 if(restriction != null && restriction.planDetails != null)
@@ -317,7 +347,13 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 %>
 
- <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
+
+ 
+  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
+ 
+  <!-- Include bootstrap modal divs-->
+ <%@ include file="flatfull/modals.html"%>
+
 </div>
 <!-- Including Footer page -->
 <jsp:include page="flatfull/footer.jsp" />
@@ -368,6 +404,11 @@ var ACCOUNT_PREFS = <%=mapper.writeValueAsString(accountPrefs)%>;
 // Get current domain user json
 var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
 
+// Get Contact Date Fields
+var CONTACTS_DATE_FIELDS = <%=mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE"))%>;
+// Get Contact Date Fields
+var COMPANY_DATE_FIELDS = <%=mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "DATE"))%>;
+
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;
 
@@ -389,7 +430,7 @@ head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", 
 // , LIB_PATH + 'lib/backbone-route-filter.js'
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(HANDLEBARS_LIB, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
+head.js(HANDLEBARS_LIB, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _AGILE_VERSION);
 else
 	head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION);
 
@@ -402,10 +443,13 @@ var Agile_Contact = {};
 
 head.ready(function() {
 	
-if(!HANDLEBARS_PRECOMPILATION)
-    downloadTemplate("tpl.js", function(){		         
+if(!HANDLEBARS_PRECOMPILATION){
+    downloadTemplate("tpl.js", function(){             
     });
-	
+    downloadTemplate("contact-view.js", function(){             
+    });
+}
+ 
 // Remove the loadinng
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
@@ -431,60 +475,6 @@ function load_globalize()
 
 }
 
-/**
- * Downloads the template synchronously (stops other browsing actions) from the
- * given url and returns it
- * 
- * @param {String}
- *            url location to download the template
- * @returns down-loaded template content
- */
-function downloadTemplate(url, callback)
-{
-
-	var dataType = 'html', template_url = CLOUDFRONT_PATH;
-
-
-	// If Precompiled is enabled, we change the directory to precompiled. If
-	// pre-compiled flat is set true then template path is sent accordingly
-	if (HANDLEBARS_PRECOMPILATION)
-	{
-		url = "tpl/min/precompiled/" + FLAT_FULL_UI +  url;
-	}
-	else
-		url = "tpl/min/" + FLAT_FULL_UI +  url;
-
-	// If JS
-	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
-	{
-		dataType = 'script';
-		template_url = template_url.replace("flatfull/", "");
-		url = template_url + url;
-	}
-
-	url += "?_=" + _AGILE_VERSION;
-	
-	// If callback is sent to this method then template is fetched synchronously
-	var is_async = false;
-	if (callback && typeof (callback) === "function")
-		is_async = true;
-
-	console.log(url + " " + dataType + " " + is_async);
-
-	var is_cached = !LOCAL_SERVER;
-
-	jQuery.ajax({ url : url, dataType : dataType, cache:is_cached, success : function(result)
-	{
-		// If HTMl, add to body
-		if (dataType == 'html')
-			$('body').append((result));
-
-		if (is_async)
-			callback(result);
-	}, async : is_async });
-
-	return "";
-}
 </script>
 
 
@@ -496,6 +486,8 @@ var glcpath = (('https:' == document.location.protocol) ? 'https://my.clickdesk.
 var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
 </script>
 <!-- End of ClickDesk -->
+
+ 
 
 </body>
 </html>

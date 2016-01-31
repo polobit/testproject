@@ -1,13 +1,13 @@
 
 <script id="deal-detail-template" type="text/html">
 <div class="app-content-full  h-full dock-view-fixing" id="deal-detail-header">
-<div class="hbox hbox-auto-xs  bg-light">
-<div class="col w-xl bg-light lter b-r">
+<div class="hbox hbox-auto-xs {{#is_mobile}} wrapper-md {{else}} bg-light {{/is_mobile}}">
+<div class="col w-xl text-center-mobile-view {{#is_mobile}} bg-white  {{else}} bg-light lter b-r {{/is_mobile}}">
 <div class="vbox">
 <div class="row-row">
 <div class="wrapper pos-rlt" id="deal-detail-actions-dropdown">
 <div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
-<div class="h3 font-thin custom-color m-b-xs" style="width:85%">{{#if name}}{{name}}{{/if}}</div>
+<div class="h3 font-thin custom-color m-b-xs" style="margin-right:12px;">{{#if name}}{{name}}{{/if}}</div>
 {{#if expected_value}}
 <div class="m-b-sm h3 font-thin   m-t-sm">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
@@ -35,7 +35,7 @@
 
 
 
-<div class="btn-group pos-abs pos-r pos-t">
+<div class="btn-group pos-abs pos-r pos-t" style="right:7px;">
 <a href="#" class="deal-restore-detail-view btn btn-sm btn-default"><i class="icon-mail-reply"></i> Restore</a>
 </div>
 
@@ -63,15 +63,15 @@
 								
 								
 								<a class=" dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
-								<ul class="dropdown-menu pull-right">
-                                    <li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="icon-edit"></i> Edit</a></li>
+								<ul class="dropdown-menu pull-right deals-edit">
+       <li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="fa fa-pencil-square" style="margin-right:2px;"></i> Edit</a></li>
                                     <li class="divider"></li>
 									<li><a href='#'  id="dealshow-note" class="deal-note"><i
-											class="icon-file"></i> Add Note</a></li>
-                                    <li><a href='#'  id="dealdetail-archive" class="deal-detail-archive"><i class="icon-archive"></i> Archive</a></li>
+											class="fa fa-file-text" style="margin-right:2px;"></i> Add Note</a></li>
+                                    <li><a href='#'  id="dealdetail-archive" class="deal-detail-archive"><i class="icon-archive" style="margin-right:2px;"></i> Archive</a></li>
 							
 									<li><a href='#'  data="{{id}}" class="deal_detail_delete" id='opportunity-actions-delete'><i
-											class="icon-trash"></i> Delete</a></li>
+											class="fa fa-trash"></i> Delete</a></li>
 								</ul>
 </div>
 <div  class="deal-owner-position deal-owner-block">
@@ -164,10 +164,10 @@
 {{/if}}
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
-        		<a href="#contact/{{id}}" class="activate-link thumb"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        		<a href="#contact/{{id}}" class="activate-link thumb m-b-xs"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         	{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}}
-        		<a href="#company/{{id}}" class="activate-link thumb"><img  {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        		<a href="#company/{{id}}" class="activate-link thumb m-b-xs"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         	{{/if_contact_type}}
         {{/each}}
       </div> 
@@ -190,12 +190,12 @@
 				</div>
 			</div>
 			
-<div class="col bg-white">
+<div class="col  {{#is_mobile}}  {{else}} bg-white {{/is_mobile}}">
 <div class="vbox" style="display:block">
 <div class="row-row" style="display:block">			
 <div id="deal-details">
 	<div class="tab-container">
-           <ul class="nav nav-tabs bg-light" id="deal-details-tab">
+           <ul class="nav nav-tabs bg-light content-tabs" id="deal-details-tab">
              <li><a href="#dealactivities" data-toggle="tab" >Activity</a></li>
              <li><a href="#dealnotes" data-toggle="tab" >Notes</a></li>
 			 <li><a href="#dealdocs" data-toggle="tab">Documents</a></li>
@@ -204,7 +204,7 @@
 			 <li><a href="#dealevents" data-toggle="tab">Events</a></li> 
            </ul>
 	</div>
- 	<div class="tab-content panel" id="deal-tab-content">
+ 	<div class="tab-content {{#is_mobile}}  {{else}} panel {{/is_mobile}}" id="deal-tab-content">
  		<div class="tab-pane" id="dealactivities"></div>
  		<div class="tab-pane" id="dealnotes"></div>
  		<div class="tab-pane" id="dealdocs"></div>

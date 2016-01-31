@@ -43,17 +43,15 @@
 					<div class="control-group form-group" id="filter-track">
 						<label class="control-label col-sm-2">Track</label>
 						<div class="controls col-sm-6" id="track_div">
-							<span><select id="pipeline" name="pipeline_id" class="form-control">
-									<option value="">Select..</option>
-							</select></span><img class="loading-img" src="img/21-0.gif"></img>
+							<select id="filter_pipeline" name="pipeline_id" class="form-control"></select>
+							<img class="loading-img" src="img/21-0.gif"></img>
 						</div>
 					</div>
 					<div class="control-group form-group" id="filter-milestone">
 						<label class="control-label col-sm-2">Milestone</label>
 						<div class="controls col-sm-6" id="milestone_div">
-							<span><select id="milestone" name="milestone" class="form-control">
-									<option value="">Select..</option>
-							</select></span><img class="loading-img" src="img/21-0.gif" style="display:none;"></img>
+							<select id="milestone" name="milestone" class="form-control"></select>
+							<img class="loading-img" src="img/21-0.gif" style="display:none;"></img>
 						</div>
 					</div>
 						
@@ -88,13 +86,14 @@
 					<div class="line line-lg b-b"></div>
 					<div class="row">
 						<div class="form-actions col-sm-offset-2 col-sm-10">
-							<a href="#deal-filters" class="btn btn-sm btn-danger">Close</a>
+							<a href="#deal-filters" class="btn btn-sm btn-default">Cancel</a>
 							<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">Save</a> 
 						</div>
 					</div>
 					{{#if id}}
 						<input type="hidden" name="id" value="{{id}}" />
 						<input type="hidden" name="created_time" value="{{created_time}}" />
+						<input type="hidden" name="filter_owner_id" value="{{filterOwner.id}}" />
 					{{/if}}
 				</fieldset>
 			</form>
