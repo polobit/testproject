@@ -12,6 +12,16 @@ $(function(){
 			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], ["modal"]);
 			$("#custom-field-case", $("#casesModal")).html($(el_custom_fields));
 
+			var el = $("#casesForm");
+
+			$('.contact_input', el).each(function(){
+				agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=PERSON');
+			});
+
+			$('.company_input', el).each(function(){
+				agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=COMPANY');
+			});
+
 		}, "CASE");
     });	
 
@@ -186,13 +196,6 @@ function showCases()
 	$("#casesModal").html(getTemplate("cases-new-modal", {}));
 	var el = $("#casesForm");
 
-	$('.contact_input', el).each(function(){
-		agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), el), contacts_typeahead);
-	});
-
-	$('.company_input', el).each(function(){
-		agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=COMPANY');
-	});
 	// Contacts type-ahead
 	agile_type_ahead("contacts-typeahead-input", el, contacts_typeahead);
 

@@ -386,7 +386,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 													'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="' + TYPEHEAD_TAGS[items] + '"><a href="'+TYPEHEAD_TYPE[items] + TYPEHEAD_TAGS[items] + '" class="text-white v-middle">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
 							}
 							//Sets modal backdrop height to modal dialog height after select the tag
-							$('.modal-backdrop',$('.modal:visible')).height($('.modal-dialog',$('.modal:visible')).height()+70);
+							$('.modal-backdrop',$('.modal:visible')).height($('.modal-dialog',$('.modal:visible')).height()+180);
 						},
 						// Needs to be overridden to set timedelay on search
 						keyup : function(e)
