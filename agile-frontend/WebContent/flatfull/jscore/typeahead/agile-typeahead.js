@@ -754,6 +754,12 @@ function appendItemInResult(item)
 			$("#contact-typeahead-heading", this.el).show();
 			$("#contact-results", this.el).append(i);
 		}
+		if (type == "company_entity")
+		{
+
+			$("#company-typeahead-heading", this.el).show();
+			$("#company-results", this.el).append(i);
+		}
 		if (type == "deal")
 		{
 			$("#deal-typeahead-heading", this.el).show();

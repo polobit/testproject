@@ -1076,6 +1076,11 @@ function setReferenceContacts(name, ele, valJSON, referenceContactIds)
 			{
 				$.each(valJSON, function(index, value){
 					var contact_name = getPropertyValue(data.get(value).get("properties"), "first_name");
+					var last_name = getPropertyValue(data.get(value).get("properties"), "last_name");
+					if(last_name)
+					{
+						contact_name += " "+last_name;
+					}
 					if(contact_name)
 					{
 						$("ul[name='"+name+"']", ele)
@@ -1086,7 +1091,7 @@ function setReferenceContacts(name, ele, valJSON, referenceContactIds)
 					{
 						$("ul[name='"+name+"']", ele)
 						.append(
-								'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + value + '"><a class="text-white m-r-xs" href="#contact/' + value + '">' + getPropertyValue(data.get(value).get("properties"), "name") + '</a><a class="close" id="remove_tag">&times</a></li>');
+								'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + value + '"><a class="text-white m-r-xs" href="#company/' + value + '">' + getPropertyValue(data.get(value).get("properties"), "name") + '</a><a class="close" id="remove_tag">&times</a></li>');
 					}
 					
 				});

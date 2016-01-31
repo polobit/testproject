@@ -906,7 +906,7 @@ function serialize_custom_fields(form)
     		else
     			json.value = en.dateFormatter({raw: "MM/dd/yyyy"})(new Date(this.value));
     	
-    	if($(element).hasClass("contact_input") && isValidContactCustomField($(element).attr('id')))
+    	if(($(element).hasClass("contact_input") || $(element).hasClass("company_input")) && isValidContactCustomField($(element).attr('id')))
     	{
     		var contact_values = [];
 			$('ul[name="'+name+'"]', $('#'+form)).find('li').each(function(index){

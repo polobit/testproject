@@ -172,7 +172,7 @@ function submitLhsFilter()
 	if(contact_type == 'COMPANY') {
 		eraseCookie('company_filter');
 		eraseData('dynamic_company_filter');
-		if (formData != null && formData.rules.length > 0)
+		if (formData != null && (formData.rules.length > 0 || formData.or_rules.length > 0))
 		{
 			storeData('dynamic_company_filter', JSON.stringify(formData));
 			//createCookie('company_filter', "Companies");

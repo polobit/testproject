@@ -6881,7 +6881,13 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 						if(type == "CONTACT")
 						{
 							$.each(contact_values_json, function(index, value){
-								contact_values += "<li class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'><a href='#contact/"+value+"' class='text-white'>"+getPropertyValue(data.get(value).get("properties"), "first_name")+"</a></li>";
+								var contact_name = getPropertyValue(data.get(value).get("properties"), "first_name");
+								var last_name = getPropertyValue(data.get(value).get("properties"), "last_name");
+								if(last_name)
+								{
+									contact_name += " "+last_name;
+								}
+								contact_values += "<li class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'><a href='#contact/"+value+"' class='text-white'>"+contact_name+"</a></li>";
 							});
 						}else if(type == "COMPANY")
 						{

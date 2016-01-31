@@ -614,7 +614,14 @@ function deserializeLhsFilters(element, data)
 
 				referenceContactsCollection.collection.fetch({
 					success : function(data){
-						$(that).parent().find("input").val(getPropertyValue(data.get(RHS_VALUE).get("properties"), "first_name"));
+						var name = "";
+						if(getPropertyValue(data.get(RHS_VALUE).get("properties"), "first_name")){
+							name += getPropertyValue(data.get(RHS_VALUE).get("properties"), "first_name");
+						}
+						if(getPropertyValue(data.get(RHS_VALUE).get("properties"), "last_name")){
+							name += " "+getPropertyValue(data.get(RHS_VALUE).get("properties"), "last_name");
+						}
+						$(that).parent().find("input").val(name);
 						$(that).parent().find("input").attr("data", RHS_VALUE);
 						hideTransitionBar();
 					}
@@ -629,7 +636,7 @@ function deserializeLhsFilters(element, data)
 
 				referenceContactsCollection.collection.fetch({
 					success : function(data){
-						$(that).parent().find("input").val(getPropertyValue(data.get(RHS_VALUE).get("properties"), "first_name"));
+						$(that).parent().find("input").val(getPropertyValue(data.get(RHS_VALUE).get("properties"), "name"));
 						$(that).parent().find("input").attr("data", RHS_VALUE);
 						hideTransitionBar();
 					}
@@ -735,7 +742,14 @@ function deserializeLhsFilters(element, data)
 					success : function(data){
 						$.each(referenceContactIdsArray, function(index){
 							var contactId = referenceContactIdsArray[index];
- 							$(that).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+data.get(contactId).id+'"><a href="#contact/'+data.get(contactId).id+'" class="text-white v-middle">'+getPropertyValue(data.get(contactId).get("properties"), "first_name")+'</a><a class="close m-l-xs" id="remove_contact_in_lhs">×</a></li>');
+							var name = "";
+							if (getPropertyValue(data.get(contactId).get("properties"), "first_name")){
+								name = getPropertyValue(data.get(contactId).get("properties"), "first_name");
+							}
+							if (getPropertyValue(data.get(contactId).get("properties"), "last_name")){
+								name += " "+getPropertyValue(data.get(contactId).get("properties"), "last_name");
+							}
+ 							$(that).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+data.get(contactId).id+'"><a href="#contact/'+data.get(contactId).id+'" class="text-white v-middle">'+name+'</a><a class="close m-l-xs" id="remove_contact_in_lhs">×</a></li>');
 						});
 						hideTransitionBar();
 					}
@@ -777,7 +791,7 @@ function deserializeLhsFilters(element, data)
 					success : function(data){
 						$.each(referenceContactIdsArray, function(index){
 							var contactId = referenceContactIdsArray[index];
- 							$(that).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+data.get(contactId).id+'"><a href="#contact/'+data.get(contactId).id+'" class="text-white v-middle">'+getPropertyValue(data.get(contactId).get("properties"), "first_name")+'</a><a class="close m-l-xs" id="remove_contact_in_lhs">×</a></li>');
+ 							$(that).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+data.get(contactId).id+'"><a href="#company/'+data.get(contactId).id+'" class="text-white v-middle">'+getPropertyValue(data.get(contactId).get("properties"), "name")+'</a><a class="close m-l-xs" id="remove_contact_in_lhs">×</a></li>');
 						});
 						hideTransitionBar();
 					}
