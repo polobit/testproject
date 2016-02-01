@@ -19,12 +19,12 @@ function show_error(modalId, formId, errorClass, htmlText)
 	if (modal_elem.css('display') !== 'none')
 	{
 		modal_elem.find('.' + errorClass).html(
-				'<div class="alert alert-danger m-b-none" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
+				'<div class="alert alert-danger" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
 	}
 	else if (form_elem.css('display') !== 'none')
 	{
 		form_elem.find('.' + errorClass).html(
-				'<div class="alert alert-danger m-b-none" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
+				'<div class="alert alert-danger" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
 	}
 }
 
