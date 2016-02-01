@@ -70,6 +70,7 @@ $(document).ready(function(){
 		if(e.target.id != 'searchText' && !$(e.target).closest('button').hasClass('search-menu-mobile'))  {
 		$('.search-mobile').addClass('hide');
 		$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
+		$('.navbar-brand').removeClass('hide');
 		}
 		},500);
 	});
@@ -87,6 +88,7 @@ $(document).ready(function(){
 		$('#search-menu-mobile').on('click touchstart',function(){
 		$('.search-mobile').removeClass('hide');
 		$('.add-modal-mobile , #search-menu-mobile').removeClass('visible-xs');
+		$('.navbar-brand').addClass('hide');
 		}); 	
 
 
