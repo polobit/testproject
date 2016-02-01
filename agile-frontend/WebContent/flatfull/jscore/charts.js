@@ -2359,7 +2359,7 @@ function BubbleChart(url, selector, name,show_loading)
 				    formatter: function () {
 					    var text = this.value;
 					    //if(categories.length>10)
-						    var formatted = text.length > 8 ? text.substring(0, 8) + '...' : text;
+						    var formatted = text.length > 9 ? text.substring(0, 9) + '...' : text;
 						/*else
 							formatted=text;*/
 
@@ -2383,7 +2383,8 @@ function BubbleChart(url, selector, name,show_loading)
 			                color: '#808080'
 			            }
 			        ],
-			        min: 0
+			        min: 0,
+			        max:100
 			    },
 			    tooltip :{
 			    		useHTML : true,
