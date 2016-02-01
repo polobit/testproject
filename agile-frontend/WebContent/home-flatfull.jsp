@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.analytics.servlets.AnalyticsServlet"%>
 <%@page import="com.agilecrm.contact.CustomFieldDef.SCOPE"%>
 <%@page import="com.agilecrm.contact.util.CustomFieldDefUtil"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
@@ -45,6 +46,11 @@ DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 System.out.println("Domain user " + domainUser);
 
 ObjectMapper mapper = new ObjectMapper();
+
+String panel = request.getParameter("sp");
+if(panel == null)
+	panel = "false";
+String clientIP = request.getRemoteAddr();
 
 // Get current user prefs
 UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
@@ -576,8 +582,8 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 %>
 
 
- 
-  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
+  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
+   
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
@@ -601,6 +607,9 @@ var LIB_PATH_FLATFULL = '<%=CLOUDFRONT_TEMPLATE_LIB_PATH + FLAT_FULL_PATH%>'
 
 var CLOUDFRONT_PATH = '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>';
 
+var LOGIN_FROM_PANEL = '<%=panel%>';
+
+var CURRENTIP = '<%=clientIP%>';
 
 var FLAT_FULL_UI = "flatfull/";  
 
