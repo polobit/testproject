@@ -28,6 +28,7 @@ function show_error(modalId, formId, errorClass, htmlText)
 	}
 }
 
+
 function show_error_in_formactions(modalId, formId, errorClass, htmlText)
 {
 	var modal_elem = $('#' + modalId);
@@ -792,6 +793,7 @@ function fill_multi_options(field_element, element)
 		html_element.appendTo(append_to);
 	}
 }
+
 
 /**
  * Creates json object for each custom field in contact form with name, type and
