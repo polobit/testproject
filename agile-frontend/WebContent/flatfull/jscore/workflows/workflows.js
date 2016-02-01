@@ -19,7 +19,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
     },
 
     unsubscribeCampaignOptionSelect : function(e){
-
+        e.preventDefault();
         var targetEl = $(e.currentTarget);
         
         var all_text = "Contact will not receive any further emails from any campaign (i.e., the 'Send Email' option will not work. However, other actions in" 
@@ -117,14 +117,16 @@ var Workflow_Model_Events = Base_Model_View.extend({
         var unsubscribe_tag = $('#unsubscribe-tag').val().trim();
         var unsubscribe_action = $('#unsubscribe-action').val();
         var unsubscribe_email = $('#unsubscribe-email').val().trim();
+        var unsubscribe_name = $('#unsubscribe-name').val().trim();
         var is_disabled = $('.is-disabled-top').attr("data");
-        if($clicked_button.attr("class") == "is-disabled-top" && is_disabled)
+        if($clicked_button.hasClass("is-disabled-top") && is_disabled)
             is_disabled = !JSON.parse(is_disabled);
 
         var unsubscribe_json ={
                                     "tag":unsubscribe_tag,
                                     "action":unsubscribe_action,
-                                    "unsubscribe_email": unsubscribe_email
+                                    "unsubscribe_email": unsubscribe_email,
+                                    "unsubscribe_name": unsubscribe_name
                                }
         
         // Check for valid name
@@ -157,20 +159,22 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 
                 show_campaign_save();
                 
+                try{
                 // Adds tag in our domain
                 add_tag_our_domain(CAMPAIGN_TAG);
-                
+                }catch(err){
+                }
                 // Hide message
                 $('#workflow-edit-msg').hide();
 
                 //toggle disable dropdown
-                 if($clicked_button.attr("class") == "is-disabled-top"){
+                 if($clicked_button.hasClass("is-disabled-top")){
                      var disabled = $(".is-disabled-top");
                  
                     if (is_disabled) {
                         disabled.attr("data", true);
                         disabled.find('i').toggleClass('fa-lock').toggleClass('fa-unlock');
-                        disabled.find('div').text("Enable Workflow");
+                        disabled.find('div').text("Enable Campaign");
                         $('#designer-tour').addClass("blur").removeClass("anti-blur");;
                         window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
                         window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
@@ -178,7 +182,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                     } else {
                         disabled.attr("data", false);
                         disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
-                        disabled.find('div').text("Disable Workflow"); 
+                        disabled.find('div').text("Disable Campaign"); 
                         $('#designer-tour').addClass("anti-blur").removeClass("blur");;
                         window.frames[0].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
                         window.frames[0].$('#toolbartabs').removeClass("disable-iframe");

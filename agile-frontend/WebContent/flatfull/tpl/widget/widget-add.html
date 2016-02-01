@@ -20,6 +20,7 @@
 			{{#if_equals name "Skype"}}
 				<center>  
   				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Skype</span></span>
+				<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
 				</center>  
         	{{else}}
       <center> 
@@ -107,7 +108,7 @@
 										{{#if_equals name "Skype"}}
 												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
 											{{else}}
-								<div class="btn-group pos-abs m-l-n-lg">
+								<div class="btn-group">
   									<a type="button" class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     									<span class="caret"></span>
@@ -141,7 +142,7 @@
 												{{#if_equals name "Skype"}}
 												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
 											{{else}}																			
-											<div class="btn-group pos-abs m-l-n-lg">
+											<div class="btn-group">
   												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
   												<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     												<span class="caret"></span>
@@ -175,7 +176,7 @@
 												{{#if_equals name "Skype"}}
 													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
 											{{else}}											
-												<div class="btn-group pos-abs m-l-n-lg">
+												<div class="btn-group">
   													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
   													<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     													<span class="caret"></span>
@@ -209,7 +210,7 @@
 												{{#if_equals name "Skype"}}
 													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
 									{{else}}	
-											<div class="btn-group pos-abs m-l-n-lg">										
+											<div class="btn-group">										
   												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
   												<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     												<span class="caret"></span>
@@ -260,7 +261,7 @@
 								<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
 								{{else}}	
 									
-								<div class="btn-group pos-abs m-l-n-lg">										
+								<div class="btn-group">										
   									<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     									<span class="caret"></span>
@@ -328,7 +329,7 @@
 						</div>
     					 <div class="text-center">
 							{{#isAdmin}}											
-								<div class="btn-group pos-abs" id="custom-widget-btn" style="margin-left:-70px;">
+								<div class="btn-group" id="custom-widget-btn">
   									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     									<span class="caret"></span>
@@ -426,7 +427,7 @@
     				
     					 <div class="text-center">
 							{{#isAdmin}}											
-								<div class="btn-group pos-abs m-t-md" id="custom-widget-btn" style="margin-left:-70px;">
+								<div class="btn-group m-t-md" id="custom-widget-btn">
   									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     									<span class="caret"></span>
@@ -530,6 +531,7 @@
 					{{#if_equals name "Skype"}}
 							<center>
 								<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Skype</span></span>
+								<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
 							</center>
 			        	{{else}}
 			        <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{logo_url}}" /></center>

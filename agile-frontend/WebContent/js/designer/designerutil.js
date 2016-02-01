@@ -477,7 +477,7 @@ function getDate(selector)
 	if(!selector)
 		selector = '#duration';
 	
-	$(selector).datepicker({ changeMonth : true, changeYear : true, yearRange : "+0:+100]", constrainInput : false,
+	$(selector).datepicker({ changeMonth : true, changeYear : true, yearRange: "2010:2050",  constrainInput : false
 	// minDate: 0
 	});
 
@@ -551,7 +551,14 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 
 	options["Custom Fields"] = custom_fields;
 	
-	var selectoption="<select style='position:relative;float:right;cursor:pointer;width: 145px;margin-right: -5px' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
+
+	var selectoption;
+	    
+	    if(uiFieldDefinition.style)
+	    	selectoption= "<select '"+ getStyleAttribute(uiFieldDefinition.style) +"' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
+	    else
+	    	selectoption= "<select style='position:relative;float:right;cursor:pointer;width: 145px;margin-right: -5px' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
+
 
 	$.each(options, function(name, option_value) {
 		if(typeof(option_value)== 'object')
@@ -742,3 +749,65 @@ function update_list_with_disabled($select, workflows_json)
 			
 	}
 }
+function insertSelectedOption(ele ,target_id)
+{
+	var curValue = $(ele).find(':selected').val();
+	insertAtCaret(target_id, curValue)
+	var text = $('#new_field').val();
+	if(text && text.indexOf("{{")!=-1)
+	$('#new_field').val($(ele).find(':selected').val());
+
+}
+	// function remove_property(ele)
+	// {
+	//  	$("#updated_value").prop('disabled', true).val('');
+	// }
+	// function add_property(ele)
+	// {
+	// 	$("#updated_value").prop('disabled', false);
+	// }
+
+	//for new set_property_node
+	// function add_remove_property(ele)
+	// {
+	// 	if($(ele).val() == "SET_NULL")
+	// 	$("#" + id).prop('disabled', true).val('');
+	// 	else	
+	// 	$("#updated_value").prop('disabled', false);	
+	// }
+
+	//disable a field 
+	function disable_property(ele, target_id, param)
+	{
+		if(!target_id)
+			target_id = $(ele).attr('id');
+		try{
+		if(param)
+		$('#' + target_id).prop('disabled',param).val('');
+		else
+		$('#' + target_id).prop('disabled',param);
+		}
+		catch(err){ }
+	}
+
+	//event handlers for radio buttons
+	function remove_property(ele, target_id)
+	{
+		disable_property(ele, target_id, true);
+	}
+	function add_property(ele, target_id)
+	{
+		disable_property(ele, target_id, false);
+	}
+
+		//for edit set_property_node
+     function setPropertyNode(jsonData)
+     {
+		if(jsonData){
+    			for (var i=0;i<jsonData.length;i++){
+    				if(jsonData[i].name == "action" && jsonData[i].value == "SET_NULL")
+    					disable_property( jsonData[i], "updated_value", true);
+    		}
+    	}
+	}
+

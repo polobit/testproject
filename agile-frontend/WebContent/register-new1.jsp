@@ -6,7 +6,7 @@
 <%@page contentType="text/html; charset=UTF-8" %>
 <%
 
-	 if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+	  if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
 	} 
@@ -15,8 +15,8 @@
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	} 
-
+	}
+ 
   String _source = request.getParameter("_source");
   
   String registered_email = request.getParameter("email");
@@ -199,6 +199,8 @@ if(isSafari && isWin)
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 <script src="/flatfull/registration/register.js" type="text/javascript"></script>
+<script src="https://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.jquery.min.js"></script>
+
   <script type="text/javascript">
   var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
@@ -217,6 +219,11 @@ $(document).ready(function() {
   <!-- Clicky code -->
   <script src="//static.getclicky.com/js" type="text/javascript"></script>
   <script type="text/javascript">try{ clicky.init(100729733); }catch(e){}</script>
-
+<script src="//platform.twitter.com/oct.js" type="text/javascript"></script>
+<script type="text/javascript">twttr.conversion.trackPid('nu0pq', { tw_sale_amount: 0, tw_order_quantity: 0 });</script>
+<noscript>
+<img height="1" width="1" style="display:none;" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=nu0pq&p_id=Twitter&tw_sale_amount=0&tw_order_quantity=0" />
+<img height="1" width="1" style="display:none;" alt="" src="//t.co/i/adsct?txn_id=nu0pq&p_id=Twitter&tw_sale_amount=0&tw_order_quantity=0" />
+</noscript>
 	</body>
 	</html>

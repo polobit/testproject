@@ -104,6 +104,37 @@ public class Note extends Cursor
     @NotSaved
     public String entity_type = "note";
 
+    
+    //added some variable for logcall which is a special type of note//
+    
+    /**
+     * phoneNumber of the related contact
+     */
+    @NotSaved(IfDefault.class)
+    public String phone = null;
+    
+
+    /**
+     * callType of the logPhone
+     */
+    @NotSaved(IfDefault.class)
+    public String callType = null;
+    
+    /**
+     * status of the logPhone
+     */
+    @NotSaved(IfDefault.class)
+    public String status = null;
+    
+    /**
+     * duration of the logPhone
+     */
+    @NotSaved(IfDefault.class)
+    public Long duration = null;
+    
+    
+    
+    
     // Dao
     public static ObjectifyGenericDao<Note> dao = new ObjectifyGenericDao<Note>(Note.class);
 
@@ -179,9 +210,13 @@ public class Note extends Cursor
 	// Create list of contact keys
 	for (Object contact_id : this.contact_ids)
 	{
-	    this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id.toString())));
+			this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id.toString())));
 	}
 
+	// Store Created Time
+	if (created_time == 0L)
+	    created_time = System.currentTimeMillis() / 1000;
+		
 	/**
 	 * Commented because not to fill AgileUser as owner for new notes.
 	 */
@@ -202,10 +237,7 @@ public class Note extends Cursor
 
 	// Saves domain user key
 	domain_owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
-
-	// Store Created Time
-	if (created_time == 0L)
-	    created_time = System.currentTimeMillis() / 1000;
+	
     }
 
     /**
@@ -330,6 +362,68 @@ public class Note extends Cursor
 	return "";
     }
 
+    /**
+     * Returns hours to logphone.
+     * 
+     * @return
+     */
+    @XmlElement(name = "hour")
+    public Long getHour()
+    {
+    	try{
+        	Long timeInSec = this.duration;
+        	Long hour = timeInSec/3600;
+        	return hour;
+    	}catch(Exception e){
+    		return null;
+    	}
+    	
+
+
+    }
+    /**
+     * Returns minutes to logphone.
+     * 
+     * @return
+     */
+    @XmlElement(name = "min")
+    public Long getMin()
+    {
+    	try{
+        	
+        	Long timeInSec = this.duration;
+    	    Long hour = timeInSec/3600;
+    	    Long min = (timeInSec - (hour*3600))/60;
+        	return min;
+    	}catch(Exception e){
+    		return null;
+    	}
+
+    	
+	    
+    }
+    /**
+     * Returns second to logphone.
+     * 
+     * @return
+     */
+    @XmlElement(name = "sec")
+    public Long getSec()
+    {
+    	try{
+        	Long timeInSec = this.duration;
+    	    Long hour = timeInSec/3600;
+    	    Long min = (timeInSec - (hour*3600))/60;
+    	    Long sec = timeInSec - (hour*3600) - (min*60);
+        	return sec;
+    	}catch(Exception e){
+    		return null;
+    	}
+    	
+
+	    
+    }
+    
     @Override
     public String toString()
     {

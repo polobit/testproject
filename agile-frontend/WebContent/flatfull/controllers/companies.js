@@ -57,10 +57,10 @@ var CompaniesRouter = Backbone.Router
 			this.companiesListView = undefined;
 			COMPANIES_HARD_RELOAD = false;
 			view_data = undefined;
-			App_Companies.companyViewModel = undefined;
+			// App_Companies.companyViewModel = undefined;
 		}
 		
-		// If id is defined get the respective custom view object
+		// If id is definesd get the respective custom view object
 		if (!view_data)
 		{
 			// Once view id fetched we use it without fetching it.
@@ -104,13 +104,6 @@ var CompaniesRouter = Backbone.Router
 			// Saves Sort By in cookie
 			_agile_set_prefs('company_sort_field', sort_key);
 		}
-
-		// Checks if user is using custom view. It check for grid view
-		/*if (grid_view || _agile_get_prefs("agile_contact_view"))
-		{
-			template_key = "contacts-grid";
-			individual_tag_name = "div";
-		}*/
 
 		// Default url for contacts route
 		var url = '/core/api/contacts/companies/list';
@@ -208,27 +201,49 @@ var CompaniesRouter = Backbone.Router
 				//setup_tags(el);
 
 				company_list_view.init(el);
+
+				abortCountQueryCall();
 				
 				if(is_lhs_filter) {
-					var count = 0;
-					if(collection.models.length > 0) {
-						count = collection.models[0].attributes.count || collection.models.length;
+
+					if(collection.models.length > 0 && !collection.models[0].get("count")){
+						// Call to get Count 
+						getAndUpdateCollectionCount("companies", el);						
 					}
-					var count_message;
-					if (count > 9999 && (_agile_get_prefs('company_filter') || _agile_get_prefs('dynamic_company_filter')))
-						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png")+ '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
-					else
-						count_message = "<small> (" + count + " Total) </small>";
-					$('#contacts-count').html(count_message);
-				} else {					
+					else {
+						var count = 0;
+						if(collection.models.length > 0) {
+							count = collection.models[0].attributes.count || collection.models.length;
+						}
+						var count_message;
+						if (count > 9999 && (_agile_get_prefs('company_filter') || _agile_get_prefs('dynamic_company_filter')))
+							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png")+ '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+						else
+							count_message = "<small> (" + count + " Total) </small>";
+						$('#contacts-count').html(count_message);
+					}
+
+				} else {
+
+					
+				    if(collection.models.length > 0 && !collection.models[0].get("count")){
+						// Call to get Count 
+						getAndUpdateCollectionCount("companies", el);						
+					}
+				    					
 					setupLhsFilters(el,true);
 					contactFiltersListeners("lhs_filters_conatiner");
 				}
 			} });
 		
 		var _that = this;
-		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=COMPANY", function(customDatefields)
+		App_Companies.companyDateFields = COMPANY_DATE_FIELDS;
+
+		if(!App_Companies.companyDateFields){
+			$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=COMPANY", function(customDatefields)
 				{
+					App_Companies.companyDateFields = customDatefields;
+
 					// Defines appendItem for custom view
 					_that.companiesListView.appendItem = function(base_model){
 						contactTableView(base_model,customDatefields,this);
@@ -238,6 +253,16 @@ var CompaniesRouter = Backbone.Router
 					_that.companiesListView.collection.fetch();
 					
 				});
+		} else {
+			// Defines appendItem for custom view
+			_that.companiesListView.appendItem = function(base_model){
+				contactTableView(base_model,App_Companies.companyDateFields,this);
+			};
+	
+			// Fetch collection
+			_that.companiesListView.collection.fetch();
+		}
+		
 
 		if (!is_lhs_filter)
 		{
@@ -336,10 +361,10 @@ var CompaniesRouter = Backbone.Router
 		add_recent_view(company);
 
 		// If contact is of type company , go to company details page
-		this.companyDetailView = new Contact_Details_Model_Events({ model : company, isNew : true, template : "company-detail",
+		this.companyDetailView = new Contact_Details_Model_Events({ model : company, isNew : true, template : "company-detail", change : false,
 			postRenderCallback : function(el)
 			{
-				fill_company_related_contacts(id, 'company-contacts');
+				fill_company_related_contacts(id, 'company-contacts', el);
 				// Clone contact model, to avoid render and
 				// post-render fell in to
 				// loop while changing attributes of contact
@@ -359,7 +384,7 @@ var CompaniesRouter = Backbone.Router
 
 		var el = this.companyDetailView.render(true).el;
 		$('#content').html(el);
-		fill_company_related_contacts(id, 'company-contacts');
+	//	fill_company_related_contacts(id, 'company-contacts');
 		// company_detail_tab.initEvents();
 		return;
 	},
@@ -389,6 +414,8 @@ var CompaniesRouter = Backbone.Router
 			{
 				COMPANIES_HARD_RELOAD = true;
 				App_Companies.navigate("companies", { trigger : true });
+				App_Companies.companyViewModel = data.toJSON();
+
 			} });
 
 		$("#content").html(companyView.render().el);

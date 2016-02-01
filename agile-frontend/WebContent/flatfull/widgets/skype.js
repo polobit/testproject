@@ -7,7 +7,5 @@ function startSkypeWidget(contact_id){
 			return;
 		}
 		getLogsForSkype();
-	}, 5000);
-	
-
+	}, 9000);
 }

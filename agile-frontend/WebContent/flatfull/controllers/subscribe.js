@@ -8,7 +8,7 @@
 var _data = null;
 var IS_TRIAL = false;
 _IS_EMAIL_PLAN_ACTIVE = false;
-var IS_CANCELLED_USER = false;
+var IS_ALLOWED_TRIAL = false;
 var SubscribeRouter = Backbone.Router
 		.extend({
 
@@ -187,7 +187,7 @@ var SubscribeRouter = Backbone.Router
 
 				saveCallback : function()
 				{
-					showNotyPopUp("information", "Emails have been purchased successfully.", "top");
+					showNotyPopUp("information", "Emails have been added successfully. It will take a few seconds to update on your account. <a href='#subscribe' onclick='document.location.reload();'>Click here</a> if they are not added.", "top", 15000);
 				}, postRenderCallback : function(el)
 				{
 					_IS_EMAIL_PLAN_ACTIVE = true;
@@ -548,7 +548,7 @@ var SubscribeRouter = Backbone.Router
 				IS_HAVING_MANDRILL = false;
 				$.ajax({ url : "core/api/email-gateway", type : "GET", success : function(data)
 				{
-					if (data && data.email_api == "MANDRILL")
+					if (data && data.email_api)
 						IS_HAVING_MANDRILL = true;
 
 				}
@@ -654,7 +654,7 @@ var SubscribeRouter = Backbone.Router
 			{
 				IS_TRIAL = true;
 				var that = this;
-				if(!IS_CANCELLED_USER)
+				if(!IS_ALLOWED_TRIAL)
 				{
 					$.ajax({ url : "core/api/subscription/agileTags?email="+CURRENT_DOMAIN_USER.email,
 					 type : "GET",
@@ -665,8 +665,8 @@ var SubscribeRouter = Backbone.Router
 							console.log(data);
 							if(data && data.tags)
 							{
-								if ( $.inArray('Cancellation Request', data.tags) > -1 || $.inArray('Cancelled Trial', data.tags) > -1) {
-								    IS_CANCELLED_USER = true;
+								if ( $.inArray('Cancellation Request', data.tags) == -1 && $.inArray('Cancelled Trial', data.tags) == -1 && $.inArray('Trial', data.tags) != -1) {
+								    IS_ALLOWED_TRIAL = true;
 								}
 							}
 							that.subscribe();
@@ -767,5 +767,19 @@ function removeStyleForAPlan(id)
 
 	if (($('selected-plan')) != ($('#email-div')))
 		$(".plan-collection-in").removeClass('selected-plan');
+
+}
+
+function getEmailsNextRenewalTime()
+{
+	var last_renewal_time = _billing_restriction.last_renewal_time;
+	if(last_renewal_time == undefined || last_renewal_time == null){
+		$.getJSON("core/api/users/current-owner", function(data){
+			$("#next_emails_renewal").html(new Date((data.createdTime+2592000)*1000).format("mmm dd, yyyy"));
+		  return;
+		});
+	}else{
+		return new Date((last_renewal_time+2592000)*1000).format("mmm dd, yyyy");
+	}
 
 }

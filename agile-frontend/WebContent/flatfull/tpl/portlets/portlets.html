@@ -6,12 +6,12 @@
 		</div>
 	</div>
 </td>
-<td style="width:calc(65%-70px);" class="p-l-none">
-	<div class="table-resp m-l-n-xs">
+<td style="width:calc(75%-80px);" class="p-l-none">
+	<div class="table-resp m-l-n-xs" style="overflow:hidden;width:12em;text-overflow:ellipsis">
 		{{#if_contact_type "PERSON"}}
         	<a class="text-cap custom-link">	{{getPropertyValue properties "first_name"}}
         	{{getPropertyValue properties "last_name"}} </a>
-        	<div>
+        	<div class="text-ellipsis">
 				<small class="text-muted m-t-xs">{{#if_propertyName "title"}}{{value}}, {{/if_propertyName}}{{getPropertyValue properties "company"}}</small>
 			</div>
         {{/if_contact_type}}
@@ -20,8 +20,8 @@
 		{{/if_contact_type}}
 	</div>
 </td>
-<td style="width:35%">
-	<div class="table-resp text-right p-b-xs">
+<td style="width:25%">
+	<div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="-webkit-line-clamp:1">
 		{{#each tags}}
     		<span class="label bg-light dk text-tiny">{{this}}</span>	
 		{{/each}}
@@ -65,7 +65,7 @@
 	</div>
 </td>
 <td class="text-muted" style="width:50%">
-	<div class="table-resp text-right">
+	<div class="text-right">
 		<i class="fa fa-clock-o m-r-xs"></i>
 		<time class="time-ago" datetime="{{epochToHumanDate "" openedTime}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" openedTime}}</time>
 	</div>
@@ -243,8 +243,10 @@
 		<i class="fa fa-clock-o m-r-xs"></i>	
 		<time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" end}}" >{{get_duration start end}}</time>
 		</div>
+        <div class="clearfix"></div>
+        <div class="pull-left text-xs text-muted m-r-md" style="font-size:14px;">{{epochToHumanDate "mmmm dd" start}}</div>
 		{{#if this.contacts}}
-			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:79px;">
+			<div class="pull-left m-b-xxs text-ellipsis">
 				{{#related_to_one contacts}}{{/related_to_one}}
 			</div>
 		{{/if}}
@@ -275,8 +277,10 @@
 		<i class="fa fa-clock-o m-r-xs"></i>	
 		<time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" endEpoch}}" >{{get_duration startEpoch endEpoch}}</time>
 		</div>
+		 <div class="clearfix"></div>
+        <div class="pull-left text-xs text-muted m-r-md" style="font-size:14px;">{{epochToHumanDate "mmmm dd" start}}</div>
 		{{#if this.contacts}}
-			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:79px;">
+			<div class="pull-left m-b-xxs text-ellipsis">
 				{{#each contacts}}
 					<span class="label bg-light dk text-tiny">{{getContactDisplayValue this}}</span> 
 				{{/each}}
@@ -1239,8 +1243,8 @@
 </script>
 
 <script id="portlets-collection-template" type="text/html">
-<div class="alert-info alert" id="no-portlets" style="display:none">
-    <div class="slate-content">
+<div class="alert bg-white" id="no-portlets" style="display:none">
+    <div class="slate-content  p-md">
        <div class="box-left pull-left m-r-md">
             <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
        </div>
@@ -1259,8 +1263,8 @@
     </div>
 </div>
 {{#unless this.length}}
-  <div class="alert-info alert" id="zero-portlets">
-    <div class="slate-content">
+  <div class="alert bg-white" id="zero-portlets">
+    <div class="slate-content p-md">
        <div class="box-left pull-left m-r-md">
             <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
        </div>
@@ -2313,6 +2317,59 @@ Deleted  {{custom1}} Campaigns<br/>
 
 		</div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-deal-goals-model-template" type="text/html">
+
+<!--<div class="portlet_header portlet_edit_icons panel-heading">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis deal_goals_header" style="width:70%;">Deal Goals</span>
+				 <small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
+					{{get_portlet_duration settings.duration}}
+				</small> 
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>-->
+        <div class="goals_portlet_body" style="cursor:move" id="goals_portlets">	
+        <div style="margin-right: -1px">
+        <div class="r bg-light hbox no-border p-t-none stats-report-settings p-b-md">
+           <div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0">
+
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+        		<div class=" v-middle hidden-md bg-light dker portlet-panel dealGraph"  style="height:91px;max-height:91px;cursor:auto;">
+                </div>
+                <div class="col dk  r-r padder-portlet portlets-companies-model-list overflow-hidden" style="cursor:auto;">
+             	<div class="pull-right clear-fix text-muted p-t-xs pos-abs goal_count_success" style="display:none">
+				
+				<i class="fa fa-thumbs-up text-success"></i>
+			</div>
+                <div class="text-primary-dk font-thin h1 text-center deal_count"></div>
+                <span class="text-muted text-xs text-center block goal_count"></span>
+                </div>
+        	</div>
+        	</div>
+        	<div style="margin-right: -1px">
+        	<div class="r bg-light hbox no-border  p-t-none ">
+        	<div class="v-middle hidden-md bg-light dker portlet-panel revenueGraph" style="cursor:auto;max-height:91px;height:91px">
+                </div>
+                <div class="col dk  padder-portlet r-r portlet-panel overflow-hidden" style="cursor:auto;">
+                	<div class="pull-right clear-fix text-muted p-t-xs pos-abs goal_amount_success" style="display:none">
+				
+				<i class="fa fa-thumbs-up text-success"></i>
+			</div>
+                 <div class="text-primary-dk font-thin h1 text-center deal_amount"></div>
+                <span class="text-muted text-xs text-center block goal_amount"></span>
+                </div>
+                </div>
+        	</div>
+        </div>
+        <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	
 </script>

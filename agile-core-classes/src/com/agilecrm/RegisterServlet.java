@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountPrefs;
@@ -230,6 +231,7 @@ public class RegisterServlet extends HttpServlet
 	}
 	catch (Exception e)
 	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    e.printStackTrace();
 	}
 
@@ -369,6 +371,7 @@ public class RegisterServlet extends HttpServlet
 	}
 	catch (Exception e)
 	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    e.printStackTrace();
 	}
 	finally
@@ -577,4 +580,10 @@ public class RegisterServlet extends HttpServlet
 	    System.out.println("Exception in setting timezone in account prefs.");
 	}
     }
+    
+    public static void main(String[] args) {
+    	String email = "info@mpagenciadigital.com.br";
+    	String emailType = (email.split("@")[1]).split("\\.")[0];
+    	System.out.println(emailType);
+	}
 }

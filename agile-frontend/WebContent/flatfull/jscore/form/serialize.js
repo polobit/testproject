@@ -192,7 +192,13 @@ $(function(){
 	}
 	
 	$('.modal').on('shown.bs.modal', function(event){
+		var modalClassLength =  event.target.classList.length;
+		if(event.target.classList[modalClassLength - 2] == "focusRelatedTo"){
+			$('#opportunityUpdateForm').find("input[name='relates_to']").focus();
+		}
+		else {
 		$('form', this).focus_first();
+		}	
 	});
 });
 
@@ -217,11 +223,20 @@ function serializeLhsFilters(element)
 
 			RHS_VALUE = getGMTEpochFromDate(date);
 		}
+
 		RHS_NEW_VALUE = $(RHS_NEW_ELEMENT).val();
 		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
 			var date = getFormattedDateObjectWithString($(RHS_NEW_ELEMENT).val());
-			
+		if(CONDITION != "BETWEEN") {
 			RHS_NEW_VALUE = getGMTEpochFromDate(date);
+		}
+		else {
+			date = new Date(getGMTEpochFromDate(date) + (24 * 60 * 60 * 1000) - 1);
+
+			RHS_NEW_VALUE = date.getTime();
+		}
+			
+			
 		}
 		if(RHS_NEW_VALUE && typeof RHS_NEW_VALUE == "string") {
 			RHS_NEW_VALUE = RHS_NEW_VALUE.trim();

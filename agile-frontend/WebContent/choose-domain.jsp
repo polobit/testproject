@@ -141,6 +141,7 @@ padding-left:10px!important;
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
 	<script type="text/javascript" src="/lib/bootstrap.min.js"></script>
+	<script src="https://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.jquery.min.js"></script>
 	<script>
 		//Init
 		var error = "";

@@ -125,6 +125,7 @@ var portlet_utility = {
 		}
 	},
 
+
 	/**
 	 * getting default portlet settings for all portlets
 	 */
@@ -181,6 +182,9 @@ var portlet_utility = {
 		} else if (portlet_type == "USERACTIVITY" && p_name == "Campaign stats") {
 			json['duration'] = "yesterday";
 			json['campaign_type'] = "All";
+		}
+		else if (portlet_type == "DEALS" && p_name == "Deal Goals") {
+			json['duration'] = "this-month";
 		}
 		return json;
 	},
@@ -299,7 +303,8 @@ var portlet_utility = {
 			"Account Details" : "portlets-account",
 			"Mini Calendar" : "portlets-minicalendar",
 			"User Activities" : "portlets-activites",
-			"Campaign stats" : "portlets-campaign-stats-report"
+			"Campaign stats" : "portlets-campaign-stats-report",
+			"Deal Goals" : "portlets-deal-goals",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
@@ -380,6 +385,12 @@ var portlet_utility = {
 					header_name) {
 				$(el).find(".campaign_stats_header").html(header_name);
 			});
+			break;
+		}
+
+		case "Deal Goals": {
+			$(el).find('.portlet_body').parent().css('background',
+					'#f0f3f4');
 			break;
 		}
 		case "Stats Report": {
@@ -1077,6 +1088,41 @@ var portlet_utility = {
 			break;
 		}
 
+		case "Deal Goals" : {
+
+					portlet_ele = $('#ui-id-' + column_position + '-' + row_position,
+					el).find('.goals_portlet_body');
+					portlet_ele
+						.attr('id', 'p-body-' + column_position + '-' + row_position);
+					var that=portlet_ele;
+			   selector= portlet_ele.attr('id');
+			var url = '/core/api/portlets/goals/'+CURRENT_DOMAIN_USER.id
+						+ '?start-date='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str)
+								+ '&end-date='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str);
+			portlet_graph_data_utility
+					.fetchPortletsGraphData(
+							url,
+							function(data) {
+								that.find('.deal_count').html(
+									portlet_utility.getNumberWithCommasForPortlets(data["dealcount"]));
+								that.find('.goal_count').html('Won Deals <br> from '+
+										portlet_utility.getNumberWithCommasForPortlets(data["goalCount"])+' Goals');
+								that.find('.deal_amount').html(portlet_utility.getPortletsCurrencySymbol()+
+									'' +
+									portlet_utility.getNumberWithCommasForPortlets(data["dealAmount"]));
+								that.find('.goal_amount').html('Revenue <br> from '+portlet_utility.getPortletsCurrencySymbol()+
+									'' +
+									portlet_utility.getNumberWithCommasForPortlets(data["goalAmount"])+' Goals');
+									portlet_graph_data_utility.dealGoalsGraphData(selector,data,column_position,row_position);
+							});
+			setPortletContentHeight(base_model);
+			break;
+		}
+
 		}
 	},
 
@@ -1504,6 +1550,18 @@ var portlet_utility = {
 					$('.loading-img').hide();
 				}
 			});
+			break;
+		}
+
+		case "Deal Goals": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsGoalsSettingsModal");
+			elData = $('#portletsGoalsSettingsModal');
+			$("#duration", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
 			break;
 		}
 		}
@@ -1955,6 +2013,51 @@ var portlet_utility = {
 			}
 		});
 	
-	}
 
+	},
+
+	is_legend_enable_in_desktop : function(base_model){
+	        
+	        if(!base_model.get("size_x") || base_model.get("size_x") > 1)
+	        		return true;	
+
+	        return false;
+	},
+
+	is_legend_enable : function(base_model){
+		return (!agile_is_mobile_browser()) ? true : false;
+	},
+
+	toggle_chart_legends: function(chart, base_model){
+		if(!chart.series)
+			  return;
+
+		var items = chart.series; 
+		for (var i = 0; i < items.length; i++) {
+			this.toggle_legend_item(chart, items[i], base_model);
+		};
+
+	},
+	toggle_legend_item : function(chart, item, base_model){
+		if(this.is_legend_enable_in_desktop(base_model))
+		{
+			item.options.showInLegend = true;
+			try{
+				chart.legend.renderItem(item);	
+			}catch(e){}
+			try{
+				chart.legend.render();	
+			}catch(e){}
+    		
+		}else {
+			item.options.showInLegend = false;
+    		item.legendItem = null;
+    		try{
+				chart.legend.destroyItem(item);	
+			}catch(e){}
+			try{
+				chart.legend.render();	
+			}catch(e){}
+		}
+	}
 };

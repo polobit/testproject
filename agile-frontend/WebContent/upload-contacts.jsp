@@ -28,8 +28,8 @@
 
 <script type="text/javascript">
 jQuery.validator.setDefaults({
-	debug: true,
-	success: "valid"
+  debug: true,
+  success: "valid"
 });;
 </script>
 <script type="text/javascript">
@@ -52,72 +52,72 @@ function getUrlVars() {
 
 function returnBack(key,type)
 {
-	
-	if(!key)
-		return;
-	
-	if (window.opener)
-	{
-		window.opener.parseCSV(key,type);
-	   	window.close();
-	}
-	return;
+  
+  if(!key)
+    return;
+  
+  if (window.opener)
+  {
+    window.opener.parseCSV(key,type);
+      window.close();
+  }
+  return;
 }
 
 $(function()
 {
-	// Check if this was referred back again
-	var key = getUrlVars()["key"];
-	var fail = getUrlVars()["f"];
-	var file = getUrlVars()["type"];
-	
+  // Check if this was referred back again
+  var key = getUrlVars()["key"];
+  var fail = getUrlVars()["f"];
+  var file = getUrlVars()["type"];
+  
 
-	//$('.error', $("#form")).remove();
-	if(fail && !key)
-		{	
-			$("#form").append('<label class="error">Max limit 10,000 contacts.</label>');	
-			return;
-		}
-	if(key != undefined)
-	{
-		returnBack(key,file);
-		return;
-	} 
+  //$('.error', $("#form")).remove();
+  if(fail && !key)
+    { 
+      $("#form").append('<label class="error">Max limit 10,000 contacts.</label>'); 
+      return;
+    }
+  if(key != undefined)
+  {
+    returnBack(key,file);
+    return;
+  } 
 });
 
 $(function()
-		{
-	$("input:file").change(function (){
-	var fileName = $(this).val();
+    {
+  $("input:file").change(function (){
+  var fileName = $(this).val();
     $(".filename").html(fileName);
     
     // to remove error message while change
     isValid();
   });
-		}); 
-		
+    }); 
+    
 function isValid(){
     $("#form").validate({
-        	rules: {
-        		file:{required:true,accept:"csv"}
+          rules: {
+            file:{required:true,accept:"csv"}
                },
-       		messages: {
-  	    	  	file: {
-  	      			accept: "Please upload a CSV file",
-  	      		},
+          messages: {
+              file: {
+                accept: "Please upload a CSV file",
+              },
                },
              submitHandler:function(form)
              {   
-          	   if($('.submit', form).attr('disabled') != undefined)
-          		   return;
-          	   
-          	   $('.submit', form).attr('disabled', true);
-          	   $('.submit', form).after('<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>');
+               if($('.submit', form).attr('disabled') != undefined)
+                 return;
+               
+               $('.submit', form).attr('disabled', true);
+               $('.submit', form).after('<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>');
               form.submit();
-          	}
+            }
     
-   	});
-	    return $("#form").valid();
+    });
+      return $("#form").valid();
     } 
 
     function agile_is_mobile_browser(){
@@ -134,9 +134,9 @@ function isValid(){
 
 </script>
 <style>
-	label.error {
-		color:red;
-	}
+  label.error {
+    color:red;
+  }
 
 </style>
 

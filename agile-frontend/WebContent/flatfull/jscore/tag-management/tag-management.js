@@ -143,6 +143,9 @@ var TAG_MODEL_VIEW = Backbone.View
 																		+ newTag
 																		+ "\". This may take a while. You may see the renamed tag on some contacts while this happens",
 																"top", 5000);
+
+													renameTags(newTag, oldTag);
+													App_Admin_Settings.tagManagement();
 												}
 											});
 
@@ -216,6 +219,7 @@ var TAG_MODEL_VIEW = Backbone.View
 																	.get('tag')
 															+ "\".  You may see the deleted tag on some contacts while this happens",
 													"top", 5000);
+											App_Admin_Settings.tagManagement();
 										}
 									});
 						});
@@ -386,6 +390,10 @@ function saveTag(field) {
 			showNotyPopUp('information', "New tag \"" + model.get('tag')
 					+ "\" created.", "top", 5000);
 
+			// Adds tag to global connection
+			if(tagsCollection && tagsCollection.models)
+				tagsCollection.add(response.toJSON());
+            App_Admin_Settings.tagManagement();
 		}
 	});
 	console.log(App_Admin_Settings);

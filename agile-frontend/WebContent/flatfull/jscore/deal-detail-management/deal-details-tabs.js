@@ -240,10 +240,12 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		var currentdeal = App_Deal_Details.dealDetailView.model;
 		updateDeal(currentdeal);
 
-		setTimeout(function()
-		{
-			$('#opportunityUpdateForm').find("input[name='relates_to']").focus();
-		}, 800);
+		//setTimeout(function()
+		//{
+		//	$('#opportunityUpdateForm').find("input[name='relates_to']").focus();
+		//}, 800);
+
+		$('#opportunityUpdateModal').addClass('focusRelatedTo');
 
 	},
 
@@ -333,7 +335,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
 		var el = $(targetEl).closest("div");
 		$(targetEl).css("display", "none");
-		el.find(".deal-document-select").css("display", "inline");
+		el.find(".deal-document-select").css("display", "block");
 		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	    fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
 		{

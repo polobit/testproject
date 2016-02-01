@@ -13,11 +13,11 @@
 			{{#if_equals num.length "1"}}<div id="skype_contact_number"></div>
 			{{else}}
 			<div class="wrapper-sm">
-			<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs">To&nbsp;:</h4></div>
-			<div class="pull-right">
-				<select name="skype_number" id="skype_contact_number" class="required form-control" style="height:27px;padding-top:2px;">
+			<!--<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs">To&nbsp;:</h4></div>-->
+			<div class="pull-left" style="width:100%;">
+				<select name="skype_number" id="skype_contact_number" class="required form-control" style="height:27px;padding-top:2px;width:100%;">
 					{{#each num}}
-						<option value="{{this}}">{{this}} 
+						<option value="{{value}}">{{value}} 
 							{{#if subtype}}({{subtype}}){{/if}}
 						</option>
 					{{/each}}
@@ -44,20 +44,20 @@
 {{#if this}}
 
 		{{#each this}}          
-			<li class="list-group-item b-n bg-light-gray m-xs">
+			<li class="list-group-item r-none b-l-none b-r-none">
 					{{#if_equals duration "0"}}
-						<i class="icon pull-left icon-phone text-white text-md m-r-xs m-t-xxs v-middle twilio-widget-unanswer"></i>
+						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-unanswer"></i>
 					{{else}}
-						<i class="icon pull-left icon-phone text-white text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
+						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
 					{{/if_equals}}
 				
-<div class="pull-left text-sm">{{#if_equals duration "0"}}Call unaswered{{else}}Call connected{{/if_equals}}</div>
+<div class="pull-left text-sm">{{#if_equals duration "0"}}Call unanswered{{else}}Call connected{{/if_equals}}</div>
 				
-<div class="pull-right"><span class="label bg-light dk text-tiny">{{#is_string duration}}{{toProperFormat duration}}{{else}}0s{{/is_string}}</span></div>
+<div class="pull-right">{{#is_string duration}}{{toProperFormat duration}}{{else}}0s{{/is_string}}</div>
 				
 <div class="clearfix"></div>
 	
-<small class="text-muted block pos-rlt" style="top:-3px;margin-left:21px;"><time class="time-ago pull-left" datetime="{{convert_toISOString startTime}}">{{toLocalTimezone startTime}}</time></small>
+<small class="text-muted block pos-rlt"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{convert_toISOString startTime}}">{{toLocalTimezone startTime}}</time></small>
 				
 <div class="clearfix"></div>
 			</li>
@@ -74,32 +74,29 @@
 <div>
 	<form class="p-xs" id="skype_login_form" name="skype_login_form" method="post">
     	<fieldset>
- 			<p class="m-t-sm" style=" border-bottom: 1px solid #DEE5E7;font-weight: bolder; margin: 0px;margin-bottom: 15px;">
-                   Make and receive calls from your contacts using your Skype client.
-			  </p>
+				<p class="m-t-sm" style=" margin: 0px;margin-bottom: 20px;">
+                    Make & receive calls using your Skype client
+			  </p>	
 				
-			<p style="font-size: 13px;">
-				Please follow these steps to make Skype call from Agile				
-			</p>
+				<p style="font-size: 13px;margin-bottom: 15px">
+					Please follow these steps 			
+				</p>
 
 				<div class="m-t-sm m-b-none text-sm" style="font-size: 12px;">
-				<p>1) Download the Executable from <a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;"> here </a> </p>
-  				<p>2) Save the widget by clicking on the save button below </p>
-				<p>3) Open Skype client in your system and log into your account </p>
-				<p>4) Run the executable by double clicking on it</p>
-				<p>5) Go to contact page whom you want to make call and click on the contact number </p>
+				<p>1) Agile needs an executable on your Windows PC to communicate with Skype. You can download it <a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;"> here.</a> </p>
+  				<p>2) Save the widget by clicking on the save button below. </p>
+				<p>3) Open Skype executable and follow the steps.</p>
 				</div>
 
-              	<div class="m-t-xl text-center">
-				<a href="#add-widget" class="btn btn-default btn-sm ">Cancel</a>
-			  	<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
-				
+              	<div style="margin-top: 18px">
+					<p style="font-size: 13px; margin-top:5px;">
+						You should be able to now make and receive calls using Skype.	
+					</p>
+				<div class="text-center">
+				<a href="#add-widget" class="btn btn-default btn-sm ml_5">Cancel</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">Save</a>
 				</div>
-              
-              <p class="m-t-sm m-b-none ">
-                  Don't have Skype client? Download
-                  <a href="http://www.skype.com/en/download-skype/skype-for-computer" target="_blank" class="text-info"> here </a>
-              </p>
+              </div>
 		 </fieldset>
     </form>
 </div>
@@ -124,8 +121,8 @@
      <div class="campaign_dialpad_row">
        <div class="campaign_dialpad_cell" ><input type="button" value="9" class="button9" id="button9" onclick="skypeSendDTMF('9');"></div>
 	   <div class="campaign_dialpad_cell"><input type="button" value="0" class="button0" id="button0" onclick="skypeSendDTMF('0');"></div>    
-	   <div class="campaign_dialpad_cell"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="skypeSendDTMF('*');"></div>
-       <div class="campaign_dialpad_cell"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="skypeSendDTMF('#');"></div> 	
+	   <div class="campaign_dialpad_cell"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="skypeSendDTMF('star');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="skypeSendDTMF('hash');"></div> 	
 	 </div>
   </div>
 </div>

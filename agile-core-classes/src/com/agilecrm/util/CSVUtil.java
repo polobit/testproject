@@ -250,7 +250,7 @@ public class CSVUtil
 	// Refreshes count of contacts. This is removed as it already calculated
 	// in deferred task; there is limation on count in remote api (max count
 	// it gives is 1000)
-	billingRestriction.refreshContacts();
+	// billingRestriction.refreshContacts();
 
 	System.out.println(billingRestriction.getCurrentLimits().getPlanId() + " : "
 		+ billingRestriction.getCurrentLimits().getPlanName());
@@ -287,6 +287,9 @@ public class CSVUtil
 	int accessDeniedToUpdate = 0;
 	Map<Object, Object> status = new HashMap<Object, Object>();
 	status.put("type", "Contacts");
+
+	List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE");
+	List<CustomFieldDef> imagefield = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "text");
 
 	/**
 	 * Iterates through all the records from blob
@@ -400,8 +403,6 @@ public class CSVUtil
 
 		    if (field.type.equals(FieldType.CUSTOM))
 		    {
-			List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(
-				SCOPE.CONTACT, "DATE");
 			for (CustomFieldDef customFieldDef : customFields)
 			{
 			    if (field.name.equalsIgnoreCase(customFieldDef.field_label))
@@ -419,8 +420,6 @@ public class CSVUtil
 			// set image in custom fields
 			if (field.name.equalsIgnoreCase(Contact.IMAGE))
 			{
-			    List<CustomFieldDef> imagefield = CustomFieldDefUtil.getCustomFieldsByScopeAndType(
-				    SCOPE.CONTACT, "text");
 
 			    for (CustomFieldDef customFieldDef : imagefield)
 			    {

@@ -232,7 +232,14 @@ a:hover .caret-white {
     padding: 10px 15px;
     position: relative;
 }
-
+.content-tabs-show ul li {
+  border-left: none;
+  border-right: none;
+}
+.content-tabs-show ul li {
+  padding: 10px 10px 10px!important;
+  border-bottom: 1px solid #e7ecee;
+}
 .list-group {
   border-radius: 2px;
 }
@@ -507,6 +514,7 @@ a.list-group-item.hover {
 .table > tfoot > tr > td {
   padding: 8px 15px;
   border-top: 1px solid #eaeff0;
+  border-bottom: none;
 }
 
 .table > thead > tr > th {

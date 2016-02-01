@@ -55,8 +55,8 @@ $(function(){
 	 * If user clicks on confirm delete the modal is hidden and
 	 * delete request is sent to "core/api/delete/account"
 	 */
-	$("#content #confirm-delete-account").off("click");
-	$('#content').on('click', '#confirm-delete-account', function(e) {
+	$("#warning-deletion-feedback #confirm-delete-account").off("click");
+	$('#warning-deletion-feedback').on('click', '#confirm-delete-account', function(e) {
 		
 			e.preventDefault();
 
@@ -192,7 +192,7 @@ $('#warning-deletion-feedback').on('click', '#warning-feedback-save', function(e
 		}
 		else
 			{
-				set_up_account_stats(el, function(data){
+				set_up_account_stats($('#warning-deletion-feedback'), function(data){
 					getTemplate('warning', data, undefined, function(template_ui){
 				 		if(!template_ui)
 				    		return;

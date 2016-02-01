@@ -242,15 +242,17 @@ function set_up_widgets(el, widgets_el)
 		if (model.get("widget_type") == "CUSTOM")
 		{
 
-			if ($('#' + model.get('selector') + '-container').length)
-			{
-				setup_custom_widget(model, widgets_el)
-			}
-			else
-				$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e)
-				{
-					setup_custom_widget(model, widgets_el)
+			if ($('#' + model.get('selector') + '-container').length){
+				$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e){
+					setup_custom_widget(model, widgets_el);
 				});
+
+				//setup_custom_widget(model, widgets_el)
+			}else {
+				$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e){
+					setup_custom_widget(model, widgets_el);
+				});
+			}
 		}
 	}, this);
 	enableWidgetSoring(widgets_el);

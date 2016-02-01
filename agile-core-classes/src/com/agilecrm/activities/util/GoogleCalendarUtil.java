@@ -1,7 +1,9 @@
 package com.agilecrm.activities.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,8 +46,16 @@ public class GoogleCalendarUtil
 		List<List<Long>> filledSlots = new ArrayList<List<Long>>();
 
 		// Current user calendar prefs
-		GoogleCalenderPrefs prefs = GoogleCalenderPrefs.dao.getByProperty("domainUserKey", new Key<DomainUser>(
+//		GoogleCalenderPrefs prefs = GoogleCalenderPrefs.dao.getByProperty("domainUserKey", new Key<DomainUser>(
+//				DomainUser.class, userid));
+		
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+		queryMap.put("domainUserKey", new Key<DomainUser>(
 				DomainUser.class, userid));
+		queryMap.put("calendar_type", GoogleCalenderPrefs.CALENDAR_TYPE.GOOGLE);
+		
+		GoogleCalenderPrefs prefs = GoogleCalenderPrefs.dao.getByProperty(queryMap);
+		
 		System.out.println(prefs);
 
 		// If google calendar sync with Agile Calendar then Get calendar

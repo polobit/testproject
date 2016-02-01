@@ -61,12 +61,22 @@ function generateRadioUI(uiFieldDefinition) {
     // Select options will be json pairs (key,values)	
     var options = uiFieldDefinition.options;
 
+    var eventHandler = uiFieldDefinition.eventHandler;
+    var event = uiFieldDefinition.event;
+    var style = uiFieldDefinition.style ? getStyleAttribute(uiFieldDefinition.style) : "" ;
+
     // Add all elements defined
     var selectOptionAttributes = "";
     $.each(
     options, function (key, value) {
 
-        var input = "<input type=\"radio\" name=\"" + uiFieldDefinition.name + "\" value=\"" + key + " >" + value + "</input>";
+        var input = "<input type=\"radio\""+ style  +" name=\"" + uiFieldDefinition.name + "\" value=\"" + key + "\" >" + value + "</input>";
+ 
+        if(event && eventHandler){
+        	input = "<input type=\"radio\""+ style  +" name=\"" + uiFieldDefinition.name + "\" value=\"" + key + "\""+event+"="+eventHandler+"(this,'"+ uiFieldDefinition.target_type +"')"+">" + value + "</input>";
+        }
+        
+
         selectOptionAttributes += input;
     });
 
@@ -124,6 +134,7 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	var eventHandler = uiFieldDefinition.eventHandler;
 	var event = uiFieldDefinition.event;
 
+
 	// Useful for changes after select list loaded
 	var callback = uiFieldDefinition.callback;
 
@@ -133,6 +144,7 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 		attr = "multiple";
 
 	var selectContainer = $("<select "+ attr +" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
+
 
 	if(event && eventHandler)
 		selectContainer = $("<select "+ attr +" id='"+uiFieldDefinition.id+"' "+getStyleAttribute(uiFieldDefinition.style)+" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"' type='"+(type == undefined ? 'select' : type)+"'></select>");
@@ -217,7 +229,7 @@ function fetchAndFillSelect(url, keyField, valField, appendNameField, options, s
 				
 				var appendName = eval("json."+ appendNameField);
 				
-				// Append name to email like Naresh <naresh@agilecrm.com>
+				// Append name to email like Naresh <naresh@agilecrm.com    >
 				if(key!= undefined && appendName != undefined)
 					key = appendName + " &lt;"+key+"&gt;";
 				
@@ -289,6 +301,7 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     	options = getTaskCategories("categories");
     }
 
+
     if(options == null)
     	options = "";
     
@@ -319,7 +332,9 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
   
     if(uiFieldDefinition.fieldType == "campaign_list")
     return "<select multiple name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+getStyleAttribute(uiFieldDefinition.style)+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes +  "</select>";
-     
+    
+
+
 	  // retun select field with name and title attributes(Yasin(14-09-10)) 
     return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
            
@@ -438,13 +453,13 @@ function generateDefaultUI(uiFieldDefinition) {
     }
     
     // Add checked
-      /* 
+      
 	  //This is appended 'checked' for all attributes.( commented by yasin(13-09-10))
 	
 	  if(isChecked)
 	  attributes += " checked";
 	 
-	  */ 
+	  
     
     // alert(tagName +":" + attributes);
     // Adds tag and attributes
@@ -694,7 +709,9 @@ function _generateUIFields(selector, ui) {
 
         // Radio
         if (uiFieldType == "radio") {
-	    
+        	addLabel(uiFieldDefinition.label,container);
+	    	uiField = generateRadioUI(uiFieldDefinition);
+	    	$(uiField).appendTo(container);
             continue;
         }
 
@@ -709,8 +726,12 @@ function _generateUIFields(selector, ui) {
           
            // Target element to insert merge field on option selected
            if("target_type" in uiFieldDefinition)
-        	   uiField = generateSelectUI(uiFieldDefinition,"insertSelectedMergeField");
-           
+           {
+           	if(!uiFieldDefinition.eventHandler)
+           	   uiFieldDefinition.eventHandler = "insertSelectedMergeField";
+           	
+        	   uiField = generateSelectUI(uiFieldDefinition,uiFieldDefinition.eventHandler);
+           }
            else
         	   uiField = generateSelectUI(uiFieldDefinition);
            
@@ -940,9 +961,9 @@ function constructUI(selector, uiDefinition) {
     
  
   
-
+	 
    // select all desired input fields and attach tooltips to them``
-   selector.find("input").tooltip({
+   selector.find("input").not(":radio").tooltip({
 
        // place tooltip on the right edge
        position: "center right",

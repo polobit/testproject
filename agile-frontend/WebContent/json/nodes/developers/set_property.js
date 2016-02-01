@@ -22,6 +22,42 @@
             "type": "select"
         },
         {
+            "label": "Set",
+            "category": "Settings",
+            "name": "action",
+            "id":"action",
+            "event":"onclick",
+            "eventHandler":"remove_property",
+            "target_type": "updated_value",
+            "options": {
+            "SET_NULL": "delete"
+            },
+            "style": {
+                "vertical-align": "-3px",
+                "margin-right": "3px"
+            },
+            "title": "Select set button to set the Select Property <br/> Select Set to null(blank) button to remove the Select Property ",
+            "type": "radio",
+            "fieldType":"radio"   
+        },
+        {
+            "category": "Settings",
+            "name": "action",
+            "event":"onclick",
+            "eventHandler":"add_property",
+            "target_type": "updated_value",
+            "options": {
+            "SET": "set"
+            },
+            "style": {
+                "vertical-align": "-3px",
+                "margin-right": "3px"
+            },
+            "title": "Select set button to add the Select Property <br/> Select Set to null(blank) button to remove the Select Property ",
+            "type": "radio",
+            "fieldType": "radio"
+        },
+        {
             "label": "Value",
             "required": "required",
             "category": "Settings",

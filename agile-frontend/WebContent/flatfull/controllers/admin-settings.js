@@ -47,7 +47,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	"lost-reasons" : "lostReasons",
 
-	"deal-sources" : "dealSources"
+	"deal-sources" : "dealSources",
+	
+	"goals": "dealGoal",
 
 
 	},
@@ -207,8 +209,19 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 						add_created_user_info_as_note_to_owner(data);
 					}
+					location.reload(true);
 				});
-			} });
+			}, saveAuth : function(el){
+				if(CURRENT_DOMAIN_USER.is_account_owner && $("#userForm", el).find("#owner:checked").length == 1 && $("#userForm", el).find("#eaddress").val() != CURRENT_DOMAIN_USER.email)
+				{
+					$("#saveUserAuthentication", el).html(getTemplate("conform-owner-change-model",{}));
+					$("#saveUserAuthentication", el).modal("show");
+					return true;
+				}
+				else{
+					return false;
+				}
+			}  });
 
 			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
@@ -257,6 +270,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			// Gets user from the collection based on id
 			var user = that.usersListView.collection.get(id);
 
+			var userEmail = user.attributes.email;
+
 			var needLogout = false;
 			if (CURRENT_DOMAIN_USER.email == user.attributes.email)
 			{
@@ -269,30 +284,49 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			 */
 			var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", saveCallback : function(response)
 			{
-				// If user changed his own email, redirect it to the login page.
-				if (needLogout && CURRENT_DOMAIN_USER.email != response.email)
-				{
-					console.log('Logging out...');
-					showNotyPopUp("information", "You Email has been updated successfully. Logging out...", "top");
-					var hash = window.location.hash;
-					setTimeout(function()
+
+				update_contact_in_our_domain(userEmail, response, function(){
+
+					// If user changed his own email, redirect it to the login page.
+					if (needLogout && CURRENT_DOMAIN_USER.email != response.email)
 					{
-						window.location.href = window.location.protocol + "//" + window.location.host + "/login" + hash;
-					}, 5000);
-				}
-				else
-				{
-					Backbone.history.navigate('users', { trigger : true });
-				}
+						console.log('Logging out...');
+						showNotyPopUp("information", "You Email has been updated successfully. Logging out...", "top");
+						var hash = window.location.hash;
+
+						setTimeout(function()
+						{
+							window.location.href = window.location.protocol + "//" + window.location.host + "/login" + hash;
+						}, 5000);
+					}
+					else
+					{
+						//Backbone.history.navigate('users', { trigger : true });
+						location.reload(true);
+					}
+				
+
+				});
+				
 
 			}, postRenderCallback : function(el)
 			{
 
 				bindAdminChangeAction(el, view.model.toJSON());
 				setTimeout(function(){
-					$('#deals-privilege', el).trigger('change');
+					//$('#deals-privilege', el).trigger('change');
 					$('#calendar-privilege', el).trigger('change');
 				},500);
+			}, saveAuth : function(el){
+				if(CURRENT_DOMAIN_USER.is_account_owner && $("#userForm", el).find("#owner:checked").length == 1 && $("#userForm", el).find("#eaddress").val() != CURRENT_DOMAIN_USER.email)
+				{
+					$("#saveUserAuthentication", el).html(getTemplate("conform-owner-change-model",{}));
+					$("#saveUserAuthentication", el).modal("show");
+					return true;
+				}
+				else{
+					return false;
+				}
 			} });
 
 			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
@@ -401,7 +435,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 					try
 					{
-						if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO")
+						if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE")
 							$("#tracking-webrules, .tracking-webrules-tab").hide();
 						else
 							$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
@@ -503,6 +537,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#milestone-listner').find('#AdminPrefsTab .select').removeClass('select');
 			$('#milestone-listner').find('.milestones-tab').addClass('select');
 			$(".active").removeClass("active");
+			$('.settings-milestones').addClass('active');
+			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
 
 		}, "#milestone-listner");
 	
@@ -937,21 +973,28 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html(getTemplate('others-not-allowed',{}));
 			return;
 		}
+		var that = this;
 		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
-		$("#milestone-listner").html(getTemplate("admin-settings"), {});
-		$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
-		this.dealLostReasons = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_LOST_REASON', templateKey : "admin-settings-lost-reasons",
-			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
-			{
-				initializeMilestoneListners(el);
-			} });
-		this.dealLostReasons.collection.fetch();
-		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealLostReasons.render().el);
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.milestones-tab').addClass('select');
-		$(".active").removeClass("active");
-		$('.settings-lost-reasons').addClass('active');
-		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#milestone-listner').html($(template_ui));
+			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
+			that.dealLostReasons = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_LOST_REASON', templateKey : "admin-settings-lost-reasons",
+				individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+				{
+					initializeMilestoneListners(el);
+				} });
+			that.dealLostReasons.collection.fetch();
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(that.dealLostReasons.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.milestones-tab').addClass('select');
+			$(".active").removeClass("active");
+			$('.settings-lost-reasons').addClass('active');
+			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+			$('.settings-lost-reasons').parent().removeClass('b-b-none');
+
+		}, "#milestone-listner");
 	},
 
 	/**
@@ -964,21 +1007,118 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html(getTemplate('others-not-allowed',{}));
 			return;
 		}
+		var that = this;
 		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
-		$("#milestone-listner").html(getTemplate("admin-settings"), {});
-		$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
-		this.dealSourcesView = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_SOURCE', templateKey : "admin-settings-deal-sources",
-			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
-			{
-				initializeMilestoneListners(el);
-			} });
-		this.dealSourcesView.collection.fetch();
-		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealSourcesView.render().el);
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.milestones-tab').addClass('select');
-		$(".active").removeClass("active");
-		$('.settings-deal-sources').addClass('active');
-		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#milestone-listner').html($(template_ui));
+			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
+			that.dealSourcesView = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_SOURCE', templateKey : "admin-settings-deal-sources",
+				individual_tag_name : 'tr', sort_collection : false, postRenderCallback : function(el)
+				{
+					initializeMilestoneListners(el);
+
+					//Enable sorting for sources
+					dealSourcesSorting();
+				} });
+			that.dealSourcesView.collection.fetch();
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(that.dealSourcesView.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.milestones-tab').addClass('select');
+			$(".active").removeClass("active");
+			$('.settings-deal-sources').addClass('active');
+			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+			$('.settings-deal-sources').parent().removeClass('b-b-none');
+
+		}, "#milestone-listner");
+	},
+
+	dealGoal : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		var that1 = this;
+		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#milestone-listner').html($(template_ui));
+			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
+
+			that1.dealGoalsView = new Base_Collection_View({ url : '/core/api/users', templateKey : "admin-settings-deal-goals",
+				individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+				{
+					initQuota(function(){
+					initializeMilestoneListners(el);
+					
+
+							var d=$('#goal_duration span').html();
+					d=new Date(d);
+					var start=getUTCMidNightEpochFromDate(d);
+
+						$.ajax({ type : 'GET', url : '/core/api/goals?start_time='+start/1000, 
+						contentType : "application/json; charset=utf-8", dataType : 'json' ,
+							success:function(data)
+							{
+								console.log(data);
+								var count=0,amount=0;
+								$('#deal-sources-table').find('td').each(function(index){
+									var that=$(this);
+									that.find('.count').val("");
+											that.find('.amount').val("");
+									$.each(data,function(index,jsond){
+										console.log(jsond);
+										if(jsond.domain_user_id==that.find('div').attr('id')){
+											that.find('.count').val(jsond.count);
+											that.find('.amount').val(jsond.amount);
+											that.attr('id',jsond.id);
+											that.attr('data',jsond.start_time);
+											//flag=true;
+										}
+
+								});
+									if(that.find('.count').val()!="")
+									count=count+parseInt(that.find('.count').val());
+									if(that.find('.amount').val()!="")
+										amount=amount+parseFloat(that.find('.amount').val());
+								});
+
+								
+								percentCountAndAmount(count,amount);
+							}
+					});
+					});
+					
+				}  });	
+			that1.dealGoalsView.collection.fetch();
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(that1.dealGoalsView.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.milestones-tab').addClass('select');
+			$(".active").removeClass("active");
+			$('.settings-deal-goal').addClass('active');
+			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+			$('.settings-deal-goal').parent().removeClass('b-b-none');
+
+		}, "#milestone-listner");
 	}
 
 });
+
+
+function initQuota(callback)
+{
+	$("#goal_duration span.date").datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true ,
+						
+				}).on('changeMonth',function(e) {
+       						/// alert(e);
+       						$("#goal_duration span").html( e.date.format("mmmm yyyy"));
+       						 callback();
+
+       						}).datepicker("setDate", new Date());
+
+				callback();
+}

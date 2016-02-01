@@ -7,7 +7,8 @@ var DealsRouter = Backbone.Router.extend({
 	routes : {
 
 	/* Deals/Opportunity */
-	"deals" : "deals", "import-deals" : "importDeals", 
+	"deals" : "deals", "import-deals" : "importDeals",
+	"deal-rc-0" : "dealsRightClick","deal-rc-1" : "dealsRightClick","deal-rc-2" : "dealsRightClick","deal-rc-3" : "dealsRightClick",
 	"deal-filters" : "dealFilters", 
 	"deal-filter-add" : "dealFilterAdd",
 	"deal-filter-edit/:id" : "dealFilterEdit",
@@ -34,6 +35,11 @@ var DealsRouter = Backbone.Router.extend({
 			}
 		}*/
 		$('#content').html("<div id='opportunity-listners'>&nbsp;</div>");
+		
+		//fix for mobile view showing only list view 
+		if(agile_is_mobile_browser())
+			createCookie("agile_deal_view", "list_view"); 
+		
 		// Depending on cookie shows list or milestone view
 		if (!_agile_get_prefs("agile_deal_view"))
 		{
@@ -116,6 +122,28 @@ var DealsRouter = Backbone.Router.extend({
 		}, 2000);
 	},
 
+	/**
+	 * Open deal view in new page when right clicked
+	 */
+	dealsRightClick : function()
+	{
+		var link = window.location.hash;
+		var param = link.split("-")[2];
+		
+		if(param == "0"){
+			_agile_set_prefs("agile_deal_view", "list_view");
+		}else if(param == "1"){
+			_agile_delete_prefs("agile_deal_view");
+			_agile_delete_prefs('deal-milestone-view');
+		}else if(param == "2"){
+			_agile_set_prefs('deal-milestone-view','compact');			
+		}else if(param == "3"){
+			_agile_set_prefs('deal-milestone-view','fit');
+		}
+		App_Deals.deals();
+		window.location.hash = "deals";
+	},
+	
 	/**
 	 * import deals from a csv file and then upload all deals to databse
 	 */
@@ -271,47 +299,41 @@ var DealsRouter = Backbone.Router.extend({
 						}
 						$('#filter_pipeline').parent().find('img').hide();
 						hideTransitionBar();
+
+						var track = $('#filter_pipeline').val();
+						if (track)
+						{
+							var milestoneModel = Backbone.Model.extend({ url : '/core/api/milestone/'+track });
+							var model = new milestoneModel();
+							model.fetch({ 
+								success : function(data){
+									var json = data.toJSON();
+									var milestones = json.milestones;
+									milestonesList = milestones.split(",");
+									$('#milestone').html('');
+									if(milestonesList.length > 1)
+									{
+										$('#milestone', el).html('<option value="">Any</option>');
+									}
+									$.each(milestonesList, function(index, milestone){
+										$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
+									});
+									if(deal_filter_json && deal_filter_json.milestone && track == deal_filter_json.pipeline_id)
+									{
+										$('#milestone').find('option[value="'+deal_filter_json.milestone+'"]').attr("selected", "selected");
+									}
+									
+									$('#milestone', el).parent().find('img').hide();
+									hideTransitionBar();
+								} 
+							});
+						}
+						else
+						{
+							$('#milestone', el).html('<option value="">Any</option>');
+						}
 					}
 				});
-				var track = deal_filter_json.pipeline_id;
-				if (track)
-				{
-					var milestoneModel = Backbone.Model.extend({ url : '/core/api/milestone/'+track });
-					var model = new milestoneModel();
-					model.fetch({ 
-						success : function(data){
-							var json = data.toJSON();
-							var milestones = json.milestones;
-							if(milestones)
-							{
-								milestonesList = milestones.split(",");
-								$('#milestone').html('');
-								if(milestonesList.length > 1)
-								{
-									$('#milestone', el).html('<option value="">Any</option>');
-								}
-								$.each(milestonesList, function(index, milestone){
-									$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
-								});
-								if(deal_filter_json && deal_filter_json.milestone)
-								{
-									$('#milestone').find('option[value="'+deal_filter_json.milestone+'"]').attr("selected", "selected");
-								}
-							}
-							else
-							{
-								$('#filter_pipeline').trigger('change');
-							}
-							
-							$('#milestone', el).parent().find('img').hide();
-							hideTransitionBar();
-						} 
-					});
-				}
-				else
-				{
-					$('#milestone', el).html('<option value="">Any</option>');
-				}
 			} });
 
 		$("#opportunity-listners").html(dealFilter.render().el);
