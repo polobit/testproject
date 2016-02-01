@@ -2413,12 +2413,13 @@ function BubbleChart(url, selector, name,show_loading)
 			    },
 
 			    legend: {
-			        layout: 'vertical',
-			        align: 'right',
-			        verticalAlign: 'top',
+			        layout: 'horizontal',
+			        align: 'center',
+			        verticalAlign: 'bottom',
 			        x: -10,
-			        y: 100,
-			        borderWidth: 0
+			        y: 10,
+			        borderWidth: 0,
+			        
 			    },
 			    //Sets the series of data to be shown in the graph,shows total 
 			    //and pipeline
