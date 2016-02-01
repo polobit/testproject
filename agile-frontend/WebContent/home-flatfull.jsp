@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<%@page import="com.analytics.servlets.AnalyticsServlet"%>
 <%@page import="com.agilecrm.contact.CustomFieldDef.SCOPE"%>
 <%@page import="com.agilecrm.contact.util.CustomFieldDefUtil"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>

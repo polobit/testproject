@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -58,7 +59,8 @@ public class AdminLoginServlet extends HttpServlet {
 		DomainUser user = DomainUserUtil.getDomainUser(domainKey);
 		if(user != null){
 			NamespaceManager.set(user.domain);
-			SessionManager.set(new UserInfo(user));
+			HttpSession session = request.getSession();
+			session.setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, new UserInfo(user));
 			String url = VersioningUtil.getURL(user.domain, request);
 			url = url + "?sp=true";
 			response.sendRedirect(url);
