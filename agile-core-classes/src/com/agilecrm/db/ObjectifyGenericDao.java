@@ -88,9 +88,8 @@ import com.socialsuite.cron.ScheduledUpdate;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
 import com.thirdparty.office365.calendar.Office365CalendarPrefs;
-
 import edu.emory.mathcs.backport.java.util.Arrays;
-
+import com.agilecrm.account.DocumentTemplates;
 /**
  * <code>ObjectifyGenericDao</code> is a generic class for all the entities,
  * which provides the facility to interact with the database (appengine) using
@@ -222,6 +221,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
     ObjectifyService.register(LandingPageCNames.class);
 	ObjectifyService.register(Goals.class);
 
+    ObjectifyService.register(DocumentTemplates.class);
+    
     }
 
     /**

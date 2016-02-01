@@ -58,6 +58,7 @@ var deal_details_tab = {
 		            url: '/core/api/documents/opportunity/' + id + "/docs",
 		            restKey: "document",
 		            templateKey: "deal-docs",
+		            modelData : {"deal_id" : id},
 		            individual_tag_name: 'li',
 		            sortKey:"uploaded_time",
 		            descending: true,

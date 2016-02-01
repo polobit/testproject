@@ -617,6 +617,7 @@ function initializeSendEmailListeners(){
 
 						// serialize form.
 						var json = serializeForm("emailForm");
+						
 						if ((json.contact_to_ids).join())
 							json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
 
@@ -642,7 +643,25 @@ function initializeSendEmailListeners(){
 						// Is valid
 						if (!isValidForm($('#emailForm')))
 							return;
+						
 
+						if($("#eattachment_key","#emailForm").attr('name')=="edoc_key")
+						{	
+							var sMessage=json.message.match(/<body[^>]*>[\s\S]*<\/body>/gi)[0].replace("<body>","").replace("</body>","");
+							var sCompleteMessage='<table width="480" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td width="480" height="30"></td></tr><tr>'
+												+'<td width="480"><table width="480" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td width="40"></td>'	
+												+'<td width="400"><table width="400" cellpadding="0" cellspacing="0" border="0"><tbody><tr>'
+												+'<td width="400" valign="top" style="font-family:\'Helvetica Neue\',\'Helvetica\',Arial,sans-serif;font-size:15px;color:#333b40;margin:0;padding:0;border-collapse:collapse;line-height:22px!important">'		
+												+'<b>' + CURRENT_DOMAIN_USER.name +'</b> sent you "<b>'+ $("#agile_attachment_name","#emailForm").attr("value") + '</b>".</td></tr><tr><td width="400">'
+												+'<hr size="1" noshade="" style="margin:10px 0 20px 0;border:none;color:#eaeaea;background-color:#eaeaea;min-height:1px"></td></tr>'
+												+'<tr><td><p style="font-family:\'Helvetica Neue\',\'Helvetica\',Arial,sans-serif;font-size:15px;color:#333b40;margin:0;padding:0;border-collapse:collapse;line-height:22px!important"><i>'+ sMessage +'</i></p>'
+												+'</td></tr><tr><td width="400"><hr size="1" noshade="" style="margin:10px 0 20px 0;border:none;color:#eaeaea;background-color:#eaeaea;min-height:1px"></td></tr>'
+												+'<tr><td width="400" align="center"><table border="0" cellpadding="0" cellspacing="0" style="border-top-left-radius:3px;border-top-right-radius:3px;border-bottom-right-radius:3px;border-bottom-left-radius:3px;background-color:#37b056;border-collapse:collapse">'					
+												+'<tbody><tr><td align="center" valign="middle" style="font-size:16px;padding:11px 25px"><a title="Open the document" href="'+ CURRENT_DOMAIN_USER.domain +".agilecrm.com/sendemail/document/" + json.document_id	+ '" style="line-height:100%;text-align:center;text-decoration:none;color:#ffffff;word-wrap:break-word;text-transform:uppercase" target="_blank">Open the document</a>'
+												+'</td></tr></tbody></table></td></tr></tbody></table></td><td width="40"></td></tr></tbody></table></td></tr><tr><td width="480"  height="50"></td></tr></tbody></table>'
+							sCompleteMessage="<!DOCTYPE html><html><head></head><body>" + sCompleteMessage + "</body></html>";
+							json.message=sCompleteMessage;
+						}	
 						// Disables send button and change text to Sending...
 						disable_send_button($(this));
 
@@ -728,3 +747,4 @@ $('#send-email-listener-container').on('click', '#cc-link, #bcc-link', function(
 	});
 
 }
+

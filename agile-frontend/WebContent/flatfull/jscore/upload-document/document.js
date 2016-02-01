@@ -1,21 +1,25 @@
+
+
 /**
 *  Document collection event listeners
 */
 var Document_Collection_Events = Base_Collection_View.extend({
 	
 	events: {
-		'click .documents-add': 'onAddDocument',
+		
 		'click #documents-model-list > tr > td:not(":first-child")': 'onDocumentListSelect',		
 	},
 
 	/**
 	 * For adding new document
 	 */
+
+	 /*
 	onAddDocument: function(e){
 		e.preventDefault();
 
 		// Show modal
-		$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
+		$('#uploadDocumentModalForm').html(getTemplate("upload-document-modal", {})).modal('show');
 	
 		// Add type a head actions
 		var el = $("#uploadDocumentForm");
@@ -25,7 +29,94 @@ var Document_Collection_Events = Base_Collection_View.extend({
 		// Deals type-ahead
 		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 	},
+	onAddeDocument: function(e){
+		e.preventDefault();
 
+		// Show modal
+		//$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
+		var model = {};
+		var id=null;
+		
+		$("#content").html('<div id="documents-listener-container"></div>');
+		getTemplate("upload-document-modal", model, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			var el = $("#documents-listener-container").html($(template_ui));
+
+
+			$('#doc_type','#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').val("SENDDOC")
+			
+
+						setupTinyMCEEditor('textarea#signdoc-template-html', false, undefined, function()
+						{
+							set_tinymce_content('signdoc-template-html', "");
+							// Register focus
+							register_focus_on_tinymce('signdoc-template-html');
+							// Reset tinymce
+						});		
+						var optionsTemplate = "<option doc_type='SENDDOC' value='{{id}}'>{{name}}</option>";
+						fillSelect('template_type', '/core/api/document/templates', 'documents', function fillNew(coll)
+						{
+						
+						$('#template_type','#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').get(0).document_templates=coll;
+						
+						//console.log(coll);
+
+						}, optionsTemplate, false, el);
+					
+						$('#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').on('change', '#template_type', function(e)
+						{
+								var template_id = $("#template_type option:selected").val();
+								var sTemplateText="";
+								$.each($(this).get(0).document_templates.toJSON(), function(index, model)
+								{
+									if(model.id==template_id)
+									{
+										var template;
+										sTemplateText=model.text;
+										var json = get_contact_json_for_merge_fields();
+										try
+										{
+											template = Handlebars.compile(sTemplateText);
+											sTemplateText = template(json);
+										}
+										catch (err)
+										{
+											sTemplateText = add_square_brackets_to_merge_fields(sTemplateText);
+
+											template = Handlebars.compile(sTemplateText);
+											sTemplateText = template(json);
+										}
+										return false;
+									}
+								});
+								set_tinymce_content('signdoc-template-html', sTemplateText);
+						});			
+						$('#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').on('click', '#document_send', function(e)
+						{
+								e.preventDefault()
+								$("#signDocSendEmailModal").html(getTemplate("send-email")).modal('show');
+						});			
+					
+					$(".senddoc",'#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').removeClass("hide ");
+					$(".send-doc-button",'#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').removeClass("hide ");
+					$(".attachment",'#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').addClass("hide");
+					
+
+			
+			
+			
+		}, "#documents-listener-container"); 
+		// Add type a head actions
+		var el = $("#uploadDocumentForm");
+		// Contacts type-ahead
+		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+		
+		// Deals type-ahead
+		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+	},
+	*/
 	 /** 
      * Document list view edit
      */
@@ -42,10 +133,11 @@ var Document_Collection_Events = Base_Collection_View.extend({
 /** Modal event initializer **/
 $(function(){
 
+	
     /** 
      * When clicked on choose network type
      */
-    $('#uploadDocumentUpdateModal,#uploadDocumentModal').on('click', '.link', function(e)
+    $('#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').on('click', '.link', function(e)
 	{
 		e.preventDefault();
 		$(this).closest('form').find('#error').html("");
@@ -64,15 +156,20 @@ $(function(){
 		return false;
 	});
 	
+	
 	/**
 	 * To validate the document add or edit forms
 	 */
-	$('#uploadDocumentUpdateModal,#uploadDocumentModal').on('click', '#document_validate, #document_update_validate', function(e){
+	$('#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').on('click', '#document_validate, #document_update_validate', function(e){
  		e.preventDefault();
 
  		var modal_id = $(this).closest('.upload-document-modal').attr("id");
     	var form_id = $(this).closest('.upload-document-modal').find('form').attr("id");
-    	
+
+		if($('#doc_type','#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').val()=="SENDDOC")
+		{	    	
+	    		save_content_to_textarea('text');
+	    }
     	// serialize form.
     	var json = serializeForm(form_id);
     	console.log(json);
@@ -83,8 +180,8 @@ $(function(){
     		saveDocument(form_id, modal_id, this, true, json);
 	});
 
-	$('#uploadDocumentModal').on('hidden.bs.modal', function(e){
-		$('#GOOGLE',$('#uploadDocumentModal')).parent().show();
+	$('#uploadDocumentModalForm').on('hidden.bs.modal', function(e){
+		$('#GOOGLE',$('#uploadDocumentModalForm')).parent().show();
 	});
 
 });
@@ -99,7 +196,7 @@ function updateDocument(ele) {
 	
 	add_recent_view(new BaseModel(value));
 
-	var uploadModal = $('#uploadDocumentUpdateModal');
+	var uploadModal = $('#uploadDocumentUpdateModalForm');
 	uploadModal.html(getTemplate("upload-document-update-modal", {}));
 	uploadModal.modal('show');
 	
@@ -179,21 +276,31 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 			
 			return false;
 		}
-		
-		var url = $('#' + form_id).find('#upload_url').val();
-		if(url == "")
+		if(json.doc_type!="SENDDOC")
+		{		
+			var url = $('#' + form_id).find('#upload_url').val();
+			if(url == "")
+			{
+				$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
+				$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
+				$('#' + form_id).find('#error').html('<div class="alert alert-danger">Sorry! Document not attached properly.</div>');
+				enable_save_button($(saveBtn));
+				return;
+			}
+		}
+		else
 		{
-			$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
-			$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
-			$('#' + form_id).find('#error').html('<div class="alert alert-danger">Sorry! Document not attached properly.</div>');
-			enable_save_button($(saveBtn));
-			return;
+
 		}
 	}
 	
 	var newDocument = new Backbone.Model();
 	newDocument.url = 'core/api/documents';
 	newDocument.save(json, {
+		error : function(er)
+		{
+			console.log(er);
+		},
 		success : function(data) {
 			// reset document size 
 			CUSTOM_DOCUMENT_SIZE = 0;

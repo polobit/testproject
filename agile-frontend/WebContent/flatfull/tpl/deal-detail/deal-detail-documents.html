@@ -11,7 +11,7 @@
                     <div class="text">
                         You can add a document related to a Deal.
                     </div>
-					<div><a href="#" class="btn btn-default btn-sm add-deal-document-select"><i class='icon-plus-sign'/></i> Add Document</a>
+					<div><a href="#" class="btn btn-default btn-sm add-deal-edocument-select m-r-xs"><i class='icon-plus-sign'/></i> Add eDoc</a><a href="#" class="btn btn-default btn-sm add-deal-document-select"><i class='icon-plus-sign'/></i> Add Document</a>
 						<span class="deal-document-select upload-doc-field" style="display:none;">
 							<select class="form-control m-b-sm inline-block w-lg m-r-sm" id="document-select">
 								<option value="">Select...</option>
@@ -38,6 +38,7 @@
         {{#if this.length}}
 	<div  class="m-b-md m-t-md m-r-sm" align="right">
         <!--<div class="btn-group right">
+
         	<a href="#" class="btn btn-sm btn-default btn-addon  deal-add-document"><i class="icon-plus-sign"></i> Add Document</a>
         	<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 			<ul class="dropdown-menu pull-right">
@@ -45,7 +46,8 @@
 			</ul>
 		</div>-->
 		{{#hasMenuScope 'DOCUMENT'}}
-		<div><a href="#" class="btn btn-sm btn-default btn-addon add-deal-document-select"><i class='icon-plus-sign'/></i> Add Document</a>
+
+		<div><a href="#" class="btn btn-sm btn-default btn-addon add-deal-edocument-select m-r-xs"><i class='icon-plus-sign'/></i> Add eDoc</a><a href="#" class="btn btn-sm btn-default btn-addon add-deal-document-select"><i class='icon-plus-sign'/></i> Add Document</a>
 			<span class="deal-document-select" style="display:none;">
 				<select class="form-control w-xl m-r-sm p-t-xs inline-block" id="document-select">
 					<option value="">Select...</option>

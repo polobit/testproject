@@ -38,6 +38,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
     	'click .document-edit-deal-tab' : 'dealDocumentEdit',
     	'click .document-unlink-deal-tab' : 'dealUnlinkDocument',
     	'click .add-deal-document-select' : 'dealDocumentsList',
+    	'click .add-deal-edocument-select' : 'navigateToeDocument',
     	'click .add-deal-document-confirm' : 'dealAddDocumentConfirm',
     	'click .add-deal-document-cancel' : 'dealAddDocumentCancel',
     	'click .deal-add-task' : 'dealAddtask',
@@ -329,12 +330,19 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	/**
 	 * For showing new/existing documents
 	 */
+	navigateToeDocument:function(e)
+	{
+		e.preventDefault();
+		var deal_json = App_Deal_Details.dealDetailView.model.toJSON();
+		Backbone.history.navigate("documents/deal/" + deal_json.id+ "/edoc",{trigger: true});	        
+	},
 	dealDocumentsList: function(e){
 		e.preventDefault();
 		var targetEl = $(e.currentTarget);
 
 		var el = $(targetEl).closest("div");
 		$(targetEl).css("display", "none");
+		$(".add-deal-edocument-select",el).css("display", "none");
 		el.find(".deal-document-select").css("display", "block");
 		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	    fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
@@ -363,7 +371,9 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	    }	    	
 	    else if(document_id == "new")
 	    {
-	    	
+	    	var deal_json = App_Deal_Details.dealDetailView.model.toJSON();
+	    	Backbone.history.navigate("documents/deal/" + deal_json.id+ "/attachment",{trigger: true});	        
+	    	return;
 	    	$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
 			
 			var el = $("#uploadDocumentForm");
@@ -407,6 +417,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		var el = $(targetEl).closest("div");
 		el.find(".deal-document-select").css("display", "none");
 		el.find(".add-deal-document-select").css("display", "inline");
+		el.find(".add-deal-edocument-select").css("display", "inline");
 	},
 
 	dealAddtask:  function(e){ 

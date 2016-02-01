@@ -257,6 +257,8 @@ var contact_details_documentandtasks_actions = {
 			}
 			var contact_name = getContactName(json);
 			$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
+
+			
        },
 
        document_unlink : function(e){
@@ -286,11 +288,39 @@ var contact_details_documentandtasks_actions = {
 			} });
        },
 
+ 		/*show_document_list : function(e){
+       		var targetEl = $(e.currentTarget);
+       		var el = $(targetEl).closest("div");
+			$(targetEl).css("display", "none");
+			el.find(".contact-document-select").css("display", "inline");
+			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+			fillSelect('document-select', 'core/api/documents', 'documents', function fillNew()
+			{
+				el.find("#document-select").append("<option value='new'>Add New Doc</option>");
+
+			}, optionsTemplate, false, el);
+	    },*/
+	    navigate_to_edocument:function(e,type)
+	    {
+	    	var id="";
+	    	if(type=="company")
+	    	{
+				json = App_Companies.companyDetailView.model.toJSON();
+			} else 
+			{
+				json = App_Contacts.contactDetailView.model.toJSON();
+			}
+			
+			
+			Backbone.history.navigate("documents/"+type+"/" + json.id+ "/edoc",{trigger: true});	
+	    },
        show_document_list : function(e){
        		var targetEl = $(e.currentTarget);
 
        		var el = $(targetEl).closest("div");
 			$(targetEl).css("display", "none");
+			//$(targetEl).previous().css("display", "none");
+			$(".add-contact-edocument-select,.add-company-edocument-select",el).css("display", "none");
 			if(agile_is_mobile_browser()){
 			el.find(".contact-document-select").css("display", "block");
 			}
@@ -305,7 +335,8 @@ var contact_details_documentandtasks_actions = {
 			}, optionsTemplate, false, el);
 	    },
 
-       add_selected_document : function(e){
+
+        add_selected_document : function(e,type){
        		var targetEl = $(e.currentTarget);
 
        		var document_id = $(targetEl).closest(".contact-document-select").find("#document-select").val();
@@ -322,9 +353,20 @@ var contact_details_documentandtasks_actions = {
 			else if (document_id == "new")
 			{
 				
+				var id="";
+		    	if(type=="company")
+		    	{
+					json = App_Companies.companyDetailView.model.toJSON();
+				} else 
+				{
+					json = App_Contacts.contactDetailView.model.toJSON();
+				}
+				Backbone.history.navigate("documents/"+type+"/" + json.id + "/attachment",{trigger: true});	        
+				
+				return;
 				$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
 				var el = $("#uploadDocumentForm");
-
+				
 				// Contacts type-ahead
 				agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
 
@@ -353,8 +395,83 @@ var contact_details_documentandtasks_actions = {
 				else
 					existing_document_attach(document_id, saveBtn);
 			}
+			$('#doc_type','#uploadDocumentUpdateModal,#uploadDocumentModal').attr("editor-loaded","no")	
+			$('#uploadDocumentUpdateModal,#uploadDocumentModal').on('change', '#doc_type', function(e)
+			{
+				if($(this).val()=="SENDDOC")
+				{
+
+					if($(this).attr("editor-loaded")!="yes")
+					{	
+						$(this).attr("editor-loaded","yes"	)
+						setupTinyMCEEditor('textarea#signdoc-template-html', false, undefined, function()
+						{
+							set_tinymce_content('signdoc-template-html', "");
+							// Register focus
+							register_focus_on_tinymce('signdoc-template-html');
+							// Reset tinymce
+						});		
+						var optionsTemplate = "<option doc_type='SENDDOC' value='{{id}}'>{{name}}</option>";
+						fillSelect('template_type', '/core/api/document/templates', 'documents', function fillNew(coll)
+						{
+						
+						$('#template_type','#uploadDocumentUpdateModal,#uploadDocumentModal').get(0).document_templates=coll;
+						
+						//console.log(coll);
+
+						}, optionsTemplate, false, el);
+					
+						$('#uploadDocumentUpdateModal,#uploadDocumentModal').on('change', '#template_type', function(e)
+						{
+								var template_id = $("#template_type option:selected").val();
+								var sTemplateText="";
+								$.each($(this).get(0).document_templates.toJSON(), function(index, model)
+								{
+									if(model.id==template_id)
+									{
+										var template;
+										sTemplateText=model.text;
+										var json = get_contact_json_for_merge_fields();
+										try
+										{
+											template = Handlebars.compile(sTemplateText);
+											sTemplateText = template(json);
+										}
+										catch (err)
+										{
+											sTemplateText = add_square_brackets_to_merge_fields(sTemplateText);
+
+											template = Handlebars.compile(sTemplateText);
+											sTemplateText = template(json);
+										}
+										return false;
+									}
+								});
+								set_tinymce_content('signdoc-template-html', sTemplateText);
+						});			
+						$('#uploadDocumentUpdateModal,#uploadDocumentModal').on('click', '#document_send', function(e)
+						{
+								$("#signDocSendEmailModal").html(getTemplate("send-email-template")).modal('show');
+						});			
+					}
+
+					$(".senddoc",'#uploadDocumentUpdateModal,#uploadDocumentModal').removeClass("hide ");
+					$(".send-doc-button",'#uploadDocumentUpdateModal,#uploadDocumentModal').removeClass("hide ");
+					$(".attachment",'#uploadDocumentUpdateModal,#uploadDocumentModal').addClass("hide");
+					
+
+				}	
+				else
+				{
+					$(".senddoc",'#uploadDocumentUpdateModal,#uploadDocumentModal').addClass("hide ");
+					$(".send-doc-button",'#uploadDocumentUpdateModal,#uploadDocumentModal').addClass("hide ");
+					$(".attachment",'#uploadDocumentUpdateModal,#uploadDocumentModal').removeClass("hide");	
+				}
+			});	
+
 		},
 };
+
 
 /**
  * To attach the document to a contact

@@ -118,7 +118,7 @@ public class ContactEmailUtil
 	    List<Long> documentIds = new ArrayList<Long>();
 	    List<BlobKey> blobKeys = new ArrayList<BlobKey>();
 	    
-	    if (StringUtils.isNotBlank(contactEmailWrapper.getDocument_key()))
+	    if (StringUtils.isNotBlank(contactEmailWrapper.getDocument_key()) && StringUtils.isBlank(contactEmailWrapper.getedoc_key()))
 	    {
 		Long documentId = Long.parseLong(contactEmailWrapper.getDocument_key());
 		documentIds.add(documentId);

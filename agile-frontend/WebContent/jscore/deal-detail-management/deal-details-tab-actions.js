@@ -201,7 +201,9 @@ $(".add-deal-document-cancel").die().live('click', function(e){
 	e.preventDefault();
 	var el = $(this).closest("div");
 	el.find(".deal-document-select").css("display", "none");
+
 	el.find(".add-deal-document-select").css("display", "inline");
+	el.find(".add-deal-edocument-select").css("display", "inline");
 });
 
 /** 

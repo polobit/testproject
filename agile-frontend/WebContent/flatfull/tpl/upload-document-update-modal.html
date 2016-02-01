@@ -1,37 +1,50 @@
 <!-- Add (Documents) Modal views -->
 <script type="text/html" id="upload-document-update-modal-template">
-<div class="modal-dialog">
-  <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
-        <h3 class="modal-title"><i class="fa fa-pencil-square-o"></i>&nbsp;Edit Document</h3>
-     </div>
-     <div class="modal-body">
-        <form id="uploadDocumentUpdateForm" name="uploadDocumentUpdateForm" method="post">
+<div class="wrapper-md lter bg-light b-b">
+  <div class="row">
+    <div class="col-md-12">Edit Document</div>
+  </div>
+</div>
+<div class="wrapper-md">
+  <div class="row">
+    <div class="col-md-9">
+      <div class="panel wrapper">
+        <form id="uploadDocumentUpdateForm" name="uploadDocumentUpdateForm" method="post" class="form-horizontal" accept-charset="UTF-8">
+        <div class="formsection chainedSelect">
            <fieldset>
               <input name="id" type="hidden"/>
               <input name="extension" id="extension" type="hidden"/>
-              <div class="row">
-                 <div class="col-md-12">
+                   <div class="control-group form-group hide">
+                              <label class="control-label  col-sm-3"><b>Type </b><span
+                                 class="field_req">*</span></label>
+                              <div class="controls col-sm-9">
+                                 <span>
+                                   <select name="doc_type" id="doc_type"  class="required form-control" placeholder="Type of Document">
+                                       <option value="ATTACHMENT">Attachment</option>
+                                       <option value="SENDDOC">Electronic Document</option>
+                                   </select>
+                                 </span>
+                              </div>
+                           </div>
+              
                     <div class="control-group form-group">
-                       <label class="control-label"><b>Title </b><span
+                       <label class="control-label  col-sm-3"><b>Title </b><span
                           class="field_req">*</span></label>
-                       <div class="controls">
+                       <div class="controls col-sm-9">
                           <span><input id="name" name="name" type="text"
                              class="required form-control" placeholder="Name of Document" /></span>
                        </div>
                     </div>
-                 </div>
-              </div>
-              <div class="row m-b-sm">
-                 <div class="col-md-12">
-                    <div class="control-group form-group">
-                       <label class="control-label"><b>Choose Document </b><span
+              
+              
+                    <div class="control-group form-group attachment">
+                       <label class="control-label  col-sm-3"><b>Choose Document </b><span
                           class="field_req">*</span></label>
-                       <div class="controls">
+                       <div class="controls col-sm-9" >
                           <input type="hidden" name="url" id="upload_url" class="required"/>
                           <input type="hidden" name="size" id="size" class="required"/>
                           <input type="hidden" name="network_type" id="network_type" class="required"/>
+                          <input type="hidden" name="doc_type" id="doc_type" class="required"/>
                           <div class="row">
                              <div class="col-md-3 col-sm-3 col-xs-3 all-l-none">
                                 <div class="link text-center thumbnail m-b-none "><i class="icon-ok pull-right" style="display:none;"></i><br/>
@@ -44,14 +57,33 @@
                                 </div>
                              </div>
                           </div>
-                       </div>
-                    </div>
+                    
                  </div>
               </div>
+               <div class="senddoc hide">
+                         <div class="control-group form-group">
+                                <label class="control-label col-sm-3"><b>Select Template </b><span
+                                   class="field_req">*</span></label>
+                                <div class="controls col-sm-9">
+                                   <span>
+                                     <select name="template_type" id="template_type"  class="required form-control" placeholder="Type of Template">
+                                         
+                                     </select>
+                                   </span>
+                                </div>
+                             </div>
+                             <div class="control-group form-group">
+                               <label class="control-label col-sm-3"><b>Content </b></label>
+                                <div class="controls col-sm-9">
+                                    <div id="loading-editor" ></div>
+                                     <textarea class="col-md-6 required" style="display: none;" name="text" id="signdoc-template-html" placeholder="Document template html"></textarea>
+                                </div>  
+                              </div>
+                          </div>
               <div id="error"></div>
               <div class="control-group form-group">
-                 <label class="control-label"><b>Related Contacts </b></label>
-                 <div class="controls" id="contactTypeAhead">
+                 <label class="control-label  col-sm-3"><b>Related Contacts </b></label>
+                 <div class="controls col-sm-9" id="contactTypeAhead">
                     <div>
                        <div>
                           <ul name="contact_ids" class="contacts tagsinput tags p-n m-n"></ul>
@@ -63,8 +95,8 @@
                  </div>
               </div>
               <div class="control-group form-group">
-                 <label class="control-label"><b>Related Deals </b></label>
-                 <div class="controls" id="dealTypeAhead">
+                 <label class="control-label  col-sm-3"><b>Related Deals </b></label>
+                 <div class="controls col-sm-9" id="dealTypeAhead">
                     <div>
                        <div>
                           <ul name="deal_ids" class="deals tagsinput deal_tags tags p-n m-n"></ul>
@@ -74,15 +106,36 @@
                           data-provide="typeahead" data-mode="multiple" />
                     </div>
                  </div>
+                    
               </div>
-           </fieldset>
-        </form>
-     </div>
-     <div class="modal-footer" id="document-save-footer">
-        <a href="#" class="btn btn-sm btn-primary" id="document_update_validate">Save
+              <div class="form-actions">      
+                       <div class="col-sm-offset-3 col-sm-9">    
+                          <a href="#" class="btn btn-sm btn-primary" id="document_update_validate">Save
         Changes</a> <span class="save-status"></span>
-     </div>
+                     
+                       </div>
+                   </div>  
+           </fieldset>
+           </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-md-3">
+           <div class="panel wrapper">
+               <h4 class="m-t-none font-thin">
+                   What are documents?
+               </h4>
+               
+               
+           <p>1. Documents helps you to build and deliver sales quotes and proposals as well as track presentations and close deals faster with legally binding eSignatures.</p>
+   
+           <p>2. Upload documents from computer and append them from cloud storage like Google Drive.</p>
+   
+           <p>Need more help? Please check the <a class="text-info" href="https://github.com/agilecrm/agile-popups#usage" target="_blank"> detailed documentation.</a></p> 
+           </div>
+       </div>
   </div>
-</div>
+</div>      
+
 </script>
 <!-- End of Modal views -->

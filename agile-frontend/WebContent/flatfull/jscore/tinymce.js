@@ -265,7 +265,7 @@ function set_up_merge_fields(editor)
 		{
 
 			// Insert value without compiling
-			if (Current_Route === "bulk-email" || Current_Route === "send-email" || Current_Route.indexOf('email-template') != -1)
+			if (Current_Route === "bulk-email" || Current_Route === "send-email" || Current_Route.indexOf('email-template') != -1 )
 			{
 				editor.insertContent(value);
 			}
@@ -323,6 +323,12 @@ function get_merge_fields(callback)
 			"Calendar URL":"{{owner.calendar_url}}"
 			
 			}
+
+	if((Current_Route.indexOf('document-template') != -1 || Current_Route.indexOf('document') != -1))
+	{
+		var document_options={"Pricing Table":"{{{pricing_table}}}"}
+		options = merge_jsons({}, options,document_options);
+	}
 	
 	if(!callback){
 		// Get Custom Fields in template format
@@ -345,8 +351,9 @@ function get_merge_fields(callback)
 
 	}
 
-
-
+	// Merges options json and custom fields json
+	var merged_json = merge_jsons({}, options, custom_fields);
+	return merged_json;
 }
 
 /**

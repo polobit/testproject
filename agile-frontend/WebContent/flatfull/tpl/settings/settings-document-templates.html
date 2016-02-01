@@ -1,0 +1,74 @@
+<script id="settings-document-templates-collection-template" type="text/html">
+    <div class="col">
+	<div class="hbox h-auto m-b-lg">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-left m-t-xs">Document Templates</div>
+			<div class="pull-right">
+            	<a href="#document-template-add" class="btn btn-default btn-sm btn-addon" id="addDocumentTemplate">
+           		 <span><i class="icon-plus-sign" /></span> New</a>
+			</div>
+			<div class="clearfix"></div>
+        </div>
+   
+	<div id="slate"></div>
+	{{#if this.length}}
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped showCheckboxes panel agile-table table-layout-mob-view" url="core/api/document/templates/bulk" >
+           
+            <thead>
+                <tr>
+                    <th class="hide">Id</th>                    
+					<th style="width:30%;">Name</th>
+                    <th style="width:30%;">Description</th>
+                    <th style="width:40%;"></th>
+                </tr>
+            </thead>
+            <tbody id="settings-document-templates-model-list" route="document-template/">
+            </tbody>
+        </table>
+     </div>
+	{{/if}}
+	
+    </div>
+</div>
+</div>
+    <div class="col w-md">
+        <div class="data-block">
+        <div class="p-l p-r">
+            <h4 class="m-t-none">
+                Document Templates
+            </h4>
+            
+            <p>
+                Personalize and customize document templates for every scenario in the document cycle. Make sure you send a great looking document every single time.
+            </p>
+            <p>
+                You can create custom document template for every sales scenario.
+            </p>
+           </div>
+        </div>
+    </div>
+
+</script>
+
+ <script id="settings-document-templates-model-template" type="text/html">
+    <td class='data hide' data='{{id}}'></td>
+    <td>
+		<div class="table-resp">
+    		{{name}}
+    	</div>
+    </td>
+    <td>
+    	<div class="table-resp">
+    		{{description}}
+    	</div>
+    </td>   
+    <td class="text-muted" style="color: #b2b0b1;">
+       {{#if created_time}}
+          <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
+    	       Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{documentTemplateOwner.name}}
+          </div>
+       {{/if}}
+    </td>
+</script>

@@ -12,14 +12,30 @@
                         You can add a document related to a {{#isCompany}}company{{else}}contact{{/isCompany}}.
                     </div>
                     {{/hasMenuScope}}
-					<div>{{#hasMenuScope 'DOCUMENT'}}<a href="#" class="btn btn-default btn-sm add-document-select m-t-xs"><i class='icon-plus-sign'/></i> Add Document</a>{{/hasMenuScope}}
+					<div>{{#hasMenuScope 'DOCUMENT'}}
+						{{#isCompany}}
+						<a href="#" class="btn btn-default btn-sm add-company-edocument-select m-t-xs"><i class="fa fa-plus-circle" /> Add eDoc</a> <a href="#" class="btn btn-default btn-sm pull-right add-document-select m-t-xs  m-l-xs"><i class='icon-plus-sign'/></i> Add Document</a> 
+						{{else}}
+						<a href="#" class="btn btn-default btn-sm add-contact-edocument-select m-t-xs"><i class="fa fa-plus-circle" /> Add eDoc</a> <a href="#" class="btn btn-default btn-sm pull-right add-document-select m-t-xs  m-l-xs"><i class='icon-plus-sign'/></i> Add Document</a> 
+						{{/isCompany}}
+						
+						{{/hasMenuScope}}
 						<span class="contact-document-select upload-doc-field" style="display:none;">
 							<select id="document-select" class="form-control inline-block">
-								<option value="">Select...</option>
+								<optgroup label="Templates" id="document-select-template">
+									<option value="">Select...</option>
+								</optgroup>
+								<optgroup label="Documents" id="document-select-documents">
+									<option value="">Select...</option>
+								</optgroup>
 							</select>
  					<div class="m-t-sm">
 							<a href="#" class="btn btn-default btn-sm add-document-cancel m-r-sm">Cancel</a>
-                    		<a href="#" class="btn btn-sm btn-primary add-document-confirm">Add</a> 
+							{{#isCompany}}
+                    		<a href="#" class="btn btn-sm btn-primary add-company-document-confirm">Add</a> 
+                    		{{else}}	
+                    		<a href="#" class="btn btn-sm btn-primary add-contact-document-confirm">Add</a> 
+							{{/isCompany}}
 							<span class="save-status"></span>
 						</span>
 					</div>
@@ -46,13 +62,23 @@
 				<li><a href="#" class="document-exist">Existing Document</a></li>
 			</ul>
 		</div>-->
-		<div>{{#hasMenuScope 'DOCUMENT'}}<a href="#" class="add-document-select btn btn-default btn-sm btn-addon"><i class='icon-plus-sign'/></i> Add Document</a>{{/hasMenuScope}}
+		<div>{{#hasMenuScope 'DOCUMENT'}}
+						{{#isCompany}}
+						<a href="#" class="btn-default btn-addon btn-sm add-company-edocument-select m-t-xs"><i class="fa fa-plus-circle" /> Add eDoc</a> <a href="#" class="btn btn-default btn-sm pull-right add-document-select m-t-xs m-l-xs"><i class='icon-plus-sign'/></i> Add Document</a> 
+						{{else}}
+						<a href="#" class="btn btn-default btn-addon btn-sm add-contact-edocument-select m-t-xs"><i class="fa fa-plus-circle" /> Add eDoc</a> <a href="#" class="btn btn-default btn-sm pull-right add-document-select m-t-xs  m-l-xs"><i class='icon-plus-sign'/></i> Add Document</a> 
+						{{/isCompany}}
+						{{/hasMenuScope}}
 			<span class="contact-document-select upload-doc-field" style="display:none;">
 				<select id="document-select" class="form-control inline-block m-r-sm p-t-xs w"> 
 					<option value="">Select...</option>
 				</select>
 				<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <a href="#" class="btn btn-sm btn-primary add-document-confirm">Add</a> 
+				{{#isCompany}}
+				<a href="#" class="btn btn-sm btn-primary add-company-document-confirm">Add</a> 
+				{{else}}
+				<a href="#" class="btn btn-sm btn-primary add-contact-document-confirm">Add</a> 
+				{{/isCompany}}
                 <a href="#" class="btn btn-default btn-sm add-document-cancel">Cancel</a>
 				<span class="save-status"></span>
 			</span>
@@ -83,8 +109,10 @@
 		</small>
 		</div>
 		<div class="clearfix"></div>
-    <div>
-		{{network network_type}}{{#hasMenuScope 'DOCUMENT'}}&nbsp;&nbsp;<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>{{/hasMenuScope}}
+    <div>	
+    {{#if url}}
+		{{network network_type}}{{#hasMenuScope 'DOCUMENT'}}&nbsp;&nbsp;<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document1"></i></a>{{/hasMenuScope}}
+	{{/if}}	
 	</div>
 <div class="clearfix"></div>
 	
@@ -110,8 +138,10 @@
 		
 		<div class="actions pull-right pos-abs pos-r-0 pos-b-0">
             {{#hasMenuScope 'DOCUMENT'}}
-			<a title="Edit"  data="{{id}}" class="document-edit-contact-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+			<a title="Edit"  data="{{id}}" href="#documents/{{id}}" class="document-edit-contact-tab1 c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+			{{#if url}}
 			<a title="Detach"  data="{{id}}" class="document-unlink-contact-tab c-p text-l-none p-r-sm"> <i class="icon-unlink"></i> </a>
+			{{/if}}	
             <!--<a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>-->
 			{{/hasMenuScope}}
         </div>

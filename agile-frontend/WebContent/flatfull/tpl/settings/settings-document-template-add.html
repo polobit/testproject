@@ -1,0 +1,45 @@
+ <script id="settings-document-template-add-template" type="text/html">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			{{#if id}}
+      			Edit Document Template
+    		{{else}}
+       			New Document Template
+   			{{/if}}
+		</div>
+		<div class="panel-body">
+	    	<form id="templatePrefs" class="">
+         		<fieldset>
+					{{#if id}}
+		               <input name="id" type="hidden" value="{{id}}" />
+		            {{else}}
+		             
+		   			{{/if}}
+		   			<div class="row">
+		   				<div class="col-md-8">
+		   					<div class="form-group ">
+							<div id="loading-editor"></div>
+			        		<textarea class="col-md-6 required" style="width: 75%; height: 45%; display: none;" name="text" id="document-template-html" placeholder="Document template html"></textarea>
+			        		</div>
+		   				</div>	
+		   				<div class="col-md-4">
+		   						<div class="form-group ">		
+			   							<label class="control-label">Name <span class="field_req">*</span></label>		
+										<input type="text" class="required input-xlarge form-control" name="name" placeholder="Enter Name"/>
+								</div>	
+								<div class="form-group ">		
+			   							<label class="control-label">Description <span class="field_req">*</span></label>		
+										
+										<input type="text" class="required input-xlarge form-control" name="description" placeholder="Enter Description"/>
+			        			</div>
+			   					<div class="form-group ">
+			   							<a href="#document-templates" class="btn btn-default btn-sm">Cancel</a>
+			            				<a href="#" type="submit" class="save btn btn-sm btn-primary">{{#if id}}Save Changes {{else}}Save {{/if}}</a> 
+		   						</div>
+		   				</div>
+					</div>	
+         		</fieldset>
+			</form>
+		</div>
+	</div>	
+</script>

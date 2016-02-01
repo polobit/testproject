@@ -44,6 +44,8 @@ var SettingsRouter = Backbone.Router
 			/* Email templates */
 			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", "email-template/:id" : "emailTemplateEdit",
 
+			"document-templates" : "documentTemplates", "document-template-add" : "documentTemplateAdd", "document-template/:id" : "documentTemplateEdit",
+
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",
 
@@ -610,6 +612,101 @@ var SettingsRouter = Backbone.Router
 						$('#tpl-attachment-name').show();
 					}, optionsTemplate, false, el);
 				}
+			},
+
+			documentTemplates : function()
+			{
+				$("#content").html(getTemplate("settings"), {});
+				this.documentTemplatesListView = new Base_Collection_View({ url : '/core/api/document/templates', restKey : "documentTemplates",
+					templateKey : "settings-document-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
+					{
+						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+						{
+							console.log("In document tmplt postrender");
+							$(".created_time", el).timeago();
+						});
+					} });
+
+				this.documentTemplatesListView.collection.fetch();
+				$('#prefs-tabs-content').html(this.documentTemplatesListView.el);
+				$('#PrefsTab .active').removeClass('active');
+				$('.document-templates-tab').addClass('active');
+				
+
+			},
+
+			/**
+			 * Loads a form to add new document-template. Sets HTMLEditor for the
+			 * form. Navigates to list of document templates on save success.
+			 */
+			documentTemplateAdd : function()
+			{
+				$("#content").html(getTemplate("settings"), {});
+				var view = new Base_Model_View({ url : '/core/api/document/templates', isNew : true, template : "settings-document-template-add",
+					window : 'document-templates', });
+
+				$('#prefs-tabs-content').html(view.render().el);
+
+				// set up TinyMCE Editor
+				setupTinyMCEEditor('textarea#document-template-html', false, undefined, function()
+				{
+					// Reset tinymce
+					set_tinymce_content('document-template-html', '');
+
+					// Register focus
+					register_focus_on_tinymce('document-template-html');
+				});
+
+				$('#PrefsTab .active').removeClass('active');
+				$('.document-templates-tab').addClass('active');
+
+			},
+
+			/**
+			 * Updates existing document-template. On updation navigates the page
+			 * to document-templates list
+			 * 
+			 * @param id
+			 *            DocumentTemplate Id
+			 */
+			documentTemplateEdit : function(id)
+			{
+				$("#content").html(getTemplate("settings"), {});
+				// Navigates to list of document templates, if it is not defined
+				if (!this.documentTemplatesListView || this.documentTemplatesListView.collection.length == 0)
+				{
+					this.navigate("document-templates", { trigger : true });
+					return;
+				}
+
+				// Gets the template form its collection
+				var currentTemplate = this.documentTemplatesListView.collection.get(id);
+
+				var view = new Base_Model_View({ url : '/core/api/document/templates', model : currentTemplate, template : "settings-document-template-add",
+					window : 'document-templates' });
+
+				$('#prefs-tabs-content').html(view.render().el);
+
+				/** TinyMCE * */
+
+				// set up TinyMCE Editor
+				setupTinyMCEEditor('textarea#document-template-html', false, undefined, function()
+				{
+
+					// Insert content into tinymce
+					set_tinymce_content('document-template-html', currentTemplate.toJSON().text);
+
+					// Register focus
+					register_focus_on_tinymce('document-template-html');
+					 $("#document-template-html_ifr").height("90vh");
+
+				});
+
+				/** End of TinyMCE* */
+
+				$('#PrefsTab .active').removeClass('active');
+				$('.document-templates-tab').addClass('active');
+				// $("#content").html(view.el);
 			},
 
 			/**

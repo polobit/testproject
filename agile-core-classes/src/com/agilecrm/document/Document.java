@@ -8,6 +8,7 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.cursor.Cursor;
@@ -65,6 +66,16 @@ public class Document extends Cursor
     @NotSaved(IfDefault.class)
     public String extension = null;
     
+    public  enum DOC_TYPE
+    {
+    	SENDDOC, ATTACHMENT
+
+    }
+    
+    public DOC_TYPE doc_type = DOC_TYPE.ATTACHMENT;
+    
+    public String text="";
+    public String template_type="";
     /**
      * Size  of  Document in bytes.
      * zero for old documents and GOOGLE docs.
@@ -75,15 +86,17 @@ public class Document extends Cursor
     /**
      * Network where document is stored.
      */
+    
     public enum NetworkType
     {
-	GOOGLE, S3
+	GOOGLE, S3,NONE
     };
 
     /**
      * Specifies network type of the document.
      */
-    public NetworkType network_type;
+    @NotSaved(IfDefault.class)
+    public NetworkType network_type=NetworkType.NONE;
 
     /**
      * URL of Document.
@@ -203,12 +216,15 @@ public class Document extends Cursor
      *            - Document URL where it is stored.
      * 
      */
-    public Document(String name, String extension, NetworkType network, String url)
+    public Document(String name, String extension, NetworkType network, String url,DOC_TYPE doc_type,String template_type,String text)
     {
 	this.name = name;
 	this.extension = extension;
 	this.network_type = network;
 	this.url = url;
+	this.doc_type=doc_type;
+	this.template_type=template_type;
+	this.text=text;
     }
 
     /**

@@ -177,6 +177,7 @@ public class ContactEmailWrapper extends Cursor
     private String user_id_from_email;
     private List<String> attachment_ids;
     
+    private String edoc_key;
     private String document_key;
     private String blob_key;
     private String attachment_name;
@@ -212,6 +213,15 @@ public class ContactEmailWrapper extends Cursor
 	this.user_id_from_email = user_id_from_email;
     }
 
+    public String getedoc_key()
+	{
+		return edoc_key;
+	}
+
+	public void setedoc_key(String edoc_key)
+	{
+		this.edoc_key = edoc_key;
+	}
 	public String getDocument_key()
 	{
 		return document_key;

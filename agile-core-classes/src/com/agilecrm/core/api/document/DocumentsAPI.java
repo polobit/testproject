@@ -103,7 +103,7 @@ public class DocumentsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Document createDocument(Document document)
     {
-    	if(document.network_type.equals("GOOGLE"))
+    	if(document!=null && document.network_type!=null && document.network_type.equals("GOOGLE"))
     		document.size = 0L;
     	document.save();
 

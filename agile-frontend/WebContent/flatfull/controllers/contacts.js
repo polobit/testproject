@@ -40,11 +40,14 @@ var ContactsRouter = Backbone.Router.extend({
 		"merge-contacts" : "mergeContacts",
 		
 		"tags/:tag" : "contacts", 
-		
+			
 		"send-email" : "sendEmail",
 		
 		"send-email/:id" : "sendEmail",
+
+		"send-email/documents/:id" : "sendDocumentEmail",
 		
+
 		"add-campaign" : "addContactToCampaign",
 
 		/* Return back from Scribe after oauth authorization */
@@ -822,7 +825,11 @@ var ContactsRouter = Backbone.Router.extend({
 	 * populate_send_email_details is called from the
 	 * postRenderCallback.
 	 */
-	sendEmail : function(id, subject, body, cc, bcc)
+	sendDocumentEmail:function(id) 
+	{
+		this.sendEmail(id,null,null,null,null,"documents");
+	},
+	sendEmail : function(id, subject, body, cc, bcc,id_type)
 	{
 		var model = {};
 		
@@ -850,6 +857,18 @@ var ContactsRouter = Backbone.Router.extend({
 					}, yes, no);
 			return;
 		}
+		var documentId=null;
+		if(id_type=="documents" && App_Documents.DocumentCollectionView && App_Documents.DocumentCollectionView.collection)
+		{
+			$.each(App_Documents.DocumentCollectionView.collection.models, function(index, document_model)
+			{
+				if(id && document_model.id==id	)
+				{
+					model=document_model.toJSON();	
+					return false;
+				}	
+			});
+		}
 		// Takes back to contacts if contacts detail view is not defined
 		if (this.contactDetailView && !this.contactDetailView.model.get(id))
 		{
@@ -863,10 +882,10 @@ var ContactsRouter = Backbone.Router.extend({
 				model = App_Companies.companyDetailView.model.toJSON();
 			}
 		}
-		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
+		//var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
 		
 		// Call setupTypeAhead to get contacts
-		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+		//agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 
 
 		$("#content").html('<div id="send-email-listener-container"></div>');
@@ -892,12 +911,34 @@ var ContactsRouter = Backbone.Router.extend({
 				// For Reply all, id may contains multiple emails. If contains multiple, skip
 				if (model && id.indexOf(',') == -1)
 				{
-					if (model.type == "PERSON")
+					if(id_type=="documents" && model.id!=null)
+					{
+						$('#emailForm').find('#eattachment').css('display','block');
+				    	$('#emailForm').find('#attachment_id').find("#attachment_fname").html('<a href=#>'+model.name+'</a>');
+				    	$('#emailForm').find(".attachment-document-select").css('display','none');
+				    	$('#emailForm').find('#eattachment_key').attr('name',"edoc_key");
+				    	$('#emailForm').find('#eattachment_key').attr('value',model.id);
+				    	$("#emailForm").find("#agile_attachment_name").attr("value", model.name);
+				    	$("#emailForm").find(".add-attachment-cancel").addClass("hide");
+				    	$("#emailForm").find(".attach-file").addClass("hide");
+				    	$("#emailForm").find(".fa-paperclip").removeClass("fa-paperclip").addClass("fa-file-text-o");
+				    	$("#emailForm").find("#attachment-select").append('<option selected=\'yes\' value='+ model.id +'>' + model.name+ '</option>');
+				    	
+				    	$("#doc_type","#emailForm").val(model.doc_type);
+		               	var first_name = getPropertyValue(model.contacts[0].properties, "first_name");
+						var last_name = getPropertyValue(model.contacts[0].properties, "last_name");
+						if (first_name || last_name)
+						{
+							name = first_name ? first_name : "";
+							name = (name + " " + (last_name ? last_name : "")).trim();
+						}
+						id=getPropertyValue(model.contacts[0].properties, "email");
+					}
+					else if (model.type == "PERSON")
 					{
 
 						var first_name = getPropertyValue(model.properties, "first_name");
 						var last_name = getPropertyValue(model.properties, "last_name");
-
 						if (first_name || last_name)
 						{
 							name = first_name ? first_name : "";
@@ -998,6 +1039,14 @@ var ContactsRouter = Backbone.Router.extend({
 		}, "#send-email-listener-container"); 
 	
 	},
+	
+	/**
+	 * Shows a send email form with some prefilled values (email - from,
+	 * to and templates etc..). To prefill the fields the function
+	 * populate_send_email_details is called from the
+	 * postRenderCallback.
+	 */
+	
 	
 	/**
 	 * Custom views, its not called through router, but by cookies
