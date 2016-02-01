@@ -2468,6 +2468,7 @@ public class OpportunityUtil
 				
 				boolean flag=false;
 			for(Opportunity list_it:list_main){
+				if(list2_main.size()!=0){
 				for(Opportunity list_it2:list2_main){
 					if(!list_it.id.equals(list_it2.id)){
 						flag=true;
@@ -2480,7 +2481,11 @@ public class OpportunityUtil
 				}
 				if(flag)
 					list2_main.add(list_it);
+				}
+				else
+					list2_main.add(list_it);
 			}
+				
 			//conversionList=new ArrayList<>(ownDealsSet);
 			System.out.println("list2"+list2_main);
 			//System.out.println("main list"+conversionList);
