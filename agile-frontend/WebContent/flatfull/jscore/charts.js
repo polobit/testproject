@@ -2332,7 +2332,7 @@ function BubbleChart(url, selector, name,show_loading)
 			        renderTo: selector,
 			        type: 'scatter',
 			        marginRight: 130,
-			        marginBottom: 50,
+			        marginBottom: 80,
 			        inverted : true,
 			    },
 			    title: {
@@ -2417,7 +2417,7 @@ function BubbleChart(url, selector, name,show_loading)
 			        align: 'center',
 			        verticalAlign: 'bottom',
 			        x: -10,
-			        y: 10,
+			       // y: 12,
 			        borderWidth: 0,
 			        
 			    },
