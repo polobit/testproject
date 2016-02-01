@@ -1736,13 +1736,21 @@ public class PortletUtil {
 					List<Long> l=new ArrayList<Long>();
 					l.add((long) tasksList.size());
 					Long Total_closure = 0L;
+					int count=0;
 					for(Task task:tasksList){
 						Long time_closure=0L;
-						if(task.task_start_time!=0)
+						if(task.task_start_time==0 || task.task_completed_time-task.task_start_time==0)
+							continue;
+							else{	
 						time_closure=(task.task_completed_time-task.task_start_time)/(60*60);
+						count++;
+						}
 						Total_closure+=time_closure;
 								}
-					l.add(Total_closure);
+					if(count!=0)
+					l.add(Total_closure/count);
+					else
+						l.add(Total_closure);
 					splitByMap.put(category.getLabel(),l);
 					}
 

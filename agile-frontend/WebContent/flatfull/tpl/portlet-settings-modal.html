@@ -831,12 +831,17 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-			<form id="portletsGoalsSettingsForm" name="portletsTaskClosureSettingsForm" method="post" >
+			<form id="portletsTaskClosureSettingsForm" name="portletsTaskClosureSettingsForm" method="post" >
 			<div class="control-group form-group">
 				<label class="control-label">Duration</label>
 				<div class="controls">
 					<select id="duration" name="duration" class="required form-control">
 						<option value="1-day" >Today</option>
+						<option value="yesterday" >Yesterday</option>
+						<option value="this-week" >This Week</option>
+						<option value="1-week">Last 7 Days</option>
+						<option value="this-month" >This Month</option>
+						<option value="1-month">Last 30 Days</option>
 
 					</select>
 					

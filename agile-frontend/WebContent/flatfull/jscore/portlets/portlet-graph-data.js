@@ -990,6 +990,7 @@ var portlet_graph_data_utility = {
 							splitByList = data["splitByList"];
 							domainUserNamesList = data["domainUserNamesList"];
 							var series = [];
+							var CountData=[];
 							var text = '';
 							var colors;
 
@@ -1003,6 +1004,7 @@ var portlet_graph_data_utility = {
 							for ( var i = 0; i < splitByNamesList.length; i++) {
 								var tempData = {};
 								var splitByDataList = [];
+								var splitByDataListCount = [];
 								$
 										.each(
 												splitByList,
@@ -1014,14 +1016,18 @@ var portlet_graph_data_utility = {
 																			key,
 																			value) {
 																		if (portlet_utility
-																				.getPortletNormalName(key) == splitByNamesList[i])
+																				.getPortletNormalName(key) == splitByNamesList[i]){
+																			splitByDataListCount.push(value[0]);
+																			
 																			splitByDataList
 																					.push(value[1]);
+																				}
 																	});
 												});
 								tempData.name = splitByNamesList[i];
 								tempData.data = splitByDataList;
 								series[i] = tempData;
+								CountData[i]=splitByDataListCount;
 							}
 							text = "Task Report";
 
@@ -1034,7 +1040,7 @@ var portlet_graph_data_utility = {
 
 							portlet_graph_utility.taskReportBarGraph(selector,
 									groupByNamesList, series, text, base_model,
-									domainUserNamesList);
+									domainUserNamesList,CountData);
 
 							portlet_utility.addWidgetToGridster(base_model);
 						});

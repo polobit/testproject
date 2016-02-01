@@ -832,7 +832,7 @@ var portlet_graph_utility = {
 	 * To display task report portlet as bar graph
 	 */
 	taskReportBarGraph : function(selector, groupByList, series, text,
-			base_model, domainUserNamesList) {
+			base_model, domainUserNamesList,CountData) {
 			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
 		var pos = '' + column_position + '' + row_position;
 
@@ -1011,7 +1011,35 @@ var portlet_graph_utility = {
 														color : '#EFEFEF'
 													},
 													formatter : function() {
-														if (base_model
+														if( base_model.get('name')=='Average Closure'){
+															var userIndex = 0;
+															for ( var i = 0; i < groupByList.length; i++) {
+																if (this.key == groupByList[i])
+																	userIndex = i;
+															}
+															return '<div>'
+																	+ '<div class="p-n">'
+																	+ domainUserNamesList[userIndex]
+																	+ ' </div>'
+																	+ '<div class="p-n" style="color:'
+																	+ this.series.color
+																	+ ';">'
+																	+ 'Average Time Taken'
+																	+ ':'
+																	+ portlet_utility.getPortletsTimeConversion(Math.round(this.y))
+																	+ ' </div>'
+																	+ '<div class="p-n" style="color:'
+																	+ this.series.color
+																	+ ';">'
+																	+ this.series.name
+																	+ ':'
+																	+ portlet_utility.getNumberWithCommasForPortlets(CountData[this.series.index][this.point.x])
+																	+ ' </div>'
+																	+ '</div>';
+															
+														}
+														
+													else	if (base_model
 																.get('settings')["group-by"] == "user") {
 															var userIndex = 0;
 															for ( var i = 0; i < groupByList.length; i++) {
