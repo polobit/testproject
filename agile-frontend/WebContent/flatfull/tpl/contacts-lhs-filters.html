@@ -5,12 +5,12 @@
       <div class="panel-body">
         
 	<div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span style="font-size:10px;">{{field_label}}</span>
+	<span class="text-base">{{field_label}}</span>
 {{#if_equals_or "CHECKBOX" field_type "TEXT" field_type "TEXTAREA" field_type}}
 	<div class="controls m-t-xs" id="{{replace_spaces field_label}}_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}" />
-		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
+		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
 			<option value="DEFINED">is defined</option>
@@ -18,7 +18,7 @@
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
-				<input type="text" placeholder="Value" prev-val="" class="required form-control" style="height:30px;font-size:10px;">
+				<input type="text" placeholder="Value" prev-val="" class="required form-control text-xs" style="height:30px;">
 			</span>
 		</div>
 		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>		
@@ -30,7 +30,7 @@
 	<div class="controls m-t-xs" id="{{replace_spaces field_label}}_number_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}_number" />
-		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
+		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="EQUALS">equals</option>
 			<option value="IS_LESS_THAN">less than</option>
 			<option value="IS_GREATER_THAN">greater than</option>
@@ -40,16 +40,16 @@
 		</select>
 		<div class="EQUALS IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
-				<input type="number" min="0" placeholder="Value" prev-val="" class="form-control required" style="height:30px;font-size:10px;">
+				<input type="number" min="0" placeholder="Value" prev-val="" class="form-control required text-xs" style="height:30px;">
 			</span>
 		</div>
 		<div class="BETWEEN condition_container hide m-t-xs">
 			<div class="clear" />
 			<span id="RHS">
-				<input type="number" min="0" class="required form-control" prev-val="" placeholder="Min Value" style="height:30px;font-size:10px;"> 
+				<input type="number" min="0" class="required form-control text-xs" prev-val="" placeholder="Min Value" style="height:30px;"> 
 			</span>
 			<span id="RHS_NEW">
-				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control" style="height:30px;font-size:10px;">
+				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control text-xs" style="height:30px;">
 			</span>
 		</div>
 		<div class="m-t-xs"><a class="hide clear-filter-condition-lhs pull-right"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
@@ -61,7 +61,7 @@
 	<div class="controls m-t-xs" id="{{replace_spaces field_label}}_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 	<input type="hidden" class="form-control" name="LHS" value="{{field_label}}_time" />
-	<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
+	<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 		<option value="ON">on</option>
 		<option value="AFTER">is after</option>
 		<option value="BEFORE">is before</option>
@@ -73,21 +73,21 @@
 	</select>
 	<div class="AFTER BEFORE ON condition_container m-t-xs">
 		<span id="RHS">
-			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control" style="height:30px;font-size:10px;">
+			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control text-xs" style="height:30px;">
 		</span>
 	</div>
 	<div class="LAST NEXT condition_container hide m-t-xs">
 		<span id="RHS">
-			<input type="number" placeholder="Number of days" prev-val="" class="form-control required" style="height:30px;font-size:10px;">
+			<input type="number" placeholder="Number of days" prev-val="" class="form-control required text-xs" style="height:30px;">
 		</span>
 	</div>
 	<div class="BETWEEN condition_container hide m-t-xs">
 		<div class="clear" />
 		<span id="RHS">
-			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control" style="height:30px;font-size:10px;">
+			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control text-xs" style="height:30px;">
 		</span>
 		<span id="RHS_NEW">
-			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control" style="height:30px;font-size:10px;">
+			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control text-xs" style="height:30px;">
 		</span>
 	</div>
 	<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
@@ -99,7 +99,7 @@
 	<div class="controls m-t-xs" id="{{replace_spaces field_label}}_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="{{field_label}}" />
-		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
+		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
 			<option value="DEFINED">is defined</option>
@@ -107,7 +107,7 @@
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
-				<select id="{{replace_spaces field_label}}-values" prev-val="" class="required form-control" name="temp" style="height:30px;font-size:10px;">
+				<select id="{{replace_spaces field_label}}-values" prev-val="" class="required form-control text-xs" name="temp" style="height:30px;">
 					<option value="">Select value</option>
 					{{{buildOptions field_data}}}
 				</select>
@@ -133,7 +133,7 @@
 <fieldset>
 <div>
 		<span class="pull-right m-r-sm">
-			<a id="clear-lhs-contact-filters" class="text-sm text-muted" href="#" style="margin-right: 6px;font-size:12px;">
+			<a id="clear-lhs-contact-filters" class="text-sm text-muted text-xs" href="#" style="margin-right: 6px;">
 				 Clear all
 			</a>
 		</span>
@@ -144,18 +144,18 @@
     <div class="panel-body">
       <div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
       
-	<span style="font-size:10px;">Tags</span>
+	<span class="text-base">Tags</span>
 	<div class="controls m-t-xs" id="tags_div">
 		<div id="tags-lhs-filter-table" class="ignore-collection">
 				<div class="hide master-tags-add-div pos-rlt">
 					<input class="form-control" type="hidden" name="LHS" value="tags">
-					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:10px;">
+					<select id="tags-filter" class="form-control text-xs" name="CONDITION" style="height:30px;">
 						<option value="EQUALS" class="tags">is</option>
 						<option value="NOTEQUALS" class="tags">isn't</option>
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
-							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;font-size:10px;
+							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead text-xs" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;
 							">
 						</span>
 					</div>
@@ -164,13 +164,13 @@
 				</div>
 				<div class="lhs-contact-filter-row pos-rlt m-t-xs">
 					<input type="hidden" name="LHS" value="tags">
-					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:10px;">
+					<select id="tags-filter" class="form-control text-xs" name="CONDITION" style="height:30px;">
 						<option value="EQUALS" class="tags">is</option>
 						<option value="NOTEQUALS" class="tags">isn't</option>
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
-							<input type="text" placeholder="Enter Tag" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;font-size:10px;">
+							<input type="text" placeholder="Enter Tag" prev-val="" class="required text-xs form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;">
 						</span>
 					</div>
 					<div class="m-t-xs">
@@ -196,27 +196,27 @@
       <div class="panel-body">
         
 	<div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span style="font-size:10px;">Score</span>
+	<span class="text-base">Score</span>
 	<div class="controls m-t-xs" id="lead_score_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" class="form-control" value="lead_score">
-		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
+		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="IS_GREATER_THAN">greater than</option>
 			<option value="IS_LESS_THAN">less than</option>
 			<option value="BETWEEN">between</option>
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
-				<input type="number" min="0" placeholder="Value" prev-val="0" class="form-control required" name="temp-2" id="temp-2" style="height:30px;font-size:10px;">
+				<input type="number" min="0" placeholder="Value" prev-val="0" class="form-control required text-xs" name="temp-2" id="temp-2" style="height:30px;">
 			</span>
 		</div>
 		<div class="BETWEEN condition_container hide m-t-xs">
 			<div class="clear"></div>
 			<span id="RHS">
-				<input type="number" min="0" class="required form-control" prev-val="" placeholder="Min Value" name="temp-3" id="temp-3" style="height:30px;font-size:10px;"> 
+				<input type="number" min="0" class="required form-control text-xs" prev-val="" placeholder="Min Value" name="temp-3" id="temp-3" style="height:30px;"> 
 			</span>
 			<span id="RHS_NEW">
-				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control" name="temp-4" id="temp-4" style="height:30px;font-size:10px;">
+				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control text-xs" name="temp-4" id="temp-4" style="height:30px;">
 			</span>
 		</div>
 		
@@ -237,27 +237,27 @@
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
         <div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span style="font-size:10px;">Star Value</span>
+	<span class="text-base">Star Value</span>
 	<div class="controls m-t-xs" id="star_value_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="star_value">
-		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
+		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="IS_GREATER_THAN">greater than</option>
 			<option value="IS_LESS_THAN">less than</option>
 			<option value="BETWEEN">between</option>
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
-				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="form-control required" name="temp-5" id="temp-5" style="height:30px;font-size:10px;">
+				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="form-control required text-xs" name="temp-5" id="temp-5" style="height:30px;">
 			</span>
 		</div>
 		<div class="BETWEEN condition_container hide m-t-xs">
 			<div class="clear"></div>
 			<span id="RHS">
-				<input type="number" min="0" max="5" class="required form-control" prev-val="" placeholder="Min Value" name="temp-6" id="temp-6" style="height:30px;font-size:10px;"> 
+				<input type="number" min="0" max="5" class="required form-control text-xs" prev-val="" placeholder="Min Value" name="temp-6" id="temp-6" style="height:30px;"> 
 			</span>
 			<span id="RHS_NEW">
-				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control" name="temp-7" id="temp-7" style="height:30px;font-size:10px;">
+				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control text-xs" name="temp-7" id="temp-7" style="height:30px;">
 			</span>
 		</div>
 		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
@@ -275,14 +275,14 @@
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
        <div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span style="font-size:10px;">Campaign Status</span>
+	<span class="text-base">Campaign Status</span>
 	<div class="controls m-t-xs" id="campaign_status_div">
 
 
 		<div id="campaign_status-lhs-filter-table" class="ignore-collection">
 			<div class="hide master-campaign_status-add-div pos-rlt m-t-xs">
 				<input type="hidden" class="form-control" name="LHS" value="campaign_status">
-				<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
+				<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 					<option value="NOT_ADDED">Never Added</option>
 					<option value="ACTIVE">Active</option>
 					<option value="DONE">Completed</option>
@@ -294,7 +294,7 @@
 		
 				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED BOUNCED SPAM condition_container m-t-xs">
 					<span id="RHS">
-						<select id="campaign_select_master" class="required form-control" name="temp1" prev-val="" style="height:30px;font-size:10px"><option class="default-select" value="">Select...</option></select>
+						<select id="campaign_select_master" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">Select...</option></select>
 					</span>
 				</div>
 					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
@@ -302,7 +302,7 @@
 			</div>
 			<div class="lhs-contact-filter-row pos-rlt m-t-xs">
 				<input type="hidden" class="form-control" name="LHS" value="campaign_status">
-				<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
+				<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 					<option value="NOT_ADDED">Never Added</option>
 					<option value="ACTIVE">Active</option>
 					<option value="DONE">Completed</option>
@@ -315,7 +315,7 @@
 		
 				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED HARDBOUNCED SOFTBOUNCED SPAM condition_container m-t-xs">
 					<span id="RHS">
-						<select id="campaign_select" class="required form-control" name="temp1" prev-val="" style="height:30px;font-size:10px;"><option class="default-select" value="">Select...</option></select>
+						<select id="campaign_select" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">Select...</option></select>
 					</span>
 				</div>
 				
@@ -335,18 +335,18 @@
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
         <div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span style="font-size:10px;">Owner</span>
+	<span class="text-base">Owner</span>
 	<div class="controls m-t-xs" id="owner_id_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="owner_id">
-		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
+		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="EQUALS">is</option>
 			<option value="NOTEQUALS">isn't</option>
 		</select>
 		
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
-				<select id="owner_select" class="required form-control" name="temp1" prev-val="" style="height:30px;font-size:10px;"><option class="default-select" value="">Select...</option></select>
+				<select id="owner_select" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">Select...</option></select>
 			</span>
 		</div>
 		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
@@ -366,11 +366,11 @@
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
         <div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span style="font-size:10px;">Created Date </span>
+	<span class="text-base">Created Date </span>
 	<div class="controls m-t-xs" id="created_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="created_time" class="form-control">
-		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
+		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="ON">on</option>
 			<option value="AFTER">is after</option>
 			<option value="BEFORE">is before</option>
@@ -380,21 +380,21 @@
 		</select>
 		<div class="AFTER BEFORE ON condition_container m-t-xs">
 			<span id="RHS">
-				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control required date" name="temp-8" id="temp-8" style="height:30px;font-size:10px;">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control required date text-xs" name="temp-8" id="temp-8" style="height:30px;">
 			</span>
 		</div>
 		<div class="LAST NEXT condition_container hide m-t-xs">
 			<span id="RHS">
-				<input type="number" placeholder="Number of days" prev-val="" class="form-control required" name="temp-9" id="temp-9" style="height:30px;font-size:10px;">
+				<input type="number" placeholder="Number of days" prev-val="" class="form-control required text-xs" name="temp-9" id="temp-9" style="height:30px;">
 			</span>
 		</div>
 		<div class="BETWEEN condition_container hide m-t-xs">
 			<div class="clear"></div>
 			<span id="RHS">
-				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required" placeholder="{{dateFormat}}" name="temp-10" id="temp-10" style="height:30px;font-size:10px;">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required text-xs" placeholder="{{dateFormat}}" name="temp-10" id="temp-10" style="height:30px;">
 			</span>
 			<span id="RHS_NEW"> 
-				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control date required" name="temp-11" id="temp-11" style="height:30px;font-size:10px;">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control date required text-xs" name="temp-11" id="temp-11" style="height:30px;">
 			</span>
 		</div>
 		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
@@ -412,11 +412,11 @@
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
         <div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span style="font-size:10px;">Last Contacted</span>
+	<span class="text-base">Last Contacted</span>
 	<div class="controls m-t-xs" id="last_contacted_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="last_contacted" class="form-control">
-		<select id="between_filter" name="CONDITION" class="form-control" style="height:30px;font-size:10px;">
+		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="ON">on</option>
 			<option value="AFTER">is after</option>
 			<option value="BEFORE">is before</option>
@@ -425,21 +425,21 @@
 		</select>
 		<div class="AFTER BEFORE ON condition_container m-t-xs">
 			<span id="RHS">
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="Select Date" class="form-control required date" name="temp-12" id="temp-12" style="height:30px;font-size:10px;">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="Select Date" class="form-control required date text-xs" name="temp-12" id="temp-12" style="height:30px;">
 			</span>
 		</div>
 		<div class="LAST condition_container hide m-t-xs">
 			<span id="RHS">
-				<input type="number" placeholder="Number of days" prev-val="" class="form-control required" name="temp-13" id="temp-13" style="height:30px;font-size:10px;">
+				<input type="number" placeholder="Number of days" prev-val="" class="form-control required text-xs" name="temp-13" id="temp-13" style="height:30px;">
 			</span>
 		</div>
 		<div class="BETWEEN condition_container hide m-t-xs">
 			<div class="clear"></div>
 			<span id="RHS">
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="form-control date required" placeholder="Select Date" name="temp-14" id="temp-14" style="height:30px;font-size:10px;">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="form-control date required text-xs" placeholder="Select Date" name="temp-14" id="temp-14" style="height:30px;">
 			</span>
 			<span id="RHS_NEW"> 
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="Select Date" class="form-control date required" name="temp-15" id="temp-15" style="height:30px;font-size:10px;">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="Select Date" class="form-control date required text-xs" name="temp-15" id="temp-15" style="height:30px;">
 			</span>
 		</div>
 		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
