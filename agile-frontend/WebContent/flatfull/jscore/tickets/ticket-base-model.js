@@ -17,8 +17,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		"click .toggle-timeline" : "toggleTimeline",
 		"click .toggle-activities-notes" : "toggleActivitiesAndNotes",
-		"click .toggle-timeline-notes" : "toggleTimelineNotes",
-
+		
 		// "click #change-sla" : "changeSla",
 		"click .contact-deals" : "showContactDeals",
 		"mouseover .hover-edit" : "showEditIcon",
@@ -74,14 +73,14 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		Tickets.changeStatus(status, function(){
 
-				showNotyPopUp('information', "Ticket status has been changed to " + status.toLowerCase(), 'bottomRight', 3000);
+			showNotyPopUp('information', "Ticket status has been changed to " + status.toLowerCase(), 'bottomRight', 3000);
 
-				var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
-					'/' + status;
+			var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
+			'/' + status;
 
-				Backbone.history.navigate(url, {trigger : true});
+			Backbone.history.navigate(url, {trigger : true});
 
-			});
+		});
 	},
 
 	changeGroup: function(e){
@@ -255,59 +254,46 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		{
 			//Rendering ticket notes
 			App_Ticket_Module.renderNotesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
-			$(".toggle-activities-notes").show();
-			$(".toggle-timeline-notes").hide();
+			Tickets.toggleActivitiesUI("show");
 		}
 		else{
 			Ticket_Timeline.render_individual_ticket_timeline();
 			tooltip_text = 'Show comments';
-
-			$(".toggle-activities-notes").hide();
-			$(".toggle-timeline-notes").show();
+			Tickets.toggleActivitiesUI("hide");
 		}
 
 		$('.toggle-timeline').text(tooltip_text);
 	},
 
-	toggleTimelineNotes : function(e){
-
-		var targetEle = $(".toggle-timeline-notes");
-		var currentType = targetEle.attr("rel");
-
-		if(currentType && currentType == "notes"){
-			$(".ticket-timeline-container").find(".comment").show();
-			targetEle.attr("rel", "activities");
-			targetEle.attr("data-original-title", "Hide notes");
-			targetEle.html("<i class='fa fa-ellipsis-v'></i>");
-		}
-		else{
-			//Rendering ticket notes
-			$(".ticket-timeline-container").find(".comment").hide();
-			targetEle.attr("rel", "notes");
-			targetEle.attr("data-original-title", "Show notes");
-			targetEle.html("<i class='fa fa-ellipsis-h'></i>");
-		}
-	},
-
 	toggleActivitiesAndNotes : function(e){
 
-		var targetEle = $(".toggle-activities-notes");
-		var currentType = targetEle.attr("rel");
+		var currentType = $(".toggle-activities-notes").attr("rel");
 
 		if(currentType && currentType == "notes"){
+
+			Tickets.toggleActivitiesUI("hide");
+
+			if($('.ticket-timeline-container').length > 0){
+				$('.ticket-timeline-container').find(".activity").show();
+				return;
+			}
+
 			App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
-			targetEle.attr("rel", "activities");
-			targetEle.attr("data-original-title", "Hide activities");
-			targetEle.html("<i class='fa fa-ellipsis-v'></i>");
-		}
-		else{
+					
+		}else{
+
+			Tickets.toggleActivitiesUI("show");	
+
+			if($('.ticket-timeline-container').length > 0){
+				$('.ticket-timeline-container').find(".activity").hide();
+				return;
+			}	
+
 			//Rendering ticket notes
 			App_Ticket_Module.renderNotesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
-			targetEle.attr("rel", "notes");
-			targetEle.attr("data-original-title", "Show activities");
-			targetEle.html("<i class='fa fa-ellipsis-h'></i>");
+			
 		}
-		
+
 	},
 
 	showContactDeals: function(e){
@@ -323,7 +309,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		}
 
 		var Deals = Backbone.Collection.extend({
-		  url: '/core/api/contacts/' + contactID + '/deals'
+			url: '/core/api/contacts/' + contactID + '/deals'
 		});
 
 		new Deals().fetch({success: function(collection){

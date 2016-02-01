@@ -1165,15 +1165,34 @@ var Tickets = {
 
 				$("#previous_tickets_container").html(getTemplate('previous-tickets-list', tickets.toJSON()));
 
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$("time", $("#previous_tickets_container")).timeago();
-				});
+				// head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				// {
+				//	$("time", $("#previous_tickets_container")).timeago();
+				// });
 
 			}
 		});
 
-	}
+	},
+
+	toggleActivitiesUI :  function(type){
+
+		var targetEle = $(".toggle-activities-notes");
+		var currentType = targetEle.attr("rel");
+
+		if(type && type == "hide"){
+			targetEle.attr("rel", "activities");
+			targetEle.attr("data-original-title", "Hide activities");
+			targetEle.html("<i class='fa fa-ellipsis-v'></i>");
+		}
+		else{
+			//Rendering ticket notes
+			targetEle.attr("rel", "notes");
+			targetEle.attr("data-original-title", "Show activities");
+			targetEle.html("<i class='fa fa-ellipsis-h'></i>");
+		}
+
+	},
 };
 
 function tickets_typeahead(data){
