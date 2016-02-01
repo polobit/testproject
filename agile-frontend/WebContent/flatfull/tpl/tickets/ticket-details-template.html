@@ -128,6 +128,18 @@
                   
             </div>
 
+            <!-- Previous Tickets -->
+            <div class="panel b-a previous-tickets-panel">
+              <div class="font-thin text-md padder m-t-sm m-b-sm">Previous Tickets</div>
+              <div class="b-b b-light m-t-sm m-l-sm m-r-sm"></div>
+              <div id="previous_tickets_container" class="m-l-sm m-r-sm m-b-xs m-t-xs ">
+
+                <img id="widget_load_img" class="m-sm" src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/ajax-loader-cursor.gif">
+                
+               </div>
+            </div>
+            <!-- End Of Previous Tickets -->
+
             <div class="panel panel-default m-t-md">
               <div class="panel-body">
                 <div class="row m-n">
@@ -315,8 +327,6 @@
                 <i class="fa fa-ellipsis-h"></i>
               </span>
 
-              <span class="label label-default cursor-pointer pull-right position-relative toggle-timeline-notes" style="bottom: 8px;right: 1px;display: none;" data-toggle="tooltip" data-placement="bottom" data-original-title="Hide notes" rel="activities"><i class="fa fa-ellipsis-v"></i></span>
-
             </div>
 
           <!-- End of ticket notes -->
@@ -341,18 +351,7 @@
       
        <div class="wrapper">
 
-          <div class="panel b-a previous-tickets-panel">
-            <h4 class="font-thin padder">Previous Tickets</h4>
-            <ul id="previous_tickets_container" class="list-group">
-
-                <li class="list-group-item">
-                   <img id="widget_load_img " src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/ajax-loader-cursor.gif">
-               </li>
-
-             </ul>
-          </div>
- 
-            <div id="widgets" class="contact_{{contactID}}">
+          <div id="widgets" class="contact_{{contactID}}">
               <div class="text-center">
                 <img id="widget_load_img " src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/ajax-loader-cursor.gif" class="m-t-sm m-b">
               </div>
@@ -516,16 +515,8 @@
 
 <script  id="previous-tickets-list-template" type="text/html">
 {{#each this}}
- <li class="list-group-item">
-
-      <p class="m-b-xs"><a href="#ticket/{{id}}" target="_blank" class="link-color">{{subject}}</a></p>
-
-      <small class="block text-muted">
-        <i class="fa fa-fw fa-clock-o"></i> 
-        <time class="b-b-dotted vertical-align-top" datetime="{{epochToHumanDate "" created_time}}">
-              {{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}</time>
-      </small>
-       
-  </li>
+  <div class="overflow-elipsis p-t-xs p-b-xs" style="max-width: 230px;">
+    {{{get_status_label status}}}<a href="#ticket/{{id}}" target="_blank" class="p-l-xs link-color" title="{{subject}}">{{subject}}</a>
+  </div>
 {{/each}}
 </script>
