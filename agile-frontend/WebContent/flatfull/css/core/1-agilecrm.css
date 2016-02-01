@@ -3124,3 +3124,13 @@ table.hide-head-checkbox th label.i-checks {
 	height:30px;
 	font-size:12px;
 }
+.lhs-contact-filter-row  div.add-icon{
+	display: none;
+}
+
+.lhs-contact-filter-row div.add-icon:last-of-type {
+	display: block!important;
+	}
+.lhs-contact-filter-row + div.master-tags-add-div {
+    margin-top: -10px;
+}
