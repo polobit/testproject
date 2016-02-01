@@ -18,12 +18,12 @@ var email_server_type = "agilecrm";
 
 var email_server_type_cookie_name = "email_server_type_" + CURRENT_DOMAIN_USER.id;
 
-function fill_company_related_contacts(companyId, htmlId)
+function fill_company_related_contacts(companyId, htmlId, context_el)
 {
 	$('#' + htmlId).html(LOADING_HTML);
 
 	var companyContactsView = new Base_Collection_View({ url : 'core/api/contacts/related/' + companyId, templateKey : 'company-contacts',
-		individual_tag_name : 'tr', cursor : true, page_size : 25, sort_collection : false, postRenderCallback : function(el)
+		individual_tag_name : 'tr', cursor : true, page_size : 25, sort_collection : false, scroll_target : (context_el ? $("#infinite-scroller-company-details", context_el) : "#infinite-scroller-company-details"), postRenderCallback : function(el)
 		{
 			// var cel = App_Contacts.contactsListView.el;
 			// var collection = App_Contacts.contactsListView.collection;
@@ -31,7 +31,10 @@ function fill_company_related_contacts(companyId, htmlId)
 
 	companyContactsView.collection.fetch();
 
-	$('#' + htmlId).html(companyContactsView.render().el);
+	if(context_el)
+		$('#' + htmlId, $(context_el)).html(companyContactsView.render().el);
+	else
+		$('#' + htmlId).html(companyContactsView.render().el);
 }
 
 var Contact_Details_Tab_Actions = {
@@ -308,7 +311,7 @@ function populate_send_email_details(el)
 {
 
 	$("#emailForm", el).find('input[name="from_name"]').val(CURRENT_DOMAIN_USER.name);
-	$("#emailForm", el).find('input[name="from_email"]').val(CURRENT_DOMAIN_USER.email);
+	$("#emailForm", el).find('input[name="from"]').val(CURRENT_DOMAIN_USER.email);
 
 	// Fill hidden signature field using userprefs
 	// $("#emailForm").find( 'input[name="signature"]'
@@ -401,6 +404,9 @@ function load_contact_tab(el, contactJSON)
 	if (position == null || position == undefined || position == "")
 		position = "timeline";
 
+	if(position == "timeline" && agile_is_mobile_browser())
+			return;
+
 	$('#contactDetailsTab a[href="#' + position + '"]', el).tab('show');
 
 	if (!position || position == "timeline")
@@ -485,7 +491,7 @@ function initializeSendEmailListeners(){
 
 			set_tinymce_content('email-body', '');
 
-			$("#emailForm").find('textarea[name="body"]').val("");
+			$("#emailForm").find('textarea[name="message"]').val("");
 			
 			$('.add-attachment-cancel').trigger("click");
 
@@ -618,10 +624,10 @@ function initializeSendEmailListeners(){
 							json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
 
 						if ((json.contact_cc_ids).join())
-							json.email_cc += ((json.email_cc != "") ? "," : "") + (json.contact_cc_ids).join();
+							json.cc += ((json.cc != "") ? "," : "") + (json.contact_cc_ids).join();
 
 						if ((json.contact_bcc_ids).join())
-							json.email_bcc += ((json.email_bcc != "") ? "," : "") + (json.contact_bcc_ids).join();
+							json.bcc += ((json.bcc != "") ? "," : "") + (json.contact_bcc_ids).join();
 
 						if (json.to == "" || json.to == null || json.to == undefined)
 						{
@@ -647,7 +653,9 @@ function initializeSendEmailListeners(){
 						$
 								.ajax({
 									type : 'POST',
-									data : json,
+									data : JSON.stringify(json),
+									dataType: 'json',
+									contentType: "application/json",
 									url : 'core/api/emails/contact/send-email',
 									success : function()
 									{

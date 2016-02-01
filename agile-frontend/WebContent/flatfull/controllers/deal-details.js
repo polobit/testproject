@@ -23,6 +23,10 @@ var DealDetailsRouter = Backbone.Router.extend({
 
 		this.dealDetailView = new Deal_Modal_Event_View({ url : '/core/api/opportunity/' + id, template : "deal-detail", postRenderCallback : function(el)
 		{
+
+			$('.content-tabs',el).tabCollapse();
+			
+
 			/**
 			 * gets the tracks count when user comes to deals page and stores in
 			 * global variable

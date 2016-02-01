@@ -105,6 +105,8 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Opportunity> getOpportunities(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
+    count = (count == null) ? "25" : count;
+    	
 	if (count != null)
 	{
 	    return OpportunityUtil.getOpportunities((Integer.parseInt(count)), cursor);
@@ -1195,7 +1197,9 @@ public class DealsAPI
     public String getConvertedDeals(@PathParam("owner-id") Long ownerId, @QueryParam("track-id") Long trackId,@QueryParam("start-date") Long min,
 	    @QueryParam("end-date") Long max)
     {
+    	if(trackId!=null){
 	ReportsUtil.check(min * 1000, max * 1000);
+    	}
 	return OpportunityUtil.getPipelineConversionData(ownerId, min, max,trackId).toString();
     }
 

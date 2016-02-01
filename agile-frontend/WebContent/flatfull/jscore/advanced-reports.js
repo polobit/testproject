@@ -147,7 +147,7 @@ function initSalesCharts(callback){
 
 		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
 
-		fillSelect("source", "/core/api/categories?entity_type=DEAL_SOURCE", undefined, function()
+		/*fillSelect("source", "/core/api/categories?entity_type=DEAL_SOURCE", undefined, function()
 		{
 			
 			$('#source option').eq(0).after($('<option class="default-select" value="1">Unknown</option>'));
@@ -156,7 +156,30 @@ function initSalesCharts(callback){
 				callback();
 			});
 
-		}, '<option class="default-select" value="{{id}}">{{label}}</option>', false, undefined, "All Sources");
+		}, '<option class="default-select" value="{{id}}">{{label}}</option>', false, undefined, "All Sources");*/
+
+		var sources = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_SOURCE', sort_collection: false});
+		sources.collection.fetch({
+			success: function(data){
+				var jsonModel = data.toJSON();
+				var html =  '<option class="default-select" value="">All Sources</option>' + 
+							'<option class="default-select" value="1">Unknown</option>';
+				
+				$.each(jsonModel,function(index,dealSource){
+					html+='<option class="default-select" value="'+dealSource.id+'">'+dealSource.label+'</option>';
+				});
+				$('#source', $('#content')).html(html);
+
+				// Hide loading bar
+				hideTransitionBar();
+
+				$('#source').change(function()
+				{
+					callback();
+				});
+			}
+		});
+		
 		callback();
 
 		
@@ -426,6 +449,7 @@ function showLossReasonGraphForUserReports(){
 			owner_id=$("#owner").val();
 			options += owner_id;
 	}
+	//options += CURRENT_DOMAIN_USER.id;
 	
 		// Get track
 		var track = 0;
@@ -607,6 +631,124 @@ function initDateRange(callback)
 }
 
 
+function showRepPerformanceReport()
+{
+
+	var options='';
+
+	// Get Date Range January 22, 2015 - January 28, 2015
+	var range = $('#range').html().split("-");
+	var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
+
+	var end_value = $.trim(range[1]);
+
+	// To make end value as end time of day
+	if (end_value)
+		end_value = end_value + " 23:59:59";
+
+
+	var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+
+	// Adds start_time, end_time and timezone offset to params.
+	var d = new Date();
+	start_time=start_time+(d.getTimezoneOffset()*60*1000);
+	 end_time += (((23*60*60)+(59*60)+59)*1000);
+	end_time=end_time+(d.getTimezoneOffset()*60*1000);
+
+	if ($('#owner').length > 0)
+	{
+		// Get owner
+		var owner_id=0;
+		if ($("#owner").val() != "")
+			owner_id=$("#owner").val();
+			options += owner_id;
+	}
+
+	//options += CURRENT_DOMAIN_USER.id;
+	options += ("?min=" + start_time/1000 + "&max=" + end_time/1000);
+		report_utility.getRepPerformanceLog('core/api/reports/repPerformance/' + options);
+
+			//console.log(resp);
+		
+
+}
+
+function initRepReports(callback){
+	
+	initReportLibs(function()
+	{
+
+					$('.daterangepicker').remove();
+					// Bootstrap date range picker.
+					$('#reportrange').daterangepicker({ ranges : {  'This Month' : [
+							Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()
+					], 'Last Month' : [
+							Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
+					], 'This Quarter' : [
+							Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() : 
+							(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() :
+							(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(9)).moveToFirstDayOfMonth(), 
+							Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(2)).moveToLastDayOfMonth() : 
+							(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() :
+							(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(8)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
+					], 'Last Quarter' : [
+							Date.today().getMonth() < 3 ? new Date(Date.today().add({ years : -1 }).setMonth(9)).moveToFirstDayOfMonth() : 
+							(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() :
+							(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth(), 
+							Date.today().getMonth() < 3 ? new Date(Date.today().add({ years : -1 }).setMonth(11)).moveToLastDayOfMonth() : 
+							(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(2)).moveToLastDayOfMonth() :
+							(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(8)).moveToLastDayOfMonth()
+					], 'This Year' : [
+							new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
+					], 'Last Year' : [
+							new Date(Date.today().setMonth(0)).add({ years : -1 }).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).add({ years : -1 }).moveToLastDayOfMonth()
+					] }, locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', customRangeLabel : 'Custom', minViewMode : 'month', dateLimit:'month', startDate:Date.today().moveToFirstDayOfMonth(),endDate:Date.today().moveToLastDayOfMonth(), daysOfWeek : [
+							'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
+					], monthNames : [
+							'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+					], firstDay : parseInt(CALENDAR_WEEK_START_DAY) } }, function(start, end)
+					{
+						if(start && end){
+						var months_diff = Math.abs(start.getMonth() - end.getMonth() + (12 * (start.getFullYear() - end.getFullYear())));
+						$('#reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
+						$("#week-range").html(end.add({ days : -6 }).toString('MMMM d, yyyy') + ' - ' + end.add({ days : 6 }).toString('MMMM d, yyyy'));
+						}
+						else
+ 						{
+ 							$('#reportrange span').html(Date.today().moveToFirstDayOfMonth().toString('MMMM d, yyyy')+'-'+Date.today().moveToLastDayOfMonth().toString('MMMM d, yyyy'));	
+ 							$('.daterangepicker > .ranges > ul > li').each(function(){
+							$(this).removeClass("active");
+						});
+ 						}
+						callback();
+					});
+					$('.daterangepicker > .ranges > ul').on("click", "li", function(e)
+					{
+						$('.daterangepicker > .ranges > ul > li').each(function(){
+							$(this).removeClass("active");
+						});
+						$(this).addClass("active");
+					});
+					$('.daterangepicker > .ranges > ul li:last-child' ).hide();
+					$('.daterangepicker  .range_inputs').hide();
+					$('.daterangepicker > .ranges > ul li:last-child').prev().removeClass('b-b');
+
+	});
+
+	
+
+	fillSelect("owner", "core/api/users", undefined, function()
+		{
+			$('select[id="owner"]').find('option[value="'+CURRENT_DOMAIN_USER.id+'"]').attr("selected",true);
+			callback();					
+			$('#owner').change(function()
+			{
+				callback();
+			});
+
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined);
+		
+	}
 
 function initComparisonReports(callback){
 	

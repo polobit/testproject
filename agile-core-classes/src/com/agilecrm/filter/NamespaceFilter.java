@@ -2,6 +2,7 @@ package com.agilecrm.filter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Calendar;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -213,6 +214,12 @@ public class NamespaceFilter implements Filter
 	    return;
 	}
 
+	 // For IE cache issue fix
+	  if(isRequestFromIEClient(request)){
+		  HttpServletResponse res = (HttpServletResponse) response;
+		  res.setDateHeader("Expires", Calendar.getInstance().getTimeInMillis());	  
+	  }
+	  
 	// Returns true if name space is set or namespace is already set for the
 	// application. If request is not to access the
 	// application but to create new domain (choosing domain) then it
@@ -234,5 +241,20 @@ public class NamespaceFilter implements Filter
     public void destroy()
     {
 	// Nothing to do
+    }
+    
+    public boolean isRequestFromIEClient(ServletRequest request){
+    	try {
+    		HttpServletRequest req = (HttpServletRequest) request;
+    		String userAgent = req.getHeader("user-agent");
+    		
+    	    return userAgent.contains("MSIE");
+    	
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+    	
+    	return false;
     }
 }

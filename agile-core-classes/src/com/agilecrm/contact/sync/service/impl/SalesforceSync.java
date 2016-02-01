@@ -98,7 +98,8 @@ public class SalesforceSync extends OneWaySyncService
     
     private String getAccountsFromSalesForce() throws Exception{
 
-		String query = "SELECT Id, ParentId, Name, Website, Phone, Industry, Description, Type, NumberOfEmployees, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
+		// String query = "SELECT Id, ParentId, Name, Website, Phone, Industry, Description, Type, NumberOfEmployees, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
+		String query = "SELECT Id, ParentId, Name, Website, Phone, Type, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
 		System.out.println("In accounts------------------------------------");
 		return SalesforceUtil.getEntities(prefs, query);
 	
@@ -579,8 +580,8 @@ public class SalesforceSync extends OneWaySyncService
 	// Saves limits
 	restriction.save();
 
-	if(syncStatus.get(ImportStatus.TOTAL_ACCOUNTS) == 0 && syncStatus.get(ImportStatus.SAVED_CONTACTS) == 0 && syncStatus.get(ImportStatus.TOTAL_TASKS) == 0)
-		  return;
+	/*if(syncStatus.get(ImportStatus.TOTAL_ACCOUNTS) == 0 && syncStatus.get(ImportStatus.SAVED_CONTACTS) == 0 && syncStatus.get(ImportStatus.TOTAL_TASKS) == 0)
+		  return;*/
 	
 	buildNotificationStatus();
 

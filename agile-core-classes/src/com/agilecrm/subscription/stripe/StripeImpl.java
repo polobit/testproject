@@ -523,7 +523,7 @@ public class StripeImpl implements AgileBilling {
 
 		// If there exists email plan, then it is updated instead of creating
 		// new subscription
-		try {
+		
 
 			/**
 			 * Retrieves all subscriptions from customer object. It is used to
@@ -604,11 +604,7 @@ public class StripeImpl implements AgileBilling {
 			// subscription.plan);
 			return StripeUtil.getJSONFromCustomer(customer_new);
 
-		} catch (StripeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+		
 
 	}
 

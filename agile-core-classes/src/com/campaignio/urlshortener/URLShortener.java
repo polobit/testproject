@@ -46,7 +46,7 @@ public class URLShortener
     
     public enum ShortenURLType
     {
-    	SMS, EMAIL
+    	SMS, EMAIL, TWEET
     };
     
     private ShortenURLType type = ShortenURLType.EMAIL;

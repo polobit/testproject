@@ -22,171 +22,192 @@ import com.campaignio.tasklets.util.TaskletUtil;
  * @author Naresh
  * 
  */
-public class AddTask extends TaskletAdapter
-{
-    /**
-     * Subject of Task
-     */
-    public static String SUBJECT = "subject";
+public class AddTask extends TaskletAdapter {
+	/**
+	 * Subject of Task
+	 */
+	public static String SUBJECT = "subject";
 
-    /**
-     * Category Type
-     */
-    public static String CATEGORY = "category";
+	/**
+	 * Category Type
+	 */
+	public static String CATEGORY = "category";
 
-    /**
-     * Call
-     */
-    public static String CALL = "CALL";
+	/**
+	 * Call
+	 */
+	public static String CALL = "CALL";
 
-    /**
-     * Email
-     */
-    public static String EMAIL = "EMAIL";
+	/**
+	 * Email
+	 */
+	public static String EMAIL = "EMAIL";
 
-    /**
-     * Follow
-     */
-    public static String FOLLOW_UP = "FOLLOW_UP";
+	/**
+	 * Follow
+	 */
+	public static String FOLLOW_UP = "FOLLOW_UP";
 
-    /**
-     * Meeting
-     */
-    public static String MEETING = "MEETING";
+	/**
+	 * Meeting
+	 */
+	public static String MEETING = "MEETING";
 
-    /**
-     * Milestone
-     */
-    public static String MILESTONE = "MILESTONE";
+	/**
+	 * Milestone
+	 */
+	public static String MILESTONE = "MILESTONE";
 
-    /**
-     * Send
-     */
-    public static String SEND = "SEND";
+	/**
+	 * Send
+	 */
+	public static String SEND = "SEND";
 
-    /**
-     * Tweet
-     */
-    public static String TWEET = "TWEET";
+	/**
+	 * Tweet
+	 */
+	public static String TWEET = "TWEET";
 
-    /**
-     * Other
-     */
-    public static String OTHER = "OTHER";
+	/**
+	 * Other
+	 */
+	public static String OTHER = "OTHER";
 
-    /**
-     * Task priority type
-     */
-    public static String PRIORITY = "priority";
+	/**
+	 * Task priority type
+	 */
+	public static String PRIORITY = "priority";
 
-    /**
-     * High priority
-     */
-    public static String HIGH = "HIGH";
+	/**
+	 * High priority
+	 */
+	public static String HIGH = "HIGH";
 
-    /**
-     * Normal priority
-     */
-    public static String NORMAL = "NORMAL";
+	/**
+	 * Normal priority
+	 */
+	public static String NORMAL = "NORMAL";
 
-    /**
-     * Low priority
-     */
-    public static String LOW = "LOW";
+	/**
+	 * Low priority
+	 */
+	public static String LOW = "LOW";
 
-    /**
-     * Number of Due days
-     */
-    public static String DUE_DAYS = "due_days";
+	/**
+	 * Number of Due days
+	 */
+	public static String DUE_DAYS = "due_days";
 
-    /**
-     * Selected DomainUser Id.
-     */
-    public static String OWNER_ID = "owner_id";
+	/**
+	 * Selected DomainUser Id.
+	 */
+	public static String OWNER_ID = "owner_id";
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
-     * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
-     */
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
-	    throws Exception
-    {
-	// Get Task Values
-	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
-	String category = getStringValue(nodeJSON, subscriberJSON, data, CATEGORY);
-	String priority = getStringValue(nodeJSON, subscriberJSON, data, PRIORITY);
-	String dueDays = getStringValue(nodeJSON, subscriberJSON, data, DUE_DAYS);
-	String givenOwnerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
+	public static String TIMEZONE = "timezone";
 
-	// Gets due date in epoch from dueDays
-	Long epochTime = AgileTaskletUtil.getDateInEpoch(dueDays);
+	public static String AT = "at";
 
-	// Contact Id
-	String contactId = AgileTaskletUtil.getId(subscriberJSON);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
+	 * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
+	 */
+	public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
+			JSONObject data, JSONObject nodeJSON) throws Exception {
+		// Get Task Values
+		String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
+		String category = getStringValue(nodeJSON, subscriberJSON, data,
+				CATEGORY);
+		String priority = getStringValue(nodeJSON, subscriberJSON, data,
+				PRIORITY);
+		String dueDays = getStringValue(nodeJSON, subscriberJSON, data,
+				DUE_DAYS);
+		String givenOwnerId = getStringValue(nodeJSON, subscriberJSON, data,
+				OWNER_ID);
+		String timezone = getStringValue(nodeJSON, subscriberJSON, data,
+				TIMEZONE);
+		String at = getStringValue(nodeJSON, subscriberJSON, data, AT);
+		
+		Long epochTime = 0l;
+		
+		try {
+			
+			System.out.println("Updated code to fix for old task node...");
+			System.out.println("Timezone is " + timezone + " and at " + at);
+			
+			// Gets due date in epoch from dueDays
+			epochTime = AgileTaskletUtil.getDateInEpoch(dueDays, timezone, at);
+			
+			System.out.println("Epoch time obtained is " + epochTime);
+			
+			// Contact Id
+			String contactId = AgileTaskletUtil.getId(subscriberJSON);
+			
+			// Contact ownerId.
+			Long contactOwnerId = ContactUtil.getContactOwnerId(Long
+					.parseLong(contactId));
 
-	try
-	{
-	    // Contact ownerId.
-	    Long contactOwnerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
+			// Adds task
+			addTask(subject, category, priority, epochTime, contactId,
+					givenOwnerId, contactOwnerId, timezone);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Exception occured while creating Task."  + e.getMessage());
+		}
 
-	    // Adds task
-	    addTask(subject, category, priority, epochTime, contactId, givenOwnerId, contactOwnerId);
+		// Creates log for AddTask
+		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON),
+				AgileTaskletUtil.getId(subscriberJSON), "Task: " + subject
+						+ "<br/> Category: " + category + "<br/> Type: "
+						+ priority + " <br/> Date: "
+						+ new Date(epochTime * 1000),
+				LogType.ADD_TASK.toString());
+
+		// Execute Next One in Loop
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
+				nodeJSON, null);
 	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.out.println("Exception occured while creating Task.");
+
+	/**
+	 * Adds task to subscribed contact.
+	 * 
+	 * @param subject
+	 *            - Name of the Task.
+	 * @param category
+	 *            - Call, Email, Meeting etc.
+	 * @param priority
+	 *            - High, Low and Medium.
+	 * @param dueDateInEpoch
+	 *            - Epoch time of given due duration.
+	 * @param contactId
+	 *            - Contact Id.
+	 * @param givenOwnerId
+	 *            - Selected owner-id.
+	 * @param contactOwnerId
+	 *            - Contact owner-id.
+	 */
+	private void addTask(String subject, String category, String priority,
+			Long dueDateInEpoch, String contactId, String givenOwnerId,
+			Long contactOwnerId, String timezone) {
+		Task task = new Task(category, dueDateInEpoch);
+
+		// Intialize task contacts with contact id
+		task.contacts = new ArrayList<String>();
+		task.contacts.add(contactId);
+
+		// Initialize task priority and subject values
+		task.priority_type = PriorityType.valueOf(priority);
+		task.subject = subject;
+
+		// If contact_owner, then owner is contact owner
+		if (givenOwnerId.equals("contact_owner"))
+			task.owner_id = contactOwnerId == null ? null : contactOwnerId
+					.toString();
+		else
+			task.owner_id = givenOwnerId;
+
+		// Save Task
+		task.save();
 	}
-
-	// Creates log for AddTask
-	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Task: "
-		+ subject + "<br/> Category: " + category + "<br/> Type: " + priority + " <br/> Date: "
-		+ new Date(epochTime * 1000), LogType.ADD_TASK.toString());
-
-	// Execute Next One in Loop
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-    }
-
-    /**
-     * Adds task to subscribed contact.
-     * 
-     * @param subject
-     *            - Name of the Task.
-     * @param category
-     *            - Call, Email, Meeting etc.
-     * @param priority
-     *            - High, Low and Medium.
-     * @param dueDateInEpoch
-     *            - Epoch time of given due duration.
-     * @param contactId
-     *            - Contact Id.
-     * @param givenOwnerId
-     *            - Selected owner-id.
-     * @param contactOwnerId
-     *            - Contact owner-id.
-     */
-    private void addTask(String subject, String category, String priority, Long dueDateInEpoch, String contactId,
-	    String givenOwnerId, Long contactOwnerId)
-    {
-	Task task = new Task(category, dueDateInEpoch);
-
-	// Intialize task contacts with contact id
-	task.contacts = new ArrayList<String>();
-	task.contacts.add(contactId);
-
-	// Initialize task priority and subject values
-	task.priority_type = PriorityType.valueOf(priority);
-	task.subject = subject;
-
-	// If contact_owner, then owner is contact owner
-	if (givenOwnerId.equals("contact_owner"))
-	    task.owner_id = contactOwnerId == null ? null : contactOwnerId.toString();
-	else
-	    task.owner_id = givenOwnerId;
-
-	// Save Task
-	task.save();
-    }
 }

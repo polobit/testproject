@@ -22,7 +22,6 @@ function organize_sync_widgets(base_model)
 		$('#shopify', this.el).append($(itemView.render().el));
 	if (sync_type == "QUICKBOOK")
 		$('#quickbook', this.el).append($(itemView.render().el));
-
 	if (sync_type == "SALESFORCE")
 		$('#salesforce', this.el).append($(itemView.render().el));
 
@@ -49,7 +48,7 @@ function initializeDataSyncListners(){
 		}
 		if(sync_type=="STRIPE"){
 
-			var callbackURL = window.location.origin + "/#sync/stripe-import";
+			var callbackURL = agileWindowOrigin() + "/#sync/stripe-import";
 		// For every request of import, it will ask to grant access
 		window.open( "/scribe?service=stripe_import&window_opened=true&return_url=" + encodeURIComponent(callbackURL),'dataSync','height=1000,width=500');
 		return false;

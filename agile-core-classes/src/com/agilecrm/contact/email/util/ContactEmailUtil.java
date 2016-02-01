@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.util.ContactGmailUtil;
@@ -22,6 +23,8 @@ import com.agilecrm.contact.email.util.ContactImapUtil;
 import com.agilecrm.contact.email.util.ContactOfficeUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.email.wrappers.ContactEmailWrapper;
+import com.agilecrm.email.wrappers.ContactEmailWrapper.PushParams;
 import com.agilecrm.email.wrappers.EmailWrapper;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.AgileUser;
@@ -37,6 +40,7 @@ import com.agilecrm.user.util.SocialPrefsUtil;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -93,48 +97,65 @@ public class ContactEmailUtil
 	}
 
 	/**
-	 * Saves email in datastore. It iterates over the given to emails and gets
-	 * the contact-id if exists for that email.
 	 * 
-	 * @param fromEmail
-	 *            - from email
-	 * @param fromName
-	 *            - from name
-	 * @param to
-	 *            - to email
-	 * @param subject
-	 *            - subject
-	 * @param body
-	 *            - body
+	 * @param contactEmailWrapper
+	 * @param contact
+	 * @throws Exception
 	 */
-	public static void saveContactEmailAndSend(String fromEmail, String fromName, String to, String cc, String bcc,
-			String subject, String body, String signature, Contact contact, boolean trackClicks,
-			List<Long> documentIds, List<BlobKey> blobKeys, String attachment_name, String attachment_url) throws Exception
+	public static void saveContactEmailAndSend(ContactEmailWrapper contactEmailWrapper) throws Exception
 	{
+		String to = contactEmailWrapper.getTo(), cc = contactEmailWrapper.getCc(), bcc = contactEmailWrapper.getBcc();
+		
+		// Removes traling commas if any
+	    to = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', to);
 
-		// Personal Email open tracking id
-		long openTrackerId = System.currentTimeMillis();
+	    if (!StringUtils.isBlank(cc))
+	    	cc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', cc);
 
-		// ContactId
-		String contactId = null;
+	    if (!StringUtils.isBlank(bcc))
+	    	bcc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', bcc);
 
+	    List<Long> documentIds = new ArrayList<Long>();
+	    List<BlobKey> blobKeys = new ArrayList<BlobKey>();
+	    
+	    if (StringUtils.isNotBlank(contactEmailWrapper.getDocument_key()))
+	    {
+		Long documentId = Long.parseLong(contactEmailWrapper.getDocument_key());
+		documentIds.add(documentId);
+	    }
+	    else if (StringUtils.isNotBlank(contactEmailWrapper.getBlob_key()))
+	    {
+		BlobKey blobKey = new BlobKey(contactEmailWrapper.getBlob_key());
+		blobKeys.add(blobKey);
+	    }
+
+		String body = contactEmailWrapper.getMessage(), emailBody = body;
+		
+		// Get signature without body
+		String signature = getParsedSignature(contactEmailWrapper.getSignature());
+		
+		Contact contact = null;
+		
 		// Returns set of To Emails
 		Set<String> toEmailSet = getToEmailSet(to);
 
-		// Get signature without body
-		signature = getParsedSignature(signature);
-
-		String emailBody = body;
-
+		// Personal Email open tracking id
+		contactEmailWrapper.setTrackerId(String.valueOf(System.currentTimeMillis()));
+		
 		// Appends tracking image to body if only one email. It is not
 		// possible to append image at the same time to show all given
 		// emails to the recipient.
-		if (toEmailSet.size() == 1)
+		if (toEmailSet.size() == 1  && contactEmailWrapper.isTrack_clicks())
 		{
-			body = EmailUtil.appendTrackingImage(body, null, String.valueOf(openTrackerId));
+			body = EmailUtil.appendTrackingImage(body, null, contactEmailWrapper.getTrackerId());
 
-			if (trackClicks)
-				body = EmailLinksConversion.convertLinksUsingJSOUP(body, contactId, null, false);
+			// Get contactId for link tracking
+			for(String email: toEmailSet)
+				contact = ContactUtil.searchContactByEmail(EmailUtil.getEmail(email));
+			
+			if (contact != null)
+				body = EmailLinksConversion.convertLinksUsingJSOUP(body, contact.id.toString(), null, contactEmailWrapper.getTrackerId(), contactEmailWrapper.getPush_param().toString());
+
 		}
 
 		// combined body and signature. Inorder to avoid link tracking in
@@ -142,15 +163,20 @@ public class ContactEmailUtil
 		body = body.replace("</body>", "<div><br/>" + signature + "</div></body>");
 
 		// Sends email
-		EmailUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, null, body, null, documentIds, blobKeys);
+		EmailUtil.sendMail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), null, body, null, documentIds, blobKeys);
 
 		// If contact is available, no need of fetching contact from
 		// to-email again.
 		if (contact != null)
 		{
-			contactId = contact.id.toString();
-			saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, emailBody, signature, contact.id,
-					openTrackerId, documentIds, attachment_name, attachment_url);
+			saveContactEmail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), emailBody, signature, contact.id,
+					Long.parseLong(contactEmailWrapper.getTrackerId()), documentIds, contactEmailWrapper.getAttachment_name(), contactEmailWrapper.getAttachment_url());
+			
+			contact.setLastEmailed(System.currentTimeMillis() / 1000);
+			contact.update();
+			
+			for (String toEmail : toEmailSet)
+			    ActivitySave.createEmailSentActivityToContact(EmailUtil.getEmail(toEmail), contactEmailWrapper.getSubject(), contactEmailWrapper.getMessage(), contact);
 		}
 		else
 		{
@@ -166,17 +192,17 @@ public class ContactEmailUtil
 				// Saves email with contact-id
 				if (contact != null)
 				{
-					contactId = contact.id.toString();
-					saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, emailBody, signature, contact.id,
-							openTrackerId, documentIds, attachment_name, attachment_url);
+					saveContactEmail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), emailBody, signature, contact.id,
+							Long.parseLong(contactEmailWrapper.getTrackerId()), documentIds, contactEmailWrapper.getAttachment_name(), contactEmailWrapper.getAttachment_url());
 
 					contact.setLastEmailed(System.currentTimeMillis() / 1000);
 					contact.update();
-
+					
+					// Add activity
+					ActivitySave.createEmailSentActivityToContact(email, contactEmailWrapper.getSubject(), contactEmailWrapper.getMessage(), contact);
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -206,6 +232,12 @@ public class ContactEmailUtil
 		return toEmailSet;
 	}
 
+	public static void buildContactEmailAndSend(ContactEmailWrapper contactEmail) throws Exception
+	{
+		
+	    saveContactEmailAndSend(contactEmail);
+	}
+	
 	/**
 	 * Saves email sent through agilecrm.
 	 * 

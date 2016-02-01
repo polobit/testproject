@@ -92,49 +92,21 @@ public class EmailsAPI
      */
     @Path("contact/send-email")
     @POST
-    @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-    public void sendEmail(@Context HttpServletRequest request, @FormParam("from_name") String fromName,
-	    @FormParam("from_email") String fromEmail, @FormParam("to") String to, @FormParam("email_cc") String cc,
-	    @FormParam("email_bcc") String bcc, @FormParam("subject") String subject, @FormParam("body") String body,
-	    @FormParam("signature") String signature, @FormParam("track_clicks") boolean trackClicks,
-	    @FormParam("document_key") String document_id, @FormParam("blob_key") String blobKeyString, 
-	    @FormParam("attachment_name") String attachment_name, @FormParam("attachment_url") String attachment_url)
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public void sendEmail(ContactEmailWrapper contactEmail)
 	    throws Exception
     {
 	try
 	{
-	    // Removes traling commas if any
-	    to = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', to);
-
-	    if (!StringUtils.isBlank(cc))
-		cc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', cc);
-
-	    if (!StringUtils.isBlank(bcc))
-		bcc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', bcc);
-
-	    List<Long> documentIds = new ArrayList<Long>();
-	    List<BlobKey> blobKeys = new ArrayList<BlobKey>();
-	    if (StringUtils.isNotBlank(document_id))
-	    {
-		Long documentId = Long.parseLong(document_id);
-		documentIds.add(documentId);
-	    }
-	    else if (StringUtils.isNotBlank(blobKeyString))
-	    {
-		BlobKey blobKey = new BlobKey(blobKeyString);
-		blobKeys.add(blobKey);
-	    }
-	    if (MandrillUtil.isEmailContentSizeValid(body, document_id))
+	    
+	    if (MandrillUtil.isEmailContentSizeValid(contactEmail.getMessage(), contactEmail.getDocument_key()))
 	    {
 		// Saves Contact Email.
-		ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature,
-			null, trackClicks, documentIds, blobKeys, attachment_name, attachment_url);
+//		ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature,
+//			null, trackClicks, documentIds, blobKeys, attachment_name, attachment_url);
+		
+		ContactEmailUtil.buildContactEmailAndSend(contactEmail);
 
-		// Returns set of To Emails
-		Set<String> toEmailSet = ContactEmailUtil.getToEmailSet(to);
-
-		for (String toEmail : toEmailSet)
-		    ActivitySave.createEmailSentActivityToContact(EmailUtil.getEmail(toEmail), subject, body);
 	    }
 
 	}

@@ -537,7 +537,7 @@ function populateDealSources(el, value){
 	if(!$('#deal_deal_source',el).hasClass("hidden")){
 		$('#deal_deal_source',el).addClass("hidden");
 	}
-	var tracks = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_SOURCE', sortKey : "label"});
+	var tracks = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_SOURCE', sort_collection: false});
 	tracks.collection.fetch({
 		success: function(data){
 			var jsonModel = data.toJSON();

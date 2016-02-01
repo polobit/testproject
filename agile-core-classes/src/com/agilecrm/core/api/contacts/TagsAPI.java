@@ -119,6 +119,30 @@ public class TagsAPI
      *            name of the tag
      * @return list of tags
      */
+    @Path("/list/{tag}/count")
+    @GET
+    public int getTaggedContactsCount(@PathParam("tag") String tag)
+    {
+	try
+	{
+		return ContactUtil.getContactsCountForTag(tag);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return 0;
+	}
+    }
+    
+    /**
+     * Gets all the contacts which are associated with the given tag and returns
+     * as list
+     * 
+     * @param tag
+     *            name of the tag
+     * @return list of tags
+     */
     @Path("{tag}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })

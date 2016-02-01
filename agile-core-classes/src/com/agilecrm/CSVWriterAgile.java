@@ -2,12 +2,13 @@ package com.agilecrm;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.channels.Channel;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.io.output.FileWriterWithEncoding;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -39,7 +40,7 @@ public class CSVWriterAgile
 	if (!file.exists())
 	    file.createNewFile();
 
-	BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+	BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(file, "UTF-8"));
 
 	csvWriter = new CSVWriter(writer);
     }

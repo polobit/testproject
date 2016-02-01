@@ -191,6 +191,7 @@ public class SendEmail extends TaskletAdapter
     public static String TRACK_CLICKS_NO = "no";
 
     public static String TRACK_CLICKS_YES_AND_PUSH = "yes_and_push";
+    public static String TRACK_CLICKS_YES_AND_PUSH_AND_EMAIL_ONLY = "yes_and_push_email_only";
 
     /**
      * Keyword that is added to url when Track Clicks yes is selected
@@ -237,6 +238,7 @@ public class SendEmail extends TaskletAdapter
     	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
     	
     	data.remove(SendMessage.SMS_CLICK_TRACKING_ID);
+    	data.remove(TwitterSendMessage.TWEET_CLICK_TRACKING_ID);
     	
     	// If From email empty
     	if(StringUtils.isBlank(fromEmail))
@@ -528,8 +530,7 @@ public class SendEmail extends TaskletAdapter
 	
 	// Check if we need to convert links
 	if (trackClicks != null
-	        && (trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES) || trackClicks
-	                .equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH)))
+	        && (!trackClicks.equalsIgnoreCase(TRACK_CLICKS_NO)))
 	{
 	    try
 	    {
@@ -538,7 +539,7 @@ public class SendEmail extends TaskletAdapter
 		data.put(CLICK_TRACKING_ID, System.currentTimeMillis());
 
 		html = EmailLinksConversion.convertLinksUsingJSOUP(html, subscriberId, campaignId,
-		        trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
+		        trackClicks);
 
 	    }
 	    catch (Exception e)
@@ -685,10 +686,10 @@ public class SendEmail extends TaskletAdapter
     {
     	try
     	{
-    	    return VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "unsubscribe?sid="
-                    + URLEncoder.encode(subscriberId, "UTF-8") + "&cid="
-                    + URLEncoder.encode(campaignId, "UTF-8") + "&e="
-                    + URLEncoder.encode(email, "UTF-8");
+    	    return VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "unsubscribe?e="
+                    + URLEncoder.encode(email, "UTF-8")
+                    + "&sid=" + URLEncoder.encode(subscriberId, "UTF-8")
+                    + "&cid=" + URLEncoder.encode(campaignId, "UTF-8");
     	}
     	catch(Exception e)
     	{

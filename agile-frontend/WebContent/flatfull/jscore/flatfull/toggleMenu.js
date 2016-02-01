@@ -29,16 +29,20 @@ $('#app-aside-folded').on('click', function(e) {
 	
     
 	});
+
+
+
+
+
+
+
+
+
+
 	
 $(document).ready(function(){
 
-	$.getJSON('scope?scope=COMPANY' , function(result) {
-		$.each(result,function(i,data){
-			console.log(data);
-		});
-	}); 
-
-	 $("#contact-results li").click(function(){
+   $("#contact-results li").click(function(){
    $("#mobile-menu-settings").trigger('click');
    });
  
@@ -54,6 +58,16 @@ $(document).ready(function(){
 	
 
 	if(( $(window).width() ) < 768 ) {
+
+
+	// if the tabs are in wide columns on larger viewports
+    $('.content-tabs').tabCollapse();
+
+    // initialize tab function
+    $('.nav-tabs a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
 
 	/*$('body').on('click','#mobile-dropdown-click-sort',function(){
 			$("#contact-sort-views").css("display","block");

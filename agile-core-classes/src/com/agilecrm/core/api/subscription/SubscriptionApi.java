@@ -18,6 +18,9 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -34,6 +37,7 @@ import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
@@ -117,6 +121,13 @@ public class SubscriptionApi {
 
 				return subscribe;
 			}
+			
+			//If uesr is not admin throw exception
+			DomainUser user = DomainUserUtil.getCurrentDomainUser();
+			if (!user.is_admin)
+			{
+				throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
+			}
 
 			/*
 			 * If card_details are null and plan in not null then update plan
@@ -168,7 +179,11 @@ public class SubscriptionApi {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Subscription changePlan(Plan plan, HttpServletRequest request) {
 		try {
-
+			DomainUser user = DomainUserUtil.getCurrentDomainUser();
+			if (!user.is_admin)
+			{
+				throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
+			}
 			Subscription subscribe = Subscription.updatePlan(plan);
 
 			BillingRestriction restriction = BillingRestrictionUtil
@@ -203,6 +218,11 @@ public class SubscriptionApi {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Subscription addEmailPlan(Plan plan) {
 		try {
+			DomainUser user = DomainUserUtil.getCurrentDomainUser();
+			if (!user.is_admin)
+			{
+				throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
+			}
 			// Return updated subscription object
 			return SubscriptionUtil.createEmailSubscription(plan);
 		} catch (PlanRestrictedException e) {

@@ -42,24 +42,24 @@
 	</div>
 <span class="hidden">{{taskOwner.name}}</span>
 <div class="pull-left rightThumbView">
-<div class="pull-left  text-md text-cap">
+<div class="pull-left  text-md text-cap {{#is_mobile}} w-full {{/is_mobile}}">
     {{#if is_complete}}
-			<div><span><i class="fa fa-check"></i></span><div class="task-subject inline text-l-t" style="margin-left:9px"><a  href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+			<div>{{#is_mobile}} {{else}}<span><i class="fa fa-check"></i></span>{{/is_mobile}}<div class="task-subject {{#is_mobile}} block text-ellipsis w-full m-l-none {{else}} inline m-l-sm {{/is_mobile}} text-l-t"><a  href="#task/{{id}}" class="space-normal">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
 					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
-                   <span><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}} hide"></i>&nbsp; -->{{ucfirst type}}</label></span>
+                   <span {{#is_mobile}} class="block" {{/is_mobile}}><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}} hide"></i>&nbsp; -->{{ucfirst type}}</label></span>
 				</div>
 		{{else}}
-			<div><label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-task form-control" type="checkbox"/><i></i></label><div class="task-subject inline"><a  href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+			<div> {{#is_mobile}} {{else}}<label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-task form-control" type="checkbox"/><i></i></label>{{/is_mobile}}<div class="task-subject {{#is_mobile}} block text-ellipsis w-full {{else}} inline {{/is_mobile}}"><a class="space-normal" href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
 					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
-                    <span><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}}"></i>&nbsp; -->{{ucfirst type}}</label></span>
+                    <span {{#is_mobile}} class="block" {{/is_mobile}}><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}}"></i>&nbsp; -->{{ucfirst type}}</label></span>
 				</div>
 	{{/if}}
 </div>
     
      <div class="clearfix"></div>
  
-	<div><span class="m-l-md p-l-xs">Due : <i class="fa fa-clock-o m-r-xs hide"></i><time class="task-created-time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span></div>
-    <div class="m-l-md p-l-xs">	
+	<div><span class="{{#is_mobile}} {{else}} m-l-md p-l-xs {{/is_mobile}}">Due : <i class="fa fa-clock-o m-r-xs hide"></i><time class="task-created-time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span></div>
+    <div class="{{#is_mobile}} {{else}} m-l-md p-l-xs {{/is_mobile}}">	
 		{{#each contacts}}
            	{{#if id}}
 				{{#isDuplicateContactProperty properties "email"}}
@@ -79,7 +79,7 @@
 		</div>
 		<div class="clearfix"></div>
  <div class="pull-left">
-     <small class="edit-hover text-muted m-l-md p-l-xs"> 
+     <small class="edit-hover text-muted {{#is_mobile}} {{else}} m-l-md p-l-xs {{/is_mobile}}"> 
           <i class="fa fa-clock-o m-r-xs"></i>
 			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 		</small>

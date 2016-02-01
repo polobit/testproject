@@ -50,12 +50,15 @@
 
         {{#if_entity "agile_email"}}
             <div class="timestamp">{{createdTime}}</div>
-            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-open-alt text-muted" title="Email Opened"></i></a></span> Email Opened</div></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-open-alt text-muted" title="{{subject}}"></i></a></span> {{subject}}</div></div>
             <div class="date">{{epochToTaskDate createdTime}}</div>
             <div class="body">
-                <div style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Subject:</b> {{subject}}</div>
+                <!--<div style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Subject:</b> {{subject}}</div>-->
                 <div class="text-xs"><span><em>Sent on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" trackerId}}</div>
                 <div class="text-xs"><span><em>Opened on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
+                {{#if email_link_clicked_at}}
+                <div class="text-xs"><span><em>Clicked on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" email_link_clicked_at}}</div>
+                {{/if}}
             </div>
         {{/if_entity}}
 
@@ -201,6 +204,31 @@
 <div class="item post" id="id-{{@index}}">
 {{/if}}
     <div class="inner">
+
+	{{#if_entity "logPhone"}}
+
+            <div class="timestamp">{{created_time}}</div>
+            <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</div></div> -->
+			<div class="text-md text-cap">	
+				<div class="contact-job-title text-sm custom-color  wrapper-xs bg-light-color">
+					<i class="icon-list-alt text-muted p-r-xs"></i>{{subject}}
+				</div>
+			</div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body wrapper-sm">
+				<div class="text-sm">
+					{{#if_equals callType "inbound"}}Incoming{{else}}Outgoing{{/if_equals}} call {{status}} 
+					{{#if_equals status "completed"}}  - {{toProperFormat duration}} 
+					{{else}}
+						{{#if_equals status "answered"}}   - {{toProperFormat duration}} 
+						{{else}}
+						{{/if_equals}}	
+					{{/if_equals}}
+ 				</div>
+                <div class="text-sm">{{description}}</div>
+            </div>
+        {{/if_entity}}
+
         {{#if_entity "note"}}
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</div></div> -->
@@ -264,14 +292,17 @@
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span> Email Opened</div></div> -->
 			<div class="text-md text-cap">	
 				<div class="contact-job-title text-base custom-color">
-					<i class="icon-folder-open-alt text-muted p-r-xs"></i>Email Opened
+					<i class="icon-folder-open-alt text-muted p-r-xs"></i>{{subject}}
 				</div>
 			</div>
             <div class="date">{{epochToTaskDate createdTime}}</div>
             <div class="body">
-                <div style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Subject:</b> {{subject}}</div>
+                <!--<div style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Subject:</b> {{subject}}</div>-->
                 <div class="text-xs"><span><em>Sent on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" trackerId}}</div>
                 <div class="text-xs"><span><em>Opened on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
+                {{#if email_link_clicked_at}}
+                <div class="text-xs"><span><em>Clicked on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" email_link_clicked_at}}</div>
+                {{/if}}
             </div>
         {{/if_entity}}
 
@@ -333,7 +364,7 @@
 			</div>
             <div class="date">{{epochToTaskDate time}}</div>
             <div class="body" style="padding:5px">
-                <div class="text-xs">Owner changed to {{custom1}}</div>
+                <div class="text-xs">Owner changed to {{custom1}} by {{user_name}}</div>
             </div>
          {{/if_equals}}
         {{/if_entity}}

@@ -48,7 +48,7 @@ function loadMiscScripts() {
     		_agile_execute_web_rules();
     });
 
-	// load_urls_on_ajax_stop('lib/user-voice.js');
+	load_urls_on_ajax_stop('lib/user-voice.js');
 
 	// load_clickdesk_code();
 

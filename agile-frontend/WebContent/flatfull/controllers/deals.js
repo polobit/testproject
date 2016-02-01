@@ -7,7 +7,8 @@ var DealsRouter = Backbone.Router.extend({
 	routes : {
 
 	/* Deals/Opportunity */
-	"deals" : "deals", "import-deals" : "importDeals", 
+	"deals" : "deals", "import-deals" : "importDeals",
+	"deal-rc-0" : "dealsRightClick","deal-rc-1" : "dealsRightClick","deal-rc-2" : "dealsRightClick","deal-rc-3" : "dealsRightClick",
 	"deal-filters" : "dealFilters", 
 	"deal-filter-add" : "dealFilterAdd",
 	"deal-filter-edit/:id" : "dealFilterEdit",
@@ -121,6 +122,28 @@ var DealsRouter = Backbone.Router.extend({
 		}, 2000);
 	},
 
+	/**
+	 * Open deal view in new page when right clicked
+	 */
+	dealsRightClick : function()
+	{
+		var link = window.location.hash;
+		var param = link.split("-")[2];
+		
+		if(param == "0"){
+			_agile_set_prefs("agile_deal_view", "list_view");
+		}else if(param == "1"){
+			_agile_delete_prefs("agile_deal_view");
+			_agile_delete_prefs('deal-milestone-view');
+		}else if(param == "2"){
+			_agile_set_prefs('deal-milestone-view','compact');			
+		}else if(param == "3"){
+			_agile_set_prefs('deal-milestone-view','fit');
+		}
+		App_Deals.deals();
+		window.location.hash = "deals";
+	},
+	
 	/**
 	 * import deals from a csv file and then upload all deals to databse
 	 */

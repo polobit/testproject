@@ -240,12 +240,46 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 		_BULK_CONTACTS = undefined;
 		
 		var html = '';
-		
-		if(company_util.isCompany())
-			html = "Selected " + App_Companies.companiesListView.collection.length + " companies. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " companies</a>";
-		else
-			html = "Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " contacts</a>";
 
+		var resultCount = 0;
+		var appCount = 0;
+		var limitValue = 10000;		
+
+		if(company_util.isCompany()){
+
+			resultCount = App_Companies.companiesListView.collection.length;
+			appCount = getAvailableContacts();
+
+			if(localStorage.getItem("dynamic_company_filter") != null || localStorage.getItem("company_filter") != null) {				
+				
+				if(resultCount > limitValue){
+					resultCount = limitValue + "+";
+				}
+
+				if(appCount > limitValue){
+					appCount = limitValue + "+";
+				}
+
+			}
+
+			html = "Selected " + resultCount + " companies. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + appCount + " companies</a>";
+		}else{
+
+			resultCount = App_Contacts.contactsListView.collection.length;
+			appCount = getAvailableContacts();
+
+			if(localStorage.getItem("dynamic_contact_filter") != null || localStorage.getItem("contact_filter") != null){	
+				if(resultCount > limitValue){
+					resultCount = limitValue + "+";
+				}
+
+				if(appCount > limitValue){
+					appCount = limitValue + "+";
+				}
+			}
+
+			html = "Selected " + resultCount + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + appCount + " contacts</a>";
+		}
 		$('body').find('#bulk-select').html(html);
     } 
 
@@ -548,7 +582,7 @@ var contacts_bulk_actions = {
 								var no = "No"
 
 								var message = "";
-								var upgrade_link = 'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
+								var upgrade_link = 'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgrade your email subscription.</a>';
 								var title = "Not enough emails left"
 								if (pendingEmails <= 0)
 								{
@@ -630,7 +664,7 @@ var contacts_bulk_actions = {
 										$(this).parent('.modal-footer').find('.contacts-export-csv-message').append($save_info);
 										$save_info.show();
 
-										var url = '/core/api/bulk/update?action_type=EXPORT_CONTACTS_CSV';
+										var url = '/core/api/contacts/export?action_type=EXPORT_CONTACTS_CSV';
 
 										var json = {};
 										json.contact_ids = id_array;
@@ -747,11 +781,24 @@ select_contacts :  function(e)
 				
 				var html = '';
 				
-				if(company_util.isCompany())
-					html = ' Selected All ' + getAvailableContacts() + ' companies. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen companies only</a>';
-				else
-					html = ' Selected All ' + getAvailableContacts() + ' contacts. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen contacts only</a>';
+				var resultCount = getAvailableContacts();
+				var limitValue = 10000;
 
+				if(company_util.isCompany()){
+					if(localStorage.getItem("dynamic_company_filter") != null || localStorage.getItem("company_filter") != null){				
+						if(resultCount > limitValue){
+							resultCount = limitValue + "+";
+						}
+					}
+					html = ' Selected All ' + resultCount + ' companies. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen companies only</a>';
+				}else{
+					if(localStorage.getItem("dynamic_contact_filter") != null || localStorage.getItem("contact_filter") != null){				
+						if(resultCount > limitValue){
+							resultCount = limitValue + "+";
+						}
+					}
+					html = ' Selected All ' + resultCount + ' contacts. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen contacts only</a>';
+				}
 				
 				$('body')
 						.find('#bulk-select')
@@ -896,7 +943,7 @@ function show_bulk_owner_change_page()
 
 		setup_tags_typeahead();
 
-		$('#addBulkTags')
+	/*	$('#addBulkTags')
 				.on(
 						"focusout",
 						function(e)
@@ -913,7 +960,7 @@ function show_bulk_owner_change_page()
 												'<li class="tag" style="display: inline-block;" data="' + tag_input + '">' + tag_input + '<a class="close" id="remove_tag" tag="' + tag_input + '">&times</a></li>');
 							}
 
-						});
+						});  */
 		/**
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
@@ -930,7 +977,7 @@ function show_bulk_owner_change_page()
 			
 			if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
 			{
-				$('#addBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+				$('#addBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
 			}
 			
 		//	$('#addBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
@@ -999,7 +1046,7 @@ function show_bulk_owner_change_page()
 
 		setup_tags_typeahead();
 
-		$('#removeBulkTags')
+	/**	$('#removeBulkTags')
 				.on(
 						"focusout",
 						function(e)
@@ -1017,7 +1064,7 @@ function show_bulk_owner_change_page()
 							}
 
 						});
-		/**
+		
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
 		 */
@@ -1037,7 +1084,7 @@ function show_bulk_owner_change_page()
 										.closest(".control-group")
 										.find('ul.tags')
 										.append(
-												'<li class="tag" style="display: inline-block;" data="' + tag_input + '">' + tag_input + '<a class="close" id="remove_tag" tag="' + tag_input + '">&times</a></li>');
+												'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + tag_input + '">' + tag_input + '<a class="close" id="remove_tag" tag="' + tag_input + '">&times</a></li>');
 							}
 
 							// $('#addBulkTags').closest(".control-group").find('ul.tags').append('<li
@@ -1248,29 +1295,53 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 	if ($(clicked_ele).is(':checked'))
 	{
 		$('body').find('#bulk-actions').css('display', 'inline-block');
-		
-		if(company_util.isCompany()){
-			if (isBulk && total_available_contacts != App_Companies.companiesListView.collection.length)
-			{
-			$('body')
-					.find('#bulk-select')
-					.css('display', 'block')
-					.html(
-							"Selected " + App_Companies.companiesListView.collection.length + " companies. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + total_available_contacts + " companies</a>");
-			$('#bulk-select').css("display","block");
-			}
-		} else {
-			if (isBulk && total_available_contacts != App_Contacts.contactsListView.collection.length)
-			{
-			$('body')
-					.find('#bulk-select')
-					.css('display', 'block')
-					.html(
-							"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + total_available_contacts + " contacts</a>");
-			$('#bulk-select').css("display","block");
-			}
-		}
 
+
+		var resultCount = 0;
+		var appCount = 0;
+		var limitValue = 10000;		
+
+		if(company_util.isCompany()){
+
+			resultCount = App_Companies.companiesListView.collection.length;
+			appCount = total_available_contacts;
+
+			if (isBulk && appCount != resultCount){
+				if(localStorage.getItem("dynamic_company_filter") != null || localStorage.getItem("company_filter") != null){				
+					if(resultCount > limitValue){
+						resultCount = limitValue + "+";
+					}
+
+					if(appCount > limitValue){
+						appCount = limitValue + "+";
+					}
+				}
+
+				$('body').find('#bulk-select').css('display', 'block')
+				.html("Selected " + resultCount + " companies. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + appCount + " companies</a>");
+				$('#bulk-select').css("display","block");
+			}
+		}else{
+
+			resultCount = App_Contacts.contactsListView.collection.length;
+			appCount = total_available_contacts;
+
+			if (isBulk && total_available_contacts != resultCount){
+				if(localStorage.getItem("dynamic_contact_filter") != null || localStorage.getItem("contact_filter") != null){	
+					if(resultCount > limitValue){
+						resultCount = limitValue + "+";
+					}
+
+					if(appCount > limitValue){
+						appCount = limitValue + "+";
+					}
+				}
+
+				$('body').find('#bulk-select').css('display', 'block')
+				.html("Selected " + resultCount + " contacts. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + appCount + " contacts</a>");
+				$('#bulk-select').css("display","block");
+			}			
+		}
 		
 	}
 	else

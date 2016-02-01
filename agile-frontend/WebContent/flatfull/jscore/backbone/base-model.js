@@ -43,6 +43,7 @@ var Base_Model_View = Backbone.View
 			 */
 			events : {
 				"click .save" : "save",
+				"click .saveAuthConform" : "save",
 				"click .delete" : "deleteItem"
 			},
 
@@ -189,6 +190,25 @@ var Base_Model_View = Backbone.View
 			 */
 			save : function(e) {
 				e.preventDefault();
+
+				var targetEle = e.currentTarget;
+
+				// Check if target contains before_save class
+				// If exist call saveAuth function
+				if($(targetEle).hasClass("saveAuth"))
+				{
+					var saveAuth = this.options.saveAuth;
+					if (saveAuth && typeof (saveAuth) === "function") {
+						this.targetEle = targetEle;
+						var isReturn = saveAuth(this.el);
+						if(isReturn)
+							return;
+					}
+
+				}
+
+				if(this.targetEle)
+					 targetEle = this.targetEle;
 				
 				// Saves tinymce content back to 
 				// textarea before form serialization
@@ -199,6 +219,7 @@ var Base_Model_View = Backbone.View
 				 * Gets the form id from the view, this.el represents html
 				 * element of the view.
 				 */
+				var $el = $(this.el);
 				var formId = $(this.el).find('form').attr('id');
 				
 				var saveCallback = this.options.saveCallback;
@@ -209,12 +230,12 @@ var Base_Model_View = Backbone.View
 				var $form = $('#' + formId);
 				console.log($form.find('.save'));
 				// Returns, if the save button has disabled attribute 
-				if($(e.currentTarget).attr('disabled'))
+				if($(targetEle).attr('disabled'))
 					return;
 				
 								
 				// Disables save button to prevent multiple click event issues
-				disable_save_button($(e.currentTarget));
+				disable_save_button($(targetEle));
 				
 				
 				// Represents validations result of the form, and json
@@ -298,7 +319,7 @@ var Base_Model_View = Backbone.View
 				if (isValid == false || !isValidForm($form)) {
 					
 					// Removes disabled attribute of save button
-					enable_save_button($(e.currentTarget));
+					enable_save_button($(targetEle));
 					
 					return;
 				}
@@ -365,7 +386,7 @@ var Base_Model_View = Backbone.View
 									success : function(model, response) 
 									{	
 										// Removes disabled attribute of save button
-										enable_save_button($(e.currentTarget));
+										enable_save_button($(targetEle));
 										
 										if (saveCallback && typeof (saveCallback) === "function") {
 											console.log(response)
@@ -422,7 +443,7 @@ var Base_Model_View = Backbone.View
 									error : function(model, response) {
 										
 										// Removes disabled attribute of save button
-										enable_save_button($(e.currentTarget));
+										enable_save_button($(targetEle));
 										console.log(response);
 										
 										if (errorCallback && typeof (errorCallback) === "function") {
@@ -439,8 +460,8 @@ var Base_Model_View = Backbone.View
 
 										// Appends error info to form actions
 										// block.
-										$(e.currentTarget).closest(".form-actions", this.el).append(
-												$save_info);
+										$(targetEle).closest(".form-actions", this.el).append($save_info);
+										
 
 										// Hides the error message after 3
 										// seconds

@@ -6,7 +6,7 @@
 <%@page contentType="text/html; charset=UTF-8" %>
 <%
 
-	 if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+	  if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
 	} 
@@ -15,8 +15,8 @@
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	} 
-
+	}
+ 
   String _source = request.getParameter("_source");
   
   String registered_email = request.getParameter("email");
@@ -199,6 +199,8 @@ if(isSafari && isWin)
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 <script src="/flatfull/registration/register.js" type="text/javascript"></script>
+<script src="https://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.jquery.min.js"></script>
+
   <script type="text/javascript">
   var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;

@@ -16,6 +16,7 @@ import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.SendEmail;
+import com.campaignio.tasklets.agile.TwitterSendMessage;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.urlshortener.URLShortener.ShortenURLType;
@@ -81,6 +82,7 @@ public class SendMessage extends TaskletAdapter
 		
 		try
 		{
+	    	data.remove(TwitterSendMessage.TWEET_CLICK_TRACKING_ID);
 			data.remove(SendEmail.CLICK_TRACKING_ID);
 			
 			if (StringUtils.isEmpty(to) || StringUtils.isEmpty(from))
@@ -116,11 +118,10 @@ public class SendMessage extends TaskletAdapter
 			data.put(SMS_CLICK_TRACKING_ID, System.currentTimeMillis());
 			
 			if(trackClicks != null
-			        && (trackClicks.equalsIgnoreCase(SendEmail.TRACK_CLICKS_YES) || trackClicks
-			                .equalsIgnoreCase(SendEmail.TRACK_CLICKS_YES_AND_PUSH)))
+			        && (!trackClicks.equalsIgnoreCase(SendEmail.TRACK_CLICKS_NO)))
 			{	
 				message = shortenLongURLs(message, AgileTaskletUtil.getId(subscriberJSON), 
-						AgileTaskletUtil.getId(campaignJSON), data.getString(SMS_CLICK_TRACKING_ID), trackClicks.equalsIgnoreCase(SendEmail.TRACK_CLICKS_YES_AND_PUSH));
+						AgileTaskletUtil.getId(campaignJSON), data.getString(SMS_CLICK_TRACKING_ID), "sms", ShortenURLType.SMS, trackClicks);
 			}
 			
 			System.out.println("Message is...." + message);
@@ -196,7 +197,7 @@ public class SendMessage extends TaskletAdapter
 		return false;
 	}
 	
-	public static String shortenLongURLs(String message, String subscriberId, String campaignId, String trackingId, boolean doPush)
+	public static String shortenLongURLs(String message, String subscriberId, String campaignId, String trackingId, String keyword, ShortenURLType type, String trackClicks)
 	{
 		String regex = "\\(?\\b(http://|www[.]|https://|HTTP://|HTTPS://)[-A-Za-z0-9+&amp;@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&amp;@#/%=~_()|]";
 		Pattern p = Pattern.compile(regex);
@@ -210,8 +211,8 @@ public class SendMessage extends TaskletAdapter
 			{
 				try
 				{
-					String shortURL = URLShortenerUtil.getShortURL(m.group(i), "sms", 
-							subscriberId, trackingId, campaignId, ShortenURLType.SMS, doPush);
+					String shortURL = URLShortenerUtil.getShortURL(m.group(i), keyword, 
+							subscriberId, trackingId, campaignId, type, trackClicks);
 					
 					if(shortURL != null)
 						message = message.replace(m.group(i), shortURL);

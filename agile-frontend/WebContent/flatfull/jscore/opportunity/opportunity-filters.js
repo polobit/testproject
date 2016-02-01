@@ -1245,6 +1245,17 @@ function initializeMilestoneListners(el){
 			return false;
 		}
 		var obj = serializeForm('dealSourcesForm');
+		if(App_Admin_Settings.dealSourcesView && App_Admin_Settings.dealSourcesView.collection)
+		{
+			var maxPos = 0;
+			$.each(App_Admin_Settings.dealSourcesView.collection.models, function(index, dealSource){
+				if(dealSource.get("order") > maxPos) {
+					maxPos = dealSource.get("order");
+				}
+			});
+			obj['order'] = maxPos + 1;
+		}
+		
 		var model = new BaseModel();
 		model.url = 'core/api/categories';
 		model.save(obj, {
@@ -1361,5 +1372,203 @@ function initializeMilestoneListners(el){
         	
         	}});
 		}
+	});
+
+	$("#milestone-listner").on('click','.goalSave',function(e)
+	{
+		var flag=true;
+			
+			var that=$(this);
+			var goals_json=[];
+				var d=$('#goal_duration span').html();
+				d=new Date(d);
+				var start=getUTCMidNightEpochFromDate(d);
+				//var end=(new Date(d.getFullYear(), d.getMonth()+1, d.getDate()-1,23,59,59)).getTime();
+					
+			$('#deal-sources-table').find('td').each(function(index){
+				if(($(this).find('.amount').val().trim())!="" && ((parseFloat($(this).find('.amount').val().trim())<0) || !(/^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/).test($(this).find('.amount').val()))){
+					$(this).find('#goal_amount_error').show();
+					flag=false;
+					return false;
+				}
+				if(($(this).find('.count').val().trim())!="" && ((parseFloat($(this).find('.count').val().trim())<0) || !(/^[0-9]*$/).test($(this).find('.count').val()))){
+					$(this).find('#goal_count_error').show();
+					flag=false;
+					return false;
+				}
+				if($(this).find("#goal_amount_error").is(':visible'))
+					$(this).find('#goal_amount_error').hide();
+				if($(this).find("#goal_count_error").is(':visible'))
+					$(this).find('#goal_count_error').hide();
+			var goal_single_user={};
+					if($(this).attr('id')!=null && ($(this).attr('data')==start/1000))
+						goal_single_user.id=$(this).attr('id');
+					goal_single_user.domain_user_id=$(this).find('.goal').attr('id');
+					//if($(this).find('.amount').val().trim()!="")
+					goal_single_user.amount=$(this).find('.amount').val().trim();
+					//if($(this).find('.count').val().trim()!="")
+					goal_single_user.count=$(this).find('.count').val().trim();
+					goal_single_user.start_time=start/1000;
+					//goal_single_user.end_time=end/1000;
+					goals_json.push(goal_single_user);
+
+			});
+					if(flag){
+					$(this).attr("disabled","disabled");
+					$('.Count_goal').text(0);
+					$('.Amount_goal').text(0);
+					$.ajax({ type : 'POST', url : '/core/api/goals', data : JSON.stringify(goals_json),
+					contentType : "application/json; charset=utf-8", dataType : 'json' ,
+					success : function(e)
+					{
+						console.log(e);
+						var count=0;
+						var amount=0;
+						$('#deal-sources-table').find('td').each(function(index){
+								var that=$(this);
+								$.each(e,function(index,jsond){
+									if(jsond.domain_user_id==that.find('div').attr('id')){
+										that.attr('id',jsond.id);
+										that.attr('data',jsond.start_time);
+
+					}
+				});
+								if(that.find('.count').val().trim()!="")
+									count=count+parseInt(that.find('.count').val());
+								if(that.find('.amount').val().trim()!="")
+									amount=amount+parseFloat(that.find('.amount').val());
+							
+							});
+									percentCountAndAmount(count,amount);
+						$save_info = $('<div style="display:inline-block"><small><p class="text-info"><i>Changes Saved</i></p></small></div>');
+
+											$('.Goals_message').html($save_info);
+
+											$save_info.show();
+
+											setTimeout(function()
+											{
+												$('.Goals_message').empty();
+												that.removeAttr("disabled");
+											}, 500);
+        		
+        	}
+	});
+			}
+});
+/*$("#milestone-listner").on('change','.count',function(e)
+	{
+		if($(this).val()!="")
+			$('.Count_goal').text(parseInt($('.Count_goal').text())+parseInt($(this).val()));
+		else
+
+	});	
+
+$("#milestone-listner").on('change','.amount',function(e)
+	{
+			$('.Amount_goal').text(parseInt($('.Amount_goal').text())+parseInt($(this).val()));
+	});	*/
+
+	$("#milestone-listner").on('keypress', '.count', function(e){
+		$(this).siblings('#goal_count_error').hide();
+	});
+
+	$("#milestone-listner").on('keypress', '.amount', function(e){
+		$(this).siblings('#goal_amount_error').hide();
+	});
+}
+
+function percentCountAndAmount(total_count,total_amount)
+{
+	$('.Count_goal').text(getNumberWithCommasForCharts(total_count));
+	$('.Amount_goal').text(numberWithCommasAsDouble(total_amount));
+	var user_Percent;
+	$('#deal-sources-table').find('td').each(function(index){
+			var count=$(this).find('.count').val();
+			var amount=$(this).find('.amount').val();
+
+			if(count!="" && count!=0)
+			{
+				user_Percent=Math.round((parseInt(count)*100)/(parseInt(total_count)));
+				$(this).find('.count_percent').html(user_Percent+'%');
+			}
+			else{
+				if($(this).find('.count_percent').html()!="")
+					$(this).find('.count_percent').html("");
+			}
+			if(amount!="" && amount!=0)
+			{
+				user_Percent=Math.round((parseInt(amount)*100)/(parseInt(total_amount)));
+				$(this).find('.amount_percent').html(user_Percent+'%');
+			}
+			else{
+				if($(this).find('.amount_percent').html()!="")
+					$(this).find('.amount_percent').html("");
+			}
+	});
+
+}
+
+function numberWithCommasAsDouble(value)
+{
+	if (value == 0)
+			return value;
+
+		if (value)
+		{
+			return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
+		}
+}
+
+function dealSourcesSorting()
+{
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function(){
+		$('.admin-settings-deal-sources-model-list').sortable({
+			axis: "y" ,
+			containment: '.admin-settings-deal-sources-model-list',
+			scroll: false,
+			items:'tr',
+			helper: function(e, tr){
+			    var $originals = tr.children();
+			    var $helper = tr.clone();
+			    $helper.children().each(function(index)
+			    {
+			      // Set helper cell sizes to match the original sizes
+			      $(this).width($originals.eq(index).width()+50);
+			      $(this).css("background","#f5f5f5");
+			      $(this).css("border-bottom","1px solid #ddd");
+			      $(this).css("max-width",($originals.eq(index).width()+50)+"px");
+			      $(this).height($originals.eq(index).height());
+			    });
+			    return $helper;
+			},
+			sort: function(event, ui){
+				ui.placeholder.height(ui.helper.height());
+			},
+			forceHelperSize:true,
+			placeholder:'<tr></tr>',
+			forcePlaceholderSize:true,
+			handle: ".icon-move",
+			cursor: "move",
+			tolerance: "pointer"
+		});
+		
+		/*
+		 * This event is called after sorting stops to save new positions of
+		 * deal sources
+		 */
+		$('.admin-settings-deal-sources-model-list',$('#deal-sources-table')).on("sortstop",function(event, ui){
+			var sourceIds = [];
+			$('#admin-settings-deal-sources-model-list > tr').each(function(column){
+				sourceIds[column] = $(this).data().id;
+			});
+			// Saves new positions in server
+			$.ajax({ type : 'POST', url : '/core/api/categories/position', data : JSON.stringify(sourceIds),
+				contentType : "application/json; charset=utf-8", dataType : 'json', success : function(data){
+					$.each(sourceIds, function(index, val){
+						$('#dealSourcesForm_'+val).find('input[name="order"]').val(index);
+					});
+				} });
+		});
 	});
 }

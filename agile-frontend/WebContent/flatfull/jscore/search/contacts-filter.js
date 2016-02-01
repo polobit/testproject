@@ -255,7 +255,9 @@ function setupContactFilterList(cel, tag_id)
 						
 
 	var filter_id = null;
-		contactFiltersListView = new Base_Collection_View(
+	setTimeout(function(){
+		
+			contactFiltersListView = new Base_Collection_View(
 			{
 				url : '/core/api/filters?type=PERSON',
 				sort_collection : false,
@@ -263,6 +265,7 @@ function setupContactFilterList(cel, tag_id)
 				templateKey : "contact-filter-list",
 				individual_tag_name : 'li',
 				sort_collection : false,
+				no_transition_bar : true,
 				postRenderCallback : function(el)
 				{
 					var filter_name;
@@ -314,10 +317,12 @@ function setupContactFilterList(cel, tag_id)
 			// Fetchs filters
 			contactFiltersListView.collection.fetch();
 		
-			var filter_dropdown_element = contactFiltersListView.render().el;
-		
 			// Shows in contacts list
 			$('#filter-list', cel).html(contactFiltersListView.render().el);
+
+	}, 500);
+
+		
 }
 
 /**
