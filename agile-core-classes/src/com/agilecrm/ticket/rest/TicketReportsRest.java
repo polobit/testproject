@@ -1,7 +1,10 @@
 package com.agilecrm.ticket.rest;
 
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.ws.rs.GET;
@@ -12,15 +15,18 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
+import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.utils.TicketReportsUtil;
-import com.agilecrm.user.util.DomainUserUtil;
-import com.campaignio.reports.DateUtil;
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.google.appengine.api.search.ScoredDocument;
 
 /**
@@ -38,81 +44,84 @@ public class TicketReportsRest
 	 * @return
 	 */
 	@GET
-	@Path("/daily-reports")
+	@Path("/tickets")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String getDailyReports(@QueryParam("start_time") Long startTime, @QueryParam("end_time") Long endTime)
+	public String getDailyReports(@QueryParam("start_time") Long startTime, @QueryParam("end_time") Long endTime,
+			@QueryParam("frequency") String frequency)
 	{
 		try
 		{
-			Long totalSecsPerDay = 86400l;
-
 			LinkedHashMap<String, LinkedHashMap<String, Integer>> map = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
 
-			while (startTime <= endTime)
+			String timeZone = "UTC";
+
+			UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+
+			if (userPrefs != null && userPrefs.timezone != null)
+				timeZone = userPrefs.timezone;
+
+			JSONObject ticketTypes = new JSONObject();
+			ticketTypes.put("NEW", 0);
+			ticketTypes.put("OPEN", 0);
+			ticketTypes.put("PENDING", 0);
+			ticketTypes.put("CLOSED", 0);
+
+			net.sf.json.JSONObject dataJSON = ReportsUtil.initializeFrequencyForReports(startTime, endTime, frequency,
+					timeZone, ticketTypes);
+
+			Collection<ScoredDocument> documents = TicketReportsUtil.getTicketsBetweenDates(startTime, endTime,
+					"created_time", "status");
+
+			for (ScoredDocument document : documents)
 			{
-				LinkedHashMap<String, Integer> data = new LinkedHashMap<String, Integer>();
-				data.put("New",
-						TicketReportsUtil.getNewTicketsCountBetweenDates(startTime, (startTime + totalSecsPerDay)));
-				data.put("Open",
-						TicketReportsUtil.getOpenTicketsCountBetweenDates(startTime, (startTime + totalSecsPerDay)));
-				data.put("Pending",
-						TicketReportsUtil.getPendingTicketsCountBetweenDates(startTime, (startTime + totalSecsPerDay)));
-				data.put("Closed",
-						TicketReportsUtil.getClosedTicketsCountBetweenDates(startTime, (startTime + totalSecsPerDay)));
+				String last = "";
+				Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+				calendar.setTimeInMillis(Math.round(document.getOnlyField("created_time").getNumber()) * 1000);
 
-				map.put(DateUtil.getDateInGivenFormat(startTime * 1000, "MMM dd",
-						DomainUserUtil.getCurrentDomainUser().timezone), data);
+				if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
+					calendar.set(Calendar.DAY_OF_MONTH, 1);
 
-				startTime += totalSecsPerDay;
+				if (StringUtils.equalsIgnoreCase(frequency, "weekly"))
+				{
+					Iterator iter = dataJSON.keys();
+
+					while (iter.hasNext())
+					{
+						String key = (String) iter.next();
+						if ((calendar.getTimeInMillis() / 1000 + "").compareToIgnoreCase(key.toString()) > -1)
+						{
+							last = key;
+							continue;
+						}
+
+						break;
+					}
+				}
+
+				calendar.set(Calendar.HOUR_OF_DAY, 0);
+				calendar.set(Calendar.MINUTE, 0);
+				calendar.set(Calendar.SECOND, 0);
+				calendar.set(Calendar.MILLISECOND, 0);
+
+				String createdtime = (calendar.getTimeInMillis() / 1000) + "";
+
+				if (StringUtils.equalsIgnoreCase(frequency, "weekly"))
+					createdtime = last;
+
+				int count = 0;
+
+				// Read from previous object if present
+				if (dataJSON.containsKey(createdtime))
+				{
+					JSONObject sourcecount1 = dataJSON.getJSONObject(createdtime);
+					count = sourcecount1.getInt(document.getOnlyField("status").getText());
+
+					sourcecount1.put(document.getOnlyField("status").getText(), ++count);
+					dataJSON.put(createdtime, sourcecount1);
+				}
 			}
 
-			return JSONSerializer.toJSON(map).toString();
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-	}
-
-	/**
-	 * 
-	 * @param startTime
-	 * @param endTime
-	 * @return
-	 */
-	@GET
-	@Path("/hourly-reports")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String getHourlyReports(@QueryParam("start_time") Long startTime)
-	{
-		try
-		{
-			Long totalSecsPerDay = 86400L, totalSecsPerHour = 3600L, endTime = (startTime + totalSecsPerDay);
-
-			LinkedHashMap<String, LinkedHashMap<String, Integer>> map = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
-
-			while (startTime <= endTime)
-			{
-				LinkedHashMap<String, Integer> data = new LinkedHashMap<String, Integer>();
-
-				data.put("New",
-						TicketReportsUtil.getNewTicketsCountBetweenDates(startTime, (startTime + totalSecsPerHour)));
-				data.put("Open",
-						TicketReportsUtil.getOpenTicketsCountBetweenDates(startTime, (startTime + totalSecsPerHour)));
-				data.put("Pending",
-						TicketReportsUtil.getPendingTicketsCountBetweenDates(startTime, (startTime + totalSecsPerHour)));
-				data.put("Closed",
-						TicketReportsUtil.getClosedTicketsCountBetweenDates(startTime, (startTime + totalSecsPerHour)));
-
-				map.put(DateUtil.getDateInGivenFormat(startTime * 1000, "h a",
-						DomainUserUtil.getCurrentDomainUser().timezone), data);
-
-				startTime += totalSecsPerHour;
-			}
-
-			return JSONSerializer.toJSON(map).toString();
+			return dataJSON.toString();
 		}
 		catch (Exception e)
 		{
@@ -224,8 +233,59 @@ public class TicketReportsRest
 				Long createdTime = Math.round(document.getOnlyField("created_time").getNumber()), closedTime = Math
 						.round(document.getOnlyField("closed_time").getNumber());
 
+				if (closedTime == null || closedTime == 0)
+					continue;
+
 				long slaTime = closedTime - createdTime;
 
+				if (slaTime < 7200)
+				{
+					map.get("<2 hour").getAndIncrement();
+				}
+				else if (slaTime > 7200 && slaTime < 21600)
+				{
+					map.get("2-6 hours").getAndIncrement();
+				}
+				else if (slaTime > 21600 && slaTime < 43200)
+				{
+					map.get("6-12 hours").getAndIncrement();
+				}
+				else if (slaTime > 43200 && slaTime < 86400)
+				{
+					map.get("12-24 hours").getAndIncrement();
+				}
+				else if (slaTime > 86400 && slaTime < 172800)
+				{
+					map.get("1-2 days").getAndIncrement();
+				}
+				else if (slaTime > 172800 && slaTime < 259200)
+				{
+					map.get("2-3 days").getAndIncrement();
+				}
+				else if (slaTime > 259200 && slaTime < 345600)
+				{
+					map.get("3-4 days").getAndIncrement();
+				}
+				else if (slaTime > 345600 && slaTime < 432000)
+				{
+					map.get("4-5 days").getAndIncrement();
+				}
+				else if (slaTime > 432000 && slaTime < 604800)
+				{
+					map.get("5-7 days").getAndIncrement();
+				}
+				else if (slaTime > 604800 && slaTime < 864000)
+				{
+					map.get("7-10 days").getAndIncrement();
+				}
+				else if (slaTime > 864000 && slaTime < 1209600)
+				{
+					map.get("10-14 days").getAndIncrement();
+				}
+				else
+				{
+					map.get(">14 days").getAndIncrement();
+				}
 			}
 
 			return JSONSerializer.toJSON(map).toString();
@@ -236,5 +296,17 @@ public class TicketReportsRest
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
+	}
+
+	public static void main(String[] args)
+	{
+		JSONObject ticketTypes = new JSONObject();
+		ticketTypes.put("New", 0);
+		ticketTypes.put("Open", 0);
+		ticketTypes.put("Pending", 0);
+		ticketTypes.put("Closed", 0);
+
+		System.out.println(ReportsUtil.initializeFrequencyForReports(1451586600l, 1454264999l, "weekly",
+				"Asia/Kolkata", ticketTypes));
 	}
 }

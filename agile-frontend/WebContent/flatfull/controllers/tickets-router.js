@@ -864,18 +864,18 @@ $('#content').find('.helpdesk-tab').addClass('select');
 	ticketReport: function(report_type){
 
 		hideTransitionBar();
+
+		$(".active").removeClass("active");
+		$("#reportsmenu").addClass("active");
+
 		initReportLibs(function(){
 
 			var template = '', callback;
 
 			switch(report_type){
-				case 'daily-tickets':
-					template = 'ticket-daily-report';
-					callback = Ticket_Reports.dailyTickets;
-					break;
-				case 'hourly-tickets':
-					template = 'ticket-hourly-report';
-					callback = Ticket_Reports.hourlyTickets;
+				case 'tickets':
+					template = 'tickets-report';
+					callback = Ticket_Reports.tickets;
 					break;
 				case 'priority-report':
 					template = 'ticket-priority-report';
@@ -885,15 +885,21 @@ $('#content').find('.helpdesk-tab').addClass('select');
 					template = 'ticket-status-report';
 					callback = Ticket_Reports.statusReports;
 					break;
+				case 'sla-report':
+					template = 'ticket-sla-report';
+					callback = Ticket_Reports.slaReport;
+					break;
 			}
+
 			getTemplate(template, {}, undefined, function(template_ui){
 
 				if(!template_ui)
 					return;
 
-				$('#content').html($(template_ui));	
+				var $template_ui = $(template_ui);
 
-				// Init the callback for daterange
+				$('#content').html($template_ui);	
+
 				initDateRange(callback);
 
 				callback();
