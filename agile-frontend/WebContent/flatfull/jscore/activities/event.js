@@ -65,7 +65,7 @@ $("#updateActivityModal").on('click', '#delete_web_event', function(e)
 		}
 		else
 		{
-			$("#updateActivityModal").find('span.error-status').html("You do not have permission to delete this Event.");
+			$("#updateActivityModal").find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>You do not have permission to delete this Event.</i></p></div>');
 			setTimeout(function()
 			{
 				$("#updateActivityModal").find('span.error-status').html('');
@@ -137,6 +137,17 @@ $("#updateActivityModal").on(
 												}
 											}
 										}
+										else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+										{
+											if (eventsView && eventsView.collection)
+											{
+												if (eventsView.collection.get(event_id))
+												{
+													eventsView.collection.remove(event_id);
+													eventsView.render(true);
+												}
+											}
+										}
 
 										// $('#updateActivityModal').find('span.save-status
 										// img').remove();
@@ -148,7 +159,7 @@ $("#updateActivityModal").on(
 									}, error : function(err)
 									{
 										enable_save_button(save_button);
-										$('#updateActivityModal').find('span.error-status').html(err.responseText);
+										$('#updateActivityModal').find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
 										setTimeout(function()
 										{
 											$('#updateActivityModal').find('span.error-status').html('');
@@ -948,14 +959,25 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 									// function
 									if (eventsView && eventsView.collection)
 									{
+										var owner = data.get("owner_id");
+
+									  	if(!owner){
+									  		owner = data.get("owner").id;
+									  	}
+
 										if (eventsView.collection.get(data.id))
 										{
-											eventsView.collection.get(data.id).set(new BaseModel(data));
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												eventsView.collection.get(data.id).set(new BaseModel(data));
+											}
+											
 										}
 										else
 										{
-											eventsView.collection.add(new BaseModel(data), { sort : false });
-											eventsView.collection.sort();
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												eventsView.collection.add(new BaseModel(data), { sort : false });
+												eventsView.collection.sort();
+											}
 										}
 									}
 
@@ -1018,14 +1040,24 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 									// function
 									if (dealEventsView && dealEventsView.collection)
 									{
+										var owner = data.get("owner_id");
+
+									  	if(!owner){
+									  		owner = data.get("owner").id;
+									  	}
+
 										if (dealEventsView.collection.get(data.id))
 										{
-											dealEventsView.collection.get(data.id).set(new BaseModel(data));
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												dealEventsView.collection.get(data.id).set(new BaseModel(data));
+											}
 										}
 										else
 										{
-											dealEventsView.collection.add(new BaseModel(data), { sort : false });
-											dealEventsView.collection.sort();
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												dealEventsView.collection.add(new BaseModel(data), { sort : false });
+												dealEventsView.collection.sort();
+											}
 										}
 									}
 									dealEventsView.render(true);
@@ -1043,7 +1075,7 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 					}, error : function(model, err)
 					{
 						enable_save_button($(saveBtn));
-						$('#' + modalName).find('span.error-status').html(err.responseText);
+						$('#' + modalName).find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
 						setTimeout(function()
 						{
 							$('#' + modalName).find('span.error-status').html('');
