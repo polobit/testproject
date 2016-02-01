@@ -2203,6 +2203,7 @@ function BubbleChart(url, selector, name,show_loading)
 		fetchReportData(url, function(data)
 		{
 
+			var symbols=['circle','triangle','square','diamond','triangle-down'];
 			// Categories are closed dates
 			var categories ;
 			var tempcategories = [];
@@ -2246,12 +2247,15 @@ function BubbleChart(url, selector, name,show_loading)
 					$.each(v, function(k1, v1)
 					{
 
+						var marker={};
+						marker.symbol=symbols[index];
 						var series_data = {};
 						var extra_data={};
 						extra_data.name = k;
 						extra_data.data = [];
 						series_data.name = k;
 						series_data.data = [];
+						series_data.marker=marker;
 						series[index] = series_data;
 						Data[index]=extra_data;
 						index++;
@@ -2342,7 +2346,7 @@ function BubbleChart(url, selector, name,show_loading)
 			     plotOptions: {
             series: {
                 marker: {
-                    radius: 6
+                    radius: 6,
                 }
             }
         },

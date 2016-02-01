@@ -3143,3 +3143,7 @@ table.hide-head-checkbox th label.i-checks {
  white-space: nowrap !important;
 }
 
+#comparison-chart .highcharts-markers  
+{
+	opacity: 0.6;
+}
