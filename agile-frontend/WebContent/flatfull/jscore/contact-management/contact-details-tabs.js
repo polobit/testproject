@@ -207,7 +207,7 @@ var Contact_Details_Tab_Actions = {
 
 		  	var owner = model.get("owner_id");
 
-		  	if(!owner){
+		  	if(!owner && && model.get("owner")){
 		  		owner = model.get("owner").id;
 		  	}
 
