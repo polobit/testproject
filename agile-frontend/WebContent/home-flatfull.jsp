@@ -34,20 +34,6 @@ pageEncoding="UTF-8"%>
 <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib">
 
 
-<script type="text/javascript">
-function isIE () {
-  var myNav = navigator.userAgent.toLowerCase();
-  return (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
-}
-
- if(isIE() && isIE() < 10)
- {window.location='/error/not-supported.jsp'; return;}
-
-</script>
-
-
-
-
 <%
     //Check if it is being access directly and not through servlet
 if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
@@ -170,6 +156,17 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 
 <body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%>'>
+
+<script type="text/javascript">
+function isIE() {
+  var myNav = navigator.userAgent.toLowerCase();
+  return (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
+}
+
+ if(isIE() && isIE() < 10)
+ {window.location='/error/not-supported.jsp';}
+
+</script>
 
 <div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
 <% 
