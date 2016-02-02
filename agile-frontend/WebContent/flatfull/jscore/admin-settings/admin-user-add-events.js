@@ -56,8 +56,10 @@ function bindAdminChangeAction(el, data)
 				$('input[value="MANAGE_CALENDAR"]', el).attr("disabled", "disabled");
 			}
 			else{
-				$('input[value="VIEW_CALENDAR"]', el).removeAttr("disabled");
-				$('input[value="MANAGE_CALENDAR"]', el).removeAttr("disabled");
+				if(_plan_restrictions.is_ACL_allowed[0]()){
+					$('input[value="VIEW_CALENDAR"]', el).removeAttr("disabled");
+					$('input[value="MANAGE_CALENDAR"]', el).removeAttr("disabled");
+				}
 			}
 		}
 	});
