@@ -469,6 +469,7 @@ var portlet_utility = {
 						postRenderCallback : function(p_el) {
 							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 								$(".time-ago", p_el).timeago();
+								initializePortletsListeners();
 							});
 							portlet_utility.addWidgetToGridster(base_model);
 						}
@@ -502,16 +503,24 @@ var portlet_utility = {
 			break;
 		}
 		case "Pending Deals": {
+			var options="";
+			if (base_model.get('settings').track != undefined
+					&& base_model.get('settings').track != "anyTrack") 
+				options+='&track='+base_model.get('settings').track;
+			if (base_model.get('settings').milestone != undefined
+					&& base_model.get('settings').milestone != "anyMilestone")
+				options+='&milestone='+base_model.get('settings').milestone;
 			App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View(
 					{
 						url : '/core/api/portlets/pending-deals?deals='
-								+ base_model.get('settings').deals,
+								+ base_model.get('settings').deals+options,
 						templateKey : 'portlets-opportunities',
 						sort_collection : false,
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
 							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 								$(".time-ago", p_el).timeago();
+								initializePortletsListeners();
 							});
 							portlet_utility.addWidgetToGridster(base_model);
 						}
@@ -561,6 +570,7 @@ var portlet_utility = {
 											.getStartAndEndDatesOnDue(start_date_str),
 									portlet_utility
 											.getStartAndEndDatesOnDue(end_date_str));
+							initializePortletsListeners();
 						}
 					});
 			portlet_utility.renderPortletsInnerCollection(
@@ -584,6 +594,7 @@ var portlet_utility = {
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
 							portlet_utility.addWidgetToGridster(base_model);
+							initializePortletsListeners();
 						}
 					});
 			portlet_utility.renderPortletsInnerCollection(
@@ -1256,6 +1267,80 @@ var portlet_utility = {
 			$("#deals", elData).find(
 					'option[value=' + base_model.get("settings").deals + ']')
 					.attr("selected", "selected");
+			if (base_model.get('settings').track == "anyTrack") {
+				options += '<option value="anyTrack" selected="selected">Any</option>';
+			} else {
+				options += '<option value="anyTrack">Any</option>';
+			}
+			$.ajax({
+				type : 'GET',
+				url : '/core/api/milestone/pipelines',
+				dataType : 'json',
+				success : function(data) {
+					$.each(data, function(index, trackObj) {
+						if (base_model.get('settings').track == trackObj.id)
+							options += "<option value=" + trackObj.id
+									+ " selected='selected'>" + trackObj.name
+									+ "</option>";
+						else
+							options += "<option value=" + trackObj.id + ">"
+									+ trackObj.name + "</option>";
+					});
+					$('#track', elData).html(options);
+					$('.loading-img').hide();
+					var track = $('#track', elData).val();
+		if (track!='anyTrack')
+		{
+			
+			$.ajax({
+				type : 'GET',
+				url : '/core/api/milestone/'+track,
+				dataType : 'json',
+				success : function(data) {
+					var milestonesList=data.milestones.split(",");
+					var lost=data.lost_milestone;
+					var won= data.won_milestone;
+					$('#milestone').html('');
+					if(milestonesList.length > 1)
+					{
+						$('#milestone', elData).html('<option value="anyMilestone">Any</option>');
+					}
+					$.each(milestonesList, function(index, milestone){
+						if(lost!=null && won!=null){
+							if(!(milestone==lost) && !(milestone==won) )
+							
+						$('#milestone', elData).append('<option value="'+milestone+'">'+milestone+'</option>');
+					}
+						else
+						{
+							if(!(milestone=='Won') && !(milestone=='Lost') )
+							
+						$('#milestone', elData).append('<option value="'+milestone+'">'+milestone+'</option>');
+						}
+					});
+					if(base_model.get('settings').milestone && track == base_model.get('settings').track)
+									{
+										$('#milestone',elData).find('option[value="'+base_model.get('settings').milestone+'"]').attr("selected", "selected");
+									}
+				}
+			});
+		}
+		else
+		{
+			$('#milestone', elData).html('<option value="anyMilestone">Any</option>');
+		}
+
+				}
+			});
+	
+			/*if (base_model.get('settings').milestone == "anyMilestone") {
+				options += '<option value="anyMilestone" selected="selected">Any</option>';
+			} else {
+				options += '<option value="anyMilestone">Any</option>';
+			}
+			$("#milestone", elData).find(
+					'option[value=' + base_model.get("settings").milestone + ']')
+					.attr("selected", "selected");*/
 			break;
 		}
 		case "Deals By Milestone": {
