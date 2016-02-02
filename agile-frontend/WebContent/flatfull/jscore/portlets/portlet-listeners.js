@@ -356,6 +356,10 @@ function initializePortletsListeners() {
 			});
 
 	$('.events_show')
+			.off(
+					'click',
+					'.minical-portlet-event')
+	$('.events_show')
 			.on(
 					'click',
 					'.minical-portlet-event',
@@ -526,6 +530,9 @@ function initializePortletsListeners() {
 						}
 					});
 
+	$('.events_show').off(
+			'click',
+			'.minical-portlet-event-add');
 	$('.events_show').on(
 			'click',
 			'.minical-portlet-event-add',
