@@ -6987,8 +6987,22 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			return options.inverse(this);
 	});
 
+Handlebars.registerHelper('is_IE_browser', function(dateInepoch, options) {
+	 return isIEBrowser();
+});
+
 function agile_is_mobile_browser(){
    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+ }
+
+ function isIEBrowser(){
+
+ 	var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
+	var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
+	if(isIE || isIENew)
+		return true;
+
+	return false;
  }
 
 
