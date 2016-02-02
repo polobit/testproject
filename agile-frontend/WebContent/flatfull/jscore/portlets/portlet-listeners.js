@@ -356,6 +356,10 @@ function initializePortletsListeners() {
 			});
 
 	$('.events_show')
+			.off(
+					'click',
+					'.minical-portlet-event')
+	$('.events_show')
 			.on(
 					'click',
 					'.minical-portlet-event',
@@ -526,6 +530,9 @@ function initializePortletsListeners() {
 						}
 					});
 
+	$('.events_show').off(
+			'click',
+			'.minical-portlet-event-add');
 	$('.events_show').on(
 			'click',
 			'.minical-portlet-event-add',
@@ -614,7 +621,7 @@ function initializePortletsListeners() {
 
 			});
 
-	$('#dashlet_heading #tutotial_modal').off('click');
+	$('#dashlet_heading').off('click', '#tutotial_modal');
 	$('#dashlet_heading').on('click', '#tutotial_modal', function(e) {
 		e.preventDefault();
 
@@ -696,6 +703,11 @@ function initializePortletsListeners() {
 				}
 			});
 
+//$('.portlet_body #portlets-events-model-list > tr').off('click');
+$('.portlet_body')
+			.off(
+					"click",
+					'#portlets-events-model-list > tr')
 	$('.portlet_body')
 			.on(
 					"click",
