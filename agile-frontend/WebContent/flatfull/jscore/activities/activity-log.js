@@ -165,6 +165,11 @@ function getActivityFilterParameters(loadingFirstTime)
 		params += ("&entity_type=" + entitytype);
 		return params;
 	}
+	else if (entitytype == 'CAMPAIGN')
+	{
+		params += ("&entity_type=" + entitytype);
+		return params;
+	}
 	else
 	{
 		params += ("&entity_type=ALL");
