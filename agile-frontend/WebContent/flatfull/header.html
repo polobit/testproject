@@ -133,7 +133,7 @@
         
        
 				   <%
-				      if(request.getHeader("User-Agent").indexOf("Mobile") == -1){
+				      if(MobileUADetector.isMobileOrTablet(request.getHeader("user-agent"))){
 				   %>
 				    <a class="navbar-brand font-bold text-lt p-l-none" href="#">   
 				   <%
