@@ -3055,9 +3055,12 @@ table.hide-head-checkbox th label.i-checks {
   background-color: #f9f9f9 !important;
   
 }
+
+@media all and (min-width: 768px) {
 .app-aside-fixed:not(.app-aside-dock) aside {
 	position: fixed;
 	height: 100vh;
+}
 }
 
 #calls-chart .highcharts-legend , #calls-chart .highcharts-tooltip

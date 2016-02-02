@@ -12,6 +12,7 @@
 <%@page import="com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil"%>
 <%@page import="com.agilecrm.subscription.restrictions.db.BillingRestriction"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
+<%@page import="com.agilecrm.util.MobileUADetector"%>
 <%
 
 			System.out.println("Domain user " + domainUser);
@@ -63,19 +64,78 @@
 				  		
 				 %>">
 				 
-				 	 <button class="pull-right visible-xs dk" id="mobile-menu-settings"  ui-toggle-class="show" data-target=".navbar-collapse">
+				 	 <button class="pull-right hide dk" id="mobile-menu-settings"  ui-toggle-class="show" data-target=".navbar-collapse">
           <i class="glyphicon glyphicon-cog"></i>
         </button>
-				  <button class="pull-right visible-xs" id="mobile-menu" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll-to="app">
+
+          <button class="pull-left visible-xs" id="mobile-menu" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll-to="app">
           <i class="glyphicon glyphicon-align-justify"></i>
         </button>
+
+        <li class="dropdown hide add-modal-mobile visible-xs pull-right wrapper-sm p-t p-r-md" id="menu1"><a class="dropdown-toggle"
+                data-toggle="dropdown" href=""><i class="fa fa-plus"></i></a>
+                <ul class="dropdown-menu  animated fadeInRight mobile-add-modals">
+                  <li><a href="#personModal"  class="person" id="person">
+                      <div class="pull-left">Contact</div><div class='pull-right shortcuts'>Shift + N</div><div class="clearfix"></div></a></li>
+                  <li><a href="#companyModal"  data-toggle="modal"
+                    id="company"> <div class="pull-left">Company</div><div class='pull-right shortcuts'>Shift + C</div><div class="clearfix"></div></a></li>
+                  <li><a href="#"  id="show-activity"> <div class="pull-left">Event</div><div class='pull-right shortcuts'>Shift + V</div><div class="clearfix"></div></a></li>
+                  <li><a href="#" class=" add-task"> <div class="pull-left">Task</div><div class='pull-right shortcuts'>Shift + T</div><div class="clearfix"></div></a></li>
+
+                  <%
+                    if(domainUser.menu_scopes.contains(NavbarConstants.DEALS)){
+                  %>
+                  <li><a href="#" class="font-bold deals-add"> <div class="pull-left">Deal</div><div class='pull-right shortcuts'>Shift + D</div><div class="clearfix"></div></a></li>
+                  <%
+                    }
+                  %>
+                  <li><a href="#" id="show-note"> <div class="pull-left">Note</div><div class='pull-right shortcuts'>Shift + O</div><div class="clearfix"></div></a></li>
+                  <li><a href="#send-email"> <div class="pull-left">Email</div><div class='pull-right shortcuts'>Shift + M</div><div class="clearfix"></div></a></li>
+                </ul> <!-- 
+              <img style='display:hidden' id='ajax'
+                src='img/ajax-loader.gif' />
+                --></li>
+
+        <button class="pull-right hide visible-xs search-menu-mobile" id="search-menu-mobile" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll-to="app">
+          <i class="icon-magnifier search-menu-mobile"></i>
+        </button>
+
+         
+
+                <%
+						   if(MobileUADetector.isMobileOrTablet(request.getHeader("user-agent"))){
+						  %>
+							<li class="nav-bar-search pull-right  search-mobile hide">
+								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift">
+					<div class="input-group">
+							<input id="searchText" type="text"
+										data-provide="typeahead"
+										class="typeahead typeahead_contacts search-query form-control-custom input-sm bg-light no-border rounded padder"
+										placeholder="Search">
+										
+										 <!-- <input id="search-results" 
+										type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
+						<span class="input-group-btn">
+                <button type="submit" class="btn btn-sm bg-light rounded" id="search-results" style="height:30px;"><i class="fa fa-search"></i></button>
+              </span>
+              </div>				
+								</form>
+							</li>
+							<%}%>
+
+
+                 
+             
+
+
+				
 			
         
        
 				 
-				    <a class="navbar-brand font-bold text-lt" href="#"><i class="fa fa-cloud"></i> <span class="hidden-folded m-l-xs"> Agile CRM </span></a>
+				    <a class="navbar-brand font-bold text-lt p-l-none" href="#"><i class="fa fa-cloud hidden-xs"></i> <span class="hidden-folded m-l-xs"> Agile CRM </span></a>
 </div>
-					<div id="navbar" class="collapse pos-rlt navbar-collapse box-shadow   
+					<div id="navbar" class="collapse pos-rlt hide-xs  navbar-collapse box-shadow   
 					
 					<%
 				 	switch (Integer.parseInt(currentUserPrefs.theme)) {
@@ -216,7 +276,10 @@
 								class="dropdown-toggle" data-toggle="dropdown" href=""> <i class='fa fa-history' style="opacity:0.8"></i>
 								<span class="visible-xs">Recent Activity</span>
 							</a><ul class="dropdown-menu animated fadeInRight recent-view" style="width:23em; right:-11px;"></ul>
-							</li> 
+							</li>  
+                          <%
+						   if(!MobileUADetector.isMobileOrTablet(request.getHeader("user-agent"))){
+						  %>
 							<li class="nav-bar-search">
 								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift">
 					<div class="input-group">
@@ -233,7 +296,7 @@
               </div>				
 								</form>
 							</li>
-							
+							<%}%>
 						</ul>
   
  			<ul class="nav  navbar-nav  navbar-right show_shortcuts">	

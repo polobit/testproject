@@ -42,17 +42,72 @@ $('#app-aside-folded').on('click', function(e) {
 	
 $(document).ready(function(){
 
+
+
+
+	
+
+	
+	
+
    $("#contact-results li").click(function(){
    $("#mobile-menu-settings").trigger('click');
    });
+
+
+
+   
  
+
+
+
+
  	 $('.aside-wrap').off('ul li');
 	 if(agile_is_mobile_browser()){
-	 	$('body').on('touchstart','.aside-wrap ul li',function(){
+
+	 	$('body').on('click',function(e){
+		setTimeout(function(){
+		if(e.target.id != 'searchText' && !$(e.target).closest('button').hasClass('search-menu-mobile'))  {
+		$('.search-mobile').addClass('hide');
+		$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
+		$('.navbar-brand').removeClass('hide');
+		}
+		},500);
+	});
+
+	 	$('body').on('click','.add-modal-mobile',function(){
+	 		
+		if($('#aside').hasClass('off-screen')) {
+			$("#mobile-menu").trigger('click');
+		}
+		
+		});
+
+
+	// search bar in mobile 
+		$('#search-menu-mobile').on('click touchstart',function(){
+		$('.search-mobile').removeClass('hide');
+		$('.add-modal-mobile , #search-menu-mobile').removeClass('visible-xs');
+		$('.navbar-brand').addClass('hide');
+		}); 	
+
+
+
+	 	$('.aside-wrap ul li').bind('touchstart',function(){
  		$('.aside-wrap ul li').removeClass('active');
  		$(this).addClass('active');
+ 		}).bind('touchleave touchend',function(){
+ 			setTimeout(function(){
+ 		$('.aside-wrap ul li').removeClass('active');
+ 		},500);
  		});
-	 }
+
+ 		
+		}
+
+	$('#menu1 a').click(function(e){
+		console.log(e.target);
+	});	
 
 	
 	
@@ -69,6 +124,8 @@ $(document).ready(function(){
         $(this).tab('show');
     });
 
+    $('#navbar').removeClass('bg-white-only');
+
 	/*$('body').on('click','#mobile-dropdown-click-sort',function(){
 			$("#contact-sort-views").css("display","block");
    	return false;
@@ -82,12 +139,12 @@ $(document).ready(function(){
         $(this).css('display','none');
     });	*/
 
-	$('#recent-menu').off('li');
+	/*$('#recent-menu').off('li');
 	$('#recent-menu').on('click', 'li', function(e){
 		e.preventDefault();
 		$('#mobile-menu-settings').trigger('click');
 	});
-
+*/
 
 	
 	$('body').on('mousedown','.navi-wrap li a , #navbar li a',function(e){

@@ -1119,7 +1119,8 @@ body {
     margin-bottom: 0;
   }
   .navbar-nav > li > a {
-    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1);
+   /* box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1);*/
+   box-shadow: none;
   }
   .navbar-nav > li > a .up {
     top: 0;
@@ -1249,7 +1250,7 @@ body {
   font-size: 11px;
 }
 
-.navi ul.nav li a > i {
+.navi ul.nav li a > i , .navbar-view-mobile  a  i{
   position: relative;
   float: left;
   width: 40px;
