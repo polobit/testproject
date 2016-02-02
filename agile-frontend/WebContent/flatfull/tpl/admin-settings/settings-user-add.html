@@ -162,14 +162,14 @@
                                <div>
                                <div class="pull-left" style="width:40%;">
                                <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="temp" value="VIEW_CALENDAR" checked><i></i> 
+                                    <input type="checkbox" name="temp" value="VIEW_CALENDAR" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     View All Events
                                     
                                </label>
                                </div>
                                <div class="pull-left" style="width:60%;">
                                <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="temp" value="MANAGE_CALENDAR" checked><i></i> 
+                                    <input type="checkbox" name="temp" value="MANAGE_CALENDAR" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     Manage Events
                                </label>
                                </div>
@@ -211,13 +211,13 @@
                                <div>
                                <div class="pull-left" style="width:40%;">
                                <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="temp" value="VIEW_CALENDAR"><i></i> 
+                                    <input type="checkbox" name="temp" value="VIEW_CALENDAR" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     View All Events
                                </label>
                                </div>
                                <div class="pull-left" style="width:60%;">
                                <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="temp" value="MANAGE_CALENDAR"><i></i> 
+                                    <input type="checkbox" name="temp" value="MANAGE_CALENDAR" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     Manage Events
                                </label>
                                </div>
@@ -258,13 +258,13 @@
                                <div>
                                <div class="pull-left" style="width:40%;">
                                <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="temp" value="VIEW_CALENDAR" disabled><i></i> 
+                                    <input type="checkbox" name="temp" value="VIEW_CALENDAR" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     View All Events
                                </label>
                                </div>
                                <div class="pull-left" style="width:60%;">
                                <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="temp" value="MANAGE_CALENDAR" disabled><i></i> 
+                                    <input type="checkbox" name="temp" value="MANAGE_CALENDAR" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     Manage Events
                                </label>
                                </div>
