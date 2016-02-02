@@ -6987,8 +6987,9 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			return options.inverse(this);
 	});
 
-Handlebars.registerHelper('is_IE_browser', function(dateInepoch, options) {
-	 return isIEBrowser();
+
+Handlebars.registerHelper('is_IE_browser', function(options) {
+	     return (isIEBrowser() ? options.fn(this) : options.inverse(this));
 });
 
 function agile_is_mobile_browser(){
