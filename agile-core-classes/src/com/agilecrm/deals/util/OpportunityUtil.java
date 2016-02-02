@@ -1218,12 +1218,28 @@ public class OpportunityUtil
      * @return List<Opportunity> having total pending deals with respect to
      *         current user.
      */
-    public static List<Opportunity> getPendingDealsRelatedToCurrentUser(long dueDate)
+    public static List<Opportunity> getPendingDealsRelatedToCurrentUser(long dueDate,String track,String milestone_id)
     {
 	List<Opportunity> pendingDealsList = new ArrayList<Opportunity>();
 	try
 	{
-		List<Milestone> milestoneList = MilestoneUtil.getMilestonesList();
+		if(track!=null && milestone_id!=null){
+			Query<Opportunity> q = dao.ofy().query(Opportunity.class)
+	    		    .filter("close_date <=", (new Date()).getTime() / 1000).filter("archived", false).limit(50)
+	    		    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+	    		    .filter("pipeline", new Key<Milestone>(Milestone.class, Long.valueOf(track))).filter("milestone", milestone_id).order("close_date");
+			pendingDealsList = dao.fetchAll(q);
+		}
+		else {
+			List<Milestone> milestoneList=new ArrayList<Milestone>();
+			if(track!=null && milestone_id==null){
+				if(MilestoneUtil.getMilestone(Long.valueOf(track))!=null)
+				milestoneList.add(MilestoneUtil.getMilestone(Long.valueOf(track)));
+		}
+		else {
+		milestoneList = MilestoneUtil.getMilestonesList();
+		}
+			if(milestoneList!=null && milestoneList.size()>0){
 	    for (Milestone milestone : milestoneList)
 	    {
 	    	List<String> milestoneNamesList = new ArrayList<String>();
@@ -1255,6 +1271,8 @@ public class OpportunityUtil
 	    	List<Opportunity> allDealsList = dao.fetchAll(q);
 	    	pendingDealsList.addAll(allDealsList);
 	    }
+			}
+		}
 	}
 	catch (Exception e)
 	{
@@ -1270,13 +1288,28 @@ public class OpportunityUtil
      * @return List<Opportunity> having total pending deals with respect to
      *         current user.
      */
-    public static List<Opportunity> getPendingDealsRelatedToAllUsers(long dueDate)
+    public static List<Opportunity> getPendingDealsRelatedToAllUsers(long dueDate,String track,String milestone_id)
     {
 	List<Opportunity> pendingDealsList = new ArrayList<Opportunity>();
 	try
 	{
 	    
-	    List<Milestone> milestoneList = MilestoneUtil.getMilestonesList();
+	    if(track!=null && milestone_id!=null){
+			Query<Opportunity> q = dao.ofy().query(Opportunity.class)
+	    		    .filter("close_date <=", (new Date()).getTime() / 1000).filter("archived", false).limit(50)
+	    		    .filter("pipeline", new Key<Milestone>(Milestone.class, Long.valueOf(track))).filter("milestone", milestone_id).order("close_date");
+			pendingDealsList = dao.fetchAll(q);
+		}
+		else {
+			List<Milestone> milestoneList=new ArrayList<Milestone>();
+			if(track!=null && milestone_id==null){
+				if(MilestoneUtil.getMilestone(Long.valueOf(track))!=null)
+				milestoneList.add(MilestoneUtil.getMilestone(Long.valueOf(track)));
+		}
+		else {
+		milestoneList = MilestoneUtil.getMilestonesList();
+		}
+			if(milestoneList!=null && milestoneList.size()>0){
 	    for (Milestone milestone : milestoneList)
 	    {
 	    	List<String> milestoneNamesList = new ArrayList<String>();
@@ -1307,6 +1340,8 @@ public class OpportunityUtil
 	    	List<Opportunity> allDealsList = dao.fetchAll(q);
 	    	pendingDealsList.addAll(allDealsList);
 	    }
+			}
+		}
 	}
 	catch (Exception e)
 	{
@@ -2406,7 +2441,6 @@ public class OpportunityUtil
 			for(String milestone_data : Opportunity.MILESTONES)
 			{
 				milestoneValue.put(" "+milestone_data.toString(), 0);
-				
 			}
 			Track_conversion.put(milestone.name, milestoneValue);
 			
@@ -2444,9 +2478,10 @@ public class OpportunityUtil
 				Long pipeline_id = opp.getPipeline_id();
 				
 				Milestone mile=MilestoneUtil.getMilestone(pipeline_id);
+
 					System.out.println("mile"+mile);
 				
-					System.out.println("ownerid"+opp.getOwner().id);
+					System.out.println("ownerid"+opp.getOwner());
 					if(opp.getOwner()!=null)
 				if(Track_conversion_User.containsKey(opp.getOwner().id.toString()))
 				{
@@ -2454,6 +2489,7 @@ public class OpportunityUtil
 					if(conversion_user.containsKey(opp.getOwner().name)){
 						
 						JSONObject conversion = conversion_user.getJSONObject(opp.getOwner().name);
+
 						if(mile!=null)
 				if (conversion.containsKey(mile.name))
 				{
@@ -2467,6 +2503,7 @@ public class OpportunityUtil
 							int count=mileObject.getInt(key);
 							count++;
 							mileObject.put(key,count);
+
 							if(key.equalsIgnoreCase(" "+opp.milestone))
 								break;
 						}
@@ -2491,6 +2528,7 @@ public class OpportunityUtil
 		return Track_conversion_User;
 	}
 	
+
 	/*
 	 * 
 	 * Return List of Opportunities for pipeline conversion
@@ -2498,7 +2536,7 @@ public class OpportunityUtil
 	public static List<Opportunity> getConversionDeals(Long ownerId,
 			long minTime, long maxTime)
 			{
-		
+
 		Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
 		Map<String, Object> conditionsMap2 = new HashMap<String, Object>();
 		
@@ -2533,6 +2571,7 @@ public class OpportunityUtil
 				
 				boolean flag=false;
 			for(Opportunity list_it:list_main){
+				if(list2_main.size()!=0){
 				for(Opportunity list_it2:list2_main){
 					if(!list_it.id.equals(list_it2.id)){
 						flag=true;
@@ -2545,7 +2584,11 @@ public class OpportunityUtil
 				}
 				if(flag)
 					list2_main.add(list_it);
+				}
+				else
+					list2_main.add(list_it);
 			}
+				
 			//conversionList=new ArrayList<>(ownDealsSet);
 			System.out.println("list2"+list2_main);
 			//System.out.println("main list"+conversionList);
@@ -2559,5 +2602,4 @@ public class OpportunityUtil
 			return null;
 		}
 			}
-	
 }

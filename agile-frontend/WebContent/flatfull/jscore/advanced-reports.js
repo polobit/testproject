@@ -756,14 +756,14 @@ function initComparisonReports(callback){
 
 	
 	// Init the callback when the track selector changes too
-		fillSelect("track", "/core/api/milestone/pipelines", undefined, function()
+		fillSelect("pipeline_track", "/core/api/milestone/pipelines", undefined, function()
 		{
-			if (_agile_get_prefs("agile_deal_track"))
-            pipeline_id = _agile_get_prefs("agile_deal_track");
+			//if (_agile_get_prefs("agile_deal_track"))
+           // pipeline_id = _agile_get_prefs("agile_deal_track");
 
-			$('select[id="track"]').find('option[value="'+pipeline_id+'"]').attr("selected",true);
+			$('select[id="pipeline_track"]').find('option[value=""]').remove();
 			        	callback();
-			$('#track').change(function()
+			$('#pipeline_track').change(function()
 			{
 				callback();
 			});
@@ -774,12 +774,12 @@ function showComparisonReportGraph()
 {
 		url='/core/api/opportunity/conversionRate/0';
 		url=url+getSelectedDates();
-		if ($('#track').length > 0)
+		if ($('#pipeline_track').length > 0)
 	{
 		// Get owner
 		var track_id=0;
-		if ($("#track").val() != ""){
-			track_id=$("#track").val();
+		if ($("#pipeline_track").val() != ""){
+			track_id=$("#pipeline_track").val();
 			url += '&track-id='+track_id;
 			BubbleChart(url,'comparison-chart','',true);
 		}
