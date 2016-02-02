@@ -145,3 +145,30 @@
 		</div>
 	  </div>
 </script>
+
+
+<script id="workflow-spam-score" type="text/html">
+					<div id="message-details">
+						<div class="panel panel-{{checkSpamScore score}}">
+      						<div class='panel-heading' ><strong>{{checkSpamMessage score}}<span class='pull-right badge'> Score = {{score}} </span></strong></div>
+  								<table  class="table table-condensed">
+    	 							<thead>
+							      		<th class="col-xs-1"> Points </h>
+							      		<th class="col-xs-1"> Rules Name </th>
+							      		<th class="col-xs-10"> Description </th>
+							    	 </thead>
+    								 <tbody>
+    	  								{{#each reason}}
+        									<tr>
+          										<td> <span class="label label-{{checkSpamScoreError this.[0]}} col-xs-12"><strong>{{this.[0]}}</strong></span> </td>
+          										<td> {{this.[1]}} </td>
+          										<td> {{this.[2]}}</td>
+        									</tr>
+      									{{/each}}
+    								 </tbody>
+  								</table>
+  	 						 </div>
+  	 					 </div>
+					</div>
+				
+</script>

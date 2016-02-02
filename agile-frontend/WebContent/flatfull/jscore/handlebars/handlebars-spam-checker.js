@@ -27,7 +27,7 @@ $(function()
     {
         return 'success';
     }
-    else return 'info';
+     return 'info';
  });
 
   
@@ -44,7 +44,7 @@ $(function()
     {
         return 'success';
     }
-    else return 'warning';
+     return 'warning';
  });
 
    /**
@@ -61,6 +61,6 @@ Handlebars.registerHelper( "checkSpamMessage", function ( score ){
     {
         return "SpamAssassin Likes Your Email Templates....";
     }
-    else return "SpamAssassin Partialy Likes Your Email Templates";
+     return "SpamAssassin Partialy Likes Your Email Templates";
  });
 });
