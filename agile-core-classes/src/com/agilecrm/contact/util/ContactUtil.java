@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
@@ -1826,6 +1827,8 @@ public class ContactUtil
      */
 	public static Contact createContact(String firstName, String email)
 	{
+		DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+		
 		Contact newContact = new Contact();
 		newContact.first_name = firstName;
 
@@ -1835,12 +1838,8 @@ public class ContactUtil
 		properties.add(new ContactField("email", email, null));
 
 		newContact.properties = properties;
-		
-		DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
-		
 		newContact.setContactOwner(new Key<DomainUser>(DomainUser.class, domainUser.id));
 		newContact.save();
-		//Contact.dao.put(newContact);
 
 		try
 		{
@@ -1848,7 +1847,7 @@ public class ContactUtil
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 
 		return newContact; 
