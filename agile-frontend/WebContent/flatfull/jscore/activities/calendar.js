@@ -639,6 +639,12 @@ function showCalendar(users)
 						 */
 						eventDrop : function(event1, dayDelta, minuteDelta, allDay, revertFunc)
 						{
+							
+							if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != event1.owner.id)){
+								revertFunc();
+								$("#moveEventErrorModal").html(getTemplate("move-event-error-modal")).modal('show');
+								return;
+							}
 
 							// Confirm from the user about the change
 							if (!confirm("Are you sure about this change?"))
@@ -752,7 +758,7 @@ function showCalendar(users)
 								$("#event_desc").html(desc);
 							}
 							
-							
+							App_Calendar.current_event = event;
 							agile_type_ahead("event_relates_to_deals", $('#updateActivityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
 							// Fills owner select element
@@ -896,7 +902,9 @@ function getCalendarUsersDetails(callback)
 				json_user.id = user.id;
 				json_user.name = user.domainUser.name;
 				json_user.domain_user_id = user.domainUser.id;
-				json_users.push(json_user);
+				if (hasScope("VIEW_CALENDAR")) {
+					json_users.push(json_user);
+				}
 			}
 		});
 		return callback(json_users);

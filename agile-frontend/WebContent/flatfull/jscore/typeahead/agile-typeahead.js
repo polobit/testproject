@@ -254,6 +254,13 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 						 */
 						updater : function(items)
 						{
+
+							//in mobile hiding the searchbar onclick
+							setTimeout(function(){
+								$('.search-mobile').addClass('hide');
+								$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
+							},200);
+
 							// To verify whether the entity (task, deal etc..)
 							// related to same contact twice
 							var tag_not_exist = true;
@@ -547,6 +554,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							this.$menu.hide();
 							this.shown = false;
 							return this;
+
+							
+
 						},
 
 						// Handles cursor exiting the textbox

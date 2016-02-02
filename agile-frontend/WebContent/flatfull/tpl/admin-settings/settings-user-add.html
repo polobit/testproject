@@ -159,6 +159,22 @@
                         	    	Update All Contacts  <br/>
 									<div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
                     	       </label>
+                               <div>
+                               <div class="pull-left" style="width:40%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="VIEW_CALENDAR" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    View All Events
+                                    
+                               </label>
+                               </div>
+                               <div class="pull-left" style="width:60%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="MANAGE_CALENDAR" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Manage Events
+                               </label>
+                               </div>
+                               <div style="margin-left:26px;"><small>  Add events to others. View, edit and delete events owned by others</small></div>
+                              </div>
 							</div>
 						</div>
                     </div>
@@ -192,6 +208,21 @@
                         	    	Update All Contacts  <br/>
 									<div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
                     	       </label>
+                               <div>
+                               <div class="pull-left" style="width:40%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="VIEW_CALENDAR" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    View All Events
+                               </label>
+                               </div>
+                               <div class="pull-left" style="width:60%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="MANAGE_CALENDAR" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Manage Events
+                               </label>
+                               </div>
+                               <div style="margin-left:26px;"><small>  Add events to others. View, edit and delete events owned by others</small></div>
+                              </div>
 							</div>
 						</div>
                     </div>
@@ -224,6 +255,21 @@
                         	    	Update All Contacts  <br/>
 									<div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
                     	       </label>
+                               <div>
+                               <div class="pull-left" style="width:40%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="VIEW_CALENDAR" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    View All Events
+                               </label>
+                               </div>
+                               <div class="pull-left" style="width:60%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="MANAGE_CALENDAR" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Manage Events
+                               </label>
+                               </div>
+                               <div style="margin-left:26px;"><small>  Add events to others. View, edit and delete events owned by others</small></div>
+                              </div>
 							</div>
 						</div>
                     </div>
@@ -238,7 +284,7 @@
                         		    <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                         	    	Contacts<br/><div style="margin-left:6px;"><small>Manage contacts</small></div></label> 
 								<label class="i-checks i-checks-sm checkbox">
-                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                         	    	Calendar<br/><div style="margin-left:6px;"><small>Manage your tasks and events</small></div></label> 
 								<label class="i-checks i-checks-sm checkbox">
             	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
@@ -286,7 +332,7 @@
                         		    <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                         	    	Contacts<br/><div style="margin-left:6px;"><small>Manage contacts</small></div></label>
 								<label class="i-checks i-checks-sm checkbox">
-                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                         	    	Calendar<br/><div style="margin-left:6px;"><small>Manage your tasks and events</small></div></label> 
 								<label class="i-checks i-checks-sm checkbox">
             	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 

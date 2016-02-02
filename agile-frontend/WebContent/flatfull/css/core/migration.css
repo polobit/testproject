@@ -149,7 +149,7 @@ margin: 0px 0 15px;
 	display: none;
 }
 .nav-bar-search {
-	display: block!Important;
+	/*display: block!Important;*/
 }
 /*#searchText {
 	width: 155px;
@@ -624,6 +624,8 @@ left:0;
 }
 
 }
+
+
 
 @media all and (max-width: 767px) {
 
@@ -1652,12 +1654,12 @@ a#email-reply{
   #calendar_container .fc-header {
     width: 65%;
   }
-  #navbar 
+/*  #navbar 
   { 
     max-height: 80vh;
     overflow-y: auto;
     overflow-x: hidden;
-  }
+  }*/
   .dropdown-submenu:hover #contact-sort-views {
     display: none;
   }
@@ -1741,12 +1743,12 @@ box-shadow: 0 0 10px 0px #bbb;
 }*/
 
 #navbar {
-box-shadow: 0 5px 10px 0px #bbb;
+box-shadow: none;
 }
 
 #searchForm {
   
-  padding: 10px 35px;
+  padding: 9px 35px;
 }
 
 .navbar-nav li a i+span {
@@ -1779,10 +1781,10 @@ width: 100%!Important;
   display: none!important;
 }
 .agile-menu .fa-history {
-  width: 15px;
+  /*width: 15px;
   font-size: 12px;
   position: relative;
-  left: 2px;
+  left: 2px;*/
 }
 .portlet_body_calendar {
   position: relative;
@@ -1888,10 +1890,21 @@ color:#727272;
 #contactDetailsTab .ativity-block-ul {
   margin-top: -10px;
 }
+
 .deal-detail-related-mobile-view tr th:nth-of-type(n+3),.deal-detail-related-mobile-view tr td:nth-of-type(n+3) {
   display: none;
 }
-
+/*.fat-menu li a {
+    display: block;
+    padding: 10px 55px 5px;
+}*/
+.hide-hover-mobile:hover {
+  background: none!Important;
+}
+#searchForm .typeahead.dropdown-menu {
+  overflow-y:auto;
+  max-height: 300px;
+}
 }
 
 @media all and (min-width: 768px) {
@@ -2045,6 +2058,7 @@ color:#727272;
   }
 }
 
+
 .slate-content .box-left {
       display: none;
   }
@@ -2062,6 +2076,12 @@ color:#727272;
 
  color:#98a6ad !important
   }
+
+.search-mobile {
+  width: 65%;
+  list-style: none;
+}
+
 
 
 

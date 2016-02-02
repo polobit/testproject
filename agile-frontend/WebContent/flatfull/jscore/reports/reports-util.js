@@ -546,7 +546,7 @@ user_reports :function(callReportUrl){
 				 	 		total=total+v1;
 				 	 	});
 				 	 	if(total>0){
-				 	var div='<div id='+k+' class="conversion_track col-sm-4 panel wrapper"></div>';
+				 	var div='<div id="'+k+'" class="conversion_track col-sm-4 panel wrapper"></div>';
 				 	
 				 	$(".converionsPipeline").append(div);
 
