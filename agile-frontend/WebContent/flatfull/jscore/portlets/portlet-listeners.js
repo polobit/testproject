@@ -1007,6 +1007,10 @@ function insideAddListener()
 			"click",
 			'.add-portlet',
 			function() {
+				var id=$(this).parents('.modal-footer').prev().find("form:visible").attr("id");
+				 if (!isValidForm("#" + id)) {
+           			 return false
+       			 }
 				var route=[];
 				var url='core/api/portlets/add';
 				$('#route-list', $(this).parents('.modal'))
@@ -1025,6 +1029,10 @@ function insideAddListener()
 			"click touchstart",
 			'.add_to_all',
 			function() {
+				var id=$(this).parents('.modal-footer').prev().find("form:visible").attr("id");
+				 if (!isValidForm("#" + id)) {
+           			 return false
+       			 }
 				var route=[];
 				$('#route-list', $(this).parents('.modal'))
 									.find('option')
