@@ -1,25 +1,24 @@
 <!-- Add (Documents) Modal views -->
 <script type="text/html" id="upload-document-modal-template">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    <div class="modal-header">
-		<!-- <button class="close" data-dismiss="modal">x</button> -->
-		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
-		<h3 class="modal-title"><i class="fa fa-plus-circle"></i>&nbsp;Add Document</h3>
-	</div>
-	<div class="modal-body">
-		<form class="form-horizontal" id="uploadDocumentForm" name="uploadDocumentForm" method="post">
-			<fieldset>
-				<div class="control-group form-group">
-						<label class="control-label col-sm-3">Title <span
-							class="field_req">*</span></label>
-						<div class="controls col-sm-7">
-							<span><input id="name" name="name" type="text"
-								class="required form-control" placeholder="Name of Document" /></span>
-						</div>
-					</div>
-					<div>
-				<div >
+<div class="modal-dialog">
+  <div class="modal-content">
+     <div class="modal-header">
+        <!-- <button class="close" data-dismiss="modal">x</button> -->
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+        <h3 class="modal-title">&nbsp;Add Document</h3>
+     </div>
+     <div class="modal-body">
+        <form id="uploadDocumentForm" name="uploadDocumentForm" method="post" class="form-horizontal">
+        <fieldset>
+        	<div class="control-group form-group">
+                       <label class="control-label  col-sm-3">Title <span
+                          class="field_req">*</span></label>
+                       <div class="controls col-sm-7">
+                          <span><input id="name" name="name" type="text"
+                             class="required form-control" placeholder="Name of Document" /></span>
+                       </div>
+            </div>
+            <div >
 					<input name="extension" id="extension" type="hidden"/>
 					<div class="control-group form-group">
 						<label class="control-label col-sm-3">Choose Document <span
@@ -43,11 +42,7 @@
 						</div>
 					</div>
 				</div>
-				</div>
 				<div id="error"></div>
-
-				
-
 				<div class="control-group form-group" style="margin-bottom:0px;">
 					<label class="control-label col-sm-3">Related Contacts</label>
 					<div class="controls col-sm-7" id="contactTypeAhead">
@@ -62,10 +57,7 @@
 						</div>
 					</div>
 				</div>
-
-
-
-				<div class="control-group form-group">
+                    <div class="control-group form-group">
 					<label class="control-label col-sm-3">Related Deals </label>
 					<div class="controls col-sm-7" id="dealTypeAhead">
 						<div>
@@ -80,14 +72,14 @@
 					</div>
 				</div>
 
+        </fieldset>
 
-
-			</fieldset>
-		</form>
-	</div>
-	<div class="modal-footer" id="document-save-footer">
-		<a href="#" class="btn btn-sm btn-primary" id="document_validate">Save</a> <span class="save-status"></span>
-	</div>
+        </form>
+     </div>
+     <div class="modal-footer" id="document-save-footer">
+        <a href="#" class="btn btn-sm btn-primary" id="document_validate">Save</a> <span class="save-status"></span>
+     </div>
+  </div>
 </div>
 </script>
 <!-- End of Modal views -->
