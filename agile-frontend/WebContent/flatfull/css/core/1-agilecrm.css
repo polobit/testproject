@@ -3142,8 +3142,3 @@ table.hide-head-checkbox th label.i-checks {
 .deals-nowrap .no-wrap {
  white-space: nowrap !important;
 }
-
-#comparison-chart .highcharts-markers  
-{
-	opacity: 0.6;
-}
