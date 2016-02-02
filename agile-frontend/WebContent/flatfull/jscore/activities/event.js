@@ -55,11 +55,22 @@ $("#updateActivityModal").on('click', '#delete_web_event', function(e)
 	{
 		e.preventDefault();
 
-		var event_id = $('#updateActivityForm input[name=id]').val();
-		$("#updateActivityModal").modal('hide');
-		$("#webEventCancelModel").modal('show');
-		$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39?");
-		$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + event_id + "'/>");
+		if(hasScope("MANAGE_CALENDAR") || (CURRENT_DOMAIN_USER.id == App_Calendar.current_event.owner.id))
+		{
+			var event_id = $('#updateActivityForm input[name=id]').val();
+			$("#updateActivityModal").modal('hide');
+			$("#webEventCancelModel").modal('show');
+			$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39?");
+			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + event_id + "'/>");
+		}
+		else
+		{
+			$("#updateActivityModal").find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>You do not have permission to delete this Event.</i></p></div>');
+			setTimeout(function()
+			{
+				$("#updateActivityModal").find('span.error-status').html('');
+			}, 2000);
+		}
 
 	});
 
@@ -126,6 +137,17 @@ $("#updateActivityModal").on(
 												}
 											}
 										}
+										else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+										{
+											if (eventsView && eventsView.collection)
+											{
+												if (eventsView.collection.get(event_id))
+												{
+													eventsView.collection.remove(event_id);
+													eventsView.render(true);
+												}
+											}
+										}
 
 										// $('#updateActivityModal').find('span.save-status
 										// img').remove();
@@ -134,6 +156,15 @@ $("#updateActivityModal").on(
 
 										var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
 										$('#calendar_event').fullCalendar('removeEvents', eventId);
+									}, error : function(err)
+									{
+										enable_save_button(save_button);
+										$('#updateActivityModal').find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
+										setTimeout(function()
+										{
+											$('#updateActivityModal').find('span.error-status').html('');
+										}, 2000);
+										console.log('-----------------', err.responseText);
 									} });
 						if (_agile_get_prefs("agile_calendar_view"))
 						{
@@ -865,12 +896,6 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 	var endarray = (json.end_time).split(":");
 	json.end = new Date(json.end * 1000).setHours(endarray[0], endarray[1]) / 1000.0;
 
-	$('#' + modalName).modal('hide');
-
-	$('#' + formId).each(function()
-	{
-		this.reset();
-	});
 
 	// Deleting start_time and end_time from json
 	delete json.start_time;
@@ -934,14 +959,25 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 									// function
 									if (eventsView && eventsView.collection)
 									{
+										var owner = data.get("owner_id");
+
+									  	if(!owner){
+									  		owner = data.get("owner").id;
+									  	}
+
 										if (eventsView.collection.get(data.id))
 										{
-											eventsView.collection.get(data.id).set(new BaseModel(data));
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												eventsView.collection.get(data.id).set(new BaseModel(data));
+											}
+											
 										}
 										else
 										{
-											eventsView.collection.add(new BaseModel(data), { sort : false });
-											eventsView.collection.sort();
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												eventsView.collection.add(new BaseModel(data), { sort : false });
+												eventsView.collection.sort();
+											}
 										}
 									}
 
@@ -1004,14 +1040,24 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 									// function
 									if (dealEventsView && dealEventsView.collection)
 									{
+										var owner = data.get("owner_id");
+
+									  	if(!owner){
+									  		owner = data.get("owner").id;
+									  	}
+
 										if (dealEventsView.collection.get(data.id))
 										{
-											dealEventsView.collection.get(data.id).set(new BaseModel(data));
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												dealEventsView.collection.get(data.id).set(new BaseModel(data));
+											}
 										}
 										else
 										{
-											dealEventsView.collection.add(new BaseModel(data), { sort : false });
-											dealEventsView.collection.sort();
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												dealEventsView.collection.add(new BaseModel(data), { sort : false });
+												dealEventsView.collection.sort();
+											}
 										}
 									}
 									dealEventsView.render(true);
@@ -1026,6 +1072,15 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 						if (callback && typeof callback === 'function')
 							callback(data);
+					}, error : function(model, err)
+					{
+						enable_save_button($(saveBtn));
+						$('#' + modalName).find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
+						setTimeout(function()
+						{
+							$('#' + modalName).find('span.error-status').html('');
+						}, 2000);
+						console.log('-----------------', err.responseText);
 					} });
 }
 
