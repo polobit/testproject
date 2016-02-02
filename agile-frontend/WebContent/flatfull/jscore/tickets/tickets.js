@@ -169,7 +169,11 @@ var Tickets = {
 					//Initialize click event on each ticket li
 					Tickets.initEvents(App_Ticket_Module.ticketsCollection.el);
 
+					//Clear bulk ops selections
 					Ticket_Bulk_Ops.clearSelection();
+
+					//Initializing checkbox events
+					Ticket_Bulk_Ops.initEvents(App_Ticket_Module.ticketsCollection.el);
 					
 					Backbone.history.navigate('#tickets/filter/' + Ticket_Filter_ID, {render:false});
 

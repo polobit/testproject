@@ -203,7 +203,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			// Iterates through data and add all keys as categories
 			$.each(data, function(k, v)
 			{
-				if(selector!='calls-chart' || selector!='tickets-chart')
+				if(selector!='calls-chart' && selector!='tickets-chart')
 				  categories.push(k);
 
 				// Initializes series with names with the first

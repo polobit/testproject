@@ -469,7 +469,6 @@ table.ticket-data > tbody > tr > td {
 }
 
 #tickets-bulk-select{
-    border: 1px solid #edf1f2;
     background-color: #f6f8f8;
     border-bottom: none;
 }
