@@ -653,7 +653,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
 		var owner = model.get("owner_id");
 
-	  	if(!owner){
+	  	if(!owner && model.get("owner")){
 	  		owner = model.get("owner").id;
 	  	}
 
