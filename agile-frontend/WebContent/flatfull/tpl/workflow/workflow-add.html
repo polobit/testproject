@@ -114,6 +114,19 @@
 						<div class="text-sm text-light">When a contact unsubscribes from your campaign, this name will be displayed as campaign name in the confirmation screen.</div>
 						<br/>
 						<br/>
+						<div class="row">
+                         <div class="control-group form-group">
+							<label class="control-label col-sm-2">
+								<b>Select a template</b>
+							</label>
+							<div class="controls col-sm-4">
+								<select class="emailSelect form-control pull-left" id="sendEmailSelect" title="Fill from Template" name="unsubscribe_subject"><option class="default-select" value="">- Fill from template -</option></select>
+							</div>
+                    	</div>
+                        </div>
+
+						<br/>
+						<br/>
                     	<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
@@ -131,6 +144,7 @@
 					</div>
                     <br />
                     <br />
+                    
                     {{#if is_new}}
 						<button class="btn btn-sm btn-primary" id="save-workflow-bottom">Save Campaign</button>
 					{{else}}

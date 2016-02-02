@@ -47,7 +47,6 @@ var WorkflowsRouter = Backbone.Router
 			workflows : function()
 			{
 
-
 				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
 					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
 					{
@@ -130,6 +129,7 @@ var WorkflowsRouter = Backbone.Router
 				});
 
 				$("#content").html(workflowModal.render().el);
+
 			},
 
 			/**
@@ -204,11 +204,12 @@ var WorkflowsRouter = Backbone.Router
 						$('#unsubscribe-name', el).val(unsubscribe.unsubscribe_name);
 						$('#unsubscribe-tag', el).val(unsubscribe.tag);
 						$('#unsubscribe-action', el).val(unsubscribe.action);
+						$('#sendEmailSelect',el).val(unsubscribe.unsubscribe_subject);
 						$('#unsubscribe-action', el).trigger('change');
 
 						if(that.is_disabled)
 								$('#designer-tour', el).addClass("blur").removeClass("anti-blur");
-
+						populate_send_email_details(el);
 						// Init SendVerify Email
 						send_verify_email(el);
 					}

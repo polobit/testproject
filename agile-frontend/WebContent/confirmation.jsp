@@ -336,7 +336,8 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			    String campaign_name = request.getParameter("c_name");
 			    String unsubscribeEmail = request.getParameter("unsubscribe_email");
 			    String unsubscribeName = request.getParameter("unsubscribe_name");
-			    
+			    String unsubscribe_subject = request.getParameter("unsubscribe_subject");
+			    System.out.println("Unsubscribe subject"+unsubscribe_subject);
 			    // Used to send as from name in confirmation email
 			    String company = request.getParameter("company");
 
@@ -419,12 +420,19 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 								company = "";
 							    
 							map.put("company", company);
-								
-							if(StringUtils.isEmpty(company))
-							    subjectMessage = "Unsubscribed successfully";
-							else
-								subjectMessage = "Unsubscribed successfully from "+company+" company";
 							
+							if(!StringUtils.isBlank(unsubscribe_subject))	
+							{
+								System.out.println("Unsubscribe subject"+unsubscribe_subject);
+								subjectMessage = unsubscribe_subject ;
+							}
+							else
+							{
+								if(StringUtils.isEmpty(company))
+								    subjectMessage = "Unsubscribed successfully";
+								else
+									subjectMessage = "Unsubscribed successfully from "+company+" company";
+							}
 							
 							// Add unsubscribe log
 							UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from all campaigns");
