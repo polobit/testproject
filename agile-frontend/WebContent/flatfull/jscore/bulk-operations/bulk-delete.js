@@ -302,6 +302,13 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 					$("."+id_array[i]).fadeOut(300, function() { $(this).remove(); });				
 			}
 			
+			try{
+			if(App_Workflows.workflow_list_view && Current_Route == "workflows" && App_Workflows.workflow_list_view.collection)
+				App_Workflows.workflow_list_view.collection.remove(id);
+			}
+			catch(err)
+			{}
+
 			$('.thead_check').attr("checked", false);
 			
 			// Show bulk operations only when thead check box is checked
