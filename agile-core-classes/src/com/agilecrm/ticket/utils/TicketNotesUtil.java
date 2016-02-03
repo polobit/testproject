@@ -12,6 +12,9 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.safety.Whitelist;
 
 import com.agilecrm.Globals;
 import com.agilecrm.ticket.entitys.TicketDocuments;
@@ -382,5 +385,19 @@ public class TicketNotesUtil
 		List<Key<TicketNotes>> notes = TicketNotes.ticketNotesDao.listKeysByProperty(searchMap);
 
 		TicketNotes.ticketNotesDao.deleteKeys(notes);
+	}
+
+	public static String br2nl(String html)
+	{
+		if (html == null)
+			return html;
+
+		Document document = Jsoup.parse(html);
+		document.outputSettings(new Document.OutputSettings().prettyPrint(false));
+		document.select("br").append("\\n");
+		document.select("p").prepend("\\n\\n");
+		String s = document.html().replaceAll("\\\\n", "\n");
+		
+		return Jsoup.clean(s, "", Whitelist.none(), new Document.OutputSettings().prettyPrint(false));
 	}
 }

@@ -408,8 +408,8 @@ public class TicketsRest
 			Long groupID = ticket.groupID, assigneeID = ticket.assigneeID;
 
 			// Converting html text to plain with jsoup
-			Document doc = Jsoup.parse(html_text, "UTF-8");
-			String plain_text = new HtmlToPlainText().getPlainText(doc);
+			//Document doc = Jsoup.parse(html_text, "UTF-8");
+			String plain_text = TicketNotesUtil.br2nl(html_text);
 
 			boolean attachmentExists = false;
 

@@ -905,168 +905,168 @@ Deleted  {{custom1}} Campaigns<br/>
 <!-- Start of ticketing activities-->
 	{{#if_equals "TICKET" entity_type}}
 		{{#if_equals "TICKET_CREATED" activity_type}}
-			New <a href="#ticket/{{entity_id}}" >Ticket#{{entity_id}}</a> created
+			New <a href="#ticket/{{entity_id}}" >ticket#{{entity_id}}</a> created<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>
 		{{/if_equals}}
 		{{#if_equals "TICKET_DELETED" activity_type}}
-			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> has been deleted <span class="inline-block first-letter-cap">{{custom1}}</span><br/>
+			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> has been deleted <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
 			<small class="activities_second_line m-t-none text-sm">
 			 	<i class="icon-trash"></i>Ticket deleted by {{user_name}}
 			</small> 
 		{{/if_equals}}
 		{{#if_equals "TICKET_ASSIGNED" activity_type}}
-			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> assigned to <span class="inline-block first-letter-cap">{{custom1}}</span><br/>
+			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> assigned to <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_ASSIGNEE_CHANGED" activity_type}}
-			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> assignee changed to <span class="inline-block first-letter-cap">{{custom1}}</span><br/>
+			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> assignee changed to <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_GROUP_CHANGED" activity_type}}
-			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> group changed to <span class="inline-block first-letter-cap">{{custom1}}</span><br/>
+			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> group changed to <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_STATUS_CHANGE" activity_type}}
-			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> status changed to <span class="inline-block first-letter-cap">{{custom1}}</span><br/>
+			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> status changed to <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_PRIORITY_CHANGE" activity_type}}
-			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a>  priority changed to <span class="inline-block first-letter-cap">{{custom1}}</span><br/>
+			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a>  priority changed to <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_TYPE_CHANGE" activity_type}}
-			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> type changed to <span class="inline-block first-letter-cap">{{custom1}}</span><br/>
+			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> type changed to <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_LABEL_ADD" activity_type}}
-			Labels <span class="inline-block first-letter-cap">{{custom1}}</span> added to <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a><br/>
+			Labels <span class="inline-block first-letter-cap">{{custom2}}</span> added to <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a><br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_LABEL_REMOVE" activity_type}}
-			Labels <span class="inline-block first-letter-cap">{{custom1}}</span> removed from <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a><br/>
+			Labels <span class="inline-block first-letter-cap">{{custom2}}</span> removed from <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a><br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_ASSIGNEE_REPLIED" activity_type}}
 			Assignee replied to <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a><br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{custom1}}
+				{{custom2}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_REQUESTER_REPLIED" activity_type}}
 			Requster replied to <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a><br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{custom1}}
+				{{custom2}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_PRIVATE_NOTES_ADD" activity_type}}
 			Private notes added to <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a><br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{custom1}}
+				{{custom2}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_MARKED_FAVORITE" activity_type}}
 			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> marked as favorite<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>    
 		{{/if_equals}}
 		{{#if_equals "TICKET_MARKED_UNFAVORITE" activity_type}}
 			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> marked as unfavorite<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>    
 		{{/if_equals}}
 		{{#if_equals "TICKET_MARKED_SPAM" activity_type}}
 			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> marked as spam<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>    
 		{{/if_equals}}
 		{{#if_equals "TICKET_MARKED_UNSPAM" activity_type}}
 			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> marked as not spam<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>    
 		{{/if_equals}}
 		{{#if_equals "BULK_ACTION_MANAGE_LABELS" activity_type}}
 			Bulk action (Manage labels) executed on <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a>
 			<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{custom1}}
+				{{custom2}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "BULK_ACTION_CHANGE_ASSIGNEE" activity_type}}
 			Bulk action (Assignee change) executed on <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a>
 			<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{custom1}}
+				{{custom2}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "BULK_ACTION_EXECUTE_WORKFLOW" activity_type}}
 			Bulk action (Execute workflow) executed on <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a>
 			<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{custom1}}
+				{{custom2}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "BULK_ACTION_CLOSE_TICKETS" activity_type}}
 			Bulk action (Close tickets) executed on <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a>
 			<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{custom1}}
+				{{custom2}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "BULK_ACTION_DELETE_TICKETS" activity_type}}
 			Bulk action (Delete tickets) executed on <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a>
 			<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{custom1}}
+				{{custom2}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "DUE_DATE_CHANGED" activity_type}}
-			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> due date has been changed to {{custom1}}
+			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> due date has been changed to {{custom2}}
 			<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>    
 		{{/if_equals}}
 		{{#if_equals "TICKET_CC_EMAIL_ADD" activity_type}}
-			{{custom1}} has been cc'ed to <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a>
+			{{custom2}} has been cc'ed to <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a>
 			<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>    
 		{{/if_equals}}
 		{{#if_equals "TICKET_CC_EMAIL_REMOVE" activity_type}}
-			{{custom1}} has been removed from <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> cc emails
+			{{custom2}} has been removed from <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> cc emails
 			<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>    
 		{{/if_equals}}
 		{{#if_equals "TICKET_NOTES_FORWARD" activity_type}}
-			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> has been forwarded to {{custom1}}
+			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> has been forwarded to {{custom2}}
 			<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
 			</small>    
 		{{/if_equals}}
 	{{/if_equals}}

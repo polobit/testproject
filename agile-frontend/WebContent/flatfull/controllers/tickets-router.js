@@ -670,7 +670,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
  				template : "ticket-filter-add-edit",
  				url : "/core/api/tickets/filters",
  				saveCallback : function(){
- 					Backbone.history.navigate( "ticket-filters", { trigger : true });
+ 					Backbone.history.navigate( "ticket-views", { trigger : true });
  				},
  				postRenderCallback : function(el) {
 
@@ -701,7 +701,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
 
 	 		if(!App_Ticket_Module.ticketFiltersCollection || !App_Ticket_Module.ticketFiltersCollection.collection){
 
- 				Backbone.history.navigate( "ticket-filters", { trigger : true });
+ 				Backbone.history.navigate( "ticket-views", { trigger : true });
  				return;
  			}
 
