@@ -132,8 +132,20 @@
 			
         
        
-				 
-				    <a class="navbar-brand font-bold text-lt p-l-none" href="#"><i class="fa fa-cloud hidden-xs"></i> <span class="hidden-folded m-l-xs"> Agile CRM </span></a>
+				   <%
+				      if(MobileUADetector.isMobileOrTablet(request.getHeader("user-agent"))){
+				   %>
+				    <a class="navbar-brand font-bold text-lt p-l-none" href="#">   
+				   <%
+				      }else {
+				   %>
+				    <a class="navbar-brand font-bold text-lt" href="#">
+				   <%
+				      }
+				   %>
+				    
+				    
+				    <i class="fa fa-cloud hidden-xs"></i> <span class="hidden-folded m-l-xs"> Agile CRM </span></a>
 </div>
 					<div id="navbar" class="collapse pos-rlt hide-xs  navbar-collapse box-shadow   
 					
