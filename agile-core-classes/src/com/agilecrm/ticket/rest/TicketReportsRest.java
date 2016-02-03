@@ -149,18 +149,19 @@ public class TicketReportsRest
 			Collection<ScoredDocument> documents = TicketReportsUtil.getTicketsBetweenDates(startTime, endTime,
 					"priority");
 			
-			LinkedHashMap<String, AtomicInteger> innerMap = new LinkedHashMap<String, AtomicInteger>();
-			innerMap.put("count", new AtomicInteger(0));
-			innerMap.put("total", new AtomicInteger(documents.size()));
+			LinkedHashMap<String, Integer> innerMap = new LinkedHashMap<String, Integer>();
+			innerMap.put("count", 0);
+			innerMap.put("total", documents.size());
 			
-			LinkedHashMap<String, LinkedHashMap<String, AtomicInteger> > map = new LinkedHashMap<String, LinkedHashMap<String, AtomicInteger>>();
-			map.put(Priority.LOW.toString(), innerMap);
-			map.put(Priority.MEDIUM.toString(), innerMap);
-			map.put(Priority.HIGH.toString(), innerMap);
+			LinkedHashMap<String, LinkedHashMap<String, Integer> > map = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
+			map.put(Priority.LOW.toString(), new LinkedHashMap<String, Integer>(innerMap));
+			map.put(Priority.MEDIUM.toString(), new LinkedHashMap<String, Integer>(innerMap));
+			map.put(Priority.HIGH.toString(), new LinkedHashMap<String, Integer>(innerMap));
 			
 			for (ScoredDocument document : documents)
 			{
-				map.get(document.getOnlyField("priority").getText()).get("count").getAndIncrement();
+				Integer count = map.get(document.getOnlyField("priority").getText()).get("count");
+				map.get(document.getOnlyField("priority").getText()).put("count", ++count);
 			}
 
 			return JSONSerializer.toJSON(map).toString();
@@ -189,19 +190,20 @@ public class TicketReportsRest
 			Collection<ScoredDocument> documents = TicketReportsUtil.getTicketsBetweenDates(startTime, endTime,
 					"status");
 			
-			LinkedHashMap<String, AtomicInteger> innerMap = new LinkedHashMap<String, AtomicInteger>();
-			innerMap.put("count", new AtomicInteger(0));
-			innerMap.put("total", new AtomicInteger(documents.size()));
+			LinkedHashMap<String, Integer> innerMap = new LinkedHashMap<String, Integer>();
+			innerMap.put("count", 0);
+			innerMap.put("total", documents.size());
 			
-			LinkedHashMap<String, LinkedHashMap<String, AtomicInteger> > map = new LinkedHashMap<String, LinkedHashMap<String, AtomicInteger>>();
-			map.put(Status.NEW.toString(), innerMap);
-			map.put(Status.OPEN.toString(), innerMap);
-			map.put(Status.PENDING.toString(), innerMap);
-			map.put(Status.CLOSED.toString(), innerMap);
+			LinkedHashMap<String, LinkedHashMap<String, Integer> > map = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
+			map.put(Status.NEW.toString(), new LinkedHashMap<String, Integer>(innerMap));
+			map.put(Status.OPEN.toString(), new LinkedHashMap<String, Integer>(innerMap));
+			map.put(Status.PENDING.toString(), new LinkedHashMap<String, Integer>(innerMap));
+			map.put(Status.CLOSED.toString(), new LinkedHashMap<String, Integer>(innerMap));
 
 			for (ScoredDocument document : documents)
 			{
-				map.get(document.getOnlyField("status").getText()).get("count").getAndIncrement();
+				Integer count = map.get(document.getOnlyField("status").getText()).get("count");
+				map.get(document.getOnlyField("status").getText()).put("count", ++count);
 			}
 
 			return JSONSerializer.toJSON(map).toString();
@@ -233,15 +235,17 @@ public class TicketReportsRest
 			String[] timeDurationToCloseTicket = { "<2 hour", "2-6 hours", "6-12 hours", "12-24 hours", "1-2 days",
 					"2-3 days", "3-4 days", "4-5 days", "5-7 days", "7-10 days", "10-14 days", ">14 days" };
 			
-			LinkedHashMap<String, AtomicInteger> innerMap = new LinkedHashMap<String, AtomicInteger>();
-			innerMap.put("count", new AtomicInteger(0));
-			innerMap.put("total", new AtomicInteger(timeDurationToCloseTicket.length));
+			LinkedHashMap<String, Integer> innerMap = new LinkedHashMap<String, Integer>();
+			innerMap.put("count", 0);
+			//innerMap.put("total", timeDurationToCloseTicket.length);
 			
-			LinkedHashMap<String, LinkedHashMap<String, AtomicInteger>> map = new LinkedHashMap<String, LinkedHashMap<String, AtomicInteger>>();
+			LinkedHashMap<String, LinkedHashMap<String, Integer>> map = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
 
 			for (String string : timeDurationToCloseTicket)
-				map.put(string, innerMap);
+				map.put(string, new LinkedHashMap<String, Integer>(innerMap));
 
+			Integer total = 0;
+			
 			for (ScoredDocument document : documents)
 			{
 				Long createdTime = Math.round(document.getOnlyField("created_time").getNumber()), closedTime = Math
@@ -249,56 +253,70 @@ public class TicketReportsRest
 
 				if (closedTime == null || closedTime == 0)
 					continue;
-
+				
+				total++;
+				
 				long slaTime = closedTime - createdTime;
 
 				if (slaTime < 7200)
 				{
-					map.get("<2 hour").get("count").getAndIncrement();
+					Integer count = map.get("<2 hour").get("count");
+					map.get("<2 hour").put("count", ++count);
 				}
 				else if (slaTime > 7200 && slaTime < 21600)
 				{
-					map.get("2-6 hours").get("count").getAndIncrement();
+					Integer count = map.get("2-6 hours").get("count");
+					map.get("2-6 hours").put("count", ++count);
 				}
 				else if (slaTime > 21600 && slaTime < 43200)
 				{
-					map.get("6-12 hours").get("count").getAndIncrement();
+					Integer count = map.get("6-12 hours").get("count");
+					map.get("6-12 hours").put("count", ++count);
 				}
 				else if (slaTime > 43200 && slaTime < 86400)
 				{
-					map.get("12-24 hours").get("count").getAndIncrement();
+					Integer count = map.get("12-24 hours").get("count");
+					map.get("12-24 hours").put("count", ++count);
 				}
 				else if (slaTime > 86400 && slaTime < 172800)
 				{
-					map.get("1-2 days").get("count").getAndIncrement();
+					Integer count = map.get("1-2 days").get("count");
+					map.get("1-2 days").put("count", ++count);
 				}
 				else if (slaTime > 172800 && slaTime < 259200)
 				{
-					map.get("2-3 days").get("count").getAndIncrement();
+					Integer count = map.get("2-3 days").get("count");
+					map.get("2-3 days").put("count", ++count);
 				}
 				else if (slaTime > 259200 && slaTime < 345600)
 				{
-					map.get("3-4 days").get("count").getAndIncrement();
+					Integer count = map.get("3-4 days").get("count");
+					map.get("3-4 days").put("count", ++count);
 				}
 				else if (slaTime > 345600 && slaTime < 432000)
 				{
-					map.get("4-5 days").get("count").getAndIncrement();
+					Integer count = map.get("4-5 days").get("count");
+					map.get("4-5 days").put("count", ++count);
 				}
 				else if (slaTime > 432000 && slaTime < 604800)
 				{
-					map.get("5-7 days").get("count").getAndIncrement();
+					Integer count = map.get("5-7 days").get("count");
+					map.get("5-7 days").put("count", ++count);
 				}
 				else if (slaTime > 604800 && slaTime < 864000)
 				{
-					map.get("7-10 days").get("count").getAndIncrement();
+					Integer count = map.get("7-10 days").get("count");
+					map.get("7-10 days").put("count", ++count);
 				}
 				else if (slaTime > 864000 && slaTime < 1209600)
 				{
-					map.get("10-14 days").get("count").getAndIncrement();
+					Integer count = map.get("10-14 days").get("count");
+					map.get("10-14 days").put("count", ++count);
 				}
 				else
 				{
-					map.get(">14 days").get("count").getAndIncrement();
+					Integer count = map.get(">14 days").get("count");
+					map.get(">14 days").put("count", ++count);
 				}
 			}
 
@@ -314,13 +332,23 @@ public class TicketReportsRest
 
 	public static void main(String[] args)
 	{
-		JSONObject ticketTypes = new JSONObject();
-		ticketTypes.put("New", 0);
-		ticketTypes.put("Open", 0);
-		ticketTypes.put("Pending", 0);
-		ticketTypes.put("Closed", 0);
+		LinkedHashMap<String, Integer> innerMap = new LinkedHashMap<String, Integer>();
+		innerMap.put("count", 0);
+		innerMap.put("total", 0);
+		
+		LinkedHashMap<String, LinkedHashMap<String, Integer> > map = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
+		map.put(Status.NEW.toString(), new LinkedHashMap<String, Integer>(innerMap));
+		map.put(Status.OPEN.toString(), innerMap);
+		map.put(Status.PENDING.toString(), innerMap);
+		map.put(Status.CLOSED.toString(), innerMap);
 
-		System.out.println(ReportsUtil.initializeFrequencyForReports(1451586600l, 1454264999l, "weekly",
-				"Asia/Kolkata", ticketTypes));
+		for (int i=0; i<3; i++)
+		{
+			int n = map.get("NEW").get("count");
+			
+			 map.get("NEW").put("count", ++n);
+		}
+		
+		System.out.println(map);
 	}
 }
