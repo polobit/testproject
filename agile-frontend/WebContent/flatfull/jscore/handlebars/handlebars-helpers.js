@@ -5871,6 +5871,8 @@ $(function()
 			icon_name = 'icon-sitemap';
 		else if (p_name == 'Deal Goals')
 			icon_name = 'icon-flag';
+		else if (p_name == 'Average Closure')
+			icon_name = 'icon-clock';
 		return icon_name;
 	});
 	
@@ -6654,6 +6656,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
 	else if(p_name == 'Deal Goals')
 		description = 'See how much sales target you have achieved.'
+	else if(p_name == 'Average Closure')
+		description = 'Find out the Average time taken to close tasks.'
 	return description;
 			});
 

@@ -1742,7 +1742,7 @@ public class PortletUtil {
 						if(task.task_start_time==0 || task.task_completed_time-task.task_start_time==0)
 							continue;
 							else{	
-						time_closure=(task.task_completed_time-task.task_start_time)/(60*60);
+						time_closure=((task.task_completed_time-task.task_start_time)*1000)/(60*60);
 						count++;
 						}
 						Total_closure+=time_closure;

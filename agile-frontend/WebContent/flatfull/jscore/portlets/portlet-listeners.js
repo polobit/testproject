@@ -900,7 +900,8 @@ function initializeAddPortletsListeners() {
 							"RevenueGraph" : "left",
 							"MiniCalendar" : "left",
 							"UserActivities" : "left",
-							"Campaignstats" : ""
+							"Campaignstats" : "",
+							"AverageClosure" : 'left'
 						};
 						if (placements_json[p_name]) {
 							placement = "left";
