@@ -1,7 +1,7 @@
 body {
     /*padding-top:70px;*/
     padding-bottom: 40px;
-    margin-left:370px;
+    margin-left:222px;
     -webkit-transition: margin 500ms ease;
     -moz-transition: margin 500ms ease;
     -ms-transition: margin 500ms ease;
@@ -66,7 +66,7 @@ body {
 .container { width:auto; margin:0 0px;}
 .sidebar-nav {
     position:fixed;
-    width:355px;
+    width:220px;
     left:0px;
     bottom:0;
     /*top:62px;*/
@@ -99,7 +99,8 @@ body {
 .sidebar-nav li { line-height:28px; margin-bottom:3px; }
 .sidebar-nav li .lyrow { margin-bottom:5px;}
 .sidebar-nav .box { line-height:26px; width:160px; height:26px; }
-.sidebar-nav .preview { display: block; font-size:12px; line-height:26px;}
+.sidebar-nav .preview { display: block; font-size:11px;}
+.sidebar-nav label { line-height: 14px;}
 .sidebar-nav .view { display: none; }
 .sidebar-nav .remove,
 .sidebar-nav .addcol,
@@ -119,6 +120,7 @@ body {
 .box,.lyrow { position:relative;}
 
 .edit .demo .lyrow .drag { top:5px; right:auto; left: 5px; z-index:10; }
+.edit .demo .lyrow .configuration { z-index:10; }
 .edit .demo .box .drag { top:50px; }
 
 .edit .demo .lyrow .addcol { top:5px; right:auto; left: 5px; z-index:10; }
@@ -296,7 +298,7 @@ div.mce-widget {
 }
 
 #settings {
-    overflow : auto ; 
+    overflow-y : auto ; 
     /*min-height: 800px*/
     overflow-x: hidden;
     height: 100%;

@@ -15,6 +15,8 @@ var EmailBuilderRouter = Backbone.Router.extend({
             $("#emailbuilder-listeners").html($(ui));
         }, "#emailbuilder-listeners");
 	
+        //hide sidebar
+        // $("#app-aside-folded .fa-dedent").click();
         hideTransitionBar();
 	},
 
@@ -45,7 +47,10 @@ var EmailBuilderRouter = Backbone.Router.extend({
         }, "#emailbuilder-listeners");
 	
 	   $('html, body').animate({scrollTop: $('body').offset().top}, 500);
-       hideTransitionBar();
+        
+        //hide sidebar
+        // $("#app-aside-folded .fa-dedent").click();
+        hideTransitionBar();
 
 	},
 

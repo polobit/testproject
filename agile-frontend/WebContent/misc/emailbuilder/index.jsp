@@ -1,5 +1,4 @@
 <%
-Long id = (long)0;
 long unixTime = System.currentTimeMillis() / 1000L;
 %>
 
@@ -15,9 +14,8 @@ long unixTime = System.currentTimeMillis() / 1000L;
         <!-- styles -->
 
         <link href="css/colpick.css" rel="stylesheet"  type="text/css"/>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-        <link href="css/themes/default.css" rel="stylesheet" type="text/css"/>
         <link href="css/template.editor.css?t=<%=unixTime%>" rel="stylesheet"/>
         <link href="css/responsive-table.css" rel="stylesheet"/>
 
@@ -47,11 +45,10 @@ AGILE_EB_OPTIONS['templateId'] = "";
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
         <![endif]-->
         <script type="text/javascript"> var path = '/';</script>
-       <!-- <script type="text/javascript" src="http://feather.aviary.com/js/feather.js"></script> -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/ui/1.9.2/jquery-ui.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
         <script type="text/javascript" src="js/colpick.js"></script>
@@ -63,78 +60,95 @@ AGILE_EB_OPTIONS['templateId'] = "";
 }
 </style>
     </head>
-    <body class="edit" style="overflow-x: hidden;" onload="parent.onEmailBuilderLoad()" id="builderFullBodyHolder">
-        <div class="navbar navbar-inverse navbar-fixed-top navbar-layoutit hidden">
-            <div class="navbar-header">
-                <button data-target="navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
-                    <span class="glyphicon-bar"></span>
-                    <span class="glyphicon-bar"></span>
-                    <span class="glyphicon-bar"></span>
-                </button>
-                <a onclick="return confirm('Are you sure you want to navigate to list of templates ?');" class="btn btn-warning" href="#">back to templates</a>
-            </div>
+    <body class="edit" style="overflow: hidden;" onload="parent.onEmailBuilderLoad()" id="builderFullBodyHolder">
 
-            <div class="collapse navbar-collapse">
-                <ul class="nav" id="menu-layoutit">
-                    <li>
-                        <span id="messagefromphp"></span>
-                        <span id="messagefromphp2"></span>
-                        <div class="btn-group" data-toggle="buttons-radio">
-                            <button type="button" class="btn btn btn-default" id="sourcepreview"><i class="glyphicon-eye-open glyphicon"></i> Preview</button>
-                        </div>
-                        <div class="btn-group">
-                            <a class="btn btn btn-warning" href="#save" id="save" ><i class="glyphicon glyphicon-floppy-disk"></i> Save</a>
-                        </div>
-                    </li>
-                </ul>
-            </div><!--/.navbar-collapse -->
-            <textarea id="templateHtmlContent" class="hidden"><%@ include file="template.html" %></textarea>
-        </div><!--/.navbar-fixed-top -->
+        <a class="hide" href="#save" id="sourcepreview">Preview</a>
+        <a class="hide" href="#save" id="save" ><i class="glyphicon glyphicon-floppy-disk"></i> Save</a>
+        <textarea id="templateHtmlContent" class="hidden"><%@ include file="template.html" %></textarea>
 
         <div class="row">
-            <div class="sidebar-nav">
-                <!-- Nav tabs -->
+            <div class="col-md-9" style="width:720px;">
+                <div class="sidebar-nav">
+                    <div id="elements">
+                        <ul class="nav nav-list accordion-group">
+                            <li class="rows" id="estRows">
 
-                <div id="elements">
-                    <ul class="nav nav-list accordion-group">
-                        <li class="rows" id="estRows">
+                                <!-- title and subtitle -->
+                                <%@ include file="blocks/title-subtitle.html" %>
+                                <!-- horizontal rule -->
+                                <%@ include file="blocks/horizontal-rule.html" %>
+                                <!-- text -->
+                                <%@ include file="blocks/text.html" %>
+                                <!-- image -->
+                                <%@ include file="blocks/image.html" %>
+                                <!-- button -->
+                                <%@ include file="blocks/button.html" %>
+                                <!--Image + Text -->
+                                <%@ include file="blocks/image-text.html" %>
+                                <!-- TEXT AND IMAGE IN COLUMN TEXT ON RIGHT SIDE -->
+                                <%@ include file="blocks/image-text-right.html" %>
+                                <!-- TEXT AND IMAGE IN COLUMN TEXT ON LEFT SIDE -->
+                                <%@ include file="blocks/image-text-left.html" %>
+                                <!-- IMG + TEXT 2 columns -->
+                                <%@ include file="blocks/column-2-image-text.html" %>
 
-                            <!-- title and subtitle -->
-                            <%@ include file="blocks/title-subtitle.html" %>
-                            <!-- horizontal rule -->
-                            <%@ include file="blocks/horizontal-rule.html" %>
-                            <!-- text -->
-                            <%@ include file="blocks/text.html" %>
-                            <!-- image -->
-                            <%@ include file="blocks/image.html" %>
-                            <!-- button -->
-                            <%@ include file="blocks/button.html" %>
-                            <!--Image + Text -->
-                            <%@ include file="blocks/image-text.html" %>
-                            <!-- TEXT AND IMAGE IN COLUMN TEXT ON RIGHT SIDE -->
-                            <%@ include file="blocks/image-text-right.html" %>
-                            <!-- TEXT AND IMAGE IN COLUMN TEXT ON LEFT SIDE -->
-                            <%@ include file="blocks/image-text-left.html" %>
-                            <!-- IMG + TEXT 2 columns -->
-                            <%@ include file="blocks/column-2-image-text.html" %>
+                                <%@ include file="blocks/column-2-text.html" %>
 
-                            <%@ include file="blocks/column-2-text.html" %>
+                                <!-- IMG +TEXT 3 columns -->
+                                <%@ include file="blocks/column-3-image-text.html" %>
 
-                            <!-- IMG +TEXT 3 columns -->
-                            <%@ include file="blocks/column-3-image-text.html" %>
+                                <%@ include file="blocks/column-3-text.html" %>
 
-                            <%@ include file="blocks/column-3-text.html" %>
+                                <!-- SOCIAL LINKS -->
+                                <%@ include file="blocks/social-links.html" %>
 
-                            <!-- SOCIAL LINKS -->
-                            <%@ include file="blocks/social-links.html" %>
-
-                        </li>
-                    </ul>
-
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <!-- END DROP ELEMENTS -->
+
+                <a href="#" class="btn btn-info btn-xs" id="edittamplate" style="margin-bottom: 2px;">Edit background</a>
+                <div id="tosave" style="width:98%;overflow-y:auto;overflow-x:hidden;padding-bottom:30px;">
+                    <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee" >
+                        <tr>
+                            <td width="100%" id="primary" class="main demo" align="center" valign="top" >
+                                <div class="column" style="min-height:150px;">
+
+                                    <div class="lyrow dragitem">
+                                        <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
+
+                                        <span class="drag label label-default"><i class="glyphicon glyphicon-move"></i></span>
+                                        <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
+
+                                        <div class="preview">
+                                            <div class="icon text-block"></div>
+                                            <label>Text</label>
+                                        </div>
+                                        <div class="view">
+                                            <div class="row clearfix">
+                                                <table width="640" class="main" cellspacing="0" cellpadding="0" border="0" style="background-color:#FFFFFF" align="center" data-type='text-block'>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;font-family:Arial;font-size:13px;color:#000000;line-height:22px">
+                                                                <div style="margin:0px 0px 10px 0px;line-height:22px" class="textFix">This is a Text Block! Click on this text to edit it. You can add content easily by dragging content blocks from the right sidebar. Drag this and other blocks around to re-order them.</div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-3" style="min-width:260px;">
                 <!-- START ELEMENT -->
-                <div class="hide" id="settings">
+                <div class="hide" id="settings" style="height:680px;overflow-y:auto;overflow-x:hidden;">
 
                     <form class="form-inline" id="common-settings">
                         <h4 class="text text-info">Padding</h4>
@@ -159,7 +173,6 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                     </tbody>
                                 </table>
                             </center>
-
                     </form>
 
                     <h4  class="text text-info">Style</h4>
@@ -193,15 +206,16 @@ AGILE_EB_OPTIONS['templateId'] = "";
                     </form>
 
                     <div id="imageproperties" style="margin-top:5px">
-                         <h4 class="text text-info">Image</h4>
+                        <h4 class="text text-info">Image</h4>
                         <div class="form-group">
                             
                             <div class="row">
                                 <div class="col-xs-11">
-<div class="input-group">
-<span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
-<input type="text" id="image-link" class="form-control" placeholder="Add link to image" aria-describedby="basic-addon11" data-id="none">
-</div><br>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
+                                        <input type="text" id="image-link" class="form-control" placeholder="Add link to image" aria-describedby="basic-addon11" data-id="none">
+                                    </div>
+                                    <br>
                                 </div>
                             </div>
 
@@ -214,6 +228,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                     <input type="file" id="uploadImageToS3Btn" class="hidden">
                                 </div>
                             </div>
+
                         </div>
 
                         <div class="form-group">
@@ -240,18 +255,17 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
                             </div>
                         </div>
-
-
                     </div>
+
                     <form id="editor" style="margin-top:5px">
                         <h4 class="text text-info">Text</h4>
-                    <div class="form-inline" id="font-settings" style="margin-top:5px">
-                        <div class="form-group">
-                            <label for="fontstyle">Font style</label>
-                            <div id="fontstyle" class="color-circle"><i class="fa fa-font"></i></div>
+                        <div class="form-inline" id="font-settings" style="margin-top:5px">
+                            <div class="form-group">
+                                <label for="fontstyle">Font style</label>
+                                <div id="fontstyle" class="color-circle"><i class="fa fa-font"></i></div>
 
+                            </div>
                         </div>
-                    </div>
 
                     <div class="hide" id='font-style'>
                         <div id="mainfontproperties" >
@@ -629,55 +643,12 @@ AGILE_EB_OPTIONS['templateId'] = "";
                     </div>
                 </div>
                 <!-- END SETTINGS -->
-
             </div>
-            <!--/span-->
 
-            <a href="#" class="btn btn-info btn-xs" id="edittamplate" style="margin-bottom: 2px;">Edit background</a>
-            <div id="tosave" style="width:98%;" data-id="<%=id%>"  data-paramone="11" data-paramtwo="22" data-paramthree="33">
-                <!-- inizio parte html da salvare -->
-                <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee" >
-                    <tr>
-                        <td width="100%" id="primary" class="main demo" align="center" valign="top" >
-                            <div class="column" style="min-height:150px;">
-
-<div class="lyrow dragitem">
-    <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
-
-    <span class="drag label label-default"><i class="glyphicon glyphicon-move"></i></span>
-    <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
-
-    <div class="preview">
-        <div class="icon text-block"></div>
-        <label>Text</label>
-    </div>
-    <div class="view">
-        <div class="row clearfix">
-            <table width="640" class="main" cellspacing="0" cellpadding="0" border="0" style="background-color:#FFFFFF" align="center" data-type='text-block'>
-                <tbody>
-                    <tr>
-                        <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;font-family:Arial;font-size:13px;color:#000000;line-height:22px">
-                            <div style="margin:0px 0px 10px 0px;line-height:22px" class="textFix">This is a Text Block! Click on this text to edit it. You can add content easily by dragging content blocks from the right sidebar. Drag this and other blocks around to re-order them.</div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div id="download-layout"></div>
         </div>
-    </div>
-</div>
 
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-
-            </div>
-            <div id="download-layout">
-
-            </div>
-        </div>
         <!--/row-->
-        <!-- Button trigger modal -->
 
 
         <!-- Modal -->
@@ -707,26 +678,6 @@ AGILE_EB_OPTIONS['templateId'] = "";
         <textarea id="download" class="hide"></textarea>
         <textarea id="selector" class="hide"></textarea>
         <textarea  id="path" class="hide"></textarea>
-
-
-
-
-        <div class="modal fade" id="previewimg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
-            <div class="modal-dialog" role="document">
-                <div class="modal-content" style="min-width:120px">
-                    <div class="modal-header">
-                        Imagegallery
-                    </div>
-                    <div class="modal-body" align="center">
-                        
-                    </div>
-                    <div class="modal-footer">
-
-                        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </body>
 

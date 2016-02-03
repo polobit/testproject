@@ -59,22 +59,29 @@ function guid() {
 /* give the attribute id to item and build the function on event onclick */
 function showSettings() {
     var settings = $('#settings');
-    var elements = $('#elements');
+    // var elements = $('#elements');
     if (settings.hasClass('hide')) {
-        elements.slideUp(300);
+        // elements.slideUp(300);
         settings.removeClass('hide');
         settings.slideDown(300);
     }
 }
 
-function showElements() {
+function hideSettings() {
     var settings = $('#settings');
-    var elements = $('#elements');
     if (!settings.hasClass('hide')) {
-        settings.slideUp(300);
         settings.addClass('hide');
-        elements.slideDown(300);
     }
+}
+
+function showElements() {
+    // var settings = $('#settings');
+    // var elements = $('#elements');
+    // if (!settings.hasClass('hide')) {
+    //     settings.slideUp(300);
+    //     settings.addClass('hide');
+    //     elements.slideDown(300);
+    // }
 }
 
 function handleObjects() {
@@ -601,8 +608,9 @@ function hideAllSettings(exceptThisElement) {
 }
 
 $(window).resize(function () {
-    $("body").css("min-height", $(window).height() - 90);
-    $(".demo").css("min-height", $(window).height() - 160);
+    // $("body").css("min-height", $(window).height() - 90);
+    // $(".demo").css("min-height", $(window).height() - 160);
+    $("#tosave").css("height", $(window).height() - 30);
 });
 
 $(document).ready(function () {
@@ -887,7 +895,8 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
          */
         $('div.row').removeClass('active');
         $('.selected-item').removeClass('selected-item').css('border', 'none');
-        showElements();
+        // showElements();
+        hideSettings();
     });
 
 
@@ -974,8 +983,6 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     });
 
 
-    $("body").css("min-height", $(window).height() - 90);
-    $(".demo").css("min-height", $(window).height() - 160);
     $(".demo .column").sortable({connectWith: ".column", opacity: .35, handle: ".drag"});
     $(".sidebar-nav .lyrow").draggable({connectToSortable: ".column", helper: 'clone',
         stop: function (e, t) {

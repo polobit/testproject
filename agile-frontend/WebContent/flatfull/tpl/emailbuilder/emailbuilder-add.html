@@ -16,14 +16,14 @@
 
 <div class="row n-m">
 
-<div class="col-md-2">
+<div class="col-md-3">
   <div class="form-group">
     <b>Name of template:</b> <span class="field_req">*</span><br>
     <input type="text" class="form-control required" name="nameoftemplate" id="nameoftemplate" placeholder="Name of template">
   </div>
 </div>
 
-<div class="col-md-3">
+<div class="col-md-4">
   <div class="form-group">
     <b>Subject:</b> <span class="field_req">*</span><br>
     <input type="text" class="form-control required" name="subject" id="subject" placeholder="Enter subject">
@@ -31,31 +31,7 @@
   </div>
 </div>
 
-<div class="col-md-4">
-  <div class="form-group" id="tpl-attachment-select">
-    <b>Attachment:</b><br>
-    <a href="#" class="addAttachmentLink text-info"><i class='icon-plus-sign'/></i> Add Attachment</a>
-    
-    <span id="attachmentSelectBoxHolder" style="display:none;">
-        <select id="attachmentSelectBox" style="margin-bottom: -1px;" name="document_id" class="form-control inline-block w overflow-auto">
-        </select>
-        <a href="#" class="btn btn-default btn-sm attachmentCancelBtn">Cancel</a>
-        <a href="#" class="btn btn-sm btn-primary add-tpl-attachment-confirm attachmentAddBtn">Add</a>
-        <span id="attachmentSelectBoxRequired" for="attachmentSelectBox" generated="true" class="help-inline" style="display:none;">This field is required.</span>
-    </span>
-
-    <span id="attachmentHolder" style="display:none">
-        <div class="email-attchment-bg form-control inline-block">
-            <div id="attachment_text" class="text-ellipsis"></div>
-            <input type="hidden" id="attachment_id" name="attachment_id" value=""/>
-        </div> 
-        <a href="#" class="attachmentCancelBtn pos-rlt pos-t-n-xs"><i class="icon-remove-circle"></i></a>     
-    </span>
-
-  </div>
-</div>
-
-<div class="col-md-1">
+<div class="col-md-2">
     <span id="nameoftemplate-msg" class="text-center"></span>
 </div>
 
@@ -92,6 +68,30 @@
     </div>
   </div>
 <br>
+
+<div class="row col-md-6">
+  <div class="form-group" id="tpl-attachment-select">
+    <b>Attachment:</b><br>
+    <a href="#" class="addAttachmentLink text-info"><i class='icon-plus-sign'/></i> Add Attachment</a>
+    
+    <span id="attachmentSelectBoxHolder" style="display:none;">
+        <select id="attachmentSelectBox" style="margin-bottom: -1px;" name="document_id" class="form-control inline-block w overflow-auto">
+        </select>
+        <a href="#" class="btn btn-default btn-sm attachmentCancelBtn">Cancel</a>
+        <a href="#" class="btn btn-sm btn-primary add-tpl-attachment-confirm attachmentAddBtn">Add</a>
+        <span id="attachmentSelectBoxRequired" for="attachmentSelectBox" generated="true" class="help-inline" style="display:none;">This field is required.</span>
+    </span>
+
+    <span id="attachmentHolder" style="display:none">
+        <div class="email-attchment-bg form-control inline-block">
+            <div id="attachment_text" class="text-ellipsis"></div>
+            <input type="hidden" id="attachment_id" name="attachment_id" value=""/>
+        </div> 
+        <a href="#" class="attachmentCancelBtn pos-rlt pos-t-n-xs"><i class="icon-remove-circle"></i></a>     
+    </span>
+
+  </div>
+</div>
                 </fieldset>
             </form>
         </div>
