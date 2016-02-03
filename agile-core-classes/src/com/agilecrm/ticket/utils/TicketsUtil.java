@@ -12,11 +12,12 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketsDocument;
-import com.agilecrm.ticket.entitys.TicketActivity;
-import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.Tickets;
@@ -230,8 +231,8 @@ public class TicketsUtil
 			new TicketsDocument().add(ticket);
 
 			// Logging ticket created activity
-			new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "", plain_text,
-					"last_reply_text").save();
+			ActivityUtil.createTicketActivity(ActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "", plain_text,
+					"last_reply_text");
 
 			// Execute triggers
 			TicketTriggerUtil.executeTriggerForNewTicket(ticket);
@@ -312,8 +313,8 @@ public class TicketsUtil
 		new TicketsDocument().edit(ticket);
 
 		// Logging activity
-		new TicketActivity(TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id, oldStatus.toString(),
-				status.toString(), "status").save();
+		ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+				oldStatus.toString(), status.toString(), "status");
 
 		return ticket;
 	}
@@ -341,8 +342,8 @@ public class TicketsUtil
 		new TicketsDocument().edit(ticket);
 
 		// Logging ticket assigned activity
-		new TicketActivity(TicketActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id, oldGroupID + "",
-				group_id + "", "groupID").save();
+		ActivityUtil.createTicketActivity(ActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id, oldGroupID
+				+ "", group_id + "", "groupID");
 
 		return ticket;
 	}
@@ -378,12 +379,12 @@ public class TicketsUtil
 
 		if (isNewTicket)
 			// Logging ticket assigned activity
-			new TicketActivity(TicketActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, null, assignee_id + "",
-					"assigneeID").save();
+			ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, null,
+					assignee_id + "", "assigneeID");
 		else
 			// Logging ticket transfer activity
-			new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
-					ticket.assignee_id + "", assignee_id + "", "assigneeID").save();
+			ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
+					ticket.assignee_id + "", assignee_id + "", "assigneeID");
 
 		return ticket;
 	}
@@ -407,8 +408,8 @@ public class TicketsUtil
 		new TicketsDocument().edit(ticket);
 
 		// Logging activity
-		new TicketActivity(TicketActivityType.TICKET_PRIORITY_CHANGE, ticket.contactID, ticket.id,
-				oldPriority.toString(), newPriority.toString(), "priority").save();
+		ActivityUtil.createTicketActivity(ActivityType.TICKET_PRIORITY_CHANGE, ticket.contactID, ticket.id,
+				oldPriority.toString(), newPriority.toString(), "priority");
 
 		return ticket;
 	}
@@ -435,8 +436,8 @@ public class TicketsUtil
 		new TicketsDocument().edit(ticket);
 
 		// Logging activity
-		new TicketActivity(TicketActivityType.TICKET_TYPE_CHANGE, ticket.contactID, ticket.id,
-				oldTicketType.toString(), newTicketType.toString(), "type").save();
+		ActivityUtil.createTicketActivity(ActivityType.TICKET_TYPE_CHANGE, ticket.contactID, ticket.id,
+				oldTicketType.toString(), newTicketType.toString(), "type");
 
 		return ticket;
 	}
@@ -459,9 +460,8 @@ public class TicketsUtil
 		new TicketsDocument().edit(ticket);
 
 		// Logging activity
-		new TicketActivity((is_favorite ? TicketActivityType.TICKET_MARKED_FAVORITE
-				: TicketActivityType.TICKET_MARKED_UNFAVORITE), ticket.contactID, ticket.id, "", "", "is_favorite")
-				.save();
+		ActivityUtil.createTicketActivity((is_favorite ? ActivityType.TICKET_MARKED_FAVORITE
+				: ActivityType.TICKET_MARKED_UNFAVORITE), ticket.contactID, ticket.id, "", "", "is_favorite");
 
 		return ticket;
 	}
@@ -477,8 +477,8 @@ public class TicketsUtil
 		new TicketsDocument().edit(ticket);
 
 		// Logging activity
-		new TicketActivity((is_spam ? TicketActivityType.TICKET_MARKED_SPAM : TicketActivityType.TICKET_MARKED_UNSPAM),
-				ticket.contactID, ticket.id, "", "", "is_spam").save();
+		ActivityUtil.createTicketActivity((is_spam ? ActivityType.TICKET_MARKED_SPAM
+				: ActivityType.TICKET_MARKED_UNSPAM), ticket.contactID, ticket.id, "", "", "is_spam");
 
 		return ticket;
 	}
@@ -502,7 +502,8 @@ public class TicketsUtil
 		}
 
 		// Logging activity
-		new TicketActivity(TicketActivityType.TICKET_NOTES_FORWARD, ticket.contactID, ticket.id, "", email, "").save();
+		ActivityUtil
+				.createTicketActivity(ActivityType.TICKET_NOTES_FORWARD, ticket.contactID, ticket.id, "", email, "");
 
 		return ticket;
 	}
@@ -531,8 +532,8 @@ public class TicketsUtil
 		new TicketsDocument().edit(ticket);
 
 		// Logging activity
-		new TicketActivity(TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id, oldStatus.toString(),
-				Status.CLOSED.toString(), "status").save();
+		ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+				oldStatus.toString(), Status.CLOSED.toString(), "status");
 
 		return ticket;
 	}
@@ -550,17 +551,17 @@ public class TicketsUtil
 
 		List<Key<TicketLabels>> labels = ticket.labels_keys_list;
 
-		TicketActivityType ticketActivityType = null;
+		ActivityType ActivityType = null;
 
 		if ("add".equalsIgnoreCase(command))
 		{
 			labels.add(label);
-			ticketActivityType = TicketActivityType.TICKET_LABEL_ADD;
+			ActivityType = ActivityType.TICKET_LABEL_ADD;
 		}
 		else
 		{
 			labels.remove(label);
-			ticketActivityType = TicketActivityType.TICKET_LABEL_REMOVE;
+			ActivityType = ActivityType.TICKET_LABEL_REMOVE;
 		}
 
 		ticket.labels_keys_list = labels;
@@ -569,7 +570,7 @@ public class TicketsUtil
 		new TicketsDocument().edit(ticket);
 
 		// Logging activity
-		new TicketActivity(ticketActivityType, ticket.contactID, ticket.id, "", label.getId() + "", "labels").save();
+		ActivityUtil.createTicketActivity(ActivityType, ticket.contactID, ticket.id, "", label.getId() + "", "labels");
 
 		return ticket;
 	}
@@ -587,17 +588,17 @@ public class TicketsUtil
 
 		List<String> CCEmails = ticket.cc_emails;
 
-		TicketActivityType ticketActivityType = null;
+		ActivityType ActivityType = null;
 
 		if ("add".equalsIgnoreCase(command))
 		{
 			CCEmails.add(email.trim());
-			ticketActivityType = TicketActivityType.TICKET_CC_EMAIL_ADD;
+			ActivityType = ActivityType.TICKET_CC_EMAIL_ADD;
 		}
 		else
 		{
 			CCEmails.remove(email);
-			ticketActivityType = TicketActivityType.TICKET_CC_EMAIL_REMOVE;
+			ActivityType = ActivityType.TICKET_CC_EMAIL_REMOVE;
 		}
 
 		ticket.cc_emails = CCEmails;
@@ -606,7 +607,7 @@ public class TicketsUtil
 		new TicketsDocument().edit(ticket);
 
 		// Logging activity
-		new TicketActivity(ticketActivityType, ticket.contactID, ticket.id, "", email, "cc_emails").save();
+		ActivityUtil.createTicketActivity(ActivityType, ticket.contactID, ticket.id, "", email, "cc_emails");
 
 		return ticket;
 	}
@@ -736,7 +737,7 @@ public class TicketsUtil
 		new TicketsDocument().delete(ticket_id + "");
 
 		// Logging deleting ticket activity
-		new TicketActivity(TicketActivityType.TICKET_DELETED, ticket.contactID, ticket.id, "", "", "").save();
+		ActivityUtil.createTicketActivity(ActivityType.TICKET_DELETED, ticket.contactID, ticket.id, "", "", "");
 	}
 
 	/**
@@ -790,8 +791,8 @@ public class TicketsUtil
 
 			// Logging group change activity
 			if (oldGroupID != ticket.groupID)
-				new TicketActivity(TicketActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id, oldGroupID
-						+ "", group_id + "", "groupID").save();
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id,
+						oldGroupID + "", group_id + "", "groupID");
 		}
 		else
 		{
@@ -827,17 +828,17 @@ public class TicketsUtil
 
 			// Logging group change activity
 			if (oldGroupID != ticket.groupID)
-				new TicketActivity(TicketActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id, oldGroupID
-						+ "", group_id + "", "groupID").save();
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id,
+						oldGroupID + "", group_id + "", "groupID");
 
 			// Logging new ticket assigned activity
 			if (isNewTicket)
-				new TicketActivity(TicketActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, "", assignee_id
-						+ "", "assigneeID").save();
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, "",
+						assignee_id + "", "assigneeID");
 			else
 				// Logging ticket assignee changed activity
-				new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
-						oldAssigneeID + "", assignee_id + "", "assigneeID").save();
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
+						oldAssigneeID + "", assignee_id + "", "assigneeID");
 		}
 
 		return ticket;
@@ -859,8 +860,8 @@ public class TicketsUtil
 		new TicketsDocument().edit(ticket);
 
 		// Logging ticket assignee changed activity
-		new TicketActivity(TicketActivityType.DUE_DATE_CHANGED, ticket.contactID, ticket.id, oldDueDate + "", dueDate
-				+ "", "due_date").save();
+		ActivityUtil.createTicketActivity(ActivityType.DUE_DATE_CHANGED, ticket.contactID, ticket.id, oldDueDate + "",
+				dueDate + "", "due_date");
 
 		return ticket;
 	}
@@ -917,5 +918,130 @@ public class TicketsUtil
 		map.put("requester_email", email);
 
 		return Tickets.ticketsDao.listByProperty(map);
+	}
+	
+	/**
+	 * 
+	 */
+	public static List<Tickets> getTicketsByContactID(Long contactID) throws JSONException
+	{
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("contact_key", new Key<Contact>(Contact.class, contactID));
+
+		return Tickets.ticketsDao.listByProperty(map);
+	}
+	
+	public static List<Activity> includeData(List<Activity> activitys) throws Exception
+	{
+		if (activitys == null || activitys.size() == 0)
+			return new ArrayList<Activity>();
+
+		Map<Long, TicketGroups> groupsList = new HashMap<Long, TicketGroups>();
+		Map<Long, DomainUser> assigneeList = new HashMap<Long, DomainUser>();
+
+		for (Activity activity : activitys)
+		{
+			switch (activity.activity_type)
+			{
+			case TICKET_LABEL_ADD:
+			case TICKET_LABEL_REMOVE:
+			{
+				Long labelID = Long.parseLong(activity.custom2);
+
+				try
+				{
+					activity.ticket_label = TicketLabels.dao.get(labelID);
+				}
+				catch (Exception e)
+				{
+					System.out.println(ExceptionUtils.getFullStackTrace(e));
+				}
+				
+				break;
+			}
+			case TICKET_ASSIGNED:
+			{
+				Long assigneeID = Long.parseLong(activity.custom2);
+
+				if (!assigneeList.containsKey(assigneeID))
+				{
+
+					DomainUser temp = DomainUserUtil.getDomainUser(assigneeID);
+
+					if (temp != null)
+						assigneeList.put(assigneeID, temp);
+				}
+
+				activity.new_assignee = assigneeList.get(assigneeID);
+				break;
+			}
+			case TICKET_ASSIGNEE_CHANGED:
+			{
+				Long newAssigneeID = Long.parseLong(activity.custom2);
+
+				Long oldAssigneeID = null;
+
+				try
+				{
+					oldAssigneeID = Long.parseLong(activity.custom1);
+				}
+				catch (Exception e)
+				{
+				}
+
+				if (!assigneeList.containsKey(newAssigneeID))
+				{
+
+					DomainUser temp = DomainUserUtil.getDomainUser(newAssigneeID);
+
+					if (temp != null)
+						assigneeList.put(newAssigneeID, temp);
+				}
+
+				if (oldAssigneeID != null && !assigneeList.containsKey(oldAssigneeID))
+				{
+
+					DomainUser temp = DomainUserUtil.getDomainUser(oldAssigneeID);
+
+					if (temp != null)
+						assigneeList.put(oldAssigneeID, temp);
+				}
+
+				activity.new_assignee = assigneeList.get(newAssigneeID);
+				activity.old_assignee = assigneeList.get(oldAssigneeID);
+				break;
+			}
+			case TICKET_GROUP_CHANGED:
+			{
+				Long newGroupID = Long.parseLong(activity.custom2);
+				Long oldGroupID = Long.parseLong(activity.custom1);
+
+				if (activity.custom1 != null)
+					if (!groupsList.containsKey(newGroupID))
+					{
+
+						TicketGroups group = TicketGroupUtil.getTicketGroupById(newGroupID);
+
+						if (group != null)
+							groupsList.put(newGroupID, group);
+					}
+
+				if (!groupsList.containsKey(oldGroupID))
+				{
+
+					TicketGroups group = TicketGroupUtil.getTicketGroupById(oldGroupID);
+
+					if (group != null)
+						groupsList.put(oldGroupID, group);
+				}
+
+				activity.new_group = groupsList.get(newGroupID);
+				activity.old_group = groupsList.get(oldGroupID);
+				break;
+			}
+			}
+		}
+
+		return activitys;
 	}
 }

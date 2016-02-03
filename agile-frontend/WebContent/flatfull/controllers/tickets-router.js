@@ -572,8 +572,8 @@ $('#content').find('.helpdesk-tab').addClass('select');
  			$('#admin-prefs-tabs-content').html(addTicketLabelView.render().el);
  			$('#content').find('#AdminPrefsTab .select').removeClass('select');
  			$('#content').find('.helpdesk-tab').addClass('select');
-});
-},
+		});
+	},
 
 	/**
 	 * Edit ticket group
@@ -605,15 +605,17 @@ $('#content').find('.helpdesk-tab').addClass('select');
  				url : "/core/api/tickets/labels",
  				postRenderCallback : function(el, data) {
 
- 					Ticket_Labels.loadColorPicker(data.color_code);
+ 					setTimeout(function(){
+ 						Ticket_Labels.loadColorPicker(data.color_code);
+ 					}, 0);
  				}
  			});
 
  			$('#admin-prefs-tabs-content').html(editTicketGroupView.render().el);
  			$('#content').find('#AdminPrefsTab .select').removeClass('select');
  			$('#content').find('.helpdesk-tab').addClass('select');
-});
-},
+		});
+	},
 
 	/**
 	 * Shows list of Groups
@@ -751,27 +753,25 @@ $('#content').find('.helpdesk-tab').addClass('select');
 
 	 			Ticket_Labels.fetchCollection(function(){
 
-	 					App_Ticket_Module.cannedResponseCollection = new Base_Collection_View({
-	 						url : '/core/api/tickets/canned-messages',
-	 						templateKey : "ticket-canned-response",
-	 						individual_tag_name : 'tr',
-	 						slateKey : "no-groups",
-	 						postRenderCallback : function(el) {
+ 					App_Ticket_Module.cannedResponseCollection = new Base_Collection_View({
+ 						url : '/core/api/tickets/canned-messages',
+ 						templateKey : "ticket-canned-response",
+ 						individual_tag_name : 'tr',
+ 						slateKey : "no-groups",
+ 						postRenderCallback : function(el) {
 
-	 						}
-	 					});
+ 						}
+ 					});
 
-	 					App_Ticket_Module.cannedResponseCollection.collection.fetch();
+ 					App_Ticket_Module.cannedResponseCollection.collection.fetch();
 
-	 					$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.cannedResponseCollection.el);
-	 					$('#content').find('#AdminPrefsTab .select').removeClass('select');
-	 					$('#content').find('.helpdesk-tab').addClass('select');
-	 				});
-
-
-	 		});
-});
-},
+ 					$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.cannedResponseCollection.el);
+ 					$('#content').find('#AdminPrefsTab .select').removeClass('select');
+ 					$('#content').find('.helpdesk-tab').addClass('select');
+ 				});
+			});
+		});
+	},
 
 	/**
 	 * Adds canned response
@@ -796,7 +796,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
  					initTicketCannedResponseEvents(el);
  				},
  				saveCallback : function(){
- 					Backbone.history.navigate( "ticket-canned-responses", { trigger : true });
+ 					Backbone.history.navigate( "canned-responses", { trigger : true });
  				}
  			});
 
@@ -804,7 +804,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
  			$('#content').find('#AdminPrefsTab .select').removeClass('select');
  			$('#content').find('.helpdesk-tab').addClass('select');
 	 	});
-},
+	},
 
 	/**
 	 * Edit canned response
@@ -837,7 +837,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
  					initTicketCannedResponseEvents(el);
  				},
  				saveCallback : function(){
- 					Backbone.history.navigate( "ticket-canned-responses", { trigger : true });
+ 					Backbone.history.navigate( "canned-responses", { trigger : true });
  				}
  			});
 

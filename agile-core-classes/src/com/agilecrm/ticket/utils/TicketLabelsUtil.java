@@ -57,13 +57,11 @@ public class TicketLabelsUtil
 	{
 		TicketLabels oldTicketLabel = TicketLabelsUtil.getLabelByName(ticketLabel.label);
 
-		if (!oldTicketLabel.id.equals(ticketLabel.id))
+		if (oldTicketLabel != null && !oldTicketLabel.id.equals(ticketLabel.id))
 			throw new Exception("Label already exists.");
+		
+		TicketLabels.dao.put(ticketLabel);
 
-		oldTicketLabel.label = ticketLabel.label;
-		oldTicketLabel.color_code = ticketLabel.color_code;
-		TicketLabels.dao.put(oldTicketLabel);
-
-		return oldTicketLabel;
+		return ticketLabel;
 	}
 }

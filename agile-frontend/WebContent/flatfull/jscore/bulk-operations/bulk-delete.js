@@ -346,6 +346,11 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 						App_Ticket_Module.ticketFilters();
 					break;
 				}
+				case 'core/api/tickets/labels/bulk':{
+					if(id_array.length == App_Ticket_Module.labelsCollection.collection.length)
+						App_Ticket_Module.ticketLabels();
+					break;
+				}
 			}	
 			
 			// Show bulk operations only when thead check box is checked

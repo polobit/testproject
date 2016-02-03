@@ -472,6 +472,15 @@ table.ticket-data > tbody > tr > td {
     background-color: #f6f8f8;
     border-bottom: none;
 }
+
+.color-picket-icon{
+    height: 16px;
+    width: 16px;
+    padding: 0!important;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    line-height: 16px;
+}
 body .app-content, #notes-collection-container {
   line-height: 1.35;
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -1832,7 +1833,58 @@ public class ActivityUtil
 	    System.out.println("Exception occured in  import log " + e.getMessage());
 	}
     }
+    
+    /**
+	 * Creates log ticket activity
+	 * 
+	 * @param activity_type
+	 * @param entityType
+	 * @param saved_contacts
+	 * @param merged_contacts
+	 */
+	public static void createTicketActivity(ActivityType ticket_activity_type, final Long contact_id, Long ticket_id,
+			String old_data, String new_data, String changed_field)
+	{
+		try
+		{
+			Contact contact = ContactUtil.getContact(contact_id);
 
+			Activity activity = new Activity();
+			activity.entity_type = EntityType.TICKET;
+			activity.activity_type = ticket_activity_type;
+			activity.entity_id = ticket_id;
+
+			activity.custom1 = old_data;
+			activity.custom2 = new_data;
+			activity.custom3 = changed_field;
+			
+			String calledToName = "";
+			ContactField firstname = contact.getContactFieldByName("first_name");
+			ContactField lastname = contact.getContactFieldByName("last_name");
+
+			if (firstname != null)
+				calledToName += firstname.value;
+
+			if (lastname != null)
+			{
+				calledToName += " ";
+				calledToName += lastname.value;
+			}
+			
+			JSONObject obj = new JSONObject();
+			obj.put("contactid", contact.id);
+			obj.put("contactname", calledToName);
+
+			activity.related_contact_ids = new JSONArray().put(obj).toString();
+
+			activity.save();
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception occured in  import log " + e.getMessage());
+		}
+	}
+	
     public static String returnNormalName(String str)
     {
 	if (str.contains("_"))
@@ -1864,5 +1916,33 @@ public class ActivityUtil
 	    return 0;
 	}
     }
+    
+    /**
+	 * Gets the count of answered calls.
+	 * 
+	 * @param activityType
+	 *            - Given activity type.
+	 * 
+	 * @return list of activities based on activity type.
+	 */
+	public static List<Activity> getTicketActivitiesByContactID(Long contactID)
+	{
+		try
+		{
+			Key<Contact> contactKey = new Key<Contact>(Contact.class, contactID);
 
+			Map<String, Object> conditionsMap = new HashMap<String, Object>();
+			conditionsMap.put("related_contacts", contactKey);
+			conditionsMap.put("entity_type", EntityType.TICKET);
+
+			return dao.listByProperty(conditionsMap);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+
+		return new ArrayList<Activity>();
+	}
 }

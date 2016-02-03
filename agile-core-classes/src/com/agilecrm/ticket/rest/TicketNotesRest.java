@@ -20,9 +20,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.examples.HtmlToPlainText;
 import org.jsoup.nodes.Document;
 
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.search.document.TicketsDocument;
-import com.agilecrm.ticket.entitys.TicketActivity;
-import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
@@ -104,8 +104,8 @@ public class TicketNotesRest
 						new ArrayList<TicketDocuments>());
 
 				// Logging private notes activity
-				new TicketActivity(TicketActivityType.TICKET_PRIVATE_NOTES_ADD, ticket.contactID, ticket.id,
-						plain_text, html_text, "html_text").save();
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_PRIVATE_NOTES_ADD, ticket.contactID, ticket.id,
+						plain_text, html_text, "html_text");
 			}
 			else
 			{
@@ -125,8 +125,8 @@ public class TicketNotesRest
 					ticket.assigned_time = Calendar.getInstance().getTimeInMillis();
 
 					// Logging status changed activity
-					new TicketActivity(TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-							Status.NEW.toString(), Status.PENDING.toString(), "status").save();
+					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+							Status.NEW.toString(), Status.PENDING.toString(), "status");
 				}
 				else
 				{
@@ -134,8 +134,8 @@ public class TicketNotesRest
 					if (ticket.assignee_id != domainUserKey)
 					{
 						// Logging ticket assignee changed activity
-						new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
-								ticket.assigneeID + "", domainUserKey.getId() + "", "assigneeID").save();
+						ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
+								ticket.assigneeID + "", domainUserKey.getId() + "", "assigneeID");
 
 						ticket.assignee_id = domainUserKey;
 						ticket.assigneeID = domainUserKey.getId();
@@ -143,8 +143,8 @@ public class TicketNotesRest
 
 					if (Status.OPEN == ticket.status)
 						// Logging status changed activity
-						new TicketActivity(TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-								Status.OPEN.toString(), Status.PENDING.toString(), "status").save();
+						ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+								Status.OPEN.toString(), Status.PENDING.toString(), "status");
 				}
 
 				// Set status to pending as it is replied by assignee
@@ -164,8 +164,8 @@ public class TicketNotesRest
 				TicketNotesUtil.sendReplyToRequester(ticket);
 
 				// Logging public notes activity
-				new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id, html_text,
-						plain_text, "html_text").save();
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id, html_text,
+						plain_text, "html_text");
 
 				// Execute note created by user trigger
 				TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);

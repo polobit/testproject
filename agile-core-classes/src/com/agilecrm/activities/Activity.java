@@ -8,11 +8,16 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketLabels;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
@@ -89,7 +94,7 @@ public class Activity extends Cursor
      */
     public static enum EntityType
     {
-	CONTACT, DEAL, TASK, EVENT, CAMPAIGN, DOCUMENT
+	CONTACT, DEAL, TASK, EVENT, CAMPAIGN, DOCUMENT, TICKET
     };
 
     /**
@@ -102,7 +107,9 @@ public class Activity extends Cursor
 
 	DOCUMENT_REMOVE, CAMPAIGN, BULK_ACTION, BULK_DELETE, EVENT_RELATED_CONTACTS, TASK_RELATED_CONTACTS, DEAL_RELATED_CONTACTS, BULK_EMAIL_SENT, DEAL_LOST, TAG_ADD, TAG_REMOVE, EMAIL_SENT, EVENT_ADD, DEAL_CHANGE, DEAL_ADD, DEAL_EDIT, DEAL_DELETE, DEAL_OWNER_CHANGE, DEAL_MILESTONE_CHANGE, DEAL_CLOSE, DOCUMENT_ADD, NOTE_ADD, CALL, CONTACT_OWNER_CHANGE,
 
-	CONTACT_CREATE, COMPANY_CREATE, CONTACT_DELETE, COMPANY_DELETE, DEAL_ARCHIVE, DEAL_RESTORE, CONTACT_IMPORT, CONTACT_EXPORT, COMPANY_IMPORT, COMPANY_EXPORT, DEAL_IMPORT, DEAL_EXPORT, CAMPAIGN_CREATE, CAMPAIGN_EDIT, CAMPAIGN_DELETE
+	CONTACT_CREATE, COMPANY_CREATE, CONTACT_DELETE, COMPANY_DELETE, DEAL_ARCHIVE, DEAL_RESTORE, CONTACT_IMPORT, CONTACT_EXPORT, COMPANY_IMPORT, COMPANY_EXPORT, DEAL_IMPORT, DEAL_EXPORT, CAMPAIGN_CREATE, CAMPAIGN_EDIT, CAMPAIGN_DELETE,
+	
+	TICKET_CREATED, TICKET_DELETED, TICKET_ASSIGNED, TICKET_ASSIGNEE_CHANGED, TICKET_GROUP_CHANGED, TICKET_STATUS_CHANGE, TICKET_PRIORITY_CHANGE, TICKET_TYPE_CHANGE, TICKET_LABEL_ADD, TICKET_LABEL_REMOVE, TICKET_ASSIGNEE_REPLIED, TICKET_REQUESTER_REPLIED, TICKET_PRIVATE_NOTES_ADD, TICKET_MARKED_FAVORITE, TICKET_MARKED_UNFAVORITE, TICKET_MARKED_SPAM, TICKET_MARKED_UNSPAM, BULK_ACTION_MANAGE_LABELS, BULK_ACTION_CHANGE_ASSIGNEE, BULK_ACTION_EXECUTE_WORKFLOW, BULK_ACTION_CLOSE_TICKETS, BULK_ACTION_DELETE_TICKETS, TICKET_TAG_ADD, TICKET_TAG_REMOVE, DUE_DATE_CHANGED, TICKET_CC_EMAIL_ADD, TICKET_CC_EMAIL_REMOVE, TICKET_NOTES_FORWARD
     };
 
     /**
@@ -163,7 +170,25 @@ public class Activity extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String related_contact_ids;
+    
+	/**
+	 * Util attributes to send data to client when changed group
+	 */
+	@NotSaved
+	public TicketGroups old_group = null, new_group = null;
 
+	/**
+	 * Util attributes to send data to client when label added/removed
+	 */
+	@NotSaved
+	public TicketLabels ticket_label = null;
+
+	/**
+	 * Util attributes to send data to client when changed assignee
+	 */
+	@NotSaved
+	public DomainUser old_assignee = null, new_assignee = null;
+	
     // Dao
     private static ObjectifyGenericDao<Activity> dao = new ObjectifyGenericDao<Activity>(Activity.class);
 

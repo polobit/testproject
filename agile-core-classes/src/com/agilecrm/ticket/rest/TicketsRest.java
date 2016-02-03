@@ -28,13 +28,15 @@ import org.jsoup.examples.HtmlToPlainText;
 import org.jsoup.nodes.Document;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
@@ -355,25 +357,14 @@ public class TicketsRest
 	 */
 	@GET
 	@Path("/activity")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<TicketActivity> listTicketActivitys(@QueryParam("id") Long ticketID)
+	 @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Activity> listTicketActivitys(@QueryParam("id") Long ticketID)
 	{
 		try
 		{
-			List<TicketActivity> activitys = new TicketActivity().getActivityByTicketId(ticketID);
+			List<Activity> activitys = ActivityUtil.getActivitiesByEntityId(EntityType.TICKET.toString(), ticketID, 0, null);
 
-			activitys = TicketActivity.includeData(activitys);
-
-			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
-
-			// Including contact in each activity
-			if (ticket.contactID != null)
-			{
-				Contact contact = ContactUtil.getContact(ticket.contactID);
-
-				for (TicketActivity activity : activitys)
-					activity.contact = contact;
-			}
+			activitys = TicketsUtil.includeData(activitys);
 
 			return activitys;
 		}

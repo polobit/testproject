@@ -13,6 +13,8 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.ticket.deferred.ChangeAssigneeDeferredTask;
@@ -22,8 +24,6 @@ import com.agilecrm.ticket.deferred.ExecuteWorkflowDeferredTask;
 import com.agilecrm.ticket.deferred.ManageLabelsDeferredTask;
 import com.agilecrm.ticket.deferred.MarkTicketsAsFavoriteDeferredTask;
 import com.agilecrm.ticket.deferred.MarkTicketsAsSpamDeferredTask;
-import com.agilecrm.ticket.entitys.TicketActivity;
-import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.TicketBulkActionAttributes;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.utils.CSVTicketIdsFetcher;
@@ -66,8 +66,8 @@ public class TicketBulkActionsBackendsRest
 			BulkActionUtil.setSessionManager(domainUserID);
 
 			// Logging bulk action activity
-			new TicketActivity(TicketActivityType.BULK_ACTION_MANAGE_LABELS, null, null, "", labelsIDs.toString(),
-					"labels").save();
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_MANAGE_LABELS, null, null, "", labelsIDs.toString(),
+					"labels");
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -110,8 +110,8 @@ public class TicketBulkActionsBackendsRest
 			BulkActionUtil.setSessionManager(domainUserID);
 
 			// Logging bulk action activity
-			new TicketActivity(TicketActivityType.BULK_ACTION_CHANGE_ASSIGNEE, null, null, "", assigneeID + " "
-					+ groupID, "assignee_id").save();
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CHANGE_ASSIGNEE, null, null, "", assigneeID + " "
+					+ groupID, "assignee_id");
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -152,8 +152,7 @@ public class TicketBulkActionsBackendsRest
 			BulkActionUtil.setSessionManager(domainUserID);
 
 			// Logging bulk action activity
-			new TicketActivity(TicketActivityType.BULK_ACTION_EXECUTE_WORKFLOW, null, null, "", workflowID + "", "")
-					.save();
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_EXECUTE_WORKFLOW, null, null, "", workflowID + "", "");
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -189,7 +188,7 @@ public class TicketBulkActionsBackendsRest
 			BulkActionUtil.setSessionManager(domainUserID);
 
 			// Logging bulk action activity
-			new TicketActivity(TicketActivityType.BULK_ACTION_CLOSE_TICKETS, null, null, "", "", "").save();
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CLOSE_TICKETS, null, null, "", "", "");
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -224,7 +223,7 @@ public class TicketBulkActionsBackendsRest
 			BulkActionUtil.setSessionManager(domainUserID);
 
 			// Logging bulk action activity
-			new TicketActivity(TicketActivityType.BULK_ACTION_DELETE_TICKETS, null, null, "", "", "").save();
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_DELETE_TICKETS, null, null, "", "", "");
 
 			ITicketIdsFetcher idsFetcher = null;
 

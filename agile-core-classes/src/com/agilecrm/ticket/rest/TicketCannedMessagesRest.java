@@ -148,8 +148,10 @@ public class TicketCannedMessagesRest
 			System.out.println("label_keys = " + label_keys);
 
 			List<Key<TicketLabels>> labelsKeysList = new ArrayList<Key<TicketLabels>>();
-			for (Long label_key : label_keys)
-				labelsKeysList.add(new Key<TicketLabels>(TicketLabels.class, label_key));
+			
+			if(label_keys != null && label_keys.size() > 0)
+				for (Long label_key : label_keys)
+					labelsKeysList.add(new Key<TicketLabels>(TicketLabels.class, label_key));
 
 			System.out.println("labelsKeysList = " + labelsKeysList);
 

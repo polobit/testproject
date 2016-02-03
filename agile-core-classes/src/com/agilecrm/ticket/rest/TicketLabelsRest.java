@@ -81,7 +81,7 @@ public class TicketLabelsRest
 	@POST
 	@Path("/bulk")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteLabels(@FormParam("ids") String model_ids) throws JSONException
 	{
 		try

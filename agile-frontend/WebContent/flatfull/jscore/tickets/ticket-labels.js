@@ -161,6 +161,7 @@ var Ticket_Labels = {
 
 			if($('#color_code').is(':visible')){
 				$.fn.colorPicker.defaults.colors = colors;
+				
 				$('#color_code').val(color);
 
 				$('#color_code').colorPicker();

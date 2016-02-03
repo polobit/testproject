@@ -13,12 +13,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.ticket.deferred.ZendeskFetchAudits;
-import com.agilecrm.ticket.entitys.TicketActivity;
-import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
@@ -227,10 +227,10 @@ public class ZendeskImport
 			new TicketsDocument().add(ticket);
 
 			// Logging ticket created activity
-			TicketActivity activity = new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID,
+			ActivityUtil.createTicketActivity(ActivityType.TICKET_CREATED, ticket.contactID,
 					ticket.id, "", ticketJSON.getString("description"), "last_reply_text");
-			activity.created_time = date.getTime();
-			activity.save();
+//			activity.created_time = date.getTime();
+//			activity.save();
 
 			ZendeskFetchAudits fetchAudits = new ZendeskFetchAudits(ticket, json.toString());
 			TaskOptions options = TaskOptions.Builder.withPayload(fetchAudits);
