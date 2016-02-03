@@ -1360,8 +1360,8 @@ var WorkflowsRouter = Backbone.Router
          		model.fetch({ success : function(data)
 		 			{
 						that.workflow_json = data.toJSON().rules;
-						workflowModal.save();
-						that.workflow_list_view.collection.add(workflowModal);
+//						workflowModal.save();
+//						that.workflow_list_view.collection.add(workflowModal);
 						$("#content").html(workflowModal.render().el);
 						
 	          		},
