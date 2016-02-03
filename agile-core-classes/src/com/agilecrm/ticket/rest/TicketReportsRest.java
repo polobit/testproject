@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -144,17 +146,21 @@ public class TicketReportsRest
 	{
 		try
 		{
-			LinkedHashMap<String, AtomicInteger> map = new LinkedHashMap<String, AtomicInteger>();
-			map.put(Priority.LOW.toString(), new AtomicInteger(0));
-			map.put(Priority.MEDIUM.toString(), new AtomicInteger(0));
-			map.put(Priority.HIGH.toString(), new AtomicInteger(0));
-
 			Collection<ScoredDocument> documents = TicketReportsUtil.getTicketsBetweenDates(startTime, endTime,
 					"priority");
-
+			
+			LinkedHashMap<String, AtomicInteger> innerMap = new LinkedHashMap<String, AtomicInteger>();
+			innerMap.put("count", new AtomicInteger(0));
+			innerMap.put("total", new AtomicInteger(documents.size()));
+			
+			LinkedHashMap<String, LinkedHashMap<String, AtomicInteger> > map = new LinkedHashMap<String, LinkedHashMap<String, AtomicInteger>>();
+			map.put(Priority.LOW.toString(), innerMap);
+			map.put(Priority.MEDIUM.toString(), innerMap);
+			map.put(Priority.HIGH.toString(), innerMap);
+			
 			for (ScoredDocument document : documents)
 			{
-				map.get(document.getOnlyField("priority").getText()).getAndIncrement();
+				map.get(document.getOnlyField("priority").getText()).get("count").getAndIncrement();
 			}
 
 			return JSONSerializer.toJSON(map).toString();
@@ -180,18 +186,22 @@ public class TicketReportsRest
 	{
 		try
 		{
-			LinkedHashMap<String, AtomicInteger> map = new LinkedHashMap<String, AtomicInteger>();
-			map.put(Status.NEW.toString(), new AtomicInteger(0));
-			map.put(Status.OPEN.toString(), new AtomicInteger(0));
-			map.put(Status.PENDING.toString(), new AtomicInteger(0));
-			map.put(Status.CLOSED.toString(), new AtomicInteger(0));
-
 			Collection<ScoredDocument> documents = TicketReportsUtil.getTicketsBetweenDates(startTime, endTime,
 					"status");
+			
+			LinkedHashMap<String, AtomicInteger> innerMap = new LinkedHashMap<String, AtomicInteger>();
+			innerMap.put("count", new AtomicInteger(0));
+			innerMap.put("total", new AtomicInteger(documents.size()));
+			
+			LinkedHashMap<String, LinkedHashMap<String, AtomicInteger> > map = new LinkedHashMap<String, LinkedHashMap<String, AtomicInteger>>();
+			map.put(Status.NEW.toString(), innerMap);
+			map.put(Status.OPEN.toString(), innerMap);
+			map.put(Status.PENDING.toString(), innerMap);
+			map.put(Status.CLOSED.toString(), innerMap);
 
 			for (ScoredDocument document : documents)
 			{
-				map.get(document.getOnlyField("status").getText()).getAndIncrement();
+				map.get(document.getOnlyField("status").getText()).get("count").getAndIncrement();
 			}
 
 			return JSONSerializer.toJSON(map).toString();
@@ -217,16 +227,20 @@ public class TicketReportsRest
 	{
 		try
 		{
-			LinkedHashMap<String, AtomicInteger> map = new LinkedHashMap<String, AtomicInteger>();
-
-			String[] timeDurationToCloseTicket = { "<2 hour", "2-6 hours", "6-12 hours", "12-24 hours", "1-2 days",
-					"2-3 days", "3-4 days", "4-5 days", "5-7 days", "7-10 days", "10-14 days", ">14 days" };
-
-			for (String string : timeDurationToCloseTicket)
-				map.put(string, new AtomicInteger(0));
-
 			Collection<ScoredDocument> documents = TicketReportsUtil.getTicketSLABetweenDates(startTime, endTime,
 					"created_time", "closed_time");
+			
+			String[] timeDurationToCloseTicket = { "<2 hour", "2-6 hours", "6-12 hours", "12-24 hours", "1-2 days",
+					"2-3 days", "3-4 days", "4-5 days", "5-7 days", "7-10 days", "10-14 days", ">14 days" };
+			
+			LinkedHashMap<String, AtomicInteger> innerMap = new LinkedHashMap<String, AtomicInteger>();
+			innerMap.put("count", new AtomicInteger(0));
+			innerMap.put("total", new AtomicInteger(timeDurationToCloseTicket.length));
+			
+			LinkedHashMap<String, LinkedHashMap<String, AtomicInteger>> map = new LinkedHashMap<String, LinkedHashMap<String, AtomicInteger>>();
+
+			for (String string : timeDurationToCloseTicket)
+				map.put(string, innerMap);
 
 			for (ScoredDocument document : documents)
 			{
@@ -240,51 +254,51 @@ public class TicketReportsRest
 
 				if (slaTime < 7200)
 				{
-					map.get("<2 hour").getAndIncrement();
+					map.get("<2 hour").get("count").getAndIncrement();
 				}
 				else if (slaTime > 7200 && slaTime < 21600)
 				{
-					map.get("2-6 hours").getAndIncrement();
+					map.get("2-6 hours").get("count").getAndIncrement();
 				}
 				else if (slaTime > 21600 && slaTime < 43200)
 				{
-					map.get("6-12 hours").getAndIncrement();
+					map.get("6-12 hours").get("count").getAndIncrement();
 				}
 				else if (slaTime > 43200 && slaTime < 86400)
 				{
-					map.get("12-24 hours").getAndIncrement();
+					map.get("12-24 hours").get("count").getAndIncrement();
 				}
 				else if (slaTime > 86400 && slaTime < 172800)
 				{
-					map.get("1-2 days").getAndIncrement();
+					map.get("1-2 days").get("count").getAndIncrement();
 				}
 				else if (slaTime > 172800 && slaTime < 259200)
 				{
-					map.get("2-3 days").getAndIncrement();
+					map.get("2-3 days").get("count").getAndIncrement();
 				}
 				else if (slaTime > 259200 && slaTime < 345600)
 				{
-					map.get("3-4 days").getAndIncrement();
+					map.get("3-4 days").get("count").getAndIncrement();
 				}
 				else if (slaTime > 345600 && slaTime < 432000)
 				{
-					map.get("4-5 days").getAndIncrement();
+					map.get("4-5 days").get("count").getAndIncrement();
 				}
 				else if (slaTime > 432000 && slaTime < 604800)
 				{
-					map.get("5-7 days").getAndIncrement();
+					map.get("5-7 days").get("count").getAndIncrement();
 				}
 				else if (slaTime > 604800 && slaTime < 864000)
 				{
-					map.get("7-10 days").getAndIncrement();
+					map.get("7-10 days").get("count").getAndIncrement();
 				}
 				else if (slaTime > 864000 && slaTime < 1209600)
 				{
-					map.get("10-14 days").getAndIncrement();
+					map.get("10-14 days").get("count").getAndIncrement();
 				}
 				else
 				{
-					map.get(">14 days").getAndIncrement();
+					map.get(">14 days").get("count").getAndIncrement();
 				}
 			}
 

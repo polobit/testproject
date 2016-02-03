@@ -64,8 +64,33 @@ var Ticket_Reports = {
 	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
 	    end_time=end_time/1000;
 		
-		pie('/core/api/tickets/reports/priority-report?start_time=' + start_time + '&end_time=' + end_time,
-			'priority-report-chart', '');
+
+		 // $.ajax({ 
+		 // 	type : 'GET', 
+		 // 	url : url_path, 
+		 // 	dataType : 'json',
+   //        	success: function(data){
+   //              $.each(data,function(index,deals){
+                   	
+   //                 	for(var i=0;i<pieData.length;i++){
+                     			   
+   //                   	if(pieData[i][0]=="0")
+   //                      	pieData[i][0]="Unknown";
+   //                     	else if(deals.id==pieData[i][0]){
+	  //                   		pieData[i][0]=deals.label;
+	  //               	}
+                        
+   //                      createAPieChart('priority-report-chart', '', false, AllData, pieData);
+   //                  }
+   //              });
+			// }		
+   //      });
+		
+		pieforReports('/core/api/tickets/reports/priority-report?start_time=' + start_time + '&end_time=' + end_time,
+			'priority-report-chart', '', true);
+
+		// pie('/core/api/tickets/reports/priority-report?start_time=' + start_time + '&end_time=' + end_time,
+		// 	'priority-report-chart', '');
 	},
 
 	statusReports: function(){
@@ -91,8 +116,11 @@ var Ticket_Reports = {
 	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
 	    end_time=end_time/1000;
 		
-		pie('/core/api/tickets/reports/status-report?start_time=' + start_time + '&end_time=' + end_time,
-			'status-report-chart', '');
+		pieforReports('/core/api/tickets/reports/status-report?start_time=' + start_time + '&end_time=' + end_time,
+			'status-report-chart', '', true);
+
+		// pie('/core/api/tickets/reports/status-report?start_time=' + start_time + '&end_time=' + end_time,
+		// 	'status-report-chart', '');
 	},
 
 	slaReport: function(){
@@ -118,7 +146,10 @@ var Ticket_Reports = {
 	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
 	    end_time=end_time/1000;
 		
-		pie('/core/api/tickets/reports/sla-report?start_time=' + start_time + '&end_time=' + end_time,
-			'sla-report-chart', '');
+		pieforReports('/core/api/tickets/reports/sla-report?start_time=' + start_time + '&end_time=' + end_time,
+			'sla-report-chart', '', true);
+
+		// pie('/core/api/tickets/reports/sla-report?start_time=' + start_time + '&end_time=' + end_time,
+		// 	'sla-report-chart', '');
 	}
 };
