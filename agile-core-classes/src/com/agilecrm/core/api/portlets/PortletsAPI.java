@@ -588,12 +588,13 @@ public class PortletsAPI {
 		return PortletUtil.getGoalsAttainedData(owner_id, start_time, end_time);
 	}
 	
-	@Path("/taskClosure")
+	
+	@Path("/averageDeviation")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getAverageTaskClosures(@QueryParam("start-date") Long start_time,@QueryParam("end-date")Long end_time)
+	public JSONObject getAverageTaskDeviation(@QueryParam("start-date") Long start_time,@QueryParam("end-date")Long end_time)
 	{
-		return PortletUtil.getAverageClosureForTasks(start_time, end_time);
+		return PortletUtil.getAverageDeviationForTasks(start_time, end_time);
 	}
 	
 }

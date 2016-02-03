@@ -111,7 +111,7 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("Today Tasks",PortletType.TASKSANDEVENTS));
 				allPortlets.add(new Portlet("Task Report",PortletType.TASKSANDEVENTS));
 				allPortlets.add(new Portlet("Mini Calendar",PortletType.TASKSANDEVENTS));
-				allPortlets.add(new Portlet("Average Closure",PortletType.TASKSANDEVENTS));
+				allPortlets.add(new Portlet("Average Deviation",PortletType.TASKSANDEVENTS));
 			}
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY)){
@@ -1699,7 +1699,7 @@ public class PortletUtil {
 		return json;
 	}
 	
-	public static JSONObject getAverageClosureForTasks(Long minTime,Long maxTime)
+	public static JSONObject getAverageDeviationForTasks(Long minTime,Long maxTime)
 	{
 		List<DomainUser> domainUsersList=null;
 		List<String> domainUserNamesList = new ArrayList<String>();
@@ -1734,19 +1734,19 @@ public class PortletUtil {
 				if(tasksList!=null)
 					{
 					List<Long> l=new ArrayList<Long>();
-					l.add((long) tasksList.size());
+					//l.add((long) tasksList.size());
 					Long Total_closure = 0L;
 					int count=0;
 					for(Task task:tasksList){
-						Long time_closure=0L;
-						if(task.task_start_time==0 || task.task_completed_time-task.task_start_time==0)
-							continue;
-							else{	
-						time_closure=((task.task_completed_time-task.task_start_time)*1000)/(60*60);
-						count++;
-						}
-						Total_closure+=time_closure;
+						Long time_deviation=0L;
+						if(task.task_completed_time>task.due)
+							{
+							time_deviation=(task.task_completed_time-task.due);
+							count++;
+							}
+						Total_closure+=time_deviation;
 								}
+					l.add((long)count);
 					if(count!=0)
 					l.add(Total_closure/count);
 					else

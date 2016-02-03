@@ -5839,7 +5839,7 @@ $(function()
 			icon_name = 'icon-graph';
 		else if (p_name == 'Calls Per Person')
 			icon_name = 'icon-call-end';
-		else if (p_name == 'Pending Deals')
+		else if (p_name == 'Pending Deals' || p_name == 'Average Deviation')
 			icon_name = 'icon-clock';
 		else if (p_name == 'Deals By Milestone')
 			icon_name = 'icon-flag';
@@ -5871,8 +5871,6 @@ $(function()
 			icon_name = 'icon-sitemap';
 		else if (p_name == 'Deal Goals')
 			icon_name = 'icon-flag';
-		else if (p_name == 'Average Closure')
-			icon_name = 'icon-clock';
 		return icon_name;
 	});
 	
@@ -6656,8 +6654,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
 	else if(p_name == 'Deal Goals')
 		description = 'See how much sales target you have achieved.'
-	else if(p_name == 'Average Closure')
-		description = 'Find out the Average time taken to close tasks.'
+	else if(p_name == 'Average Deviation')
+		description = 'Find out the Average deviation time taken to close tasks.'
 	return description;
 			});
 

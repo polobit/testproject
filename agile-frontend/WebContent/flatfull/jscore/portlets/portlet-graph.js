@@ -869,7 +869,7 @@ var portlet_graph_utility = {
 													categories : groupByList,
 													labels : {
 														formatter : function() {
-															if(base_model.get('name')=='Average Closure')
+															if(base_model.get('name')=='Average Deviation')
 															{
 																var userIndex = 0;
 																for ( var i = 0; i < groupByList.length; i++) {
@@ -1011,7 +1011,7 @@ var portlet_graph_utility = {
 														color : '#EFEFEF'
 													},
 													formatter : function() {
-														if( base_model.get('name')=='Average Closure'){
+														if( base_model.get('name')=='Average Deviation'){
 															var userIndex = 0;
 															for ( var i = 0; i < groupByList.length; i++) {
 																if (this.key == groupByList[i])
@@ -1024,7 +1024,7 @@ var portlet_graph_utility = {
 																	+ '<div class="p-n" style="color:'
 																	+ this.series.color
 																	+ ';">'
-																	+ 'Average Time Taken'
+																	+ 'Average Deviation Time'
 																	+ ':'
 																	+ portlet_utility.getPortletsTimeConversion(Math.round(this.y))
 																	+ ' </div>'

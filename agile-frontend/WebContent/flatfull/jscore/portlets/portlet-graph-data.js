@@ -962,7 +962,7 @@ var portlet_graph_data_utility = {
 					portlet_graph_utility.dealGoalsPieGraph(graphSelector2,data["dealAmount"],data["goalAmount"],colors2);
 					}
 	},
-	taskClosureGraphData : function(base_model, selector, url) {
+	taskDeviationGraphData : function(base_model, selector, url) {
 		var groupByList = [];
 		var splitByList = [];
 		var splitByNamesList = [];
