@@ -140,6 +140,20 @@ var Workflow_Model_Events = Base_Model_View.extend({
         
         var workflowJSON = {};
 
+        try{
+            var nodeLength = $('iframe[id=designer]').contents().find('#paintarea .contextMenuForNode').length;
+            var currentLimits=_billing_restriction.currentLimits;
+            var campaignNodeLimit=currentLimits.campaignNodesLimit;
+            if(nodeLength > campaignNodeLimit)
+            {
+                $("#workflow-edit-msg").hide();
+                $("#nodes-limit-reached").show();
+                campaignAlert("nodeLimit");
+            }
+
+        }
+        catch(err){}
+
         // New Workflow or Copy Workflow
         if (App_Workflows.workflow_model === undefined || $(targetEl).attr('id') === 'duplicate-workflow-top' || $(targetEl).attr('id') === 'duplicate-workflow-bottom') 
         {
