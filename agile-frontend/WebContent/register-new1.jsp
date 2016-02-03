@@ -90,7 +90,7 @@ if(isSafari && isWin)
 
 <%
     if (isMSIE) {
-				response.sendRedirect("/error/not-supported.jsp");
+				// response.sendRedirect("/error/not-supported.jsp");
 			}
 %>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
