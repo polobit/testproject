@@ -46,7 +46,7 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			workflows : function()
 			{
-				if (this.workflow_list_view && this.workflow_list_view.collection)
+				if (this.workflow_list_view && this.workflow_list_view.collection && this.workflow_list_view.collection.length > 0)
 				{
 					//$('body').trigger('agile_collection_loaded');
 					$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(this.workflow_list_view.render(true).el);
