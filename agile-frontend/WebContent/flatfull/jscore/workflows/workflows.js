@@ -149,6 +149,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 $("#workflow-edit-msg").hide();
                 $("#nodes-limit-reached").show();
                 campaignAlert("nodeLimit");
+                return;
             }
 
         }
