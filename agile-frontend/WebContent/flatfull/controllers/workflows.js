@@ -1360,8 +1360,8 @@ var WorkflowsRouter = Backbone.Router
          		model.fetch({ success : function(data)
 		 			{
 	             		that.workflow_json = data.toJSON().rules;
-	             		if(!checkMaxNodesCount())
-	 						return;
+//	             		if(!checkMaxNodesCount())
+//	 						return;
 						$("#content").html(workflowModal.render().el);
 						that.workflow_list_view = undefined;
 	          		},
