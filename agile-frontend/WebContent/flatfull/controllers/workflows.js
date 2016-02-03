@@ -1362,8 +1362,9 @@ var WorkflowsRouter = Backbone.Router
 	             		that.workflow_json = data.toJSON().rules;
 //	             		if(!checkMaxNodesCount())
 //	 						return;
+						that.workflow_list_view.add(workflowModal);
 						$("#content").html(workflowModal.render().el);
-						that.workflow_list_view = undefined;
+						
 	          		},
 
 	          		error:function(data){
