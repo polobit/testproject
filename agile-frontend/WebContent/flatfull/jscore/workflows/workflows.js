@@ -210,8 +210,6 @@ var Workflow_Model_Events = Base_Model_View.extend({
             error: function(jqXHR, status, errorThrown){ 
               enable_save_button($clicked_button);
 
-              App_Workflows.workflow_list_view.collection.remove(App_Workflows.workflow_model);
-
               console.log(status);
                     // Show cause of error in saving
                     $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
@@ -370,7 +368,7 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
             
             error: function(jqXHR, status, errorThrown){ 
               enable_save_button($clicked_button); 
-              
+              App_Workflows.workflow_list_view.collection.remove(App_Workflows.workflow_model);
               // shows Exception message
               if(status.status != 406)
               {
