@@ -2985,6 +2985,18 @@ width: 915px;
  white-space:normal!important;
  } 
 
+ .thumb-m {
+	 display: inline-block;
+  width: 80px;
+}
+
+.rep-user-info
+{
+	background-color: rgb(240, 243, 244);
+    margin-top: 108px;
+    margin-left: 156px;
+}
+
 .custom_popover .popover-content{
 	padding-top: 5px;
 	padding-bottom:5px;
@@ -3043,9 +3055,12 @@ table.hide-head-checkbox th label.i-checks {
   background-color: #f9f9f9 !important;
   
 }
+
+@media all and (min-width: 768px) {
 .app-aside-fixed:not(.app-aside-dock) aside {
 	position: fixed;
 	height: 100vh;
+}
 }
 
 #calls-chart .highcharts-legend , #calls-chart .highcharts-tooltip
@@ -3082,3 +3097,51 @@ table.hide-head-checkbox th label.i-checks {
     width: 100vw;
 }
 
+.contacts-toolbar .sort-field-txt:hover {
+    color: rgb(88, 102, 110)!important;
+}
+
+
+
+.conversion_track::-webkit-scrollbar-thumb {
+ background: #bebebe;
+}
+.conversion_track::-webkit-scrollbar {
+ width: 5px;
+ margin-right: 4px !important;
+ background:#eee;
+}
+
+.conversion_track{
+	height:332px;
+	overflow-y:auto;
+}
+
+
+#count_goals_chart .highcharts-tooltip , 
+#amount_goals_chart .highcharts-tooltip 
+{
+	z-index: 1;
+}
+
+
+.slate-content h4{
+	font-size: 18px;
+	opacity:0.8;
+}
+.slate-content .text, .slate-content .text-base{
+	font-size: 15px;
+}
+
+
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+/* Safari and Chrome */
+.no-wrap {
+ white-space: normal !important;
+}
+ 
+} 
+
+.deals-nowrap .no-wrap {
+ white-space: nowrap !important;
+}

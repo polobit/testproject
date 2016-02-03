@@ -25,7 +25,7 @@ public class DataSyncUrlConstants
 	public static String STRIPE_IMAGE_URL="/img/plugins/Stripe.png";
 	public static String STRIPE_CONTENT="Sync customers in Stripe as Contacts in Agile CRM with their subscription & payment data.";
 	
-	public static String OFFICE365_IMAGE_URL="/img/plugins/office356-calendar.png";
+	public static String OFFICE365_IMAGE_URL="/img/plugins/office356-calendar-logo.png";
 	public static String OFFICE365_CONTENT="By configuring access to your Office365 Calendar, we'll automatically sync your events in your Office365 Calendar with Agile calendar.";
 			
 	public static String SALESFORCE_IMAGE_URL="/img/plugins/logo-salesforce.png";

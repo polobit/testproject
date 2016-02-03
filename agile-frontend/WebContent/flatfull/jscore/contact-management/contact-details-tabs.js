@@ -18,12 +18,12 @@ var email_server_type = "agilecrm";
 
 var email_server_type_cookie_name = "email_server_type_" + CURRENT_DOMAIN_USER.id;
 
-function fill_company_related_contacts(companyId, htmlId)
+function fill_company_related_contacts(companyId, htmlId, context_el)
 {
 	$('#' + htmlId).html(LOADING_HTML);
 
 	var companyContactsView = new Base_Collection_View({ url : 'core/api/contacts/related/' + companyId, templateKey : 'company-contacts',
-		individual_tag_name : 'tr', cursor : true, page_size : 25, sort_collection : false, postRenderCallback : function(el)
+		individual_tag_name : 'tr', cursor : true, page_size : 25, sort_collection : false, scroll_target : (context_el ? $("#infinite-scroller-company-details", context_el) : "#infinite-scroller-company-details"), postRenderCallback : function(el)
 		{
 			// var cel = App_Contacts.contactsListView.el;
 			// var collection = App_Contacts.contactsListView.collection;
@@ -31,7 +31,10 @@ function fill_company_related_contacts(companyId, htmlId)
 
 	companyContactsView.collection.fetch();
 
-	$('#' + htmlId).html(companyContactsView.render().el);
+	if(context_el)
+		$('#' + htmlId, $(context_el)).html(companyContactsView.render().el);
+	else
+		$('#' + htmlId).html(companyContactsView.render().el);
 }
 
 var Contact_Details_Tab_Actions = {
@@ -201,6 +204,17 @@ var Contact_Details_Tab_Actions = {
 		  	var targetEl = $(e.currentTarget);
 
 		  	var model = $(targetEl).parents('li').data();
+
+		  	var owner = model.get("owner_id");
+
+		  	if(!owner && model.get("owner")){
+		  		owner = model.get("owner").id;
+		  	}
+
+		  	if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "event"){
+				$("#deleteEventErrorModal").html(getTemplate("delete-event-error-modal")).modal('show');
+				return;
+			}
 
 			if (model && model.toJSON().type != "WEB_APPOINTMENT")
 			{

@@ -327,11 +327,20 @@ public class PortletUtil {
 	public static List<Opportunity> getPendingDealsList(JSONObject json)throws Exception{
 		List<Opportunity> dealsList=null;
 		try {
+			String track=null;
+			String milestone=null;
+			if(json.get("track")!=null)
+				track=json.get("track").toString();
+			if(json.get("milestone")!=null)
+				milestone=json.get("milestone").toString();
 			if(json!=null && json.get("deals")!=null){
 				if(json.get("deals").toString().equalsIgnoreCase("all-deals"))
-					dealsList=OpportunityUtil.getPendingDealsRelatedToAllUsers(0);
+					dealsList=OpportunityUtil.getPendingDealsRelatedToAllUsers(0,track,milestone);
 				else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
-					dealsList=OpportunityUtil.getPendingDealsRelatedToCurrentUser(0);
+					dealsList=OpportunityUtil.getPendingDealsRelatedToCurrentUser(0,track,milestone);
+				for(Opportunity opp:dealsList){
+					
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -846,7 +855,8 @@ public class PortletUtil {
 			//portlet is deleted by user or not
 			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1);
 			Portlet statsReportPortlet = new Portlet("Stats Report",PortletType.USERACTIVITY,1,1,1,1);
-			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,2,1,1,1);
+			Portlet dealGoalsPortlet = new Portlet("Deal Goals",PortletType.DEALS,2,1,1,1);
+			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,2,5,1,1);
 			Portlet blogPortlet = new Portlet("Agile CRM Blog",PortletType.RSS,3,3,1,2);
 			Portlet eventsPortlet = new Portlet("Agenda",PortletType.TASKSANDEVENTS,1,2,1,1);
 			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,2,1,1);
@@ -854,7 +864,7 @@ public class PortletUtil {
 			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,3,2,1);
 			Portlet accountPortlet=new Portlet("Account Details",PortletType.ACCOUNT,1,5,1,1);
 			Portlet onboardingPortlet = new Portlet("Onboarding",PortletType.CONTACTS,3,1,1,2);
-			Portlet activityPortlet=new Portlet("User Activities",PortletType.USERACTIVITY,2,5,1,1);
+			Portlet activityPortlet=new Portlet("User Activities",PortletType.USERACTIVITY,3,5,1,1);
 			
 			JSONObject filterBasedContactsPortletJSON = new JSONObject();
 			filterBasedContactsPortletJSON.put("filter","myContacts");
@@ -882,6 +892,10 @@ public class PortletUtil {
 			JSONObject tasksPortletJSON = new JSONObject();
 			tasksPortletJSON.put("duration","today-and-tomorrow");
 			tasksPortlet.prefs = tasksPortletJSON.toString();
+			
+			JSONObject dealGoalPortletJSON = new JSONObject();
+			dealGoalPortletJSON.put("duration","this-month");
+			dealGoalsPortlet.prefs = dealGoalPortletJSON.toString();
 			
 			JSONObject onboardingPortletJSON = new JSONObject();
 			List<String> onboardingSteps = new ArrayList<>();
@@ -924,7 +938,7 @@ public class PortletUtil {
 			pendingDealsPortlet.save();
 			dealsFunnelPortlet.save();
 			statsReportPortlet.save();
-			
+			dealGoalsPortlet.save();
 			onboardingPortlet.save();
 			
 		} catch (Exception e) {

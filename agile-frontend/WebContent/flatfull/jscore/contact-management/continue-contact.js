@@ -985,7 +985,7 @@ function add_model_cursor(app_collection, mdl)
  */
 function isCompanyExist(company, callback)
 {
-	$.get('core/api/contacts/company/validate/' + company, function(data){
+	$.get('core/api/contacts/company/validate?companyName=' + company, function(data){
 		   if(data == "true"){
 		   	    callback(true);
 		   		return;

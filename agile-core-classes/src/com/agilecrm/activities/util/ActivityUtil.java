@@ -102,6 +102,48 @@ public class ActivityUtil
 	activity.save();
 	return activity;
     }
+    
+    /**
+     * To merge contacts activity.
+     * 
+     * @param activity_type
+     *            the type of the activity performed on the Contact (MERGE)
+     * 
+     * @param contact
+     *            the contact object on which the activity is performed.
+     * @param data
+     *            extra information about the activity like Tag name when a tag
+     *            is added. null if nothing.
+     */
+    
+    public static Activity mergeContactActivity(ActivityType activity_type,Contact contact,int length){
+    	String contact_name = "";
+    	Activity activity = new Activity();
+    	if (contact != null)
+    	{
+    	    ContactField firstname = contact.getContactFieldByName("first_name");
+    	    ContactField lastname = contact.getContactFieldByName("last_name");
+    	    if (firstname != null)
+    	    {
+    		contact_name += firstname.value;
+    	    }
+    	    if (lastname != null)
+    	    {
+    		contact_name += " ";
+    		contact_name += lastname.value;
+    	    }
+
+    	    activity.label = contact_name;
+    	    activity.label = activity.label.trim();
+    	    contact_name = "";
+    	    activity.entity_id = contact.id;
+    	}
+    	activity.activity_type = activity_type;
+    	activity.entity_type = EntityType.CONTACT;
+    	activity.custom1 = String.valueOf(length);
+    	activity.save();
+    	return activity;
+    }
 
 	   /**
      * To save save the contact activity.

@@ -123,6 +123,7 @@ public class WidgetsAPI {
 			customWidget.save();
 			
 			Widget widget = new Widget();
+			widget.isForAll = customWidget.custom_isForAll;
 			widget.script = customWidget.script;
 			widget.logo_url = customWidget.logo_url;
 			widget.fav_ico_url = customWidget.fav_ico_url;

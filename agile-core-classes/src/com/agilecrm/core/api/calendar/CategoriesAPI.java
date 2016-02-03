@@ -221,5 +221,53 @@ public class CategoriesAPI
 		    .entity("Unable to delete Category. Please check the input.").build());
 	}
     }
+    
+    /**
+     * Save the category order based on the order of the category id's sent.
+     * 
+     * @param ids
+     *            category ids.
+     * @return successes message after saving or else error message.
+     */
+    @Path("position")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String setCategoryOrder(String ids)
+    {
+	System.out.println("-----------" + ids);
+	JSONObject result = new JSONObject();
+	try
+	{
+	    JSONArray idsArray = null;
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+		List<Long> catIds = new ArrayList<Long>();
+		for (int i = 0; i < idsArray.length(); i++)
+		{
+		    catIds.add(Long.parseLong(idsArray.getString(i)));
+		}
+		categoriesUtil.saveCategoryOrder(catIds);
+		result.put("message", "Order changes sucessfully.");
+	    }
+	    return result.toString();
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	    try
+	    {
+		result.put("error", "Unable to update the order. Please check the input.");
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(result).build());
+	    }
+	    catch (JSONException e)
+	    {
+		e.printStackTrace();
+	    }
+	    return null;
+	}
+    }
 
 }

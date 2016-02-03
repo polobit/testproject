@@ -1,8 +1,8 @@
 
 <script id="deal-detail-template" type="text/html">
 <div class="app-content-full  h-full dock-view-fixing" id="deal-detail-header">
-<div class="hbox hbox-auto-xs  bg-light">
-<div class="col w-xl bg-light lter b-r text-center-mobile-view">
+<div class="hbox hbox-auto-xs {{#is_mobile}} wrapper-md {{else}} bg-light {{/is_mobile}}">
+<div class="col w-xl text-center-mobile-view {{#is_mobile}} bg-white  {{else}} bg-light lter b-r {{/is_mobile}}">
 <div class="vbox">
 <div class="row-row">
 <div class="wrapper pos-rlt" id="deal-detail-actions-dropdown">
@@ -184,12 +184,12 @@
 				</div>
 			</div>
 			
-<div class="col bg-white">
+<div class="col  {{#is_mobile}}  {{else}} bg-white {{/is_mobile}}">
 <div class="vbox" style="display:block">
 <div class="row-row" style="display:block">			
 <div id="deal-details">
 	<div class="tab-container">
-           <ul class="nav nav-tabs bg-light" id="deal-details-tab">
+           <ul class="nav nav-tabs bg-light content-tabs" id="deal-details-tab">
              <li><a href="#dealactivities" data-toggle="tab" >Activity</a></li>
              <li><a href="#dealnotes" data-toggle="tab" >Notes</a></li>
 			 <li><a href="#dealdocs" data-toggle="tab">Documents</a></li>
@@ -198,7 +198,7 @@
 			 <li><a href="#dealevents" data-toggle="tab">Events</a></li> 
            </ul>
 	</div>
- 	<div class="tab-content panel" id="deal-tab-content">
+ 	<div class="tab-content {{#is_mobile}}  {{else}} panel {{/is_mobile}}" id="deal-tab-content">
  		<div class="tab-pane" id="dealactivities"></div>
  		<div class="tab-pane" id="dealnotes"></div>
  		<div class="tab-pane" id="dealdocs"></div>

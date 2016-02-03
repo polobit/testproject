@@ -98,7 +98,8 @@ public class SalesforceSync extends OneWaySyncService
     
     private String getAccountsFromSalesForce() throws Exception{
 
-		String query = "SELECT Id, ParentId, Name, Website, Phone, Industry, Description, Type, NumberOfEmployees, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
+		// String query = "SELECT Id, ParentId, Name, Website, Phone, Industry, Description, Type, NumberOfEmployees, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
+		String query = "SELECT Id, ParentId, Name, Website, Phone, Type, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
 		System.out.println("In accounts------------------------------------");
 		return SalesforceUtil.getEntities(prefs, query);
 	

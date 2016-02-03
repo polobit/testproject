@@ -96,8 +96,39 @@ function currentRoute(route)
 	 // Check the user permission to view the current route.
 	 if(CURRENT_DOMAIN_USER)
 		 tight_acl.init_permissions();
+
+		//removing_fullscreen();
+
 }
 
+
+
+/*
+checking the current path for the contacts
+*/
+/*
+function removing_fullscreen()
+{
+
+    var fullscreenhideRoutes = ["contacts", "deals", "workflows"];
+    var hideFullScreen = false;
+    for(var i=0;i <fullscreenhideRoutes.length; i++){
+    	if(Current_Route == undefined) {
+    		$("#content").removeClass("fullscreenwidjet");
+			$("#aside").removeClass("hide");
+		}
+         else if (Current_Route.indexOf(fullscreenhideRoutes[i]) == 0){
+           		return;
+    }
+    else  {
+    $("#content").removeClass("fullscreenwidjet");
+	$("#aside").removeClass("hide");
+	}
+	}
+
+    
+ }
+ */
 /**
  * Clickdesk Widget
  */

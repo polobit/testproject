@@ -213,3 +213,102 @@ function _agile_load_form_fields()
 		return;
 	} });
 }
+
+/*
+* Returns query param value by name
+**/
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+/**
+* Sets utm parameters in cookie
+**/
+function agile_setUtmParams()
+{
+	
+	try
+	{
+	    if (!agile_read_data("agile_utm_source")){
+	    	var _utm_source = getParameterByName('utm_source');
+
+	        if(_utm_source)
+	        	agile_store_data("agile_utm_source", _utm_source, 90);
+		}
+
+	    if(!agile_read_data("agile_utm_medium")){
+	    	var _utm_medium = getParameterByName('utm_medium');
+
+	    	if(_utm_medium)
+	        	agile_store_data("agile_utm_medium", _utm_medium, 90);
+	    }
+	    
+	    if(!agile_read_data("agile_utm_campaign")){
+	    	var _utm_campaign = getParameterByName('utm_campaign');
+
+	    	if(_utm_campaign)
+	        	agile_store_data("agile_utm_campaign", _utm_campaign, 90);
+	    }
+
+	    if(!agile_read_data("agile_utm_content")){
+	    	var _utm_content = getParameterByName('utm_content');
+
+	    	if(_utm_content)
+	    		agile_store_data("agile_utm_content", _utm_content, 90);
+	    }
+
+	    if(!agile_read_data("agile_utm_term")){
+	    	var _utm_term = getParameterByName('utm_term');
+
+	    	if(_utm_term)
+	    		agile_store_data("agile_utm_term", _utm_term, 90);
+	    }
+	}
+	catch(err)
+	{
+		console.log("Error while setting utm params - " + err);
+	}
+
+}
+
+/**
+* Returns saved cookie utm parameters as json
+**/
+function agile_getUtmParams()
+{
+	var utm_properties = {};
+	
+	try
+	{
+		var utm_source = agile_read_data("agile_utm_source");
+		var utm_medium = agile_read_data("agile_utm_medium");
+		var utm_campaign = agile_read_data("agile_utm_campaign");
+		var utm_content = agile_read_data("agile_utm_content");
+		var utm_term = agile_read_data("agile_utm_term");
+
+		if(utm_source)
+			utm_properties["utm_source"] = utm_source;
+
+		if(utm_medium)
+			utm_properties["utm_medium"] = utm_medium;
+
+		if(utm_campaign)
+			utm_properties["utm_campaign"] = utm_campaign;
+
+		if(utm_term)
+			utm_properties["utm_term"] = utm_term;
+
+		if(utm_content)
+			utm_properties["utm_content"] = utm_content;
+
+		return utm_properties;
+	}
+	catch(err)
+	{
+		console.log("Error occured while getting utm params - " + err);
+	}
+
+}

@@ -30,7 +30,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             $('#shop').focus();
             return false;
         }
-        var domain = window.location.origin;
+        var domain = agileWindowOrigin();
 
         e.preventDefault();
         var callbackURL = window.location.href;
@@ -46,7 +46,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
         var sync_type=$(ele).attr('sync_type');
         if(sync_type=='STRIPE'){
-            var callbackURL = window.location.origin + "/#sync/stripe-import";
+            var callbackURL = agileWindowOrigin() + "/#sync/stripe-import";
             // For every request of import, it will ask to grant access
             window.open( "/scribe?service=stripe_import&window_opened=true&return_url=" + encodeURIComponent(callbackURL),'dataSync','height=1000,width=500');
             return false;
@@ -307,7 +307,7 @@ binds all click events  for google calendar model
         e.preventDefault();
 
        // URL to return, after fetching token and secret key from LinkedIn
-		var callbackURL = window.location.origin + "/#sync/calendar-setup";
+		var callbackURL = agileWindowOrigin() + "/#sync/calendar-setup";
 
 		// For every request of import, it will ask to grant access
 		window.open("/scribe?service=google_calendar&window_opened=true&return_url=" + encodeURIComponent(callbackURL),'dataSync','height=1000,width=500');

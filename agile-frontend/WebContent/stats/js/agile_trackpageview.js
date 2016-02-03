@@ -36,7 +36,10 @@ function agile_trackPageview(callback)
 		params = "guid={0}&sid={1}&url={2}&agile={3}".format(guid, session_id, encodeURIComponent(url), agile);
 
 	if (agile_guid.get_email())
-		params += "&email=" + encodeURIComponent(agile_guid.get_email());	
+		params += "&email=" + encodeURIComponent(agile_guid.get_email());
+
+	// Sets UTM params
+	agile_setUtmParams();	
 
 	var agile_url = "https://" + agile_id.getNamespace() + ".agilecrm.com/stats?callback=?&" + params;
 

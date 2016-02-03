@@ -19,11 +19,16 @@ function isArray(a)
  */
 function load_events_from_google(callback)
 {
+	var eventFilters;
+	var eventData = JSON.parse(_agile_get_prefs('event-lhs-filters'));	
 
-	var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
+	if(eventData){
+		eventFilters = eventData[CURRENT_AGILE_USER.id];
+	}
+
 	var agile_event = false;
 	if (eventFilters)
-	{
+	{		
 		var type_of_cal = eventFilters.cal_type;
 		var owners = eventFilters.owner_ids;
 		if (owners && owners.length > 0)
@@ -205,10 +210,16 @@ function showCalendar(users)
 								{ 	
 									events : function(start, end, callback)
 								{
-									var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
+									var eventFilters;
+									var eventData = JSON.parse(_agile_get_prefs('event-lhs-filters'));	
+	
+									if(eventData){
+										eventFilters = eventData[CURRENT_AGILE_USER.id];
+									}																		
+									
 									var agile_event_owners = '';
 									if (eventFilters)
-									{
+									{										
 										var type_of_cal = eventFilters.cal_type;
 										var owners = eventFilters.owner_ids;
 
@@ -628,6 +639,12 @@ function showCalendar(users)
 						 */
 						eventDrop : function(event1, dayDelta, minuteDelta, allDay, revertFunc)
 						{
+							
+							if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != event1.owner.id)){
+								revertFunc();
+								$("#moveEventErrorModal").html(getTemplate("move-event-error-modal")).modal('show');
+								return;
+							}
 
 							// Confirm from the user about the change
 							if (!confirm("Are you sure about this change?"))
@@ -741,7 +758,7 @@ function showCalendar(users)
 								$("#event_desc").html(desc);
 							}
 							
-							
+							App_Calendar.current_event = event;
 							agile_type_ahead("event_relates_to_deals", $('#updateActivityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
 							// Fills owner select element
@@ -885,7 +902,9 @@ function getCalendarUsersDetails(callback)
 				json_user.id = user.id;
 				json_user.name = user.domainUser.name;
 				json_user.domain_user_id = user.domainUser.id;
-				json_users.push(json_user);
+				if (hasScope("VIEW_CALENDAR")) {
+					json_users.push(json_user);
+				}
 			}
 		});
 		return callback(json_users);

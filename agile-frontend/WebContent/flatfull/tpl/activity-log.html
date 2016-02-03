@@ -2,13 +2,18 @@
 
 {{#unless this.length}}
 
-        <div class="alert-info alert">
-            <div class="slate-content">
+        <div class="alert bg-white">
+            <div class="slate-content p-md">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>                
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">No activity found</h4>
+
+                    <h4 class="m-t-none" style="opacity:0.8;">You do not have any activity yet.</h4>
+                </div>
+                <div class="text text-center" style="opacity:0.5">
+                Displays a live timeline of all user activities here.
+
                 </div>
 				<div class="clearfix">
 				</div>
@@ -549,6 +554,14 @@ Created a new Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 <small class="activities_second_line m-t-none text-sm">
  <i class="icon-user"></i>{{#unless this.entityObject}}Contact deleted later. {{/unless}}Contact assigned to {{custom1}}.
 </small>  
+{{/if_equals}}
+
+{{#if_equals "MERGE_CONTACT" activity_type}}
+{{#if_equals "1" custom1}} 
+Merged {{custom1}} contact to {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+{{else}}
+Merged {{custom1}} contacts to {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+{{/if_equals}}
 {{/if_equals}}
 
 {{#if_equals "COMPANY_CREATE" activity_type}}

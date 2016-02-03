@@ -133,6 +133,7 @@
         </div>
     </div>
     <div class="modal-footer" id="event-save-footer">
+        <span class="error-status text-danger"></span>
         <a href="#" class="btn btn-primary" id="task_event_validate">Save </a>
         <span class="save-status"></span>
     </div>
@@ -140,3 +141,39 @@
 </div>
 </script>
 <!-- End of Modal views -->
+
+<!-- Update event error modal -->
+<script type="text/html" id="move-event-error-modal-template">
+<div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a href="#" data-dismiss="modal" class="close">×</a>
+        <h3>Update</h3>
+      </div>
+      <div class="modal-body">You do not have permission to update Events.</div>
+      <div class="modal-footer">
+        <div>
+          <a href="#" class="btn btn-primary" data-dismiss="modal">Cancel</a>
+        </div>
+      </div>
+    </div>
+</div>
+</script>
+
+<!-- Delete event error modal -->
+<script type="text/html" id="delete-event-error-modal-template">
+<div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a href="#" data-dismiss="modal" class="close">×</a>
+        <h3>Delete</h3>
+      </div>
+      <div class="modal-body">You do not have permission to delete this Event.</div>
+      <div class="modal-footer">
+        <div>
+          <a href="#" class="btn btn-primary" data-dismiss="modal">Cancel</a>
+        </div>
+      </div>
+    </div>
+</div>
+</script>

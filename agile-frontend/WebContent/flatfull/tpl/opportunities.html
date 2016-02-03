@@ -26,9 +26,9 @@
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu pull-right">
-							<li><a href="#" class="deals-list-view" onclick="return false;">List View</a></li>
+							<li><a href="#deal-rc-0" class="deals-list-view" onclick="return false;">List View</a></li>
               
-						<li><a href="#" class="deals-pipelined-view">Milestone View</a></li>
+						<li><a href="#deal-rc-1" class="deals-pipelined-view">Milestone View</a></li>
             
 					</ul>
 			</div>
@@ -44,6 +44,16 @@
 						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
 					
 					</ul>
+          <!--
+          {{#is_mobile}}
+
+          {{else}}
+          <div class="btn-group pull-left m-l-xs" style="padding-left:3px;">
+            <button class="btn btn-default btn-sm m-l-sm fullscreenelement" style="height:30px;width:30px;" targetFullscreenElement="#content" >
+              <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
+
+              {{/is_mobile}}
+              -->
 			</div>
 			</div>
 			<div class="clearfix"></div>
@@ -92,7 +102,7 @@
 			<div class="panel-heading">Deals</div>
 			<div class="table-responsive">
 
-                <table class="table table-striped showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/delete" id="deal-list" style="table-layout:auto;">
+                <table class="table table-striped showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table deals-nowrap {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/delete" id="deal-list" style="table-layout:auto;">
 
 					<thead>
                         <tr>

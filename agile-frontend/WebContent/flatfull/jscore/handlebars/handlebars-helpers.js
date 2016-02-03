@@ -301,7 +301,8 @@ $(function()
 		var initials = '';
 		try
 		{
-			// initials = text_gravatar_initials(items)
+			// if(!isIE())
+			initials = text_gravatar_initials(items);
 		}
 		catch (e)
 		{
@@ -310,9 +311,11 @@ $(function()
 
 		if (initials.length == 0)
 			backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
-		var data_name = '';
-		// "onLoad=\"image_load(this)\" onError=\"image_error(this)\"
-		// _data-name=\"" + initials;
+
+		var data_name =  '';
+		// if(!isIE())
+			data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
+		
 		var email = getPropertyValue(items, "email");
 		if (email)
 		{
@@ -1001,6 +1004,8 @@ $(function()
 	{
 		var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 		var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
+		if(symbol=='Rs')
+			symbol='Rs.';
 		return symbol;
 	});
 	Handlebars.registerHelper('mandrill_exist', function(options)
@@ -3850,6 +3855,14 @@ $(function()
 
 	});
 
+		Handlebars.registerHelper('month-range', function(options)
+	{
+		var from_date = Date.today().moveToFirstDayOfMonth();
+		var to_date = Date.today().moveToLastDayOfMonth();
+		return from_date.toString('MMMM d, yyyy') + " - " + to_date.toString('MMMM d, yyyy');
+
+	});
+
 	Handlebars.registerHelper("extractEmail", function(content, options)
 	{
 
@@ -5759,7 +5772,7 @@ $(function()
 	{
 		var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
 		agile_api = JSON.parse(agile_api);
-		var shopify_webhook = window.location.origin + "/shopifytrigger?api-key=" + agile_api.api_key;
+		var shopify_webhook = agileWindowOrigin() + "/shopifytrigger?api-key=" + agile_api.api_key;
 		return new Handlebars.SafeString(shopify_webhook);
 	});
 
@@ -6974,8 +6987,23 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			return options.inverse(this);
 	});
 
+
+Handlebars.registerHelper('is_IE_browser', function(options) {
+	     return (isIEBrowser() ? options.fn(this) : options.inverse(this));
+});
+
 function agile_is_mobile_browser(){
    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+ }
+
+ function isIEBrowser(){
+
+ 	var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
+	var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
+	if(isIE || isIENew)
+		return true;
+
+	return false;
  }
 
 

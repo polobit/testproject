@@ -1245,6 +1245,17 @@ function initializeMilestoneListners(el){
 			return false;
 		}
 		var obj = serializeForm('dealSourcesForm');
+		if(App_Admin_Settings.dealSourcesView && App_Admin_Settings.dealSourcesView.collection)
+		{
+			var maxPos = 0;
+			$.each(App_Admin_Settings.dealSourcesView.collection.models, function(index, dealSource){
+				if(dealSource.get("order") > maxPos) {
+					maxPos = dealSource.get("order");
+				}
+			});
+			obj['order'] = maxPos + 1;
+		}
+		
 		var model = new BaseModel();
 		model.url = 'core/api/categories';
 		model.save(obj, {
@@ -1507,4 +1518,57 @@ function numberWithCommasAsDouble(value)
 		{
 			return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
 		}
+}
+
+function dealSourcesSorting()
+{
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function(){
+		$('.admin-settings-deal-sources-model-list').sortable({
+			axis: "y" ,
+			containment: '.admin-settings-deal-sources-model-list',
+			scroll: false,
+			items:'tr',
+			helper: function(e, tr){
+			    var $originals = tr.children();
+			    var $helper = tr.clone();
+			    $helper.children().each(function(index)
+			    {
+			      // Set helper cell sizes to match the original sizes
+			      $(this).width($originals.eq(index).width()+50);
+			      $(this).css("background","#f5f5f5");
+			      $(this).css("border-bottom","1px solid #ddd");
+			      $(this).css("max-width",($originals.eq(index).width()+50)+"px");
+			      $(this).height($originals.eq(index).height());
+			    });
+			    return $helper;
+			},
+			sort: function(event, ui){
+				ui.placeholder.height(ui.helper.height());
+			},
+			forceHelperSize:true,
+			placeholder:'<tr></tr>',
+			forcePlaceholderSize:true,
+			handle: ".icon-move",
+			cursor: "move",
+			tolerance: "pointer"
+		});
+		
+		/*
+		 * This event is called after sorting stops to save new positions of
+		 * deal sources
+		 */
+		$('.admin-settings-deal-sources-model-list',$('#deal-sources-table')).on("sortstop",function(event, ui){
+			var sourceIds = [];
+			$('#admin-settings-deal-sources-model-list > tr').each(function(column){
+				sourceIds[column] = $(this).data().id;
+			});
+			// Saves new positions in server
+			$.ajax({ type : 'POST', url : '/core/api/categories/position', data : JSON.stringify(sourceIds),
+				contentType : "application/json; charset=utf-8", dataType : 'json', success : function(data){
+					$.each(sourceIds, function(index, val){
+						$('#dealSourcesForm_'+val).find('input[name="order"]').val(index);
+					});
+				} });
+		});
+	});
 }

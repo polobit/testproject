@@ -47,8 +47,7 @@
 
 		</div>
 		<div class="clearfix"></div>
-		<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs"
-			style="padding-left: 24px;">
+		<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs no-wrap" style="padding-left: 24px;">
 			{{#each tags}} <span
 				class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">{{this}}</span>
 			{{/each}}
@@ -71,7 +70,7 @@
 				class="tbody_check grid-view-checkbox" value=""> <i></i>
 			</label>
 		</div>
-		<div style="margin-left: 25px;height: 71px;">
+		<div style="margin-left: 25px; height: 71px;">
 			<div class="pull-left m-r-xs">
 				<a href="#contact/{{id}}"><img
 					title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}"
@@ -107,7 +106,7 @@
 			</div>
 			<div class="clearfix"></div>
 		</div>
-	<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs" style="padding-left: 27px;">
+	<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs no-wrap" style="padding-left: 27px;">
 				{{#each tags}} <span
 					class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">{{this}}</span>
 				{{/each}}
@@ -167,12 +166,12 @@
 <div class="pull-right">
 			<div class="btn-group pull-left m-r-xs contacts-toolbar">
 			<div class="btn-group dropdown m-l-none" style="float: none;">
-	    		<button class="btn btn-sm no-shadow p-n b-n bg-transparent m-t-xs" data-toggle="dropdown" id="contact-sort" aria-expanded="false">
-					<span>Sort by: </span>
-				    <span class="sort-field-txt text-muted"></span>
+	    		<button class="btn btn-sm no-shadow p-n b-n bg-transparent m-t-xs text-base" data-toggle="dropdown" id="contact-sort" aria-expanded="false">
+					<span class="text-muted">Sort by </span>
+				    <span class="sort-field-txt"></span>
 				</button>
-				<button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs text-base" style="margin-top:3px;"  data-toggle="dropdown" aria-expanded="true">
-					<i class="fa fa-sort"></i>
+				<button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs m-t-xs"  data-toggle="dropdown" aria-expanded="true">
+					<i class="fa fa-sort-desc"></i>
 				</button>
 			    <ul class="pull-right dropdown-menu">
 			    	<li>
