@@ -1009,9 +1009,20 @@
         <servlet-class>com.thirdparty.call.GetInformUserServlet</servlet-class>
     </servlet>  
  
+ 
     <servlet-mapping>
         <servlet-name>GetInformUserServlet</servlet-name>
         <url-pattern>/GetInformUser</url-pattern>
+    </servlet-mapping>
+    
+    	<servlet>
+        <servlet-name>TaskReminderUnitTest</servlet-name>
+        <servlet-class>com.agilecrm.reminder.test.TaskReminderUnitTestServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>TaskReminderUnitTest</servlet-name>
+        <url-pattern>test/taskreminder/unit-test</url-pattern>
     </servlet-mapping>
   
 </web-app>
