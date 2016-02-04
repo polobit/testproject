@@ -299,7 +299,7 @@ public class SetProperty extends TaskletAdapter
 			Pattern calendarPattern = Pattern.compile(DateUtil.WaiTillDateRegEx);
 			Matcher calendarMatcher = calendarPattern.matcher(updated_value);
 			
-			// Date Matcher for dd MMM yyyy format..
+			 // Date Matcher for dd MMM yyyy format..
 			if (calendarMatcherCurrentDate.matches())
 					sdf = new SimpleDateFormat(DateUtil.CustomFieldDateFormat);
 
