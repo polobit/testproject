@@ -63,9 +63,9 @@ public class DateUtil
 
 	public static final String WaitTillDateFormat = "MM/dd/yyyy";
 
-	private static final String CustomFieldDateRegEx = "(0?[1-9]|[12][0-9]|3[01])\\s([a-zA-Z]{3})\\s((19|20)\\d\\d)";
+	public static final String CustomFieldDateRegEx = "(0?[1-9]|[12][0-9]|3[01])\\s([a-zA-Z]{3})\\s((19|20)\\d\\d)";
 
-	private static final String CustomFieldDateFormat = "dd MMM yyyy";
+	public static final String CustomFieldDateFormat = "dd MMM yyyy";
 
 	private static final String CustomFieldCSVDateRegEx = "(0?[1-9]|[12][0-9]|3[01])\\s([a-zA-Z]{3})\\s((19|20)\\d\\d)";
 
