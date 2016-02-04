@@ -16,7 +16,7 @@ var EmailBuilderRouter = Backbone.Router.extend({
         }, "#emailbuilder-listeners");
 	
         //hide sidebar
-        // $("#app-aside-folded .fa-dedent").click();
+        collapseLeftMenuInBuilder();
         hideTransitionBar();
 	},
 
@@ -49,7 +49,7 @@ var EmailBuilderRouter = Backbone.Router.extend({
 	   $('html, body').animate({scrollTop: $('body').offset().top}, 500);
         
         //hide sidebar
-        // $("#app-aside-folded .fa-dedent").click();
+        collapseLeftMenuInBuilder();
         hideTransitionBar();
 
 	},
@@ -66,10 +66,22 @@ var EmailBuilderRouter = Backbone.Router.extend({
         getTemplate("emailbuilder-add", data, undefined, function(ui){
             $("#emailbuilder-listeners").html($(ui));            
         }, "#emailbuilder-listeners");
-    
+
+        //hide sidebar
+        collapseLeftMenuInBuilder();
+        
        $('html, body').animate({scrollTop: $('body').offset().top}, 500);
        hideTransitionBar();
 
     }
 	
 });
+
+function collapseLeftMenuInBuilder() {
+    $wrapElement = $("#wrap");
+    if(!$wrapElement.hasClass("app-aside-dock")) {
+        if(!$wrapElement.hasClass("app-aside-folded")) {
+            $wrapElement.addClass("app-aside-folded");
+        }
+    }
+}
