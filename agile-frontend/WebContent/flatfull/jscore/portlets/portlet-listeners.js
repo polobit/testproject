@@ -946,8 +946,8 @@ function initializeAddPortletsListeners() {
 							"UserActivities" : updateImageS3Path("flatfull/img/dashboard_images/User-Activities.png"),
 							"Campaignstats" : updateImageS3Path("flatfull/img/dashboard_images/Campaign-stats.jpg"),
 							"DealGoals" : updateImageS3Path("flatfull/img/dashboard_images/Quota.png"),
-							"IncomingDeals" : updateImageS3Path("flatfull/img/dashboard_images/incoming-deals.png"),
-							"LostDealAnalysis" : updateImageS3Path("flatfull/img/dashboard_images/lost-deal-analysis.png")
+							"IncomingDeals" : updateImageS3Path("flatfull/img/dashboard_images/incoming-deals-new.png"),
+							"LostDealAnalysis" : updateImageS3Path("flatfull/img/dashboard_images/lost-deal-analysis-new.png")
 
 						};
 						var placements_json = {
