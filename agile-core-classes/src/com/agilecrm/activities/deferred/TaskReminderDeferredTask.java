@@ -14,6 +14,7 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
@@ -148,9 +149,9 @@ public class TaskReminderDeferredTask implements DeferredTask
 			mapContact.put(contactField.name, contactField);
 
 		    mapContact.put("id", String.valueOf(contact.id));
-		   /* if(contact.getContactFieldValue(contact.EMAIL)!=null)
-				mapContact.put("email_image", MD5Util.getMD5Code(contact.getContactFieldValue(contact.EMAIL)));
-		   */ // save id of this contact for href
+		  	mapContact.put("email_image", ContactUtil.getMD5EncodedImage(contact));	
+				
+		    // save id of this contact for href
 
 		    contactListMap.add(mapContact);
 		}
