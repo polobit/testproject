@@ -1,5 +1,5 @@
 <script id="contacts-grid-model-template" type="text/html">
-
+<div class="custom-animated custom-fadeInUp">
 <div class="contacts-grid-view-temp p-b col-md-4 {{id}}">
 	{{#if_contact_type "PERSON"}}
 	<div class="b r-5x p-sm bg-white" id="{{id}}" style="height: 110px;">
@@ -58,7 +58,7 @@
 
 
 </div>
-
+</div>
 </script>
 
 <script id="contacts-grid-table-model-template" type="text/html">
@@ -131,7 +131,7 @@
     <div class="col">
 	  <div id="right-pane">
 		
-	<div class="wrapper bg-light padder-md padder-v p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);width: 988px;>
+	<div class="wrapper bg-light padder-md padder-v p-r-none m-r-md {{#is_mobile}} m-r-none {{/is_mobile}}" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);>
 	    <div class="btn-toolbar m-l-none pos-rlt">
 		
     	<div class="btn-toolbar m-l-none pos-rlt">
@@ -160,7 +160,7 @@
     </div>
     </div>
     <div class="contacts-div">
-    <div id="bulk-action-btns" class="panel-heading no-shadow m-r-md" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
+    <div id="bulk-action-btns" class="panel-heading no-shadow m-r-md {{#is_mobile}} m-r-none {{/is_mobile}}" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
 				      	
 					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add Tags</button>
 					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Remove Tags</button>
