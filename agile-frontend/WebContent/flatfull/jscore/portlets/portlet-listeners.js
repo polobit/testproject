@@ -837,7 +837,7 @@ function initializePortletsListeners() {
 						}
 					});
 
-	$('.gridster-portlets').on("click", '.portlet-settings', function(e) {
+	$('.gridster-portlets').off("click").on("click", '.portlet-settings', function(e) {
 		e.preventDefault();
 
 		portlet_utility.showPortletSettings(this.id);

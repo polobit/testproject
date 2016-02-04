@@ -1180,6 +1180,7 @@ var portlet_utility = {
 							"<div class='text-center v-middle opa-half' style='margin-top:"
 									+ topPos
 									+ "px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+			$("#"+selector).addClass("lost-deal-analysis-portlet-pie");
 			pieforReports(url, selector, '', undefined, true);
 			setPortletContentHeight(base_model);
 			break;
