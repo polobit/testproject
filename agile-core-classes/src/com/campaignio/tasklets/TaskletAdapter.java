@@ -145,7 +145,7 @@ public class TaskletAdapter implements Tasklet
      */
     public static String getStringValue(JSONObject nodeJSON, JSONObject subscriberJSON, JSONObject data, String keyName) throws Exception
     {
-      //adding current date merge field
+       //adding current date merge field
     	addCurrentDate(subscriberJSON);
            	
 	Object returnValue = getValue(nodeJSON, subscriberJSON, data, keyName);
