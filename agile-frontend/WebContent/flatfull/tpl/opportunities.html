@@ -26,9 +26,9 @@
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu pull-right">
-							<li><a href="#" class="deals-list-view" onclick="return false;">List View</a></li>
+							<li><a href="#deal-rc-0" class="deals-list-view" onclick="return false;">List View</a></li>
               
-						<li><a href="#" class="deals-pipelined-view">Milestone View</a></li>
+						<li><a href="#deal-rc-1" class="deals-pipelined-view">Milestone View</a></li>
             
 					</ul>
 			</div>
@@ -102,7 +102,7 @@
 			<div class="panel-heading">Deals</div>
 			<div class="table-responsive">
 
-                <table class="table table-striped showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/delete" id="deal-list" style="table-layout:auto;">
+                <table class="table table-striped showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table deals-nowrap {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/delete" id="deal-list" style="table-layout:auto;">
 
 					<thead>
                         <tr>

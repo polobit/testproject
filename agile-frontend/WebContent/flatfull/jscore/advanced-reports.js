@@ -147,7 +147,7 @@ function initSalesCharts(callback){
 
 		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
 
-		fillSelect("source", "/core/api/categories?entity_type=DEAL_SOURCE", undefined, function()
+		/*fillSelect("source", "/core/api/categories?entity_type=DEAL_SOURCE", undefined, function()
 		{
 			
 			$('#source option').eq(0).after($('<option class="default-select" value="1">Unknown</option>'));
@@ -156,7 +156,30 @@ function initSalesCharts(callback){
 				callback();
 			});
 
-		}, '<option class="default-select" value="{{id}}">{{label}}</option>', false, undefined, "All Sources");
+		}, '<option class="default-select" value="{{id}}">{{label}}</option>', false, undefined, "All Sources");*/
+
+		var sources = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_SOURCE', sort_collection: false});
+		sources.collection.fetch({
+			success: function(data){
+				var jsonModel = data.toJSON();
+				var html =  '<option class="default-select" value="">All Sources</option>' + 
+							'<option class="default-select" value="1">Unknown</option>';
+				
+				$.each(jsonModel,function(index,dealSource){
+					html+='<option class="default-select" value="'+dealSource.id+'">'+dealSource.label+'</option>';
+				});
+				$('#source', $('#content')).html(html);
+
+				// Hide loading bar
+				hideTransitionBar();
+
+				$('#source').change(function()
+				{
+					callback();
+				});
+			}
+		});
+		
 		callback();
 
 		
@@ -733,14 +756,14 @@ function initComparisonReports(callback){
 
 	
 	// Init the callback when the track selector changes too
-		fillSelect("track", "/core/api/milestone/pipelines", undefined, function()
+		fillSelect("pipeline_track", "/core/api/milestone/pipelines", undefined, function()
 		{
-			if (_agile_get_prefs("agile_deal_track"))
-            pipeline_id = _agile_get_prefs("agile_deal_track");
+			//if (_agile_get_prefs("agile_deal_track"))
+           // pipeline_id = _agile_get_prefs("agile_deal_track");
 
-			$('select[id="track"]').find('option[value="'+pipeline_id+'"]').attr("selected",true);
+			$('select[id="pipeline_track"]').find('option[value=""]').remove();
 			        	callback();
-			$('#track').change(function()
+			$('#pipeline_track').change(function()
 			{
 				callback();
 			});
@@ -751,12 +774,12 @@ function showComparisonReportGraph()
 {
 		url='/core/api/opportunity/conversionRate/0';
 		url=url+getSelectedDates();
-		if ($('#track').length > 0)
+		if ($('#pipeline_track').length > 0)
 	{
 		// Get owner
 		var track_id=0;
-		if ($("#track").val() != ""){
-			track_id=$("#track").val();
+		if ($("#pipeline_track").val() != ""){
+			track_id=$("#pipeline_track").val();
 			url += '&track-id='+track_id;
 			BubbleChart(url,'comparison-chart','',true);
 		}

@@ -177,6 +177,9 @@ var Base_Model_View = Backbone.View
 							deleteCallback(model, response);
 						}
 						
+						if(this.options.no_reload_on_delete)
+							  return;
+
 						location.reload(true);
 					}
 				});

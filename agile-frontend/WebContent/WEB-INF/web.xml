@@ -1004,14 +1004,24 @@
         <url-pattern>/InformUser</url-pattern>
     </servlet-mapping>
     
-    	<servlet>
+    <servlet>
         <servlet-name>GetInformUserServlet</servlet-name>
         <servlet-class>com.thirdparty.call.GetInformUserServlet</servlet-class>
-    </servlet>  
- 
+    </servlet>
     <servlet-mapping>
         <servlet-name>GetInformUserServlet</servlet-name>
         <url-pattern>/GetInformUser</url-pattern>
     </servlet-mapping>
+    
+   	<servlet>
+   		<servlet-name>AdmnLoginServlet</servlet-name>
+   		<servlet-class>com.agilecrm.AdminLoginServlet</servlet-class>
+   	</servlet>  
+   	<servlet-mapping>
+        <servlet-name>AdmnLoginServlet</servlet-name>
+        <url-pattern>/custLogin</url-pattern>
+    </servlet-mapping>
+ 
+    
   
 </web-app>

@@ -280,9 +280,14 @@ public class PortletsAPI {
 	@Path("/pending-deals")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Opportunity> getPortletPendingDealsList(@QueryParam("deals") String deals)throws Exception {
-		JSONObject json=new JSONObject();
+	public List<Opportunity> getPortletPendingDealsList(@QueryParam("deals") String deals,@QueryParam("track") String track,@QueryParam("milestone") String milestone
+			)throws Exception {
+	JSONObject json=new JSONObject();
 		json.put("deals",deals);
+		if(track!=null)
+		json.put("track",track);
+		if(milestone!=null)
+		json.put("milestone",milestone);
 		PortletUtil.checkPrivilegesForPortlets("DEALS");
 		return PortletUtil.getPendingDealsList(json);
 	}

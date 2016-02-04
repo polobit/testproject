@@ -3055,9 +3055,12 @@ table.hide-head-checkbox th label.i-checks {
   background-color: #f9f9f9 !important;
   
 }
+
+@media all and (min-width: 768px) {
 .app-aside-fixed:not(.app-aside-dock) aside {
 	position: fixed;
 	height: 100vh;
+}
 }
 
 #calls-chart .highcharts-legend , #calls-chart .highcharts-tooltip
@@ -3093,6 +3096,7 @@ table.hide-head-checkbox th label.i-checks {
     left: -20px;
     width: 100vw;
 }
+
 .contacts-toolbar .sort-field-txt:hover {
     color: rgb(88, 102, 110)!important;
 }
@@ -3118,4 +3122,26 @@ table.hide-head-checkbox th label.i-checks {
 #amount_goals_chart .highcharts-tooltip 
 {
 	z-index: 1;
+}
+
+
+.slate-content h4{
+	font-size: 18px;
+	opacity:0.8;
+}
+.slate-content .text, .slate-content .text-base{
+	font-size: 15px;
+}
+
+
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+/* Safari and Chrome */
+.no-wrap {
+ white-space: normal !important;
+}
+ 
+} 
+
+.deals-nowrap .no-wrap {
+ white-space: nowrap !important;
 }

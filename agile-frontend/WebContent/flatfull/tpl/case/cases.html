@@ -14,14 +14,14 @@
 <div class="row">
 	<div class="col-md-9">
 		{{#unless this.length}}
-		<div class="alert-info alert">
-            <div class="slate-content">
+		<div class="alert bg-white ">
+            <div class="slate-content p-md">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="/img/clipboard.png">
                 </div>
                 <div class="box-right pull-left">
-                    <h4>There are no pending cases </h4>
-                    <div class="text">
+                    <h4 class="text-lg" style="opacity:0.8;">There are no pending cases </h4>
+                    <div class="text-base" style="opacity:0.5">
 						You can add case by clicking the button below or the one on the right side of the page.
                     </div>
                     <a href="#" class="cases-add btn btn-default btn-sm blue m-t-xs"><i class="icon-plus-sign"></i>  Add Case</a>
@@ -151,20 +151,25 @@
                 <p><b>Related To : </b></p> 
                 <div>
 				{{#each_with_index contacts}}
-                	<div class='col-md-4 inline-block' style='margin-left:25px;'>
-					{{#if_equals type 'PERSON'}}
-                    	<img class='thumbnail thumb-sm' src='{{gravatarurl properties 50}}'/>
-                    	<div class='text-ellipsis inline-block w-xs'>
-                        	{{contact_name_necessary this}}
-					{{/if_equals}}
-					{{#if_equals type 'COMPANY'}}
-                    	<img class='thumbnail' {{getCompanyImage '40'}} />
-                    	<div class='text-ellipsis inline-block w-xs'>
-                        	{{contact_name_necessary this}}
-					{{/if_equals}}
-						{{#if_equals index ../contacts.length}}
-						{{else}}
-							,
+                	<div class='col-md-4 block'>
+					<div class="block thumb-sm">
+                {{#if_equals type "PERSON"}}
+                <img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}"  title="{{contact_name_necessary this}}" />
+                <div class='text-ellipsis block w-xs'>
+                            {{contact_name_necessary this}}
+                   </div> 
+                {{/if_equals}}
+
+                {{#if_equals type "COMPANY"}}
+                <img class='thumbnail' {{getCompanyImage '40'}} />
+                        <div class='text-ellipsis block w-xs'>
+                            {{contact_name_necessary this}}
+                            </div>
+                    {{/if_equals}}
+                        {{#if_equals index ../contacts.length}}
+                        {{else}}
+                            ,
+
 						{{/if_equals}}
 						</div>
                 	</div>

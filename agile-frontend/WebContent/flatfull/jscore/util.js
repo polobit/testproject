@@ -19,13 +19,17 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-r
  * Default image shown for contacts if image is not available
  */
 
-var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
+var DEFAULT_GRAVATAR_url = agileWindowOrigin() + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
 
-var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/rabinder,haaris_farooqi";
 
-var SALES_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Vikas,Mrudula,Shravi_Sharma,Bharat,Manish,Nick,Stephen";
+var ONBOARDING_SCHEDULE_URL = "http://supportcal.agilecrm.com";
 
-var SUPPORT_SCHEDULE_URL = "https://our.agilecrm.com/calendar/rabinder,haaris_farooqi";
+
+var SALES_SCHEDULE_URL = "http://salescal.agilecrm.com";
+
+
+var SUPPORT_SCHEDULE_URL = "http://supportcal.agilecrm.com";
+
 
 var CALENDAR_WEEK_START_DAY = CURRENT_USER_PREFS.calendar_wk_start_day;
 /**
@@ -358,7 +362,9 @@ function showTextGravatar(selector, element)
 			return;
 
 		$(this).attr("data-name", name);
-		$(this).initial({ charCount : 2 });
+
+		// $(element).initial({charCount: 2,fontWeight: 'normal',fontSize:20, width:$(element).width(), height:$(element).height()});
+		$(element).initial({charCount: 2,fontWeight: 'normal'});
 	});
 }
 
@@ -581,3 +587,20 @@ function getFormattedDateObjectWithString(value){
 	
 }
 
+function isIE() {
+
+	var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
+	var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
+	if(isIE || isIENew)
+	 return true;
+
+	return false;
+}
+
+function agileWindowOrigin(){
+	if (!window.location.origin) {
+	   return window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+	}
+
+	return window.location.origin;
+}

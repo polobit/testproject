@@ -38,6 +38,7 @@
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
+  <target>agile-calendar</target>
   </queue>
   <queue>
     <name>reports-queue</name>
@@ -476,6 +477,14 @@
       <user-email>yaswanth@agilecrm.com</user-email>      <!-- can list, get, lease, delete, and update tasks -->
   <!--  can insert tasks, in addition to rights granted by being a user_email above -->
     </acl>
+  </queue>
+  
+  <queue>
+  <name>webhooks-register-add-queue</name>
+  <mode>pull</mode>
+  <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+  </retry-parameters>
   </queue>
 
 </queue-entries>
