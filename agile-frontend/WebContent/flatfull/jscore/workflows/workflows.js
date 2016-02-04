@@ -368,7 +368,7 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
             
             error: function(jqXHR, status, errorThrown){ 
               enable_save_button($clicked_button); 
-              
+              App_Workflows.workflow_list_view.collection.remove(workflow);
               // shows Exception message
               if(status.status != 406)
               {
