@@ -174,6 +174,8 @@ public class MultipartUtility
 				response.put("err_msg", sb.toString());
 				
 				System.out.println("Error: " + response);
+				
+				reader.close();
 			}
 		}
 		catch (Exception e)
@@ -182,7 +184,6 @@ public class MultipartUtility
 		}
 		finally
 		{
-			reader.close();
 			httpConn.disconnect();
 		}
 		

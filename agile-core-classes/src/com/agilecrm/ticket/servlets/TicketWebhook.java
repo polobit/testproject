@@ -179,44 +179,51 @@ public class TicketWebhook extends HttpServlet
 			// Need to implement attachments saving code here
 			List<TicketDocuments> attachmentURLs = new ArrayList<TicketDocuments>();
 
-			if (msgJSON.has("attachments"))
+			try
 			{
-				JSONObject attachments = msgJSON.getJSONObject("attachments");
-
-				for (Iterator iter = attachments.keys(); iter.hasNext();)
+				if (msgJSON.has("attachments"))
 				{
-					JSONObject fileJSON = attachments.getJSONObject((String) iter.next());
+					JSONObject attachments = msgJSON.getJSONObject("attachments");
 
-					String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
+					for (Iterator iter = attachments.keys(); iter.hasNext();)
+					{
+						JSONObject fileJSON = attachments.getJSONObject((String) iter.next());
 
-					JSONObject responseJSON = MultipartUtility.SaveFileToS3(fileName, fileType,
-							fileJSON.getString("content"));
+						String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
 
-					TicketDocuments document = new TicketDocuments(fileName, fileType, 0l,
-							responseJSON.getString("file_url"));
+						JSONObject responseJSON = MultipartUtility.SaveFileToS3(fileName, fileType,
+								fileJSON.getString("content"));
+
+						TicketDocuments document = new TicketDocuments(fileName, fileType, 0l,
+								responseJSON.getString("file_url"));
+						
+						attachmentURLs.add(document);
+					}
+				}
+			
+				if (msgJSON.has("images"))
+				{
+					JSONObject attachments = msgJSON.getJSONObject("images");
 					
-					attachmentURLs.add(document);
+					for (Iterator iter = attachments.keys(); iter.hasNext();)
+					{
+						JSONObject fileJSON = attachments.getJSONObject((String) iter.next());
+
+						String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
+
+						JSONObject responseJSON = MultipartUtility.SaveFileToS3(fileName, fileType,
+								fileJSON.getString("content"));
+
+						TicketDocuments document = new TicketDocuments(fileName, fileType, 0l,
+								responseJSON.getString("file_url"));
+						
+						attachmentURLs.add(document);
+					}
 				}
 			}
-		
-			if (msgJSON.has("images"))
+			catch (Exception e)
 			{
-				JSONObject attachments = msgJSON.getJSONObject("images");
 				
-				for (Iterator iter = attachments.keys(); iter.hasNext();)
-				{
-					JSONObject fileJSON = attachments.getJSONObject((String) iter.next());
-
-					String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
-
-					JSONObject responseJSON = MultipartUtility.SaveFileToS3(fileName, fileType,
-							fileJSON.getString("content"));
-
-					TicketDocuments document = new TicketDocuments(fileName, fileType, 0l,
-							responseJSON.getString("file_url"));
-					
-					attachmentURLs.add(document);
-				}
 			}
 
 			Tickets ticket = null;
