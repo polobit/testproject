@@ -1364,6 +1364,7 @@ var WorkflowsRouter = Backbone.Router
 //						workflowModal.save();
 //						that.workflow_list_view.collection.add(workflowModal);
 						$("#content").html(workflowModal.render().el);
+						App_Workflows.workflow_list_view.collection.remove();
 						
 	          		},
 
