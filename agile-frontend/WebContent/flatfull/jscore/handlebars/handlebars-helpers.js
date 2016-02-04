@@ -6996,6 +6996,14 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 		else
 			return options.fn(this);
 	});
+	
+	Handlebars.registerHelper("check_admin_ip", function(options)
+	{
+		if($.inArray(CURRENTIP, IPCHECK) != -1)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
 
 
 Handlebars.registerHelper('is_IE_browser', function(options) {
