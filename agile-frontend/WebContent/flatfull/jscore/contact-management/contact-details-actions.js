@@ -279,11 +279,11 @@ function fill_relation(el){
 		json = App_Contacts.contactDetailView.model.toJSON();
 	}
  	var contact_name = getContactName(json);//getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name");
- 	
+ 	var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+  
 
  	// Adds contact name to tags ul as li element
  	$('.tags',el).html(template({name : contact_name, id : json.id}));
-  var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
       
 }
 
