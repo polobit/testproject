@@ -384,7 +384,8 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
     	    	
     	    	// Updates workflow model
     	    	App_Workflows.workflow_model = workflow;
-                //App_Workflows.workflow_list_view = undefined;
+                if(Current_Route.indexOf("share-campaign")!=-1)
+                    App_Workflows.workflow_list_view = undefined;
     	    },
             
             error: function(jqXHR, status, errorThrown){ 
