@@ -478,5 +478,13 @@
   <!--  can insert tasks, in addition to rights granted by being a user_email above -->
     </acl>
   </queue>
+  
+  <queue>
+  <name>webhooks-register-add-queue</name>
+  <mode>pull</mode>
+  <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+  </retry-parameters>
+  </queue>
 
 </queue-entries>

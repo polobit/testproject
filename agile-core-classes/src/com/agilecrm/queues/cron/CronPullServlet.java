@@ -61,11 +61,19 @@ public class CronPullServlet extends HttpServlet
 	    return;
 	}
 
+	if (queueName.equalsIgnoreCase("webhooks-register-add-queue"))
+	{
+	    // If from cron Process tasks in frontend
+	    PullScheduler pullScheduler = new PullScheduler(queueName, true);
+	    pullScheduler.run();
+	    return;
+	}
+
 	// Process tasks in backend
 	if (tasksCount > FETCH_LIMIT)
 	{
 	    System.out.println("Running " + queueName + " tasks in backend...");
-	    
+
 	    try
 	    {
 		PullQueueUtil.processTasksInBackend("/backend-pull", queueName);
@@ -75,7 +83,7 @@ public class CronPullServlet extends HttpServlet
 		System.out.println("exception raised to process task");
 		e.printStackTrace();
 	    }
-	    
+
 	}
 	else
 	{
