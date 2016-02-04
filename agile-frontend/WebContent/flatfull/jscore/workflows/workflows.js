@@ -164,6 +164,10 @@ var Workflow_Model_Events = Base_Model_View.extend({
         else
         {
             workflowJSON = App_Workflows.workflow_model;
+
+            // To reset model on error
+            var previousAttributes = App_Workflows.workflow_model.previousAttributes();
+
             App_Workflows.workflow_model.set("name", name);
             App_Workflows.workflow_model.set("rules", designerJSON);
             App_Workflows.workflow_model.set("unsubscribe", unsubscribe_json);
@@ -223,6 +227,9 @@ var Workflow_Model_Events = Base_Model_View.extend({
             error: function(jqXHR, status, errorThrown){ 
               enable_save_button($clicked_button);
 
+              // Reset model with previous on error
+              App_Workflows.workflow_model.set(previousAttributes);
+              
               console.log(status);
                     // Show cause of error in saving
                     $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
@@ -377,11 +384,12 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
     	    	
     	    	// Updates workflow model
     	    	App_Workflows.workflow_model = workflow;
+                //App_Workflows.workflow_list_view = undefined;
     	    },
             
             error: function(jqXHR, status, errorThrown){ 
               enable_save_button($clicked_button); 
-              
+              App_Workflows.workflow_list_view.collection.remove(workflow);
               // shows Exception message
               if(status.status != 406)
               {

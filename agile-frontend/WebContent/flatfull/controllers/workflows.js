@@ -48,7 +48,14 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			workflows : function()
 			{
-
+				if (this.workflow_list_view && this.workflow_list_view.collection && this.workflow_list_view.collection.length > 0)
+				{
+					//$('body').trigger('agile_collection_loaded');
+					$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(this.workflow_list_view.render(true).el);
+					$(".active").removeClass("active");
+					$("#workflowsmenu").addClass("active");
+					return;
+				}
 
 				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
 					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
@@ -1331,7 +1338,8 @@ var WorkflowsRouter = Backbone.Router
 			
 			shareWorkflow : function(sender_cid, sender_domain, workflow){
 				
-                this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', postRenderCallback : function(el)
+                this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
+					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
 					{	
 					}});
 
