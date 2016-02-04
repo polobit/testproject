@@ -2,8 +2,10 @@ package com.agilecrm.ticket.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.instrument.Instrumentation;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -34,6 +36,7 @@ import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.MultipartUtility;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
@@ -99,26 +102,10 @@ public class TicketWebhook extends HttpServlet
 				return;
 
 			/**
-			 * msgJSON contains recipient addresses as json array
+			 * msgJSON contains email field where Mandrill received the message
 			 */
-			JSONArray recipientsArray = msgJSON.getJSONArray("to");
 
-			if (recipientsArray == null || recipientsArray.length() == 0)
-				return;
-
-			/**
-			 * Finding the exact recipient address as recipient addresses may
-			 * contains many. To address will be in below format -
-			 * namespace+groupID@helptor.com
-			 */
-			String toAddress = "";
-			for (int i = 0; i < recipientsArray.length(); i++)
-			{
-				toAddress = recipientsArray.getJSONArray(i).getString(0);
-
-				if (toAddress.endsWith(Globals.INBOUND_EMAIL_SUFFIX))
-					break;
-			}
+			String toAddress = msgJSON.getString("email");
 
 			System.out.println("toAddress: " + toAddress);
 
@@ -191,6 +178,46 @@ public class TicketWebhook extends HttpServlet
 			// Save attachments and get URLs
 			// Need to implement attachments saving code here
 			List<TicketDocuments> attachmentURLs = new ArrayList<TicketDocuments>();
+
+			if (msgJSON.has("attachments"))
+			{
+				JSONObject attachments = msgJSON.getJSONObject("attachments");
+
+				for (Iterator iter = attachments.keys(); iter.hasNext();)
+				{
+					JSONObject fileJSON = attachments.getJSONObject((String) iter.next());
+
+					String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
+
+					JSONObject responseJSON = MultipartUtility.SaveFileToS3(fileName, fileType,
+							fileJSON.getString("content"));
+
+					TicketDocuments document = new TicketDocuments(fileName, fileType, 0l,
+							responseJSON.getString("file_url"));
+					
+					attachmentURLs.add(document);
+				}
+			}
+		
+			if (msgJSON.has("images"))
+			{
+				JSONObject attachments = msgJSON.getJSONObject("images");
+				
+				for (Iterator iter = attachments.keys(); iter.hasNext();)
+				{
+					JSONObject fileJSON = attachments.getJSONObject((String) iter.next());
+
+					String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
+
+					JSONObject responseJSON = MultipartUtility.SaveFileToS3(fileName, fileType,
+							fileJSON.getString("content"));
+
+					TicketDocuments document = new TicketDocuments(fileName, fileType, 0l,
+							responseJSON.getString("file_url"));
+					
+					attachmentURLs.add(document);
+				}
+			}
 
 			Tickets ticket = null;
 

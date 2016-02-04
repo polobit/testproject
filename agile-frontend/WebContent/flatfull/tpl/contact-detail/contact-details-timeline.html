@@ -189,6 +189,20 @@
                 <div class="text-xs">{{body}}</div>
             </div>
         {{/if_entity}}
+        {{#if_entity "tickets"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="text-md text-cap">  
+                <div class="contact-job-title text-base custom-color">
+                    <i class="fa fa-ticket text-muted text-muted p-r-xs" title="Ticket created">
+                    </i> Ticket#{{id}} created
+                </div>
+            </div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                 <div class="text-xs ">{{subject}}</div>
+                <div class="text-xs ">{{first_notes_text}}</div>
+            </div>
+        {{/if_entity}}
 	<a href="#" class="open-close"></a>
   </div>
 </div>

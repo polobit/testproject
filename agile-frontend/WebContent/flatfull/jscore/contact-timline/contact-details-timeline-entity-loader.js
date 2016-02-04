@@ -32,7 +32,7 @@ var timeline_entity_loader = {
 	load_related_entites : function(contactId)
 	{
 		var entity_types = [
-				"deals", "notes", "cases", "tasks","calls","events", "ticketActivity"
+				"deals", "notes", "cases", "tasks","calls","events", "tickets"
 		];
 
 		var url = 'core/api/contacts/related-entities/' + contactId;
