@@ -9,11 +9,11 @@ function contactListener()
 
 
  
-      clearTimeout(timer);
+     
 
 			timer=setTimeout(function() {
 						 	
-						 	
+						  	
 				if (!insidePopover)	{
 		
 					 $('.popover').remove();	
@@ -68,6 +68,7 @@ function contactListener()
 		}
 					
 	}, 200);
+	 clearTimeout(timer);
 		
 	});
 }
