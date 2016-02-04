@@ -7005,7 +7005,13 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('getCredit', function(credit, options)
+	{
+		if(!credit)
+			return 0;
+		return (credit/100)*(-1).toFixed(2);
 
+	});
 Handlebars.registerHelper('is_IE_browser', function(options) {
 	     return (isIEBrowser() ? options.fn(this) : options.inverse(this));
 });
