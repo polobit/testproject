@@ -2959,7 +2959,7 @@ width: 915px;
 
 }
 
-#deals-reports .highcharts-tooltip span , #lossreasonpie-chart-users .highcharts-tooltip span , #calls-chart-user .highcharts-tooltip span , #call-report .highcharts-tooltip span
+#deals-reports .highcharts-tooltip span , #lossreasonpie-chart-users .highcharts-tooltip span , #calls-chart-user .highcharts-tooltip span , #call-report .highcharts-tooltip span, .lost-deal-analysis-portlet-pie .highcharts-tooltip span 
 {
 	 background-color: #313030;
      opacity: 1;
@@ -2967,7 +2967,7 @@ width: 915px;
      padding: 8px;
      border-radius: 5px
  }
- #deals-reports svg .highcharts-tooltip, #lossreasonpie-chart-users svg .highcharts-tooltip,#calls-chart-user svg .highcharts-tooltip , #call-report svg .highcharts-tooltip {
+ #deals-reports svg .highcharts-tooltip, #lossreasonpie-chart-users svg .highcharts-tooltip,#calls-chart-user svg .highcharts-tooltip , #call-report svg .highcharts-tooltip, .lost-deal-analysis-portlet-pie svg .highcharts-tooltip {
  	visibility: hidden!important;
  }
 
