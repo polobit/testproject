@@ -263,7 +263,7 @@ function getSearchableCustomFields(scope, callback)
 	if(!scope)
 	  scope = "CONTACT";
 
-	$.getJSON("core/api/custom-fields/scope?scope=" + scope, function(data){
+	$.getJSON("core/api/custom-fields/searchable/scope?scope=" + scope, function(data){
 		if(callback && typeof callback === 'function')
 			callback(data);
 	});
