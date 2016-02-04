@@ -158,7 +158,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
                 if($(".checkedMultiCheckbox").find('input:checked').length > 0)
                       return true;
                 else{
-                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>Please select atleast one option.</span>"); 
+                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>Please select at least one option.</span>"); 
                 }
                 
                  return false;
