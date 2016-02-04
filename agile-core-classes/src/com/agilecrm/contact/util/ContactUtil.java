@@ -42,6 +42,7 @@ import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.MD5Util;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
@@ -1819,5 +1820,24 @@ public class ContactUtil
 		lastCampaignEmailed, toEmail);
 	Queue queue = QueueFactory.getQueue(AgileQueues.LAST_CONTACTED_UPDATE_QUEUE);
 	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).etaMillis(System.currentTimeMillis() + 5000));
+    }
+
+    public static String getMD5EncodedImage(Contact contact){
+
+         String email = contact.getContactFieldValue(contact.EMAIL);
+         String image_email = "";
+            if(email != null)
+            {
+                try
+                {
+                     image_email = MD5Util.getMD5Code(email);   
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+                
+            }
+            return image_email;
     }
 }
