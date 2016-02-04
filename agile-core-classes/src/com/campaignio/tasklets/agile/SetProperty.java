@@ -291,17 +291,8 @@ public class SetProperty extends TaskletAdapter
 		try
 		{
 			SimpleDateFormat sdf = null;
-			
-			// For Current Date merge field(dd mmm yyyy)
-			 Pattern calendarPatternCurrentDate = Pattern.compile(DateUtil.CustomFieldDateRegEx);
-			 Matcher calendarMatcherCurrentDate = calendarPatternCurrentDate.matcher(updated_value);
-				
 			Pattern calendarPattern = Pattern.compile(DateUtil.WaiTillDateRegEx);
 			Matcher calendarMatcher = calendarPattern.matcher(updated_value);
-			
-			// Date Matcher for dd MMM yyyy format..
-			if (calendarMatcherCurrentDate.matches())
-					sdf = new SimpleDateFormat(DateUtil.CustomFieldDateFormat);
 
 			if (calendarMatcher.matches())
 				sdf = new SimpleDateFormat(DateUtil.WaitTillDateFormat);
@@ -311,11 +302,8 @@ public class SetProperty extends TaskletAdapter
 					updatedNumber = Integer.parseInt(updated_value);
 
 					if (!isNew)
-						if (updatedNumber != 0 && calendarMatcher.matches())
+						if (updatedNumber != 0)
 							sdf = new SimpleDateFormat(DateUtil.WaitTillDateFormat);
-					
-					if (updatedNumber != 0 && calendarMatcherCurrentDate.matches())
-						 sdf = new SimpleDateFormat(DateUtil.CustomFieldDateFormat);
 				}
 
 			if (sdf != null)
