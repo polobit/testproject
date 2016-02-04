@@ -344,10 +344,9 @@ function showCalendar(users)
 							var reletedContacts = '';
 							var meeting_type = '';
 							 	
-								if(event.contacts != null){
-									if (event.contacts.length > 0 ){
+								if(event.contacts.length != 0){
+									
 										reletedContacts += '<i class="icon-user text-muted m-r-xs"></i>';
-									}
 									if(event.contacts.length>1){
 									for (var i = 0; i < event.contacts.length; i++)
 									{
