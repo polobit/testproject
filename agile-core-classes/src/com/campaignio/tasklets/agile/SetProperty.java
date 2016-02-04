@@ -296,6 +296,7 @@ public class SetProperty extends TaskletAdapter
 
 			if (calendarMatcher.matches())
 				sdf = new SimpleDateFormat(DateUtil.WaitTillDateFormat);
+			
 			if (sdf == null)
 				if (isIncOrDesc(updated_value))
 				{
