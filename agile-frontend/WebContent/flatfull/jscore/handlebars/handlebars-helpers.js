@@ -5840,7 +5840,7 @@ $(function()
 			icon_name = 'icon-envelope';
 		else if (p_name == 'Emails Sent')
 			icon_name = 'icon-envelope';
-		else if (p_name == 'Growth Graph')
+		else if (p_name == 'Growth Graph' || p_name == 'Incoming Deals')
 			icon_name = 'icon-graph';
 		else if (p_name == 'Calls Per Person')
 			icon_name = 'icon-call-end';
@@ -5876,6 +5876,8 @@ $(function()
 			icon_name = 'icon-sitemap';
 		else if (p_name == 'Deal Goals')
 			icon_name = 'icon-flag';
+		else if (p_name == 'Lost Deal Analysis')
+			icon_name = 'icon-pie-chart';
 		return icon_name;
 	});
 	
@@ -6405,6 +6407,10 @@ $(function()
 		{
 			time_period = 'Next Year';
 		}
+		else if (duration == 'last-year')
+		{
+			time_period = 'Last Year';
+		}
 		
 		return time_period;
 	});
@@ -6659,6 +6665,10 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
 	else if(p_name == 'Deal Goals')
 		description = 'See how much sales target you have achieved.'
+	else if(p_name == 'Incoming Deals')
+		description = 'See how your deal sources are performing over time.'
+	else if(p_name == 'Lost Deal Analysis')
+		description = 'Get insights into why deals were lost. Filter by owner, track and source.'
 	return description;
 			});
 

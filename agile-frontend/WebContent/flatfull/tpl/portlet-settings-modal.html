@@ -838,3 +838,132 @@
 </div>
 </div>
 </div>
+
+<div class="modal  fade" id="portletsIncomingDealsSettingsModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Dashlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsIncomingDealsSettingssForm" name="portletsIncomingDealsSettingsForm" method="post" >
+			<div class="control-group form-group">
+				<label class="control-label">Split by</label>
+				<div class="controls">
+					<select id="split-by-incoming-deals" name="type" class="form-control">
+						<option value="deals">Total Deals</option>
+                    	<option value="Revenue">Total Revenue</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group form-group" id="portletsIncomingDealsOwner">
+				<label class="control-label">Owner</label>
+				<div class="controls">
+					<select id="owner" name="owner" class="form-control">
+						
+					</select>
+					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label">Frequency</label>
+				<div class="controls">
+					<select id="frequency-incoming-deals" name="frequency" class="form-control">
+						<option value="daily">Daily</option>
+						<option value="weekly">Weekly</option>
+						<option value="monthly">Monthly</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration-incoming-deals" name="duration" class="form-control">
+						<option value="1-day" >Today</option>
+						<option value="yesterday" >Yesterday</option>
+						<option value="1-week">Last 7 Days</option>
+						<option value="1-month">Last 30 Days</option>
+						<option value="this-month" >This Month</option>
+						<option value="last-month" >Last Month</option>
+						<option value="this-quarter">This Quarter</option>
+						<option value="last-quarter">Last Quarter</option>
+						<option value="this-year">This Year</option>
+						<option value="last-year">Last Year</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+	</div>
+</div>
+</div>
+</div>
+
+<div class="modal  fade" id="portletsLostDealAnalysisSettingsModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Dashlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsLostDealAnalysisSettingsForm" name="portletsLostDealAnalysisSettingsForm" method="post" >
+			<div class="control-group form-group" id="portletsLostDealAnalysisOwner">
+				<label class="control-label">Owner</label>
+				<div class="controls">
+					<select id="owner-lost-deal-analysis" name="owner" class="form-control">
+						
+					</select>
+					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/ajax-loader-cursor.gif"></img>
+				</div>
+			</div>
+			<div class="control-group form-group" id="portletsLostDealAnalysisTrack">
+				<label class="control-label">Track</label>
+				<div class="controls">
+					<select id="track-lost-deal-analysis" name="track" class="form-control">
+						
+					</select>
+					<!-- <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img> -->
+				</div>
+			</div>
+			<div class="control-group form-group" id="portletsLostDealAnalysisSource">
+				<label class="control-label">Source</label>
+				<div class="controls">
+					<select id="source-lost-deal-analysis" name="source" class="form-control">
+						
+					</select>
+					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/ajax-loader-cursor.gif"></img>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration-lost-deal-analysis" name="duration" class="form-control">
+						<option value="1-day" >Today</option>
+						<option value="yesterday" >Yesterday</option>
+						<option value="1-week">Last 7 Days</option>
+						<option value="1-month">Last 30 Days</option>
+						<option value="this-month" >This Month</option>
+						<option value="last-month" >Last Month</option>
+						<option value="this-quarter">This Quarter</option>
+						<option value="last-quarter">Last Quarter</option>
+						<option value="this-year">This Year</option>
+						<option value="last-year">Last Year</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+	</div>
+</div>
+</div>
+</div>
