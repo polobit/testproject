@@ -758,6 +758,14 @@ function insertSelectedOption(ele ,target_id)
 	$('#new_field').val($(ele).find(':selected').val());
 
 }
+
+function insertSelectedOption1(ele ,target_id)
+{
+	var text = $(target_id).val();
+	
+		$(target_id).val($(ele).find(':selected').val());
+
+}
 	// function remove_property(ele)
 	// {
 	//  	$("#updated_value").prop('disabled', true).val('');
