@@ -139,7 +139,7 @@ public class TicketsDocument implements BuilderInterface
 			document.addField(Field.newBuilder().setName("requester_email").setText(requesterEmail));
 
 			// Set mail content
-			document.addField(Field.newBuilder().setName("mail_content").setText(plainText));
+			//document.addField(Field.newBuilder().setName("mail_content").setText(plainText));
 
 			// Set mail subject
 			document.addField(Field.newBuilder().setName("subject").setText(ticket.subject));
