@@ -238,13 +238,22 @@ public class TicketWebhook extends HttpServlet
 				}
 				catch (Exception e)
 				{
-					System.out.println(e.getMessage());
 				}
 
+				String text = "";
+				
+				try
+				{
+					text = msgJSON.getString("text");
+				}
+				catch (Exception e)
+				{
+				}
+				
 				// Creating new Ticket in Ticket table
 				ticket = TicketsUtil.createTicket(groupID, null, msgJSON.getString("from_name"),
 						msgJSON.getString("from_email"), msgJSON.getString("subject"), ccEmails,
-						msgJSON.getString("text"), Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL,
+						text, Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL,
 						attachmentExists, ip, new ArrayList<Key<TicketLabels>>());
 
 				BulkActionNotifications.publishNotification("New ticket #" + ticket.id + " received");

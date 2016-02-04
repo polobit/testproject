@@ -223,7 +223,7 @@ public class MultipartUtility
 		System.out.println("key: " + key);
 		
 		org.json.JSONObject response = multipart.finish();
-		response.put("file_url", requestURL + key);
+		response.put("file_url", requestURL + key + fileName);
 		
 		System.out.println("response: " + response);
 		
