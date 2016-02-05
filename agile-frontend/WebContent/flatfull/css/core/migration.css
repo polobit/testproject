@@ -1891,7 +1891,15 @@ color:#727272;
 .deal-detail-related-mobile-view tr th:nth-of-type(n+3),.deal-detail-related-mobile-view tr td:nth-of-type(n+3) {
   display: none;
 }
-
+#prefs-tabs-content .nav li a{
+  padding: 10px 16px;
+}
+#prefs-tabs-content .nav li.active {
+opacity: 1;
+}
+#prefs-tabs-content .nav li {
+opacity: 0.4;
+}
 }
 
 @media all and (min-width: 768px) {
@@ -2063,5 +2071,16 @@ color:#727272;
  color:#98a6ad !important
   }
 
+.prefs-view a {
+    width: calc(100% / 7);
+    padding: 10px 6px;
+    display: inline-block;
+    float: left;
+    opacity: 0.4;
+}
 
+.prefs-view a.select {
+  background: #edf1f2;
+  opacity: 1;
+}
 
