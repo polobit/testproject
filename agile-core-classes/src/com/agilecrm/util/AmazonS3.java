@@ -11,7 +11,9 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Calendar;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.google.appengine.api.NamespaceManager;
@@ -89,10 +91,33 @@ public class AmazonS3
 	 */
 	public void addFilePart(String fieldName, String fileName, InputStream inputStream) throws IOException
 	{
-		// String fileName = uploadFile.getName();
+		String contentType = URLConnection.guessContentTypeFromName(fileName);
+		String contentDisposition = "form-data";
+
+		System.out.println("contentType: " + contentType);
+		
+		if (StringUtils.isBlank(contentType))
+		{
+			contentType = "image/jpeg";
+			fileName = "file-" + Calendar.getInstance().getTimeInMillis() + ".jpg";
+		}
+
+		switch (contentType)
+		{
+		case "image/jpeg":
+		case "image/png":
+		case "application/pdf":
+		case "text/plain":
+		case "text/html":
+			contentDisposition = "inline";
+		}
+
+		System.out.println("contentDisposition: " + contentDisposition);
+		
 		writer.append("--" + boundary).append(LINE_FEED);
-		writer.append("Content-Disposition: form-data; name=\"" + fieldName + "\"; filename=\"" + fileName + "\"")
-				.append(LINE_FEED);
+		writer.append(
+				"Content-Disposition: " + contentDisposition + "; name=\"" + fieldName + "\"; filename=\"" + fileName
+						+ "\"").append(LINE_FEED);
 		writer.append("Content-Type: " + URLConnection.guessContentTypeFromName(fileName)).append(LINE_FEED);
 		writer.append("Content-Transfer-Encoding: binary").append(LINE_FEED);
 		writer.append(LINE_FEED);
@@ -147,9 +172,9 @@ public class AmazonS3
 			int status = httpConn.getResponseCode();
 
 			System.out.println("status: " + status);
-			
+
 			response.put("status_code", status);
-			
+
 			if (status == HttpURLConnection.HTTP_OK)
 			{
 				return response;
@@ -162,11 +187,11 @@ public class AmazonS3
 
 				while ((line = reader.readLine()) != null)
 					sb.append(line);
-				
+
 				response.put("err_msg", sb.toString());
-				
+
 				System.out.println("Error: " + response);
-				
+
 				reader.close();
 			}
 		}
@@ -178,7 +203,7 @@ public class AmazonS3
 		{
 			httpConn.disconnect();
 		}
-		
+
 		return response;
 	}
 
@@ -213,15 +238,21 @@ public class AmazonS3
 		multipart.addFilePart("file", fileName, stream);
 
 		System.out.println("key: " + key);
-		
+
 		org.json.JSONObject response = multipart.finish();
-		
+
 		fileName = "https://s3.amazonaws.com/agilecrm/" + key + fileName;
-		
+
 		response.put("file_url", fileName);
-		
+
 		System.out.println("response: " + response);
-		
+
 		return response;
+	}
+
+	public static void main(String[] args)
+	{
+		String fileName = "dasfas.html";
+		System.out.println(URLConnection.guessContentTypeFromName(fileName));
 	}
 }
