@@ -45,7 +45,7 @@ public class SkypeWidgetAPI
 	    	if (!(StringUtils.isBlank(phone))){
 	    		Contact contact = ContactUtil.searchContactByPhoneNumber(phone);
 
-	    		if (direction.equalsIgnoreCase("Outgoing"))
+	    		if (direction.equalsIgnoreCase("Outgoing") ||  direction.equalsIgnoreCase("outbound-dial"))
 	    		{
 	    		    ActivityUtil.createLogForCalls("Skype", phone, Call.OUTBOUND, status.toLowerCase(), duration);
 
@@ -53,7 +53,7 @@ public class SkypeWidgetAPI
 	    		    CallTriggerUtil.executeTriggerForCall(contact, "Skype", Call.OUTBOUND, status.toLowerCase(), duration);
 	    		}
 
-	    		if (direction.equalsIgnoreCase("Incoming"))
+	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("inbound"))
 	    		{
 	    		    ActivityUtil.createLogForCalls("Skype", phone, Call.INBOUND, status.toLowerCase(), duration);
 
@@ -82,7 +82,7 @@ public class SkypeWidgetAPI
 	    		if(null == contact){
 	    			return "";
 	    		}
-	    		if (direction.equalsIgnoreCase("Outgoing"))
+	    		if (direction.equalsIgnoreCase("Outgoing") || direction.equalsIgnoreCase("outbound-dial"))
 	    		{
 	    		    ActivityUtil.createLogForCalls("Skype", phone, Call.OUTBOUND, status.toLowerCase(), duration, contact);
 
@@ -90,7 +90,7 @@ public class SkypeWidgetAPI
 	    		    CallTriggerUtil.executeTriggerForCall(contact, "Skype", Call.OUTBOUND, status.toLowerCase(), duration);
 	    		}
 
-	    		if (direction.equalsIgnoreCase("Incoming"))
+	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("inbound"))
 	    		{
 	    			ActivityUtil.createLogForCalls("Skype", phone, Call.INBOUND, status.toLowerCase(), duration, contact);
 

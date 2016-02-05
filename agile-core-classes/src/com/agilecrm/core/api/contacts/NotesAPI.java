@@ -122,7 +122,7 @@ public class NotesAPI
 		if (null != id ){
     		contact = ContactUtil.getContact(id);
 		}else{
-			if(StringUtils.isBlank(phone)){
+			if(!StringUtils.isBlank(phone)){
 				contact = ContactUtil.searchContactByPhoneNumber(phone);
 			}
 		}
@@ -131,7 +131,7 @@ public class NotesAPI
 			return "";
 		}
 		
-	    		if (direction.equalsIgnoreCase("outbound-dial"))
+	    		if (direction.equalsIgnoreCase("outbound-dial") || direction.equalsIgnoreCase("Outgoing"))
 	    		{
 	    			ActivityUtil.createLogForCalls(callWidget, phone, Call.OUTBOUND, status.toLowerCase(), duration);
 
@@ -139,7 +139,7 @@ public class NotesAPI
 	    			 CallTriggerUtil.executeTriggerForCall(contact, callWidget, Call.OUTBOUND, status.toLowerCase(), duration);
 	    		}
 
-	    		if (direction.equalsIgnoreCase("inbound"))
+	    		if (direction.equalsIgnoreCase("inbound") || direction.equalsIgnoreCase("Incoming"))
 	    		{
 	    			 ActivityUtil.createLogForCalls(callWidget, phone, Call.INBOUND, status.toLowerCase(), duration);
 	    			 
