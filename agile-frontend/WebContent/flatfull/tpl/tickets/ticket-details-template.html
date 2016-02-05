@@ -516,6 +516,9 @@
 
 <script  id="previous-tickets-list-template" type="text/html">
 {{#each this}}
+  
+  {{^is_current_opend_ticket id}}
+
   <div class="p-t-xs each-previous-ticket m-b-none position-relative" style="">
 
     <div class="overflow-elipsis" style="max-width: 230px;">
@@ -572,5 +575,6 @@
       <!-- End of popup -->
     
   </div>
+  {{/is_current_opend_ticket}}
 {{/each}}
 </script>
