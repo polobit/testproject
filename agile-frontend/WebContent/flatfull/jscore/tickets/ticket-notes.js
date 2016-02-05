@@ -45,20 +45,23 @@ var Tickets_Notes = {
 
 			success : function(model) {
 
-				Tickets_Notes.repltBtn('reply');
+				Tickets.renderExistingCollection();
+				return;
+
+				// Tickets_Notes.repltBtn('reply');
 
 				// If in time line add event to timeline
-				if($('.ticket-timeline-container').length > 0){
-					Ticket_Timeline.render_individual_ticket_timeline();
-					return;
-				}
+				// if($('.ticket-timeline-container').length > 0){
+				// 	Ticket_Timeline.render_individual_ticket_timeline();
+				// 	return;
+				// }
 
-				if($("#ticket-activities-model-list").length > 0)
-						App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
-				else{
-					App_Ticket_Module.notesCollection.collection.add(model);
-					App_Ticket_Module.notesCollection.render(true);
-				}
+				// if($("#ticket-activities-model-list").length > 0)
+				// 		App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
+				// else{
+				// 	App_Ticket_Module.notesCollection.collection.add(model);
+				// 	App_Ticket_Module.notesCollection.render(true);
+				// }
 				
 			},
 			error : function(data, response) {
@@ -82,16 +85,19 @@ var Tickets_Notes = {
 
 			success : function(model) {
 
-				Tickets_Notes.repltBtn('reply');
+				Tickets.renderExistingCollection();
+				return;
+
+				// Tickets_Notes.repltBtn('reply');
 
 				// If in time line add event to timeline
-				if($('.ticket-timeline-container').length > 0){
-					Ticket_Timeline.render_individual_ticket_timeline();
-					return;
-				}
+				// if($('.ticket-timeline-container').length > 0){
+				// 	Ticket_Timeline.render_individual_ticket_timeline();
+				// 	return;
+				// }
 
-				if($("#ticket-activities-model-list").length > 0)
-					App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
+				// if($("#ticket-activities-model-list").length > 0)
+				// 	App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
 				
 
 				

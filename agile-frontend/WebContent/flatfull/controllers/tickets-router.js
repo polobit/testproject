@@ -365,7 +365,7 @@ $("#right-pane").html(ticketView.render().el);
 				Tickets.initCCEmailsListeners();
 
 				// Get previous ticket 
-				Tickets.showPreviousTickets(data.requester_email, el);
+				Tickets.showPreviousTicketCount(data.requester_email, el);
 				
 			}
 		});
