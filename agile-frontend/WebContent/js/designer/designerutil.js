@@ -586,6 +586,9 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 	});
 	
 	console.log(selectoption);
+	if(uiFieldDefinition.invisible)
+		selectoption = $(selectoption).attr("invisible", uiFieldDefinition.invisible);
+
 	return selectoption;
 }
 

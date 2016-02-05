@@ -39,7 +39,6 @@
                   {
                 	  "label": "of",
                       "category": "Settings",
-                      "name": "and_condition_merge",
                       "id": "condition_merge",
                       "title": "Select required merge field.",
                       "fieldType": "merge_fields",
@@ -47,6 +46,7 @@
                       "type": "select",
                       "event": "onchange",
                       "eventHandler": "insertSelectedOption1",
+                      "invisible": "true",
                       "style": {
                           "float": "none"
                       } 
@@ -60,7 +60,7 @@
                     "name": "and_variable_1",
                     "title": "E.g. {{score}}, {{company}}, <br>{{your custom field}}",
                     "fieldType": "input",
-                    "type": "text" 
+                    "type": "text"
                 },
                 {
                     "label": "compare this",
@@ -130,7 +130,7 @@
                      "event": "onchange",
                      "eventHandler": "insertSelectedOption1",
                      "style": {
-                         "float": "none",
+                         "float": "none"
                      } 
                  },
                  {
@@ -142,7 +142,8 @@
                    "name": "or_variable_1",
                    "title": "E.g. {{score}}, {{company}}, <br>{{your custom field}}",
                    "fieldType": "input",
-                   "type": "text" 
+                   "type": "text",
+                   "invisible": "true"
                },
                {
                    "label": "compare this",

@@ -47,8 +47,11 @@ function constructGridPopup(uiFieldDefinition, callback, jsonValues) {
 function editGrid(e, selector, rowIndex)
 {
 
+    var $form = selector.find('form');
+    $form.find("[invisible=true]").attr('disabled', 'disabled');
+
     // Serialize the grid
-    var jsonArray = selector.find('form').serializeArray();
+    var jsonArray = $form.serializeArray();
 
     // Create td
     var td = Edit_Delete_Column;
@@ -82,8 +85,12 @@ function editGrid(e, selector, rowIndex)
 // Adds grid entered elements to the grid
 function addToGrid(e, selector) {
 
+    var $form = selector.find('form');
+
+    $form.find("[invisible=true]").attr('disabled', 'disabled');
+
     // Serialize the grid
-    var jsonArray = selector.find('form').serializeArray();
+    var jsonArray = $form.serializeArray();
     console.log(jsonArray);
 
     // Create tr and add to parent table
@@ -120,7 +127,11 @@ function generateGridUI(container, uiFieldDefinition) {
     for (var j = 0; j < uiElements.length; j++) {
         // console.log("Grid[" + j + "] = " + uiElements[j].label);
         var label = uiElements[j].label;
+        
+        if(!uiElements[j].invisible)
         th += "<th class='grid_width' id='" + uiElements[j].name + "'>" + label + "</th>";
+
+
     }
     var thead = "<thead><tr class='ui-widget-header '><th style='width:12%'></th>" + th + "</tr></thead>"
 
@@ -141,8 +152,11 @@ function generateGridUI(container, uiFieldDefinition) {
             tbody += ("<tr>" + Edit_Delete_Column);
             
             $.each(row, function (key, value) {
+                //if(typeof row.invisibleTd == "undefined" || !row.invisibleTd) {
                 var input = "<td>" + value + "</td>";
-                tbody += input;
+                tbody += input;    
+                //}
+                
             });
             tbody += "</tr>";
         }
