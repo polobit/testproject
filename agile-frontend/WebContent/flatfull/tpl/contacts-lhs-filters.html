@@ -147,7 +147,7 @@
 	<span class="text-base">Tags</span>
 	<div class="controls m-t-xs" id="tags_div">
 		<div id="tags-lhs-filter-table" class="ignore-collection">
-				<div class="hide master-tags-add-div pos-rlt">
+				<div class="hide master-tags-add-div pos-rlt m-t-sm">
 					<input class="form-control" type="hidden" name="LHS" value="tags">
 					<select id="tags-filter" class="form-control text-xs" name="CONDITION" style="height:30px;">
 						<option value="EQUALS" class="tags">is</option>
@@ -160,7 +160,6 @@
 						</span>
 					</div>
 					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs fa fa-trash text-l-none-hover c-p"></i></a></div>
-					<div class="clearfix"></div>
 				</div>
 				<div class="lhs-contact-filter-row pos-rlt m-t-xs">
 					<input type="hidden" name="LHS" value="tags">
@@ -173,11 +172,10 @@
 							<input type="text" placeholder="Enter Tag" prev-val="" class="required text-xs form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;">
 						</span>
 					</div>
-						
 					<div class="clearfix"></div>
 				</div>
 		</div>	
-		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none text-muted pos-rlt" style="top: 2px;font-size:10px;" data-name="tags"><i class="fa fa-plus-square"></i> Add</a>
+		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none text-muted pos-rlt" style="top:-2px;font-size:10px;" data-name="tags"><i class="fa fa-plus-square"></i> Add</a>
 			
 	</div>
 </div>
@@ -278,7 +276,7 @@
 
 
 		<div id="campaign_status-lhs-filter-table" class="ignore-collection">
-			<div class="hide master-campaign_status-add-div pos-rlt m-t-xs">
+			<div class="hide master-campaign_status-add-div pos-rlt m-t-sm">
 				<input type="hidden" class="form-control" name="LHS" value="campaign_status">
 				<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 					<option value="NOT_ADDED">Never Added</option>
@@ -296,7 +294,6 @@
 					</span>
 				</div>
 					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs fa fa-trash text-l-none-hover c-p"></i></a></div>
-					<div class="clearfix"></div>
 			</div>
 			<div class="lhs-contact-filter-row pos-rlt m-t-xs">
 				<input type="hidden" class="form-control" name="LHS" value="campaign_status">
