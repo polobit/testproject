@@ -417,4 +417,12 @@ Handlebars.registerHelper('get_filters_select_options', function(options)
   return resultHTML;
 });
 
+Handlebars.registerHelper('is_current_opend_ticket', function(id, options)
+{
+	if(id == Current_Ticket_ID)
+  	return options.fn(this);
+
+	return options.inverse(this);
+});
+
 /** End of ticketing handlebars* */

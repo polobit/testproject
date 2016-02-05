@@ -1251,6 +1251,23 @@ var Tickets = {
 		}
 
 	},
+
+	updateIframeHeight : function(iframe){
+		$(iframe).height($(iframe).contents().height() - 17);
+
+		$(iframe).contents().find('body').css({
+		    'font-family': '"Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif',
+		    'font-size': '14px',
+		    '-webkit-font-smoothing': 'antialiased',
+		    'line-height': '1.42857143',
+		    'color': '#58666e',
+		    'background-color': 'transparent',
+		    'margin': '0',
+		    'padding': '0'
+		});
+
+	}
+	
 };
 
 function tickets_typeahead(data){
