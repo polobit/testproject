@@ -140,7 +140,7 @@ public class NewCondition extends TaskletAdapter
 			JSONObject andParamJSON = andParamsJSONArray.getJSONObject(i);
 
 			String ifType = andParamJSON.getString("and_if_type");
-			String conditionMerge = andParamJSON.getString("and_condition_merge");
+			//String conditionMerge = andParamJSON.getString("and_condition_merge");
 			String variable1 = andParamJSON.getString("and_variable_1");
 			String comparator = andParamJSON.getString("and_comparator");
 			String variable2 = andParamJSON.getString("and_variable_2");
@@ -173,7 +173,7 @@ public class NewCondition extends TaskletAdapter
 					JSONObject orParamJSON = orParamsJSONArray.getJSONObject(i);
 
 					String ifType = orParamJSON.getString("or_if_type");
-					String conditionMerge = orParamJSON.getString("or_condition_merge");
+					//String conditionMerge = orParamJSON.getString("or_condition_merge");
 					String variable1 = orParamJSON.getString("or_variable_1");
 					String comparator = orParamJSON.getString("or_comparator");
 					String variable2 = orParamJSON.getString("or_variable_2");
