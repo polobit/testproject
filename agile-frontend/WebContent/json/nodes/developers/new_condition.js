@@ -7,7 +7,7 @@
     "author": "john",
     "company": "Invox",
     "language": "en",
-    "branches": "failure,success",
+    "branches": "No,Yes",
     "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.NewCondition",
     "category": "Developers",
     "ui": [
