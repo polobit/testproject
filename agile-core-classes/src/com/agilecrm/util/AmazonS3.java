@@ -89,31 +89,8 @@ public class AmazonS3
 	 *            a File to be uploaded
 	 * @throws IOException
 	 */
-	public void addFilePart(String fieldName, String fileName, InputStream inputStream) throws IOException
+	public void addFilePart(String fieldName, String fileName, String contentType, String contentDisposition, InputStream inputStream) throws IOException
 	{
-		String contentType = URLConnection.guessContentTypeFromName(fileName);
-		String contentDisposition = "form-data";
-
-		System.out.println("contentType: " + contentType);
-		
-		if (StringUtils.isBlank(contentType))
-		{
-			contentType = "image/jpeg";
-			fileName = "file-" + Calendar.getInstance().getTimeInMillis() + ".jpg";
-		}
-
-		switch (contentType)
-		{
-		case "image/jpeg":
-		case "image/png":
-		case "application/pdf":
-		case "text/plain":
-		case "text/html":
-			contentDisposition = "inline";
-		}
-
-		System.out.println("contentDisposition: " + contentDisposition);
-		
 		writer.append("--" + boundary).append(LINE_FEED);
 		writer.append(
 				"Content-Disposition: " + contentDisposition + "; name=\"" + fieldName + "\"; filename=\"" + fileName
@@ -223,6 +200,29 @@ public class AmazonS3
 		String requestURL = "https://agilecrm.s3.amazonaws.com/";
 		String key = "panel/uploaded-logo/" + NamespaceManager.get() + "/";
 
+		String contentType = URLConnection.guessContentTypeFromName(fileName);
+		String contentDisposition = "form-data";
+
+		System.out.println("contentType: " + contentType);
+		
+		if (StringUtils.isBlank(contentType))
+		{
+			contentType = "image/jpeg";
+			fileName = "file-" + Calendar.getInstance().getTimeInMillis() + ".jpg";
+		}
+
+		switch (contentType)
+		{
+		case "image/jpeg":
+		case "image/png":
+		case "application/pdf":
+		case "text/plain":
+		case "text/html":
+			contentDisposition = "inline";
+		}
+
+		System.out.println("contentDisposition: " + contentDisposition);
+		
 		AmazonS3 multipart = new AmazonS3(requestURL, charset);
 		multipart.addFormField("key", key);
 		multipart.addFormField("acl", "public-read");
@@ -235,15 +235,13 @@ public class AmazonS3
 						"policy",
 						"IHsKImV4cGlyYXRpb24iOiAiMjAyMC0wMS0wMVQxMjowMDowMC4wMDBaIiwKICAiY29uZGl0aW9ucyI6IFsKICAgIHsiYnVja2V0IjogImFnaWxlY3JtIiB9LAogICAgeyJhY2wiOiAicHVibGljLXJlYWQiIH0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAicGFuZWwvdXBsb2FkZWQtbG9nbyJdLAogICAgWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgImltYWdlLyJdLAogICAgWyAiY29udGVudC1sZW5ndGgtcmFuZ2UiLCA1MTIsIDEwNDg1NzYwXSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJHN1Y2Nlc3NfYWN0aW9uX3JlZGlyZWN0IiwgIiIgXQogIF0KfQ==");
 		multipart.addFormField("signature", "lJaO/ZQyMANyulpZrP/FcxVLz5M=");
-		multipart.addFilePart("file", fileName, stream);
+		multipart.addFilePart("file", fileName, contentType, contentDisposition, stream);
 
 		System.out.println("key: " + key);
 
 		org.json.JSONObject response = multipart.finish();
 
-		fileName = "https://s3.amazonaws.com/agilecrm/" + key + fileName;
-
-		response.put("file_url", fileName);
+		response.put("file_url", ("https://s3.amazonaws.com/agilecrm/" + key + fileName));
 
 		System.out.println("response: " + response);
 
