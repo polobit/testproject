@@ -5,13 +5,13 @@
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
 		<h3 class="modal-title">
-			<i class="fa fa-plus-circle"></i>&nbsp;Add Case
+			&nbsp;Add Case
 		</h3>
 	</div>
 
 	<div class="modal-body">
 
-		<form id="casesForm" name="casesForm" method="post">
+		<form id="casesForm" name="casesForm" method="post" class="form-horizontal">
 			<fieldset>
 				<div class="control-group form-group">
 	                <label class="control-label col-sm-3">Title <span class="field_req">*</span></label>
@@ -19,14 +19,18 @@
 		                 <div class="controls">
 							<span><input id="title" name="title" type="text" class="required form-control" placeholder="Title of the Case"></span>
 						</div>
+
 		             </div>
 		         </div>
+
 		         <div class="form-group control-group">
 						<label class="control-label col-sm-3">Owner<span class="field_req">*</span></label>
 						<div class="controls col-sm-7" id="owners">
 							<select id="owners-list" class="required form-control" name="owner_id"></select>
 						</div>
 				</div>
+
+
 				<div class=" form-group control-group">
 						<label class="control-label col-sm-3">Status<span class="field_req">*</span></label>
 						<div class="controls col-sm-7" id="status">
@@ -38,7 +42,7 @@
 							</span>
 						</div>
 					</div>
-				</div>
+
 				<div class="control-group form-group">
 					<label class="control-label col-sm-3">Related Contacts</label>
 					<div class="controls col-sm-7" id="contactTypeAhead">
@@ -54,6 +58,7 @@
 						</div>
 					</div>
 				</div>
+
 				<div id="custom-field-case"></div>
 				<div class="form-group control-group">
 					<label class="control-label col-sm-3">Description</label>

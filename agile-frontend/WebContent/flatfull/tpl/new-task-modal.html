@@ -9,24 +9,13 @@
     <div class="modal-body">
         <input type="hidden" value="task" id="hiddentask" /> 
         <div id="relatedTask">
-            <div>
-                <p><i><i class="icon-tasks"></i>&nbsp;Tasks are like to-dos. Result
-                    oriented. You can assign a category such as call, <br />email etc</i>
-                </p>
-            </div>
             <!--Task form -->
-            <form id="taskForm" name="taskForm" method="post">
+            <form id="taskForm" name="taskForm" method="post" class="form-horizontal">
                 <fieldset>
                     <input name="progress" id="progress" type="hidden" value="">
-					<input name="is_complete" id="is_complete" type="hidden" value="">
-					                    
-                    <div class="row">
-                        <div id="addTask" class="control-group form-group col-md-6">
-                            <label for="subject" class="control-label"> <b>Task</b> <span class="field_req">*</span></label>
-                            <div class="controls"><span class="input "><input id="subject" type="text" name="subject" size="40" class="required form-control" placeholder="Name of Task"/> </span>
-                            </div>
-                        </div> -->
 
+                    <input name="is_complete" id="is_complete" type="hidden" value="">
+                                        
                         <div id="addTask" class="control-group form-group" style="margin-bottom:0px;">
                             <label class="control-label col-sm-3">Task<span class="field_req">*</span></label>
                             <div class="controls col-sm-7">
@@ -58,29 +47,6 @@
                             </div>
                         </div>
 
-
-
-
-                        <!--<div id="taskCategory" class="control-group form-group col-md-6">
-                            <label for="type" class="control-label"><b> Category </b><span class="field_req">*</span></label>
-                            <div class="controls">
-                                <span class="input">
-                                    <select name="type" id="type" size="1" class="input-medium required form-control">
-                                        
-                                        <option value="CALL">Call</option>
-                                        <option value="EMAIL">Email</option>
-                                        <option value="FOLLOW_UP">Follow-up</option>
-                                        <option value="MEETING">Meeting</option>
-                                        <option value="MILESTONE">Milestone</option>
-                                        <option value="SEND">Send</option>
-                                        <option value="TWEET">Tweet</option>
-                                        <option value="OTHER">Other</option>
-                                    </select>
-                                </span>
-                            </div>
-
-                        </div> -->
-                    <!-- </div> -->
                     
                     <div class="row">
                         <div class="col-sm-6">
@@ -99,21 +65,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="control-group form-group col-md-6">
-                            <label for="due" class="control-label"><b> Date (Due) </b><span class="field_req">*</span></label>
-                            <div class="controls">
-                                <input type="text" name="due" placeholder="Select Date" id="task-date-1" class="required  date form-control" />
-                            </div>
-                        </div>
-                           <div class="control-group form-group col-md-6">
-							<label class="control-label"><b>Time </b><span class="field_req">*</span></label>
-                            <div class="controls">							
-                               <input type="text" name="task_ending_time" class="new-task-timepicker required form-control" id="task_ending_time" style="width:65px" placeholder="time" />		
-                            </div>
-                        </div>
-                    </div> -->
 
+                </div>
 
 
                     <div class="control-group form-group">
@@ -135,34 +88,6 @@
                                     </select>
                             </div>
                        </div>
-
-
-
-
-                   <!-- <div class="row">
-                        <div class="control-group form-group col-md-6">
-                            <label class="control-label"><b> Owner </b><span
-                                class="field_req">*</span></label>
-                            <div class="controls" id="owners">
-                                <select id="owners-list" class="required form-control"  name="owner_id"></select>
-                                <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/21-0-new.gif"></img>
-                            </div>
-                        </div>
-                        <div class="control-group form-group col-md-6">
-                             <label for="priority_type" class="control-label"><b>Priority </b></label>
-                            <div class="controls">
-                                <span class="input ">
-                                    <select name="priority_type" id="priority_type" size="1" class="input-medium form-control">
-                                        <option value="HIGH">High</option>
-                                        <option value="NORMAL" selected="selected">Normal</option>
-                                        <option value="LOW">Low</option>
-                                    </select>
-                                </span>
-
-                            </div>                              
-                        </div>
-                    </div> -->
-
 
                     <div class="control-group form-group">
                             <label for="status" class="control-label col-sm-3">Status</label>
@@ -201,28 +126,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
-                    <!--<div class="row">
-                      <div class="congrol-group form-group col-md-12">
-                         <label class="control-label"><a href="#" id="new-task-related-contacts-label"><i class="icon-plus"></i> Add Contacts</a></label>
-                        <label class="control-label new-task-related-contacts-label"><b>Related Contacts</b></label>
-                        <div class="controls new-task-related-contacts-input">
-                            <div>
-                                <div class="pull-left">
-                                    <ul name="contacts" class="contacts tags tagsinput p-n"></ul>
-                                </div>
-                                <div class="clearfix"></div>
-                                <input type="text" id="task_related_to"
-                                    class="typeahead typeahead_contacts form-control" data-provide="typeahead"
-                                    placeholder="Related Contacts" data-mode="multiple" size="40" />
-                            </div>
-                        </div>
-                      </div>
-                     </div>  -->
-
-
                      <div class="control-group form-group">
                         <!-- <label class="control-label"><a href="#" id="new-event-related-deals-label"><i class="icon-plus"></i> Add Deals</a></label> -->
                         <label class="control-label new-task-related-deals-label col-sm-3">Related Deals</label>
@@ -238,30 +141,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
-
-                     <!--<div class="row">
-                      <div class="control-group form-group col-md-12">
-                             <label class="control-label"><a href="#" id="new-task-related-deals-label"><i class="icon-plus"></i> Add Deals</a></label>  
-                            <label class="control-label new-task-related-deals-label"><b>Related Deals</b></label>
-                            <div class="controls new-task-related-deals-input" id="dealTypeAhead">
-                                <div>
-                                    <div>
-                                        <ul name="deal_ids" class="deals tagsinput deal_tags p-n"></ul>
-                                    </div>
-                                    <input type="text" id="task_relates_to_deals" 
-                                    placeholder="Related Deals" class="typeahead typeahead_deals form-control"
-                                    data-provide="typeahead" data-mode="multiple" />
-                                </div>
-                            </div>
-                        </div>  
-                    </div> -->
-
-
-
-
 
                     <div class="row hide">
                         <div class="congrol-group form-group ">

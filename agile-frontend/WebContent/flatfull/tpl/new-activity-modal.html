@@ -4,29 +4,26 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3 class="modal-title"><i class="icon-plus-sign"></i>&nbsp;Add Event</h3>
+        <h3 class="modal-title">&nbsp;Add Event</h3>
     </div>
     <div class="modal-body">
         <input type="hidden" value="event" id="hiddentask" /> 
         <div id="relatedEvent">
-            <p><i><i class="icon-calendar"></i>&nbsp;Events are time based such as
-                meetings. They show up in calendar.</i>
-            </p>
             <!--Event form  -->
-            <form id="activityForm" name="activityForm" method="post">
+            <form id="activityForm" name="activityForm" method="post" class="form-horizontal">
                 <fieldset>
-                        <div id="addEvent" class="control-group form-group" style="margin-bottom:0px;">
+                    <div id="addEvent" class="control-group form-group" style="margin-bottom:0px;">
                             <label class="control-label col-sm-3">Event Name<span class="field_req">*</span></label>
                             <div class="controls col-sm-7">
                                 <input id="title" placeholder="Name of Event" type="text" name="title" class="required form-control" />
                             </div>
-                        </div>
-                        <div class="text-muted">
+                    </div>
+                    <div class="text-muted">
                             <div class="col-sm-offset-3 col-sm-7" style="font-size:12px;padding-left: 9px;margin-bottom:10px;">
                                  Note: Events are time based such as meetings. They show up in calendar.
                             </div>
-                        </div>
-                        <div class="control-group form-group">
+                    </div>
+                    <div class="control-group form-group">
                             <label for="priority_type" class="control-label col-sm-3">Priority </label>
                             <div class="controls col-sm-7">
                                 <span class="input ">
@@ -37,21 +34,20 @@
                                     </select>
                                 </span>
                             </div>
-                        </div>
                     </div>
-                       <div class="control-group form-group">
-							<label class="control-label col-sm-3">Owner<span class="field_req">*</span></label>
-							<div class="controls col-sm-7" id="event-owners">
-								<select id="event-owners-list" class="required form-control" name="owner_id"></select>
-								<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/21-0-new.gif"></img>
-							</div>
-					   </div>
+                    <div class="control-group form-group">
+                            <label class="control-label col-sm-3">Owner<span class="field_req">*</span></label>
+                            <div class="controls col-sm-7" id="event-owners">
+                                <select id="event-owners-list" class="required form-control" name="owner_id"></select>
+                                <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/21-0-new.gif"></img>
+                            </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-6">
                         <div class="control-group form-group" style="margin-bottom:15px;">
                             <label class="control-label col-sm-6">Start Date <span class="field_req">*</span></label>
                             <div class="controls col-sm-5">
-                                <input type="text" name="start" placeholder="Select Date" id="event-date-1" class="required date form-control" />							
+                                <input type="text" name="start" placeholder="Select Date" id="event-date-1" class="required date form-control" />                           
                             </div>
                         </div>
                         </div>
@@ -59,40 +55,37 @@
                         <div class="control-group form-group" style="margin-bottom:15px;">
                             <label class="control-label col-sm-4" style="text-align:left;font-size:13.5px;">Start Time <span class="field_req">*</span></label>
                             <div class="controls col-sm-6">
-                                <input type="text" name="start_time" class="start-timepicker required form-control" id="event-time-1" style="width:67px" placeholder="time" />		
+                                <input type="text" name="start_time" class="start-timepicker required form-control" id="event-time-1" style="width:67px" placeholder="time" />      
                             </div>
                         </div>
+                        </div>
                     </div>
-                </div>
-                    <div class="row">
+                <div class="row">
                         <div class="col-sm-6">
                         <div class="control-group form-group" style="margin-bottom:4px !important">
                             <label class="control-label col-sm-6">End Date <span class="field_req">*</span></label>
                             <div class="controls col-sm-5">
-                                <input type="text" name="end" placeholder="Select Date" id="event-date-2" class="required date form-control" />									
+                                <input type="text" name="end" placeholder="Select Date" id="event-date-2" class="required date form-control" />                                 
                             </div>
                         </div>
                         </div>
                         <div class="col-sm-6">
                         <div class="control-group form-group" style="margin-bottom:4px !important">
                             <label class="control-label col-sm-4">End Time <span class="field_req">*</span></label>
-                            <div class="controls col-sm-6">							
-                                <input type="text" name="end_time" class="end-timepicker required form-control" id="event-time-2"  placeholder="time" style="width:67px"/>		
+                            <div class="controls col-sm-6">                         
+                                <input type="text" name="end_time" class="end-timepicker required form-control" id="event-time-2"  placeholder="time" style="width:67px"/>      
                             </div>
                         </div>
-                    </div>
-                </div>
-                    
-                    <div class="control-group form-group">
-                        <div class="checkbox col-sm-offset-3 col-sm-6">
-                            <label class="i-checks i-checks-sm c-p">
-                            	<input type="checkbox" name="allDay" id="allDay" /><i></i>	All day event
-                        	</label>
                         </div>
                     </div>
+                <div class="control-group form-group">
+                        <div class="checkbox col-sm-offset-3 col-sm-6">
+                            <label class="i-checks i-checks-sm c-p">
+                                <input type="checkbox" name="allDay" id="allDay" /><i></i>  All day event
+                            </label>
+                        </div>
                     </div>
-                    <div class="row">
-                    <div class="control-group form-group col-md-12">
+                    <div class="control-group form-group">
                         <!-- <label class="control-label"><a href="#" id="new-event-related-contacts-label"><i class="icon-plus"></i> Add Contacts</a></label> -->
 
                         <label class="control-label new-event-related-contacts-label col-sm-3">Related Contacts</label>
@@ -106,32 +99,28 @@
                             </div>
                         </div>
                     </div>
-                    </div>
-                    <div class="row">
-                    <div class="control-group form-group col-md-12">
-						<!-- <label class="control-label"><a href="#" id="new-event-related-deals-label"><i class="icon-plus"></i> Add Deals</a></label> -->
+                    <div class="control-group form-group">
+                        <!-- <label class="control-label"><a href="#" id="new-event-related-deals-label"><i class="icon-plus"></i> Add Deals</a></label> -->
 
-						<label class="control-label new-event-related-deals-label col-sm-3">Related Deals</label>
-						<div class="controls new-event-related-deals-input col-sm-7" id="dealTypeAhead">
-							<div>
-								<input type="text" id="event_relates_to_deals" 
-								placeholder="Related Deals" class="typeahead typeahead_deals form-control"
-								data-provide="typeahead" data-mode="multiple" />
+                        <label class="control-label new-event-related-deals-label col-sm-3">Related Deals</label>
+                        <div class="controls new-event-related-deals-input col-sm-7" id="dealTypeAhead">
+                            <div>
+                                <input type="text" id="event_relates_to_deals" 
+                                placeholder="Related Deals" class="typeahead typeahead_deals form-control"
+                                data-provide="typeahead" data-mode="multiple" />
                                 <div style="padding-top:2px;">
                                     <ul name="deal_ids" class="deals tagsinput deal_tags p-n m-n"></ul>
                                 </div>
                                 <div class="clearfix"></div>
-							</div>
-						</div>
-					</div>
+                            </div>
+                        </div>
                     </div>
-					<div class="control-group form-group" id="addEventDescription">
-					<label class="control-label col-sm-3"> Add Description </label>
+                    <div class="control-group form-group" id="addEventDescription">
+                    <label class="control-label col-sm-3"> Add Description </label>
                         <div class="controls col-sm-7"> 
                             <textarea rows="3" class="input form-control-F-width form-control" placeholder="Add Description" name="description" id="description"></textarea> 
                        </div>
-					</div>
-					
+                    </div>
                 </fieldset>
             </form>
         </div>
