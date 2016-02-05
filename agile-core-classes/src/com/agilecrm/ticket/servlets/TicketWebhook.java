@@ -36,7 +36,7 @@ import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.MultipartUtility;
+import com.agilecrm.util.AmazonS3;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
@@ -191,7 +191,7 @@ public class TicketWebhook extends HttpServlet
 
 						String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
 
-						JSONObject responseJSON = MultipartUtility.SaveFileToS3(fileName, fileType,
+						JSONObject responseJSON = AmazonS3.SaveFile(fileName, fileType,
 								fileJSON.getString("content"));
 
 						TicketDocuments document = new TicketDocuments(fileName, fileType, 0l,
@@ -211,7 +211,7 @@ public class TicketWebhook extends HttpServlet
 
 						String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
 
-						JSONObject responseJSON = MultipartUtility.SaveFileToS3(fileName, fileType,
+						JSONObject responseJSON = AmazonS3.SaveFile(fileName, fileType,
 								fileJSON.getString("content"));
 
 						TicketDocuments document = new TicketDocuments(fileName, fileType, 0l,
