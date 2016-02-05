@@ -89,13 +89,12 @@ public class AmazonS3
 	 *            a File to be uploaded
 	 * @throws IOException
 	 */
-	public void addFilePart(String fieldName, String fileName, String contentType, String contentDisposition, InputStream inputStream) throws IOException
+	public void addFilePart(String fieldName, String fileName, String contentType, InputStream inputStream) throws IOException
 	{
 		writer.append("--" + boundary).append(LINE_FEED);
-		writer.append(
-				"Content-Disposition: " + contentDisposition + "; name=\"" + fieldName + "\"; filename=\"" + fileName
-						+ "\"").append(LINE_FEED);
-		writer.append("Content-Type: " + URLConnection.guessContentTypeFromName(fileName)).append(LINE_FEED);
+		writer.append("Content-Disposition: form-data; name=\"" + fieldName + "\"; filename=\"" + fileName + "\"")
+		.append(LINE_FEED);
+		writer.append("Content-Type: " + contentType).append(LINE_FEED);
 		writer.append("Content-Transfer-Encoding: binary").append(LINE_FEED);
 		writer.append(LINE_FEED);
 		writer.flush();
@@ -235,7 +234,7 @@ public class AmazonS3
 						"policy",
 						"IHsKImV4cGlyYXRpb24iOiAiMjAyMC0wMS0wMVQxMjowMDowMC4wMDBaIiwKICAiY29uZGl0aW9ucyI6IFsKICAgIHsiYnVja2V0IjogImFnaWxlY3JtIiB9LAogICAgeyJhY2wiOiAicHVibGljLXJlYWQiIH0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAicGFuZWwvdXBsb2FkZWQtbG9nbyJdLAogICAgWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgImltYWdlLyJdLAogICAgWyAiY29udGVudC1sZW5ndGgtcmFuZ2UiLCA1MTIsIDEwNDg1NzYwXSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJHN1Y2Nlc3NfYWN0aW9uX3JlZGlyZWN0IiwgIiIgXQogIF0KfQ==");
 		multipart.addFormField("signature", "lJaO/ZQyMANyulpZrP/FcxVLz5M=");
-		multipart.addFilePart("file", fileName, contentType, contentDisposition, stream);
+		multipart.addFilePart("file", fileName, contentType, stream);
 
 		System.out.println("key: " + key);
 
