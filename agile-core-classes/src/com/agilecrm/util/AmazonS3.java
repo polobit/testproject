@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 
@@ -191,9 +190,9 @@ public class AmazonS3
 	 * @return
 	 * @throws Exception
 	 */
-	public static org.json.JSONObject SaveFile(String fileName, String fileType, String fileContent) throws Exception
+	public static org.json.JSONObject SaveFile(String fileName, String fileType, byte[] bytes) throws Exception
 	{
-		InputStream stream = new ByteArrayInputStream(fileContent.getBytes(StandardCharsets.UTF_8));
+		InputStream stream = new ByteArrayInputStream(bytes);
 
 		String charset = "UTF-8";
 		String requestURL = "https://agilecrm.s3.amazonaws.com/";
@@ -216,7 +215,10 @@ public class AmazonS3
 		System.out.println("key: " + key);
 		
 		org.json.JSONObject response = multipart.finish();
-		response.put("file_url", requestURL + key + fileName);
+		
+		fileName = "https://s3.amazonaws.com/agilecrm/" + key + fileName;
+		
+		response.put("file_url", fileName);
 		
 		System.out.println("response: " + response);
 		

@@ -2,7 +2,7 @@ package com.agilecrm.ticket.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.instrument.Instrumentation;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -17,6 +17,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.examples.HtmlToPlainText;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -38,6 +43,7 @@ import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.AmazonS3;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
+import com.google.api.client.util.Base64;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
@@ -85,7 +91,7 @@ public class TicketWebhook extends HttpServlet
 			// Fetch data posted by Mandrill
 			String mandrillResponse = request.getParameter("mandrill_events");
 
-			System.out.println("MandrillResponse: " + mandrillResponse);
+			// System.out.println("MandrillResponse: " + mandrillResponse);
 
 			if (StringUtils.isBlank(mandrillResponse))
 				return;
@@ -172,6 +178,14 @@ public class TicketWebhook extends HttpServlet
 			for (int i = 0; i < ccEmailsArray.length(); i++)
 				ccEmails.add(ccEmailsArray.getJSONArray(i).getString(0));
 
+			String text = "No plain text available", html = "No html content available";
+
+			if (msgJSON.has("text"))
+				text = msgJSON.getString("text");
+
+			if (msgJSON.has("html"))
+				html = msgJSON.getString("html");
+
 			// Check if any attachments exists
 			Boolean attachmentExists = msgJSON.has("attachments") || msgJSON.has("images");
 
@@ -191,39 +205,70 @@ public class TicketWebhook extends HttpServlet
 
 						String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
 
-						JSONObject responseJSON = AmazonS3.SaveFile(fileName, fileType,
-								fileJSON.getString("content"));
+						System.out.println("fileName: " + fileName);
+						System.out.println("type: " + fileType);
+						System.out.println("base64: " + fileJSON.getBoolean("base64"));
+
+						JSONObject responseJSON = AmazonS3.SaveFile(fileName, fileType, fileJSON.getString("content")
+								.getBytes(StandardCharsets.UTF_8));
 
 						TicketDocuments document = new TicketDocuments(fileName, fileType, 0l,
 								responseJSON.getString("file_url"));
-						
+
 						attachmentURLs.add(document);
 					}
 				}
-			
+
 				if (msgJSON.has("images"))
 				{
-					JSONObject attachments = msgJSON.getJSONObject("images");
-					
-					for (Iterator iter = attachments.keys(); iter.hasNext();)
+					JSONObject images = msgJSON.getJSONObject("images");
+
+					Document doc = Jsoup.parse(html, "UTF-8");
+
+					for (Iterator iter = images.keys(); iter.hasNext();)
 					{
-						JSONObject fileJSON = attachments.getJSONObject((String) iter.next());
+						JSONObject fileJSON = images.getJSONObject((String) iter.next());
 
 						String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
 
-						JSONObject responseJSON = AmazonS3.SaveFile(fileName, fileType,
-								fileJSON.getString("content"));
+						boolean isBase64Encoded = fileJSON.getBoolean("base64");
 
-						TicketDocuments document = new TicketDocuments(fileName, fileType, 0l,
-								responseJSON.getString("file_url"));
-						
-						attachmentURLs.add(document);
+						System.out.println("fileName: " + fileName);
+						System.out.println("type: " + fileType);
+						System.out.println("base64: " + isBase64Encoded);
+
+						byte[] bytes = null;
+
+						if (isBase64Encoded)
+							bytes = Base64.decodeBase64(fileJSON.getString("content"));
+						else
+							bytes = fileJSON.getString("content").getBytes();
+
+						JSONObject responseJSON = AmazonS3.SaveFile(fileName, fileType, bytes);
+
+						Elements elements = doc.getElementsByAttributeValue("src", "cid:" + fileName);
+
+						if (elements == null || elements.size() == 0)
+						{
+							TicketDocuments document = new TicketDocuments(fileName, fileType, 0l,
+									responseJSON.getString("file_url"));
+
+							attachmentURLs.add(document);
+
+							continue;
+						}
+
+						Element element = elements.first();
+
+						element.attr("src", responseJSON.getString("file_url"));
 					}
+
+					html = doc.toString();
 				}
 			}
 			catch (Exception e)
 			{
-				
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
 			}
 
 			Tickets ticket = null;
@@ -240,21 +285,11 @@ public class TicketWebhook extends HttpServlet
 				{
 				}
 
-				String text = "";
-				
-				try
-				{
-					text = msgJSON.getString("text");
-				}
-				catch (Exception e)
-				{
-				}
-				
 				// Creating new Ticket in Ticket table
 				ticket = TicketsUtil.createTicket(groupID, null, msgJSON.getString("from_name"),
-						msgJSON.getString("from_email"), msgJSON.getString("subject"), ccEmails,
-						text, Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL,
-						attachmentExists, ip, new ArrayList<Key<TicketLabels>>());
+						msgJSON.getString("from_email"), msgJSON.getString("subject"), ccEmails, text, Status.NEW,
+						Type.PROBLEM, Priority.LOW, Source.EMAIL, attachmentExists, ip,
+						new ArrayList<Key<TicketLabels>>());
 
 				BulkActionNotifications.publishNotification("New ticket #" + ticket.id + " received");
 			}
@@ -284,8 +319,8 @@ public class TicketWebhook extends HttpServlet
 
 			// Creating new Notes in TicketNotes table
 			TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, groupID, ticket.assigneeID,
-					CREATED_BY.REQUESTER, msgJSON.getString("from_name"), msgJSON.getString("from_email"),
-					msgJSON.getString("text"), msgJSON.getString("html"), NOTE_TYPE.PUBLIC, attachmentURLs);
+					CREATED_BY.REQUESTER, msgJSON.getString("from_name"), msgJSON.getString("from_email"), text, html,
+					NOTE_TYPE.PUBLIC, attachmentURLs);
 
 			if (!isNewTicket)
 				// Execute note created by customer trigger
