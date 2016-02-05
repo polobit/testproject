@@ -74,7 +74,7 @@ public class AmazonS3
 	{
 		writer.append("--" + boundary).append(LINE_FEED);
 		writer.append("Content-Disposition: form-data; name=\"" + name + "\"").append(LINE_FEED);
-		writer.append("Content-Type: text/plain; charset=" + charset).append(LINE_FEED);
+		//writer.append("Content-Type: text/plain; charset=" + charset).append(LINE_FEED);
 		writer.append(LINE_FEED);
 		writer.append(value).append(LINE_FEED);
 		writer.flush();
@@ -95,7 +95,7 @@ public class AmazonS3
 		writer.append("Content-Disposition: form-data; name=\"" + fieldName + "\"; filename=\"" + fileName + "\"")
 		.append(LINE_FEED);
 		writer.append("Content-Type: " + contentType).append(LINE_FEED);
-		writer.append("Content-Transfer-Encoding: binary").append(LINE_FEED);
+		//writer.append("Content-Transfer-Encoding: binary").append(LINE_FEED);
 		writer.append(LINE_FEED);
 		writer.flush();
 
@@ -193,8 +193,6 @@ public class AmazonS3
 	 */
 	public static org.json.JSONObject SaveFile(String fileName, String fileType, byte[] bytes) throws Exception
 	{
-		InputStream stream = new ByteArrayInputStream(bytes);
-
 		String charset = "UTF-8";
 		String requestURL = "https://agilecrm.s3.amazonaws.com/";
 		String key = "panel/uploaded-logo/" + NamespaceManager.get() + "/";
@@ -221,6 +219,8 @@ public class AmazonS3
 		}
 
 		System.out.println("contentDisposition: " + contentDisposition);
+		
+		InputStream stream = new ByteArrayInputStream(bytes);
 		
 		AmazonS3 multipart = new AmazonS3(requestURL, charset);
 		multipart.addFormField("key", key);
