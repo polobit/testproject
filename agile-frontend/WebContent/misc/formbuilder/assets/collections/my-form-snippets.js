@@ -23,13 +23,24 @@ define([
      , giveUniqueId: function(snippet){
       
        var snippetType = snippet.attributes.fields.id.value;
+       var idArray = "";
+        for(var i=1; i<=saveform.length-1; i++){
+        idArray += saveform[i].fields.id.value+",";
+       }
+      var largest = Math.max.apply(null, idArray.match(/(\d+)/g));
+      console.log(largest);
+       
        if(typeof this.counter[snippetType] === "undefined") {
+        if(largest)
+          this.counter[snippetType] = largest+1;
+        else
          this.counter[snippetType] = (saveform.length);
        } else {
          this.counter[snippetType] += 1;
        }
  
        snippet.setField("id", snippetType + "-" + this.counter[snippetType]);
+
  
      }
     , renderAll: function(){
