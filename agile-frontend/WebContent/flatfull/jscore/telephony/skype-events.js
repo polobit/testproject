@@ -420,7 +420,10 @@ function saveCallNoteSkype(){
 	    	contact_name = getContactName(contact);
 	    	if(callStatus == "Answered"){
 				var el = $('#noteForm');
-			 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ id +'">'+contact_name+'</li>');
+				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+			 	// Adds contact name to tags ul as li element
+				$('.tags',el).html(template({name : contact_name, id : id}));
+
 			 	$("#noteForm #subject").val(noteSub);
 					$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(duration));
 					$("#noteForm").find("#description").focus();
@@ -447,8 +450,11 @@ function saveCallNoteSkype(){
 						contact_name = getContactName(json);
 
 					var el = $('#noteForm');
-				 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ cntId +'">'+contact_name+'</li>');
-				 	$("#noteForm #subject").val(noteSub);
+					var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+				 	// Adds contact name to tags ul as li element
+					$('.tags',el).html(template({name : contact_name, id : cntId}));
+					
+					$("#noteForm #subject").val(noteSub);
 				 	$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(duration));
 						$("#noteForm").find("#description").focus();
 					$('#noteModal').modal('show');

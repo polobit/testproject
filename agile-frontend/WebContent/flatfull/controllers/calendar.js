@@ -330,22 +330,23 @@ function show_model(id)
 		for (var i = 0; i < contactList.length; i++)
 
 		{
+			var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}"><a href="#contact/{{id}}" class="text-white v-middle">{{name}}</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+			var json = {};
+		 	// Adds contact name to tags ul as li element
+		 	fel.append();
+
 			if (contactList[i].type == "COMPANY")
-			{
-
-				$('#updateActivityModal')
-						.find("ul[name='contacts']")
-						.append(
-								'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + contactList[i].id + '"><a href="#contact/' + contactList[i].id + '">' + getCompanyName(contactList[i].properties) + '</a><a class="close" id="remove_tag">x</a></li>');
-
+			{   
+				json = {name : getCompanyName(contactList[i].properties), id : contactList[i].id};
 			}
 			else
 			{
-				$('#updateActivityModal')
-						.find("ul[name='contacts']")
-						.append(
-								'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + contactList[i].id + '"><a href="#contact/' + contactList[i].id + '">' + getName(contactList[i].properties) + '</a><a class="close" id="remove_tag">x</a></li>');
+				json = {name : getName(contactList[i].properties), id : contactList[i].id};
 			}
+
+			$('#updateActivityModal')
+						.find("ul[name='contacts']")
+						.append(template(json));
 		}
 
 		var priority = event.color;
