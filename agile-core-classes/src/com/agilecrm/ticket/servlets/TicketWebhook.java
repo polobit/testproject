@@ -231,7 +231,10 @@ public class TicketWebhook extends HttpServlet
 
 						String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
 
-						boolean isBase64Encoded = fileJSON.getBoolean("base64");
+						boolean isBase64Encoded = false;
+
+						if (fileJSON.has("base64"))
+							isBase64Encoded = fileJSON.getBoolean("base64");
 
 						System.out.println("fileName: " + fileName);
 						System.out.println("type: " + fileType);
