@@ -5711,6 +5711,8 @@ $(function()
 	// function to compare integer values
 	Handlebars.registerHelper('ifCond', function(v1, type, v2, options)
 	{
+		if(!v1 || !v2)
+			return options.inverse(this);
 		switch (type) {
 		case "greaterthan":
 			if (parseInt(v1) > parseInt(v2))
