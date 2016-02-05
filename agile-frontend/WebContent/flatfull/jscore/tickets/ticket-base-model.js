@@ -63,7 +63,9 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		//LHS save as button events
 		"click [name=\"save-type\"]" : "toggleFields",
-		"change [name=\"filter-collection\"]" : "changViewName"
+		"change [name=\"filter-collection\"]" : "changViewName",
+
+		"click #toggle_previous_tickets" : "togglePreviousTickets"
 	},
 
 	changeStatus: function(e){
@@ -416,5 +418,13 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		e.preventDefault();
 
 		Ticket_Custom_Filters.changViewName();
+	},
+
+	togglePreviousTickets :  function(e){
+		e.preventDefault();
+
+		var ticketJSON = App_Ticket_Module.ticketView.model.toJSON();
+		
+		Tickets.togglePreviousTickets(ticketJSON.requester_email);
 	}
 });

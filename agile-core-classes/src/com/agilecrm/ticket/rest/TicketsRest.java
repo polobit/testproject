@@ -33,7 +33,6 @@ import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.BulkActionUtil;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.session.SessionManager;
@@ -357,12 +356,13 @@ public class TicketsRest
 	 */
 	@GET
 	@Path("/activity")
-	 @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Activity> listTicketActivitys(@QueryParam("id") Long ticketID)
 	{
 		try
 		{
-			List<Activity> activitys = ActivityUtil.getActivitiesByEntityId(EntityType.TICKET.toString(), ticketID, 0, null);
+			List<Activity> activitys = ActivityUtil.getActivitiesByEntityId(EntityType.TICKET.toString(), ticketID, 0,
+					null);
 
 			activitys = TicketsUtil.includeData(activitys);
 
@@ -408,7 +408,7 @@ public class TicketsRest
 			Long groupID = ticket.groupID, assigneeID = ticket.assigneeID;
 
 			// Converting html text to plain with jsoup
-			//Document doc = Jsoup.parse(html_text, "UTF-8");
+			// Document doc = Jsoup.parse(html_text, "UTF-8");
 			String plain_text = TicketNotesUtil.br2nl(html_text);
 
 			boolean attachmentExists = false;
@@ -889,6 +889,22 @@ public class TicketsRest
 		try
 		{
 			return TicketsUtil.getTicketsByEmail(email);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	@GET
+	@Path("/ticket-count")
+	public int getTicketCountByEmail(@QueryParam("email") String email)
+	{
+		try
+		{
+			return TicketsUtil.getTicketCountByEmail(email);
 		}
 		catch (Exception e)
 		{

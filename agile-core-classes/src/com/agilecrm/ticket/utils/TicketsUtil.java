@@ -919,7 +919,15 @@ public class TicketsUtil
 
 		return Tickets.ticketsDao.listByProperty(map);
 	}
-	
+
+	public static int getTicketCountByEmail(String email) throws JSONException
+	{
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("requester_email", email);
+
+		return Tickets.ticketsDao.getCountByProperty(map);
+	}
+
 	/**
 	 * 
 	 */
@@ -930,7 +938,7 @@ public class TicketsUtil
 
 		return Tickets.ticketsDao.listByProperty(map);
 	}
-	
+
 	public static List<Activity> includeData(List<Activity> activitys) throws Exception
 	{
 		if (activitys == null || activitys.size() == 0)
@@ -956,7 +964,7 @@ public class TicketsUtil
 				{
 					System.out.println(ExceptionUtils.getFullStackTrace(e));
 				}
-				
+
 				break;
 			}
 			case TICKET_ASSIGNED:

@@ -1154,28 +1154,82 @@ var Tickets = {
 			$('td#' + ticketIDArray[i]).closest('tr').remove();
 	},
 
-	showPreviousTickets : function(email, el){
-		
+	showPreviousTicketCount: function(email, el){
+
+		$.get('/core/api/tickets/ticket-count?email=' + email, {}, function(count){
+
+			if(count && count > 1){ 
+					$(".previous-tickets-panel", el).find("#count").html("(" + (count - 1) + ")");
+					$(".previous-tickets-panel", el).show();
+				}
+		});
+
+	},
+
+	togglePreviousTickets: function(email){
+
+		if($("#previous_tickets_container").is(':visible')){
+			$("#previous_tickets_container").toggle();
+			$("#toggle_previous_tickets").addClass("fa-plus").removeClass("fa-minus");
+			return;
+		}
+
+		$("#previous_tickets_container").toggle();
+		$("#toggle_previous_tickets").removeClass("fa-plus").addClass("fa-minus");
+
+		// If collection loaded
+		if($("#previous_tickets_container").find(".each-previous-ticket").length > 0)
+			return;
+			
 		var previousTickets = Backbone.Model.extend({
 			url : '/core/api/tickets/email?email=' + email
 		});
 		new previousTickets().fetch({
 			success : function(tickets) {
 
-				if(tickets.toJSON().length == 0){
+				if(tickets.toJSON().length > 1){
 					$(".previous-tickets-panel").hide();
 					return;
 				}
 
-				$("#previous_tickets_container").html(getTemplate('previous-tickets-list', tickets.toJSON()));
+				$("#previous_tickets_container").html(getTemplate('previous-tickets-list', tickets.toJSON())).show();
 
-				// head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				// {
-				//	$("time", $("#previous_tickets_container")).timeago();
-				// });
+				Tickets.initPreviousTicketEvents($("#previous_tickets_container"));
 
 			}
 		});
+
+	},
+
+	initPreviousTicketEvents: function(el){
+
+		$(el).off('mouseover mouseout');
+		$(el)
+			.on('mouseover mouseout', '.show-notes',
+				function(event) {
+
+					clearTimeout(popoverFunction);
+
+					var top = '15px';
+					if (event.type == 'mouseover'){
+
+						var $tr = $(this).closest('.each-previous-ticket'), $that = $tr.find('#ticket-last-notes');
+
+						popoverFunction = setTimeout(function(){
+
+							var popup_height = $that.height();
+
+							if (window.innerHeight - ($tr.offset().top - $(window).scrollTop()) <= (popup_height + 100))
+								top = '-' + (popup_height + 15) + 'px';
+
+							$that.css('top', top).css('left','25px').css('display', 'block');
+
+						},600);
+					} else {
+						$('.ticket-last-notes').css('display', 'none').css('top', top);
+					}
+				}
+			);
 
 	},
 

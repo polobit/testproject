@@ -129,10 +129,11 @@
             </div>
 
             <!-- Previous Tickets -->
-            <div class="panel b-a previous-tickets-panel">
-              <div class="font-thin text-md padder m-t-sm m-b-sm">Previous Tickets</div>
-              <div class="b-b b-light m-t-sm m-l-sm m-r-sm"></div>
-              <div id="previous_tickets_container" class="m-l-sm m-r-sm m-b-xs m-t-xs ">
+            <div class="panel b-a previous-tickets-panel" style="display: none;">
+              <div class="padder m-t-sm m-b-sm">Previous Tickets <span id="count"></span>
+                  <i id="toggle_previous_tickets" class="fa fa-plus text-muted pull-right m-t-xs text-sm cursor-pointer"></i>
+              </div>
+              <div id="previous_tickets_container" class="m-l-sm m-r-sm m-b-sm m-t-xs p-t-xs b-t b-light" style="display:none;">
 
                 <img id="widget_load_img" class="m-sm" src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/ajax-loader-cursor.gif">
                 
@@ -515,8 +516,61 @@
 
 <script  id="previous-tickets-list-template" type="text/html">
 {{#each this}}
-  <div class="overflow-elipsis p-t-xs p-b-xs" style="max-width: 230px;">
-    {{{get_status_label status}}}<a href="#ticket/{{id}}" target="_blank" class="p-l-xs link-color" title="{{subject}}">{{subject}}</a>
+  <div class="p-t-xs each-previous-ticket m-b-none position-relative" style="">
+
+    <div class="overflow-elipsis" style="max-width: 230px;">
+    
+      <span class="show-notes">{{{get_status_label status}}}</span><a href="#ticket/{{id}}" target="_blank" class="p-l-xs link-color">#{{id}}
+
+      <span class="text-sm" title="{{subject}}"> - {{subject}}</span>
+
+      </a> 
+    </div>
+
+    <!-- Ticket popup -->
+    <div id="ticket-last-notes" class="ticket-last-notes animated popup-fadeInUp" style="max-height: {{#if_equals status 'NEW'}}170px;{{else}}270px;{{/if_equals}};">
+        <div class="row m-n mar-btm-md">
+          <div class="col-md-12 p-b-sm">
+            <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;
+            <span class="v-middle txt-small">Ticket #{{id}}</span>
+            <span class="text-light pull-right" style="margin-top: 2px;">
+              <time class="time-ago txt-small" datetime="{{epochToHumanDate "" created_time}}">
+                  {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
+              </time>
+            </span>
+          </div>
+          <div class="col-md-12 p-b-sm">
+            <strong>{{subject}}</strong>
+          </div>
+          <div class="col-md-12 last-notes-drp-dwn p-b-sm">  
+            <div id="recent-reply-notes" class="recent-reply-notes">
+              {{{first_notes_text}}}
+            </div>
+          </div>
+          {{#if_equals status 'NEW'}}
+          {{else}}
+            <div class="col-md-12 pad-all-sm">
+              <span class="text-muted">Last comment</span>
+              <hr class="m-t-xs m-b-xs">
+            </div>
+            <div class="col-md-12 pad-all-sm">
+              <span class="v-middle txt-small">
+                <strong>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</strong>
+              </span>
+              <span class="text-light pull-right txt-small">
+                <time class="time-ago txt-small" datetime="{{epochToHumanDate "" last_updated_time}}">
+                  {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}
+                </time>
+              </span>
+            </div>
+            <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
+              {{{last_reply_text}}}  
+            </div>
+          {{/if_equals}}
+        </div>
+      </div>
+      <!-- End of popup -->
+    
   </div>
 {{/each}}
 </script>
