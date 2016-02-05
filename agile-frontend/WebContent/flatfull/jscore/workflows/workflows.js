@@ -63,16 +63,8 @@ var Workflow_Model_Events = Base_Model_View.extend({
 
     unsubscribeCampaign : function(e){
         e.preventDefault();
-        var targetEl = $(e.currentTarget);
-
-        if($(targetEl).hasClass('collapsed'))
-        {
-            $('#workflow-unsubscribe-option').html('<span><i class="icon-plus"></i></span> Manage Unsubscription');
-            return;
-        }
-        
-        $('#workflow-unsubscribe-option').html('<span><i class="icon-minus"></i></span> Manage Unsubscription')
-        
+        $(e.currentTarget).find('i').toggleClass('icon-plus').toggleClass('icon-minus');
+        $("#workflow-unsubscribe-block").slideToggle('fast');        
     },
 
    /**
