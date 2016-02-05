@@ -63,7 +63,7 @@ function showSettings() {
     if (settings.hasClass('hide')) {
         // elements.slideUp(300);
         settings.removeClass('hide');
-        settings.slideDown(300);
+        settings.slideRight(300);
     }
 }
 
@@ -502,6 +502,8 @@ function storeValues(obj, fontcolor, text, fontsize, fontfamily, background) {
     var theeditor = tinyMCE.get('html5editor');
     theeditor.setContent(text);
 
+    tinyMCE.execCommand('mceFocus',false,'html5editor');
+
     hideAllSettings();
     $('#editor').show();
 
@@ -611,6 +613,19 @@ $(window).resize(function () {
     // $("body").css("min-height", $(window).height() - 90);
     // $(".demo").css("min-height", $(window).height() - 160);
     $("#tosave").css("height", $(window).height() - 30);
+    var widthOfWindow = $(window).width();
+    if(widthOfWindow <= 1360) {
+        var $settings = $("#settings");
+        if(!$settings.hasClass("settings-panel-fixed")) {
+            $settings.addClass("settings-panel-fixed");
+            $( ".settings-panel-fixed" ).draggable();
+            var closeButton = '<div class="pull-right settings-panel-close-holder" style="font-size: 18px;"><i class="glyphicon glyphicon-remove settings-panel-close" style="cursor: pointer;"></i></div>';
+            $settings.prepend(closeButton);
+        }
+    } else {
+        $("#settings").removeClass("settings-panel-fixed");
+        $(".settings-panel-close-holder").remove();
+    }
 });
 
 $(document).ready(function () {
@@ -882,7 +897,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
     /*settings functions*/
 
-    $(document).on('click', '#saveElement', function (e) {
+    $(document).on('click', '#saveElement,.settings-panel-close', function (e) {
         e.preventDefault();
         /*
          * must apply element properties

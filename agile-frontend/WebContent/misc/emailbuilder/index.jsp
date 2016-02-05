@@ -58,6 +58,9 @@ AGILE_EB_OPTIONS['templateId'] = "";
 .mce-btn button {
     padding: 2px 4px !important;
 }
+.main {
+    width: 638px !important;
+}
 </style>
     </head>
     <body class="edit" style="overflow: hidden;" onload="parent.onEmailBuilderLoad()" id="builderFullBodyHolder">
@@ -67,7 +70,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
         <textarea id="templateHtmlContent" class="hidden"><%@ include file="template.html" %></textarea>
 
         <div class="row">
-            <div class="col-md-9" style="width:720px;">
+            <div class="col-md-9" style="width:800px;">
                 <div class="sidebar-nav">
                     <div id="elements">
                         <ul class="nav nav-list accordion-group">
@@ -146,116 +149,9 @@ AGILE_EB_OPTIONS['templateId'] = "";
                 </div>
             </div>
 
-            <div class="col-md-3" style="min-width:260px;">
+            <div class="col-md-3" style="width:370px;">
                 <!-- START ELEMENT -->
-                <div class="hide" id="settings" style="height:680px;overflow-y:auto;overflow-x:hidden;">
-
-                    <form class="form-inline" id="common-settings">
-                        <h4 class="text text-info">Padding</h4>
-                            <center>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td><input type="text" class="form-control" placeholder="top" value="15px" id="ptop" name="ptop" style="width: 60px; margin-right: 5px"></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="text" class="form-control" placeholder="left" value="15px" id="pleft" name="mtop" style="width: 60px; margin-right: 5px"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control" placeholder="right" value="15px" id="pright" name="mbottom" style="width: 60px; margin-right: 5px"></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td><input type="text" class="form-control" placeholder="bottom" value="15px" id="pbottom" name="pbottom" style="width: 60px; margin-right: 5px"></td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </center>
-                    </form>
-
-                    <h4  class="text text-info">Style</h4>
-                    <form id="background"  class="form-inline">
-                        <div class="form-group">
-                            <label for="bgcolor">Background</label>
-                            <div class="color-circle" id="bgcolor"></div>
-                            <script type="text/javascript">
-                                $('#bgcolor').colpick({
-                                    layout: 'hex',
-                                    onBeforeShow: function () {
-                                        $(this).colpickSetColor(rgb2hex($('#bgcolor').css('backgroundColor')).replace("#",""));
-                                    },
-                                    onChange: function (hsb, hex, rgb, el, bySetColor) {
-
-                                        if (!bySetColor)
-                                            $(el).css('background-color', '#' + hex);
-                                    },
-                                    onSubmit: function (hsb, hex, rgb, el) {
-                                        $(el).css('background-color', '#' + hex);
-
-                                        $('#' + $('#path').val()).css('background-color', '#' + hex);
-                                        $(el).colpickHide();
-                                    }
-
-                                }).keyup(function () {
-                                    $(this).colpickSetColor(this.value);
-                                });
-                            </script>
-                        </div>
-                    </form>
-
-                    <div id="imageproperties" style="margin-top:5px">
-                        <h4 class="text text-info">Image</h4>
-                        <div class="form-group">
-                            
-                            <div class="row">
-                                <div class="col-xs-11">
-                                    <div class="input-group">
-                                        <span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
-                                        <input type="text" id="image-link" class="form-control" placeholder="Add link to image" aria-describedby="basic-addon11" data-id="none">
-                                    </div>
-                                    <br>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-8">
-                                    <input type="text" id="image-url" class="form-control" data-id="none"/>
-                                </div>
-                                <div class="col-xs-4">
-                                    <a class="btn btn-default" id="browseBtn" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
-                                    <input type="file" id="uploadImageToS3Btn" class="hidden">
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-xs-1">
-                                    W:
-                                </div>
-                                <div class="col-xs-3">
-                                    <input type="text" id="image-w" class="form-control" name="director" />
-                                </div>
-
-                                <div class="col-xs-1">
-                                    H:
-                                </div>
-
-                                <div class="col-xs-3">
-                                    <input type="text" id="image-h"class="form-control" name="writer" />
-                                </div>
-
-                                <div class="col-xs-4">
-
-                                    <a class="btn btn-warning" href="#" id="change-image"><i class="fa fa-edit"></i>&nbsp;Apply</a>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
+                <div class="hide" id="settings" style="height:660px;overflow-y:auto;overflow-x:hidden;">
 
                     <form id="editor" style="margin-top:5px">
                         <h4 class="text text-info">Text</h4>
@@ -340,6 +236,58 @@ AGILE_EB_OPTIONS['templateId'] = "";
                     </div>
                         <div class="panel panel-body panel-default html5editor" id="html5editor"></div>
                     </form>
+
+                    <div id="imageproperties" style="margin-top:5px">
+                        <h4 class="text text-info">Image</h4>
+                        <div class="form-group">
+                            
+                            <div class="row">
+                                <div class="col-xs-11">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
+                                        <input type="text" id="image-link" class="form-control" placeholder="Add link to image" aria-describedby="basic-addon11" data-id="none">
+                                    </div>
+                                    <br>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-8">
+                                    <input type="text" id="image-url" class="form-control" data-id="none"/>
+                                </div>
+                                <div class="col-xs-4">
+                                    <a class="btn btn-default" id="browseBtn" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
+                                    <input type="file" id="uploadImageToS3Btn" class="hidden">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-1">
+                                    W:
+                                </div>
+                                <div class="col-xs-3">
+                                    <input type="text" id="image-w" class="form-control" name="director" />
+                                </div>
+
+                                <div class="col-xs-1">
+                                    H:
+                                </div>
+
+                                <div class="col-xs-3">
+                                    <input type="text" id="image-h"class="form-control" name="writer" />
+                                </div>
+
+                                <div class="col-xs-4">
+
+                                    <a class="btn btn-warning" href="#" id="change-image"><i class="fa fa-edit"></i>&nbsp;Apply</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
 
                     <div id="social-links">
                         <h4 class="text text-info">Social</h4>
@@ -637,6 +585,61 @@ AGILE_EB_OPTIONS['templateId'] = "";
                         </ul>
 
                     </div>
+
+                    <form class="form-inline" id="common-settings">
+                        <h4 class="text text-info">Padding</h4>
+                            <center>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td><input type="text" class="form-control" placeholder="top" value="15px" id="ptop" name="ptop" style="width: 60px; margin-right: 5px"></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" class="form-control" placeholder="left" value="15px" id="pleft" name="mtop" style="width: 60px; margin-right: 5px"></td>
+                                            <td></td>
+                                            <td><input type="text" class="form-control" placeholder="right" value="15px" id="pright" name="mbottom" style="width: 60px; margin-right: 5px"></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td><input type="text" class="form-control" placeholder="bottom" value="15px" id="pbottom" name="pbottom" style="width: 60px; margin-right: 5px"></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </center>
+                    </form>
+
+                    <h4  class="text text-info">Style</h4>
+                    <form id="background"  class="form-inline">
+                        <div class="form-group">
+                            <label for="bgcolor">Background</label>
+                            <div class="color-circle" id="bgcolor"></div>
+                            <script type="text/javascript">
+                                $('#bgcolor').colpick({
+                                    layout: 'hex',
+                                    onBeforeShow: function () {
+                                        $(this).colpickSetColor(rgb2hex($('#bgcolor').css('backgroundColor')).replace("#",""));
+                                    },
+                                    onChange: function (hsb, hex, rgb, el, bySetColor) {
+
+                                        if (!bySetColor)
+                                            $(el).css('background-color', '#' + hex);
+                                    },
+                                    onSubmit: function (hsb, hex, rgb, el) {
+                                        $(el).css('background-color', '#' + hex);
+
+                                        $('#' + $('#path').val()).css('background-color', '#' + hex);
+                                        $(el).colpickHide();
+                                    }
+
+                                }).keyup(function () {
+                                    $(this).colpickSetColor(this.value);
+                                });
+                            </script>
+                        </div>
+                    </form>
 
                     <div class="text text-right" style="margin-top:5px">
                         <a href="#" id="saveElement" class="btn btn-info">done</a>
