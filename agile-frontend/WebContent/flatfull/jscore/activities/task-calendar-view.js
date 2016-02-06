@@ -469,8 +469,11 @@ function setCalendarTaskColors(data)
    	if(data["is_complete"] == true || data["is_complete"] == "true"){
    		data.backgroundColor = '#fff';
    	}
+   	/*else if(data["due"] <= (getGMTEpochFromDate(new Date()) / 1000)){
+   		data.backgroundColor = '#f05050';
+   	}*/
    	else{
-   		data.backgroundColor = '#A2D0A3';
+   		data.backgroundColor = '#ff6666';
    	}
    	data.color = '';
 }
