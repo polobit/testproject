@@ -74,7 +74,7 @@ public class AmazonS3
 	{
 		writer.append("--" + boundary).append(LINE_FEED);
 		writer.append("Content-Disposition: form-data; name=\"" + name + "\"").append(LINE_FEED);
-		writer.append("Content-Type: text/plain; charset=" + charset).append(LINE_FEED);
+		//writer.append("Content-Type: text/plain; charset=" + charset).append(LINE_FEED);
 		writer.append(LINE_FEED);
 		writer.append(value).append(LINE_FEED);
 		writer.flush();
@@ -153,6 +153,17 @@ public class AmazonS3
 
 			if (status == HttpURLConnection.HTTP_OK)
 			{
+				reader = new BufferedReader(new InputStreamReader(httpConn.getInputStream()));
+				String line = "";
+				StringBuilder sb = new StringBuilder();
+
+				while ((line = reader.readLine()) != null)
+					sb.append(line);
+
+				response.put("success_msg", sb.toString());
+
+				System.out.println("response: " + response);
+				
 				return response;
 			}
 			else
@@ -198,28 +209,15 @@ public class AmazonS3
 		String key = "panel/uploaded-logo/" + NamespaceManager.get() + "/";
 
 		String contentType = URLConnection.guessContentTypeFromName(fileName);
-		String contentDisposition = "form-data";
 
 		System.out.println("contentType: " + contentType);
 		
 		if (StringUtils.isBlank(contentType))
 		{
 			contentType = "image/jpeg";
-			fileName = "file-" + Calendar.getInstance().getTimeInMillis() + ".jpg";
+			fileName = "img_" + Calendar.getInstance().getTimeInMillis() + ".jpg";
 		}
 
-		switch (contentType)
-		{
-		case "image/jpeg":
-		case "image/png":
-		case "application/pdf":
-		case "text/plain":
-		case "text/html":
-			contentDisposition = "inline";
-		}
-
-		System.out.println("contentDisposition: " + contentDisposition);
-		
 		InputStream stream = new ByteArrayInputStream(bytes);
 		
 		AmazonS3 multipart = new AmazonS3(requestURL, charset);
