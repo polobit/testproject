@@ -95,12 +95,7 @@ public class AmazonS3
 		writer.append("Content-Disposition: form-data; name=\"" + fieldName + "\"; filename=\"" + fileName + "\"")
 		.append(LINE_FEED);
 		writer.append("Content-Type: " + contentType).append(LINE_FEED);
-		
-		if (contentType.equalsIgnoreCase("image/jpeg") || contentType.equalsIgnoreCase("image/png"))
-			writer.append("Content-Transfer-Encoding: base64").append(LINE_FEED);
-		else
-			writer.append("Content-Transfer-Encoding: binary").append(LINE_FEED);
-		
+		writer.append("Content-Transfer-Encoding: binary").append(LINE_FEED);
 		writer.append(LINE_FEED);
 		writer.flush();
 
