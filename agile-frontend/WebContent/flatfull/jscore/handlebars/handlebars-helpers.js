@@ -1592,8 +1592,7 @@ $(function()
 	Handlebars.registerHelper('show_link_in_statement', function(value)
 	{
 
-        console.log(value);
-		if(value){
+        if(value){
 			value = value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 		}
 
@@ -1656,7 +1655,10 @@ $(function()
 
 	Handlebars.registerHelper('safe_string', function(data)
 	{
-
+		console.log("data = " + data);
+		if (data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
+				data = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		
 		data = data.replace(/\n/, "<br/>");
 		return new Handlebars.SafeString(data);
 	});
@@ -3778,13 +3780,6 @@ $(function()
 			console.log(App_Contacts.contactDetailView.model.toJSON());
 			return getPropertyValue(contact_properties, value);
 		}
-	});
-
-	Handlebars.registerHelper('safe_string', function(data)
-	{
-
-		data = data.replace(/\n/, "<br/>");
-		return new Handlebars.SafeString(data);
 	});
 
 	Handlebars.registerHelper('string_to_date', function(format, date)
@@ -6986,8 +6981,21 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 		if(!credit)
 			return 0;
 		return (credit/100)*(-1).toFixed(2);
-
 	});
+
+	Handlebars.registerHelper('event_format_time', function(time, format, options)
+	{
+		return time.format(format);
+	});
+	Handlebars.registerHelper('dottedEventDescription', function(description, options)
+	{
+		return addDotsAtEnd(description);
+	});
+	Handlebars.registerHelper('get_template_type', function(template_name)
+	{
+		return new Handlebars.SafeString(getTemplate(template_name, this));
+	});
+
 Handlebars.registerHelper('is_IE_browser', function(options) {
 	     return (isIEBrowser() ? options.fn(this) : options.inverse(this));
 });

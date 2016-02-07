@@ -110,6 +110,8 @@ tasks : function()
 /* Show new view of tasks. */
 tasks_new : function()
 {
+	console.log("tasks_new");
+	
 	$('#content').html("<div id='tasks-list-template'>&nbsp;</div>");
 
 	getTemplate("new-tasks-list-header", {}, undefined, function(template_ui){
