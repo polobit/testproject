@@ -64,10 +64,12 @@ function setupDealFilters(cel)
 		var el = $('#opportunity-listners');
 
 		// Fills owner select element
-		populateUsers("owners-list-bulk", el, undefined, undefined, function(data)
+		populateUsers("owners-list-bulk", el, undefined, undefined, function(data, optionsHTML)
 		{
 
-			$("#deals-filter").find("#owners-list-filters").html(data);
+            console.log(optionsHTML);
+            
+			$("#deals-filter").find("#owners-list-filters").html(optionsHTML);
 			// Select none by default.
 			if (_agile_get_prefs('deal-filters'))
 			{
@@ -76,7 +78,7 @@ function setupDealFilters(cel)
 
 			$("#owners-list-filters", $("#dealsFilterForm")).closest('div').find('.loading-img').hide();
 
-			$("#deal_owner_change_modal").find("#owners-list-bulk").html(data);
+			$("#deal_owner_change_modal").find("#owners-list-bulk").html(optionsHTML);
 			$("#owners-list-bulk", $("#deal_owner_change_modal")).closest('div').find('.loading').hide();
 
 			// Populate pipeline in the select box.
@@ -164,21 +166,15 @@ function setNewDealFilters(data){
 	{
 		filters_ui += "<li class='divider'></li>";
 	}
+	var template = '<li><a class="deal-filter" id="{{id}}">{{name}}</a></li>';  
 	$.each(filters_list,function(index, filter){
-		filters_ui += "<li><a class='deal-filter' id='"+filter.id+"'>"+filter.name+"</a></li>"
+		filters_ui += Handlebars.compile(template)({id : filter.id, name : filter.name});
 	});
 	$('#deal-filter-list-model-list').html(filters_ui);
 	var cookie_filter_id = _agile_get_prefs("deal-filter-name");
 	if(cookie_filter_id && cookie_filter_id != 'my-deals' && data.get(cookie_filter_id) && data.get(cookie_filter_id).get('name')){
-		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">'+data.get(cookie_filter_id).get("name")+'</span><a class="close default_deal_filter">×</a></div>');
-		/*var filters = _agile_get_prefs('deal-filters');
-		if(filters){
-			var filtersJSON = $.parseJSON(filters);
-			if(filtersJSON && filtersJSON.pipeline_id){
-				_agile_set_prefs('agile_deal_track', filtersJSON.pipeline_id);
-				$('#deals-tracks').find('button').attr('disabled', true);
-			}
-		}*/
+		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">'+Handlebars.compile('{{name}}')({name : data.get(cookie_filter_id).get("name")})+'</span><a class="close default_deal_filter">×</a></div>');
+		
 	}else if(cookie_filter_id && cookie_filter_id == 'my-deals'){
 		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">My Deals</span><a class="close default_deal_filter">×</a></div>');
 	}else{
@@ -1035,15 +1031,16 @@ function initializeMilestoneListners(el){
     		
     		if(add_milestone)
     		{
-    			var html = "<tr data='" + new_milestone + "' style='display: table-row;'><td><div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>";
-    			html += new_milestone + "</div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+
+    			var html = "<tr data='{{new_milestone}}' style='display: table-row;'><td><div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>";
+    			html += "{{new_milestone}}</div></td><td class='b-r-none'><div class='m-b-n-xs'>";
     			html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
 				html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
 				html +=	"<a class='milestone-delete c-p m-l-sm text-l-none text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Delete Milestone'><i class='icon icon-trash'></i>" +
 				"</a><a class='text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;'><i title='Drag' class='icon-move'></i></a></div></td></tr>";
-				milestone_list.append(html);
+				milestone_list.append(Handlebars.compile(html)({new_milestone : new_milestone}));
     			//milestone_list.append("<tr data='"+new_milestone+"' style='display: table-row;'><td><div style='display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%'>"+new_milestone+"</div></td><td><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete' style='cursor: pointer;margin-left:10px; text-decoration: none;' data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>");
-    	//		milestone_list.append("<li data='" + new_milestone + "'><div><span>" + new_milestone + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>");
+    			//milestone_list.append("<li data='" + new_milestone + "'><div><span>" + new_milestone + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>");
     			fill_ordered_milestone(form.attr('id'));
     		}
     	}

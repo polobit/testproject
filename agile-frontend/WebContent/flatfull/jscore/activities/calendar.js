@@ -367,14 +367,14 @@ function showCalendar(users)
 											if (last_name == undefined)
 												last_name = "";
 											if(event.contacts[i].type == 'COMPANY')
-												reletedContacts += '<a class="text-info" href="#company/' + event.contacts[i].id + '">' + getPropertyValue(
-													event.contacts[i].properties, "name") + '</a>';
+												reletedContacts += '<a class="text-info" href="#company/' + event.contacts[i].id + '">' + Handlebars.compile('{{name}}')({name : getPropertyValue(
+													event.contacts[i].properties, "name")}) + '</a>';
 											else
-												reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
-														event.contacts[i].properties, "first_name") + ' ' + last_name + '</a>';
+												reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + Handlebars.compile('{{name}}')({name : getPropertyValue(
+													event.contacts[i].properties, "first_name")}) + ' ' + Handlebars.compile('{{name}}')({name : last_name}) + '</a>';
 										}else{
-											reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
-													event.contacts[i].properties, "name") + '</a>';
+											reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + Handlebars.compile('{{name}}')({name : getPropertyValue(
+													event.contacts[i].properties, "name")}) + '</a>';
 										}
 										if (i != event.contacts.length - 1){
 											reletedContacts += ', ';
@@ -395,6 +395,8 @@ function showCalendar(users)
 											
 									if (calendarView == "month")
 									{
+										console.log("month");
+
 										popover_min_width = $('.fc-view-month').find('.fc-widget-content').eq(0).width() * 2;
 										var left = jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10;
 										var top = jsEvent.currentTarget.offsetTop;
@@ -420,8 +422,8 @@ function showCalendar(users)
 																 '</div>' + '</div>';
 											$(this).after(popoverElement);
 										}else{
-											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-													.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + Handlebars.compile('{{name}}')({name : event.title}) + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+													.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + Handlebars.compile('{{name}}')({name : event.owner.name}) + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
 											$(this).after(popoverElement);
 										}
 										
@@ -448,6 +450,7 @@ function showCalendar(users)
 									}
 									else if (calendarView == "agendaWeek")
 									{
+										console.log("agendaWeek");
 										popover_min_width = $('.fc-view-agendaWeek').find('.fc-widget-content').eq(0).width() * 2;
 										var left = jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10;
 										var top = jsEvent.currentTarget.offsetTop;
@@ -484,6 +487,7 @@ function showCalendar(users)
 									}
 									else if (calendarView == "agendaDay")
 									{
+										console.log("agendaDay");
 										var left = jsEvent.currentTarget.offsetLeft;
 										var top = jsEvent.currentTarget.offsetTop + jsEvent.currentTarget.offsetHeight + 10;
 										leftorright = 'top';

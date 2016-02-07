@@ -130,6 +130,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		});
 		// Convert template into HTML
 		var modelTemplate = Handlebars.compile(template);
+		var optionsHTML = "";
 		// Iterates though each model in the collection and
 		// populates the template using handlebars
 		$.each(data, function(index, model)
@@ -140,8 +141,8 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 			}
 			else
 			{
-				var optionsHTML = modelTemplate(model);
-				$("#" + selectId, el).append(optionsHTML);
+				optionsHTML += modelTemplate(model);
+				$("#" + selectId, el).append(modelTemplate(model));
 			}
 		});
 
@@ -151,7 +152,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		{
 			// execute the callback, passing parameters as
 			// necessary
-			callback(collection);
+			callback(collection, optionsHTML);
 		}
 	}
 

@@ -314,13 +314,11 @@
 			success: function(campaigns){
 				var html = '';
 				$.each(campaigns, function(index,camp){
-					//console.log(customfield);
+					var option = '<option value="{{id}}">{{name}}</option></th>';
 					if(camp.is_disabled){
- 						html += '<option value="'+camp.id+'" disabled = disabled>'+camp.name+' (Disabled)</option>';
- 						return true;
+						option = '<option value="{{id}}" disabled = disabled>{{name}} (Disabled)</option>';
  					} 
-
-					html += '<option value="'+camp.id+'">'+camp.name+'</th>';
+					html += Handlebars.compile(option)({id : camp.id, name : camp.name});
 				});
 				el.html(html);
 				return campaigns;
@@ -331,7 +329,8 @@
 	deal_bulk_actions.fillPipelineList = function(pipelines){
 		var html = '<option value="">Select</option>';
 		$.each(pipelines,function(index,value){
-			html += '<option value="'+value.id+'" data="'+value.milestones+'">'+value.name+'</option>'
+			var option = '<option value="{{id}}" data="{{milestones}}">{{name}}</option>';
+			html += Handlebars.compile(option)({id : value.id, milestones : value.milestones, name : value.name});
 		});
 		$("#deal_mile_change_modal").find("#pipeline-list-bulk").html(html);
 	};

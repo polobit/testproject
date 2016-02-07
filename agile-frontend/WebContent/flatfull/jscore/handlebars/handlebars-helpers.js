@@ -1592,6 +1592,11 @@ $(function()
 	Handlebars.registerHelper('show_link_in_statement', function(value)
 	{
 
+        console.log(value);
+		if(value){
+			value = value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		}
+
 		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 
 		try
@@ -3743,23 +3748,6 @@ $(function()
 			return options.fn(this);
 		else
 			return options.inverse(this);
-	});
-
-	Handlebars.registerHelper('show_link_in_statement', function(value)
-	{
-
-		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-
-		try
-		{
-			value = value.replace(exp, "<a href='$1' target='_blank' class='cd_hyperlink'>$1</a>");
-			return new Handlebars.SafeString(value);
-		}
-		catch (err)
-		{
-			return value;
-		}
-
 	});
 
 	/**
@@ -6168,29 +6156,15 @@ $(function()
 	 */
 	Handlebars.registerHelper("isCurrentDeal", function(deal_id, options)
 	{
-		var dealId = App_Deal_Details.dealDetailView.model.id;
+
+		var dealId = '';
+		if (App_Deal_Details.dealDetailView)
+			dealId = App_Deal_Details.dealDetailView.model.id;
+
 		if (deal_id && deal_id == dealId)
 			return options.fn(this);
 
 		return options.inverse(this);
-	});
-	Handlebars.registerHelper('getDealNames', function(deals)
-	{
-		var html = '';
-		var currentDealId = 0;
-		if (App_Deal_Details.dealDetailView)
-			currentDealId = App_Deal_Details.dealDetailView.model.id;
-		$.each(deals, function(index, deal)
-		{
-			if (deal.id != currentDealId)
-			{
-				html += '<a href="#deal/' + deal.id + '">' + deal.name + '</a>';
-				if (index + 1 < deals.length)
-					html += ', ';
-			}
-		});
-		return html;
-
 	});
 
 	/**

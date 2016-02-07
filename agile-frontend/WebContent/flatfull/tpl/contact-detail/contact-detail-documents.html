@@ -104,7 +104,12 @@
            		
            	{{/if}}
        	{{/each}}
-		{{{getDealNames deals}}}
+
+       	{{#each deals}}
+       	    {{#isCurrentDeal this.id}} {{else}}
+                <a href="#deal/{{this.id}}">{{this.name}}</a>{{#if @last}}{{else}},{{/if}}
+       	    {{/isCurrentDeal}}
+       	{{/each}}
 		</div>
 	
 		
