@@ -562,6 +562,7 @@ function createJSON() {
          success : function()
             {
                 $("#shareCampaign").modal('hide');
+                showNotyPopUp("information", "Campaign has been shared successfully.", "top");
                 //Backbone.history.navigate("workflows", { trigger : true });
             },error : function(){
                 $("#shareCampaign").modal('hide');
