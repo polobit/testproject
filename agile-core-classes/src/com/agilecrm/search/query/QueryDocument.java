@@ -319,6 +319,7 @@ public class QueryDocument<T> implements QueryInterface
 	{
 	    SortOptions sortOptions = null;
 	    SortExpression.Builder sortExpressionBuilder = SortExpression.newBuilder();
+
 	    if (orderBy.startsWith("-"))
 	    {
 		orderBy = orderBy.substring(1);
@@ -329,15 +330,8 @@ public class QueryDocument<T> implements QueryInterface
 		sortExpressionBuilder = sortExpressionBuilder.setDirection(SortDirection.ASCENDING);
 	    }
 	    sortExpressionBuilder.setExpression(orderBy);
-	    if (orderBy.contains("time") || orderBy.contains("last_contacted"))
-	    {
-		sortExpressionBuilder.setExpression(orderBy + "_epoch").setDefaultValueNumeric(0.0);
-	    }
-	    else if (orderBy.contains("name"))
-	    {
-		sortExpressionBuilder.setDefaultValue("");
-	    }
-	    else if (ContactFilterUtil.isCustomField(orderBy))
+
+	    if (ContactFilterUtil.isCustomField(orderBy))
 	    {
 		String[] fragments = orderBy.split("_AGILE_CUSTOM_");
 
@@ -372,6 +366,14 @@ public class QueryDocument<T> implements QueryInterface
 
 		    sortExpressionBuilder.setExpression(orderBy);
 		}
+	    }
+	    else if (orderBy.contains("time") || orderBy.contains("last_contacted"))
+	    {
+		sortExpressionBuilder.setExpression(orderBy + "_epoch").setDefaultValueNumeric(0.0);
+	    }
+	    else if (orderBy.contains("name"))
+	    {
+		sortExpressionBuilder.setDefaultValue("");
 	    }
 	    else
 	    {
