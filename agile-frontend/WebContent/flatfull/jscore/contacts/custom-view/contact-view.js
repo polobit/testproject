@@ -241,9 +241,16 @@ function setUpContactSortFilters(el)
 	
 }
 
-function addCustomFieldToSearch(base_model)
+function addCustomFieldToSearch(base_model, scope)
 {
-	if(!CUSTOM_SORT_VIEW)
+	var sort_view;
+	if(scope == "COMPANY"){
+		sort_view = COMPANY_CUSTOM_SORT_VIEW;
+	}else{
+		sort_view = CUSTOM_SORT_VIEW;
+	}
+
+	if(!sort_view)
 		return;
 
 	if(!base_model)
@@ -252,7 +259,7 @@ function addCustomFieldToSearch(base_model)
 	if(!base_model.get("searchable"))
 		return;
 
-	CUSTOM_SORT_VIEW.collection.add(base_model);
+	sort_view.collection.add(base_model);
 }
 
 function updateModel (base_model)
@@ -271,27 +278,34 @@ function updateModel (base_model)
 		return;
 
 	if(!searchable)
-		removeCustomFieldFromSortOptions(base_model);
+		removeCustomFieldFromSortOptions(base_model, "CONTACT");
 }
 
-function removeCustomFieldFromSortOptions(base_model)
+function removeCustomFieldFromSortOptions(base_model, scope)
 {
+	var sort_view;
+	if(scope == "COMPANY"){
+		sort_view = COMPANY_CUSTOM_SORT_VIEW;
+	}else{
+		sort_view = CUSTOM_SORT_VIEW;
+	}
+	
 	if(!base_model)
 		return;
 
 	if(!base_model.get("searchable"))
 		return;
 
-	if(!CUSTOM_SORT_VIEW)
+	if(!sort_view)
 		return;
 	
-	var model = CUSTOM_SORT_VIEW.collection.get(base_model.get('id'));
+	var model = sort_view.collection.get(base_model.get('id'));
 
 	if(model)
 	{
-		CUSTOM_SORT_VIEW.collection.remove(base_model.get('id'));
+		sort_view.collection.remove(base_model.get('id'));
 
-		CUSTOM_SORT_VIEW.render(true);
+		sort_view.render(true);
 	}
 }
 

@@ -828,12 +828,12 @@ function groupingCustomFields(base_model){
 		}
 		function appendItem(base_model)
 		{
-			addCustomFieldToSearch(base_model);
+			addCustomFieldToSearch(base_model,  base_model.get("scope"));
 		};
 
 		function removeItem(base_model)
 		{
-			removeCustomFieldFromSortOptions(base_model);
+			removeCustomFieldFromSortOptions(base_model, base_model.get("scope"));
 		};
 
 		App_Admin_Settings.contactCustomFieldsListView.collection.bind('add', appendItem);
@@ -858,12 +858,12 @@ function groupingCustomFields(base_model){
 			}
 			function appendItem(base_model)
 			{
-				addCustomFieldToSearch(base_model);
+				addCustomFieldToSearch(base_model, base_model.get("scope"));
 			};
 
 			function removeItem(base_model)
 			{
-				removeCustomFieldFromSortOptions(base_model);
+				removeCustomFieldFromSortOptions(base_model, base_model.get("scope"));
 			};
 
 		App_Admin_Settings.companyCustomFieldsListView.collection.bind('add', appendItem);
