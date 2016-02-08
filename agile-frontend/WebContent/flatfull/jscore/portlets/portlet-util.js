@@ -27,6 +27,16 @@ var portlet_utility = {
 		$("#deals", elData).find(
 				'option[value=' + base_model.get("settings").deals + ']').attr(
 				"selected", "selected");
+		if(base_model.get("name") == "Deals Funnel" && base_model.get("settings")["split-by"]) {
+			$("#deals-funnel-split-by", elData).find(
+					'option[value=' + base_model.get("settings")["split-by"] + ']').attr(
+					"selected", "selected");
+		}
+		else if(base_model.get("name") == "Deals Funnel") {
+			$("#deals-funnel-split-by", elData).find(
+					'option[value=revenue]').attr(
+					"selected", "selected");
+		}
 	},
 
 	/**
