@@ -420,6 +420,7 @@ public class SalesforceSync extends OneWaySyncService
 						switch (type) {
 						case "High":
 							agileTask.priority_type = Task.PriorityType.HIGH;
+							agileTask.is_complete = true;
 							break;
 						case "Normal":
 							agileTask.priority_type = Task.PriorityType.NORMAL;
