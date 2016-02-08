@@ -96,8 +96,20 @@
 						Ticket_Labels.showSelectedLabels(new Array(), $(el));
 					});
 					
-					//Initializing click on CC email field
-					Tickets.initCCEmailsListeners(el);
+					//Initializing type ahead for cc emails
+					agile_type_ahead("cc_email_field", el, tickets_typeahead, function(arg1, arg2){
+
+						arg2 = arg2.split(" ").join("");
+
+						var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
+
+						if(!email || email == 'No email')
+							return;
+
+						$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
+	        			$('#cc_email_field').val('');
+
+	        	  	},undefined, undefined, 'core/api/search/');
 
 					//Initializing type ahead for selecting contact in To address field
 					agile_type_ahead("requester_email_typeahead", el, tickets_typeahead, function(arg1, arg2){
@@ -326,7 +338,7 @@ $("#right-pane").html(ticketView.render().el);
 				Ticket_Labels.showSelectedLabels(data.labels, $(el));
 
 				//Initializing events on CC email field
-				Tickets.initCCEmailsListeners(el);
+				//Tickets.initCCEmailsListeners(el);
 
 				//Rendering ticket notes
 				App_Ticket_Module.renderNotesCollection(id, $('#notes-collection-container', el), function(){});
