@@ -46,7 +46,6 @@
                       "type": "select",
                       "event": "onchange",
                       "eventHandler": "insertSelectedOption1",
-                      "invisible": "true",
                       "style": {
                           "float": "none"
                       } 
@@ -60,6 +59,7 @@
                     "name": "and_variable_1",
                     "title": "E.g. {{score}}, {{company}}, <br>{{your custom field}}",
                     "fieldType": "input",
+                    "invisible": "true",
                     "type": "text"
                 },
                 {
