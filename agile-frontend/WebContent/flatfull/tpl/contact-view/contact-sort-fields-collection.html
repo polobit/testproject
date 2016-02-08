@@ -1,43 +1,38 @@
 <script id="contact-view-sort-collection-template" type="text/html">
-	<div class="btn-group">
-	<button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
-    	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-    	{{#is_mobile}}
-    	<ul id="" class="pull-right dropdown-menu">
-    	   	<li>
-            	<a href="#contact-view-prefs">Add/Remove Columns</a>
-        	</li>
-    	</ul>
-    	{{else}}
-    	
-    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs">
-        	<!--<li>
-            	<a href="#contacts" class="DefaultView">Default</a>
-				 a href="#contacts" class="GridView">Grid View</a 
-        	</li>
-			<li class="divider"></li>-->
-			<li>
-            	<a href="#contact-view-prefs">Add/Remove Columns</a>
-        	</li>
-    	</ul>
-    	{{/is_mobile}}
-    	</div>
+<div class="btn-group pull-left m-r-xs contacts-toolbar">
+	   <div class="btn-group dropdown m-l-none" style="float: none;">
+                <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="margin-top:3px;" data-toggle="dropdown" id="contact-sort" aria-expanded="false">
+                    <span class="text-muted">Sort by: </span>
+                    <span class="sort-field-txt"></span>
+                </button>
+                <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs m-t-xs" data-toggle="dropdown" aria-expanded="true">
+                    <i class="fa fa-sort"></i>
+                </button>
+                <ul class="pull-right dropdown-menu" id="contact-view-sort-model-list">
+                    <li class="dropdown-header hide" id="system-fields" >System Fields</li>
+                    <li class="dropdown-header display-none" id="custom-fields">Custom Fields</li>
+                    <li class="divider" id="sort-divider"></li>
+                    <li>
+                        <a class="order-by pos-rlt" data="" href="javascript:void(0);">Ascending <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check "></i> </a>
+                    </li>
+                    <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">Descending  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check "></i> </a></li>
+                </ul>
+            </div>
+        </div>
 </script>
 
 <script id="contact-view-sort-model-template" type="text/html">
-{{#if this.scope}}
-	<a class="sort" id="sort-by-{{search_key}}_AGILE_CUSTOM_{{field_type}}-asc" data="{{search_key}}_AGILE_CUSTOM_{{field_type}}" href="#">{{field_label}} Asc</a>
-	<a class="sort" id="sort-by-{{search_key}}_AGILE_CUSTOM_{{field_type}}-desc" data="-{{search_key}}_AGILE_CUSTOM_{{field_type}}" href="#">{{field_label}} Desc</a>
-{{else}}
-{{#each this}}
-	<a class="sort" id="sort-by-{{field_value}}-{{#if desc_order}}desc{{else}}asc{{/if}}" data="{{field_key}}" href="#">{{field_label}}</a>
-{{/each}}
-{{/if}}
-	{{#is_mobile}}
-				{{else}}
-					{{#unless is_last}}
-						<li class="divider"></li>
-					{{/unless}}
-		{{/is_mobile}}
 
+{{#if scope}}
+    <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="{{search_key}}_AGILE_CUSTOM_{{field_type}}" type="custom">
+        {{field_label}}
+        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check {{selected}} {{#if selected}}{{else}}display-none{{/if}}" ></i> 
+    </a>
+    {{else}}
+
+    <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="{{field_value}}">
+        {{field_label}}
+        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check {{selected}} {{#if selected}}{{else}}display-none{{/if}}"></i> 
+    </a>
+{{/if}}
 </script>
