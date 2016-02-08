@@ -27,11 +27,11 @@ define([
         for(var i=1; i<=saveform.length-1; i++){
         idArray += saveform[i].fields.id.value+",";
        }
+       //regex function to seperate numbers form id
       var largest = Math.max.apply(null, idArray.match(/(\d+)/g));
-      console.log(largest);
        
        if(typeof this.counter[snippetType] === "undefined") {
-        if(largest)
+        if(isFinite(largest))
           this.counter[snippetType] = largest+1;
         else
          this.counter[snippetType] = (saveform.length);
