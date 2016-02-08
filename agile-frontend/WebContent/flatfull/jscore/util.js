@@ -605,3 +605,27 @@ function agileWindowOrigin(){
 
 	return window.location.origin;
 }
+
+$(function(){
+    $( document ).ajaxError(function(event, jqXHR) {
+	   // Get response code and redirect to login page
+	   if(jqXHR.status && jqXHR.status == 401)
+	   	      handleAjaxError();
+	});
+});
+
+function handleAjaxError(){
+
+		var hash = window.location.hash;
+
+		// Unregister all streams on server.
+		unregisterAll();
+		
+		// Unregister on SIP server.
+		sipUnRegister();
+		
+		// Firefox do not support window.location.origin, so protocol is explicitly added to host
+		window.location.href = window.location.protocol + "//" + window.location.host+"/login"+hash;
+
+}
+
