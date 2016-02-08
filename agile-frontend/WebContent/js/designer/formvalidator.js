@@ -153,7 +153,11 @@ function initValidator(selector, callback) {
             		   		  saveflag = false;
 				
 					}
-  			});   
+  			});
+	        //special condition to skip the error message for and_key_grid-table
+	        if(keys[1] == "and_key_grid-table")
+	        	saveflag = true;
+	        
   	        //if errors show single message
 	   		if(!saveflag){
 				  
