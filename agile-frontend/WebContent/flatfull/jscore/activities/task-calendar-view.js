@@ -455,7 +455,7 @@ function setCalendarTaskColors(data)
 {
 	data["title"] = data["subject"];
 	data["start"] = data["due"];
-	data["end"] = data["due"]+1800;
+	data["end"] = data["due"]+55;
 	data["allDay"] = false;
 	if (data.priority_type == 'HIGH'){
 		data.className = 'fc-b-l fc-b-2x fc-b-danger fc-border-height fc-event-month';
