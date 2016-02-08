@@ -241,18 +241,6 @@ public class LoginServlet extends HttpServlet {
 		hash = (String) request.getSession().getAttribute(
 				RETURN_PATH_SESSION_HASH);
 
-		// String campaignId = (String) request.getSession().getAttribute(
-		// CampaignShareServlet.CAMP_ID);
-		//
-		// String senderDomain = (String) request.getSession().getAttribute(
-		// CampaignShareServlet.SENDER_DOMAIN);
-		// System.out.println("campaignId in LoginServlet" + campaignId);
-		// System.out.println("senderDomain in LoginServlet" + senderDomain);
-		//
-		// if (StringUtils.isNotBlank(campaignId)
-		// && StringUtils.isNotBlank(senderDomain))
-		// hash = "/#share-campaign/" + campaignId + "/" + senderDomain;
-
 		if (!StringUtils.isEmpty(hash)) {
 			request.getSession().removeAttribute(RETURN_PATH_SESSION_HASH);
 			response.sendRedirect("/" + hash);
