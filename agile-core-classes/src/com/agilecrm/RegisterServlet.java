@@ -326,6 +326,7 @@ public class RegisterServlet extends HttpServlet
 	    }
 
 	    properties.add(createField(RegistrationGlobals.DOMAIN, userDomain));
+	    properties.add(createField(RegistrationGlobals.IP, request.getLocalAddr()));
 	    
 	    JSONObject json = new JSONObject();
 	    json.put("city", city);
