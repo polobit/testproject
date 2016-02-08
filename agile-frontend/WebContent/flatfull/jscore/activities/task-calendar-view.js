@@ -283,11 +283,9 @@ function getCalendarView() {
 								$(jsEvent.currentTarget.parentElement).css('z-index', 9);
 							}
 							$(this).parent().find('.fc-overlayw').show();
-							$(this).find(".ui-resizable-handle").show();
 						},
 						eventMouseout : function(event, jsEvent, view)
 						{
-							$(this).parent().find('.fc-overlayw').hide();
 							$(this).parent().find('.fc-overlayw').remove();
 							$(this).find(".ui-resizable-handle").hide();
 							$(jsEvent.currentTarget).css('z-index', 8);
