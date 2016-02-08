@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
@@ -57,7 +58,7 @@ public class AgileForm extends HttpServlet
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid auth details");
 		return;
 	    }
-
+	 	    
 	    String apiKey = formJson.getString("_agile_api");
 	    String agileDomain = formJson.getString("_agile_domain");
 	    String agileRedirectURL = formJson.getString("_agile_redirect_url");
@@ -171,7 +172,7 @@ public class AgileForm extends HttpServlet
 	}
     }
 
-    public List<ContactField> getAgileContactProperties(Contact contact, org.json.JSONObject formJson)
+    public List<ContactField> getAgileContactProperties(Contact contact, org.json.JSONObject formJson) throws JSONException
     {
 	Iterator i = formJson.keys();
 
@@ -181,6 +182,10 @@ public class AgileForm extends HttpServlet
 	while (i.hasNext())
 	{
 	    String key = (String) i.next();
+	   // System.out.println(key);
+
+	    if(!formJson.getString(key).isEmpty() && key.contains("_agile_utm"))	 
+			   properties.add(buildCustomContactProperty(key.substring(7), formJson.getString(key), null));
 
 	    if (isNotContactProperty(key))
 		continue;
@@ -204,7 +209,14 @@ public class AgileForm extends HttpServlet
 	}
 	if (addressJson.length() != 0)
 	    properties.add(new ContactField(Contact.ADDRESS, addressJson.toString(), null));
-
+	
+	
+	Iterator<String> k=formJson.keys();
+	while(k.hasNext()){
+	   String key = (String)k.next();
+	   if(!formJson.getString(key).isEmpty() && key.contains("utm"))	 
+			   properties.add(buildCustomContactProperty(key.substring(7), formJson.getString(key), null));
+	}
 	return updateContactPropList(contact.properties, properties);
     }
 
