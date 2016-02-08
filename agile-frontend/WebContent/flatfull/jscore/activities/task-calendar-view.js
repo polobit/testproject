@@ -452,10 +452,19 @@ function initilizeTasksCalendarViewListeners()
 	});
 }
 function setCalendarTaskColors(data)
-{
+{	
+	var due_date;
+	if(data["due"])
+	{
+		due_date = new Date(data["due"] * 1000);
+	}
 	data["title"] = data["subject"];
 	data["start"] = data["due"];
-	data["end"] = data["due"]+55;
+	data["end"] = data["due"] + 55;
+	if(due_date && due_date.getHours() == 0 && due_date.getMinutes() == 0)
+	{
+		data["end"] = data["due"] + 1800;
+	}
 	data["allDay"] = false;
 	if (data.priority_type == 'HIGH'){
 		data.className = 'fc-b-l fc-b-2x fc-b-danger fc-border-height fc-event-month';
