@@ -620,11 +620,11 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 			
 			var dealRemoveValue = dealRemoveModel.attributes.expected_value;
 			
-			var removeDealValue = parseFloat($('#'+milestone.replace(/ +/g, '')+'_totalvalue').text())-parseFloat(dealRemoveValue); 
+			var removeDealValue = parseFloat($('#'+milestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(dealRemoveValue); 
             
 
 
-            $('#'+milestone.replace(/ +/g, '')+'_totalvalue').text(removeDealValue.toFixed(2).replace(/\.00$/, ""));
+            $('#'+milestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(removeDealValue));
           
            $('#'+ milestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()) - 1);			
            

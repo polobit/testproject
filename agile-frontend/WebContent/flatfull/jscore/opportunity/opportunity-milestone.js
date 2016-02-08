@@ -189,7 +189,7 @@ function dealsFetch(base_model)
             for (i = 0; i < dealcountarray.length; ++i){
             	dealcount = dealcount + dealcountarray[i].get("expected_value");
             }
-            $('#' + base_model.get("heading").replace(/ +/g, '') + '_totalvalue').text(dealcount.toFixed(2).replace(/\.00$/, ""));
+            $('#' + base_model.get("heading").replace(/ +/g, '') + '_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount));
          }
 
 		catch (err)

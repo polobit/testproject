@@ -171,6 +171,23 @@ $(function()
 											pieMilestones();
 											enable_save_button(that);
 											$("#deal_archive_confirm_modal").modal('hide');
+											var arch_deal_value = model.attributes.expected_value;
+											var oldMilestone = model.attributes.milestone;
+											try
+						                    {
+
+                        					  var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(arch_deal_value); 
+                         			          $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
+                        
+											  $('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+						
+                          
+
+											}
+											catch (err)
+											{
+											console.log(err);
+											}
 											// Shows deals chart
 											dealsLineChart();
 											update_deal_collection(model.toJSON(), id, milestone, milestone);
@@ -645,12 +662,16 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 
 					var id = deal.id;
 					var oldMilestone = $('#' + id).attr('data');
+					$("#"+deal.id).parent().removeClass();
+					$("#"+deal.id).parent().addClass(deal.colorName);
+		            $("#"+deal.id).parent().addClass("deal-color");
 					// update_deal_collection(deal, id, newMilestone,
 					// oldMilestone);
 
 					var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : oldMilestone });
 					if (!dealPipelineModel)
 						return;
+					var deal_pre_modified_value = dealPipelineModel[0].get('dealCollection').get(id).attributes.expected_value;
 					dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
 
 					if (!checkPipeline(deal.pipeline_id))
@@ -659,7 +680,9 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 						$("#" + oldMilestone.replace(/ +/g, '')).find("#" + id).parent().remove();
 						try
 						{
-							$('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+							var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(deal_pre_modified_value);
+						    $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
+						    $('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
 						}
 						catch (err)
 						{
@@ -680,12 +703,12 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 						{
 
                            var dealchangevalue = deal.expected_value;
-                           var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text())-parseFloat(dealchangevalue); 
-                           var newdealvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text())+parseFloat(dealchangevalue);
+                           var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(deal_pre_modified_value); 
+                           var newdealvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))+parseFloat(dealchangevalue);
 
 
-		                  $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(newdealvalue.toFixed(2).replace(/\.00$/, ""));
-		                  $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(olddealvalue.toFixed(2).replace(/\.00$/, ""));
+		                  $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue));
+		                  $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
 
 
 						  $('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
@@ -714,6 +737,21 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 							dealsTemplate = 'deals-by-paging-relax-model';
 						}
 						$("#" + newMilestone.replace(/ +/g, '')).find("#" + id).parent().html(getTemplate(dealsTemplate, deal));
+						try
+						{
+
+                           var dealchangevalue = deal.expected_value;
+                           var prenewdealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(deal_pre_modified_value); 
+                           var newdealvalue = parseFloat(prenewdealvalue)+parseFloat(dealchangevalue);
+
+
+		                  $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue));
+		                  
+						}
+						catch (err)
+						{
+							console.log(err);
+						}
 					}
 
 					if (removeArchive(deal))
@@ -754,9 +792,9 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 					{    
 						var newdealvairable = deal.expected_value;
 
-                        var newdealeditvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text())+parseFloat(newdealvairable);
+                        var newdealeditvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))+parseFloat(newdealvairable);
                         
-                        $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(newdealeditvalue.toFixed(2).replace(/\.00$/, ""));
+                        $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealeditvalue));
 
 						$('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
 					}
@@ -767,6 +805,8 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 				}
 				includeTimeAgo($("#" + newMilestone.replace(/ +/g, '')));
 				$('a.deal-notes').tooltip();
+				$("#"+deal.id).parent().addClass(deal.colorName);
+		        $("#"+deal.id).parent().addClass("deal-color");
 			}
 			else
 			{

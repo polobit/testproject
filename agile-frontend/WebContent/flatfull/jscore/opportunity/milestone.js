@@ -138,17 +138,16 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
 	try{
 
 
-         if(oldMilestone != newMilestone){
-		 var dealchangevalue = dealModel.expected_value;
-         var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text())-parseFloat(dealchangevalue); 
-         var newdealvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text())+parseFloat(dealchangevalue);
-         
-        
-		$('#'+newMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1);
+        if(oldMilestone != newMilestone){
+	    var dealchangevalue = dealModel.expected_value;
+        var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(dealchangevalue); 
+        var newdealvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))+parseFloat(dealchangevalue);
+
+   		$('#'+newMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1);
 		$('#'+oldMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1);
 
-		$('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(newdealvalue.toFixed(2).replace(/\.00$/, ""));
-		$('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(olddealvalue.toFixed(2).replace(/\.00$/, ""));
+		$('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue));
+		$('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
 	
       }
 	} catch(err){

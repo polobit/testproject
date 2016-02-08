@@ -36,8 +36,8 @@
             control : $('<div class="colorPicker-picker">&nbsp;</div>'),
             palette : $('<div id="colorPicker_palette" class="colorPicker-palette" />'),
             swatch  : $('<div class="colorPicker-swatch">&nbsp;</div>'),
-            hexLabel: $('<label for="colorPicker_hex">Hex</label>'),
-            hexField: $('<input type="text" id="colorPicker_hex" />')
+            hexLabel: $('<label></label>'),
+            hexField: $('<input type="hidden"/>')
         },
         transparent     = "transparent",
         lastColor;
@@ -100,14 +100,6 @@
               var hexColor = $.fn.colorPicker.toHex($(event.target).val());
               $.fn.colorPicker.previewColor(hexColor ? hexColor : element.val());
             });
-
-            $('<div class="colorPicker_hexWrap" />').append(newHexLabel).appendTo(newPalette);
-
-            newPalette.find('.colorPicker_hexWrap').append(newHexField);
-            if (opts.showHexField === false) {
-                newHexField.hide();
-                newHexLabel.hide();
-            }
 
             $("body").append(newPalette);
 
