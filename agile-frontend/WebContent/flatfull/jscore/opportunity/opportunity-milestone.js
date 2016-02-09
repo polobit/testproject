@@ -150,15 +150,25 @@ function dealsFetch(base_model)
 	}
 
 	// Define sub collection
-	var dealCollection = new Base_Collection_View({ url : base_model.get("url"), templateKey : dealsTemplate, individual_tag_name : 'li',
+	var dealCollection = new Base_Collection_View({ url : base_model.get("url"), templateKey : dealsTemplate, individual_tag_name : 'li', 
 		sort_collection : false, cursor : true, page_size : 20, postRenderCallback : function(el)
-		{
+		{   
+			$(el).find('ul li').each(function(){
+				$(this).addClass("deal-color");
+				$(this).addClass($(this).find("input").attr("class"));
+			});
+			
+
 			$('ul.milestones', el).attr('milestone', base_model.get("heading"));
 
 			if (!_agile_get_prefs("agile_deal_view"))
 				deal_infi_scroll($('#' + base_model.get("heading").replace(/ +/g, '') + '-list-container')[0], dealCollection);
 
+
 			includeTimeAgo(el);
+
+			
+
 		} });
 
 	// Fetch task from DB for sub collection
@@ -173,12 +183,21 @@ function dealsFetch(base_model)
 		{
 			var count = data.at(0) ? data.at(0).toJSON().count : 0;
 			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(data.at(0) ? data.at(0).toJSON().count : 0);
-		}
+	        var dealcountarray = data.toArray();
+	        var i;
+	        var dealcount=0;
+            for (i = 0; i < dealcountarray.length; ++i){
+            	dealcount = dealcount + dealcountarray[i].get("expected_value");
+            }
+            $('#' + base_model.get("heading").replace(/ +/g, '') + '_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount));
+         }
+
 		catch (err)
 		{
 			console.log(err);
-		}
-
+		}  
+        
+        
 		$('a.deal-notes').tooltip();
 		// Counter to fetch next sub collection
 		pipeline_count++;
