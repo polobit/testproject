@@ -943,7 +943,6 @@ content: "\f075"!important;
 /*Styling for deal color starts*/
 
 li.deal-color:after {
-    background: yellow; 
     content: '';
     display: block;
     height: 40px;
