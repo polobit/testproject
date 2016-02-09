@@ -197,8 +197,9 @@ var DealsRouter = Backbone.Router.extend({
 						if(json && json.length > 1){
 							$('#owners-list-filters').html('<option value="">Any</option>');
 						}
+						var template = Handlebars.compile('<option value="{{id}}">{{name}}</option>'); 
 						$.each(json, function(index, user){
-							$('#owners-list-filters').append('<option value="'+user.id+'">'+user.name+'</option>');
+							$('#owners-list-filters').append(template({name : user.name, id : user.id}));
 						});
 						$('#owners-list-filters').parent().find('img').hide();
 						hideTransitionBar();
@@ -212,8 +213,9 @@ var DealsRouter = Backbone.Router.extend({
 						if(json && json.length > 1){
 							$('#filter_pipeline').html('<option value="">Any</option>');
 						}
+						var template = Handlebars.compile('<option value="{{id}}">{{name}}</option>'); 
 						$.each(json, function(index, track){
-							$('#filter_pipeline').append('<option value="'+track.id+'">'+track.name+'</option>');
+							$('#filter_pipeline').append(template({name : track.name, id : track.id}));
 						});
 						$('#filter_pipeline', $('#opportunity-listners')).trigger('change');
 						$('#filter_pipeline').parent().find('img').hide();
@@ -264,8 +266,9 @@ var DealsRouter = Backbone.Router.extend({
 						if(json && json.length > 1){
 							$('#owners-list-filters').html('<option value="">Any</option>');
 						}
+						var template = Handlebars.compile('<option value="{{id}}">{{name}}</option>');
 						$.each(json, function(index, user){
-							$('#owners-list-filters').append('<option value="'+user.id+'">'+user.name+'</option>');
+							$('#owners-list-filters').append(template({id : user.id, name : user.name}));
 						});
 						if(deal_filter_json && deal_filter_json.owner_id)
 						{
@@ -290,8 +293,9 @@ var DealsRouter = Backbone.Router.extend({
 						if(json && json.length > 1){
 							$('#filter_pipeline').html('<option value="">Any</option>');
 						}
+						var template = Handlebars.compile('<option value="{{id}}">{{name}}</option>');
 						$.each(json, function(index, track){
-							$('#filter_pipeline').append('<option value="'+track.id+'">'+track.name+'</option>');
+							$('#filter_pipeline').append(template({id : track.id, name : track.name}));
 						});
 						if(deal_filter_json && deal_filter_json.pipeline_id)
 						{
@@ -315,8 +319,9 @@ var DealsRouter = Backbone.Router.extend({
 									{
 										$('#milestone', el).html('<option value="">Any</option>');
 									}
+									var template = Handlebars.compile('<option value="{{milestone}}">{{milestone}}</option>');
 									$.each(milestonesList, function(index, milestone){
-										$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
+										$('#milestone', el).append(template({milestone : milestone}));
 									});
 									if(deal_filter_json && deal_filter_json.milestone && track == deal_filter_json.pipeline_id)
 									{

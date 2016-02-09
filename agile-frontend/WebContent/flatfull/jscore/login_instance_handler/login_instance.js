@@ -13,8 +13,6 @@ function check_login_instance(pubnub_message)
 	// Checks if user logged in has same id as in id received from pubnub
 	if(pubnub_message.id && pubnub_message.id == current_user_id)
 	{
-	
-		
 		// Reads JESSION ID to compare with 
 		JSESSIONID = readCookie("JSESSIONID");
 		console.log(JSESSIONID);
@@ -29,6 +27,10 @@ function check_login_instance(pubnub_message)
 			return;
 		if(pubnub_message.login_time < get_current_user_loggedin_time())
 			return;
+
+		// If mobile no logout on other end
+		if(agile_is_mobile_browser())
+			   return;
 		
 		pubnub_message["email"] = get_current_user_email();
 		
@@ -69,6 +71,10 @@ function get_current_user_email()
 // Publishes user details who logged in to check if someone loggedin with same credentials
 function publishLoginEvent(pubnub)
 {
+
+	// If mobile no logout on other end
+	if(agile_is_mobile_browser())
+		   return;
 	
 	var publishJSON = {
 			

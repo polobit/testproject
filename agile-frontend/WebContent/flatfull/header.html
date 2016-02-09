@@ -385,7 +385,7 @@
                
                
               </span>
-              <div class="pull-left text-ellipsis w-auto hidden-sm hidden-md" style="max-width:150px;"><span class="hidden-sm hidden-md"><%=domainUser.name%></span></div>
+              <div class="pull-left text-ellipsis w-auto hidden-sm hidden-md" style="max-width:150px;"><span class="hidden-sm hidden-md"><%=SafeHtmlUtil.sanitize(domainUser.name)%></span></div>
               <b class="caret"></b>									
 									 </a>
 								<ul class="dropdown-menu animated fadeInRight w">
