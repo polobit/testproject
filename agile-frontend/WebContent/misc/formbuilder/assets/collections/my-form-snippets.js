@@ -21,7 +21,8 @@ define([
      }
  
      , giveUniqueId: function(snippet){
-      
+       
+       if(snippet.attributes.fields.id){
        var snippetType = snippet.attributes.fields.id.value;
        var idArray = "";
         for(var i=1; i<=saveform.length-1; i++){
@@ -40,7 +41,7 @@ define([
        }
  
        snippet.setField("id", snippetType + "-" + this.counter[snippetType]);
-
+      }
  
      }
     , renderAll: function(){
