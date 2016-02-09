@@ -568,3 +568,13 @@ Base_Collection_View.extend = function(child) {
 	view.prototype.events = _.extend({}, this.prototype.events, child.events);
 	return view;
 };
+
+
+/**
+*  Extended View of list view. It combines parent events to extended view events.
+*/
+Base_List_View.extend = function(child) {
+	var view = Backbone.View.extend.apply(this, arguments);
+	view.prototype.events = _.extend({}, this.prototype.events, child.events);
+	return view;
+};

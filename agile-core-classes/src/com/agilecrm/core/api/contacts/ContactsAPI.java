@@ -55,6 +55,7 @@ import com.agilecrm.contact.ContactFullDetails;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
+import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.imports.CSVImporter;
 import com.agilecrm.contact.imports.impl.ContactsCSVImporter;
 import com.agilecrm.contact.util.ContactUtil;
@@ -71,7 +72,6 @@ import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.JSONUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -117,11 +117,16 @@ public class ContactsAPI
 	}
 
 	System.out.println("Fetching page by page");
+
+	if (sortKey != null && ContactFilterUtil.isCustomField(sortKey))
+	{
+	    return ContactFilterUtil.getFilterContactsBySortKey(sortKey, Integer.parseInt(count), cursor);
+	}
 	List<Contact> contacts = ContactUtil.getAllContactsByOrder(Integer.parseInt(count), cursor, sortKey);
 	return contacts;
 
     }
-    
+
     /**
      * Fetches all the contacts (of type person). Activates infiniScroll, if
      * no.of contacts are more than count and cursor is not null. This method is
@@ -143,9 +148,9 @@ public class ContactsAPI
 	System.out.println("Fetching count int");
 	Map searchMap = new HashMap();
 	searchMap.put("type", Contact.Type.PERSON);
-	
+
 	return Contact.dao.getCountByProperty(searchMap);
-	
+
     }
 
     /**
@@ -238,7 +243,7 @@ public class ContactsAPI
 
 	return ContactUtil.getAllCompaniesByOrder(sortKey);
     }
-    
+
     /**
      * Fetches all the contacts (of type person). Activates infiniScroll, if
      * no.of contacts are more than count and cursor is not null. This method is
@@ -260,9 +265,9 @@ public class ContactsAPI
 	System.out.println("Fetching count of companies");
 	Map searchMap = new HashMap();
 	searchMap.put("type", Contact.Type.COMPANY);
-	
+
 	return Contact.dao.getCountByProperty(searchMap);
-	
+
     }
 
     /**
