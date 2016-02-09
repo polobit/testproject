@@ -1,17 +1,11 @@
 /*
- * Function to sync form data to agile v4
+ * Function to sync form data to agile v3
  */
-var _agile_synch_form_v4 = function()
+var _agile_synch_form_v3 = function()
 {
-	var validator = $("#agile-form").validate();
-	if(!validator.form()){
-		return;
-	}
-
 	var agile_button = document.getElementsByClassName("agile-button")[0];
 	if (agile_button)
 		agile_button.setAttribute("disabled", "disabled");
-
 	var agile_error_msg = document.getElementById("agile-error-msg");
 	if (agile_error_msg)
 	{
@@ -82,7 +76,7 @@ var _agile_synch_form_v4 = function()
 	var agile_email = agile_contact.email;
 	if (agile_email)
 		_agile.set_email(agile_email);
-       	 	
+	
 	delete agile_contact._agile_form_name;
 	delete agile_contact._agile_domain;
 	delete agile_contact._agile_api;
