@@ -71,8 +71,9 @@ function renderActivityView(params)
  * 
  * @returns {String} query string
  */
-function getActivityFilterParameters(loadingFirstTime)
+function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 {
+	$("#activities_date_range").show();
 	var params = "?";
 
 	var user =null;
@@ -100,19 +101,39 @@ function getActivityFilterParameters(loadingFirstTime)
 
 		// Adds start_time, end_time and timezone offset to params.
 		params += ("start_time=" + start_time + "&end_time=" + end_time);
+
 	}
 	
 
 	if(loadingFirstTime){
 		var activityFilters=JSON.parse(_agile_get_prefs(ACTIVITY_FILTER));
-		if(activityFilters){
+		if(activityFilters)
+		{
 			user=activityFilters.userId;
 			if(activityFilters.entityId)
+			{
 				entitytype=activityFilters.entityId;
+				if(campaignHistory)
+				{
+					entitytype='ALL';
+					$("#activities_date_range").hide();
+				}
+			}
+			else if(campaignHistory)
+			{
+				entitytype='ALL';
+				$("#activities_date_range").hide();
+			}
 			else
 				entitytype='ALL';
 		}
+
 		else{
+			if(campaignHistory)
+			  {
+				entitytype='ALL';
+				$("#activities_date_range").hide();
+			   }
 			entitytype="ALL";
 		}
 		if(user)
@@ -128,6 +149,9 @@ function getActivityFilterParameters(loadingFirstTime)
 	 user = $('#user-select').data("selected_item");
 
 	 entitytype = $('#entity_type').data("selected_item");
+
+	 //For change campaign activity url to activity url
+	 document.location.hash = "activities";
 	if (user)
 		params += ("&user_id=" + user);
 	// Get owner name and append it to params

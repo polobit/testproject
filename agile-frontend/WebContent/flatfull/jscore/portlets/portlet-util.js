@@ -27,6 +27,16 @@ var portlet_utility = {
 		$("#deals", elData).find(
 				'option[value=' + base_model.get("settings").deals + ']').attr(
 				"selected", "selected");
+		if(base_model.get("name") == "Deals Funnel" && base_model.get("settings")["split-by"]) {
+			$("#deals-funnel-split-by", elData).find(
+					'option[value=' + base_model.get("settings")["split-by"] + ']').attr(
+					"selected", "selected");
+		}
+		else if(base_model.get("name") == "Deals Funnel") {
+			$("#deals-funnel-split-by", elData).find(
+					'option[value=revenue]').attr(
+					"selected", "selected");
+		}
 	},
 
 	/**
@@ -1881,6 +1891,19 @@ var portlet_utility = {
 
 		value = parseFloat(value);
 		value = Math.round(value);
+		if (value == 0)
+			return value;
+
+		if (value)
+			return value.toFixed(2).toString().replace(
+					/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
+	},
+	/**
+	 * Get the number with english number format (ex : 782,345,32.32)
+	 */
+	getNumberWithCommasAndDecimalsForPortlets : function(value) {
+
+		value = parseFloat(value);
 		if (value == 0)
 			return value;
 

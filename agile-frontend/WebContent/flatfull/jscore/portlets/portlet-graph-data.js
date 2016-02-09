@@ -156,6 +156,7 @@ var portlet_graph_data_utility = {
 							milestoneMap = data["milestoneMap"];
 							wonMilestone = data["wonMilestone"];
 							lostMilestone = data["lostMilestone"];
+							milestoneNumbersList = data["milestoneNumbersList"];
 
 							var funnel_data = [];
 							var temp;
@@ -163,9 +164,17 @@ var portlet_graph_data_utility = {
 							$.each(milestonesList, function(index, milestone) {
 								var each_data = [];
 								if (milestone != lostMilestone) {
-									if (milestone != wonMilestone)
-										each_data.push(milestone,
+									if (milestone != wonMilestone) {
+										if (base_model.get("settings")["split-by"] && base_model.get("settings")["split-by"] == "count") {
+											each_data.push(milestone,
+												milestoneNumbersList[index]);
+										}
+										else {
+											each_data.push(milestone,
 												milestoneValuesList[index]);
+										}
+										
+									}	
 									else
 										temp = index;
 									if (each_data != "")
@@ -175,8 +184,15 @@ var portlet_graph_data_utility = {
 
 							var temp_data = [];
 							if (temp != undefined) {
-								temp_data.push(milestonesList[temp],
+								if (base_model.get("settings")["split-by"] && base_model.get("settings")["split-by"] == "count") {
+									temp_data.push(milestonesList[temp],
+										milestoneNumbersList[temp]);
+								}
+								else {
+									temp_data.push(milestonesList[temp],
 										milestoneValuesList[temp]);
+								}
+								
 								funnel_data.push(temp_data);
 							}
 							var falg = false;
@@ -189,7 +205,7 @@ var portlet_graph_data_utility = {
 							else
 								funnel_data = [];
 							portlet_graph_utility.dealsFunnelGraph(selector,
-									funnel_data);
+									funnel_data, base_model);
 
 							portlet_utility.addWidgetToGridster(base_model);
 						});

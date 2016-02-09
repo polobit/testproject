@@ -130,6 +130,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		});
 		// Convert template into HTML
 		var modelTemplate = Handlebars.compile(template);
+		var optionsHTML = "";
 		// Iterates though each model in the collection and
 		// populates the template using handlebars
 		$.each(data, function(index, model)
@@ -140,8 +141,8 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 			}
 			else
 			{
-				var optionsHTML = modelTemplate(model);
-				$("#" + selectId, el).append(optionsHTML);
+				optionsHTML += modelTemplate(model);
+				$("#" + selectId, el).append(modelTemplate(model));
 			}
 		});
 
@@ -151,7 +152,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		{
 			// execute the callback, passing parameters as
 			// necessary
-			callback(collection);
+			callback(collection, optionsHTML);
 		}
 	}
 
@@ -604,3 +605,29 @@ function agileWindowOrigin(){
 
 	return window.location.origin;
 }
+
+$(function(){
+    $( document ).ajaxError(function(event, jqXHR) {
+	   // Get response code and redirect to login page
+	   if(jqXHR.status && jqXHR.status == 401)
+	   	      handleAjaxError();
+	});
+});
+
+function handleAjaxError(){
+
+		var hash = window.location.hash;
+
+        try{
+            // Unregister all streams on server.
+			unregisterAll();
+        }catch(err){}
+		
+		// Unregister on SIP server.
+		sipUnRegister();
+		
+		// Firefox do not support window.location.origin, so protocol is explicitly added to host
+		window.location.href = window.location.protocol + "//" + window.location.host+"/login"+hash;
+
+}
+

@@ -302,10 +302,9 @@ public class ContactFilterUtil
 	return StringUtils.containsIgnoreCase(field, "_AGILE_CUSTOM_");
     }
 
-    public static List<Contact> getFilterContactsBySortKey(String sortKey, Integer page_count, String cursor)
-
+    public static List<Contact> getFilterContactsBySortKey(String sortKey, Integer page_count, String cursor, Type contactType)
     {
-	ContactFilter contact_filter = getFilterByType(Type.PERSON);
+	ContactFilter contact_filter = getFilterByType(contactType);
 
 	// Modification to sort based on company name. This is required as
 	// company name lower is saved in different field in text search
@@ -348,5 +347,4 @@ public class ContactFilterUtil
 	    return new ArrayList<Contact>();
 	}
     }
-
 }

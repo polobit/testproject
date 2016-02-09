@@ -257,7 +257,7 @@
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <!-- <div class="caption" style="margin-top:-8px"><i class="{{icons type}}"></i> ({{type}})</div> -->         
-                <div class="text-xs ">{{{subject}}} <span>({{task_property type}})</span></div>
+                <div class="text-xs ">{{subject}} <span>({{task_property type}})</span></div>
             </div>
         {{/if_entity}}
 
@@ -426,8 +426,8 @@
                 <div class="text-xs text-ellipsis" style="margin-top:-8px">Campaign - {{campaign_name}}</div>
 
             {{#if message}}
-                    <div class="text-xs text-ellipsis">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
-                        <div class="right" data="{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}"><a href="#" id="tl-log-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
+                    <div class="text-xs text-ellipsis">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{message}} {{/if_email_sent}}
+                        <div class="right" data="{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{message}} {{/if_email_sent}}"><a href="#" id="tl-log-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
                     </div>   
             {{/if}}        
             </div>
@@ -464,7 +464,7 @@
             {{#if message}}
                 <div>
 					<div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
-						<div><p>{{{message}}}</p></div>
+						<div><p>{{message}}</p></div>
 					</div>
                     <div class="right m-t-n" data="{{message}}">
 						<a href="#" id="tl-mail-popover"><i class="glyphicon glyphicon-plus-sign"></i></a>

@@ -24,13 +24,13 @@
 <script id="contact-view-sort-model-template" type="text/html">
 
 {{#if scope}}
-    <a class="sort-link sort-field pos-rlt" href="javascript:void(0);" data="{{search_key}}_AGILE_CUSTOM_{{field_type}}" type="custom">
+    <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="{{search_key}}_AGILE_CUSTOM_{{field_type}}" type="custom">
         {{field_label}}
         <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check {{selected}} {{#if selected}}{{else}}display-none{{/if}}" ></i> 
     </a>
     {{else}}
 
-    <a class="sort-link sort-field pos-rlt" href="javascript:void(0);" data="{{field_value}}">
+    <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="{{field_value}}">
         {{field_label}}
         <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check {{selected}} {{#if selected}}{{else}}display-none{{/if}}"></i> 
     </a>

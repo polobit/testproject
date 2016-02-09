@@ -35,7 +35,9 @@ var WorkflowsRouter = Backbone.Router
 				"workflow/completed-subscribers/:id" : "completedSubscribers", "workflow/removed-subscribers/:id" : "removedSubscribers",
 
 				"workflow/unsubscribed-subscribers/:id" : "unsubscribedSubscribers", "workflow/hardbounced-subscribers/:id" : "hardBouncedSubscribers",
-				"workflow/softbounced-subscribers/:id" : "softBouncedSubscribers", "workflow/spam-reported-subscribers/:id" : "spamReportedSubscribers"
+				"workflow/softbounced-subscribers/:id" : "softBouncedSubscribers", "workflow/spam-reported-subscribers/:id" : "spamReportedSubscribers",
+				// Added for Campaign sharing
+				"share-campaign/:c/:t" : "shareWorkflow"
 
 			},
 
@@ -1333,5 +1335,52 @@ var WorkflowsRouter = Backbone.Router
 					callback(); 		
 
 			},
-});
+			
+			shareWorkflow : function(sender_cid, sender_domain, workflow){
+				
+                this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
+					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
+					{	
+					}});
 
+                var workflowModal = new Workflow_Model_Events({
+							url : 'core/api/workflow', 
+							template : 'workflow-add',
+							isNew : 'true',
+							data : { "is_new" : true, "is_disabled" : false, "was_disabled" : false  },
+							postRenderCallback : function(el){
+								// Init SendVerify Email
+								send_verify_email(el);
+							}
+
+						});
+
+				// Get workflow template based on category and template name
+				var workflow_template_model = Backbone.Model.extend({
+
+					url : '/core/api/workflows/shareCampAPI?id='+sender_cid+'&senderDomain='+sender_domain
+				});
+
+				var model = new workflow_template_model();
+	
+        		var that = this;
+
+         		model.fetch({ success : function(data)
+		 			{
+						that.workflow_json = data.toJSON().rules;
+						console.log(data.toJSON().rules);
+//						workflowModal.save();
+//						that.workflow_list_view.collection.add(workflowModal);
+						$("#content").html(workflowModal.render().el);
+						App_Workflows.workflow_list_view.collection.remove();
+						
+	          		},
+
+	          		error:function(data){
+	          			$("#content").html(workflowModal.render().el);
+	          		}
+
+         		});		
+		
+			}
+});

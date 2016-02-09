@@ -170,6 +170,42 @@ function setupViews(cel, button_name) {
 	// });
 }
 
+
+var COMPANY_CUSTOM_SORT_VIEW = undefined;
+function setUpCompanySortFilters(el)
+{
+	if(COMPANY_CUSTOM_SORT_VIEW)
+	{
+		$("#contact-sorter", el).html(COMPANY_CUSTOM_SORT_VIEW.render(true).el);
+		//CUSTOM_SORT_VIEW.init();
+		//CUSTOM_SORT_VIEW.preSelectFields();
+		return;	
+	}
+
+	var view = COMPANY_SORT_FIELDS_VIEW.view();
+	COMPANY_CUSTOM_SORT_VIEW = new view ({
+		data : sort_company_configuration.getCompanySortableFields(),
+		templateKey : "contact-view-sort",
+		sortPrefsName : "company_sort_field",
+		individual_tag_name : "li",
+		sort_collection : false,
+		postRenderCallback: function(el)
+		{
+			COMPANY_CUSTOM_SORT_VIEW.postProcess();
+		}
+	});
+
+	
+	COMPANY_CUSTOM_SORT_VIEW.init();
+	$("#contact-sorter", el).html(COMPANY_CUSTOM_SORT_VIEW.render(true).el);
+	
+
+	getSearchableCustomFields("COMPANY", function(data){
+		COMPANY_CUSTOM_SORT_VIEW.collection.add(data);
+	})
+	
+}
+
 var CUSTOM_SORT_VIEW = undefined;
 function setUpContactSortFilters(el)
 {
@@ -185,6 +221,7 @@ function setUpContactSortFilters(el)
 	CUSTOM_SORT_VIEW = new view ({
 		data : sort_configuration.getContactSortableFields(),
 		templateKey : "contact-view-sort",
+		sortPrefsName : "sort_by_name",
 		individual_tag_name : "li",
 		sort_collection : false,
 		postRenderCallback: function(el)
@@ -204,9 +241,16 @@ function setUpContactSortFilters(el)
 	
 }
 
-function addCustomFieldToSearch(base_model)
+function addCustomFieldToSearch(base_model, scope)
 {
-	if(!CUSTOM_SORT_VIEW)
+	var sort_view;
+	if(scope == "COMPANY"){
+		sort_view = COMPANY_CUSTOM_SORT_VIEW;
+	}else{
+		sort_view = CUSTOM_SORT_VIEW;
+	}
+
+	if(!sort_view)
 		return;
 
 	if(!base_model)
@@ -215,46 +259,58 @@ function addCustomFieldToSearch(base_model)
 	if(!base_model.get("searchable"))
 		return;
 
-	CUSTOM_SORT_VIEW.collection.add(base_model);
+	sort_view.collection.add(base_model);
 }
 
-function updateModel (base_model)
+function updateCustomFieldToSearch(base_model, scope)
 {
-	if(!CUSTOM_SORT_VIEW)
+	var sort_view;
+	if(scope == "COMPANY"){
+		sort_view = COMPANY_CUSTOM_SORT_VIEW;
+	}else{
+		sort_view = CUSTOM_SORT_VIEW;
+	}
+
+	if(!sort_view)
 		return;
 
 	if(!base_model)
 		return;
 
 	var searchable  = base_model.get("searchable");
-	var model = CUSTOM_SORT_VIEW.collection.get(base_model.get('id'));
 
-
-	if(!model)
-		return;
-
-	if(!searchable)
-		removeCustomFieldFromSortOptions(base_model);
+	if(searchable){
+		addCustomFieldToSearch(base_model, scope);
+	}else{
+		removeCustomFieldFromSortOptions(base_model, scope);
+	}
 }
 
-function removeCustomFieldFromSortOptions(base_model)
+function removeCustomFieldFromSortOptions(base_model, scope)
 {
+	var sort_view;
+	if(scope == "COMPANY"){
+		sort_view = COMPANY_CUSTOM_SORT_VIEW;
+	}else{
+		sort_view = CUSTOM_SORT_VIEW;
+	}
+	
 	if(!base_model)
 		return;
 
-	if(!base_model.get("searchable"))
-		return;
+	// if(!base_model.get("searchable"))
+	// 	return;
 
-	if(!CUSTOM_SORT_VIEW)
+	if(!sort_view)
 		return;
 	
-	var model = CUSTOM_SORT_VIEW.collection.get(base_model.get('id'));
+	var model = sort_view.collection.get(base_model.get('id'));
 
 	if(model)
 	{
-		CUSTOM_SORT_VIEW.collection.remove(base_model.get('id'));
+		sort_view.collection.remove(base_model.get('id'));
 
-		CUSTOM_SORT_VIEW.render(true);
+		sort_view.render(true);
 	}
 }
 

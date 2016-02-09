@@ -41,7 +41,7 @@ contact_sort_configuration.SORT_FIELDS_VIEW = function(sort_options, custom_opti
 			this.options.sort_options = _.defaults(sort_defaults, this.options.sort_options);
 			
 			// Gets sort key from local storage
-			var sort_key = _agile_get_prefs(this.options.sort_options.sortPrefsName);
+			var sort_key = _agile_get_prefs(this.options.sortPrefsName);
 
 			if(this.options.sort_options.selectedModel)	
 				this.setPropertiesByModel(this.options.sort_options.selectedModel);
