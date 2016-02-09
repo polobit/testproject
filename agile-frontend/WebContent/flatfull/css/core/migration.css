@@ -1900,6 +1900,9 @@ opacity: 1;
 #prefs-tabs-content .nav li {
 opacity: 0.4;
 }
+.email-mobile-view-templates tr th:first-child {
+width: 1%!important;
+}
 }
 
 @media all and (min-width: 768px) {
