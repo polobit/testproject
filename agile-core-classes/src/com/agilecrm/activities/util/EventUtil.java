@@ -165,10 +165,14 @@ public class EventUtil
     {
 	try
 	{
-	    if (ownerId != null)
-		return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end)
-			.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
-	    return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end).list();
+	    if (ownerId != null){
+	    	Query<Event> q =  dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end)
+	    			.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId));
+	    	return dao.fetchAll(q);
+	    }
+		
+	    Query<Event> q =  dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end);
+	    return dao.fetchAll(q);
 	}
 	catch (Exception e)
 	{
@@ -254,7 +258,7 @@ public class EventUtil
 	Query<Event> query = dao.ofy().query(Event.class)
 		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("start");
 
-	return query.list();
+	return dao.fetchAll(query);
     }
 
     /**

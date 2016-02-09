@@ -313,8 +313,7 @@ public abstract class ContactSyncService implements IContactSyncService
     private Contact saveContact(Contact contact)
     {
 	addTagToContact(contact);
-	// Temporary fix for stripe sync merging contacts
-	if (ContactUtil.isDuplicateContact(contact) && prefs.type != null && !prefs.type.equals(Type.STRIPE))
+	if (ContactUtil.isDuplicateContact(contact))
 	{
 	    contact = ContactUtil.mergeContactFields(contact);
 

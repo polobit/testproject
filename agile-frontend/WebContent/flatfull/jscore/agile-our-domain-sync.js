@@ -23,7 +23,7 @@ function our_domain_set_account() {
 		_agile.set_account('7n7762stfek4hj61jnpce7uedi', 'local');
 
 	else
-		_agile.set_account('td2h2iv4njd4mbalruce18q7n4', 'our');
+		_agile.set_account('fdpa0sc7i1putehsp8ajh81efh', 'our');
 
 	_agile.set_email(CURRENT_DOMAIN_USER['email']);
 
@@ -662,5 +662,38 @@ function add_plan_change_info_as_note_to_owner(cus_email, plan_type, plan_id, qu
 			callback(data);
 
 	}, cus_email);
+
+}
+
+function update_contact_in_our_domain(user_email, response, callback){
+
+	console.log("update_contact_in_our_domain");
+
+	if(!response || !response.email){
+		processCallback(callback);
+		return;
+	}
+
+	try{
+
+		if (CURRENT_DOMAIN_USER.email != user_email)
+		   _agile.set_email(user_email);
+
+		_agile.update_contact({
+		    "email": response.email
+		}, {
+		    success: function (data) {
+		        console.log("success");
+		        processCallback(callback);
+		    },
+		    error: function (data) {
+		        console.log("error");
+		        processCallback(callback);
+		    }
+		});
+
+	}catch(e){
+		processCallback(callback);
+	}
 
 }

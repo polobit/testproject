@@ -111,7 +111,7 @@ public class UserAccessControlUtil
 	System.out.println(userAccess.getCurrentUserScopes());
 	if (!userAccess.canRead())
 	{
-	    if (className.equals("Contact"))
+	    if (className.equals("Contact") || className.equals("Event"))
 		userAccess.modifyQuery(q);
 	    else
 		CRUDOperation.READ.throwException(className);

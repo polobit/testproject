@@ -10,7 +10,15 @@ function startMakingCollection(criteria, pending)
 		  // Display list view
 		  displayListView();
 		  return;
-		}	
+		}
+
+	// Check for calendar view 
+	if(criteria == "CALENDAR")
+	{	
+	  // Display calendar view
+	  displayCalendarView();
+	  return;
+	}		
 	
 	// Hide list view and show column view with loading img
 	hideListViewAndShowLoading();

@@ -2,6 +2,20 @@
 <div class="custom-animated custom-fadeInUp hide-rainbow">
 <div class="wrapper-md">
 <div class="row">
+
+<!-- IE conditional check-->
+{{#is_IE_browser}}
+<div class="col-md-6 col-md-offset-3">
+<div class="alert alert-warning" role="alert"> <strong>Warning!</strong> 
+<div class="error-details">
+                    We&#39;re sorry. This browser may not support this feature.<br>
+To get the best experience, we recommend you to use <a href="https://support.google.com/chrome/answer/95346?hl=en">Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/features">Firefox</a> or <a href="http://support.apple.com/kb/dl1531">Safari</a> (Mac only).
+                </div>
+</div>
+</div> {{else}} 
+{{/is_IE_browser}}
+<!-- End of IE conditional check-->
+
     <div class="col-md-12">
         <div class="panel wrapper campaign-new-add">
             <form id="workflowform" >
@@ -44,6 +58,11 @@
 														<i class="fa fa-clipboard" style="width: 20px;"></i> Create a Copy
 													</a>
 												</li>
+												<li>
+													<a href="javascript:void(0)" id="share-campaign" onclick="shareCampaign()" class="share-Campaign">
+														<i class="fa fa-share-alt" style="width: 20px;"></i> Share with
+													</a>
+												</li>
 											</ul>
                            				</div>
 									<a href="#" data = "{{is_disabled}}" class="btn btn-default btn-sm m-r-sm btn-addon pull-right is-disabled-top" style="color:white">
@@ -65,12 +84,12 @@
 					<br />
                     <br />
                     <div>
-						<a href="#" class="text-info" id="workflow-unsubscribe-option" data-toggle="collapse" data-target="#workflow-unsubscribe-block">
-							<span><i class="icon-plus"></i></span> Manage Unsubscription
+						<a href="#" class="text-info" id="workflow-unsubscribe-option">
+							<i class="icon-plus"></i> Manage Unsubscription
 						</a>
 					</div>
 					<br/>
-					<div class="collapse" id="workflow-unsubscribe-block">
+					<div id="workflow-unsubscribe-block" style="display:none">
 						<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
@@ -145,6 +164,11 @@
 												<li>
 													<a href="#" id="duplicate-workflow-top">
 														<i class="fa fa-clipboard"></i> Create a Copy
+													</a>
+												</li>
+												<li>
+													<a href="javascript:void(0)" id="share-campaign" onclick="shareCampaign()" class="share-Campaign">
+														<i class="fa fa-share-alt" style="width: 20px;"></i> Share with
 													</a>
 												</li>
 											</ul>

@@ -95,3 +95,75 @@ function agile_createCookieInAllAgileSubdomains(name, value, days)
 function agile_delete_cookie(name){
 	agile_create_cookie(name, "", -1);
 }
+
+/**
+ * stores data with given name in local storage or cookies.
+ * 
+ * @param name
+ *            name of the variable example : agile-email etc.
+ * @param value
+ *            value of the variable example: agilecrm@example.com
+ * @param days
+ *            time in days before the variable expires example : 15*365
+ * @returns cookie
+ */
+function agile_store_data(name, value, days)
+{
+	if(typeof(Storage) !== "undefined") {
+		if(agile_islocalStorageHasSpace()){
+			localStorage.setItem(name, value);
+		}
+	} else {
+	    agile_create_cookie(name, value, days);
+	}
+}
+
+/**
+ * Used to read a particular variable's value from local storage
+ * 
+ * @param name
+ *            the name of the cookie variable to read example :
+ *            agile-crm-session_start_time
+ * @returns value of the cookie variable else it returns null
+ */
+function agile_read_data(name)
+{
+	if(typeof(Storage) !== "undefined") {
+		return localStorage.getItem(name);
+	} else {
+	    return agile_read_cookie(name);
+	}
+}
+
+/**
+ * Used to delete a variable from storage
+ * 
+ * @param name
+ *            name of the variable to be removed from the cookie
+ */
+function agile_erase_data(name)
+{
+
+	if(typeof(Storage) !== "undefined") {
+		return localStorage.removeItem(name);
+	} else {
+	    return agile_delete_cookie(name);
+	}
+}
+
+/**
+ * This function will check the space is available in the local storage.
+ */
+function agile_islocalStorageHasSpace(){
+	var hasSpace = false;
+	var fixedLimit = 1242597;
+	var localStorageSize = 1024 * 1024 * 5 - unescape(encodeURIComponent(JSON.stringify(localStorage))).length;
+	if(localStorageSize){
+		if(localStorageSize > fixedLimit){
+			hasSpace = true;
+		}
+	}else{
+		hasSpace = true;
+	}
+	return hasSpace;
+}

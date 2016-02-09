@@ -144,7 +144,7 @@ function notySetup(type, message, position, noty_timeout, clickCallback) {
 	    $.noty.closeAll()
 
 		var n = noty({
-			text : message,
+			text : Handlebars.compile("{{message}}")({message : message}),
 			layout : position,
 			type : type,
 			animation : {

@@ -85,7 +85,7 @@ public class Globals
     // public static final String STRIPE_LIVE_CLIENT_ID =
     // "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
-    public static final String STRIPE_LIVE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
+    public static final String STRIPE_LIVE_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
     public static final String STRIPE_TEST_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
     public static final String STRIPE_LIVE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
@@ -200,5 +200,5 @@ public class Globals
     // Sandbox Keys Paypal.
 	//	public static final String PAYPAL_CLIENT_ID = "AdinLitMf9_3K9nwxTQEs5KyBom16l6EuR4FHy8vefth7Lup57d07e80Rz1tbt6gABT-l9jgEykvOVhr";
 	//	public static final String PAYPAL_SECRET_ID = "EGyp6P-kmdaDsoNUK2F2nYs5-RifRg3nhPJkmzai-TRqpRmTpj3lm4NG6pw_B08IJSdpv5pfGfWQF1Bb";
-
+	public static final String GRAVATAR_SECURE_DEFAULT_IMAGE_URL = "https://clickdesk.agilecrm.com/flatfull/images/flatfull/user-default.jpg";
 }

@@ -826,8 +826,27 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 
 		// Check old hash and call same function
-		if(!force_reload && Agile_Old_Hash && Agile_Old_Hash.indexOf("contact/") > -1){
+
+		if(!force_reload && Agile_Old_Hash && Agile_Old_Hash.indexOf("contact/") > -1)
+		{
+              var contactId = Agile_Old_Hash.split("/")[1];
+
+             
+             // Gets the domain name from the contacts of the custom fields.
+               var currentContactJson = App_Contacts.contactDetailView.model.toJSON();
+               if(contactId == currentContactJson.id){
+					var properties = currentContactJson.properties;
+					var email;
+					$.each(properties,function(id, obj){
+						if(obj.name == "email"){
+							email = obj.value;
+							return false;
+						}
+					});
+			   }
               
+              this.sendEmail(email, subject, body, cc, bcc, true);
+              return;
 		}
 
 		var model = {};
@@ -925,11 +944,13 @@ var ContactsRouter = Backbone.Router.extend({
 					if(id.indexOf('<') == -1 && id.indexOf('>') == -1)
 						data = name + ' <' + id.trim() + '>';
 
-					$('#to', el)
+					var template = Handlebars.compile('<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="{{name}}"><a href="#contact/{{id}}">{{name}}</a><a class="close" id="remove_tag">&times</a></li>');
+
+				 	// Adds contact name to tags ul as li element
+				 	$('#to', el)
 							.closest("div.controls")
 							.find(".tags")
-							.append(
-									'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+							.append(template({name : data, id : model.id}));
 				}
 				else
 					$("#emailForm", el).find('input[name="to"]').val(id);

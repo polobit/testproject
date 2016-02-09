@@ -355,6 +355,9 @@ function initializeSubscriptionListeners()
 
 				var quantity = $("#user_quantity").val();
 				var cost = $("#users_total_cost").text();
+				var credit = $("#credit_amount").text();
+				if(credit == "")
+					credit = 0;
 				var plan = $("#plan_type").val();
 				if("pro" == plan)
 					plan = "enterprise";
@@ -436,6 +439,11 @@ function initializeSubscriptionListeners()
 				plan_json.new_signup = is_new_signup_payment();
 				plan_json.price = update_price();
 				plan_json.cost = (cost * months).toFixed(2);
+				if(credit > 0){
+					plan_json.costWithCredit = plan_json.cost;
+					plan_json.credit = credit;
+					plan_json.cost = (plan_json.cost - credit).toFixed(2);
+				}
 				plan_json.months = months;
 				plan_json.plan = plan;
 				plan_json.plan_type = plan.toUpperCase() + "_" + cycle.toUpperCase();
@@ -517,7 +525,7 @@ function initializeSubscriptionListeners()
 							  	{
 							  		plan_json.unUsedCost = data.lines.data[0].amount*(-1)/100;
 							  		plan_json.remainingCost = data.lines.data[1].amount/100;
-							  		plan_json.cost = (plan_json.remainingCost - plan_json.unUsedCost).toFixed(2);
+							  		plan_json.cost = (plan_json.remainingCost - plan_json.unUsedCost - credit).toFixed(2);
 							  	}else
 							  	{
 							  		plan_json.unUsedCost = undefined;

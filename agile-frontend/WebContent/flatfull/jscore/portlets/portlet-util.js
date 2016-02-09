@@ -27,6 +27,16 @@ var portlet_utility = {
 		$("#deals", elData).find(
 				'option[value=' + base_model.get("settings").deals + ']').attr(
 				"selected", "selected");
+		if(base_model.get("name") == "Deals Funnel" && base_model.get("settings")["split-by"]) {
+			$("#deals-funnel-split-by", elData).find(
+					'option[value=' + base_model.get("settings")["split-by"] + ']').attr(
+					"selected", "selected");
+		}
+		else if(base_model.get("name") == "Deals Funnel") {
+			$("#deals-funnel-split-by", elData).find(
+					'option[value=revenue]').attr(
+					"selected", "selected");
+		}
 	},
 
 	/**
@@ -185,6 +195,12 @@ var portlet_utility = {
 		}
 		else if (portlet_type == "DEALS" && p_name == "Deal Goals") {
 			json['duration'] = "this-month";
+		} else if (portlet_type == "DEALS" && p_name == "Incoming Deals") {
+			json['type'] = "deals";
+			json['frequency'] = "daily";
+			json['duration'] = "1-week";
+		} else if (portlet_type == "DEALS" && p_name == "Lost Deal Analysis") {
+			json['duration'] = "1-week";
 		}
 		return json;
 	},
@@ -305,6 +321,8 @@ var portlet_utility = {
 			"User Activities" : "portlets-activites",
 			"Campaign stats" : "portlets-campaign-stats-report",
 			"Deal Goals" : "portlets-deal-goals",
+			"Incoming Deals" : "portlets-incoming-deals",
+			"Lost Deal Analysis" : "portlets-lost-deal-analysis",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
@@ -469,6 +487,7 @@ var portlet_utility = {
 						postRenderCallback : function(p_el) {
 							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 								$(".time-ago", p_el).timeago();
+								initializePortletsListeners();
 							});
 							portlet_utility.addWidgetToGridster(base_model);
 						}
@@ -502,16 +521,24 @@ var portlet_utility = {
 			break;
 		}
 		case "Pending Deals": {
+			var options="";
+			if (base_model.get('settings').track != undefined
+					&& base_model.get('settings').track != "anyTrack") 
+				options+='&track='+base_model.get('settings').track;
+			if (base_model.get('settings').milestone != undefined
+					&& base_model.get('settings').milestone != "anyMilestone")
+				options+='&milestone='+base_model.get('settings').milestone;
 			App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View(
 					{
 						url : '/core/api/portlets/pending-deals?deals='
-								+ base_model.get('settings').deals,
+								+ base_model.get('settings').deals+options,
 						templateKey : 'portlets-opportunities',
 						sort_collection : false,
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
 							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 								$(".time-ago", p_el).timeago();
+								initializePortletsListeners();
 							});
 							portlet_utility.addWidgetToGridster(base_model);
 						}
@@ -561,6 +588,7 @@ var portlet_utility = {
 											.getStartAndEndDatesOnDue(start_date_str),
 									portlet_utility
 											.getStartAndEndDatesOnDue(end_date_str));
+							initializePortletsListeners();
 						}
 					});
 			portlet_utility.renderPortletsInnerCollection(
@@ -584,6 +612,7 @@ var portlet_utility = {
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
 							portlet_utility.addWidgetToGridster(base_model);
+							initializePortletsListeners();
 						}
 					});
 			portlet_utility.renderPortletsInnerCollection(
@@ -1038,17 +1067,36 @@ var portlet_utility = {
 									.html(
 											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
+			var emailsSentCount = 0;
+			if (_agile_get_prefs('dashboard_campaign_count_'+CURRENT_DOMAIN_USER.id)) {
+				emailsSentCount = _agile_get_prefs('dashboard_campaign_count_'+CURRENT_DOMAIN_USER.id);
+			}
+			that.find('#emails-sent-count').text(portlet_utility.getNumberWithCommasForPortlets(emailsSentCount));
+			that.find('#emails-sent-label').text("Campaign emails sent");
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
 							campaignEmailsSentsurl,
 							function(data) {
-								that
+								if(emailsSentCount > data["emailsSentCount"]) {
+									that
 										.find('#emails-sent-count')
 										.text(
 												portlet_utility
 														.getNumberWithCommasForPortlets(data["emailsSentCount"]));
+								}
+								else {
+									that.find('#emails-sent-count')
+									  .prop('number', emailsSentCount)
+									  .animateNumber(
+									    {
+									      number: data["emailsSentCount"]
+									    },
+									    2000
+									  );
+								}
 								that.find('#emails-sent-label').text(
 										"Campaign emails sent");
+								_agile_set_prefs('dashboard_campaign_count_'+CURRENT_DOMAIN_USER.id, data["emailsSentCount"]);
 							});
 			setPortletContentHeight(base_model);
 			break;
@@ -1119,6 +1167,61 @@ var portlet_utility = {
 									portlet_utility.getNumberWithCommasForPortlets(data["goalAmount"])+' Goals');
 									portlet_graph_data_utility.dealGoalsGraphData(selector,data,column_position,row_position);
 							});
+			setPortletContentHeight(base_model);
+			break;
+		}
+		case "Incoming Deals": {
+			var owner_id = 0;
+			if (base_model.get('settings').owner) {
+				owner_id = base_model.get('settings').owner;
+			}
+			var url = 'core/api/opportunity/details/'
+					+ owner_id
+					+ '?min='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ '&max='
+					+ (portlet_utility.getStartAndEndDatesOnDue(end_date_str) - 1)
+					+ '&frequency='
+					+ base_model.get('settings').frequency
+					+ '&type='
+					+ base_model.get('settings').type;
+			portlet_graph_data_utility.incomingDealsGraphData(base_model, selector, url);
+			setPortletContentHeight(base_model);
+			break;
+		}
+		case "Lost Deal Analysis": {
+			var owner_id = 0;
+			var track_id = 0;
+			var source_id = 0;
+			if (base_model.get('settings').owner) {
+				owner_id = base_model.get('settings').owner;
+			}
+			if (base_model.get('settings').track) {
+				track_id = base_model.get('settings').track;
+			}
+			if (base_model.get('settings').source) {
+				source_id = base_model.get('settings').source;
+			}
+			var url = 'core/api/opportunity/details/'
+					+ owner_id + '/'
+					+ track_id + '/'
+					+ source_id
+					+ '?min='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ '&max='
+					+ (portlet_utility.getStartAndEndDatesOnDue(end_date_str) - 1);
+
+			var sizey = parseInt($('#' + selector).parent().attr("data-sizey"));
+			var topPos = 50 * sizey;
+			if (sizey == 2 || sizey == 3)
+				topPos += 50;
+			$('#' + selector)
+					.html(
+							"<div class='text-center v-middle opa-half' style='margin-top:"
+									+ topPos
+									+ "px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+			$("#"+selector).addClass("lost-deal-analysis-portlet-pie");
+			pieforReports(url, selector, '', undefined, true);
 			setPortletContentHeight(base_model);
 			break;
 		}
@@ -1256,6 +1359,80 @@ var portlet_utility = {
 			$("#deals", elData).find(
 					'option[value=' + base_model.get("settings").deals + ']')
 					.attr("selected", "selected");
+			if (base_model.get('settings').track == "anyTrack") {
+				options += '<option value="anyTrack" selected="selected">Any</option>';
+			} else {
+				options += '<option value="anyTrack">Any</option>';
+			}
+			$.ajax({
+				type : 'GET',
+				url : '/core/api/milestone/pipelines',
+				dataType : 'json',
+				success : function(data) {
+					$.each(data, function(index, trackObj) {
+						if (base_model.get('settings').track == trackObj.id)
+							options += "<option value=" + trackObj.id
+									+ " selected='selected'>" + trackObj.name
+									+ "</option>";
+						else
+							options += "<option value=" + trackObj.id + ">"
+									+ trackObj.name + "</option>";
+					});
+					$('#track', elData).html(options);
+					$('.loading-img').hide();
+					var track = $('#track', elData).val();
+		if (track!='anyTrack')
+		{
+			
+			$.ajax({
+				type : 'GET',
+				url : '/core/api/milestone/'+track,
+				dataType : 'json',
+				success : function(data) {
+					var milestonesList=data.milestones.split(",");
+					var lost=data.lost_milestone;
+					var won= data.won_milestone;
+					$('#milestone').html('');
+					if(milestonesList.length > 1)
+					{
+						$('#milestone', elData).html('<option value="anyMilestone">Any</option>');
+					}
+					$.each(milestonesList, function(index, milestone){
+						if(lost!=null && won!=null){
+							if(!(milestone==lost) && !(milestone==won) )
+							
+						$('#milestone', elData).append('<option value="'+milestone+'">'+milestone+'</option>');
+					}
+						else
+						{
+							if(!(milestone=='Won') && !(milestone=='Lost') )
+							
+						$('#milestone', elData).append('<option value="'+milestone+'">'+milestone+'</option>');
+						}
+					});
+					if(base_model.get('settings').milestone && track == base_model.get('settings').track)
+									{
+										$('#milestone',elData).find('option[value="'+base_model.get('settings').milestone+'"]').attr("selected", "selected");
+									}
+				}
+			});
+		}
+		else
+		{
+			$('#milestone', elData).html('<option value="anyMilestone">Any</option>');
+		}
+
+				}
+			});
+	
+			/*if (base_model.get('settings').milestone == "anyMilestone") {
+				options += '<option value="anyMilestone" selected="selected">Any</option>';
+			} else {
+				options += '<option value="anyMilestone">Any</option>';
+			}
+			$("#milestone", elData).find(
+					'option[value=' + base_model.get("settings").milestone + ']')
+					.attr("selected", "selected");*/
 			break;
 		}
 		case "Deals By Milestone": {
@@ -1562,6 +1739,34 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+			break;
+		}
+		case "Incoming Deals": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsIncomingDealsSettingsModal");
+			elData = $('#portletsIncomingDealsSettingsModal');
+			$("#duration-incoming-deals", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			$("#split-by-incoming-deals", elData).find('option[value='+ base_model.get("settings")["type"] + ']').attr("selected", "selected");
+			$("#frequency-incoming-deals", elData).find('option[value='+ base_model.get("settings")["frequency"] + ']').attr("selected", "selected");
+			portlet_utility.setOwners("owner", base_model, elData);
+			break;
+		}
+		case "Lost Deal Analysis": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsLostDealAnalysisSettingsModal");
+			elData = $('#portletsLostDealAnalysisSettingsModal');
+			$("#duration-lost-deal-analysis", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			portlet_utility.setOwners("owner-lost-deal-analysis", base_model, elData);
+			portlet_utility.setTracks("track-lost-deal-analysis", base_model, elData);
+			portlet_utility.setSources("source-lost-deal-analysis", base_model, elData);
 			break;
 		}
 		}
@@ -1968,6 +2173,20 @@ var portlet_utility = {
 			d.setDate(1);
 		}
 
+		// last year start
+		if (duration == "last-year-start") {
+			d.setFullYear(d.getFullYear() - 1);
+			d.setMonth(d.getMonth() - d.getMonth());
+			d.setDate(1);
+		}
+
+		// last year end
+		if (duration == "last-year-end") {
+			d.setFullYear(d.getFullYear());
+			d.setMonth(d.getMonth() - d.getMonth());
+			d.setDate(1);
+		}
+
 		return (getGMTTimeFromDate(d) / 1000);
 	},
 
@@ -2059,5 +2278,54 @@ var portlet_utility = {
 				chart.legend.render();	
 			}catch(e){}
 		}
+	},
+
+	/**
+	 * Set owners data in incoming deals and lost deal analysis portlet
+	 * settings.
+	 */
+	setOwners : function(ele_id, base_model, elData) {
+		var options = '<option value="">All</option>';
+		$.ajax({
+			type : 'GET',
+			url : '/core/api/users',
+			dataType : 'json',
+			success : function(data) {
+				$.each(data, function(index, domainUser) {
+					options += "<option value=" + domainUser.id + ">"
+								+ domainUser.name + "</option>";
+				});
+				$('#' + ele_id, elData).html(options);
+				$('#' + ele_id, elData).find("option[value="+base_model.get("settings")["owner"]+"]").attr("selected", "selected");
+				$('.loading-img').hide();
+			}
+		});
+	},
+
+	setSources : function(ele_id, base_model, elData) {
+		var sources = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_SOURCE', sort_collection: false});
+		sources.collection.fetch({
+			success: function(data){
+				var jsonModel = data.toJSON();
+				var html =  '<option class="default-select" value="">All Sources</option>' + 
+							'<option class="default-select" value="1">Unknown</option>';
+				
+				$.each(jsonModel,function(index,dealSource){
+					html+='<option class="default-select" value="'+dealSource.id+'">'+dealSource.label+'</option>';
+				});
+				$('#'+ele_id, elData).html(html);
+				$('#'+ele_id, elData).find('option[value='+base_model.get("settings")["source"]+']').attr("selected", "selected");
+
+				// Hide loading bar
+				hideTransitionBar();
+			}
+		});
+	},
+
+	setTracks : function(ele_id, base_model, elData) {
+		fillSelect(ele_id, "/core/api/milestone/pipelines", undefined, function()
+		{
+			$('#'+ele_id, elData).find('option[value='+base_model.get("settings")["track"]+']').attr("selected", "selected");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
 	}
 };

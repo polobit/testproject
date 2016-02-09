@@ -111,11 +111,11 @@
 <div class="wrapper-sm">
 {{#check_length message "140"}}
 		<div class="ellipsis-multi-line collapse-25 word-break p-n overflow-hidden text-base" title="{{message}} " style="height:110px;line-height:160%;">
-			{{{message}}}
+			{{message}}
 		</div>
 {{else}}	
 		<div class="word-break p-n text-base" style="line-height:160%;">
-			{{{message}}}
+			{{message}}
 		</div>	
 {{/check_length}}
 </div>
@@ -125,7 +125,7 @@
 <div class="m-t">
 	Xero is an online accounting software for small business - Explore invoicing, reconciliation anytime, anywhere.
 	<div class="m-t text-center">	
-	<a class="btn btn-sm btn-primary m-t-sm" href="{{url}}">Link Your Xero</a>
+	<a class="btn btn-sm btn-primary m-t-sm" href="{{url}}">Link your Xero</a>
 	</div>
 </div>
 </script>
@@ -133,7 +133,7 @@
 
 <script id="xero-profile-addcontact-template" type="text/html">
 <div class="wrapper-sm">
-		<div>{{{message}}}</div>
+		<div>{{message}}</div>
 		<a  id="xero_add_contact" class="block m-t-sm btn btn-sm btn-default">Add Contact</a>
 	</div>
 </script>

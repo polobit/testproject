@@ -376,9 +376,10 @@ $(function(){
 				// Show add note modal with current contact from call
 				// noty
 				var el = $("#noteForm");
-				$('.tags', el)
-						.html(
-								'<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="' + CALL_CAMPAIGN.current_contact.id + '">' + CALL_CAMPAIGN.current_contact_name + '</li>');
+				var template = Handlebars.compile('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="{{id}}">{{name}}</li>');
+			 	// Adds contact name to tags ul as li element
+				$('.tags',el).html(template({name : CALL_CAMPAIGN.current_contact_name, id : CALL_CAMPAIGN.current_contact.id}));
+
 				$("#noteForm").find("#description").focus();
 				$('#noteModal').modal('show');
 				agile_type_ahead("note_related_to", el, contacts_typeahead);
