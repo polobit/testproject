@@ -211,12 +211,6 @@ public class AgileForm extends HttpServlet
 	    properties.add(new ContactField(Contact.ADDRESS, addressJson.toString(), null));
 	
 	
-	Iterator<String> k=formJson.keys();
-	while(k.hasNext()){
-	   String key = (String)k.next();
-	   if(!formJson.getString(key).isEmpty() && key.contains("utm"))	 
-			   properties.add(buildCustomContactProperty(key.substring(7), formJson.getString(key), null));
-	}
 	return updateContactPropList(contact.properties, properties);
     }
 
