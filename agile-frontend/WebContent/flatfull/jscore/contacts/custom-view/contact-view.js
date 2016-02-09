@@ -201,7 +201,7 @@ function setUpCompanySortFilters(el)
 	
 
 	getSearchableCustomFields("COMPANY", function(data){
-		COMPANY_CUSTOM_SORT_VIEW.collection.add(data);
+		COMPANY_CUSTOM_SORT_VIEW.addAll(data);
 	})
 	
 }
@@ -236,7 +236,7 @@ function setUpContactSortFilters(el)
 	
 
 	getSearchableCustomFields("CONTACT", function(data){
-		CUSTOM_SORT_VIEW.collection.add(data);
+		CUSTOM_SORT_VIEW.addAll(data);
 	})
 	
 }
