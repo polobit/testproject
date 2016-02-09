@@ -685,13 +685,6 @@ if(!HANDLEBARS_PRECOMPILATION){
     });
     downloadTemplate("contact-view.js", function(){             
     });
-
-    try{
-      var sig = CURRENT_USER_PREFS.signature;
-      sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-
-      CURRENT_USER_PREFS.signature = sig;
-    }catch(e){}
 }
  
 // Remove the loadinng
@@ -708,6 +701,13 @@ head.ready(["core"], function(){
 	//Resting the variables.
 	<%  session.removeAttribute("widgetMsgType");
 	session.removeAttribute("widgetMsg"); %>
+	
+	try{
+      var sig = CURRENT_USER_PREFS.signature;
+      sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+
+      CURRENT_USER_PREFS.signature = sig;
+	}catch(e){}
 });
 
 });    
