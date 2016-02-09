@@ -306,11 +306,17 @@ function removeCustomFieldFromSortOptions(base_model, scope)
 	
 	var model = sort_view.collection.get(base_model.get('id'));
 
-	if(model)
-	{
+	if(model){
 		sort_view.collection.remove(base_model.get('id'));
-
 		sort_view.render(true);
+		// if(scope == "COMPANY"){
+		// 	var selectedCompanyFilter = _agile_get_prefs('company_sort_field');
+		// 	var currentField = model.attributes.search_key + "_AGILE_CUSTOM_"+ model.attributes.field_type;
+		// 	if(selectedCompanyFilter == selectedCompanyFilter){
+		// 		_agile_set_prefs('company_sort_field', "-created_time");
+		// 	}
+		// }
+		
 	}
 }
 
