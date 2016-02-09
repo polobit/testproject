@@ -1898,6 +1898,19 @@ var portlet_utility = {
 			return value.toFixed(2).toString().replace(
 					/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
 	},
+	/**
+	 * Get the number with english number format (ex : 782,345,32.32)
+	 */
+	getNumberWithCommasAndDecimalsForPortlets : function(value) {
+
+		value = parseFloat(value);
+		if (value == 0)
+			return value;
+
+		if (value)
+			return value.toFixed(2).toString().replace(
+					/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
+	},
 
 	/**
 	 * Get the time format in (h m s) by passing seconds

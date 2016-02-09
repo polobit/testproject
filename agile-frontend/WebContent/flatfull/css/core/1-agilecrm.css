@@ -940,6 +940,31 @@ content: "\f075"!important;
 }
 /*ending UI for deals new look*/
 
+/*Styling for deal color starts*/
+
+li.deal-color:after {
+    content: '';
+    display: block;
+    height: 40px;
+    position: absolute;
+    left: 0px;
+    top: 25%;
+    width: 2px;
+}
+li.deal-color{position:relative;}
+li.deal-color.YELLOW:after { background: yellow;}
+li.deal-color.RED:after { background: red;}
+li.deal-color.VIOLET:after { background: violet;}
+li.deal-color.INDIGO:after { background: indigo;}
+li.deal-color.BLUE:after { background: blue;}
+li.deal-color.GREEN:after { background: green;}
+li.deal-color.ORANGE:after { background: orange;}
+li.deal-color.BLACK:after { background: black;}
+li.deal-color.WHITE:after { background: white;}
+li.deal-color.GREY:after { background: grey;}
+
+/*Styling for deal color ends*/
+
 .milestone-main {
 	white-space: nowrap;
 	overflow: auto;
