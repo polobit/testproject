@@ -315,14 +315,14 @@
   </queue>
 
   <queue>
-    <name>company-update-</name>
+    <name>company-update-queue</name>
     <rate>10/s</rate>
     <bucket-size>50</bucket-size>
     <max-concurrent-requests>40</max-concurrent-requests>
     <retry-parameters>
-    <task-retry-limit>2</task-retry-limit>
+      <task-retry-limit>2</task-retry-limit>
+    </retry-parameters>
     <target>agile-normal-bulk</target>
-  </retry-parameters>
   </queue>
   
   <!-- pull queues -->
