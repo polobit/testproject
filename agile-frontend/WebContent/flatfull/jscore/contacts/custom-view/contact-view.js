@@ -236,7 +236,7 @@ function setUpContactSortFilters(el)
 	
 
 	getSearchableCustomFields("CONTACT", function(data){
-		CUSTOM_SORT_VIEW.collection.add(data);
+		CUSTOM_SORT_VIEW.addAll(data);
 	})
 	
 }

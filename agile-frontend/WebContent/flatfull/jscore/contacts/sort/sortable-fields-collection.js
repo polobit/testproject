@@ -19,6 +19,9 @@ contact_sort_configuration.SORT_FIELDS_VIEW = function(sort_options, custom_opti
 			selectedModel : undefined,
 			original_with_order : this.final_sort_key,
 		}
+		sort_defaults.built_key = sort_defaults.sortBy + sort_defaults.orderBy;
+
+		console.log(sort_defaults);
 
 	sort_defaults = _.defaults(sort_options, sort_defaults);
 	//custom_properties_defaults = _.defaults(custom_options, custom_properties_defaults);
@@ -43,6 +46,8 @@ contact_sort_configuration.SORT_FIELDS_VIEW = function(sort_options, custom_opti
 			// Gets sort key from local storage
 			var sort_key = _agile_get_prefs(this.options.sortPrefsName);
 
+			//var sort_key = "created_time";
+
 			if(this.options.sort_options.selectedModel)	
 				this.setPropertiesByModel(this.options.sort_options.selectedModel);
 			else
@@ -60,7 +65,7 @@ contact_sort_configuration.SORT_FIELDS_VIEW = function(sort_options, custom_opti
 		setDefaults : function()
 		{
 			this.options.sort_options = _.defaults(sort_defaults, this.options.sort_options);
-			this.setProperties(this.options.sort_options.final_sort_key);
+			this.setProperties(this.options.sort_options.built_key);
 		},
 		setSortOrder : function(sortBy)
 		{
@@ -121,10 +126,12 @@ contact_sort_configuration.SORT_FIELDS_VIEW = function(sort_options, custom_opti
 
 			}
 
+			clone_properties.is_custom_field = false;
 			if(orderBy.indexOf("_AGILE_CUSTOM_"))
 			{
 				var temp = orderBy.split("_AGILE_CUSTOM_");
 				orderBy = temp[0];
+				clone_properties.is_custom_field = true;
 			}
 			
 			clone_properties.orderBy = orderBy;
@@ -231,6 +238,27 @@ contact_sort_configuration.SORT_FIELDS_VIEW = function(sort_options, custom_opti
 
 			return false;
 		},
+		addAll : function(fields_list)
+		{
+			var foundField = false;
+			if(!fields_list || fields_list.length == 0)
+			{
+			//	foundField = this.options.sort_options.is_custom_field;
+			}
+			var collection = this.collection;
+			var that = this;
+			$.each(fields_list, function(index, value){
+				if(that.options.sort_options.is_custom_field && that.options.sort_options.orderBy == value["search_key"] && !foundField)
+					foundField = true;
+				collection.add(value);
+			});
+			
+			if(this.options.sort_options.is_custom_field && !foundField)
+			{
+				this.setDefaults();
+				this.sort_collection();
+			}
+		},	
 		appendItem : function(base_model, append)
 			{	
 				if(this.isMatchingEntity(base_model))
