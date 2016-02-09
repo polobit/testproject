@@ -89,16 +89,8 @@ var Base_Model_View = Backbone.View
 
 					if(response.status == 401)
 					{
-						var hash = window.location.hash;
-
-						// Unregister all streams on server.
-						unregisterAll();
-						
-						// Unregister on SIP server.
-						sipUnRegister();
-						
-						// Firefox do not support window.location.origin, so protocol is explicitly added to host
-						window.location.href = window.location.protocol + "//" + window.location.host+"/login"+hash;
+						// Redirect to login page
+						handleAjaxError();
 						return;
 					}
 				});

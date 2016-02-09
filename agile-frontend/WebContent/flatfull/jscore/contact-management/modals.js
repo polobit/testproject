@@ -27,10 +27,10 @@ $(function(){
 		{
 			if(forceCompany.doit==true)
 			{
-				$("#personForm [name='contact_company_id']")
-					.html('<li class="tag"  style="display: inline-block;" data="' + forceCompany.id + 
-						'"><a href="#contact/' + forceCompany.id +'" id="contact_company_autofilled">' + forceCompany.name + 
-						'</a></li>');
+
+				var template = Handlebars.compile('<li class="tag"  style="display: inline-block;" data="{{id}}"><a href="#contact/{{id}}" id="contact_company_autofilled">{{name}}</a></li>');
+
+			 	$("#personForm [name='contact_company_id']").html(template({name : forceCompany.name, id : forceCompany.id}));
 				$("#personForm #contact_company").hide();
 				//Force Company, disable input box so user can't enter a new Company.
 				
@@ -84,10 +84,9 @@ $(function(){
 				 */
 				var fxn_display_company=function(data,item)
 				{
-					$("#personForm [name='contact_company_id']")
-						.html('<li class="tag"  style="display: inline-block;" data="' + data + 
-							'"><a href="#contact/' + data +'" id="contact_company_autofilled">' + item + 
-							'</a><a class="close" id="remove_tag">&times</a></li>');
+					var template = Handlebars.compile('<li class="tag"  style="display: inline-block;" data="{{id}}"><a href="#contact/{{id}}" id="contact_company_autofilled">{{name}}</a></li>');
+
+			 		$("#personForm [name='contact_company_id']").html(template({name : item, id : data}));
 					$("#personForm #contact_company").hide();
 				}
 				agile_type_ahead("contact_company",$('#personForm'), contacts_typeahead,fxn_display_company,'type=COMPANY','<b>No Results</b> <br/> Will add a new one');
