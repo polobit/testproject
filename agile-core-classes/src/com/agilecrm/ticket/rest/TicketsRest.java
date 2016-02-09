@@ -916,11 +916,11 @@ public class TicketsRest
 
 	@GET
 	@Path("/delete/text-document")
-	public void deleteTextDocument(@QueryParam("id") Long ticketID)
+	public void deleteTextDocument(@QueryParam("id") String ticketID)
 	{
 		try
 		{
-			new TicketsDocument().delete(ticketID + "");
+			new TicketsDocument().delete(ticketID);
 		}
 		catch (Exception e)
 		{

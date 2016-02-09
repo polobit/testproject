@@ -59,7 +59,7 @@ public class TicketsDocument implements BuilderInterface
 
 			Document.Builder document = Document.newBuilder();
 
-			String ticketID = (ticket.id <= 9 ? "0" + ticket.id : ticket.id) + "";
+			String ticketID = ticket.id + "";
 
 			// Set ticket id as doc id
 			document.setId(ticketID);

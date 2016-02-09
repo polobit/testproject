@@ -1062,7 +1062,7 @@ var Tickets = {
 	updateDueDate : function(timeInMilli, callback){
 
 	  	var json = {};
-		json.due_time = timeInMilli;
+		json.due_time = Math.floor(timeInMilli);
 		json.id = App_Ticket_Module.ticketView.model.toJSON().id;
 
 		// Send req to trigger campaign
@@ -1113,6 +1113,8 @@ var Tickets = {
 
 					  	if(due_time)
 					  		$('#ticket_change_sla').val(new Date(due_time).format('mm/dd/yyyy'));
+					  	else
+					  		$('#ticket_change_sla').val('');
 
 					  	$('#ticket-modals').html($(template_ui));
 					  	$('#sla-error-modal').modal('show');
