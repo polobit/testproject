@@ -618,8 +618,10 @@ function handleAjaxError(){
 
 		var hash = window.location.hash;
 
-		// Unregister all streams on server.
-		unregisterAll();
+        try{
+            // Unregister all streams on server.
+			unregisterAll();
+        }catch(err){}
 		
 		// Unregister on SIP server.
 		sipUnRegister();
