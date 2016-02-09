@@ -810,7 +810,7 @@ var portlet_graph_data_utility = {
 
 							$.each(groupByList, function(index, name) {
 								groupByNamesList[index] = portlet_utility
-										.getPortletNormalName(name);
+										.getPortletNormalName(name+'-'+index);
 							});
 
 							portlet_graph_utility.taskReportBarGraph(selector,
@@ -1035,7 +1035,7 @@ var portlet_graph_data_utility = {
 
 							$.each(groupByList, function(index, name) {
 								groupByNamesList[index] = portlet_utility
-										.getPortletNormalName(name);
+										.getPortletNormalName(name+'-'+index);
 							});
 
 							portlet_graph_utility.taskReportBarGraph(selector,

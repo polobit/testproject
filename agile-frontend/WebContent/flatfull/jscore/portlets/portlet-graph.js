@@ -896,7 +896,7 @@ var portlet_graph_utility = {
 																						0,
 																						8) != "no image")
 																	return '<img src="'
-																			+ this.value
+																			+ this.value.split('-')[0]
 																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
 																			+ domainUserNamesList[userIndex]
 																			+ '"/>';
@@ -935,7 +935,7 @@ var portlet_graph_utility = {
 																						0,
 																						8) != "no image")
 																	return '<img src="'
-																			+ this.value
+																			+ this.value.split('-')[0]
 																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
 																			+ domainUserNamesList[userIndex]
 																			+ '"/>';
@@ -1024,7 +1024,7 @@ var portlet_graph_utility = {
 																	+ '<div class="p-n" style="color:'
 																	+ this.series.color
 																	+ ';">'
-																	+ 'Average Deviation Time'
+																	+ 'Average Deviation Time Taken'
 																	+ ':'
 																	+ portlet_utility.getPortletsTimeConversion(Math.round(this.y))
 																	+ ' </div>'
