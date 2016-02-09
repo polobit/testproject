@@ -7,7 +7,7 @@ window.onload=function(){
 
 function utmHiddenField(){  
   
-  //alert("hi");
+ 
   for ( var i = 0, len= localStorage.length;i<len; ++i ) {
 
   if(new RegExp("agile_").test(localStorage.key(i))){
