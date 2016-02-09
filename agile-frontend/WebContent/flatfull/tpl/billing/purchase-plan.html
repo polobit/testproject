@@ -117,7 +117,7 @@
 									{{#if remainingCost}}{{#if unUsedCost}}
 									
 										<span class="pos-rlt" style="top:-3px;">
-										(<span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Total Amount">${{remainingCost}}</span> - <span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Prorated Amount">${{unUsedCost}}</span>{{#if credit}} - <span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Credit">${{credit}}</span>{{/if}})
+										({{#if credit}}({{/if}}<span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Total Amount">${{remainingCost}}</span> - <span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Prorated Amount">${{unUsedCost}}</span>{{#if credit}}) - <span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Credit">${{credit}}</span>{{/if}})
 										</span>
 										{{/if}}{{else}}{{#if credit}}
 										<span class="pos-rlt" style="top:-3px;">
