@@ -121,22 +121,16 @@ public class TicketFiltersUtil
 
 					break;
 				}
-				case "ticket_is":
+				case "ticket_spam":
 				{
-
-					switch (RHS)
-					{
-					case "TICKET_STARRED":
-						RHS = "is_favorite";
-						break;
-					case "TICKET_SPAM":
-						RHS = "is_spam";
-						break;
-					}
-					if (operator != null && operator.contains("not"))
-						query.append(RHS + "=" + false);
-					else
-						query.append(RHS + "=" + true);
+					query.append("is_spam="
+							+ (operator.equalsIgnoreCase("TICKET_IS") ? true : false));
+					break;
+				}					
+				case "ticket_favorite":
+				{
+					query.append("is_favorite="
+							+ (operator.equalsIgnoreCase("TICKET_IS") ? true : false));
 					break;
 				}
 				case "ticket_last_updated_by":
@@ -181,8 +175,11 @@ public class TicketFiltersUtil
 					query.append("created_time >=" + Long.parseLong(RHS) + " AND " + "created_time <="
 							+ Long.parseLong(condition.RHS_NEW));
 					break;
+				case "due_date":
+					query.append("due_date <=" + Long.parseLong(RHS) + " AND " + "due_date > 0");
+					break;
 				}
-
+				
 				query.append(" OR ");
 			}
 
@@ -206,7 +203,6 @@ public class TicketFiltersUtil
 
 		for (SearchRule condition : conditions)
 		{
-
 			String LHS = condition.LHS.toString();
 
 			List<SearchRule> groupedConditions = new ArrayList<SearchRule>();

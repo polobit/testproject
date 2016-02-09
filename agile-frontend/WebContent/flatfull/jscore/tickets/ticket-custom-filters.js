@@ -46,26 +46,46 @@ var Ticket_Custom_Filters = {
 
 			  	$container.html($(template_ui));
 
+			  	head.load(LIB_PATH + 'lib/date-charts.js', function()
+				{	
+					var $input = $('.due-date-input', $container);
+
+					$input.datepicker({ 
+						drops: "down", 
+						dateFormat : CURRENT_USER_PREFS.dateFormat
+					}).on('changeDate', function(ev)
+					{
+						//Show clear button
+						$('#clear-due-date').show();
+
+						$input.blur();
+
+						$input.datepicker("hide");
+
+						Ticket_Custom_Filters.changeDueDate(Date.parse($input.val()).getTime());
+					});
+				});
+
 			  	//Initializaing due date picker
-			  	Tickets.initDateTimePicker($('.due-date-input'), true, function(start){
+			  // 	Tickets.initDateTimePicker($('.due-date-input'), true, function(start){
 			  		
-			  		//Show clear button
-					$('#clear-due-date').show();
+			  // 		//Show clear button
+					// $('#clear-due-date').show();
 
-			  		//Calculate date differences between them
-			  		var duration = moment.duration((moment(start).diff(moment(new Date()))));
+			  // 		//Calculate date differences between them
+			  // 		var duration = moment.duration((moment(start).diff(moment(new Date()))));
 
-			  		Ticket_Custom_Filters.changeDueDate(duration.asHours());
-			  	});
+			  // 		//Ticket_Custom_Filters.changeDueDate(duration.asHours());
+			  // 	});
 
 			  	//Initializaing created date filter picker
-			  	Tickets.initDateTimePicker($('.created-date-input'), false, function(start, end){
+			  // 	Tickets.initDateTimePicker($('.created-date-input'), false, function(start, end){
 			  		
-			  		//Show clear button
-					$('#clear-created-date').show();
+			  // 		//Show clear button
+					// $('#clear-created-date').show();
 
-			  		Ticket_Custom_Filters.changeCreatedDate(start, end);
-			  	});
+			  // 		Ticket_Custom_Filters.changeCreatedDate(start, end);
+			  // 	});
 
 			  	var options = [];
 
@@ -110,15 +130,7 @@ var Ticket_Custom_Filters = {
 
 			  		$(this).hide();
 
-			  		var $input = $('input.due-date-input');
-			  		
-			  		//Set date in daterange picker
-			  		$input.data('daterangepicker').setStartDate(new Date());
-
-			  		//Set date in daterange picker
-			  		$input.data('daterangepicker').setEndDate(new Date());
-
-			  		$input.val('');
+			  		$('input.due-date-input').val('');
 			  		
 			  		//Re-render collection with updated filter conditions
 			  		Ticket_Custom_Filters.changeDueDate();
@@ -150,10 +162,16 @@ var Ticket_Custom_Filters = {
 
 			  		var value = $(this).data('value'), current_date = new Date();
 
+			  		var $input = $('.due-date-input', $container);
+
 			  		//Show clear button
 			  		$('#clear-due-date').show();
 
-			  		switch(value){
+			  		$input.blur();
+
+					$input.datepicker("hide");
+
+					switch(value){
 			  			case 'overdue':
 			  				current_date.setDate(current_date.getDate());
 			  				break;
@@ -172,19 +190,10 @@ var Ticket_Custom_Filters = {
 			  		}
 
 			  		//Set date in daterange picker
-			  		$('input.due-date-input').data('daterangepicker').setStartDate(current_date);
-
-			  		//Set date in daterange picker
-			  		$('input.due-date-input').data('daterangepicker').setEndDate(current_date);
-
-			  		//Set selected date in input field
-			  		$('input.due-date-input').val(moment(current_date).format('MM/DD/YYYY'));
-
-			  		//Calculate date differences between them
-			  		var duration = moment.duration((moment(current_date).diff(moment(new Date()))));
+			  		$input.val(current_date.format('mm/dd/yyyy'));
 
 			  		//Re-render collection with updated filter conditions
-			  		Ticket_Custom_Filters.changeDueDate(duration.asHours());
+			  		Ticket_Custom_Filters.changeDueDate(current_date.getTime());
 			  	});
 
 			  	//Initializes chosen dropdown, fetches labels collection and renders selected labels
@@ -277,6 +286,19 @@ var Ticket_Custom_Filters = {
 						$('#ticket-modals').html(view.render().el);
 						$('#create-filter-modal').modal('show');
 					});
+
+					//Initializing click event on 'Save as' button in LHS filters 
+					$container.off('click','.clear-custom-filter');
+					$container.on('click','.clear-custom-filter', function(e){
+						e.preventDefault();
+
+						if(!Ticket_Custom_Filters.isFilterChanged())
+							return;
+
+						App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
+			
+						Ticket_Bulk_Ops.clearSelection();
+					});
 			  	});
 
 			  	var tempAssignees = {all_assignees: Ticket_Custom_Filters.assignees, selected_assignees: dataJSON.assignees};
@@ -305,12 +327,16 @@ var Ticket_Custom_Filters = {
 							case 'priority':
 								condition.CONDITION = 'TICKET_PRIORITY_IS';
 								break;
-							case 'ticket_type':
-								condition.CONDITION = 'TICKET_TYPE_IS';
-								break;
 							case 'assignee_id':
 							case 'group_id':
 								condition.CONDITION = 'EQUALS';
+								break;
+							case 'ticket_type':
+								condition.CONDITION = 'TICKET_TYPE_IS';
+								break;
+							case 'ticket_favorite':
+							case 'ticket_spam':
+								condition.CONDITION = 'TICKET_IS';
 								break;
 						}
 
@@ -341,6 +367,8 @@ var Ticket_Custom_Filters = {
 			priorityArray = ['LOW', 'MEDIUM','HIGH'], 
 			typeArray = ['PROBLEM','INCIDENT','TASK','QUESTION'], assigneesArray = [], groupsArray = [];
 		
+		var is_favorite = false, is_spam = false;
+
 		for(var i=0; i<this.assignees.length; i++)
 			assigneesArray.push(this.assignees[i].id);
 		
@@ -462,6 +490,21 @@ var Ticket_Custom_Filters = {
 								_groups.push(group);
 						}
 					}
+					break;	
+				case 'ticket_favorite':{
+
+					if(condition.CONDITION == 'TICKET_IS'){
+						is_favorite= true;
+					}
+
+					break;
+				}
+				case 'ticket_spam':{
+					
+					if(condition.CONDITION == 'TICKET_IS'){
+						is_spam = true;
+					}
+				}
 			}
 		}
 
@@ -471,32 +514,32 @@ var Ticket_Custom_Filters = {
 		dataJSON.assignees = _assignees.toString();
 		dataJSON.groups = _groups.toString();
 		dataJSON.labels = _labels;
-
+		dataJSON.is_favorite = is_favorite;
+		dataJSON.is_spam = is_spam;
 
 		if(callback)
 			callback(dataJSON);
 	},
 
-	changeDueDate: function(hrs){
+	changeDueDate: function(epoch_time){
 
 		//Removing existing due date conditions from custom filters
   		for(var i=0; i< Ticket_Custom_Filters.customFilters.length; i++){
 
 			var condition = Ticket_Custom_Filters.customFilters[i];
 
-			if(condition.LHS != 'hrs_since_due_date')
+			if(condition.LHS != 'due_date')
 				continue;
 
 			Ticket_Custom_Filters.customFilters.splice(i, 1);
-			break;
 		}
 
-		if(hrs){
+		if(epoch_time){
 
 			var condition = {};
-			condition.LHS = 'hrs_since_due_date';
+			condition.LHS = 'due_date';
 			condition.CONDITION = 'IS_LESS_THAN';
-			condition.RHS = parseInt(hrs);
+			condition.RHS = Math.floor(epoch_time/1000);
 
 			Ticket_Custom_Filters.customFilters.push(condition);
 		}

@@ -144,13 +144,13 @@
         <div class="col-md-12 p-n">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="favorite" name="favorite" type="checkbox">
+              <input class="favorite" name="ticket_favorite" value="true" {{#if is_favorite}}checked{{/if}} type="checkbox">
               <i></i>
             </label> Favorite
           </div>
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="spam" name="spam" type="checkbox">
+              <input class="spam" name="ticket_spam" value="true" {{#if is_spam}}checked{{/if}} type="checkbox">
               <i></i>
             </label> Spam
           </div>
@@ -159,7 +159,7 @@
     </div>
 </div>
 <div class="save-as-filter-container">
-  <a href="javascript:void(0);" class="c-p txt-small link-color">Clear</a>
+  <a href="javascript:void(0);" class="c-p txt-small link-color clear-custom-filter">Clear</a>
   <a href="javascript:void(0);" class="c-p txt-small link-color pull-right save-new-filter">Save as</a>
 </div>
 </script>

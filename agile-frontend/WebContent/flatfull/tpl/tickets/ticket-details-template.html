@@ -189,7 +189,7 @@
                       <!-- <a id="change-sla" href="javascript:void(0);" class="text-info">Change</a> -->
                     </div>
                       
-                    <input type="text" class="form-control text-xs" id="ticket_change_sla" placeholder="Select date" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}"/>
+                    <input type="text" class="form-control text-xs" id="ticket_change_sla" placeholder="Select date" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}"  {{#if_equals status "CLOSED"}}READONLY{{/if_equals}}/>
 
                     <div class="col-md-12 p-n">
                       <div class="col-md-3 p-n">
@@ -577,4 +577,24 @@
   </div>
   {{/is_current_opend_ticket}}
 {{/each}}
+</script>
+<script id="ticket-sla-error-template" type="text/html">
+<div id="sla-error-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">x</button>
+                <h3 class="modal-title"><i class="icon icon-warning"></i> Error</h3>
+            </div>
+            <div class="modal-body">
+                <form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
+                    Due date must be greater than current time<br/><br/>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
 </script>

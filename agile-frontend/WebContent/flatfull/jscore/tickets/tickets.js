@@ -664,24 +664,6 @@ var Tickets = {
 		});
 	},
 
-	initDateTimePicker: function($input, singleDatePicker, callback){
-
-		var eventDate = $input.datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
-		{
-			callback($input.val(), end);
-		});
-
-		// head.load(LIB_PATH + '/lib/web-calendar-event/moment.min.js', '/lib/date-range-picker2.min.js?_=' + _AGILE_VERSION, '/flatfull/css/final-lib/date-range-picker2.css?_=' + _AGILE_VERSION,  function()
-		// {	
-		// 	$input.daterangepicker({
-		// 	    "singleDatePicker": singleDatePicker, "drops": "up"
-		// 	}, function(start, end, label) {
-				
-		// 		callback(start, end);
-		// 	});
-		// });
-	},
-
 	updateModel: function(url, success_cbk, err_cbk, ticket_id){
 		var newTicketModel = new BaseModel();
 		newTicketModel.url = url;
@@ -1077,7 +1059,7 @@ var Tickets = {
 			$row.css('min-height', window.innerHeight - $row.offset().top + 'px');
 	},
 
-	updateDueDate : function(timeInMilli){
+	updateDueDate : function(timeInMilli, callback){
 
 	  	var json = {};
 		json.due_time = timeInMilli;
@@ -1087,34 +1069,65 @@ var Tickets = {
 		var newTicketModel = new BaseModel();
 		newTicketModel.url = "core/api/tickets/change-due-date?due_time="
 		+ timeInMilli + "&id=" + Current_Ticket_ID;
-		newTicketModel.save(json, 
-			{	success: function(model){
+		newTicketModel.save(json, {	
+			success: function(model){
 
+				var formatted_date = new Date(timeInMilli).format('mmm dd, yyyy');
+				showNotyPopUp('information', "Due date has been changed to " + formatted_date, 
+					'bottomRight', 3000);
+
+				if(callback)
+					callback();
 			}}
 		);
 	},
 
 	initializeTicketSLA : function(el){
 		
-		 head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css",  function()
-		  {
+		var ticket = App_Ticket_Module.ticketView.model.toJSON();
 
-		  	$('#ticket_change_sla', el).datepicker({ drops: "down", format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+  		if(ticket.status == "CLOSED")
+  			return;
+
+		head.load(LIB_PATH + 'lib/date-charts.js', function()
+		{
+			$('#ticket_change_sla', el).datepicker({ 
+				drops: "down", 
+				dateFormat : CURRENT_USER_PREFS.dateFormat
+			}).on('changeDate', function(ev)
 			{
-				// Apply SLA to the ticket
-		     	//var timeInMilli = moment(start).valueOf();
+				var selected_date = $('#ticket_change_sla', el).val();
+				var selected_date_epoch_time = Date.parse(selected_date).getTime();
 
-		     	Tickets.updateDueDate($('#ticket_change_sla', el).val());
+				//Show alert if selected date is less than today start time
+				if(selected_date_epoch_time < Date.today().getTime()){
+
+					getTemplate("ticket-sla-error", {}, undefined, function(template_ui){
+
+						if(!template_ui)
+					  		return;
+
+					  	$('#ticket_change_sla', el).datepicker( "hide" );
+
+					  	var due_time = ticket.due_time;
+
+					  	if(due_time)
+					  		$('#ticket_change_sla').val(new Date(due_time).format('mm/dd/yyyy'));
+
+					  	$('#ticket-modals').html($(template_ui));
+					  	$('#sla-error-modal').modal('show');
+					});
+
+					return;
+				}
+
+				
+				Tickets.updateDueDate(selected_date_epoch_time, function(){
+					$('#ticket_change_sla', el).datepicker("hide");
+					$('#ticket_change_sla', el).blur();
+				});
 			});
-
-		   /*$('#ticket_change_sla', el).daterangepicker({
-		       "singleDatePicker": true,"drops": "up","timePicker": true
-		   }, function(start, end, label) {
-
-		      	
-
-		   });*/
-		  });
+		});
 
 		//Initializing click event on due date button
 	  	$(el).on('click','.choose-due-date', function(event){
@@ -1137,9 +1150,12 @@ var Tickets = {
 	  		}
 
 	  		//Set selected date in input field
-	  		$('input#ticket_change_sla').val(moment(current_date).format('MM/DD/YYYY'));
+	  		$('#ticket_change_sla', el).val(new Date(current_date.getTime()).format('mm/dd/yyyy'));
 
-	  		Tickets.updateDueDate(moment(current_date).valueOf());
+	  		Tickets.updateDueDate(current_date.getTime(), function(){
+				$('#ticket_change_sla', el).datepicker("hide");
+				$('#ticket_change_sla', el).blur();
+			});
 	  	});
 	},
 
@@ -1150,8 +1166,10 @@ var Tickets = {
 		if(!ticketIDArray || ticketIDArray.length ==0)
 			return;
 
-		for(var i=0; i<ticketIDArray.length; i++)
+		for(var i=0; i<ticketIDArray.length; i++){
 			$('td#' + ticketIDArray[i]).closest('tr').remove();
+			App_Ticket_Module.ticketsCollection.collection.remove(ticketIDArray[i]);
+		}
 	},
 
 	showPreviousTicketCount: function(email, el){

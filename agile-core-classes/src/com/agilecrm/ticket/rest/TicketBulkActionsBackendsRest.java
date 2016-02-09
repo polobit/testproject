@@ -268,7 +268,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Tickets bulk deletion started");
+			BulkActionNotifications.publishNotification("Tickets bulk action spam tickets started");
 		}
 		catch (Exception e)
 		{
@@ -300,7 +300,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Tickets bulk deletion started");
+			BulkActionNotifications.publishNotification("Tickets bulk action favorite tickets started");
 		}
 		catch (Exception e)
 		{

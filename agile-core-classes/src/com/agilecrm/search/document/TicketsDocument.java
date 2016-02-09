@@ -138,6 +138,12 @@ public class TicketsDocument implements BuilderInterface
 			// Set requester email
 			document.addField(Field.newBuilder().setName("requester_email").setText(requesterEmail));
 
+			if(ticket.is_favorite)
+				document.addField(Field.newBuilder().setName("is_favorite").setText("true"));
+			
+			if(ticket.is_spam)
+				document.addField(Field.newBuilder().setName("is_spam").setText("true"));
+			
 			// Set mail content
 			//document.addField(Field.newBuilder().setName("mail_content").setText(plainText));
 

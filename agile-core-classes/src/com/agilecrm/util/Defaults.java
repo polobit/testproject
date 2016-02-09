@@ -37,7 +37,7 @@ public class Defaults
 	saveDefaultReports();
 	saveDefaultNotes();
 	TicketFiltersUtil.saveDefaultFilters();
-	saveDefaultWorkflowsAndTriggers();
+	//saveDefaultWorkflowsAndTriggers();
     }
 
 	/**

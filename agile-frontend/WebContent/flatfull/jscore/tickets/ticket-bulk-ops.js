@@ -21,11 +21,31 @@ var Ticket_Bulk_Ops = {
 		/**
 		 * Initializing click event on bulk action close tickets
 		 */
-		 $el.off('click', ".bulk-ticket-close");
+		$el.off('click', ".bulk-ticket-close");
 		$el.on('click', ".bulk-ticket-close", function(e){
 			e.preventDefault();
 			
 			Ticket_Bulk_Ops.renderTemplate('close-tickets');
+		});
+
+		/**
+		 * Initializing click event on bulk action close tickets
+		 */
+		$el.off('click', ".bulk-favorite-tickets");
+		$el.on('click', ".bulk-favorite-tickets", function(e){
+			e.preventDefault();
+			
+			Ticket_Bulk_Ops.renderTemplate('mark-favorite');
+		});
+
+		/**
+		 * Initializing click event on bulk action close tickets
+		 */
+		$el.off('click', ".bulk-spam-tickets");
+		$el.on('click', ".bulk-spam-tickets", function(e){
+			e.preventDefault();
+			
+			Ticket_Bulk_Ops.renderTemplate('mark-spam');
 		});
 
 		/**
@@ -283,6 +303,12 @@ var Ticket_Bulk_Ops = {
 					url : "/core/api/tickets/bulk-actions/delete-tickets",
 					saveCallback: function(){
 						
+						if(Ticket_Bulk_Ops.selected_all_filter_tickets)
+							Tickets_Count.ticketsCount[Ticket_Filter_ID] = 0;
+						else
+							Tickets_Count.ticketsCount[Ticket_Filter_ID] = Tickets_Count.ticketsCount[Ticket_Filter_ID] - 
+												Ticket_Bulk_Ops.selected_ticket_ids.length;
+
 						Tickets.removeTicketsFromCollection(Ticket_Bulk_Ops.getSelectedTickesObj());
 						Ticket_Bulk_Ops.clearSelection();
 						$('#delete-tickets-modal').modal('hide');
