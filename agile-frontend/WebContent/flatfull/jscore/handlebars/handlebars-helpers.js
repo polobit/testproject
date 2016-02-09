@@ -5711,6 +5711,8 @@ $(function()
 	// function to compare integer values
 	Handlebars.registerHelper('ifCond', function(v1, type, v2, options)
 	{
+		if(!v1 || !v2)
+			return options.inverse(this);
 		switch (type) {
 		case "greaterthan":
 			if (parseInt(v1) > parseInt(v2))
@@ -7005,7 +7007,13 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('getCredit', function(credit, options)
+	{
+		if(!credit)
+			return 0;
+		return (credit/100)*(-1).toFixed(2);
 
+	});
 Handlebars.registerHelper('is_IE_browser', function(options) {
 	     return (isIEBrowser() ? options.fn(this) : options.inverse(this));
 });
