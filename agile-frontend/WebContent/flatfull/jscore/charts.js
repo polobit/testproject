@@ -11,7 +11,7 @@ function setupCharts(callback)
 {
 
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/highcharts-more.js',LIB_PATH + 'lib/flot/solid-gauge.js', LIB_PATH + 'lib/flot/highcharts-exporting.js', LIB_PATH + 'lib/flot/funnel.js',LIB_PATH + 'lib/flot/highcharts-grid.js',
-	LIB_PATH + 'lib/flot/no-data-to-display.js', function()
+	LIB_PATH + 'lib/flot/no-data-to-display.js', LIB_PATH + 'lib/flot/export-csv.js', function()
 	{
 
 		// Checks if callback is available, if available calls the callback
@@ -308,6 +308,28 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			            	return'<b>'+this.x+'</b><br/>'+this.series.name+': '+this.y;
 			        },
 			        useHTML : true,
+			    },
+
+			    exporting : {
+			    	buttons: {
+   						 contextButton: {
+       					 menuItems: null,
+       					 onclick: function () { this.downloadCSV(); }
+       					 
+       					},
+       					       'test2Button': {
+            symbol: 'url(http://highcharts.com/demo/gfx/sun.png)',
+            x: -88,
+            symbolX: 4,
+            symbolY: 4,
+            symbolFill: '#B5C9DF',
+            hoverSymbolFill: '#779ABF',
+            _titleKey: 'test2Title',
+            onclick: function() {
+                alert("test2Button");
+            }
+        }
+       				}
 			    },
 			    plotOptions: {
 			        column: {
