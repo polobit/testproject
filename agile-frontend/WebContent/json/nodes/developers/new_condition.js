@@ -51,7 +51,7 @@
                       } 
                   },
                   {
-                	"label": "variable1",
+                	"label": "variable",
                   	"required": "required",
                     "category": "Settings",
                     "id": "new_field1",
@@ -134,7 +134,7 @@
                      } 
                  },
                  {
-                	"label": "variable1",
+                	"label": "variable",
                  	"required": "required",
                    "category": "Settings",
                    "id": "new_field2",
@@ -178,7 +178,7 @@
 				]
 		},
         {
-            "label": "Check for a condition (IF/Value/Len) in your workflow.",
+            "label": "Check for Multiple AND/OR Conditions in Your Workflow.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 
