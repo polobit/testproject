@@ -39,8 +39,11 @@ import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.email.wrappers.ContactEmailWrapper;
 import com.agilecrm.mandrill.util.MandrillUtil;
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.EmailPrefs;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
@@ -504,8 +507,9 @@ public class EmailsAPI
 	    @FormParam("text_email") String textEmail, @FormParam("html_email") String htmlEmail,
 	    @FormParam("replyto_email") String replyToEmail)
     {
-    	//Getting  Domain name
-    	 String domainName=NamespaceManager.get();
+    	//Getting  Domain name and user name for unique file name
+    	 String domainName=NamespaceManager.get()+ "_"+SessionManager.get().getName();
+    	 
     	 String scoreJson=null;
 		 String date=DateUtil.getCalendarString(System.currentTimeMillis(), "E, dd MMM yyyy HH:mm:ss Z", "");
     	
