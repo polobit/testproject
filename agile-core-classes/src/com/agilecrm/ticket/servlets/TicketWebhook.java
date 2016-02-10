@@ -32,6 +32,7 @@ import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.ticket.entitys.Tickets.CreatedBy;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
@@ -291,7 +292,7 @@ public class TicketWebhook extends HttpServlet
 				// Creating new Ticket in Ticket table
 				ticket = TicketsUtil.createTicket(groupID, null, msgJSON.getString("from_name"),
 						msgJSON.getString("from_email"), msgJSON.getString("subject"), ccEmails, text, Status.NEW,
-						Type.PROBLEM, Priority.LOW, Source.EMAIL, attachmentExists, ip,
+						Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip,
 						new ArrayList<Key<TicketLabels>>());
 
 				BulkActionNotifications.publishNotification("New ticket #" + ticket.id + " received");

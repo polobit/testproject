@@ -45,6 +45,7 @@ import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.TicketWorkflow;
 import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.ticket.entitys.Tickets.CreatedBy;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
@@ -77,43 +78,16 @@ public class TicketsRest
 {
 	/**
 	 * 
-	 * @param groupID
-	 * @param cursor
-	 * @param pageSize
-	 * @param status
-	 * @return list of tickets
+	 * @return
 	 */
 	@GET
+	@Path("/count")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Tickets> getTicketsByGroup(@QueryParam("group_id") String groupID, @QueryParam("cursor") String cursor,
-			@QueryParam("page_size") String pageSize, @QueryParam("status") String status)
+	public String getTicketsCount()
 	{
 		try
 		{
-			if (StringUtils.isBlank(status))
-				throw new Exception("Required paramaters missing.");
-
-			// Set default group id if Group ID is null
-			if (StringUtils.isBlank(groupID))
-				groupID = TicketGroupUtil.getDefaultTicketGroup().id + "";
-
-			List<Tickets> tickets = new ArrayList<Tickets>();
-
-			if (StringUtils.equalsIgnoreCase(status, "starred"))
-			{
-				tickets = TicketsUtil.getFavoriteTickets(Long.parseLong(groupID), cursor, pageSize);
-			}
-			else
-			{
-				tickets = TicketsUtil.getTicketsByGroupID(Long.parseLong(groupID),
-						Status.valueOf(status.toUpperCase()), cursor, pageSize, "-last_updated_time");
-			}
-
-			// Include Ticket Group Object
-			tickets = TicketsUtil.inclGroupDetails(tickets);
-			tickets = TicketsUtil.inclDomainUsers(tickets);
-
-			return tickets;
+			return new JSONObject().put("count", Tickets.ticketsDao.count()).toString();
 		}
 		catch (Exception e)
 		{
@@ -255,41 +229,6 @@ public class TicketsRest
 	 * @return list of tickets
 	 */
 	@GET
-	@Path("/count")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getTicketsCountByType(@QueryParam("group_id") String groupID, @QueryParam("status") String status)
-	{
-		try
-		{
-			// Set default group id if Group ID is null
-			if (groupID == null)
-			{
-				groupID = TicketGroupUtil.getDefaultTicketGroup().id + "";
-			}
-
-			int count = StringUtils.equalsIgnoreCase(status, "starred") ? TicketsUtil.getFavoriteTicketsCount(Long
-					.parseLong(groupID)) : TicketsUtil.getTicketsCountByType(Long.parseLong(groupID),
-					Status.valueOf(status));
-
-			return new JSONObject().put("count", count).toString();
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-	}
-
-	/**
-	 * 
-	 * @param groupID
-	 * @param cursor
-	 * @param pageSize
-	 * @param status
-	 * @return list of tickets
-	 */
-	@GET
 	@Path("/fitered-tickets-count")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getFilteredTicketsCount(@QueryParam("filter_id") Long filterID)
@@ -401,6 +340,9 @@ public class TicketsRest
 		try
 		{
 			String html_text = ticket.html_text;
+			html_text = html_text.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
+			
+			CreatedBy createdBy = ticket.created_by;
 
 			if (StringUtils.isBlank(html_text))
 				throw new Exception("Please provide message body.");
@@ -427,7 +369,7 @@ public class TicketsRest
 			// Creating new Ticket in Ticket table
 			ticket = TicketsUtil.createTicket(groupID, assigneeID, ticket.requester_name, ticket.requester_email,
 					ticket.subject, ticket.cc_emails, plain_text, ticket.status, ticket.type, ticket.priority,
-					ticket.source, attachmentExists, "", labels_keys_list);
+					ticket.source, ticket.created_by, attachmentExists, "", labels_keys_list);
 
 			// Creating new Notes in TicketNotes table
 			TicketNotesUtil.createTicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER,
@@ -1029,7 +971,7 @@ public class TicketsRest
 
 				Tickets ticket = TicketsUtil.createTicket(group.id, null, "Sasi", "sasi@clickdesk.com",
 						"Test ticket created from rest method", new ArrayList<String>(), message, Status.NEW,
-						Type.PROBLEM, Priority.LOW, Source.EMAIL, true, "[142.152.23.23]",
+						Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, true, "[142.152.23.23]",
 						new ArrayList<Key<TicketLabels>>());
 
 				// Creating new Notes in TicketNotes table

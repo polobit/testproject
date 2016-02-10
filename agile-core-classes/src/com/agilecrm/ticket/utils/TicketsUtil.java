@@ -1,5 +1,6 @@
 package com.agilecrm.ticket.utils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -8,9 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
+import org.scribe.model.Verb;
 
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.ActivityType;
@@ -21,6 +26,7 @@ import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.ticket.entitys.Tickets.CreatedBy;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
@@ -171,7 +177,7 @@ public class TicketsUtil
 	 */
 	public static Tickets createTicket(Long group_id, Long assignee_id, String requester_name, String requester_email,
 			String subject, List<String> cc_emails, String plain_text, Status status, Type type, Priority priority,
-			Source source, Boolean attachments, String ipAddress, List<Key<TicketLabels>> labelsKeysList)
+			Source source, CreatedBy createdBy, Boolean attachments, String ipAddress, List<Key<TicketLabels>> labelsKeysList)
 	{
 		Tickets ticket = new Tickets();
 
@@ -183,14 +189,11 @@ public class TicketsUtil
 			ticket.type = type;
 			ticket.priority = priority;
 			ticket.source = source;
+			ticket.created_by = createdBy;
 
 			Long epochTime = Calendar.getInstance().getTimeInMillis();
 
-			/**
-			 * Verifying for ticket status. If Open then ticket should be
-			 * assigned to someone.
-			 */
-			if (status == Status.OPEN)
+			if (assignee_id != null)
 			{
 				ticket.assignee_id = new Key<DomainUser>(DomainUser.class, assignee_id);
 				ticket.assigned_time = epochTime;

@@ -1,32 +1,40 @@
 <script id="ticket-filters-collection-template" type="text/html">
 {{#unless this.length}}
-    <div class="text-center padder-v">
-        <h4 class="m-t-none m-b-xs">You don&#39;t have any filters</h4>
-        <div class="m-b-xs">
-            Create views to streamline your Tickets. For example new tickets received in last 24 hours, tickets which last updated by requester etc. 
-        </div>
-        <div>
-            <a href="#add-ticket-filter" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-                Add Filter
-            </a>
+    <div class="col panel wrapper">
+        <div class="hbox h-auto m-b-sm">
+            <div class="text-center padder-v">
+                <h4 class="m-t-none m-b-xs">You don&#39;t have any filters</h4>
+                <div class="m-b-xs">
+                    Create views to streamline your Tickets. For example new tickets received in last 24 hours, tickets which last updated by requester etc. 
+                </div>
+                <div>
+                    <a href="#add-ticket-filter" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+                        Add Filter
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 {{/unless}}
 {{#if this.length}}
-    <div class="pull-right">
-        <a href="#add-ticket-view" class="btn btn-sm btn-default btn-addon">
-            <span><i class="icon-plus-sign"></i></span> Add
-        </a>
+    <div class="col panel wrapper">
+        <div class="hbox h-auto m-b-sm">
+            <div class="pull-right">
+                <a href="#add-ticket-view" class="btn btn-sm btn-default btn-addon">
+                    <span><i class="icon-plus-sign"></i></span> Add
+                </a>
+            </div>
+            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/filters/bulk" data-bulk-delete-title="Delete" data-bulk-delete-msg="Are you sure you want to delete?">
+                <thead>
+                    <tr>
+                        <th class="hide">Id</th>
+                        <th style="width: 35%">Name</th>
+                        <th style="width: 40%">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody id="ticket-filters-model-list" route="ticket-view/" class="c-p"></tbody>
+            </table>
+        </div>
     </div>
-    <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/filters/bulk" data-bulk-delete-title="Delete" data-bulk-delete-msg="Are you sure you want to delete?">
-        <thead>
-            <tr>
-                <th class="hide">Id</th>
-                <th style="width: 35%">Name</th>
-                <th style="width: 40%">&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody id="ticket-filters-model-list" route="ticket-view/" class="c-p"></tbody>
-    </table>
 {{/if}}
 </script>

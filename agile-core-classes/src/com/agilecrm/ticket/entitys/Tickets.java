@@ -238,7 +238,17 @@ public class Tickets extends Cursor implements Serializable
 	 * Stores ticket created source EMAIL or WEB_FORM
 	 */
 	public Source source = Source.EMAIL;
-
+	
+	public static enum CreatedBy
+	{
+		CUSTOMER, AGENT
+	};
+	
+	/**
+	 * Stores who created the ticket
+	 */
+	public CreatedBy created_by = CreatedBy.CUSTOMER;
+	
 	/**
 	 * Stores customer country to generate country wise reports
 	 */
@@ -302,7 +312,14 @@ public class Tickets extends Cursor implements Serializable
 	 */
 	@NotSaved
 	public List<Long> labels = new ArrayList<Long>();
-
+	
+	/**
+	 * Util attribute using when creating new ticket from admin dashboard.
+	 */
+	@NotSaved
+	public List<Long> contact_ids = new ArrayList<Long>();
+	
+	
 	/**
 	 * Default constructor
 	 */

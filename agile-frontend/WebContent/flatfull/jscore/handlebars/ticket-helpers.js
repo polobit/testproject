@@ -425,4 +425,12 @@ Handlebars.registerHelper('is_current_opend_ticket', function(id, options)
 	return options.inverse(this);
 });
 
+Handlebars.registerHelper('is_helpdesk_enabled', function(options)
+{
+	if(Helpdesk_Enabled)
+  		return options.fn(this);
+
+	return options.inverse(this);
+});
+
 /** End of ticketing handlebars* */

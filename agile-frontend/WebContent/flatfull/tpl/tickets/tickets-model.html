@@ -49,14 +49,21 @@
                     {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" closed_time}}
                   </time>
                 {{else}}
-                  {{#if_equals last_updated_by 'AGENT'}}
-                    assignee replied 
+                  {{#if_equals user_replies_count 1}}
+                      created 
+                      <time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">
+                        {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
+                      </time>
                   {{else}}
-                    customer responded 
+                    {{#if_equals last_updated_by 'AGENT'}}
+                      assignee replied 
+                    {{else}}
+                      customer responded 
+                    {{/if_equals}}
+                    <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">
+                      {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}
+                    </time>
                   {{/if_equals}}
-                  <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">
-                    {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}
-                  </time>
                 {{/if_equals}}
               {{/if_equals}}
               {{#if_equals status 'CLOSED'}}
@@ -248,7 +255,7 @@
   {{/each}}  
 </script>
 <script id="ticket-single-row-popup-template" type="text/html">
-<div id="ticket-last-notes" class="ticket-last-notes animated popup-fadeInUp" style="min-height: {{#if_equals status 'NEW'}}170px;{{else}}270px;{{/if_equals}};">
+<div id="ticket-last-notes" class="ticket-last-notes animated popup-fadeInUp" style="max-height: {{#if_equals status 'NEW'}}170px;{{else}}270px;{{/if_equals}};">
     <div class="row m-n mar-btm-md">
           <div class="col-md-12 p-b-sm">
             <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;

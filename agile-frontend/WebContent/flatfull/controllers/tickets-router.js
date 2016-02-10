@@ -51,7 +51,7 @@
 
 	tickets: function(){
 		/*App_Ticket_Module.ticketsByGroup(DEFAULT_GROUP_ID, 'new');*/
-		App_Ticket_Module.ticketsByFilter();
+		App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
 	},
 
 	/**
@@ -80,21 +80,25 @@
 				saveCallback : function(ticket){
 					$('#new-ticket-modal').modal('hide');
 				},
+				prePersist : function(model)
+				{	
+					var json = {};
+					console.log(model);
+
+					var assignee_id = $('#groupID option:selected').data('assignee-id');
+
+					if(assignee_id){
+						json.assigneeID = assignee_id;
+
+						model.set(json, { silent : true });
+					}
+				},
 				postRenderCallback : function(el, data) {
 
 					$('[data-toggle="tooltip"]').tooltip();
 
-					//Initializing chaining on Group and Assignee select fields
-					head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
-					{
-						var LHS = $("#group_id", el);
-						var RHS = $("#assignee_id", el);
-
-						RHS.chained(LHS);
-
-						//Initializing type ahead for tags
-						Ticket_Labels.showSelectedLabels(new Array(), $(el));
-					});
+					//Initializing type ahead for tags
+					Ticket_Labels.showSelectedLabels(new Array(), $(el));
 					
 					//Initializing type ahead for cc emails
 					agile_type_ahead("cc_email_field", el, tickets_typeahead, function(arg1, arg2){
@@ -190,56 +194,8 @@
 			}
 		});
 
-$(".tickets-collection-pane").html('');
-$("#right-pane").html(ticketView.render().el);
-},
-
-	/**
-	 * Shows list of tickets for the selected Group
-	 */
-	 ticketsByGroup: function(group_id, status){
-
-	 	Ticket_Status = status;
-	 	Ticket_Filter_ID = null;
-	 	var url = '/core/api/tickets?status=' + Ticket_Status + '&group_id=' + group_id;
-
-	 	if(!Group_ID || Group_ID != group_id){
-
-	 		Group_ID = group_id;
-	 		Reload_Tickets_Count = true;
-	 	}	
-
-	 	Tickets.fetch_tickets_collection(url, group_id);
-	 },
-
-	/**
-	 * Shows ticket details and notes for select ticket
-	 */
-	 ticketNotes: function(group_id, status, id){
-
-	 	Ticket_Status = status;
-	 	Ticket_Filter_ID = null;
-
-	 	var ticketModal = null;
-
-	 	if(App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection)
-	 		ticketModal = App_Ticket_Module.ticketsCollection.collection.get(id);
-
-		//Verifying ticket exists in collection or not
-		if(!ticketModal)
-		{
-			Group_ID = group_id;
-			Reload_Tickets_Count = true;
-			
-			//If collection doesn't exists the re-render the whole layout and then fetch ticket notes
-			Tickets.initialize(group_id, function(){
-				App_Ticket_Module.ticketDetails(id);
-			});
-		}else{
-			
-			//If model exists renders the view directly
-			App_Ticket_Module.ticketDetails(id);
-		}
+		$(".tickets-collection-pane").html('');
+		$("#right-pane").html(ticketView.render().el);
 	},
 
 	/**
@@ -247,7 +203,14 @@ $("#right-pane").html(ticketView.render().el);
 	 **/
 	 ticketsByFilter : function(filter_id){
 
-	 	if(App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection.length > 0 
+	 	$.getJSON("/core/api/tickets/count", function(json) {
+			
+			if(json.count)
+				Helpdesk_Enabled = true;
+		});
+
+	 	if(App_Ticket_Module.ticketsCollection && 
+	 		App_Ticket_Module.ticketsCollection.collection.length > 0 
 	 		&& Ticket_Filter_ID == filter_id){
 
 	 		Tickets.renderExistingCollection();
@@ -416,6 +379,26 @@ $("#right-pane").html(ticketView.render().el);
 	 				individual_tag_name : 'tr',
 	 				postRenderCallback : function(el, collection) {
 
+	 					//Disabling click events on copy btn
+						$('#ticket-groups-model-list', el).on('click', 'a.a-frwd-email', function(e){
+
+							console.log('e');
+							e.stopPropagation();
+							e.stopImmediatePropagation();
+						});
+
+						head.js('/lib/zeroclipboard2/ZeroClipboard.min.js', function()
+						{
+							$('[data-toggle="popover"]').popover();
+
+							var array = collection.toJSON();
+							for(var i=0; i< array.length; i++){
+
+								var model = array[i];
+								initZeroClipboard2($('#grp-' + model.id), $('#source-' + model.id));
+							}
+						});
+
 						setTimeout(function(){
 
 							var $ele  = $('td[default_group]').closest('tr').find('.tbody_check');
@@ -428,14 +411,14 @@ $("#right-pane").html(ticketView.render().el);
 					}
 				});
 
-App_Ticket_Module.groupsCollection.collection.fetch();
+				App_Ticket_Module.groupsCollection.collection.fetch();
 
-$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.groupsCollection.el);
-$('#content').find('#AdminPrefsTab .select').removeClass('select');
-$('#content').find('.helpdesk-tab').addClass('select');
-});
-});
-},
+				$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.groupsCollection.el);
+				$('#content').find('#AdminPrefsTab .select').removeClass('select');
+				$('#content').find('.helpdesk-tab').addClass('select');
+			});
+		});
+	},
 
 	/**
 	 * Add ticket group
@@ -725,7 +708,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
  				url : "/core/api/tickets/filters",
  				template : "ticket-filter-add-edit",
  				saveCallback : function(){
- 					Backbone.history.navigate( "ticket-filters", { trigger : true });
+ 					Backbone.history.navigate( "ticket-views", { trigger : true });
  				},
  				postRenderCallback : function(el, data) {
 

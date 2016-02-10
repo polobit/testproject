@@ -29,17 +29,32 @@
 				    <div class="form-inline no-footer">
 			    		<div class="row m-n">
 			    			<div class="col-sm-12 p-n">
-			    				<div class="text-center padder-v b-t">
-									<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
-									<div class="m-b-xs">
-										Configure your help desk system to answer customer queries from your Agile Dashboard.
+			    				{{#is_helpdesk_enabled}}
+				    				<div class="text-center padder-v b-t">
+										<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
+										<div class="m-b-xs">
+											You can create new views from 
+											<a class="link-color" href="/#add-ticket-view">Help Desk settings</a>
+										</div>
+										<!-- <div>
+											<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+												Configure Help Desk
+											</a>
+										</div> -->
 									</div>
-									<div>
-										<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-											Configure Help Desk
-										</a>
+								{{else}}
+									<div class="text-center padder-v b-t">
+										<h4 class="m-t-none m-b-xs">Configure email forwarding to receive tickets to Help Desk</h4>
+										<div class="m-b-sm">
+											Configure your help desk system to answer customer queries from your Agile Dashboard.
+										</div>
+										<div>
+											<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+												Configure Help Desk
+											</a>
+										</div>
 									</div>
-								</div>
+								{{/is_helpdesk_enabled}}
 			    			</div>
 			    		</div>
 			    	</div>
@@ -131,17 +146,32 @@
 					    <div class="form-inline no-footer">
 				    		<div class="row m-n">
 				    			<div class="col-sm-12 p-n">
-				    				<div class="text-center padder-v b-t">
-										<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
-										<div class="m-b-xs">
-											Configure your help desk system to answer customer queries from your Agile Dashboard.
+				    				{{#is_helpdesk_enabled}}
+					    				<div class="text-center padder-v b-t">
+											<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
+											<div class="m-b-xs">
+												You can create new views from 
+												<a class="link-color" href="/#add-ticket-view">Help Desk settings</a>
+											</div>
+											<!-- <div>
+												<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+													Configure Help Desk
+												</a>
+											</div> -->
 										</div>
-										<div>
-											<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-												Configure Help Desk
-											</a>
+									{{else}}
+										<div class="text-center padder-v b-t">
+											<h4 class="m-t-none m-b-xs">Configure email forwarding to receive tickets to Help Desk</h4>
+											<div class="m-b-sm">
+												Configure your help desk system to answer customer queries from your Agile Dashboard.
+											</div>
+											<div>
+												<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+													Configure Help Desk
+												</a>
+											</div>
 										</div>
-									</div>
+									{{/is_helpdesk_enabled}}
 				    			</div>
 				    		</div>
 				    	</div>

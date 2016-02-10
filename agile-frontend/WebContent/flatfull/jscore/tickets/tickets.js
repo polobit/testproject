@@ -1,5 +1,5 @@
 var Group_ID = null, Current_Ticket_ID = null, Ticket_Filter_ID = null, Tickets_Util = {}, Sort_By = "-", Sort_Field = 'last_updated_time', Ticket_Position= null;
-var popoverFunction = undefined;
+var popoverFunction = undefined, Helpdesk_Enabled = false;
 
 var Tickets = {
 
@@ -1273,7 +1273,7 @@ var Tickets = {
 	},
 
 	updateIframeHeight : function(iframe){
-		$(iframe).height($(iframe).contents().height() - 17);
+		$(iframe).height($(iframe).contents().height() - 5);
 
 		$(iframe).contents().find('body').css({
 		    'font-family': '"Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif',

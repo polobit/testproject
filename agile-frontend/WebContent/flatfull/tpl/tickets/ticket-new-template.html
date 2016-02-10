@@ -54,8 +54,9 @@
                 <label class="control-label"><b>Status</b></label>
                 <span class="controls">
                   <select id="status" name="status" class="form-control status">
-                      <option value="NEW">New</option>
                       <option value="OPEN">Open</option>
+                      <option value="PENDING">Pending</option>
+                      <option value="CLOSED">Closed</option>
                   </select>
                 </span>
             </div>
@@ -74,11 +75,19 @@
               </span>
             </div>
             <div class="control-group col-md-6">
-                <label class="control-label"><b>Group</b></label>
+                <label class="control-label"><b>Assignee</b></label>
                 <span class="controls">
-                  <select id="groupID" name="groupID" class="form-control required">
+                  <select id="groupID" name="groupID" class="form-control required group_id">
+                     {{#each this}}
+                        <option value="{{id}}">{{group_name}}</option>
+                    {{/each}}
+                    <option role='separator' disabled>------------------------------------------------------</option>
                     {{#each this}}
-                      <option value="{{id}}">{{group_name}}</option>  
+                      <optgroup data-group-email="{{group_email}}" label="{{group_name}}">
+                        {{#group_users}}
+                          <option data-assignee-id="{{id}}" value="{{../id}}">{{name}}</option>
+                        {{/group_users}}
+                      </optgroup>
                     {{/each}}
                   </select>
                 </span>
@@ -87,19 +96,19 @@
       </div>
       <div class="control-group form-group">
         <div class="row">
-            <div class="control-group col-md-5">
+            <!--<div class="control-group col-md-5">
               <label class="control-label"><b>Assignee</b></label>
               <span class="controls">
-                <select id="assigneeID" name="assigneeID" class="form-control grp-assigee" disabled>
+                <select id="assigneeID" name="assigneeID" class="form-control grp-assigee assignee_id">
                   {{#each this}}
                       {{#each group_users}}
-                          <option class="{{../id}}" value="{{id}}">{{name}}</option>  
+                        <option class="{{../id}}" value="{{id}}">{{name}}</option>  
                       {{/each}}
                   {{/each}}
                 </select>
               </span>
-            </div>
-            <div class="control-group col-md-6">
+            </div>-->
+            <div class="control-group col-md-5">
                 <label class="control-label block"><b>Labels</b></label>
                 <span class="controls">
                   <select name="labels" data-placeholder="Labels" class="chosen-select form-control" multiple class="w-md">
