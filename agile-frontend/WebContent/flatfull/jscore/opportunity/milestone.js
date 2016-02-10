@@ -148,8 +148,21 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
 
 		$('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue));
 		$('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
-	
-      }
+		/* average of new deal total */
+     	var avg_old_deal_size = 0;
+     	var old_deal_count = parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1 ; 
+     	if(old_deal_count == 0)
+     		avg_old_deal_size = 0;
+     	else
+     		avg_old_deal_size = olddealvalue / old_deal_count;
+		 /* average of new deal total */
+      	var avg_new_deal_size = 0;
+     	var new_deal_count = parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1 ; 
+     	if(new_deal_count == 0)
+     		avg_new_deal_size = 0;
+     	else
+     		avg_new_deal_size = newdealvalue / new_deal_count;
+        }
 	} catch(err){
 		console.log(err);
 	}

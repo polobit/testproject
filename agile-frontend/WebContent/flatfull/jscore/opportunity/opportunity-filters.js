@@ -656,7 +656,15 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 
             $('#'+milestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(removeDealValue));
           
-           $('#'+ milestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()) - 1);			
+            $('#'+ milestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()) - 1);	
+	          
+			 /* average of deal total */
+	      	var avg_deal_size = 0;
+	     	var deal_count = parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()) - 1 ; 
+	     	if(deal_count == 0)
+	     		avg_new_deal_size = 0;
+	     	else
+	     		avg_new_deal_size = removeDealValue / deal_count;		
            
 
 			dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));

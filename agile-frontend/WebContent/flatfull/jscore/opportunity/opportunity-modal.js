@@ -178,13 +178,18 @@ $(function()
 											try
 						                    {
 
-                        					  var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(arch_deal_value); 
-                         			          $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
+                        					    var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(arch_deal_value); 
+                         			            $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
                         
-											  $('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
-						
-                          
-
+											 	$('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+												/* average of new deal total */
+										     	var avg_deal_size = 0;
+										     	var deal_count = parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1 ; 
+										     	if(deal_count == 0)
+										     		avg_deal_size = 0;
+										     	else
+										     		avg_old_deal_size = olddealvalue / deal_count;
+												 
 											}
 											catch (err)
 											{
@@ -684,6 +689,15 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 							var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(deal_pre_modified_value);
 						    $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
 						    $('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+						
+							/* average of new deal total */
+					     	var avg_deal_size = 0;
+					     	var old_deal_count = parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1 ; 
+					     	if(old_deal_count == 0)
+					     		avg_deal_size = 0;
+					     	else
+					     		avg_deal_size = olddealvalue / old_deal_count;
+							 
 						}
 						catch (err)
 						{
@@ -703,18 +717,31 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 						try
 						{
 
-                           var dealchangevalue = deal.expected_value;
-                           var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(deal_pre_modified_value); 
-                           var newdealvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))+parseFloat(dealchangevalue);
+                            var dealchangevalue = deal.expected_value;
+                            var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(deal_pre_modified_value); 
+                            var newdealvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))+parseFloat(dealchangevalue);
 
 
-		                  $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue));
-		                  $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
+		                    $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue));
+		                    $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
 
 
-						  $('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
-						  $('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
-						
+						    $('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
+						    $('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+							/* average of new deal total */
+					     	var avg_old_deal_size = 0;
+					     	var old_deal_count = parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1 ; 
+					     	if(old_deal_count == 0)
+					     		avg_old_deal_size = 0;
+					     	else
+					     		avg_old_deal_size = olddealvalue / old_deal_count;
+							 /* average of new deal total */
+					      	var avg_new_deal_size = 0;
+					     	var new_deal_count = parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1; 
+					     	if(new_deal_count == 0)
+					     		avg_new_deal_size = 0;
+					     	else
+					     		avg_new_deal_size = newdealvalue / new_deal_count;
                           
 
 						}
@@ -748,6 +775,14 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 
 		                  $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue));
 		                  
+						    /* average of new deal total */
+					      	var avg_new_deal_size = 0;
+					     	var new_deal_count = parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1; 
+					     	if(new_deal_count == 0)
+					     		avg_new_deal_size = 0;
+					     	else
+					     		avg_new_deal_size = newdealvalue / new_deal_count;
+
 						}
 						catch (err)
 						{
@@ -798,6 +833,15 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
                         $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealeditvalue));
 
 						$('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
+					    /* average of new deal total */
+				      	var avg_new_deal_size = 0;
+				     	var new_deal_count = parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1 ;  
+				     	if(new_deal_count == 0)
+				     		avg_new_deal_size = 0;
+				     	else
+				     		avg_new_deal_size = newdealeditvalue / new_deal_count;
+
+
 					}
 					catch (err)
 					{
