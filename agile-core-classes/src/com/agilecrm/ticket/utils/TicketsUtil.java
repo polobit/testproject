@@ -23,6 +23,7 @@ import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketsDocument;
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.Tickets;
@@ -493,8 +494,8 @@ public class TicketsUtil
 		String[] emails = csvEmails.split(",");
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 		
-		String agentName = DomainUserUtil.getDomainUser(ticket.assigneeID).name;
-		String fromAddress = DomainUserUtil.getDomainUser(ticket.assigneeID).email;
+		String agentName = SessionManager.get().getName();
+		String fromAddress = SessionManager.get().getEmail();
 		
 		for (String email : emails)
 		{
