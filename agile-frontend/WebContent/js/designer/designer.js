@@ -607,7 +607,7 @@ function send_test_email(button){
     });
 }
 function check_spam_score(button){
-      window.parent.workflow_alerts("Please Wait Spam Score Checking is Progress...", "<img src='http://localhost:8888/img/21-0.gif' alt='Waiting' style='padding-left:240px; height=50px; '>" , "workflow-alert-modal",undefined);        
+      window.parent.workflow_alerts("Please Wait Spam Score Checking is Progress...", "<img src='img/21-0.gif' alt='Waiting' style='padding-left:240px; height=50px; '>" , "workflow-alert-modal",undefined);        
     
     var margin;
     var jsonValues = serializeNodeForm();
