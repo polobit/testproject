@@ -341,7 +341,7 @@ public class TicketsRest
 		{
 			String html_text = ticket.html_text;
 			html_text = html_text.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
-			
+
 			CreatedBy createdBy = ticket.created_by;
 
 			if (StringUtils.isBlank(html_text))
@@ -920,6 +920,33 @@ public class TicketsRest
 
 			for (Key<Tickets> key : keys)
 				TicketsUtil.deleteTicket(key.getId());
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
+	 * Forward ticket
+	 * 
+	 * @param notes
+	 * @return
+	 */
+	@GET
+	@Path("/add-tickets-to-text-search")
+	public void addTicketsToTextSearch()
+	{
+		try
+		{
+			List<Key<Tickets>> keys = Tickets.ticketsDao.listAllKeys();
+
+			for (Key<Tickets> key : keys)
+			{
+				new TicketsDocument().add(Tickets.ticketsDao.get(key));
+			}
 		}
 		catch (Exception e)
 		{
