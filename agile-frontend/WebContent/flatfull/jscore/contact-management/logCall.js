@@ -291,17 +291,27 @@ function saveLogPhone(form, modal, element, logPhone)
 		var logPhone = data.toJSON();
 
 		if($("#saveActivity",form).val() == "true"){
-			var contactDetailsObj = agile_crm_get_contact();
-			var data ={};
-			data.url = "/core/api/notes/save_logPhoneActivity";
-			data.id = contactDetailsObj.id;
-			data.callType = logPhone.callType;
-			data.number = logPhone.phone;
-			data.status = logPhone.status;
-			data.duration = logPhone.duration;
-			data.widget = $("#callWidgetName",form).val();
-			CallLogVariables.callActivitySaved = true;
-			saveLogPhoneActivity(data);
+			try{
+				var contactDetailsObj;
+				if(CallLogVariables.id){
+					contactDetailsObj = CallLogVariables.id;
+				}else{
+					contactDetailsObj = agile_crm_get_contact();	
+				}
+				var data ={};
+				data.url = "/core/api/notes/save_logPhoneActivity";
+				data.id = contactDetailsObj.id;
+				data.callType = logPhone.callType;
+				data.number = logPhone.phone;
+				data.status = logPhone.status;
+				data.duration = logPhone.duration;
+				data.widget = $("#callWidgetName",form).val();
+				CallLogVariables.callActivitySaved = true;
+				saveLogPhoneActivity(data);
+			}catch(e){
+				console.log("activities not saved AS CONTACT NOT FOUND");
+			}
+			
 		}
 		
 		modal.modal('hide');
