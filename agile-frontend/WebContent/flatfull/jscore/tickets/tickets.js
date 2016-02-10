@@ -990,15 +990,22 @@ var Tickets = {
 
 	toggleFavorite : function(e){
 
+		//Toggling star color
+		if($(e.target).hasClass("fa-star text-warning")){
+			$(e.target).removeClass("fa-star text-warning").addClass("fa-star-o text-light");
+		}else{
+			$(e.target).addClass("fa-star text-warning").removeClass("fa-star-o text-light");	
+		}
+
 		var newTicketModel = new BaseModel();
 		newTicketModel.url = "/core/api/tickets/toggle-favorite?id=" + Current_Ticket_ID;
 		newTicketModel.save({'id': Current_Ticket_ID}, 
 			{	
 				success: function(model){
-					if(model.toJSON().is_favorite)
-						$(e.target).addClass("fa-star text-warning").removeClass("fa-star-o text-light");
-					else
-						$(e.target).removeClass("fa-star text-warning").addClass("fa-star-o text-light");
+					// if(model.toJSON().is_favorite)
+					// 	$(e.target).addClass("fa-star text-warning").removeClass("fa-star-o text-light");
+					// else
+					// 	$(e.target).removeClass("fa-star text-warning").addClass("fa-star-o text-light");
 
 					// If in time line add event to timeline
 					if($('.ticket-timeline-container').length > 0){
@@ -1273,7 +1280,8 @@ var Tickets = {
 	},
 
 	updateIframeHeight : function(iframe){
-		$(iframe).height($(iframe).contents().height() - 5);
+
+		$(iframe).height($(iframe).contents().height());
 
 		$(iframe).contents().find('body').css({
 		    'font-family': '"Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif',

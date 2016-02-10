@@ -20,11 +20,11 @@ var Tickets_Notes = {
 		});
 
 		if(!$("#send-reply").valid())
-		return;
+			return;
 
 		var json = serializeForm("send-reply");
 
-		json.html_text = json.html_text + "<br><br>" +CURRENT_USER_PREFS.signature;
+		json.html_text = json.html_text + "<br><br>" + CURRENT_USER_PREFS.signature;
 
 		if($(e.target).hasClass('forward')){
 			this.forwardTicket(json, $save_btn);
@@ -79,42 +79,63 @@ var Tickets_Notes = {
 
 	forwardTicket : function(data, targetEle){
 
-		var newTicketNotesModel = new BaseModel();
-		newTicketNotesModel.url = '/core/api/tickets/forward-ticket';
-		newTicketNotesModel.save(data, {
+		var emails = [];
 
-			success : function(model) {
-
-				Tickets.renderExistingCollection();
-				return;
-
-				// Tickets_Notes.repltBtn('reply');
-
-				// If in time line add event to timeline
-				// if($('.ticket-timeline-container').length > 0){
-				// 	Ticket_Timeline.render_individual_ticket_timeline();
-				// 	return;
-				// }
-
-				// if($("#ticket-activities-model-list").length > 0)
-				// 	App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
-				
-
-				
-			},
-			error : function(data, response) {
-
-				$('.error-msg').html(response.responseText);
-
-				enable_save_button(targetEle);
-
-				setTimeout(function() {
-					$('.error-msg').html('');
-				}, 3000);
-			}
+		$('ul.forward-emails > li').each(function(index){
+			emails.push($(this).find('a.anchor').text());
 		});
 
+		//set to emails
+		data.email = emails.join();
 
+		$.ajax({
+			url : '/core/api/tickets/forward-ticket',
+			method: "POST",
+			data: data,
+			contentType: 'application/x-www-form-urlencoded',
+			accept: 'application/json',
+			success : function(data){
+				showNotyPopUp('information', "Ticket has been forwarded to " + emails.join(), 
+					'bottomRight', 3000);
+
+				Tickets.renderExistingCollection();
+			}	
+		});
+
+		// var newTicketNotesModel = new BaseModel();
+		// newTicketNotesModel.url = '/core/api/tickets/forward-ticket';
+		// newTicketNotesModel.save(data, {
+
+		// 	success : function(model) {
+
+		// 		Tickets.renderExistingCollection();
+		// 		return;
+
+		// 		// Tickets_Notes.repltBtn('reply');
+
+		// 		// If in time line add event to timeline
+		// 		// if($('.ticket-timeline-container').length > 0){
+		// 		// 	Ticket_Timeline.render_individual_ticket_timeline();
+		// 		// 	return;
+		// 		// }
+
+		// 		// if($("#ticket-activities-model-list").length > 0)
+		// 		// 	App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
+				
+
+				
+		// 	},
+		// 	error : function(data, response) {
+
+		// 		$('.error-msg').html(response.responseText);
+
+		// 		enable_save_button(targetEle);
+
+		// 		setTimeout(function() {
+		// 			$('.error-msg').html('');
+		// 		}, 3000);
+		// 	}
+		// });
 	},
 
 	repltBtn : function(reply_type, el) {

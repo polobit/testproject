@@ -145,6 +145,7 @@ public class TicketNotesUtil
 	 */
 	public static JSONObject getFormattedEmailNoteJSON(TicketNotes notes) throws Exception
 	{
+		Map<Long, DomainUser> domainUsersMap = new HashMap<Long, DomainUser>();
 
 		JSONObject json = new JSONObject();
 
@@ -155,7 +156,10 @@ public class TicketNotesUtil
 
 		if (notes.created_by == CREATED_BY.AGENT)
 		{
-			DomainUser user = DomainUserUtil.getDomainUser(notes.assignee_id);
+			if (!domainUsersMap.containsKey(notes.assignee_id))
+				domainUsersMap.put(notes.assignee_id, DomainUserUtil.getDomainUser(notes.assignee_id));
+			
+			DomainUser user = domainUsersMap.get(notes.assignee_id);
 
 			json.put("name", user.name);
 			json.put("img_url", user.getOwnerPic());
@@ -397,7 +401,7 @@ public class TicketNotesUtil
 		document.select("br").append("\\n");
 		document.select("p").prepend("\\n\\n");
 		String s = document.html().replaceAll("\\\\n", "\n");
-		
+
 		return Jsoup.clean(s, "", Whitelist.none(), new Document.OutputSettings().prettyPrint(false));
 	}
 }

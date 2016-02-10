@@ -149,7 +149,7 @@ public class TicketNotesRest
 
 				// Set status to pending as it is replied by assignee
 				ticket.status = Status.PENDING;
-
+				
 				// Updating ticket entity
 				Tickets.ticketsDao.put(ticket);
 

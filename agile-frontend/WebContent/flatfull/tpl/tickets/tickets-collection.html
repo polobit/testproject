@@ -291,11 +291,11 @@
 				                        <input name="created_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'created_time'}}checked{{/is_column_selected}}><i></i></label> Created date
 				                    </a>
 				                </li>
-				                <li><a href="javascript:void(0);" class="p-b-none">
+				                <!-- <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
 				                        <input name="contact_details" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'contact_details'}}checked{{/is_column_selected}}><i></i></label> Contact details
 				                    </a>
-				                </li>
+				                </li> -->
 					          </ul>
 				            </li>
 				          </ul>
@@ -326,7 +326,7 @@
 											<th class="organization {{#is_column_selected 'organization'}}{{else}}display-none{{/is_column_selected}}">Organization</th>
 											<th class="closed_date {{#is_column_selected 'closed_time'}}{{else}}display-none{{/is_column_selected}}">Closed&nbsp;date</th>
 											<th class="created_time {{#is_column_selected 'created_time'}}{{else}}display-none{{/is_column_selected}}">Created&nbsp;date</th>
-											<th class="contact_details {{#is_column_selected 'contact_details'}}{{else}}display-none{{/is_column_selected}}">Contact&nbsp;details</th>
+											<!-- <th class="contact_details {{#is_column_selected 'contact_details'}}{{else}}display-none{{/is_column_selected}}">Contact&nbsp;details</th> -->
 										</tr>
 									</thead>
 									<tbody id="ticket-single-row-model-list" class="tickets-collection ticket-single-row-model-list"

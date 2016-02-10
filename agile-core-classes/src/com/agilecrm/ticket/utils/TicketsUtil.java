@@ -177,7 +177,8 @@ public class TicketsUtil
 	 */
 	public static Tickets createTicket(Long group_id, Long assignee_id, String requester_name, String requester_email,
 			String subject, List<String> cc_emails, String plain_text, Status status, Type type, Priority priority,
-			Source source, CreatedBy createdBy, Boolean attachments, String ipAddress, List<Key<TicketLabels>> labelsKeysList)
+			Source source, CreatedBy createdBy, Boolean attachments, String ipAddress,
+			List<Key<TicketLabels>> labelsKeysList)
 	{
 		Tickets ticket = new Tickets();
 
@@ -486,28 +487,32 @@ public class TicketsUtil
 		return ticket;
 	}
 
-	public static Tickets forwardTicket(Long ticket_id, String content, String email) throws EntityNotFoundException
+	public static Tickets forwardTicket(Long ticket_id, String content, String csvEmails)
+			throws EntityNotFoundException
 	{
+		String[] emails = csvEmails.split(",");
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-
-		try
+		
+		String agentName = DomainUserUtil.getDomainUser(ticket.assigneeID).name;
+		String fromAddress = DomainUserUtil.getDomainUser(ticket.assigneeID).email;
+		
+		for (String email : emails)
 		{
-			String agentName = DomainUserUtil.getDomainUser(ticket.assigneeID).name;
+			try
+			{
+				TicketNotesUtil.sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress,
+						ticket.cc_emails, SendMail.TICKET_REPLY, new JSONObject());
+			}
+			catch (Exception e)
+			{
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
 
-			String fromAddress = DomainUserUtil.getDomainUser(ticket.assigneeID).email;
-
-			// Send email
-			TicketNotesUtil.sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress, ticket.cc_emails,
-					SendMail.TICKET_REPLY, new JSONObject());
+			// Logging activity
+			ActivityUtil.createTicketActivity(ActivityType.TICKET_NOTES_FORWARD, ticket.contactID, ticket.id, "",
+					email, "");
 		}
-		catch (Exception e)
-		{
-		}
-
-		// Logging activity
-		ActivityUtil
-				.createTicketActivity(ActivityType.TICKET_NOTES_FORWARD, ticket.contactID, ticket.id, "", email, "");
-
+		
 		return ticket;
 	}
 
