@@ -12,10 +12,11 @@
 var Workflow_Model_Events = Base_Model_View.extend({
    
     events: {
-        'click #save-workflow-top,#save-workflow-bottom,#duplicate-workflow-top,#duplicate-workflow-bottom,.is-disabled-top': 'saveCampaignClick',
+        'click #save-workflow-top,#save-workflow-bottom,#duplicate-workflow-top,#duplicate-workflow-bottom': 'saveCampaignClick',
         'click #workflow-unsubscribe-option': 'unsubscribeCampaign',
         'click #workflow-designer-help': 'helpCampaign',
         'change #unsubscribe-action': 'unsubscribeCampaignOptionSelect',
+        'change #disable-workflow':'disableSwitchChanges',
     },
 
     unsubscribeCampaignOptionSelect : function(e){
@@ -75,6 +76,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         
     },
 
+    
    /**
      * Saves the content of workflow if the form is valid. Verifies for duplicate workflow names.
      * Separate ids are given for buttons (as IDs are unique in html) but having same functionality, 
@@ -167,33 +169,6 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 // Hide message
                 $('#workflow-edit-msg').hide();
 
-                //toggle disable dropdown
-                 if($clicked_button.hasClass("is-disabled-top")){
-                     var disabled = $(".is-disabled-top");
-                 
-                    if (is_disabled) {
-                        disabled.attr("data", true);
-                        disabled.find('i').toggleClass('fa-lock').toggleClass('fa-unlock');
-                        disabled.find('div').text("Enable Campaign");
-                        $('#designer-tour').addClass("blur").removeClass("anti-blur");;
-                        window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
-                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
-                        show_campaign_save("Campaign has been disabled successfully.","red");
-                    } else {
-                        disabled.attr("data", false);
-                        disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
-                        disabled.find('div').text("Disable Campaign"); 
-                        $('#designer-tour').addClass("anti-blur").removeClass("blur");;
-                        window.frames[0].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
-                        window.frames[0].$('#toolbartabs').removeClass("disable-iframe");
-                       // $('#designer-tour').css("pointer-events","none");
-                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
-                        show_campaign_save("Campaign has been enabled successfully.");
-
-                    }
-                }
-
-                
                 // Boolean data used on clicking on Done
                 if(trigger_data && trigger_data["navigate"])
                 {
@@ -229,6 +204,31 @@ var Workflow_Model_Events = Base_Model_View.extend({
             
         } 
     },
+
+    disableSwitchChanges:function(el){
+                     var disabled = $(".is-disabled-top");
+                 var status = $('#disable-switch').bootstrapSwitch('status');
+                if (status) {
+                        disabled.attr("data", true);
+                        disabled.find('i').toggleClass('fa-lock').toggleClass('fa-unlock');
+                        disabled.find('div').text("Enable Campaign");
+                        $('#designer-tour').addClass("blur").removeClass("anti-blur");;
+                        window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
+                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
+                        show_campaign_save("Campaign has been disabled successfully.","red");
+                    } else {
+                        disabled.attr("data", false);
+                        disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
+                        disabled.find('div').text("Disable Campaign"); 
+                        $('#designer-tour').addClass("anti-blur").removeClass("blur");;
+                        window.frames[0].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
+                        window.frames[0].$('#toolbartabs').removeClass("disable-iframe");
+                       // $('#designer-tour').css("pointer-events","none");
+                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
+                        show_campaign_save("Campaign has been enabled successfully.");
+                    }
+             },
+
 
 });
 
@@ -368,7 +368,7 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
             
             error: function(jqXHR, status, errorThrown){ 
               enable_save_button($clicked_button); 
-              App_Workflows.workflow_list_view.collection.remove(workflow);
+              
               // shows Exception message
               if(status.status != 406)
               {
