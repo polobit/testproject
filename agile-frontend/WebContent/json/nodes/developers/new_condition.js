@@ -46,6 +46,7 @@
                       "type": "select",
                       "event": "onchange",
                       "eventHandler": "insertSelectedOption1",
+                      "invisible": "true",
                       "style": {
                           "float": "none"
                       } 
@@ -58,8 +59,7 @@
                     "class":"new_field1",
                     "name": "and_variable_1",
                     "title": "E.g. {{score}}, {{company}}, <br>{{your custom field}}",
-                    "fieldType": "input",
-                    "invisible": "true",
+                    "fieldType": "input",                    
                     "type": "text"
                 },
                 {
@@ -129,6 +129,7 @@
                      "type": "select",
                      "event": "onchange",
                      "eventHandler": "insertSelectedOption1",
+                     "invisible": "true",
                      "style": {
                          "float": "none"
                      } 
@@ -142,8 +143,7 @@
                    "name": "or_variable_1",
                    "title": "E.g. {{score}}, {{company}}, <br>{{your custom field}}",
                    "fieldType": "input",
-                   "type": "text",
-                   "invisible": "true"
+                   "type": "text"
                },
                {
                    "label": "compare this",
