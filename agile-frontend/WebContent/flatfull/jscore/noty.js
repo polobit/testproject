@@ -185,9 +185,11 @@ function get_random_message() {
 	else
 		trail_expiry_message = "Your trial will expire in "+getPendingdaysIntrail()+" days";*/
 	
-	
-	var messages = ["You are using FREE limited version of Agile CRM. <span> Upgrade Now </span> "];
-
+	var messages = [];
+	if(_billing_restriction.currentLimits.freePlan)
+		messages = ["You are using FREE limited version of Agile CRM. <span> Upgrade Now </span> "];
+	else if(USER_BILLING_PREFS != undefined && USER_BILLING_PREFS.status != undefined && USER_BILLING_PREFS.status != null && $.inArray(USER_BILLING_PREFS.status, PAYMENT_FAILED_REASON) != -1)
+		messages = ["Your payment for updating subscription was failed. Please update your your card. Otherwise your acccount will be blocked on 15 Feb, 16."];
 	var random = Math.floor((Math.random() * messages.length));
 	// console.log(random + messages[random]);
 

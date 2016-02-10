@@ -32,6 +32,12 @@ var SUPPORT_SCHEDULE_URL = "http://supportcal.agilecrm.com";
 
 
 var CALENDAR_WEEK_START_DAY = CURRENT_USER_PREFS.calendar_wk_start_day;
+
+var AVOID_PAGEBLOCK_URL = [ "subscribe", "purchase-plan", "updateCreditCard" ];
+
+var PAGEBLOCK_REASON = [ "BILLING_FAILED_3", "SUBSCRIPTION_DELETED" ];
+
+var PAYMENT_FAILED_REASON = ["BILLING_FAILED_0", "BILLING_FAILED_1", "BILLING_FAILED_2"];
 /**
  * Returns random loading images
  * 
@@ -631,3 +637,26 @@ function handleAjaxError(){
 
 }
 
+function showPageBlockModal() {
+
+	// Removing existing modal
+	$("#user-blocked-modal").modal('hide');
+
+	if ($.inArray(Current_Route, AVOID_PAGEBLOCK_URL) != -1 || USER_BILLING_PREFS == undefined || USER_BILLING_PREFS.status == undefined || USER_BILLING_PREFS.status == null)
+		return false;
+	else if($.inArray(USER_BILLING_PREFS.status, PAYMENT_FAILED_REASON) != -1){
+		showNotyPopUp("warning", get_random_message(), "topCenter", "none", function(){
+			Backbone.history.navigate('subscribe', {
+				 trigger : true
+				 });
+		});
+	}else if($.inArray(USER_BILLING_PREFS.status, PAGEBLOCK_REASON) != -1){
+		getTemplate("block-user", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("body").append(template_ui);
+			$("#user-blocked-modal").modal('show');
+		}, null);
+	}
+
+}
