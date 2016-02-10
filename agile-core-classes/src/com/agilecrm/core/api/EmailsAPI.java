@@ -518,10 +518,10 @@ public class EmailsAPI
 
 		    // If no powered by merge field, append Agile label to html
 		    if (!StringUtils.contains(htmlEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
-			htmlEmail = EmailUtil.appendAgileToHTML(htmlEmail, "campaign", "Powered by",
+		    		htmlEmail = EmailUtil.appendAgileToHTML(htmlEmail, "campaign", "Powered by",
 				emailSender.isEmailWhiteLabelEnabled());
 		 
-    	String  data ="domainName";												data +="\n";
+    	String  data =domainName;												data +="\n";
     			data +="Mime-Version: 1.0";										data +="\n";
 		    	data +="Content-Type: multipart/alternative; boundary=\"_av-0sAAoRRXZN7YLBFWvl0DvA\"";		data +="\n";
     		    data +="Message-Id: <v0421010eb70653b14e06@[208.192.102.193]>";	data +="\n";
@@ -540,7 +540,7 @@ public class EmailsAPI
     	
 	try
 	{
-		scoreJson=HTTPUtil.accessURLUsingPost("http://localhost:8080/Test/test",data);
+		scoreJson=HTTPUtil.accessURLUsingPost("http://54.84.112.13/spamassassin/spam",data);
 	  /* 
 
 	   // emailSender.sendEmail(fromEmail, fromName, fromEmail, null, null, subject, replyToEmail, htmlEmail,
@@ -552,7 +552,7 @@ public class EmailsAPI
 	    System.err.println("Exception occured while sending test email..." + e.getMessage());
 	    e.printStackTrace();
 	}
-
+	
 	return scoreJson;
     }
 }
