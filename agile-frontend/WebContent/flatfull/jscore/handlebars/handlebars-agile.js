@@ -309,6 +309,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("skype.js");
 	}
+	if (templateName.indexOf("dashboard") == 0)
+	{
+		template_relative_urls.push("dashboards.js");
+	}
 	return template_relative_urls;
 }
 

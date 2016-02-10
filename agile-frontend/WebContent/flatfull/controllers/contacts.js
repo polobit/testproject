@@ -82,7 +82,22 @@ var ContactsRouter = Backbone.Router.extend({
             return;
 		}
 
-		getTemplate('portlets', {}, undefined, function(template_ui){
+		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+
+		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
+
+		var dashboardJSON = {};
+		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {
+			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
+				if(dashboard_name != "DashBoard" && value.id == dashboard_name) {
+					dashboardJSON["id"] = value.id;
+					dashboardJSON["name"] = value.name;
+					dashboardJSON["description"] = value.description;
+				}
+			});
+		}
+
+		getTemplate('portlets', dashboardJSON, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 
@@ -95,7 +110,7 @@ var ContactsRouter = Backbone.Router.extend({
 					$("#chrome-extension-button").removeClass('hide');
 				}
 
-				loadPortlets('DashBoard',el);
+				loadPortlets(dashboard_name,el);
 
 		}, "#content");
 

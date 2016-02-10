@@ -10,6 +10,7 @@ import net.sf.json.JSONObject;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.dashboards.Dashboard;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -54,7 +55,7 @@ public class Portlet {
     
     @Indexed
     @NotSaved(IfDefault.class)
-    public PortletRoute portlet_route = null;
+    public String portlet_route = null;
     
     @NotSaved(IfDefault.class)
     public String prefs = null;
@@ -116,7 +117,7 @@ public class Portlet {
     	this.portlet_type=type;
     }
     
-    public Portlet(String name,PortletType type,int column_position,int row_position,int size_x,int size_y,PortletRoute route){
+    public Portlet(String name,PortletType type,int column_position,int row_position,int size_x,int size_y,String route){
     	this.name=name;
     	this.portlet_type=type;
     	this.column_position=column_position;

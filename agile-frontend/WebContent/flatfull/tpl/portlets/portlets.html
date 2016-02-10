@@ -1326,8 +1326,20 @@
     </a>
 	</span>	
 	{{else}}
-				<h1 class="m-n font-thin h3 text-black">Dashboard</h1>
-				<small class="text-muted">Welcome to Agile CRM</small>
+				<div class="btn-group">
+					<h1 class="m-n font-thin h3 text-black pull-left c-p" data-toggle="dropdown" data-value="{{#if id}}{{id}}{{/if}}" id="dashboard-name">
+						{{#if name}}{{getTruncatedDashboardName name}}{{else}}Dashboard{{/if}}
+					</h1>
+					<button class="btn btn-sm dropdown-toggle no-shadow bg-transparent b-n p-l-xs" data-toggle="dropdown" aria-expanded="true">
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						{{#getCurrentUserDashboards 'dashboard'}}{{/getCurrentUserDashboards}}
+					</ul>
+				</div>
+				<div class="text-ellipsis" style="max-width:300px;">
+					<small class="text-muted" id="dashboard-desc">{{#if description}}{{description}}{{else}}Welcome to Agile CRM{{/if}}</small>
+				</div>
 		{{/is_mobile}}		
 			</div>
 			<div class="pull-right">
@@ -1342,7 +1354,10 @@
 				</a>
 				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
 					<i class="icon icon-plus-sign"></i> Add Dashlet
-				</a> 
+				</a>
+				<!-- <a href="#dashboards" id="dashboards" class="btn btn-default btn-sm btn-addon dashboards add-stream-tab pos-rlt">
+					<i class="icon icon-plus-sign"></i> Add/Edit Dashboard
+				</a> -->
 				
 			</div>
 			<div class="clearfix"></div>      	

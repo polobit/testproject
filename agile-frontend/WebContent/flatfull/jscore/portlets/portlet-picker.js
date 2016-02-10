@@ -39,7 +39,7 @@ function organize_portlets(base_model) {
  */
 function set_p_portlets(base_model) {
 	
-	if(base_model.toJSON().portlet_route!='DashBoard'){
+	if(base_model.toJSON().portlet_route!='DashBoard' && isNaN(base_model.toJSON().portlet_route)){
 		App_Portlets.RoutePortlets.push(base_model);
 		return;
 	}
@@ -47,6 +47,13 @@ function set_p_portlets(base_model) {
 	if(base_model.toJSON().isForAll)
 	{
 		App_Portlets.adminPortlets.push(base_model);
+		return;
+	}
+
+	//If portlet is user defined dashboards portlet, we can add that portlet to DashboardPortlets
+	if(base_model.toJSON().portlet_route!='DashBoard' && !isNaN(base_model.toJSON().portlet_route) && 
+		base_model.get("row_position") == -1 && base_model.get("column_position") == -1){
+		App_Portlets.DashboardPortlets.push(base_model);
 		return;
 	}
 	

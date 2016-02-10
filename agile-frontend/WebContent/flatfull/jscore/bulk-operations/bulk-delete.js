@@ -266,6 +266,28 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 				});
 				
 			}
+
+			if(url=='core/api/dashboards/bulk')
+			{
+				if(App_Dashboards.dashboards_collection_view && App_Dashboards.dashboards_collection_view.collection)
+				{
+					$.each(id_array, function(index, id_val){
+						App_Dashboards.dashboards_collection_view.collection.remove(id_val);
+					});
+				}
+				if(CURRENT_USER_DASHBOARDS && CURRENT_USER_DASHBOARDS.length > 0)
+				{
+					$.each(id_array, function(index, id_val){
+						$.each(CURRENT_USER_DASHBOARDS, function(index1, val)
+						{
+							if(id_val == this.id)
+							{
+								CURRENT_USER_DASHBOARDS.splice(index1, 1);
+							}
+						});
+					});
+				}
+			}
 			
 			$(".bulk-delete-loading").remove();	
 			if(count > 20 || count == 0)

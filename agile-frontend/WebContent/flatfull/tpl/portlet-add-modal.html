@@ -21,6 +21,9 @@
 						<option value="Tasks">Tasks</option>
 						<option value="Contacts">Contacts</option>
 						<option value="Events">Events</option>
+						<optgroup label="Custom Dashboards">
+							{{#getCurrentUserDashboards 'portlet'}}{{/getCurrentUserDashboards}}
+						</optgroup>
 					</select>
 				</div>        					   			  
 				</fieldset>

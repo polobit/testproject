@@ -1,0 +1,47 @@
+<script id="dashboard-add-template" type="text/html">
+<div class="bg-light lter b-b wrapper-md">
+	{{#if id}} 
+		<h3  class="formheading h3 font-thin m-n">Edit Dashboard
+			<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="Use dashboards to give over-arching views of your data which are made up of dashlets. You can configure your preferred dashlets and show the dashboards based on configured dashlets." id="element" data-trigger="hover"></span>
+		</h3>
+	{{else}}
+        <h3 class="formheading h3 font-thin m-n"><i class="icon-plus-sign"></i> Add Dashboard
+        	<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="Use dashboards to give over-arching views of your data which are made up of dashlets. You can configure your preferred dashlets and show the dashboards based on configured dashlets." id="element" data-trigger="hover">
+			</span>
+		</h3>
+     {{/if}}
+</div>
+<div class="wrapper-md">
+	<div class="row">
+		<div class="col-md-12">
+			<form id="dashboardAddForm" name="dashboardAddForm" class="form-horizontal">
+				<fieldset>
+					<div class="control-group form-group">
+						<label class="control-label col-sm-2">Name<span class="field_req">*</span></label>
+						<div class="controls col-sm-6">
+							<input type="text" name="name" placeholder="Dashboard name" class="required form-control" autofocus/>
+						</div>
+					</div>
+					<div class="control-group form-group">
+						<label class="control-label col-sm-2">Description</label>
+						<div class="controls col-sm-6">
+							<textarea name="description" id="description" placeholder="Add description" class="form-control" style="width:100%;" rows="5" />
+						</div>
+					</div>
+					<div class="line line-lg b-b"></div>
+					<div class="row">
+						<div class="form-actions col-sm-offset-2 col-sm-10">
+							<a href="#dashboards" class="btn btn-sm btn-default">Cancel</a>
+							<a href="#" type="submit" class="save btn btn-sm btn-primary" id="dashboardAdd">Save</a> 
+						</div>
+					</div>
+					{{#if id}}
+						<input type="hidden" name="id" value="{{id}}" />
+						<input type="hidden" name="created_time" value="{{created_time}}" />
+					{{/if}}
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+</script>

@@ -40,6 +40,7 @@ $(function()
 	App_Companies = new CompaniesRouter();
 	App_Datasync = new DataSyncRouter();
 	App_LandingPageRouter = new LandingPageRouter();
+	App_Dashboards = new DashboardsRouter();
 
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)

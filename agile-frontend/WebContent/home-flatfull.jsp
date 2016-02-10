@@ -18,6 +18,9 @@
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
+<%@page import="com.agilecrm.dashboards.Dashboard"%>
+<%@page import="com.agilecrm.dashboards.util.DashboardUtil"%>
+<%@page import="java.util.List"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
@@ -83,6 +86,8 @@ if(is_free_plan && is_first_time_user)
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String _VERSION_ID = VersioningUtil.getVersion();
+
+List<Dashboard> dashboardsList = DashboardUtil.getAddedDashboardsForCurrentUser();
 %>
 
 
@@ -375,6 +380,9 @@ var ACCOUNT_PREFS = <%=mapper.writeValueAsString(accountPrefs)%>;
 
 // Get current domain user json
 var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
+
+// Get current user dashboards
+var CURRENT_USER_DASHBOARDS = <%=mapper.writeValueAsString(dashboardsList)%>;
 
 // Get Contact Date Fields
 var CONTACTS_DATE_FIELDS = <%=mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE"))%>;

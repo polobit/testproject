@@ -38,6 +38,7 @@ function loadPortlets(route,el){
 	App_Portlets.dealGoals=new Array();
 	App_Portlets.adminPortlets = new Array();
 	App_Portlets.RoutePortlets=new Array();
+	App_Portlets.DashboardPortlets=new Array();
 
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
@@ -48,7 +49,7 @@ function loadPortlets(route,el){
 	// postrender. It is set to false after portlet setup is initialized
 	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets?route='+route, sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 		postRenderCallback : function(portlets_el){
-			if(route!='DashBoard')
+			if(route!='DashBoard' && isNaN(route))
 			{
 				if($('#zero-portlets').is(':visible') || $('#no-portlets').is(':visible'))
 				$('#no-portlets').parents('.wrapper-md').hide();
@@ -89,6 +90,39 @@ function loadPortlets(route,el){
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
 					
 				}
+
+				if(route!='DashBoard' && App_Portlets.DashboardPortlets.length!=0){
+					var models = [];
+					$.each(App_Portlets.DashboardPortlets, function(index,model) {
+						var obj={};
+						var next_position = gridster.next_position(1, 1);
+						obj.column_position = next_position.col;
+						obj.row_position = next_position.row;
+
+					
+						model.set({ 'column_position' : obj.column_position}, { silent : true });
+						model.set({ 'row_position' : obj.row_position  }, { silent : true });
+						model.set({'isForAll' : false});
+						portlet_utility.getOuterViewOfPortlet(model,portlets_el, function() {
+								portlet_utility.getInnerViewOfPortlet(model, portlets_el);
+							});
+						portlet_utility.addWidgetToGridster(model);
+						var that=$('#'+model.id).parent();
+						if(!(that.attr('data-col')==model.get('column_position')) || !(that.attr('data-row')==model.get('row_position')))
+						{
+							model.set({ 'column_position' : parseInt(that.attr("data-col")) }, { silent : true });
+							model.set({ 'row_position' : parseInt(that.attr("data-row")) }, { silent : true });
+							that.attr('id','ui-id-'+that.attr("data-col")+'-'+that.attr("data-row"));
+							that.find('div.portlet_body').attr('id','p-body-'+that.attr("data-col")+'-'+that.attr("data-row"));
+						}
+						models.push({ id : model.get("id"), column_position : obj.column_position, row_position : obj.row_position,isForAll : false });
+			
+					});
+					$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
+						contentType : "application/json; charset=utf-8", dataType : 'json' });
+					
+				}
+
 				if(App_Portlets.adminPortlets.length!=0)
 				{
 					var models = [];

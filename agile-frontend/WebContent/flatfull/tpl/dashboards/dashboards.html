@@ -1,0 +1,57 @@
+<script id="dashboard-collection-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+	<div class="row">
+    	<div class="col-md-12">
+        	<h3 class="pull-left font-thin h3">Dashboards</h3>
+            <a href="#add-dashboard" class="btn btn-sm btn-default right" id="addDashboard"><span><i class='icon-plus-sign'/></span>  Add Dashboard</a>
+            <div class="clearfix"></div>
+           
+        </div>
+	</div>
+</div>
+<div class="wrapper-md">
+	<div class="row">
+    	<div class="col-md-9"> 
+	        {{#if this.length}}
+	        	<div class="panel panel-default">
+					<div class="table-responsive">
+	        			<table class="table table-bordered showCheckboxes agile-table panel table-layout-mob-view" url="core/api/dashboards/bulk" id="dashboard-list">  
+	            			<thead>
+	                			<tr>   
+	                    			<th style="width:50%">Name</th>
+	                    			<th style="width:25%">Created Time</th>
+	                			</tr>
+	            			</thead>
+	            			<tbody id='dashboard-model-list' route='edit-dashboard/'></tbody>
+	        			</table>
+					</div>
+				</div>
+			{{/if}}
+			<div id="slate"></div>
+    	</div>
+    	<div class='col-md-3'>
+        	<div class="wrapper" id='addview'>
+             	<h4 class="m-t-none m-b-sm">
+              		What are Dashboards?
+             	</h4>
+            	<p>Dashboards give over-arching views of your data which are made up of dashlets. You can configure your preferred dashlets and show the dashboards based on configured dashlets.</p>
+        	</div>
+    	</div>
+	</div>
+</div>
+</script>
+
+<script id="dashboard-model-template" type="text/html">
+<td data='{{id}}' class='data c-p'>
+  <div class="text-ellipsis">
+    {{name}} 
+  </div>
+</td>
+<td> 
+  {{#if created_time}}
+      <div>
+         <time class="created_time time-ago text-muted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time>
+      </div>
+  {{/if}}
+</td>
+</script>
