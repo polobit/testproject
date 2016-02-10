@@ -106,6 +106,20 @@ var contact_details_documentandtasks_actions = {
         		var targetEl = $(e.currentTarget);
 
         		var el = $("#opportunityForm");
+
+        		if($('#color1', el).is(':hidden')){
+
+			    	$('.colorPicker-picker', el).remove();
+
+			    	$('#color1', el).colorPicker();
+				}
+
+				var colorcode = "#808080";
+			    $('#color1' , el).attr('value', colorcode);
+			    $('.colorPicker-picker', el).css("background-color", colorcode); 
+			    // Disable color input field
+			    $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
+
 				$("#opportunityModal").modal('show');
 
 				add_custom_fields_to_form({}, function(data)
