@@ -309,7 +309,7 @@ var contact_details_documentandtasks_actions = {
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 			fillSelect('document-select', 'core/api/documents', 'documents', function fillNew()
 			{
-				el.find("#document-select").append("<option value='new'>Add New Doc</option>");
+				el.find("#document-select > option:first").after("<option value='new'>Add New Doc</option>");
 
 			}, optionsTemplate, false, el);
 	    },
