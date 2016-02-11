@@ -229,3 +229,165 @@
 
 </div>
 </script>
+
+<script id="calendar-popover-meeting-type-template" type="text/html">
+    {{#if event.description}}
+        {{#if event.meeting_type}}
+	    	<i class="icon-comment-alt text-muted m-r-xs"></i>
+	    	<span>Meeting Type - {{event.meeting_type}}</span><br/>
+	    	<span title="{{event.description}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{dottedEventDescription event.description}}
+	    	</span>
+	    {{else}}
+	         <i class="icon-comment-alt text-muted m-r-xs"></i>
+	         <span title="{{event.description}}">{{dottedEventDescription event.description}}</span>
+	    {{/if}}
+	{{/if}}
+</script>
+<script id="calendar-popover-contacts-template" type="text/html">
+    {{#if event.contacts}}
+	   {{#if event.contacts.length}}
+	   		<i class="icon-user text-muted m-r-xs"></i>
+	   {{/if}}
+	   {{#each event.contacts}}
+	       {{#if_equals this.entity_type "contact_entity"}}
+	             {{#if_equals this.type "COMPANY"}}
+	              		<a class="text-info" href="#company/{{this.id}}">
+	              			{{getPropertyValue this.properties "name"}}
+	              		</a>
+	              	{{else}}
+	              	    <a class="text-info" href="#contact/{{this.id}}">
+	              			{{getPropertyValue this.properties "first_name"}} {{getPropertyValue this.properties "first_name"}}
+	              		</a>
+	       		 {{/if_equals}}   
+	       	{{else}}
+	       	     <a class="text-info" href="#contact/{{this.id}}">
+	       	     	 {{getPropertyValue this.properties "name"}}
+	       	     </a> 
+	       {{/if_equals}}
+	       {{#if @last}} {{else}}, {{/if}}
+	   {{/each}}
+	{{/if}}
+</script>
+
+<script id="office-calendar-mouseover-popover-template" type="text/html">
+    <div class="fc-overlayw {{leftorright}}" style="min-width:{{popover_min_width}}px;max-width: {{popover_min_width}}px;left:{{left}}px;top:{{top}}px;position:absolute;z-index:10;display:none;">	
+    	<div class="panel bg-white b-a pos-rlt p-sm">
+		 	<span class="arrow {{leftorright}} {{pullupornot}}" style="top:11px;"></span> 
+			 <div class="m-b-sm">
+			 	<div class="pull-left text-flow-ellipsis p-b-xs" style="width:100%;">{{event.title}}</div>
+			 </div>
+		 	<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}</div>
+		 	<div class="text-ellipsis">
+		 	    {{get_template_type "calendar-popover-contacts"}}
+		 	</div>
+		 	<div class="text-ellipsis">
+		 	     {{get_template_type "calendar-popover-meeting-type"}}
+		 	</div>
+		 </div>
+	</div>
+</script>
+
+<script id="calendar-mouseover-popover-template" type="text/html">
+	<div class="fc-overlayw {{leftorright}}" style="width:100%;min-width:{{popover_min_width}}px;max-width:{{popover_min_width}}px;left:{{left}}px;top:{{top}}px;position:absolute;z-index:10;display:none;">
+	    <div class="panel bg-white b-a pos-rlt p-sm">
+	       	<span class="arrow {{leftorright}} {{pullupornot}}" style="top:11px;"></span>
+	       	<div class="h4 font-thin m-b-sm">
+	       		<div class="pull-left text-ellipsis p-b-xs" style="width:100%;">{{event.title}} </div>
+	       	</div>
+	       	<div class="line b-b b-light"></div>
+	       	<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
+				<div class="pull-right" style="width:10%;">
+					<img class="r-2x" src="{{event.ownerPic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
+				</div>
+			</div>
+			<div class="text-ellipsis">
+		 	    {{get_template_type "calendar-popover-contacts"}}
+		 	</div>
+		 	<div class="text-ellipsis">
+		 	     {{get_template_type "calendar-popover-meeting-type"}}
+		 	</div>
+		</div>
+	</div>
+</script>
+
+<script id="week-office-calendar-mouseover-popover-template" type="text/html">
+	<div class="fc-overlayw {{leftorright}}" style="min-width:{{popover_min_width}}px;max-width:{{popover_min_width}}px;left:{{left}}px;top:{{top}}px;position:absolute;z-index:10;display:none;">
+		<div class="panel bg-white b-a pos-rlt p-sm">
+			<span class="arrow {{leftorright}} {{pullupornot}}" style="top:11px;"></span>
+			<div class="m-b-sm">
+				<div class="pull-left text-flow-ellipsis p-b-xs" style="width:100%;">{{event.title}}</div>
+			</div>
+			<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}</div>
+			<div class="text-ellipsis">
+		 	    {{get_template_type "calendar-popover-contacts"}}
+		 	</div>
+		 	<div class="text-ellipsis">
+		 	     {{get_template_type "calendar-popover-meeting-type"}}
+		 	</div>
+		</div>
+	</div>
+</script>
+
+<script id="week-calendar-mouseover-popover-template" type="text/html">
+	<div class="fc-overlayw {{leftorright}}" style="width:100%;min-width:{{popover_min_width}}px;max-width:{{popover_min_width}}px;left:{{left}}px;top:{{top}}px;position:absolute;z-index:10;display:none;">
+		<div class="panel bg-white b-a pos-rlt p-sm">
+			<span class="arrow {{leftorright}} {{pullupornot}}" style="top:11px;"></span>
+			<div class="h4 font-thin m-b-sm">
+				<div class="pull-left text-ellipsis p-b-xs" style="width:100%;">{{event.title}}</div>
+			</div>
+			<div class="line b-b b-light"></div>
+			<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
+				<div class="pull-right" style="width:10%;">
+					<img class="r-2x" src="{{event.ownerPic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
+				</div>
+			</div>
+			<div class="text-ellipsis">
+		 	    {{get_template_type "calendar-popover-contacts"}}
+		 	</div>
+		 	<div class="text-ellipsis">
+		 	     {{get_template_type "calendar-popover-meeting-type"}}
+		 	</div>
+		</div>
+	</div>
+</script>	
+
+<script id="day-office-calendar-mouseover-popover-template" type="text/html">
+	<div class="fc-overlayw {{leftorright}}" style="min-width:{{popover_min_width}}px;max-width: {{popover_min_width}}px;left:{{left}}px;top:{{top}}px;position:absolute;z-index:10;display:none;">
+		<div class="panel bg-white b-a pos-rlt p-sm">
+			<span class="arrow {{leftorright}} {{pullupornot}}" style="top:11px;"></span>
+			<div class="m-b-sm">
+				<div class="pull-left text-flow-ellipsis p-b-xs" style="width:100%;">{{event.title}}</div>
+			</div>
+			<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}</div>
+			<div class="text-ellipsis">
+		 	    {{get_template_type "calendar-popover-contacts"}}
+		 	</div>
+		 	<div class="text-ellipsis">
+		 	     {{get_template_type "calendar-popover-meeting-type"}}
+		 	</div>
+		</div>
+	</div>
+</script>	
+
+<script id="day-calendar-mouseover-popover-template" type="text/html">
+	<div class="fc-overlayw {{leftorright}}" style="width:100%;min-width:{{popover_min_width}}px;max-width:{{popover_min_width}}px;left:{{left}}px;top:{{top}}px;position:absolute;z-index:10;display:none;">
+		<div class="panel bg-white b-a pos-rlt p-sm">
+			<span class="arrow {{leftorright}} {{pullupornot}}" style="top:11px;"></span>
+			<div class="h4 font-thin m-b-sm">
+				<div class="pull-left text-ellipsis p-b-xs" style="width:100%;">{{event.title}}</div>
+			</div>
+			<div class="line b-b b-light"></div>
+			<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
+				<div class="pull-right" style="width:10%;">
+					<img class="r-2x" src="{{event.ownerPic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
+				</div>
+			</div>
+			<div class="text-ellipsis">
+		 	    {{get_template_type "calendar-popover-contacts"}}
+		 	</div>
+		 	<div class="text-ellipsis">
+		 	     {{get_template_type "calendar-popover-meeting-type"}}
+		 	</div>
+		</div>
+	</div>											
+</script>								

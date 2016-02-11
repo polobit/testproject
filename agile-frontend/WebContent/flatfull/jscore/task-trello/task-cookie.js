@@ -29,7 +29,7 @@ function addDetailsInCookie(elmnt)
 	_agile_set_prefs(taskField, taskFieldValue);
 	
 	// Save setting for group view	
-	if(getCriteria() != "LIST")
+	if(getCriteria() != "LIST" && getCriteria() != "CALENDAR")
 		{
 		 // Creates the cookie
 		 _agile_set_prefs(taskFieldForGroupView, taskFieldValueForGroupView);

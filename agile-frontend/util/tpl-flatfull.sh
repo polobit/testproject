@@ -2,6 +2,7 @@ cd ../WebContent
 cat flatfull/tpl/*.html > tpl/min/flatfull/tpl.js
 cat flatfull/tpl/settings/*.html >  tpl/min/flatfull/settings.js
 cat flatfull/tpl/continue/*.html > tpl/min/flatfull/continue.js
+cat flatfull/tpl/deal-detail/*.html > tpl/min/flatfull/deal-detail.js
 cat flatfull/tpl/bulk-actions/*.html > tpl/min/flatfull/bulk-actions.js
 cat flatfull/tpl/gmap/*.html > tpl/min/flatfull/gmap.js
 cat flatfull/tpl/report/*.html > tpl/min/flatfull/report.js

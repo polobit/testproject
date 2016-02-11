@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.SafeHtmlUtil"%>
 <%@page import="com.agilecrm.contact.CustomFieldDef.SCOPE"%>
 <%@page import="com.agilecrm.contact.util.CustomFieldDefUtil"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
@@ -45,6 +46,11 @@ DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 System.out.println("Domain user " + domainUser);
 
 ObjectMapper mapper = new ObjectMapper();
+
+String panel = request.getParameter("sp");
+if(panel == null)
+	panel = "false";
+String clientIP = request.getRemoteAddr();
 
 // Get current user prefs
 UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
@@ -479,7 +485,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
                
                
               </span>
-              <div class="text-ellipsis w-auto hidden-sm hidden-md" style="max-width:150px;"><span class="hidden-sm hidden-md"><%=domainUser.name%></span></div>
+              <div class="text-ellipsis w-auto hidden-sm hidden-md" style="max-width:150px;"><span class="hidden-sm hidden-md"><%=SafeHtmlUtil.sanitize(domainUser.name)%></span></div>
              <!-- <b class="caret"></b> -->   
 
              <div  class="">
@@ -490,7 +496,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
                                     + "'style='padding:2px !important' class='thumbnail m-b-none thumb-xxs m-r-xs inline'></img>");
                               else
                                 out.println("<img src='img/gravatar.png' style='padding:2px !important' class='thumbnail m-b-none thumb-xxs m-r-xs inline'></img>");
-                      %> --%> <span class="text-sm m-r-md"> <%=user.getEmail()%></span>
+                      %> --%> <span class="text-sm m-r-md"> <%=SafeHtmlUtil.sanitize(user.getEmail())%></span>
 
                   </div>
                   </span>              
@@ -576,8 +582,8 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 %>
 
 
- 
-  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
+  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
+   
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
@@ -601,6 +607,9 @@ var LIB_PATH_FLATFULL = '<%=CLOUDFRONT_TEMPLATE_LIB_PATH + FLAT_FULL_PATH%>'
 
 var CLOUDFRONT_PATH = '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>';
 
+var LOGIN_FROM_PANEL = '<%=panel%>';
+
+var CURRENTIP = '<%=clientIP%>';
 
 var FLAT_FULL_UI = "flatfull/";  
 
@@ -621,21 +630,21 @@ var IS_FLUID = <%=is_fluid %>
 
 var CLICKDESK_CODE_LOADED = false;
 
-var _plan_on_signup = <%=mapper.writeValueAsString(plan)%>;
+var _plan_on_signup = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(plan))%>;
 
 // Get current user prefs json
-var CURRENT_USER_PREFS = <%=UserPrefsUtil.getMapperString(currentUserPrefs)%>;
+var CURRENT_USER_PREFS = <%=SafeHtmlUtil.sanitize(UserPrefsUtil.getMapperString(currentUserPrefs))%>;
 
 //Get current user prefs json
-var ACCOUNT_PREFS = <%=mapper.writeValueAsString(accountPrefs)%>; 
+var ACCOUNT_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(accountPrefs))%>; 
 
 // Get current domain user json
-var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
+var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(domainUser))%>;
 
 // Get Contact Date Fields
-var CONTACTS_DATE_FIELDS = <%=mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE"))%>;
+var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE")))%>;
 // Get Contact Date Fields
-var COMPANY_DATE_FIELDS = <%=mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "DATE"))%>;
+var COMPANY_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "DATE")))%>;
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;
@@ -643,7 +652,7 @@ var ONLINE_SCHEDULING_URL ="" ;
 var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 
 // Billing Restriction
-var _billing_restriction = <%=mapper.writeValueAsString(restriction)%>;
+var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
 
 var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 //var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
@@ -692,6 +701,13 @@ head.ready(["core"], function(){
 	//Resting the variables.
 	<%  session.removeAttribute("widgetMsgType");
 	session.removeAttribute("widgetMsg"); %>
+	
+	try{
+      var sig = CURRENT_USER_PREFS.signature;
+      sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+
+      CURRENT_USER_PREFS.signature = sig;
+	}catch(e){}
 });
 
 });    

@@ -160,7 +160,10 @@ body {
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script> -->
 <script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
 <script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
-<script src="https://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.jquery.min.js"></script>
+
+<!--[if lt IE 10]>
+<script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
+<![endif]-->
 <!-- <script type="text/javascript">
 jQuery.validator.setDefaults({
 	debug: true,

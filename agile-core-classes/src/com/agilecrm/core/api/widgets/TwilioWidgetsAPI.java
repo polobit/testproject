@@ -466,11 +466,17 @@ public class TwilioWidgetsAPI
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public String autoSaveNote(@FormParam("subject") String subject, @FormParam("message") String message,
-			@FormParam("contactid") String contactid)
+			@FormParam("contactid") String contactid,@FormParam("phone") String phone,@FormParam("callType") String callType,@FormParam("status") String status, @FormParam("duration") String duration)
 	{
 		Long contactId = Long.parseLong(contactid);
 		Note note = new Note(subject, message);
 		note.addRelatedContacts(contactId.toString());
+		if(null != phone || null != callType || null != status || null != duration){
+			note.phone = phone;
+			note.callType = callType;
+			note.status = status.toLowerCase();
+			note.duration = Long.parseLong(duration);
+		}
 		note.save();
 		return "";
 	}

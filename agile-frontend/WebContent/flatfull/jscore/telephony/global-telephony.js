@@ -3,6 +3,8 @@ var callOptionDiv = "" ;
 var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "calledFrom":null, "contactedId":null};
 var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null}; 
 var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
+var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null };
+
 $(function()
 {
 	initToPubNub();
@@ -322,6 +324,17 @@ function resetglobalCallForActivityVariables()
 	globalCallForActivity.callId = null;
 	globalCallForActivity.callNumber = null;
 	globalCallForActivity.duration = 0;
+}
+
+function resetCallLogVariables(){
+	CallLogVariables.callActivitySaved = false;
+	CallLogVariables.id = null;
+	CallLogVariables.callType = null;
+	CallLogVariables.status = null;
+	CallLogVariables.callWidget = null;
+	CallLogVariables.duration = null;
+	CallLogVariables.phone = null;
+	CallLogVariables.url = null;
 }
 
 function handleCallRequest(message)

@@ -116,7 +116,6 @@ if(isSafari && isWin)
 <div id="openid_btns">
 <input type='hidden' name='type' value='agile'></input>
 <input type='hidden' name='step' id="step" value="1"></input>
-<input type='hidden' name='account_timezone' id='account_timezone' value=''></input>
 
 <div class="list-group list-group-sm" style="margin-bottom:4px;">
 <div class="list-group-item">
@@ -197,9 +196,10 @@ if(isSafari && isWin)
 </div>
 <!-- JQUery Core and UI CDN -->
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 <script src="/flatfull/registration/register.js" type="text/javascript"></script>
-<script src="https://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.jquery.min.js"></script>
+<!--[if lt IE 10]>
+<script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
+<![endif]-->
 
   <script type="text/javascript">
   var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
@@ -212,7 +212,6 @@ $(document).ready(function() {
     newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/agile-registration-page-high.png';
 
 
-    $('#account_timezone').val(jstz.determine().name());
 });
   </script>
 
