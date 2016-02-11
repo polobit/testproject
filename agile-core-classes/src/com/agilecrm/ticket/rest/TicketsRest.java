@@ -984,6 +984,26 @@ public class TicketsRest
 	 * @throws JSONException
 	 */
 	@GET
+	@Path("/create-default-ticket")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void createDefaultTicket() throws JSONException
+	{
+		try
+		{
+			TicketsUtil.createDefaultTicket();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws JSONException
+	 */
+	@GET
 	@Path("/create-test-ticket")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public String createTestTickets() throws JSONException

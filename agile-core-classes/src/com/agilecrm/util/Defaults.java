@@ -23,6 +23,7 @@ import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleType;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
+import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.Trigger;
 
@@ -38,6 +39,7 @@ public class Defaults
 	saveDefaultNotes();
 	TicketFiltersUtil.saveDefaultFilters();
 	//saveDefaultWorkflowsAndTriggers();
+	TicketsUtil.createDefaultTicket();
     }
 
 	/**

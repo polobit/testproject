@@ -1,6 +1,5 @@
 package com.agilecrm.ticket.utils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -9,13 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.scribe.model.OAuthRequest;
-import org.scribe.model.Response;
-import org.scribe.model.Verb;
 
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.ActivityType;
@@ -24,8 +19,11 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
+import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
+import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.CreatedBy;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
@@ -493,10 +491,10 @@ public class TicketsUtil
 	{
 		String[] emails = csvEmails.split(",");
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-		
+
 		String agentName = SessionManager.get().getName();
 		String fromAddress = SessionManager.get().getEmail();
-		
+
 		for (String email : emails)
 		{
 			try
@@ -513,7 +511,7 @@ public class TicketsUtil
 			ActivityUtil.createTicketActivity(ActivityType.TICKET_NOTES_FORWARD, ticket.contactID, ticket.id, "",
 					email, "");
 		}
-		
+
 		return ticket;
 	}
 
@@ -1060,5 +1058,34 @@ public class TicketsUtil
 		}
 
 		return activitys;
+	}
+
+	public static void createDefaultTicket()
+	{
+		try
+		{
+			TicketGroups group = TicketGroupUtil.getDefaultTicketGroup();
+
+			String plainText = "Hi!..\r\n\r\nWelcome to Help Desk\r\n\r\nNow you can receive all your support tickets directly to Agile Help Desk. "
+					+ "Every email will be created as ticket in Help Desk. You can start using Help Desk just by setting up forward email.\r\n\r\n"
+					+ "1. Getting started with Help Desk \r\nhttps://www.agilecrm.com/helpdesk \r\n\r\n"
+					+ "2. Setup email forwarding \r\nhttps://www.agilecrm.com/helpdesk/setup-forwarding \r\n\r\nThank you\r\nAgile CRM Team";
+
+			String subject = "Getting started with Help Desk";
+
+			Tickets ticket = TicketsUtil.createTicket(group.id, null, "Customer", "customer@domain.com", subject,
+					new ArrayList<String>(), plainText, Status.NEW, Type.PROBLEM, Priority.MEDIUM, Source.EMAIL,
+					CreatedBy.CUSTOMER, true, "[142.152.23.23]", new ArrayList<Key<TicketLabels>>());
+
+			String htmlText = plainText.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
+			
+			// Creating new Notes in TicketNotes table
+			TicketNotesUtil.createTicketNotes(ticket.id, group.id, null, CREATED_BY.REQUESTER, "Customer",
+					"customer@domain.com", plainText, htmlText, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>());
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
 	}
 }
