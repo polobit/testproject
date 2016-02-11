@@ -610,23 +610,23 @@ function initializeSubscriptionListeners()
 		if(emails < 5000)
 		{
 			$("#emails_total_cost").html(quantity * 0);
-			$("#email_rate").html("$4");
+			$("#email_rate").html("$3");
 		}
 		else if (emails < 100000)
-		{
-			$("#emails_total_cost").html(quantity * 4);
-			$("#email_rate").html("$4");
-		}
-
-		else if (emails <= 1000000)
 		{
 			$("#emails_total_cost").html(quantity * 3);
 			$("#email_rate").html("$3");
 		}
+
+		else if (emails <= 1000000)
+		{
+			$("#emails_total_cost").html((quantity * 2.5).toFixed(2));
+			$("#email_rate").html("$2.50");
+		}
 		else if (emails >= 1000000)
 		{
-			$("#emails_total_cost").html(quantity * 2);
-			$("#email_rate").html("$2");
+			$("#emails_total_cost").html((quantity * 1.5).toFixed(2));
+			$("#email_rate").html("$1.50");
 		}
 		}
 		email_validation($("#email-plan-form"));
