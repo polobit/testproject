@@ -2,8 +2,8 @@
     "name": "Condition",
     "thumbnail": "json/nodes/images/sms/Condition.png",
     "icon": "json/nodes/icons/sms/Condition.png",
-    "info": "Check for a condition (IF/Value/Len) in your workflow.",
-    "help": "Check for a condition (if/value/len) in your workflow.",
+    "info": "Check for Multiple Conditions in Your Workflow.",
+    "help": "Check for Multiple Conditions in Your Workflow.",
     "author": "john",
     "company": "Invox",
     "language": "en",
@@ -12,7 +12,7 @@
     "category": "Developers",
     "ui": [
         {
-			"label"   : "And Conditions",
+			"label"   : "And",
 			"category": "Settings",
 			"name"    : "and_key_grid",
 			"type"    : "grid",
@@ -21,7 +21,7 @@
             }, 
 			"ui":[
 			       {
-			    	   "label": "IF",
+			    	   "label": "If",
 			            "required": "required",
 			            "category": "Settings",
 			            "name": "and_if_type",
@@ -94,7 +94,7 @@
                 }
 				]
 		},{
-			"label"   : "Or Conditions",
+			"label"   : "Or",
 			"category": "Settings",
 			"name"    : "or_key_grid",
 			"type"    : "grid",
@@ -103,7 +103,7 @@
             },
 			"ui":[
 			       {
-			    	   "label": "IF",
+			    	   "label": "If",
 			            "required": "required",
 			            "category": "Settings",
 			            "name": "or_if_type",
@@ -178,7 +178,7 @@
 				]
 		},
         {
-            "label": "Check for Multiple AND/OR Conditions in Your Workflow.",
+            "label": "Check for Multiple Conditions in Your Workflow.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

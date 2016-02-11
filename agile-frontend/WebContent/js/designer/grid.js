@@ -165,6 +165,36 @@ function generateGridUI(container, uiFieldDefinition) {
 
     // Create table
     var tableId = uiFieldDefinition.name + '-table';
+    if(tableId == "and_key_grid-table"|| tableId =="or_key_grid-table" ){
+    	var uiFieldDiv = $("<div style='width:500px;height:100px;overflow-y:auto;margin-bottom:10px;' class='ui-widget-content ui-corner-all'></div>");
+    	uiFieldDiv.appendTo(container);
+
+        var uiField = $("<table class='ui-widget ' id='" + tableId + "'>" + thead + "<tbody>" + tbody + "</tbody></table>");
+    	uiField.appendTo(uiFieldDiv);
+
+    	// Add button & icon (Yasin (20-09-10))
+    	$(addHTML).button({
+    			             icons: {
+    			                 primary: 'ui-icon-circle-plus'
+    			             }
+    			             }).appendTo(uiFieldDiv.parent());
+    	
+
+        // Add name and data to table. This will used while editing and adding
+        uiField.data('name', uiFieldDefinition.name);
+        uiField.data('ui', uiFieldDefinition);
+
+        // Add handler
+        $('#' + addId).click(function(e)
+        	{
+        		e.preventDefault();    	    
+        		var uiFieldDefinition = $('#' + tableId).data('ui')
+        		//alert(uiFieldDefinition);
+        		constructGridPopup(uiFieldDefinition, addToGrid)
+        	});
+    }
+    else
+    {
 	var uiFieldDiv = $("<div style='width:500px;height:150px;overflow:auto;margin-bottom:10px;' class='ui-widget-content ui-corner-all'></div>");
 	uiFieldDiv.appendTo(container);
 
@@ -191,6 +221,7 @@ function generateGridUI(container, uiFieldDefinition) {
     		//alert(uiFieldDefinition);
     		constructGridPopup(uiFieldDefinition, addToGrid)
     	});
+    }
 }
 
 
