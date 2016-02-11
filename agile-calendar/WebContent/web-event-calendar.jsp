@@ -46,6 +46,8 @@ String [] slots_array=null;
 List<JSONArray> business_hours_array=new ArrayList<JSONArray>();
 List<List<String>> profile_list=new ArrayList<List<String>>();
 List<Long>_multiple_users=new ArrayList<Long>();
+StringBuilder sb = new StringBuilder();
+String loopDelim = ",";
 
 
 String profile_pic = "/img/gravatar.png";
@@ -188,8 +190,17 @@ if(scheduleid.contains(",")){
  <%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
-
+<% 
+if(multiple_users) { 
+ %>
+<title>Online Appointment Scheduling - <%=scheduleid %></title>
+<%
+} else {
+ %>
 <title>Online Appointment Scheduling - <%=user_name %></title>
+<%
+} 
+%>
 <link rel="stylesheet" href="../../flatfull/css/web-calendar-event/bootstrap.min.css">
 <link rel="stylesheet" href="../../flatfull/css/web-calendar-event/style.css">
 <link rel="stylesheet" type="text/css" href="../../flatfull/css/agile-css-framework.css">
