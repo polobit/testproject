@@ -25,20 +25,19 @@ var Workflow_Model_Events = Base_Model_View.extend({
         console.log('fillDetails');
         var model_id = $('.emailSelect option:selected').prop('value');
         if (!model_id)
+        {
+            var unsubscribe_subject = "";
+            unsubscribe_fill_select.id = "";
         	return;
+        }
         
 		var emailTemplatesModel = Backbone.Model.extend({ url : '/core/api/email/templates/' + model_id, restKey : "emailTemplates" });
 		var templateModel = new emailTemplatesModel();
-		var unsubscribe_subject = $('#sendEmailSelect').val().trim();
-        //var unsubscribe = emailTemplatesModel.get("unsubscribe");
-        //var model = data.toJSON();
-        // var subject = model.subject;
-        // var text = model.text;
-        // unsubscribe.unsubscribe_subject = subject;
+		
 		templateModel.fetch({ success : function(data)
 		{
             var model = data.toJSON();
-			unsubscribe_fill_select.subject = unsubscribe_subject;
+			unsubscribe_fill_select.id = model_id;
             unsubscribe_fill_select.text = model.text;
 
 		} });
@@ -145,7 +144,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         var unsubscribe_action = $('#unsubscribe-action').val();
         var unsubscribe_email = $('#unsubscribe-email').val().trim();
         var unsubscribe_name = $('#unsubscribe-name').val().trim();
-        var unsubscribe_subject = $('#sendEmailSelect').val().trim();
+        var unsubscribe_subject = unsubscribe_fill_select.id;
         var is_disabled = $('.is-disabled-top').attr("data");
         if($clicked_button.hasClass("is-disabled-top") && is_disabled)
             is_disabled = !JSON.parse(is_disabled);

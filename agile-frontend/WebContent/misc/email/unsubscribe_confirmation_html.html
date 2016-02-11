@@ -1,3 +1,7 @@
+{{#unsubscribe_subject}}
+{{unsubscribe_body}}	
+{{/unsubscribe_subject}}
+{{^unsubscribe_subject}}
 <body>
 	<div>
 		<div
@@ -21,13 +25,19 @@
 						<tr>
 							<td
 								style="padding-right: 20px; padding-left: 20px; line-height: 20px; font-size: 14px; font-family: Lucida Grande, verdana">
+								
 								{{#company}}<p>You have been unsubscribed successfully from all communication from {{company}}.</p>{{/company}}
 								{{^campaign_name}}
 									{{^company}}
 										<p>You have been unsubscribed successfully from all communication</p>
+										{{unsubscribe_body}}
+										{{#unsubscribe_body}}
+										<p>inside if</p>p>
+										{{/unsubscribe_body}}
 								    {{/company}}
-								{{/campaign_name}}
+								{{/campaign_name}}		
 								{{#campaign_name}}<p>You have been successfully removed from campaign - {{campaign_name}}</p>{{/campaign_name}}
+								
 							</td>
 						</tr>
 					</tbody>
@@ -58,3 +68,4 @@
 		</div>
 		</div>
 </body>
+{{/unsubscribe_subject}}

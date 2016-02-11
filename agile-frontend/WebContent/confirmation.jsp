@@ -20,6 +20,11 @@
 <%@page import="com.agilecrm.user.DomainUser" %>
 <%@page import="com.agilecrm.user.util.DomainUserUtil" %>
 <%@page import="com.agilecrm.workflows.triggers.Trigger.Type" %>
+<%@page import="com.agilecrm.account.util.EmailTemplatesUtil" %>
+<%@page import="com.agilecrm.account.EmailTemplates" %>
+<%@page import="java.util.regex.Matcher" %>
+<%@page import="java.util.regex.Pattern" %>
+<%@page import="org.jsoup.Jsoup" %>
 
 <html>
 <head>
@@ -412,6 +417,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    // Send Confirmation email
 					    HashMap<String, String> map = new HashMap<String, String>();
 						String subjectMessage = "Unsubscribe";
+						map.put("unsubscribe_subject",unsubscribe_subject);
 						
 					    if ("all".equals(status))
 						{
@@ -423,8 +429,12 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 							
 							if(!StringUtils.isBlank(unsubscribe_subject))	
 							{
-								System.out.println("Unsubscribe subject"+unsubscribe_subject);
-								subjectMessage = unsubscribe_subject ;
+								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
+								subjectMessage = template_details.subject ;
+								String htmlString = template_details.text.replaceAll("\\<.*?>","");
+								System.out.println("htmlString is"+htmlString);
+								String text = Jsoup.parse(htmlString).text();
+								map.put("unsubscribe_body", text);
 							}
 							else
 							{
@@ -445,9 +455,21 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    		map.put("campaign_name", unsubscribeName);
 					    	else
 					    		map.put("campaign_name", campaign_name); */
-							map.put("campaign_name", unsubscribeName);
-							subjectMessage = "Unsubscribed successfully from Campaign";
-							
+					    	
+					    	map.put("campaign_name", unsubscribeName);
+					    	if(!StringUtils.isBlank(unsubscribe_subject))	
+							{
+								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
+								subjectMessage = template_details.subject ;
+								String htmlString = template_details.text.replaceAll("\\<.*?>","");
+								System.out.println("htmlString is"+htmlString);
+								String text = Jsoup.parse(htmlString).text();
+								map.put("unsubscribe_body", text);
+							}
+							else
+							{
+								subjectMessage = "Unsubscribed successfully from Campaign";
+							}
 							// Add unsubscribe log
 							UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from campaign " + campaign_name);
 							
