@@ -183,6 +183,7 @@ function dealsFetch(base_model)
 		{
 			var count = data.at(0) ? data.at(0).toJSON().count : 0;
 			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(data.at(0) ? data.at(0).toJSON().count : 0);
+	        var heading =  base_model.get("heading");
 	        var dealcountarray = data.toArray();
 	        var i;
 	        var dealcount=0;
@@ -190,6 +191,10 @@ function dealsFetch(base_model)
             	dealcount = dealcount + dealcountarray[i].get("expected_value");
             }
             $('#' + base_model.get("heading").replace(/ +/g, '') + '_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount));
+            $("#"+heading+" .dealtitle-angular").attr("data-toggle" , "tooltip" );
+            $("#"+heading+" .dealtitle-angular").attr("data-placement" , "top" );
+            $("#"+heading+" .dealtitle-angular").attr("title" , "Total: "+dealcount+" & avg: "+dealcount );
+
          }
 
 		catch (err)
