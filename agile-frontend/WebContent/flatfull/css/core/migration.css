@@ -2117,10 +2117,19 @@ width: 1%!important;
     float: left;
     opacity: 0.4;
 }
-
+.admin-setting-icon a{
+ width:calc(100% / 4);
+ padding: 10px 0;
+ text-align: center;
+ opacity: 0.4;
+ float: left;
+}
 
 .prefs-view a.select {
   background: #edf1f2;
   opacity: 1;
 }
+.stats-tabs-border li.active > a{
 
+  border-left-color: #fff !important;
+}
