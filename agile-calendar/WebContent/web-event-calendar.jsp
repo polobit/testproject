@@ -1,5 +1,4 @@
-<%@page import="com.agilecrm.util.VersioningUtil"%>
-<%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
+	<%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
 <%@page import="com.agilecrm.activities.util.WebCalendarEventUtil"%>
 <%@page import="org.json.JSONObject"%>
@@ -26,10 +25,6 @@
 <%@page import="java.util.Arrays"%>
 
 <%
-/**
- * checks for team calendar or individual calendar. gets required details to process 
- *a request and keeps them in global variable to avoid multiple queries to db.
- */
 String url = request.getRequestURL().toString();
 String[] ar=url.split("/");
 String scheduleid=ar[ar.length-2];
@@ -60,7 +55,6 @@ Long user_id = 0L;
 Long agile_user_id = 0L;
 String meeting_durations=null;
 String welcome_title="<p class='lead' style='color: #777;font-size: 19px;font-weight:normal'>Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>";
-String baseUrl=VersioningUtil.getStaticFilesBaseURL();
 
 
 URL ur=new URL(url);
@@ -190,35 +184,35 @@ if(scheduleid.contains(",")){
 %>
 <!DOCTYPE html>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
-<%@ page contentType="text/html; charset=UTF-8" %>
+ <%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
 
 <title>Online Appointment Scheduling - <%=user_name %></title>
-<link rel="stylesheet" href="../../css/web-calendar-event/bootstrap.min.css">
-<link rel="stylesheet" href="../../css/web-calendar-event/style.css?_=<%=_AGILE_VERSION%>">
-<link rel="stylesheet" type="text/css" href="<%=baseUrl%>css/agile-css-framework.css?_=<%=_AGILE_VERSION%>">
-<!-- <link rel="stylesheet" href="../../css/web-calendar-event/font-awesome.min.css"> -->
+<link rel="stylesheet" href="../../flatfull/css/web-calendar-event/bootstrap.min.css">
+<link rel="stylesheet" href="../../flatfull/css/web-calendar-event/style.css">
+<link rel="stylesheet" type="text/css" href="../../flatfull/css/agile-css-framework.css">
+<!-- <link rel="stylesheet" href="../../flatfull/css/web-calendar-event/font-awesome.min.css"> -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" ></script>
-<script type="text/javascript" src="../../lib/web-calendar-event/jquery.js"></script>
-<script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
-<script type="text/javascript" src="../../lib/date-formatter.js"></script>
-<script type="text/javascript" src="../../lib/web-calendar-event/moment.min.js"></script>
-<script type="text/javascript" src="../../lib/web-calendar-event/moment.timezone.min.js"></script>
+<script type="text/javascript" src="../../flatfull/lib/web-calendar-event/jquery.js"></script>
+<script type="text/javascript" src="../../flatfull/lib/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../flatfull/lib/date-formatter.js"></script>
+<script type="text/javascript" src="../../flatfull/lib/web-calendar-event/moment.min.js"></script>
+<script type="text/javascript" src="../../flatfull/lib/web-calendar-event/moment.timezone.min.js"></script>
 
-<link rel="stylesheet" href="../../css/web-calendar-event/datepicker.css"
+<link rel="stylesheet" href="../..//flatfull/css/web-calendar-event/datepicker.css"
 	type="text/css" />
 <script type="text/javascript"
 	src="../../lib/web-calendar-event/datepicker.js"></script>
-<script type="text/javascript" src="../../lib/web-calendar-event/eye.js"></script>
-<script type="text/javascript" src="../../lib/web-calendar-event/utils.js"></script>
+<script type="text/javascript" src="../../flatfull/lib/web-calendar-event/eye.js"></script>
+<script type="text/javascript" src="../../flatfull/lib/web-calendar-event/utils.js"></script>
 <script type="text/javascript"
-	src="../../lib/web-calendar-event/layout.js?ver=1.0.2"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/time.js?_=<%=_AGILE_VERSION%>"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/util.js?_=<%=_AGILE_VERSION%>"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/ui.js?_=<%=_AGILE_VERSION%>"></script>
+	src="../../flatfull/lib/web-calendar-event/layout.js?ver=1.0.2"></script>
+<script type="text/javascript" src="../../flatfull/jscore/web-calendar-event/time.js"></script>
+<script type="text/javascript" src="../../flatfull/jscore/web-calendar-event/util.js"></script>
+<script type="text/javascript" src="../../flatfull/jscore/web-calendar-event/ui.js"></script>
 </head>
 
 <body onload="bodyLoad();">
@@ -228,8 +222,8 @@ if(scheduleid.contains(",")){
 	     if(multiple_users!=true){
      %>
 	
-		<img src="<%=profile_pic%>" id="avatar" class="thumbnail" title="<%=user_name%>"/>
-	<div class="text-center"><%=welcome_title%></div>
+		<img src="<%=profile_pic%>" id="avatar" class="thumbnail" title="<%=welcome_title%>"/>
+		<div class="text-center"><%=welcome_title%></div>
 <%}else{ %>
 <p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal"> Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>
 			<div class="col-sm-10 segment segment0">
@@ -238,19 +232,28 @@ if(scheduleid.contains(",")){
 			<div class="row user_avatars hide">
 		
 			<!-- <div align="center" style="margin: 5px auto;width: 100%;"> -->
-			<% for(int k=0;k<=profile_list.size()-1;k++){
+			<% 
+			List<String> list=WebCalendarEventUtil.removeDuplicateScheduleIds(scheduleid);
+            String _multiple_schedule_ids[]=list.toArray(new String[list.size()]);
+			for(int k=0;k<=profile_list.size()-1;k++){
+				 System.out.println(_multiple_schedule_ids[k]+"  schedule id");
+                 OnlineCalendarPrefs online_prefs=null;
+                 online_prefs=OnlineCalendarUtil.getOnlineCalendarPrefs(_multiple_schedule_ids[k]);
 				 List<String> pro_pic=profile_list.get(k);
 				 String pr_pic=pro_pic.get(0);
 				 String pr_name=pro_pic.get(1);
 				 String workHours=pro_pic.get(2);
 				 String timezone=pro_pic.get(3);
 				 String domain_user_id=pro_pic.get(4); 
+				 String custom_message = online_prefs.user_calendar_title;
+				 if(custom_message == null)
+					 custom_message = "Welcome to my scheduling page. Please follow the instructions to book an appointment.";
 		   %>
 		   <div class="fluidClass col-xs-12 text-center">
 		   <div style="display: inline-block;width: 150px;margin-right: 5px;">
-		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" title="<%=pr_name%>"/>
-		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" title="<%=pr_name %>"><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
-		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:16px;" title="Working Hours"><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
+		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>"  title="<%=pr_name%>"/>
+		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" title="<%=custom_message %>"><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
+		<span id="workhours-<%= domain_user_id%>" style="display:none;color:#8E8F8F;font-size:16px;" title="Working Hours"><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
 		<span class="user_in_visitor_timezone" style="color:#8E8F8F;font-size:16px;" title="Timezone"><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>
 		<span id="timezone-<%= domain_user_id%>" style="display:none;color:#8E8F8F;font-size:16px;" title="Timezone"><%=timezone %></span>
 		</div>
@@ -1197,7 +1200,6 @@ var slot_details=[];
 var single_user_mapobject=<%=single_user_map_object%>;
 var CURRENT_DAY_OPERATION=null;
 var MEETING_DURATION_AND_NAMES=null;
-var BUFFERTIME=null;
  </script>
 
 	<script type="text/javascript">
@@ -1248,9 +1250,9 @@ var BUFFERTIME=null;
 						selecteddate=dates;
 						// On date change change selected date
 						Selected_Date = formated;
+						
 						$('.user_in_visitor_timezone').html(SELECTED_TIMEZONE);
 						updateUserBusinessHoursInVisitorTimezone(dates);
-						
 						//setting the date to current_date_mozilla variable becoz it doesn't shppot new date format
 						current_date_mozilla=Selected_Date;
 					
