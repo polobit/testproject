@@ -134,6 +134,14 @@ public abstract class ContactWrapper implements IContactWrapper
     }
 
     /**
+     * Sets the email.
+     */
+    private void setSyncId()
+    {
+	addPropertyToContact(getSyncId());
+    }
+    
+    /**
      * Sets the phone number.
      */
     private void setPhoneNumber()
