@@ -805,7 +805,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date. Please change.</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date. Please change.</div>');
 
 		return false;
 	}
@@ -814,7 +814,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
 
 		return false;
 	}
@@ -823,7 +823,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
 
 		return false;
 	}
