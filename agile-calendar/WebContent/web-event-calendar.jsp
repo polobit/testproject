@@ -160,7 +160,7 @@ if(scheduleid.contains(",")){
 		meeting_durations = online_prefs.meeting_durations;
 		meeting_types = online_prefs.meeting_types;
 		welcome_title= online_prefs.user_calendar_title;
-		personal_calendar_title = welcome_title
+		personal_calendar_title = welcome_title ; 
 	     if(StringUtils.isNotBlank(welcome_title)&&!welcome_title.contains("</p>")){
 	    	welcome_title="<p class='lead' style='color: #777;font-size: 19px;font-weight:normal'>"+welcome_title+"</p>";
 	     }
