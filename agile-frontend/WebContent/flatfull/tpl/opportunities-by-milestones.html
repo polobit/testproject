@@ -126,11 +126,10 @@
 
 <script id="opportunities-by-paging-model-template" type="text/html">
 	<div class='dealtitle-angular panel-heading'>
-		<div class='milestone-heading text-left text-ellipsis'> <span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left" style="max-width:calc(100% - 125px);">{{heading}}</span>
+		<div class='milestone-heading text-left text-ellipsis'> <span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left" style="width:calc(100% - 75px);">{{heading}}</span>
 		    <div class="pull-right">
 		    <div style="font-size:14px; float:left">
-		      <span  style="margin-right: -4px;">{{currencySymbol}}</span>
-		      <span id="{{remove_spaces heading}}_totalvalue" class="">0</span>  
+		      
 			{{#if lost_milestone}}<i data-toogle="tooltip" title="" class="icon-dislike mark-lost" data-original-title="Deals with this milestone are considered as Lost." style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
 			{{#if won_milestone}}<i data-toogle="tooltip" title="" class="icon-like mark-won" data-original-title="Deals with this milestone are considered as Won." style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
 

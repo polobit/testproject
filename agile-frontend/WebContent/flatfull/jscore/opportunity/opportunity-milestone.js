@@ -192,14 +192,17 @@ function dealsFetch(base_model)
             }
             $('#' + base_model.get("heading").replace(/ +/g, '') + '_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount));
 
-            $("#"+heading+" .dealtitle-angular").attr("data-toggle" , "tooltip" );
-            $("#"+heading+" .dealtitle-angular").attr("data-placement" , "top" );
-            $("#"+heading+" .dealtitle-angular").attr("title" , "Total: "+dealcount+" & avg: "+dealcount );
             var avg_deal_size = 0;
             if(count == 0)
             	avg_deal_size = 0;
             else
             	avg_deal_size = dealcount / count ; 
+            dealcount = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount) ;
+            avg_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_deal_size);
+
+            $("#"+heading+" .dealtitle-angular").attr("data-toggle" , "tooltip" );
+            $("#"+heading+" .dealtitle-angular").attr("data-placement" , "top" );
+            $("#"+heading+" .dealtitle-angular").attr("title" , "Total: "+dealcount+" & avg: "+avg_deal_size );
 
 
          }
