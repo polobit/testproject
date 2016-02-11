@@ -8,12 +8,40 @@
  */
 $(function()
 {
+	
+	
+	// This method is called when the add-note modal is closed .....
+	//This will check if the if the activities is saved or not
+		$('#logCallModal').on('hidden.bs.modal', function (e) {
+			
+			var widget = $("#callWidgetName",$("#phoneLogForm")).val();
+			if(CallLogVariables.callActivitySaved || widget == ""){
+				resetCallLogVariables();
+				return;
+			}
+			var data ={};
+			var direction = CallLogVariables.callType;
+			if(direction == "outbound-dial" || direction == "Outgoing" || direction == "outgoing") {
+				data.url = CallLogVariables.url + "savecallactivityById";
+			}else{
+				data.url = CallLogVariables.url + "savecallactivity";
+			}
+				data.id = CallLogVariables.id;
+				data.callType = CallLogVariables.callType;
+				data.number = CallLogVariables.phone;
+				data.status = CallLogVariables.status;
+				data.duration = CallLogVariables.duration;
+				data.widget = CallLogVariables.callWidget
+				saveLogPhoneActivity(data);
+				resetCallLogVariables();
+		});  
+		
 /**
  * select box change functionality on number change
  * @id = "logPhone_number_option"
  * 
  */	
-	$('#globalModal').on('click', '#logPhone_number_option', function(e)
+	$('#logCallModal').on('click', '#logPhone_number_option', function(e)
 	{
 		var formName = $(this).parents("form").attr("id");
 		
@@ -34,7 +62,7 @@ $(function()
 	 * 
 	 */
 	
-	$('#globalModal').on('click', '#statusValue', function(e)
+	$('#logCallModal').on('click', '#statusValue', function(e)
 			{
 				var formName = $(this).parents("form").attr("id");
 				var opt = $(this).attr("value");
@@ -56,7 +84,7 @@ $(function()
 	 * Saves logPhone model using "Bcakbone.Model" object, and adds saved data to
 	 * time-line if necessary.
 	 */
-	$('#globalModal').on('click', '#validate-logPhone', function(e)
+	$('#logCallModal').on('click', '#validate-logPhone', function(e)
 	{
 		e.preventDefault();
 
@@ -71,7 +99,7 @@ $(function()
 			modalName = "phoneLogModal_update";
 		}else{
 			formName = "phoneLogForm";
-			modalName = "globalModal";
+			modalName = "logCallModal";
 		}
 		
 		var json = serializeForm(formName);
@@ -162,8 +190,8 @@ $(function()
 			phone = getPhoneWithSkypeInArray(contact.properties);
 			logCallParam['num'] = phone;
 			logCallParam['action'] = "edit";
-			$("#globalModal").html(getTemplate("phoneLogModal",logCallParam));
-			deserializeForm(logPhone, $("#phoneLogForm", "#globalModal"));
+			$("#logCallModal").html(getTemplate("phoneLogModal",logCallParam));
+			deserializeForm(logPhone, $("#phoneLogForm", "#logCallModal"));
 			$("#phoneLogForm #contact_logPhone_number").html(logPhone.phone);
 			$("#phoneLogForm #contact_logPhone_number").attr("value", logPhone.phone);
 			
@@ -176,16 +204,20 @@ $(function()
 				$("#phoneLogForm #sec").attr('disabled','disabled');
 			}
 			
-			$("#globalModal").modal('show');
+			$("#logCallModal").modal('show');
 			$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+name+'</li>');
 		}catch(e){
-			$('#globalModal').modal('hide');
+			$('#logCallModal').modal('hide');
 			console.log ("an error has occured")
 		}
 	});
 	
 /**
 	 * Shows logPhone modal and activates contacts
+	 * 
+	 * Here we are proiding two solution of save/edit and saveactivity
+	 * 1) action : whether to add or edit
+	 * 2)setting the value of saveactivity hidden text field : True is auto save the activity and false if dont save the activity
 	 */
 	$('body').on('click', '.show-logPhone', function(e)
 	{
@@ -199,14 +231,14 @@ $(function()
 			logCallParam['num'] = phone;
 			logCallParam['action'] = "add";
 		}catch(e){
-			$('#globalModal').modal('hide');
+			$('#logCallModal').modal('hide');
 			console.log ("an error has occured")
 		}
 		
-		$("#globalModal").html(getTemplate("phoneLogModal",logCallParam));
+		$("#logCallModal").html(getTemplate("phoneLogModal",logCallParam));
 		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+name+'</li>');
 		$('#phoneLogForm #saveActivity').val("true");
-		$("#globalModal").modal('show');
+		$("#logCallModal").modal('show');
 
 
 	});
@@ -215,10 +247,10 @@ $(function()
 	/**
 	 * Shows edit page to add phone number
 	 */
-	$('#globalModal').on('click', '.add_logPhone', function(e)
+	$('#logCallModal').on('click', '.add_logPhone', function(e)
 	{
 		e.preventDefault();
-		$("#globalModal").modal('hide');
+		$("#logCallModal").modal('hide');
 		routeToPage("contact-edit");
 		setTimeout(function()
 			{
@@ -256,11 +288,35 @@ function saveLogPhone(form, modal, element, logPhone)
 			this.reset();
 		});
 
-		modal.modal('hide');
-
 		var logPhone = data.toJSON();
 
-		console.log(logPhone);
+		if($("#saveActivity",form).val() == "true"){
+			try{
+				var contactDetailsObj;
+				if(CallLogVariables.id){
+					contactDetailsObj = CallLogVariables.id;
+				}else{
+					contactDetailsObj = agile_crm_get_contact();	
+				}
+				var data ={};
+				data.url = "/core/api/notes/save_logPhoneActivity";
+				data.id = contactDetailsObj.id;
+				data.callType = logPhone.callType;
+				data.number = logPhone.phone;
+				data.status = logPhone.status;
+				data.duration = logPhone.duration;
+				data.widget = $("#callWidgetName",form).val();
+				CallLogVariables.callActivitySaved = true;
+				saveLogPhoneActivity(data);
+			}catch(e){
+				console.log("activities not saved AS CONTACT NOT FOUND");
+			}
+			
+		}
+		
+		modal.modal('hide');
+
+		
 		// function
 		if (notesView && notesView.collection)
 		{
@@ -274,9 +330,6 @@ function saveLogPhone(form, modal, element, logPhone)
 				notesView.collection.add(new BaseModel(logPhone), { sort : false });
 				notesView.collection.sort();
 			}
-		}
-		if($("#saveActivity",form).val() == "true"){
-			saveLogPhoneActivity(logPhone.callType, logPhone.phone, logPhone.status, logPhone.duration, "" );
 		}
 		
 		//updating in contact detail view
@@ -308,19 +361,26 @@ function toTitleCase(str) {
     });
 }
 
-
-
-function saveLogPhoneActivity(direction,phone,status,duration,widgetName){
-	
-	
-	$.post( "/core/api/notes/save_logPhoneActivity",{
-		direction: direction, 
-		phone: phone, 
-		status : status,
-		duration : duration,
-		widgetName : widgetName
-		});
-	
+function saveLogPhoneActivity(data){
+	var direction = data.callType;
+	if(direction == "outbound-dial" || direction == "Outgoing" || direction == "outgoing") {
+		$.post( data.url,{
+			id:data.id,
+			direction: direction, 
+			phone: data.number, 
+			status : data.status,
+			callWidget : data.widget,
+			duration : data.duration 
+			});
+	}else{
+		$.post( data.url,{
+			direction: direction, 
+			phone: data.number, 
+			status : data.status,
+			callWidget : data.widget,
+			duration : data.duration 
+			});
+	}
 }
 
 
@@ -343,4 +403,52 @@ function getPhoneWithSkypeInArray(items)
 		}
 	}
 	return va;
+}
+
+
+/**
+ * this method will dynamically populate the log call modal with the supplier params
+ * this will update the edited logPhone
+ *
+ *
+ */
+
+function showDynamicCallLogs(data)
+{
+	try{
+		console.log("parameter send" + data );
+		var logCallParam = {};
+		logCallParam['num'] = [data.number];
+		logCallParam['action'] = "add";
+		$("#logCallModal").html(getTemplate("phoneLogModal",logCallParam));
+		
+		$("#phoneLogForm #callStatus").attr("value", data.status);
+		$("#phoneLogForm #callStatus").html(toTitleCase(data.status));
+		$("input[name=callType][value="+data.callType+"]").attr('checked', 'checked');
+		
+		$("#logCallModal").modal('show');
+		$('#phoneLogForm #subject').val(data.subject);
+		var time = getTimeInArray(data.duration); //[hours,miiutes,second]
+		$('#phoneLogForm #sec').val(time.pop());
+		$('#phoneLogForm #min').val(time.pop());
+		$('#phoneLogForm #hour').val(time.pop());
+		$('#phoneLogForm #callWidgetName').val(data.widget);
+		$('#phoneLogForm #saveActivity').val("true");
+		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ data.contId +'">'+data.contact_name+'</li>');
+		$("#phoneLogForm").find("#description").focus();
+		
+		CallLogVariables.callActivitySaved = false;
+		CallLogVariables.id = data.contId;
+		CallLogVariables.callType = data.callType;
+		CallLogVariables.status = data.status;
+		CallLogVariables.callWidget = data.widget;
+		CallLogVariables.duration = data.duration;
+		CallLogVariables.phone = data.number;
+		CallLogVariables.url = data.url;
+		
+		
+	}catch(e){
+		$('#logCallModal').modal('hide');
+		console.log ("an error has occured");
+	}
 }
