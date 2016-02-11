@@ -112,18 +112,7 @@
                     	</div>
                         </div>
 						<div class="text-sm text-light">When a contact unsubscribes from your campaign, this name will be displayed as campaign name in the confirmation screen.</div>
-						<br/>
-						<br/>
-						<div class="row">
-                         <div class="control-group form-group">
-							<label class="control-label col-sm-2">
-								<b>Select a template</b>
-							</label>
-							<div class="controls col-sm-4">
-								<select class="emailSelect form-control pull-left" id="sendEmailSelect" title="Fill from Template" name="unsubscribe_subject"><option class="default-select" value="">Default</option></select>
-							</div>
-                    	</div>
-                        </div>
+						
 
 						<br/>
 						<br/>
@@ -138,6 +127,19 @@
                     	</div>
                         </div>
 						<div class="text-sm text-light">When a contact unsubscribes from your campaign, a confirmation email is sent. The above given email address will be used as ‘From’ address for that email.</div>
+						<br/>
+						<br/>
+						<div class="row">
+                         <div class="control-group form-group">
+							<label class="control-label col-sm-2">
+								<b>Unsubscribe Template</b>
+							</label>
+							<div class="controls col-sm-4">
+								<select class="emailSelect form-control pull-left" id="sendEmailSelect" title="Fill from Template" name="unsubscribe_subject"><option class="default-select" value="">Default template</option></select>
+							</div>
+                    	</div>
+                        </div>
+                        <div class="text-sm text-light"> When a contact unsubscribes from your campaign, a confirmation email is sent. The above given template will be used for that email.</div>
 						<br/>
 						<br/>
                         <small>Unsubscribed contacts are not sent any further emails but other actions such as lead scoring will still continue to execute.</small>

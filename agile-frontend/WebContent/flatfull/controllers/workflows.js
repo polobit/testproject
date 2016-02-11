@@ -209,7 +209,8 @@ var WorkflowsRouter = Backbone.Router
 
 						if(that.is_disabled)
 								$('#designer-tour', el).addClass("blur").removeClass("anti-blur");
-						populate_send_email_details(el);
+						var optionsTemplate = "<option value='{{id}}'> {{#if name}}{{name}}{{else}}{{subject}}{{/if}}</option>";
+						fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined, optionsTemplate, false, el, 'Default template');
 						// Init SendVerify Email
 						send_verify_email(el);
 					}
