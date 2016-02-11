@@ -8,7 +8,9 @@
 <div id = "contact-dtl" class="app-content-full  h-full dock-view-fixing">
 <div class="hbox hbox-auto-xs hbox-auto-sm bg-light" >
   
+
   <div class="col  details-mobile-view b-r bg-light lter vbox-mobile-view">
+
   
   <div class="vbox">
   <div class="row-row">
@@ -106,6 +108,7 @@
 								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
 								</div>
 							<div class=" m-b-xs text-cap" style="padding-right:5px;">	
+
 						<div class="contact-job-title text-base text-center font-thin custom-color text-ellipsis" style="max-width:100%;">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}   {{#if contact_company_id}}
 
 									<a class = "block text-xs"  href="#company/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
@@ -436,6 +439,7 @@
 -->
 <div class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
 
+
 			<a class="contact-make-call c-progress text-xs" phone="{{value}}" >{{value}}   {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}} </a>
 </div>
 
@@ -538,7 +542,6 @@
  
 
 
-
 {{#getContactCustomPropertiesExclusively
 								properties}}
 
@@ -559,8 +562,10 @@
 									{{#each_with_index this}}
 										
 
+
                                             <span class="contact-custom-name custom-color word-break ">
 												<span class="text-light word-break text-base" title="{{name}}"  >{{name}}</span>
+
 											</span>
 
 										
@@ -751,6 +756,7 @@
  </div>
   </div>
   </div>
+
   <div class="contact-right-widgetsview box-border  col w-lg   bg-auto {{#is_mobile}} p-t-none bg-white m-b m-l m-r {{else}}
     b-l bg-light lter {{/is_mobile}}">
  	 <div class="vbox">
@@ -768,4 +774,5 @@
  					</div>
  					</div>
  					</div>
+
 </script>
