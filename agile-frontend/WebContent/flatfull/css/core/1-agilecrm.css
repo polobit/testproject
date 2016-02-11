@@ -3170,3 +3170,19 @@ table.hide-head-checkbox th label.i-checks {
 .deals-nowrap .no-wrap {
  white-space: nowrap !important;
 }
+.contact_popover{
+
+	border-radius: 0px;
+	//width : 260px;
+}
+
+#contacts-table .popover-content{
+	padding: 0px;
+}
+#contacts-table .popover{
+	max-width:100%;
+}
+
+.contact_popover .arrow{
+	display: none;
+}
