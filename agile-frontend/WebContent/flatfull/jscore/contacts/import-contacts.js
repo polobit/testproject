@@ -491,7 +491,7 @@ $('#' + id).on('click', '#import-deals', function(e)
 						getTemplate("import-deal-validation-message", upload_valudation_errors.deal_duplicated, undefined, function(template_ui){
 								if(!template_ui)
 									  return;
-								$("#import-validation-error").html($(template_ui));
+						$("#import-validation-error").html($(template_ui));
 						}, "#import-validation-error");
 						return false;
 					}
@@ -729,10 +729,10 @@ function importContactsValidate()
 							getTemplate("import-contacts-validation-message", upload_valudation_errors.first_name_missing, undefined, function(template_ui){
 								if(!template_ui)
 									  return;
-								$("#import-validation-error").html($(template_ui));	
+								$(".contacts-import-outbox #import-validation-error").html($(template_ui));	
 								initializeImportEvents($firstDiv.attr('id'));
 
-							}, "#import-validation-error");
+							}, ".contacts-import-outbox #import-validation-error");
 							
 							return false;
 						}
@@ -742,8 +742,8 @@ function importContactsValidate()
 								if(!template_ui)
 									  return;
 
-								$('#import-validation-error').html($(template_ui));	
-							}, "#import-validation-error");
+								$('.contacts-import-outbox #import-validation-error').html($(template_ui));	
+							}, ".contacts-import-outbox #import-validation-error");
 
 							return false;
 						}
@@ -759,8 +759,8 @@ function importContactsValidate()
 								if(!template_ui)
 									  return;
 									
-								$('#import-validation-error').html($(template_ui));	
-							}, "#import-validation-error");
+								$('.contacts-import-outbox #import-validation-error').html($(template_ui));	
+							}, ".contacts-import-outbox #import-validation-error");
 
 							return false;
 						}
@@ -770,8 +770,8 @@ function importContactsValidate()
 								if(!template_ui)
 									  return;
 									
-								$('#import-validation-error').html($(template_ui));	
-							}, "#import-validation-error");
+								$('.contacts-import-outbox #import-validation-error').html($(template_ui));	
+							}, ".contacts-import-outbox #import-validation-error");
 
 							return false;
 						}
@@ -781,8 +781,8 @@ function importContactsValidate()
 								if(!template_ui)
 									  return;
 									
-								$('#import-validation-error').html($(template_ui));	
-							}, "#import-validation-error");
+								$('.contacts-import-outbox #import-validation-error').html($(template_ui));	
+							}, ".contacts-import-outbox #import-validation-error");
 
 							return false;
 						}
@@ -792,8 +792,8 @@ function importContactsValidate()
 								if(!template_ui)
 									  return;
 									
-								$('#import-validation-error').html($(template_ui));	
-							}, "#import-validation-error");
+								$('.contacts-import-outbox #import-validation-error').html($(template_ui));	
+							}, ".contacts-import-outbox #import-validation-error");
 
 							return false;
 						}
@@ -833,8 +833,8 @@ function importContactsValidate()
 							getTemplate("import-contacts-validation-message", upload_valudation_errors.invalid_tag, undefined, function(template_ui){
 								if(!template_ui)
 									  return;
-								$('#import-validation-error').html($(template_ui));	
-							}, "#import-validation-error");
+								$('.contacts-import-outbox #import-validation-error').html($(template_ui));	
+							}, ".contacts-import-outbox #import-validation-error");
 
 							return false;
 						}
