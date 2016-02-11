@@ -298,16 +298,16 @@ function saveLogPhone(form, modal, element, logPhone)
 				}else{
 					contactDetailsObj = agile_crm_get_contact();	
 				}
-				var data ={};
-				data.url = "/core/api/notes/save_logPhoneActivity";
-				data.id = contactDetailsObj.id;
-				data.callType = logPhone.callType;
-				data.number = logPhone.phone;
-				data.status = logPhone.status;
-				data.duration = logPhone.duration;
-				data.widget = $("#callWidgetName",form).val();
+				var data1 ={};
+				data1.url = "/core/api/notes/save_logPhoneActivity";
+				data1.id = contactDetailsObj.id;
+				data1.callType = logPhone.callType;
+				data1.number = logPhone.phone;
+				data1.status = logPhone.status;
+				data1.duration = logPhone.duration;
+				data1.widget = $("#callWidgetName",form).val();
 				CallLogVariables.callActivitySaved = true;
-				saveLogPhoneActivity(data);
+				saveLogPhoneActivity(data1);
 			}catch(e){
 				console.log("activities not saved AS CONTACT NOT FOUND");
 			}
