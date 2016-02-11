@@ -17,15 +17,29 @@
 <div class="modal-body">
   <form id="new-ticket" name="new-ticket">
     <fieldset>
+      <div class="control-group form-group new-contact-row">
+        <div class="row">
+            <input type="hidden" id="contact_id" name="contact_id">
+            <div class="control-group col-md-6">
+              <label class="control-label"><b>Customer name</b> <span class="field_req">*</span></label>
+              <span class="controls">
+                <input type="text" id="requester_name" autocomplete="off" name="requester_name" placeholder="Search name" class="required typeahead typeahead_contacts form-control" data-provide="typeahead">
+              </span>
+            </div>
+            <div class="control-group col-md-6">
+                <label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
+                <span class="controls">
+                  <input type="text" id="requester_email" autocomplete="off" name="requester_email" placeholder="Search email" class="required typeahead typeahead_contacts form-control email" data-provide="typeahead">
+                </span>
+            </div>
+        </div>
+      </div>
       <div class="control-group form-group">
         <div class="row">
-            <div class="control-group col-md-5">
-              <label class="control-label"><b>To</b> <span class="field_req">*</span></label>
+            <div class="control-group col-md-6">
+              <label class="control-label"><b>Subject</b> <span class="field_req">*</span></label>
               <span class="controls">
-                <input type="hidden" id="requester_name" name="requester_name">
-                <input type="hidden" id="contact_id" name="contact_id">
-                <input type="text" id="requester_email" name="requester_email" class="form-control nt-reqester_email required" style="display: none;">
-                <input type="text" id="requester_email_typeahead" placeholder="Search contact" class="required typeahead typeahead_contacts form-control email" data-provide="typeahead">
+                <input type="text" name="subject" class="form-control required"  placeholder="Subject">
               </span>
             </div>
             <div class="control-group col-md-6">
@@ -44,14 +58,8 @@
       </div>
       <div class="control-group form-group">
         <div class="row">
-            <div class="control-group col-md-5">
-              <label class="control-label"><b>Subject</b> <span class="field_req">*</span></label>
-              <span class="controls">
-                <input type="text" name="subject" class="form-control required"  placeholder="Subject">
-              </span>
-            </div>
             <div class="control-group col-md-6">
-                <label class="control-label"><b>Status</b></label>
+              <label class="control-label"><b>Status</b></label>
                 <span class="controls">
                   <select id="status" name="status" class="form-control status">
                       <option value="OPEN">Open</option>
@@ -60,22 +68,22 @@
                   </select>
                 </span>
             </div>
+            <div class="control-group col-md-6">
+                <label class="control-label"><b>Priority</b></label>
+                <span class="controls">
+                  <select id="priority" name="priority" class="form-control">
+                      <option value="LOW">Low</option>
+                      <option value="MEDIUM">Medium</option>
+                      <option value="HIGH">High</option>
+                  </select>
+                </span>
+            </div>
         </div>
       </div>
       <div class="control-group form-group">
         <div class="row">
-            <div class="control-group col-md-5">
-              <label class="control-label"><b>Priority</b></label>
-              <span class="controls">
-                <select id="priority" name="priority" class="form-control">
-                    <option value="LOW">Low</option>
-                    <option value="MEDIUM">Medium</option>
-                    <option value="HIGH">High</option>
-                </select>
-              </span>
-            </div>
             <div class="control-group col-md-6">
-                <label class="control-label"><b>Assignee</b></label>
+              <label class="control-label"><b>Assignee</b></label>
                 <span class="controls">
                   <select id="groupID" name="groupID" class="form-control required group_id">
                      {{#each this}}
@@ -92,23 +100,7 @@
                   </select>
                 </span>
             </div>
-        </div>
-      </div>
-      <div class="control-group form-group">
-        <div class="row">
-            <!--<div class="control-group col-md-5">
-              <label class="control-label"><b>Assignee</b></label>
-              <span class="controls">
-                <select id="assigneeID" name="assigneeID" class="form-control grp-assigee assignee_id">
-                  {{#each this}}
-                      {{#each group_users}}
-                        <option class="{{../id}}" value="{{id}}">{{name}}</option>  
-                      {{/each}}
-                  {{/each}}
-                </select>
-              </span>
-            </div>-->
-            <div class="control-group col-md-5">
+            <div class="control-group col-md-6">
                 <label class="control-label block"><b>Labels</b></label>
                 <span class="controls">
                   <select name="labels" data-placeholder="Search Labels" class="chosen-select form-control" multiple class="w-md">
@@ -119,13 +111,11 @@
       </div>
       <div class="control-group form-group">
         <div class="row">
-            <div class="control-group col-md-11">
+            <div class="control-group col-md-12">
               <label class="control-label"><b>Message</b> <span class="field_req">*</span></label>
               <span class="controls">
                 <textarea id="reply_textarea" name="html_text" class="form-control required" style="min-height:76px;max-height:400px;text-indent: 0px; overflow-y: hidden; resize: none;padding: 8px;"></textarea>
               </span>
-            </div>
-            <div class="control-group col-md-1">
             </div>
         </div>
       </div>

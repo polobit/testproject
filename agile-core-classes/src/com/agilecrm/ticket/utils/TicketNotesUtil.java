@@ -47,6 +47,18 @@ public class TicketNotesUtil
 	 * @param ticketID
 	 * @param sortOrder
 	 * @return
+	 * @throws EntityNotFoundException 
+	 */
+	public static TicketNotes getTicketNotesByID(Long notesID) throws EntityNotFoundException
+	{
+		return TicketNotes.ticketNotesDao.get(notesID);
+	}
+	
+	/**
+	 * 
+	 * @param ticketID
+	 * @param sortOrder
+	 * @return
 	 */
 	public static List<TicketNotes> getTicketNotes(Long ticketID, String sortOrder)
 	{

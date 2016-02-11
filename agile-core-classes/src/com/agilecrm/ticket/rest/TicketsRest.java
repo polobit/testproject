@@ -986,7 +986,7 @@ public class TicketsRest
 	@GET
 	@Path("/create-test-ticket")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String createTicket() throws JSONException
+	public String createTestTickets() throws JSONException
 	{
 		try
 		{

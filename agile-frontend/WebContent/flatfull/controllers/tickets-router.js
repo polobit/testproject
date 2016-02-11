@@ -115,8 +115,8 @@
 
 	        	  	},undefined, undefined, 'core/api/search/');
 
-					//Initializing type ahead for selecting contact in To address field
-					agile_type_ahead("requester_email_typeahead", el, tickets_typeahead, function(arg1, arg2){
+					//Initializing type ahead on email field
+					agile_type_ahead("requester_email", el, tickets_typeahead, function(arg1, arg2){
 
 						arg2 = arg2.split(" ").join("");
 
@@ -125,12 +125,31 @@
 						if(!email || email == 'No email')
 							return;
 
-						$('#requester_name').val(arg2);
-						$('#contact_id').val(arg1);
-						$('#requester_email').val(email).show();
-						$('#requester_email_typeahead').hide();
+						setTimeout(function(){
+							$('#requester_email', el).val(email);
+							$('#requester_name', el).val(arg2);
+							$('#contact_id', el).val(arg1);
+						}, 0);
 
 					},undefined, undefined, 'core/api/search/');
+
+					//Initializing type ahead on email field
+					agile_type_ahead("requester_name", el, tickets_typeahead, function(arg1, arg2){
+
+						arg2 = arg2.split(" ").join("");
+
+						var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
+
+						if(!email || email == 'No email')
+							return;
+
+						setTimeout(function(){
+							$('#requester_email', el).val(email);
+							$('#requester_name', el).val(arg2);
+							$('#contact_id', el).val(arg1);
+						}, 0);
+
+					},undefined,undefined,'core/api/search/');
 				}
 			});
 

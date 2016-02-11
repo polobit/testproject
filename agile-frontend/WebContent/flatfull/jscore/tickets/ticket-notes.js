@@ -357,6 +357,19 @@ var Tickets_Notes = {
 
 			}}
 		);
+	},
 
+	showOriginal: function(id){
+
+		var params  = 'width=550';
+		params += ', height=' + (screen.height-200);
+		params += ', top=0, left=0';
+
+		newwin=window.open('ticket-notes.jsp?id=' + id,'Help Desk | Agile CRM', params);
+
+		if (window.focus)
+			newwin.focus();
+
+		return false;
 	}
 };

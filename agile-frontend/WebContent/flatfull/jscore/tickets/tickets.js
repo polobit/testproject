@@ -1293,9 +1293,7 @@ var Tickets = {
 		    'margin': '0',
 		    'padding': '0'
 		});
-
 	}
-	
 };
 
 function tickets_typeahead(data){
