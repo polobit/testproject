@@ -132,7 +132,7 @@ public class InvoicePdfServlet extends HttpServlet {
 			if(plan == null){
 				json.put("plan_type", "Credits");
 				json.put("description", lines.getDescription());
-				json.put("description2", "(charged @ $30/1000)");
+				json.put("description2", "(charged @ $4/1000)");
 			}else if(plan.getName().toLowerCase().contains("email")){
 				json.put("plan_type", "Emails");
 				json.put("description", lines.getQuantity()*1000+" Emails");

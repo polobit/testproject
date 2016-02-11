@@ -725,7 +725,7 @@ function initializeSubscriptionListeners()
 		}
 		if (isNaN(quantity) || quantity < 0)
 			return;
-		$("#total_credits_cost").html(quantity*30);
+		$("#total_credits_cost").html(quantity*4);
 	});
 }
 
