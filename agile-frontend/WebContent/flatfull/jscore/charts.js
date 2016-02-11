@@ -108,6 +108,17 @@ function pie(url, selector, name)
 												return { x : 15, y : 23 };
 											}, },
 										legend : { itemWidth : 75, },
+
+										exporting : {
+									    	buttons: {
+						   						 contextButton: {
+						       					 menuItems: null,
+						       					 onclick: function () { this.downloadCSV(); }
+						       					 
+						       					},
+						       		
+						       				}
+									    },
 										plotOptions : {
 											pie : {
 												 animation: animation,
@@ -133,7 +144,7 @@ function pie(url, selector, name)
 
 										series : [
 											{ type : 'pie', name : 'Tag', data : pieData, startAngle : 90 }
-										], exporting : { enabled : false } }, function(chart)
+										], }, function(chart)
 									{ // on complete
 
 										chart.renderer.image(updateImageS3Path('img/donut-tooltip-frame.png'), 14, 5, 200, 80).add();
@@ -313,22 +324,21 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			    exporting : {
 			    	buttons: {
    						 contextButton: {
-                    enabled: false
-                },
-       					// menuItems: null,
-       					// onclick: function () { this.downloadCSV(); }
+       					 menuItems: null,
+       					 onclick: function () { this.downloadCSV(); }
        					 
-       					//},
-       					       'test2Button': {
-            symbol: 'url(http://highcharts.com/demo/gfx/sun.png)',
+       					},
+       		/*			       'downloadButton': {
+            symbol: 'url(/flatfull/img/Download_chart.png)',
             x: -88,
             symbolX: 4,
             symbolY: 4,
             symbolFill: '#B5C9DF',
+            symbolSize:,
             hoverSymbolFill: '#779ABF',
             _titleKey: 'test2Title',
              onclick: function () { this.downloadCSV(); }
-        }
+        }*/
        				}
 			    },
 			    plotOptions: {
@@ -634,9 +644,16 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 			    //Sets the series of data to be shown in the graph,shows total 
 			    //and pipeline
 			    series: series,
-			    exporting: {
-			        enabled: false
-			    }
+			    exporting : {
+						    	buttons: {
+			   						 contextButton: {
+			       					 menuItems: null,
+			       					 onclick: function () { this.downloadCSV(); }
+			       					 
+			       					},
+			       		
+			       				}
+						    },
 			});
 		});
 	});
@@ -703,6 +720,16 @@ function showFunnel(url, selector, name, show_loading)
 		            text: name,
 		            x: -50
 		        },
+		        exporting : {
+						    	buttons: {
+			   						 contextButton: {
+			       					 menuItems: null,
+			       					 onclick: function () { this.downloadCSV(); }
+			       					 
+			       					},
+			       		
+			       				}
+						    },
 		        plotOptions: {
 		            series: {
 		                dataLabels: {
@@ -1101,9 +1128,16 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 			    //Sets the series of data to be shown in the graph,shows total 
 			    //and pipeline
 			    series: series,
-			    exporting: {
-			        enabled: false
-			    }
+			   exporting : {
+					    	buttons: {
+		   						 contextButton: {
+		       					 menuItems: null,
+		       					 onclick: function () { this.downloadCSV(); }
+		       					 
+		       					},
+		       		
+		       				}
+					    },
 			});
 		});
 	});
@@ -1456,9 +1490,16 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,freque
 			    //Sets the series of data to be shown in the graph,shows total 
 			    //and pipeline
 			    series: series,
-			    exporting: {
-			        enabled: false
-			    },
+			    exporting : {
+						    	buttons: {
+			   						 contextButton: {
+			       					 menuItems: null,
+			       					 onclick: function () { this.downloadCSV(); }
+			       					 
+			       					},
+			       		
+			       				}
+						    },
 			    lang: {
             				noData: "No Deals Found"
         				},
@@ -1724,9 +1765,16 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                 //Sets the series of data to be shown in the graph,shows total 
                 //and pipeline
                 series: series,
-                exporting: {
-                    enabled: false
-                }
+                exporting : {
+						    	buttons: {
+			   						 contextButton: {
+			       					 menuItems: null,
+			       					 onclick: function () { this.downloadCSV(); }
+			       					 
+			       					},
+			       		
+			       				}
+						    },
             });
 }
 function pieforReports(url, selector, name,show_loading, is_lost_analysis)
@@ -1879,7 +1927,16 @@ if(selector == 'lossreasonpie-chart-users'){
 
 				series : [
 					{ type : 'pie', name : 'Deal', data : pieData, startAngle : 90 }
-				], exporting : { enabled : false },
+				], exporting : {
+						    	buttons: {
+			   						 contextButton: {
+			       					 menuItems: null,
+			       					 onclick: function () { this.downloadCSV(); }
+			       					 
+			       					},
+			       		
+			       				}
+						    },
 
 				 lang: {
 					noData: "No Deals Found"
@@ -2108,9 +2165,16 @@ function showGuage(selector, data,goal_data,name,show_loading)
             },
         },
         },
-        exporting :{
-        	enabled : false,
-        },
+        exporting : {
+				    	buttons: {
+	   						 contextButton: {
+	       					 menuItems: null,
+	       					 onclick: function () { this.downloadCSV(); }
+	       					 
+	       					},
+	       		
+	       				}
+				    },
 
              series: [{
             name: 'Goal',
@@ -2194,9 +2258,16 @@ function showFunnelForConversion(selector, name, show_loading,v)
 		        legend: {
 		            enabled: false
 		        },
-		        exporting :{
-		        	enabled:false
-		        },
+		        exporting : {
+					    	buttons: {
+		   						 contextButton: {
+		       					 menuItems: null,
+		       					 onclick: function () { this.downloadCSV(); }
+		       					 
+		       					},
+		       		
+		       				}
+					    },
 		        series: [{
 		            name: 'Deals',
 		            data: funnel_data
@@ -2451,9 +2522,16 @@ function BubbleChart(url, selector, name,show_loading)
 			    //Sets the series of data to be shown in the graph,shows total 
 			    //and pipeline
 			    series: series,
-			    exporting: {
-			        enabled: false
-			    }
+			   exporting : {
+						    	buttons: {
+			   						 contextButton: {
+			       					 menuItems: null,
+			       					 onclick: function () { this.downloadCSV(); }
+			       					 
+			       					},
+			       		
+			       				}
+						    },
 			});
 		});
 	});
