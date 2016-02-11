@@ -313,10 +313,12 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			    exporting : {
 			    	buttons: {
    						 contextButton: {
-       					 menuItems: null,
-       					 onclick: function () { this.downloadCSV(); }
+                    enabled: false
+                },
+       					// menuItems: null,
+       					// onclick: function () { this.downloadCSV(); }
        					 
-       					},
+       					//},
        					       'test2Button': {
             symbol: 'url(http://highcharts.com/demo/gfx/sun.png)',
             x: -88,
@@ -325,9 +327,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
             symbolFill: '#B5C9DF',
             hoverSymbolFill: '#779ABF',
             _titleKey: 'test2Title',
-            onclick: function() {
-                alert("test2Button");
-            }
+             onclick: function () { this.downloadCSV(); }
         }
        				}
 			    },
