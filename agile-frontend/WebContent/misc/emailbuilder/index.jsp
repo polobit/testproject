@@ -586,60 +586,63 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
                     </div>
 
-                    <form class="form-inline" id="common-settings">
-                        <h4 class="text text-info">Padding</h4>
-                            <center>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td><input type="text" class="form-control" placeholder="top" value="15px" id="ptop" name="ptop" style="width: 60px; margin-right: 5px"></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="text" class="form-control" placeholder="left" value="15px" id="pleft" name="mtop" style="width: 60px; margin-right: 5px"></td>
-                                            <td></td>
-                                            <td><input type="text" class="form-control" placeholder="right" value="15px" id="pright" name="mbottom" style="width: 60px; margin-right: 5px"></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td><input type="text" class="form-control" placeholder="bottom" value="15px" id="pbottom" name="pbottom" style="width: 60px; margin-right: 5px"></td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </center>
-                    </form>
+                    <div id="common-settings">
+                        
+                        <h4  class="text text-info">Style</h4>
+                        <form id="background"  class="form-inline">
+                            <div class="form-group">
+                                <label for="bgcolor">Background</label>
+                                <div class="color-circle" id="bgcolor"></div>
+                                <script type="text/javascript">
+                                    $('#bgcolor').colpick({
+                                        layout: 'hex',
+                                        onBeforeShow: function () {
+                                            $(this).colpickSetColor(rgb2hex($('#bgcolor').css('backgroundColor')).replace("#",""));
+                                        },
+                                        onChange: function (hsb, hex, rgb, el, bySetColor) {
 
-                    <h4  class="text text-info">Style</h4>
-                    <form id="background"  class="form-inline">
-                        <div class="form-group">
-                            <label for="bgcolor">Background</label>
-                            <div class="color-circle" id="bgcolor"></div>
-                            <script type="text/javascript">
-                                $('#bgcolor').colpick({
-                                    layout: 'hex',
-                                    onBeforeShow: function () {
-                                        $(this).colpickSetColor(rgb2hex($('#bgcolor').css('backgroundColor')).replace("#",""));
-                                    },
-                                    onChange: function (hsb, hex, rgb, el, bySetColor) {
-
-                                        if (!bySetColor)
+                                            if (!bySetColor)
+                                                $(el).css('background-color', '#' + hex);
+                                        },
+                                        onSubmit: function (hsb, hex, rgb, el) {
                                             $(el).css('background-color', '#' + hex);
-                                    },
-                                    onSubmit: function (hsb, hex, rgb, el) {
-                                        $(el).css('background-color', '#' + hex);
 
-                                        $('#' + $('#path').val()).css('background-color', '#' + hex);
-                                        $(el).colpickHide();
-                                    }
+                                            $('#' + $('#path').val()).css('background-color', '#' + hex);
+                                            $(el).colpickHide();
+                                        }
 
-                                }).keyup(function () {
-                                    $(this).colpickSetColor(this.value);
-                                });
-                            </script>
-                        </div>
-                    </form>
+                                    }).keyup(function () {
+                                        $(this).colpickSetColor(this.value);
+                                    });
+                                </script>
+                            </div>
+                        </form>
+
+                        <form class="form-inline">
+                            <h4 class="text text-info">Padding</h4>
+                                <center>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td><input type="text" class="form-control" placeholder="top" value="15px" id="ptop" name="ptop" style="width: 60px; margin-right: 5px"></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td><input type="text" class="form-control" placeholder="left" value="15px" id="pleft" name="mtop" style="width: 60px; margin-right: 5px"></td>
+                                                <td></td>
+                                                <td><input type="text" class="form-control" placeholder="right" value="15px" id="pright" name="mbottom" style="width: 60px; margin-right: 5px"></td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td><input type="text" class="form-control" placeholder="bottom" value="15px" id="pbottom" name="pbottom" style="width: 60px; margin-right: 5px"></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </center>
+                        </form>
+                    </div>
 
                     <div class="text text-right" style="margin-top:5px">
                         <a href="#" id="saveElement" class="btn btn-info">done</a>

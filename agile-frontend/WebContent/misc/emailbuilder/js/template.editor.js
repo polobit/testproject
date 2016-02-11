@@ -63,7 +63,7 @@ function showSettings() {
     if (settings.hasClass('hide')) {
         // elements.slideUp(300);
         settings.removeClass('hide');
-        settings.slideRight(300);
+        settings.show('slide',{direction:'right'},1000);
     }
 }
 
@@ -168,8 +168,8 @@ function handleObjects() {
 
                         break;
                     case 'imgtxtcol':
+                        $('.selected-item').removeClass('selected-item').css('border', 'none');
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
-                        var textElement = self.find('tbody tr td div.textFix');
                         var img = self.find('tbody tr td table tbody tr td img');
 
                         var imageid = img.attr('id');
@@ -191,49 +191,13 @@ function handleObjects() {
                             $('#image-link').val(img.parent('a').attr('href'));
                         }
 
-                        hideAllSettings("#editor");
+                        hideAllSettings();
                         $('#imageproperties').show();
-
-                        textElement.unbind('click');
-                        textElement.bind('click', function () {
-                            $('#selector').val('tbody tr td div.textFix');
-                            $('.selected-item').removeClass('selected-item').css('border', 'none');
-                            textElement.css('border', '1px dotted red');
-                            $(this).addClass('selected-item');
-
-                            var fontcolor = textElement.css('fontColor');
-                            var text = textElement.html();
-                            var fontsize = textElement.css('font-size');
-                            var fontfamily = textElement.css('font-family');
-                            var background = $('#' + $('#path').val()).css('background-color');
-                            $('#selector').val('tbody tr td div.textFix');
-                            storeValues($('#' + $('#path').val()), fontcolor, text, fontsize, fontfamily, background);
-
-
-                        })
                         break;
                     case 'imgtxtincol':
+                        $('.selected-item').removeClass('selected-item').css('border', 'none');
 
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
-                        var textElement = self.find('td.text div.textFix');
-
-                        textElement.each(function (index) {
-                            $(this).unbind('click');
-                            $(this).bind('click', function () {
-                                $('#selector').val('tbody tr td.text:eq(' + index + ') div.textFix');
-                                $('.selected-item').removeClass('selected-item').css('border', 'none');
-                                $(this).css('border', '1px dotted red');
-                                $(this).addClass('selected-item');
-
-                                var fontcolor = $(this).css('fontColor');
-                                var text = $(this).html();
-                                var fontsize = $(this).css('font-size');
-                                var fontfamily = $(this).css('font-family');
-                                var background = $('#' + $('#path').val()).css('background-color');
-                                storeValues($('#' + $('#path').val()), fontcolor, text, fontsize, fontfamily, background);
-                            });
-                        });
-
                         var imgs = self.find('td.imageInColumn img');
 
                         imgs.each(function (i) {
@@ -244,12 +208,13 @@ function handleObjects() {
                             }
                         });
 
+                        hideAllSettings();
                         handleButtonsTxt(self);
                         break;
                     case 'imgtxt':
+                        $('.selected-item').removeClass('selected-item').css('border', 'none');
                         //    $('#'+$('#path').val()).unbind('click');
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
-                        var textElement = self.find('tbody tr td div.textFix');
                         var img = self.find('tbody tr td table tbody tr td img');
                         // devi mettere un each perchè ci sono piu di un immagine.
 
@@ -274,26 +239,8 @@ function handleObjects() {
                             $('#image-link').val(img.parent('a').attr('href'));
                         }
 
-                        hideAllSettings("#editor");
+                        hideAllSettings();
                         $('#imageproperties').show();
-
-                        textElement.unbind('click');
-                        textElement.bind('click', function () {
-                            $('#selector').val('tbody tr td div.textFix');
-                            $('.selected-item').removeClass('selected-item').css('border', 'none');
-                            textElement.css('border', '1px dotted red');
-                            $(this).addClass('selected-item');
-
-                            var fontcolor = textElement.css('fontColor');
-                            var text = textElement.html();
-                            var fontsize = textElement.css('font-size');
-                            var fontfamily = textElement.css('font-family');
-                            var background = $('#' + $('#path').val()).css('background-color');
-                            $('#selector').val('tbody tr td div.textFix');
-                            storeValues($('#' + $('#path').val()), fontcolor, text, fontsize, fontfamily, background);
-
-
-                        })
 
                         break;
 
@@ -342,13 +289,13 @@ function handleObjects() {
                         }
 
 
-                        $('input.social-input [name="facebook"]').val(self.find('a.facebook').attr('href'));
+                        $('input.social-input[name="facebook"]').val(self.find('a.facebook').attr('href'));
 
-                        $('input.social-input [name="twitter"]').val(self.find('a.twitter').attr('href'));
+                        $('input.social-input[name="twitter"]').val(self.find('a.twitter').attr('href'));
 
-                        $('input.social-input [name="linkedin"]').val(self.find('a.linkedin').attr('href'));
+                        $('input.social-input[name="linkedin"]').val(self.find('a.linkedin').attr('href'));
 
-                        $('input.social-input [name="youtube"]').val(self.find('a.youtube').attr('href'));
+                        $('input.social-input[name="youtube"]').val(self.find('a.youtube').attr('href'));
 
                         hideAllSettings();
                         $('#social-links').show();
@@ -1135,6 +1082,27 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         }
         hideAllSettings();
         $('#imageproperties').show();
+    });
+
+    $('#tosave').on('click','.textFix',function(e) {
+        e.stopPropagation();
+        $('#common-settings').hide();
+
+        var self = $(this).closest(".main");
+
+        $('.selected-item').removeClass('selected-item').css('border', 'none');
+
+        var fontcolor = $(this).css('fontColor');
+        var text =        $(this).html();
+        var fontsize =    $(this).css('font-size');
+        var fontfamily =  $(this).css('font-family');
+        var background =  $(this).css('background-color');
+
+        $('#selector').val(".selected-item");
+        $(this).addClass('selected-item');
+        $(this).css('border','1px dotted red');
+
+        storeValues(self, fontcolor, text, fontsize, fontfamily, background);
     });
     
     handleObjects();
