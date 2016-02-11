@@ -55,7 +55,7 @@ Long user_id = 0L;
 Long agile_user_id = 0L;
 String meeting_durations=null;
 String welcome_title="<p class='lead' style='color: #777;font-size: 19px;font-weight:normal'>Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>";
-
+String personal_calendar_title = null;
 
 URL ur=new URL(url);
 String d_name=domain_name= NamespaceUtil.getNamespaceFromURL(ur);
@@ -160,6 +160,7 @@ if(scheduleid.contains(",")){
 		meeting_durations = online_prefs.meeting_durations;
 		meeting_types = online_prefs.meeting_types;
 		welcome_title= online_prefs.user_calendar_title;
+		personal_calendar_title = welcome_title
 	     if(StringUtils.isNotBlank(welcome_title)&&!welcome_title.contains("</p>")){
 	    	welcome_title="<p class='lead' style='color: #777;font-size: 19px;font-weight:normal'>"+welcome_title+"</p>";
 	     }
@@ -220,9 +221,11 @@ if(scheduleid.contains(",")){
 	 <% if(userAvailable == true && emailAvailable == true)
        {
 	     if(multiple_users!=true){
+	         if(personal_calendar_title == null)
+	              personal_calendar_title = "Welcome to my scheduling page. Please follow the instructions to book an appointment.";
      %>
 	
-		<img src="<%=profile_pic%>" id="avatar" class="thumbnail" title="<%=welcome_title%>"/>
+		<img src="<%=profile_pic%>" id="avatar" class="thumbnail" title="<%=personal_calendar_title%>"/>
 		<div class="text-center"><%=welcome_title%></div>
 <%}else{ %>
 <p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal"> Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>
@@ -247,7 +250,7 @@ if(scheduleid.contains(",")){
 				 String domain_user_id=pro_pic.get(4); 
 				 String custom_message = online_prefs.user_calendar_title;
 				 if(custom_message == null)
-					 custom_message = "Welcome to my scheduling page. Please follow the instructions to book an appointment.";
+					 custom_message = "Welcome to my scheduling page.Please follow the instructions to book an appointment.";
 		   %>
 		   <div class="fluidClass col-xs-12 text-center">
 		   <div style="display: inline-block;width: 150px;margin-right: 5px;">
