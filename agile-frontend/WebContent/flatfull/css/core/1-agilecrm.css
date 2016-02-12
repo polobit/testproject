@@ -3182,6 +3182,7 @@ table.hide-head-checkbox th label.i-checks {
  white-space: nowrap !important;
 }
 
+
 .contact_popover{ 
 
 	border-radius: 0px;
@@ -3381,4 +3382,26 @@ table.hide-head-checkbox th label.i-checks {
 	padding: 5px;
 	margin-top: 8px;
 	border-radius: 2px;
+}
+
+.admin-user-name{
+	width: calc(100% - 45px);
+	line-height: 20px;
+	color:#7C7C7C;
+	margin-left:82px;
+	font-size:18px;
+	margin-top:-67px;
+	margin-left:52px;
+}
+
+.admin-user-adduser{
+	margin-left:13px;
+	width:140px;
+	font-size:14px;
+}
+
+.admin-username{
+	max-width:calc(100% - 101px);
+	text-transform: capitalize;
+	font-size:14px;
 }
