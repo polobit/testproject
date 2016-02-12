@@ -45,6 +45,14 @@ var Tickets_Notes = {
 
 			success : function(model) {
 
+				var next_ticket_url = $(".navigation .next-ticket").attr("href");
+				if(next_ticket_url){
+					Backbone.history.navigate(next_ticket_url, {
+						trigger : true
+					});
+					return;
+				}
+
 				Tickets.renderExistingCollection();
 				return;
 
@@ -95,8 +103,17 @@ var Tickets_Notes = {
 			contentType: 'application/x-www-form-urlencoded',
 			accept: 'application/json',
 			success : function(data){
+				
 				showNotyPopUp('information', "Ticket has been forwarded to " + emails.join(), 
 					'bottomRight', 3000);
+
+				var next_ticket_url = $(".navigation .next-ticket").attr("href");
+				if(next_ticket_url){
+					Backbone.history.navigate(next_ticket_url, {
+						trigger : true
+					});
+					return;
+				}
 
 				Tickets.renderExistingCollection();
 			}	
@@ -233,9 +250,10 @@ var Tickets_Notes = {
 			if(!message)
 				return;
 
+			var type_text = $container.find("#reply_textarea").val();
+
 			// Get canned response
-			$container.find("#reply_textarea").val(
-					message + $container.find("#reply_textarea").text());
+			$container.find("#reply_textarea").val(type_text + message);
 
 		})
 
