@@ -2086,6 +2086,14 @@ color:#727272;
   list-style: none;
 }
 
-
-
+.admin-setting-icon a.select{
+  opacity: 1;
+  background-color: #edf1f2;
+}
+.stats-tabs-border li.active > a{
+  border-left-color: #fff !important;
+}
+.icons-space-m li a{
+  padding: 10px 14px;
+}
 

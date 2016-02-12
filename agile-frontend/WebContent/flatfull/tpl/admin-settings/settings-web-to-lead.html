@@ -1,7 +1,19 @@
 <script id="admin-settings-web-to-lead-new-collection-template"	type="text/html">
 	<div class="tab-container m-b-none">
-       <ul class="nav nav-tabs">
-         <li><a href="#web-to-lead-tab" data-toggle="tab"  class="b-l-none">Web to Lead</a></li>
+       <ul class="nav nav-tabs {{#is_mobile}} icons-space-m {{/is_mobile}}">
+
+         {{#is_mobile}}
+
+         <li><a href="#web-to-lead-tab" data-toggle="tab"  class="b-l-none"><i class="icon-globe"></i></a></li>
+         <li><a href="#e-commerce-tab" data-toggle="tab" ><i class="icon-basket-loaded"></i></a></li>
+		 <li><a href="#cms-tab" data-toggle="tab" ><i class="icon-wrench"></i></a></li>
+		 <li><a href="#email-gateways-tab" data-toggle="tab" ><i class="icon-envelope"></i></a></li>
+		 <li><a href="#sms-gateways-tab" data-toggle="tab" ><i class="icon-screen-smartphone"></i></a></li>
+		 <li><a href="#web-app-integrations-tab" data-toggle="tab" ><i class="icon-drawer"></i></a></li>
+
+		 {{else}}
+
+		 <li><a href="#web-to-lead-tab" data-toggle="tab"  class="b-l-none">Web to Lead</a></li>
          <li><a href="#e-commerce-tab" data-toggle="tab" >Ecommerce</a></li>
 		 <li><a href="#cms-tab" data-toggle="tab" >CMS</a></li>
 		 <li><a href="#email-gateways-tab" data-toggle="tab" >Email</a></li>
