@@ -289,9 +289,15 @@ $("#right-pane").html(ticketView.render().el);
 
 	 	var ticketModel = null;
 
-	 	if (App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection)
+	 	if (App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection){
 	 	   ticketModel = App_Ticket_Module.ticketsCollection.collection.get(id);
+
+	 	   console.log('Tcket model...');
+	 	   console.log(ticketModel.toJSON());
+	 	}
 	 
+	 	
+
 	 	Current_Ticket_ID = id;
 
 	 	Ticket_Canned_Response.fetchCollection(function(){
@@ -575,7 +581,16 @@ $('#content').find('.helpdesk-tab').addClass('select');
  				saveCallback : function(){
  					Backbone.history.navigate( "ticket-labels", { trigger : true });
  				},
- 				postRenderCallback : function(el, data) {
+                errorCallback :function(response)
+                {
+                	$('.error_message_label').css('display','block');
+                	// Hides the error message after 5 seconds
+                	
+                	//setTimeout($('.error_message_label').text(response.responseText),5000);
+                    $('.error_message_label').text(response.responseText).delay(5000).hide(1);
+        	        
+                },
+   				postRenderCallback : function(el, data) {
 
  					Ticket_Labels.loadColorPicker(data.color_code);
  				}
