@@ -82,7 +82,7 @@ public class ShopifyPluginUtil {
 		String custID = null;
 		LinkedHashMap<String, Object> customer = getCustomer(widget, email);
 		if (customer != null && customer.size() > 0) {
-			Integer customerId = (Integer) customer.get("id");
+			Long customerId = (Long) customer.get("id");
 			custID = customerId.toString();
 		}
 		return custID;
