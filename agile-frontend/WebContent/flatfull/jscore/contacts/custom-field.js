@@ -135,6 +135,41 @@ function showCustomFieldModel(data)
 
 			$("#custom-field-add-modal").modal('hide');
 			$("body").removeClass("modal-open").css("padding-right", "");
+		},
+		errorCallback : function(response)
+		{
+			if(response.responseText.indexOf("Sorry") == 0)
+			{
+				$('#duplicate-custom-field-err').html("<i>"+response.responseText+"</i>");
+				$('#duplicate-custom-field-err').removeClass("hide");
+			}
+			else
+			{
+				var errorJSON = {};
+				errorJSON["TEXTAREA"] = "Text Area";
+				errorJSON["TEXT"] = "Text Field";
+				errorJSON["DATE"] = "Date Field";
+				errorJSON["CHECKBOX"] = "Checkbox";
+				errorJSON["LIST"] = "List";
+				errorJSON["NUMBER"] = "Number";
+				errorJSON["FORMULA"] = "Formula";
+				errorJSON["CONTACT"] = "Contact";
+				errorJSON["COMPAN"] = "Company";
+
+				if($('#label', $('#textModalForm')).is(':disabled'))
+				{
+					$('#duplicate-custom-field-type-err').html("<i>"+errorJSON[response.responseText]+" type custom field exists with same label. Choose same type.</i>");
+				}
+				else
+				{
+					$('#duplicate-custom-field-type-err').html("<i>"+errorJSON[response.responseText]+" type custom field exists with same label. Choose same type or different label.</i>");
+				}
+				$('#duplicate-custom-field-type-err').removeClass("hide");
+			}
+			setTimeout(function(){
+				$('#duplicate-custom-field-err').addClass("hide");
+				$('#duplicate-custom-field-type-err').addClass("hide");
+			},3000);
 		}
 	});
 
