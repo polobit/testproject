@@ -12,6 +12,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
+import com.google.gdata.data.contacts.Website;
 
 /**
  * <code>ShopifyContactWrapperImple</code> Implements ContactWrapper This class
@@ -225,6 +226,21 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
 	}
 
 	return notes;
+    }
+    
+    @Override
+    public List<ContactField> getMoreCustomInfo()
+    {
+	// TODO Auto-generated method stub
+    	List<ContactField> fields = new ArrayList<ContactField>();
+    	String syncid = null;
+    	if (contactProperties.containsKey("id") && contactProperties.get("id") != null)
+    	{
+    		syncid = contactProperties.get("id").toString();
+    	}
+    		fields.add(new ContactField(Contact.SYNC, syncid.toString(), "home"));
+    		return fields;
+
     }
 
     @Override

@@ -52,7 +52,7 @@ public interface IContactWrapper
      */
     public ContactField getEmail();
 
-    public ContactField getSyncId();
+   // public ContactField getSyncId();
     /**
      * Gets the phone number.
      * 
