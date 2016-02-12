@@ -81,8 +81,8 @@ public class ShopifyPluginUtil {
 	public static String isCustomerExist(Widget widget, String email) {
 		String custID = null;
 		LinkedHashMap<String, Object> customer = getCustomer(widget, email);
-		if (customer != null && customer.size() > 0) {
-			Long customerId = (Long) customer.get("id");
+		if (customer != null && customer.size() > 0) {			
+			Long customerId =   Long.parseLong(customer.get("id").toString());
 			custID = customerId.toString();
 		}
 		return custID;
