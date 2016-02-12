@@ -231,7 +231,7 @@ var Tickets = {
 
 			Tickets.updateModel(url, function(){
 
-				showNotyPopUp('information', message, 'bottomRight', 3000);
+				showNotyPopUp('information', message, 'bottomRight', 5000);
 				$that.closest('tr').find('a.' + action_type).html(action_value);
 				$that.closest('div').find('.dropdown-menu').dropdown('toggle');
 
@@ -625,8 +625,10 @@ var Tickets = {
 
 		this.updateModel(url, function(){
 			$select.attr('disabled', false);
-		}, function(){
+            showNotyPopUp('information', 'Ticket Type has been changed to '+ toLowerCase().new_ticket_type, 'bottomRight', 5000);
+		}, function(error){
 			$select.attr('disabled', false);
+			showNotyPopUp('information', error , 'bottomRight', 5000);
 		});
 	},
 
@@ -639,8 +641,10 @@ var Tickets = {
 
 		this.updateModel(url, function(){
 			$priority.attr('disabled', false);
-		}, function(){
+			showNotyPopUp('information', 'Ticket Type has been changed to'+new_priority , 'bottomRight', 5000);
+		}, function(error){
 			$priority.attr('disabled', false);
+	        showNotyPopUp('information', 'Ticket Type has been changed to'+new_priority , 'bottomRight', 5000);
 		});
 	},
 
@@ -658,9 +662,10 @@ var Tickets = {
 
 			var updatedDueDate = new Date(slaEpoch).format('mmm dd, yyyy HH:MM')
 
-			showNotyPopUp('information', 'Ticket due date has been updated to ' + updatedDueDate, 'bottomRight', 3000);
-		}, function(){
+			showNotyPopUp('information', 'Ticket due date has been updated to ' + updatedDueDate, 'bottomRight', 5000);
+		}, function(error){
 			$input.attr('disabled', false);
+			showNotyPopUp('information', error , 'bottomRight', 5000);
 		});
 	},
 
@@ -882,7 +887,7 @@ var Tickets = {
 
 		this.changeStatus("CLOSED", function(){
 
-				showNotyPopUp('information', "Ticket has been closed", 'bottomRight', 3000);
+				showNotyPopUp('information', "Ticket has been closed", 'bottomRight', 5000);
 
 				var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
 					'/' + (Ticket_Status ? Ticket_Status : 'new');
@@ -990,18 +995,30 @@ var Tickets = {
 
 	toggleFavorite : function(e){
 
+		var favourite = true; 
+
 		//Toggling star color
 		if($(e.target).hasClass("fa-star text-warning")){
 			$(e.target).removeClass("fa-star text-warning").addClass("fa-star-o text-light");
+		     favourite=false;
 		}else{
-			$(e.target).addClass("fa-star text-warning").removeClass("fa-star-o text-light");	
+		   
+			$(e.target).addClass("fa-star text-warning").removeClass("fa-star-o text-light");
 		}
 
 		var newTicketModel = new BaseModel();
 		newTicketModel.url = "/core/api/tickets/toggle-favorite?id=" + Current_Ticket_ID;
 		newTicketModel.save({'id': Current_Ticket_ID}, 
 			{	
+
 				success: function(model){
+				     console.log(favourite);
+                     var succesmessage = "Ticket marked favourite";
+					if(!favourite)
+
+						succesmessage = "Ticket marked as unfavourite";
+
+					 showNotyPopUp('information', succesmessage, 'bottomRight', 5000);
 					// if(model.toJSON().is_favorite)
 					// 	$(e.target).addClass("fa-star text-warning").removeClass("fa-star-o text-light");
 					// else
@@ -1023,11 +1040,16 @@ var Tickets = {
 		newTicketModel.save({'id': Current_Ticket_ID}, 
 			{	
 				success: function(model){
-					if(model.toJSON().is_spam)
+					var message ="";
+					if(model.toJSON().is_spam){
 						$(e.target).addClass("btn-danger").removeClass("btn-default");
-					else
+					    message="Ticket marked as Spam";
+					}
+					else{
 						$(e.target).removeClass("btn-danger").addClass("btn-default");
-
+                        message="Ticket un marked as Spam";
+                    }
+                    showNotyPopUp('information',message, 'bottomRight', 5000);
 					// If in time line add event to timeline
 					if($('.ticket-timeline-container').length > 0){
 						Ticket_Timeline.render_individual_ticket_timeline()
@@ -1081,7 +1103,7 @@ var Tickets = {
 
 				var formatted_date = new Date(timeInMilli).format('mmm dd, yyyy');
 				showNotyPopUp('information', "Due date has been changed to " + formatted_date, 
-					'bottomRight', 3000);
+					'bottomRight', 5000);
 
 				if(callback)
 					callback();
