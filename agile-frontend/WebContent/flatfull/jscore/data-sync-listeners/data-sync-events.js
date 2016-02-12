@@ -64,7 +64,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
         e.preventDefault();
         var ele = $(e.currentTarget);
-        var disabled = $(this).attr("disabled");
+        /*var disabled = $(this).attr("disabled");
         if (disabled) {
             return false;
         } else {
@@ -72,11 +72,24 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             $(ele).text("Syncing");
         }
 
-
+*/        $(ele).attr("disabled", "disabled");
+       
+                      
         var syncPrefs = serializeForm("shopify-contact-import-form");
         syncPrefs["inProgress"] = true;
+             getSyncModelFromName('SHOPIFY', function(mod) {
 
-        getSyncModelFromName('SHOPIFY', function(mod) {
+                if(mod.inProgress==true)
+                {
+                     show_success_message_after_save_button("Already in Progress", App_Datasync.dataSync.el);
+                      setTimeout(function() {
+            $(ele).removeAttr("disabled");
+            },3000);
+                     return false;
+                }
+        
+
+       
 
             var model = new Backbone.Model(mod);
             model.set(syncPrefs, {
@@ -90,6 +103,9 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             model.save({}, {
                 success: function(data) {
                     show_success_message_after_save_button("Sync Initiated", App_Datasync.dataSync.el);
+                    setTimeout(function() {
+                 $(ele).removeAttr("disabled");
+                     },3000);
                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                 }
             });
@@ -127,15 +143,15 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
         var ele = $(e.currentTarget);
         var disabled = $(ele).attr("disabled");
-        if (disabled)
-            return;
+       // if (disabled)
+         //   return;
 
         if (!isValidForm("#google-contacts-import-form")) {
             return;
         };
 
-        $(ele).attr("disabled", "disabled");
-        $(ele).text("Syncing");
+        //$(ele).attr("disabled", "disabled");
+       // $(ele).text("Syncing");
 
         //	return;
 
@@ -146,6 +162,15 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
         getSyncModelFromName('GOOGLE', function(mod) {
 
+             if(mod.inProgress==true)
+                {
+                     show_success_message_after_save_button("Already in Progress", App_Datasync.dataSync.el);
+                     setTimeout(function() {
+                                 $(ele).removeAttr("disabled");
+                                     },3000);
+                     return false;
+                }
+        
             var model = new Backbone.Model(mod);
             model.set(syncPrefs, {
                 silent: true
@@ -157,6 +182,9 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             model.save({}, {
                 success: function(data) {
                     show_success_message_after_save_button("Sync Initiated", App_Datasync.dataSync.el);
+                    setTimeout(function() {
+                                 $(ele).removeAttr("disabled");
+                                     },3000);
                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                 }
             });
@@ -186,19 +214,29 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
     syncStripePrefs: function(e) {
         e.preventDefault();
         var ele = $(e.currentTarget);
-        var disabled = $(ele).attr("disabled");
-        if (disabled) {
+        //var disabled = $(ele).attr("disabled");
+       /* if (disabled) {
             return false;
         } else {
             $(ele).attr("disabled", "disabled");
             $(ele).text("Syncing");
-        }
-
+        }*/
+        $(ele).attr("disabled", "disabled");
+                    $(ele).delay(3000).removeAttr("disabled");
 
         var syncPrefs = serializeForm("stripe-prefs-form");
         syncPrefs["inProgress"] = true;
         getSyncModelFromName('STRIPE', function(mod) {
 
+             if(mod.inProgress==true)
+                {
+                     show_success_message_after_save_button("Already in Progress", App_Datasync.dataSync.el);
+                     setTimeout(function() {
+                                 $(ele).removeAttr("disabled");
+                                     },3000);
+                     return false;
+                }
+        
             var model = new Backbone.Model(mod);
             model.set(syncPrefs, {
                 silent: true
@@ -211,6 +249,9 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             model.save({}, {
                 success: function(data) {
                     show_success_message_after_save_button("Sync Initiated", App_Datasync.dataSync.el);
+                    setTimeout(function() {
+                                 $(ele).removeAttr("disabled");
+                                     },3000);
                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                 }
             });
@@ -221,11 +262,11 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
         e.preventDefault();
         var ele = $(e.currentTarget);
 
-       var disable = $(ele).attr('disabled');
+       /*var disable = $(ele).attr('disabled');
         if(disable)
             return false;
         $(ele).attr("disabled", "disabled");
-        $(ele).text("Syncing");
+        $(ele).text("Syncing");*/
         
         var quickbookPrefs = serializeForm("quickbook-form");
         quickbookPrefs['inProgress'] = true;
@@ -233,6 +274,15 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
           getSyncModelFromName('QUICKBOOK', function(mod) {
 
+             if(mod.inProgress==true)
+                {
+                     show_success_message_after_save_button("Already in Progress", App_Datasync.dataSync.el);
+                     setTimeout(function() {
+                                 $(ele).removeAttr("disabled");
+                                     },3000);
+                     return false;
+                }
+        
             var model = new Backbone.Model(mod);
             model.set(quickbookPrefs, {
                 silent: true
@@ -245,6 +295,9 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             model.save({}, {
                 success: function(data) {
                     show_success_message_after_save_button("Sync Initiated", App_Datasync.dataSync.el);
+                    setTimeout(function() {
+                                 $(ele).removeAttr("disabled");
+                                     },3000);
                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                 }
             });
@@ -256,16 +309,26 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
         e.preventDefault();
         var ele = $(e.currentTarget);
 
-                var disable = $(ele).attr('disabled');
-                    if(disable)
-                    return false;
+                //var disable = $(ele).attr('disabled');
+                    //if(disable)
+                    //return false;
                     $(ele).attr("disabled", "disabled");
-                    $(ele).text("Syncing");
+                    $(ele).delay(3000).removeAttr("disabled");
+                   // $(ele).text("Syncing");*/
                     
                     var freshbooks_prefs = serializeForm("freshbooks-form");
                     freshbooks_prefs['inProgress'] = true;
                      getSyncModelFromName('FRESHBOOKS', function(mod) {
 
+                         if(mod.inProgress==true)
+                {
+                     show_success_message_after_save_button("Already in Progress", App_Datasync.dataSync.el);
+                     setTimeout(function() {
+                      $(ele).removeAttr("disabled");
+                      },3000);
+                     return false;
+                }
+        
                         var model = new Backbone.Model(mod);
                         model.set(freshbooks_prefs, {
                             silent: true
@@ -278,6 +341,10 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
                         model.save({}, {
                             success: function(data) {
                                 show_success_message_after_save_button("Sync Initiated", App_Datasync.dataSync.el);
+                            setTimeout(function() {
+                                 $(ele).removeAttr("disabled");
+                                     },3000);
+                            
                                 showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                             }
                         });

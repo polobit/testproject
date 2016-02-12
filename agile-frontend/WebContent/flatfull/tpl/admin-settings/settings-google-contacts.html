@@ -193,10 +193,9 @@
 <form id="stripe-prefs-form" class="m-b">
 <input type ="hidden" value = "{{id}}" name ="id">
           <div>Account Linked: {{userName}}</div>
-	
+			<br>
           
-             	<div class="control-group form-group p-t-sm">
-             		<a href="#" class="delete">Change</a>
+             	<div class="control-group form-group">
 					<label class="control-label">Frequency</label> 
            				<div class="controls">
 							<select class="required form-control" name="duration" id="freq">
@@ -300,11 +299,11 @@
 	
            {{#if id}}
               <div>
-                   Shop : <span>{{othersParams}}</span>
+                   Shop: <span>{{othersParams}}</span>
                 
-                       <div class="text-center"><a class="delete" href="#"  id="shopify-import-prefs-delete" >Change</a></div>
+                      
 					</div>
-                 
+                 <br>
              	<div class="control-group form-group">
 					<label class="control-label">Frequency</label> 
            				<div class="controls">
@@ -421,7 +420,7 @@
     {{#if id}}
 <form id="quickbook-form">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked: {{userName}} <span><a href="#" class="delete">Change</a></span></div>
+          <div>Account Linked: {{userName}} </div>
 	
           <br>
              	<div class="control-group form-group">
@@ -542,7 +541,7 @@
     {{#if id}}
 <form id="xero-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked: {{userName}} <span><a href="#" class="delete">Change</a></span></div>
+          <div>Account Linked: {{userName}} </div>
 	
           
              	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
@@ -601,8 +600,8 @@
     {{#if id}}
 <form id="freshbooks-form">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div><span>Account Linked </span>  <span>{{othersParams}}.freshbooks.com <span><a href="#" class="delete">Change</a></span></span></div>
-	
+          <div><span>Account Linked </span>  <span>{{othersParams}}.freshbooks.com </span></div>
+			<br>
           
              	<div class="control-group form-group">
 					<label class="control-label">Frequency</label> 
