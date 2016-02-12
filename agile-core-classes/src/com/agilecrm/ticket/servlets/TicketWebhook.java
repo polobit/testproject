@@ -178,7 +178,7 @@ public class TicketWebhook extends HttpServlet
 			for (int i = 0; i < ccEmailsArray.length(); i++)
 				ccEmails.add(ccEmailsArray.getJSONArray(i).getString(0));
 
-			String text = "No plain text available", html = "No html content available";
+			String text = "", html = "";
 
 			if (msgJSON.has("text"))
 				text = msgJSON.getString("text");
@@ -294,10 +294,9 @@ public class TicketWebhook extends HttpServlet
 					fromName = msgJSON.getString("from_name");
 
 				// Creating new Ticket in Ticket table
-				ticket = TicketsUtil.createTicket(groupID, null, fromName,
-						msgJSON.getString("from_email"), msgJSON.getString("subject"), ccEmails, text, Status.NEW,
-						Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip,
-						new ArrayList<Key<TicketLabels>>());
+				ticket = TicketsUtil.createTicket(groupID, null, fromName, msgJSON.getString("from_email"),
+						msgJSON.getString("subject"), ccEmails, text, Status.NEW, Type.PROBLEM, Priority.LOW,
+						Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip, new ArrayList<Key<TicketLabels>>());
 
 				BulkActionNotifications.publishNotification("New ticket #" + ticket.id + " received");
 			}
@@ -317,8 +316,8 @@ public class TicketWebhook extends HttpServlet
 				Long ticketUpdatedTime = Calendar.getInstance().getTimeInMillis();
 
 				// Updating existing ticket
-				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, msgJSON.getString("text"),
-						LAST_UPDATED_BY.REQUESTER, ticketUpdatedTime, ticketUpdatedTime, null, attachmentExists);
+				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, text, LAST_UPDATED_BY.REQUESTER,
+						ticketUpdatedTime, ticketUpdatedTime, null, attachmentExists);
 
 				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket(#" + ticket.id
 						+ ")");
