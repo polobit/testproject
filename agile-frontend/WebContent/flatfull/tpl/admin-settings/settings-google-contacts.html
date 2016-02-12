@@ -192,10 +192,11 @@
     {{#if id}}
 <form id="stripe-prefs-form" class="m-b">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
+          <div>Account Linked: {{userName}}</div>
 	
           
-             	<div class="control-group form-group">
+             	<div class="control-group form-group p-t-sm">
+             		<a href="#" class="delete">Change</a>
 					<label class="control-label">Frequency</label> 
            				<div class="controls">
 							<select class="required form-control" name="duration" id="freq">
@@ -420,7 +421,7 @@
     {{#if id}}
 <form id="quickbook-form">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
+          <div>Account Linked: {{userName}} <span><a href="#" class="delete">Change</a></span></div>
 	
           <br>
              	<div class="control-group form-group">
@@ -541,7 +542,7 @@
     {{#if id}}
 <form id="xero-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
+          <div>Account Linked: {{userName}} <span><a href="#" class="delete">Change</a></span></div>
 	
           
              	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
