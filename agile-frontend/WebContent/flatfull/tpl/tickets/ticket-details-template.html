@@ -520,13 +520,13 @@
   
   {{^is_current_opend_ticket id}}
 
-  <div class="p-t-xs each-previous-ticket m-b-none position-relative" style="">
+  <div class="p-t-xs each-previous-ticket m-b-none position-relative show-notes" style="">
 
     <div class="overflow-elipsis" style="max-width: 230px;">
     
-      <span class="show-notes">{{{get_status_label status}}}</span><a href="#ticket/{{id}}" target="_blank" class="p-l-xs link-color">#{{id}}
+      <span>{{{get_status_label status}}}</span><a href="#ticket/{{id}}" target="_blank" class="p-l-xs link-color">#{{id}}
 
-      <span class="text-sm" title="{{subject}}"> - {{subject}}</span>
+      <span class="text-sm"> - {{subject}}</span>
 
       </a> 
     </div>
