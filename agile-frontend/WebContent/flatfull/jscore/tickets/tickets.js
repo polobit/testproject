@@ -606,9 +606,9 @@ var Tickets = {
 
 		newTicketModel.url = url;
 
-		newTicketModel.save(ticketModel, 
+		newTicketModel.save(ticketModel,   
 			{	success: function(model){
-
+  
 				if(callback)
 					callback(model);
 				
@@ -624,9 +624,15 @@ var Tickets = {
 		$select.attr('disabled', true);
 
 		this.updateModel(url, function(){
-			$select.attr('disabled', false);
-            showNotyPopUp('information', 'Ticket Type has been changed to '+ toLowerCase().new_ticket_type, 'bottomRight', 5000);
-		}, function(error){
+
+		// current view
+		Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {type : new_ticket_type}); 
+		//update collection 
+   			$select.attr('disabled', false);
+            showNotyPopUp('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
+		},
+
+		 function(error){
 			$select.attr('disabled', false);
 			showNotyPopUp('information', error , 'bottomRight', 5000);
 		});
@@ -640,12 +646,33 @@ var Tickets = {
 		$priority.attr('disabled', true);
 
 		this.updateModel(url, function(){
+
+
+			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {priority : new_priority});
+
 			$priority.attr('disabled', false);
-			showNotyPopUp('information', 'Ticket Type has been changed to'+new_priority , 'bottomRight', 5000);
+			showNotyPopUp('information', 'Ticket Type has been changed to '+ new_priority.toLowerCase() , 'bottomRight', 5000);
+		    
 		}, function(error){
 			$priority.attr('disabled', false);
 	        showNotyPopUp('information', 'Ticket Type has been changed to'+new_priority , 'bottomRight', 5000);
 		});
+	},
+
+	updateDataInModelAndCollection : function(id, data){
+
+		if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
+			return;
+
+		App_Ticket_Module.ticketView.model.set(data, {silent:true}); 
+
+		// get data from collection with id
+		updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
+
+		// Update data in model
+		updated_model.set(data);
+
+
 	},
 
 	changeSLA: function($input, selected_date){
