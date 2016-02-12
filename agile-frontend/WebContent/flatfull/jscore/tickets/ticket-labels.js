@@ -81,6 +81,7 @@ var Ticket_Labels = {
 
 	updateLabel : function(label, command, callback) {
 
+        //console.log(command);
 		if (!label || !Current_Ticket_ID) {
 			if (callback)
 				callback();
@@ -88,20 +89,45 @@ var Ticket_Labels = {
 			return;
 		}
 
-		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
+        if(App_Ticket_Module.ticketsCollection){
 
-		if (ticketModel.labels)
-			ticketModel.labels.push(label);
-		else
-			ticketModel.labels = new Array(label);
+            var ticket_labels_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
+            var ticket_labels = ticket_labels_model.get('labels');
+		    //console.log(ticket_labels);  
+		    
+		    if(!ticket_labels)
+			    ticket_labels = [];
 
+		   	if(command=='add'){
+	        	ticket_labels.push(label);
+	        }
+		    else{
+				
+				ticket_labels= jQuery.grep(ticket_labels, function(value) {
+				 	return value != label;
+				});
+
+				//console.log(ticket_labels);                      
+			}
+
+			ticket_labels_model.set({labels: ticket_labels}, {
+					silent : true
+			});
+
+			//console.log(App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID)); 
+		} 		         
+		
 		var newTicketModel = new BaseModel();
+		     
 		newTicketModel.url = "/core/api/tickets/update-labels?command="
 				+ command + "&label=" + label + '&id=' + Current_Ticket_ID;
+
+		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
+
 		newTicketModel.save(ticketModel, {
 			success : function(model) {
-
-				App_Ticket_Module.ticketView.model.set(model, {
+               
+               App_Ticket_Module.ticketView.model.set(model, {
 					silent : true
 				});
 

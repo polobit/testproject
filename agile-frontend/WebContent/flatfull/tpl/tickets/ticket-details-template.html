@@ -302,7 +302,7 @@
 
             <div class="btn-group m-l-xs">
 
-              <button class="fa fa-ban btn btn-sm p-ver-2 {{#if_equals is_spam "true"}}btn-danger{{else}}btn-default{{/if_equals}} w-xxs w-auto-xs toggle-spam" data-toggle="tooltip" data-placement="bottom" data-original-title="{{#if_equals is_spam "true"}}not spam{{else}}Mark as Spam{{/if_equals}}"></button>
+              <button class="fa fa-ban btn btn-sm p-ver-2 {{#if_equals is_spam "true"}}btn-danger{{else}}btn-default{{/if_equals}} w-xxs w-auto-xs toggle-spam" data-toggle="tooltip" data-placement="bottom" data-original-title="{{#if_equals is_spam "true"}}Not Spam{{else}}Mark as Spam{{/if_equals}}"></button>
               
               <button class="fa fa-trash-o btn btn-sm p-ver-2 btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-placement="bottom" data-original-title="Delete Ticket"></button>
 
@@ -416,7 +416,8 @@
                   <div class="m-t-xs clearfix m-b-sm">
 
                    <span class="error-msg text-sm pull-right" style="color: #d9534f;"></span>
-                    {{#if label_matched_canned_responses}}<span onclick="$('.matched-canned-responses-list').toggle();" class="text-info text-sm cursor-pointer border-highlight-light pull-right">Show matched Macros</span>{{/if}}
+
+                    {{#if label_matched_canned_responses}}<a href="javascript:void(0);" onclick="$('.matched-canned-responses-list').toggle();" class="link-color text-sm cursor-pointer border-highlight-light pull-right">{{label_matched_canned_responses.length}} Recommendation{{#if_equals label_matched_canned_responses.length "1"}}{{else}}s{{/if_equals}}</a>{{/if}}
 
                     {{#if_equals reply_type "reply"}}
                     <div class="btn-group dropdown p-none">
@@ -454,8 +455,8 @@
                       <tbody>
                         {{#each label_matched_canned_responses}}
                         <tr id="ticket_canned_response" rel="{{id}}" class="ticket-canned-response text-sm">                    
-                          <td>{{title}}</td>
-                          <td>
+                          <td class="cursor-pointer">{{title}}</td>
+                          <td class="cursor-pointer">
                             <div id="message" class="edit-hover text-muted div-max-width" style="max-width: 50%;" title="{{compile_template message ../this}}">{{compile_template message ../this}}</div>
                           </td>
                         </tr>
@@ -519,13 +520,13 @@
   
   {{^is_current_opend_ticket id}}
 
-  <div class="p-t-xs each-previous-ticket m-b-none position-relative" style="">
+  <div class="p-t-xs each-previous-ticket m-b-none position-relative show-notes" style="">
 
     <div class="overflow-elipsis" style="max-width: 230px;">
     
-      <span class="show-notes">{{{get_status_label status}}}</span><a href="#ticket/{{id}}" target="_blank" class="p-l-xs link-color">#{{id}}
+      <span>{{{get_status_label status}}}</span><a href="#ticket/{{id}}" target="_blank" class="p-l-xs link-color">#{{id}}
 
-      <span class="text-sm" title="{{subject}}"> - {{subject}}</span>
+      <span class="text-sm"> - {{subject}}</span>
 
       </a> 
     </div>

@@ -44,8 +44,7 @@ public class TicketLabelsRest
 		{
 			if (!TagValidator.getInstance().validate(ticketLabel.label))
 				throw new Exception(
-						"Sorry, Label name should start with an alphabet and can not contain special characters other than underscore and space - "
-								+ ticketLabel.label);
+						"Sorry, Label name should start with an alphabet and can not contain special characters other than underscore,space and hyphen");
 
 			return TicketLabelsUtil.createLabel(ticketLabel);
 		}
