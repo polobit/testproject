@@ -47,13 +47,13 @@ public class TicketNotesUtil
 	 * @param ticketID
 	 * @param sortOrder
 	 * @return
-	 * @throws EntityNotFoundException 
+	 * @throws EntityNotFoundException
 	 */
 	public static TicketNotes getTicketNotesByID(Long notesID) throws EntityNotFoundException
 	{
 		return TicketNotes.ticketNotesDao.get(notesID);
 	}
-	
+
 	/**
 	 * 
 	 * @param ticketID
@@ -163,14 +163,14 @@ public class TicketNotesUtil
 
 		json.put("created_time", DateUtil.getCalendarString(notes.created_time, "MMM d, h:mm a (z)", ""));
 
-		json.put("plain_text", TicketNotesUtil.parsePlainText(notes.plain_text));
+		json.put("plain_text", notes.plain_text);
 		json.put("html_text", TicketNotesUtil.parseHtmlText(notes.html_text));
 
 		if (notes.created_by == CREATED_BY.AGENT)
 		{
 			if (!domainUsersMap.containsKey(notes.assignee_id))
 				domainUsersMap.put(notes.assignee_id, DomainUserUtil.getDomainUser(notes.assignee_id));
-			
+
 			DomainUser user = domainUsersMap.get(notes.assignee_id);
 
 			json.put("name", user.name);
@@ -298,7 +298,7 @@ public class TicketNotesUtil
 	public static String parsePlainText(String original_plain_text)
 	{
 		// parse plain text
-		return original_plain_text.replaceAll("(\r\n|\n)", "<br/>");
+		return original_plain_text.replaceAll("(\r\n)", "<br/>");
 	}
 
 	/**
@@ -323,6 +323,9 @@ public class TicketNotesUtil
 	{
 		try
 		{
+			if (StringUtils.isBlank(text))
+				return text;
+
 			Pattern pattern = Pattern.compile("On.*?wrote:.*?", Pattern.DOTALL);
 			text = pattern.split(text)[0];
 		}

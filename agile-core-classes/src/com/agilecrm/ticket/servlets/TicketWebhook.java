@@ -18,7 +18,6 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
-import org.jsoup.examples.HtmlToPlainText;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -92,7 +91,7 @@ public class TicketWebhook extends HttpServlet
 			// Fetch data posted by Mandrill
 			String mandrillResponse = request.getParameter("mandrill_events");
 
-			// System.out.println("MandrillResponse: " + mandrillResponse);
+			System.out.println("MandrillResponse: " + mandrillResponse);
 
 			if (StringUtils.isBlank(mandrillResponse))
 				return;
@@ -179,7 +178,7 @@ public class TicketWebhook extends HttpServlet
 			for (int i = 0; i < ccEmailsArray.length(); i++)
 				ccEmails.add(ccEmailsArray.getJSONArray(i).getString(0));
 
-			String text = "No plain text available", html = "No html content available";
+			String text = "", html = "";
 
 			if (msgJSON.has("text"))
 				text = msgJSON.getString("text");
@@ -289,17 +288,20 @@ public class TicketWebhook extends HttpServlet
 				{
 				}
 
+				String fromName = "";
+
+				if (msgJSON.has("from_name"))
+					fromName = msgJSON.getString("from_name");
+
 				// Creating new Ticket in Ticket table
-				ticket = TicketsUtil.createTicket(groupID, null, msgJSON.getString("from_name"),
-						msgJSON.getString("from_email"), msgJSON.getString("subject"), ccEmails, text, Status.NEW,
-						Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip,
-						new ArrayList<Key<TicketLabels>>());
+				ticket = TicketsUtil.createTicket(groupID, null, fromName, msgJSON.getString("from_email"),
+						msgJSON.getString("subject"), ccEmails, text, Status.NEW, Type.PROBLEM, Priority.LOW,
+						Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip, new ArrayList<Key<TicketLabels>>());
 
 				BulkActionNotifications.publishNotification("New ticket #" + ticket.id + " received");
 			}
 			else
 			{
-				// Fetch ticket ID from In-Reply-To mime header
 				Long ticketID = Long.parseLong(toAddressArray[2]);
 
 				ticket = TicketsUtil.getTicketByID(ticketID);
@@ -314,8 +316,8 @@ public class TicketWebhook extends HttpServlet
 				Long ticketUpdatedTime = Calendar.getInstance().getTimeInMillis();
 
 				// Updating existing ticket
-				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, msgJSON.getString("text"),
-						LAST_UPDATED_BY.REQUESTER, ticketUpdatedTime, ticketUpdatedTime, null, attachmentExists);
+				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, text, LAST_UPDATED_BY.REQUESTER,
+						ticketUpdatedTime, ticketUpdatedTime, null, attachmentExists);
 
 				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket(#" + ticket.id
 						+ ")");

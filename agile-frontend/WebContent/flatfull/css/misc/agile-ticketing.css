@@ -481,6 +481,7 @@ table.ticket-data > tbody > tr > td {
     cursor: pointer;
     line-height: 16px;
 }
+
 body .app-content, #notes-collection-container {
   line-height: 1.35;
 }
@@ -489,6 +490,10 @@ body .app-content, #notes-collection-container {
   right: 20px;
   position: absolute;
   display: none;
+}
+
+.err-msg-color{
+  color:#B94A48;
 }
 
 .public-notes-container:HOVER .show-original-div{
