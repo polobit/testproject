@@ -122,7 +122,8 @@ public class TicketNotesRest
 				{
 					ticket.assignee_id = domainUserKey;
 					ticket.assigneeID = domainUserKey.getId();
-					ticket.assigned_time = Calendar.getInstance().getTimeInMillis();
+					ticket.assigned_time = ticketUpdatedTime;
+					ticket.first_replied_time = ticketUpdatedTime;
 
 					// Logging status changed activity
 					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,

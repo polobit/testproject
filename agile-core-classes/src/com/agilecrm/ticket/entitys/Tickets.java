@@ -95,17 +95,17 @@ public class Tickets extends Cursor implements Serializable
 	/**
 	 * Stores epoch time when ticket is assigned
 	 */
-	public Long assigned_time = 0L;
+	public Long assigned_time = null;
 
 	/**
 	 * Stores epoch time of due date
 	 */
-	public Long due_time = 0L;
+	public Long due_time = null;
 
 	/**
 	 * Stores epoch time when ticket is closed
 	 */
-	public Long closed_time = 0L;
+	public Long closed_time = null;
 
 	/**
 	 * Util attribute to domain user obj
@@ -150,7 +150,7 @@ public class Tickets extends Cursor implements Serializable
 	/**
 	 * Stores epoch time when ticket is last updated
 	 */
-	public Long last_updated_time = 0L;
+	public Long last_updated_time = null;
 
 	public static enum LAST_UPDATED_BY
 	{
@@ -165,17 +165,17 @@ public class Tickets extends Cursor implements Serializable
 	/**
 	 * Stores epoch time when agent is first replied
 	 */
-	public Long first_replied_time = 0L;
+	public Long first_replied_time = null;
 
 	/**
 	 * Stores epoch time of agent's last reply
 	 */
-	public Long last_agent_replied_time = 0L;
+	public Long last_agent_replied_time = null;
 
 	/**
 	 * Stores epoch time of customer's last reply
 	 */
-	public Long last_customer_replied_time = 0L;
+	public Long last_customer_replied_time = null;
 
 	/**
 	 * Stores first created plain text ticket content

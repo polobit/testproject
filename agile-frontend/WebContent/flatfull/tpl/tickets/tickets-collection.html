@@ -276,11 +276,11 @@
 				                        <input name="last_updated_date" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'last_updated_date'}}checked{{/is_column_selected}}><i></i></label> Last updated date
 				                    </a>
 				                </li>
-				                <li><a href="javascript:void(0);" class="p-b-none">
+				               <!-- <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
 				                        <input name="organization" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'organization'}}checked{{/is_column_selected}}><i></i></label> Organization
 				                    </a>
-				                </li>
+				                </li> -->
 				                <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
 				                        <input name="closed_date" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'id'}}checked{{/is_column_selected}}><i></i></label> Closed date
@@ -322,8 +322,8 @@
 											<th class="group {{#is_column_selected 'group'}}{{else}}display-none{{/is_column_selected}}">Group</th>
 											<th class="assigned_time {{#is_column_selected 'assigned_time'}}{{else}}display-none{{/is_column_selected}}">Assigned&nbsp;date</th>
 											<th class="ticket_type {{#is_column_selected 'ticket_type'}}{{else}}display-none{{/is_column_selected}}">Ticket&nbsp;Type</th>
-											<th class="last_updated_date {{#is_column_selected 'last_updated_date'}}{{else}}display-none{{/is_column_selected}}">Last&nbsp;updated&nbsp;date</th>
-											<th class="organization {{#is_column_selected 'organization'}}{{else}}display-none{{/is_column_selected}}">Organization</th>
+											<th class="last_updated_date {{#is_column_selected 'last_updated_time'}}{{else}}display-none{{/is_column_selected}}">Last&nbsp;updated&nbsp;date</th>
+											<!--<th class="organization {{#is_column_selected 'organization'}}{{else}}display-none{{/is_column_selected}}">Organization</th>-->
 											<th class="closed_date {{#is_column_selected 'closed_time'}}{{else}}display-none{{/is_column_selected}}">Closed&nbsp;date</th>
 											<th class="created_time {{#is_column_selected 'created_time'}}{{else}}display-none{{/is_column_selected}}">Created&nbsp;date</th>
 											<!-- <th class="contact_details {{#is_column_selected 'contact_details'}}{{else}}display-none{{/is_column_selected}}">Contact&nbsp;details</th> -->
