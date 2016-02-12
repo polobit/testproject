@@ -1259,7 +1259,7 @@ var Tickets = {
 
 					clearTimeout(popoverFunction);
 
-					var top = '15px';
+					var top = '20px';
 					if (event.type == 'mouseover'){
 
 						var $tr = $(this).closest('.each-previous-ticket'), $that = $tr.find('#ticket-last-notes');
@@ -1269,7 +1269,7 @@ var Tickets = {
 							var popup_height = $that.height();
 
 							if (window.innerHeight - ($tr.offset().top - $(window).scrollTop()) <= (popup_height + 100))
-								top = '-' + (popup_height + 15) + 'px';
+								top = '-' + (popup_height + 20) + 'px';
 
 							$that.css('top', top).css('left','25px').css('display', 'block');
 
