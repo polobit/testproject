@@ -163,7 +163,7 @@ public class TicketNotesUtil
 
 		json.put("created_time", DateUtil.getCalendarString(notes.created_time, "MMM d, h:mm a (z)", ""));
 
-		json.put("plain_text", TicketNotesUtil.parsePlainText(notes.plain_text));
+		json.put("plain_text", notes.plain_text);
 		json.put("html_text", TicketNotesUtil.parseHtmlText(notes.html_text));
 
 		if (notes.created_by == CREATED_BY.AGENT)

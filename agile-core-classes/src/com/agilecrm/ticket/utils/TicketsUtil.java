@@ -1075,7 +1075,7 @@ public class TicketsUtil
 
 			Tickets ticket = TicketsUtil.createTicket(group.id, null, "Customer", "customer@domain.com", subject,
 					new ArrayList<String>(), plainText, Status.NEW, Type.PROBLEM, Priority.MEDIUM, Source.EMAIL,
-					CreatedBy.CUSTOMER, true, "[142.152.23.23]", new ArrayList<Key<TicketLabels>>());
+					CreatedBy.CUSTOMER, false, "[142.152.23.23]", new ArrayList<Key<TicketLabels>>());
 
 			String htmlText = plainText.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
 			
