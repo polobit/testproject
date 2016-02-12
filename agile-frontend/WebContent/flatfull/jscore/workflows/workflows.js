@@ -81,7 +81,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
             var nodeLength = $('iframe[id=designer]').contents().find('#paintarea .contextMenuForNode').length;
             var currentLimits=_billing_restriction.currentLimits;
             var campaignNodeLimit=currentLimits.campaignNodesLimit;
-            if(nodeLength > campaignNodeLimit)
+            if(nodeLength-1 > campaignNodeLimit)
             {
                 $("#workflow-edit-msg").hide();
                 $("#nodes-limit-reached").show();
