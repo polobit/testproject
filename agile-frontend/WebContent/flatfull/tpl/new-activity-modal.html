@@ -53,7 +53,7 @@
                         </div>
                         <div class="col-sm-6">
                         <div class="control-group form-group" style="margin-bottom:15px;">
-                            <label class="control-label col-sm-4" style="text-align:left;font-size: 14px;padding-left:5px;">Start Time <span class="field_req">*</span></label>
+                            <label class="control-label col-sm-4  {{#is_mobile}}  {{else}} p-l-none{{/is_mobile}}">Start Time <span class="field_req">*</span></label>
                             <div class="controls col-sm-6" style="margin-left:3px;">
                                 <input type="text" name="start_time" class="start-timepicker required form-control" id="event-time-1" style="width:67px" placeholder="time" />      
                             </div>
@@ -71,7 +71,7 @@
                         </div>
                         <div class="col-sm-6">
                         <div class="control-group form-group" style="margin-bottom:4px !important">
-                            <label class="control-label col-sm-4" style="padding-left:5px;text-align: left;">End Time <span class="field_req">*</span></label>
+                            <label class="control-label col-sm-4 {{#is_mobile}} {{else}} p-l-none  {{/is_mobile}}">End Time <span class="field_req">*</span></label>
                             <div class="controls col-sm-6" style="margin-left: 3px;">                         
                                 <input type="text" name="end_time" class="end-timepicker required form-control" id="event-time-2"  placeholder="time" style="width:67px"/>      
                             </div>
