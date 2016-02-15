@@ -3019,7 +3019,7 @@ width : 150px;
 
 .goal
 {
-	width:calc(100% - 420px);
+	width:calc	(100% - 420px);
 }
 
 .datepicker-months
@@ -3038,11 +3038,15 @@ width : 150px;
 .contact_popover{
 
 	border-radius: 0px;
-	width : 260px;
+	z-index:10;
+
 }
 
 .contact_popover .popover-content{
 	padding: 0px;
+}
+.contact_popover .popover{
+	max-width:100%;
 }
 
 .contact_popover .arrow{

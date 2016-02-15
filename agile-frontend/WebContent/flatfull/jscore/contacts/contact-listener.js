@@ -1,69 +1,20 @@
 var timer = undefined;
 function contactListener(el)
 {
-	$('#contacts-custom-view-model-list').off('mouseenter','tr');
-		$('#contacts-custom-view-model-list').on('mouseenter','tr',function(e){
+	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').off('mouseenter','tr > td:not(":first-child")');
+		$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').on('mouseenter','tr > td:not(":first-child")',function(e){
 			//e.stopPropagation();
-			var left=e.pageX;
-            var that=$(this);
+				var left=e.pageX;
+				left=left-100;
+            var that=$(this).parent();
+             popoverEnter(that,left,true);
 
-
- 
-      clearTimeout(timer);
-
-			timer=setTimeout(function() {
-						 		
-				if (!insidePopover)	{
 		
-					 //$(that).popover('show');
-		 App_Contacts.contact_popover=$(that).data();
-		 try{
-		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-								$(that).popover(
-        {
-            "rel": "popover",
-            "trigger": "manual",
-            "placement": "top",
-            "html": "true",
-            "content": template_ui,
-            });
-								$(that).popover('show');
-							$('.popover').addClass("contact_popover fadeInLeft animated");
-							$('.popover-content').html(template_ui);
-
-							$('.popover').css('left', ($('.dta-contatiner').offset().left + 90+"px"));
-							if (window.innerHeight - $(that).offset().top >= 400)
-                            $('.popover').css('top', ($(that).offset().top  + "px"));
-                        
-                         else{
-                         	if($(window).scrollTop()>($('#contacts-table .popover').offset().top-$('#contacts-table .popover').height()))
-                         		$('#contacts-table .popover').offset({ top : $(that).offset().top+20 });
-                         }
-                        	
-							 attachEvents(that,App_Contacts.contact_popover,true);
-						contact_list_starify('.popover',true);
-						
-					});
-		 		that.find('.data').attr('data');
-		 	}
-		 	catch(e){
-		 		return false;
-		 	}
-		 	}
-		 }, 1000);
 });
-		$('#contacts-custom-view-model-list').off('mouseleave','tr');
-	$('#contacts-custom-view-model-list').on('mouseleave','tr',function(){
-		var that=$(this);
-	setTimeout(function() {
-		if (!insidePopover){
-			if($('.popover').length!=0)
-			$(that).popover('hide');
-		}
-					
-	}, 1000);
+		$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').off('mouseleave','tr > td:not(":first-child")');
+	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').on('mouseleave','tr > td:not(":first-child")',function(){
+		var that=$(this).parent();
+		popout(that);
 		
 	});
 
@@ -71,324 +22,80 @@ function contactListener(el)
 	$(el).off('mouseenter','tr');
 		$(el).on('mouseenter','tr',function(e){
 			//e.stopPropagation();
-			var left=e.pageX;
+			//var left=e.pageX;
             var that=$(this);
-
-
- 
-      clearTimeout(timer);
-
-			timer=setTimeout(function() {
-						 		
-				if (!insidePopover)	{
-		
-					 //$(that).popover('show');
-		 App_Contacts.contact_popover=$(that).data();
-		 try{
-		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-								$(that).popover(
-        {
-            "rel": "popover",
-            "trigger": "manual",
-            "placement": "top",
-            "html": "true",
-            "content": template_ui,
-            });
-								$(that).popover('show');
-						$('.popover').addClass("contact_popover fadeInLeft animated");
-						$('.popover-content').html(template_ui);
-
-							 attachEvents(that,App_Contacts.contact_popover,undefined);
-						contact_list_starify('.popover',undefined);
-						
-					});
-		 		that.find('.data').attr('data');
-		 	}
-		 	catch(e){
-		 		return false;
-		 	}
-		 	}
-		 }, 1000);
+             popoverEnter(that,undefined,undefined);
 });
+
+
 		$(el).off('mouseleave','tr');
 	$(el).on('mouseleave','tr',function(){
 		var that=$(this);
-	setTimeout(function() {
-		if (!insidePopover){
-			if($('.popover').length!=0)
-			$(that).popover('hide');
-		}
-					
-	}, 1000);
+		popout(that);
 		
 	});
 
-	$('#company-contacts-model-list').off('mouseenter','tr');
-		$('#company-contacts-model-list').on('mouseenter','tr',function(e){
-			//e.stopPropagation();
+	$('#company-contacts-model-list').off('mouseenter','tr > td');
+		$('#company-contacts-model-list').on('mouseenter','tr > td',function(e){
 			var left=e.pageX;
-            var that=$(this);
-
-
- 
-      clearTimeout(timer);
-
-			timer=setTimeout(function() {
-						 		
-				if (!insidePopover)	{
-		
-					 //$(that).popover('show');
-		 App_Contacts.contact_popover=$(that).data();
-		 try{
-		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-								$(that).popover(
-        {
-            "rel": "popover",
-            "trigger": "manual",
-            "placement": "top",
-            "html": "true",
-            "content": template_ui,
-            });
-								$(that).popover('show');
-						$('.popover').addClass("contact_popover fadeInLeft animated");
-						$('.popover-content').html(template_ui);
-							
-							if (window.innerHeight - $(that).offset().top >= 400)
-                            $('.popover').css('top', ($(that).offset().top  + "px"));
-                        
-                         else{
-                         	if($(window).scrollTop()>($('#contacts .popover').offset().top-$('#contacts .popover').height()))
-                         		$('#contacts .popover').offset({ top : $(that).offset().top+20 });
-                         }
-                        	
-							 attachEvents(that,App_Contacts.contact_popover,undefined);
-						contact_list_starify('.popover',undefined);
-						
-					});
-		 		that.find('.data').attr('data');
-		 	}
-		 	catch(e){
-		 		return false;
-		 	}
-		 	}
-		 }, 1000);
+			left=left-400;
+            var that=$(this).parent();
+             popoverEnter(that,left,undefined);
 });
-		$('#company-contacts-model-list').off('mouseleave','tr');
-	$('#company-contacts-model-list').on('mouseleave','tr',function(){
-		var that=$(this);
-	setTimeout(function() {
-		if (!insidePopover){
-			if($('.popover').length!=0)
-			$(that).popover('hide');
-		}
-					
-	}, 1000);
+		$('#company-contacts-model-list').off('mouseleave','tr > td');
+	$('#company-contacts-model-list').on('mouseleave','tr > td',function(){
+	var that=$(this).parent();
+		popout(that);
 		
 	});
-	$('#task-related-model-list').off('mouseenter','tr');
-		$('#task-related-model-list').on('mouseenter','tr',function(e){
-			//e.stopPropagation();
+	$('#task-related-model-list').off('mouseenter','tr > td');
+		$('#task-related-model-list').on('mouseenter','tr > td',function(e){
 			var left=e.pageX;
-            var that=$(this);
-
-
- 
-      clearTimeout(timer);
-
-			timer=setTimeout(function() {
-						 		
-				if (!insidePopover)	{
-		
-					 //$(that).popover('show');
-		 App_Contacts.contact_popover=$(that).data();
-		 try{
-		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-								$(that).popover(
-        {
-            "rel": "popover",
-            "trigger": "manual",
-            "placement": "top",
-            "html": "true",
-            "content": template_ui,
-            });
-								$(that).popover('show');
-						$('.popover').addClass("contact_popover fadeInLeft animated");
-						$('.popover-content').html(template_ui);
-
-							if (window.innerHeight - $(that).offset().top >= 400)
-                            $('.popover').css('top', ($(that).offset().top  + "px"));
-                        
-                         else{
-                         	if($(window).scrollTop()>($('#contacts .popover').offset().top-$('#contacts .popover').height()))
-                         		$('#contacts .popover').offset({ top : $(that).offset().top+20 });
-                         }
-                        	
-							 attachEvents(that,App_Contacts.contact_popover,undefined);
-						contact_list_starify('.popover',undefined);
-						
-					});
-		 		that.find('.data').attr('data');
-		 	}
-		 	catch(e){
-		 		return false;
-		 	}
-		 	}
-		 }, 1000);
+			left=left-400;
+            var that=$(this).parent();
+             popoverEnter(that,left,undefined);
+			
 });
-		$('#task-related-model-list').off('mouseleave','tr');
-	$('#task-related-model-list').on('mouseleave','tr',function(){
-		var that=$(this);
-	setTimeout(function() {
-		if (!insidePopover){
-			if($('.popover').length!=0)
-			$(that).popover('hide');
-		}
-					
-	}, 1000);
+		$('#task-related-model-list').off('mouseleave','tr > td');
+	$('#task-related-model-list').on('mouseleave','tr > td',function(){
+		var that=$(this).parent();
+		popout(that);
 		
 	});
 	
-	$('#deal-related-model-list').off('mouseenter','tr');
-		$('#deal-related-model-list').on('mouseenter','tr',function(e){
-			//e.stopPropagation();
+	$('#deal-related-model-list').off('mouseenter','tr > td');
+		$('#deal-related-model-list').on('mouseenter','tr > td',function(e){
 			var left=e.pageX;
-            var that=$(this);
-
-
- 
-      clearTimeout(timer);
-
-			timer=setTimeout(function() {
-						 		
-				if (!insidePopover)	{
-		
-					 //$(that).popover('show');
-		 App_Contacts.contact_popover=$(that).data();
-		 try{
-		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-								$(that).popover(
-        {
-            "rel": "popover",
-            "trigger": "manual",
-            "placement": "top",
-            "html": "true",
-            "content": template_ui,
-            });
-								$(that).popover('show');
-						$('.popover').addClass("contact_popover fadeInLeft animated");
-							$('.popover-content').html(template_ui);
-
-							if (window.innerHeight - $(that).offset().top >= 400)
-                            $('.popover').css('top', ($(that).offset().top  + "px"));
-                        
-                         else{
-                         	if($(window).scrollTop()>($('#contacts .popover').offset().top-$('#contacts .popover').height()))
-                         		$('#contacts .popover').offset({ top : $(that).offset().top+20 });
-                         }
-                        	
-							 attachEvents(that,App_Contacts.contact_popover,undefined);
-						contact_list_starify('.popover',undefined);
-						
-					});
-		 		that.find('.data').attr('data');
-		 	}
-		 	catch(e){
-		 		return false;
-		 	}
-		 	}
-		 }, 1000);
+			left=left-400;
+            var that=$(this).parent();
+             popoverEnter(that,left,undefined);
 });
-		$('#deal-related-model-list').off('mouseleave','tr');
-	$('#deal-related-model-list').on('mouseleave','tr',function(){
-		var that=$(this);
-	setTimeout(function() {
-		if (!insidePopover){
-			if($('.popover').length!=0)
-			$(that).popover('hide');
-		}
-					
-	}, 1000);
+		$('#deal-related-model-list').off('mouseleave','tr > td');
+	$('#deal-related-model-list').on('mouseleave','tr > td',function(){
+	var that=$(this).parent();
+		popout(that);
 		
 	});
 
 	
 	$('#workflow-other-subscribers-model-list').off('mouseenter','td.data .table-resp');
 		$('#workflow-other-subscribers-model-list').on('mouseenter','td.data .table-resp',function(e){
-		
 			var left=e.pageX;
-            var that=$(this);
-
-
- 		if(insidePopover==true){
+            var that=$(this).parents('tr');
+            left=left-350;
+            if(insidePopover==true){
  			insidePopover=false;
  			$("time.campaign-started-time").timeago();
 				$("time.campaign-completed-time").timeago();
 
  		}
- 			
-      clearTimeout(timer);
-
-			timer=setTimeout(function() {
-						 		
-				if (!insidePopover)	{
+             popoverEnter(that,left,undefined,true);
 		
-					 //$(that).popover('show');
-		 App_Contacts.contact_popover=$(that).parents('tr').data();
-		 try{
-		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-								$(that).popover(
-        {
-            "rel": "popover",
-            "trigger": "manual",
-            "placement": "top",
-            "html": "true",
-            "animation" : "true",
-            "content": template_ui,
-            });
-								$(that).popover('show');
-						$('.popover').addClass("contact_popover fadeInLeft animated");
-							$('.popover-content').html(template_ui);
-
-							if (window.innerHeight - $(that).offset().top >= 400)
-                            $('.popover').css('top', ($(that).offset().top  + "px"));
-                        
-                         else{
-                         	if($(window).scrollTop()>($('.popover').offset().top-$('.popover').height()))
-                         		$('.popover').offset({ top : $(that).offset().top+20 });
-                         }
-                        	
-							 attachEvents(that,App_Contacts.contact_popover,undefined,true);
-						contact_list_starify('.popover',undefined);
-						
-					});
-		 		that.find('.data').attr('data');
-		 	}
-		 	catch(e){
-		 		return false;
-		 	}
-		 	}
-		 }, 1000);
-});
+			});
 		$('#workflow-other-subscribers-model-list').off('mouseleave','td.data .table-resp');
 	$('#workflow-other-subscribers-model-list').on('mouseleave','td.data .table-resp',function(){
-		var that=$(this);
-	setTimeout(function() {
-		if (!insidePopover){
-			if($('.popover').length!=0)
-			$(that).popover('hide');
-		}
-					
-	}, 1000);
+		var that=$(this).parents('tr');
+		popout(that);
 		
 	});
 
@@ -428,15 +135,6 @@ function contactListener(el)
 						$('.popover').addClass("contact_popover fadeInLeft animated");
 							$('.popover-content').html(template_ui);
 
-							/*if (window.innerHeight - $(that).offset().top >= 400)
-                            $('.popover').css('top', ($(that).offset().top  + "px"));
-                        
-                         else{
-                         	if($(window).scrollTop()>($('#contacts .popover').offset().top-$('#contacts .popover').height()))
-                         		$('#contacts .popover').offset({ top : $(that).offset().top+20 });
-                         }*/
-                        	
-							 //attachEvents(that,App_Contacts.contact_popover,undefined);
 						contact_list_starify('.popover',undefined);
 						
 					});
@@ -796,4 +494,66 @@ function contact_list_starify(el,listView) {
         });
     });
     
+}
+
+function popoverEnter(that,left,listView,campaigns_view)
+{
+
+
+ 
+     
+
+			timer=setTimeout(function() {
+						 	
+						  	
+				if (!insidePopover)	{
+		
+					 $('.popover').remove();	
+
+		 App_Contacts.contact_popover=$(that).data();
+		 try{
+		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+								$(that).popover(
+        {
+            "rel": "popover",
+            "trigger": "manual",
+            "placement": "auto top",
+            "html": "true",
+            "content": template_ui,
+            });
+								$(that).popover('show');
+							$('.popover').addClass("contact_popover fadeInLeft animated");
+							$('.popover-content').html(template_ui);
+							if(left!=undefined)
+							$('.popover').css('left', left + "px");
+                        	
+							 attachEvents(that,App_Contacts.contact_popover,listView,campaigns_view);
+						contact_list_starify('.popover',listView);
+						
+					});
+		 		that.find('.data').attr('data');
+		 	}
+		 	catch(e){
+		 		return false;
+		 	}
+		 	}
+		 }, 1000);
+}
+
+function popout(that)
+{
+		
+	setTimeout(function() {
+		if (!insidePopover){
+			if($('.popover',that.parent()).length!=0)
+			{
+			$(that).popover('hide');
+			$('.popover').remove();
+			}
+		}
+					
+	}, 200);
+	 clearTimeout(timer);
 }

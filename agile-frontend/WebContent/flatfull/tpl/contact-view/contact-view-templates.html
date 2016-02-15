@@ -250,7 +250,7 @@
 </script>
 
 <script id = "contacts-custom-view-popover-template" type="text/html">
-       <div class="data panel-default" data={{id}}>
+       <div class="data panel-default" data={{id}} style="width:260px">
 	   
        	<div class="text-cap panel-heading text-ellipsis"><div class="text-ellipsis inline-block" style="width:80%" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}}</div>
@@ -284,7 +284,6 @@
        	<div class="contact-owner text-base m-l-md" id="change-owner-element">
         	
 		{{#canEditContact owner.id}}
-
 		{{#if owner}}
         	<a id="contact-owner-popover" class="custom-color" data={{owner.id}} title="{{owner.name}}">{{owner.name}}</a>
         	{{else}}
@@ -309,7 +308,6 @@
        		{{#property_is_exists "company" properties}}
        		<div class="b-b b-light p-b-xs">
        		<div class="pull-left"><i class="icon icon-building text-sm v-middle"></i></div>
-
        		<span class="text-cap m-l-sm" title="{{getPropertyValue properties "title"}}">{{getPropertyValue properties "title"}}</span> 
        		<span class="text-cap" href="#company/{{contact_company_id}}" title="{{getPropertyValue properties "company"}}">{{getPropertyValue properties "company"}}</span></div>
 
@@ -358,7 +356,6 @@
 								{{/property_is_exists}}
 
 								<div class="m-t-xs">
-
 								 <div id="added-tags-popover" class="text-ellipsis pull-left m-b-xs" style="width:13em;"> 	
 				{{#each tags}}
 	    			<span class="label bg-light text-tiny">{{this}}</span>	
@@ -374,7 +371,7 @@
 						</div>
 						{{#canEditContact owner.id}}
 			<div class="pull-left"><a href="#" id="add-tags-popover" rel="tooltip"
-							data-original-title="addtag" data-placement="top" class="text-xs  pull-left" style="padding:.2em"> <i class="fa fa-plus text-info"></i><span class="text-info" >Tag</span></a></div>
+							data-original-title="addtag" data-placement="top" class="text-xs  pull-left" style="padding:.2em"> <i class="fa fa-plus"></i><span>Tag</span></a></div>
 						{{/canEditContact}}
 
 						
