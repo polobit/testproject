@@ -82,6 +82,7 @@ function showElements() {
     //     settings.addClass('hide');
     //     elements.slideDown(300);
     // }
+    hideSettings();
 }
 
 function handleObjects() {
@@ -116,6 +117,7 @@ function handleObjects() {
                 $('#pright').val(self.find('td:first').css('padding-right'));
 
                 $('#common-settings').show();
+                $('#padding-setting').show();
                 switch (t) {
                     case 'title':
 
@@ -1037,16 +1039,11 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
     $('#edittamplate').click(function (e) {
         e.preventDefault();
-        $('#common-settings').hide();
-        $('#editor').hide();
-        $('#editimage').hide();
-        $('#social-links').hide();
-        $('#buttons').hide();
-        $('#buttonstxt').hide();
+        hideAllSettings();
+        $('#common-settings').show();
+        $('#padding-setting').hide();
         $('#path').val('tosave table:first');
-
         $('#bgcolor').css('background-color', $('#tosave table').css('backgroundColor'));
-
         showSettings();
     });
 

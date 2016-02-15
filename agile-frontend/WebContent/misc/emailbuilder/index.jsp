@@ -240,16 +240,6 @@ AGILE_EB_OPTIONS['templateId'] = "";
                     <div id="imageproperties" style="margin-top:5px">
                         <h4 class="text text-info">Image</h4>
                         <div class="form-group">
-                            
-                            <div class="row">
-                                <div class="col-xs-11">
-                                    <div class="input-group">
-                                        <span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
-                                        <input type="text" id="image-link" class="form-control" placeholder="Add link to image" aria-describedby="basic-addon11" data-id="none">
-                                    </div>
-                                    <br>
-                                </div>
-                            </div>
 
                             <div class="row">
                                 <div class="col-xs-8">
@@ -264,6 +254,17 @@ AGILE_EB_OPTIONS['templateId'] = "";
                         </div>
 
                         <div class="form-group">
+                            
+                            <div class="row">
+                                <div class="col-xs-11">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
+                                        <input type="text" id="image-link" class="form-control" placeholder="Link to Web Address(URL)" aria-describedby="basic-addon11" data-id="none">
+                                    </div>
+                                    <br>
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="col-xs-1">
                                     W:
@@ -618,7 +619,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                             </div>
                         </form>
 
-                        <form class="form-inline">
+                        <form id="padding-setting" class="form-inline">
                             <h4 class="text text-info">Padding</h4>
                                 <center>
                                     <table>
