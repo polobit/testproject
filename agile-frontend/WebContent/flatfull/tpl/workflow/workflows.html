@@ -29,15 +29,18 @@
         </div>
         {{/if}}
     </td> 
-
     <td>
-        <div class="table-resp hide" id="camp_reports">
-            <div class="pull-left text-ellipsis" style="width: 55%;">
-                <a href="#email-reports/{{id}}" class="stop-propagation">Reports</a>
-            </div>
-            {{#if is_disabled}}
+    <div class="table-resp">
+    {{#if is_disabled}}
             <div class="pull-left"><label class="label label-danger m-b-none">Disabled</label></div>
             {{/if}}
+     </div>
+    </td>
+    <td>
+        <div class="table-resp hide" id="camp_reports">
+            <div class="pull-left text-ellipsis">
+                <a href="#email-reports/{{id}}" class="stop-propagation">Reports</a>
+            </div>
         </div> 
     </td>
 
@@ -123,8 +126,9 @@
                             <th style="width:30%">Name</th>
                             <th style="width:20%">Triggers</th>
                             <th style="width:23%">&nbsp;</th>
-                            <th style="width:17%">&nbsp;</th>
-                            <th style="width:10%"> </th>
+                            <th style="width:9%">&nbsp;</th>
+                            <th style="width:9%">&nbsp;</th>
+                            <th style="width:9%"> </th>
                         </tr>
                     </thead>
                     <tbody id="workflows-model-list" route="workflow/" class="c-p"> </tbody>
