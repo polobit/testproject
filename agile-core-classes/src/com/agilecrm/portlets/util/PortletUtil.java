@@ -104,6 +104,8 @@ public class PortletUtil {
 				//allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
 				allPortlets.add(new Portlet("Revenue Graph",PortletType.DEALS));
 				allPortlets.add(new Portlet("Deal Goals",PortletType.DEALS));
+				allPortlets.add(new Portlet("Incoming Deals",PortletType.DEALS));
+				allPortlets.add(new Portlet("Lost Deal Analysis",PortletType.DEALS));
 			}
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR)){

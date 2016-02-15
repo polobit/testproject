@@ -9,7 +9,8 @@ var ActivitylogRouter = Backbone.Router.extend({
         /* Shows page */
         "activities": "activities",
         "contact-activities": "contactActivities",
-        "contact-activities/:type": "contactActivities"
+        "contact-activities/:type": "contactActivities",
+        "activities/campaign/:id" : "activities"
     },
 
     activities: function(id) {
@@ -32,7 +33,18 @@ var ActivitylogRouter = Backbone.Router.extend({
 
                     initActivitiesDateRange();
 
-                    renderActivityView(getActivityFilterParameters(true));
+                    //comaign  history
+                    var campaignHistory=true;
+
+                    if(id==undefined){
+                        campaignHistory=false;
+                    }
+                    else{
+                        $('#selectedentity_type').html("Campaings");
+                        $("#activities_date_range").hide();
+                    }
+
+                    renderActivityView(getActivityFilterParameters(true,campaignHistory)+"&campaign-id="+id);
                     
                     $(".activity-log-button").css('display','none');
 
@@ -47,8 +59,16 @@ var ActivitylogRouter = Backbone.Router.extend({
                             $('ul#user-select li a').closest("ul").data("selected_item", activityFilters.userId);
                             $('ul#entity_type li a').closest("ul").data("selected_item", activityFilters.entityId);
                             $('#selectedusername').html(activityFilters.user);
-                            $('#selectedentity_type').html(activityFilters.entity);
-                            $('.activity-sub-heading').html(activityFilters.entity);
+
+                                    //Campaing History
+                            if(id != undefined)
+                            {
+
+                                   activityFilters.entity="Campaings";
+                            }
+                            
+                                $('#selectedentity_type').html(activityFilters.entity);
+                                $('.activity-sub-heading').html(activityFilters.entity);
 
                         }
 

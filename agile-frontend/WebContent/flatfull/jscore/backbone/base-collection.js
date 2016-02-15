@@ -245,17 +245,7 @@ var Base_Collection_View = Backbone.View
 				{
 					if (response.status == 401)
 					{
-						var hash = window.location.hash;
-
-						// Unregister all streams on server.
-						unregisterAll();
-
-						// Unregister on SIP server.
-						sipUnRegister();
-
-						// Firefox do not support window.location.origin, so
-						// protocol is explicitly added to host
-						window.location.href = window.location.protocol + "//" + window.location.host + "/login" + hash;
+						handleAjaxError();
 						return;
 					}
 					that.render(true, response.responseText);
@@ -574,6 +564,16 @@ var Base_Collection_View = Backbone.View
 *  Extended View of Base_Collection. It combines parent events to extended view events.
 */
 Base_Collection_View.extend = function(child) {
+	var view = Backbone.View.extend.apply(this, arguments);
+	view.prototype.events = _.extend({}, this.prototype.events, child.events);
+	return view;
+};
+
+
+/**
+*  Extended View of list view. It combines parent events to extended view events.
+*/
+Base_List_View.extend = function(child) {
 	var view = Backbone.View.extend.apply(this, arguments);
 	view.prototype.events = _.extend({}, this.prototype.events, child.events);
 	return view;
