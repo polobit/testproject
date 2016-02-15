@@ -129,7 +129,7 @@
 		<div class='milestone-heading text-left text-ellipsis'> <span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left" style="width:calc(100% - 75px);">{{heading}}</span>
 		    <div class="pull-right">
 		    <div style="font-size:14px; float:left">
-		      
+		       <input type="hidden" id="{{remove_spaces heading}}_totalvalue" name="0" />	  
 			{{#if lost_milestone}}<i data-toogle="tooltip" title="" class="icon-dislike mark-lost" data-original-title="Deals with this milestone are considered as Lost." style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
 			{{#if won_milestone}}<i data-toogle="tooltip" title="" class="icon-like mark-won" data-original-title="Deals with this milestone are considered as Won." style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
 
@@ -198,6 +198,7 @@
         </span>
 </div>
 <div class="clearfix"></div>
+<input type="hidden" name="{{colorName}}" class="{{colorName}}"/>
 </div>
 </script>
 

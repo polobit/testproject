@@ -660,12 +660,20 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 	          
 			 /* average of deal total */
 	      	var avg_deal_size = 0;
-	     	var deal_count = parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()) - 1 ; 
+	     	var deal_count = parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()); 
 	     	if(deal_count == 0)
 	     		avg_new_deal_size = 0;
 	     	else
-	     		avg_new_deal_size = removeDealValue / deal_count;		
-           
+	     		avg_new_deal_size = removeDealValue / deal_count;	
+
+ 			removeDealValue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(removeDealValue) ;
+        	avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
+        
+
+	     	var heading = milestone.replace(/ +/g, '');
+	        $("#"+heading+" .dealtitle-angular").removeAttr("data-original-title");        
+	        $("#"+heading+" .dealtitle-angular").attr("data-original-title" , "Total: "+removeDealValue+" & avg: "+avg_new_deal_size );
+	       
 
 			dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
 
@@ -681,8 +689,6 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 			dealsLineChart();
 		} });
 	});
-
-	
 
 	/**
 	 * Deal list view edit

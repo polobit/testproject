@@ -572,7 +572,11 @@
             descending: true,
             postRenderCallback: function(el) {
             	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $(".deal-created-time", el).timeago();
+            		$(".deal-created-time", el).timeago();
+            		$(el).find('ul li').each(function(){
+				    $(this).addClass("deal-color");
+				    $(this).addClass($(this).find("input").attr("class"));
+			        });
             	})
             }
         });

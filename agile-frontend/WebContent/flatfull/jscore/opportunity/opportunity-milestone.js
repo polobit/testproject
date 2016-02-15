@@ -183,7 +183,7 @@ function dealsFetch(base_model)
 		{
 			var count = data.at(0) ? data.at(0).toJSON().count : 0;
 			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(data.at(0) ? data.at(0).toJSON().count : 0);
-	        var heading =  base_model.get("heading");
+	        var heading =  base_model.get("heading").replace(/ +/g, '');
 	        var dealcountarray = data.toArray();
 	        var i;
 	        var dealcount=0;
@@ -198,23 +198,22 @@ function dealsFetch(base_model)
             else
             	avg_deal_size = dealcount / count ; 
             dealcount = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount) ;
+            var symbol = getCurrencySymbolForCharts();
             avg_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_deal_size);
-
             $("#"+heading+" .dealtitle-angular").attr("data-toggle" , "tooltip" );
             $("#"+heading+" .dealtitle-angular").attr("data-placement" , "top" );
-            $("#"+heading+" .dealtitle-angular").attr("title" , "Total: "+dealcount+" & avg: "+avg_deal_size );
+            $("#"+heading+" .dealtitle-angular").attr("data-original-title" , "Total "+heading+" value: &#13; "+symbol+""+dealcount+" &#13; avg "+heading+" value: &#13; "+symbol+""+avg_deal_size );
 
-
-         }
+            }
 
 		catch (err)
 		{
 			console.log(err);
 		}  
         
-        
-		$('a.deal-notes').tooltip();
-		// Counter to fetch next sub collection
+        $(".dealtitle-angular").tooltip();
+        $('a.deal-notes').tooltip();
+        	// Counter to fetch next sub collection
 		pipeline_count++;
 		setup_deals_in_milestones('opportunities-by-paging-model-list');
 		

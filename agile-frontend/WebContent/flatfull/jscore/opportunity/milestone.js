@@ -150,18 +150,31 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
 		$('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
 		/* average of new deal total */
      	var avg_old_deal_size = 0;
-     	var old_deal_count = parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1 ; 
+     	var old_deal_count = parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text()) ; 
      	if(old_deal_count == 0)
      		avg_old_deal_size = 0;
      	else
      		avg_old_deal_size = olddealvalue / old_deal_count;
 		 /* average of new deal total */
       	var avg_new_deal_size = 0;
-     	var new_deal_count = parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1 ; 
+     	var new_deal_count = parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text()) ; 
      	if(new_deal_count == 0)
      		avg_new_deal_size = 0;
      	else
      		avg_new_deal_size = newdealvalue / new_deal_count;
+     	
+     	olddealvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue) ;
+        avg_old_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_old_deal_size);
+        newdealvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue) ;
+        avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
+
+     	var oldheading = oldMilestone.replace(/ +/g, '');
+     	var newheading = newMilestone.replace(/ +/g, '');
+        $("#"+oldheading+" .dealtitle-angular").removeAttr("data-original-title");        
+        $("#"+oldheading+" .dealtitle-angular").attr("data-original-title" , "Total: "+olddealvalue+" & avg: "+avg_old_deal_size );
+        $("#"+newheading+" .dealtitle-angular").removeAttr("data-original-title");        
+        $("#"+newheading+" .dealtitle-angular").attr("data-original-title" , "Total: "+newdealvalue+" & avg: "+avg_new_deal_size );
+
         }
 	} catch(err){
 		console.log(err);
