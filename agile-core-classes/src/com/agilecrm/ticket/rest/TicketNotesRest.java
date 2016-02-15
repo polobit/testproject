@@ -94,8 +94,9 @@ public class TicketNotesRest
 			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
 
 			// Converting html text to plain with jsoup
-			Document doc = Jsoup.parse(notes.html_text, "UTF-8");
-			String plain_text = new HtmlToPlainText().getPlainText(doc);
+			// Document doc = Jsoup.parse(notes.html_text, "UTF-8");
+			// String plain_text = new HtmlToPlainText().getPlainText(doc);
+			String plain_text = notes.html_text;
 
 			TicketNotes ticketNotes = new TicketNotes();
 

@@ -503,3 +503,8 @@ body .app-content, #notes-collection-container {
 div.chosen-container>ul.chosen-choices{
   height: initial !important;
 }
+
+.plain-text-comment a{
+  color: #337ab7!important;
+  text-decoration: none;
+}

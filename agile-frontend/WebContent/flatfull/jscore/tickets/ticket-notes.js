@@ -265,10 +265,14 @@ var Tickets_Notes = {
 			if(!message)
 				return;
 
-			var type_text = $container.find("#reply_textarea").val();
+			// var type_text = $container.find("#reply_textarea").val();
 
 			// Get canned response
-			$container.find("#reply_textarea").val(type_text + message);
+			head.js('/flatfull/lib/jquery.insertatcursor.js', function()
+			{	
+				$container.find("#reply_textarea").insertAtCaret(message);
+			});
+			
 
 		})
 

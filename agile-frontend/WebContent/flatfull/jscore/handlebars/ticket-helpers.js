@@ -366,21 +366,8 @@ Handlebars.registerHelper('is_ticket_collection_available', function(options) {
 
 Handlebars.registerHelper('convert_to_html', function(str, options) {
 
-	if(!str)
-		return;
+	return str;
 
-	str = str.replace(/(?:\r\n|\r|\n)/g, '<br/>');
-
-	// Construct anchor links
-	try {
-		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-		str = str.replace(exp,
-				"<a href='$1' target='_blank' class='link-color'>$1</a>");
-
-	} catch (err) {
-	}
-
-	return new Handlebars.SafeString(str);
 });
 
 Handlebars.registerHelper('get_current_filter_id', function(str, options) {
