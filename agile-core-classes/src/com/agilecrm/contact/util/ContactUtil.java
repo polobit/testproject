@@ -1856,7 +1856,7 @@ public class ContactUtil
 
 		return newContact;  
 	}
-}
+	
     public static String getMD5EncodedImage(Contact contact){
 
          String email = contact.getContactFieldValue(contact.EMAIL);
