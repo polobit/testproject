@@ -498,8 +498,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs companies_input">
 						<span id="RHS">
-							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead companies_input" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;font-size:12px;
-							">
+							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead companies_input" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;font-size:12px;">
 						</span>					
 					</div>
 					<div class="m-t-xs"><a class="pull-right" style="font-size:16px;"><i class="filter-tags-multiple-remove-lhs fa fa-trash text-l-none-hover c-p"></i></a>
@@ -519,6 +518,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 					</div>
 					
 					<div class="clearfix"></div>
+					<div class="m-t-xs"><a class="pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
 				</div>
 		</div>	
 		<div class="m-t-xs">
@@ -674,12 +674,17 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 </div>
 </div>
 </div>
-	<a id="clear-lhs-company-filters" href="#" class="c-p txt-small link-color" style="color: #337ab7!important;">Clear</a>
+	
 </div>
 	<div class="clearfix"></div>
 
 <div id="custom-filter-fields" ></div>
-	
+<div class="bg-light">
+  <span class="pull-left m-l-md">
+
+	<a id="clear-lhs-company-filters" href="#" class="c-p txt-small link-color" style="color: #337ab7!important;">Clear</a>
+	</span>
+</div>
 </div>
 
 </fieldset>
