@@ -226,10 +226,11 @@ public class ContactUtil
      *            Activates infiniScroll at client side
      * @return list of contacts (company)
      */
-    public static List<Contact> getAllCompaniesByOrder(int max, String cursor, String sortKey){
-		Map<String, Object> searchMap = new HashMap<String, Object>();
-		searchMap.put("type", Type.COMPANY);
-		return dao.fetchAllByOrder(max, cursor, searchMap, false, false, sortKey);
+    public static List<Contact> getAllCompaniesByOrder(int max, String cursor, String sortKey)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("type", Type.COMPANY);
+	return dao.fetchAllByOrder(max, cursor, searchMap, false, false, sortKey);
     }
 
     /**
@@ -915,8 +916,12 @@ public class ContactUtil
 	    // Delete Crons.
 	    CronUtil.removeTask(null, id.toString());
 
+	    Long start = System.currentTimeMillis();
+
 	    // Deletes logs of contact.
 	    LogUtil.deleteSQLLogs(null, id.toString());
+
+	    System.out.println("Time taken to delete logs : " + (System.currentTimeMillis() - start));
 
 	    // Deletes TwitterCron
 	    TwitterJobQueueUtil.removeTwitterJobs(null, id.toString(), NamespaceManager.get());
@@ -1822,22 +1827,23 @@ public class ContactUtil
 	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).etaMillis(System.currentTimeMillis() + 5000));
     }
 
-    public static String getMD5EncodedImage(Contact contact){
+    public static String getMD5EncodedImage(Contact contact)
+    {
 
-         String email = contact.getContactFieldValue(contact.EMAIL);
-         String image_email = "";
-            if(email != null)
-            {
-                try
-                {
-                     image_email = MD5Util.getMD5Code(email);   
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-                
-            }
-            return image_email;
+	String email = contact.getContactFieldValue(contact.EMAIL);
+	String image_email = "";
+	if (email != null)
+	{
+	    try
+	    {
+		image_email = MD5Util.getMD5Code(email);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
+	}
+	return image_email;
     }
 }
