@@ -52,6 +52,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Index;
+import com.google.appengine.api.search.SearchException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -904,9 +905,37 @@ public class ContactUtil
 	}
     }
 
+    public static void deleteTextSearchDataWithRetries(String[] ids, int maxRetries)
+    {
+	Index index = new AppengineSearch<Contact>(Contact.class).index;
+
+	try
+	{
+	    index.delete(ids);
+	    return;
+	}
+	catch (SearchException e)
+	{
+	    System.out.println("Exception occured while deleting text search data in domain : "
+		    + NamespaceManager.get() + " " + maxRetries);
+
+	    if (maxRetries > 0)
+	    {
+		System.out.println("retrying");
+		deleteTextSearchDataWithRetries(ids, --maxRetries);
+	    }
+	}
+    }
+
     public static void postDeleteOperation(List<Long> ids, Set<String> tags)
     {
 	String[] docIds = new String[ids.size()];
+
+	/**
+	 * Delete text search indexed data with maximum of 3 retires
+	 */
+	deleteTextSearchDataWithRetries(docIds, 4);
+
 	for (int i = 0; i < ids.size(); i++)
 	{
 	    Long id = ids.get(i);
@@ -928,11 +957,6 @@ public class ContactUtil
 
 	    docIds[i] = String.valueOf(id);
 	}
-
-	Index index = new AppengineSearch<Contact>(Contact.class).index;
-
-	if (index != null)
-	    index.delete(docIds);
 
 	// Delete Tags
 	TagUtil.deleteTags(tags);
