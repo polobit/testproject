@@ -16,9 +16,6 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.examples.HtmlToPlainText;
-import org.jsoup.nodes.Document;
 
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
@@ -92,8 +89,10 @@ public class TicketNotesRest
 			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
 
 			// Converting html text to plain with jsoup
-			Document doc = Jsoup.parse(notes.html_text, "UTF-8");
-			String plain_text = new HtmlToPlainText().getPlainText(doc);
+			// Document doc = Jsoup.parse(notes.html_text, "UTF-8");
+			// String plain_text = new HtmlToPlainText().getPlainText(doc);
+
+			String plain_text = notes.html_text;
 
 			TicketNotes ticketNotes = new TicketNotes();
 
@@ -135,8 +134,8 @@ public class TicketNotesRest
 					if (ticket.assignee_id != domainUserKey)
 					{
 						// Logging ticket assignee changed activity
-						ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
-								ticket.assigneeID + "", domainUserKey.getId() + "", "assigneeID");
+						ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID,
+								ticket.id, ticket.assigneeID + "", domainUserKey.getId() + "", "assigneeID");
 
 						ticket.assignee_id = domainUserKey;
 						ticket.assigneeID = domainUserKey.getId();
@@ -144,13 +143,13 @@ public class TicketNotesRest
 
 					if (Status.OPEN == ticket.status)
 						// Logging status changed activity
-						ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-								Status.OPEN.toString(), Status.PENDING.toString(), "status");
+						ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID,
+								ticket.id, Status.OPEN.toString(), Status.PENDING.toString(), "status");
 				}
 
 				// Set status to pending as it is replied by assignee
 				ticket.status = Status.PENDING;
-				
+
 				// Updating ticket entity
 				Tickets.ticketsDao.put(ticket);
 
@@ -165,8 +164,8 @@ public class TicketNotesRest
 				TicketNotesUtil.sendReplyToRequester(ticket);
 
 				// Logging public notes activity
-				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id, html_text,
-						plain_text, "html_text");
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id,
+						html_text, plain_text, "html_text");
 
 				// Execute note created by user trigger
 				TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);

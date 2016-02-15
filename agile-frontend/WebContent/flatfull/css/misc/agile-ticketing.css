@@ -499,3 +499,8 @@ body .app-content, #notes-collection-container {
 .public-notes-container:HOVER .show-original-div{
   display: block;
 }
+
+.plain-text-comment a{
+  color: #337ab7!important;
+  text-decoration: none;
+}
