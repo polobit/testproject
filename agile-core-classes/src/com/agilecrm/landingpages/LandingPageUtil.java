@@ -175,6 +175,33 @@ public class LandingPageUtil
 		
 	}
 	
+	public boolean isNameExists(String name) {
+		String oldNameSpace = NamespaceManager.get();
+		NamespaceManager.set("");
+		
+		try
+		{
+			Query<LandingPage> q = null;
+			ObjectifyGenericDao<LandingPage> dao = new ObjectifyGenericDao<LandingPage>(LandingPage.class);
+			q = dao.ofy().query(LandingPage.class);
+			q.filter("name", name);
+			LandingPage lpNames =  q.get();
+			if(lpNames != null && lpNames.id != null)
+			{
+				return true;			
+			}
+			else
+			{
+				return false;
+			}
+		}
+		finally
+		{
+			NamespaceManager.set(oldNameSpace);
+		}
+		
+	}
+	
 	public boolean isCNameExists(String cname) {
 		String oldNameSpace = NamespaceManager.get();
 		NamespaceManager.set("");

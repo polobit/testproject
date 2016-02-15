@@ -217,69 +217,105 @@ angular.module('builder.projects', [])
             projectPageData['title'] = $("#metatitle",parent.document).val();
             projectPageData['tags'] = $("#metadesc",parent.document).val();
             projectPageData['description'] = $("#metakeywords",parent.document).val();
+            
+            var reqMethod = "POST";
 
             if(landingPageName == "") {
             	alertify.log("Page name is required.", "error");
             	$rootScope.savingChanges = false;
             	return;
+            }else{
+            	var req = {
+              			 method: reqMethod,
+              			 url: AGILE_LP_ROOT + 'core/api/landingpages/checkName',
+              			 headers: {
+              			   'Content-Type': "application/json"
+              			 },data: {"landingpageName": landingPageName}
+              			};
+
+                          return $http(req).success(function(data) {
+                        	  if(data){
+                        		  $("#landingpagename-msg",parent.document).html('<span style="color: red; margin-left: 85px;">Page name already exists.</span>').show().fadeOut(3000);
+                        		  	alertify.log("Page name already exists.", "error");
+                              		$rootScope.savingChanges = false;
+                              		$timeout(function() {
+                                      	$(".saveLandingPageButton",parent.document).prop("disabled",false);
+                      					$(".saveLandingPageButton",parent.document).html("Save Page");
+                                  	}, 3000);
+                        	  }else{
+                        		   
+
+                                  
+                                  var webPageObject = {
+                      			  "name": landingPageName,
+                      			  "html": projectPageData.html,
+                      			  "css": projectPageData.css,
+                      			  "js": projectPageData.js,
+                      			  "title": projectPageData.title,
+                      			  "tags": projectPageData.tags,
+                      			  "description": projectPageData.description
+                      			};
+
+                                  if(typeof projectPageData.id != "undefined") {
+                                  	webPageObject["id"] = projectPageData.id;
+                                  	reqMethod = "PUT";
+                                  }
+
+                      			var req = {
+                      			 method: reqMethod,
+                      			 url: AGILE_LP_ROOT + 'core/api/landingpages',
+                      			 headers: {
+                      			   'Content-Type': "application/json"
+                      			 },
+                      			 data: JSON.stringify(webPageObject)
+                      			};
+
+                                  return $http(req).success(function(data) {
+
+                                  	var returnDataFormat = {"pages": []};
+                                  	returnDataFormat.pages[0] = data;
+                                  	returnDataFormat.pages[0].name = "index";
+                      				project.active = returnDataFormat;
+
+                      				$("#landingpagename-msg",parent.document).html('<span style="color: green; margin-left: 85px;">Page saved.</span>').show().fadeOut(3000);
+
+                      				$timeout(function() {
+                                      	$(".saveLandingPageButton",parent.document).prop("disabled",false);
+                      					$(".saveLandingPageButton",parent.document).html("Save Page");
+                                  	}, 3000);
+
+                      				//alertify.log("Saved successfully.", "success");
+
+                      			}).error(function(data) {
+                      				$timeout(function() {
+                                      	$(".saveLandingPageButton",parent.document).prop("disabled",false);
+                      					$(".saveLandingPageButton",parent.document).html("Save Page");
+                                  	}, 3000);
+                      				//alertify.log(data.substring(0, 500), 'error', 2500);
+                      			}).finally(function(data) {
+                      				$rootScope.savingChanges = false;
+                      			});
+
+                                  $timeout(function() {
+                                      $rootScope.savingChanges = false;
+                                  }, 300)
+
+                        		  
+                        	  }
+
+                          	
+              			}).error(function(data) {
+              				$timeout(function() {
+                              	$(".saveLandingPageButton",parent.document).prop("disabled",false);
+              					$(".saveLandingPageButton",parent.document).html("Save Page");
+                          	}, 3000);
+              				//alertify.log(data.substring(0, 500), 'error', 2500);
+              			});
             }
-
-            var reqMethod = "POST";
-
-            var webPageObject = {
-			  "name": landingPageName,
-			  "html": projectPageData.html,
-			  "css": projectPageData.css,
-			  "js": projectPageData.js,
-			  "title": projectPageData.title,
-			  "tags": projectPageData.tags,
-			  "description": projectPageData.description
-			};
-
-            if(typeof projectPageData.id != "undefined") {
-            	webPageObject["id"] = projectPageData.id;
-            	reqMethod = "PUT";
-            }
-
-			var req = {
-			 method: reqMethod,
-			 url: AGILE_LP_ROOT + 'core/api/landingpages',
-			 headers: {
-			   'Content-Type': "application/json"
-			 },
-			 data: JSON.stringify(webPageObject)
-			};
-
-            return $http(req).success(function(data) {
-
-            	var returnDataFormat = {"pages": []};
-            	returnDataFormat.pages[0] = data;
-            	returnDataFormat.pages[0].name = "index";
-				project.active = returnDataFormat;
-
-				$("#landingpagename-msg",parent.document).html('<span style="color: green; margin-left: 85px;">Page saved.</span>').show().fadeOut(3000);
-
-				$timeout(function() {
-                	$(".saveLandingPageButton",parent.document).prop("disabled",false);
-					$(".saveLandingPageButton",parent.document).html("Save Page");
-            	}, 3000);
-
-				//alertify.log("Saved successfully.", "success");
-
-			}).error(function(data) {
-				$timeout(function() {
-                	$(".saveLandingPageButton",parent.document).prop("disabled",false);
-					$(".saveLandingPageButton",parent.document).html("Save Page");
-            	}, 3000);
-				//alertify.log(data.substring(0, 500), 'error', 2500);
-			}).finally(function(data) {
-				$rootScope.savingChanges = false;
-			});
-
-            $timeout(function() {
-                $rootScope.savingChanges = false;
-            }, 300)
-		},
+            
+            
+            
+         		},
 
 		/**
 		 * Apply template with given id to active project.
