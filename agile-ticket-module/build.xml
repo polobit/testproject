@@ -10,7 +10,7 @@
     <property name="debuglevel" value="source,lines,vars"/>
     <path id="libpath">
         <fileset dir="${LIB_DIR}" >
-			<include ="*.jar"/>
+			<include name="*.jar"/>
 			<exclude name="guava-recompiled-agile-14.jar"/>
 		</fileset>
     </path>
