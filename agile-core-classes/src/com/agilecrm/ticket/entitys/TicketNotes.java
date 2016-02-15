@@ -112,6 +112,11 @@ public class TicketNotes
 	 */
 	public String original_html_text = "";
 
+	/**
+	 * Stores mime object
+	 */
+	public String mime_object = "";
+
 	public static enum NOTE_TYPE
 	{
 		PUBLIC, PRIVATE
@@ -144,7 +149,7 @@ public class TicketNotes
 	 */
 	@NotSaved
 	public List<String> cc_emails = new ArrayList<String>();
-	
+
 	/**
 	 * Saves ticket close status when agent sending reply
 	 */
