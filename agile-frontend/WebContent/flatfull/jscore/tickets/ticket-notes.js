@@ -24,7 +24,7 @@ var Tickets_Notes = {
 
 		var json = serializeForm("send-reply");
 
-		json.html_text = json.html_text + "<br><br>" + CURRENT_USER_PREFS.signature;
+		json.html_text = json.html_text.trim() + "<br><br>" + CURRENT_USER_PREFS.signature;
 
 		if($(e.target).hasClass('forward')){
 			this.forwardTicket(json, $save_btn);
@@ -399,13 +399,15 @@ var Tickets_Notes = {
 		);
 	},
 
-	showOriginal: function(id){
+	showOriginal: function(id, type){
 
 		var params  = 'width=550';
 		params += ', height=' + (screen.height-200);
 		params += ', top=0, left=0';
 
-		newwin=window.open('ticket-notes.jsp?id=' + id,'Help Desk | Agile CRM', params);
+		type = (!type) ? "html" : "original";
+
+		newwin=window.open('ticket-notes.jsp?id=' + id + '&type=' + type,'Help Desk | Agile CRM', params);
 
 		if (window.focus)
 			newwin.focus();
