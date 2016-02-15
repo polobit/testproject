@@ -3,8 +3,8 @@
  */
 var _agile_synch_form_v4 = function()
 {
-	var validator = $("#agile-form").validate();
-	if(!validator.form()){
+	
+	if(!agile_validations()){
 		return;
 	}
 
