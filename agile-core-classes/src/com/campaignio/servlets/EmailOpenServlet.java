@@ -25,6 +25,7 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.analytics.servlets.AnalyticsServlet;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -74,13 +75,23 @@ public class EmailOpenServlet extends HttpServlet
 
 	// Contact subject
 	String subject = request.getParameter("d");
+	
+	//Get client IP address
+	String clientIPAddress=AnalyticsServlet.getClientIP(request);
 
 	System.out.println("subject...." + subject);
-
 	// Fetches domain name from url. E.g. From admin.agilecrm.com, returns
 	// admin
 	URL url = new URL(request.getRequestURL().toString());
 	String namespace = NamespaceUtil.getNamespaceFromURL(url);
+	
+	//code for IP filter on emails open
+	  if(AnalyticsServlet.isBlockedIp(clientIPAddress,namespace))
+	  {
+		  System.out.println("Testing email open IP filter..");
+		  return;
+	  }
+	
 
 	if (StringUtils.isEmpty(namespace))
 	    return;
