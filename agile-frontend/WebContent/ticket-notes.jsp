@@ -8,6 +8,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Help Desk | Agile CRM</title>
+<style type="text/css">
+body {
+    font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.42857143;
+    color: #58666e;
+    background-color: transparent;
+}
+</style>
 </head>
 <body>
 	<%
@@ -20,7 +30,16 @@
 		}
 
 		TicketNotes notes = TicketNotesUtil.getTicketNotesByID(Long.parseLong(notedID));
+
+		String type = request.getParameter("type");
 	%>
-	<%= notes.html_text %>
+
+	<%
+	if(type != null && type.equalsIgnoreCase("original") && notes.mime_object != null){ 
+	  	out.println(notes.mime_object); 
+	}else{
+		out.println(notes.html_text); 
+	}
+	%>
 </body>
 </html>

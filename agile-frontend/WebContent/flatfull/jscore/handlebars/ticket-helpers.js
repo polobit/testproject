@@ -366,6 +366,11 @@ Handlebars.registerHelper('is_ticket_collection_available', function(options) {
 
 Handlebars.registerHelper('convert_to_html', function(str, options) {
 
+	if(!str)
+		return "";
+
+	str = str.trim();
+
 	return str;
 
 });

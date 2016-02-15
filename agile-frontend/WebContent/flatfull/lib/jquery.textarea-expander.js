@@ -47,6 +47,10 @@
 		  ResizeTextarea(this);
 		}).on('input', function () {
 		  ResizeTextarea(this);
+		}).on('keyup', function () {
+		  ResizeTextarea(this);
+		}).on('focus', function () {
+		  ResizeTextarea(this);
 		});
 
 		return this;
