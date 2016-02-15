@@ -25,6 +25,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.deferred.CompanyDeleteDeferredTask;
+import com.agilecrm.contact.deferred.ContactPostDeleteTask;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.email.deferred.LastContactedDeferredTask;
@@ -936,30 +937,9 @@ public class ContactUtil
 	 */
 	deleteTextSearchDataWithRetries(docIds, 4);
 
-	for (int i = 0; i < ids.size(); i++)
-	{
-	    Long id = ids.get(i);
-	    // Delete Notes
-	    NoteUtil.deleteAllNotes(id);
-
-	    // Delete Crons.
-	    CronUtil.removeTask(null, id.toString());
-
-	    Long start = System.currentTimeMillis();
-
-	    // Deletes logs of contact.
-	    LogUtil.deleteSQLLogs(null, id.toString());
-
-	    System.out.println("Time taken to delete logs : " + (System.currentTimeMillis() - start));
-
-	    // Deletes TwitterCron
-	    TwitterJobQueueUtil.removeTwitterJobs(null, id.toString(), NamespaceManager.get());
-
-	    docIds[i] = String.valueOf(id);
-	}
-
-	// Delete Tags
-	TagUtil.deleteTags(tags);
+	ContactPostDeleteTask task = new ContactPostDeleteTask(ids, tags, NamespaceManager.get());
+	Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_POST_DELETE_QUEUE);
+	queue.addAsync(TaskOptions.Builder.withPayload(task));
     }
 
     public static void postDeleteOperation(Long id, Set<String> tags)
