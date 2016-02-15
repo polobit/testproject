@@ -86,6 +86,8 @@ public class EmailOpenServlet extends HttpServlet
 	String namespace = NamespaceUtil.getNamespaceFromURL(url);
 	
 	//code for IP filter on emails open
+	System.out.println("Client IP is : "+ clientIPAddress);
+	System.out .println("Domain Name is : "+namespace);
 	  if(AnalyticsServlet.isBlockedIp(clientIPAddress,namespace))
 	  {
 		  System.out.println("Testing email open IP filter..");
