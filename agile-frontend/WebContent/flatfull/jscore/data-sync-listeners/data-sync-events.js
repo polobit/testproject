@@ -154,6 +154,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
        // $(ele).text("Syncing");
 
         //	return;
+         $(ele).attr("disabled", "disabled");
 
         var syncPrefs = serializeForm("google-contacts-import-form");
         syncPrefs["inProgress"] = true;
@@ -222,7 +223,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             $(ele).text("Syncing");
         }*/
         $(ele).attr("disabled", "disabled");
-                    $(ele).delay(3000).removeAttr("disabled");
+                   
 
         var syncPrefs = serializeForm("stripe-prefs-form");
         syncPrefs["inProgress"] = true;
@@ -267,6 +268,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             return false;
         $(ele).attr("disabled", "disabled");
         $(ele).text("Syncing");*/
+         $(ele).attr("disabled", "disabled");
         
         var quickbookPrefs = serializeForm("quickbook-form");
         quickbookPrefs['inProgress'] = true;
@@ -313,7 +315,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
                     //if(disable)
                     //return false;
                     $(ele).attr("disabled", "disabled");
-                    $(ele).delay(3000).removeAttr("disabled");
+                   
                    // $(ele).text("Syncing");*/
                     
                     var freshbooks_prefs = serializeForm("freshbooks-form");
