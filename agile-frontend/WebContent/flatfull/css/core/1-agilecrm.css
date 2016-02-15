@@ -982,14 +982,14 @@ content: "\f075"!important;
 	margin-bottom: 0px;
 }
 
-.milestone-column>div.milestones ul{
+.milestone-column>div.milestones > ul{
 	list-style: none;
 	margin-left: 0px;
 	margin-bottom: 0px;
 	min-height: 468px;
 }
 
-#opportunities-by-milestones-model-list .milestone-column>ul>li, #deals-by-paging-model-list li, #deals-by-paging-relax-model-list li
+#opportunities-by-milestones-model-list .milestone-column>ul>li, #deals-by-paging-model-list>li, #deals-by-paging-relax-model-list>li
 {
 margin:0px;
 	cursor: move;

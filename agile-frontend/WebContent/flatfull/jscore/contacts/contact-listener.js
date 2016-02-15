@@ -145,14 +145,14 @@ function contactListener(el)
 		 }, 1000);
 });
 
-	$('body').off('mouseout','.popover_contact');
+/*	$('body').off('mouseout','.popover_contact');
 		$('body').on('mouseout','.popover_contact',function(e){
 				var that=$(this);
 			if($('.popover').length!=0){
 			$(that).popover('hide');
 			$('.popover').remove();
 		}
-			});
+			});*/
 }
 
 var insidePopover=false;
