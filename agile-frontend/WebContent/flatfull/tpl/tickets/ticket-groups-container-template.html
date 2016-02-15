@@ -16,10 +16,10 @@
 					style="font-size: 11px; color: rgb(88, 102, 110);">
 					<span class="text-muted">Sort by</span> <span class="p-r-xs sort-field-txt">
 						{{#if_equals sort_field "last_updated_time"}}
-							Last updated time
+							Last Updated Time
 						{{else}}
 							{{#if_equals sort_field "created_time"}}
-								Created time
+								Created Time
 							{{else}}
 								{{#if_equals sort_field "priority_code"}}
 									Priority
@@ -35,14 +35,14 @@
 				</button>
 			    <ul class="dropdown-menu">
 			    	<li>
-			    		<a class="sort-link sort-field" href="javascript:void(0);" data-sort-key="last_updated_time">Last updated time 
+			    		<a class="sort-link sort-field" href="javascript:void(0);" data-sort-key="last_updated_time">Last Updated Time 
 			    			<i class="fa fa-check pull-right txt-small m-t-xs 
 			    				{{#if_equals sort_field "last_updated_time"}}{{else}}display-none{{/if_equals}} sort-field-check"></i>
 		    			</a>
 		    		</li>
 			    	<li>
 			    		<a class="sort-field" href="javascript:void(0);" data-sort-key="created_time">
-				    		Created time <i class="fa fa-check pull-right txt-small m-t-xs {{#if_equals sort_field "created_time"}}{{else}}display-none{{/if_equals}}  sort-field-check"></i> 
+				    		Created Time <i class="fa fa-check pull-right txt-small m-t-xs {{#if_equals sort_field "created_time"}}{{else}}display-none{{/if_equals}}  sort-field-check"></i> 
 				    	</a>
 				    </li>
 			    	<li>

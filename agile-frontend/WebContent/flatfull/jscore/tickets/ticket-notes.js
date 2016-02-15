@@ -105,8 +105,13 @@ var Tickets_Notes = {
 		var emails = [];
 
 		$('ul.forward-emails > li').each(function(index){
-			emails.push($(this).find('a.anchor').text());
+			var email =  $(this).find('a.anchor').text();
+			if(email)
+				emails.push(email);
 		});
+
+		if(emails.length == 0)
+			return;
 
 		//set to emails
 		data.email = emails.join();

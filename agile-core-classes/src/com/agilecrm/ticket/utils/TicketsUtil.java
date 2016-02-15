@@ -499,11 +499,13 @@ public class TicketsUtil
 		{
 			try
 			{
-				TicketNotesUtil.sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress,
-						ticket.cc_emails, SendMail.TICKET_REPLY, new JSONObject());
+				TicketNotesUtil.sendEmail(email, ticket.subject, agentName, fromAddress, ticket.cc_emails,
+						SendMail.TICKET_FORWARD, new JSONObject().put("content", content));
+
 			}
 			catch (Exception e)
 			{
+				e.printStackTrace();
 				System.out.println(ExceptionUtils.getFullStackTrace(e));
 			}
 
@@ -965,7 +967,7 @@ public class TicketsUtil
 			}
 
 			activity.domainUser = assigneeList.get(activity.domainUserID);
-			
+
 			switch (activity.activity_type)
 			{
 			case TICKET_LABEL_ADD:

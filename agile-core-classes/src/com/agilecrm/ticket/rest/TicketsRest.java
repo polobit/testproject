@@ -23,9 +23,6 @@ import org.codehaus.jackson.map.type.TypeFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.examples.HtmlToPlainText;
-import org.jsoup.nodes.Document;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.Activity;
@@ -300,8 +297,8 @@ public class TicketsRest
 	{
 		try
 		{
-			List<Activity> activitys = ActivityUtil.getActivitiesByEntityId(EntityType.TICKET.toString(), ticketID, 200,
-					null);
+			List<Activity> activitys = ActivityUtil.getActivitiesByEntityId(EntityType.TICKET.toString(), ticketID,
+					200, null);
 
 			activitys = TicketsUtil.includeData(activitys);
 
@@ -811,8 +808,10 @@ public class TicketsRest
 				throw new Exception("Required parameters missing.");
 
 			// Converting html text to plain with jsoup
-			Document doc = Jsoup.parse(HTMLcontent, "UTF-8");
-			String plain_text = new HtmlToPlainText().getPlainText(doc);
+			// Document doc = Jsoup.parse(HTMLcontent, "UTF-8");
+			// String plain_text = new HtmlToPlainText().getPlainText(doc);
+
+			String plain_text = HTMLcontent;
 
 			return TicketsUtil.forwardTicket(ticketId, plain_text, email);
 		}
