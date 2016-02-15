@@ -9,10 +9,7 @@
               	<property file="../agile-java-server/build.properties"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <path id="libpath">
-        <fileset dir="${LIB_DIR}" >
-			<include name="*.jar"/>
-			<exclude name="guava-recompiled-agile-14.jar"/>
-		</fileset>
+        <fileset dir="${LIB_DIR}" includes="*.jar"/>
     </path>
     <path id="appenginelibpath">
         <pathelement location="${APPENGINE_DIR}/shared/servlet-api.jar"/>
@@ -74,9 +71,7 @@
         </copy>
         <!--Copy application libraries to target -->
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib">
-            <fileset dir="${LIB_DIR}" >
-                <exclude name="guava-recompiled-agile-14.jar"/>
-            </fileset>
+            <fileset dir="${LIB_DIR}" />
         </copy>
         <!--Copy appengine libraries to target -->
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/shared/servlet-api.jar"/>
