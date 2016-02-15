@@ -42,7 +42,7 @@
 {{/is_mobile}}
 	<div class="{{#is_mobile}}{{else}}col{{/is_mobile}} ">
 		<div id="right-pane">
-	<div class="wrapper bg-light padder-md padder-v p-r-none m-r-md {{#is_mobile}} m-r-none {{/is_mobile}}" style="
+	<div class="wrapper bg-light padder-md padder-v  {{#is_mobile}} {{else}} m-r-md p-r-none {{/is_mobile}}" style="
     border-bottom: 1px solid rgba(140, 139, 139, 0.2);
     ">
 	    <div class="btn-toolbar m-l-none pos-rlt">
@@ -54,8 +54,8 @@
             			<i id="icon-filter" class="fa fa-bars icon-white"></i>
           			</a>
           			{{/is_mobile}}
-	    		</div>
-				<div  class="btn-group inline-block pull-left m-t-xs p-l" style="display: none;" id="bulk-select"></div>
+	    		</div><br>
+				<div  class="btn-group inline-block pull-left m-t-xs" style="display: none;" id="bulk-select"></div>
     
     
 
@@ -119,7 +119,7 @@
 	    
 	</div>
 	<div class="contacts-div">
-<div id="bulk-action-btns" class="panel-heading no-shadow m-r-md p-r-none {{#is_mobile}} m-r-none {{/is_mobile}}" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
+<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none {{#is_mobile}} {{else}} m-r-md {{/is_mobile}}" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
 				      	
 					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add Tags</button>
 					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Remove Tags</button>
