@@ -13,7 +13,7 @@
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
       <div class="col-md-12 p-n m-b-xs">Labels</div>
-      <div class="col-md-12 p-n m-b-xs cusom-filter-labels txt-small">
+      <div class="col-md-12 p-n m-b-xs cusom-filter-labels choose-labels txt-small">
         <select data-placeholder="Search labels" class="chosen-select form-control" multiple class="w-md"></select>
       </div>
       <div class="col-md-12 p-n m-t-xs">
@@ -72,7 +72,7 @@
             </label> Open
           </div>
         </div>
-        <div class="col-md-12 p-n">
+        <div class="col-md-12 p-n txt-small">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="status" name="status" value="PENDING" {{#contains_string 'PENDING' status}}checked{{/contains_string}} type="checkbox">

@@ -503,8 +503,14 @@ body .app-content, #notes-collection-container {
 div.chosen-container>ul.chosen-choices{
   height: initial !important;
 }
-
 .plain-text-comment a{
   color: #337ab7!important;
   text-decoration: none;
+
+.tooltip-inner {
+  white-space:nowrap;
+  max-width:none;
+}
+.choose-labels>div.chosen-container>ul.chosen-choices>li.search-field>.default{
+  color: #A3ACB0 !important;
 }
