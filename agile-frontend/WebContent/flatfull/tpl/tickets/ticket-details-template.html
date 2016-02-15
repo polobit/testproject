@@ -55,21 +55,22 @@
                           {{/if}}
 
                           </div>
-                        <div class="text-md m-t-sm m-b-xxs"> <span class="first-letter-cap inline-block">
+                        <div class="text-md m-t-sm m-b-xxs overflow-elipsis m-b-none" style="max-width: 230px"> <span class="">
                               {{getPropertyValue contact.properties "first_name"}}
                               {{getPropertyValue contact.properties "last_name"}} 
                             </span>
                         </div>
-                        <div><span class="first-letter-cap">
+                        <div class="overflow-elipsis m-b-none" style="max-width: 230px">
+                          <span class="">
                               {{getPropertyValue contact.properties "company"}}
                             </span>
                         </div>
 
-                         <div>
+                         <div class="overflow-elipsis m-b-none" style="max-width: 230px">
                               {{getPropertyValue contact.properties "email"}}
                           </div>
 
-                           <div>
+                           <div class="overflow-elipsis m-b-none" style="max-width: 230px">
                                <a href="tel:{{getPropertyValue contact.properties "phone"}}" class="contact-make-call contact-call-button" phone="{{getPropertyValue contact.properties "phone"}}">
                                   {{getPropertyValue contact.properties "phone"}}
                                 </a>
@@ -85,7 +86,7 @@
                             </div>
                             {{/if}}
 
-                            <div class="col-md-12 p-n m-t-xs">
+                            <div class="col-md-12 p-n m-t-xso verflow-elipsis m-b-none" style="max-width: 230px">
 
                               {{#each contact.properties}}
 
