@@ -34,7 +34,9 @@ var Tickets_Notes = {
 		var note_type = $(e.target).hasClass('private') ? 'PRIVATE' : 'PUBLIC';
 		json.note_type = note_type;
 
-		if($(e.target).hasClass('close-ticket'))
+		var is_ticket_closed = $(e.target).hasClass('close-ticket');
+
+		if(is_ticket_closed)
 			json.close_ticket="true";
 
 		disable_save_button($save_btn);
@@ -44,6 +46,19 @@ var Tickets_Notes = {
 		newTicketNotesModel.save(json, {
 
 			success : function(model) {
+
+				//update model in collection
+				if(App_Ticket_Module.ticketsCollection){
+
+					var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
+
+					var json = {};
+					json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING';
+
+					ticket_model.set(json, {
+						silent : true
+					});
+				}
 
 				var next_ticket_url = $(".navigation .next-ticket").attr("href");
 				if(next_ticket_url){
@@ -274,6 +289,9 @@ var Tickets_Notes = {
 		$.each(Ticket_Canned_Response.cannedResponseCollection.toJSON(), function(index, eachCannedResponse){
 
 			     cannedResponseLabels = eachCannedResponse.labels;
+
+			     if(!cannedResponseLabels)
+			     	return true;
 
 			     var isAllowed = (cannedResponseLabels.length == 0) ? false : true;
 

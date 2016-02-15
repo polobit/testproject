@@ -180,8 +180,8 @@ public class TicketGroupRest
 				throw new Exception("Please select atleast one User to create Ticket Group.");
 
 			TicketGroups existingGroup = TicketGroupUtil.getTicketGroupByName(groupName);
-
-			if (!existingGroup.equals(ticketGroup))
+			
+			if (existingGroup != null && !existingGroup.equals(ticketGroup))
 				throw new Exception("Ticket Group with name " + groupName
 						+ " already exists. Please choose a different Group name.");
 
@@ -189,14 +189,17 @@ public class TicketGroupRest
 
 			for (Long agent_key : agents_keys)
 				agents_key_list.add(new Key<DomainUser>(DomainUser.class, agent_key));
+			
+			//Get group from db
+			TicketGroups dbGroup = TicketGroupUtil.getTicketGroupById(ticketGroup.id);
+			
+			//Set updated values
+			dbGroup.group_name = ticketGroup.group_name;
+			dbGroup.setAgents_key_list(agents_key_list);
 
-			existingGroup.group_name = ticketGroup.group_name;
-			existingGroup.setAgents_key_list(agents_key_list);
-			existingGroup.updated_time = Calendar.getInstance().getTimeInMillis();
+			TicketGroups.ticketGroupsDao.put(dbGroup);
 
-			TicketGroups.ticketGroupsDao.put(existingGroup);
-
-			return ticketGroup;
+			return dbGroup;
 		}
 		catch (Exception e)
 		{

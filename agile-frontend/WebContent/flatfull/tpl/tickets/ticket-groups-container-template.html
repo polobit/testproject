@@ -14,36 +14,54 @@
 	    	<div class="btn-group dropdown m-l-none" style="float: none;">
 	    		<button class="btn btn-sm no-shadow p-n b-n bg-transparent" data-toggle="dropdown" 
 					style="font-size: 11px; color: rgb(88, 102, 110);">
-					<span class="text-muted">Sort by</span> <span class="p-r-xs sort-field-txt">Last updated time</span>
+					<span class="text-muted">Sort by</span> <span class="p-r-xs sort-field-txt">
+						{{#if_equals sort_field "last_updated_time"}}
+							Last updated time
+						{{else}}
+							{{#if_equals sort_field "created_time"}}
+								Created time
+							{{else}}
+								{{#if_equals sort_field "priority_code"}}
+									Priority
+								{{else}}
+									Due Date 
+								{{/if_equals}}
+							{{/if_equals}}
+						{{/if_equals}}
+					</span>
 				</button>
 				<button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none" data-toggle="dropdown" aria-expanded="false" style="padding-left: 2px;">
 					<span class="caret"></span>
 				</button>
 			    <ul class="dropdown-menu">
 			    	<li>
-			    		<a class="sort-link sort-field" href="javascript:void(0);" data-sort-key="last_updated_time">Updated time <i class="fa fa-check pull-right txt-small m-t-xs sort-field-check"></i> 
+			    		<a class="sort-link sort-field" href="javascript:void(0);" data-sort-key="last_updated_time">Last updated time 
+			    			<i class="fa fa-check pull-right txt-small m-t-xs 
+			    				{{#if_equals sort_field "last_updated_time"}}{{else}}display-none{{/if_equals}} sort-field-check"></i>
 		    			</a>
 		    		</li>
 			    	<li>
 			    		<a class="sort-field" href="javascript:void(0);" data-sort-key="created_time">
-				    		Created time <i class="fa fa-check pull-right txt-small m-t-xs display-none sort-field-check"></i> 
+				    		Created time <i class="fa fa-check pull-right txt-small m-t-xs {{#if_equals sort_field "created_time"}}{{else}}display-none{{/if_equals}}  sort-field-check"></i> 
 				    	</a>
 				    </li>
 			    	<li>
 			    		<a class="sort-field" href="javascript:void(0);" data-sort-key="priority_code">
-				    		Priority <i class="fa fa-check pull-right txt-small m-t-xs display-none sort-field-check"></i> 
+				    		Priority <i class="fa fa-check pull-right txt-small m-t-xs {{#if_equals sort_field "priority_code"}}{{else}}display-none{{/if_equals}} sort-field-check"></i> 
 				    	</a>
 			    	</li>
 			    	<li>
 			    		<a class="sort-field" href="javascript:void(0);" data-sort-key="due_date">
-				    		Due Date <i class="fa fa-check pull-right txt-small m-t-xs display-none sort-field-check"></i> 
+				    		Due Date <i class="fa fa-check pull-right txt-small m-t-xs {{#if_equals sort_field "due_date"}}{{else}}display-none{{/if_equals}} sort-field-check"></i> 
 				    	</a>
 			    	</li>
 			    	<li class="divider"></li>
 			    	<li>
-			    		<a class="sort-by" data-sort-by="-" href="javascript:void(0);">Descending <i class="fa fa-check pull-right txt-small m-t-xs sort-by-check"></i> </a>
+			    		<a class="sort-by" data-sort-by="-" href="javascript:void(0);">Descending 
+			    			<i class="fa fa-check pull-right txt-small m-t-xs sort-by-check {{#if_equals sort_by "-"}}{{else}}display-none{{/if_equals}}"></i>
+			    		</a>
 			    	</li>
-			    	<li><a class="sort-by"  data-sort-by="" href="javascript:void(0);">Ascending <i class="fa fa-check pull-right txt-small m-t-xs sort-by-check display-none"></i> </a></li>
+			    	<li><a class="sort-by"  data-sort-by="" href="javascript:void(0);">Ascending <i class="fa fa-check pull-right txt-small m-t-xs sort-by-check {{#if_equals sort_by "-"}}display-none{{else}}{{/if_equals}}"></i> </a></li>
 				</ul>
 	    	</div>
 	    </div>

@@ -4,9 +4,12 @@ var Ticket_Custom_Filters = {
 	assignees: [],
 	groups: [],
 	filters: [],
+	template_ui: '',
+	template_data_json: {},
 
 	reset: function(){
 		this.customFilters = new Array();
+		template_data_json = {};
 	},
 	init: function(callback){
 
@@ -33,170 +36,300 @@ var Ticket_Custom_Filters = {
 		}	
 	},
 
+	initEvents: function(){
+
+		var $container = $('#custom-filters-container');
+
+		//Initializing date picker
+		head.load(LIB_PATH + 'lib/date-charts.js', 
+				  LIB_PATH + 'lib/date-range-picker.js'+'?_=' + _AGILE_VERSION, function()
+		{	
+			var $input = $('.due-date-input', $container);
+
+			$input.datepicker({ 
+				drops: "down", 
+				dateFormat : CURRENT_USER_PREFS.dateFormat
+			}).on('changeDate', function(ev)
+			{
+				//Show clear button
+				$('#clear-due-date').show();
+
+				$input.blur();
+
+				$input.datepicker("hide");
+
+				Ticket_Custom_Filters.changeDueDate(Date.parse($input.val()).getTime());
+			});
+
+			$('.daterangepicker').remove();
+
+			// Bootstrap date range picker.
+			$('#created-date-input').daterangepicker({drops: 'up', locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', firstDay : parseInt(CALENDAR_WEEK_START_DAY)}}, function(start, end)
+			{
+				var range = $('#created-date-input').val();
+				var range_array = range.split('-');
+
+				$('#clear-created-date').show();
+
+				Ticket_Custom_Filters.changeCreatedDate(range_array[0], range_array[1]);
+			});
+		});
+
+		var options = [];
+
+	  	//Initializing click event due date dropdown
+	  	$container.off('click','ul.due-date-dropdown li a');
+	  	$container.on('click','ul.due-date-dropdown li a', function(event){
+
+	  		var $target = $(event.currentTarget);
+
+	  		$(event.target).blur();
+
+	  		if($target.hasClass("due-date-custom")){
+
+	  			$('input.due-date-input').trigger('click');
+	  			return false;
+	  		}else if($target.hasClass("clear-due-dates")){
+
+	  			options = [];
+	  			$('input.due-date-input').val('');
+	  			$('.due-date-chbx').prop('checked', false);
+
+	  			return false;
+	  		}
+
+	  		var val = $target.attr('data-value'),
+					$chbx = $target.find('input[type="checkbox"]'), idx;
+
+				if((idx = options.indexOf(val)) > -1){
+		      options.splice(idx, 1);
+		      setTimeout(function(){$chbx.prop('checked', false)}, 0);
+		   	}else{
+		      options.push(val);
+		      setTimeout(function(){$chbx.prop('checked', true)}, 0);
+		   	}
+			
+			$('input.due-date-input').val(options);
+			return false;
+	  	});
+
+	  	//Initializing click event on clear due date button
+	  	$container.off('click','a#clear-due-date');
+	  	$container.on('click','a#clear-due-date', function(event){
+
+	  		$(this).hide();
+
+	  		$('input.due-date-input').val('');
+	  		
+	  		//Re-render collection with updated filter conditions
+	  		Ticket_Custom_Filters.changeDueDate();
+	  	});
+
+	  	//Initializing click event on clear create date button
+	  	$container.off('click','a#clear-created-date');
+	  	$container.on('click','a#clear-created-date', function(event){
+
+	  		$(this).hide();
+
+	  		$('input.created-date-input').val('');
+	  		
+	  		//Re-render collection with updated filter conditions
+	  		Ticket_Custom_Filters.changeCreatedDate();
+	  	});
+
+	  	//Initializing click event on due date button
+	  	$container.off('click','a.choose-due-date');
+	  	$container.on('click','a.choose-due-date', function(event){
+
+	  		var value = $(this).data('value'), current_date = new Date();
+
+	  		var $input = $('.due-date-input', $container);
+
+	  		//Show clear button
+	  		$('#clear-due-date').show();
+
+	  		$input.blur();
+
+			$input.datepicker("hide");
+
+			switch(value){
+	  			case 'overdue':
+	  				current_date.setDate(current_date.getDate());
+	  				break;
+	  			case 'tomorrow':
+	  				current_date.setDate(current_date.getDate() + 1);
+	  				break;
+	  			case 'next_two_days':
+	  				current_date.setDate(current_date.getDate() + 2);
+	  				break;
+	  			case 'next_three_days':
+	  				current_date.setDate(current_date.getDate() + 3);
+	  				break;
+	  			case 'next_five_days':
+	  				current_date.setDate(current_date.getDate() + 5);
+	  				break;
+	  		}
+
+	  		//Set date in daterange picker
+	  		$input.val(current_date.format('mm/dd/yyyy'));
+
+	  		//Re-render collection with updated filter conditions
+	  		Ticket_Custom_Filters.changeDueDate(current_date.getTime());
+	  	});
+
+		//Initializing click event on 'Save as' button in LHS filters 
+		$container.off('click','.save-new-filter');
+		$container.on('click','.save-new-filter', function(e){
+
+			var view = new Ticket_Base_Model({
+				isNew : true, 
+				template : "ticket-create-filter-modal",
+				url : '/core/api/tickets/filters',
+				saveCallback: function(model){
+
+					$('#create-filter-modal').modal('hide');
+					App_Ticket_Module.ticketFiltersList.collection.add(model);
+					App_Ticket_Module.ticketsByFilter(model.id);
+				},
+				prePersist : function(model)
+				{
+					var json = {};
+					json.conditions = Ticket_Custom_Filters.customFilters;
+
+					var formJSON = model.toJSON();
+
+					if(formJSON['save-type'] == 'replace')
+						json.id = $('[name="filter-collection"]').val();
+
+					model.set(json, { silent : true });
+				}
+			});
+
+			$('#ticket-modals').html(view.render().el);
+			$('#create-filter-modal').modal('show');
+		});
+
+		//Initializing click event on 'Save as' button in LHS filters 
+		$container.off('click','.clear-custom-filter');
+		$container.on('click','.clear-custom-filter', function(e){
+			e.preventDefault();
+
+			if(!Ticket_Custom_Filters.isFilterChanged())
+				return;
+
+			App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
+
+			Ticket_Bulk_Ops.clearSelection();
+		});
+
+		var $select = $(".chosen-select");
+
+		// Initliazing multi select drop down
+		$select.chosen({no_results_text: "No labels found"});
+
+		$select.off('change');
+		$select.on('change', function(evt, params) {
+
+			if (params && params.deselected) {
+				
+				for(var i=0; i< Ticket_Custom_Filters.customFilters.length; i++){
+
+					var condition = Ticket_Custom_Filters.customFilters[i];
+
+					if(condition.LHS != 'labels' || condition.RHS != params.deselected)
+						continue;
+
+					Ticket_Custom_Filters.customFilters.splice(i, 1);
+					break;
+				}
+			}
+			else{
+				var condition = {};
+				condition.LHS = 'labels';
+				condition.RHS = params.selected;
+				condition.CONDITION = 'TICKET_LABEL_IS';
+
+				Ticket_Custom_Filters.customFilters.push(condition);
+			}
+
+			//Re-render collection with customized filters
+			Tickets.fetchTicketsCollection();
+		});
+
+		//Initializing on change events on all select dropdowns in custom filters
+		$('[type="checkbox"]', $container).off('change');
+		$('[type="checkbox"]', $container).on('change', function(evt) {
+
+			var isSelected = $(this).is(':checked');
+			var attributeName = $(this).attr('name');
+			
+			//Remove value from custom json if value is deselected
+			if (isSelected) {
+				var condition = {};
+				condition.LHS = attributeName;
+				condition.RHS = $(this).val();
+
+				switch(condition.LHS){
+					case 'status':
+						condition.CONDITION = 'TICKET_STATUS_IS';
+						break;
+					case 'priority':
+						condition.CONDITION = 'TICKET_PRIORITY_IS';
+						break;
+					case 'assignee_id':
+					case 'group_id':
+						condition.CONDITION = 'EQUALS';
+						break;
+					case 'ticket_type':
+						condition.CONDITION = 'TICKET_TYPE_IS';
+						break;
+					case 'ticket_favorite':
+					case 'ticket_spam':
+						condition.CONDITION = 'TICKET_IS';
+						break;
+				}
+
+				Ticket_Custom_Filters.customFilters.push(condition);
+			}else{
+				for(var i=0; i< Ticket_Custom_Filters.customFilters.length; i++){
+
+					var condition = Ticket_Custom_Filters.customFilters[i];
+
+					if(condition.LHS == attributeName && condition.RHS == $(this).val()){
+
+						Ticket_Custom_Filters.customFilters.splice(i, 1);
+						break;
+					}
+				}
+			}
+
+			//Re-render collection with customized filters
+			Tickets.fetchTicketsCollection();
+		});
+	},
+
 	renderLayout: function(){
 
-		Ticket_Custom_Filters.prepareConditions(function(dataJSON){
+		Ticket_Custom_Filters.prepareConditions(function(){
 
-			getTemplate("ticket-custom-filters", dataJSON, undefined, function(template_ui){
+			getTemplate("ticket-custom-filters", Ticket_Custom_Filters.template_data_json, undefined, function(template_ui){
 
 				if(!template_ui)
 			  		return;
+
+			  	Ticket_Custom_Filters.template_ui = template_ui;
 
 			  	var $container = $('#custom-filters-container');
 
 			  	$container.html($(template_ui));
 
-			  	head.load(LIB_PATH + 'lib/date-charts.js', function()
-				{	
-					var $input = $('.due-date-input', $container);
+			  	var tempAssignees = {all_assignees: Ticket_Custom_Filters.assignees, selected_assignees: Ticket_Custom_Filters.template_data_json.assignees};
+				var tempGroups = {all_groups: Ticket_Custom_Filters.groups, selected_groups: Ticket_Custom_Filters.template_data_json.groups};
 
-					$input.datepicker({ 
-						drops: "down", 
-						dateFormat : CURRENT_USER_PREFS.dateFormat
-					}).on('changeDate', function(ev)
-					{
-						//Show clear button
-						$('#clear-due-date').show();
+				$('.assignee-select').html(getTemplate('ticket-filter-assignee', tempAssignees));
+				$('.group-select').html(getTemplate('ticket-filter-group', tempGroups));
 
-						$input.blur();
-
-						$input.datepicker("hide");
-
-						Ticket_Custom_Filters.changeDueDate(Date.parse($input.val()).getTime());
-					});
-				});
-
-			  	//Initializaing due date picker
-			  // 	Tickets.initDateTimePicker($('.due-date-input'), true, function(start){
-			  		
-			  // 		//Show clear button
-					// $('#clear-due-date').show();
-
-			  // 		//Calculate date differences between them
-			  // 		var duration = moment.duration((moment(start).diff(moment(new Date()))));
-
-			  // 		//Ticket_Custom_Filters.changeDueDate(duration.asHours());
-			  // 	});
-
-			  	//Initializaing created date filter picker
-			  // 	Tickets.initDateTimePicker($('.created-date-input'), false, function(start, end){
-			  		
-			  // 		//Show clear button
-					// $('#clear-created-date').show();
-
-			  // 		Ticket_Custom_Filters.changeCreatedDate(start, end);
-			  // 	});
-
-			  	var options = [];
-
-			  	//Initializing click event due date dropdown
-			  	$container.off('click','ul.due-date-dropdown li a');
-			  	$container.on('click','ul.due-date-dropdown li a', function(event){
-
-			  		var $target = $(event.currentTarget);
-			  		$(event.target).blur();
-
-			  		if($target.hasClass("due-date-custom")){
-
-			  			$('input.due-date-input').trigger('click');
-			  			return false;
-			  		}else if($target.hasClass("clear-due-dates")){
-
-			  			options = [];
-			  			$('input.due-date-input').val('');
-			  			$('.due-date-chbx').prop('checked', false);
-
-			  			return false;
-			  		}
-
-			  		var val = $target.attr('data-value'),
-       					$chbx = $target.find('input[type="checkbox"]'), idx;
-
-       				if((idx = options.indexOf(val)) > -1){
-				      options.splice(idx, 1);
-				      setTimeout(function(){$chbx.prop('checked', false)}, 0);
-				   	}else{
-				      options.push(val);
-				      setTimeout(function(){$chbx.prop('checked', true)}, 0);
-				   	}
-					
-					$('input.due-date-input').val(options);
-					return false;
-			  	});
-
-			  	//Initializing click event on clear due date button
-			  	$container.off('click','a#clear-created-date');
-			  	$container.on('click','a#clear-due-date', function(event){
-
-			  		$(this).hide();
-
-			  		$('input.due-date-input').val('');
-			  		
-			  		//Re-render collection with updated filter conditions
-			  		Ticket_Custom_Filters.changeDueDate();
-			  	});
-
-			  	//Initializing click event on clear create date button
-			  	$container.off('click','a#clear-created-date');
-			  	$container.on('click','a#clear-created-date', function(event){
-
-			  		$(this).hide();
-
-			  		var $input = $('input.created-date-input');
-
-			  		//Set date in daterange picker
-			  		$input.data('daterangepicker').setStartDate(new Date());
-
-			  		//Set date in daterange picker
-			  		$input.data('daterangepicker').setEndDate(new Date());
-
-			  		$input.val('');
-			  		
-			  		//Re-render collection with updated filter conditions
-			  		Ticket_Custom_Filters.changeDueDate();
-			  	});
-
-			  	//Initializing click event on due date button
-			  	$container.off('click','a.choose-due-date');
-			  	$container.on('click','a.choose-due-date', function(event){
-
-			  		var value = $(this).data('value'), current_date = new Date();
-
-			  		var $input = $('.due-date-input', $container);
-
-			  		//Show clear button
-			  		$('#clear-due-date').show();
-
-			  		$input.blur();
-
-					$input.datepicker("hide");
-
-					switch(value){
-			  			case 'overdue':
-			  				current_date.setDate(current_date.getDate());
-			  				break;
-			  			case 'tomorrow':
-			  				current_date.setDate(current_date.getDate() + 1);
-			  				break;
-			  			case 'next_two_days':
-			  				current_date.setDate(current_date.getDate() + 2);
-			  				break;
-			  			case 'next_three_days':
-			  				current_date.setDate(current_date.getDate() + 3);
-			  				break;
-			  			case 'next_five_days':
-			  				current_date.setDate(current_date.getDate() + 5);
-			  				break;
-			  		}
-
-			  		//Set date in daterange picker
-			  		$input.val(current_date.format('mm/dd/yyyy'));
-
-			  		//Re-render collection with updated filter conditions
-			  		Ticket_Custom_Filters.changeDueDate(current_date.getTime());
-			  	});
-
-			  	//Initializes chosen dropdown, fetches labels collection and renders selected labels
+				//Initializes chosen dropdown, fetches labels collection and renders selected labels
 			  	Ticket_Labels.fetchCollection(function(labelsCollection){
 
 			  		head.js('/lib/chosen.jquery.min.js', function() {
@@ -210,7 +343,7 @@ var Ticket_Custom_Filters = {
 
 						$select.html(optionList);
 
-						$.each(dataJSON.labels, function(index, label) {
+						$.each(Ticket_Custom_Filters.template_data_json.labels, function(index, label) {
 							
 							var $option = $select.find('option[value="'+ label.RHS +'"]');
 							if($option && $option.length){
@@ -222,140 +355,8 @@ var Ticket_Custom_Filters = {
 							}
 						});
 
-						// Initliazing multi select drop down
-						$select.chosen({no_results_text: "No labels found"});
-
-						$select.off('change');
-						$select.on('change', function(evt, params) {
-
-							if (params && params.deselected) {
-								
-								for(var i=0; i< Ticket_Custom_Filters.customFilters.length; i++){
-
-									var condition = Ticket_Custom_Filters.customFilters[i];
-
-									if(condition.LHS != 'labels' || condition.RHS != params.deselected)
-										continue;
-
-									Ticket_Custom_Filters.customFilters.splice(i, 1);
-									break;
-								}
-							}
-							else{
-								var condition = {};
-								condition.LHS = 'labels';
-								condition.RHS = params.selected;
-								condition.CONDITION = 'TICKET_LABEL_IS';
-
-								Ticket_Custom_Filters.customFilters.push(condition);
-							}
-
-							//Re-render collection with customized filters
-							Tickets.fetchTicketsCollection();
-						});
+						Ticket_Custom_Filters.initEvents();
 					});
-					
-					//Initializing click event on 'Save as' button in LHS filters 
-					$container.off('click','.save-new-filter');
-					$container.on('click','.save-new-filter', function(e){
-
-						var view = new Ticket_Base_Model({
-							isNew : true, 
-							template : "ticket-create-filter-modal",
-							url : '/core/api/tickets/filters',
-							saveCallback: function(model){
-
-								$('#create-filter-modal').modal('hide');
-								App_Ticket_Module.ticketFiltersList.collection.add(model);
-								App_Ticket_Module.ticketsByFilter(model.id);
-							},
-							prePersist : function(model)
-							{
-								var json = {};
-								json.conditions = Ticket_Custom_Filters.customFilters;
-
-								var formJSON = model.toJSON();
-
-								if(formJSON['save-type'] == 'replace')
-									json.id = $('[name="filter-collection"]').val();
-
-								model.set(json, { silent : true });
-							}
-						});
-
-						$('#ticket-modals').html(view.render().el);
-						$('#create-filter-modal').modal('show');
-					});
-
-					//Initializing click event on 'Save as' button in LHS filters 
-					$container.off('click','.clear-custom-filter');
-					$container.on('click','.clear-custom-filter', function(e){
-						e.preventDefault();
-
-						if(!Ticket_Custom_Filters.isFilterChanged())
-							return;
-
-						App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
-			
-						Ticket_Bulk_Ops.clearSelection();
-					});
-			  	});
-
-			  	var tempAssignees = {all_assignees: Ticket_Custom_Filters.assignees, selected_assignees: dataJSON.assignees};
-				var tempGroups = {all_groups: Ticket_Custom_Filters.groups, selected_groups: dataJSON.groups};
-
-				$('.assignee-select').html(getTemplate('ticket-filter-assignee', tempAssignees));
-				$('.group-select').html(getTemplate('ticket-filter-group', tempGroups));
-
-				//Initializing on change events on all select dropdowns in custom filters
-				$('[type="checkbox"]', $container).off('change');
-				$('[type="checkbox"]', $container).on('change', function(evt) {
-
-					var isSelected = $(this).is(':checked');
-					var attributeName = $(this).attr('name');
-					
-					//Remove value from custom json if value is deselected
-					if (isSelected) {
-						var condition = {};
-						condition.LHS = attributeName;
-						condition.RHS = $(this).val();
-
-						switch(condition.LHS){
-							case 'status':
-								condition.CONDITION = 'TICKET_STATUS_IS';
-								break;
-							case 'priority':
-								condition.CONDITION = 'TICKET_PRIORITY_IS';
-								break;
-							case 'assignee_id':
-							case 'group_id':
-								condition.CONDITION = 'EQUALS';
-								break;
-							case 'ticket_type':
-								condition.CONDITION = 'TICKET_TYPE_IS';
-								break;
-							case 'ticket_favorite':
-							case 'ticket_spam':
-								condition.CONDITION = 'TICKET_IS';
-								break;
-						}
-
-						Ticket_Custom_Filters.customFilters.push(condition);
-					}else{
-						for(var i=0; i< Ticket_Custom_Filters.customFilters.length; i++){
-
-							var condition = Ticket_Custom_Filters.customFilters[i];
-
-							if(condition.LHS == attributeName && condition.RHS == $(this).val()){
-
-								Ticket_Custom_Filters.customFilters.splice(i, 1);
-								break;
-							}
-						}
-					}
-
-					//Re-render collection with customized filters
-					Tickets.fetchTicketsCollection();
 				});
 			});
 		});	
@@ -375,16 +376,20 @@ var Ticket_Custom_Filters = {
 		for(var i=0; i<this.groups.length; i++)
 			groupsArray.push(this.groups[i].id);
 
-		var filterJSON = {}, dataJSON = {}, _status=[], _priority=[], _type=[], _assignees=[], _groups=[], _labels = [];
+		var _status=[], _priority=[], _type=[], _assignees=[], _groups=[], _labels = [];
 
-		if(Ticket_Filter_ID)
-			filterJSON = App_Ticket_Module.ticketFiltersList.collection.get(Ticket_Filter_ID).toJSON();
+		if(Ticket_Custom_Filters.customFilters.length == 0){
+			var filterJSON = App_Ticket_Module.ticketFiltersList.collection.get(Ticket_Filter_ID).toJSON();
 
-		for(var i=0; i<filterJSON.conditions.length; i++){
+			//Cloning filter object to avoid changing in collection when custom filter changed
+			var copiedFilterJSON = $.extend(true, {}, filterJSON)
 
-			var condition = filterJSON.conditions[i];
+			Ticket_Custom_Filters.customFilters = copiedFilterJSON.conditions;
+		}
 
-			Ticket_Custom_Filters.customFilters.push(condition);
+		for(var i=0; i<Ticket_Custom_Filters.customFilters.length; i++){
+
+			var condition = Ticket_Custom_Filters.customFilters[i];
 
 			switch(condition.LHS){
 				case 'labels':{
@@ -508,17 +513,17 @@ var Ticket_Custom_Filters = {
 			}
 		}
 
-		dataJSON.status = _status.toString();
-		dataJSON.priority = _priority.toString();
-		dataJSON.type = _type.toString();
-		dataJSON.assignees = _assignees.toString();
-		dataJSON.groups = _groups.toString();
-		dataJSON.labels = _labels;
-		dataJSON.is_favorite = is_favorite;
-		dataJSON.is_spam = is_spam;
+		Ticket_Custom_Filters.template_data_json.status = _status.toString();
+		Ticket_Custom_Filters.template_data_json.priority = _priority.toString();
+		Ticket_Custom_Filters.template_data_json.type = _type.toString();
+		Ticket_Custom_Filters.template_data_json.assignees = _assignees.toString();
+		Ticket_Custom_Filters.template_data_json.groups = _groups.toString();
+		Ticket_Custom_Filters.template_data_json.labels = _labels;
+		Ticket_Custom_Filters.template_data_json.is_favorite = is_favorite;
+		Ticket_Custom_Filters.template_data_json.is_spam = is_spam;
 
 		if(callback)
-			callback(dataJSON);
+			callback();
 	},
 
 	changeDueDate: function(epoch_time){

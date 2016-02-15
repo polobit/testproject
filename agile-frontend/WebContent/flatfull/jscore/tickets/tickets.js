@@ -1,4 +1,5 @@
-var Group_ID = null, Current_Ticket_ID = null, Ticket_Filter_ID = null, Tickets_Util = {}, Sort_By = "-", Sort_Field = 'last_updated_time', Ticket_Position= null;
+var Group_ID = null, Current_Ticket_ID = null, Ticket_Filter_ID = null, 
+	Tickets_Util = {}, Sort_By = "-", Sort_Field = 'last_updated_time', Ticket_Position= null;
 var popoverFunction = undefined, Helpdesk_Enabled = false;
 
 var Tickets = {
@@ -17,8 +18,12 @@ var Tickets = {
 
 				$('#content').html($(template_ui));	
 
+				var json = {};
+				json.sort_by = Sort_By;
+				json.sort_field = Sort_Field;
+
 				//Fetching ticket toolbar template
-				getTemplate("tickets-toolbar-container", {isSingleRowView: Tickets.isSingleRowView()}, undefined, function(toolbar_ui){
+				getTemplate("tickets-toolbar-container", json, undefined, function(toolbar_ui){
 
 					if(!toolbar_ui)
 			  			return;
@@ -81,7 +86,7 @@ var Tickets = {
 				sort_collection: false,
 				templateKey : Tickets.isSingleRowView() ? 'ticket-single-row' : 'ticket',
 				customLoader: true,
-				custom_scrollable_element: '#ticket-model-list',
+				custom_scrollable_element: '.ticket-collection-container',
 				customLoaderTemplate: 'ticket-collection-loader',
 				individual_tag_name : 'tr',
 				cursor : true,
@@ -162,7 +167,7 @@ var Tickets = {
 
 				Ticket_Filters.renderFiltersCollection(function(){
 
-					$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
+					$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.render(true).el);
 					
 					Tickets.setCountText();
 
@@ -818,10 +823,24 @@ var Tickets = {
 
 					if($("#ticket-activities-model-list").length > 0)
 						App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
-				
+					
+					if(App_Ticket_Module.ticketsCollection){
+						//Updating model collection
+						var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
+	            		var cc_emails = ticket_model.get('cc_emails');
+
+	            		if("add" == command){
+	            			cc_emails.push(email);
+	            		}else{
+							cc_emails.splice(cc_emails.indexOf(cc_emails), 1);
+	            		}
+
+	            		//Settting update cc emails back to current ticket model
+	            		ticket_model.set({cc_emails: cc_emails}, {silent : true});
+	            	}
+
 					if(callback)
 						callback(model);
-
 				}
 			});
 	},
@@ -911,18 +930,16 @@ var Tickets = {
 
 	closeTicket : function(e){
 
-
 		this.changeStatus("CLOSED", function(){
 
-				showNotyPopUp('information', "Ticket has been closed", 'bottomRight', 5000);
+			showNotyPopUp('information', "Ticket has been closed", 'bottomRight', 5000);
 
-				var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
-					'/' + (Ticket_Status ? Ticket_Status : 'new');
+			var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
+				'/' + (Ticket_Status ? Ticket_Status : 'new');
 
-				Backbone.history.navigate(url, {trigger : true});
+			Backbone.history.navigate(url, {trigger : true});
 
-			});
-		
+		});
 	},
 
 	deleteTicket: function(e){

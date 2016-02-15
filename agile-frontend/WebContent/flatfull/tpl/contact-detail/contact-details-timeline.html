@@ -564,9 +564,13 @@
                 <div class="contact-job-title text-base custom-color">
                     <i class="fa fa-ticket text-muted text-muted p-r-xs" title="Ticket created">
                     </i> Ticket#{{id}} created
+                    <div class="pull-right" style="font-size:11px;margin-top: 3px; text-transform: initial;">
+                        <i class="fa fa-clock-o m-r-xs"></i> {{epochToHumanDate "hh:MM tt" created_time}}
+                    </div>
                 </div>
             </div>
-            <div class="date">{{epochToTaskDate created_time}}</div>
+            
+            <div class="date" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}">{{epochToTaskDate created_time}}</div>
             <div class="body">
                  <div class="text-xs ">{{subject}}</div>
                 <div class="text-xs ">{{first_notes_text}}</div>
