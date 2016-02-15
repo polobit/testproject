@@ -10,17 +10,6 @@
         </div>  
     </td>
 
-    <td>
-        <div class="table-resp">
-            <div class="pull-left text-ellipsis" style="width: 55%;">
-                <a href="#email-reports/{{id}}" class="stop-propagation">Reports</a>
-            </div>
-            {{#if is_disabled}}
-            <div class="pull-left"><label class="label label-danger m-b-none">Disabled</label></div>
-            {{/if}}
-        </div> 
-    </td>
-
     <td> 
         {{#if updated_time}}
         <div class="table-resp">
@@ -41,8 +30,19 @@
         {{/if}}
     </td> 
 
+    <td>
+        <div class="table-resp hide" id="camp_reports">
+            <div class="pull-left text-ellipsis" style="width: 55%;">
+                <a href="#email-reports/{{id}}" class="stop-propagation">Reports</a>
+            </div>
+            {{#if is_disabled}}
+            <div class="pull-left"><label class="label label-danger m-b-none">Disabled</label></div>
+            {{/if}}
+        </div> 
+    </td>
+
     <td>   
-    <div class="table-resp">
+    <div class="table-resp hide" id="camp_history">
         <div class="pull-left">
         <a href="#activities/campaign/{{id}}" class="stop-propagation" >History</a></div>
         </div>

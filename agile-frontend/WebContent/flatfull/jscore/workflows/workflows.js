@@ -563,6 +563,15 @@ function createJSON() {
             }
         });
 }
+$('body').on('mouseenter','#workflows-model-list', function(e){
+        $('#camp_history').removeClass('hide');
+        $('#camp_reports').removeClass('hide');
+    });
+
+$('body').on('mouseleave','#workflows-model-list', function(e){
+        $('#camp_history').addClass('hide');
+        $('#camp_reports').addClass('hide');
+    });
 
 function initializeWorkflowsListeners() {}
 
