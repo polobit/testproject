@@ -20,6 +20,7 @@ function agile_validations(){
 						inputNode.parentNode.insertBefore(spanTag,inputNode.nextSibling);
 					}
 				else if(inputNode.value && spans){
+					isValid = false;
 					document.getElementById("agile_span"+i).remove();		
 				}
 	}
