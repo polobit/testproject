@@ -2,6 +2,7 @@ package com.agilecrm.ticket.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,6 +25,7 @@ import org.jsoup.select.Elements;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.export.gcs.GCSServiceAgile;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
@@ -41,8 +43,10 @@ import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.AmazonS3;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsOutputChannel;
 import com.google.api.client.util.Base64;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
@@ -209,11 +213,19 @@ public class TicketWebhook extends HttpServlet
 						System.out.println("type: " + fileType);
 						System.out.println("base64: " + fileJSON.getBoolean("base64"));
 
-						JSONObject responseJSON = AmazonS3.SaveFile(fileName, fileType, fileJSON.getString("content")
-								.getBytes(StandardCharsets.UTF_8));
+						GcsFileOptions options = new GcsFileOptions.Builder().mimeType(fileType)
+								.contentEncoding("UTF-8").acl("public-read")
+								.addUserMetadata("domain", NamespaceManager.get()).build();
+
+						GCSServiceAgile service = new GCSServiceAgile(fileName, "ticket-attachments", options);
+
+						GcsOutputChannel writer = service.getOutputchannel();
+
+						writer.write(ByteBuffer.wrap(fileJSON.getString("content").getBytes(StandardCharsets.UTF_8)));
+						writer.close();
 
 						TicketDocuments document = new TicketDocuments(fileName, fileType, 0l,
-								responseJSON.getString("file_url"));
+								service.getFilePathToDownload());
 
 						attachmentURLs.add(document);
 					}
@@ -247,14 +259,23 @@ public class TicketWebhook extends HttpServlet
 						else
 							bytes = fileJSON.getString("content").getBytes();
 
-						JSONObject responseJSON = AmazonS3.SaveFile(fileName, fileType, bytes);
+						GcsFileOptions options = new GcsFileOptions.Builder().mimeType(fileType)
+								.contentEncoding("UTF-8").acl("public-read")
+								.addUserMetadata("domain", NamespaceManager.get()).build();
+
+						GCSServiceAgile service = new GCSServiceAgile(fileName, "ticket-attachments", options);
+
+						GcsOutputChannel writer = service.getOutputchannel();
+
+						writer.write(ByteBuffer.wrap(fileJSON.getString("content").getBytes(StandardCharsets.UTF_8)));
+						writer.close();
 
 						Elements elements = doc.getElementsByAttributeValue("src", "cid:" + fileName);
 
 						if (elements == null || elements.size() == 0)
 						{
 							TicketDocuments document = new TicketDocuments(fileName, fileType, 0l,
-									responseJSON.getString("file_url"));
+									service.getFilePathToDownload());
 
 							attachmentURLs.add(document);
 
@@ -263,7 +284,7 @@ public class TicketWebhook extends HttpServlet
 
 						Element element = elements.first();
 
-						element.attr("src", responseJSON.getString("file_url"));
+						element.attr("src", service.getFilePathToDownload());
 					}
 
 					html = doc.toString();
