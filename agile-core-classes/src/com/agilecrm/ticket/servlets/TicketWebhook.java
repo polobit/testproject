@@ -284,7 +284,7 @@ public class TicketWebhook extends HttpServlet
 
 						Element element = elements.first();
 
-						element.attr("src", responseJSON.getString("file_url"));
+						element.attr("src", service.getFilePathToDownload());
 					}
 
 					html = doc.toString();
