@@ -300,7 +300,7 @@ public class TicketsRest
 	{
 		try
 		{
-			List<Activity> activitys = ActivityUtil.getActivitiesByEntityId(EntityType.TICKET.toString(), ticketID, 0,
+			List<Activity> activitys = ActivityUtil.getActivitiesByEntityId(EntityType.TICKET.toString(), ticketID, 200,
 					null);
 
 			activitys = TicketsUtil.includeData(activitys);

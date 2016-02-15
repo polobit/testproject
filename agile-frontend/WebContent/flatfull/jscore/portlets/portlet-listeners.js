@@ -893,7 +893,7 @@ $('.portlet_body')
 						}
 					});
 
-	$('.gridster-portlets').on("click", '.portlet-settings', function(e) {
+	$('.gridster-portlets').off("click").on("click", '.portlet-settings', function(e) {
 		e.preventDefault();
 
 		portlet_utility.showPortletSettings(this.id);
@@ -946,6 +946,8 @@ function initializeAddPortletsListeners() {
 							"UserActivities" : updateImageS3Path("flatfull/img/dashboard_images/User-Activities.png"),
 							"Campaignstats" : updateImageS3Path("flatfull/img/dashboard_images/Campaign-stats.jpg"),
 							"DealGoals" : updateImageS3Path("flatfull/img/dashboard_images/Quota.png"),
+							"IncomingDeals" : updateImageS3Path("flatfull/img/dashboard_images/incoming-deals-new.png"),
+							"LostDealAnalysis" : updateImageS3Path("flatfull/img/dashboard_images/lost-deal-analysis-new.png")
 
 						};
 						var placements_json = {
@@ -956,7 +958,8 @@ function initializeAddPortletsListeners() {
 							"RevenueGraph" : "left",
 							"MiniCalendar" : "left",
 							"UserActivities" : "left",
-							"Campaignstats" : ""
+							"Campaignstats" : "",
+							"LostDealAnalysis" : "left"
 						};
 						if (placements_json[p_name]) {
 							placement = "left";

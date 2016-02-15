@@ -327,6 +327,18 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 					$("."+id_array[i]).fadeOut(300, function() { $(this).remove(); });				
 			}
 			
+			try{
+			if(App_Workflows.workflow_list_view && Current_Route == "workflows")
+				{
+				for(i=0;i<id_array.length;i++){
+				App_Workflows.workflow_list_view.collection.remove(id_array[i]);
+				$(App_Workflows.workflow_list_view.el).find(id_array[i]).closest("tr").remove();
+				}
+			}
+			}
+			catch(err)
+			{}
+
 			$('.thead_check').attr("checked", false);
 			
 			switch(url){

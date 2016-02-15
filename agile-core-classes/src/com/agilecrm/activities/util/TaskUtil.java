@@ -492,7 +492,9 @@ public class TaskUtil
 	    System.out.println("startTime: " + startTime);
 	    System.out.println("endTime: " + endTime);
 
-	    if (type.equalsIgnoreCase("OVERDUE"))
+	    if (type != null)
+	    {
+    	if (type.equalsIgnoreCase("OVERDUE"))
 	    {
 		searchMap.put("due <", startTime);
 	    }
@@ -510,12 +512,19 @@ public class TaskUtil
 	    {
 		searchMap.put("due >=", endTime + 86400);
 	    }
+	    }
 
 	    if (StringUtils.isNotBlank(owner))
 		searchMap.put("owner", new Key<DomainUser>(DomainUser.class, Long.parseLong(owner)));
 
 	    if (pending)
 		searchMap.put("is_complete", !pending);
+	    
+	    if(criteria != null && criteria.equalsIgnoreCase("CALENDAR"))
+	    {
+	    searchMap.put("due >=", startTime);
+		searchMap.put("due <", endTime);
+	    }
 
 	    if (max != null)
 		return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "due");

@@ -364,6 +364,10 @@ function saveCallActivitySkype(call){
 	}
 	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 	
+	if(call.status == "Answered"){
+		return;
+	}
+	
 	if(call.direction == "Outgoing" || call.direction == "outgoing"){
 		var callerObjectId = globalCall.contactedId;
 		if(!callerObjectId){
@@ -419,21 +423,32 @@ function saveCallNoteSkype(){
 	    	contact = responseJson;
 	    	contact_name = getContactName(contact);
 	    	if(callStatus == "Answered"){
-				var el = $('#noteForm');
+
+				var data = {};
+				data.url = "/core/api/widgets/skype/";
+				data.subject = noteSub;
+				data.number = number;
+				data.callType = "inbound";
+				data.status = "answered";
+				data.duration = duration;
+				data.contId = id;
+				data.contact_name = contact_name;
+				data.widget = "Skype";
+				showDynamicCallLogs(data);
+
+/*				var el = $('#noteForm');
 			 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ id +'">'+contact_name+'</li>');
 			 	$("#noteForm #subject").val(noteSub);
 					$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(duration));
 					$("#noteForm").find("#description").focus();
 				$('#noteModal').modal('show');
-				agile_type_ahead("note_related_to", el, contacts_typeahead);
+				agile_type_ahead("note_related_to", el, contacts_typeahead);*/
 	    	}else{
-				var note = {"subject" : noteSub, "message" : "", "contactid" : id};
+	    		var note = {"subject" : noteSub, "message" : "", "contactid" : id,"phone": number, "callType": "inbound", "status": callStatus, "duration" : 0 };
 				autosaveNoteByUser(note);
 	    	}
 	    });
-	    
 	}else{
-		
 		var cntId = globalCall.contactedId;
 		if(cntId){
 				if( callStatus == "Answered"){
@@ -442,20 +457,30 @@ function saveCallNoteSkype(){
 						if(json == null) {
 							return;
 						}
-
-
+						
 						contact_name = getContactName(json);
-
-					var el = $('#noteForm');
+						var data = {};
+						data.url = "/core/api/widgets/skype/";
+						data.subject = noteSub;
+						data.number = number;
+						data.callType = "outbound-dial";
+						data.status = "answered";
+						data.duration = duration;
+						data.contId = cntId;
+						data.contact_name = contact_name;
+						data.widget = "Skype";
+						showDynamicCallLogs(data);
+						
+/*					var el = $('#noteForm');
 				 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ cntId +'">'+contact_name+'</li>');
 				 	$("#noteForm #subject").val(noteSub);
 				 	$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(duration));
 						$("#noteForm").find("#description").focus();
 					$('#noteModal').modal('show');
-					agile_type_ahead("note_related_to", el, contacts_typeahead);
+					agile_type_ahead("note_related_to", el, contacts_typeahead);*/
 					});
 				}else{
-					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId};
+					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number, "callType": "outbound-dial", "status": callStatus, "duration" : 0 };
 					autosaveNoteByUser(note);
 				}
 		}

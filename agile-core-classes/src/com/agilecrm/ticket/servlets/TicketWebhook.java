@@ -181,10 +181,10 @@ public class TicketWebhook extends HttpServlet
 			String text = "", html = "";
 
 			if (msgJSON.has("text"))
-				text = msgJSON.getString("text");
+				text = msgJSON.getString("text").trim();
 
 			if (msgJSON.has("html"))
-				html = msgJSON.getString("html");
+				html = msgJSON.getString("html").trim();
 
 			// Check if any attachments exists
 			Boolean attachmentExists = msgJSON.has("attachments") || msgJSON.has("images");

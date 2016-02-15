@@ -1592,6 +1592,10 @@ $(function()
 	Handlebars.registerHelper('show_link_in_statement', function(value)
 	{
 
+        if(value){
+			value = value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		}
+
 		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 
 		try
@@ -1651,7 +1655,10 @@ $(function()
 
 	Handlebars.registerHelper('safe_string', function(data)
 	{
-
+		console.log("data = " + data);
+		if (data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
+				data = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		
 		data = data.replace(/\n/, "<br/>");
 		return new Handlebars.SafeString(data);
 	});
@@ -3745,23 +3752,6 @@ $(function()
 			return options.inverse(this);
 	});
 
-	Handlebars.registerHelper('show_link_in_statement', function(value)
-	{
-
-		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-
-		try
-		{
-			value = value.replace(exp, "<a href='$1' target='_blank' class='cd_hyperlink'>$1</a>");
-			return new Handlebars.SafeString(value);
-		}
-		catch (err)
-		{
-			return value;
-		}
-
-	});
-
 	/**
 	 * Returns table headings for custom contacts list view
 	 */
@@ -3790,13 +3780,6 @@ $(function()
 			console.log(App_Contacts.contactDetailView.model.toJSON());
 			return getPropertyValue(contact_properties, value);
 		}
-	});
-
-	Handlebars.registerHelper('safe_string', function(data)
-	{
-
-		data = data.replace(/\n/, "<br/>");
-		return new Handlebars.SafeString(data);
 	});
 
 	Handlebars.registerHelper('string_to_date', function(format, date)
@@ -5711,6 +5694,8 @@ $(function()
 	// function to compare integer values
 	Handlebars.registerHelper('ifCond', function(v1, type, v2, options)
 	{
+		if(!v1 || !v2)
+			return options.inverse(this);
 		switch (type) {
 		case "greaterthan":
 			if (parseInt(v1) > parseInt(v2))
@@ -5840,7 +5825,7 @@ $(function()
 			icon_name = 'icon-envelope';
 		else if (p_name == 'Emails Sent')
 			icon_name = 'icon-envelope';
-		else if (p_name == 'Growth Graph')
+		else if (p_name == 'Growth Graph' || p_name == 'Incoming Deals')
 			icon_name = 'icon-graph';
 		else if (p_name == 'Calls Per Person')
 			icon_name = 'icon-call-end';
@@ -5876,6 +5861,8 @@ $(function()
 			icon_name = 'icon-sitemap';
 		else if (p_name == 'Deal Goals')
 			icon_name = 'icon-flag';
+		else if (p_name == 'Lost Deal Analysis')
+			icon_name = 'icon-pie-chart';
 		return icon_name;
 	});
 	
@@ -6164,29 +6151,15 @@ $(function()
 	 */
 	Handlebars.registerHelper("isCurrentDeal", function(deal_id, options)
 	{
-		var dealId = App_Deal_Details.dealDetailView.model.id;
+
+		var dealId = '';
+		if (App_Deal_Details.dealDetailView)
+			dealId = App_Deal_Details.dealDetailView.model.id;
+
 		if (deal_id && deal_id == dealId)
 			return options.fn(this);
 
 		return options.inverse(this);
-	});
-	Handlebars.registerHelper('getDealNames', function(deals)
-	{
-		var html = '';
-		var currentDealId = 0;
-		if (App_Deal_Details.dealDetailView)
-			currentDealId = App_Deal_Details.dealDetailView.model.id;
-		$.each(deals, function(index, deal)
-		{
-			if (deal.id != currentDealId)
-			{
-				html += '<a href="#deal/' + deal.id + '">' + deal.name + '</a>';
-				if (index + 1 < deals.length)
-					html += ', ';
-			}
-		});
-		return html;
-
 	});
 
 	/**
@@ -6286,7 +6259,7 @@ $(function()
 	});
 	
 	Handlebars.registerHelper("getPlanLimits", function(key){
-		if(_billing_restriction.currentLimits.planName == "PRO")
+		if(_billing_restriction.currentLimits.planName == "PRO" || _billing_restriction.currentLimits.planName == "ENTERPRISE")
 			return "Unlimited";
 		else
 			return _billing_restriction.currentLimits[key];
@@ -6404,6 +6377,10 @@ $(function()
 		else if (duration == 'next-year')
 		{
 			time_period = 'Next Year';
+		}
+		else if (duration == 'last-year')
+		{
+			time_period = 'Last Year';
 		}
 		
 		return time_period;
@@ -6659,6 +6636,10 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
 	else if(p_name == 'Deal Goals')
 		description = 'See how much sales target you have achieved.'
+	else if(p_name == 'Incoming Deals')
+		description = 'See how your deal sources are performing over time.'
+	else if(p_name == 'Lost Deal Analysis')
+		description = 'Get insights into why deals were lost. Filter by owner, track and source.'
 	return description;
 			});
 
@@ -6981,12 +6962,39 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 
 	Handlebars.registerHelper('is_acl_allowed', function(options)
 	{
-		if(!_plan_restrictions.is_ACL_allowed[0]())
+		if(_plan_restrictions.is_ACL_allowed[0]() || checkForSpecialUsers())
+			return options.inverse(this);
+		else
+			return options.fn(this);
+	});
+	
+	Handlebars.registerHelper("check_admin_ip", function(options)
+	{
+		if($.inArray(CURRENTIP, IPCHECK) != -1)
 			return options.fn(this);
 		else
 			return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('getCredit', function(credit, options)
+	{
+		if(!credit)
+			return 0;
+		return (credit/100)*(-1).toFixed(2);
+	});
+
+	Handlebars.registerHelper('event_format_time', function(time, format, options)
+	{
+		return time.format(format);
+	});
+	Handlebars.registerHelper('dottedEventDescription', function(description, options)
+	{
+		return addDotsAtEnd(description);
+	});
+	Handlebars.registerHelper('get_template_type', function(template_name)
+	{
+		return new Handlebars.SafeString(getTemplate(template_name, this));
+	});
 
 Handlebars.registerHelper('is_IE_browser', function(options) {
 	     return (isIEBrowser() ? options.fn(this) : options.inverse(this));
@@ -7006,4 +7014,12 @@ function agile_is_mobile_browser(){
 	return false;
  }
 
+
+Handlebars.registerHelper('multiple_Property_Element_List', function(name, properties,id, options)
+		{
+
+			var matching_properties_list = agile_crm_get_List_contact_properties_list(name);
+			if (matching_properties_list.length > 0)
+				return options.fn(matching_properties_list);
+		});
 

@@ -109,7 +109,9 @@ var Ticket_Filters = {
 					return;
 				}
 
-				Ticket_Filter_ID =  App_Ticket_Module.ticketFiltersList.collection.at(0).id;
+				if(!Ticket_Filter_ID)
+					Ticket_Filter_ID =  App_Ticket_Module.ticketFiltersList.collection.at(0).id;
+
 				var url = '#tickets/filter/' + Ticket_Filter_ID;
 				Backbone.history.navigate(url, {trigger : false});
 

@@ -144,6 +144,12 @@ public class TicketNotes
 	 */
 	@NotSaved
 	public List<String> cc_emails = new ArrayList<String>();
+	
+	/**
+	 * Saves ticket close status when agent sending reply
+	 */
+	@NotSaved
+	public boolean close_ticket = false;
 
 	/**
 	 * Default constructor

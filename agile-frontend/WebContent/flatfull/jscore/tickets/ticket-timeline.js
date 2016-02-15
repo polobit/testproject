@@ -42,7 +42,7 @@ var Ticket_Timeline = {
 		collection.fetch({ success : function(){
 
 			// To timeline in sorting(dec) order
-			var data = new BaseCollection(collection.toJSON(), {sortKey : "created_time",descending:false}).toJSON();
+			var data = new BaseCollection(collection.toJSON(), {sortKey : "time",descending:true}).toJSON();
 
 			var $template = $(getTemplate("ticket-timeline", data));
 

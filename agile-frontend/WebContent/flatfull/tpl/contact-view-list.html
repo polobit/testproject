@@ -1,6 +1,6 @@
 <script id="contact-view-collection-template" type="text/html">
 
-	<div class="btn-group m-r-sm" id="contact-sorter">
+	<div class="btn-group m-r-sm">
 	<button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
     	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
     	{{#is_mobile}}
@@ -41,7 +41,6 @@
 <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
 {{/is_mobile}}
 -->
-
 	</div>
 </div>
 	
@@ -56,21 +55,7 @@
 	    
     	
 {{#is_mobile}}
-
-
 <ul id="contact-view-model-list" class="pull-right dropdown-menu">
-        	<li>
-            	<a href="#companies" class="DefaultView">Default</a>
-				<!-- a href="#contacts" class="GridView">Grid View</a -->
-        	</li>
-			<li class="divider"></li>
-			<li class="dropdown-submenu"><a>Sort By</a> </li>
-				
-			<li><a class="sort" id="comp-sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
-			<li><a class="sort" id="comp-sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
-			
-			
-			<li class="divider"></li>
         	<li>
             	<a href="#company-view-prefs">Add/Remove Columns</a>
         	</li>
@@ -78,21 +63,6 @@
 
     	{{else}}
     	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs">
-        	<li>
-            	<a href="#companies" class="DefaultView">Default</a>
-				<!-- a href="#contacts" class="GridView">Grid View</a -->
-        	</li>
-			<li class="divider"></li>
-			<li class="dropdown-submenu"><a data-toggle="dropdown" ontouchstart="contactSortTouch(event)">Sort By</a>
-				<ul class="dropdown-menu" id="contact-sort-views">
-					<li><a class="sort" id="comp-sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
-					<li><a class="sort" id="comp-sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
-					<li class="divider"></li>
-					<li><a class="sort comp-sort-by-name" id="comp-sort-by-name-desc" data="-name" href="#">Name Desc</a></li>
-					<li><a class="sort comp-sort-by-name" id="comp-sort-by-name-asc" data="name" href="#">Name Asc</a></li>
-				</ul>
-			</li>
-			<li class="divider"></li>
         	<li>
             	<a href="#company-view-prefs">Add/Remove Columns</a>
         	</li>
@@ -121,7 +91,6 @@
 			<i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
 		{{/is_mobile}}
 		-->
-		
 	
 	</div>
 	

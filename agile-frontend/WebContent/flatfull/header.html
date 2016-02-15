@@ -386,7 +386,7 @@
                
                
               </span>
-              <div class="pull-left text-ellipsis w-auto hidden-sm hidden-md" style="max-width:150px;"><span class="hidden-sm hidden-md"><%=domainUser.name%></span></div>
+              <div class="pull-left text-ellipsis w-auto hidden-sm hidden-md" style="max-width:150px;"><span class="hidden-sm hidden-md"><%=SafeHtmlUtil.sanitize(domainUser.name)%></span></div>
               <b class="caret"></b>									
 									 </a>
 								<ul class="dropdown-menu animated fadeInRight w">
@@ -417,7 +417,7 @@
 											<div class="pull-left">Theme & Layout</div><div class='pull-right shortcuts'>Shift + L</div><div class="clearfix"></div></a></li>
 									<li class="divider"></li>
 									<li><a href="#subscribe"><!-- <i class="icon-cog"></i> -->
-											<div class="pull-left">Upgrade</div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
+											<div class="pull-left">Plan & Upgrade</div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
 									<li><a href="https://www.agilecrm.com/product-updates" target="_blank"><!-- <i class="icon-off"></i> -->
 											<div class="pull-left">Product Updates</div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
 									<li><a href="#help"><!-- <i class="icon-off"></i> -->

@@ -956,6 +956,16 @@ public class TicketsUtil
 
 		for (Activity activity : activitys)
 		{
+			if (!assigneeList.containsKey(activity.domainUserID))
+			{
+				DomainUser temp = DomainUserUtil.getDomainUser(activity.domainUserID);
+
+				if (temp != null)
+					assigneeList.put(activity.domainUserID, temp);
+			}
+
+			activity.domainUser = assigneeList.get(activity.domainUserID);
+			
 			switch (activity.activity_type)
 			{
 			case TICKET_LABEL_ADD:
@@ -1078,7 +1088,7 @@ public class TicketsUtil
 					CreatedBy.CUSTOMER, false, "[142.152.23.23]", new ArrayList<Key<TicketLabels>>());
 
 			String htmlText = plainText.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
-			
+
 			// Creating new Notes in TicketNotes table
 			TicketNotesUtil.createTicketNotes(ticket.id, group.id, null, CREATED_BY.REQUESTER, "Customer",
 					"customer@domain.com", plainText, htmlText, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>());

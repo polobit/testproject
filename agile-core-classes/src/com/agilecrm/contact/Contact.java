@@ -21,6 +21,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.util.EmailBounceStatusUtil;
+import com.agilecrm.contact.util.CompanyUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.contact.util.TagUtil;
@@ -249,7 +250,7 @@ public class Contact extends Cursor
     public static final String WEBSITE = "website";
     public static final String ADDRESS = "address";
     public static final String PHONE = "phone";
-	public static final String SKYPEPHONE = "skypePhone";
+    public static final String SKYPEPHONE = "skypePhone";
     public static final String IMAGE = "image";
 
     /**
@@ -423,6 +424,11 @@ public class Contact extends Cursor
     {
 
 	Long time = System.currentTimeMillis();
+
+	if (type == Type.COMPANY && oldContact != null)
+	{
+	    CompanyUtil.checkAndUpdateCompanyName(oldContact, this);
+	}
 
 	// Execute trigger for contacts
 	ContactTriggerUtil.executeTriggerToContact(oldContact, this);

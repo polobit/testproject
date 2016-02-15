@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -189,6 +190,18 @@ public class Activity extends Cursor
 	 */
 	@NotSaved
 	public TicketLabels ticket_label = null;
+	
+	/**
+	 * saves domain user who performed the operation
+	 */
+	@NotSaved
+	public DomainUser domainUser = null;
+	
+	/**
+	 * saves domain user id who performed the operation
+	 */
+	@NotSaved
+	public Long domainUserID = null;
 
 	/**
 	 * Util attributes to send data to client when changed assignee
@@ -294,7 +307,13 @@ public class Activity extends Cursor
 	    user = new Key<DomainUser>(DomainUser.class, userInfo.getDomainId());
 	}
     }
-
+    
+    @PostLoad
+	private void postLoad()
+	{
+		if (user != null)
+			domainUserID = user.getId();
+	}
     /*
      * (non-Javadoc)
      * 

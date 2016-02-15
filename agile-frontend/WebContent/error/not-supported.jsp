@@ -35,12 +35,12 @@
 
   <body style=" background-color:#f6f6f6; font-family:Source Sans Pro, Helvetica Neue, Helvetica, Arial, sans-serif; margin:0; padding:0;">
    
+<div style="text-align:center;">
 	<div class="container">
-
-		<div class="error-cont-main">
+	    <div class="error-cont-main">
 			 
 				<h2>Wait!</h2> 
-				<h3 style="margin-top:-10px; line-height: 25px;">Agile CRM currently does not support Internet Explorer and Safari on Windows OS<br>
+				<h3 style="margin-top:-10px; line-height: 24px; font-size:18px;">Agile CRM currently does not support Internet Explorer and Safari on Windows OS<br>
 				<small style="font-weight: normal;">
 					You may use any recent version of  <a href="https://support.google.com/chrome/answer/95346?hl=en">Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/features">Firefox</a> or <a href="http://support.apple.com/kb/dl1531">Safari</a> (Mac only).
 				</small>
@@ -48,5 +48,6 @@
 			 
 		</div>
 	</div>
+</div>
   </body>
 </html>

@@ -70,7 +70,7 @@ public class TicketCannedMessagesRest
 	 */
 	@POST
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String createCannedMessgae(TicketCannedMessages cannedMessage)
+	public TicketCannedMessages createCannedMessgae(TicketCannedMessages cannedMessage)
 	{
 		try
 		{
@@ -101,7 +101,7 @@ public class TicketCannedMessagesRest
 
 			TicketCannedMessages.dao.put(cannedMessage);
 
-			return new JSONObject().put("status", "success").toString();
+			return cannedMessage;
 		}
 		catch (Exception e)
 		{
@@ -118,7 +118,7 @@ public class TicketCannedMessagesRest
 	 */
 	@PUT
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String updateCannedMessgae(TicketCannedMessages cannedMessage)
+	public TicketCannedMessages updateCannedMessgae(TicketCannedMessages cannedMessage)
 	{
 		try
 		{
@@ -159,7 +159,7 @@ public class TicketCannedMessagesRest
 
 			TicketCannedMessages.dao.put(cannedMessage);
 
-			return new JSONObject().put("status", "success").toString();
+			return cannedMessage;
 		}
 		catch (Exception e)
 		{

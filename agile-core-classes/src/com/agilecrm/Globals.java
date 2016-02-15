@@ -200,12 +200,9 @@ public class Globals
     // Sandbox Keys Paypal.
 	//	public static final String PAYPAL_CLIENT_ID = "AdinLitMf9_3K9nwxTQEs5KyBom16l6EuR4FHy8vefth7Lup57d07e80Rz1tbt6gABT-l9jgEykvOVhr";
 	//	public static final String PAYPAL_SECRET_ID = "EGyp6P-kmdaDsoNUK2F2nYs5-RifRg3nhPJkmzai-TRqpRmTpj3lm4NG6pw_B08IJSdpv5pfGfWQF1Bb";
-
+	public static final String GRAVATAR_SECURE_DEFAULT_IMAGE_URL = "https://clickdesk.agilecrm.com/flatfull/images/flatfull/user-default.jpg";
 	// Inbound email address suffix
 	public static final String INBOUND_EMAIL_SUFFIX = "@helptor.com";
 	// Gravatar image URL
 	public static final String GRAVATAR_SECURE_IMAGE_URL = "https://secure.gravatar.com/avatar/"; 
-
-	// Default image url
-	public static final String GRAVATAR_SECURE_DEFAULT_IMAGE_URL = "https://clickdesk.agilecrm.com/flatfull/images/flatfull/user-default.jpg";
 }

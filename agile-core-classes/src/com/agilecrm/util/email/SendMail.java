@@ -128,6 +128,10 @@ public class SendMail
     public static final String TICKET_REPLY = "ticket_reply_email";
     public static final String TICKET_SEND_EMAIL_TO_USER = "ticket_send_email_to_user";
     
+	// For campaign sharing
+	public static final String SHARE_CAMPAIGN_CONFIRMATION = "share_campaign_confirmation";
+	public static final String SHARE_CAMPAIGN_SUBJECT = " Campaign Shared - Agile CRM";
+
     /**
      * From Name of email.
      */
@@ -136,7 +140,7 @@ public class SendMail
     /**
      * From Email-id of email.
      */
-    public static final String AGILE_FROM_EMAIL = "noreply@agilecrm.com";
+    public static final String AGILE_FROM_EMAIL = "noreply@agilecrm.com  ";
 
     /**
      * Templates path where template files exist.

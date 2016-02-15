@@ -16,6 +16,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.examples.HtmlToPlainText;
+import org.jsoup.nodes.Document;
 
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
@@ -73,6 +76,8 @@ public class TicketNotesRest
 	{
 		try
 		{
+			Long currentTime = Calendar.getInstance().getTimeInMillis();
+
 			Long ticketID = notes.ticket_id;
 
 			if (notes.html_text != null)
@@ -91,7 +96,6 @@ public class TicketNotesRest
 			// Converting html text to plain with jsoup
 			// Document doc = Jsoup.parse(notes.html_text, "UTF-8");
 			// String plain_text = new HtmlToPlainText().getPlainText(doc);
-
 			String plain_text = notes.html_text;
 
 			TicketNotes ticketNotes = new TicketNotes();
@@ -108,11 +112,9 @@ public class TicketNotesRest
 			}
 			else
 			{
-				Long ticketUpdatedTime = Calendar.getInstance().getTimeInMillis();
-
 				// Updating existing ticket
-				ticket = TicketsUtil.updateTicket(ticketID, notes.cc_emails, plain_text, LAST_UPDATED_BY.AGENT,
-						ticketUpdatedTime, null, ticketUpdatedTime,
+				ticket = TicketsUtil.updateTicket(ticketID, ticket.cc_emails, plain_text, LAST_UPDATED_BY.AGENT,
+						currentTime, null, currentTime,
 						(notes.attachments_list != null && notes.attachments_list.size() > 0) ? true : false);
 
 				Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
@@ -121,8 +123,8 @@ public class TicketNotesRest
 				{
 					ticket.assignee_id = domainUserKey;
 					ticket.assigneeID = domainUserKey.getId();
-					ticket.assigned_time = ticketUpdatedTime;
-					ticket.first_replied_time = ticketUpdatedTime;
+					ticket.assigned_time = currentTime;
+					ticket.first_replied_time = currentTime;
 
 					// Logging status changed activity
 					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
@@ -147,8 +149,23 @@ public class TicketNotesRest
 								ticket.id, Status.OPEN.toString(), Status.PENDING.toString(), "status");
 				}
 
-				// Set status to pending as it is replied by assignee
-				ticket.status = Status.PENDING;
+				Status oldStatus = null;
+
+				// If send reply and close ticket is selected
+				if (notes.close_ticket)
+				{
+					oldStatus = ticket.status;
+
+					ticket.closed_time = currentTime;
+
+					// Set status to pending as it is replied by assignee
+					ticket.status = Status.CLOSED;
+				}
+				else
+				{
+					// Set status to pending as it is replied by assignee
+					ticket.status = Status.PENDING;
+				}
 
 				// Updating ticket entity
 				Tickets.ticketsDao.put(ticket);
@@ -169,6 +186,16 @@ public class TicketNotesRest
 
 				// Execute note created by user trigger
 				TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);
+
+				if (notes.close_ticket)
+				{
+					// Logging ticket closed activity
+					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+							oldStatus.toString(), Status.CLOSED.toString(), "status");
+
+					// Execute note closed by user trigger
+					TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
+				}
 			}
 
 			ticketNotes.domain_user = DomainUserUtil.getDomainUser(ticket.assigneeID);

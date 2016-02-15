@@ -45,7 +45,7 @@ public class BriaWidgetAPI
 	    	if (!(StringUtils.isBlank(phone))){
 	    		Contact contact = ContactUtil.searchContactByPhoneNumber(phone);
 
-	    		if (direction.equalsIgnoreCase("Outgoing"))
+	    		if (direction.equalsIgnoreCase("Outgoing") || direction.equalsIgnoreCase("outbound-dial"))
 	    		{
 	    		    ActivityUtil.createLogForCalls("Bria", phone, Call.OUTBOUND, status.toLowerCase(), duration);
 
@@ -53,7 +53,7 @@ public class BriaWidgetAPI
 	    		    CallTriggerUtil.executeTriggerForCall(contact, "Bria", Call.OUTBOUND, status.toLowerCase(), duration);
 	    		}
 
-	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("Missed"))
+	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("Missed") || direction.equalsIgnoreCase("inbound"))
 	    		{
 	    		    ActivityUtil.createLogForCalls("Bria", phone, Call.INBOUND, status.toLowerCase(), duration);
 
@@ -82,7 +82,7 @@ public class BriaWidgetAPI
 	    		if(null == contact){
 	    			return "";
 	    		}
-	    		if (direction.equalsIgnoreCase("Outgoing"))
+	    		if (direction.equalsIgnoreCase("Outgoing") || direction.equalsIgnoreCase("outbound-dial"))
 	    		{
 	    		    ActivityUtil.createLogForCalls("Bria", phone, Call.OUTBOUND, status.toLowerCase(), duration, contact);
 
@@ -90,7 +90,7 @@ public class BriaWidgetAPI
 	    		    CallTriggerUtil.executeTriggerForCall(contact, "Bria", Call.OUTBOUND, status.toLowerCase(), duration);
 	    		}
 
-	    		if (direction.equalsIgnoreCase("Incoming"))
+	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("inbound"))
 	    		{
 	    			ActivityUtil.createLogForCalls("Bria", phone, Call.INBOUND, status.toLowerCase(), duration, contact);
 

@@ -24,17 +24,15 @@
 
 			        	{{#if_equals activity_type 'TICKET_CREATED'}}
 			        		<img class="r-5x" src="{{nameAvatar contact.properties 30}}" onerror="image_error(this);" 
-			        		_data-name="{{#if contact}}{{getPropertyValue contact.properties "first_name"}}{{getPropertyValue contact.properties "last_name"}}{{else}}Requester
-					                {{/if}}"/>
+			        		_data-name="{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}{{this.contactname}}{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}"/>
 			        	{{/if_equals}}
 
 			        	{{#if_equals activity_type 'TICKET_REQUESTER_REPLIED'}}
-			        			<img class="img-inital r-5x" src="{{nameAvatar contact.properties 30}}" onerror="image_error(this);" _data-name="{{#if contact}}{{getPropertyValue contact.properties "first_name"}}{{getPropertyValue contact.properties "last_name"}}{{else}}Requester
-					                {{/if}}"/>
+			        			<img class="img-inital r-5x" src="{{nameAvatar contact.properties 30}}" onerror="image_error(this);" _data-name="{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}{{this.contactname}}{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}"/>
 			        	{{/if_equals}}
 
 			        	{{#if_equals activity_type 'TICKET_ASSIGNEE_REPLIED'}}
-			        		<img class="r-5x" src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}"/>
+			        		<img class="r-5x" src="{{#if domainUser.name}}{{domainUser.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}"/>
 
 			        	{{/if_equals}}
 
@@ -53,7 +51,7 @@
 			            <a href="javascript:;">
 
 			           	 {{#if_equals activity_type 'TICKET_ASSIGNEE_REPLIED'}}
-				            <span class="first-letter-cap inline-block">{{user.name}}</span> replied to ticket
+				            <span class="first-letter-cap inline-block">{{domainUser.name}}</span> replied to ticket
 				         {{/if_equals}}
 
 				         {{#if_equals activity_type 'TICKET_REQUESTER_REPLIED'}}
@@ -90,8 +88,8 @@
 
 			        <a class="pull-left thumb-xs m-l-n-md">
 
-		        		<img class="r-5x" src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" 
-			        				data-original-title="{{user.name}}"/>
+		        		<img class="r-5x" src="{{#if domainUser.name}}{{domainUser.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" 
+			        				data-original-title="{{domainUser.name}}"/>
 			        	
 			        </a>  
 			        <div class="m-l-lg panel b-a {{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}bg-lightyellow{{/if_equals}} ">
@@ -117,7 +115,8 @@
 						    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_GROUP_CHANGED'}}
-					                Ticket group changed to <span class="first-letter-cap">{{new_group.group_name}}</span>
+					                Ticket group changed to <span class="first-letter-cap">
+					                {{new_group.group_name}}</span>
 						    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_STATUS_CHANGE'}}
@@ -150,34 +149,34 @@
 
 
 		                    {{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}
-		                        <span class="first-letter-cap inline-block">{{user.name}}</span>  added a note
+		                        <span class="first-letter-cap inline-block">{{domainUser.name}}</span>  added a note
 		                    {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_MARKED_FAVORITE'}}
-		                        <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as favorite
+		                    	<!-- <span class="first-letter-cap inline-block">{{domainUser.name}}</span>--> 
+		                        Marked as favorite
 		                    {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_MARKED_UNFAVORITE'}}
-		                        <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as unfavorite
+		                        <!-- <span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
+		                        Marked as unfavorite
 		                    {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_MARKED_SPAM'}}
-		                        <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as spam
+		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
+		                        Marked as spam
 		                    {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_MARKED_UNSPAM'}}
-		                        <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as unspam
+		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
+		                        Marked as unspam
 		                    {{/if_equals}}
 
 		                    {{#if_equals activity_type 'DUE_DATE_CHANGED'}}
-		                        <span class="first-letter-cap inline-block">{{user.name}}</span>  Changed due date to {{epochToHumanDate "mm/dd/yyyy" custom2}}
-			              		</span>
-		                    {{/if_equals}}
-
-		                    	
+		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
+		                        Changed due date to {{epochToHumanDate "mm/dd/yyyy" custom2}}
+		                    {{/if_equals}}	
 				        </a>
-			            
-
 			          </div>
 			          
 			          {{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}
@@ -185,7 +184,6 @@
 			          	<div class="word-break-full">{{convert_to_html custom2}}</div>
 			          </div>
 			          {{/if_equals}}
-			          
 			      </div>
 	        </div>
 

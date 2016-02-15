@@ -273,9 +273,6 @@
 
 	 	if (App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection){
 	 	   ticketModel = App_Ticket_Module.ticketsCollection.collection.get(id);
-
-	 	   console.log('Tcket model...');
-	 	   console.log(ticketModel.toJSON());
 	 	}
 	 
 	 	
@@ -824,7 +821,12 @@
 
  					initTicketCannedResponseEvents(el);
  				},
- 				saveCallback : function(){
+ 				saveCallback : function(model){
+
+ 					if(Ticket_Canned_Response.cannedResponseCollection){
+ 						Ticket_Canned_Response.cannedResponseCollection.add(model);
+ 					}
+
  					Backbone.history.navigate( "canned-responses", { trigger : true });
  				}
  			});
@@ -865,7 +867,7 @@
  					Ticket_Labels.showSelectedLabels(cannedResponse.toJSON().labels, $(el));
  					initTicketCannedResponseEvents(el);
  				},
- 				saveCallback : function(){
+ 				saveCallback : function(model){
  					Backbone.history.navigate( "canned-responses", { trigger : true });
  				}
  			});

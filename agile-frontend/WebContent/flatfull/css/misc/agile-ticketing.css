@@ -66,7 +66,7 @@
 
 .cc_emails_st{
 	border: none;
-	width: 9em !important;
+	width: 15em !important;
 }
 
 .boder-btm-dot{
@@ -498,6 +498,10 @@ body .app-content, #notes-collection-container {
 
 .public-notes-container:HOVER .show-original-div{
   display: block;
+}
+
+div.chosen-container>ul.chosen-choices{
+  height: initial !important;
 }
 
 .plain-text-comment a{

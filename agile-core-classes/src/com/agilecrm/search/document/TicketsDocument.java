@@ -89,21 +89,25 @@ public class TicketsDocument implements BuilderInterface
 				// Set due date
 				document.addField(Field.newBuilder().setName("due_date").setNumber(Math.floor(ticket.due_time / 1000)));
 
-			// Set ticket last updated time
-			document.addField(Field.newBuilder().setName("last_updated_time")
-					.setNumber(Math.floor(ticket.last_updated_time / 1000)));
+			if (ticket.last_updated_time != null)
+				// Set ticket last updated time
+				document.addField(Field.newBuilder().setName("last_updated_time")
+						.setNumber(Math.floor(ticket.last_updated_time / 1000)));
 
-			// Set ticket first replied time
-			document.addField(Field.newBuilder().setName("first_replied_time")
-					.setNumber(Math.floor(ticket.first_replied_time / 1000)));
+			if (ticket.first_replied_time != null)
+				// Set ticket first replied time
+				document.addField(Field.newBuilder().setName("first_replied_time")
+						.setNumber(Math.floor(ticket.first_replied_time / 1000)));
 
-			// Set ticket last agent updated time
-			document.addField(Field.newBuilder().setName("last_agent_replied_time")
-					.setNumber(Math.floor(ticket.last_agent_replied_time / 1000)));
+			if (ticket.last_agent_replied_time != null)
+				// Set ticket last agent updated time
+				document.addField(Field.newBuilder().setName("last_agent_replied_time")
+						.setNumber(Math.floor(ticket.last_agent_replied_time / 1000)));
 
-			// Set ticket last customer updated time
-			document.addField(Field.newBuilder().setName("last_customer_replied_time")
-					.setNumber(Math.floor(ticket.last_customer_replied_time / 1000)));
+			if (ticket.last_customer_replied_time != null)
+				// Set ticket last customer updated time
+				document.addField(Field.newBuilder().setName("last_customer_replied_time")
+						.setNumber(Math.floor(ticket.last_customer_replied_time / 1000)));
 
 			// Set ticket last updated by
 			document.addField(Field.newBuilder().setName("last_updated_by").setText(ticket.last_updated_by.toString()));
@@ -138,14 +142,14 @@ public class TicketsDocument implements BuilderInterface
 			// Set requester email
 			document.addField(Field.newBuilder().setName("requester_email").setText(requesterEmail));
 
-			if(ticket.is_favorite)
+			if (ticket.is_favorite)
 				document.addField(Field.newBuilder().setName("is_favorite").setText("true"));
-			
-			if(ticket.is_spam)
+
+			if (ticket.is_spam)
 				document.addField(Field.newBuilder().setName("is_spam").setText("true"));
-			
+
 			// Set mail content
-			//document.addField(Field.newBuilder().setName("mail_content").setText(plainText));
+			// document.addField(Field.newBuilder().setName("mail_content").setText(plainText));
 
 			// Set mail subject
 			document.addField(Field.newBuilder().setName("subject").setText(ticket.subject));

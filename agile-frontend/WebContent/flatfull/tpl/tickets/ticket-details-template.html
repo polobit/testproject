@@ -186,10 +186,12 @@
 
                     <div class="col-md-12 p-n m-b-xxs"> 
                       <span class="sla-text">Due Date</span>
-                      <!-- <a id="change-sla" href="javascript:void(0);" class="text-info">Change</a> -->
+                      <a class="link-color pull-right text-xs remove-date {{#if due_time}}{{else}}display-none{{/if}}" href="javascript:void(0);">
+                        remove
+                      </a>
                     </div>
                       
-                    <input type="text" class="form-control text-xs" id="ticket_change_sla" placeholder="Select date" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}"  {{#if_equals status "CLOSED"}}READONLY{{/if_equals}}/>
+                    <input type="text" class="form-control text-xs" id="ticket_change_sla" placeholder="Select date" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}" {{#if_equals status "CLOSED"}}READONLY{{/if_equals}}/>
 
                     <div class="col-md-12 p-n">
                       <div class="col-md-3 p-n">
