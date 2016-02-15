@@ -192,7 +192,7 @@
     {{#if id}}
 <form id="stripe-prefs-form" class="m-b">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked: {{userName}}</div>
+          <div>Account Linked: <div class="text-ellipsis" title={{userName}}>{{userName}}</div></div>
 			<br>
           
              	<div class="control-group form-group">
@@ -420,7 +420,7 @@
     {{#if id}}
 <form id="quickbook-form">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked: {{userName}} </div>
+          <div>Account Linked: <div class="text-ellipsis" title={{userName}}>{{userName}}</div> </div>
 	
           <br>
              	<div class="control-group form-group">
@@ -541,7 +541,7 @@
     {{#if id}}
 <form id="xero-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked: {{userName}} </div>
+          <div>Account Linked: <div class="text-ellipsis" title={{userName}}>{{userName}} </div></div>
 	
           
              	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
