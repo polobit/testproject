@@ -28,7 +28,7 @@ for ( var i = 0; i < ca.length; i++)
 
 	// Check if nameEQ starts with c, if yes unescape and return its value
 	if (c.indexOf(nameEQ) == 0)
-		return unescape(c.substring(nameEQ.length, c.length));
+		return unescape_html(unescape(c.substring(nameEQ.length, c.length)));
 }
 return null;
 }
@@ -181,36 +181,15 @@ value = JSON.parse(value);
 
 if (value instanceof Array) {
 for ( var i = 0; i < value.length; i++) {
-value[i] =stringifyObj(escape_json_values(value[i]));
+value[i] =escape_json_values(value[i]);
 }
 
 } else if (typeof value == "object") {
-return stringifyObj(escape_json_values(value));
+return escape_json_values(value);
 }
 
 return value;
 }
-
-function stringifyObj(obj) {
-
-if (!obj)
-return obj;
-
-var str = "[";
-for ( var i = 0; i < obj.length; i++) {
-if (obj[i] instanceof Array)
-stringifyObj(obj[i]);
-else
-str += JSON.stringify(obj[i])
-+ ((i != (obj.length - 1)) ? "," : "");
-}
-str += "]";
-
-return str;
-
-}
-
-
 
 function escape_html (html_string) {
 if (!html_string)
@@ -226,11 +205,21 @@ function escape_json_values (json) {
 
 if (!json)
 return;
-
-for (key in json) {
-if(!typeof json[key] =="number")
-json[key] = this.escape_html(json[key]);
+try{
+json=JSON.stringify(json);
+}catch(e){
+	return escape_html(json);
 }
 
-return json;
+return escape_html(json);
+}
+
+function unescape_html (html_string) {
+if (!html_string)
+return;
+
+html_string = html_string.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#34;/g, "\"").replace(/&#039;/g,"'");
+
+return html_string;
+
 }
