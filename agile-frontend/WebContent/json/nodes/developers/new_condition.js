@@ -2,8 +2,8 @@
     "name": "Condition",
     "thumbnail": "json/nodes/images/sms/Condition.png",
     "icon": "json/nodes/icons/sms/Condition.png",
-    "info": "Check for Multiple Conditions in Your Workflow.",
-    "help": "Check for Multiple Conditions in Your Workflow.",
+    "info": "Check for multiple conditions in your workflow.",
+    "help": "Check for multiple conditions in your workflow.",
     "author": "john",
     "company": "Invox",
     "language": "en",
@@ -57,7 +57,7 @@
                     "category": "Settings",
                     "id": "new_field1",
                     "class":"new_field1",
-                    "name": "and_variable_1",
+                    "name": "and_variable",
                     "title": "E.g. {{score}}, {{company}}, <br>{{your custom field}}",
                     "fieldType": "input",                    
                     "type": "text"
@@ -140,7 +140,7 @@
                    "category": "Settings",
                    "id": "new_field2",
                    "class":"new_field2",
-                   "name": "or_variable_1",
+                   "name": "or_variable",
                    "title": "E.g. {{score}}, {{company}}, <br>{{your custom field}}",
                    "fieldType": "input",
                    "type": "text"
@@ -178,7 +178,7 @@
 				]
 		},
         {
-            "label": "Check for Multiple Conditions in Your Workflow.",
+            "label": "Check for multiple conditions in your workflow.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

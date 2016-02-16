@@ -138,8 +138,10 @@ function generateGridUI(container, uiFieldDefinition) {
     // Add and delete elements
     var addId = uiFieldDefinition.name + '-add';    
     var addHTML = "<button id='" + addId + "'>Add</button>";
-
-
+    
+    if(tableId == "and_key_grid-table" ){
+    	addHTML += "&nbsp; &nbsp; &nbsp; &nbsp; <label for="and_label"> And </label>";
+    }
 	
 
     // Populate Default values

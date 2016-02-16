@@ -141,7 +141,7 @@ public class NewCondition extends TaskletAdapter
 
 			String ifType = andParamJSON.getString("and_if_type");
 			//String conditionMerge = andParamJSON.getString("and_condition_merge");
-			String variable1 = andParamJSON.getString("and_variable_1");
+			String variable1 = andParamJSON.getString("and_variable");
 			String comparator = andParamJSON.getString("and_comparator");
 			String variable2 = andParamJSON.getString("and_variable_2");
 			flag1 = flag1 & evaluateExpression(variable1, variable2, ifType,comparator);
@@ -174,7 +174,7 @@ public class NewCondition extends TaskletAdapter
 
 					String ifType = orParamJSON.getString("or_if_type");
 					//String conditionMerge = orParamJSON.getString("or_condition_merge");
-					String variable1 = orParamJSON.getString("or_variable_1");
+					String variable1 = orParamJSON.getString("or_variable");
 					String comparator = orParamJSON.getString("or_comparator");
 					String variable2 = orParamJSON.getString("or_variable_2");
 					flag2 = flag2 | evaluateExpression(variable1, variable2, ifType,comparator);
