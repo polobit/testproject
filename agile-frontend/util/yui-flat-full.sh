@@ -30,10 +30,10 @@ cat ../WebContent/flatfull/controllers/app.js >> ../WebContent/jscore/min/flatfu
 
 cat ../WebContent/stats/js/*.js > ../WebContent/stats/min/agile-min.js
 
-java -jar yuicompressor-2.4.7.jar ../WebContent/stats/min/agile-min.js --type js -o  ../WebContent/stats/min/agile-min.js
+#java -jar yuicompressor-2.4.7.jar ../WebContent/stats/min/agile-min.js --type js -o  ../WebContent/stats/min/agile-min.js
 
 
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min.js
+#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min.js
 
 
 

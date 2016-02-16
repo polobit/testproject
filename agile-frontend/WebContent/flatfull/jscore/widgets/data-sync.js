@@ -161,9 +161,18 @@ var DATA_SYNC_FORCE_FETCH=false;
 fetches the model from collection if collection exists
 else fetchs colection and returns model
 */
-function getSyncModelFromName(name, callback){
+function getSyncModelFromName(name, callback,modelfetch){
 
        // Checks force fetch
+       if(modelfetch && !DATA_SYNC_FORCE_FETCH){
+       	var base_model=new Base_Model_View(
+					{
+						url : '/core/api/contactprefs/'+name
+					});
+       	base_model.model.fetch({ success : function(data){
+       	App_Datasync.agile_sync_collection_view.collection.add(data.toJSON());
+       }});
+       }
        if(DATA_SYNC_FORCE_FETCH){
        		DATA_SYNC_FORCE_FETCH=false;
 

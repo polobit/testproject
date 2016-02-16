@@ -109,7 +109,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                 }
             });
-        });
+        },true);
 
 
     },
