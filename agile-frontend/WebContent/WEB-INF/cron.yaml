@@ -112,3 +112,8 @@ cron:
 - description: Webhooks Normal TEST Cron
   url: /backend/cron/cron-pull?q=webhooks-register-add-queue
   schedule: every 1 mins
+
+- description: Ticket SLA Cron
+  url: /backend/ticket/slacron
+  schedule: every day 00:00
+  target: agile-ticket-module

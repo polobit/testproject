@@ -28,4 +28,6 @@ public abstract class ITicketIdsFetcher implements Serializable
 	public abstract boolean hasNext();
 
 	public abstract Set<Key<Tickets>> next();
+	
+	public abstract int size();
 }

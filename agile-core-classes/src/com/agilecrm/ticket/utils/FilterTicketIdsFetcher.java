@@ -116,4 +116,10 @@ public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 		IndexSpec indexSpec = IndexSpec.newBuilder().setName("tickets").build();
 		return SearchServiceFactory.getSearchService().getIndex(indexSpec);
 	}
+
+	@Override
+	public int size()
+	{
+		return 0;
+	}
 }

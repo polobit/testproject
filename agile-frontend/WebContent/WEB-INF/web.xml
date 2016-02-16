@@ -971,6 +971,15 @@
 		<url-pattern>/backend/ticket/open</url-pattern>
 		<url-pattern>/ticket/open</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>TicketSLAServlet</servlet-name>
+		<servlet-class>>com.agilecrm.ticket.servlets.TicketSLAServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ActivityReports</servlet-name>
+		<url-pattern>/backend/ticket/slacron</url-pattern>
+	</servlet-mapping>
 	
 	<servlet-mapping>
 		<servlet-name>RemoteApiServlet</servlet-name>

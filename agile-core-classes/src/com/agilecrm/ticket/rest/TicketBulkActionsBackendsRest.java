@@ -20,7 +20,6 @@ import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
-import com.agilecrm.reports.deferred.ReportsDeferredTask;
 import com.agilecrm.ticket.deferred.ChangeAssigneeDeferredTask;
 import com.agilecrm.ticket.deferred.CloseTicketsDeferredTask;
 import com.agilecrm.ticket.deferred.DeleteTicketsDeferredTask;
@@ -36,9 +35,6 @@ import com.agilecrm.ticket.utils.ITicketIdsFetcher;
 import com.agilecrm.ticket.utils.TicketBulkActionUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 
 /**
@@ -315,25 +311,6 @@ public class TicketBulkActionsBackendsRest
 		catch (Exception e)
 		{
 			e.printStackTrace();
-		}
-	}
-
-	@GET
-	@Path("/execute-sla-cron")
-	public void executeSLACron()
-	{
-		try
-		{
-			Set<String> domains = NamespaceUtil.getAllNamespaces();
-			
-			for (String namespace : domains)
-			{
-				
-			}
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 }

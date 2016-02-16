@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -952,13 +953,20 @@ public class TicketsUtil
 	 * @throws Exception
 	 * 
 	 */
-	public static List<Tickets> getOverdueTickets() throws Exception
+	public static List<Key<Tickets>> getOverdueTickets() throws Exception
 	{
-		String query = "NOT status:" + Status.CLOSED + " AND due_time <=" + Calendar.getInstance().getTimeInMillis();
+		String query = "NOT status:" + Status.CLOSED + " AND due_time <=" + Calendar.getInstance().getTimeInMillis()/1000;
 
-		JSONObject keysJSON = new TicketsDocument().searchDocuments(query, "", "", 1000);
+		JSONObject resultJSON = new TicketsDocument().searchDocuments(query, "", "", 1000);
+		
+		JSONArray keysArray = resultJSON.getJSONArray("keys");
 
-		return null;
+		List<Key<Tickets>> keys = new ArrayList<Key<Tickets>>();
+
+		for (int i = 0; i < keysArray.length(); i++)
+			keys.add((Key<Tickets>) keysArray.get(i));
+
+		return keys;
 	}
 
 	public static List<Activity> includeData(List<Activity> activitys) throws Exception
