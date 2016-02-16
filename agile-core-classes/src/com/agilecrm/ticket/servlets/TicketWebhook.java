@@ -327,9 +327,7 @@ public class TicketWebhook extends HttpServlet
 
 						element.attr("src", service.getFilePathToDownload());
 						
-						String altText = element.attr("alt");
-						
-						plainText = plainText.replace("[image: " + cid + "]", element.html());
+						plainText = plainText.replace("[image: " + element.attr("alt") + "]", element.html());
 					}
 
 					html = doc.toString();
