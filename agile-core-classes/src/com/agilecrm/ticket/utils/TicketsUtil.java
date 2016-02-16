@@ -948,6 +948,19 @@ public class TicketsUtil
 		return Tickets.ticketsDao.listByProperty(map);
 	}
 
+	/**
+	 * @throws Exception
+	 * 
+	 */
+	public static List<Tickets> getOverdueTickets() throws Exception
+	{
+		String query = "NOT status:" + Status.CLOSED + " AND due_time <=" + Calendar.getInstance().getTimeInMillis();
+
+		JSONObject keysJSON = new TicketsDocument().searchDocuments(query, "", "", 1000);
+
+		return null;
+	}
+
 	public static List<Activity> includeData(List<Activity> activitys) throws Exception
 	{
 		if (activitys == null || activitys.size() == 0)
