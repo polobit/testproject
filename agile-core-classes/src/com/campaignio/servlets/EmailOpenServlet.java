@@ -2,6 +2,7 @@ package com.campaignio.servlets;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -88,6 +89,13 @@ public class EmailOpenServlet extends HttpServlet
 	//code for IP filter on emails open
 	System.out.println("Client IP is : "+ clientIPAddress);
 	System.out .println("Domain Name is : "+namespace);
+	 Enumeration enumt = request.getHeaderNames();  
+     while (enumt.hasMoreElements()) {  
+     String headerName = (String) enumt.nextElement();  
+     String headerValue = request.getHeader(headerName);  
+     System.out.println(headerName+"sssssssssssTesting"+headerValue);
+     }
+
 
 	  if(AnalyticsServlet.isBlockedIp(clientIPAddress,namespace))
 	  {

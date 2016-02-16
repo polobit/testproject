@@ -174,9 +174,7 @@ public class RedirectServlet extends HttpServlet
 		resp.sendRedirect(normalisedLongURL);
 	    }
 
-	    // For personal emails campaign-id is blank
-	    System.out.println("Client IP is : "+ clientIPAddress);
-		System.out .println("Domain Name is : "+domain);
+	    // For personal emails campaign-id is blank  and checked ip address is blocked or not for mail notification
 	    if (StringUtils.isBlank(campaignId) && contact != null && !(AnalyticsServlet.isBlockedIp(clientIPAddress,domain)))
 	    {
 	    	
