@@ -26,6 +26,7 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.Trigger.Type;
 import com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.analytics.servlets.AnalyticsServlet;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.campaignio.servlets.util.TrackClickUtil;
@@ -66,6 +67,8 @@ public class RedirectServlet extends HttpServlet
 	String originalURL = req.getParameter("u");
 	String push = req.getParameter("p");
 	String personalEmailTrackerId = req.getParameter("t");
+	//Get client IP address
+		String clientIPAddress=AnalyticsServlet.getClientIP(req);
 
 	// To get namespace
 	String url = req.getRequestURL().toString();
@@ -172,7 +175,9 @@ public class RedirectServlet extends HttpServlet
 	    }
 
 	    // For personal emails campaign-id is blank
-	    if (StringUtils.isBlank(campaignId) && contact != null)
+	    System.out.println("Client IP is : "+ clientIPAddress);
+		System.out .println("Domain Name is : "+domain);
+	    if (StringUtils.isBlank(campaignId) && contact != null && !(AnalyticsServlet.isBlockedIp(clientIPAddress,domain)))
 	    {
 	    	
 	    	// Save link clicked time
