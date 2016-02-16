@@ -16,7 +16,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         'click #workflow-unsubscribe-option': 'unsubscribeCampaign',
         'click #workflow-designer-help': 'helpCampaign',
         'change #unsubscribe-action': 'unsubscribeCampaignOptionSelect',
-        'change #disable-workflow':'disableSwitchChanges',
+        'change #disable-workflow':'saveCampaignClick',
     },
 
     unsubscribeCampaignOptionSelect : function(e){
@@ -121,7 +121,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         var unsubscribe_email = $('#unsubscribe-email').val().trim();
         var unsubscribe_name = $('#unsubscribe-name').val().trim();
         var is_disabled = $('.is-disabled-top').attr("data");
-        if($clicked_button.hasClass("is-disabled-top") && is_disabled)
+        if(e.type == "change" && is_disabled)
             is_disabled = !JSON.parse(is_disabled);
 
         var unsubscribe_json ={
@@ -169,6 +169,30 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 // Hide message
                 $('#workflow-edit-msg').hide();
 
+                if(e.type == "change"){
+                     var disabled = $(".is-disabled-top");
+                 var status = $('#disable-switch').bootstrapSwitch('status');
+                if (is_disabled && status) {
+                        disabled.attr("data", true);
+                        disabled.find('i').toggleClass('fa-lock').toggleClass('fa-unlock');
+                        disabled.find('div').text("Enable Campaign");
+                        $('#designer-tour').addClass("blur").removeClass("anti-blur");;
+                        window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
+                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
+                        show_campaign_save("Campaign has been disabled successfully.","red");
+                    } else {
+                        disabled.attr("data", false);
+                        disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
+                        disabled.find('div').text("Disable Campaign"); 
+                        $('#designer-tour').addClass("anti-blur").removeClass("blur");;
+                        window.frames[0].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
+                        window.frames[0].$('#toolbartabs').removeClass("disable-iframe");
+                       // $('#designer-tour').css("pointer-events","none");
+                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
+                        show_campaign_save("Campaign has been enabled successfully.");
+                    }
+                }
+
                 // Boolean data used on clicking on Done
                 if(trigger_data && trigger_data["navigate"])
                 {
@@ -204,31 +228,6 @@ var Workflow_Model_Events = Base_Model_View.extend({
             
         } 
     },
-
-    disableSwitchChanges:function(el){
-                     var disabled = $(".is-disabled-top");
-                 var status = $('#disable-switch').bootstrapSwitch('status');
-                if (status) {
-                        disabled.attr("data", true);
-                        disabled.find('i').toggleClass('fa-lock').toggleClass('fa-unlock');
-                        disabled.find('div').text("Enable Campaign");
-                        $('#designer-tour').addClass("blur").removeClass("anti-blur");;
-                        window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
-                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
-                        show_campaign_save("Campaign has been disabled successfully.","red");
-                    } else {
-                        disabled.attr("data", false);
-                        disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
-                        disabled.find('div').text("Disable Campaign"); 
-                        $('#designer-tour').addClass("anti-blur").removeClass("blur");;
-                        window.frames[0].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
-                        window.frames[0].$('#toolbartabs').removeClass("disable-iframe");
-                       // $('#designer-tour').css("pointer-events","none");
-                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
-                        show_campaign_save("Campaign has been enabled successfully.");
-                    }
-             },
-
 
 });
 
