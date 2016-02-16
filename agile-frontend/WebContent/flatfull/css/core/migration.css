@@ -2087,5 +2087,12 @@ color:#727272;
 }
 
 
-
+@media all and (min-width: 768px) and (max-width: 800px) {
+  #wrap:not(.app-aside-folded) .need_help{
+  display: none;
+  }
+  .prefs-mobile-view .vbox {
+    min-height: auto;
+  }
+}
 
