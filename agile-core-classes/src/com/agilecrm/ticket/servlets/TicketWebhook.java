@@ -203,10 +203,10 @@ public class TicketWebhook extends HttpServlet
 			{
 				if (msgJSON.has("attachments"))
 				{
+					JSONObject attachments = msgJSON.getJSONObject("attachments");
+					
 					msgJSON.remove("attachments");
 					
-					JSONObject attachments = msgJSON.getJSONObject("attachments");
-
 					for (Iterator iter = attachments.keys(); iter.hasNext();)
 					{
 						JSONObject fileJSON = attachments.getJSONObject((String) iter.next());
@@ -238,10 +238,10 @@ public class TicketWebhook extends HttpServlet
 
 				if (msgJSON.has("images"))
 				{
+					JSONObject images = msgJSON.getJSONObject("images");
+					
 					msgJSON.remove("images");
 					
-					JSONObject images = msgJSON.getJSONObject("images");
-
 					Document doc = Jsoup.parse(html, "UTF-8");
 
 					int i = 0;
