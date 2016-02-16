@@ -410,7 +410,7 @@ var Tickets_Notes = {
 		params += ', height=' + (screen.height-200);
 		params += ', top=0, left=0';
 
-		type = (!type) ? "html" : "original";
+		type = (!type) ? "html" : type;
 
 		newwin=window.open('ticket-notes.jsp?id=' + id + '&type=' + type,'Help Desk | Agile CRM', params);
 
