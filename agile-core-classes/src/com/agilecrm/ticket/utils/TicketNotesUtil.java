@@ -295,10 +295,10 @@ public class TicketNotesUtil
 	 * @param original_plain_text
 	 * @return
 	 */
-	public static String parsePlainText(String original_plain_text)
+	public static String parsePlainText(String plainText)
 	{
 		// parse plain text
-		return original_plain_text.replaceAll("(\r\n)", "<br/>");
+		return plainText.replaceAll("(\r\n|\n\r|\r|\n)", "<br />");
 	}
 
 	/**
@@ -306,10 +306,10 @@ public class TicketNotesUtil
 	 * @param original_html_text
 	 * @return
 	 */
-	public static String parseHtmlText(String original_html_text)
+	public static String parseHtmlText(String htmlText)
 	{
 		// parse plain text
-		return original_html_text;
+		return htmlText;
 	}
 
 	/**

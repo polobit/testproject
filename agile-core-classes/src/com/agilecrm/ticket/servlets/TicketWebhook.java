@@ -2,6 +2,7 @@ package com.agilecrm.ticket.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -43,7 +44,6 @@ import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsOutputChannel;
@@ -92,6 +92,8 @@ public class TicketWebhook extends HttpServlet
 	{
 		try
 		{
+			Long currentTime = Calendar.getInstance().getTimeInMillis();
+
 			// Fetch data posted by Mandrill
 			String mandrillResponse = request.getParameter("mandrill_events");
 
@@ -182,10 +184,10 @@ public class TicketWebhook extends HttpServlet
 			for (int i = 0; i < ccEmailsArray.length(); i++)
 				ccEmails.add(ccEmailsArray.getJSONArray(i).getString(0));
 
-			String text = "", html = "";
+			String plainText = "", html = "";
 
 			if (msgJSON.has("text"))
-				text = msgJSON.getString("text").trim();
+				plainText = msgJSON.getString("text").trim();
 
 			if (msgJSON.has("html"))
 				html = msgJSON.getString("html").trim();
@@ -217,7 +219,8 @@ public class TicketWebhook extends HttpServlet
 								.contentEncoding("UTF-8").acl("public-read")
 								.addUserMetadata("domain", NamespaceManager.get()).build();
 
-						GCSServiceAgile service = new GCSServiceAgile(fileName, "ticket-attachments", options);
+						GCSServiceAgile service = new GCSServiceAgile(currentTime + fileName, "ticket-attachments",
+								options);
 
 						GcsOutputChannel writer = service.getOutputchannel();
 
@@ -237,6 +240,7 @@ public class TicketWebhook extends HttpServlet
 
 					Document doc = Jsoup.parse(html, "UTF-8");
 
+					int i = 0;
 					for (Iterator iter = images.keys(); iter.hasNext();)
 					{
 						JSONObject fileJSON = images.getJSONObject((String) iter.next());
@@ -252,6 +256,25 @@ public class TicketWebhook extends HttpServlet
 						System.out.println("type: " + fileType);
 						System.out.println("base64: " + isBase64Encoded);
 
+						String contentType = URLConnection.guessContentTypeFromName(fileName);
+
+						System.out.println("contentType: " + contentType);
+
+						if (StringUtils.isBlank(contentType))
+						{
+							switch (contentType)
+							{
+							case "image/png":
+								fileName += ".png";
+								break;
+							case "image/jpeg":
+								fileName += ".jpg";
+								break;
+							default:
+								break;
+							}
+						}
+
 						byte[] bytes = null;
 
 						if (isBase64Encoded)
@@ -263,7 +286,8 @@ public class TicketWebhook extends HttpServlet
 								.contentEncoding("UTF-8").acl("public-read")
 								.addUserMetadata("domain", NamespaceManager.get()).build();
 
-						GCSServiceAgile service = new GCSServiceAgile(fileName, "ticket-attachments", options);
+						GCSServiceAgile service = new GCSServiceAgile(currentTime + fileName, "ticket-attachments",
+								options);
 
 						GcsOutputChannel writer = service.getOutputchannel();
 
@@ -285,6 +309,10 @@ public class TicketWebhook extends HttpServlet
 						Element element = elements.first();
 
 						element.attr("src", service.getFilePathToDownload());
+
+						i++;
+
+						plainText = plainText.replace("[image: Inline image " + i + "]", element.html());
 					}
 
 					html = doc.toString();
@@ -316,7 +344,7 @@ public class TicketWebhook extends HttpServlet
 
 				// Creating new Ticket in Ticket table
 				ticket = TicketsUtil.createTicket(groupID, null, fromName, msgJSON.getString("from_email"),
-						msgJSON.getString("subject"), ccEmails, text, Status.NEW, Type.PROBLEM, Priority.LOW,
+						msgJSON.getString("subject"), ccEmails, plainText, Status.NEW, Type.PROBLEM, Priority.LOW,
 						Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip, new ArrayList<Key<TicketLabels>>());
 
 				BulkActionNotifications.publishNotification("New ticket #" + ticket.id + " received");
@@ -334,11 +362,9 @@ public class TicketWebhook extends HttpServlet
 					return;
 				}
 
-				Long ticketUpdatedTime = Calendar.getInstance().getTimeInMillis();
-
 				// Updating existing ticket
-				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, text, LAST_UPDATED_BY.REQUESTER,
-						ticketUpdatedTime, ticketUpdatedTime, null, attachmentExists);
+				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, plainText, LAST_UPDATED_BY.REQUESTER,
+						currentTime, currentTime, null, attachmentExists);
 
 				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket(#" + ticket.id
 						+ ")");
@@ -346,14 +372,16 @@ public class TicketWebhook extends HttpServlet
 
 			// Creating new Notes in TicketNotes table
 			TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, groupID, ticket.assigneeID,
-					CREATED_BY.REQUESTER, msgJSON.getString("from_name"), msgJSON.getString("from_email"), text, html,
-					NOTE_TYPE.PUBLIC, attachmentURLs);
+					CREATED_BY.REQUESTER, msgJSON.getString("from_name"), msgJSON.getString("from_email"), plainText,
+					html, NOTE_TYPE.PUBLIC, attachmentURLs);
 
 			if (!isNewTicket)
 				// Execute note created by customer trigger
 				TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
 
 			NamespaceManager.set(oldNamespace);
+
+			System.out.println("Execution time: " + (Calendar.getInstance().getTimeInMillis() - currentTime) + "ms");
 		}
 		catch (Exception e)
 		{
