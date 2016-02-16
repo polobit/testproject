@@ -1,3 +1,10 @@
+/** Closing the datepicker on back and forward button **/
+$(function(){
+window.onhashchange = function (e) {
+	console.log('hi');
+	$('.daterangepicker').hide();
+}
+});
 /**
  * Initializes the date-range-picker and other filters. Calls the callback when
  * the date range is selected.
