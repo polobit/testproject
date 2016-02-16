@@ -1093,7 +1093,7 @@ public class TicketsUtil
 
 			// Creating new Notes in TicketNotes table
 			TicketNotesUtil.createTicketNotes(ticket.id, group.id, null, CREATED_BY.REQUESTER, "Customer",
-					"customer@domain.com", plainText, htmlText, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>());
+					"customer@domain.com", plainText, htmlText, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
 		}
 		catch (Exception e)
 		{

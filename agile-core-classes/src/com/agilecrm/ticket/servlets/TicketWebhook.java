@@ -203,6 +203,8 @@ public class TicketWebhook extends HttpServlet
 			{
 				if (msgJSON.has("attachments"))
 				{
+					msgJSON.remove("attachments");
+					
 					JSONObject attachments = msgJSON.getJSONObject("attachments");
 
 					for (Iterator iter = attachments.keys(); iter.hasNext();)
@@ -236,6 +238,8 @@ public class TicketWebhook extends HttpServlet
 
 				if (msgJSON.has("images"))
 				{
+					msgJSON.remove("images");
+					
 					JSONObject images = msgJSON.getJSONObject("images");
 
 					Document doc = Jsoup.parse(html, "UTF-8");
@@ -262,7 +266,7 @@ public class TicketWebhook extends HttpServlet
 
 						if (StringUtils.isBlank(contentType))
 						{
-							switch (contentType)
+							switch (fileType)
 							{
 							case "image/png":
 								fileName += ".png";
@@ -373,7 +377,7 @@ public class TicketWebhook extends HttpServlet
 			// Creating new Notes in TicketNotes table
 			TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, groupID, ticket.assigneeID,
 					CREATED_BY.REQUESTER, msgJSON.getString("from_name"), msgJSON.getString("from_email"), plainText,
-					html, NOTE_TYPE.PUBLIC, attachmentURLs);
+					html, NOTE_TYPE.PUBLIC, attachmentURLs, msgJSON.toString());
 
 			if (!isNewTicket)
 				// Execute note created by customer trigger

@@ -132,31 +132,30 @@ public class ZendeskFetchAudits implements DeferredTask
 								// Creating new Notes in TicketNotes table
 								TicketNotes notes = TicketNotesUtil.createTicketNotes(ticket.id, ticket.groupID, null,
 										CREATED_BY.REQUESTER, ticket.requester_name, ticket.requester_email, body,
-										body, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>());
+										body, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
 
 								notes.created_time = date.getTime();
 								TicketNotes.ticketNotesDao.put(notes);
 
 								// Logging private notes activity
-								 ActivityUtil.createTicketActivity(
-										ActivityType.TICKET_REQUESTER_REPLIED, ticket.contactID, ticket.id, body,
-											body, "html_text");
-//								activity.created_time = date.getTime();
-//								activity.save();
+								ActivityUtil.createTicketActivity(ActivityType.TICKET_REQUESTER_REPLIED,
+										ticket.contactID, ticket.id, body, body, "html_text");
+								// activity.created_time = date.getTime();
+								// activity.save();
 							}
 							else
 							{
 								TicketNotesUtil.createTicketNotes(ticket.id, ticket.groupID, ticket.assigneeID,
 										CREATED_BY.AGENT, ticket.requester_name, ticket.requester_email, body, body,
-										NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>());
+										NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
 
 								// Logging private notes activity
-								 ActivityUtil.createTicketActivity(
-										 ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id, body,
-										body, "html_text");
-//								activity.setUser(new Key<>(DomainUser.class, ticket.assigneeID));
-//								activity.created_time = date.getTime();
-//								activity.save();
+								ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED,
+										ticket.contactID, ticket.id, body, body, "html_text");
+								// activity.setUser(new Key<>(DomainUser.class,
+								// ticket.assigneeID));
+								// activity.created_time = date.getTime();
+								// activity.save();
 							}
 						}
 						else
@@ -171,14 +170,15 @@ public class ZendeskFetchAudits implements DeferredTask
 								domainUser = domainOwner;
 
 							TicketNotesUtil.createTicketNotes(ticket.id, null, domainUser.id, CREATED_BY.AGENT, "", "",
-									body, body, NOTE_TYPE.PRIVATE, new ArrayList<TicketDocuments>());
+									body, body, NOTE_TYPE.PRIVATE, new ArrayList<TicketDocuments>(), "");
 
 							// Logging private notes activity
-							 ActivityUtil.createTicketActivity(ActivityType.TICKET_PRIVATE_NOTES_ADD,
-									ticket.contactID, ticket.id, body, body, "html_text");
-//							activity.setUser(new Key<>(DomainUser.class, domainUser.id));
-//							activity.created_time = date.getTime();
-//							activity.save();
+							ActivityUtil.createTicketActivity(ActivityType.TICKET_PRIVATE_NOTES_ADD, ticket.contactID,
+									ticket.id, body, body, "html_text");
+							// activity.setUser(new Key<>(DomainUser.class,
+							// domainUser.id));
+							// activity.created_time = date.getTime();
+							// activity.save();
 						}
 					}
 					else
@@ -190,13 +190,13 @@ public class ZendeskFetchAudits implements DeferredTask
 							switch (fieldName)
 							{
 							case "assignee_id":
-								ActivityUtil.createTicketActivity(
-										ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
-										eventJSON.getString("previous_value"), eventJSON.getString("value"),
-										"assigneeID");
-//								activity.setUser(new Key<>(DomainUser.class, domainOwner.id));
-//								activity.created_time = date.getTime();
-//								activity.save();
+								ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED,
+										ticket.contactID, ticket.id, eventJSON.getString("previous_value"),
+										eventJSON.getString("value"), "assigneeID");
+								// activity.setUser(new Key<>(DomainUser.class,
+								// domainOwner.id));
+								// activity.created_time = date.getTime();
+								// activity.save();
 								break;
 							case "status":
 							{
@@ -218,12 +218,12 @@ public class ZendeskFetchAudits implements DeferredTask
 								};
 
 								// Logging activity
-								ActivityUtil.createTicketActivity(
-										ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-										statusMap.get(oldStatus), statusMap.get(newStatus), "status");
-//								statusActivity.setUser(new Key<>(DomainUser.class, domainOwner.id));
-//								statusActivity.created_time = date.getTime();
-//								statusActivity.save();
+								ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID,
+										ticket.id, statusMap.get(oldStatus), statusMap.get(newStatus), "status");
+								// statusActivity.setUser(new
+								// Key<>(DomainUser.class, domainOwner.id));
+								// statusActivity.created_time = date.getTime();
+								// statusActivity.save();
 								break;
 							}
 							}
@@ -242,11 +242,12 @@ public class ZendeskFetchAudits implements DeferredTask
 										agentID = domainOwner.id;
 
 									// Logging private notes activity
-									ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED,
-											ticket.contactID, ticket.id, "", agentID + "", "assigneeID");
-//									activity.setUser(new Key<>(DomainUser.class, domainOwner.id));
-//									activity.created_time = date.getTime();
-//									activity.save();
+									ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, ticket.contactID,
+											ticket.id, "", agentID + "", "assigneeID");
+									// activity.setUser(new
+									// Key<>(DomainUser.class, domainOwner.id));
+									// activity.created_time = date.getTime();
+									// activity.save();
 								}
 							}
 						}

@@ -86,11 +86,11 @@ public class TicketNotesUtil
 	 */
 	public static TicketNotes createTicketNotes(Long ticket_id, Long group_id, Long assignee_id, CREATED_BY created_by,
 			String requester_name, String requester_email, String original_plain_text, String original_html_text,
-			NOTE_TYPE note_type, List<TicketDocuments> attachments_list) throws EntityNotFoundException
+			NOTE_TYPE note_type, List<TicketDocuments> attachments_list,String mimeObject) throws EntityNotFoundException
 	{
 		TicketNotes ticketNotes = new TicketNotes(ticket_id, group_id, assignee_id, created_by, requester_name,
 				requester_email, removedQuotedReplies(original_plain_text), removedQuotedReplies(original_html_text),
-				original_plain_text, original_html_text, note_type, attachments_list);
+				original_plain_text, original_html_text, note_type, attachments_list, mimeObject);
 
 		Key<TicketNotes> key = TicketNotes.ticketNotesDao.put(ticketNotes);
 

@@ -104,7 +104,7 @@ public class TicketNotesRest
 			{
 				ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, null, DomainUserUtil.getCurentUserKey()
 						.getId(), CREATED_BY.AGENT, "", "", plain_text, html_text, NOTE_TYPE.PRIVATE,
-						new ArrayList<TicketDocuments>());
+						new ArrayList<TicketDocuments>(), "");
 
 				// Logging private notes activity
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_PRIVATE_NOTES_ADD, ticket.contactID, ticket.id,
@@ -176,7 +176,7 @@ public class TicketNotesRest
 				// Creating new Notes in TicketNotes table
 				ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, ticket.groupID, ticket.assigneeID,
 						CREATED_BY.AGENT, ticket.requester_name, ticket.requester_email, plain_text, html_text,
-						notes.note_type, new ArrayList<TicketDocuments>());
+						notes.note_type, new ArrayList<TicketDocuments>(), "");
 
 				TicketNotesUtil.sendReplyToRequester(ticket);
 

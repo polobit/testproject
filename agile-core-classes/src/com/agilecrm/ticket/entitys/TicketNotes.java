@@ -166,7 +166,7 @@ public class TicketNotes
 
 	public TicketNotes(Long ticket_id, Long group_id, Long assignee_id, CREATED_BY created_by, String requester_name,
 			String requester_email, String plain_text, String html_text, String original_plain_text,
-			String original_html_text, NOTE_TYPE note_type, List<TicketDocuments> attachments_list)
+			String original_html_text, NOTE_TYPE note_type, List<TicketDocuments> attachments_list, String mimeObject)
 	{
 		super();
 		this.ticket_key = new Key<Tickets>(Tickets.class, ticket_id);
@@ -187,6 +187,8 @@ public class TicketNotes
 		this.note_type = note_type;
 		this.attachments_list = attachments_list;
 		this.created_time = Calendar.getInstance().getTimeInMillis();
+		
+		this.mime_object = mimeObject;
 	}
 
 	@javax.persistence.PostLoad
