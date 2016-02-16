@@ -40,7 +40,7 @@ var ActivitylogRouter = Backbone.Router.extend({
                         campaignHistory=false;
                     }
                     else{
-                        $('#selectedentity_type').html("Campaings");
+                        $('#selectedentity_type').html("Campaigns");
                         $("#activities_date_range").hide();
                     }
 
@@ -64,7 +64,7 @@ var ActivitylogRouter = Backbone.Router.extend({
                             if(id != undefined)
                             {
 
-                                   activityFilters.entity="Campaings";
+                                   activityFilters.entity="Campaigns";
                             }
                             
                                 $('#selectedentity_type').html(activityFilters.entity);
