@@ -262,7 +262,7 @@ public class TicketWebhook extends HttpServlet
 					{
 						JSONObject fileJSON = images.getJSONObject((String) iter.next());
 
-						String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
+						String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type"), cid = fileName;
 
 						boolean isBase64Encoded = false;
 
@@ -311,7 +311,7 @@ public class TicketWebhook extends HttpServlet
 						writer.write(ByteBuffer.wrap(bytes));
 						writer.close();
 
-						Elements elements = doc.getElementsByAttributeValue("src", "cid:" + fileName);
+						Elements elements = doc.getElementsByAttributeValue("src", "cid:" + cid);
 
 						if (elements == null || elements.size() == 0)
 						{
@@ -329,7 +329,7 @@ public class TicketWebhook extends HttpServlet
 						
 						String altText = element.attr("alt");
 						
-						plainText = plainText.replace("[image: " + altText + "]", element.html());
+						plainText = plainText.replace("[image: " + cid + "]", element.html());
 					}
 
 					html = doc.toString();
