@@ -4,7 +4,7 @@ var Ticket_Labels = {
 
 	initChoosenSelect : function(el) {
 
-		head.js('/lib/chosen.jquery.min.js', function() {
+		head.js('/flatfull/css/misc/chosen.css', '/lib/chosen.jquery.min.js', function() {
 			var $select = $(".chosen-select", el);
 
 			// Initliazing multi select drop down

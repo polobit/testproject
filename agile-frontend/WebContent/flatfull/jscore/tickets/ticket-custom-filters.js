@@ -332,7 +332,7 @@ var Ticket_Custom_Filters = {
 				//Initializes chosen dropdown, fetches labels collection and renders selected labels
 			  	Ticket_Labels.fetchCollection(function(labelsCollection){
 
-			  		head.js('/lib/chosen.jquery.min.js', function() {
+			  		head.js('/flatfull/css/misc/chosen.css','/lib/chosen.jquery.min.js', function() {
 				  		var optionList = "";
 						$.each(labelsCollection.toJSON(), function(index, label) {
 							optionList += "<option value='" + label.id + "'>"
