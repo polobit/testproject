@@ -154,8 +154,11 @@ function fill_relation_deal(el)
 
 	var json = App_Deal_Details.dealDetailView.model.toJSON();
 	var deal_name = json.name;
-	$('.tags', el).html('<li class="tag inline-block v-middle m-r-xs btn btn-xs btn-primary" data="' + json.id + '">' + deal_name + '</li>');
 
+	var template = Handlebars.compile('<li class="tag inline-block v-middle m-r-xs btn btn-xs btn-primary" data="{{id}}">{{name}}</li>');
+  
+ 	// Adds contact name to tags ul as li element
+ 	$('.tags',el).html(template({name : deal_name, id : json.id}));
 }
 
 function deserialize_deal(value, template)
@@ -257,6 +260,10 @@ function fill_relation_deal_task(el)
 
 	var json = App_Deal_Details.dealDetailView.model.toJSON();
 	var deal_name = json.name;
-	$('.deal_tags', el).html('<li class="tag inline-block v-middle m-r-xs btn btn-xs btn-primary" data="' + json.id + '">' + deal_name + '</li>');
 
+	var template = Handlebars.compile('<li class="tag inline-block v-middle m-r-xs btn btn-xs btn-primary" data="{{id}}">{{name}}</li>');
+
+ 	// Adds contact name to tags ul as li element
+ 	$('.deal_tags',el).html(template({name : deal_name, id : json.id}));
+	
 }

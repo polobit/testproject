@@ -81,7 +81,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
             var nodeLength = $('iframe[id=designer]').contents().find('#paintarea .contextMenuForNode').length;
             var currentLimits=_billing_restriction.currentLimits;
             var campaignNodeLimit=currentLimits.campaignNodesLimit;
-            if(nodeLength > campaignNodeLimit)
+            if(nodeLength-1 > campaignNodeLimit)
             {
                 $("#workflow-edit-msg").hide();
                 $("#nodes-limit-reached").show();
@@ -563,6 +563,15 @@ function createJSON() {
             }
         });
 }
+$('body').on('mouseenter','#workflows-model-list tr', function(e){
+         $(this).find('#camp_history').removeClass('hide');
+         $(this).find('#camp_reports').removeClass('hide');
+    });
+
+$('body').on('mouseleave','#workflows-model-list tr', function(e){
+         $(this).find('#camp_history').addClass('hide');
+         $(this).find('#camp_reports').addClass('hide');
+    });
 
 function initializeWorkflowsListeners() {}
 

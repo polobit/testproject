@@ -49,11 +49,11 @@
 <div class="wrapper-sm">
 {{#check_length message "140"}}
 	<div class="ellipsis-multi-line collapse-25 overflow-hidden word-break p-n text-base" title="{{message}}" style="height:110px;line-height:160%;">
-		{{message}}
+		{{{message}}}
 	</div>
 {{else}}
 	<div class="word-break p-n text-base" style="line-height:160%;">
-		{{message}}
+		{{{message}}}
 	</div>
 {{/check_length}}
 </div>
@@ -72,7 +72,9 @@
 <ul class="m-b-none list-group text-base">
 <li class="list-group-item r-none b-l-none b-r-none">
 <div class="pull-left">
-	<a class="order c-p"  data-toggle="collapse" data-placement="top" title= "Order" href="#" value="{{this.id}}"><i class="icon icon-plus text-muted text-sm"></i> No #{{this.id}}</a>
+	<a class="order c-p" data-target="collapse-{{this.id}}" data-toggle="collapse" data-placement="top" title= "Order" href="#" value="{{this.id}}">
+		<i class="icon icon-plus text-muted text-sm"></i> No #{{this.id}}
+	</a>
 </div> 
 <div class="pull-right">{{currency}}&nbsp;{{this.subtotal_price}}</div>
 <div class="clearfix"></div>

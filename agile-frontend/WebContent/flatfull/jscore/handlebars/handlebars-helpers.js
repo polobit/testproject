@@ -1592,6 +1592,10 @@ $(function()
 	Handlebars.registerHelper('show_link_in_statement', function(value)
 	{
 
+        if(value){
+			value = value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		}
+
 		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 
 		try
@@ -1651,7 +1655,10 @@ $(function()
 
 	Handlebars.registerHelper('safe_string', function(data)
 	{
-
+		console.log("data = " + data);
+		if (data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
+				data = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		
 		data = data.replace(/\n/, "<br/>");
 		return new Handlebars.SafeString(data);
 	});
@@ -3745,23 +3752,6 @@ $(function()
 			return options.inverse(this);
 	});
 
-	Handlebars.registerHelper('show_link_in_statement', function(value)
-	{
-
-		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-
-		try
-		{
-			value = value.replace(exp, "<a href='$1' target='_blank' class='cd_hyperlink'>$1</a>");
-			return new Handlebars.SafeString(value);
-		}
-		catch (err)
-		{
-			return value;
-		}
-
-	});
-
 	/**
 	 * Returns table headings for custom contacts list view
 	 */
@@ -3790,13 +3780,6 @@ $(function()
 			console.log(App_Contacts.contactDetailView.model.toJSON());
 			return getPropertyValue(contact_properties, value);
 		}
-	});
-
-	Handlebars.registerHelper('safe_string', function(data)
-	{
-
-		data = data.replace(/\n/, "<br/>");
-		return new Handlebars.SafeString(data);
 	});
 
 	Handlebars.registerHelper('string_to_date', function(format, date)
@@ -6168,29 +6151,15 @@ $(function()
 	 */
 	Handlebars.registerHelper("isCurrentDeal", function(deal_id, options)
 	{
-		var dealId = App_Deal_Details.dealDetailView.model.id;
+
+		var dealId = '';
+		if (App_Deal_Details.dealDetailView)
+			dealId = App_Deal_Details.dealDetailView.model.id;
+
 		if (deal_id && deal_id == dealId)
 			return options.fn(this);
 
 		return options.inverse(this);
-	});
-	Handlebars.registerHelper('getDealNames', function(deals)
-	{
-		var html = '';
-		var currentDealId = 0;
-		if (App_Deal_Details.dealDetailView)
-			currentDealId = App_Deal_Details.dealDetailView.model.id;
-		$.each(deals, function(index, deal)
-		{
-			if (deal.id != currentDealId)
-			{
-				html += '<a href="#deal/' + deal.id + '">' + deal.name + '</a>';
-				if (index + 1 < deals.length)
-					html += ', ';
-			}
-		});
-		return html;
-
 	});
 
 	/**
@@ -7012,8 +6981,21 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 		if(!credit)
 			return 0;
 		return (credit/100)*(-1).toFixed(2);
-
 	});
+
+	Handlebars.registerHelper('event_format_time', function(time, format, options)
+	{
+		return time.format(format);
+	});
+	Handlebars.registerHelper('dottedEventDescription', function(description, options)
+	{
+		return addDotsAtEnd(description);
+	});
+	Handlebars.registerHelper('get_template_type', function(template_name)
+	{
+		return new Handlebars.SafeString(getTemplate(template_name, this));
+	});
+
 Handlebars.registerHelper('is_IE_browser', function(options) {
 	     return (isIEBrowser() ? options.fn(this) : options.inverse(this));
 });
@@ -7032,4 +7014,12 @@ function agile_is_mobile_browser(){
 	return false;
  }
 
+
+Handlebars.registerHelper('multiple_Property_Element_List', function(name, properties,id, options)
+		{
+
+			var matching_properties_list = agile_crm_get_List_contact_properties_list(name);
+			if (matching_properties_list.length > 0)
+				return options.fn(matching_properties_list);
+		});
 

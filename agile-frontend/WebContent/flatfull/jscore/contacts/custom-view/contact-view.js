@@ -18,6 +18,8 @@
 var CURRENT_VIEW_OBJECT;
 var CONTACTS_SORT_LIST={"created_time":"Created Date","lead_score":"Score","star_value":"Starred","first_name":"First Name","last_name":"Last Name","last_contacted":"Contacted Date",}
 
+
+var ifFromRender=false;
 function contactTableView(base_model,customDatefields,view) {
 	
 	var templateKey = 'contacts-custom-view-model';
@@ -33,6 +35,10 @@ function contactTableView(base_model,customDatefields,view) {
 		tagName : view.options.individual_tag_name
 	});
 
+
+	itemView.model.unbind('change')
+	itemView.renderRow = function(el, isFromRender)
+	{
 	// Reads the modelData (customView object)
 	var modelData = view.options.modelData;
 
@@ -51,6 +57,8 @@ function contactTableView(base_model,customDatefields,view) {
 		
 		// Iterates through, each field name and appends the field according to
 		// order of the fields
+		if(isFromRender!=true)
+			$(el).html($(el).find('td').first());
 		$.each(fields, function(index, field_name) {
 			if(field_name.indexOf("CUSTOM_") != -1)
 			{
@@ -106,12 +114,24 @@ function contactTableView(base_model,customDatefields,view) {
 			}, null);
 	}
 				
+	
+	//contactListener();
+	}
+	itemView.render = function(el)
+	{
+		isFromRender=true;
+		this.renderRow(el,isFromRender);
+	}
+
+	itemView.model.bind('change', itemView.renderRow, itemView);
+	itemView.render();
 	// Appends model to model-list template in collection template
-	$(('#'+view.options.templateKey+'-model-list'), view.el).append(el);
+	$(('#'+view.options.templateKey+'-model-list'), view.el).append(itemView.el);
 
 	// Sets data to tr
 	$(('#'+view.options.templateKey+'-model-list'), view.el).find('tr:last').data(
 			base_model);
+	
 }
 
 // Check whether the given fields list has the property name.
@@ -201,7 +221,7 @@ function setUpCompanySortFilters(el)
 	
 
 	getSearchableCustomFields("COMPANY", function(data){
-		COMPANY_CUSTOM_SORT_VIEW.collection.add(data);
+		COMPANY_CUSTOM_SORT_VIEW.addAll(data);
 	})
 	
 }
@@ -236,7 +256,7 @@ function setUpContactSortFilters(el)
 	
 
 	getSearchableCustomFields("CONTACT", function(data){
-		CUSTOM_SORT_VIEW.collection.add(data);
+		CUSTOM_SORT_VIEW.addAll(data);
 	})
 	
 }
@@ -306,11 +326,17 @@ function removeCustomFieldFromSortOptions(base_model, scope)
 	
 	var model = sort_view.collection.get(base_model.get('id'));
 
-	if(model)
-	{
+	if(model){
 		sort_view.collection.remove(base_model.get('id'));
-
 		sort_view.render(true);
+		// if(scope == "COMPANY"){
+		// 	var selectedCompanyFilter = _agile_get_prefs('company_sort_field');
+		// 	var currentField = model.attributes.search_key + "_AGILE_CUSTOM_"+ model.attributes.field_type;
+		// 	if(selectedCompanyFilter == selectedCompanyFilter){
+		// 		_agile_set_prefs('company_sort_field', "-created_time");
+		// 	}
+		// }
+		
 	}
 }
 
@@ -552,5 +578,9 @@ $(function() {
 		// Loads the contacts
 		App_Contacts.contacts(undefined, undefined, true);
 
+
 	});
+
+
 });
+
