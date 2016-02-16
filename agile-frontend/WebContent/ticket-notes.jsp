@@ -66,6 +66,13 @@ body {
 
 			$(".original_message").html(JSON.stringify(mimeobj, null, 4));
 
+			// $(".original_message").html(JSON.stringify(mimeobj, convertHTMLToString, 4));
+
+		}
+
+		function convertHTMLToString (key, value) {
+			// Replace the html tags
+			return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 		}
 		
 	</script>
