@@ -88,6 +88,16 @@ public class EmailOpenServlet extends HttpServlet
 	//code for IP filter on emails open
 	System.out.println("Client IP is : "+ clientIPAddress);
 	System.out .println("Domain Name is : "+namespace);
+	
+	System.out.println("Proxy" + request.getHeader("Proxy-Client-IP"));  
+  
+	System.out.println("wl proxy" + request.getHeader("WL-Proxy-Client-IP"));  
+	System.out.println("http_client" + request.getHeader("HTTP_CLIENT_IP"));  
+	System.out.println("http forwarede" + request.getHeader("HTTP_X_FORWARDED_FOR"));  
+	System.out.println("Remote addr" + request.getRemoteAddr()); 
+	System.out.println("sforwared" + request.getHeader("X-Forwarded-For"));
+	System.out.println("xreal "+request.getHeader( "X-Real-IP" ));
+
 	  if(AnalyticsServlet.isBlockedIp(clientIPAddress,namespace))
 	  {
 		  System.out.println("Testing email open IP filter..");
