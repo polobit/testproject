@@ -258,7 +258,6 @@ public class TicketWebhook extends HttpServlet
 					
 					Document doc = Jsoup.parse(html, "UTF-8");
 
-					int i = 0;
 					for (Iterator iter = images.keys(); iter.hasNext();)
 					{
 						JSONObject fileJSON = images.getJSONObject((String) iter.next());
@@ -293,12 +292,12 @@ public class TicketWebhook extends HttpServlet
 							}
 						}
 
-						byte[] bytes = null;
+						byte[] bytes = Base64.decodeBase64(fileJSON.getString("content"));;
 
-						if (isBase64Encoded)
-							bytes = Base64.decodeBase64(fileJSON.getString("content"));
-						else
-							bytes = fileJSON.getString("content").getBytes();
+//						if (isBase64Encoded)
+//							bytes = Base64.decodeBase64(fileJSON.getString("content"));
+//						else
+//							bytes = fileJSON.getString("content").getBytes();
 
 						GcsFileOptions options = new GcsFileOptions.Builder().mimeType(fileType)
 								.contentEncoding("UTF-8").acl("public-read")
@@ -309,7 +308,7 @@ public class TicketWebhook extends HttpServlet
 
 						GcsOutputChannel writer = service.getOutputchannel();
 
-						writer.write(ByteBuffer.wrap(fileJSON.getString("content").getBytes(StandardCharsets.UTF_8)));
+						writer.write(ByteBuffer.wrap(bytes));
 						writer.close();
 
 						Elements elements = doc.getElementsByAttributeValue("src", "cid:" + fileName);
@@ -327,10 +326,10 @@ public class TicketWebhook extends HttpServlet
 						Element element = elements.first();
 
 						element.attr("src", service.getFilePathToDownload());
-
-						i++;
-
-						plainText = plainText.replace("[image: Inline image " + i + "]", element.html());
+						
+						String altText = element.attr("alt");
+						
+						plainText = plainText.replace("[image: " + altText + "]", element.html());
 					}
 
 					html = doc.toString();
