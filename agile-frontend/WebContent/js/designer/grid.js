@@ -139,9 +139,9 @@ function generateGridUI(container, uiFieldDefinition) {
     var addId = uiFieldDefinition.name + '-add';    
     var addHTML = "<button id='" + addId + "'>Add</button>";
     
-    if(tableId == "and_key_grid-table" ){
-    	addHTML += "&nbsp; &nbsp; &nbsp; &nbsp; <label for="and_label"> And </label>";
-    }
+//    if(uiFieldDefinition.name == "and_key_grid" ){
+//    	addHTML +='<h1> And </h1>';
+//    }
 	
 
     // Populate Default values
