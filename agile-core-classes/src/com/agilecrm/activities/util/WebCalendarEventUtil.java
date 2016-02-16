@@ -113,8 +113,7 @@ public class WebCalendarEventUtil
 		List<List<Long>> filledGoogleSlots = GoogleCalendarUtil.getFilledGoogleSlots(userid, slotTime, timezone,
 				timezoneName, startTime, endTime);
 
-		if (filledGoogleSlots != null)
-		{
+		if (filledGoogleSlots != null){
 			// Remove all filled slots from available/possible slots.
 			possibleSlots.removeAll(filledGoogleSlots);
 
@@ -1379,12 +1378,12 @@ public class WebCalendarEventUtil
 	
 	public static void getBaseDetails() {
 		Long user_id = 5629499534213120L;
-		String date = "Wed Feb 03 2016 11:15:34 GMT 0530 (India Standard Time)";
+		String date = "Thu Feb 18 2016 16:28:20 GMT 0530 (India Standard Time)";
 		int slot_time = 60;
 		String timezone_name = "Asia/Kolkata";
-		long epoch_time = 1453055400L;
-		long startTime = 1453055400L;
-		long endTime = 1453141800L;
+		long epoch_time = 1455733800L;
+		long startTime = 1455733800L;
+		long endTime = 1455820200L;
 		// long agile_user_id = 5716606839685120L;
 		Long agile_user_id = null;
 		int timezone = -330;
