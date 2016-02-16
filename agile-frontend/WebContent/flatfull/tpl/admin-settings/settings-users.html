@@ -1,13 +1,7 @@
 <script id="admin-settings-users-collection-template" type="text/html">
 
-<div class="panel panel-default">
- <div class="panel-heading">
-	<div class="pull-left  m-t-xs">Users</div>
-	<!--<div class="pull-right">
-		<a href="#users-add" class="btn btn-sm btn-default btn-addon" id="addUser"><span><i class='icon-plus-sign'/></span> Add User</a>
-	</div>-->
-	<div class="clearfix"></div>
- </div>
+
+ 
 <div class="row">
 <div class="hbox hbox-auto-xs hbox-auto-sm">
    
@@ -29,10 +23,10 @@
     </div>
 </div>
 </div>
-</div>
+
 </script>
 <script id="admin-settings-users-model-template" type="text/html">
-  <div  class='data p-b col-md-4 col-sm-6 col-xs-12' data='{{id}}'style="margin-bottom:4px;" >
+  <div  class='data p-b col-sm-6 admin-user_temp' data='{{id}}'style="margin-bottom:4px;" >
   
 	<div class="b r-5x p-sm bg-white" data="{{id}}" style="height: 121px;">
 	
@@ -42,20 +36,21 @@
 			</label>
 		</div>
 		
-		<div style="margin-left: 25px; margin-bottom: 55px;">
-			<div class="pull-left m-r-xs thumb-sm  agile-img" >
+		<div style="margin-left: 25px;">
+			<div class="pull-left m-r-xs   agile-img" style="margin-left:3px;" >
 				{{#if ownerPic}}
 					<img class="img-inital r r-2x" style="height:62px;width:62px;" src="{{ownerPic}}"  title="{{name}}" />
 				   {{else}}
-					<img class="w-full" style="height:75px;width:75px;" src="{{defaultGravatarurl 50}}" title="{{name}}" />
+					<img class="w-full" style="height:62px;width:62px;" src="{{defaultGravatarurl 50}}" title="{{name}}" />
 				{{/if}}
 			</div>
-			<div class="pull-left text-ellipsis admin-user-name" >
-				<a  href="#user-edit/{{id}}"class="m-r-sm custom-link pull-left text-ellipsis w-auto admin-username">{{name}}</a><br>
+			<div class="pull-left text-ellipsis admin-user-name" style="margin-top: -64px;
+    margin-left:76px;" >
+				<a  class="m-r-sm custom-link pull-left text-ellipsis w-auto admin-username">{{name}}</a><br>
 				
 					<div class="text-xs">{{email}}</div>
-					<div class="text-xs">{{epochToDate info_json_string "created_time"}}</div>
-					<div class="text-muted">
+					 <div class="text-xs">Created on {{epochToDate info_json_string "created_time"}}</div>
+					 <div class="text-muted">Last login
 						<i class="fa fa-clock-o"></i>
 						<time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" >{{epochToDate info_json_string "logged_in_time"}}</time>
 					</div>					
@@ -65,7 +60,7 @@
 
 		</div>
 		<div class="clearfix"></div>
-		<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs no-wrap" style="padding-left:186px;">
+		<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs no-wrap" style="padding-left:24px;">
 		{{#if is_admin}}
 			<span class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">Admin</span>
 			
@@ -77,6 +72,17 @@
 			<span class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-colorlabel label-danger">Disabled</span>
 		{{/if}}
 		</div>
+
+		<div class="pull-right user-view-actions grid-view-action-button" style="margin-top:-106px;">
+				<span class="m-r-xs c-p"><a href="#user-edit/{{id}}"><i
+						data-toggle="tooltip" data-placement="left" title=""
+						data-original-title="Edit"
+						class="fa fa-pencil-square grid-edit-color"></i></a></span>
+						<span class='c-p delete' con_id="{{id}}" id="user-action-delete"><i
+					data-toggle="tooltip" data-placement="left" title=""
+					data-original-title="Delete" class="fa fa-trash grid-delete-color"></i></span>
+			</div>
+
 
 	</div>
 	
