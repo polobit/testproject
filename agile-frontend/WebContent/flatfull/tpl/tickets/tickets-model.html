@@ -14,7 +14,7 @@
       {{#if contact.properties}}
         <img src="{{nameAvatar contact.properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{requester_name}}" style="height: 45px; width: 45px;">
       {{else}}
-        <img src="{{getGravatarFromEmail 42 requester_email}}" onerror="image_error(this);" 
+        <img src="{{getGravatarFromEmail requester_email 42}}" onerror="image_error(this);" 
           _data-name="{{requester_name}}" style="height: 45px; width: 45px;">
       {{/if}}
     </a>
