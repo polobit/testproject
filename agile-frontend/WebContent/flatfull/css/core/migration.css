@@ -2131,9 +2131,9 @@ width: 1%!important;
   opacity: 1;
 }
 .stats-tabs-border li.active > a{
-
   border-left-color: #fff !important;
 }
+<<<<<<< HEAD
 
 @media all and (min-width: 768px) and (max-width: 800px) {
   #wrap:not(.app-aside-folded) .need_help{
@@ -2146,3 +2146,8 @@ width: 1%!important;
   }
 
 
+=======
+.icons-space-m li a{
+  padding: 10px 14px;
+}
+>>>>>>> 188fbde27b00e72c4bde5382f2155df96d20043b
