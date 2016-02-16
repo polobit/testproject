@@ -418,8 +418,6 @@
                   
                   <div class="m-t-xs clearfix m-b-sm">
 
-                   <span class="error-msg text-sm pull-right" style="color: #d9534f;"></span>
-
                     {{#if label_matched_canned_responses}}<a href="javascript:void(0);" onclick="$('.matched-canned-responses-list').toggle();" class="link-color text-sm cursor-pointer border-highlight-light pull-right">{{label_matched_canned_responses.length}} Recommendation{{#if_equals label_matched_canned_responses.length "1"}}{{else}}s{{/if_equals}}</a>{{/if}}
 
                     {{#if_equals reply_type "reply"}}
@@ -448,6 +446,7 @@
                         <button class="btn btn-sm btn-gray send-reply forward">Forward</button>
                       {{/if_equals}}
 
+                      <span class="error-msg text-sm" style="color: #d9534f;"></span>
                     
                   </div>
 

@@ -666,17 +666,18 @@ var Tickets = {
 
 	updateDataInModelAndCollection : function(id, data){
 
-		if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
-			return;
-
-		App_Ticket_Module.ticketView.model.set(data, {silent:true}); 
+		// if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
+		// 	return;
+        if(!App_Ticket_Module.ticketsCollection)
+        return;
+		App_Ticket_Module.ticketView.model.set(data); 
 
 		// get data from collection with id
 		updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
 
 		// Update data in model
 		updated_model.set(data);
-
+		
 
 	},
 
@@ -1056,12 +1057,11 @@ var Tickets = {
 			{	
 
 				success: function(model){
-				     console.log(favourite);
                      var succesmessage = "Ticket marked favourite";
 					if(!favourite)
 
 						succesmessage = "Ticket marked as unfavourite";
-
+                     Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{is_favorite:favourite});
 					 showNotyPopUp('information', succesmessage, 'bottomRight', 5000);
 					// if(model.toJSON().is_favorite)
 					// 	$(e.target).addClass("fa-star text-warning").removeClass("fa-star-o text-light");
@@ -1085,19 +1085,23 @@ var Tickets = {
 			{	
 				success: function(model){
 					var message ="";
+					var spam_value=true;
 					if(model.toJSON().is_spam){
 						$(e.target).addClass("btn-danger").removeClass("btn-default");
 					    message="Ticket marked as Spam";
+					    
 					}
 					else{
 						$(e.target).removeClass("btn-danger").addClass("btn-default");
                         message="Ticket un marked as Spam";
+                        spam_value=false;
                     }
                     showNotyPopUp('information',message, 'bottomRight', 5000);
 					// If in time line add event to timeline
 					if($('.ticket-timeline-container').length > 0){
 						Ticket_Timeline.render_individual_ticket_timeline()
 					}
+					Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {is_spam:spam_value});
 
 				}
 			});
