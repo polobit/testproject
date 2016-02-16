@@ -14,7 +14,7 @@
       {{#if contact.properties}}
         <img src="{{nameAvatar contact.properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{requester_name}}" style="height: 45px; width: 45px;">
       {{else}}
-        <img src="{{getGravatarFromEmail requester_email 42}}" onerror="image_error(this);" 
+        <img src="{{getGravatarFromEmail requester_email 42}}" onerror="image_error(this);"
           _data-name="{{requester_name}}" style="height: 45px; width: 45px;">
       {{/if}}
     </a>
@@ -221,13 +221,13 @@
   <td class="first-letter-cap open-ticket ticket_type {{#is_column_selected 'ticket_type'}}{{else}}display-none{{/is_column_selected}}">
     {{type}}
   </td>
-   <td class="first-letter-cap open-ticket text-ellipsis last_updated_date {{#is_column_selected 'last_updated_time'}}{{else}}display-none{{/is_column_selected}}">
+   <td class="first-letter-cap open-ticket text-ellipsis last_updated_time {{#is_column_selected 'last_updated_time'}}{{else}}display-none{{/is_column_selected}}">
     {{#if last_updated_time}}{{epochToHumanDate 'mmm dd, yyyy' last_updated_time}}{{else}}-{{/if}}
   </td>
   <!--<td class="first-letter-cap open-ticket organization {{#is_column_selected 'organization'}}{{else}}display-none{{/is_column_selected}}">
     {{organization}}
   </td>-->
-  <td class="first-letter-cap open-ticket text-ellipsis closed_date {{#is_column_selected 'closed_time'}}{{else}}display-none{{/is_column_selected}}">
+  <td class="first-letter-cap open-ticket text-ellipsis closed_time {{#is_column_selected 'closed_time'}}{{else}}display-none{{/is_column_selected}}">
     {{#if closed_time}}{{epochToHumanDate 'mmm dd, yyyy' closed_time}}{{else}}-{{/if}}
   </td>
   <td class="first-letter-cap open-ticket text-ellipsis created_time {{#is_column_selected 'created_time'}}{{else}}display-none{{/is_column_selected}}">

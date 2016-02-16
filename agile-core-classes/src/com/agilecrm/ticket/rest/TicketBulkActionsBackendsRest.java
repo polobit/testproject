@@ -1,45 +1,4 @@
-package com.agilecrm.ticket.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.apache.commons.lang.exception.ExceptionUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.agilecrm.activities.Activity.ActivityType;
-import com.agilecrm.activities.util.ActivityUtil;
-import com.agilecrm.contact.util.BulkActionUtil;
-import com.agilecrm.contact.util.bulk.BulkActionNotifications;
-import com.agilecrm.reports.deferred.ReportsDeferredTask;
-import com.agilecrm.ticket.deferred.ChangeAssigneeDeferredTask;
-import com.agilecrm.ticket.deferred.CloseTicketsDeferredTask;
-import com.agilecrm.ticket.deferred.DeleteTicketsDeferredTask;
-import com.agilecrm.ticket.deferred.ExecuteWorkflowDeferredTask;
-import com.agilecrm.ticket.deferred.ManageLabelsDeferredTask;
-import com.agilecrm.ticket.deferred.MarkTicketsAsFavoriteDeferredTask;
-import com.agilecrm.ticket.deferred.MarkTicketsAsSpamDeferredTask;
-import com.agilecrm.ticket.entitys.TicketBulkActionAttributes;
-import com.agilecrm.ticket.entitys.TicketLabels;
-import com.agilecrm.ticket.utils.CSVTicketIdsFetcher;
-import com.agilecrm.ticket.utils.FilterTicketIdsFetcher;
-import com.agilecrm.ticket.utils.ITicketIdsFetcher;
-import com.agilecrm.ticket.utils.TicketBulkActionUtil;
-import com.agilecrm.util.NamespaceUtil;
-import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
-import com.googlecode.objectify.Key;
 
 /**
  * 
@@ -89,7 +48,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Bulk manage labels task started");
+			BulkActionNotifications.publishNotification("Selected Ticket labels have been updated successfully.");
 		}
 		catch (Exception e)
 		{
@@ -133,7 +92,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Bulk change assignee started");
+			BulkActionNotifications.publishNotification("Selected Tickets asignee name have been changed successfully.");
 		}
 		catch (Exception e)
 		{
@@ -175,7 +134,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Executing workflows on tickets");
+			BulkActionNotifications.publishNotification("Workflows have been executed on the selected tickets");
 		}
 		catch (Exception e)
 		{
@@ -210,7 +169,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Closing ticket bulk action started");
+			BulkActionNotifications.publishNotification("Selected tickets have been closed successfully.");
 		}
 		catch (Exception e)
 		{
@@ -245,7 +204,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Tickets bulk deletion started");
+			BulkActionNotifications.publishNotification("Selected tickets have been deleted successfully.");
 		}
 		catch (Exception e)
 		{
@@ -277,7 +236,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Tickets bulk action spam tickets started");
+			BulkActionNotifications.publishNotification("Selected tickets have been marked as spam successfully");
 		}
 		catch (Exception e)
 		{
@@ -310,7 +269,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Tickets bulk action favorite tickets started");
+			BulkActionNotifications.publishNotification("Selected tickets have been added to favourites successfully.");
 		}
 		catch (Exception e)
 		{
