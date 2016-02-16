@@ -24,6 +24,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Milestones */
 	"milestones" : "milestones",
 	
+	/* Products */
+	"products" : "products", "product-add" : "productsAdd", "product-edit/:id" : "productEdit",
+
 	/* Categories */
 	"categories" : "categories",
 
@@ -530,6 +533,144 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
 	},
 	
+	/**
+	 * Creates a Model to show and edit products, reloads the page on save
+	 * success
+	 */
+
+	products : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+
+		$("#content").html(getTemplate("admin-settings"), {});
+		this.productsGridView = new Base_Collection_View({ url : '/core/api/products', 
+			templateKey : "admin-settings-products",
+			individual_tag_name : 'tr', postRenderCallback : function(el)
+			{
+				console.log("loaded products : ", el);
+				
+			} });
+		this.productsGridView.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').html(this.productsGridView.render().el);
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.products-tab').addClass('select');
+		$(".active").removeClass("active");
+	},
+
+	/**
+	 * Loads a template to add new user, navigates to users list on adding a
+	 * user
+	 */
+	productsAdd : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+
+			return;
+		}
+		console.log('product add...');
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			console.log('product add1...');
+			$('#content').html($(template_ui));	
+
+			var view = new Base_Model_View({ url : 'core/api/products', template : "admin-settings-product-add", isNew : true,  reload : false,
+			postRenderCallback : function(el)
+			{
+
+				
+			}, saveCallback : function(response)
+			{
+				
+			} });
+
+			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.products-tab').addClass('select');
+			$(".active").removeClass("active");
+
+		}, "#content");
+
+		
+
+	},
+
+	/**
+	 * Loads a template to add new user, to a particular domain user
+	 */
+
+	/**
+	 * Edits the existing user by verifying whether the users list view is
+	 * defined or not
+	 */
+	productEdit : function(id)
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+
+			return;
+		}
+		var that = this;
+		console.log("Product Edit");
+			getTemplate("admin-settings", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+
+				// If products list is not defined then take back to products template
+				if (!that.productsGridView || !that.productsGridView.collection.get(id))
+				{
+					that.navigate("products", { trigger : true });
+					return;
+				}
+
+				// Gets product from the collection based on id
+				var product = that.productsGridView.collection.get(id);
+			
+			
+				/*
+				 * Creates a Model for products edit, navigates back to 'product' window on
+				 * save success
+				 */
+				var view = new Base_Model_View({ url : 'core/api/products',
+					model : product, template : "admin-settings-product-add", 				
+				saveCallback : function(response)
+				{
+						Backbone.history.navigate('products', { trigger : true });
+				}, 
+				postRenderCallback : function(el)
+				{
+					//initializeIntegrationsTabListeners("integrations_tab", "integrations");
+								
+				}
+			 });
+
+			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.products-tab').addClass('select');
+			$(".active").removeClass("active");
+		
+		}, "#content");
+
+		
+
+	},
+
 	/**
 	 * Creates a Model to show and edit milestones, reloads the page on save
 	 * success

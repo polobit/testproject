@@ -44,7 +44,6 @@
                           <input type="hidden" name="url" id="upload_url" class="required"/>
                           <input type="hidden" name="size" id="size" class="required"/>
                           <input type="hidden" name="network_type" id="network_type" class="required"/>
-                          <input type="hidden" name="doc_type" id="doc_type" class="required"/>
                           <div class="row">
                              <div class="col-md-3 col-sm-3 col-xs-3 all-l-none">
                                 <div class="link text-center thumbnail m-b-none "><i class="icon-ok pull-right" style="display:none;"></i><br/>
@@ -60,15 +59,15 @@
                     
                  </div>
               </div>
-               <div class="senddoc hide">
-                         <div class="control-group form-group">
+                    <div class="senddoc hide">
+                         <div class="control-group form-group hide">
                                 <label class="control-label col-sm-3"><b>Select Template </b><span
                                    class="field_req">*</span></label>
                                 <div class="controls col-sm-9">
                                    <span>
-                                     <select name="template_type" id="template_type"  class="required form-control" placeholder="Type of Template">
+                                     <text name="template_type" type="hide" id="template_type"  class="required form-control" placeholder="Type of Template">
                                          
-                                     </select>
+                                     </text>
                                    </span>
                                 </div>
                              </div>

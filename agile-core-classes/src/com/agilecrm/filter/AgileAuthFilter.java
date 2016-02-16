@@ -66,6 +66,7 @@ public class AgileAuthFilter implements Filter
 		|| httpRequest.getRequestURI().contains("/core/api/bulk-actions") || httpRequest.getRequestURI().contains("/core/api/opportunity/backend")
 		|| httpRequest.getRequestURI().contains("oauth") || httpRequest.getRequestURI().contains("/gmail")
 		|| httpRequest.getRequestURI().contains("/core/api/webevents")|| httpRequest.getRequestURI().contains("/core/hook")
+		|| httpRequest.getRequestURI().contains("/core/api/documentviewer") 
 		|| httpRequest.getRequestURI().contains("/download-attachment") || httpRequest.getRequestURI().contains("/core/api/forms/form"))
 	{
 	    System.out.println("JS API - ignoring filter");

@@ -71,6 +71,18 @@ public class Opportunity extends Cursor implements Serializable
     @Id
     public Long id;
 
+	public static enum DiscountType {
+		Value, Percent
+	};
+	
+	public boolean apply_discount = false;
+	
+	public float discount_value = 0;
+	public float discount_amt = 0;
+	
+	@NotSaved(IfDefault.class)
+	public DiscountType discount_type = DiscountType.Value;
+	
     /**
      * Name of a Deal.
      */
@@ -92,6 +104,10 @@ public class Opportunity extends Cursor implements Serializable
     @Embedded
     public List<CustomFieldData> custom_data = new ArrayList<CustomFieldData>();
 
+    @XmlElement(name = "products")
+ 	@Embedded
+ 	public List<DealProducts> products = new ArrayList<DealProducts>();
+    
     /**
      * Description of a deal.
      */
@@ -818,7 +834,9 @@ public class Opportunity extends Cursor implements Serializable
 
 	StringBuilder builder = new StringBuilder();
 	builder.append("Opportunity [id=").append(id).append(", name=").append(name).append(", contact_ids=")
-		.append(contact_ids).append(", related_contacts=").append(related_contacts).append(", custom_data=")
+		.append(contact_ids).append(", related_contacts=").append(related_contacts)
+		.append(", related_products=").append(products)
+		.append(", custom_data=")
 		.append(custom_data).append(", description=").append(description).append(", expected_value=")
 		.append(expected_value).append(", milestone=").append(milestone).append(", probability=")
 		.append(probability).append(", close_date=").append(close_date).append(", owner_id=").append(owner_id)
@@ -828,7 +846,12 @@ public class Opportunity extends Cursor implements Serializable
 		.append(", related_notes=").append(related_notes).append(", note_description=")
 		.append(note_description).append(", pipeline=").append(pipeline).append(", pipeline_id=")
 		.append(pipeline_id).append(", archived=").append(archived).append(", lost_reason_id=")
-		.append(lost_reason_id).append(", deal_source_id=").append(deal_source_id).append("]");
+		.append(lost_reason_id)
+		.append(", discount_type=").append(discount_type)
+		.append(", apply_discount=").append(apply_discount)
+		.append(",discount_value=").append(discount_value)
+		.append(",discount_amt=").append(discount_amt)
+		.append(", deal_source_id=").append(deal_source_id).append("]");
 	;
 	return builder.toString();
     }

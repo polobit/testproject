@@ -21,6 +21,7 @@ import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
+import com.agilecrm.contact.Note;
 
 /**
  * <code>DocumentsAPI</code> includes REST calls to interact with
@@ -52,6 +53,7 @@ public class DocumentsAPI
 	return DocumentUtil.getDocuments();
     }
 
+    
     /**
      * Gets a document based on id
      * 

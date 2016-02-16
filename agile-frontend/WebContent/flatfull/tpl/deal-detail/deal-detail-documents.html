@@ -88,12 +88,15 @@
  
 
 	<div class="pos-rlt">
-		{{network network_type}}&nbsp;&nbsp;<a href="{{url}}" target="_blank" class="pull-left"><i class="icon-external-link" title="Open Document"></i></a>
+	{{#if url}}
+		{{network network_type}}&nbsp;&nbsp;<a href="{{url}}" target="_blank" class="pull-left"><i class="icon-external-link" title="Open Document"></i></a>{{/if}}	
 		<span class="pull-right">{{#is_mobile}}{{#hasMenuScope 'DOCUMENT'}}
 	  <div class="pos-abs pos-r-0 " >
 		<span class="actions">
 			<a title="Edit"  data="{{id}}" class="document-edit-deal-tab  m-r-sm"> <i class="icon-pencil"></i> </a>
+			{{#if url}}
 			<a title="Detach"  data="{{id}}" class="document-unlink-deal-tab"> <i class="icon-unlink"></i> </a>
+			{{/if}}	
             <!--<a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>-->
         </span>
         </div>
@@ -123,7 +126,9 @@
 	  <div class="pos-abs pos-r-0 pos-b-0" style="bottom:-7px">
 		<span class="actions">
 			<a title="Edit"  data="{{id}}" class="document-edit-deal-tab  m-r-sm"> <i class="icon-pencil"></i> </a>
+			{{#if url}}
 			<a title="Detach"  data="{{id}}" class="document-unlink-deal-tab"> <i class="icon-unlink"></i> </a>
+			{{/if}}	
             <!--<a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>-->
         </span>
         </div>

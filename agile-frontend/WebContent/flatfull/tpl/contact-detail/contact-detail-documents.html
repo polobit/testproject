@@ -64,7 +64,7 @@
 		</div>-->
 		<div>{{#hasMenuScope 'DOCUMENT'}}
 						{{#isCompany}}
-						<a href="#" class="btn-default btn-addon btn-sm add-company-edocument-select m-t-xs"><i class="fa fa-plus-circle" /> Add eDoc</a> <a href="#" class="btn btn-default btn-sm pull-right add-document-select m-t-xs m-l-xs"><i class='icon-plus-sign'/></i> Add Document</a> 
+						<a href="#" class="btn btn-default btn-sm add-company-edocument-select m-t-xs"><i class="fa fa-plus-circle" /> Add eDoc</a> <a href="#" class="btn btn-default btn-sm pull-right add-document-select m-t-xs m-l-xs"><i class='icon-plus-sign'/></i> Add Document</a> 
 						{{else}}
 						<a href="#" class="btn btn-default btn-addon btn-sm add-contact-edocument-select m-t-xs"><i class="fa fa-plus-circle" /> Add eDoc</a> <a href="#" class="btn btn-default btn-sm pull-right add-document-select m-t-xs  m-l-xs"><i class='icon-plus-sign'/></i> Add Document</a> 
 						{{/isCompany}}
@@ -138,7 +138,11 @@
 		
 		<div class="actions pull-right pos-abs pos-r-0 pos-b-0">
             {{#hasMenuScope 'DOCUMENT'}}
-			<a title="Edit"  data="{{id}}" href="#documents/{{id}}" class="document-edit-contact-tab1 c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+            {{#isCompany}}
+			<a title="Edit"  data="{{id}}" href="#" href1="#documents/{{id}}" class="document-edit-company-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+			{{else}}
+			<a title="Edit"  data="{{id}}" href="#" href1="#documents/{{id}}" class="document-edit-contact-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+			{{/isCompany}}
 			{{#if url}}
 			<a title="Detach"  data="{{id}}" class="document-unlink-contact-tab c-p text-l-none p-r-sm"> <i class="icon-unlink"></i> </a>
 			{{/if}}	

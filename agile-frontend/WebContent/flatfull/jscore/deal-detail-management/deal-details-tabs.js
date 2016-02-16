@@ -298,8 +298,11 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		e.preventDefault();
 		var targetEl = $(e.currentTarget);
 
-		var id = $(targetEl).attr('data');
-		updateDocument(dealDocsView.collection.get(id));
+		var document_id = $(targetEl).attr('data');
+		var currentDeal = App_Deal_Details.dealDetailView.model.toJSON();
+		
+		Backbone.history.navigate("documents/"+document_id+"/" + currentDeal.id,{trigger: true});	
+		//updateDocument(dealDocsView.collection.get(id));
 	},
 
 	// For unlinking document from contact-details

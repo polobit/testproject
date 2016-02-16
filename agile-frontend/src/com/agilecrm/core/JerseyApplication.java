@@ -112,7 +112,10 @@ public class JerseyApplication extends Application {
 
 	s.add(com.agilecrm.core.api.deals.GoalsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.PaypalWidgetApi.class);
+	s.add(com.agilecrm.core.api.products.ProductsAPI.class);
 	s.add(com.agilecrm.core.api.prefs.DocumentTemplatesPrefsAPI.class);
-		return s;
-	}
+	s.add(com.agilecrm.core.api.contacts.DocumentViewerAPI.class);
+	return s;
+    }
+
 }

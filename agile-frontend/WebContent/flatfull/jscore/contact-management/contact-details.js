@@ -269,6 +269,8 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click .contact-add-contact' : 'addContact',
     	'click .contact-add-document' : 'addDocument',
     	//'click .document-edit-contact-tab' : 'editDocument',
+    	'click .document-edit-contact-tab' : 'navigateToContacteditDocument',
+    	'click .document-edit-company-tab' : 'navigateToCompanyeditDocument',
     	'click .document-unlink-contact-tab' : 'unlinkDocument',
     	'click .add-document-select' : 'listDocuments',
     	'click .add-company-edocument-select' : 'navigateToCompanyeDocument',
@@ -927,6 +929,20 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 	{
 		e.preventDefault();
 		contact_details_documentandtasks_actions.navigate_to_edocument(e,"company");
+
+		        
+	},
+	navigateToContacteditDocument:function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.navigate_to_edit_document(e,"contact");
+
+		        
+	},
+	navigateToCompanyeditDocument:function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.navigate_to_edit_document(e,"company");
 
 		        
 	},

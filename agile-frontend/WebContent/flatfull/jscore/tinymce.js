@@ -15,7 +15,7 @@ var CONTACT_CUSTOM_FIELDS = undefined;
  *            id of HTML element e.g., textarea#email-body
  * 
  */
-function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
+function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback,merge_fields_values_callback)
 {
 	
 	// Id undefined
@@ -75,7 +75,7 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
 			        forced_root_block : false,
 					extended_valid_elements : "*[*]", setup : function(editor)
 					{
-						editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor) });
+						editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor,merge_fields_values_callback) });
 					}
 					});
 				
@@ -244,12 +244,12 @@ function remove_tinymce_editor_instance(selector)
  * @param editor -
  *            editor instance
  */
-function set_up_merge_fields(editor)
+function set_up_merge_fields(editor,merge_fields_values_callback)
 {
 	var menu = [];
 
 	var contact_json;
-
+	var _merge_fields_values_callback=merge_fields_values_callback;
 	// Get Current Contact json for merge fields
 	if (App_Contacts.contactDetailView != undefined && App_Contacts.contactDetailView.model != undefined)
 		contact_json = get_contact_json_for_merge_fields();
@@ -276,6 +276,8 @@ function set_up_merge_fields(editor)
 
 				try
 				{
+					if(_merge_fields_values_callback)
+						contact_json=_merge_fields_values_callback(contact_json);
 					compiled_template = template(contact_json);
 				}
 				catch(err)
@@ -432,16 +434,19 @@ function merge_jsons(target, object1, object2)
 /**
  * Returns json required for merge fields in Editor
  */
-function get_contact_json_for_merge_fields()
+function get_contact_json_for_merge_fields(contact_json)
 {
 	// Compile templates immediately in Send email but not for bulk contacts
-	if (App_Contacts.contactDetailView != undefined && App_Contacts.contactDetailView.model != undefined)
+	if (contact_json==undefined && App_Contacts.contactDetailView != undefined && App_Contacts.contactDetailView.model != undefined)
 	{
 
 		// Get Current Contact
-		var contact_json = App_Contacts.contactDetailView.model.toJSON();
-		var contact_property_json = get_property_JSON(contact_json);
+		contact_json = App_Contacts.contactDetailView.model.toJSON();
 		
+	}	
+	if(contact_json!=undefined)
+	{
+		var contact_property_json = get_property_JSON(contact_json);
 		try
 		{
 			contact_property_json["score"]= contact_json["lead_score"];
@@ -465,8 +470,8 @@ function get_contact_json_for_merge_fields()
 		}
 		
 		return merge_jsons({}, {"owner":contact_json.owner}, contact_property_json);
-		
-	}  
+	}
+	  
 }
 
 /**

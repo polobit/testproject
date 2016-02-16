@@ -924,6 +924,7 @@ var ContactsRouter = Backbone.Router.extend({
 				    	$("#emailForm").find(".fa-paperclip").removeClass("fa-paperclip").addClass("fa-file-text-o");
 				    	$("#emailForm").find("#attachment-select").append('<option selected=\'yes\' value='+ model.id +'>' + model.name+ '</option>');
 				    	
+				    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
 				    	$("#doc_type","#emailForm").val(model.doc_type);
 		               	var first_name = getPropertyValue(model.contacts[0].properties, "first_name");
 						var last_name = getPropertyValue(model.contacts[0].properties, "last_name");

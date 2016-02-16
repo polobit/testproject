@@ -63,6 +63,7 @@ public class Note extends Cursor
      */
     public String description;
 
+    public String document_id;
     /**
      * List of contact ids, a note related to
      * 
@@ -155,9 +156,19 @@ public class Note extends Cursor
      *            description of the note
      * 
      */
+    
+    
     public Note(String subject, String description)
     {
 	this.description = description;
+	if (subject != null)
+	    this.subject = subject;
+    }
+
+    public Note(String subject, String description,String document_id)
+    {
+	this.description = description;
+	this.document_id=document_id;
 	if (subject != null)
 	    this.subject = subject;
     }
@@ -427,6 +438,6 @@ public class Note extends Cursor
     @Override
     public String toString()
     {
-	return "id: " + id + " created_time: " + created_time + " subj" + subject + " description: " + description;
+	return "id: " + id + " created_time: " + created_time + " subj" + subject + " description: " + description + " document_id: " + document_id;
     }
 }

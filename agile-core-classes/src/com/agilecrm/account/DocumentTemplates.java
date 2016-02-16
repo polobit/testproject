@@ -22,12 +22,12 @@ import com.googlecode.objectify.condition.IfDefault;
 
 /**
  * <code>DocumentTemplates</code> is the base class for Document Templates. User can
- * create custom document templates with  Body. Document Templates are
- * useful while sending an document to the Contact. User can just include required
- * template before sending document. DocumentTemplates gives reusability feature for
+ * create custom document templates with Subject and Body. Document Templates are
+ * useful while sending document to the Contact. User can just include required
+ * template before sending document. DocumentTemplates gives re-usability feature for
  * sending document to different contacts.
  * <p>
- * DocumentTemplates are saved in datastore with unique id,  Body.
+ * DocumentTemplates are saved in datastore with unique id, Subject and Body.
  * </p>
  * 
  */
@@ -71,7 +71,6 @@ public class DocumentTemplates
 	private Key<DomainUser> owner = null;
 
 	/**
-	 * Created time of document template
 	 */
 	public Long created_time = 0L;
 	

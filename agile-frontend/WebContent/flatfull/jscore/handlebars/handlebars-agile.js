@@ -313,6 +313,7 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("skype.js");
 	}
+	
 	return template_relative_urls;
 }
 

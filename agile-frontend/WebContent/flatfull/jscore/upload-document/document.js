@@ -301,7 +301,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 		{
 			console.log(er);
 		},
-		success : function(data) {
+		success : function(data) 
+		{
 			// reset document size 
 			CUSTOM_DOCUMENT_SIZE = 0;
 
@@ -330,10 +331,50 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 			add_recent_view(new BaseModel(document));
 			
 			// Updates data to timeline
-			if (App_Contacts.contactDetailView
-					&& Current_Route == "contact/"
-							+ App_Contacts.contactDetailView.model.get('id')) {
-
+			if (App_Contacts.contactDetailView)
+			{
+					if(Current_Route.indexOf( "contact")>-1)	
+					{
+						$.each(document.contacts, function(index, contact) 
+						{
+							
+							if (contact.id == App_Contacts.contactDetailView.model.get('id'))
+							{
+								if (documentsView && documentsView.collection)
+								{
+									if(documentsView.collection.get(document.id))
+									{
+										documentsView.collection.get(document.id).set(new BaseModel(document));
+									}
+									else
+									{
+										documentsView.collection.add(new BaseModel(document), { sort : false });
+										documentsView.collection.sort();
+									}
+								}
+								
+									// Activates "Timeline" tab and its tab content in
+									// contact detail view
+									// activate_timeline_tab();
+									//add_entity_to_timeline(data);
+									/*
+									 * If timeline is not defined yet, initiates with the
+									 * data else inserts
+									 */
+									return false;
+							}
+						});	
+						var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
+						Backbone.history.navigate(sURL, { trigger : true });
+						return;	
+					}
+					else if( Current_Route.indexOf( App_Contacts.contactDetailView.model.get('id'))>-1)
+					{
+						var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
+						Backbone.history.navigate(sURL, { trigger : true });
+						return;
+					}		
+					
 				// Add model to collection. Disabled sort while adding and called
 				// sort explicitly, as sort is not working when it is called by add
 				// function
@@ -343,96 +384,126 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 				 * Verifies whether the added document is related to the contact in
 				 * contact detail view or not
 				 */
-				$.each(document.contacts, function(index, contact) {
 					
-					if (contact.id == App_Contacts.contactDetailView.model.get('id'))
+			
+			} 
+			if (App_Companies.companyDetailView)
+			{
+					if(Current_Route.indexOf( "company")>-1)	
 					{
-						if (documentsView && documentsView.collection)
+						$.each(document.contacts, function(index, company) 
 						{
-							if(documentsView.collection.get(document.id))
+							
+							if (company.id == App_Companies.companyDetailView.model.get('id'))
 							{
-								documentsView.collection.get(document.id).set(new BaseModel(document));
+								if (documentsView && documentsView.collection)
+								{
+									if(documentsView.collection.get(document.id))
+									{
+										documentsView.collection.get(document.id).set(new BaseModel(document));
+									}
+									else
+									{
+										documentsView.collection.add(new BaseModel(document), { sort : false });
+										documentsView.collection.sort();
+									}
+								}
+								
+									// Activates "Timeline" tab and its tab content in
+									// contact detail view
+									// activate_timeline_tab();
+									//add_entity_to_timeline(data);
+									/*
+									 * If timeline is not defined yet, initiates with the
+									 * data else inserts
+									 */
+									return false;
 							}
-							else
-							{
-								documentsView.collection.add(new BaseModel(document), { sort : false });
-								documentsView.collection.sort();
-							}
-						}
-						
-							// Activates "Timeline" tab and its tab content in
-							// contact detail view
-							// activate_timeline_tab();
-							//add_entity_to_timeline(data);
-							/*
-							 * If timeline is not defined yet, initiates with the
-							 * data else inserts
-							 */
-							return false;
+						});	
+						var sURL="company/" + App_Companies.companyDetailView.model.get('id');
+						Backbone.history.navigate(sURL, { trigger : true });
+						return;	
 					}
-				});
-			} else if (company_util.isCompany()){
-				company_util.updateDocumentsList(document,true);
+					else if( Current_Route.indexOf( App_Companies.companyDetailView.model.get('id'))>-1)
+					{
+						company_util.updateDocumentsList(document,true);
+						var sURL="company/" + App_Companies.companyDetailView.model.get('id');
+						Backbone.history.navigate(sURL, { trigger : true });
+						return;
+					}				
+					
+				
 			}
-			else if (Current_Route == 'documents') {
+			if (App_Deal_Details.dealDetailView)
+			{
+					if(Current_Route.indexOf( "deal")>-1)	
+					{
+						$.each(document.deals, function(index, deal) 
+						{
+							
+							if (deal.id == App_Deal_Details.dealDetailView.model.get('id'))
+							{
+								if (documentsView && documentsView.collection)
+								{
+									if(documentsView.collection.get(document.id))
+									{
+										documentsView.collection.get(document.id).set(new BaseModel(document));
+									}
+									else
+									{
+										documentsView.collection.add(new BaseModel(document), { sort : false });
+										documentsView.collection.sort();
+									}
+								}
+								
+									// Activates "Timeline" tab and its tab content in
+									// contact detail view
+									// activate_timeline_tab();
+									//add_entity_to_timeline(data);
+									/*
+									 * If timeline is not defined yet, initiates with the
+									 * data else inserts
+									 */
+									return false;
+							}
+						});	
+						var sURL="deal/" + App_Contacts.contactDetailView.model.get('id');
+						Backbone.history.navigate(sURL, { trigger : true });
+						return;	
+					}
+					else if( Current_Route.indexOf( App_Deal_Details.dealDetailView.model.id)>-1)
+					{
+
+						var sURL="deal/" + App_Deal_Details.dealDetailView.model.id;
+						Backbone.history.navigate(sURL, { trigger : true });
+						return;
+					}				
+				
+			}
+			
+			if (Current_Route == 'documents') 
+			{
 				if (isUpdate)
 					App_Documents.DocumentCollectionView.collection.remove(json);
 
 				App_Documents.DocumentCollectionView.collection.add(data);
 
 				App_Documents.DocumentCollectionView.render(true);
+					App_Documents.navigate("documents", {
+					trigger : true});
+				return;	
 
 			}
-			else if (App_Deal_Details.dealDetailView
-					&& Current_Route == "deal/"
-						+ App_Deal_Details.dealDetailView.model.id) {
-
-			// Add model to collection. Disabled sort while adding and called
-			// sort explicitly, as sort is not working when it is called by add
-			// function
-			
-			
-			/*
-			 * Verifies whether the added document is related to the deal in
-			 * deal detail view or not
-			 */
-			$.each(document.deals, function(index, deal) {
-				
-				if (deal.id == App_Deal_Details.dealDetailView.model.id)
-				{
-					if (dealDocsView && dealDocsView.collection)
-					{
-						if(dealDocsView.collection.get(document.id))
-						{
-							dealDocsView.collection.get(document.id).set(new BaseModel(document));
-						}
-						else
-						{
-							dealDocsView.collection.add(new BaseModel(document), { sort : false });
-							dealDocsView.collection.sort();
-						}
-					}
-					
-						// Activates "Timeline" tab and its tab content in
-						// contact detail view
-						// activate_timeline_tab();
-						//add_entity_to_timeline(data);
-						/*
-						 * If timeline is not defined yet, initiates with the
-						 * data else inserts
-						 */
-						return false;
-				}
-			});
-		}
-		else if (Current_Route == "email-template-add" || Current_Route.indexOf("email-template") == 0) {
-			$('#tpl-attachment-select').find('select').find('option:last').after("<option value="+document.id+" selected='selected'>"+document.name+"</option>");
-			$('.add-tpl-attachment-confirm').trigger("click");
-			App_Settings.navigate(Current_Route, {
-					trigger : true
-				});
-		}
-			else {
+			if (Current_Route == "email-template-add" || Current_Route.indexOf("email-template") == 0) 
+			{
+				$('#tpl-attachment-select').find('select').find('option:last').after("<option value="+document.id+" selected='selected'>"+document.name+"</option>");
+				$('.add-tpl-attachment-confirm').trigger("click");
+				App_Settings.navigate(Current_Route, {
+						trigger : true
+					});
+			}
+			else 
+			{
 				App_Documents.navigate("documents", {
 					trigger : true
 				});

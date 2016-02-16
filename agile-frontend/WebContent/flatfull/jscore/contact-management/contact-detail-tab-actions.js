@@ -314,6 +314,22 @@ var contact_details_documentandtasks_actions = {
 			
 			Backbone.history.navigate("documents/"+type+"/" + json.id+ "/edoc",{trigger: true});	
 	    },
+	    navigate_to_edit_document:function(e,type)
+	    {
+	    	
+	    	var document_id=$(e.currentTarget).attr("data");
+
+	    	if(type=="company")
+	    	{
+				json = App_Companies.companyDetailView.model.toJSON();
+			} else 
+			{
+				json = App_Contacts.contactDetailView.model.toJSON();
+			}
+			
+			
+			Backbone.history.navigate("documents/"+document_id+"/" + json.id,{trigger: true});	
+	    },
        show_document_list : function(e){
        		var targetEl = $(e.currentTarget);
 
@@ -374,9 +390,12 @@ var contact_details_documentandtasks_actions = {
 				agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false, null, null, "core/api/search/deals", false, true);
 
 				var json = null;
-				if(company_util.isCompany()){
+				if(company_util.isCompany())
+				{
 					json = App_Companies.companyDetailView.model.toJSON();
-				} else {
+				}
+				else 
+				{
 					json = App_Contacts.contactDetailView.model.toJSON();
 				}
 				var contact_name = getContactName(json);
