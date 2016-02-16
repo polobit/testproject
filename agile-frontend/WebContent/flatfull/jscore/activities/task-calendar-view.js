@@ -392,6 +392,8 @@ function getCalendarView() {
 							if (isNaN(taskJson.id))
 								return;
 
+							taskJson.due = taskJson.start.getTime() / 1000;
+
 							// Show edit modal for the event
 							$("#updateTaskModal").html(getTemplate("task-update-modal")).modal("show");
 

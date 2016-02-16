@@ -132,21 +132,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	
 	webhookSettings : function()
 	{
-		if (!CURRENT_DOMAIN_USER.is_admin)
-		{
-			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-				$('#content').html($(template_ui));	
-			}, "#content");
-
-			return;
-		}
 		
-		getTemplate("admin-settings", {}, undefined, function(template_ui){
-			if(!template_ui)
-				  return;
-			$('#content').html($(template_ui));	
+		
 			var view = new Base_Model_View({ url : '/core/api/webhooksregister', template : "admin-settings-webhook", 
 			no_reload_on_delete : true,
 			postRenderCallback : function()
@@ -172,15 +159,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				App_Admin_Settings.webhookSettings();
 			} });
 
-			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
-			$('#content').find('#AdminPrefsTab .select').removeClass('select');
-			$('#content').find('.webhook-tab').addClass('select');
-			$(".active").removeClass("active");
-
-		}, "#content");
-
-		
-		
+			$('#content').find('#webhook-accordian-template').html(view.render().el);
+	
 	},
 	
 	/**
