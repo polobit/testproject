@@ -931,6 +931,11 @@ public class ContactUtil
     public static void postDeleteOperation(List<Long> ids, Set<String> tags)
     {
 	String[] docIds = new String[ids.size()];
+	Iterator<Long> iterator = ids.iterator();
+	for (int i = 0; iterator.hasNext(); i++)
+	{
+	    docIds[i] = String.valueOf(iterator.next());
+	}
 
 	/**
 	 * Delete text search indexed data with maximum of 3 retires
