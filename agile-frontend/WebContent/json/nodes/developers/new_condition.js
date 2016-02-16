@@ -178,7 +178,7 @@
 				]
 		},
         {
-            "label": "Check for multiple conditions in your workflow.",
+            "label": "Check for multiple conditions in your workflow.Only And or only Or conditions can also be provided.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 
