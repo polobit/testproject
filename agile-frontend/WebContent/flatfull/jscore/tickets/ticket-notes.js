@@ -19,15 +19,21 @@ var Tickets_Notes = {
 			  }
 		});
 
-		if(!$("#send-reply").valid())
+		if(!$("#send-reply").valid()){
+
+			if($(e.target).hasClass('forward'))
+				this.forwardTicket(json, $save_btn, false);
+
 			return;
+		}
+			
 
 		var json = serializeForm("send-reply");
 
 		json.html_text = json.html_text.trim() + "<br><br>" + CURRENT_USER_PREFS.signature;
 
 		if($(e.target).hasClass('forward')){
-			this.forwardTicket(json, $save_btn);
+			this.forwardTicket(json, $save_btn, true);
 			return;
 		}
 
@@ -100,7 +106,7 @@ var Tickets_Notes = {
 		});
 	},
 
-	forwardTicket : function(data, targetEle){
+	forwardTicket : function(data, targetEle, isValid){
 
 		var emails = [];
 
@@ -110,7 +116,12 @@ var Tickets_Notes = {
 				emails.push(email);
 		});
 
-		if(emails.length == 0)
+		if(emails.length == 0){
+			$('ul.forward-emails').addClass("ticket-input-border-error");
+			return;
+		}
+
+		if(!isValid)
 			return;
 
 		//set to emails
@@ -221,6 +232,17 @@ var Tickets_Notes = {
 	        	$('ul.forward-emails').prepend(getTemplate('forward-email-li', {email: email, err_email: err_email}));
 	        	$('#forward_email_input').val('');
 
+	        	var emails = [];
+	        	$('ul.forward-emails > li').each(function(index){
+					var email =  $(this).find('a.anchor').text();
+					if(email)
+						emails.push(email);
+				});
+
+				if(emails.length > 0){
+					$('ul.forward-emails').removeClass("ticket-input-border-error");
+				}
+
 	        	return false;
 
 	    	}
@@ -238,6 +260,8 @@ var Tickets_Notes = {
 
 				$('ul.forward-emails').prepend(getTemplate('forward-email-li', {email: email}));
 				$('#forward_email_input').val('');
+
+				$('ul.forward-emails').removeClass("ticket-input-border-error");
 		  		
 		  	},undefined, undefined, 'core/api/search/');
 		}

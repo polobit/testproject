@@ -3,6 +3,7 @@
 <%@page import="com.agilecrm.ticket.utils.TicketNotesUtil"%>
 <%@page import="com.agilecrm.ticket.entitys.TicketNotes"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
+<%@page import="org.apache.commons.lang.exception.ExceptionUtils"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -37,14 +38,15 @@ body {
 	%>
 
 	<%
-	JSONObject outputString = null;
+	String outputString = null;
 	if(type != null && type.equalsIgnoreCase("html")){ 
 		out.println(notes.html_text);
 	}else{
 
 		try{
-			outputString = new JSONArray(notes.mime_object).getJSONObject(0);
+			outputString = notes.mime_object;
 		}catch(Exception e){
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 		
 	}
@@ -55,10 +57,22 @@ body {
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js">
 	</script>
 	<script type="text/javascript">
-		
-		var mime = '<%= outputString%>';
 
-		if(mime &&  mime != null && mime != "undefind"){
+		var mime = <%= outputString%>;
+		var type = "<%= type%>";
+
+		printMIMEObj(type, mime);
+
+		function printMIMEObj(type, mime){
+
+			if(type && type == "html")
+				return;
+
+			if(!mime || mime == null || mime == "undefind")
+				return;
+
+			if(typeof mime == "object")
+				mime = JSON.stringify(mime[0]);
 
 			mime = mime.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -69,7 +83,7 @@ body {
 			// $(".original_message").html(JSON.stringify(mimeobj, convertHTMLToString, 4));
 
 		}
-
+		
 		function convertHTMLToString (key, value) {
 			// Replace the html tags
 			return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

@@ -506,6 +506,7 @@ div.chosen-container>ul.chosen-choices{
 .plain-text-comment a{
   color: #337ab7!important;
   text-decoration: none;
+}
 
 .tooltip-inner {
   white-space:nowrap;
@@ -513,4 +514,8 @@ div.chosen-container>ul.chosen-choices{
 }
 .choose-labels>div.chosen-container>ul.chosen-choices>li.search-field>.default{
   color: #A3ACB0 !important;
+}
+
+.ticket-input-border-error{
+    border-color: #a94442 !important;
 }
