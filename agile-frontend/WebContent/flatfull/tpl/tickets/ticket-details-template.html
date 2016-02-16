@@ -458,9 +458,11 @@
                       <tbody>
                         {{#each label_matched_canned_responses}}
                         <tr id="ticket_canned_response" rel="{{id}}" class="ticket-canned-response text-sm">                    
-                          <td class="cursor-pointer overflow-elipsis" style="max-width: 130px;">{{title}}</td>
+                          <td class="cursor-pointer">{{title}}
+                            <div class="div-max-width" style="max-width: 90%;">{{title}}</div>
+                          </td>
                           <td class="cursor-pointer">
-                            <div id="message" class="edit-hover text-muted div-max-width" style="max-width: 50%;" title="{{compile_template message ../this}}">{{compile_template message ../this}}</div>
+                            <div id="message" class="text-muted div-max-width" style="max-width: 90%;" title="{{compile_template message ../this}}">{{compile_template message ../this}}</div>
                           </td>
                         </tr>
                         {{/each}}
