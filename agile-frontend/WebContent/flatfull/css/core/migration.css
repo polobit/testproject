@@ -2125,6 +2125,7 @@ width: 1%!important;
  float: left;
 }
 
+
 .prefs-view a.select {
   background: #edf1f2;
   opacity: 1;
@@ -2133,3 +2134,15 @@ width: 1%!important;
 
   border-left-color: #fff !important;
 }
+
+@media all and (min-width: 768px) and (max-width: 800px) {
+  #wrap:not(.app-aside-folded) .need_help{
+  display: none;
+  }
+}
+
+ .prefs-mobile-view .vbox {
+    min-height: auto;
+  }
+
+
