@@ -1,14 +1,15 @@
+package com.agilecrm.ticket.rest;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,7 +30,6 @@ import com.agilecrm.ticket.utils.CSVTicketIdsFetcher;
 import com.agilecrm.ticket.utils.FilterTicketIdsFetcher;
 import com.agilecrm.ticket.utils.ITicketIdsFetcher;
 import com.agilecrm.ticket.utils.TicketBulkActionUtil;
-import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
