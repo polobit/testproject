@@ -3389,7 +3389,7 @@ table.hide-head-checkbox th label.i-checks {
 	line-height: 20px;
 	color:#7C7C7C;
 	margin-left:82px;
-	font-size:18px;
+	font-size:12px;
 	margin-top:-67px;
 	margin-left:52px;
 }
@@ -3405,3 +3405,11 @@ table.hide-head-checkbox th label.i-checks {
 	text-transform: capitalize;
 	font-size:14px;
 }
+
+.admin-user_temp:hover div.user-view-actions {
+  display: block;
+}
+div.user-view-actions {
+  display: none;
+}
+
