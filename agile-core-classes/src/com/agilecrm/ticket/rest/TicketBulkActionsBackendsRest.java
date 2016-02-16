@@ -2,14 +2,17 @@ package com.agilecrm.ticket.rest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,6 +20,7 @@ import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.reports.deferred.ReportsDeferredTask;
 import com.agilecrm.ticket.deferred.ChangeAssigneeDeferredTask;
 import com.agilecrm.ticket.deferred.CloseTicketsDeferredTask;
 import com.agilecrm.ticket.deferred.DeleteTicketsDeferredTask;
@@ -30,7 +34,11 @@ import com.agilecrm.ticket.utils.CSVTicketIdsFetcher;
 import com.agilecrm.ticket.utils.FilterTicketIdsFetcher;
 import com.agilecrm.ticket.utils.ITicketIdsFetcher;
 import com.agilecrm.ticket.utils.TicketBulkActionUtil;
+import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 
 /**
@@ -66,8 +74,8 @@ public class TicketBulkActionsBackendsRest
 			BulkActionUtil.setSessionManager(domainUserID);
 
 			// Logging bulk action activity
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_MANAGE_LABELS, null, null, "", labelsIDs.toString(),
-					"labels");
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_MANAGE_LABELS, null, null, "",
+					labelsIDs.toString(), "labels");
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -110,8 +118,8 @@ public class TicketBulkActionsBackendsRest
 			BulkActionUtil.setSessionManager(domainUserID);
 
 			// Logging bulk action activity
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CHANGE_ASSIGNEE, null, null, "", assigneeID + " "
-					+ groupID, "assignee_id");
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CHANGE_ASSIGNEE, null, null, "", assigneeID
+					+ " " + groupID, "assignee_id");
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -152,7 +160,8 @@ public class TicketBulkActionsBackendsRest
 			BulkActionUtil.setSessionManager(domainUserID);
 
 			// Logging bulk action activity
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_EXECUTE_WORKFLOW, null, null, "", workflowID + "", "");
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_EXECUTE_WORKFLOW, null, null, "", workflowID
+					+ "", "");
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -243,7 +252,7 @@ public class TicketBulkActionsBackendsRest
 			e.printStackTrace();
 		}
 	}
-	
+
 	@POST
 	@Path("/spam-tickets/{domain_user_id}")
 	@Produces(MediaType.APPLICATION_FORM_URLENCODED)
@@ -275,7 +284,7 @@ public class TicketBulkActionsBackendsRest
 			e.printStackTrace();
 		}
 	}
-	
+
 	@POST
 	@Path("/favorite-tickets/{domain_user_id}")
 	@Produces(MediaType.APPLICATION_FORM_URLENCODED)
@@ -296,7 +305,8 @@ public class TicketBulkActionsBackendsRest
 			else if (attributes.ticketIDs != null)
 				idsFetcher = new CSVTicketIdsFetcher(attributes.ticketIDs);
 
-			MarkTicketsAsFavoriteDeferredTask task = new MarkTicketsAsFavoriteDeferredTask(NamespaceManager.get(), domainUserID);
+			MarkTicketsAsFavoriteDeferredTask task = new MarkTicketsAsFavoriteDeferredTask(NamespaceManager.get(),
+					domainUserID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
@@ -305,6 +315,25 @@ public class TicketBulkActionsBackendsRest
 		catch (Exception e)
 		{
 			e.printStackTrace();
+		}
+	}
+
+	@GET
+	@Path("/execute-sla-cron")
+	public void executeSLACron()
+	{
+		try
+		{
+			Set<String> domains = NamespaceUtil.getAllNamespaces();
+			
+			for (String namespace : domains)
+			{
+				
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 }
