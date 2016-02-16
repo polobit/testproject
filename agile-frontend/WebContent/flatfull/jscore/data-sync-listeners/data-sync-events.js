@@ -78,7 +78,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
         var syncPrefs = serializeForm("shopify-contact-import-form");
         syncPrefs["inProgress"] = true;
              getSyncModelFromName('SHOPIFY', function(mod) {
-
+              if(mod!=undefined){
                 if(mod.inProgress==true)
                 {
                      show_success_message_after_save_button("Already in Progress", App_Datasync.dataSync.el);
@@ -87,7 +87,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             },3000);
                      return false;
                 }
-        
+          }
 
        
 
@@ -189,7 +189,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                 }
             });
-        });
+        },true);
     },
 
     importStripePrefsDelete: function(e) {
@@ -256,7 +256,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                 }
             });
-        });
+        },true);
     },
 
     syncQuickbooks: function(e) {
@@ -303,7 +303,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                 }
             });
-        });
+        },true);
 
     },
 
@@ -350,7 +350,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
                                 showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                             }
                         });
-                    });
+                    },true);
                     
     }
 

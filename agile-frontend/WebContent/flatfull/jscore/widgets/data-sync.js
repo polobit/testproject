@@ -170,8 +170,10 @@ function getSyncModelFromName(name, callback,modelfetch){
 						url : '/core/api/contactprefs/'+name
 					});
        	base_model.model.fetch({ success : function(data){
-       	App_Datasync.agile_sync_collection_view.collection.add(data.toJSON());
+       	App_Datasync.agile_sync_collection_view.collection.get(data.toJSON().id).set('inProgress',data.toJSON().inProgress);
+       	 callback(getModalfromName(App_Datasync.agile_sync_collection_view.collection.toJSON(), name));
        }});
+       	return;
        }
        if(DATA_SYNC_FORCE_FETCH){
        		DATA_SYNC_FORCE_FETCH=false;
