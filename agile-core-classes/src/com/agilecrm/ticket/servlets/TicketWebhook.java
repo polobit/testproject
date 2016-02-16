@@ -204,7 +204,7 @@ public class TicketWebhook extends HttpServlet
 				if (msgJSON.has("attachments"))
 				{
 					JSONObject attachments = msgJSON.getJSONObject("attachments");
-					
+
 					try
 					{
 						msgJSON.remove("attachments");
@@ -212,8 +212,7 @@ public class TicketWebhook extends HttpServlet
 					catch (Exception e)
 					{
 					}
-					
-					
+
 					for (Iterator iter = attachments.keys(); iter.hasNext();)
 					{
 						JSONObject fileJSON = attachments.getJSONObject((String) iter.next());
@@ -246,16 +245,16 @@ public class TicketWebhook extends HttpServlet
 				if (msgJSON.has("images"))
 				{
 					JSONObject images = msgJSON.getJSONObject("images");
-					
+
 					try
 					{
 						msgJSON.remove("images");
 					}
 					catch (Exception e)
 					{
-					
+
 					}
-					
+
 					Document doc = Jsoup.parse(html, "UTF-8");
 
 					for (Iterator iter = images.keys(); iter.hasNext();)
@@ -281,23 +280,25 @@ public class TicketWebhook extends HttpServlet
 						{
 							switch (fileType)
 							{
-								case "image/png":
-									fileName += ".png";
-									break;
-								case "image/jpeg":
-									fileName += ".jpg";
-									break;
-								default:
-									break;
+							case "image/png":
+								fileName += ".png";
+								break;
+							case "image/jpeg":
+								fileName += ".jpg";
+								break;
+							default:
+								break;
 							}
 						}
 
-						byte[] bytes = Base64.decodeBase64(fileJSON.getString("content"));;
+						byte[] bytes = Base64.decodeBase64(fileJSON.getString("content"));
+						;
 
-//						if (isBase64Encoded)
-//							bytes = Base64.decodeBase64(fileJSON.getString("content"));
-//						else
-//							bytes = fileJSON.getString("content").getBytes();
+						// if (isBase64Encoded)
+						// bytes =
+						// Base64.decodeBase64(fileJSON.getString("content"));
+						// else
+						// bytes = fileJSON.getString("content").getBytes();
 
 						GcsFileOptions options = new GcsFileOptions.Builder().mimeType(fileType)
 								.contentEncoding("UTF-8").acl("public-read")
@@ -326,8 +327,8 @@ public class TicketWebhook extends HttpServlet
 						Element element = elements.first();
 
 						element.attr("src", service.getFilePathToDownload());
-						
-						plainText = plainText.replace("[image: " + element.attr("alt") + "]", element.html());
+
+						plainText = plainText.replace("[image: " + element.attr("alt") + "]", element.outerHtml());
 					}
 
 					html = doc.toString();
