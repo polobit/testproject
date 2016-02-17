@@ -11,7 +11,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"change .ticket_type" : "changeTicketType",
 		"change .ticket_priority" : "changeTicketPriority",
 		"click .delete-ticket" : "deleteTicket",
-		/*"click .close-ticket" : "closeTicket",*/
+		"click .close-current-ticket" : "closeTicket",
 		"click .show-workflows" : "workflows",
 		"click #workflows_list li a" : "executeWorkflows",
 

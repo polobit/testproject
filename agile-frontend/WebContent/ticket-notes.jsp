@@ -72,7 +72,7 @@ body {
 				return;
 
 			if(typeof mime == "object")
-				mime = JSON.stringify(mime[0]);
+				mime = JSON.stringify(mime);
 
 			mime = mime.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
