@@ -5,9 +5,11 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		//Ticket operations change group, assignee, priority etc
 		/*"click .ticket_group_name" : "changeGroup",*/
 		"change .ticket_status" : "changeStatus",
+		
 		"click .ticket_assignee_name" : "changeAssignee",
+		"click #ticket-assignee" : "changeAssignee",
 		"click .assign-to-me" : "assignToMe",
-
+         
 		"change .ticket_type" : "changeTicketType",
 		"change .ticket_priority" : "changeTicketPriority",
 		"click .delete-ticket" : "deleteTicket",

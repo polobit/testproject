@@ -358,7 +358,7 @@ public class TicketWebhook extends HttpServlet
 			String fromEmail = msgJSON.getString("from_email");
 
 			String fromName = fromEmail.substring(0, fromEmail.lastIndexOf("@"));
-			
+
 			System.out.println("From email: " + fromEmail);
 			System.out.println("From name: " + fromName);
 			
