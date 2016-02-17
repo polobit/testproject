@@ -2,8 +2,12 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
+import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.utils.TicketsUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -63,6 +67,18 @@ public class TicketEmailGroup extends TaskletAdapter
 
 				// Change Group and Assignee
 				TicketsUtil.sendEmailToGroup(Long.parseLong(groupId), subject, emailBody);
+
+				String message = "Ticket(#" + ticketJSON.getString("id") + ") email sent to group";
+				try
+				{
+					message = message + " - " + TicketGroups.ticketGroupsDao.get(Long.parseLong(groupId)).group_name;
+				}
+				catch (Exception e)
+				{
+				}
+
+				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+						message, LogType.TICKET_EMAIL_GROUP.toString());
 
 			}
 
