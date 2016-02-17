@@ -115,7 +115,7 @@ function isValidForm(form) {
 		if(value=="")
 			return false;
 		
-		return /^\+?(0|[1-9]\d*)$/.test(value);
+		return /^\+?([1-9]\d*)$/.test(value);
 	}," Please enter a positive number.");
 
 	
@@ -191,22 +191,6 @@ function isValidForm(form) {
 		}
 	);
 
-	//Positive Number validation
-	jQuery.validator.addMethod("positive_number", function(value, element){
-		
-		if(value=="")
-			return true;
-
-		if(isNaN(value))
-		{
-			return false;
-		}
-		if(!isNaN(value) && parseFloat(value) >= 0)
-		{
-			return true;
-		}
-
-	}," Please enter a value greater than or equal to 0.");
 
 	$(form).validate({
 		rules : {

@@ -386,7 +386,9 @@ var contacts_bulk_actions = {
 		{
 			continueAction = false;
 			var pendingEmails = getPendingEmails();
-
+			var credits = _billing_restriction.email_credits_count;
+			if(credits != undefined)
+				pendingEmails = pendingEmails + credits;
 			var yes = "Yes";
 			var no = "No"
 

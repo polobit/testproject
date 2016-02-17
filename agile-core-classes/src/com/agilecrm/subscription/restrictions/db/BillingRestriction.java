@@ -471,6 +471,9 @@ public class BillingRestriction
 
 	if (max_emails_count == null)
 	    max_emails_count = 0;
+	
+	if (email_credits_count == null || email_credits_count < 0)
+		email_credits_count = 0;
 
 	if (one_time_emails_count > 0 && (max_emails_count == null || max_emails_count == 0))
 	{
