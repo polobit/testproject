@@ -121,11 +121,14 @@ var portlet_graph_utility = {
 													} ],
 													exporting : {
 											    			buttons: {
-								   						 contextButton: {
-								       					 menuItems: null,
-								       					 onclick: function () { this.downloadCSV(); }
-						       					 
-						       					},
+								   						   exportButton: {
+							       					 menuItems: null,
+							       					 onclick: function () { this.downloadCSV(); }
+							       					 
+							       					},
+							       					printButton: {
+							       						enabled : false
+       					}
 						       		
 						       				}
 									    },												});
@@ -187,11 +190,15 @@ var portlet_graph_utility = {
 						} ],
 						exporting : {
 									    	buttons: {
-						   						 contextButton: {
-						       					 menuItems: null,
-						       					 onclick: function () { this.downloadCSV(); }
-						       					 
-						       					},
+								   						   exportButton: {
+							       					 menuItems: null,
+							       					 onclick: function () { this.downloadCSV(); }
+							       					 
+							       					},
+							       					printButton: {
+							       						enabled : false
+       					}
+	       		
 						       		
 						       				}
 									    },
@@ -281,11 +288,15 @@ var portlet_graph_utility = {
 												} ],
 												exporting : {
 									    			buttons: {
-						   						 contextButton: {
-						       					 menuItems: null,
-						       					 onclick: function () { this.downloadCSV(); }
-						       					 
-						       					},
+						   						   exportButton: {
+								       					 menuItems: null,
+								       					 onclick: function () { this.downloadCSV(); }
+								       					 
+								       					},
+								       					printButton: {
+								       						enabled : false
+								       					}
+	       		
 						       		
 						       				}
 									    },
@@ -355,11 +366,14 @@ var portlet_graph_utility = {
 												series : series,
 												exporting : {
 									    			buttons: {
-						   						 contextButton: {
-						       					 menuItems: null,
-						       					 onclick: function () { this.downloadCSV(); }
-						       					 
-						       					},
+						   						   exportButton: {
+							       					 menuItems: null,
+							       					 onclick: function () { this.downloadCSV(); }
+							       					 
+							       					},
+							       					printButton: {
+							       						enabled : false
+       					}
 						       		
 						       				}
 									    },
@@ -453,11 +467,14 @@ var portlet_graph_utility = {
 							series : series,
 							exporting : {
 									    	buttons: {
-						   						 contextButton: {
-						       					 menuItems: null,
-						       					 onclick: function () { this.downloadCSV(); }
-						       					 
-						       					},
+						   						    exportButton: {
+							       					 menuItems: null,
+							       					 onclick: function () { this.downloadCSV(); }
+							       					 
+							       					},
+							       					printButton: {
+							       						enabled : false
+       					}
 						       		
 						       				}
 									    },
@@ -559,11 +576,14 @@ var portlet_graph_utility = {
 												} ],
 												exporting : {
 									    	buttons: {
-						   						 contextButton: {
-						       					 menuItems: null,
-						       					 onclick: function () { this.downloadCSV(); }
-						       					 
-						       					},
+						   						   exportButton: {
+							       					 menuItems: null,
+							       					 onclick: function () { this.downloadCSV(); }
+							       					 
+							       					},
+							       					printButton: {
+							       						enabled : false
+       					}
 						       		
 						       				}
 									    },
@@ -746,11 +766,14 @@ var portlet_graph_utility = {
 						        series: series,
 						       exporting : {
 									    	buttons: {
-						   						 contextButton: {
-						       					 menuItems: null,
-						       					 onclick: function () { this.downloadCSV(); }
-						       					 
-						       					},
+						   						    exportButton: {
+							       					 menuItems: null,
+							       					 onclick: function () { this.downloadCSV(); }
+							       					 
+							       					},
+							       					printButton: {
+							       						enabled : false
+       					}
 						       		
 						       				}
 									    },
@@ -857,11 +880,14 @@ var portlet_graph_utility = {
 		        }],
 		        exporting : {
 									    	buttons: {
-						   						 contextButton: {
-						       					 menuItems: null,
-						       					 onclick: function () { this.downloadCSV(); }
-						       					 
-						       					},
+						   						   exportButton: {
+							       					 menuItems: null,
+							       					 onclick: function () { this.downloadCSV(); }
+							       					 
+							       					},
+							       					printButton: {
+							       						enabled : false
+       					}
 						       		
 						       				}
 									    },
@@ -1000,11 +1026,14 @@ var portlet_graph_utility = {
 												series : series,
 												exporting : {
 									    	buttons: {
-						   						 contextButton: {
-						       					 menuItems: null,
-						       					 onclick: function () { this.downloadCSV(); }
-						       					 
-						       					},
+						   						    exportButton: {
+							       					 menuItems: null,
+							       					 onclick: function () { this.downloadCSV(); }
+							       					 
+							       					},
+							       					printButton: {
+							       						enabled : false
+       					}
 						       		
 						       				}
 									    },
@@ -1168,11 +1197,14 @@ var portlet_graph_utility = {
 												series : series,
 												exporting : {
 									    	buttons: {
-						   						 contextButton: {
-						       					 menuItems: null,
-						       					 onclick: function () { this.downloadCSV(); }
-						       					 
-						       					},
+						   						    exportButton: {
+							       					 menuItems: null,
+							       					 onclick: function () { this.downloadCSV(); }
+							       					 
+							       					},
+							       					printButton: {
+							       						enabled : false
+       					}
 						       		
 						       				}
 									    },
@@ -1333,11 +1365,14 @@ setupCharts(function(){
 												} ],
 												exporting : {
 									    	buttons: {
-						   						 contextButton: {
-						       					 menuItems: null,
-						       					 onclick: function () { this.downloadCSV(); }
-						       					 
-						       					},
+						   						    exportButton: {
+							       					 menuItems: null,
+							       					 onclick: function () { this.downloadCSV(); }
+							       					 
+							       					},
+							       					printButton: {
+							       						enabled : false
+       					}
 						       		
 						       				}
 									    },
@@ -1520,11 +1555,14 @@ setupCharts(function(){
 												} ],
 												exporting : {
 									    	buttons: {
-						   						 contextButton: {
-						       					 menuItems: null,
-						       					 onclick: function () { this.downloadCSV(); }
-						       					 
-						       					},
+						   						   exportButton: {
+							       					 menuItems: null,
+							       					 onclick: function () { this.downloadCSV(); }
+							       					 
+							       					},
+							       					printButton: {
+							       						enabled : false
+       					}
 						       		
 						       				}
 									    },
@@ -1621,11 +1659,14 @@ setupCharts(function(){
 												} ],
 												exporting : {
 									    	buttons: {
-						   						 contextButton: {
-						       					 menuItems: null,
-						       					 onclick: function () { this.downloadCSV(); }
-						       					 
-						       					},
+						   						   exportButton: {
+							       					 menuItems: null,
+							       					 onclick: function () { this.downloadCSV(); }
+							       					 
+							       					},
+							       					printButton: {
+							       						enabled : false
+       					}
 						       		
 						       				}
 									    },

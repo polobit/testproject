@@ -111,11 +111,14 @@ function pie(url, selector, name)
 
 										exporting : {
 									    	buttons: {
-						   						 contextButton: {
-						       					 menuItems: null,
-						       					 onclick: function () { this.downloadCSV(); }
-						       					 
-						       					},
+						   						 exportButton: {
+       									 menuItems: null,
+       								 onclick: function () { this.downloadCSV(); }
+       					 
+				       								},
+				       					printButton: {
+       											enabled : false
+       											}
 						       		
 						       				}
 									    },
@@ -323,22 +326,15 @@ function showBar(url, selector, name, yaxis_name, stacked)
 
 			    exporting : {
 			    	buttons: {
-   						 contextButton: {
+   						 exportButton: {
        					 menuItems: null,
        					 onclick: function () { this.downloadCSV(); }
        					 
        					},
-       		/*			       'downloadButton': {
-            symbol: 'url(/flatfull/img/Download_chart.png)',
-            x: -88,
-            symbolX: 4,
-            symbolY: 4,
-            symbolFill: '#B5C9DF',
-            symbolSize:,
-            hoverSymbolFill: '#779ABF',
-            _titleKey: 'test2Title',
-             onclick: function () { this.downloadCSV(); }
-        }*/
+       					printButton: {
+       						enabled : false
+       					}
+
        				}
 			    },
 			    plotOptions: {
@@ -646,11 +642,15 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 			    series: series,
 			    exporting : {
 						    	buttons: {
-			   						 contextButton: {
-			       					 menuItems: null,
-			       					 onclick: function () { this.downloadCSV(); }
-			       					 
-			       					},
+			   						  exportButton: {
+       					 menuItems: null,
+       					 onclick: function () { this.downloadCSV(); }
+       					 
+       					},
+       					printButton: {
+       						enabled : false
+       					}
+	       		
 			       		
 			       				}
 						    },
@@ -722,11 +722,15 @@ function showFunnel(url, selector, name, show_loading)
 		        },
 		        exporting : {
 						    	buttons: {
-			   						 contextButton: {
-			       					 menuItems: null,
-			       					 onclick: function () { this.downloadCSV(); }
-			       					 
-			       					},
+			   						  exportButton: {
+       					 menuItems: null,
+       					 onclick: function () { this.downloadCSV(); }
+       					 
+       					},
+       					printButton: {
+       						enabled : false
+       					}
+	       		
 			       		
 			       				}
 						    },
@@ -1130,11 +1134,15 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 			    series: series,
 			   exporting : {
 					    	buttons: {
-		   						 contextButton: {
-		       					 menuItems: null,
-		       					 onclick: function () { this.downloadCSV(); }
-		       					 
-		       					},
+		   						   exportButton: {
+       					 menuItems: null,
+       					 onclick: function () { this.downloadCSV(); }
+       					 
+       					},
+       					printButton: {
+       						enabled : false
+       					}
+	       		
 		       		
 		       				}
 					    },
@@ -1492,11 +1500,15 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,freque
 			    series: series,
 			    exporting : {
 						    	buttons: {
-			   						 contextButton: {
-			       					 menuItems: null,
-			       					 onclick: function () { this.downloadCSV(); }
-			       					 
-			       					},
+			   						   exportButton: {
+       					 menuItems: null,
+       					 onclick: function () { this.downloadCSV(); }
+       					 
+       					},
+       					printButton: {
+       						enabled : false
+       					}
+	       		
 			       		
 			       				}
 						    },
@@ -1767,11 +1779,15 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                 series: series,
                 exporting : {
 						    	buttons: {
-			   						 contextButton: {
-			       					 menuItems: null,
-			       					 onclick: function () { this.downloadCSV(); }
-			       					 
-			       					},
+			   						  exportButton: {
+       					 menuItems: null,
+       					 onclick: function () { this.downloadCSV(); }
+       					 
+       					},
+       					printButton: {
+       						enabled : false
+       					}
+	       		
 			       		
 			       				}
 						    },
@@ -1929,11 +1945,15 @@ if(selector == 'lossreasonpie-chart-users'){
 					{ type : 'pie', name : 'Deal', data : pieData, startAngle : 90 }
 				], exporting : {
 						    	buttons: {
-			   						 contextButton: {
-			       					 menuItems: null,
-			       					 onclick: function () { this.downloadCSV(); }
-			       					 
-			       					},
+			   						  exportButton: {
+       					 menuItems: null,
+       					 onclick: function () { this.downloadCSV(); }
+       					 
+       					},
+       					printButton: {
+       						enabled : false
+       					}
+	       		
 			       		
 			       				}
 						    },
@@ -2167,11 +2187,14 @@ function showGuage(selector, data,goal_data,name,show_loading)
         },
         exporting : {
 				    	buttons: {
-	   						 contextButton: {
-	       					 menuItems: null,
-	       					 onclick: function () { this.downloadCSV(); }
-	       					 
-	       					},
+	   						  exportButton: {
+       					 menuItems: null,
+       					 onclick: function () { this.downloadCSV(); }
+       					 
+       					},
+       					printButton: {
+       						enabled : false
+       					}
 	       		
 	       				}
 				    },
@@ -2260,12 +2283,14 @@ function showFunnelForConversion(selector, name, show_loading,v)
 		        },
 		        exporting : {
 					    	buttons: {
-		   						 contextButton: {
-		       					 menuItems: null,
-		       					 onclick: function () { this.downloadCSV(); }
-		       					 
-		       					},
-		       		
+		   						  exportButton: {
+       					 menuItems: null,
+       					 onclick: function () { this.downloadCSV(); }
+       					 
+       					},
+       					printButton: {
+       						enabled : false
+       					}
 		       				}
 					    },
 		        series: [{
@@ -2524,12 +2549,14 @@ function BubbleChart(url, selector, name,show_loading)
 			    series: series,
 			   exporting : {
 						    	buttons: {
-			   						 contextButton: {
-			       					 menuItems: null,
-			       					 onclick: function () { this.downloadCSV(); }
-			       					 
-			       					},
-			       		
+			   						 exportButton: {
+       					 menuItems: null,
+       					 onclick: function () { this.downloadCSV(); }
+       					 
+       					},
+       					printButton: {
+       						enabled : false
+       					}
 			       				}
 						    },
 			});
