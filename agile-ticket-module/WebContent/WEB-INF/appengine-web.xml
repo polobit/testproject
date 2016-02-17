@@ -8,7 +8,7 @@
 		<property name="com.google.gdata.DisableCookieHandler" value="true" />
 	</system-properties>
 
-  <!--instance and scaling settings-->
+  <!--Instance and scaling settings-->
   <instance-class>B4</instance-class>
   <basic-scaling>
     <max-instances>5</max-instances>
