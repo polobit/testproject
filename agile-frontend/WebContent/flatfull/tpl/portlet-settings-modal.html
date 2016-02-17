@@ -327,11 +327,11 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsDealsFunnelSettingsForm" name="portletsDealsFunnelSettingsForm" method="post" >
+		<form id="portletsDealsFunnelSettingsForm" name="portletsDealsFunnelSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<!-- <input type="text" class="hidden pull-right" /> -->
 			<div class="control-group form-group" id="portletsDealsFunnelTrack" style="display:none;">
-				<label class="control-label">Track</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Track</label>
+				<div class="controls col-sm-7">
 					<select id="track" name="track" class="required form-control">
 						
 					</select>
@@ -339,8 +339,8 @@
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label">Deals</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Deals</label>
+				<div class="controls col-sm-7">
 					<select id="deals" name="deals" class="required form-control">
 						<option value="all-deals">All Deals</option>
 						<option value="my-deals">My Deals</option>
@@ -354,8 +354,8 @@
                 </div>
 			</div> -->
 			<div class="control-group form-group">
-				<label class="control-label">Split by</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Split by</label>
+				<div class="controls col-sm-7">
 					<select id="deals-funnel-split-by" name="split-by" class="required form-control">
 						<option value="revenue">Revenue</option>
 						<option value="count">Count</option>
@@ -858,10 +858,10 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsIncomingDealsSettingssForm" name="portletsIncomingDealsSettingsForm" method="post" >
+		<form id="portletsIncomingDealsSettingssForm" name="portletsIncomingDealsSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label">Split by</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Split by</label>
+				<div class="controls col-sm-7">
 					<select id="split-by-incoming-deals" name="type" class="form-control">
 						<option value="deals">Total Deals</option>
                     	<option value="Revenue">Total Revenue</option>
@@ -869,8 +869,8 @@
 				</div>
 			</div>
 			<div class="control-group form-group" id="portletsIncomingDealsOwner">
-				<label class="control-label">Owner</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Owner</label>
+				<div class="controls col-sm-7">
 					<select id="owner" name="owner" class="form-control">
 						
 					</select>
@@ -878,8 +878,8 @@
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label">Frequency</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Frequency</label>
+				<div class="controls col-sm-7">
 					<select id="frequency-incoming-deals" name="frequency" class="form-control">
 						<option value="daily">Daily</option>
 						<option value="weekly">Weekly</option>
@@ -888,8 +888,8 @@
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label">Duration</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Duration</label>
+				<div class="controls col-sm-7">
 					<select id="duration-incoming-deals" name="duration" class="form-control">
 						<option value="1-day" >Today</option>
 						<option value="yesterday" >Yesterday</option>
@@ -923,10 +923,10 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsLostDealAnalysisSettingsForm" name="portletsLostDealAnalysisSettingsForm" method="post" >
+		<form id="portletsLostDealAnalysisSettingsForm" name="portletsLostDealAnalysisSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group" id="portletsLostDealAnalysisOwner">
-				<label class="control-label">Owner</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Owner</label>
+				<div class="controls col-sm-7">
 					<select id="owner-lost-deal-analysis" name="owner" class="form-control">
 						
 					</select>
@@ -934,8 +934,8 @@
 				</div>
 			</div>
 			<div class="control-group form-group" id="portletsLostDealAnalysisTrack">
-				<label class="control-label">Track</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Track</label>
+				<div class="controls col-sm-7">
 					<select id="track-lost-deal-analysis" name="track" class="form-control">
 						
 					</select>
@@ -943,8 +943,8 @@
 				</div>
 			</div>
 			<div class="control-group form-group" id="portletsLostDealAnalysisSource">
-				<label class="control-label">Source</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Source</label>
+				<div class="controls col-sm-7">
 					<select id="source-lost-deal-analysis" name="source" class="form-control">
 						
 					</select>
@@ -952,8 +952,8 @@
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label">Duration</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Duration</label>
+				<div class="controls col-sm-7">
 					<select id="duration-lost-deal-analysis" name="duration" class="form-control">
 						<option value="1-day" >Today</option>
 						<option value="yesterday" >Yesterday</option>
