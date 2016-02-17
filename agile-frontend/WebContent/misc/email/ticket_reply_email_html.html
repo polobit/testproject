@@ -18,7 +18,7 @@
 												<img alt="clickdesk-profile-pic" height="40" class="clickdesk-profile-pic" src="{{img_url}}" style="min-height:auto;line-height:100%;outline:none;text-decoration:none;border-radius:3px" width="40"/></td>
                                                 <td width="100%" valign="top">
                                                     <p style="font-family:Arial,sans-serif;font-size:14px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">
-                                                    	<strong>{{name}}</strong>
+                                                    	<strong>{{user_name}}</strong>
                                                     </p>
                                                      
                                                     <p style="font-family:Arial,sans-serif;font-size:12px;line-height:25px;margin-bottom:15px;margin-top:0;padding:0;color:#A8A8A8">{{created_time}}</p>
@@ -28,19 +28,34 @@
                                                     
                                                 </td>
                                             </tr>
-                                            <tr>
-                                            	{{#attachments_list}}
-                                            		<td valign="top" style="padding:0 10px 0 0;width:45px">              
-														<a href="{{this.url}}" target="_blank">{{this.name}}</a>
-													</td>
-                                            	{{/attachments_list}}
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    {{#attachments_exists}}
+                    	<h4>Attachments:</h4>
+	                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+	                        <tbody>
+	                            <tr>
+	                                <td width="100%">
+	                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed">
+	                                        <tbody>
+	                                            <tr>
+	                                            	{{#attachments_list}}
+	                                            		<td valign="top" style="padding:0 10px 0 0;">              
+															<a href="{{url}}" target="_blank">{{name}}</a>
+														</td>
+	                                            	{{/attachments_list}}
+	                                            </tr>
+	                                        </tbody>
+	                                    </table>
+	                                </td>
+	                            </tr>
+	                        </tbody>
+	                    </table>
+	               {{/attachments_exists}}
                 </div>
                {{/note_json_array}}
 				
