@@ -66,9 +66,11 @@ public class RedirectServlet extends HttpServlet
 	String originalURL = req.getParameter("u");
 	String push = req.getParameter("p");
 	String personalEmailTrackerId = req.getParameter("t");
+	
 	//Get client IP address
-		String clientIPAddress=AnalyticsServlet.getClientIP(req);
-
+	String clientIPAddress=AnalyticsServlet.getClientIP(req);
+    boolean IPFilterStatus = false;
+    
 	// To get namespace
 	String url = req.getRequestURL().toString();
 	String host = new URL(url).getHost().toString();
@@ -85,7 +87,9 @@ public class RedirectServlet extends HttpServlet
 	// using contactspot URLs
 	if (StringUtils.isBlank(domain))
 	    return;
-
+    //IP Filter status for email clicked and open
+	IPFilterStatus=AnalyticsServlet.isBlockedIp(clientIPAddress,domain);
+	
 	// Shorten urls uses tracker-id
 	String trackerId = null;
 
@@ -174,7 +178,7 @@ public class RedirectServlet extends HttpServlet
 	    }
 
 	    // For personal emails campaign-id is blank  and checked ip address is blocked or not for mail notification
-	    if (StringUtils.isBlank(campaignId) && contact != null && !(AnalyticsServlet.isBlockedIp(clientIPAddress,domain)))
+	    if (StringUtils.isBlank(campaignId) && contact != null && IPFilterStatus == false)
 	    {
 	    	
 	    	// Save link clicked time
@@ -206,7 +210,7 @@ public class RedirectServlet extends HttpServlet
 
 	    // Get Workflow to add to log (campaign name) and show notification
 	    Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));
-	    if (workflow != null)
+	    if (workflow != null && IPFilterStatus == false)
 	    {
 		
 		    // Add log
@@ -249,8 +253,9 @@ public class RedirectServlet extends HttpServlet
 	    // Interrupt cron tasks of clicked.
 	    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.EMAIL);
 
-	    // Link clicked trigger
-    	EmailTrackingTriggerUtil.executeTrigger(subscriberId, campaignId, originalURL, Type.EMAIL_LINK_CLICKED);
+	    // Link clicked trigger if IP is not blocked
+	    if(IPFilterStatus == false)
+	    	EmailTrackingTriggerUtil.executeTrigger(subscriberId, campaignId, originalURL, Type.EMAIL_LINK_CLICKED);
 	}
 	catch (Exception e)
 	{
