@@ -973,7 +973,7 @@
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>TicketSLAServlet</servlet-name>
-		<servlet-class>>com.agilecrm.ticket.servlets.TicketSLAServlet</servlet-class>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketSLAServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>

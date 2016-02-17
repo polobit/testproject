@@ -4,8 +4,7 @@
 	<span class="pull-left thumb-sm">
 
 		{{#is_ticket_requester_activity activity_type}}
-			<img class="img-inital r-5x" src="{{nameAvatar contact.properties 30}}" onerror="image_error(this);" _data-name="{{#if contact}}{{getPropertyValue contact.properties "first_name"}}{{getPropertyValue contact.properties "last_name"}}{{else}}Requester
-					                {{/if}}"/>
+			<img class="img-inital r-5x" src="{{nameAvatar contact.properties 30}}" onerror="image_error(this);" _data-name="{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}{{this.contactname}}{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}"/>
 		{{else}}
 
 			<img class="r-5x" alt="..." src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}"/>
@@ -25,7 +24,7 @@
 					                {{getPropertyValue contact.properties "first_name"}} 
 					                    {{getPropertyValue contact.properties "last_name"}}
 					                 {{else}}
-					                    Requester
+					                    {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}{{this.contactname}}{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
 					                {{/if}}
 					</b></span>
 
