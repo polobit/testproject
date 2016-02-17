@@ -166,8 +166,7 @@ function dealsFetch(base_model)
 
 
 			includeTimeAgo(el);
-
-			
+			initializeDealsListeners(el);			
 
 		} });
 
@@ -200,10 +199,10 @@ function dealsFetch(base_model)
             dealcount = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount) ;
             var symbol = getCurrencySymbolForCharts();
             avg_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_deal_size);
-            $("#"+heading+" .dealtitle-angular").attr("data-toggle" , "tooltip" );
-            $("#"+heading+" .dealtitle-angular").attr("data-placement" , "top" );
-            $("#"+heading+" .dealtitle-angular").attr("data-original-title" , "Total "+heading+" value: &#13; "+symbol+""+dealcount+" &#13; avg "+heading+" value: &#13; "+symbol+""+avg_deal_size );
-
+			var dealdata = {"heading": heading ,"dealcount":dealcount ,"avgDeal" : avg_deal_size,"symbol":symbol,"dealNumber":count};
+			var dealDataString = JSON.stringify(dealdata) ; 
+			$("#"+heading+" .dealtitle-angular").removeAttr("data");
+			$("#"+heading+" .dealtitle-angular").attr("data" , dealDataString ); 
             }
 
 		catch (err)
@@ -211,7 +210,6 @@ function dealsFetch(base_model)
 			console.log(err);
 		}  
         
-        $(".dealtitle-angular").tooltip();
         $('a.deal-notes').tooltip();
         	// Counter to fetch next sub collection
 		pipeline_count++;
@@ -259,4 +257,41 @@ function deal_infi_scroll(element_id, targetCollection)
 			$(targetCollection.infiniScroll.options.target).append(
 					'<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader-cursor.gif")+'" style="margin-left: 44%;"> </div>');
 		} });
+}
+// show deal pop-over modal
+
+function initializeDealsListeners(el)
+{
+	$("#opportunity-listners").off('mouseenter','.milestone-column > .dealtitle-angular');
+	$("#opportunity-listners").on('mouseenter','.milestone-column > .dealtitle-angular', function(){
+
+		var data = $(this).attr('data');
+		var jsonDealData = JSON.parse(data);
+	//  var currentCase = App_Cases.casesCollectionView.collection.get(data);
+		var that = this;
+		getTemplate('deal-detail-popover', jsonDealData , undefined, function(template_ui){
+ 		if(!template_ui)
+	    		return;
+    	var ele = $(template_ui);
+		$(that).popover(
+					{ "rel" : "popover", "trigger" : "hover", "placement" : 'bottom', "content" : ele,
+						"html" : "true"}); 
+			$(that).popover('show');
+			$(".popover-content").html(ele);
+			$(".dealtitle-angular + .popover > .arrow").remove();
+			$(".dealtitle-angular + .popover").css("top","35px");
+			$(".dealtitle-angular + .popover > .popover-content" ).css("padding","0px");
+			$(".dealtitle-angular + .popover ").css("border-radius","0px");
+		});
+
+	});
+
+	/**
+	 * On mouse out on the row hides the popover.
+	 */
+	 $('.milestone-column > .dealtitle-angular').off('mouseleave');
+	 $('#opportunity-listners').on('mouseleave', '.milestone-column > .dealtitle-angular', function()
+	{
+		$(this).popover('hide');
+	});
 }

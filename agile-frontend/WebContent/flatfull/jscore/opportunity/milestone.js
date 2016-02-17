@@ -162,7 +162,7 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
      		avg_new_deal_size = 0;
      	else
      		avg_new_deal_size = newdealvalue / new_deal_count;
-     	
+
      	olddealvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue) ;
         avg_old_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_old_deal_size);
         newdealvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue) ;
@@ -170,11 +170,20 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
 
      	var oldheading = oldMilestone.replace(/ +/g, '');
      	var newheading = newMilestone.replace(/ +/g, '');
-        $("#"+oldheading+" .dealtitle-angular").removeAttr("data-original-title");        
-        $("#"+oldheading+" .dealtitle-angular").attr("data-original-title" , "Total: "+olddealvalue+" & avg: "+avg_old_deal_size );
-        $("#"+newheading+" .dealtitle-angular").removeAttr("data-original-title");        
-        $("#"+newheading+" .dealtitle-angular").attr("data-original-title" , "Total: "+newdealvalue+" & avg: "+avg_new_deal_size );
+     	var symbol = getCurrencySymbolForCharts();
 
+       
+        $("#"+oldheading+" .dealtitle-angular").removeAttr("data");  
+        $("#"+newheading+" .dealtitle-angular").removeAttr("data"); 
+       
+        var dealolddata = {"heading": oldheading ,"dealcount":olddealvalue ,"avgDeal" : avg_old_deal_size,"symbol":symbol,"dealNumber":old_deal_count};
+		var dealOldDataString = JSON.stringify(dealolddata); 
+		$("#"+oldheading+" .dealtitle-angular").attr("data" , dealOldDataString); 
+
+        var dealnewdata = {"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
+		var dealNewDataString = JSON.stringify(dealnewdata); 
+		$("#"+newheading+" .dealtitle-angular").attr("data" , dealNewDataString);
+        
         }
 	} catch(err){
 		console.log(err);

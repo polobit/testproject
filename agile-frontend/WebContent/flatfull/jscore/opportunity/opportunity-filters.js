@@ -671,9 +671,15 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
         
 
 	     	var heading = milestone.replace(/ +/g, '');
-	        $("#"+heading+" .dealtitle-angular").removeAttr("data-original-title");        
-	        $("#"+heading+" .dealtitle-angular").attr("data-original-title" , "Total: "+removeDealValue+" & avg: "+avg_new_deal_size );
+
+            var symbol = getCurrencySymbolForCharts();
+
 	       
+	        $("#"+heading+" .dealtitle-angular").removeAttr("data");  
+	       
+	        var dealdata = {"heading": heading ,"dealcount":removeDealValue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":deal_count};
+			var dealDataString = JSON.stringify(dealdata); 
+			$("#"+heading+" .dealtitle-angular").attr("data" , dealDataString); 
 
 			dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
 
