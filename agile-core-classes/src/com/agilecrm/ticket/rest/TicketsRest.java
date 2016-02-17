@@ -490,12 +490,12 @@ public class TicketsRest
 			Tickets oldTicket = TicketsUtil.getTicketByID(ticketID);
 
 			Tickets updatedTicket = TicketsUtil.changeGroupAndAssignee(ticketID, groupID, assigneeID);
-			
-			if(updatedTicket.assigneeID != null)
+
+			if (updatedTicket.assigneeID != null)
 				updatedTicket.assignee = DomainUserUtil.getDomainUser(assigneeID);
-				
-			if(updatedTicket.groupID != null)
-				updatedTicket.group =TicketGroups.ticketGroupsDao.get(groupID);
+
+			if (updatedTicket.groupID != null)
+				updatedTicket.group = TicketGroups.ticketGroupsDao.get(groupID);
 
 			if (oldTicket.assigneeID != updatedTicket.assigneeID || (oldTicket.groupID != updatedTicket.groupID))
 				TicketTriggerUtil.executeTriggerForAssigneeChanged(updatedTicket);
@@ -816,6 +816,7 @@ public class TicketsRest
 			// Converting html text to plain with jsoup
 			// Document doc = Jsoup.parse(HTMLcontent, "UTF-8");
 			// String plain_text = new HtmlToPlainText().getPlainText(doc);
+			HTMLcontent = HTMLcontent.replaceAll("(\r\n|\n)", "<br />");
 
 			String plain_text = HTMLcontent;
 

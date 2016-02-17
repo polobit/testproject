@@ -351,7 +351,10 @@ var Tickets_Notes = {
 			return notesText;
 
 		$.each(notesCollection, function(index, note){
-			notesText += note.original_plain_text + "\n\n-----------------------------------------\n\n";
+
+			if(note.note_type != "PRIVATE")
+				notesText += note.original_plain_text + "\n\n-----------------------------------------\n\n";
+			
 		})
 
 		console.log("notesText = " + notesText);
