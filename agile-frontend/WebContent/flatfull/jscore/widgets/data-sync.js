@@ -165,11 +165,12 @@ function getSyncModelFromName(name, callback,modelfetch){
 
        // Checks force fetch
        if(modelfetch && !DATA_SYNC_FORCE_FETCH){
-       	var base_model=new Base_Model_View(
+       	var sync_base_model=Backbone.Model.extend(
 					{
 						url : '/core/api/contactprefs/'+name
 					});
-       	base_model.model.fetch({ success : function(data){
+       	var base_model=new sync_base_model();
+       	base_model.fetch({ success : function(data){
        	App_Datasync.agile_sync_collection_view.collection.get(data.toJSON().id).set('inProgress',data.toJSON().inProgress);
        	 callback(getModalfromName(App_Datasync.agile_sync_collection_view.collection.toJSON(), name));
        }});
