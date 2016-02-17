@@ -41,6 +41,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"change .status" : "toggleGroupAssigneeFields",
 		"click .nt-reqester_email" : "showContactTypeAhead",
 		"click .toggle-options" : "toggleOptions",
+		"click .add-ticket-contact": "toggleAddTicketContact",
 
 		//Attachment events
 		"click .toggle-docs-dropdown" : "toggleDocsDropdown",
@@ -426,5 +427,12 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		var ticketJSON = App_Ticket_Module.ticketView.model.toJSON();
 		
 		Tickets.togglePreviousTickets(ticketJSON.requester_email);
+	},
+
+	toggleAddTicketContact: function(e){
+		e.preventDefault();
+
+		$('div.new-contact-row').toggle();
+		$('div.search-contact-row').toggle();
 	}
 });

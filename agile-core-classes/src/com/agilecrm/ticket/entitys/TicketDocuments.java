@@ -5,6 +5,9 @@ import java.util.Calendar;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @XmlRootElement
 public class TicketDocuments
@@ -55,5 +58,21 @@ public class TicketDocuments
 		this.size = size;
 		this.url = url;
 		this.uploaded_time = Calendar.getInstance().getTimeInMillis();
+	}
+
+	@Override
+	public String toString()
+	{
+		try
+		{
+			ObjectMapper mapper = new ObjectMapper();
+			return mapper.writeValueAsString(this);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+
+		return null;
 	}
 }
