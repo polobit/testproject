@@ -698,6 +698,8 @@ public class TicketsUtil
 
 			List<DomainUser> domainUsers = DomainUserUtil.dao.fetchAllByKeys(new ArrayList<Key<DomainUser>>(
 					domainUserKeys));
+			
+			
 
 			System.out.println("domainUsers: " + domainUsers);
 
@@ -790,6 +792,9 @@ public class TicketsUtil
 			// Assigning new group to ticket
 			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
 			ticket.groupID = group_id;
+			
+			ticket.assignee_id = null;
+			ticket.assigneeID = null;
 
 			ticket.assigned_to_group = true;
 

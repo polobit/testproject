@@ -309,7 +309,8 @@
               
               <button class="fa fa-trash-o btn btn-sm p-ver-2 btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Delete Ticket"></button>
 
-              <button class="fa fa-check btn btn-sm p-ver-2 btn-default w-xxs w-auto-xs close-current-ticket" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Close Ticket"></button>
+                <button class="fa fa-check btn btn-sm p-ver-2 btn-default w-xxs w-auto-xs close-current-ticket" style="{{#if_equals status 'CLOSED'}}display:none{{/if_equals}}" data-toggle="tooltip" data-placement="bottom" data-original-title="Close Ticket"></button>
+                
             </div> 
 
             <button class="fa fa-dedent btn btn-sm p-ver-2 btn-default m-l-xs toggle-widgets" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Toggle Widgets"></button>

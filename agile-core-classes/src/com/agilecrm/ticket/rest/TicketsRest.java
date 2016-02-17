@@ -475,7 +475,7 @@ public class TicketsRest
 	 * @param assignee_id
 	 * @return returns updated ticket object
 	 */
-	@PUT
+	@GET
 	@Path("/assign-ticket")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Tickets assignTicket(@QueryParam("ticket_id") Long ticketID, @QueryParam("assignee_id") Long assigneeID,
@@ -490,6 +490,12 @@ public class TicketsRest
 			Tickets oldTicket = TicketsUtil.getTicketByID(ticketID);
 
 			Tickets updatedTicket = TicketsUtil.changeGroupAndAssignee(ticketID, groupID, assigneeID);
+			
+			if(updatedTicket.assigneeID != null)
+				updatedTicket.assignee = DomainUserUtil.getDomainUser(assigneeID);
+				
+			if(updatedTicket.groupID != null)
+				updatedTicket.group =TicketGroups.ticketGroupsDao.get(groupID);
 
 			if (oldTicket.assigneeID != updatedTicket.assigneeID || (oldTicket.groupID != updatedTicket.groupID))
 				TicketTriggerUtil.executeTriggerForAssigneeChanged(updatedTicket);
