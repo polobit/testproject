@@ -107,9 +107,9 @@ public class TicketCondition extends TaskletAdapter
 		// Get Variables
 		String variable1 = getStringValue(nodeJSON, subscriberJSON, data, VARIABLE_1);
 		String variable2 = getStringValue(nodeJSON, subscriberJSON, data, VARIABLE_2);
-		
+
 		String branch = BRANCH_NO;
-		
+
 		try
 		{
 
@@ -123,8 +123,6 @@ public class TicketCondition extends TaskletAdapter
 			String ifType = getStringValue(nodeJSON, subscriberJSON, data, IF_TYPE);
 			if (ifType.equalsIgnoreCase(IF_TYPE_STRLEN))
 				variable1 = variable1.length() + "";
-
-			
 
 			String comparator = getStringValue(nodeJSON, subscriberJSON, data, COMPARATOR);
 
@@ -224,7 +222,7 @@ public class TicketCondition extends TaskletAdapter
 			e.printStackTrace();
 			System.out.println("Exception occured while executing Condition node: " + e.getMessage());
 		}
-		
+
 		// Go to next tasks
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, branch);
 	}
