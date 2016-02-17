@@ -55,7 +55,7 @@ public class CheckTicketSLADeferred implements DeferredTask
 
 			for (final Key<Tickets> key : keys)
 			{
-				Queue queue = QueueFactory.getQueue("reports-queue");
+				Queue queue = QueueFactory.getQueue("ticket-bulk-actions");
 				queue.add(TaskOptions.Builder.withPayload(new DeferredTask()
 				{
 					/**
@@ -77,6 +77,8 @@ public class CheckTicketSLADeferred implements DeferredTask
 					}
 				}));
 			}
+			
+			System.out.println("Successfully trigger initiated for all tickets.");
 		}
 		catch (Exception e)
 		{
