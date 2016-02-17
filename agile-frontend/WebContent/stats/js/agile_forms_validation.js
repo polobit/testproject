@@ -9,7 +9,7 @@ function agile_validations(){
 			var spans = document.getElementById("agile_span"+i);
 			var required = divs[i].getAttribute("required");
 		
-		if(inputType == "text" || inputType == "email" || inputType == "url"){				
+		if(inputType){				
 				if (inputNode.value == "" && spans == null && required == "") {
 					isValid = false;
 					var spanTag = document.createElement("span");
@@ -23,7 +23,11 @@ function agile_validations(){
 					isValid = false;
 					document.getElementById("agile_span"+i).remove();		
 				}
+				else if(inputNode.value == "" && spans){
+					isValid = false;
+				}
 	}
+
    }
 	return isValid;
 }
