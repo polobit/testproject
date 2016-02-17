@@ -17,6 +17,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -119,6 +120,7 @@ public class NamespaceFilter implements Filter
 	    return false;
 	}
 
+	subdomain = AliasDomainUtil.setDomain(subdomain);
 	// Set the subdomain as name space
 	System.out.println("Setting the domain " + subdomain + " " + ((HttpServletRequest) request).getRequestURL());
 	NamespaceManager.set(subdomain);

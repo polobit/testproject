@@ -14,6 +14,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.NamespaceUtil;
@@ -68,8 +69,8 @@ public class LoginServlet extends HttpServlet {
 		request.getSession().removeAttribute(
 				SessionManager.AUTH_SESSION_COOKIE_NAME);
 
-		// Check if this subdomain even exists
-		if (DomainUserUtil.count() == 0) {
+		// Check if this subdomain even exists or alias exist
+		if (DomainUserUtil.count() == 0 && AliasDomainUtil.checkForAlias()) {
 			response.sendRedirect(Globals.CHOOSE_DOMAIN);
 			return;
 		}
