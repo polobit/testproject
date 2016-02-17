@@ -97,7 +97,7 @@ body {
 .sidebar-nav .accordion-group { border:none; }
 .boxes {}
 .sidebar-nav li { line-height:28px; margin-bottom:3px; }
-.sidebar-nav li .lyrow { margin-bottom:5px;}
+.sidebar-nav li .lyrow { margin-bottom:12px;}
 .sidebar-nav .box { line-height:26px; width:160px; height:26px; }
 .sidebar-nav .preview { display: block; font-size:11px;}
 .sidebar-nav label { line-height: 14px;}

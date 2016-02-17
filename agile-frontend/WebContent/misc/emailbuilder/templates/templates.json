@@ -23,6 +23,16 @@
                     "id": "layout8",
                     "displayname": "sample layout 2",
                     "description": "this is sample text"
+                },
+                {
+                    "id": "layout4",
+                    "displayname": "sample layout 2",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "layout6",
+                    "displayname": "sample layout 2",
+                    "description": "this is sample text"
                 }
             ]
         }

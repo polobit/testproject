@@ -72,7 +72,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
         <div class="row">
             <div class="col-md-9" style="width:800px;">
                 <div class="sidebar-nav">
-                    <div id="elements">
+                    <div id="elements" style="position:relative;">
                         <ul class="nav nav-list accordion-group">
                             <li class="rows" id="estRows">
 
@@ -88,10 +88,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 <%@ include file="blocks/button.html" %>
                                 <!--Image + Text -->
                                 <%@ include file="blocks/image-text.html" %>
-                                <!-- TEXT AND IMAGE IN COLUMN TEXT ON RIGHT SIDE -->
-                                <%@ include file="blocks/image-text-right.html" %>
-                                <!-- TEXT AND IMAGE IN COLUMN TEXT ON LEFT SIDE -->
-                                <%@ include file="blocks/image-text-left.html" %>
+                                                                
                                 <!-- IMG + TEXT 2 columns -->
                                 <%@ include file="blocks/column-2-image-text.html" %>
 
