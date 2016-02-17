@@ -385,10 +385,7 @@ var contacts_bulk_actions = {
 		if (!canSendEmails(count))
 		{
 			continueAction = false;
-			var pendingEmails = getPendingEmails();
-			var credits = _billing_restriction.email_credits_count;
-			if(credits != undefined)
-				pendingEmails = pendingEmails + credits;
+			var pendingEmails = getPendingEmails() + getEmailCreditsCount();
 			var yes = "Yes";
 			var no = "No"
 
