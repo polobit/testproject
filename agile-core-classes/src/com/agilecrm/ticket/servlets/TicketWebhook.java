@@ -205,15 +205,16 @@ public class TicketWebhook extends HttpServlet
 
 					try
 					{
-						//Removing attachments object form mime object as we'll save mime in datastore
+						// Removing attachments object form mime object as we'll
+						// save mime in datastore
 						msgJSON.remove("attachments");
 					}
 					catch (Exception e)
-					{	
-						//No need to print stack trace
+					{
+						// No need to print stack trace
 					}
-					
-					//Iterating every attachment and saving it to cloud
+
+					// Iterating every attachment and saving it to cloud
 					for (Iterator iter = attachments.keys(); iter.hasNext();)
 					{
 						JSONObject fileJSON = attachments.getJSONObject((String) iter.next());
@@ -226,30 +227,31 @@ public class TicketWebhook extends HttpServlet
 						System.out.println("base64: " + isBase64Encoded);
 
 						byte[] bytes = null;
-						
-						//Decoding file content with Base64Decoder if it is encoded
+
+						// Decoding file content with Base64Decoder if it is
+						// encoded
 						if (isBase64Encoded)
 							bytes = Base64.decodeBase64(fileJSON.getString("content").getBytes(StandardCharsets.UTF_8));
 						else
 							bytes = fileJSON.getString("content").getBytes(StandardCharsets.UTF_8);
-						
-						//Preparing GCS options
+
+						// Preparing GCS options
 						GcsFileOptions options = new GcsFileOptions.Builder().mimeType(fileType)
 								.contentEncoding("UTF-8").acl("public-read")
 								.addUserMetadata("domain", NamespaceManager.get()).build();
 
-						//Creating service object to writer instance
+						// Creating service object to writer instance
 						GCSServiceAgile service = new GCSServiceAgile(currentTime + fileName, "ticket-attachments",
 								options);
-						
-						//Getting the writer object to save file to GCS
+
+						// Getting the writer object to save file to GCS
 						GcsOutputChannel writer = service.getOutputchannel();
 
 						writer.write(ByteBuffer.wrap(bytes));
 						writer.close();
-						
-						//Saving file URL to document object
-						TicketDocuments document = new TicketDocuments(fileName, fileType, (long)bytes.length,
+
+						// Saving file URL to document object
+						TicketDocuments document = new TicketDocuments(fileName, fileType, (long) bytes.length,
 								service.getFilePathToDownload());
 
 						attachmentURLs.add(document);
@@ -262,18 +264,21 @@ public class TicketWebhook extends HttpServlet
 
 					try
 					{
-						//Removing attachments object form mime object as we'll save mime in datastore
+						// Removing attachments object form mime object as we'll
+						// save mime in datastore
 						msgJSON.remove("images");
 					}
 					catch (Exception e)
 					{
-						//No need to print stack trace
+						// No need to print stack trace
 					}
 
-					//Creating dom object from HTML to replace image src with storage URL 
+					// Creating dom object from HTML to replace image src with
+					// storage URL
 					Document doc = Jsoup.parse(html, "UTF-8");
-					
-					//Iterate images array, save images to GCS and store URLs in document object
+
+					// Iterate images array, save images to GCS and store URLs
+					// in document object
 					for (Iterator iter = images.keys(); iter.hasNext();)
 					{
 						JSONObject fileJSON = images.getJSONObject((String) iter.next());
@@ -302,8 +307,9 @@ public class TicketWebhook extends HttpServlet
 								break;
 							}
 						}
-						
-						//By default all images would be base64 encoded so converting them back by decoding
+
+						// By default all images would be base64 encoded so
+						// converting them back by decoding
 						byte[] bytes = Base64.decodeBase64(fileJSON.getString("content"));
 
 						GcsFileOptions options = new GcsFileOptions.Builder().mimeType(fileType)
@@ -322,7 +328,7 @@ public class TicketWebhook extends HttpServlet
 
 						if (elements == null || elements.size() == 0)
 						{
-							TicketDocuments document = new TicketDocuments(fileName, fileType, (long)bytes.length,
+							TicketDocuments document = new TicketDocuments(fileName, fileType, (long) bytes.length,
 									service.getFilePathToDownload());
 
 							attachmentURLs.add(document);
@@ -359,7 +365,9 @@ public class TicketWebhook extends HttpServlet
 				{
 				}
 
-				String fromName = "";
+				String fromEmail = msgJSON.getString("from_email");
+
+				String fromName = fromEmail.substring(0, fromEmail.lastIndexOf("@"));
 
 				if (msgJSON.has("from_name"))
 					fromName = msgJSON.getString("from_name");

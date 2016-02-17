@@ -165,7 +165,10 @@ public class TicketNotesUtil
 
 		json.put("plain_text", notes.plain_text);
 		json.put("html_text", TicketNotesUtil.parseHtmlText(notes.html_text));
-
+		
+		if(notes.attachments_list != null && notes.attachments_list.size() > 0)
+			json.put("attachments_list", notes.attachments_list);
+		
 		if (notes.created_by == CREATED_BY.AGENT)
 		{
 			if (!domainUsersMap.containsKey(notes.assignee_id))
