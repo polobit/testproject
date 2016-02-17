@@ -113,6 +113,14 @@ public class TicketWebhook extends HttpServlet
 			if (!msgJSON.has("headers"))
 				return;
 
+			try
+			{
+				msgJSON.remove("raw_msg");
+			}
+			catch (Exception e)
+			{
+			}
+			
 			/**
 			 * msgJSON contains email field where Mandrill received the message
 			 */
