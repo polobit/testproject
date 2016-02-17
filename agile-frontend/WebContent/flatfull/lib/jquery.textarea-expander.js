@@ -43,6 +43,7 @@
 		    $(e).css(styleObj).height(e.scrollHeight);
 		}
 
+		// Bind all the events
 		this.each(function () {
 		  ResizeTextarea(this);
 		}).on('input', function () {
