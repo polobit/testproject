@@ -97,7 +97,7 @@ public class TicketWebhook extends HttpServlet
 			// Fetch data posted by Mandrill
 			String mandrillResponse = request.getParameter("mandrill_events");
 
-			System.out.println("MandrillResponse: " + mandrillResponse);
+			//System.out.println("MandrillResponse: " + mandrillResponse);
 
 			if (StringUtils.isBlank(mandrillResponse))
 				return;

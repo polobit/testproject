@@ -1852,8 +1852,8 @@ public class ContactUtil
 		}
 		else
 		{
-			newContact.first_name = firstName;
-			properties.add(new ContactField("first_name", firstName, null));
+			newContact.first_name = name;
+			properties.add(new ContactField("first_name", name, null));
 		}
 
 		newContact.properties = properties;
