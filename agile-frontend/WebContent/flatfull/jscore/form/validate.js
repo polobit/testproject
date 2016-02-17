@@ -116,7 +116,7 @@ function isValidForm(form) {
 			return false;
 		
 		return /^\+?([1-9]\d*)$/.test(value);
-	}," Please enter a positive number.");
+	}," Please enter a number greater than 0.");
 
 	
 	jQuery.validator.addMethod("multi-select", function(value, element){
