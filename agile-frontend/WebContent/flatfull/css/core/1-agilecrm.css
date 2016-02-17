@@ -3131,6 +3131,3 @@ table.hide-head-checkbox th label.i-checks {
 .lhs-contact-filter-row div.add-icon:last-of-type {
 	display: block!important;
 	}
-.lhs-contact-filter-row + div.master-tags-add-div {
-    margin-top: -10px;
-}
