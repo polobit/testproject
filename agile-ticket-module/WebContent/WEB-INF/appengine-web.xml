@@ -9,7 +9,7 @@
 	</system-properties>
 
   <!--instance and scaling settings-->
-  <instance-class>B2</instance-class>
+  <instance-class>B4</instance-class>
   <basic-scaling>
     <max-instances>5</max-instances>
   </basic-scaling>
