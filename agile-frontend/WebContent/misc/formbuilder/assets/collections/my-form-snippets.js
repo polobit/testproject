@@ -26,7 +26,7 @@ define([
        var snippetType = snippet.attributes.fields.id.value;
        var idArray = "";
         for(var i=1; i<=saveform.length-1; i++){
-        if(saveform[i].title!="Multiple Radios")
+        if(saveform[i].fields.id)
         idArray += saveform[i].fields.id.value+",";
        }
        //regex function to seperate numbers form id
