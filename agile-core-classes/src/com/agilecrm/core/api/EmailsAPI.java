@@ -502,6 +502,7 @@ public class EmailsAPI
     @Path("check-spam-score")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.TEXT_PLAIN)
     public String checkSpamScore(@FormParam("from_name") String fromName, @FormParam("from_email") String fromEmail,
 	    @FormParam("to_email") String toEmail, @FormParam("subject") String subject,
 	    @FormParam("text_email") String textEmail, @FormParam("html_email") String htmlEmail,
