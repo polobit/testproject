@@ -409,11 +409,13 @@ public class Tickets extends Cursor implements Serializable
 
 			try
 			{
+				System.out.println("Waiting for acquiring lock.");
 				Thread.sleep(500L);
 			}
 			catch (InterruptedException e)
 			{
 				e.printStackTrace();
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
 			}
 		}
 	}
