@@ -97,7 +97,7 @@ public class TicketWebhook extends HttpServlet
 			// Fetch data posted by Mandrill
 			String mandrillResponse = request.getParameter("mandrill_events");
 
-			System.out.println("MandrillResponse: " + mandrillResponse);
+			//System.out.println("MandrillResponse: " + mandrillResponse);
 
 			if (StringUtils.isBlank(mandrillResponse))
 				return;
@@ -352,7 +352,11 @@ public class TicketWebhook extends HttpServlet
 			}
 
 			Tickets ticket = null;
+			
+			String fromEmail = msgJSON.getString("from_email");
 
+			String fromName = fromEmail.substring(0, fromEmail.lastIndexOf("@"));
+			
 			if (isNewTicket)
 			{
 				String ip = "";
@@ -365,15 +369,11 @@ public class TicketWebhook extends HttpServlet
 				{
 				}
 
-				String fromEmail = msgJSON.getString("from_email");
-
-				String fromName = fromEmail.substring(0, fromEmail.lastIndexOf("@"));
-
 				if (msgJSON.has("from_name"))
 					fromName = msgJSON.getString("from_name");
 
 				// Creating new Ticket in Ticket table
-				ticket = TicketsUtil.createTicket(groupID, null, fromName, msgJSON.getString("from_email"),
+				ticket = TicketsUtil.createTicket(groupID, null, fromName, fromEmail,
 						msgJSON.getString("subject"), ccEmails, plainText, Status.NEW, Type.PROBLEM, Priority.LOW,
 						Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip, new ArrayList<Key<TicketLabels>>());
 
@@ -402,7 +402,7 @@ public class TicketWebhook extends HttpServlet
 
 			// Creating new Notes in TicketNotes table
 			TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, groupID, ticket.assigneeID,
-					CREATED_BY.REQUESTER, msgJSON.getString("from_name"), msgJSON.getString("from_email"), plainText,
+					CREATED_BY.REQUESTER, fromName, fromEmail, plainText,
 					html, NOTE_TYPE.PUBLIC, attachmentURLs, msgJSON.toString());
 
 			if (!isNewTicket)

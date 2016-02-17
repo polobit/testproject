@@ -87,11 +87,15 @@
 
 					var assignee_id = $('#groupID option:selected').data('assignee-id');
 
-					if(assignee_id){
+					if(assignee_id)
 						json.assigneeID = assignee_id;
 
-						model.set(json, { silent : true });
-					}
+					var last_name = $('#last_name').val();
+
+					if(last_name)
+						json.requester_name = $('#first_name').val() + ' ' + last_name;
+
+					model.set(json, { silent : true });
 				},
 				postRenderCallback : function(el, data) {
 
@@ -132,24 +136,6 @@
 						}, 0);
 
 					},undefined, undefined, 'core/api/search/');
-
-					//Initializing type ahead on email field
-					agile_type_ahead("requester_name", el, tickets_typeahead, function(arg1, arg2){
-
-						arg2 = arg2.split(" ").join("");
-
-						var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
-
-						if(!email || email == 'No email')
-							return;
-
-						setTimeout(function(){
-							$('#requester_email', el).val(email);
-							$('#requester_name', el).val(arg2);
-							$('#contact_id', el).val(arg1);
-						}, 0);
-
-					},undefined,undefined,'core/api/search/');
 				}
 			});
 

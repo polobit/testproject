@@ -3,7 +3,11 @@ package com.campaignio.tasklets.agile;
 import org.json.JSONObject;
 
 import com.agilecrm.ticket.utils.TicketsUtil;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -56,6 +60,18 @@ public class TicketAssignee extends TaskletAdapter
 				// Change Group and Assignee
 				TicketsUtil.changeGroupAndAssignee(ticketJSON.getLong("id"), Long.parseLong(ticketGroupId),
 						Long.parseLong(ticketAssigneeId));
+
+				String message = "Ticket(#" + ticketJSON.getString("id") + ") assignee changed";
+				try
+				{
+					message = message + " - " + DomainUserUtil.getDomainUser(Long.parseLong(ticketAssigneeId)).name;
+				}
+				catch (Exception e)
+				{
+				}
+				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+						message, LogType.TICKET_ASSIGNEE_CHANGED.toString());
+
 			}
 
 		}
