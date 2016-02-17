@@ -57,7 +57,7 @@ var ReportsRouter = Backbone.Router
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
 				
-				var reportsTab = _agile_get_prefs("reports_tab");
+				/*var reportsTab = _agile_get_prefs("reports_tab");
 				if(!reportsTab || reportsTab == null) {
 					var tabTemp;
 					if(islocalStorageHasSpace()){
@@ -68,13 +68,13 @@ var ReportsRouter = Backbone.Router
 							_agile_set_prefs('reports_tab', tabTemp);	
 					}
 					reportsTab = tabTemp;
-				}
-				$('#reports-tab-container a[href="#'+reportsTab+'"]').tab('show');
+				}*/
+				/*$('#reports-tab-container a[href="#'+reportsTab+'"]').tab('show');
 				$("#reports-tab-container ul li").off("click");
 				$("#reports-tab-container").on("click",".tab-container ul li",function(){
 					var temp = $(this).find("a").attr("href").split("#");
 					_agile_set_prefs('reports_tab', temp[1]);
-				});
+				});*/
 
 					$('[data-toggle="tooltip"]').tooltip();
 

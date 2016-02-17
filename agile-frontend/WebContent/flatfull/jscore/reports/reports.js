@@ -100,6 +100,17 @@ function initializeReportsListeners(){
 
 						$('.show_screenshot').popover();
 					});
+
+			$('#reports-listerners-container')
+			.on(
+					"mouseover",
+					'.nav-tabs a',
+					function(e) {
+
+						$(this).trigger('click');
+					});
+			
+
 }
 
 function reportsContactTableView(base_model, customDatefields, view)

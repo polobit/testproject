@@ -3186,3 +3186,7 @@ table.hide-head-checkbox th label.i-checks {
 .contact_popover .arrow{
 	display: none;
 }
+
+#reports-tab-container .nav-tabs>li{
+	float: none!important;
+}
