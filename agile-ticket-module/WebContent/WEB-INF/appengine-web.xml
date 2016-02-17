@@ -11,6 +11,6 @@
   <!--Instance and scaling settings-->
   <instance-class>B4</instance-class>
   <manual-scaling>
-    <max-instances>5</max-instances>
+    <instances>5</instances>
   </manual-scaling>
 </appengine-web-app>
