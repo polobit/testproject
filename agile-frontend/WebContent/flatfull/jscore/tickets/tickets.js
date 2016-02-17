@@ -529,11 +529,11 @@ var Tickets = {
 		var groupsAssignees = Backbone.Model.extend({urlRoot : '/core/api/tickets/groups'});
 		new groupsAssignees().fetch({success: function(model, response, options){
 
-			var groupsList = model.toJSON();
+			Tickets.groupsList = model.toJSON();
 		
-			var html = getTemplate('ticket-change-assignee', groupsList);
+			var html = getTemplate('ticket-change-assignee', Tickets.groupsList);
 			html += "<option role='separator' disabled>----------------------------------------------------------</option>";
-			$.each(groupsList, function(index, data){
+			$.each(Tickets.groupsList, function(index, data){
 				html += "<option value='"+data.id+"'>"+data.group_name+"</option>";
 			});
 
@@ -549,39 +549,66 @@ var Tickets = {
       		
 
       		 // If current user not 
-      		if(selectedAssignee != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(selectedGroup, groupsList))
+      		if(selectedAssignee != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(selectedGroup, Tickets.groupsList))
       			$('.assign-to-me', el).show();
       		else
 				$('.assign-to-me', el).hide();
 
-      		$(el).on('change', '#ticket-assignee', function ()
-			{
-				var assigneeId = $(this).val();
-			    var groupId = $(this.options[this.selectedIndex]).closest('optgroup').attr('data-group-id');
-			    if(!groupId){
-			    	groupId = $(this).val();
-			    	assigneeId = "";
-			    }
-			    	
-			    Tickets.sendReqToChangeAssignee(assigneeId, groupId, App_Ticket_Module.ticketView.model.toJSON(), function(model){
-
-			    	if(assigneeId != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(groupId, groupsList))
-			    		$('.assign-to-me').show();
-					else
-						$('.assign-to-me').hide();
-					
-					App_Ticket_Module.ticketView.model.set(model, {silent: true});
-
-				});
-
-
-			});
 
 		}, error: function(){
 
 		}});
 	},
-	
+
+	changeAssignee : function(e){
+
+		var that = e.target;
+
+		var assigneeId = $(that).val();
+		console.log(assigneeId);
+
+	    var groupId = $(that.options[that.selectedIndex]).closest('optgroup').attr('data-group-id');
+
+	    if(!groupId){
+	    	groupId = $(that).val();
+	    	assigneeId = "";
+	    }
+       
+       	Tickets.sendReqToChangeAssignee(assigneeId, groupId, App_Ticket_Module.ticketView.model.toJSON(), function(data){
+            
+            var modelData = data;
+
+            try{
+            	if(modelData.assigneeID != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(groupId, Tickets.groupsList))
+	    		$('.assign-to-me').show();
+			else
+				$('.assign-to-me').hide();
+            }
+            catch(e){
+
+            }
+
+            console.log(modelData);
+            console.log(modelData.assigneeID);
+
+            var assigneeName = (modelData.assigneeID) ? (modelData.assignee.name) : modelData.group.group_name;
+
+			var message = 'Ticket group has been changed to ' + assigneeName;
+			if(modelData.assigneeID)
+				var message = 'Assignee has been changed to ' + assigneeName;
+			
+		    showNotyPopUp('information', message, 'bottomRight', 5000);
+
+		    modelData.assignee = ((modelData.assignee) ? modelData.assignee : "");
+		    modelData.group = ((modelData.group) ? modelData.group : "");
+
+		   	// Update assignee in model and collection 
+			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, modelData); 					
+			
+		});
+
+	},
+
 	isCurrentUserExistInGroup : function(selectedGroupId, groupsList){
 
 			var isExist = false;
@@ -603,22 +630,24 @@ var Tickets = {
 
 	sendReqToChangeAssignee : function(assignee_id, group_id, ticketModel, callback){
 
-		var newTicketModel = new BaseModel();
-
 		var url = "/core/api/tickets/assign-ticket?ticket_id=" + Current_Ticket_ID + '&group_id=' + group_id;
 		if(assignee_id)
 			url += "&assignee_id=" + assignee_id;
 
-		newTicketModel.url = url;
-
-		newTicketModel.save(ticketModel,   
-			{	success: function(model){
-  
-				if(callback)
-					callback(model);
+		$.ajax({
+			url : url,
+			method: "GET",
+			data: {},
+			contentType: 'application/x-www-form-urlencoded',
+			accept: 'application/json',
+			success : function(response){
 				
-			}}
-		);
+				if(callback)
+					callback(response);
+				
+			}	
+		});
+
 	},
 
 	changeTicketType: function(event){
@@ -670,13 +699,13 @@ var Tickets = {
 		// 	return;
         if(!App_Ticket_Module.ticketsCollection)
         return;
-		App_Ticket_Module.ticketView.model.set(data); 
+		App_Ticket_Module.ticketView.model.set(data, {silent: true}); 
 
 		// get data from collection with id
 		updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
 
 		// Update data in model
-		updated_model.set(data);
+		updated_model.set(data, {silent: true});
 		
 
 	},
@@ -922,6 +951,11 @@ var Tickets = {
 		var url = "/core/api/tickets/change-status?status="+status+"&id=" + Current_Ticket_ID;
 
 		Tickets.updateModel(url, function(model){
+
+				if(status != "CLOSED")
+					$(".close-current-ticket").show();
+				else
+					$(".close-current-ticket").hide();
 
 				if(callback)
 					callback(model.toJSON());
