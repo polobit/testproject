@@ -1,15 +1,15 @@
 function agile_validations(){
 	var isValid =  true;
-	var divs = document.getElementsByTagName("input");
+	var agile_form = document.forms["agile-form"];
 
-	for(var i=0; i<divs.length; i++){
-			var inputId = divs[i].id;
-        	var inputType = divs[i].type;
+	for(var i=0; i<agile_form.length; i++){
+			var inputId = agile_form[i].getAttribute("id");
+        	var inputType = agile_form[i].getAttribute("type");
         	var inputNode = document.getElementById(inputId);
 			var spans = document.getElementById("agile_span"+i);
-			var required = divs[i].getAttribute("required");
+			var required = agile_form[i].getAttribute("required");
 		
-		if(inputType){				
+		if(inputId){				
 				if (inputNode.value == "" && spans == null && required == "") {
 					isValid = false;
 					var spanTag = document.createElement("span");
