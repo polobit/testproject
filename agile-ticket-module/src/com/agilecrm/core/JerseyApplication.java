@@ -100,6 +100,8 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.deals.DealsBulkActionsAPI.class);
 	s.add(com.agilecrm.core.api.forms.FormsAPI.class);
 	s.add(com.agilecrm.core.api.WebhooksAPI.class);
+	s.add(com.agilecrm.ticket.rest.TicketBulkActionsBackendsRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketImportsRest.class);
 	return s;
     }
 }
