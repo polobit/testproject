@@ -17,19 +17,47 @@
 <div class="modal-body">
   <form id="new-ticket" name="new-ticket">
     <fieldset>
-      <div class="control-group form-group new-contact-row">
+      <div class="control-group form-group search-contact-row m-b-sm">
         <div class="row">
             <input type="hidden" id="contact_id" name="contact_id">
-            <div class="control-group col-md-6">
-              <label class="control-label"><b>Customer name</b> <span class="field_req">*</span></label>
-              <span class="controls">
-                <input type="text" id="requester_name" autocomplete="off" name="requester_name" placeholder="Search name" class="required typeahead typeahead_contacts form-control" data-provide="typeahead">
-              </span>
-            </div>
+            <input type="hidden" id="requester_name" name="requester_name">
             <div class="control-group col-md-6">
                 <label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
                 <span class="controls">
-                  <input type="text" id="requester_email" autocomplete="off" name="requester_email" placeholder="Search email" class="required typeahead typeahead_contacts form-control email" data-provide="typeahead">
+                  <input type="text" id="requester_email" autocomplete="off" name="requester_email" placeholder="Search contacts" class="required typeahead typeahead_contacts form-control email" data-provide="typeahead">
+                  <a class="text-xs pull-right link-color add-ticket-contact" href="javascript:void(0);">
+                    Add new contact
+                  </a>
+                </span>
+            </div>
+            
+        </div>
+      </div>
+      <div class="control-group form-group new-contact-row display-none m-b-sm">
+        <div class="row">
+            <div class="control-group col-md-6">
+                <label class="control-label"><b>First name</b> <span class="field_req">*</span></label>
+                <span class="controls">
+                  <input type="text" id="first_name" autocomplete="off" name="first_name" placeholder="E.g Mark" class="required form-control">
+                </span>
+            </div>
+            <div class="control-group col-md-6">
+                <label class="control-label"><b>Last name</b></label>
+                <span class="controls">
+                  <input type="text" id="last_name" autocomplete="off" name="last_name" placeholder="E.g Twain" class="form-control">
+                </span>
+            </div>
+        </div>
+      </div>
+      <div class="control-group form-group new-contact-row display-none m-b-sm">
+        <div class="row">
+            <div class="control-group col-md-6">
+                <label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
+                <span class="controls">
+                  <input type="text" id="requester_email" autocomplete="off" name="requester_email" placeholder="E.g mark.twain@gmail.com" class="required form-control email">
+                  <a class="text-xs pull-right link-color add-ticket-contact" href="javascript:void(0);">
+                    Search contact
+                  </a>
                 </span>
             </div>
         </div>

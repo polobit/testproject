@@ -5,7 +5,10 @@ import java.util.Calendar;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -63,6 +66,11 @@ public class TicketSetSLA extends TaskletAdapter
 			{
 				// Set SLA
 				// TicketsUtil.setSLA(ticketJSON, SLATime);
+
+				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+						"Ticket(#" + ticketJSON.getString("id") + ") SLA changed - " + duration + " hours",
+						LogType.TICKET_SET_SLA.toString());
+
 			}
 
 		}

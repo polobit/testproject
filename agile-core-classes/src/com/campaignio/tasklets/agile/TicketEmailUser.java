@@ -3,7 +3,10 @@ package com.campaignio.tasklets.agile;
 import org.json.JSONObject;
 
 import com.agilecrm.ticket.utils.TicketsUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -64,6 +67,10 @@ public class TicketEmailUser extends TaskletAdapter
 
 				// Change Group and Assignee
 				TicketsUtil.sendEmailToUser(emailUserId, subject, emailBody);
+
+				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+						"Ticket(#" + ticketJSON.getString("id") + ") email sent to user - " + emailUserId,
+						LogType.TICKET_EMAIL_USER.toString());
 
 			}
 

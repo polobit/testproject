@@ -86,7 +86,8 @@ public class TicketNotesUtil
 	 */
 	public static TicketNotes createTicketNotes(Long ticket_id, Long group_id, Long assignee_id, CREATED_BY created_by,
 			String requester_name, String requester_email, String original_plain_text, String original_html_text,
-			NOTE_TYPE note_type, List<TicketDocuments> attachments_list,String mimeObject) throws EntityNotFoundException
+			NOTE_TYPE note_type, List<TicketDocuments> attachments_list, String mimeObject)
+			throws EntityNotFoundException
 	{
 		TicketNotes ticketNotes = new TicketNotes(ticket_id, group_id, assignee_id, created_by, requester_name,
 				requester_email, removedQuotedReplies(original_plain_text), removedQuotedReplies(original_html_text),
@@ -165,10 +166,13 @@ public class TicketNotesUtil
 
 		json.put("plain_text", notes.plain_text);
 		json.put("html_text", TicketNotesUtil.parseHtmlText(notes.html_text));
-		
-		if(notes.attachments_list != null && notes.attachments_list.size() > 0)
+
+		if (notes.attachments_list != null && notes.attachments_list.size() > 0)
+		{
+			json.put("attachments_exists", true);
 			json.put("attachments_list", notes.attachments_list);
-		
+		}
+
 		if (notes.created_by == CREATED_BY.AGENT)
 		{
 			if (!domainUsersMap.containsKey(notes.assignee_id))
@@ -176,12 +180,12 @@ public class TicketNotesUtil
 
 			DomainUser user = domainUsersMap.get(notes.assignee_id);
 
-			json.put("name", user.name);
+			json.put("user_name", user.name);
 			json.put("img_url", user.getOwnerPic());
 		}
 		else
 		{
-			json.put("name", notes.requester_name);
+			json.put("user_name", notes.requester_name);
 			json.put("img_url", Globals.GRAVATAR_SECURE_IMAGE_URL + MD5Util.getMD5Code(notes.requester_email));
 		}
 

@@ -1829,17 +1829,32 @@ public class ContactUtil
      * @param email
      * @return new created contact
      */
-	public static Contact createContact(String firstName, String email)
+	public static Contact createContact(String name, String email)
 	{
+
 		DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
-		
+
+		String[] names = name.split(" ");
+
 		Contact newContact = new Contact();
-		newContact.first_name = firstName;
 
 		List<ContactField> properties = new ArrayList<ContactField>();
 
-		properties.add(new ContactField("first_name", firstName, null));
 		properties.add(new ContactField("email", email, null));
+
+		if (names.length > 1)
+		{
+			newContact.first_name = names[0];
+			newContact.last_name = names[1];
+
+			properties.add(new ContactField("first_name", names[0], null));
+			properties.add(new ContactField("last_name", names[1], null));
+		}
+		else
+		{
+			newContact.first_name = name;
+			properties.add(new ContactField("first_name", name, null));
+		}
 
 		newContact.properties = properties;
 		newContact.setContactOwner(new Key<DomainUser>(DomainUser.class, domainUser.id));
@@ -1854,7 +1869,7 @@ public class ContactUtil
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 
-		return newContact;  
+		return newContact;
 	}
 	
     public static String getMD5EncodedImage(Contact contact){

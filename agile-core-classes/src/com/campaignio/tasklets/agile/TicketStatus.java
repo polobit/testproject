@@ -4,7 +4,10 @@ import org.json.JSONObject;
 
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketsUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -47,6 +50,11 @@ public class TicketStatus extends TaskletAdapter
 			if (ticketJSON != null)
 			{
 				TicketsUtil.changeStatus(ticketJSON.getLong("id"), Tickets.Status.valueOf(status));
+
+				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+						"Ticket(" + ticketJSON.getString("id") + ") status changed  - " + status,
+						LogType.TICKET_STATUS.toString());
+
 			}
 
 		}
@@ -59,5 +67,4 @@ public class TicketStatus extends TaskletAdapter
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 	}
-
 }
