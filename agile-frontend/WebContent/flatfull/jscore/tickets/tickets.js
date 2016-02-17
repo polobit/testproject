@@ -939,7 +939,7 @@ var Tickets = {
 				'/' + (Ticket_Status ? Ticket_Status : 'new');
 
 			Backbone.history.navigate(url, {trigger : true});
-
+		
 		});
 	},
 
@@ -952,10 +952,13 @@ var Tickets = {
 			saveCallback : function(){
 
 				$('#ticket-delete-modal').modal('hide');
-				var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
-					'/' + (Ticket_Status ? Ticket_Status : 'new');
 
+				 if(App_Ticket_Module.ticketsCollection)
+	           	 	App_Ticket_Module.ticketsCollection.collection.remove(Current_Ticket_ID);
+	           
+				var url = '#tickets/filter/' + Ticket_Filter_ID;
 				Backbone.history.navigate(url, {trigger : true});
+
 			}
 		});
 
