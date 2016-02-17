@@ -51,7 +51,7 @@ public class CheckTicketSLADeferred implements DeferredTask
 			List<Key<Tickets>> keys = TicketsUtil.getOverdueTickets();
 			
 			System.out.println("Namespace: " + namespace);
-			System.out.println("CheckTicketSLADeferred keys: " + keys);
+			System.out.println("Ticket keys found: " + keys);
 
 			for (final Key<Tickets> key : keys)
 			{

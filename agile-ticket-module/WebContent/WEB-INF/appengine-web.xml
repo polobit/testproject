@@ -10,8 +10,7 @@
 
   <!--instance and scaling settings-->
   <instance-class>B2</instance-class>
-  <automatic-scaling>
-    <max-idle-instances>2</max-idle-instances>
-    <min-pending-latency>90ms</min-pending-latency>
-  </automatic-scaling>
+  <basic-scaling>
+    <max-instances>5</max-instances>
+  </basic-scaling>
 </appengine-web-app>
