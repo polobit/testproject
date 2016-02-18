@@ -148,6 +148,7 @@ $(function()
 												$("#deal_archive_confirm_modal").modal('hide');
 												App_Deal_Details.dealDetailView.model = model;
 												App_Deal_Details.dealDetailView.render(true)
+												$('body').removeClass("modal-open");
 												Backbone.history.navigate("deal/" + model.toJSON().id, { trigger : true });
 												return;
 											}
@@ -258,6 +259,7 @@ $(function()
 												$("#deal_restore_confirm_modal").modal('hide');
 												App_Deal_Details.dealDetailView.model = model;
 												App_Deal_Details.dealDetailView.render(true)
+												$('body').removeClass("modal-open");
 												Backbone.history.navigate("deal/" + model.toJSON().id, { trigger : true });
 												return;
 											}

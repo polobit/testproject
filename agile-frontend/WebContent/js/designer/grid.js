@@ -47,8 +47,11 @@ function constructGridPopup(uiFieldDefinition, callback, jsonValues) {
 function editGrid(e, selector, rowIndex)
 {
 
+    var $form = selector.find('form');
+    $form.find("[invisible=true]").attr('disabled', 'disabled');
+
     // Serialize the grid
-    var jsonArray = selector.find('form').serializeArray();
+    var jsonArray = $form.serializeArray();
 
     // Create td
     var td = Edit_Delete_Column;
@@ -82,8 +85,12 @@ function editGrid(e, selector, rowIndex)
 // Adds grid entered elements to the grid
 function addToGrid(e, selector) {
 
+    var $form = selector.find('form');
+
+    $form.find("[invisible=true]").attr('disabled', 'disabled');
+
     // Serialize the grid
-    var jsonArray = selector.find('form').serializeArray();
+    var jsonArray = $form.serializeArray();
     console.log(jsonArray);
 
     // Create tr and add to parent table
@@ -120,15 +127,21 @@ function generateGridUI(container, uiFieldDefinition) {
     for (var j = 0; j < uiElements.length; j++) {
         // console.log("Grid[" + j + "] = " + uiElements[j].label);
         var label = uiElements[j].label;
+        
+        if(!uiElements[j].invisible)
         th += "<th class='grid_width' id='" + uiElements[j].name + "'>" + label + "</th>";
+
+
     }
     var thead = "<thead><tr class='ui-widget-header '><th style='width:12%'></th>" + th + "</tr></thead>"
 
     // Add and delete elements
     var addId = uiFieldDefinition.name + '-add';    
     var addHTML = "<button id='" + addId + "'>Add</button>";
-
-
+    
+//    if(uiFieldDefinition.name == "and_key_grid" ){
+//    	addHTML +='<h1> And </h1>';
+//    }
 	
 
     // Populate Default values
@@ -141,8 +154,11 @@ function generateGridUI(container, uiFieldDefinition) {
             tbody += ("<tr>" + Edit_Delete_Column);
             
             $.each(row, function (key, value) {
+                //if(typeof row.invisibleTd == "undefined" || !row.invisibleTd) {
                 var input = "<td>" + value + "</td>";
-                tbody += input;
+                tbody += input;    
+                //}
+                
             });
             tbody += "</tr>";
         }
@@ -151,6 +167,36 @@ function generateGridUI(container, uiFieldDefinition) {
 
     // Create table
     var tableId = uiFieldDefinition.name + '-table';
+    if(tableId == "and_key_grid-table"|| tableId =="or_key_grid-table" ){
+    	var uiFieldDiv = $("<div style='width:500px;height:100px;overflow-y:auto;margin-bottom:10px;' class='ui-widget-content ui-corner-all'></div>");
+    	uiFieldDiv.appendTo(container);
+
+        var uiField = $("<table class='ui-widget ' id='" + tableId + "'>" + thead + "<tbody>" + tbody + "</tbody></table>");
+    	uiField.appendTo(uiFieldDiv);
+
+    	// Add button & icon (Yasin (20-09-10))
+    	$(addHTML).button({
+    			             icons: {
+    			                 primary: 'ui-icon-circle-plus'
+    			             }
+    			             }).appendTo(uiFieldDiv.parent());
+    	
+
+        // Add name and data to table. This will used while editing and adding
+        uiField.data('name', uiFieldDefinition.name);
+        uiField.data('ui', uiFieldDefinition);
+
+        // Add handler
+        $('#' + addId).click(function(e)
+        	{
+        		e.preventDefault();    	    
+        		var uiFieldDefinition = $('#' + tableId).data('ui')
+        		//alert(uiFieldDefinition);
+        		constructGridPopup(uiFieldDefinition, addToGrid)
+        	});
+    }
+    else
+    {
 	var uiFieldDiv = $("<div style='width:500px;height:150px;overflow:auto;margin-bottom:10px;' class='ui-widget-content ui-corner-all'></div>");
 	uiFieldDiv.appendTo(container);
 
@@ -177,6 +223,7 @@ function generateGridUI(container, uiFieldDefinition) {
     		//alert(uiFieldDefinition);
     		constructGridPopup(uiFieldDefinition, addToGrid)
     	});
+    }
 }
 
 

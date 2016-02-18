@@ -130,7 +130,7 @@ public class ShopifyPluginUtil {
 			ExceptionUtil.catchException(e);
 		}
 
-		if (customer.size() > 0) {
+		if (customer != null && customer.size() > 0) {
 			return customer.get(0);
 		}
 		return new LinkedHashMap<String, Object>();
