@@ -384,7 +384,7 @@ function show_custom_fields_helper(custom_fields, properties){
 									+'_input custom_field required" id='
 									+field.id+' name="'
 									+field.field_label
-									+'" style="margin: 0px 5px;"><i></i>'+field.field_label+'</div></label><div class="field_req inline-block">*</div></div>');
+									+'" style="margin: 0px 5px;"><i></i>'+field.field_label+'</label><div class="field_req inline-block">*</div></div></div>');
 						}else{
 							el = el.concat('<div class="control-group form-group ">	<label class="i-checks i-checks-sm '+label_style+'">'
 									+'<span class="field_req">*</span><input type="'
