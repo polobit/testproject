@@ -416,10 +416,12 @@ var CompaniesRouter = Backbone.Router
 				}, '<option value="CUSTOM_{{field_label}}">{{field_label}}</option>', true, el);
 			}, saveCallback : function(data)
 			{
-				COMPANIES_HARD_RELOAD = true;
-				App_Companies.navigate("companies", { trigger : true });
-				App_Companies.companyViewModel = data.toJSON();
 
+				COMPANIES_HARD_RELOAD = true;
+				if(App_Companies.companyViewModel)
+					App_Companies.companyViewModel["fields_set"] = data.fields_set;
+
+				App_Companies.navigate("companies", { trigger : true });
 			} });
 
 		$("#content").html(companyView.render().el);

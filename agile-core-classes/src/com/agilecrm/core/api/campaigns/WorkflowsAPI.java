@@ -237,6 +237,71 @@ public class WorkflowsAPI {
 		WorkflowDeleteUtil.deleteRelatedEntities(workflowsJSONArray);
 
 	}
+	
+	/**
+	 * Returns count of contacts having campaignStatus Done for the given
+	 * campaign-id.
+	 * 
+	 * @param workflow_id
+	 *            - workflow id.
+	 * @return
+	 */
+	@Path("{subscribers_type}-subscribers/{id}/count")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON + "; charset=utf-8",
+			MediaType.APPLICATION_XML + "; charset=utf-8" })
+	public Integer getCompletedContacts(
+			@PathParam("subscribers_type") String subscribers_type, @PathParam("id") String workflow_id) {
+		
+		System.out.println("subscribers_type = " + subscribers_type);
+		
+		if(subscribers_type.equalsIgnoreCase("all"))
+		{
+			return CampaignSubscribersUtil.getContactsCountByCampaignId(workflow_id);
+			
+		}
+		
+		if(subscribers_type.equalsIgnoreCase("active"))
+		{
+			return CampaignSubscribersUtil.getSubscribersCount(workflow_id + "-" + CampaignStatus.Status.ACTIVE);
+			
+		}
+		
+		if(subscribers_type.equalsIgnoreCase("completed")){
+			
+			return CampaignSubscribersUtil.getSubscribersCount(workflow_id + "-" + CampaignStatus.Status.DONE);
+		}
+		
+		if(subscribers_type.equalsIgnoreCase("removed")){
+			
+			return CampaignSubscribersUtil.getSubscribersCount(workflow_id + "-" + CampaignStatus.Status.REMOVED);
+		}
+		
+		if(subscribers_type.equalsIgnoreCase("unsubscribed")){
+			
+			return UnsubscribeStatusUtil.getUnsubscribeContactsCountByCampaignId(workflow_id);
+		}
+		
+		if(subscribers_type.equalsIgnoreCase("hardbounced")){
+			
+			return CampaignSubscribersUtil.getBoucedContactsCountByCampaignId(EmailBounceType.HARD_BOUNCE,
+					workflow_id);
+		}
+		
+		if(subscribers_type.equalsIgnoreCase("softbounced")){
+			
+			return CampaignSubscribersUtil.getBoucedContactsCountByCampaignId(EmailBounceType.SOFT_BOUNCE,
+					workflow_id);
+		}
+		
+		if(subscribers_type.equalsIgnoreCase("spam-reported")){
+			
+			return CampaignSubscribersUtil.getBoucedContactsCountByCampaignId(EmailBounceType.SPAM,
+					workflow_id);
+		}
+		
+		return 0;
+	}
 
 	/**
 	 * Returns active subscribers of given campaign.

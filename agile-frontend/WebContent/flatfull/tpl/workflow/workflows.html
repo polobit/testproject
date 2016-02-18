@@ -10,17 +10,6 @@
         </div>  
     </td>
 
-    <td>
-        <div class="table-resp">
-            <div class="pull-left text-ellipsis" style="width: 55%;">
-                <a href="#email-reports/{{id}}" class="stop-propagation">Reports</a>
-            </div>
-            {{#if is_disabled}}
-            <div class="pull-left"><label class="label label-danger m-b-none">Disabled</label></div>
-            {{/if}}
-        </div> 
-    </td>
-
     <td> 
         {{#if updated_time}}
         <div class="table-resp">
@@ -40,9 +29,23 @@
         </div>
         {{/if}}
     </td> 
+    <td>
+    <div>
+    {{#if is_disabled}}
+            <div><label class="label label-danger m-b-none">Disabled</label></div>
+            {{/if}}
+     </div>
+    </td>
+    <td>
+        <div class="table-resp hide" id="camp_reports">
+            <div class="pull-left text-ellipsis">
+                <a href="#email-reports/{{id}}" class="stop-propagation">Reports</a>
+            </div>
+        </div> 
+    </td>
 
     <td>   
-    <div class="table-resp">
+    <div class="table-resp hide" id="camp_history">
         <div class="pull-left">
         <a href="#activities/campaign/{{id}}" class="stop-propagation" >History</a></div>
         </div>
@@ -94,6 +97,16 @@
         <div class="col-md-9 col-sm-9">
             <div id="slate">
         </div>
+        <div class="embed-responsive embed-responsive-16by9">
+        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tgM4Rwbz8Ps" style="
+                width: 58%;
+                position: absolute;
+                left: 37%;
+                top: 15%;
+                margin: -75px 0 0 -135px;
+                height: 304px;
+                " allowfullscreen=""></iframe>
+            </div>
         </div>
         {{/unless}}
         {{#if this.length}}
@@ -122,9 +135,10 @@
                             <th class="hide">Id</th>
                             <th style="width:30%">Name</th>
                             <th style="width:20%">Triggers</th>
-                            <th style="width:17%">&nbsp;</th>
                             <th style="width:23%">&nbsp;</th>
-                            <th style="width:10%"> </th>
+                            <th style="width:9%">&nbsp;</th>
+                            <th style="width:9%">&nbsp;</th>
+                            <th style="width:9%"> </th>
                         </tr>
                     </thead>
                     <tbody id="workflows-model-list" route="workflow/" class="c-p"> </tbody>

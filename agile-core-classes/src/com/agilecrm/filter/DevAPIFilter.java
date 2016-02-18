@@ -31,9 +31,8 @@ import com.google.appengine.api.NamespaceManager;
  * </p>
  * 
  */
-public class JSAPIFilter implements Filter
+public class DevAPIFilter implements Filter
 {
-    private final String callbackParameter = "callback";
 
     @Override
     public void destroy()
@@ -55,41 +54,14 @@ public class JSAPIFilter implements Filter
 	final HttpServletResponse httpResponse = (HttpServletResponse) response;
 
 	// Gets the id from the request
-	String agileId = httpRequest.getParameter("id");
 	String domain = httpRequest.getParameter("domain");
 	String password = httpRequest.getParameter("password");
 	String username = httpRequest.getParameter("username");
+	
 	// If APIKey from the request is not null, If key in the request matches
 	// with APIKey of current namespace/domain request is allowed to access
 	// functionalities in "js/api".
-	if (agileId != null)
-	{
-	    // Check if ApiKey
-	    if (APIKey.isValidJSKey(agileId) || APIKey.isPresent(agileId))
-	    {
-		UserInfo userInfo = (UserInfo) httpRequest.getSession().getAttribute(
-		        SessionManager.AUTH_SESSION_COOKIE_NAME);
-
-		// Get AgileUser
-		DomainUser domainUser = null;
-		if (APIKey.isPresent(agileId))
-		    domainUser = APIKey.getDomainUserRelatedToAPIKey(agileId);
-		if (APIKey.isValidJSKey(agileId))
-		    domainUser = APIKey.getDomainUserRelatedToJSAPIKey(agileId);
-
-		// Domain becomes null if user is deleted
-		if (domainUser != null)
-		    userInfo = new UserInfo("agilecrm.com", domainUser.email, domainUser.name);
-
-		SessionManager.set(userInfo);
-		chain.doFilter(httpRequest, httpResponse);
-		return;
-	    }
-	    sendJSONErrorResponse((HttpServletRequest) request, (HttpServletResponse) response,
-		    JSAPIUtil.generateJSONErrorResponse(JSAPIUtil.Errors.UNAUTHORIZED));
-	    return;
-	}
-	else if (domain != null && password != null && username != null)
+	if (domain != null && password != null && username != null)
 	{
 	    // Get AgileUser
 	    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(username);
@@ -99,7 +71,8 @@ public class JSAPIFilter implements Filter
 	    {
 		// If domain user exists and the APIKey matches, request is
 		// given access
-		if (isValidPassword(password, domainUser) || APIKey.isPresent(password))
+		if (isValidPassword(password, domainUser) || APIKey.isValidJSKey(password)
+		        || APIKey.isPresent(password))
 		{
 		    UserInfo userInfo = new UserInfo("agilecrm.com/js", domainUser.email, domainUser.name);
 
@@ -119,47 +92,13 @@ public class JSAPIFilter implements Filter
     private void sendJSONErrorResponse(HttpServletRequest request, HttpServletResponse response, String responseString)
 	    throws IOException
     {
-	if (!isJSONPRequest(request))
-	{
-	    System.out.println("Error - Key does not match for JS API");
+    	
+    	System.out.println("Error - Key does not match for JS API");
 	    response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-	    return;
-	}
-
-	// enclosed with in callback parameter.
-	ServletOutputStream out = response.getOutputStream();
-	out.println(getCallbackParameter(request) + "(");
-	out.println(responseString);
-	out.println(");");
-
-	response.setContentType("application/javascript");
+	
     }
 
-    /**
-     * Checks whether request received is a valid JSONP request. It checks for
-     * the callback parameter.
-     * 
-     * @param httpRequest
-     * @return ({@link Boolean}
-     */
-    private boolean isJSONPRequest(HttpServletRequest httpRequest)
-    {
-	String callbackMethod = getCallbackParameter(httpRequest);
-	return (callbackMethod != null && callbackMethod.length() > 0);
-    }
-
-    /**
-     * Reads the callback parameter sent in JSONP request which is a unique
-     * number generated and assigned to widow as a callback function.
-     * 
-     * @param request
-     * @return
-     */
-    private String getCallbackParameter(HttpServletRequest request)
-    {
-	return request.getParameter(callbackParameter);
-    }
-
+    
     @Override
     public void init(FilterConfig arg0) throws ServletException
     {

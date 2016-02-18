@@ -1160,9 +1160,9 @@ time {
 }*/
 
 @media (min-width:760px) and (max-width:991px) {
-.agile-menu > li:nth-child(n + 4):not(.nav-bar-search):not(#more-menu) {
+/*.agile-menu > li:nth-child(n + 4):not(.nav-bar-search):not(#more-menu) {
 	display:none;
-}
+}*/
 #searchText {
 	width:100px;
 }
