@@ -148,7 +148,7 @@ public class JSAPI
 
 	    // Get Contact count by email
 	    String email = contact.getContactFieldValue(Contact.EMAIL);
-	    int count = ContactUtil.searchContactCountByEmail(email);
+	    int count = ContactUtil.searchContactCountByEmail(email.toLowerCase());
 	    if (count != 0)
 	    {
 		return JSAPIUtil.generateJSONErrorResponse(Errors.DUPLICATE_CONTACT, email);
@@ -1371,14 +1371,14 @@ public class JSAPI
 	    for (Trigger trigger : triggers)
 	    {
 		if (StringUtils.equals(trigger.type.toString(), "FORM_SUBMIT")
-		        && (newContact || !TriggerUtil.getTriggerRunStatus(trigger)))
+			&& (newContact || !TriggerUtil.getTriggerRunStatus(trigger)))
 		{
 		    System.out.println("trigger condition, event match ...");
 		    if (StringUtils.equals(trigger.trigger_form_event, form.id.toString()))
 		    {
 			System.out.println("Assigning campaign to contact ...");
 			WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
-			        new JSONObject().put("form", formFields));
+				new JSONObject().put("form", formFields));
 		    }
 		}
 	    }
