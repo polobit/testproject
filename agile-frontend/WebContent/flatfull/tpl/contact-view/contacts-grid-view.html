@@ -160,7 +160,7 @@
     </div>
     </div>
     <div class="contacts-div">
-    <div id="bulk-action-btns" class="panel-heading no-shadow {{#is_mobile}} {{else}} m-r-md {{/is_mobile}}" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
+    <div id="bulk-action-btns" class="panel-heading no-shadow grid-checkboxes {{#is_mobile}} {{else}} m-r-md {{/is_mobile}}" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
 				      	
 					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add Tags</button>
 					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Remove Tags</button>
@@ -175,7 +175,7 @@
 					    {{/hasScope}}
 					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Delete</button>
 					    {{#if this.length}}
-				          <span style="margin: 5px 10px 5px 5px;"> <label class="i-checks i-checks-sm">
+				          <span style="margin: 5px 0px 5px 5px;float:right"> <label class="i-checks i-checks-sm">
 				                <input type="checkbox" id="select_grid_contacts1" class="thead_check" value="">
 				                <i></i>                
 				          </label>Select All</span>
