@@ -431,10 +431,9 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 							{
 								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
 								subjectMessage = template_details.subject ;
-								String htmlString = template_details.text.replaceAll("\\<.*?>","");
+								String htmlString = template_details.text;
 								System.out.println("htmlString is"+htmlString);
-								String text = Jsoup.parse(htmlString).text();
-								map.put("unsubscribe_body", text);
+								map.put("unsubscribe_body", htmlString);
 							}
 							else
 							{
@@ -461,10 +460,9 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 							{
 								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
 								subjectMessage = template_details.subject ;
-								String htmlString = template_details.text.replaceAll("\\<.*?>","");
+								String htmlString = template_details.text;
 								System.out.println("htmlString is"+htmlString);
-								String text = Jsoup.parse(htmlString).text();
-								map.put("unsubscribe_body", text);
+								map.put("unsubscribe_body", htmlString);
 							}
 							else
 							{
