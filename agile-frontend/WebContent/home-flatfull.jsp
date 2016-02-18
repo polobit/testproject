@@ -661,23 +661,15 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 // Billing Restriction
 var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
 var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
-var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
-//var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
-// head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + 'final-lib/min/lib-all-min.js', LIB_PATH + 'lib/backbone-route-filter.js');
-
-<!-- JQUery Core and UI CDN --> 
-<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
-console.log("before dashboard load");
-head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min.js?_=' + _AGILE_VERSION, function(){
+head.load(LIB_PATH + 'final-lib/min/lib-all-min.js?_=' + _AGILE_VERSION, function(){
         load_globalize();
         showVideoForRegisteredUser();
 
 })
-// , LIB_PATH + 'lib/backbone-route-filter.js'
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(HANDLEBARS_LIB, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _AGILE_VERSION);
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl-combined.js" + "?_=" + _AGILE_VERSION);
 else
 	head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION);
 
@@ -691,9 +683,7 @@ var Agile_Contact = {};
 head.ready(function() {
 	
 if(!HANDLEBARS_PRECOMPILATION){
-    downloadTemplate("tpl.js", function(){             
-    });
-    downloadTemplate("contact-view.js", function(){             
+    downloadTemplate("tpl-combined.js", function(){             
     });
 }
  
