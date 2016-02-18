@@ -384,7 +384,7 @@ function show_custom_fields_helper(custom_fields, properties){
 									+'_input custom_field required" id='
 									+field.id+' name="'
 									+field.field_label
-									+'" style="margin: 0px 5px;"><i></i><div class="field_req inline-block">*</div>'+field.field_label+'</div></label></div>');
+									+'" style="margin: 0px 5px;"><i></i>'+field.field_label+'</label><div class="field_req inline-block">*</div></div></div>');
 						}else{
 							el = el.concat('<div class="control-group form-group ">	<label class="i-checks i-checks-sm '+label_style+'">'
 									+'<span class="field_req">*</span><input type="'
@@ -399,6 +399,7 @@ function show_custom_fields_helper(custom_fields, properties){
 					}else{
 						if(isModal){
 							el = el.concat('<div class="control-group form-group modal-cbx-m-t"><div class="checkbox '+modal_checkbox+' col-sm-6"><label class="i-checks i-checks-sm">'
+
 									+'<input type="'
 									+field_type
 									+'" class="'
@@ -425,6 +426,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				if(field.is_required){
 					if(isModal){
 						el = el.concat('<div class="control-group form-group modal-cbx-m-t"><div class="checkbox '+modal_checkbox+' col-sm-6">'
+
 								+'<label class="i-checks i-checks-sm"><input type="'
 								+field_type
 								+'" class="'
@@ -432,7 +434,7 @@ function show_custom_fields_helper(custom_fields, properties){
 								+'_input custom_field required" id='
 								+field.id+' name="'
 								+field.field_label
-								+'"><i></i><div class="field_req inline-block">*</div>'+field.field_label+'</label></div></div>');
+								+'"><i></i>'+field.field_label+'</label><div class="field_req inline-block">*</div></div></div>');
 					}else{
 						el = el.concat('<div class="control-group form-group ">	<label class="control-label '+checkbox_style+" "+label_style+'">'
 								+field.field_label
@@ -449,6 +451,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				else{
 					if(isModal){
 						el = el.concat('<div class="control-group form-group modal-cbx-m-t"><div class="checkbox '+modal_checkbox+' col-sm-6"><label class="i-checks i-checks-sm">'
+
 								+'<input type="'
 								+field_type
 								+'" class="'
@@ -928,6 +931,15 @@ function serialize_custom_fields(form)
     		else
     			json.value = en.dateFormatter({raw: "MM/dd/yyyy"})(new Date(this.value));
     	
+    	if($(element).hasClass("contact_input") && isValidContactCustomField($(element).attr('id')))
+    	{
+    		var contact_values = [];
+			$('ul[name="'+name+'"]', $('#'+form)).find('li').each(function(index){
+				contact_values.push($(this).attr("data"));
+			});
+			json.value = JSON.stringify(contact_values);
+    	}
+
     	
     	if(!json.value)
     		return;
@@ -942,7 +954,7 @@ function groupingCustomFields(base_model){
 			templateKey : templateKey, individual_tag_name : 'tr',
 			postRenderCallback : function(custom_el){
 				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
-				bindModelSearchable(App_Admin_Settings.contactCustomFieldsListView.collection);
+				bindModelSearchable(App_Admin_Settings.contactCustomFieldsListView.collection)
 			}});
 		function bindModelSearchable(collection)
 		{
@@ -952,21 +964,17 @@ function groupingCustomFields(base_model){
 		}
 		function appendItem(base_model)
 		{
-			addCustomFieldToSearch(base_model,  base_model.get("scope"));
+			addCustomFieldToSearch(base_model);
 		};
 
 		function removeItem(base_model)
 		{
-			removeCustomFieldFromSortOptions(base_model, base_model.get("scope"));
-		};
-
-		function updateItem(base_model){
-				updateCustomFieldToSearch(base_model, base_model.get("scope"));
+			removeCustomFieldFromSortOptions(base_model);
 		};
 
 		App_Admin_Settings.contactCustomFieldsListView.collection.bind('add', appendItem);
 		App_Admin_Settings.contactCustomFieldsListView.collection.bind('remove', removeItem);
-		App_Admin_Settings.contactCustomFieldsListView.collection.bind('change', updateItem);
+		
 
 		App_Admin_Settings.contactCustomFieldsListView.collection.fetch();
 		$('#customfields-contacts-accordion', this.el).append($(App_Admin_Settings.contactCustomFieldsListView.render().el));
@@ -975,33 +983,7 @@ function groupingCustomFields(base_model){
 			templateKey : templateKey, individual_tag_name : 'tr',
 			postRenderCallback : function(custom_el){
 				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
-				bindModelSearchable(App_Admin_Settings.companyCustomFieldsListView.collection);
 			}});
-
-			function bindModelSearchable(collection)
-			{
-				$.each(collection, function (i, m){
-					
-				})
-			}
-			function appendItem(base_model)
-			{
-				addCustomFieldToSearch(base_model, base_model.get("scope"));
-			};
-
-			function removeItem(base_model)
-			{
-				removeCustomFieldFromSortOptions(base_model, base_model.get("scope"));
-			};
-
-			function updateItem(base_model){
-				updateCustomFieldToSearch(base_model, base_model.get("scope"));
-			};
-
-		App_Admin_Settings.companyCustomFieldsListView.collection.bind('add', appendItem);
-		App_Admin_Settings.companyCustomFieldsListView.collection.bind('remove', removeItem);
-		App_Admin_Settings.companyCustomFieldsListView.collection.bind('change', updateItem);
-
 		App_Admin_Settings.companyCustomFieldsListView.collection.fetch();
 		$('#customfields-companies-accordion', this.el).append($(App_Admin_Settings.companyCustomFieldsListView.render().el));
 	}else if(base_model.get("scope")=="DEAL"){
