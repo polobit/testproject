@@ -682,6 +682,7 @@ var contacts_bulk_actions = {
 											// hide bulk actions button.
 											$('body').find('#bulk-actions').css('display', 'none');
 											$('body').find('#bulk-select').css('display', 'none');
+											$('body').find('#bulk-action-btns button').addClass("disabled");
 											$('table#contacts-table').find('.thead_check').removeAttr('checked');
 											$('table#contacts-table').find('.tbody_check').removeAttr('checked');
 											$(".grid-checkboxes").find(".thead_check").removeAttr("checked");
