@@ -1036,6 +1036,9 @@ var WorkflowsRouter = Backbone.Router
 					{
 						if (!template_ui)
 							return;
+
+						abortCountQueryCall();
+
 						$('#campaign-analysis-tabs').html($(template_ui));
 						var all_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/all-subscribers/' + id,
 								'workflow-other-subscribers');
@@ -1043,6 +1046,7 @@ var WorkflowsRouter = Backbone.Router
 						{
 							if (collection.length === 0)
 								fill_subscribers_slate('subscribers-slate', "all-subscribers");
+
 						} });
 						$("#campaign-analysis-tabs-content").html(all_subscribers_collection.el);
 						// Hide bulk subscribers block

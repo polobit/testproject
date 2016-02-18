@@ -1200,7 +1200,9 @@ var ContactsRouter = Backbone.Router.extend({
 		
 	});
 
-function getAndUpdateCollectionCount(type, el){
+function getAndUpdateCollectionCount(type, el, countFetchURL){
+
+		console.log("countFetchURL = " + countFetchURL);
 
 		var count_message = "";
     	$("#contacts-count").html(count_message);
@@ -1208,7 +1210,9 @@ function getAndUpdateCollectionCount(type, el){
     	var countURL = "";
     	if(type == "contacts")
     		countURL = App_Contacts.contactsListView.options.url + "/count";
-    	else
+    	else if(type == "workflows")
+    		countURL = countFetchURL + "/count";
+     	else
     		countURL = App_Companies.companiesListView.options.url + "/count";
 
     	// Hide bulk action checkbox
@@ -1223,10 +1227,15 @@ function getAndUpdateCollectionCount(type, el){
                     count_message = "<small> (" + data + " Total) </small>";
 					$('#contacts-count').html(count_message);
 
+					if(type == "workflows")
+						  $("span.badge.bg-primary", el).html(data);
+
 					// Reset collection
 					if(type == "contacts")
 						App_Contacts.contactsListView.collection.models[0].set("count", data, {silent: true});
-					else{
+					else if(type == "workflows"){
+						
+					} else{
 						App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
 					}
 
