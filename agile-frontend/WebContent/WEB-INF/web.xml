@@ -977,7 +977,7 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>ActivityReports</servlet-name>
+		<servlet-name>TicketSLAServlet</servlet-name>
 		<url-pattern>/backend/ticket/slacron</url-pattern>
 	</servlet-mapping>
 	

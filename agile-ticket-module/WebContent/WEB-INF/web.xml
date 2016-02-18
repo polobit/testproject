@@ -211,14 +211,22 @@
     <servlet-name>TwilioIOTwiml</servlet-name>
     <url-pattern>/twiml</url-pattern>
   </servlet-mapping>
-	<servlet>
-		<servlet-name>TicketWebhook</servlet-name>
-		<servlet-class>com.agilecrm.ticket.servlets.TicketWebhook</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>TicketWebhook</servlet-name>
-		<url-pattern>/backend/ticket/webhook</url-pattern>
-	</servlet-mapping>
+  <servlet>
+	<servlet-name>TicketWebhook</servlet-name>
+	<servlet-class>com.agilecrm.ticket.servlets.TicketWebhook</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>TicketWebhook</servlet-name>
+	<url-pattern>/backend/ticket/webhook</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>TicketSLAServlet</servlet-name>
+	<servlet-class>com.agilecrm.ticket.servlets.TicketSLAServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>TicketSLAServlet</servlet-name>
+	<url-pattern>/backend/ticket/slacron</url-pattern>
+  </servlet-mapping>
   <!-- <filter>
     <filter-name>NamespaceFilter</filter-name>
     <filter-class>com.agilecrm.filter.NamespaceFilter</filter-class>
