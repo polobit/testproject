@@ -309,7 +309,7 @@
               
               <button class="fa fa-trash-o btn btn-sm p-ver-2 btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Delete Ticket"></button>
 
-                <button class="fa fa-check btn btn-sm p-ver-2 btn-default w-xxs w-auto-xs close-current-ticket" style="{{#if_equals status 'CLOSED'}}display:none{{/if_equals}}" data-toggle="tooltip" data-placement="bottom" data-original-title="Close Ticket"></button>
+                <button class="fa fa-check btn btn-sm p-ver-2 btn-default w-xxs w-auto-xs close-current-ticket" style="{{#if_equals status 'CLOSED'}}display:none{{/if_equals}}" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Close Ticket"></button>
                 
             </div> 
 
@@ -413,7 +413,11 @@
                       </ul> 
                     {{/if_equals}}
 
-                     <textarea id="reply_textarea" name="html_text" class="form-control required {{#if_equals reply_type "comment"}} bg-lightyellow{{/if_equals}}" style="min-height: 49px;height: 60px;max-height:400px;width:100%;text-indent: 0px; resize: none;">{{#if_equals reply_type "forward"}} {{get_palin_text_from_html notes}} {{/if_equals}}</textarea>
+                     <textarea id="reply_textarea" name="html_text" class="form-control required 
+                     {{#if_equals reply_type "forward"}}forward{{/if_equals}} 
+                     {{#if_equals reply_type "reply"}}reply{{/if_equals}} 
+                     {{#if_equals reply_type "comment"}} bg-lightyellow comment{{/if_equals}}
+                     " style="min-height: 49px;height: 60px;max-height:400px;width:100%;text-indent: 0px; resize: none;">{{#if_equals reply_type "forward"}}{{#if draft_message.forward}}{{draft_message.forward}}{{else}}{{get_palin_text_from_html notes}}{{/if}}{{/if_equals}}{{#if_equals reply_type "comment"}}{{draft_message.comment}}{{/if_equals}}{{#if_equals reply_type "reply"}}{{draft_message.reply}}{{/if_equals}}</textarea>
             
                   </div>
                   
@@ -423,7 +427,7 @@
 
                     {{#if_equals reply_type "reply"}}
                     <div class="btn-group dropdown p-none">
-                        <button class="btn btn-gray btn-sm send-reply">Send Reply</button>
+                        <button class="btn btn-gray btn-sm send-reply" data-loading-text="Sending...">Send Reply</button>
                         <button class="btn btn-gray btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                         <ul class="dropdown-menu">
                           <li><a href="javascript:void(0);" class="send-reply close-ticket">Send Reply &amp; Close Ticket</a></li>
@@ -442,9 +446,8 @@
                       </div> 
                       {{/if_equals}} 
 
-
                       {{#if_equals reply_type "forward"}} 
-                        <button class="btn btn-sm btn-gray send-reply forward">Forward</button>
+                        <button class="btn btn-sm btn-gray send-reply forward" data-loading-text="Sending...">Forward</button>
                       {{/if_equals}}
 
                       <span class="error-msg text-sm" style="color: #d9534f;"></span>
