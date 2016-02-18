@@ -1,7 +1,7 @@
 /** Closing the datepicker on back and forward button **/
 $(function(){
 window.onhashchange = function (e) {
-	console.log('hi');
+	
 	$('.daterangepicker').hide();
 }
 });
