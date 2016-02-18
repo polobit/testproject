@@ -161,7 +161,6 @@
                 "position": "relative",
                 "outline": "none",
                 "font-size": "11px",
-                "top": "-41px",
                 "right": "70px"
             }
         },
@@ -233,7 +232,6 @@
                 "border-bottom": "1px solid",
                 "padding": "0px 0px 1px 0px",
                 "position": "relative",
-                "top": "-76px",
                 "outline": "none",
                 "font-size": "11px",
                 "right":"70px"
