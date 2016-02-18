@@ -959,7 +959,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TicketWebhook</servlet-name>
-		<url-pattern>/backend/ticket/webhook</url-pattern>
+		<url-pattern>/ticket-module/backend/webhook</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -968,8 +968,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TicketOpenServlet</servlet-name>
-		<url-pattern>/backend/ticket/open</url-pattern>
-		<url-pattern>/ticket/open</url-pattern>
+		<url-pattern>/ticket-module/backend/open</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>TicketSLAServlet</servlet-name>

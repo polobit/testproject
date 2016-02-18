@@ -351,7 +351,7 @@ var Tickets = {
 								var $closest_div = $that.closest('div.row');
 								var top = 0, left = $closest_div.offset().left + 70 + 'px';
 
-								if (window.innerHeight - $that.offset().top >= 250)
+								if (window.innerHeight - ($that.offset().top - $(window).scrollTop()) >= 250)
 									top = $that.offset().top + 35 + 'px';
 								else
 									top = $that.offset().top - $('#ticket-last-notes').height() + 'px';

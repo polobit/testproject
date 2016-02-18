@@ -425,4 +425,14 @@ Handlebars.registerHelper('is_helpdesk_enabled', function(options)
 	return options.inverse(this);
 });
 
+Handlebars.registerHelper('is_current_logged_in_user', function(id, options)
+{
+
+	if (CURRENT_DOMAIN_USER.id == id)
+
+		return options.fn(this);
+
+	return options.inverse(this);
+});
+
 /** End of ticketing handlebars* */

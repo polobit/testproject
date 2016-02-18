@@ -336,6 +336,14 @@ public class TicketsRest
 	{
 		try
 		{
+			if (StringUtils.isBlank(ticket.requester_email))
+				throw new Exception("Please provide email address.");
+
+			String fromName = ticket.requester_email.substring(0, ticket.requester_email.lastIndexOf("@"));
+
+			if (StringUtils.isBlank(ticket.requester_name))
+				ticket.requester_name = fromName;
+
 			String html_text = ticket.html_text;
 			html_text = html_text.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
 

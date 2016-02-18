@@ -54,7 +54,7 @@
             <div class="control-group col-md-6">
                 <label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
                 <span class="controls">
-                  <input type="text" id="requester_email" autocomplete="off" name="requester_email" placeholder="E.g mark.twain@gmail.com" class="required form-control email">
+                  <input type="text" id="email_input" autocomplete="off" name="email_input" placeholder="E.g mark.twain@gmail.com" class="required form-control email">
                   <a class="text-xs pull-right link-color add-ticket-contact" href="javascript:void(0);">
                     Search contact
                   </a>
@@ -67,7 +67,7 @@
             <div class="control-group col-md-6">
               <label class="control-label"><b>Subject</b> <span class="field_req">*</span></label>
               <span class="controls">
-                <input type="text" name="subject" class="form-control required"  placeholder="Subject">
+                <input type="text" name="subject" autocomplete="off" class="form-control required"  placeholder="Subject">
               </span>
             </div>
             <div class="control-group col-md-6">
@@ -121,7 +121,7 @@
                     {{#each this}}
                       <optgroup data-group-email="{{group_email}}" label="{{group_name}}">
                         {{#group_users}}
-                          <option data-assignee-id="{{id}}" value="{{../id}}">{{name}}</option>
+                          <option data-assignee-id="{{id}}" value="{{../id}}" {{#is_current_logged_in_user id}}selected{{/is_current_logged_in_user}}>{{name}}</option>
                         {{/group_users}}
                       </optgroup>
                     {{/each}}
@@ -151,7 +151,7 @@
   </form>
 </div>
 <div class="modal-footer">
-    <span class="form-action-error"></span>
+    <span class="form-action-error pull-left" style="color: red;"></span>
     <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a> 
     <a href="javascript:void(0);" class="save btn btn-sm btn-primary">Save</a>
     <span class="save-status"></span>

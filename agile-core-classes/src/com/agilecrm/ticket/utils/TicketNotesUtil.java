@@ -392,7 +392,7 @@ public class TicketNotesUtil
 		queryParams += "n=" + notesID;
 
 		String trackingImage = "<div class=\"ag-img\"><img src="
-				+ VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "/ticket/open?" + queryParams
+				+ VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "/ticket-module/backend/open?" + queryParams
 				+ " nosend=\"1\" style=\"display:none !important;\" width=\"1\" height=\"1\"></img></div>";
 
 		return trackingImage;

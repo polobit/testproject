@@ -114,6 +114,11 @@ cron:
   schedule: every 1 mins
 
 - description: Ticket SLA Cron
-  url: /backend/ticket/slacron
+  url: /ticket-module/backend/slacron
   schedule: every day 00:00
   target: agile-ticket-module
+  
+- description: Ticket module wake up req
+  url: /ticket-module/backend/wakeup-servlet
+  schedule: every day 00:00
+  schedule: every 1 mins

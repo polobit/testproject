@@ -95,6 +95,11 @@
 					if(last_name)
 						json.requester_name = $('#first_name').val() + ' ' + last_name;
 
+					var email = $('#email_input').val();
+
+					if(email)
+						json.requester_email = email;
+
 					model.set(json, { silent : true });
 				},
 				postRenderCallback : function(el, data) {
@@ -126,14 +131,23 @@
 
 						var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
 
-						if(!email || email == 'No email')
-							return;
+						if(!email || email == 'No email'){
+							var $span = $('.form-action-error');
 
-						setTimeout(function(){
-							$('#requester_email', el).val(email);
-							$('#requester_name', el).val(arg2);
-							$('#contact_id', el).val(arg1);
-						}, 0);
+							$span.html('No email address found.');
+
+							setTimeout(function(){
+								$span.html('');
+							}, 4000);
+						}
+						else{
+							setTimeout(function(){
+
+								$('#requester_email', el).val(email);
+								$('#requester_name', el).val(arg2);
+								$('#contact_id', el).val(arg1);
+							}, 0);
+						}
 
 					},undefined, undefined, 'core/api/search/');
 				}

@@ -38,7 +38,7 @@ import com.googlecode.objectify.Key;
  * @author Sasi on 30-Sep-2015
  * 
  */
-@Path("/api/bulk-actions/tickets")
+@Path("/api/ticket-module/backend")
 public class TicketBulkActionsBackendsRest
 {
 	@POST

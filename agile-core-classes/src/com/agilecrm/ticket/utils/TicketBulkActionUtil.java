@@ -27,13 +27,13 @@ public class TicketBulkActionUtil
 {
 	public static enum TicketBulkActionType
 	{
-		MANAGE_LABELS("/core/api/bulk-actions/tickets/manage-labels", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), CHANGE_ASSIGNEE(
-				"/core/api/bulk-actions/tickets/change-assignee", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), EXECUTE_WORKFLOW(
-				"/core/api/bulk-actions/tickets/execute-workflow", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), CLOSE_TICKET(
-				"/core/api/bulk-actions/tickets/close-tickets", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), DELETE(
-				"/core/api/bulk-actions/tickets/delete-tickets", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), SPAM(
-				"/core/api/bulk-actions/tickets/spam-tickets", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), FAVORITE(
-				"/core/api/bulk-actions/tickets/favorite-tickets", AgileQueues.TICKET_BULK_ACTIONS_QUEUE);
+		MANAGE_LABELS("/core/api/ticket-module/backend/manage-labels", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), CHANGE_ASSIGNEE(
+				"/core/api/ticket-module/backend/change-assignee", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), EXECUTE_WORKFLOW(
+				"/core/api/ticket-module/backend/execute-workflow", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), CLOSE_TICKET(
+				"/core/api/ticket-module/backend/close-tickets", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), DELETE(
+				"/core/api/ticket-module/backend/delete-tickets", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), SPAM(
+				"/core/api/ticket-module/backend/spam-tickets", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), FAVORITE(
+				"/core/api/ticket-module/backend/favorite-tickets", AgileQueues.TICKET_BULK_ACTIONS_QUEUE);
 
 		private String queue, url;
 
