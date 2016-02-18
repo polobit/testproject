@@ -339,7 +339,9 @@ var CompaniesRouter = Backbone.Router
 				}, error : function(data, response)
 				{
 					if (response && response.status == '403')
-						$("#content").html("You do not have permission to view this Company.");
+
+						$("#content").html("<div class='well'><div class='alert bg-white text-center'><div class='slate-content p-md text'><h4> Sorry, your account does not have access to Companies.</h4><h4>Please contact your admin or account owner to enable this option.</h4></div></div></div>");
+
 				} });
 
 				return;
