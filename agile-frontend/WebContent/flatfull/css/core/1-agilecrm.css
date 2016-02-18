@@ -3186,3 +3186,10 @@ table.hide-head-checkbox th label.i-checks {
 .contact_popover .arrow{
 	display: none;
 }
+.task-view-description-outbox .task-view-description
+{
+max-width:300px;
+text-overflow:ellipsis;
+overflow-x:hidden;
+text-align:justify;
+}
