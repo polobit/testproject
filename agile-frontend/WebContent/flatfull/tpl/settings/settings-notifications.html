@@ -22,7 +22,11 @@
                     </div>
                     <div class="pull-right">
                     <span id="desktop-notification-content" class="right text-base"></span>
+                    {{#is_mobile}}
+
+                    {{else}}
                     <a href="#notification-prefs" class="btn pull-right btn-sm btn-default btn-addon" id="set-desktop-notification"><i class="icon-bullhorn"></i> Set Desktop Notifications</a>
+                    {{/is_mobile}}
                     {{/if}}
                     <input name="id" type="hidden" value="{{id}}" /> 
                     </div>

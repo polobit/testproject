@@ -1204,62 +1204,75 @@ function showNoteAfterCall(callRespJson,messageObj)
 						phoneNumber = TWILIO_CALLED_NO;
 						TWILIO_CALLED_NO = "";
 						
-						$.post( "/core/api/widgets/twilio/savecallactivityById",{
-							id:TWILIO_CONTACT_ID,
-							direction: TWILIO_DIRECTION, 
-							phone: phoneNumber, 
-							status : callRespJson.status,
-							duration : callRespJson.duration 
-							});
-					}
-					else{
+						if(callStatus != "completed") {
+							$.post( "/core/api/widgets/twilio/savecallactivityById",{
+								id:TWILIO_CONTACT_ID,
+								direction: TWILIO_DIRECTION, 
+								phone: phoneNumber, 
+								status : callRespJson.status,
+								duration : callRespJson.duration 
+								});
+						}
+					}else{
 						phoneNumber = callRespJson.from;
-						$.post( "/core/api/widgets/twilio/savecallactivity",{
-							direction: TWILIO_DIRECTION, 
-							phone: phoneNumber, 
-							status : callRespJson.status,
-							duration : callRespJson.duration 
-							});
+						
+						if(callStatus != "completed") {
+							$.post( "/core/api/widgets/twilio/savecallactivity",{
+								direction: TWILIO_DIRECTION, 
+								phone: phoneNumber, 
+								status : callRespJson.status,
+								duration : callRespJson.duration 
+								});
+						}
 					}
 						
 					
 
-					
+					var noteStatus = "";
 					switch(callStatus) {
 				    case "canceled":
 				    	noteSub = TWILIO_CALLTYPE + " call - Declined";
 				    	friendlyStatus = "Declined";
+				    	noteStatus = "failed";
 				        break;
 				    case "completed":
 				    	noteSub = TWILIO_CALLTYPE + " call - Done";
 				    	friendlyStatus = "Done";
+				    	noteStatus = "answered";
 				    	break;
 				    case "busy":
 				    	noteSub = TWILIO_CALLTYPE + " call - Busy";
 				    	friendlyStatus = "Received busy tone on number "+ phoneNumber;
+				    	noteStatus = "busy";
 				    	break;
 				    case "failed":
 				    	noteSub = TWILIO_CALLTYPE + " call - Failed";
 				    	friendlyStatus = TWILIO_CALLTYPE + " call made to "+ phoneNumber +" has failed";
+				    	noteStatus = "failed";
 				    	break;
 				    case "no-answer":
 				    	noteSub = TWILIO_CALLTYPE + " call - No answer";
 				    	friendlyStatus = "No answer";
+				    	noteStatus = "busy";
 				    	break;
 				    default:
 				        return;
 					}
 				 	// Adds contact name to tags ul as li element
 					if(callStatus == "completed") {
-						var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
-		                // Adds contact name to tags ul as li element
-		                $('.tags',el).html(template({name : contact_name, id : json.id}));
 
-					 	$("#noteForm #subject").val(noteSub);
-				 		$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(callRespJson.duration));
-				 		$("#noteForm").find("#description").focus();
-						$('#noteModal').modal('show');
-						agile_type_ahead("note_related_to", el, contacts_typeahead);
+						var data = {};
+						data.url = "/core/api/widgets/twilio/";
+						data.subject = noteSub;
+						data.number = phoneNumber;
+						data.callType = TWILIO_DIRECTION;
+						data.status = "answered";
+						data.duration = callRespJson.duration;
+						data.contId = json.id;
+						data.contact_name = contact_name;
+						data.widget = "Twilio";
+						showDynamicCallLogs(data);
+
 						//changed by prakash to add the last_called parameter and last_connected parameter of contact object on server side - 15/6/15
 							if(TWILIO_DIRECTION == "outbound-dial") {
 								twilioIOSaveContactedTime();	
@@ -1275,7 +1288,11 @@ function showNoteAfterCall(callRespJson,messageObj)
 						$.post( "/core/api/widgets/twilio/autosavenote", {
 							subject: noteSub,
 							message: "",
-							contactid: TWILIO_CONTACT_ID
+							contactid: TWILIO_CONTACT_ID,
+							phone: phoneNumber,
+							callType: TWILIO_DIRECTION,
+							status: noteStatus,
+							duration: 0
 							});
 					}
 				}
@@ -1285,23 +1302,23 @@ function showNoteAfterCall(callRespJson,messageObj)
 		var phoneNumber = "";
 		if(TWILIO_DIRECTION == "outbound-dial"){
 			phoneNumber = callRespJson.to;
-			$.post( "/core/api/widgets/twilio/savecallactivityById",{
+/*			$.post( "/core/api/widgets/twilio/savecallactivityById",{
 				id:TWILIO_CONTACT_ID,
 				direction: TWILIO_DIRECTION, 
 				phone: phoneNumber, 
 				status : callRespJson.status,
 				duration : callRespJson.duration 
-				});
-		}
-		else{
+				});*/
+		}else{
 			phoneNumber = callRespJson.from;
+		}
 			$.post( "/core/api/widgets/twilio/savecallactivity",{
 				direction: TWILIO_DIRECTION, 
 				phone: phoneNumber, 
 				status : callRespJson.status,
 				duration : callRespJson.duration 
 				});
-		}
+		
 
 		return showNewContactModal(phoneNumber);
 	}

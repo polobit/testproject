@@ -1160,9 +1160,9 @@ time {
 }*/
 
 @media (min-width:760px) and (max-width:991px) {
-.agile-menu > li:nth-child(n + 4):not(.nav-bar-search):not(#more-menu) {
+/*.agile-menu > li:nth-child(n + 4):not(.nav-bar-search):not(#more-menu) {
 	display:none;
-}
+}*/
 #searchText {
 	width:100px;
 }
@@ -3169,4 +3169,20 @@ table.hide-head-checkbox th label.i-checks {
 
 .deals-nowrap .no-wrap {
  white-space: nowrap !important;
+}
+.contact_popover{
+
+	border-radius: 0px;
+	//width : 260px;
+}
+
+#contacts-table .popover-content{
+	padding: 0px;
+}
+#contacts-table .popover{
+	max-width:100%;
+}
+
+.contact_popover .arrow{
+	display: none;
 }
