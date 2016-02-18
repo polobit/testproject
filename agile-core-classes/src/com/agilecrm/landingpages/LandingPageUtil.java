@@ -177,7 +177,6 @@ public class LandingPageUtil
 	
 	public boolean isNameExists(String name) {
 		String oldNameSpace = NamespaceManager.get();
-		NamespaceManager.set("");
 		
 		try
 		{
