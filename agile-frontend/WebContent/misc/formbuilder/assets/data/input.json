@@ -5,7 +5,7 @@
             "id": {
                 "label": "ID",
                 "type": "input",
-                "value": "textinput"
+                "value": "agilefield"
             },
             "label": {
                 "label": "Label Text",
@@ -77,7 +77,7 @@
             "id": {
                 "label": "ID",
                 "type": "input",
-                "value": "passwordinput"
+                "value": "agilefield"
             },
             "label": {
                 "label": "Label Text",
@@ -149,7 +149,7 @@
             "id": {
                 "label": "ID",
                 "type": "input",
-                "value": "searchinput"
+                "value": "agilefield"
             },
             "label": {
                 "label": "Label Text",
@@ -221,7 +221,7 @@
             "id": {
                 "label": "ID",
                 "type": "input",
-                "value": "prependedtext"
+                "value": "agilefield"
             },
             "label": {
                 "label": "Label Text",
@@ -298,7 +298,7 @@
             "id": {
                 "label": "ID",
                 "type": "input",
-                "value": "appendedtext"
+                "value": "agilefield"
             },
             "label": {
                 "label": "Label Text",
@@ -375,7 +375,7 @@
             "id": {
                 "label": "ID",
                 "type": "input",
-                "value": "prependedcheckbox"
+                "value": "agilefield"
             },
             "label": {
                 "label": "Label Text",
@@ -452,7 +452,7 @@
             "id": {
                 "label": "ID",
                 "type": "input",
-                "value": "appendedcheckbox"
+                "value": "agilefield"
             },
             "label": {
                 "label": "Label Text",
@@ -529,7 +529,7 @@
             "id": {
                 "label": "ID",
                 "type": "input",
-                "value": "textarea"
+                "value": "agilefield"
             },
             "label": {
                 "label": "Label Text",
