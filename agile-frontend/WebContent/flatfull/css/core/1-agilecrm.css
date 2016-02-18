@@ -3187,6 +3187,6 @@ table.hide-head-checkbox th label.i-checks {
 	display: none;
 }
 
-svg {
+#calls-chart svg {
 	overflow: visible!important;
 }
