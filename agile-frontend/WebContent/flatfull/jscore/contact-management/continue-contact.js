@@ -311,7 +311,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 					if (status)
 					{
-						show_error(modal_id, form_id, 'duplicate-email', 'Company name already exist.');
+						show_error(modal_id, form_id, 'duplicate-email', 'Company name already exists.');
 
 						enable_save_button($(saveBtn));// Remove loading image
 						return;
