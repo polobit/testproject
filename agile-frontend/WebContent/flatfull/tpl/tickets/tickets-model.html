@@ -228,7 +228,11 @@
     {{organization}}
   </td>-->
   <td class="first-letter-cap open-ticket text-ellipsis closed_time {{#is_column_selected 'closed_time'}}{{else}}display-none{{/is_column_selected}}">
-    {{#if closed_time}}{{epochToHumanDate 'mmm dd, yyyy' closed_time}}{{else}}-{{/if}}
+    
+     {{#if_equals status 'CLOSED'}}
+       {{#if closed_time}}{{epochToHumanDate 'mmm dd, yyyy' closed_time}}{{else}}-{{/if}}
+      {{else}}-
+      {{/if_equals}}
   </td>
   <td class="first-letter-cap open-ticket text-ellipsis created_time {{#is_column_selected 'created_time'}}{{else}}display-none{{/is_column_selected}}">
     {{epochToHumanDate 'mmm dd, yyyy' created_time}}

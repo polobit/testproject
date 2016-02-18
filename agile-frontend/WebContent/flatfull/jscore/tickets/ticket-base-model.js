@@ -9,7 +9,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .ticket_assignee_name" : "changeAssignee",
 		"click #ticket-assignee" : "changeAssignee",
 		"click .assign-to-me" : "assignToMe",
-         
+         "click .remove-date" :"removeTicketDuedate",
 		"change .ticket_type" : "changeTicketType",
 		"change .ticket_priority" : "changeTicketPriority",
 		"click .delete-ticket" : "deleteTicket",
@@ -172,6 +172,11 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		e.preventDefault();
 
 		Tickets.removeCCEmails(e);
+	},
+	
+	removeTicketDuedate : function(e){
+      e.preventDefault();
+      Tickets.removeDuedate(e);
 	},
 
 

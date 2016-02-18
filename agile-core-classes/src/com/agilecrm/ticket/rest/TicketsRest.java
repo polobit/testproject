@@ -1042,4 +1042,29 @@ public class TicketsRest
 
 		return new JSONObject().put("status", "success").toString();
 	}
+	/**
+	 * changes ticket due date
+	 * @param ticket_id
+	 * @return returns success json
+	 */
+	@PUT
+	@Path("/remove-due-date")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Tickets removeDueate(@QueryParam("id") Long ticketID)
+	{
+		try
+		{
+			if (ticketID == null)
+				throw new Exception("Required parameters missing.");
+
+			return TicketsUtil.removeDuedate(ticketID);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+		
+	}
 }

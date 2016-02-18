@@ -954,8 +954,10 @@ var Tickets = {
 
 				if(status != "CLOSED")
 					$(".close-current-ticket").show();
-				else
+				else{
 					$(".close-current-ticket").hide();
+				    Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{closed_time:current_time});
+				}
 
 				if(callback)
 					callback(model.toJSON());
@@ -966,7 +968,9 @@ var Tickets = {
 	closeTicket : function(e){
 
 		this.changeStatus("CLOSED", function(){
+            var current_time = new Date().getTime();
 
+             Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{closed_time:current_time});
 			showNotyPopUp('information', "Ticket has been closed", 'bottomRight', 5000);
 
 			var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
@@ -989,7 +993,9 @@ var Tickets = {
 
 				 if(App_Ticket_Module.ticketsCollection)
 	           	 	App_Ticket_Module.ticketsCollection.collection.remove(Current_Ticket_ID);
-	           
+
+	           	showNotyPopUp('information', "Ticket has been deleted",'bottomRight', 5000);
+	                          
 				var url = '#tickets/filter/' + Ticket_Filter_ID;
 				Backbone.history.navigate(url, {trigger : true});
 
@@ -1187,6 +1193,7 @@ var Tickets = {
 			success: function(model){
 
 				var formatted_date = new Date(timeInMilli).format('mmm dd, yyyy');
+				Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:json.due_time});
 				showNotyPopUp('information', "Due date has been changed to " + formatted_date, 
 					'bottomRight', 5000);
 
@@ -1194,6 +1201,20 @@ var Tickets = {
 					callback();
 			}}
 		);
+	},
+	removeDuedate : function(){
+		url = "/core/api/tickets/remove-due-date?id=" + Current_Ticket_ID;
+
+        Tickets.updateModel(url, function(model){
+
+        		$('#ticket_change_sla').val(''); 
+
+				Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:''});
+
+				showNotyPopUp('information', "Due date has been removed",'bottomRight', 5000);
+
+		}, null, Current_Ticket_ID);
+ 
 	},
 
 	initializeTicketSLA : function(el){

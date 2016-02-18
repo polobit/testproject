@@ -58,11 +58,11 @@ var Tickets_Notes = {
 
 					var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
                     var current_date = new Date().getTime();
-
-					var json = {};
-
+   					var json = {};
+                    //console.log(ticket_model);
 					json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
 					json.last_updated_time = current_date;
+					json.closed_time='';
 					ticket_model.set(json, {
 						silent : true
 					});

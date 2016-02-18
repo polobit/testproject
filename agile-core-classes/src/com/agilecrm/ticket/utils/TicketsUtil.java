@@ -1126,4 +1126,24 @@ public class TicketsUtil
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
+	public static Tickets removeDuedate(Long ticket_id) throws EntityNotFoundException
+	{
+		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+
+		if (ticket.due_time == null)
+			return ticket;
+
+		
+		ticket.due_time  = null;
+
+		
+		Tickets.ticketsDao.put(ticket);
+
+		// Updating search document
+		new TicketsDocument().edit(ticket);
+
+		// Logging activity
+		return ticket;
+	}
+
 }
