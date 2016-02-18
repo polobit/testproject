@@ -203,6 +203,7 @@ var Tickets_Notes = {
 			data.canned_responses = Ticket_Canned_Response.cannedResponseCollection.toJSON();
 
 		data.label_matched_canned_responses = this.getMatchedCannedResponses(data.labels);
+		data.draft_message = (Tickets.get_draft_message())[data.id];
 
 		var $container = (el) ?  $('#send-reply-container', el): $('#send-reply-container');
 
@@ -216,6 +217,8 @@ var Tickets_Notes = {
 			}catch(e){}
 			
 		});
+
+		Tickets.start_ticket_draft_timer(data.id, 'textarea#reply_textarea');
 
 		//Initializing type ahead for cc emails
 		$($container).on('keypress', '#forward_email_input', function(e){

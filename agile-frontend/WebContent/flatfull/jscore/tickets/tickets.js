@@ -1400,6 +1400,90 @@ var Tickets = {
 		    'margin': '0',
 		    'padding': '0'
 		});
+	},
+
+	message_draft_timer : undefined,
+
+	// Draft typed message
+	start_ticket_draft_timer : function(key, ele){
+
+
+		// Reset timer
+		if (Tickets.message_draft_timer)
+			clearInterval(Tickets.message_draft_timer);
+		
+		if (!ele)
+			return;
+
+		Tickets.message_draft_timer = setInterval(function() {
+
+			var $ele = $(ele);
+
+			if(!$ele || $ele.length == 0){
+				clearInterval(Tickets.message_draft_timer);
+				return;
+			}
+			
+			Tickets.draft_typed_message(key, Tickets.get_typed_message_json($ele));
+
+		}, 2000);
+
+	},
+
+	get_typed_message_json : function($ele){
+
+		var value = $ele.val();
+
+		console.log($ele);
+		console.log($ele.attr("class"));
+
+		if($ele.hasClass('forward'))
+			return {"forward" : value};
+		else if($ele.hasClass('comment'))
+			return {"comment" : value};
+		else
+			return {"reply" : value};
+
+	},
+
+	draft_typed_message :  function(key, ticketDraftJSON) {
+
+		if(!key || !ticketDraftJSON)
+			return;
+
+		var draft_mssgs = Tickets.get_draft_message();
+		var value = draft_mssgs[key];
+		if(!value)
+			value = {};
+
+		for (typeKey in ticketDraftJSON) {
+			value[typeKey] = ticketDraftJSON[typeKey];
+		}
+
+		draft_mssgs[key] = value;
+
+	 	try {
+	 		// Add to localstorage
+			localStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
+	    } catch (e) {
+
+	    	draft_mssgs = {
+	    		key:value
+	    	}
+	    	localStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
+	    }
+
+	},
+
+	get_draft_message : function(key){
+
+		var draft_mssgs = localStorage.getItem("ticket-draft-message");
+		if (!draft_mssgs)
+			return {};
+
+		// Parse stringify values
+		return JSON.parse(draft_mssgs);
+	
 	}
 };
 
