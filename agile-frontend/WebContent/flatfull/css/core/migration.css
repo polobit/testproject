@@ -1922,6 +1922,14 @@ opacity: 0.4;
 .email-mobile-view-templates tr th:first-child {
 width: 1%!important;
 }
+#companies + div + footer{
+  display: none;
+}
+
+#contacts-custom-view-model-list tr td:first-child, #opportunities-model-list tr td:first-child, #companies-custom-view-model-list tr td:first-child, #companies-custom-view-model-list tr td:nth-child(n+3){
+  display: none;
+}
+
 }
 
 @media all and (min-width: 768px) {
@@ -2133,7 +2141,6 @@ width: 1%!important;
 .stats-tabs-border li.active > a{
   border-left-color: #fff !important;
 }
-<<<<<<< HEAD
 
 @media all and (min-width: 768px) and (max-width: 800px) {
   #wrap:not(.app-aside-folded) .need_help{
@@ -2145,9 +2152,8 @@ width: 1%!important;
     min-height: auto;
   }
 
-
-=======
 .icons-space-m li a{
   padding: 10px 14px;
 }
->>>>>>> 188fbde27b00e72c4bde5382f2155df96d20043b
+
+

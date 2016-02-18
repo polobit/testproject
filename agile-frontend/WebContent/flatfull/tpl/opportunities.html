@@ -1,5 +1,7 @@
 <script id="opportunities-collection-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
+{{#is_mobile}}
+{{else}}
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12">
@@ -60,7 +62,8 @@
 </div>
 </div>
 </div>
-<div class="wrapper-md">
+{{/is_mobile}}
+<div class="{{#is_mobile}} {{else}} wrapper-md {{/is_mobile}}">
 <div class="row">
     <div class="col-md-9">
         <div id="slate">
@@ -98,13 +101,15 @@
 				<br>
 			</div>
       {{/is_mobile}}
-			<div class="panel panel-default">
-			<div class="panel-heading">Deals</div>
+			<div class="panel panel-default" {{#is_mobile}} style="border:0px; border-radius:0px;" {{/is_mobile}}>
+			{{#is_mobile}} {{else}} <div class="panel-heading"> Deals</div>{{/is_mobile}}
 			<div class="table-responsive">
 
-                <table class="table table-striped showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table deals-nowrap {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/delete" id="deal-list" style="table-layout:auto;">
+                <table class="table {{#is_mobile}} {{else}} table-striped {{/is_mobile}} showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table deals-nowrap {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/delete" id="deal-list" style="{{#is_mobile}} border-radius:0px; {{/is_mobile}} table-layout:auto;">
 
-					<thead>
+					{{#is_mobile}}
+           {{else}}
+          <thead>
                         <tr>
                             <th>Opportunity</th>
                             <th>Related To</th>
@@ -114,6 +119,7 @@
                             <th>Owner</th>
                         </tr>
                     </thead>
+                    {{/is_mobile}}
                     <tbody id="opportunities-model-list" class="c-p"><!--route="deals/"-->
                     </tbody>
                 </table>
@@ -122,6 +128,10 @@
         
         {{/if}}
         </div>
+
+        {{#is_mobile}}
+
+        {{else}}
         
     <div class="col-md-3">
         <div class="data-block">
@@ -134,30 +144,32 @@
                 </header>
                 <div id="pie-deals-chart" class="w-full" style="height:400px"></div>
 			</div>
-      {{/is_mobile}}
+       {{/is_mobile}}
 
 			<div class="m-t-md">
-                <h4 class="m-t-none m-b-sm h4 text-center-xs">
+                <h4 class="m-t-none m-b-sm h4 text-center-xs {{#is_mobile}} text-center text-md {{/is_mobile}}">
                     What are Milestones?
                 </h4>
                 
-                <p>
+                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs {{/is_mobile}}">
                     Milestones are used to define the status of the deal.
                 </p>
-                <p>
+                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs {{/is_mobile}}">
                     e.g. Use 'Won' in case of a successfully completed deal or 'New' for a newly added deal. You can define custom milestones.
                 </p>
                 
-                <h4 class="m-t-none m-b-sm h4 text-center-xs">
+                <h4 class="m-t-none m-b-sm h4 text-center-xs {{#is_mobile}} text-center text-md {{/is_mobile}}">
                     What are Deals?
                 </h4>
                 
-                <p>
+                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs{{/is_mobile}}">
                     Deals are opportunities you can continuously track throughout their life-cycle.
                 </p>
             </div>
         </div> 
     </div>
+     {{/is_mobile}}
+
 </div>
 </div>
 
@@ -357,6 +369,30 @@
 
 </script>
 <script id="opportunities-model-template" type="text/html">
+
+{{#is_mobile}}
+
+<td data="{{id}}" class="data" style="padding-bottom:12px;">
+
+  <div class="text-ellipsis" style="width:10em"> 
+    <a class="text-cap">{{name}}</a>
+    <span class="p-l-sm">{{milestone}} ({{probability}}%)</span>
+  </div>
+
+  <div class="text-ellipsis" style="width:10em; font-size:13px; margin-top:-2px;">{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}</div>
+
+  <div class="text-ellipsis text-light" style="width:5em; font-size:12px; margin-top:-3px;">
+       {{owner.name}}
+    </div>
+</div>
+
+
+</td>
+<td>
+
+
+{{else}}
+
 <td data="{{id}}" class="data">
 	<div class="text-ellipsis" style="width:10em"> 
 		<a class="text-cap">{{name}}</a>
@@ -391,6 +427,7 @@
     </div>
 </div>
 </td>
+{{/is_mobile}}
 </script>
 
 <script id="opportunity-track-list-collection-template" type="text/html">
