@@ -340,7 +340,7 @@ var CompaniesRouter = Backbone.Router
 				{
 					if (response && response.status == '403')
 
-						$("#content").html("<div class='well'> <div class='alert bg-white text-center'><div class='slate-content p-md text'><h4> Sorry, your account does not have access to Companies.</h4><h4>Please contact your admin or account owner to enable this option.</h4></div></div></div>");
+						$("#content").html("<div class='well'> <div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8'> Sorry, your account does not have access to Companies.</h4><div class='text'style='opacity:0.6'>Please contact your admin or account owner to enable this option.</div></div></div></div>");
 
 				} });
 
