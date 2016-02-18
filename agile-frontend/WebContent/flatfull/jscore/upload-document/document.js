@@ -185,7 +185,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 		{
 			$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
 			$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
-			$('#' + form_id).find('#error').html('<div class="alert alert-danger">Sorry! Document not attached properly.</div>');
+			$('#' + form_id).find('#error').html('<div class="alert alert-danger col-sm-offset-3 col-sm-7">Sorry! Document not attached properly.</div>');
 			enable_save_button($(saveBtn));
 			return;
 		}
