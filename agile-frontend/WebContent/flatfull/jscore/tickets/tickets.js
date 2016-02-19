@@ -952,13 +952,17 @@ var Tickets = {
 
 		Tickets.updateModel(url, function(model){
 
-				if(status != "CLOSED")
-					$(".close-current-ticket").show();
-				else{
-					$(".close-current-ticket").hide();
-				    Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{closed_time:current_time});
+				if(status != "CLOSED"){
+                    	$('#ticket_change_sla').removeAttr("disabled");
+                    	$(".close-current-ticket").removeAttr("disabled");					
+				}						
+				else{ 
+					$('#ticket_change_sla').attr("disabled","disabled");
+					$(".close-current-ticket").attr("disabled","disabled");
+				    Tickets.updateDataInModelAndCollection(CurrentTicket_ID,{closed_time:current_time});
 				}
-
+                Tickets.updateDataInModelAndCollection(CurrentTicket_ID,{status:status});
+				
 				if(callback)
 					callback(model.toJSON());
 
@@ -1194,6 +1198,7 @@ var Tickets = {
 
 				var formatted_date = new Date(timeInMilli).format('mmm dd, yyyy');
 				Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:json.due_time});
+				$(".remove-date").css("display", "block");
 				showNotyPopUp('information', "Due date has been changed to " + formatted_date, 
 					'bottomRight', 5000);
 
@@ -1208,6 +1213,8 @@ var Tickets = {
         Tickets.updateModel(url, function(model){
 
         		$('#ticket_change_sla').val(''); 
+
+        		$(".remove-date").css("display", "none");
 
 				Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:''});
 
@@ -1231,6 +1238,7 @@ var Tickets = {
 				dateFormat : CURRENT_USER_PREFS.dateFormat
 			}).on('changeDate', function(ev)
 			{
+				
 				var selected_date = $('#ticket_change_sla', el).val();
 				var selected_date_epoch_time = Date.parse(selected_date).getTime();
 
@@ -1244,10 +1252,12 @@ var Tickets = {
 
 					  	$('#ticket_change_sla', el).datepicker( "hide" );
 
+
 					  	var due_time = ticket.due_time;
 
 					  	if(due_time)
 					  		$('#ticket_change_sla').val(new Date(due_time).format('mm/dd/yyyy'));
+					 
 					  	else
 					  		$('#ticket_change_sla').val('');
 

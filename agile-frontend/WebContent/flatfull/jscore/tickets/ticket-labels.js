@@ -107,7 +107,7 @@ var Ticket_Labels = {
 				 	return value != label;
 				});
 
-				console.log(ticket_labels);                      
+				//console.log(ticket_labels);                      
 			}
 
 			ticket_model.set({labels: ticket_labels}, {
