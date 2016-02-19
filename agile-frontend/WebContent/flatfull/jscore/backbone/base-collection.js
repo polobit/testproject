@@ -240,6 +240,8 @@ var Base_Collection_View = Backbone.View
 			 */
 			initialize : function()
 			{
+				printCurrentDateMillis("initialize");
+
 				// Do not show transition bar 
 				if(!this.options.no_transition_bar)
 				    showTransitionBar();
@@ -304,6 +306,7 @@ var Base_Collection_View = Backbone.View
 				// Commented as it was creating a ripple effect
 				// this.collection.bind('add', function(){that.render(true)});
 
+				printCurrentDateMillis("initialize1");
 				/*
 				 * Calls render before fetching the collection to show loading
 				 * image while collection is being fetched.
@@ -383,6 +386,7 @@ var Base_Collection_View = Backbone.View
 					// Set the URL
 					this.collection.fetch = function(options)
 					{
+						printCurrentDateMillis("fetch start");
 						options || (options = {})
 						options.data || (options.data = {});
 						options.data['page_size'] = page_size;
@@ -496,6 +500,7 @@ var Base_Collection_View = Backbone.View
 			 */
 			render : function(force_render, error_message)
 			{
+				printCurrentDateMillis("initialize2");
 
 				// If collection in not reset then show loading in the content,
 				// once collection is fetched, loading is removed by render and
@@ -517,7 +522,8 @@ var Base_Collection_View = Backbone.View
 					$(this.el).html('<div style="padding:10px;font-size:14px"><b>' + error_message + '<b></div>');
 					return;
 				}
-
+				printCurrentDateMillis("fetch end");
+				printCurrentDateMillis("initialize3");
 				var _this = this;
 				var ui_function = this.buildCollectionUI;
 				// Populate template with collection and view element is created
@@ -534,6 +540,7 @@ var Base_Collection_View = Backbone.View
 				return this;
 			}, buildCollectionUI : function(result)
 			{
+				printCurrentDateMillis("initialize4");
 				$(this.el).html(result);
 				// If collection is Empty show some help slate
 				if (this.collection.models.length == 0)
@@ -568,6 +575,8 @@ var Base_Collection_View = Backbone.View
 
 				$(this.model_list_element).append(this.model_list_element_fragment);
 
+				printCurrentDateMillis("initialize5");
+
 				/*
 				 * Few operations on the view after rendering the view,
 				 * operations like adding some alerts, graphs etc after the view
@@ -582,7 +591,7 @@ var Base_Collection_View = Backbone.View
 				 */
 				if (callback && typeof (callback) === "function")
 				{
-					
+					printCurrentDateMillis("initialize6");
 					// execute the callback, passing parameters as necessary
 					callback($(this.el), this.collection);
 				}

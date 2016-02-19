@@ -66,6 +66,8 @@ var Current_Route;
  */
 function currentRoute(route)
 {
+	endFunctionTimer("startbackbone");
+	
 	Current_Route = window.location.hash.split("#")[1];
 	
 	if(SCROLL_POSITION)
