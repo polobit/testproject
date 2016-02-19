@@ -70,7 +70,7 @@ public class LoginServlet extends HttpServlet {
 				SessionManager.AUTH_SESSION_COOKIE_NAME);
 
 		// Check if this subdomain even exists or alias exist
-		if (DomainUserUtil.count() == 0 && AliasDomainUtil.checkForAlias()) {
+		if (DomainUserUtil.count() == 0) {
 			response.sendRedirect(Globals.CHOOSE_DOMAIN);
 			return;
 		}

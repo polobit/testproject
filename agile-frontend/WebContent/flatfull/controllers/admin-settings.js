@@ -54,6 +54,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Webhook */
 	"webhook" : "webhookSettings",
 
+	"change-domain" : "changeDomain"
+
 
 	},
 
@@ -1141,6 +1143,56 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('.settings-deal-goal').parent().removeClass('b-b-none');
 
 		}, "#milestone-listner");
+	},
+
+	changeDomain : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+
+			return;
+		}
+		
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#content').html($(template_ui));	
+			var view = new Base_Model_View({ url : '/core/api/alias', template : "admin-settings-domain-alias", postRenderCallback : function(el)
+			{
+				if($("#alias_domain #alias").html() == "")
+					$("#alias_domain #alias").val(CURRENT_DOMAIN_USER.domain);
+			},prePersist : function(model){
+				var aliasJSON = [];
+				$.each($("#alias_domain").find('input[name="alias"]'), function(index, data) {
+					aliasJSON.push(($(data).val()));
+				});
+			    model.set({ 
+			       'alias' : aliasJSON
+			      }, 
+			      { 
+			       silent : true 
+			      });
+			   }, saveCallback : function(){
+				console.log("saveCallback");
+				showNotyPopUp("information", "Domain saved successfully", "top", 1000);
+			},errorCallback : function(data){
+				showNotyPopUp("warning", data.responseText, "top");
+			} });
+
+			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.account-prefs-tab').addClass('select');
+			$(".active").removeClass("active");
+
+		}, "#content");
+
+		
+		
 	}
 
 });

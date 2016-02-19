@@ -1,5 +1,7 @@
 package com.agilecrm.user;
 
+import java.util.List;
+
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -27,7 +29,7 @@ public class AliasDomain {
 	public String domain;
 	
 	//Aliase of the domain
-	public String alias;
+	public List<String> alias;
 	
 	/**
 	 * AliasDomain Dao.
@@ -40,6 +42,12 @@ public class AliasDomain {
 	public AliasDomain()
 	{
 
+	}
+	
+	public AliasDomain(String domain, List<String> alias)
+	{
+		this.domain = domain;
+		this.alias = alias;
 	}
 	
 	/**

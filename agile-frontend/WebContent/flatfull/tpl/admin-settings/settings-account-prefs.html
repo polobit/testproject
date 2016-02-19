@@ -32,6 +32,12 @@
                         </div>
                     </div>
                     <div class="control-group form-group">
+                        <label class="control-label col-sm-4 col-xs-4">Domain</label>
+                        <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
+                            <a href="#change-domain" class="text-info">Change Domain </a>                           
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Company <span class="field_req">*</span></label> 
                         <div class="controls col-sm-8 col-xs-8">
                             <input name="company_name" class="input-medium required form-control" type="text" value="{{company_name}}" />
@@ -58,6 +64,49 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="clearfix"></div>
+<div class="line ling-lg b-b"></div>
+<div class="row">
+<div class="col-md-7 col-xs-8">
+<div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
+            
+                <a href="#" type="submit" class="save btn btn-sm btn-primary">Save Changes</a>
+           
+
+</div>
+</div>
+</div>
+        </fieldset>
+    </form>
+</div>
+</div>
+
+</script>
+
+<script id="admin-settings-domain-alias-template" type="text/html">
+<div id="alias_domain" class="panel panel-default">
+    <div class="panel-heading">Change Domain</div>
+    <div class="panel-body">
+    <form id="aliasDomain" class="form-horizontal">
+        <fieldset>
+            {{#if id}}
+                <input name="id" class="form-control" type="hidden" value="{{id}}" />
+            {{/if}}
+            <input name="domain" class="form-control" type="hidden" value="{{get_current_domain}}" />
+            
+            <div class="row">
+                <div class="col-md-7 col-xs-12">
+                    
+                    
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-4 col-xs-4">Domain <span class="field_req">*</span></label> 
+                        <div class="controls col-sm-8 col-xs-8">
+                            <input name="alias" id="alias" class="input-medium required form-control" type="text" value="{{alias}}" />
+                        </div>
+                    </div>
+                </div>
+                
             </div>
             <div class="clearfix"></div>
 <div class="line ling-lg b-b"></div>

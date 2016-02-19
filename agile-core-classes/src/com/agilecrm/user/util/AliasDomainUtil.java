@@ -42,13 +42,20 @@ public class AliasDomainUtil {
     	    return getAliasDomain(NamespaceManager.get());
     }
     
+    public static AliasDomain getAliasDomainById(Long id){
+
+	    return dao.getByProperty("id", id);
+    }
+    
     public static AliasDomain getAliasDomain(String domain){
     	String oldNamespace = NamespaceManager.get();
     	NamespaceManager.set("");
 
     	try
     	{
-    	    return dao.getByProperty("domain", domain);
+    	    AliasDomain aliasDomain =  dao.getByProperty("domain", domain);
+    	    System.out.println(aliasDomain);
+    	    return aliasDomain;
     	}
     	finally
     	{
@@ -62,7 +69,9 @@ public class AliasDomainUtil {
 
     	try
     	{
-    	    return dao.getByProperty("alias", alias);
+    	    AliasDomain aliasDomain =  dao.getByProperty("alias", alias);
+    	    System.out.println(aliasDomain);
+    	    return aliasDomain;
     	}
     	finally
     	{
@@ -94,7 +103,7 @@ public class AliasDomainUtil {
     	return false;
 	}
 	
-	public static String setDomain(String alias){
+	public static String getActualDomain(String alias){
 		String domain = getDomainByAlias(alias);
 		if(domain == null || StringUtils.isEmpty(domain))
 			return alias;

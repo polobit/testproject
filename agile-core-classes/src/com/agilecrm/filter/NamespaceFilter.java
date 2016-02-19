@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.AliasDomain;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.NamespaceUtil;
@@ -29,7 +30,6 @@ import com.google.appengine.api.utils.SystemProperty;
  * <p>
  * If the url path starts with "/backend/" then filter forwards request without
  * verification of namespace, because it is required to run specific
- * functionalities with out session or namespace being set i.e., to run crons,
  * webhooks from stripe etc
  * </p>
  * 
@@ -120,7 +120,7 @@ public class NamespaceFilter implements Filter
 	    return false;
 	}
 
-	subdomain = AliasDomainUtil.setDomain(subdomain);
+	subdomain = AliasDomainUtil.getActualDomain(subdomain);
 	// Set the subdomain as name space
 	System.out.println("Setting the domain " + subdomain + " " + ((HttpServletRequest) request).getRequestURL());
 	NamespaceManager.set(subdomain);
@@ -205,6 +205,11 @@ public class NamespaceFilter implements Filter
 	 * (Exception e) { // TODO Auto-generated catch block
 	 * e.printStackTrace(); }
 	 */
+	
+	/*AliasDomain aliasDomain = new AliasDomain("testDomain", "testAlias");
+	   try { aliasDomain.save(); } catch
+	  (Exception e) { // TODO Auto-generated catch block
+	  e.printStackTrace(); }*/
 
 	// If URL path starts with "/backend", then request is forwarded without
 	// namespace verification i.e., no filter on url which starts with
