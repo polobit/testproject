@@ -12,6 +12,8 @@
 	</span>
 
 	<div class="m-l-xl p-l-sm">
+
+		{{#if_equals created_by "REQUESTER"}}
 	  	<div class="btn-group dropdown show-original-div">
 	      <button class="btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="false">
 		  	<span class="caret"></span>
@@ -21,6 +23,8 @@
 	        {{#if mime_object}}<li><a onClick="Tickets_Notes.showOriginal({{id}}, 'original')" href="javascript:void(0);">Show original</a></li>{{/if}}
 	      </ul>
 	    </div>
+	    {{/if_equals}}
+
         <span>
 	  	{{#if_equals created_by 'REQUESTER'}}
           	<span><b class="text-sm vertical-align-top">{{requester_name}}</b></span>
