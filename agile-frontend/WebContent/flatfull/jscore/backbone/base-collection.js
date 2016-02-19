@@ -386,7 +386,7 @@ var Base_Collection_View = Backbone.View
 					// Set the URL
 					this.collection.fetch = function(options)
 					{
-						printCurrentDateMillis("fetch start");
+						startFunctionTimer("fetch start");
 						options || (options = {})
 						options.data || (options.data = {});
 						options.data['page_size'] = page_size;
@@ -522,7 +522,7 @@ var Base_Collection_View = Backbone.View
 					$(this.el).html('<div style="padding:10px;font-size:14px"><b>' + error_message + '<b></div>');
 					return;
 				}
-				printCurrentDateMillis("fetch end");
+				endFunctionTimer("fetch start");
 				printCurrentDateMillis("initialize3");
 				var _this = this;
 				var ui_function = this.buildCollectionUI;

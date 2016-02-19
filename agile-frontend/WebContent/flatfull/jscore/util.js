@@ -690,4 +690,9 @@ function showPageBlockModal() {
 		}, null);
 	}
 
+function  printCurrentDateMillis(type){
+      console.log(type + " " + new Date().getTime());
+}
+function  startFunctionTimer(name){
+      console.time(name);
 }
