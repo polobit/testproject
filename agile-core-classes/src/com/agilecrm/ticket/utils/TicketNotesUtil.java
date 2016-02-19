@@ -125,7 +125,8 @@ public class TicketNotesUtil
 		json.put("tracking_img", appendTrackingImage(ticket.id, notesList.get(0).id));
 
 		String companyName = AccountPrefsUtil.getAccountPrefs().company_name;
-		if(companyName != null && !companyName.equals("My company"))
+		
+		if(companyName != null)
 			json.put("company_name", companyName);
 		
 		System.out.println("notesList.get(0).id): " + notesList.get(0).id);

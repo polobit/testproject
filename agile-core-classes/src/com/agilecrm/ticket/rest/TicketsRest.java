@@ -387,7 +387,7 @@ public class TicketsRest
 			// Execute triggers
 			TicketTriggerUtil.executeTriggerForNewTicket(ticket);
 			
-			BulkActionNotifications.publishNotification("New ticket#" + ticket.id + " has been created.");
+			BulkActionNotifications.publishNotification("Ticket#" + ticket.id + " has been created.");
 
 			return ticket;
 		}
