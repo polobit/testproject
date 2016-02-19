@@ -121,3 +121,4 @@ cron:
 - description: Ticket module wake up req
   url: /ticket-module/backend/wakeup-servlet
   schedule: every 1 mins
+  target: agile-ticket-module
