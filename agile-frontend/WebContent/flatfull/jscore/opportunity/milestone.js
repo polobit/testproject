@@ -172,15 +172,15 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
      	var newheading = newMilestone.replace(/ +/g, '');
      	var symbol = getCurrencySymbolForCharts();
 
-       
+        var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
         $("#"+oldheading+" .dealtitle-angular").removeAttr("data");  
         $("#"+newheading+" .dealtitle-angular").removeAttr("data"); 
        
-        var dealolddata = {"heading": oldheading ,"dealcount":olddealvalue ,"avgDeal" : avg_old_deal_size,"symbol":symbol,"dealNumber":old_deal_count};
+        var dealolddata = {"dealTrack": dealTrack,"heading": oldheading ,"dealcount":olddealvalue ,"avgDeal" : avg_old_deal_size,"symbol":symbol,"dealNumber":old_deal_count};
 		var dealOldDataString = JSON.stringify(dealolddata); 
 		$("#"+oldheading+" .dealtitle-angular").attr("data" , dealOldDataString); 
 
-        var dealnewdata = {"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
+        var dealnewdata = {"dealTrack": dealTrack,"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
 		var dealNewDataString = JSON.stringify(dealnewdata); 
 		$("#"+newheading+" .dealtitle-angular").attr("data" , dealNewDataString);
         

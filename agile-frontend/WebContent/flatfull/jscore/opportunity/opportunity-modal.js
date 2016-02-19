@@ -192,10 +192,10 @@ $(function()
 
 										     	olddealvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue) ;
 										        avg_old_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_old_deal_size);
-
+										        var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
 										     	var oldheading = oldMilestone.replace(/ +/g, '');
 										     	var symbol = getCurrencySymbolForCharts();
-												var dealdata = {"heading": oldheading ,"dealcount":olddealvalue ,"avgDeal" : avg_old_deal_size,"symbol":symbol,"dealNumber":deal_count};
+												var dealdata = {"dealTrack":dealTrack ,"heading": oldheading ,"dealcount":olddealvalue ,"avgDeal" : avg_old_deal_size,"symbol":symbol,"dealNumber":deal_count};
 												var dealDataString = JSON.stringify(dealdata) ; 
 												$("#"+oldheading+" .dealtitle-angular").removeAttr("data");
 												$("#"+oldheading+" .dealtitle-angular").attr("data" , dealDataString ); 
@@ -711,10 +711,10 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 
 					     	olddealvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue) ;
 					        avg_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_deal_size);
-
+					        var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
 					     	var symbol = getCurrencySymbolForCharts();
 					     	var heading = oldMilestone.replace(/ +/g, '');
-					     	var dealdata = {"heading": heading ,"dealcount":olddealvalue ,"avgDeal" : avg_deal_size,"symbol":symbol,"dealNumber":old_deal_count};
+					     	var dealdata = {"dealTrack":dealTrack ,"heading": heading ,"dealcount":olddealvalue ,"avgDeal" : avg_deal_size,"symbol":symbol,"dealNumber":old_deal_count};
 							var dealDataString = JSON.stringify(dealdata) ; 
 							$("#"+heading+" .dealtitle-angular").removeAttr("data");
 							$("#"+heading+" .dealtitle-angular").attr("data" , dealDataString ); 
@@ -775,15 +775,15 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 
 					        var symbol = getCurrencySymbolForCharts();
 
-       
+       						var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
 					        $("#"+oldheading+" .dealtitle-angular").removeAttr("data");  
 					        $("#"+newheading+" .dealtitle-angular").removeAttr("data"); 
 					       
-					        var dealolddata = {"heading": oldheading ,"dealcount":olddealvalue ,"avgDeal" : avg_old_deal_size,"symbol":symbol,"dealNumber":old_deal_count};
+					        var dealolddata = {"dealTrack":dealTrack ,"heading": oldheading ,"dealcount":olddealvalue ,"avgDeal" : avg_old_deal_size,"symbol":symbol,"dealNumber":old_deal_count};
 							var dealOldDataString = JSON.stringify(dealolddata); 
 							$("#"+oldheading+" .dealtitle-angular").attr("data" , dealOldDataString); 
 
-					        var dealnewdata = {"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
+					        var dealnewdata = {"dealTrack":dealTrack ,"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
 							var dealNewDataString = JSON.stringify(dealnewdata); 
 							$("#"+newheading+" .dealtitle-angular").attr("data" , dealNewDataString);
 
@@ -831,9 +831,9 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 
 					     	var newheading = newMilestone.replace(/ +/g, '');
 					        var symbol = getCurrencySymbolForCharts();
-				           
+				            var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
 				            avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
-							var dealdata = {"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
+							var dealdata = {"dealTrack":dealTrack ,"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
 							var dealDataString = JSON.stringify(dealdata) ; 
 							$("#"+newheading+" .dealtitle-angular").removeAttr("data"); 
 							$("#"+newheading+" .dealtitle-angular").attr("data" , dealDataString ); 
@@ -903,8 +903,8 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 				     	var newheading = newMilestone.replace(/ +/g, '');
 				        $("#"+newheading+" .dealtitle-angular").removeAttr("data");  
 				        var symbol = getCurrencySymbolForCharts();
-
-			            var dealdata = {"heading": newheading ,"dealcount":newdealeditvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
+				        var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
+			            var dealdata = {"dealTrack":dealTrack ,"heading": newheading ,"dealcount":newdealeditvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
 						var dealDataString = JSON.stringify(dealdata) ; 
 						$("#"+newheading+" .dealtitle-angular").attr("data" , dealDataString ); 
 

@@ -196,10 +196,11 @@ function dealsFetch(base_model)
             	avg_deal_size = 0;
             else
             	avg_deal_size = dealcount / count ; 
+            var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
             dealcount = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount) ;
             var symbol = getCurrencySymbolForCharts();
             avg_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_deal_size);
-			var dealdata = {"heading": heading ,"dealcount":dealcount ,"avgDeal" : avg_deal_size,"symbol":symbol,"dealNumber":count};
+			var dealdata = {"dealTrack": dealTrack ,"heading": heading ,"dealcount":dealcount ,"avgDeal" : avg_deal_size,"symbol":symbol,"dealNumber":count};
 			var dealDataString = JSON.stringify(dealdata) ; 
 			$("#"+heading+" .dealtitle-angular").removeAttr("data");
 			$("#"+heading+" .dealtitle-angular").attr("data" , dealDataString ); 

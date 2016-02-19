@@ -668,16 +668,12 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 
  			removeDealValue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(removeDealValue) ;
         	avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
-        
-
-	     	var heading = milestone.replace(/ +/g, '');
-
+           	var heading = milestone.replace(/ +/g, '');
             var symbol = getCurrencySymbolForCharts();
-
 	       
-	        $("#"+heading+" .dealtitle-angular").removeAttr("data");  
-	       
-	        var dealdata = {"heading": heading ,"dealcount":removeDealValue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":deal_count};
+	        $("#"+heading+" .dealtitle-angular").removeAttr("data"); 
+	        var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();	       
+	        var dealdata = {"dealTrack":dealTrack,"heading": heading ,"dealcount":removeDealValue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":deal_count};
 			var dealDataString = JSON.stringify(dealdata); 
 			$("#"+heading+" .dealtitle-angular").attr("data" , dealDataString); 
 
