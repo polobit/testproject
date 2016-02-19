@@ -37,6 +37,7 @@ import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
@@ -1831,45 +1832,35 @@ public class ContactUtil
      */
 	public static Contact createContact(String name, String email)
 	{
-
-		DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
-
+		Contact contact = new Contact();
+		contact.addpropertyWithoutSaving(new ContactField(Contact.EMAIL, email, null));
+		
 		String[] names = name.split(" ");
-
-		Contact newContact = new Contact();
-
-		List<ContactField> properties = new ArrayList<ContactField>();
-
-		properties.add(new ContactField("email", email, null));
-
+		
 		if (names.length > 1)
 		{
-			newContact.first_name = names[0];
-			newContact.last_name = names[1];
-
-			properties.add(new ContactField("first_name", names[0], null));
-			properties.add(new ContactField("last_name", names[1], null));
-		}
-		else
-		{
-			newContact.first_name = name;
-			properties.add(new ContactField("first_name", name, null));
+			contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, names[0], null));
+			
+			contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, names[1],
+					null));
+		}else{
+			contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, name, null));
 		}
 
-		newContact.properties = properties;
-		newContact.setContactOwner(new Key<DomainUser>(DomainUser.class, domainUser.id));
-		newContact.save();
-
+		DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+		
+		contact.setContactOwner(new Key<DomainUser>(DomainUser.class, domainUser.id));
+		
 		try
 		{
-			ActivitySave.createTagAddActivity(newContact);
+			contact.save();
 		}
-		catch (Exception e)
+		catch (PlanRestrictedException e)
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
-
-		return newContact;
+		
+		return contact;
 	}
 	
     public static String getMD5EncodedImage(Contact contact){
