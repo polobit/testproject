@@ -1841,42 +1841,4 @@ public class ContactUtil
             return image_email;
     }
     
-    public static Contact getDuplicateContactForSync(Contact contact)
-    {
-	List<ContactField> sync = contact.getContactPropertiesList(Contact.SYNC);
-
-	if (sync.size() == 0)
-	    return contact;
-
-	Contact oldContact = null;
-	for (ContactField field : sync)
-	{
-	    oldContact = searchContactBySyncId(field.value);
-	    if (oldContact != null)
-		break;
-	}
-
-	return oldContact;
-    }
-    
-    public static Contact searchContactBySyncId(String sync_id)
-    {
-	if (StringUtils.isBlank(sync_id))
-	    return null;
-
-	Query<Contact> q = dao.ofy().query(Contact.class);
-	q.filter("properties.name", Contact.SYNC);
-	q.filter("type", Type.PERSON);
-	q.filter("properties.value", sync_id.toLowerCase());
-
-	try
-	{
-	    return dao.get(q.getKey());
-	}
-	catch (Exception e)
-	{
-	    return null;
-	}
-
-    }
 }

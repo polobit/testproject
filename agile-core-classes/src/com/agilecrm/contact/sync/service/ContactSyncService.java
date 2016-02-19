@@ -314,7 +314,7 @@ public abstract class ContactSyncService implements IContactSyncService
     private boolean findDuplicateAndMerge(Contact contact,Map<String, Object> queryMap)
     {
 	boolean isDuplicate = false;
-	if (prefs.type == Type.SHOPIFY)
+	if (prefs.type == Type.SHOPIFY || prefs.type == Type.QUICKBOOK)
 	{
 	    boolean isDuplicateById = false;
 
@@ -368,8 +368,13 @@ public abstract class ContactSyncService implements IContactSyncService
 	Map<String, Object> queryMap = new HashMap<String , Object>();
 	if (prefs.type == Type.SHOPIFY)
 	{
-    queryMap.put("properties.name", "shopifyId");
-    queryMap.put("properties.value", contact.getContactFieldValue("shopifyId"));
+    queryMap.put("properties.name", Contact.SHOPIFY_SYNC);
+    queryMap.put("properties.value", contact.getContactFieldValue(Contact.SHOPIFY_SYNC));
+	}
+	if (prefs.type == Type.QUICKBOOK)
+	{
+    queryMap.put("properties.name", Contact.QUICKBOOK_SYNC);
+    queryMap.put("properties.value", contact.getContactFieldValue(Contact.QUICKBOOK_SYNC));
 	}
 	boolean isUpdated= findDuplicateAndMerge(contact,queryMap);
 	if (isUpdated)

@@ -252,7 +252,8 @@ public class Contact extends Cursor
     public static final String PHONE = "phone";
     public static final String SKYPEPHONE = "skypePhone";
     public static final String IMAGE = "image";
-    public static final String SYNC = "shopifyId";
+    public static final String SHOPIFY_SYNC = "shopifySyncId";
+    public static final String QUICKBOOK_SYNC = "quickbookSyncId";
 
     /**
      * Unsubscribe status

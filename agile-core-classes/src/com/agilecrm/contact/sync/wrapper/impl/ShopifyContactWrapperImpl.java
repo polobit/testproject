@@ -238,7 +238,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     	{
     		syncid = contactProperties.get("id").toString();
     	}
-    		fields.add(new ContactField(Contact.SYNC, syncid.toString(), "home"));
+    		fields.add(new ContactField(Contact.SHOPIFY_SYNC, syncid.toString(), "home"));
     		return fields;
 
     }
