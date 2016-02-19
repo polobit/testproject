@@ -40,10 +40,22 @@ var Tickets_Notes = {
 		var note_type = $(e.target).hasClass('private') ? 'PRIVATE' : 'PUBLIC';
 		json.note_type = note_type;
 
-		var is_ticket_closed = $(e.target).hasClass('close-ticket');
+         
 
-		if(is_ticket_closed)
+		var is_ticket_closed = $(e.target).hasClass('close-ticket');
+      
+        if(!is_ticket_closed){         
+           showNotyPopUp('information', "Note has been added and ticket changed to Pending", 
+		 			'bottomRight', 5000);
+        } 
+        
+		if(is_ticket_closed){
 			json.close_ticket="true";
+            
+            showNotyPopUp('information', "Note has been added and ticket changed to Closed state", 
+					'bottomRight', 5000);
+		
+		}
 
 		disable_save_button($save_btn);
 
@@ -138,7 +150,7 @@ var Tickets_Notes = {
 			success : function(data){
 				
 				showNotyPopUp('information', "Ticket has been forwarded to " + emails.join(), 
-					'bottomRight', 3000);
+					'bottomRight', 5000);
 
 				var next_ticket_url = $(".navigation .next-ticket").attr("href");
 				if(next_ticket_url){

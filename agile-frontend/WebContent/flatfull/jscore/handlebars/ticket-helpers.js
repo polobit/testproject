@@ -82,6 +82,11 @@ Handlebars.registerHelper('is_labels_collection_empty', function(options) {
 	return options.inverse(this);
 
 });
+Handlebars.registerHelper('is_select_all', function(options) {
+
+	if (Ticket_Bulk_Ops.selected_all_filter_tickets == true )
+		return true;
+	});
 
 
 Handlebars.registerHelper('get_ticket_labels_from_ids', function(labels,
