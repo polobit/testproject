@@ -188,7 +188,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 				if(mile.lost_milestone){
 					html+='<option value="'+mile.id+'_'+mile.lost_milestone+'" style="display:none;">'+mile.lost_milestone+'</option>';
 				}
-				$('#' + id, el).closest('.control-group').find('label b').text('Milestone');
+				$('#' + id, el).closest('.control-group').find('label').text('Milestone');
 			}
 			else {
 				$.each(jsonModel,function(index,mile){
@@ -207,7 +207,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					}
 					html+='</optgroup>';
 				});
-				$('#' + id, el).closest('.control-group').find('label b').text('Track & Milestone');
+				$('#' + id, el).closest('.control-group').find('label').text('Track & Milestone');
 			}
 			$('#' + id, el).html(html);
 			console.log('adding');
