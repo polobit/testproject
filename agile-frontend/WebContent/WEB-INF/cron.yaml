@@ -120,5 +120,4 @@ cron:
   
 - description: Ticket module wake up req
   url: /ticket-module/backend/wakeup-servlet
-  schedule: every day 00:00
   schedule: every 1 mins
