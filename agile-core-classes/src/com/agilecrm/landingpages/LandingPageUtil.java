@@ -175,7 +175,7 @@ public class LandingPageUtil
 		
 	}
 	
-	public boolean isNameExists(String name) {
+	public boolean isNameExists(String name,String id) {
 		String oldNameSpace = NamespaceManager.get();
 		
 		try
@@ -185,7 +185,7 @@ public class LandingPageUtil
 			q = dao.ofy().query(LandingPage.class);
 			q.filter("name", name);
 			LandingPage lpNames =  q.get();
-			if(lpNames != null && lpNames.id != null)
+			if(lpNames != null && lpNames.id != null && !id.equals(lpNames.id+""))
 			{
 				return true;			
 			}

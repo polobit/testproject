@@ -230,7 +230,7 @@ angular.module('builder.projects', [])
               			 url: AGILE_LP_ROOT + 'core/api/landingpages/checkName',
               			 headers: {
               			   'Content-Type': "application/json"
-              			 },data: {"landingpageName": landingPageName}
+              			 },data: {"landingpageName": landingPageName, "id":projectPageData.id }
               			};
 
                           return $http(req).success(function(data) {
