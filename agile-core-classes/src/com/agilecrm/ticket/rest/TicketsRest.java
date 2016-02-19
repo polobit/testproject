@@ -30,6 +30,7 @@ import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.BulkActionUtil;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.session.SessionManager;
@@ -385,6 +386,8 @@ public class TicketsRest
 
 			// Execute triggers
 			TicketTriggerUtil.executeTriggerForNewTicket(ticket);
+			
+			BulkActionNotifications.publishNotification("Ticket#" + ticket.id + " has been created.");
 
 			return ticket;
 		}

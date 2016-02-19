@@ -65,6 +65,10 @@ var Tickets_Notes = {
 
 			success : function(model) {
 
+				// Remove draft message from local staorage
+				$('textarea#reply_textarea').val("");
+				Tickets.remove_draft_message(Current_Ticket_ID, ((note_type == 'PUBLIC') ? 'reply' : 'comment'));
+
 				//update model in collection
 				if(App_Ticket_Module.ticketsCollection){
 
@@ -89,6 +93,7 @@ var Tickets_Notes = {
 				}
 
 				Tickets.renderExistingCollection();
+
 				return;
 
 				// Tickets_Notes.repltBtn('reply');
@@ -151,6 +156,10 @@ var Tickets_Notes = {
 				
 				showNotyPopUp('information', "Ticket has been forwarded to " + emails.join(), 
 					'bottomRight', 5000);
+
+				// Remove draft message from local staorage
+				$('textarea#reply_textarea').val("");
+				Tickets.remove_draft_message(Current_Ticket_ID, 'forward');
 
 				var next_ticket_url = $(".navigation .next-ticket").attr("href");
 				if(next_ticket_url){

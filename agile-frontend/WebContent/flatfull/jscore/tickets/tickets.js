@@ -1465,9 +1465,6 @@ var Tickets = {
 
 		var value = $ele.val();
 
-		console.log($ele);
-		console.log($ele.attr("class"));
-
 		if($ele.hasClass('forward'))
 			return {"forward" : value};
 		else if($ele.hasClass('comment'))
@@ -1515,7 +1512,23 @@ var Tickets = {
 		// Parse stringify values
 		return JSON.parse(draft_mssgs);
 	
+	},
+
+	remove_draft_message : function(key, type){
+
+		var draft_mssgs = Tickets.get_draft_message();
+
+		var ticketDraft = draft_mssgs[key];
+
+		// Delete message key
+		delete ticketDraft[type];
+
+		draft_mssgs[key] = ticketDraft;
+		localStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
+	
 	}
+
+
 };
 
 function tickets_typeahead(data){
