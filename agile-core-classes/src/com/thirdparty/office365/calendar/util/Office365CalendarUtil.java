@@ -18,7 +18,10 @@ import org.json.JSONObject;
 
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.activities.util.WebCalendarEventUtil;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -172,14 +175,18 @@ public class Office365CalendarUtil {
 
 			String pattern = "EE MMM dd HH:mm:ss z yyyy";
 
+			System.out.println(AccountPrefsUtil.getTimeZone());
+			
+			String userTimeZone = UserPrefsUtil.getUserTimezoneFromUserPrefs(AgileUser.getCurrentAgileUser().id);
+			
+			//For Testing use the below code.
+			//String userTimeZone = UserPrefsUtil.getUserTimezoneFromUserPrefs(null);
 			SimpleDateFormat parsedFormat = new SimpleDateFormat(pattern,
 					Locale.ENGLISH);
-			parsedFormat.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil
-					.getTimeZone()));
+			parsedFormat.setTimeZone(TimeZone.getTimeZone(userTimeZone));
 			SimpleDateFormat reqFormat = new SimpleDateFormat(
 					"MMM d, yyyy HH:mm:ss");
-			reqFormat.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil
-					.getTimeZone()));
+			reqFormat.setTimeZone(TimeZone.getTimeZone(userTimeZone));
 			System.out.println("test");
 			Date parsedDate;
 			String start = resultObj.getString("startDate");
