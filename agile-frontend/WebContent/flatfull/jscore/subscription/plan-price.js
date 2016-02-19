@@ -618,7 +618,7 @@ function initializeSubscriptionListeners()
 			$("#email_rate").html("$3");
 		}
 
-		else if (emails <= 1000000)
+		else if (emails < 1000000)
 		{
 			$("#emails_total_cost").html((quantity * 2.5).toFixed(2));
 			$("#email_rate").html("$2.50");

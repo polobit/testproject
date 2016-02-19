@@ -509,7 +509,7 @@ public class BillingRestriction
     }
     
     public boolean checkForEmailCredits(){
-    	if(this.one_time_emails_count != null && this.one_time_emails_count <= 5 && this.email_credits_count != null && this.email_credits_count > 0)
+    	if(this.one_time_emails_count != null && this.one_time_emails_count <= 0 && this.email_credits_count != null && this.email_credits_count > 0)
     		return true;
     	else
     		return false;

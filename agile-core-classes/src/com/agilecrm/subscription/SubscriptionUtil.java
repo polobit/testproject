@@ -145,11 +145,11 @@ public class SubscriptionUtil
 	    return plan_id;
 	}
 
-	if (count <= 100000)
+	if (count < 100000)
 	    plan_id = "email3";
-	else if (count <= 1000000)
+	else if (count < 1000000)
 	    plan_id = "email2.5";
-	else if (count > 1000000)
+	else if (count >= 1000000)
 	    plan_id = "email1.5";
 	return plan_id;
     }
