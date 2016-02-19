@@ -1056,8 +1056,9 @@ public class TicketsRest
 		{
 			if (ticketID == null)
 				throw new Exception("Required parameters missing.");
+			Tickets ticket = TicketsUtil.removeDuedate(ticketID);
 
-			return TicketsUtil.removeDuedate(ticketID);
+			return ticket;
 		}
 		catch (Exception e)
 		{
