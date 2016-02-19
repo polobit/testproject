@@ -17,6 +17,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.safety.Whitelist;
 
 import com.agilecrm.Globals;
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -123,6 +124,10 @@ public class TicketNotesUtil
 		json.put("agent_name", agentName);
 		json.put("tracking_img", appendTrackingImage(ticket.id, notesList.get(0).id));
 
+		String companyName = AccountPrefsUtil.getAccountPrefs().company_name;
+		if(companyName != null && !companyName.equals("My company"))
+			json.put("company_name", companyName);
+		
 		System.out.println("notesList.get(0).id): " + notesList.get(0).id);
 
 		JSONArray notesArray = new JSONArray();
@@ -163,7 +168,7 @@ public class TicketNotesUtil
 		JSONObject json = new JSONObject();
 
 		json.put("created_time", DateUtil.getCalendarString(notes.created_time, "MMM d, h:mm a (z)", ""));
-
+		
 		json.put("plain_text", notes.plain_text);
 		json.put("html_text", TicketNotesUtil.parseHtmlText(notes.html_text));
 

@@ -188,8 +188,11 @@ var Ticket_Custom_Filters = {
 				saveCallback: function(model){
 
 					$('#create-filter-modal').modal('hide');
+
 					App_Ticket_Module.ticketFiltersList.collection.add(model);
 					App_Ticket_Module.ticketsByFilter(model.id);
+
+					$('body').removeClass('modal-open').animate({ scrollTop: 0 }, "slow");
 				},
 				prePersist : function(model)
 				{

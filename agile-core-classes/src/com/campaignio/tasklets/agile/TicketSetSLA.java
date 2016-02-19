@@ -3,8 +3,10 @@ package com.campaignio.tasklets.agile;
 import java.util.Calendar;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.ticket.utils.TicketsUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -59,24 +61,25 @@ public class TicketSetSLA extends TaskletAdapter
 
 		try
 		{
-
 			JSONObject ticketJSON = data.getJSONObject(TICKET);
 
+			Long ticketID = ticketJSON.getLong("id");
+			
 			if (ticketJSON != null && StringUtils.isNotBlank(durationType) && StringUtils.isNotBlank(duration))
 			{
 				// Set SLA
-				// TicketsUtil.setSLA(ticketJSON, SLATime);
+				TicketsUtil.changeDueDate(ticketID, SLATime);
 
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-						"Ticket(#" + ticketJSON.getString("id") + ") SLA changed - " + duration + " hours",
+						"Ticket(#" + ticketID + ") SLA changed - " + duration + " hours",
 						LogType.TICKET_SET_SLA.toString());
 
 			}
-
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception in TicketSetSLAt :" + e.getMessage());
+			System.out.println("Exception in TicketsUtil.changeDueDate :" + e.getMessage());
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 
 		// Execute Next One in Loop
