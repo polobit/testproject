@@ -136,41 +136,50 @@
   <div class="panel panel-default m-b-none">
   
     <div class="panel-body">
-      <div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
+      <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
       
-	<span class="text-base">Tags</span>
-	<div class="controls m-t-xs" id="tags_div">
+	<span style="font-size:14px;">Tags</span>
+	<div class="controls m-t-xs" id="tags_div" style="position: relative;">
 		<div id="tags-lhs-filter-table" class="ignore-collection">
-				<div class="hide master-tags-add-div pos-rlt m-t-none p-b-sm">
+				<div class="hide master-tags-add-div pos-rlt m-t-xs">
 					<input class="form-control" type="hidden" name="LHS" value="tags">
-					<select id="tags-filter" class="form-control text-xs" name="CONDITION" style="height:30px;">
+					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
 						<option value="EQUALS" class="tags">is</option>
 						<option value="NOTEQUALS" class="tags">isn't</option>
 					</select>
-					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
-						<span id="RHS">
-							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead text-xs" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;
-							">
-						</span>
+					<div class="EQUALS NOTEQUALS condition_container m-t-xs companies_input">
+						<span id="RHS" class="no-filter-action">
+							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead companies_input" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;font-size:12px;">
+						</span>					
 					</div>
-					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon icon-trash text-l-none-hover c-p"></i></a></div>
-				</div>
-				<div class="lhs-contact-filter-row pos-rlt m-t-xs">
-					<input type="hidden" name="LHS" value="tags">
-					<select id="tags-filter" class="form-control text-xs" name="CONDITION" style="height:30px;">
-						<option value="EQUALS" class="tags">is</option>
-						<option value="NOTEQUALS" class="tags">isn't</option>
-					</select>
-					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
-						<span id="RHS">
-							<input type="text" placeholder="Enter Tag" prev-val="" class="required text-xs form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;">
-						</span>
+					<div class="m-t-xs"><a class="pull-right trash-css" style="font-size:16px;"><i class="filter-tags-multiple-remove-lhs fa fa-trash text-l-none-hover c-p"></i></a>
+						<div class="clearfix"></div>
 					</div>
-					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon icon-trash text-l-none-hover c-p"></i></a></div>
 					<div class="clearfix"></div>
+					
 				</div>
+				<div class="lhs-contact-filter-row pos-rlt m-t-xs " style="min-height: 90px;" >
+					<input type="hidden" name="LHS" value="tags">
+					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
+						<option value="EQUALS" class="tags">is</option>
+						<option value="NOTEQUALS" class="tags">isn't</option>
+					</select>
+					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
+						<span id="RHS">
+							<input type="text" placeholder="Enter Tag" prev-val="" class="required form-control filters-tags-typeahead companies_input" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;font-size:12px;">
+						</span>
+					</div>
+					<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+					
+					<div class="clearfix"></div>
+					
+				</div>
+
 		</div>	
-		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none text-muted pos-rlt" style="top:-2px;font-size:12px;font-weight: normal !important;" data-name="tags"><i class="icon icon-plus"></i><span> Add</span></a>
+
+		<div class="m-t-xs">
+						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;" data-name="tags"><i class="icon-plus"></i> Add</a>
+					</div>
 			
 	</div>
 </div>
@@ -179,7 +188,6 @@
     </div>
   </div>
 </div>
-
 
 
 <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
@@ -262,17 +270,17 @@
 </div>
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs" style="padding-top:20px">
   <div class="panel panel-default m-b-none">
-      <div class="panel-body">
-       <div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+  
+    <div class="panel-body">
+      <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
+      
 	<span class="text-base">Campaign Status</span>
-	<div class="controls m-t-xs" id="campaign_status_div">
-
-
+	<div class="controls m-t-xs" id="campaign_status_div" style="position: relative;">
 		<div id="campaign_status-lhs-filter-table" class="ignore-collection">
-			<div class="hide master-campaign_status-add-div pos-rlt m-t-none p-b-sm">
-				<input type="hidden" class="form-control" name="LHS" value="campaign_status">
+				<div class="hide master-campaign_status-add-div pos-rlt m-t-xs">
+					<input type="hidden" class="form-control" name="LHS" value="campaign_status">
 				<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 					<option value="NOT_ADDED">Never Added</option>
 					<option value="ACTIVE">Active</option>
@@ -282,16 +290,19 @@
 					<option value="UNSUBSCRIBED">Unsubscribed</option>
 					<option value="SPAM">Spam Reported</option>
 				</select>
-		
 				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED BOUNCED SPAM condition_container m-t-xs">
 					<span id="RHS">
 						<select id="campaign_select_master" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">Select...</option></select>
 					</span>
 				</div>
-					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon icon-trash text-l-none-hover c-p"></i></a></div>
-			</div>
-			<div class="lhs-contact-filter-row pos-rlt m-t-xs">
-				<input type="hidden" class="form-control" name="LHS" value="campaign_status">
+					<div class="m-t-xs"><a class="pull-right trash-css" style="font-size:16px;"><i class="filter-tags-multiple-remove-lhs fa fa-trash text-l-none-hover c-p"></i></a>
+						<div class="clearfix"></div>
+					</div>
+					<div class="clearfix"></div>
+					
+				</div>
+				<div class="lhs-contact-filter-row pos-rlt m-t-xs " style="min-height: 90px;" >
+					<input type="hidden" class="form-control" name="LHS" value="campaign_status">
 				<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 					<option value="NOT_ADDED">Never Added</option>
 					<option value="ACTIVE">Active</option>
@@ -302,23 +313,32 @@
 					<option value="UNSUBSCRIBED">Unsubscribed</option>
 					<option value="SPAM">Spam Reported</option>
 				</select>
-		
-				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED HARDBOUNCED SOFTBOUNCED SPAM condition_container m-t-xs">
+					<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED HARDBOUNCED SOFTBOUNCED SPAM condition_container m-t-xs">
 					<span id="RHS">
 						<select id="campaign_select" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">Select...</option></select>
 					</span>
+					</div>
+					<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+					
+					<div class="clearfix"></div>
+					
 				</div>
-				<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon icon-trash text-l-none-hover c-p"></i></a></div>
-				<div class="clearfix"></div>
-			</div>
-		</div>
-		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none text-muted pos-rlt" style="top:2px;font-size:12px;" data-name="campaign_status"><i class="icon icon-plus"></i> <span>Add</span></a>
+
+		</div>	
+
+		<div class="m-t-xs">
+						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;" data-name="campaign_status"><i class="icon-plus"></i> Add</a>
+					</div>
+			
 	</div>
 </div>
-        
-     </div>
+
+
+    </div>
   </div>
 </div>
+
+
 
 
 <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
