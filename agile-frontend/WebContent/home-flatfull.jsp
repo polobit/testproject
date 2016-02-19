@@ -601,6 +601,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
+console.time("startbackbone");
 
 var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
 //var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
