@@ -1,5 +1,6 @@
 package com.campaignio.logger.util;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -248,6 +249,11 @@ public class LogUtil
 					new TypeReference<List<LogWrapper>>()
 					{
 					});
+			
+			if(log_type == null || ("All_Activities").equals(log_type))
+			{
+				Collections.sort(logsList, new SentDateComparator());
+			}
 
 			LogWrapper lastLog = logsList.get(logsList.size() - 1);
 			lastLog.cursor = (Integer.parseInt(cursor) + Integer.parseInt(page_size)) + "";

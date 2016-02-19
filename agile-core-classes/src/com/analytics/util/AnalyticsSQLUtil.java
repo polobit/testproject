@@ -2,15 +2,18 @@ package com.analytics.util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.util.GoogleSQLUtil;
-import com.agilecrm.util.EmailUtil;
+import com.agilecrm.util.HTTPUtil;
+import com.analytics.Analytics;
 import com.campaignio.tasklets.agile.URLVisited;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -25,78 +28,6 @@ import com.google.appengine.api.utils.SystemProperty;
  */
 public class AnalyticsSQLUtil
 {
-	/**
-	 * Inserts values into page_views table.
-	 * 
-	 * @param domain
-	 *            - current namespace.
-	 * @param guid
-	 *            - guid.
-	 * @param email
-	 *            - email-id.
-	 * @param sid
-	 *            - sid.
-	 * @param url
-	 *            - url.
-	 * @param ip
-	 *            - ip address.
-	 * @param isNew
-	 *            - if new
-	 * @param ref
-	 *            -reference.
-	 * @param userAgent
-	 *            - userAgent header.
-	 * @param country
-	 *            - appengine header country value.
-	 * @param region
-	 *            - appengine header region (or state) value
-	 * @param city
-	 *            - appengine header city value.
-	 * @param cityLatLong
-	 *            - appengine header city latitudes and longitudes.
-	 */
-	public static void addToPageViews(String domain, String guid, String email, String sid, String url, String ip,
-			String isNew, String ref, String userAgent, String country, String region, String city, String cityLatLong)
-	{
-		String insertToPageViews = "INSERT INTO page_views (domain,guid,email,sid,url,ip,is_new,ref,user_agent,country,region,city,city_lat_long,stats_time) VALUES("
-				+ GoogleSQLUtil.encodeSQLColumnValue(domain)
-				+ ","
-				+ GoogleSQLUtil.encodeSQLColumnValue(guid)
-				+ ","
-				+ GoogleSQLUtil.encodeSQLColumnValue(email)
-				+ ","
-				+ GoogleSQLUtil.encodeSQLColumnValue(sid)
-				+ ","
-				+ GoogleSQLUtil.encodeSQLColumnValue(url)
-				+ ","
-				+ GoogleSQLUtil.encodeSQLColumnValue(ip)
-				+ ","
-				+ isNew
-				+ ","
-				+ GoogleSQLUtil.encodeSQLColumnValue(ref)
-				+ ","
-				+ GoogleSQLUtil.encodeSQLColumnValue(userAgent)
-				+ ","
-				+ GoogleSQLUtil.encodeSQLColumnValue(country)
-				+ ","
-				+ GoogleSQLUtil.encodeSQLColumnValue(region)
-				+ ","
-				+ GoogleSQLUtil.encodeSQLColumnValue(city)
-				+ ","
-				+ GoogleSQLUtil.encodeSQLColumnValue(cityLatLong) + ", NOW()" + ")";
-
-		// System.out.println("Insert Query to PageViews: " +
-		// insertToPageViews);
-
-		try
-		{
-			GoogleSQL.executeNonQuery(insertToPageViews);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Gets all sessions from table having sids equal with given email
@@ -133,64 +64,6 @@ public class AnalyticsSQLUtil
 			return null;
 		}
 	}
-	
-	/**
-	 * Gets all sessions from table having sids equal with given email
-	 * 
-	 * @param email
-	 *            - string with or without comma
-	 */
-	public static JSONArray getPageViewsOfAllEmails(String email)
-	{
-		String domain = NamespaceManager.get();
-
-		String q1 = "SELECT p1.*, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views p1";
-
-		// Gets UNIQUE session ids based on Email from database
-		String sessions = "(SELECT DISTINCT sid FROM page_views WHERE email IN ("
-				+ getEmails(EmailUtil.getStringTokenSet(email, ",")) + ") AND domain = "
-				+ GoogleSQLUtil.encodeSQLColumnValue(domain) + ") p2";
-
-		String joinQuery = q1 + " INNER JOIN " + sessions + " ON p1.sid=p2.sid AND p1.domain = "
-				+ GoogleSQLUtil.encodeSQLColumnValue(domain);
-
-		String pageViews = "SELECT * FROM (" + joinQuery + ") pg";
-
-		// System.out.println("sids query is: " + sessions);
-		// System.out.println("Select query: " + pageViews);
-
-		try
-		{
-			return GoogleSQL.getJSONQuery(pageViews);
-		}
-		catch (Exception e1)
-		{
-			e1.printStackTrace();
-			return null;
-		}
-	}
-	
-	/**
-	 * Returns page views based on given count
-	 * 
-	 * @param limit - fetch count
-	 */
-	public static JSONArray getLimitedPageViews(int limit)
-	{
-		String domain = NamespaceManager.get();
-
-		String query = "SELECT * FROM page_views WHERE domain = " + GoogleSQLUtil.encodeSQLColumnValue(domain) + " LIMIT " + limit;
-
-		try
-		{
-			return GoogleSQL.getJSONQuery(query);
-		}
-		catch (Exception e1)
-		{
-			e1.printStackTrace();
-			return null;
-		}
-	}
 
 	/**
 	 * Removes stats from SQL based on namespace.
@@ -200,14 +73,14 @@ public class AnalyticsSQLUtil
 	 */
 	public static void deleteStatsBasedOnNamespace(String namespace)
 	{
-		String deleteQuery = "DELETE FROM page_views WHERE" + GoogleSQLUtil.appendDomainToQuery(namespace);
-
 		try
 		{
-			GoogleSQL.executeNonQuery(deleteQuery);
+			String url = AnalyticsUtil.getStatsUrlForDeleteDomainStats(namespace);
+			HTTPUtil.accessURL(url);
 		}
 		catch (Exception e)
 		{
+			System.out.println("Execution occured while deleting stats of a namespace");
 			e.printStackTrace();
 		}
 	}
@@ -239,34 +112,17 @@ public class AnalyticsSQLUtil
 		ResultSet rs = null;
 		try
 		{
-			String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE domain = "
-					+ GoogleSQLUtil.encodeSQLColumnValue(domain) + " AND email = "
-					+ GoogleSQLUtil.encodeSQLColumnValue(email) + " AND url LIKE ";
-
-			if ((URLVisited.EXACT_MATCH).equals(type))
-				urlCountQuery += GoogleSQLUtil.encodeSQLColumnValue(url);
-			else
-				urlCountQuery += " \'%" + url + "%\'";
-
-			// User doesn't want date and time or old url visited node
-			if (!("0").equals(duration) && !StringUtils.isEmpty(duration))
-				urlCountQuery += " AND stats_time BETWEEN DATE_SUB(DATE(NOW())," + " INTERVAL " + duration + " "
-						+ durationType + ") AND NOW() ";
-
-			System.out.println("URL count query is: " + urlCountQuery);
-
-			rs = GoogleSQL.executeQuery(urlCountQuery);
-
-			if (rs.next())
+			String statsServerURL = AnalyticsUtil.getStatsUrlForFetchingUrlVisitedCount(url, domain, email, type,
+					duration, durationType);
+			try
 			{
-				// Gets first column
-				count = rs.getInt(1);
+				String result = HTTPUtil.accessURL(statsServerURL);
+				count = Integer.parseInt(result);
 			}
-		}
-		catch (SQLException e)
-		{
-			System.out.println("SQLException in AnalyTicsSQLUtil.." + e.getMessage());
-			e.printStackTrace();
+			catch (Exception e)
+			{
+				System.out.println("Exception occured while urlvisited count query " + e.getMessage());
+			}
 		}
 		catch (Exception e)
 		{
@@ -291,29 +147,16 @@ public class AnalyticsSQLUtil
 	 */
 	public static int getPageViewsCountForGivenDomain(String domain)
 	{
-		String pageViewsCount = "SELECT COUNT(*) FROM page_views WHERE domain = "
-				+ GoogleSQLUtil.encodeSQLColumnValue(domain);
-
 		int count = 0;
-
-		ResultSet rs = GoogleSQL.executeQuery(pageViewsCount);
-
+		String statsServerURL = AnalyticsUtil.getStatsUrlForPageViewsCount(domain);
 		try
 		{
-			if (rs.next())
-			{
-				// Gets first column
-				count = rs.getInt(1);
-			}
+			String result = HTTPUtil.accessURL(statsServerURL);
+			count = Integer.parseInt(result);
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			// Closes the connection and ResultSet Objects
-			GoogleSQL.closeResultSet(rs);
+			System.out.println(e.getMessage());
 		}
 
 		return count;
@@ -366,55 +209,121 @@ public class AnalyticsSQLUtil
 		return count;
 
 	}
-	
+
 	public static JSONArray getPageSessionsCountForDomain(String startDate, String endDate, String timeZone)
 	{
 		String domain = NamespaceManager.get();
 
-    	// For development
-    	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
-    	    domain = "localhost";
-    	
+		// For development
+		if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+			domain = "localhost";
+
 		if (StringUtils.isBlank(domain))
 			return null;
-		
+
 		// Returns (sign)HH:mm from total minutes.
-    	String timeZoneOffset = GoogleSQLUtil.convertMinutesToTime(timeZone);
-    	
+		String timeZoneOffset = GoogleSQLUtil.convertMinutesToTime(timeZone);
+
 		String urlCountQuery = "SELECT count(DISTINCT sid) AS count,count(sid) AS total FROM page_views WHERE domain = "
 				+ GoogleSQLUtil.encodeSQLColumnValue(domain);
 
-	    urlCountQuery += " AND stats_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
-    	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+")";
+		urlCountQuery += " AND stats_time BETWEEN CONVERT_TZ(" + GoogleSQLUtil.encodeSQLColumnValue(startDate) + ","
+				+ GoogleSQLUtil.getConvertTZ2(timeZoneOffset) + ") " + "AND CONVERT_TZ("
+				+ GoogleSQLUtil.encodeSQLColumnValue(endDate) + "," + GoogleSQLUtil.getConvertTZ2(timeZoneOffset) + ")";
 
 		System.out.println("URL count query is: " + urlCountQuery);
 
 		try
-    	{
-    	    return GoogleSQL.getJSONQuery(urlCountQuery);
-    	}
-    	catch (Exception e)
-    	{
-    	    e.printStackTrace();
-    	    return new JSONArray();
-    	}
+		{
+			return GoogleSQL.getJSONQuery(urlCountQuery);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return new JSONArray();
+		}
 
 	}
-	
-	private static String getEmails(Set<String> emails)
+
+	/***
+	 * Responsible for fetching page views from stats server. It converts json
+	 * result into Analytics objects.
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public static List<Analytics> getPageViewsFromStatsServer(String url)
 	{
-		String emailString = "";
-		
-		if(emails == null || emails.size()==0)
-			return emailString;
-		
-		for(String email : emails)
+		try
 		{
-			if(StringUtils.isNotBlank(email))
-				emailString += GoogleSQLUtil.encodeSQLColumnValue(email) + ",";
+			String mergedStats = HTTPUtil.accessURL(url);
+			return new ObjectMapper().readValue(mergedStats.toString(), new TypeReference<List<Analytics>>()
+			{
+			});
 		}
-		
-		return StringUtils.removeEnd(emailString, ",");
-		
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			return null;
+		}
 	}
+
+	/***
+	 * Responsible for fetching limited page views from stats server.
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public static String fetchLimitedPageViewsFromStatsServer(String url)
+	{
+		try
+		{
+			String stats = HTTPUtil.accessURL(url);
+			return stats;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
+
+	/**
+	 * Returns page views based on given count
+	 * 
+	 * @param limit
+	 *            - fetch count
+	 */
+	public static JSONArray getLimitedPageViews(int limit)
+	{
+		JSONArray resultArray = null;
+		try
+		{
+			String url = AnalyticsUtil.getStatsUrlForFetchLimitedRows(limit);
+			String result = AnalyticsSQLUtil.fetchLimitedPageViewsFromStatsServer(url);
+			if (StringUtils.isNotBlank(result))
+			{
+				try
+				{
+					resultArray = new JSONArray(result);
+				}
+				catch (JSONException e)
+				{
+					System.out.println("Exception occured while json parsing page views limited String "
+							+ e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			return null;
+		}
+		return resultArray;
+	}
+
 }
