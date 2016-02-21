@@ -93,6 +93,10 @@
 					else if(dealsView.collection.get(deal.id))
 					{
 						dealsView.collection.get(deal.id).set(new BaseModel(deal));
+						$("#"+deal.id).closest("li").removeAttr("class");
+						$("#"+deal.id).closest("li").addClass("deal-color");
+						$("#"+deal.id).closest("li").addClass(deal.colorName);
+
 					}
 					else
 					{
