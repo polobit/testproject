@@ -356,6 +356,11 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 				case 'core/api/tickets/filters/bulk':{
 					if(id_array.length == App_Ticket_Module.ticketFiltersCollection.collection.length)
 						App_Ticket_Module.ticketFilters();
+				    	  $.each(id_array, function(index, data){
+					      App_Ticket_Module.ticketFiltersCollection.collection.remove(data[index]);
+					      });
+                          var filterJSON = App_Ticket_Module.ticketFiltersCollection.collection.at(0).toJSON();
+			 			  Ticket_Filter_ID = filterJSON.id;
 					break;
 				}
 				case 'core/api/tickets/labels/bulk':{

@@ -43,19 +43,12 @@ var Tickets_Notes = {
          
 
 		var is_ticket_closed = $(e.target).hasClass('close-ticket');
-      
-        if(!is_ticket_closed){         
-           showNotyPopUp('information', "Note has been added and ticket changed to Pending", 
-		 			'bottomRight', 5000);
-        } 
+         
         
-		if(is_ticket_closed){
+		if(is_ticket_closed)
 			json.close_ticket="true";
             
-            showNotyPopUp('information', "Note has been added and ticket changed to Closed state", 
-					'bottomRight', 5000);
-		
-		}
+        
 
 		disable_save_button($save_btn);
 
@@ -68,10 +61,15 @@ var Tickets_Notes = {
 				// Remove draft message from local staorage
 				$('textarea#reply_textarea').val("");
 				Tickets.remove_draft_message(Current_Ticket_ID, ((note_type == 'PUBLIC') ? 'reply' : 'comment'));
-
+                
+                if(is_ticket_closed){
+                 showNotyPopUp('information', "Note has been added and ticket status changed to Closed", 'bottomRight', 5000);
+                }
+				else 
+                 showNotyPopUp('information', "Note has been added and ticket status changed to Pending", 'bottomRight', 5000);
 				//update model in collection
 				if(App_Ticket_Module.ticketsCollection){
-
+                    
 					var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
                     var current_date = new Date().getTime();
    					var json = {};
@@ -79,6 +77,7 @@ var Tickets_Notes = {
 					json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
 					json.last_updated_time = current_date;
 					json.closed_time='';
+					json.user_replies_count = model.user_replies_count;
 					ticket_model.set(json, {
 						silent : true
 					});
