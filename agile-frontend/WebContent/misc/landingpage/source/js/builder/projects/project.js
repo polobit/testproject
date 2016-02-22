@@ -265,6 +265,8 @@ angular.module('builder.projects', [])
 					//window.parent.location.hash = ("landing-page/"+returnDataFormat.pages[0].id);
 					if(typeof projectPageData.id == "undefined") {
 						window.parent.location.hash = ("landing-pages");
+					}else{
+						window.parent.location.hash = ("landing-page/"+returnDataFormat.pages[0].id);
 					}
             	}, 3000);
 
