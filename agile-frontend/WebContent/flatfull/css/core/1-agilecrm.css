@@ -3170,7 +3170,7 @@ table.hide-head-checkbox th label.i-checks {
 .deals-nowrap .no-wrap {
  white-space: nowrap !important;
 }
-.contact_popover{
+.contact_popover{ 
 
 	border-radius: 0px;
 	//width : 260px;
@@ -3187,14 +3187,13 @@ table.hide-head-checkbox th label.i-checks {
 	display: none;
 }
 
+
 .well{
 	background: none!important;
 	 border:none!important;
 	  
 }
-
-
-#api_key_generate_icon span ,#jsapi_key_generate_icon span{
-	color: white;
+#api_key_generate_icon span , #jsapi_key_generate_icon span{
+	color: white !important;
 }
 
