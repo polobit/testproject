@@ -20,7 +20,6 @@ import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.activities.util.WebCalendarEventUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.googlecode.objectify.Key;
@@ -176,11 +175,15 @@ public class Office365CalendarUtil {
 			String pattern = "EE MMM dd HH:mm:ss z yyyy";
 
 			System.out.println(AccountPrefsUtil.getTimeZone());
-			
-			String userTimeZone = UserPrefsUtil.getUserTimezoneFromUserPrefs(AgileUser.getCurrentAgileUser().id);
-			
-			//For Testing use the below code.
-			//String userTimeZone = UserPrefsUtil.getUserTimezoneFromUserPrefs(null);
+
+			String userTimeZone = UserPrefsUtil
+					.getUserTimezoneFromUserPrefs(AgileUser
+							.getCurrentAgileUser().id);
+
+			// For Testing use the below code.
+			// String userTimeZone = UserPrefsUtil
+			// .getUserTimezoneFromUserPrefs(null);
+
 			SimpleDateFormat parsedFormat = new SimpleDateFormat(pattern,
 					Locale.ENGLISH);
 			parsedFormat.setTimeZone(TimeZone.getTimeZone(userTimeZone));
@@ -275,41 +278,43 @@ public class Office365CalendarUtil {
 			return null;
 		} else {
 			String Url = null;
-			if (startTime != null && endTime !=null) {
+			if (startTime != null && endTime != null) {
 				startTime = startTime * 1000;
-				endTime = endTime *1000;
+				endTime = endTime * 1000;
 				Url = Office365CalendarUtil.getOfficeURL(startTime.toString(),
 						endTime.toString(), calendarPrefs);
 			}
 			try {
 				List<OfficeCalendarTemplate> appointments = Office365CalendarUtil
 						.getAppointmentsFromServer(Url);
-				
-				for (int i = 0; i < appointments.size(); i++){
+
+				for (int i = 0; i < appointments.size(); i++) {
 					OfficeCalendarTemplate officeTemplate = appointments.get(i);
 					/*
-					 * Make sub slot of filled slot as per selected duration(slot time) and add in list
+					 * Make sub slot of filled slot as per selected
+					 * duration(slot time) and add in list
 					 */
-					if(officeTemplate != null){		
-						long starting =0L;
+					if (officeTemplate != null) {
+						long starting = 0L;
 						long ending = 0L;
-						
+
 						// Starting time.
-						Date start =new Date(officeTemplate.getStart());
-						if(start.getTime()/1000 < startTime){
-							starting = startTime/1000;
-						}else{
-							starting = start.getTime()/1000;
+						Date start = new Date(officeTemplate.getStart());
+						if (start.getTime() / 1000 < startTime) {
+							starting = startTime / 1000;
+						} else {
+							starting = start.getTime() / 1000;
 						}
-						
+
 						// Ending time.
-						Date end =new Date(officeTemplate.getEnd());	
-						if(end.getTime()/1000 < endTime){
-							ending = endTime/1000;
-						}else{
-							ending = end.getTime()/1000;
+						Date end = new Date(officeTemplate.getEnd());
+						if (end.getTime() / 1000 < endTime) {
+							ending = endTime / 1000;
+						} else {
+							ending = end.getTime() / 1000;
 						}
-					    filledSlots.addAll(WebCalendarEventUtil.makeSlots(slotTime, starting, ending));
+						filledSlots.addAll(WebCalendarEventUtil.makeSlots(
+								slotTime, starting, ending));
 					}
 				}
 
