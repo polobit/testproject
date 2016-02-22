@@ -153,7 +153,7 @@
 							">
 						</span>
 					</div>
-					<div class="m-t-xs"><a class="pull-right trash-css" style="font-size:16px;"><i class="filter-tags-multiple-remove-lhs fa fa-trash text-l-none-hover c-p"></i></a>
+					<div class="m-t-xs"><a class="pull-right trash-css" style="font-size:16px;"><i class="filter-tags-multiple-remove-lhs fa fa-trash text-l-none-hover c-p" id="removeBtn"></i></a>
 						<div class="clearfix"></div>
 					</div>
 					<div class="clearfix"></div>
@@ -170,7 +170,7 @@
 							<input type="text" placeholder="Enter Tag" prev-val="" class="required text-xs form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;">
 						</span>
 					</div>
-					<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+					<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 					
 					<div class="clearfix"></div>
 					
@@ -179,7 +179,7 @@
 		</div>	
 
 		<div class="m-t-xs">
-						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;font-weight: normal !important;" data-name="tags"><i class="icon-plus"></i> Add</a>
+						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;font-weight: normal !important;" data-name="tags" id="addBtn"><i class="icon-plus"></i> Add</a>
 					</div>
 			
 	</div>
@@ -219,7 +219,7 @@
 				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control text-xs" name="temp-4" id="temp-4" style="height:30px;">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -260,7 +260,7 @@
 				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control text-xs" name="temp-7" id="temp-7" style="height:30px;">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -296,7 +296,7 @@
 						<select id="campaign_select_master" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">Select...</option></select>
 					</span>
 				</div>
-					<div class="m-t-xs"><a class="pull-right trash-css" style="font-size:16px;"><i class="filter-tags-multiple-remove-lhs fa fa-trash text-l-none-hover c-p"></i></a>
+					<div class="m-t-xs"><a class="pull-right trash-css" style="font-size:16px;"><i class="filter-tags-multiple-remove-lhs fa fa-trash text-l-none-hover c-p" id="removeBtn"></i></a>
 						<div class="clearfix"></div>
 					</div>
 					<div class="clearfix"></div>
@@ -319,7 +319,7 @@
 						<select id="campaign_select" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">Select...</option></select>
 					</span>
 					</div>
-					<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+					<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 					
 					<div class="clearfix"></div>
 					
@@ -328,7 +328,7 @@
 		</div>	
 
 		<div class="m-t-xs">
-						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;" data-name="campaign_status"><i class="icon-plus"></i> Add</a>
+						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;" data-name="campaign_status" id="addBtn"><i class="icon-plus"></i> Add</a>
 					</div>
 			
 	</div>
@@ -360,7 +360,7 @@
 				<select id="owner_select" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">Select...</option></select>
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -408,7 +408,7 @@
 				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control date required text-xs" name="temp-11" id="temp-11" style="height:30px;">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -453,7 +453,7 @@
 				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="Select Date" class="form-control date required text-xs" name="temp-15" id="temp-15" style="height:30px;">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
