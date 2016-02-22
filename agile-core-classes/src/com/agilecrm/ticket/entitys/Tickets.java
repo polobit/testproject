@@ -145,7 +145,7 @@ public class Tickets extends Cursor implements Serializable
 	/**
 	 * Stores epoch time when ticket is created
 	 */
-	public Long created_time = 0L;
+	public Long created_time = null;
 
 	/**
 	 * Stores epoch time when ticket is last updated

@@ -279,6 +279,8 @@ var Ticket_Bulk_Ops = {
 					saveCallback: function(){
 						Ticket_Bulk_Ops.clearSelection();
 						$('#close-tickets-modal').modal('hide');
+
+						$('body').removeClass('modal-open').animate({ scrollTop: 0 }, "slow");
 					},
 					prePersist : function(model)
 					{
@@ -312,6 +314,8 @@ var Ticket_Bulk_Ops = {
 						Tickets.removeTicketsFromCollection(Ticket_Bulk_Ops.getSelectedTickesObj());
 						Ticket_Bulk_Ops.clearSelection();
 						$('#delete-tickets-modal').modal('hide');
+
+						$('body').removeClass('modal-open').animate({ scrollTop: 0 }, "slow");
 					},
 					prePersist : function(model)
 					{
@@ -337,6 +341,8 @@ var Ticket_Bulk_Ops = {
 					saveCallback: function(){
 						Ticket_Bulk_Ops.clearSelection();
 						$('#spam-tickets-modal').modal('hide');
+
+						$('body').removeClass('modal-open').animate({ scrollTop: 0 }, "slow");
 					},
 					prePersist : function(model)
 					{
@@ -362,6 +368,8 @@ var Ticket_Bulk_Ops = {
 					saveCallback: function(){
 						Ticket_Bulk_Ops.clearSelection();
 						$('#favorite-tickets-modal').modal('hide');
+
+						$('body').removeClass('modal-open').animate({ scrollTop: 0 }, "slow");
 					},
 					prePersist : function(model)
 					{
