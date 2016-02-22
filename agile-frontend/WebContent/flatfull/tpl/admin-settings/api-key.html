@@ -14,15 +14,16 @@
                         <div class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne" id="api-key">
                            <div class="panel-body" id="api-accordion">
                               <div class="tab-pane active" id="api">
-                                 <b>API key</b> for REST clients (Java, PHP, .Net wrappers) and integrations (Zapier, Wufoo, Unbounce, Chrome extension and others).
+                                 <b>REST API</b>
                                  <div class="clearfix"></div>
-                                 <br/>
-                                 <code  class="prettyprint" id="api_key_code">{{api_key}}<span class="pull-right inline-block"><a id="api_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top"  rel="popover" data-placement="bottom" data-title="" data-content="Reset API Key" id="element" data-trigger="hover" data-original-title=""></span></code>
-                                 <br/><br/>
-   					  			 <b>Javascript API key</b> only for tracking code on website.
+                                
+                                 <code  class="prettyprint" id="api_key_code"style="letter-spacing:1px;">{{api_key}}<span class=" inline-block"style="padding:5px;position:relative;right:-80px;"><a id="api_key_generate_icon" class="c-p m-t-xs m-r-xs"><button class="btn btn-sm  btn-danger text-white">Reset</button></a></span></code>
+                                 <br/>For Java, PHP, .Net wrappers and integrations Zapier, Wufoo, Unbounce, Chrome extension etc,.<br /><br />
+   					  			 <b>Javascript API key</b>
                                  <div class="clearfix"></div>
-                                 <br/>
-                                 <code class="prettyprint" id="jsapi_key_code">{{js_api_key}}<span class="inline-block pull-right"><a id="jsapi_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top" rel="popover" data-placement="bottom" data-title="" data-content="Reset JavaScript API Key" id="element" data-trigger="hover" data-original-title=""></span></code>
+                             
+                                 <code class="prettyprint Api_code" id="jsapi_key_code"style="letter-spacing:1px;">{{js_api_key}}<span class="inline-block " style="padding:5px;position:relative;right:-80px;"><a id="jsapi_key_generate_icon" class="c-p m-t-xs m-r-xs"><button class="btn  btn-sm btn-danger text-white">Reset</button></a></span></code><br />Only for tracking code on website.
+                                 <div class="clearfix"></div>
                               </div>
                            </div>
                         </div>
