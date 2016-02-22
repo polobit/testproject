@@ -3186,8 +3186,15 @@ table.hide-head-checkbox th label.i-checks {
 .contact_popover .arrow{
 	display: none;
 }
+
 .well{
 	background: none!important;
 	 border:none!important;
 	  
 }
+
+
+#api_key_generate_icon span ,#jsapi_key_generate_icon span{
+	color: white;
+}
+

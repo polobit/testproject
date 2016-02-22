@@ -1,6 +1,6 @@
 function initializeRegenerateKeysListeners() {
     $(".prettyprint").css({
-            "padding": "5px 15px; ",
+            "padding": "9px 15px; ",
             "border": "none"
     });
 
