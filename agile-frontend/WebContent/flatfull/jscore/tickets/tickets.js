@@ -1494,21 +1494,21 @@ var Tickets = {
 		draft_mssgs[key] = value;
 
 	 	try {
-	 		// Add to localstorage
-			localStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
+	 		// Add to sessionStorage
+			sessionStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
 	    } catch (e) {
 
 	    	draft_mssgs = {
 	    		key:value
 	    	}
-	    	localStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
+	    	sessionStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
 	    }
 
 	},
 
 	get_draft_message : function(key){
 
-		var draft_mssgs = localStorage.getItem("ticket-draft-message");
+		var draft_mssgs = sessionStorage.getItem("ticket-draft-message");
 		if (!draft_mssgs)
 			return {};
 
@@ -1527,7 +1527,7 @@ var Tickets = {
 		delete ticketDraft[type];
 
 		draft_mssgs[key] = ticketDraft;
-		localStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
+		sessionStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
 	
 	}
 

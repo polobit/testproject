@@ -64,10 +64,4 @@ public class CSVTicketIdsFetcher extends ITicketIdsFetcher
 		
 		return ticketIDList;
 	}
-
-	@Override
-	public int size()
-	{
-		return ticketsList.size();
-	}
 }

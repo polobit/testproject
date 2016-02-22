@@ -175,8 +175,13 @@ public class TicketNotesUtil
 
 		if (notes.attachments_list != null && notes.attachments_list.size() > 0)
 		{
+			JSONArray attachmentsArray = new JSONArray();
+			
+			for(TicketDocuments document : notes.attachments_list)
+				attachmentsArray.put(document.toString());
+			
 			json.put("attachments_exists", true);
-			json.put("attachments_list", notes.attachments_list);
+			json.put("attachments_list", attachmentsArray);
 		}
 
 		if (notes.created_by == CREATED_BY.AGENT)

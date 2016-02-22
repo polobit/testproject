@@ -411,4 +411,4 @@ function contact_list_starify(el,listView) {
         });
     });
     
-}1
+}
