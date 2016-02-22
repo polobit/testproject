@@ -228,7 +228,10 @@ public class TicketWebhook extends HttpServlet
 						JSONObject fileJSON = attachments.getJSONObject((String) iter.next());
 
 						String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
-						boolean isBase64Encoded = fileJSON.getBoolean("base64");
+						boolean isBase64Encoded = false;
+						
+						if(fileJSON.has("base64"))
+							isBase64Encoded = fileJSON.getBoolean("base64");
 
 						System.out.println("fileName: " + fileName);
 						System.out.println("type: " + fileType);
@@ -295,7 +298,7 @@ public class TicketWebhook extends HttpServlet
 
 						System.out.println("fileName: " + fileName);
 						System.out.println("type: " + fileType);
-						System.out.println("base64: " + fileJSON.getBoolean("base64"));
+						//System.out.println("base64: " + fileJSON.getBoolean("base64"));
 
 						String contentType = URLConnection.guessContentTypeFromName(fileName);
 
