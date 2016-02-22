@@ -116,7 +116,7 @@ public class TicketNotesRest
 			{
 				Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
 
-				if (ticket.assignee_id.getId() != domainUserKey.getId())
+				if (ticket.assignee_id != null && ticket.assignee_id.getId() != domainUserKey.getId())
 				{
 					TicketGroups group = TicketGroupUtil.getTicketGroupById(ticket.group_id.getId());
 
