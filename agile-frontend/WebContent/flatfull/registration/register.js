@@ -1,4 +1,4 @@
-function isDuplicateAccount(url, form, successCallback, errorCallback)
+ function isDuplicateAccount(url, form, successCallback, errorCallback)
 		{		 
 			 $.post(url, {}, function(data){
 				 console.log(data);

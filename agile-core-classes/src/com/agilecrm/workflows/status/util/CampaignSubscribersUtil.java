@@ -61,6 +61,25 @@ public class CampaignSubscribersUtil
 
 	return dao.fetchAll(max, cursor, subscribers, true, false);
     }
+    
+    /**
+     * Returns list of contacts count based on cursor.
+     * 
+     * @param max
+     *            - limit per request
+     * @param cursor
+     *            - Cursor
+     * @param campaignId
+     *            - workflow id.
+     * @return
+     */
+    public static Integer getContactsCountByCampaignId(String campaignId)
+    {
+	Map<String, Object> subscribers = new HashMap<String, Object>();
+	subscribers.put("campaignStatus.campaign_id", campaignId);
+
+	return dao.getCountByProperty(subscribers);
+    }
 
     /**
      * Returns campaign subscribers for the given status
@@ -79,6 +98,25 @@ public class CampaignSubscribersUtil
 	subscribers.put("campaignStatus.status", status);
 
 	return dao.fetchAll(max, cursor, subscribers, true, false);
+    }
+    
+    /**
+     * Returns campaign subscribers count for the given status
+     * 
+     * @param max
+     *            - count
+     * @param cursor
+     *            - cursor offset.
+     * @param status
+     *            - CampaignStatus (Active or Done)
+     * @return List
+     */
+    public static Integer getSubscribersCount(String status)
+    {
+	Map<String, Object> subscribers = new HashMap<String, Object>();
+	subscribers.put("campaignStatus.status", status);
+
+	return dao.getCountByProperty(subscribers);
     }
 
     /**
@@ -113,6 +151,28 @@ public class CampaignSubscribersUtil
 	subscribers.put("emailBounceStatus.campaign_id", campaignId);
 
 	return dao.fetchAll(max, cursor, subscribers, true, false);
+    }
+    
+    /**
+     * Returns bounced contacts count
+     * 
+     * 
+     * @param max
+     *            - count
+     * @param cursor
+     *            - cursor offset.
+     * @param emailBounceType
+     *            - HardBounce or SoftBounce
+     * @return List
+     */
+    public static Integer getBoucedContactsCountByCampaignId(EmailBounceType emailBounceType,
+	    String campaignId)
+    {
+	Map<String, Object> subscribers = new HashMap<String, Object>();
+	subscribers.put("emailBounceStatus.emailBounceType", emailBounceType);
+	subscribers.put("emailBounceStatus.campaign_id", campaignId);
+
+	return dao.getCountByProperty(subscribers);
     }
 
 }

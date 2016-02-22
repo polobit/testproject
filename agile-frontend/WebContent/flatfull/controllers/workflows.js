@@ -204,6 +204,8 @@ var WorkflowsRouter = Backbone.Router
 					isNew : 'true',
 					data :  {"is_disabled" : ""+that.is_disabled},
 					postRenderCallback : function(el){
+						head.load(CSS_PATH + 'css/bootstrap_switch.css', LIB_PATH + 'lib/bootstrapSwitch.js', LIB_PATH + 'lib/desktop-notify-min.js');
+						
 						// Set the name
 						$('#workflow-name', el).val(that.workflow_model.get("name"));
 
@@ -217,6 +219,7 @@ var WorkflowsRouter = Backbone.Router
 
 						if(that.is_disabled)
 								$('#designer-tour', el).addClass("blur").removeClass("anti-blur");
+
 
 						// Init SendVerify Email
 						send_verify_email(el);
@@ -1033,6 +1036,9 @@ var WorkflowsRouter = Backbone.Router
 					{
 						if (!template_ui)
 							return;
+
+						abortCountQueryCall();
+
 						$('#campaign-analysis-tabs').html($(template_ui));
 						var all_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/all-subscribers/' + id,
 								'workflow-other-subscribers');
@@ -1040,6 +1046,7 @@ var WorkflowsRouter = Backbone.Router
 						{
 							if (collection.length === 0)
 								fill_subscribers_slate('subscribers-slate', "all-subscribers");
+
 						} });
 						$("#campaign-analysis-tabs-content").html(all_subscribers_collection.el);
 						// Hide bulk subscribers block
