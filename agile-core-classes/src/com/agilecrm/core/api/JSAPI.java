@@ -148,7 +148,12 @@ public class JSAPI
 
 	    // Get Contact count by email
 	    String email = contact.getContactFieldValue(Contact.EMAIL);
+	    if (email != null)
+	    {
+		System.out.println(email.toLowerCase());
+	    }
 	    int count = ContactUtil.searchContactCountByEmail(email.toLowerCase());
+	    System.out.println("count = " + count);
 	    if (count != 0)
 	    {
 		return JSAPIUtil.generateJSONErrorResponse(Errors.DUPLICATE_CONTACT, email);
