@@ -263,7 +263,9 @@ angular.module('builder.projects', [])
                 	$(".saveLandingPageButton",parent.document).prop("disabled",false);
 					$(".saveLandingPageButton",parent.document).html("Save Page");
 					//window.parent.location.hash = ("landing-page/"+returnDataFormat.pages[0].id);
-					window.parent.location.hash = ("landing-pages");
+					if(typeof projectPageData.id == "undefined") {
+						window.parent.location.hash = ("landing-pages");
+					}
             	}, 3000);
 
 				//alertify.log("Saved successfully.", "success");
