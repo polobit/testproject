@@ -178,7 +178,7 @@ public class TicketNotesUtil
 			JSONArray attachmentsArray = new JSONArray();
 			
 			for(TicketDocuments document : notes.attachments_list)
-				attachmentsArray.put(document.toString());
+				attachmentsArray.put(new JSONObject(document.toString()));
 			
 			json.put("attachments_exists", true);
 			json.put("attachments_list", attachmentsArray);
