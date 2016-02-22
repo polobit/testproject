@@ -90,7 +90,7 @@ public class TicketFiltersRest
 	@PUT
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String updateFilter(TicketFilters filter)
+	public TicketFilters updateFilter(TicketFilters filter)
 	{
 		try
 		{
@@ -98,7 +98,7 @@ public class TicketFiltersRest
 
 			TicketFilters.dao.put(filter);
 
-			return new JSONObject().put("status", "success").toString();
+			return filter;
 		}
 		catch (Exception e)
 		{

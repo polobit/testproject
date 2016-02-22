@@ -578,6 +578,11 @@
  				template : "ticket-label-add-edit",
  				url : "/core/api/tickets/labels",
  				saveCallback : function(){
+
+ 					if(Ticket_Labels.labelsCollection){
+ 						Ticket_Labels.labelsCollection.add(model);
+ 					}
+
  					Backbone.history.navigate( "ticket-labels", { trigger : true });
  				},
                 errorCallback :function(response)
@@ -625,7 +630,15 @@
  				model : label, 
  				isNew : true, 
  				template : "ticket-label-add-edit",
- 				saveCallback : function(){
+ 				saveCallback : function(model){
+
+ 					if(Ticket_Labels.labelsCollection)
+ 					{
+ 						var old_model = Ticket_Labels.labelsCollection.get(model.id);
+
+ 						old_model.set(model, {silent: true});
+ 					}
+
  					Backbone.history.navigate( "ticket-labels", { trigger : true });
  				},
  				url : "/core/api/tickets/labels",
@@ -695,7 +708,12 @@
  				isNew : true,
  				template : "ticket-filter-add-edit",
  				url : "/core/api/tickets/filters",
- 				saveCallback : function(){
+ 				saveCallback : function(model){
+
+ 					if(App_Ticket_Module.ticketFiltersList
+ 						&& App_Ticket_Module.ticketFiltersList.collection)
+ 						App_Ticket_Module.ticketFiltersList.collection.add(model);
+
  					Backbone.history.navigate( "ticket-views", { trigger : true });
  				},
  				postRenderCallback : function(el) {
@@ -738,7 +756,16 @@
  				isNew : true,
  				url : "/core/api/tickets/filters",
  				template : "ticket-filter-add-edit",
- 				saveCallback : function(){
+ 				saveCallback : function(model){
+
+ 					if(App_Ticket_Module.ticketFiltersList
+ 						&& App_Ticket_Module.ticketFiltersList.collection)
+ 					{	
+ 						var old_model = App_Ticket_Module.ticketFiltersList.collection.get(model.id);
+ 						
+ 						old_model.set(model, {silent: true});
+ 					}
+
  					Backbone.history.navigate( "ticket-views", { trigger : true });
  				},
  				postRenderCallback : function(el, data) {
@@ -868,6 +895,14 @@
  					initTicketCannedResponseEvents(el);
  				},
  				saveCallback : function(model){
+
+ 					if(Ticket_Canned_Response.cannedResponseCollection)
+ 					{
+ 						var old_model = Ticket_Canned_Response.cannedResponseCollection.get(model.id);
+
+ 						old_model.set(model, {silent: true});
+ 					}
+
  					Backbone.history.navigate( "canned-responses", { trigger : true });
  				}
  			});

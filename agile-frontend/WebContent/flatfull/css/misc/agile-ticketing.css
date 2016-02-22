@@ -127,7 +127,7 @@ div.cc-emails-st{
 	background-color: white; 
 	border: 1px solid #cfdadd; 
 	border-radius: 2px; 
-	padding: 5px 9px 1px 9px;
+	padding: 3px 9px 1px 9px;
 }
 
 .low-priority{
@@ -514,4 +514,9 @@ div.chosen-container>ul.chosen-choices{
 
 .ticket-input-border-error{
     border-color: #a94442 !important;
+}
+
+form#new-ticket ul.chosen-choices {
+    height: 34px !important;
+    padding-top: 2px !important;
 }
