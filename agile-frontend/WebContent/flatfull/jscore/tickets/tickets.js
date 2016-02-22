@@ -955,7 +955,7 @@ var Tickets = {
 	changeStatus : function(status, callback){
 
 		var url = "/core/api/tickets/change-status?status="+status+"&id=" + Current_Ticket_ID;
-
+        var current_time = new Date().getTime();
 		Tickets.updateModel(url, function(model){
 
 				if(status != "CLOSED"){
@@ -965,9 +965,9 @@ var Tickets = {
 				else{ 
 					$('#ticket_change_sla').attr("disabled","disabled");
 					$(".close-current-ticket").attr("disabled","disabled");
-				    Tickets.updateDataInModelAndCollection(CurrentTicket_ID,{closed_time:current_time});
+				    Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{closed_time:current_time});
 				}
-                Tickets.updateDataInModelAndCollection(CurrentTicket_ID,{status:status});
+                Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{status:status});
 				
 				if(callback)
 					callback(model.toJSON());
@@ -978,9 +978,6 @@ var Tickets = {
 	closeTicket : function(e){
 
 		this.changeStatus("CLOSED", function(){
-            var current_time = new Date().getTime();
-
-             Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{closed_time:current_time});
 			showNotyPopUp('information', "Ticket has been closed", 'bottomRight', 5000);
 
 			var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
