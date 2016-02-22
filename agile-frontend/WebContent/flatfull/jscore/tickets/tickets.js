@@ -1143,7 +1143,7 @@ var Tickets = {
 					}
 					else{
 						$(e.target).removeClass("btn-danger").addClass("btn-default");
-                        message="Ticket unmarked as Spam";
+                        message="Ticket un marked as Spam";
                         spam_value=false;
                     }
                     showNotyPopUp('information',message, 'bottomRight', 5000);
@@ -1494,21 +1494,21 @@ var Tickets = {
 		draft_mssgs[key] = value;
 
 	 	try {
-	 		// Add to sessionStorage
-			sessionStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
+	 		// Add to localstorage
+			localStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
 	    } catch (e) {
 
 	    	draft_mssgs = {
 	    		key:value
 	    	}
-	    	sessionStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
+	    	localStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
 	    }
 
 	},
 
 	get_draft_message : function(key){
 
-		var draft_mssgs = sessionStorage.getItem("ticket-draft-message");
+		var draft_mssgs = localStorage.getItem("ticket-draft-message");
 		if (!draft_mssgs)
 			return {};
 
@@ -1527,7 +1527,7 @@ var Tickets = {
 		delete ticketDraft[type];
 
 		draft_mssgs[key] = ticketDraft;
-		sessionStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
+		localStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
 	
 	}
 
