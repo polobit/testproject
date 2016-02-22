@@ -3046,3 +3046,11 @@ table.hide-head-checkbox th label.i-checks {
 	position: fixed;
 	height: 100vh;
 }
+#addBtn:hover
+{
+  color: black !important;
+}
+#removeBtn:hover
+{
+  color: black !important;
+}
