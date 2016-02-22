@@ -263,6 +263,35 @@ function fill_relation_deal_task(el)
 
 	var template = Handlebars.compile('<li class="tag inline-block v-middle m-r-xs btn btn-xs btn-primary" data="{{id}}">{{name}}</li>');
 
+	var relatedContactsJOSN = json.contacts;
+	$.each(relatedContactsJOSN, function(index, relContact){
+		var rel_contact_exist = true;
+		// If tag already exists returns
+		$.each($('ul.tags', el).children('li'), function(index, tag)
+		{
+			if ($(tag).attr('data') == relContact.id)
+			{
+				rel_contact_exist = false;
+				return;
+			}
+		});
+
+		if(rel_contact_exist)
+		{
+			var tplJSON = {};
+			tplJSON.email_item = relContact.id;
+			if(relContact.type == 'PERSON'){
+				tplJSON.type_item = '#contact/';
+			}
+			else if(relContact.type == 'COMPANY'){
+				tplJSON.type_item = '#company/';
+			}
+			tplJSON.tag_item = relContact.id;
+			tplJSON.item = getContactName(relContact);
+			$('ul.tags', el).append(getTemplate("tag-item-li", tplJSON));
+		}
+	});
+
  	// Adds contact name to tags ul as li element
  	$('.deal_tags',el).html(template({name : deal_name, id : json.id}));
 	
