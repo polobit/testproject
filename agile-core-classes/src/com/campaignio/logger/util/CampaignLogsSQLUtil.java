@@ -301,7 +301,7 @@ public class CampaignLogsSQLUtil
 		JSONArray contactActivities = null;
 		if (log_type == null || ("All_Activities").equals(log_type))
 		{
-			getAllContactActivitiesByPage(domain,cursor,page_size);
+			contactActivities = getAllContactActivitiesByPage(domain,cursor,page_size);
 		}	    
 		else
 		{
