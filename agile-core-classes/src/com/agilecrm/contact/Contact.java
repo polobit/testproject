@@ -252,6 +252,11 @@ public class Contact extends Cursor
     public static final String PHONE = "phone";
     public static final String SKYPEPHONE = "skypePhone";
     public static final String IMAGE = "image";
+    public static final String UTM_SOURCE = "utm_source";
+    public static final String UTM_MEDIUM = "utm_medium";
+    public static final String UTM_CAMPAIGN = "utm_campaign";
+    public static final String UTM_TERM = "utm_term";
+    public static final String UTM_CONTENT = "utm_content";
 
     /**
      * Unsubscribe status
@@ -335,7 +340,9 @@ public class Contact extends Cursor
 	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(EMAIL)
 		|| fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
 		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
-		|| fieldName.equals(NAME) || fieldName.equals(SKYPEPHONE))
+		|| fieldName.equals(NAME) || fieldName.equals(SKYPEPHONE) || fieldName.equals(UTM_SOURCE)
+		|| fieldName.equals(UTM_MEDIUM) || fieldName.equals(UTM_CAMPAIGN) || fieldName.equals(UTM_TERM)
+		|| fieldName.equals(UTM_CONTENT))
 	    type = FieldType.SYSTEM;
 
 	// If field is null then new contact field is added to properties.
@@ -415,7 +422,7 @@ public class Contact extends Cursor
 
 	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
 	    return;
-
+	
 	addToSearch();
 
     }
