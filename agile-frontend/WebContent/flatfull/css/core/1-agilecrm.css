@@ -3191,3 +3191,6 @@ table.hide-head-checkbox th label.i-checks {
 	 border:none!important;
 	  
 }
+#calls-chart svg {
+	overflow: visible!important;
+}
