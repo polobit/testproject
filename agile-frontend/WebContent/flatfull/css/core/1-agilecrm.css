@@ -3190,3 +3190,12 @@ table.hide-head-checkbox th label.i-checks {
 #reports-tab-container .nav-tabs>li{
 	float: none!important;
 }
+
+.reports_tab_content{
+	 width: 920px;
+    left: 200px;
+    top: 71px;
+    position: fixed;
+    z-index: 1000
+
+}

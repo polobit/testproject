@@ -683,7 +683,7 @@ getRepPerformanceLog : function(url) {
 
 },
  
- 	loadReportsTemplate : function(){
+ 	loadReportsTemplate : function(callback){
  		if (!tight_acl.checkPermission('REPORT'))
 					return;
 
@@ -740,8 +740,10 @@ getRepPerformanceLog : function(url) {
 				});*/
 
 					$('[data-toggle="tooltip"]').tooltip();
+					callback();
 
 				}, "#content");
+				
  	}
  };
 

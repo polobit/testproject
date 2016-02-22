@@ -21,8 +21,18 @@ var ReportsRouter = Backbone.Router
 			 */
 			reports : function()
 			{
-				report_utility.loadReportsTemplate();
-
+				report_utility.loadReportsTemplate(function(){
+				var tab_active=$('.nav-tabs li:first-child>a').attr('href').substring(1);
+				$.each($('.tab-content .tab-pane'),function()
+				{
+					if($(this).attr('id')==tab_active)
+					{
+						var route=$('.col-md-3:first-child .btn-default',this).attr('href').substring(1);
+						Backbone.history.loadUrl(route);
+						return;
+					}
+				});
+			});
 			},
 
 			/**
@@ -172,7 +182,7 @@ var ReportsRouter = Backbone.Router
 			 */
 			emailReports : function()
 			{
-				report_utility.loadReportsTemplate();
+				report_utility.loadReportsTemplate(function(){
 				//$("#content").html("<div id='reports-listerners-container'></div>");
 				this.reports = new Base_Collection_View({ url : '/core/api/reports', restKey : "reports", templateKey : "report", individual_tag_name : 'tr',
 					postRenderCallback : function()
@@ -182,6 +192,7 @@ var ReportsRouter = Backbone.Router
 
 				this.reports.collection.fetch();
 				$(".reports-Container").html(this.reports.render().el);
+			});
 
 			},
 
@@ -289,7 +300,7 @@ var ReportsRouter = Backbone.Router
 			 */
 			reportInstantResults : function(id, report)
 			{
-				report_utility.loadReportsTemplate();
+				report_utility.loadReportsTemplate(function(){
 				if (!report)
 				{
 					// If reports view is not defined, navigates to reports
@@ -337,6 +348,7 @@ var ReportsRouter = Backbone.Router
 					report_results_view.collection.fetch();
 				});
 				$(".reports-Container").html(report_results_view.render().el);
+				});
 			},
 
 			/**
@@ -348,7 +360,7 @@ var ReportsRouter = Backbone.Router
 			showFunnelReport : function(tags)
 			{
 				hideTransitionBar();
-				report_utility.loadReportsTemplate();
+				report_utility.loadReportsTemplate(function(){
 				initReportLibs(function()
 				{
 					getTemplate("report-funnel", {}, undefined, function(template_ui)
@@ -376,6 +388,7 @@ var ReportsRouter = Backbone.Router
 					}, ".reports-Container");
 
 				});
+				});
 			},
 
 			/**
@@ -387,7 +400,7 @@ var ReportsRouter = Backbone.Router
 			showGrowthReport : function(tags)
 			{
 				hideTransitionBar();
-				report_utility.loadReportsTemplate();
+				report_utility.loadReportsTemplate(function(){
 				initReportLibs(function()
 
 				{
@@ -415,6 +428,7 @@ var ReportsRouter = Backbone.Router
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
 				highlightDatepickerOption();
+			});
 			},
 			
 			
@@ -428,7 +442,7 @@ var ReportsRouter = Backbone.Router
 			showCallsReport : function(reportType)
 			{
 				hideTransitionBar();
-				report_utility.loadReportsTemplate();
+				report_utility.loadReportsTemplate(function(){
 				initReportLibs(function()
 
 				{
@@ -511,7 +525,7 @@ var ReportsRouter = Backbone.Router
 
 					}, ".reports-Container");
 				});
-				
+				});
 			},
 			
 			/**
@@ -521,7 +535,7 @@ var ReportsRouter = Backbone.Router
 
 			{
 				hideTransitionBar();
-				report_utility.loadReportsTemplate();
+				report_utility.loadReportsTemplate(function(){
 				initReportLibs(function()
 						{
 					getTemplate("report-revenue-user", {}, undefined, function(template_ui){
@@ -552,6 +566,7 @@ var ReportsRouter = Backbone.Router
 				}, ".reports-Container");
 
 						});
+			});
 			},
 
 
@@ -565,7 +580,7 @@ var ReportsRouter = Backbone.Router
 			showRatioReport : function(tag1, tag2)
 			{
 
-				report_utility.loadReportsTemplate();
+				report_utility.loadReportsTemplate(function(){
 				initReportLibs(function()
 
 				{
@@ -593,7 +608,7 @@ var ReportsRouter = Backbone.Router
 					}, ".reports-Container");
 
 				});
-
+				});
 
 			},
 
@@ -602,7 +617,7 @@ var ReportsRouter = Backbone.Router
 			 */
 			reportCharts : function(type)
 			{
-				report_utility.loadReportsTemplate();
+				report_utility.loadReportsTemplate(function(){
 				var template_name = "report-growth";
 
 				if (type)
@@ -630,11 +645,12 @@ var ReportsRouter = Backbone.Router
 				});
 
 				}, ".reports-Container");
+			});
 			},
 
 			showIncomingDeals : function(){
 				hideTransitionBar();
-				report_utility.loadReportsTemplate();
+				report_utility.loadReportsTemplate(function(){
 				initReportLibs(function()
 						{
 
@@ -651,12 +667,13 @@ var ReportsRouter = Backbone.Router
 							});
 						}, ".reports-Container");
 					});
+			});
 			},
 
 			showDealsLossReason : function()
 			{
 				hideTransitionBar();
-				report_utility.loadReportsTemplate();
+				report_utility.loadReportsTemplate(function(){
 				initReportLibs(function()
 				{
 
@@ -675,12 +692,13 @@ var ReportsRouter = Backbone.Router
 					$("#reportsmenu").addClass("active");
 				}, ".reports-Container");
 			});
+			});
 			},
 
 			showDealsWonChart : function()
 			{
 				hideTransitionBar();
-				report_utility.loadReportsTemplate();
+				report_utility.loadReportsTemplate(function(){
 			initReportLibs(function()
 				{
 
@@ -700,58 +718,64 @@ var ReportsRouter = Backbone.Router
 				$("#reportsmenu").addClass("active");
 				}, ".reports-Container");
 			  });	
+		});
 },
 
 			showrevenuegraph : function()
 			{
 						hideTransitionBar();
+						report_utility.loadReportsTemplate(function(){
 				initReportLibs(function()
 				{
 							// Load Reports Template
 						getTemplate("report-sales", {}, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
-						$('#content').html($(template_ui));	
+						$('.reports-Container').html($(template_ui));	
 							// Set the name
 
 							initSalesCharts(function()
 							{
 								showsalesReportGraphs();
 					});
-						}, "#content");
+						}, ".reports-Container");
 					});
+			});
 			},
 
 			showComparisonReport : function()
 			{
 					hideTransitionBar();
+					report_utility.loadReportsTemplate(function(){
 				initReportLibs(function()
 				{
 							// Load Reports Template
 						getTemplate("report-comparison", {}, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
-						$('#content').html($(template_ui));	
+						$('.reports-Container').html($(template_ui));	
 							// Set the name
 
 							initComparisonReports(function()
 							{
 								showComparisonReportGraph();
 					});
-						}, "#content");
+						}, ".reports-Container");
 					});
+			});
 			},
 			
 			showRepPerformance : function()
 			{
 				hideTransitionBar();
+				report_utility.loadReportsTemplate(function(){
 				initReportLibs(function()
 				{
 							// Load Reports Template
 						getTemplate("report-user-performance", {}, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
-						$('#content').html($(template_ui));	
+						$('.reports-Container').html($(template_ui));	
 							// Set the name
 
 						initRepReports(function()
@@ -759,8 +783,9 @@ var ReportsRouter = Backbone.Router
 								showRepPerformanceReport();
 								
 					});
-						}, "#content");
+						}, ".reports-Container");
 					});
+			});
 			},
 			
 });
