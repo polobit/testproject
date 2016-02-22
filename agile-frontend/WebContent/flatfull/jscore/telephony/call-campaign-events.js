@@ -25,6 +25,25 @@ $(function(){
 			
 	});  
 	
+	// This method is called when the add-note modal is closed .....
+	//This will check if the campaign is started and need to dial the next call....
+		$('#logCallModal').on('hidden.bs.modal', function (e) {
+			console.log(CALL_CAMPAIGN.start +"  closeTwilioNoty "+CALL_CAMPAIGN.call_from_campaign);
+				
+			if(CALL_CAMPAIGN.start){
+				if(CALL_CAMPAIGN.call_status == "DISCONNECTED"){
+					  CALL_CAMPAIGN.state = "START";
+					  if(CALL_CAMPAIGN.autodial){
+						  dialNextCallAutomatically();
+					  }else{
+						  dialNextCallManually();
+					  }
+				}
+			}	
+				
+		});  
+		
+	
 //This method is called when the personmodal is closed....
 //This will check if the campaign is started and need to dial the next call....
 	$('#personModal').on('hidden.bs.modal', function (e) {
@@ -376,9 +395,10 @@ $(function(){
 				// Show add note modal with current contact from call
 				// noty
 				var el = $("#noteForm");
-				$('.tags', el)
-						.html(
-								'<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="' + CALL_CAMPAIGN.current_contact.id + '">' + CALL_CAMPAIGN.current_contact_name + '</li>');
+				var template = Handlebars.compile('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="{{id}}">{{name}}</li>');
+			 	// Adds contact name to tags ul as li element
+				$('.tags',el).html(template({name : CALL_CAMPAIGN.current_contact_name, id : CALL_CAMPAIGN.current_contact.id}));
+
 				$("#noteForm").find("#description").focus();
 				$('#noteModal').modal('show');
 				agile_type_ahead("note_related_to", el, contacts_typeahead);

@@ -47,15 +47,18 @@ var CONTACTS_HARD_RELOAD = false;
 function bulkActivitiesNoty(type, message, position) {
 	CONTACTS_HARD_RELOAD = true;
 	
+	message = message.message;
+	message = Handlebars.compile("{{message}}")({message : message});
+
 	// if no position, default bottomRight
 	if(!position)
 	{
-		showNotyPopUp(type, message.message, "bottomRight")
+		showNotyPopUp(type, message, "bottomRight")
 		return;
 	}
 		
 	// shows noty in given position
-	showNotyPopUp(type, message.message, position)
+	showNotyPopUp(type, message, position)
 }
 
 /**

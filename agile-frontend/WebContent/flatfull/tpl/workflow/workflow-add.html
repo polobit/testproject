@@ -58,17 +58,25 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 														<i class="fa fa-clipboard" style="width: 20px;"></i> Create a Copy
 													</a>
 												</li>
+												<li>
+													<a href="javascript:void(0)" id="share-campaign" onclick="shareCampaign()" class="share-Campaign">
+														<i class="fa fa-share-alt" style="width: 20px;"></i> Share with
+													</a>
+												</li>
 											</ul>
-                           				</div>
-									<a href="#" data = "{{is_disabled}}" class="btn btn-default btn-sm m-r-sm btn-addon pull-right is-disabled-top" style="color:white">
-											{{#if_equals "true" is_disabled}}
-											<div class="inline" style="vertical-align: middle;">&nbsp;Enable Campaign</div>
-											{{else}}
-											<div class="inline" style="vertical-align: middle;">&nbsp;Disable Campaign</div>
-											{{/if_equals}}
-									</a>
-                            		{{/if}}
-								</div>
+                           				</div>                                        
+                  <div id="disable-switch" data = "{{is_disabled}}" class="is-disabled-top">
+							<label class="r-switch m-t-xs m-r pull-right">
+                          		{{#if_equals "true" is_disabled}}
+                          			<input type="checkbox" id="disable-workflow" class="left"  name="disable-workflow" checked="checked">
+                         	 	{{else}}
+                          				<input type="checkbox" id="disable-workflow" class="left"  name="disable-workflow">
+                         		 {{/if_equals}}
+						  		 <i></i>
+							</label> 
+					</div>                     
+                       {{/if}}
+							</div>
                            		<div class="save-workflow-img right m-r-xs m-t-sm pos-rlt inline-block"></div>
 							</div>
 						</div>
@@ -79,12 +87,12 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 					<br />
                     <br />
                     <div>
-						<a href="#" class="text-info" id="workflow-unsubscribe-option" data-toggle="collapse" data-target="#workflow-unsubscribe-block">
-							<span><i class="icon-plus"></i></span> Manage Unsubscription
+						<a href="#" class="text-info" id="workflow-unsubscribe-option">
+							<i class="icon-plus"></i> Manage Unsubscription
 						</a>
 					</div>
 					<br/>
-					<div class="collapse" id="workflow-unsubscribe-block">
+					<div id="workflow-unsubscribe-block" style="display:none">
 						<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
@@ -159,6 +167,11 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 												<li>
 													<a href="#" id="duplicate-workflow-top">
 														<i class="fa fa-clipboard"></i> Create a Copy
+													</a>
+												</li>
+												<li>
+													<a href="javascript:void(0)" id="share-campaign" onclick="shareCampaign()" class="share-Campaign">
+														<i class="fa fa-share-alt" style="width: 20px;"></i> Share with
 													</a>
 												</li>
 											</ul>

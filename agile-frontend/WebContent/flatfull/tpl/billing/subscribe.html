@@ -617,6 +617,16 @@ users.
 {{#if billingData}}
 <div class="row">
 	<div class="col-md-12">
+	{{#ifCond billingData.accountBalance "lessthan" "0"}}
+		<div class="panel panel-default wrapper-md">
+			<p class="b-b b-light p-b-xs">Credit<i class="icon-question p-l-xs" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Your credit balance will be utilized in next billing cycle."></i>
+
+			</p>
+		<div>Credit Balance: $<span id="credit_amount">{{getCredit billingData.accountBalance}}</span></div>
+		<div class="clearfix"></div>
+
+		</div>
+	{{/ifCond}}
 {{#check_plan "FREE"}}
         <div class="panel panel-default wrapper-md m-t-xl">
 {{else}}
@@ -635,6 +645,7 @@ users.
 		<div class="clearfix"></div>
 
 		</div>
+		
 </div>
  
 </div>
@@ -642,15 +653,9 @@ users.
 </div> <!-- End of col-md-3 -->
 
 {{#if billingData}}
-	{{#if this.freePlan}}
-		{{#if this.freeEmailPack}}
-				<div class="col-md-3 hide">
-		{{else}}
-			<div class="col-md-3">
-		{{/if}}
-	{{else}}
+	
 		<div class="col-md-3">
-	{{/if}}
+	
 		<div class="panel panel-default wrapper-md m-b-none">
 		<p class="b-b b-light p-b-xs">Invoices<a href="#invoice-details" style="font-size: 12px;" class="text-info pull-right">More</a></p>
 		<div id="recent_invoice">

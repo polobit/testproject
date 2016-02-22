@@ -466,8 +466,11 @@ function fill_relation_task(el)
 
 	var json = taskDetailView.toJSON();
 	var task_name = json.name;
-	$('.tags', el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + task_name + '</li>');
 
+	var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+
+ 	// Adds contact name to tags ul as li element
+ 	$('.tags', el).html(template({name : task_name, id : json.id}));
 }
 
 

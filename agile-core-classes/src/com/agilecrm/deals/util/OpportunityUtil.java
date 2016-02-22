@@ -2211,6 +2211,7 @@ public class OpportunityUtil
 		list2.addAll(list2_temp);
 		for (Opportunity list_it : list)
 		{
+			if(list2.size()>0){
 		    for (Opportunity list_it2 : list2)
 		    {
 			if (!list_it.id.equals(list_it2.id))
@@ -2227,6 +2228,9 @@ public class OpportunityUtil
 		    if (flag)
 			list2.add(list_it);
 		}
+			else
+				list2.add(list_it);
+		}
 	    }
 	    else
 	    {
@@ -2240,6 +2244,7 @@ public class OpportunityUtil
 		list2.addAll(list2_temp);
 		for (Opportunity list_it : list)
 		{
+			if(list2.size()>0){
 		    for (Opportunity list_it2 : list2)
 		    {
 			if (!list_it.id.equals(list_it2.id))
@@ -2255,6 +2260,9 @@ public class OpportunityUtil
 		    }
 		    if (flag)
 			list2.add(list_it);
+			}
+			else
+				list2.add(list_it);
 		}
 	    }
 	}
@@ -2276,6 +2284,7 @@ public class OpportunityUtil
 		    list2.addAll(list2_temp);
 		    for (Opportunity list_it : list)
 		    {
+		    	if(list2.size()>0){
 			for (Opportunity list_it2 : list2)
 			{
 			    if (!list_it.id.equals(list_it2.id))
@@ -2292,6 +2301,10 @@ public class OpportunityUtil
 			if (flag)
 			    list2.add(list_it);
 		    }
+		    	 else
+						list2.add(list_it);
+		    }
+		   
 		}
 		else
 		{
@@ -2307,6 +2320,7 @@ public class OpportunityUtil
 		    list2.addAll(list2_temp);
 		    for (Opportunity list_it : list)
 		    {
+		    	if(list2.size()>0){
 			for (Opportunity list_it2 : list2)
 			{
 			    if (!list_it.id.equals(list_it2.id))
@@ -2322,6 +2336,9 @@ public class OpportunityUtil
 			}
 			if (flag)
 			    list2.add(list_it);
+		    }
+		    	 else
+						list2.add(list_it);
 		    }
 		}
 	    }

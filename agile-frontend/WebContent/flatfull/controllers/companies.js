@@ -202,6 +202,8 @@ var CompaniesRouter = Backbone.Router
 
 				company_list_view.init(el);
 
+				setUpCompanySortFilters(el);
+
 				abortCountQueryCall();
 				
 				if(is_lhs_filter) {
@@ -337,7 +339,9 @@ var CompaniesRouter = Backbone.Router
 				}, error : function(data, response)
 				{
 					if (response && response.status == '403')
-						$("#content").html("You do not have permission to view this Company.");
+
+						$("#content").html("<div class='well'> <div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8'> Sorry, you do not have permission to view this Company.</h4><div class='text'style='opacity:0.6'>Please contact your admin or account owner to enable this option.</div></div></div></div>");
+
 				} });
 
 				return;
@@ -412,10 +416,12 @@ var CompaniesRouter = Backbone.Router
 				}, '<option value="CUSTOM_{{field_label}}">{{field_label}}</option>', true, el);
 			}, saveCallback : function(data)
 			{
-				COMPANIES_HARD_RELOAD = true;
-				App_Companies.navigate("companies", { trigger : true });
-				App_Companies.companyViewModel = data.toJSON();
 
+				COMPANIES_HARD_RELOAD = true;
+				if(App_Companies.companyViewModel)
+					App_Companies.companyViewModel["fields_set"] = data.fields_set;
+
+				App_Companies.navigate("companies", { trigger : true });
 			} });
 
 		$("#content").html(companyView.render().el);

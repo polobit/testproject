@@ -250,6 +250,7 @@ var SubscribeRouter = Backbone.Router
 					_data = that.subscribe_plan.model.toJSON();
 
 					initializeSubscriptionListeners()
+					$('[data-toggle="tooltip"]').tooltip();
 
 					var _window = window;
 					// Setup account statistics
