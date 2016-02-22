@@ -647,7 +647,7 @@ var Tickets = {
 			contentType: 'application/x-www-form-urlencoded',
 			accept: 'application/json',
 			success : function(response){
-				Tickets.updateDataInModelAndCollection(Current_Ticket_ID, modelData);
+				Tickets.updateDataInModelAndCollection(Current_Ticket_ID, response);
 				if(callback)
 					callback(response);
 				
