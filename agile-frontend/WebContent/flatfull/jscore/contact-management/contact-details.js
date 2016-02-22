@@ -276,7 +276,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 
     	'click #contacts-inner-tabs #next' : 'tabViewNext',
     	'click #contacts-inner-tabs #prev' : 'tabViewPrev',
-
+    	'click #contact_edit_text '  :'togglehiddenfield',
     	/** Company events **/
     	'click #contactDetailsTab a[href="#company-contacts"]' : 'listCompanyContacts',
     	'click #contactDetailsTab a[href="#company-deals"]' : 'listCompanyDeals',
@@ -947,6 +947,14 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		e.preventDefault();
 		contact_details_documentandtasks_actions.add_selected_document(e);
 
+	},
+/*
+show and hide the input for editing the contact name and saving that
+*/
+	togglehiddenfield :function(e)
+	{	
+		$("#contact_edit_text").toggleClass("hidden");
+		$('#Contact-input').toggleClass("hidden");
 	},
 
 	tabViewNext :  function(e){
