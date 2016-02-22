@@ -189,7 +189,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			individual_tag_name : "div", sortKey : "name", postRenderCallback : function(el)
 			{
 				$('i').tooltip();
-				$("#admin-settings-users-model-list").append("<div class='p-b col-sm-6 '><div class='b r-5x p-sm bg-white' style='height: 121px;'><center><img class='img-inital r r-2x' style='height:62px;width:62px;' src='{{CURRENT_USER_PREFS.pic}}'  /><br><a href='#users-add' class='btn btn-sm btn-primary btn-addon admin-user-adduser' id='addUser'> Add User</a></center></div>");
+				$("#admin-settings-users-model-list").append("<div class='p-b col-sm-6 '><div class='b r-5x p-sm bg-white' style='height: 121px;'><center><img class='img-inital r r-2x' style='height:62px;width:62px;margin-bottom:2px;' src='"+CURRENT_USER_PREFS.pic+"'  /><br><a href='#users-add' class='btn btn-sm btn-primary btn-addon admin-user-adduser' id='addUser'> Add User</a></center></div>");
 
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{
