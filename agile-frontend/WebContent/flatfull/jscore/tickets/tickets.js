@@ -565,7 +565,7 @@ var Tickets = {
 		var that = e.target;
 
 		var assigneeId = $(that).val();
-		console.log(assigneeId);
+		//console.log(assigneeId);
 
 	    var groupId = $(that.options[that.selectedIndex]).closest('optgroup').attr('data-group-id');
 
@@ -573,8 +573,14 @@ var Tickets = {
 	    	groupId = $(that).val();
 	    	assigneeId = "";
 	    }
-       
-       	Tickets.sendReqToChangeAssignee(assigneeId, groupId, App_Ticket_Module.ticketView.model.toJSON(), function(data){
+       	
+       	var ticketJSON = App_Ticket_Module.ticketView.model.toJSON();
+
+       	if(ticketJSON.assigneeID == assigneeId 
+       		&& ticketJSON.groupID == groupId)
+       		return;
+
+       	Tickets.sendReqToChangeAssignee(assigneeId, groupId, ticketJSON, function(data){
             
             var modelData = data;
 

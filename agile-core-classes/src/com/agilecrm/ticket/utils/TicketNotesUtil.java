@@ -125,10 +125,10 @@ public class TicketNotesUtil
 		json.put("tracking_img", appendTrackingImage(ticket.id, notesList.get(0).id));
 
 		String companyName = AccountPrefsUtil.getAccountPrefs().company_name;
-		
-		if(companyName != null)
+
+		if (companyName != null)
 			json.put("company_name", companyName);
-		
+
 		System.out.println("notesList.get(0).id): " + notesList.get(0).id);
 
 		JSONArray notesArray = new JSONArray();
@@ -169,7 +169,7 @@ public class TicketNotesUtil
 		JSONObject json = new JSONObject();
 
 		json.put("created_time", DateUtil.getCalendarString(notes.created_time, "MMM d, h:mm a (z)", ""));
-		
+
 		json.put("plain_text", notes.plain_text);
 		json.put("html_text", TicketNotesUtil.parseHtmlText(notes.html_text));
 
@@ -431,5 +431,32 @@ public class TicketNotesUtil
 		String s = document.html().replaceAll("\\\\n", "\n");
 
 		return Jsoup.clean(s, "", Whitelist.none(), new Document.OutputSettings().prettyPrint(false));
+	}
+
+	/** Example */
+	public static void main(String[] args) throws Exception
+	{
+		JSONArray notesArray = new JSONArray();
+		
+		JSONObject json = new JSONObject();
+		json.put("img_url", "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/11.png");
+		json.put("user_name", "Sasi");
+		json.put("plain_text", "fdsafd asf dsa f dasf das ");
+
+		JSONArray attachmentsArray = new JSONArray();
+		JSONObject attchments = new JSONObject();
+		json.put("url", "attachemnt_url");
+		json.put("name", "file.pdf");
+		
+		attachmentsArray.put(attchments);
+		
+		json.put("attachments_exists", true);
+		json.put("attachments_list", attachmentsArray);
+		
+		notesArray.put(json);
+		
+		String template = "{{#note_json_array}}{{img_url}}, {{user_name}} {{plain_text}} {{#attachments_exists}}{{#attachments_list}} {{url}} {{name}} {{/attachments_list}}{{/attachments_exists}}{{/note_json_array}}";
+		
+		System.out.println(MustacheUtil.compile(template, new JSONObject().put("note_json_array", notesArray)));
 	}
 }

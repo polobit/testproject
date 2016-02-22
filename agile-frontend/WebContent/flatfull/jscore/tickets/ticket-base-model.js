@@ -441,5 +441,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		$('div.new-contact-row').toggle();
 		$('div.search-contact-row').toggle();
+
+		$('#email_input').val($('#requester_email').val());
 	}
 });

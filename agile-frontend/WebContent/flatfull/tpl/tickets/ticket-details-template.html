@@ -49,7 +49,7 @@
                       <div class="inline">
                         <div class="thumb-sm">
                           {{#if contact.properties}}
-                            <img src="{{nameAvatar contact.properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{requester_name}}">
+                            <img src="{{nameAvatar contact.properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}">
                           {{else}}
                             <img src="{{getGravatarFromEmail requester_email 24}}"  class="r-5x" onerror="image_error(this);" _data-name="{{requester_name}}">
                           {{/if}}
@@ -380,7 +380,7 @@
           <button type="button" class="btn btn-default btn-sm reply-btn {{#if_equals reply_type "reply"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="reply">Reply
             {{#if_equals reply_type "reply"}}<span class="arrow bottom arrow-light" style="top:100%;"></span>{{/if_equals}}
           </button>
-          <button type="button" class="btn btn-default btn-sm reply-btn {{#if_equals reply_type "comment"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="comment">Comment
+          <button type="button" class="btn btn-default btn-sm reply-btn {{#if_equals reply_type "comment"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="comment">Notes
             {{#if_equals reply_type "comment"}}<span class="arrow bottom arrow-light" style="top:100%;"></span>{{/if_equals}}
           </button>
 
@@ -407,8 +407,8 @@
 
                     {{#if_equals reply_type "forward"}}
                      <ul class="forward-emails m-n p-a-sm b-a p-xs p-b-none r" name="forward_emails">
-                          <li class="tag m-r-xs m-b-xs inline-block">
-                             <input type="text" id="forward_email_input" name="email" class="b-n" placeholder="To Email" autocomplete="off"/>
+                          <li class="tag m-r-xs m-b-xs inline-block w-full">
+                             <input type="text" id="forward_email_input" name="email" class="b-n w-full" placeholder="To Email" autocomplete="off"/>
                           </li>
                       </ul> 
                     {{/if_equals}}
@@ -438,10 +438,10 @@
                       {{#if_equals reply_type "comment"}} 
 
                       <div class="btn-group dropdown p-none">
-                        <button class="btn btn-gray btn-sm send-reply private">Add Comment</button>
+                        <button class="btn btn-gray btn-sm send-reply private">Add Notes</button>
                         <button class="btn btn-gray btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                          <li><a href="javascript:void(0);" class="send-reply private close-ticket">Add Comment & Close Ticket</a></li>
+                          <li><a href="javascript:void(0);" class="send-reply private close-ticket">Add Notes & Close Ticket</a></li>
                         </ul>
                       </div> 
                       {{/if_equals}} 
