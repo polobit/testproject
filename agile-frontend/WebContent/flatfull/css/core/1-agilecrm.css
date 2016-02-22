@@ -3186,3 +3186,16 @@ table.hide-head-checkbox th label.i-checks {
 .contact_popover .arrow{
 	display: none;
 }
+#scorebox{
+	text-align:center;
+	right: 5px;
+	width: 51px;
+	padding-bottom: 0;padding-left: 2px;
+	padding-right: 2px;padding-top: 1px;
+	border-top-width: 1px;
+	margin-top: 6px;
+	top: -3px;
+	height: 28px;
+	left:39px;
+	font-size: 14px;
+}
