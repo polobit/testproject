@@ -75,6 +75,7 @@
 </script>
 
 <script type="text/html" id="report-categories-template">
+<div id='reports-listerners-container'>
 <div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
@@ -88,7 +89,7 @@
     </div>
 </div>
 </div>
-<div class="wrapper-md p-t-none">
+<div class="p-t-none">
 
 <div class="hbox hbox-auto-xs hbox-auto-sm bg-light agile-tab">
 <div class="col w b-r">
@@ -121,26 +122,26 @@
        <ul class="nav nav-tabs" id="subTab">
                                             {{#hasMenuScope 'DEALS'}}
                                             <li role="presentation" data-tab="6" id="dealstab">
-                                                <a href="#deals-tab" role="tab" >Deals</a>
+                                                <a href="#deals-tab" role="tab" data-toggle="tab">Deals</a>
                                             </li>
                                             {{/hasMenuScope}}
                                              <li role="presentation" data-tab="5" id="callstab">
-                                                <a href="#calls-tab"   role="tab"  >Calls</a>
+                                                <a href="#calls-tab"   role="tab" data-toggle="tab" >Calls</a>
                                             </li>
                                             {{#hasMenuScope 'ACTIVITY'}}
                                              <li role="presentation" data-tab="4">
-                                                <a href="#activities-tab"  role="tab"  >Activities</a>
+                                                <a href="#activities-tab"  role="tab" data-toggle="tab" >Activities</a>
                                             </li>
                                             {{/hasMenuScope}}
                                               <li role="presentation" data-tab="2">
-                                                <a href="#graph-tab"  role="tab" >Growth Graphs</a>
+                                                <a href="#graph-tab"  role="tab" data-toggle="tab">Growth Graphs</a>
                                             </li>
                                             <li role="presentation"  data-tab="1">
-                                                <a href="#email-tab" role="tab"  >Reports via Email</a>
+                                                <a href="#email-tab" role="tab" data-toggle="tab" >Reports via Email</a>
                                             </li>
                                           
                                              <li role="presentation" data-tab="3">
-                                                <a href="#campaign-tab" role="tab" >Campaigns</a>
+                                                <a href="#campaign-tab" role="tab" data-toggle="tab">Campaigns</a>
                                             </li>
 
 </ul>
@@ -700,11 +701,12 @@
 
 </div>
 </div>
-<div class="tab-content wrapper-md">
+<div class="tab-content reports-Container">
             
         </div>
 </div>
 </div>
 </div>
 
+</div>
 </script>

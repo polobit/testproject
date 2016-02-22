@@ -681,7 +681,68 @@ getRepPerformanceLog : function(url) {
 		});
 	
 
-}
+},
+ 
+ 	loadReportsTemplate : function(){
+ 		if (!tight_acl.checkPermission('REPORT'))
+					return;
+
+				//$("#content").html("<div id='reports-listerners-container'></div>");
+				getTemplate('report-categories', {}, undefined, function(template_ui)
+				{
+					if (!template_ui)
+						return;
+					$('#content').html($(template_ui));
+
+						preloadImages([
+							'flatfull/img/reports_images/Growth-graph.png',
+							'flatfull/img/reports_images/ratio.png',
+							'flatfull/img/reports_images/funnel-graph.png',
+							'flatfull/img/reports_images/Campaign-stats.png',
+							'flatfull/img/reports_images/Calls-By-User.png',
+							'flatfull/img/reports_images/averageofcall.png',
+							'flatfull/img/reports_images/user-activities-call.png',
+							'flatfull/img/reports_images/Incoming-Deals.png',
+							'flatfull/img/reports_images/Lost-Deal-Analysis.png',
+							'flatfull/img/reports_images/Revenue.png',
+							'flatfull/img/reports_images/Sales-forecast.png',
+							'flatfull/img/reports_images/User-reports.png',
+							'flatfull/img/reports_images/Call-Outcomes.png',
+							'flatfull/img/reports_images/contact.png',
+							'flatfull/img/reports_images/user-activities.png',
+							'flatfull/img/reports_images/Daily-reports.png',
+							'flatfull/img/reports_images/Call_Report_Time.png',
+							'flatfull/img/reports_images/Rep_Performance.png',
+							'flatfull/img/reports_images/Comparison_Report.png',
+							]);
+				initializeReportsListeners();
+				hideTransitionBar();
+				$(".active").removeClass("active");
+				$("#reportsmenu").addClass("active");
+				
+				/*var reportsTab = _agile_get_prefs("reports_tab");
+				if(!reportsTab || reportsTab == null) {
+					var tabTemp;
+					if(islocalStorageHasSpace()){
+						if($("#dealstab").length>0)
+							tabTemp="deals-tab";
+						else
+							tabTemp="calls-tab";
+							_agile_set_prefs('reports_tab', tabTemp);	
+					}
+					reportsTab = tabTemp;
+				}*/
+				/*$('#reports-tab-container a[href="#'+reportsTab+'"]').tab('show');
+				$("#reports-tab-container ul li").off("click");
+				$("#reports-tab-container").on("click",".tab-container ul li",function(){
+					var temp = $(this).find("a").attr("href").split("#");
+					_agile_set_prefs('reports_tab', temp[1]);
+				});*/
+
+					$('[data-toggle="tooltip"]').tooltip();
+
+				}, "#content");
+ 	}
  };
 
 
