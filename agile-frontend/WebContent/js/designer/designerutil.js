@@ -655,6 +655,9 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler) {
 	});
 
 	console.log(selectoption);
+	if(uiFieldDefinition.invisible)
+		selectoption = $(selectoption).attr("invisible", uiFieldDefinition.invisible);
+
 	return selectoption;
 }
 
@@ -839,6 +842,14 @@ function insertSelectedOption(ele ,target_id)
 	var text = $('#new_field').val();
 	if(text && text.indexOf("{{")!=-1)
 	$('#new_field').val($(ele).find(':selected').val());
+
+}
+
+function insertSelectedOption1(ele ,target_id)
+{
+	var text = $(target_id).val();
+	
+		$(target_id).val($(ele).find(':selected').val());
 
 }
 	// function remove_property(ele)

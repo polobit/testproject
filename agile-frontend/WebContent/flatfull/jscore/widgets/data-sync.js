@@ -161,9 +161,21 @@ var DATA_SYNC_FORCE_FETCH=false;
 fetches the model from collection if collection exists
 else fetchs colection and returns model
 */
-function getSyncModelFromName(name, callback){
+function getSyncModelFromName(name, callback,modelfetch){
 
        // Checks force fetch
+       if(modelfetch && !DATA_SYNC_FORCE_FETCH){
+       	var sync_base_model=Backbone.Model.extend(
+					{
+						url : '/core/api/contactprefs/'+name
+					});
+       	var base_model=new sync_base_model();
+       	base_model.fetch({ success : function(data){
+       	App_Datasync.agile_sync_collection_view.collection.get(data.toJSON().id).set('inProgress',data.toJSON().inProgress);
+       	 callback(getModalfromName(App_Datasync.agile_sync_collection_view.collection.toJSON(), name));
+       }});
+       	return;
+       }
        if(DATA_SYNC_FORCE_FETCH){
        		DATA_SYNC_FORCE_FETCH=false;
 

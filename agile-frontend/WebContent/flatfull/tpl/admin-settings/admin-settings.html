@@ -3,7 +3,7 @@
 <!-- Check whether DomainUSer has admin Privileges -->
         <div class="bg-light lter b-b wrapper-md">
             <h1 class="pull-left font-thin h3">Admin Settings</h1>
-<a href="#subscribe" class="pull-right text-lg  text-info">Plan & Upgrade</a>
+<a href="#subscribe" class="pull-right text-lg  text-info {{#is_mobile}} block {{/is_mobile}}">Plan & Upgrade</a>
 <div class="clearfix"></div>    
     </div>
    
@@ -11,9 +11,22 @@
     <!-- <div class="app-content-full  h-full enable-full-height"> -->
 	<div class="hbox hbox-auto-xs hbox-auto-sm bg-light agile-tab">
 	<div class="col w b-r">
-    <div class="vbox">
-      <div class="row-row">
-		<div id="AdminPrefsTab" class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+     <div class={{#is_mobile}}"text-center  vbox"{{else}}"vbox"{{/is_mobile}} {{#is_mobile}} style="min-height:auto; {{/is_mobile}}">
+      <div class="row-row {{#is_mobile}} admin-setting-icon {{/is_mobile}}">
+		<div id="AdminPrefsTab" class="list-group list-group-lg no-radius no-border no-bg m-b-none 
+		{{#is_mobile}} bg-white w-full p-l {{/is_mobile}}">
+
+		{{#is_mobile}}
+
+
+			<a href="#users" class="users-tab"><i class="icon-users"></i></a>
+			<a href="#integrations" class="integrations-tab"><i class="icon-settings"></i></a>
+			<a href="#analytics-code" class="analytics-code-tab"><i class="icon-eye"></i></a>		
+		    <a href="#integrations-stats" class="stats-tab"><i class="icon-bar-chart"></i></a>
+
+		    <div class="clearfix"></div>
+
+            {{else}}
 		
 			<a href="#account-prefs" class="account-prefs-tab list-group-item  select">Preferences</a>
 			<a href="#users" class="users-tab list-group-item">Users</a>
@@ -27,7 +40,12 @@
 		<!-- <a href="#menu-settings" class="menu-settings-tab list-group-item">Menu Settings</a> -->
             <a href="#integrations-stats" class="stats-tab list-group-item">Stats</a>
 
+
            <!-- <a href="#webhook" class="webhook-tab list-group-item">Webhook </a>-->
+
+      
+
+            {{/is_mobile}}
 
 		</div>
 		</div>
