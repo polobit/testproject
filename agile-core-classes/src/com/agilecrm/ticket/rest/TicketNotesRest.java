@@ -24,12 +24,14 @@ import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.ticket.entitys.TicketDocuments;
+import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.Status;
+import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
@@ -112,28 +114,44 @@ public class TicketNotesRest
 			}
 			else
 			{
+				Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
+
+				if (ticket.assignee_id.getId() != domainUserKey.getId())
+				{
+					TicketGroups group = TicketGroupUtil.getTicketGroupById(ticket.group_id.getId());
+
+					// If domain user doesn't exists in ticket group then
+					// throwing exception
+					if (!group.agents_keys.contains(ticket.assignee_id))
+						throw new Exception("You must in " + group.group_name + " in order to reply to this ticket");
+				}
+
+				int repliesCount = ticket.user_replies_count;
+				Status status = ticket.status;
+
 				// Updating existing ticket
 				ticket = TicketsUtil.updateTicket(ticketID, ticket.cc_emails, plain_text, LAST_UPDATED_BY.AGENT,
 						currentTime, null, currentTime,
 						(notes.attachments_list != null && notes.attachments_list.size() > 0) ? true : false);
-
-				Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
-
-				if (ticket.status == Status.NEW)
+				
+				if(repliesCount == 1)
+					ticket.first_replied_time = currentTime;
+				
+				// Checking if assignee is replying to new ticket for first time
+				if (status == Status.NEW && ticket.assignee_id == null)
 				{
 					ticket.assignee_id = domainUserKey;
 					ticket.assigneeID = domainUserKey.getId();
 					ticket.assigned_time = currentTime;
-					ticket.first_replied_time = currentTime;
 
 					// Logging status changed activity
 					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-							Status.NEW.toString(), Status.PENDING.toString(), "status");
+							status.toString(), Status.PENDING.toString(), "status");
 				}
 				else
 				{
 					// Check if another assignee is replied to ticket
-					if (ticket.assignee_id != domainUserKey)
+					if (ticket.assignee_id.getId() != domainUserKey.getId())
 					{
 						// Logging ticket assignee changed activity
 						ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID,
@@ -141,9 +159,10 @@ public class TicketNotesRest
 
 						ticket.assignee_id = domainUserKey;
 						ticket.assigneeID = domainUserKey.getId();
+						ticket.assigned_time = currentTime;
 					}
 
-					if (Status.OPEN == ticket.status)
+					if (Status.OPEN == status)
 						// Logging status changed activity
 						ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID,
 								ticket.id, Status.OPEN.toString(), Status.PENDING.toString(), "status");
@@ -170,7 +189,7 @@ public class TicketNotesRest
 				// Updating ticket entity
 				Tickets.ticketsDao.put(ticket);
 
-				// updating text search data
+				// Updating text search data
 				new TicketsDocument().edit(ticket);
 
 				// Creating new Notes in TicketNotes table
@@ -199,7 +218,9 @@ public class TicketNotesRest
 			}
 
 			ticketNotes.domain_user = DomainUserUtil.getDomainUser(ticket.assigneeID);
-
+			
+			System.out.println("Execution time: " + (Calendar.getInstance().getTimeInMillis() - currentTime) + "ms");
+			
 			return ticketNotes;
 		}
 		catch (Exception e)

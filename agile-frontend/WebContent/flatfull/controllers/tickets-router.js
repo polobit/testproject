@@ -955,6 +955,10 @@
 					template = 'ticket-sla-report';
 					callback = Ticket_Reports.slaReport;
 					break;
+				case 'avg-first-resp-time':
+					template = 'ticket-avg-first-resp-time';
+					callback = Ticket_Reports.avgFirstRespTime;
+					break;
 			}
 
 			getTemplate(template, {}, undefined, function(template_ui){

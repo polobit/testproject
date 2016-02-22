@@ -1143,7 +1143,7 @@ var Tickets = {
 					}
 					else{
 						$(e.target).removeClass("btn-danger").addClass("btn-default");
-                        message="Ticket un marked as Spam";
+                        message="Ticket unmarked as Spam";
                         spam_value=false;
                     }
                     showNotyPopUp('information',message, 'bottomRight', 5000);
