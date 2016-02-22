@@ -967,7 +967,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         var templateContent = $("#templateHtmlContent").val();
         var fullSource = templateContent.replace("{body}",$('#download').val());
         var builderSource = save.html();
-        parent.saveEmailTemplateFromBuilder(encode_utf8(fullSource),builderSource);
+        parent.saveEmailTemplateFromBuilder(fullSource,builderSource);
         return;
         // console.log(save.html());
         // console.log($('#download').val());
@@ -1214,12 +1214,4 @@ function uploadImageToS3ThroughBtn(file) {
             }
         });
     }
-}
-
-function encode_utf8( s ) {
-  return unescape( encodeURIComponent( s ) );
-}
-
-function decode_utf8( s ) {
-  return decodeURIComponent( escape( s ) );
 }
