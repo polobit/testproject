@@ -60,7 +60,7 @@ public class CSVTicketIdsFetcher extends ITicketIdsFetcher
 		Set<Key<Tickets>> ticketIDList = new HashSet<Key<Tickets>>();
 
 		for (String key : subList)
-			ticketIDList.add(new Key<Tickets>(Tickets.class, Long.parseLong(key)));
+			ticketIDList.add(new Key<Tickets>(Tickets.class, Long.parseLong(key.trim())));
 		
 		return ticketIDList;
 	}
