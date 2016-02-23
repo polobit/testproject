@@ -322,7 +322,7 @@ public class ContactsAPI
     public Contact createContact(Contact contact)
     {
 	// Check if the email exists with the current email address
-	boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL").toLowerCase());
+	boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL"));
 
 	// Throw non-200 if it exists
 	if (isDuplicate)
