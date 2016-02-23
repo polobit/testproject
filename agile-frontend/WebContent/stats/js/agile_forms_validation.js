@@ -5,14 +5,17 @@ function agile_validations(){
 	var agile_form = document.forms["agile-form"];
 
 	for(var i=0; i<agile_form.length; i++){
+
 			var inputId = agile_form[i].getAttribute("id");
         	var inputType = agile_form[i].getAttribute("type");
         	var inputNode = document.getElementById(inputId);
 			var spans = document.getElementById("agile_span"+i);
 			var required = agile_form[i].getAttribute("required");
 		
-		if(inputId){				
-				if (inputNode.value == "" && spans == null && required == "") {
+		if(inputId){	
+
+				//if field is not having span,value and having required			
+				if (inputNode.value == "" && spans == null && required == "") { 
 					isValid = false;
 					var spanTag = document.createElement("span");
 						spanTag.innerHTML = "Enter a value for this field.";
@@ -24,31 +27,23 @@ function agile_validations(){
 						continue;
 			}
 
-		else if(inputNode.value && spans){
+		else if(inputNode.value && spans){ //if field having value and span
 
 					// email validations
-					if(agile_form[i].type == "email" && validateEmail(inputNode.value)){
+					if(agile_form[i].type == "email"){
+						
+						if(validateEmail(inputNode.value)){
 							document.getElementById("agile_span"+i).remove(); 
 		 					isValid = true;
 		 					continue;
 						}
- 						else if(agile_form[i].type == "email"){
+ 						else {
  							document.getElementById("agile_span"+i).innerHTML = "Please enter a valid email.";
  							count++;
  							continue;
  						}	
-
-					//website validations
-					if(agile_form[i].type == "url" && validateWebsite(inputNode.value)){
-							document.getElementById("agile_span"+i).remove();
-							isValid = true;
-							continue;
-						}
-						else if(agile_form[i].type == "url"){
- 							document.getElementById("agile_span"+i).innerHTML = "Please enter a valid website.";
- 							count++;
- 							continue;
- 						}	
+ 					}
+	
 
 					//other fields if have value 
 					document.getElementById("agile_span"+i).remove();
@@ -56,14 +51,16 @@ function agile_validations(){
 					continue;		
 		}
 
-		else if(inputNode.value && spans == null){
+		else if(inputNode.value && spans == null){ //if field having only value not spans
 					
 					// email validations
-					if(agile_form[i].type == "email" && validateEmail(inputNode.value)){ 
+					if(agile_form[i].type == "email"){
+
+					if(validateEmail(inputNode.value)){ 
 		 					isValid = true;
 		 					continue;
 						}
- 						else if(agile_form[i].type == "email"){
+ 						else{
  							var spanTag = document.createElement("span");
 						spanTag.innerHTML = "Please enter a valid email.";
 						spanTag.id = "agile_span"+i;
@@ -72,27 +69,12 @@ function agile_validations(){
 						inputNode.parentNode.insertBefore(spanTag,inputNode.nextSibling);
 						count++;    //if span created then we will increase by one
 						continue;
- 						}	
+ 						}
 
-				//website validations
-					if(agile_form[i].type == "url" && validateWebsite(inputNode.value)){
-							isValid = true;
-							continue;
-						}
-						else if(agile_form[i].type == "url"){
- 							var spanTag = document.createElement("span");
-						spanTag.innerHTML = "Please enter a valid website.";
-						spanTag.id = "agile_span"+i;
-						spanTag.style.color = "red";
-						spanTag.style.fontSize = "12px";
-						inputNode.parentNode.insertBefore(spanTag,inputNode.nextSibling);
-						count++;    //if span created then we will increase by one
-						continue;
- 						}	
+ 					}		
 		}
 
-		else if(inputNode.value == "" && spans){
-					isValid = false;
+		else if(inputNode.value == "" && spans){ //if field having spans not a value
 					count++;
 					continue;
 		}	
@@ -116,15 +98,4 @@ function validateEmail(email){
 		 		return true;
  			else
  				return false;
-}
-
-
-function validateWebsite(url){
-
-		var reg = /^(ftp|http|https):\/\/[^ "]+$/;
-			if(reg.test(url))
-				return true;
-			else
- 				return false;
- 							
 }
