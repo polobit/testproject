@@ -190,7 +190,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			{
 				$('i').tooltip();
 
-				getTemplate('adminsettings-newuser', data, undefined, function(template_ui){
+				getTemplate('adminsettings-newuser', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
 

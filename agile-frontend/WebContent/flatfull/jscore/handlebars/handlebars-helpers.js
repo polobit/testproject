@@ -300,34 +300,6 @@ $(function()
 		// backup_image="";
 		var initials = '';
 
-		if(type!=undefined)
-		{
-
-			for(var i=0;i<CURRENT_DOMAIN_USER.name.length;i++)
-			{
-				if(CURRENT_DOMAIN_USER.name[i]==""){
-					var name = CURRENT_DOMAIN_USER.name.split(" ");
-				}
-				if(name.length<=1){
-					initials=name.substring(0,2);
-				}
-				else
-				{
-					initials=name[0].substring(0,1)+name[1].substring(0,1);
-				}
-			}
-			if (initials.length == 0)
-			backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
-
-			var data_name =  '';
-			// if(!isIE())
-				data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
-			
-
-			return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
-
-		}
-
 		try
 		{
 			// if(!isIE())
