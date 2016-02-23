@@ -8,6 +8,7 @@ mkdir ../WebContent/flatfull/final-lib/min
 cat $(find ../WebContent/flatfull/final-lib/ -iname *.js ! -path ../WebContent/flatfull/final-lib/min/*.js | sort) >../WebContent/flatfull/final-lib/min/lib-all-min.js 
 
 java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/final-lib/min/lib-all-min.js --type js -o  ../WebContent/flatfull/final-lib/min/lib-all-min.js
+java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/final-lib/min/lib-all-min.js --type js -o  ../WebContent/flatfull/final-lib/min/lib-all-min-1.js
 
 rm -r ../WebContent/flatfull/css/min/*.css
 
