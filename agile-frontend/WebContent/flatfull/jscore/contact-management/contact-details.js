@@ -279,7 +279,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 
     	/** Inliner edits input fields **/
     	'click #Contactedit-text '  : 'togglehiddenfield',
-    	'change #Contact-input input' : 'inlineNameChange',
+    	'change #Contact-input input ' : 'inlineNameChange',
         /** End of inliner edits **/
 
     	/** Company events **/
@@ -301,14 +301,14 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
            console.log("inlineNameChange");
 
            // Get actual name
-          var contactName=$("#Contact-input input").val();
-
+          var contactFirstName=$("#Contact-input-firstname").val();
+          var contactLastName=$("#Contact-input-lastname").val();
           // Update name
-          agile_crm_update_contact("first_name", contactName);
-
+          agile_crm_update_contact("first_name", contactFirstName);
+          agile_crm_update_contact("last_name", contactLastName);
           // Toggle fields
 		  $("#Contact-input").toggleClass("hidden");
-          $("#Contactedit-text").text(contactName).toggleClass("hidden");
+          $("#Contactedit-text").text(contactFirstName+" "+contactLastName).toggleClass("hidden");
     },
     /*
 show and hide the input for editing the contact name and saving that
