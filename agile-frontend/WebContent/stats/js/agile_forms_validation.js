@@ -75,6 +75,7 @@ function agile_validations(){
 		}
 
 		else if(inputNode.value == "" && spans){ //if field having spans not a value
+					isValid = false;
 					count++;
 					continue;
 		}	
