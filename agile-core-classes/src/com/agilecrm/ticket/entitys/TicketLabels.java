@@ -19,7 +19,6 @@ public class TicketLabels extends Cursor implements Serializable
 	public Long id;
 
 	public String label;
-	public String color_code;
 
 	public Long created_time = 0L;
 	public Long updated_time = 0L;
@@ -48,7 +47,6 @@ public class TicketLabels extends Cursor implements Serializable
 	{
 		super();
 		this.label = label;
-		this.color_code = color_code;
 	}
 
 	@javax.persistence.PrePersist

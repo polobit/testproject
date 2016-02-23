@@ -103,8 +103,14 @@
                     <i class="icon-calendar icon-large"></i>
                     <span id="range">{{date-range "today" "-6"}}</span>
                 </div>
+                <div class="pull-right" style="padding:0px 8px 10px">
+                    <select name="report_type" id="report_type" class="required form-control" style="width:100px">
+                        <option value="priority" selected>Priority</option>
+                        <option value="status">Status</option>
+                    </select>
+                </div>
                 <div class="col-md-4 col-sm-6" style="padding-left:0px;">
-                    <h3 class="font-thin h3">Priority report</h3>
+                    <h3 class="font-thin h3 report_name">Priority report</h3>
                 </div>
             </div>
         </div>
@@ -127,6 +133,12 @@
                 <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1); border:1px solid #cfdadd;height:34px;padding:5px">
                     <i class="icon-calendar icon-large"></i>
                     <span id="range">{{date-range "today" "-6"}}</span>
+                </div>
+                <div class="pull-right" style="padding:0px 8px 10px">
+                    <select name="report_type" id="report_type" class="required form-control" style="width:100px">
+                        <option value="priority">Priority</option>
+                        <option value="status" selected>Status</option>
+                    </select>
                 </div>
                 <div class="col-md-4 col-sm-6" style="padding-left:0px;">
                     <h3 class="font-thin h3">Status report</h3>

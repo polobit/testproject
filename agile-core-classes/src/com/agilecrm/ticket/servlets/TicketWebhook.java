@@ -27,6 +27,7 @@ import org.jsoup.select.Elements;
 import com.agilecrm.Globals;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.export.gcs.GCSServiceAgile;
+import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
@@ -97,7 +98,7 @@ public class TicketWebhook extends HttpServlet
 			// Fetch data posted by Mandrill
 			String mandrillResponse = request.getParameter("mandrill_events");
 
-			//System.out.println("MandrillResponse: " + mandrillResponse);
+			// System.out.println("MandrillResponse: " + mandrillResponse);
 
 			if (StringUtils.isBlank(mandrillResponse))
 				return;
@@ -120,7 +121,7 @@ public class TicketWebhook extends HttpServlet
 			catch (Exception e)
 			{
 			}
-			
+
 			/**
 			 * msgJSON contains email field where Mandrill received the message
 			 */
@@ -229,8 +230,8 @@ public class TicketWebhook extends HttpServlet
 
 						String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
 						boolean isBase64Encoded = false;
-						
-						if(fileJSON.has("base64"))
+
+						if (fileJSON.has("base64"))
 							isBase64Encoded = fileJSON.getBoolean("base64");
 
 						System.out.println("fileName: " + fileName);
@@ -298,7 +299,8 @@ public class TicketWebhook extends HttpServlet
 
 						System.out.println("fileName: " + fileName);
 						System.out.println("type: " + fileType);
-						//System.out.println("base64: " + fileJSON.getBoolean("base64"));
+						// System.out.println("base64: " +
+						// fileJSON.getBoolean("base64"));
 
 						String contentType = URLConnection.guessContentTypeFromName(fileName);
 
@@ -363,16 +365,16 @@ public class TicketWebhook extends HttpServlet
 			}
 
 			System.out.println("msgJSON: " + msgJSON);
-			
+
 			Tickets ticket = null;
-			
+
 			String fromEmail = msgJSON.getString("from_email");
 
 			String fromName = fromEmail.substring(0, fromEmail.lastIndexOf("@"));
 
 			System.out.println("From email: " + fromEmail);
 			System.out.println("From name: " + fromName);
-			
+
 			if (isNewTicket)
 			{
 				String ip = "";
@@ -389,9 +391,9 @@ public class TicketWebhook extends HttpServlet
 					fromName = msgJSON.getString("from_name");
 
 				// Creating new Ticket in Ticket table
-				ticket = TicketsUtil.createTicket(groupID, null, fromName, fromEmail,
-						msgJSON.getString("subject"), ccEmails, plainText, Status.NEW, Type.PROBLEM, Priority.LOW,
-						Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip, new ArrayList<Key<TicketLabels>>());
+				ticket = TicketsUtil.createTicket(groupID, null, fromName, fromEmail, msgJSON.getString("subject"),
+						ccEmails, plainText, Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER,
+						attachmentExists, ip, new ArrayList<Key<TicketLabels>>());
 
 				BulkActionNotifications.publishNotification("New ticket #" + ticket.id + " received");
 			}
@@ -412,14 +414,26 @@ public class TicketWebhook extends HttpServlet
 				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, plainText, LAST_UPDATED_BY.REQUESTER,
 						currentTime, currentTime, null, attachmentExists);
 
+				if (ticket.status == Status.CLOSED)
+				{
+					ticket.no_of_reopens += 1;
+					
+					// Updating ticket entity
+					Tickets.ticketsDao.put(ticket);
+
+					// Updating text search data
+					new TicketsDocument().edit(ticket);
+				}
+
+				// Sending user replied notification
 				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket(#" + ticket.id
 						+ ")");
 			}
 
 			// Creating new Notes in TicketNotes table
 			TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, groupID, ticket.assigneeID,
-					CREATED_BY.REQUESTER, fromName, fromEmail, plainText,
-					html, NOTE_TYPE.PUBLIC, attachmentURLs, msgJSON.toString());
+					CREATED_BY.REQUESTER, fromName, fromEmail, plainText, html, NOTE_TYPE.PUBLIC, attachmentURLs,
+					msgJSON.toString());
 
 			if (!isNewTicket)
 				// Execute note created by customer trigger

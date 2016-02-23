@@ -308,8 +308,13 @@ public class TicketsUtil
 		Status oldStatus = ticket.status;
 		ticket.status = status;
 
+		//Set ticket closed time
 		if (status == Status.CLOSED)
 			ticket.closed_time = Calendar.getInstance().getTimeInMillis();
+
+		//Incr. no of reopens if ticket old status is closed
+		if (oldStatus == Status.CLOSED)
+			ticket.no_of_reopens += 1;
 
 		Tickets.ticketsDao.put(ticket);
 
@@ -698,8 +703,6 @@ public class TicketsUtil
 
 			List<DomainUser> domainUsers = DomainUserUtil.dao.fetchAllByKeys(new ArrayList<Key<DomainUser>>(
 					domainUserKeys));
-			
-			
 
 			System.out.println("domainUsers: " + domainUsers);
 
@@ -792,7 +795,7 @@ public class TicketsUtil
 			// Assigning new group to ticket
 			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
 			ticket.groupID = group_id;
-			
+
 			ticket.assignee_id = null;
 			ticket.assigneeID = null;
 
@@ -960,10 +963,11 @@ public class TicketsUtil
 	 */
 	public static List<Key<Tickets>> getOverdueTickets() throws Exception
 	{
-		String query = "NOT status:" + Status.CLOSED + " AND due_time <=" + Calendar.getInstance().getTimeInMillis()/1000;
+		String query = "NOT status:" + Status.CLOSED + " AND due_time <=" + Calendar.getInstance().getTimeInMillis()
+				/ 1000;
 
 		JSONObject resultJSON = new TicketsDocument().searchDocuments(query, "", "", 1000);
-		
+
 		JSONArray keysArray = resultJSON.getJSONArray("keys");
 
 		List<Key<Tickets>> keys = new ArrayList<Key<Tickets>>();
@@ -1126,6 +1130,7 @@ public class TicketsUtil
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
+
 	public static Tickets removeDuedate(Long ticket_id) throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
@@ -1133,10 +1138,8 @@ public class TicketsUtil
 		if (ticket.due_time == null)
 			return ticket;
 
-		
-		ticket.due_time  = null;
+		ticket.due_time = null;
 
-		
 		Tickets.ticketsDao.put(ticket);
 
 		// Updating search document

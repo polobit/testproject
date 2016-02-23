@@ -72,9 +72,16 @@ public class TicketsDocument implements BuilderInterface
 			{
 				document.addField(Field.newBuilder().setName("assignee_id")
 						.setText(ticket.getAssignee_id().getId() + ""));
-
-				document.addField(Field.newBuilder().setName("assigned_time")
-						.setNumber(Math.floor(ticket.assigned_time / 1000)));
+				
+				try
+				{
+					document.addField(Field.newBuilder().setName("assigned_time")
+							.setNumber(Math.floor(ticket.assigned_time / 1000)));
+				}
+				catch (Exception e)
+				{
+					System.out.println(ExceptionUtils.getFullStackTrace(e));
+				}
 			}
 
 			/**

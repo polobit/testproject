@@ -150,7 +150,7 @@ public class TicketReportsRest
 
 			LinkedHashMap<String, Integer> innerMap = new LinkedHashMap<String, Integer>();
 			innerMap.put("count", 0);
-			innerMap.put("total", documents.size());
+			//innerMap.put("total", documents.size());
 
 			LinkedHashMap<String, LinkedHashMap<String, Integer>> map = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
 			map.put(Priority.LOW.toString(), new LinkedHashMap<String, Integer>(innerMap));
@@ -191,7 +191,7 @@ public class TicketReportsRest
 
 			LinkedHashMap<String, Integer> innerMap = new LinkedHashMap<String, Integer>();
 			innerMap.put("count", 0);
-			innerMap.put("total", documents.size());
+			//innerMap.put("total", documents.size());
 
 			LinkedHashMap<String, LinkedHashMap<String, Integer>> map = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
 			map.put(Status.NEW.toString(), new LinkedHashMap<String, Integer>(innerMap));
@@ -227,7 +227,7 @@ public class TicketReportsRest
 
 			LinkedHashMap<String, Long> innerMap = new LinkedHashMap<String, Long>();
 			innerMap.put("count", 0l);
-			innerMap.put("total", (long) documents.size());
+			//innerMap.put("total", (long) documents.size());
 
 			LinkedHashMap<String, LinkedHashMap<String, Long>> map = new LinkedHashMap<String, LinkedHashMap<String, Long>>();
 			map.put("0-1 hr", new LinkedHashMap<String, Long>(innerMap));
@@ -347,7 +347,7 @@ public class TicketReportsRest
 
 			LinkedHashMap<String, Integer> innerMap = new LinkedHashMap<String, Integer>();
 			innerMap.put("count", 0);
-			// innerMap.put("total", timeDurationToCloseTicket.length);
+			//innerMap.put("total", timeDurationToCloseTicket.length);
 
 			LinkedHashMap<String, LinkedHashMap<String, Integer>> map = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
 

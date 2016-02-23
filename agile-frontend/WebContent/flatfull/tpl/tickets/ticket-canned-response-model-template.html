@@ -20,7 +20,17 @@
 
 		{{#if labelsJSON}}
 		<div class="table-resp">
-			{{#each labelsJSON}}<span class="label m-l-xs" style="background-color: {{color_code}};">{{label}}</span>{{/each}}
+			{{#if labelsJSON}}
+				<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
+					{{#each labelsJSON}}
+						<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs">
+							<span>
+								<a class="anchor m-r-xs custom-color" style="color:#363f44" href="javascript:void(0);">{{label}}</a>
+							</span>
+						</li>
+					{{/each}}
+				</ul>
+			{{/if}}
 		</div>	
 		{{/if}}
 	</td>

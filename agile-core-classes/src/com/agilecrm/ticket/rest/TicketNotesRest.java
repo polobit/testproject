@@ -123,7 +123,7 @@ public class TicketNotesRest
 					// If domain user doesn't exists in ticket group then
 					// throwing exception
 					if (!group.agents_keys.contains(ticket.assignee_id))
-						throw new Exception("You must in " + group.group_name + " in order to reply to this ticket");
+						throw new Exception("You must in " + group.group_name + " group in order to reply to this ticket");
 				}
 
 				int repliesCount = ticket.user_replies_count;
@@ -133,10 +133,10 @@ public class TicketNotesRest
 				ticket = TicketsUtil.updateTicket(ticketID, ticket.cc_emails, plain_text, LAST_UPDATED_BY.AGENT,
 						currentTime, null, currentTime,
 						(notes.attachments_list != null && notes.attachments_list.size() > 0) ? true : false);
-				
-				if(repliesCount == 1)
+
+				if (repliesCount == 1)
 					ticket.first_replied_time = currentTime;
-				
+
 				// Checking if assignee is replying to new ticket for first time
 				if (status == Status.NEW && ticket.assignee_id == null)
 				{
@@ -151,7 +151,7 @@ public class TicketNotesRest
 				else
 				{
 					// Check if another assignee is replied to ticket
-					if (ticket.assignee_id.getId() != domainUserKey.getId())
+					if (ticket.assignee_id == null && ticket.assignee_id.getId() != domainUserKey.getId())
 					{
 						// Logging ticket assignee changed activity
 						ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID,
@@ -166,10 +166,19 @@ public class TicketNotesRest
 						// Logging status changed activity
 						ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID,
 								ticket.id, Status.OPEN.toString(), Status.PENDING.toString(), "status");
+					
+					if (Status.CLOSED == status)
+						// Logging status changed activity
+						ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID,
+								ticket.id, Status.CLOSED.toString(), Status.PENDING.toString(), "status");
 				}
 
 				Status oldStatus = null;
-
+				
+				//If tickcet is already closed then incr. no of re opens attr.
+				if(status == Status.CLOSED)
+					ticket.no_of_reopens += 1;
+				
 				// If send reply and close ticket is selected
 				if (notes.close_ticket)
 				{
@@ -218,9 +227,9 @@ public class TicketNotesRest
 			}
 
 			ticketNotes.domain_user = DomainUserUtil.getDomainUser(ticket.assigneeID);
-			
+
 			System.out.println("Execution time: " + (Calendar.getInstance().getTimeInMillis() - currentTime) + "ms");
-			
+
 			return ticketNotes;
 		}
 		catch (Exception e)

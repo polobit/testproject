@@ -260,6 +260,12 @@ public class Tickets extends Cursor implements Serializable
 	 * Customer. Used to generate first contact resolution report.
 	 */
 	public Integer user_replies_count = 1;
+	
+	/**
+	 * Stores number of times public notes were added by both Agent and
+	 * Customer. Used to generate first contact resolution report.
+	 */
+	public Integer no_of_reopens = 0;
 
 	/**
 	 * Stores true if any of its notes have attachments
