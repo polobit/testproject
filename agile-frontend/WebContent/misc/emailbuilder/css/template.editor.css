@@ -1,7 +1,6 @@
 body {
     /*padding-top:70px;*/
     padding-bottom: 40px;
-    margin-left:222px;
     -webkit-transition: margin 500ms ease;
     -moz-transition: margin 500ms ease;
     -ms-transition: margin 500ms ease;
@@ -65,20 +64,9 @@ body {
 
 .container { width:auto; margin:0 0px;}
 .sidebar-nav {
-    position:fixed;
     width:220px;
-    left:0px;
-    bottom:0;
-    /*top:62px;*/
-    top:0;
     background-color: #FFFFFF;
-    /*padding: 10px;*/
     z-index:10;
-    -webkit-transition: all 500ms ease;
-    -moz-transition: all 500ms ease;
-    -ms-transition: all 500ms ease;
-    -o-transition: all 500ms ease;
-    transition: all 500ms ease;
 }
 .sidebar-nav .nav-header { cursor:pointer; font-size:14px;  text-shadow:0 1px 0 rgba(0, 0, 0, 0.3); text-transform:uppercase; font-weight:bold;}
 .sidebar-nav .nav-header span.label { font-size:10px; /*padding-bottom:0;*/ position:relative; top:-1px; }

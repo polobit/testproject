@@ -563,7 +563,7 @@ $(window).resize(function () {
     // $(".demo").css("min-height", $(window).height() - 160);
     $("#tosave").css("height", $(window).height() - 30);
     var widthOfWindow = $(window).width();
-    if(widthOfWindow <= 1360) {
+    if(widthOfWindow <= 1362) {
         var $settings = $("#settings");
         if(!$settings.hasClass("settings-panel-fixed")) {
             $settings.addClass("settings-panel-fixed");

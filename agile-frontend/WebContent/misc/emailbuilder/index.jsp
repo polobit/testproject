@@ -70,7 +70,8 @@ AGILE_EB_OPTIONS['templateId'] = "";
         <textarea id="templateHtmlContent" class="hidden"><%@ include file="template.html" %></textarea>
 
         <div class="row">
-            <div class="col-md-9" style="width:800px;">
+
+            <div class="col-md-2" style="width:222px;">
                 <div class="sidebar-nav">
                     <div id="elements" style="position:relative;">
                         <ul class="nav nav-list accordion-group">
@@ -106,6 +107,9 @@ AGILE_EB_OPTIONS['templateId'] = "";
                         </ul>
                     </div>
                 </div>
+            </div>
+
+            <div class="col-md-7" style="width:800px;">
 
                 <a href="#" class="btn btn-info btn-xs" id="edittamplate" style="margin-bottom: 2px;">Edit background</a>
                 <div id="tosave" style="width:98%;overflow-y:auto;overflow-x:hidden;padding-bottom:30px;">
