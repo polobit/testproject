@@ -276,7 +276,9 @@ $(function() {
 		var id = $(this).attr('modal_id');
 		if(id == "opportunityModal")
 			show_deal();
-		else
+		else if(id == "personModal")
+			addContactBasedOnCustomfields();
+		else 
 			$("#" + id).modal('show');
 	});
 });
