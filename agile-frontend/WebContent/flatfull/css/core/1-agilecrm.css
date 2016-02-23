@@ -3199,7 +3199,19 @@ table.hide-head-checkbox th label.i-checks {
 }
 
 
+
 #calls-chart svg {
 	overflow: visible!important;
+}
+
+
+.api-key-pos
+{
+	padding:5px;
+	position:relative;
+	right:-80px;
+}
+.api-key-spacing{
+	letter-spacing: 1px;
 }
 
