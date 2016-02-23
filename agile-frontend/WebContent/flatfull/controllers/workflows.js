@@ -48,6 +48,7 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			workflows : function()
 			{
+
 				if (this.workflow_list_view && this.workflow_list_view.collection && this.workflow_list_view.collection.length > 0)
 				{
 					//$('body').trigger('agile_collection_loaded');
@@ -56,6 +57,7 @@ var WorkflowsRouter = Backbone.Router
 					$("#workflowsmenu").addClass("active");
 					return;
 				}
+
 
 				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
 					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
@@ -139,6 +141,7 @@ var WorkflowsRouter = Backbone.Router
 				});
 
 				$("#content").html(workflowModal.render().el);
+
 			},
 
 			/**
@@ -215,11 +218,21 @@ var WorkflowsRouter = Backbone.Router
 						$('#unsubscribe-name', el).val(unsubscribe.unsubscribe_name);
 						$('#unsubscribe-tag', el).val(unsubscribe.tag);
 						$('#unsubscribe-action', el).val(unsubscribe.action);
+						
 						$('#unsubscribe-action', el).trigger('change');
-
+						console.log($(el).html());
 						if(that.is_disabled)
 								$('#designer-tour', el).addClass("blur").removeClass("anti-blur");
 
+						var optionsTemplate = "<option value='{{id}}'> {{#if name}}{{name}}{{else}}{{subject}}{{/if}}</option>";
+						fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', function(){
+							console.log($(el).html());
+							var mId = unsubscribe.unsubscribe_subject;
+							//$('#sendEmailSelect').append($("<option></option>").attr("value","None").text("None"));
+							$('select option[value="' + mId + '"]', el).attr("selected",true);
+							//$("select option").val(mId).attr("selected", true);
+						}, optionsTemplate, false, el, 'Default template');
+						
 
 						// Init SendVerify Email
 						send_verify_email(el);

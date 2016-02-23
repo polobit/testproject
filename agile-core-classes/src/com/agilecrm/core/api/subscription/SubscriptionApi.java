@@ -442,26 +442,30 @@ public class SubscriptionApi {
 	public String planRestrictions(Plan plan) {
 		try {
 			Subscription subscription = SubscriptionUtil.getSubscription();
+			String restrictionsJSONString = null;
+			JSONObject json =  new JSONObject();
 			if (subscription.plan != null && subscription.plan.plan_type == PlanType.FREE) {
 				int count = DomainUserUtil.count();
 				System.out.println("existing users cout in free plan " + count);
 				if (plan.quantity < count) {
-					JSONObject json =  new JSONObject();
 					json.put("is_more_users", true);
 					json.put("count", count);
 					return json.toString();
 				}else{
-					JSONObject json =  new JSONObject();
 					json.put("is_allowed_plan", true);
 					return json.toString();
 				}
 			}else if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)) {
 				System.out.println("plan upgrade not possible");
 				Map<String, Map<String, Integer>> restrictions = BillingRestrictionUtil.getInstanceTemporary(plan).getRestrictions();
-				String restrictionsJSONString = new Gson().toJson(restrictions);
-				return restrictionsJSONString;
+				restrictionsJSONString = new Gson().toJson(restrictions);
 			}
 			Invoice invoice = subscription.getUpcomingInvoice(plan);
+			if(restrictionsJSONString != null){
+				json.put("restrictions", restrictionsJSONString);
+				json.put("nextPaymentAttempt", invoice.getNextPaymentAttempt());
+				return json.toString();
+			}
 			String invoiceJSONString = new Gson().toJson(invoice);
 			return invoiceJSONString;
 		} catch (Exception e) {

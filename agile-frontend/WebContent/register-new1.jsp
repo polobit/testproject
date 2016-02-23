@@ -79,6 +79,9 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
 
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
+
 <script type="text/javascript">
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
 var isWin = (window.navigator.userAgent.indexOf("Windows") != -1);
