@@ -255,9 +255,10 @@ var _agile = {
 
 		},
 		_filter : function(callback){
-            if(this.is_valid_call())
-            	   callback();
+            if(this.is_valid_call()){
+            	return callback();
+            }   
 
-            console.log("Stop! Functions calls from console is disabled.");
+            console.log("%cStop! Function calls from console is disabled.", "color: red;");
 		}
 };

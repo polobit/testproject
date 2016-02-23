@@ -318,7 +318,7 @@ function agile_getUtmParams()
 function _agile_check_function_caller_is_console(){
 
   try{
-
+  	
   	var stack;
     try
     {
