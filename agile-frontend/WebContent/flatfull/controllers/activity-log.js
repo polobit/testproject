@@ -140,6 +140,7 @@ var ActivitylogRouter = Backbone.Router.extend({
                         default:
                             keyword = "?log_type=All_Activities";
                             uiKeyword = "All Activities";
+                            sortCollection = true;
                     }
 
                     urlPath = urlPath + keyword;
@@ -162,7 +163,9 @@ var ActivitylogRouter = Backbone.Router.extend({
                         cursor: true,
                         scroll_symbol: 'scroll',
                         page_size: 20,
-                        sort_collection: false,
+                        sort_collection: sortCollection,
+                        sortKey : "time",
+                        descending: true,
                         postRenderCallback: function(el) {
                             // initDateRangePicker("contact_activities_date_range",el);
                             head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
