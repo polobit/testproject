@@ -283,10 +283,10 @@ $(function()
 	 * @returns image link
 	 * 
 	 */
-	Handlebars.registerHelper('gravatarurl', function(items, width)
+	Handlebars.registerHelper('gravatarurl', function(items, width,type)
 	{
 
-		if (items == undefined)
+		if (items == undefined),
 			return;
 
 		// Checks if properties already has an image, to return it
@@ -297,8 +297,33 @@ $(function()
 		// Default image
 		var img = DEFAULT_GRAVATAR_url;
 		var backup_image = "&d=404\" ";
-		// backup_image="";
 		var initials = '';
+		if(type!=undefined)
+		{
+			for(var i=0;i<CURRENT_DOMAIN_USER.name.length;i++)
+			{
+			if(CURRENT_DOMAIN_USER.name[i]==""){
+				var name = CURRENT_DOMAIN_USER.name.split(" ");
+			}
+			if(name.length==1){
+				initials=name.substring(0,2);
+			}
+			else
+			{
+				initials=name[0].substring(0,1)+name[1].substring(0,1);
+			}
+			}
+			if (initials.length == 0)
+			backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
+
+		var data_name =  '';
+		// if(!isIE())
+			data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
+
+			return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
+		}
+		// backup_image="";
+		
 		try
 		{
 			// if(!isIE())
@@ -325,6 +350,7 @@ $(function()
 		return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 
 	});
+
 
 	Handlebars.registerHelper('defaultGravatarurl', function(width)
 	{

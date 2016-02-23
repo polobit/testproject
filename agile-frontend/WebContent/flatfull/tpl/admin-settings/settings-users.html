@@ -28,7 +28,7 @@
 <script id="admin-settings-users-model-template" type="text/html">
   <div  class='data p-b col-sm-6 admin-user_temp' data='{{id}}'style="margin-bottom:4px;" >
   
-	<div class="b r-5x p-sm bg-white" data="{{id}}" style="height: 121px;">
+	<div class="b r-5x p-sm bg-white" data="{{id}}" >
 	
 		<div class="left pos-abs">
 			<label class="i-checks i-checks-sm"> <input type="checkbox"
@@ -50,17 +50,14 @@
 				
 					<div class="text-xs">{{email}}</div>
 					 <div class="text-xs">Created on {{epochToDate info_json_string "created_time"}}</div>
-					 <div class="text-muted">Last login
-						<i class="fa fa-clock-o"></i>
-						<time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" >{{epochToDate info_json_string "logged_in_time"}}</time>
-					</div>					
+					 					
 				
 	    	</div>
 			
 
 		</div>
 		<div class="clearfix"></div>
-		<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs no-wrap" style="padding-left:24px;">
+		<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-md no-wrap" style="padding-left:24px;">
 		{{#if is_admin}}
 			<span class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">Admin</span>
 			
@@ -71,9 +68,15 @@
 		{{#if is_disabled}}
 			<span class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-colorlabel label-danger">Disabled</span>
 		{{/if}}
+		<div class="pull-right">
+		 <div class="text-muted"><span style="font-size:12px;">Last login</span>
+						<i class="fa fa-clock-o"></i>
+						<time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" >{{epochToDate info_json_string "logged_in_time"}}</time>
+					</div>
+		</div>
 		</div>
 
-		<div class="pull-right user-view-actions grid-view-action-button" style="margin-top:-106px;">
+		<div class="pull-right user-view-actions grid-view-action-button" style="margin-top:-108px;">
 				<span class="m-r-xs c-p"><a href="#user-edit/{{id}}"><i
 						data-toggle="tooltip" data-placement="left" title=""
 						data-original-title="Edit"
