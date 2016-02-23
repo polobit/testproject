@@ -1043,8 +1043,16 @@ public class Contact extends Cursor
 	    {
 		ContactField firstNameField = this.getContactFieldByName(Contact.FIRST_NAME);
 		ContactField lastNameField = this.getContactFieldByName(Contact.LAST_NAME);
+		ContactField contactFieldEmail = this.getContactFieldByName(Contact.EMAIL);
 		this.first_name = firstNameField != null ? StringUtils.lowerCase(firstNameField.value) : "";
 		this.last_name = lastNameField != null ? StringUtils.lowerCase(lastNameField.value) : "";
+		//check weather contact is new or not
+		Long contact_id=this.id;
+		if((contact_id)==(null)){
+			System.out.println("Reached");
+			String mail = contactFieldEmail.value.trim();
+			this.getContactFieldByName(Contact.EMAIL).value = mail;
+			}		
 	    }
 	    if (StringUtils.isNotEmpty(contact_company_id))
 	    {
