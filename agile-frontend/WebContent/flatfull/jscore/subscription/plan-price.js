@@ -517,7 +517,9 @@ function initializeSubscriptionListeners()
 						}else if(data.is_allowed_plan){
 							Backbone.history.navigate("purchase-plan", { trigger : true });
 						}else if(data.lines){
-							
+							plan_json.date = data.nextPaymentAttempt;
+							if(months == 24)
+								plan_json.date = plan_json.date + 31557600;
 							$.each( JSON.parse(USER_BILLING_PREFS.billingData).subscriptions.data, function( key, value ) {
 							  if(value.plan.id.indexOf("email") == -1)
 							  {
@@ -560,8 +562,9 @@ function initializeSubscriptionListeners()
 						}
 							
 					},
-					error : function(msg){
-						$(this).text(buttonText).removeAttr("disabled");
+					error : function(data){
+						showNotyPopUp("warning", data.responseText, "top");
+						$(that).text(buttonText).removeAttr("disabled");
 					}
 				});
 
