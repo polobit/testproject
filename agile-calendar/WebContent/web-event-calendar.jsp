@@ -236,7 +236,7 @@ if(multiple_users) {
 	              personal_calendar_title = "Welcome to my scheduling page. Please follow the instructions to book an appointment.";
      %>
 	
-		<img src="<%=profile_pic%>" id="avatar" class="thumbnail" title="<%=personal_calendar_title%>"/>
+		<img src="<%=profile_pic%>" id="avatar" class="thumbnail" title="<%=user_name %>"/>
 		<div class="text-center"><%=welcome_title%></div>
 <%}else{ %>
 <p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal"> Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>
@@ -265,8 +265,8 @@ if(multiple_users) {
 		   %>
 		   <div class="fluidClass col-xs-12 text-center">
 		   <div style="display: inline-block;width: 150px;margin-right: 5px;">
-		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>"  title="<%=pr_name%>"/>
-		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" title="<%=custom_message %>"><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
+		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>"  title="<%=custom_message %>"/>
+		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" title="<%=pr_name %>"><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
 		<span id="workhours-<%= domain_user_id%>" style="display:none;color:#8E8F8F;font-size:16px;" title="Working Hours"><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
 		<span class="user_in_visitor_timezone" style="color:#8E8F8F;font-size:16px;" title="Timezone"><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>
 		<span id="timezone-<%= domain_user_id%>" style="display:none;color:#8E8F8F;font-size:16px;" title="Timezone"><%=timezone %></span>
