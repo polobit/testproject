@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.activities.Category;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.deals.CustomFieldData;
@@ -35,6 +37,7 @@ public class DealCSVExport
     public static final String CLOSE_DATE = "Close Date";
     public static final String OWNER = "Owner";
     public static final String RELATED_TO = "Related Contacts";
+    public static final String DEAL_SOURCE = "Deal Source";
 
     private static final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -100,6 +103,13 @@ public class DealCSVExport
 	    {
 		str[indexMap.get(field.name)] = field.value;
 	    }
+	    if(deal.getDeal_source_id()!=null)
+	    	{
+	    	CategoriesUtil cu=new CategoriesUtil();
+	    	Category source = cu.getCategory(deal.getDeal_source_id());
+	    	if(source!=null)
+	    	str[indexMap.get(DEAL_SOURCE)] = source.getLabel();
+	    	}
 
 	}
 	catch (ParseException e)
