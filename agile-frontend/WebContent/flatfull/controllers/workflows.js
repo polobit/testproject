@@ -204,13 +204,20 @@ var WorkflowsRouter = Backbone.Router
 						$('#unsubscribe-name', el).val(unsubscribe.unsubscribe_name);
 						$('#unsubscribe-tag', el).val(unsubscribe.tag);
 						$('#unsubscribe-action', el).val(unsubscribe.action);
-						$('#sendEmailSelect',el).val(unsubscribe.unsubscribe_subject);
+						
 						$('#unsubscribe-action', el).trigger('change');
-
+						console.log($(el).html());
 						if(that.is_disabled)
 								$('#designer-tour', el).addClass("blur").removeClass("anti-blur");
 						var optionsTemplate = "<option value='{{id}}'> {{#if name}}{{name}}{{else}}{{subject}}{{/if}}</option>";
-						fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined, optionsTemplate, false, el, 'Default template');
+						fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', function(){
+							console.log($(el).html());
+							var mId = unsubscribe.unsubscribe_subject;
+							//$('#sendEmailSelect').append($("<option></option>").attr("value","None").text("None"));
+							$('select option[value="' + mId + '"]', el).attr("selected",true);
+							//$("select option").val(mId).attr("selected", true);
+						}, optionsTemplate, false, el, 'Default template');
+						
 						// Init SendVerify Email
 						send_verify_email(el);
 					}

@@ -418,60 +418,6 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    HashMap<String, String> map = new HashMap<String, String>();
 						String subjectMessage = "Unsubscribe";
 						map.put("unsubscribe_subject",unsubscribe_subject);
-						
-					    if ("all".equals(status))
-						{
-							// If company is My company (default), make empty
-							if(company.equals("My company"))
-								company = "";
-							    
-							map.put("company", company);
-							
-							if(!StringUtils.isBlank(unsubscribe_subject))	
-							{
-								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
-								subjectMessage = template_details.subject ;
-								String htmlString = template_details.text;
-								System.out.println("htmlString is"+htmlString);
-								map.put("unsubscribe_body", htmlString);
-							}
-							else
-							{
-								if(StringUtils.isEmpty(company))
-								    subjectMessage = "Unsubscribed successfully";
-								else
-									subjectMessage = "Unsubscribed successfully from "+company+" company";
-							}
-							
-							// Add unsubscribe log
-							UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from all campaigns");
-							
-						}
-					    
-					    if("current".equals(status))
-						{
-					    	/* if(StringUtils.isNotBlank(unsubscribeName) && !StringUtils.equalsIgnoreCase(unsubscribeName, "null"))
-					    		map.put("campaign_name", unsubscribeName);
-					    	else
-					    		map.put("campaign_name", campaign_name); */
-					    	
-					    	map.put("campaign_name", unsubscribeName);
-					    	if(!StringUtils.isBlank(unsubscribe_subject))	
-							{
-								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
-								subjectMessage = template_details.subject ;
-								String htmlString = template_details.text;
-								System.out.println("htmlString is"+htmlString);
-								map.put("unsubscribe_body", htmlString);
-							}
-							else
-							{
-								subjectMessage = "Unsubscribed successfully from Campaign";
-							}
-							// Add unsubscribe log
-							UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from campaign " + campaign_name);
-							
-						}
 					    
 						// Trigger Unsubscribe
 						EmailTrackingTriggerUtil.executeTrigger(contactId, campaignId, null, Type.UNSUBSCRIBED);
@@ -497,6 +443,57 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    map.put("campaign_id", campaignId);
 					    map.put("email", email);
 						 
+					    if ("all".equals(status))
+						{
+							// If company is My company (default), make empty
+							if(company.equals("My company"))
+								company = "";
+							    
+							map.put("company", company);
+							if(!StringUtils.isBlank(unsubscribe_subject))	
+							{
+								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
+								subjectMessage = template_details.subject ;
+								String htmlString = template_details.text;
+								System.out.println("htmlString is"+htmlString);
+								map.put("unsubscribe_body", htmlString);
+							}
+							else
+							{
+								if(StringUtils.isEmpty(company))
+								    subjectMessage = "Unsubscribed successfully";
+								else
+									subjectMessage = "Unsubscribed successfully from "+company+" company";
+							}
+							
+							
+						}
+					    
+					    if("current".equals(status))
+						{
+					    	/* if(StringUtils.isNotBlank(unsubscribeName) && !StringUtils.equalsIgnoreCase(unsubscribeName, "null"))
+					    		map.put("campaign_name", unsubscribeName);
+					    	else
+					    		map.put("campaign_name", campaign_name); */
+					    	
+					    	map.put("campaign_name", unsubscribeName);
+					    	if(!StringUtils.isBlank(unsubscribe_subject))	
+							{
+								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
+								subjectMessage = template_details.subject ;
+								String htmlString = template_details.text;
+								System.out.println("htmlString is"+htmlString);
+								map.put("unsubscribe_body", htmlString);
+							}
+							else
+							{
+								subjectMessage = "Unsubscribed successfully from Campaign";
+							}
+							
+							
+						}
+					 	// Add unsubscribe log
+						UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from campaign " + campaign_name);
 						if(map.size() != 0)
 						   SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company);
 					}
