@@ -276,7 +276,12 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 
     	'click #contacts-inner-tabs #next' : 'tabViewNext',
     	'click #contacts-inner-tabs #prev' : 'tabViewPrev',
-    	'click #contact_edit_text '  :'togglehiddenfield',
+
+    	/** Inliner edits input fields **/
+    	'click #Contactedit-text '  : 'togglehiddenfield',
+    	'change #Contact-input input' : 'inlineNameChange',
+        /** End of inliner edits **/
+
     	/** Company events **/
     	'click #contactDetailsTab a[href="#company-contacts"]' : 'listCompanyContacts',
     	'click #contactDetailsTab a[href="#company-deals"]' : 'listCompanyDeals',
@@ -292,6 +297,27 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #contact-actions-grid-delete' : 'contactActionsGridDelete',
     },
 
+    inlineNameChange : function(e){
+           console.log("inlineNameChange");
+
+           // Get actual name
+          var contactName=$("#Contact-input input").val();
+
+          // Update name
+          agile_crm_update_contact("first_name", contactName);
+
+          // Toggle fields
+		  $("#Contact-input").toggleClass("hidden");
+          $("#Contactedit-text").text(contactName).toggleClass("hidden");
+    },
+    /*
+show and hide the input for editing the contact name and saving that
+*/
+	togglehiddenfield :function(e)
+	{	
+		$("#Contactedit-text").toggleClass("hidden");
+		$("#Contact-input").toggleClass("hidden");
+	},
 
 	contactActionsGridDelete: function(e){
 		
@@ -948,14 +974,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		contact_details_documentandtasks_actions.add_selected_document(e);
 
 	},
-/*
-show and hide the input for editing the contact name and saving that
-*/
-	togglehiddenfield :function(e)
-	{	
-		$("#contact_edit_text").toggleClass("hidden");
-		$('#Contact-input').toggleClass("hidden");
-	},
+
 
 	tabViewNext :  function(e){
 	  console.log("next clicked");
