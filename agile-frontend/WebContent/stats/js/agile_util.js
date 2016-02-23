@@ -312,3 +312,43 @@ function agile_getUtmParams()
 	}
 
 }
+
+
+/** Check function execute from console */
+function _agile_check_function_caller_is_console(){
+
+  try{
+
+  	var stack;
+    try
+    {
+       // Throwing the error for Safari's sake, in Chrome and Firefox
+       // var stack = new Error().stack; is sufficient.
+       throw new Error();
+    }
+    catch (e)
+    {
+        stack = e.stack;
+    }
+    if (!stack)
+        return false;
+
+    var lines = stack.split("\n");
+    for (var i = 0; i < lines.length; i++)
+    {
+        if (lines[i].indexOf("at Object.InjectedScript.") >= 0)
+            return true;   // Chrome console
+        if (lines[i].indexOf("@debugger eval code") == 0)
+            return true;   // Firefox console
+        if (lines[i].indexOf("_evaluateOn") == 0)
+            return true;   // Safari console
+    }
+    return false;
+
+  }catch(e){
+  	console.log(e);
+  	return false;
+  }
+   
+}
+
