@@ -17,4 +17,4 @@ rm WebContent/jscore/min/flatfull/js-all-min.js
 
 git stash
 
-git checkout sandbox_model_event_conversion
+git checkout sandbox_beta
