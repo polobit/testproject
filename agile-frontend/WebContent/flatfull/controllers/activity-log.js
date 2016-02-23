@@ -101,10 +101,13 @@ var ActivitylogRouter = Backbone.Router.extend({
 
                     var keyword = "";
                     var uiKeyword = "";
+                    var sortCollection = false;
+                    var sortKey = "time";
                     switch (id) {
                         case "all":
                             keyword = "?log_type=All_Activities";
                             uiKeyword = "All Activities";
+                            sortCollection = true;
                             break;
                         case "page-views":
                             keyword = "?log_type=Page_Views";
