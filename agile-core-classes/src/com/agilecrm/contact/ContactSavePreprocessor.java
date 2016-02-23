@@ -90,8 +90,7 @@ public class ContactSavePreprocessor
 	    return;
 	}
 
-	if (newContact.id != null)
-	    ContactUtil.isDuplicateContact(newContact, oldContact, true);
+	ContactUtil.isDuplicateContact(newContact, oldContact, true);
     }
 
     private void persistOldCreatedTime()
