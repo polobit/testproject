@@ -35,6 +35,9 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 <meta name="description" content="">
 <meta name="author" content="">
 
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
+
 <style>
 body {
 	background: #7266ba;
