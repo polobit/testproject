@@ -2,7 +2,9 @@
 <!--
 {{#each fields_set}}
 	{{#equals "image" this}}
-		 <td><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width='40px' height='40px'></td>
+		 <td><img class="thumbnail img-inital" data-name="{{dataNameAvatar 
+
+properties}}" src="{{gravatarurl properties 40}}" width='40px' height='40px'></td>
 	{{/equals}}
 			<td>{{getPropertyFieldValue .. this}}</td>
 {{/each}}
@@ -13,7 +15,9 @@
 <!--
 {{#each fields_set}}
 	{{#equals "image" this}}
-		 <td><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width='40px' height='40px'></td>
+		 <td><img class="thumbnail img-inital" data-name="{{dataNameAvatar 
+
+properties}}" src="{{gravatarurl properties 40}}" width='40px' height='40px'></td>
 	{{/equals}}
 			<td>{{getPropertyFieldValue .. this}}</td>
 {{/each}}
@@ -27,25 +31,43 @@
 <div class="bg-light lter b-b wrapper-md ng-scope">
     <div>
       <div>
- <h1 class="m-n font-thin h3 pull-left"><span id="contact-heading">Companies</span><span id="contacts-count" class="m-l-xs">{{companies_count}}</span></h1>
-            <div class="pull-left"> <div class="btn-group m-l-lg m-r-sm pull-left" id="bulk-actions"
+ <h1 class="m-n font-thin h3 pull-left"><span id="contact-heading">Companies</span><span 
+
+id="contacts-count" class="m-l-xs">{{companies_count}}</span></h1>
+            <div class="pull-left"> <div class="btn-group m-l-lg m-r-sm pull-left" 
+
+id="bulk-actions"
 				style="display: none;">
 
-					<div class="btn btn-sm btn-default">Bulk Actions</div>
-					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+					<div class="btn btn-sm btn-default">Bulk 
+
+Actions</div>
+					<a class="btn btn-sm btn-default dropdown-toggle" 
+
+data-toggle="dropdown" href="#">
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#" id="bulk-email">Send Email</a></li>
+						<li><a href="#" id="bulk-email">Send 
+
+Email</a></li>
                         <li class='divider'></li>
-						<li><a href="#" id="bulk-owner">Change Owner</a></li>
+						<li><a href="#" id="bulk-owner">Change 
+
+Owner</a></li>
 						{{#hasScope "EXPORT_CONTACTS"}}
-						<li><a href="#" id="bulk-companies-export">Export Companies as CSV</a></li>
+						<li><a href="#" id="bulk-companies-
+
+export">Export Companies as CSV</a></li>
 						{{/hasScope}}
-						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
+						<li><a href="#" class="delete-checked-
+
+contacts">Delete</a></li>
 					</ul>
 			</div>
-			<div  class="btn-group inline-block pull-left m-t-xs" style="display: none;" id="bulk-select"></div>
+			<div  class="btn-group inline-block pull-left m-t-xs" 
+
+style="display: none;" id="bulk-select"></div>
 			</div>
 			
 			<div class="pull-right">
@@ -60,7 +82,7 @@
     </div>
 </div>
 </div>
-{{/is_mobile}}
+     {{/is_mobile}}
 
     <div class="hbox hbox-auto-xs hbox-auto-sm">
     {{#is_mobile}}
@@ -84,15 +106,25 @@
         {{#is_mobile}}
         {{else}}
         <div class="panel-heading" style="background:#f6f8f8;">Companies List 
-         <a id="companies-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+         <a id="companies-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-
+
+placement="right" title="" data-original-title="Filters">
 			<i class="fa fa-bars icon-white"></i>
 		</a>
         </div>
         {{/is_mobile}}
-            <div class="dta-contatiner table-responsive" {{#is_mobile}} style="border:none;" {{/is_mobile}}>
-				<div class="panel panel-default" style="{{#is_mobile}} border:none; border-radius:0px; {{/is_mobile}} overflow-x:auto;border-left:none;">
+            <div class="dta-contatiner table-responsive" {{#is_mobile}} 
+
+style="border:none;" {{/is_mobile}}>
+				<div class="panel panel-default" style="{{#is_mobile}} 
+
+border:none; border-radius:0px; {{/is_mobile}} overflow-x:auto;border-left:none;">
 			    
-                <table id="companies" class="table {{#is_mobile}} {{else}} table-striped {{/is_mobile}} showCheckboxes no-sorting panel agile-table"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
+                <table id="companies" class="table {{#is_mobile}} {{else}} table-striped 
+
+{{/is_mobile}} showCheckboxes no-sorting panel agile-table"  url="core/api/bulk/update?
+
+action_type=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -123,10 +155,18 @@
  <div class="panel-heading" style="background:#f6f8f8;">Companies List</div>
             <div class="dta-contatiner table-responsive">
 				<div class="panel panel-default"
-				 style="{{#is_mobile}} border:none; border-radius:0px; {{/is_mobile}} overflow-x:auto;border-left:none;">
+				 style="{{#is_mobile}} border:none; border-radius:0px; 
+
+{{/is_mobile}} overflow-x:auto;border-left:none;">
 			    
-                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
-					<div class="filter-criteria">					
+                <table id="contacts-table" class="table table-striped showCheckboxes no-
+
+sorting panel agile-table"  url="core/api/bulk/update?action_type=DELETE" style="table-
+
+layout:auto">                
+					<div class="filter-criteria">				
+
+	
 					</div>
 					<thead>
                         <tr class="text-cap">

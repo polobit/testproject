@@ -374,14 +374,15 @@
 
 <td data="{{id}}" class="data" style="padding-bottom:12px;">
 
-  <div class="text-ellipsis" style="width:10em"> 
+  <div class="text-ellipsis" style="width:24em"> 
     <a class="text-cap">{{name}}</a>
-    <span class="p-l-sm">{{milestone}} ({{probability}}%)</span>
+    
+  </div>
+  <div class="text-ellipsis" style="width:24em; font-size:13px; margin-top:-2px;">{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}
+<span class="p-l-sm">{{milestone}} ({{probability}}%)</span>
   </div>
 
-  <div class="text-ellipsis" style="width:10em; font-size:13px; margin-top:-2px;">{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}</div>
-
-  <div class="text-ellipsis text-light" style="width:5em; font-size:12px; margin-top:-3px;">
+  <div class="text-ellipsis text-light" style="width:24em; font-size:12px; margin-top:-3px;">
        {{owner.name}}
     </div>
 </div>
