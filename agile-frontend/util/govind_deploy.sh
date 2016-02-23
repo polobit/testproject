@@ -3,6 +3,7 @@ cd ../
 
 git stash
 
+chmod u+x ./../deploy-beta.sh
 ./../deploy-beta.sh agile-frontend async
 
 # git checkout sandbox_sync_conversion
