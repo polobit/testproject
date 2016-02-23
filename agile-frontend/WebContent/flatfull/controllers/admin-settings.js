@@ -190,14 +190,15 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			{
 				$('i').tooltip();
 
-				getTemplate('adminsettings-newuser', {"name";CURRENT_DOMAIN_USER.name}, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
+				getTemplate('adminsettings-newuser', data, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
 
-						// Get template 
-						$('#admin-settings-users-model-list').append($(template_ui));
+					// Get template and fill it with chats data and append it to chats panel
+					$('#admin-settings-users-model-list').append($(template_ui));
 
 				}, null);
+
 
 
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
