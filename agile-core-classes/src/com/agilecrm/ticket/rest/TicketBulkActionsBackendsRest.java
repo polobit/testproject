@@ -10,6 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -72,9 +73,15 @@ public class TicketBulkActionsBackendsRest
 			ITicketIdsFetcher idsFetcher = null;
 
 			if (attributes.conditions != null && attributes.conditions.size() > 0)
-				idsFetcher = new FilterTicketIdsFetcher(null);
+			{
+				idsFetcher = new FilterTicketIdsFetcher(attributes.conditions);
+				System.out.println(attributes.conditions);
+			}
 			else if (attributes.ticketIDs != null)
+			{
 				idsFetcher = new CSVTicketIdsFetcher(attributes.ticketIDs);
+				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
+			}
 
 			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(labels, dataJSON.getString("command"),
 					NamespaceManager.get(), domainUserID);
@@ -85,7 +92,7 @@ public class TicketBulkActionsBackendsRest
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 
@@ -116,20 +123,27 @@ public class TicketBulkActionsBackendsRest
 			ITicketIdsFetcher idsFetcher = null;
 
 			if (attributes.conditions != null && attributes.conditions.size() > 0)
+			{
 				idsFetcher = new FilterTicketIdsFetcher(attributes.conditions);
+				System.out.println(attributes.conditions);
+			}
 			else if (attributes.ticketIDs != null)
+			{
 				idsFetcher = new CSVTicketIdsFetcher(attributes.ticketIDs);
+				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
+			}
 
 			ChangeAssigneeDeferredTask task = new ChangeAssigneeDeferredTask(NamespaceManager.get(), domainUserID,
 					assigneeID, groupID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Selected Tickets asignee name have been changed successfully.");
+			BulkActionNotifications
+					.publishNotification("Selected Tickets asignee name have been changed successfully.");
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 
@@ -158,9 +172,15 @@ public class TicketBulkActionsBackendsRest
 			ITicketIdsFetcher idsFetcher = null;
 
 			if (attributes.conditions != null && attributes.conditions.size() > 0)
+			{
 				idsFetcher = new FilterTicketIdsFetcher(attributes.conditions);
+				System.out.println(attributes.conditions);
+			}
 			else if (attributes.ticketIDs != null)
+			{
 				idsFetcher = new CSVTicketIdsFetcher(attributes.ticketIDs);
+				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
+			}
 
 			ExecuteWorkflowDeferredTask task = new ExecuteWorkflowDeferredTask(NamespaceManager.get(), domainUserID,
 					workflowID);
@@ -171,7 +191,7 @@ public class TicketBulkActionsBackendsRest
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 
@@ -194,9 +214,15 @@ public class TicketBulkActionsBackendsRest
 			ITicketIdsFetcher idsFetcher = null;
 
 			if (attributes.conditions != null && attributes.conditions.size() > 0)
+			{
 				idsFetcher = new FilterTicketIdsFetcher(attributes.conditions);
+				System.out.println(attributes.conditions);
+			}
 			else if (attributes.ticketIDs != null)
+			{
 				idsFetcher = new CSVTicketIdsFetcher(attributes.ticketIDs);
+				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
+			}
 
 			CloseTicketsDeferredTask task = new CloseTicketsDeferredTask(NamespaceManager.get(), domainUserID);
 
@@ -206,7 +232,7 @@ public class TicketBulkActionsBackendsRest
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 
@@ -229,9 +255,15 @@ public class TicketBulkActionsBackendsRest
 			ITicketIdsFetcher idsFetcher = null;
 
 			if (attributes.conditions != null && attributes.conditions.size() > 0)
+			{
 				idsFetcher = new FilterTicketIdsFetcher(attributes.conditions);
+				System.out.println(attributes.conditions);
+			}
 			else if (attributes.ticketIDs != null)
+			{
 				idsFetcher = new CSVTicketIdsFetcher(attributes.ticketIDs);
+				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
+			}
 
 			DeleteTicketsDeferredTask task = new DeleteTicketsDeferredTask(NamespaceManager.get(), domainUserID);
 
@@ -241,7 +273,7 @@ public class TicketBulkActionsBackendsRest
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 
@@ -261,9 +293,15 @@ public class TicketBulkActionsBackendsRest
 			ITicketIdsFetcher idsFetcher = null;
 
 			if (attributes.conditions != null && attributes.conditions.size() > 0)
+			{
 				idsFetcher = new FilterTicketIdsFetcher(attributes.conditions);
+				System.out.println(attributes.conditions);
+			}
 			else if (attributes.ticketIDs != null)
+			{
 				idsFetcher = new CSVTicketIdsFetcher(attributes.ticketIDs);
+				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
+			}
 
 			MarkTicketsAsSpamDeferredTask task = new MarkTicketsAsSpamDeferredTask(NamespaceManager.get(), domainUserID);
 
@@ -273,7 +311,7 @@ public class TicketBulkActionsBackendsRest
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 
@@ -293,9 +331,15 @@ public class TicketBulkActionsBackendsRest
 			ITicketIdsFetcher idsFetcher = null;
 
 			if (attributes.conditions != null && attributes.conditions.size() > 0)
+			{
 				idsFetcher = new FilterTicketIdsFetcher(attributes.conditions);
+				System.out.println(attributes.conditions);
+			}
 			else if (attributes.ticketIDs != null)
+			{
 				idsFetcher = new CSVTicketIdsFetcher(attributes.ticketIDs);
+				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
+			}
 
 			MarkTicketsAsFavoriteDeferredTask task = new MarkTicketsAsFavoriteDeferredTask(NamespaceManager.get(),
 					domainUserID);
@@ -306,7 +350,7 @@ public class TicketBulkActionsBackendsRest
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 }

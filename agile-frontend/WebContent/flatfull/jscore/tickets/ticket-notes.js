@@ -63,10 +63,10 @@ var Tickets_Notes = {
 				Tickets.remove_draft_message(Current_Ticket_ID, ((note_type == 'PUBLIC') ? 'reply' : 'comment'));
                 
                 if(is_ticket_closed){
-                 showNotyPopUp('information', "Note has been added and ticket status changed to Closed", 'bottomRight', 5000);
+                 showNotyPopUp('information', "Comment has been added and ticket status changed to Closed", 'bottomRight', 5000);
                 }
 				else 
-                 showNotyPopUp('information', "Note has been added and ticket status changed to Pending", 'bottomRight', 5000);
+                 showNotyPopUp('information', "Comment has been added and ticket status changed to Pending", 'bottomRight', 5000);
 				//update model in collection
 				if(App_Ticket_Module.ticketsCollection){
                     

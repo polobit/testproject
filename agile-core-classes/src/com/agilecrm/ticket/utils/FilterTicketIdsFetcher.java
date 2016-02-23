@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.contact.filter.ContactFilterIdsResultFetcher;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -47,7 +48,7 @@ public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 
@@ -105,7 +106,7 @@ public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 
 		return resultArticleIds;
