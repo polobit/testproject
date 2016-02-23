@@ -22,55 +22,109 @@ function agile_validations(){
 						inputNode.parentNode.insertBefore(spanTag,inputNode.nextSibling);
 						count++;    //if span created then we will increase by one
 						continue;
-					}
+			}
 
-				else if(inputNode.value && spans){
+		else if(inputNode.value && spans){
 
 					// email validations
-					if(agile_form[i].type == "email"){
-						var reg = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
- 						if (reg.test(inputNode.value)){
-		 					document.getElementById("agile_span"+i).remove(); 
+					if(agile_form[i].type == "email" && validateEmail(inputNode.value)){
+							document.getElementById("agile_span"+i).remove(); 
 		 					isValid = true;
 		 					continue;
-							}
- 						else{
- 							document.getElementById("agile_span"+i).innerHTML = "Please enter a valid email";
+						}
+ 						else if(agile_form[i].type == "email"){
+ 							document.getElementById("agile_span"+i).innerHTML = "Please enter a valid email.";
  							count++;
  							continue;
  						}	
-					}
 
 					//website validations
-					if(agile_form[i].type == "url"){
-						var reg = /^(ftp|http|https):\/\/[^ "]+$/;
-						if(reg.test(inputNode.value)){
+					if(agile_form[i].type == "url" && validateWebsite(inputNode.value)){
 							document.getElementById("agile_span"+i).remove();
 							isValid = true;
 							continue;
-							}
-							else{
- 							document.getElementById("agile_span"+i).innerHTML = "Please enter a valid website";
+						}
+						else if(agile_form[i].type == "url"){
+ 							document.getElementById("agile_span"+i).innerHTML = "Please enter a valid website.";
  							count++;
  							continue;
  						}	
-					}
 
 					//other fields if have value 
 					document.getElementById("agile_span"+i).remove();
 					isValid = true;
 					continue;		
-				}
-				else if(inputNode.value == "" && spans){
+		}
+
+		else if(inputNode.value && spans == null){
+					
+					// email validations
+					if(agile_form[i].type == "email" && validateEmail(inputNode.value)){ 
+		 					isValid = true;
+		 					continue;
+						}
+ 						else if(agile_form[i].type == "email"){
+ 							var spanTag = document.createElement("span");
+						spanTag.innerHTML = "Please enter a valid email.";
+						spanTag.id = "agile_span"+i;
+						spanTag.style.color = "red";
+						spanTag.style.fontSize = "12px";
+						inputNode.parentNode.insertBefore(spanTag,inputNode.nextSibling);
+						count++;    //if span created then we will increase by one
+						continue;
+ 						}	
+
+				//website validations
+					if(agile_form[i].type == "url" && validateWebsite(inputNode.value)){
+							isValid = true;
+							continue;
+						}
+						else if(agile_form[i].type == "url"){
+ 							var spanTag = document.createElement("span");
+						spanTag.innerHTML = "Please enter a valid website.";
+						spanTag.id = "agile_span"+i;
+						spanTag.style.color = "red";
+						spanTag.style.fontSize = "12px";
+						inputNode.parentNode.insertBefore(spanTag,inputNode.nextSibling);
+						count++;    //if span created then we will increase by one
+						continue;
+ 						}	
+		}
+
+		else if(inputNode.value == "" && spans){
 					isValid = false;
 					count++;
 					continue;
-				}
-	}
+		}	
+
 				if(count != null){	// if form having spans 
 					isValid =false;
 				}
 
-   }
+   		}
+
+   	}
+
 	return isValid;
+}
+
+
+function validateEmail(email){
+
+		var reg = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+ 		if (reg.test(email))
+		 		return true;
+ 			else
+ 				return false;
+}
+
+
+function validateWebsite(url){
+
+		var reg = /^(ftp|http|https):\/\/[^ "]+$/;
+			if(reg.test(url))
+				return true;
+			else
+ 				return false;
+ 							
 }
