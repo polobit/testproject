@@ -517,9 +517,6 @@ function initializeSubscriptionListeners()
 						}else if(data.is_allowed_plan){
 							Backbone.history.navigate("purchase-plan", { trigger : true });
 						}else if(data.lines){
-							plan_json.date = data.nextPaymentAttempt;
-							if(months == 24)
-								plan_json.date = plan_json.date + 31557600;
 							$.each( JSON.parse(USER_BILLING_PREFS.billingData).subscriptions.data, function( key, value ) {
 							  if(value.plan.id.indexOf("email") == -1)
 							  {
@@ -535,31 +532,34 @@ function initializeSubscriptionListeners()
 							  	}
 							  }
 							});
-							Backbone.history.navigate("purchase-plan", { trigger : true });
+							
 						}else{
-							if(data.contacts.count > data.contacts.limit)
+							var restrictions = data.restrictions;
+							if(restrictions.contacts.count > restrictions.contacts.limit)
 								errorsCount++;
-							if(data.webrules.count > data.webrules.limit)
+							if(restrictions.webrules.count > restrictions.webrules.limit)
 								errorsCount++;
-							if(data.users.count > data.users.limit)
+							if(restrictions.users.count > restrictions.users.limit)
 								errorsCount++;
-							if(data.workflows.count > data.workflows.limit)
+							if(restrictions.workflows.count > restrictions.workflows.limit)
 								errorsCount++;
-							if(data.triggers.count > data.triggers.limit)
+							if(restrictions.triggers.count > restrictions.triggers.limit)
 								errorsCount++;
 							if(errorsCount >= 1)
 							{
-								data.errorsCount = errorsCount;
-								getTemplate("subscribe-error-modal",data , undefined, function(template_ui){
+								restrictions.errorsCount = errorsCount;
+								getTemplate("subscribe-error-modal",restrictions , undefined, function(template_ui){
 									if(!template_ui)
 										  return;
 									$(template_ui).modal('show');
 								}, null);
 								
 							}
-							else
-								Backbone.history.navigate("purchase-plan", { trigger : true });
 						}
+						plan_json.date = data.nextPaymentAttempt;
+						if(months == 24)
+							plan_json.date = plan_json.date + 31557600;
+						Backbone.history.navigate("purchase-plan", { trigger : true });
 							
 					},
 					error : function(data){
