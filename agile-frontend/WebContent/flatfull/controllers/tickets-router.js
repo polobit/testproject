@@ -577,7 +577,7 @@
  				isNew : false,
  				template : "ticket-label-add-edit",
  				url : "/core/api/tickets/labels",
- 				saveCallback : function(){
+ 				saveCallback : function(model){
 
  					if(Ticket_Labels.labelsCollection){
  						Ticket_Labels.labelsCollection.add(model);
