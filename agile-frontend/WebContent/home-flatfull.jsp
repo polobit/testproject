@@ -148,7 +148,6 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   display: none !important;
 }
 
-
 </style>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -175,7 +174,7 @@ function isIE() {
  {window.location='/error/not-supported.jsp';}
 
 </script>
-
+<div id="alert-message" style="display:none;"></div>
 <div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
@@ -584,8 +583,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 %>
 
 
-  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
-   
+   <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
