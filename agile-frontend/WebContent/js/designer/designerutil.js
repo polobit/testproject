@@ -471,6 +471,7 @@ function disable_text_required_property(selector)
 	if (selector.find('#tinyMCEhtml_email').val() != "" && selector.find('#text_email').val() == "")
 		selector.find('#text_email').removeProp("required");
 }
+
 // Bhasuri 10/25/2014
 function getDate(selector)
 {
@@ -821,4 +822,15 @@ function insertSelectedOption1(ele ,target_id)
     		}
     	}
 	}
+
+	function checkRequiredFieldUpdateDeal(selector)
+	{
+	
+	if (selector.find('#expected_value').val() != "" && selector.find('#milestone').val() == "")
+		selector.find('#milestone').removeProp("required");
+
+	// function remove_property(ele)
+	}
+
+	
 
