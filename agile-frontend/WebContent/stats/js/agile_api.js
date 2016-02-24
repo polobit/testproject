@@ -259,6 +259,6 @@ var _agile = {
             	return callback();
             }   
 
-            console.log("%cStop! Function calls from console is disabled.", "color: red;");
+            console.log("%cStop! Function calls from console are disabled.", "color: red;");
 		}
 };
