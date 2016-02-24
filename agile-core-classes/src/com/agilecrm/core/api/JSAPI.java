@@ -699,7 +699,7 @@ public class JSAPI
 	try
 	{
 		if(!JSAPIUtil.isRequestFromOurDomain())
-			return null;
+			return new JSONArray().toString();
 		
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
@@ -772,7 +772,7 @@ public class JSAPI
 	try
 	{
 		if(!JSAPIUtil.isRequestFromOurDomain())
-			return null;
+			return new JSONArray().toString();
 		
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
@@ -811,7 +811,7 @@ public class JSAPI
 	try
 	{
 		if(!JSAPIUtil.isRequestFromOurDomain())
-			return null;
+			return new JSONArray().toString();
 		
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
@@ -986,7 +986,7 @@ public class JSAPI
 	try
 	{
 		if(!JSAPIUtil.isRequestFromOurDomain())
-			return null;
+			return new JSONArray().toString();
 		
 	    Milestone milestone = MilestoneUtil.getMilestones();
 	    ObjectMapper mapper = new ObjectMapper();
@@ -1012,7 +1012,7 @@ public class JSAPI
 	try
 	{
 		if(!JSAPIUtil.isRequestFromOurDomain())
-			return null;
+			return new JSONArray().toString();
 		
 	    List<Milestone> milestones = MilestoneUtil.getMilestonesList();
 	    ObjectMapper mapper = new ObjectMapper();
@@ -1038,7 +1038,7 @@ public class JSAPI
 	try
 	{
 		if(!JSAPIUtil.isRequestFromOurDomain())
-			return null;
+			return new JSONArray().toString();
 		
 	    Milestone milestone = null;
 	    if (pipelineId != null && pipelineId > 0)
@@ -1424,7 +1424,7 @@ public class JSAPI
 	try
 	{
 		if(!JSAPIUtil.isRequestFromOurDomain())
-			return null;
+			return new JSONArray().toString();
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(DomainUserUtil.getUsers());
