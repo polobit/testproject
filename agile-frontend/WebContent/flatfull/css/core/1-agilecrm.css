@@ -3184,3 +3184,23 @@ table.hide-head-checkbox th label.i-checks {
 #user-blocked-modal .modal-dialog{
 	top: 20vh;
 }
+
+.user-alert{
+	position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.user-alert .user-alert-message{
+	position: fixed;
+    width: 50%;
+    margin: 25px auto;
+    text-align: center;
+    background: #f7ecc2!important;
+    border: 1px solid rgb(255, 194, 55);
+    left: 0;
+    right: 0;
+    z-index: 99999;
+    cursor: pointer;
+}

@@ -642,8 +642,8 @@ function showPageBlockModal() {
 	// Removing existing modal
 	$("#user-blocked-modal").modal('hide');
 	$("#alert-message").html("").hide();
-	if ($.inArray(Current_Route, AVOID_PAGEBLOCK_URL) != -1 || USER_BILLING_PREFS == undefined || USER_BILLING_PREFS.status == undefined || USER_BILLING_PREFS.status == null)
-		return false;
+	if ($.inArray(Current_Route, AVOID_PAGEBLOCK_URL) != -1 || USER_BILLING_PREFS == undefined || USER_BILLING_PREFS.status == undefined || USER_BILLING_PREFS.status == null || USER_BILLING_PREFS.updated_time == undefined || USER_BILLING_PREFS.updated_time == null || USER_BILLING_PREFS.updated_time < 1456298581)
+		return;
 	else if($.inArray(USER_BILLING_PREFS.status, PAYMENT_FAILED_REASON) != -1){
 		var expiry_date = (USER_BILLING_PREFS.updated_time+691200)*1000;
 		if(USER_BILLING_PREFS.status == "BILLING_FAILED_1")
