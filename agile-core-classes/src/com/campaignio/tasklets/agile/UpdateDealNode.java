@@ -34,10 +34,7 @@ public class UpdateDealNode extends TaskletAdapter
     	String milestone = getStringValue(nodeJSON, subscriberJSON, data, MILESTONE);
     	String expectedValue = getStringValue(nodeJSON, subscriberJSON, data, EXPECTEDVALUE);
     	String msg=null;
-    	System.out.println("milestone :" + milestone);
-    	System.out.println("expectedValue :" + expectedValue);
-
-    	
+    	    	
     	try
     {
         
