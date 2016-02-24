@@ -424,16 +424,16 @@ $('#' + id).on('click', '#import-deals', function(e)
 						return;
 
 					var upload_valudation_errors = {
-							"deal_name_missing" : { "error_message" : "Deal Name is mandatory. Please select deal name." },
-							"deal_duplicated" : { "error_message" : "Deal Name field is duplicated" },
-							"deal_value_duplicated" : { "error_message" : "Deal value field is duplicated" },
-							"deal_track_duplicated" : { "error_message" : "Deal track field is duplicated" },
-							"deal_milestone_duplicated" : {"error_message" : "Milestone field is duplicated."},
-							"deal_related_contact_duplicated" : {"error_message" : "Deal relatsTo field duplicated" },
-							"deal_probability_duplicated" : {"error_message" : "Deal probability field is duplicated"},
-							"deal_close_date_duplicated" : {"error_message" : "Deal close date field is duplicated"},
-							"deal_note_duplicated" : {"error_message" : "Deal Note field duplicated"},
-							"deal_description_duplicated" : {"error_message":"Deal descriptions field is duplicated"},
+							"deal_name_missing" : { "error_message" : "'Deal Name' is mandatory!" },
+							"deal_duplicated" : { "error_message" : "'Name' already exists!" },
+							"deal_value_duplicated" : { "error_message" : "'Value' already exists!" },
+							"deal_track_duplicated" : { "error_message" : "'Track' already exists!" },
+							"deal_milestone_duplicated" : {"error_message" : "'Milestone' already exists!"},
+							"deal_related_contact_duplicated" : {"error_message" : "'Related to' already exists!" },
+							"deal_probability_duplicated" : {"error_message" : "'probability' already exists!"},
+							"deal_close_date_duplicated" : {"error_message" : "'close date' already exists!"},
+							"deal_note_duplicated" : {"error_message" : "'Note' already exists!"},
+							"deal_description_duplicated" : {"error_message":"'Description' already exists!"},
 					}
 					var models = [];
 
