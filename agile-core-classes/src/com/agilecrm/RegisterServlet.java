@@ -86,7 +86,7 @@ public class RegisterServlet extends HttpServlet
 	System.out.println("type   " + type);
 
 	// Type the type of registration for the user - oauth or agile
-	try
+	/*try
 	{
 	    if (type != null)
 	    {
@@ -108,7 +108,7 @@ public class RegisterServlet extends HttpServlet
 	    request.getRequestDispatcher("register-new1.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(
 		    request, response);
 	    return;
-	}
+	}*/
 
 	request.getRequestDispatcher("register-new1.jsp").forward(request, response);
     }

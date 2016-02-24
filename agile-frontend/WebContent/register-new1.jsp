@@ -6,7 +6,7 @@
 <%@page contentType="text/html; charset=UTF-8" %>
 <%
 
-	  if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+	  /*if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
 	} 
@@ -15,7 +15,7 @@
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	}
+	}*/
  
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");

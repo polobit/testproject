@@ -666,6 +666,12 @@ var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.j
 <!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
 head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min.js?_=' + _AGILE_VERSION, function(){
         load_globalize();
+        if((document.referrer!=null)&&(document.referrer.indexOf("register") != -1))
+        {
+        $("#dashboard_video").modal("show");
+        console.log("after-modal");
+        }
+
 })
 // , LIB_PATH + 'lib/backbone-route-filter.js'
 
@@ -737,7 +743,25 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
 </script>
 <!-- End of ClickDesk -->
 
-
+ <!--video on dashboard -->
+ <div class="modal  fade" id="dashboard_video">
+        <div class="modal-dialog" >
+        <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" data-dismiss="modal">x</button>
+          <h3 id="myModalLabel">welcome</h3>
+        </div>      
+          <div class="modal-body">
+              <div class="embed-responsive embed-responsive-16by9">
+                      <iframe class="embed-responsive-item" src="//www.youtube.com/embed/9aH60N6HPcc?list=PLqZv4FUxASTctDCZmdVbheU75Y3Szk9Ny" frameborder="0" allowfullscreen></iframe>
+               </div>       
+          </div>     
+        <div class="modal-footer">
+             
+        </div>
+        </div>
+        </div>
+  </div>
 
 </body>
 </html>
