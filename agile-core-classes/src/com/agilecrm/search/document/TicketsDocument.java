@@ -141,7 +141,6 @@ public class TicketsDocument implements BuilderInterface
 
 			String requesterName = ticket.requester_name;
 			String requesterEmail = ticket.requester_email;
-			String plainText = ticket.last_reply_text;
 
 			// Set requester name
 			document.addField(Field.newBuilder().setName("requester_name").setText(requesterName));
@@ -175,8 +174,7 @@ public class TicketsDocument implements BuilderInterface
 			document.addField(Field
 					.newBuilder()
 					.setName("search_tokens")
-					.setText(
-							StringUtils2.breakdownFragments(plainText).toString() + " " + requesterName + " "
+					.setText(requesterName + " "
 									+ requesterEmail + " " + ticketID));
 
 			System.out.println(getIndex().put(document));
@@ -210,33 +208,33 @@ public class TicketsDocument implements BuilderInterface
 	{
 		try
 		{
-			Tickets ticket = (Tickets) entity;
-			Document document = getIndex().get(ticket.id + "");
+//			Tickets ticket = (Tickets) entity;
+//			Document document = getIndex().get(ticket.id + "");
+//
+//			String existingMailContent = "";
+//
+//			try
+//			{
+//				existingMailContent = document.getOnlyField("mail_content").getText();
+//			}
+//			catch (Exception e)
+//			{
+//				e.printStackTrace();
+//			}
+//
+//			System.out.println("existingMailContent: " + existingMailContent);
+//
+//			if (StringUtils.isBlank(existingMailContent))
+//			{
+//				add(ticket);
+//				return;
+//			}
+//
+//			ticket.last_reply_text += existingMailContent;
+//
+//			System.out.println("ticket.last_reply_text: " + ticket.last_reply_text);
 
-			String existingMailContent = "";
-
-			try
-			{
-				existingMailContent = document.getOnlyField("mail_content").getText();
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-
-			System.out.println("existingMailContent: " + existingMailContent);
-
-			if (StringUtils.isBlank(existingMailContent))
-			{
-				add(ticket);
-				return;
-			}
-
-			ticket.last_reply_text += existingMailContent;
-
-			System.out.println("ticket.last_reply_text: " + ticket.last_reply_text);
-
-			add(ticket);
+			add((Tickets) entity);
 		}
 		catch (Exception e)
 		{

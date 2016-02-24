@@ -18,6 +18,10 @@ var Tickets = {
 
 				$('#content').html($(template_ui));	
 
+				if($('body').hasClass('modal-open')){
+					$('body').removeClass('modal-open').animate({ scrollTop: 0 }, "slow");
+				}
+
 				var json = {};
 				json.sort_by = Sort_By;
 				json.sort_field = Sort_Field;
@@ -570,6 +574,9 @@ var Tickets = {
 		var assigneeId = $(that).val();
 		//console.log(assigneeId);
 
+		if(!assigneeId)
+			return;
+
 	    var groupId = $(that.options[that.selectedIndex]).closest('optgroup').attr('data-group-id');
 
 	    if(!groupId){
@@ -645,7 +652,7 @@ var Tickets = {
 
 		$.ajax({
 			url : url,
-			method: "GET",
+			method: "PUT",
 			data: {},
 			contentType: 'application/x-www-form-urlencoded',
 			accept: 'application/json',

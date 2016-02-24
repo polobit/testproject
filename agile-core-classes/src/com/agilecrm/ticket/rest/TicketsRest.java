@@ -114,8 +114,15 @@ public class TicketsRest
 		{
 			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
 
-			// Include Ticket Group Object
-			ticket.group = TicketGroups.ticketGroupsDao.get(ticket.groupID);
+			try
+			{
+				// Include Ticket Group Object
+				ticket.group = TicketGroups.ticketGroupsDao.get(ticket.groupID);
+			}
+			catch (Exception e)
+			{
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
 
 			if (ticket.assignee_id != null)
 			{

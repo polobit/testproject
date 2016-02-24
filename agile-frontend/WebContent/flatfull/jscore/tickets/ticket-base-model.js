@@ -7,7 +7,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"change .ticket_status" : "changeStatus",
 		
 		"click .ticket_assignee_name" : "changeAssignee",
-		"click #ticket-assignee" : "changeAssignee",
+		"change #ticket-assignee" : "changeAssignee",
 		"click .assign-to-me" : "assignToMe",
          "click .remove-date" :"removeTicketDuedate",
 		"change .ticket_type" : "changeTicketType",
