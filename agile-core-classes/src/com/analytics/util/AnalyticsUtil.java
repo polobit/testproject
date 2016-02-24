@@ -142,7 +142,7 @@ public class AnalyticsUtil
     {
 	String hostUrl = getStatsServerUrl(domain);
 	String statsServerUrl = null;
-	statsServerUrl = hostUrl + "action=url_visited_count&url=" + url + "&email=" + email + "&type=" + type
+	statsServerUrl = hostUrl + "action=URL_VISITED_COUNT&url=" + url + "&email=" + email + "&type=" + type
 		+ "&duration=" + duration + "&durationType=" + durationType;
 	return statsServerUrl;
     }
