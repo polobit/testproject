@@ -520,3 +520,12 @@ form#new-ticket ul.chosen-choices {
     height: 34px !important;
     padding-top: 2px !important;
 }
+.ticket_attachment{
+    width:6px;
+    height:6px;
+    border:0px; 
+    padding: 0px; 
+    margin:0px; 
+    padding-left: 0px; 
+    white-space: nowrap 
+}

@@ -21,10 +21,12 @@ var Tickets_Notes = {
 
 		if(!$("#send-reply").valid()){
 
-			if($(e.target).hasClass('forward'))
+			if($(e.target).hasClass('forward')){
+				$(".macro").attr("disabled", true);
 				this.forwardTicket(json, $save_btn, false);
 
-			return;
+			    return;
+		    }
 		}
 			
 
@@ -33,6 +35,7 @@ var Tickets_Notes = {
 		json.html_text = json.html_text.trim() + "<br><br>" + CURRENT_USER_PREFS.signature;
 
 		if($(e.target).hasClass('forward')){
+			$(".macro").attr("disabled", true);
 			this.forwardTicket(json, $save_btn, true);
 			return;
 		}
@@ -148,7 +151,7 @@ var Tickets_Notes = {
 			$('ul.forward-emails').addClass("ticket-input-border-error");
 			return;
 		}
-
+		
 		if(!isValid)
 			return;
 
@@ -224,9 +227,9 @@ var Tickets_Notes = {
 		var data = ticketModel.toJSON();
 
 		data.reply_type = (reply_type) ? reply_type : "reply";
-			
-		if(data.reply_type == 'forward')
-			data.notes = this.constructTextComments(App_Ticket_Module.notesCollection.collection.toJSON());
+		if(data.reply_type == 'forward'){
+		data.notes = this.constructTextComments(App_Ticket_Module.notesCollection.collection.toJSON());
+		}
 
 		if(Ticket_Canned_Response.cannedResponseCollection && Ticket_Canned_Response.cannedResponseCollection.toJSON() 
 			&& Ticket_Canned_Response.cannedResponseCollection.toJSON().length > 0)
@@ -238,6 +241,11 @@ var Tickets_Notes = {
 		var $container = (el) ?  $('#send-reply-container', el): $('#send-reply-container');
 
 		$container.html(getTemplate('create-ticket-notes', data));
+
+		if(data.reply_type == 'forward'){
+		 $("#macro_list", $container).addClass("disabled text-muted");
+		 $("#macro_list").css("cursor","no-drop");
+		}
 
 		head.js('/flatfull/lib/jquery.textarea-expander.js', function()
 		{	
