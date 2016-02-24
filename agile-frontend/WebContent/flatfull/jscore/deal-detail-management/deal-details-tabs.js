@@ -339,8 +339,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	    fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
 		{
-			el.find("#document-select > option:first").after("<option value='new'>Add New Doc</option>");
-
+			el.find("#document-select > option:first").after("<option value='new'>Add New Doc</option><option style='font-size: 1pt; background-color: #EDF1F2;'disabled>&nbsp;</option>");
+			el.find("#document-select > option:first").remove();
 		}, optionsTemplate, false, el); 
 	},
 
