@@ -8,7 +8,7 @@
 <div id = "contact-dtl" class="app-content-full  h-full dock-view-fixing">
 <div class="hbox hbox-auto-xs hbox-auto-sm bg-light" >
   
-  <div class="col  details-mobile-view b-r bg-light lter ">
+  <div class="col  details-mobile-view b-r bg-light lter vbox-mobile-view">
   
   <div class="vbox">
   <div class="row-row">
@@ -106,7 +106,7 @@
 								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
 								</div>
 							<div class=" m-b-xs text-cap" style="padding-right:5px;">	
-						<div class="contact-job-title text-base text-center font-thin custom-color text-ellipsis">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}   {{#if contact_company_id}}
+						<div class="contact-job-title text-base text-center font-thin custom-color text-ellipsis" style="max-width:100%;">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}   {{#if contact_company_id}}
 
 									<a class = "block text-xs"  href="#company/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
 								{{else}}
@@ -560,7 +560,7 @@
 										
 
                                             <span class="contact-custom-name custom-color text-ellipsis">
-												<span class="text-light text-ellipsis text-base" title="{{name}}">{{name}}</span>
+												<span class="text-light text-ellipsis text-base" title="{{name}}" style="display:block;" >{{name}}</span>
 											</span>
 
 										
