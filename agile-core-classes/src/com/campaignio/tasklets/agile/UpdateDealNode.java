@@ -41,14 +41,14 @@ public class UpdateDealNode extends TaskletAdapter
          OpportunityUtil.updateDeal(Long.parseLong(AgileTaskletUtil.getId(subscriberJSON)),
                 milestone,expectedValue);
       
-        if(expectedValue!=null && (milestone.length()!=0 || milestone!=null))
-            msg="Deal is updated."+"<br>Expected Value : " + expectedValue +"<br> MileStone : "+milestone;
+        if(expectedValue.length()!=0 && milestone.length()!=0 )
+            msg="Deal is updated."+"<br>Expected Value : " + expectedValue +"<br> MileStone : "+milestone.substring(milestone.indexOf("_")+1);
             		
         else if( milestone.length()!=0)
-        	msg="Milestone of Deal is updated " + milestone;
+        	msg="Milestone of Deal is updated :" + milestone.substring(milestone.indexOf("_")+1);
             		
-        else if(expectedValue!=null)
-            msg= "Expected Value of Deal is updated " + expectedValue;            		
+        else if(expectedValue.length()!=0)
+            msg= "Expected Value of Deal is updated :" + expectedValue;            		
         
         LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), msg
         		,LogType.UPDATE_DEAL.toString());  

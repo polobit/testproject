@@ -1,7 +1,7 @@
 {
     "name": "Update Deal",
-    "thumbnail": "json/nodes/images/crm/has_deal.png",
-    "icon": "json/nodes/icons/crm/has_deal.png",
+    "thumbnail": "json/nodes/images/crm/update_deal.png",
+    "icon": "json/nodes/icons/crm/update_deal.png",
     "info": "Update your deals here.",
     "help": "Update your deals here.",
     "author": "sonali",

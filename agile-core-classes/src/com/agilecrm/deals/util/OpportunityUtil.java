@@ -2712,13 +2712,15 @@ public class OpportunityUtil
 	}
     }
     
-    public static void updateDeal(Long contactId, String milestone, String expectedValue)
-    {
-    	if (contactId == 0 && milestone.length()==0 && expectedValue ==null)
-    		return;
+    @SuppressWarnings("null")
+	public static void updateDeal(Long contactId, String milestone, String expectedValue)
+    {   
+    	if(expectedValue==null && milestone==null)
+    		if (contactId == 0 && milestone.length()==0 && expectedValue.length()==0 )
+    			return; 
     	
     	double expectedValueD=0;
-    	if(expectedValue!=null)
+    	if(expectedValue.length()!=0 && expectedValue!=null)
     		expectedValueD= Double.parseDouble(expectedValue);
     		
     	
@@ -2728,7 +2730,7 @@ public class OpportunityUtil
     	Long pipeline=null;
     	String milestoneStr=null;
     	
-    	if(milestone.length()!=0 || milestone!=null){ 
+    	if(milestone.length()!=0 && milestone!=null){ 
     		Map<String, String> fromMilestoneDetails = AgileTaskletUtil.getTrackDetails(milestone);
     		milestoneStr=fromMilestoneDetails.get("milestone").trim();
     		pipeline=Long.parseLong(fromMilestoneDetails.get("pipelineID"));
