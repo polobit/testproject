@@ -464,11 +464,11 @@ public class CampaignLogsSQLUtil
 	    	JSONArray campaignLogs = null;
 	    	JSONArray webStats = null;
 	    	
-	    	String campaignLogAliasTable = " ( SELECT NULL AS url,NULL AS ip,NULL AS stats_time,NULL AS email,"
+	    	String campaignLogAliasTable = "SELECT NULL AS url,NULL AS ip,NULL AS stats_time,NULL AS email,"
 		    + "campaign_id,subscriber_id,campaign_name,log_time,log_type,message,UNIX_TIMESTAMP(log_time) AS time "
 		    + "FROM campaign_logs AS campaignLogsAlias WHERE DOMAIN = '"
 		    + domain
-		    + "' AND (log_type='EMAIL_OPENED' OR log_type='CLICK' OR log_type='UNSUBSCRIBED') ORDER BY log_time DESC "
+		    + "' AND (log_type='EMAIL_OPENED' OR log_type='CLICK' OR log_type='UNSUBSCRIBED') ORDER BY log_time DESC"
 		    + GoogleSQLUtil.appendLimitToQuery(cursor, page_size);	    
 	    
 		    try

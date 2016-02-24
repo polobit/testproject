@@ -250,10 +250,10 @@ public class LogUtil
 					{
 					});
 			
-//			if(log_type == null || ("All_Activities").equals(log_type))
-//			{
-//				Collections.sort(logsList, new SentDateComparator());
-//			}
+			if(log_type == null || ("All_Activities").equals(log_type))
+			{
+				Collections.sort(logsList, new SentDateComparator());
+			}
 
 			LogWrapper lastLog = logsList.get(logsList.size() - 1);
 			lastLog.cursor = (Integer.parseInt(cursor) + Integer.parseInt(page_size)) + "";
