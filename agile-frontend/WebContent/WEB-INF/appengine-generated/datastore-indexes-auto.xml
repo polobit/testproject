@@ -433,4 +433,10 @@
         <property name="won_date" direction="asc"/>
     </datastore-index>
     
+    <datastore-index kind="AliasDomain" ancestor="false" source="auto">
+        <property name="alias" direction="asc"/>
+        <property name="domain" direction="asc"/>
+    </datastore-index>
+    
+    
 </datastore-indexes>
