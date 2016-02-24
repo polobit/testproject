@@ -1,5 +1,6 @@
 <%
-long unixTime = System.currentTimeMillis() / 1000L;
+String version = "beta1dot0";
+// long unixTime = System.currentTimeMillis() / 1000L;
 %>
 
 <!DOCTYPE html>
@@ -16,7 +17,7 @@ long unixTime = System.currentTimeMillis() / 1000L;
         <link href="css/colpick.css" rel="stylesheet"  type="text/css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-        <link href="css/template.editor.css?t=<%=unixTime%>" rel="stylesheet"/>
+        <link href="css/template.editor.css?v=<%=version%>" rel="stylesheet"/>
         <link href="css/responsive-table.css" rel="stylesheet"/>
 
 
@@ -52,7 +53,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
         <script type="text/javascript" src="js/colpick.js"></script>
-        <script type="text/javascript" src="js/template.editor.js?t=<%=unixTime%>"></script>
+        <script type="text/javascript" src="js/template.editor.js?v=<%=version%>"></script>
 
 <style>
 .mce-btn button {
