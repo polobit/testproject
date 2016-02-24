@@ -7,6 +7,7 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * <code>UpdateDeal</code> Update milestone and expected value of latest deal
@@ -33,6 +34,8 @@ public class UpdateDealNode extends TaskletAdapter
     	String milestone = getStringValue(nodeJSON, subscriberJSON, data, MILESTONE);
     	String expectedValue = getStringValue(nodeJSON, subscriberJSON, data, EXPECTEDVALUE);
     	String msg=null;
+    	System.out.println("milestone :" + milestone);
+    	System.out.println("expectedValue :" + expectedValue);
 
     	
     	try
@@ -57,7 +60,8 @@ public class UpdateDealNode extends TaskletAdapter
     catch (Exception e)
     {
         e.printStackTrace();
-        System.err.println("Exception occured while updating deals..." + e.getMessage());
+        System.err.println("Exception occured while updating deals..." + e.getMessage() );
+        System.out.println(ExceptionUtils.getFullStackTrace(e));
     }
     
     TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
