@@ -19,13 +19,17 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-r
  * Default image shown for contacts if image is not available
  */
 
-var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
+var DEFAULT_GRAVATAR_url = agileWindowOrigin() + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
 
-var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi,Sandeep";
 
-var SALES_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Shravi_Sharma,stephen";
+var ONBOARDING_SCHEDULE_URL = "http://supportcal.agilecrm.com";
 
-var SUPPORT_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Raja_Shekar,Natesh,Abhishek_Pandey";
+
+var SALES_SCHEDULE_URL = "http://salescal.agilecrm.com";
+
+
+var SUPPORT_SCHEDULE_URL = "http://supportcal.agilecrm.com";
+
 
 var CALENDAR_WEEK_START_DAY = CURRENT_USER_PREFS.calendar_wk_start_day;
 /**
@@ -126,6 +130,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		});
 		// Convert template into HTML
 		var modelTemplate = Handlebars.compile(template);
+		var optionsHTML = "";
 		// Iterates though each model in the collection and
 		// populates the template using handlebars
 		$.each(data, function(index, model)
@@ -136,8 +141,8 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 			}
 			else
 			{
-				var optionsHTML = modelTemplate(model);
-				$("#" + selectId, el).append(optionsHTML);
+				optionsHTML += modelTemplate(model);
+				$("#" + selectId, el).append(modelTemplate(model));
 			}
 		});
 
@@ -147,7 +152,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		{
 			// execute the callback, passing parameters as
 			// necessary
-			callback(collection);
+			callback(collection, optionsHTML);
 		}
 	}
 
@@ -358,7 +363,9 @@ function showTextGravatar(selector, element)
 			return;
 
 		$(this).attr("data-name", name);
-		$(this).initial({ charCount : 2 });
+
+		// $(element).initial({charCount: 2,fontWeight: 'normal',fontSize:20, width:$(element).width(), height:$(element).height()});
+		$(element).initial({charCount: 2,fontWeight: 'normal'});
 	});
 }
 
@@ -579,5 +586,48 @@ function getFormattedDateObjectWithString(value){
 
 		return new Date(value);
 	
+}
+
+function isIE() {
+
+	var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
+	var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
+	if(isIE || isIENew)
+	 return true;
+
+	return false;
+}
+
+function agileWindowOrigin(){
+	if (!window.location.origin) {
+	   return window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+	}
+
+	return window.location.origin;
+}
+
+$(function(){
+    $( document ).ajaxError(function(event, jqXHR) {
+	   // Get response code and redirect to login page
+	   if(jqXHR.status && jqXHR.status == 401)
+	   	      handleAjaxError();
+	});
+});
+
+function handleAjaxError(){
+
+		var hash = window.location.hash;
+
+        try{
+            // Unregister all streams on server.
+			unregisterAll();
+        }catch(err){}
+		
+		// Unregister on SIP server.
+		sipUnRegister();
+		
+		// Firefox do not support window.location.origin, so protocol is explicitly added to host
+		window.location.href = window.location.protocol + "//" + window.location.host+"/login"+hash;
+
 }
 

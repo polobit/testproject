@@ -9,10 +9,10 @@ function startGettingDeals(criteria, pending)
 		$('#new-opportunity-list-paging').html(html);
 		return;
 	}
-	if (readCookie('agile_deal_track'))
+	if (_agile_get_prefs('agile_deal_track'))
 	{
-		if (readCookie('agile_deal_track') != pipeline_id)
-			createCookie('agile_deal_track', pipeline_id);
+		if (_agile_get_prefs('agile_deal_track') != pipeline_id)
+			_agile_set_prefs('agile_deal_track', pipeline_id);
 	}
 	var currentTrack = trackListView.collection.get(pipeline_id).toJSON();
 	var milestones = currentTrack.milestones.split(',');
@@ -43,7 +43,7 @@ function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 	// Url to call DB
 	var initialURL = '/core/api/opportunity/based?pipeline_id=' + pipeline_id + '&order_by=close_date';
 
-	if (readCookie('deal-filters'))
+	if (_agile_get_prefs('deal-filters'))
 	{
 		initialURL += '&filters=' + encodeURIComponent(getDealFilters());
 	}
@@ -91,9 +91,9 @@ function initDealListCollection(milestones)
 			// Setting dynamic auto width
 			var width = (100 / count);
 
-			if (readCookie('deal-milestone-view'))
+			if (_agile_get_prefs('deal-milestone-view'))
 			{
-				if (readCookie('deal-milestone-view') == "compact" && count > 8)
+				if (_agile_get_prefs('deal-milestone-view') == "compact" && count > 8)
 					width = 100 / 8;
 			}
 			else if (count > 5)
@@ -144,21 +144,31 @@ function dealsFetch(base_model)
 
 	var dealsTemplate = 'deals-by-paging';
 
-	if (!readCookie('deal-milestone-view'))
+	if (!_agile_get_prefs('deal-milestone-view'))
 	{
 		dealsTemplate = 'deals-by-paging-relax';
 	}
 
 	// Define sub collection
-	var dealCollection = new Base_Collection_View({ url : base_model.get("url"), templateKey : dealsTemplate, individual_tag_name : 'li',
+	var dealCollection = new Base_Collection_View({ url : base_model.get("url"), templateKey : dealsTemplate, individual_tag_name : 'li', 
 		sort_collection : false, cursor : true, page_size : 20, postRenderCallback : function(el)
-		{
+		{   
+			$(el).find('ul li').each(function(){
+				$(this).addClass("deal-color");
+				$(this).addClass($(this).find("input").attr("class"));
+			});
+			
+
 			$('ul.milestones', el).attr('milestone', base_model.get("heading"));
 
-			if (!readCookie("agile_deal_view"))
+			if (!_agile_get_prefs("agile_deal_view"))
 				deal_infi_scroll($('#' + base_model.get("heading").replace(/ +/g, '') + '-list-container')[0], dealCollection);
 
+
 			includeTimeAgo(el);
+
+			
+
 		} });
 
 	// Fetch task from DB for sub collection
@@ -173,12 +183,21 @@ function dealsFetch(base_model)
 		{
 			var count = data.at(0) ? data.at(0).toJSON().count : 0;
 			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(data.at(0) ? data.at(0).toJSON().count : 0);
-		}
+	        var dealcountarray = data.toArray();
+	        var i;
+	        var dealcount=0;
+            for (i = 0; i < dealcountarray.length; ++i){
+            	dealcount = dealcount + dealcountarray[i].get("expected_value");
+            }
+            $('#' + base_model.get("heading").replace(/ +/g, '') + '_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount));
+         }
+
 		catch (err)
 		{
 			console.log(err);
-		}
-
+		}  
+        
+        
 		$('a.deal-notes').tooltip();
 		// Counter to fetch next sub collection
 		pipeline_count++;

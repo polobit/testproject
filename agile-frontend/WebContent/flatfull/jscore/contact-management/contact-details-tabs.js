@@ -18,12 +18,12 @@ var email_server_type = "agilecrm";
 
 var email_server_type_cookie_name = "email_server_type_" + CURRENT_DOMAIN_USER.id;
 
-function fill_company_related_contacts(companyId, htmlId)
+function fill_company_related_contacts(companyId, htmlId, context_el)
 {
 	$('#' + htmlId).html(LOADING_HTML);
 
 	var companyContactsView = new Base_Collection_View({ url : 'core/api/contacts/related/' + companyId, templateKey : 'company-contacts',
-		individual_tag_name : 'tr', cursor : true, page_size : 25, sort_collection : false, postRenderCallback : function(el)
+		individual_tag_name : 'tr', cursor : true, page_size : 25, sort_collection : false, scroll_target : (context_el ? $("#infinite-scroller-company-details", context_el) : "#infinite-scroller-company-details"), postRenderCallback : function(el)
 		{
 			// var cel = App_Contacts.contactsListView.el;
 			// var collection = App_Contacts.contactsListView.collection;
@@ -31,7 +31,10 @@ function fill_company_related_contacts(companyId, htmlId)
 
 	companyContactsView.collection.fetch();
 
-	$('#' + htmlId).html(companyContactsView.render().el);
+	if(context_el)
+		$('#' + htmlId, $(context_el)).html(companyContactsView.render().el);
+	else
+		$('#' + htmlId).html(companyContactsView.render().el);
 }
 
 var Contact_Details_Tab_Actions = {
@@ -202,10 +205,21 @@ var Contact_Details_Tab_Actions = {
 
 		  	var model = $(targetEl).parents('li').data();
 
-		  	if(!hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != model.get("owner").id) && model.get("entity_type") && model.get("entity_type") == "deal"){
+		  	var owner = model.get("owner_id");
+
+		  	if(!owner && model.get("owner")){
+		  		owner = model.get("owner").id;
+		  	}
+
+		  	if(!hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "deal"){
 		  		$('#deal_delete_privileges_error_modal').modal('show');
 		  		return;
 		  	}
+
+		  	if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "event"){
+				$("#deleteEventErrorModal").html(getTemplate("delete-event-error-modal")).modal('show');
+				return;
+			}
 
 			if (model && model.toJSON().type != "WEB_APPOINTMENT")
 			{
@@ -313,7 +327,7 @@ function populate_send_email_details(el)
 {
 
 	$("#emailForm", el).find('input[name="from_name"]').val(CURRENT_DOMAIN_USER.name);
-	$("#emailForm", el).find('input[name="from_email"]').val(CURRENT_DOMAIN_USER.email);
+	$("#emailForm", el).find('input[name="from"]').val(CURRENT_DOMAIN_USER.email);
 
 	// Fill hidden signature field using userprefs
 	// $("#emailForm").find( 'input[name="signature"]'
@@ -391,20 +405,23 @@ function get_web_stats_count_for_domain(callback)
 function save_contact_tab_position_in_cookie(tab_href)
 {
 
-	var position = readCookie(contact_tab_position_cookie_name);
+	var position = _agile_get_prefs(contact_tab_position_cookie_name);
 
 	if (position == tab_href)
 		return;
 
-	createCookie(contact_tab_position_cookie_name, tab_href);
+	_agile_set_prefs(contact_tab_position_cookie_name, tab_href);
 }
 
 function load_contact_tab(el, contactJSON)
 {
 	timeline_collection_view = null;
-	var position = readCookie(contact_tab_position_cookie_name);
+	var position = _agile_get_prefs(contact_tab_position_cookie_name);
 	if (position == null || position == undefined || position == "")
 		position = "timeline";
+
+	if(position == "timeline" && agile_is_mobile_browser())
+			return;
 
 	$('#contactDetailsTab a[href="#' + position + '"]', el).tab('show');
 
@@ -459,10 +476,10 @@ function save_email_server_type_in_cookie(cookie_value)
 {
 	if (cookie_value)
 	{
-		var previous_cookie_value = readCookie(email_server_type_cookie_name);
+		var previous_cookie_value = _agile_get_prefs(email_server_type_cookie_name);
 		if (previous_cookie_value === cookie_value)
 			return;
-		createCookie(email_server_type_cookie_name, cookie_value, 30);
+		_agile_set_prefs(email_server_type_cookie_name, cookie_value, 30);
 	}
 }
 
@@ -490,7 +507,7 @@ function initializeSendEmailListeners(){
 
 			set_tinymce_content('email-body', '');
 
-			$("#emailForm").find('textarea[name="body"]').val("");
+			$("#emailForm").find('textarea[name="message"]').val("");
 			
 			$('.add-attachment-cancel').trigger("click");
 
@@ -623,10 +640,10 @@ function initializeSendEmailListeners(){
 							json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
 
 						if ((json.contact_cc_ids).join())
-							json.email_cc += ((json.email_cc != "") ? "," : "") + (json.contact_cc_ids).join();
+							json.cc += ((json.cc != "") ? "," : "") + (json.contact_cc_ids).join();
 
 						if ((json.contact_bcc_ids).join())
-							json.email_bcc += ((json.email_bcc != "") ? "," : "") + (json.contact_bcc_ids).join();
+							json.bcc += ((json.bcc != "") ? "," : "") + (json.contact_bcc_ids).join();
 
 						if (json.to == "" || json.to == null || json.to == undefined)
 						{
@@ -652,7 +669,9 @@ function initializeSendEmailListeners(){
 						$
 								.ajax({
 									type : 'POST',
-									data : json,
+									data : JSON.stringify(json),
+									dataType: 'json',
+									contentType: "application/json",
 									url : 'core/api/emails/contact/send-email',
 									success : function()
 									{

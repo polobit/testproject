@@ -4,10 +4,21 @@
 
 <div id="integrationstats">
 	<div class="">
-           <ul class="nav nav-tabs" id="integration-stats">
+           <ul class="nav nav-tabs stats-tabs-border" id="integration-stats">
+           {{#is_mobile}}
+
+             <li><a href="#account-stats-new" data-toggle="tab" ><i class="icon-user-following"></i></a></li>
+             <li><a href="#email-stats-new" data-toggle="tab" ><i class="icon-envelope"></i></a></li>
+			 <li><a href="#sms-stats-new" data-toggle="tab"><i class="icon-screen-smartphone"></i></a></li>
+
+			 {{else}}
+
+
              <li><a href="#account-stats-new" data-toggle="tab" >Account</a></li>
              <li><a href="#email-stats-new" data-toggle="tab" >Email</a></li>
 			 <li><a href="#sms-stats-new" data-toggle="tab">SMS</a></li>
+
+			 {{/is_mobile}}
            </ul>
 	</div>
  	<div class="tab-content panel wrapper" id="stats-tab-content">

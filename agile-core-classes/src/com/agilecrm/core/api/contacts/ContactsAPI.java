@@ -30,6 +30,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -49,11 +50,15 @@ import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
 import com.agilecrm.cases.Case;
 import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactFullDetails;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
+import com.agilecrm.contact.filter.util.ContactFilterUtil;
+import com.agilecrm.contact.imports.CSVImporter;
+import com.agilecrm.contact.imports.impl.ContactsCSVImporter;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
@@ -69,6 +74,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
@@ -112,7 +118,39 @@ public class ContactsAPI
 	}
 
 	System.out.println("Fetching page by page");
-	return ContactUtil.getAllContactsByOrder(Integer.parseInt(count), cursor, sortKey);
+
+	if (sortKey != null && ContactFilterUtil.isCustomField(sortKey))
+	{
+	    return ContactFilterUtil.getFilterContactsBySortKey(sortKey, Integer.parseInt(count), cursor, Type.PERSON);
+	}
+	List<Contact> contacts = ContactUtil.getAllContactsByOrder(Integer.parseInt(count), cursor, sortKey);
+	return contacts;
+
+    }
+
+    /**
+     * Fetches all the contacts (of type person). Activates infiniScroll, if
+     * no.of contacts are more than count and cursor is not null. This method is
+     * called if TEXT_PLAIN is request
+     * 
+     * If count is null fetches all the contacts at once
+     * 
+     * @param cursor
+     *            activates infiniScroll
+     * @param count
+     *            no.of contacts to be fetched at once (if more contacts are
+     *            there)
+     * @return list of contacts
+     */
+    @Path("/list/count")
+    @GET
+    public int getContactsCount()
+    {
+	System.out.println("Fetching count int");
+	Map searchMap = new HashMap();
+	searchMap.put("type", Contact.Type.PERSON);
+
+	return Contact.dao.getCountByProperty(searchMap);
 
     }
 
@@ -197,14 +235,47 @@ public class ContactsAPI
     public List<Contact> getCompaniesList(@FormParam("cursor") String cursor, @FormParam("page_size") String count,
 	    @FormParam("global_sort_key") String sortKey)
     {
+
 	if (count != null)
 	{
+
+	    if (sortKey != null && ContactFilterUtil.isCustomField(sortKey))
+	    {
+		return ContactFilterUtil.getFilterContactsBySortKey(sortKey, Integer.parseInt(count), cursor,
+			Type.COMPANY);
+	    }
 
 	    System.out.println("Fetching companies page by page");
 	    return ContactUtil.getAllCompaniesByOrder(Integer.parseInt(count), cursor, sortKey);
 	}
 
 	return ContactUtil.getAllCompaniesByOrder(sortKey);
+    }
+
+    /**
+     * Fetches all the contacts (of type person). Activates infiniScroll, if
+     * no.of contacts are more than count and cursor is not null. This method is
+     * called if TEXT_PLAIN is request
+     * 
+     * If count is null fetches all the contacts at once
+     * 
+     * @param cursor
+     *            activates infiniScroll
+     * @param count
+     *            no.of contacts to be fetched at once (if more contacts are
+     *            there)
+     * @return list of contacts
+     */
+    @Path("/companies/list/count")
+    @GET
+    public int getCompaniesCount()
+    {
+	System.out.println("Fetching count of companies");
+	Map searchMap = new HashMap();
+	searchMap.put("type", Contact.Type.COMPANY);
+
+	return Contact.dao.getCountByProperty(searchMap);
+
     }
 
     /**
@@ -251,7 +322,7 @@ public class ContactsAPI
     public Contact createContact(Contact contact)
     {
 	// Check if the email exists with the current email address
-	boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL"));
+	boolean isDuplicate = ContactUtil.isExists(StringUtils.lowerCase(contact.getContactFieldValue("EMAIL")));
 
 	// Throw non-200 if it exists
 	if (isDuplicate)
@@ -936,7 +1007,14 @@ public class ContactsAPI
 
 	System.out.println("In searchContactByPhoneNumber : " + phoneNumber);
 
-	return QueryDocumentUtil.getContactsByPhoneNumber(phoneNumber);
+	try
+	{
+	    return QueryDocumentUtil.getContactsByPhoneNumber(phoneNumber);
+	}
+	catch (Exception e)
+	{
+	    return ContactUtil.searchContactByPhoneNumber(phoneNumber);
+	}
     }
 
     /**
@@ -1077,10 +1155,10 @@ public class ContactsAPI
      * @param companyName
      * @return
      */
-    @Path("/company/validate/{company-name}")
+    @Path("/company/validate")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public boolean isCompanyExist(@PathParam("company-name") String companyName)
+    public boolean isCompanyExist(@QueryParam("companyName") String companyName)
     {
 	return ContactUtil.isCompanyExist(companyName);
     }
@@ -1168,6 +1246,8 @@ public class ContactsAPI
 	    }
 
 	}
+	if (contact.type.toString().equals(("PERSON")))
+	    ActivityUtil.mergeContactActivity(ActivityType.MERGE_CONTACT, contact, ids.length);
 	// merge notes
 	return contact;
     }
@@ -1253,6 +1333,39 @@ public class ContactsAPI
 	// ContactExportType.CONTACT);
 	// ActivityUtil.createLogForImport(ActivityType.CONTACT_EXPORT,
 	// EntityType.CONTACT, count, 0);
+    }
+
+    @Path("/import/{key}/{type}")
+    @POST
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void contactsBulkSave(Contact contact, @PathParam("key") String key, @PathParam("type") String type)
+    {
+	// it gives is 1000)
+	int currentEntityCount = ContactUtil.getCount();
+
+	// Creates a blobkey object from blobkey string
+	BlobKey blobKey = new BlobKey(key);
+
+	// new CSVUtil(restrictions,
+	// accessControl).createContactsFromCSV(blobStream, contact,
+	// ownerId);
+	UserInfo info = SessionManager.get();
+
+	CSVImporter<Contact> importer;
+	try
+	{
+	    importer = new ContactsCSVImporter(NamespaceManager.get(), blobKey, info.getDomainId(),
+		    new ObjectMapper().writeValueAsString(contact), Contact.class, currentEntityCount);
+
+	    PullQueueUtil.addToPullQueue("contact-import-queue", importer, key);
+	}
+
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
     }
 
     @Path("/email/chrome/{email}")
@@ -1522,6 +1635,88 @@ public class ContactsAPI
 	    contact.save();
 
 	return contact;
+    }
+
+    /**
+     * Delete the existing tags to a contact (Partial update)
+     * 
+     * @param tagJson
+     * 
+     * @return tag list
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
+     * @throws JSONException
+     * @throws JsonParseException
+     */
+    @Path("/delete/tags")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public ArrayList<Tag> deleteTagsById(String tagJson) throws JSONException, JsonParseException,
+	    JsonMappingException, IOException
+    {
+	// Get data and check if id is present
+	JSONObject obj = new JSONObject(tagJson);
+	Tag[] tagsArray = null;
+	ObjectMapper mapper = new ObjectMapper();
+	if (!obj.has("id"))
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Please check id value passed.").build());
+	}
+
+	// Search contact if id is present else throw exception
+	Contact contact = ContactUtil.getContact(obj.getLong("id"));
+	if (contact == null)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Contact is not availabe for given id.").build());
+	}
+
+	// Iterate data by keys ignore email key value pair
+	Iterator<?> keys = obj.keys();
+
+	while (keys.hasNext())
+	{
+	    String key = (String) keys.next();
+
+	    if (key.equals("tags"))
+	    {
+		String tagString = obj.getString(key);
+		System.out.println(tagString.length() == 0);
+		if (StringUtils.isEmpty(tagString))
+		{
+		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry, tag input is empty").build());
+		}
+		JSONArray tagsJSONArray = new JSONArray(tagString);
+		tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(), Tag[].class);
+		if (tagsArray.length == 0)
+		{
+		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry, tag input is empty").build());
+		}
+	    }
+
+	}
+
+	if (tagsArray != null)
+	{
+	    try
+	    {
+		contact.removeTags(tagsArray, true);
+
+	    }
+	    catch (WebApplicationException e)
+	    {
+		return null;
+	    }
+	}
+	else
+	    return null;
+
+	return contact.getTagsList();
     }
 
 }

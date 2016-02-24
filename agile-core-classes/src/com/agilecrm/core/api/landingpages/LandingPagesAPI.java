@@ -107,7 +107,31 @@ public class LandingPagesAPI
 		}
 	}
 
-
+	@Path("/checkName")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+	public boolean checkNameExists(String jsonString)
+	{
+		JSONObject data;
+		String name="";
+		String id ="";
+		try {
+			data = new JSONObject(jsonString);
+			name = data.getString("landingpageName").trim();
+			id = data.getString("id");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		LandingPageUtil lputil = new LandingPageUtil();
+		if(lputil.isNameExists(name,id)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -117,6 +141,8 @@ public class LandingPagesAPI
 		landingPage.save();
 		return landingPage;
 	}
+	
+	
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)

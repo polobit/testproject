@@ -212,7 +212,7 @@ function fill_slate(id, el, key) {
 
 		var template_name = "", json = {};
 
-		if((route_path == "contacts") && readCookie('company_filter')){
+		if((route_path == "contacts") && _agile_get_prefs('company_filter')){
 			template_name = "empty-collection-model";
 			json = CONTENT_JSON["companies"];
 		} 	
@@ -276,7 +276,9 @@ $(function() {
 		var id = $(this).attr('modal_id');
 		if(id == "opportunityModal")
 			show_deal();
-		else
+		else if(id == "personModal")
+			addContactBasedOnCustomfields();
+		else 
 			$("#" + id).modal('show');
 	});
 });

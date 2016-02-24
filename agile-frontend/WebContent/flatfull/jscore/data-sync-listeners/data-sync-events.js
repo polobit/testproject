@@ -30,7 +30,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             $('#shop').focus();
             return false;
         }
-        var domain = window.location.origin;
+        var domain = agileWindowOrigin();
 
         e.preventDefault();
         var callbackURL = window.location.href;
@@ -46,7 +46,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
         var sync_type=$(ele).attr('sync_type');
         if(sync_type=='STRIPE'){
-            var callbackURL = window.location.origin + "/#sync/stripe-import";
+            var callbackURL = agileWindowOrigin() + "/#sync/stripe-import";
             // For every request of import, it will ask to grant access
             window.open( "/scribe?service=stripe_import&window_opened=true&return_url=" + encodeURIComponent(callbackURL),'dataSync','height=1000,width=500');
             return false;
@@ -64,7 +64,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
         e.preventDefault();
         var ele = $(e.currentTarget);
-        var disabled = $(this).attr("disabled");
+        /*var disabled = $(this).attr("disabled");
         if (disabled) {
             return false;
         } else {
@@ -72,11 +72,24 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             $(ele).text("Syncing");
         }
 
-
+*/        $(ele).attr("disabled", "disabled");
+       
+                      
         var syncPrefs = serializeForm("shopify-contact-import-form");
         syncPrefs["inProgress"] = true;
+             getSyncModelFromName('SHOPIFY', function(mod) {
+              if(mod!=undefined){
+                if(mod.inProgress==true)
+                {
+                     show_success_message_after_save_button("Sync in progress", App_Datasync.dataSync.el);
+                      setTimeout(function() {
+            $(ele).removeAttr("disabled");
+            },3000);
+                     return false;
+                }
+          }
 
-        getSyncModelFromName('SHOPIFY', function(mod) {
+       
 
             var model = new Backbone.Model(mod);
             model.set(syncPrefs, {
@@ -89,11 +102,14 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             model.url = url + "?sync=true"
             model.save({}, {
                 success: function(data) {
-                    show_success_message_after_save_button("Sync Initiated", App_Datasync.dataSync.el);
+                    show_success_message_after_save_button("Sync initiated", App_Datasync.dataSync.el);
+                    setTimeout(function() {
+                 $(ele).removeAttr("disabled");
+                     },3000);
                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                 }
             });
-        });
+        },true);
 
 
     },
@@ -127,17 +143,18 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
         var ele = $(e.currentTarget);
         var disabled = $(ele).attr("disabled");
-        if (disabled)
-            return;
+       // if (disabled)
+         //   return;
 
         if (!isValidForm("#google-contacts-import-form")) {
             return;
         };
 
-        $(ele).attr("disabled", "disabled");
-        $(ele).text("Syncing");
+        //$(ele).attr("disabled", "disabled");
+       // $(ele).text("Syncing");
 
         //	return;
+         $(ele).attr("disabled", "disabled");
 
         var syncPrefs = serializeForm("google-contacts-import-form");
         syncPrefs["inProgress"] = true;
@@ -146,6 +163,15 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
         getSyncModelFromName('GOOGLE', function(mod) {
 
+             if(mod.inProgress==true)
+                {
+                     show_success_message_after_save_button("Sync in progress", App_Datasync.dataSync.el);
+                     setTimeout(function() {
+                                 $(ele).removeAttr("disabled");
+                                     },3000);
+                     return false;
+                }
+        
             var model = new Backbone.Model(mod);
             model.set(syncPrefs, {
                 silent: true
@@ -156,11 +182,14 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             model.url = url + "?sync=true"
             model.save({}, {
                 success: function(data) {
-                    show_success_message_after_save_button("Sync Initiated", App_Datasync.dataSync.el);
+                    show_success_message_after_save_button("Sync initiated", App_Datasync.dataSync.el);
+                    setTimeout(function() {
+                                 $(ele).removeAttr("disabled");
+                                     },3000);
                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                 }
             });
-        });
+        },true);
     },
 
     importStripePrefsDelete: function(e) {
@@ -186,19 +215,29 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
     syncStripePrefs: function(e) {
         e.preventDefault();
         var ele = $(e.currentTarget);
-        var disabled = $(ele).attr("disabled");
-        if (disabled) {
+        //var disabled = $(ele).attr("disabled");
+       /* if (disabled) {
             return false;
         } else {
             $(ele).attr("disabled", "disabled");
             $(ele).text("Syncing");
-        }
-
+        }*/
+        $(ele).attr("disabled", "disabled");
+                   
 
         var syncPrefs = serializeForm("stripe-prefs-form");
         syncPrefs["inProgress"] = true;
         getSyncModelFromName('STRIPE', function(mod) {
 
+             if(mod.inProgress==true)
+                {
+                     show_success_message_after_save_button("Sync in progress", App_Datasync.dataSync.el);
+                     setTimeout(function() {
+                                 $(ele).removeAttr("disabled");
+                                     },3000);
+                     return false;
+                }
+        
             var model = new Backbone.Model(mod);
             model.set(syncPrefs, {
                 silent: true
@@ -210,22 +249,26 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             model.url = url + "?sync=true"
             model.save({}, {
                 success: function(data) {
-                    show_success_message_after_save_button("Sync Initiated", App_Datasync.dataSync.el);
+                    show_success_message_after_save_button("Sync initiated", App_Datasync.dataSync.el);
+                    setTimeout(function() {
+                                 $(ele).removeAttr("disabled");
+                                     },3000);
                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                 }
             });
-        });
+        },true);
     },
 
     syncQuickbooks: function(e) {
         e.preventDefault();
         var ele = $(e.currentTarget);
 
-       var disable = $(ele).attr('disabled');
+       /*var disable = $(ele).attr('disabled');
         if(disable)
             return false;
         $(ele).attr("disabled", "disabled");
-        $(ele).text("Syncing");
+        $(ele).text("Syncing");*/
+         $(ele).attr("disabled", "disabled");
         
         var quickbookPrefs = serializeForm("quickbook-form");
         quickbookPrefs['inProgress'] = true;
@@ -233,6 +276,15 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
           getSyncModelFromName('QUICKBOOK', function(mod) {
 
+             if(mod.inProgress==true)
+                {
+                     show_success_message_after_save_button("Sync in progress", App_Datasync.dataSync.el);
+                     setTimeout(function() {
+                                 $(ele).removeAttr("disabled");
+                                     },3000);
+                     return false;
+                }
+        
             var model = new Backbone.Model(mod);
             model.set(quickbookPrefs, {
                 silent: true
@@ -244,11 +296,14 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             model.url = url + "?sync=true"
             model.save({}, {
                 success: function(data) {
-                    show_success_message_after_save_button("Sync Initiated", App_Datasync.dataSync.el);
+                    show_success_message_after_save_button("Sync initiated", App_Datasync.dataSync.el);
+                    setTimeout(function() {
+                                 $(ele).removeAttr("disabled");
+                                     },3000);
                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                 }
             });
-        });
+        },true);
 
     },
 
@@ -256,16 +311,26 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
         e.preventDefault();
         var ele = $(e.currentTarget);
 
-                var disable = $(ele).attr('disabled');
-                    if(disable)
-                    return false;
+                //var disable = $(ele).attr('disabled');
+                    //if(disable)
+                    //return false;
                     $(ele).attr("disabled", "disabled");
-                    $(ele).text("Syncing");
+                   
+                   // $(ele).text("Syncing");*/
                     
                     var freshbooks_prefs = serializeForm("freshbooks-form");
                     freshbooks_prefs['inProgress'] = true;
                      getSyncModelFromName('FRESHBOOKS', function(mod) {
 
+                         if(mod.inProgress==true)
+                {
+                     show_success_message_after_save_button("Sync in progress", App_Datasync.dataSync.el);
+                     setTimeout(function() {
+                      $(ele).removeAttr("disabled");
+                      },3000);
+                     return false;
+                }
+        
                         var model = new Backbone.Model(mod);
                         model.set(freshbooks_prefs, {
                             silent: true
@@ -277,11 +342,15 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
                         model.url = url + "?sync=true"
                         model.save({}, {
                             success: function(data) {
-                                show_success_message_after_save_button("Sync Initiated", App_Datasync.dataSync.el);
+                                show_success_message_after_save_button("Sync initiated", App_Datasync.dataSync.el);
+                            setTimeout(function() {
+                                 $(ele).removeAttr("disabled");
+                                     },3000);
+                            
                                 showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                             }
                         });
-                    });
+                    },true);
                     
     }
 
@@ -307,7 +376,7 @@ binds all click events  for google calendar model
         e.preventDefault();
 
        // URL to return, after fetching token and secret key from LinkedIn
-		var callbackURL = window.location.origin + "/#sync/calendar-setup";
+		var callbackURL = agileWindowOrigin() + "/#sync/calendar-setup";
 
 		// For every request of import, it will ask to grant access
 		window.open("/scribe?service=google_calendar&window_opened=true&return_url=" + encodeURIComponent(callbackURL),'dataSync','height=1000,width=500');

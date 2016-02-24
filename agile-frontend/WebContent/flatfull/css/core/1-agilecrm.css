@@ -940,6 +940,31 @@ content: "\f075"!important;
 }
 /*ending UI for deals new look*/
 
+/*Styling for deal color starts*/
+
+li.deal-color:after {
+    content: '';
+    display: block;
+    height: 40px;
+    position: absolute;
+    left: 0px;
+    top: 25%;
+    width: 2px;
+}
+li.deal-color{position:relative;}
+li.deal-color.YELLOW:after { background: yellow;}
+li.deal-color.RED:after { background: red;}
+li.deal-color.VIOLET:after { background: violet;}
+li.deal-color.INDIGO:after { background: indigo;}
+li.deal-color.BLUE:after { background: blue;}
+li.deal-color.GREEN:after { background: green;}
+li.deal-color.ORANGE:after { background: orange;}
+li.deal-color.BLACK:after { background: black;}
+li.deal-color.WHITE:after { background: white;}
+li.deal-color.GREY:after { background: grey;}
+
+/*Styling for deal color ends*/
+
 .milestone-main {
 	white-space: nowrap;
 	overflow: auto;
@@ -1135,9 +1160,9 @@ time {
 }*/
 
 @media (min-width:760px) and (max-width:991px) {
-.agile-menu > li:nth-child(n + 4):not(.nav-bar-search):not(#more-menu) {
+/*.agile-menu > li:nth-child(n + 4):not(.nav-bar-search):not(#more-menu) {
 	display:none;
-}
+}*/
 #searchText {
 	width:100px;
 }
@@ -1276,7 +1301,6 @@ ul.tags-management li.tag a {/*color:#ffffff;*/
 	/*color: #000;*/
 	font-size: 12px;
 	width: 100%;
-	max-width:100px;
 }
 .tag-management-actions a {
 	cursor: pointer;
@@ -2960,7 +2984,7 @@ width: 915px;
 
 }
 
-#deals-reports .highcharts-tooltip span , #lossreasonpie-chart-users .highcharts-tooltip span , #calls-chart-user .highcharts-tooltip span , #call-report .highcharts-tooltip span
+#deals-reports .highcharts-tooltip span , #lossreasonpie-chart-users .highcharts-tooltip span , #calls-chart-user .highcharts-tooltip span , #call-report .highcharts-tooltip span, .lost-deal-analysis-portlet-pie .highcharts-tooltip span 
 {
 	 background-color: #313030;
      opacity: 1;
@@ -2968,7 +2992,7 @@ width: 915px;
      padding: 8px;
      border-radius: 5px
  }
- #deals-reports svg .highcharts-tooltip, #lossreasonpie-chart-users svg .highcharts-tooltip,#calls-chart-user svg .highcharts-tooltip , #call-report svg .highcharts-tooltip {
+ #deals-reports svg .highcharts-tooltip, #lossreasonpie-chart-users svg .highcharts-tooltip,#calls-chart-user svg .highcharts-tooltip , #call-report svg .highcharts-tooltip, .lost-deal-analysis-portlet-pie svg .highcharts-tooltip {
  	visibility: hidden!important;
  }
 
@@ -2986,6 +3010,18 @@ width: 915px;
  white-space:normal!important;
  } 
 
+ .thumb-m {
+	 display: inline-block;
+  width: 80px;
+}
+
+.rep-user-info
+{
+	background-color: rgb(240, 243, 244);
+    margin-top: 108px;
+    margin-left: 156px;
+}
+
 .custom_popover .popover-content{
 	padding-top: 5px;
 	padding-bottom:5px;
@@ -2997,3 +3033,185 @@ width: 915px;
 	max-width: none;
 	
 }
+
+.c-progress
+{
+	cursor: progress;
+}
+
+.width-goal
+{
+width : 150px;
+}
+
+.padder-portlet
+{
+	padding-top: 9px;
+	padding-bottom:9px;
+}
+
+#portlets-add-listener #deals > div:nth-of-type(4)
+{
+	height: 243px;
+}
+
+.goal
+{
+	width:calc(100% - 420px);
+}
+
+.datepicker-months
+{
+		width : 233px;
+}
+@-moz-document url-prefix() { 
+
+.mozilla-addon
+{
+	position:relative; top :-2px;
+
+}
+}
+table.hide-head-checkbox th label.i-checks {
+      visibility: hidden;
+}
+
+.table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th,.table-striped>tbody>tr:hover>td{
+  background-color: #f9f9f9 !important;
+  
+}
+
+@media all and (min-width: 768px) {
+.app-aside-fixed:not(.app-aside-dock) aside {
+	position: fixed;
+	height: 100vh;
+}
+}
+
+#calls-chart .highcharts-legend , #calls-chart .highcharts-tooltip
+{
+	text-transform: capitalize;
+}
+
+.display-none{
+	display: none;
+}
+
+}
+.fullscreen{
+  width: 100%;
+  height: 100%;
+  background-color: #f0f3f4;
+}
+.fullscreenwidjet{
+
+	float: left!important;
+	width: 100%!important;
+	position: absolute!important;
+	font-size: 13px!important;
+	margin: 0!important;
+	left:0px;
+	top:0px;
+	z-index:9999;
+	overflow-y:scroll;
+}
+.fullscreenwidjet .landingpagessmart,.fullscreenwidjet .campaign-new-add{
+	position: relative;
+    top: -20px;
+    left: -20px;
+    width: 100vw;
+}
+
+.contacts-toolbar .sort-field-txt:hover {
+    color: rgb(88, 102, 110)!important;
+}
+
+
+
+.conversion_track::-webkit-scrollbar-thumb {
+ background: #bebebe;
+}
+.conversion_track::-webkit-scrollbar {
+ width: 5px;
+ margin-right: 4px !important;
+ background:#eee;
+}
+
+.conversion_track{
+	height:332px;
+	overflow-y:auto;
+}
+
+
+#count_goals_chart .highcharts-tooltip , 
+#amount_goals_chart .highcharts-tooltip 
+{
+	z-index: 1;
+}
+
+
+.slate-content h4{
+	font-size: 18px;
+	opacity:0.8;
+}
+.slate-content .text, .slate-content .text-base{
+	font-size: 15px;
+}
+
+
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+/* Safari and Chrome */
+.no-wrap {
+ white-space: normal !important;
+}
+ 
+} 
+
+.deals-nowrap .no-wrap {
+ white-space: nowrap !important;
+}
+.contact_popover{ 
+
+	border-radius: 0px;
+	//width : 260px;
+}
+
+#contacts-table .popover-content{
+	padding: 0px;
+}
+#contacts-table .popover{
+	max-width:100%;
+}
+
+.contact_popover .arrow{
+	display: none;
+}
+
+
+.well{
+	background: none!important;
+	 border:none!important;
+	  
+}
+
+#api_key_generate_icon span , #jsapi_key_generate_icon span{
+	color: white !important;
+}
+
+
+
+#calls-chart svg {
+	overflow: visible!important;
+}
+
+
+.api-key-pos
+{
+	padding:5px;
+	position:relative;
+	
+}
+.api-key-spacing{
+	letter-spacing: 1px;
+}
+

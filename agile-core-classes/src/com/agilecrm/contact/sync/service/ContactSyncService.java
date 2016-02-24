@@ -52,7 +52,7 @@ public abstract class ContactSyncService implements IContactSyncService
     /**
      * To check if it contacts limit is exceeded in current plan
      */
-    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(true);
+    protected BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(true);
 
     /** contact restriction. */
     DaoBillingRestriction contactRestriction = DaoBillingRestriction.getInstace(
@@ -179,7 +179,7 @@ public abstract class ContactSyncService implements IContactSyncService
      *            the object
      * @return the contact
      */
-    private Contact wrapContactToAgileSchema(Object object)
+    protected Contact wrapContactToAgileSchema(Object object)
     {
 	if (contactWrapper == null)
 	    try
@@ -313,8 +313,7 @@ public abstract class ContactSyncService implements IContactSyncService
     private Contact saveContact(Contact contact)
     {
 	addTagToContact(contact);
-	// Temporary fix for stripe sync merging contacts
-	if (ContactUtil.isDuplicateContact(contact) && prefs.type != null && !prefs.type.equals(Type.STRIPE))
+	if (ContactUtil.isDuplicateContact(contact))
 	{
 	    contact = ContactUtil.mergeContactFields(contact);
 

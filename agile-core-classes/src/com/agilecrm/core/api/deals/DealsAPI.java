@@ -90,6 +90,8 @@ public class DealsAPI
 	    @QueryParam("order_by") String fieldName, @QueryParam("cursor") String cursor,
 	    @QueryParam("page_size") String count, @QueryParam("pipeline_id") Long pipelineId)
     {
+	count = (count == null) ? "25" : count;
+
 	if (count != null)
 	    return OpportunityUtil.getOpportunitiesWithMilestones(ownerId, milestone, contactId, fieldName,
 		    (Integer.parseInt(count)), cursor, pipelineId);
@@ -107,6 +109,8 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Opportunity> getOpportunities(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
+	count = (count == null) ? "25" : count;
+
 	if (count != null)
 	{
 	    return OpportunityUtil.getOpportunities((Integer.parseInt(count)), cursor);
@@ -140,6 +144,8 @@ public class DealsAPI
 	    @QueryParam("page_size") String count, @QueryParam("pipeline_id") Long pipelineId,
 	    @QueryParam("filters") String filters)
     {
+	count = (count == null) ? "25" : count;
+
 	if (filters != null)
 	{
 	    System.out.println(filters);
@@ -495,6 +501,8 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Opportunity> getUpcomingDealsRelatedToCurrentUser(@QueryParam("page_size") String page_size)
     {
+	page_size = (page_size == null) ? "25" : page_size;
+
 	if (page_size != null)
 	    return OpportunityUtil.getUpcomingDealsRelatedToCurrentUser(page_size);
 
@@ -1193,6 +1201,19 @@ public class DealsAPI
 	    opportunity.save();
 
 	return opportunity;
+    }
+
+    @Path("/conversionRate/{owner-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getConvertedDeals(@PathParam("owner-id") Long ownerId, @QueryParam("track-id") Long trackId,
+	    @QueryParam("start-date") Long min, @QueryParam("end-date") Long max)
+    {
+	if (trackId != null)
+	{
+	    ReportsUtil.check(min * 1000, max * 1000);
+	}
+	return OpportunityUtil.getPipelineConversionData(ownerId, min, max, trackId).toString();
     }
 
 }

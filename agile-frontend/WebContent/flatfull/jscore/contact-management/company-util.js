@@ -219,7 +219,7 @@
 		
 		//reads the value from cookie or local store if the value is no it will return from here
 		
-		var map_view=localStorage.getItem('MAP_VIEW');
+		var map_view=_agile_get_prefs('MAP_VIEW');
 		if(map_view=="disabled"){
 			$("#map_view_action",el).html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
 			return;
@@ -332,7 +332,7 @@
 	}
 	
 	var updateSelectedSortKey = function(el) {
-		var sort_key = readCookie("company_sort_field");
+		var sort_key = _agile_get_prefs("company_sort_field");
 		if(sort_key && sort_key != null) {
 			var idSuffix = '-asc';
 			if(sort_key.indexOf('-') == 0) {
@@ -360,8 +360,9 @@
 					.html(
 							'<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li  class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="m-l-xs pull-left">' + decodeURI(tag_id) + '</span><a class="close default_contact_remove_tag m-l-xs pull-left">&times</a></li></ul>').attr("_filter", tag_id);
 							
-
-		var filter_id = null;
+		setTimeout(function(){
+					
+			var filter_id = null;
 			companyFiltersListView = new Base_Collection_View(
 				{
 					url : '/core/api/filters?type=COMPANY',
@@ -370,11 +371,12 @@
 					templateKey : "company-filter-list",
 					individual_tag_name : 'li',
 					sort_collection : false,
+					no_transition_bar : true,
 					postRenderCallback : function(el)
 					{
 						var filter_name;
 						// Set saved filter name on dropdown button
-						if (filter_name = readCookie('company_filter'))
+						if (filter_name = _agile_get_prefs('company_filter'))
 						{
 							// If is not system type get the name of the filter from
 							// id(from cookie)
@@ -383,15 +385,16 @@
 										filter_name = companyFiltersListView.collection.get(filter_name).toJSON().name;
 								
 
-							el.find('.filter-dropdown').append(filter_name);
+							el.find('.filter-dropdown').append(Handlebars.compile('{{name}}')({name : filter_name}));
 						}
 
 						if (!filter_name)
 							return;
 
-						$('.filter-criteria', cel)
-						.html(
-								'<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="inline-block m-r-xs v-middle">' + filter_name + '</span><a class="close default_company_filter">&times</a></li></ul>');
+						var template = Handlebars.compile('<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="inline-block m-r-xs v-middle">{{name}}</span><a class="close default_company_filter">&times</a></li></ul>');
+
+					 	// Adds contact name to tags ul as li element
+						$('.filter-criteria', cel).html(template({name : filter_name}));
 						
 						if(filter_id)
 							$('.filter-criteria', cel).attr("_filter", filter_id);
@@ -407,15 +410,14 @@
 			
 				// Shows in contacts list
 				$('#filter-list', cel).html(companyFiltersListView.render().el);
+		}, 500);
 				
 	};
 	
 	company_list_view.revertToDefaultCompanies = function(){
 		// Erase filter cookie. Erases both contact and company filter
-		//eraseCookie('contact_filter');
-		//eraseCookie('contact_filter_type');
-		eraseCookie('company_filter');
-		eraseData('dynamic_filter');
+		_agile_delete_prefs('company_filter');
+		_agile_delete_prefs('dynamic_filter');
 	
 		if (App_Companies.companiesListView)
 			App_Companies.companiesListView = undefined;
@@ -540,8 +542,14 @@
 		       			App_Companies.companyDetailView.model.set(data.toJSON(), {silent : true});
 		       			
 		       			// Append to the list, when no match is found 
-		       			if ($.inArray(new_tags, old_tags) == -1) 
-		       				$('#added-tags-ul').append('<li  class="tag inline-block btn btn-xs btn-default m-r-xs" style="color:#363f44" data="' + new_tags + '"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-company-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
+		       			if ($.inArray(new_tags, old_tags) == -1) {
+
+		       				var template = Handlebars.compile('<li  class="tag inline-block btn btn-xs btn-default m-r-xs" style="color:#363f44" data="{{name}}"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{name}}" >{{name}}</a><a class="close remove-company-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+
+						 	// Adds contact name to tags ul as li element
+							$('#added-tags-ul').append(template({name : new_tags}));
+
+		       			}
 		       			
 		       			console.log(new_tags);
 		       			// Adds the added tags (if new) to tags collection
@@ -611,7 +619,7 @@
             }
         });
         notesView.collection.fetch();
-        $('#notes', App_Companies.companyDetailView.el).html(notesView.el);
+        $('#notes', App_Companies.companyDetailView.el).html(notesView.render().el);
         company_detail_tab.activateCurrentTab($('#notes'));
 	};
 	
@@ -633,13 +641,10 @@
 	            }
 	        });
 		    documentsView.collection.fetch();
-	        $('#documents', App_Companies.companyDetailView.el).html(documentsView.el);
+	        $('#documents', App_Companies.companyDetailView.el).html(documentsView.render().el);
 	        company_detail_tab.activateCurrentTab($('#documents'));
 	};
 	
 
 }(window.company_detail_tab = window.company_detail_tab || {}, $));
-
-
-
 

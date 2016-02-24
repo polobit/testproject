@@ -81,7 +81,10 @@ function isValidForm(form) {
 		$(element).val("");
 		if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
 		{
-			$(element).closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+			var template = Handlebars.compile('<li class="tag" style="display: inline-block;" data="{{name}}">{{name}}<a class="close" id="remove_tag" tag="{{name}}">&times</a></li>');
+
+		 	// Adds contact name to tags ul as li element
+			$(element).closest(".control-group").find('ul.tags').append(template({name : tag_input}));
 		}
 		
 		return $(element).closest(".control-group").find('ul.tags > li').length > 0 ? true : false;
@@ -123,6 +126,19 @@ function isValidForm(form) {
 	jQuery.validator.addMethod("checkedMultiSelect", function(value, element){
 		
 		var counter = $(element).find('option:selected').length;
+		
+		if(counter == 0)
+			return false;
+
+		return true;
+	},"Please select atleast one option.");
+
+	jQuery.validator.addMethod("checkedMultiCheckbox", function(value, element){
+		
+		console.log("value = " + value);
+		console.log("element = " + element);
+
+		var counter = $(element).find('input:checked').length;
 		
 		if(counter == 0)
 			return false;

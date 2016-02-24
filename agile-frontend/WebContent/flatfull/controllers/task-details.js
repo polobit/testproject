@@ -394,13 +394,13 @@ function save_task_tab_position_in_cookie(tab_href)
 
 	var position = '';
 
-	if (readCookie(task_tab_position_cookie_name))
-		position = readCookie(task_tab_position_cookie_name);
+	if (_agile_get_prefs(task_tab_position_cookie_name))
+		position = _agile_get_prefs(task_tab_position_cookie_name);
 
 	if (position == tab_href)
 		return;
 
-	createCookie(task_tab_position_cookie_name, tab_href);
+	_agile_set_prefs(task_tab_position_cookie_name, tab_href);
 }
 
 
@@ -466,8 +466,11 @@ function fill_relation_task(el)
 
 	var json = taskDetailView.toJSON();
 	var task_name = json.name;
-	$('.tags', el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + task_name + '</li>');
 
+	var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+
+ 	// Adds contact name to tags ul as li element
+ 	$('.tags', el).html(template({name : task_name, id : json.id}));
 }
 
 

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"></meta>
+<title>Example 2</title>
+<link rel="stylesheet" href="" media="all" />
+</head>
+<body>
+
+	<style type="text/css" media="all">
+@font-face {
+	font-family: SourceSansPro;
+	src:
+		url(https://www.clickdesk.com/asstes/css/fonts/SourceSansPro-Regular.ttf);
+}
+
+.clearfix:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+a {
+	color: #0087C3;
+	text-decoration: none;
+}
+
+body {
+	position: relative;
+	width: 21cm;
+	height: 29.7cm;
+	margin: 0 auto;
+	color: #555555;
+	background: #FFFFFF;
+	font-family: SourceSansPro;
+	font-size: 12px;
+}
+
+body * {
+   font-family: SourceSansPro;
+}
+
+header {
+	padding: 10px 0;
+	margin-bottom: 20px;
+	border-bottom: 1px solid #AAAAAA;
+}
+
+#logo {
+	float: left;
+	margin-top: 8px;
+}
+
+#logo img {
+	height: 70px;
+}
+
+#company {
+	float: right;
+	text-align: right;
+}
+
+#details {
+	margin-bottom: 50px;
+}
+
+#client {
+	padding-left: 6px;
+	border-left: 6px solid #0087C3;
+	float: left;
+}
+
+#client .to {
+	color: #777777;
+}
+
+h2.name {
+	font-size: 20px;
+	font-weight: normal;
+	margin: 0;
+}
+
+#invoice {
+	float: right;
+	text-align: right;
+}
+
+#invoice h1 {
+	color: #0087C3;
+	font-size: 32px;
+	line-height: 16px;
+	font-weight: normal;
+	margin: 0 0 10px 0;
+}
+
+#invoice .date {
+	font-size: 16px;
+	color: #777777;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	margin-bottom: 20px;
+}
+
+table th,table td {
+	padding: 20px;
+	background: #EEEEEE;
+	text-align: center;
+	border-bottom: 1px solid #FFFFFF !important;
+}
+
+table tr.no-padding td {
+	padding: 0px;
+	background: #FFFFFF;
+	height: 1px;
+}
+
+table tr.no-bgcolor td {
+	background: #FFFFFF;
+}
+
+table tr.no-padding-with-custom-color td {
+	padding: 0px;
+	padding-bottom: 50px;
+	background: #AAAAAA;
+	height: 1px;
+}
+
+table th {
+	white-space: nowrap;
+	font-weight: normal;
+}
+
+table td {
+	text-align: right;
+}
+
+table td h3 {
+	color: #57B223;
+	font-size: 18px;
+	font-weight: normal;
+	margin: 0 0 0.2em 0;
+}
+
+table .no {
+	color: #FFFFFF;
+	font-size: 25px;
+	background: #57B223;
+}
+
+table .desc {
+	text-align: left;
+}
+
+table .unit {
+	background: #DDDDDD;
+}
+
+table .qty {
+	
+}
+
+table .total {
+	background: #57B223;
+	color: #FFFFFF;
+}
+
+table td.unit,table td.qty,table td.total {
+	font-size: 18px;
+}
+
+table tbody tr:last-child td {
+	border: none;
+}
+
+table tfoot td {
+	padding: 15px 20px;
+	background: #FFFFFF;
+	border-bottom: none;
+	font-size: 18px;
+	white-space: nowrap;
+	border-top: 1px solid #AAAAAA !important;
+}
+
+table tfoot tr:first-child td {
+	border-top: none;
+}
+
+table tfoot tr:last-child td {
+	color: #57B223;
+	font-size: 20px;
+	border-top: 1px solid #57B223;
+}
+
+table tfoot tr td:first-child {
+	border: none;
+}
+
+#thanks {
+	font-size: 30px;
+	margin-bottom: 50px;
+}
+
+#notices {
+	padding-left: 6px;
+	border-left: 6px solid #0087C3;
+}
+
+#notices .notice {
+	font-size: 18px;
+}
+
+footer {
+	color: #777777;
+	width: 100%;
+	height: 30px;
+	position: absolute;
+	bottom: 0;
+	border-top: 1px solid #AAAAAA;
+	padding: 8px 0;
+	text-align: center;
+}
+</style>
+
+	<table border="0" style="margin: 0px;">
+		<tbody>
+			<tr class="no-bgcolor">
+				<td width="50%;">
+					<div id="logo">
+						<img src="http://doxhze3l6s7v9.cloudfront.net/beta/static/img/crm-plugins/formbuilder.png" width="144"
+							height="44" style="height: 44px; width: 144px;" />
+						
+					</div>
+				</td>
+				<td width="40%;">
+					<div id="company">
+						<h2 class="name">Agile CRM</h2>
+						<div style="clear: both; height: 5px;"></div>
+						<div style="float: right; margin-top: 5px;">440 N Wolfe
+							Road,</div>
+						<div style="clear: both; height: 5px;"></div>
+						<div style="float: right; margin-top: 5px;">Sunnyvale, CA,
+							94085</div>
+						<div style="clear: both; height: 5px;"></div>
+						<div style="margin-top: 5px; float: right;">
+							<a href="mailto:billing@agilecrm.com"
+								style="color: #0087C3; margin-top: 3px; text-decoration: none; display: block; font-size: 14px;">billing@agilecrm.com</a>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+
+	<main>
+
+	<table>
+		<tbody>
+			<tr class="no-padding-with-custom-color">
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr class="no-padding">
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr class="no-padding">
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr class="no-padding">
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr class="no-padding">
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr class="no-padding">
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr class="no-padding">
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr class="no-padding">
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr class="no-padding">
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr class="no-padding">
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr class="no-padding">
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+
+			<tr class="no-bgcolor">
+				<td style="width: 6px; background: #0087C3; padding: 0px;"></td>
+				<td width="50%;">
+					<div id="client">
+						{{#company_name}}
+						<div class="to">INVOICE TO:</div>
+						<div style="clear: both; height: 10px;"></div>
+						<h2 class="name" style="text-align: left;">{{company_name}}</h2>
+						<div style="clear: both; height: 5px;"></div>
+						{{#company_address}}
+						<div class="address">{{tok}}</div>
+						<div style="clear: both; height: 5px;"></div>
+						{{/company_address}} {{/company_name}}
+					</div>
+				</td>
+				<td width="50%;">
+					<div id="invoice" style="float: right; text-align: right;">
+						<h1
+							style="color: #0087C3; font-size: 18px; line-height: 16px; font-weight: normal; margin: 0 0 10px 0;">{{id}}</h1>
+						<div class="date"
+							style="font-size: 18px; color: #777777; text-align: right; float: right;">Invoice Date: {{payment_date}}</div>
+							
+						<div style="clear: both; height: 10px;"></div>
+						<!-- <div class="date"
+							style="font-size: 18px; color: #777777; text-align: right; float: right;">Period:
+							{{payment_period}}</div>
+							
+						<div style="clear: both; height: 5px;"></div> -->
+						<div style="margin-top: 5px; float: right;">
+							<a href="mailto:{{user_id}}"
+								style="color: #0087C3; margin-top: 3px; text-decoration: none; display: block; font-size: 14px;">{{user_id}}</a>
+						</div>
+						
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<table style="width: 100%; margin-bottom: 20px;">
+		<tbody>
+			<tr>
+				<td style="padding: 50px;"></td>
+				<td style="padding: 50px;"></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div id="details" class="clearfix"
+		style="margin-bottom: 50px; display: block;"></div>
+
+	<table style="width: 100%;">
+		<thead>
+			<tr>
+				<th class="no" style="width: 5%; border-bottom: 1px solid #fff;"><div style="color : #FFFFFF;">#</div></th>
+				<th style="width: 35%"><div>Plan</div></th>
+				<th class="desc" style="width: 40%"><div>Description</div></th>
+				<th class="total" style="width: 20%;"><div style="color : #FFFFFF;">Amount</div></th>
+			</tr>
+		</thead>
+		<tbody>
+            <tr class="no-padding">
+				<td style="width: 5%;background: #FFFFFF;"></td>
+				<td style="width: 35%;background: #FFFFFF;"></td>
+				<td style="width: 45%;background: #FFFFFF;"></td>
+				<td style="width: 15%;background: #FFFFFF;"></td>
+			</tr>
+			{{#detailed_collection}}
+			<tr>
+				<td class="no" style="width: 5%;"><div style="color : #FFFFFF;">{{index}}</div></td>
+				<td style="width: 35%"><div>{{plan_type}}</div></td>
+				<td class="desc" style="width: 45%"><div>{{description}}<br/>{{description2}}
+					</div></td>
+				<td class="total" style="width: 15%"><div style="color : #FFFFFF;">{{amount}}</div></td>
+			</tr>
+			<tr class="no-padding">
+				<td style="width: 5%;background: #FFFFFF;"></td>
+				<td style="width: 35%;background: #FFFFFF;"></td>
+				<td style="width: 45%;background: #FFFFFF;"></td>
+				<td style="width: 15%;background: #FFFFFF;"></td>
+			</tr>
+			{{/detailed_collection}}
+
+		</tbody>
+		<tfoot>
+			{{#discount.coupon}}
+			<tr>
+				<td colspan="2"></td>
+				<td><div>DISCOUNT {{discount.coupon.percentOff}}%</div></td>
+				<td><div>${{subtotal}}</div></td>
+			</tr>
+			<tr class="no-padding">
+				<td colspan="2"></td>
+				<td style="background: #AAAAAA;"></td>
+				<td style="background: #AAAAAA;"></td>
+			</tr>
+			{{/discount.coupon}}
+
+			<tr>
+				<td colspan="2"></td>
+				<td><div style="color: #57B223;">GRAND TOTAL</div></td>
+				<td><div style="color: #57B223;">{{total}}</div></td>
+			</tr>
+		</tfoot>
+	</table>
+
+	<table style="width: 100%;">
+		<tbody>
+			<tr>
+				<td style="padding: 50px;"></td>
+				<td style="padding: 50px;"></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div id="thanks" style="margin-bottom: 50px; font-size: 20px;">Thank
+		you!</div>
+
+	<table style="width: 100%;">
+		<tbody>
+			<tr>
+				<td style="padding: 50px;"></td>
+				<td style="padding: 50px;"></td>
+			</tr>
+		</tbody>
+	</table>
+
+	 </main>
+
+</body>
+</html>

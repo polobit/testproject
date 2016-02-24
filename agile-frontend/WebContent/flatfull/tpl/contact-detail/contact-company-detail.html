@@ -1,6 +1,6 @@
   <script id="company-detail-template" type="text/html">
 <div class="row hide"><small class="navigation span9" style="min-height:10px!important;font-size:smaller;line-height:6px;"></small></div>
-<div class="app-content-full  h-full dock-view-fixing">
+<div class="app-content-full  h-full dock-view-fixing" id="infinite-scroller-company-details">
 <div class="hbox hbox-auto-xs  bg-light ">
 <div class="col w-xl bg-light lter b-r">
 <div class="vbox">
@@ -248,7 +248,8 @@
 
 
  									{{#property_is_exists "address" properties}}
-<div class="m-t-sm "><small class="text-xs text-muted">Location</small></div>
+ 									  {{#property_json_is_not_empty "address" properties}}
+									<div class="m-t-sm "><small class="text-xs text-muted">Location</small></div>
 										<div>
 											{{#address_Element properties}}{{/address_Element}}</div></div>
 
@@ -256,6 +257,7 @@
 											<div id="map" style="width: auto; height: 200px; display: none; margin: 10px">
 											</div>
 										</div>
+									  {{/property_json_is_not_empty}}
 									{{/property_is_exists}}
 <div class="clearfix"></div>
 <!-- ending funda for contact detail edit -->

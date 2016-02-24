@@ -115,6 +115,9 @@ String logo_url = accountPrefs.logo;
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
 
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
+
 <style>
 body {
    background-image: url('<%=S3_STATIC_IMAGE_PATH%>/images/agile-login-page-low.jpg');
@@ -160,21 +163,31 @@ position: fixed;width: 100%;top: 0px;
 </style>
 
 <script>
+
+
+/*
 var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
 var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
-if(isIE || isIENew) 
-	window.location = '/error/not-supported.jsp';
+if(isIE || isIENew)
+ window.location = '/error/not-supported.jsp';
+*/
 
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
 var isWin = (window.navigator.userAgent.indexOf("Windows") != -1);
 if(isSafari && isWin) 
-	window.location = '/error/not-supported.jsp';
+ window.location = '/error/not-supported.jsp';
 
 </script>
 
+<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+
+<!--[if lt IE 10]>
+<script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
+<![endif]-->
+
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-<!--[if lt IE 9]>
-      <script src="lib/ie/html5.js"></script>
+<!--[if lt IE 9]>	 
+	<script src="lib/ie/html5.js"></script>
     <![endif]-->
 
 </head>
@@ -276,9 +289,10 @@ if(isSafari && isWin)
 	</div>
 	
 	<!-- JQUery Core and UI CDN -->
-	<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+	
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
+	
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
@@ -313,6 +327,9 @@ if(isSafari && isWin)
 				 $(this).closest('div').fadeOut('slow', function() {
 				   });
 				 });
+
+
+			// $('input, textarea').placeholder();
 			
 		});
 		

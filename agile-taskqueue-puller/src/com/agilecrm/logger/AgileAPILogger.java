@@ -35,8 +35,8 @@ public class AgileAPILogger
 	{
 	    public void print(final String string)
 	    {
-		// realPrintStream.print(string);
-		// logger.info(string);
+		realPrintStream.print(string);
+		logger.info(string);
 	    }
 	};
     }
@@ -47,7 +47,7 @@ public class AgileAPILogger
 	{
 	    public void print(final String string)
 	    {
-		// realPrintStream.print(string);
+		realPrintStream.print(string);
 		logger.error(string);
 	    }
 	};

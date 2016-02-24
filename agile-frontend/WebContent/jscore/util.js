@@ -20,11 +20,12 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "im
  */
 var DEFAULT_GRAVATAR_url = "https://dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png";
 
-var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi";
+var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/khader,haaris_farooqi";
 
-var SALES_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Shravi_Sharma";
+var SALES_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Vikas,Mrudula,Shravi_Sharma,Bharat,Manish,Nick,Stephen";
 
-var SUPPORT_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Raja_Shekar,Vamshi,Natesh,praveen,Abhishek_Pandey";
+var SUPPORT_SCHEDULE_URL = "https://our.agilecrm.com/calendar/khader,haaris_farooqi
+";
 
 /**
  * Returns random loading images

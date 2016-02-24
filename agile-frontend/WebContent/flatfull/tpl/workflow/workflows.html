@@ -10,17 +10,6 @@
         </div>  
     </td>
 
-    <td>
-        <div class="table-resp">
-            <div class="pull-left text-ellipsis" style="width: 55%;">
-                <a href="#email-reports/{{id}}" class="stop-propagation">Reports</a>
-            </div>
-            {{#if is_disabled}}
-            <div class="pull-left"><label class="label label-danger m-b-none">Disabled</label></div>
-            {{/if}}
-        </div> 
-    </td>
-
     <td> 
         {{#if updated_time}}
         <div class="table-resp">
@@ -39,7 +28,28 @@
             </small>
         </div>
         {{/if}}
-    </td>  
+    </td> 
+    <td>
+    <div>
+    {{#if is_disabled}}
+            <div><label class="label label-danger m-b-none">Disabled</label></div>
+            {{/if}}
+     </div>
+    </td>
+    <td>
+        <div class="table-resp hide" id="camp_reports">
+            <div class="pull-left text-ellipsis">
+                <a href="#email-reports/{{id}}" class="stop-propagation">Reports</a>
+            </div>
+        </div> 
+    </td>
+
+    <td>   
+    <div class="table-resp hide" id="camp_history">
+        <div class="pull-left">
+        <a href="#activities/campaign/{{id}}" class="stop-propagation" >History</a></div>
+        </div>
+    </td> 
 <br />
 </script>
 <script id="workflows-collection-template" type="text/html">
@@ -58,8 +68,21 @@
                     <ul class="dropdown-menu pull-right">
                         <li><a href="#campaign-stats" id="campaign-stats"><i class="icon-bar-chart"></i> Compare Campaigns</a></li>
                     </ul>
+
+
+                   <!-- {{#is_mobile}}
+                    {{else}}
+                    <div class="btn-group pull-left m-l-xs" style="padding-left:3px;">
+                         <button class="btn btn-default btn-sm m-l-xs fullscreenelement" style="height:30px;width:30px;" targetFullscreenElement="#content" >
+                <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
+                {{/is_mobile}}
+                -->
+
                 </div>
                 <a href="#triggers" class="btn right btn-default btn-sm pos-rlt m-r-sm pull-right btn-addon" id="add-trigger"><i class="icon-cog"></i> Manage Triggers</a>
+            </div>
+<div class="pull-right">
+<div><a id="campaign_logs" class="btn btn-default btn-sm m-r-sm" href="#">Reports</a></div>
             </div>
             <div class="clearfix"></div>
         
@@ -68,7 +91,28 @@
 </div>
 <div class="wrapper-md">
 <div class="row">
-      <!-- Pending Triggers Content -->
+     
+
+        {{#unless this.length}}
+        <div class="col-md-9 col-sm-9">
+            <div id="slate">
+        </div>
+        <div class="embed-responsive embed-responsive-16by9">
+        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tgM4Rwbz8Ps" style="
+                width: 58%;
+                position: absolute;
+                left: 37%;
+                top: 15%;
+                margin: -75px 0 0 -135px;
+                height: 304px;
+                " allowfullscreen=""></iframe>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+            {{add_tag "Campaigns"}}
+            <div class="col-md-9 col-sm-9">
+             <!-- Pending Triggers Content -->
         <div id="triggers-verification" class="m-t-n-sm" style="display:none;">
             <div class="alert danger info-block alert-warning text-black">
                 <div>
@@ -82,16 +126,6 @@
             </div>
         </div>
         <!-- End of Pending Triggers Content -->
-
-        {{#unless this.length}}
-        <div class="col-md-9 col-sm-9">
-            <div id="slate">
-        </div>
-        </div>
-        {{/unless}}
-        {{#if this.length}}
-            {{add_tag "Campaigns"}}
-            <div class="col-md-9 col-sm-9">
             <div class="panel panel-default">
                 <div class="panel-heading">Campaigns List</div>
                 <div class="table-responsive">
@@ -99,10 +133,12 @@
                     <thead>
                         <tr>
                             <th class="hide">Id</th>
-                            <th style="width:35%">Name</th>
+                            <th style="width:30%">Name</th>
                             <th style="width:20%">Triggers</th>
-                            <th style="width:17%">&nbsp;</th>
-                            <th style="width:25%">&nbsp;</th>
+                            <th style="width:23%">&nbsp;</th>
+                            <th style="width:9%">&nbsp;</th>
+                            <th style="width:9%">&nbsp;</th>
+                            <th style="width:9%"> </th>
                         </tr>
                     </thead>
                     <tbody id="workflows-model-list" route="workflow/" class="c-p"> </tbody>

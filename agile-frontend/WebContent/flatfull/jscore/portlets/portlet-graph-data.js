@@ -156,6 +156,7 @@ var portlet_graph_data_utility = {
 							milestoneMap = data["milestoneMap"];
 							wonMilestone = data["wonMilestone"];
 							lostMilestone = data["lostMilestone"];
+							milestoneNumbersList = data["milestoneNumbersList"];
 
 							var funnel_data = [];
 							var temp;
@@ -163,9 +164,17 @@ var portlet_graph_data_utility = {
 							$.each(milestonesList, function(index, milestone) {
 								var each_data = [];
 								if (milestone != lostMilestone) {
-									if (milestone != wonMilestone)
-										each_data.push(milestone,
+									if (milestone != wonMilestone) {
+										if (base_model.get("settings")["split-by"] && base_model.get("settings")["split-by"] == "count") {
+											each_data.push(milestone,
+												milestoneNumbersList[index]);
+										}
+										else {
+											each_data.push(milestone,
 												milestoneValuesList[index]);
+										}
+										
+									}	
 									else
 										temp = index;
 									if (each_data != "")
@@ -175,8 +184,15 @@ var portlet_graph_data_utility = {
 
 							var temp_data = [];
 							if (temp != undefined) {
-								temp_data.push(milestonesList[temp],
+								if (base_model.get("settings")["split-by"] && base_model.get("settings")["split-by"] == "count") {
+									temp_data.push(milestonesList[temp],
+										milestoneNumbersList[temp]);
+								}
+								else {
+									temp_data.push(milestonesList[temp],
 										milestoneValuesList[temp]);
+								}
+								
 								funnel_data.push(temp_data);
 							}
 							var falg = false;
@@ -189,7 +205,7 @@ var portlet_graph_data_utility = {
 							else
 								funnel_data = [];
 							portlet_graph_utility.dealsFunnelGraph(selector,
-									funnel_data);
+									funnel_data, base_model);
 
 							portlet_utility.addWidgetToGridster(base_model);
 						});
@@ -594,7 +610,7 @@ var portlet_graph_data_utility = {
 
 							portlet_graph_utility.dealsAssignedBarGraph(
 									selector, domainUsersList,
-									dealsAssignedCountList);
+									dealsAssignedCountList, base_model);
 
 							portlet_utility.addWidgetToGridster(base_model);
 						});
@@ -608,6 +624,13 @@ var portlet_graph_data_utility = {
 		var busyCallsCountList = [];
 		var failedCallsCountList = [];
 		var voiceMailCallsCountList = [];
+		var missedCallsCountList= [];
+		var inquiryCallsCountList= [];
+		var interestCallsCountList= [];
+		var noInterestCallsCountList= [];
+		var incorrectReferralCallsCountList= [];
+		var newOpportunityCallsCountList= [];
+		var meetingScheduledCallsCountList = [];
 		var callsDurationList = [];
 		var totalCallsCountList = [];
 		var domainUsersList = [];
@@ -635,6 +658,13 @@ var portlet_graph_data_utility = {
 							busyCallsCountList = data["busyCallsCountList"];
 							failedCallsCountList = data["failedCallsCountList"];
 							voiceMailCallsCountList = data["voiceMailCallsCountList"];
+							missedCallsCountList = data["missedCallsCountList"];
+							inquiryCallsCountList = data["inquiryCallsCountList"];
+							interestCallsCountList = data["interestCallsCountList"];
+							noInterestCallsCountList = data["noInterestCallsCountList"];
+							incorrectReferralCallsCountList = data["incorrectReferralCallsCountList"];
+							meetingScheduledCallsCountList = data["meetingScheduledCallsCountList"];
+							newOpportunityCallsCountList = data["newOpportunityCallsCountList"];
 							callsDurationList = data["callsDurationList"];
 							totalCallsCountList = data["totalCallsCountList"];
 							domainUsersList = data["domainUsersList"];
@@ -664,6 +694,41 @@ var portlet_graph_data_utility = {
 								tempData.name = "Voicemail";
 								tempData.data = voiceMailCallsCountList;
 								series[3] = tempData;
+
+								tempData = {};
+								tempData.name = "Missed ";
+								tempData.data = missedCallsCountList;
+								series[4] = tempData;
+
+								tempData = {};
+								tempData.name = "Inquiry";
+								tempData.data = inquiryCallsCountList;
+								series[5] = tempData;
+
+								tempData = {};
+								tempData.name = "Interest";
+								tempData.data = interestCallsCountList;
+								series[6] = tempData;
+
+								tempData = {};
+								tempData.name = "No Interest";
+								tempData.data = noInterestCallsCountList;
+								series[7] = tempData;
+
+								tempData = {};
+								tempData.name = "Incorrect Referral";
+								tempData.data = incorrectReferralCallsCountList;
+								series[8] = tempData;
+
+								tempData = {};
+								tempData.name = "Meeting Scheduled";
+								tempData.data = meetingScheduledCallsCountList;
+								series[9] = tempData;
+
+								tempData = {};
+								tempData.name = "New Opportunity";
+								tempData.data = newOpportunityCallsCountList;
+								series[10] = tempData;
 								text = "No. of Calls";
 								colors = [ 'green', 'blue', 'red', 'violet' ];
 							} else {
@@ -685,7 +750,7 @@ var portlet_graph_data_utility = {
 							portlet_graph_utility.callsPerPersonBarGraph(
 									selector, domainUsersList, series,
 									totalCallsCountList, callsDurationList,
-									text, colors, domainUserImgList);
+									text, colors, domainUserImgList,base_model);
 
 							portlet_utility.addWidgetToGridster(base_model);
 						});
@@ -875,4 +940,403 @@ var portlet_graph_data_utility = {
 							portlet_utility.addWidgetToGridster(base_model);
 						});
 	},
+	dealGoalsGraphData : function(selector,data,column_position,row_position)
+	{
+					var colors1=[ '#ffffff', '#27C24C' ];
+					var colors2= ['#ffffff','#fad733'];
+			
+					var deal_graph_el=$('#'+selector).find('.dealGraph');
+					deal_graph_el.attr('id','dealGraph-'+column_position + '-' + row_position);
+					var graphSelector1=$('#'+selector).find('.dealGraph').attr('id');
+					var revenue_graph_el=$('#'+selector).find('.revenueGraph');
+					revenue_graph_el.attr('id','revenueGraph-'+column_position + '-' + row_position);
+						var graphSelector2=$('#'+selector).find('.revenueGraph').attr('id');
+					if(data["goalCount"]==0)
+					{
+						$('#' + graphSelector1)
+										.html(
+												'<div class="portlet-error-message" style="padding:30px 15px">No Deals Goals set </div>');
+								
+					}
+					else{
+						if(data["dealcount"]>=data["goalCount"])
+							$('#'+selector).find('.goal_count_success').show();
+						portlet_graph_utility.dealGoalsPieGraph(graphSelector1,data["dealcount"],data["goalCount"],colors1);
+					}
+						
+
+					if(data["goalAmount"]==0)
+					{
+						$('#' + graphSelector2)
+										.html(
+												'<div class="portlet-error-message" style="padding:30px 15px">No Revenue Goals set</div>');
+								
+					}
+					 else{
+					 	if(data["dealAmount"]>=data["goalAmount"])
+							$('#'+selector).find('.goal_amount_success').show();
+					portlet_graph_utility.dealGoalsPieGraph(graphSelector2,data["dealAmount"],data["goalAmount"],colors2);
+					}
+	},
+	/**
+	 * Fetch incoming deals portlet data to render as pie graph
+	 */
+	incomingDealsGraphData : function(base_model, selector, url) {
+		var that = this;
+		var sizey = parseInt($('#' + selector).parent().attr("data-sizey"));
+		var topPos = 50 * sizey;
+		if (sizey == 2 || sizey == 3)
+			topPos += 50;
+		$('#' + selector)
+				.html(
+						"<div class='text-center v-middle opa-half' style='margin-top:"
+								+ topPos
+								+ "px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		setupCharts(function()
+	    {
+	    	that.fetchPortletsGraphData(url, function(data)
+	        {
+
+	            // Categories are created time
+	            var categories = [];
+	            var tempcategories=[];
+	            var type = base_model.get("settings").type;
+	            if(!type)
+	            	type = 0;
+	            var frequency= base_model.get("settings").frequency;
+	            if(!frequency)
+	            	frequency = 'daily';
+	            // Data with deals
+	            var series;
+	            var AllData=[];
+	            var sortedKeys = [];
+	            $.each(data,function(k,v){
+	                sortedKeys.push(k);
+	            });
+	            sortedKeys.sort();
+	            var sortedData = {};
+	            $.each(sortedKeys,function(index,value){
+	                sortedData[''+value] = data[''+value];
+	            });
+
+	            var min_tick_interval = 1;
+	            var dataLength = 0;
+	            // Iterates through data and adds keys into
+	            // categories
+	            $.each(sortedData, function(k, v)
+	            {
+	            	var totalData=[];
+	            	totalData.push(k);
+	            	var total=0;
+	                // Initializes series with names with the first
+	                // data point
+	                if (series == undefined)
+	                {
+	                    var index = 0;
+	                    series = []; 
+	                    $.each(v, function(k1, v1)
+	                    {
+	                    	
+	                        var series_data = {};
+	                        series_data.name = k1;
+	                        series_data.data = [];
+	                        series[index++] = series_data;
+	                        //totalData.push(total);
+	                    });
+	                
+	                }
+
+
+	                // Fill Data Values with series data
+	                $.each(v, function(k1, v1)
+	                {
+	                	total=total+v1;
+	                    // Find series with the name k1 and to that,
+	                    // push v1
+	                    var series_data = find_series_with_name(series, k1);
+	                    series_data.data.push(v1);
+	                });
+	                     totalData.push(total);
+	                tempcategories.push(k*1000);
+					dataLength++;
+					AllData.push(totalData);
+				});
+					
+					that.dateRangeonXaxis(sortedData,tempcategories,categories,frequency,dataLength);
+
+	            if(Math.ceil((dataLength-1)/10)>0)
+	            {
+	                min_tick_interval = Math.ceil(dataLength/10);
+	                if(min_tick_interval==3)
+	                {
+	                    min_tick_interval = 4;
+	                }
+	            }
+	            if(series==undefined)
+	            	 chartRenderforIncoming(selector,categories,name,'',min_tick_interval,type,series,AllData,0,0);
+	            else
+	            {
+	            $.ajax({ type : 'GET', url : '/core/api/categories?entity_type=DEAL_SOURCE', dataType : 'json',
+	            success: function(data){
+	                $.each(data,function(index,deals){
+	                    for(var i=0;i<series.length;i++){
+	                        if(series[i].name=="0")
+	                                series[i].name="Unknown";
+	                        else if(deals.id==series[i].name){
+	                            series[i].name=deals.label;
+	                        }
+	                            
+	                    }
+	                });
+	                chartRenderforIncoming(selector,categories,name,'',min_tick_interval,type,series,AllData,0,0);
+	                } 
+	            });
+	        	}
+
+
+	            // After loading and processing all data, highcharts are initialized
+	            // setting preferences and data to show
+	            
+	        });
+	    });
+	},
+	dateRangeonXaxis : function(sortedData, tempcategories, categories, frequency, dataLength) {
+		var cnt = 0;
+		$
+				.each(
+						sortedData,
+						function(k, v) {
+							var dte = new Date(
+									tempcategories[cnt]);
+							if (frequency != undefined) {
+								if (frequency == "daily") {
+									categories
+											.push(Highcharts
+													.dateFormat(
+															'%e.%b',
+															Date
+																	.UTC(
+																			dte
+																					.getFullYear(),
+																			dte
+																					.getMonth(),
+																			dte
+																					.getDate()))
+													+ '');
+								} else if (frequency == "weekly") {
+									if (cnt != dataLength - 1) {
+										var next_dte = new Date(
+												tempcategories[cnt + 1]);
+										categories
+												.push(Highcharts
+														.dateFormat(
+																'%e.%b',
+																Date
+																		.UTC(
+																				dte
+																						.getFullYear(),
+																				dte
+																						.getMonth(),
+																				dte
+																						.getDate()))
+														+ ' - '
+														+ Highcharts
+																.dateFormat(
+																		'%e.%b',
+																		Date
+																				.UTC(
+																						next_dte
+																								.getFullYear(),
+																						next_dte
+																								.getMonth(),
+																						next_dte
+																								.getDate() - 1)));
+									} else {
+										var end_date = new Date();
+										categories
+												.push(Highcharts
+														.dateFormat(
+																'%e.%b',
+																Date
+																		.UTC(
+																				dte
+																						.getFullYear(),
+																				dte
+																						.getMonth(),
+																				dte
+																						.getDate()))
+														+ ' - '
+														+ Highcharts
+																.dateFormat(
+																		'%e.%b',
+																		Date
+																				.UTC(
+																						end_date
+																								.getFullYear(),
+																						end_date
+																								.getMonth(),
+																						end_date
+																								.getDate())));
+									}
+								} else if (frequency == "monthly") {
+									if (cnt != dataLength - 1) {
+										var next_dte = new Date(
+												tempcategories[cnt + 1]);
+										var current_date = new Date();
+										var from_date = '';
+										var to_date = '';
+										if (cnt != 0) {
+											if (current_date
+													.getFullYear() != dte
+													.getFullYear()) {
+												from_date = Highcharts
+														.dateFormat(
+																'%b.%Y',
+																Date
+																		.UTC(
+																				dte
+																						.getFullYear(),
+																				dte
+																						.getMonth(),
+																				dte
+																						.getDate()));
+											} else {
+												from_date = Highcharts
+														.dateFormat(
+																'%b',
+																Date
+																		.UTC(
+																				dte
+																						.getFullYear(),
+																				dte
+																						.getMonth(),
+																				dte
+																						.getDate()));
+											}
+											categories
+													.push(from_date);
+										} else {
+											if (current_date
+													.getUTCFullYear() != dte
+													.getUTCFullYear()) {
+												from_date = Highcharts
+														.dateFormat(
+																'%e.%b.%Y',
+																Date
+																		.UTC(
+																				dte
+																						.getFullYear(),
+																				dte
+																						.getMonth(),
+																				dte
+																						.getDate()));
+											} else {
+												from_date = Highcharts
+														.dateFormat(
+																'%e.%b',
+																Date
+																		.UTC(
+																				dte
+																						.getFullYear(),
+																				dte
+																						.getMonth(),
+																				dte
+																						.getDate()));
+											}
+											if (current_date
+													.getUTCFullYear() != next_dte
+													.getUTCFullYear()) {
+												to_date = Highcharts
+														.dateFormat(
+																'%e.%b.%Y',
+																Date
+																		.UTC(
+																				next_dte
+																						.getFullYear(),
+																				next_dte
+																						.getMonth(),
+																				next_dte
+																						.getDate() - 1));
+											} else {
+												to_date = Highcharts
+														.dateFormat(
+																'%e.%b',
+																Date
+																		.UTC(
+																				next_dte
+																						.getFullYear(),
+																				next_dte
+																						.getMonth(),
+																				next_dte
+																						.getDate() - 1));
+											}
+											categories
+													.push(from_date
+															+ ' - '
+															+ to_date);
+										}
+									} else {
+										var current_date = new Date();
+										var from_date = '';
+										var to_date = '';
+										var end_date = new Date();
+										if (current_date
+												.getUTCFullYear() != dte
+												.getUTCFullYear()) {
+											from_date = Highcharts
+													.dateFormat(
+															'%e.%b.%Y',
+															Date
+																	.UTC(
+																			dte
+																					.getFullYear(),
+																			dte
+																					.getMonth(),
+																			dte
+																					.getDate()));
+											to_date = Highcharts
+													.dateFormat(
+															'%e.%b.%Y',
+															Date
+																	.UTC(
+																			end_date
+																					.getFullYear(),
+																			end_date
+																					.getMonth(),
+																			end_date
+																					.getDate()));
+										} else {
+											from_date = Highcharts
+													.dateFormat(
+															'%e.%b',
+															Date
+																	.UTC(
+																			dte
+																					.getFullYear(),
+																			dte
+																					.getMonth(),
+																			dte
+																					.getDate()));
+											to_date = Highcharts
+													.dateFormat(
+															'%e.%b',
+															Date
+																	.UTC(
+																			end_date
+																					.getFullYear(),
+																			end_date
+																					.getMonth(),
+																			end_date
+																					.getDate()));
+										}
+										categories
+												.push(from_date
+														+ ' - '
+														+ to_date);
+									}
+								}
+								cnt++;
+							}
+						});
+	}
 };

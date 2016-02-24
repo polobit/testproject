@@ -122,9 +122,9 @@ function update_price()
 	var plan_name = $("#plan_type").val();
 	if(_billing_restriction.currentLimits.planName == "FREE")
 	{
-		if(plan_name == "starter" || IS_CANCELLED_USER)
+		if(plan_name == "starter")
 			$("#purchase-plan").text("Proceed to Pay");
-		else if(IS_TRIAL)
+		else if(IS_TRIAL && IS_ALLOWED_TRIAL)
 			$("#purchase-plan").text("Proceed to Trial");
 		else
 			$("#purchase-plan").text("Proceed to Pay");
@@ -343,6 +343,7 @@ function initializeSubscriptionListeners()
 			function(e)
 			{
 				e.preventDefault();
+				plan_json = {};
 				var buttonText = $(this).html();
 				$(this).text("Loading...");
 				$(this).attr("disabled","disabled");
@@ -354,6 +355,9 @@ function initializeSubscriptionListeners()
 
 				var quantity = $("#user_quantity").val();
 				var cost = $("#users_total_cost").text();
+				var credit = $("#credit_amount").text();
+				if(credit == "")
+					credit = 0;
 				var plan = $("#plan_type").val();
 				if("pro" == plan)
 					plan = "enterprise";
@@ -422,9 +426,9 @@ function initializeSubscriptionListeners()
 
 				if(_billing_restriction.currentLimits.planName == "FREE")
 				{
-					if(plan_name == "starter" || IS_CANCELLED_USER)
+					if(plan_name == "starter")
 						plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
-					else if(IS_TRIAL)
+					else if(IS_TRIAL && IS_ALLOWED_TRIAL)
 						plan_json.date = currentDate.setHours(currentDate.getHours()+168);
 					else
 						plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
@@ -432,10 +436,14 @@ function initializeSubscriptionListeners()
 					plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
 
 				
-				plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
 				plan_json.new_signup = is_new_signup_payment();
 				plan_json.price = update_price();
 				plan_json.cost = (cost * months).toFixed(2);
+				if(credit > 0){
+					plan_json.costWithCredit = plan_json.cost;
+					plan_json.credit = credit;
+					plan_json.cost = (plan_json.cost - credit).toFixed(2);
+				}
 				plan_json.months = months;
 				plan_json.plan = plan;
 				plan_json.plan_type = plan.toUpperCase() + "_" + cycle.toUpperCase();
@@ -508,34 +516,55 @@ function initializeSubscriptionListeners()
 							}, null);
 						}else if(data.is_allowed_plan){
 							Backbone.history.navigate("purchase-plan", { trigger : true });
+						}else if(data.lines){
+							$.each( JSON.parse(USER_BILLING_PREFS.billingData).subscriptions.data, function( key, value ) {
+							  if(value.plan.id.indexOf("email") == -1)
+							  {
+							  	if((cost * months).toFixed(2) > value.quantity*(value.plan.amount/100))
+							  	{
+							  		plan_json.unUsedCost = data.lines.data[0].amount*(-1)/100;
+							  		plan_json.remainingCost = data.lines.data[1].amount/100;
+							  		plan_json.cost = (plan_json.remainingCost - plan_json.unUsedCost - credit).toFixed(2);
+							  	}else
+							  	{
+							  		plan_json.unUsedCost = undefined;
+							  		plan_json.remainingCost = undefined;
+							  	}
+							  }
+							});
+							
 						}else{
-							if(data.contacts.count > data.contacts.limit)
+							var restrictions = data.restrictions;
+							if(restrictions.contacts.count > restrictions.contacts.limit)
 								errorsCount++;
-							if(data.webrules.count > data.webrules.limit)
+							if(restrictions.webrules.count > restrictions.webrules.limit)
 								errorsCount++;
-							if(data.users.count > data.users.limit)
+							if(restrictions.users.count > restrictions.users.limit)
 								errorsCount++;
-							if(data.workflows.count > data.workflows.limit)
+							if(restrictions.workflows.count > restrictions.workflows.limit)
 								errorsCount++;
-							if(data.triggers.count > data.triggers.limit)
+							if(restrictions.triggers.count > restrictions.triggers.limit)
 								errorsCount++;
 							if(errorsCount >= 1)
 							{
-								data.errorsCount = errorsCount;
-								getTemplate("subscribe-error-modal",data , undefined, function(template_ui){
+								restrictions.errorsCount = errorsCount;
+								getTemplate("subscribe-error-modal",restrictions , undefined, function(template_ui){
 									if(!template_ui)
 										  return;
 									$(template_ui).modal('show');
 								}, null);
 								
 							}
-							else
-								Backbone.history.navigate("purchase-plan", { trigger : true });
 						}
+						plan_json.date = data.nextPaymentAttempt;
+						if(months == 24)
+							plan_json.date = plan_json.date + 31557600;
+						Backbone.history.navigate("purchase-plan", { trigger : true });
 							
 					},
-					error : function(msg){
-						$(this).text(buttonText).removeAttr("disabled");
+					error : function(data){
+						showNotyPopUp("warning", data.responseText, "top");
+						$(that).text(buttonText).removeAttr("disabled");
 					}
 				});
 
@@ -661,6 +690,32 @@ function initializeSubscriptionListeners()
 		e.preventDefault();
 		$(this).closest(".plan-collection-in").find(".plan_features").css("display","none");
 	});
+
+	$("#subscribe_plan_change").on("click","#cancel_email_plan",function(e){
+		e.preventDefault();
+		getTemplate("cancel-email-conformation-modal",{} , undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$(template_ui).modal('show');
+		}, null);
+	});
+
+	//From modal popup
+	$("#cancel_email_plan_conform").off("click");
+	$("body").on("click","#cancel_email_plan_conform",function(e){
+		e.preventDefault();
+		$.ajax({url:'core/api/subscription/cancel/email',
+			type:'GET',
+			success:function(data){
+				showNotyPopUp("information", "Email subscription has been cancelled successfully.", "top"); 
+				setTimeout(function(){ 
+					document.location.reload();
+				}, 1000);				
+			},error: function(){
+				alert("Error occured, Please try again");
+			}
+		});
+	});
 }
 
 function is_new_signup_payment()
@@ -710,4 +765,14 @@ function email_validation(form)
 
 				} });
 	return $(form).valid();
+}
+
+function emailClickEvent() {
+	$('ul.nav.nav-tabs').removeClass("hide");
+	$("#email").addClass("hide");
+	$("#currentPlan").addClass("p-t-md");
+	$("#usertab").removeClass("active");
+	$("#emailtab").addClass("active");
+	$("#users-content").removeClass("active");
+	$("#email-content").addClass("active");
 }

@@ -248,14 +248,19 @@ var Report_Filters_Event_View = Base_Model_View.extend({
 var contactFiltersListView
 function setupContactFilterList(cel, tag_id)
 {
-	if (tag_id)
-		$('.filter-criteria', cel)
-				.html(
-						'<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li  class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="m-l-xs pull-left">' + decodeURI(tag_id) + '</span><a class="close default_contact_remove_tag m-l-xs pull-left">&times</a></li></ul>').attr("_filter", tag_id);
-						
+	if (tag_id){
+
+		var template = Handlebars.compile('<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li  class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="m-l-xs pull-left">{{name}}</span><a class="close default_contact_remove_tag m-l-xs pull-left">&times</a></li></ul>');
+
+	 	// Adds contact name to tags ul as li element
+		$('.filter-criteria', cel).html(template({name : decodeURI(tag_id)})).attr("_filter", tag_id);
+
+	}
 
 	var filter_id = null;
-		contactFiltersListView = new Base_Collection_View(
+	setTimeout(function(){
+		
+			contactFiltersListView = new Base_Collection_View(
 			{
 				url : '/core/api/filters?type=PERSON',
 				sort_collection : false,
@@ -263,11 +268,12 @@ function setupContactFilterList(cel, tag_id)
 				templateKey : "contact-filter-list",
 				individual_tag_name : 'li',
 				sort_collection : false,
+				no_transition_bar : true,
 				postRenderCallback : function(el)
 				{
 					var filter_name;
 					// Set saved filter name on dropdown button
-					if (filter_name = readCookie('contact_filter'))
+					if (filter_name = _agile_get_prefs('contact_filter'))
 					{
 						/*
 						 * Check whether filter contains recent of lead to set
@@ -293,17 +299,17 @@ function setupContactFilterList(cel, tag_id)
 							
 						}
 
-						el.find('.filter-dropdown').append(filter_name);
+						el.find('.filter-dropdown').append(Handlebars.compile('{{name}}')({name : filter_name}));
 					}
 
 					if (!filter_name)
 						return;
 
-					
-					$('.filter-criteria', cel)
-					.html(
-							'<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="inline-block m-r-xs v-middle">' + filter_name + '</span><a class="close default_filter">&times</a></li></ul>');
-					
+					var template = Handlebars.compile('<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="inline-block m-r-xs v-middle">{{name}}</span><a class="close default_filter">&times</a></li></ul>');
+
+				 	// Adds contact name to tags ul as li element
+					$('.filter-criteria', cel).html(template({name : filter_name}));
+
 					if(filter_id)
 						$('.filter-criteria', cel).attr("_filter", filter_id);
 					else
@@ -314,10 +320,12 @@ function setupContactFilterList(cel, tag_id)
 			// Fetchs filters
 			contactFiltersListView.collection.fetch();
 		
-			var filter_dropdown_element = contactFiltersListView.render().el;
-		
 			// Shows in contacts list
 			$('#filter-list', cel).html(contactFiltersListView.render().el);
+
+	}, 500);
+
+		
 }
 
 /**
@@ -327,10 +335,10 @@ function setupContactFilterList(cel, tag_id)
 function revertToDefaultContacts()
 {
 	// Erase filter cookie. Erases both contact and company filter
-	eraseCookie('contact_filter');
-	eraseCookie('contact_filter_type');
-	eraseCookie('company_filter');
-	eraseData('dynamic_filter');
+	_agile_delete_prefs('contact_filter');
+	_agile_delete_prefs('contact_filter_type');
+	_agile_delete_prefs('company_filter');
+	_agile_delete_prefs('dynamic_filter');
 
 	if (App_Contacts.contactsListView)
 		App_Contacts.contactsListView = undefined;
@@ -678,7 +686,7 @@ function add_custom_class_to_filter_elements(element, className)
 }
 
 function showDynamicFilters(el){
-	if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
+	if(_agile_get_prefs(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
 		$('#contacts-lhs-filters-toggle').hide();
 	}
 	else{
@@ -690,7 +698,7 @@ function showDynamicFilters(el){
 function setUpContactView(cel,tagExists){
 
 	
-	if (readCookie("agile_contact_view"))
+	if (_agile_get_prefs("agile_contact_view"))
 	{
 		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='List View' class='btn btn-default btn-sm contacts-view' data='list'><i class='fa fa-list'  style='margin-right:3px'></i></a>");
 	}
@@ -710,14 +718,14 @@ var contact_filters_util = {
 		e.preventDefault();
 		var targetEl = $(e.currentTarget);
 
-		eraseData('dynamic_contact_filter');
+		_agile_delete_prefs('dynamic_contact_filter');
 
 		var filter_id = $(targetEl).attr('id');
 		var filter_type = $(targetEl).attr('filter_type');
 
 		// Saves Filter in cookie
-		createCookie('contact_filter', filter_id)
-		createCookie('contact_filter_type', filter_type)
+		_agile_set_prefs('contact_filter', filter_id)
+		_agile_set_prefs('contact_filter_type', filter_type)
 
 		// Gets name of the filter, which is set as data
 		// attribute in filter
@@ -734,10 +742,10 @@ var contact_filters_util = {
 	{
 
 		e.preventDefault();
-		eraseCookie('contact_filter');
-		eraseCookie('contact_filter_type');
+		_agile_delete_prefs('contact_filter');
+		_agile_delete_prefs('contact_filter_type');
 
-		createCookie('company_filter', "Companies");
+		_agile_set_prefs('company_filter', "Companies");
 		CONTACTS_HARD_RELOAD = true;
 		App_Contacts.contacts(); // /Show Companies list, explicitly hard
 		// reload

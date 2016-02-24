@@ -390,6 +390,12 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 				<input type="hidden" name="company" value="<%=company%>">
 				<input type="hidden" name="c_name" value="<%= workflow.name%>">
 				<input type="hidden" name="unsubscribe_email" value="<%= workflow.unsubscribe.unsubscribe_email%>">
+				<input type="hidden" name="unsubscribe_name" value="<%= workflow.unsubscribe.unsubscribe_name%>">
+
+				<input type="hidden" name="he" value="<%= email%>">
+
+				<input type="hidden" name="unsubscribe_subject" value="<%= workflow.unsubscribe.unsubscribe_subject%>">
+
 				
 				<div id="unsubscribe-template"></div>
 				<div class="error"></div>
@@ -414,7 +420,8 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 <script id="remove-from-this-campaign-template" type="text/html">
 <input type="hidden" name="status" value="current">
 
-<p>You are about to be removed from the Campaign - <%= workflow.name %></p>
+<p>You are about to be removed from the Campaign - <%= workflow.unsubscribe.unsubscribe_name %>
+</p>
 </script>
 
 <script id="remove-from-all-campaigns-template" type="text/html">
@@ -424,7 +431,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 </script>
 
 <script id="ask-the-user-template" type="text/html">
-<input type="radio" name="status" id="current" value="current"/> Remove me from this campaign - <%= workflow.name %>
+<input type="radio" name="status" id="current" value="current"/> Remove me from this campaign - <%= workflow.unsubscribe.unsubscribe_name %>
 <br/>
 <input type="radio" name="status" value="all" id="all"/> Stop ALL communication from this sender.
 <label for="status" class="error">Please select any one of the options</label>			

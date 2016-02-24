@@ -1,13 +1,51 @@
+ <script id="data-import-collection-template" type="html/text">
+        
+    <div class="tab-container m-b-none">
+       <ul class="nav nav-tabs">
+         <li><a href="#salesforce-tab" data-toggle="tab"  class="b-l-none">Salesforce</a></li>
+       </ul>
+	</div>
+
+	<div class="tab-content wrapper-md panel" id="settings-data-import-tab-content">
+		<div class="tab-pane" id="salesforce-tab">
+			<div class="row">
+				<div id="salesforce" class="col-md-4 col-sm-6 col-xs-12"></div>
+			</div>
+		</div>
+	</div>
+
+</script>
+
+<script id="data-import-settings-template" type="text/html">
+	<div class="tab-container m-b-none widgets_inner">
+       <ul class="nav nav-tabs">
+         <li><a href="#salesforce-tab" data-toggle="tab"  class="b-l-none">Salesforce</a></li>
+       </ul>
+	</div>
+
+	<div class="tab-content wrapper-md panel">
+		<div class="tab-pane active" id="data-import-settings-tab-content"></div>
+	</div>
+</script>
 
  <script id="data-sync-collection-template" type="html/text">
         
     <div class="tab-container m-b-none">
        <ul class="nav nav-tabs">
+       {{#is_mobile}}
+        <li><a href="#google-tab" data-toggle="tab"  class="b-l-none"><i class="fa fa-google"></i></a></li>
+         <li><a href="#ecommerce-tab" data-toggle="tab"><i class="icon icon-basket-loaded"></i></a></li>
+         <li><a href="#office365-tab" data-toggle="tab"><i class="icon icon-envelope-open"></i></a></li>
+         <li><a href="#payment-tab" data-toggle="tab"><i class="icon icon-credit-card"></i></a></li>
+         <li><a href="#accounting-tab" data-toggle="tab"><i class="icon icon-calculator"></i></a></li>
+
+       {{else}}
          <li><a href="#google-tab" data-toggle="tab"  class="b-l-none">Google</a></li>
          <li><a href="#ecommerce-tab" data-toggle="tab">Ecommerce</a></li>
          <li><a href="#office365-tab" data-toggle="tab">Office 365</a></li>
          <li><a href="#payment-tab" data-toggle="tab">Payment</a></li>
          <li><a href="#accounting-tab" data-toggle="tab">Accounting</a></li>
+        {{/is_mobile}}
        </ul>
 	</div>
 
@@ -43,11 +81,8 @@
 	</div>
 
 </script>
+
 <script id="data-sync-model-template" type="text/html">	
-
-
-
-
 </script>
 
 <script id="data-sync-settings-template" type="text/html">
@@ -180,6 +215,18 @@
 				{{/canSyncContacts}}
     		{{/if}}
     		{{/if_equals}}
+
+    		{{#if_equals type "SALESFORCE"}}
+			{{#if id}}
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
+    			<a href="#sync/salesforce" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    		{{else}}
+    			<a href="#sync/salesforce" class="btn btn-sm btn-default" id="setting-widget">Enable</a>
+    		{{/if}}
+    		
+
+    		{{/if_equals}}
+
 	</div>
 	</div>
 </div>

@@ -35,16 +35,19 @@ function initToPubNub(callback)
  */
 function subscribeClientChannel(callback)
 {
-	Pubnub.subscribe({ channel : CURRENT_DOMAIN_USER.id + "_Channel", restore : true, message : function(message, env, channel)
+	Pubnub.subscribe({ channel : CURRENT_DOMAIN_USER.id + "_Channel", restore : false, message : function(message, env, channel)
 	{
 		//console.log(message);
-
-		// Display message in stream.
-			if((message || {}).type  == "BRIA_CALL"){
-				showBriaCallNoty(message);
-				return;
+		
+		try{
+			if((message || {}).type  == "call"){
+				handleCallRequest(message);
+			}else{
+				// Display message in stream.
+				handleMessage(message);	
+			}
+		}catch (e) {
 		}
-		handleMessage(message);
 
 	}, // RECEIVED A MESSAGE.
 	presence : function(message, env, channel)
