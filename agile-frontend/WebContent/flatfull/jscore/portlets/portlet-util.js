@@ -1738,8 +1738,10 @@ var portlet_utility = {
 		var secs = Math
 				.floor(((diffInSeconds % (24 * 60 * 60)) % (60 * 60)) % 60);
 
+		if(days!=0)
+			duration += '' + days + 'd';
 		if (hrs != 0)
-			duration += '' + ((days * 24) + hrs) + 'h';
+			duration += ' ' + hrs + 'h';
 		if (mins != 0)
 			duration += ' ' + mins + 'm';
 		if (secs != 0)

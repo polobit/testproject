@@ -810,12 +810,12 @@ var portlet_graph_data_utility = {
 
 							$.each(groupByList, function(index, name) {
 								groupByNamesList[index] = portlet_utility
-										.getPortletNormalName(name+'-'+index);
+										.getPortletNormalName(name+'#'+index);
 							});
 
 							portlet_graph_utility.taskReportBarGraph(selector,
 									groupByNamesList, series, text, base_model,
-									domainUserNamesList);
+									domainUserNamesList,undefined,'');
 
 							portlet_utility.addWidgetToGridster(base_model);
 						});
@@ -1029,18 +1029,18 @@ var portlet_graph_data_utility = {
 								series[i] = tempData;
 								CountData[i]=splitByDataListCount;
 							}
-							text = "Task Report";
+							text = "Average Deviation";
 
 							var groupByNamesList = [];
 
 							$.each(groupByList, function(index, name) {
 								groupByNamesList[index] = portlet_utility
-										.getPortletNormalName(name+'-'+index);
+										.getPortletNormalName(name+'#'+index);
 							});
 
 							portlet_graph_utility.taskReportBarGraph(selector,
 									groupByNamesList, series, text, base_model,
-									domainUserNamesList,CountData);
+									domainUserNamesList,CountData,'in seconds');
 
 							portlet_utility.addWidgetToGridster(base_model);
 						});

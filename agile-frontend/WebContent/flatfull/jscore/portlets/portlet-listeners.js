@@ -890,6 +890,7 @@ function initializeAddPortletsListeners() {
 							"UserActivities" : updateImageS3Path("flatfull/img/dashboard_images/User-Activities.png"),
 							"Campaignstats" : updateImageS3Path("flatfull/img/dashboard_images/Campaign-stats.jpg"),
 							"DealGoals" : updateImageS3Path("flatfull/img/dashboard_images/Quota.png"),
+							"AverageDeviation" :  updateImageS3Path("flatfull/img/dashboard_images/Average_deviation.png"),
 
 						};
 						var placements_json = {
