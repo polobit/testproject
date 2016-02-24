@@ -248,8 +248,8 @@ var _agile = {
 		},
 		is_valid_call : function(){
 
-			if(agile_id.getNamespace() == "our")
-             	 return true;
+			// if(agile_id.getNamespace() == "our")
+             	 // return true;
 
              return !_agile_check_function_caller_is_console();
 
