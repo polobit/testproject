@@ -468,8 +468,8 @@ public class CampaignLogsSQLUtil
 		    + "campaign_id,subscriber_id,campaign_name,log_time,log_type,message,UNIX_TIMESTAMP(log_time) AS time "
 		    + "FROM campaign_logs AS campaignLogsAlias WHERE DOMAIN = '"
 		    + domain
-		    + "' AND (log_type='EMAIL_OPENED' OR log_type='CLICK' OR log_type='UNSUBSCRIBED') ORDER BY log_time DESC LIMIT "
-		    + (Integer.parseInt(cursor) == 0 ? "20" : Integer.parseInt(cursor) + 20) + ") ";	    
+		    + "' AND (log_type='EMAIL_OPENED' OR log_type='CLICK' OR log_type='UNSUBSCRIBED') ORDER BY log_time DESC "
+		    + GoogleSQLUtil.appendLimitToQuery(cursor, page_size);	    
 	    
 		    try
 			{
