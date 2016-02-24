@@ -1455,8 +1455,8 @@ var Tickets = {
 		// Reset timer
 		if (Tickets.message_draft_timer)
 			clearInterval(Tickets.message_draft_timer);
-		
-		if (!ele)
+
+		if (!ele  || $(ele).hasClass("forward"))
 			return;
 
 		Tickets.message_draft_timer = setInterval(function() {
@@ -1467,6 +1467,7 @@ var Tickets = {
 				clearInterval(Tickets.message_draft_timer);
 				return;
 			}
+
 			
 			Tickets.draft_typed_message(key, Tickets.get_typed_message_json($ele));
 
@@ -1505,20 +1506,20 @@ var Tickets = {
 
 	 	try {
 	 		// Add to localstorage
-			localStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
+			sessionStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
 	    } catch (e) {
 
 	    	draft_mssgs = {
 	    		key:value
 	    	}
-	    	localStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
+	    	sessionStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
 	    }
 
 	},
 
 	get_draft_message : function(key){
 
-		var draft_mssgs = localStorage.getItem("ticket-draft-message");
+		var draft_mssgs = sessionStorage.getItem("ticket-draft-message");
 		if (!draft_mssgs)
 			return {};
 
@@ -1537,7 +1538,7 @@ var Tickets = {
 		delete ticketDraft[type];
 
 		draft_mssgs[key] = ticketDraft;
-		localStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
+		sessionStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
 	
 	}
 

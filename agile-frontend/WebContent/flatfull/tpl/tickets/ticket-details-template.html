@@ -392,7 +392,7 @@
       
         {{#if canned_responses}}
         <div class="btn-group dropdown m-l-xs pull-right">
-          <a class="link-color text-sm" data-toggle="dropdown" aria-expanded="false">Macros <span class="caret"></span></a>
+          <a class="link-color text-sm"  id="macro_list" data-toggle="dropdown" aria-expanded="false">Macros <span class="caret"></span></a>
           <ul id="workflows_list" class="dropdown-menu">
             {{#each canned_responses}}
             <li id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>
