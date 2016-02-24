@@ -8,7 +8,7 @@
                         <form id="bulk-labels" class="form-horizontal" onsubmit="return false;">
                             <fieldset>
                                 <div class="control-group form-group">         
-                                    <label class="control-label col-sm-2">
+                                    <label class="control-label col-sm-3">
                                         Select Labels <span class="field_req">*</span>
                                     </label>
                                     <div class="controls col-sm-7">
@@ -19,16 +19,24 @@
                                         </span>  
                                     </div>
                                 </div>
+                                <div class="control-group form-group">         
+                                    <label class="control-label col-sm-3">
+                                        Choose action <span class="field_req">*</span>
+                                    </label>
+                                    <div class="controls col-sm-7">
+                                        <select name="manage_lables" class="form-control" class="w-md">
+                                            <option value="add">Add</option>
+                                            <option value="remove">Remove</option>
+                                        </select> 
+                                    </div>
+                                </div>
                                 <hr class="m-t-none">
                                 <div class="row">
-                                    <div class="col-sm-offset-2 col-sm-10">
+                                    <div class="col-sm-offset-3 col-sm-9">
                                         <div class="form-actions">       
                                             <a href="#tickets" class="btn btn-default btn-sm">Close</a>   
-                                            <a href="javascript:void(0);" class="btn btn-primary btn-sm save m-l-xs">
-                                                Remove Labels
-                                            </a>
-                                            <a href="javascript:void(0);" class="btn btn-primary btn-sm save m-l-xs">
-                                                Add Labels
+                                             <a href="javascript:void(0);" class="btn btn-primary btn-sm save m-l-xs">
+                                                Save
                                             </a> 
                                             <span class="save-status"></span>
                                         </div>

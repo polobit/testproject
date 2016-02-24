@@ -1,10 +1,8 @@
 package com.agilecrm.ticket.rest;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -16,8 +14,6 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 
-import com.agilecrm.contact.Tag;
-import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.ticket.entitys.TicketBulkActionAttributes;
 import com.agilecrm.ticket.entitys.TicketBulkActionAttributes.Manage_Lables;
 import com.agilecrm.ticket.entitys.TicketGroups;
@@ -54,18 +50,20 @@ public class TicketBulkActionsRest
 	@POST
 	@Path("/manage-labels")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void manageLabels(@QueryParam("command") Manage_Lables manage_lables, TicketBulkActionAttributes fields)
+	public void manageLabels(TicketBulkActionAttributes fields)
 	{
 		try
 		{
-			System.out.println("Request reached to frontend...");
+			System.out.println("...Request reached to frontend...");
+			
 			System.out.println("conditions.." + fields.conditions);
 			System.out.println("ticket_ids.." + fields.ticketIDs);
 			System.out.println("labels.." + fields.labels);
+			System.out.println("fields.manage_lables.." + fields.manage_lables);
 
 			TicketBulkActionUtil.postDataToBulkActionBackend(TicketBulkActionType.MANAGE_LABELS, fields.ticketIDs,
 					Method.POST, fields.conditions,
-					new JSONObject().put("labels", fields.labels).put("command", manage_lables));
+					new JSONObject().put("labels", fields.labels).put("command", fields.manage_lables));
 		}
 		catch (Exception e)
 		{
