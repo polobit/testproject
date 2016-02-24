@@ -214,7 +214,7 @@ public class LoginServlet extends HttpServlet {
 		// Read Subdomain
 		String subdomain = NamespaceUtil.getNamespaceFromURL(request
 				.getServerName());
-
+		subdomain = AliasDomainUtil.getActualDomain(subdomain);
 		if (!subdomain.equalsIgnoreCase(domainUser.domain))
 			if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 				throw new Exception(
