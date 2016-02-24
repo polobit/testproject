@@ -280,6 +280,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	/** Inliner edits input fields **/
     	'click #Contactedit-text '  : 'togglehiddenfield',
     	'change #Contact-input input ' : 'inlineNameChange',
+    	'blur #Contact-input input ' : 'inlineNameChange',
         /** End of inliner edits **/
 
     	/** Company events **/
@@ -296,20 +297,41 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 
     	'click #contact-actions-grid-delete' : 'contactActionsGridDelete',
     },
-
+    
     inlineNameChange : function(e){
            console.log("inlineNameChange");
 
            // Get actual name
-          var contactFirstName=$("#Contact-input-firstname").val();
-          var contactLastName=$("#Contact-input-lastname").val();
+          var contactName = $("#Contact-input-firstname").val();
+          var contactLastName = "";
+          var contactFirstName ="";
+          if( contactName != "")
+          {
+          	var Name = contactName.split(" ");
+          	 contactFirstName = Name[0];
+          	
+          	for(var i = 1;i < Name.length;i++)
+          		 contactLastName = contactLastName+Name[i];
+         
+         		var validator1 = contactNameValidation("first_name",contactFirstName);
+         		var validator2 = contactNameValidation("last_name",contactLastName);
+
+         if (validator1 || validator2 )
+         {
           // Update name
           agile_crm_update_contact("first_name", contactFirstName);
           agile_crm_update_contact("last_name", contactLastName);
           // Toggle fields
 		  $("#Contact-input").toggleClass("hidden");
           $("#Contactedit-text").text(contactFirstName+" "+contactLastName).toggleClass("hidden");
-    },
+         }
+         else{
+         	return;
+         }
+         }	
+          },
+   
+    
     /*
 show and hide the input for editing the contact name and saving that
 */

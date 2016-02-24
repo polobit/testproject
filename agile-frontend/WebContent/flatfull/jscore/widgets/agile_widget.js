@@ -156,6 +156,40 @@ function agile_crm_update_contact(propertyName, value, callback)
 
 }
 
+function contactNameValidation(propertyName,value)
+    {
+    var contact_model = null;
+	if(company_util.isCompany()){
+		contact_model = App_Companies.companyDetailView.model;
+	} else {
+		contact_model = App_Contacts.contactDetailView.model;
+	}
+
+	// Reads properties fied from the contact
+	var properties = contact_model.toJSON()['properties'];
+
+	/*
+	 * Iterates through each property in contact properties and checks for the
+	 * match in it for the given property name and if match is found, updates
+	 * the value of it with the given value
+	 */
+	$.each(properties, function(index, property)
+	{
+		if (property.name == propertyName)
+		{
+			// flag is set true to indicate property already exists in contact
+			if(property.value == value)
+			return false;
+			else 
+			return true;
+		}
+
+	});
+
+		
+    }
+
+
 /**
  * Updates a contact with the list of property name and its value specified in
  * propertiesArray. If property name already exists with the given then replaces
