@@ -101,16 +101,18 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
     }
 
     $.ajax({
-        type: 'post', 
+        type: requestType, 
         url: 'core/api/email/templates',       
         data: JSON.stringify(template),
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
         success: function (data) {
-            $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green; margin-left: 85px;">'+message+'</span>').show().fadeOut(3000);
+            $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
             $(".saveEmailBuilderButton",parent.document).prop("disabled",false);
             $(".saveEmailBuilderButton",parent.document).html("Save");
-            window.location.hash = "email-templates";
+            if(requestType == "post") {
+                window.location.hash = "email-templates";
+            }
         },
     });
 }
