@@ -2,6 +2,7 @@ package com.agilecrm.ticket.utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -158,7 +159,12 @@ public class TicketFiltersUtil
 				case "hrs_since_due_date":
 				case "hrs_untill_due_date":
 				{
-					Long currentEpoch = Calendar.getInstance().getTimeInMillis();
+					Calendar calendar = Calendar.getInstance();
+					calendar.set(Calendar.MINUTE, 0);
+					calendar.set(Calendar.SECOND, 0);
+					calendar.add(Calendar.HOUR, 1);
+
+					Long currentEpoch = calendar.getTimeInMillis();
 
 					Long millis = Long.parseLong(RHS) * 60 * 60 * 1000;
 					Long rhsEpoch = (currentEpoch - millis) / 1000;
