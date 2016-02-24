@@ -103,22 +103,21 @@ function showCustomFieldModel(data)
 			if(custom_field_model_json)
 			{
 				//App_Admin_Settings.customFieldsListView.collection.remove(custom_field_model_json);
-				custom_field_model_json.set(new BaseModel(model),{silent:true});
-				if(model.scope=="CONTACT")
+				custom_field_model_json.set(model);
+			/*	if(model.scope=="CONTACT")
 					App_Admin_Settings.contactCustomFieldsListView.render(true);
 				else if(model.scope=="COMPANY")
 					App_Admin_Settings.companyCustomFieldsListView.render(true);
 				else if(model.scope=="DEAL")
 					App_Admin_Settings.dealCustomFieldsListView.render(true);
 				else if(model.scope=="CASE")
-					App_Admin_Settings.caseCustomFieldsListView.render(true);
+					App_Admin_Settings.caseCustomFieldsListView.render(true);*/
 			}
 			
 			else
 			{
 				if(model.scope=="CONTACT"){
 					App_Admin_Settings.contactCustomFieldsListView.collection.add(model);
-					App_Admin_Settings.contactCustomFieldsListView.render(true);
 				}else if(model.scope=="COMPANY"){
 					App_Admin_Settings.companyCustomFieldsListView.collection.add(model);
 					App_Admin_Settings.companyCustomFieldsListView.render(true);
@@ -934,7 +933,32 @@ function groupingCustomFields(base_model){
 			templateKey : templateKey, individual_tag_name : 'tr',
 			postRenderCallback : function(custom_el){
 				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
+				bindModelSearchable(App_Admin_Settings.contactCustomFieldsListView.collection);
 			}});
+		function bindModelSearchable(collection)
+		{
+			$.each(collection, function (i, m){
+				
+			})
+		}
+		function appendItem(base_model)
+		{
+			addCustomFieldToSearch(base_model,  base_model.get("scope"));
+		};
+
+		function removeItem(base_model)
+		{
+			removeCustomFieldFromSortOptions(base_model, base_model.get("scope"));
+		};
+
+		function updateItem(base_model){
+				updateCustomFieldToSearch(base_model, base_model.get("scope"));
+		};
+
+		App_Admin_Settings.contactCustomFieldsListView.collection.bind('add', appendItem);
+		App_Admin_Settings.contactCustomFieldsListView.collection.bind('remove', removeItem);
+		App_Admin_Settings.contactCustomFieldsListView.collection.bind('change', updateItem);
+
 		App_Admin_Settings.contactCustomFieldsListView.collection.fetch();
 		$('#customfields-contacts-accordion', this.el).append($(App_Admin_Settings.contactCustomFieldsListView.render().el));
 	}else if(base_model.get("scope")=="COMPANY"){
@@ -942,7 +966,33 @@ function groupingCustomFields(base_model){
 			templateKey : templateKey, individual_tag_name : 'tr',
 			postRenderCallback : function(custom_el){
 				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
+				bindModelSearchable(App_Admin_Settings.companyCustomFieldsListView.collection);
 			}});
+
+			function bindModelSearchable(collection)
+			{
+				$.each(collection, function (i, m){
+					
+				})
+			}
+			function appendItem(base_model)
+			{
+				addCustomFieldToSearch(base_model, base_model.get("scope"));
+			};
+
+			function removeItem(base_model)
+			{
+				removeCustomFieldFromSortOptions(base_model, base_model.get("scope"));
+			};
+
+			function updateItem(base_model){
+				updateCustomFieldToSearch(base_model, base_model.get("scope"));
+			};
+
+		App_Admin_Settings.companyCustomFieldsListView.collection.bind('add', appendItem);
+		App_Admin_Settings.companyCustomFieldsListView.collection.bind('remove', removeItem);
+		App_Admin_Settings.companyCustomFieldsListView.collection.bind('change', updateItem);
+
 		App_Admin_Settings.companyCustomFieldsListView.collection.fetch();
 		$('#customfields-companies-accordion', this.el).append($(App_Admin_Settings.companyCustomFieldsListView.render().el));
 	}else if(base_model.get("scope")=="DEAL"){

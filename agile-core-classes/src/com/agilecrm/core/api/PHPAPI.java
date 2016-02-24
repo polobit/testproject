@@ -89,7 +89,7 @@ public class PHPAPI
 	    int count = 0;
 
 	    if (obj.has("email"))
-		count = ContactUtil.searchContactCountByEmail(obj.getString("email"));
+		count = ContactUtil.searchContactCountByEmail(obj.getString("email").toLowerCase());
 
 	    System.out.println("contacts available" + count);
 	    if (count != 0)
@@ -103,13 +103,13 @@ public class PHPAPI
 
 	    // Add properties list to contact properties
 	    contact.properties = properties;
-	    if(tags.length > 0)
+	    if (tags.length > 0)
 	    {
 		try
 		{
 		    contact.addTags(tags);
 		}
-		catch(WebApplicationException e)
+		catch (WebApplicationException e)
 		{
 		    return null;
 		}
@@ -371,7 +371,7 @@ public class PHPAPI
 	    {
 		contact.addTags(tagsArray);
 	    }
-	    catch(WebApplicationException e)
+	    catch (WebApplicationException e)
 	    {
 		return null;
 	    }
@@ -755,16 +755,16 @@ public class PHPAPI
 		    contact.addProperty(field);
 		}
 	    }
-	    if(tags.length > 0)
+	    if (tags.length > 0)
 	    {
 		try
-	    	{
+		{
 		    contact.addTags(tags);
 		}
-	    	catch(WebApplicationException e)
-	    	{
-	    	    return null;
-	    	}
+		catch (WebApplicationException e)
+		{
+		    return null;
+		}
 	    }
 	    else
 		contact.save();

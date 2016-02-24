@@ -166,6 +166,13 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 
 		});
 
+//Click event on add web rules button
+$("#content").on( "click", ".addWebrule", function(e) 
+ {
+	openEmailTemplate(e);
+	console.log($( this ).text());
+		
+});
 
 function loadTinyMCE(name)
 {
@@ -270,3 +277,29 @@ function merge_webrules_jsons(target, object1, object2)
 {
 	return $.extend(target, object1, object2);
 }
+
+/** 
+ * It's load email template page on click of add web rule button
+ **/
+ function openEmailTemplate(e)
+ {
+ 	//e.preventDefault();
+
+				// If not empty, redirect to tinymce
+				if($('#tinyMCEhtml_email').val() !== "")
+				{
+					if($('.custom_html').length > 1){
+						alert("Only one popup is allowed per webrule. You have already set a popup action for this webrule.");
+						$($(e.currentTarget)).closest(".alert").remove();
+						return;
+					}
+				}
+				var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
+				var new_window = window.open('templates.jsp?id=tinyMCEhtml_email&t=web_rules', 'name', strWindowFeatures);
+				
+				if(window.focus)
+					{
+						new_window.focus();
+					}
+				return false;
+ }

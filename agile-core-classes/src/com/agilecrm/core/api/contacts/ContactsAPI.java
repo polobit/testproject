@@ -50,11 +50,13 @@ import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
 import com.agilecrm.cases.Case;
 import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactFullDetails;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
+import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.imports.CSVImporter;
 import com.agilecrm.contact.imports.impl.ContactsCSVImporter;
 import com.agilecrm.contact.util.ContactUtil;
@@ -71,7 +73,6 @@ import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.JSONUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -117,11 +118,16 @@ public class ContactsAPI
 	}
 
 	System.out.println("Fetching page by page");
+
+	if (sortKey != null && ContactFilterUtil.isCustomField(sortKey))
+	{
+	    return ContactFilterUtil.getFilterContactsBySortKey(sortKey, Integer.parseInt(count), cursor, Type.PERSON);
+	}
 	List<Contact> contacts = ContactUtil.getAllContactsByOrder(Integer.parseInt(count), cursor, sortKey);
 	return contacts;
 
     }
-    
+
     /**
      * Fetches all the contacts (of type person). Activates infiniScroll, if
      * no.of contacts are more than count and cursor is not null. This method is
@@ -143,9 +149,9 @@ public class ContactsAPI
 	System.out.println("Fetching count int");
 	Map searchMap = new HashMap();
 	searchMap.put("type", Contact.Type.PERSON);
-	
+
 	return Contact.dao.getCountByProperty(searchMap);
-	
+
     }
 
     /**
@@ -229,8 +235,15 @@ public class ContactsAPI
     public List<Contact> getCompaniesList(@FormParam("cursor") String cursor, @FormParam("page_size") String count,
 	    @FormParam("global_sort_key") String sortKey)
     {
+
 	if (count != null)
 	{
+
+	    if (sortKey != null && ContactFilterUtil.isCustomField(sortKey))
+	    {
+		return ContactFilterUtil.getFilterContactsBySortKey(sortKey, Integer.parseInt(count), cursor,
+			Type.COMPANY);
+	    }
 
 	    System.out.println("Fetching companies page by page");
 	    return ContactUtil.getAllCompaniesByOrder(Integer.parseInt(count), cursor, sortKey);
@@ -238,7 +251,7 @@ public class ContactsAPI
 
 	return ContactUtil.getAllCompaniesByOrder(sortKey);
     }
-    
+
     /**
      * Fetches all the contacts (of type person). Activates infiniScroll, if
      * no.of contacts are more than count and cursor is not null. This method is
@@ -260,9 +273,9 @@ public class ContactsAPI
 	System.out.println("Fetching count of companies");
 	Map searchMap = new HashMap();
 	searchMap.put("type", Contact.Type.COMPANY);
-	
+
 	return Contact.dao.getCountByProperty(searchMap);
-	
+
     }
 
     /**
@@ -309,7 +322,7 @@ public class ContactsAPI
     public Contact createContact(Contact contact)
     {
 	// Check if the email exists with the current email address
-	boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL"));
+	boolean isDuplicate = ContactUtil.isExists(StringUtils.lowerCase(contact.getContactFieldValue("EMAIL")));
 
 	// Throw non-200 if it exists
 	if (isDuplicate)
@@ -1234,7 +1247,7 @@ public class ContactsAPI
 
 	}
 	if (contact.type.toString().equals(("PERSON")))
-		ActivityUtil.mergeContactActivity(ActivityType.MERGE_CONTACT,contact,ids.length);
+	    ActivityUtil.mergeContactActivity(ActivityType.MERGE_CONTACT, contact, ids.length);
 	// merge notes
 	return contact;
     }

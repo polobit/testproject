@@ -2,6 +2,20 @@
 <div class="custom-animated custom-fadeInUp hide-rainbow">
 <div class="wrapper-md">
 <div class="row">
+
+<!-- IE conditional check-->
+{{#is_IE_browser}}
+<div class="col-md-6 col-md-offset-3">
+<div class="alert alert-warning" role="alert"> <strong>Warning!</strong> 
+<div class="error-details">
+                    We&#39;re sorry. This browser may not support this feature.<br>
+To get the best experience, we recommend you to use <a href="https://support.google.com/chrome/answer/95346?hl=en">Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/features">Firefox</a> or <a href="http://support.apple.com/kb/dl1531">Safari</a> (Mac only).
+                </div>
+</div>
+</div> {{else}} 
+{{/is_IE_browser}}
+<!-- End of IE conditional check-->
+
     <div class="col-md-12">
         <div class="panel wrapper campaign-new-add">
             <form id="workflowform" >
@@ -44,17 +58,25 @@
 														<i class="fa fa-clipboard" style="width: 20px;"></i> Create a Copy
 													</a>
 												</li>
+												<li>
+													<a href="javascript:void(0)" id="share-campaign" onclick="shareCampaign()" class="share-Campaign">
+														<i class="fa fa-share-alt" style="width: 20px;"></i> Share with
+													</a>
+												</li>
 											</ul>
-                           				</div>
-									<a href="#" data = "{{is_disabled}}" class="btn btn-default btn-sm m-r-sm btn-addon pull-right is-disabled-top" style="color:white">
-											{{#if_equals "true" is_disabled}}
-											<div class="inline" style="vertical-align: middle;">&nbsp;Enable Campaign</div>
-											{{else}}
-											<div class="inline" style="vertical-align: middle;">&nbsp;Disable Campaign</div>
-											{{/if_equals}}
-									</a>
-                            		{{/if}}
-								</div>
+                           				</div>                                        
+                  <div id="disable-switch" data = "{{is_disabled}}" class="is-disabled-top">
+							<label class="r-switch m-t-xs m-r pull-right">
+                          		{{#if_equals "true" is_disabled}}
+                          			<input type="checkbox" id="disable-workflow" class="left"  name="disable-workflow" checked="checked">
+                         	 	{{else}}
+                          				<input type="checkbox" id="disable-workflow" class="left"  name="disable-workflow">
+                         		 {{/if_equals}}
+						  		 <i></i>
+							</label> 
+					</div>                     
+                       {{/if}}
+							</div>
                            		<div class="save-workflow-img right m-r-xs m-t-sm pos-rlt inline-block"></div>
 							</div>
 						</div>
@@ -65,12 +87,12 @@
 					<br />
                     <br />
                     <div>
-						<a href="#" class="text-info" id="workflow-unsubscribe-option" data-toggle="collapse" data-target="#workflow-unsubscribe-block">
-							<span><i class="icon-plus"></i></span> Manage Unsubscription
+						<a href="#" class="text-info" id="workflow-unsubscribe-option">
+							<i class="icon-plus"></i> Manage Unsubscription
 						</a>
 					</div>
 					<br/>
-					<div class="collapse" id="workflow-unsubscribe-block">
+					<div id="workflow-unsubscribe-block" style="display:none">
 						<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
@@ -112,6 +134,8 @@
                     	</div>
                         </div>
 						<div class="text-sm text-light">When a contact unsubscribes from your campaign, this name will be displayed as campaign name in the confirmation screen.</div>
+						
+
 						<br/>
 						<br/>
                     	<div class="row">
@@ -127,10 +151,24 @@
 						<div class="text-sm text-light">When a contact unsubscribes from your campaign, a confirmation email is sent. The above given email address will be used as ‘From’ address for that email.</div>
 						<br/>
 						<br/>
+						<div class="row">
+                         <div class="control-group form-group">
+							<label class="control-label col-sm-2">
+								<b>Unsubscribe Template</b>
+							</label>
+							<div class="controls col-sm-4">
+								<select class="emailSelect form-control pull-left" id="sendEmailSelect" title="Fill from Template" name="unsubscribe_subject"><option class="default-select" value="">Default template</option></select>
+							</div>
+                    	</div>
+                        </div>
+                        <div class="text-sm text-light"> When a contact unsubscribes from your campaign, a confirmation email is sent. The above given template will be used for that email.</div>
+						<br/>
+						<br/>
                         <small>Unsubscribed contacts are not sent any further emails but other actions such as lead scoring will still continue to execute.</small>
 					</div>
                     <br />
                     <br />
+                    
                     {{#if is_new}}
 						<button class="btn btn-sm btn-primary" id="save-workflow-bottom">Save Campaign</button>
 					{{else}}
@@ -145,6 +183,11 @@
 												<li>
 													<a href="#" id="duplicate-workflow-top">
 														<i class="fa fa-clipboard"></i> Create a Copy
+													</a>
+												</li>
+												<li>
+													<a href="javascript:void(0)" id="share-campaign" onclick="shareCampaign()" class="share-Campaign">
+														<i class="fa fa-share-alt" style="width: 20px;"></i> Share with
 													</a>
 												</li>
 											</ul>

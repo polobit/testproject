@@ -2,6 +2,21 @@
 <div class="custom-animated custom-fadeInUp hide-rainbow">
 <div class="wrapper-md">
 <div class="row">
+
+<!-- IE conditional check-->
+{{#is_IE_browser}}
+<div class="col-md-6 col-md-offset-3">
+<div class="alert alert-warning" role="alert"> <strong>Warning!</strong> 
+<div class="error-details">
+                    We&#39;re sorry. This browser may not support this feature.<br>
+To get the best experience, we recommend you to use <a href="https://support.google.com/chrome/answer/95346?hl=en">Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/features">Firefox</a> or <a href="http://support.apple.com/kb/dl1531">Safari</a> (Mac only).
+                </div>
+</div>
+</div> {{else}} 
+{{/is_IE_browser}}
+<!-- End of IE conditional check-->
+
+
     <div class="col-md-12">
         <div class="panel wrapper landingpagessmart" >
             <form id="landingPageBuilderForm">

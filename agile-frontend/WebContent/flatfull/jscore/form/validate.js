@@ -81,7 +81,10 @@ function isValidForm(form) {
 		$(element).val("");
 		if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
 		{
-			$(element).closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+			var template = Handlebars.compile('<li class="tag" style="display: inline-block;" data="{{name}}">{{name}}<a class="close" id="remove_tag" tag="{{name}}">&times</a></li>');
+
+		 	// Adds contact name to tags ul as li element
+			$(element).closest(".control-group").find('ul.tags').append(template({name : tag_input}));
 		}
 		
 		return $(element).closest(".control-group").find('ul.tags > li').length > 0 ? true : false;

@@ -50,6 +50,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"deal-sources" : "dealSources",
 	
 	"goals": "dealGoal",
+	
+	/* Webhook */
+	"webhook" : "webhookSettings",
 
 
 	},
@@ -126,6 +129,40 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		
 	},
 
+	
+	webhookSettings : function()
+	{
+		
+		
+			var view = new Base_Model_View({ url : '/core/api/webhooksregister', template : "admin-settings-webhook", 
+			no_reload_on_delete : true,
+			postRenderCallback : function()
+			{
+				
+			}, 
+			form_custom_validate : function(){
+				$(".checkedMultiCheckbox").find(".help-inline").remove();
+                if($(".checkedMultiCheckbox").find('input:checked').length > 0)
+                      return true;
+                else{
+                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>Please select at least one option.</span>"); 
+                }
+                
+                 return false;
+			}, saveCallback : function(){
+				console.log("saveCallback");
+				App_Admin_Settings.webhookSettings();
+				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
+			},
+			deleteCallback : function(){
+				console.log("deleteCallback");
+				App_Admin_Settings.webhookSettings();
+			} });
+
+			$('#content').find('#webhook-accordian-template').html(view.render().el);
+	
+	},
+	
 	/**
 	 * Shows list of all the users with an option to add new user
 	 */
@@ -313,6 +350,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			{
 
 				bindAdminChangeAction(el, view.model.toJSON());
+				setTimeout(function(){
+					//$('#deals-privilege', el).trigger('change');
+					$('#calendar-privilege', el).trigger('change');
+				},500);
 			}, saveAuth : function(el){
 				if(CURRENT_DOMAIN_USER.is_account_owner && $("#userForm", el).find("#owner:checked").length == 1 && $("#userForm", el).find("#eaddress").val() != CURRENT_DOMAIN_USER.email)
 				{

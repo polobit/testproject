@@ -1,9 +1,11 @@
 package com.agilecrm.contact;
 
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.util.ContactViewPrefsUtil;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
@@ -72,6 +74,12 @@ public class CustomFieldDef
      * Searches the respective entity, if the field is searchable
      */
     public boolean searchable = false;
+
+    /**
+     * Search key. To keep track of what is saved in text search
+     */
+    @NotSaved
+    public String search_key;
 
     /**
      * Specifies the scope of the custom field should be added
@@ -151,6 +159,19 @@ public class CustomFieldDef
 	    }
 
 	dao.put(this);
+    }
+
+    @PostLoad
+    public void postLoad()
+    {
+	if (searchable)
+	{
+	    search_key = SearchUtil.normalizeTextSearchString(field_label);
+	    if (field_type == Type.DATE)
+		search_key += "_time_epoch";
+	    else if (field_type == Type.NUMBER)
+		search_key += "_number";
+	}
     }
 
     /**

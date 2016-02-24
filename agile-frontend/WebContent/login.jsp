@@ -115,6 +115,9 @@ String logo_url = accountPrefs.logo;
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
 
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
+
 <style>
 body {
    background-image: url('<%=S3_STATIC_IMAGE_PATH%>/images/agile-login-page-low.jpg');
@@ -177,7 +180,11 @@ if(isSafari && isWin)
 </script>
 
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
-<script src="https://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.jquery.min.js"></script>
+
+<!--[if lt IE 10]>
+<script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
+<![endif]-->
+
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>	 
 	<script src="lib/ie/html5.js"></script>

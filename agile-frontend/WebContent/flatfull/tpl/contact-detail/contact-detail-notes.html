@@ -11,8 +11,8 @@
                         You can save specific information about {{#isCompany}}companies{{else}}contacts{{/isCompany}} as a Note.
                     </div>
 					<div class="btn-group">
-            			<a href="#noteModal" data-toggle="modal" class="btn btn-default btn-sm btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>&nbsp;Add Note</a>
-            			<a class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+            			<a href="#noteModal" data-toggle="modal" class="btn m-t-xs btn-default btn-sm btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>&nbsp;Add Note</a>
+            			<a class="btn dropdown-toggle m-t-xs btn-sm btn-default" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
 						<ul class="dropdown-menu pull-right" style="padding:2px">
 							<li style="padding:0px; text-align: center;"><a class="show-logPhone ">&nbsp;Add Call-log</a> </li>
 						</ul>
@@ -73,14 +73,17 @@
 
 	{{else}}
 			{{#if_equals callType "inbound"}}Incoming call from{{else}}Outgoing call to{{/if_equals}}  {{phone}} </br>
-			{{#if status}} status : {{status}} {{/if}}</br>
+			{{#if status}} Status: {{status}} {{/if}}</br>
 			{{#if_equals status "busy"}}
 			{{else}}
 			{{#if_equals status "failed"}}
 			{{else}}
 			{{#if_equals status "missed"}}
 			{{else}}
-				Duration :  {{toProperFormat duration}} </br>
+			{{#if_equals status "no-answer"}}
+			{{else}}
+				Duration:  {{toProperFormat duration}} </br>
+			{{/if_equals}}
 			{{/if_equals}}
 			{{/if_equals}}
 			{{/if_equals}}

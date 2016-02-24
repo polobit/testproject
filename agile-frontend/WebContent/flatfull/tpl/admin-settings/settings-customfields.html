@@ -122,13 +122,11 @@
 
 
 <script id="admin-settings-customfields-contact-collection-template" type="text/html">
-{{#if this.length}}
-        <table class="table table-hover  custom-fields-table table-hover m-b-none agile-table" url="core/api/custom-fields/bulk">
+        <table class="table table-hover  onlySorting custom-fields-table table-hover m-b-none agile-table" url="core/api/custom-fields/bulk">
 				<!-- <colgroup><col width="40%"><col width="12%"><col width="1%"></colgroup> -->
                     <tbody id="admin-settings-customfields-contact-model-list" class="custom-fields-contact-tbody">
                     </tbody>
                 </table> 
-        {{/if}}
 		<div class="p-l p-t p-b">
 			<a href="#contactCustomFModal" class="fieldmodal text-info" data-toggle="modal" type="CONTACT" ><i class="icon-plus-sign" /> Add </a>
 		</div>

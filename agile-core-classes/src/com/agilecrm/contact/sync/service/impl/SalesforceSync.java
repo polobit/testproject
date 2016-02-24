@@ -404,6 +404,7 @@ public class SalesforceSync extends OneWaySyncService
 						switch (status) {
 						case "Completed":
 							agileTask.status = Task.Status.COMPLETED;
+							agileTask.is_complete = true;
 							break;
 						case "In Progress":
 							agileTask.status = Task.Status.IN_PROGRESS;
@@ -420,6 +421,7 @@ public class SalesforceSync extends OneWaySyncService
 						switch (type) {
 						case "High":
 							agileTask.priority_type = Task.PriorityType.HIGH;
+							agileTask.is_complete = true;
 							break;
 						case "Normal":
 							agileTask.priority_type = Task.PriorityType.NORMAL;
