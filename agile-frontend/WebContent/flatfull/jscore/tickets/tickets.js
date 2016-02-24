@@ -167,6 +167,9 @@ var Tickets = {
 
 				Ticket_Filters.renderFiltersCollection(function(){
 
+					//Showing selected filter name on top
+					Ticket_Filters.updateFilterName();
+
 					$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.render(true).el);
 					
 					Tickets.setCountText();

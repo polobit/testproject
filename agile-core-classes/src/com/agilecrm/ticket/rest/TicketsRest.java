@@ -486,7 +486,7 @@ public class TicketsRest
 	 * @param assignee_id
 	 * @return returns updated ticket object
 	 */
-	@GET
+	@PUT
 	@Path("/assign-ticket")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Tickets assignTicket(@QueryParam("ticket_id") Long ticketID, @QueryParam("assignee_id") Long assigneeID,

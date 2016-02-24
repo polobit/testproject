@@ -308,11 +308,11 @@ public class TicketsUtil
 		Status oldStatus = ticket.status;
 		ticket.status = status;
 
-		//Set ticket closed time
+		// Set ticket closed time
 		if (status == Status.CLOSED)
 			ticket.closed_time = Calendar.getInstance().getTimeInMillis();
 
-		//Incr. no of reopens if ticket old status is closed
+		// Incr. no of reopens if ticket old status is closed
 		if (oldStatus == Status.CLOSED)
 			ticket.no_of_reopens += 1;
 
@@ -357,46 +357,49 @@ public class TicketsUtil
 		return ticket;
 	}
 
-	/**
-	 * 
-	 * @param ticket_id
-	 * @param assignee_id
-	 * @return
-	 * @throws EntityNotFoundException
-	 */
-	public static Tickets assignTicket(Long ticket_id, Long assignee_id) throws EntityNotFoundException
-	{
-		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-
-		boolean isNewTicket = false;
-
-		if (ticket.status == Status.NEW)
-		{
-			ticket.status = Status.OPEN;
-			isNewTicket = true;
-		}
-
-		ticket.assignee_id = new Key<DomainUser>(DomainUser.class, assignee_id);
-		ticket.assigned_to_group = false;
-
-		ticket.assigned_time = Calendar.getInstance().getTimeInMillis();
-
-		Tickets.ticketsDao.put(ticket);
-
-		// Update search document
-		new TicketsDocument().edit(ticket);
-
-		if (isNewTicket)
-			// Logging ticket assigned activity
-			ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, null,
-					assignee_id + "", "assigneeID");
-		else
-			// Logging ticket transfer activity
-			ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
-					ticket.assignee_id + "", assignee_id + "", "assigneeID");
-
-		return ticket;
-	}
+	// /**
+	// *
+	// * @param ticket_id
+	// * @param assignee_id
+	// * @return
+	// * @throws EntityNotFoundException
+	// */
+	// public static Tickets assignTicket(Long ticket_id, Long assignee_id)
+	// throws EntityNotFoundException
+	// {
+	// Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+	//
+	// boolean isNewTicket = false;
+	//
+	// if (ticket.status == Status.NEW)
+	// {
+	// ticket.status = Status.OPEN;
+	// isNewTicket = true;
+	// }
+	//
+	// ticket.assignee_id = new Key<DomainUser>(DomainUser.class, assignee_id);
+	// ticket.assigned_to_group = false;
+	//
+	// ticket.assigned_time = Calendar.getInstance().getTimeInMillis();
+	//
+	// Tickets.ticketsDao.put(ticket);
+	//
+	// // Update search document
+	// new TicketsDocument().edit(ticket);
+	//
+	// if (isNewTicket)
+	// // Logging ticket assigned activity
+	// ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED,
+	// ticket.contactID, ticket.id, null,
+	// assignee_id + "", "assigneeID");
+	// else
+	// // Logging ticket transfer activity
+	// ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED,
+	// ticket.contactID, ticket.id,
+	// ticket.assignee_id + "", assignee_id + "", "assigneeID");
+	//
+	// return ticket;
+	// }
 
 	/**
 	 * 
@@ -662,7 +665,16 @@ public class TicketsUtil
 				Long groupID = ticket.groupID;
 
 				if (!groupsList.containsKey(groupID))
-					groupsList.put(groupID, TicketGroups.ticketGroupsDao.get(groupID));
+				{
+					try
+					{
+						groupsList.put(groupID, TicketGroups.ticketGroupsDao.get(groupID));
+					}
+					catch (Exception e)
+					{
+						System.out.println(ExceptionUtils.getFullStackTrace(e));
+					}
+				}
 
 				ticket.group = groupsList.get(groupID);
 			}
@@ -1076,20 +1088,32 @@ public class TicketsUtil
 				if (activity.custom1 != null)
 					if (!groupsList.containsKey(newGroupID))
 					{
+						try
+						{
+							TicketGroups group = TicketGroupUtil.getTicketGroupById(newGroupID);
 
-						TicketGroups group = TicketGroupUtil.getTicketGroupById(newGroupID);
-
-						if (group != null)
-							groupsList.put(newGroupID, group);
+							if (group != null)
+								groupsList.put(newGroupID, group);
+						}
+						catch (Exception e)
+						{
+							System.out.println(ExceptionUtils.getFullStackTrace(e));
+						}
 					}
 
 				if (!groupsList.containsKey(oldGroupID))
 				{
+					try
+					{
+						TicketGroups group = TicketGroupUtil.getTicketGroupById(oldGroupID);
 
-					TicketGroups group = TicketGroupUtil.getTicketGroupById(oldGroupID);
-
-					if (group != null)
-						groupsList.put(oldGroupID, group);
+						if (group != null)
+							groupsList.put(oldGroupID, group);
+					}
+					catch (Exception e)
+					{
+						System.out.println(ExceptionUtils.getFullStackTrace(e));
+					}
 				}
 
 				activity.new_group = groupsList.get(newGroupID);

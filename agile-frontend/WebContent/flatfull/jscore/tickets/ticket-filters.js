@@ -126,6 +126,7 @@ var Ticket_Filters = {
 		});
 
 		App_Ticket_Module.ticketFiltersList.collection.fetch();
+		
 		//$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
 		$("div.filters-drp-down").html(App_Ticket_Module.ticketFiltersList.el);
 	},
@@ -133,7 +134,7 @@ var Ticket_Filters = {
 	renderFiltersCollection: function(callback){
 
 		//Rendering existing filter tickets drop down view
-		$("div.filters-drp-down").html(App_Ticket_Module.ticketFiltersList.el);
+		$("div.filters-drp-down").html(App_Ticket_Module.ticketFiltersList.render(true).el);
 
 		if(callback)
 			callback();
