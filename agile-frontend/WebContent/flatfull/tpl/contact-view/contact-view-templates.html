@@ -12,7 +12,7 @@
 
 <script id = "contacts-custom-view-basic_info-template" type="text/html">
 	<td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}}>
-    	<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 110px);" {{else}} style="width:15em;" {{/is_mobile}}>
+    	<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:15em;" {{/is_mobile}}>
     	<div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
         	{{#if_contact_type "PERSON"}}
         		<img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
@@ -22,9 +22,9 @@
         		<img class="r r-2x" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
         	{{/if_contact_type}}
     	</div>
-  		<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 65px);" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
+  		<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
         	{{#if_contact_type "PERSON"}}
-        		<a class="text-cap custom-link" {{#is_mobile}} style="display:block; margin-top:-5px;" {{/is_mobile}}>{{getPropertyValue properties "first_name"}}
+        		<a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} </a>
         		<div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
         	{{/if_contact_type}}
