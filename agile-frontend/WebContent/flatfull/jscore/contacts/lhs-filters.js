@@ -185,8 +185,8 @@ $('#' + container_id).on('click', 'a.clear-filter-condition-lhs', function(e)
 {
 	
 	$(this).addClass('hide');
-	var container = $(this).parents('.lhs-row-filter');
-	$(container).find('#RHS').children().val("").attr('prev-val', "");
+	var container = $(this).closest('.lhs-row-filter');
+	$(container).find('#RHS:not(.no-filter-action)').children().val("").attr('prev-val', "");
 	$(container).find('#RHS_NEW').filter(visibleFilter).children().val("").attr('prev-val', "");
 	$(container).find('select[name="CONDITION"]').val($(container).find('select[name="CONDITION"] option:first').val()).attr('prev-val', "");
 	$(container).find('select[name="CONDITION"]').trigger('change');
@@ -490,7 +490,7 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
 
 		});
 
-     $('body #companies-left-filters-toggle').off('click');
+    $("body").off("click", "#companies-left-filters-toggle");
  	$('body').on('click', '#companies-left-filters-toggle', function(e)
 		{
 

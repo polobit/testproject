@@ -3156,6 +3156,7 @@ table.hide-head-checkbox th label.i-checks {
 }
 
 
+
 .slate-content h4{
 	font-size: 18px;
 	opacity:0.8;
@@ -3259,4 +3260,25 @@ table.hide-head-checkbox th label.i-checks {
 .user-alert .user-alert-message span{
 	margin-top: -8px;
     font-size: 15px;
+}
+.companies_input{
+	height:30px;
+	font-size:12px;
+}
+.lhs-contact-filter-row  div.add-icon{
+	display: none;
+}
+
+.lhs-contact-filter-row div.add-icon:last-of-type {
+	display: block!important;
+	}
+#addBtn:hover
+{
+  color: black !important;
+}
+
+#removeBtn:hover
+{
+  color: black !important;
+  opacity: 0.9;
 }
