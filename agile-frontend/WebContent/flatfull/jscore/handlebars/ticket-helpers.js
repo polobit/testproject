@@ -84,8 +84,9 @@ Handlebars.registerHelper('is_labels_collection_empty', function(options) {
 });
 Handlebars.registerHelper('is_select_all', function(options) {
 
-	if (Ticket_Bulk_Ops.selected_all_filter_tickets == true )
-		return true;
+	if (Ticket_Bulk_Ops.selected_all_filter_tickets)
+		var tickets_selcted=true;
+		return tickets_selcted;
 	});
 
 

@@ -1449,13 +1449,12 @@ var Tickets = {
 	// Draft typed message
 	start_ticket_draft_timer : function(key, ele){
 
-
-		// Reset timer
+        // Reset timer
 		if (Tickets.message_draft_timer)
 			clearInterval(Tickets.message_draft_timer);
 
 		if (!ele  || $(ele).hasClass("forward"))
-			return;
+	    	return;
 
 		Tickets.message_draft_timer = setInterval(function() {
 
@@ -1466,7 +1465,6 @@ var Tickets = {
 				return;
 			}
 
-			
 			Tickets.draft_typed_message(key, Tickets.get_typed_message_json($ele));
 
 		}, 2000);
