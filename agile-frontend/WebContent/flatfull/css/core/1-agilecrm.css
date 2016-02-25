@@ -923,6 +923,12 @@ z-index: 99;
 	position:relative;
 	border-bottom:1px solid #ddd;
 }
+.dealtitle-angular + .tooltip{
+
+	width:200px;
+    word-wrap:break-word;
+    white-space:normal;
+}
 .milestone-main .milestone-column:last-child .milestone-heading:after,.milestone-main .milestone-column:last-child span:after
 {
 	display:none;
