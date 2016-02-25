@@ -664,13 +664,11 @@ var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.j
 
 <!-- JQUery Core and UI CDN --> 
 <!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
+console.log("before dashboard load");
 head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min.js?_=' + _AGILE_VERSION, function(){
         load_globalize();
-        if((document.referrer!=null)&&(document.referrer.indexOf("register") != -1))
-        {
-        $("#dashboard_video").modal("show");
-        console.log("after-modal");
-        }
+
+        showVideoForRegisteredUser();
 
 })
 // , LIB_PATH + 'lib/backbone-route-filter.js'
@@ -731,6 +729,18 @@ function load_globalize()
 
 }
 
+function showVideoForRegisteredUser(){
+    console.log("Ref = " + document.referrer);
+
+    if(!document.referrer || document.referrer.indexOf("register") == -1)
+         return;
+
+    $("#dashboard_video").modal("show");
+
+    var frame = $("#dashboard_video iframe");
+    frame.attr("src", $frame.attr("data-source"));
+}
+
 </script>
 
 
@@ -753,11 +763,11 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
         </div>      
           <div class="modal-body">
               <div class="embed-responsive embed-responsive-16by9">
-                      <iframe class="embed-responsive-item" src="//www.youtube.com/embed/9aH60N6HPcc?list=PLqZv4FUxASTctDCZmdVbheU75Y3Szk9Ny" frameborder="0" allowfullscreen></iframe>
-               </div>       
+                      <iframe class="embed-responsive-item" data-source="//www.youtube.com/embed/9aH60N6HPcc?list=PLqZv4FUxASTctDCZmdVbheU75Y3Szk9Ny" frameborder="0" allowfullscreen></iframe>
+              </div>       
           </div>     
         <div class="modal-footer">
-             
+             <div class="btn btn-default close" data-dismiss="modal">Skip</div>
         </div>
         </div>
         </div>
