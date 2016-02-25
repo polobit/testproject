@@ -385,8 +385,7 @@ var contacts_bulk_actions = {
 		if (!canSendEmails(count))
 		{
 			continueAction = false;
-			var pendingEmails = getPendingEmails();
-
+			var pendingEmails = getPendingEmails() + getEmailCreditsCount();
 			var yes = "Yes";
 			var no = "No"
 
@@ -576,7 +575,7 @@ var contacts_bulk_actions = {
 
 							if (!canSendEmails(count))
 							{
-								var pendingEmails = getPendingEmails();
+								var pendingEmails = getPendingEmails() + getEmailCreditsCount();
 
 								var yes = "Yes";
 								var no = "No"

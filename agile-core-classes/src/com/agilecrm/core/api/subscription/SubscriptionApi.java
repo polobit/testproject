@@ -499,5 +499,24 @@ public class SubscriptionApi {
 			NamespaceManager.set(oldNameSpace);
 		}
 	}
+	
+	// Life time emails purchase 
+	@Path("/purchaseEmailCredits")
+	@POST
+	public void purchaseEmailCredits(@QueryParam("quantity") Integer quantity)
+	{
+		Subscription subscription = SubscriptionUtil.getSubscription();
+		try {
+			subscription.purchaseEmailCredits(quantity);
+			BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+			restriction.incrementEmailCreditsCount(quantity*1000);
+			restriction.save();
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
 
 }
