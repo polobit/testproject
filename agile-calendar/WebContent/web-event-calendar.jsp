@@ -193,8 +193,16 @@ if(scheduleid.contains(",")){
 <%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
-
+<% 
+if (scheduleid != null && !multiple_users){  %>
+<title>Online Appointment Scheduling - <%=scheduleid %></title>
+<%
+} else {
+ %>
 <title>Online Appointment Scheduling - <%=user_name %></title>
+<%
+} 
+%>
 <link rel="stylesheet" href="../../css/web-calendar-event/bootstrap.min.css">
 <link rel="stylesheet" href="../../css/web-calendar-event/style.css?_=<%=_AGILE_VERSION%>">
 <link rel="stylesheet" type="text/css" href="<%=baseUrl%>css/agile-css-framework.css?_=<%=_AGILE_VERSION%>">
