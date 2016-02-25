@@ -119,7 +119,7 @@ public class TicketNotesRest
 
 					// If domain user doesn't exists in ticket group then
 					// throwing exception
-					if (!group.agents_keys.contains(ticket.assignee_id))
+					if (!group.agents_keys.contains(domainUserKey.getId()))
 						throw new Exception("You must in " + group.group_name + " group in order to reply to this ticket");
 				}
 

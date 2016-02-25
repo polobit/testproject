@@ -21,12 +21,10 @@ var Tickets_Notes = {
 
 		if(!$("#send-reply").valid()){
 
-			if($(e.target).hasClass('forward')){
-				$(".macro").attr("disabled", true);
+			if($(e.target).hasClass('forward'))	
 				this.forwardTicket(json, $save_btn, false);
 
-			    return;
-		    }
+			return;
 		}
 			
 
