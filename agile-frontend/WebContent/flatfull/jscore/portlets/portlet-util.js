@@ -1591,7 +1591,6 @@ var portlet_utility = {
 					.attr("selected", "selected");
 			break;
 		}
-		portletsTaskClosureSettingsModal
 		}
 		if (base_model.get('name') == "Pending Deals"
 				|| base_model.get('name') == "Deals By Milestone"

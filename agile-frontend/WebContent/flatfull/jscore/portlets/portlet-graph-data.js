@@ -1040,7 +1040,7 @@ var portlet_graph_data_utility = {
 
 							portlet_graph_utility.taskReportBarGraph(selector,
 									groupByNamesList, series, text, base_model,
-									domainUserNamesList,CountData,'in seconds');
+									domainUserNamesList,CountData,'In Seconds');
 
 							portlet_utility.addWidgetToGridster(base_model);
 						});
