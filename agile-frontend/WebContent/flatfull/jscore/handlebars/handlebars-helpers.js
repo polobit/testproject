@@ -5782,7 +5782,9 @@ $(function()
 		else if(p_name=='Stats Report')
 			portlet_name = "Activity Overview";
 		else if(p_name=='Campaign stats')
-			portlet_name = "Campaign Stats"
+			portlet_name = "Campaign Stats";
+		else if(p_name=='Average Deviation')
+			portlet_name = "Tasks Completion Time Deviation";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5803,7 +5805,7 @@ $(function()
 			icon_name = 'icon-graph';
 		else if (p_name == 'Calls Per Person')
 			icon_name = 'icon-call-end';
-		else if (p_name == 'Pending Deals')
+		else if (p_name == 'Pending Deals' || p_name == 'Average Deviation')
 			icon_name = 'icon-clock';
 		else if (p_name == 'Deals By Milestone')
 			icon_name = 'icon-flag';
@@ -6614,6 +6616,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'See how your deal sources are performing over time.'
 	else if(p_name == 'Lost Deal Analysis')
 		description = 'Get insights into why deals were lost. Filter by owner, track and source.'
+	else if(p_name == 'Average Deviation')
+		description = 'A quick view of deviation in tasks completion times.'
 	return description;
 			});
 

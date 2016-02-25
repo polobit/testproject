@@ -37,6 +37,7 @@ function loadPortlets(el){
 	App_Portlets.campaignstats = new Array();
 	App_Portlets.dealGoals=new Array();
 	App_Portlets.adminPortlets = new Array();
+	App_Portlets.taskAverage = new Array();
 
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is

@@ -3050,7 +3050,7 @@ width : 150px;
 	padding-bottom:9px;
 }
 
-#portlets-add-listener #deals > div:nth-of-type(4)
+#portlets-add-listener .wrapper-md div:nth-of-type(4)
 {
 	height: 243px;
 }
