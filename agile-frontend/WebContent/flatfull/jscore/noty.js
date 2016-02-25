@@ -185,9 +185,7 @@ function get_random_message() {
 	else
 		trail_expiry_message = "Your trial will expire in "+getPendingdaysIntrail()+" days";*/
 	
-	
-	var messages = ["You are using FREE limited version of Agile CRM. <span> Upgrade Now </span> "];
-
+	var	messages = ["You are using FREE limited version of Agile CRM. <span> Upgrade Now </span> "];
 	var random = Math.floor((Math.random() * messages.length));
 	// console.log(random + messages[random]);
 

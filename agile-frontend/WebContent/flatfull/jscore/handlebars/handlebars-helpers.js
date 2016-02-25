@@ -1308,7 +1308,7 @@ $(function()
         	value = JSON.parse(value);
         }catch(e){}
 
-		if (Object.keys(value).length > 0)
+		if (Object.keys(value) && Object.keys(value).length > 0)
 			return options.fn(this);
 		
 		return options.inverse(this);
@@ -5264,6 +5264,11 @@ $(function()
 			return "5000";
 		else
 			return "-";
+	});
+
+	Handlebars.registerHelper('getEmailCreditsCount', function()
+	{
+		return getEmailCreditsCount();
 	});
 
 	// helper function to return agile bcc special email for inbound mail event

@@ -56,7 +56,7 @@ public class EmailSender
 
 	isWhiteLabled = billingRestriction.isEmailWhiteLabelEnabled();
 	System.out.println("Email limit for domain " + NamespaceManager.get() + " whitelabel : " + isWhiteLabled
-	        + "pending emails : " + billingRestriction.one_time_emails_count);
+	        + "pending emails : " + billingRestriction.one_time_emails_count+" and email credits count : "+billingRestriction.email_credits_count);
 
 	return isWhiteLabled;
     }
@@ -79,7 +79,7 @@ public class EmailSender
 
     public void updateStats()
     {
-	System.out.println("initial count : " + billingRestriction.one_time_emails_count);
+	System.out.println("initial count : " + billingRestriction.one_time_emails_count+" and email credits count : "+billingRestriction.email_credits_count);
 
 	billingRestriction = BillingRestrictionUtil.getBillingRestriction(true);
 
@@ -87,8 +87,10 @@ public class EmailSender
 
 	billingRestriction.one_time_emails_count = billingRestriction.one_time_emails_count == null ? 0
 	        : billingRestriction.one_time_emails_count;
-
-	billingRestriction.one_time_emails_count -= totalEmailsSent;
+	if(billingRestriction.checkForEmailCredits())
+		billingRestriction.decrementEmailCreditsCount(totalEmailsSent);
+	else
+		billingRestriction.one_time_emails_count -= totalEmailsSent;
 
 	System.out.println("Updated count : " + billingRestriction.one_time_emails_count + ", emails sent"
 	        + totalEmailsSent);
@@ -128,8 +130,10 @@ public class EmailSender
 	    // To avoid NullPointerException
 	    billingRestriction.one_time_emails_count = billingRestriction.one_time_emails_count == null ? 0
 		    : billingRestriction.one_time_emails_count;
-
-	    billingRestriction.one_time_emails_count -= count;
+	    if(billingRestriction.checkForEmailCredits())
+	    	billingRestriction.decrementEmailCreditsCount(count);
+	    else
+	    	billingRestriction.one_time_emails_count -= count;
 
 	}
 

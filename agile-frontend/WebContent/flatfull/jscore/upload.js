@@ -51,7 +51,7 @@ function setImageURL(url)
 	var id = "upload-container";
 	// Set the media stream
 	$('#' + id).find('.imgholder').html('');
-	$('#' + id).find('.imgholder').html('<img class="w-full" src="' + url + '"/>');
+ 	$('#' + id).find('.imgholder').html('<img class="w-full" src="' + url + '"/>');
 	
 	// Set the value of selector for input
 	$('#' + id).find('#upload_url').val(url);
@@ -62,8 +62,8 @@ function setContactImageURL(url)
 {
 	var id = "contact-container";
 	// Set the media stream
-	$('#' + id).find('.imgholder').html('');
-	$('#' + id).find('.imgholder').html('<img src="' + url + '" height="50" width="50"/>');
+	$('#' + id).find('.contact-image-view').html('');
+	$('#' + id).find('.contact-image-view').html('<img src="' + url + '" class="upload_pic imgholder submit w-full img-circle" style="width:96px;height:96px;" type="submit" />');
 	
 	// Set the value of selector for input
 	$('#' + id).find('#upload_url').val(url);

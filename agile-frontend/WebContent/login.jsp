@@ -115,6 +115,9 @@ String logo_url = accountPrefs.logo;
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
 
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
+
 <style>
 body {
    background-image: url('<%=S3_STATIC_IMAGE_PATH%>/images/agile-login-page-low.jpg');
