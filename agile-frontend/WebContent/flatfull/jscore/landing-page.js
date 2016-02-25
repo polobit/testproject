@@ -36,6 +36,36 @@ function initializeLandingPageListeners() {
     		}
     	}
 	});
+	
+	$('#landingpages-listeners').on('click', '.lpDeviceView', function(e){
+		e.preventDefault();
+		var triggeringElement = $(this).data("trigger");
+    	var landingPageIframe = document.getElementById('landingPageBuilder').contentWindow;
+    	landingPageIframe.$(triggeringElement).trigger("click");
+    	var deviceClass = $(this).data("deviceclass");
+    	landingPageIframe.$("#preview-frame").removeClass("xs-width sm-width md-width full-width");
+    	landingPageIframe.$("#preview-frame").addClass(deviceClass);
+
+	});
+
+	$('#landingpages-listeners').on('click', '.lpPreviewView', function(e){
+		e.preventDefault();
+		var triggeringElement = $(this).data("trigger");
+    	document.getElementById('landingPageBuilder').contentWindow.$(triggeringElement).trigger("click");
+    	$(this).find('i').toggleClass('fa-eye fa-eye-slash');
+    	
+    	
+    	if( $(this).find('i').hasClass('fa-eye')) {
+    		//alert("Inside toggle");
+    		document.getElementById('landingPageBuilder').contentWindow.$("#preview-closer").trigger("click");
+    	}
+    	
+    	if ($(this).find("span").text() == 'Close'){
+        	$(this).find("span").text('Preview');
+    	} else {
+        	$(this).find("span").text('Close');
+    	} 
+	});
 
 	$('#landingpages-listeners').on('click', '#builderPageOptionsLink', function (e) {
 		e.preventDefault();
