@@ -122,7 +122,7 @@ var ContactsRouter = Backbone.Router.extend({
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
 		{
 			// Empty container
-  $(        "#content").html("");
+  		$("#content").html("");
 		
 		insidePopover=false;
 		if(SCROLL_POSITION)
