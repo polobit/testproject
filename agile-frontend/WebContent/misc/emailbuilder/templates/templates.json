@@ -19,13 +19,18 @@
                     "displayname": "sample layout 2",
                     "description": "this is sample text"
                 },
-                {
-                    "id": "layout4",
+				{
+                    "id": "layout7",
                     "displayname": "sample layout 2",
                     "description": "this is sample text"
                 },
                 {
                     "id": "layout5",
+                    "displayname": "sample layout 2",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "layout4",
                     "displayname": "sample layout 2",
                     "description": "this is sample text"
                 },
