@@ -127,7 +127,7 @@ function handleObjects() {
                         var text =        titleElement.html();
                         var fontsize =    titleElement.css('font-size');
                         var fontfamily =  titleElement.css('font-family');
-                        var background =  titleElement.css('background-color');
+                        var background =  self.css('background-color');
                         $('#selector').val('.title');
                         storeValues(self, fontcolor, text, fontsize, fontfamily, background);
                         break;
