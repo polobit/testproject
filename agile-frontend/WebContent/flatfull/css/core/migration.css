@@ -1978,6 +1978,7 @@ width: 1%!important;
   display: none;
 }
 .deal_custom_replace{ display: none !important;}
+.deals-name{ width: 18em;}
 
 }
 
@@ -2001,6 +2002,9 @@ width: 1%!important;
 @media all and (orientation:landscape) and (max-width: 768px) { 
     .contact-list-mobile {
       float: right;
+    }
+    .deals-name{
+      width: 28em;
     }
 }
 
