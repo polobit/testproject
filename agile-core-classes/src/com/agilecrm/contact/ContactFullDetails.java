@@ -164,7 +164,12 @@ public class ContactFullDetails
 	{
 		try
 		{
-			return TicketsUtil.getTicketsByContactID(contact_id);
+			List<Tickets> tickets =  TicketsUtil.getTicketsByContactID(contact_id);
+			
+			for(Tickets ticket : tickets)
+				ticket.created_time = ticket.created_time/1000;
+			
+			return tickets;
 		}
 		catch (Exception e)
 		{

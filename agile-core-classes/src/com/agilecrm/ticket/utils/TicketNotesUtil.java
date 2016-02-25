@@ -176,10 +176,10 @@ public class TicketNotesUtil
 		if (notes.attachments_list != null && notes.attachments_list.size() > 0)
 		{
 			JSONArray attachmentsArray = new JSONArray();
-			
-			for(TicketDocuments document : notes.attachments_list)
+
+			for (TicketDocuments document : notes.attachments_list)
 				attachmentsArray.put(new JSONObject(document.toString()));
-			
+
 			json.put("attachments_exists", true);
 			json.put("attachments_list", attachmentsArray);
 		}
@@ -191,8 +191,16 @@ public class TicketNotesUtil
 
 			DomainUser user = domainUsersMap.get(notes.assignee_id);
 
-			json.put("user_name", user.name);
-			json.put("img_url", user.getOwnerPic());
+			if (user == null)
+			{
+				json.put("user_name", "");
+				json.put("img_url", Globals.GRAVATAR_SECURE_DEFAULT_IMAGE_URL);
+			}
+			else
+			{
+				json.put("user_name", user.name);
+				json.put("img_url", user.getOwnerPic());
+			}
 		}
 		else
 		{
@@ -442,7 +450,7 @@ public class TicketNotesUtil
 	public static void main(String[] args) throws Exception
 	{
 		JSONArray notesArray = new JSONArray();
-		
+
 		JSONObject json = new JSONObject();
 		json.put("img_url", "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/11.png");
 		json.put("user_name", "Sasi");
@@ -452,16 +460,16 @@ public class TicketNotesUtil
 		JSONObject attchments = new JSONObject();
 		json.put("url", "attachemnt_url");
 		json.put("name", "file.pdf");
-		
+
 		attachmentsArray.put(attchments);
-		
+
 		json.put("attachments_exists", true);
 		json.put("attachments_list", attachmentsArray);
-		
+
 		notesArray.put(json);
-		
+
 		String template = "{{#note_json_array}}{{img_url}}, {{user_name}} {{plain_text}} {{#attachments_exists}}{{#attachments_list}} {{url}} {{name}} {{/attachments_list}}{{/attachments_exists}}{{/note_json_array}}";
-		
+
 		System.out.println(MustacheUtil.compile(template, new JSONObject().put("note_json_array", notesArray)));
 	}
 }

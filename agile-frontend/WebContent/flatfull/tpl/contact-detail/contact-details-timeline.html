@@ -589,7 +589,7 @@
             <div class="date" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}">{{epochToTaskDate created_time}}</div>
             <div class="body">
                  <div class="text-xs ">{{subject}}</div>
-                <div class="text-xs ">{{first_notes_text}}</div>
+                <div class="text-xs ">{{{convert_to_html plain_text}}}</div>
             </div>
         {{/if_entity}}
 	<!-- <a href="#" class="open-close"></a> -->
