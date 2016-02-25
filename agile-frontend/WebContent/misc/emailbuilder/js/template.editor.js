@@ -121,10 +121,10 @@ function handleObjects() {
                 switch (t) {
                     case 'title':
 
-                        var titleElement = self.find('.title');
+                        var titleElement = self;
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
                         var fontcolor = titleElement.css('fontColor');
-                        var text =        titleElement.html();
+                        var text =        titleElement.find('.title').html();
                         var fontsize =    titleElement.css('font-size');
                         var fontfamily =  titleElement.css('font-family');
                         var background =  titleElement.css('background-color');
