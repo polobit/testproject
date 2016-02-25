@@ -120,7 +120,9 @@ var ContactsRouter = Backbone.Router.extend({
 	 * all at once.
 	 */
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
-	{
+		{
+			// Empty container
+  $(        "#content").html("");
 		
 		insidePopover=false;
 		if(SCROLL_POSITION)
@@ -939,7 +941,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#contacts-listener-container').html(el);
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 			if(agile_is_mobile_browser()) {
-			$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+			$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 			}
 			
 
@@ -1054,7 +1056,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 				if(agile_is_mobile_browser()) {
 				
-					var $nextEle = $('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+					var $nextEle = $('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 					$('#contacts-table tbody tr .icon-append-mobile',el).after($nextEle);
 				}
 				
@@ -1063,7 +1065,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 			}, appendItemCallback: function(el){
 				if(agile_is_mobile_browser()) {
-					$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+					$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 				}
 			}, });
 

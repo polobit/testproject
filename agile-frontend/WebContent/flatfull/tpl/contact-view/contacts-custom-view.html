@@ -7,6 +7,7 @@
 			<td>{{getPropertyFieldValue .. this}}</td>
 {{/each}}
 -->
+
 </script>
 
 <script id="contacts-custom-view-table-model-template" type="text/html">
@@ -20,152 +21,233 @@
 -->
 </script>
 	
+
+
+
 <script id="contacts-custom-view-collection-template" type="text/html">
-<div class="custom-animated custom-fadeInUp">
-<div class="bg-light lter b-b wrapper-md ng-scope">
-    <div>
-      <div>
- <h1 class="m-n font-thin h3 pull-left"><span id="contact-heading">Contacts</span><span id="contacts-count" class="m-l-xs">{{contacts_count}}</span></h1>
-            <div class="pull-left"> <div class="btn-group m-l-lg m-r-sm pull-left" id="bulk-actions"
-				style="display: none;">
+{{#is_mobile}}
 
-					<div class="btn btn-sm btn-default">Bulk Actions</div>
-					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#" id="bulk-tags" class="_contact_bulk_action">Add Tags</a></li>
-						<li><a href="#" id="bulk-tags-remove" class="_contact_bulk_action">Remove Tags</a></li>
-                        <li class='divider'></li>  
-						{{#hasMenuScope 'CAMPAIGN'}}
-						<li><a href="#" id="bulk-campaigns" class="_contact_bulk_action">Add to Campaign</a></li>
-						{{/hasMenuScope}}
-						<li><a href="#" id="show-callcampaignModal">Start Call Campaign<span class="label label-sm bg-danger" style="margin-left:2px;">Beta</span></a></li>
-						<li><a href="#" id="bulk-email" class="_contact_bulk_action">Send Email</a></li>
-                        <li class='divider'></li>
-						<li><a href="#" id="bulk-owner" class="_contact_bulk_action">Change Owner</a></li>
-                         {{#hasScope "EXPORT_CONTACTS"}}
-                        <li><a href="#" id="bulk-contacts-export" class="_contact_bulk_action">Export Contacts as CSV</a></li>
-                         {{/hasScope}}
-						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
-					</ul>
-			</div>
-			<div  class="btn-group inline-block pull-left m-t-xs" style="display: none;" id="bulk-select"></div>
-			</div>
 
-			<div class="pull-right">
-			<div class="btn-group pull-left m-r-xs" id="contact-sorter">
-			</div>
-			
-            <div class="btn-group pull-left m-r-xs" id="contacts-view-options"></div>
+<!-- Newly Added -->
 
-			<div class="btn-group pull-left m-r-xs" id="filter-list"></div>
-		
-            <div id="view-list" class="pull-left btn-group"></div>
-            </div>
-        <div class="clearfix"></div>
-    </div>
-</div>
-</div>
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+ 
+	<div class="">
+		<div id="right-pane">
+	
+	<div class="contacts-div">
 
-    <div class="{{#is_mobile}} wrapper-md {{else}} hbox hbox-auto-xs hbox-auto-sm {{/is_mobile}}">
-    {{#is_mobile}}
-    {{else}}
-    <div class="col w-md b-r" id="contacts-lhs-filters-toggle" style="display:{{toggle_contacts_filter}}">
-		<div class="data-block">
-			<div  id="lhs_filters_conatiner">
-				
-			</div>
-		</div>
-    </div>
-    {{/is_mobile}}
-    <div class="{{#is_mobile}} contacts-div {{else}} col contacts-div {{/is_mobile}}">
-		{{#unless this.length}}
-			
-			<div class="filter-criteria">
-					
-			</div>
-			<div class="panel-heading" style="background:#f6f8f8;">Contacts List
-			{{#is_mobile}}
-			{{else}}
-			<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-			<i id="icon-filter" class="fa fa-bars icon-white"></i>
-			</a>
-			{{/is_mobile}}
-</div>
-			<div id="slate"></div>
-		{{else}}
-        <div class="data {{#is_mobile}} panel panel-default b-l {{else}}  {{/is_mobile}}" {{#is_mobile}} style ="border-left:1px solid #dee5e7;" {{/is_mobile}}>
-         <div class="panel-heading" style="background:#f6f8f8;">Contacts List
-       {{#is_mobile}}
-       {{else}}  
-		<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-			<i id="icon-filter" class="fa fa-bars icon-white"></i>
-		</a>
-		{{/is_mobile}}
-</div>
-            <div class="dta-contatiner table-responsive">
-				<div class="panel panel-default {{#is_mobile}} m-b-none {{/is_mobile}}" style="{{#is_mobile}} overflow-x:hidden; {{else}} overflow-x:auto; {{/is_mobile}} border-left:none;">
-			    
-                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
+<div class="dta-contatiner table-responsive m-r-sm b-n">
+				<div class="panel panel-default m-b-none b-n no-radius" style="overflow-x:hidden;">
+			    {{#unless this.length}}
+		        <div class="m-l-sm" id="slate">
+		        </div>
+		        {{/unless}}
+		        {{#if this.length}}
+                <table id="contacts-table" class="table b-n no-radius showCheckboxes no-sorting panel agile-table noDelete"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
+					
+                    <tbody id="contacts-custom-view-model-list" route="contact/">
+                    </tbody>
+                </table>
+                {{/if}}
+				</div>
+            </div>
+        </div>
+	 </div>
+			    
+	    	</div>
+
+<!-- Newly Added -->
+
+{{else}}
+
+<!-- Newly Added -->
+
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+  
+	<div class="col w-lg bg-light dk b-r bg-auto" id="contacts-lhs-filters-toggle" style="display:{{toggle_contacts_filter}}">
+		<div class="data-block">
+			<div id="lhs_filters_conatiner">
+		</div>
+
+</div>
+	</div>
+ 
+	<div class="col">
+		<div id="right-pane">
+	<div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="
+    border-bottom: 1px solid rgba(140, 139, 139, 0.2);
+    ">
+	    <div class="btn-toolbar m-l-none pos-rlt">
+	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
+	    		<div class="inline-block pull-left" style="font-size: 18px;color: rgb(88, 102, 110);">Contacts New<span id="contacts-count" class="m-l-xs">{{contacts_count}}</span>
+	    			 
+	    			<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+            			<i id="icon-filter" class="fa fa-bars icon-white"></i>
+          			</a>
+          			 
+	    		</div>
+	    		<br>
+				<div class="btn-group inline-block pull-left m-t-xs" style="display: none;" id="bulk-select"></div>
+    
+    
+
+
+</div></div>
+	    	<div class="pull-right">
+            <div class="btn-group pull-left m-r-xs" id="contacts-view-options" style="pointer-events: auto;"></div>
+
+			<div class="btn-group pull-left m-r-xs" id="filter-list"></div>
+		
+            <div id="view-list" class="pull-left btn-group"><div class="btn-group m-r-sm">
+    	<button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
+    	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+    	
+    	
+    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs">
+        	<!--<li>
+            	<a href="#contacts" class="DefaultView">Default</a>
+				 a href="#contacts" class="GridView">Grid View</a 
+        	</li>
+			<li class="divider"></li>-->
+			<li class="dropdown-submenu"><a data-toggle="dropdown" id="mobile-dropdown-click-sort">Sort By</a>
+
+				<ul class="dropdown-menu" id="contact-sort-views">
+					<li><a class="sort bold-text" id="sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
+					<li><a class="sort" id="sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
+					<li class="divider"></li>
+					<li><a class="sort" id="sort-by-lead_score-desc" data="-lead_score" href="#">Highest Score</a></li>
+					<li><a class="sort" id="sort-by-lead_score-asc" data="lead_score" href="#">Lowest Score</a></li>
+					<li class="divider"></li>
+					<li><a class="sort" id="sort-by-star_value-desc" data="-star_value" href="#">Highest Starred</a></li>
+					<li><a class="sort" id="sort-by-star_value-asc" data="star_value" href="#">Lowest Starred</a></li>
+					<li class="divider"></li>
+					<li><a class="sort" id="sort-by-first_name-desc" data="-first_name" href="#">First Name Desc</a></li>
+					<li><a class="sort" id="sort-by-first_name-asc" data="first_name" href="#">First Name Asc</a></li>
+					<li class="divider"></li>
+					<li><a class="sort" id="sort-by-last_name-desc" data="-last_name" href="#">Last Name Desc</a></li>
+					<li><a class="sort" id="sort-by-last_name-asc" data="last_name" href="#">Last Name Asc</a></li>
+					<li class="divider"></li>
+					<li><a class="sort" id="sort-by-last_contacted-desc" data="-last_contacted" href="#">Contacted Date Desc</a></li>
+					<li><a class="sort" id="sort-by-last_contacted-asc" data="last_contacted" href="#">Contacted Date Asc</a></li>
+				</ul>
+			</li>
+        	<li class="divider"></li>
+        	<li>
+            	<a href="#contact-view-prefs">Add/Remove Columns</a>
+        	</li>
+    	</ul>
+    	
+	</div>
+    <div class="btn-group">
+        <a href="#contacts" onclick="$('.person').click();" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Contact</a>
+        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+		<ul class="dropdown-menu pull-right">
+			<li><a href="#import">Import from CSV</a></li>
+			<li><a href="#import">Import from Salesforce</a></li>
+		</ul>
+	</div></div>
+            </div>
+	    </div>
+	    
+	</div>
+	<div class="contacts-div">
+<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none m-r-sm" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
+				      	
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add Tags</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Remove Tags</button>
+					    {{#hasMenuScope 'CAMPAIGN'}}
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add to Campaign</button>
+					    {{/hasMenuScope}}
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Start Call Campaign</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Send Email</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Change Owner</button>
+					    {{#hasScope "EXPORT_CONTACTS"}}
+					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Export Contacts as CSV</button>
+					    {{/hasScope}}
+					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs disabled" style="font-size:10px">Delete</button>
+					    
+				    </div>
+
+
+<div class="dta-contatiner table-responsive m-r-sm">
+				<div class="panel panel-default" style="overflow-x:auto; border-left:none;">
+			    {{#unless this.length}}
+		        <div class="m-l-sm" id="slate">
+		        </div>
+		        {{/unless}}
+		        {{#if this.length}}
+                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
+					<div class="filter-criteria">
+					
+					</div>
+				 
 					<thead>
                         <tr style="text-transform: capitalize;">
                             {{contactTableHeadings "fields_set"}}
                         </tr>
                     </thead>
+                     
                     <tbody id="contacts-custom-view-model-list" route="contact/">
                     </tbody>
                 </table>
+                {{/if}}
 				</div>
             </div>
         </div>
-	{{/unless}}
-    </div>
-</div>
-</div>
+	 </div>
+			    
+	    	</div>
+
+<!-- Newly Added -->
+
+{{/is_mobile}}
+    
 </script>
 <script id="contacts-custom-view-table-collection-template" type="text/html">
-{{#unless this.length}}
-<div>
-<div class="panel-heading" style="background:#f6f8f8;">Contacts List
-		{{#is_mobile}}
-       {{else}}  
-		<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-			<i id="icon-filter" class="fa fa-bars icon-white"></i>
-		</a>
-		{{/is_mobile}}
-</div>
-			<div id="slate"></div>
-</div>
-		{{else}}
-        <div class="data {{#is_mobile}} panel panel-default b-l {{else}}  {{/is_mobile}}" {{#is_mobile}} style ="border-left:1px solid #dee5e7;" {{/is_mobile}}>
- <div class="panel-heading" style="background:#f6f8f8;">Contacts List
-	{{#is_mobile}}
-       {{else}}  
-<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-			<i id="icon-filter" class="fa fa-bars icon-white"></i>
-		</a>
-		{{/is_mobile}}
-</div>
-            <div class="dta-contatiner table-responsive">
+
+<div id="bulk-action-btns" class="panel-heading no-shadow m-r-sm" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
+				      	
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add Tags</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Remove Tags</button>
+					    {{#hasMenuScope 'CAMPAIGN'}}
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add to Campaign</button>
+					    {{/hasMenuScope}}
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Start Call Campaign</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Send Email</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Change Owner</button>
+					    {{#hasScope "EXPORT_CONTACTS"}}
+					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Export Contacts as CSV</button>
+					    {{/hasScope}}
+					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs disabled" style="font-size:10px">Delete</button>
+					    
+				    </div>
+
+
+<div class="dta-contatiner table-responsive m-r-sm">
 				<div class="panel panel-default {{#is_mobile}} m-b-none {{/is_mobile}}" style="{{#is_mobile}} overflow-x:hidden; {{else}} overflow-x:auto; {{/is_mobile}} border-left:none;">
-			    
-                   <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">               
-					<div class="filter-criteria">					
+			    {{#unless this.length}}
+		        <div class="m-l-sm" id="slate">
+		        </div>
+		        {{/unless}}
+		        {{#if this.length}}
+                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
+					<div class="filter-criteria">
+					
 					</div>
+
 					<thead>
-                        <tr class="text-cap">
+                        <tr style="text-transform: capitalize;">
                             {{contactTableHeadings "fields_set"}}
                         </tr>
                     </thead>
                     <tbody id="contacts-custom-view-table-model-list" route="contact/">
                     </tbody>
                 </table>
+                {{/if}}
 				</div>
             </div>
-        </div>
-	{{/unless}}
 </script>
