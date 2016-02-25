@@ -378,17 +378,21 @@ var Tickets_Notes = {
 
 		if(!notesCollection || notesCollection.length == 0)
 			return notesText;
-
+           
 		$.each(notesCollection, function(index, note){
 			
 			 var noteAttachment=note.attachments_list;
-             var Attachment_text="";
 
               if(note.note_type != "PRIVATE")
             	 notesText += note.plain_text;
-                             
+              
+              if(noteAttachment.length >0)
+                 notesText +="\n\nAttachments:";   
+
               $.each(noteAttachment,function(index,note_Attachment){
-               notesText += "\n" +note_Attachment.name+":"+note_Attachment.url;
+               
+                notesText += "\n"+ (index+=1) +" . "+note_Attachment.name+" - "+note_Attachment.url;
+              
              });
              
              notesText += "\n\n-----------------------------------------\n\n";
