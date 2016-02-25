@@ -337,7 +337,7 @@ public class TicketNotesUtil
 	 * @param fromAddress
 	 * @return sent only last typed reply
 	 */
-	private static String removedQuotedReplies(String text)
+	public static String removedQuotedReplies(String text)
 	{
 		try
 		{

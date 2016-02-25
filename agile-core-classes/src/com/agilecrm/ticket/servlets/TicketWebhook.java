@@ -392,7 +392,7 @@ public class TicketWebhook extends HttpServlet
 
 				// Creating new Ticket in Ticket table
 				ticket = TicketsUtil.createTicket(groupID, null, fromName, fromEmail, msgJSON.getString("subject"),
-						ccEmails, plainText, Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER,
+						ccEmails, TicketNotesUtil.removedQuotedReplies(plainText), Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER,
 						attachmentExists, ip, new ArrayList<Key<TicketLabels>>());
 
 				BulkActionNotifications.publishNotification("New ticket #" + ticket.id + " received");
@@ -411,7 +411,7 @@ public class TicketWebhook extends HttpServlet
 				}
 
 				// Updating existing ticket
-				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, plainText, LAST_UPDATED_BY.REQUESTER,
+				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, TicketNotesUtil.removedQuotedReplies(plainText), LAST_UPDATED_BY.REQUESTER,
 						currentTime, currentTime, null, attachmentExists);
 
 				if (ticket.status == Status.CLOSED)
