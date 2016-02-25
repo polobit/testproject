@@ -45,8 +45,10 @@
 					
 							<div class="text-ellipsis  m-t-xs  h3 font-thin custom-color w-full">
 
-								{{getPropertyValue properties "name"}}
+								<div id="company-Input"><input type="text" class="hidden col-sm-11 m-l-xs pull-left inlineditor" id="company-inline-input"style="height:26px;"value='{{getPropertyValue properties "name"}}'></input>
+								<div id="company-name-text">{{getPropertyValue properties "name"}}</div></div>
 								{{#if_propertyName "url"}}</br>
+								
 									<a class="text-lg" href="{{getHyperlinkFromURL value}}" title="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
 								{{/if_propertyName}}
 								

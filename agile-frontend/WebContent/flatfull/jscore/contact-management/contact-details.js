@@ -293,17 +293,18 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #company-actions-delete' : 'companyDelete',
     	'click .company-owner-list' : 'companyOwnerList',
     	'click .remove-company-tags' : 'removeCmpanyTags',
-
     	'click #contact-actions-grid-delete' : 'contactActionsGridDelete',
+
+		/** inliner edits input fields**/
+		'click #company-name-text '  : 'toggleinline_company',
+		'blur #company-Input input ' : 'inlineCompanyNameChange'
     },
     
     inlineNameChange : function(e){
 
            console.log("inlineNameChange");
 
-           // Validate form
-
-           isValidForm('#inlineValidate');
+           
            // Get actual name
           var name = $("#Contact-input-firstname").val();
           if(!name){
@@ -355,6 +356,37 @@ show and hide the input for editing the contact name and saving that
 
 		if($("#Contactedit-text").hasClass("hidden"))
 			$("#Contact-input-firstname").focus();
+	},
+
+	/*
+	show and hide the input for editing the company name and save that
+	*/
+	toggleinline_company :function(e){
+		$("#company-inline-input").toggleClass("hidden");
+		$("#company-name-text").toggleClass("hidden");
+		if(!$("#company-inline-input").hasClass("hidden"))
+			$("#company-inline-input").focus();
+	},
+
+	inlineCompanyNameChange :function(e){
+		console.log("inlineCompanyNameChange");
+		var companyname = $("#company-inline-input").val();
+		console.log(companyname);
+		if(!companyname){
+          	$("#company-inline-input").addClass("error-inputfield");
+          	 return;
+          }
+        companyname=companyname.trim();
+        if(agile_crm_is_model_property_changed("name", companyname)){
+				// Update first name
+          		agile_crm_update_contact("name", companyname);
+          
+         }
+         /* toggle fields*/
+          $("#company-inline-input").toggleClass("hidden");
+          $("#company-name-text").text(companyname).toggleClass("hidden");
+          $("#company-inline-input").removeClass("error-inputfield");
+
 	},
 
 	contactActionsGridDelete: function(e){
