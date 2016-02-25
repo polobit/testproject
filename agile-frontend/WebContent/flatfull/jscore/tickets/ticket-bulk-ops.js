@@ -276,11 +276,12 @@ var Ticket_Bulk_Ops = {
 					isNew : true, 
 					template : "ticket-bulk-actions-close-tickets",
 					url : "/core/api/tickets/bulk-actions/close-tickets",
+					modal: '#close-tickets-modal',
 					saveCallback: function(){
 						Ticket_Bulk_Ops.clearSelection();
-						$('#close-tickets-modal').modal('hide');
+						//$('#close-tickets-modal').modal('hide');
 
-						$('body').removeClass('modal-open').animate({ scrollTop: 0 }, "slow");
+						Ticket_Utils.resetModalSettings($('#close-tickets-modal'));
 					},
 					prePersist : function(model)
 					{
@@ -313,9 +314,9 @@ var Ticket_Bulk_Ops = {
 
 						Tickets.removeTicketsFromCollection(Ticket_Bulk_Ops.getSelectedTickesObj());
 						Ticket_Bulk_Ops.clearSelection();
-						$('#delete-tickets-modal').modal('hide');
+						//$('#delete-tickets-modal').modal('hide');
 
-						$('body').removeClass('modal-open').animate({ scrollTop: 0 }, "slow");
+						Ticket_Utils.resetModalSettings($('#delete-tickets-modal'));
 					},
 					prePersist : function(model)
 					{
@@ -340,9 +341,9 @@ var Ticket_Bulk_Ops = {
 					url : "/core/api/tickets/bulk-actions/spam-tickets",
 					saveCallback: function(){
 						Ticket_Bulk_Ops.clearSelection();
-						$('#spam-tickets-modal').modal('hide');
+						//$('#spam-tickets-modal').modal('hide');
 
-						$('body').removeClass('modal-open').animate({ scrollTop: 0 }, "slow");
+						Ticket_Utils.resetModalSettings($('#spam-tickets-modal'));
 					},
 					prePersist : function(model)
 					{
@@ -367,9 +368,9 @@ var Ticket_Bulk_Ops = {
 					url : "/core/api/tickets/bulk-actions/favorite-tickets",
 					saveCallback: function(){
 						Ticket_Bulk_Ops.clearSelection();
-						$('#favorite-tickets-modal').modal('hide');
+						//$('#favorite-tickets-modal').modal('hide');
 
-						$('body').removeClass('modal-open').animate({ scrollTop: 0 }, "slow");
+						Ticket_Utils.resetModalSettings($('#favorite-tickets-modal'));
 					},
 					prePersist : function(model)
 					{

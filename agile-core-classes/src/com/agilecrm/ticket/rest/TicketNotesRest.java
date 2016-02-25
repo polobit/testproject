@@ -148,7 +148,7 @@ public class TicketNotesRest
 				else
 				{
 					// Check if another assignee is replied to ticket
-					if (ticket.assignee_id == null && ticket.assignee_id.getId() != domainUserKey.getId())
+					if (ticket.assignee_id == null)
 					{
 						// Logging ticket assignee changed activity
 						ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID,

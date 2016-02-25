@@ -18,10 +18,8 @@ var Tickets = {
 
 				$('#content').html($(template_ui));	
 
-				if($('body').hasClass('modal-open')){
-					$('body').removeClass('modal-open').animate({ scrollTop: 0 }, "slow");
-				}
-
+				Ticket_Utils.resetModalSettings();
+				
 				var json = {};
 				json.sort_by = Sort_By;
 				json.sort_field = Sort_Field;
