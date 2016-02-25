@@ -21,12 +21,10 @@ var Tickets_Notes = {
 
 		if(!$("#send-reply").valid()){
 
-			if($(e.target).hasClass('forward')){
-				$(".macro").attr("disabled", true);
+			if($(e.target).hasClass('forward'))
 				this.forwardTicket(json, $save_btn, false);
 
 			    return;
-		    }
 		}
 			
 
@@ -34,11 +32,10 @@ var Tickets_Notes = {
 
 		json.html_text = json.html_text.trim() + "<br><br>" + CURRENT_USER_PREFS.signature;
 
-		if($(e.target).hasClass('forward')){
-			$(".macro").attr("disabled", true);
-			this.forwardTicket(json, $save_btn, true);
+		if($(e.target).hasClass('forward'))
+		    this.forwardTicket(json, $save_btn, true);
 			return;
-		}
+
 
 		var note_type = $(e.target).hasClass('private') ? 'PRIVATE' : 'PUBLIC';
 		json.note_type = note_type;
@@ -384,13 +381,25 @@ var Tickets_Notes = {
 			return notesText;
 
 		$.each(notesCollection, function(index, note){
-
-			if(note.note_type != "PRIVATE")
-				notesText += note.original_plain_text + "\n\n-----------------------------------------\n\n";
 			
-		})
+			 var noteAttachment=note.attachments_list;
+             var Attachment_text="";
 
-		console.log("notesText = " + notesText);
+              if(note.note_type != "PRIVATE")
+            	 notesText += note.plain_text;
+                             
+              $.each(noteAttachment,function(index,note_Attachment){
+               notesText += "\n" +note_Attachment.name+":"+note_Attachment.url;
+             });
+             
+             notesText += "\n\n-----------------------------------------\n\n";
+
+             notesText = notesText.replace(/<br\s*[\/]?>/gi, "\n");
+              
+          
+	    })
+
+		
 
 		return notesText;
 
