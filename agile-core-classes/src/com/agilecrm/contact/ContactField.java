@@ -97,9 +97,7 @@ public class ContactField
 	if (fieldName != null && (fieldName.equals(Contact.FIRST_NAME) || fieldName.equals(Contact.LAST_NAME) || fieldName.equals(Contact.EMAIL)
 	        || fieldName.equals(Contact.TITLE) || fieldName.equals(Contact.WEBSITE) || fieldName.equals(Contact.COMPANY)
 	        || fieldName.equals(Contact.ADDRESS) || fieldName.equals(Contact.URL) || fieldName.equals(Contact.PHONE)
-	        || fieldName.equals(Contact.NAME) || fieldName.equals(Contact.SKYPEPHONE) || fieldName.equals(Contact.UTM_SOURCE)
-			|| fieldName.equals(Contact.UTM_MEDIUM) || fieldName.equals(Contact.UTM_CAMPAIGN) || fieldName.equals(Contact.UTM_TERM)
-			|| fieldName.equals(Contact.UTM_CONTENT)) )
+	        || fieldName.equals(Contact.NAME) || fieldName.equals(Contact.SKYPEPHONE)) )
 	    type = FieldType.SYSTEM;
 	
 	return type;

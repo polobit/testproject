@@ -45,8 +45,7 @@ public class SearchUtil
      * @return {@link Map}
      */
 	
-	private static String UTM_PARAMETER="utm_source, utm_medium, utm_campaign, utm_term, utm_content";
-	
+
     public static Map<String, String> getFieldsMap(Contact contact, Document.Builder doc)
     {
 	// Map to store all the fields
@@ -65,8 +64,9 @@ public class SearchUtil
 		/*
 		 * Add UTM parameter in a Search Document of contact. If UTM parameter is Avialable 
 		 */
-		if (!(StringUtils.isEmpty(contactField.value)) && UTM_PARAMETER.contains(contactField.name))
-		{
+	    System.out.println("ssssssssssssss  "+contactField.name);
+		if (!(StringUtils.isEmpty(contactField.value)) && (contactField.name.equals("utm_source") || contactField.name.equals("utm_medium") || contactField.name.equals("utm_campaign") || contactField.name.equals("utm_term") || contactField.name.equals("utm_content")))
+		{System.out.println("hi");
 			 doc.addField(Field.newBuilder().setName(field_name).setText(StringUtils.lowerCase(normalized_value)));
 		     fields.put(field_name, normalized_value);
 			 continue;
