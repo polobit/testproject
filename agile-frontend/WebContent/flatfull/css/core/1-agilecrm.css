@@ -3131,3 +3131,13 @@ table.hide-head-checkbox th label.i-checks {
 .lhs-contact-filter-row div.add-icon:last-of-type {
 	display: block!important;
 	}
+#addBtn:hover
+{
+  color: black !important;
+}
+
+#removeBtn:hover
+{
+  color: black !important;
+  opacity: 0.9;
+}

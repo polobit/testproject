@@ -490,7 +490,7 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
 
 		});
 
-     $('body #companies-left-filters-toggle').off('click');
+    $("body").off("click", "#companies-left-filters-toggle");
  	$('body').on('click', '#companies-left-filters-toggle', function(e)
 		{
 

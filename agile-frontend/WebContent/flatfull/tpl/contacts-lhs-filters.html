@@ -503,7 +503,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead companies_input" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;font-size:12px;">
 						</span>					
 					</div>
-					<a class="pull-right trash-css" style="font-size:16px;opacity: 0.9;"><i class="filter-tags-multiple-remove-lhs fa fa-trash text-l-none-hover c-p"></i></a>
+					<a class="pull-right trash-css" style="font-size:16px;opacity: 0.9;"><i class="filter-tags-multiple-remove-lhs fa fa-trash text-l-none-hover c-p" id="removeBtn"></i></a>
 						<div class="clearfix"></div>
 					
 					<div class="clearfix"></div>
@@ -520,7 +520,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 							<input type="text" placeholder="Enter Tag" prev-val="" class="required form-control filters-tags-typeahead companies_input" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;font-size:12px;">
 						</span>
 					</div>
-					<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+					<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;" ><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 					
 					<div class="clearfix"></div>
 					
@@ -529,7 +529,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		</div>	
 
 		<div class="m-t-xs">
-						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;" data-name="tags"><i class="icon-plus"></i> Add</a>
+						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;" data-name="tags" id="addBtn"><i class="icon-plus"></i> Add</a>
 					</div>
 			
 	</div>
@@ -568,7 +568,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control companies_input" name="temp-7" id="temp-7" >
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;" ><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -596,7 +596,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 				<select id="owner_select" class="required form-control companies_input" name="temp1" prev-val="" ><option class="default-select" value="">Select...</option></select>
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;" ><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -643,7 +643,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control date required companies_input" name="temp-11" id="temp-11" >
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;" ><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -671,7 +671,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 			<span id="RHS">
 				<input type="text" placeholder="Value" prev-val="" class="form-control required companies_input" >
 			</span>
-			<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+			<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;" ><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 		
@@ -691,7 +691,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 <div class="bg-light">
   <span class="pull-left m-l-md">
 
-	<a id="clear-lhs-company-filters" href="#" class="c-p txt-small link-color" style="color: #337ab7!important;">Clear all</a>
+	<a id="clear-lhs-company-filters" href="#" class="c-p txt-small link-color" style="color: #337ab7!important;">Clear</a>
 	</span>
 <div class="clearfix"></div>
 
