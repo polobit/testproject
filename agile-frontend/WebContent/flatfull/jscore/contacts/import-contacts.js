@@ -430,8 +430,8 @@ $('#' + id).on('click', '#import-deals', function(e)
 							"deal_track_duplicated" : { "error_message" : "'Track' already exists!" },
 							"deal_milestone_duplicated" : {"error_message" : "'Milestone' already exists!"},
 							"deal_related_contact_duplicated" : {"error_message" : "'Related to' already exists!" },
-							"deal_probability_duplicated" : {"error_message" : "'probability' already exists!"},
-							"deal_close_date_duplicated" : {"error_message" : "'close date' already exists!"},
+							"deal_probability_duplicated" : {"error_message" : "'Probability' already exists!"},
+							"deal_close_date_duplicated" : {"error_message" : "'Close date' already exists!"},
 							"deal_note_duplicated" : {"error_message" : "'Note' already exists!"},
 							"deal_description_duplicated" : {"error_message":"'Description' already exists!"},
 					}
