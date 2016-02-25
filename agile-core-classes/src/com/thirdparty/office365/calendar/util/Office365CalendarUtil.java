@@ -80,7 +80,7 @@ public class Office365CalendarUtil {
 
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("In office util  " + e);
 			}
 		}
 		return appointments;
@@ -138,10 +138,9 @@ public class Office365CalendarUtil {
 					+ URLEncoder.encode(endDate, "UTF-8");
 			System.out.println("url : " + url);
 		} catch (Exception e) {
-			System.err
+			System.out
 					.println("Exception occured in getOfficeURLCalendarPrefs "
 							+ e.getMessage());
-			e.printStackTrace();
 		}
 
 		return url;
@@ -320,7 +319,7 @@ public class Office365CalendarUtil {
 
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e);
 			}
 		}
 		return filledSlots;
