@@ -18,7 +18,6 @@
 	}
  
   String _source = request.getParameter("_source");
-  
   String registered_email = request.getParameter("email");
 
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
@@ -32,6 +31,9 @@ String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
 //Static images s3 path
 String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
+
+// Error Message
+String errorMessage = "";
 if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 {
 	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
@@ -42,8 +44,19 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 
   if(registered_email != null)
   {
-    request.getRequestDispatcher("/register-new2.jsp").forward(request, response);
-    return;
+	  try{
+		  // Validate Email
+		  new RegisterVerificationServlet().validateEmailIdWhileRegister(request, response);
+		  request.getRequestDispatcher("/register-new2.jsp").forward(request, response);
+		  return;
+		    
+	  }
+	  catch(Exception e)
+	  {
+		  errorMessage = e.getMessage();
+		    	
+	  }
+	
   }
 
 %>
@@ -65,6 +78,9 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 <link rel="stylesheet" type="text/css" href="/flatfull/css/register-new.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
+
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
 
 <script type="text/javascript">
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
@@ -100,7 +116,11 @@ if(isSafari && isWin)
 
 </head>
 <body>
-  <div id="error-area" class="error-top-view"></div>
+  <div id="error-area" class="error-top-view">
+    <%if(StringUtils.isNotEmpty(errorMessage)){
+        out.println(errorMessage);
+    }%>
+  </div>
 <div class="app app-header-fixed app-aside-fixed">
 <div class="container w-xxl w-auto-xs">
 <a href="https://www.agilecrm.com/" class="navbar-brand block m-t text-white">
@@ -131,14 +151,14 @@ if(isSafari && isWin)
 <input class="input-xlarge field required email form-control no-border"
 			id="login_email" name='email' type="email" required maxlength="50"
 			minlength="6" value="<%=email%>"  placeholder="Email Address (User ID)"
-			autocapitalize="off">
+			autocapitalize="off" autocomplete="off">
 </div>
 
 
 <div class="list-group-item">
 <input class="input-xlarge field required form-control no-border"
 											maxlength="20" minlength="4" required name='password' type="password"
-											placeholder="Password" autocapitalize="off">
+											placeholder="Password" autocapitalize="off" autocomplete="off">
 </div>
 
 </div>
@@ -205,11 +225,15 @@ if(isSafari && isWin)
   var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
 $(document).ready(function() {
+	
   	var newImg = new Image;
     newImg.onload = function() {
     $("body").css("background-image","url('"+this.src+"')");
      }
     newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/agile-registration-page-high.png';
+
+    if($("#error-area").text().trim())
+    	$("#error-area").slideDown("slow");
 
 
 });

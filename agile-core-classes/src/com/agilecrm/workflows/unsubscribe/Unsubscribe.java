@@ -36,6 +36,8 @@ public class Unsubscribe {
 
     public String unsubscribe_name = null;
 
+    public String unsubscribe_subject = null;
+
     /**
      * Default Unsubscribe
      */

@@ -153,14 +153,29 @@ function initValidator(selector, callback) {
             		   		  saveflag = false;
 				
 					}
-  			});   
+  			});
+	        //special condition to skip the error message for and_key_grid-table
+	        if(keys[1] == "and_key_grid-table" || keys[1] == "or_key_grid-table" )
+	        {
+	        	if($('#and_key_grid-table tr').length > 1  || $('#or_key_grid-table tr').length > 1)
+	        	{
+	        	saveflag = true;
+	        	}
+	        }
+	        
   	        //if errors show single message
 	   		if(!saveflag){
 				  
 				   // Show Grid error  (Ramesh(27 Sep 2010))
-				   
+	   			if(keys[1] == "and_key_grid-table" || keys[1] == "or_key_grid-table" )
+		        {
+	   				selector.find("#errorsdiv").html("<p> Please add atleast one condition </p>").addClass('ui-state-highlight');
+	   			  
+		        }
+	   			else
+	   			{  
 	   		     selector.find("#errorsdiv").html("<p> <strong>" + keys[1]  + "</strong> -Please add data inside <strong>"+ keys[0] +"</strong></p>").addClass('ui-state-highlight');
-	   		    
+	   			}
 	   		}
 	   		//if no errors (i.e all table elements are filled)
 	   		else{

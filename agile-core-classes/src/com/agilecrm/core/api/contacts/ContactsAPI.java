@@ -235,19 +235,21 @@ public class ContactsAPI
     public List<Contact> getCompaniesList(@FormParam("cursor") String cursor, @FormParam("page_size") String count,
 	    @FormParam("global_sort_key") String sortKey)
     {
-    	
-    	if (count != null)
-    	{
-    		
-    		if (sortKey != null && ContactFilterUtil.isCustomField(sortKey)){
-    			return ContactFilterUtil.getFilterContactsBySortKey(sortKey, Integer.parseInt(count), cursor, Type.COMPANY);
-    		}
-    		
-    	    System.out.println("Fetching companies page by page");
-    	    return ContactUtil.getAllCompaniesByOrder(Integer.parseInt(count), cursor, sortKey);
-    	}
 
-    	return ContactUtil.getAllCompaniesByOrder(sortKey);
+	if (count != null)
+	{
+
+	    if (sortKey != null && ContactFilterUtil.isCustomField(sortKey))
+	    {
+		return ContactFilterUtil.getFilterContactsBySortKey(sortKey, Integer.parseInt(count), cursor,
+			Type.COMPANY);
+	    }
+
+	    System.out.println("Fetching companies page by page");
+	    return ContactUtil.getAllCompaniesByOrder(Integer.parseInt(count), cursor, sortKey);
+	}
+
+	return ContactUtil.getAllCompaniesByOrder(sortKey);
     }
 
     /**
@@ -320,7 +322,7 @@ public class ContactsAPI
     public Contact createContact(Contact contact)
     {
 	// Check if the email exists with the current email address
-	boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL"));
+	boolean isDuplicate = ContactUtil.isExists(StringUtils.lowerCase(contact.getContactFieldValue("EMAIL")));
 
 	// Throw non-200 if it exists
 	if (isDuplicate)
@@ -1245,7 +1247,7 @@ public class ContactsAPI
 
 	}
 	if (contact.type.toString().equals(("PERSON")))
-		ActivityUtil.mergeContactActivity(ActivityType.MERGE_CONTACT,contact,ids.length);
+	    ActivityUtil.mergeContactActivity(ActivityType.MERGE_CONTACT, contact, ids.length);
 	// merge notes
 	return contact;
     }

@@ -1308,7 +1308,7 @@ $(function()
         	value = JSON.parse(value);
         }catch(e){}
 
-		if (Object.keys(value).length > 0)
+		if (Object.keys(value) && Object.keys(value).length > 0)
 			return options.fn(this);
 		
 		return options.inverse(this);
@@ -2627,37 +2627,6 @@ $(function()
 			return options.inverse(this);
 		}
 		 
-	});
-
-	Handlebars.registerHelper('get_subscribers_type_from_hash', function()
-	{
-
-		// Returns "workflows" from "#workflows"
-		var hash = window.location.hash.substr(1);
-
-		if (hash.indexOf("all") != -1)
-			return "All";
-
-		if (hash.indexOf("active") != -1)
-			return "Active";
-
-		if (hash.indexOf("completed") != -1)
-			return "Completed";
-
-		if (hash.indexOf("removed") != -1)
-			return "Removed";
-
-		if (hash.indexOf("unsubscribed") != -1)
-			return "Unsubscribed";
-
-		if (hash.indexOf("hardbounced") != -1)
-			return "Hard Bounced";
-
-		if (hash.indexOf("softbounced") != -1)
-			return "Soft Bounced";
-
-		if (hash.indexOf("spam-reported") != -1)
-			return "Spam Reported";
 	});
 
 	Handlebars.registerHelper("check_plan", function(plan, options)
@@ -5295,6 +5264,11 @@ $(function()
 			return "5000";
 		else
 			return "-";
+	});
+
+	Handlebars.registerHelper('getEmailCreditsCount', function()
+	{
+		return getEmailCreditsCount();
 	});
 
 	// helper function to return agile bcc special email for inbound mail event
