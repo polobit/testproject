@@ -37,7 +37,8 @@ public class DealCSVExport
     public static final String CLOSE_DATE = "Close Date";
     public static final String OWNER = "Owner";
     public static final String RELATED_TO = "Related Contacts";
-    public static final String DEAL_SOURCE = "Deal Source";
+    public static final String SOURCE = "Deal Source";
+    public static final String LOSSREASON = "Loss Reason";
 
     private static final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -103,13 +104,20 @@ public class DealCSVExport
 	    {
 		str[indexMap.get(field.name)] = field.value;
 	    }
-	    if(deal.getDeal_source_id()!=null)
+	    if(deal.getDeal_source_id()!=null && deal.getDeal_source_id()!=0)
 	    	{
 	    	CategoriesUtil cu=new CategoriesUtil();
 	    	Category source = cu.getCategory(deal.getDeal_source_id());
 	    	if(source!=null)
-	    	str[indexMap.get(DEAL_SOURCE)] = source.getLabel();
+	    	str[indexMap.get(SOURCE)] = source.getLabel();
 	    	}
+	    if(deal.getLost_reason_id()!=null && deal.getLost_reason_id()!=0)
+    	{
+    	CategoriesUtil cu=new CategoriesUtil();
+    	Category reason = cu.getCategory(deal.getLost_reason_id());
+    	if(reason!=null)
+    	str[indexMap.get(LOSSREASON)] = reason.getLabel();
+    	}
 
 	}
 	catch (ParseException e)
