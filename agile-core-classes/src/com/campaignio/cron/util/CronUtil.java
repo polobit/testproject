@@ -35,6 +35,8 @@ import com.googlecode.objectify.Query;
  */
 public class CronUtil
 {
+	
+	private Map<String, Boolean> cacheMap = new HashMap<String, Boolean>();
 	/**
 	 * Dao of Cron class.
 	 */
@@ -219,27 +221,36 @@ public class CronUtil
 		NamespaceManager.set("");
 
 		// Get all sessions with last_messg_rcvd_time
-		Long milliSeconds = Calendar.getInstance().getTimeInMillis();
+		Long milliSeconds = System.currentTimeMillis();
 		System.out.println(milliSeconds + " " + NamespaceManager.get());
 
+		CronUtil cronUtil = new CronUtil();
+		
 		Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", milliSeconds);
 		int count = query.count();
-
 		QueryResultIterator<Cron> iterator = query.iterator();
-
+		
 		while (iterator.hasNext())
 		{
 			Cron cron = iterator.next();
 			dao.delete(cron);
-
+			
+			// Skips if duplicate cron got from Datastore in the same query
+			if(cronUtil.isCronExists(cron))
+				continue;
+			
 			// Temporary list
 			List<Cron> cronList = new ArrayList<Cron>();
 			cronList.add(cron);
 
 			// Run cron job
 			executeTasklets(cronList, Cron.CRON_TYPE_TIME_OUT, null, count);
+			
 		}
-
+		
+		// clears cacheMap
+		cronUtil.cacheMap.clear();
+		
 		NamespaceManager.set(oldNamespace);
 	}
 
@@ -257,25 +268,59 @@ public class CronUtil
 	 */
 	public static void interrupt(String custom1, String custom2, String custom3, JSONObject interruptData)
 	{
-		if (custom1 == null && custom2 == null && custom3 == null)
+		String oldNamespace = NamespaceManager.get();
+		
+		NamespaceManager.set("");
+		
+		try
+		{
+			if (custom1 == null && custom2 == null && custom3 == null)
 			return;
 
-		Map<String, Object> searchMap = new HashMap<String, Object>();
-
-		if (custom1 != null)
-			searchMap.put("custom1", custom1);
-
-		if (custom2 != null)
-			searchMap.put("custom2", custom2);
-
-		if (custom3 != null)
-			searchMap.put("custom3", custom3);
-
-		List<Cron> cronJobs = dao.listByProperty(searchMap);
-		dao.deleteAll(cronJobs);
+			Map<String, Object> searchMap = new HashMap<String, Object>();
+	
+			if (custom1 != null)
+				searchMap.put("custom1", custom1);
+	
+			if (custom2 != null)
+				searchMap.put("custom2", custom2);
+	
+			if (custom3 != null)
+				searchMap.put("custom3", custom3);
+	
 		
-		// Execute in another tasklet
-		executeTasklets(cronJobs, Cron.CRON_TYPE_INTERRUPT, interruptData, cronJobs.size());
+			List<Cron> cronJobs = dao.listByProperty(searchMap);
+			
+			CronUtil cronUtil = new CronUtil();
+			
+			for(Cron cron : cronJobs)
+			{
+				cron.delete();
+				
+				// If duplicate cron obtained, skip
+				if(cronUtil.isCronExists(cron))
+					continue;
+				
+				// Temporary list
+				List<Cron> cronList = new ArrayList<Cron>();
+				cronList.add(cron);
+
+				// Execute in another tasklet
+				executeTasklets(cronList, Cron.CRON_TYPE_INTERRUPT, interruptData, cronJobs.size());
+			}
+
+			// Clears map
+			cronUtil.cacheMap.clear();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception occured in interrupt of CronUtil - " + e.getMessage());
+		}
+		finally
+		{
+		    NamespaceManager.set(oldNamespace);
+		}
 	}
 
 	/**
@@ -416,4 +461,28 @@ public class CronUtil
 
 		return calendar.getTimeInMillis();
 	}
+	
+	/**
+	 * Instance method to verifies duplicate cron in the query
+	 * 
+	 * @param cron - Cron object
+	 * 
+	 * @return boolean
+	 */
+	private boolean isCronExists(Cron cron)
+	{
+		// Key that identifies duplicate crons
+		String key = cron.namespace + "_"+ cron.campaign_id + "_" + cron.subscriber_id + "_" + cron.custom1 + "_" + cron.custom2 + "_" + cron.custom3;
+		
+		if(cacheMap.containsKey(key))
+		{
+			System.err.print("Duplicate cron exists..." + key);
+			return true;
+		}
+		
+		cacheMap.put(key, true);
+		
+		return false;
+	}
 }
+

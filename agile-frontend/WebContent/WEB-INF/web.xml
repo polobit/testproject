@@ -38,6 +38,15 @@
 		<servlet-name>PaypalScribe</servlet-name>
 		<url-pattern>/paypalScribe</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>OfficeTest</servlet-name>
+		<servlet-class>TestServelt</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OfficeTest</servlet-name>
+		<url-pattern>/officetest</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Shopify</servlet-name>
@@ -166,6 +175,15 @@
 	<servlet-mapping>
 		<servlet-name>registration checker</servlet-name>
 		<url-pattern>backend/register-check</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>share campaign</servlet-name>
+		<servlet-class>com.agilecrm.CampaignShareServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>share campaign</servlet-name>
+		<url-pattern>/share</url-pattern>
 	</servlet-mapping>
 
 
@@ -452,7 +470,41 @@
 		<url-pattern>/enter-domain</url-pattern>
 	</servlet-mapping>
 
+	<!-- Start of appstats -->
+	<servlet>
+		<servlet-name>appstats</servlet-name>
+		<servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
+	</servlet>
 
+	<servlet-mapping>
+		<servlet-name>appstats</servlet-name>
+		<url-pattern>/appstats/*</url-pattern>
+	</servlet-mapping>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>appstats</web-resource-name>
+			<url-pattern>/appstats/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<filter>
+		<filter-name>appstats</filter-name>
+		<filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
+		<init-param>
+			<param-name>calculateRpcCosts</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>appstats</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- End of appstats -->
 
 	<filter>
 		<filter-name>NamespaceFilter</filter-name>
@@ -488,7 +540,8 @@
 		<url-pattern>/upload-google-document.jsp</url-pattern>
 		<url-pattern>/XeroServlet</url-pattern>
 		<url-pattern>/shopify</url-pattern>
-		<url-pattern>/auth/*</url-pattern>		
+		<url-pattern>/auth/*</url-pattern>
+			
 	</filter-mapping>
 
 	<filter-mapping>
@@ -943,6 +996,33 @@
 		<servlet-class>com.google.apphosting.utils.remoteapi.RemoteApiServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>TicketWebhook</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketWebhook</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketWebhook</servlet-name>
+		<url-pattern>/ticket-module/backend/webhook</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>TicketOpenServlet</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketOpenServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketOpenServlet</servlet-name>
+		<url-pattern>/ticket-module/backend/open</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>TicketSLAServlet</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketSLAServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TicketSLAServlet</servlet-name>
+		<url-pattern>/backend/ticket/slacron</url-pattern>
+	</servlet-mapping>
+	
 	<servlet-mapping>
 		<servlet-name>RemoteApiServlet</servlet-name>
 		<url-pattern>/remote_api</url-pattern>
@@ -1003,17 +1083,38 @@
         <servlet-name>InformUserServlet</servlet-name>
         <url-pattern>/InformUser</url-pattern>
     </servlet-mapping>
-    	<servlet>
+    
+    <servlet>
         <servlet-name>GetInformUserServlet</servlet-name>
         <servlet-class>com.thirdparty.call.GetInformUserServlet</servlet-class>
-    </servlet>  
- 
+
+    </servlet>
+    
     <servlet-mapping>
         <servlet-name>GetInformUserServlet</servlet-name>
         <url-pattern>/GetInformUser</url-pattern>
     </servlet-mapping>
-
-    <servlet>
+    
+   	<servlet>
+   		<servlet-name>AdmnLoginServlet</servlet-name>
+   		<servlet-class>com.agilecrm.AdminLoginServlet</servlet-class>
+   	</servlet>  
+   	<servlet-mapping>
+        <servlet-name>AdmnLoginServlet</servlet-name>
+        <url-pattern>/custLogin</url-pattern>
+    </servlet-mapping>
+ 
+   
+    	<servlet>
+        <servlet-name>TaskReminderUnitTest</servlet-name>
+        <servlet-class>com.agilecrm.reminder.test.TaskReminderUnitTestServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>TaskReminderUnitTest</servlet-name>
+        <url-pattern>test/taskreminder/unit-test</url-pattern>
+    </servlet-mapping>
+  	<servlet>
         <servlet-name>OpenDocumentViewer</servlet-name>
         <jsp-file>/open-documentviewer.jsp</jsp-file>
     </servlet>

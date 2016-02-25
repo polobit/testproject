@@ -34,6 +34,8 @@ var Calendar_Sync_Settings_View = Base_Model_View.extend({
 
 		if(_that.model.get("calendar_type") == "OFFICE365"){
 			var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
+			eventFilters = eventFilters[CURRENT_AGILE_USER.id];
+
 			var filtterList = eventFilters.cal_type;
 			var indexOf = filtterList.indexOf("office");
 			
@@ -43,7 +45,14 @@ var Calendar_Sync_Settings_View = Base_Model_View.extend({
 		        eventFilters.cal_type = $.grep(filtterList, function(value){
 		         return value != calendarItem;
 		       });
-		       _agile_set_prefs('event-lhs-filters', JSON.stringify(eventFilters));
+
+		        var eventData = JSON.parse(_agile_get_prefs('event-lhs-filters'));	
+				eventData[CURRENT_AGILE_USER.id] = eventFilters;
+
+				/*
+				 * if (event_list_type) json_obj.event_type = event_list_type;
+				 */
+				_agile_set_prefs('event-lhs-filters', JSON.stringify(eventData));		        
 			}
 		}
 

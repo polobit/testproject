@@ -60,129 +60,20 @@ $('#' + id).on('click', '.upload', function(e)
 			});
 
 $('#' + id  + " #import-contacts").off('click');
+$('#' + id).on('change', '.import-select', function(e) {
+    
+    importContactsValidate();
+
+});
 $('#' + id).on('click', '#import-contacts', function(e)
 					{
 
 						if ($(this).attr('disabled'))
 							return;
-
-						var upload_valudation_errors = {
-							"first_name_missing" : { "error_message" : "First Name is mandatory. Please select first name." },
-							"last_name_missing" : { "error_message" : "Last Name is mandatory. Please select last name." },
-							"email_missing" : { "error_message" : "Email is mandatory. Please select Email." },
-							"first_name_duplicate" : { "error_message" : " You have assigned First Name to more than one element. Please ensure that first name is assigned to only one element. " },
-							"last_name_duplicate" : { "error_message" : "You have assigned Last Name to more than one element. Please ensure that last name is assigned to only one element." },
-							"company_duplicate" : { "error_message" : "You have assigned Company to more than one element. Please ensure that company is assigned to only one element." },
-							"job_title_duplicate" : { "error_message" : "You have assigned job description to more than one element. Please ensure that job description is assigned to only one element." },
-							"invalid_tag" : { "error_message" : "Tag name should start with an alphabet and can not contain special characters other than underscore and space." },
-							}
-
-						var models = [];
-
-						// Hide the alerts
-						$(".import_contact_error").hide();
-
-						// Headings validation Rammohan: 10-09-12
-						/*
-						 * Reads all the table heading set after importing
-						 * contacts list from CSV and ensures that first_name
-						 * and last_name fields are set, which are mandatory
-						 * fields. Checks if duplicate table headings are set.
-						 * If validations failed the error alerts a explaining
-						 * the cause are shown
-						 */
-
-						var fist_name_count = 0, last_name_count = 0, emails_count = 0, company_count = 0, job_title_count = 0;
-						$(".import-select").each(function(index, element)
-						{
-							var value = $(element).val()
-							if (value == "properties_first_name")
-								fist_name_count += 1;
-							else if (value == "properties_last_name")
-								last_name_count += 1;
-							else if (value == "properties_company")
-								company_count += 0;
-							else if (value.indexOf("-email") != -1)
-								emails_count += 1;
-							else if (value == "properties_title")
-								job_title_count += 1;
-						})
-
-						if (fist_name_count == 0)
-						{
-							getTemplate("import-contacts-validation-message", upload_valudation_errors.first_name_missing, undefined, function(template_ui){
-								if(!template_ui)
-									  return;
-								$("#import-validation-error").html($(template_ui));	
-								initializeImportEvents($firstDiv.attr('id'));
-
-							}, "#import-validation-error");
-							
-							return false;
-						}
-						else if (emails_count == 0)
-						{
-							getTemplate("import-contacts-validation-message", upload_valudation_errors.email_missing, undefined, function(template_ui){
-								if(!template_ui)
-									  return;
-
-								$('#import-validation-error').html($(template_ui));	
-							}, "#import-validation-error");
-
-							return false;
-						}
-						/*
-						 * else if(lastNameCount.length == 0) {
-						 * $("#import-validation-error").html(getTemplate("import-contacts-validation-message",
-						 * upload_valudation_errors.last_name_missing)); return
-						 * false; }
-						 */
-						else if (fist_name_count > 1)
-						{
-							getTemplate("import-contacts-validation-message", upload_valudation_errors.first_name_duplicate, undefined, function(template_ui){
-								if(!template_ui)
-									  return;
-									
-								$('#import-validation-error').html($(template_ui));	
-							}, "#import-validation-error");
-
-							return false;
-						}
-						else if (last_name_count > 1)
-						{
-							getTemplate("import-contacts-validation-message", upload_valudation_errors.last_name_duplicate, undefined, function(template_ui){
-								if(!template_ui)
-									  return;
-									
-								$('#import-validation-error').html($(template_ui));	
-							}, "#import-validation-error");
-
-							return false;
-						}
-						else if (company_count > 1)
-						{
-							getTemplate("import-contacts-validation-message", upload_valudation_errors.company_duplicate, undefined, function(template_ui){
-								if(!template_ui)
-									  return;
-									
-								$('#import-validation-error').html($(template_ui));	
-							}, "#import-validation-error");
-
-							return false;
-						}
-						else if (job_title_count > 1)
-						{
-							getTemplate("import-contacts-validation-message", upload_valudation_errors.job_title_duplicate, undefined, function(template_ui){
-								if(!template_ui)
-									  return;
-									
-								$('#import-validation-error').html($(template_ui));	
-							}, "#import-validation-error");
-
-							return false;
-						}
-
-						
+						if(!importContactsValidate())
+						      return false;
+						 else		
+							$(this).attr('disabled', true);
 
 						var properties = [];
 
@@ -778,7 +669,7 @@ $('#' + id).on('click', '#import-deals', function(e)
 							// contact uploaded
 
 							showNotyPopUp('information', "Deals are now being imported. You will be notified on email when it is done", "top", 5000);
-							location.href = window.location.origin + "#deals";
+							location.href = agileWindowOrigin() + "#deals";
 							// Calls vefiryUploadStatus with data returned
 							// from the url i.e., key of the memcache
 							// verifyUploadStatus(data);
@@ -787,7 +678,169 @@ $('#' + id).on('click', '#import-deals', function(e)
 				});
 
 }
+// Validation function for import contacts.
+function importContactsValidate() 
+                    {
 
+						var upload_valudation_errors = {
+							"first_name_missing" : { "error_message" : "First Name is mandatory. Please select first name." },
+							"last_name_missing" : { "error_message" : "Last Name is mandatory. Please select last name." },
+							"email_missing" : { "error_message" : "Email is mandatory. Please select Email." },
+							"first_name_duplicate" : { "error_message" : " You have assigned First Name to more than one element. Please ensure that first name is assigned to only one element. " },
+							"last_name_duplicate" : { "error_message" : "You have assigned Last Name to more than one element. Please ensure that last name is assigned to only one element." },
+							"company_duplicate" : { "error_message" : "You have assigned Company to more than one element. Please ensure that company is assigned to only one element." },
+							"job_title_duplicate" : { "error_message" : "You have assigned job description to more than one element. Please ensure that job description is assigned to only one element." },
+							"invalid_tag" : { "error_message" : "Tag name should start with an alphabet and can not contain special characters other than underscore and space." },
+							}
+
+						var models = [];
+
+						// Hide the alerts
+						$(".import_contact_error").hide();
+
+						// Headings validation Rammohan: 10-09-12
+						/*
+						 * Reads all the table heading set after importing
+						 * contacts list from CSV and ensures that first_name
+						 * and last_name fields are set, which are mandatory
+						 * fields. Checks if duplicate table headings are set.
+						 * If validations failed the error alerts a explaining
+						 * the cause are shown
+						 */
+
+						var fist_name_count = 0, last_name_count = 0, emails_count = 0, company_count = 0, job_title_count = 0;
+						$(".import-select").each(function(index, element)
+						{
+							var value = $(element).val()
+							if (value == "properties_first_name")
+								fist_name_count += 1;
+							else if (value == "properties_last_name")
+								last_name_count += 1;
+							else if (value == "properties_company")
+								company_count += 0;
+							else if (value.indexOf("-email") != -1)
+								emails_count += 1;
+							else if (value == "properties_title")
+								job_title_count += 1;
+						})
+
+						if (fist_name_count == 0)
+						{
+							getTemplate("import-contacts-validation-message", upload_valudation_errors.first_name_missing, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$("#import-validation-error").html($(template_ui));	
+								initializeImportEvents($firstDiv.attr('id'));
+
+							}, "#import-validation-error");
+							
+							return false;
+						}
+						else if (emails_count == 0)
+						{
+							getTemplate("import-contacts-validation-message", upload_valudation_errors.email_missing, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+
+								$('#import-validation-error').html($(template_ui));	
+							}, "#import-validation-error");
+
+							return false;
+						}
+						/*
+						 * else if(lastNameCount.length == 0) {
+						 * $("#import-validation-error").html(getTemplate("import-contacts-validation-message",
+						 * upload_valudation_errors.last_name_missing)); return
+						 * false; }
+						 */
+						else if (fist_name_count > 1)
+						{
+							getTemplate("import-contacts-validation-message", upload_valudation_errors.first_name_duplicate, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+									
+								$('#import-validation-error').html($(template_ui));	
+							}, "#import-validation-error");
+
+							return false;
+						}
+						else if (last_name_count > 1)
+						{
+							getTemplate("import-contacts-validation-message", upload_valudation_errors.last_name_duplicate, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+									
+								$('#import-validation-error').html($(template_ui));	
+							}, "#import-validation-error");
+
+							return false;
+						}
+						else if (company_count > 1)
+						{
+							getTemplate("import-contacts-validation-message", upload_valudation_errors.company_duplicate, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+									
+								$('#import-validation-error').html($(template_ui));	
+							}, "#import-validation-error");
+
+							return false;
+						}
+						else if (job_title_count > 1)
+						{
+							getTemplate("import-contacts-validation-message", upload_valudation_errors.job_title_duplicate, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+									
+								$('#import-validation-error').html($(template_ui));	
+							}, "#import-validation-error");
+
+							return false;
+						}
+
+						
+
+						var properties = [];
+
+						/*
+						 * Iterates through all tbody tr's and reads the table
+						 * heading from the table, push the table name as
+						 * property name and value as property value as
+						 * ContactField properties.
+						 */
+						var model = {};
+
+						// Add Tags
+						var tags = get_tags('import-contact-tags');
+						var tags_valid = true;
+						if (tags != undefined)
+						{
+							$.each(tags[0].value, function(index, value)
+							{
+								if(!isValidTag(value, false)) {
+									tags_valid = false;
+									return false;
+								}
+								if (!model.tags)
+									model.tags = [];
+
+								console.log(model);
+
+								model.tags.push(value);
+							});
+						}
+						if(!tags_valid) {
+							getTemplate("import-contacts-validation-message", upload_valudation_errors.invalid_tag, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$('#import-validation-error').html($(template_ui));	
+							}, "#import-validation-error");
+
+							return false;
+						}
+						return true;
+
+					}
 
 
 /**

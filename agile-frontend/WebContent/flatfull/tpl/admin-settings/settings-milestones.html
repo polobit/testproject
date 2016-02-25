@@ -17,7 +17,7 @@
 			{{#isTracksEligible}}
 				<a href="#pipelineModal" role="button" data-toggle="modal" type="submit" class="add-pipeline btn btn-default btn-addon btn-sm" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</a>
 			{{else}}
-				<span class="btn btn-default disabled" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</span>
+				<span class="btn btn-default  btn-addon btn-sm disabled" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</span>
 				<div class="clearfix"></div>
 			{{/isTracksEligible}}
 			</h4>
@@ -109,7 +109,7 @@
 					</tbody>
 					</table>
 					</div>
-					<div class="p-l p-t p-b"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> Add Milestone</a></div>
+					<div class="p-l p-t p-b"><a href="#" class="show_milestone_field btn btn-sm btn-default btn-addon"><i class="icon-plus-sign"></i> Add Milestone</a></div>
 					<div class="show_field p-l p-t p-b" style="display:none;">
 						<input id="add_new_milestone" class="add_new_milestone form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="New Milestone">
 						<a class="btn btn-default btn-addon btn-sm add_milestone m-b-xxs m-t-n-xxs" data-toggle="modal" id="add_milestone" href="#">Add</a>
@@ -130,13 +130,8 @@
 
 <script id="admin-settings-lost-reasons-collection-template" type="text/html">
 <div class="panel wrapper">
-	<div class="">
-		<table id="lost-reasons-table" class="table table-bordered agile-table onlySorting m-b-n-xs table-hover">
-			<tbody id="admin-settings-lost-reasons-model-list" class="admin-settings-lost-reasons-model-list" style="word-break:normal!important;" ></tbody>
-		</table>
-	</div>
-	<form id="lostReasonsForm" class="form-horizontal m-b-none pipeline" method=post>
-		<div class="p-l p-t p-b show_lost_reason_add"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> Add Reason</a></div>
+<form id="lostReasonsForm" class="form-horizontal m-b-none pipeline" method=post style="float:right;">
+		<div class="p-l p-t p-b show_lost_reason_add"><a href="#" class="show_milestone_field btn btn-default btn-sm btn-addon"><i class="icon-plus-sign"></i> Add Reason</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
 			<input id="lost_reason_name" name="label" class="form-control input-sm required" style="width:145px;display:inline-block" type="text" placeholder="New Loss Reason">
 			<input type="hidden" name="entity_type" value="DEAL_LOST_REASON" />
@@ -146,6 +141,12 @@
 			<span id="lost_reason_existed_error" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Reason with this name already exists.</span>
 		</div>
 	</form>
+	<div class="">
+		<table id="lost-reasons-table" class="table table-bordered agile-table onlySorting m-b-n-xs table-hover">
+			<tbody id="admin-settings-lost-reasons-model-list" class="admin-settings-lost-reasons-model-list" style="word-break:normal!important;" ></tbody>
+		</table>
+	</div>
+	
 <div>
 </script>
 
@@ -177,13 +178,8 @@
 
 <script id="admin-settings-deal-sources-collection-template" type="text/html">
 <div class="panel wrapper">
-	<div class="">
-		<table id="deal-sources-table" class="table  table-bordered agile-table onlySorting m-b-n-xs table-hover">
-			<tbody id="admin-settings-deal-sources-model-list" class="admin-settings-deal-sources-model-list" style="word-break:normal!important;" ></tbody>
-		</table>
-	</div>
-	<form id="dealSourcesForm" class="form-horizontal m-b-none pipeline" method=post>
-		<div class="p-l p-t p-b show_deal_source_add"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> Add Source</a></div>
+<form id="dealSourcesForm" class="form-horizontal m-b-none pipeline" method=post style="float:right;">
+		<div class="p-l p-t p-b show_deal_source_add"><a href="#" class="show_milestone_field btn btn-default btn-sm btn-addon"><i class="icon-plus-sign"></i> Add Source</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
 			<input id="deal_source_name" name="label" class="form-control input-sm required" style="width:145px;display:inline-block" type="text" placeholder="New Source">
 			<input type="hidden" name="entity_type" value="DEAL_SOURCE" />
@@ -193,6 +189,12 @@
 			<span id="deal_source_existed_error" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Source with this name already exists.</span>
 		</div>
 	</form>
+	<div class="">
+		<table id="deal-sources-table" class="table  table-bordered agile-table onlySorting m-b-n-xs table-hover">
+			<tbody id="admin-settings-deal-sources-model-list" class="admin-settings-deal-sources-model-list" style="word-break:normal!important;" ></tbody>
+		</table>
+	</div>
+	
 <div>
 </script>
 
@@ -217,7 +219,11 @@
 		<a class="deal-source-delete text-l-none-hover c-p text-xs m-l-sm hover-show">
 			<i title="Delete Source" class="icon-trash"></i>
 		</a>
+		<a class="deal-source-move text-l-none-hover c-p text-xs m-l-sm hover-show">
+			<i title="Drag Source" class="icon-move"></i>
+		</a>
 	</div>
+	<input type="hidden" name="order" value="{{order}}" />
 	</form>
 </td>
 </script>

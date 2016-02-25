@@ -40,14 +40,15 @@ var ContactsRouter = Backbone.Router.extend({
 		"merge-contacts" : "mergeContacts",
 		
 		"tags/:tag" : "contacts", 
-			
+		
 		"send-email" : "sendEmail",
 		
+		"send-email/documents/:id" : "sendDocumentEmail",
+
 		"send-email/:id" : "sendEmail",
 
-		"send-email/documents/:id" : "sendDocumentEmail",
+		"send-emails/:id" : "sendEmailCustom",
 		
-
 		"add-campaign" : "addContactToCampaign",
 
 		/* Return back from Scribe after oauth authorization */
@@ -81,7 +82,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 	dashboard : function()
 	{
-
+		insidePopover=false;
 		$(".active").removeClass("active");
 		if(CURRENT_DOMAIN_USER.domain == "admin")
 		{
@@ -104,7 +105,7 @@ var ContactsRouter = Backbone.Router.extend({
 					$("#chrome-extension-button").removeClass('hide');
 				}
 
-				loadPortlets(el);
+				loadPortlets('DashBoard',el);
 
 		}, "#content");
 
@@ -122,7 +123,8 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
 	{
-
+		
+		insidePopover=false;
 		if(SCROLL_POSITION)
 		{
 			$('html, body').animate({ scrollTop : SCROLL_POSITION  },1000);
@@ -259,6 +261,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$("#contactsmenu").addClass("active");
 
 			contactFiltersListeners();
+
 			return;
 		}
 		if(_agile_get_prefs('dynamic_contact_filter')) {
@@ -299,7 +302,7 @@ var ContactsRouter = Backbone.Router.extend({
 				// To set heading in template
 				if(is_lhs_filter) {
 
-					setupViews();
+					setupViews(el);
 					setupContactFilterList();
 					//setUpContactView();
 
@@ -314,7 +317,7 @@ var ContactsRouter = Backbone.Router.extend({
 						}
 						var count_message;
 						if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
-							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: 0px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 						else
 							count_message = "<small> (" + count + " Total) </small>";
 						$('#contacts-count').html(count_message);
@@ -327,6 +330,7 @@ var ContactsRouter = Backbone.Router.extend({
 					setupViews(cel);
 					setupContactFilterList(cel, tag_id);
 					setUpContactView(cel);
+					loadPortlets('Contacts',cel);
 
 					if(collection.models.length > 0 && !collection.models[0].get("count")){
 						// Call to get Count 
@@ -337,6 +341,7 @@ var ContactsRouter = Backbone.Router.extend({
 				$('[data-toggle="tooltip"]').tooltip();
 				start_tour("contacts", el);
 
+
 			} });
 
 		// Contacts are fetched when the app loads in the initialize
@@ -345,7 +350,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(this.contactsListView.render().el);
 			contactFiltersListeners();
-			
+			contactListener();
 		} else {
 			$('#contacts-listener-container').find('.contacts-div').html(this.contactsListView.render().el);
 			$('#bulk-actions').css('display', 'none');
@@ -356,6 +361,7 @@ var ContactsRouter = Backbone.Router.extend({
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
 		$('[data-toggle="tooltip"]').tooltip();
+
 	
 		
 
@@ -543,7 +549,9 @@ var ContactsRouter = Backbone.Router.extend({
 				error: function(data, response)
 				{
 					if(response && response.status == '403')
-						$("#content").html(response.responseText);
+
+						$("#content").html ("<div class='well'><div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8;margin-bottom:5px!important;'> Sorry, you do not have permission to view this Contact.</h4><div class='text'style='opacity:0.6;'>Please contact your admin or account owner to enable this option.</div></div></div></div>");
+
 				}
 				});
 				
@@ -819,239 +827,56 @@ var ContactsRouter = Backbone.Router.extend({
 		
 	},
 
-	/**
-	 * Shows a send email form with some prefilled values (email - from,
-	 * to and templates etc..). To prefill the fields the function
-	 * populate_send_email_details is called from the
-	 * postRenderCallback.
-	 */
 	sendDocumentEmail:function(id) 
 	{
 		this.sendEmail(id,null,null,null,null,"documents");
 	},
-	sendEmail : function(id, subject, body, cc, bcc,id_type)
-	{
-		var model = {};
-		
-		if(!canSendEmails(1))
-		{
-			var pendingEmails = getPendingEmails();
-			window.history.back();
-			var title = "Emails limit";
-			var yes = "";
-			var no = "Ok"
-			var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
-			var message = "You have used up all emails in your quota. " + upgrade_link;
-			
-			showModalConfirmation(title, 
-					message, 
-					""
-				, function(element){
-						
-					// No callback
-						Backbone.history.navigate( "subscribe", { trigger : true });
-						return;
-					},
-					function(element){
-						
-					}, yes, no);
-			return;
-		}
-		var documentId=null;
-		if(id_type=="documents" && App_Documents.DocumentCollectionView && App_Documents.DocumentCollectionView.collection)
-		{
-			$.each(App_Documents.DocumentCollectionView.collection.models, function(index, document_model)
-			{
-				if(id && document_model.id==id	)
-				{
-					model=document_model.toJSON();	
-					return false;
-				}	
-			});
-		}
-		// Takes back to contacts if contacts detail view is not defined
-		if (this.contactDetailView && !this.contactDetailView.model.get(id))
-		{
-			// Show the email form with the email prefilled from the curtrent contact
-			model = this.contactDetailView.model.toJSON();
-		}
-		
-		if(App_Companies.companyDetailView){
-			var compEmailTemp = getPropertyValue(App_Companies.companyDetailView.model.toJSON().properties,'email');
-			if(id && id == compEmailTemp){
-				model = App_Companies.companyDetailView.model.toJSON();
-			}
-		}
-		//var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
-		
-		// Call setupTypeAhead to get contacts
-		//agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 
-
-		$("#content").html('<div id="send-email-listener-container"></div>');
-		var that = this;
-		getTemplate("send-email", model, undefined, function(template_ui){
-			if(!template_ui)
-				  return;
-
-			var el = $("#send-email-listener-container").html($(template_ui));
-
-			// Call setupTypeAhead to get contacts
-			agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
-
-			agile_type_ahead("email_cc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
-
-			agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
-
-			// To append name to email
-			if (id)
-			{
-				var name;
-
-				// For Reply all, id may contains multiple emails. If contains multiple, skip
-				if (model && id.indexOf(',') == -1)
-				{
-					if(id_type=="documents" && model.id!=null)
-					{
-						$('#emailForm').find('#eattachment').css('display','block');
-						$('#emailForm').find('#attachment_id').css("display",'block');
-						$('#emailForm').find('#attachment_id').find("#attachment_fname").removeClass("text-ellipsis")
-						$('#emailForm').find('#attachment_id').find("#attachment_fname").attr("href","#documents/" + model.id)
-						$('#emailForm').find('#attachment_id').find("#attachment_fname").css( 'cursor', 'pointer' );
-				    	$('#emailForm').find('#attachment_id').find("#attachment_fname").html('<div title=' + model.name + ' class="line-clamp activity-tag">' + model.name +'</div>');
-				    	$('#emailForm').find(".attachment-document-select").css('display','none');
-				    	$('#emailForm').find('#eattachment_key').attr('name',"edoc_key");
-				    	$('#emailForm').find('#eattachment_key').attr('value',model.id);
-				    	$("#emailForm").find("#agile_attachment_name").attr("value", model.name);
-				    	$("#emailForm").find(".add-attachment-cancel").addClass("hide");
-				    	$("#emailForm").find(".attach-file").addClass("hide");
-				    	$("#emailForm").find(".fa-paperclip").removeClass("fa-paperclip").addClass("fa-file-text-o");
-				    	$("#emailForm").find("#attachment-select").append('<option selected=\'yes\' value='+ model.id +'>' + model.name+ '</option>');
-				    	
-				    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
-				    	$("#doc_type","#emailForm").val(model.doc_type);
-		               	var first_name = getPropertyValue(model.contacts[0].properties, "first_name");
-						var last_name = getPropertyValue(model.contacts[0].properties, "last_name");
-						if (first_name || last_name)
-						{
-							name = first_name ? first_name : "";
-							name = (name + " " + (last_name ? last_name : "")).trim();
-						}
-						id=getPropertyValue(model.contacts[0].properties, "email");
-					}
-					else if (model.type == "PERSON")
-					{
-
-						var first_name = getPropertyValue(model.properties, "first_name");
-						var last_name = getPropertyValue(model.properties, "last_name");
-						if (first_name || last_name)
-						{
-							name = first_name ? first_name : "";
-							name = (name + " " + (last_name ? last_name : "")).trim();
-						}
-					}
-					else
-					{
-						var company_name = getPropertyValue(model.properties, "name");
-						name = (company_name ? company_name : "").trim();
-					}
-				}
-
-				if (name && name.length)
-				{
-					var data = id;
-
-					// If already appended with name, skip
-					if(id.indexOf('<') == -1 && id.indexOf('>') == -1)
-						data = name + ' <' + id.trim() + '>';
-
-					$('#to', el)
-							.closest("div.controls")
-							.find(".tags")
-							.append(
-									'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
-				}
-				else
-					$("#emailForm", el).find('input[name="to"]').val(id);
-			}
-			else
-				$("#emailForm", el).find('input[name="to"]').val('');
-
-			// Checks Zoomifier tag for contact
-			if (checkTagAgile("Zoomifier") && that.contactDetailView)
-			{
-				// Appends zoomifier link to attach their documents.
-				head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
-				{
-					$("#emailForm", el).find('textarea[name="count_message"]').closest(".controls")
-							.append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
-				});
-			}
-
-			// Populate from address and templates
-			populate_send_email_details(el);
-			
-			if(subject)
-				$("#emailForm",el).find('input[name="subject"]').val(subject);
-			
-			if(cc)
-			{
-				$("#emailForm",el).find('#email_cc').closest('.control-group').show();
-				$("#emailForm",el).find('input[name="cc"]').val(cc);
-			}
-			
-			if(bcc)
-			{
-				$("#emailForm",el).find('#email_bcc').closest('.control-group').show();
-				$("#emailForm",el).find('input[name="bcc"]').val(bcc);
-			}
-			
-			// Setup HTML Editor
-			if(id)
-			{		
-				setupTinyMCEEditor('textarea#email-body', false, undefined, function(){
-					
-						if(!body)
-							body = '';
-					
-						// Add tinymce content
-						set_tinymce_content('email-body', body);
-						
-						// Register focus
-						register_focus_on_tinymce('email-body');
-				
-					});
-			}
-			else
-			{	
-				setupTinyMCEEditor('textarea#email-body', true, undefined, function(){
-
-						if(!body)
-							body = '';
-					
-						// Add tinymce content
-						set_tinymce_content('email-body', body);
-						
-						// Register focus
-						register_focus_on_tinymce('email-body')
-				});
-			}
-			
-			initializeSendEmailListeners();
-			sendEmailAttachmentListeners("send-email-listener-container");
-			
-			
-		}, "#send-email-listener-container"); 
-	
-	},
-	
 	/**
 	 * Shows a send email form with some prefilled values (email - from,
 	 * to and templates etc..). To prefill the fields the function
 	 * populate_send_email_details is called from the
 	 * postRenderCallback.
 	 */
+	sendEmail : function(id, subject, body, cc, bcc, force_reload,id_type)
+	{
+
+		// Check old hash and call same function
+
+		if(!force_reload && Agile_Old_Hash && Agile_Old_Hash.indexOf("contact/") > -1)
+		{
+              var contactId = Agile_Old_Hash.split("/")[1];
+
+             
+             // Gets the domain name from the contacts of the custom fields.
+               var currentContactJson = App_Contacts.contactDetailView.model.toJSON();
+               if(contactId == currentContactJson.id){
+					var properties = currentContactJson.properties;
+					var email;
+					$.each(properties,function(id, obj){
+						if(obj.name == "email"){
+							email = obj.value;
+							return false;
+						}
+					});
+			   }
+              
+              this.sendEmail(email, subject, body, cc, bcc, true,id_type);
+              return;
+		}
+
+		var that=this;
+		sendMail(id,subject,body,cc,bcc,that,id_type);
 	
+	},
+
+	sendEmailCustom : function(id, subject, body, cc, bcc,custom_view)
+	{
+		var that=this.contact_popover;
+		insidePopover=false;
+		sendMail(id,subject,body,cc,bcc,that,true);
+	
+	},
 	
 	/**
 	 * Custom views, its not called through router, but by cookies
@@ -1104,6 +929,7 @@ var ContactsRouter = Backbone.Router.extend({
 						App_Contacts.contacts();
 						return;
 					}
+					
 					App_Contacts.contactViewModel = data.toJSON();
 					App_Contacts.customView(undefined, App_Contacts.contactViewModel, url, tag_id, is_lhs_filter);
 
@@ -1123,12 +949,14 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(el);
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
+			//loadPortlets('Contacts',el);
 			if(agile_is_mobile_browser()) {
-			$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+			$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 			}
 			
 
 			contactFiltersListeners();
+			contactListener();
 
 			if (_agile_get_prefs('company_filter'))
 				$('#contact-heading', el).text('Companies');
@@ -1139,6 +967,8 @@ var ContactsRouter = Backbone.Router.extend({
 			setupViews(el, view_data.name);
 			setupContactFilterList(el, tag_id);
 			setUpContactView(el);
+			//loadPortlets('Contacts',el);
+
 
 			$(".active").removeClass("active"); // Activate Contacts
 												// Navbar tab
@@ -1187,6 +1017,8 @@ var ContactsRouter = Backbone.Router.extend({
 			{
 				
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
+				contactListener();
+
 
 				// To set chats and view when contacts are fetch by
 				// infiniscroll
@@ -1205,6 +1037,7 @@ var ContactsRouter = Backbone.Router.extend({
 				setUpContactView(el);
 
 				abortCountQueryCall();
+				loadPortlets('Contacts',el);
 
 				if(is_lhs_filter) {
 
@@ -1218,7 +1051,7 @@ var ContactsRouter = Backbone.Router.extend({
 						}
 						var count_message;
 						if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
-							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+ updateImageS3Path("/img/help.png") +'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: 0px">' + '<img border="0" src="'+ updateImageS3Path("/img/help.png") +'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 						else
 							count_message = "<small> (" + count + " Total) </small>";
 						$('#contacts-count').html(count_message);
@@ -1236,7 +1069,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 				if(agile_is_mobile_browser()) {
 				
-					var $nextEle = $('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+					var $nextEle = $('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 					$('#contacts-table tbody tr .icon-append-mobile',el).after($nextEle);
 				}
 				
@@ -1245,7 +1078,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 			}, appendItemCallback: function(el){
 				if(agile_is_mobile_browser()) {
-					$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+					$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 				}
 			}, });
 
@@ -1263,6 +1096,8 @@ var ContactsRouter = Backbone.Router.extend({
 					};
 					// Fetch collection
 					_that.contact_custom_view.collection.fetch();
+					contactListener();
+					
 				});
 
 		} else{
@@ -1279,13 +1114,15 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(this.contact_custom_view.el);
 			contactFiltersListeners();
+			//loadPortlets('Contacts',el);
 		} else {
 			$('#contacts-listener-container').find('.contacts-div').html(this.contact_custom_view.el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
+
 			CONTACTS_HARD_RELOAD = true;
 		}
-		
+			
 		// Activate Contacts Navbar tab
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
@@ -1344,6 +1181,14 @@ var ContactsRouter = Backbone.Router.extend({
 					}
 					agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
 
+					$('.contact_input', $('#content')).each(function(){
+						agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=PERSON');
+					});
+
+					$('.company_input', $('#content')).each(function(){
+						agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=COMPANY');
+					});
+
 				}, "#content"); 
 
 					
@@ -1381,7 +1226,9 @@ var ContactsRouter = Backbone.Router.extend({
 		
 	});
 
-function getAndUpdateCollectionCount(type, el){
+function getAndUpdateCollectionCount(type, el, countFetchURL){
+
+		console.log("countFetchURL = " + countFetchURL);
 
 		var count_message = "";
     	$("#contacts-count").html(count_message);
@@ -1389,7 +1236,9 @@ function getAndUpdateCollectionCount(type, el){
     	var countURL = "";
     	if(type == "contacts")
     		countURL = App_Contacts.contactsListView.options.url + "/count";
-    	else
+    	else if(type == "workflows")
+    		countURL = countFetchURL + "/count";
+     	else
     		countURL = App_Companies.companiesListView.options.url + "/count";
 
     	// Hide bulk action checkbox
@@ -1404,15 +1253,21 @@ function getAndUpdateCollectionCount(type, el){
                     count_message = "<small> (" + data + " Total) </small>";
 					$('#contacts-count').html(count_message);
 
+					if(type == "workflows")
+						  $("span.badge.bg-primary", el).html(data);
+
 					// Reset collection
 					if(type == "contacts")
 						App_Contacts.contactsListView.collection.models[0].set("count", data, {silent: true});
-					else{
+					else if(type == "workflows"){
+						
+					} else{
 						App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
 					}
 
 					$(".thead_check", el).closest("label").css("visibility", "visible");
 					$("table", el).removeClass("hide-head-checkbox");	
+
     	});
 }
 
@@ -1420,4 +1275,227 @@ function abortCountQueryCall(){
 	try{
 		Count_XHR_Call.abort();
 	}catch(e){}
+}
+
+function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
+{
+	var model = {};
+		
+		if(!canSendEmails(1))
+		{
+			var pendingEmails = getPendingEmails();
+			window.history.back();
+			var title = "Emails limit";
+			var yes = "";
+			var no = "Ok"
+			var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
+			var message = "You have used up all emails in your quota. " + upgrade_link;
+			
+			showModalConfirmation(title, 
+					message, 
+					""
+				, function(element){
+						
+					// No callback
+						Backbone.history.navigate( "subscribe", { trigger : true });
+						return;
+					},
+					function(element){
+						
+					}, yes, no);
+			return;
+		}
+
+		if(custom_view){
+			model=that.toJSON();
+		}
+		else{
+			var documentId=null;
+			if(id_type=="documents" && App_Documents.DocumentCollectionView && App_Documents.DocumentCollectionView.collection)
+			{
+				$.each(App_Documents.DocumentCollectionView.collection.models, function(index, document_model)
+				{
+					if(id && document_model.id==id	)
+					{
+						model=document_model.toJSON();	
+						return false;
+					}	
+				});
+			}	
+		// Takes back to contacts if contacts detail view is not defined
+		if (that.contactDetailView && !that.contactDetailView.model.get(id))
+		{
+			// Show the email form with the email prefilled from the curtrent contact
+			model = that.contactDetailView.model.toJSON();
+		}
+		
+		if(App_Companies.companyDetailView){
+			var compEmailTemp = getPropertyValue(App_Companies.companyDetailView.model.toJSON().properties,'email');
+			if(id && id == compEmailTemp){
+				model = App_Companies.companyDetailView.model.toJSON();
+			}
+		}
+	}
+	
+		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
+		
+		// Call setupTypeAhead to get contacts
+		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+
+		$("#content").html('<div id="send-email-listener-container"></div>');
+		//var that = this;
+		getTemplate("send-email", model, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			var el = $("#send-email-listener-container").html($(template_ui));
+
+			// Call setupTypeAhead to get contacts
+			agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+			agile_type_ahead("email_cc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+			agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+			// To append name to email
+			if (id)
+			{
+				var name;
+
+				// For Reply all, id may contains multiple emails. If contains multiple, skip
+				if (model && id.indexOf(',') == -1)
+				{
+					if(id_type=="documents" && model.id!=null)
+					{
+						$('#emailForm').find('#eattachment').css('display','block');
+						$('#emailForm').find('#attachment_id').css("display",'block');
+						$('#emailForm').find('#attachment_id').find("#attachment_fname").removeClass("text-ellipsis")
+						$('#emailForm').find('#attachment_id').find("#attachment_fname").attr("href","#documents/" + model.id)
+						$('#emailForm').find('#attachment_id').find("#attachment_fname").css( 'cursor', 'pointer' );
+				    	$('#emailForm').find('#attachment_id').find("#attachment_fname").html('<div title=' + model.name + ' class="line-clamp activity-tag">' + model.name +'</div>');
+				    	$('#emailForm').find(".attachment-document-select").css('display','none');
+				    	$('#emailForm').find('#eattachment_key').attr('name',"edoc_key");
+				    	$('#emailForm').find('#eattachment_key').attr('value',model.id);
+				    	$("#emailForm").find("#agile_attachment_name").attr("value", model.name);
+				    	$("#emailForm").find(".add-attachment-cancel").addClass("hide");
+				    	$("#emailForm").find(".attach-file").addClass("hide");
+				    	$("#emailForm").find(".fa-paperclip").removeClass("fa-paperclip").addClass("fa-file-text-o");
+				    	$("#emailForm").find("#attachment-select").append('<option selected=\'yes\' value='+ model.id +'>' + model.name+ '</option>');
+				    	
+				    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
+				    	$("#doc_type","#emailForm").val(model.doc_type);
+		               	var first_name = getPropertyValue(model.contacts[0].properties, "first_name");
+						var last_name = getPropertyValue(model.contacts[0].properties, "last_name");
+						if (first_name || last_name)
+						{
+							name = first_name ? first_name : "";
+							name = (name + " " + (last_name ? last_name : "")).trim();
+						}
+						id=getPropertyValue(model.contacts[0].properties, "email");
+					}
+					else if (model.type == "PERSON")
+					{
+
+						var first_name = getPropertyValue(model.properties, "first_name");
+						var last_name = getPropertyValue(model.properties, "last_name");
+
+						if (first_name || last_name)
+						{
+							name = first_name ? first_name : "";
+							name = (name + " " + (last_name ? last_name : "")).trim();
+						}
+					}
+					else
+					{
+						var company_name = getPropertyValue(model.properties, "name");
+						name = (company_name ? company_name : "").trim();
+					}
+				}
+
+				if (name && name.length)
+				{
+					var data = id;
+
+					// If already appended with name, skip
+					if(id.indexOf('<') == -1 && id.indexOf('>') == -1)
+						data = name + ' <' + id.trim() + '>';
+
+					$('#to', el)
+							.closest("div.controls")
+							.find(".tags")
+							.append(
+									'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+				}
+				else
+					$("#emailForm", el).find('input[name="to"]').val(id);
+			}
+			else
+				$("#emailForm", el).find('input[name="to"]').val('');
+
+			// Checks Zoomifier tag for contact
+			if (checkTagAgile("Zoomifier") && that.contactDetailView)
+			{
+				// Appends zoomifier link to attach their documents.
+				head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
+				{
+					$("#emailForm", el).find('textarea[name="body"]').closest(".controls")
+							.append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
+				});
+			}
+
+			// Populate from address and templates
+			populate_send_email_details(el);
+			
+			if(subject)
+				$("#emailForm",el).find('input[name="subject"]').val(subject);
+			
+			if(cc)
+			{
+				$("#emailForm",el).find('#email_cc').closest('.control-group').show();
+				$("#emailForm",el).find('input[name="email_cc"]').val(cc);
+			}
+			
+			if(bcc)
+			{
+				$("#emailForm",el).find('#email_bcc').closest('.control-group').show();
+				$("#emailForm",el).find('input[name="email_bcc"]').val(bcc);
+			}
+			
+			// Setup HTML Editor
+			if(id)
+			{		
+				setupTinyMCEEditor('textarea#email-body', false, undefined, function(){
+					
+						if(!body)
+							body = '';
+					
+						// Add tinymce content
+						set_tinymce_content('email-body', body);
+						
+						// Register focus
+						register_focus_on_tinymce('email-body');
+				
+					});
+			}
+			else
+			{	
+				setupTinyMCEEditor('textarea#email-body', true, undefined, function(){
+
+						if(!body)
+							body = '';
+					
+						// Add tinymce content
+						set_tinymce_content('email-body', body);
+						
+						// Register focus
+						register_focus_on_tinymce('email-body')
+				});
+			}
+			
+			initializeSendEmailListeners();
+			sendEmailAttachmentListeners("send-email-listener-container");
+			
+			
+		}, "#send-email-listener-container"); 
 }

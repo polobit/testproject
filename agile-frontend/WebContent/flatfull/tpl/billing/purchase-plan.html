@@ -95,6 +95,14 @@
 									{{epochToHumanDate "mmm dd, yyyy" date}}
 								</div>
 							</div>
+							{{#if credit}}
+							<div class="control-group form-group m-b-xs">
+								<label class="col-sm-3 control-label p-t-none">Credit : </label>
+								<div class="controls col-sm-6">
+									$ {{credit}}
+								</div>
+							</div>
+							{{/if}}
 							
 <div class="line line-dashed b-b line-lg"></div>
 
@@ -105,13 +113,20 @@
 									Cost : </label>
 								<div class="controls col-sm-6">
 									<span style="font-size: 22px;color: #FA782D;font-weight: bold;">$</span>
-									<b class="p-r-xs" style="font-size: 22px;color: #FA782D;">{{cost}}</b>
+									<b class="p-r-xs" style="font-size: 22px;color: #FA782D;">{{#if_less_than "0" cost}}{{cost}}{{else}}0{{/if_less_than}}</b>
 									{{#if remainingCost}}{{#if unUsedCost}}
-									<span class="pos-rlt" style="top:-3px;">
-									(<span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Total Amount">${{remainingCost}}</span> - <span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Prorated Amount">${{unUsedCost}}</span>)
-									</span>
-									{{/if}}{{/if}}
-									<p class="help-block m-b-none">
+									
+										<span class="pos-rlt" style="top:-3px;">
+										({{#if credit}}({{/if}}<span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Total Amount">${{remainingCost}}</span> - <span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Prorated Amount">${{unUsedCost}}</span>{{#if credit}}) - <span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Credit">${{credit}}</span>{{/if}})
+										</span>
+										{{/if}}{{else}}{{#if credit}}
+										<span class="pos-rlt" style="top:-3px;">
+										(<span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Total Amount">${{costWithCredit}}</span> - <span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Credit">${{credit}}</span>)
+										</span>
+										{{/if}}
+									{{/if}}
+
+									<p class="help-block m-t-n-xs">
 										{{quantity}} 
 
 {{#if_equals quantity 1}}
@@ -130,6 +145,16 @@ Months
 
 								</div>
 							</div>
+{{#if_less_than "0" cost}}
+{{else}}
+	<div class="control-group form-group m-b-xs">
+								<label class="col-sm-3 control-label p-t-none">Remaining Credit : </label>
+								<div class="controls col-sm-6">
+									${{numeric_operation cost "-1" "*"}}
+								</div>
+							</div>
+{{/if_less_than}}
+
 {{#if billingData}}
 {{#check_plan "FREE"}}
 {{#is_not_allowed_trial}}

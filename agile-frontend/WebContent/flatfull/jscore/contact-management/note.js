@@ -6,8 +6,18 @@
  * @module Contact management
  * @author Rammohan
  */
+ var Agile_Old_Hash;
 $(function()
 {
+
+	
+	$(window).on("hashchange", function(e){
+		var oldUrl = e.originalEvent.oldURL;
+		if(!oldUrl){
+			 return;
+		}
+		Agile_Old_Hash = oldUrl.split("#")[1];
+	});
 
 	$('body').on('click', '.edit-note', function(e)
 	{
@@ -124,6 +134,9 @@ $(function()
 		var el = $("#noteForm");
 		agile_type_ahead("note_related_to", el, contacts_typeahead);
 	});
+	//when click on emailbutton automatically it takes contact details
+
+	
 
 	/**
 	 * "Hide" event of note modal to remove contacts appended to related to

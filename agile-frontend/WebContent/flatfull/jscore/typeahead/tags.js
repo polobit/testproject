@@ -20,7 +20,7 @@ var tagsCollectionView;
  * @method setup_tags_typeahead
  * 
  */
-function setup_tags_typeahead() {
+function setup_tags_typeahead(callback) {
 	var tags_list = [];
 	
 	
@@ -82,7 +82,10 @@ function setup_tags_typeahead() {
     		if((this.$element).closest(".control-group").hasClass('save-tag')){
     			
     			var json = null;
-    			
+    			if(callback!=undefined)
+    			{ callback(tag);
+    				return;
+    			}
     			if(company_util.isCompany())
     				json = App_Companies.companyDetailView.model.toJSON();
     			else
@@ -109,16 +112,22 @@ function setup_tags_typeahead() {
 	       			if(company_util.isCompany()){
 	       				App_Companies.companyDetailView.model.set(data.toJSON(), {silent : true});
 	       			// Append to the list, when no match is found 
-		       			if ($.inArray(tag, old_tags) == -1) 
-		       				$('#added-tags-ul').append('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="' + tag + '"><span><a class="anchor m-r-xs" href="#tags/'+ tag + '" >'+ tag + '</a><a class="close remove-company-tags" id="' + tag + '" tag="'+tag+'">&times</a></span></li>');
-	    				
+		       			if ($.inArray(tag, old_tags) == -1) {
+                            var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{name}}"><span><a class="anchor m-r-xs" href="#tags/{{name}}" >{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+                            // Adds contact name to tags ul as li element
+                            $('#added-tags-ul').append(template({name : tag}));
+                        }
 	       			}
 	       			else{
 	       				App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
 	       				addTagToTimelineDynamically(tag, data.get("tagsWithTime"));
 	       			// Append to the list, when no match is found 
-		       			if ($.inArray(tag, old_tags) == -1) 
-		       				$('#added-tags-ul').append('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="' + tag + '"><span><a class="anchor m-r-xs" href="#tags/'+ tag + '" >'+ tag + '</a><a class="close remove-tags" id="' + tag + '" tag="'+tag+'">&times</a></span></li>');
+		       			if ($.inArray(tag, old_tags) == -1) {
+
+                            var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{name}}"><span><a class="anchor m-r-xs" href="#tags/{{name}}" >{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+                            // Adds contact name to tags ul as li element
+                            $('#added-tags-ul').append(template({name : tag}));
+                        }
 	    				
 	       			}
 	       			
@@ -135,8 +144,12 @@ function setup_tags_typeahead() {
             });
 
             // If tag is not added already, then add new tag.
-    		if($.inArray(tag, tags_temp) == -1)
-    			(this.$element).closest(".control-group").find('ul.tags').append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"   data="'+ tag+'"><span class="m-r-xs v-middle">'+tag+'</span><a class="close" id="remove_tag">&times</a></li>');
+    		if($.inArray(tag, tags_temp) == -1){
+                var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"   data="{{name}}"><span class="m-r-xs v-middle">{{name}}</span><a class="close" id="remove_tag">&times</a></li>');
+                // Adds contact name to tags ul as li element
+                (this.$element).closest(".control-group").find('ul.tags').append(template({name : tag}));
+            }
+    			
         }
     });
     
@@ -188,7 +201,11 @@ function setup_tags_typeahead() {
         			$("#addTagsForm").css("display", "none");
         		    $("#add-tags").css("display", "block");
 
-           				$('#added-tags-ul').append('<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + tag + '" ><span><a class="anchor m-r-xs" href="#tags/'+ tag + '">'+ tag + '</a><a class="close remove-tags" id="' + tag + '" tag="'+tag+'">&times</a></span></li>');
+                    var template = Handlebars.compile('<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{name}}" ><span><a class="anchor m-r-xs" href="#tags/{{name}}">{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+
+                    // Adds contact name to tags ul as li element
+                    $('#added-tags-ul').append(template({name : tag}));
+                    
         			},function(model,response){
         				console.log(response);
     	       			alert(response.responseText);
@@ -237,8 +254,12 @@ function setup_tags_typeahead() {
     			}
     		});
     		
-    		if(add_tag)
-    			tags_list.append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="'+ tag+'">'+tag+'<a class="close m-l-xs" id="remove_tag" tag="'+tag+'">&times</a></li>');
+    		if(add_tag){
+                var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="{{name}}">{{name}}<a class="close m-l-xs" id="remove_tag" tag="{{name}}">&times</a></li>');
+                // Adds contact name to tags ul as li element
+                tags_list.append(template({name : tag}));
+                
+            }
     	}
     });
 }

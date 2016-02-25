@@ -182,17 +182,6 @@
         <property name="task_completed_time" direction="asc"/>
     </datastore-index>
     
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="archived" direction="asc"/>
-        <property name="ownerKey" direction="asc"/>
-        <property name="won_date" direction="asc"/>
-    </datastore-index>
-
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="ownerKey" direction="asc"/>
-        <property name="won_date" direction="asc"/>
-    </datastore-index>
-
     <datastore-index kind="Activity" ancestor="false" source="auto">
         <property name="activity_type" direction="asc"/>
         <property name="custom3" direction="asc"/>
@@ -298,95 +287,11 @@
         <property name="created_time" direction="desc"/>
     </datastore-index>
     
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="archived" direction="asc"/>
-        <property name="milestone" direction="asc"/>
-        <property name="won_date" direction="asc"/>
-    </datastore-index>
-
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="archived" direction="asc"/>
-        <property name="milestone" direction="asc"/>
-        <property name="ownerKey" direction="asc"/>
-        <property name="won_date" direction="asc"/>
-	</datastore-index>
-	
-	<datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="pipeline" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-    </datastore-index>
-    
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="archived" direction="asc"/>
-        <property name="ownerKey" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-    </datastore-index>
-	
-	<datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="archived" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-    </datastore-index>
-	
-	<datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="archived" direction="asc"/>
-		<property name="milestone" direction="asc"/>
-        <property name="won_date" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-    </datastore-index>
-	
-	<datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="archived" direction="asc"/>
-		<property name="milestone" direction="asc"/>
-        <property name="won_date" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-		<property name="ownerKey" direction="asc"/>
-    </datastore-index>
-    
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="archived" direction="asc"/>
-		<property name="milestone" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="won_date" direction="asc"/>
-    </datastore-index>
-    
-    <datastore-index kind="Opportunity" ancestor="false" source="manual">
-        <property name="archived" direction="asc"/>
-        <property name="milestone" direction="asc"/>
-        <property name="ownerKey" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="milestone_changed_time" direction="asc"/>
-    </datastore-index>
-    
-    <datastore-index kind="Opportunity" ancestor="false" source="manual">
-        <property name="archived" direction="asc"/>
-        <property name="milestone" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="milestone_changed_time" direction="asc"/>
-    </datastore-index>
-    
-    
     <datastore-index kind="Category" ancestor="false" source="manual">
         <property name="entity_type" direction="asc"/>
         <property name="order" direction="asc"/>
     </datastore-index>
     
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="archived" direction="asc"/>
-        <property name="milestone" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-    </datastore-index>
-	
-	<datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="archived" direction="asc"/>
-        <property name="milestone" direction="asc"/>
-        <property name="ownerKey" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-    </datastore-index>
-
     <datastore-index kind="Category" ancestor="false" source="auto">
         <property name="entity_type" direction="asc"/>
         <property name="label" direction="asc"/>
@@ -407,57 +312,125 @@
         <property name="related_deals" direction="asc"/>
         <property name="due" direction="asc"/>
      </datastore-index>
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="created_time" direction="asc"/>
-		<property name="ownerKey" direction="asc"/>
-    </datastore-index>
-    
-    <datastore-index kind="Opportunity" ancestor="false" source="manual">
-        <property name="archived" direction="asc"/>
-        <property name="dealSource" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-    </datastore-index>
-    
-    <datastore-index kind="Opportunity" ancestor="false" source="manual">
-        <property name="archived" direction="asc"/>
-        <property name="dealSource" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-        <property name="ownerKey" direction="asc"/>
-    </datastore-index>
-    
-    <datastore-index kind="Opportunity" ancestor="false" source="manual">
-        <property name="archived" direction="asc"/>
-        <property name="dealSource" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-         <property name="pipeline" direction="asc"/>
-    </datastore-index>
-    
-    <datastore-index kind="Opportunity" ancestor="false" source="manual">
-        <property name="archived" direction="asc"/>
-        <property name="dealSource" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-         <property name="pipeline" direction="asc"/>
-		 <property name="ownerKey" direction="asc"/>
-   </datastore-index>
-
-    <datastore-index kind="Opportunity" ancestor="false" source="manual">
-        <property name="archived" direction="asc"/>
-        <property name="milestone" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="created_time" direction="asc"/>
-    </datastore-index>
-    
-        <datastore-index kind="Opportunity" ancestor="false" source="manual">
-        <property name="archived" direction="asc"/>
-        <property name="ownerKey" direction="asc"/>
-        <property name="milestone" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="created_time" direction="asc"/>
-    </datastore-index>
     
     <datastore-index kind="ContactEmail" ancestor="false" source="manual">
         <property name="contact_id" direction="asc"/>
         <property name="date_secs" direction="desc"/>
     </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="archived" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
 	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="expected_value" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="milestone" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="archived" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="expected_value" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="milestone" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="pipeline" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="archived" direction="asc"/>
+        <property name="expected_value" direction="asc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="milestone" direction="asc"/>
+        <property name="expected_value" direction="asc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="pipeline" direction="asc"/>
+        <property name="expected_value" direction="asc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="expected_value" direction="asc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="archived" direction="asc"/>
+        <property name="won_date" direction="asc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="milestone" direction="asc"/>
+        <property name="won_date" direction="asc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="won_date" direction="asc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="archived" direction="asc"/>
+        <property name="milestone_changed_time" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="milestone" direction="asc"/>
+        <property name="milestone_changed_time" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="milestone_changed_time" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="pipeline" direction="asc"/>
+        <property name="milestone_changed_time" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="pipeline" direction="asc"/>
+        <property name="won_date" direction="asc"/>
+    </datastore-index>
+    
 </datastore-indexes>

@@ -388,7 +388,11 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
 	    	var deal_json = App_Deal_Details.dealDetailView.model.toJSON();
 	    	var deal_name = deal_json.name;
-	    	$('.deal_tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ deal_json.id +'">'+deal_name+'</li>');
+
+	    	var template = Handlebars.compile('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="{{id}}">{{name}}</li>');
+  
+		 	// Adds contact name to tags ul as li element
+		 	$('.deal_tags',el).html(template({name : deal_name, id : deal_json.id}));
 	    }
 	    else if(document_id != undefined && document_id != null)
 	    {
@@ -664,6 +668,17 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		var targetEl = $(e.currentTarget)
 
 		var model = $(targetEl).parents('li').data();
+
+		var owner = model.get("owner_id");
+
+	  	if(!owner && model.get("owner")){
+	  		owner = model.get("owner").id;
+	  	}
+
+		if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "event"){
+			$("#deleteEventErrorModal").html(getTemplate("delete-event-error-modal")).modal('show');
+			return;
+		}
 
 		if (model && model.toJSON().type != "WEB_APPOINTMENT")
 		{

@@ -193,7 +193,15 @@ var portlet_graph_utility = {
 	/**
 	 * To display deals funnel portlet as funnel graph
 	 */
-	dealsFunnelGraph : function(selector, funnel_data) {
+	dealsFunnelGraph : function(selector, funnel_data, base_model) {
+		var currency = '';
+		var series_name = "Revenue";
+		if (base_model && base_model.get("settings")["split-by"] && base_model.get("settings")["split-by"] == "count") {
+			series_name = "Deals";
+		}
+		else {
+			currency = portlet_utility.getPortletsCurrencySymbol();
+		}
 		head
 				.js(
 						LIB_PATH + 'lib/flot/highcharts-3.js',
@@ -232,8 +240,7 @@ var portlet_graph_utility = {
 															useHTML : true,
 															format : '<div class="text-center"><span style="color:{point.color}">{point.name}</span><br>'
 																	+ '<span style="color:{point.color}">('
-																	+ portlet_utility
-																			.getPortletsCurrencySymbol()
+																	+ currency
 																	+ '{point.y:,.0f})</span></div>',
 															softConnector : true
 														},
@@ -250,8 +257,7 @@ var portlet_graph_utility = {
 												},
 												tooltip : {
 													pointFormat : '<span>{series.name}:<b>'
-															+ portlet_utility
-																	.getPortletsCurrencySymbol()
+															+ currency
 															+ '{point.y:,.0f}</b></span>',
 													shared : true,
 													useHTML : true,
@@ -265,7 +271,7 @@ var portlet_graph_utility = {
 													}
 												},
 												series : [ {
-													name : 'Value',
+													name : series_name,
 													data : funnel_data
 												} ],
 												exporting : {

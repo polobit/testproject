@@ -81,6 +81,25 @@ public class UnsubscribeStatusUtil
 	}
 
 	/**
+	 * Returns list of contacts count based on cursor.
+	 * 
+	 * @param max
+	 *            - limit per request
+	 * @param cursor
+	 *            - Cursor
+	 * @param campaignId
+	 *            - workflow id.
+	 * @return
+	 */
+	public static Integer getUnsubscribeContactsCountByCampaignId(String campaignId)
+	{
+		Map<String, Object> subscribers = new HashMap<String, Object>();
+		subscribers.put("unsubscribeStatus.campaign_id", campaignId);
+
+		return dao.getCountByProperty(subscribers);
+	}
+	
+	/**
 	 * Returns list of contacts based on cursor.
 	 * 
 	 * @param max
@@ -98,6 +117,7 @@ public class UnsubscribeStatusUtil
 
 		return dao.fetchAll(max, cursor, subscribers, true, false);
 	}
+	
 
 	/**
 	 * Resubscribes contact if unsubscribed from all campaigns

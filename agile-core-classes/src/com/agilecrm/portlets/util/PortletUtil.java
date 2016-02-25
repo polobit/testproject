@@ -104,6 +104,8 @@ public class PortletUtil {
 				//allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
 				allPortlets.add(new Portlet("Revenue Graph",PortletType.DEALS));
 				allPortlets.add(new Portlet("Deal Goals",PortletType.DEALS));
+				allPortlets.add(new Portlet("Incoming Deals",PortletType.DEALS));
+				allPortlets.add(new Portlet("Lost Deal Analysis",PortletType.DEALS));
 			}
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR)){
@@ -327,11 +329,20 @@ public class PortletUtil {
 	public static List<Opportunity> getPendingDealsList(JSONObject json)throws Exception{
 		List<Opportunity> dealsList=null;
 		try {
+			String track=null;
+			String milestone=null;
+			if(json.get("track")!=null)
+				track=json.get("track").toString();
+			if(json.get("milestone")!=null)
+				milestone=json.get("milestone").toString();
 			if(json!=null && json.get("deals")!=null){
 				if(json.get("deals").toString().equalsIgnoreCase("all-deals"))
-					dealsList=OpportunityUtil.getPendingDealsRelatedToAllUsers(0);
+					dealsList=OpportunityUtil.getPendingDealsRelatedToAllUsers(0,track,milestone);
 				else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
-					dealsList=OpportunityUtil.getPendingDealsRelatedToCurrentUser(0);
+					dealsList=OpportunityUtil.getPendingDealsRelatedToCurrentUser(0,track,milestone);
+				for(Opportunity opp:dealsList){
+					
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

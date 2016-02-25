@@ -21,13 +21,9 @@
 						
 						{{/hasMenuScope}}
 						<span class="contact-document-select upload-doc-field" style="display:none;">
-							<select id="document-select" class="form-control inline-block">
-								<optgroup label="Templates" id="document-select-template">
-									<option value="">Select...</option>
-								</optgroup>
-								<optgroup label="Documents" id="document-select-documents">
-									<option value="">Select...</option>
-								</optgroup>
+
+							<select id="document-select" class="form-control inline-block w">
+								<option value="">Select...</option>
 							</select>
  					<div class="m-t-sm">
 							<a href="#" class="btn btn-default btn-sm add-document-cancel m-r-sm">Cancel</a>
@@ -132,7 +128,12 @@
            		
            	{{/if}}
        	{{/each}}
-		{{{getDealNames deals}}}
+
+       	{{#each deals}}
+       	    {{#isCurrentDeal this.id}} {{else}}
+                <a href="#deal/{{this.id}}">{{this.name}}</a>{{#if @last}}{{else}},{{/if}}
+       	    {{/isCurrentDeal}}
+       	{{/each}}
 		</div>
 	
 		

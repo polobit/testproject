@@ -108,3 +108,7 @@ cron:
 - description: Bulk Normal SMS Cron
   url: /backend/cron/cron-pull?q=normal-sms-pull-queue
   schedule: every 1 mins
+
+- description: Webhooks Normal TEST Cron
+  url: /backend/cron/cron-pull?q=webhooks-register-add-queue
+  schedule: every 1 mins

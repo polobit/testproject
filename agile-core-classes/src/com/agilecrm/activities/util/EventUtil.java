@@ -165,10 +165,14 @@ public class EventUtil
     {
 	try
 	{
-	    if (ownerId != null)
-		return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end)
-			.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
-	    return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end).list();
+	    if (ownerId != null){
+	    	Query<Event> q =  dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end)
+	    			.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId));
+	    	return dao.fetchAll(q);
+	    }
+		
+	    Query<Event> q =  dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end);
+	    return dao.fetchAll(q);
 	}
 	catch (Exception e)
 	{
@@ -185,12 +189,12 @@ public class EventUtil
 	try{
 		    if (ownerId != null){
 		    	startList = dao.ofy().query(Event.class).filter("search_range >=", start).filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
-				endList = dao.ofy().query(Event.class).filter("search_range >=", end).filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
+				endList = dao.ofy().query(Event.class).filter("search_range <=", end).filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
 				 System.out.println(startList.size()+ "  :  "+ endList.size());
 				 startList.addAll(endList); 
 				 return EventUtil.getDuplicateList(startList); 
 		    }else{
-		    	  startList = dao.ofy().query(Event.class).filter("search_range >=", start).list();
+		    	  startList = dao.ofy().query(Event.class).filter("search_range <=", start).list();
 				  endList = dao.ofy().query(Event.class).filter("search_range >=", end).list();				    
 				  System.out.println(startList.size()+ "  :  "+ endList.size());
 				  startList.addAll(endList);				
@@ -203,7 +207,6 @@ public class EventUtil
 		    return null;
 		}
     }
-    
     
     /**
      * Gets Events with respect to AgileUser.
@@ -255,7 +258,7 @@ public class EventUtil
 	Query<Event> query = dao.ofy().query(Event.class)
 		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("start");
 
-	return query.list();
+	return dao.fetchAll(query);
     }
 
     /**

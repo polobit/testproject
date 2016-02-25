@@ -110,6 +110,8 @@ tasks : function()
 /* Show new view of tasks. */
 tasks_new : function()
 {
+	console.log("tasks_new");
+	
 	$('#content').html("<div id='tasks-list-template'>&nbsp;</div>");
 
 	getTemplate("new-tasks-list-header", {}, undefined, function(template_ui){
@@ -198,6 +200,8 @@ function appendItem1(base_model)
 	}
 
 	var jsonObject = $.parseJSON(_agile_get_prefs('event-lhs-filters'));
+	jsonObject = jsonObject[CURRENT_AGILE_USER.id];
+
 	var owner = jsonObject ? jsonObject.owner_ids : null;// if no owner then
 	// its all
 	if (owner && owner.length == 1 && owner[0] == CURRENT_AGILE_USER.id)
@@ -231,6 +235,8 @@ function appendItem2(base_model)
 	// on landing of page
 
 	var jsonObject = $.parseJSON(_agile_get_prefs('event-lhs-filters'));
+	jsonObject = jsonObject[CURRENT_AGILE_USER.id];
+
 	var owner = jsonObject ? jsonObject.owner_ids : null; // if no owner then
 	// its all
 	if (owner && owner.length == 1 && owner[0] == CURRENT_AGILE_USER.id)
@@ -326,22 +332,23 @@ function show_model(id)
 		for (var i = 0; i < contactList.length; i++)
 
 		{
+			var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}"><a href="#contact/{{id}}" class="text-white v-middle">{{name}}</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+			var json = {};
+		 	// Adds contact name to tags ul as li element
+		 	fel.append();
+
 			if (contactList[i].type == "COMPANY")
-			{
-
-				$('#updateActivityModal')
-						.find("ul[name='contacts']")
-						.append(
-								'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + contactList[i].id + '"><a href="#contact/' + contactList[i].id + '">' + getCompanyName(contactList[i].properties) + '</a><a class="close" id="remove_tag">x</a></li>');
-
+			{   
+				json = {name : getCompanyName(contactList[i].properties), id : contactList[i].id};
 			}
 			else
 			{
-				$('#updateActivityModal')
-						.find("ul[name='contacts']")
-						.append(
-								'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + contactList[i].id + '"><a href="#contact/' + contactList[i].id + '">' + getName(contactList[i].properties) + '</a><a class="close" id="remove_tag">x</a></li>');
+				json = {name : getName(contactList[i].properties), id : contactList[i].id};
 			}
+
+			$('#updateActivityModal')
+						.find("ul[name='contacts']")
+						.append(template(json));
 		}
 
 		var priority = event.color;
@@ -492,6 +499,8 @@ function loadAgileEvents()
 			calEnable = true;
 
 		var jsonObject = $.parseJSON(_agile_get_prefs('event-lhs-filters'));
+		jsonObject = jsonObject[CURRENT_AGILE_USER.id];
+
 		var agile_event_owners = '';
 		if (jsonObject)
 		{
