@@ -194,7 +194,7 @@ if(scheduleid.contains(",")){
 <html>
 <head>
 <% 
-if (scheduleid != null && !multiple_users){  %>
+if (scheduleid != null && multiple_users){  %>
 <title>Online Appointment Scheduling - <%=scheduleid %></title>
 <%
 } else {
