@@ -267,7 +267,9 @@ function initializeDealsListeners(el)
 	$("#opportunity-listners").on('mouseenter','.milestone-column > .dealtitle-angular', function(){
 
 		var data = $(this).attr('data');
+		var originalHeading = $(this).siblings().find('.milestones').attr('milestone');
 		var jsonDealData = JSON.parse(data);
+		jsonDealData.heading = originalHeading;
 	//  var currentCase = App_Cases.casesCollectionView.collection.get(data);
 		var that = this;
 		getTemplate('deal-detail-popover', jsonDealData , undefined, function(template_ui){
