@@ -318,7 +318,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 				}
 			});
 		}
-		else if (Current_Route == "email-template-add" || Current_Route.indexOf("email-template") == 0) {
+		else if (Current_Route == "email-template-add" || Current_Route.indexOf("email-template") == 0 || Current_Route.indexOf("emailbuilder") == 0) {
 			$('#tpl-attachment-select').find('select').find('option:last').after("<option value="+document.id+" selected='selected'>"+document.name+"</option>");
 			$('.add-tpl-attachment-confirm').trigger("click");
 			App_Settings.navigate(Current_Route, {
