@@ -21,15 +21,8 @@ var Tickets_Notes = {
 
 		if(!$("#send-reply").valid()){
 
-
-			if($(e.target).hasClass('forward'))	
-				this.forwardTicket(json, $save_btn, false);
-
-			return;
-
 			if($(e.target).hasClass('forward'))
 				this.forwardTicket(json, $save_btn, false);
-
 			    return;
 		}
 			
@@ -38,10 +31,10 @@ var Tickets_Notes = {
 
 		json.html_text = json.html_text.trim() + "<br><br>" + CURRENT_USER_PREFS.signature;
 
-		if($(e.target).hasClass('forward'))
+		if($(e.target).hasClass('forward')){
 		    this.forwardTicket(json, $save_btn, true);
 			return;
-
+        }
 
 		var note_type = $(e.target).hasClass('private') ? 'PRIVATE' : 'PUBLIC';
 		json.note_type = note_type;
@@ -66,34 +59,24 @@ var Tickets_Notes = {
 
 				// Remove draft message from local staorage
 				$('textarea#reply_textarea').val("");
-
 				Tickets.remove_draft_message(Current_Ticket_ID, ((note_type == 'PUBLIC') ? 'reply' : 'comment'));
                 
-                if(note_type != 'PUBLIC'){
-               		showNotyPopUp('information', "Comment has been added", 'bottomRight', 5000);
-                }else{
-	                if(is_ticket_closed){
-	                	showNotyPopUp('information', "Comment has been added and ticket status changed to Closed", 'bottomRight', 5000);
-	                }
-					else 
-	                	showNotyPopUp('information', "Comment has been added and ticket status changed to Pending", 'bottomRight', 5000);
-				}
-
+                if(is_ticket_closed){
+                 showNotyPopUp('information', "Comment has been added and ticket status changed to Closed", 'bottomRight', 5000);
+                }
+				else 
+                 showNotyPopUp('information', "Comment has been added and ticket status changed to Pending", 'bottomRight', 5000);
 				//update model in collection
 				if(App_Ticket_Module.ticketsCollection){
                     
 					var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
                     var current_date = new Date().getTime();
    					var json = {};
-
                     //console.log(ticket_model);
-                    if(note_type == 'PUBLIC')
-						json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING';
-
+					json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
 					json.last_updated_time = current_date;
-					json.closed_time = '';
+					json.closed_time='';
 					json.user_replies_count = model.user_replies_count;
-
 					ticket_model.set(json, {
 						silent : true
 					});
@@ -230,9 +213,9 @@ var Tickets_Notes = {
 		var data = ticketModel.toJSON();
 
 		data.reply_type = (reply_type) ? reply_type : "reply";
-		if(data.reply_type == 'forward'){
-		data.notes = this.constructTextComments(App_Ticket_Module.notesCollection.collection.toJSON());
-		}
+		if(data.reply_type == 'forward')
+		 data.notes = this.constructTextComments(App_Ticket_Module.notesCollection.collection.toJSON());
+		
 
 		if(Ticket_Canned_Response.cannedResponseCollection && Ticket_Canned_Response.cannedResponseCollection.toJSON() 
 			&& Ticket_Canned_Response.cannedResponseCollection.toJSON().length > 0)
