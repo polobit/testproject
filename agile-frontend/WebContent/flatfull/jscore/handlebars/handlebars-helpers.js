@@ -5818,7 +5818,9 @@ $(function()
 		else if(p_name=='Stats Report')
 			portlet_name = "Activity Overview";
 		else if(p_name=='Campaign stats')
-			portlet_name = "Campaign Stats"
+			portlet_name = "Campaign Stats";
+		else if(p_name=='Average Deviation')
+			portlet_name = "Tasks Completion Time Deviation";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -6655,7 +6657,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	else if(p_name == 'Deal Goals')
 		description = 'See how much sales target you have achieved.'
 	else if(p_name == 'Average Deviation')
-		description = 'Find out the Average deviation time taken to close tasks.'
+		description = 'A quick view of deviation in tasks completion times.'
 	return description;
 			});
 
