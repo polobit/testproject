@@ -90,6 +90,7 @@ function currentRoute(route)
 	// disposeEvents();
 
 	// load_clickdesk_code();
+	showPageBlockModal();
 	 showUpgradeNoty();
 
 	 // Check the user permission to view the current route.
