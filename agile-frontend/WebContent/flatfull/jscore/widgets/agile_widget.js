@@ -112,13 +112,7 @@ function agile_crm_get_contact_properties_list(propertyName)
 function agile_crm_update_contact(propertyName, value, callback)
 {
 	// Gets current contact model from the contactDetailView object
-	var contact_model = null;
-	
-	if(company_util.isCompany()){
-		contact_model = App_Companies.companyDetailView.model;
-	} else {
-		contact_model = App_Contacts.contactDetailView.model;
-	}
+	var contact_model = agile_crm_get_contact_model();
 
 	// Reads properties fied from the contact
 	var properties = contact_model.toJSON()['properties'];
@@ -156,16 +150,22 @@ function agile_crm_update_contact(propertyName, value, callback)
 
 }
 
-function contactNameValidation(propertyName,value)
-    {
-    var contact_model = null;
-	if(company_util.isCompany()){
-		contact_model = App_Companies.companyDetailView.model;
-	} else {
-		contact_model = App_Contacts.contactDetailView.model;
-	}
 
-	// Reads properties fied from the contact
+function agile_crm_get_contact_model(){
+	
+	if(company_util.isCompany()){
+		return App_Companies.companyDetailView.model;
+	} else {
+		return App_Contacts.contactDetailView.model;
+	}
+}
+
+function agile_crm_is_model_property_changed(propertyName, value){
+    var changed = true;
+
+  	var contact_model = agile_crm_get_contact_model();
+
+  	// Reads properties fied from the contact
 	var properties = contact_model.toJSON()['properties'];
 
 	/*
@@ -175,20 +175,13 @@ function contactNameValidation(propertyName,value)
 	 */
 	$.each(properties, function(index, property)
 	{
-		if (property.name == propertyName)
-		{
-			// flag is set true to indicate property already exists in contact
-			if(property.value == value)
-			return false;
-			else 
-			return true;
-		}
-
+		if (property.name == propertyName && property.value == value)
+			   changed = false;
 	});
 
-		
-    }
+	return changed;
 
+}
 
 /**
  * Updates a contact with the list of property name and its value specified in

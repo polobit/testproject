@@ -3188,6 +3188,16 @@ table.hide-head-checkbox th label.i-checks {
 }
 .well{
 	background: none!important;
-	 border:none!important;
-	  
+	 border:none!important;	  
+}
+.inlineditor{
+	font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 8px 10px;
+}
+
+.error-inputfield
+{
+ border:1px solid red;
 }
