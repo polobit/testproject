@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.agilecrm.activities.Event;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -52,11 +53,17 @@ public class NoteUtil
 	return dao.ofy().query(Note.class).filter("related_contacts = ", contactKey).order("-created_time").list();
     }
 
-    public static List<Note> getDocumentsNotes(String document_id) throws Exception
+    public static List<Note> getDocumentsNotes(String document_id,int max, String cursor) throws Exception
     {
+    	
     	if(document_id!=null)
+    	{
     		return dao.ofy().query(Note.class).filter("document_id =", document_id).order("-document_id").order("-created_time").list();
-    	return dao.ofy().query(Note.class).filter("document_id !=", null).order("-document_id").order("-created_time").list();
+    	}	
+    	Query<Note> query = dao.ofy().query(Note.class).filter("document_id >", 0).order("-document_id").order("-created_time");
+    	
+    	return dao.fetchAllWithCursor(max, cursor, query, false, false);
+    	//return dao.ofy().query(Note.class).filter("document_id !=", null).order("-document_id").order("-created_time").list();
     }
     /**
      * Gets all the notes related to a contact.

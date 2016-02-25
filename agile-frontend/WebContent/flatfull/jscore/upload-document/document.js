@@ -131,12 +131,11 @@ var Document_Collection_Events = Base_Collection_View.extend({
 });
   
 /** Modal event initializer **/
+/*
 $(function(){
 
 	
-    /** 
-     * When clicked on choose network type
-     */
+  
     $('#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').on('click', '.link', function(e)
 	{
 		e.preventDefault();
@@ -157,9 +156,6 @@ $(function(){
 	});
 	
 	
-	/**
-	 * To validate the document add or edit forms
-	 */
 	$('#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').on('click', '#document_validate, #document_update_validate', function(e){
  		e.preventDefault();
 
@@ -185,7 +181,7 @@ $(function(){
 	});
 
 });
-
+*/
 
 /**
  * Show document popup for updating

@@ -265,7 +265,7 @@ function set_up_merge_fields(editor,merge_fields_values_callback)
 		{
 
 			// Insert value without compiling
-			if (Current_Route === "bulk-email" || Current_Route === "send-email" || Current_Route.indexOf('email-template') != -1 )
+			if (Current_Route === "bulk-email" || Current_Route === "send-email" || Current_Route.indexOf('email-template') != -1 || Current_Route.indexOf('document-template') != -1)
 			{
 				editor.insertContent(value);
 			}

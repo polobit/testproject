@@ -40,6 +40,8 @@ $(function()
 		var modal_id = $(this).closest('.opportunity-modal').attr("id");
 		var form_id = $(this).closest('.opportunity-modal').find('form').attr("id");
 
+		if(!ValidateDealDiscountAmt("#" + form_id))
+			return;
 		var json = serializeForm(form_id);
 		json["custom_data"] = serialize_custom_fields(form_id);
 

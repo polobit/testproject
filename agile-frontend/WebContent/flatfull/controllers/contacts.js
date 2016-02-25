@@ -914,7 +914,11 @@ var ContactsRouter = Backbone.Router.extend({
 					if(id_type=="documents" && model.id!=null)
 					{
 						$('#emailForm').find('#eattachment').css('display','block');
-				    	$('#emailForm').find('#attachment_id').find("#attachment_fname").html('<a href=#>'+model.name+'</a>');
+						$('#emailForm').find('#attachment_id').css("display",'block');
+						$('#emailForm').find('#attachment_id').find("#attachment_fname").removeClass("text-ellipsis")
+						$('#emailForm').find('#attachment_id').find("#attachment_fname").attr("href","#documents/" + model.id)
+						$('#emailForm').find('#attachment_id').find("#attachment_fname").css( 'cursor', 'pointer' );
+				    	$('#emailForm').find('#attachment_id').find("#attachment_fname").html('<div title=' + model.name + ' class="line-clamp activity-tag">' + model.name +'</div>');
 				    	$('#emailForm').find(".attachment-document-select").css('display','none');
 				    	$('#emailForm').find('#eattachment_key').attr('name',"edoc_key");
 				    	$('#emailForm').find('#eattachment_key').attr('value',model.id);

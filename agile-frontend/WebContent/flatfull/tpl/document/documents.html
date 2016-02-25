@@ -116,9 +116,11 @@
     </div>
 </td>
 <td class="v-middle">
+    {{#unless url}}
     <div class="send-document text-center label text-xs">
         <a href="#send-email/documents/{{id}}" title="Send Email"><i class="fa fa-envelope"></i></a>
-    </div>    
+    </div>   
+    {{/unless}} 
 </td>
 </script>
 <script id="document-etype-select-collection-template" type="text/html">
@@ -139,12 +141,14 @@
     <div pos="1" pos1="{{getIndexIncrementByOne @index}}" class="panel panel-default document-template-go pos-rlt" data="{{id}}" style="height: 220px;">
       <div pos="{{getIndexIncrementByOne @index}}" class="panel-heading text-flow-ellipsis line-clamp"  data="{{id}}">
         <center>
-            {{name}}
+            <div class=" line-clamp" title="{{name}}">
+                {{name}}
+            </div>
         </center>
       </div>
       <div class="panel-body">
          <div class="text-flow-ellipsis line-clamp line-clamp-3 document-template-text" style="height:85px;" rel="tooltip" title="{{description}}">
-            <center>{{description}}</center>
+            <center><div class="ellipsis-multiline line-clamp line-clamp-3 " title="{{description}}">{{description}}</div></center>
          </div>
          <div class="text-center m-t-xs">
          {{#if contactcompanydealtype}}
@@ -181,13 +185,9 @@
         </div>
         {{/unless}}
         {{#if this.length}}
-        <!--div class="panel b-a">
-            <h4 class="font-thin padder panel-heading">Latest Comments</h4>
-            
-      </div-->
-       <div class="panel b-a panel-default">
-            <div class="panel-heading">Latest Comments</div>
-                <div class="list-group list-group-sp">
+       <div class="panel b-a panel-default" style="height:90%;">
+            <div class="panel-heading" >Latest Comments</div>
+                <div class="list-group list-group-sp" id="documents-comments-history">
                     <section class="scroll">
                         <form>
                           <div class="ref-log">  
@@ -208,7 +208,7 @@
 </script>
 <script id="document-notes-model-template" type="text/html">
                     <li class="wrapper-sm b-b">
-                    <p class="m-b-none"><a href="#documents/{{document_id}}">{{description}}</a></p>
+                    <p class="m-b-none"><a class="line-clamp activity-tag"  title="{{description}}" href="#documents/{{document_id}}">{{description}}</a></p>
                     <small class="block text-muted" > 
                     <i class="fa fa-fw fa-clock-o"></i>&nbsp;<time class="text-sm" datetime="{{epochToHumanDate "" created_time}}"> {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" created_time}}</time>
                     </small>

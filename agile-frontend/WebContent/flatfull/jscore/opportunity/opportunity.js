@@ -628,7 +628,7 @@ function populate_deal_products(el, value,form_id){
 						$(me._form_id).on("blur",".dealproducts_qty_input",
 								function(e)
 								{
-									me.close(e);
+									me.close(e,"blur");
 								});
 						$(me._form_id).on("click",".discounttype-input-group-btn ul li a",
 								function(e)
@@ -686,7 +686,7 @@ function populate_deal_products(el, value,form_id){
 								
 								for(var key in data.models)
 								{
-									if(data.models[key1].id	==_id)
+									if(data.models[key].id	==_id)
 									{
 										_found=true;
 									}
@@ -739,7 +739,7 @@ function populate_deal_products(el, value,form_id){
 				}
 				this.updateOnEnter=function (e)
 				{
-					if(e.keyCode==13)this.close(e);
+					if(e.keyCode==13)this.close(e,"enter");
 
 				}
 				this.toggleDiscountButton=function(e)
@@ -801,17 +801,40 @@ function populate_deal_products(el, value,form_id){
 					this.input.focus();
 
 				}
-				this.close=function(e)
+				this.close=function(e,type)
 				{
 					var source = event.target || event.srcElement;		
 					var value=$(source).val();
-		
-					$(source).removeClass('block').addClass('hide');
-		
-					if(value)
+					
+					//type-enter/blur
+					if(type=="blur")
 					{
+						if(!$.isNumeric(value))
+						{
+							value=$(source).attr("prev_val");
+							if(!$.isNumeric(value))
+							{
+								value=1;
+							}
+						}
+						$(source).removeClass('block').addClass('hide');	
 						var objTD=$(source).parent('td');
 						objTD.children().eq(0).removeClass('hide').addClass('block');
+					}
+					else
+					{
+						if($.isNumeric(value))
+						{
+							$(source).removeClass('block').addClass('hide');			
+							var objTD=$(source).parent('td');
+							objTD.children().eq(0).removeClass('hide').addClass('block');
+						}		
+					}
+						
+					if($.isNumeric(value))
+					{
+
+						
 						var objTR=$(source).closest('tr');
 						var objData=objTR.data();
 						var objModel= App_Deal_Details.deal_products_collection_view.collection.get(objData.id)
@@ -840,6 +863,7 @@ function populate_deal_products(el, value,form_id){
 					}
 						
 					this.input.removeClass('hide').addClass('block');
+					$(this.input).attr("prev_val",$(this.input).val())
 					jSpan.removeClass('block').addClass('hide');
 					
 
@@ -860,6 +884,8 @@ function populate_deal_products(el, value,form_id){
 					if($("#apply_discount",me._form_id).is(':checked'))
 					{
 						iDiscountAmt=$("#discount_value",me._form_id).val();
+						if(iDiscountAmt=="")
+							iDiscountAmt=0
 						if(iDiscountAmt!=null && iDiscountAmt!=undefined )
 							{
 								if($(".discounttype-input-group-btn span",me._form_id).eq(0).text()=="Percent")
@@ -868,7 +894,8 @@ function populate_deal_products(el, value,form_id){
 								}
 							}
 					}
-					iDiscountAmt=iDiscountAmt.toFixed(2)
+					if(iDiscountAmt.toFixed)
+						iDiscountAmt=iDiscountAmt.toFixed(2)
 					$("input[name='discount_amt']",$(me._form_id)).val(iDiscountAmt);
 					iTotal-=iDiscountAmt
 					if($("input[name='currency_conversion_value']",$(me._form_id)).length)
@@ -876,9 +903,68 @@ function populate_deal_products(el, value,form_id){
 					else
 						$("input[name='expected_value']",$(me._form_id)).val(iTotal);
 					
+					ValidateDealDiscountAmt(me._form_id);
 				}
+				
 }
 
+function ValidateDealDiscountAmt(_form_id)
+{
+	
+	var iTotal=0;
+	try{
+		$(".calculation-error-status",_form_id).html("")
+		if($("#apply_discount",_form_id).is(':checked'))
+		{
+			var iDiscountValue=$("#discount_value",_form_id).val();
+			if(!$.isNumeric(iDiscountValue))
+			{
+				$(".calculation-error-status",_form_id).html("Discount should be numeric")
+				return false;
+			}
+			if(iDiscountValue!=null && iDiscountValue!=undefined )
+			{
+				if($(".discounttype-input-group-btn span",_form_id).eq(0).text()=="Percent")
+				{
+					if(parseFloat(iDiscountValue)>100)
+					{
+						
+						$(".calculation-error-status",_form_id).html("Discount percent cannot be greater than 100")
+						return false;
+					}
+					else if(parseFloat(iDiscountValue)<0)
+					{
+						$(".calculation-error-status",_form_id).html("Discount percent cannot be less than 0")
+						return false;
+					}	
+				}
+				else
+				{
+					var iTotal=0
+					if($("input[name='currency_conversion_value']",$(_form_id)).length)
+						iTotal=$("input[name='currency_conversion_value']",$(_form_id)).val(iTotal);
+					else
+						iTotal=$("input[name='expected_value']",$(_form_id)).val();	
+					if(parseFloat(iDiscountValue)>parseFloat(iTotal))
+					{
+						$(".calculation-error-status",_form_id).html("Discount Value cannot be greater than Total Products Value")
+						return false;	
+					}
+					if(parseFloat(iDiscountValue)<0)
+					{
+						$(".calculation-error-status",_form_id).html("Discount Value cannot be less than 0")
+						return false;	
+					}	
+				}
+			}
+
+		}	
+	}catch(e)
+	{
+
+	}	
+	return true;
+}
 function populateDealSources(el, value){
 	if(!$('#deal_deal_source',el).hasClass("hidden")){
 		$('#deal_deal_source',el).addClass("hidden");

@@ -591,7 +591,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				
 			}, saveCallback : function(response)
 			{
-				
+				Backbone.history.navigate('products', { trigger : true });
 			} });
 
 			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);

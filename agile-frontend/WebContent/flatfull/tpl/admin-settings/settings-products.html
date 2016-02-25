@@ -31,10 +31,14 @@
 </script>
 <script id="admin-settings-products-model-template" type="text/html">
     <td class='data' data='{{id}}'>
-    {{name}}
+        <div class="table-resp">
+            {{name}}
+        </div>
 	</td>
 	<td class='data'>
-    {{description}}
+        <div class="table-resp">
+            {{description}}
+        </div>
 	</td>
 
 	<td class='data'>
@@ -51,7 +55,7 @@
 <script id="admin-settings-product-add-template" type="text/html">
 <div class="wrapper">
     <div class="row">
-    	<div class="col-md-9">
+    	<div class="col-md-12">
     	   <div class="panel panel-default">
                  <div class="panel-heading">
                     {{#if id}}
@@ -63,13 +67,15 @@
                 </div>
         		<form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
         			<fieldset class="wrapper">
-        				
+        				{{#if id}}
+                            <input name="id" type="hidden" value="{{id}}" />
+                        {{/if}}
         				<br/>
                        	<div class="control-group form-group">
         					<label class="control-label col-md-3" for="pname">Name <span class="field_req">*</span></label> 
                             <div class="col-md-9">
                            		<div class="controls">
-            						<input type="text" id="pname" name="name" class="required form-control" placeholder="Name" autocapitalize="off"/>
+            						<input type="text" id="pname" name="name" maxlength="50" class="required form-control" placeholder="Name" autocapitalize="off"/>
             					</div>
                             </div>
         				</div> 
@@ -77,7 +83,7 @@
         					<label class="control-label col-md-3" for="pdescription">Description </label> 
                             <div class="col-md-9">
                            		<div class="controls">
-            						<textarea id="pdescription" rows="3" name="description" class="form-control" placeholder="Description"></textarea>
+            						<textarea id="pdescription" rows="3" maxlength="400" name="description" class="form-control" placeholder="Description"></textarea>
             					</div>
                             </div>
         				</div>
@@ -85,7 +91,7 @@
         					<label class="control-label col-md-3" for="pprice">Price <span class="field_req ">*</span></label> 
                             <div class="col-md-9">
                            		<div class="controls">
-            						<input type="number" id="pprice" name="price" class="required form-control" placeholder="Price" autocapitalize="off"/> 
+            						<input type="text" id="pprice" name="price" class="required number form-control" placeholder="Price" autocapitalize="off" min="0" max="1000000000000"/> 
             					</div>
                             </div>
         				</div>
@@ -95,10 +101,10 @@
                         </div>    
 
         			    <div class="form-group">
-                             <div class="form-actions col-sm-offset-3 col-md-9">
+                             <div class="form-actions col-sm-offset-3 col-md-12">
                        			
                        			<a type="reset" href='#products' class="btn btn-default btn-sm">Cancel</a>
-                                <button type="submit" class="save btn btn-sm  btn-primary">Save Changes</button>
+                                <button type="submit" class="save btn btn-sm  btn-primary">{{#if id}}Save Changes {{else}}Save {{/if}}</button>
                              </div>   
                  		</div>
 

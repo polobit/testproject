@@ -230,9 +230,10 @@ function renderDocumentsActivityView(params)
 {
 	// Creates backbone collection view
 	this.activitiesview = new Base_Collection_View({ url : '/core/api/notes/documents' , sortKey : 'time',
-		descending : true, templateKey : "document-notes", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 20,
+		descending : true, templateKey : "document-notes", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 10,
 		individual_tag_name : 'li', postRenderCallback : function(el)
 		{
+			deal_infi_scroll($('#documents-comments-history'), this.activitiesview);
 			includeTimeAgo(el);
 			
 		}, appendItemCallback : function(el)
@@ -317,34 +318,26 @@ function initializeDocumentsListeners()
     	else
     		saveDocument(form_id, modal_id, this, true, json);
 	});
-
-	$('#uploadDocumentModalForm,#uploadDocumentUpdateForm').on('change', '#template_type', function(e)
+	$('#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').on('click', '.link', function(e)
 	{
-		var template_id = $("#template_type option:selected").val();
-		var sTemplateText="";
-		$.each($(this).get(0).document_templates.toJSON(), function(index, model)
+		e.preventDefault();
+		$(this).closest('form').find('#error').html("");
+		var form_id = $(this).closest('form').attr("id");
+		var id = $(this).find("a").attr("id");
+		
+		if(id && id == "GOOGLE")
+			var newwindow = window.open("upload-google-document.jsp?id="+ form_id, 'name','height=510,width=800');
+		else if(id && id == "S3")
+			var newwindow = window.open("upload-custom-document.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain, 'name','height=310,width=500');
+		
+		if (window.focus)
 		{
-			if(model.id==template_id)
-			{
-				var template;
-				sTemplateText=model.text;
-				var json = get_contact_json_for_merge_fields();
-				try
-				{
-					template = Handlebars.compile(sTemplateText);
-					sTemplateText = template(json);
-				}
-				catch (err)
-				{
-					sTemplateText = add_square_brackets_to_merge_fields(sTemplateText);
-
-					template = Handlebars.compile(sTemplateText);
-					sTemplateText = template(json);
-				}
-				return false;
-			}
-		});
-		set_tinymce_content('signdoc-template-html', sTemplateText);
+			newwindow.focus();
+		}
+		return false;
+	});
+	$('#uploadDocumentModalForm').on('hidden.bs.modal', function(e){
+		$('#GOOGLE',$('#uploadDocumentModalForm')).parent().show();
 	});	
 }
 function proc_add_document(model_json)
@@ -379,7 +372,7 @@ function proc_add_document(model_json)
 			
 			var fxn_process_added_contact = function(data, item)
 		     {
-		      $("#content [name='deal_ids']")
+		      $("#content [name='contact_ids']")
 		        .html(
 		          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 		      		var url = '/core/api/contacts/'+ data;
@@ -387,7 +380,8 @@ function proc_add_document(model_json)
 						url : url,
 						type: 'GET',
 						dataType: 'json',
-						success: function(data){
+						success: function(data)
+						{
 							$("#documents-listener-container").data("contact_model_json",data)
 							
 						}
@@ -425,17 +419,7 @@ function proc_add_document(model_json)
 						$("#network_type",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').val("NONE");
 						$("#doc_type",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').val("SENDDOC");
 					
-						/*var optionsTemplate = "<option doc_type='SENDDOC' value='{{id}}'>{{name}}</option>";
-						fillSelect('template_type', '/core/api/document/templates', 'documents', function fillNew(coll)
-						{
 						
-						$('#template_type','#uploadDocumentModalForm,#uploadDocumentUpdateForm').get(0).document_templates=coll;
-						
-						
-						//console.log(coll);
-
-						}, optionsTemplate, false, el);
-						*/
 						setupTinyMCEEditor('textarea#signdoc-template-html', false, undefined, function()
 						{
 							
@@ -444,7 +428,7 @@ function proc_add_document(model_json)
 							var sTemplateText="";
 							if(templateid)
 							{
-								$('#template_type option[value=' + templateid + ']','#uploadDocumentModalForm,#uploadDocumentUpdateForm').attr('selected','selected')
+								
 								var tempate_model=null;
 								if(eDocTemplate_Select_View && eDocTemplate_Select_View.collection)
 									tempate_model=eDocTemplate_Select_View.collection.get(templateid)	
@@ -466,7 +450,7 @@ function proc_add_document(model_json)
 								}
 								else
 								{
-									process_add_document_templatemodel(tempate_model,sPricingTable,model_json);
+									process_add_document_templatemodel(tempate_model.toJSON(),sPricingTable,model_json);
 								}
 							
 							}
@@ -682,25 +666,51 @@ function load_document_from_edit_model(model)
 					register_focus_on_tinymce('signdoc-template-html');
 					// Reset tinymce
 				});		
-				var optionsTemplate = "<option doc_type='SENDDOC' value='{{id}}'>{{name}}</option>";
-				fillSelect('template_type', '/core/api/document/templates', 'documents', function fillNew(coll)
-				{
 				
-				$('#template_type','#uploadDocumentModalForm,#uploadDocumentUpdateForm').get(0).document_templates=coll;
-
-				$('#template_type', "#uploadDocumentUpdateForm").find('option[value=' + 	template_type + ']').attr('selected', 'selected');
-				//console.log(coll);
-
-				}, optionsTemplate, false, el);
 
 				$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").find(".icon-ok").css("display", "inline");
 				$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").css("background-color", "#EDEDED");
 		}, "#documents-listener-container");		
 
-		// Call setupTypeAhead to get contacts
-		agile_type_ahead("document_relates_to_contacts", uploadDocumentUpdateForm, contacts_typeahead);
-		
-		// Deals type-ahead
-		agile_type_ahead("document_relates_to_deals", uploadDocumentUpdateForm, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-		initializeDocumentsListeners();	
+		var fxn_process_added_contact = function(data, item)
+		     {
+		      $("#content [name='contact_ids']")
+		        .html(
+		          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+		      		var url = '/core/api/contacts/'+ data;
+					$.ajax({
+						url : url,
+						type: 'GET',
+						dataType: 'json',
+						success: function(data)
+						{
+							$("#documents-listener-container").data("contact_model_json",data)
+							
+						}
+					});
+		     }
+			// Contacts type-ahead
+			agile_type_ahead("document_relates_to_contacts", uploadDocumentUpdateForm, contacts_typeahead,fxn_process_added_contact);
+		     
+			var fxn_process_added_deal = function(data, item)
+		     {
+		      $("#content [name='deal_ids']")
+		        .html(
+		          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#deal/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+		      		var url = '/core/api/opportunity/'+ data;
+					$.ajax({
+						url : url,
+						type: 'GET',
+						dataType: 'json',
+						success: function(data){
+							$("#documents-listener-container").data("deal_model_json",data)
+							
+						}
+					});
+		     }
+
+			// Deals type-ahead
+			agile_type_ahead("document_relates_to_deals", uploadDocumentUpdateForm, deals_typeahead, fxn_process_added_deal, null, null, "core/api/search/deals", false, true);	
+
+			initializeDocumentsListeners();	
 }

@@ -655,6 +655,7 @@ var SettingsRouter = Backbone.Router
 
 					// Register focus
 					register_focus_on_tinymce('document-template-html');
+					$("#document-template-html_ifr").height("90vh");
 				});
 
 				$('#PrefsTab .active').removeClass('active');

@@ -143,10 +143,10 @@ public class NotesAPI
 	@Path("documents")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Note> getDocumentsNotes(@QueryParam("documentid") String documentid)
+    public List<Note> getDocumentsNotes(@QueryParam("documentid") String documentid,@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
 		try{
-		return NoteUtil.getDocumentsNotes(documentid);
+		return NoteUtil.getDocumentsNotes(documentid,Integer.parseInt(count), cursor);
 		}catch(Exception e)
 		{
 			e.printStackTrace();
