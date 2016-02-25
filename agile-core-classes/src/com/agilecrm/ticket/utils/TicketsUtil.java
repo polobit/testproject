@@ -1056,11 +1056,11 @@ public class TicketsUtil
 				}
 				catch (Exception e)
 				{
+					System.out.println(ExceptionUtils.getFullStackTrace(e));
 				}
 
 				if (!assigneeList.containsKey(newAssigneeID))
 				{
-
 					DomainUser temp = DomainUserUtil.getDomainUser(newAssigneeID);
 
 					if (temp != null)
@@ -1069,7 +1069,6 @@ public class TicketsUtil
 
 				if (oldAssigneeID != null && !assigneeList.containsKey(oldAssigneeID))
 				{
-
 					DomainUser temp = DomainUserUtil.getDomainUser(oldAssigneeID);
 
 					if (temp != null)

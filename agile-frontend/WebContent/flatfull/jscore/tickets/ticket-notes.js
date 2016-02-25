@@ -76,7 +76,9 @@ var Tickets_Notes = {
 					json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
 					json.last_updated_time = current_date;
 					json.closed_time='';
+					json.last_reply_text = model.plain_text;
 					json.user_replies_count = model.user_replies_count;
+					
 					ticket_model.set(json, {
 						silent : true
 					});

@@ -301,7 +301,7 @@ public class TicketsRest
 	@GET
 	@Path("/activity")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Activity> listTicketActivitys(@QueryParam("id") Long ticketID)
+	public List<Activity> getTicketActivitys(@QueryParam("id") Long ticketID)
 	{
 		try
 		{
