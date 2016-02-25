@@ -923,6 +923,12 @@ z-index: 99;
 	position:relative;
 	border-bottom:1px solid #ddd;
 }
+.dealtitle-angular + .tooltip{
+
+	width:200px;
+    word-wrap:break-word;
+    white-space:normal;
+}
 .milestone-main .milestone-column:last-child .milestone-heading:after,.milestone-main .milestone-column:last-child span:after
 {
 	display:none;
@@ -3050,7 +3056,7 @@ width : 150px;
 	padding-bottom:9px;
 }
 
-#portlets-add-listener #deals > div:nth-of-type(4)
+#portlets-add-listener .wrapper-md div:nth-of-type(4)
 {
 	height: 243px;
 }
@@ -3148,6 +3154,7 @@ table.hide-head-checkbox th label.i-checks {
 {
 	z-index: 1;
 }
+
 
 
 .slate-content h4{
@@ -3253,4 +3260,25 @@ table.hide-head-checkbox th label.i-checks {
 .user-alert .user-alert-message span{
 	margin-top: -8px;
     font-size: 15px;
+}
+.companies_input{
+	height:30px;
+	font-size:12px;
+}
+.lhs-contact-filter-row  div.add-icon{
+	display: none;
+}
+
+.lhs-contact-filter-row div.add-icon:last-of-type {
+	display: block!important;
+	}
+#addBtn:hover
+{
+  color: black !important;
+}
+
+#removeBtn:hover
+{
+  color: black !important;
+  opacity: 0.9;
 }

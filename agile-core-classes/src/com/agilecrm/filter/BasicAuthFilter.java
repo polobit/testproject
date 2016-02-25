@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
+import org.json.simple.JSONObject;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.session.SessionManager;
@@ -91,9 +92,32 @@ public class BasicAuthFilter implements Filter
 		    // given access
 		    if (isValidPassword(password, domainUser) || isValidAPIKey(password, domainUser))
 		    {
-			setUser(domainUser);
-			chain.doFilter(httpRequest, httpResponse);
-			return;
+			try
+			{
+			    setUser(domainUser);
+			    chain.doFilter(httpRequest, httpResponse);
+			    return;
+			}
+			catch (Exception e)
+			{
+			    System.out.println("Error");
+
+			    System.out.println(e.getMessage());
+
+			    JSONObject address = new JSONObject();
+
+			    address.put("status", "500");
+			    address.put("exception message", e.getMessage());
+
+			    httpResponse.setContentType("application/json");
+			    httpResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+			    httpResponse.getWriter().write(address.toString());
+			    System.out.println("done");
+			    System.err.println("This code has below error : ");
+			    e.printStackTrace();
+			    return;
+			}
 		    }
 
 		}
