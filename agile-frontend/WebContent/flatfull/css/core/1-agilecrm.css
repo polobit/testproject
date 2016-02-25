@@ -3203,4 +3203,10 @@ table.hide-head-checkbox th label.i-checks {
     right: 0;
     z-index: 99999;
     cursor: pointer;
+    padding: 5px;
+    margin-top: 5px;
+}
+.user-alert .user-alert-message span{
+	margin-top: -8px;
+    font-size: 15px;
 }
