@@ -38,6 +38,15 @@
 		<servlet-name>PaypalScribe</servlet-name>
 		<url-pattern>/paypalScribe</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>OfficeTest</servlet-name>
+		<servlet-class>TestServelt</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OfficeTest</servlet-name>
+		<url-pattern>/officetest</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Shopify</servlet-name>
