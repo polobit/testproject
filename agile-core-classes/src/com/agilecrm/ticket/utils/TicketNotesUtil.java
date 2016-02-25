@@ -118,7 +118,10 @@ public class TicketNotesUtil
 
 		String groupName = group.group_name;
 		String agentName = DomainUserUtil.getDomainUser(ticket.assigneeID).name;
-
+		
+		if(StringUtils.isBlank(agentName))
+			agentName = "";
+		
 		json.put("ticket_id", ticket.id);
 		json.put("group_name", groupName);
 		json.put("agent_name", agentName);

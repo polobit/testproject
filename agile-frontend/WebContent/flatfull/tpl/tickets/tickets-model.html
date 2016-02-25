@@ -2,7 +2,8 @@
 	<td id="{{id}}" class="{{#if_equals priority 'HIGH'}}b-l b-l-3x {{toLowerCase priority}}-priority{{/if_equals}} data ticket no-border v-middle cursor-default" data-id="{{id}}" 
       style="width: 6%;">
     <label class="i-checks i-checks-sm" style="margin-top: 3px;">
-      <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}} {{#is_select_all tickets_selcted true}}checked='checked'{{/is_select_all}}">
+      <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}
+      {{#selected_all_tickets}}checked="checked"{{/selected_all_tickets}}">
       <i></i>
     </label>
   </td>
@@ -182,7 +183,8 @@
 
   <td class="data select_checkbox c-p pos-rlt p-r-none" data-id="{{id}}">
     <label class="i-checks i-checks-sm" style="vertical-align: sub;">    
-       <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}  {{#is_select_all tickets_selcted true}}checked='checked'{{/is_select_all}}"><i></i>
+       <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}  
+       {{#selected_all_tickets}}checked='checked'{{/selected_all_tickets}}"><i></i>
     </label>
   </td>
   <td class="ticket_attachment">{{#if attachments_exists}}<i class="fa fa-paperclip m-l-sm ticket_attachment" aria-hidden="false"></i>{{/if}}</td> 
