@@ -15,6 +15,7 @@ import com.google.appengine.api.NamespaceManager;
  */
 public class AnalyticsUtil
 {
+    public static final String STATS_SEREVR_HTTP_REQUEST_PWD = "blAster432";
     
     public static String getEmails(Set<String> emails)
     {
@@ -76,7 +77,7 @@ public class AnalyticsUtil
 	String url = null;
 	String domain = NamespaceManager.get();
 	String hostUrl = getStatsServerUrl(domain);
-	url = hostUrl + "&action=FETCH_LIMITED_VIEWS&limit=" + limit;
+	url = hostUrl + "&action=FETCH_XLIMITED_VIEWS&limit=" + limit;
 	return url;
     }
     
@@ -103,7 +104,7 @@ public class AnalyticsUtil
     {
 	String hostUrl = getStatsServerUrl(domain);
 	String url = null;
-	url = hostUrl + "&action=delete_page_views";
+	url = hostUrl + "&action=ERADICATEX";
 	return url;
     }
     
@@ -117,7 +118,7 @@ public class AnalyticsUtil
     {
 	String url = null;
 	String hostUrl = getStatsServerUrl(domain);
-	url = hostUrl + "&action=FETCH_PAGE_VIEWS&search_email=" + searchEmail;
+	url = hostUrl + "&action=FETCH_PAGE_XVIEWS&search_email=" + searchEmail;
 	return url;
     }
     
@@ -133,7 +134,7 @@ public class AnalyticsUtil
     {
 	String hostUrl = getStatsServerUrl(domain);
 	String url = null;
-	url = hostUrl + "&action=FETCH_ACTIVITIES&offset=" + offset + "&limit=" + limit;
+	url = hostUrl + "&action=FETCH_XACTIVITIES&offset=" + offset + "&limit=" + limit;
 	return url;
     }
     
@@ -142,7 +143,7 @@ public class AnalyticsUtil
     {
 	String hostUrl = getStatsServerUrl(domain);
 	String statsServerUrl = null;
-	statsServerUrl = hostUrl + "action=URL_VISITED_COUNT&url=" + url + "&email=" + email + "&type=" + type
+	statsServerUrl = hostUrl + "action=URL_VISITED_XCOUNT&url=" + url + "&email=" + email + "&type=" + type
 		+ "&duration=" + duration + "&durationType=" + durationType;
 	return statsServerUrl;
     }
@@ -162,7 +163,8 @@ public class AnalyticsUtil
      */
     public static String getStatsServerUrl(String domain)
     {
-	String statsServerUrl = "https://agilecrm-web-stats.appspot.com/stats?domain=" + domain;
+	String statsServerUrl = "https://agilecrm-web-stats.appspot.com/stats?domain=" + domain + "&psd="
+		+ STATS_SEREVR_HTTP_REQUEST_PWD;
 	return statsServerUrl;
     }
     
