@@ -44,6 +44,8 @@ import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.contact.filter.ContactFilterIdsResultFetcher;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
+import com.agilecrm.contact.imports.CSVImporter;
+import com.agilecrm.contact.imports.impl.ContactsCSVImporter;
 import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
@@ -51,6 +53,7 @@ import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.export.ExportBuilder;
 import com.agilecrm.export.Exporter;
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -572,24 +575,24 @@ public class BulkOperationsAPI
 	    if (type.equalsIgnoreCase("contacts"))
 	    {
 		// it gives is 1000)
-		// int currentEntityCount = ContactUtil.getCount();
+		int currentEntityCount = ContactUtil.getCount();
 
-		new CSVUtil(restrictions, accessControl).createContactsFromCSV(blobStream, contact, ownerId);
-		/*
-		 * CSVImporter<Contact> importer = new
-		 * ContactsCSVImporter(NamespaceManager.get(), blobKey,
-		 * Long.parseLong(ownerId), new
-		 * ObjectMapper().writeValueAsString(contact), Contact.class,
-		 * currentEntityCount);
-		 * 
-		 * PullQueueUtil.addToPullQueue("contact-import-queue",
-		 * importer, key);
-		 */
+		// new CSVUtil(restrictions,
+		// accessControl).createContactsFromCSV(blobStream, contact,
+		// ownerId);
+
+		CSVImporter<Contact> importer = new ContactsCSVImporter(NamespaceManager.get(), blobKey,
+			Long.parseLong(ownerId), new ObjectMapper().writeValueAsString(contact), Contact.class,
+			currentEntityCount);
+
+		PullQueueUtil.addToPullQueue("contact-import-queue", importer, key);
 
 		// PullQueueUtil.addToPullQueue("dummy-pull-queue", importer,
 		// null);
 
-		new CSVUtil(restrictions, accessControl).createContactsFromCSV(blobStream, contact, ownerId);
+		// new CSVUtil(restrictions,
+		// accessControl).createContactsFromCSV(blobStream, contact,
+		// ownerId);
 	    }
 	    else if (type.equalsIgnoreCase("companies"))
 	    {
@@ -796,14 +799,14 @@ public class BulkOperationsAPI
 	{
 	    // message = fetcher.getAvailableContacts() + " Contacts deleted";
 	    ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "SEND_EMAIL",
-		    ActivitySave.html2text(emailData.getString("body")), "contacts",
+		    ActivitySave.html2text(emailData.getString("message")), "contacts",
 		    ActivitySave.html2text(emailData.getString("subject")));
 	}
 	else if (fetcher.getAvailableCompanies() > 0)
 	{
 	    // message = fetcher.getAvailableCompanies() + " Companies deleted";
 	    ActivitySave.createBulkActionActivity(fetcher.getAvailableCompanies(), "SEND_EMAIL",
-		    ActivitySave.html2text(emailData.getString("body")), "companies",
+		    ActivitySave.html2text(emailData.getString("message")), "companies",
 		    ActivitySave.html2text(emailData.getString("subject")));
 	}
 

@@ -97,7 +97,32 @@ public class StripeImpl implements AgileBilling {
 		Map<String, Object> updateParams = new HashMap<String, Object>();
 		updateParams.put("plan", plan.plan_id);
 		updateParams.put("quantity", plan.quantity);
-		if(!plan.plan_id.contains("email")  && !plan.plan_type.name().contains("STARTER") && plan.trialStatus.equals("apply")){
+		boolean isTrialAllowed = false;
+		String namespace = NamespaceManager.get();
+		DomainUser user = DomainUserUtil.getCurrentDomainUser();
+		NamespaceManager.set("our");
+		System.out.println("Changed name space to::: "+NamespaceManager.get());
+		try
+		{
+			System.out.println("OUR domain user Email:: "+user.email);
+			// Fetches contact form our domain
+			Contact contact = ContactUtil.searchContactByEmail(user.email);
+			System.out.println("contact in our domain :::"+contact.name);
+			LinkedHashSet<String> tagsList = contact.tags;
+			if(tagsList.contains("Trial"))
+				isTrialAllowed = true;
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    System.err.println("Exception occured while retrieving tags..." + e.getMessage());
+		}
+
+		finally
+		{
+		    NamespaceManager.set(namespace);
+		}
+		if(!plan.plan_id.contains("email")  && !plan.plan_type.name().contains("STARTER") && plan.trialStatus.equals("apply") && isTrialAllowed){
 			plan.trialStatus = "applied";
 			updateParams.put("trial_end", new DateUtil().addDays(7).getTime().getTime() / 1000);
 			//For testing just 2 hours to cancel trial
@@ -230,7 +255,7 @@ public class StripeImpl implements AgileBilling {
 		if (oldSubscription != null) {
 			oldSubscription.update(updateParams);
 		} else {
-			boolean isCancelledUser = false;
+			boolean isTrialAllowed = false;
 			String namespace = NamespaceManager.get();
 			DomainUser user = DomainUserUtil.getCurrentDomainUser();
 			NamespaceManager.set("our");
@@ -242,8 +267,8 @@ public class StripeImpl implements AgileBilling {
 				Contact contact = ContactUtil.searchContactByEmail(user.email);
 				System.out.println("contact in our domain :::"+contact.name);
 				LinkedHashSet<String> tagsList = contact.tags;
-				if(tagsList.contains("Cancellation Request") || tagsList.contains("Cancelled Trial"))
-					isCancelledUser = true;
+				if(!tagsList.contains("Cancellation Request") && !tagsList.contains("Cancelled Trial") && tagsList.contains("Trial"))
+					isTrialAllowed = true;
 			}
 			catch (Exception e)
 			{
@@ -255,7 +280,7 @@ public class StripeImpl implements AgileBilling {
 			{
 			    NamespaceManager.set(namespace);
 			}
-			if(!isCancelledUser && plan.trialStatus.equals("apply")){
+			if(!isTrialAllowed && !plan.plan_type.name().contains("STARTER") && plan.trialStatus.equals("apply")){
 				plan.trialStatus = "applied";
 				updateParams.put("trial_end", new DateUtil().addDays(7).getTime().getTime() / 1000);
 				//For testing just 2 hours to cancel trial
@@ -498,7 +523,7 @@ public class StripeImpl implements AgileBilling {
 
 		// If there exists email plan, then it is updated instead of creating
 		// new subscription
-		try {
+		
 
 			/**
 			 * Retrieves all subscriptions from customer object. It is used to
@@ -579,11 +604,7 @@ public class StripeImpl implements AgileBilling {
 			// subscription.plan);
 			return StripeUtil.getJSONFromCustomer(customer_new);
 
-		} catch (StripeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+		
 
 	}
 

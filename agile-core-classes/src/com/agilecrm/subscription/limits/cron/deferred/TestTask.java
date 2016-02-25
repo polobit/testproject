@@ -48,14 +48,7 @@ public class TestTask implements DeferredTask
     
     public static void main(String[] args) {
     	
-    	System.out.println(parse("$11111.0sadfsad0"));
+    	System.out.println("Contact".equalsIgnoreCase("COntact"));
 	}
 
-    private static String parse(String hex)
-    {
-        Pattern pattern = Pattern.compile("(\\d+\\.\\d+)|(\\d+)");
-        Matcher matcher = pattern.matcher(hex);
-        matcher.find();
-        return matcher.group();
-        }
 }

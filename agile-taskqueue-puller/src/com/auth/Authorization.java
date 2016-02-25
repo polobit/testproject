@@ -33,7 +33,7 @@ public class Authorization
 
     /** Directory to store user credentials. */
     private static final java.io.File DATA_STORE_DIR = new java.io.File(System.getProperty("user.dir"),
-	    ".store/live/task_queue_sample");
+	    ".store/beta/task_queue_sample");
 
     private static FileDataStoreFactory dataStoreFactory;
 
@@ -68,10 +68,10 @@ public class Authorization
     {
 	logger.info(System.getProperty("user.dir"));
 
-	logger.info(System.getProperty("user.dir") + "/credentials/live/client_secrets.json");
+	logger.info(System.getProperty("user.dir") + "/credentials/beta/client_secrets.json");
 
 	FileInputStream f = new FileInputStream(new File(System.getProperty("user.dir")
-		+ "/credentials/live/client_secrets.json"));
+		+ "/credentials/beta/client_secrets.json"));
 	logger.info(f.toString());
 	// load client secrets
 	GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(f));

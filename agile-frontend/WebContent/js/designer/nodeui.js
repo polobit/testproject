@@ -15,7 +15,7 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
 
     console.log("constructNodeFromDefinition "+nodeId);
 	console.log(nodeJSONDefinition);
-	
+
     // Remove old data
     $("#nodeui").removeData();
     $("#nodeui").empty();
@@ -42,7 +42,6 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     // Change Grid default values in nodeJSONDefinition
     // Clone
     var newJSONDefinition = JSON.parse(JSON.stringify(nodeJSONDefinition));
-    
     if(jsonData != undefined)
 	    newJSONDefinition = changeDefaultValues(newJSONDefinition, jsonData);
         
@@ -93,6 +92,11 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     if(nodeJSONDefinition["name"] == "Send Message" && (jsonData == undefined || jsonData == "json/nodes/sms/sendmessage.js"))
         $("#nodeui").find("[name=to]").val("{{phone}}");
     
+    //for set property node
+    if(nodeJSONDefinition["name"] == "Set Property"){
+    		setPropertyNode(jsonData);
+    }
+
     // Clear Global Operations Queues (for dynamic edit)
     clearGridOperations();
 
@@ -104,6 +108,10 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
 		width:620,
         open: function(event, ui) {
 			$(this).css({'max-height': 610, 'overflow-y': 'auto'}); 
+			if(($(this).find('.inbound-help-text').length) > 0)
+			{
+				loadForwardingEmail($(this));
+			}
 		},
         autoOpen: true,        
         buttons: {
@@ -142,6 +150,24 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
 	//.removeClass('ui-button-text-only').addClass('ui-button-text-icon').append("<span class='ui-icon ui-icon-disk'></span>");        
 	
 }
+
+function loadForwardingEmail(element)
+{	
+	$.ajax({url : '/core/api/api-key',
+		type : 'GET',
+		async : true,
+		dataType : 'json',
+		success : function(agile_api)
+		{
+			var inbound_email = window.location.hostname.split('.')[0] + "-" + agile_api.api_key + "@agle.cc";
+			element.find('.inbound-help-text').text(inbound_email);
+		},
+		error : function(response)
+		{
+		} 
+	});
+}
+
 
 function serializeNodeForm()
 {

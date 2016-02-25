@@ -61,6 +61,15 @@ function prettify_api_add_events() {
         allowed_domains = allowed_domains ? allowed_domains + ", " + new_allowed_domain : new_allowed_domain;
         put_allowed_domains(allowed_domains);
     });
+$("#webhook_accordian").on('click', function(e) {
+        e.preventDefault();
+        if($("#webhook-accordian-template").html() != "")
+            return;
+        setTimeout(function(){
+             App_Admin_Settings.webhookSettings();
+        },500)
+       
+    });
 
     $(".allowed-domain-delete").off('click');
     $(".allowed-domain-delete").on('click', function(e) {
@@ -92,7 +101,7 @@ function prettify_api_add_events() {
         put_blocked_ips(blocked_ips);
     });
     try {
-        if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO")
+        if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE")
             $("#tracking-webrules, .tracking-webrules-tab").hide();
         else
             $("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();

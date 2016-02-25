@@ -41,21 +41,38 @@ public class SalesforceImportUtil
 		}
 	}
 
-	public static void importSalesforceContacts(ContactPrefs contactPrefs, Key<DomainUser> key) throws Exception
+	public static void importSalesforceContacts(ContactPrefs contactPrefs) throws Exception
 	{
 		try
 		{
 			JSONArray json = new JSONArray(SalesforceUtil.getContactsFromSalesForce(contactPrefs));
 			System.out.println(json);
-			SalesforceContactToAgileContact.saveSalesforceContactsInAgile(contactPrefs, json, key);
+			SalesforceContactToAgileContact.saveSalesforceContactsInAgile(contactPrefs, json);
 		}
 		catch (SocketTimeoutException e)
 		{
 			System.out.println("In exception ");
-			importSalesforceContacts(contactPrefs, key);
+			importSalesforceContacts(contactPrefs);
 		}
 
 	}
+	
+	public static void importSalesforceTasks(ContactPrefs contactPrefs) throws Exception
+	{
+		try
+		{
+			JSONArray json = new JSONArray(SalesforceUtil.getTasksFromSalesForce(contactPrefs));
+			System.out.println(json);
+			SalesforceContactToAgileContact.saveSalesforceTaskssInAgile(contactPrefs, json);
+		}
+		catch (SocketTimeoutException e)
+		{
+			System.out.println("In exception ");
+			importSalesforceTasks(contactPrefs);
+		}
+
+	}
+	
 
 	public static void importSalesforceCases(ContactPrefs contactPrefs, Key<DomainUser> key) throws Exception
 	{

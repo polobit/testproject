@@ -1,7 +1,7 @@
 <script id="deal-events-collection-template" type="text/html">
 		{{#unless this.length}}
         <div class="wrapper p-t-none">
-            <div class="slate-content">
+            <div class="slate-content mobile-pad-content">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
@@ -37,7 +37,7 @@
 			<span class="owner-name hidden">{{owner.name}}</span>
 	</div>
 <div class="pull-left rightThumbView">	
-	<div class="event-title pull-left text-md text-cap contact-title-dynamic custom-color">{{title}} <span class="hidden label label-{{task_label_color color}}">{{event_priority color}}</span></div><div class="pull-right"><span class="text-muted"><i class="fa fa-clock-o"></i> <time datetime="{{epochToHumanDate "" start}}" class="event-created-time">{{epochToHumanDate "dd mmm yyyy' - 'hh:MM tt" start}}</time></span></div>
+	<div class="event-title pull-left text-md text-cap contact-title-dynamic custom-color text-ellipsis">{{title}} <span class="hidden label label-{{task_label_color color}}">{{event_priority color}}</span></div><div class="pull-right"><span class="text-muted"><i class="fa fa-clock-o"></i> <time datetime="{{epochToHumanDate "" start}}" class="event-created-time">{{epochToHumanDate "dd mmm yyyy' - 'hh:MM tt" start}}</time></span></div>
 <div class="clearfix"></div>
 <!-- <div class="m-b-xs">
 	<span>StartTime : <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="event-created-time text-muted" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time></span>
@@ -53,10 +53,10 @@
 
 					{{else}}
 						{{#if_contact_type "PERSON"}}	
-							<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+							<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		

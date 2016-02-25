@@ -248,14 +248,19 @@ var Report_Filters_Event_View = Base_Model_View.extend({
 var contactFiltersListView
 function setupContactFilterList(cel, tag_id)
 {
-	if (tag_id)
-		$('.filter-criteria', cel)
-				.html(
-						'<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li  class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="m-l-xs pull-left">' + decodeURI(tag_id) + '</span><a class="close default_contact_remove_tag m-l-xs pull-left">&times</a></li></ul>').attr("_filter", tag_id);
-						
+	if (tag_id){
+
+		var template = Handlebars.compile('<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li  class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="m-l-xs pull-left">{{name}}</span><a class="close default_contact_remove_tag m-l-xs pull-left">&times</a></li></ul>');
+
+	 	// Adds contact name to tags ul as li element
+		$('.filter-criteria', cel).html(template({name : decodeURI(tag_id)})).attr("_filter", tag_id);
+
+	}
 
 	var filter_id = null;
-		contactFiltersListView = new Base_Collection_View(
+	setTimeout(function(){
+		
+			contactFiltersListView = new Base_Collection_View(
 			{
 				url : '/core/api/filters?type=PERSON',
 				sort_collection : false,
@@ -263,6 +268,7 @@ function setupContactFilterList(cel, tag_id)
 				templateKey : "contact-filter-list",
 				individual_tag_name : 'li',
 				sort_collection : false,
+				no_transition_bar : true,
 				postRenderCallback : function(el)
 				{
 					var filter_name;
@@ -293,17 +299,17 @@ function setupContactFilterList(cel, tag_id)
 							
 						}
 
-						el.find('.filter-dropdown').append(filter_name);
+						el.find('.filter-dropdown').append(Handlebars.compile('{{name}}')({name : filter_name}));
 					}
 
 					if (!filter_name)
 						return;
 
-					
-					$('.filter-criteria', cel)
-					.html(
-							'<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="inline-block m-r-xs v-middle">' + filter_name + '</span><a class="close default_filter">&times</a></li></ul>');
-					
+					var template = Handlebars.compile('<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="inline-block m-r-xs v-middle">{{name}}</span><a class="close default_filter">&times</a></li></ul>');
+
+				 	// Adds contact name to tags ul as li element
+					$('.filter-criteria', cel).html(template({name : filter_name}));
+
 					if(filter_id)
 						$('.filter-criteria', cel).attr("_filter", filter_id);
 					else
@@ -314,10 +320,12 @@ function setupContactFilterList(cel, tag_id)
 			// Fetchs filters
 			contactFiltersListView.collection.fetch();
 		
-			var filter_dropdown_element = contactFiltersListView.render().el;
-		
 			// Shows in contacts list
 			$('#filter-list', cel).html(contactFiltersListView.render().el);
+
+	}, 500);
+
+		
 }
 
 /**

@@ -198,6 +198,50 @@ function initializePortletsListeners() {
 							taskreportStatus.show();
 					});
 
+			$('#portletsPendingDealsSettingsModal').off('change', '#track');
+	$('#portletsPendingDealsSettingsModal').on('change', '#track', function(e)
+	{
+		var el = $(this).closest('form');
+		var track = $('#track', el).val();
+		if (track!='anyTrack')
+		{
+			
+			$.ajax({
+				type : 'GET',
+				url : '/core/api/milestone/'+track,
+				dataType : 'json',
+				success : function(data) {
+					var milestonesList=data.milestones.split(",");
+					$('#milestone').html('');
+					var lost=data.lost_milestone;
+					var won= data.won_milestone;
+					if(milestonesList.length > 1)
+					{
+						$('#milestone', el).html('<option value="anyMilestone">Any</option>');
+					}
+					$.each(milestonesList, function(index, milestone){
+						if(lost!=null && won!=null){
+							if(!(milestone==lost) && !(milestone==won) )
+							
+						$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
+					}
+						else
+						{
+							if(!(milestone=='Won') && !(milestone=='Lost') )
+							
+						$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
+						}
+					});
+				}
+			});
+		}
+		else
+		{
+			$('#milestone', el).html('<option value="anyMilestone">Any</option>');
+		}
+		
+	});
+
 	$('.gridster-portlets').off("mouseover").on(
 			'mouseover',
 			'.stats_report_portlet_body',
@@ -208,6 +252,8 @@ function initializePortletsListeners() {
 							'.gs-resize-handle').remove();
 				}
 			});
+
+	
 
 	$('.portlet_body').off("change").on(
 			'change',
@@ -309,6 +355,10 @@ function initializePortletsListeners() {
 				$(this).find('.fc-button').css('visibility', 'hidden');
 			});
 
+	$('.events_show')
+			.off(
+					'click',
+					'.minical-portlet-event')
 	$('.events_show')
 			.on(
 					'click',
@@ -480,6 +530,9 @@ function initializePortletsListeners() {
 						}
 					});
 
+	$('.events_show').off(
+			'click',
+			'.minical-portlet-event-add');
 	$('.events_show').on(
 			'click',
 			'.minical-portlet-event-add',
@@ -568,7 +621,7 @@ function initializePortletsListeners() {
 
 			});
 
-	$('#dashlet_heading #tutotial_modal').off('click');
+	$('#dashlet_heading').off('click', '#tutotial_modal');
 	$('#dashlet_heading').on('click', '#tutotial_modal', function(e) {
 		e.preventDefault();
 
@@ -618,7 +671,7 @@ function initializePortletsListeners() {
 		});
 
 	});
-
+	$('.portlet_body #portlets-opportunities-model-list > tr').off();
 	$('.portlet_body').on(
 			"click",
 			'#portlets-opportunities-model-list > tr',
@@ -650,6 +703,11 @@ function initializePortletsListeners() {
 				}
 			});
 
+//$('.portlet_body #portlets-events-model-list > tr').off('click');
+$('.portlet_body')
+			.off(
+					"click",
+					'#portlets-events-model-list > tr')
 	$('.portlet_body')
 			.on(
 					"click",
@@ -835,11 +893,22 @@ function initializePortletsListeners() {
 						}
 					});
 
-	$('.gridster-portlets').on("click", '.portlet-settings', function(e) {
+	$('.gridster-portlets').off("click").on("click", '.portlet-settings', function(e) {
 		e.preventDefault();
 
 		portlet_utility.showPortletSettings(this.id);
 	});
+
+	$('.gridster-portlets').on(
+			'mouseover',
+			'.goals_portlet_body',
+			function(e) {
+				if ($('.goals_portlet_body').parent().find(
+						'.gs-resize-handle')) {
+					$('.goals_portlet_body').parent().find(
+							'.gs-resize-handle').remove();
+				}
+			});
 
 }
 
@@ -875,7 +944,11 @@ function initializeAddPortletsListeners() {
 							"AccountDetails" : updateImageS3Path("flatfull/img/dashboard_images/account-information.png"),
 							"MiniCalendar" : updateImageS3Path("flatfull/img/dashboard_images/Mini-Calendar.jpg"),
 							"UserActivities" : updateImageS3Path("flatfull/img/dashboard_images/User-Activities.png"),
-							"Campaignstats" : updateImageS3Path("flatfull/img/dashboard_images/Campaign-stats.jpg")
+							"Campaignstats" : updateImageS3Path("flatfull/img/dashboard_images/Campaign-stats.jpg"),
+							"DealGoals" : updateImageS3Path("flatfull/img/dashboard_images/Quota.png"),
+							"IncomingDeals" : updateImageS3Path("flatfull/img/dashboard_images/incoming-deals-new.png"),
+							"LostDealAnalysis" : updateImageS3Path("flatfull/img/dashboard_images/lost-deal-analysis-new.png")
+
 						};
 						var placements_json = {
 							"GrowthGraph" : "left",
@@ -885,7 +958,8 @@ function initializeAddPortletsListeners() {
 							"RevenueGraph" : "left",
 							"MiniCalendar" : "left",
 							"UserActivities" : "left",
-							"Campaignstats" : ""
+							"Campaignstats" : "",
+							"LostDealAnalysis" : "left"
 						};
 						if (placements_json[p_name]) {
 							placement = "left";

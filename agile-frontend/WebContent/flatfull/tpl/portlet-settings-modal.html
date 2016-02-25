@@ -175,6 +175,24 @@
 					</select>
 				</div>
 			</div>
+				<div class="control-group form-group">
+				<label class="control-label">Track</label>
+				<div class="controls">
+					<select id="track" name="track" class="form-control">
+						
+					</select>
+					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
+				</div>
+			</div>
+
+				<div class="control-group form-group">
+				<label class="control-label">Milestone</label>
+				<div class="controls">
+					<select id="milestone" name="milestone" class="form-control">
+						
+					</select>
+				</div>
+			</div>
 		</form>
 	</div>
 	<div class="modal-footer">
@@ -335,6 +353,15 @@
                     <span><input id="due-date" type="text" name="due-date" class="required date form-control" placeholder="MM/DD/YYYY" /></span>
                 </div>
 			</div> -->
+			<div class="control-group form-group">
+				<label class="control-label">Split by</label>
+				<div class="controls">
+					<select id="deals-funnel-split-by" name="split-by" class="required form-control">
+						<option value="revenue">Revenue</option>
+						<option value="count">Count</option>
+					</select>
+				</div>
+			</div>
 		</form>
 	</div>
 	<div class="modal-footer">
@@ -385,10 +412,10 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsCallsPerPersonSettingsForm" name="portletsCallsPerPersonSettingsForm" method="post" >
+		<form id="portletsCallsPerPersonSettingsForm" name="portletsCallsPerPersonSettingsForm" method="post" class="form-horizontal">
 			<div class="control-group form-group">
-				<label class="control-label">Duration</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Duration</label>
+				<div class="controls col-sm-8">
 					<select id="duration" name="duration" class="required form-control">
 						<option value="1-day" >Today</option>
 						<option value="yesterday" >Yesterday</option>
@@ -400,8 +427,8 @@
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label">Graph on</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Graph on</label>
+				<div class="controls col-sm-8">
 					<select id="group-by" name="group-by" class="required form-control">
 						<option value="number-of-calls" >No. of calls</option>
 						<option value="call-duration">Call duration</option>
@@ -409,8 +436,8 @@
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label">User</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">User</label>
+				<div class="controls col-sm-8">
 					<span class="m-xs block">
 						<a href="#" id="calls-user-select-all" class="text-info">Select all</a> |
 						<a href="#" id="calls-user-select-none" class="text-info">Select none</a>
@@ -750,10 +777,10 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-		<form id="portletsCampaignStatsSettingsForm" name="portletsCampaignStatsSettingsForm" method="post" >
+		<form id="portletsCampaignStatsSettingsForm" name="portletsCampaignStatsSettingsForm" method="post" class="form-horizontal">
 			<div class="control-group form-group">
-				<label class="control-label">Duration</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Duration</label>
+				<div class="controls col-sm-8">
 					<select id="duration" name="duration" class="required form-control">
 						<option value="1-day" >Today</option>
 						<option value="yesterday" >Yesterday</option>
@@ -769,8 +796,8 @@
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label">Campaign Type</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Campaign Type</label>
+				<div class="controls col-sm-8">
 					<select id="campaign_type" name="campaign_type" class="required form-control">
 						
 					</select>
@@ -782,6 +809,169 @@
 	<div class="modal-footer">
 		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
 		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+</div>
+</div>
+
+<div id="portletsGoalsSettingsModal" class="modal  fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Dashlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+			<form id="portletsGoalsSettingsForm" name="portletsGoalsSettingsForm" method="post" >
+			<div class="control-group form-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required form-control">
+						<option value="this-month" >This Month</option>
+						<option value="last-month" >Last Month</option>
+						<option value="this-quarter">This Quarter</option>
+						<option value="this-year">This Year</option>
+
+					</select>
+					
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+</div>
+</div>
+
+<div class="modal  fade" id="portletsIncomingDealsSettingsModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Dashlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsIncomingDealsSettingssForm" name="portletsIncomingDealsSettingsForm" method="post" >
+			<div class="control-group form-group">
+				<label class="control-label">Split by</label>
+				<div class="controls">
+					<select id="split-by-incoming-deals" name="type" class="form-control">
+						<option value="deals">Total Deals</option>
+                    	<option value="Revenue">Total Revenue</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group form-group" id="portletsIncomingDealsOwner">
+				<label class="control-label">Owner</label>
+				<div class="controls">
+					<select id="owner" name="owner" class="form-control">
+						
+					</select>
+					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label">Frequency</label>
+				<div class="controls">
+					<select id="frequency-incoming-deals" name="frequency" class="form-control">
+						<option value="daily">Daily</option>
+						<option value="weekly">Weekly</option>
+						<option value="monthly">Monthly</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration-incoming-deals" name="duration" class="form-control">
+						<option value="1-day" >Today</option>
+						<option value="yesterday" >Yesterday</option>
+						<option value="1-week">Last 7 Days</option>
+						<option value="1-month">Last 30 Days</option>
+						<option value="this-month" >This Month</option>
+						<option value="last-month" >Last Month</option>
+						<option value="this-quarter">This Quarter</option>
+						<option value="last-quarter">Last Quarter</option>
+						<option value="this-year">This Year</option>
+						<option value="last-year">Last Year</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+	</div>
+</div>
+</div>
+</div>
+
+<div class="modal  fade" id="portletsLostDealAnalysisSettingsModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Dashlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsLostDealAnalysisSettingsForm" name="portletsLostDealAnalysisSettingsForm" method="post" >
+			<div class="control-group form-group" id="portletsLostDealAnalysisOwner">
+				<label class="control-label">Owner</label>
+				<div class="controls">
+					<select id="owner-lost-deal-analysis" name="owner" class="form-control">
+						
+					</select>
+					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/ajax-loader-cursor.gif"></img>
+				</div>
+			</div>
+			<div class="control-group form-group" id="portletsLostDealAnalysisTrack">
+				<label class="control-label">Track</label>
+				<div class="controls">
+					<select id="track-lost-deal-analysis" name="track" class="form-control">
+						
+					</select>
+					<!-- <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img> -->
+				</div>
+			</div>
+			<div class="control-group form-group" id="portletsLostDealAnalysisSource">
+				<label class="control-label">Source</label>
+				<div class="controls">
+					<select id="source-lost-deal-analysis" name="source" class="form-control">
+						
+					</select>
+					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/ajax-loader-cursor.gif"></img>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration-lost-deal-analysis" name="duration" class="form-control">
+						<option value="1-day" >Today</option>
+						<option value="yesterday" >Yesterday</option>
+						<option value="1-week">Last 7 Days</option>
+						<option value="1-month">Last 30 Days</option>
+						<option value="this-month" >This Month</option>
+						<option value="last-month" >Last Month</option>
+						<option value="this-quarter">This Quarter</option>
+						<option value="last-quarter">Last Quarter</option>
+						<option value="this-year">This Year</option>
+						<option value="last-year">Last Year</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
 	</div>
 </div>
 </div>

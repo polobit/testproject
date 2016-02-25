@@ -26,6 +26,12 @@ import com.agilecrm.activities.Event;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.GoogleCalendarUtil;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>EventsAPI</code> includes REST calls to interact with {@link Event}
@@ -137,10 +143,10 @@ public class EventsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void deleteEvent(@PathParam("id") Long id)
     {
+    Event event = EventUtil.getEvent(id);
+    UserAccessControlUtil.check(Event.class.getSimpleName(), event, CRUDOperation.DELETE, true);
 	try
 	{
-	    Event event = EventUtil.getEvent(id);
-
 	    if (event != null)
 	    {
 		ActivitySave.createEventDeleteActivity(event);
@@ -191,6 +197,7 @@ public class EventsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Event updateEvent(Event event)
     {
+    UserAccessControlUtil.check(Event.class.getSimpleName(), event, CRUDOperation.UPDATE, true);
 	try
 	{
 	    ActivitySave.createEventEditActivity(event);

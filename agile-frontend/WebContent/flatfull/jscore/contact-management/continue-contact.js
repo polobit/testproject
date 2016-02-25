@@ -211,6 +211,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 		if (isValidField(form_id + ' #phone'))
 			properties.push(property_JSON('phone', form_id + ' #phone'));
+		
+/*		if (isValidField(form_id + ' #skypePhone'))
+			properties.push(property_JSON('skypePhone', form_id + ' #skypePhone'));*/
 
 		if (isValidField(form_id + ' #job_title'))
 			properties.push(property_JSON('title', form_id + ' #job_title'));
@@ -561,6 +564,25 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 				if(!CALL_CAMPAIGN.start && Current_Route != "contact/" + data.id)
 				App_Contacts.navigate("contact/" + data.id, { trigger : true });
 			} else {
+				//Update all the existed contacts with mapped this company
+				var companyJSON = data.toJSON();
+				if(App_Contacts.contactsListView)
+				{
+					var realetd_contats = App_Contacts.contactsListView.collection.where({ contact_company_id : ""+companyJSON.id });
+					$.each(realetd_contats, function(index, contactModel){
+						$.each(contactModel.get("properties"), function(index, property){
+							if(property.name == "company" && property.type == "SYSTEM")
+							{
+								$.each(companyJSON.properties, function(index, companyProperty){
+									if (companyProperty.name == "name" && companyProperty.type == "SYSTEM"){
+										property.value = companyProperty.value;
+									}
+								});
+							}
+						});
+					});
+				}
+
 				// update contacts-details view
 				if (App_Companies.companyDetailView)
 					App_Companies.companyDetailView.model = data;
@@ -953,8 +975,9 @@ function add_model_cursor(app_collection, mdl)
 	else
 		app_collection.add(mdl);
 
-	if (app_collection.at(0).attributes.count)
+	if(app_collection.at(0).attributes.count){
 		app_collection.at(0).attributes.count += 1;
+	}		
 }
 
 /**
@@ -962,7 +985,7 @@ function add_model_cursor(app_collection, mdl)
  */
 function isCompanyExist(company, callback)
 {
-	$.get('core/api/contacts/company/validate/' + company, function(data){
+	$.get('core/api/contacts/company/validate?companyName=' + company, function(data){
 		   if(data == "true"){
 		   	    callback(true);
 		   		return;

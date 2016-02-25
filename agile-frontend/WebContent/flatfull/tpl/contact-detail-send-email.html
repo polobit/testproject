@@ -13,7 +13,7 @@
         <form id='emailForm' name="emailForm" class="form-horizontal" accept-charset="UTF-8">
             <fieldset>
                 <input type="hidden"  name="from_name"/>
-                <input type="hidden"  id="from" name="from_email"/>
+                <input type="hidden"  id="from" name="from"/>
                 <input type="hidden"  id="agile_attachment_name" name="attachment_name"/>
                 <input type="hidden"  id="agile_attachment_url" name="attachment_url"/>
                 <div id="bulk-count" style="margin-left: 17%; padding-bottom: 5px; display: none;"><p></p></div>
@@ -23,7 +23,7 @@
                         <input type="text" placeholder="From Name" class="form-control b-r-none" id="from_name" name="from_name"/>
                     </div>
                     <div class="controls p-l-none col-sm-5 col-xs-6">
-                        <input type="text" placeholder="From Email" class="email required form-control" id="from_email" name="from_email" style="margin-left:-1px;" />
+                        <input type="text" placeholder="From Email" class="email required form-control" id="from_email" name="from" style="margin-left:-1px;" />
                     </div>
                 </div>
 			<!--	<div class="control-group form-group">
@@ -55,7 +55,7 @@
 							<div>
 								<ul name="contact_cc_ids" class="contacts tagsinput tags"></ul>
 							</div>
-                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="email_cc" id="email_cc" placeholder="Cc" data-provide="typeahead" data-mode="multiple"/>
+                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="cc" id="email_cc" placeholder="Cc" data-provide="typeahead" data-mode="multiple"/>
                     	</div>
 					</div>
                 </div>
@@ -67,7 +67,7 @@
 							<div>
 								<ul name="contact_bcc_ids" class="contacts tagsinput tags"></ul>
 							</div>
-                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="email_bcc" id="email_bcc" placeholder="Bcc" data-provide="typeahead" data-mode="multiple"/>
+                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="bcc" id="email_bcc" placeholder="Bcc" data-provide="typeahead" data-mode="multiple"/>
 						</div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
                     <label class="control-label col-sm-2">Message </label>
                     <div class="controls col-sm-8">
                         <div id="loading-editor"></div>
-                        <textarea class="form-control required" name="body" id="email-body" placeholder="Description" style="width: 75%; height: 45%; display: none;"></textarea>
+                        <textarea class="form-control required" name="message" id="email-body" placeholder="Description" style="width: 75%; height: 45%; display: none;"></textarea>
                     </div>
                 </div>   
                 
@@ -127,12 +127,18 @@
 
                 <div class="control-group form-group m-b-sm">
                     <div class="col-sm-offset-2 col-sm-8">
-                        <div class="checkbox p-t-none"  id="enable_tracking">
-
+                        <div class="checkbox p-t-none pull-left" id="enable_tracking">
                             <label class="i-checks i-checks-sm">
                             <input type="checkbox" name="track_clicks" checked="checked"><i></i>
                             Enable Tracking
                             </label>
+                        </div>
+                        <div class="pull-right">
+                            <select name="push_param" class="form-control">
+                                <option value="YES">Yes</option>
+                                <option value="YES_AND_PUSH_EMAIL_ONLY"> Yes & Push (Email only)</option>
+                                <option value="YES_AND_PUSH">Yes & Push</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -202,12 +208,12 @@
         <form id='emailForm' name="emailForm" class="form-horizontal" accept-charset="UTF-8">
             <fieldset>
                 <input type="hidden"  name="from_name"/>
-                <input type="hidden"  id="from" name="from_email"/>
+                <input type="hidden"  id="from" name="from"/>
                 <div id="bulk-count" style="margin-left: 17%; padding-bottom: 5px; display: none;"><p></p></div>
 				<div class="control-group form-group" style="display: none;">
                     <label class="control-label col-sm-2">From <span class="field_req">*</span></label>
                     <div class="controls col-sm-8">
-                        <input type="text" placeholder="From Email" class="email required form-control" id="from_email" name="from_email" />
+                        <input type="text" placeholder="From Email" class="email required form-control" id="from_email" name="from" />
                     </div>
                 </div>
 				<div class="control-group form-group">
@@ -243,7 +249,7 @@
 							<div>
 								<ul name="contact_cc_ids" class="contacts tagsinput tags"></ul>
 							</div>
-                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="email_cc" id="email_cc" placeholder="Cc" data-provide="typeahead" data-mode="multiple"/>
+                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="cc" id="email_cc" placeholder="Cc" data-provide="typeahead" data-mode="multiple"/>
                     	</div>
 					</div>
                 </div>
@@ -255,7 +261,7 @@
 							<div>
 								<ul name="contact_bcc_ids" class="contacts tagsinput tags"></ul>
 							</div>
-                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="email_bcc" id="email_bcc" placeholder="Bcc" data-provide="typeahead" data-mode="multiple"/>
+                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="bcc" id="email_bcc" placeholder="Bcc" data-provide="typeahead" data-mode="multiple"/>
 						</div>
                     </div>
                 </div>
@@ -280,7 +286,7 @@
                     <label class="control-label col-sm-2">Message </label>
                     <div class="controls col-sm-8">
                         <div id="loading-editor"></div>
-                        <textarea class="form-control required" name="body" id="email-body" placeholder="Description" style="width: 75%; height: 45%; display: none;"></textarea>
+                        <textarea class="form-control required" name="message" id="email-body" placeholder="Description" style="width: 75%; height: 45%; display: none;"></textarea>
                     </div>
                 </div>   
                 

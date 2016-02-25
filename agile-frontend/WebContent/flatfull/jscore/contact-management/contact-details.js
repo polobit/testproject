@@ -226,7 +226,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #change-owner-element>#contact-owner' : 'onChangeOwner',
     	'click .contact-owner-list' : 'onChangeOwnerSelected',
     	'click #change-owner-element>.contact-owner-add' : 'onAddContactOwner',
-    	'click #contact-actions-delete' : 'onContactDelete',
+    	'click #contact-actions-delete' : 'onContactDetailsDelete',
     	'click .remove-tags' : 'onRemoveContactTag',
     	'click #add-tags' : 'onAddContactTag',
     	'click #contact-add-tags' : 'onAddContactTags',
@@ -559,7 +559,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     },
 
     // Deletes a contact from database
-    onContactDelete : function(e){
+    onContactDetailsDelete : function(e){
 
     	e.preventDefault();
 		if(!confirm("Do you want to delete the contact?"))
@@ -569,6 +569,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		App_Contacts.contactDetailView.model.destroy({success: function(model, response) {
 			  Backbone.history.navigate("contacts",{trigger: true});
 		}});
+		
     },
 
     /**
@@ -689,8 +690,13 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
 		       			
 		       			// Append to the list, when no match is found 
-		       			if ($.inArray(new_tags, old_tags) == -1) 
-		       				$('#added-tags-ul').append('<li  class="tag inline-block btn btn-xs btn-default m-r-xs m-b-xs" style="color:#363f44" data="' + new_tags + '"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
+		       			if ($.inArray(new_tags, old_tags) == -1) {
+
+		       				var template = Handlebars.compile('<li  class="tag inline-block btn btn-xs btn-default m-r-xs m-b-xs" style="color:#363f44" data="{{name}}"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{name}}" >{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+
+						 	// Adds contact name to tags ul as li element
+							$('#added-tags-ul').append(template({name : new_tags}));
+		       			}
 		       			
 		       			console.log(new_tags);
 		       			// Adds the added tags (if new) to tags collection
