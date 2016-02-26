@@ -1172,6 +1172,28 @@ function changeEndTime(startTime, endTime)
 	console.log("In changeEndTime");
 	console.log(startTime);
 	console.log(endTime);
+	// var s0 = startTime[0];
+ //    var s1=startTime[1];
+    var reg = /[a-zA-Z]/;
+   
+  for(var i=0;i<startTime.length;i++)
+  {
+     if (reg.test(startTime[i])) {
+   startTime[i]=00;
+	}
+	else if(!reg.test(startTime[i])){
+		startTime[i] = startTime[i].substring(0,2);
+	}
+
+
+  }
+
+   /*if (reg.test(s1)) {
+   startTime[1]=00;
+	}
+	else if(!reg.test(s1)){
+		startTime[1] = s1.substring(0,2);
+	}*/
 
 	if (startTime[0] > endTime[0] || (startTime[0] == endTime[0] && startTime[1] >= endTime[1]))
 	{

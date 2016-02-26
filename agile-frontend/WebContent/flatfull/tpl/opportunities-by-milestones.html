@@ -126,11 +126,10 @@
 
 <script id="opportunities-by-paging-model-template" type="text/html">
 	<div class='dealtitle-angular panel-heading'>
-		<div class='milestone-heading text-left text-ellipsis'> <span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left" style="max-width:calc(100% - 125px);">{{heading}}</span>
+		<div class='milestone-heading text-left text-ellipsis'> <span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left" style="width:calc(100% - 75px);">{{heading}}</span>
 		    <div class="pull-right">
 		    <div style="font-size:14px; float:left">
-		      <span  style="margin-right: -4px;">{{currencySymbol}}</span>
-		      <span id="{{remove_spaces heading}}_totalvalue" class="">0</span>  
+		       <input type="hidden" id="{{remove_spaces heading}}_totalvalue" name="0" />	  
 			{{#if lost_milestone}}<i data-toogle="tooltip" title="" class="icon-dislike mark-lost" data-original-title="Deals with this milestone are considered as Lost." style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
 			{{#if won_milestone}}<i data-toogle="tooltip" title="" class="icon-like mark-won" data-original-title="Deals with this milestone are considered as Won." style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
 
@@ -199,6 +198,7 @@
         </span>
 </div>
 <div class="clearfix"></div>
+<input type="hidden" name="{{colorName}}" class="{{colorName}}"/>
 </div>
 </script>
 
@@ -315,3 +315,52 @@
 <a id='{{id}}' class="pipeline c-p" data="Default">Default</a>
 {{/if}}
 </script>
+
+
+<script id="deal-detail-dummy-popover-template" type="text/html">
+
+<div id='deal_detail_popover-div' style="font-size:12px;">
+    <div style="background-color:#edf1f2;font-weight:bold;max-width:100%;padding: 2px;">
+    <p class="deal-popover-p" style="margin:2px;overflow:hidden !important;text-overflow: ellipsis;">
+    	<span>{{heading}}</span></p>
+    <p class="deal-popover-p pull-left" style="margin:2px;overflow:hidden !important;text-overflow:ellipsis;max-width:calc(100% - 35px);">
+    	<span>{{heading}}</span ></p><span class="pull-right">{{dealNumber}}</span><div class="clearfix"></div>
+     </div>
+    <p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>Total Value:</span><span> {{symbol}}{{dealcount}}</span></p>
+    <p class="deal-popover-p" style="margin:2px"><span>Avg. Value:</span><span> {{symbol}}{{avgDeal}}</span></p>
+</div>
+</script>
+
+<!-- popover on deal milestone -->
+<script id = "deal-detail-popover-template" type="text/html"> 
+       <div class="data panel-default" style="min-width:200px;max-width:280px;">
+	   
+       	<div class="text-cap panel-heading text-ellipsis" style="padding:6px;"><div class="text-ellipsis inline-block" style="width:100%;" title="{{track}}"><strong>{{dealTrack}}</strong></div>
+				 <div class="pull-left" style="max-width:60%;overflow:hidden !important;text-overflow: ellipsis;">{{heading}}</div>
+        		<div>
+	   	  <div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
+							<div  class="text-lg score-view">
+								<span class="pull-right" style="font-size:15px;">
+									<span id="lead-score">{{dealNumber}}</span>
+								
+								</span>
+							
+							</div>
+						</div>
+						</div>
+        		</div>
+        		<div style="padding: 0px 5px;">
+       		<div class="b-b b-light p-b-xs">
+       			
+       	<div class="contact-owner text-base" id="change-owner-element">
+        	
+		<p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>Total Value:</span><span> {{symbol}}{{dealcount}}</span></p>
+       </div>
+       </div>
+       		<div class=" p-b-xs">
+			<p class="deal-popover-p" style="margin:2px"><span>Avg. Value:</span><span> {{symbol}}{{avgDeal}}</span></p>
+       		</div>
+                   </div>
+	   	          </div>	
+</script>
+<!--end popover on deal milestone-->
