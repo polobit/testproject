@@ -911,29 +911,25 @@ public class TicketsUtil
 	public static void sendEmailToGroup(long group_id, String subject, String body) throws EntityNotFoundException,
 			JSONException
 	{
+		System.out.println("Send email to ticket group....");
+
+		// Fetching ticket group
+		TicketGroups group = TicketGroupUtil.getTicketGroupById(group_id);
+
+		List<Long> users_keys = group.agents_keys;
+		List<Key<DomainUser>> domainUserKeys = new ArrayList<Key<DomainUser>>();
+
+		for (Long userKey : users_keys)
+			domainUserKeys.add(new Key<DomainUser>(DomainUser.class, userKey));
+
 		String oldnamespace = NamespaceManager.get();
+		List<DomainUser> users = null;
 
 		try
 		{
 			NamespaceManager.set("");
 
-			System.out.println("Send email to ticket group....");
-
-			// Fetching ticket group
-			TicketGroups group = TicketGroupUtil.getTicketGroupById(group_id);
-
-			List<Long> users_keys = group.agents_keys;
-			List<Key<DomainUser>> domainUserKeys = new ArrayList<Key<DomainUser>>();
-
-			for (Long userKey : users_keys)
-				domainUserKeys.add(new Key<DomainUser>(DomainUser.class, userKey));
-
-			List<DomainUser> users = DomainUserUtil.dao.fetchAllByKeys(domainUserKeys);
-
-			System.out.println("users found...." + users.size());
-
-			for (DomainUser user : users)
-				sendEmailToUser(user.email, subject, body);
+			users = DomainUserUtil.dao.fetchAllByKeys(domainUserKeys);
 		}
 		catch (Exception e)
 		{
@@ -943,6 +939,11 @@ public class TicketsUtil
 		{
 			NamespaceManager.set(oldnamespace);
 		}
+
+		System.out.println("users found...." + users.size());
+
+		for (DomainUser user : users)
+			sendEmailToUser(user.email, subject, body);
 	}
 
 	/**
