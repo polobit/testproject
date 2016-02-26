@@ -344,6 +344,12 @@ public class OpportunityUtil
 		.filter("close_date <= ", maxTime).filter("milestone", milestone).order("close_date");
 	return dao.getCount(q);
     }
+    
+    public static int getDealsbyMilestone(Long pipelineId)
+    {
+	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("pipeline",  new Key<Milestone>(Milestone.class, pipelineId)).limit(2);
+	return dao.getCount(q);
+    }
 
     /**
      * Gets milestone JSONObject with respect to given time period. Filters the

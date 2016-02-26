@@ -48,6 +48,9 @@ public class Milestone
     public String lost_milestone = null;
 
     public String won_milestone = null;
+    
+    @NotSaved
+    public boolean deals_exist = false ; 
 
     /**
      * Milestone Dao
