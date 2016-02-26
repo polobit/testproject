@@ -103,14 +103,14 @@ function initializeReportsListeners(){
 
 			$('#reports-listerners-container')
 			.on(
-					"mouseover",'.tab-container',function(e){
+					"mouseenter",'#reports-tab-container',function(e){
 						$('.reports_tab_content').show();
 					});
 			$('#reports-listerners-container')
 			.on(
-					"mouseout",'.tab-container',function(e){
+					"mouseleave",'#reports-tab-container',function(e){
 						$('.reports_tab_content').hide();
-						$('.nav-tabs .active').removeClass('active');
+						//$('.nav-tabs .active').removeClass('active');
 					});
 			$('#reports-listerners-container')
 			.on(
