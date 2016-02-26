@@ -6969,6 +6969,17 @@ Handlebars.registerHelper('is_IE_browser', function(options) {
 	     return (isIEBrowser() ? options.fn(this) : options.inverse(this));
 });
 
+
+Handlebars.registerHelper('brainTreeStatus', function(value) {
+	var status = {
+		AUTHORIZED : "Authorized",
+		VOIDED : "Voided",
+		SUBMITTED_FOR_SETTLEMENT : "Submitted For Settlement"
+	};
+	
+	return status.value;
+});
+
 function agile_is_mobile_browser(){
    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
  }

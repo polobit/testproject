@@ -62,8 +62,8 @@ public class DefaultWidgets {
 		widgets.add(new Widget(
 				"Braintree",
 				"Braintree enables individuals and businesses to accept payments over the internet.",
-				"/widgets/braintree.js", "/img/plugins/BrainTree.png",
-				"/widgets/braintree-small-logo.png", null, WidgetType.BILLING));
+				"/widgets/braintree.js", "/img/plugins/braintree-lg-logo.png",
+				"/widgets/braintree-sm-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"PayPal","PayPal is the faster, safer way for online invoicing  web and mobile payments. Configure your PayPal business account to view your PayPal invoices in Agile.",
 				"/widgets/paypal.js", "/img/plugins/paypal_logo_png.png",

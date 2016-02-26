@@ -34,28 +34,28 @@
 {{#if transaction.length}}
 	{{#each transaction}}
 		<li class="list-group-item r-none b-l-none b-r-none" style="width:249px;">
-			<div class="clear">					
-				<a class="pull-left c-p" data-toggle="collapse" href="#collapse-{{id}}" >
+			<div class="clear">							
+				<a class="col-md-7 p-none text-left text-ellipsis c-p text-info" title="{{orderId}}" data-toggle="collapse" href="#collapse-{{id}}" >
 					Order ID: #{{orderId}}
 				</a>
-				<div class="pull-right">$ {{amount}}</div>	
+				<div class="col-md-5 p-none text-right">$ {{amount}}</div>	
 				<div class="clearfix"></div>	
 				<div class="pull-left">Status</div>
-				<div class="pull-right text-ellipsis text-right" style="width: 165px;" title="{{status}}">{{status}}</div>
+				<div class="pull-right text-ellipsis text-right" style="width: 165px;" title="{{brainTreeStatus status}}">{{brainTreeStatus status}}</div>
 				<div class="clearfix"></div>	
 			</div>		
 			<div class="clearfix"></div>					
 			<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
-				<div class="pull-left">Tax Amount</div>
-				<div class="pull-right">$ {{taxAmount}}</div>
+				<div class="col-md-5 p-none text-left">Tax Amount</div>
+				<div class="col-md-7 p-none text-right text-ellipsis" title="{{taxAmount}}">$ {{taxAmount}}</div>
 				<div class="clearfix"></div>
 
-				<div class="pull-left">Order Id</div>
-				<div class="pull-right">{{orderId}}</div>
+				<div class="col-md-5 p-none text-left">Order ID</div>
+				<div class="col-md-7 p-none text-right text-ellipsis" title="{{orderId}}">{{orderId}}</div>
 				<div class="clearfix"></div>
 
-				<div class="pull-left">Purchase Id</div>
-				<div class="pull-right">{{purchaseId}}</div>
+				<div class="col-md-5 p-none text-left">Purchase ID</div>
+				<div class="col-md-7 p-none text-right text-ellipsis" title="{{purchaseId}}">{{purchaseId}}</div>
 				<div class="clearfix"></div>								
 			</div>
 			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" createdDate}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" createdDate}}</time></small>
