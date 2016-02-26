@@ -932,10 +932,12 @@ public class TicketsUtil
 	 * @throws JSONException
 	 */
 	public static void sendEmailToUser(String email, String subject, String body) throws JSONException
-	{
+	{	
+		body = body.replaceAll("(\r\n|\n)", "<br />");
+		
 		Map<String, String> data = new HashMap<String, String>();
 		data.put("body", body);
-
+		
 		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data);
 	}
 

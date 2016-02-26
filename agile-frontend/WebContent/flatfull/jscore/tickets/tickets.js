@@ -987,12 +987,6 @@ var Tickets = {
 
 		this.changeStatus("CLOSED", function(){
 			showNotyPopUp('information', "Ticket has been closed", 'bottomRight', 5000);
-
-			var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
-				'/' + (Ticket_Status ? Ticket_Status : 'new');
-
-			Backbone.history.navigate(url, {trigger : true});
-		
 		});
 	},
 

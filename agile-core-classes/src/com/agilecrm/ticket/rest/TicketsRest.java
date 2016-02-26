@@ -392,7 +392,7 @@ public class TicketsRest
 			ticket.groupID = ticket.group_id.getId();
 
 			// Execute triggers
-			TicketTriggerUtil.executeTriggerForNewTicket(ticket);
+			//TicketTriggerUtil.executeTriggerForNewTicket(ticket);
 			
 			BulkActionNotifications.publishNotification("Ticket#" + ticket.id + " has been created.");
 
@@ -472,7 +472,7 @@ public class TicketsRest
 
 			// Execute closed ticket trigger. Do not execute trigger if updated
 			// status and current status is same.
-			if (Status.CLOSED == status && ticket.status != status)
+			if (Status.CLOSED == status)
 				TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
 
 			return ticket;

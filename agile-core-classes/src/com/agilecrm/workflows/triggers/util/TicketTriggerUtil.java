@@ -3,6 +3,7 @@ package com.agilecrm.workflows.triggers.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -162,7 +163,9 @@ public class TicketTriggerUtil
 		List<Trigger> triggersList = new ArrayList<Trigger>();
 
 		triggersList = TriggerUtil.getTriggersByCondition(condition);
-
+		
+		System.out.println("triggersList: " + triggersList);
+		
 		// If no triggers
 		if (triggersList.isEmpty())
 			return;
@@ -193,7 +196,7 @@ public class TicketTriggerUtil
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 
@@ -215,7 +218,7 @@ public class TicketTriggerUtil
 		}
 		catch (JSONException e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 
