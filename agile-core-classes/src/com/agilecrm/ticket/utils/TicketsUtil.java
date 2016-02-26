@@ -790,7 +790,7 @@ public class TicketsUtil
 			throws EntityNotFoundException
 	{
 		System.out.println("changeGroupAndAssignee: ");
-		
+
 		// Fetching ticket object by its id
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
@@ -872,7 +872,7 @@ public class TicketsUtil
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
 						oldAssigneeID + "", assignee_id + "", "assigneeID");
 		}
-		
+
 		System.out.println("completed changeGroupAndAssignee execution");
 		return ticket;
 	}
@@ -911,23 +911,38 @@ public class TicketsUtil
 	public static void sendEmailToGroup(long group_id, String subject, String body) throws EntityNotFoundException,
 			JSONException
 	{
-		System.out.println("Send email to group....");
-		
-		// Fetching ticket group
-		TicketGroups group = TicketGroupUtil.getTicketGroupById(group_id);
+		String oldnamespace = NamespaceManager.get();
 
-		List<Long> users_keys = group.agents_keys;
-		List<Key<DomainUser>> domainUserKeys = new ArrayList<Key<DomainUser>>();
+		try
+		{
+			NamespaceManager.set("");
 
-		for (Long userKey : users_keys)
-			domainUserKeys.add(new Key<DomainUser>(DomainUser.class, userKey));
+			System.out.println("Send email to ticket group....");
 
-		List<DomainUser> users = DomainUserUtil.dao.fetchAllByKeys(domainUserKeys);
-		
-		System.out.println("users found...." + users.size());
-		
-		for (DomainUser user : users)
-			sendEmailToUser(user.email, subject, body);
+			// Fetching ticket group
+			TicketGroups group = TicketGroupUtil.getTicketGroupById(group_id);
+
+			List<Long> users_keys = group.agents_keys;
+			List<Key<DomainUser>> domainUserKeys = new ArrayList<Key<DomainUser>>();
+
+			for (Long userKey : users_keys)
+				domainUserKeys.add(new Key<DomainUser>(DomainUser.class, userKey));
+
+			List<DomainUser> users = DomainUserUtil.dao.fetchAllByKeys(domainUserKeys);
+
+			System.out.println("users found...." + users.size());
+
+			for (DomainUser user : users)
+				sendEmailToUser(user.email, subject, body);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		finally
+		{
+			NamespaceManager.set(oldnamespace);
+		}
 	}
 
 	/**
@@ -939,14 +954,14 @@ public class TicketsUtil
 	 * @throws JSONException
 	 */
 	public static void sendEmailToUser(String email, String subject, String body) throws JSONException
-	{	
+	{
 		body = body.replaceAll("(\r\n|\n)", "<br />");
-		
+
 		Map<String, String> data = new HashMap<String, String>();
 		data.put("body", body);
-		
+
 		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data);
-		
+
 		System.out.println("Sent email to: " + email);
 	}
 
