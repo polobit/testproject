@@ -395,7 +395,7 @@ var Tickets_Notes = {
 
               $.each(noteAttachment,function(index,note_Attachment){
                
-                notesText += "\n"+ (index+=1) +" . "+note_Attachment.name+" - "+ encodeURI(note_Attachment.url);
+                notesText += "\n"+ (index+=1) +" . <a href='" + encodeURI(note_Attachment.url) +"'>" + note_Attachment.name + "</a>";
               
              });
              
