@@ -3282,3 +3282,7 @@ table.hide-head-checkbox th label.i-checks {
   color: black !important;
   opacity: 0.9;
 }
+#removeBtn:hover
+{
+  color: black !important;
+}
