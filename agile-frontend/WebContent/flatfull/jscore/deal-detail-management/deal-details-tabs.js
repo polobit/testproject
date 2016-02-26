@@ -47,8 +47,16 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
     	'click .deal-add-event' : 'dealAddEvent',
     	'click .event-edit-deal-tab' : 'dealEditEvent',
 		'click .deal-event-delete' : 'dealEditDelete', 
-		'click .activity-delete' : 'deleteActivity',  	
+		'click .activity-delete' : 'deleteActivity',
+		//agile-x-edit
+		'click #deals-inline' : 'dealInlineEdit', 	
     	
+    },
+
+    /*deals inline edit function*/
+    dealInlineEdit : function(e){
+    	e.preventDefault();
+    	alert("harsha1");
     },
 
 	/**
