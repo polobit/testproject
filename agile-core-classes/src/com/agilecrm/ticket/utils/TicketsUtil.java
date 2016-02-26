@@ -917,7 +917,7 @@ public class TicketsUtil
 		TicketGroups group = TicketGroupUtil.getTicketGroupById(group_id);
 
 		List<Long> users_keys = group.agents_keys;
-		List<Key<DomainUser>> domainUserKeys = new ArrayList<Key<DomainUser>>();
+		Set<Key<DomainUser>> domainUserKeys = new HashSet<Key<DomainUser>>();
 
 		String oldnamespace = NamespaceManager.get();
 		List<DomainUser> users = null;
@@ -929,7 +929,9 @@ public class TicketsUtil
 			for (Long userKey : users_keys)
 				domainUserKeys.add(new Key<DomainUser>(DomainUser.class, userKey));
 			
-			users = DomainUserUtil.dao.fetchAllByKeys(domainUserKeys);
+			System.out.println("domainUserKeys: " + domainUserKeys);
+			
+			users = DomainUserUtil.dao.fetchAllByKeys(new ArrayList<Key<DomainUser>>(domainUserKeys));
 		}
 		catch (Exception e)
 		{
