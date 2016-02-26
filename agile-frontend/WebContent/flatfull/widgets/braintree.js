@@ -9,23 +9,28 @@ function getTransactions(callback, contact_id){
 	 * Calls queueGetRequest method in widget_loader.js, with queue name as
 	 * "widget_queue" to retrieve tickets
 	 */
-	queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/btree/get/" + BRAINTREE_Plugin_Id + "/" + Email, "json", 
-	function success(data){
 
-		console.log("Brain tree success data ");
-		console.log(data);
-			
-		BrainTreeObj.transaction = data;
+	if(Email){
+		queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/btree/get/" + BRAINTREE_Plugin_Id + "/" + Email, "json", 
+			function success(data){
 
-		// If defined, execute the callback function
-		if (callback && typeof (callback) === "function"){
-			callback(0);
-		}
+			console.log("Brain tree success data ");
+			console.log(data);
+				
+			BrainTreeObj.transaction = data;
 
-	}, function error(data){
-		console.log("Brain tree failed ");
-		$('#Braintree').html('<div class="wrapper-sm">Please configure widget properly</div>');
-	});
+			// If defined, execute the callback function
+			if (callback && typeof (callback) === "function"){
+				callback(0);
+			}
+
+		}, function error(data){
+			console.log("Brain tree failed ");
+			$('#Braintree').html('<div class="wrapper-sm">Please configure widget properly</div>');
+		});
+	}else{
+		$('#Braintree').html('<div class="wrapper-sm">Email not found for this contact</div>');
+	}
 }
 
 function loadTransaction(offSet){
