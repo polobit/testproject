@@ -3258,9 +3258,13 @@ table.hide-head-checkbox th label.i-checks {
     cursor: pointer;
     padding: 5px;
     margin-top: 5px;
+    border-radius: 6px;
 }
 .user-alert .user-alert-message span{
-	margin-top: -8px;
+	background-color: #DCD1A5;
+    padding: 0px 6px 4px;
+	margin-left: 10px;
+    margin-right: 5px;
     font-size: 15px;
 }
 .companies_input{
