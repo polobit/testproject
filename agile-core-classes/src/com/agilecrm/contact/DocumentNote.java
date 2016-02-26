@@ -41,7 +41,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Cached
-public class Note extends Cursor
+public class DocumentNote extends Cursor
 {
     // Key
     @Id
@@ -63,16 +63,13 @@ public class Note extends Cursor
      */
     public String description;
 
-    
+    public String document_id;
     /**
      * List of contact ids, a note related to
      * 
      */
     @NotSaved
     private List<String> contact_ids = new ArrayList<String>();
-
-    @NotSaved
-    public List<String> deal_ids = new ArrayList<String>();
 
     /**
      * Owner key of AgileUser id.
@@ -103,46 +100,19 @@ public class Note extends Cursor
      * purpose). And no queries run on this, so no need to save in the database.
      */
     @NotSaved
-    public String entity_type = "note";
+    public String entity_type = "documentnote";
 
-    
-    //added some variable for logcall which is a special type of note//
-    
-    /**
-     * phoneNumber of the related contact
-     */
-    @NotSaved(IfDefault.class)
-    public String phone = null;
-    
-
-    /**
-     * callType of the logPhone
-     */
-    @NotSaved(IfDefault.class)
-    public String callType = null;
-    
-    /**
-     * status of the logPhone
-     */
-    @NotSaved(IfDefault.class)
-    public String status = null;
-    
-    /**
-     * duration of the logPhone
-     */
-    @NotSaved(IfDefault.class)
-    public Long duration = null;
     
     
     
     
     // Dao
-    public static ObjectifyGenericDao<Note> dao = new ObjectifyGenericDao<Note>(Note.class);
+    public static ObjectifyGenericDao<DocumentNote> dao = new ObjectifyGenericDao<DocumentNote>(DocumentNote.class);
 
     /**
      * Default constructor
      */
-    public Note()
+    public DocumentNote()
     {
 
     }
@@ -158,13 +128,20 @@ public class Note extends Cursor
      */
     
     
-    public Note(String subject, String description)
+    public DocumentNote(String subject, String description)
     {
 	this.description = description;
 	if (subject != null)
 	    this.subject = subject;
     }
 
+    public DocumentNote(String subject, String description,String document_id)
+    {
+	this.description = description;
+	this.document_id=document_id;
+	if (subject != null)
+	    this.subject = subject;
+    }
 
     /**
      * Saves a note in the database
@@ -366,71 +343,10 @@ public class Note extends Cursor
 	return "";
     }
 
-    /**
-     * Returns hours to logphone.
-     * 
-     * @return
-     */
-    @XmlElement(name = "hour")
-    public Long getHour()
-    {
-    	try{
-        	Long timeInSec = this.duration;
-        	Long hour = timeInSec/3600;
-        	return hour;
-    	}catch(Exception e){
-    		return null;
-    	}
-    	
-
-
-    }
-    /**
-     * Returns minutes to logphone.
-     * 
-     * @return
-     */
-    @XmlElement(name = "min")
-    public Long getMin()
-    {
-    	try{
-        	
-        	Long timeInSec = this.duration;
-    	    Long hour = timeInSec/3600;
-    	    Long min = (timeInSec - (hour*3600))/60;
-        	return min;
-    	}catch(Exception e){
-    		return null;
-    	}
-
-    	
-	    
-    }
-    /**
-     * Returns second to logphone.
-     * 
-     * @return
-     */
-    @XmlElement(name = "sec")
-    public Long getSec()
-    {
-    	try{
-        	Long timeInSec = this.duration;
-    	    Long hour = timeInSec/3600;
-    	    Long min = (timeInSec - (hour*3600))/60;
-    	    Long sec = timeInSec - (hour*3600) - (min*60);
-        	return sec;
-    	}catch(Exception e){
-    		return null;
-    	}
-    	
-
-	    
-    }
     
     @Override
     public String toString()
     {
-	return "id: " + id + " created_time: " + created_time + " subj" + subject + " description: " + description ;
+	return "id: " + id + " created_time: " + created_time + " subj" + subject + " description: " + description + " document_id: " + document_id;
     }
 }

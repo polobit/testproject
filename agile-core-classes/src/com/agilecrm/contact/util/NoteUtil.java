@@ -14,8 +14,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
-import com.agilecrm.document.Document;
-import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -54,18 +52,7 @@ public class NoteUtil
 	return dao.ofy().query(Note.class).filter("related_contacts = ", contactKey).order("-created_time").list();
     }
 
-    public static List<Note> getDocumentsNotes(String document_id,int max, String cursor) throws Exception
-    {
-    	
-    	if(document_id!=null)
-    	{
-    		return dao.ofy().query(Note.class).filter("document_id =", document_id).order("-document_id").order("-created_time").list();
-    	}	
-    	Query<Note> query = dao.ofy().query(Note.class).filter("document_id >", 0).order("-document_id").order("-created_time");
-    	
-    	return dao.fetchAllWithCursor(max, cursor, query, false, false);
-    	//return dao.ofy().query(Note.class).filter("document_id !=", null).order("-document_id").order("-created_time").list();
-    }
+
     /**
      * Gets all the notes related to a contact.
      * 

@@ -229,7 +229,7 @@ var DocumentsRouter = Backbone.Router.extend({
 function renderDocumentsActivityView(params)
 {
 	// Creates backbone collection view
-	this.activitiesview = new Base_Collection_View({ url : '/core/api/notes/documents' , sortKey : 'time',
+	this.activitiesview = new Base_Collection_View({ url : '/core/api/documentviewer/documents' , sortKey : 'time',
 		descending : true, templateKey : "document-notes", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 10,
 		individual_tag_name : 'li', postRenderCallback : function(el)
 		{

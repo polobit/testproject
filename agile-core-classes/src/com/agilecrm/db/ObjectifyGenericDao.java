@@ -92,7 +92,9 @@ import com.thirdparty.google.calendar.GoogleCalenderPrefs;
 import com.thirdparty.office365.calendar.Office365CalendarPrefs;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
-
+import com.agilecrm.account.DocumentTemplates;
+import com.agilecrm.products.Product;
+import com.agilecrm.contact.DocumentNote;
 /**
  * <code>ObjectifyGenericDao</code> is a generic class for all the entities,
  * which provides the facility to interact with the database (appengine) using
@@ -227,7 +229,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(Webhook.class);
 
 	ObjectifyService.register(DocumentTemplates.class);
-    
+	ObjectifyService.register(DocumentNote.class);
     ObjectifyService.register(Product.class);
     }
 

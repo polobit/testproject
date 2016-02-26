@@ -11,7 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
+import javax.ws.rs.QueryParam;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 
@@ -22,8 +22,9 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.contact.util.DocumentNoteUtil;
 import com.agilecrm.workflows.triggers.util.CallTriggerUtil;
-
+import com.agilecrm.contact.DocumentNote;
 /**
  * <code>NotesAPI</code> includes REST calls to interact with {@link Note} class
  * to initiate Note Create, Read and Delete operations.
@@ -151,17 +152,5 @@ public class NotesAPI
 	   return "";
 	}
   
-	@Path("documents")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Note> getDocumentsNotes(@QueryParam("documentid") String documentid,@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
-    {
-		try{
-		return NoteUtil.getDocumentsNotes(documentid,Integer.parseInt(count), cursor);
-		}catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return null;
-    }	
+	
 }

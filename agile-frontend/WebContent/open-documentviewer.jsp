@@ -18,8 +18,8 @@
 <%@page import="com.agilecrm.user.AgileUser"%>
 <%@page import="com.agilecrm.document.util.DocumentUtil"%>
 <%@page import="com.agilecrm.document.Document"%>
-<%@page import="com.agilecrm.contact.Note"%>
-<%@page import="com.agilecrm.contact.util.NoteUtil"%>
+<%@page import="com.agilecrm.contact.DocumentNote"%>
+<%@page import="com.agilecrm.contact.util.DocumentNoteUtil"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Calendar"%>
@@ -51,14 +51,14 @@ String sDocumentId=ar[ar.length-2];
 String sContactId=ar[ar.length-1];
 Long dDocumentId= Long.parseLong(sDocumentId);
 Document document =DocumentUtil.getDocument(dDocumentId);
-List<Note> notes=null;
+List<DocumentNote> notes=null;
 if(document!=null)
 {
 
-	 notes= NoteUtil.getDocumentsNotes(sDocumentId,0,null);
+	 notes= DocumentNoteUtil.getDocumentsNotes(sDocumentId,0,null);
 	 if(notes!=null)
 	 {
-	 	for(Note note:notes){
+	 	for(DocumentNote note:notes){
 	 		String description=note.description;
 	 	};
 	 } 
@@ -223,7 +223,7 @@ var subject=<%=mapper.writeValueAsString(sNoteSubject)%>
        <div class="cell">
          <div class="cell-inner">
            <div class="wrapper-md comments-history">
-<% if(notes!=null ){ for(Note note:notes){ %>
+<% if(notes!=null ){ for(DocumentNote note:notes){ %>
              <ul class="list-group">
 <li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="word-wrap: break-word" title="<%=note.description %>" ><%=note.description %></p>
 <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time class="timeago" datetime="<%=note.created_time %>"><%=note.created_time%></time></small>

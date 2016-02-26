@@ -829,7 +829,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 	sendDocumentEmail:function(id) 
 	{
-		this.sendEmail(id,null,null,null,null,"documents");
+		this.sendEmail(id,null,null,null,null,null,"documents");
 	},
 
 	/**
@@ -866,7 +866,7 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		var that=this;
-		sendMail(id,subject,body,cc,bcc,that,id_type);
+		sendMail(id,subject,body,cc,bcc,that,null,id_type);
 	
 	},
 
@@ -1311,17 +1311,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 		}
 		else{
 			var documentId=null;
-			if(id_type=="documents" && App_Documents.DocumentCollectionView && App_Documents.DocumentCollectionView.collection)
-			{
-				$.each(App_Documents.DocumentCollectionView.collection.models, function(index, document_model)
-				{
-					if(id && document_model.id==id	)
-					{
-						model=document_model.toJSON();	
-						return false;
-					}	
-				});
-			}	
+			
 		// Takes back to contacts if contacts detail view is not defined
 		if (that.contactDetailView && !that.contactDetailView.model.get(id))
 		{
@@ -1329,12 +1319,24 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 			model = that.contactDetailView.model.toJSON();
 		}
 		
+
 		if(App_Companies.companyDetailView){
 			var compEmailTemp = getPropertyValue(App_Companies.companyDetailView.model.toJSON().properties,'email');
 			if(id && id == compEmailTemp){
 				model = App_Companies.companyDetailView.model.toJSON();
 			}
 		}
+		if(id_type=="documents" && App_Documents.DocumentCollectionView && App_Documents.DocumentCollectionView.collection)
+		{
+			$.each(App_Documents.DocumentCollectionView.collection.models, function(index, document_model)
+			{
+				if(id && document_model.id==id	)
+				{
+					model=document_model.toJSON();	
+					return false;
+				}	
+			});
+		}	
 	}
 	
 		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
