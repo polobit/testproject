@@ -2,8 +2,6 @@ package com.agilecrm.ticket.deferred;
 
 import java.util.List;
 
-import sun.security.krb5.internal.Ticket;
-
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketsUtil;
