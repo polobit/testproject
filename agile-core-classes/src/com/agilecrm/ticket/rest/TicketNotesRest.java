@@ -112,6 +112,13 @@ public class TicketNotesRest
 			else
 			{
 				Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
+				TicketGroups group = TicketGroupUtil.getTicketGroupById(ticket.group_id.getId());
+
+				// If domain user doesn't exists in ticket group then
+				// throwing exception
+				if (!group.agents_keys.contains(domainUserKey.getId()))
+					throw new Exception("You must in " + group.group_name + " group in order to reply to this ticket");
+
 				int repliesCount = ticket.user_replies_count;
 				Status status = ticket.status;
 
@@ -124,10 +131,9 @@ public class TicketNotesRest
 					ticket.assignee_id = domainUserKey;
 					ticket.assigneeID = domainUserKey.getId();
 					ticket.assigned_time = currentTime;
-					ticket.no_of_reopens += 1;
-					
+
 					ticket.status = Status.PENDING;
-					
+
 					// Logging public notes activity
 					ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID,
 							ticket.id, html_text, plain_text, "html_text");
@@ -138,19 +144,6 @@ public class TicketNotesRest
 				}
 				else
 				{
-					// Verifying ticket assignee is same as replying domain user
-					if (ticket.assignee_id != null && ticket.assignee_id.getId() != domainUserKey.getId())
-					{
-						TicketGroups group = TicketGroupUtil.getTicketGroupById(ticket.group_id.getId());
-
-						// If domain user doesn't exists in ticket group then
-						// throwing exception
-						if (!group.agents_keys.contains(domainUserKey.getId()))
-							throw new Exception("You must in " + group.group_name
-									+ " group in order to reply to this ticket");
-					}
-					else
-					{
 						// Verifying if ticket assignee is null then assign
 						// current logged domain user
 						if (ticket.assignee_id == null)
@@ -190,7 +183,7 @@ public class TicketNotesRest
 					if (status == Status.CLOSED)
 					{
 						ticket.no_of_reopens += 1;
-						
+
 						// Logging status changed activity
 						ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID,
 								ticket.id, Status.CLOSED.toString(), Status.PENDING.toString(), "status");
@@ -207,7 +200,7 @@ public class TicketNotesRest
 					else
 						// Set status to pending as it is replied by assignee
 						ticket.status = Status.PENDING;
-					
+
 					// Updating ticket entity
 					Tickets.ticketsDao.put(ticket);
 
@@ -221,23 +214,22 @@ public class TicketNotesRest
 
 					TicketNotesUtil.sendReplyToRequester(ticket);
 
-					// Execute note created by user trigger
-					TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);
-
 					if (notes.close_ticket)
 					{
 						// Execute note closed by user trigger
 						TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
 					}
 				}
-			}
-			
+
 			String cleanText = plain_text.replaceAll("(<br />|<br/>|<br/>)", "");
-			
+
 			// Updating existing ticket
 			ticket = TicketsUtil.updateTicket(ticketID, ticket.cc_emails, cleanText, LAST_UPDATED_BY.AGENT,
 					currentTime, null, currentTime,
 					(notes.attachments_list != null && notes.attachments_list.size() > 0) ? true : false);
+			
+			// Execute note created by user trigger
+			TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);
 			
 			ticketNotes.domain_user = DomainUserUtil.getDomainUser(ticket.assigneeID);
 
