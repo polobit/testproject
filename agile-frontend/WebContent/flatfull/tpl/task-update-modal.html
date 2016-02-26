@@ -27,7 +27,7 @@
 							</div>
 					</div>
 					<div class="text-muted">
-                            <div class="col-sm-offset-3 col-sm-7" style="font-size:12px;padding-left: 9px;margin-bottom:10px;">
+                            <div class="col-sm-offset-3 col-sm-7" {{#is_mobile}} style="padding-left: 0px !important;font-size: 11px;" {{else}} style="font-size:12px;margin-bottom:10px;padding-left: 9px"{{/is_mobile}}>
                                  Note: Tasks are like to-dos. Result
                             oriented. You can assign a category such as call, email etc.
                             </div>
@@ -62,9 +62,9 @@
                         </div>
                         <div class="col-sm-5">
                         <div class="control-group form-group">
-                            <label class="control-label col-sm-5"> Time<span class="field_req">*</span></label>
-                            <div class="controls col-sm-5">
-                                <input type="text" name="task_ending_time" class="update-task-timepicker required form-control" id="task_ending_time" style="width:67px" placeholder="Time">     
+                            <label class="control-label col-sm-4" {{#is_mobile}} {{else}} style="text-align: left !important;"{{/is_mobile}}"> Time<span class="field_req">*</span></label>
+                            <div class="controls col-sm-5" {{#is_mobile}} {{else}} style="padding: 0 2px 0 0px;" {{/is_mobile}}>
+                                <input type="text" name="task_ending_time" class="update-task-timepicker required form-control" id="task_ending_time" style="width:100px" placeholder="Time">     
                             </div>
                         </div>
                     </div>
