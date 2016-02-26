@@ -252,7 +252,7 @@ public class LogUtil
 			
 			if(log_type == null || ("All_Activities").equals(log_type))
 			{
-				Collections.sort(logsList, new SentDateComparator());
+				Collections.sort(logsList, new TimeComparator());
 			}
 
 			LogWrapper lastLog = logsList.get(logsList.size() - 1);
