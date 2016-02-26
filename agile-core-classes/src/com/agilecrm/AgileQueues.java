@@ -60,6 +60,9 @@ public class AgileQueues
 
     // Free Emails added push queue
     public static final String EMAILS_ADDED_QUEUE = "free-emails-added-queue";
+    
+    // Credits auto renewal queue
+    public static final String CREDITS_AUTO_RENEWAL_QUEUE = "credits-auto-renewal-queue";
 
     // Contacts and Deal push queue
     public static final String WEBHOOKS_REGISTER_ADD_QUEUE = "webhooks-register-add-queue";

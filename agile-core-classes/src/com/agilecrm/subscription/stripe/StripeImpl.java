@@ -16,6 +16,8 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.AgileBilling;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -673,6 +675,9 @@ public class StripeImpl implements AgileBilling {
 		params.put("description", quantity*1000+" Email Credits");
 		InvoiceItem invoiceItem = InvoiceItem.create(params);
 		System.out.println("invoiceItem for email credits "+invoiceItem);
+		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+		restriction.last_credit_id = invoiceItem.getId();
+		restriction.save();
 		params.remove("amount");
 		params.remove("currency");
 		try{
