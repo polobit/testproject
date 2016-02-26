@@ -1304,11 +1304,15 @@ $(function()
 	{
 
         var value = getPropertyValue(properties, name);
+        if(!value)
+        {
+        	return options.inverse(this);
+        }
         try{
         	value = JSON.parse(value);
         }catch(e){}
 
-		if (Object.keys(value) && Object.keys(value).length > 0)
+		if (value && Object.keys(value) && Object.keys(value).length > 0)
 			return options.fn(this);
 		
 		return options.inverse(this);
