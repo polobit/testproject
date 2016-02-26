@@ -132,105 +132,98 @@ public class TicketNotesRest
 					ticket.assigneeID = domainUserKey.getId();
 					ticket.assigned_time = currentTime;
 
-					ticket.status = Status.PENDING;
-
-					// Logging public notes activity
-					ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID,
-							ticket.id, html_text, plain_text, "html_text");
-
 					// Logging status changed activity
 					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
 							status.toString(), Status.PENDING.toString(), "status");
 				}
 				else
 				{
-						// Verifying if ticket assignee is null then assign
-						// current logged domain user
-						if (ticket.assignee_id == null)
-						{
-							ticket.assignee_id = domainUserKey;
-							ticket.assigneeID = domainUserKey.getId();
-							ticket.assigned_time = currentTime;
+					// Verifying if ticket assignee is null then assign
+					// current logged domain user
+					if (ticket.assignee_id == null)
+					{
+						ticket.assignee_id = domainUserKey;
+						ticket.assigneeID = domainUserKey.getId();
+						ticket.assigned_time = currentTime;
 
-							// Logging ticket assigned activity
-							ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, ticket.contactID,
-									ticket.id, ticket.assigneeID + "", "", "assigneeID");
-						}
-						else if (ticket.assignee_id != null && ticket.assignee_id.getId() != domainUserKey.getId())
-						{
-							ticket.assignee_id = domainUserKey;
-							ticket.assigneeID = domainUserKey.getId();
-							ticket.assigned_time = currentTime;
+						// Logging ticket assigned activity
+						ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id,
+								ticket.assigneeID + "", "", "assigneeID");
+					}
+					else if (ticket.assignee_id != null && ticket.assignee_id.getId() != domainUserKey.getId())
+					{
+						ticket.assignee_id = domainUserKey;
+						ticket.assigneeID = domainUserKey.getId();
+						ticket.assigned_time = currentTime;
 
-							// Log assignee changed activity
-							ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID,
-									ticket.id, domainUserKey.getId() + "", ticket.assignee_id.getId() + "",
-									"assigneeID");
-						}
-
-						if (Status.OPEN == status)
-							// Logging status changed activity
-							ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID,
-									ticket.id, Status.OPEN.toString(), Status.PENDING.toString(), "status");
-
-						// Logging public notes activity
-						ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID,
-								ticket.id, html_text, plain_text, "html_text");
+						// Log assignee changed activity
+						ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID,
+								ticket.id, domainUserKey.getId() + "", ticket.assignee_id.getId() + "", "assigneeID");
 					}
 
-					// If tickcet is already closed then incr. no of re opens
-					// attr. and log ticket open activity
-					if (status == Status.CLOSED)
-					{
-						ticket.no_of_reopens += 1;
-
+					if (Status.OPEN == status)
 						// Logging status changed activity
 						ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID,
-								ticket.id, Status.CLOSED.toString(), Status.PENDING.toString(), "status");
-					}
-
-					// If send reply and close ticket is selected
-					if (notes.close_ticket)
-					{
-						ticket.closed_time = currentTime;
-
-						// Set status to pending as it is replied by assignee
-						ticket.status = Status.CLOSED;
-					}
-					else
-						// Set status to pending as it is replied by assignee
-						ticket.status = Status.PENDING;
-
-					// Updating ticket entity
-					Tickets.ticketsDao.put(ticket);
-
-					// Updating text search data
-					new TicketsDocument().edit(ticket);
-
-					// Creating new Notes in TicketNotes table
-					ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, ticket.groupID, ticket.assigneeID,
-							CREATED_BY.AGENT, ticket.requester_name, ticket.requester_email, plain_text, html_text,
-							notes.note_type, new ArrayList<TicketDocuments>(), "");
-
-					TicketNotesUtil.sendReplyToRequester(ticket);
-
-					if (notes.close_ticket)
-					{
-						// Execute note closed by user trigger
-						TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
-					}
+								ticket.id, Status.OPEN.toString(), Status.PENDING.toString(), "status");
 				}
 
-			String cleanText = plain_text.replaceAll("(<br />|<br/>|<br/>)", "");
+				// If tickcet is already closed then incr. no of re opens
+				// attr. and log ticket open activity
+				if (status == Status.CLOSED)
+				{
+					ticket.no_of_reopens += 1;
 
-			// Updating existing ticket
-			ticket = TicketsUtil.updateTicket(ticketID, ticket.cc_emails, cleanText, LAST_UPDATED_BY.AGENT,
-					currentTime, null, currentTime,
-					(notes.attachments_list != null && notes.attachments_list.size() > 0) ? true : false);
-			
-			// Execute note created by user trigger
-			TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);
-			
+					// Logging status changed activity
+					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+							Status.CLOSED.toString(), Status.PENDING.toString(), "status");
+				}
+
+				// If send reply and close ticket is selected
+				if (notes.close_ticket)
+				{
+					ticket.closed_time = currentTime;
+
+					// Set status to pending as it is replied by assignee
+					ticket.status = Status.CLOSED;
+				}
+				else
+					// Set status to pending as it is replied by assignee
+					ticket.status = Status.PENDING;
+
+				if (notes.close_ticket)
+				{
+					// Execute note closed by user trigger
+					TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
+				}
+
+				String cleanText = plain_text.replaceAll("(<br />|<br/>|<br/>)", "");
+
+				// Updating existing ticket
+				ticket = TicketsUtil.updateTicket(ticketID, ticket.cc_emails, cleanText, LAST_UPDATED_BY.AGENT,
+						currentTime, null, currentTime,
+						(notes.attachments_list != null && notes.attachments_list.size() > 0) ? true : false);
+
+				// Updating ticket entity
+				Tickets.ticketsDao.put(ticket);
+
+				// Updating text search data
+				new TicketsDocument().edit(ticket);
+
+				// Creating new Notes in TicketNotes table
+				ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, ticket.groupID, ticket.assigneeID,
+						CREATED_BY.AGENT, ticket.requester_name, ticket.requester_email, plain_text, html_text,
+						notes.note_type, new ArrayList<TicketDocuments>(), "");
+
+				TicketNotesUtil.sendReplyToRequester(ticket);
+
+				// Execute note created by user trigger
+				TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);
+				
+				// Logging public notes activity
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID,
+						ticket.id, html_text, plain_text, "html_text");
+			}
+
 			ticketNotes.domain_user = DomainUserUtil.getDomainUser(ticket.assigneeID);
 
 			System.out.println("Execution time: " + (Calendar.getInstance().getTimeInMillis() - currentTime) + "ms");
