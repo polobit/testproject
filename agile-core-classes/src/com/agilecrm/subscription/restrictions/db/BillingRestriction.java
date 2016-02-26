@@ -412,7 +412,7 @@ public class BillingRestriction
     {
     	
 	isAutoRenewalEnabled = true;
-	nextRechargeCount = 1000;
+	nextRechargeCount = 1;
 	autoRenewalPoint = 10;
     	
 	if (this.id == null)
