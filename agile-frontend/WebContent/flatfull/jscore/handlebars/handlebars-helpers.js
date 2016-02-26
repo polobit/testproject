@@ -6971,13 +6971,26 @@ Handlebars.registerHelper('is_IE_browser', function(options) {
 
 
 Handlebars.registerHelper('brainTreeStatus', function(value) {
-	var status = {
+	/**
+	 * Braintree transaction status.
+	 */
+	var BRAINTREE_STATUS = {
 		AUTHORIZED : "Authorized",
 		VOIDED : "Voided",
-		SUBMITTED_FOR_SETTLEMENT : "Submitted For Settlement"
+		SUBMITTED_FOR_SETTLEMENT : "Submitted For Settlement",
+		SETTLED : "Settled",
+		AUTHORIZATION_EXPIRED : "Authorization Expired",
+		AUTHORIZING : "Authorizing",
+		SETTLEMENT_PENDING : "Settlement Pending",
+		SETTLEMENT_CONFIRMED : "Settlement Confirmed",
+		SETTLEMENT_DECLINED : "Settlement Declined",
+		FAILED : "Failed",
+		GATEWAY_REJECTED : "Gateway Rejected",
+		PROCESSOR_DECLINED : "Processor Declined",
+		SETTLING : "Settling"
 	};
 	
-	return status.value;
+	return BRAINTREE_STATUS[value];
 });
 
 function agile_is_mobile_browser(){
