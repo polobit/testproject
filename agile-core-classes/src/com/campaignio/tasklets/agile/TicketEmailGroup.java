@@ -51,7 +51,8 @@ public class TicketEmailGroup extends TaskletAdapter
 
 		try
 		{
-
+			System.out.println("TicketEmailGroup: Intiated");
+			
 			JSONObject ticketJSON = data.getJSONObject(TICKET);
 
 			if (ticketJSON != null)
@@ -64,7 +65,9 @@ public class TicketEmailGroup extends TaskletAdapter
 
 				// Ticket body
 				String emailBody = getStringValue(nodeJSON, subscriberJSON, data, BODY);
-
+				
+				System.out.println("TicketEmailGroup groupId: " + groupId);
+				
 				// Change Group and Assignee
 				TicketsUtil.sendEmailToGroup(Long.parseLong(groupId), subject, emailBody);
 

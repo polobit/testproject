@@ -919,16 +919,16 @@ public class TicketsUtil
 		List<Long> users_keys = group.agents_keys;
 		List<Key<DomainUser>> domainUserKeys = new ArrayList<Key<DomainUser>>();
 
-		for (Long userKey : users_keys)
-			domainUserKeys.add(new Key<DomainUser>(DomainUser.class, userKey));
-
 		String oldnamespace = NamespaceManager.get();
 		List<DomainUser> users = null;
 
 		try
 		{
 			NamespaceManager.set("");
-
+			
+			for (Long userKey : users_keys)
+				domainUserKeys.add(new Key<DomainUser>(DomainUser.class, userKey));
+			
 			users = DomainUserUtil.dao.fetchAllByKeys(domainUserKeys);
 		}
 		catch (Exception e)
