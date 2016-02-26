@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.landingpages.LandingPageUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -224,6 +225,9 @@ public class AccountDeleteUtil
 				AnalyticsSQLUtil.deleteStatsBasedOnNamespace(namespace);
 
 				deleteTextSearchData(namespace, 0L);
+				
+				LandingPageUtil.deleteAllLandingPageCNamesAssociatedWithDomain(namespace);
+				
 			}
 			catch (Exception e)
 			{
