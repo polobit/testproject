@@ -667,7 +667,6 @@ var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.j
 console.log("before dashboard load");
 head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min.js?_=' + _AGILE_VERSION, function(){
         load_globalize();
-
         showVideoForRegisteredUser();
 
 })
@@ -737,8 +736,8 @@ function showVideoForRegisteredUser(){
 
     $("#dashboard_video").modal("show");
 
-    var frame = $("#dashboard_video iframe");
-    frame.attr("src", $frame.attr("data-source"));
+    var $frame = $("#dashboard_video iframe");
+    $frame.attr("src", $frame.attr("data-source"));
 }
 
 </script>
@@ -758,17 +757,15 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
         <div class="modal-dialog" >
         <div class="modal-content">
         <div class="modal-header">
-          <button class="close" data-dismiss="modal">x</button>
+          <button class="close" data-dismiss="modal">&times;</button>
           <h3 id="myModalLabel">welcome</h3>
         </div>      
           <div class="modal-body">
               <div class="embed-responsive embed-responsive-16by9">
-                      <iframe class="embed-responsive-item" data-source="//www.youtube.com/embed/9aH60N6HPcc?list=PLqZv4FUxASTctDCZmdVbheU75Y3Szk9Ny" frameborder="0" allowfullscreen></iframe>
+                      <iframe class="embed-responsive-item" data-source="https://www.youtube.com/embed/9aH60N6HPcc?list=PLqZv4FUxASTctDCZmdVbheU75Y3Szk9Ny" frameborder="0" allowfullscreen></iframe>
               </div>       
           </div>     
-        <div class="modal-footer">
-             <div class="btn btn-default close" data-dismiss="modal">Skip</div>
-        </div>
+        
         </div>
         </div>
   </div>
