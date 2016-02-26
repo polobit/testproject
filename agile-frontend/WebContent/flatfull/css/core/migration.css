@@ -2004,6 +2004,12 @@ width: 1%!important;
       float: right;
     }
     .deals-name{
+      width: 40em;
+    }
+}
+
+@media all and (orientation:landscape) and (min-width: 480px) and (max-width: 600px) { 
+     .deals-name{
       width: 28em;
     }
 }
