@@ -281,7 +281,8 @@ public class TicketNotesUtil
 
 			for (TicketNotes note : notes)
 			{
-				if (note.created_by == CREATED_BY.REQUESTER)
+				if (note.created_by == CREATED_BY.REQUESTER 
+						|| note.assignee_id == null)
 					continue;
 
 				System.out.println(note.assignee_id);

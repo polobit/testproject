@@ -443,4 +443,14 @@ Handlebars.registerHelper('is_current_logged_in_user', function(id, options)
 	return options.inverse(this);
 });
 
+Handlebars.registerHelper('replace_br_with_space', function(text, options)
+{
+	if(!text)
+		return;
+
+	var regex = /<br\s*[\/]?>/gi;
+
+	return text.replace(regex, " ");
+});
+
 /** End of ticketing handlebars* */

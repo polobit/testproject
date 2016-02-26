@@ -57,6 +57,8 @@ var Tickets_Notes = {
 
 			success : function(model) {
 
+				var notes_json = model.toJSON();
+
 				// Remove draft message from local staorage
 				$('textarea#reply_textarea').val("");
 				Tickets.remove_draft_message(Current_Ticket_ID, ((note_type == 'PUBLIC') ? 'reply' : 'comment'));
@@ -76,8 +78,8 @@ var Tickets_Notes = {
 					json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
 					json.last_updated_time = current_date;
 					json.closed_time='';
-					json.last_reply_text = model.plain_text;
-					json.user_replies_count = model.user_replies_count;
+					json.last_reply_text = notes_json.plain_text;
+					json.user_replies_count = notes_json.user_replies_count;
 					
 					ticket_model.set(json, {
 						silent : true
@@ -393,7 +395,7 @@ var Tickets_Notes = {
 
               $.each(noteAttachment,function(index,note_Attachment){
                
-                notesText += "\n"+ (index+=1) +" . "+note_Attachment.name+" - "+note_Attachment.url;
+                notesText += "\n"+ (index+=1) +" . "+note_Attachment.name+" - "+ encodeURI(note_Attachment.url);
               
              });
              

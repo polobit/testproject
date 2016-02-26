@@ -967,19 +967,19 @@ Deleted  {{custom1}} Campaigns<br/>
 		{{#if_equals "TICKET_ASSIGNEE_REPLIED" activity_type}}
 			Assignee replied to <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a><br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{custom2}}
+				{{{replace_br_with_space custom1}}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_REQUESTER_REPLIED" activity_type}}
 			Requster replied to <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a><br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{custom2}}
+				{{{replace_br_with_space custom1}}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_PRIVATE_NOTES_ADD" activity_type}}
 			Private notes added to <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a><br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{custom2}}
+				{{{replace_br_with_space custom2}}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_MARKED_FAVORITE" activity_type}}

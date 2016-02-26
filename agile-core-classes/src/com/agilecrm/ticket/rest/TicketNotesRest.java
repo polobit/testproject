@@ -124,7 +124,10 @@ public class TicketNotesRest
 					ticket.assignee_id = domainUserKey;
 					ticket.assigneeID = domainUserKey.getId();
 					ticket.assigned_time = currentTime;
-
+					ticket.no_of_reopens += 1;
+					
+					ticket.status = Status.PENDING;
+					
 					// Logging public notes activity
 					ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID,
 							ticket.id, html_text, plain_text, "html_text");
@@ -204,12 +207,7 @@ public class TicketNotesRest
 					else
 						// Set status to pending as it is replied by assignee
 						ticket.status = Status.PENDING;
-
-					// Updating existing ticket
-					ticket = TicketsUtil.updateTicket(ticketID, ticket.cc_emails, plain_text, LAST_UPDATED_BY.AGENT,
-							currentTime, null, currentTime,
-							(notes.attachments_list != null && notes.attachments_list.size() > 0) ? true : false);
-
+					
 					// Updating ticket entity
 					Tickets.ticketsDao.put(ticket);
 
@@ -233,7 +231,14 @@ public class TicketNotesRest
 					}
 				}
 			}
-
+			
+			String cleanText = plain_text.replaceAll("(<br />|<br/>|<br/>)", "");
+			
+			// Updating existing ticket
+			ticket = TicketsUtil.updateTicket(ticketID, ticket.cc_emails, cleanText, LAST_UPDATED_BY.AGENT,
+					currentTime, null, currentTime,
+					(notes.attachments_list != null && notes.attachments_list.size() > 0) ? true : false);
+			
 			ticketNotes.domain_user = DomainUserUtil.getDomainUser(ticket.assigneeID);
 
 			System.out.println("Execution time: " + (Calendar.getInstance().getTimeInMillis() - currentTime) + "ms");
