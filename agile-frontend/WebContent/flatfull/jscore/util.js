@@ -654,7 +654,7 @@ function showPageBlockModal() {
 			$("#alert-message").html(template_ui).show();
 		}, null);
 
-	}else if($.inArray(USER_BILLING_PREFS.status, PAGEBLOCK_REASON) != -1 && USER_BILLING_PREFS.updated_time ! null && USER_BILLING_PREFS.updated_time ! undefined && USER_BILLING_PREFS.updated_time < 1457224200){
+	}else if($.inArray(USER_BILLING_PREFS.status, PAGEBLOCK_REASON) != -1 && USER_BILLING_PREFS.updated_time ! null && USER_BILLING_PREFS.updated_time != undefined && USER_BILLING_PREFS.updated_time < 1457224200){
 		getTemplate("block-user", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
