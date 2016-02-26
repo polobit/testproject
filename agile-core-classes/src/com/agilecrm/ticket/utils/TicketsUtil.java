@@ -789,6 +789,8 @@ public class TicketsUtil
 	public static Tickets changeGroupAndAssignee(Long ticket_id, Long group_id, Long assignee_id)
 			throws EntityNotFoundException
 	{
+		System.out.println("changeGroupAndAssignee: ");
+		
 		// Fetching ticket object by its id
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
@@ -870,7 +872,8 @@ public class TicketsUtil
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
 						oldAssigneeID + "", assignee_id + "", "assigneeID");
 		}
-
+		
+		System.out.println("completed changeGroupAndAssignee execution");
 		return ticket;
 	}
 
@@ -908,6 +911,8 @@ public class TicketsUtil
 	public static void sendEmailToGroup(long group_id, String subject, String body) throws EntityNotFoundException,
 			JSONException
 	{
+		System.out.println("Send email to group....");
+		
 		// Fetching ticket group
 		TicketGroups group = TicketGroupUtil.getTicketGroupById(group_id);
 
@@ -918,7 +923,9 @@ public class TicketsUtil
 			domainUserKeys.add(new Key<DomainUser>(DomainUser.class, userKey));
 
 		List<DomainUser> users = DomainUserUtil.dao.fetchAllByKeys(domainUserKeys);
-
+		
+		System.out.println("users found...." + users.size());
+		
 		for (DomainUser user : users)
 			sendEmailToUser(user.email, subject, body);
 	}
@@ -939,6 +946,8 @@ public class TicketsUtil
 		data.put("body", body);
 		
 		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data);
+		
+		System.out.println("Sent email to: " + email);
 	}
 
 	/**

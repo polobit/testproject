@@ -19,7 +19,7 @@ function getUsersFromGroup(element, jsonData) {
 
 			var usersSelectField = "";
 			$.each(data, function(index, userData) {
-				usersSelectField += "<option id='" + userData.id + "'>"
+				usersSelectField += "<option value='" + userData.id + "'>"
 						+ userData.name + " (" + userData.email + ") "
 						+ "</option>";
 			});
