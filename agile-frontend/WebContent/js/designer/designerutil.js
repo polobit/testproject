@@ -826,10 +826,12 @@ function insertSelectedOption1(ele ,target_id)
 	function checkRequiredFieldUpdateDeal(selector)
 	{
 	
-	if (selector.find('#expected_value').val() != "" && selector.find('#milestone').val() == "")
-		selector.find('#milestone').removeProp("required");
-
-	// function remove_property(ele)
+		if (selector.find('#expected_value').val() == "" && selector.find('#milestone').val() == ""){
+			
+			selector.find("#errorsdiv").html("<p style=font-size:120%;>Please complete any one of the fields.</p>");
+			throw new Error('This is not an error. This is just to abort javascript');
+		} 
+	
 	}
 
 	
