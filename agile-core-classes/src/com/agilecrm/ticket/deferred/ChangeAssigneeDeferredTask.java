@@ -3,6 +3,7 @@ package com.agilecrm.ticket.deferred;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.googlecode.objectify.Key;
 
 public class ChangeAssigneeDeferredTask extends TicketBulkActionAdaptor
@@ -29,11 +30,14 @@ public class ChangeAssigneeDeferredTask extends TicketBulkActionAdaptor
 	@Override
 	protected void performAction()
 	{
-		for (Key<Tickets> ticket : ticketsKeySet)
+		for (Key<Tickets> ticketKey : ticketsKeySet)
 		{
 			try
 			{
-				TicketsUtil.changeGroupAndAssignee(ticket.getId(), groupID, newAssigneeID);
+				Tickets ticket = TicketsUtil.changeGroupAndAssignee(ticketKey.getId(), groupID, newAssigneeID);
+				
+				//Execute trigger for assignee change
+				TicketTriggerUtil.executeTriggerForAssigneeChanged(ticket);
 			}
 			catch (Exception e)
 			{

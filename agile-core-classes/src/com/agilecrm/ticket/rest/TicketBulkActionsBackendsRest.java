@@ -45,7 +45,7 @@ public class TicketBulkActionsBackendsRest
 	@POST
 	@Path("/manage-labels/{domain_user_id}")
 	@Produces(MediaType.APPLICATION_FORM_URLENCODED)
-	public void manageTags(@PathParam("domain_user_id") Long domainUserID, TicketBulkActionAttributes attributes)
+	public void manageLabels(@PathParam("domain_user_id") Long domainUserID, TicketBulkActionAttributes attributes)
 	{
 		try
 		{

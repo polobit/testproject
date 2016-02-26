@@ -65,11 +65,12 @@ var Tickets_Notes = {
                 if(notes_json.note_type == 'PRIVATE'){
                 	showNotyPopUp('information', "Comment has been added", 'bottomRight', 5000);
                 }else{
-	                if(is_ticket_closed){
-	                 showNotyPopUp('information', "Comment has been added and ticket status changed to Closed", 'bottomRight', 5000);
-	                }
+	                
+	                if(is_ticket_closed)
+	                	showNotyPopUp('information', "Comment has been added and ticket status changed to Closed", 'bottomRight', 5000);
 					else 
-	                 showNotyPopUp('information', "Comment has been added and ticket status changed to Pending", 'bottomRight', 5000);
+	                	showNotyPopUp('information', "Comment has been added and ticket status changed to Pending", 'bottomRight', 5000);
+					
 					//update model in collection
 					if(App_Ticket_Module.ticketsCollection){
 	                    
@@ -472,13 +473,12 @@ var Tickets_Notes = {
 		json.workflow_id = workflowId;
 		json.ticket_id = Current_Ticket_ID;
 
-
 		// Send req to trigger campaign
 		var newTicketModel = new BaseModel();
 		newTicketModel.url = "core/api/tickets/execute-workflow";
-		newTicketModel.save(json, 
-			{	success: function(model){
-
+		newTicketModel.save(json, {	
+				success: function(model){
+					showNotyPopUp('information', 'Workflow execution has been started successfully', 'bottomRight', 5000);
 			}}
 		);
 	},
