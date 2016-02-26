@@ -160,26 +160,25 @@
     </div>
     <div class="contacts-div">
     <div id="bulk-action-btns" class="panel-heading no-shadow grid-checkboxes b-r {{#is_mobile}} {{else}} m-r-sm {{/is_mobile}}" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);background-color: rgba(246,248,248,1);">
-				      	
-					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add Tags</button>
-					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Remove Tags</button>
-					    {{#hasMenuScope 'CAMPAIGN'}}
-					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add to Campaign</button>
-					    {{/hasMenuScope}}
-					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Start Call Campaign</button>
-					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Send Email</button>
-					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Change Owner</button>
-					    {{#hasScope "EXPORT_CONTACTS"}}
-					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Export Contacts as CSV</button>
-					    {{/hasScope}}
-					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Delete</button>
-					    {{#if this.length}}
-				          <span style="margin: 5px 0px 5px 5px;float:right"> <label class="i-checks i-checks-sm">
+    					{{#if this.length}}
+				          <span style="margin: 5px 0px 5px 5px;"> <label class="i-checks i-checks-sm p-l-lg">
 				                <input type="checkbox" id="select_grid_contacts1" class="thead_check" value="">
 				                <i></i>                
-				          </label>Select All</span>
+				          </label></span>
 				  		{{/if}}
-					    
+				      	
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add Tags</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Remove Tags</button>
+					    {{#hasMenuScope 'CAMPAIGN'}}
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add to Campaign</button>
+					    {{/hasMenuScope}}
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Start Call Campaign</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Send Email</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Change Owner</button>
+					    {{#hasScope "EXPORT_CONTACTS"}}
+					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Export Contacts as CSV</button>
+					    {{/hasScope}}
+					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Delete</button>
 				    </div>
       <div class="m-l-sm filter-criteria"></div>
       {{#unless this.length}}
@@ -201,26 +200,24 @@
 	<script id="contacts-grid-table-collection-template" type="text/html">
 
 	<div id="bulk-action-btns" class="panel-heading no-shadow m-r-sm b-r" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);background-color: rgba(246,248,248,1);">
-				      	
-					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add Tags</button>
-					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Remove Tags</button>
-					    {{#hasMenuScope 'CAMPAIGN'}}
-					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Add to Campaign</button>
-					    {{/hasMenuScope}}
-					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Start Call Campaign</button>
-					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Send Email</button>
-					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Change Owner</button>
-					    {{#hasScope "EXPORT_CONTACTS"}}
-					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Export Contacts as CSV</button>
-					    {{/hasScope}}
-					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled" style="font-size:10px">Delete</button>
-					    {{#if this.length}}
-				          <span style="margin: 5px 0px 5px 5px;float:right"> <label class="i-checks i-checks-sm">
+				      	{{#if this.length}}
+				          <span style="margin: 5px 0px 5px 5px;"> <label class="i-checks i-checks-sm p-l-lg">
 				                <input type="checkbox" id="select_grid_contacts1" class="thead_check" value="">
 				                <i></i>                
-				          </label>Select All</span>
+				          </label></span>
 				  		{{/if}}
-					    
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add Tags</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Remove Tags</button>
+					    {{#hasMenuScope 'CAMPAIGN'}}
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add to Campaign</button>
+					    {{/hasMenuScope}}
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Start Call Campaign</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Send Email</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Change Owner</button>
+					    {{#hasScope "EXPORT_CONTACTS"}}
+					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Export Contacts as CSV</button>
+					    {{/hasScope}}
+					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Delete</button>
 				    </div>
       <div class="m-l-sm filter-criteria"></div>
       {{#unless this.length}}
