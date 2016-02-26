@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import com.campaignio.wrapper.LogWrapper;
 
-public class SentDateComparator implements Comparator<LogWrapper>
+public class TimeComparator implements Comparator<LogWrapper>
 {
 
 	@Override
@@ -13,7 +13,7 @@ public class SentDateComparator implements Comparator<LogWrapper>
 		int result = 0;
 		try
 		{
-			result = (log1.time.compareTo(log2.time));
+			result = (log2.time.compareTo(log1.time));
 			return result;
 		}
 		catch (Exception e)
