@@ -186,7 +186,7 @@ $(function()
 										     	var avg_deal_size = 0;
 										     	var deal_count = parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) ; 
 										     	if(deal_count == 0)
-										     		avg_deal_size = 0;
+										     		avg_old_deal_size = 0;
 										     	else
 										     		avg_old_deal_size = olddealvalue / deal_count;
 
