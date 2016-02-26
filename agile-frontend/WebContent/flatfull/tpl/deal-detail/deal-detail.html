@@ -7,8 +7,9 @@
 <div class="row-row">
 <div class="wrapper pos-rlt" id="deal-detail-actions-dropdown">
 <div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
-<span class="h3 font-thin custom-color m-b-xs" style="margin-right:12px;"id=" deals-inline" property="name" value="{{name}}" url="/deals/id:">
-{{#if name}}{{name}}{{/if}}</span>
+<div><input type="text" class="col-md-10 hidden" value="{{name}}"id="inline-input"></input>
+<span class="h3 font-thin custom-color m-b-xs"id="deals-inline" >
+{{#if name}}{{name}}{{/if}}</span></div>
 {{#if expected_value}}
 <div class="m-b-sm h3 font-thin   m-t-sm">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}

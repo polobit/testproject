@@ -50,13 +50,37 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		'click .activity-delete' : 'deleteActivity',
 		//agile-x-edit
 		'click #deals-inline' : 'dealInlineEdit', 	
-    	
+    	'blur #inline-input' : 'inlineDealNameChange',
     },
 
-    /*deals inline edit function*/
+    /*
+    get actual name and update the name of the deal
+    */
+    inlineDealNameChange : function(e){
+
+    	console.log("harsha");
+    	var name = $("#inline-input").val();
+    	if(!name)
+    	{
+    		$("#inline-input").addClass("error-inputfield");
+          	 return;
+    	}
+
+    	name = name.trim();
+
+    	dealNameEdit(name);
+
+    },
+
+    /*deals inline edit function
+    shows and hides the inline input for editing
+    */
     dealInlineEdit : function(e){
     	e.preventDefault();
-    	alert("harsha1");
+    	$("#deals-inline").toggleClass("hidden");
+    	$("#inline-input").toggleClass("hidden");
+    	if(!$("#inline-input").hasClass("hidden"))
+			$("#inline-input").focus();
     },
 
 	/**
