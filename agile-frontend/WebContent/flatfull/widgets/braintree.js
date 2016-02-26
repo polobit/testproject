@@ -24,7 +24,7 @@ function getTransactions(callback, contact_id){
 
 	}, function error(data){
 		console.log("Brain tree failed ");
-		$('#Braintree').html('<div class="wrapper-sm">Please Configure Widget Properly</div>');
+		$('#Braintree').html('<div class="wrapper-sm">Please configure widget properly</div>');
 	});
 }
 

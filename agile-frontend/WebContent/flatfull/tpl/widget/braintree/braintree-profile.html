@@ -1,19 +1,17 @@
 <script id="braintree-login-template" type="text/html">
 	<div>
 		<form  id="braintree_login_form" name="braintree_login_form" method="post">
-	    	<fieldset>
-				<p>Get the Transactions from BrainTree</p>
-				
-				<label>Enter your BrainTree details </label>
+	    	<fieldset>			
+				<label>Enter your Braintree details </label>
 				<div class="control-group form-group">
 					<div class="controls">
-						<input type="text" id="merchant_id" placeholder="merchant id" class="input-medium required widget_input_box form-control" value="" name="merchant_id">
+						<input type="text" id="merchant_id" placeholder="Merchant ID" class="input-medium required widget_input_box form-control" value="" name="merchant_id">
 						</input>
 					</div>
 				</div>
 				<div class="control-group form-group">
 					<div class="controls">
-						<input type="text" id="public_key" class="input-medium required widget_input_box form-control"  placeholder="public key" value="" name="public_key">
+						<input type="text" id="public_key" class="input-medium required widget_input_box form-control"  placeholder="Public Key" value="" name="public_key">
 						</input>
 					</div>
 				</div>
@@ -38,7 +36,7 @@
 		<li class="list-group-item r-none b-l-none b-r-none" style="width:249px;">
 			<div class="clear">					
 				<a class="pull-left c-p" data-toggle="collapse" href="#collapse-{{id}}" >
-					#{{orderId}}
+					Order ID: #{{orderId}}
 				</a>
 				<div class="pull-right">$ {{amount}}</div>	
 				<div class="clearfix"></div>	
@@ -49,7 +47,7 @@
 			<div class="clearfix"></div>					
 			<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
 				<div class="pull-left">Tax Amount</div>
-				<div class="pull-right">{{taxAmount}}</div>
+				<div class="pull-right">$ {{taxAmount}}</div>
 				<div class="clearfix"></div>
 
 				<div class="pull-left">Order Id</div>
@@ -64,6 +62,6 @@
 		</li>
 	{{/each}}
 {{else}}
-	<li class="list-group-item r-none b-l-none b-r-none"> No Transactions </li>
+	<li class="list-group-item r-none b-l-none b-r-none"> No transactions </li>
 {{/if}}
 </script>
