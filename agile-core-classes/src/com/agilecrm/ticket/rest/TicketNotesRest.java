@@ -131,6 +131,7 @@ public class TicketNotesRest
 					ticket.assignee_id = domainUserKey;
 					ticket.assigneeID = domainUserKey.getId();
 					ticket.assigned_time = currentTime;
+					ticket.assigned_to_group = false;
 
 					// Logging status changed activity
 					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
@@ -196,15 +197,15 @@ public class TicketNotesRest
 					TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
 				}
 
+				// Updating ticket entity
+				Tickets.ticketsDao.put(ticket);
+				
 				String cleanText = plain_text.replaceAll("(<br />|<br/>|<br/>)", "");
-
+				
 				// Updating existing ticket
 				ticket = TicketsUtil.updateTicket(ticketID, ticket.cc_emails, cleanText, LAST_UPDATED_BY.AGENT,
 						currentTime, null, currentTime,
 						(notes.attachments_list != null && notes.attachments_list.size() > 0) ? true : false);
-
-				// Updating ticket entity
-				Tickets.ticketsDao.put(ticket);
 
 				// Updating text search data
 				new TicketsDocument().edit(ticket);
