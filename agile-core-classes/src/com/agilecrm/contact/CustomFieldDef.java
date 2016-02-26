@@ -157,10 +157,14 @@ public class CustomFieldDef
 		    throw new Exception();
 		}
 	    }
-
+	//Check custom field should not be utm parameter name
+	   if(Contact.UTM_CAMPAIGN.equalsIgnoreCase(this.field_label) || Contact.UTM_SOURCE.equalsIgnoreCase(this.field_label) || Contact.UTM_TERM.equalsIgnoreCase(this.field_label) || Contact.UTM_MEDIUM.equalsIgnoreCase(this.field_label) || Contact.UTM_CONTENT.equalsIgnoreCase(this.field_label) )
+	   {
+		   throw new Exception();
+	   }
+	   System.out.println("ppppppppppppp "+this.field_label);
 	dao.put(this);
     }
-
     @PostLoad
     public void postLoad()
     {
