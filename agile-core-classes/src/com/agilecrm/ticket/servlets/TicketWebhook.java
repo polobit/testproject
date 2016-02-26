@@ -25,6 +25,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.agilecrm.Globals;
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.export.gcs.GCSServiceAgile;
 import com.agilecrm.search.document.TicketsDocument;
@@ -392,8 +394,9 @@ public class TicketWebhook extends HttpServlet
 
 				// Creating new Ticket in Ticket table
 				ticket = TicketsUtil.createTicket(groupID, null, fromName, fromEmail, msgJSON.getString("subject"),
-						ccEmails, TicketNotesUtil.removedQuotedReplies(plainText), Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER,
-						attachmentExists, ip, new ArrayList<Key<TicketLabels>>());
+						ccEmails, TicketNotesUtil.removedQuotedReplies(plainText), Status.NEW, Type.PROBLEM,
+						Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip,
+						new ArrayList<Key<TicketLabels>>());
 
 				BulkActionNotifications.publishNotification("New ticket #" + ticket.id + " received");
 			}
@@ -411,19 +414,30 @@ public class TicketWebhook extends HttpServlet
 				}
 
 				// Updating existing ticket
-				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, TicketNotesUtil.removedQuotedReplies(plainText), LAST_UPDATED_BY.REQUESTER,
-						currentTime, currentTime, null, attachmentExists);
+				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, TicketNotesUtil.removedQuotedReplies(plainText),
+						LAST_UPDATED_BY.REQUESTER, currentTime, currentTime, null, attachmentExists);
 
 				if (ticket.status == Status.CLOSED)
 				{
 					ticket.no_of_reopens += 1;
-					
-					// Updating ticket entity
-					Tickets.ticketsDao.put(ticket);
 
-					// Updating text search data
-					new TicketsDocument().edit(ticket);
+					// Logging status changed activity
+					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+							Status.CLOSED.toString(), Status.OPEN.toString(), "status");
 				}
+				else
+				{
+					// Logging status changed activity
+					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+							Status.PENDING.toString(), Status.OPEN.toString(), "status");
+				}
+
+				ticket.status = Status.OPEN;
+				// Updating ticket entity
+				Tickets.ticketsDao.put(ticket);
+
+				// Updating text search data
+				new TicketsDocument().edit(ticket);
 
 				// Sending user replied notification
 				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket(#" + ticket.id
