@@ -3177,6 +3177,8 @@ table.hide-head-checkbox th label.i-checks {
 .deals-nowrap .no-wrap {
  white-space: nowrap !important;
 }
+
+
 .contact_popover{ 
 
 	border-radius: 0px;
@@ -3282,3 +3284,15 @@ table.hide-head-checkbox th label.i-checks {
   color: black !important;
   opacity: 0.9;
 }
+#removeBtn:hover
+{
+  color: black !important;
+}
+
+
+@media ( max-width : 767px) {
+	.vbox-mobile-view .vbox{ display: block;min-height:auto;}
+	.vbox-mobile-view .row-row{ display: inherit !important; }
+
+}
+
