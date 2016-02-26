@@ -249,6 +249,11 @@ function deal_infi_scroll(element_id, targetCollection)
 			$(targetCollection.infiniScroll.options.target).find('.scroll-loading').remove();
 			includeTimeAgo($(targetCollection.infiniScroll.options.target));
 			$('a.deal-notes').tooltip();
+			$(response).each(function(){
+				$('#'+this.id).parent('li').addClass("deal-color");
+				$('#'+this.id).parent('li').addClass(this.colorName);
+
+			});
 		},
 		onFetch : function()
 		{
