@@ -19,6 +19,8 @@ div.colorPicker-palette {
   background-color: #EFEFEF;
   padding: 2px;
   z-index: 9999;
+  top: 148px !important;
+  left: 580px !important;
 }
   div.colorPicker_hexWrap {width: 0%; float:left;height:0%; }
   div.colorPicker_hexWrap label {font-size: 95%; color: #2F2F2F; margin: 5px 2px; width: 25%;display:none}
