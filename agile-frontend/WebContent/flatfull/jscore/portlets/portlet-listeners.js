@@ -933,17 +933,28 @@ function initializeAddPortletsListeners() {
 	
 	$('#portlets-add-listener').on('click','.configure-portlets',function(e){
 		e.preventDefault();
-					var route=$(this).attr("route");
-					route=route.substr(1,route.length-2);
-					var routes=route.split(',');
+		  
+					//var route=$(this).attr("route");
+					//route=route.substr(1,route.length-2);
+					//var routes=route.split(',');
 		var portlet_type = $(this).attr("portlet_type");
 				var p_name = $(this).attr("portlet_name");
 				
 				$("#portletStreamModal").html(getTemplate('portletStreamModalInfo'));
 				$("#portletStreamModal").modal('show');
 
-				if(p_name=='Mini Calendar')
-				{
+					  $.ajax({
+            type: "GET",
+            url: "/core/api/portlets/default",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data) {  
+            	if(p_name=='Mini Calendar'){
+            	$.each(data,function(index,p){ 
+            		if(p.name=='Mini Calendar'){
+            			var route=p.is_routeadded;
+					route=route.substr(1,route.length-2);
+					var routes=route.split(',');
 					$.each(routes,function(index,data)
 					{
 						$('#route-list>option', $('#portletStreamModal')).each(function(i,d)
@@ -953,6 +964,10 @@ function initializeAddPortletsListeners() {
 						})
 					});
 				}
+            		});
+            	
+            } 
+					
 				if($('#route-list' , $('#portletStreamModal')).children().length==0){
 					$('.modal-body',$('#portletStreamModal')).text('Already Added');
 				$(".add-portlet").addClass('disabled');
@@ -978,6 +993,8 @@ function initializeAddPortletsListeners() {
 		$(".add_to_all").attr('portlet_type',
 				portlet_type);
 		$(".add_to_all").attr('portlet_name',p_name);
+	}
+	 });
 		
 	});
 
@@ -1105,9 +1122,9 @@ function clickfunction(that,url,forAll,route){
 							$('#zero-portlets').hide();
 						if ($('#no-portlets').is(':visible'))
 							$('#no-portlets').hide();
-						App_Portlets.navigate("dashboard", {
+						/*App_Portlets.navigate("dashboard", {
 							trigger : true
-						});
+						});*/
 					},
 					error : function(model, response) {
 						alert("Failed to add.");

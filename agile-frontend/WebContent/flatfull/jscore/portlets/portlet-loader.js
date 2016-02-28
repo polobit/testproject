@@ -52,7 +52,7 @@ function loadPortlets(route,el){
 			{
 				/*if($('#zero-portlets').is(':visible') || $('#no-portlets').is(':visible'))
 				$('#no-portlets').parents('.wrapper-md').hide();*/
-				$('#portlets').parents('.wrapper-md').show();
+				$('#portlets').parents('.route_Portlet').show();
 			}
 			set_up_portlets(el, portlets_el);
 				if(route!='DashBoard' && App_Portlets.RoutePortlets.length!=0){
