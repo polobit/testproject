@@ -463,7 +463,6 @@ public class Tickets extends Cursor implements Serializable
 				labels.add(key.getId());
 			}
 		}
-
 	}
 
 	/**

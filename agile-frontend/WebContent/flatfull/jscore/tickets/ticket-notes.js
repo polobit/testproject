@@ -82,6 +82,7 @@ var Tickets_Notes = {
 						json.last_updated_time = current_date;
 						json.closed_time='';
 						json.last_reply_text = notes_json.plain_text;
+						json.last_updated_by = 'AGENT';
 						json.user_replies_count = notes_json.user_replies_count;
 						
 						ticket_model.set(json, {

@@ -185,6 +185,7 @@ public class TicketsUtil
 		try
 		{
 			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
+			ticket.groupID = group_id;
 			ticket.labels_keys_list = labelsKeysList;
 			ticket.status = status;
 			ticket.type = type;
