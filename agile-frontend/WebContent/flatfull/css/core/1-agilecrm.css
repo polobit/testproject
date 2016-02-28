@@ -3199,3 +3199,8 @@ table.hide-head-checkbox th label.i-checks {
     z-index: 1000
 
 }
+
+.report-selected
+{
+	background-color: #e4eaec!important;
+}

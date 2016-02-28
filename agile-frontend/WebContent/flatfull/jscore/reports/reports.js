@@ -100,6 +100,35 @@ function initializeReportsListeners(){
 
 						$('.show_screenshot').popover();
 					});
+			$('.col-md-3')
+			.on(
+					"click",
+					'.report-go',
+					function(e) {
+
+						var tab_id=$(this).parents('.tab-pane').attr('id');
+						_agile_set_prefs('reports_tab', tab_id);
+						return;
+					/*	$.each($("#reports-tab-container .tab-container ul li"),function(){
+					var temp = $(this).find("a").attr("href").substring(1);
+					if(temp==tab_id)
+					{*/
+						//$(this).addClass('report-selected');
+					/*	var reportsTab = _agile_get_prefs("reports_tab");
+				if(!reportsTab || reportsTab == null) {
+					var tabTemp;
+					if(islocalStorageHasSpace()){
+						if($("#dealstab").length>0)
+							tabTemp="deals-tab";
+						else
+							tabTemp="calls-tab";
+							_agile_set_prefs('reports_tab', tabTemp);	
+					}
+					reportsTab = tabTemp;
+						return;*/
+					//}
+				//});
+					});
 
 			$('#reports-listerners-container')
 			.on(
@@ -110,7 +139,7 @@ function initializeReportsListeners(){
 			.on(
 					"mouseleave",'#reports-tab-container',function(e){
 						$('.reports_tab_content').hide();
-						//$('.nav-tabs .active').removeClass('active');
+						$('.nav-tabs .active').removeClass('active');
 					});
 			$('#reports-listerners-container')
 			.on(

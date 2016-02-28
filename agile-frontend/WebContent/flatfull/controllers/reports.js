@@ -28,6 +28,8 @@ var ReportsRouter = Backbone.Router
 					if($(this).attr('id')==tab_active)
 					{
 						var route=$('.col-md-3:first-child .btn-default',this).attr('href').substring(1);
+						_agile_set_prefs("reports_tab",tab_active);
+						$('#reports-tab-container a[href="#'+tab_active+'"]').parent().addClass('report-selected');
 						Backbone.history.loadUrl(route);
 						return;
 					}

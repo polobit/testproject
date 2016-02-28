@@ -719,7 +719,8 @@ getRepPerformanceLog : function(url) {
 				hideTransitionBar();
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
-				
+				var reportsTab = _agile_get_prefs("reports_tab");
+				$('#reports-tab-container a[href="#'+reportsTab+'"]').parent().addClass('report-selected');
 				/*var reportsTab = _agile_get_prefs("reports_tab");
 				if(!reportsTab || reportsTab == null) {
 					var tabTemp;
