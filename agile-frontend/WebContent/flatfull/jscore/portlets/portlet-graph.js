@@ -1025,7 +1025,7 @@ var portlet_graph_utility = {
 																	+ '<div class="p-n" style="color:'
 																	+ this.series.color
 																	+ ';">'
-																	+ 'Average Deviation Time Taken'
+																	+ 'Deviation Time'
 																	+ ':'
 																	+ portlet_utility.getPortletsTimeConversion(Math.round(this.y))
 																	+ ' </div>'
