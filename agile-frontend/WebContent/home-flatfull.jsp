@@ -711,7 +711,6 @@ head.ready(["core"], function(){
   try{
 	   showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
     }catch(e){}
-  });
    
 	//Resting the variables.
 	<%  session.removeAttribute("widgetMsgType");
