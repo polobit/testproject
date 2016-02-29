@@ -1738,7 +1738,7 @@ var portlet_utility = {
 				.floor(((diffInSeconds % (24 * 60 * 60)) % (60 * 60)) % 60);
 
 		if(days!=0)
-			duration += '' + days + 'd';
+			duration += ' ' + days + 'd';
 		if (hrs != 0)
 			duration += ' ' + hrs + 'h';
 		if (mins != 0)

@@ -1033,7 +1033,7 @@ var portlet_graph_utility = {
 																	+ this.series.color
 																	+ ';">'
 																	+ this.series.name
-																	+ ':'
+																	+ ': '
 																	+ portlet_utility.getNumberWithCommasForPortlets(CountData[this.series.index][this.point.x])
 																	+ ' </div>'
 																	+ '</div>';
