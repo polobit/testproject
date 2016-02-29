@@ -29,7 +29,7 @@
               "category": "Info",
               "name": "expected_value",
               "id": "expected_value",
-              "title": "Enter value or stripe merge field",
+              "title": "Enter value or merge field",
               "fieldType":"input", 
               "type": "text"
              

@@ -2713,16 +2713,15 @@ public class OpportunityUtil
     }
     
     @SuppressWarnings("null")
-	public static void updateDeal(Long contactId, String milestone, String expectedValue)
+	public static String updateDeal(Long contactId, String milestone, String expectedValue)
     {   
     	if(expectedValue==null && milestone==null)
     		if (contactId == 0 && milestone.length()==0 && expectedValue.length()==0 )
-    			return; 
+    			return null; 
     	
     	double expectedValueD=0;
-    	if(expectedValue.length()!=0 && expectedValue!=null)
-    		expectedValueD= Double.parseDouble(expectedValue);
-    		
+    	if(expectedValue.length()!=0 && expectedValue!=null)    		
+    		expectedValueD= Double.parseDouble(expectedValue);	
     	
     	Map<String, Object> conditionsMap = new HashMap<String, Object>();
     	conditionsMap.put("archived", false);
@@ -2742,7 +2741,7 @@ public class OpportunityUtil
 	   	List<Opportunity> listOpportunityObj= dao.fetchAllByOrder(1,null,conditionsMap,true,false,"-created_time");
     	
 	   	if(listOpportunityObj.isEmpty())
-	   		return;
+	   		return null;
 	   	
 	   	Opportunity opportunityObj = listOpportunityObj.get(0);
     		
@@ -2751,10 +2750,12 @@ public class OpportunityUtil
 	   		opportunityObj.pipeline_id=pipeline;
     	}
 	   	
-    	if(expectedValueD!=0)
+	   	if(expectedValue.length()!=0 && expectedValue!=null)   
     		opportunityObj.expected_value=expectedValueD;
     	
     	opportunityObj.save();
+
+    	return opportunityObj.name;
     }
 	
 }

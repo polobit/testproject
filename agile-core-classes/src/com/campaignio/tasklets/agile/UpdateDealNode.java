@@ -33,25 +33,20 @@ public class UpdateDealNode extends TaskletAdapter
     
     	String milestone = getStringValue(nodeJSON, subscriberJSON, data, MILESTONE);
     	String expectedValue = getStringValue(nodeJSON, subscriberJSON, data, EXPECTEDVALUE);
-    	String msg=null;
-    	    	
+    	String msg=null;   
+    	
     	try
     {
         
-         OpportunityUtil.updateDeal(Long.parseLong(AgileTaskletUtil.getId(subscriberJSON)),
+        String dealName= OpportunityUtil.updateDeal(Long.parseLong(AgileTaskletUtil.getId(subscriberJSON)),
                 milestone,expectedValue);
          
-        if(expectedValue.length()!=0 && milestone.length()!=0 && expectedValue!=null && milestone!=null)
-            msg="Deal is updated."+"<br>Value : " + expectedValue +"<br> MileStone : "+milestone.substring(milestone.indexOf("_")+1);
-            		
-        else if( milestone.length()!=0 &&  milestone!=null)
-        	msg="Milestone of Deal is updated :" + milestone.substring(milestone.indexOf("_")+1);
-            		
-        else if(expectedValue.length()!=0 && expectedValue!=null)
-            msg= "Value of Deal is updated :" + expectedValue;            		
+        if(dealName!=null){
+        	msg =printErrorMessage(dealName,milestone,expectedValue);
+        	 LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), msg
+             		,LogType.UPDATE_DEAL.toString());  
+        }
         
-        LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), msg
-        		,LogType.UPDATE_DEAL.toString());  
         
     }
     catch (Exception e)
@@ -63,4 +58,22 @@ public class UpdateDealNode extends TaskletAdapter
     
     TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
     }
+    
+    public String printErrorMessage(String dealName,String milestone,String expectedValue){
+    	
+    	String msg=null;
+    	if(expectedValue.length()!=0 && milestone.length()!=0 && expectedValue!=null && milestone!=null)
+            msg=dealName +" deal is updated."+"<br>Value : " + expectedValue +"<br> MileStone : "+milestone.substring(milestone.indexOf("_")+1);
+            		
+        else if( milestone.length()!=0 &&  milestone!=null)
+        	msg="Milestone of "+dealName +" deal is updated :" + milestone.substring(milestone.indexOf("_")+1);
+            		
+        else if(expectedValue.length()!=0 && expectedValue!=null)
+            msg= "Value of "+dealName +" deal is updated :" + expectedValue; 
+    	
+    	return msg;
+        
+    }
+    
+    
 }
