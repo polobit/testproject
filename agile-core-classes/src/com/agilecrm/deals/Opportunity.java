@@ -242,6 +242,12 @@ public class Opportunity extends Cursor implements Serializable
      */
     @NotSaved(IfDefault.class)
     private Key<Category> dealSource = null;
+    
+    /**
+     * Total Deal value
+     */
+    @NotSaved
+    public Long total_deal_value = 0L;
 
     /**
      * ObjectifyDao of Opportunity.
