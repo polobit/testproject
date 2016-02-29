@@ -58,17 +58,31 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
     */
     inlineDealNameChange : function(e){
 
-    	console.log("harsha");
+    	
     	var name = $("#inline-input").val();
+    	var lastname = $("#deals-inline").text();
+
     	if(!name)
     	{
     		$("#inline-input").addClass("error-inputfield");
           	 return;
     	}
 
-    	name = name.trim();
+    	if(lastname != name)
+    	{
+    		name = name.trim();
 
-    	dealNameEdit(name);
+    		dealNameEdit(name);
+    	}
+
+    	else
+    	{
+    		$("#inline-input").toggleClass("hidden");
+			$("#deals-inline").toggleClass("hidden");
+			return;
+    	}
+
+    	
 
     },
 

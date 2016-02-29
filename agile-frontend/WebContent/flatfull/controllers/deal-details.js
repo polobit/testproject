@@ -98,12 +98,6 @@ var DealDetailsRouter = Backbone.Router.extend({
 function dealNameEdit(el)
 {
 	var json = App_Deal_Details.dealDetailView.model.toJSON();
-	if( json.name == el )
-	{
-		$("#inline-input").toggleClass("hidden");
-		$("#deals-inline").toggleClass("hidden");
-		return;
-	}
 	json.name = el ;
 	var dealModel = new BaseModel();
 	dealModel.url = '/core/api/opportunity';
