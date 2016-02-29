@@ -201,7 +201,7 @@ public class TicketNotesRest
 				// Updating ticket entity
 				Tickets.ticketsDao.put(ticket);
 
-				String cleanText = plain_text.replaceAll("(<br />|<br/>|<br/>)", "");
+				String cleanText = plain_text.replaceAll("(<br />|<br>|<br/>)", "");
 
 				// Updating existing ticket
 				ticket = TicketsUtil.updateTicket(ticketID, ticket.cc_emails, cleanText, LAST_UPDATED_BY.AGENT,

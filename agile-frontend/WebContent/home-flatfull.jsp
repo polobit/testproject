@@ -708,7 +708,10 @@ head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-mi
 head.ready(["core"], function(){
 	 $('[data-toggle="tooltip"]').tooltip();  
 	//Code to display alerts of widgets.
-	showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
+  try{
+	   showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
+    }catch(e){}
+  });
    
 	//Resting the variables.
 	<%  session.removeAttribute("widgetMsgType");
