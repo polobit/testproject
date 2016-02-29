@@ -522,7 +522,7 @@
 </script>
 
 <script id="portlets-contacts-emails-opened-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Emails Opened</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
@@ -561,7 +561,7 @@
      <div class="row_position" style="display:none">{{row_position}}</div>
 </script>
 <script id="portlets-contacts-growth-graph-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Tag Graph</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
@@ -603,7 +603,7 @@
      <div class="row_position" style="display:none">{{row_position}}</div>
 </script>
 <script id="portlets-deals-deals-by-milestone-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">
 					{{#if_equals settings.deals "all-deals"}}
@@ -621,7 +621,7 @@
 				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>			
 		</div>
-        <div class="portlet_body panel-body p-n b-n deals-by-milestone-portlet-body"></div>
+        <div class="portlet_body panel-body p-n b-n deals-by-milestone-portlet-body portlet_graph"></div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>
@@ -660,7 +660,7 @@
      <div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
 <script id="portlets-deals-deals-funnel-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">
 					{{#if_equals settings.deals "all-deals"}}
@@ -678,7 +678,7 @@
 				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>			
 		</div>
-        <div class="portlet_body panel-body p-n b-n"></div>
+        <div class="portlet_body panel-body portlet_graph p-n b-n"></div>
 
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
@@ -703,7 +703,7 @@
      <div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
 <script id="portlets-contacts-calls-per-person-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Calls</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
@@ -715,7 +715,7 @@
 				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
-        <div class="portlet_body panel-body p-n b-n"></div>
+        <div class="portlet_body panel-body p-n b-n portlet_graph"></div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	
@@ -776,7 +776,7 @@
      <div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
 <script id="portlets-tasksandevents-task-report-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:50%;">Task Report</span>
 				<span class="pull-right text-right" style="width: 50%;">
@@ -796,7 +796,7 @@
 				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
-        <div class="portlet_body"></div>
+        <div class="portlet_body portlet_graph	"></div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	
@@ -1231,7 +1231,7 @@
 </script>
 
 <script id="portlets-deals-revenue-graph-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis text-muted">
 				<span class="pull-left inline-block text-ellipsis" style="width:60%;">Revenue Graph</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 40%;">
@@ -1243,7 +1243,7 @@
 				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
-        <div class="portlet_body panel-body p-n b-n">
+        <div class="portlet_body panel-body p-n b-n portlet_graph">
 		</div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
@@ -2383,7 +2383,7 @@ Deleted  {{custom1}} Campaigns<br/>
 </script>
 
 <script id="portlets-incoming-deals-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis text-muted">
 				<span class="pull-left inline-block text-ellipsis" style="width:60%;">Incoming Deals</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 40%;">
@@ -2403,7 +2403,7 @@ Deleted  {{custom1}} Campaigns<br/>
 </script>
 
 <script id="portlets-lost-deal-analysis-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis text-muted">
 				<span class="pull-left inline-block text-ellipsis" style="width:60%;">Lost Deal Analysis</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 40%;">
@@ -2425,7 +2425,7 @@ Deleted  {{custom1}} Campaigns<br/>
 
 
 <script id="portlets-Tasks-Deviation-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Tasks Completion Time Deviation</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
@@ -2438,7 +2438,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
-        <div class="portlet_body"></div>
+        <div class="portlet_body portlet_graph"></div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	

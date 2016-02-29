@@ -436,6 +436,7 @@ public class PortletUtil {
 	}
 	public static JSONObject getDealsByMilestoneData(JSONObject json)throws Exception{
 		JSONObject dealsByMilestoneJSON=new JSONObject();
+		try{
 		if(json!=null){
 			if(json.get("deals")!=null && (json.get("deals").toString().equalsIgnoreCase("all-deals") || json.get("deals").toString().equalsIgnoreCase("my-deals")) && json.get("track")!=null){
 				List<String> milestonesList=new ArrayList<String>();
@@ -462,16 +463,17 @@ public class PortletUtil {
 				dealsByMilestoneJSON.put("milestonesList",milestonesList);
 				dealsByMilestoneJSON.put("milestoneValuesList",milestoneValuesList);
 				dealsByMilestoneJSON.put("milestoneNumbersList",milestoneNumbersList);
-				if(milestone.won_milestone != null){
+				if(milestone!=null && milestone.won_milestone != null){
 					dealsByMilestoneJSON.put("wonMilestone",milestone.won_milestone);
 				}else{
 					dealsByMilestoneJSON.put("wonMilestone","Won");
 				}
-				if(milestone.lost_milestone != null){
+				if(milestone!=null && milestone.lost_milestone != null){
 					dealsByMilestoneJSON.put("lostMilestone",milestone.lost_milestone);
 				}else{
 					dealsByMilestoneJSON.put("lostMilestone","Lost");
 				}
+
 			}
 		}
 		List<Milestone> milestoneList=MilestoneUtil.getMilestonesList();
@@ -481,6 +483,12 @@ public class PortletUtil {
 		}
 		dealsByMilestoneJSON.put("milestoneMap",milestoneMap);
 		
+		
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		return dealsByMilestoneJSON;
 	}
 	public static JSONObject getClosuresPerPersonData(JSONObject json)throws Exception{
@@ -1333,6 +1341,7 @@ public class PortletUtil {
 						Double milestoneValue = 0d;
 						if(wonDealsList!=null){
 							for(Opportunity opportunity : wonDealsList){
+								if(opportunity.expected_value!=null)
 								milestoneValue += opportunity.expected_value;
 							}
 						}
@@ -1685,12 +1694,15 @@ public class PortletUtil {
 		Long count_goal=0L;
 		Double value=0.0;
 		Double amount_goal=0.0;
-		JSONObject json=new JSONObject();;
+		JSONObject json=new JSONObject();
+		try{
 		List<Opportunity> opportunities=OpportunityUtil.getWonDealsListWithOwner(minTime, maxTime, owner_id);
 		if(opportunities!=null){
 			for(Opportunity opp:opportunities){
+				if(opp.expected_value!=null){
 			value = value+opp.expected_value;
 			count++;
+				}
 		}
 		}
 		json.put("dealcount", count);
@@ -1707,6 +1719,11 @@ public class PortletUtil {
 			json.put("goalCount",count_goal);
 			json.put("goalAmount", amount_goal);
 	}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		return json;
 	}
 	
@@ -1750,11 +1767,13 @@ public class PortletUtil {
 					int count=0;
 					for(Task task:tasksList){
 						Long time_deviation=0L;
+						if(task.task_completed_time!=null && task.due!=null){
 						if(task.task_completed_time>task.due)
 							{
 							time_deviation=(task.task_completed_time-task.due);
 							count++;
 							}
+						}
 						Total_closure+=time_deviation;
 								}
 					l.add((long)count);
