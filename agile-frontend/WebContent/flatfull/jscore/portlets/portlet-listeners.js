@@ -965,14 +965,15 @@ function initializeAddPortletsListeners() {
 					});
 				}
             		});
-            	
-            } 
-					
-				if($('#route-list' , $('#portletStreamModal')).children().length==0){
-					$('.modal-body',$('#portletStreamModal')).text('Already Added');
+            		if($('#route-list' , $('#portletStreamModalNew')).children().length==0){
+					$('.modal-body',$('#portletStreamModalNew')).text('Already Added');
 				$(".add-portlet").addClass('disabled');
 				$(".add_to_all").addClass('disabled');
 			}
+            	
+            } 
+					
+			
 
 				head.js(LIB_PATH + 'lib/jquery.multi-select.js', function() {
 						$('#ms-route-list' ).remove();
@@ -1067,7 +1068,7 @@ function insideAddListener()
 }
 function clickfunction(that,url,forAll,route){
 
-	$("#portletStreamModal").modal('hide');
+	$("#portletStreamModalNew").modal('hide');
 	$('.modal-backdrop').hide();
 	var portlet_type = that.attr("portlet_type");
 				var p_name = that.attr("portlet_name");
