@@ -169,7 +169,7 @@ function serializeChainedElement(element)
 			json_object[name] = value;
 		// Pushes each rule built from chained select in to an JSON array
 	});
-	if(json_object.CONDITION = "BETWEEN") {
+	if(json_object.CONDITION == "BETWEEN") {
 	    var newdate = (json_object.RHS_NEW + (24 * 60 * 60 * 1000) - 1);
        json_object.RHS_NEW = newdate;
 	}
