@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.contact.filter.ContactFilterIdsResultFetcher;
+import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.google.appengine.api.search.Cursor;
@@ -45,6 +46,7 @@ public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 		try
 		{
 			queryString = TicketFiltersUtil.getQueryFromConditions(conditions);
+			count = new  TicketsDocument().getTicketsCount(queryString);
 		}
 		catch (Exception e)
 		{
@@ -116,5 +118,11 @@ public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 	{
 		IndexSpec indexSpec = IndexSpec.newBuilder().setName("tickets").build();
 		return SearchServiceFactory.getSearchService().getIndex(indexSpec);
+	}
+
+	@Override
+	public Integer getCount()
+	{
+		return count;
 	}
 }
