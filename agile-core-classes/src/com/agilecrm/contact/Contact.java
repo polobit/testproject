@@ -981,10 +981,10 @@ public class Contact extends Cursor
 		    user.getCalendarURL();
 
 		return user;*/
-	    DomainUser user = new DomainUser();
-	    user.id = owner_key.getId();
+	    // DomainUser user = new DomainUser();
+	    // user.id = owner_key.getId();
 	    
-	    return user;
+	    // return user;
 	    }
 	    catch (Exception e)
 	    {
