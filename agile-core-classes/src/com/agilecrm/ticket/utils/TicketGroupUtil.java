@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.DomainUser;
@@ -133,7 +135,16 @@ public class TicketGroupUtil
 	 */
 	public static TicketGroups getTicketGroupById(Long groupID) throws EntityNotFoundException
 	{
-		return TicketGroups.ticketGroupsDao.get(groupID);
+		try
+		{
+			return TicketGroups.ticketGroupsDao.get(groupID);
+		}	
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		
+		return null;
 	}
 
 	/**

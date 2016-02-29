@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 
@@ -27,7 +29,7 @@ public class TicketLabelsUtil
 		}
 		catch (EntityNotFoundException e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 
 		return null;

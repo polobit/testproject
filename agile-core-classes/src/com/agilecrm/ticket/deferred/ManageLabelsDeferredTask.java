@@ -2,6 +2,8 @@ package com.agilecrm.ticket.deferred;
 
 import java.util.List;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketsUtil;
@@ -46,7 +48,7 @@ public class ManageLabelsDeferredTask extends TicketBulkActionAdaptor
 				}
 				catch (EntityNotFoundException e)
 				{
-					e.printStackTrace();
+					System.out.println(ExceptionUtils.getFullStackTrace(e));
 				}
 			}
 		}

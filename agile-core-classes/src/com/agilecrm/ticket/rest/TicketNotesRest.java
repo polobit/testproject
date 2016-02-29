@@ -20,6 +20,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.search.document.TicketsDocument;
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -199,9 +200,9 @@ public class TicketNotesRest
 
 				// Updating ticket entity
 				Tickets.ticketsDao.put(ticket);
-				
+
 				String cleanText = plain_text.replaceAll("(<br />|<br/>|<br/>)", "");
-				
+
 				// Updating existing ticket
 				ticket = TicketsUtil.updateTicket(ticketID, ticket.cc_emails, cleanText, LAST_UPDATED_BY.AGENT,
 						currentTime, null, currentTime,
@@ -219,10 +220,10 @@ public class TicketNotesRest
 
 				// Execute note created by user trigger
 				TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);
-				
+
 				// Logging public notes activity
-				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID,
-						ticket.id, html_text, plain_text, "html_text");
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id,
+						html_text, plain_text, "html_text");
 			}
 
 			ticketNotes.domain_user = DomainUserUtil.getDomainUser(ticket.assigneeID);

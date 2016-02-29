@@ -19,6 +19,7 @@ public abstract class ITicketIdsFetcher implements Serializable
 	private static final long serialVersionUID = 1L;
 
 	Integer maxFetch = 200;
+	Integer count = 0;
 
 	public ITicketIdsFetcher()
 	{
@@ -28,4 +29,5 @@ public abstract class ITicketIdsFetcher implements Serializable
 	public abstract boolean hasNext();
 
 	public abstract Set<Key<Tickets>> next();
+	public abstract Integer getCount();
 }

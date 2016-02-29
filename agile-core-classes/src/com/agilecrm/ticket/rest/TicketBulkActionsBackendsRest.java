@@ -26,11 +26,17 @@ import com.agilecrm.ticket.deferred.ManageLabelsDeferredTask;
 import com.agilecrm.ticket.deferred.MarkTicketsAsFavoriteDeferredTask;
 import com.agilecrm.ticket.deferred.MarkTicketsAsSpamDeferredTask;
 import com.agilecrm.ticket.entitys.TicketBulkActionAttributes;
+import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.utils.CSVTicketIdsFetcher;
 import com.agilecrm.ticket.utils.FilterTicketIdsFetcher;
 import com.agilecrm.ticket.utils.ITicketIdsFetcher;
 import com.agilecrm.ticket.utils.TicketBulkActionUtil;
+import com.agilecrm.ticket.utils.TicketGroupUtil;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
@@ -59,16 +65,12 @@ public class TicketBulkActionsBackendsRest
 			JSONArray labelsIDs = dataJSON.getJSONArray("labels");
 			// String[] labelsArray = dataJSON.getString("labels").split(",");
 
-			List<Key<TicketLabels>> labels = new ArrayList<Key<TicketLabels>>();
+			List<Key<TicketLabels>> labelsKeys = new ArrayList<Key<TicketLabels>>();
 
 			for (int i = 0; i < labelsIDs.length(); i++)
-				labels.add(new Key<TicketLabels>(TicketLabels.class, labelsIDs.getLong(i)));
+				labelsKeys.add(new Key<TicketLabels>(TicketLabels.class, labelsIDs.getLong(i)));
 
 			BulkActionUtil.setSessionManager(domainUserID);
-
-			// Logging bulk action activity
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_MANAGE_LABELS, null, null, "",
-					labelsIDs.toString(), "labels");
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -83,10 +85,24 @@ public class TicketBulkActionsBackendsRest
 				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
 			}
 
-			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(labels, dataJSON.getString("command"),
+			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(labelsKeys, dataJSON.getString("command"),
 					NamespaceManager.get(), domainUserID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
+
+			List<TicketLabels> labels = TicketLabels.dao.fetchAllByKeys(labelsKeys);
+
+			StringBuilder labelsCSV = new StringBuilder();
+			for (TicketLabels label : labels)
+				labelsCSV.append(label.label).append(" ,");
+
+			labelsCSV.substring(0, labels.lastIndexOf(" ,"));
+
+			System.out.println("labelsCSV: " + labelsCSV);
+
+			// Logging bulk action activity
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_MANAGE_LABELS, null, null, "",
+					labelsCSV.toString(), idsFetcher.getCount() + "");
 
 			BulkActionNotifications.publishNotification("Selected Ticket labels have been updated successfully.");
 		}
@@ -116,10 +132,6 @@ public class TicketBulkActionsBackendsRest
 
 			BulkActionUtil.setSessionManager(domainUserID);
 
-			// Logging bulk action activity
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CHANGE_ASSIGNEE, null, null, "", assigneeID
-					+ " " + groupID, "assignee_id");
-
 			ITicketIdsFetcher idsFetcher = null;
 
 			if (attributes.conditions != null && attributes.conditions.size() > 0)
@@ -137,6 +149,14 @@ public class TicketBulkActionsBackendsRest
 					assigneeID, groupID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
+
+			DomainUser domaiUser = DomainUserUtil.getDomainUser(assigneeID);
+			TicketGroups group = TicketGroupUtil.getTicketGroupById(groupID);
+
+			// Create log with static content (Domain user who initiated actiona
+			// and group name)
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CHANGE_ASSIGNEE, null, null, domaiUser.name,
+					group.group_name, idsFetcher.getCount() + "");
 
 			BulkActionNotifications
 					.publishNotification("Selected Tickets asignee name have been changed successfully.");
@@ -165,10 +185,6 @@ public class TicketBulkActionsBackendsRest
 
 			BulkActionUtil.setSessionManager(domainUserID);
 
-			// Logging bulk action activity
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_EXECUTE_WORKFLOW, null, null, "", workflowID
-					+ "", "");
-
 			ITicketIdsFetcher idsFetcher = null;
 
 			if (attributes.conditions != null && attributes.conditions.size() > 0)
@@ -186,6 +202,12 @@ public class TicketBulkActionsBackendsRest
 					workflowID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
+
+			Workflow workflow = WorkflowUtil.getWorkflow(workflowID);
+
+			// Logging bulk action activity
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_EXECUTE_WORKFLOW, null, null, workflow.name,
+					workflowID + "", idsFetcher.getCount() + "");
 
 			BulkActionNotifications.publishNotification("Workflows have been executed on the selected tickets");
 		}
@@ -208,9 +230,6 @@ public class TicketBulkActionsBackendsRest
 
 			BulkActionUtil.setSessionManager(domainUserID);
 
-			// Logging bulk action activity
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CLOSE_TICKETS, null, null, "", "", "");
-
 			ITicketIdsFetcher idsFetcher = null;
 
 			if (attributes.conditions != null && attributes.conditions.size() > 0)
@@ -227,6 +246,10 @@ public class TicketBulkActionsBackendsRest
 			CloseTicketsDeferredTask task = new CloseTicketsDeferredTask(NamespaceManager.get(), domainUserID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
+
+			// Logging bulk action activity
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CLOSE_TICKETS, null, null, "", "",
+					idsFetcher.getCount() + "");
 
 			BulkActionNotifications.publishNotification("Selected tickets have been closed successfully.");
 		}
@@ -249,9 +272,6 @@ public class TicketBulkActionsBackendsRest
 
 			BulkActionUtil.setSessionManager(domainUserID);
 
-			// Logging bulk action activity
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_DELETE_TICKETS, null, null, "", "", "");
-
 			ITicketIdsFetcher idsFetcher = null;
 
 			if (attributes.conditions != null && attributes.conditions.size() > 0)
@@ -268,6 +288,10 @@ public class TicketBulkActionsBackendsRest
 			DeleteTicketsDeferredTask task = new DeleteTicketsDeferredTask(NamespaceManager.get(), domainUserID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
+
+			// Logging bulk action activity
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_DELETE_TICKETS, null, null, "", "",
+					idsFetcher.getCount() + "");
 
 			BulkActionNotifications.publishNotification("Selected tickets have been deleted successfully.");
 		}
@@ -307,6 +331,10 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
+			// Logging bulk action activity
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_SPAM_TICKETS, null, null, "", "",
+					idsFetcher.getCount() + "");
+
 			BulkActionNotifications.publishNotification("Selected tickets have been marked as spam successfully");
 		}
 		catch (Exception e)
@@ -345,6 +373,10 @@ public class TicketBulkActionsBackendsRest
 					domainUserID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
+
+			// Logging bulk action activity
+			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_FAVORITE_TICKETS, null, null, "", "",
+					idsFetcher.getCount() + "");
 
 			BulkActionNotifications.publishNotification("Selected tickets have been added to favourites successfully.");
 		}

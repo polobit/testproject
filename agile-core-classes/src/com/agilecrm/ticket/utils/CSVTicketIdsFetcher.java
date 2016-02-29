@@ -25,6 +25,7 @@ public class CSVTicketIdsFetcher extends ITicketIdsFetcher
 	{
 		super();
 		ticketsList = Arrays.asList(ticketIDs.split(","));
+		count = ticketsList.size();
 	}
 
 	@Override
@@ -63,5 +64,11 @@ public class CSVTicketIdsFetcher extends ITicketIdsFetcher
 			ticketIDList.add(new Key<Tickets>(Tickets.class, Long.parseLong(key.trim())));
 		
 		return ticketIDList;
+	}
+
+	@Override
+	public Integer getCount()
+	{
+		return count;
 	}
 }
