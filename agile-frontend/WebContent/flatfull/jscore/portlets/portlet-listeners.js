@@ -602,8 +602,9 @@ function initializePortletsListeners() {
 					model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
 
 					models.push({ id : model.get("id"), column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
+							}
 							});
-						}
+
 							// Saves new positions in server
 				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
