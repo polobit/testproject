@@ -3413,3 +3413,12 @@ div.user-view-actions {
   display: none;
 }
 
+.useradmin-edit-delete{
+	margin-top:-104px;
+}
+.admin-settings-bulkactions{
+	border-bottom: 1px solid rgba(140, 139, 139, 0.2);
+	background-color: rgba(246,248,248,1);
+	margin-left:15px;
+}
+

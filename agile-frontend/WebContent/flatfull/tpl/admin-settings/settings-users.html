@@ -13,10 +13,19 @@
         {{#if this.length}}
         <div class="data">
             <div class="data-container">
-            
-                <div id='admin-settings-users-model-list' route='user-edit/' class="wrapper-md" url="core/api/users/bulk">
-			</div>
-			
+            	<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm admin-settings-bulkactions {{#is_mobile}}{{else}}  {{/is_mobile}}" >
+            	 	<span style="margin: 5px 0px 5px 5px;"> 
+            	 		<label class="i-checks i-checks-sm p-l-lg" style="visibility: visible;">
+				            <input type="checkbox"  class="thead_check" value="">
+				                <i></i>                
+				        </label>
+				    </span>
+				
+					<button class="btn btn-default bulk-action-btn btn-sm"  id="delete-checked-grid" style="font-size:10px">Delete</button>
+				    </div>
+
+                <div id='admin-settings-users-model-list' route='user-edit/' class="wrapper-md showCheckboxes" url="core/api/users/bulk">
+			</div>		
             </div>
         </div>
         {{/if}}
@@ -32,7 +41,7 @@
 	
 		<div class="left pos-abs">
 			<label class="i-checks i-checks-sm"> <input type="checkbox"
-				class="tbody_check grid-view-checkbox" value=""> <i></i>
+				class="tbody_check" value=""> <i></i>
 			</label>
 		</div>
 		
@@ -76,7 +85,7 @@
 		</div>
 		</div>
 
-		<div class="pull-right user-view-actions grid-view-action-button" style="margin-top:-108px;">
+		<div class="pull-right user-view-actions grid-view-action-button useradmin-edit-delete">
 				<span class="m-r-xs c-p"><a href="#user-edit/{{id}}"><i
 						data-toggle="tooltip" data-placement="left" title=""
 						data-original-title="Edit"
