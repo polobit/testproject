@@ -22,7 +22,7 @@ public class StatsServlet extends HttpServlet
 {
     public static enum ACTIONS
     {
-	ADD, FETCH_PAGE_XVIEWS, FETCH_XACTIVITIES, FETCH_XLIMITED_VIEWS, URL_VISITED_XCOUNT, ERADICATEX
+	FETCH_PAGE_XVIEWS, FETCH_XACTIVITIES, FETCH_XLIMITED_VIEWS, URL_VISITED_XCOUNT, ERADICATEX
     }
     
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -46,9 +46,6 @@ public class StatsServlet extends HttpServlet
 	    ACTIONS routeAction = ACTIONS.valueOf(action);
 	    switch (routeAction)
 	    {
-	    case ADD:
-		StatsUtil.insertPageVisit(req, res);
-		break;
 	    case FETCH_PAGE_XVIEWS:
 		if (StatsUtil.isValidRequest(req.getParameter("psd")))
 		    StatsSQLUtil.getAnalyticsOfAContact(req, res, domain);

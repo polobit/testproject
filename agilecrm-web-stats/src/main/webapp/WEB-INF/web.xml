@@ -11,4 +11,12 @@
 		<servlet-name>AnalyticsServlet</servlet-name>
 		<url-pattern>/stats</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>AddAnalyticsServlet</servlet-name>
+		<servlet-class>com.agilecrm.web.stats.AddStatsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddAnalyticsServlet</servlet-name>
+		<url-pattern>/addstats</url-pattern>
+	</servlet-mapping>
 </web-app>
