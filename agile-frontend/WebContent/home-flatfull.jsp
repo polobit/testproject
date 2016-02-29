@@ -758,7 +758,8 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
         <div class="modal-content">
         <div class="modal-header">
           <button class="close" data-dismiss="modal">&times;</button>
-          <h3 id="myModalLabel">welcome</h3>
+          <h3 id="myModalLabel">Welcome to Agile CRM</h3>
+          <small>With Sales & Marketing Automation, Telephony, Web Engagement, Social Media Integration, Email Campaigns and Mobile Marketing.</small>
         </div>      
           <div class="modal-body">
               <div class="embed-responsive embed-responsive-16by9">
