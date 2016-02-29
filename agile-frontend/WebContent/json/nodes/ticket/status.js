@@ -2,7 +2,7 @@
     "name": "Status",
     "thumbnail": "json/nodes/images/ticket/status.png",
     "icon": "json/nodes/icons/ticket/status.png",
-    "info": "Check if a link in the email is clicked within a specified duration.",
+    "info": "Change the status of a ticket as open,pending or closed.",
     "help": "Check if a link in the email is clicked within a specified duration.",
     "author": "John",
     "company": "mantra",
@@ -20,6 +20,7 @@
             "title": "Select status",
             "options": {
                 "Open": "OPEN",
+                "Pending": "PENDING",
                 "Closed": "CLOSED"
             },
             "fieldType": "select",

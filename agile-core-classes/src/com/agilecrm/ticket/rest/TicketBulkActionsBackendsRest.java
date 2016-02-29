@@ -33,7 +33,7 @@ import com.agilecrm.ticket.utils.ITicketIdsFetcher;
 import com.agilecrm.ticket.utils.TicketBulkActionUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
-
+import org.apache.commons.lang.StringUtils;
 /**
  * 
  * @author Sasi on 30-Sep-2015
@@ -55,7 +55,7 @@ public class TicketBulkActionsBackendsRest
 
 			JSONObject dataJSON = new JSONObject(attributes.dataString);
 			System.out.println("dataJSON: " + dataJSON);
-
+            String Command = dataJSON.getString("command");
 			JSONArray labelsIDs = dataJSON.getJSONArray("labels");
 			// String[] labelsArray = dataJSON.getString("labels").split(",");
 
@@ -83,12 +83,20 @@ public class TicketBulkActionsBackendsRest
 				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
 			}
 
-			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(labels, dataJSON.getString("command"),
+			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(labels, Command,
 					NamespaceManager.get(), domainUserID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Selected Ticket labels have been updated successfully.");
+			String Message = "Selected Ticket labels have been added successfully";
+			 			
+			 			if(Command == "remove")
+			 				Message = "Selected Ticket labels have been removed successfully";
+			 			
+			 				BulkActionNotifications.publishNotification(Message);
+			 				
+			 			if (StringUtils.isBlank(Command))
+			 					return;
 		}
 		catch (Exception e)
 		{
