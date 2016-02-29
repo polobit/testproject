@@ -561,7 +561,7 @@ function initializePortletsListeners() {
 						if(portlet.get('portlet_route')!='DashBoard')
 						{
 							if ($('.gridster-portlets > div').length == 0)
-							$('#no-portlets').parents('.wrapper-md').hide();
+							$('#no-portlets').parents('.route_Portlet').hide();
 						}
 						if ($('.gridster-portlets > div').length == 0)
 							$('#no-portlets').show();
