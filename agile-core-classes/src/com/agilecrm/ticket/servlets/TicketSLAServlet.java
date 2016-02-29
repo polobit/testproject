@@ -1,7 +1,6 @@
 package com.agilecrm.ticket.servlets;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpServlet;
@@ -32,8 +31,7 @@ public class TicketSLAServlet extends HttpServlet
 	{
 		try
 		{
-			Set<String> domains = new HashSet<String>();
-			domains.add("sudha");
+			Set<String> domains = NamespaceUtil.getAllNamespaces();
 
 			System.out.println("Domains found: " + domains.size());
 
