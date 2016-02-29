@@ -127,7 +127,8 @@ function initializeLandingPageListeners() {
 	$('#landingpages-listeners').on('click', '.lpBuilderMenuItem', function(e){
 		e.preventDefault();
 		var builderIFrame = document.getElementById('landingPageBuilder').contentWindow;
-		var selector = '#'+$(this).data("id")+'AgileId';
+		var selectorId = $(this).data("id");
+		var selector = '#'+selectorId+'AgileId';
 
 		if($(this).hasClass("active")) {
 			builderIFrame.$('#elements-container').hide();
@@ -136,6 +137,18 @@ function initializeLandingPageListeners() {
 			builderIFrame.$('#elements-container').show();
 			$('.lpBuilderMenuItem').removeClass("active");
 			$(this).addClass("active");
+		}
+
+		if(selectorId == "inspector") {
+			builderIFrame.$('#elementsPanelAgileId').addClass("hidden");
+			builderIFrame.$('#elements-container').css("position","fixed");
+			builderIFrame.$('#elements-container').css("left","");
+			builderIFrame.$('#elements-container').css("right","0");
+		} else {
+			builderIFrame.$('#elementsPanelAgileId').removeClass("hidden");
+			builderIFrame.$('#elements-container').css("position","absolute");
+			builderIFrame.$('#elements-container').css("right","");
+			builderIFrame.$('#elements-container').css("left","0");
 		}
 		
 		builderIFrame.$(selector).trigger("click");

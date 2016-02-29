@@ -98,7 +98,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                         </div>
                     </div>
                     <div class="panel-inner">
-                        <div class="panel" ng-class="{ open: panels.active === 'elements' }" data-name="elements" bl-pretty-scrollbar bl-panels-accordion>
+                        <div class="panel" id="elementsPanelAgileId" ng-class="{ open: panels.active === 'elements' }" data-name="elements" bl-pretty-scrollbar bl-panels-accordion>
                             <section id="el-panel-top">
                                 <div id="panel-search" class="panel-heading-input hidden">
                                     <input type="text" class="form-control" id="el-search" placeholder="{{ 'searchElements' | translate }}" ng-model="query" ng-model-options="{ debounce: 300 }">
@@ -336,7 +336,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                                     <option value="">Font</option>
                                                     <option ng-repeat="font in textStyles.baseFonts" data-font-family="{{ font.css }}" value="{{ font.css }}">{{ font.name }}</option>
                                                 </select>
-                                                <div id="more-fonts" class="pull-right" data-toggle="modal" data-target="#fonts-modal"><i class="icon icon-google"></i></div>
+                                                <div id="more-fonts" class="pull-right hidden" data-toggle="modal" data-target="#fonts-modal"><i class="icon icon-google"></i></div>
                                             </div>
 
                                             <div class="clearfix">
@@ -449,7 +449,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                 <div class="arrow-right" id="background-arrow"></div>
                             </section>
                         </aside>
-                        <div id="pages" ng-class="{ open: panels.active === 'pages' }" class="panel" data-name="pages" ng-controller="PagesController" bl-pretty-scrollbar>
+                        <div id="pages" ng-class="{ open: panels.active === 'pages' }" class="panel hidden" data-name="pages" ng-controller="PagesController" bl-pretty-scrollbar>
                         
                         <div class="hidden">
                             <ul class="list-unstyled">
@@ -494,7 +494,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                 <button class="btn btn-danger" ng-click="emptyProject()">{{ 'emptyProject' | translate }}</button>
                             </div>
                         </div>
-                        <div id="settings" ng-class="{ open: panels.active === 'settings' }" class="panel" data-name="settings" ng-controller="SettingsController">
+                        <div id="settings" ng-class="{ open: panels.active === 'settings' }" class="panel hidden" data-name="settings" ng-controller="SettingsController">
                             <div class="categories" bl-panels-accordion>
                                 <div class="accordion-item" ng-repeat="(category, categorySettings) in settings.all" ng-class="{ open: category === 'autoSave' }">
                                     <div class="accordion-heading">{{ category | translate }} <i class="icon icon-down-open-1"></i></div>
