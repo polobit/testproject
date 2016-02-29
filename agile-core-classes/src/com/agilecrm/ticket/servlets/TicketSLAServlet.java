@@ -1,6 +1,7 @@
 package com.agilecrm.ticket.servlets;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpServlet;
@@ -31,19 +32,20 @@ public class TicketSLAServlet extends HttpServlet
 	{
 		try
 		{
-			Set<String> domains = NamespaceUtil.getAllNamespaces();
-			
+			Set<String> domains = new HashSet<String>();
+			domains.add("sudha");
+
 			System.out.println("Domains found: " + domains.size());
-			
+
 			for (String namespace : domains)
 			{
 				CheckTicketSLADeferred SLADeferred = new CheckTicketSLADeferred(namespace);
-				
+
 				// Add to queue
 				Queue queue = QueueFactory.getQueue("ticket-bulk-actions");
 				queue.add(TaskOptions.Builder.withPayload(SLADeferred));
 			}
-			
+
 			System.out.println("Successfully tasks initiated for all domains.");
 		}
 		catch (Exception e)

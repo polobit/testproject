@@ -1015,9 +1015,11 @@ public class TicketsUtil
 	 */
 	public static List<Key<Tickets>> getOverdueTickets() throws Exception
 	{
-		String query = "NOT status:" + Status.CLOSED + " AND due_time <="
+		String query = "NOT status:" + Status.CLOSED + " AND due_date <="
 				+ (Calendar.getInstance().getTimeInMillis() / 1000);
-
+		
+		System.out.println("Overdue tickets query: " + query);
+		
 		JSONObject resultJSON = new TicketsDocument().searchDocuments(query, "", "created_time", 1000);
 
 		JSONArray keysArray = resultJSON.getJSONArray("keys");
