@@ -528,3 +528,10 @@ form#new-ticket ul.chosen-choices {
     padding-left: 0px; 
     white-space: nowrap 
 }
+@-moz-document url-prefix() {
+    .farword_remove_email *{
+        vertical-align: center;
+        float:left;       
+
+    }
+}
