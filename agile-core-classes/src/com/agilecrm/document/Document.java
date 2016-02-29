@@ -156,7 +156,8 @@ public class Document extends Cursor
     @XmlElement
     public List<Contact> getContacts()
     {
-	return Contact.dao.fetchAllByKeys(this.related_contacts);
+	// return Contact.dao.fetchAllByKeys(this.related_contacts);
+    	return null;
     }
 
     /**
@@ -168,7 +169,8 @@ public class Document extends Cursor
     @XmlElement
     public List<Case> getCases()
     {
-	return Case.dao.fetchAllByKeys(this.related_cases);
+	// return Case.dao.fetchAllByKeys(this.related_cases);
+    	return null;
     }
 
     /**
@@ -180,7 +182,8 @@ public class Document extends Cursor
     @XmlElement
     public List<Opportunity> getDeals()
     {
-	return Opportunity.dao.fetchAllByKeys(this.related_deals);
+	// return Opportunity.dao.fetchAllByKeys(this.related_deals);
+    	return null;
     }
 
     /**
@@ -274,7 +277,8 @@ public class Document extends Cursor
 	    try
 	    {
 		// Gets Domain User Object
-		return DomainUserUtil.getDomainUser(ownerKey.getId());
+		// return DomainUserUtil.getDomainUser(ownerKey.getId());
+	    return null;
 	    }
 	    catch (Exception e)
 	    {
@@ -302,11 +306,12 @@ public class Document extends Cursor
 	try
 	{
 	    // Get owner pic through agileuser prefs
-	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey.getId());
+	    /*agileuser = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey.getId());
 	    if (agileuser != null)
 		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
 	    if (userprefs != null)
-		return userprefs.pic;
+		return userprefs.pic; */
+		return null;
 	}
 	catch (Exception e)
 	{

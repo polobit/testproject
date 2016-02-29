@@ -133,10 +133,11 @@ public class Case extends Cursor
     @XmlElement
     public List<Contact> getContacts()
     {
-	Objectify ofy = ObjectifyService.begin();
+	/*Objectify ofy = ObjectifyService.begin();
 	List<Contact> contactsList = new ArrayList<Contact>();
 	contactsList.addAll(ofy.get(this.related_contacts_key).values());
-	return contactsList;
+	return contactsList;*/
+    	return null;
     }
 
     /**
@@ -167,7 +168,8 @@ public class Case extends Cursor
 	{
 	    try
 	    {
-		return DomainUserUtil.getDomainUser(owner_key.getId());
+		// return DomainUserUtil.getDomainUser(owner_key.getId());
+	    	return null;
 	    }
 	    catch (Exception e)
 	    {
@@ -193,14 +195,15 @@ public class Case extends Cursor
 	try
 	{
 	    // Get owner pic through agileuser prefs
-	    if (owner_key != null)
+	    /*if (owner_key != null)
 		agileUser = AgileUser.getCurrentAgileUserFromDomainUser(owner_key.getId());
 
 	    if (agileUser != null)
 		userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
 
 	    if (userPrefs != null)
-		return userPrefs.pic;
+		return userPrefs.pic;*/
+		return null;
 	}
 	catch (Exception e)
 	{

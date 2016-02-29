@@ -269,7 +269,8 @@ public class Task extends Cursor
     @XmlElement
     public List<Contact> getContacts()
     {
-	return Contact.dao.fetchAllByKeys(this.related_contacts);
+	// return Contact.dao.fetchAllByKeys(this.related_contacts);
+    	return null;
     }
 
     public void addContacts(String id)
@@ -311,14 +312,16 @@ public class Task extends Cursor
 	try
 	{
 	    // Get owner pic through agileuser prefs
-	    if (owner != null)
+	    /*if (owner != null)
 		agileuser = AgileUser.getCurrentAgileUserFromDomainUser(owner.getId());
 
 	    if (agileuser != null)
 		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
 
 	    if (userprefs != null)
-		return userprefs.pic;
+		return userprefs.pic;*/
+		
+		return null;
 	}
 	catch (Exception e)
 	{
@@ -343,7 +346,8 @@ public class Task extends Cursor
 	    try
 	    {
 		// Gets Domain User Object
-		return DomainUserUtil.getDomainUser(owner.getId());
+		// return DomainUserUtil.getDomainUser(owner.getId());
+	    	return null;
 	    }
 	    catch (Exception e)
 	    {
@@ -461,7 +465,8 @@ public class Task extends Cursor
     @XmlElement
     public List<Note> getNotes()
     {
-	return Note.dao.fetchAllByKeys(this.related_notes);
+	// return Note.dao.fetchAllByKeys(this.related_notes);
+    	return null;
     }
 
     public void addNotes(String id)
@@ -494,7 +499,8 @@ public class Task extends Cursor
     @XmlElement
     public List<Opportunity> getDeals()
     {
-	return Opportunity.dao.fetchAllByKeys(this.related_deals);
+	// return Opportunity.dao.fetchAllByKeys(this.related_deals);
+    	return null;
     }
 
     /**

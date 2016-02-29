@@ -333,10 +333,11 @@ public class Opportunity extends Cursor implements Serializable
     @XmlElement
     public List<Contact> getContacts()
     {
-	Objectify ofy = ObjectifyService.begin();
+	/*Objectify ofy = ObjectifyService.begin();
 	List<Contact> contacts_list = new ArrayList<Contact>();
 	contacts_list.addAll(ofy.get(this.related_contacts).values());
-	return contacts_list;
+	return contacts_list;*/
+    	return null;
     }
 
     public void addContactIds(String id)
@@ -379,7 +380,8 @@ public class Opportunity extends Cursor implements Serializable
 	    try
 	    {
 		// Gets Domain User Object
-		return MilestoneUtil.getMilestone(pipeline.getId());
+		// return MilestoneUtil.getMilestone(pipeline.getId());
+	    	return null;
 	    }
 	    catch (Exception e)
 	    {
@@ -404,7 +406,8 @@ public class Opportunity extends Cursor implements Serializable
 	    try
 	    {
 		// Gets Domain User Object
-		return DomainUserUtil.getDomainUser(ownerKey.getId());
+		// return DomainUserUtil.getDomainUser(ownerKey.getId());
+	    	return null;
 	    }
 	    catch (Exception e)
 	    {
@@ -432,11 +435,12 @@ public class Opportunity extends Cursor implements Serializable
 	try
 	{
 	    // Get owner pic through agileuser prefs
-	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey.getId());
+	    /*agileuser = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey.getId());
 	    if (agileuser != null)
 		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
 	    if (userprefs != null)
-		return userprefs.pic;
+		return userprefs.pic;*/
+		return null;
 	}
 	catch (Exception e)
 	{
@@ -456,7 +460,8 @@ public class Opportunity extends Cursor implements Serializable
     @XmlElement
     public List<Note> getNotes()
     {
-	return Note.dao.fetchAllByKeys(this.related_notes);
+	// return Note.dao.fetchAllByKeys(this.related_notes);
+    	return null;
     }
 
     public Long getLost_reason_id()
