@@ -10,7 +10,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,7 +33,7 @@ import com.agilecrm.ticket.utils.ITicketIdsFetcher;
 import com.agilecrm.ticket.utils.TicketBulkActionUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
-
+import org.apache.commons.lang.StringUtils;
 /**
  * 
  * @author Sasi on 30-Sep-2015
@@ -50,19 +49,16 @@ public class TicketBulkActionsBackendsRest
 	{
 		try
 		{
-		    
 			System.out.println("*********Request reached to backend*********");
 			System.out.println("domain_user_id.." + domainUserID);
 			System.out.println("NamespaceManager.." + NamespaceManager.get());
 
 			JSONObject dataJSON = new JSONObject(attributes.dataString);
 			System.out.println("dataJSON: " + dataJSON);
-
+            String Command = dataJSON.getString("command");
 			JSONArray labelsIDs = dataJSON.getJSONArray("labels");
 			// String[] labelsArray = dataJSON.getString("labels").split(",");
-			
-			String Command = dataJSON.getString("command");
-			
+
 			List<Key<TicketLabels>> labels = new ArrayList<Key<TicketLabels>>();
 
 			for (int i = 0; i < labelsIDs.length(); i++)
@@ -87,21 +83,20 @@ public class TicketBulkActionsBackendsRest
 				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
 			}
 
-			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(labels,Command,
+			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(labels, Command,
 					NamespaceManager.get(), domainUserID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
-			
+
 			String Message = "Selected Ticket labels have been added successfully";
-			
-			if(Command == "remove")
-				Message = "Selected Ticket labels have been removed successfully";
-			
-				BulkActionNotifications.publishNotification(Message);
-				
-			if (StringUtils.isBlank(Command))
-					return;
-					
+			 			
+			 			if(Command == "remove")
+			 				Message = "Selected Ticket labels have been removed successfully";
+			 			
+			 				BulkActionNotifications.publishNotification(Message);
+			 				
+			 			if (StringUtils.isBlank(Command))
+			 					return;
 		}
 		catch (Exception e)
 		{

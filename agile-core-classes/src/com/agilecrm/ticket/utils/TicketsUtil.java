@@ -413,11 +413,11 @@ public class TicketsUtil
 	public static Tickets changePriority(Long ticket_id, Priority newPriority) throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-		
-		//Return if ticket already have same priority
+
+		// Return if ticket already have same priority
 		if (ticket.priority == newPriority)
 			return ticket;
-		
+
 		Priority oldPriority = ticket.priority;
 		ticket.priority = newPriority;
 
@@ -444,10 +444,10 @@ public class TicketsUtil
 	public static Tickets changeTicketType(Long ticket_id, Type newTicketType) throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-		
+
 		if (ticket.type == newTicketType)
 			return ticket;
-		
+
 		Type oldTicketType = ticket.type;
 
 		// Updating with new ticket type
@@ -572,7 +572,7 @@ public class TicketsUtil
 	 * @return
 	 * @throws EntityNotFoundException
 	 */
-	public static Tickets updateLabels(Long ticket_id, Key<TicketLabels> label, String command)
+	public static Tickets updateLabels(Long ticket_id, Key<TicketLabels> labelKey, String command)
 			throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
@@ -583,12 +583,12 @@ public class TicketsUtil
 
 		if ("add".equalsIgnoreCase(command))
 		{
-			labels.add(label);
+			labels.add(labelKey);
 			ActivityType = ActivityType.TICKET_LABEL_ADD;
 		}
 		else
 		{
-			labels.remove(label);
+			labels.remove(labelKey);
 			ActivityType = ActivityType.TICKET_LABEL_REMOVE;
 		}
 
@@ -597,8 +597,11 @@ public class TicketsUtil
 
 		new TicketsDocument().edit(ticket);
 
+		TicketLabels label = TicketLabelsUtil.getLabelById(labelKey.getId());
+
 		// Logging activity
-		ActivityUtil.createTicketActivity(ActivityType, ticket.contactID, ticket.id, "", label.getId() + "", "labels");
+		ActivityUtil.createTicketActivity(ActivityType, ticket.contactID, ticket.id, "", (label != null ? label.label
+				: ""), "labels");
 
 		return ticket;
 	}
@@ -812,6 +815,9 @@ public class TicketsUtil
 		// Copying old data to create ticket activity
 		Long oldGroupID = ticket.groupID, oldAssigneeID = ticket.assigneeID;
 
+		TicketGroups group = TicketGroupUtil.getTicketGroupById(group_id);
+		DomainUser domainUser = DomainUserUtil.getDomainUser(assignee_id);
+
 		// Verifying if ticket is assigned to Group. This happens only if ticket
 		// is NEW.
 		if (assignee_id == null || assignee_id == 0)
@@ -833,14 +839,13 @@ public class TicketsUtil
 
 			// Logging group change activity
 			if (oldGroupID != ticket.groupID)
+			{
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id,
-						oldGroupID + "", group_id + "", "groupID");
+						oldGroupID + "", (group != null) ? group.group_name : "", "groupID");
+			}
 		}
 		else
 		{
-			// Fetching ticket group
-			TicketGroups group = TicketGroupUtil.getTicketGroupById(group_id);
-
 			// Checking if assignee belongs to given group or not
 			if (!group.agents_keys.contains(assignee_id))
 				return ticket;
@@ -872,19 +877,20 @@ public class TicketsUtil
 			// Logging group change activity
 			if (oldGroupID != ticket.groupID)
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id,
-						oldGroupID + "", group_id + "", "groupID");
+						oldGroupID + "", (group != null) ? group.group_name : "", "groupID");
 
 			// Logging new ticket assigned activity
 			if (isNewTicket)
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, "",
-						assignee_id + "", "assigneeID");
+						((domainUser != null) ? domainUser.name : ""), "assigneeID");
 			else
 				// Logging ticket assignee changed activity
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
-						oldAssigneeID + "", assignee_id + "", "assigneeID");
+						oldAssigneeID + "", ((domainUser != null) ? domainUser.name : ""), "assigneeID");
 		}
 
 		System.out.println("completed changeGroupAndAssignee execution");
+
 		return ticket;
 	}
 
@@ -1017,9 +1023,9 @@ public class TicketsUtil
 	{
 		String query = "NOT status:" + Status.CLOSED + " AND due_date <="
 				+ (Calendar.getInstance().getTimeInMillis() / 1000);
-		
+
 		System.out.println("Overdue tickets query: " + query);
-		
+
 		JSONObject resultJSON = new TicketsDocument().searchDocuments(query, "", "created_time", 1000);
 
 		JSONArray keysArray = resultJSON.getJSONArray("keys");
