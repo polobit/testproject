@@ -976,11 +976,15 @@ public class Contact extends Cursor
 	    try
 	    {
 		// return dao.ofy().get(owner_key);
-		DomainUser user = DomainUserUtil.getDomainUser(owner_key.getId());
+		/*DomainUser user = DomainUserUtil.getDomainUser(owner_key.getId());
 		if (user != null)
 		    user.getCalendarURL();
 
-		return user;
+		return user;*/
+	    DomainUser user = new DomainUser();
+	    user.id = owner_key.getId();
+	    
+	    return user;
 	    }
 	    catch (Exception e)
 	    {
