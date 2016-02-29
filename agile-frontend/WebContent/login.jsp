@@ -120,7 +120,7 @@ String logo_url = accountPrefs.logo;
 
 <style>
 body {
-   background-image: url('<%=S3_STATIC_IMAGE_PATH%>/images/agile-login-page-low.jpg');
+  /* background-image: url('<%=S3_STATIC_IMAGE_PATH%>/images/agile-login-page-low.jpg');*/
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% 100%;
@@ -303,11 +303,17 @@ if(isSafari && isWin)
 			if(login_hash)
 				$("#location_hash").val(login_hash);
 
-        var newImg = new Image;
+		var  images = new Array[];
+		images[0] = 'login1.jpg';
+		images[1] = 'login2.jpg';
+		images[2] = 'login3.jpg';
+		images[3] = 'login4.jpg';
+         var newImg = new Image;
+        var random = Math.round(Math.random()*10);
         newImg.onload = function() {
         $("body").css("background-image","url('"+this.src+"')");
         }
-        newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/agile-login-page-high.png';
+        newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/'+images[random];
 			// Pre load dashlet files when don is active
 			preload_dashlet_libs();
 
