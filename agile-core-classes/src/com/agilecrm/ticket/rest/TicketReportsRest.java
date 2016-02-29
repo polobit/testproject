@@ -71,13 +71,13 @@ public class TicketReportsRest
 					timeZone, ticketTypes);
 
 			Collection<ScoredDocument> documents = TicketReportsUtil.getTicketsBetweenDates(startTime, endTime,
-					"created_time", "status");
+					"last_updated_time", "status");
 
 			for (ScoredDocument document : documents)
 			{
 				String last = "";
 				Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-				calendar.setTimeInMillis(Math.round(document.getOnlyField("created_time").getNumber()) * 1000);
+				calendar.setTimeInMillis(Math.round(document.getOnlyField("last_updated_time").getNumber()) * 1000);
 
 				if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
 					calendar.set(Calendar.DAY_OF_MONTH, 1);

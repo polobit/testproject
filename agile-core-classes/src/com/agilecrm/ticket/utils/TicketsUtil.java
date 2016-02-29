@@ -308,6 +308,7 @@ public class TicketsUtil
 
 		Status oldStatus = ticket.status;
 		ticket.status = status;
+		ticket.last_updated_time = Calendar.getInstance().getTimeInMillis();
 
 		// Set ticket closed time
 		if (status == Status.CLOSED)
@@ -412,6 +413,11 @@ public class TicketsUtil
 	public static Tickets changePriority(Long ticket_id, Priority newPriority) throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+		
+		//Return if ticket already have same priority
+		if (ticket.priority == newPriority)
+			return ticket;
+		
 		Priority oldPriority = ticket.priority;
 		ticket.priority = newPriority;
 
@@ -438,7 +444,10 @@ public class TicketsUtil
 	public static Tickets changeTicketType(Long ticket_id, Type newTicketType) throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-
+		
+		if (ticket.type == newTicketType)
+			return ticket;
+		
 		Type oldTicketType = ticket.type;
 
 		// Updating with new ticket type
@@ -840,6 +849,7 @@ public class TicketsUtil
 			if (ticket.status == Status.NEW)
 			{
 				ticket.status = Status.OPEN;
+
 				isNewTicket = true;
 			}
 
@@ -926,12 +936,12 @@ public class TicketsUtil
 		try
 		{
 			NamespaceManager.set("");
-			
+
 			for (Long userKey : users_keys)
 				domainUserKeys.add(new Key<DomainUser>(DomainUser.class, userKey));
-			
+
 			System.out.println("domainUserKeys: " + domainUserKeys);
-			
+
 			users = DomainUserUtil.dao.fetchAllByKeys(new ArrayList<Key<DomainUser>>(domainUserKeys));
 		}
 		catch (Exception e)
@@ -1005,10 +1015,10 @@ public class TicketsUtil
 	 */
 	public static List<Key<Tickets>> getOverdueTickets() throws Exception
 	{
-		String query = "NOT status:" + Status.CLOSED + " AND due_time <=" + Calendar.getInstance().getTimeInMillis()
-				/ 1000;
+		String query = "NOT status:" + Status.CLOSED + " AND due_time <="
+				+ (Calendar.getInstance().getTimeInMillis() / 1000);
 
-		JSONObject resultJSON = new TicketsDocument().searchDocuments(query, "", "", 1000);
+		JSONObject resultJSON = new TicketsDocument().searchDocuments(query, "", "created_time", 1000);
 
 		JSONArray keysArray = resultJSON.getJSONArray("keys");
 
