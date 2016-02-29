@@ -20,6 +20,9 @@
 <%@page import="com.agilecrm.document.Document"%>
 <%@page import="com.agilecrm.contact.DocumentNote"%>
 <%@page import="com.agilecrm.contact.util.DocumentNoteUtil"%>
+<%@page import="com.agilecrm.contact.util.ContactUtil"%>
+<%@page import="com.agilecrm.contact.Contact"%>
+
 <%@page import="java.util.Set"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Calendar"%>
@@ -38,10 +41,10 @@ String domain_name=null;
 Long user_id = 0L;
 Long agile_user_id = 0L;
 
-String _multiple_contact_ids="";
+
 String htmlContent="";
 String docTitle="";
-String _multiple_leads_ids="";
+
 
 URL ur=new URL(url);
 String d_name=domain_name= NamespaceUtil.getNamespaceFromURL(ur);
@@ -50,8 +53,10 @@ String baseUrl=VersioningUtil.getStaticFilesBaseURL();
 String sDocumentId=ar[ar.length-2];
 String sContactId=ar[ar.length-1];
 Long dDocumentId= Long.parseLong(sDocumentId);
+Long dContactId= Long.parseLong(sContactId);
 Document document =DocumentUtil.getDocument(dDocumentId);
 List<DocumentNote> notes=null;
+String sContactName="";
 if(document!=null)
 {
 
@@ -65,23 +70,9 @@ if(document!=null)
 	 htmlContent=document.text;
 	 docTitle=document.name;
 	 sNoteSubject=docTitle; 
-	List<String> list=document.getContact_ids();
+	 Contact contact = ContactUtil.getContact(dContactId);
+	 sContactName=contact.first_name + " " + contact.last_name;
 	
-	if(list!=null)
-	{
-		for(String id : list){
-			_multiple_contact_ids+="," + id;
-		};
-	}
-
-	List<String> list_deals=document.getDeal_ids();
-	
-	if(list!=null)
-	{
-		for(String id : list){
-			_multiple_leads_ids+="," + id;
-		};
-	}	 
 
 	DomainUser domainUser =document.getOwner();
 	AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
@@ -129,8 +120,10 @@ var Agile_User_Id = <%=mapper.writeValueAsString(agile_user_id)%>;
 var SELECTED_DOMAIN_USER="";
 var domainname=<%=mapper.writeValueAsString(domain_name)%>;
 var d_name=<%=mapper.writeValueAsString(d_name)%>;
-var contactid=<%=mapper.writeValueAsString(sContactId)%>;
+var contact_id=<%=mapper.writeValueAsString(sContactId)%>;
+var contact_name=<%=mapper.writeValueAsString(sContactName)%>;
 var document_id=<%=mapper.writeValueAsString(sDocumentId)%>;
+
 var subject=<%=mapper.writeValueAsString(sNoteSubject)%>
  </script>
 <style type="text/css">
@@ -225,7 +218,7 @@ var subject=<%=mapper.writeValueAsString(sNoteSubject)%>
            <div class="wrapper-md comments-history">
 <% if(notes!=null ){ for(DocumentNote note:notes){ %>
              <ul class="list-group">
-<li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="word-wrap: break-word" title="<%=note.description %>" ><%=note.description %></p>
+<li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="word-wrap: break-word;overflow:hidden;" title="<%=note.description %>" ><%=note.description %></p>
 <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time class="timeago" datetime="<%=note.created_time %>"><%=note.created_time%></time></small>
 </li>
 </ul>
@@ -238,9 +231,8 @@ var subject=<%=mapper.writeValueAsString(sNoteSubject)%>
        <div class="m-t-sm"><div class="row">
        	<textarea class="inputtext " rows="6" 
 id="comments" name="notes" placeholder="Comments"></textarea>
-<text id="contact_ids" name="contact_ids" type="hidden" value="<%=_multiple_contact_ids%>"></text>
-<text id="deal_ids" name="deal_ids" type="hidden" value="<%=_multiple_leads_ids%>"></text>
-<text id="document_ids" name="document_ids" type="hidden" value="<%=sDocumentId%>"></text>
+
+<text id="contact_id" name="subject" type="hidden" value="<%=sContactId%>"></text>
 <text id="subject" name="subject" type="hidden" value="<%=sNoteSubject%>"></text>
 </div>
 <div class="row">
@@ -282,32 +274,13 @@ function bodyLoad()
 					$("body").on("click","#send-comments",function (e){
 						e.preventDefault();
 						var jsonreq=[];
-						var contactIds=[];
-						var dealIds=[];
-						/*if($("#contact_ids").val()!=undefined && $("#contact_ids").val()!="")
-						{
-							contactIds=$("#contact_ids").val();
-							var arrcontactIds=contactIds.split(",");
-							$.each(arrcontactIds,function(index,value){
-								contactIds.push(value);	
-							});
-							
 						
-						}
 						
-
-						if($("#deal_ids").val()!=undefined && $("#deal_ids").val()!="")
-						{
-							dealIds=$("#deal_ids").val();
-							var arrdealIds=dealIds.split(",");
-							$.each(arrdealIds,function(index,value){
-								dealIds.push(value);	
-							});
-						}*/
-						contactIds.push(contactid);	
+						
 						var doc_json={"description":$("#comments").val(),
-							"contact_ids": contactIds,
-							"deal_ids": dealIds,
+							"contact_id": contact_id,
+								"commenter_id": contact_id,
+							"commenter_name": contact_name,
 							"document_id":document_id,
 							"subject":subject,
 							"owner_id" : User_Id,
@@ -328,7 +301,7 @@ function bodyLoad()
 							},
 							success:function(res){
 								var sComments=$("#comments").val();
-								var sHTML='<ul class="list-group"><li class="list-group-item document-notes"><p>'+ sComments +'</p><small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time class="timeago" datetime="Feb 19 2016 19:02:53" title="1455888773">less than a minute ago</time></small></li></ul>'
+								var sHTML='<ul class="list-group"><li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="word-wrap: break-word;overflow:hidden;">'+ sComments +'</p><small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time class="timeago" datetime="Feb 19 2016 19:02:53" title="1455888773">less than a minute ago</time></small></li></ul>'
 								$(".comments-history").prepend(sHTML)
 								$("#comments").val("")
 							}	

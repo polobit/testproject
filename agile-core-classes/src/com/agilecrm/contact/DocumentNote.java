@@ -63,13 +63,37 @@ public class DocumentNote extends Cursor
      */
     public String description;
 
+	private String commenter_name;
+    
+    public String getcommenter_name() {
+		return commenter_name;
+	}
+
+	public void setcommenter_name(String commenter_name) {
+		this.commenter_name = commenter_name;
+	}
+
+	public String getContact_id() {
+		return contact_id;
+	}
+
+	public void setContact_id(String contact_id) {
+		this.contact_id = contact_id;
+	}
+
+
+
+	private String contact_id;
+
+    
+    
     public String document_id;
     /**
      * List of contact ids, a note related to
      * 
      */
-    @NotSaved
-    private List<String> contact_ids = new ArrayList<String>();
+    
+    
 
     /**
      * Owner key of AgileUser id.
@@ -89,11 +113,7 @@ public class DocumentNote extends Cursor
     @NotSaved(IfDefault.class)
     private Key<DomainUser> domain_owner = null;
 
-    /**
-     * List of contact keys, a note related to
-     */
-    @NotSaved(IfDefault.class)
-    private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
+    
 
     /**
      * Separates note from bulk of other models at client side (For timeline
@@ -135,10 +155,13 @@ public class DocumentNote extends Cursor
 	    this.subject = subject;
     }
 
-    public DocumentNote(String subject, String description,String document_id)
+    public DocumentNote(String subject, String description,String document_id,String contact_id,String commenter_name)
     {
 	this.description = description;
 	this.document_id=document_id;
+	this.contact_id=contact_id;
+	
+	this.commenter_name=commenter_name;
 	if (subject != null)
 	    this.subject = subject;
     }
@@ -162,22 +185,8 @@ public class DocumentNote extends Cursor
 	this.owner = owner;
     }
 
-    /**
-     * Remove related contact owner. Used for delete note of specific contact. 
-     * 
-     * @param contactKey
-     */
-    @JsonIgnore
-    public void removeRelatedContacts(Key<Contact> contactKey)
-    {
-	this.related_contacts.remove(contactKey);
-    }
 
-    @JsonIgnore
-    public void addRelatedContacts(String contactId)
-    {
-	contact_ids.add(contactId);
-    }
+    
 
     /**
      * Creates contact keys by iterating note related contact ids and assigns
@@ -186,13 +195,9 @@ public class DocumentNote extends Cursor
     @PrePersist
     private void PrePersist()
     {
-	System.out.println("contacts before saving : " + contact_ids);
+	
 
-	// Create list of contact keys
-	for (Object contact_id : this.contact_ids)
-	{
-			this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id.toString())));
-	}
+	
 
 	// Store Created Time
 	if (created_time == 0L)
@@ -221,44 +226,11 @@ public class DocumentNote extends Cursor
 	
     }
 
-    /**
-     * Gets contacts related with Notes.
-     * 
-     * @return list of contact objects as xml element related with a deal.
-     */
-    @XmlElement
-    public List<Contact> getContacts()
-    {
-	Objectify ofy = ObjectifyService.begin();
-	List<Contact> contacts_list = new ArrayList<Contact>();
-	contacts_list.addAll(ofy.get(this.related_contacts).values());
-	return contacts_list;
-    }
+    
+    
 
-    public void addContactIds(String id)
-    {
-	if (contact_ids == null)
-	    contact_ids = new ArrayList<String>();
 
-	contact_ids.add(id);
-    }
-
-    /**
-     * Returns contact ids related to note.
-     * 
-     * @return
-     */
-    @XmlElement(name = "contact_ids")
-    public List<String> getContact_ids()
-    {
-	contact_ids = new ArrayList<String>();
-
-	for (Key<Contact> contactKey : related_contacts)
-	    contact_ids.add(String.valueOf(contactKey.getId()));
-
-	return contact_ids;
-    }
-
+    
     /**
      * Returns {@link UserPrefs} Object related to current note
      * 
@@ -347,6 +319,6 @@ public class DocumentNote extends Cursor
     @Override
     public String toString()
     {
-	return "id: " + id + " created_time: " + created_time + " subj" + subject + " description: " + description + " document_id: " + document_id;
+	return "id: " + id + " created_time: " + created_time + " subj" + subject + " description: " + description + " document_id: " + document_id + " contact_id: " + contact_id+" commenter_name: " + commenter_name;
     }
 }

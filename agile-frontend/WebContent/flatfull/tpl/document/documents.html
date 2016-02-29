@@ -204,7 +204,7 @@
 </script>
 <script id="document-notes-model-template" type="text/html">
                     <li class="wrapper-sm b-b">
-                    <p class="m-b-none"><a class="line-clamp activity-tag"  title="{{description}}" href="#documents/{{document_id}}">{{description}}</a></p>
+                    <a class="line-clamp activity-tag"  title="{{description}}" href="#documents/{{document_id}}"><div class="m-b-none text-flow-ellipsis line-clamp">{{description}} by {{commenter_name}}</div></a>
                     <small class="block text-muted" > 
                     <i class="fa fa-fw fa-clock-o"></i>&nbsp;<time class="text-sm" datetime="{{epochToHumanDate "" created_time}}"> {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" created_time}}</time>
                     </small>

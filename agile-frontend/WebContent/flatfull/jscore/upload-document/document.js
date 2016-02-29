@@ -432,8 +432,9 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 			}
 			if (App_Deal_Details.dealDetailView)
 			{
-					if(Current_Route.indexOf( "deal")>-1)	
+					if(Current_Route.indexOf( "deal" + "/" +App_Deal_Details.dealDetailView.model.id)>-1)	
 					{
+
 						$.each(document.deals, function(index, deal) 
 						{
 							
@@ -451,29 +452,15 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 										documentsView.collection.sort();
 									}
 								}
-								
-									// Activates "Timeline" tab and its tab content in
-									// contact detail view
-									// activate_timeline_tab();
-									//add_entity_to_timeline(data);
-									/*
-									 * If timeline is not defined yet, initiates with the
-									 * data else inserts
-									 */
-									return false;
+								return false;			
 							}
-						});	
-						var sURL="deal/" + App_Contacts.contactDetailView.model.get('id');
+						});
+						var sURL="deal/" + App_Deal_Details.dealDetailView.model.id ;
 						Backbone.history.navigate(sURL, { trigger : true });
-						return;	
+						return;			
+						
 					}
-					else if( Current_Route.indexOf( App_Deal_Details.dealDetailView.model.id)>-1)
-					{
-
-						var sURL="deal/" + App_Deal_Details.dealDetailView.model.id;
-						Backbone.history.navigate(sURL, { trigger : true });
-						return;
-					}				
+							
 				
 			}
 			
