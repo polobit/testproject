@@ -2,7 +2,7 @@
     "name": "Email User",
     "thumbnail": "json/nodes/images/ticket/email-user.png",
     "icon": "json/nodes/icons/ticket/email-user.png",
-    "info": "Check if a link in the email is clicked within a specified duration.",
+    "info": "Send an email to requester or assignee.",
     "help": "Check if a link in the email is clicked within a specified duration.",
     "author": "John",
     "company": "mantra",

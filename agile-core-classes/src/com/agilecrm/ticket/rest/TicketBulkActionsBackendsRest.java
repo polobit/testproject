@@ -10,6 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,6 +50,7 @@ public class TicketBulkActionsBackendsRest
 	{
 		try
 		{
+		    
 			System.out.println("*********Request reached to backend*********");
 			System.out.println("domain_user_id.." + domainUserID);
 			System.out.println("NamespaceManager.." + NamespaceManager.get());
@@ -58,7 +60,9 @@ public class TicketBulkActionsBackendsRest
 
 			JSONArray labelsIDs = dataJSON.getJSONArray("labels");
 			// String[] labelsArray = dataJSON.getString("labels").split(",");
-
+			
+			String Command = dataJSON.getString("command");
+			
 			List<Key<TicketLabels>> labels = new ArrayList<Key<TicketLabels>>();
 
 			for (int i = 0; i < labelsIDs.length(); i++)
@@ -83,12 +87,21 @@ public class TicketBulkActionsBackendsRest
 				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
 			}
 
-			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(labels, dataJSON.getString("command"),
+			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(labels,Command,
 					NamespaceManager.get(), domainUserID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
-
-			BulkActionNotifications.publishNotification("Selected Ticket labels have been updated successfully.");
+			
+			String Message = "Selected Ticket labels have been added successfully";
+			
+			if(Command == "remove")
+				Message = "Selected Ticket labels have been removed successfully";
+			
+				BulkActionNotifications.publishNotification(Message);
+				
+			if (StringUtils.isBlank(Command))
+					return;
+					
 		}
 		catch (Exception e)
 		{

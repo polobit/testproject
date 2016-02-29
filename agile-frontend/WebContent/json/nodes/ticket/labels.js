@@ -2,7 +2,7 @@
     "name": "Labels",
     "thumbnail": "json/nodes/images/ticket/labels.png",
     "icon": "json/nodes/icons/ticket/labels.png",
-    "info": "Add or delete label for your customer. You can sort your tickets based on labels or generate reports accordingly.",
+    "info": "Add or delete label for a ticket.",
     "help": "Add or delete label for your customer. You can sort your tickets based on labels or generate reports accordingly.",
     "author": "John",
     "company": "mantra",

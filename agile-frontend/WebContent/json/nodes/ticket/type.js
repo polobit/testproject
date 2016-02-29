@@ -2,7 +2,7 @@
     "name": "Ticket Type",
     "thumbnail": "json/nodes/images/ticket/ticket-type.png",
     "icon": "json/nodes/icons/ticket/ticket-type.png",
-    "info": "Check if a link in the email is clicked within a specified duration.",
+    "info": "Change the type of a ticket.",
     "help": "Check if a link in the email is clicked within a specified duration.",
     "author": "John",
     "company": "mantra",

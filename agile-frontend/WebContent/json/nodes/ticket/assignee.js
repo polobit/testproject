@@ -2,7 +2,7 @@
     "name": "Assignee",
     "thumbnail": "json/nodes/images/ticket/assignee.png",
     "icon": "json/nodes/icons/ticket/assignee.png",
-    "info": "Check if a link in the email is clicked within a specified duration.",
+    "info": "You can change the group and assignee  for a ticket.",
     "help": "Check if a link in the email is clicked within a specified duration.",
     "author": "John",
     "company": "mantra",

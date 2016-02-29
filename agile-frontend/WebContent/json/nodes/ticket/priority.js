@@ -2,7 +2,7 @@
     "name": "Priority",
     "thumbnail": "json/nodes/images/ticket/priority.png",
     "icon": "json/nodes/icons/ticket/priority.png",
-    "info": "Check if a link in the email is clicked within a specified duration.",
+    "info": "Set the priority of a ticket as low,medium or high.",
     "help": "Check if a link in the email is clicked within a specified duration.",
     "author": "John",
     "company": "mantra",
