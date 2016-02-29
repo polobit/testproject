@@ -11,6 +11,13 @@ function initializeEmailBuilderListeners() {
     	}
 	});
 
+    $('#emailbuilder-listeners').on('click', '.sendTestEmailButton', function(e){
+        e.preventDefault();
+        if (isValidForm('#emailBuilderForm')) {
+            document.getElementById('emailBuilderFrame').contentWindow.$('#sendTestEmail').trigger("click");          
+        }
+    });
+
     $('#emailbuilder-listeners').on('click', '#emailBuilderOptionsLink', function (e) {
         e.preventDefault();
         $(this).find('i').toggleClass('icon-plus').toggleClass('icon-minus');
@@ -116,6 +123,34 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
         },
     });
 }
+
+function sendTestEmailTemplate(fullSource,builderSource) {
+    
+    var template = {
+                "name": $("#nameoftemplate").val(),
+                "from_name": CURRENT_DOMAIN_USER.name,
+                "from_email":CURRENT_DOMAIN_USER.email,
+                "to_email": CURRENT_DOMAIN_USER.email,
+                "replyto_email":CURRENT_DOMAIN_USER.email,
+                "subject": $("#subject").val(),
+                "text_email": $("#text_email").val(),
+                "html_email": fullSource
+            };
+
+    var requestType = "post";
+    var message = "Test Email Sent.";
+
+    $.ajax({
+        type: requestType, 
+        url: 'core/api/emails/send-test-email',    
+        data: template,
+        success: function (data) {
+            $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
+            
+        },
+    });
+}
+
 
 function redirectToOldEditor(templateId) {
     window.location.hash = "email-template/"+templateId;

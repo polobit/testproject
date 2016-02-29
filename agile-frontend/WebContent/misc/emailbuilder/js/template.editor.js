@@ -987,6 +987,25 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         return false;
     });
 
+    $("#sendTestEmail").click(function () {
+
+        $('div.row').removeClass('active');
+        $('.selected-item').removeClass('selected-item').css('border', 'none');
+
+        downloadLayoutSrc();
+
+        var save = $('#tosave');
+        var templateContent = $("#templateHtmlContent").val();
+        var fullSource = templateContent.replace("{body}",escapeHtmlEntities($('#download').val()));
+        var builderSource = save.html();
+        parent.sendTestEmailTemplate(fullSource,escapeHtmlEntities(builderSource));
+        return;
+        // console.log(save.html());
+        // console.log($('#download').val());
+        // return;
+
+    });
+
     $("#edit").click(function () {
         $("body").removeClass("devpreview sourcepreview");
         $("body").addClass("edit");
