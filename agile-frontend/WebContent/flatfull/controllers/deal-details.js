@@ -107,7 +107,9 @@ function dealNameEdit(el)
 	$("#inline-input").toggleClass("hidden");
 	$("#deals-inline").toggleClass("hidden");
 	$("#inline-input").removeClass("error-inputfield");
+	App_Deal_Details.dealDetailView.model = dealModel;
 	}
+
 
 	});
 
