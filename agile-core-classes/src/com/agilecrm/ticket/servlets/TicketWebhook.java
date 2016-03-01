@@ -433,12 +433,17 @@ public class TicketWebhook extends HttpServlet
 				}
 
 				ticket.status = Status.OPEN;
+				
 				// Updating ticket entity
 				Tickets.ticketsDao.put(ticket);
 
 				// Updating text search data
 				new TicketsDocument().edit(ticket);
-
+				
+				// Logging public notes activity
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_REQUESTER_REPLIED, ticket.contactID, ticket.id,
+						html, TicketNotesUtil.removedQuotedReplies(plainText), "html_text");
+				
 				// Sending user replied notification
 				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket(#" + ticket.id
 						+ ")");
