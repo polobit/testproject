@@ -433,4 +433,9 @@
         <property name="won_date" direction="asc"/>
     </datastore-index>
     
+   <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+    
 </datastore-indexes>
