@@ -139,7 +139,7 @@ function initializeLandingPageListeners() {
 			$(this).addClass("active");
 		}
 
-		if(selectorId == "inspector") {
+/*		if(selectorId == "inspector") {
 			builderIFrame.$('#elementsPanelAgileId').addClass("hidden");
 			builderIFrame.$('#elements-container').css("position","fixed");
 			builderIFrame.$('#elements-container').css("left","");
@@ -149,7 +149,7 @@ function initializeLandingPageListeners() {
 			builderIFrame.$('#elements-container').css("position","absolute");
 			builderIFrame.$('#elements-container').css("right","");
 			builderIFrame.$('#elements-container').css("left","0");
-		}
+		}*/
 		
 		builderIFrame.$(selector).trigger("click");
 	});

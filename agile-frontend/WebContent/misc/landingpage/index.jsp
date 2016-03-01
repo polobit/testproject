@@ -449,7 +449,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                 <div class="arrow-right" id="background-arrow"></div>
                             </section>
                         </aside>
-                        <div id="pages" ng-class="{ open: panels.active === 'pages' }" class="panel hidden" data-name="pages" ng-controller="PagesController" bl-pretty-scrollbar>
+                        <div id="pages" ng-class="{ open: panels.active === 'pages' }" class="panel" data-name="pages" ng-controller="PagesController" bl-pretty-scrollbar>
                         
                         <div class="hidden">
                             <ul class="list-unstyled">
@@ -494,7 +494,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                 <button class="btn btn-danger" ng-click="emptyProject()">{{ 'emptyProject' | translate }}</button>
                             </div>
                         </div>
-                        <div id="settings" ng-class="{ open: panels.active === 'settings' }" class="panel hidden" data-name="settings" ng-controller="SettingsController">
+                        <div id="settings" ng-class="{ open: panels.active === 'settings' }" class="panel" data-name="settings" ng-controller="SettingsController">
                             <div class="categories" bl-panels-accordion>
                                 <div class="accordion-item" ng-repeat="(category, categorySettings) in settings.all" ng-class="{ open: category === 'autoSave' }">
                                     <div class="accordion-heading">{{ category | translate }} <i class="icon icon-down-open-1"></i></div>
