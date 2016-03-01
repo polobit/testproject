@@ -1361,7 +1361,7 @@ public class ContactUtil
 	if (contact == null)
 	    return null;
 
-	DomainUser contactOwner = contact.getOwner();
+	DomainUser contactOwner = contact.getContactOwner();
 
 	// if contactOwner is null, return
 	if (contactOwner == null)

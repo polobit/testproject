@@ -77,7 +77,7 @@ public class SetOwner extends TaskletAdapter
 	    // Update subscriberJSON
 	    subscriberJSON = AgileTaskletUtil.getUpdatedSubscriberJSON(updatedContact, subscriberJSON);
 
-	    DomainUser newContactOwner = updatedContact.getOwner();
+	    DomainUser newContactOwner = updatedContact.getContactOwner();
 
 	    // Owner is not updating sometimes, so updating subscriberJSON
 	    if (newContactOwner != null && subscriberJSON.has("data")

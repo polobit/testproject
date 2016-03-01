@@ -970,6 +970,8 @@ public class Contact extends Cursor
     @XmlElement(name = "owner")
     public DomainUserPartial getOwner()
     {
+    	System.out.println("Owner call");
+    	
 	if (owner_key != null)
 	{
 	    
@@ -977,18 +979,42 @@ public class Contact extends Cursor
 	    // and return null
 	    try
 	    {
-	    	return DomainUserUtil.getPartialDomainUser(owner_key.getId());
+	    return DomainUserUtil.getPartialDomainUser(owner_key.getId());
+	    }
+	    catch (Exception e)
+	    {
+		owner_key = null;
+		return null;
+	    }
+	}
+	return null;
+    }
+    
+    /**
+     * While saving a contact it contains domain user key as owner, but while
+     * retrieving includes complete DomainUser object.
+     * 
+     * @return {@link DomainUser} object
+     */
+    public DomainUser getContactOwner()
+    {
+    	System.out.println("getContactOwner call");
+    	
+	if (owner_key != null)
+	{
+	    
+	    // If user is deleted no user is found with key so set user to null
+	    // and return null
+	    try
+	    {
 	    	
 		// return dao.ofy().get(owner_key);
-		/*DomainUser user = DomainUserUtil.getDomainUser(owner_key.getId());
+		DomainUser user = DomainUserUtil.getDomainUser(owner_key.getId());
 		if (user != null)
 		    user.getCalendarURL();
 
-		return user;*/
-	    // DomainUser user = new DomainUser();
-	    // user.id = owner_key.getId();
+		return user;
 	    
-	    // return user;
 	    }
 	    catch (Exception e)
 	    {
