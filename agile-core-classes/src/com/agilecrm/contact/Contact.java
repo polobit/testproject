@@ -983,6 +983,7 @@ public class Contact extends Cursor
 	    }
 	    catch (Exception e)
 	    {
+	    System.err.println(e.getMessage());
 		owner_key = null;
 		return null;
 	    }
