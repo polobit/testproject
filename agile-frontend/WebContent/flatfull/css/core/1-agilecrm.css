@@ -923,6 +923,12 @@ z-index: 99;
 	position:relative;
 	border-bottom:1px solid #ddd;
 }
+.dealtitle-angular + .tooltip{
+
+	width:200px;
+    word-wrap:break-word;
+    white-space:normal;
+}
 .milestone-main .milestone-column:last-child .milestone-heading:after,.milestone-main .milestone-column:last-child span:after
 {
 	display:none;
@@ -3050,7 +3056,7 @@ width : 150px;
 	padding-bottom:9px;
 }
 
-#portlets-add-listener #deals > div:nth-of-type(4)
+#portlets-add-listener .wrapper-md div:nth-of-type(4)
 {
 	height: 243px;
 }
@@ -3150,6 +3156,7 @@ table.hide-head-checkbox th label.i-checks {
 }
 
 
+
 .slate-content h4{
 	font-size: 18px;
 	opacity:0.8;
@@ -3170,6 +3177,8 @@ table.hide-head-checkbox th label.i-checks {
 .deals-nowrap .no-wrap {
  white-space: nowrap !important;
 }
+
+
 .contact_popover{ 
 
 	border-radius: 0px;
@@ -3249,8 +3258,45 @@ table.hide-head-checkbox th label.i-checks {
     cursor: pointer;
     padding: 5px;
     margin-top: 5px;
+    border-radius: 6px;
 }
 .user-alert .user-alert-message span{
-	margin-top: -8px;
+	background-color: #DCD1A5;
+    padding: 0px 6px 4px;
+	margin-left: 10px;
+    margin-right: 5px;
     font-size: 15px;
 }
+.companies_input{
+	height:30px;
+	font-size:12px;
+}
+.lhs-contact-filter-row  div.add-icon{
+	display: none;
+}
+
+.lhs-contact-filter-row div.add-icon:last-of-type {
+	display: block!important;
+	}
+#addBtn:hover
+{
+  color: black !important;
+}
+
+#removeBtn:hover
+{
+  color: black !important;
+  opacity: 0.9;
+}
+#removeBtn:hover
+{
+  color: black !important;
+}
+
+
+@media ( max-width : 767px) {
+	.vbox-mobile-view .vbox{ display: block;min-height:auto;}
+	.vbox-mobile-view .row-row{ display: inherit !important; }
+
+}
+

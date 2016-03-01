@@ -681,6 +681,7 @@ var contacts_bulk_actions = {
 											// hide bulk actions button.
 											$('body').find('#bulk-actions').css('display', 'none');
 											$('body').find('#bulk-select').css('display', 'none');
+											$('body').find('#bulk-action-btns button').addClass("disabled");
 											$('table#contacts-table').find('.thead_check').removeAttr('checked');
 											$('table#contacts-table').find('.tbody_check').removeAttr('checked');
 											$(".grid-checkboxes").find(".thead_check").removeAttr("checked");
@@ -1290,7 +1291,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 	$('body').find('#bulk-select').css('display', 'none')
 	if ($(clicked_ele).is(':checked'))
 	{
-		$('body').find('#bulk-actions').css('display', 'inline-block');
+		<!--$('body').find('#bulk-actions').css('display', 'inline-block');-->
 
 
 		var resultCount = 0;
@@ -1298,7 +1299,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 		var limitValue = 10000;		
 
 		if(company_util.isCompany()){
-
+			$("#bulk-action-btns button").removeClass("disabled");
 			resultCount = App_Companies.companiesListView.collection.length;
 			appCount = total_available_contacts;
 
@@ -1318,7 +1319,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 				$('#bulk-select').css("display","block");
 			}
 		}else{
-
+			$("#bulk-action-btns button").removeClass("disabled");
 			resultCount = App_Contacts.contactsListView.collection.length;
 			appCount = total_available_contacts;
 
@@ -1344,7 +1345,10 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 	{
 		if (isBulk)
 		{
-			$('#bulk-actions').css('display', 'none');
+			if(company_util.isCompany())
+				$("#bulk-action-btns button").addClass("disabled");
+			else
+				$("#bulk-action-btns button").addClass("disabled");
 			return;
 		}
 
@@ -1361,7 +1365,10 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 
 		if (check_count == 0)
 		{
-			$('#bulk-actions').css('display', 'none');
+			if(company_util.isCompany())
+				$('#bulk-actions').css('display', 'none');
+			else
+				$("#bulk-action-btns button").addClass("disabled");
 		}
 	}
 }
