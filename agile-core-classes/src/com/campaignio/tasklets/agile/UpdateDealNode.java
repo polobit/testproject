@@ -66,10 +66,10 @@ public class UpdateDealNode extends TaskletAdapter
             msg=dealName +" deal is updated."+"<br>Value : " + expectedValue +"<br> MileStone : "+milestone.substring(milestone.indexOf("_")+1);
             		
         else if( milestone.length()!=0 &&  milestone!=null)
-        	msg="Milestone of "+dealName +" deal is updated :" + milestone.substring(milestone.indexOf("_")+1);
+        	msg="Milestone of "+dealName +" deal is updated to " + milestone.substring(milestone.indexOf("_")+1);
             		
         else if(expectedValue.length()!=0 && expectedValue!=null)
-            msg= "Value of "+dealName +" deal is updated :" + expectedValue; 
+            msg= "Value of "+dealName +" deal is updated to " + expectedValue; 
     	
     	return msg;
         

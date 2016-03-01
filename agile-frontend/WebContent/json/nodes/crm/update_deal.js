@@ -2,8 +2,8 @@
     "name": "Update Deal",
     "thumbnail": "json/nodes/images/crm/update_deal.png",
     "icon": "json/nodes/icons/crm/update_deal.png",
-    "info": "Update your latest deal.",
-    "help": "Update your latest deal.",
+    "info": "Updates latest deal of contact with Milestone/Value or both.",
+    "help": "Updates latest deal of contact with Milestone/Value or both.",
     "author": "sonali",
     "company": "agilecrm",
     "language": "en",
@@ -36,7 +36,7 @@
        },
        
     {
-            "label": " Update your latest deal with Milestone/Value or both.",
+            "label": "Updates latest deal of contact with Milestone/Value or both.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 
