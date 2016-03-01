@@ -65,6 +65,7 @@ function initializeLandingPageListeners() {
     	} else {
         	$(this).find("span").text('Close');
     	} 
+    	document.getElementById('landingPageBuilder').contentWindow.$("#preview-closer").addClass("hidden");
 	});
 
 	$('#landingpages-listeners').on('click', '#builderPageOptionsLink', function (e) {

@@ -524,7 +524,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     <div class="size">{{ activeCanvasSize+'Size' | translate }}</div>
                                 </div>
                             </div>
-                            <div class="bottom-navigation">
+                            <div class="bottom-navigation hidden">
                                 <button id="landingpageFullPreview" ng-click="preview()" bl-tooltip="preview" placement="top"><i class="icon icon-eye"></i></button>
                                 <button class="hidden" ng-click="openPanel('export')" bl-tooltip="export" placement="top"><i class="icon icon-export"></i></button>
                                 <button ng-click="toggleDevicesPanel()" ng-class="{ active: devicesPanelOpen }" bl-tooltip="changeDevice" placement="top"><i class="icon icon-mobile"></i></button>
