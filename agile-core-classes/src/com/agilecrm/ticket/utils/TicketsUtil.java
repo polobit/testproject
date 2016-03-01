@@ -154,7 +154,16 @@ public class TicketsUtil
 	 */
 	public static Tickets getTicketByID(Long ticketID) throws EntityNotFoundException
 	{
-		return Tickets.ticketsDao.get(ticketID);
+		try
+		{
+			return Tickets.ticketsDao.get(ticketID);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		
+		return null;
 	}
 
 	/**
@@ -1043,7 +1052,6 @@ public class TicketsUtil
 		if (activitys == null || activitys.size() == 0)
 			return new ArrayList<Activity>();
 
-		Map<Long, TicketGroups> groupsList = new HashMap<Long, TicketGroups>();
 		Map<Long, DomainUser> assigneeList = new HashMap<Long, DomainUser>();
 
 		for (Activity activity : activitys)
@@ -1057,117 +1065,6 @@ public class TicketsUtil
 			}
 
 			activity.domainUser = assigneeList.get(activity.domainUserID);
-
-			switch (activity.activity_type)
-			{
-			case TICKET_LABEL_ADD:
-			case TICKET_LABEL_REMOVE:
-			{
-				Long labelID = Long.parseLong(activity.custom2);
-
-				try
-				{
-					activity.ticket_label = TicketLabels.dao.get(labelID);
-				}
-				catch (Exception e)
-				{
-					System.out.println(ExceptionUtils.getFullStackTrace(e));
-				}
-
-				break;
-			}
-			case TICKET_ASSIGNED:
-			{
-				Long assigneeID = Long.parseLong(activity.custom2);
-
-				if (!assigneeList.containsKey(assigneeID))
-				{
-
-					DomainUser temp = DomainUserUtil.getDomainUser(assigneeID);
-
-					if (temp != null)
-						assigneeList.put(assigneeID, temp);
-				}
-
-				activity.new_assignee = assigneeList.get(assigneeID);
-				break;
-			}
-			case TICKET_ASSIGNEE_CHANGED:
-			{
-				Long newAssigneeID = Long.parseLong(activity.custom2);
-
-				Long oldAssigneeID = null;
-
-				try
-				{
-					oldAssigneeID = Long.parseLong(activity.custom1);
-				}
-				catch (Exception e)
-				{
-					System.out.println(ExceptionUtils.getFullStackTrace(e));
-				}
-
-				if (!assigneeList.containsKey(newAssigneeID))
-				{
-					DomainUser temp = DomainUserUtil.getDomainUser(newAssigneeID);
-
-					if (temp != null)
-						assigneeList.put(newAssigneeID, temp);
-				}
-
-				if (oldAssigneeID != null && !assigneeList.containsKey(oldAssigneeID))
-				{
-					DomainUser temp = DomainUserUtil.getDomainUser(oldAssigneeID);
-
-					if (temp != null)
-						assigneeList.put(oldAssigneeID, temp);
-				}
-
-				activity.new_assignee = assigneeList.get(newAssigneeID);
-				activity.old_assignee = assigneeList.get(oldAssigneeID);
-				break;
-			}
-			case TICKET_GROUP_CHANGED:
-			{
-				Long newGroupID = Long.parseLong(activity.custom2);
-				Long oldGroupID = Long.parseLong(activity.custom1);
-
-				if (activity.custom1 != null)
-					if (!groupsList.containsKey(newGroupID))
-					{
-						try
-						{
-							TicketGroups group = TicketGroupUtil.getTicketGroupById(newGroupID);
-
-							if (group != null)
-								groupsList.put(newGroupID, group);
-						}
-						catch (Exception e)
-						{
-							System.out.println(ExceptionUtils.getFullStackTrace(e));
-						}
-					}
-
-				if (!groupsList.containsKey(oldGroupID))
-				{
-					try
-					{
-						TicketGroups group = TicketGroupUtil.getTicketGroupById(oldGroupID);
-
-						if (group != null)
-							groupsList.put(oldGroupID, group);
-					}
-					catch (Exception e)
-					{
-						System.out.println(ExceptionUtils.getFullStackTrace(e));
-					}
-				}
-
-				activity.new_group = groupsList.get(newGroupID);
-				activity.old_group = groupsList.get(oldGroupID);
-				break;
-			}
-			}
 		}
 
 		return activitys;

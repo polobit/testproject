@@ -93,6 +93,9 @@ public class TicketNotesRest
 
 			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
 
+			if (ticket == null)
+				throw new Exception("Ticket has been deleted.");
+
 			// Converting html text to plain with jsoup
 			// Document doc = Jsoup.parse(notes.html_text, "UTF-8");
 			// String plain_text = new HtmlToPlainText().getPlainText(doc);
@@ -114,6 +117,9 @@ public class TicketNotesRest
 			{
 				Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
 				TicketGroups group = TicketGroupUtil.getTicketGroupById(ticket.group_id.getId());
+
+				if (group == null)
+					throw new Exception("Ticket group has been deleted. Please change ticket group to reply.");
 
 				// If domain user doesn't exists in ticket group then
 				// throwing exception
@@ -150,7 +156,7 @@ public class TicketNotesRest
 
 						// Logging ticket assigned activity
 						ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id,
-								ticket.assigneeID + "", "", "assigneeID");
+								"", SessionManager.get().getName(), "assigneeID");
 					}
 					else if (ticket.assignee_id != null && ticket.assignee_id.getId() != domainUserKey.getId())
 					{
@@ -160,7 +166,7 @@ public class TicketNotesRest
 
 						// Log assignee changed activity
 						ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID,
-								ticket.id, domainUserKey.getId() + "", ticket.assignee_id.getId() + "", "assigneeID");
+								ticket.id, "", SessionManager.get().getName(), "assigneeID");
 					}
 
 					if (Status.OPEN == status)

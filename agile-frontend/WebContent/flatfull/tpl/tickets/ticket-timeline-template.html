@@ -51,7 +51,7 @@
 			            <a href="javascript:;">
 
 			           	 {{#if_equals activity_type 'TICKET_ASSIGNEE_REPLIED'}}
-				            <span class="first-letter-cap inline-block">{{domainUser.name}}</span> replied to ticket
+				            <span class="first-letter-cap inline-block">{{user_name}}</span> replied to ticket
 				         {{/if_equals}}
 
 				         {{#if_equals activity_type 'TICKET_REQUESTER_REPLIED'}}
@@ -112,38 +112,38 @@
 			            <a href="javascript:;">
 
 			               {{#if_equals activity_type 'TICKET_ASSIGNED'}}
-						        Ticket assigned to <span class="first-letter-cap">{{new_assignee.name}}</span>
+						        Ticket assigned to <span class="first-letter-cap">{{custom2}}</span>
 						    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_ASSIGNEE_CHANGED'}}
 				            	Ticket assignee changed to <span class="first-letter-cap">
-						            	{{new_assignee.name}}
+						            	{{custom2}}
 						            </span>
 						    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_GROUP_CHANGED'}}
 					                Ticket group changed to <span class="first-letter-cap">
-					                {{new_group.group_name}}</span>
+					                {{custom2}}</span>
 						    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_STATUS_CHANGE'}}
-			                    Status changed to <span class="first-letter-cap">{{custom2}}</span>
+			                    Status changed from <span class="first-letter-cap">{{custom1}}</span> to <span class="first-letter-cap">{{custom2}}</span>
 			                {{/if_equals}}
 
 			                {{#if_equals activity_type 'TICKET_PRIORITY_CHANGE'}}
-		                       Priority changed to <span class="first-letter-cap">{{custom2}}</span>
+		                       Priority changed from <span class="first-letter-cap">{{custom1}}</span> to <span class="first-letter-cap">{{custom2}}</span>
 		                    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_TYPE_CHANGE'}}
-		                        Type changed to <span class="first-letter-cap">{{custom2}}</span>
+		                        Type changed from <span class="first-letter-cap">{{custom1}}</span> to <span class="first-letter-cap">{{custom2}}</span>
 		                     {{/if_equals}}
 						                        
 		                    {{#if_equals activity_type 'TICKET_LABEL_ADD'}}
-		                        Label added - <label class="label bg-success m-l-xs">{{get_label_from_label_id custom2}}</label>
+		                        Label added - <label class="label bg-success m-l-xs">{{custom2}}</label>
 		                     {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_LABEL_REMOVE'}}
-		                        Label removed - <label class="label bg-info m-l-xs">{{get_label_from_label_id custom2}}</label>
+		                        Label removed - <label class="label bg-info m-l-xs">{{custom2}}</label>
 		                     {{/if_equals}}
 
 		                     {{#if_equals activity_type 'TICKET_CC_EMAIL_ADD'}}
