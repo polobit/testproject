@@ -1263,7 +1263,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 			var yes = "";
 			var no = "Ok"
 			var upgrade_link =  'Please <a  href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> upgrade </a> your email subscription.';
-			var emialErrormsg = '<div>To continue sending emails from your account, please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> purchase </a>more.</div>';
+			var emialErrormsg = '<div class="m-t-xs">To continue sending emails from your account, please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> purchase </a>more.</div>';
 			var message = "<div>Sorry, your emails quota has been utilized.</div>" + emialErrormsg;
 			
 			showModalConfirmation(title, 
