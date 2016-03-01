@@ -3,7 +3,7 @@
     "thumbnail": "json/nodes/images/ticket/email-user.png",
     "icon": "json/nodes/icons/ticket/email-user.png",
     "info": "Send an email to requester or assignee.",
-    "help": "Check if a link in the email is clicked within a specified duration.",
+    "help": "",
     "author": "John",
     "company": "mantra",
     "language": "en",
@@ -52,7 +52,7 @@
                "type": "text"
            },
            {
-               "label": "Write label for email user",
+               "label": "",
                "category": "Help",
                "fieldType": "label",
                "type": "label"

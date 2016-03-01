@@ -3,7 +3,7 @@
     "thumbnail": "json/nodes/images/ticket/assignee.png",
     "icon": "json/nodes/icons/ticket/assignee.png",
     "info": "You can change the group and assignee  for a ticket.",
-    "help": "Check if a link in the email is clicked within a specified duration.",
+    "help": "",
     "author": "John",
     "company": "mantra",
     "language": "en",
@@ -45,7 +45,7 @@
                "type": "select"
            },
            {
-               "label": "Write label for Assignee",
+               "label": "",
                "category": "Help",
                "fieldType": "label",
                "type": "label"

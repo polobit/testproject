@@ -2,7 +2,7 @@ package com.agilecrm.ticket.rest;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import org.apache.commons.lang.StringUtils;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -60,7 +60,11 @@ public class TicketBulkActionsBackendsRest
 			System.out.println("NamespaceManager.." + NamespaceManager.get());
 
 			JSONObject dataJSON = new JSONObject(attributes.dataString);
+			String command = dataJSON.getString("command");
 			System.out.println("dataJSON: " + dataJSON);
+			
+			if (StringUtils.isBlank(command))
+				return;
 
 			JSONArray labelsIDs = dataJSON.getJSONArray("labels");
 			// String[] labelsArray = dataJSON.getString("labels").split(",");
@@ -84,8 +88,8 @@ public class TicketBulkActionsBackendsRest
 				idsFetcher = new CSVTicketIdsFetcher(attributes.ticketIDs);
 				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
 			}
-
-			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(labelsKeys, dataJSON.getString("command"),
+			
+			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(labelsKeys, command,
 					NamespaceManager.get(), domainUserID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
@@ -103,9 +107,14 @@ public class TicketBulkActionsBackendsRest
 			// Logging bulk action activity
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_MANAGE_LABELS, null, null, "",
 					labelsCSV.toString(), idsFetcher.getCount() + "");
-
-			BulkActionNotifications.publishNotification(idsFetcher.getCount()
-					+ " tickets labels have been updated successfully.");
+            
+			String message = "Ticket labels have been added.";
+            
+            if(command.equalsIgnoreCase("remove"))
+            	message = "Ticket labels have been removed.";
+	
+            BulkActionNotifications.publishNotification(idsFetcher.getCount()
+					+ message);
 		}
 		catch (Exception e)
 		{

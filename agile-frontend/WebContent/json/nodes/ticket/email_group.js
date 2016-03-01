@@ -3,7 +3,7 @@
     "thumbnail": "json/nodes/images/ticket/email-group.png",
     "icon": "json/nodes/icons/ticket/email-group.png",
     "info": "Send an email to assigned ticket group.",
-    "help": "Check if a link in the email is clicked within a specified duration.",
+    "help": "",
     "author": "John",
     "company": "mantra",
     "language": "en",
@@ -51,7 +51,7 @@
                "type": "text"
            },
            {
-               "label": "Write label for email group",
+               "label": "",
                "category": "Help",
                "fieldType": "label",
                "type": "label"

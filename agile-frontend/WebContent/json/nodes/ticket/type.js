@@ -3,7 +3,7 @@
     "thumbnail": "json/nodes/images/ticket/ticket-type.png",
     "icon": "json/nodes/icons/ticket/ticket-type.png",
     "info": "Change the type of a ticket.",
-    "help": "Check if a link in the email is clicked within a specified duration.",
+    "help": "",
     "author": "John",
     "company": "mantra",
     "language": "en",
@@ -28,7 +28,7 @@
             "type": "select"
         },
         {
-            "label": "Write label for ticket type",
+            "label": "",
             "category": "Help",
             "fieldType": "label",
             "type": "label"

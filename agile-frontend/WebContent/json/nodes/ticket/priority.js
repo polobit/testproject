@@ -3,7 +3,7 @@
     "thumbnail": "json/nodes/images/ticket/priority.png",
     "icon": "json/nodes/icons/ticket/priority.png",
     "info": "Set the priority of a ticket as low,medium or high.",
-    "help": "Check if a link in the email is clicked within a specified duration.",
+    "help": "",
     "author": "John",
     "company": "mantra",
     "language": "en",
@@ -27,7 +27,7 @@
                "type": "select"
            },
            {
-               "label": "Write a label for priority",
+               "label": "",
                "category": "Help",
                "fieldType": "label",
                "type": "label"
