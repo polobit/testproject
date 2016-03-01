@@ -100,9 +100,9 @@ public class TicketBulkActionsBackendsRest
 			for (TicketLabels label : labels)
 				labelsCSV.append(label.label).append(" ,");
 
-			labelsCSV.substring(0, labels.lastIndexOf(" ,"));
-
-			System.out.println("labelsCSV: " + labelsCSV);
+//			labelsCSV.substring(0, labels.lastIndexOf(" ,"));
+//
+//			System.out.println("labelsCSV: " + labelsCSV);
 
 			// Logging bulk action activity
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_MANAGE_LABELS, null, null, "",
