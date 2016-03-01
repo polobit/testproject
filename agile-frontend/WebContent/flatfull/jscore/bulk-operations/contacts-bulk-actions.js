@@ -586,7 +586,7 @@ var contacts_bulk_actions = {
 								var title = "Not Enough Emails Left"
 								if (pendingEmails <= 0)
 								{
-									title = "Emails limit";
+									title = "Emails Limit";
 									yes = "";
 									no = "Ok"
 									message = "<div>Sorry, your emails quota has been utilized.</div> " + emialErrormsg;
