@@ -941,7 +941,7 @@ function initializeAddPortletsListeners() {
 				var p_name = $(this).attr("portlet_name");
 				
 				$("#portletStreamModalNew").html(getTemplate('portletStreamModalInfo'));
-				$("#portletStreamModalNew").modal('show');
+				
 
 					  $.ajax({
             type: "GET",
@@ -994,6 +994,7 @@ function initializeAddPortletsListeners() {
 		$(".add_to_all").attr('portlet_type',
 				portlet_type);
 		$(".add_to_all").attr('portlet_name',p_name);
+		$("#portletStreamModalNew").modal('show');
 	}
 	 });
 		

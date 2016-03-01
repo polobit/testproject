@@ -309,11 +309,11 @@ function showCalendar(users)
 							{
 								pushLoading();
 								$("#loading_calendar_events").remove();
-								$('.fc-header-left')
+								$('.fc-header-left','#calendar_event')
 										.append(
 												'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
 										.show();
-								$('.fc-header-left').show();
+								$('.fc-header-left','#calendar_event').show();
 
 							}
 							else

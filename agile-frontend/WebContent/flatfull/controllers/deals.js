@@ -99,7 +99,7 @@ var DealsRouter = Backbone.Router.extend({
 						setupDealFilters(cel);
 						setNewDealFilters(App_Deals.deal_filters.collection);
 						initializeDealListners(el);
-						loadPortlets('Deals',el);
+						//loadPortlets('Deals',el);
 					}, appendItemCallback : function(el)
 					{
 						appendCustomfields(el);

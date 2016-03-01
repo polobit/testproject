@@ -71,10 +71,10 @@ calendar : function()
 
 						$('#grp_filter').css('display', 'none');
 						$('#event_tab').css('display', 'none');
-					
+						loadPortlets('Events',$(template_ui1));
 
 					}, $('#calendar-listers').find("#calendar-filters"));
-					loadPortlets('Events');
+					
 
 		});	
 	}, "#calendar-listers");
@@ -128,7 +128,7 @@ tasks_new : function()
 			readDetailsFromCookie();
 			// Bind dropdown events
 			bindDropdownEvents();
-			loadPortlets('Tasks');
+			loadPortlets('Tasks',$(template_ui));
 
 		}, "<li><a href='{{id}}' class='hide-on-owner'>My Tasks</a></li>", true);
 
