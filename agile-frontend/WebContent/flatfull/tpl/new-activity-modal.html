@@ -4,27 +4,28 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3 class="modal-title"><i class="icon-plus-sign"></i>&nbsp;Add Event</h3>
+        <h3 class="modal-title">&nbsp;Add Event</h3>
     </div>
     <div class="modal-body">
         <input type="hidden" value="event" id="hiddentask" /> 
         <div id="relatedEvent">
-            <p><i><i class="icon-calendar"></i>&nbsp;Events are time based such as
-                meetings. They show up in calendar.</i>
-            </p>
             <!--Event form  -->
-            <form id="activityForm" name="activityForm" method="post">
+            <form id="activityForm" name="activityForm" method="post" class="form-horizontal">
                 <fieldset>
-                    <div class="row">
-                        <div id="addEvent" class="control-group form-group col-md-6">
-                            <label class="control-label"><b>Event Name </b><span class="field_req">*</span></label>
-                            <div class="controls">
+                    <div id="addEvent" class="control-group form-group" style="margin-bottom:0px;">
+                            <label class="control-label col-sm-3">Event Name<span class="field_req">*</span></label>
+                            <div class="controls col-sm-7">
                                 <input id="title" placeholder="Name of Event" type="text" name="title" class="required form-control" />
                             </div>
-                        </div>
-                        <div class="control-group form-group col-md-6">
-                            <label for="priority_type" class="control-label"><b>Priority </b></label>
-                            <div class="controls">
+                    </div>
+                    <div class="text-muted">
+                            <div class="col-sm-offset-3 col-sm-7" {{#is_mobile}} style="padding-left: 0px !important;font-size: 11px;" {{else}} style="font-size:12px;margin-bottom:10px;padding-left: 9px"{{/is_mobile}}>
+                                 Note: Events are time based such as meetings. They show up in calendar.
+                            </div>
+                    </div>
+                    <div class="control-group form-group">
+                            <label for="priority_type" class="control-label col-sm-3">Priority</label>
+                            <div class="controls col-sm-7">
                                 <span class="input ">
                                     <select name="color" id="color" size="1" class="input-small form-control">
                                         <option value="red">High</option>
@@ -33,101 +34,95 @@
                                     </select>
                                 </span>
                             </div>
-                        </div>
                     </div>
-                    
-                    <div class="row">
-                       <div class="control-group form-group col-md-6">
-							<label class="control-label"><b>Owner</b><span class="field_req">*</span></label>
-							<div class="controls" id="event-owners">
-								<select id="event-owners-list" class="required form-control" name="owner_id"></select>
-								<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/21-0-new.gif"></img>
-							</div>
-					   </div>
-                     </div>
-                    
-                    <div class="row">
-                        <div class="control-group form-group col-md-6">
-                            <label class="control-label"><b>Start Date </b><span class="field_req">*</span></label>
-                            <div class="controls">
-                                <input type="text" name="start" placeholder="Select Date" id="event-date-1" class="required date form-control" />							
+                    <div class="control-group form-group">
+                            <label class="control-label col-sm-3">Owner<span class="field_req">*</span></label>
+                            <div class="controls col-sm-7" id="event-owners">
+                                <select id="event-owners-list" class="required form-control" name="owner_id"></select>
+                                <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/21-0-new.gif"></img>
                             </div>
-                        </div>
-                        <div class="control-group form-group col-md-6">
-                            <label class="control-label"><b>Start Time </b><span class="field_req">*</span></label>
-                            <div class="controls">
-                                <input type="text" name="start_time" class="start-timepicker required form-control" id="event-time-1" style="width:65px" placeholder="time" />		
-                            </div>
-                        </div>
                     </div>
                     <div class="row">
-                        <div class="control-group form-group col-md-6 m-b-none">
-                            <label class="control-label"><b>End Date </b><span class="field_req">*</span></label>
-                            <div class="controls">
-                                <input type="text" name="end" placeholder="Select Date" id="event-date-2" class="required date form-control" />									
+                        <div class="col-sm-6">
+                        <div class="control-group form-group" style="margin-bottom:15px;">
+                            <label class="control-label col-sm-6">Start Date<span class="field_req">*</span></label>
+                            <div class="controls col-sm-5">
+                                <input type="text" name="start" placeholder="Select Date" id="event-date-1" class="required date form-control" style="font-size:13px"/>                           
                             </div>
                         </div>
-                        <div class="control-group form-group col-md-6 m-b-none">
-                            <label class="control-label"><b>End Time </b><span class="field_req">*</span></label>
-                            <div class="controls">							
-                                <input type="text" name="end_time" class="end-timepicker required form-control" id="event-time-2" style="width:65px" placeholder="time" /><br />		
+                        </div>
+                        <div class="col-sm-6">
+                        <div class="control-group form-group" style="margin-bottom:15px;">
+                            <label class="control-label col-sm-4  {{#is_mobile}} {{else}} p-l-none {{/is_mobile}}"  {{#is_mobile}} {{else}} style="text-align: left !important;"{{/is_mobile}}>Start Time<span class="field_req">*</span></label>
+                            <div class="controls col-sm-4 {{#is_mobile}} {{else}} p-l-none {{/is_mobile}}">
+                                <input type="text" name="start_time" class="start-timepicker required form-control" id="event-time-1" style="width:85px" placeholder="Time" />      
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12  invalid-range">
                         </div>
                     </div>
-                    <div class="row">
-                    <div class="control-group form-group m-b-none col-md-6">
-                        <div class="checkbox">
+                <div class="row">
+                        <div class="col-sm-6">
+                        <div class="control-group form-group" style="margin-bottom:4px;">
+                            <label class="control-label col-sm-6">End Date<span class="field_req">*</span></label>
+                            <div class="controls col-sm-5">
+                                <input type="text" name="end" placeholder="Select Date" id="event-date-2" class="required date form-control" style="font-size:13px"/>                                 
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-sm-6">
+                        <div class="control-group form-group" style="margin-bottom:4px !important">
+                            <label class="control-label col-sm-4" {{#is_mobile}} {{else}} style="text-align: left !important;padding-left: 6px !important;" {{/is_mobile}} > End Time<span class="field_req">*</span></label>
+                            <div class="controls col-sm-4 {{#is_mobile}} {{else}} p-l-none {{/is_mobile}}">                         
+                                <input type="text" name="end_time" class="end-timepicker required form-control" id="event-time-2"  placeholder="Time" style="width:85px"/>      
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-offset-3 col-sm-7  invalid-range p-l-r-8 {{#is_mobile}} p-l-r-8 {{/is_mobile}}">
+                    </div>
+                <div class="control-group form-group">
+                        <div class="checkbox col-sm-offset-3 col-sm-6">
                             <label class="i-checks i-checks-sm c-p">
-                            	<input type="checkbox" name="allDay" id="allDay" /><i></i>	All day event
-                        	</label>
+                                <input type="checkbox" name="allDay" id="allDay" /><i></i>  All day event
+                            </label>
                         </div>
                     </div>
-                    </div>
-                    <div class="row">
-                    <div class="control-group form-group col-md-12">
+                    <div class="control-group form-group">
                         <!-- <label class="control-label"><a href="#" id="new-event-related-contacts-label"><i class="icon-plus"></i> Add Contacts</a></label> -->
-                        <label class="control-label new-event-related-contacts-label"><b>Related Contacts</b></label>
-                        <div class="controls new-event-related-contacts-input">
+
+                        <label class="control-label new-event-related-contacts-label col-sm-3">Related Contacts</label>
+                        <div class="controls new-event-related-contacts-input col-sm-7">
                             <div>
-                                <div class="pull-left">
-                                    <ul name="contacts" class="contacts tags tagsinput p-n"></ul>
+                                <input type="text" id="event_related_to" class="typeahead typeahead_contacts form-control" placeholder="Related Contacts" data-provide="typeahead" data-mode="multiple" size="40" />
+                                <div style="padding-top:1px;">
+                                    <ul name="contacts" class="contacts tags tagsinput p-n m-n"></ul>
                                 </div>
                                 <div class="clearfix"></div>
-                                <input type="text" id="event_related_to" class="typeahead typeahead_contacts form-control" placeholder="Related Contacts" data-provide="typeahead" data-mode="multiple" size="40" />
                             </div>
                         </div>
                     </div>
+                    <div class="control-group form-group">
+                        <!-- <label class="control-label"><a href="#" id="new-event-related-deals-label"><i class="icon-plus"></i> Add Deals</a></label> -->
+
+                        <label class="control-label new-event-related-deals-label col-sm-3">Related Deals</label>
+                        <div class="controls new-event-related-deals-input col-sm-7" id="dealTypeAhead">
+                            <div>
+                                <input type="text" id="event_relates_to_deals" 
+                                placeholder="Related Deals" class="typeahead typeahead_deals form-control"
+                                data-provide="typeahead" data-mode="multiple" />
+                                <div style="padding-top:1px;">
+                                    <ul name="deal_ids" class="deals tagsinput deal_tags p-n m-n"></ul>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row">
-                    <div class="control-group form-group col-md-12">
-						<!-- <label class="control-label"><a href="#" id="new-event-related-deals-label"><i class="icon-plus"></i> Add Deals</a></label> -->
-						<label class="control-label new-event-related-deals-label"><b>Related Deals</b></label>
-						<div class="controls new-event-related-deals-input" id="dealTypeAhead">
-							<div>
-								<div>
-									<ul name="deal_ids" class="deals tagsinput deal_tags p-n"></ul>
-								</div>
-								<input type="text" id="event_relates_to_deals" 
-								placeholder="Related Deals" class="typeahead typeahead_deals form-control"
-								data-provide="typeahead" data-mode="multiple" />
-							</div>
-						</div>
-					</div>
+                    <div class="control-group form-group" id="addEventDescription">
+                    <label class="control-label col-sm-3"> Add Description</label>
+                        <div class="controls col-sm-7"> 
+                            <textarea rows="3" class="input form-control-F-width form-control" placeholder="Add Description" name="description" id="description"></textarea> 
+                       </div>
                     </div>
-                    
-                     <div class="row-fluid">
-					<div class="control-group form-group m-b-none" id="addEventDescription">
-						<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>
-						<div class="controls event_discription hide">
-							<textarea id="description" name="description" rows="3"
-								class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>
-						</div>
-					</div>
-					</div>
                 </fieldset>
             </form>
         </div>

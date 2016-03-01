@@ -11,7 +11,7 @@
 <%
     // Get Catalog
     String[] EMAIL_CATALOG = {"json/nodes/email/addons/send_email.jsp","json/nodes/email/addons/ab.js", "json/nodes/email/addons/clicked.js","json/nodes/email/addons/opened.js","json/nodes/email/addons/replied.js"};
-  	String[] UTILITIES_CATALOG = {"json/nodes/common/addons/wait.js","json/nodes/common/addons/wait_till.jsp","json/nodes/crm/addons/has_deal.js","json/nodes/common/addons/check_tags.js", "json/nodes/crm/addons/transfer.jsp","json/nodes/common/addons/time.js","json/nodes/developers/addons/new_condition.js","json/nodes/crm/addons/notify.js","json/nodes/crm/addons/check_campaign.js", "json/nodes/crm/addons/has_event.js"};
+  	String[] UTILITIES_CATALOG = {"json/nodes/common/addons/wait.js","json/nodes/common/addons/wait_till.jsp","json/nodes/crm/addons/has_deal.js","json/nodes/common/addons/check_tags.js", "json/nodes/crm/addons/transfer.jsp","json/nodes/common/addons/time.js","json/nodes/developers/addons/new_condition.js","json/nodes/crm/addons/notify.js","json/nodes/crm/addons/check_campaign.js", "json/nodes/crm/addons/has_event.js","json/nodes/crm/addons/update_deal.js"};
     String[] MOBILE_CATALOG = { "json/nodes/sms/addons/sendmessage.js", "json/nodes/email/addons/clicked.js"};
 		   /* ,"json/nodes/sms/getmessage.js", "json/nodes/sms/menusms.js" };  */
     String[] DEVELOPERS_CATALOG = { "json/nodes/developers/addons/jsonio.js", "json/nodes/developers/addons/new_condition.js","json/nodes/developers/addons/set_property.js"};

@@ -300,6 +300,9 @@ function show_custom_fields_helper(custom_fields, properties){
 			return;
 		
 		var label_style = "";
+		var modal_label_style = "";
+		var modal_control_style = "";
+		var modal_checkbox = "";
 		var field_style = "";
 		var div_col9_style = "";
 		var div_col3_style = "";
@@ -310,9 +313,25 @@ function show_custom_fields_helper(custom_fields, properties){
 			field_style = "col-sm-10";
 			div_col9_style = "col-sm-9";
 			div_col3_style = "col-sm-3";
-		}else if(field.scope == "COMPANY" || field.scope == "DEAL" || field.scope == "CASE"){
+			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
+		}else if(field.scope == "COMPANY"){
 			label_style = "control-label col-sm-3 word-break-all";
+			modal_label_style = "control-label col-sm-3 word-break-all"; 
+			modal_control_style = "col-sm-7";
 			checkbox_style = "col-sm-3";
+			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
+		}else if(field.scope == "DEAL"){
+			label_style = "control-label col-sm-3 word-break-all";
+			modal_label_style = "control-label col-sm-3 word-break-all";
+			modal_control_style = "col-sm-7";
+			checkbox_style = "col-sm-3";
+			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
+		}else if(field.scope == "CASE"){
+			label_style = "control-label col-sm-3 word-break-all";
+			modal_label_style = "control-label col-sm-3 word-break-all";
+			modal_control_style = "col-sm-7";
+			checkbox_style = "col-sm-3";
+			modal_checkbox = "col-sm-offset-3";
 		}
 		
 		// If field type is list create a select dropdown
@@ -334,9 +353,9 @@ function show_custom_fields_helper(custom_fields, properties){
 				if(field.is_required){
 					
 					if(isModal){
-						el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
+						el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
 								+field.field_label
-								+'</b><span class="field_req">*</span></label><div class="controls"><span><select class="'
+								+'<span class="field_req">*</span></label><div class="controls '+modal_control_style+'"><span><select class="'
 								+field.field_type.toLowerCase()
 								+' custom_field required form-control '+field_style+'" id='
 								+field.id
@@ -361,9 +380,9 @@ function show_custom_fields_helper(custom_fields, properties){
 					
 				}else{
 					if(isModal){
-						el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
+						el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
 								+field.field_label
-								+'</b></label><div class="controls"><select class="'
+								+'</label><div class="controls '+modal_control_style+'"><select class="'
 								+field.field_type.toLowerCase()
 								+' custom_field form-control '+field_style+'" id='
 								+field.id
@@ -392,7 +411,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				if(field.scope=="DEAL"){
 					if(field.is_required){
 						if(isModal){
-							el = el.concat('<div class="control-group form-group "><label class="i-checks i-checks-sm">'
+							el = el.concat('<div class="control-group form-group modal-cbx-m-t"><div class="checkbox '+modal_checkbox+' col-sm-6"><label class="i-checks i-checks-sm ">'
 									+'<input type="'
 									+field_type
 									+'" class="'
@@ -400,7 +419,8 @@ function show_custom_fields_helper(custom_fields, properties){
 									+'_input custom_field required" id='
 									+field.id+' name="'
 									+field.field_label
-									+'" style="margin: 0px 5px;"><i></i><div class="field_req inline-block">*</div><b>'+field.field_label+'</b></label></div>');
+									+'" style="margin: 0px 5px;"><i></i>'+field.field_label+'</label><div class="field_req inline-block">*</div><span for="'+field.field_label+'" generated="true" class="help-inline"></span></div></div>');
+
 						}else{
 							el = el.concat('<div class="control-group form-group ">	<label class="i-checks i-checks-sm '+label_style+'">'
 									+'<span class="field_req">*</span><input type="'
@@ -414,7 +434,8 @@ function show_custom_fields_helper(custom_fields, properties){
 						}
 					}else{
 						if(isModal){
-							el = el.concat('<div class="control-group form-group "><label class="i-checks i-checks-sm">'
+							el = el.concat('<div class="control-group form-group modal-cbx-m-t"><div class="checkbox '+modal_checkbox+' col-sm-6"><label class="i-checks i-checks-sm">'
+
 									+'<input type="'
 									+field_type
 									+'" class="'
@@ -422,7 +443,7 @@ function show_custom_fields_helper(custom_fields, properties){
 									+'_input custom_field" id='
 									+field.id+' name="'
 									+field.field_label
-									+'" style="margin: 0px 5px;"><i></i><b>'+field.field_label+'</b></label></div>');
+									+'" style="margin: 0px 5px;"><i></i>'+field.field_label+'</label></div></div>');
 						}else{
 							el = el.concat('<div class="control-group form-group "><label class="i-checks i-checks-sm '+label_style+'">'
 									+'<input type="'
@@ -440,7 +461,8 @@ function show_custom_fields_helper(custom_fields, properties){
 				
 				if(field.is_required){
 					if(isModal){
-						el = el.concat('<div class="control-group form-group ">'
+						el = el.concat('<div class="control-group form-group modal-cbx-m-t"><div class="checkbox '+modal_checkbox+' col-sm-6">'
+
 								+'<label class="i-checks i-checks-sm"><input type="'
 								+field_type
 								+'" class="'
@@ -448,7 +470,7 @@ function show_custom_fields_helper(custom_fields, properties){
 								+'_input custom_field required" id='
 								+field.id+' name="'
 								+field.field_label
-								+'"><i></i><div class="field_req inline-block">*</div><b>'+field.field_label+'</b></label></div>');
+								+'"><i></i>'+field.field_label+'</label><div class="field_req inline-block">*</div><span for="'+field.field_label+'" generated="true" class="help-inline"></span></div></div>');
 					}else{
 						el = el.concat('<div class="control-group form-group ">	<label class="control-label '+checkbox_style+" "+label_style+'">'
 								+field.field_label
@@ -464,7 +486,8 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 				else{
 					if(isModal){
-						el = el.concat('<div class="control-group form-group "><label class="i-checks i-checks-sm">'
+						el = el.concat('<div class="control-group form-group modal-cbx-m-t"><div class="checkbox '+modal_checkbox+' col-sm-6"><label class="i-checks i-checks-sm">'
+
 								+'<input type="'
 								+field_type
 								+'" class="'
@@ -472,7 +495,7 @@ function show_custom_fields_helper(custom_fields, properties){
 								+'_input custom_field" id='
 								+field.id+' name="'
 								+field.field_label
-								+'"><i></i><b>'+field.field_label+'</b></label></label></div>');
+								+'"><i></i>'+field.field_label+'</label></label></div></div>');
 					}else{
 						el = el.concat('<div class="control-group form-group "><label class="control-label '+checkbox_style+" "+label_style+'">'
 								+field.field_label
@@ -498,9 +521,9 @@ function show_custom_fields_helper(custom_fields, properties){
 				
 			if(field.is_required){
 				if(isModal){
-					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
+					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
 							+field.field_label
-							+'</b><span class="field_req">*</span></label><div class="controls"><textarea rows="'
+							+'<span class="field_req">*</span></label><div class="controls '+modal_control_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field required form-control resize-vertical field_length" id='
@@ -520,9 +543,9 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
+					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
 							+field.field_label
-							+'</b></label><div class="controls"><textarea rows="'
+							+'</label><div class="controls '+modal_control_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field form-control resize-vertical field_length" id='
@@ -548,9 +571,9 @@ function show_custom_fields_helper(custom_fields, properties){
 			field_type = "number";
 			if(field.is_required){
 				if(isModal){
-					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
+					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
 						+field.field_label
-						+'</b><span class="field_req">*</span></label><div class="controls custom-number-controls"><input type="number" class="'
+						+'<span class="field_req">*</span></label><div class="controls custom-number-controls '+modal_control_style+'"><input type="number" class="'
 						+field.field_type.toLowerCase()
 						+'_input custom_field required form-control field_length" id="'
 						+field.id+'" name="'
@@ -570,9 +593,9 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
+					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
 						+field.field_label
-						+'</label><div class="controls custom-number-controls"><input type="number" class="'
+						+'</label><div class="controls custom-number-controls '+modal_control_style+'"><input type="number" class="'
 						+field.field_type.toLowerCase()
 						+'_input custom_field form-control field_length" id="'
 						+field.id+'" name="'
@@ -599,13 +622,119 @@ function show_custom_fields_helper(custom_fields, properties){
 			//If custom field is formula we return without appending anything	
 			return;
 		}
-		
+		else if(field.field_type.toLowerCase() == "contact")
+		{
+			field_type = "contact";
+			if(field.is_required){
+				if(isModal){
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break-all"><b>'
+								+field.field_label
+								+'</b><span class="field_req">*</span></label><div class="controls">'
+								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
+								+'<input type="text" class="'
+								+field.field_type.toLowerCase()
+								+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
+								+field.id+' name="'+field.field_label
+								+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+				}else{
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'">	<label class="control-label '+label_style+'">'
+							+field.field_label
+							+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'">'
+							+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
+							+'<input type="text" class="'
+							+field.field_type.toLowerCase()
+							+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
+							+field.id+' name="'+field.field_label
+							+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+				}
+			}else{
+				if(isModal){
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break-all"><b>'
+								+field.field_label
+								+'</b></label><div class="controls">'
+								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
+								+'<input type="text" class="'
+								+field.field_type.toLowerCase()
+								+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
+								+field.id+' name="'
+								+field.field_label
+								+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+				}else{
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label '+label_style+'">'
+							+field.field_label
+							+'</label><div class="controls col-sm-9 '+div_col9_style+'">'
+							+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
+							+'<input type="text" class="'
+							+field.field_type.toLowerCase()
+							+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
+							+field.id+' name="'
+							+field.field_label
+							+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+				}
+			}
+				
+			return;
+		}
+		else if(field.field_type.toLowerCase() == "company")
+		{
+			field_type = "company";
+			if(field.is_required){
+				if(isModal){
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break-all"><b>'
+								+field.field_label
+								+'</b><span class="field_req">*</span></label><div class="controls">'
+								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
+								+'<input type="text" class="'
+								+field.field_type.toLowerCase()
+								+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
+								+field.id+' name="'+field.field_label
+								+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+				}else{
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'">	<label class="control-label '+label_style+'">'
+							+field.field_label
+							+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'">'
+							+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
+							+'<input type="text" class="'
+							+field.field_type.toLowerCase()
+							+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
+							+field.id+' name="'+field.field_label
+							+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+				}
+			}else{
+				if(isModal){
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break-all"><b>'
+								+field.field_label
+								+'</b></label><div class="controls">'
+								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
+								+'<input type="text" class="'
+								+field.field_type.toLowerCase()
+								+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
+								+field.id+' name="'
+								+field.field_label
+								+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+				}else{
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label '+label_style+'">'
+							+field.field_label
+							+'</label><div class="controls col-sm-9 '+div_col9_style+'">'
+							+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
+							+'<input type="text" class="'
+							+field.field_type.toLowerCase()
+							+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
+							+field.id+' name="'
+							+field.field_label
+							+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+				}
+			}
+				
+			return;
+		}
+
 		// If the field is not of type list or checkbox, create text field (plain text field or date field)
 		if(field.is_required){
 			if(isModal){
-				el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
+				el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
 							+field.field_label
-							+'</b><span class="field_req">*</span></label><div class="controls"><input type="text" class="'
+							+'<span class="field_req">*</span></label><div class="controls '+modal_control_style+'"><input type="text" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field required form-control field_length" id='
 							+field.id+' name="'+field.field_label
@@ -621,9 +750,9 @@ function show_custom_fields_helper(custom_fields, properties){
 			}
 		}else{
 			if(isModal){
-				el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
+				el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
 							+field.field_label
-							+'</b></label><div class="controls"><input type="text" class="'
+							+'</label><div class="controls '+modal_control_style+'"><input type="text" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field form-control field_length" id='
 							+field.id+' name="'
@@ -644,7 +773,6 @@ function show_custom_fields_helper(custom_fields, properties){
 
 	return el;
 }
-
 
 /**
  * It builds UI for showing custom fields in the contacts-merge feature
@@ -839,6 +967,15 @@ function serialize_custom_fields(form)
     		else
     			json.value = en.dateFormatter({raw: "MM/dd/yyyy"})(new Date(this.value));
     	
+    	if($(element).hasClass("contact_input") && isValidContactCustomField($(element).attr('id')))
+    	{
+    		var contact_values = [];
+			$('ul[name="'+name+'"]', $('#'+form)).find('li').each(function(index){
+				contact_values.push($(this).attr("data"));
+			});
+			json.value = JSON.stringify(contact_values);
+    	}
+
     	
     	if(!json.value)
     		return;
@@ -853,7 +990,7 @@ function groupingCustomFields(base_model){
 			templateKey : templateKey, individual_tag_name : 'tr',
 			postRenderCallback : function(custom_el){
 				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
-				bindModelSearchable(App_Admin_Settings.contactCustomFieldsListView.collection);
+				bindModelSearchable(App_Admin_Settings.contactCustomFieldsListView.collection)
 			}});
 		function bindModelSearchable(collection)
 		{
@@ -863,22 +1000,17 @@ function groupingCustomFields(base_model){
 		}
 		function appendItem(base_model)
 		{
-			addCustomFieldToSearch(base_model,  base_model.get("scope"));
+			addCustomFieldToSearch(base_model);
 		};
 
 		function removeItem(base_model)
 		{
-			removeCustomFieldFromSortOptions(base_model, base_model.get("scope"));
-		};
-
-		function updateItem(base_model){
-				updateCustomFieldToSearch(base_model, base_model.get("scope"));
+			removeCustomFieldFromSortOptions(base_model);
 		};
 
 		App_Admin_Settings.contactCustomFieldsListView.collection.bind('add', appendItem);
 		App_Admin_Settings.contactCustomFieldsListView.collection.bind('remove', removeItem);
 		App_Admin_Settings.contactCustomFieldsListView.collection.bind('change', updateItem);
-
 		App_Admin_Settings.contactCustomFieldsListView.collection.fetch();
 		$('#customfields-contacts-accordion', this.el).append($(App_Admin_Settings.contactCustomFieldsListView.render().el));
 	}else if(base_model.get("scope")=="COMPANY"){
@@ -886,33 +1018,7 @@ function groupingCustomFields(base_model){
 			templateKey : templateKey, individual_tag_name : 'tr',
 			postRenderCallback : function(custom_el){
 				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
-				bindModelSearchable(App_Admin_Settings.companyCustomFieldsListView.collection);
 			}});
-
-			function bindModelSearchable(collection)
-			{
-				$.each(collection, function (i, m){
-					
-				})
-			}
-			function appendItem(base_model)
-			{
-				addCustomFieldToSearch(base_model, base_model.get("scope"));
-			};
-
-			function removeItem(base_model)
-			{
-				removeCustomFieldFromSortOptions(base_model, base_model.get("scope"));
-			};
-
-			function updateItem(base_model){
-				updateCustomFieldToSearch(base_model, base_model.get("scope"));
-			};
-
-		App_Admin_Settings.companyCustomFieldsListView.collection.bind('add', appendItem);
-		App_Admin_Settings.companyCustomFieldsListView.collection.bind('remove', removeItem);
-		App_Admin_Settings.companyCustomFieldsListView.collection.bind('change', updateItem);
-
 		App_Admin_Settings.companyCustomFieldsListView.collection.fetch();
 		$('#customfields-companies-accordion', this.el).append($(App_Admin_Settings.companyCustomFieldsListView.render().el));
 	}else if(base_model.get("scope")=="DEAL"){

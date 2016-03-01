@@ -98,8 +98,12 @@ public class LandingPagesAPI
 		try
 		{
 			LandingPage landingPage = LandingPageUtil.getLandingPage(id);
-			if (landingPage != null)
+			if (landingPage != null) {
+				JSONArray pageIds = new JSONArray();
+				pageIds.put(landingPage.id);
+				LandingPageUtil.deleteLandingPageCNames(pageIds);
 				landingPage.delete();
+			}
 		}
 		catch (Exception e)
 		{
