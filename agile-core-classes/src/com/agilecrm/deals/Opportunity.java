@@ -110,6 +110,7 @@ public class Opportunity extends Cursor implements Serializable
     @Embedded
     public List<CustomFieldData> custom_data = new ArrayList<CustomFieldData>();
 
+    
     @XmlElement(name = "products")
  	@Embedded
  	public List<DealProducts> products = new ArrayList<DealProducts>();

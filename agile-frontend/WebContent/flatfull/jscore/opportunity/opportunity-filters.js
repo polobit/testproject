@@ -51,6 +51,7 @@ $(function()
 		json["custom_data"] = serialize_custom_fields(form_id);
 		json["colorName"]  = color[colorcode];
 
+		
 		json["products"] = serialize_deal_products(form_id);
 		
 		console.log(json);

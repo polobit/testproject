@@ -614,6 +614,7 @@ function populate_deal_products(el, value,form_id){
 						$(me._form_id).on("click",".discountcheck",
 						function(e)
 						{
+							
 							me.calculateGrandTotal(e);
 						});
 						$(me._form_id).on("keyup",".discountvalue",
