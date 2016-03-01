@@ -581,8 +581,8 @@ var contacts_bulk_actions = {
 								var no = "No"
 
 								var message = "";
-								var upgrade_link = 'Please<a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny"> upgrade your email subscription.</a>';
-								var emialErrormsg = '<div><a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">To continue sending emails from your account, please purchase more.</a></div>';
+								var upgrade_link = 'Please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> upgrade</a> your email subscription.';
+								var emialErrormsg = '<div>To continue sending emails from your account, please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> purchase</a>  more.</div>';
 								var title = "Not Enough Emails Left"
 								if (pendingEmails <= 0)
 								{
