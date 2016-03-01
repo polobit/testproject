@@ -451,7 +451,11 @@
         	    			<i class="icon-folder-open-alt text-muted p-r-xs" title="Email Opened"></i>
         				{{/if_equals}}
 					{{/if}}
+				{{#if subject}}
 					{{subject}}
+				{{else}}
+					no subject
+				{{/if}}
 				</div>
 			</div>
              <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" date_secs}}</div><div class="clearfix"></div>
