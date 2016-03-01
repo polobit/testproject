@@ -974,19 +974,21 @@ public class Contact extends Cursor
     	
 	if (owner_key != null)
 	{
-	    
+		System.out.println("owner_key call");
+		
 	    // If user is deleted no user is found with key so set user to null
 	    // and return null
-	    try
+		return DomainUserUtil.getPartialDomainUser(owner_key.getId());
+	   /* try
 	    {
-	    return DomainUserUtil.getPartialDomainUser(owner_key.getId());
+	     return DomainUserUtil.getPartialDomainUser(owner_key.getId());
 	    }
 	    catch (Exception e)
 	    {
 	    System.err.println(e.getMessage());
 		owner_key = null;
 		return null;
-	    }
+	    } */
 	}
 	return null;
     }
