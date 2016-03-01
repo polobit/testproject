@@ -5,27 +5,26 @@
   <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
-        <button class="close" data-dismiss="modal">&times;</button>
-        <h3 class="modal-title"><i class="icon-plus-sign"></i>&nbsp;Add Company</h3>
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title">&nbsp;Add Company</h3>
     </div>
     <div class="modal-body">
         <form id="companyForm" name="companyForm" method="post" class="form-horizontal">
             <fieldset>
                 
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-4"><b>Company</b> <span class="field_req">*</span></label>
-                    <div class="controls col-sm-6">
+                    <label class="control-label col-sm-3">Company<span class="field_req">*</span></label>
+                    <div class="controls col-sm-7">
                         <input name="name" type="text" field="test company" class="required form-control field_length" max_len="100" id="company_name" placeholder="Company" />
-
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-5  duplicate-email">
+                    <div class="col-sm-offset-3 col-sm-7 duplicate-email">
                     </div>
                 </div>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-4"><b>URL</b> </label>
-                    <div class="controls col-sm-6">
+                    <label class="control-label col-sm-3">URL</label>
+                    <div class="controls col-sm-7">
                         <input class="input-large form-control field_length" max_len="500" name="url" type="text" id="company_url" placeholder="http://www." />
                     </div>
                 </div>
