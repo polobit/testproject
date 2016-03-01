@@ -1,6 +1,6 @@
 <%
 String version = "beta.1.0";
-boolean isProduction = false;
+boolean isProduction = true;
 if(!isProduction) {
     version += "_" + System.currentTimeMillis() / 1000L;
 }
