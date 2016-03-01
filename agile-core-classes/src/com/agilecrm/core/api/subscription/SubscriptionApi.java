@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -508,8 +509,23 @@ public class SubscriptionApi {
 		Subscription subscription = SubscriptionUtil.getSubscription();
 		try {
 			subscription.purchaseEmailCredits(quantity);
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
+	// Auto Renewal Credits 
+	@Path("/auto_recharge")
+	@POST
+	public void autoRecharge(@FormParam("isAutoRenewalEnabled") Boolean isAutoRenewalEnabled, @FormParam("nextRechargeCount") Integer nextRechargeCount, @FormParam("autoRenewalPoint") Integer autoRenewalPoint)
+	{
+		try {
 			BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
-			restriction.incrementEmailCreditsCount(quantity*1000);
+			restriction.isAutoRenewalEnabled = isAutoRenewalEnabled;
+			restriction.nextRechargeCount = nextRechargeCount;
+			restriction.autoRenewalPoint = autoRenewalPoint;
 			restriction.save();
 		} catch (Exception e) {
 			throw new WebApplicationException(Response

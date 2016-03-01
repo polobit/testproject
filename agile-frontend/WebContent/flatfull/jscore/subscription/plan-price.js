@@ -738,6 +738,68 @@ function initializeSubscriptionListeners()
 			return;
 		$("#total_credits_cost").html(quantity*4);
 	});
+
+	//auto recharge related events
+	$("#manage_auto_recharge").off("click");
+	$("#purchase-credits-info-modal").on("click","#manage_auto_recharge", function(e){
+		e.preventDefault();
+		$(this).hide();
+
+		var data = {};
+		if(_billing_restriction.nextRechargeCount != undefined)
+			data.nextRechargeCount = _billing_restriction.nextRechargeCount;
+		if(_billing_restriction.autoRenewalPoint != undefined)
+			data.autoRenewalPoint = _billing_restriction.autoRenewalPoint;
+		if(_billing_restriction.isAutoRenewalEnabled != undefined)
+			data.isAutoRenewalEnabled = _billing_restriction.isAutoRenewalEnabled;
+		getTemplate("auto-recharge",data , undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("#auto-recharge-content").html($(template_ui));
+		}, null);
+			
+	});
+
+	$("#save_auto_recharge").off("click");
+	$("#purchase-credits-info-modal").on("click","#save_auto_recharge", function(e){
+		e.preventDefault();
+		var $form = $(this).closest('form');
+		if(!isValidForm($form))
+			return;
+		var json = serializeForm("auto-recharge-form");
+		json.isAutoRenewalEnabled = true;
+		disable_save_button($(this));
+		var $that = $(this);
+		$.post("core/api/subscription/auto_recharge", json, function(data){
+			enable_save_button($that);
+			$(".auto_recharge_status").text("ON");
+			$("#disable_auto_recharge").show();
+		}).fail(function(data) {
+			 showNotyPopUp("information","Auto Recharge Enabled", "top");
+			enable_save_button($that);
+		    showNotyPopUp("warning", data.responseText, "top");
+  		});
+			
+	});
+
+	$("#purchase-credits-info-modal #disable_auto_recharge").off("click");
+	$("#purchase-credits-info-modal").on("click","#disable_auto_recharge", function(e){
+		e.preventDefault();
+		var $form = $(this).closest('form');
+		if(!isValidForm($form))
+			return;
+		var json = serializeForm("auto-recharge-form");
+		json.isAutoRenewalEnabled = false;
+		var that = this;
+		$.post("core/api/subscription/auto_recharge", json, function(data){
+			showNotyPopUp("information","Auto Recharge Disabled", "top");
+			$(".auto_recharge_status").text("OFF");
+			$(that).hide();
+		}).fail(function(data) {
+		    showNotyPopUp("warning", data.responseText, "top");
+  		});
+			
+	});
 }
 
 function is_new_signup_payment()

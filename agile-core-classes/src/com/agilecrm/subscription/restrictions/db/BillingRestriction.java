@@ -411,10 +411,6 @@ public class BillingRestriction
     private void prePersist()
     {
     	
-	isAutoRenewalEnabled = true;
-	nextRechargeCount = 1;
-	autoRenewalPoint = 10;
-    	
 	if (this.id == null)
 	    return;
 

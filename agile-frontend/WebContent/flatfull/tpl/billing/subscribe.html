@@ -852,27 +852,32 @@ users.
 				<form id="purchaseCreditsForm" class="form-horizontal" novalidate="novalidate"> 
 			     <fieldset> 
 			      <div class="control-group form-group m-b-none"> 
-			       <label class="control-label col-sm-3">Emails<span class="field_req">*</span></label> 
-			       <div class="controls col-sm-9"> 
+			       <label class="control-label col-sm-4">Emails<span class="field_req">*</span></label> 
+			       <div class="controls col-sm-8"> 
 					<input type="text" id="email_credits_count" name="nextRechargeCount" value="" class="form-control required positive_number inline-block pull-left" style="width:25%;">
 			        <span class="input-group-addon form-control pull-left" style="width:25%;padding-top:9px;">× 1000</span>
 			        
 			       </div>
-			       <div class="col-sm-offset-3 p-l help-block m-b-none"> 
+			       <div class="col-sm-offset-4 p-l help-block m-b-none"> 
 				     You will be charged @ $4/1000 emails.
 				   </div>
-			       <span for="email_credits_count" generated="true" class="help-inline col-sm-offset-3 p-l"></span> 
+			       <span for="email_credits_count" generated="true" class="help-inline col-sm-offset-4 p-l"></span> 
 			      </div>
 			      <div class="control-group form-group m-b-xs"> 
-			       <label class="control-label col-sm-3">Total Cost</label> 
+			       <label class="control-label col-sm-4">Total Cost</label> 
 			       <div class="controls col-sm-6" style="padding-top:7px;">
 			       	 $<span id="total_credits_cost">0</span>
 			       </div>
 			       </div>
 			     </fieldset> 
 			    </form>
-			    
-
+			    <div id="auto-recharge-content">
+				    <div class="row">
+				    	<div class="col-sm-offset-4">
+				    		<a href="#" class="text-info text-xs m-l-sm" id="manage_auto_recharge">Manage Auto Recharge</a>
+				    	</div>
+				    </div>
+			    </div>
 			</div>
 			<div class="modal-footer">
 				<a href="#" data-dismiss="modal" class="btn btn-sm btn-default">Cancel</a>
@@ -880,4 +885,31 @@ users.
 			</div>
 		</div>
 	</div>
+</script>
+<script id="auto-recharge-template" type="text/html">
+	<div class="m-b"><span class="m-r-sm" style="color:#333;">Auto Recharge</span><span class="label bg-light dk text-tiny auto_recharge_status">{{#if isAutoRenewalEnabled}}ON{{else}}OFF{{/if}}</span></div>
+	<form id="auto-recharge-form" class="form-horizontal">
+	 <div class="form-group">
+      <label class="col-sm-4 control-label">Recharge Emails With<span class="field_req">*</span></label>
+      <div class="col-sm-5">
+        <input type="text" name="nextRechargeCount" value="{{nextRechargeCount}}" style="width:65%;" class="form-control required digits inline-block pull-left" min="1">
+        <span class="input-group-addon form-control">*1000</span>
+        <span id="nextRechargeCountError" style="font-size: 11px;" for="nextRechargeCount" generated="true" class="help-inline"></span>
+     </div>
+    </div>
+
+	<div class="form-group">
+      <label class="col-sm-4 control-label">When Emails Falls Below<span class="field_req">*</span></label>
+      <div class="col-sm-5">
+        <input type="text" name="autoRenewalPoint" value="{{autoRenewalPoint}}" class="form-control required digits" min="0">
+        <span id="autoRechargeLimitError" style="font-size: 11px;" for="autoRenewalPoint" generated="true" class="help-inline"></span>
+      </div>
+    </div>
+    <div class="row">
+	    <div class="col-sm-offset-4 col-sm-5">
+	    	<div class="m-b-xs"><a href="#" id="save_auto_recharge" loadingText = "Saving..." data-save-text="Save" class="btn btn-xs btn-primary">Save</a></div>
+	    	<a href="#" class="text-info text-xs" style="{{#if isAutoRenewalEnabled}}{{else}}display:none;{{/if}}" id="disable_auto_recharge">Disable Auto Recharge</a>
+	    </div>
+    </div>
+	</form>
 </script>

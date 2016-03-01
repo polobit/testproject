@@ -448,6 +448,9 @@ public class Subscription {
 	 */
 	public void purchaseEmailCredits(Integer quantity) throws Exception {
 		getAgileBilling().purchaseEmailCredits(billing_data, quantity);
+		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+		restriction.incrementEmailCreditsCount(quantity*1000);
+		restriction.save();
 	}
 
 	/**
