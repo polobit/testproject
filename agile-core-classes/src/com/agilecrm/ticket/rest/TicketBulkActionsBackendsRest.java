@@ -62,7 +62,7 @@ public class TicketBulkActionsBackendsRest
 			JSONObject dataJSON = new JSONObject(attributes.dataString);
 			String command = dataJSON.getString("command");
 			System.out.println("dataJSON: " + dataJSON);
-			
+
 			if (StringUtils.isBlank(command))
 				return;
 
@@ -88,33 +88,31 @@ public class TicketBulkActionsBackendsRest
 				idsFetcher = new CSVTicketIdsFetcher(attributes.ticketIDs);
 				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
 			}
-			
-			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(labelsKeys, command,
-					NamespaceManager.get(), domainUserID);
+
+			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(labelsKeys, command, NamespaceManager.get(),
+					domainUserID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
 			List<TicketLabels> labels = TicketLabels.dao.fetchAllByKeys(labelsKeys);
 
-			StringBuilder labelsCSV = new StringBuilder();
+			StringBuilder labelsCSVSB = new StringBuilder();
 			for (TicketLabels label : labels)
-				labelsCSV.append(label.label).append(" ,");
+				labelsCSVSB.append(label.label).append(", ");
 
-//			labelsCSV.substring(0, labels.lastIndexOf(" ,"));
-//
-//			System.out.println("labelsCSV: " + labelsCSV);
+			String labelsCSV = labelsCSVSB.toString();
+			labelsCSV = labelsCSV.substring(0, labelsCSV.lastIndexOf(","));
 
 			// Logging bulk action activity
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_MANAGE_LABELS, null, null, "",
 					labelsCSV.toString(), idsFetcher.getCount() + "");
-            
-			String message = "Ticket labels have been added.";
-            
-            if(command.equalsIgnoreCase("remove"))
-            	message = "Ticket labels have been removed.";
-	
-            BulkActionNotifications.publishNotification(idsFetcher.getCount()
-					+ message);
+
+			String message = "Labels " + labelsCSV + " have been added to " + idsFetcher.getCount() + " tickets";
+
+			if (command.equalsIgnoreCase("remove"))
+				message = "Labels " + labelsCSV + " have been removed from " + idsFetcher.getCount() + " tickets";
+
+			BulkActionNotifications.publishNotification(message);
 		}
 		catch (Exception e)
 		{
@@ -169,7 +167,7 @@ public class TicketBulkActionsBackendsRest
 					group.group_name, idsFetcher.getCount() + "");
 
 			BulkActionNotifications.publishNotification(idsFetcher.getCount()
-					+ " tickets asignee and group have been changed successfully.");
+					+ " tickets assignee and group have been changed successfully.");
 		}
 		catch (Exception e)
 		{
