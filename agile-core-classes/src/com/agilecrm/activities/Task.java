@@ -1,8 +1,11 @@
 package com.agilecrm.activities;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Id;
@@ -25,6 +28,12 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PropertyProjection;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.RawValue;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -584,4 +593,43 @@ public class Task extends Cursor
     }
 
     /***************************************************************************/
+    
+    public void test(){
+    	Query proj = new Query("DomainUser");
+    	proj.addProjection(new PropertyProjection("email", String.class));
+    	proj.addProjection(new PropertyProjection("name", String.class));
+
+    	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    	Iterator<Entity> projTests = datastore.prepare(proj).asIterable().iterator();
+
+    	while(projTests.hasNext()){
+    		Entity entity = projTests.next();
+    		System.out.println(entity.getKey().getId());
+    		
+    		Map<String, Object> props = entity.getProperties();
+    		
+    		for (Map.Entry<String, Object> entry : props.entrySet())
+    		{
+    		    System.out.println(entry.getKey() + "/" + entry.getValue());
+    		
+    		}
+    		
+    	}
+    	
+    }
+    
+    public static void main(String[] args) {
+    	TestTask t = new TestTask();
+    	  for(Field f : t.getClass().getFields()) {
+    	   System.out.println(f.getGenericType() +" "+f.getName() + " " + f.getType());
+    	  }
+	}
+    
+}
+
+class TestTask {
+	public Long id;
+	public String name;
+	public String email;
+	
 }

@@ -27,6 +27,7 @@ import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.social.linkedin.LinkedInUtil;
@@ -967,14 +968,17 @@ public class Contact extends Cursor
      * @return {@link DomainUser} object
      */
     @XmlElement(name = "owner")
-    public DomainUser getOwner()
+    public DomainUserPartial getOwner()
     {
 	if (owner_key != null)
 	{
+	    
 	    // If user is deleted no user is found with key so set user to null
 	    // and return null
 	    try
 	    {
+	    	return DomainUserUtil.getPartialDomainUser(owner_key.getId());
+	    	
 		// return dao.ofy().get(owner_key);
 		/*DomainUser user = DomainUserUtil.getDomainUser(owner_key.getId());
 		if (user != null)

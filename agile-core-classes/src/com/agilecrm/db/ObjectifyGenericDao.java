@@ -81,7 +81,11 @@ import com.campaignio.twitter.TwitterJobQueue;
 import com.campaignio.urlshortener.URLShortener;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
@@ -1039,6 +1043,31 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	    break;
 	}
 	return id;
+    }
+    
+    private Object getPartial(Long id){
+    	
+    	com.google.appengine.api.datastore.Query proj = new com.google.appengine.api.datastore.Query("DomainUser");
+    	proj.addProjection(new PropertyProjection("email", String.class));
+    	proj.addProjection(new PropertyProjection("name", String.class));
+
+    	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    	Iterator<Entity> projTests = datastore.prepare(proj).asIterable().iterator();
+
+    	while (projTests.hasNext()) {
+    		Entity entity = projTests.next();
+    		System.out.println(entity.getKey().getId());
+
+    		Map<String, Object> props = entity.getProperties();
+
+    		for (Map.Entry<String, Object> entry : props.entrySet()) {
+    			System.out.println(entry.getKey() + "/" + entry.getValue());
+
+    		}
+
+    	}
+    	
+    	return null;
     }
 
 }

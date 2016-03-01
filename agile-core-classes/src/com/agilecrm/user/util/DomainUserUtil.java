@@ -14,11 +14,17 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.Key;
@@ -121,6 +127,42 @@ public class DomainUserUtil
 	try
 	{
 	    return dao.get(id);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+    
+    /**
+     * Gets a user based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static DomainUserPartial getPartialDomainUser(Long id)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+		com.google.appengine.api.datastore.Query proj = new com.google.appengine.api.datastore.Query("DomainUser", KeyFactory.createKey("DomainUser", id));
+		
+    	proj.addProjection(new PropertyProjection("email", String.class));
+    	proj.addProjection(new PropertyProjection("name", String.class));
+
+    	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    	Entity entity = datastore.prepare(proj).asSingleEntity();
+    	
+    	return new DomainUserPartial(id, (String) entity.getProperty("name"), (String) entity.getProperty("email"));
+
+    	
 	}
 	catch (Exception e)
 	{
