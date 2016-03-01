@@ -43,9 +43,6 @@ function agile_trackPageview(callback)
 	if(agile_id.getNamespace())
 		params += "&domain=" + encodeURIComponent(agile_id.getNamespace());
 
-	// Add action param
-	params += "&action=ADD";
-
 	// Sets UTM params
 	agile_setUtmParams();	
 
