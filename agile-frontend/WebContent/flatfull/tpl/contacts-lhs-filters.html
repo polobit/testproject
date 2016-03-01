@@ -1,13 +1,16 @@
 <script id="contacts-lhs-filters-custom-template" type="text/html">
 {{#each this}}
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
         
-	<div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span class="text-base">{{field_label}}</span>
+	<div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		{{field_label}}
+		<i class="fa inline pos-abs pos-r-0 pos-t-xs fa-plus-square-o"></i></a>
+
 {{#if_equals_or "CHECKBOX" field_type "TEXT" field_type "TEXTAREA" field_type}}
-	<div class="controls m-t-xs" id="{{replace_spaces field_label}}_div">
+	<div class="controls m-t-xs hide" id="{{replace_spaces field_label}}_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}" />
 		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control text-xs" style="height:30px;">
@@ -27,7 +30,7 @@
 	
 	{{/if_equals_or}}
 	{{#if_equals "NUMBER" field_type}}
-	<div class="controls m-t-xs" id="{{replace_spaces field_label}}_number_div">
+	<div class="controls m-t-xs hide" id="{{replace_spaces field_label}}_number_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}_number" />
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
@@ -58,7 +61,7 @@
 	</div>
 	{{/if_equals}}
 	{{#if_equals "DATE" field_type}}
-	<div class="controls m-t-xs" id="{{replace_spaces field_label}}_time_div">
+	<div class="controls m-t-xs hide" id="{{replace_spaces field_label}}_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 	<input type="hidden" class="form-control" name="LHS" value="{{field_label}}_time" />
 	<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
@@ -96,7 +99,7 @@
 	</div>
 	{{/if_equals}}
 	{{#if_equals "LIST" field_type}}
-	<div class="controls m-t-xs" id="{{replace_spaces field_label}}_div">
+	<div class="controls m-t-xs hide" id="{{replace_spaces field_label}}_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="{{field_label}}" />
 		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control text-xs" style="height:30px;">
@@ -183,14 +186,15 @@
 <input type="hidden" name="contact_type" class="form-control" id="contact_type" value="PERSON" />
 <div id="tagslist">
 <fieldset>
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs" style="padding-top:20px">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
   
     <div class="panel-body">
       <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
-      
-	<span style="font-size:14px;">Tags</span>
-	<div class="controls m-t-xs" id="tags_div" style="position: relative;">
+    <a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Tags
+		<i class="fa inline pos-abs pos-r-0 pos-t-xs fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="tags_div" style="position: relative;">
 		<div id="tags-lhs-filter-table" class="ignore-collection">
 				<div class="hide master-tags-add-div pos-rlt m-t-xs">
 					<input class="form-control" type="hidden" name="LHS" value="tags">
@@ -239,13 +243,15 @@
 </div>
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
         
-	<div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span class="text-base">Score</span>
-	<div class="controls m-t-xs" id="lead_score_div">
+	<div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Score
+		<i class="fa inline pos-abs pos-r-0 pos-t-xs fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="lead_score_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" class="form-control" value="lead_score">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
@@ -281,12 +287,14 @@
 
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
-        <div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span class="text-base">Star Value</span>
-	<div class="controls m-t-xs" id="star_value_div">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+    <a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Star Value
+		<i class="fa inline pos-abs pos-r-0 pos-t-xs fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="star_value_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="star_value">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
@@ -319,14 +327,16 @@
 </div>
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs" style="padding-top:20px">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
   <div class="panel panel-default m-b-none">
   
     <div class="panel-body">
       <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
       
-	<span class="text-base">Campaign Status</span>
-	<div class="controls m-t-xs" id="campaign_status_div" style="position: relative;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Campaign Status
+		<i class="fa inline pos-abs pos-r-0 pos-t-xs fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="campaign_status_div" style="position: relative;">
 		<div id="campaign_status-lhs-filter-table" class="ignore-collection">
 				<div class="hide master-campaign_status-add-div pos-rlt m-t-xs">
 					<input type="hidden" class="form-control" name="LHS" value="campaign_status">
@@ -390,12 +400,14 @@
 
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
-        <div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span class="text-base">Owner</span>
-	<div class="controls m-t-xs" id="owner_id_div">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Owner
+		<i class="fa inline pos-abs pos-r-0 pos-t-xs fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="owner_id_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="owner_id">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
@@ -421,12 +433,14 @@
 
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
-        <div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span class="text-base">Created Date </span>
-	<div class="controls m-t-xs" id="created_time_div">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Created Date
+		<i class="fa inline pos-abs pos-r-0 pos-t-xs fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="created_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="created_time" class="form-control">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
@@ -467,12 +481,14 @@
 </div>
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
-        <div class="control-group form-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span class="text-base">Last Contacted</span>
-	<div class="controls m-t-xs" id="last_contacted_div">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Last Contacted
+		<i class="fa inline pos-abs pos-r-0 pos-t-xs fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="last_contacted_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="last_contacted" class="form-control">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
@@ -534,14 +550,16 @@
 <div id="tagslist" style="word-wrap: break-word;">
 <fieldset>
 
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs" style="padding-top:20px">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
   
     <div class="panel-body">
       <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
       
-	<span style="font-size:14px;">Tags</span>
-	<div class="controls m-t-xs" id="tags_div" style="position: relative;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Tags
+		<i class="fa inline pos-abs pos-r-0 pos-t-xs fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="tags_div" style="position: relative;">
 		<div id="tags-lhs-filter-table" class="ignore-collection">
 				<div class="hide master-tags-add-div pos-rlt m-t-xs" style="margin-top:8px;">
 					<input class="form-control" type="hidden" name="LHS" value="tags">
@@ -592,12 +610,14 @@
 </div>
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
         <div class="control-group  lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span class="text-base">Star Value</span>
-	<div class="controls m-t-xs" id="star_value_div">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Star Value
+		<i class="fa inline pos-abs pos-r-0 pos-t-xs fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="star_value_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="star_value">
 		<select id="between_filter" name="CONDITION" class="form-control companies_input" >
@@ -629,12 +649,14 @@
 </div>
 </div>
 
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
         <div class="control-group  lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span class="text-base">Owner</span>
-	<div class="controls m-t-xs" id="owner_id_div">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Owner
+		<i class="fa inline pos-abs pos-r-0 pos-t-xs fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="owner_id_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="owner_id">
 		<select id="between_filter" name="CONDITION" class="form-control companies_input" >
@@ -659,12 +681,14 @@
 
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
         <div class="control-group  lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-	<span class="text-base">Created Date </span>
-	<div class="controls m-t-xs" id="created_time_div">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Created Date
+		<i class="fa inline pos-abs pos-r-0 pos-t-xs fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="created_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="created_time" class="form-control">
 		<select id="between_filter" name="CONDITION" class="form-control companies_input" >
@@ -705,13 +729,15 @@
 </div>
 
 
-<div class="wrapper bg-light hidden-sm hidden-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
 
 <div class="control-group  lhs-row-filter p-n" style="border-bottom: solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;" >
-	<span class="text-base">Name</span>
-	<div class="controls m-t-xs" id="name_div">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
+		Name
+		<i class="fa inline pos-abs pos-r-0 pos-t-xs fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="name_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="name" />
 		<select id="between_filter" name="CONDITION" class="form-control companies_input"  >

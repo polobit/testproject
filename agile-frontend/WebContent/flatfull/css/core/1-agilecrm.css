@@ -3300,3 +3300,10 @@ table.hide-head-checkbox th label.i-checks {
 
 }
 
+#lhs_filters_conatiner .panel-body{
+	padding: 5px 15px;
+}
+#lhs_filters_conatiner #lhs-filters-header{
+	font-size : 14px;
+}
+
