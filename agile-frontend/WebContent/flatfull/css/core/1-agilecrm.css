@@ -3300,3 +3300,51 @@ table.hide-head-checkbox th label.i-checks {
 
 }
 
+#lhs_filters_conatiner .panel-body{
+	padding: 5px 15px;
+	min-height: 35px;
+}
+#lhs_filters_conatiner #lhs-filters-header{
+	font-size : 14px;
+}
+#lhs_filters_conatiner #lhs-filters-header i{
+	top : 3px;
+}
+/* Modals New  Look  UI Starting */
+
+.modal-footer {
+    padding: 10px;
+    background-color: rgba(0,0,0,0.025);
+}
+
+.modal-title {
+    margin: 0;
+    /* line-height: 1.42857143; */
+}
+
+.modal-header h3,.modal-header .h3 {
+    font-size: 18px;
+}
+
+.modal-title i {
+	display: none;
+}
+
+
+.modal-content {
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0,0,0,.2);
+     border-radius: 0px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+}
+
+
+
+/* 
+Modals New  Look  UI Ending */
