@@ -1732,7 +1732,7 @@ public class ContactsAPI
     @Path("delete")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("ids") String model_ids, @FormParam("filter") String filter,
+    public void deleteContacts(@FormParam("ids") String model_ids, @QueryParam("filter") String filter,
 	    @FormParam("dynamic_filter") String dynamicFilter) throws JSONException
     {
 	Long current_user_id = SessionManager.get().getDomainId();
