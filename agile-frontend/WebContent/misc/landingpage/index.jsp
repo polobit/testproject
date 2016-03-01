@@ -513,10 +513,10 @@ AGILE_LP_OPTIONS['templateId'] = "";
                         <section>
                             <div class="device-switcher" ng-show="devicesPanelOpen">
                                 <div class="devices">
-                                    <button ng-class="{ active: activeCanvasSize === 'xs' }" ng-click="resizeCanvas('xs')"><i class="icon icon-mobile"></i></button>
-                                    <button ng-class="{ active: activeCanvasSize === 'sm' }" ng-click="resizeCanvas('sm')"><i class="icon icon-tablet-1"></i></button>
-                                    <button ng-class="{ active: activeCanvasSize === 'md' }" ng-click="resizeCanvas('md')"><i class="icon icon-laptop"></i></button>
-                                    <button ng-class="{ active: activeCanvasSize === 'lg' }" ng-click="resizeCanvas('lg')"><i class="icon icon-desktop"></i></button>
+                                    <button ng-class="{ active: activeCanvasSize === 'xs' }" ng-click="resizeCanvas('xs')"><i class="icon icon-mobile" id="deviceSwitcherMobile"></i></button>
+                                    <button ng-class="{ active: activeCanvasSize === 'sm' }" ng-click="resizeCanvas('sm')"><i class="icon icon-tablet-1" id="deviceSwitcherTablet"></i></button>
+                                    <button ng-class="{ active: activeCanvasSize === 'md' }" ng-click="resizeCanvas('md')"><i class="icon icon-laptop" id="deviceSwitcherLaptop"></i></button>
+                                    <button ng-class="{ active: activeCanvasSize === 'lg' }" ng-click="resizeCanvas('lg')"><i class="icon icon-desktop" id="deviceSwitcherDesktop"></i></button>
                                 </div>
                                 <div class="current-device">
                                     <i class="icon icon-desktop"></i>
@@ -524,8 +524,8 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     <div class="size">{{ activeCanvasSize+'Size' | translate }}</div>
                                 </div>
                             </div>
-                            <div class="bottom-navigation">
-                                <button ng-click="preview()" bl-tooltip="preview" placement="top"><i class="icon icon-eye"></i></button>
+                            <div class="bottom-navigation hidden">
+                                <button id="landingpageFullPreview" ng-click="preview()" bl-tooltip="preview" placement="top"><i class="icon icon-eye"></i></button>
                                 <button class="hidden" ng-click="openPanel('export')" bl-tooltip="export" placement="top"><i class="icon icon-export"></i></button>
                                 <button ng-click="toggleDevicesPanel()" ng-class="{ active: devicesPanelOpen }" bl-tooltip="changeDevice" placement="top"><i class="icon icon-mobile"></i></button>
                                 <button class="hidden" bl-tooltip="save" placement="top" ng-click="project.save()" ng-disabled="savingChanges">
