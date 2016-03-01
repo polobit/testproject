@@ -50,7 +50,7 @@ function agile_trackPageview(callback)
 	agile_setUtmParams();	
 
 	var agile_url = "https://" + agile_id.getNamespace() + ".agilecrm.com/stats?callback=?&" + params;
-	var agile_url_new =  Track_Visitor_Server_URL + "/stats?callback=?&" + params;
+	var agile_url_new =  Track_Visitor_Server_URL + "/addstats?callback=?&" + params;
 
 	// Callback
 	agile_json(agile_url, callback);
