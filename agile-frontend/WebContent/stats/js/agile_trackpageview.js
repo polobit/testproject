@@ -10,6 +10,8 @@
  */
 function agile_trackPageview(callback)
 {
+	var Track_Visitor_Server_URL = "https://agilecrm-web-stats.appspot.com";
+
 	// Get guid
 	var guid = agile_guid.get();
 
@@ -38,13 +40,23 @@ function agile_trackPageview(callback)
 	if (agile_guid.get_email())
 		params += "&email=" + encodeURIComponent(agile_guid.get_email());
 
+	if(agile_id.getNamespace())
+		params += "&domain=" + encodeURIComponent(agile_id.getNamespace());
+
+	// Add action param
+	params += "&action=ADD";
+
 	// Sets UTM params
 	agile_setUtmParams();	
 
 	var agile_url = "https://" + agile_id.getNamespace() + ".agilecrm.com/stats?callback=?&" + params;
+	var agile_url_new =  Track_Visitor_Server_URL + "/stats?callback=?&" + params;
 
 	// Callback
 	agile_json(agile_url, callback);
+
+	agile_json(agile_url_new);
+
 }
 
 function agile_trackingDomain(host){
