@@ -1262,8 +1262,9 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 			var title = "Emails limit";
 			var yes = "";
 			var no = "Ok"
-			var upgrade_link =  '<div><a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">To continue sending emails from your account, please purchase more.</a><div>';
-			var message = "<div>Sorry, your emails quota has been utilized.</div>" + upgrade_link;
+			var upgrade_link =  'Please<a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny"> upgrade your email subscription.</a>';
+			var emialErrormsg = '<div><a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">To continue sending emails from your account, please purchase more.</a></div>';
+			var message = "<div>Sorry, your emails quota has been utilized.</div>" + emialErrormsg;
 			
 			showModalConfirmation(title, 
 					message, 
