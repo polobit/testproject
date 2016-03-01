@@ -139,7 +139,7 @@ var CONTENT_JSON = {
 		"title" : "You do not have any Email templates currently.",
 		"description" : "Personalize and customize email templates for every scenario in the sales cycle.",
 		"button_text" : "Add Email Template",
-		"route" : "#email-template-add",
+		"route" : "#emailbuilder-templates",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-activities" : {
@@ -288,7 +288,9 @@ $(function() {
 		var id = $(this).attr('modal_id');
 		if(id == "opportunityModal")
 			show_deal();
-		else
+		else if(id == "personModal")
+			addContactBasedOnCustomfields();
+		else 
 			$("#" + id).modal('show');
 	});
 });

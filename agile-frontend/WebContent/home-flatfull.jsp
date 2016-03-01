@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.subscription.Subscription"%>
 <%@page import="com.agilecrm.SafeHtmlUtil"%>
 <%@page import="com.agilecrm.contact.CustomFieldDef.SCOPE"%>
 <%@page import="com.agilecrm.contact.util.CustomFieldDefUtil"%>
@@ -33,6 +34,9 @@ pageEncoding="UTF-8"%>
 <meta name="author" content="">
 <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
 <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib">
+
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
 
 
 <%
@@ -89,6 +93,7 @@ if(restriction != null && restriction.checkToUpdateFreeEmails()){
 	restriction.refreshEmails();
 	restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
 }
+Subscription subscription = SubscriptionUtil.getSubscription(true);
 boolean is_free_plan = false;
 
 if(restriction != null && restriction.planDetails != null)
@@ -147,7 +152,6 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   display: none !important;
 }
 
-
 </style>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -174,7 +178,7 @@ function isIE() {
  {window.location='/error/not-supported.jsp';}
 
 </script>
-
+<div id="alert-message" style="display:none;"></div>
 <div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
@@ -594,8 +598,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 %>
 
 
-  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
-   
+   <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
@@ -665,7 +668,7 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 
 // Billing Restriction
 var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
-
+var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
 var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 //var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
@@ -712,6 +715,11 @@ head.ready(["core"], function(){
 	   showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
     }catch(e){}
    
+   try{
+    //Code to display alerts of widgets.
+    showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
+   }catch(e){}
+	 
 	//Resting the variables.
 	<%  session.removeAttribute("widgetMsgType");
 	session.removeAttribute("widgetMsg"); %>

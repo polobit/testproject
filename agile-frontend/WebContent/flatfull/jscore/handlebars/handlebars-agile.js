@@ -301,6 +301,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("landingpages.js");
 	}
+	if (templateName.indexOf("emailbuilder") == 0)
+	{
+		template_relative_urls.push("emailbuilder.js");
+	}
 	if (templateName.indexOf("ticket") == 0)
 	{
 		template_relative_urls.push("tickets.js");

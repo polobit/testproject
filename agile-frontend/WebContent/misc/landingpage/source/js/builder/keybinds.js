@@ -13,16 +13,16 @@ angular.module('builder')
 
 				   	if (e.which === 38) {
 				   		// arrow donw
-				   		e.preventDefault();
-				        dom.moveSelected('up');
+				   		//e.preventDefault();
+				        //dom.moveSelected('up');
 				   	} else if (e.which === 40) {
 				   		// arrow up
-				   		e.preventDefault();
-				        dom.moveSelected('down');
+				   		//e.preventDefault();
+				        //dom.moveSelected('down');
 				   	} else if (e.which === 46) {
 				   		// del
-				   		e.preventDefault();
-				        dom.delete($rootScope.selected.node);
+				   		//e.preventDefault();
+				        //dom.delete($rootScope.selected.node);
 				   	} else if (e.which === 67 && e.ctrlKey) {
 				   		// C + Ctrl
 				   		e.preventDefault();

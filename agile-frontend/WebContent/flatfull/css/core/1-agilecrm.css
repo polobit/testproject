@@ -923,6 +923,12 @@ z-index: 99;
 	position:relative;
 	border-bottom:1px solid #ddd;
 }
+.dealtitle-angular + .tooltip{
+
+	width:200px;
+    word-wrap:break-word;
+    white-space:normal;
+}
 .milestone-main .milestone-column:last-child .milestone-heading:after,.milestone-main .milestone-column:last-child span:after
 {
 	display:none;
@@ -3050,7 +3056,7 @@ width : 150px;
 	padding-bottom:9px;
 }
 
-#portlets-add-listener #deals > div:nth-of-type(4)
+#portlets-add-listener .wrapper-md div:nth-of-type(4)
 {
 	height: 243px;
 }
@@ -3150,6 +3156,7 @@ table.hide-head-checkbox th label.i-checks {
 }
 
 
+
 .slate-content h4{
 	font-size: 18px;
 	opacity:0.8;
@@ -3170,7 +3177,9 @@ table.hide-head-checkbox th label.i-checks {
 .deals-nowrap .no-wrap {
  white-space: nowrap !important;
 }
-.contact_popover{
+
+
+.contact_popover{ 
 
 	border-radius: 0px;
 	//width : 260px;
@@ -3186,11 +3195,108 @@ table.hide-head-checkbox th label.i-checks {
 .contact_popover .arrow{
 	display: none;
 }
+
+
 .well{
 	background: none!important;
 	 border:none!important;
 	  
 }
+
+#api_key_generate_icon span , #jsapi_key_generate_icon span{
+	color: white !important;
+}
+
+
+
 #calls-chart svg {
 	overflow: visible!important;
 }
+
+
+.api-key-pos
+{
+	padding:5px;
+	position:relative;
+	
+}
+.api-key-spacing{
+	letter-spacing: 1px;
+}
+
+
+/* account block model */
+#user-blocked-modal .panel-body{
+	padding: 60px 30px 60px 30px;
+	background-color: #edb25b;
+	color: white;
+}
+#user-blocked-modal a{
+	color: white !important;
+}
+#user-blocked-modal .modal-dialog{
+	top: 20vh;
+}
+
+.user-alert{
+	position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.user-alert .user-alert-message{
+	position: fixed;
+    width: 50%;
+    margin: 25px auto;
+    text-align: center;
+    background: #f7ecc2!important;
+    border: 1px solid rgb(255, 194, 55);
+    left: 0;
+    right: 0;
+    z-index: 99999;
+    cursor: pointer;
+    padding: 5px;
+    margin-top: 5px;
+    border-radius: 6px;
+}
+.user-alert .user-alert-message span{
+	background-color: #DCD1A5;
+    padding: 0px 6px 4px;
+	margin-left: 10px;
+    margin-right: 5px;
+    font-size: 15px;
+}
+.companies_input{
+	height:30px;
+	font-size:12px;
+}
+.lhs-contact-filter-row  div.add-icon{
+	display: none;
+}
+
+.lhs-contact-filter-row div.add-icon:last-of-type {
+	display: block!important;
+	}
+#addBtn:hover
+{
+  color: black !important;
+}
+
+#removeBtn:hover
+{
+  color: black !important;
+  opacity: 0.9;
+}
+#removeBtn:hover
+{
+  color: black !important;
+}
+
+
+@media ( max-width : 767px) {
+	.vbox-mobile-view .vbox{ display: block;min-height:auto;}
+	.vbox-mobile-view .row-row{ display: inherit !important; }
+
+}
+

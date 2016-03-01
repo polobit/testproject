@@ -390,6 +390,7 @@ var Base_Collection_View = Backbone.View
 					return;
 				}
 
+				console.log("appendItem");
 				this.model_list_element_fragment.appendChild(this.createListView(base_model).render().el);
 			},
 			createListView : function(base_model)
