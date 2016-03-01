@@ -581,14 +581,15 @@ var contacts_bulk_actions = {
 								var no = "No"
 
 								var message = "";
-								var upgrade_link = '<div><a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">To continue sending emails from your account, please purchase more.</a></div>';
+								var upgrade_link = 'Please<a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny"> upgrade your email subscription.</a>';
+								var emialErrormsg = '<div><a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">To continue sending emails from your account, please purchase more.</a></div>';
 								var title = "Not enough emails left"
 								if (pendingEmails <= 0)
 								{
 									title = "Emails limit";
 									yes = "";
 									no = "Ok"
-									message = "<div>Sorry, your emails quota has been utilized.</div> " + upgrade_link;
+									message = "<div>Sorry, your emails quota has been utilized.</div> " + emialErrormsg;
 								}
 								else
 									message = "You have only " + pendingEmails + " emails remaining as per your quota. " + upgrade_link + " Continuing with this operation may not send the email to some contacts. <br/><br/>" + "Do you want to proceed?";
