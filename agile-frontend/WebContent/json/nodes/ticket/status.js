@@ -3,7 +3,7 @@
     "thumbnail": "json/nodes/images/ticket/status.png",
     "icon": "json/nodes/icons/ticket/status.png",
     "info": "Change the status of a ticket as open,pending or closed.",
-    "help": "Check if a link in the email is clicked within a specified duration.",
+    "help": "",
     "author": "John",
     "company": "mantra",
     "language": "en",
@@ -27,7 +27,7 @@
             "type": "select"
         },
         {
-            "label": "Check if the email recepient has clicked on a link in the email. Here, you need to mention the maximum waiting period before it proceeds to the next step. <br/><br/>This node has 2 exit paths - Yes and No.<br/><ul><li>If there is a click, then the control moves through the 'Yes' path without waiting any further.</li><br/><li> If the recepient did not click any link in the preceding email, it waits here for specified time. If there is no click till the max wait time, it moves through the 'No' path. </li></ul>",
+            "label": "",
             "category": "Help",
             "fieldType": "label",
             "type": "label"

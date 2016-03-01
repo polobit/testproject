@@ -2,8 +2,8 @@
     "name": "Condition",
     "thumbnail": "json/nodes/images/sms/Condition.png",
     "icon": "json/nodes/icons/sms/Condition.png",
-    "info": "Check for a condition (IF/Value/Len) in your workflow.",
-    "help": "Check for a condition (if/value/len) in your workflow.",
+    "info": "Check for a condition (IF/Value) in your workflow on ticket.",
+    "help": "",
     "author": "john",
     "company": "Invox",
     "language": "en",
@@ -21,8 +21,7 @@
             "ismultiple": "true",
             "value": "value",
             "options": {
-                "value": "value",
-                "strlen": "strlen"
+                "value": "value"
             },
             "fieldType": "select",
             "type": "select" 
@@ -45,9 +44,6 @@
                 "Priority": "{{ticket.priority}}",
                 "Ticket Type": "{{ticket.type}}",
                 "Subject": "{{ticket.subject}}",
-                "Created Time": "{{ticket.created_time}}",
-                "Closed Time": "{{ticket.closed_time}}",
-                "Last Updated Time": "{{ticket.last_updated_time}}",
                 "Last Updated By": "{{ticket.last_updated_by}}"
             },
             "fieldType": "select",
@@ -79,12 +75,12 @@
             "required": "required",
             "category": "Settings",
             "name": "variable_2",
-            "title": "Enter a value. For Date value enter in 'mm/dd/yyyy' <br><br> Status possible values 'NEW, OPEN, CLOSED' <br> Priority possible values 'LOW, MEDIUM, HIGH' <br> Ticket Type possible values 'INCIDENT, QUESTION, TASK, PROBLEM' <br> Last Updated By possible values 'AGENT, REQUESTER'",
+            "title": "Enter a value.<br><br> Status possible values 'OPEN,PENDING,CLOSED' <br> Priority possible values 'LOW, MEDIUM, HIGH' <br> Ticket Type possible values 'INCIDENT, QUESTION, TASK, PROBLEM' <br> Last Updated By possible values 'AGENT, REQUESTER'",
             "fieldType": "input",
             "type": "text" 
         },
         {
-            "label": "Check for a condition (IF/Value/Len) in your workflow.",
+            "label": "",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

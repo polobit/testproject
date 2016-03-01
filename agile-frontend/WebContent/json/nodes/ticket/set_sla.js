@@ -3,7 +3,7 @@
     "thumbnail": "json/nodes/icons/ticket/priority.png",
     "icon": "json/nodes/icons/ticket/priority.png",
     "info": "Set due date/duration time for a ticket in Hours.",
-    "help": "Set SLA",
+    "help": "",
     "author": "John",
     "company": "mantra",
     "language": "en",
@@ -32,7 +32,7 @@
 			"fieldType": "select",
 			"type": "select" 
          },{
-            "label": "Set SLA",
+            "label": "",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 
