@@ -379,7 +379,7 @@ Handlebars.registerHelper('convert_to_html', function(str, options) {
 
 	str = str.trim();
 
-	str = str.replace(/(?:\r\n)/g, '<br/>');
+	//str = str.replace(/(?:\r\n)/g, '<br/>');
 
 	// Construct anchor links
 	try {

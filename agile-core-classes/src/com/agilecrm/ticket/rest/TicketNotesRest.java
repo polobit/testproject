@@ -222,6 +222,7 @@ public class TicketNotesRest
 						CREATED_BY.AGENT, ticket.requester_name, ticket.requester_email, plain_text, html_text,
 						notes.note_type, new ArrayList<TicketDocuments>(), "");
 
+				//Send email thread to user
 				TicketNotesUtil.sendReplyToRequester(ticket);
 
 				// Execute note created by user trigger
