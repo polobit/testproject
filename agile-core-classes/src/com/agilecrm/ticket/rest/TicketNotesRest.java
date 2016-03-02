@@ -96,6 +96,8 @@ public class TicketNotesRest
 			if (ticket == null)
 				throw new Exception("Ticket has been deleted.");
 
+			Status status = ticket.status;
+
 			// Converting html text to plain with jsoup
 			// Document doc = Jsoup.parse(notes.html_text, "UTF-8");
 			// String plain_text = new HtmlToPlainText().getPlainText(doc);
@@ -112,6 +114,24 @@ public class TicketNotesRest
 				// Logging private notes activity
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_PRIVATE_NOTES_ADD, ticket.contactID, ticket.id,
 						plain_text, html_text, "html_text");
+
+				if (notes.close_ticket)
+				{
+					// Logging status changed activity
+					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+							status.toString(), Status.CLOSED.toString(), "status");
+
+					ticket.closed_time = currentTime;
+					ticket.status = Status.CLOSED;
+
+					// Updating ticket entity
+					Tickets.ticketsDao.put(ticket);
+
+					// Updating text search data
+					new TicketsDocument().edit(ticket);
+
+					TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
+				}
 			}
 			else
 			{
@@ -127,7 +147,6 @@ public class TicketNotesRest
 					throw new Exception("You must in " + group.group_name + " group in order to reply to this ticket");
 
 				int repliesCount = ticket.user_replies_count;
-				Status status = ticket.status;
 
 				if (repliesCount == 1)
 					ticket.first_replied_time = currentTime;
@@ -191,8 +210,13 @@ public class TicketNotesRest
 				{
 					ticket.closed_time = currentTime;
 
-					// Set status to pending as it is replied by assignee and closed
+					// Set status to pending as it is replied by assignee and
+					// closed
 					ticket.status = Status.CLOSED;
+
+					// Logging status changed activity
+					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+							status.toString(), Status.CLOSED.toString(), "status");
 				}
 				else
 					// Set status to pending as it is replied by assignee
@@ -222,7 +246,7 @@ public class TicketNotesRest
 						CREATED_BY.AGENT, ticket.requester_name, ticket.requester_email, plain_text, html_text,
 						notes.note_type, new ArrayList<TicketDocuments>(), "");
 
-				//Send email thread to user
+				// Send email thread to user
 				TicketNotesUtil.sendReplyToRequester(ticket);
 
 				// Execute note created by user trigger
