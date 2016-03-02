@@ -7002,3 +7002,10 @@ Handlebars.registerHelper('multiple_Property_Element_List', function(name, prope
 				return options.fn(matching_properties_list);
 		});
 
+Handlebars.registerHelper('isEmailCreditsExists', function(options)
+	{
+		var credits = _billing_restriction.email_credits_count;
+		if (credits != undefined && credits > 0)
+			return options.fn(this);
+		return options.inverse(this);
+	});
