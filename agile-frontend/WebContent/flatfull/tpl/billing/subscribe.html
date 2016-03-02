@@ -638,6 +638,7 @@ users.
 
 		</div>
 	{{/ifCond}}
+{{#isAdmin}}
 {{#check_plan "FREE"}}
         <div class="panel panel-default wrapper-md m-t-xl">
 {{else}}
@@ -656,7 +657,7 @@ users.
 		<div class="clearfix"></div>
 
 		</div>
-		
+{{/isAdmin}}	
 </div>
  
 </div>
