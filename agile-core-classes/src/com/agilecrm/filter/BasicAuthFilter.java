@@ -89,8 +89,15 @@ public class BasicAuthFilter implements Filter
 		    String user = credentials[0];
 		    String password = credentials[1];
 
+		    String email = "";
+		    if (user != null)
+		    {
+			System.out.println("User = " + user);
+			email = user.toLowerCase();
+		    }
+
 		    // Get AgileUser
-		    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(user);
+		    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
 
 		    if (domainUser == null)
 		    {
@@ -118,15 +125,21 @@ public class BasicAuthFilter implements Filter
 			{
 			    System.out.println("Input data = " + bufferedReqest.getRequestBody());
 			    System.out.println("Path Info = " + httpRequest.getPathInfo());
+			    System.out.println("done");
+			}
+			catch (Exception e)
+			{
+			    System.out.println("This is for log issue handle");
+			}
+			try
+			{
 			    setUser(domainUser);
-			    chain.doFilter(bufferedReqest, httpResponse);
+			    chain.doFilter(httpRequest, httpResponse);
 			    return;
 			}
 			catch (Exception e)
 			{
 			    System.err.println("Error");
-
-			    System.out.println("Error data = " + bufferedReqest.getRequestBody());
 
 			    JSONObject address = new JSONObject();
 
