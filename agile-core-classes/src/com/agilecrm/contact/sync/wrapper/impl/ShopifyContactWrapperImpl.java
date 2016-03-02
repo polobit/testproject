@@ -55,11 +55,13 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     public ContactField getFirstName()
     {
 	String firstName = null;
+	ContactField field = null;
 	if (contactProperties.containsKey("first_name") && contactProperties.get("first_name") != null)
 	{
 	    firstName = contactProperties.get("first_name").toString();
+	    field = new ContactField(Contact.FIRST_NAME, firstName, null);
 	}
-	return new ContactField(Contact.FIRST_NAME, firstName, null);
+	return field;
     }
 
     /*
@@ -71,11 +73,13 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     public ContactField getLastName()
     {
 	String lastName = null;
+	ContactField field = null;
 	if (contactProperties.containsKey("last_name") && contactProperties.get("last_name") != null)
 	{
 	    lastName = contactProperties.get("last_name").toString();
+	    field = new ContactField(Contact.LAST_NAME, lastName, null); 
 	}
-	return new ContactField(Contact.LAST_NAME, lastName, null);
+	return field;
     }
 
     /*
@@ -87,11 +91,13 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     public ContactField getEmail()
     {
 	String email = null;
+	ContactField field = null;
 	if (contactProperties.containsKey("email") && contactProperties.get("email") != null)
 	{
 	    email = contactProperties.get("email").toString();
+	    field = new ContactField(Contact.EMAIL, email, "home");
 	}
-	return new ContactField(Contact.EMAIL, email, "home");
+	return field;
     }
 
     /*
@@ -123,11 +129,13 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     public ContactField getOrganization()
     {
 	String company = null;
+	ContactField field = null;
 	if (contactProperties.containsKey("company"))
 	{
 	    company = defaultAddress.get("phone");
+	    field = new ContactField(Contact.COMPANY, company, "office");
 	}
-	return new ContactField(Contact.COMPANY, company, "office");
+	return field;
     }
 
     /*
@@ -175,6 +183,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     public ContactField getAddress()
     {
 	JSONObject address = new JSONObject();
+	ContactField field = null;
 	if (defaultAddress != null)
 	{
 	    String strete = defaultAddress.get("address1");
@@ -199,6 +208,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
 		    address.put("zip", defaultAddress.get("zip"));
 
 		address.put("address", strete);
+		field = new ContactField(Contact.ADDRESS, address.toString(), "home");
 	    }
 	    catch (JSONException e)
 	    {
@@ -206,7 +216,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
 		e.printStackTrace();
 	    }
 	}
-	return new ContactField(Contact.ADDRESS, address.toString(), "home");
+	return field;
     }
 
     /**
