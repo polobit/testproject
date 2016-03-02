@@ -968,7 +968,7 @@ function initializeAddPortletsListeners() {
             		if($('#route-list' , $('#portletStreamModalNew')).children().length==0){
 					$('.modal-body',$('#portletStreamModalNew')).text('Already Added');
 				$(".add-portlet").addClass('disabled');
-				$(".add_to_all").addClass('disabled');
+				//$(".add_to_all").addClass('disabled');
 			}
             	
             } 

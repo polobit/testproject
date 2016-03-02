@@ -39,6 +39,7 @@ function loadPortlets(route,el){
 	App_Portlets.adminPortlets = new Array();
 	App_Portlets.RoutePortlets=new Array();
 
+	console.log("before initialized" + App_Portlets.RoutePortlets.length);
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
@@ -48,6 +49,7 @@ function loadPortlets(route,el){
 	// postrender. It is set to false after portlet setup is initialized
 	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets?route='+route, sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 		postRenderCallback : function(portlets_el){
+			console.log(	App_Portlets.RoutePortlets.length);
 			if(route!='DashBoard' && App_Portlets.RoutePortlets.length!=0)
 			{
 				/*if($('#zero-portlets').is(':visible') || $('#no-portlets').is(':visible'))
@@ -175,6 +177,7 @@ function loadPortlets(route,el){
  */
 function set_up_portlets(el, portlets_el){
 
+	$('.gridster > div:visible',portlets_el);
 	var dimensions;
 	var dim_width = Math.round($('.gridster-portlets').width()/3)-20;
 	var dim_height = 200;
@@ -414,7 +417,7 @@ function set_up_portlets(el, portlets_el){
 		gridster.enable_resize();
 	}
 
-    $(window).trigger('resize');
+   // $(window).trigger('resize');
 
     //return callback();
 }

@@ -38,8 +38,15 @@ function organize_portlets(base_model) {
  * Appends the outer view and inner view of each portlet.
  */
 function set_p_portlets(base_model) {
-	
-	if(base_model.toJSON().portlet_route!='DashBoard'){
+	console.log(Portlets_View.collection);
+	var routeJSON = {
+		"Contacts" : "contacts",
+		"Deals" : "deals",
+		"Tasks" : "tasks",
+		"Events" : "calendar"
+	};
+
+	if(base_model.toJSON().portlet_route!='DashBoard' && Current_Route.toUpperCase()==routeJSON[base_model.toJSON().portlet_route].toUpperCase()){
 		App_Portlets.RoutePortlets.push(base_model);
 		return;
 	}
