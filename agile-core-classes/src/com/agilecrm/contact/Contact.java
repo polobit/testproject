@@ -970,10 +970,10 @@ public class Contact extends Cursor
     @XmlElement(name = "owner")
     public DomainUserPartial getOwner()
     {
-    	System.out.println("Owner call");
+    	// System.out.println("Owner call");
     	
-	if (owner_key != null)
-	{
+	// if (owner_key != null)
+	// {
 		System.out.println("owner_key call");
 		
 	    // If user is deleted no user is found with key so set user to null
@@ -989,8 +989,8 @@ public class Contact extends Cursor
 		owner_key = null;
 		return null;
 	    } */
-	}
-	return null;
+	// }
+	// return null;
     }
     
     /**
