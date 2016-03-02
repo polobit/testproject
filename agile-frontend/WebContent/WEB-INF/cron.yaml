@@ -115,4 +115,4 @@ cron:
  
  - description: All Domain stats report
    url: /backend/stats-report
-   schedule: very day 04:00
+   schedule: every day 04:00
