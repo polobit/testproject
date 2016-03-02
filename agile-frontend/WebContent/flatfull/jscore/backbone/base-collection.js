@@ -68,7 +68,8 @@ parse : function(response)
  * view.
  */
 var Base_List_View = Backbone.View.extend({ events : { "click .delete" : "deleteItem", "click .edit" : "edit", "delete-checked .agile_delete" : "deleteItem",
-	"click .delete-model" : "deleteModel"
+	"click .delete-model" : "deleteModel",
+	"click .delete-confirm" : "deleteConfirm"
 
 },
 /*
@@ -91,7 +92,6 @@ initialize : function()
  */
 deleteItem : function(e)
 {
-	
 	e.preventDefault();
 	this.model.destroy();
 	this.remove();
@@ -101,11 +101,49 @@ deleteModel : function(e)
 	e.preventDefault();
 	if(!confirm("Are you sure you want to delete?"))
 		return false;
+
 	$.ajax({ type: 'DELETE', url: this.model.url(),success : function() {
 		location.reload(true);
 	}
         });
+	
 },
+
+deleteConfirm : function(e)
+{
+	var that = this;
+	var confirmModal = $('#deleteConfirmationModal');
+
+	confirmModal.html(getTemplate('modal-delete-confirm', {})).modal('show');
+
+	$("#delete-confirm", confirmModal).off();
+	confirmModal.on("click", "#delete-confirm", function(e){
+			e.preventDefault();
+			var id=that.model.get("id");
+			console.log(id);
+		   // Show loading
+		   $(this).button('loading');
+		   $.ajax({
+    					url: 'core/api/users/'+id,
+       					type: 'DELETE',
+       					success: function()
+       					{
+       						$('#deleteConfirmationModal').modal('hide');
+       						that.remove();
+       					},
+       					error : function(response)
+						{
+							confirmModal.find(".modal-footer").find("#delete-user").html('<div class="alert alert-danger delete-adminuser-individual"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry, can not delete user having <i>admin</i> privilege.</div>');
+							console.log(response);
+
+						}
+
+       			});
+          
+	});
+
+},
+
 edit : function(e)
 {
 	/*

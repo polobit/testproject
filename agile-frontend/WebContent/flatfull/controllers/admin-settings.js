@@ -1172,3 +1172,18 @@ function initQuota(callback)
 
 				callback();
 }
+
+function userModalDelete(e)
+{
+	
+	$('#deleteuserModal').on('click', '#delete_user_yes', function(e) {
+		var id=$("#deleteuserModal").attr(data);
+		App_Admin_Settings.usersListView.collection.remove(id);
+		App_Admin_Settings.usersListView.render(true);
+
+	});
+	$('#deleteuserModal').on('click', '#delete_user_no', function(e) {
+		$('#deleteuserModal').modal('hide');
+	});
+
+}

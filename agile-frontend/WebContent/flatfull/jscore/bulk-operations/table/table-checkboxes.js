@@ -89,18 +89,22 @@ $(function(){
 			
 			if (Current_Route == 'deals')
 				deal_bulk_actions.toggle_deals_bulk_actions_dropdown(undefined, true,$(this).parents('table').attr('id'));
+			else if(Current_Route == 'users')
+				$("#bulk-action-btns button").addClass("disabled");
 			else
 				toggle_contacts_bulk_actions_dropdown(undefined, true,$(this).parents('table').attr('id'));
 			
 		}
-		else
+		else{
 			$('.tbody_check').prop('checked',true);
-	
+			$("#bulk-action-btns button").removeClass("disabled");
+		}
 		console.log($(this).is(':checked'));
 		
 		// Show bulk operations only when thead check box is checked
 		if (Current_Route == 'deals')
 			deal_bulk_actions.toggle_deals_bulk_actions_dropdown(this, true,$(this).parents('table').attr('id'));
+		
 		else
 			toggle_contacts_bulk_actions_dropdown(this, true,$(this).parents('table').attr('id'));
 		
@@ -118,6 +122,7 @@ $(function(){
 			deal_bulk_actions.toggle_deals_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
 		/*else if(Current_Route=='contacts' && _agile_get_prefs("agile_contact_view"))
 			toggle_contacts_bulk_actions_dropdown(this,true,$(this).parents('table').attr("id"));*/
+		
 		else
 			toggle_contacts_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
 	});

@@ -3422,3 +3422,19 @@ div.user-view-actions {
 	margin-left:15px;
 }
 
+.delete-adminuser{
+	width: 98%;
+    margin: 0 0 5px 4px;
+    padding: 6px 10px;
+}
+.delete-adminuser-individual{
+	width: 58%;
+    margin: 0 0 0 15px;
+    text-align: left;
+    float: left;
+    padding: 6px 10px 2px;
+}
+.adduser
+{
+	margin-left: 104px;
+}

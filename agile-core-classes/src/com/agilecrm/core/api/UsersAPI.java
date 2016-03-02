@@ -221,6 +221,24 @@ public class UsersAPI
 
 	domainUser.delete();
     }
+    
+    /**
+     * Deletes a user from database, by validating users count and ownership of
+     * the user to be deleted. If the user is fit to delete, deletes its related
+     * entities also.
+     * 
+     * @param domainUser
+     *            user to be deleted
+     */
+    @Path("/{domainuserid}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteDomainUser(@PathParam("domainuserid") String domainUserKey)
+    {
+    	DomainUser domainuser = DomainUserUtil.getDomainUser(Long.parseLong(domainUserKey));
+    	
+    	deleteDomainUser(domainuser);
+    }
 
     /**
      * Deletes each user individually by iterating the json array of user ids

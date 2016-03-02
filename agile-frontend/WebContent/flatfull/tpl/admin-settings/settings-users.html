@@ -13,7 +13,7 @@
         {{#if this.length}}
         <div class="data">
             <div class="data-container">
-            	<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm admin-settings-bulkactions {{#is_mobile}}{{else}}  {{/is_mobile}}" >
+            	<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm admin-settings-bulkactions grid-checkboxes {{#is_mobile}}{{else}}  {{/is_mobile}}" >
             	 	<span style="margin: 5px 0px 5px 5px;"> 
             	 		<label class="i-checks i-checks-sm p-l-lg" style="visibility: visible;">
 				            <input type="checkbox"  class="thead_check" value="">
@@ -21,7 +21,8 @@
 				        </label>
 				    </span>
 				
-					<button class="btn btn-default bulk-action-btn btn-sm"  id="delete-checked-grid" style="font-size:10px">Delete</button>
+					<button class="btn btn-default bulk-action-btns btn-sm disabled"  id="delete-checked-grid" 
+					style="font-size:10px">Delete</button>
 				    </div>
 
                 <div id='admin-settings-users-model-list' route='user-edit/' class="wrapper-md showCheckboxes" url="core/api/users/bulk">
@@ -35,11 +36,12 @@
 
 </script>
 <script id="admin-settings-users-model-template" type="text/html">
-  <div  class='data p-b col-sm-6 admin-user_temp' data='{{id}}'style="margin-bottom:4px;" >
-  
-	<div class="b r-5x p-sm bg-white" data="{{id}}" >
+ 
+  <div  class='data p-b col-sm-6 admin-user_temp' style="margin-bottom:4px;" >
+  	<span class='master-tag'></span>
+	<div class="b r-5x p-sm bg-white {{id}}" data="{{id}}" >
 	
-		<div class="left pos-abs">
+		<div class="left pos-abs" id="{{id}}">
 			<label class="i-checks i-checks-sm"> <input type="checkbox"
 				class="tbody_check" value=""> <i></i>
 			</label>
@@ -90,9 +92,9 @@
 						data-toggle="tooltip" data-placement="left" title=""
 						data-original-title="Edit"
 						class="fa fa-pencil-square grid-edit-color"></i></a></span>
-						<span class='c-p delete' con_id="{{id}}" id="user-action-delete"><i
-					data-toggle="tooltip" data-placement="left" title=""
-					data-original-title="Delete" class="fa fa-trash grid-delete-color"></i></span>
+						<span class='c-p delete-confirm {{id}}' deletId="{{id}}" id="user-action-delete">
+						<i data-toggle="tooltip" data-placement="left" title=""
+						data-original-title="Delete" class="fa fa-trash grid-delete-color"></i></span>
 			</div>
 
 
@@ -106,17 +108,25 @@
 
 <script id="adminsettings-newuser-template" type="text/html">
 
-<div class="p-b col-sm-6">
 
-<div class="b r-5x p-sm bg-white" style="height:122px;">
+<div  class='data p-b col-sm-6 admin-user_temp' style="margin-bottom:4px;" >
+<div class="b r-5x p-sm bg-white" style="height:120px;">
+
 <div class="left pos-abs">
 			<label class="i-checks i-checks-sm"> <input type="checkbox disable"
 				class="tbody_check grid-view-checkbox disable" value=""> <i></i>
 			</label>
 		</div>
-<img class='img-inital r r-2x m-t-sm' style='height:62px;width:62px;margin-left:33px;' src="flatfull/images/user-default.jpg"/>
+<div style="margin-left: 25px;">
+<div class="pull-left m-r-xs   agile-img" style="margin-left:3px;" >
+	<img class='img-inital r r-2x m-t-sm' style='height:62px;width:62px;' src="flatfull/images/user-default.jpg"/>
 <br>
-<a href='#users-add' class='btn btn-primary btn-sm btn-addon add-portlet add-stream-tab pos-rlt' id='addUser' style='margin-left:42.333333%;margin-top:-86px;'><span><i class='icon-plus-sign'/></span>  Add User</a>
+</div>
+
+ <div>Add user to manage specific tasks by providing user level priveleges.</div>
+<a href='#users-add' class='btn btn-primary btn-sm btn-addon add-portlet add-stream-tab pos-rlt adduser' id='addUser' ><span><i class='icon-plus-sign'/></span>  Add User</a>
+
+</div>
 </div>
 </div>
 
