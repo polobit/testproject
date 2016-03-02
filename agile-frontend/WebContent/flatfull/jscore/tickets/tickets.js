@@ -967,10 +967,12 @@ var Tickets = {
 		Tickets.updateModel(url, function(model){
 
 				if(status != "CLOSED"){
+					    $(".ticket-send-reply .btn").removeAttr("disabled");
                     	$('#ticket_change_sla').removeAttr("disabled");
                     	$(".close-current-ticket").removeAttr("disabled");					
 				}						
 				else{ 
+					$(".ticket-send-reply .btn").attr("disabled","disabled");
 					$('#ticket_change_sla').attr("disabled","disabled");
 					$(".close-current-ticket").attr("disabled","disabled");
 				    Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{closed_time:current_time});
