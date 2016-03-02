@@ -7,7 +7,12 @@
  * @returns
  */
 function isValidForm(form) {
-	
+
+    jQuery.validator.addMethod("choosen-select-input", function(value, element){
+           var label_value=$("#bulk-labels .chosen-select").val();
+           if(label_value)
+            	return true;			
+		}," This field is required.");
 
 	// Credit card validation to check card is valid for next 3 months
 	jQuery.validator.addMethod("atleastThreeMonths", function(value, element) {
@@ -179,6 +184,7 @@ function isValidForm(form) {
 		
 	}," Please enter a valid date.");
 
+    
 	jQuery.validator.addMethod("field_length", function(value, element){
 		if(value=="")
 			return true;
@@ -223,10 +229,14 @@ function isValidForm(form) {
 		errorPlacement: function(error, element) {
     		if (element.hasClass('checkedMultiSelect')) {
      			 error.appendTo($(element).parent());
-    			} else {
+    			} 
+    		else if(element.hasClass("choosen-select-input")){
+                 error.appendTo($("#bulk-labels .chosen-container"));
+              }
+    			else {
       				error.insertAfter(element);
-    			}
-  }
+    			}    
+         }
 	});
 
 	// Return valid of invalid, to stop from saving the data
