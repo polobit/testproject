@@ -156,7 +156,7 @@
                                     <div class="controls col-sm-6">
                                         <select name="workflowID" class="form-control">
                                             {{#each this}}
-                                               <option value="{{id}}">{{name}}</option>
+                                               <option value="{{id}}" {{#is_disabled}}disabled{{/is_disabled}}>{{name}}</option>
                                             {{/each}}                                               
                                         </select>
                                     </div>
