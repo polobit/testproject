@@ -1044,5 +1044,15 @@
         <servlet-name>TaskReminderUnitTest</servlet-name>
         <url-pattern>test/taskreminder/unit-test</url-pattern>
     </servlet-mapping>
+    <servlet>
+    
+        <servlet-name>AllDomainStatsServlet</servlet-name>
+        <servlet-class>com.agilecrm.alldomainstats.util.AllDomainStatsServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>AllDomainStatsServlet</servlet-name>
+        <url-pattern>/stats-report</url-pattern>
+    </servlet-mapping>
   
 </web-app>
