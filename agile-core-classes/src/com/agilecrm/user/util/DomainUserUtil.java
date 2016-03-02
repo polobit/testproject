@@ -161,6 +161,7 @@ public class DomainUserUtil
 
     	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     	Entity entity = datastore.prepare(proj).asSingleEntity();
+    	System.out.println(entity);
     	
     	return new DomainUserPartial(id, (String) entity.getProperty("name"), (String) entity.getProperty("email"));
 
