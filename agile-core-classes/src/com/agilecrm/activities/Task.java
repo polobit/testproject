@@ -21,6 +21,7 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
@@ -348,15 +349,14 @@ public class Task extends Cursor
      *             when Domain User not exists with respect to id.
      */
     @XmlElement(name = "taskOwner")
-    public DomainUser getTaskOwner() throws Exception
+    public DomainUserPartial getTaskOwner() throws Exception
     {
 	if (owner != null)
 	{
 	    try
 	    {
 		// Gets Domain User Object
-		// return DomainUserUtil.getDomainUser(owner.getId());
-	    	return null;
+	    return DomainUserUtil.getPartialDomainUser(owner.getId());
 	    }
 	    catch (Exception e)
 	    {
@@ -619,6 +619,9 @@ public class Task extends Cursor
     }
     
     public static void main(String[] args) {
+    
+    	System.out.println(Long.parseLong("5605596153774080"));
+    	
     	TestTask t = new TestTask();
     	  for(Field f : t.getClass().getFields()) {
     	   System.out.println(f.getGenericType() +" "+f.getName() + " " + f.getType());

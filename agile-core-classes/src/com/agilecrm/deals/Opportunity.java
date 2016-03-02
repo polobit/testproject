@@ -23,6 +23,7 @@ import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -333,10 +334,10 @@ public class Opportunity extends Cursor implements Serializable
     @XmlElement
     public List<Contact> getContacts()
     {
-	/*Objectify ofy = ObjectifyService.begin();
+	Objectify ofy = ObjectifyService.begin();
 	List<Contact> contacts_list = new ArrayList<Contact>();
 	contacts_list.addAll(ofy.get(this.related_contacts).values());
-	return contacts_list;*/
+	return contacts_list;
     	return null;
     }
 
@@ -399,15 +400,15 @@ public class Opportunity extends Cursor implements Serializable
      *             when Domain User not exists with respect to id.
      */
     @XmlElement(name = "owner")
-    public DomainUser getOwner() throws Exception
+    public DomainUserPartial getOwner() throws Exception
     {
 	if (ownerKey != null)
 	{
 	    try
 	    {
 		// Gets Domain User Object
-		// return DomainUserUtil.getDomainUser(ownerKey.getId());
-	    	return null;
+		   return DomainUserUtil.getPartialDomainUser(ownerKey.getId());
+	    	
 	    }
 	    catch (Exception e)
 	    {

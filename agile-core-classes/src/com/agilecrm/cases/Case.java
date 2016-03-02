@@ -15,6 +15,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.CustomFieldData;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -162,14 +163,13 @@ public class Case extends Cursor
      *             when Domain User not exists with respect to id.
      */
     @XmlElement(name = "owner")
-    public DomainUser getOwner()
+    public DomainUserPartial getOwner()
     {
 	if (owner_key != null)
 	{
 	    try
 	    {
-		// return DomainUserUtil.getDomainUser(owner_key.getId());
-	    	return null;
+	    	return DomainUserUtil.getPartialDomainUser(owner_key.getId());
 	    }
 	    catch (Exception e)
 	    {

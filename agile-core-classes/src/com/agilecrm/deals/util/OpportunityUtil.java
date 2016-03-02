@@ -33,6 +33,8 @@ import com.agilecrm.core.api.deals.MilestoneAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.OpportunityDocument;
@@ -50,6 +52,12 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.search.Document.Builder;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -2958,4 +2966,35 @@ public class OpportunityUtil
     	return opportunityObj.name;
     }
 	
+    /**
+     * Gets a partial opportunity based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static OpportunityPartial getPartialOpportunity(List<Key<Opportunity>> ids_list)
+    {
+
+	try
+	{
+		String dbName = "Opportunity";
+		
+		
+		com.google.appengine.api.datastore.Query proj = new com.google.appengine.api.datastore.Query(dbName);
+    	proj.addProjection(new PropertyProjection("name", String.class));
+
+    	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    	Entity entity = datastore.prepare(proj).asSingleEntity();
+    	
+    	return new OpportunityPartial(entity.getKey().getId(), (String) entity.getProperty("name"));
+
+    	
+	}
+	catch (Exception e)
+	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 }

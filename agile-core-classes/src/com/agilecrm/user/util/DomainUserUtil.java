@@ -152,7 +152,6 @@ public class DomainUserUtil
 
 	try
 	{
-		System.out.println("Id = " + id);
 		
 		com.google.appengine.api.datastore.Query proj = new com.google.appengine.api.datastore.Query("DomainUser", KeyFactory.createKey("DomainUser", id));
 		
@@ -161,7 +160,6 @@ public class DomainUserUtil
 
     	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     	Entity entity = datastore.prepare(proj).asSingleEntity();
-    	System.out.println(entity);
     	
     	return new DomainUserPartial(id, (String) entity.getProperty("name"), (String) entity.getProperty("email"));
 
