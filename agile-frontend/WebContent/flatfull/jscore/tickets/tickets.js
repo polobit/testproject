@@ -615,7 +615,7 @@ var Tickets = {
 
 		    modelData.assignee = ((modelData.assignee) ? modelData.assignee : "");
 		    modelData.group = ((modelData.group) ? modelData.group : "");
-
+ 
 		   	// Update assignee in model and collection 
 			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, modelData); 					
 			
@@ -709,15 +709,13 @@ var Tickets = {
 
 	updateDataInModelAndCollection : function(id, data){
 
+	     App_Ticket_Module.ticketView.model.set(data, {silent: true});
 		// if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
 		// 	return;
         if(!App_Ticket_Module.ticketsCollection)
         return;
-		App_Ticket_Module.ticketView.model.set(data, {silent: true}); 
-
 		// get data from collection with id
 		updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
-
 		// Update data in model
 		updated_model.set(data, {silent: true});
 		

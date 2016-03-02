@@ -110,12 +110,14 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		var assigneeId = CURRENT_AGILE_USER.domainUser.id;
 
 		$('#ticket-assignee').find("optgroup[data-group-id='"+groupId+"']").find("option[value='"+assigneeId+"']").attr('selected', 'selected');
-		
+          		
 		$('.assign-to-me').hide();
 
 		Tickets.sendReqToChangeAssignee(assigneeId, groupId, App_Ticket_Module.ticketView.model.toJSON(), function(model){
-
+        
 			App_Ticket_Module.ticketView.model.set(model, {silent: true});
+
+       	showNotyPopUp('information', 'Assignee has been changed to ' + CURRENT_AGILE_USER.domainUser.name, 'bottomRight', 5000);
 		});
 		
 
