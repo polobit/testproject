@@ -10,5 +10,7 @@
 <%@page import="com.google.appengine.api.datastore.PropertyProjection"%>
 <%@page import="com.google.appengine.api.datastore.Query"%>
 <%
-  DomainUserUtil.getPartialDomainUser(5605596153774080L);
+  String id = request.getParameter("id");
+
+  DomainUserUtil.getPartialDomainUser(Long.parseLong(s));
 %>
