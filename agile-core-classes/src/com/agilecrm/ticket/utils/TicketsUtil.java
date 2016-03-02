@@ -884,7 +884,7 @@ public class TicketsUtil
 			new TicketsDocument().edit(ticket);
 
 			// Logging group change activity
-			if (oldGroupID != ticket.groupID)
+			if (oldGroupID.longValue() != ticket.groupID.longValue())
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id,
 						oldGroupID + "", (group != null) ? group.group_name : "", "groupID");
 

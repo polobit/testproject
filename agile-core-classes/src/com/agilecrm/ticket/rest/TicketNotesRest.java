@@ -191,7 +191,7 @@ public class TicketNotesRest
 				{
 					ticket.closed_time = currentTime;
 
-					// Set status to pending as it is replied by assignee
+					// Set status to pending as it is replied by assignee and closed
 					ticket.status = Status.CLOSED;
 				}
 				else

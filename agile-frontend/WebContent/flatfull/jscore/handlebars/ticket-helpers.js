@@ -379,6 +379,17 @@ Handlebars.registerHelper('convert_to_html', function(str, options) {
 
 	str = str.trim();
 
+	str = str.replace(/(?:\r\n)/g, '<br/>');
+
+	// Construct anchor links
+	try {
+		var exp = /(\b(http|https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+		str = str.replace(exp,
+				"<a href='$1' target='_blank' class='link-color'>$1</a>");
+
+	} catch (err) {
+	}
+
 	return str;
 
 });

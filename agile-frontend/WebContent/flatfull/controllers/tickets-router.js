@@ -275,8 +275,6 @@
 	 	   ticketModel = App_Ticket_Module.ticketsCollection.collection.get(id);
 	 	}
 	 
-	 	
-
 	 	Current_Ticket_ID = id;
 
 	 	Ticket_Canned_Response.fetchCollection(function(){
@@ -296,8 +294,6 @@
 		 	return;
 
 	 	});
-
-	 	
 	},
 
 	getTicketModelView: function(model){
@@ -1065,27 +1061,10 @@
 					$("time", el).timeago();
 				});
 
-				head.js("/flatfull/lib/jquery.linky.min.js", function(){
+				// head.js("/flatfull/lib/jquery.linky.min.js", function(){
 
-					// var timestamp = new Date().getTime();
-
-					// To fix the issue (Only linkify URLs that are not already identified as
-           			// `a` elements with an `href`.)
-					//$(".plain-text-comment", el).find("a").each(function(){
-					//	$(this).attr("href", $(this).attr("href") + "-" + timestamp);
-					//});
-
-					$(".plain-text-comment", el).linky();
-
-					// To fix the issue (Only linkify URLs that are not already identified as
-           			// `a` elements with an `href`.)
-					// Replace with actual valuers
-					// $(".plain-text-comment", el).find("a").each(function(){
-					//	var a = $(this).attr("href").split("-" + timestamp);
-					//	$(this).attr("href", a[0]);
-					// });
-
-				});
+				// 	$(".plain-text-comment", el).linky();
+				// });
 
 	 			if(callback)
 	 				callback();
