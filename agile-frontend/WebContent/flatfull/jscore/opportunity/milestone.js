@@ -113,6 +113,17 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
 			if (updateCollectionFlag) {
 				update_deal_collection(model.toJSON(), id, newMilestone, oldMilestone);
 			}
+		},
+		error : function(model, response) {
+			if(response && (response.responseText == "Deal not saved properly." || response.responseText == "Deal not updated properly.")) {
+				showModalConfirmation("Deals", response.responseText, function(element){
+					App_Deals.deals();	
+				},
+				"",
+				function(element){
+					App_Deals.deals();
+				}, "Ok", "");
+			}
 		}
 	});
 

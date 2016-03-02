@@ -858,7 +858,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 	}, error : function(model, err)
 	{
 		enable_save_button($(saveBtn));
-		$('#' + modalId).find('span.error-status').html(err.responseText);
+		$('#' + modalId).find('span.error-status').html("<i style='color:#B94A48;'>"+err.responseText+"</i>");
 		setTimeout(function()
 		{
 			$('#' + modalId).find('span.error-status').html('');
