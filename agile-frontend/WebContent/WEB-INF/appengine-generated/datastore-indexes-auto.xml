@@ -1,7 +1,11 @@
 <!-- Indices written at Mon, 4 May 2015 17:19:59 IST -->
 
 <datastore-indexes>
-
+    
+    <datastore-index kind="DomainUser" ancestor="true" source="manual">
+        <property name="email" direction="asc"/>
+        <property name="name" direction="asc"/>
+    </datastore-index>
 
     <!-- Used 2 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
