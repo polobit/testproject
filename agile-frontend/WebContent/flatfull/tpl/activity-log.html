@@ -1099,11 +1099,31 @@ Deleted  {{custom1}} Campaigns<br/>
 				{{custom3}} tickets have been marked as favorite
 			</small>  
 		{{/if_equals}}
+		{{#if_equals "SET_DUE_DATE" activity_type}}
+			{{#if user_name}}
+				{{user_name}} set <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> due date to {{epochToHumanDate "mmm dd, yyyy" custom2}}
+			{{else}}
+				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> due date has been set to {{epochToHumanDate "mmm dd, yyyy" custom2}}
+			{{/if}}
+			<br/><small class="activities_second_line m-t-none text-sm">
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+			</small>    
+		{{/if_equals}}
 		{{#if_equals "DUE_DATE_CHANGED" activity_type}}
 			{{#if user_name}}
 				{{user_name}} changed <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> due date to {{epochToHumanDate "dd mmm, yyyy" custom2}}
 			{{else}}
-				<a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> due date has been changed to {{epochToHumanDate "dd mmm, yyyy" custom2}}
+				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> due date has been changed to {{epochToHumanDate "dd mmm, yyyy" custom2}}
+			{{/if}}
+			<br/><small class="activities_second_line m-t-none text-sm">
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+			</small>    
+		{{/if_equals}}
+		{{#if_equals "DUE_DATE_REMOVED" activity_type}}
+			{{#if user_name}}
+				{{user_name}} removed <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> due date
+			{{else}}
+				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> due date has been removed
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
 				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}

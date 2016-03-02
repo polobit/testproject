@@ -9,9 +9,17 @@
 function isValidForm(form) {
 
     jQuery.validator.addMethod("choosen-select-input", function(value, element){
-           var label_value=$("#bulk-labels .chosen-select").val();
-           if(label_value)
+
+
+    		if(!$('#bulk-labels').length)
+    			return true;
+    		
+        	var label_value=$("#bulk-labels .chosen-select").val();
+
+           	if(label_value)
             	return true;			
+			
+			return false;
 		}," This field is required.");
 
 	// Credit card validation to check card is valid for next 3 months

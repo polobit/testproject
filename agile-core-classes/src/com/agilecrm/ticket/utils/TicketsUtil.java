@@ -162,7 +162,7 @@ public class TicketsUtil
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
-		
+
 		return null;
 	}
 
@@ -908,7 +908,15 @@ public class TicketsUtil
 		// Fetching ticket object by its id
 		Tickets ticket = TicketsUtil.getTicketByID(ticketID);
 
-		long oldDueDate = (ticket.due_time != null) ? ticket.due_time : 0l;
+		boolean isDuedateChanged = false;
+
+		long oldDueDate = 0l;
+
+		if (ticket.due_time != null)
+		{
+			isDuedateChanged = true;
+			oldDueDate = ticket.due_time;
+		}
 
 		ticket.due_time = dueDate;
 
@@ -918,9 +926,11 @@ public class TicketsUtil
 		// Updating search document
 		new TicketsDocument().edit(ticket);
 
+		ActivityType activityType = (isDuedateChanged) ? ActivityType.DUE_DATE_CHANGED : ActivityType.SET_DUE_DATE;
+
 		// Logging ticket assignee changed activity
-		ActivityUtil.createTicketActivity(ActivityType.DUE_DATE_CHANGED, ticket.contactID, ticket.id, oldDueDate + "",
-				dueDate + "", "due_date");
+		ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, oldDueDate + "", dueDate + "",
+				"due_date");
 
 		return ticket;
 	}
@@ -1112,6 +1122,10 @@ public class TicketsUtil
 
 		// Updating search document
 		new TicketsDocument().edit(ticket);
+
+		// Logging ticket assignee changed activity
+		ActivityUtil.createTicketActivity(ActivityType.DUE_DATE_REMOVED, ticket.contactID, ticket.id, "", "",
+				"due_date");
 
 		// Logging activity
 		return ticket;

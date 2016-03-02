@@ -1068,7 +1068,7 @@ public class TicketsRest
 	@PUT
 	@Path("/remove-due-date")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets removeDueate(@QueryParam("id") Long ticketID)
+	public Tickets removeDuedate(@QueryParam("id") Long ticketID)
 	{
 		try
 		{
