@@ -189,7 +189,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 				if(mile.lost_milestone){
 					html += Handlebars.compile('<option value="{{id}}_{{lost_milestone}}" style="display:none;">{{lost_milestone}}</option>')({id : mile.id, lost_milestone : mile.lost_milestone});
 				}
-				$('#' + id, el).closest('.control-group').find('label').text('Milestone');
+				$('#' + id, el).closest('.control-group').find('label').html('Milestone<span class="field_req">*</span>');
 			}
 			else {
 				$.each(jsonModel,function(index,mile){
@@ -209,7 +209,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					}
 					html+='</optgroup>';
 				});
-				$('#' + id, el).closest('.control-group').find('label').text('Track & Milestone');
+				$('#' + id, el).closest('.control-group').find('label').html('Track & Milestone<span class="field_req">*</span>');
 			}
 			
 			$('#' + id, el).html(html);
