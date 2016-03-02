@@ -30,9 +30,9 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                     <span for="landingpagename" generated="true" class="help-inline" style="display: block;padding: 6px;padding-left: 10px;"></span>
 								</div>
 								<div class="col-md-3 col-sm-3 col-xs-4">
-									<span id="landingpagename-msg" class="text-center"></span>
-								</div>
-								<div class="col-md-4 col-sm-5 col-xs-4">
+                                    <span id="landingpagename-msg" class="text-center"></span>
+                                </div>
+                                <div class="col-md-4 col-sm-5">
                                <!--
                                 {{#is_mobile}}
                                 
@@ -42,19 +42,28 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                     <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button>
                                 {{/is_mobile}}
                                 -->
-                                <div><button class="btn btn-primary btn-sm  right pos-rlt m-r-xs saveLandingPageButton" >Save Page
+                                <div class="btn-group right m-r-xs m-r-n-xs">
+                                <div class="lpPreviewView pull-left p-r-sm p-t-xs" data-trigger="#landingpageFullPreview"><a href="#"><i class="fa fa-eye fa-lg"></i> <span>Preview</span></a></div>
+
+                                <button class="btn btn-primary btn-sm btn-addon saveLandingPageButton" ><i class="icon-plus-sign"></i>Save Page
                                 </button>
+                                <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
+                                                <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" style="min-width:0px;left:76px;">
+                                            <li>
+                                                <a href="#landing-page-copy/{{templateId}}" id="duplicate-landingpage-top">
+                                                    <i class="fa fa-clipboard" style="width: 20px;"></i>Create a Copy</a>
+                                            </li>
+                                </ul>
                                     </div>
-
-                                <div style="display: block; " class="lp-menu-nav pull-right p-r-sm p-t-xs">
-                               <div class="lpPreviewView" data-trigger="#landingpageFullPreview"><a href="#" ><i class="fa fa-eye fa-lg"></i> <span>Preview</span></a></div></div>
-
-								
+        
                                     </div>
-								</div>
+                                </div>
                                
                                 
-                           		<div class="save-workflow-img right m-r-xs m-t-sm pos-rlt inline-block"></div>
+                                <div class="save-workflow-img right m-r-xs m-t-sm pos-rlt inline-block"></div>
+
 							</div>
 						</div>
                     

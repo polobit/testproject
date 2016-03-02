@@ -415,6 +415,29 @@ angular.module('builder.projects', [])
 
             project.save();
             $rootScope.$broadcast('builder.project.cleared');
+		},
+
+		/**
+		* Loads existing page from datastore
+		* @author reddy
+		*/
+		copyExistingPage: function(pageId) {
+		
+            this.getPageFromDatastore(pageId).success(function(data) { 
+            	var returnDataFormat = {"pages": []};
+            	returnDataFormat.pages[0] = data;
+            	delete returnDataFormat.pages[0].id;
+            	returnDataFormat.pages[0].name = "index";
+				project.active = returnDataFormat;
+
+            	if (project.active) {
+                	project.changePage(localStorage.get('activePage'));
+            	} else {
+                	project.createNewProject();
+                	project.changePage('index');
+            	}
+			});
+
 		}
 	};
 
