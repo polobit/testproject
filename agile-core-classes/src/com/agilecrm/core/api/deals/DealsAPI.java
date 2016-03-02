@@ -252,7 +252,7 @@ public class DealsAPI
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 	//Some times milestone comes as null from client side, if it is null we can'tsave it.
-	if(opportunity != null && opportunity.milestone == null)
+	if(opportunity != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
 	{
 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Deal not saved properly.").build());
 	}
@@ -285,7 +285,7 @@ public class DealsAPI
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 	//Some times milestone comes as null from client side, if it is null we can'tsave it.
-	if(opportunity != null && opportunity.id != null && opportunity.milestone == null)
+	if(opportunity != null && opportunity.id != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
 	{
 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Deal not updated properly.").build());
 	}
