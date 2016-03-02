@@ -39,6 +39,7 @@ public class DealCSVExport
     public static final String RELATED_TO = "Related Contacts";
     public static final String SOURCE = "Deal Source";
     public static final String LOSSREASON = "Loss Reason";
+    public static final String CREATED_DATE = "Created Date";
 
     private static final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -118,6 +119,12 @@ public class DealCSVExport
     	if(reason!=null)
     	str[indexMap.get(LOSSREASON)] = reason.getLabel();
     	}
+	    if (deal.created_time != null)
+	    {
+		Date d = new Date();
+		d.setTime(deal.created_time * 1000);
+		str[indexMap.get(CREATED_DATE)] = date.format(d);
+	    }
 
 	}
 	catch (ParseException e)
