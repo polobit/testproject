@@ -5,7 +5,7 @@
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page contentType="text/html; charset=UTF-8" %>
 <%
-
+/*
 	  if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
@@ -16,7 +16,7 @@
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
 	}
- 
+ */
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");
 
@@ -225,12 +225,16 @@ if(isSafari && isWin)
   var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
 $(document).ready(function() {
-	
+	 var number = Math.round(Math.random()*10);
+	 console.log(number);
+        	if(number == 8)
+        	number = 1;
   	var newImg = new Image;
     newImg.onload = function() {
     $("body").css("background-image","url('"+this.src+"')");
      }
-    newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/agile-registration-page-high.png';
+   newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/signup'+number+'.jpg';
+    alert(newImg.src);
 
     if($("#error-area").text().trim())
     	$("#error-area").slideDown("slow");
