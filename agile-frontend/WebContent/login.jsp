@@ -120,8 +120,8 @@ String logo_url = accountPrefs.logo;
 
 <style>
 body {
-   background-image: url('<%=S3_STATIC_IMAGE_PATH%>/images/agile-login-page-low.jpg');
-  background-repeat: no-repeat;
+  /* background-image: url('<%=S3_STATIC_IMAGE_PATH%>/images/agile-login-page-low.jpg');
+  */background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% 100%;
   background-attachment: fixed;
@@ -310,9 +310,10 @@ if(isSafari && isWin)
         newImg.onload = function() {
         
         $("body").css("background-image","url('"+this.src+"')");
-        alert(this.src);
+       
         }
-        newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/agile-login-page-high.png';// login'+number+'.jpg'
+        newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/login'+number+'.jpg';
+        // agile-login-page-high.png
 
 			// Pre load dashlet files when don is active
 			preload_dashlet_libs();
