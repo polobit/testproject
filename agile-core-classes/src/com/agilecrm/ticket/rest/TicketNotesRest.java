@@ -96,7 +96,7 @@ public class TicketNotesRest
 			if (ticket == null)
 				throw new Exception("Ticket has been deleted.");
 
-			Status status = ticket.status;
+			Status currentStatus = ticket.status, newStatus = Status.PENDING;
 
 			// Converting html text to plain with jsoup
 			// Document doc = Jsoup.parse(notes.html_text, "UTF-8");
@@ -119,7 +119,7 @@ public class TicketNotesRest
 				{
 					// Logging status changed activity
 					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-							status.toString(), Status.CLOSED.toString(), "status");
+							currentStatus.toString(), Status.CLOSED.toString(), "status");
 
 					ticket.closed_time = currentTime;
 					ticket.status = Status.CLOSED;
@@ -152,7 +152,7 @@ public class TicketNotesRest
 					ticket.first_replied_time = currentTime;
 
 				// Checking if assignee is replying to new ticket for first time
-				if (status == Status.NEW && ticket.assignee_id == null)
+				if (currentStatus == Status.NEW && ticket.assignee_id == null)
 				{
 					ticket.assignee_id = domainUserKey;
 					ticket.assigneeID = domainUserKey.getId();
@@ -160,8 +160,8 @@ public class TicketNotesRest
 					ticket.assigned_to_group = false;
 
 					// Logging status changed activity
-					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-							status.toString(), Status.PENDING.toString(), "status");
+//					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+//							status.toString(), Status.PENDING.toString(), "status");
 				}
 				else
 				{
@@ -187,22 +187,17 @@ public class TicketNotesRest
 						ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID,
 								ticket.id, "", SessionManager.get().getName(), "assigneeID");
 					}
-
-					if (Status.OPEN == status)
-						// Logging status changed activity
-						ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID,
-								ticket.id, Status.OPEN.toString(), Status.PENDING.toString(), "status");
 				}
 
-				// If tickcet is already closed then incr. no of re opens
+				// If ticket is already closed then incr. no of re opens
 				// attr. and log ticket open activity
-				if (status == Status.CLOSED && !notes.close_ticket)
+				if (currentStatus == Status.CLOSED && !notes.close_ticket)
 				{
 					ticket.no_of_reopens += 1;
 
 					// Logging status changed activity
-					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-							Status.CLOSED.toString(), Status.PENDING.toString(), "status");
+//					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+//							Status.CLOSED.toString(), Status.PENDING.toString(), "status");
 				}
 
 				// If send reply and close ticket is selected
@@ -213,10 +208,11 @@ public class TicketNotesRest
 					// Set status to pending as it is replied by assignee and
 					// closed
 					ticket.status = Status.CLOSED;
-
+					
+					newStatus =  Status.CLOSED;
 					// Logging status changed activity
-					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-							status.toString(), Status.CLOSED.toString(), "status");
+//					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+//							status.toString(), Status.CLOSED.toString(), "status");
 				}
 				else
 					// Set status to pending as it is replied by assignee
@@ -251,7 +247,11 @@ public class TicketNotesRest
 
 				// Execute note created by user trigger
 				TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);
-
+				
+				// Logging ticket status change activity
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+						currentStatus.toString(), newStatus.toString(), "status");
+				
 				// Logging public notes activity
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id,
 						html_text, plain_text, "html_text");

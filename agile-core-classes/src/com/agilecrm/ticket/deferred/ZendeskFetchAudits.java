@@ -96,7 +96,7 @@ public class ZendeskFetchAudits implements DeferredTask
 					continue;
 				}
 
-				DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+				DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("sasi@clicdesk.com");
 
 				if (domainUser != null)
 					domainUsersMap.put(id, domainUser);

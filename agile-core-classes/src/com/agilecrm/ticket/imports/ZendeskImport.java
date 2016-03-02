@@ -88,8 +88,8 @@ public class ZendeskImport
 				continue;
 			}
 
-			DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
-
+			DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("sasi@clicdesk.com");
+			
 			if (domainUser != null)
 				domainUsersMap.put(id, domainUser);
 		}
@@ -227,10 +227,10 @@ public class ZendeskImport
 			new TicketsDocument().add(ticket);
 
 			// Logging ticket created activity
-			ActivityUtil.createTicketActivity(ActivityType.TICKET_CREATED, ticket.contactID,
-					ticket.id, "", ticketJSON.getString("description"), "last_reply_text");
-//			activity.created_time = date.getTime();
-//			activity.save();
+			ActivityUtil.createTicketActivity(ActivityType.TICKET_CREATED, ticket.contactID, ticket.id,
+					ticketJSON.getString("description"), ticketJSON.getString("description"), "last_reply_text");
+			// activity.created_time = date.getTime();
+			// activity.save();
 
 			ZendeskFetchAudits fetchAudits = new ZendeskFetchAudits(ticket, json.toString());
 			TaskOptions options = TaskOptions.Builder.withPayload(fetchAudits);
