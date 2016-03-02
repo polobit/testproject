@@ -192,7 +192,7 @@
                       </a>
                     </div>
                       
-                    <input type="text" class="form-control text-xs" id="ticket_change_sla" placeholder="Select Date" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}" {{#if_equals status "CLOSED"}}READONLY{{/if_equals}}/>
+                    <input "type="text" class="form-control text-xs" id="ticket_change_sla" placeholder="Select Date" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
 
                     <div class="col-md-12 p-n">
                       <div class="col-md-3 p-n">
@@ -426,9 +426,9 @@
                     {{#if label_matched_canned_responses}}<a href="javascript:void(0);" onclick="$('.matched-canned-responses-list').toggle();" class="link-color text-sm cursor-pointer border-highlight-light pull-right">{{label_matched_canned_responses.length}} Recommendation{{#if_equals label_matched_canned_responses.length "1"}}{{else}}s{{/if_equals}}</a>{{/if}}
 
                     {{#if_equals reply_type "reply"}}
-                    <div class="btn-group dropdown p-none">
-                        <button class="btn btn-gray btn-sm send-reply" data-loading-text="Sending...">Send Reply</button>
-                        <button class="btn btn-gray btn-sm" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                    <div class="btn-group dropdown p-none ticket-send-reply">
+                        <button class="btn btn-gray btn-sm send-reply"{{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} data-loading-text="Sending...">Send Reply</button>
+                        <button class="btn btn-gray btn-sm" data-toggle="dropdown"  {{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} aria-expanded="false"><span class="caret"></span></button>
                         <ul class="dropdown-menu">
                           <li><a href="javascript:void(0);" class="send-reply close-ticket">Send Reply &amp; Close Ticket</a></li>
                         </ul>
