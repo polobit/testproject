@@ -84,8 +84,6 @@ public class TicketGroupRest
 
 			List<DomainUser> domainUsers = DomainUserUtil.dao.fetchAllByKeys(domainUserKeyList);
 
-			NamespaceManager.set(oldnamespace);
-
 			return domainUsers;
 		}
 		catch (Exception e)

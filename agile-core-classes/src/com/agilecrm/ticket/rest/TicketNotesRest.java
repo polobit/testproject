@@ -177,7 +177,7 @@ public class TicketNotesRest
 
 				// If tickcet is already closed then incr. no of re opens
 				// attr. and log ticket open activity
-				if (status == Status.CLOSED)
+				if (status == Status.CLOSED && !notes.close_ticket)
 				{
 					ticket.no_of_reopens += 1;
 

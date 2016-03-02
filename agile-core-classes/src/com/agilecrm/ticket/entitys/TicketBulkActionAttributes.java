@@ -7,13 +7,10 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.ticket.utils.TicketBulkActionUtil.TicketBulkActionType;
-import com.google.gdata.data.extensions.Labels;
 
 /**
  * Utility class to receive attributes from client side to execute bulk
