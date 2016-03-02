@@ -1995,11 +1995,11 @@ var portlet_utility = {
 				base_model.get("size_y"), base_model.get("column_position"),
 				base_model.get("row_position"));
 
-		gridster.set_dom_grid_height();
+		/*gridster.set_dom_grid_height();
 		window
 				.scrollTo(
 						0,
-						((parseInt($('#' + portletId).attr('data-row')) - 1) * 200) + 5);
+						((parseInt($('#' + portletId).attr('data-row')) - 1) * 200) + 5);*/
 
 	},
 
