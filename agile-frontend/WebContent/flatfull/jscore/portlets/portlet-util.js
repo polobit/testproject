@@ -1059,7 +1059,7 @@ var portlet_utility = {
 							LIB_PATH + 'lib/jquery-ui.min.js',
 							'lib/fullcalendar.min.js',
 							function() {
-								$('.portlet_body_calendar', $('#portlet-res'))
+								$('.portlet_body_calendar', $("#ui-id-"+column_position+"-"+row_position))
 										.attr(
 												'id',
 												'p-body-calendar'

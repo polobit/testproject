@@ -299,7 +299,7 @@ function set_up_portlets(el, portlets_el){
 						var css = {"height" : height+"px", "max-height" : height+"px"};
 
 						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css(css);
-						$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(el));	
+						$('#calendar_container',$(el)).fullCalendar('option','aspectRatio',getaspectratio(el));	
 						
 						var top=parseInt($(el).find('.fc-widget-content').css('height'))/2-7;
 						$(el).find('.fc-day-number').css('top',top);
@@ -397,8 +397,8 @@ function set_up_portlets(el, portlets_el){
 				$('.portlet_body_calendar').each(function()
 				{
 					var that=$(this);
-					if($("#calendar_container").find('.fc-widget-header').length!=0)
-					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
+					if($("#calendar_container",that).find('.fc-widget-header').length!=0)
+					$('#calendar_container',that).fullCalendar('option','aspectRatio',getaspectratio(that));
 					var weeksArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 					$(this).find('#calendar_container').find('.fc-widget-header').each(function(index)
 					{

@@ -949,7 +949,7 @@ function initializeAddPortletsListeners() {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function(data) {  
-            	if(p_name=='Mini Calendar'){
+            	/*if(p_name=='Mini Calendar'){
             	$.each(data,function(index,p){ 
             		if(p.name=='Mini Calendar'){
             			var route=p.is_routeadded;
@@ -971,7 +971,7 @@ function initializeAddPortletsListeners() {
 				//$(".add_to_all").addClass('disabled');
 			}
             	
-            } 
+            } */
 					
 			
 

@@ -110,8 +110,13 @@ $("#updateActivityModal").on(
 												var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
 												a.setHours(0,0,0,0);
 												_agile_set_prefs("current_date_calendar",a);
-										       $('#calendar_container').fullCalendar( 'refetchEvents' );
+										       $('.portlet_body_calendar').each(function(){
+										       	var that=$(this);
+										       	if(that.parents('.gs-w').attr('data-col')+that.parents('.gs-w').attr('data-row')==App_Portlets.currentPosition)
+										       	$('#calendar_container',that).fullCalendar( 'refetchEvents' );
 										       App_Portlets.refetchEvents = true;
+										       });
+										       
 										       //_agile_delete_prefs('current_date_calendar');
 									      }
 										else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
@@ -979,9 +984,12 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 								a.setHours(0,0,0,0);
 								_agile_set_prefs("current_date_calendar",a);
 							}
-							$('#calendar_container').fullCalendar( 'refetchEvents' );
-						       App_Portlets.refetchEvents = true;
-						       //_agile_delete_prefs('current_date_calendar');
+						$('.portlet_body_calendar').each(function(){
+										       	var that=$(this);
+										       	if(that.parents('.gs-w').attr('data-col')+that.parents('.gs-w').attr('data-row')==App_Portlets.currentPosition)
+										       	$('#calendar_container',that).fullCalendar( 'refetchEvents' );
+										       App_Portlets.refetchEvents = true;
+										       });
 					      }
 						else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
 						{

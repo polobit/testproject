@@ -117,7 +117,7 @@ public class PortletsAPI {
 				List<DomainUser> domainusers=du.getUsers();
 				for(DomainUser domainuser:domainusers)	{
 					boolean flag=true;
-					if(portlet.name.equalsIgnoreCase("Mini Calendar"))	{
+					/*if(portlet.name.equalsIgnoreCase("Mini Calendar"))	{
 						AgileUser aUser = AgileUser.getCurrentAgileUserFromDomainUser(domainuser.id);
 						if(aUser!=null)
 					  p=PortletUtil.getPortlet(portlet.name,aUser.id);
@@ -136,7 +136,7 @@ public class PortletsAPI {
 						  
 					  }
 					  continue;
-					}
+					}*/
 					portlet.saveAll(domainuser);
 				}
 				if(portlet.prefs!=null){
