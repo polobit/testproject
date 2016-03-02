@@ -251,7 +251,7 @@ public class CronUtil
 					// Run cron job
 					executeTasklets(cronList, Cron.CRON_TYPE_TIME_OUT, null, count);
 					long end = System.currentTimeMillis();
-					System.out.println("Took : " + ((end - start) / 1000) + " seconds to process one cron record in queue");
+					System.out.println("Took : " + ((end - start)) + " milli seconds to process one cron record in queue");
 				}
 				catch(DatastoreTimeoutException e){
 					e.printStackTrace();
