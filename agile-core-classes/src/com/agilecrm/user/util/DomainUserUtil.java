@@ -152,6 +152,8 @@ public class DomainUserUtil
 
 	try
 	{
+		System.out.println("Id = " + id);
+		
 		com.google.appengine.api.datastore.Query proj = new com.google.appengine.api.datastore.Query("DomainUser", KeyFactory.createKey("DomainUser", id));
 		
     	proj.addProjection(new PropertyProjection("email", String.class));
@@ -166,6 +168,7 @@ public class DomainUserUtil
 	}
 	catch (Exception e)
 	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    e.printStackTrace();
 	    return null;
 	}
