@@ -72,7 +72,7 @@ public class TicketsDocument implements BuilderInterface
 			{
 				document.addField(Field.newBuilder().setName("assignee_id")
 						.setText(ticket.getAssignee_id().getId() + ""));
-				
+
 				try
 				{
 					document.addField(Field.newBuilder().setName("assigned_time")
@@ -171,11 +171,8 @@ public class TicketsDocument implements BuilderInterface
 			document.addField(Field.newBuilder().setName("labels").setText(labelsString.toString().trim()));
 
 			// Setting search tokens
-			document.addField(Field
-					.newBuilder()
-					.setName("search_tokens")
-					.setText(requesterName + " "
-									+ requesterEmail + " " + ticketID));
+			document.addField(Field.newBuilder().setName("search_tokens")
+					.setText(requesterName + " " + requesterEmail + " " + ticketID));
 
 			System.out.println(getIndex().put(document));
 
@@ -208,31 +205,34 @@ public class TicketsDocument implements BuilderInterface
 	{
 		try
 		{
-//			Tickets ticket = (Tickets) entity;
-//			Document document = getIndex().get(ticket.id + "");
-//
-//			String existingMailContent = "";
-//
-//			try
-//			{
-//				existingMailContent = document.getOnlyField("mail_content").getText();
-//			}
-//			catch (Exception e)
-//			{
-//				e.printStackTrace();
-//			}
-//
-//			System.out.println("existingMailContent: " + existingMailContent);
-//
-//			if (StringUtils.isBlank(existingMailContent))
-//			{
-//				add(ticket);
-//				return;
-//			}
-//
-//			ticket.last_reply_text += existingMailContent;
-//
-//			System.out.println("ticket.last_reply_text: " + ticket.last_reply_text);
+			// Tickets ticket = (Tickets) entity;
+			// Document document = getIndex().get(ticket.id + "");
+			//
+			// String existingMailContent = "";
+			//
+			// try
+			// {
+			// existingMailContent =
+			// document.getOnlyField("mail_content").getText();
+			// }
+			// catch (Exception e)
+			// {
+			// e.printStackTrace();
+			// }
+			//
+			// System.out.println("existingMailContent: " +
+			// existingMailContent);
+			//
+			// if (StringUtils.isBlank(existingMailContent))
+			// {
+			// add(ticket);
+			// return;
+			// }
+			//
+			// ticket.last_reply_text += existingMailContent;
+			//
+			// System.out.println("ticket.last_reply_text: " +
+			// ticket.last_reply_text);
 
 			add((Tickets) entity);
 		}
@@ -289,7 +289,7 @@ public class TicketsDocument implements BuilderInterface
 			cursor = Cursor.newBuilder().setPerResult(true).build(URLDecoder.decode(cursorString));
 
 		QueryOptions options = QueryOptions.newBuilder().setCursor(cursor).setReturningIdsOnly(true).setLimit(limit)
-				.build();
+				.setNumberFoundAccuracy(10000).build();
 		Query query = null;
 
 		// SortDirection direction = sortField.startsWith("-") ?
@@ -373,7 +373,8 @@ public class TicketsDocument implements BuilderInterface
 	 */
 	public int countRows(String queryString)
 	{
-		QueryOptions options = QueryOptions.newBuilder().setReturningIdsOnly(true).setLimit(1000).build();
+		QueryOptions options = QueryOptions.newBuilder().setReturningIdsOnly(true).setLimit(1000)
+				.setNumberFoundAccuracy(10000).build();
 
 		Query query = Query.newBuilder().setOptions(options).build(queryString);
 
