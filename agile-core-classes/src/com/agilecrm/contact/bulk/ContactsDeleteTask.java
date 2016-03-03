@@ -87,7 +87,7 @@ public class ContactsDeleteTask implements DeferredTask
 
     }
 
-    private void logActivity() throws JSONException
+    public void logActivity() throws JSONException
     {
 	System.out.println("contacts : " + fetcher.getContactCount());
 	System.out.println("companies : " + fetcher.getCompanyCount());
