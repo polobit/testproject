@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.ticket.imports.ZendeskImport;
 
-@Path("/api/bulk-actions/tickets/imports")
+@Path("/api/ticket-module/backend/imports")
 public class TicketImportsRest
 {
 	@POST
