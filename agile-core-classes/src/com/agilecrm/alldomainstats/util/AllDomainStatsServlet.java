@@ -32,7 +32,7 @@ public class AllDomainStatsServlet extends HttpServlet {
 		   DateUtil dateUtil=new DateUtil();
 		   
 		 //yesterday mid night time in millisecond
-		   long yesterdayTime = dateUtil.removeDays(0).toMidnight().getCalendar().getTimeInMillis();
+		   long yesterdayTime = dateUtil.removeDays(1).toMidnight().getCalendar().getTimeInMillis();
 		   
 		  // Yesterday date in "EEEE, dd MMM yyyy" format
 		   String current_date= com.campaignio.reports.DateUtil.getDateInGivenFormat(yesterdayTime,"EEEE, dd MMM yyyy", "IST");
@@ -61,7 +61,7 @@ public class AllDomainStatsServlet extends HttpServlet {
 			   			    "Sent using Agile");
 		   		    textMail = EmailUtil.appendAgileToText(textMail, "Sent using", emailSender.isEmailWhiteLabelEnabled());
 
-			   		   emailSender.sendEmail("info@agilecrm.com", "Admin", "prashannjeet@gmail.com", "prashannjeet@agilecrm.com", null, "All Domain Stats Report for "+current_date, null, 
+			   		   emailSender.sendEmail("care@agilecrm.com", "Admin", "rahul@agilecrm.com", "prashannjeet@agilecrm.com", null, "All Domain Stats Report for "+current_date, null, 
 			   				textMail,"Hi", null, new ArrayList<Long>(),new ArrayList<BlobKey>());
 
 			   		}
