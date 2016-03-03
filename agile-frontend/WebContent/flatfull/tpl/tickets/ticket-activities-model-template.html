@@ -87,7 +87,7 @@
 
 		    {{#if_equals activity_type 'TICKET_ASSIGNEE_CHANGED'}}
 	        	Ticket assignee changed to <span class="first-letter-cap">
-		            	{{new_assignee.name}}
+		            	{{custom2}}
 		            </span>
 		    {{/if_equals}}
 
@@ -108,16 +108,27 @@
 	         {{/if_equals}}
 		                        
 	        {{#if_equals activity_type 'TICKET_LABEL_ADD'}}
-	            Label added - <label class="label bg-success m-l-xs">{{get_label_from_label_id custom2}}</label>
+	            Label added - <label class="label bg-success m-l-xs">{{custom2}}</label>
 	         {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_LABEL_REMOVE'}}
-	            Label removed - <label class="label bg-info m-l-xs">{{get_label_from_label_id custom2}}</label>
+	            Label removed - <label class="label bg-info m-l-xs">{{custom2}}</label>
 	         {{/if_equals}}
 
 	         {{#if_equals activity_type 'TICKET_CC_EMAIL_ADD'}}
 	            CC email added - <label class="label bg-success m-l-xs">{{custom2}}</label>
 	         {{/if_equals}}
+	         {{#if_equals activity_type 'SET_DUE_DATE'}}
+		         <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
+		          Due date set to {{epochToHumanDate "mmm dd, yyyy" custom2}}
+		     {{/if_equals}}
+		     {{#if_equals activity_type 'DUE_DATE_REMOVED'}}
+		         <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
+				Due date removed
+		     {{/if_equals}}
+		         {{#if_equals activity_type 'TICKET_NOTES_FORWARD'}}
+		             Ticket has been forwarded to {{custom2}}
+		     {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_CC_EMAIL_REMOVE'}}
 	            CC email removed - <label class="label bg-info m-l-xs">{{custom2}}</label>
@@ -143,6 +154,7 @@
 	            <span class="first-letter-cap inline-block">{{user.name}}</span>  Changed due date to {{epochToHumanDate "mm/dd/yyyy" custom2}}
 	      		</span>
 	        {{/if_equals}}
+	        
 
 		 </div>
 
