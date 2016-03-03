@@ -12,9 +12,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.CustomFieldData;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
@@ -132,13 +134,9 @@ public class Case extends Cursor
      * @return List&lt;Contact&gt;
      */
     @XmlElement
-    public List<Contact> getContacts()
+    public List<ContactPartial> getContacts()
     {
-	/*Objectify ofy = ObjectifyService.begin();
-	List<Contact> contactsList = new ArrayList<Contact>();
-	contactsList.addAll(ofy.get(this.related_contacts_key).values());
-	return contactsList;*/
-    	return null;
+    	return ContactUtil.getPartialContacts(this.related_contacts_key);
     }
 
     /**
@@ -178,39 +176,6 @@ public class Case extends Cursor
 	}
 
 	return null;
-    }
-
-    /**
-     * Get link of owner image
-     * 
-     * @return url of the image
-     * @throws Exception
-     */
-    @XmlElement
-    public String getOwnerPic() throws Exception
-    {
-	AgileUser agileUser = null;
-	UserPrefs userPrefs = null;
-
-	try
-	{
-	    // Get owner pic through agileuser prefs
-	    /*if (owner_key != null)
-		agileUser = AgileUser.getCurrentAgileUserFromDomainUser(owner_key.getId());
-
-	    if (agileUser != null)
-		userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-
-	    if (userPrefs != null)
-		return userPrefs.pic;*/
-		return null;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
-	return "";
     }
 
     /**

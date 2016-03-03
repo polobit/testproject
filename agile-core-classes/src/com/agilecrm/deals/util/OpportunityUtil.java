@@ -58,6 +58,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PropertyProjection;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -65,6 +66,7 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
+import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
 
 /**
  * <code>OpportunityUtil</code> is the utility class to fetch opportunities with
@@ -2972,22 +2974,35 @@ public class OpportunityUtil
      * @param id
      * @return
      */
-    public static OpportunityPartial getPartialOpportunity(List<Key<Opportunity>> ids_list)
+    public static List<OpportunityPartial> getPartialOpportunities(List<Key<Opportunity>> ids_list)
     {
-
+    	List<OpportunityPartial> list = new ArrayList<OpportunityPartial>();
 	try
 	{
+		List<com.google.appengine.api.datastore.Key> keys = new ArrayList<com.google.appengine.api.datastore.Key>();
+		Iterator<Key<Opportunity>> iteartor = ids_list.iterator();
+		while (iteartor.hasNext()) {
+			Key<com.agilecrm.deals.Opportunity> key = (Key<com.agilecrm.deals.Opportunity>) iteartor.next();
+			keys.add(KeyFactory.createKey(key.getKind(), key.getId()));
+		}
+		
+		
 		String dbName = "Opportunity";
 		
-		
 		com.google.appengine.api.datastore.Query proj = new com.google.appengine.api.datastore.Query(dbName);
+		proj.addFilter("__key__", FilterOperator.IN, keys);
+		
     	proj.addProjection(new PropertyProjection("name", String.class));
 
-    	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    	Entity entity = datastore.prepare(proj).asSingleEntity();
+    	DatastoreService datastore = CachingDatastoreServiceFactory.getDatastoreService();
+    	Iterator<Entity> entities = datastore.prepare(proj).asIterable().iterator();
+    	while (entities.hasNext()) {
+			Entity entity2 = (Entity) entities.next();
+			
+			list.add(new OpportunityPartial(entity2.getKey().getId(), (String) entity2.getProperty("name")));
+		}
     	
-    	return new OpportunityPartial(entity.getKey().getId(), (String) entity.getProperty("name"));
-
+    	return list;
     	
 	}
 	catch (Exception e)

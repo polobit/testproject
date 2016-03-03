@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
@@ -32,6 +33,9 @@ import com.agilecrm.contact.email.deferred.LastContactedDeferredTask;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.exception.DuplicateContactException;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -50,7 +54,13 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.agile.CheckCampaign;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PropertyProjection;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.SearchException;
@@ -59,6 +69,7 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
+import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
 
 /**
  * <code>ContactUtil</code> is a utility class to process the data of contact
@@ -1856,4 +1867,67 @@ public class ContactUtil
 	return image_email;
     }
     
+    /**
+     * Gets a partial opportunity based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static List<ContactPartial> getPartialContacts(List<Key<Contact>> ids_list)
+    {
+    	List<ContactPartial> list = new ArrayList<ContactPartial>();
+    	if(ids_list == null || ids_list.size() == 0)
+    		 return list;
+	try
+	{
+		List<com.google.appengine.api.datastore.Key> keys = new ArrayList<com.google.appengine.api.datastore.Key>();
+		Iterator<Key<Contact>> iteartor = ids_list.iterator();
+		while (iteartor.hasNext()) {
+			Key<Contact> key = (Key<Contact>) iteartor.next();
+			keys.add(KeyFactory.createKey(key.getKind(), key.getId()));
+		}
+		
+		
+		String dbName = "Contact";
+		
+		com.google.appengine.api.datastore.Query proj = new com.google.appengine.api.datastore.Query(dbName);
+		proj.addFilter("__key__", FilterOperator.IN, keys);
+		
+    	proj.addProjection(new PropertyProjection("first_name", String.class));
+    	proj.addProjection(new PropertyProjection("last_name", String.class));
+    	proj.addProjection(new PropertyProjection("name", String.class));
+    	proj.addProjection(new PropertyProjection("type", String.class));
+
+    	DatastoreService datastore = CachingDatastoreServiceFactory.getDatastoreService();
+    	Iterator<Entity> entities = datastore.prepare(proj).asIterable().iterator();
+    	while (entities.hasNext()) {
+			Entity entity2 = (Entity) entities.next();
+			
+			String first_name = null, last_name = null, name = null, type = null;
+			if(entity2.hasProperty("first_name"))
+				first_name = (String) entity2.getProperty("first_name");
+			if(entity2.hasProperty("last_name"))
+				last_name = (String) entity2.getProperty("last_name");
+			if(entity2.hasProperty("name"))
+				name = (String) entity2.getProperty("name");
+			
+			if(entity2.hasProperty("type"))
+				type = (String) entity2.getProperty("type");
+			
+			list.add(new ContactPartial(entity2.getKey().getId(), first_name, last_name, name, type));
+		}
+    	
+    	
+    	
+    	return list;
+
+    	
+	}
+	catch (Exception e)
+	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 }

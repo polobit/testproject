@@ -19,10 +19,12 @@ import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
@@ -332,13 +334,14 @@ public class Opportunity extends Cursor implements Serializable
      * @return list of contact objects as xml element related with a deal.
      */
     @XmlElement
-    public List<Contact> getContacts()
+    public List<ContactPartial> getContacts()
     {
-	Objectify ofy = ObjectifyService.begin();
-	List<Contact> contacts_list = new ArrayList<Contact>();
-	contacts_list.addAll(ofy.get(this.related_contacts).values());
-	return contacts_list;
-    	return null;
+    	return ContactUtil.getPartialContacts(this.related_contacts);
+    }
+    
+    public List<Contact> relatedContacts()
+    {
+    	return Contact.dao.fetchAllByKeys(this.related_contacts);
     }
 
     public void addContactIds(String id)
@@ -407,7 +410,7 @@ public class Opportunity extends Cursor implements Serializable
 	    try
 	    {
 		// Gets Domain User Object
-		   return DomainUserUtil.getPartialDomainUser(ownerKey.getId());
+		return DomainUserUtil.getPartialDomainUser(ownerKey.getId());
 	    	
 	    }
 	    catch (Exception e)
@@ -419,40 +422,6 @@ public class Opportunity extends Cursor implements Serializable
     }
 
     /**
-     * Gets picture of owner who created deal. Owner picture is retrieved from
-     * user prefs of domain user who created deal and is used to display owner
-     * picture in deals list.
-     * 
-     * @return picture of owner.
-     * @throws Exception
-     *             when agileuser doesn't exist with respect to owner key.
-     */
-    @XmlElement
-    public String getPic() throws Exception
-    {
-	AgileUser agileuser = null;
-	UserPrefs userprefs = null;
-
-	try
-	{
-	    // Get owner pic through agileuser prefs
-	    /*agileuser = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey.getId());
-	    if (agileuser != null)
-		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
-	    if (userprefs != null)
-		return userprefs.pic;*/
-		return null;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-
-	}
-
-	return "";
-    }
-
-    /**
      * While saving an opportunity it contains list of notes keys, but while
      * retrieving includes complete note object.
      * 
@@ -461,8 +430,7 @@ public class Opportunity extends Cursor implements Serializable
     @XmlElement
     public List<Note> getNotes()
     {
-	// return Note.dao.fetchAllByKeys(this.related_notes);
-    	return null;
+	  return Note.dao.fetchAllByKeys(this.related_notes);
     }
 
     public Long getLost_reason_id()

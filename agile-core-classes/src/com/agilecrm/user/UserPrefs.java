@@ -244,7 +244,10 @@ public class UserPrefs
 					&& (currentDomainUser.name == null || !currentDomainUser.name.equals(this.name)))
 			{
 				currentDomainUser.name = this.name;
+				// Add pic also
+				currentDomainUser.pic = pic;
 				currentDomainUser.save();
+				
 				this.name = null;
 			}
 		}

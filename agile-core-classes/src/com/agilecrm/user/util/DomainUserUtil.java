@@ -29,6 +29,7 @@ import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
+import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
 
 /**
  * <code>DomainUserUtil</code> is utility class used to process data of
@@ -157,11 +158,12 @@ public class DomainUserUtil
 		
     	proj.addProjection(new PropertyProjection("email", String.class));
     	proj.addProjection(new PropertyProjection("name", String.class));
+    	proj.addProjection(new PropertyProjection("pic", String.class));
 
-    	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    	DatastoreService datastore = CachingDatastoreServiceFactory.getDatastoreService();
     	Entity entity = datastore.prepare(proj).asSingleEntity();
     	
-    	return new DomainUserPartial(id, (String) entity.getProperty("name"), (String) entity.getProperty("email"));
+    	return new DomainUserPartial(id, (String) entity.getProperty("name"), (String) entity.getProperty("email"), (String) entity.getProperty("pic"));
 
     	
 	}

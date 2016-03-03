@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <%@page import="com.agilecrm.subscription.Subscription"%>
+<%@page import="com.google.appengine.api.NamespaceManager"%>
+<%@page import="com.campaignio.servlets.deferred.DomainUserAddPicDeferredTask"%>
+<%@page import="com.google.appengine.api.taskqueue.TaskOptions"%>
+<%@page import="com.google.appengine.api.taskqueue.QueueFactory"%>
+<%@page import="com.agilecrm.activities.util.TaskUtil"%>
 <%@page import="com.agilecrm.SafeHtmlUtil"%>
 <%@page import="com.agilecrm.contact.CustomFieldDef.SCOPE"%>
 <%@page import="com.agilecrm.contact.util.CustomFieldDefUtil"%>
@@ -47,6 +52,11 @@ return;
 }
 
 DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+if(domainUser.pic == null){
+	 // Add pic to all domain users
+	QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withPayload(new DomainUserAddPicDeferredTask(NamespaceManager.get())));
+}
+
 System.out.println("Domain user " + domainUser);
 
 ObjectMapper mapper = new ObjectMapper();

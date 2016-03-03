@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.contact.util.ContactUtil"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%@page import="com.google.appengine.api.datastore.RawValue"%>
 <%@page import="java.util.Map"%>
@@ -12,5 +13,5 @@
 <%
   String id = request.getParameter("id");
 
-  DomainUserUtil.getPartialDomainUser(Long.parseLong(s));
+  out.println( ContactUtil.getContact(Long.parseLong(id)));
 %>

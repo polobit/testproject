@@ -18,10 +18,14 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
@@ -277,10 +281,15 @@ public class Task extends Cursor
      * @return List of contact objects
      */
     @XmlElement
-    public List<Contact> getContacts()
+    public List<ContactPartial> getContacts()
     {
 	// return Contact.dao.fetchAllByKeys(this.related_contacts);
-    	return null;
+    return ContactUtil.getPartialContacts(this.related_contacts);
+    }
+    
+    public List<Contact> relatedContacts()
+    {
+	 return Contact.dao.fetchAllByKeys(this.related_contacts);
     }
 
     public void addContacts(String id)
@@ -298,47 +307,10 @@ public class Task extends Cursor
      *            - Task Id.
      * @return list of Contacts
      */
-    public List<Contact> getContacts(Long id)
+    public List<ContactPartial> getContacts(Long id)
     {
 	Task task = TaskUtil.getTask(id);
 	return task.getContacts();
-    }
-
-    /**
-     * Gets picture of owner who created deal. Owner picture is retrieved from
-     * user prefs of domain user who created deal and is used to display owner
-     * picture in deals list.
-     * 
-     * @return picture of owner.
-     * @throws Exception
-     *             when agileuser doesn't exist with respect to owner key.
-     */
-    @XmlElement(name = "ownerPic")
-    public String getOwnerPic() throws Exception
-    {
-	AgileUser agileuser = null;
-	UserPrefs userprefs = null;
-
-	try
-	{
-	    // Get owner pic through agileuser prefs
-	    /*if (owner != null)
-		agileuser = AgileUser.getCurrentAgileUserFromDomainUser(owner.getId());
-
-	    if (agileuser != null)
-		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
-
-	    if (userprefs != null)
-		return userprefs.pic;*/
-		
-		return null;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
-	return "";
     }
 
     /**
@@ -474,8 +446,7 @@ public class Task extends Cursor
     @XmlElement
     public List<Note> getNotes()
     {
-	// return Note.dao.fetchAllByKeys(this.related_notes);
-    	return null;
+	   return Note.dao.fetchAllByKeys(this.related_notes);
     }
 
     public void addNotes(String id)
@@ -506,10 +477,15 @@ public class Task extends Cursor
      * @return List of deal objects
      */
     @XmlElement
-    public List<Opportunity> getDeals()
+    public List<OpportunityPartial> getDeals()
     {
-	// return Opportunity.dao.fetchAllByKeys(this.related_deals);
-    	return null;
+    	// return Opportunity.dao.fetchAllByKeys(this.related_deals);
+    	return OpportunityUtil.getPartialOpportunities(this.related_deals);
+    }
+    
+    public List<Opportunity> relatedDeals()
+    {
+    	return Opportunity.dao.fetchAllByKeys(this.related_deals);
     }
 
     /**
@@ -580,7 +556,7 @@ public class Task extends Cursor
 	    /*
 	     * if (!this.get.contains(contact_id)) { al.add(contact_id); }
 	     */
-	    for (Contact c : getContacts())
+	    for (ContactPartial c : getContacts())
 	    {
 		if (!c.id.equals(contact_id))
 		    al.add(contact_id);
@@ -620,6 +596,7 @@ public class Task extends Cursor
     
     public static void main(String[] args) {
     
+    	
     	System.out.println(Long.parseLong("5605596153774080"));
     	
     	TestTask t = new TestTask();
