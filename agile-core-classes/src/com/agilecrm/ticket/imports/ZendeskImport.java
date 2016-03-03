@@ -209,6 +209,9 @@ public class ZendeskImport
 			date = new SimpleDateFormat(datePattern).parse(updatedAt);
 			ticket.last_updated_time = date.getTime();
 
+			if(ticket.status == Status.CLOSED)
+				ticket.closed_time = date.getTime();
+			
 			if (ticketJSON.has("collaborator_ids"))
 			{
 				JSONArray ccEmails = ticketJSON.getJSONArray("collaborator_ids");
