@@ -9,7 +9,11 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.ticket.deferred.CreateTestTickets;
 import com.agilecrm.ticket.imports.ZendeskImport;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 @Path("/api/ticket-module/backend/imports")
 public class TicketImportsRest
@@ -22,7 +26,11 @@ public class TicketImportsRest
 		try
 		{
 			System.out.println("data: " + data);
-			ZendeskImport.fetchTickets(new JSONObject(data));
+			// ZendeskImport.fetchTickets(new JSONObject(data));
+			CreateTestTickets ticket = new CreateTestTickets();
+
+			Queue queue = QueueFactory.getQueue("ticket-bulk-actions");
+			queue.add(TaskOptions.Builder.withPayload(ticket));
 		}
 		catch (Exception e)
 		{

@@ -1,6 +1,5 @@
 package com.agilecrm.ticket.rest;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +24,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
@@ -46,7 +48,6 @@ import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
-import com.agilecrm.ticket.imports.ZendeskImport;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
@@ -59,6 +60,10 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import com.googlecode.objectify.Key;
 
 /**
@@ -906,23 +911,21 @@ public class TicketsRest
 	{
 		try
 		{
-			// Queue queue =
-			// QueueFactory.getQueue(AgileQueues.TICKET_BULK_ACTIONS_QUEUE);
+			Queue queue = QueueFactory.getQueue(AgileQueues.TICKET_BULK_ACTIONS_QUEUE);
 
 			Widget zendesk = WidgetUtil.getWidgetByNameAndType("Zendesk", null);
 			final JSONObject json = new JSONObject(zendesk.prefs);
 
-			ZendeskImport.fetchTickets(json);
+			// ZendeskImport.fetchTickets(json);
 
-			// TaskOptions taskOptions =
-			// TaskOptions.Builder.withUrl("/core/api/ticket-module/backend/imports/zendesk")
-			// .param("data", json.toString()).param("domain_user_id",
-			// SessionManager.get().getClaimedId())
-			// .param("tracker", bulk_action_tracker).header("Content-Type",
-			// "application/x-www-form-urlencoded")
-			// .method(Method.POST);
-			//
-			// queue.addAsync(taskOptions);
+			String bulk_action_tracker = String.valueOf(BulkActionUtil.randInt(1, 10000));
+
+			TaskOptions taskOptions = TaskOptions.Builder.withUrl("/core/api/ticket-module/backend/imports/zendesk")
+					.param("data", json.toString()).param("domain_user_id", SessionManager.get().getClaimedId())
+					.param("tracker", bulk_action_tracker).header("Content-Type", "application/x-www-form-urlencoded")
+					.method(Method.POST);
+
+			queue.addAsync(taskOptions);
 		}
 		catch (Exception e)
 		{
