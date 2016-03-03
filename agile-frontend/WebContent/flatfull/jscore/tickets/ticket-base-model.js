@@ -80,10 +80,10 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 			showNotyPopUp('information', "Ticket status has been changed to " + status.toLowerCase(), 'bottomRight', 3000);
 
-			var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
-			'/' + status;
+			// var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
+			// '/' + status;
 
-			Backbone.history.navigate(url, {trigger : true});
+			//Backbone.history.navigate(url, {trigger : true});
 
 		});
 	},
