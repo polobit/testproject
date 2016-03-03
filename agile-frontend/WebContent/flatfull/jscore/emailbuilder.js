@@ -137,6 +137,8 @@ function sendTestEmailTemplate(fullSource,builderSource) {
                 "html_email": fullSource
             };
 
+    // Verifies merge fields and gives alert
+    check_merge_fields_and_send(template);
     var requestType = "post";
     var message = "Test Email Sent.";
 
@@ -178,3 +180,50 @@ function setAttachmentInTemplateEdit(attachmentId) {
         }
     });
 }
+
+function check_merge_fields_and_send(template)
+ {
+    
+     var subject = $('#subject').val();
+     var text_body = template.text_email;
+     var html_body = template.html_email;
+     if((subject && subject.indexOf('{{') != -1) || (text_body && text_body.indexOf('{{') != -1) || (html_body && html_body.indexOf('{{') != -1))
+         {
+             show_test_email_alert();
+             return false;
+         }
+      else
+         {
+             //send_test_email();
+             return true;
+         }
+         
+ 
+  }
+  
+ function show_test_email_alert(){
+     var title="Send Test Email";
+     var message="Please observe that the merge fields in test emails would not be replaced.";
+ 
+ 
+     window.parent.workflow_alerts(title, message , "workflow-alert-modal"
+ 
+         ,function(modal){
+ 
+         var $a = $(modal).find("a");
+ 
+         $a.off("click");
+         $a.on("click", function(e){
+                     e.preventDefault();
+                    
+                     // Disable and change text
+                     $(this).attr('disabled', 'disabled').text("Sending");
+                    
+                 });
+ 
+         // On hidden
+         modal.on('hidden.bs.modal', function (e) {
+            
+         });
+     }); 
+ }
