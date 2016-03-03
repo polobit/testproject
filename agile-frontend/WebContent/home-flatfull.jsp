@@ -758,7 +758,7 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
 <!-- End of ClickDesk -->
 
  <!--video on dashboard -->
- <div class="modal  fade" id="dashboard_video"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
+ <div class="modal  fade hidden-xs" id="dashboard_video"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" id="dashboard-video" >
         <div class="modal-content">
         <div class="modal-header">
