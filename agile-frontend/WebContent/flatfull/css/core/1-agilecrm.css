@@ -3368,3 +3368,7 @@ table.hide-head-checkbox th label.i-checks {
 	padding-left: 20px;
 	padding-right : 20px;
 }
+
+#portletStreamModalNew .modal-title i{
+	display: inline!important;
+}
