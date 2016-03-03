@@ -21,54 +21,57 @@ To get the best experience, we recommend you to use <a href="https://support.goo
         <div class="panel wrapper landingpagessmart" >
             <form id="landingPageBuilderForm">
                 <fieldset>
-                    <div class="control-group form-group">
+                     <div class="control-group form-group">
                         <label class="control-label"><b>Name of page:</b> <span class="field_req">*</span></label>
                         <div class="controls">
-							<div class="row">
-								<div class="col-md-5 col-sm-4 col-xs-4">
-									<input name="landingpagename" type="text" id="landingpagename" class="col-md-3 form-control required w-md m-r-xs" placeholder="Name of page"/>
+                            <div class="row">
+
+                                <div class="col-md-5 col-sm-4">
+                                    <input name="landingpagename" type="text" id="landingpagename" class="col-md-3 form-control required w-md m-r-xs" placeholder="Name of page"/>
                                     <span for="landingpagename" generated="true" class="help-inline" style="display: block;padding: 6px;padding-left: 10px;"></span>
-								</div>
-								<div class="col-md-3 col-sm-3 col-xs-4">
+                                </div>
+                                <div class="col-md-3 col-sm-3">
                                     <span id="landingpagename-msg" class="text-center"></span>
                                 </div>
                                 <div class="col-md-4 col-sm-5">
-                               <!--
-                                {{#is_mobile}}
-                                
-                                {{else}}
 
-                                <button class="btn btn-default btn-sm m-l-xs fullscreenelement pull-right" style="height:30px;width:30px;" targetFullscreenElement="#content" >
-                                    <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button>
-                                {{/is_mobile}}
-                                -->
-                                <div class="lpPreviewView pull-left p-r-sm p-t-xs" data-trigger="#landingpageFullPreview" {{#if_equals action "edit"}}style="margin-left: 180px;" {{else}} style="margin-left: 245px;"{{/if_equals}}><a href="#"><i class="fa fa-eye fa-lg"></i> <span>Preview</span></a>
-                                </div>
-                                <div class="btn-group right m-r-xs m-r-n-xs">
-                                <button class="btn btn-primary btn-sm btn-addon saveLandingPageButton" >{{#if_equals action "edit"}}<i class="icon-plus-sign"></i>{{/if_equals}}<span class="saveLandingPageButtonText">Save Page</span>
-                                </button>
-                                {{#if_equals action "edit"}}
-                                <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
+                                    {{#if_equals action "edit"}}
+                                        <div class="btn-group right m-r-xs m-r-n-sm">                                   
+                                            <button class="btn btn-primary btn-sm btn-addon saveLandingPageButton" ><i class="icon-plus-sign"></i><span class="saveLandingPageButtonText">Save Page</span>
+                                            </button>
+                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
                                                 <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" style="min-width:0px;">
-                                            <li>
-                                                <a href="#landing-page-copy/{{templateId}}" id="duplicate-landingpage-top">
-                                                    <i class="fa fa-clipboard" style="width: 20px;"></i>Create a Copy</a>
-                                            </li>
-                                </ul>
-                                 {{/if_equals}}
-                                    </div>
-        
-                                    </div>
-                                </div>
-                               
-                                
-                                <div class="save-workflow-img right m-r-xs m-t-sm pos-rlt inline-block"></div>
+                                            </button>
+                                            <ul class="dropdown-menu landingpage-copy">
+                                                <li>
+                                                    <a href="#landing-page-copy/{{templateId}}" id="duplicate-landingpage-top">
+                                                        <i class="fa fa-clipboard" style="width: 20px;"></i> Create a Copy
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>   
+                                     <!--
+                                        {{#is_mobile}}
 
-							</div>
-						</div>
-                    
+                                                {{else}}
+                                            <div class="btn-group pull-left m-l-xs" style="padding-left:3px;">
+                                            <button class="btn btn-default btn-sm m-l-xs fullscreenelement pull-right" style="height:30px;width:30px;" targetFullscreenElement="#content" >
+                                    <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
+                                        {{/is_mobile}}
+                                        -->
+                                    {{else}}
+                                        <button class="btn btn-primary btn-sm  right pos-rlt m-r-xs saveLandingPageButton" ><span class="saveLandingPageButtonText">Save Page</span>
+                                        </button> 
+                                    {{/if_equals}}                                       
+                  <div class="lpPreviewView" data-trigger="#landingpageFullPreview">
+                            <label class="m-t-xs m-r pull-right">
+                                <a href="#"><i class="fa fa-eye fa-lg"></i> <span>Preview</span></a>
+                            </label> 
+                    </div>
+ 
+                    </div>
+                    <br />
+                    <br />
 					<div id="landingPageBuilderHolder">
 
                     <div class="row">
@@ -99,7 +102,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                     </div>
 
                     <IFRAME SRC="misc/landingpage/index.jsp?tmpid={{templateId}}&action={{action}}" id="landingPageBuilder" frameBorder="0" name="landingPageBuilder" WIDTH="100%" HEIGHT="900px"></IFRAME>
-                    </div>
+                   
                     <br />
                     <br />
                     <div>
@@ -169,7 +172,6 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                             </li>
                                 </ul>
                     {{/if_equals}}
-                    <div>
                 </fieldset>
             </form>
         </div>
