@@ -171,7 +171,7 @@ position: fixed;width: 100%;top: 0px;
     bottom: 0;
     top: 0;
     background-color: black;
-    opacity: 0.35;
+    opacity: 0.25;
 }
 .view{
 	position: absolute;

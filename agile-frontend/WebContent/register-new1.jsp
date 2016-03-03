@@ -97,7 +97,7 @@ body{
     bottom: 0;
     top: 0;
     background-color: black;
-    opacity: 0.35;
+    opacity: 0.25;
 }
 </STYLE>
 
