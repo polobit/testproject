@@ -527,7 +527,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
                       <div class="pull-left">Upgrade</div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
                   <li><a href="https://www.agilecrm.com/product-updates" target="_blank"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left">Product Updates</div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
-                  <li><a href="#help"><!-- <i class="icon-off"></i> -->
+                  <li><a href="https://www.agilecrm.com/support" target="_blank"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left">Help</div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
                   <!-- <li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i> Help
                       Videos</a></li>
