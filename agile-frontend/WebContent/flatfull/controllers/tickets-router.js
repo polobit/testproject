@@ -70,20 +70,71 @@
 			if(!template_ui)
 				return;
 
-			$('#ticket-modals').html($(template_ui));
+			var el = $(template_ui);
+
+			$('#ticket-modals').html(el);
 			$('#new-ticket-modal').modal('show');
 
-			var ticketView = new Ticket_Base_Model({
-				isNew : false, 
-				template : "ticket-new-modal-form",
-				url : "/core/api/tickets/new-ticket",
-				saveCallback : function(ticket){
-					$('#new-ticket-modal').modal('hide');
-				},
-				prePersist : function(model)
-				{	
-					var json = {};
-					console.log(model);
+			setTimeout(function(){
+				fillSelect('groupID', '/core/api/tickets/new-ticket', '', function(collection){
+					$('#groupID').html(getTemplate('select-assignee-dropdown', collection.toJSON()));
+				}, '', false, el);
+
+				$('[data-toggle="tooltip"]').tooltip();
+
+				//Initializing type ahead for tags
+				Ticket_Labels.showSelectedLabels(new Array(), $(el));
+
+				//Initializing type ahead for cc emails
+				agile_type_ahead("cc_email_field", el, tickets_typeahead, function(arg1, arg2){
+
+					arg2 = arg2.split(" ").join("");
+
+					var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
+
+					if(!email || email == 'No email')
+						return;
+
+					$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
+        			$('#cc_email_field').val('');
+
+        	  	},undefined, undefined, 'core/api/search/');
+
+    	  		//Initializing type ahead on email field
+				agile_type_ahead("requester_email", el, tickets_typeahead, function(arg1, arg2){
+
+					arg2 = arg2.split(" ").join("");
+
+					var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
+
+					if(!email || email == 'No email'){
+						var $span = $('.form-action-error');
+
+						$span.html('No email address found.');
+
+						setTimeout(function(){
+							$span.html('');
+						}, 4000);
+					}
+					else{
+						setTimeout(function(){
+
+							$('#requester_email', el).val(email);
+							$('#requester_name', el).val(arg2);
+							$('#contact_id', el).val(arg1);
+						}, 0);
+					}
+
+				},undefined, undefined, 'core/api/search/');
+
+				el.on('click', '#create-ticket', function(e){
+
+					if (!isValidForm($('#new-ticket', el))) {
+					
+						return;
+					}
+
+					var json = serializeForm('new-ticket');
 
 					var assignee_id = $('#groupID option:selected').data('assignee-id');
 
@@ -100,60 +151,21 @@
 					if(email)
 						json.requester_email = email;
 
-					model.set(json, { silent : true });
-				},
-				postRenderCallback : function(el, data) {
+					enable_save_button($(this));
 
-					$('[data-toggle="tooltip"]').tooltip();
-
-					//Initializing type ahead for tags
-					Ticket_Labels.showSelectedLabels(new Array(), $(el));
+					var newTicketModel = new BaseModel();
+					newTicketModel.url = '/core/api/tickets/new-ticket';
 					
-					//Initializing type ahead for cc emails
-					agile_type_ahead("cc_email_field", el, tickets_typeahead, function(arg1, arg2){
-
-						arg2 = arg2.split(" ").join("");
-
-						var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
-
-						if(!email || email == 'No email')
-							return;
-
-						$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
-	        			$('#cc_email_field').val('');
-
-	        	  	},undefined, undefined, 'core/api/search/');
-
-					//Initializing type ahead on email field
-					agile_type_ahead("requester_email", el, tickets_typeahead, function(arg1, arg2){
-
-						arg2 = arg2.split(" ").join("");
-
-						var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
-
-						if(!email || email == 'No email'){
-							var $span = $('.form-action-error');
-
-							$span.html('No email address found.');
-
-							setTimeout(function(){
-								$span.html('');
-							}, 4000);
-						}
-						else{
-							setTimeout(function(){
-
-								$('#requester_email', el).val(email);
-								$('#requester_name', el).val(arg2);
-								$('#contact_id', el).val(arg1);
-							}, 0);
-						}
-
-					},undefined, undefined, 'core/api/search/');
-				}
-			});
-
-			$('#modal-body').html(ticketView.render().el);
+					newTicketModel.save(json, {
+							success: function(model){
+								$('#new-ticket-modal').modal('hide');
+						}, error: function(){
+							if(err_cbk)
+								err_cbk(model);
+						}}
+					);
+				});
+			}, 200);
 		});	
 	},
 
