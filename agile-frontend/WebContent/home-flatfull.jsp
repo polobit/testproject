@@ -733,11 +733,15 @@ function showVideoForRegisteredUser(){
 
     if(!document.referrer || document.referrer.indexOf("register") == -1)
          return;
-
-    $("#dashboard_video").modal("show");
-
+    var domainuser_video_cookie = '_agile_Dashboard_prefs' + CURRENT_DOMAIN_USER.domain;
+    if(_agile_get_prefs(domainuser_video_cookie)!= null)
+    {
+       $("#dashboard_video").modal("show");
+    }       
     var $frame = $("#dashboard_video iframe");
     $frame.attr("src", $frame.attr("data-source"));
+    _agile_set_prefs(domainuser_video_cookie,true);
+    
 }
 
 </script>
@@ -753,7 +757,7 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
 <!-- End of ClickDesk -->
 
  <!--video on dashboard -->
- <div class="modal  fade" id="dashboard_video">
+ <div class="modal  fade" id="dashboard_video"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" id="dashboard-video" >
         <div class="modal-content">
         <div class="modal-header">
