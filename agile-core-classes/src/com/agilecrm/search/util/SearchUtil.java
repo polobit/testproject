@@ -64,7 +64,6 @@ public class SearchUtil
 		/*
 		 * Add UTM parameter in a Search Document of contact. If UTM parameter is Avialable 
 		 */
-	    System.out.println("Custome Field NamE "+ field_name);
 		if (!(StringUtils.isEmpty(contactField.value)) && (contactField.name.equals(Contact.UTM_SOURCE) || contactField.name.equals(Contact.UTM_MEDIUM) || contactField.name.equals(Contact.UTM_CAMPAIGN) || contactField.name.equals(Contact.UTM_TERM) || contactField.name.equals(Contact.UTM_CONTENT)))
 		{
 			 doc.addField(Field.newBuilder().setName(field_name).setText(StringUtils.lowerCase(normalized_value)));

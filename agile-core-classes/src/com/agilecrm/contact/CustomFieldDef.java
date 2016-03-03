@@ -162,7 +162,6 @@ public class CustomFieldDef
 	   {
 		   throw new Exception();
 	   }
-	   System.out.println("ppppppppppppp "+this.field_label);
 	dao.put(this);
     }
     @PostLoad
