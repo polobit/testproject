@@ -1019,7 +1019,8 @@
 	 	App_Ticket_Module.activitiesCollection = new Base_Collection_View({
 	 		url : '/core/api/tickets/activity?id=' + ticket_id,
 	 		templateKey : "ticket-activities",
-	 		sortKey:"created_time",
+	 		sort_collection : true,
+	 		sortKey:"time",
 	 		customLoader: true,
 	 		customLoaderTemplate: "ticket-notes-loader",
 	 		descending:true,
