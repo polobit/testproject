@@ -234,6 +234,8 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #enable_map_view' : 'onEnableMapView',
     	'click #add' : 'onAddScore',
     	'click #minus' : 'onRemoveScore',
+    	'click #cadd' : 'onCaddScore',
+    	'click #cminus' :'onCremoveScore',
     	
     	
     	'click .email-subject' : 'onEmailSubjectClick',
@@ -690,8 +692,13 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
 		       			
 		       			// Append to the list, when no match is found 
-		       			if ($.inArray(new_tags, old_tags) == -1) 
-		       				$('#added-tags-ul').append('<li  class="tag inline-block btn btn-xs btn-default m-r-xs m-b-xs" style="color:#363f44" data="' + new_tags + '"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
+		       			if ($.inArray(new_tags, old_tags) == -1) {
+
+		       				var template = Handlebars.compile('<li  class="tag inline-block btn btn-xs btn-default m-r-xs m-b-xs" style="color:#363f44" data="{{name}}"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{name}}" >{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+
+						 	// Adds contact name to tags ul as li element
+							$('#added-tags-ul').append(template({name : new_tags}));
+		       			}
 		       			
 		       			console.log(new_tags);
 		       			// Adds the added tags (if new) to tags collection
@@ -779,7 +786,36 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		});
 		          
 	},
+	onCaddScore :  function(e){
+	     e.preventDefault();
+	    
+	     // Convert string type to int
+	     var add_score = parseInt($('#lead-cscore').text());
+	    
+	     add_score = add_score + 1;
+	    
+	     // Changes score in UI
+	     $('#lead-cscore').text(add_score);
+       
+	    App_Companies.companyDetailView.model.set({'lead_score': add_score}, {silent: true});
+	 	var contact_model =  App_Companies.companyDetailView.model.toJSON();
+	    
+	   /* // Refreshing the view ({silent: true} not working)
+	     contact_model.url = 'core/api/contacts';
+	     contact_model.set('lead_score', add_score, {silent: true});
 	
+	     // Save model
+	    contact_model.save();*/
+	    
+	 	var new_model = new Backbone.Model();
+	 	new_model.url = 'core/api/contacts';
+	 	new_model.save(contact_model,{
+	 		success: function(model){
+
+	 		}
+	 	});		          
+	 },
+			
 	   
 	/**
 	 * Subtracts score of a contact (both in UI and back end)
@@ -813,6 +849,34 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 			}
 		});
 	},
+
+		onCremoveScore :  function(e){
+		 	e.preventDefault();
+			
+		 	// Converts string type to Int
+		 	var sub_score = parseInt($('#lead-cscore').text());
+			
+		 	if(sub_score <= 0)
+		 		return;
+			
+		 	sub_score = sub_score - 1;
+			
+		 	// Changes score in UI
+		 	 $('#lead-cscore').text(sub_score);
+			
+		 // Changes lead_score of the contact and save it.
+		 App_Companies.companyDetailView.model.set({'lead_score': sub_score}, {silent: true});
+		var contact_model =  App_Companies.companyDetailView.model.toJSON();
+			
+		 var new_model = new Backbone.Model();
+		new_model.url = 'core/api/contacts';
+		new_model.save(contact_model,{
+		 	success: function(model){
+
+		 		}
+		 	});
+		 },
+
 
 
     addTask : function(e){

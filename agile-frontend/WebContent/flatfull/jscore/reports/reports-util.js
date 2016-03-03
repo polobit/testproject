@@ -132,6 +132,13 @@ call_reports : function(url,reportType,graphOn){
 	var busyCallsCountList=[];
 	var failedCallsCountList=[];
 	var voiceMailCallsCountList=[];
+	var missedCallsCountList= [];
+	var inquiryCallsCountList= [];
+	var interestCallsCountList= [];
+	var noInterestCallsCountList= [];
+	var incorrectReferralCallsCountList= [];
+	var newOpportunityCallsCountList= [];
+	var meetingScheduledCallsCountList = [];
 	var callsDurationList=[];
 	var totalCallsCountList=[];
 	var domainUsersList=[];
@@ -153,11 +160,19 @@ call_reports : function(url,reportType,graphOn){
 		busyCallsCountList=data["busyCallsCountList"];
 		failedCallsCountList=data["failedCallsCountList"];
 		voiceMailCallsCountList=data["voiceMailCallsCountList"];
+		missedCallsCountList = data["missedCallsCountList"];
+		inquiryCallsCountList = data["inquiryCallsCountList"];
+		interestCallsCountList = data["interestCallsCountList"];
+		noInterestCallsCountList = data["noInterestCallsCountList"];
+		incorrectReferralCallsCountList = data["incorrectReferralCallsCountList"];
+		meetingScheduledCallsCountList = data["meetingScheduledCallsCountList"];
+		newOpportunityCallsCountList = data["newOpportunityCallsCountList"];
 		callsDurationList=data["callsDurationList"];
 		totalCallsCountList=data["totalCallsCountList"];
 		domainUsersList=data["domainUsersList"];
 		domainUserImgList=data["domainUserImgList"];
-		pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls'];
+		pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls','Missed','Inquiry',
+		'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity'];
 		
 		var series=[];
 		var text='';
@@ -188,6 +203,49 @@ call_reports : function(url,reportType,graphOn){
 				voicemailCallCount +=voicemailCall;
 			});
 			CompleteCallsCount.push(voicemailCallCount);
+
+			var missedCallsCount=0;
+			$.each(missedCallsCountList,function(index,missedCall){
+				missedCallsCountList +=missedCall;
+			});
+			CompleteCallsCount.push(missedCallsCount);
+
+			var inquiryCallsCount=0;
+			$.each(inquiryCallsCountList,function(index,inquiryCall){
+				inquiryCallsCount +=inquiryCall;
+			});
+			CompleteCallsCount.push(inquiryCallsCount);
+
+			var interestCallsCount=0;
+			$.each(interestCallsCountList,function(index,interestCall){
+				interestCallsCount +=interestCall;
+			});
+			CompleteCallsCount.push(interestCallsCount);
+
+			var noInterestCallsCount=0;
+			$.each(noInterestCallsCountList,function(index,noInterestCall){
+				noInterestCallsCount +=noInterestCall;
+			});
+			CompleteCallsCount.push(noInterestCallsCount);
+
+			var incorrectReferralCallsCount=0;
+			$.each(incorrectReferralCallsCountList,function(index,incorrectReferralCall){
+				incorrectReferralCallsCount +=incorrectReferralCall;
+			});
+			CompleteCallsCount.push(incorrectReferralCallsCount);
+
+			var newOpportunityCallsCount=0;
+			$.each(newOpportunityCallsCountList,function(index,newOpportunityCall){
+				newOpportunityCallsCount +=newOpportunityCall;
+			});
+			CompleteCallsCount.push(newOpportunityCallsCount);
+
+			var meetingScheduledCallsCount=0;
+			$.each(meetingScheduledCallsCountList,function(index,meetingScheduledCall){
+				meetingScheduledCallsCount +=meetingScheduledCall;
+			});
+			CompleteCallsCount.push(meetingScheduledCallsCount);
+
 			
 			
 			portlet_graph_utility.callsByPersonPieGraph(selector,pieGraphRegions,CompleteCallsCount);
@@ -216,6 +274,41 @@ call_reports : function(url,reportType,graphOn){
 			tempData.name="Voicemail";
 			tempData.data=voiceMailCallsCountList;
 			series[3]=tempData;
+
+			tempData = {};
+			tempData.name = "Missed ";
+			tempData.data = missedCallsCountList;
+			series[4] = tempData;
+
+			tempData = {};
+			tempData.name = "Inquiry";
+			tempData.data = inquiryCallsCountList;
+			series[5] = tempData;
+
+			tempData = {};
+			tempData.name = "Interest";
+			tempData.data = interestCallsCountList;
+			series[6] = tempData;
+
+			tempData = {};
+			tempData.name = "No Interest";
+			tempData.data = noInterestCallsCountList;
+			series[7] = tempData;
+
+			tempData = {};
+			tempData.name = "Incorrect Referral";
+			tempData.data = incorrectReferralCallsCountList;
+			series[8] = tempData;
+
+			tempData = {};
+			tempData.name = "Meeting Scheduled";
+			tempData.data = meetingScheduledCallsCountList;
+			series[9] = tempData;
+
+			tempData = {};
+			tempData.name = "New Opportunity";
+			tempData.data = newOpportunityCallsCountList;
+			series[10] = tempData;
 			text="Total Calls";
 			colors=['green','blue','red','violet'];
 		}
@@ -277,11 +370,19 @@ user_reports :function(callReportUrl){
 		var busyCallsCountList=[];
 		var failedCallsCountList=[];
 		var voiceMailCallsCountList=[];
+		var missedCallsCountList= [];
+		var inquiryCallsCountList= [];
+		var interestCallsCountList= [];
+		var noInterestCallsCountList= [];
+		var incorrectReferralCallsCountList= [];
+		var newOpportunityCallsCountList= [];
+		var meetingScheduledCallsCountList = [];
 		var callsDurationList=[];
 		var totalCallsCountList=[];
 		var domainUsersList=[];
 		var domainUserImgList=[];
 		var averageCallList=[];
+		var callsDurationAvg=0;
 		var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
 		var topPos = 50*sizey;
 		if(sizey==2 || sizey==3)
@@ -301,7 +402,19 @@ user_reports :function(callReportUrl){
 			totalCallsCountList=data["totalCallsCountList"];
 			domainUsersList=data["domainUsersList"];
 			domainUserImgList=data["domainUserImgList"];
-			pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls'];
+			missedCallsCountList = data["missedCallsCountList"];
+			inquiryCallsCountList = data["inquiryCallsCountList"];
+			interestCallsCountList = data["interestCallsCountList"];
+			noInterestCallsCountList = data["noInterestCallsCountList"];
+			incorrectReferralCallsCountList = data["incorrectReferralCallsCountList"];
+			meetingScheduledCallsCountList = data["meetingScheduledCallsCountList"];
+			newOpportunityCallsCountList = data["newOpportunityCallsCountList"];
+			callsDurationList=data["callsDurationList"];
+			totalCallsCountList=data["totalCallsCountList"];
+			domainUsersList=data["domainUsersList"];
+			domainUserImgList=data["domainUserImgList"];
+			pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls','Missed','Inquiry',
+			'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity'];
 			
 			var series=[];
 			var text='';
@@ -330,16 +443,245 @@ user_reports :function(callReportUrl){
 					voicemailCallCount +=voicemailCall;
 				});
 				CompleteCallsCount.push(voicemailCallCount);
+
+				var missedCallsCount=0;
+				$.each(missedCallsCountList,function(index,missedCall){
+					missedCallsCountList +=missedCall;
+				});
+				CompleteCallsCount.push(missedCallsCount);
+
+				var inquiryCallsCount=0;
+				$.each(inquiryCallsCountList,function(index,inquiryCall){
+					inquiryCallsCount +=inquiryCall;
+				});
+				CompleteCallsCount.push(inquiryCallsCount);
+
+				var interestCallsCount=0;
+				$.each(interestCallsCountList,function(index,interestCall){
+					interestCallsCount +=interestCall;
+				});
+				CompleteCallsCount.push(interestCallsCount);
+
+				var noInterestCallsCount=0;
+				$.each(noInterestCallsCountList,function(index,noInterestCall){
+					noInterestCallsCount +=noInterestCall;
+				});
+				CompleteCallsCount.push(noInterestCallsCount);
+
+				var incorrectReferralCallsCount=0;
+				$.each(incorrectReferralCallsCountList,function(index,incorrectReferralCall){
+					incorrectReferralCallsCount +=incorrectReferralCall;
+				});
+				CompleteCallsCount.push(incorrectReferralCallsCount);
+
+				var newOpportunityCallsCount=0;
+				$.each(newOpportunityCallsCountList,function(index,newOpportunityCall){
+					newOpportunityCallsCount +=newOpportunityCall;
+				});
+				CompleteCallsCount.push(newOpportunityCallsCount);
+
+				var meetingScheduledCallsCount=0;
+				$.each(meetingScheduledCallsCountList,function(index,meetingScheduledCall){
+					meetingScheduledCallsCount +=meetingScheduledCall;
+				});
+				CompleteCallsCount.push(meetingScheduledCallsCount);
 				
+				if(callsDurationList[0]!=0)
+				   callsDurationAvg=callsDurationList[0]/answeredCallsCountList[0];
+
+				$('.avg-duration').html("Average Time Spent on Call:"+portlet_utility.getPortletsTimeConversion(Math.round(callsDurationAvg)));
 				
 				portlet_graph_utility.callsByPersonPieGraph(selector,pieGraphRegions,CompleteCallsCount);
 			
 		});
-	
-	
 },
 
+	Goal_report : function(url)
+	{
+		var selector1="count_goals_chart";
+		var selector2="amount_goals_chart";
+		var colors1=[ '#ffffff', '#27C24C' ];
+		var colors2= ['#ffffff','#fad733'];
+		portlet_graph_data_utility.fetchPortletsGraphData(url,function(data){
+					if(data["goalCount"]==0)
+					{
+						$('#' + selector1)
+									.html(
+										'<div class="portlet-error-message" style=" font-size: 14px;font-style: normal;padding-top: 174px;padding-bottom : 203px">No Deals Goals set </div>');
+								
+					}
+					else{
 
+					 showGuage(selector1,data["dealcount"],data["goalCount"],'Won Deals','',true);
+					}
+					if(data["goalAmount"]==0)
+					{
+						$('#' + selector2)
+										.html(
+												'<div class="portlet-error-message" style="font-size: 14px;font-style: normal;padding-top: 174px;padding-bottom : 203px">No Amount Goals set </div>');
+								
+					}
+					else{
+
+					 showGuage(selector2,data["dealAmount"],data["goalAmount"],'Revenue','',true);
+					}
+		});
+
+	},
+	
+		conversion_report : function(url)
+		{
+
+			
+			portlet_graph_data_utility.fetchPortletsGraphData(url,function(data){
+
+				console.log(data);
+				//var div='';
+				var pipeline_json=[];
+				$.each(data,function(index,data1){
+				$.each(data1,function(index,data2){
+				 	 $.each(data2,function(k,v){
+				 	 	var total=0;
+				 	 	$.each(v,function(k1,v1){
+				 	 		total=total+v1;
+				 	 	});
+				 	 	if(total>0){
+				 	var div='<div id="'+k+'" class="conversion_track col-sm-4 panel wrapper"></div>';
+				 	
+				 	$(".converionsPipeline").append(div);
+
+				 	
+				 	showFunnelForConversion(k,k,true,v);
+				 }
+				 	/*//var innerdiv='';
+				 	var index=0;
+				 		$.ajax({ url : 'core/api/milestone/pipelinesbyName/'+k, type : 'GET', success : function(data)
+					{
+							console.log(data);
+							pipeline_json.push(k,data[0].won_milestone);
+							 $('.conversion_track ').each(function(index)
+								 {
+								 		var id=$(this).attr('id');
+								 		var won_class=pipeline_json.pop(id);
+								 		$(this).find('.'+won_class);
+
+								 });
+					}
+				 });
+				 	var percent='';
+				 	var value;
+				 	var total=0;
+				 	var first_name;
+				 		var first;
+				 	$.each(v,function(k1,v1){
+				 		var percent='';
+				 		var percent_base='';
+				 		
+				 		total=total+v1;
+				 		if(index==0){
+				 				if(v1!=0)
+				 				percent=100;
+				 				else
+				 					percent=0;
+				 				first=v1;
+				 				first_name=k1;
+				 			}
+				 			else
+				 			{
+				 				if(value!=0)
+				 				percent=(v1*100)/value;
+				 				else
+				 					percent=0;
+				 				if(first!=0)
+				 					percent_base=(v1*100)/first;
+				 			}
+				 				
+				 			value=v1;
+				 		index++;
+				 		if(first_name==k1)
+				 			div=div.concat('<div class="'+k1+'">'+
+				 				'<span class="pull-right text-primary">(' +v1+')</span>'+
+				 				'<span>'+k1+'</span>'+
+           				' </div>')
+				 		else
+				 			div=div.concat('<div class="'+k1+'">'+
+              '<span class="pull-right text-primary">'+Math.round(percent)+'% ('+percent_base+'% of ' +first_name+')(' +v1+')</span>'+
+              '<span>'+k1+'</span>'+
+           ' </div>');
+				 			div=div.concat(
+            '<div class="progress progress-xs m-t-sm bg-light">'+
+              '<div class="progress-bar bg-primary" data-toggle="tooltip" data-original-title="'+Math.round(percent)+'%" style="width: '+Math.round(percent)+'%"></div>'+
+            '</div>');
+				 	});
+
+				 	if(total==0)
+				 		div=div.concat('<div class="hidden"></div>');
+				 	div=div.concat('</div>');
+				 	
+				 		//$('.conversion_track').hide();*/
+				 	
+				 });
+});				
+}); 
+				 if($('.converionsPipeline').children().length!=0)
+				 	$('.converionsPipeline').parents('.row').find('.bg-primary').show();
+
+				
+			});
+				
+		},
+
+getRepPerformanceLog : function(url) {
+		fetchReportData(url, function(data)
+		{
+			if(data.length!=0){
+				console.log("Inside RepPerform");
+				getTemplate("report-user-data", data, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#rep-performance-reports').html($(template_ui));	
+				
+				showLossReasonGraphForUserReports();
+
+								/*var callReportUrl='core/api/portlets/calls-per-person/' + getSelectedDates();
+							
+							if ($('#owner').length > 0)
+							{
+								if ($("#owner").val() != ""){
+									var user=$("#owner").val();
+								//var user=CURRENT_DOMAIN_USER.id;
+								callReportUrl=callReportUrl+'&user=["'+user+'"]';
+							}
+							}
+							
+							report_utility.user_reports(callReportUrl);*/
+
+							var goal_url = '/core/api/portlets/goals/';
+							var user;
+							if ($('#owner').length > 0)
+							{
+								if ($("#owner").val() != ""){
+									user=$("#owner").val();
+								//var user=CURRENT_DOMAIN_USER.id;
+								goal_url=goal_url+user;
+							}
+							}
+							goal_url=goal_url+ getSelectedDates();
+							report_utility.Goal_report(goal_url);
+
+							var conversion_url='/core/api/opportunity/conversionRate/'+user+getSelectedDates();
+							report_utility.conversion_report(conversion_url);
+							
+			}, "#rep-performance-reports");
+			}
+			else
+			{
+				$('#rep-performance-reports').html('<div style="padding-left:50%;color:#98A6AD">No Data to display</div>');
+			}
+		});
+	
+
+}
  };
 
 

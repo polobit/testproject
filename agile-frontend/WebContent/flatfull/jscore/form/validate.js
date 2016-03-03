@@ -81,7 +81,10 @@ function isValidForm(form) {
 		$(element).val("");
 		if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
 		{
-			$(element).closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+			var template = Handlebars.compile('<li class="tag" style="display: inline-block;" data="{{name}}">{{name}}<a class="close" id="remove_tag" tag="{{name}}">&times</a></li>');
+
+		 	// Adds contact name to tags ul as li element
+			$(element).closest(".control-group").find('ul.tags').append(template({name : tag_input}));
 		}
 		
 		return $(element).closest(".control-group").find('ul.tags > li').length > 0 ? true : false;
@@ -108,6 +111,16 @@ function isValidForm(form) {
 		
 		return /^[0-9\-]+$/.test(value);
 	}," Please enter a valid number.");
+
+	//positive number validation
+	jQuery.validator.addMethod("positive_number", function(value, element){
+			
+		if(value=="")
+			return false;
+		
+		return /^\+?([1-9]\d*)$/.test(value);
+	}," Please enter a number greater than 0.");
+
 	
 	jQuery.validator.addMethod("multi-select", function(value, element){
 		var counter = 0;
@@ -181,22 +194,6 @@ function isValidForm(form) {
 		}
 	);
 
-	//Positive Number validation
-	jQuery.validator.addMethod("positive_number", function(value, element){
-		
-		if(value=="")
-			return true;
-
-		if(isNaN(value))
-		{
-			return false;
-		}
-		if(!isNaN(value) && parseFloat(value) >= 0)
-		{
-			return true;
-		}
-
-	}," Please enter a value greater than or equal to 0.");
 
 	$(form).validate({
 		rules : {

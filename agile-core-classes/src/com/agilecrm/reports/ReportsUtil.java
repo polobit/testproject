@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -22,12 +24,21 @@ import org.json.JSONObject;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Call;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.activities.util.TaskUtil;
+import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
+import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.deals.Goals;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.GoalsUtil;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.reports.deferred.ReportsInstantEmailDeferredTask;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.util.SearchUtil;
@@ -36,12 +47,14 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.Err
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction.ClassEntities;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.taskqueue.Queue;
@@ -445,6 +458,185 @@ public class ReportsUtil
     {
 	return Reports.dao.count();
     }
+
+    public static JSONObject userPerformanceForReports(Long ownerId, long minTime,
+			long maxTime){
+    	try
+		{
+			List<Opportunity> wonDealsList = OpportunityUtil.getWonDealsListOfUser(minTime, maxTime, ownerId);
+			JSONObject dataJson = new JSONObject();
+			Double milestoneValue = 0d;
+			Integer soldCount=0;
+			Double avgValue=0d;
+			Double team_average=0d;
+			Double avgDealsClosure=0d;
+			List<JSONObject> cateList = new ArrayList<JSONObject>();
+			List<JSONObject> countCateList=new ArrayList<JSONObject>();
+			//Double callsDuration=0d;
+
+			if(wonDealsList!=null){
+				for(Opportunity opportunity : wonDealsList){
+					milestoneValue += opportunity.expected_value;
+					soldCount++;
+				}
+				avgValue=(double) Math.round(milestoneValue/soldCount);
+			}
+			dataJson.put("sales", milestoneValue);
+			dataJson.put("soldDeals",soldCount);
+			dataJson.put("avgSalesValue",avgValue);
+			
+		/*	List<Opportunity> closedDeals=OpportunityUtil.getDealsWithOwnerandPipeline(ownerId,null,minTime, maxTime);
+			if(closedDeals!=null )
+			{
+				
+				for(Opportunity opportunity : closedDeals){
+					Integer r=0;
+					if(opportunity.close_date >= opportunity.created_time)
+					 r=Math.round((opportunity.close_date-opportunity.created_time)/(60*60*24));
+					avgDealsClosure=avgDealsClosure+r;
+				}
+				if(closedDeals.size()!=0)
+				avgDealsClosure=(double) Math.round(avgDealsClosure/closedDeals.size());
+			}
+			
+			dataJson.put("avgDealClosetime", avgDealsClosure);*/
+			/*int contact_count=ContactUtil.getContactsCountForOwner(ownerId,minTime,maxTime);
+			List<Activity> contact_created=ActivityUtil.getActivitiesByActivityType("CONTACT_CREATE",ownerId,minTime,maxTime);
+			dataJson.put("contactCount", contact_count);
+				int contactAssigned=0;
+			if(contact_created!=null && contact_created.size()!=0)
+			{
+				contactAssigned=contact_created.size();
+				
+			}
+			dataJson.put("contactAssigned",contact_created.size());*/
+			dataJson.put("userName", DomainUserUtil.getDomainUser(ownerId).name);
+			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(ownerId);
+			
+			UserPrefs userPrefs = null;
+			
+			if(agileUser!=null)
+				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+			if(userPrefs!=null)
+				dataJson.put("userPic",userPrefs.pic);
+			else
+				dataJson.put("userPic","");
+			//List<DomainUser> usersList = new ArrayList<DomainUser>();
+			List<DomainUser> usersList = new ArrayList<DomainUser>();
+			List<DomainUser> domainUsersList = null;
+			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+			if(dUser!=null)
+				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
+			List<Long> users=GoalsUtil.getAllGoalsForTime(minTime, maxTime);
+			for(DomainUser domainUser : domainUsersList){
+				if(users.contains(domainUser.id))
+					usersList.add(domainUser);
+			}
+		
+				Double total_milestoneValues = 0d;
+				int total_count=0;
+			for(DomainUser domainUser : usersList){
+				JSONObject cateJson = new JSONObject();
+				cateJson.put("name", "Revenue");
+				List<Opportunity> wonDealList = OpportunityUtil.getWonDealsListOfUser(minTime, maxTime, domainUser.id);
+				Double milestoneValues = 0d;
+				int count=0;
+				if(wonDealList!=null){
+					for(Opportunity opportunity : wonDealList){
+						milestoneValues += opportunity.expected_value;
+						count++;
+					}
+				}
+				total_milestoneValues=total_milestoneValues+milestoneValues;
+				total_count=total_count+count;
+				cateJson.put("value", Math.round(milestoneValues));
+				cateJson.put("id", domainUser.id);
+				cateJson.put("count", count);
+				
+				//AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+				
+
+				cateList.add(cateJson);
+				countCateList.add(cateJson);
+				Collections.sort(cateList,new Comparator<JSONObject>(){
+					@Override  
+	                public int compare(JSONObject o1, JSONObject o2){
+						try
+						{
+							return Double.valueOf(o2.getDouble("value")).compareTo(Double.valueOf(o1.getDouble("value")));
+						}
+						catch (JSONException e)
+						{
+							// TODO Auto-generated catch block
+
+							e.printStackTrace();
+							return 0;
+						}  
+	                }
+	            });
+				Collections.sort(countCateList,new Comparator<JSONObject>(){
+					@Override  
+	                public int compare(JSONObject o1, JSONObject o2){
+						try
+						{
+							return Double.valueOf(o2.getDouble("count")).compareTo(Double.valueOf(o1.getDouble("count")));
+						}
+						catch (JSONException e)
+						{
+							// TODO Auto-generated catch block
+
+							e.printStackTrace();
+							return 0;
+						}  
+	                }
+	            });
+			}
+			//JSONObject obj=new JSONObject();
+			int index=0;
+			boolean flag=false;
+			boolean rev_flag=false;
+			for(JSONObject obj:cateList)
+			{
+				index++;
+					if(ownerId.equals(obj.getLong("id")))
+							{
+						flag=true;
+							break;
+							}
+					
+			}
+			if(flag)
+			dataJson.put("Rank", index);
+			
+			int won_index=0;
+			for(JSONObject obj:countCateList)
+			{
+				won_index++;
+					if(ownerId.equals(obj.getLong("id"))){
+						rev_flag=true;
+						break;
+					}
+							
+					
+			}
+			team_average=(double) Math.round(total_milestoneValues/total_count);
+			if(rev_flag){
+			dataJson.put("won_Rank", won_index);
+			dataJson.put("Team_Revenue",total_milestoneValues);
+			dataJson.put("Team_Deals",total_count);
+			dataJson.put("Team_average",team_average);
+			}
+			return dataJson;
+			
+		}
+		catch (JSONException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
     
     /**
      * 
@@ -507,10 +699,19 @@ public class ReportsUtil
 		catch(Exception e){
 			e.printStackTrace();
 		}
-				callsObject.put("Answered", 0);
-				callsObject.put("Busy",0);
-				callsObject.put("Failed",0);
-				callsObject.put("Voicemails",0);
+			String type="";
+				callsObject.put("answered", 0);
+				callsObject.put("busy",0);
+				callsObject.put("failed",0);
+				callsObject.put("voicemail",0);
+				callsObject.put("missed",0);
+				callsObject.put("inquiry",0);
+				callsObject.put("interest",0);
+				callsObject.put("no interest",0);
+				callsObject.put("incorrect referral",0);
+				callsObject.put("meeting scheduled",0);
+				callsObject.put("new opportunity",0);
+
 				callsPerPersonJSON=initializeFrequencyForReports(minTime,maxTime,frequency,timeZone,callsObject);
 			        try{
 				for(Activity activity : activitieslist){
@@ -550,32 +751,52 @@ public class ReportsUtil
 			            	net.sf.json.JSONObject count = callsPerPersonJSON.getJSONObject(createdTime);
 		                    if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.ANSWERED) || activity.custom3.equalsIgnoreCase("completed")))
 		                    	{	
-		                    	
-		                    		int count1=count.getInt("Answered");
-		                    		count1++;
-		                    		count.put("Answered",count1);
+		                    		type=Call.ANSWERED;
 		                    	}
 							else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
 							{
-		                    	
-	                    		int count1=count.getInt("Busy");
-	                    		count1++;
-	                    		count.put("Busy",count1);
+								type=Call.BUSY;
+	                    		
 	                    	}
 							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
 							{
-		                    	
-	                    		int count1=count.getInt("Failed");
-	                    		count1++;
-	                    		count.put("Failed",count1);
+		                    	type=Call.FAILED;
 	                    	}
 							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
 							{
-		                    	
-	                    		int count1=count.getInt("Voicemails");
-	                    		count1++;
-	                    		count.put("Voicemails",count1);
+		                    	type=Call.VOICEMAIL;
 	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Missed))
+							{
+		                    	type=Call.Missed;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
+							{
+		                    	type=Call.NewOpportunity;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
+							{
+		                    	type=Call.MeetingScheduled;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Inquiry))
+							{
+		                    	type=Call.Inquiry;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.IncorrectReferral))
+							{
+		                    	type=Call.IncorrectReferral;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Interest))
+							{
+		                    	type=Call.Interest;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NoInterest))
+							{
+		                    	type=Call.NoInterest;
+	                    	}
+		                    int count1=count.getInt(type);
+                    		count1++;
+                    		count.put(type,count1);
 		                    callsPerPersonJSON.put(createdTime, count);
 			            }
 				}

@@ -47,15 +47,18 @@ var CONTACTS_HARD_RELOAD = false;
 function bulkActivitiesNoty(type, message, position) {
 	CONTACTS_HARD_RELOAD = true;
 	
+	message = message.message;
+	message = Handlebars.compile("{{message}}")({message : message});
+
 	// if no position, default bottomRight
 	if(!position)
 	{
-		showNotyPopUp(type, message.message, "bottomRight")
+		showNotyPopUp(type, message, "bottomRight")
 		return;
 	}
 		
 	// shows noty in given position
-	showNotyPopUp(type, message.message, position)
+	showNotyPopUp(type, message, position)
 }
 
 /**
@@ -182,9 +185,7 @@ function get_random_message() {
 	else
 		trail_expiry_message = "Your trial will expire in "+getPendingdaysIntrail()+" days";*/
 	
-	
-	var messages = ["You are using FREE limited version of Agile CRM. <span> Upgrade Now </span> "];
-
+	var	messages = ["You are using FREE limited version of Agile CRM. <span> Upgrade Now </span> "];
 	var random = Math.floor((Math.random() * messages.length));
 	// console.log(random + messages[random]);
 

@@ -85,7 +85,8 @@ var portlet_graph_utility = {
 														},
 														pie : {
 															borderWidth : 0,
-															innerSize : '50%',
+															innerSize : '35%',
+															size:'45%',
 															dataLabels : {
 																enabled : true,
 																useHTML : true,
@@ -133,7 +134,7 @@ var portlet_graph_utility = {
 	/**
 	 * To display closers per person portlet as bar graph
 	 */
-	closuresPerPersonBarGraph : function(selector, catges, data, text, name) {
+	closuresPerPersonBarGraph : function(selector, catges, data, text, name, base_model) {
 		head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function() {
 			$('#' + selector).highcharts(
 					{
@@ -155,7 +156,7 @@ var portlet_graph_utility = {
 							allowDecimals : false
 						},
 						legend : {
-							enabled : false
+							enabled : portlet_utility.is_legend_enable(base_model),
 						},
 						tooltip : {
 							formatter : function() {
@@ -192,7 +193,15 @@ var portlet_graph_utility = {
 	/**
 	 * To display deals funnel portlet as funnel graph
 	 */
-	dealsFunnelGraph : function(selector, funnel_data) {
+	dealsFunnelGraph : function(selector, funnel_data, base_model) {
+		var currency = '';
+		var series_name = "Revenue";
+		if (base_model && base_model.get("settings")["split-by"] && base_model.get("settings")["split-by"] == "count") {
+			series_name = "Deals";
+		}
+		else {
+			currency = portlet_utility.getPortletsCurrencySymbol();
+		}
 		head
 				.js(
 						LIB_PATH + 'lib/flot/highcharts-3.js',
@@ -211,7 +220,8 @@ var portlet_graph_utility = {
 											{
 												chart : {
 													type : 'funnel',
-													marginRight : 20,
+													marginLeft:-85,
+													marginBottom: 20,
 													className : 'deals-funnel-portlet'
 												},
 												colors : [ "#23b7e5",
@@ -228,15 +238,14 @@ var portlet_graph_utility = {
 														dataLabels : {
 															enabled : true,
 															useHTML : true,
-															format : '<div class="text-center"><span style="color:{point.color}"><b>{point.name}</b></span><br/>'
+															format : '<div class="text-center"><span style="color:{point.color}">{point.name}</span><br>'
 																	+ '<span style="color:{point.color}">('
-																	+ portlet_utility
-																			.getPortletsCurrencySymbol()
+																	+ currency
 																	+ '{point.y:,.0f})</span></div>',
 															softConnector : true
 														},
 														neckWidth : '20%',
-														neckHeight : '20%',
+														neckHeight : '25%',
 
 														// -- Other available
 														// options
@@ -248,8 +257,7 @@ var portlet_graph_utility = {
 												},
 												tooltip : {
 													pointFormat : '<span>{series.name}:<b>'
-															+ portlet_utility
-																	.getPortletsCurrencySymbol()
+															+ currency
 															+ '{point.y:,.0f}</b></span>',
 													shared : true,
 													useHTML : true,
@@ -263,7 +271,7 @@ var portlet_graph_utility = {
 													}
 												},
 												series : [ {
-													name : 'Value',
+													name : series_name,
 													data : funnel_data
 												} ],
 												exporting : {
@@ -367,6 +375,15 @@ var portlet_graph_utility = {
 								marginRight : 20,
 							// plotBorderWidth: 1,
 							// plotBorderColor: '#F4F4F5'
+							   events: {
+							   		load: function(){
+							   			console.log("load");
+							   			portlet_utility.toggle_chart_legends(this, base_model);
+							   		}, redraw : function(){
+							   			console.log("redraw");
+							   			portlet_utility.toggle_chart_legends(this, base_model);
+							   		}
+							   },
 							},
 							title : {
 								text : ''
@@ -440,6 +457,7 @@ var portlet_graph_utility = {
 								layout : 'vertical',
 								floating : true,
 								align : 'right',
+								enabled:portlet_utility.is_legend_enable(base_model),
 								verticalAlign : 'top'
 							},
 							colors : [ "#23b7e5", "#27c24c", "#7266ba",
@@ -453,7 +471,7 @@ var portlet_graph_utility = {
 	/**
 	 * To display deals assigned portlet as bar graph
 	 */
-	dealsAssignedBarGraph : function(selector, catges, dealsCountList) {
+	dealsAssignedBarGraph : function(selector, catges, dealsCountList, base_model) {
 		head
 				.js(
 						LIB_PATH + 'lib/flot/highcharts-3.js',
@@ -463,7 +481,16 @@ var portlet_graph_utility = {
 											{
 												chart : {
 													type : 'bar',
-													marginRight : 20
+													marginRight : 20,
+													events: {
+												   		load: function(){
+												   			console.log("load");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}, redraw : function(){
+												   			console.log("redraw");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}
+												   },
 												},
 												title : {
 													text : ''
@@ -479,7 +506,7 @@ var portlet_graph_utility = {
 													allowDecimals : false
 												},
 												legend : {
-													enabled : false
+													enabled : portlet_utility.is_legend_enable(base_model),
 												},
 												tooltip : {
 													formatter : function() {
@@ -522,7 +549,7 @@ var portlet_graph_utility = {
 	 */
 	callsPerPersonBarGraph : function(selector, domainUsersList, series,
 			totalCallsCountList, callsDurationList, text, colors,
-			domainUserImgList) {
+			domainUserImgList,base_model) {
 			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
 		var pos = '' + column_position + '' + row_position;
 		var	height=domainUsersList.length*30+($('#'+selector).height()-30);
@@ -542,6 +569,15 @@ var portlet_graph_utility = {
 						            plotBorderWidth: 1,
 						            plotBorderColor: '#F4F4F5',
 						            height:height,
+						            events: {
+								   		load: function(){
+								   			console.log("load");
+								   			portlet_utility.toggle_chart_legends(this, base_model);
+								   		}, redraw : function(){
+								   			console.log("redraw");
+								   			portlet_utility.toggle_chart_legends(this, base_model);
+								   		}
+								   },
 						        },
 						        title: {
 						            text: ''
@@ -627,6 +663,34 @@ var portlet_graph_utility = {
 						        				tt += 	'<tr><td style="color:'+this.points[3].series.color+';padding:0">'+this.points[3].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[3].point.y+'</b></td></tr>';
 						        			}
+						        			if(this.points[4]!=undefined && this.points[4].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[4].series.color+';padding:0">'+this.points[4].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[4].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[5]!=undefined && this.points[5].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[5].series.color+';padding:0">'+this.points[5].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[5].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[6]!=undefined && this.points[6].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[6].series.color+';padding:0">'+this.points[6].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[6].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[7]!=undefined && this.points[7].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[7].series.color+';padding:0">'+this.points[7].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[7].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[8]!=undefined && this.points[8].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[8].series.color+';padding:0">'+this.points[8].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[8].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[9]!=undefined && this.points[9].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[9].series.color+';padding:0">'+this.points[9].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[9].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[10]!=undefined && this.points[10].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[10].series.color+';padding:0">'+this.points[10].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[10].point.y+'</b></td></tr>';
+						        			}
 						        			tt += '<tr><td>Total:&nbsp; </td><td class="b-b-none">'+totalCallsCountList[this.points[0].point.x]+'</td></tr></table>';
 						        		}
 						        		return tt;
@@ -660,7 +724,7 @@ var portlet_graph_utility = {
 						        exporting: {
 							        enabled: false
 							    },
-							    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", "#fad733","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
+							    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
 							    legend : {
 									itemStyle : {
 										fontSize : '10px',
@@ -670,6 +734,7 @@ var portlet_graph_utility = {
 									layout : 'vertical',
 									floating : true,
 									align : 'right',
+									enabled:portlet_utility.is_legend_enable(base_model),
 									verticalAlign : 'top'
 								}
 						    });
@@ -710,7 +775,7 @@ var portlet_graph_utility = {
 		            type: 'pie',
 		            marginRight: 20
 		        },
-		        colors : ['#7266ba','#23b7e5','#fad733','#27c24c','#f05050',"#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353", "#7798BF","#aaeeee"],
+		        colors : ["#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
 		        title: {
 		            text: ''
 		        },
@@ -773,7 +838,7 @@ var portlet_graph_utility = {
 	 * To display task report portlet as bar graph
 	 */
 	taskReportBarGraph : function(selector, groupByList, series, text,
-			base_model, domainUserNamesList) {
+			base_model, domainUserNamesList,CountData,yaxistitle) {
 			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
 		var pos = '' + column_position + '' + row_position;
 
@@ -785,22 +850,71 @@ var portlet_graph_utility = {
 												colors : [ "#23b7e5",
 														"#27c24c", "#7266ba",
 														"#fad733", "#f05050",
-														"#aaeeee", "#ff0066",
+														"#aaeeee", "#f4a460",
 														"#eeaaee", "#55BF3B",
 														"#DF5353" ],
 												chart : {
 													renderTo:selector,
 													type : 'bar',
-													marginRight : 20,
+													marginRight : 80,
 													height:groupByList.length*30+($('#'+selector).height()-30),
+													events: {
+												   		load: function(){
+												   			console.log("load");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}, redraw : function(){
+												   			console.log("redraw");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}
+												   },
 												},
 												title : {
 													text : ''
 												},
+												
 												xAxis : {
 													categories : groupByList,
 													labels : {
 														formatter : function() {
+															if(base_model.get('name')=='Average Deviation')
+															{
+																var userIndex = 0;
+																for ( var i = 0; i < groupByList.length; i++) {
+																	if (this.value == groupByList[i]
+																			&& groupByList[i]
+																					.substring(
+																							0,
+																							8) != "no image")
+																		userIndex = i;
+																	else if (this.value == groupByList[i]
+																			&& groupByList[i]
+																					.substring(
+																							0,
+																							8) == "no image")
+																		userIndex = parseInt(groupByList[i]
+																				.substring(
+																						9,
+																						10));
+																}
+																if (this.value != undefined
+																		&& this.value != ""
+																		&& this.value
+																				.substring(
+																						0,
+																						8) != "no image")
+																	return '<img src="'
+																			+ this.value.split('#')[0]
+																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
+																			+ domainUserNamesList[userIndex]
+																			+ '"/>';
+																else
+																	return '<img src="'
+																			+ gravatarImgForPortlets(25)
+																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
+																			+ domainUserNamesList[userIndex]
+																			+ '"/>';
+															}
+																else{
 															if (base_model
 																	.get('settings')["group-by"] == "user") {
 																var userIndex = 0;
@@ -828,7 +942,7 @@ var portlet_graph_utility = {
 																						0,
 																						8) != "no image")
 																	return '<img src="'
-																			+ this.value
+																			+ this.value.split('#')[0]
 																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
 																			+ domainUserNamesList[userIndex]
 																			+ '"/>';
@@ -849,6 +963,7 @@ var portlet_graph_utility = {
 																	return this.value;
 																}
 															}
+														}
 														},
 														style : {
 															color : '#98a6ad',
@@ -864,7 +979,7 @@ var portlet_graph_utility = {
 												yAxis : {
 													min : 0,
 													title : {
-														text : ''
+														text : yaxistitle
 													},
 													allowDecimals : false,
 													gridLineWidth : 1,
@@ -903,7 +1018,35 @@ var portlet_graph_utility = {
 														color : '#EFEFEF'
 													},
 													formatter : function() {
-														if (base_model
+														if( base_model.get('name')=='Average Deviation'){
+															var userIndex = 0;
+															for ( var i = 0; i < groupByList.length; i++) {
+																if (this.key == groupByList[i])
+																	userIndex = i;
+															}
+															return '<div>'
+																	+ '<div class="p-n">'
+																	+ domainUserNamesList[userIndex]
+																	+ ' </div>'
+																	+ '<div class="p-n" style="color:'
+																	+ this.series.color
+																	+ ';">'
+																	+ 'Deviation Time'
+																	+ ':'
+																	+ portlet_utility.getPortletsTimeConversion(Math.round(this.y))
+																	+ ' </div>'
+																	+ '<div class="p-n" style="color:'
+																	+ this.series.color
+																	+ ';">'
+																	+ this.series.name
+																	+ ': '
+																	+ portlet_utility.getNumberWithCommasForPortlets(CountData[this.series.index][this.point.x])
+																	+ ' </div>'
+																	+ '</div>';
+															
+														}
+														
+													else	if (base_model
 																.get('settings')["group-by"] == "user") {
 															var userIndex = 0;
 															for ( var i = 0; i < groupByList.length; i++) {
@@ -950,6 +1093,7 @@ var portlet_graph_utility = {
 													floating : true,
 													align : 'right',
 													verticalAlign : 'top',
+													enabled:portlet_utility.is_legend_enable(base_model),
 													labelFormatter : function() {
 														if (this.name.length > 12) {
 															return this.name
@@ -985,7 +1129,17 @@ var portlet_graph_utility = {
 											{
 												chart : {
 													type : 'areaspline',
-													marginRight : 20
+													marginRight : 20,
+													events: {
+												   		load: function(){
+												   			console.log("load");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}, redraw : function(){
+												   			console.log("redraw");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}
+												   },
+
 												},
 												title : {
 													text : ''
@@ -1087,6 +1241,7 @@ var portlet_graph_utility = {
 													layout : 'vertical',
 													floating : true,
 													align : 'right',
+													enabled:portlet_utility.is_legend_enable(base_model),
 													verticalAlign : 'top'
 												},
 												colors : [ "#23b7e5",
@@ -1316,7 +1471,6 @@ var portlet_graph_utility = {
 												},
 												legend : {
 													enabled : false,
-
 												},
 												plotOptions : {
 													series : {
@@ -1395,7 +1549,6 @@ var portlet_graph_utility = {
 											});
 						});
 	},
-
 	dealGoalsPieGraph : function(selector, data1,data2,colors)
 	{
 			var series = [];

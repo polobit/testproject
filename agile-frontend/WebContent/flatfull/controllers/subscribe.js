@@ -187,7 +187,7 @@ var SubscribeRouter = Backbone.Router
 
 				saveCallback : function()
 				{
-					showNotyPopUp("information", "Emails have been purchased successfully.", "top");
+					showNotyPopUp("information", "Emails have been added successfully. It will take a few seconds to update on your account. <a href='#subscribe' onclick='document.location.reload();'>Click here</a> if they are not added.", "top", 15000);
 				}, postRenderCallback : function(el)
 				{
 					_IS_EMAIL_PLAN_ACTIVE = true;
@@ -250,6 +250,7 @@ var SubscribeRouter = Backbone.Router
 					_data = that.subscribe_plan.model.toJSON();
 
 					initializeSubscriptionListeners()
+					$('[data-toggle="tooltip"]').tooltip();
 
 					var _window = window;
 					// Setup account statistics
@@ -723,7 +724,7 @@ function getMaxEmailsLimit()
 }
 function canSendEmails(emails_to_send)
 {
-	var pending = getPendingEmails();
+	var pending = getPendingEmails() + getEmailCreditsCount();
 	if (pending >= emails_to_send)
 		return true;
 
@@ -775,10 +776,21 @@ function getEmailsNextRenewalTime()
 	var last_renewal_time = _billing_restriction.last_renewal_time;
 	if(last_renewal_time == undefined || last_renewal_time == null){
 		$.getJSON("core/api/users/current-owner", function(data){
-		  return new Date((data.createdTime+2592000)*1000).format("mmm dd, yyyy");
+			$("#next_emails_renewal").html(new Date((data.createdTime+2592000)*1000).format("mmm dd, yyyy"));
+		  return;
 		});
 	}else{
 		return new Date((last_renewal_time+2592000)*1000).format("mmm dd, yyyy");
 	}
 
+}
+
+function getEmailCreditsCount()
+{
+	var count = _billing_restriction.email_credits_count;
+
+	if (count == undefined)
+		count = 0;
+
+	return count;
 }

@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.query.QueryDocument;
@@ -21,6 +22,7 @@ import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.datastore.QueryResultIterable;
+import com.google.appengine.api.search.SearchException;
 import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -286,5 +288,63 @@ public class ContactFilterUtil
 	rule.RHS = contact_filter.contact_type.toString();
 	contact_filter.rules.add(rule);
 	return contact_filter;
+    }
+
+    /**
+     * This is to check if field label is of custom field type when send from
+     * frontend to sort or query
+     * 
+     * @param field
+     * @return
+     */
+    public static boolean isCustomField(String field)
+    {
+	return StringUtils.containsIgnoreCase(field, "_AGILE_CUSTOM_");
+    }
+
+    public static List<Contact> getFilterContactsBySortKey(String sortKey, Integer page_count, String cursor, Type contactType)
+    {
+	ContactFilter contact_filter = getFilterByType(contactType);
+
+	// Modification to sort based on company name. This is required as
+	// company name lower is saved in different field in text search
+	sortKey = (sortKey != null ? ((sortKey.equals("name") || sortKey.equals("-name")) ? sortKey.replace("name",
+		"name_lower") : sortKey) : null);
+
+	return getFilterContacts(contact_filter, page_count, cursor, sortKey);
+    }
+
+    public static ContactFilter getFilterByType(Type type)
+    {
+	ContactFilter contact_filter = new ContactFilter();
+	SearchRule rule = new SearchRule();
+	rule.LHS = "type";
+	rule.CONDITION = RuleCondition.EQUALS;
+	rule.RHS = type.toString();
+	contact_filter.rules.add(rule);
+
+	return contact_filter;
+    }
+
+    public static List<Contact> getFilterContacts(ContactFilter contact_filter, Integer page_count, String cursor,
+	    String sortKey)
+    {
+
+	if (page_count == null)
+	    page_count = 100;
+
+	// Sets ACL condition
+	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
+		UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules, null);
+
+	List<Contact> contacts = null;
+	try
+	{
+	    return contacts = new ArrayList<Contact>(contact_filter.queryContacts(page_count, cursor, sortKey));
+	}
+	catch (SearchException e)
+	{
+	    return new ArrayList<Contact>();
+	}
     }
 }

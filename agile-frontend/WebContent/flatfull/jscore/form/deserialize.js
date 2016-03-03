@@ -185,9 +185,12 @@ function deserializeForm(data, form)
 													 * value is contact id and
 													 * name of li element is
 													 * contact full name
-													 */													
-													fel.append(
-																	'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + tag_id + '"  style="display: inline-block; "><a class="text-white v-middle" href="' + hrefLink + '">' + tag_name + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+													 */	
+													 var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}"  style="display: inline-block; "><a class="text-white v-middle" href="{{link}}">{{name}}</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+
+												 	// Adds contact name to tags ul as li element
+												 	fel.append(template({name : tag_name, id : tag_id, link : hrefLink}));
+
 												});
 							}
 
@@ -235,8 +238,10 @@ function deserializeForm(data, form)
 													 * name of li element is
 													 * contact full name
 													 */
-													fel
-															.append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + tag_id + '"><a href="#deal/' + deal.id + '" class="text-white v-middle">' + tag_name + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+													 var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}"><a href="#deal/{{id}}" class="text-white v-middle">{{name}}</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+
+												 	// Adds contact name to tags ul as li element
+												 	fel.append(template({name : tag_name, id : tag_id}));
 												});
 							}
 
@@ -599,6 +604,7 @@ function deserializeLhsFilters(element, data)
 		{
 			$('#' + LHS + '_div').parent().find('a').addClass('bold-text');
 			$('#' + LHS + '_div').removeClass('hide');
+			$('#' + LHS + '_div').prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 			if ((tagsConditionsCount == 0 && LHS == 'tags') || (campaignConditionsCount == 0 && LHS == 'campaign_status'))
 			{
 				currentElemnt = $('#' + LHS + '-lhs-filter-table').find("div.lhs-contact-filter-row:last")

@@ -16,7 +16,10 @@
  * @param base_model
  */
 var CURRENT_VIEW_OBJECT;
+var CONTACTS_SORT_LIST={"created_time":"Created Date","lead_score":"Score","star_value":"Starred","first_name":"First Name","last_name":"Last Name","last_contacted":"Contacted Date",}
 
+
+var ifFromRender=false;
 function contactTableView(base_model,customDatefields,view) {
 	
 	var templateKey = 'contacts-custom-view-model';
@@ -25,6 +28,9 @@ function contactTableView(base_model,customDatefields,view) {
 		templateKey = 'contacts-grid';
 	}
 
+	// if(agile_is_mobile_browser())
+
+
 	// Creates list view for
 	var itemView = new Base_List_View({
 		model : base_model,
@@ -32,6 +38,10 @@ function contactTableView(base_model,customDatefields,view) {
 		tagName : view.options.individual_tag_name
 	});
 
+
+	itemView.model.unbind('change')
+	itemView.renderRow = function(el, isFromRender)
+	{
 	// Reads the modelData (customView object)
 	var modelData = view.options.modelData;
 
@@ -43,59 +53,74 @@ function contactTableView(base_model,customDatefields,view) {
 	var el = itemView.el;
 
 	if (!gridViewEl || window.location.hash=="#companies") {
-	
-		// Clears the template, because all the fields are appended, has to be reset
-		// for each contact
-		// $('#contacts-custom-view-model-template').empty();
-		
-		// Iterates through, each field name and appends the field according to
-		// order of the fields
-		$.each(fields, function(index, field_name) {
-			if(field_name.indexOf("CUSTOM_") != -1)
-			{
-				field_name = field_name.split("CUSTOM_")[1]; 			
-				var property = getProperty(contact.properties, field_name);
-				var json = {};
-				if(!property)
-				{
-					json.id = contact.id;
-					getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
+
+		if(agile_is_mobile_browser()){
+
+			getTemplate('contacts-custom-view-basic_info-mobile', contact, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
 						$(el).append($(template_ui));
 					}, null);
-					return;
-				}
-				if(isDateCustomField(customDatefields,property)){
-					console.log('got true');
-					json = property;
-					json.id = contact.id;
-					getTemplate('contacts-custom-view-custom-date', json, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$(el).append($(template_ui));
-					}, null);
-				}
-				else
-				{
-					json = property;
-					json.id = contact.id;
-					getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$(el).append($(template_ui));
-					}, null);
+
+		}else {
+				// Clears the template, because all the fields are appended, has to be reset
+				// for each contact
+				// $('#contacts-custom-view-model-template').empty();
+				
+				// Iterates through, each field name and appends the field according to
+				// order of the fields
+				if(isFromRender!=true)
+					$(el).html($(el).find('td').first());
+				$.each(fields, function(index, field_name) {
+					if(field_name.indexOf("CUSTOM_") != -1)
+					{
+						field_name = field_name.split("CUSTOM_")[1]; 			
+						var property = getProperty(contact.properties, field_name);
+						var json = {};
+						if(!property)
+						{
+							json.id = contact.id;
+							getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui));
+							}, null);
+							return;
+						}
+						if(isDateCustomField(customDatefields,property)){
+							console.log('got true');
+							json = property;
+							json.id = contact.id;
+							getTemplate('contacts-custom-view-custom-date', json, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui));
+							}, null);
+						}
+						else
+						{
+							json = property;
+							json.id = contact.id;
+							getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui));
+							}, null);
+							
+						}
+						return;
+					}
 					
-				}
-				return;
-			}
-			
-			getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-				$(el).append($(template_ui));
-			}, null);
-		});
+					getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$(el).append($(template_ui));
+					}, null);
+				});
+
+		}
+	
+		
 
 	} else  {
 		getTemplate('contacts-grid-model', contact, undefined, function(template_ui){
@@ -105,12 +130,24 @@ function contactTableView(base_model,customDatefields,view) {
 			}, null);
 	}
 				
+	
+	//contactListener();
+	}
+	itemView.render = function(el)
+	{
+		isFromRender=true;
+		this.renderRow(el,isFromRender);
+	}
+
+	itemView.model.bind('change', itemView.renderRow, itemView);
+	itemView.render();
 	// Appends model to model-list template in collection template
-	$(('#'+view.options.templateKey+'-model-list'), view.el).append(el);
+	$(('#'+view.options.templateKey+'-model-list'), view.el).append(itemView.el);
 
 	// Sets data to tr
 	$(('#'+view.options.templateKey+'-model-list'), view.el).find('tr:last').data(
 			base_model);
+	
 }
 
 // Check whether the given fields list has the property name.
@@ -152,9 +189,11 @@ function setupViews(cel, button_name) {
 			// the view is show in the custom view button.
 			if (button_name)
 				$("#view-list", cel).find('.custom_view').append(button_name);
+			
+
 			//updates the selected sort item to bold
-			updateSelectedSortKey($("#view-list", cel));
-			addClickEventsForSorting($("#view-list", cel));
+			//updateSelectedSortKey($(".contacts-toolbar", cel));
+			//addClickEventsForSorting($("#view-list", cel));
 			if(_agile_get_prefs('company_filter') || _agile_get_prefs('contact_filter_type') == 'COMPANY')
 			{
 				$('#contact-view-model-list>li').css('display','none');
@@ -162,25 +201,256 @@ function setupViews(cel, button_name) {
 			}
 
 		}, $("#view-list", cel));
+
+		setUpContactSortFilters(cel);
 	// });
+}
+
+
+var COMPANY_CUSTOM_SORT_VIEW = undefined;
+function setUpCompanySortFilters(el)
+{
+	if(COMPANY_CUSTOM_SORT_VIEW)
+	{
+		$("#contact-sorter", el).html(COMPANY_CUSTOM_SORT_VIEW.render(true).el);
+		//CUSTOM_SORT_VIEW.init();
+		//CUSTOM_SORT_VIEW.preSelectFields();
+		return;	
+	}
+
+	var view = COMPANY_SORT_FIELDS_VIEW.view();
+	COMPANY_CUSTOM_SORT_VIEW = new view ({
+		data : sort_company_configuration.getCompanySortableFields(),
+		templateKey : "contact-view-sort",
+		sortPrefsName : "company_sort_field",
+		individual_tag_name : "li",
+		sort_collection : false,
+		postRenderCallback: function(el)
+		{
+			COMPANY_CUSTOM_SORT_VIEW.postProcess();
+		}
+	});
+
+	
+	COMPANY_CUSTOM_SORT_VIEW.init();
+	$("#contact-sorter", el).html(COMPANY_CUSTOM_SORT_VIEW.render(true).el);
+	
+
+	getSearchableCustomFields("COMPANY", function(data){
+		COMPANY_CUSTOM_SORT_VIEW.addAll(data);
+	})
+	
+}
+
+var CUSTOM_SORT_VIEW = undefined;
+function setUpContactSortFilters(el)
+{
+	if(CUSTOM_SORT_VIEW)
+	{
+		$("#contact-sorter", el).html(CUSTOM_SORT_VIEW.render(true).el);
+		//CUSTOM_SORT_VIEW.init();
+		//CUSTOM_SORT_VIEW.preSelectFields();
+		return;	
+	}
+
+	var view = CONTACT_SORT_FIELDS_VIEW.view();
+	CUSTOM_SORT_VIEW = new view ({
+		data : sort_configuration.getContactSortableFields(),
+		templateKey : "contact-view-sort",
+		sortPrefsName : "sort_by_name",
+		individual_tag_name : "li",
+		sort_collection : false,
+		postRenderCallback: function(el)
+		{
+			CUSTOM_SORT_VIEW.postProcess();
+		}
+	});
+
+	
+	CUSTOM_SORT_VIEW.init();
+	$("#contact-sorter", el).html(CUSTOM_SORT_VIEW.render(true).el);
+	
+
+	getSearchableCustomFields("CONTACT", function(data){
+		CUSTOM_SORT_VIEW.addAll(data);
+	})
+	
+}
+
+function addCustomFieldToSearch(base_model, scope)
+{
+	var sort_view;
+	if(scope == "COMPANY"){
+		sort_view = COMPANY_CUSTOM_SORT_VIEW;
+	}else{
+		sort_view = CUSTOM_SORT_VIEW;
+	}
+
+	if(!sort_view)
+		return;
+
+	if(!base_model)
+		return;
+
+	if(!base_model.get("searchable"))
+		return;
+
+	sort_view.collection.add(base_model);
+}
+
+function updateCustomFieldToSearch(base_model, scope)
+{
+	var sort_view;
+	if(scope == "COMPANY"){
+		sort_view = COMPANY_CUSTOM_SORT_VIEW;
+	}else{
+		sort_view = CUSTOM_SORT_VIEW;
+	}
+
+	if(!sort_view)
+		return;
+
+	if(!base_model)
+		return;
+
+	var searchable  = base_model.get("searchable");
+
+	if(searchable){
+		addCustomFieldToSearch(base_model, scope);
+	}else{
+		removeCustomFieldFromSortOptions(base_model, scope);
+	}
+}
+
+function removeCustomFieldFromSortOptions(base_model, scope)
+{
+	var sort_view;
+	if(scope == "COMPANY"){
+		sort_view = COMPANY_CUSTOM_SORT_VIEW;
+	}else{
+		sort_view = CUSTOM_SORT_VIEW;
+	}
+	
+	if(!base_model)
+		return;
+
+	// if(!base_model.get("searchable"))
+	// 	return;
+
+	if(!sort_view)
+		return;
+	
+	var model = sort_view.collection.get(base_model.get('id'));
+
+	if(model){
+		sort_view.collection.remove(base_model.get('id'));
+		sort_view.render(true);
+		// if(scope == "COMPANY"){
+		// 	var selectedCompanyFilter = _agile_get_prefs('company_sort_field');
+		// 	var currentField = model.attributes.search_key + "_AGILE_CUSTOM_"+ model.attributes.field_type;
+		// 	if(selectedCompanyFilter == selectedCompanyFilter){
+		// 		_agile_set_prefs('company_sort_field', "-created_time");
+		// 	}
+		// }
+		
+	}
+}
+
+function getSearchableCustomFields(scope, callback)
+{
+	if(!scope)
+	  scope = "CONTACT";
+
+	$.getJSON("core/api/custom-fields/searchable/scope?scope=" + scope, function(data){
+		if(callback && typeof callback === 'function')
+			callback(data);
+	});
 }
 
 function updateSelectedSortKey(el) {
 	var sort_key = _agile_get_prefs("sort_by_name");
+	$('.sort-field-check').addClass('display-none');
+	$('.sort-by-check').addClass('display-none');
 	if(sort_key && sort_key != null) {
-		var idSuffix = '-asc';
-		if(sort_key.indexOf('-') == 0) {
-			sort_key = sort_key.substring(1);
-			idSuffix = '-desc'
-		}
-		var elementId = 'sort-by-'+sort_key+idSuffix;
-		$(el).find('#'+elementId).addClass('bold-text');
+		var sort = sort_key.split("-")
+		if(sort[0] == "")
+			$(".sort-by[data='-']").find('i').removeClass('display-none');
+		else
+			$(".sort-by[data='']").find('i').removeClass('display-none');
+		if(sort.length > 1)
+			sort_key = sort[1];
+		$(".sort-field[data='"+sort_key+"']").find('i').removeClass('display-none');
+		printSortNameByData(sort_key);
+		
+	}else{
+		$(".sort-by[data='']").find('i').removeClass('display-none');
+		$(".sort-field[data='created_time']").find('i').removeClass('display-none');
+		printSortNameByData('created_time');
 	}
+}
+
+function printSortNameByData(data){
+	 $(".contacts-toolbar").find(".sort-field-txt").html(CONTACTS_SORT_LIST[data]);
 }
 
 	function addClickEventsForSorting(el) {
 		// Fetch sort result without changing route on click
-		$(el).find('.sort').on("click", function(e)
+		$('.contacts-toolbar').on('click', 'a.sort-field', function(e){
+			e.preventDefault();
+			// Gets name of the attribut to sort, which is set as data
+			// attribute in the link
+			var sort_field = $(this).attr('data');
+			printSortNameByData(sort_field);
+			var sort_key = _agile_get_prefs('sort_by_name');
+			if(sort_key != undefined && sort_key != null && sort_key[0] == "-")
+				sort_field = "-"+sort_field;
+			_agile_set_prefs('sort_by_name', sort_field);
+			
+			CONTACTS_HARD_RELOAD=true;
+			// If filter is not set then show view on the default contacts
+			// list
+			if(!App_Contacts.tag_id)
+			{
+				App_Contacts.contacts(undefined, undefined, undefined, true);
+				return;
+			}
+			
+			// If tag filter is applied send tags fetch url and tag_id, which is tobe shown on contacts table.
+			App_Contacts.contacts(App_Contacts.tag_id, undefined, undefined, true);
+			return;
+			
+		});
+
+		$('.contacts-toolbar').on('click', 'a.sort-by', function(e){
+			e.preventDefault();
+
+
+			var sort_by = $(this).attr("data");
+			var sort_field = _agile_get_prefs('sort_by_name');
+			if(sort_field == null || sort_field == undefined)
+				sort_field = "created_time";
+			if(sort_field[0] == "-")
+				sort_field = sort_field.slice(1);
+			_agile_set_prefs('sort_by_name', sort_by+sort_field);
+			
+			CONTACTS_HARD_RELOAD=true;
+			// If filter is not set then show view on the default contacts
+			// list
+			if(!App_Contacts.tag_id)
+			{
+				App_Contacts.contacts(undefined, undefined, undefined, true);
+				return;
+			}
+			
+			// If tag filter is applied send tags fetch url and tag_id, which is tobe shown on contacts table.
+			App_Contacts.contacts(App_Contacts.tag_id, undefined, undefined, true);
+			return;
+
+			
+		});
+
+
+		/*$(el).find('.sort').on("click", function(e)
 		{
 
 			e.preventDefault();
@@ -207,7 +477,7 @@ function updateSelectedSortKey(el) {
 			// If tag filter is applied send tags fetch url and tag_id, which is tobe shown on contacts table.
 			App_Contacts.contacts(App_Contacts.tag_id, undefined, undefined, true);
 			return;
-		});
+		});*/
 
 	}
 
@@ -324,5 +594,9 @@ $(function() {
 		// Loads the contacts
 		App_Contacts.contacts(undefined, undefined, true);
 
+
 	});
+
+
 });
+

@@ -38,6 +38,7 @@ function loadPortlets(route,el){
 	App_Portlets.dealGoals=new Array();
 	App_Portlets.adminPortlets = new Array();
 	App_Portlets.RoutePortlets=new Array();
+	App_Portlets.taskAverage = new Array();
 
 	console.log("before initialized" + App_Portlets.RoutePortlets.length);
 	/*
@@ -369,6 +370,7 @@ function set_up_portlets(el, portlets_el){
     		{
     			$('.portlet_body_calendar').each(function(){
 					var that=$(this);
+
 					if($("#calendar_container").find('.fc-widget-header').length!=0)
 					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
 				});
@@ -385,6 +387,7 @@ function set_up_portlets(el, portlets_el){
 		{
 				$('.portlet_body_calendar').each(function(){
 					var that=$(this);
+
 					if($("#calendar_container").find('.fc-widget-header').length!=0)
 					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
 				$(this).find('#calendar_container').find('.fc-widget-header').each(function(){

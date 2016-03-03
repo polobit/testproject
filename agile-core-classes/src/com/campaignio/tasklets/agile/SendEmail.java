@@ -686,10 +686,10 @@ public class SendEmail extends TaskletAdapter
     {
     	try
     	{
-    	    return VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "unsubscribe?sid="
-                    + URLEncoder.encode(subscriberId, "UTF-8") + "&cid="
-                    + URLEncoder.encode(campaignId, "UTF-8") + "&e="
-                    + URLEncoder.encode(email, "UTF-8");
+    	    return VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "unsubscribe?e="
+                    + URLEncoder.encode(email, "UTF-8")
+                    + "&sid=" + URLEncoder.encode(subscriberId, "UTF-8")
+                    + "&cid=" + URLEncoder.encode(campaignId, "UTF-8");
     	}
     	catch(Exception e)
     	{

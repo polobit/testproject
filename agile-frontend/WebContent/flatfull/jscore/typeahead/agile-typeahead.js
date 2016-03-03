@@ -254,6 +254,13 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 						 */
 						updater : function(items)
 						{
+
+							//in mobile hiding the searchbar onclick
+							setTimeout(function(){
+								$('.search-mobile').addClass('hide');
+								$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
+							},200);
+
 							// To verify whether the entity (task, deal etc..)
 							// related to same contact twice
 							var tag_not_exist = true;
@@ -335,8 +342,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 									$('#' + id, el)
 											.closest("div.controls")
 											.find(".tags")
-											.append(
-													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block"  data="' + TYPEHEAD_EMAILS[items] + '"><a class="text-white" href="'+TYPEHEAD_TYPE[items] + TYPEHEAD_TAGS[items] + '">' + items_temp + '</a><a class="close text-white m-l-xs" id="remove_tag">&times</a></li>');
+											.append(getTemplate("tag-item-li", get_tag_item_json(items, items_temp, "email")));
+
 
 								}
 
@@ -356,8 +363,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								// add tag
 								if (tag_not_exist)
 									$('.deal_tags', el)
-											.append(
-													'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="' + TYPEHEAD_TAGS[items] + '"><a href="#deal/' + TYPEHEAD_TAGS[items] + '" class="text-white v-middle">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+											.append(getTemplate("tag-deal-item-li", get_tag_item_json(items, items_temp, "deals")));
 							}
 							else
 							{
@@ -382,8 +388,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								// add tag
 								if (tag_not_exist)
 									targetContainer
-											.append(
-													'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="' + TYPEHEAD_TAGS[items] + '"><a href="'+TYPEHEAD_TYPE[items] + TYPEHEAD_TAGS[items] + '" class="text-white v-middle">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+											.append(getTemplate("tag-item-li", get_tag_item_json(items, items_temp)));
+
+											
 							}
 							//Sets modal backdrop height to modal dialog height after select the tag
 							$('.modal-backdrop',$('.modal:visible')).height($('.modal-dialog',$('.modal:visible')).height()+70);
@@ -493,12 +500,18 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 												return;
 											}
 										});
-										if (email_check)
+										if (email_check){
+
+											var emailJSON = {};
+											emailJSON.email_item = email_value;
+											emailJSON.item = email_value;
 											$('#' + id, el)
 													.closest("div.controls")
 													.find(".tags")
-													.append(
-															'<li class="tag"  style="display: inline-block;" data="' + email_value + '"><a style="cursor:pointer;">' + email_value + '</a><a class="close" id="remove_tag">&times</a></li>');
+													.append(getTemplate("tag-item-li", emailJSON));
+													
+										}
+											
 										this.select();
 									}
 									else
@@ -547,6 +560,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							this.$menu.hide();
 							this.shown = false;
 							return this;
+
+							
+
 						},
 
 						// Handles cursor exiting the textbox
@@ -778,4 +794,23 @@ function appendItemInResult(item)
 		}
 	}
 
+}
+
+function get_tag_item_json(items, items_temp, type){
+
+	var tag_item_json = {};
+
+	if(type == "email"){
+		tag_item_json.email_item = TYPEHEAD_EMAILS[items];
+		tag_item_json.type_item = TYPEHEAD_TYPE[items];
+	} else {
+		tag_item_json.email_item = TYPEHEAD_TAGS[items];
+		tag_item_json.type_item = TYPEHEAD_TYPE[items];
+	}
+	
+	tag_item_json.tag_item = TYPEHEAD_TAGS[items];
+	tag_item_json.item = items_temp;
+
+	console.log(tag_item_json);
+	return tag_item_json;
 }

@@ -216,9 +216,9 @@ public class EmailUtil
 
 	// For Campaign HTML emails, Powered by should be right aligned
 	if (StringUtils.equals(labelText, "Powered by") && StringUtils.equals(medium, "campaign"))
-	    html = html + "<br><br><div style=\"float:right;\">" + getPoweredByAgileLink(medium, labelText) + "</div>";
+	    html = html + "<div style=\"float:right;margin-top:5px\">" + getPoweredByAgileLink(medium, labelText) + "</div>";
 	else
-	    html = html + "<br><br>" + getPoweredByAgileLink(medium, labelText);
+	    html = html + "<div style=\"margin-top:5px\">" + getPoweredByAgileLink(medium, labelText) + "</div>";
 
 	return html;
     }

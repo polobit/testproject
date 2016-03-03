@@ -211,7 +211,7 @@ public class Event extends Cursor
     /**
      * Range object for doing two inequality queries
      */
-    List<Long> search_range = null;
+    public List<Long> search_range = null;
 
     /******************************** New Field ********************/
     /**

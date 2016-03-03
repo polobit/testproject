@@ -492,7 +492,9 @@ public class TaskUtil
 	    System.out.println("startTime: " + startTime);
 	    System.out.println("endTime: " + endTime);
 
-	    if (type.equalsIgnoreCase("OVERDUE"))
+	    if (type != null)
+	    {
+    	if (type.equalsIgnoreCase("OVERDUE"))
 	    {
 		searchMap.put("due <", startTime);
 	    }
@@ -510,12 +512,19 @@ public class TaskUtil
 	    {
 		searchMap.put("due >=", endTime + 86400);
 	    }
+	    }
 
 	    if (StringUtils.isNotBlank(owner))
 		searchMap.put("owner", new Key<DomainUser>(DomainUser.class, Long.parseLong(owner)));
 
 	    if (pending)
 		searchMap.put("is_complete", !pending);
+	    
+	    if(criteria != null && criteria.equalsIgnoreCase("CALENDAR"))
+	    {
+	    searchMap.put("due >=", startTime);
+		searchMap.put("due <", endTime);
+	    }
 
 	    if (max != null)
 		return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "due");
@@ -829,7 +838,7 @@ public class TaskUtil
 
 	    if (startTime != null)
 	    {
-		if (tasks.equalsIgnoreCase("all-tasks"))
+		if (tasks!=null && tasks.equalsIgnoreCase("all-tasks"))
 		{
 		    searchMap1.put("due >=", startTime);
 		    searchMap2.put("task_completed_time >=", startTime);
@@ -839,7 +848,7 @@ public class TaskUtil
 	    }
 	    if (endTime != null)
 	    {
-		if (tasks.equalsIgnoreCase("all-tasks"))
+		if (tasks!=null && tasks.equalsIgnoreCase("all-tasks"))
 		{
 		    searchMap1.put("due <", endTime);
 		    searchMap2.put("task_completed_time <", endTime);
@@ -855,7 +864,7 @@ public class TaskUtil
 	    }
 
 	    tasksList1 = dao.listByProperty(searchMap1);
-	    if (tasks.equalsIgnoreCase("all-tasks"))
+	    if (tasks!=null && tasks.equalsIgnoreCase("all-tasks"))
 	    {
 		HashSet<Long> hashSet = new HashSet<Long>();
 		tasksList2 = dao.listByProperty(searchMap2);
@@ -936,4 +945,12 @@ public class TaskUtil
 
 		return query.list();
 	}
+	
+	/* public static List<Task> getCompletedTasks(Long start,Long end)
+	    {
+		return dao.ofy().query(Task.class)
+			.filter("task_completed_time >= ", start).filter("task_completed_time <=" , end)
+			.order("-task_completed_time").list();
+	    }*/
+
 }

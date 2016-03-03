@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.webhooks.triggers.util.WebhookTriggerUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 
@@ -39,6 +40,19 @@ public class ContactTriggerUtil
 	{
 	    executeTriggerForNewContact(newContact);
 	    return;
+	}
+
+	Boolean updated = newContact.isDocumentUpdateRequired(oldContact);
+	if (updated)
+	{
+	    try
+	    {
+		WebhookTriggerUtil.triggerWebhook(newContact, "Contact", updated);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 	}
 
 	ScoreTriggerUtil.checkScoreChange(oldContact, newContact);

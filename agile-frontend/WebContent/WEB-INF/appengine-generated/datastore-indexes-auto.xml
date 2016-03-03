@@ -307,13 +307,8 @@
 		<property name="name" direction="asc"/>
         <property name="entity_type" direction="asc"/>
     </datastore-index>
-	
-	<datastore-index kind="Tickets" ancestor="false" source="manual">
-        <property name="group_id" direction="asc"/>
-        <property name="status" direction="asc"/>
-        <property name="last_updated_time" direction="desc"/>
-    </datastore-index>
     
+
     <datastore-index kind="Task" ancestor="false" source="auto">
         <property name="related_deals" direction="asc"/>
         <property name="due" direction="asc"/>
@@ -323,11 +318,6 @@
         <property name="contact_id" direction="asc"/>
         <property name="date_secs" direction="desc"/>
     </datastore-index>
-
-    <datastore-index kind="TicketActivity" ancestor="false" source="manual">
-        <property name="ticket_key" direction="asc"/>
-        <property name="created_time" direction="desc"/>
-    </datastore-index>
     
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
         <property name="archived" direction="asc"/>
@@ -439,7 +429,17 @@
         <property name="milestone_changed_time" direction="desc"/>
     </datastore-index>
     
-    <datastore-index kind="Portlet" ancestor="true" source="manual">
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="pipeline" direction="asc"/>
+        <property name="won_date" direction="asc"/>
+    </datastore-index>
+    
+   <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+    
+     <datastore-index kind="Portlet" ancestor="true" source="manual">
         <property name="portlet_route" direction="asc"/>
         <property name="row_position" direction="asc"/>
     </datastore-index>

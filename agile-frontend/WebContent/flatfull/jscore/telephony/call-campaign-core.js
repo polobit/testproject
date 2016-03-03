@@ -965,3 +965,28 @@ function updateTotalTime(timeToAdd)
 	CALL_CAMPAIGN.total_time = CALL_CAMPAIGN.total_time + parseInt(timeToAdd);
 	$("#totalTime").html('(' + SecondsToCampaignTime(CALL_CAMPAIGN.total_time) + ')');
 }
+
+/**
+ * provided time it will give the sec, min and hour
+ * 
+ * @param time
+ * @returns {String}
+ */
+function getTimeInArray(time)
+{
+	var hours = 0;
+	var minutes = 0;
+	var seconds = 0;
+	var timeArray = [0,0,0];
+	if (time == 0)
+		return timeArray;
+	
+	 hours = Math.floor(time / 3600);
+	 	if (hours > 0)
+	 		time = time - hours * 60 * 60;
+	 minutes = Math.floor(time / 60);
+	 seconds = time - minutes * 60;
+	timeArray = [hours,minutes,seconds];
+	
+	return timeArray;
+}

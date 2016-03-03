@@ -1,0 +1,51 @@
+<script type="text/html" id="emailbuilder-categories-template">
+<div class="custom-animated custom-fadeInUp">
+
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-md-12">
+       <h3 class="pull-left font-light h3">Select a template <small> New email template <span class="label label-sm bg-danger">Beta</span></small></h3>
+	   <div class="pull-right">
+            <a href="#" class="btn btn-default btn-sm btn-addon" title="Create your own template by copy pasting your HTML into editor" id="bringYourCodeBtn">Bring Your Code</a>
+            <a href="#emailbuilder-add" class="btn btn-default btn-sm btn-addon" title="Start with an empty email">Custom</a>
+	   </div>
+	   <div class="clearfix"></div>
+     </div>
+</div>
+</div>
+
+
+<div class="wrapper-md  p-t-none">
+<div class="row">    
+    <div class="col-md-12">
+        <!-- <h4>General</h4> --><br>
+    </div>
+</div>
+
+<div id="general" class="row">
+
+{{#each list}}
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="panel wrapper text-center">
+        <!-- Thumbnail and Title -->
+        <div>
+           <div class="p-b-sm p-l-none p-r-none">
+            <a href="#emailbuilder-add/{{id}}"><img style="width:98%;" src="misc/emailbuilder/templates/{{id}}/thumbnail.png"/></a>
+           </div>
+        </div>
+        <!-- Add button -->
+        <div>
+            <a class="btn btn-sm btn-default" href="#emailbuilder-add/{{id}}">Go</a>
+        </div>
+    </div>
+</div>
+{{/each}}
+
+    
+</div>
+
+</div>
+
+
+</div>
+</script>
