@@ -116,8 +116,17 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
 			}
 			$('ul.milestones').sortable("enable");
 		},
-		error : function(response) {
+		error : function(model, response) {
 			$('ul.milestones').sortable("enable");
+			if(response && (response.responseText == "Deal not saved properly." || response.responseText == "Deal not updated properly.")) {
+				showModalConfirmation("Deals", response.responseText, function(element){
+					App_Deals.deals();	
+				},
+				"",
+				function(element){
+					App_Deals.deals();
+				}, "Ok", "");
+			}
 		}
 	});
 
