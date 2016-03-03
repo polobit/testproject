@@ -1236,7 +1236,8 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 					if(type == "contacts")
 						App_Contacts.contactsListView.collection.models[0].set("count", data, {silent: true});
 					else if(type == "workflows"){
-						
+						if(App_Workflows.active_subscribers_collection)
+							App_Workflows.active_subscribers_collection.models[0].set("count", data, {silent: true});
 					} else{
 						App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
 					}
