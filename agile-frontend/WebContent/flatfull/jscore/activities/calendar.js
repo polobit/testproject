@@ -774,22 +774,16 @@ function loadDefaultFilters(callback)
 	// event filter.
 	if (!_agile_get_prefs('event-filters'))
 	{
-		$.getJSON('/core/api/users/agileusers', function(users)
+		$.getJSON('/core/api/users/current-agile-user', function(user)
 		{
-			if (users)
+			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 			{
-				$.each(users, function(i, user)
-				{
-					if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-					{
-						var json = {};
-						json.owner_id = user.id.toString();
-						json.type = '';
-						_agile_set_prefs('event-filters', JSON.stringify(json));
-					}
-				});
+				var json = {};
+				json.owner_id = user.id.toString();
+				json.type = '';
+				_agile_set_prefs('event-filters', JSON.stringify(json));
 			}
-
+			
 			if (callback)
 				callback();
 		});

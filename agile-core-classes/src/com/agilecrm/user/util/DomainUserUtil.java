@@ -1,5 +1,6 @@
 package com.agilecrm.user.util;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -27,6 +29,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.QueryResultIterator;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
@@ -165,6 +168,61 @@ public class DomainUserUtil
     	
     	return new DomainUserPartial(id, (String) entity.getProperty("name"), (String) entity.getProperty("email"), (String) entity.getProperty("pic"));
 
+    	
+	}
+	catch (Exception e)
+	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
+	    e.printStackTrace();
+	    return null;
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+    
+    /**
+     * Gets a user based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static List<DomainUserPartial> getPartialDomainUsers(String domainname)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+		List<DomainUserPartial> domainUsers = new ArrayList<DomainUserPartial>();
+
+		com.google.appengine.api.datastore.Query proj = new com.google.appengine.api.datastore.Query("DomainUser");
+		proj.addFilter("domain", FilterOperator.EQUAL, domainname);
+		
+    	proj.addProjection(new PropertyProjection("email", String.class));
+    	proj.addProjection(new PropertyProjection("name", String.class));
+    	proj.addProjection(new PropertyProjection("pic", String.class));
+
+    	DatastoreService datastore = CachingDatastoreServiceFactory.getDatastoreService();
+    	
+    	Iterator<Entity> entities = datastore.prepare(proj).asIterable().iterator();
+    	while (entities.hasNext()) {
+			Entity entity2 = (Entity) entities.next();
+			
+			domainUsers.add(new DomainUserPartial(entity2.getKey().getId(), (String) entity2.getProperty("name"), (String) entity2.getProperty("email"), (String) entity2.getProperty("pic")));
+		}
+    	
+    	// Now sort by name.
+	    Collections.sort(domainUsers, new Comparator<DomainUserPartial>()
+	    {
+		public int compare(DomainUserPartial one, DomainUserPartial other)
+		{
+		    return one.name.toLowerCase().compareTo(other.name.toLowerCase());
+		}
+	    });
+	    
+	    return domainUsers;
     	
 	}
 	catch (Exception e)

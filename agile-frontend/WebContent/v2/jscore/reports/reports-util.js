@@ -148,7 +148,7 @@ call_reports : function(url,reportType,graphOn){
 	var topPos = 50*sizey;
 	if(sizey==2 || sizey==3)
 		topPos += 50;
-	$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+	$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='"+updateImageS3Path('../v2/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
 
 	portlet_graph_data_utility.fetchPortletsGraphData(url,function(data){
 		if(data.status==403){
@@ -387,7 +387,7 @@ user_reports :function(callReportUrl){
 		var topPos = 50*sizey;
 		if(sizey==2 || sizey==3)
 			topPos += 50;
-		$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='"+updateImageS3Path('../v2/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
 		
 		portlet_graph_data_utility.fetchPortletsGraphData(callReportUrl,function(data){
 			if(data.status==403){
