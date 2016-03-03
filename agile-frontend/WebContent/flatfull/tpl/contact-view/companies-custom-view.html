@@ -19,112 +19,176 @@
 {{/each}}
 -->
 </script>
-	
 <script id="companies-custom-view-collection-template" type="text/html">
-<div class="custom-animated custom-fadeInUp">
-<div class="bg-light lter b-b wrapper-md ng-scope">
-    <div>
-      <div>
- <h1 class="m-n font-thin h3 pull-left"><span id="contact-heading">Companies</span><span id="contacts-count" class="m-l-xs">{{companies_count}}</span></h1>
-            <div class="pull-left"> <div class="btn-group m-l-lg m-r-sm pull-left" id="bulk-actions"
-				style="display: none;">
 
-					<div class="btn btn-sm btn-default">Bulk Actions</div>
-					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#" id="bulk-email">Send Email</a></li>
-                        <li class='divider'></li>
-						<li><a href="#" id="bulk-owner">Change Owner</a></li>
-						{{#hasScope "EXPORT_CONTACTS"}}
-						<li><a href="#" id="bulk-companies-export">Export Companies as CSV</a></li>
-						{{/hasScope}}
-						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
-					</ul>
-			</div>
-			<div  class="btn-group inline-block pull-left m-t-xs" style="display: none;" id="bulk-select"></div>
-			</div>
-			
-			<div class="pull-right">
-			<div class="btn-group pull-left m-r-xs" id="contact-sorter">
-			</div>
+{{#is_mobile}}
 
-			<div class="btn-group inline-block m-r-xs" id="filter-list"></div>
-		
-            <div id="view-list" class="inline-block"></div>
-            </div>
-        <div class="clearfix"></div>
-    </div>
-</div>
-</div>
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+  
+<div class="">
+		<div id="right-pane">
 
-    <div class="hbox hbox-auto-xs hbox-auto-sm">
-    <div class="col w-md b-r" id="companies-lhs-filters-toggle" style="{{ toggle_companies_filter }}">
-		<div class="data-block">
-			<div  id="lhs_filters_conatiner">
-				
-			</div>
-		</div>
-    </div>
-    <div class="col contacts-div">
-		{{#unless this.length}}
-			<div class="filter-criteria">
+	<div class="contacts-div">
+	 				 
 					
-			</div>
-			<div id="slate"></div>
-		{{else}}
-        <div class="data">
-         <div class="panel-heading" style="background:#f6f8f8;">Companies List 
-         <a id="companies-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-			<i class="fa fa-bars icon-white"></i>
-		</a>
-         </div>
-            <div class="dta-contatiner table-responsive">
-				<div class="panel panel-default" style="overflow-x:auto;border-left:none;">
-			    
-                <table id="companies" class="table table-striped showCheckboxes no-sorting panel agile-table"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
+	<div class="dta-contatiner table-responsive " style="margin-bottom:0; border:none;">
+				
+				<div class="panel panel-default" style="overflow-x:hidden; margin-bottom:0; overflow-x:auto; border:none; border-radius:0px;">
+			    {{#unless this.length}}
+		        <div class="m-l-sm" id="slate">
+		        </div>
+		        {{/unless}}
+		        {{#if this.length}}
+                <table id="companies" class="table showCheckboxes no-sorting panel agile-table noDelete"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
+
+				
+                    <tbody id="companies-custom-view-model-list" route="company/">
+                    </tbody>
+                </table>
+                {{/if}}
+				</div>
+            </div>
+        </div>
+	 </div>
+			    
+	    	</div>
+
+{{else}}
+
+
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+ {{#is_mobile}}
+    {{else}}
+	<div class="col w-lg  dk b-r bg-auto" id="companies-lhs-filters-toggle" 
+	style="{{ toggle_companies_filter }}">
+		<div class="data-block">
+			<div id="lhs_filters_conatiner">
+			</div>
+		</div>
+	</div>
+{{/is_mobile}}
+<div class="{{#is_mobile}}{{else}}col{{/is_mobile}} ">
+		<div id="right-pane">
+
+	<div class="wrapper bg-light padder-md padder-v m-r-sm {{#is_mobile}} {{else}}  p-r-none {{/is_mobile}}" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+	    <div class="btn-toolbar m-l-none pos-rlt">
+	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
+
+	    		<div class="inline-block" style="font-size: 18px;color: rgb(88, 102, 110);">Companies<span id="contacts-count" class="m-l-xs">{{companies_count}}</span>
+
+	    			{{#is_mobile}}
+					{{else}}
+	    			<a id="companies-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+            			<i id="icon-filter" class="fa fa-bars icon-white"></i>
+          			</a>
+          			{{/is_mobile}}
+	    		</div><br>
+				<div  class="btn-group inline-block pull-left m-t-xs" style="display: none;" id="bulk-select"></div> 
+
+			 </div>
+		  </div>
+	    	<div class="pull-right">
+			<div  class="btn-group pull-left m-r-xs" id="contact-sorter"></div>
+			<div class="btn-group pull-left m-r-xs" id="filter-list"></div>
+			
+            <div id="view-list" class="pull-left btn-group"></div>
+            </div>
+	    </div>
+	    
+	</div>
+	<div class="contacts-div">
+
+	 				<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm {{#is_mobile}} {{else}}  {{/is_mobile}}" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
+
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Send Email</button>	
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Change Owner</button>
+					    {{#hasScope "EXPORT_CONTACTS"}}
+					    <button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Export Contacts as CSV</button>
+					    {{/hasScope}}
+					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs disabled" style="font-size:10px">Delete</button>
+					    
+				    </div>
+					
+
+	<div class="dta-contatiner table-responsive m-r-sm">
+				
+				<div class="panel panel-default {{#is_mobile}} m-b-none {{/is_mobile}}" style="{{#is_mobile}} overflow-x:hidden; {{else}} overflow-x:auto; {{/is_mobile}} border-left:none;">
+			    {{#unless this.length}}
+		        <div class="m-l-sm" id="slate">
+		        </div>
+		        {{/unless}}
+		        {{#if this.length}}
+                <table id="companies" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
+					<div class="filter-criteria">
+					
+					</div>
+
 					<thead>
-                        <tr style="text-transform: capitalize;">
+					<tr style="text-transform: capitalize;">
                             {{companyTableHeadings "fields_set"}}
                         </tr>
                     </thead>
                     <tbody id="companies-custom-view-model-list" route="company/">
                     </tbody>
                 </table>
+                {{/if}}
 				</div>
             </div>
         </div>
-	{{/unless}}
-    </div>
-</div>
-</div>
+	 </div>
+			    
+	    	</div>
+
+
+	    	{{/is_mobile}}
+
+
+<!-- Newly Added -->	
 </script>
 <script id="companies-custom-view-table-collection-template" type="text/html">
-{{#unless this.length}}
-			<div id="slate"></div>
-		{{else}}
-        <div class="data">
- <div class="panel-heading" style="background:#f6f8f8;">Companies List</div>
-            <div class="dta-contatiner table-responsive">
-				<div class="panel panel-default" style="overflow-x:auto;border-left:none;">
-			    
-                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
-					<div class="filter-criteria">					
+  
+
+   <div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm{{#is_mobile}} {{else}} {{/is_mobile}}" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
+
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Send Email</button>	
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Change Owner</button>
+					    {{#hasScope "EXPORT_CONTACTS"}}
+					    <button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Export Contacts as CSV</button>
+					    {{/hasScope}}
+					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs disabled" style="font-size:10px">Delete</button>
+					    
+   </div>
+   
+
+   <div class="dta-contatiner table-responsive m-r-sm">
+
+				<div class="panel panel-default {{#is_mobile}} m-b-none {{/is_mobile}}" style="{{#is_mobile}} overflow-x:hidden; {{else}} overflow-x:auto; {{/is_mobile}} border-left:none;">
+			    {{#unless this.length}}
+		        <div class="m-l-sm" id="slate">
+		        </div>
+		        {{/unless}}
+		        {{#if this.length}}
+                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
+					<div class="filter-criteria">
+					
 					</div>
+
 					<thead>
-                        <tr class="text-cap">
+                        <tr style="text-transform: capitalize;">
                             {{companyTableHeadings "fields_set"}}
                         </tr>
                     </thead>
                     <tbody id="companies-custom-view-table-model-list" route="company/">
                     </tbody>
                 </table>
+                {{/if}}
 				</div>
             </div>
-        </div>
-	{{/unless}}
+				
+
+
 </script>
+

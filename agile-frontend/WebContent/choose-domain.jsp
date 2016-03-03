@@ -50,6 +50,9 @@ else
 <link type="text/css" rel="stylesheet" href="/css/openid-min.css">
 <link type="text/css" rel="stylesheet" href="/css/signin.css">
 
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
+
 <style>
 @media (min-width: 900px) {
 body {

@@ -471,6 +471,7 @@ function disable_text_required_property(selector)
 	if (selector.find('#tinyMCEhtml_email').val() != "" && selector.find('#text_email').val() == "")
 		selector.find('#text_email').removeProp("required");
 }
+
 // Bhasuri 10/25/2014
 function getDate(selector)
 {
@@ -821,4 +822,6 @@ function insertSelectedOption1(ele ,target_id)
     		}
     	}
 	}
+
+	
 

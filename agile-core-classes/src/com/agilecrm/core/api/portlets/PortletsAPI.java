@@ -592,4 +592,14 @@ public class PortletsAPI {
 	{
 		return PortletUtil.getGoalsAttainedData(owner_id, start_time, end_time);
 	}
+	
+	
+	@Path("/averageDeviation")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getAverageTaskDeviation(@QueryParam("start-date") Long start_time,@QueryParam("end-date")Long end_time)
+	{
+		return PortletUtil.getAverageDeviationForTasks(start_time, end_time);
+	}
+	
 }

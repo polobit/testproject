@@ -343,6 +343,10 @@ function initializeSubscriptionListeners()
 			function(e)
 			{
 				e.preventDefault();
+				if(!CURRENT_DOMAIN_USER.is_admin){
+					showNotyPopUp("warning", "Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.", "top");
+					return;
+				}
 				plan_json = {};
 				var buttonText = $(this).html();
 				$(this).text("Loading...");
@@ -517,7 +521,6 @@ function initializeSubscriptionListeners()
 						}else if(data.is_allowed_plan){
 							Backbone.history.navigate("purchase-plan", { trigger : true });
 						}else if(data.lines){
-							
 							$.each( JSON.parse(USER_BILLING_PREFS.billingData).subscriptions.data, function( key, value ) {
 							  if(value.plan.id.indexOf("email") == -1)
 							  {
@@ -533,35 +536,39 @@ function initializeSubscriptionListeners()
 							  	}
 							  }
 							});
-							Backbone.history.navigate("purchase-plan", { trigger : true });
+							
 						}else{
-							if(data.contacts.count > data.contacts.limit)
+							var restrictions = data.restrictions;
+							if(restrictions.contacts.count > restrictions.contacts.limit)
 								errorsCount++;
-							if(data.webrules.count > data.webrules.limit)
+							if(restrictions.webrules.count > restrictions.webrules.limit)
 								errorsCount++;
-							if(data.users.count > data.users.limit)
+							if(restrictions.users.count > restrictions.users.limit)
 								errorsCount++;
-							if(data.workflows.count > data.workflows.limit)
+							if(restrictions.workflows.count > restrictions.workflows.limit)
 								errorsCount++;
-							if(data.triggers.count > data.triggers.limit)
+							if(restrictions.triggers.count > restrictions.triggers.limit)
 								errorsCount++;
 							if(errorsCount >= 1)
 							{
-								data.errorsCount = errorsCount;
-								getTemplate("subscribe-error-modal",data , undefined, function(template_ui){
+								restrictions.errorsCount = errorsCount;
+								getTemplate("subscribe-error-modal",restrictions , undefined, function(template_ui){
 									if(!template_ui)
 										  return;
 									$(template_ui).modal('show');
 								}, null);
 								
 							}
-							else
-								Backbone.history.navigate("purchase-plan", { trigger : true });
 						}
+						plan_json.date = data.nextPaymentAttempt;
+						if(months == 24)
+							plan_json.date = plan_json.date + 31557600;
+						Backbone.history.navigate("purchase-plan", { trigger : true });
 							
 					},
-					error : function(msg){
-						$(this).text(buttonText).removeAttr("disabled");
+					error : function(data){
+						showNotyPopUp("warning", data.responseText, "top");
+						$(that).text(buttonText).removeAttr("disabled");
 					}
 				});
 
@@ -618,23 +625,23 @@ function initializeSubscriptionListeners()
 		if(emails < 5000)
 		{
 			$("#emails_total_cost").html(quantity * 0);
-			$("#email_rate").html("$4");
+			$("#email_rate").html("$3");
 		}
 		else if (emails < 100000)
-		{
-			$("#emails_total_cost").html(quantity * 4);
-			$("#email_rate").html("$4");
-		}
-
-		else if (emails <= 1000000)
 		{
 			$("#emails_total_cost").html(quantity * 3);
 			$("#email_rate").html("$3");
 		}
+
+		else if (emails < 1000000)
+		{
+			$("#emails_total_cost").html((quantity * 2.5).toFixed(2));
+			$("#email_rate").html("$2.50");
+		}
 		else if (emails >= 1000000)
 		{
-			$("#emails_total_cost").html(quantity * 2);
-			$("#email_rate").html("$2");
+			$("#emails_total_cost").html((quantity * 1.5).toFixed(2));
+			$("#email_rate").html("$1.50");
 		}
 		}
 		email_validation($("#email-plan-form"));
@@ -713,6 +720,28 @@ function initializeSubscriptionListeners()
 			}
 		});
 	});
+	$("#purchase_credits").off("click");
+	$("#email-content").on("click","#purchase_credits", function(e){
+		e.preventDefault();
+		getTemplate("purchase-credits-info-modal",{} , undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("#purchase-credits-info-modal").html($(template_ui)).modal('show');
+		}, null);
+			
+	});
+
+	$('#purchase-credits-info-modal').on("keyup", '#email_credits_count', function(e)
+	{
+		var quantity = $(this).val();
+		if(quantity == ""){
+			$("#total_credits_cost").html(quantity*10);
+			return;
+		}
+		if (isNaN(quantity) || quantity < 0)
+			return;
+		$("#total_credits_cost").html(quantity*4);
+	});
 }
 
 function is_new_signup_payment()
@@ -773,3 +802,30 @@ function emailClickEvent() {
 	$("#users-content").removeClass("active");
 	$("#email-content").addClass("active");
 }
+
+$(function(){
+
+  $("#purchase_credits_conform").off("click");
+	$("#purchase-credits-info-modal").on("click","#purchase_credits_conform",function(e){
+		e.preventDefault();
+		var $form = $("#purchaseCreditsForm");
+		if(!isValidForm($form))
+			return;
+		$(this).attr("disabled", "disabled").html("Processing...");
+		var credits_count = $form.find("#email_credits_count").val();
+		$.ajax({url:'core/api/subscription/purchaseEmailCredits?quantity='+credits_count,
+			type:'POST',
+			success:function(data){
+				$form.closest(".modal").modal("hide");
+				showNotyPopUp("information", "Email credits have been added successfully.", "top"); 
+				setTimeout(function(){ 
+					document.location.reload();
+				}, 1000);				
+			},error: function(response){
+				$form.closest(".modal").modal("hide");
+				showNotyPopUp("warning", response.responseText, "top"); 
+			}
+		});
+	});
+
+});
