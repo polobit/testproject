@@ -34,7 +34,7 @@ public class ContactPartial {
 		this.last_name = last_name;
 		this.type = type;
 		
-		// Create a propertirs list
+		// Create a properties list
 		properties.add(new ContactField("first_name", first_name, null));
 		properties.add(new ContactField("last_name", last_name, null));
 		properties.add(new ContactField("name", name, null));
