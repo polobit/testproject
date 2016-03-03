@@ -603,7 +603,7 @@ var Tickets = {
             }
 
             console.log(modelData);
-            console.log(modelData.assigneeID);
+           // console.log(modelData.assigneeID);
 
             var assigneeName = (modelData.assigneeID) ? (modelData.assignee.name) : modelData.group.group_name;
 
@@ -859,12 +859,12 @@ var Tickets = {
 			{success: function(model){
 
 					// If in time line add event to timeline
-					if($('.ticket-timeline-container').length > 0){
-						Ticket_Timeline.render_individual_ticket_timeline()
-					}
+					// if($('.ticket-timeline-container').length > 0){
+					// 	Ticket_Timeline.render_individual_ticket_timeline()
+					// }
 
-					if($("#ticket-activities-model-list").length > 0)
-						App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
+					// if($("#ticket-activities-model-list").length > 0)
+					// 	App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
 					
 					if(App_Ticket_Module.ticketsCollection){
 						//Updating model collection
@@ -1121,9 +1121,9 @@ var Tickets = {
 					// 	$(e.target).removeClass("fa-star text-warning").addClass("fa-star-o text-light");
 
 					// If in time line add event to timeline
-					if($('.ticket-timeline-container').length > 0){
-						Ticket_Timeline.render_individual_ticket_timeline()
-					}
+					// if($('.ticket-timeline-container').length > 0){
+					// 	Ticket_Timeline.render_individual_ticket_timeline()
+					// }
 
 				}
 			});
@@ -1150,10 +1150,10 @@ var Tickets = {
                     }
                     showNotyPopUp('information',message, 'bottomRight', 5000);
 					// If in time line add event to timeline
-					if($('.ticket-timeline-container').length > 0){
-						Ticket_Timeline.render_individual_ticket_timeline()
-					}
-					Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {is_spam:spam_value});
+					// if($('.ticket-timeline-container').length > 0){
+					// 	Ticket_Timeline.render_individual_ticket_timeline()
+					// }
+					 Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {is_spam:spam_value});
 
 				}
 			});
