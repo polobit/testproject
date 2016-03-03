@@ -734,14 +734,14 @@ function showVideoForRegisteredUser(){
     if(!document.referrer || document.referrer.indexOf("register") == -1)
          return;
     var domainuser_video_cookie = CURRENT_DOMAIN_USER.domain+'_video_cookie';
-    if(_agile_get_prefs(domainuser_video_cookie) == null)
-    {
+    if(!localStorage.getItem(domainuser_video_cookie))
+    {     
        $("#dashboard_video").modal("show");
        var $frame = $("#dashboard_video iframe");
       $frame.attr("src", $frame.attr("data-source"));
     }       
     
-    _agile_set_prefs(domainuser_video_cookie,true);
+    localStorage.setItem(domainuser_video_cookie,true);
     
 }
 
