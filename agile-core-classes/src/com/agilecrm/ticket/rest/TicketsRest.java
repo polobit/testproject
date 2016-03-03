@@ -48,6 +48,7 @@ import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
+import com.agilecrm.ticket.imports.ZendeskImport;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
@@ -906,19 +907,21 @@ public class TicketsRest
 	{
 		try
 		{
-			Queue queue = QueueFactory.getQueue(AgileQueues.TICKET_BULK_ACTIONS_QUEUE);
+			//Queue queue = QueueFactory.getQueue(AgileQueues.TICKET_BULK_ACTIONS_QUEUE);
 
 			String bulk_action_tracker = String.valueOf(BulkActionUtil.randInt(1, 10000));
 
 			Widget zendesk = WidgetUtil.getWidgetByNameAndType("Zendesk", null);
 			JSONObject json = new JSONObject(zendesk.prefs);
 
-			TaskOptions taskOptions = TaskOptions.Builder.withUrl("/core/api/ticket-module/backend/imports/zendesk")
-					.param("data", json.toString()).param("domain_user_id", SessionManager.get().getClaimedId())
-					.param("tracker", bulk_action_tracker).header("Content-Type", "application/x-www-form-urlencoded")
-					.method(Method.POST);
-
-			queue.addAsync(taskOptions);
+			ZendeskImport.fetchTickets(json);
+			
+//			TaskOptions taskOptions = TaskOptions.Builder.withUrl("/core/api/ticket-module/backend/imports/zendesk")
+//					.param("data", json.toString()).param("domain_user_id", SessionManager.get().getClaimedId())
+//					.param("tracker", bulk_action_tracker).header("Content-Type", "application/x-www-form-urlencoded")
+//					.method(Method.POST);
+//
+//			queue.addAsync(taskOptions);
 		}
 		catch (Exception e)
 		{
