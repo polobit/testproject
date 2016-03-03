@@ -3,6 +3,7 @@ package com.agilecrm.ticket.imports;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -207,7 +208,7 @@ public class ZendeskImport
 			ticket.created_time = date.getTime();
 
 			date = new SimpleDateFormat(datePattern).parse(updatedAt);
-			ticket.last_updated_time = date.getTime();
+			ticket.last_updated_time = Calendar.getInstance().getTimeInMillis();
 
 			if(ticket.status == Status.CLOSED)
 				ticket.closed_time = date.getTime();

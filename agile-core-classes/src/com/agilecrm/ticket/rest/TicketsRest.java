@@ -61,6 +61,8 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -393,8 +395,8 @@ public class TicketsRest
 			ticket.groupID = ticket.group_id.getId();
 
 			// Execute triggers
-			//TicketTriggerUtil.executeTriggerForNewTicket(ticket);
-			
+			// TicketTriggerUtil.executeTriggerForNewTicket(ticket);
+
 			BulkActionNotifications.publishNotification("Ticket#" + ticket.id + " has been created.");
 
 			return ticket;
@@ -907,21 +909,47 @@ public class TicketsRest
 	{
 		try
 		{
-			//Queue queue = QueueFactory.getQueue(AgileQueues.TICKET_BULK_ACTIONS_QUEUE);
-
-			String bulk_action_tracker = String.valueOf(BulkActionUtil.randInt(1, 10000));
+			// Queue queue =
+			// QueueFactory.getQueue(AgileQueues.TICKET_BULK_ACTIONS_QUEUE);
 
 			Widget zendesk = WidgetUtil.getWidgetByNameAndType("Zendesk", null);
-			JSONObject json = new JSONObject(zendesk.prefs);
+			final JSONObject json = new JSONObject(zendesk.prefs);
 
-			ZendeskImport.fetchTickets(json);
-			
-//			TaskOptions taskOptions = TaskOptions.Builder.withUrl("/core/api/ticket-module/backend/imports/zendesk")
-//					.param("data", json.toString()).param("domain_user_id", SessionManager.get().getClaimedId())
-//					.param("tracker", bulk_action_tracker).header("Content-Type", "application/x-www-form-urlencoded")
-//					.method(Method.POST);
-//
-//			queue.addAsync(taskOptions);
+			for (int i = 0; i < 50; i++)
+			{
+				Queue queue = QueueFactory.getQueue("ticket-bulk-actions");
+				queue.add(TaskOptions.Builder.withPayload(new DeferredTask()
+				{
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void run()
+					{
+						try
+						{
+							ZendeskImport.fetchTickets(json);
+						}
+						catch (Exception e)
+						{
+							System.out.println(ExceptionUtils.getFullStackTrace(e));
+						}
+					}
+				}));
+
+			}
+
+			// TaskOptions taskOptions =
+			// TaskOptions.Builder.withUrl("/core/api/ticket-module/backend/imports/zendesk")
+			// .param("data", json.toString()).param("domain_user_id",
+			// SessionManager.get().getClaimedId())
+			// .param("tracker", bulk_action_tracker).header("Content-Type",
+			// "application/x-www-form-urlencoded")
+			// .method(Method.POST);
+			//
+			// queue.addAsync(taskOptions);
 		}
 		catch (Exception e)
 		{
@@ -1063,8 +1091,10 @@ public class TicketsRest
 
 		return new JSONObject().put("status", "success").toString();
 	}
+
 	/**
 	 * changes ticket due date
+	 * 
 	 * @param ticket_id
 	 * @return returns success json
 	 */
@@ -1087,6 +1117,6 @@ public class TicketsRest
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
-		
+
 	}
 }
