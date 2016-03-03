@@ -912,10 +912,7 @@ public class TicketsRest
 			Widget zendesk = WidgetUtil.getWidgetByNameAndType("Zendesk", null);
 			final JSONObject json = new JSONObject(zendesk.prefs);
 
-			for (int i = 0; i < 50; i++)
-			{
-				ZendeskImport.fetchTickets(json);
-			}
+			ZendeskImport.fetchTickets(json);
 
 			// TaskOptions taskOptions =
 			// TaskOptions.Builder.withUrl("/core/api/ticket-module/backend/imports/zendesk")
