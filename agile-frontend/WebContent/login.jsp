@@ -93,7 +93,7 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
 	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
 	  CSS_PATH = FLAT_FULL_PATH;
-	  S3_STATIC_IMAGE_PATH = VersioningUtil.getBaseServerURL() + "/beta/static/";
+	  S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL();
 }
 
 // Users can show their logo on login page. 
@@ -124,7 +124,7 @@ int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 
 <style>
 body {
-  background-image: url('<%=S3_STATIC_IMAGE_PATH%>/images/login-<%=randomBGImageInteger%>-low.jpg');
+  background-image: url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-low.jpg');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% 100%;
@@ -329,7 +329,7 @@ if(isSafari && isWin)
         $("body").css("background-image","url('"+this.src+"')");
        
         }
-        newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/login-<%=randomBGImageInteger%>-high.jpg';
+        newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high.jpg';
         // agile-login-page-high.png
 
 			// Pre load dashlet files when don is active
