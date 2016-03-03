@@ -369,7 +369,7 @@ function initializePortletsListeners() {
 												deserializeForm(
 														model,
 														$("#updateActivityForm"));
-
+												$('#current_div').val("Mini Calendar");
 												$("#update-event-date-1").val(
 														getDateInFormat(start));
 												$("#update-event-date-2").val(
@@ -503,6 +503,8 @@ function initializePortletsListeners() {
 				$('#task-date-1').val(getDateInFormat(start));
 				$("#event-date-1").val(getDateInFormat(start));
 				$("#event-date-2").val(getDateInFormat(start));
+				$('#current_div').val("Mini Calendar");
+
 
 				// Set Time for Event
 				// if ((start.getHours() == 00) && (start.getHours() == 00) &&
@@ -693,6 +695,7 @@ function initializePortletsListeners() {
 							var startDate = new Date(model.get('start') * 1000);
 							var endDate = new Date(model.get('end') * 1000)
 							// Set time for update Event
+							$('#current_div').val("Events Dashlet");
 							$('#update-event-time-1')
 									.val(
 											(startDate.getHours() < 10 ? "0"
@@ -943,12 +946,7 @@ function initializeAddPortletsListeners() {
 				$("#portletStreamModalNew").html(getTemplate('portletStreamModalInfo'));
 				
 
-					  $.ajax({
-            type: "GET",
-            url: "/core/api/portlets/default",
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function(data) {  
+					  
             	/*if(p_name=='Mini Calendar'){
             	$.each(data,function(index,p){ 
             		if(p.name=='Mini Calendar'){
@@ -995,8 +993,6 @@ function initializeAddPortletsListeners() {
 				portlet_type);
 		$(".add_to_all").attr('portlet_name',p_name);
 		$("#portletStreamModalNew").modal('show');
-	}
-	 });
 		
 	});
 
