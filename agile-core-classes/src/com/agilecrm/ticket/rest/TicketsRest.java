@@ -913,7 +913,7 @@ public class TicketsRest
 			Widget zendesk = WidgetUtil.getWidgetByNameAndType("Zendesk", null);
 			JSONObject json = new JSONObject(zendesk.prefs);
 
-			TaskOptions taskOptions = TaskOptions.Builder.withUrl("/api/ticket-module/backend/imports/zendesk")
+			TaskOptions taskOptions = TaskOptions.Builder.withUrl("/core/api/ticket-module/backend/imports/zendesk")
 					.param("data", json.toString()).param("domain_user_id", SessionManager.get().getClaimedId())
 					.param("tracker", bulk_action_tracker).header("Content-Type", "application/x-www-form-urlencoded")
 					.method(Method.POST);
