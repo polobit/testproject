@@ -1,5 +1,6 @@
 package com.agilecrm.ticket.rest;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,8 +76,13 @@ import com.googlecode.objectify.Key;
  * 
  */
 @Path("/api/tickets")
-public class TicketsRest
+public class TicketsRest implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 * @return
@@ -920,9 +926,6 @@ public class TicketsRest
 				Queue queue = QueueFactory.getQueue("ticket-bulk-actions");
 				queue.add(TaskOptions.Builder.withPayload(new DeferredTask()
 				{
-					/**
-					 * 
-					 */
 					private static final long serialVersionUID = 1L;
 
 					@Override
