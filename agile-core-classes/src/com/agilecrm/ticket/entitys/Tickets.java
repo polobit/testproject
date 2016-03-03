@@ -428,8 +428,7 @@ public class Tickets extends Cursor implements Serializable
 
 	public static void decrement(String syncKey)
 	{
-		// If sync key exists decrement by -1 else set its value to 0
-		MemcacheServiceFactory.getMemcacheService().increment(syncKey, -1, 0L);
+		MemcacheServiceFactory.getMemcacheService().put(syncKey, 0l);
 	}
 
 	/**
