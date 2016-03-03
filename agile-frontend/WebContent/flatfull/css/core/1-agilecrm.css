@@ -982,7 +982,7 @@ content: "\f075"!important;
 	margin-bottom: 0px;
 }
 
-.milestone-column>div.milestones > ul{
+.milestone-column>div.milestones ul.milestones{
 	list-style: none;
 	margin-left: 0px;
 	margin-bottom: 0px;
