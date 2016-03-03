@@ -101,7 +101,98 @@ public class ActivityUtil
 	activity.save();
 	return activity;
     }
+    
+    /**
+     * To merge contacts activity.
+     * 
+     * @param activity_type
+     *            the type of the activity performed on the Contact (MERGE)
+     * 
+     * @param contact
+     *            the contact object on which the activity is performed.
+     * @param data
+     *            extra information about the activity like Tag name when a tag
+     *            is added. null if nothing.
+     */
+    
+    public static Activity mergeContactActivity(ActivityType activity_type,Contact contact,int length){
+    	String contact_name = "";
+    	Activity activity = new Activity();
+    	if (contact != null)
+    	{
+    	    ContactField firstname = contact.getContactFieldByName("first_name");
+    	    ContactField lastname = contact.getContactFieldByName("last_name");
+    	    if (firstname != null)
+    	    {
+    		contact_name += firstname.value;
+    	    }
+    	    if (lastname != null)
+    	    {
+    		contact_name += " ";
+    		contact_name += lastname.value;
+    	    }
 
+    	    activity.label = contact_name;
+    	    activity.label = activity.label.trim();
+    	    contact_name = "";
+    	    activity.entity_id = contact.id;
+    	}
+    	activity.activity_type = activity_type;
+    	activity.entity_type = EntityType.CONTACT;
+    	activity.custom1 = String.valueOf(length);
+    	activity.save();
+    	return activity;
+    }
+
+	   /**
+     * To save save the contact activity.
+     * 
+     * @param activity_type
+     *            the type of the activity performed on the Contact (ADD, EDIT
+     *            etc..)
+     *            
+     *   @param custom4 : if we need to add all 4 activity fields         
+     */
+    public static Activity createContactActivity(ActivityType activity_type, Contact contact, String new_data,
+	    String old_data, String changed_field, String custom4)
+    {
+	String contact_name = "";
+	Activity activity = new Activity();
+	if (contact != null)
+	{
+
+	    ContactField firstname = contact.getContactFieldByName("first_name");
+	    ContactField lastname = contact.getContactFieldByName("last_name");
+	    if (firstname != null)
+	    {
+		contact_name += firstname.value;
+	    }
+	    if (lastname != null)
+	    {
+		contact_name += " ";
+		contact_name += lastname.value;
+	    }
+
+	    activity.label = contact_name;
+	    activity.label = activity.label.trim();
+	    contact_name = "";
+	    activity.entity_id = contact.id;
+	}
+	activity.activity_type = activity_type;
+	activity.entity_type = EntityType.CONTACT;
+
+	if (StringUtils.isNotEmpty(new_data))
+	    activity.custom1 = new_data;
+	if (StringUtils.isNotEmpty(old_data))
+	    activity.custom2 = old_data;
+	if (StringUtils.isNotEmpty(changed_field))
+	    activity.custom3 = changed_field;
+	if (StringUtils.isNotEmpty(custom4))
+	    activity.custom4 = custom4;
+	activity.save();
+	return activity;
+    }
+ 
     /**
      * To save the task activity.
      * 
@@ -1599,10 +1690,16 @@ public class ActivityUtil
 	else if (status.equalsIgnoreCase("voicemail"))
 	{
 	    return Call.VOICEMAIL;
+	}else if (status.equalsIgnoreCase("missed"))
+	{
+	    return Call.Missed;
+	}else if (status.equalsIgnoreCase("answered"))
+	{
+	    return Call.ANSWERED;
 	}
 	else
 	{
-	    return null;
+	    return status;
 	}
     }
 
@@ -1682,26 +1779,31 @@ public class ActivityUtil
      * @return
      */
     public static List<Activity> getActivititesBasedOnSelectedConditon(String entitytype, Long userid, int max,
-	    String cursor, Long starttime, Long endtime)
-    {
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))
-	    searchMap.put("entity_type", entitytype);
-	if (entitytype.equalsIgnoreCase("CALL"))
-	    searchMap.put("activity_type", entitytype);
-	if (starttime != null)
-	    searchMap.put("time >=", starttime);
-	if (endtime != null)
-	    searchMap.put("time <=", endtime);
+    	    String cursor, Long starttime, Long endtime, Long entityId )
+        {
+    	Map<String, Object> searchMap = new HashMap<String, Object>();
+    	if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))
+    	    searchMap.put("entity_type", entitytype);
+    	if (entitytype.equalsIgnoreCase("CALL"))
+    	    searchMap.put("activity_type", entitytype);
+    	if (entityId != null)
+    	    searchMap.put("entity_id =", entityId);
+    	else
+    	{
+    		if (starttime != null)
+    		    searchMap.put("time >=", starttime);
+    		if (endtime != null)
+    		    searchMap.put("time <=", endtime);
+    		
+    	}
+    	if (userid != null)
+    	    searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
 
-	if (userid != null)
-	    searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
+    	if (max != 0)
+    	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
 
-	if (max != 0)
-	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
-
-	return dao.listByPropertyAndOrder(searchMap, "-time");
-    }
+    	return dao.listByPropertyAndOrder(searchMap, "-time");
+        }
 
     /**
      * 

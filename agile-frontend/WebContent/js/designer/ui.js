@@ -61,12 +61,22 @@ function generateRadioUI(uiFieldDefinition) {
     // Select options will be json pairs (key,values)	
     var options = uiFieldDefinition.options;
 
+    var eventHandler = uiFieldDefinition.eventHandler;
+    var event = uiFieldDefinition.event;
+    var style = uiFieldDefinition.style ? getStyleAttribute(uiFieldDefinition.style) : "" ;
+
     // Add all elements defined
     var selectOptionAttributes = "";
     $.each(
     options, function (key, value) {
 
-        var input = "<input type=\"radio\" name=\"" + uiFieldDefinition.name + "\" value=\"" + key + " >" + value + "</input>";
+        var input = "<input type=\"radio\""+ style  +" name=\"" + uiFieldDefinition.name + "\" value=\"" + key + "\" >" + value + "</input>";
+ 
+        if(event && eventHandler){
+        	input = "<input type=\"radio\""+ style  +" name=\"" + uiFieldDefinition.name + "\" value=\"" + key + "\""+event+"="+eventHandler+"(this,'"+ uiFieldDefinition.target_type +"')"+">" + value + "</input>";
+        }
+        
+
         selectOptionAttributes += input;
     });
 
@@ -291,6 +301,7 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     	options = getTaskCategories("categories");
     }
 
+
     if(options == null)
     	options = "";
     
@@ -321,7 +332,9 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
   
     if(uiFieldDefinition.fieldType == "campaign_list")
     return "<select multiple name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+getStyleAttribute(uiFieldDefinition.style)+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes +  "</select>";
-     
+    
+
+
 	  // retun select field with name and title attributes(Yasin(14-09-10)) 
     return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
            
@@ -329,7 +342,7 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
 
 function generateMilestonesSelectUI(uiFieldDefinition)
 {
-	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
+	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "' id='" + uiFieldDefinition.id +"'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + "</select>");
 	var options = uiFieldDefinition.options;
 	var selectOptionAttributes ="";
 	
@@ -440,13 +453,13 @@ function generateDefaultUI(uiFieldDefinition) {
     }
     
     // Add checked
-      /* 
+      
 	  //This is appended 'checked' for all attributes.( commented by yasin(13-09-10))
 	
 	  if(isChecked)
 	  attributes += " checked";
 	 
-	  */ 
+	  
     
     // alert(tagName +":" + attributes);
     // Adds tag and attributes
@@ -529,7 +542,7 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates(); return false;'>(Select a Template / Load from Editor)</a></label><br/><br/> ";
 	
 	htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' type='textarea' name='" + textAreaName + "' style='width:100%' rows='13' cols='75'>" + value + "</textarea> ";		
-	htmlDiv += "<div style='clear:both;'></div><br/><p style='margin: 0;position: relative;top: 20px;'><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
+	htmlDiv += "<div style='clear:both;'></div><br/><p style='margin: 0;position: relative;top: 35px;'><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
 
 	$(htmlDiv).appendTo(container);	
 }
@@ -696,7 +709,9 @@ function _generateUIFields(selector, ui) {
 
         // Radio
         if (uiFieldType == "radio") {
-	    
+        	addLabel(uiFieldDefinition.label,container);
+	    	uiField = generateRadioUI(uiFieldDefinition);
+	    	$(uiField).appendTo(container);
             continue;
         }
 
@@ -946,9 +961,9 @@ function constructUI(selector, uiDefinition) {
     
  
   
-
+	 
    // select all desired input fields and attach tooltips to them``
-   selector.find("input").tooltip({
+   selector.find("input").not(":radio").tooltip({
 
        // place tooltip on the right edge
        position: "center right",

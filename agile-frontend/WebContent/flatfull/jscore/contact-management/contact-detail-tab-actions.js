@@ -106,6 +106,20 @@ var contact_details_documentandtasks_actions = {
         		var targetEl = $(e.currentTarget);
 
         		var el = $("#opportunityForm");
+
+        		if($('#color1', el).is(':hidden')){
+
+			    	$('.colorPicker-picker', el).remove();
+
+			    	$('#color1', el).colorPicker();
+				}
+
+				var colorcode = "#808080";
+			    $('#color1' , el).attr('value', colorcode);
+			    $('.colorPicker-picker', el).css("background-color", colorcode); 
+			    // Disable color input field
+			    $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
+
 				$("#opportunityModal").modal('show');
 
 				add_custom_fields_to_form({}, function(data)
@@ -165,8 +179,11 @@ var contact_details_documentandtasks_actions = {
 					json = App_Contacts.contactDetailView.model.toJSON();
 				}
 				var contact_name = getContactName(json);
-				$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
 
+				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+  
+			 	// Adds contact name to tags ul as li element
+			 	$('.tags',el).html(template({name : contact_name, id : json.id}));
         },
 
        add_case : function(e){
@@ -191,8 +208,11 @@ var contact_details_documentandtasks_actions = {
 					json = App_Contacts.contactDetailView.model.toJSON();
 				}
 				var contact_name = getContactName(json);
-				$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
 
+				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+  
+			 	// Adds contact name to tags ul as li element
+			 	$('.tags',el).html(template({name : contact_name, id : json.id}));
 				$("#casesModal").modal('show');
 			});
        },
@@ -256,8 +276,11 @@ var contact_details_documentandtasks_actions = {
 				json = App_Contacts.contactDetailView.model.toJSON();
 			}
 			var contact_name = getContactName(json);
-			$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
-       },
+			var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+  
+		 	// Adds contact name to tags ul as li element
+		 	$('.tags',el).html(template({name : contact_name, id : json.id}));
+		 },
 
        document_unlink : function(e){
        		var targetEl = $(e.currentTarget);
@@ -291,7 +314,12 @@ var contact_details_documentandtasks_actions = {
 
        		var el = $(targetEl).closest("div");
 			$(targetEl).css("display", "none");
-			el.find(".contact-document-select").css("display", "inline");
+			if(agile_is_mobile_browser()){
+			el.find(".contact-document-select").css("display", "block");
+			}
+			else {
+			el.find(".contact-document-select").css("display", "inline");	
+			}
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 			fillSelect('document-select', 'core/api/documents', 'documents', function fillNew()
 			{
@@ -333,7 +361,11 @@ var contact_details_documentandtasks_actions = {
 					json = App_Contacts.contactDetailView.model.toJSON();
 				}
 				var contact_name = getContactName(json);
-				$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
+
+				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+	  
+			 	// Adds contact name to tags ul as li element
+			 	$('.tags',el).html(template({name : contact_name, id : json.id}));
 			}
 			else if (document_id != undefined && document_id != null)
 			{

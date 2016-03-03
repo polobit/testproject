@@ -391,6 +391,11 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 				<input type="hidden" name="c_name" value="<%= workflow.name%>">
 				<input type="hidden" name="unsubscribe_email" value="<%= workflow.unsubscribe.unsubscribe_email%>">
 				<input type="hidden" name="unsubscribe_name" value="<%= workflow.unsubscribe.unsubscribe_name%>">
+
+				<input type="hidden" name="he" value="<%= email%>">
+
+				<input type="hidden" name="unsubscribe_subject" value="<%= workflow.unsubscribe.unsubscribe_subject%>">
+
 				
 				<div id="unsubscribe-template"></div>
 				<div class="error"></div>

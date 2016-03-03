@@ -1,6 +1,8 @@
 package com.agilecrm.core.api;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -37,10 +39,15 @@ import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.email.wrappers.ContactEmailWrapper;
 import com.agilecrm.mandrill.util.MandrillUtil;
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.EmailPrefs;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.util.NamespaceUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -479,4 +486,78 @@ public class EmailsAPI
     	
     }
 
+
+    /**
+     * Check Spam Score and show the output.
+     * 
+     * @param fromEmail
+     *            - from email
+     * @param to
+     *            - to email
+     * @param subject
+     *            - subject
+     * @param body
+     *            - body
+     */
+    @Path("check-spam-score")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String checkSpamScore(@FormParam("from_name") String fromName, @FormParam("from_email") String fromEmail,
+	    @FormParam("to_email") String toEmail, @FormParam("subject") String subject,
+	    @FormParam("text_email") String textEmail, @FormParam("html_email") String htmlEmail,
+	    @FormParam("replyto_email") String replyToEmail)
+    {
+    	//Getting  Domain name and user name for unique file name
+    	 String domainName=NamespaceManager.get()+ "_"+SessionManager.get().getName();
+    	 
+    	 String scoreJson=null;
+		 String date=DateUtil.getCalendarString(System.currentTimeMillis(), "E, dd MMM yyyy HH:mm:ss Z", "");
+    	
+		 EmailSender emailSender = EmailSender.getEmailSender();
+
+		    // Appends Agile label
+		    textEmail = StringUtils.replace(textEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by"),
+			    "Sent using Agile");
+		    textEmail = EmailUtil.appendAgileToText(textEmail, "Sent using", emailSender.isEmailWhiteLabelEnabled());
+
+		    // If no powered by merge field, append Agile label to html
+		    if (!StringUtils.contains(htmlEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
+		    		htmlEmail = EmailUtil.appendAgileToHTML(htmlEmail, "campaign", "Powered by",
+				emailSender.isEmailWhiteLabelEnabled());
+		 
+    	String  data =domainName;												data +="\n";
+    			data +="Mime-Version: 1.0";										data +="\n";
+		    	data +="Content-Type: multipart/alternative; boundary=\"_av-0sAAoRRXZN7YLBFWvl0DvA\"";		data +="\n";
+    		    data +="Message-Id: <v0421010eb70653b14e06@[208.192.102.193]>";	data +="\n";
+    		    data +="Date: "+date;											data +="\n";
+		    	data +="To: " + toEmail;										data +="\n";
+		    	data +="From: " + fromEmail;									data +="\n";
+		    	data +="Subject: " + subject;									data +="\n";
+		    	data +="Sender: " + "contact@agilecrm.com";						data +="\n";
+		    	data +="Reply-To: " + replyToEmail;								data +="\n";
+		    	data +="--_av-0sAAoRRXZN7YLBFWvl0DvA\nContent-Type: text/plain; charset=utf-8 \n Content-Transfer-Encoding: 7bit\n";
+		    	data +=textEmail;												data +="\n";
+		    	data +="--_av-0sAAoRRXZN7YLBFWvl0DvA";							data +="\n";
+		    	data +="--_av-0sAAoRRXZN7YLBFWvl0DvA\nContent-Type: text/html; charset=utf-8 \n Content-Transfer-Encoding: 7bit\n";
+		    	data +=htmlEmail;												data +="\n";
+		    	data +="--_av-0sAAoRRXZN7YLBFWvl0DvA--";						data +="\n";
+    	
+	try
+	{
+		scoreJson=HTTPUtil.accessURLUsingPost("http://54.84.112.13/spamassassin/spam",data);
+	  /* 
+
+	   // emailSender.sendEmail(fromEmail, fromName, fromEmail, null, null, subject, replyToEmail, htmlEmail,
+		//    textEmail, null, new ArrayList<Long>(),new ArrayList<BlobKey>());
+*/
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while sending test email..." + e.getMessage());
+	    e.printStackTrace();
+	}
+	
+	return scoreJson;
+    }
 }

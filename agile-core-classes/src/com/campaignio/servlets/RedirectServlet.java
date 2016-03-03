@@ -1,7 +1,11 @@
 package com.campaignio.servlets;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -9,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.mortbay.util.URIUtil;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
@@ -20,6 +25,7 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.Trigger.Type;
 import com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.analytics.servlets.AnalyticsServlet;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.campaignio.servlets.util.TrackClickUtil;
@@ -60,7 +66,11 @@ public class RedirectServlet extends HttpServlet
 	String originalURL = req.getParameter("u");
 	String push = req.getParameter("p");
 	String personalEmailTrackerId = req.getParameter("t");
-
+	
+	//Get client IP address
+	String clientIPAddress=AnalyticsServlet.getClientIP(req);
+    boolean IPFilterStatus = false;
+    
 	// To get namespace
 	String url = req.getRequestURL().toString();
 	String host = new URL(url).getHost().toString();
@@ -77,7 +87,9 @@ public class RedirectServlet extends HttpServlet
 	// using contactspot URLs
 	if (StringUtils.isBlank(domain))
 	    return;
-
+    //IP Filter status for email clicked and open
+	IPFilterStatus=AnalyticsServlet.isBlockedIp(clientIPAddress,domain);
+	
 	// Shorten urls uses tracker-id
 	String trackerId = null;
 
@@ -86,7 +98,7 @@ public class RedirectServlet extends HttpServlet
 	String oldNamespace = NamespaceManager.get();
 	try
 	{
-	    NamespaceManager.set(domain);
+		NamespaceManager.set(domain);
 
 	    // When requested from shorten url, get values from URLShortener
 	    if (StringUtils.equals(NamespaceUtil.getNamespaceFromURL(host), "click"))
@@ -118,10 +130,13 @@ public class RedirectServlet extends HttpServlet
 	    }
 
 	    // Add CD Params - IMPORTANT: agile js-api is dependent on these
-	    // params
-	    String params = "?fwd=cd";
+	    /*// params
+    	String params = "?fwd=cd";
 	    if (originalURL.contains("?"))
 		params = "&fwd=cd";
+	    */
+	    
+	    String params= "fwd=cd";
 
 	    // Get Contact
 	    Contact contact = ContactUtil.getContact(Long.parseLong(subscriberId));
@@ -141,22 +156,29 @@ public class RedirectServlet extends HttpServlet
 		params += TrackClickUtil.appendContactPropertiesToParams(contact, push);
 		
 		//Append url fragment(Prashannjeet)
-		if(normalisedLongURL.contains("#"))
-			normalisedLongURL=normalisedLongURL.replaceFirst("#", params+"#");
-		else
-			normalisedLongURL+=params;
-
-			System.out.println("Forwarding it to " + normalisedLongURL + " " + params);
+			   try
+			   {
+				    normalisedLongURL=appendURI(normalisedLongURL, params).toString();
+					
+					//url is already encoded in encoded format. 
+					normalisedLongURL=URLDecoder.decode(normalisedLongURL,"UTF-8");
+					System.out.println("Forwarding it to.. " + normalisedLongURL);
+					resp.sendRedirect(normalisedLongURL);
+			   }
+			   catch(Exception e)
+			   {
+				   System.err.println(e);
+				   resp.sendRedirect(normalisedLongURL);
+			   }
 		
-			resp.sendRedirect(normalisedLongURL);
 	    }
 	    else
 	    {
 		resp.sendRedirect(normalisedLongURL);
 	    }
 
-	    // For personal emails campaign-id is blank
-	    if (StringUtils.isBlank(campaignId) && contact != null)
+	    // For personal emails campaign-id is blank  and checked ip address is blocked or not for mail notification
+	    if (StringUtils.isBlank(campaignId) && contact != null && IPFilterStatus == false)
 	    {
 	    	
 	    	// Save link clicked time
@@ -188,7 +210,7 @@ public class RedirectServlet extends HttpServlet
 
 	    // Get Workflow to add to log (campaign name) and show notification
 	    Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));
-	    if (workflow != null)
+	    if (workflow != null && IPFilterStatus == false)
 	    {
 		
 		    // Add log
@@ -231,8 +253,9 @@ public class RedirectServlet extends HttpServlet
 	    // Interrupt cron tasks of clicked.
 	    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.EMAIL);
 
-	    // Link clicked trigger
-    	EmailTrackingTriggerUtil.executeTrigger(subscriberId, campaignId, originalURL, Type.EMAIL_LINK_CLICKED);
+	    // Link clicked trigger if IP is not blocked
+	    if(IPFilterStatus == false)
+	    	EmailTrackingTriggerUtil.executeTrigger(subscriberId, campaignId, originalURL, Type.EMAIL_LINK_CLICKED);
 	}
 	catch (Exception e)
 	{
@@ -243,5 +266,24 @@ public class RedirectServlet extends HttpServlet
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
+    }
+    
+    //Append URI Fragment with #(Hash sign)
+    
+    public URI appendURI(String uri, String appendQuery) throws URISyntaxException  {
+      
+    	   URI oldUri = new URI(uri);
+    	   String newQuery = oldUri.getQuery();
+    	  
+        
+    	   if (newQuery == null) 
+            newQuery = appendQuery;
+    	   else {
+    		     newQuery += "&" + appendQuery; 
+    	   }
+        
+    	   URI newUri = new URI(oldUri.getScheme(), oldUri.getAuthority(), oldUri.getPath(), newQuery, oldUri.getFragment());
+    	   return newUri;
+      
     }
 }

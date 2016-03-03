@@ -1,5 +1,5 @@
 <script id="campaigns-collection-template" type="text/html">
-<div class="wrapper p-t-none">
+<div class="wrapper">
 {{#contact_model}}
 	<div>
 		 {{#contact_campaigns this "campaignStatus"}}
@@ -8,13 +8,14 @@
          
 		 {{#if this.done}}
          <div>
-           <div class="text-md inline-block m-r-xs pull-left">Completed Campaigns: </div> <div class="tagsinput">
+           <div class="text-md inline-block m-r-xs pull-left">Completed Campaigns: </div> <div class="tagsinput pull-left">
                    {{#each this.done}}
 						<span class="tag inline-block label bg-light" style="padding:7px 8px" data="{{campaign_id}}"><span>
-							<a class="anchor" href="#workflow/{{campaign_id}}">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Done Campaign{{/if}}</a>
+							<a class="anchor word-break space-normal block text-left" href="#workflow/{{campaign_id}}">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Done Campaign{{/if}}</a>
 						</span></span> 
 					{{/each}}
                     </div>
+                    <div class="clearfix"></div>
          </div>
          <br>
          {{/if}}
@@ -31,7 +32,7 @@
 					{{/each}}
                     </div>
 	       {{#canEditCurrentContact "1"}}
-                <a class="add-to-campaign"  href="#"><i class="icon-plus"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
+                <a class="add-to-campaign space-normal"  href="#"><i class="icon-plus"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
 	        {{/canEditCurrentContact}}
             <form id="add-to-campaign-form" class="show_campaigns_list" style="display:none;">
             	<div class="control-group form-group">
@@ -75,7 +76,7 @@
 <div class="clearfix"></div>
 		{{#unless this.length}}
         <div class="wrapper p-t-none">
-            <div class="slate-content">
+            <div class="slate-content mobile-pad-content m-t-none">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>

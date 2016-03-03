@@ -22,6 +22,8 @@ import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.cron.deferred.OurDomainSyncDeferredTask;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -30,6 +32,7 @@ import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.DateUtil;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.workflows.Workflow;
@@ -94,6 +97,9 @@ public class BillingRestriction
     public Integer widgets_count = 0;
 
     public Integer one_time_emails_count = 0;
+    
+    // Life time emails
+    public Integer email_credits_count = 0;
 
     /**
      * This field is not saved in database, it is used to have a backup emails
@@ -102,6 +108,14 @@ public class BillingRestriction
      */
     @NotSaved
     private Integer one_time_emails_backup = 0;
+    
+    /**
+     * This field is not saved in database, it is used to have a backup email credits
+     * count we have got from DB. This field is used to compare before saving
+     * emails count
+     */
+    @NotSaved
+    private Integer email_credits_backup = 0;
 
     @NotSaved
     public boolean isNewEmailPlanUpgrade = false;
@@ -219,7 +233,7 @@ public class BillingRestriction
 
     public boolean isEmailWhiteLabelEnabled()
     {
-	if (one_time_emails_count != null && one_time_emails_count > 0)
+	if ((one_time_emails_count != null && one_time_emails_count > 0) || (email_credits_count != null && email_credits_count > 0))
 	    return true;
 
 	return false;
@@ -330,6 +344,7 @@ public class BillingRestriction
   		this.max_emails_count = 0;
   		this.last_renewal_time = System.currentTimeMillis()/1000;
   		this.save();
+  		BillingRestrictionUtil.sendFreeEmailsUpdatedMail();
   	}
 
     private void setCreatedTime()
@@ -392,15 +407,20 @@ public class BillingRestriction
 	// Just to avoid null pointer exception
 	if (this.one_time_emails_backup == null)
 	    this.one_time_emails_backup = this.one_time_emails_count;
+	if (this.email_credits_backup == null)
+	    this.email_credits_backup = this.email_credits_count;
 
 	// Substracting from existing db count
 	restriction.one_time_emails_count -= (this.one_time_emails_backup - this.one_time_emails_count);
+	restriction.email_credits_count -= (this.email_credits_backup - this.email_credits_count);
 
 	// Updating one time count from that of DB entity
 	this.one_time_emails_count = restriction.one_time_emails_count;
+	this.email_credits_count = restriction.email_credits_count;
 
 	// Updating backup count from that of DB entity
 	this.one_time_emails_backup = one_time_emails_count;
+	this.email_credits_backup = email_credits_count;
 
     }
 
@@ -451,6 +471,9 @@ public class BillingRestriction
 
 	if (max_emails_count == null)
 	    max_emails_count = 0;
+	
+	if (email_credits_count == null || email_credits_count < 0)
+		email_credits_count = 0;
 
 	if (one_time_emails_count > 0 && (max_emails_count == null || max_emails_count == 0))
 	{
@@ -458,7 +481,49 @@ public class BillingRestriction
 	}
 
 	one_time_emails_backup = one_time_emails_count;
+	email_credits_backup = email_credits_count;
 
-	System.out.println("one time emails in domain : " + NamespaceManager.get() + " : " + one_time_emails_backup);
+	System.out.println("one time emails in domain : " + NamespaceManager.get() + " : " + one_time_emails_backup +" and email credits count : "+email_credits_backup);
+    }
+    
+    public boolean checkToUpdateFreeEmails(){
+    	Subscription subscription = SubscriptionUtil.getSubscription();
+    	System.out.println("max emails count::"+this.max_emails_count);
+    	if(this.max_emails_count == null || this.max_emails_count == 0 || (this.one_time_emails_count != null && this.one_time_emails_count <= 0 && subscription != null && subscription.emailPlan == null)){
+			System.out.println("last renewal time::"+this.last_renewal_time);
+			if(this.last_renewal_time == null){
+				DomainUser owner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+				if (owner != null)
+					this.last_renewal_time = owner.getCreatedTime();
+				else
+					this.last_renewal_time = new DateUtil().getTime().getTime()/1000;
+			}
+			Long currentDate = new DateUtil().getTime().getTime()/1000;
+			if(currentDate - this.last_renewal_time >= 2592000){
+				System.out.println("Updating free 5000 emails");
+				return true;
+			}
+		}
+		System.out.println("restriction obj:: "+this);
+		return false;
+    }
+    
+    public boolean checkForEmailCredits(){
+    	if(this.one_time_emails_count != null && this.one_time_emails_count <= 0 && this.email_credits_count != null && this.email_credits_count > 0)
+    		return true;
+    	else
+    		return false;
+    }
+    
+    public void decrementEmailCreditsCount(){
+    	--this.email_credits_count;
+    }
+    
+    public void decrementEmailCreditsCount(int count){
+    	this.email_credits_count -= count;
+    }
+    
+    public void incrementEmailCreditsCount(int count){
+    	this.email_credits_count += count;
     }
 }

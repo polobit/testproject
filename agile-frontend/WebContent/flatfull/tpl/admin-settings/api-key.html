@@ -13,21 +13,39 @@
                         </div>
                         <div class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne" id="api-key">
                            <div class="panel-body" id="api-accordion">
-                              <div class="tab-pane active" id="api">
-                                 <b>API key</b> for REST clients (Java, PHP, .Net wrappers) and integrations (Zapier, Wufoo, Unbounce, Chrome extension and others).
+                              <div class="tab-pane api_key_code active" id="api">
+                                 <b>REST API</b>
                                  <div class="clearfix"></div>
-                                 <br/>
-                                 <code  class="prettyprint" id="api_key_code">{{api_key}}<span class="pull-right inline-block"><a id="api_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top"  rel="popover" data-placement="bottom" data-title="" data-content="Reset API Key" id="element" data-trigger="hover" data-original-title=""></span></code>
-                                 <br/><br/>
-   					  			 <b>Javascript API key</b> only for tracking code on website.
+                                {{#is_mobile}}
+                                <div><code  class="prettyprint pull-left" id="api_key_code"style="letter-spacing:1px;width:100%">{{api_key}}</code></div><div><span class=" inline-block p-xs api-key-pos"><a id="api_key_generate_icon" class="c-p m-l-n-xs m-r-xs btn btn-sm  btn-danger text-white">Reset</a></span></div>
+                                {{else}}
+                                <div><code  class="prettyprint pull-left" id="api_key_code"style="letter-spacing:1px;">{{api_key}}</code></div><div><span class=" inline-block p-xs api-key-pos"><a id="api_key_generate_icon" class="c-p m-t-n-xs m-r-xs btn btn-sm  btn-danger text-white">Reset</a></span></div>
+                                {{/is_mobile}}
+                                
+                                 <br/>For Java, PHP, .Net wrappers and integrations like Zapier, Wufoo, Unbounce, Chrome extension etc.<br /><hr />
+   					  			 <b>Javascript API Key</b>
                                  <div class="clearfix"></div>
-                                 <br/>
-                                 <code class="prettyprint" id="jsapi_key_code">{{js_api_key}}<span class="inline-block pull-right"><a id="jsapi_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top" rel="popover" data-placement="bottom" data-title="" data-content="Reset JavaScript API Key" id="element" data-trigger="hover" data-original-title=""></span></code>
+                             {{#is_mobile}}
+                             <div> <code class="prettyprint pull-left Api_code" id="jsapi_key_code"style="letter-spacing:1px;width:100%">{{js_api_key}}</code></div><div><span class="inline-block p-xs api-key-pos " ><a id="jsapi_key_generate_icon" class="c-p m-l-n-xs m-r-xs btn btn-sm  btn-danger text-white">Reset</a></span></div>
+                             {{else}}
+                             <div> <code class="prettyprint pull-left Api_code" id="jsapi_key_code"style="letter-spacing:1px;">{{js_api_key}}</code></div><div><span class="inline-block p-xs api-key-pos " ><a id="jsapi_key_generate_icon" class="c-p m-t-n-xs m-r-xs btn btn-sm  btn-danger text-white">Reset</a></span></div>
+                             {{/is_mobile}}
+                                <br />Only for tracking code on website.
+                                 <div class="clearfix"></div>
                               </div>
                            </div>
                         </div>
                      </div>
                   </div>
+                  <div class="panel panel-default">
+                     <div id="">
+                        <div class="panel-heading" role="tab" id="">
+                           <div class="panel-title">
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-webhook"id="webhook_accordian">Webhooks<span class="label label-sm bg-danger m-l-xs" style="position: relative;top: -2px;">Beta</span></a>
+                           </div>
+                        </div>
+                        <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-webhook" aria-expanded="true">
+                           <div id="webhook-accordian-template"></div></div></div></div>
                   <div class="panel panel-default">
                      <div id="settings-analytics">
                         <div class="panel-heading" role="tab" id="headingTwo">

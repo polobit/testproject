@@ -106,7 +106,9 @@ public class SalesforceUtil
 
 	public static String getAccountsFromSalesForce(ContactPrefs prefs) throws Exception
 	{
-		String query = "SELECT Id, ParentId, Name, Website, Phone, Fax, Industry, Description, Type, NumberOfEmployees, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
+		// String query = "SELECT Id, ParentId, Name, Website, Phone, Industry, Description, Type, NumberOfEmployees, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
+		String query = "SELECT Id, ParentId, Name, Website, Phone, Type, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
+		// Industry, Description, NumberOfEmployees,
 		System.out.println("In accounts------------------------------------");
 		return SalesforceUtil.getEntities(prefs, query);
 	}
@@ -182,17 +184,26 @@ public class SalesforceUtil
 		/*prefs.userName = "govindarajulu3@gmail.com";
 		prefs.password = "govind8706!";
 		prefs.apiKey = "N8KPS4sZLuw31VYBZ1ZuPnVUx";*/
-
+		
+		
+		/*prefs.userName = "nmorgens@sarahcaregsc.com";
+		prefs.password = "T0xaway3";
+		prefs.apiKey = "1D1yoWLDDyCq8QMKzm2JHTkw";*/
+		
+		prefs.userName = "daniel.parker@logicalware.com";
+		prefs.password = "carla2009";
+		prefs.apiKey = "ruQgQR8rGQodMaDvQ1r651hID";
+		
 		try
 		{
 			
 			describeSObjectsSample();
 			
-			// System.out.println(SalesforceUtil.getAccountsFromSalesForce(prefs));
+			System.out.println(SalesforceUtil.getAccountsFromSalesForce(prefs));
 			
 		    // System.out.println(SalesforceUtil.getNotesFromSalesForce(prefs));
 			
-			// System.out.println(SalesforceUtil.checkSalesforcePrefs(prefs));
+		     // System.out.println(SalesforceUtil.checkSalesforcePrefs(prefs));
 
 			// System.out.println(SalesforceUtil.getTasksFromSalesForce(prefs));
 			

@@ -9,6 +9,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.util.DateUtil;
@@ -61,8 +63,15 @@ public class ActivityApi
     public List<Activity> getActivityBesedOnSelection(@QueryParam("entity_type") String entitytype,
 	    @QueryParam("user_id") Long userid, @QueryParam("cursor") String cursor,
 	    @QueryParam("page_size") String count, @QueryParam("start_time") Long starttime,
-	    @QueryParam("end_time") Long endtime)
+	    @QueryParam("end_time") Long endtime,@QueryParam("campaign-id") String id)
     {
+    
+    //filter on campaign id
+    	Long campignId=null;
+    	if(StringUtils.isNumeric(id))
+    		campignId=Long.parseLong(id);
+    	
+    	
     String time_zone = DateUtil.getCurrentUserTimezoneOffset();
 	if (starttime != null && endtime != null)
 	{
@@ -76,7 +85,7 @@ public class ActivityApi
 	}
 
 	return ActivityUtil.getActivititesBasedOnSelectedConditon(entitytype, userid, Integer.parseInt(count), cursor,
-	        starttime, endtime);
+	        starttime, endtime, campignId);
     }
 
     /**

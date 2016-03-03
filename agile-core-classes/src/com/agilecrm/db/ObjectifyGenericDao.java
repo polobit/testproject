@@ -35,7 +35,7 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
-import com.agilecrm.contact.upload.blob.status.ImportStatus;
+import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -66,6 +66,8 @@ import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.voicemail.VoiceMail;
+import com.agilecrm.webhooks.triggers.util.Webhook;
+import com.agilecrm.webhooks.triggers.util.WebhookTriggerUtil;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -226,6 +228,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	// CSV Import status
 	ObjectifyService.register(ImportStatus.class);
 
+	ObjectifyService.register(Webhook.class);
+
     }
 
     /**
@@ -264,7 +268,34 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	// Checks User access control over current entity to be saved.
 	UserAccessControlUtil.check(clazz.getSimpleName(), entity, CRUDOperation.CREATE, true);
 
-	return ofy().put(entity);
+	Long id = getEntityIdByEnity(entity);
+	Key<T> key = ofy().put(entity);
+
+	String className = clazz.getSimpleName();
+	if (className.equals("Contact") || className.equals("Opportunity"))
+	{
+	    try
+	    {
+		if (id != null && className.equals("Contact"))
+		{
+		    System.out.println("Class Name" + className);
+		    return key;
+		}
+		else
+		{
+		    WebhookTriggerUtil.triggerWebhook(entity, className, (id != null));
+		}
+
+	    }
+	    catch (EntityNotFoundException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+
+	}
+
+	return key;
     }
 
     /**
@@ -982,6 +1013,30 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	    }
 	}
 	return results;
+    }
+
+    private Long getEntityIdByEnity(T entity)
+    {
+	Long id = null;
+	Object obj = (Object) entity;
+	String entitytype = clazz.getSimpleName();
+	switch (entitytype.toLowerCase())
+	{
+	case "contact":
+	    Contact con = (Contact) obj;
+	    System.out.println(con);
+	    id = con.id;
+	    break;
+
+	case "opportunity":
+	    Opportunity opp = (Opportunity) obj;
+	    id = opp.id;
+	    break;
+
+	default:
+	    break;
+	}
+	return id;
     }
 
 }

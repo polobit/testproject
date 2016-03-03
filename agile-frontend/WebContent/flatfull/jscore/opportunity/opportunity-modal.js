@@ -148,6 +148,7 @@ $(function()
 												$("#deal_archive_confirm_modal").modal('hide');
 												App_Deal_Details.dealDetailView.model = model;
 												App_Deal_Details.dealDetailView.render(true)
+												$('body').removeClass("modal-open");
 												Backbone.history.navigate("deal/" + model.toJSON().id, { trigger : true });
 												return;
 											}
@@ -173,6 +174,38 @@ $(function()
 											pieMilestones();
 											enable_save_button(that);
 											$("#deal_archive_confirm_modal").modal('hide');
+											var arch_deal_value = model.attributes.expected_value;
+											var oldMilestone = model.attributes.milestone;
+											try
+						                    {
+
+                        					    var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(arch_deal_value); 
+                         			            $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
+                        
+											 	$('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+												/* average of new deal total */
+										     	var avg_deal_size = 0;
+										     	var deal_count = parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) ; 
+										     	if(deal_count == 0)
+										     		avg_old_deal_size = 0;
+										     	else
+										     		avg_old_deal_size = olddealvalue / deal_count;
+
+										     	olddealvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue) ;
+										        avg_old_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_old_deal_size);
+										        var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
+										     	var oldheading = oldMilestone.replace(/ +/g, '');
+										     	var symbol = getCurrencySymbolForCharts();
+												var dealdata = {"dealTrack":dealTrack ,"heading": oldheading ,"dealcount":olddealvalue ,"avgDeal" : avg_old_deal_size,"symbol":symbol,"dealNumber":deal_count};
+												var dealDataString = JSON.stringify(dealdata) ; 
+												$("#"+oldheading+" .dealtitle-angular").removeAttr("data");
+												$("#"+oldheading+" .dealtitle-angular").attr("data" , dealDataString ); 
+
+											}
+											catch (err)
+											{
+											console.log(err);
+											}
 											// Shows deals chart
 											dealsLineChart();
 											update_deal_collection(model.toJSON(), id, milestone, milestone);
@@ -241,6 +274,7 @@ $(function()
 												$("#deal_restore_confirm_modal").modal('hide');
 												App_Deal_Details.dealDetailView.model = model;
 												App_Deal_Details.dealDetailView.render(true)
+												$('body').removeClass("modal-open");
 												Backbone.history.navigate("deal/" + model.toJSON().id, { trigger : true });
 												return;
 											}
@@ -357,7 +391,26 @@ function updateDeal(ele, editFromMilestoneView)
 
 	deserializeForm(value, $("#opportunityUpdateForm"));
 
-	$("#opportunityUpdateModal").modal('show');
+   if($('#color1' , dealForm).is(':hidden')){
+   	$('.colorPicker-picker', dealForm).remove();
+    $('#color1' , dealForm).colorPicker();
+	} 
+    // Disable color input field
+    $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
+
+
+ var color = {"VIOLET":"#ee82ee","INDIGO":"#4b0082","BLUE":"#0000ff","GREEN":"#00ff00","YELLOW":"#ffff00"
+		               ,"ORANGE":"#ff6600","RED":"#ff0000","BLACK":"#000000","WHITE":"#ffffff","GREY":"#808080"};
+
+    var colorcode = color[value.colorName];
+      if(!colorcode)
+      	  colorcode = "#808080";
+      $('#color1' , dealForm).attr('value', colorcode);
+      $('.colorPicker-picker', dealForm).css("background-color", colorcode);
+
+
+
+    $("#opportunityUpdateModal").modal('show');
 
 	// Hide archive button, if the is already archived.
 	if (value.archived)
@@ -419,10 +472,21 @@ function updateDeal(ele, editFromMilestoneView)
  */
 function show_deal()
 {
+   $( "#opportunityForm" )[ 0 ].reset();
+   
+   var el = $("#opportunityForm");
 
-	var el = $("#opportunityForm");
+    if($('#color1', el).is(':hidden')){
 
-	$("#opportunityModal").modal('show');
+    $('.colorPicker-picker', el).remove();
+
+    $('#color1', el).colorPicker();
+	} 
+    // Disable color input field
+    $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
+
+
+    $("#opportunityModal").modal('show');
 
 	add_custom_fields_to_form({}, function(data)
 	{
@@ -578,6 +642,9 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 						else if (dealsView.collection.get(deal.id))
 						{
 							dealsView.collection.get(deal.id).set(new BaseModel(deal));
+							$("#"+deal.id).closest("li").removeAttr("class");
+							$("#"+deal.id).closest("li").addClass("deal-color");
+							$("#"+deal.id).closest("li").addClass(deal.colorName);
 						}
 						else
 						{
@@ -616,12 +683,16 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 
 					var id = deal.id;
 					var oldMilestone = $('#' + id).attr('data');
+					$("#"+deal.id).parent().removeClass();
+					$("#"+deal.id).parent().addClass(deal.colorName);
+		            $("#"+deal.id).parent().addClass("deal-color");
 					// update_deal_collection(deal, id, newMilestone,
 					// oldMilestone);
 
 					var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : oldMilestone });
 					if (!dealPipelineModel)
 						return;
+					var deal_pre_modified_value = dealPipelineModel[0].get('dealCollection').get(id).attributes.expected_value;
 					dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
 
 					if (!checkPipeline(deal.pipeline_id))
@@ -630,7 +701,29 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 						$("#" + oldMilestone.replace(/ +/g, '')).find("#" + id).parent().remove();
 						try
 						{
-							$('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+							var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(deal_pre_modified_value);
+						    $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
+						    $('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+						
+							/* average of new deal total */
+					     	var avg_deal_size = 0;
+					     	var old_deal_count = parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text())  ; 
+					     	if(old_deal_count == 0)
+					     		avg_deal_size = 0;
+					     	else
+					     		avg_deal_size = olddealvalue / old_deal_count;
+
+
+					     	olddealvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue) ;
+					        avg_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_deal_size);
+					        var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
+					     	var symbol = getCurrencySymbolForCharts();
+					     	var heading = oldMilestone.replace(/ +/g, '');
+					     	var dealdata = {"dealTrack":dealTrack ,"heading": heading ,"dealcount":olddealvalue ,"avgDeal" : avg_deal_size,"symbol":symbol,"dealNumber":old_deal_count};
+							var dealDataString = JSON.stringify(dealdata) ; 
+							$("#"+heading+" .dealtitle-angular").removeAttr("data");
+							$("#"+heading+" .dealtitle-angular").attr("data" , dealDataString ); 
+							 
 						}
 						catch (err)
 						{
@@ -649,8 +742,56 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 
 						try
 						{
-							$('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
-							$('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+
+                            var dealchangevalue = deal.expected_value;
+                            var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(deal_pre_modified_value); 
+                            var newdealvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))+parseFloat(dealchangevalue);
+
+
+		                    $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue));
+		                    $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
+
+
+						    $('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
+						    $('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+							/* average of new deal total */
+					     	var avg_old_deal_size = 0;
+					     	var old_deal_count = parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) ; 
+					     	if(old_deal_count == 0)
+					     		avg_old_deal_size = 0;
+					     	else
+					     		avg_old_deal_size = olddealvalue / old_deal_count;
+							 /* average of new deal total */
+					      	var avg_new_deal_size = 0;
+					     	var new_deal_count = parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()); 
+					     	if(new_deal_count == 0)
+					     		avg_new_deal_size = 0;
+					     	else
+					     		avg_new_deal_size = newdealvalue / new_deal_count;
+
+					     	olddealvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue) ;
+					        avg_old_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_old_deal_size);
+					        newdealvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue) ;
+					        avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
+
+					     	var oldheading = oldMilestone.replace(/ +/g, '');
+					     	var newheading = newMilestone.replace(/ +/g, '');
+					        
+
+					        var symbol = getCurrencySymbolForCharts();
+
+       						var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
+					        $("#"+oldheading+" .dealtitle-angular").removeAttr("data");  
+					        $("#"+newheading+" .dealtitle-angular").removeAttr("data"); 
+					       
+					        var dealolddata = {"dealTrack":dealTrack ,"heading": oldheading ,"dealcount":olddealvalue ,"avgDeal" : avg_old_deal_size,"symbol":symbol,"dealNumber":old_deal_count};
+							var dealOldDataString = JSON.stringify(dealolddata); 
+							$("#"+oldheading+" .dealtitle-angular").attr("data" , dealOldDataString); 
+
+					        var dealnewdata = {"dealTrack":dealTrack ,"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
+							var dealNewDataString = JSON.stringify(dealnewdata); 
+							$("#"+newheading+" .dealtitle-angular").attr("data" , dealNewDataString);
+
 						}
 						catch (err)
 						{
@@ -672,6 +813,41 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 							dealsTemplate = 'deals-by-paging-relax-model';
 						}
 						$("#" + newMilestone.replace(/ +/g, '')).find("#" + id).parent().html(getTemplate(dealsTemplate, deal));
+						try
+						{
+
+                           var dealchangevalue = deal.expected_value;
+                           var prenewdealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(deal_pre_modified_value); 
+                           var newdealvalue = parseFloat(prenewdealvalue)+parseFloat(dealchangevalue);
+
+
+		                  $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue));
+		                  
+						    /* average of new deal total */
+					      	var avg_new_deal_size = 0;
+					     	var new_deal_count = parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()); 
+					     	if(new_deal_count == 0)
+					     		avg_new_deal_size = 0;
+					     	else
+					     		avg_new_deal_size = newdealvalue / new_deal_count;
+
+					     	newdealvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue) ;
+					        avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
+
+					     	var newheading = newMilestone.replace(/ +/g, '');
+					        var symbol = getCurrencySymbolForCharts();
+				            var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
+				            avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
+							var dealdata = {"dealTrack":dealTrack ,"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
+							var dealDataString = JSON.stringify(dealdata) ; 
+							$("#"+newheading+" .dealtitle-angular").removeAttr("data"); 
+							$("#"+newheading+" .dealtitle-angular").attr("data" , dealDataString ); 
+						
+						}
+						catch (err)
+						{
+							console.log(err);
+						}
 					}
 
 					if (removeArchive(deal))
@@ -709,9 +885,37 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 
 					dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel, deal));
 					try
-					{
+					{    
+						var newdealvairable = deal.expected_value;
+
+                        var newdealeditvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))+parseFloat(newdealvairable);
+                        
+                        $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealeditvalue));
+
 						$('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
-					}
+					    /* average of new deal total */
+				      	var avg_new_deal_size = 0;
+				     	var new_deal_count = parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) ;  
+				     	if(new_deal_count == 0)
+				     		avg_new_deal_size = 0;
+				     	else
+				     		avg_new_deal_size = newdealeditvalue / new_deal_count;
+
+                        
+				        newdealeditvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealeditvalue) ;
+				        avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
+
+				     	var newheading = newMilestone.replace(/ +/g, '');
+				        $("#"+newheading+" .dealtitle-angular").removeAttr("data");  
+				        var symbol = getCurrencySymbolForCharts();
+				        var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
+			            var dealdata = {"dealTrack":dealTrack ,"heading": newheading ,"dealcount":newdealeditvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
+						var dealDataString = JSON.stringify(dealdata) ; 
+						$("#"+newheading+" .dealtitle-angular").attr("data" , dealDataString ); 
+
+				        
+
+				        }
 					catch (err)
 					{
 						console.log(err);
@@ -719,6 +923,8 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 				}
 				includeTimeAgo($("#" + newMilestone.replace(/ +/g, '')));
 				$('a.deal-notes').tooltip();
+				$("#"+deal.id).parent().addClass(deal.colorName);
+		        $("#"+deal.id).parent().addClass("deal-color");
 			}
 			else
 			{

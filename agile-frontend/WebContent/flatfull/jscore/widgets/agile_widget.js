@@ -145,16 +145,22 @@ function agile_crm_update_contact(propertyName, value, callback)
 		properties.push({ "name" : propertyName, "value" : value, "type" : "CUSTOM" });
 
 	contact_model.set({ "properties" : properties }, { silent : true });
-	contact_model.url = "core/api/contacts";
+
+ 	
+	var model = new Backbone.Model();
+	model.url = "core/api/contacts";
 
 	// Save model
-	contact_model.save({ success : function(model, response)
+	model.save(contact_model.toJSON(), { success : function(model, response)
 	{
-		if (callback && typeof (callback) == "function")
-			callback();
-	} }, { silent : true });
+	// Reset model view
+	contact_model.set(model.toJSON(), { silent: true });
 
+	if (callback && typeof (callback) == "function")
+	callback();
+	} }, { silent : true });
 }
+
 
 /**
  * Updates a contact with the list of property name and its value specified in

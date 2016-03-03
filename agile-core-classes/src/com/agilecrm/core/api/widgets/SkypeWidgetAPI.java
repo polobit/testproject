@@ -45,7 +45,7 @@ public class SkypeWidgetAPI
 	    	if (!(StringUtils.isBlank(phone))){
 	    		Contact contact = ContactUtil.searchContactByPhoneNumber(phone);
 
-	    		if (direction.equalsIgnoreCase("Outgoing"))
+	    		if (direction.equalsIgnoreCase("Outgoing") ||  direction.equalsIgnoreCase("outbound-dial"))
 	    		{
 	    		    ActivityUtil.createLogForCalls("Skype", phone, Call.OUTBOUND, status.toLowerCase(), duration);
 
@@ -53,12 +53,49 @@ public class SkypeWidgetAPI
 	    		    CallTriggerUtil.executeTriggerForCall(contact, "Skype", Call.OUTBOUND, status.toLowerCase(), duration);
 	    		}
 
-	    		if (direction.equalsIgnoreCase("Incoming"))
+	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("inbound"))
 	    		{
 	    		    ActivityUtil.createLogForCalls("Skype", phone, Call.INBOUND, status.toLowerCase(), duration);
 
 	    		    // Trigger for inbound
 	    		    CallTriggerUtil.executeTriggerForCall(contact,  "Skype", Call.INBOUND, status.toLowerCase(), duration);
+	    		}
+	    	}
+		return "";
+	}
+	
+	/**
+	 * Saving call info and history on the basis of id.
+	 * 
+	 * @author Prakash
+	 * @created 10-Jan-2015
+	 * @return String
+	 */
+	@Path("savecallactivityById")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String saveCallActivityById(@FormParam("id") Long id,@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration) {		
+	    
+	    	if (null != id && !(StringUtils.isBlank(phone))){
+	    		Contact contact = ContactUtil.getContact(id);
+	    		if(null == contact){
+	    			return "";
+	    		}
+	    		if (direction.equalsIgnoreCase("Outgoing") || direction.equalsIgnoreCase("outbound-dial"))
+	    		{
+	    		    ActivityUtil.createLogForCalls("Skype", phone, Call.OUTBOUND, status.toLowerCase(), duration, contact);
+
+	    		    // Trigger for outbound
+	    		    CallTriggerUtil.executeTriggerForCall(contact, "Skype", Call.OUTBOUND, status.toLowerCase(), duration);
+	    		}
+
+	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("inbound"))
+	    		{
+	    			ActivityUtil.createLogForCalls("Skype", phone, Call.INBOUND, status.toLowerCase(), duration, contact);
+
+	    		    // Trigger for inbound
+	    			CallTriggerUtil.executeTriggerForCall(contact,  "Skype", Call.INBOUND, status.toLowerCase(), duration);
 	    		}
 	    	}
 		return "";

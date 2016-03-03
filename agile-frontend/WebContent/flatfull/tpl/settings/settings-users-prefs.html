@@ -2,9 +2,15 @@
 <script id="settings-user-prefs-tab-template" type="text/html">
 	<div class="tab-container m-b-none">
        <ul class="nav nav-tabs">
-         <li class="prefs-profile"><a href="#settings-user-prefs" data-toggle="tab"  class="b-l-none">Profile</a></li>
+       {{#is_mobile}}
+        <li class="prefs-profile"><a href="#settings-user-prefs" data-toggle="tab"  class="b-l-none"><i class="icon icon-user"></i></a></li>
+         <li class="prefs-reminders"><a href="#settings-reminders" data-toggle="tab" ><i class="icon icon-note"></i></a></li>
+		 <li class="prefs-advanced"><a href="#settings-advanced" data-toggle="tab" ><i class="icon-magnifier"></i></a></li>
+		 {{else}}
+		  <li class="prefs-profile"><a href="#settings-user-prefs" data-toggle="tab"  class="b-l-none">Profile</a></li>
          <li class="prefs-reminders"><a href="#settings-reminders" data-toggle="tab" >Reminders</a></li>
 		 <li class="prefs-advanced"><a href="#settings-advanced" data-toggle="tab" >Advanced</a></li>
+		 {{/is_mobile}}
        </ul>
 	</div>
 	<div class="tab-content" id="settings-user-prefs-tab-content">
@@ -992,6 +998,9 @@
                 </div>
 
             </div>
+            {{#is_mobile}}
+
+            {{else}}
             <div class="row m-t-sm">
 <div class="col-md-12">
             <div class="control-group form-group">
@@ -1002,6 +1011,7 @@
                 </div>
             </div>
             </div>
+            {{/is_mobile}}
 </div>
 <div class="row">
 <div class="col-md-12">            

@@ -268,6 +268,15 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			}
 			
 			$(".bulk-delete-loading").remove();	
+			if(url=='core/api/users/bulk')
+			{
+				var message;
+				if(count > 1)
+					message = "Users have been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted users.";
+				else
+					message = "User has been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted user.";
+				showNotyPopUp('information', message, "top", 10000);
+			}
 			if(count > 20 || count == 0)
 			{
 				if($(table).attr('id') == "contacts-table")
@@ -293,6 +302,18 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 					$("."+id_array[i]).fadeOut(300, function() { $(this).remove(); });				
 			}
 			
+			try{
+			if(App_Workflows.workflow_list_view && Current_Route == "workflows")
+				{
+				for(i=0;i<id_array.length;i++){
+				App_Workflows.workflow_list_view.collection.remove(id_array[i]);
+				$(App_Workflows.workflow_list_view.el).find(id_array[i]).closest("tr").remove();
+				}
+			}
+			}
+			catch(err)
+			{}
+
 			$('.thead_check').attr("checked", false);
 			
 			// Show bulk operations only when thead check box is checked

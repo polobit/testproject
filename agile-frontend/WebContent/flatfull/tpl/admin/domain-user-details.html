@@ -6,6 +6,7 @@
 {{email}}
 {{#if is_account_owner}}
             <span class="label bg-light m-l-xs dk text-tiny">Owner</span>
+            {{#check_admin_ip}}	<a href="https://{{domain}}.agilecrm.com/custLogin?d={{id}}" target="_blank" class="text-info p-l-xs">Login To Domain</a>{{/check_admin_ip}}	
     {{/if}}
 </td>
 <td class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" style="border-bottom:dotted 1px #999">{{epochToDate info_json_string "logged_in_time"}}</time></td>

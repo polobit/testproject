@@ -33,6 +33,9 @@ import com.agilecrm.scribe.util.ScribeUtil;
  */
 @SuppressWarnings("serial")
 public class ScribeServlet extends HttpServlet {
+	
+	public static final String SERVICE_TYPE_PAYPAL_IN = "Paypal";
+
 	public static final String SERVICE_TYPE_LINKED_IN = "linkedin";
 	public static final String SERVICE_TYPE_TWITTER = "twitter";
 	public static final String SERVICE_TYPE_GMAIL = "gmail";
@@ -171,9 +174,11 @@ public class ScribeServlet extends HttpServlet {
 			if (shop.contains(".myshopify.com")) {
 				shop = shop.split("\\.")[0];
 			}
+			
 			String domain = req.getParameter("domain");
-			resp.sendRedirect("http://shopify4j.appspot.com/shopify?shop="
-					+ shop + "&domain=" + domain);
+			String requestUrl = "http://shopify4j.appspot.com/shopify?shop="+ shop + "&domain=" + domain;
+			resp.sendRedirect(requestUrl);
+			
 			return;
 		}
 
@@ -358,9 +363,9 @@ public class ScribeServlet extends HttpServlet {
 		String serviceName = (String) req.getSession().getAttribute(
 				"oauth.service");
 
-		if (serviceName == null)
-			serviceName = (String) req.getSession()
-					.getAttribute("service_type");
+		if (serviceName == null){
+			serviceName = (String) req.getSession().getAttribute("service_type");
+		}
 		System.out.println("service name " + serviceName);
 		String code = null;
 		Token requestToken = null;

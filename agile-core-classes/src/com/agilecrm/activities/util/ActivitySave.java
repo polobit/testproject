@@ -469,7 +469,16 @@ public class ActivitySave
 	System.out.println(js);
 
 	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contact_ids"));
-
+	
+	String custom4 = "";
+	if(null != note.callType && null != note.phone && null != note.status){
+		if(note.callType .equals("outbound-dial")){
+			custom4 +=  "Outgoing call to " + note.phone + ", Status is "+ note.status;
+		}else{
+			custom4 +=  "Incoming call from " + note.phone + ", Status is "+ note.status;
+		}
+		System.out.println(custom4);
+	}
 	if (jsn != null && jsn.length() > 0)
 	{
 
@@ -477,8 +486,13 @@ public class ActivitySave
 	    {
 
 		Contact contact = ContactUtil.getContact(jsn.getLong(i));
-		ActivityUtil.createContactActivity(ActivityType.NOTE_ADD, contact, note.subject, note.description,
-		        note.id.toString());
+		if(null != note.callType){
+			ActivityUtil.createContactActivity(ActivityType.NOTE_ADD, contact, note.subject, note.description,
+			        note.id.toString(),custom4);
+		}else{
+			ActivityUtil.createContactActivity(ActivityType.NOTE_ADD, contact, note.subject, note.description,
+			        note.id.toString());
+		}
 	    }
 
 	}

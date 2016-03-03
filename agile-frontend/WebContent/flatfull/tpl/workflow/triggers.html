@@ -31,7 +31,7 @@
 <div class="row">
         {{#unless this.length}}
 		<div class="col-md-9 col-sm-9 table-responsive">
-        <div class="alert-info alert">
+        <div class="alert bg-white p-md">
             <div class="slate-content">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
@@ -81,6 +81,9 @@
             <p>
                 e.g. If a user registers on your website, you can automate the workflow to send a welcome email. The user registering on site is the trigger.
             </p>
+			<p>
+				Please note that Triggers may not run immediately. It may take few minutes based on the pending campaigns to be executed.
+			</p>
         </div>
     </div>
 </div>

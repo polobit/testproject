@@ -34,6 +34,7 @@ var Widget_Model_Events = Base_Model_View.extend({
    		var widgetName = $(ele).closest("#widget-settings").attr("widget-name");
    		delete_widget(widgetName);
    		window.location.href = "#add-widget";
+      location.reload();
    },
 
    saveWidgetPrefs : function(e){
