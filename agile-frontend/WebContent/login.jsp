@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.MathUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="java.util.TimeZone"%>
@@ -99,6 +100,9 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 String logo_url = accountPrefs.logo;
 
+// Bg Image
+int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
+
 %>
 <!DOCTYPE html>
 
@@ -120,8 +124,8 @@ String logo_url = accountPrefs.logo;
 
 <style>
 body {
-  /* background-image: url('<%=S3_STATIC_IMAGE_PATH%>/images/agile-login-page-low.jpg');
-  */background-repeat: no-repeat;
+  background-image: url('<%=S3_STATIC_IMAGE_PATH%>/images/login-<%=randomBGImageInteger%>-low.jpg');
+  background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% 100%;
   background-attachment: fixed;
@@ -159,6 +163,23 @@ position: fixed;width: 100%;top: 0px;
 		display: none;
 	}
 }
+.overlay:before{
+  content: "";
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: black;
+    opacity: 0.35;
+}
+.view{
+	position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
 
 </style>
 
@@ -192,13 +213,13 @@ if(isSafari && isWin)
 
 </head>
 
-<body>
+<body  class="overlay">
 <div id="openid_btns">
 					   	
 	<div class="" id="app">
 
 		<div ui-view="" class="fade-in-right-big smooth">
-  			<div class="container w-xxl w-auto-xs">
+  			<div class="container w-xxl w-auto-xs view">
 				
 					<a href="https://www.agilecrm.com/" class="navbar-brand block m-t text-white">
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
@@ -303,16 +324,12 @@ if(isSafari && isWin)
 			if(login_hash)
 				$("#location_hash").val(login_hash);
         var newImg = new Image;
-         //getting the random number in between1 to ten 
-        var number = Math.round(Math.random()*10);
-        	if(number == 10)
-        	number = 1;
         newImg.onload = function() {
         
         $("body").css("background-image","url('"+this.src+"')");
        
         }
-        newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/login'+number+'.jpg';
+        newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/login-<%=randomBGImageInteger%>-high.jpg';
         // agile-login-page-high.png
 
 			// Pre load dashlet files when don is active

@@ -3,9 +3,10 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
+<%@page import="com.agilecrm.util.MathUtil"%>
 <%@page contentType="text/html; charset=UTF-8" %>
 <%
-/*
+
 	  if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
@@ -16,7 +17,7 @@
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
 	}
- */
+
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");
 
@@ -31,6 +32,9 @@ String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
 //Static images s3 path
 String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
+
+// Bg Image
+int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 
 // Error Message
 String errorMessage = "";
@@ -81,6 +85,21 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 
 <!-- Include ios meta tags -->
 <%@ include file="ios-native-app-meta-tags.jsp"%>
+<STYLE>
+body{
+	background-image: url('<%=S3_STATIC_IMAGE_PATH%>/images/signup-<%=randomBGImageInteger%>-low.jpg');
+}
+.overlay:before{
+	content: "";
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: black;
+    opacity: 0.35;
+}
+</STYLE>
 
 <script type="text/javascript">
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
@@ -115,13 +134,13 @@ if(isSafari && isWin)
     <![endif]-->
 
 </head>
-<body>
+<body class="overlay">
   <div id="error-area" class="error-top-view">
     <%if(StringUtils.isNotEmpty(errorMessage)){
         out.println(errorMessage);
     }%>
   </div>
-<div class="app app-header-fixed app-aside-fixed">
+<div class="app app-header-fixed app-aside-fixed transparant">
 <div class="container w-xxl w-auto-xs">
 <a href="https://www.agilecrm.com/" class="navbar-brand block m-t text-white">
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
@@ -225,17 +244,12 @@ if(isSafari && isWin)
   var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
 $(document).ready(function() {
-	 var number = Math.round(Math.random()*10);
-	 console.log(number);
-        	if(number == 8)
-        	number = 1;
   	var newImg = new Image;
     newImg.onload = function() {
     $("body").css("background-image","url('"+this.src+"')");
      }
-   newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/signup'+number+'.jpg';
-    alert(newImg.src);
-
+   newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/signup-<%=randomBGImageInteger%>-high.jpg';
+   console.log(newImg.src);
     if($("#error-area").text().trim())
     	$("#error-area").slideDown("slow");
 
