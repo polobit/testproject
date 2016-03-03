@@ -240,7 +240,7 @@ angular.module('builder.projects', [])
                               		$rootScope.savingChanges = false;
                               		$timeout(function() {
                                       	$(".saveLandingPageButton",parent.document).prop("disabled",false);
-                      					$(".saveLandingPageButton",parent.document).html("Save Page");
+                      					$(".saveLandingPageButtonText",parent.document).html("Save Page");
                                   	}, 3000);
                         	  }else{
                         		   
@@ -281,7 +281,7 @@ angular.module('builder.projects', [])
 
                       				$timeout(function() {
                                       	$(".saveLandingPageButton",parent.document).prop("disabled",false);
-                      					$(".saveLandingPageButton",parent.document).html("Save Page");
+                      					$(".saveLandingPageButtonText",parent.document).html("Save Page");
                       					//window.parent.location.hash = ("landing-page/"+returnDataFormat.pages[0].id);
                     					if(typeof projectPageData.id == "undefined") {
                     						window.parent.location.hash = ("landing-pages");
@@ -295,7 +295,7 @@ angular.module('builder.projects', [])
                       			}).error(function(data) {
                       				$timeout(function() {
                                       	$(".saveLandingPageButton",parent.document).prop("disabled",false);
-                      					$(".saveLandingPageButton",parent.document).html("Save Page");
+                      					$(".saveLandingPageButtonText",parent.document).html("Save Page");
                                   	}, 3000);
                       				//alertify.log(data.substring(0, 500), 'error', 2500);
                       			}).finally(function(data) {
@@ -313,7 +313,7 @@ angular.module('builder.projects', [])
               			}).error(function(data) {
               				$timeout(function() {
                               	$(".saveLandingPageButton",parent.document).prop("disabled",false);
-              					$(".saveLandingPageButton",parent.document).html("Save Page");
+              					$(".saveLandingPageButtonText",parent.document).html("Save Page");
                           	}, 3000);
               				//alertify.log(data.substring(0, 500), 'error', 2500);
               			});

@@ -45,8 +45,9 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                 <div class="btn-group right m-r-xs m-r-n-xs">
                                 <div class="lpPreviewView pull-left p-r-sm p-t-xs" data-trigger="#landingpageFullPreview"><a href="#"><i class="fa fa-eye fa-lg"></i> <span>Preview</span></a></div>
 
-                                <button class="btn btn-primary btn-sm btn-addon saveLandingPageButton" ><i class="icon-plus-sign"></i>Save Page
+                                <button class="btn btn-primary btn-sm btn-addon saveLandingPageButton" >{{#if_equals action "edit"}}<i class="icon-plus-sign"></i>{{/if_equals}}<span class="saveLandingPageButtonText">Save Page</span>
                                 </button>
+                                {{#if_equals action "edit"}}
                                 <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
                                                 <span class="caret"></span>
                                 </button>
@@ -56,6 +57,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                                     <i class="fa fa-clipboard" style="width: 20px;"></i>Create a Copy</a>
                                             </li>
                                 </ul>
+                                 {{/if_equals}}
                                     </div>
         
                                     </div>
@@ -155,7 +157,8 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                     <br />
 					<br />
                     <div class="btn-group left m-r-xs m-r-n-xs">
-					<button class="btn btn-sm btn-primary btn-addon saveLandingPageButton" ><i class="icon-plus-sign"></i>Save Page</button>
+					<button class="btn btn-sm btn-primary btn-addon saveLandingPageButton" > {{#if_equals action "edit"}}<i class="icon-plus-sign"></i>{{/if_equals}}<span class="saveLandingPageButtonText">Save Page</span>
+                    {{#if_equals action "edit"}}
                      <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
                                                 <span class="caret"></span>
                                 </button>
@@ -165,6 +168,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                                     <i class="fa fa-clipboard" style="width: 20px;"></i>Create a Copy</a>
                                             </li>
                                 </ul>
+                    {{/if_equals}}
                     <div>
                     <div class="save-workflow-img inline-block"></div>
                     <br />

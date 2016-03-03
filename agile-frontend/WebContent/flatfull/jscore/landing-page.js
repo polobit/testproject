@@ -25,7 +25,7 @@ function initializeLandingPageListeners() {
 		// Check if the form is valid
     	if (isValidForm('#landingPageBuilderForm')) {
     		$(".saveLandingPageButton").prop("disabled",true);
-			$(".saveLandingPageButton").html("Saving...");
+			$(".saveLandingPageButtonText").html("Saving...");
     		document.getElementById('landingPageBuilder').contentWindow.$('.icon-floppy-1:last').trigger("click");
     		if(App_LandingPageRouter.LandingPageCollectionView) {
     			App_LandingPageRouter.LandingPageCollectionView.collection.fetch();
