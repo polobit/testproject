@@ -35,7 +35,7 @@ public class CreateTestTickets implements DeferredTask
 					String oldNamespace = NamespaceManager.get();
 					try
 					{
-						NamespaceManager.set("ticketstest");
+						NamespaceManager.set("testtickets");
 
 						for (int j = 0; j < 100; j++)
 						{
