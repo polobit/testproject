@@ -154,7 +154,18 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                     </div>
                     <br />
 					<br />
-					<button class="btn btn-sm btn-primary saveLandingPageButton" >Save Page</button>
+                    <div class="btn-group left m-r-xs m-r-n-xs">
+					<button class="btn btn-sm btn-primary btn-addon saveLandingPageButton" ><i class="icon-plus-sign"></i>Save Page</button>
+                     <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
+                                                <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" style="min-width:0px;margin-top: -19px;">
+                                            <li>
+                                                <a href="#landing-page-copy/{{templateId}}" id="duplicate-landingpage-top">
+                                                    <i class="fa fa-clipboard" style="width: 20px;"></i>Create a Copy</a>
+                                            </li>
+                                </ul>
+                    <div>
                     <div class="save-workflow-img inline-block"></div>
                     <br />
                 </fieldset>
