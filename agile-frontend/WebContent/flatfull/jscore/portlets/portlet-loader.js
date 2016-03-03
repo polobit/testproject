@@ -50,15 +50,14 @@ function loadPortlets(route,el){
 	// postrender. It is set to false after portlet setup is initialized
 	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets?route='+route, sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 		postRenderCallback : function(portlets_el){
-			console.log(	App_Portlets.RoutePortlets.length);
-			if(route!='DashBoard' && App_Portlets.RoutePortlets.length!=0)
+			if(route!='DashBoard' && Portlets_View.collection.length!=0)
 			{
 				/*if($('#zero-portlets').is(':visible') || $('#no-portlets').is(':visible'))
 				$('#no-portlets').parents('.wrapper-md').hide();*/
 				$('#portlets').parents('.route_Portlet').show();
 			}
 			set_up_portlets(el, portlets_el);
-				if(route!='DashBoard' && App_Portlets.RoutePortlets.length!=0){
+				//if(route!='DashBoard' && App_Portlets.RoutePortlets.length!=0){
 					var models = [];
 					$.each( App_Portlets.RoutePortlets, function(index,model) {
 
@@ -92,7 +91,7 @@ function loadPortlets(route,el){
 				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
 					
-				}
+				//}
 				if(App_Portlets.adminPortlets.length!=0)
 				{
 					var models = [];

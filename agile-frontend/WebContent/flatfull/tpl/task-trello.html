@@ -24,7 +24,7 @@
 	        </div> 	
           {{#is_mobile}}
           {{else}}
-			<div class="btn-group type-task-button c-p pull-right">
+			<div class="btn-group type-task-button c-p m-r">
 		        <button class="btn btn-default btn-sm selected_name">Due</button>
 		        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 		        <span class="caret"></span>
@@ -46,7 +46,11 @@
                <li><a href="CALENDAR" class="calendar-view new-type-task">Calendar View</a></li>                     
 		        </ul>
 		    </div>
-
+        <div class="btn-group type-task-button c-p pull-right">
+        <a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
+          <i class="icon icon-plus-sign"></i> Add Dashlet
+        </a>
+        </div>
 	        {{/is_mobile}}		
 
 		</div>

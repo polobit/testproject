@@ -1141,8 +1141,8 @@ function clickfunction(that,url,forAll,route){
 				obj.portlet_type = portlet_type;
 				var max_row_position = 0;
 				var next_position = gridster.next_position(1, 1);
-				obj.column_position = next_position.col;
-				obj.row_position = next_position.row;
+				obj.column_position = -1;
+				obj.row_position = -1;
 				obj.size_x = next_position.size_x;
 				obj.size_y = next_position.size_y;
 

@@ -43,10 +43,11 @@ function set_p_portlets(base_model) {
 		"Contacts" : "contacts",
 		"Deals" : "deals",
 		"Tasks" : "tasks",
-		"Events" : "calendar"
+		"Events" : "calendar",
+		"DashBoard" : "dashboard"
 	};
 
-	if(base_model.toJSON().portlet_route!='DashBoard' && Current_Route.toUpperCase()==routeJSON[base_model.toJSON().portlet_route].toUpperCase()){
+	if((base_model.toJSON().column_position == -1 && base_model.toJSON().row_position == -1) && (Current_Route==undefined || Current_Route.toUpperCase()==routeJSON[base_model.toJSON().portlet_route].toUpperCase())){
 		App_Portlets.RoutePortlets.push(base_model);
 		return;
 	}
@@ -56,7 +57,10 @@ function set_p_portlets(base_model) {
 		App_Portlets.adminPortlets.push(base_model);
 		return;
 	}
-	
+	if(Current_Route!='DashBoard')
+			{
+				$('#portlets').parents('.route_Portlet').show();
+			}
 	var that = this;
 	portlet_utility.getOuterViewOfPortlet(base_model, this.el, function() {
 		portlet_utility.getInnerViewOfPortlet(base_model, that.el);
