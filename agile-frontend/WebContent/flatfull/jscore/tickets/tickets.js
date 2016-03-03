@@ -523,7 +523,14 @@ var Tickets = {
 			{	success: function(model){
 					CURRENT_DOMAIN_USER.helpdeskSettings = model.toJSON();
 
-					Tickets.renderExistingCollection();
+					//Tickets.renderExistingCollection();
+
+					$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.render(true).el);
+					
+					Tickets.setCountText();
+
+					//Initialize click event on each ticket li
+					Tickets.initEvents(App_Ticket_Module.ticketsCollection.el);
 				}
 			});
 
