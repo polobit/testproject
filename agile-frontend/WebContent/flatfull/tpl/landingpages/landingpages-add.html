@@ -42,16 +42,16 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                     <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button>
                                 {{/is_mobile}}
                                 -->
+                                <div class="lpPreviewView pull-left p-r-sm p-t-xs" data-trigger="#landingpageFullPreview" style="margin-left: 180px;"><a href="#"><i class="fa fa-eye fa-lg"></i> <span>Preview</span></a>
+                                </div>
                                 <div class="btn-group right m-r-xs m-r-n-xs">
-                                <div class="lpPreviewView pull-left p-r-sm p-t-xs" data-trigger="#landingpageFullPreview"><a href="#"><i class="fa fa-eye fa-lg"></i> <span>Preview</span></a></div>
-
                                 <button class="btn btn-primary btn-sm btn-addon saveLandingPageButton" >{{#if_equals action "edit"}}<i class="icon-plus-sign"></i>{{/if_equals}}<span class="saveLandingPageButtonText">Save Page</span>
                                 </button>
                                 {{#if_equals action "edit"}}
                                 <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
                                                 <span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu" style="min-width:0px;left:76px;">
+                                <ul class="dropdown-menu" style="min-width:0px;">
                                             <li>
                                                 <a href="#landing-page-copy/{{templateId}}" id="duplicate-landingpage-top">
                                                     <i class="fa fa-clipboard" style="width: 20px;"></i>Create a Copy</a>
@@ -162,7 +162,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                      <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
                                                 <span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu" style="min-width:0px;margin-top: -19px;">
+                                <ul class="dropdown-menu" style="min-width:0px;">
                                             <li>
                                                 <a href="#landing-page-copy/{{templateId}}" id="duplicate-landingpage-top">
                                                     <i class="fa fa-clipboard" style="width: 20px;"></i>Create a Copy</a>
@@ -170,8 +170,6 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                 </ul>
                     {{/if_equals}}
                     <div>
-                    <div class="save-workflow-img inline-block"></div>
-                    <br />
                 </fieldset>
             </form>
         </div>
