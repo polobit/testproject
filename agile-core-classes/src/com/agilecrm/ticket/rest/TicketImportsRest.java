@@ -21,13 +21,13 @@ public class TicketImportsRest
 	{
 		try
 		{
+			System.out.println("data: " + data);
 			ZendeskImport.fetchTickets(new JSONObject(data));
 		}
 		catch (Exception e)
 		{
 			System.out.println(e.getMessage());
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			e.printStackTrace();
 		}
 	}
 }

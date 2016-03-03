@@ -88,7 +88,7 @@ public class ZendeskImport
 				continue;
 			}
 
-			DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("sasi@clicdesk.com");
+			DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("sasi@clickdesk.com");
 			
 			if (domainUser != null)
 				domainUsersMap.put(id, domainUser);
