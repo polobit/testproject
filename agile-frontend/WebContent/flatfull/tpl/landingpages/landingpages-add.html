@@ -42,7 +42,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                     <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button>
                                 {{/is_mobile}}
                                 -->
-                                <div class="lpPreviewView pull-left p-r-sm p-t-xs" data-trigger="#landingpageFullPreview" style="margin-left: 180px;"><a href="#"><i class="fa fa-eye fa-lg"></i> <span>Preview</span></a>
+                                <div class="lpPreviewView pull-left p-r-sm p-t-xs" data-trigger="#landingpageFullPreview" {{#if_equals action "edit"}}style="margin-left: 180px;" {{else}} style="margin-left: 245px;"{{/if_equals}}><a href="#"><i class="fa fa-eye fa-lg"></i> <span>Preview</span></a>
                                 </div>
                                 <div class="btn-group right m-r-xs m-r-n-xs">
                                 <button class="btn btn-primary btn-sm btn-addon saveLandingPageButton" >{{#if_equals action "edit"}}<i class="icon-plus-sign"></i>{{/if_equals}}<span class="saveLandingPageButtonText">Save Page</span>
