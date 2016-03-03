@@ -25,16 +25,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
-import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
@@ -62,12 +59,6 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.taskqueue.DeferredTask;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
-import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import com.googlecode.objectify.Key;
 
 /**
@@ -76,7 +67,7 @@ import com.googlecode.objectify.Key;
  * 
  */
 @Path("/api/tickets")
-public class TicketsRest implements Serializable
+public class TicketsRest
 {
 	/**
 	 * 
@@ -923,25 +914,7 @@ public class TicketsRest implements Serializable
 
 			for (int i = 0; i < 50; i++)
 			{
-				Queue queue = QueueFactory.getQueue("ticket-bulk-actions");
-				queue.add(TaskOptions.Builder.withPayload(new DeferredTask()
-				{
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void run()
-					{
-						try
-						{
-							ZendeskImport.fetchTickets(json);
-						}
-						catch (Exception e)
-						{
-							System.out.println(ExceptionUtils.getFullStackTrace(e));
-						}
-					}
-				}));
-
+				ZendeskImport.fetchTickets(json);
 			}
 
 			// TaskOptions taskOptions =
