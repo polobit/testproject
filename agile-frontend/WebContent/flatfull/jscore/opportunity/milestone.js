@@ -20,6 +20,7 @@ function setup_deals_in_milestones(id){
 		      },
 		      // When deal is dropped its milestone is changed 
 		      update : function(event, ui) {
+		      	  $('ul.milestones').sortable("disable");
 		      	  console.log(">>>>>>>>>>>>>>>>>> deals id");
 		    	  console.log(ui);
 		    	  console.log(ui.item[0]);
@@ -113,6 +114,10 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
 			if (updateCollectionFlag) {
 				update_deal_collection(model.toJSON(), id, newMilestone, oldMilestone);
 			}
+			$('ul.milestones').sortable("enable");
+		},
+		error : function(response) {
+			$('ul.milestones').sortable("enable");
 		}
 	});
 
