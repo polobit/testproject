@@ -109,9 +109,7 @@ function inlineNameChange(e,data){
 
 			if(data == "contactName")
 				return;
-           console.log("inlineNameChange");
 
-           
            // Get actual name
           var firstName = $("#Contact-input-firstname").val();
           var lastName  = $("#Contact-input-lastname").val();
@@ -120,11 +118,11 @@ function inlineNameChange(e,data){
           	$("#Contact-input-firstname").addClass("error-inputfield");
           	return;
           }
-          if(!lastName)
+          /*if(!lastName)
           {
           	$("#Contact-input-lastname").addClass("error-inputfield");
           	return;
-          }
+          }*/
           if(agile_crm_is_model_property_changed("first_name", firstName)){
 				// Update first name
           		agile_crm_update_contact("first_name", firstName, function()
@@ -135,8 +133,6 @@ function inlineNameChange(e,data){
           		$("#Contact-input-lastname").removeClass("error-inputfield");	
           		});
           		// Toggle fields
-		  
-          
           }
 
           if(agile_crm_is_model_property_changed("last_name", lastName)){
@@ -148,15 +144,13 @@ function inlineNameChange(e,data){
           		$("#Contact-input-lastname").removeClass("error-inputfield");
           	   });
           	   // Toggle fields
-		  
           }
 
           // Toggle fields
 		  $("#Contact-input").addClass("hidden");
           $("#contactName").text(firstName+" "+lastName).removeClass("hidden");
           $("#Contact-input-firstname").removeClass("error-inputfield");
-          $("#Contact-input-lastname").removeClass("error-inputfield");
-          
+          $("#Contact-input-lastname").removeClass("error-inputfield"); 
     }
 /**
  * Shows all the domain users names as ul drop down list 

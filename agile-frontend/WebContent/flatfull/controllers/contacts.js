@@ -581,7 +581,6 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			
 			$(el).on('click',function(el){
-				console.log("harsha");
 				var newId = el.target.id;
 				if(newId == "contactName")
 					return ;
