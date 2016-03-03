@@ -580,7 +580,7 @@ var ContactsRouter = Backbone.Router.extend({
 		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
-			/*$(el).on('click',function(el){
+			$(el).on('click',function(el){
 				console.log("harsha");
 				var newId = el.target.id;
 				if(newId == "contactName")
@@ -591,7 +591,7 @@ var ContactsRouter = Backbone.Router.extend({
 					inlineNameChange(el,newId);
 				
 			});
-		*/
+		
 			//mobile tabs
 			 $('.content-tabs').tabCollapse(); 
 
