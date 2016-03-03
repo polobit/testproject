@@ -214,7 +214,7 @@
 					    			<i class="fa fa-navicon"></i>
 					    		{{/is_single_row_view}}
 					    	</button>
-				          	<ul class="dropdown-menu dropdown-menu-right choose-columns">
+				          	<ul class="dropdown-menu dropdown-menu-right choose-columns m-t-none">
 					          	<li class="dropdown-header text-base">Choose columns</li>
 								<li><a href="javascript:void(0);" class="p-b-none">
 										<label class="i-checks i-checks-sm">
@@ -291,11 +291,6 @@
 				                        <input name="created_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'created_time'}}checked{{/is_column_selected}}><i></i></label> Created date
 				                    </a>
 				                </li>
-				                <!-- <li><a href="javascript:void(0);" class="p-b-none">
-				                		<label class="i-checks i-checks-sm">
-				                        <input name="contact_details" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'contact_details'}}checked{{/is_column_selected}}><i></i></label> Contact details
-				                    </a>
-				                </li> -->
 					          </ul>
 				            </li>
 				          </ul>
@@ -311,22 +306,51 @@
 											<th></th>
 											<th></th>
 											<th></th>
-											<th class="id {{#is_column_selected 'id'}}{{else}}display-none{{/is_column_selected}}">Id</th>
-											<th class="subject {{#is_column_selected 'subject'}}{{else}}display-none{{/is_column_selected}}">Subject</th>
-											<th class="requester_name {{#is_column_selected 'requester_name'}}{{else}}display-none{{/is_column_selected}}">Requester&nbsp;Name</th>
-											<th class="requester_email {{#is_column_selected 'requester_email'}}{{else}}
-												display-none{{/is_column_selected}}">Requester&nbsp;email</th>
-											<th class="due_date {{#is_column_selected 'due_date'}}{{else}}display-none{{/is_column_selected}}">Due&nbsp;Date</th>
-											<th class="priority {{#is_column_selected 'priority'}}{{else}}display-none{{/is_column_selected}}">Priority</th>
-											<th class="status {{#is_column_selected 'status'}}{{else}}display-none{{/is_column_selected}}">Status</th>
-											<th class="assignee {{#is_column_selected 'assignee'}}{{else}}display-none{{/is_column_selected}}">Assignee</th>
-											<th class="group {{#is_column_selected 'group'}}{{else}}display-none{{/is_column_selected}}">Group</th>
-											<th class="assigned_time {{#is_column_selected 'assigned_time'}}{{else}}display-none{{/is_column_selected}}">Assigned&nbsp;Date</th>
-											<th class="ticket_type {{#is_column_selected 'ticket_type'}}{{else}}display-none{{/is_column_selected}}">Ticket&nbsp;Type</th>
-											<th class="last_updated_time {{#is_column_selected 'last_updated_time'}}{{else}}display-none{{/is_column_selected}}">Last&nbsp;updated&nbsp;date</th>
+											{{#is_column_selected 'id'}}
+												<th class="id">Id</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'subject'}}
+												<th class="subject">Subject</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'requester_name'}}
+												<th class="requester_name">Requester&nbsp;Name</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'requester_email'}}
+												<th class="requester_email">Requester&nbsp;email</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'due_date'}}
+												<th class="due_date">Due&nbsp;Date</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'priority'}}
+												<th class="priority">Priority</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'status'}}
+												<th class="status">Status</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'assignee'}}
+												<th class="assignee">Assignee</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'group'}}
+												<th class="group">Group</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'assigned_time'}}
+												<th class="assigned_time">Assigned&nbsp;Date</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'ticket_type'}}
+												<th class="ticket_type">Ticket&nbsp;Type</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'last_updated_time'}}
+												<th class="last_updated_time ">Last&nbsp;updated&nbsp;date</th>
+											{{/is_column_selected}}
+											
 											<!--<th class="organization {{#is_column_selected 'organization'}}{{else}}display-none{{/is_column_selected}}">Organization</th>-->
-											<th class="closed_time {{#is_column_selected 'closed_time'}}{{else}}display-none{{/is_column_selected}}">Closed&nbsp;Date</th>
-											<th class="created_time {{#is_column_selected 'created_time'}}{{else}}display-none{{/is_column_selected}}">Created&nbsp;Date</th>
+											{{#is_column_selected 'closed_time'}}
+												<th class="closed_time">Closed&nbsp;Date</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'created_time'}}
+												{{else}}display-none
+											{{/is_column_selected}}
+											<th class="created_time">Created&nbsp;Date</th>
 											<!-- <th class="contact_details {{#is_column_selected 'contact_details'}}{{else}}display-none{{/is_column_selected}}">Contact&nbsp;details</th> -->
 										</tr>
 									</thead>

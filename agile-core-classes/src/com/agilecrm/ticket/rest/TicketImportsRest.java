@@ -7,10 +7,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.json.JSONObject;
 
 import com.agilecrm.ticket.deferred.CreateTestTickets;
-import com.agilecrm.ticket.imports.ZendeskImport;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;

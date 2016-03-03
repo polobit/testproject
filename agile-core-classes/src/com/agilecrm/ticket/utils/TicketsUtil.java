@@ -239,7 +239,8 @@ public class TicketsUtil
 			ticket.contactID = contact.id;
 
 			// Save ticket
-			ticket.saveWithNewID();
+			//ticket.saveWithNewID();
+			Tickets.ticketsDao.put(ticket);
 
 			// Create search document
 			new TicketsDocument().add(ticket);

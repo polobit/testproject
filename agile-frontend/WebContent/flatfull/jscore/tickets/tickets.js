@@ -82,7 +82,7 @@ var Tickets = {
 
 		Ticket_Labels.fetchCollection(function() {
 
-				App_Ticket_Module.ticketsCollection = new Base_Collection_View({
+			App_Ticket_Module.ticketsCollection = new Base_Collection_View({
 				url : '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID + '&custom_filters=' + encodeURI(JSON.stringify(Ticket_Custom_Filters.customFilters)),
 				global_sort_key: Sort_By + Sort_Field,
 				sort_collection: false,
@@ -129,7 +129,7 @@ var Tickets = {
 						Tickets.setMinHeight();
 				}
 			});
-
+	
 			//Activating main menu
 			$('nav').find(".active").removeClass("active");
 			$("#tickets").addClass("active");
@@ -486,7 +486,7 @@ var Tickets = {
 			$('ul.choose-columns').closest('div').removeClass('open');
 		});
 
-		//Initializing click event due date dropdown
+		//Initializing click event on choose columns for single line row view
 		$(el).off('click','ul.choose-columns > li > a');
 	  	$(el).on('click','ul.choose-columns > li > a', function(event){
 	  		event.preventDefault();
@@ -501,13 +501,13 @@ var Tickets = {
 
 			var field_name = $chbx.attr('name');
 
-			if(isChecked){
-				$('table.single-row').find('th.' + field_name + '').show();
-				$('table.single-row').find('td.' + field_name + '').show();
-			}else{
-				$('table.single-row').find('th.' + field_name + '').hide();
-				$('table.single-row').find('td.' + field_name + '').hide();
-			}
+			// if(isChecked){
+			// 	$('table.single-row').find('th.' + field_name + '').show();
+			// 	$('table.single-row').find('td.' + field_name + '').show();
+			// }else{
+			// 	$('table.single-row').find('th.' + field_name + '').hide();
+			// 	$('table.single-row').find('td.' + field_name + '').hide();
+			// }
 
 			var selected_columns = $('.choose-column-chbx:checked'), column_names = [];
 
@@ -522,6 +522,8 @@ var Tickets = {
 			baseModel.save(json, 
 			{	success: function(model){
 					CURRENT_DOMAIN_USER.helpdeskSettings = model.toJSON();
+
+					Tickets.renderExistingCollection();
 				}
 			});
 
