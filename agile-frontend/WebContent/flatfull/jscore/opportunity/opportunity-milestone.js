@@ -166,7 +166,11 @@ function dealsFetch(base_model)
 
 
 			includeTimeAgo(el);
-			initializeDealsListeners(el);			
+			initializeDealsListeners(el);
+			
+			var height = $(window).height()+5-$("#header").height()-$("#deals-milestone-view-heading").height()-104-$(".dealtitle-angular").height();
+			$("#"+base_model.get('heading').replace(/ +/g, '')+"-list-container").height(height);
+			$("#"+base_model.get('heading').replace(/ +/g, '')+"-list-container").find("ul.milestones").css('min-height', ''+height+'px!important');			
 
 		} });
 
