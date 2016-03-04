@@ -1930,7 +1930,7 @@ public class ActivityUtil
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception occured in  import log " + e.getMessage());
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 		
 		return null;
