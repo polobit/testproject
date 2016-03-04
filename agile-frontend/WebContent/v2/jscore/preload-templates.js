@@ -1,4 +1,4 @@
-var tpl_directory = {
+;var tpl_directory = {
 
     loadTemplates: function(views, callback) {
 
