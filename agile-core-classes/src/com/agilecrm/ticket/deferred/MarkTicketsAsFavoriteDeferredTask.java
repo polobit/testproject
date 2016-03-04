@@ -1,5 +1,7 @@
 package com.agilecrm.ticket.deferred;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
@@ -31,7 +33,7 @@ public class MarkTicketsAsFavoriteDeferredTask extends TicketBulkActionAdaptor
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
 			}
 		}
 	}

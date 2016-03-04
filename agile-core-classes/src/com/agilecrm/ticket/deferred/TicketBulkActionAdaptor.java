@@ -1,7 +1,8 @@
 package com.agilecrm.ticket.deferred;
 
-
 import java.util.Set;
+
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.session.SessionManager;
@@ -21,9 +22,9 @@ public abstract class TicketBulkActionAdaptor implements DeferredTask
 	protected String namespace;
 	protected UserInfo info;
 	private DomainUser user = null;
-	
+
 	public Set<Key<Tickets>> ticketsKeySet = null;
-	
+
 	public void run()
 	{
 		String oldNamespace = NamespaceManager.get();
@@ -36,7 +37,7 @@ public abstract class TicketBulkActionAdaptor implements DeferredTask
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 		finally
 		{
@@ -46,15 +47,23 @@ public abstract class TicketBulkActionAdaptor implements DeferredTask
 
 	private void setSession()
 	{
+		System.out.println("Setting session................");
+		
+		System.out.println("Setting session info................" + info);
+		
 		if (info != null)
 		{
 			SessionManager.set(info);
 		}
-
+		
+		System.out.println("Setting session key................" + key);
+		
 		if (key != null)
 		{
 			user = DomainUserUtil.getDomainUser(key.getId());
-
+			
+			System.out.println("Setting session user................" + user);
+			
 			if (user == null)
 				return;
 
@@ -64,8 +73,9 @@ public abstract class TicketBulkActionAdaptor implements DeferredTask
 	}
 
 	protected abstract void performAction();
-	
-	public void setTicketKeys(Set<Key<Tickets>> ticketsKeySet){
+
+	public void setTicketKeys(Set<Key<Tickets>> ticketsKeySet)
+	{
 		this.ticketsKeySet = ticketsKeySet;
 	}
 }

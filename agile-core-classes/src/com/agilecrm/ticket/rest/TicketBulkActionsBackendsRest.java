@@ -2,7 +2,7 @@ package com.agilecrm.ticket.rest;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang.StringUtils;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -10,13 +10,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.activities.Activity;
-import com.agilecrm.activities.Activity.ActivityType;
-import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.session.SessionManager;
@@ -107,8 +105,9 @@ public class TicketBulkActionsBackendsRest
 			labelsCSV = labelsCSV.substring(0, labelsCSV.lastIndexOf(","));
 
 			// Logging bulk action activity
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_MANAGE_LABELS, null, null, "",
-					labelsCSV.toString(), idsFetcher.getCount() + "");
+			// ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_MANAGE_LABELS,
+			// null, null, "",
+			// labelsCSV.toString(), idsFetcher.getCount() + "");
 
 			int selectedTicketsCount = idsFetcher.getCount();
 
@@ -171,8 +170,9 @@ public class TicketBulkActionsBackendsRest
 
 			// Create log with static content (Domain user who initiated actiona
 			// and group name)
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CHANGE_ASSIGNEE, null, null, domaiUser.name,
-					group.group_name, idsFetcher.getCount() + "");
+			// ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CHANGE_ASSIGNEE,
+			// null, null, domaiUser.name,
+			// group.group_name, idsFetcher.getCount() + "");
 
 			int selectedTicketsCount = idsFetcher.getCount();
 
@@ -226,8 +226,9 @@ public class TicketBulkActionsBackendsRest
 			Workflow workflow = WorkflowUtil.getWorkflow(workflowID);
 
 			// Logging bulk action activity
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_EXECUTE_WORKFLOW, null, null, workflow.name,
-					workflowID + "", idsFetcher.getCount() + "");
+			// ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_EXECUTE_WORKFLOW,
+			// null, null, workflow.name,
+			// workflowID + "", idsFetcher.getCount() + "");
 
 			int selectedTicketsCount = idsFetcher.getCount();
 
@@ -272,8 +273,9 @@ public class TicketBulkActionsBackendsRest
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
 			// Logging bulk action activity
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CLOSE_TICKETS, null, null, "", "",
-					idsFetcher.getCount() + "");
+			// ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CLOSE_TICKETS,
+			// null, null, "", "",
+			// idsFetcher.getCount() + "");
 
 			int selectedTicketsCount = idsFetcher.getCount();
 
@@ -318,8 +320,9 @@ public class TicketBulkActionsBackendsRest
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
 			// Logging bulk action activity
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_DELETE_TICKETS, null, null, "", "",
-					idsFetcher.getCount() + "");
+			// ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_DELETE_TICKETS,
+			// null, null, "", "",
+			// idsFetcher.getCount() + "");
 
 			int selectedTicketsCount = idsFetcher.getCount();
 
@@ -364,8 +367,9 @@ public class TicketBulkActionsBackendsRest
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
 			// Logging bulk action activity
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_SPAM_TICKETS, null, null, "", "",
-					idsFetcher.getCount() + "");
+			// ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_SPAM_TICKETS,
+			// null, null, "", "",
+			// idsFetcher.getCount() + "");
 
 			int selectedTicketsCount = idsFetcher.getCount();
 
@@ -428,10 +432,10 @@ public class TicketBulkActionsBackendsRest
 			System.out.println("Logged in user getClaimedId " + SessionManager.get().getClaimedId());
 
 			// Logging bulk action activity
-			Activity activity = ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_FAVORITE_TICKETS, null,
-					null, "", "", idsFetcher.getCount() + "");
-
-			System.out.println("activity: " + activity);
+			// Activity activity =
+			// ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_FAVORITE_TICKETS,
+			// null,
+			// null, "", "", idsFetcher.getCount() + "");
 
 			int selectedTicketsCount = idsFetcher.getCount();
 

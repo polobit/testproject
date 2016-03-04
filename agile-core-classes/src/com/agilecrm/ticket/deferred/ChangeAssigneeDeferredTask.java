@@ -24,8 +24,8 @@ public class ChangeAssigneeDeferredTask extends TicketBulkActionAdaptor
 		this.key = new Key<DomainUser>(DomainUser.class, domainUserID);
 		this.newAssigneeID = newAssigneeID;
 		this.groupID = newGroupID;
+		this.namespace = nameSpace;
 	}
-
 
 	@Override
 	protected void performAction()
@@ -35,8 +35,8 @@ public class ChangeAssigneeDeferredTask extends TicketBulkActionAdaptor
 			try
 			{
 				Tickets ticket = TicketsUtil.changeGroupAndAssignee(ticketKey.getId(), groupID, newAssigneeID);
-				
-				//Execute trigger for assignee change
+
+				// Execute trigger for assignee change
 				TicketTriggerUtil.executeTriggerForAssigneeChanged(ticket);
 			}
 			catch (Exception e)

@@ -18,7 +18,7 @@ public class ManageLabelsDeferredTask extends TicketBulkActionAdaptor
 	private List<Key<TicketLabels>> labels = null;
 	private String command = "";
 
-	public ManageLabelsDeferredTask(List<Key<TicketLabels>> labels, String command, String nameSpace, Long domainUserID)
+	public ManageLabelsDeferredTask(List<Key<TicketLabels>> labels, String command, String nameSpace,Long domainUserID)
 	{
 		super();
 
@@ -26,6 +26,7 @@ public class ManageLabelsDeferredTask extends TicketBulkActionAdaptor
 		this.key = new Key<DomainUser>(DomainUser.class, domainUserID);
 		this.labels = labels;
 		this.command = command;
+		this.namespace = nameSpace;
 	}
 
 	@Override
@@ -38,7 +39,7 @@ public class ManageLabelsDeferredTask extends TicketBulkActionAdaptor
 				try
 				{
 					Tickets ticket = TicketsUtil.updateLabels(ticketKey.getId(), labelKey, command);
-					
+
 					if ("add".equalsIgnoreCase(command))
 						// Execute note closed by user trigger
 						TicketTriggerUtil.executeTriggerForLabelAddedToTicket(ticket);
