@@ -229,6 +229,7 @@ public class CronUtil
 		
 		Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", milliSeconds);
 		int count = query.count();
+		query = query.chunkSize(50);
 		QueryResultIterator<Cron> iterator = query.iterator();
 		
 		
