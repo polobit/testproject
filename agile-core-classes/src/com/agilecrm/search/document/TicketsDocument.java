@@ -292,19 +292,6 @@ public class TicketsDocument implements BuilderInterface
 				.setNumberFoundAccuracy(10000).build();
 		Query query = null;
 
-		// SortDirection direction = sortField.startsWith("-") ?
-		// SortExpression.SortDirection.DESCENDING
-		// : SortExpression.SortDirection.ASCENDING;
-		//
-		// sortField = sortField.replace("-", "");
-		//
-		// // Build the SortOptions with 2 sort keys
-		// SortOptions sortOptions = SortOptions
-		// .newBuilder()
-		// .addSortExpression(
-		// SortExpression.newBuilder().setExpression(sortField).setDirection(direction)
-		// .setDefaultValueNumeric(0)).setLimit(1000).build();
-
 		SortExpression.Builder sortExpressionBuilder = SortExpression.newBuilder();
 		if (sortField.startsWith("-"))
 		{

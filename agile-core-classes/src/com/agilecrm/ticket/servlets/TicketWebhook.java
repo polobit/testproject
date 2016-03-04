@@ -374,6 +374,9 @@ public class TicketWebhook extends HttpServlet
 
 			String fromName = fromEmail.substring(0, fromEmail.lastIndexOf("@"));
 
+			if (msgJSON.has("from_name"))
+				fromName = msgJSON.getString("from_name");
+
 			System.out.println("From email: " + fromEmail);
 			System.out.println("From name: " + fromName);
 
@@ -388,9 +391,6 @@ public class TicketWebhook extends HttpServlet
 				catch (Exception e)
 				{
 				}
-
-				if (msgJSON.has("from_name"))
-					fromName = msgJSON.getString("from_name");
 
 				// Creating new Ticket in Ticket table
 				ticket = TicketsUtil.createTicket(groupID, null, fromName, fromEmail, msgJSON.getString("subject"),
@@ -433,20 +433,19 @@ public class TicketWebhook extends HttpServlet
 				}
 
 				ticket.status = Status.OPEN;
-				
+
 				// Updating ticket entity
 				Tickets.ticketsDao.put(ticket);
 
 				// Updating text search data
 				new TicketsDocument().edit(ticket);
-				
+
 				// Logging public notes activity
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_REQUESTER_REPLIED, ticket.contactID, ticket.id,
 						html, TicketNotesUtil.removedQuotedReplies(plainText), "html_text");
-				
+
 				// Sending user replied notification
-				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket(#" + ticket.id
-						+ ")");
+				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket#" + ticket.id);
 			}
 
 			// Creating new Notes in TicketNotes table
