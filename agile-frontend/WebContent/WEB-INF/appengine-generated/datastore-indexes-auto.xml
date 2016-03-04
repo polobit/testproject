@@ -7,6 +7,12 @@
         <property name="name" direction="asc"/>
         <property name="pic" direction="asc"/>
     </datastore-index>
+    <datastore-index kind="DomainUser" ancestor="false" source="manual">
+        <property name="domain" direction="asc"/>
+        <property name="email" direction="asc"/>
+        <property name="name" direction="asc"/>
+        <property name="pic" direction="asc"/>
+    </datastore-index>
     
     <datastore-index kind="Contact" ancestor="false" source="manual">
         <property name="__key__" direction="asc"/>
