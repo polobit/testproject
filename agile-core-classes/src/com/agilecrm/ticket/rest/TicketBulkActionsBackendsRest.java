@@ -74,7 +74,8 @@ public class TicketBulkActionsBackendsRest
 			for (int i = 0; i < labelsIDs.length(); i++)
 				labelsKeys.add(new Key<TicketLabels>(TicketLabels.class, labelsIDs.getLong(i)));
 
-			BulkActionUtil.setSessionManager(domainUserID);
+			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
+			BulkActionUtil.setSessionManager(user);
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -107,10 +108,14 @@ public class TicketBulkActionsBackendsRest
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_MANAGE_LABELS, null, null, "",
 					labelsCSV.toString(), idsFetcher.getCount() + "");
 
-			String message = "Labels " + labelsCSV + " have been added to " + idsFetcher.getCount() + " tickets";
+			int selectedTicketsCount = idsFetcher.getCount();
+
+			String message = "Labels " + labelsCSV + " have been added to " + selectedTicketsCount
+					+ ((selectedTicketsCount == 1) ? " ticket" : " tickets");
 
 			if (command.equalsIgnoreCase("remove"))
-				message = "Labels " + labelsCSV + " have been removed from " + idsFetcher.getCount() + " tickets";
+				message = "Labels " + labelsCSV + " have been removed from " + selectedTicketsCount
+						+ ((selectedTicketsCount == 1) ? " ticket" : " tickets");
 
 			BulkActionNotifications.publishNotification(message);
 		}
@@ -138,7 +143,8 @@ public class TicketBulkActionsBackendsRest
 			Long assigneeID = dataJSON.getLong("assignee_id");
 			Long groupID = dataJSON.getLong("group_id");
 
-			BulkActionUtil.setSessionManager(domainUserID);
+			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
+			BulkActionUtil.setSessionManager(user);
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -166,8 +172,8 @@ public class TicketBulkActionsBackendsRest
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CHANGE_ASSIGNEE, null, null, domaiUser.name,
 					group.group_name, idsFetcher.getCount() + "");
 
-			BulkActionNotifications.publishNotification(idsFetcher.getCount()
-					+ " tickets assignee and group have been changed successfully.");
+			BulkActionNotifications.publishNotification(((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
+					+ " assignee and group have been changed successfully.");
 		}
 		catch (Exception e)
 		{
@@ -191,7 +197,8 @@ public class TicketBulkActionsBackendsRest
 
 			Long workflowID = dataJSON.getLong("workflow_id");
 
-			BulkActionUtil.setSessionManager(domainUserID);
+			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
+			BulkActionUtil.setSessionManager(user);
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -217,8 +224,8 @@ public class TicketBulkActionsBackendsRest
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_EXECUTE_WORKFLOW, null, null, workflow.name,
 					workflowID + "", idsFetcher.getCount() + "");
 
-			BulkActionNotifications.publishNotification("Workflows have been executed on the " + idsFetcher.getCount()
-					+ " tickets");
+			BulkActionNotifications.publishNotification("Workflow have been executed on "
+					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets"));
 		}
 		catch (Exception e)
 		{
@@ -237,7 +244,8 @@ public class TicketBulkActionsBackendsRest
 			System.out.println("domain_user_id.." + domainUserID);
 			System.out.println("NamespaceManager.." + NamespaceManager.get());
 
-			BulkActionUtil.setSessionManager(domainUserID);
+			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
+			BulkActionUtil.setSessionManager(user);
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -260,8 +268,8 @@ public class TicketBulkActionsBackendsRest
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CLOSE_TICKETS, null, null, "", "",
 					idsFetcher.getCount() + "");
 
-			BulkActionNotifications.publishNotification(idsFetcher.getCount()
-					+ " tickets have been closed successfully.");
+			BulkActionNotifications.publishNotification(((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
+					+ " have been closed successfully.");
 		}
 		catch (Exception e)
 		{
@@ -280,7 +288,8 @@ public class TicketBulkActionsBackendsRest
 			System.out.println("domain_user_id.." + domainUserID);
 			System.out.println("NamespaceManager.." + NamespaceManager.get());
 
-			BulkActionUtil.setSessionManager(domainUserID);
+			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
+			BulkActionUtil.setSessionManager(user);
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -303,8 +312,8 @@ public class TicketBulkActionsBackendsRest
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_DELETE_TICKETS, null, null, "", "",
 					idsFetcher.getCount() + "");
 
-			BulkActionNotifications.publishNotification(idsFetcher.getCount()
-					+ " tickets have been deleted successfully.");
+			BulkActionNotifications.publishNotification(((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
+					+ " have been deleted successfully.");
 		}
 		catch (Exception e)
 		{
@@ -323,7 +332,8 @@ public class TicketBulkActionsBackendsRest
 			System.out.println("domain_user_id.." + domainUserID);
 			System.out.println("NamespaceManager.." + NamespaceManager.get());
 
-			BulkActionUtil.setSessionManager(domainUserID);
+			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
+			BulkActionUtil.setSessionManager(user);
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -346,8 +356,8 @@ public class TicketBulkActionsBackendsRest
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_SPAM_TICKETS, null, null, "", "",
 					idsFetcher.getCount() + "");
 
-			BulkActionNotifications.publishNotification(idsFetcher.getCount()
-					+ " tickets have been marked as spam successfully");
+			BulkActionNotifications.publishNotification(((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
+					+ " have been marked as spam successfully");
 		}
 		catch (Exception e)
 		{
@@ -366,7 +376,8 @@ public class TicketBulkActionsBackendsRest
 			System.out.println("domain_user_id.." + domainUserID);
 			System.out.println("NamespaceManager.." + NamespaceManager.get());
 
-			BulkActionUtil.setSessionManager(domainUserID);
+			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
+			BulkActionUtil.setSessionManager(user);
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -390,8 +401,8 @@ public class TicketBulkActionsBackendsRest
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_FAVORITE_TICKETS, null, null, "", "",
 					idsFetcher.getCount() + "");
 
-			BulkActionNotifications.publishNotification(idsFetcher.getCount()
-					+ " tickets have been added to favourites successfully.");
+			BulkActionNotifications.publishNotification(((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
+					+ " have been added to favourites successfully.");
 		}
 		catch (Exception e)
 		{

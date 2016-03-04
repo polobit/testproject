@@ -240,7 +240,7 @@ public class TicketsUtil
 
 			// Save ticket
 			ticket.saveWithNewID();
-			//Tickets.ticketsDao.put(ticket);
+			// Tickets.ticketsDao.put(ticket);
 
 			// Create search document
 			new TicketsDocument().add(ticket);
@@ -484,6 +484,10 @@ public class TicketsUtil
 	public static Tickets markFavorite(Long ticket_id, Boolean is_favorite) throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+		
+		if (ticket.is_favorite.equals(is_favorite))
+			return ticket;
+		
 		ticket.is_favorite = is_favorite;
 
 		Tickets.ticketsDao.put(ticket);
@@ -501,6 +505,10 @@ public class TicketsUtil
 	public static Tickets markSpam(Long ticket_id, Boolean is_spam) throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+
+		if (ticket.is_spam.equals(is_spam))
+			return ticket;
+
 		ticket.is_spam = is_spam;
 
 		Tickets.ticketsDao.put(ticket);
