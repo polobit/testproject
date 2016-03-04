@@ -247,7 +247,7 @@ public class Opportunity extends Cursor implements Serializable
      * Total Deal value
      */
     @NotSaved
-    public Long total_deal_value = 0L;
+    public Double total_deal_value = 0d;
 
     /**
      * ObjectifyDao of Opportunity.
