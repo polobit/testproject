@@ -974,11 +974,15 @@ var Tickets = {
 		Tickets.updateModel(url, function(model){
 
 				if(status != "CLOSED"){
+					    $(".ticket-addnote-close").removeAttr("disabled");
 					    $(".ticket-send-reply .btn").removeAttr("disabled");
-                    	$('#ticket_change_sla').removeAttr("disabled");
-                    	$(".close-current-ticket").removeAttr("disabled");					
+                    	$('#ticket_change_sla').removeAttr("disabled");                    	
+                    	$(".close-current-ticket").removeAttr("disabled");
+                    	$(".remove-date").css("display", "block");					
 				}						
-				else{ 
+				else{
+					$(".remove-date").css("display", "none");
+				    $(".ticket-addnote_close").attr("disabled","disabled"); 
 					$(".ticket-send-reply .btn").attr("disabled","disabled");
 					$('#ticket_change_sla').attr("disabled","disabled");
 					$(".close-current-ticket").attr("disabled","disabled");

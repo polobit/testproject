@@ -63,11 +63,14 @@ var Tickets_Notes = {
 				Tickets.remove_draft_message(Current_Ticket_ID, ((note_type == 'PUBLIC') ? 'reply' : 'comment'));
                 
                 if(notes_json.note_type == 'PRIVATE'){
+
                 	showNotyPopUp('information', "Comment has been added", 'bottomRight', 5000);
                 }else{
 	                
-	                if(is_ticket_closed)
+	                if(is_ticket_closed){
+	                	$(".ticket_status").val("CLOSED");
 	                	showNotyPopUp('information', "Comment has been added and ticket status changed to Closed", 'bottomRight', 5000);
+	                }
 					else 
 	                	showNotyPopUp('information', "Comment has been added and ticket status changed to Pending", 'bottomRight', 5000);
 					
