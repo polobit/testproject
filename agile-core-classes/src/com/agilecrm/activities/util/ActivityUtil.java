@@ -31,6 +31,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
@@ -1895,7 +1896,10 @@ public class ActivityUtil
 		try
 		{
 			Contact contact = ContactUtil.getContact(contact_id);
-
+			
+			System.out.println("Namespace:"  + NamespaceManager.get());
+			System.out.println("contact: " + contact.name);
+			
 			Activity activity = new Activity();
 			activity.entity_type = EntityType.TICKET;
 			activity.activity_type = ticket_activity_type;

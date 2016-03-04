@@ -370,7 +370,7 @@ public class TicketBulkActionsBackendsRest
 			int selectedTicketsCount = idsFetcher.getCount();
 
 			BulkActionNotifications.publishNotification(selectedTicketsCount
-					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets") + " have been marked as spam");
+					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets") + " have been marked as spam.");
 		}
 		catch (Exception e)
 		{
@@ -391,9 +391,15 @@ public class TicketBulkActionsBackendsRest
 
 			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
 			System.out.println("user.name: " + user.name);
-
+			
+			System.out.println("Logged in user " + SessionManager.get().getName());
+			System.out.println("Logged in user getClaimedId " + SessionManager.get().getClaimedId());
+			
 			BulkActionUtil.setSessionManager(user);
-
+			
+			System.out.println("set Logged in user " + SessionManager.get().getName());
+			System.out.println("set Logged in user getClaimedId " + SessionManager.get().getClaimedId());
+			
 			ITicketIdsFetcher idsFetcher = null;
 
 			if (attributes.conditions != null && attributes.conditions.size() > 0)
@@ -406,7 +412,10 @@ public class TicketBulkActionsBackendsRest
 				idsFetcher = new CSVTicketIdsFetcher(attributes.ticketIDs);
 				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
 			}
-
+			
+			System.out.println("Logged in user " + SessionManager.get().getName());
+			System.out.println("Logged in user getClaimedId " + SessionManager.get().getClaimedId());
+			
 			MarkTicketsAsFavoriteDeferredTask task = new MarkTicketsAsFavoriteDeferredTask(NamespaceManager.get(),
 					domainUserID);
 
