@@ -19,5 +19,4 @@ cat flatfull/tpl/case/*.html > tpl/min/flatfull/case.js
 cat flatfull/tpl/document/*.html > tpl/min/flatfull/document.js
 cat flatfull/tpl/portlets/*.html > tpl/min/flatfull/portlets.js
 cat flatfull/tpl/landingpages/*.html > tpl/min/flatfull/landingpages.js
-cat flatfull/tpl/emailbuilder/*.html > tpl/min/flatfull/emailbuilder.js
 cd ../util
