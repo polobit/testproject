@@ -160,8 +160,9 @@ public class TicketNotesRest
 					ticket.assigned_to_group = false;
 
 					// Logging status changed activity
-//					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-//							status.toString(), Status.PENDING.toString(), "status");
+					// ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE,
+					// ticket.contactID, ticket.id,
+					// status.toString(), Status.PENDING.toString(), "status");
 				}
 				else
 				{
@@ -196,8 +197,10 @@ public class TicketNotesRest
 					ticket.no_of_reopens += 1;
 
 					// Logging status changed activity
-//					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-//							Status.CLOSED.toString(), Status.PENDING.toString(), "status");
+					// ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE,
+					// ticket.contactID, ticket.id,
+					// Status.CLOSED.toString(), Status.PENDING.toString(),
+					// "status");
 				}
 
 				// If send reply and close ticket is selected
@@ -208,11 +211,12 @@ public class TicketNotesRest
 					// Set status to pending as it is replied by assignee and
 					// closed
 					ticket.status = Status.CLOSED;
-					
-					newStatus =  Status.CLOSED;
+
+					newStatus = Status.CLOSED;
 					// Logging status changed activity
-//					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-//							status.toString(), Status.CLOSED.toString(), "status");
+					// ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE,
+					// ticket.contactID, ticket.id,
+					// status.toString(), Status.CLOSED.toString(), "status");
 				}
 				else
 					// Set status to pending as it is replied by assignee
@@ -247,11 +251,12 @@ public class TicketNotesRest
 
 				// Execute note created by user trigger
 				TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);
-				
-				// Logging ticket status change activity
-				ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-						currentStatus.toString(), newStatus.toString(), "status");
-				
+
+				if (currentStatus != newStatus)
+					// Logging ticket status change activity
+					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+							currentStatus.toString(), newStatus.toString(), "status");
+
 				// Logging public notes activity
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id,
 						html_text, plain_text, "html_text");

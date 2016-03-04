@@ -172,8 +172,11 @@ public class TicketBulkActionsBackendsRest
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CHANGE_ASSIGNEE, null, null, domaiUser.name,
 					group.group_name, idsFetcher.getCount() + "");
 
-			BulkActionNotifications.publishNotification(((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
-					+ " assignee and group have been changed successfully.");
+			int selectedTicketsCount = idsFetcher.getCount();
+
+			BulkActionNotifications
+					.publishNotification((selectedTicketsCount + ((selectedTicketsCount == 1) ? " ticket" : " tickets"))
+							+ " assignee and group have been changed.");
 		}
 		catch (Exception e)
 		{
@@ -224,7 +227,9 @@ public class TicketBulkActionsBackendsRest
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_EXECUTE_WORKFLOW, null, null, workflow.name,
 					workflowID + "", idsFetcher.getCount() + "");
 
-			BulkActionNotifications.publishNotification("Workflow have been executed on "
+			int selectedTicketsCount = idsFetcher.getCount();
+
+			BulkActionNotifications.publishNotification("Workflow have been executed on " + selectedTicketsCount
 					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets"));
 		}
 		catch (Exception e)
@@ -268,8 +273,10 @@ public class TicketBulkActionsBackendsRest
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CLOSE_TICKETS, null, null, "", "",
 					idsFetcher.getCount() + "");
 
-			BulkActionNotifications.publishNotification(((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
-					+ " have been closed successfully.");
+			int selectedTicketsCount = idsFetcher.getCount();
+
+			BulkActionNotifications.publishNotification(selectedTicketsCount
+					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets") + " have been closed.");
 		}
 		catch (Exception e)
 		{
@@ -312,8 +319,10 @@ public class TicketBulkActionsBackendsRest
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_DELETE_TICKETS, null, null, "", "",
 					idsFetcher.getCount() + "");
 
-			BulkActionNotifications.publishNotification(((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
-					+ " have been deleted successfully.");
+			int selectedTicketsCount = idsFetcher.getCount();
+
+			BulkActionNotifications.publishNotification(selectedTicketsCount
+					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets") + " have been deleted.");
 		}
 		catch (Exception e)
 		{
@@ -356,8 +365,11 @@ public class TicketBulkActionsBackendsRest
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_SPAM_TICKETS, null, null, "", "",
 					idsFetcher.getCount() + "");
 
-			BulkActionNotifications.publishNotification(((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
-					+ " have been marked as spam successfully");
+			int selectedTicketsCount = idsFetcher.getCount();
+
+			BulkActionNotifications.publishNotification(selectedTicketsCount
+					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
+					+ " have been marked as spam");
 		}
 		catch (Exception e)
 		{
@@ -401,8 +413,11 @@ public class TicketBulkActionsBackendsRest
 			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_FAVORITE_TICKETS, null, null, "", "",
 					idsFetcher.getCount() + "");
 
-			BulkActionNotifications.publishNotification(((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
-					+ " have been added to favourites successfully.");
+			int selectedTicketsCount = idsFetcher.getCount();
+
+			BulkActionNotifications.publishNotification(selectedTicketsCount
+					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
+					+ " have been added to favourites.");
 		}
 		catch (Exception e)
 		{
