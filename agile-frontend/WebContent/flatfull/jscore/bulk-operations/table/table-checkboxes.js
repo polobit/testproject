@@ -89,14 +89,14 @@ $(function(){
 			
 			if (Current_Route == 'deals')
 				deal_bulk_actions.toggle_deals_bulk_actions_dropdown(undefined, true,$(this).parents('table').attr('id'));
-			else if(Current_Route == 'users')
-				$("#bulk-action-btns button").addClass("disabled");
+			else if(Current_Route == 'users')			
+				toggle_admin_user_bulk_actions_delete(this, true,$(this).parents('table').attr('id'));
 			else
 				toggle_contacts_bulk_actions_dropdown(undefined, true,$(this).parents('table').attr('id'));
 			
 		}
 		else{
-			$('.tbody_check').prop('checked',true);
+			$('.tbody_check').prop('checked',true);		
 			$("#bulk-action-btns button").removeClass("disabled");
 		}
 		console.log($(this).is(':checked'));
@@ -104,7 +104,9 @@ $(function(){
 		// Show bulk operations only when thead check box is checked
 		if (Current_Route == 'deals')
 			deal_bulk_actions.toggle_deals_bulk_actions_dropdown(this, true,$(this).parents('table').attr('id'));
-		
+		else if(Current_Route == 'users')			
+				toggle_admin_user_bulk_actions_delete(this, true,$(this).parents('table').attr('id'));		
+
 		else
 			toggle_contacts_bulk_actions_dropdown(this, true,$(this).parents('table').attr('id'));
 		
@@ -122,7 +124,8 @@ $(function(){
 			deal_bulk_actions.toggle_deals_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
 		/*else if(Current_Route=='contacts' && _agile_get_prefs("agile_contact_view"))
 			toggle_contacts_bulk_actions_dropdown(this,true,$(this).parents('table').attr("id"));*/
-		
+		else if(Current_Route == 'users')			
+				toggle_admin_user_bulk_actions_delete(this, true,$(this).parents('table').attr('id'));
 		else
 			toggle_contacts_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
 	});

@@ -1173,17 +1173,38 @@ function initQuota(callback)
 				callback();
 }
 
-function userModalDelete(e)
+function toggle_admin_user_bulk_actions_delete(clicked_ele, isBulk, isCampaign)
 {
-	
-	$('#deleteuserModal').on('click', '#delete_user_yes', function(e) {
-		var id=$("#deleteuserModal").attr(data);
-		App_Admin_Settings.usersListView.collection.remove(id);
-		App_Admin_Settings.usersListView.render(true);
+	$("#bulk-action-btns button").addClass("disabled");
+	if ($(clicked_ele).is(':checked'))
+	{
+		$("#bulk-action-btns button").removeClass("disabled");
 
-	});
-	$('#deleteuserModal').on('click', '#delete_user_no', function(e) {
-		$('#deleteuserModal').modal('hide');
-	});
+	}
+	else
+	{
+		if (isBulk)
+		{
+			$("#bulk-action-btns button").addClass("disabled");
 
+			return;
+		}
+
+		var check_count = 0
+		$.each($('.tbody_check'), function(index, element)
+		{
+			if ($(element).is(':checked'))
+			{
+				check_count++;
+				return false;
+			}
+			// return;
+		});
+
+		if (check_count == 0)
+		{
+			$("#bulk-action-btns button").addClass("disabled");
+		}
+	}
 }
+
