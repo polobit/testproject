@@ -496,9 +496,11 @@ public class TicketsUtil
 		new TicketsDocument().edit(ticket);
 
 		// Logging activity
-		ActivityUtil.createTicketActivity((is_favorite ? ActivityType.TICKET_MARKED_FAVORITE
+		Activity  activity = ActivityUtil.createTicketActivity((is_favorite ? ActivityType.TICKET_MARKED_FAVORITE
 				: ActivityType.TICKET_MARKED_UNFAVORITE), ticket.contactID, ticket.id, "", "", "is_favorite");
-
+		
+		System.out.println("activity: " + activity);
+		
 		return ticket;
 	}
 

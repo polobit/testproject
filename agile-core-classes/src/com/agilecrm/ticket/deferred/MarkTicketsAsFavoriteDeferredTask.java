@@ -5,6 +5,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
 public class MarkTicketsAsFavoriteDeferredTask extends TicketBulkActionAdaptor
@@ -19,7 +20,16 @@ public class MarkTicketsAsFavoriteDeferredTask extends TicketBulkActionAdaptor
 		super();
 
 		this.namespace = nameSpace;
-		this.key = new Key<DomainUser>(DomainUser.class, domainUserID);
+
+		try
+		{
+			NamespaceManager.set("");
+			this.key = new Key<DomainUser>(DomainUser.class, domainUserID);
+		}
+		finally
+		{
+			NamespaceManager.set(nameSpace);
+		}
 	}
 
 	@Override

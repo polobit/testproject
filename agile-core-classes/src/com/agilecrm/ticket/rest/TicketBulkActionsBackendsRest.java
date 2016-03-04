@@ -394,18 +394,8 @@ public class TicketBulkActionsBackendsRest
 			System.out.println("NamespaceManager.." + NamespaceManager.get());
 
 			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
-			System.out.println("user.name: " + user.name);
-
-			if (SessionManager.get() != null)
-			{
-				System.out.println("Logged in user " + SessionManager.get().getName());
-				System.out.println("Logged in user getClaimedId " + SessionManager.get().getClaimedId());
-			}
 
 			BulkActionUtil.setSessionManager(user);
-
-			System.out.println("set Logged in user " + SessionManager.get().getName());
-			System.out.println("set Logged in user getClaimedId " + SessionManager.get().getClaimedId());
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -420,16 +410,10 @@ public class TicketBulkActionsBackendsRest
 				System.out.println("attributes.ticketIDs: " + attributes.ticketIDs);
 			}
 
-			System.out.println("Logged in user " + SessionManager.get().getName());
-			System.out.println("Logged in user getClaimedId " + SessionManager.get().getClaimedId());
-
 			MarkTicketsAsFavoriteDeferredTask task = new MarkTicketsAsFavoriteDeferredTask(NamespaceManager.get(),
 					domainUserID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
-
-			System.out.println("Logged in user " + SessionManager.get().getName());
-			System.out.println("Logged in user getClaimedId " + SessionManager.get().getClaimedId());
 
 			// Logging bulk action activity
 			// Activity activity =
