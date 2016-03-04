@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.reports.ReportsUtil;
+import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.utils.TicketReportsUtil;
@@ -69,9 +70,12 @@ public class TicketReportsRest
 
 			net.sf.json.JSONObject dataJSON = ReportsUtil.initializeFrequencyForReports(startTime, endTime, frequency,
 					timeZone, ticketTypes);
+			
+			String queryString = "last_updated_time >=" + startTime + " AND " + " last_updated_time <= " + endTime;
 
-			Collection<ScoredDocument> documents = TicketReportsUtil.getTicketsBetweenDates(startTime, endTime,
-					"last_updated_time", "status");
+			System.out.println("Query: " + queryString);
+			
+			Collection<ScoredDocument> documents = new TicketsDocument().executeQuery(queryString, "last_updated_time", "status");
 
 			for (ScoredDocument document : documents)
 			{
