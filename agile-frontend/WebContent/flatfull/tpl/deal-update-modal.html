@@ -1,149 +1,142 @@
 <!-- Edit (Deal) Modal views -->
+
 <div class="modal  fade opportunity-modal" id="opportunityUpdateModal">
 <div class="modal-dialog">
-    <div class="modal-content">
-	<div class="modal-header">
-		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title"><i class="icon-edit"></i>&nbsp;Edit Deal</h3>
-	</div>
-	<div class="modal-body">
-		<form id="opportunityUpdateForm" name="opportunityUpdateForm" method="post">
-			<fieldset>
-				<input name="id" type="hidden"/>
-				<input name="created_time" type="hidden"/>
-				<input name="won_date" type="hidden"/>
-				<input name="discount_amt" type="hidden" class="form-control discountvalue" id="discount_amt">
-				<div class="row">
-					<div class="control-group form-group col-md-6">
-				    <label class="control-label"><b>Name </b><span
-							class="field_req">*</span></label>
-						<div class="controls">
-							<span><input id="name" name="name" type="text"
-								class=" required form-control" placeholder="Name of Deal" /></span>
-						</div>
-					</div>
-					<div class="control-group form-group col-md-6">
-						<label class="control-label"><b>Owner </b><span
-							class="field_req">*</span></label>
-						<div class="controls" id="owners">
-							<select id="owners-list" class="required form-control" name="owner_id"></select>
-							<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="control-group form-group col-md-6">
-						<label class="control-label"><b>Value </b><span
-							class="field_req">*</span></label>
-						<div class="controls">
-							<span id="milestone_val"><input type="text" name="expected_value"
-								class="required  number form-control" min="0" max="1000000000000"
-								placeholder="Value of Deal" /></span>
-						</div>
-					</div>
-					<div class="control-group form-group col-md-6">
-						<label class="control-label"><b>Probability (%) </b><span
-							class="field_req">*</span></label>
-						<div class="controls ">
-							<span><input type="text" id="probability"
-								name="probability" class=" required digits form-control" max="100"
-								placeholder="Probability %" /></span>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="control-group form-group col-md-6">
-						<label class="control-label"><b>Milestone  </b><span
-							class="field_req">*</span></label>
-						<div class="controls">
-							<span><select id="pipeline_milestone" name="pipeline_milestone"
-								class="required form-control">
-									<option value="">Select..</option>
-							</select></span><img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
-						</div>
-					</div>
-					<div class="control-group form-group col-md-6">
-						<label class="control-label"><b>Close Date </b></label>
-						<div class="controls">
-							<span><input id="close_date" type="text" name="close_date"
-								class="input date form-control" /></span>
-						</div>
-					</div>
-					<input id="pipeline" name="pipeline_id" type="hidden"/>
-					<input id="milestone" name="milestone" type="hidden"/>
-				</div>
-				<div class="row">
-					<div class="control-group form-group col-md-6 hidden" id="deal_deal_source">
-						<label class="control-label"><b>Deal Source</b></label>
-						<div class="controls">
-							<span><select id="deal_source" name="deal_source_id"
-								class="form-control">
-									<option value="">Select..</option>
-							</select></span><img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif" style="display:none;"></img>
-						</div>
-					</div>
+    <div class="modal-content" style="border-radius:0px;">
+  <div class="modal-header">
+    <button class="close" data-dismiss="modal">x</button>
+    <h3 class="modal-title" style="font-size:18px;">&nbsp;Edit Deal</h3>
+  </div>
+  <div class="modal-body">
+    <form id="opportunityUpdateForm" name="opportunityUpdateForm" method="post" class="form-horizontal">
+      <fieldset>
+      <input name="id" type="hidden"/>
+        <input name="created_time" type="hidden"/>
+        <input name="won_date" type="hidden"/>
+		<input name="discount_amt" type="hidden" class="form-control discountvalue" id="discount_amt">
+        <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Name<span
+              class="field_req">*</span></label>
+            <div class="controls col-sm-7">
+              <span><input id="name" name="name" type="text"
+                class=" required form-control" placeholder="Name of Deal" /></span>
+            </div>
+        </div>
 
-                    <div class="control-group form-group col-md-6">
-						<label class="control-label"><b>Type</b></label>
-						<div class="controls" style="height:32px;overflow:hidden;">
-							<span><input type="text" id="color1" name="color1" value="#808080" class=" required form-control" />
-                          		
-							</span>
-						</div>
-					</div>  
-                    </div>
-                   <div class="row">
-                        <div class="control-group form-group col-md-6 hidden" id="deal_lost_reason">
-						<label class="control-label"><b>Loss Reason</b></label>
-						<div class="controls">
-							<span><select id="lost_reason" name="lost_reason_id"
-								class="form-control">
-									<option value="">Select..</option>
-							</select></span><img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif" style="display:none;"></img>
-						</div>
-					</div>
-				</div>
-				
-				<div class="control-group form-group">
-					<label class="control-label"><b>Related To </b></label>
-					<div class="controls" id="contactTypeAhead">
-						<div>
-							<div>
-								<ul name="contact_ids" class="contacts tagsinput tags p-n"></ul>
-							</div>
-							<div class="clearfix"></div>
-							<input type="text" id="relates_to" name="relates_to"
-								placeholder="Contact Name" class="typeahead typeahead_contacts form-control"
-								data-provide="typeahead" data-mode="multiple" />
-						</div>
-					</div>
-				</div>
-				<div class="control-group form-group hidden">	
-					<label class="i-checks i-checks-sm control-label">
-					<input type="checkbox" id="archived" class="input" name="archived" style="margin: 0px 5px;"><i></i>Archive </label>
-				</div>
-				<div id="custom-field-deals">
-				</div>
-				<div class="control-group form-group">
-					<label class="control-label"><b>Description </b></label>
-					<div class="controls">
-						<textarea id="description" name="description" rows="3"
-							class="input form-control" placeholder="Add Comment"></textarea>
-					</div>
-				</div>
-				<div class="row">
-				<div class="col-md-12">
-					    <div class="control-group form-group">
-					    
-							<div id="forNoteForm" class="controls"></div>
-							<ul style="display:none;" id="notes" name="notes" class="notes"></ul>
-						</div>
-						</div>
-				</div>
-				<div class="toggleHead"><i> Advanced</i></div>
-				<div class="advances hide" >
+
+        <div class="control-group form-group">
+            <label class="control-label col-sm-3">Owner<span
+              class="field_req">*</span></label>
+            <div class="controls col-sm-7" id="owners">
+              <select id="owners-list" class="required form-control" name="owner_id"></select>
+
+              <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
+
+            </div>
+        </div>
+
+        <div class="control-group form-group">
+            <label class="control-label col-sm-3">Value<span
+              class="field_req">*</span></label>
+            <div class="controls col-sm-7">
+              <span id="milestone_val"><input type="text" name="expected_value"
+                class="required  number form-control" min="0" max="1000000000000"
+                placeholder="Value of Deal" /></span>
+            </div>
+    </div>
+          <div class="control-group form-group" style="margin-bottom:0px;">
+            <label class="control-label col-sm-3">Probability (%)<span
+              class="field_req">*</span></label>
+            <div class="controls col-sm-7">
+                <div class="form-group row" style="margin-left:0;margin-right:0">
+                          <div class="col-md-10 p-n" style="width:100%">
+                            <input type="text" value="20" class="form-control digits error deal-pro required positive_number" id="probability" name="probability" placeholder="Probability %" max="100" style="border-radius:2px 0px 0px 2px;"/>
+                          </div>
+               </div>
+            </div>  
+          </div>
+
+          <div class="control-group form-group">
+            <label class="control-label col-sm-3">Milestone<span
+              class="field_req">*</span></label>
+            <div class="controls col-sm-7">
+              <span><select id="pipeline_milestone" name="pipeline_milestone"
+                class="required form-control">
+                  <option value="">Select..</option>
+              </select></span><img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif" style="display:none;"></img>
+            </div>
+        </div>
+        <div>
+            <div class="control-group form-group">
+                <label class="control-label col-sm-3">Close Date</label>
+                <div class="controls col-sm-7">
+                  <span><input id="close_date" placeholder="Select Date" type="text" name="close_date"
+                    class="input date form-control" /></span>
+                </div>
+            </div>
+          <input id="pipeline" name="pipeline_id" type="hidden"/>
+          <input id="milestone" name="milestone" type="hidden"/>
+        </div>
+
+        <div class="control-group form-group hidden" id="deal_deal_source">
+            <label class="control-label col-sm-3">Deal Source</label>
+            <div class="controls col-sm-7">
+              <span><select id="deal_source" name="deal_source_id"
+                class="form-control">
+                  <option value="">Select..</option>
+              </select></span><img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif" style="display:none;"></img>
+            </div>
+        </div>
+        <div class="control-group form-group">
+            <label class="control-label col-sm-3">Type</label>
+            <div class="controls col-sm-7" style="height:32px;overflow:hidden;">
+              <span><input type="text" id="color1" name="color1" value="#808080" class=" required form-control" />
+                              
+              </span>
+            </div>
+          </div> 
+        <div class="control-group form-group  hidden" id="deal_lost_reason">
+            <label class="control-label col-sm-3">Loss Reason</label>
+            <div class="controls col-sm-7">
+              <span><select id="lost_reason" name="lost_reason_id"
+                class="form-control">
+                  <option value="">Select..</option>
+              </select></span><img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif" style="display:none;"></img>
+            </div>
+        </div>
+        <div class="control-group form-group" style="margin-bottom:3px;">
+          <label class="control-label col-sm-3">Related To</label>
+          <div class="controls col-sm-7" id="contactTypeAhead">
+            <div>
+              <input type="text" id="relates_to" name="relates_to"
+                placeholder="Contact Name" class="typeahead typeahead_contacts form-control"
+                data-provide="typeahead" data-mode="multiple" />
+                <div style="padding-top:1px;">
+                  <ul name="contact_ids" class="contacts tagsinput tags p-n"></ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+        <div class="control-group hidden">  
+          <label class="i-checks i-checks-sm control-label">
+          <input type="checkbox" id="archived" class="input" name="archived" style="margin: 0px 5px;"><i></i> Archive </label>
+        </div>
+        
+        <div id="custom-field-deals"></div>
+
+        <div class="control-group form-group">
+            <label class="control-label col-sm-3">Description</label>
+            <div class="controls col-sm-7">
+              <textarea id="description" name="description" rows="3"
+                class="input col-md-8 form-control" placeholder="Add Comment"></textarea>
+            </div>
+        </div>
+
+       
+        	<div class="toggleHead p-l-md"><i> Advanced</i></div>
+				<div class="advances hide  p-r-md p-l-md" >
 					<div class="row">
-						
 						<div class="col-md-12  m-t-md"><b>Select Products</b></div>
 					</div>
 					<div class="row">
@@ -153,17 +146,15 @@
 	 					</div>
 					</div>
 					</div>
-					<div class="row">
-						<div class="col-md-12">
 							<div class="control-group form-group m-t-md">
-								<label class="control-label"><b>Discount</b></label>
-								<div class="input-group">
+								<label class="control-label  col-sm-2 text-left">Discount</label>
+								<div class="controls col-sm-10 input-group pull-right" style="padding-right:15px;">
 									<span class="input-group-addon">
                 						<input type="checkbox" class="discountcheck" name="apply_discount" id="apply_discount">
               						</span>
               						<input name="discount_value" type="text" class="form-control discountvalue" id="discount_value">
 						            <div class="discounttype-input-group-btn input-group-btn dropdown" dropdown="" style="">
-						  				    <button type="button" name="discount_type_btn" id="discount_type_btn" class="btn btn-default discounttype-select" dropdown-toggle="" aria-haspopup="true" aria-expanded="false"><span>Value</span><span class="caret"></span></button>
+						  				    <button type="button" name="discount_type_btn" id="discount_type_btn" class="btn btn-default discounttype-select" dropdown-toggle="" aria-haspopup="true" aria-expanded="false"><span class="m-r-xs">Value</span><span class="caret"></span></button>
                 							<ul class="dropdown-menu pull-right"></ul>
                 							<input type="text" class="hide"  name="discount_type" id="discount_type">
               						</div><!-- /btn-group -->
@@ -171,19 +162,20 @@
             				</div>	
             				<span class="calculation-error-status pull-left" style="color:red;"></span>
 								</div>
-					</div>
-				</div>
-			</fieldset>
-		</form>
-	</div>
-	<div class="modal-footer" id="deals-add-footer">
+	
+		 </div>		
+      </fieldset>
 
-		<span class="error-status" style="color:red;"></span>
-		<a href="#" class="btn btn-sm btn-default" id="opportunity_archive" title="Archive deal">Archive</a>
-		<a href="#" class="btn btn-sm btn-default" id="opportunity_unarchive" title="Move Deal from Archive to Active state">Restore</a>
-		<a href="#" class="btn btn-primary" id="opportunity_validate">Save
-			Changes</a> <span class="save-status"></span>
-	</div>
+    </form>
+    <div class="modal-footer" id="deals-add-footer">
+    <span class="error-status" style="color:red;"></span>
+    <a href="#" class="btn btn-sm btn-default" id="opportunity_archive" title="Archive deal">Archive</a>
+    <a href="#" class="btn btn-sm btn-default" id="opportunity_unarchive" title="Move Deal from Archive to Active state">Restore</a>
+    <a href="#" class="btn btn-primary" id="opportunity_validate">Save
+      Changes</a> <span class="save-status"></span>
+  </div>
+  </div>
+
 </div>
 </div>
 </div>
