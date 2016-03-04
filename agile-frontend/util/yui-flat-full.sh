@@ -21,13 +21,13 @@ cat ../WebContent/jscore/min/flatfull/social-suite-all-min.js >> ../WebContent/t
 #rm ../WebContent/tpl/min/precompiled/flatfull/temp.js
 
 ## Create a basic tpl by combining basic feature tpl's
-rm ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
-cat ../WebContent/tpl/min/precompiled/flatfull/tpl.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
-cat ../WebContent/tpl/min/precompiled/flatfull/contact-view.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
-cat ../WebContent/tpl/min/precompiled/flatfull/case.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
-cat ../WebContent/tpl/min/precompiled/flatfull/document.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
-cat ../WebContent/tpl/min/precompiled/flatfull/workflow.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
-cat ../WebContent/tpl/min/precompiled/flatfull/portlets.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
+## rm ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
+## cat ../WebContent/tpl/min/precompiled/flatfull/tpl.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
+## cat ../WebContent/tpl/min/precompiled/flatfull/contact-view.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
+## cat ../WebContent/tpl/min/precompiled/flatfull/case.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
+## cat ../WebContent/tpl/min/precompiled/flatfull/document.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
+## cat ../WebContent/tpl/min/precompiled/flatfull/workflow.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
+## cat ../WebContent/tpl/min/precompiled/flatfull/portlets.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
 
 
 
