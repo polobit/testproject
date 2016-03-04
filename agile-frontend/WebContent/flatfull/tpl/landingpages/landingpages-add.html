@@ -16,25 +16,22 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 {{/is_IE_browser}}
 <!-- End of IE conditional check-->
 
-
-    <div class="col-md-12">
+ <div class="col-md-12">
         <div class="panel wrapper landingpagessmart" >
             <form id="landingPageBuilderForm">
                 <fieldset>
                      <div class="control-group form-group">
                         <label class="control-label"><b>Name of page:</b> <span class="field_req">*</span></label>
                         <div class="controls">
-                            <div class="row">
-
-                                <div class="col-md-5 col-sm-4">
+                        <div class="row">
+                        <div class="col-md-5 col-sm-4">
                                     <input name="landingpagename" type="text" id="landingpagename" class="col-md-3 form-control required w-md m-r-xs" placeholder="Name of page"/>
                                     <span for="landingpagename" generated="true" class="help-inline" style="display: block;padding: 6px;padding-left: 10px;"></span>
-                                </div>
+                        </div>
                                 <div class="col-md-3 col-sm-3">
                                     <span id="landingpagename-msg" class="text-center"></span>
                                 </div>
                                 <div class="col-md-4 col-sm-5">
-
                                     {{#if_equals action "edit"}}
                                         <div class="btn-group right m-r-xs m-r-n-sm">                                   
                                             <button class="btn btn-primary btn-sm btn-addon saveLandingPageButton" ><i class="icon-plus-sign"></i><span class="saveLandingPageButtonText">Save Page</span>
@@ -49,8 +46,8 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                                     </a>
                                                 </li>
                                             </ul>
-                                        </div>   
-                                     <!--
+                                        </div> 
+                                         <!--
                                         {{#is_mobile}}
 
                                                 {{else}}
@@ -59,7 +56,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                     <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
                                         {{/is_mobile}}
                                         -->
-                                    {{else}}
+                                         {{else}}
                                         <button class="btn btn-primary btn-sm  right pos-rlt m-r-xs saveLandingPageButton" ><span class="saveLandingPageButtonText">Save Page</span>
                                         </button> 
                                     {{/if_equals}}                                       
@@ -68,11 +65,11 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                 <a href="#"><i class="fa fa-eye fa-lg"></i> <span>Preview</span></a>
                             </label> 
                     </div>
- 
                     </div>
-                    <br />
-                    <br />
-					<div id="landingPageBuilderHolder">
+                                </div>
+                                </div>
+                        </div>
+                    <div id="landingPageBuilderHolder">
 
                     <div class="row">
                         <div class="col-md-12" id="landingPageBuilderMenuNav" style="display:none;">
@@ -83,8 +80,8 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 
 
             
-			
-			<li class="lpDeviceView p-l-xxl m-l-xxl" data-trigger="#deviceSwitcherDesktop" data-deviceclass="full-width"><a href="#" ><i class="fa fa-desktop fa-lg"></i></a></li>
+            
+            <li class="lpDeviceView p-l-xxl m-l-xxl" data-trigger="#deviceSwitcherDesktop" data-deviceclass="full-width"><a href="#" ><i class="fa fa-desktop fa-lg"></i></a></li>
             <li class="lpDeviceView" data-trigger="#deviceSwitcherLaptop" data-deviceclass="md-width"><a href="#" ><i class="fa fa-laptop fa-lg"></i> </a></li>
             <li class="lpDeviceView" data-trigger="#deviceSwitcherTablet" data-deviceclass="sm-width"><a href="#" ><i class="fa fa-tablet fa-lg"></i> </a></li>
             <li class="lpDeviceView" data-trigger="#deviceSwitcherMobile" data-deviceclass="xs-width"><a href="#" ><i class="fa fa-mobile fa-lg"></i> </a></li>
@@ -94,7 +91,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
             -->
             </ul>
 
-			
+            
 
 
                             </div>
@@ -102,7 +99,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                     </div>
 
                     <IFRAME SRC="misc/landingpage/index.jsp?tmpid={{templateId}}&action={{action}}" id="landingPageBuilder" frameBorder="0" name="landingPageBuilder" WIDTH="100%" HEIGHT="900px"></IFRAME>
-                   
+                    </div>
                     <br />
                     <br />
                     <div>
@@ -158,10 +155,11 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 
                     </div>
                     <br />
-					<br />
+                    <br />
                     <div class="btn-group left m-r-xs m-r-n-xs">
-					<button class="btn btn-sm btn-primary btn-addon saveLandingPageButton" > {{#if_equals action "edit"}}<i class="icon-plus-sign"></i>{{/if_equals}}<span class="saveLandingPageButtonText">Save Page</span>
                     {{#if_equals action "edit"}}
+                    <button class="btn btn-sm btn-primary btn-addon saveLandingPageButton" ><i class="icon-plus-sign"></i><span class="saveLandingPageButtonText">Save Page</span>
+                    </button>
                      <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
                                                 <span class="caret"></span>
                                 </button>
@@ -171,7 +169,13 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                                     <i class="fa fa-clipboard" style="width: 20px;"></i>Create a Copy</a>
                                             </li>
                                 </ul>
+                    </button>
+                    {{else}}
+                    <button class="btn btn-sm btn-primary btn-addon saveLandingPageButton" ><span class="saveLandingPageButtonText">Save Page</span>
+                    </button>
                     {{/if_equals}}
+                    </div>                    
+                    <br />
                 </fieldset>
             </form>
         </div>
