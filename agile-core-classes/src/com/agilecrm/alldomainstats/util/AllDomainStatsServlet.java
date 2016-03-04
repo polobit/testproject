@@ -61,7 +61,7 @@ public class AllDomainStatsServlet extends HttpServlet {
 			   			    "Sent using Agile");
 		   		    textMail = EmailUtil.appendAgileToText(textMail, "Sent using", emailSender.isEmailWhiteLabelEnabled());
 
-			   		   emailSender.sendEmail("care@agilecrm.com", "Admin", "rahul@agilecrm.com", "prashannjeet@agilecrm.com", null, "All Domain Stats Report for "+current_date, null, 
+			   		   emailSender.sendEmail("noreply@agilecrm.com", "Agile CRM", "rahul@agilecrm.com", "pavan@agilecrm.com", null, "All Domain Stats Report for "+current_date, null, 
 			   				textMail,"Hi", null, new ArrayList<Long>(),new ArrayList<BlobKey>());
 
 			   		}
