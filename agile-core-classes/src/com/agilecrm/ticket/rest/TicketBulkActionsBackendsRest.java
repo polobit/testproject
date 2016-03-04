@@ -14,10 +14,12 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.deferred.ChangeAssigneeDeferredTask;
 import com.agilecrm.ticket.deferred.CloseTicketsDeferredTask;
 import com.agilecrm.ticket.deferred.DeleteTicketsDeferredTask;
@@ -368,8 +370,7 @@ public class TicketBulkActionsBackendsRest
 			int selectedTicketsCount = idsFetcher.getCount();
 
 			BulkActionNotifications.publishNotification(selectedTicketsCount
-					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
-					+ " have been marked as spam");
+					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets") + " have been marked as spam");
 		}
 		catch (Exception e)
 		{
@@ -389,6 +390,8 @@ public class TicketBulkActionsBackendsRest
 			System.out.println("NamespaceManager.." + NamespaceManager.get());
 
 			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
+			System.out.println("user.name: " + user.name);
+
 			BulkActionUtil.setSessionManager(user);
 
 			ITicketIdsFetcher idsFetcher = null;
@@ -409,15 +412,19 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
+			System.out.println("Logged in user " + SessionManager.get().getName());
+			System.out.println("Logged in user getClaimedId " + SessionManager.get().getClaimedId());
+
 			// Logging bulk action activity
-			ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_FAVORITE_TICKETS, null, null, "", "",
-					idsFetcher.getCount() + "");
+			Activity activity = ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_FAVORITE_TICKETS, null,
+					null, "", "", idsFetcher.getCount() + "");
+
+			System.out.println("activity: " + activity);
 
 			int selectedTicketsCount = idsFetcher.getCount();
 
 			BulkActionNotifications.publishNotification(selectedTicketsCount
-					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
-					+ " have been added to favourites.");
+					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets") + " have been added to favourites.");
 		}
 		catch (Exception e)
 		{

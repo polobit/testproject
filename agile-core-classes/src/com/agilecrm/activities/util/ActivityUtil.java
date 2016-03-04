@@ -1889,7 +1889,7 @@ public class ActivityUtil
 	 * @param saved_contacts
 	 * @param merged_contacts
 	 */
-	public static void createTicketActivity(ActivityType ticket_activity_type, final Long contact_id, Long ticket_id,
+	public static Activity createTicketActivity(ActivityType ticket_activity_type, final Long contact_id, Long ticket_id,
 			String old_data, String new_data, String changed_field)
 	{
 		try
@@ -1925,11 +1925,15 @@ public class ActivityUtil
 			activity.related_contact_ids = new JSONArray().put(obj).toString();
 
 			activity.save();
+			
+			return activity;
 		}
 		catch (Exception e)
 		{
 			System.out.println("Exception occured in  import log " + e.getMessage());
 		}
+		
+		return null;
 	}
 	
     public static String returnNormalName(String str)
