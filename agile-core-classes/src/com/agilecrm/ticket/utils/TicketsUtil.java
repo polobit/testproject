@@ -20,6 +20,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
@@ -484,10 +485,10 @@ public class TicketsUtil
 	public static Tickets markFavorite(Long ticket_id, Boolean is_favorite) throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-		
+
 		if (ticket.is_favorite.equals(is_favorite))
 			return ticket;
-		
+
 		ticket.is_favorite = is_favorite;
 
 		Tickets.ticketsDao.put(ticket);
@@ -495,12 +496,17 @@ public class TicketsUtil
 		// Update search document
 		new TicketsDocument().edit(ticket);
 
+		UserInfo userInfo = SessionManager.get();
+		System.out.println("userInfo.getName(): " + userInfo.getName());
+		
+		System.out.println("userInfo): " + userInfo);
+
 		// Logging activity
-		Activity  activity = ActivityUtil.createTicketActivity((is_favorite ? ActivityType.TICKET_MARKED_FAVORITE
+		Activity activity = ActivityUtil.createTicketActivity((is_favorite ? ActivityType.TICKET_MARKED_FAVORITE
 				: ActivityType.TICKET_MARKED_UNFAVORITE), ticket.contactID, ticket.id, "", "", "is_favorite");
-		
+
 		System.out.println("activity: " + activity);
-		
+
 		return ticket;
 	}
 
