@@ -70,6 +70,9 @@ var Tickets_Notes = {
 
 	                showNotyPopUp('information', msg, 'bottomRight', 5000);
 				}
+				
+				if(is_ticket_closed){
+	            	$(".ticket_status").val("CLOSED");
 
 				//update model in collection
 				if(App_Ticket_Module.ticketsCollection){
