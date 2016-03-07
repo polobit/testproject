@@ -20,7 +20,6 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .toggle-timeline" : "toggleTimeline",
 		"click .toggle-activities-notes" : "toggleActivitiesAndNotes",
 		
-		// "click #change-sla" : "changeSla",
 		"click .contact-deals" : "showContactDeals",
 		"mouseover .hover-edit" : "showEditIcon",
 		"mouseout  .hover-edit" : "hideEditIcon",

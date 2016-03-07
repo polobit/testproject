@@ -339,9 +339,6 @@
 				//Load widgets
 				Tickets.loadWidgets(App_Ticket_Module.ticketView.el);
 
-				//Initializing event on SLA date picket
-				//Tickets.initDateTimePicker($('#datetimepicker', el), Tickets.changeSLA);
-
 				Tickets.fillAssigneeAndGroup(el);
 
 				Tickets.initializeTicketSLA(el);

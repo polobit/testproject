@@ -608,7 +608,7 @@ var Tickets = {
 				$('.assign-to-me').hide();
             }
             catch(e){
-
+            	console.log(e);
             }
 
             console.log(modelData);
@@ -731,26 +731,26 @@ var Tickets = {
 
 	},
 
-	changeSLA: function($input, selected_date){
+	// changeSLA: function($input, selected_date){
 
-		$input.attr('disabled', true);
+	// 	$input.attr('disabled', true);
 
-        var slaEpoch = new Date(selected_date).getTime();
+ //        var slaEpoch = new Date(selected_date).getTime();
 
-        var url = "/core/api/tickets/change-due-date?id=" + Current_Ticket_ID + "&due_time=" + slaEpoch;
+ //        var url = "/core/api/tickets/change-due-date?id=" + Current_Ticket_ID + "&due_time=" + slaEpoch;
 
-        Tickets.updateModel(url, function(model){
+ //        Tickets.updateModel(url, function(model){
 
-			$input.attr('disabled', false).hide();
+	// 		$input.attr('disabled', false).hide();
 
-			var updatedDueDate = new Date(slaEpoch).format('mmm dd, yyyy HH:MM')
+	// 		var updatedDueDate = new Date(slaEpoch).format('mmm dd, yyyy HH:MM')
 
-			showNotyPopUp('information', 'Ticket due date has been updated to ' + updatedDueDate, 'bottomRight', 5000);
-		}, function(error){
-			$input.attr('disabled', false);
-			showNotyPopUp('information', error , 'bottomRight', 5000);
-		});
-	},
+	// 		showNotyPopUp('information', 'Ticket due date has been updated to ' + updatedDueDate, 'bottomRight', 5000);
+	// 	}, function(error){
+	// 		$input.attr('disabled', false);
+	// 		showNotyPopUp('information', error , 'bottomRight', 5000);
+	// 	});
+	// },
 
 	updateModel: function(url, success_cbk, err_cbk, ticket_id){
 		var newTicketModel = new BaseModel();
@@ -1200,22 +1200,30 @@ var Tickets = {
 
 	updateDueDate : function(timeInMilli, callback){
 
-	  	var json = {};
-		json.due_time = Math.floor(timeInMilli);
-		json.id = App_Ticket_Module.ticketView.model.toJSON().id;
+		var json = App_Ticket_Module.ticketView.model.toJSON();
+
+		var due_date_present = json.due_time ? true : false;
+
+	  	json.due_time = Math.floor(timeInMilli);
 
 		// Send req to trigger campaign
 		var newTicketModel = new BaseModel();
 		newTicketModel.url = "core/api/tickets/change-due-date?due_time="
 		+ timeInMilli + "&id=" + Current_Ticket_ID;
+
 		newTicketModel.save(json, {	
 			success: function(model){
 
 				var formatted_date = new Date(timeInMilli).format('mmm dd, yyyy');
-				Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:json.due_time});
+
+				Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {due_time:json.due_time});
+
 				$(".remove-date").css("display", "block");
-				showNotyPopUp('information', "Due date has been changed to " + formatted_date, 
-					'bottomRight', 5000);
+
+				var msg = (due_date_present) ? ("Due date has been changed to " + formatted_date) 
+							: ("Due date has been set to " + formatted_date);
+
+				showNotyPopUp('information', msg, 'bottomRight', 5000);
 
 				if(callback)
 					callback();

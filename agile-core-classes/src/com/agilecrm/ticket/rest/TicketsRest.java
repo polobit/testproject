@@ -275,7 +275,7 @@ public class TicketsRest
 		{
 			List<TicketGroups> groups = TicketGroupUtil.getAllGroups();
 
-			List<DomainUser> domainUsers = DomainUserUtil.getAllAdminUsers(NamespaceManager.get());
+			List<DomainUser> domainUsers = DomainUserUtil.getUsers(NamespaceManager.get());
 
 			for (TicketGroups group : groups)
 			{

@@ -47,22 +47,14 @@ public abstract class TicketBulkActionAdaptor implements DeferredTask
 
 	private void setSession()
 	{
-		System.out.println("Setting session................");
-		
-		System.out.println("Setting session info................" + info);
-		
 		if (info != null)
 		{
 			SessionManager.set(info);
 		}
 		
-		System.out.println("Setting session key................" + key);
-		
 		if (key != null)
 		{
 			user = DomainUserUtil.getDomainUser(key.getId());
-			
-			System.out.println("Setting session user................" + user);
 			
 			if (user == null)
 				return;

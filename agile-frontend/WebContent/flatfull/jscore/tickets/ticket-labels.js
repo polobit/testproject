@@ -122,6 +122,7 @@ var Ticket_Labels = {
 		newTicketModel.url = "/core/api/tickets/update-labels?command="
 				+ command + "&label=" + label + '&id=' + Current_Ticket_ID;
 
+		newTicketModel.set({id: Current_Ticket_ID}, {silent : true});
 		//var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
 
 		newTicketModel.save(ticket_model, {

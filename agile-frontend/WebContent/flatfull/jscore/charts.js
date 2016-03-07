@@ -191,7 +191,9 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			var tempcategories = [];
 			var colors=[];
 
-			if(selector!='calls-chart')
+			if(selector == 'tickets-chart')
+				colors=['#f0ad4e','#5cb85c'];
+			else if(selector!='calls-chart')
 				colors=['#23b7e5','#27c24c','#7266ba','#fad733'];
 			else
 				colors=['#27c24c','#23b7e5','#f05050','#7266ba','#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'];

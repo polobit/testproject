@@ -64,18 +64,18 @@ public class TicketReportsRest
 
 			JSONObject ticketTypes = new JSONObject();
 			ticketTypes.put("NEW", 0);
-			ticketTypes.put("OPEN", 0);
-			ticketTypes.put("PENDING", 0);
 			ticketTypes.put("CLOSED", 0);
 
 			net.sf.json.JSONObject dataJSON = ReportsUtil.initializeFrequencyForReports(startTime, endTime, frequency,
 					timeZone, ticketTypes);
-			
-			String queryString = "last_updated_time >=" + startTime + " AND " + " last_updated_time <= " + endTime;
+
+			String queryString = "(last_updated_time >=" + startTime + " AND " + " last_updated_time <= " + endTime
+					+ ") AND (status = NEW OR status = CLOSED)";
 
 			System.out.println("Query: " + queryString);
-			
-			Collection<ScoredDocument> documents = new TicketsDocument().executeQuery(queryString, "last_updated_time", "status");
+
+			Collection<ScoredDocument> documents = new TicketsDocument().executeQuery(queryString, "last_updated_time",
+					"status");
 
 			for (ScoredDocument document : documents)
 			{
@@ -154,7 +154,7 @@ public class TicketReportsRest
 
 			LinkedHashMap<String, Integer> innerMap = new LinkedHashMap<String, Integer>();
 			innerMap.put("count", 0);
-			//innerMap.put("total", documents.size());
+			// innerMap.put("total", documents.size());
 
 			LinkedHashMap<String, LinkedHashMap<String, Integer>> map = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
 			map.put(Priority.LOW.toString(), new LinkedHashMap<String, Integer>(innerMap));
@@ -195,7 +195,7 @@ public class TicketReportsRest
 
 			LinkedHashMap<String, Integer> innerMap = new LinkedHashMap<String, Integer>();
 			innerMap.put("count", 0);
-			//innerMap.put("total", documents.size());
+			// innerMap.put("total", documents.size());
 
 			LinkedHashMap<String, LinkedHashMap<String, Integer>> map = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
 			map.put(Status.NEW.toString(), new LinkedHashMap<String, Integer>(innerMap));
@@ -231,7 +231,7 @@ public class TicketReportsRest
 
 			LinkedHashMap<String, Long> innerMap = new LinkedHashMap<String, Long>();
 			innerMap.put("count", 0l);
-			//innerMap.put("total", (long) documents.size());
+			// innerMap.put("total", (long) documents.size());
 
 			LinkedHashMap<String, LinkedHashMap<String, Long>> map = new LinkedHashMap<String, LinkedHashMap<String, Long>>();
 			map.put("0-1 hr", new LinkedHashMap<String, Long>(innerMap));
@@ -309,9 +309,9 @@ public class TicketReportsRest
 			// Finding average response time
 			for (Map.Entry<String, LinkedHashMap<String, Long>> entry : map.entrySet())
 			{
-				if(countMap.get(entry.getKey()) == 0)
+				if (countMap.get(entry.getKey()) == 0)
 					continue;
-				
+
 				Long totalTime = map.get(entry.getKey()).get("count");
 				Long avgTime = totalTime / countMap.get(entry.getKey());
 
@@ -351,7 +351,7 @@ public class TicketReportsRest
 
 			LinkedHashMap<String, Integer> innerMap = new LinkedHashMap<String, Integer>();
 			innerMap.put("count", 0);
-			//innerMap.put("total", timeDurationToCloseTicket.length);
+			// innerMap.put("total", timeDurationToCloseTicket.length);
 
 			LinkedHashMap<String, LinkedHashMap<String, Integer>> map = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
 

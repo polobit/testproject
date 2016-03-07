@@ -66,29 +66,28 @@ var Tickets_Notes = {
                 	showNotyPopUp('information', "Comment has been added", 'bottomRight', 5000);
                 }else{
 	                
-	                if(is_ticket_closed)
-	                	showNotyPopUp('information', "Comment has been added and ticket status changed to Closed", 'bottomRight', 5000);
-					else 
-	                	showNotyPopUp('information', "Comment has been added and ticket status changed to Pending", 'bottomRight', 5000);
+	                var msg = 'Comment has been added and ticket status changed to ' + ((is_ticket_closed) ? 'Closed' : 'Pending');
+
+	                showNotyPopUp('information', msg, 'bottomRight', 5000);
+				}
+
+				//update model in collection
+				if(App_Ticket_Module.ticketsCollection){
+                    
+					var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
+                    var current_date = new Date().getTime();
+   					
+   					var json = {};
+                   	json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
+					json.last_updated_time = current_date;
+					json.closed_time= (is_ticket_closed) ? current_date : '';
+					json.last_reply_text = notes_json.plain_text;
+					json.last_updated_by = 'AGENT';
+					json.user_replies_count = notes_json.user_replies_count;
 					
-					//update model in collection
-					if(App_Ticket_Module.ticketsCollection){
-	                    
-						var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
-	                    var current_date = new Date().getTime();
-	   					var json = {};
-	                    //console.log(ticket_model);
-						json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
-						json.last_updated_time = current_date;
-						json.closed_time='';
-						json.last_reply_text = notes_json.plain_text;
-						json.last_updated_by = 'AGENT';
-						json.user_replies_count = notes_json.user_replies_count;
-						
-						ticket_model.set(json, {
-							silent : true
-						});
-					}
+					ticket_model.set(json, {
+						silent : true
+					});
 				}
 
 				var next_ticket_url = $(".navigation .next-ticket").attr("href");
@@ -102,22 +101,6 @@ var Tickets_Notes = {
 				Tickets.renderExistingCollection();
 
 				return;
-
-				// Tickets_Notes.repltBtn('reply');
-
-				// If in time line add event to timeline
-				// if($('.ticket-timeline-container').length > 0){
-				// 	Ticket_Timeline.render_individual_ticket_timeline();
-				// 	return;
-				// }
-
-				// if($("#ticket-activities-model-list").length > 0)
-				// 		App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
-				// else{
-				// 	App_Ticket_Module.notesCollection.collection.add(model);
-				// 	App_Ticket_Module.notesCollection.render(true);
-				// }
-				
 			},
 			error : function(data, response) {
 
