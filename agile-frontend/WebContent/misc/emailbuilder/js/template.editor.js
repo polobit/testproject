@@ -987,6 +987,25 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         return false;
     });
 
+    $("#sendTestEmail").click(function () {
+
+        $('div.row').removeClass('active');
+        $('.selected-item').removeClass('selected-item').css('border', 'none');
+
+        downloadLayoutSrc();
+
+        var save = $('#tosave');
+        var templateContent = $("#templateHtmlContent").val();
+        var fullSource = templateContent.replace("{body}",escapeHtmlEntities($('#download').val()));
+        var builderSource = save.html();
+        parent.sendTestEmailTemplate(fullSource,escapeHtmlEntities(builderSource));
+        return;
+        // console.log(save.html());
+        // console.log($('#download').val());
+        // return;
+
+    });
+
     $("#edit").click(function () {
         $("body").removeClass("devpreview sourcepreview");
         $("body").addClass("edit");
@@ -1112,7 +1131,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
 function loadSavedTemplate() {
     //this should be loaded first when dom is ready
-    if(AGILE_EB_OPTIONS['templateId'] && AGILE_EB_OPTIONS['action'] == "edit") {
+    if(AGILE_EB_OPTIONS['templateId'] && (AGILE_EB_OPTIONS['action'] == "edit" || AGILE_EB_OPTIONS['action'] == "copy")) {
         $.ajax({
             url: AGILE_EB_ROOT+"core/api/email/templates/"+AGILE_EB_OPTIONS['templateId'],
             dataType: 'json',
@@ -1123,12 +1142,15 @@ function loadSavedTemplate() {
                     parent.redirectToOldEditor(AGILE_EB_OPTIONS['templateId']);
                     return;
                 }
-                $("#nameoftemplate",parent.document).val(data.name);
-                $("#subject",parent.document).val(data.subject);
-                $("#text_email",parent.document).val(data.text_email);
-                if(data.attachment_id && data.attachment_id != "0") {
-                    parent.setAttachmentInTemplateEdit(data.attachment_id);
+                if(AGILE_EB_OPTIONS['action'] == "edit") {
+                    $("#nameoftemplate",parent.document).val(data.name);
+                    $("#subject",parent.document).val(data.subject);
+                    $("#text_email",parent.document).val(data.text_email);
+                    if(data.attachment_id && data.attachment_id != "0") {
+                        parent.setAttachmentInTemplateEdit(data.attachment_id);
+                    }
                 }
+
                 $("#tosave").html(data.html_for_builder);
             }
         });

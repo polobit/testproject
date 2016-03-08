@@ -3357,3 +3357,9 @@ table.hide-head-checkbox th label.i-checks {
 {
 	margin-top: 110px;
 }
+
+.emailbuilder-copy{
+	min-width: 106px;
+    margin-right: 80px;
+    top: 50px;
+}
