@@ -19,6 +19,10 @@ public class ContactReportDeferredTaskCreation
 	Queue queue = QueueFactory.getQueue("reports-queue");
 	TaskOptions options = TaskOptions.Builder.withPayload(send_contact_report_deferred_task);
 	options.etaMillis(time * 1000);
+	if(reportid != null)
+	{
+	options.taskName(String.valueOf(reportid));
+	}
 	queue.add(options);
     }
 }
