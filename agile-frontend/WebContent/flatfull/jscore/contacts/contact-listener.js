@@ -108,7 +108,7 @@ function contactListener(el)
 
 
  
-      clearTimeout(timer);
+     // clearTimeout(timer);
 
 			timer=setTimeout(function() {
 						 		
@@ -154,6 +154,7 @@ function contactListener(el)
 			$(that).popover('hide');
 			$('.popover').remove();
 		}
+		clearTimeout(timer);
 			});
 }
 
