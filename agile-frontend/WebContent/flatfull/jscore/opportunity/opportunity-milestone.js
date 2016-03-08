@@ -196,7 +196,7 @@ function dealsFetch(base_model)
 		pipeline_count++;
 		setup_deals_in_milestones('opportunities-by-paging-model-list');
 		dealTotalCountForPopover(heading);
-		
+		initializeDealsListeners();		
 		
 		
 	} });
@@ -253,8 +253,9 @@ function initializeDealsListeners()
 {
 	$("#opportunity-listners").off('mouseenter','.milestone-column > .dealtitle-angular');
 	$("#opportunity-listners").on('mouseenter','.milestone-column > .dealtitle-angular', function(){
+	var data = $(this).attr('data');
+		if(data){
 
-		var data = $(this).attr('data');
 		var originalHeading = $(this).siblings().find('.milestones').attr('milestone');
 		var jsonDealData = JSON.parse(data);
 		jsonDealData.heading = originalHeading;
@@ -264,7 +265,7 @@ function initializeDealsListeners()
 	    		return;
     	var ele = $(template_ui);
 		$(that).popover(
-					{ "rel" : "popover", "trigger" : "hover", "placement" : 'bottom', "content" : ele,
+					{ "rel" : "popover", "trigger" : "manual", "placement" : 'bottom', "content" : ele,
 						"html" : "true"}); 
 			$(that).popover('show');
 			$(".popover-content").html(ele);
@@ -273,7 +274,10 @@ function initializeDealsListeners()
 			$(".dealtitle-angular + .popover > .popover-content" ).css("padding","0px");
 			$(".dealtitle-angular + .popover ").css("border-radius","0px");
 		});
-
+		}
+		else{
+			initializeDealsListeners();
+		}
 	});
 
 	/**
@@ -314,35 +318,31 @@ console.log('------popover pipeline id-----', pipeline_id);
 			else if(currentTrack.lost_milestone == milestone)
 				newDealList.lost_milestone = currentTrack.lost_milestone;
 			$.ajax({ type : 'GET', url : url, success : function(data){
-                   try
-					{
-						var json = JSON.parse(data); 
-						var dealcount = json.total;
-						var count = $('#'+json.milestone.replace(/ +/g, '')+'_count').text();
-						var countoto = 3;
-				        var heading = json.milestone.replace(/ +/g, '');
-				        var i;
-				        $('#'+json.milestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount));
+                if(data){
+					var json = JSON.parse(data); 
+					var dealcount = json.total;
+					var count = $('#'+json.milestone.replace(/ +/g, '')+'_count').text();
+					var countoto = 3;
+			        var heading = json.milestone.replace(/ +/g, '');
+			        var i;
+			        $('#'+json.milestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount));
 
-			            var avg_deal_size = 0;
-			            if(count == 0)
-			            	avg_deal_size = 0;
-			            else
-			            	avg_deal_size = dealcount / count ; 
-			            var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
-			            dealcount = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount) ;
-			            var symbol = getCurrencySymbolForCharts();
-			            avg_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_deal_size);
-						var dealdata = {"dealTrack": dealTrack ,"heading": heading ,"dealcount":dealcount ,"avgDeal" : avg_deal_size,"symbol":symbol,"dealNumber":count};
-						var dealDataString = JSON.stringify(dealdata) ; 
-						$("#"+heading+" .dealtitle-angular").attr("data" , dealDataString ); 
-						initializeDealsListeners();
-			           
-			        }
-					catch (err)
-					{
-						console.log(err);
-					} 
+		            var avg_deal_size = 0;
+		            if(count == 0)
+		            	avg_deal_size = 0;
+		            else
+		            	avg_deal_size = dealcount / count ; 
+		            var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
+		            dealcount = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount) ;
+		            var symbol = getCurrencySymbolForCharts();
+		            avg_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_deal_size);
+					var dealdata = {"dealTrack": dealTrack ,"heading": heading ,"dealcount":dealcount ,"avgDeal" : avg_deal_size,"symbol":symbol,"dealNumber":count};
+					var dealDataString = JSON.stringify(dealdata) ; 
+					$("#"+heading+" .dealtitle-angular").attr("data" , dealDataString ); 	
+		        }
+		        else{
+		        	dealTotalCountForPopover(milestone);
+		        }
 			},error: function() {
                  console.log('An error occurred');
       		}
