@@ -3390,8 +3390,8 @@ table.hide-head-checkbox th label.i-checks {
 	color:#7C7C7C;
 	margin-left:82px;
 	font-size:12px;
-	margin-top:-67px;
-	margin-left:52px;
+	 margin-top: -64px;
+    margin-left: 57px;
 }
 
 .admin-user-adduser{
@@ -3440,10 +3440,17 @@ div.user-view-actions {
 }
 
 #admin-newuser-image{
-	margin-left:3px;
-	margin-top:-7px;
+	margin-left: -18px;	
 }
+
 #admin-newuser-adduser{
  text-align: left;
     margin-top: 4px;	
 }
+#admin-newuser-adduser
+{
+ 	text-align: left;
+    margin-top: 5px;
+
+}
+

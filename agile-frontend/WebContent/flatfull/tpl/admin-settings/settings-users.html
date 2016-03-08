@@ -48,15 +48,14 @@
 		</div>
 		
 		<div style="margin-left: 25px;">
-			<div class="pull-left m-r-xs   agile-img" style="margin-left:3px;" >
+			<div class="pull-left m-r-xs   agile-img" style="margin-left:-18px;" >
 				{{#if ownerPic}}
 					<img class="img-inital r r-2x" style="height:62px;width:62px;" src="{{ownerPic}}"  title="{{name}}" />
 				   {{else}}
 					<img class="w-full" style="height:62px;width:62px;" src="{{defaultGravatarurl 50}}" title="{{name}}" />
 				{{/if}}
 			</div>
-			<div class="pull-left text-ellipsis admin-user-name" style="margin-top: -64px;
-    margin-left:76px;" >
+			<div class="pull-left text-ellipsis admin-user-name">
 				<a  class="m-r-sm custom-link pull-left text-ellipsis w-auto admin-username">{{name}}</a><br>
 				
 					<div class="text-xs">{{email}}</div>
@@ -68,7 +67,7 @@
 
 		</div>
 		<div class="clearfix"></div>
-		<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-md no-wrap" style="padding-left:24px;">
+		<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-md no-wrap" style="padding-left:7px;">
 		{{#if is_admin}}
 			<span class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">Admin</span>
 			
@@ -118,14 +117,14 @@
 			</label>
 		</div>
 <div style="margin-left: 25px;">
-<div class="pull-left m-r-xs   agile-img" id="admin-newuser-image">
-	<img class='img-inital r r-2x m-t-sm' style='height:62px;width:62px;' src="flatfull/images/user-default.jpg"/>
+<div class="pull-left    agile-img" id="admin-newuser-image">
+	<img class='img-inital r r-2x ' style='height:62px;width:62px;' src="flatfull/images/user-default.jpg"/>
 <br>
 </div>
 
  <span>Add user to manage specific tasks by providing user level priveleges.</span>
 
-<div id="#admin-newuser-adduser">
+<div id="admin-newuser-adduser">
 <a href='#users-add' class='btn btn-primary btn-sm btn-addon add-portlet add-stream-tab pos-rlt' id='addUser' ><span><i class='icon-plus-sign'/></span>  Add User</a>
 </div>
 </div>

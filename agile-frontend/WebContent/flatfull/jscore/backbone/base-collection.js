@@ -122,7 +122,7 @@ deleteConfirm : function(e)
 			var id=that.model.get("id");
 			console.log(id);
 		   // Show loading
-		   $(this).button('loading');
+		   $(this).addClass("disabled")
 		   $.ajax({
     					url: 'core/api/users/'+id,
        					type: 'DELETE',
@@ -133,7 +133,7 @@ deleteConfirm : function(e)
        					},
        					error : function(response)
 						{
-							confirmModal.find(".modal-footer").find("#delete-user").html('<div class="alert alert-danger delete-adminuser-individual"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry, can not delete user having <i>admin</i> privilege.</div>');
+							confirmModal.find(".modal-footer").find("#delete-user").html('<small class="text-danger" style="font-size:15px;margin-right:172px;"><i>Sorry, can not delete user having admin privilege.</i></small>');
 							console.log(response);
 
 						}
