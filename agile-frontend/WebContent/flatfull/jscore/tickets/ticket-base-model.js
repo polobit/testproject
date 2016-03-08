@@ -42,7 +42,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"change .status" : "toggleGroupAssigneeFields",
 		"click .nt-reqester_email" : "showContactTypeAhead",
 		"click .toggle-options" : "toggleOptions",
-		"click .add-ticket-contact": "toggleAddTicketContact",
+		//"click .add-ticket-contact": "toggleAddTicketContact",
 
 		//Attachment events
 		"click .toggle-docs-dropdown" : "toggleDocsDropdown",
@@ -108,15 +108,18 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		var groupId = App_Ticket_Module.ticketView.model.toJSON().groupID;
 		var assigneeId = CURRENT_AGILE_USER.domainUser.id;
 
-		$('#ticket-assignee').find("optgroup[data-group-id='"+groupId+"']").find("option[value='"+assigneeId+"']").attr('selected', 'selected');
-          		
-		$('.assign-to-me').hide();
-
 		Tickets.sendReqToChangeAssignee(assigneeId, groupId, App_Ticket_Module.ticketView.model.toJSON(), function(model){
         
 			App_Ticket_Module.ticketView.model.set(model, {silent: true});
 
-       	showNotyPopUp('information', 'Assignee has been changed to ' + CURRENT_AGILE_USER.domainUser.name, 'bottomRight', 5000);
+       		showNotyPopUp('information', 'Assignee has been changed to ' + CURRENT_AGILE_USER.domainUser.name, 'bottomRight', 5000);
+
+       		$('#ticket-assignee').find("optgroup[data-group-id='"+groupId+"']")
+       			.find("option[value='"+assigneeId+"']").attr('selected', 'selected');
+          	
+          	$('.assign-to-me').hide();
+
+          	console.log($('#ticket-assignee').length);
 		});
 		
 
@@ -435,14 +438,14 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		var ticketJSON = App_Ticket_Module.ticketView.model.toJSON();
 		
 		Tickets.togglePreviousTickets(ticketJSON.requester_email);
-	},
-
-	toggleAddTicketContact: function(e){
-		e.preventDefault();
-
-		$('div.new-contact-row').toggle();
-		$('div.search-contact-row').toggle();
-
-		$('#email_input').val($('#requester_email').val());
 	}
+
+	// toggleAddTicketContact: function(e){
+	// 	e.preventDefault();
+
+	// 	$('div.new-contact-row').toggle();
+	// 	$('div.search-contact-row').toggle();
+
+	// 	$('#email_input').val($('#requester_email').val());
+	// }
 });

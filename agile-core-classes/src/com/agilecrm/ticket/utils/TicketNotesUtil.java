@@ -18,6 +18,7 @@ import org.jsoup.safety.Whitelist;
 
 import com.agilecrm.Globals;
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -118,10 +119,10 @@ public class TicketNotesUtil
 
 		String groupName = group.group_name;
 		String agentName = DomainUserUtil.getDomainUser(ticket.assigneeID).name;
-		
-		if(StringUtils.isBlank(agentName))
+
+		if (StringUtils.isBlank(agentName))
 			agentName = "";
-		
+
 		json.put("ticket_id", ticket.id);
 		json.put("group_name", groupName);
 		json.put("agent_name", agentName);
@@ -142,7 +143,7 @@ public class TicketNotesUtil
 			if (notes.note_type == NOTE_TYPE.PRIVATE)
 				continue;
 
-			JSONObject eachNoteJSON = getFormattedEmailNoteJSON(notes);
+			JSONObject eachNoteJSON = getFormattedEmailNoteJSON(notes, ticket.getContact());
 
 			if (eachNoteJSON != null)
 				notesArray.put(eachNoteJSON);
@@ -165,7 +166,7 @@ public class TicketNotesUtil
 	 * @return
 	 * @throws Exception
 	 */
-	public static JSONObject getFormattedEmailNoteJSON(TicketNotes notes) throws Exception
+	public static JSONObject getFormattedEmailNoteJSON(TicketNotes notes, Contact contact) throws Exception
 	{
 		Map<Long, DomainUser> domainUsersMap = new HashMap<Long, DomainUser>();
 
@@ -208,7 +209,13 @@ public class TicketNotesUtil
 		else
 		{
 			json.put("user_name", notes.requester_name);
-			json.put("img_url", Globals.GRAVATAR_SECURE_IMAGE_URL + MD5Util.getMD5Code(notes.requester_email));
+
+			String imageURL = contact.getContactFieldValue(Contact.IMAGE);
+
+			if (imageURL == null)
+				imageURL = Globals.GRAVATAR_SECURE_DEFAULT_IMAGE_URL;
+
+			json.put("img_url", imageURL);
 		}
 
 		return json;
@@ -281,8 +288,7 @@ public class TicketNotesUtil
 
 			for (TicketNotes note : notes)
 			{
-				if (note.created_by == CREATED_BY.REQUESTER 
-						|| note.assignee_id == null)
+				if (note.created_by == CREATED_BY.REQUESTER || note.assignee_id == null)
 					continue;
 
 				System.out.println(note.assignee_id);

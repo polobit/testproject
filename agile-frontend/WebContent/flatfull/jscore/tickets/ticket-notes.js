@@ -63,7 +63,7 @@ var Tickets_Notes = {
 				Tickets.remove_draft_message(Current_Ticket_ID, ((note_type == 'PUBLIC') ? 'reply' : 'comment'));
                 
                 if(notes_json.note_type == 'PRIVATE'){
-                	showNotyPopUp('information', "Comment has been added", 'bottomRight', 5000);
+                	showNotyPopUp('information', "Comment has been added" + ((is_ticket_closed) ? ' and status changed to Closed' : ''), 'bottomRight', 5000);
                 }else{
 	                
 	                var msg = 'Comment has been added and ticket status changed to ' + ((is_ticket_closed) ? 'Closed' : 'Pending');
@@ -94,10 +94,12 @@ var Tickets_Notes = {
 					});
 				}
 				var next_ticket_url = $(".navigation .next-ticket").attr("href");
+
 				if(next_ticket_url){
 					Backbone.history.navigate(next_ticket_url, {
 						trigger : true
 					});
+					
 					return;
 				}
 

@@ -127,12 +127,19 @@
 
 				},undefined, undefined, 'core/api/search/');
 
+				//Initializing click event on add new contact link
+				el.on('click', '.add-ticket-contact', function(e){
+					$('div.new-contact-row').toggle();
+					$('div.search-contact-row').toggle();
+
+					$('#email_input').val($('#requester_email').val());
+				});
+
+				//Initializing click event on create ticket button
 				el.on('click', '#create-ticket', function(e){
 
-					if (!isValidForm($('#new-ticket', el))) {
-					
+					if (!isValidForm($('#new-ticket', el)))
 						return;
-					}
 
 					var json = serializeForm('new-ticket');
 
