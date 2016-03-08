@@ -3192,7 +3192,7 @@ table.hide-head-checkbox th label.i-checks {
 }
 
 .reports_tab_content{
-	 width: 920px;
+	 width: 420px;
     left: 200px;
     top: 71px;
     position: fixed;
@@ -3203,4 +3203,9 @@ table.hide-head-checkbox th label.i-checks {
 .report-selected
 {
 	background-color: #e4eaec!important;
+}
+
+.sub-nav-tab li
+{
+	margin-left : 25px;
 }
