@@ -2989,7 +2989,7 @@ width: 915px;
     position: absolute;
     right: 0;
     width: 14px;
-    height: 31px;
+    height: 32px;
 }
 .ccw_selector_arrows {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAALCAYAAACzkJeoAAAAOklEQVQYV2P4//8/AwxHRkb+B2I4H13iP7ICbBJwBbgkwBhuLDaMXxLZddgk8duJTQKnP7E6CFkChAFpxL/ydoaj+QAAAABJRU5ErkJggg==) no-repeat center center;
@@ -3000,7 +3000,8 @@ width: 915px;
     right: 0px;
     width: 14px;
 }
-.ccw_unit_selector_cnt{border: 1px solid gainsboro;
+.ccw_unit_selector_cnt{
+	border-bottom: 1px solid gainsboro;
     -webkit-border-radius: 2px 0px 0px 2px;
     overflow: hidden;
     position: relative;
