@@ -114,6 +114,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.deals.GoalsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.PaypalWidgetApi.class);
 	s.add(com.agilecrm.webhooks.triggers.util.AgileWebhookAPI.class);
+	s.add(com.agilecrm.core.api.widgets.UservoiceWidgetAPI.class);
 
 	return s;
     }

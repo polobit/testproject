@@ -317,6 +317,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("skype.js");
 	}
+	if (templateName.indexOf("uservoice") == 0)
+	{
+		template_relative_urls.push("uservoice.js");
+	}
 	return template_relative_urls;
 }
 

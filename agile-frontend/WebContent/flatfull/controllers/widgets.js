@@ -23,6 +23,8 @@ var WidgetsRouter = Backbone.Router
                 "HelpScout/:id" : "HelpScout",
                 "Zendesk" : "Zendesk",
                 "Zendesk/:id" : "Zendesk",
+                "Uservoice" : "Uservoice",
+                "Uservoice/:id" : "Uservoice",
                 // Calling widgets
                 "Sip" : "Sip",
                 "Sip/:id" : "Sip",
@@ -170,6 +172,13 @@ var WidgetsRouter = Backbone.Router
              */
             Zendesk : function(id) {
                 addConfigurableWidget(id, "Zendesk", "zendesk-login");
+            },
+            
+            /**
+             * Manages Uservoice widget
+             */            
+            Uservoice : function(id){
+                addConfigurableWidget(id, "Uservoice", "uservoice-login");
             },
 
             /**

@@ -1,0 +1,111 @@
+<script id="uservoice-login-template" type="text/html">
+	<div>
+		<form  id="uservoice_login_form" name="uservoice_login_form" method="post">
+	    	<fieldset>			
+				<label>Enter your Uservoice details </label>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="uv_api_key" placeholder="API Key" class="input-medium required widget_input_box form-control" value="" name="uv_api_key">
+						</input>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="uv_secert_key" class="input-medium required widget_input_box form-control"  placeholder="Secert Key" value="" name="uv_secert_key">
+						</input>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="uv_domain_name" class="input-medium required widget_input_box form-control"  placeholder="Domain Name" value="" name="uv_domain_name">
+						</input>
+					</div>
+				</div>
+				<div class="text-center">		
+				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
+				</div>
+			 </fieldset>
+	    </form>
+	</div>
+</script>
+
+<script id="uservoice-profile-template" type="text/html">
+<div class="wrapper-sm">
+{{#if users}}
+<a class="thumb pull-left m-r-sm">
+	{{#if avatar_url}}
+		<img src="{{avatar_url}}" width="36" height="36" alt="" class="img-circle"/>
+	{{else}}
+		<img src="https://secure.gravatar.com/avatar/51200e80ab8b12eaaae230fcfe7dd1c6?d=https%3A//assets.zendesk.com/images/types/user_sm.png&s=30&r=g" alt="" class="img-circle"/>
+	{{/if}}
+</a>
+<div class="clear">
+	{{#if name}}
+		<a class="text-cap text-base m-b-xs">{{name}}</a>	
+	{{/if}}
+		<div class="row">
+			<div class="col-md-5">
+				<div class="pull-right">:</div> Role
+			</div>
+			<div class="col-md-6 p-n">
+				{{#if is_admin}}
+					 Admin
+				{{else}}
+					 General User
+				{{/if}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-5">
+				<div class="pull-right">:</div> Status
+			</div>
+			<div class="col-md-6 p-n">
+				{{#if_equals allowed_state "allowed"}}
+					 Active
+				{{else}}
+					 Blocked
+				{{/if_equals}}
+			</div>
+		</div>
+{{else}}
+	User data not found.
+{{/if}}
+</div>
+</script>
+
+<script id="uservoice-transactions-template" type="text/html">
+{{#if transaction.length}}
+	{{#each transaction}}
+		<li class="list-group-item r-none b-l-none b-r-none" style="width:249px;">
+			<div class="clear">							
+				<a class="col-md-7 p-none text-left text-ellipsis c-p text-info" title="{{orderId}}" data-toggle="collapse" href="#collapse-{{id}}" >
+					Order ID: #{{orderId}}
+				</a>
+				<div class="col-md-5 p-none text-right">$ {{amount}}</div>	
+				<div class="clearfix"></div>	
+				<div class="pull-left">Status</div>
+				<div class="pull-right text-ellipsis text-right" style="width: 165px;" title="{{brainTreeStatus status}}">{{brainTreeStatus status}}</div>
+				<div class="clearfix"></div>	
+			</div>		
+			<div class="clearfix"></div>					
+			<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
+				<div class="col-md-5 p-none text-left">Tax Amount</div>
+				<div class="col-md-7 p-none text-right text-ellipsis" title="{{taxAmount}}">$ {{taxAmount}}</div>
+				<div class="clearfix"></div>
+
+				<div class="col-md-5 p-none text-left">Order ID</div>
+				<div class="col-md-7 p-none text-right text-ellipsis" title="{{orderId}}">{{orderId}}</div>
+				<div class="clearfix"></div>
+
+				<div class="col-md-7 p-none text-left">Purchase Order No</div>
+				<div class="col-md-5 p-none text-right text-ellipsis" title="{{purchaseId}}">{{purchaseId}}</div>
+				<div class="clearfix"></div>								
+			</div>
+			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" createdDate}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" createdDate}}</time></small>
+		</li>
+	{{/each}}
+{{else}}
+	<li class="list-group-item r-none b-l-none b-r-none"> No Comments </li>
+{{/if}}
+</script>
