@@ -75,10 +75,12 @@ var Tickets_Notes = {
 	            	$(".ticket_status").val("CLOSED");
              
 				//update model in collection
-				if(App_Ticket_Module.ticketsCollection){
+				if(notes_json.note_type != 'PRIVATE' && 
+					App_Ticket_Module.ticketsCollection){
                     
 					var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
                     var current_date = new Date().getTime();
+                    
    					var json = {};
                    	json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
 					json.last_updated_time = current_date;
