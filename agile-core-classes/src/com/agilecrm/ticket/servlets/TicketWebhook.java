@@ -380,6 +380,8 @@ public class TicketWebhook extends HttpServlet
 			System.out.println("From email: " + fromEmail);
 			System.out.println("From name: " + fromName);
 
+			Status status = Status.PENDING;
+
 			if (isNewTicket)
 			{
 				String ip = "";
@@ -420,16 +422,7 @@ public class TicketWebhook extends HttpServlet
 				if (ticket.status == Status.CLOSED)
 				{
 					ticket.no_of_reopens += 1;
-
-					// Logging status changed activity
-					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-							Status.CLOSED.toString(), Status.OPEN.toString(), "status");
-				}
-				else
-				{
-					// Logging status changed activity
-					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-							Status.PENDING.toString(), Status.OPEN.toString(), "status");
+					status = Status.CLOSED;
 				}
 
 				ticket.status = Status.OPEN;
@@ -454,8 +447,14 @@ public class TicketWebhook extends HttpServlet
 					msgJSON.toString());
 
 			if (!isNewTicket)
+			{
 				// Execute note created by customer trigger
 				TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
+
+				// Logging status changed activity
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
+						status.toString(), Status.OPEN.toString(), "status");
+			}
 
 			NamespaceManager.set(oldNamespace);
 
