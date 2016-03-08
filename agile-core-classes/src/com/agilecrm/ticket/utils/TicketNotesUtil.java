@@ -328,7 +328,7 @@ public class TicketNotesUtil
 	public static String parsePlainText(String plainText)
 	{
 		// parse plain text
-		return plainText.replaceAll("(\r\n|\n\r|\r|\n)", "<br />");
+		return plainText.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
 	}
 
 	/**

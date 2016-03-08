@@ -917,16 +917,24 @@ Deleted  {{custom1}} Campaigns<br/>
 			</small> 
 		{{/if_equals}}
 		{{#if_equals "TICKET_ASSIGNED" activity_type}}
-			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> assigned to <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
-			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
-			</small>  
+			{{#if user_name}}
+				{{user_name}} assigned <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> to <span class="inline-block first-letter-cap">{{custom2}}</span>
+			{{else}}
+				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> assigned to <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
+				<small class="activities_second_line m-t-none text-sm">
+					{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				</small>
+			{{/if}}
 		{{/if_equals}}
 		{{#if_equals "TICKET_ASSIGNEE_CHANGED" activity_type}}
-			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> assignee changed to <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
-			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
-			</small>  
+			{{#if user_name}}
+				{{user_name}} changed <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> assignee to <span class="inline-block first-letter-cap">{{custom2}}</span>
+			{{else}}
+				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> assignee changed to <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
+				<small class="activities_second_line m-t-none text-sm">
+					{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				</small>
+			{{/if}}
 		{{/if_equals}}
 		{{#if_equals "TICKET_GROUP_CHANGED" activity_type}}
 			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> group changed to <span class="inline-block first-letter-cap">{{custom2}}</span><br/>

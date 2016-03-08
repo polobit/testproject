@@ -80,8 +80,10 @@ public class TicketNotesRest
 
 			Long ticketID = notes.ticket_id;
 
+			String plain_text = notes.html_text;
+			
 			if (notes.html_text != null)
-				notes.html_text = notes.html_text.replaceAll("(\r\n|\n)", "<br />");
+				notes.html_text = notes.html_text.replaceAll("((\r\n|\n\r|\r|\n))", "<br />");
 
 			String html_text = notes.html_text;
 
@@ -97,11 +99,6 @@ public class TicketNotesRest
 				throw new Exception("Ticket has been deleted.");
 
 			Status currentStatus = ticket.status, newStatus = Status.PENDING;
-
-			// Converting html text to plain with jsoup
-			// Document doc = Jsoup.parse(notes.html_text, "UTF-8");
-			// String plain_text = new HtmlToPlainText().getPlainText(doc);
-			String plain_text = notes.html_text;
 
 			TicketNotes ticketNotes = new TicketNotes();
 
@@ -231,10 +228,8 @@ public class TicketNotesRest
 				// Updating ticket entity
 				Tickets.ticketsDao.put(ticket);
 
-				String cleanText = plain_text.replaceAll("(<br />|<br>|<br/>)", "");
-
 				// Updating existing ticket
-				ticket = TicketsUtil.updateTicket(ticketID, ticket.cc_emails, cleanText, LAST_UPDATED_BY.AGENT,
+				ticket = TicketsUtil.updateTicket(ticketID, ticket.cc_emails, plain_text, LAST_UPDATED_BY.AGENT,
 						currentTime, null, currentTime,
 						(notes.attachments_list != null && notes.attachments_list.size() > 0) ? true : false);
 

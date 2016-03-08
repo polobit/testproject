@@ -498,7 +498,7 @@ public class TicketsUtil
 
 		UserInfo userInfo = SessionManager.get();
 		System.out.println("userInfo.getName(): " + userInfo.getName());
-		
+
 		System.out.println("userInfo): " + userInfo);
 
 		// Logging activity
@@ -609,11 +609,17 @@ public class TicketsUtil
 
 		if ("add".equalsIgnoreCase(command))
 		{
+			if (labels.contains(labelKey))
+				return ticket;
+
 			labels.add(labelKey);
 			ActivityType = ActivityType.TICKET_LABEL_ADD;
 		}
 		else
 		{
+			if (!labels.contains(labelKey))
+				return ticket;
+
 			labels.remove(labelKey);
 			ActivityType = ActivityType.TICKET_LABEL_REMOVE;
 		}

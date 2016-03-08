@@ -356,8 +356,8 @@ public class TicketsRest
 
 			if (StringUtils.isBlank(ticket.requester_name))
 				ticket.requester_name = fromName;
-
-			String html_text = ticket.html_text;
+			
+			String html_text = ticket.html_text, plain_text = html_text;
 			html_text = html_text.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
 
 			CreatedBy createdBy = ticket.created_by;
@@ -367,9 +367,7 @@ public class TicketsRest
 
 			Long groupID = ticket.groupID, assigneeID = ticket.assigneeID;
 
-			// Converting html text to plain with jsoup
-			// Document doc = Jsoup.parse(html_text, "UTF-8");
-			String plain_text = TicketNotesUtil.br2nl(html_text);
+			//String plain_text = TicketNotesUtil.br2nl(html_text);
 
 			boolean attachmentExists = false;
 
