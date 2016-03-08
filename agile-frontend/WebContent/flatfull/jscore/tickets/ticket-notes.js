@@ -73,13 +73,12 @@ var Tickets_Notes = {
 				
 				if(is_ticket_closed)
 	            	$(".ticket_status").val("CLOSED");
-
+             
 				//update model in collection
 				if(App_Ticket_Module.ticketsCollection){
                     
 					var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
                     var current_date = new Date().getTime();
-   					
    					var json = {};
                    	json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
 					json.last_updated_time = current_date;
@@ -87,12 +86,11 @@ var Tickets_Notes = {
 					json.last_reply_text = notes_json.plain_text;
 					json.last_updated_by = 'AGENT';
 					json.user_replies_count = notes_json.user_replies_count;
-					
+				    json.assigneeID = model.attributes.assignee_id;	
 					ticket_model.set(json, {
 						silent : true
 					});
 				}
-
 				var next_ticket_url = $(".navigation .next-ticket").attr("href");
 				if(next_ticket_url){
 					Backbone.history.navigate(next_ticket_url, {
