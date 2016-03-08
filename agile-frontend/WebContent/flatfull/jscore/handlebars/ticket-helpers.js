@@ -408,7 +408,6 @@ Handlebars.registerHelper('convert_to_html', function(str, options) {
 	}
 
 	return str;
-
 });
 
 Handlebars.registerHelper('get_current_filter_id', function(str, options) {
