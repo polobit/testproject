@@ -246,7 +246,10 @@ if (scheduleid != null && multiple_users){  %>
 			<div class="row user_avatars hide">
 		
 			<!-- <div align="center" style="margin: 5px auto;width: 100%;"> -->
-			<% for(int k=0;k<=profile_list.size()-1;k++){
+			<% 
+				List<String> list=WebCalendarEventUtil.removeDuplicateScheduleIds(scheduleid);
+           		String _multiple_schedule_ids[]=list.toArray(new String[list.size()]);
+				for(int k=0;k<=profile_list.size()-1;k++){
 				 System.out.println(_multiple_schedule_ids[k]+"  schedule id");
                  OnlineCalendarPrefs online_prefs = OnlineCalendarUtil.getOnlineCalendarPrefs(_multiple_schedule_ids[k]);
 				 List<String> pro_pic=profile_list.get(k);
