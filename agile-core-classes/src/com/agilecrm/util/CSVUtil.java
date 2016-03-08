@@ -1587,8 +1587,8 @@ public class CSVUtil
 		Calendar c = Calendar.getInstance();
 		int year = Integer.parseInt(data[2].trim());
 		int day = Integer.parseInt(data[1].trim());
-		int month = Integer.parseInt(data[0].trim());
-		c.set(year, month - 1, day);
+		int month = Integer.parseInt(data[0].trim()) - 1;
+		c.set(year, month, day);
 		Date date = c.getTime();
 		if (month > 11)
 		{
