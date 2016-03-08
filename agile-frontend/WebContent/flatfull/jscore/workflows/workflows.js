@@ -92,7 +92,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         $("#workflow-unsubscribe-block").slideToggle('fast');        
     },
 
-    
+        
    /**
      * Saves the content of workflow if the form is valid. Verifies for duplicate workflow names.
      * Separate ids are given for buttons (as IDs are unique in html) but having same functionality, 
@@ -175,13 +175,15 @@ var Workflow_Model_Events = Base_Model_View.extend({
 
         // Disables save button to prevent multiple save on click event issues
         disable_save_button($(targetEl));
-        
+
+                
         var workflowJSON = {};
 
         // New Workflow or Copy Workflow
         if (App_Workflows.workflow_model === undefined || $(targetEl).attr('id') === 'duplicate-workflow-top' || $(targetEl).attr('id') === 'duplicate-workflow-bottom') 
         {
-            create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled);
+            create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled);   
+
         }
         // Update workflow
         else
@@ -199,7 +201,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 
                 enable_save_button($clicked_button);
                 
-                show_campaign_save();
+                show_campaign_save(e);
                 
                 try{
                 // Adds tag in our domain
@@ -219,7 +221,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                         $('#designer-tour').addClass("blur").removeClass("anti-blur");
                         window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
                         window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
-                        show_campaign_save("Campaign has been disabled successfully.","red");
+                        show_campaign_save(e,"Campaign has been disabled successfully.","red");
                     } else {
                         disabled.attr("data", false);
                         disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
@@ -229,7 +231,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                         window.frames[0].$('#toolbartabs').removeClass("disable-iframe");
                        // $('#designer-tour').css("pointer-events","none");
                         window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
-                        show_campaign_save("Campaign has been enabled successfully.");
+                        show_campaign_save(e,"Campaign has been enabled successfully.");
                     }
                 }
 
@@ -408,8 +410,8 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
     	    	enable_save_button($clicked_button);
     	    	
     	    	// Shows Campaign save message
-    	    	show_campaign_save();
-    	    	
+    	    	show_campaign_save(e);
+
     	    	// $('#workflowform').find('#save-workflow').removeAttr('disabled');
     	    	
     	    	// Hide edit message
@@ -524,14 +526,19 @@ function fill_logs_slate(id, type)
 
 }
 
-function show_campaign_save(message,color)
+function show_campaign_save(e,message,color)
 {
 	// Campaign save message
     var save_info;
     if(message)
         save_info = '<span style="color: green;">'+message+'</span>';
     else
+    {
 	   save_info = '<span style="color: green;">Campaign saved.</span>';
+       //Show popup modal for adding campaign in trigger or contac
+        showCampaignPopup(e);
+
+    }
 
     if(color)
         save_info = $(save_info).css("color", color);
@@ -583,6 +590,7 @@ function shareCampaign()
                     window.history.back();
                 });*/
     }, null);
+
         
 }
 function createJSON() {
@@ -621,6 +629,54 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
          $(this).find('#camp_history').addClass('hide');
          $(this).find('#camp_reports').addClass('hide');
     });
+
+   /**
+     *Script to show Popup window. when user click on save campaign 
+     *
+     **/
+   
+     function showCampaignPopup(e)
+     {
+
+        var targetEl=$(e.currentTarget);
+        var click_button= $(targetEl).attr('id');
+        var popup_status=readData("campaign-save-popup");
+
+        if(popup_status !=='true' && (click_button==='save-workflow-top' || click_button==='save-workflow-bottom' || click_button==='duplicate-workflow-top' || click_button==='duplicate-workflow-bottom'))
+        {
+            while(window.parent.$("#workflow-save-popup").length)
+                  window.parent.$("#workflow-save-popup").remove();
+
+            window.parent.workflow_alerts("Next Action ", "null" , "workflow-save-popup-modal",undefined);  
+        }
+     }
+
+    function popupCampaignContact ()
+    {
+          // window.location.hash="#contacts";
+           Backbone.history.navigate("#contacts" , {
+                trigger: true
+            });
+           window.parent.$("#workflow-save-popup").remove();
+       }
+         
+     function popupCampaignTrigger ()
+     {
+             Backbone.history.navigate("#trigger-add" , {
+                trigger: true
+            });
+             window.parent.$("#workflow-save-popup").remove();
+     }
+
+
+     function hideCampaignPopup()
+     {
+        if($("#campaign-save-popup").prop("checked"))
+            storeData("campaign-save-popup", true,10);
+        else
+            storeData("campaign-save-popup", false,10);
+      }
+
 
 function initializeWorkflowsListeners() {}
 
