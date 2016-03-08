@@ -75,13 +75,20 @@ public class TicketReportsRest
 			System.out.println("Query: " + queryString);
 
 			Collection<ScoredDocument> documents = new TicketsDocument().executeQuery(queryString, "last_updated_time",
-					"status");
+					"closed_time", "status");
 
 			for (ScoredDocument document : documents)
 			{
-				String last = "";
+				String last = "", status = document.getOnlyField("status").getText();
+
 				Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-				calendar.setTimeInMillis(Math.round(document.getOnlyField("last_updated_time").getNumber()) * 1000);
+
+				String fieldToReturn = "last_updated_time";
+
+				if (status != null && status.equalsIgnoreCase(Status.CLOSED.toString()))
+					fieldToReturn = "closed_time";
+
+				calendar.setTimeInMillis(Math.round(document.getOnlyField(fieldToReturn).getNumber()) * 1000);
 
 				if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
 					calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -119,9 +126,9 @@ public class TicketReportsRest
 				if (dataJSON.containsKey(createdtime))
 				{
 					JSONObject sourcecount1 = dataJSON.getJSONObject(createdtime);
-					count = sourcecount1.getInt(document.getOnlyField("status").getText());
+					count = sourcecount1.getInt(status);
 
-					sourcecount1.put(document.getOnlyField("status").getText(), ++count);
+					sourcecount1.put(status, ++count);
 					dataJSON.put(createdtime, sourcecount1);
 				}
 			}

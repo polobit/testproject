@@ -928,7 +928,8 @@ Deleted  {{custom1}} Campaigns<br/>
 		{{/if_equals}}
 		{{#if_equals "TICKET_ASSIGNEE_CHANGED" activity_type}}
 			{{#if user_name}}
-				{{user_name}} changed <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> assignee to <span class="inline-block first-letter-cap">{{custom2}}</span>
+				{{user_name}} changed <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> assignee to 
+					<span class="inline-block first-letter-cap">{{custom2}}</span>
 			{{else}}
 				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> assignee changed to <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
 				<small class="activities_second_line m-t-none text-sm">
