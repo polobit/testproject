@@ -347,9 +347,10 @@ var ContactsRouter = Backbone.Router.extend({
 			contactFiltersListeners();
 			contactListener();
 		} else {
-			$('#contacts-listener-container').find('.contacts-div').html(this.contactsListView.render().el);
+			$('#contacts-listener-container').find('.contacts-inner-div').html(this.contactsListView.render().el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
+			$('#bulk-action-btns > button').addClass("disabled");
 			CONTACTS_HARD_RELOAD = true;
 			
 		}
@@ -1100,9 +1101,10 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#contacts-listener-container').html(this.contact_custom_view.el);
 			contactFiltersListeners();
 		} else {
-			$('#contacts-listener-container').find('.contacts-div').html(this.contact_custom_view.el);
+			$('#contacts-listener-container').find('.contacts-inner-div').html(this.contact_custom_view.el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
+			$('#bulk-action-btns > button').addClass("disabled");
 
 			CONTACTS_HARD_RELOAD = true;
 		}
