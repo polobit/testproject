@@ -3037,3 +3037,8 @@ table.hide-head-checkbox th label.i-checks {
       visibility: hidden;
 }
 }
+
+#dashboard-video
+{
+	margin-top: 110px;
+}

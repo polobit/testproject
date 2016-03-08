@@ -18,6 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import net.sf.json.JSONObject;
 
@@ -254,6 +255,11 @@ public class DealsAPI
     {
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
+	//Some times milestone comes as null from client side, if it is null we can'tsave it.
+	if(opportunity != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
+	{
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Deal not saved properly.").build());
+	}
 	opportunity.save();
 	try
 	{
@@ -282,7 +288,12 @@ public class DealsAPI
 
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
-
+	//Some times milestone comes as null from client side, if it is null we can'tsave it.
+	if(opportunity != null && opportunity.id != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
+	{
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Deal not updated properly.").build());
+	}
+	
 	try
 	{
 	    ActivitySave.createDealEditActivity(opportunity);
