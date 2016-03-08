@@ -12,7 +12,7 @@ function initializeEmailBuilderListeners() {
     });
 
     $('#emailbuilder-listeners').on('click', '.sendTestEmailButton', function(e){
-        e.preventDefault();
+         e.preventDefault();
         if (isValidForm('#emailBuilderForm')) {
             document.getElementById('emailBuilderFrame').contentWindow.$('#sendTestEmail').trigger("click");          
         }
