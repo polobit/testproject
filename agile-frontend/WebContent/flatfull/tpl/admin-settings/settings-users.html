@@ -13,7 +13,7 @@
         {{#if this.length}}
         <div class="data">
             <div class="data-container">
-            	<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm admin-settings-bulkactions grid-checkboxes {{#is_mobile}}{{else}}  {{/is_mobile}}" >
+            	<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm admin-settings-bulkactions grid-checkboxes hide {{#is_mobile}}{{else}}  {{/is_mobile}}" >
             	 	<span style="margin: 5px 0px 5px 5px;"> 
             	 		<label class="i-checks i-checks-sm p-l-lg" style="visibility: visible;">
 				            <input type="checkbox"  class="thead_check" value="">
@@ -41,9 +41,9 @@
   	<span class='master-tag'></span>
 	<div class="b r-5x p-sm bg-white {{id}}" data="{{id}}" >
 	
-		<div class="left pos-abs" id="{{id}}">
+		<div class="left pos-abs hide" id="{{id}}">
 			<label class="i-checks i-checks-sm"> <input type="checkbox"
-				class="tbody_check grid-view-checkbox" value=""> <i></i>
+				class="tbody_check" value=""> <i></i>
 			</label>
 		</div>
 		
@@ -112,20 +112,22 @@
 <div  class='data p-b col-sm-6 admin-user_temp' style="margin-bottom:4px;" >
 <div class="b r-5x p-sm bg-white" style="height:120px;">
 
-<div class="left pos-abs">
+<div class="left pos-abs hide">
 			<label class="i-checks i-checks-sm"> <input type="checkbox disable"
 				class="tbody_check grid-view-checkbox disable" value=""> <i></i>
 			</label>
 		</div>
 <div style="margin-left: 25px;">
-<div class="pull-left m-r-xs   agile-img" style="margin-left:3px;" >
+<div class="pull-left m-r-xs   agile-img" id="admin-newuser-image">
 	<img class='img-inital r r-2x m-t-sm' style='height:62px;width:62px;' src="flatfull/images/user-default.jpg"/>
 <br>
 </div>
 
- <div>Add user to manage specific tasks by providing user level priveleges.</div>
-<a href='#users-add' class='btn btn-primary btn-sm btn-addon add-portlet add-stream-tab pos-rlt adduser' id='addUser' ><span><i class='icon-plus-sign'/></span>  Add User</a>
+ <span>Add user to manage specific tasks by providing user level priveleges.</span>
 
+<div id="#admin-newuser-adduser">
+<a href='#users-add' class='btn btn-primary btn-sm btn-addon add-portlet add-stream-tab pos-rlt' id='addUser' ><span><i class='icon-plus-sign'/></span>  Add User</a>
+</div>
 </div>
 </div>
 </div>

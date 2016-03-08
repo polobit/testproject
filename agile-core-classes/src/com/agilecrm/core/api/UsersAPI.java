@@ -205,7 +205,7 @@ public class UsersAPI
 			.entity("Can’t delete all users").build());
 
 	    // Throws exception, if user is owner
-	    if (domainUser.is_account_owner)
+	    if (domainUser.is_account_owner || domainUser.is_admin)
 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 			.entity("Master account can’t be deleted").build());
 	}

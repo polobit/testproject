@@ -3438,3 +3438,12 @@ div.user-view-actions {
 {
 	margin-left: 104px;
 }
+
+#admin-newuser-image{
+	margin-left:3px;
+	margin-top:-7px;
+}
+#admin-newuser-adduser{
+ text-align: left;
+    margin-top: 4px;	
+}
