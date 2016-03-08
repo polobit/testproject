@@ -119,19 +119,7 @@ var portlet_graph_utility = {
 														name : 'Deal',
 														data : data
 													} ],
-													exporting : {
-											    			buttons: {
-								   						   exportButton: {
-							       					 menuItems: null,
-							       					 onclick: function () { this.downloadCSV(); }
-							       					 
-							       					},
-							       					printButton: {
-							       						enabled : false
-       					}
-						       		
-						       				}
-									    },												});
+																									});
 							}
 						});
 	},
@@ -188,20 +176,6 @@ var portlet_graph_utility = {
 							name : name,
 							data : data
 						} ],
-						exporting : {
-									    	buttons: {
-								   						   exportButton: {
-							       					 menuItems: null,
-							       					 onclick: function () { this.downloadCSV(); }
-							       					 
-							       					},
-							       					printButton: {
-							       						enabled : false
-       					}
-	       		
-						       		
-						       				}
-									    },
 					});
 		});
 	},
@@ -286,20 +260,7 @@ var portlet_graph_utility = {
 													name : series_name,
 													data : funnel_data
 												} ],
-												exporting : {
-									    			buttons: {
-						   						   exportButton: {
-								       					 menuItems: null,
-								       					 onclick: function () { this.downloadCSV(); }
-								       					 
-								       					},
-								       					printButton: {
-								       						enabled : false
-								       					}
-	       		
-						       		
-						       				}
-									    },
+											
 											});
 						});
 	},
@@ -364,19 +325,7 @@ var portlet_graph_utility = {
 													}
 												},
 												series : series,
-												exporting : {
-									    			buttons: {
-						   						   exportButton: {
-							       					 menuItems: null,
-							       					 onclick: function () { this.downloadCSV(); }
-							       					 
-							       					},
-							       					printButton: {
-							       						enabled : false
-       					}
-						       		
-						       				}
-									    },
+									
 												colors : colors
 											});
 						});
@@ -465,19 +414,7 @@ var portlet_graph_utility = {
 								}
 							},
 							series : series,
-							exporting : {
-									    	buttons: {
-						   						    exportButton: {
-							       					 menuItems: null,
-							       					 onclick: function () { this.downloadCSV(); }
-							       					 
-							       					},
-							       					printButton: {
-							       						enabled : false
-       					}
-						       		
-						       				}
-									    },
+				
 							tooltip : {
 								borderWidth : 1,
 								backgroundColor : '#313030',
@@ -574,19 +511,7 @@ var portlet_graph_utility = {
 													name : 'Assigned Deals',
 													data : dealsCountList
 												} ],
-												exporting : {
-									    	buttons: {
-						   						   exportButton: {
-							       					 menuItems: null,
-							       					 onclick: function () { this.downloadCSV(); }
-							       					 
-							       					},
-							       					printButton: {
-							       						enabled : false
-       					}
-						       		
-						       				}
-									    },
+									
 											});
 						});
 	},
@@ -764,19 +689,6 @@ var portlet_graph_utility = {
 						    		}
 						        },
 						        series: series,
-						       exporting : {
-									    	buttons: {
-						   						    exportButton: {
-							       					 menuItems: null,
-							       					 onclick: function () { this.downloadCSV(); }
-							       					 
-							       					},
-							       					printButton: {
-							       						enabled : false
-       					}
-						       		
-						       				}
-									    },
 							    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
 							    legend : {
 									itemStyle : {
@@ -878,19 +790,7 @@ var portlet_graph_utility = {
 		            name: "",
 		            data: data
 		        }],
-		        exporting : {
-									    	buttons: {
-						   						   exportButton: {
-							       					 menuItems: null,
-							       					 onclick: function () { this.downloadCSV(); }
-							       					 
-							       					},
-							       					printButton: {
-							       						enabled : false
-       					}
-						       		
-						       				}
-									    },
+
 		    });
 		}
 	});
@@ -1024,19 +924,7 @@ var portlet_graph_utility = {
 													}
 												},
 												series : series,
-												exporting : {
-									    	buttons: {
-						   						    exportButton: {
-							       					 menuItems: null,
-							       					 onclick: function () { this.downloadCSV(); }
-							       					 
-							       					},
-							       					printButton: {
-							       						enabled : false
-       					}
-						       		
-						       				}
-									    },
+										
 												tooltip : {
 													borderWidth : 1,
 													backgroundColor : '#313030',
@@ -1195,19 +1083,7 @@ var portlet_graph_utility = {
 													}
 												},
 												series : series,
-												exporting : {
-									    	buttons: {
-						   						    exportButton: {
-							       					 menuItems: null,
-							       					 onclick: function () { this.downloadCSV(); }
-							       					 
-							       					},
-							       					printButton: {
-							       						enabled : false
-       					}
-						       		
-						       				}
-									    },
+										
 												tooltip : {
 													borderWidth : 1,
 													backgroundColor : '#313030',
@@ -1363,19 +1239,7 @@ setupCharts(function(){
 													name : 'Deal',
 													data : data
 												} ],
-												exporting : {
-									    	buttons: {
-						   						    exportButton: {
-							       					 menuItems: null,
-							       					 onclick: function () { this.downloadCSV(); }
-							       					 
-							       					},
-							       					printButton: {
-							       						enabled : false
-       					}
-						       		
-						       				}
-									    },
+												
 											});
 						});
 	},
@@ -1553,19 +1417,7 @@ setupCharts(function(){
 													// name: 'Deal',
 													data : data
 												} ],
-												exporting : {
-									    	buttons: {
-						   						   exportButton: {
-							       					 menuItems: null,
-							       					 onclick: function () { this.downloadCSV(); }
-							       					 
-							       					},
-							       					printButton: {
-							       						enabled : false
-       					}
-						       		
-						       				}
-									    },
+										
 											});
 						});
 	},
@@ -1653,23 +1505,15 @@ setupCharts(function(){
 														}
 													}
 												},
+												exporting :
+												{
+													enabled : false,
+												},
 												series : [ {
 													name : 'Goal',
 													data : series
 												} ],
-												exporting : {
-									    	buttons: {
-						   						   exportButton: {
-							       					 menuItems: null,
-							       					 onclick: function () { this.downloadCSV(); }
-							       					 
-							       					},
-							       					printButton: {
-							       						enabled : false
-       					}
-						       		
-						       				}
-									    },
+											
 											});
 						});
 	},
