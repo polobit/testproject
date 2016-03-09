@@ -491,18 +491,4 @@ public class TicketNotesUtil
 
 		TicketNotes.ticketNotesDao.deleteKeys(notes);
 	}
-
-	public static String br2nl(String html)
-	{
-		if (html == null)
-			return html;
-
-		Document document = Jsoup.parse(html);
-		document.outputSettings(new Document.OutputSettings().prettyPrint(false));
-		document.select("br").append("\\n");
-		document.select("p").prepend("\\n\\n");
-		String s = document.html().replaceAll("\\\\n", "\n");
-
-		return Jsoup.clean(s, "", Whitelist.none(), new Document.OutputSettings().prettyPrint(false));
-	}
 }

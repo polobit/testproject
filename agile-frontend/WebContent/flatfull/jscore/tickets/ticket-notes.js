@@ -73,26 +73,30 @@ var Tickets_Notes = {
 				
 				if(is_ticket_closed)
 	            	$(".ticket_status").val("CLOSED");
-             
-				//update model in collection
+             	
+             	var json = {};
+                
+                json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
+
+				//Update model in collection
 				if(notes_json.note_type != 'PRIVATE' && 
 					App_Ticket_Module.ticketsCollection){
                     
 					var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
                     var current_date = new Date().getTime();
                     
-   					var json = {};
-                   	json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
-					json.last_updated_time = current_date;
+   					json.last_updated_time = current_date;
 					json.closed_time= (is_ticket_closed) ? current_date : '';
 					json.last_reply_text = notes_json.plain_text;
 					json.last_updated_by = 'AGENT';
 					json.user_replies_count = notes_json.user_replies_count;
-				    json.assigneeID = model.attributes.assignee_id;	
-					ticket_model.set(json, {
+				    json.assigneeID = model.attributes.assignee_id;
+				}
+
+				ticket_model.set(json, {
 						silent : true
 					});
-				}
+
 				var next_ticket_url = $(".navigation .next-ticket").attr("href");
 
 				if(next_ticket_url){
@@ -378,31 +382,28 @@ var Tickets_Notes = {
            
 		$.each(notesCollection, function(index, note){
 			
-			 var noteAttachment=note.attachments_list;
+			if(note.note_type == "PRIVATE")
+              	return;
 
-              if(note.note_type != "PRIVATE")
-            	 notesText += note.plain_text;
+            var noteAttachment=note.attachments_list;
+
+            notesText += note.plain_text;
               
-              if(noteAttachment.length >0)
-                 notesText +="\n\nAttachments:";   
+	        if(noteAttachment.length >0)
+	            notesText +="\n\nAttachments:";   
 
-              $.each(noteAttachment,function(index,note_Attachment){
-               
-                notesText += "\n"+ (index+=1) +". "+note_Attachment.name+" - "+ encodeURI(note_Attachment.url);
-              
-             });
-             
-             notesText += "\n\n-----------------------------------------\n\n";
+	        $.each(noteAttachment,function(index,note_Attachment){
+	           
+	            notesText += "\n"+ (index+=1) +". "+note_Attachment.name+" - "+ encodeURI(note_Attachment.url);
+	          
+	        });
+	         
+            notesText += "\n\n-----------------------------------------\n\n";
 
-             notesText = notesText.replace(/<br\s*[\/]?>/gi, "\n");
-              
-          
-	    })
-
-		
+            notesText = notesText.replace(/<br\s*[\/]?>/gi, "\n");
+        });
 
 		return notesText;
-
 	},
 
 	/**
