@@ -437,7 +437,8 @@ public class CSVUtil
 		    }
 		    if (field.name.equalsIgnoreCase(Contact.COMPANY))
 		    {
-			tempContact.properties.add(new ContactField("name", csvValues[j].trim().toLowerCase(), null));
+			tempContact.properties.add(new ContactField(Contact.COMPANY, csvValues[j].trim().toLowerCase(),
+				null));
 		    }
 
 		    tempContact.properties.add(field);
