@@ -8,6 +8,39 @@
  * @author jagadeesh
  */
 
+	/*
+    get actual name and update the name of the deal
+    */
+ function inlineDealNameChange(e){
+
+    	
+    	var name = $("#inline-input").val();
+    	var lastname = $("#deals-inline").text();
+
+    	if(!name)
+    	{
+    		$("#inline-input").addClass("error-inputfield");
+          	 return;
+    	}
+
+    	if(lastname != name)
+    	{
+    		name = name.trim();
+
+    		dealNameEdit(name);
+    	}
+
+    	else
+    	{
+    		$("#inline-input").addClass("hidden");
+			$("#deals-inline").removeClass("hidden");
+			return;
+    	}
+
+    	
+
+    }
+
 var deal_tab_position_cookie_name = "deal_tab_position";
 var id;
 
@@ -50,41 +83,21 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		'click .activity-delete' : 'deleteActivity',
 		//agile-x-edit
 		'click #deals-inline' : 'dealInlineEdit', 	
-    	'blur #inline-input' : 'inlineDealNameChange',
+    	'blur #inline-input' : 'dealinlineedit',
+    	'keydown #inline-input' : 'dealNameChange'
+    },
+    dealinlineedit : function(e){
+    	inlineDealNameChange();
     },
 
-    /*
-    get actual name and update the name of the deal
-    */
-    inlineDealNameChange : function(e){
-
-    	
-    	var name = $("#inline-input").val();
-    	var lastname = $("#deals-inline").text();
-
-    	if(!name)
-    	{
-    		$("#inline-input").addClass("error-inputfield");
-          	 return;
-    	}
-
-    	if(lastname != name)
-    	{
-    		name = name.trim();
-
-    		dealNameEdit(name);
-    	}
-
-    	else
-    	{
-    		$("#inline-input").toggleClass("hidden");
-			$("#deals-inline").toggleClass("hidden");
-			return;
-    	}
-
-    	
-
+    dealNameChange : function(e)
+    {
+    	if(e.keyCode == 13)
+    	inlineDealNameChange();
     },
+
+    
+    
 
     /*deals inline edit function
     shows and hides the inline input for editing

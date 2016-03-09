@@ -104,8 +104,8 @@ function dealNameEdit(el)
 	dealModel.save(json,{ success : function(model)
 	{
 	$("#deals-inline").text(el);
-	$("#inline-input").toggleClass("hidden");
-	$("#deals-inline").toggleClass("hidden");
+	$("#inline-input").addClass("hidden");
+	$("#deals-inline").removeClass("hidden");
 	$("#inline-input").removeClass("error-inputfield");
 	App_Deal_Details.dealDetailView.model = dealModel;
 	}
