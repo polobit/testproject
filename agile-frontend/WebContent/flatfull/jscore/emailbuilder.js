@@ -6,7 +6,7 @@ function initializeEmailBuilderListeners() {
         e.preventDefault();
         if (isValidForm('#emailBuilderForm')) {
             $(".saveEmailBuilderButton").prop("disabled",true);
-            $(".saveEmailBuilderButton").html("Saving...");
+            $(".saveEmailBuilderButtonText").html("Saving...");
             document.getElementById('emailBuilderFrame').contentWindow.$('#save').trigger("click");
         }
     });
@@ -116,7 +116,7 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
         success: function (data) {
             $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
             $(".saveEmailBuilderButton",parent.document).prop("disabled",false);
-            $(".saveEmailBuilderButton",parent.document).html("Save");
+            $(".saveEmailBuilderButtonText",parent.document).html("Save");
             if(requestType == "post") {
                 window.location.hash = "email-templates";
             }
