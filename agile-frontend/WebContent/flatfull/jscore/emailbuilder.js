@@ -138,19 +138,21 @@ function sendTestEmailTemplate(fullSource,builderSource) {
             };
 
     // Verifies merge fields and gives alert
-    check_merge_fields_and_send(template);
-    var requestType = "post";
-    var message = "Test Email Sent.";
+    if ( check_merge_fields_and_send(template) ){
+        var requestType = "post";
+        var message = "Test Email Sent.";
 
-    $.ajax({
-        type: requestType, 
-        url: 'core/api/emails/send-test-email',    
-        data: template,
-        success: function (data) {
-            $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
+        $.ajax({
+            type: requestType, 
+            url: 'core/api/emails/send-test-email',    
+            data: template,
+            success: function (data) {
+                $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
             
-        },
-    });
+            },
+        });
+    }
+    
 }
 
 
@@ -189,8 +191,13 @@ function check_merge_fields_and_send(template)
      var html_body = template.html_email;
      if((subject && subject.indexOf('{{') != -1) || (text_body && text_body.indexOf('{{') != -1) || (html_body && html_body.indexOf('{{') != -1))
          {
-             show_test_email_alert();
-             return false;
+             if ( show_test_email_alert(template))
+             {
+                return true;
+             }else{
+                return false;
+             }
+             
          }
       else
          {
@@ -201,7 +208,7 @@ function check_merge_fields_and_send(template)
  
   }
   
- function show_test_email_alert(){
+ function show_test_email_alert(template){
      var title="Send Test Email";
      var message="Please observe that the merge fields in test emails would not be replaced.";
  
@@ -218,12 +225,25 @@ function check_merge_fields_and_send(template)
                     
                      // Disable and change text
                      $(this).attr('disabled', 'disabled').text("Sending");
+                     var requestType = "post";
+                    var message = "Test Email Sent.";
+
+                    $.ajax({
+                        type: requestType, 
+                        url: 'core/api/emails/send-test-email',    
+                        data: template,
+                        success: function (data) {
+                            $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
+            
+                        },
+                    });
+                     return true;
                     
                  });
  
          // On hidden
          modal.on('hidden.bs.modal', function (e) {
-            
+        
          });
      }); 
  }
