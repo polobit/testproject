@@ -450,7 +450,7 @@ function init_cal(el){
 	// Transforms the event sources to Google Calendar Events
 	fc.sourceFetchers.push(function(sourceOptions, start, end) {
 		if (sourceOptions.dataType == 'agile-events')
-			loadingGoogleEvents(el,start.getTime()/1000,end.getTime()/1000);
+			loadingGoogleEvents(App_Portlets.eventCalendar,start.getTime()/1000,end.getTime()/1000);
 	});
 
 }
@@ -459,7 +459,7 @@ function init_cal(el){
  */
 function googledata(el,response,startTime,endTime)
 {
-	gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
+	gapi.auth.setToken({ access_token : response.access_token, state : "https://www.`apis.com/auth/calendar" });
 
 	var current_date = new Date();
 	var timezone_offset = current_date.getTimezoneOffset();
@@ -483,7 +483,7 @@ function googledata(el,response,startTime,endTime)
 		}
 
 		//**Add the google Events in the list of events in events_show div **/
-		var len=$(".events_show").find('.list').find('li').length;
+		var len=$(".events_show",el).find('.list').find('li').length;
 		var date=new Date();
 		$.each(events,function(index,ev){
 			var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
@@ -565,7 +565,7 @@ function renderGoogleEvents(events,fc_event,el)
 							new_json.end=fc_event.end.getTime()/1000;
 						}
 						console.log(new_json);
-						$('#calendar_container',el).fullCalendar('renderEvent',new_json);
+						$('#calenetdar_container',el).fullCalendar('renderEvent',new_json);
 						events.push(new_json);
 					}
 				}

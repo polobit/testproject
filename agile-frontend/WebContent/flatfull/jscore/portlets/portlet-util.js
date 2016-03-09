@@ -1130,6 +1130,7 @@ var portlet_utility = {
 																	getRandomLoadingImg());
 													setPortletContentHeight(base_model);
 													App_Portlets.refetchEvents = false;
+													App_Portlets.eventCalendar=$(this);
 													minicalendar($(this));
 												});
 							});

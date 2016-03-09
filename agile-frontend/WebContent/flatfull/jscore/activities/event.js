@@ -124,9 +124,12 @@ $("#updateActivityModal").on(
 												_agile_set_prefs("current_date_calendar",a);
 										       $('.portlet_body_calendar').each(function(){
 										       	var that=$(this);
-										       	if(that.parents('.gs-w').attr('data-col')+that.parents('.gs-w').attr('data-row')==App_Portlets.currentPosition)
+										       	if(that.parents('.gs-w').attr('data-col')+that.parents('.gs-w').attr('data-row')==App_Portlets.currentPosition){
+										       	 App_Portlets.eventCalendar=that;
 										       	$('#calendar_container',that).fullCalendar( 'refetchEvents' );
+
 										       App_Portlets.refetchEvents = true;
+										   }
 										       });
 										       
 										       //_agile_delete_prefs('current_date_calendar');
@@ -932,21 +935,24 @@ function save_event(formId, modalName, isUpdate, saveBtn, el,callback)
 						event = renderEventBasedOnOwner(event);
 						if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar' && el == "Mini Calendar")
 					      {
-							if($('.minical-portlet-event').attr('data-date')!=undefined){
-								var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
+							
+						$('.portlet_body_calendar').each(function(){
+										       	var that=$(this);
+										       	if(that.parents('.gs-w').attr('data-col')+that.parents('.gs-w').attr('data-row')==App_Portlets.currentPosition){
+										       	if($('.minical-portlet-event',that).attr('data-date')!=undefined){
+								var a=new Date(parseInt($('.minical-portlet-event',that).attr('data-date')));	
 								a.setHours(0,0,0,0);
 								_agile_set_prefs("current_date_calendar",a);
 							}
 							else{
-								var a=new Date(parseInt($('.minical-portlet-event-add').attr('data-date')));	
+								var a=new Date(parseInt($('.minical-portlet-event-add',that).attr('data-date')));	
 								a.setHours(0,0,0,0);
 								_agile_set_prefs("current_date_calendar",a);
 							}
-						$('.portlet_body_calendar').each(function(){
-										       	var that=$(this);
-										       	if(that.parents('.gs-w').attr('data-col')+that.parents('.gs-w').attr('data-row')==App_Portlets.currentPosition)
+										       	 App_Portlets.eventCalendar=that;
 										       	$('#calendar_container',that).fullCalendar( 'refetchEvents' );
 										       App_Portlets.refetchEvents = true;
+										   }
 										       });
 					      }
 

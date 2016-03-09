@@ -39,8 +39,8 @@ function loadPortlets(route,el){
 	App_Portlets.adminPortlets = new Array();
 	App_Portlets.RoutePortlets=new Array();
 	App_Portlets.taskAverage = new Array();
-
-	console.log("before initialized" + App_Portlets.RoutePortlets.length);
+	if(Portlets_View!=undefined)
+	console.log("before initialized" + Portlets_View.collection.length);
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable

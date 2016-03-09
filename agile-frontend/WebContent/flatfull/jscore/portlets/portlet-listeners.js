@@ -355,6 +355,11 @@ function initializePortletsListeners() {
 				$(this).find('.fc-button').css('visibility', 'hidden');
 			});
 
+	$('.portlet_body_calendar').on('click', '.fc-button-content',
+			function(e) {
+				App_Portlets.eventCalendar=$(this).parents('.portlet_body_calendar');
+			});
+
 	$('.events_show')
 			.off(
 					'click',

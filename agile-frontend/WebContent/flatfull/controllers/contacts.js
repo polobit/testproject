@@ -1027,7 +1027,7 @@ var ContactsRouter = Backbone.Router.extend({
 				setUpContactView(el);
 
 				abortCountQueryCall();
-				loadPortlets('Contacts',el);
+				
 
 				if(is_lhs_filter) {
 
@@ -1046,6 +1046,7 @@ var ContactsRouter = Backbone.Router.extend({
 							count_message = "<small> (" + count + " Total) </small>";
 						$('#contacts-count').html(count_message);
 					}
+
 					
 				} else {	
 
@@ -1055,6 +1056,7 @@ var ContactsRouter = Backbone.Router.extend({
 					}
 
 					setupLhsFilters(el);
+					loadPortlets('Contacts',el);
 				}
 
 				if(agile_is_mobile_browser()) {
