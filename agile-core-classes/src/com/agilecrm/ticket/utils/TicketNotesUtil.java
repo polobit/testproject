@@ -95,8 +95,8 @@ public class TicketNotesUtil
 	{
 		TicketNotes ticketNotes = new TicketNotes(ticket_id, group_id, assignee_id, created_by, requester_name,
 				requester_email, removedQuotedRepliesFromPlainText(original_plain_text),
-				removedQuotedRepliesFromHTMLText(original_html_text), original_plain_text, original_html_text, note_type,
-				attachments_list, mimeObject);
+				removedQuotedRepliesFromHTMLText(original_html_text), original_plain_text, original_html_text,
+				note_type, attachments_list, mimeObject);
 
 		Key<TicketNotes> key = TicketNotes.ticketNotesDao.put(ticketNotes);
 
@@ -374,11 +374,11 @@ public class TicketNotesUtil
 
 			String[] textArray = pattern.split(text);
 
-			if (textArray.length >= 1)
+			if (textArray.length >= 2)
 				return textArray[0];
 
 			// Checking with 2 new lines and greater than delimeter
-			pattern = Pattern.compile("\n\n>");
+			pattern = Pattern.compile("\n\n>", Pattern.DOTALL);
 
 			textArray = pattern.split(text);
 
@@ -504,32 +504,5 @@ public class TicketNotesUtil
 		String s = document.html().replaceAll("\\\\n", "\n");
 
 		return Jsoup.clean(s, "", Whitelist.none(), new Document.OutputSettings().prettyPrint(false));
-	}
-
-	/** Example */
-	public static void main(String[] args) throws Exception
-	{
-		JSONArray notesArray = new JSONArray();
-
-		JSONObject json = new JSONObject();
-		json.put("img_url", "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/11.png");
-		json.put("user_name", "Sasi");
-		json.put("plain_text", "fdsafd asf dsa f dasf das ");
-
-		JSONArray attachmentsArray = new JSONArray();
-		JSONObject attchments = new JSONObject();
-		json.put("url", "attachemnt_url");
-		json.put("name", "file.pdf");
-
-		attachmentsArray.put(attchments);
-
-		json.put("attachments_exists", true);
-		json.put("attachments_list", attachmentsArray);
-
-		notesArray.put(json);
-
-		String template = "{{#note_json_array}}{{img_url}}, {{user_name}} {{plain_text}} {{#attachments_exists}}{{#attachments_list}} {{url}} {{name}} {{/attachments_list}}{{/attachments_exists}}{{/note_json_array}}";
-
-		System.out.println(MustacheUtil.compile(template, new JSONObject().put("note_json_array", notesArray)));
 	}
 }
