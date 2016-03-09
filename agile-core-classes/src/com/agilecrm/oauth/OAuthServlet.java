@@ -163,14 +163,29 @@ public class OAuthServlet extends HttpServlet {
 		req.getSession().setAttribute("service", serviceType);
 
 		System.out.println("Saved in session.............");
-
 		String authUrl = "";
-		try {
-			authUrl = provider.retrieveRequestToken(consumer,
-					getRedirectURI(req));
-		} catch (Exception e) {
-			throw new ServletException(e.getMessage());
+		if (linkType != null && linkType.equals("widget")) {
+			try {
+				String Widget_authUrl = provider.retrieveRequestToken(consumer,
+						getRedirectURI(req));
+				authUrl= Widget_authUrl;
+			} 
+			catch (Exception e) {
+				throw new ServletException(e.getMessage());
+			}
 		}
+		else{
+			try {
+				String sync_authUrl = provider.retrieveRequestToken(consumer,
+						getRedirectURI(req));
+						authUrl= sync_authUrl;;
+			} 
+			catch (Exception e) {
+				throw new ServletException(e.getMessage());
+			}
+			
+		}
+		
 
 		// System.out.println("Access token: " + consumer.getToken());
 		// System.out.println("Token secret: " + consumer.getTokenSecret());
@@ -205,13 +220,13 @@ public class OAuthServlet extends HttpServlet {
 
 	public OAuthConsumer getOAuthConsumer(String serviceType, String linkType) {
 		OAuthConsumer oauth_conusumer = null;
-		/*if (linkType != null && linkType.equals("widget")) {
+		if (linkType != null && linkType.equals("widget")) {
 			oauth_conusumer = new DefaultOAuthConsumer(Globals.QUICKBOOKS_WIDGET_CONSUMER_KEY,
-					Globals.QUICKBOOKS_WIDGET_CONSUMER_SECRET);*/
-		//} else {
+					Globals.QUICKBOOKS_WIDGET_CONSUMER_SECRET);
+		} else {
 			oauth_conusumer = new DefaultOAuthConsumer(Globals.QUICKBOOKS_CONSUMER_KEY,
 					Globals.QUICKBOOKS_CONSUMER_SECRET);
-		//}
+		}
 		return oauth_conusumer;
 	}
 

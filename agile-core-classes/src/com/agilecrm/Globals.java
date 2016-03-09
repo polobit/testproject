@@ -134,7 +134,7 @@ public class Globals
     public static final String QUICKBOOKS_CONSUMER_SECRET = "sHeU8i12GIHe6YpgdgFpNfLV0jIiZhe0iG4A9cgS";
 
 
-    //dups tested for widget working fine (untitled APP keys)
+    //New Testing Keys for widget Issue (AgileCRM Widget APP keys)
     public static final String QUICKBOOKS_WIDGET_APP_KEY = "1639cdaab6418b4af9bb9eab600468969077";
     public static final String QUICKBOOKS_WIDGET_CONSUMER_KEY = "qyprdXoSXv87x0xWWzSPPA5fOFkmDU";
     public static final String QUICKBOOKS_WIDGET_CONSUMER_SECRET = "eX0eco8KJuGStfCBKf0R59bxxEHmMAtPwUxoxA3m";

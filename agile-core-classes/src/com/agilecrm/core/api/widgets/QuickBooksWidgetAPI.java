@@ -49,7 +49,7 @@ public class QuickBooksWidgetAPI
 		if (widget != null)
 		{
 			QuickBooksUtil utilObj = new QuickBooksUtil(widget.getProperty("token"), widget.getProperty("secret"),
-			        Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET, widget.getProperty("company"));
+			        Globals.QUICKBOOKS_WIDGET_CONSUMER_KEY, Globals.QUICKBOOKS_WIDGET_CONSUMER_SECRET, widget.getProperty("company"));
 			try
 			{
 			    // Calls QuickBooksUtil method to retrieve invoices
