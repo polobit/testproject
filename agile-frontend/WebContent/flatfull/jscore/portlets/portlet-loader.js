@@ -370,8 +370,8 @@ function set_up_portlets(el, portlets_el){
     			$('.portlet_body_calendar').each(function(){
 					var that=$(this);
 
-					if($("#calendar_container").find('.fc-widget-header').length!=0)
-					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
+					if($("#calendar_container",that).find('.fc-widget-header').length!=0)
+					$('#calendar_container',that).fullCalendar('option','aspectRatio',getaspectratio(that));
 				});
     		}
     	}
@@ -387,8 +387,8 @@ function set_up_portlets(el, portlets_el){
 				$('.portlet_body_calendar').each(function(){
 					var that=$(this);
 
-					if($("#calendar_container").find('.fc-widget-header').length!=0)
-					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
+					if($("#calendar_container",that).find('.fc-widget-header').length!=0)
+					$('#calendar_container',that).fullCalendar('option','aspectRatio',getaspectratio(that));
 				$(this).find('#calendar_container').find('.fc-widget-header').each(function(){
 				$(this).text($(this).text().substring(0, 1));
 				});
