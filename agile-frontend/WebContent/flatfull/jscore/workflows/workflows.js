@@ -537,13 +537,13 @@ function show_campaign_save(e,message,color)
 	   save_info = '<span style="color: green;">Campaign saved.</span>';
        //Show popup modal for adding campaign in trigger or contac
         showCampaignPopup(e);
-
+       
     }
 
     if(color)
         save_info = $(save_info).css("color", color);
 
-	$("#workflow-msg").html(save_info).show().fadeOut(3000);
+   	$("#workflow-msg").html(save_info).show().fadeOut(3000);
 }
 
 function is_start_active(designerJSON){
@@ -637,6 +637,7 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
    
      function showCampaignPopup(e)
      {
+         e.preventDefault();
 
         var targetEl=$(e.currentTarget);
         var click_button= $(targetEl).attr('id');
@@ -644,29 +645,35 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
 
         if(popup_status !=='true' && (click_button==='save-workflow-top' || click_button==='save-workflow-bottom' || click_button==='duplicate-workflow-top' || click_button==='duplicate-workflow-bottom'))
         {
-            while(window.parent.$("#workflow-save-popup").length)
-                  window.parent.$("#workflow-save-popup").remove();
+            while($("#workflow-save-popup").length)
+                  $("#workflow-save-popup").remove();
 
-            window.parent.workflow_alerts("Next Action ", "null" , "workflow-save-popup-modal",undefined);  
-            window.parent.$("#popup-msg").show().fadeOut(10000);
+            workflow_alerts("Next Action ", "null" , "workflow-save-popup-modal", function(el){
+               
+                window.setTimeout(function () {   $(el).find("#popup-msg").fadeOut(8000); }, 500); 
+            });
         }
      }
 
     function popupCampaignContact ()
     {
+            $("#workflow-save-popup").modal("hide");
+           
           // window.location.hash="#contacts";
            Backbone.history.navigate("#contacts" , {
                 trigger: true
             });
-           window.parent.$("#workflow-save-popup").remove();
+           
        }
          
      function popupCampaignTrigger ()
-     {
+     {  
+            $("#workflow-save-popup").modal("hide");
+             
              Backbone.history.navigate("#trigger-add" , {
                 trigger: true
             });
-             window.parent.$("#workflow-save-popup").remove();
+            
      }
 
 
