@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -396,7 +397,7 @@ public class TicketWebhook extends HttpServlet
 
 				// Creating new Ticket in Ticket table
 				ticket = TicketsUtil.createTicket(groupID, null, fromName, fromEmail, msgJSON.getString("subject"),
-						ccEmails, TicketNotesUtil.removedQuotedReplies(plainText), Status.NEW, Type.PROBLEM,
+						ccEmails, TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText), Status.NEW, Type.PROBLEM,
 						Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip,
 						new ArrayList<Key<TicketLabels>>());
 
@@ -416,7 +417,7 @@ public class TicketWebhook extends HttpServlet
 				}
 
 				// Updating existing ticket
-				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, TicketNotesUtil.removedQuotedReplies(plainText),
+				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText),
 						LAST_UPDATED_BY.REQUESTER, currentTime, currentTime, null, attachmentExists);
 
 				if (ticket.status == Status.CLOSED)
@@ -435,7 +436,7 @@ public class TicketWebhook extends HttpServlet
 
 				// Logging public notes activity
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_REQUESTER_REPLIED, ticket.contactID, ticket.id,
-						html, TicketNotesUtil.removedQuotedReplies(plainText), "html_text");
+						html, TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText), "html_text");
 
 				// Sending user replied notification
 				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket#" + ticket.id);

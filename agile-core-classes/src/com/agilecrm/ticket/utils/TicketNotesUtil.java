@@ -10,10 +10,12 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
 
 import com.agilecrm.Globals;
@@ -92,8 +94,9 @@ public class TicketNotesUtil
 			throws EntityNotFoundException
 	{
 		TicketNotes ticketNotes = new TicketNotes(ticket_id, group_id, assignee_id, created_by, requester_name,
-				requester_email, removedQuotedReplies(original_plain_text), removedQuotedReplies(original_html_text),
-				original_plain_text, original_html_text, note_type, attachments_list, mimeObject);
+				requester_email, removedQuotedRepliesFromPlainText(original_plain_text),
+				removedQuotedRepliesFromHTMLText(original_html_text), original_plain_text, original_html_text, note_type,
+				attachments_list, mimeObject);
 
 		Key<TicketNotes> key = TicketNotes.ticketNotesDao.put(ticketNotes);
 
@@ -175,7 +178,13 @@ public class TicketNotesUtil
 		json.put("created_time", DateUtil.getCalendarString(notes.created_time, "MMM d, h:mm a (z)", ""));
 
 		json.put("plain_text", notes.plain_text);
-		json.put("html_text", TicketNotesUtil.parseHtmlText(notes.html_text));
+
+		String htmlText = notes.html_text;
+
+		if (StringUtils.isBlank(htmlText))
+			htmlText = notes.plain_text;
+
+		json.put("html_text", htmlText);
 
 		if (notes.attachments_list != null && notes.attachments_list.size() > 0)
 		{
@@ -349,28 +358,69 @@ public class TicketNotesUtil
 	}
 
 	/**
-	 * Removes quoted replies in received ticket.
+	 * Removes quoted replies in received ticket plain text.
 	 * 
-	 * @param text
-	 * @param fromAddress
-	 * @return sent only last typed reply
+	 * @return text
 	 */
-	public static String removedQuotedReplies(String text)
+	public static String removedQuotedRepliesFromPlainText(String text)
 	{
 		try
 		{
 			if (StringUtils.isBlank(text))
 				return text;
 
+			// Checking with on.... wrote: delimeter
 			Pattern pattern = Pattern.compile("On.*?wrote:.*?", Pattern.DOTALL);
-			text = pattern.split(text)[0];
+
+			String[] textArray = pattern.split(text);
+
+			if (textArray.length >= 1)
+				return textArray[0];
+
+			// Checking with 2 new lines and greater than delimeter
+			pattern = Pattern.compile("\n\n>");
+
+			textArray = pattern.split(text);
+
+			if (textArray.length >= 1)
+				return textArray[0];
+
+			return text;
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 
 		return text;
+	}
+
+	/**
+	 * Removes quoted replies in received ticket html text.
+	 * 
+	 * @return text
+	 */
+	public static String removedQuotedRepliesFromHTMLText(String html)
+	{
+		try
+		{
+			if (StringUtils.isBlank(html))
+				return html;
+
+			Document doc = Jsoup.parse(html, "UTF-8");
+
+			// Right now considering only mails from gmail
+			for (Element element : doc.select("div.gmail_extra"))
+				element.remove();
+
+			return doc.toString();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+
+		return html;
 	}
 
 	/**
