@@ -34,9 +34,9 @@ public class UservoiceWidgetAPI {
 				 UservoiceAPI uv = new UservoiceAPI(domain, apiKey, apiSecret);
 				 JSONObject resultObject = new JSONObject();				 
 				 JSONObject userInfo = uv.getUserInfo(email);
-				 JSONObject comments = uv.getComments(email);
+				 JSONObject comments = uv.getuserComments(email);
 				  resultObject.put("userInfo",userInfo);
-				  resultObject.put("comments", comments);
+				  resultObject.put("comments", "148025571");
 				 return resultObject.toString();
 			}
 		} catch (Exception e) {

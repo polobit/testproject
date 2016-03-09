@@ -32,24 +32,24 @@
 
 <script id="uservoice-profile-template" type="text/html">
 <div class="wrapper-sm">
-{{#if users}}
+{{#if userInfo}}
 <a class="thumb pull-left m-r-sm">
-	{{#if avatar_url}}
-		<img src="{{avatar_url}}" width="36" height="36" alt="" class="img-circle"/>
+	{{#if userInfo.avatar_url}}
+		<img src="{{userInfo.avatar_url}}" width="36" height="36" alt="" class="img-circle"/>
 	{{else}}
 		<img src="https://secure.gravatar.com/avatar/51200e80ab8b12eaaae230fcfe7dd1c6?d=https%3A//assets.zendesk.com/images/types/user_sm.png&s=30&r=g" alt="" class="img-circle"/>
 	{{/if}}
 </a>
 <div class="clear">
-	{{#if name}}
-		<a class="text-cap text-base m-b-xs">{{name}}</a>	
+	{{#if userInfo.name}}
+		<a class="text-cap text-base m-b-xs">{{userInfo.name}}</a>	
 	{{/if}}
 		<div class="row">
 			<div class="col-md-5">
 				<div class="pull-right">:</div> Role
 			</div>
 			<div class="col-md-6 p-n">
-				{{#if is_admin}}
+				{{#if userInfo.is_admin}}
 					 Admin
 				{{else}}
 					 General User
@@ -61,7 +61,7 @@
 				<div class="pull-right">:</div> Status
 			</div>
 			<div class="col-md-6 p-n">
-				{{#if_equals allowed_state "allowed"}}
+				{{#if_equals userInfo.allowed_state "allowed"}}
 					 Active
 				{{else}}
 					 Blocked

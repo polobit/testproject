@@ -53,7 +53,7 @@ public class UservoiceAPI {
 	private void loadSuggestions() {
 		String url = "https://" + subDomain
 				+ ".uservoice.com/api/v2/admin/suggestions";
-		JSONObject resultObj = getData(url);
+		JSONObject resultObj = getData(url, null);
 		if (resultObj != null && resultObj != null) {
 			try {
 				suggestions = new HashMap<String, String>();
@@ -72,10 +72,9 @@ public class UservoiceAPI {
 	}
 
 	public JSONObject getUserInfo(String email) {
-		String url = "https://" + subDomain
-				+ ".uservoice.com/api/v2/admin/users?per_page=1&email_address="
-				+ email;
-		JSONObject resultObj = getData(url);
+		String url = "https://" + subDomain + ".uservoice.com/api/v2/admin/users";
+		String parameters = "per_page=1&email_address="+ email;
+		JSONObject resultObj = getData(url, parameters);
 		if (resultObj != null) {
 			try {
 				JSONArray usersArray = resultObj.getJSONArray("users");
@@ -85,6 +84,13 @@ public class UservoiceAPI {
 				e.printStackTrace();
 			}
 		}
+		return resultObj;
+	}
+	
+	public JSONObject getuserComments(String userId){
+		String url = "https://"+subDomain+ ".uservoice.com/api/v1/users/"+userId+"/comments.json";
+		String parameters = "client="+API_KEY;
+		JSONObject resultObj = getData(url, parameters);
 		return resultObj;
 	}
 
@@ -102,7 +108,9 @@ public class UservoiceAPI {
 			// Send post request
 			con.setDoOutput(true);
 			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-			wr.writeBytes(parameters);
+			if(parameters != null){
+				wr.writeBytes(parameters);
+			}			
 			wr.flush();
 			wr.close();
 
@@ -133,10 +141,14 @@ public class UservoiceAPI {
 		return resultObj;
 	}
 
-	public JSONObject getData(String url) {
+	public JSONObject getData(String url, String parameters) {
 		JSONObject resultObj = null;
 		try {
-			URL obj = new URL(url);
+			if(parameters != null){
+				url += "?"+parameters;
+			}
+			
+			URL obj = new URL(url);			
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 			// optional default is GET
@@ -166,15 +178,45 @@ public class UservoiceAPI {
 		}
 		return resultObj;
 	}
+	
+	public JSONObject getJSONData(String url) {
+		JSONObject resultObj = null;
+		try {
+			URL obj = new URL(url);
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+			// optional default is GET
+			con.setRequestMethod("GET");
+
+			// add request header
+			con.setRequestProperty("User-Agent", USER_AGENT);
+			con.setRequestProperty("Authorization", "Bearer  " + accessToken);
+
+			int responseCode = con.getResponseCode();
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+			System.out.println(response.toString());
+			resultObj = new JSONObject(response.toString());
+		} catch (Exception e) {
+			System.out.println("Error occured while accessing the resource " + e.getMessage());
+		}
+		return resultObj;
+	}
 
 	public JSONObject getComments(String email) {
-		String url = "https://"
-				+ subDomain
-				+ ".uservoice.com/api/v2/admin/comments?page=1&per_page=100&includes="
-				+ email;
-		JSONObject resultObj = new JSONObject(getData(url));
-		if(resultObj != null)
-		System.out.println(resultObj.toString());
+		String url = "https://"	+ subDomain + ".uservoice.com/api/v2/admin/comments";
+		String parameters = "page=1&per_page=100&includes="+ email;
+		JSONObject resultObj = getData(url, parameters);
+		if(resultObj != null){
+			System.out.println(resultObj.toString());
+		}
 		return resultObj;
 	}
 
@@ -184,8 +226,7 @@ public class UservoiceAPI {
 //		String API_SECRET = "Sv7Wib2alD1K2Ih4Ns9ytgFp33ERTmFedlr6k9pA";
 //
 //		UservoiceAPI uv = new UservoiceAPI("masala124", API_KEY, API_SECRET);
-//		JSONObject userInfo = uv.getUserInfo(email);
-//		System.out.println(userInfo);
-//		System.out.println(uv.getComments(email));
+//		JSONObject userInfo = uv.getUserInfo(email);			
+//		uv.getuserComments("148025571");
 //	}
 }

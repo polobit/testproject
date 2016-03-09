@@ -44,31 +44,30 @@ function loadData(contact_id){
 		queueGetRequest(queueName, "core/api/widgets/uservoice/profile/" + uservoice_Plugin_Id + "/"+ Email, "", 
 		function success(data){		
 			console.log(data);	
+			var sendData = {};
 			if(data){
-				data = JSON.parse(data);
+				data = JSON.parse(data);												
+				if(data.userInfo.email_address){						
+					sendData.userInfo = data.userInfo;
+				}
 			}			
-			getTemplate('uservoice-profile', data.userInfo, undefined, function(template_ui){				
+			getTemplate('uservoice-profile', sendData, undefined, function(template_ui){				
 		 		if(!template_ui){
 		    		return;
 		    	}
 		    	$('#Uservoice').html(template_ui);
 		    }, "#Uservoice");
+
+		    console.log("Error in email id");
+			uservoiceOBJ = data.comments.comments;
+			loadUservoiceComments(0);
 		}, 
 		function error(data){
 			console.log("Has error in uservoice");
 			$('#Uservoice').html('<div class="wrapper-sm">Error occured while fetching comments</div>');
-		});
-
-		// console.log("Uservoice Data *** Comments");
-		// console.log(result);		
-		// uservoiceOBJ = {};	
-		// uservoiceCommentsCount = 1;			
-		// uservoiceOBJ.comments = result.responseJSON.comments;
-		// loadUservoiceComments(0);					
+		});				
 	}else{		
-		console.log("Error in email id");
-		uservoiceOBJ = {};
-		loadUservoiceComments(0);
+		$('#Uservoice').html('<div class="wrapper-sm">Email not found.</div>');
 	}	
 }
 
