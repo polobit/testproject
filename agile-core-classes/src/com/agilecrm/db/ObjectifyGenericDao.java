@@ -35,7 +35,7 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
-import com.agilecrm.contact.sync.ImportStatus;
+import com.agilecrm.contact.upload.blob.status.ImportStatus;
 import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -225,10 +225,10 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(LandingPageCNames.class);
 	ObjectifyService.register(Goals.class);
 
+	ObjectifyService.register(Webhook.class);
+
 	// CSV Import status
 	ObjectifyService.register(ImportStatus.class);
-
-	ObjectifyService.register(Webhook.class);
 
     }
 
