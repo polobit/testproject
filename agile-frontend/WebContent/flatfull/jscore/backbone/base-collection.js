@@ -133,7 +133,7 @@ deleteConfirm : function(e)
        					},
        					error : function(response)
 						{
-							confirmModal.find(".modal-footer").find("#delete-user").html('<small class="text-danger" style="font-size:15px;margin-right:172px;"><i>Sorry, can not delete user having admin privilege.</i></small>');
+							confirmModal.find(".modal-footer").find("#delete-user").html('<small class="text-danger" style="font-size:15px;margin-right:172px;">Sorry, can not delete user having admin privilege.</small>');
 							console.log(response);
 
 						}
