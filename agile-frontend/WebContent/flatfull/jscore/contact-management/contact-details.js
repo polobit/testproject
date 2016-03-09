@@ -154,6 +154,30 @@ function inlineNameChange(e,data){
           $("#Contact-input-firstname").removeClass("error-inputfield");
           $("#Contact-input-lastname").removeClass("error-inputfield"); 
     }
+
+   function inlineCompanyNameChange(el){
+    
+    console.log("inlineCompanyNameChange");
+    var companyname = $("#company-inline-input").val();
+    console.log(companyname);
+    if(!companyname)
+    {
+      $("#company-inline-input").addClass("error-inputfield");
+      return;
+     }
+     companyname=companyname.trim();
+     if(agile_crm_is_model_property_changed("name", companyname)){
+       // Update first name
+      agile_crm_update_contact("name", companyname);
+          
+         }
+         /* toggle fields*/
+          $("#company-inline-input").addClass("hidden");
+          $("#company-name-text").text(companyname).removeClass("hidden");
+          $("#company-inline-input").removeClass("error-inputfield");
+
+  }
+
 /**
  * Shows all the domain users names as ul drop down list 
  * to change the owner of a contact 
@@ -328,6 +352,8 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 
     	/** Inliner edits input fields **/
     	'click #contactName'  : 'togglehiddenfield',
+      'keydown #Contact-input-firstname' : 'contactNameChange',
+      'keydown  #Contact-input-lastname' : 'contactNameChange',
     	//'blur #Contact-input input ' : 'inlineNameChange',
         /** End of inliner edits **/
 
@@ -346,13 +372,21 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 
 		/** inliner edits input fields**/
 		'click #company-name-text '  : 'toggleinline_company',
-		'blur #company-Input input ' : 'inlineCompanyNameChange'
+		'blur #company-Input input ' : 'companyInlineEdit',
+    'keydown #company-inline-input' : 'companyNameChange'  
     },
     
     
    
-    
-    /*
+  /*xedit enter key press event listening and calling the name name chanage method*/  
+  
+  contactNameChange : function(e)
+  {
+    if(e.keyCode == 13)
+      inlineNameChange(e);
+  },
+
+/*
 show and hide the input for editing the contact name and saving that
 */
 	togglehiddenfield :function(e)
@@ -369,6 +403,12 @@ show and hide the input for editing the contact name and saving that
 
 	},
 
+
+  companyNameChange : function(e)
+  {
+    if(e.keyCode == 13)
+     inlineCompanyNameChange(e);
+  },
 	/*
 	show and hide the input for editing the company name and save that
 	*/
@@ -378,28 +418,10 @@ show and hide the input for editing the contact name and saving that
 		if(!$("#company-inline-input").hasClass("hidden"))
 			$("#company-inline-input").focus();
 	},
-
-	inlineCompanyNameChange :function(e){
-		console.log("inlineCompanyNameChange");
-		var companyname = $("#company-inline-input").val();
-		console.log(companyname);
-		if(!companyname){
-          	$("#company-inline-input").addClass("error-inputfield");
-          	 return;
-          }
-        companyname=companyname.trim();
-        if(agile_crm_is_model_property_changed("name", companyname)){
-				// Update first name
-          		agile_crm_update_contact("name", companyname);
-          
-         }
-         /* toggle fields*/
-          $("#company-inline-input").toggleClass("hidden");
-          $("#company-name-text").text(companyname).toggleClass("hidden");
-          $("#company-inline-input").removeClass("error-inputfield");
-
-	},
-
+  companyInlineEdit : function (e){
+    inlineCompanyNameChange(e);
+  },
+	
 	contactActionsGridDelete: function(e){
 		
 		e.preventDefault();
