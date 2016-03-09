@@ -7,7 +7,7 @@
 <%@page contentType="text/html; charset=UTF-8" %>
 <%
 
-	  if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+	/*  if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
 	} 
@@ -17,7 +17,7 @@
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
 	}
-
+*/
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");
 
@@ -89,7 +89,6 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 body{
 
 	background-image: url('<%=S3_STATIC_IMAGE_PATH%>images/signup-<%=randomBGImageInteger%>-low.jpg');
-
 }
 .overlay:before{
 	content: "";
@@ -250,15 +249,31 @@ $(document).ready(function() {
     newImg.onload = function() {
     $("body").css("background-image","url('"+this.src+"')");
      }
-
    newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/signup-<%=randomBGImageInteger%>-high.jpg';
-
-   console.log(newImg.src);
+   
+  console.log(newImg.src);
     if($("#error-area").text().trim())
     	$("#error-area").slideDown("slow");
-
-
+preload_login_pages();
 });
+
+ function preload_login_pages()
+			{
+
+			for(var i=1; i < 10; i++){
+
+			$('<img/>', {
+				class: 'hide',
+				src: '<%=S3_STATIC_IMAGE_PATH%>/images/signup-' + i + '-high.jpg',
+			}).appendTo('body');
+
+			$('<img/>', {
+				class: 'hide',
+				src: '<%=S3_STATIC_IMAGE_PATH%>/images/signup-' + i + '-low.jpg',
+				}).appendTo('body');
+
+			}
+		}
   </script>
 
   <!-- Clicky code -->
@@ -266,9 +281,11 @@ $(document).ready(function() {
   <script type="text/javascript">try{ clicky.init(100729733); }catch(e){}</script>
 <script src="//platform.twitter.com/oct.js" type="text/javascript"></script>
 <script type="text/javascript">twttr.conversion.trackPid('nu0pq', { tw_sale_amount: 0, tw_order_quantity: 0 });</script>
+
 <noscript>
 <img height="1" width="1" style="display:none;" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=nu0pq&p_id=Twitter&tw_sale_amount=0&tw_order_quantity=0" />
 <img height="1" width="1" style="display:none;" alt="" src="//t.co/i/adsct?txn_id=nu0pq&p_id=Twitter&tw_sale_amount=0&tw_order_quantity=0" />
+
 </noscript>
 	</body>
 	</html>
