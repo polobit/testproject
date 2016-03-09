@@ -664,8 +664,11 @@ var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.j
 
 <!-- JQUery Core and UI CDN --> 
 <!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
+console.log("before dashboard load");
 head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min.js?_=' + _AGILE_VERSION, function(){
         load_globalize();
+        showVideoForRegisteredUser();
+
 })
 // , LIB_PATH + 'lib/backbone-route-filter.js'
 
@@ -725,6 +728,23 @@ function load_globalize()
 
 }
 
+function showVideoForRegisteredUser(){
+    console.log("Ref = " + document.referrer);
+
+    if(!document.referrer || document.referrer.indexOf("register") == -1)
+         return;
+    var domainuser_video_cookie = CURRENT_DOMAIN_USER.domain+'_video_cookie';
+    if(!localStorage.getItem(domainuser_video_cookie))
+    {     
+       $("#dashboard_video").modal("show");
+       var $frame = $("#dashboard_video iframe");
+      $frame.attr("src", $frame.attr("data-source"));
+    }       
+    
+    localStorage.setItem(domainuser_video_cookie,true);
+    
+}
+
 </script>
 
 
@@ -737,7 +757,25 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
 </script>
 <!-- End of ClickDesk -->
 
-
+ <!--video on dashboard -->
+ <div class="modal  fade hidden-xs" id="dashboard_video"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" id="dashboard-video" >
+        <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" data-dismiss="modal">&times;</button>
+          <h3 id="myModalLabel">Welcome to Agile CRM</h3>
+          <small>With Sales & Marketing Automation, Telephony, Web Engagement, Social Media Integration, Email Campaigns and Mobile Marketing.</small>
+        </div>      
+        <div class="modal-body">
+              <div class="embed-responsive embed-responsive-16by9">
+                      <iframe class="embed-responsive-item" data-source="https://www.youtube.com/embed/9aH60N6HPcc?list=PLqZv4FUxASTctDCZmdVbheU75Y3Szk9Ny" frameborder="0" allowfullscreen></iframe>
+              </div>                     
+        </div>
+               
+        
+        </div>
+        </div>
+  </div>
 
 </body>
 </html>

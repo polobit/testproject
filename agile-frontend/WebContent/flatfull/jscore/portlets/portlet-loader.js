@@ -504,7 +504,7 @@ function loadGoogleEventsForPortlets(p_el,startTime,endTime){
 		if (response)
 		{
 
-		head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
+		head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=25', function()
 		{
 			setupGC(function()
 			{
