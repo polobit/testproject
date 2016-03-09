@@ -17,7 +17,6 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
-import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.deferred.ChangeAssigneeDeferredTask;
 import com.agilecrm.ticket.deferred.CloseTicketsDeferredTask;
 import com.agilecrm.ticket.deferred.DeleteTicketsDeferredTask;

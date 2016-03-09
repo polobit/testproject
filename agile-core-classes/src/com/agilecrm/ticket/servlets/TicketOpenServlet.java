@@ -48,7 +48,7 @@ public class TicketOpenServlet extends HttpServlet
 
 			NamespaceManager.set(namespace);
 
-			TicketNotesUtil.updateRequestedViewedTime(ticketID, notesID);
+			TicketNotesUtil.ticketNoteViewedTime(ticketID, notesID);
 		}
 		catch (Exception e)
 		{

@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,7 +16,6 @@ import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -36,7 +34,6 @@ import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
-import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
@@ -165,101 +162,6 @@ public class TicketsUtil
 		}
 
 		return null;
-	}
-
-	/**
-	 * 
-	 * @param group_id
-	 * @param assignee_id
-	 * @param requester_name
-	 * @param requester_email
-	 * @param subject
-	 * @param cc_emails
-	 * @param plain_text
-	 * @param status
-	 * @param type
-	 * @param priority
-	 * @param source
-	 * @param attachments
-	 * @param ipAddress
-	 * @param tags
-	 * @return
-	 */
-	public static Tickets createTicket(Long group_id, Long assignee_id, String requester_name, String requester_email,
-			String subject, List<String> cc_emails, String plain_text, Status status, Type type, Priority priority,
-			Source source, CreatedBy createdBy, Boolean attachments, String ipAddress,
-			List<Key<TicketLabels>> labelsKeysList)
-	{
-		Tickets ticket = new Tickets();
-
-		try
-		{
-			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
-			ticket.groupID = group_id;
-			ticket.labels_keys_list = labelsKeysList;
-			ticket.status = status;
-			ticket.type = type;
-			ticket.priority = priority;
-			ticket.source = source;
-			ticket.created_by = createdBy;
-
-			Long epochTime = Calendar.getInstance().getTimeInMillis();
-
-			if (assignee_id != null)
-			{
-				ticket.assignee_id = new Key<DomainUser>(DomainUser.class, assignee_id);
-				ticket.assigned_time = epochTime;
-			}
-			else
-				ticket.assigned_to_group = true;
-
-			ticket.requester_name = requester_name;
-			ticket.requester_email = requester_email;
-			ticket.subject = subject;
-			ticket.cc_emails = cc_emails;
-			ticket.first_notes_text = plain_text;
-			ticket.last_reply_text = plain_text;
-			ticket.attachments_exists = attachments;
-
-			ticket.created_time = epochTime;
-			ticket.last_updated_time = epochTime;
-			ticket.last_customer_replied_time = epochTime;
-			ticket.last_updated_by = LAST_UPDATED_BY.REQUESTER;
-			ticket.requester_ip_address = ipAddress;
-			ticket.user_replies_count = 1;
-
-			/**
-			 * Checking if new ticket requester is exists in Contacts
-			 */
-			Contact contact = ContactUtil.searchContactByEmail(requester_email);
-
-			if (contact == null)
-				contact = ContactUtil.createContact(requester_name, requester_email);
-
-			ticket.contact_key = new Key<Contact>(Contact.class, contact.id);
-			ticket.contactID = contact.id;
-
-			// Save ticket
-			ticket.saveWithNewID();
-			// Tickets.ticketsDao.put(ticket);
-
-			// Create search document
-			new TicketsDocument().add(ticket);
-
-			// Logging ticket created activity
-			ActivityUtil.createTicketActivity(ActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "", plain_text,
-					"last_reply_text");
-
-			// Execute triggers
-			TicketTriggerUtil.executeTriggerForNewTicket(ticket);
-		}
-		catch (Exception e)
-		{
-			System.out.println("ExceptionUtils.getFullStackTrace(e): " + ExceptionUtils.getFullStackTrace(e));
-			e.printStackTrace();
-		}
-
-		return ticket;
 	}
 
 	/**
@@ -1048,6 +950,9 @@ public class TicketsUtil
 
 	/**
 	 * 
+	 * @param contactID
+	 * @return
+	 * @throws JSONException
 	 */
 	public static List<Tickets> getTicketsByContactID(Long contactID) throws JSONException
 	{
@@ -1058,24 +963,25 @@ public class TicketsUtil
 	}
 
 	/**
-	 * @throws Exception
+	 * Returns set of all ticket keys which are over due
 	 * 
 	 */
-	public static List<Key<Tickets>> getOverdueTickets() throws Exception
+	public static Set<Key<Tickets>> getOverdueTickets()
 	{
 		String query = "NOT status:" + Status.CLOSED + " AND due_date <="
 				+ (Calendar.getInstance().getTimeInMillis() / 1000);
 
 		System.out.println("Overdue tickets query: " + query);
 
-		JSONObject resultJSON = new TicketsDocument().searchDocuments(query, "", "created_time", 1000);
+		//Initializing idsfetcher object with query string
+		ITicketIdsFetcher idsFetcher = new FilterTicketIdsFetcher(query);
 
-		JSONArray keysArray = resultJSON.getJSONArray("keys");
+		Set<Key<Tickets>> keys = new HashSet<Key<Tickets>>();
 
-		List<Key<Tickets>> keys = new ArrayList<Key<Tickets>>();
+		while (idsFetcher.hasNext())
+			keys.addAll(idsFetcher.next());
 
-		for (int i = 0; i < keysArray.length(); i++)
-			keys.add((Key<Tickets>) keysArray.get(i));
+		System.out.println("Keys set size: " + keys.size());
 
 		return keys;
 	}
@@ -1116,7 +1022,7 @@ public class TicketsUtil
 
 			String subject = "Getting started with Help Desk";
 
-			Tickets ticket = TicketsUtil.createTicket(group.id, null, "Customer", "customer@domain.com", subject,
+			Tickets ticket = new Tickets(group.id, null, "Customer", "customer@domain.com", subject,
 					new ArrayList<String>(), plainText, Status.NEW, Type.PROBLEM, Priority.MEDIUM, Source.EMAIL,
 					CreatedBy.CUSTOMER, false, "[142.152.23.23]", new ArrayList<Key<TicketLabels>>());
 

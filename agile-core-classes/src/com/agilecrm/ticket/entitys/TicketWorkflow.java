@@ -2,6 +2,12 @@ package com.agilecrm.ticket.entitys;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Utility class
+ * 
+ * @author Mantra
+ *
+ */
 @XmlRootElement
 public class TicketWorkflow
 {

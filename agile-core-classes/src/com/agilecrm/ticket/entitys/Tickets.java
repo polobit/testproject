@@ -2,6 +2,7 @@ package com.agilecrm.ticket.entitys;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Embedded;
@@ -13,13 +14,17 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
@@ -238,29 +243,29 @@ public class Tickets extends Cursor implements Serializable
 	 * Stores ticket created source EMAIL or WEB_FORM
 	 */
 	public Source source = Source.EMAIL;
-	
+
 	public static enum CreatedBy
 	{
 		CUSTOMER, AGENT
 	};
-	
+
 	/**
 	 * Stores who created the ticket
 	 */
 	public CreatedBy created_by = CreatedBy.CUSTOMER;
-	
+
 	/**
 	 * Stores customer country to generate country wise reports
 	 */
-	public String country = "";
-	public String city = "";
+	// public String country = "";
+	// public String city = "";
 
 	/**
 	 * Stores number of times public notes were added by both Agent and
 	 * Customer. Used to generate first contact resolution report.
 	 */
 	public Integer user_replies_count = 1;
-	
+
 	/**
 	 * Stores number of times public notes were added by both Agent and
 	 * Customer. Used to generate first contact resolution report.
@@ -318,14 +323,13 @@ public class Tickets extends Cursor implements Serializable
 	 */
 	@NotSaved
 	public List<Long> labels = new ArrayList<Long>();
-	
+
 	/**
 	 * Util attribute using when creating new ticket from admin dashboard.
 	 */
 	@NotSaved
 	public List<Long> contact_ids = new ArrayList<Long>();
-	
-	
+
 	/**
 	 * Default constructor
 	 */
@@ -340,6 +344,96 @@ public class Tickets extends Cursor implements Serializable
 	public Tickets(Long id)
 	{
 		this.id = id;
+	}
+
+	/**
+	 * 
+	 * @param group_id
+	 * @param assignee_id
+	 * @param requester_name
+	 * @param requester_email
+	 * @param subject
+	 * @param cc_emails
+	 * @param plain_text
+	 * @param status
+	 * @param type
+	 * @param priority
+	 * @param source
+	 * @param attachments
+	 * @param ipAddress
+	 * @param tags
+	 * @return
+	 */
+	public Tickets(Long group_id, Long assignee_id, String requester_name, String requester_email, String subject,
+			List<String> cc_emails, String plain_text, Status status, Type type, Priority priority, Source source,
+			CreatedBy createdBy, Boolean attachments, String ipAddress, List<Key<TicketLabels>> labelsKeysList)
+	{
+		try
+		{
+			this.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
+			this.groupID = group_id;
+			this.labels_keys_list = labelsKeysList;
+			this.status = status;
+			this.type = type;
+			this.priority = priority;
+			this.source = source;
+			this.created_by = createdBy;
+
+			Long epochTime = Calendar.getInstance().getTimeInMillis();
+
+			if (assignee_id != null)
+			{
+				this.assignee_id = new Key<DomainUser>(DomainUser.class, assignee_id);
+				this.assigned_time = epochTime;
+			}
+			else
+				this.assigned_to_group = true;
+
+			this.requester_name = requester_name;
+			this.requester_email = requester_email;
+			this.subject = subject;
+			this.cc_emails = cc_emails;
+			this.first_notes_text = plain_text;
+			this.last_reply_text = plain_text;
+			this.attachments_exists = attachments;
+
+			this.created_time = epochTime;
+			this.last_updated_time = epochTime;
+			this.last_customer_replied_time = epochTime;
+			this.last_updated_by = LAST_UPDATED_BY.REQUESTER;
+			this.requester_ip_address = ipAddress;
+			this.user_replies_count = 1;
+
+			/**
+			 * Checking if new ticket requester is exists in Contacts
+			 */
+			Contact contact = ContactUtil.searchContactByEmail(requester_email);
+
+			if (contact == null)
+				contact = ContactUtil.createContact(requester_name, requester_email);
+
+			this.contact_key = new Key<Contact>(Contact.class, contact.id);
+			this.contactID = contact.id;
+
+			// Save ticket
+			this.saveWithNewID();
+			// Tickets.ticketsDao.put(ticket);
+
+			// Create search document
+			new TicketsDocument().add(this);
+
+			// Logging ticket created activity
+			ActivityUtil.createTicketActivity(ActivityType.TICKET_CREATED, this.contactID, this.id, "", plain_text,
+					"last_reply_text");
+
+			// Execute triggers
+			TicketTriggerUtil.executeTriggerForNewTicket(this);
+		}
+		catch (Exception e)
+		{
+			System.out.println("ExceptionUtils.getFullStackTrace(e): " + ExceptionUtils.getFullStackTrace(e));
+			e.printStackTrace();
+		}
 	}
 
 	/**

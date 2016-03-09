@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
@@ -105,11 +106,13 @@ public class TicketNotes
 	/**
 	 * Stores original notes content in plain text format
 	 */
+	@JsonIgnore
 	public String original_plain_text = "";
 
 	/**
 	 * Stores original notes content in html text format
 	 */
+	@JsonIgnore
 	public String original_html_text = "";
 
 	/**
@@ -187,7 +190,7 @@ public class TicketNotes
 		this.note_type = note_type;
 		this.attachments_list = attachments_list;
 		this.created_time = Calendar.getInstance().getTimeInMillis();
-		
+
 		this.mime_object = mimeObject;
 	}
 

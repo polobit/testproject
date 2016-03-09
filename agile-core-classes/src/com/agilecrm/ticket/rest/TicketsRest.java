@@ -383,7 +383,7 @@ public class TicketsRest
 					labels_keys_list.add(new Key<TicketLabels>(TicketLabels.class, labelID));
 
 			// Creating new Ticket in Ticket table
-			ticket = TicketsUtil.createTicket(groupID, assigneeID, ticket.requester_name, ticket.requester_email,
+			ticket = new Tickets(groupID, assigneeID, ticket.requester_name, ticket.requester_email,
 					ticket.subject, ticket.cc_emails, plain_text, ticket.status, ticket.type, ticket.priority,
 					ticket.source, ticket.created_by, attachmentExists, "", labels_keys_list);
 
@@ -1045,7 +1045,7 @@ public class TicketsRest
 
 				String message = "Hi!..\r\n\r\nThis is test message. Please ignore.\r\n\r\nThank you\r\nSasi Krishna";
 
-				Tickets ticket = TicketsUtil.createTicket(group.id, null, "Sasi", "sasi@clickdesk.com",
+				Tickets ticket = new Tickets(group.id, null, "Sasi", "sasi@clickdesk.com",
 						"Test ticket created from rest method", new ArrayList<String>(), message, Status.NEW,
 						Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, true, "[142.152.23.23]",
 						new ArrayList<Key<TicketLabels>>());

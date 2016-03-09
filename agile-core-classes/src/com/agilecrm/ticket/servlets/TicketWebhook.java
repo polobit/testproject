@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -207,13 +206,13 @@ public class TicketWebhook extends HttpServlet
 			// Check if any attachments exists
 			Boolean attachmentExists = msgJSON.has("attachments");
 
-			List<TicketDocuments> attachmentURLs = new ArrayList<TicketDocuments>();
+			List<TicketDocuments> documentsList = new ArrayList<TicketDocuments>();
 
 			try
 			{
-				if (msgJSON.has("attachments"))
+				if (attachmentExists)
 				{
-					JSONObject attachments = msgJSON.getJSONObject("attachments");
+					documentsList = saveAttachments(msgJSON);
 
 					try
 					{
@@ -224,52 +223,6 @@ public class TicketWebhook extends HttpServlet
 					catch (Exception e)
 					{
 						// No need to print stack trace
-					}
-
-					// Iterating every attachment and saving it to cloud
-					for (Iterator iter = attachments.keys(); iter.hasNext();)
-					{
-						JSONObject fileJSON = attachments.getJSONObject((String) iter.next());
-
-						String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
-						boolean isBase64Encoded = false;
-
-						if (fileJSON.has("base64"))
-							isBase64Encoded = fileJSON.getBoolean("base64");
-
-						System.out.println("fileName: " + fileName);
-						System.out.println("type: " + fileType);
-						System.out.println("base64: " + isBase64Encoded);
-
-						byte[] bytes = null;
-
-						// Decoding file content with Base64Decoder if it is
-						// encoded
-						if (isBase64Encoded)
-							bytes = Base64.decodeBase64(fileJSON.getString("content").getBytes(StandardCharsets.UTF_8));
-						else
-							bytes = fileJSON.getString("content").getBytes(StandardCharsets.UTF_8);
-
-						// Preparing GCS options
-						GcsFileOptions options = new GcsFileOptions.Builder().mimeType(fileType)
-								.contentEncoding("UTF-8").acl("public-read")
-								.addUserMetadata("domain", NamespaceManager.get()).build();
-
-						// Creating service object to writer instance
-						GCSServiceAgile service = new GCSServiceAgile(currentTime + fileName, "ticket-attachments",
-								options);
-
-						// Getting the writer object to save file to GCS
-						GcsOutputChannel writer = service.getOutputchannel();
-
-						writer.write(ByteBuffer.wrap(bytes));
-						writer.close();
-
-						// Saving file URL to document object
-						TicketDocuments document = new TicketDocuments(fileName, fileType, (long) bytes.length,
-								service.getFilePathToDownload());
-
-						attachmentURLs.add(document);
 					}
 				}
 
@@ -298,63 +251,22 @@ public class TicketWebhook extends HttpServlet
 					{
 						JSONObject fileJSON = images.getJSONObject((String) iter.next());
 
-						String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type"), cid = fileName;
+						TicketDocuments document = saveImage(fileJSON);
 
-						System.out.println("fileName: " + fileName);
-						System.out.println("type: " + fileType);
-						// System.out.println("base64: " +
-						// fileJSON.getBoolean("base64"));
+						if (document == null)
+							continue;
 
-						String contentType = URLConnection.guessContentTypeFromName(fileName);
-
-						System.out.println("contentType: " + contentType);
-
-						if (StringUtils.isBlank(contentType))
-						{
-							switch (fileType)
-							{
-							case "image/png":
-								fileName += ".png";
-								break;
-							case "image/jpeg":
-								fileName += ".jpg";
-								break;
-							default:
-								break;
-							}
-						}
-
-						// By default all images would be base64 encoded so
-						// converting them back by decoding
-						byte[] bytes = Base64.decodeBase64(fileJSON.getString("content"));
-
-						GcsFileOptions options = new GcsFileOptions.Builder().mimeType(fileType)
-								.contentEncoding("UTF-8").acl("public-read")
-								.addUserMetadata("domain", NamespaceManager.get()).build();
-
-						GCSServiceAgile service = new GCSServiceAgile(currentTime + fileName, "ticket-attachments",
-								options);
-
-						GcsOutputChannel writer = service.getOutputchannel();
-
-						writer.write(ByteBuffer.wrap(bytes));
-						writer.close();
-
-						Elements elements = doc.getElementsByAttributeValue("src", "cid:" + cid);
+						Elements elements = doc.getElementsByAttributeValue("src", "cid:" + fileJSON.getString("name"));
 
 						if (elements == null || elements.size() == 0)
 						{
-							TicketDocuments document = new TicketDocuments(fileName, fileType, (long) bytes.length,
-									service.getFilePathToDownload());
-
-							attachmentURLs.add(document);
-
+							documentsList.add(document);
 							continue;
 						}
 
 						Element element = elements.first();
 
-						element.attr("src", service.getFilePathToDownload());
+						element.attr("src", document.url);
 
 						plainText = plainText.replace("[image: " + element.attr("alt") + "]", element.outerHtml());
 					}
@@ -396,9 +308,9 @@ public class TicketWebhook extends HttpServlet
 				}
 
 				// Creating new Ticket in Ticket table
-				ticket = TicketsUtil.createTicket(groupID, null, fromName, fromEmail, msgJSON.getString("subject"),
-						ccEmails, TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText), Status.NEW, Type.PROBLEM,
-						Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip,
+				ticket = new Tickets(groupID, null, fromName, fromEmail, msgJSON.getString("subject"),
+						ccEmails, TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText), Status.NEW,
+						Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip,
 						new ArrayList<Key<TicketLabels>>());
 
 				BulkActionNotifications.publishNotification("New ticket #" + ticket.id + " received");
@@ -417,8 +329,9 @@ public class TicketWebhook extends HttpServlet
 				}
 
 				// Updating existing ticket
-				ticket = TicketsUtil.updateTicket(ticketID, ccEmails, TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText),
-						LAST_UPDATED_BY.REQUESTER, currentTime, currentTime, null, attachmentExists);
+				ticket = TicketsUtil.updateTicket(ticketID, ccEmails,
+						TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText), LAST_UPDATED_BY.REQUESTER,
+						currentTime, currentTime, null, attachmentExists);
 
 				if (ticket.status == Status.CLOSED)
 				{
@@ -443,9 +356,8 @@ public class TicketWebhook extends HttpServlet
 			}
 
 			// Creating new Notes in TicketNotes table
-			TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, groupID, ticket.assigneeID,
-					CREATED_BY.REQUESTER, fromName, fromEmail, plainText, html, NOTE_TYPE.PUBLIC, attachmentURLs,
-					msgJSON.toString());
+			TicketNotesUtil.createTicketNotes(ticket.id, groupID, ticket.assigneeID, CREATED_BY.REQUESTER, fromName,
+					fromEmail, plainText, html, NOTE_TYPE.PUBLIC, documentsList, msgJSON.toString());
 
 			if (!isNewTicket)
 			{
@@ -466,5 +378,140 @@ public class TicketWebhook extends HttpServlet
 			System.out.println("ExceptionUtils.getFullStackTrace(e): " + ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Writes attachment objects to GCS and returns {@link List} of
+	 * {@link TicketDocuments} objects which contains file name, size and URL
+	 * 
+	 * @param msgJSON
+	 * @return
+	 */
+	public static List<TicketDocuments> saveAttachments(JSONObject msgJSON)
+	{
+		List<TicketDocuments> documents = new ArrayList<>();
+
+		try
+		{
+			JSONObject attachments = msgJSON.getJSONObject("attachments");
+
+			// Iterating every attachment and saving it to cloud
+			for (Iterator iter = attachments.keys(); iter.hasNext();)
+			{
+				JSONObject fileJSON = attachments.getJSONObject((String) iter.next());
+
+				String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
+				boolean isBase64Encoded = false;
+
+				if (fileJSON.has("base64"))
+					isBase64Encoded = fileJSON.getBoolean("base64");
+
+				System.out.println("fileName: " + fileName);
+				System.out.println("type: " + fileType);
+				System.out.println("base64: " + isBase64Encoded);
+
+				byte[] bytes = null;
+
+				// Decoding file content with Base64Decoder if it is
+				// encoded
+				if (isBase64Encoded)
+					bytes = Base64.decodeBase64(fileJSON.getString("content").getBytes(StandardCharsets.UTF_8));
+				else
+					bytes = fileJSON.getString("content").getBytes(StandardCharsets.UTF_8);
+
+				// Saving file to GCS
+				GCSServiceAgile service = saveFileToGCS(fileName, fileType, bytes);
+
+				// Saving file URL to document object
+				documents.add(new TicketDocuments(fileName, fileType, (long) bytes.length, service
+						.getFilePathToDownload()));
+			}
+
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+
+		return documents;
+	}
+
+	/**
+	 * Writes given image to GCS and returns {@link TicketDocuments} object
+	 * which contains file name, URL and size.
+	 * 
+	 * @param fileJSON
+	 * @return
+	 */
+	public static TicketDocuments saveImage(JSONObject fileJSON)
+	{
+		try
+		{
+			String fileName = fileJSON.getString("name"), fileType = fileJSON.getString("type");
+
+			System.out.println("fileName: " + fileName);
+			System.out.println("type: " + fileType);
+
+			String contentType = URLConnection.guessContentTypeFromName(fileName);
+
+			System.out.println("contentType: " + contentType);
+
+			if (StringUtils.isBlank(contentType))
+			{
+				switch (fileType)
+				{
+				case "image/png":
+					fileName += ".png";
+					break;
+				case "image/jpeg":
+					fileName += ".jpg";
+					break;
+				default:
+					break;
+				}
+			}
+
+			// By default all images would be base64 encoded so
+			// converting them back by decoding
+			byte[] bytes = Base64.decodeBase64(fileJSON.getString("content"));
+
+			// Saving file to GCS
+			GCSServiceAgile service = saveFileToGCS(fileName, fileType, bytes);
+
+			return new TicketDocuments(fileName, fileType, (long) bytes.length, service.getFilePathToDownload());
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+
+		return null;
+	}
+
+	/**
+	 * Writes file content to GCS and returns service object to get file path.
+	 * 
+	 * @param fileName
+	 * @param fileType
+	 * @param fileContent
+	 * @param currentTime
+	 * @return
+	 * @throws IOException
+	 */
+	public static GCSServiceAgile saveFileToGCS(String fileName, String fileType, byte[] fileContent)
+			throws IOException
+	{
+		GcsFileOptions options = new GcsFileOptions.Builder().mimeType(fileType).contentEncoding("UTF-8")
+				.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+
+		GCSServiceAgile service = new GCSServiceAgile((Calendar.getInstance().getTimeInMillis()) + fileName,
+				"ticket-attachments", options);
+
+		GcsOutputChannel writer = service.getOutputchannel();
+
+		writer.write(ByteBuffer.wrap(fileContent));
+		writer.close();
+
+		return service;
 	}
 }

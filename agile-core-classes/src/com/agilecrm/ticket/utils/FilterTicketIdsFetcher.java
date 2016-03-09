@@ -23,6 +23,8 @@ import com.google.appengine.api.search.SearchServiceFactory;
 import com.googlecode.objectify.Key;
 
 /**
+ * Fetches ticket ids for a given query string based on iterator pattern.
+ * 
  * {@link ContactFilterIdsResultFetcher}
  * 
  * @author Sasi on 18-Nov-2015
@@ -39,6 +41,21 @@ public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 
 	String queryString = null;
 
+	public FilterTicketIdsFetcher(String queryString)
+	{
+		super();
+
+		try
+		{
+			this.queryString = queryString;
+			count = new TicketsDocument().getTicketsCount(queryString);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+	}
+
 	public FilterTicketIdsFetcher(List<SearchRule> conditions)
 	{
 		super();
@@ -46,7 +63,7 @@ public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 		try
 		{
 			queryString = TicketFiltersUtil.getQueryFromConditions(conditions);
-			count = new  TicketsDocument().getTicketsCount(queryString);
+			count = new TicketsDocument().getTicketsCount(queryString);
 		}
 		catch (Exception e)
 		{

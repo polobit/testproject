@@ -377,8 +377,16 @@ public class TicketNotesUtil
 			if (textArray.length >= 2)
 				return textArray[0];
 
-			// Checking with 2 new lines and greater than delimeter
+			// Checking with \n and greater than delimeter
 			pattern = Pattern.compile("\n\n>", Pattern.DOTALL);
+
+			textArray = pattern.split(text);
+
+			if (textArray.length >= 1)
+				return textArray[0];
+			
+			// Checking with \r\n and greater than delimeter
+			pattern = Pattern.compile("\r\n\r\n>", Pattern.DOTALL);
 
 			textArray = pattern.split(text);
 
@@ -429,7 +437,7 @@ public class TicketNotesUtil
 	 * @param notesID
 	 * @throws Exception
 	 */
-	public static void updateRequestedViewedTime(String ticketID, String notesID) throws Exception
+	public static void ticketNoteViewedTime(String ticketID, String notesID) throws Exception
 	{
 		if (StringUtils.isBlank(ticketID) || StringUtils.isBlank(notesID))
 			return;

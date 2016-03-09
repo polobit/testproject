@@ -1,6 +1,7 @@
 package com.agilecrm.ticket.rest;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -48,7 +49,7 @@ public class CheckTicketSLADeferred implements DeferredTask
 
 			NamespaceManager.set(namespace);
 
-			List<Key<Tickets>> keys = TicketsUtil.getOverdueTickets();
+			Set<Key<Tickets>> keys = TicketsUtil.getOverdueTickets();
 			
 			System.out.println("Namespace: " + namespace);
 			System.out.println("Ticket keys found: " + keys);

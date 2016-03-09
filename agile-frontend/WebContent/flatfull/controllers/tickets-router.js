@@ -49,20 +49,18 @@
 		"ticket-report/:report_type" : "ticketReport"
 	},
 
+	/**
+	 * Default root path provided in main menu
+	 */
 	tickets: function(){
-		/*App_Ticket_Module.ticketsByGroup(DEFAULT_GROUP_ID, 'new');*/
+		
 		App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
 	},
 
 	/**
 	 * Shows new ticket form
 	 */
-	 newTicket : function(){
-
-	 	App_Ticket_Module.renderNewTicketModalView();
-	 },
-
-	 renderNewTicketModalView: function(){
+	renderNewTicketModalView: function(){
 
 		//Rendering root template
 		getTemplate("ticket-new-modal", {}, undefined, function(template_ui){
@@ -72,22 +70,30 @@
 
 			var el = $(template_ui);
 
+			//Appending template to ticket modals container
 			$('#ticket-modals').html(el);
+
+			//Triggering modal show event
 			$('#new-ticket-modal').modal('show');
 
+
+			//Showing modal would take some milliseconds so execution rest of code after 200ms
 			setTimeout(function(){
+
+				//Fetching all groups, assignees and appending them to select dropdown
 				fillSelect('groupID', '/core/api/tickets/new-ticket', '', function(collection){
 					$('#groupID').html(getTemplate('select-assignee-dropdown', collection.toJSON()));
 				}, '', false, el);
 
-				$('[data-toggle="tooltip"]').tooltip();
+				//$('[data-toggle="tooltip"]').tooltip();
 
-				//Initializing type ahead for tags
+				//Initializing type ahead for labels
 				Ticket_Labels.showSelectedLabels(new Array(), $(el));
 
 				//Initializing type ahead for cc emails
 				agile_type_ahead("cc_email_field", el, tickets_typeahead, function(arg1, arg2){
 
+					//Upon selection of any contact in cc field, this callback will be executed
 					arg2 = arg2.split(" ").join("");
 
 					var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
@@ -95,7 +101,9 @@
 					if(!email || email == 'No email')
 						return;
 
+					//Appending cc email template
 					$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
+
         			$('#cc_email_field').val('');
 
         	  	},undefined, undefined, 'core/api/search/');
@@ -107,6 +115,7 @@
 
 					var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
 
+					//Showing error if the selected contact doesn't have email
 					if(!email || email == 'No email'){
 						var $span = $('.form-action-error');
 
@@ -115,8 +124,7 @@
 						setTimeout(function(){
 							$span.html('');
 						}, 4000);
-					}
-					else{
+					}else{
 						setTimeout(function(){
 
 							$('#requester_email', el).val(email);
@@ -129,6 +137,8 @@
 
 				//Initializing click event on add new contact link
 				el.on('click', '.add-ticket-contact', function(e){
+
+					//Toggle views between search contact and add contact
 					$('div.new-contact-row').toggle();
 					$('div.search-contact-row').toggle();
 
@@ -138,11 +148,14 @@
 				//Initializing click event on create ticket button
 				el.on('click', '#create-ticket', function(e){
 
+					//Aborting execution if form is invalid 
 					if (!isValidForm($('#new-ticket', el)))
 						return;
 
+					//Serializing form and preparing data
 					var json = serializeForm('new-ticket');
 
+					//Fetching selected assignee ID
 					var assignee_id = $('#groupID option:selected').data('assignee-id');
 
 					if(assignee_id)
@@ -158,6 +171,7 @@
 					if(email)
 						json.requester_email = email;
 
+					//Disable create ticket button
 					disable_save_button($(this));
 					
 					var $that = $(this);
@@ -174,8 +188,8 @@
 
 							if(err_cbk)
 								err_cbk(model);
-						}}
-					);
+						}
+					});
 				});
 			}, 200);
 		});	
