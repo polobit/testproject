@@ -588,6 +588,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 		try
 		{
+			// Assigning Random avatar
+			if (pic == null)
+				pic = new UserPrefs().chooseRandomAvatar();
 			
 			dao.put(this);
 
