@@ -31,20 +31,24 @@
 </script>
 
 <script id="uservoice-profile-template" type="text/html">
-<div class="wrapper-sm">
 {{#if userInfo}}
-<a class="thumb pull-left m-r-sm">
-	{{#if userInfo.avatar_url}}
-		<img src="{{userInfo.avatar_url}}" width="36" height="36" alt="" class="img-circle"/>
-	{{else}}
-		<img src="https://secure.gravatar.com/avatar/51200e80ab8b12eaaae230fcfe7dd1c6?d=https%3A//assets.zendesk.com/images/types/user_sm.png&s=30&r=g" alt="" class="img-circle"/>
-	{{/if}}
-</a>
-<div class="clear">
-	{{#if userInfo.name}}
-		<a class="text-cap text-base m-b-xs">{{userInfo.name}}</a>	
-	{{/if}}
-		<div class="row">
+
+<div class="wrapper-sm">
+  <div class="row">
+  		<div class="col-md-3">
+		<a class="thumb m-r-sm">
+			{{#if userInfo.avatar_url}}
+				<img src="{{userInfo.avatar_url}}" width="36" height="36" alt="" class="img-circle"/>
+			{{else}}
+				<img src="https://secure.gravatar.com/avatar/51200e80ab8b12eaaae230fcfe7dd1c6?d=https%3A//assets.zendesk.com/images/types/user_sm.png&s=30&r=g" alt="" class="img-circle"/>
+			{{/if}}	
+		</a>
+  </div>
+  <div class="col-md-9">  	
+  	{{#if userInfo.name}}
+			<a class="text-cap text-base m-b-xs">{{userInfo.name}}</a>	
+	{{/if}}		
+	<div class="row">
 			<div class="col-md-5">
 				<div class="pull-right">:</div> Role
 			</div>
@@ -68,40 +72,27 @@
 				{{/if_equals}}
 			</div>
 		</div>
-{{else}}
-	User data not found.
-{{/if}}
+  	</div>
+  </div>
+<div class="clear-fix"></div>
 </div>
+<div id="uservoice-comments"></div>
+{{else}}
+	<div class="wrapper-sm">
+		User not found.
+	</div>
+{{/if}}
 </script>
 
 <script id="uservoice-transactions-template" type="text/html">
-{{#if transaction.length}}
-	{{#each transaction}}
+{{#if comments.length}}
+	{{#each comments}}
 		<li class="list-group-item r-none b-l-none b-r-none" style="width:249px;">
 			<div class="clear">							
-				<a class="col-md-7 p-none text-left text-ellipsis c-p text-info" title="{{orderId}}" data-toggle="collapse" href="#collapse-{{id}}" >
-					Order ID: #{{orderId}}
-				</a>
-				<div class="col-md-5 p-none text-right">$ {{amount}}</div>	
+				<p>{{text}}</p>
+				<p>{{getSuggestionName suggestion.id}}</p>
 				<div class="clearfix"></div>	
-				<div class="pull-left">Status</div>
-				<div class="pull-right text-ellipsis text-right" style="width: 165px;" title="{{brainTreeStatus status}}">{{brainTreeStatus status}}</div>
-				<div class="clearfix"></div>	
-			</div>		
-			<div class="clearfix"></div>					
-			<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
-				<div class="col-md-5 p-none text-left">Tax Amount</div>
-				<div class="col-md-7 p-none text-right text-ellipsis" title="{{taxAmount}}">$ {{taxAmount}}</div>
-				<div class="clearfix"></div>
-
-				<div class="col-md-5 p-none text-left">Order ID</div>
-				<div class="col-md-7 p-none text-right text-ellipsis" title="{{orderId}}">{{orderId}}</div>
-				<div class="clearfix"></div>
-
-				<div class="col-md-7 p-none text-left">Purchase Order No</div>
-				<div class="col-md-5 p-none text-right text-ellipsis" title="{{purchaseId}}">{{purchaseId}}</div>
-				<div class="clearfix"></div>								
-			</div>
+			</div>												
 			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" createdDate}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" createdDate}}</time></small>
 		</li>
 	{{/each}}

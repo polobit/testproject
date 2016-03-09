@@ -17,7 +17,7 @@ public class UservoiceAPI {
 	private static final String USER_AGENT = "Mozilla/5.0";
 	private String subDomain;
 	private String accessToken;
-	private HashMap<String, String> suggestions;
+	JSONObject suggestionsObject;
 
 	// App Test Keys.
 	private String API_KEY;
@@ -55,15 +55,14 @@ public class UservoiceAPI {
 				+ ".uservoice.com/api/v2/admin/suggestions";
 		JSONObject resultObj = getData(url, null);
 		if (resultObj != null && resultObj != null) {
-			try {
-				suggestions = new HashMap<String, String>();
+			try {			
+				suggestionsObject = new JSONObject();
 				JSONArray suggestionsArray = resultObj
 						.getJSONArray("suggestions");
 				for (int i = 0; i < suggestionsArray.length(); i++) {
 					JSONObject object = suggestionsArray.getJSONObject(i);
-					suggestions.put(object.getString("id"),
-							object.getString("title"));
-				}
+					suggestionsObject.put(object.getString("id"), object.getString("title"));
+				}				
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -72,8 +71,9 @@ public class UservoiceAPI {
 	}
 
 	public JSONObject getUserInfo(String email) {
-		String url = "https://" + subDomain + ".uservoice.com/api/v2/admin/users";
-		String parameters = "per_page=1&email_address="+ email;
+		String url = "https://" + subDomain
+				+ ".uservoice.com/api/v2/admin/users";
+		String parameters = "per_page=1&email_address=" + email;
 		JSONObject resultObj = getData(url, parameters);
 		if (resultObj != null) {
 			try {
@@ -86,10 +86,11 @@ public class UservoiceAPI {
 		}
 		return resultObj;
 	}
-	
-	public JSONObject getuserComments(String userId){
-		String url = "https://"+subDomain+ ".uservoice.com/api/v1/users/"+userId+"/comments.json";
-		String parameters = "client="+API_KEY;
+
+	public JSONObject getuserComments(String userId) {
+		String url = "https://" + subDomain + ".uservoice.com/api/v1/users/"
+				+ userId + "/comments.json";
+		String parameters = "client=" + API_KEY;
 		JSONObject resultObj = getData(url, parameters);
 		return resultObj;
 	}
@@ -108,9 +109,9 @@ public class UservoiceAPI {
 			// Send post request
 			con.setDoOutput(true);
 			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-			if(parameters != null){
+			if (parameters != null) {
 				wr.writeBytes(parameters);
-			}			
+			}
 			wr.flush();
 			wr.close();
 
@@ -144,11 +145,11 @@ public class UservoiceAPI {
 	public JSONObject getData(String url, String parameters) {
 		JSONObject resultObj = null;
 		try {
-			if(parameters != null){
-				url += "?"+parameters;
+			if (parameters != null) {
+				url += "?" + parameters;
 			}
-			
-			URL obj = new URL(url);			
+
+			URL obj = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 			// optional default is GET
@@ -178,55 +179,14 @@ public class UservoiceAPI {
 		}
 		return resultObj;
 	}
-	
-	public JSONObject getJSONData(String url) {
-		JSONObject resultObj = null;
-		try {
-			URL obj = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-			// optional default is GET
-			con.setRequestMethod("GET");
-
-			// add request header
-			con.setRequestProperty("User-Agent", USER_AGENT);
-			con.setRequestProperty("Authorization", "Bearer  " + accessToken);
-
-			int responseCode = con.getResponseCode();
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					con.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-			System.out.println(response.toString());
-			resultObj = new JSONObject(response.toString());
-		} catch (Exception e) {
-			System.out.println("Error occured while accessing the resource " + e.getMessage());
-		}
-		return resultObj;
-	}
-
-	public JSONObject getComments(String email) {
-		String url = "https://"	+ subDomain + ".uservoice.com/api/v2/admin/comments";
-		String parameters = "page=1&per_page=100&includes="+ email;
-		JSONObject resultObj = getData(url, parameters);
-		if(resultObj != null){
-			System.out.println(resultObj.toString());
-		}
-		return resultObj;
-	}
-
-//	public static void main(String args[]) {
-//		String email = "premtammina22@gmail.com";
-//		String API_KEY = "Od0Vo5spH4BeFOwotefuw";
-//		String API_SECRET = "Sv7Wib2alD1K2Ih4Ns9ytgFp33ERTmFedlr6k9pA";
-//
-//		UservoiceAPI uv = new UservoiceAPI("masala124", API_KEY, API_SECRET);
-//		JSONObject userInfo = uv.getUserInfo(email);			
-//		uv.getuserComments("148025571");
-//	}
+	// public static void main(String args[]) {
+	// String email = "premtammina22@gmail.com";
+	// String API_KEY = "Od0Vo5spH4BeFOwotefuw";
+	// String API_SECRET = "Sv7Wib2alD1K2Ih4Ns9ytgFp33ERTmFedlr6k9pA";
+	//
+	// UservoiceAPI uv = new UservoiceAPI("masala124", API_KEY, API_SECRET);
+	// JSONObject userInfo = uv.getUserInfo(email);
+	// uv.getuserComments("148025571");
+	// }
 }

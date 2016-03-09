@@ -17,7 +17,6 @@ $(function()
 		return getPropertyValue(items, name);
 	});
 
-
 	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
 	{
 		if(amount == 0){
@@ -7006,3 +7005,8 @@ Handlebars.registerHelper('multiple_Property_Element_List', function(name, prope
 				return options.fn(matching_properties_list);
 		});
 
+Handlebars.registerHelper('getSuggestionName', function(suggestionId){
+		if(suggestionId){
+			return uservoiceOBJ.suggestions[suggestionId];
+		}		
+});

@@ -16,23 +16,23 @@ function loadUservoiceComments(offSet){
 		}
 
 		getTemplate('uservoice-transactions', result, undefined, function(template_inv){						
-			$('#Uservoice').html(template_inv);
+			$('#uservoice-comments').html(template_inv);
 		},null);
 
 		if(uservoiceOBJ.comments && uservoiceOBJ.comments.length > 5){
-			$('#Uservoice').append(showMoreUservoiceCommments);
+			$('#uservoice-comments').append(showMoreUservoiceCommments);
 		}
 	}else if(offSet > 0  && (offSet+5) < uservoiceOBJ.comments.length){
 		var result = {};
 		result.comments = uservoiceOBJ.comments.slice(offSet, (offSet+5));
 		$('.uservoice_show_more').remove();
-		$('#Uservoice').apped(getTemplate('uservoice-transactions', result));
-		$('#Uservoice').append(showMoreUservoiceCommments);
+		$('#uservoice-comments').apped(getTemplate('uservoice-transactions', result));
+		$('#uservoice-comments').append(showMoreUservoiceCommments);
 	}else{
 		var result = {};
 		result.comments = uservoiceOBJ.comments.slice(offSet, uservoiceOBJ.comments.length);
 		$('.uservoice_show_more').remove();
-		$('#Uservoice').append(getTemplate('uservoice-transactions', result));
+		$('#uservoice-comments').append(getTemplate('uservoice-transactions', result));
 	}
 }
 
@@ -49,6 +49,8 @@ function loadData(contact_id){
 				data = JSON.parse(data);												
 				if(data.userInfo.email_address){						
 					sendData.userInfo = data.userInfo;
+					uservoiceOBJ.suggestions = data.suggestions;					
+					uservoiceOBJ.comments = data.comments.comments;
 				}
 			}			
 			getTemplate('uservoice-profile', sendData, undefined, function(template_ui){				
@@ -58,8 +60,7 @@ function loadData(contact_id){
 		    	$('#Uservoice').html(template_ui);
 		    }, "#Uservoice");
 
-		    console.log("Error in email id");
-			uservoiceOBJ = data.comments.comments;
+		   
 			loadUservoiceComments(0);
 		}, 
 		function error(data){
