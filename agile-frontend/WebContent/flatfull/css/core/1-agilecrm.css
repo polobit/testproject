@@ -3357,3 +3357,9 @@ table.hide-head-checkbox th label.i-checks {
 {
 	margin-top: 110px;
 }
+
+/* Fix for timeline support issue starting */
+.item table.body td.center {
+    position: static!important;
+}
+/* Fix for timeline support issue ending */
