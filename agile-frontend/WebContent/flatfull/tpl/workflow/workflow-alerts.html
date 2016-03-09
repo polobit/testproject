@@ -187,19 +187,21 @@
     		<div class="modal-content">
 				<div class="modal-header">
 					<button class="close" data-dismiss="modal">x</button>
-							<h3 class="modal-title"><i class="icon-edit"></i> <span class="glyphicon glyphicon-arrow-right"></span> <strong> {{title}} </strong> Add contacts to the Campaign</h3>
+					<h3 class="modal-title">
+						<h6 style="margin:5px"><span style="color: green;">Campaign saved successfully</span></h6>
+						<i class="glyphicon glyphicon-arrow-right"></i> <strong> {{title}} </strong> Add contacts to the Campaign</h3>
 				</div>
 				<div class="modal-body">
 					<form id="workflow-save-popup-form" >
 						<fieldset>            
                 			<div class="control-group form-group">
-	                			<div class="radio col-sm-6" >
-   							  		<label onclick="popupCampaignTrigger();">
-   								 		<i class="fa fa-bullseye icon-4x" style="margin-left: 40px;"></i><br> Add Trigger to Campaign</label>
-								</div>
-								<div class="radio col-sm-6" style="margin-top:10px;">
+								<div class="radio col-sm-6">
    							  			<label  onclick="popupCampaignContact();">
    								 	<i class="icon-user icon-4x" style="margin-left: 40px;"></i><br> Add Contacts Manually</label>
+								</div>
+								<div class="radio col-sm-6" style="margin-top:10px;" >
+   							  		<label onclick="popupCampaignTrigger();">
+   								 		<i class="fa fa-bullseye icon-4x" style="margin-left: 40px;"></i><br> Add Trigger to Campaign</label>
 								</div>
 							</div>
 						</fieldset>
