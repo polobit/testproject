@@ -1469,7 +1469,8 @@ var Tickets = {
 		if (Tickets.message_draft_timer)
 			clearInterval(Tickets.message_draft_timer);
 
-		if (!ele  || $(ele).hasClass("forward"))
+		if (!ele  || $(ele).hasClass("forward") 
+			||$(ele).hasClass('create_ticket_textarea'))
 	    	return;
 
 		Tickets.message_draft_timer = setInterval(function() {
@@ -1497,7 +1498,6 @@ var Tickets = {
 			return {"comment" : value};
 		else
 			return {"reply" : value};
-
 	},
 
 	draft_typed_message :  function(key, ticketDraftJSON) {
@@ -1551,10 +1551,7 @@ var Tickets = {
 
 		draft_mssgs[key] = ticketDraft;
 		sessionStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
-	
 	}
-
-
 };
 
 function tickets_typeahead(data){

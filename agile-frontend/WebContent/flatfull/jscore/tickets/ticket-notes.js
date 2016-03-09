@@ -71,20 +71,22 @@ var Tickets_Notes = {
 	                showNotyPopUp('information', msg, 'bottomRight', 5000);
 				}
 				
-				if(is_ticket_closed)
-	            	$(".ticket_status").val("CLOSED");
-             	
-             	var json = {};
+				var json = {};
                 
-                json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
+                if(is_ticket_closed){
+	            	$(".ticket_status").val("CLOSED");
+	            	json.status = 'CLOSED'; 
+	            }
+
+                var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
 
 				//Update model in collection
 				if(notes_json.note_type != 'PRIVATE' && 
 					App_Ticket_Module.ticketsCollection){
                     
-					var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
-                    var current_date = new Date().getTime();
+					var current_date = new Date().getTime();
                     
+                    json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
    					json.last_updated_time = current_date;
 					json.closed_time= (is_ticket_closed) ? current_date : '';
 					json.last_reply_text = notes_json.plain_text;

@@ -438,10 +438,10 @@
                       {{#if_equals reply_type "comment"}} 
 
                       <div class="btn-group dropdown p-none">
-                        <button class="btn btn-gray btn-sm send-reply private">Add Notes</button>
+                        <button class="btn btn-gray btn-sm send-reply private" data-loading-text="Add Notes">Add Notes</button>
                         <button class="ticket-addnote-close btn btn-gray btn-sm" {{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                          <li><a href="javascript:void(0);" class="send-reply private close-ticket">Add Notes & Close Ticket</a></li>
+                          <li><a href="javascript:void(0);" class="send-reply private close-ticket" data-loading-text="Add Notes & Close Ticket">Add Notes & Close Ticket</a></li>
                         </ul>
                       </div> 
                       {{/if_equals}} 

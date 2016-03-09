@@ -158,7 +158,9 @@
 					if(email)
 						json.requester_email = email;
 
-					enable_save_button($(this));
+					disable_save_button($(this));
+					
+					var $that = $(this);
 
 					var newTicketModel = new BaseModel();
 					newTicketModel.url = '/core/api/tickets/new-ticket';
@@ -167,6 +169,9 @@
 							success: function(model){
 								$('#new-ticket-modal').modal('hide');
 						}, error: function(){
+
+							enable_save_button($that);
+
 							if(err_cbk)
 								err_cbk(model);
 						}}
