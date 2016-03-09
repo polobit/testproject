@@ -648,6 +648,7 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
                   window.parent.$("#workflow-save-popup").remove();
 
             window.parent.workflow_alerts("Next Action ", "null" , "workflow-save-popup-modal",undefined);  
+            window.parent.$("#popup-msg").show().fadeOut(10000);
         }
      }
 

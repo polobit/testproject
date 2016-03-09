@@ -188,9 +188,9 @@
 				<div class="modal-header">
 					<button class="close" data-dismiss="modal">x</button>
 					<h3 class="modal-title">
-						<h6 style="margin:5px"><span style="color: green;">Campaign saved successfully</span></h6>
-						<i class="glyphicon glyphicon-arrow-right"></i> <strong> {{title}} </strong> Add contacts to the Campaign</h3>
-				</div>
+						<h6 id="popup-msg" style="margin:5px"><span style="color: green;">Campaign saved successfully</span></h6>
+						<i class="glyphicon glyphicon-arrow-right"></i> <strong> {{title}} </strong> Assign contact(s) to the Campaign</h3>
+				</div> 
 				<div class="modal-body">
 					<form id="workflow-save-popup-form" >
 						<fieldset>            
@@ -208,7 +208,7 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<div class="checkbox col-sm-6">
+					<div class="checkbox col-sm-6" style="margin-top:4px; margin-bottom:4px;">
     					<label class="pull-left" onclick="hideCampaignPopup();"><input type="checkbox" id="campaign-save-popup" value="false">Don't show me again</label>
 					</div>
   					<div class="col-sm-6">	
