@@ -687,7 +687,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
         <textarea id="download" class="hide"></textarea>
         <textarea id="selector" class="hide"></textarea>
         <textarea  id="path" class="hide"></textarea>
-
+        <a class="hide" id="sendTestEmail" href="#">.</a>
     </body>
 
 </html>

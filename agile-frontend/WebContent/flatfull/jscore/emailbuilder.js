@@ -11,6 +11,13 @@ function initializeEmailBuilderListeners() {
     	}
 	});
 
+    $('#emailbuilder-listeners').on('click', '.sendTestEmailButton', function(e){
+        e.preventDefault();
+        if (isValidForm('#emailBuilderForm')) {
+            document.getElementById('emailBuilderFrame').contentWindow.$('#sendTestEmail').trigger("click");          
+        }
+    });
+
     $('#emailbuilder-listeners').on('click', '#emailBuilderOptionsLink', function (e) {
         e.preventDefault();
         $(this).find('i').toggleClass('icon-plus').toggleClass('icon-minus');
@@ -117,6 +124,38 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
     });
 }
 
+function sendTestEmailTemplate(fullSource,builderSource) {
+    
+    var template = {
+                "name": $("#nameoftemplate").val(),
+                "from_name": CURRENT_DOMAIN_USER.name,
+                "from_email":CURRENT_DOMAIN_USER.email,
+                "to_email": CURRENT_DOMAIN_USER.email,
+                "replyto_email":CURRENT_DOMAIN_USER.email,
+                "subject": $("#subject").val(),
+                "text_email": $("#text_email").val(),
+                "html_email": fullSource
+            };
+
+    // Verifies merge fields and gives alert
+    if ( check_merge_fields_and_send(template) ){
+        var requestType = "post";
+        var message = "Test Email Sent.";
+
+        $.ajax({
+            type: requestType, 
+            url: 'core/api/emails/send-test-email',    
+            data: template,
+            success: function (data) {
+                $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
+            
+            },
+        });
+    }
+    
+}
+
+
 function redirectToOldEditor(templateId) {
     window.location.hash = "email-template/"+templateId;
 }
@@ -143,3 +182,68 @@ function setAttachmentInTemplateEdit(attachmentId) {
         }
     });
 }
+
+function check_merge_fields_and_send(template)
+ {
+    
+     var subject = $('#subject').val();
+     var text_body = template.text_email;
+     var html_body = template.html_email;
+     if((subject && subject.indexOf('{{') != -1) || (text_body && text_body.indexOf('{{') != -1) || (html_body && html_body.indexOf('{{') != -1))
+         {
+             if ( show_test_email_alert(template))
+             {
+                return true;
+             }else{
+                return false;
+             }
+             
+         }
+      else
+         {
+             //send_test_email();
+             return true;
+         }
+         
+ 
+  }
+  
+ function show_test_email_alert(template){
+     var title="Send Test Email";
+     var message="Please observe that the merge fields in test emails would not be replaced.";
+ 
+ 
+     window.parent.workflow_alerts(title, message , "workflow-alert-modal"
+ 
+         ,function(modal){
+ 
+         var $a = $(modal).find("a");
+ 
+         $a.off("click");
+         $a.on("click", function(e){
+                     e.preventDefault();
+                    
+                     // Disable and change text
+                     $(this).attr('disabled', 'disabled').text("Sending");
+                     var requestType = "post";
+                    var message = "Test Email Sent.";
+
+                    $.ajax({
+                        type: requestType, 
+                        url: 'core/api/emails/send-test-email',    
+                        data: template,
+                        success: function (data) {
+                            $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
+            
+                        },
+                    });
+                     return true;
+                    
+                 });
+ 
+         // On hidden
+         modal.on('hidden.bs.modal', function (e) {
+        
+         });
+     }); 
+ }
