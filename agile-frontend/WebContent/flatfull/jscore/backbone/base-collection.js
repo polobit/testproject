@@ -116,8 +116,7 @@ deleteConfirm : function(e)
 
 	confirmModal.html(getTemplate('modal-delete-confirm', {})).modal('show');
 
-	$("#delete-confirm", confirmModal).off();
-	confirmModal.on("click", "#delete-confirm", function(e){
+	$("#delete-confirm", confirmModal).click(function(e){
 			e.preventDefault();
 			var id=that.model.get("id");
 			console.log(id);
@@ -128,11 +127,24 @@ deleteConfirm : function(e)
        					type: 'DELETE',
        					success: function()
        					{
+       						console.log("success");
        						$('#deleteConfirmationModal').modal('hide');
        						that.remove();
+						    if(!_billing_restriction.currentLimits.freePlan)
+							   {
+							    var message;
+							    if(count > 1)
+							     message = "Users have been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted users.";
+							    else
+							     message = "User has been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted user.";
+							    showNotyPopUp('information', message, "top", 10000);
+							   }
+
+
        					},
        					error : function(response)
 						{
+							console.log("error");
 							confirmModal.find(".modal-footer").find("#delete-user").html('<small class="text-danger" style="font-size:15px;margin-right:172px;">Sorry, can not delete user having admin privilege.</small>');
 							console.log(response);
 
