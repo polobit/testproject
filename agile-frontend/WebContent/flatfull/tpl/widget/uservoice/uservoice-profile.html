@@ -59,8 +59,8 @@
 					 General User
 				{{/if}}
 			</div>
-		</div>
-		<div class="row">
+	</div>
+	<div class="row">
 			<div class="col-md-5">
 				<div class="pull-right">:</div> Status
 			</div>
@@ -71,9 +71,9 @@
 					 Blocked
 				{{/if_equals}}
 			</div>
-		</div>
-  	</div>
+	</div>
   </div>
+</div>
 <div class="clear-fix"></div>
 </div>
 <div id="uservoice-comments"></div>
@@ -87,13 +87,27 @@
 <script id="uservoice-transactions-template" type="text/html">
 {{#if comments.length}}
 	{{#each comments}}
-		<li class="list-group-item r-none b-l-none b-r-none" style="width:249px;">
-			<div class="clear">							
-				<p>{{text}}</p>
-				<p>{{getSuggestionName suggestion.id}}</p>
-				<div class="clearfix"></div>	
-			</div>												
-			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" createdDate}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" createdDate}}</time></small>
+		<li class="list-group-item r-none b-l-none b-r-none text-xs" style="width:249px;">	
+			<div class="row">			
+				<div class="col-md-12 word-break font-bold text-sm" title="{{getSuggestionName suggestion.id}}">
+					{{getSuggestionName suggestion.id}}
+				</div>
+			</div>
+			<div class="row">				
+				<div class="col-md-12 m-t-sm word-break" style="max-height: 120px; overflow: hidden;">
+					{{text}}
+				</div>
+			</div>	
+			<div class="row">
+				{{#if suggestion.url}}			
+					<div class="pull-left p-sm">
+						<a class="btn btn-xs btn-default" target="_blank" href="{{suggestion.url}}">View on Uservoice</a>
+					</div>
+				{{/if}}
+			</div>					
+			<div class="clear-fix"></div>												
+			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" created_at}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_at}}</time>
+			</small>
 		</li>
 	{{/each}}
 {{else}}
