@@ -154,7 +154,7 @@ function serializeChainedElement(element)
 		if ($(data).hasClass("date")) {
 			var date = getFormattedDateObjectWithString($(data).val());
 
-			value = getGMTEpochFromDate(date);
+			value = getGMTEpochFromDateForCustomFilters(date);
 		}
 
 		// Value of input/select

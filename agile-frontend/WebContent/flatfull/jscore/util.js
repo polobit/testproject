@@ -338,6 +338,16 @@ function getGMTEpochFromDate(date)
 	return date.getTime() + (date.getTimezoneOffset() * 60 * 1000);
 }
 
+//get the GMT time for contact and compant static filters
+function getGMTEpochFromDateForCustomFilters(date)
+{
+	var current_sys_date = new Date();
+	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+	var offset = (date.getTimezoneOffset() * 60 * 1000) ;
+	// Adding offset to date returns GMT time 
+	return date.getTime() - (date.getTimezoneOffset() * 60 * 1000);
+	}
+
 /**
  * Returns local epoch time based form GMT time
  * 
