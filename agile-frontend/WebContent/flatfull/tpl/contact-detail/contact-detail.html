@@ -229,32 +229,44 @@
 					<div class="row">
 					<div class="col-xs-12 col-sm-7 text-center">
 					 <div id='star' class="contact-star"></div>
-					</div>
-					<div class="text-right hidden-xs col-sm-5">		
+					</div>		
+
+
+		<div class="text-right hidden-xs col-sm-5" style="left:5px;width: 90px;padding-left: 1px;padding-right: 1px;">		
 								<!--  starting score -->
 						<div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
-							<div  class="text-lg score-view">
+							<div class="text-lg score-view text-left">
 							<div style="position:relative;">
 
-							<i class="icon-trophy " style="height:14px; vertical-align: middle; display: inline-block;right:1px;position: relative;font-size:14px;opacity: 0.8;top:1px;" rel="popover" data-placement="bottom" data-title="Lead Score"
-									data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation."
-									id="element" data-trigger="hover" ></i>
-								 
-							
-								<span class="inline-block v-middle">
-									{{#if lead_score}} <span id="lead-score">{{lead_score}}</span>&nbsp;
-									{{else}} <span id="lead-score">0</span>&nbsp;
-									{{/if}}
+ 								<span class="m-l-n-xs pos-rlt" style="font-size:14px;float:left;margin-left:8px;top:6px">
+								<i class="icon-trophy" border="0" style="height: 6px; vertical-align: middle" rel="popover" data-placement="bottom" data-title="Lead Score" data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation." id="element" data-trigger="hover" ></i>
 								</span>
-							{{#canEditContact owner.id}}
-								<span class="contact-score-control m-l-xs">
-									<ul class="inline-block list-none m-n p-n">
-										<li style="height: 9px"><i class="icon-sort-up c-p" id="add"
-											style="height: 10px;"></i></li>
-										<li><i class="icon-sort-down c-p" id="minus"
-											style="height: 10px;"></i></li>
-									</ul>
+
+							  		{{#canEditContact owner.id}}
+								<span class="inline-block v-middle" style="margin-top: -5px;margin-left: 6px;">
+									{{#if lead_score}}<span title="{{lead_score}}" id="lead-score"class="inline-block text-ellipsis" style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px;">{{lead_score}}</span>&nbsp;
+									{{else}} <span title="0" id="lead-score"class="inline-block text-ellipsis"style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px">0</span>&nbsp;
+										{{/if}}
+									</span>
+
+									<span class="inline-block v-middle">
+									<input type="text" maxlength="10" autofocus="true" class="hide pos-abs form-control" id="scorebox">
+									</span>
+									
+									<span class="contact-score-control m-l-xs" style="left:79px;position:absolute;top:5px;">
+										<ul class="inline-block list-none m-n p-n">
+											<li style="height: 12px"><i class="icon-sort-up c-p" id="add" style="height: 6px;"></i></li>
+											<li><i class="icon-sort-down c-p" id="minus" style="height: 10px;"></i></li>
+										</ul>
 								</span>
+								{{else}}
+								<span class="inline-block v-middle" style="margin-left:21px">
+
+									{{#if lead_score}} <span title="{{lead_score}}" id="lead_score_uneditable"class="inline-block text-ellipsis" style="text-align:center;position: relative;top: 5px;width:48px;font-size: 14px;">{{lead_score}}</span>&nbsp;
+									{{else}} <span title="0" id="lead-score"class="inline-block text-ellipsis"style="text-align:center;position: relative;top: 4px;width:48px;font-size: 14px;">0</span>&nbsp;
+									{{/if}}		
+								</span>
+								
 							{{/canEditContact}}
 							</div>
 							</div>
