@@ -39,6 +39,7 @@ public class ReportsInstantEmailDeferredTask implements DeferredTask
 
 	try
 	{
+		System.out.println("Report id in SendContactReportDeferredTask------------"+report_id);
 	    // Generates report and sends to user
 	    ReportsUtil.sendReportsToUsers(reports);
 	}

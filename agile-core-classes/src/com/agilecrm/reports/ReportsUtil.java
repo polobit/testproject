@@ -139,6 +139,7 @@ public class ReportsUtil
 
 	    results.put("duration", WordUtils.capitalizeFully((report.duration.toString())));
 
+	    System.out.println("Before sendMail in sendReportsToUsers of ReportsUtil"); 
 	    // Send reports email
 	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS,
 		    new Object[] { results, fieldsList });

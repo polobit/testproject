@@ -22,6 +22,8 @@ public class SendContactReportDeferredTask implements DeferredTask
     {
 	try
 	{
+		System.out.println("Domain in SendContactReportDeferredTask------------"+domain);
+		System.out.println("Report id in SendContactReportDeferredTask------------"+reportid);
 	    ReportsUtil.sendReport(reportid);
 	}
 	catch (Exception e)

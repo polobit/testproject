@@ -5,7 +5,7 @@ cron:
  
 - description: daily reports
   url: /backend/cron/reports?duration=DAILY
-  schedule: every day 04:25
+  schedule: every day 04:00
   target: agile-normal-bulk
   
 - description: Monthly reports
