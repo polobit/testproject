@@ -24,6 +24,8 @@ var Ticket_Reports = {
 	    end_time=end_time/1000;
 		
 	    var frequency = $('#frequency').find('option:selected').val();
+
+	    $('#frequency').off('change');
 		$('#frequency').change(function()
 		{	
 			frequency = $(this).find('option:selected').val();
@@ -32,6 +34,7 @@ var Ticket_Reports = {
 		});
 
 		var status = $('#status').find('option:selected').val();
+		$('#status').off('change');
 		$('#status').change(function()
 		{	
 			status = $(this).find('option:selected').val();
@@ -67,6 +70,8 @@ var Ticket_Reports = {
 	    end_time=end_time/1000;
 		
 	    var report_type = $(this).find('option:selected').val();
+
+	    $('#report_type').off('change');
 		$('#report_type').change(function()
 		{	
 			report_type = $(this).find('option:selected').val();
@@ -83,8 +88,18 @@ var Ticket_Reports = {
 			$('.report_name').text(report_title);
 		});
 
-		Ticket_Reports.pieforReports('/core/api/tickets/reports/priority-report?start_time=' + start_time + '&end_time=' + end_time,
-			'report-chart', '', true);
+		report_type = $(this).find('option:selected').val();
+
+		var url = '/core/api/tickets/reports/priority-report?start_time=' + start_time + '&end_time=' + end_time,
+		    report_title = 'Priority report';
+
+		if(report_type == 'status'){
+			url = '/core/api/tickets/reports/status-report?start_time=' + start_time + '&end_time=' + end_time;
+		    report_title = 'Status report';
+		}
+
+		Ticket_Reports.pieforReports(url,'report-chart', '', true);
+		$('.report_name').text(report_title);
 	},
 
 	avgFirstRespTime: function(){
@@ -220,7 +235,7 @@ var Ticket_Reports = {
 						return  '<div>' + 
 	                        '<div class="p-n">'+this.series.name+': <b>'+ getNumberWithCommasForCharts(AllData[this.point.x][1]) + '</b></div>' +
 	                        '</div>'+
-	                        '<div class="p-n">Total: <b>' +pieData[this.point.x][2]+ '</b></div>';
+	                        '<div class="p-n">Total: <b>' + pieData[this.point.x][2]+ '</b></div>';
 					},
 					shared: true,
 					useHTML: true,

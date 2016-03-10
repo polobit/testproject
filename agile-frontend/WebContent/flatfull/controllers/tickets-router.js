@@ -370,6 +370,7 @@
 	 */
 	 ticketGroups : function() {
 
+	 	//Rendering root template
 	 	getTemplate("admin-settings", {}, undefined, function(template_ui){
 
 	 		if(!template_ui)
@@ -377,6 +378,7 @@
 
 	 		$('#content').html($(template_ui));	
 
+	 		//Rendering root template
 	 		getTemplate("ticket-settings-nav-tab", {groups: true}, undefined, function(tab_template_ui){
 
 	 			if(!tab_template_ui)
@@ -384,6 +386,7 @@
 
 	 			$('#admin-prefs-tabs-content').html($(tab_template_ui));	
 
+	 			//Initializing base collection with groups URL
 	 			App_Ticket_Module.groupsCollection = new Base_Collection_View({
 	 				url : '/core/api/tickets/groups',
 	 				templateKey : "ticket-groups",
@@ -398,6 +401,7 @@
 							e.stopImmediatePropagation();
 						});
 
+						//Loading and initializing copy to clipboard buttons
 						head.js('/lib/zeroclipboard2/ZeroClipboard.min.js', function()
 						{
 							$('[data-toggle="popover"]').popover();
@@ -409,22 +413,15 @@
 								initZeroClipboard2($('#grp-' + model.id), $('#source-' + model.id));
 							}
 						});
-
-						setTimeout(function(){
-
-							var $ele  = $('td[default_group]').closest('tr').find('.tbody_check');
-							
-							//Disabling default group checkbox to avoid deleting
-							$ele.attr('disabled', true).removeClass('tbody_check');
-							$ele.closest('label').addClass('cursor-default');
-							
-						}, 1000);
 					}
 				});
 
+	 			//Fetching groups collections
 				App_Ticket_Module.groupsCollection.collection.fetch();
 
+				//Rendering template
 				$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.groupsCollection.el);
+				
 				$('#content').find('#AdminPrefsTab .select').removeClass('select');
 				$('#content').find('.helpdesk-tab').addClass('select');
 			});
@@ -451,11 +448,14 @@
  					Backbone.history.navigate( "ticket-groups", { trigger : true });
  				},
  				postRenderCallback : function(el) {
+
+ 					//Fetches domain users collection and shows them in add group form
  					App_Ticket_Module.renderUsersCollection($('#users-collection', el));
  				}
  			});
 
  			$('#admin-prefs-tabs-content').html(addTicketGroupView.render().el);
+
  			$('#content').find('#AdminPrefsTab .select').removeClass('select');
  			$('#content').find('.helpdesk-tab').addClass('select');
 	 	});
@@ -473,14 +473,17 @@
 
 	 		$('#content').html($(template_ui));	
 
+	 		//Redirecting to groups collection if collection not exists
 	 		if(!App_Ticket_Module.groupsCollection || !App_Ticket_Module.groupsCollection.collection){
 
  				Backbone.history.navigate( "ticket-groups", { trigger : true });
  				return;
  			}
 
+ 			//Fetching selected group model form collection to render edit form
  			var group = App_Ticket_Module.groupsCollection.collection.get(id);
 
+ 			//Create base model view with existing group
  			var editTicketGroupView = new Base_Model_View({
  				model : group, 
  				isNew : true, 
@@ -491,14 +494,16 @@
  				url : "/core/api/tickets/groups",
  				postRenderCallback : function(el, data) {
 
+ 					//Fetching all domains users
  					App_Ticket_Module.renderUsersCollection($('#users-collection', el), function(){
 
  						var agents_keys = data.agents_keys;
 
- 						for(var i=0; i < agents_keys.length; i++){
+ 						//Selecting domain users who are exists in current group
+ 						for(var i=0; i < agents_keys.length; i++)
  							$("input[data='"+ agents_keys[i] +"']").attr('checked', 'checked');
- 						}
 
+ 						//Initializing copy to clipboard button
  						head.js('/lib/zeroclipboard2/ZeroClipboard.min.js', function()
  						{	
  							initZeroClipboard2($('#grp-' + data.id), $('#source-' + data.id));
@@ -508,6 +513,7 @@
  			});
 
  			$('#admin-prefs-tabs-content').html(editTicketGroupView.render().el);
+
  			$('#content').find('#AdminPrefsTab .select').removeClass('select');
  			$('#content').find('.helpdesk-tab').addClass('select');
 		});
@@ -518,6 +524,7 @@
 	 */
 	 ticketLabels: function(){
 
+	 	//Rendering root template
 	 	getTemplate("admin-settings", {}, undefined, function(template_ui){
 
 	 		if(!template_ui)
@@ -532,6 +539,7 @@
 
 	 			$('#admin-prefs-tabs-content').html($(tab_template_ui));	
 
+	 			//Creating base collection for fetching labels collection
 	 			App_Ticket_Module.labelsCollection = new Base_Collection_View({ 
 	 				url : 'core/api/tickets/labels', 
 	 				templateKey : "ticket-label", 
@@ -540,10 +548,11 @@
 	 				sortKey : 'updated_time'
 	 			});
 
-				//labelsCollectionView.appendItem = Ticket_Labels.appendLabelManagement;
+				//Fetching labels collection
 				App_Ticket_Module.labelsCollection.collection.fetch();
 
 				$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.labelsCollection.el);
+				
 				$('#content').find('#AdminPrefsTab .select').removeClass('select');
 				$('#content').find('.helpdesk-tab').addClass('select');
 			});
@@ -568,10 +577,12 @@
  				url : "/core/api/tickets/labels",
  				saveCallback : function(model){
 
+ 					//Adding new created label to existing collection
  					if(Ticket_Labels.labelsCollection){
  						Ticket_Labels.labelsCollection.add(model);
  					}
 
+ 					//Redirecting back to labels collection
  					Backbone.history.navigate( "ticket-labels", { trigger : true });
  				},
                 errorCallback :function(response)
@@ -582,14 +593,11 @@
                 	//setTimeout($('.error_message_label').text(response.responseText),5000);
                     $('.error_message_label').text(response.responseText).delay(5000).hide(1);
         	        
-                },
-   				postRenderCallback : function(el, data) {
-
- 					Ticket_Labels.loadColorPicker(data.color_code);
- 				}
+                }
  			});
 
  			$('#admin-prefs-tabs-content').html(addTicketLabelView.render().el);
+
  			$('#content').find('#AdminPrefsTab .select').removeClass('select');
  			$('#content').find('.helpdesk-tab').addClass('select');
 		});
@@ -619,6 +627,7 @@
  				model : label, 
  				isNew : true, 
  				template : "ticket-label-add-edit",
+ 				url : "/core/api/tickets/labels",
  				saveCallback : function(model){
 
  					if(Ticket_Labels.labelsCollection)
@@ -629,17 +638,11 @@
  					}
 
  					Backbone.history.navigate( "ticket-labels", { trigger : true });
- 				},
- 				url : "/core/api/tickets/labels",
- 				postRenderCallback : function(el, data) {
-
- 					setTimeout(function(){
- 						Ticket_Labels.loadColorPicker(data.color_code);
- 					}, 0);
  				}
  			});
 
  			$('#admin-prefs-tabs-content').html(editTicketGroupView.render().el);
+
  			$('#content').find('#AdminPrefsTab .select').removeClass('select');
  			$('#content').find('.helpdesk-tab').addClass('select');
 		});
@@ -668,13 +671,13 @@
 	 				url : '/core/api/tickets/filters',
 	 				templateKey : "ticket-filters",
 	 				individual_tag_name : 'tr',
-	 				slateKey : "no-ticket-filters",
-	 				postRenderCallback : function(el) {}
+	 				slateKey : "no-ticket-filters"
 	 			});
 
 	 			App_Ticket_Module.ticketFiltersCollection.collection.fetch();
 
 	 			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.ticketFiltersCollection.el);
+	 			
 	 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
 	 			$('#content').find('.helpdesk-tab').addClass('select');
 	 		});
@@ -715,10 +718,11 @@
  			});
 
  			$('#admin-prefs-tabs-content').html(addTicketFilterView.render().el);
+
  			$('#content').find('#AdminPrefsTab .select').removeClass('select');
  			$('#content').find('.helpdesk-tab').addClass('select');
 	 	});
-},
+	},
 
 	/**
 	 * Edit ticket group
@@ -768,10 +772,11 @@
  			});
 
  			$('#admin-prefs-tabs-content').html(editTicketFilterView.render().el);
+
  			$('#content').find('#AdminPrefsTab .select').removeClass('select');
  			$('#content').find('.helpdesk-tab').addClass('select');
 	 	});
-},
+	},
 
 	/**
 	 * Shows list of Canned Responses
@@ -799,15 +804,13 @@
  						url : '/core/api/tickets/canned-messages',
  						templateKey : "ticket-canned-response",
  						individual_tag_name : 'tr',
- 						slateKey : "no-groups",
- 						postRenderCallback : function(el) {
-
- 						}
+ 						slateKey : "no-groups"
  					});
 
  					App_Ticket_Module.cannedResponseCollection.collection.fetch();
 
  					$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.cannedResponseCollection.el);
+ 					
  					$('#content').find('#AdminPrefsTab .select').removeClass('select');
  					$('#content').find('.helpdesk-tab').addClass('select');
  				});
@@ -902,6 +905,9 @@
 		});
 	},
 
+	/**
+	 * Ticket reports router
+	 */
 	ticketReports: function(){
 		getTemplate("ticket-report-container", {}, undefined, function(template_ui){
 
@@ -916,6 +922,9 @@
 	 	});
 	},
 
+	/**
+	 * Generates highchart reports for given report type
+	 */
 	ticketReport: function(report_type){
 
 		hideTransitionBar();
@@ -923,8 +932,10 @@
 		$(".active").removeClass("active");
 		$("#reportsmenu").addClass("active");
 
+		//Loading highchart files and daterange picker files
 		initReportLibs(function(){
 
+			//CallbCK function executes when daterange picker is changed
 			var template = '', callback;
 
 			switch(report_type){
@@ -936,10 +947,6 @@
 					template = 'ticket-priority-report';
 					callback = Ticket_Reports.priorityReports;
 					break;
-				// case 'status-report':
-				// 	template = 'ticket-status-report';
-				// 	callback = Ticket_Reports.statusReports;
-				// 	break;
 				case 'sla-report':
 					template = 'ticket-sla-report';
 					callback = Ticket_Reports.slaReport;
@@ -950,6 +957,7 @@
 					break;
 			}
 
+			//Renders the required template based on report type
 			getTemplate(template, {}, undefined, function(template_ui){
 
 				if(!template_ui)
@@ -959,6 +967,7 @@
 
 				$('#content').html($template_ui);	
 
+				//initializing date range picket
 				initDateRange(callback);
 
 				callback();
@@ -967,46 +976,9 @@
 		});
 	},
 
-	/*ticketsCollectionView: function(){
-
-		getTemplate("admin-settings", {}, undefined, function(template_ui){
-
-	 		if(!template_ui)
-	 			return;
-
-	 		$('#content').html($(template_ui));	
-
-	 		getTemplate("ticket-settings-nav-tab", {view_type: true}, undefined, function(tab_template_ui){
-
-	 			if(!tab_template_ui)
-	 				return;
-
-	 			$('#admin-prefs-tabs-content').html($(tab_template_ui));
-
-		 		var view = new Base_Model_View({
-	 				isNew : false,
-	 				template : "ticket-collection-view",
-	 				saveCallback : function(data){
-	 					CURRENT_DOMAIN_USER.helpdeskSettings = data;
-					},
-	 				url : '/core/api/users/helpdesk-settings',
-	 				postRenderCallback: function(el){
-	 					head.js('/lib/jquery-ui.min.js', 'css/designer/start/jquery-ui-1.8.5.custom.css', function()
- 						{	
- 							$( "#sortable1, #sortable2" ).sortable({
-						      connectWith: ".connectedSortable"
-						    }).disableSelection();
- 						});
-	 				}
-	 			});
-
-	 			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(view.render().el);
-	 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
-	 			$('#content').find('.helpdesk-tab').addClass('select');
-	 		});
-	 	});
-	},*/
-
+	/**
+	 * Renders ticket activities collection
+	 */
 	renderActivitiesCollection : function(ticket_id, $ele, callback){
 
 	 	App_Ticket_Module.activitiesCollection = new Base_Collection_View({
@@ -1055,12 +1027,7 @@
 					$("time", el).timeago();
 				});
 
-				// head.js("/flatfull/lib/jquery.linky.min.js", function(){
-
-				// 	$(".plain-text-comment", el).linky();
-				// });
-
-	 			if(callback)
+				if(callback)
 	 				callback();
 	 		}
 	 	});
@@ -1079,28 +1046,29 @@
 		var collection_def = Backbone.Collection.extend({url : '/core/api/users'});
 		var collection = new collection_def();
 
-		collection.fetch({ success : function(){
+		collection.fetch(
+			{ success : function(){
 
-			var data = collection.toJSON();
-			data.sort(function(a, b)
-			{
-				if (a.name < b.name)
-					return -1;
-				if (b.name < a.name)
-					return 1;
-				return 0;
-			});
+				var data = collection.toJSON();
+				data.sort(function(a, b)
+				{
+					if (a.name < b.name)
+						return -1;
+					if (b.name < a.name)
+						return 1;
+					return 0;
+				});
 
-			var html = '';
-			for(var i=0; i < data.length; i++){
-				html+= getTemplate('ticket-add-group-user', data[i]);
+				var html = '';
+				for(var i=0; i < data.length; i++){
+					html+= getTemplate('ticket-add-group-user', data[i]);
+				}
+
+				$ele.html(html);
+
+				if(callback)
+					callback();
 			}
-
-			$ele.html(html);
-
-			if(callback)
-				callback();
-		}
-	});
+		});
 	}
 });

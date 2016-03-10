@@ -241,14 +241,6 @@ public class TicketReportsRest
 
 			LinkedHashMap<String, Long> innerMap = new LinkedHashMap<String, Long>();
 			innerMap.put("count", 0l);
-			// innerMap.put("total", (long) documents.size());
-
-			// LinkedHashMap<String, LinkedHashMap<String, Long>> map = new
-			// LinkedHashMap<String, LinkedHashMap<String, Long>>();
-			// map.put("0-1 hr", new LinkedHashMap<String, Long>(innerMap));
-			// map.put("1-8 hrs", new LinkedHashMap<String, Long>(innerMap));
-			// map.put("8-24 hrs", new LinkedHashMap<String, Long>(innerMap));
-			// map.put(">24 hrs", new LinkedHashMap<String, Long>(innerMap));
 
 			LinkedHashMap<String, LinkedHashMap<String, Long>> countMap = new LinkedHashMap<String, LinkedHashMap<String, Long>>();
 			countMap.put("0-1 hr", new LinkedHashMap<String, Long>(innerMap));

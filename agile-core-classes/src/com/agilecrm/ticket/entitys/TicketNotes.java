@@ -65,7 +65,7 @@ public class TicketNotes
 
 	public static enum CREATED_BY
 	{
-		AGENT, REQUESTER, SYSTEM
+		AGENT, REQUESTER
 	};
 
 	/**

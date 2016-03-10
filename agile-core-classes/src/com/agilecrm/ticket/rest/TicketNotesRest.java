@@ -242,14 +242,14 @@ public class TicketNotesRest
 				// Execute note created by user trigger
 				TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);
 
+				// Logging public notes activity
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id,
+						html_text, plain_text, "html_text");
+				
 				if (currentStatus != newStatus)
 					// Logging ticket status change activity
 					ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
 							currentStatus.toString(), newStatus.toString(), "status");
-
-				// Logging public notes activity
-				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id,
-						html_text, plain_text, "html_text");
 			}
 
 			ticketNotes.domain_user = DomainUserUtil.getDomainUser(ticket.assigneeID);
