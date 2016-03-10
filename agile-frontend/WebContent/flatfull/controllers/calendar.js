@@ -131,7 +131,7 @@ tasks_new : function()
 			readDetailsFromCookie();
 			// Bind dropdown events
 			bindDropdownEvents();
-			loadPortlets('Tasks');
+			
 
 		}, "<li><a href='{{id}}' class='hide-on-owner'>My Tasks</a></li>", true);
 
@@ -142,6 +142,7 @@ tasks_new : function()
 
 		// Hide owner's and status task selection options from dropdown
 		$(".hide-on-pending").hide();
+		loadPortlets('Tasks');
 
 	}, "#tasks-list-template");
 

@@ -40,7 +40,7 @@ function loadPortlets(route,el){
 	App_Portlets.RoutePortlets=new Array();
 	App_Portlets.taskAverage = new Array();
 	if(Portlets_View!=undefined)
-	console.log("before initialized" + Portlets_View.collection.length);
+	console.log("before initialized" +route+ Portlets_View.collection.length);
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
@@ -50,7 +50,7 @@ function loadPortlets(route,el){
 	// postrender. It is set to false after portlet setup is initialized
 	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets?route='+route, sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 		postRenderCallback : function(portlets_el){
-			if(route!='DashBoard' && Portlets_View.collection.length!=0)
+			if(route!='DashBoard' && Portlets_View.collection.length!=0 && !$('.route_Portlet').is(':visible'))
 			{
 				/*if($('#zero-portlets').is(':visible') || $('#no-portlets').is(':visible'))
 				$('#no-portlets').parents('.wrapper-md').hide();*/

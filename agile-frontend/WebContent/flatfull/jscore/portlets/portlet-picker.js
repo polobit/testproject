@@ -62,7 +62,7 @@ function set_p_portlets(base_model) {
 		App_Portlets.adminPortlets.push(base_model);
 		return;
 	}
-	if(Current_Route!=undefined && Current_Route.toUpperCase()!=('DashBoard').toUpperCase())
+	if(Current_Route!=undefined && Current_Route.toUpperCase()!=('DashBoard').toUpperCase() && Portlets_View.collection.length!=0 && ! $('.route_Portlet').is(':visible'))
 			{
 				$('#portlets').parents('.route_Portlet').show();
 			}

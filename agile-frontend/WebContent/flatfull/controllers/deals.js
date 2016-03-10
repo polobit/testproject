@@ -117,11 +117,12 @@ var DealsRouter = Backbone.Router.extend({
 
 		$(".active").removeClass("active");
 		$("#dealsmenu").addClass("active");
+		loadPortlets('Deals');
 		setTimeout(function()
 		{
 			$('a.deal-notes').tooltip();
 			$('.deal_won_date').tooltip();
-			loadPortlets('Deals');
+			
 		}, 2000);
 	},
 
