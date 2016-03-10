@@ -61,7 +61,7 @@ public class AllDomainStatsServlet extends HttpServlet {
 			   			    "Sent using Agile");
 		   		    textMail = EmailUtil.appendAgileToText(textMail, "Sent using", emailSender.isEmailWhiteLabelEnabled());
 
-			   		   emailSender.sendEmail("noreply@agilecrm.com", "Agile CRM", "rahul@agilecrm.com", "pavan@agilecrm.com", null, "All Domain Stats Report for "+current_date, null, 
+			   		   emailSender.sendEmail("stats@agilecrm.com", "Agile CRM", "manohar@agilecrm.com", "rahul@agilecrm.com", "pavan@agilecrm.com", "All Domain Stats Report for "+current_date, null, 
 			   				textMail,"Hi", null, new ArrayList<Long>(),new ArrayList<BlobKey>());
 
 			   		}
@@ -73,8 +73,6 @@ public class AllDomainStatsServlet extends HttpServlet {
 			   
 			   return;
 		   }
-
-		   System.out.println("Exception occured while getting stats report");
 		   		   
 		  
 	    }
