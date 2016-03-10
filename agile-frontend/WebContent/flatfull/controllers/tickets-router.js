@@ -176,11 +176,15 @@
 					
 					var $that = $(this);
 
+					//Creating base model
 					var newTicketModel = new BaseModel();
 					newTicketModel.url = '/core/api/tickets/new-ticket';
 					
+					//Creating new ticket
 					newTicketModel.save(json, {
 							success: function(model){
+
+								//Hiding the modal if ticket is created is created succesffully
 								$('#new-ticket-modal').modal('hide');
 						}, error: function(){
 
@@ -196,76 +200,18 @@
 	},
 
 	/**
-	 * Renders new ticket form and initializes required events
-	 */ 
-	 renderNewTicketView: function(){
-
-	 	var ticketView = new Ticket_Base_Model({
-	 		isNew : false, 
-	 		template : "ticket-new",
-	 		url : "/core/api/tickets/new-ticket",
-	 		saveCallback : function(ticket){
-
-				// var url = 'tickets/group/'+ ticket.groupID +'/'+ ticket.status.toLowerCase() +'/' + ticket.id;
-
-				// Backbone.history.navigate( url, { trigger : true });
-			},
-			postRenderCallback : function(el, data) {
-
-				$('[data-toggle="tooltip"]').tooltip();
-
-				//Activating ticket type pill
-				$('ul.ticket-types').find('.active').removeClass('active');
-
-				//Initializing chaining on Group and Assignee select fields
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
-				{
-					var LHS = $("#group_id", el);
-					var RHS = $("#assignee_id", el);
-
-					RHS.chained(LHS);
-				});
-
-				//Initializing type ahead for tags
-				Ticket_Tags.initTagsTypeahead('.ticket-tags-typeahead');
-				
-				//Initializing click on CC email field
-				Tickets.initCCEmailsListeners(el);
-
-				//Initializing type ahead for selecting contact in To address field
-				agile_type_ahead("requester_email_typeahead", el, tickets_typeahead, function(arg1, arg2){
-
-					arg2 = arg2.split(" ").join("");
-
-					var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
-
-					if(!email || email == 'No email')
-						return;
-
-					$('#requester_name').val(arg2);
-					$('#contact_id').val(arg1);
-					$('#requester_email').val(email).show();
-					$('#requester_email_typeahead').hide();
-
-				},undefined, undefined, 'core/api/search/');
-			}
-		});
-
-		$(".tickets-collection-pane").html('');
-		$("#right-pane").html(ticketView.render().el);
-	},
-
-	/**
 	 * Shows list of tickets for the given filter id
 	 **/
 	 ticketsByFilter : function(filter_id){
 
+	 	//Fetching whole tickets count to show suggestion if there are no tickets
 	 	$.getJSON("/core/api/tickets/count", function(json) {
 			
 			if(json.count)
 				Helpdesk_Enabled = true;
 		});
 
+	 	//Verifying there exits any ticket collection
 	 	if(App_Ticket_Module.ticketsCollection && 
 	 		App_Ticket_Module.ticketsCollection.collection.length > 0 
 	 		&& Ticket_Filter_ID == filter_id){
@@ -276,13 +222,13 @@
 
 	 	Ticket_Filter_ID = filter_id;
 
-		//Rendering the whole layout
+		//Rendering the root layout
 		Tickets.renderLayout(function(){
 
 			//Fetching filters collection
 			Ticket_Filters.fetchFiltersCollection(function(){
 
-				//Reset custom filters
+				//Reseting custom filters
 				Ticket_Custom_Filters.reset();
 				
 				//Showing selected filter name on top
@@ -297,8 +243,13 @@
 		});
 	},
 
+	/**
+	 * Shows individual ticket details and notes collection
+	 **/
 	ticketDetailsByFilter : function(filter_id, ticket_id){
+
 		Ticket_Filter_ID = filter_id;
+
 		App_Ticket_Module.ticketDetails(ticket_id);
 	},
 
@@ -309,12 +260,14 @@
 
 	 	var ticketModel = null;
 
+	 	//Fetching ticket model from collection
 	 	if (App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection){
 	 	   ticketModel = App_Ticket_Module.ticketsCollection.collection.get(id);
 	 	}
 	 
 	 	Current_Ticket_ID = id;
 
+	 	//Fetching canned responses collection
 	 	Ticket_Canned_Response.fetchCollection(function(){
 
 	 		// Get ticket models
@@ -328,12 +281,16 @@
 		 		return;
 		 	}
 
+		 	//Rendering ticket details page
 		 	App_Ticket_Module.getTicketModelView(ticketModel);
-		 	return;
 
+		 	return;
 	 	});
 	},
 
+	/**
+	 * Renders ticket details page for given ticket model
+	 **/
 	getTicketModelView: function(model){
 
 		if(!model || !model.toJSON().id)
@@ -354,19 +311,19 @@
 	 			//Initialize tooltips
 				$('[data-toggle="tooltip"]', el).tooltip();
 
+				//Showing ticket labels as selected labels
 				Ticket_Labels.showSelectedLabels(data.labels, $(el));
-
-				//Initializing events on CC email field
-				//Tickets.initCCEmailsListeners(el);
 
 				//Rendering ticket notes
 				App_Ticket_Module.renderNotesCollection(id, $('#notes-collection-container', el), function(){});
 
-				//Load widgets
+				//Load RHS side bar widgets
 				Tickets.loadWidgets(App_Ticket_Module.ticketView.el);
 
+				//Initializing Assignee dropdown with groups and assignees
 				Tickets.fillAssigneeAndGroup(el);
 
+				//Initializing date picker on due date field
 				Tickets.initializeTicketSLA(el);
 
 				// Fill next, Prev navigation
@@ -384,17 +341,15 @@
 
 					$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
         			$('#cc_email_field').val('');
+
         	  		Tickets.updateCCEmails(email, 'add');
-
-
         	  	},undefined, undefined, 'core/api/search/');
 
-				// initialize events on cc input
+				// Initialize events on cc input
 				Tickets.initCCEmailsListeners();
 
 				// Get previous ticket 
-				Tickets.showPreviousTicketCount(data.requester_email, el);
-				
+				Tickets.showPreviousTicketCount(data.requester_email, el);	
 			}
 		});
 
@@ -403,6 +358,9 @@
 		
 	},
 
+	/**
+	 * Bulk actions route
+	 */
 	ticketsBulkActions: function(action_type){
 		Ticket_Bulk_Ops.renderTemplate(action_type);
 	},
@@ -978,10 +936,10 @@
 					template = 'ticket-priority-report';
 					callback = Ticket_Reports.priorityReports;
 					break;
-				case 'status-report':
-					template = 'ticket-status-report';
-					callback = Ticket_Reports.statusReports;
-					break;
+				// case 'status-report':
+				// 	template = 'ticket-status-report';
+				// 	callback = Ticket_Reports.statusReports;
+				// 	break;
 				case 'sla-report':
 					template = 'ticket-sla-report';
 					callback = Ticket_Reports.slaReport;

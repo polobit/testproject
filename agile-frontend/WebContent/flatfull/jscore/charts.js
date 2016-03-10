@@ -170,7 +170,7 @@ function pie(url, selector, name)
  * @param stacked -
  *            is stacked graph or bar graph? If bar graph, stacked is null.
  */
-function showBar(url, selector, name, yaxis_name, stacked)
+function showBar(url, selector, name, yaxis_name, stacked, selected_colors)
 {
 	var chart;
 
@@ -191,12 +191,13 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			var tempcategories = [];
 			var colors=[];
 
-			if(selector == 'tickets-chart')
-				colors=['#f0ad4e','#5cb85c'];
-			else if(selector!='calls-chart')
+			if(selector!='calls-chart')
 				colors=['#23b7e5','#27c24c','#7266ba','#fad733'];
 			else
 				colors=['#27c24c','#23b7e5','#f05050','#7266ba','#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'];
+			
+			colors = selected_colors || colors;
+			
 			var dataLength = 0;
 				var frequency= $("#frequency:visible").val();
 			// Data to map with X-axis and Y-axis.

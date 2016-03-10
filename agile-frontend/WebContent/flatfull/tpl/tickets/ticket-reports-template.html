@@ -8,6 +8,12 @@
                     <span id="range">{{date-range "today" "-6"}}</span>
                 </div>
                 <div class="pull-right" style="padding:0px 8px 10px">
+                    <select name="status" id="status" class="required form-control" style="width:100px">
+                        <option value="NEW">New</option>
+                        <option value="CLOSED">Closed</option>
+                    </select>
+                </div>
+                <div class="pull-right" style="padding:0px 8px 10px">
                     <select name="frequency" id="frequency" class="required form-control" style="width:100px">
                         <option value="daily" selected>Daily</option>
                         <option value="weekly">Weekly</option>
@@ -118,7 +124,7 @@
     <div class="wrapper-md">    
         <div class="row">
             <div class="col-md-12">
-                <div id="priority-report-chart" class="panel"></div>
+                <div id="report-chart" class="panel"></div>
             </div>
         </div>
         <hr>

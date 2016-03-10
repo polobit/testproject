@@ -229,7 +229,10 @@ public class TicketsUtil
 
 		// Incr. no of reopens if ticket old status is closed
 		if (oldStatus == Status.CLOSED)
+		{
 			ticket.no_of_reopens += 1;
+			ticket.closed_time = null;
+		}
 
 		Tickets.ticketsDao.put(ticket);
 
@@ -973,7 +976,7 @@ public class TicketsUtil
 
 		System.out.println("Overdue tickets query: " + query);
 
-		//Initializing idsfetcher object with query string
+		// Initializing idsfetcher object with query string
 		ITicketIdsFetcher idsFetcher = new FilterTicketIdsFetcher(query);
 
 		Set<Key<Tickets>> keys = new HashSet<Key<Tickets>>();

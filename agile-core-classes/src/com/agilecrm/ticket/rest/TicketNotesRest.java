@@ -192,12 +192,7 @@ public class TicketNotesRest
 				if (currentStatus == Status.CLOSED && !notes.close_ticket)
 				{
 					ticket.no_of_reopens += 1;
-
-					// Logging status changed activity
-					// ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE,
-					// ticket.contactID, ticket.id,
-					// Status.CLOSED.toString(), Status.PENDING.toString(),
-					// "status");
+					ticket.closed_time = null;
 				}
 
 				// If send reply and close ticket is selected

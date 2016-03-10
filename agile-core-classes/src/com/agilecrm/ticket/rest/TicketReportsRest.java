@@ -23,6 +23,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.document.TicketsDocument;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.utils.TicketReportsUtil;
@@ -49,12 +50,10 @@ public class TicketReportsRest
 	@Path("/tickets")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public String getDailyReports(@QueryParam("start_time") Long startTime, @QueryParam("end_time") Long endTime,
-			@QueryParam("frequency") String frequency)
+			@QueryParam("frequency") String frequency, @QueryParam("status") String status)
 	{
 		try
 		{
-			LinkedHashMap<String, LinkedHashMap<String, Integer>> map = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
-
 			String timeZone = "UTC";
 
 			UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
@@ -63,31 +62,35 @@ public class TicketReportsRest
 				timeZone = userPrefs.timezone;
 
 			JSONObject ticketTypes = new JSONObject();
-			ticketTypes.put("NEW", 0);
-			ticketTypes.put("CLOSED", 0);
+			ticketTypes.put(status, 0);
 
 			net.sf.json.JSONObject dataJSON = ReportsUtil.initializeFrequencyForReports(startTime, endTime, frequency,
 					timeZone, ticketTypes);
 
-			String queryString = "(last_updated_time >=" + startTime + " AND " + " last_updated_time <= " + endTime
-					+ ") AND (status = NEW OR status = CLOSED)";
+			Collection<ScoredDocument> documents = null;
+
+			String fieldToReturn = Tickets.CREATE_TIME;
+
+			String queryString = "(" + fieldToReturn + " >=" + startTime + " AND " + fieldToReturn + " <= " + endTime
+					+ ") AND (status = NEW)";
+
+			if (Status.CLOSED.toString().equalsIgnoreCase(status))
+			{
+				fieldToReturn = Tickets.CLOSED_TIME;
+
+				queryString = "(" + fieldToReturn + " >=" + startTime + " AND " + fieldToReturn + " <= " + endTime
+						+ ") AND (status = CLOSED)";
+			}
 
 			System.out.println("Query: " + queryString);
 
-			Collection<ScoredDocument> documents = new TicketsDocument().executeQuery(queryString, "last_updated_time",
-					"closed_time", "status");
+			documents = new TicketsDocument().executeQuery(queryString, fieldToReturn);
 
 			for (ScoredDocument document : documents)
 			{
-				String last = "", status = document.getOnlyField("status").getText();
+				String last = "";
 
 				Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-
-				String fieldToReturn = "last_updated_time";
-
-				if (status != null && status.equalsIgnoreCase(Status.CLOSED.toString()))
-					fieldToReturn = "closed_time";
-
 				calendar.setTimeInMillis(Math.round(document.getOnlyField(fieldToReturn).getNumber()) * 1000);
 
 				if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
@@ -126,7 +129,7 @@ public class TicketReportsRest
 				if (dataJSON.containsKey(createdtime))
 				{
 					JSONObject sourcecount1 = dataJSON.getJSONObject(createdtime);
-					count = sourcecount1.getInt(status);
+					count = sourcecount1.getInt(status.toString());
 
 					sourcecount1.put(status, ++count);
 					dataJSON.put(createdtime, sourcecount1);
@@ -240,17 +243,18 @@ public class TicketReportsRest
 			innerMap.put("count", 0l);
 			// innerMap.put("total", (long) documents.size());
 
-			LinkedHashMap<String, LinkedHashMap<String, Long>> map = new LinkedHashMap<String, LinkedHashMap<String, Long>>();
-			map.put("0-1 hr", new LinkedHashMap<String, Long>(innerMap));
-			map.put("1-8 hrs", new LinkedHashMap<String, Long>(innerMap));
-			map.put("8-24 hrs", new LinkedHashMap<String, Long>(innerMap));
-			map.put(">24 hrs", new LinkedHashMap<String, Long>(innerMap));
+			// LinkedHashMap<String, LinkedHashMap<String, Long>> map = new
+			// LinkedHashMap<String, LinkedHashMap<String, Long>>();
+			// map.put("0-1 hr", new LinkedHashMap<String, Long>(innerMap));
+			// map.put("1-8 hrs", new LinkedHashMap<String, Long>(innerMap));
+			// map.put("8-24 hrs", new LinkedHashMap<String, Long>(innerMap));
+			// map.put(">24 hrs", new LinkedHashMap<String, Long>(innerMap));
 
-			LinkedHashMap<String, Long> countMap = new LinkedHashMap<String, Long>();
-			countMap.put("0-1 hr", 0l);
-			countMap.put("1-8 hrs", 0l);
-			countMap.put("8-24 hrs", 0l);
-			countMap.put(">24 hrs", 0l);
+			LinkedHashMap<String, LinkedHashMap<String, Long>> countMap = new LinkedHashMap<String, LinkedHashMap<String, Long>>();
+			countMap.put("0-1 hr", new LinkedHashMap<String, Long>(innerMap));
+			countMap.put("1-8 hrs", new LinkedHashMap<String, Long>(innerMap));
+			countMap.put("8-24 hrs", new LinkedHashMap<String, Long>(innerMap));
+			countMap.put(">24 hrs", new LinkedHashMap<String, Long>(innerMap));
 
 			for (ScoredDocument document : documents)
 			{
@@ -262,72 +266,42 @@ public class TicketReportsRest
 				}
 				catch (Exception e)
 				{
-
-				}
-
-				if (field == null)
 					continue;
+				}
 
 				Long firstRepliedTime = Math.round(field.getNumber()), createdTime = Math.round(document.getOnlyField(
 						"created_time").getNumber());
 
 				Long firstResponseTime = firstRepliedTime - createdTime;
 
+				String key = "";
+				
 				if (firstResponseTime <= 3600)
 				{
-					// Add first responsetime
-					Long totalTime = map.get("0-1 hr").get("count");
-					map.get("0-1 hr").put("count", (totalTime + firstResponseTime));
-
-					// Increase count
-					countMap.put("0-1 hr", (countMap.get("0-1 hr") + 1));
+					key = "0-1 hr";
 				}
 				else if (firstResponseTime > 3600 && firstResponseTime <= 28800)
 				{
-
-					// Add first responsetime
-					Long totalTime = map.get("1-8 hrs").get("count");
-					map.get("1-8 hrs").put("count", (totalTime + firstResponseTime));
-
-					// Increase count
-					countMap.put("1-8 hrs", (countMap.get("1-8 hrs") + 1));
+					key = "1-8 hrs";
 				}
 				else if (firstResponseTime > 28800 && firstResponseTime <= 86400)
 				{
-
-					// Add first responsetime
-					Long totalTime = map.get("8-24 hrs").get("count");
-					map.get("8-24 hrs").put("count", (totalTime + firstResponseTime));
-
-					// Increase count
-					countMap.put("8-24 hrs", (countMap.get("8-24 hrs") + 1));
+					key = "8-24 hrs";
 				}
 				else
 				{
-					// Add first responsetime
-					Long totalTime = map.get(">24 hrs").get("count");
-					map.get(">24 hrs").put("count", (totalTime + firstResponseTime));
-
-					// Increase count
-					countMap.put(">24 hrs", (countMap.get(">24 hrs") + 1));
+					key = ">24 hrs";
 				}
+
+				// Add first responsetime
+				LinkedHashMap<String, Long> tempMap = countMap.get(key);
+				tempMap.put("count", tempMap.get("count") + 1);
+
+				// Increase count
+				countMap.put(key, tempMap);
 			}
 
-			// Finding average response time
-			for (Map.Entry<String, LinkedHashMap<String, Long>> entry : map.entrySet())
-			{
-				if (countMap.get(entry.getKey()) == 0)
-					continue;
-
-				Long totalTime = map.get(entry.getKey()).get("count");
-				Long avgTime = totalTime / countMap.get(entry.getKey());
-
-				map.get(entry.getKey()).put("count", avgTime);
-
-				System.out.println(entry.getKey() + "/" + entry.getValue());
-			}
-
-			return JSONSerializer.toJSON(map).toString();
+			return JSONSerializer.toJSON(countMap).toString();
 		}
 		catch (Exception e)
 		{

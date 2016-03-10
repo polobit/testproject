@@ -336,6 +336,7 @@ public class TicketWebhook extends HttpServlet
 				if (ticket.status == Status.CLOSED)
 				{
 					ticket.no_of_reopens += 1;
+					ticket.closed_time = null;
 					status = Status.CLOSED;
 				}
 

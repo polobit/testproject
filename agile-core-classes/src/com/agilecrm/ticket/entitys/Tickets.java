@@ -347,6 +347,14 @@ public class Tickets extends Cursor implements Serializable
 	}
 
 	/**
+	 * Stores the property names in final variables, for reading flexibility of
+	 * the property values
+	 */
+	public static final String CREATE_TIME = "created_time";
+	public static final String LAST_UPDATED_TIME = "last_updated_time";
+	public static final String CLOSED_TIME = "closed_time";
+
+	/**
 	 * 
 	 * @param group_id
 	 * @param assignee_id

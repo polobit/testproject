@@ -24,21 +24,23 @@ var Ticket_Reports = {
 	    end_time=end_time/1000;
 		
 	    var frequency = $('#frequency').find('option:selected').val();
+		$('#frequency').change(function()
+		{	
+			frequency = $(this).find('option:selected').val();
+			showBar('/core/api/tickets/reports/tickets?start_time=' + start_time + '&end_time=' 
+					+ end_time + '&frequency=' + frequency, 'tickets-chart', '', 'Tickets count', false);
+		});
 
-		if ($('#frequency').length > 0){
-			$('#frequency').change(function()
-			{	
-				frequency = $(this).find('option:selected').val();
-				showBar('/core/api/tickets/reports/tickets?start_time=' + start_time + '&end_time=' 
-						+ end_time + '&frequency=' + frequency, 'tickets-chart', '', 'Tickets count', false);
-			});
-		}
-
-		// showDealsGrowthgraph('/core/api/tickets/reports/tickets?start_time=' + start_time + '&end_time=' 
-		// 		+ end_time + '&frequency=' + frequency, 'tickets-chart', '', '', '');
+		var status = $('#status').find('option:selected').val();
+		$('#status').change(function()
+		{	
+			status = $(this).find('option:selected').val();
+			showBar('/core/api/tickets/reports/tickets?start_time=' + start_time + '&end_time=' 
+					+ end_time + '&frequency=' + frequency + '&status=' + status, 'tickets-chart', '', 'Tickets count', false, ((status == 'NEW') ? ['#f0ad4e'] : ['#5cb85c']));
+		});
 
 		showBar('/core/api/tickets/reports/tickets?start_time=' + start_time + '&end_time=' 
-				+ end_time + '&frequency=' + frequency, 'tickets-chart', '', 'Tickets count', false);
+				+ end_time + '&frequency=' + frequency + '&status=' + status, 'tickets-chart', '', 'Tickets count', false, ((status == 'NEW') ? ['#f0ad4e'] : ['#5cb85c']));
 	},
 
 	priorityReports: function(){
@@ -64,61 +66,25 @@ var Ticket_Reports = {
 	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
 	    end_time=end_time/1000;
 		
-		if ($('#report_type').length > 0){
-			$('#report_type').change(function()
-			{	
-				var report_type = $(this).find('option:selected').val();
+	    var report_type = $(this).find('option:selected').val();
+		$('#report_type').change(function()
+		{	
+			report_type = $(this).find('option:selected').val();
 
-				if(report_type == 'priority'){
-					Ticket_Reports.pieforReports('/core/api/tickets/reports/priority-report?start_time=' + start_time + '&end_time=' + end_time,
-						'priority-report-chart', '', true);
+			var url = '/core/api/tickets/reports/priority-report?start_time=' + start_time + '&end_time=' + end_time,
+			    report_title = 'Priority report';
 
-					$('.report_name').text('Priority report');
+			if(report_type == 'status'){
+				url = '/core/api/tickets/reports/status-report?start_time=' + start_time + '&end_time=' + end_time;
+			    report_title = 'Status report';
+			}
 
-					return;
-				}
-
-				Ticket_Reports.pieforReports('/core/api/tickets/reports/status-report?start_time=' + start_time + '&end_time=' + end_time,
-					'priority-report-chart', '', true);
-				$('.report_name').text('Status report');
-			});
-		}
+			Ticket_Reports.pieforReports(url,'report-chart', '', true);
+			$('.report_name').text(report_title);
+		});
 
 		Ticket_Reports.pieforReports('/core/api/tickets/reports/priority-report?start_time=' + start_time + '&end_time=' + end_time,
-			'priority-report-chart', '', true);
-
-		// pie('/core/api/tickets/reports/priority-report?start_time=' + start_time + '&end_time=' + end_time,
-		// 	'priority-report-chart', '');
-	},
-
-	statusReports: function(){
-
-		var range = $('#range').html().split("-");
-    
-	    var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
-	    var d = new Date();
-	    start_time=start_time+(d.getTimezoneOffset()*60*1000);
-	    start_time=start_time/1000;
-	    var end_value = $.trim(range[1]);
-
-	    // To make end value as end time of day
-	    if (end_value)
-	        end_value = end_value + " 23:59:59";
-
-	    // Returns milliseconds from end date.
-	    //var end_time = Date.parse(end_value).valueOf();
-	    //Get the GMT end time
-	    var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
-
-	    end_time += (((23*60*60)+(59*60)+59)*1000);
-	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
-	    end_time=end_time/1000;
-		
-		Ticket_Reports.pieforReports('/core/api/tickets/reports/status-report?start_time=' + start_time + '&end_time=' + end_time,
-			'status-report-chart', '', true);
-
-		// pie('/core/api/tickets/reports/status-report?start_time=' + start_time + '&end_time=' + end_time,
-		// 	'status-report-chart', '');
+			'report-chart', '', true);
 	},
 
 	avgFirstRespTime: function(){
