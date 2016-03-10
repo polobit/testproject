@@ -72,7 +72,7 @@ public class TicketReportsRest
 			String fieldToReturn = Tickets.CREATE_TIME;
 
 			String queryString = "(" + fieldToReturn + " >=" + startTime + " AND " + fieldToReturn + " <= " + endTime
-					+ ") AND (status = NEW)";
+					+ ")";
 
 			if (Status.CLOSED.toString().equalsIgnoreCase(status))
 			{
