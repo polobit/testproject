@@ -48,11 +48,11 @@
 		</div>
 		
 		<div style="margin-left: 25px;">
-			<div class="pull-left m-r-xs   agile-img" style="margin-left:-18px;" >
+			<div class="pull-left m-r-xs   agile-img" style="margin-left:-24px;" >
 				{{#if ownerPic}}
-					<img class="img-inital r r-2x" style="height:62px;width:62px;" src="{{ownerPic}}"  title="{{name}}" />
+					<img class="img-inital r r-2x" height=62 width=62 src="{{ownerPic}}"  title="{{name}}" />
 				   {{else}}
-					<img class="w-full" style="height:62px;width:62px;" src="{{defaultGravatarurl 50}}" title="{{name}}" />
+					<img class="w-full" height=62 width=62 src="{{defaultGravatarurl 50}}" title="{{name}}" />
 				{{/if}}
 			</div>
 			<div class="pull-left text-ellipsis admin-user-name">
@@ -79,7 +79,7 @@
 			<span class=" label label label-danger text-tiny font-normal overflow-visible">Disabled </span>
 		{{/if}}
 		<div class="pull-right">
-		 <div class="text-muted"><span style="font-size:12px;">Last login</span>
+		 <div class="text-muted" style="padding-right:2px;"><span style="font-size:12px;">Last login</span>
 						<i class="fa fa-clock-o"></i>
 						<time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" >{{epochToDate info_json_string "logged_in_time"}}</time>
 					</div>
