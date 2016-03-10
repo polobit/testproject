@@ -36,15 +36,15 @@ public class MandrillSetBounceStatusDeferredTask implements DeferredTask {
 	/**
 	 * Event JSON.
 	 */
-	JSONObject eventJSON;
+	String eventJSON;
 
 	public MandrillSetBounceStatusDeferredTask(String eventJSON){
-		try {
-			this.eventJSON = new JSONObject(eventJSON);
-		} catch (JSONException e) {
+		//try {
+			this.eventJSON = eventJSON;
+		/*} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	@Override
@@ -53,13 +53,20 @@ public class MandrillSetBounceStatusDeferredTask implements DeferredTask {
 		String oldNamespace = NamespaceManager.get();
 		JSONObject metadata = null;
 		String subject = null;
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject = new JSONObject(eventJSON);
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		try
 		{
-		    if (!eventJSON.has(MSG))
+		    if (!jsonObject.has(MSG))
 			return;
 
-		    JSONObject msgJSON = eventJSON.getJSONObject(MSG);
+		    JSONObject msgJSON = jsonObject.getJSONObject(MSG);
 
 		    // If no subaccount or email, return
 		    if (!msgJSON.has(SUBACCOUNT) || !msgJSON.has(EMAIL))
@@ -82,10 +89,10 @@ public class MandrillSetBounceStatusDeferredTask implements DeferredTask {
 		    // By default SOFT_BOUNCE
 		    EmailBounceType type = EmailBounceType.SOFT_BOUNCE;
 
-		    if (HARD_BOUNCE.equals(eventJSON.getString(EVENT)))
+		    if (HARD_BOUNCE.equals(jsonObject.getString(EVENT)))
 			type = EmailBounceType.HARD_BOUNCE;
 
-		    if (SPAM.equals(eventJSON.getString(EVENT)))
+		    if (SPAM.equals(jsonObject.getString(EVENT)))
 			type = EmailBounceType.SPAM;
 
 		    // Set status to Agile Contact

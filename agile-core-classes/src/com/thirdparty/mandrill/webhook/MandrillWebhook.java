@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONSerializer;
+
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -81,6 +83,7 @@ public class MandrillWebhook extends HttpServlet
 		        || StringUtils.equalsIgnoreCase(event, SOFT_BOUNCE)
 		        || StringUtils.equalsIgnoreCase(event, SPAM)){
 		    //setBounceStatusToContact(eventJSON);
+			//System.out.println(eventJSON.toString());
 		MandrillSetBounceStatusDeferredTask mandrillSetBounceStatusDeferredTask = new MandrillSetBounceStatusDeferredTask(eventJSON.toString());
 
 		
