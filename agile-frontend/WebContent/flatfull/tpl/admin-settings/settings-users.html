@@ -1,87 +1,135 @@
 <script id="admin-settings-users-collection-template" type="text/html">
 
-<div class="panel panel-default">
- <div class="panel-heading">
-	<div class="pull-left  m-t-xs">Users</div>
-	<div class="pull-right">
-		<a href="#users-add" class="btn btn-sm btn-default btn-addon" id="addUser"><span><i class='icon-plus-sign'/></span> Add User</a>
-	</div>
-	<div class="clearfix"></div>
- </div>
+
+ 
 <div class="row">
-<div class="col-md-12 col-sm-12">
-            <div class=" table-responsive"> 
-            <table class="table table-striped showCheckboxes agile-table panel table-layout-mob-view" url="core/api/users/bulk">
-                <thead>
-                    <tr>
-						
-                        <th style="width:60%" class="header">User</th>
-						<!--  <th style="width:20%" class="header">Tags</th> -->
-                        <th style="width:20%" class="header">Created On</th>
-                        <th style="width:20%" class="header">Last Logged In</th>
-						<!-- <th style="width:20%" class="header">&nbsp;</th> -->
-                    </tr>
-                 </thead>
-                 <tbody id='admin-settings-users-model-list' route='user-edit/'>
-                 </tbody>
-            </table>
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+   
+    <div class="col contacts-div">
+	 {{#unless this.length}}
+        	<div class="m-l-sm" id="slate">
+        	</div>
+        {{/unless}}
+        {{#if this.length}}
+        <div class="data">
+            <div class="data-container">
+            	<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm admin-settings-bulkactions grid-checkboxes hide {{#is_mobile}}{{else}}  {{/is_mobile}}" >
+            	 	<span style="margin: 5px 0px 5px 5px;"> 
+            	 		<label class="i-checks i-checks-sm p-l-lg" style="visibility: visible;">
+				            <input type="checkbox"  class="thead_check" value="">
+				                <i></i>                
+				        </label>
+				    </span>
+				
+					<button class="btn btn-default bulk-action-btns btn-sm disabled"  id="delete-checked-grid" 
+					style="font-size:10px">Delete</button>
+				    </div>
+
+                <div id='admin-settings-users-model-list' route='user-edit/' class="wrapper-md showCheckboxes" url="core/api/users/bulk">
+			</div>		
             </div>
+        </div>
+        {{/if}}
     </div>
 </div>
 </div>
+
 </script>
 <script id="admin-settings-users-model-template" type="text/html">
-    <td class='data' data='{{id}}'>
-    <div class="table-resp">
-	<div class="thumb-xs agile-img avatar">
-	   {{#if ownerPic}}
-        <img class="img-inital r r-2x" src="{{ownerPic}}"  title="{{name}}" />
-	   {{else}}
-		<img class="w-full" src="{{defaultGravatarurl 50}}" title="{{name}}" />
-       {{/if}}
-    </div>
-	<div class="agile-thumb agile-thumb-view">
-		<a class="m-r-sm custom-link pull-left text-ellipsis w-auto" style="max-width:calc(100% - 101px);">{{name}}</a>
-<span class="pull-left" style="width:91px">
+ 
+  <div  class='data p-b col-sm-6 admin-user_temp' style="margin-bottom:4px;" >
+  	<span class='master-tag'></span>
+	<div class="b r-5x p-sm bg-white {{id}}" data="{{id}}" >
+	
+		<div class="left pos-abs hide" id="{{id}}">
+			<label class="i-checks i-checks-sm"> <input type="checkbox"
+				class="tbody_check" value=""> <i></i>
+			</label>
+		</div>
+		
+		<div style="margin-left: 25px;">
+			<div class="pull-left m-r-xs   agile-img" style="margin-left:-18px;" >
+				{{#if ownerPic}}
+					<img class="img-inital r r-2x" style="height:62px;width:62px;" src="{{ownerPic}}"  title="{{name}}" />
+				   {{else}}
+					<img class="w-full" style="height:62px;width:62px;" src="{{defaultGravatarurl 50}}" title="{{name}}" />
+				{{/if}}
+			</div>
+			<div class="pull-left text-ellipsis admin-user-name">
+				<a  class="m-r-sm custom-link pull-left text-ellipsis w-auto admin-username">{{name}}</a><br>
+				
+					<div class="text-xs">{{email}}</div>
+					 <div class="text-xs">Created on {{epochToDate info_json_string "created_time"}}</div>
+					 					
+				
+	    	</div>
+			
+
+		</div>
+		<div class="clearfix"></div>
+		<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-md no-wrap" style="padding-left:7px;">
 		{{#if is_admin}}
-			<span class="label m-r-xs bg-light dk text-tiny">Admin</span>
+			<span class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">Admin</span>
+			
 		{{/if}}
 		{{#if is_account_owner}}
-			<span class="label bg-light dk text-tiny">Owner</span>
+			<span class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">Owner</span>
 		{{/if}}
 		{{#if is_disabled}}
-			<span class="label label-danger">Disabled</span>
+			<span class=" label label label-danger text-tiny font-normal overflow-visible">Disabled </span>
 		{{/if}}
-		</span>	
-<div class="clearfix"></div>
-		<div class="text-xs">{{email}}</div>
-	</div>
-	</div>
-	</td>
-	<!-- <td>
-		<span class="pull-left" style="width:91px">
-		{{#if is_admin}}
-			<span class="label m-r-xs bg-light dk text-tiny">Admin</span>
-		{{/if}}
-		{{#if is_account_owner}}
-			<span class="label bg-light dk text-tiny">Owner</span>
-		{{/if}}
-		{{#if is_disabled}}
-			<span class="label label-danger">Disabled</span>
-		{{/if}}
-		</span>	
-	</td> -->
-    <td>
-		<div class="table-resp">
-		{{epochToDate info_json_string "created_time"}}
+		<div class="pull-right">
+		 <div class="text-muted"><span style="font-size:12px;">Last login</span>
+						<i class="fa fa-clock-o"></i>
+						<time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" >{{epochToDate info_json_string "logged_in_time"}}</time>
+					</div>
 		</div>
-	</td>
-    <td class="text-muted">
-		<div class="table-resp">
-			<i class="fa fa-clock-o"></i>
-			<time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" >{{epochToDate info_json_string "logged_in_time"}}</time>
 		</div>
-	</td>
-   <!-- <td><div class="table-resp">{{#if is_admin}}<span class="label m-r-xs bg-light dk text-tiny">Admin</span>{{/if}}{{#if is_account_owner}}<span class="label bg-light dk text-tiny">Owner</span>{{/if}}{{#if is_disabled}}<span class="label label-danger">Disabled</span>{{/if}}</div></td> -->
+
+		<div class="pull-right user-view-actions grid-view-action-button useradmin-edit-delete">
+				<span class="m-r-xs c-p"><a href="#user-edit/{{id}}"><i
+						data-toggle="tooltip" data-placement="left" title=""
+						data-original-title="Edit"
+						class="fa fa-pencil-square grid-edit-color"></i></a></span>
+						<span class='c-p delete-confirm {{id}}' deletId="{{id}}" id="user-action-delete">
+						<i data-toggle="tooltip" data-placement="left" title=""
+						data-original-title="Delete" class="fa fa-trash grid-delete-color"></i></span>
+			</div>
+
+
+	</div>
+	
+
+</div>
     
+</script>
+
+
+<script id="adminsettings-newuser-template" type="text/html">
+
+
+<div  class='data p-b col-sm-6 admin-user_temp' style="margin-bottom:4px;" >
+<div class="b r-5x p-sm bg-white" style="height:120px;">
+
+<div class="left pos-abs hide">
+			<label class="i-checks i-checks-sm"> <input type="checkbox disable"
+				class="tbody_check grid-view-checkbox disable" value=""> <i></i>
+			</label>
+		</div>
+<div style="margin-left: 25px;">
+<div class="pull-left    agile-img" id="admin-newuser-image">
+	<img class='img-inital r r-2x ' style='height:62px;width:62px;' src="flatfull/images/user-default.jpg"/>
+<br>
+</div>
+
+ <span>Add user to manage specific tasks by providing user level priveleges.</span>
+
+<div id="admin-newuser-adduser">
+<a href='#users-add' class='btn btn-primary btn-sm btn-addon add-portlet add-stream-tab pos-rlt' id='addUser' ><span><i class='icon-plus-sign'/></span>  Add User</a>
+</div>
+</div>
+</div>
+</div>
+
+
 </script>

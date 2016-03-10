@@ -3182,6 +3182,7 @@ table.hide-head-checkbox th label.i-checks {
  white-space: nowrap !important;
 }
 
+
 .contact_popover{ 
 
 	border-radius: 0px;
@@ -3388,3 +3389,74 @@ table.hide-head-checkbox th label.i-checks {
     position: static!important;
 }
 /* Fix for timeline support issue ending */
+
+.admin-user-name{
+	width: calc(100% - 45px);
+	line-height: 20px;
+	color:#7C7C7C;
+	margin-left:82px;
+	font-size:12px;
+	 margin-top: -64px;
+    margin-left: 57px;
+}
+
+.admin-user-adduser{
+	margin-left:13px;
+	width:140px;
+	font-size:14px;
+}
+
+.admin-username{
+	max-width:calc(100% - 101px);
+	text-transform: capitalize;
+	font-size:14px;
+}
+
+.admin-user_temp:hover div.user-view-actions {
+  display: block;
+}
+div.user-view-actions {
+  display: none;
+}
+
+.useradmin-edit-delete{
+	margin-top:-104px;
+}
+.admin-settings-bulkactions{
+	border-bottom: 1px solid rgba(140, 139, 139, 0.2);
+	background-color: rgba(246,248,248,1);
+	margin-left:15px;
+}
+
+.delete-adminuser{
+	width: 98%;
+    margin: 0 0 5px 4px;
+    padding: 6px 10px;
+}
+.delete-adminuser-individual{
+	width: 58%;
+    margin: 0 0 0 15px;
+    text-align: left;
+    float: left;
+    padding: 6px 10px 2px;
+}
+.adduser
+{
+	margin-left: 104px;
+}
+
+#admin-newuser-image{
+	margin-left: -18px;	
+}
+
+#admin-newuser-adduser{
+ text-align: left;
+    margin-top: 4px;	
+}
+#admin-newuser-adduser
+{
+ 	text-align: left;
+    margin-top: 5px;
+
+}
+
