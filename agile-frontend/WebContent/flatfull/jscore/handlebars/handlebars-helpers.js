@@ -1304,11 +1304,15 @@ $(function()
 	{
 
         var value = getPropertyValue(properties, name);
+        if(!value)
+        {
+        	return options.inverse(this);
+        }
         try{
         	value = JSON.parse(value);
         }catch(e){}
 
-		if (Object.keys(value).length > 0)
+		if (value && Object.keys(value) && Object.keys(value).length > 0)
 			return options.fn(this);
 		
 		return options.inverse(this);
@@ -1411,10 +1415,10 @@ $(function()
 								if (properties_count != 0)
 
 									el = el
-											.concat('<div class="contact-addressview"><div><div class="pull-left hide" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color">');
+											.concat('<div class="contact-addressview text-xs"><div><div class="pull-left hide text-xs" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color text-xs">');
 								else
 									el = el
-											.concat('<div class="contact-addressview"><div><div class="pull-left hide" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color">');
+											.concat('<div class="contact-addressview text-xs"><div><div class="pull-left hide text-xs" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color text-xs">');
 
 								if(address.address !== undefined)
 									el = el.concat(address.address+", ");
@@ -2627,37 +2631,6 @@ $(function()
 			return options.inverse(this);
 		}
 		 
-	});
-
-	Handlebars.registerHelper('get_subscribers_type_from_hash', function()
-	{
-
-		// Returns "workflows" from "#workflows"
-		var hash = window.location.hash.substr(1);
-
-		if (hash.indexOf("all") != -1)
-			return "All";
-
-		if (hash.indexOf("active") != -1)
-			return "Active";
-
-		if (hash.indexOf("completed") != -1)
-			return "Completed";
-
-		if (hash.indexOf("removed") != -1)
-			return "Removed";
-
-		if (hash.indexOf("unsubscribed") != -1)
-			return "Unsubscribed";
-
-		if (hash.indexOf("hardbounced") != -1)
-			return "Hard Bounced";
-
-		if (hash.indexOf("softbounced") != -1)
-			return "Soft Bounced";
-
-		if (hash.indexOf("spam-reported") != -1)
-			return "Spam Reported";
 	});
 
 	Handlebars.registerHelper("check_plan", function(plan, options)
@@ -5297,6 +5270,11 @@ $(function()
 			return "-";
 	});
 
+	Handlebars.registerHelper('getEmailCreditsCount', function()
+	{
+		return getEmailCreditsCount();
+	});
+
 	// helper function to return agile bcc special email for inbound mail event
 	// trigger
 	Handlebars.registerHelper('inboundMail', function()
@@ -5808,7 +5786,9 @@ $(function()
 		else if(p_name=='Stats Report')
 			portlet_name = "Activity Overview";
 		else if(p_name=='Campaign stats')
-			portlet_name = "Campaign Stats"
+			portlet_name = "Campaign Stats";
+		else if(p_name=='Average Deviation')
+			portlet_name = "Tasks Completion Time Deviation";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5829,7 +5809,7 @@ $(function()
 			icon_name = 'icon-graph';
 		else if (p_name == 'Calls Per Person')
 			icon_name = 'icon-call-end';
-		else if (p_name == 'Pending Deals')
+		else if (p_name == 'Pending Deals' || p_name == 'Average Deviation')
 			icon_name = 'icon-clock';
 		else if (p_name == 'Deals By Milestone')
 			icon_name = 'icon-flag';
@@ -6640,6 +6620,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'See how your deal sources are performing over time.'
 	else if(p_name == 'Lost Deal Analysis')
 		description = 'Get insights into why deals were lost. Filter by owner, track and source.'
+	else if(p_name == 'Average Deviation')
+		description = 'A quick view of deviation in tasks completion times.'
 	return description;
 			});
 
@@ -7002,6 +6984,7 @@ Handlebars.registerHelper('is_IE_browser', function(options) {
 
 function agile_is_mobile_browser(){
    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+  
  }
 
  function isIEBrowser(){

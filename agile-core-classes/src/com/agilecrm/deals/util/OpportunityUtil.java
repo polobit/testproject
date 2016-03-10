@@ -2711,4 +2711,51 @@ public class OpportunityUtil
 	    return null;
 	}
     }
+    
+    @SuppressWarnings("null")
+	public static String updateDeal(Long contactId, String milestone, String expectedValue)
+    {   
+    	if(expectedValue==null && milestone==null)
+    		if (contactId == 0 && milestone.length()==0 && expectedValue.length()==0 )
+    			return null; 
+    	
+    	double expectedValueD=0;
+    	if(expectedValue.length()!=0 && expectedValue!=null)    		
+    		expectedValueD= Double.parseDouble(expectedValue);	
+    	
+    	Map<String, Object> conditionsMap = new HashMap<String, Object>();
+    	conditionsMap.put("archived", false);
+
+    	Long pipeline=null;
+    	String milestoneStr=null;
+    	
+    	if(milestone.length()!=0 && milestone!=null){ 
+    		Map<String, String> fromMilestoneDetails = AgileTaskletUtil.getTrackDetails(milestone);
+    		milestoneStr=fromMilestoneDetails.get("milestone").trim();
+    		pipeline=Long.parseLong(fromMilestoneDetails.get("pipelineID"));
+    	}
+    	
+    	if (contactId != null)
+    		conditionsMap.put("related_contacts", new Key<Contact>(Contact.class, contactId));
+    	
+	   	List<Opportunity> listOpportunityObj= dao.fetchAllByOrder(1,null,conditionsMap,true,false,"-created_time");
+    	
+	   	if(listOpportunityObj.isEmpty())
+	   		return null;
+	   	
+	   	Opportunity opportunityObj = listOpportunityObj.get(0);
+    		
+	   	if(milestoneStr!=null){
+	   		opportunityObj.milestone=milestoneStr;
+	   		opportunityObj.pipeline_id=pipeline;
+    	}
+	   	
+	   	if(expectedValue.length()!=0 && expectedValue!=null)   
+    		opportunityObj.expected_value=expectedValueD;
+    	
+    	opportunityObj.save();
+
+    	return opportunityObj.name;
+    }
+	
 }

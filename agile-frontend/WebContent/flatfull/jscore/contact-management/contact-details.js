@@ -237,6 +237,8 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #lead-score' : 'onGetScorebox',
     	'focusout #scorebox' : 'getScore',
 	   	'keyup  #scorebox' : 'scoreValEnter',
+    	'click #cadd' : 'onCaddScore',
+    	'click #cminus' :'onCremoveScore',
 
     	
     	
@@ -813,7 +815,36 @@ getScore:  function(e){
 		this.updateScoreValue();
 	
 	},
-	   
+
+	onCaddScore :  function(e){
+	     e.preventDefault();
+	    
+	     // Convert string type to int
+	     var add_score = parseInt($('#lead-cscore').text());
+	    
+	     add_score = add_score + 1;
+	    
+	     // Changes score in UI
+	     $('#lead-cscore').text(add_score);
+       
+	    App_Companies.companyDetailView.model.set({'lead_score': add_score}, {silent: true});
+	 	var contact_model =  App_Companies.companyDetailView.model.toJSON();
+	    
+	   /* // Refreshing the view ({silent: true} not working)
+	     contact_model.url = 'core/api/contacts';
+	     contact_model.set('lead_score', add_score, {silent: true});
+	
+	     // Save model
+	    contact_model.save();*/
+	    
+	 	var new_model = new Backbone.Model();
+	 	new_model.url = 'core/api/contacts';
+	 	new_model.save(contact_model,{
+	 		success: function(model){
+
+	 		}
+	 	});		          
+	 },
 	   
 	/**
 	 * Subtracts score of a contact (both in UI and back end)
@@ -846,6 +877,34 @@ getScore:  function(e){
 			}
 		});
 	},
+
+		onCremoveScore :  function(e){
+		 	e.preventDefault();
+			
+		 	// Converts string type to Int
+		 	var sub_score = parseInt($('#lead-cscore').text());
+			
+		 	if(sub_score <= 0)
+		 		return;
+			
+		 	sub_score = sub_score - 1;
+			
+		 	// Changes score in UI
+		 	 $('#lead-cscore').text(sub_score);
+			
+		 // Changes lead_score of the contact and save it.
+		 App_Companies.companyDetailView.model.set({'lead_score': sub_score}, {silent: true});
+		var contact_model =  App_Companies.companyDetailView.model.toJSON();
+			
+		 var new_model = new Backbone.Model();
+		new_model.url = 'core/api/contacts';
+		new_model.save(contact_model,{
+		 	success: function(model){
+
+		 		}
+		 	});
+		 },
+
 
 
     addTask : function(e){

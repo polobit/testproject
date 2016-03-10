@@ -9,13 +9,38 @@
  /**
 *  Workflow event listeners
 */
+var unsubscribe_fill_select = {};
 var Workflow_Model_Events = Base_Model_View.extend({
    
     events: {
-        'click #save-workflow-top,#save-workflow-bottom,#duplicate-workflow-top,#duplicate-workflow-bottom,.is-disabled-top': 'saveCampaignClick',
+        'click #save-workflow-top,#save-workflow-bottom,#duplicate-workflow-top,#duplicate-workflow-bottom': 'saveCampaignClick',
         'click #workflow-unsubscribe-option': 'unsubscribeCampaign',
         'click #workflow-designer-help': 'helpCampaign',
         'change #unsubscribe-action': 'unsubscribeCampaignOptionSelect',
+        'change #disable-workflow':'saveCampaignClick',
+        'change .emailSelect,click .emailSelect' : 'fillDetails',
+    },
+
+    fillDetails : function(e)
+    {
+        console.log('fillDetails');
+        var unsubscribe_subject = "";
+        unsubscribe_fill_select.id = "";
+        var model_id = $('.emailSelect option:selected').prop('value');
+        if (!model_id)
+        	return;
+		var emailTemplatesModel = Backbone.Model.extend({ url : '/core/api/email/templates/' + model_id, restKey : "emailTemplates" });
+		var templateModel = new emailTemplatesModel();
+		
+		templateModel.fetch({ success : (function(data)
+		{
+            var model = data.toJSON();
+			unsubscribe_fill_select.id = model_id;
+            unsubscribe_fill_select.text = model.text;
+		})
+    });
+            
+
     },
 
     unsubscribeCampaignOptionSelect : function(e){
@@ -67,6 +92,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         $("#workflow-unsubscribe-block").slideToggle('fast');        
     },
 
+    
    /**
      * Saves the content of workflow if the form is valid. Verifies for duplicate workflow names.
      * Separate ids are given for buttons (as IDs are unique in html) but having same functionality, 
@@ -125,16 +151,21 @@ var Workflow_Model_Events = Base_Model_View.extend({
         var unsubscribe_action = $('#unsubscribe-action').val();
         var unsubscribe_email = $('#unsubscribe-email').val().trim();
         var unsubscribe_name = $('#unsubscribe-name').val().trim();
+        var unsubscribe_subject = "";
+        if(unsubscribe_fill_select.id)
+            unsubscribe_subject = unsubscribe_fill_select.id;
         var is_disabled = $('.is-disabled-top').attr("data");
-        if($clicked_button.hasClass("is-disabled-top") && is_disabled)
+        if(e.type == "change" && is_disabled)
             is_disabled = !JSON.parse(is_disabled);
 
         var unsubscribe_json ={
                                     "tag":unsubscribe_tag,
                                     "action":unsubscribe_action,
                                     "unsubscribe_email": unsubscribe_email,
-                                    "unsubscribe_name": unsubscribe_name
+                                    "unsubscribe_name": unsubscribe_name,
+                                    "unsubscribe_subject": unsubscribe_subject
                                }
+
         
         // Check for valid name
         if (isNotValid(name)) {
@@ -178,15 +209,14 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 // Hide message
                 $('#workflow-edit-msg').hide();
 
-                //toggle disable dropdown
-                 if($clicked_button.hasClass("is-disabled-top")){
+                if(e.type == "change"){
                      var disabled = $(".is-disabled-top");
-                 
-                    if (is_disabled) {
+                 var status = $('#disable-switch').bootstrapSwitch('status');
+                if (is_disabled && status) {
                         disabled.attr("data", true);
                         disabled.find('i').toggleClass('fa-lock').toggleClass('fa-unlock');
                         disabled.find('div').text("Enable Campaign");
-                        $('#designer-tour').addClass("blur").removeClass("anti-blur");;
+                        $('#designer-tour').addClass("blur").removeClass("anti-blur");
                         window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
                         window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
                         show_campaign_save("Campaign has been disabled successfully.","red");
@@ -194,17 +224,15 @@ var Workflow_Model_Events = Base_Model_View.extend({
                         disabled.attr("data", false);
                         disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
                         disabled.find('div').text("Disable Campaign"); 
-                        $('#designer-tour').addClass("anti-blur").removeClass("blur");;
+                        $('#designer-tour').addClass("anti-blur").removeClass("blur");
                         window.frames[0].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
                         window.frames[0].$('#toolbartabs').removeClass("disable-iframe");
                        // $('#designer-tour').css("pointer-events","none");
                         window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
                         show_campaign_save("Campaign has been enabled successfully.");
-
                     }
                 }
 
-                
                 // Boolean data used on clicking on Done
                 if(trigger_data && trigger_data["navigate"])
                 {
@@ -242,6 +270,27 @@ var Workflow_Model_Events = Base_Model_View.extend({
             });        
             
         } 
+        var unsubscribe_subject = "";
+        unsubscribe_fill_select.id = "";
+        var model_id = $('.emailSelect option:selected').prop('value');
+        if (!model_id)
+            return;
+        
+        var emailTemplatesModel = Backbone.Model.extend({ url : '/core/api/email/templates/' + model_id, restKey : "emailTemplates" });
+        var templateModel = new emailTemplatesModel();
+        
+        templateModel.fetch({ success : (function(data)
+            {
+                var model = data.toJSON();
+                unsubscribe_fill_select.id = model_id;
+                unsubscribe_fill_select.text = model.text;
+            }),
+        error: (function () {
+                unsubscribe_fill_select.id = model_id;
+                unsubscribe_subject = unsubscribe_fill_select.id;
+            })
+        });
+ 
     },
 
 });

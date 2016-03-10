@@ -278,7 +278,7 @@
 		<time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" endEpoch}}" >{{get_duration startEpoch endEpoch}}</time>
 		</div>
 		 <div class="clearfix"></div>
-        <div class="pull-left text-xs text-muted m-r-md" style="font-size:14px;">{{epochToHumanDate "mmmm dd" start}}</div>
+        <div class="pull-left text-xs text-muted m-r-md" style="font-size:14px;">{{epochToHumanDate "mmmm dd" startEpoch}}</div>
 		{{#if this.contacts}}
 			<div class="pull-left m-b-xxs text-ellipsis">
 				{{#each contacts}}
@@ -778,10 +778,18 @@
 <script id="portlets-tasksandevents-task-report-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Task Report</span>
-				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
-					{{get_portlet_duration settings.duration}}
-				</small>
+				<span class="pull-left inline-block text-ellipsis" style="width:50%;">Task Report</span>
+				<span class="pull-right text-right" style="width: 50%;">
+					<small class="p-t-xs portlet-header-small-text text-ellipsis">
+						{{#if_equals settings.tasks "all-tasks"}}All{{else}}Completed{{/if_equals}}
+					</small>
+					<small class="portlet-header-small-text text-ellipsis" style="font-size:18px;">
+						|
+					</small>
+					<small class="p-t-xs portlet-header-small-text text-ellipsis">
+						{{get_portlet_duration settings.duration}}
+  					</small>
+  				</span>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
 				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
@@ -2409,6 +2417,28 @@ Deleted  {{custom1}} Campaigns<br/>
 		</div>
         <div class="portlet_body panel-body p-n b-n">
 		</div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+
+
+<script id="portlets-Tasks-Deviation-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Tasks Completion Time Deviation</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
+
+	{{get_portlet_duration settings.duration}}
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	

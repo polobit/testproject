@@ -28,6 +28,9 @@ function contactTableView(base_model,customDatefields,view) {
 		templateKey = 'contacts-grid';
 	}
 
+	// if(agile_is_mobile_browser())
+
+
 	// Creates list view for
 	var itemView = new Base_List_View({
 		model : base_model,
@@ -50,61 +53,74 @@ function contactTableView(base_model,customDatefields,view) {
 	var el = itemView.el;
 
 	if (!gridViewEl || window.location.hash=="#companies") {
-	
-		// Clears the template, because all the fields are appended, has to be reset
-		// for each contact
-		// $('#contacts-custom-view-model-template').empty();
-		
-		// Iterates through, each field name and appends the field according to
-		// order of the fields
-		if(isFromRender!=true)
-			$(el).html($(el).find('td').first());
-		$.each(fields, function(index, field_name) {
-			if(field_name.indexOf("CUSTOM_") != -1)
-			{
-				field_name = field_name.split("CUSTOM_")[1]; 			
-				var property = getProperty(contact.properties, field_name);
-				var json = {};
-				if(!property)
-				{
-					json.id = contact.id;
-					getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
+
+		if(agile_is_mobile_browser()){
+
+			getTemplate('contacts-custom-view-basic_info-mobile', contact, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
 						$(el).append($(template_ui));
 					}, null);
-					return;
-				}
-				if(isDateCustomField(customDatefields,property)){
-					console.log('got true');
-					json = property;
-					json.id = contact.id;
-					getTemplate('contacts-custom-view-custom-date', json, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$(el).append($(template_ui));
-					}, null);
-				}
-				else
-				{
-					json = property;
-					json.id = contact.id;
-					getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$(el).append($(template_ui));
-					}, null);
+
+		}else {
+				// Clears the template, because all the fields are appended, has to be reset
+				// for each contact
+				// $('#contacts-custom-view-model-template').empty();
+				
+				// Iterates through, each field name and appends the field according to
+				// order of the fields
+				if(isFromRender!=true)
+					$(el).html($(el).find('td').first());
+				$.each(fields, function(index, field_name) {
+					if(field_name.indexOf("CUSTOM_") != -1)
+					{
+						field_name = field_name.split("CUSTOM_")[1]; 			
+						var property = getProperty(contact.properties, field_name);
+						var json = {};
+						if(!property)
+						{
+							json.id = contact.id;
+							getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui));
+							}, null);
+							return;
+						}
+						if(isDateCustomField(customDatefields,property)){
+							console.log('got true');
+							json = property;
+							json.id = contact.id;
+							getTemplate('contacts-custom-view-custom-date', json, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui));
+							}, null);
+						}
+						else
+						{
+							json = property;
+							json.id = contact.id;
+							getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui));
+							}, null);
+							
+						}
+						return;
+					}
 					
-				}
-				return;
-			}
-			
-			getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-				$(el).append($(template_ui));
-			}, null);
-		});
+					getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$(el).append($(template_ui));
+					}, null);
+				});
+
+		}
+	
+		
 
 	} else  {
 		getTemplate('contacts-grid-model', contact, undefined, function(template_ui){

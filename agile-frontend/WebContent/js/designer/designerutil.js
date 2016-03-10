@@ -471,6 +471,7 @@ function disable_text_required_property(selector)
 	if (selector.find('#tinyMCEhtml_email').val() != "" && selector.find('#text_email').val() == "")
 		selector.find('#text_email').removeProp("required");
 }
+
 // Bhasuri 10/25/2014
 function getDate(selector)
 {
@@ -586,6 +587,9 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 	});
 	
 	console.log(selectoption);
+	if(uiFieldDefinition.invisible)
+		selectoption = $(selectoption).attr("invisible", uiFieldDefinition.invisible);
+
 	return selectoption;
 }
 
@@ -758,6 +762,14 @@ function insertSelectedOption(ele ,target_id)
 	$('#new_field').val($(ele).find(':selected').val());
 
 }
+
+function insertSelectedOption1(ele ,target_id)
+{
+	var text = $(target_id).val();
+	
+		$(target_id).val($(ele).find(':selected').val());
+
+}
 	// function remove_property(ele)
 	// {
 	//  	$("#updated_value").prop('disabled', true).val('');
@@ -810,4 +822,6 @@ function insertSelectedOption(ele ,target_id)
     		}
     	}
 	}
+
+	
 

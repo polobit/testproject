@@ -50,6 +50,8 @@ public class ContactPrefsAPI {
 	public ContactPrefs getContactPrefs(@PathParam("type") String type) {
 
 		System.out.println("in contact prefs api");
+		if(type!=null)
+			return ContactPrefsUtil.getPrefsByType(Type.valueOf(type));
 		return ContactPrefsUtil.getPrefsByType(Type.GOOGLE);
 	}
 

@@ -36,6 +36,37 @@ function initializeLandingPageListeners() {
     		}
     	}
 	});
+	
+	$('#landingpages-listeners').on('click', '.lpDeviceView', function(e){
+		e.preventDefault();
+		var triggeringElement = $(this).data("trigger");
+    	var landingPageIframe = document.getElementById('landingPageBuilder').contentWindow;
+    	landingPageIframe.$(triggeringElement).trigger("click");
+    	var deviceClass = $(this).data("deviceclass");
+    	landingPageIframe.$("#preview-frame").removeClass("xs-width sm-width md-width full-width");
+    	landingPageIframe.$("#preview-frame").addClass(deviceClass);
+
+	});
+
+	$('#landingpages-listeners').on('click', '.lpPreviewView', function(e){
+		e.preventDefault();
+		var triggeringElement = $(this).data("trigger");
+    	document.getElementById('landingPageBuilder').contentWindow.$(triggeringElement).trigger("click");
+    	$(this).find('i').toggleClass('fa-eye fa-eye-slash');
+    	
+    	
+    	if( $(this).find('i').hasClass('fa-eye')) {
+    		//alert("Inside toggle");
+    		document.getElementById('landingPageBuilder').contentWindow.$("#preview-closer").trigger("click");
+    	}
+    	
+    	if ($(this).find("span").text() == 'Close'){
+        	$(this).find("span").text('Preview');
+    	} else {
+        	$(this).find("span").text('Close');
+    	} 
+    	document.getElementById('landingPageBuilder').contentWindow.$("#preview-closer").addClass("hidden");
+	});
 
 	$('#landingpages-listeners').on('click', '#builderPageOptionsLink', function (e) {
 		e.preventDefault();
@@ -96,7 +127,8 @@ function initializeLandingPageListeners() {
 	$('#landingpages-listeners').on('click', '.lpBuilderMenuItem', function(e){
 		e.preventDefault();
 		var builderIFrame = document.getElementById('landingPageBuilder').contentWindow;
-		var selector = '#'+$(this).data("id")+'AgileId';
+		var selectorId = $(this).data("id");
+		var selector = '#'+selectorId+'AgileId';
 
 		if($(this).hasClass("active")) {
 			builderIFrame.$('#elements-container').hide();
@@ -106,6 +138,18 @@ function initializeLandingPageListeners() {
 			$('.lpBuilderMenuItem').removeClass("active");
 			$(this).addClass("active");
 		}
+
+/*		if(selectorId == "inspector") {
+			builderIFrame.$('#elementsPanelAgileId').addClass("hidden");
+			builderIFrame.$('#elements-container').css("position","fixed");
+			builderIFrame.$('#elements-container').css("left","");
+			builderIFrame.$('#elements-container').css("right","0");
+		} else {
+			builderIFrame.$('#elementsPanelAgileId').removeClass("hidden");
+			builderIFrame.$('#elements-container').css("position","absolute");
+			builderIFrame.$('#elements-container').css("right","");
+			builderIFrame.$('#elements-container').css("left","0");
+		}*/
 		
 		builderIFrame.$(selector).trigger("click");
 	});

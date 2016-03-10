@@ -2,19 +2,20 @@
 <div class="row hide"><small class="navigation span9" style="min-height:10px!important;font-size:smaller;line-height:6px;"></small></div>
 <div class="app-content-full  h-full dock-view-fixing" id="infinite-scroller-company-details">
 <div class="hbox hbox-auto-xs  bg-light ">
-<div class="col w-xl bg-light lter b-r">
+<div class="col  details-mobile-view b-r bg-light lter">
 <div class="vbox">
 <div class="row-row">
-<div class="wrapper  text-center-mobile-view company-details-mobile-view">
+<div class=" text-center-mobile-view company-details-mobile-view">
+<div class="wrapper p-t">
+	<div class="panel panel-default m-b-none">
+        <div class="panel-body">
 				<div class="text-center pos-rlt">
-				
-						
 							<form id="contact-container">
 								<a href="#" class="tooltip_info" data-placement="top"
 									data-toggle="tooltip"
 									title="<i class='icon-edit icon-white icon'></i> Change Picture"
 									style='text-decoration: none;'> 
-								<img class='b-2x r-2x upload_pic imgholder submit' style="width:96px;height:96px" type="submit"
+								<img class='b-2x r-2x upload_pic imgholder submit' style="width:75px;height:75px" type="submit"
 									{{getCompanyImage "80" "display:inline;"}} /> 
 								</a> <input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
@@ -22,7 +23,7 @@
 <div class="pos-abs pos-r-0 pos-t-0">
 <div>
  
-								<a class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
+								<a class="dropdown-toggle" data-toggle="dropdown"><span style="opacity:0.8;margin-top:91px;"class="caret text-lg"></span></a>
 								<ul class="dropdown-menu pull-right">
 <li> <a href="#company-edit"><i class="fa fa-pencil-square" style="margin-right:2px"></i> Edit</a></li>
 <li class="divider"></li>
@@ -43,14 +44,14 @@
 </div>
 						
 					
-							<div class="text-ellipsis  m-t-xs  h3 font-thin custom-color w-full">
+							<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-right:5px; text-transform: capitalize;">
 
 								{{getPropertyValue properties "name"}}
 								{{#if_propertyName "url"}}</br>
-									<a class="text-lg" href="{{getHyperlinkFromURL value}}" title="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
+									<a class="text-base" href="{{getHyperlinkFromURL value}}" title="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
 								{{/if_propertyName}}
 								
-								<div class="text-base text-center m-b-xs text-muted m-t-sm">
+								<div class=" text-center m-b-xs text-muted  text-ellipsis" style="font-size:13px;">
 									{{#property_is_exists "website" properties}}
 									{{#multiple_Company_Property_Element "website" properties}} {{#each
 									this}} {{#if_equals subtype "TWITTER"}} <span class="m-r-xs"><a target="_blank"
@@ -73,21 +74,61 @@
 									</span>{{/if_equals}} {{/if_equals}} {{/each}} {{/multiple_Company_Property_Element}}
 									{{/property_is_exists}}
 								</div>
-							</div>
-					
-		
-							
-				<div id='star' class="company-star-view" style='width:auto!important;padding-bottom: 13px;margin:0 auto;'></div>
-								
-				
-					
-
+							</div>	
 					</div>
+
+			<div class=" panel-middle-align-mobile">	
+			   <div class="row">
+				<div class="col-xs-12 col-sm-7 text-center">
+				 	<div id='star' class="company-star-view" style='width:auto!important;padding-bottom: 13px;margin:0 auto;'></div>
+				</div>
+
+                <div class="text-right hidden-xs col-sm-5">		
+								<!--  starting score -->
+						<div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
+							<div  class="text-lg score-view">
+							<div style="position:relative;">
+
+							<i class="icon-trophy " style="height:14px; vertical-align: middle; display: inline-block;right:1px;position: relative;font-size:14px;opacity: 0.8;top:1px;" rel="popover" data-placement="bottom" data-title="Lead Score"
+									data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation."
+									id="element" data-trigger="hover" ></i>
+								 
+							
+								<span class="inline-block v-middle">
+									{{#if lead_score}} <span id="lead-cscore">{{lead_score}}</span>&nbsp;
+									{{else}} <span id="lead-cscore">0</span>&nbsp;
+									{{/if}}
+								</span>
+							{{#canEditContact owner.id}}
+								<span class="contact-score-control m-l-xs">
+									<ul class="inline-block list-none m-n p-n">
+										<li style="height: 9px"><i class="icon-sort-up c-p" id="cadd"
+											style="height: 10px;"></i></li>
+										<li><i class="icon-sort-down c-p" id="cminus"
+											style="height: 10px;"></i></li>
+									</ul>
+								</span>
+							{{/canEditContact}}
+							</div>
+							</div>
+							</div>
+
+						</div>
+						</div>
+						</div>
+			</div>
+			</div>
+			</div>
+
 					<!-- Owner block -->
-	<div clas="m-t-sm"><small class="text-muted text-sm">Owner</small></div>				
+<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+
+	<small class="text-muted text-base">Owner</small>				
 					<div class="change-owner-succes"></div>
      <div title="Owner" class="contact-owner-view">
-      	<div class="contact-owner text-base" id="change-owner-element">
+      	<div class="contact-owner text-xs" id="change-owner-element">
         	
 			{{#if owner}}
         	<span class="contact-owner-pic" style="visibility:visible;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span>
@@ -98,16 +139,21 @@
         
         	{{#canEditContact owner.id}}
         	<div class="dropdown" id="change-owner-ul" style="display: none">
-        		 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change owner <span class="caret"></span></a>
+        		 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change owner <span class="caret" ></span></a>
         		 <ul id='contact-detail-owner' class="dropdown-menu"></ul>
         	</div> 
 			{{/canEditContact}}
        </div>
     </div>
+</div>
+</div>
+</div>
 				
 <!-- Tags block -->
-
-<div class="m-t-sm"><small class="text-muted text-sm">Tags</small></div>
+<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+<small class="text-muted text-base">Tags</small>
 						<div class="contact-tags m-b-xs m-t-xs">
 					<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
 							{{#if tagsWithTime.length}} 
@@ -143,6 +189,11 @@
 						{{/canEditContact}}
 					</div>
 				</div>	
+</div>
+</div>
+</div>
+
+
 <!-- funda for contact details edit -->
 
 {{#property_is_exists "phone" properties}}
@@ -176,13 +227,16 @@
 
 
 							{{#property_is_exists "phone" properties}}
-<div class="m-t-sm"><small class="text-xs text-muted">Contact Info</small></div>
-							<div>
+							<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  								<div class="panel panel-default m-b-none">
+   							    <div class="panel-body">
+							<small class="text-base text-muted">Company Info</small>
+							
 								{{#multiple_Company_Property_Element "phone" properties}}
 								
-								<div class="custom-color text-sm">
+								<div class="custom-color text-xs">
 									{{#each this}}
-									<div class="l-h-xs">
+									<div class="l-h-xs" style="line-height:20px;">
                                         <a href='#' class="contact-make-sip-call" style="display:none;"
                                            phone="{{value}}">
                                            {{value}}
@@ -197,16 +251,19 @@
 									{{/each}}
 								</div>
 								{{/multiple_Company_Property_Element}}
-							</div>
+							
 							{{/property_is_exists}}
  							{{#property_is_exists "email" properties}}
-							<div class="custom-color">
+							<div class="custom-color text-xs" style="line-height:20px;">
 								{{#multiple_Company_Property_Element "email" properties}}
 								
 								{{#property_is_exists "phone" ../properties}}
 								
 									{{else}}
-<div class="m-t-sm"><small class="text-xs text-muted">Contact Info</small></div>
+								<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  								<div class="panel panel-default m-b-none">
+   							    <div class="panel-body">
+						<small class="text-base text-muted">Company Info</small>
 									
 										{{/property_is_exists}} 
 									{{#each this}}
@@ -219,9 +276,20 @@
 								</div>
 								{{/property_is_exists}}
 
+								{{#property_is_exists "phone" properties}}
+								</div></div></div>
+								{{else}}
+									{{#property_is_exists "email" ../properties}}
+									</div></div></div>
+									{{/property_is_exists}}
+								{{/property_is_exists}}
+
  <div class="custom-data"> {{#getCompanyCustomPropertiesExclusively properties}}
+ <div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  									<div class="panel panel-default m-b-none">
+    								<div class="panel-body">
 <div class="clearfix"></div>
-<div class="m-t-sm"><small class="text-xs text-muted">Custom Info</small></div>
+<small class="text-base text-muted">Custom Info</small>
 
 								<div class="word-break-all">
 									{{#each_with_index this}}
@@ -231,10 +299,10 @@
 											<span class="text-muted"  title="{{name}}">{{name}}<span>
 										</div>
 										{{#if_equals index ../this.length}}
-											<div class="inline-block custom-color">
+											<div class="inline-block custom-color text-xs" >
 											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
 										{{else}}
-											<div class="inline-block custom-color">
+											<div class="inline-block custom-color text-xs">
 											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
 
 										{{/if_equals}}
@@ -242,22 +310,31 @@
                                         <div class="clearfix"></div>
 										{{/each_with_index}}
 									</div>
+									</div>
+									</div>
+									</div>
 									{{/getCompanyCustomPropertiesExclusively}}
 									</div>
 
 
 
  									{{#property_is_exists "address" properties}}
+ 									<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  									<div class="panel panel-default m-b-none">
+    								<div class="panel-body">
  									  {{#property_json_is_not_empty "address" properties}}
-									<div class="m-t-sm "><small class="text-xs text-muted">Location</small></div>
+									<small class="text-base text-muted">Location</small>
 										<div>
 											{{#address_Element properties}}{{/address_Element}}</div></div>
 
-										<div class="pull-left m-t-sm m-b-sm w-full">
+										<div class="pull-left m-t-sm m-b-sm w-full text-xs">
 											<div id="map" style="width: auto; height: 200px; display: none; margin: 10px">
 											</div>
 										</div>
 									  {{/property_json_is_not_empty}}
+									 </div>
+									 </div>
+									 </div>
 									{{/property_is_exists}}
 <div class="clearfix"></div>
 <!-- ending funda for contact detail edit -->

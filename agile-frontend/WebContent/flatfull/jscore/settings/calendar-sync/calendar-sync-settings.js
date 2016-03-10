@@ -34,7 +34,11 @@ var Calendar_Sync_Settings_View = Base_Model_View.extend({
 
 		if(_that.model.get("calendar_type") == "OFFICE365"){
 			var eventFilters = JSON.parse(_agile_get_prefs('event-lhs-filters'));
-			eventFilters = eventFilters[CURRENT_AGILE_USER.id];
+			var userBasedFilter = eventFilters[CURRENT_AGILE_USER.id];
+
+			if(userBasedFilter){
+				eventFilters = userBasedFilter;
+			}
 
 			var filtterList = eventFilters.cal_type;
 			var indexOf = filtterList.indexOf("office");

@@ -135,7 +135,7 @@ public class SubscriptionUtil
     {
 	Integer count = quantity * 1000;
 
-	String plan_id = "email-4";
+	String plan_id = "email3";
 
 	EmailGateway gateway = EmailGatewayUtil.getEmailGateway();
 
@@ -145,12 +145,12 @@ public class SubscriptionUtil
 	    return plan_id;
 	}
 
-	if (count <= 100000)
-	    plan_id = "email-4";
-	else if (count <= 1000000)
-	    plan_id = "email-3";
-	else if (count > 1000000)
-	    plan_id = "email-3";
+	if (count < 100000)
+	    plan_id = "email3";
+	else if (count < 1000000)
+	    plan_id = "email2.5";
+	else if (count >= 1000000)
+	    plan_id = "email1.5";
 	return plan_id;
     }
 

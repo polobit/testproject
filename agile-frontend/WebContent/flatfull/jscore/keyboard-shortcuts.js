@@ -127,8 +127,8 @@ function enableKeyboardShotcuts()
 
 		// Help
 		Mousetrap.bind('shift+h',function(){
-			if(!isRoute("help") && !isModalVisible())
-				App_Settings.navigate("help",{trigger:true});
+			if(!isModalVisible())
+				window.open("https://www.agilecrm.com/support", true);
 		});
 
 		// Logout

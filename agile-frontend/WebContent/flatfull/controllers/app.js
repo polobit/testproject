@@ -40,6 +40,7 @@ $(function()
 	App_Companies = new CompaniesRouter();
 	App_Datasync = new DataSyncRouter();
 	App_LandingPageRouter = new LandingPageRouter();
+	App_EmailBuilderRouter = new EmailBuilderRouter();
 
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
@@ -90,6 +91,7 @@ function currentRoute(route)
 	// disposeEvents();
 
 	// load_clickdesk_code();
+	showPageBlockModal();
 	 showUpgradeNoty();
 
 	 // Check the user permission to view the current route.
