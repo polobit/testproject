@@ -268,7 +268,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			}
 			
 			$(".bulk-delete-loading").remove();	
-			if(url=='core/api/users/bulk')
+			if(url=='core/api/users/bulk' && !_billing_restriction.currentLimits.freePlan)
 			{
 				var message;
 				if(count > 1)
