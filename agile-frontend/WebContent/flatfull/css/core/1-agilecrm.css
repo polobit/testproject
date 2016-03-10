@@ -3381,7 +3381,7 @@ table.hide-head-checkbox th label.i-checks {
 	border-color: #5fa2dd;
 	color: white !important;
 }
-#account_pause button:hover{
+#account_pause a:hover{
 	background-color: #f76c51;
 	border-color: #f76c51;
 	color: white !important;
