@@ -29,6 +29,15 @@
 		<servlet-name>Scribe</servlet-name>
 		<url-pattern>/scribe</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>PaypalScribe</servlet-name>
+		<servlet-class>com.agilecrm.scribe.PaypalScribeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PaypalScribe</servlet-name>
+		<url-pattern>/paypalScribe</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Shopify</servlet-name>
@@ -74,6 +83,7 @@
 		<servlet-name>OAuth2Servlet</servlet-name>
 		<url-pattern>/backend/googleservlet</url-pattern>
 		<url-pattern>/backend/StripeServlet</url-pattern>
+		<url-pattern>/backend/paypalRoute</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -156,6 +166,15 @@
 	<servlet-mapping>
 		<servlet-name>registration checker</servlet-name>
 		<url-pattern>backend/register-check</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>share campaign</servlet-name>
+		<servlet-class>com.agilecrm.CampaignShareServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>share campaign</servlet-name>
+		<url-pattern>/share</url-pattern>
 	</servlet-mapping>
 
 
@@ -277,7 +296,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TaskReminder</servlet-name>
-		<url-pattern> /backend/cron/tasks</url-pattern>
+		<url-pattern>/backend/cron/tasks</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -286,7 +305,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>EventReminder</servlet-name>
-		<url-pattern> /backend/cron/events</url-pattern>
+		<url-pattern>/backend/cron/events</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -295,7 +314,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ContactSchemaChange</servlet-name>
-		<url-pattern> /backend/cron/contact-schema-change</url-pattern>
+		<url-pattern>/backend/cron/contact-schema-change</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -304,7 +323,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>FailedDomainEventReminder</servlet-name>
-		<url-pattern> /backend/faileddomaineventreminder</url-pattern>
+		<url-pattern>/backend/faileddomaineventreminder</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -471,13 +490,15 @@
 		<url-pattern>/</url-pattern>
 		<url-pattern>/core/*</url-pattern>
 		<url-pattern>/scribe</url-pattern>
+		<url-pattern>/paypalScribe</url-pattern>
 		<url-pattern>/upload.jsp</url-pattern>
 		<url-pattern>/import_shopify.jsp</url-pattern>
 		<url-pattern>/upload-contacts.jsp</url-pattern>
 		<url-pattern>/upload-google-document.jsp</url-pattern>
 		<url-pattern>/XeroServlet</url-pattern>
 		<url-pattern>/shopify</url-pattern>
-		<url-pattern>/auth/*</url-pattern>		
+		<url-pattern>/auth/*</url-pattern>
+			
 	</filter-mapping>
 
 	<filter-mapping>
@@ -899,14 +920,6 @@
 	<servlet-mapping>
 		<servlet-name>FacebookPageTab</servlet-name>
 		<url-pattern>/facebookpagetab</url-pattern>
-	</servlet-mapping>	
-	<servlet>
-		<servlet-name>FacebookFormLoadServlet</servlet-name>
-		<servlet-class>com.agilecrm.facebookpage.FacebookFormLoadServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>FacebookFormLoadServlet</servlet-name>
-		<url-pattern>/fbformload</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>FacebookPageServlet</servlet-name>
@@ -944,16 +957,7 @@
 		<servlet-name>RemoteApiServlet</servlet-name>
 		<url-pattern>/remote_api</url-pattern>
 	</servlet-mapping>
-	<servlet>
-        <servlet-name>BriaInformUserServlet</servlet-name>
-        <servlet-class>com.thirdparty.bria.BriaInformUserServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>  
- 
-    <servlet-mapping>
-        <servlet-name>BriaInformUserServlet</servlet-name>
-        <url-pattern>/InformUser</url-pattern>
-    </servlet-mapping>
+
 	
 	<servlet>
 		<servlet-name>LandingPagesTemplateServlet</servlet-name>
@@ -975,9 +979,70 @@
 		<servlet-name>LandingPageServingServlet</servlet-name>
 		<servlet-class>com.agilecrm.landingpages.LandingPageServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>InvoicePdfServlet</display-name>
+		<servlet-name>InvoicePdfServlet</servlet-name>
+		<servlet-class>com.agilecrm.InvoicePdfServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>LandingPageServingServlet</servlet-name>
 		<url-pattern>/landing/*</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>InvoicePdfServlet</servlet-name>
+		<url-pattern>/InvoicePdfServlet</url-pattern>
+	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>invoice</servlet-name>
+		<servlet-class>com.agilecrm.InvoicePdfServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>invoice</servlet-name>
+		<url-pattern>/invoice</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+        <servlet-name>InformUserServlet</servlet-name>
+        <servlet-class>com.thirdparty.call.InformUserServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>InformUserServlet</servlet-name>
+        <url-pattern>/InformUser</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>GetInformUserServlet</servlet-name>
+        <servlet-class>com.thirdparty.call.GetInformUserServlet</servlet-class>
+
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>GetInformUserServlet</servlet-name>
+        <url-pattern>/GetInformUser</url-pattern>
+    </servlet-mapping>
+    
+   	<servlet>
+   		<servlet-name>AdmnLoginServlet</servlet-name>
+   		<servlet-class>com.agilecrm.AdminLoginServlet</servlet-class>
+   	</servlet>  
+   	<servlet-mapping>
+        <servlet-name>AdmnLoginServlet</servlet-name>
+        <url-pattern>/custLogin</url-pattern>
+    </servlet-mapping>
+ 
+   
+    	<servlet>
+        <servlet-name>TaskReminderUnitTest</servlet-name>
+        <servlet-class>com.agilecrm.reminder.test.TaskReminderUnitTestServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>TaskReminderUnitTest</servlet-name>
+        <url-pattern>test/taskreminder/unit-test</url-pattern>
+    </servlet-mapping>
+  
 </web-app>

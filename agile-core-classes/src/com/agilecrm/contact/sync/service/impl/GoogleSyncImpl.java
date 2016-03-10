@@ -447,6 +447,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	int limit = 0;
 	int contacts_list_size = contacts.size();
 	
+	//boolean contactCreate = true;
+	
 	for (int i = 0; i < contacts_list_size; i++)
 	{
 
@@ -476,11 +478,21 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	    if (!skip)
 	    {
-		BatchUtils.setBatchId(createContact, contact.id.toString());
-		BatchUtils.setBatchOperationType(createContact, BatchOperationType.INSERT);
-		BatchUtils.setBatchId(createContact,"create");
-		requestFeed.getEntries().add(createContact);
-		insertRequestCount++;
+		    if(createContact.getId() == null)
+		    {
+				BatchUtils.setBatchOperationType(createContact, BatchOperationType.INSERT);
+				BatchUtils.setBatchId(createContact,"create");
+				requestFeed.getEntries().add(createContact);
+		    }
+		    else
+		    {
+		    	//If contact already present in google with this email, we just update this
+		    	//instead of creating new contact
+				BatchUtils.setBatchOperationType(createContact, BatchOperationType.UPDATE);
+				BatchUtils.setBatchId(createContact,"update");
+				requestFeed.getEntries().add(createContact);
+		    }
+			insertRequestCount++;
 	    }
 
 	    if (insertRequestCount >= 95 || (i >= contacts.size() - 1 && insertRequestCount != 0))
@@ -537,6 +549,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	ContactFeed responseFeed = null;
 	int limit = 0;
 	int contacts_list_size = contacts.size();
+	
+//	boolean contactCreate = false;
 	
 	for (int i = 0; i < contacts_list_size; i++)
 	{

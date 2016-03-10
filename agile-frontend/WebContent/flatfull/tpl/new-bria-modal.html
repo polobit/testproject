@@ -1,19 +1,51 @@
-<!-- New (Note) Modal views -->
-<div class="modal  fade bria-modal" id="briaInfoModal">
+<script type="text/html" id="briaInfoModal-template">
   <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
-        <button class="close" data-dismiss="modal">X</button>
+        <button class="close" data-dismiss="modal">&times;</button>
         <h3 class="modal-title">&nbsp;Bria</h3>
     </div>
     <div class="modal-body">
        <div class="text-base p-b-lg">
-       Please make sure the Agile Bria app is running in your machine.
+
+
+      Sorry, we could not establish the connection.<br>
+		It seems that you are not running the executable file that is essential to establish the connection.
+		
+		
        </div>
+       
+       <div class="text-xs">
+
+     	  If you have not download the executable to make a call . Download from <a href="#" class="text-info" target="_blank" id="downloadCallJar"> here </a>.
+		
+       </div>
+       
     </div>
     <div class="modal-footer">
         <a href="#" class="btn btn-sm btn-default" id="bria_info_ok">Okay</a>
     </div>
     </div>
     </div>
-</div>
+
+</script>
+
+<script type="text/html" id="briaCallStatusModal-template">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title">&nbsp;Bria</h3>
+    </div>
+    <div class="modal-body">
+       <div class="text-base p-b-lg">
+       Already on call.
+       </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-sm btn-default" id="bria_status_ok">Okay</a>
+    </div>
+    </div>
+    </div>
+</script>

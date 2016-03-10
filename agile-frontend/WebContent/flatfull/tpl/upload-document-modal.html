@@ -1,53 +1,39 @@
 <!-- Add (Documents) Modal views -->
-<div class="modal  fade upload-document-modal" id="uploadDocumentModal">
-
-  <div class="modal-dialog">
-    <div class="modal-content">
-    <div class="modal-header">
-		<!-- <button class="close" data-dismiss="modal">x</button> -->
-		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
-		<h3 class="modal-title"><i class="fa fa-plus-circle"></i>&nbsp;Add Document</h3>
-	</div>
-	<div class="modal-body">
-		<form id="uploadDocumentForm" name="uploadDocumentForm" method="post">
-			<fieldset>
-				<div class="row">
-				<div class="col-md-12">
-					<div class="control-group form-group">
-						<label class="control-label"><b>Title </b><span
-							class="field_req">*</span></label>
-						<div class="controls">
-							<span><input id="name" name="name" type="text"
-								class="required form-control" placeholder="Name of Document" /></span>
-						</div>
-					</div>
-					<!-- <div class="control-group span5" style="margin-left: 30px;">
-						<label class="control-label"><b>Owner </b><span
-							class="field_req">*</span></label>
-						<div class="controls" id="owners">
-							<select id="owners-list" class="required form-control" name="owner_id"></select>
-							<img class="loading-img" src="img/21-0.gif"></img>
-						</div>
-					</div> -->
-				</div>
-				</div>
-				<div class="row m-b-sm">
-				<div class="col-md-12">
+<script type="text/html" id="upload-document-modal-template">
+<div class="modal-dialog">
+  <div class="modal-content">
+     <div class="modal-header">
+        <!-- <button class="close" data-dismiss="modal">x</button> -->
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+        <h3 class="modal-title">&nbsp;Add Document</h3>
+     </div>
+     <div class="modal-body">
+        <form id="uploadDocumentForm" name="uploadDocumentForm" method="post" class="form-horizontal">
+        <fieldset>
+        	<div class="control-group form-group">
+                       <label class="control-label  col-sm-3">Title<span
+                          class="field_req">*</span></label>
+                       <div class="controls col-sm-7">
+                          <span><input id="name" name="name" type="text"
+                             class="required form-control" placeholder="Name of Document" /></span>
+                       </div>
+            </div>
+            <div >
 					<input name="extension" id="extension" type="hidden"/>
 					<div class="control-group form-group">
-						<label class="control-label"><b>Choose Document </b><span
+						<label class="control-label col-sm-3">Choose Document<span
 							class="field_req">*</span></label>
-						<div class="controls">
+						<div class="controls col-sm-9 col-xs-12">
 						    <input type="hidden" name="url" id="upload_url" class="required"/>
 						    <input type="hidden" name="size" id="size" class="required"/>
 						    <input type="hidden" name="network_type" id="network_type" class="required"/>
 						    <div class="row" id="document-link">
-						    <div class="col-md-3 col-sm-3 col-xs-6 all-l-none">
+						    <div class="col-md-4 col-sm-6 col-xs-6" style="width:39%;">
 								<div class="link text-center thumbnail m-b-none"><i class="icon-ok pull-right" style="display:none;"></i><br/>
 									<a href="#" id="S3"><i class="icon-desktop icon-2x" title="Custom"></i><br/><span>My Computer</span></a>
 								</div>
 							</div>
-							<div class="col-md-3 col-sm-3 col-xs-6 all-l-none">
+							<div class="col-md-4 col-sm-6 col-xs-6 " style="width:39%;">
 								<div class="link text-center thumbnail m-b-none"><i class="icon-ok pull-right" style="display:none;"></i><br/>
 									<a href="#" id="GOOGLE"><i class="icon-google-plus icon-2x" title="Google"></i><br/><span>Google Drive</span></a>
 								</div>
@@ -56,50 +42,44 @@
 						</div>
 					</div>
 				</div>
-				</div>
 				<div id="error"></div>
-				<div class="row">
-				<div class="col-md-12">
-				<div class="control-group form-group">
-					<label class="control-label"><b>Related Contacts </b></label>
-					<div class="controls" id="contactTypeAhead">
+				<div class="control-group form-group" style="margin-bottom:0px;">
+					<label class="control-label col-sm-3">Related Contacts</label>
+					<div class="controls col-sm-7" id="contactTypeAhead">
 						<div>
-							<div>
-								<ul name="contact_ids" class="contacts tagsinput tags p-n"></ul>
-							</div>
 							<input type="text" id="document_relates_to_contacts" name="related_contacts"
 								placeholder="Contact Name" class="typeahead typeahead_contacts form-control"
 								data-provide="typeahead" data-mode="multiple" />
+							<div style="padding-top:2px;">
+								<ul name="contact_ids" class="contacts tagsinput tags p-n"></ul>
+							</div>
+							<div class="clearfix"></div>	
 						</div>
 					</div>
 				</div>
-				</div>
-				</div>
-				<div class="row">
-				<div class="col-md-12">
-				<div class="control-group form-group">
-					<label class="control-label"><b>Related Deals </b></label>
-					<div class="controls" id="dealTypeAhead">
+                    <div class="control-group form-group">
+					<label class="control-label col-sm-3">Related Deals</label>
+					<div class="controls col-sm-7" id="dealTypeAhead">
 						<div>
-							<div>
-								<ul name="deal_ids" class="deals tagsinput deal_tags p-n"></ul>
-							</div>
 							<input type="text" id="document_relates_to_deals" name="related_deals"
 								placeholder="Deal Name" class="typeahead typeahead_deals form-control"
 								data-provide="typeahead" data-mode="multiple" />
+							<div style="padding-top:2px;">
+								<ul name="deal_ids" class="deals tagsinput deal_tags p-n"></ul>
+							</div>
+							<div class="clearfix"></div>
 						</div>
 					</div>
-					</div>
-					</div>
 				</div>
-			</fieldset>
-		</form>
-	</div>
-	<div class="modal-footer" id="document-save-footer">
-		<a href="#" class="btn btn-sm btn-primary" id="document_validate">Save</a> <span class="save-status"></span>
-	</div>
-</div>
-</div>
-</div>
 
+        </fieldset>
+
+        </form>
+     </div>
+     <div class="modal-footer" id="document-save-footer">
+        <a href="#" class="btn btn-sm btn-primary" id="document_validate">Save</a> <span class="save-status"></span>
+     </div>
+  </div>
+</div>
+</script>
 <!-- End of Modal views -->

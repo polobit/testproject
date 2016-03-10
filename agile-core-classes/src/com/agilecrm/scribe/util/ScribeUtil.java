@@ -50,6 +50,7 @@ import com.stripe.model.Account;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.GoogleServiceUtil;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
+import com.thirdparty.google.calendar.GoogleCalenderPrefs.CALENDAR_TYPE;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 import com.thirdparty.shopify.ShopifyAccessURLBuilder;
 
@@ -398,8 +399,7 @@ public class ScribeUtil {
 				});
 
 		ContactPrefs prefs = new ContactPrefs();
-		if (properties.containsKey("refresh_token"))
-		{
+		if (properties.containsKey("refresh_token")) {
 
 			prefs.refreshToken = properties.get("refresh_token");
 			prefs.apiKey = properties.get("access_token");
@@ -439,6 +439,7 @@ public class ScribeUtil {
 		Map<String, String> properties = new HashMap<String, String>();
 		properties.put("token", accessToken.getToken());
 		properties.put("secret", accessToken.getSecret());
+		properties.put("version", "v2");
 		properties.put("time", String.valueOf(System.currentTimeMillis()));
 		properties.put("isForAll", isForAll);
 
@@ -584,8 +585,8 @@ public class ScribeUtil {
 		contactPrefs.setExpiryTime(Long.valueOf(properties.get("expires_in")
 				.toString()));
 		contactPrefs.refreshToken = properties.get("refresh_token").toString();
-		if(ContactPrefsUtil.findPrefsByType(Type.GOOGLE))
-		contactPrefs.save();
+		if (ContactPrefsUtil.findPrefsByType(Type.GOOGLE))
+			contactPrefs.save();
 
 		// initialize backend to save contacts
 		// ContactsImportUtil.initilaizeGoogleSyncBackend(contactPrefs.id);
@@ -614,6 +615,7 @@ public class ScribeUtil {
 				access_token);
 		// Sets expiry time and saves prefs
 		pref.setExpiryTime(Integer.valueOf(result.get("expires_in").toString()));
+		pref.calendar_type = CALENDAR_TYPE.GOOGLE;
 		pref.save();
 	}
 
@@ -888,39 +890,11 @@ public class ScribeUtil {
 		// update widget with tokens
 		// saveWidgetPrefsByName(serviceType, properties);
 	}
-	
-	public static boolean isWindowPopUpOpened(String serviceName, String returnURL, HttpServletRequest req, HttpServletResponse resp){
-		  
-		  // Get session param
-		boolean openedService=false;
-		Object obj=req.getSession().getAttribute("window_opened_service");
-		if(obj!=null)
-		  openedService = (boolean)obj;
-		  if(!openedService)
-		      return false;
-		  
-		  // Delete return url Attribute
-		  	  req.getSession().removeAttribute("window_opened_service");
-		    
-		      
-		      String[] syncPrefServices=new String[]{"google","stripe_import","shopify","google_calendar","quickbook-import"};
-		      if(StringUtils.isBlank(returnURL))
-		       returnURL = "/";
-		      
-		      if(Arrays.asList(syncPrefServices).contains(serviceName)){
-		       try {
-		        resp.getWriter().print("<script>parent.window.opener.executeDataSyncReturnCallback('" + returnURL + "','"+serviceName+"'); window.close();</script>");
-		   } catch (Exception e) {
-		   }
-		      
-		       return true;
-		      }
-		      
-		      return false;
-		 }
-	
-	public static boolean closeOpendWindow(String returnUrl, HttpServletRequest req, HttpServletResponse resp){
-		
+
+	public static boolean isWindowPopUpOpened(String serviceName,
+			String returnURL, HttpServletRequest req, HttpServletResponse resp) {
+
+		// Get session param
 		boolean openedService = false;
 		Object obj = req.getSession().getAttribute("window_opened_service");
 		if (obj != null)
@@ -930,19 +904,49 @@ public class ScribeUtil {
 
 		// Delete return url Attribute
 		req.getSession().removeAttribute("window_opened_service");
-		try
-		{
+
+		String[] syncPrefServices = new String[] { "google", "stripe_import",
+				"shopify", "google_calendar", "quickbook-import" };
+		if (StringUtils.isBlank(returnURL))
+			returnURL = "/";
+
+		if (Arrays.asList(syncPrefServices).contains(serviceName)) {
+			try {
+				resp.getWriter().print(
+						"<script>parent.window.opener.executeDataSyncReturnCallback('"
+								+ returnURL + "','" + serviceName
+								+ "'); window.close();</script>");
+			} catch (Exception e) {
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean closeOpendWindow(String returnUrl,
+			HttpServletRequest req, HttpServletResponse resp) {
+
+		boolean openedService = false;
+		Object obj = req.getSession().getAttribute("window_opened_service");
+		if (obj != null)
+			openedService = (boolean) obj;
+		if (!openedService)
+			return false;
+
+		// Delete return url Attribute
+		req.getSession().removeAttribute("window_opened_service");
+		try {
 			resp.setContentType("text/html");
 			resp.getWriter().print(
 					"<script type='text/javascript'> window.close();</script>");
 			return true;
-		}
-		catch (Exception e)
-		{
-			
+		} catch (Exception e) {
+
 		}
 		return false;
-		
+
 	}
 
-   }
+}

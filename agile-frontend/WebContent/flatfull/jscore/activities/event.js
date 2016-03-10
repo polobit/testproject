@@ -55,11 +55,22 @@ $("#updateActivityModal").on('click', '#delete_web_event', function(e)
 	{
 		e.preventDefault();
 
-		var event_id = $('#updateActivityForm input[name=id]').val();
-		$("#updateActivityModal").modal('hide');
-		$("#webEventCancelModel").modal('show');
-		$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39?");
-		$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + event_id + "'/>");
+		if(hasScope("MANAGE_CALENDAR") || (CURRENT_DOMAIN_USER.id == App_Calendar.current_event.owner.id))
+		{
+			var event_id = $('#updateActivityForm input[name=id]').val();
+			$("#updateActivityModal").modal('hide');
+			$("#webEventCancelModel").modal('show');
+			$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39?");
+			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + event_id + "'/>");
+		}
+		else
+		{
+			$("#updateActivityModal").find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>You do not have permission to delete this Event.</i></p></div>');
+			setTimeout(function()
+			{
+				$("#updateActivityModal").find('span.error-status').html('');
+			}, 2000);
+		}
 
 	});
 
@@ -109,10 +120,10 @@ $("#updateActivityModal").on(
 									      {
 												var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
 												a.setHours(0,0,0,0);
-												createCookie("current_date_calendar",a);
+												_agile_set_prefs("current_date_calendar",a);
 										       $('#calendar_container').fullCalendar( 'refetchEvents' );
 										       App_Portlets.refetchEvents = true;
-										       //eraseCookie('current_date_calendar');
+										       //_agile_delete_prefs('current_date_calendar');
 									      }
 										else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
 										{
@@ -126,6 +137,17 @@ $("#updateActivityModal").on(
 												}
 											}
 										}
+										else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+										{
+											if (eventsView && eventsView.collection)
+											{
+												if (eventsView.collection.get(event_id))
+												{
+													eventsView.collection.remove(event_id);
+													eventsView.render(true);
+												}
+											}
+										}
 
 										// $('#updateActivityModal').find('span.save-status
 										// img').remove();
@@ -134,8 +156,17 @@ $("#updateActivityModal").on(
 
 										var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
 										$('#calendar_event').fullCalendar('removeEvents', eventId);
+									}, error : function(err)
+									{
+										enable_save_button(save_button);
+										$('#updateActivityModal').find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
+										setTimeout(function()
+										{
+											$('#updateActivityModal').find('span.error-status').html('');
+										}, 2000);
+										console.log('-----------------', err.responseText);
 									} });
-						if (readCookie("agile_calendar_view"))
+						if (_agile_get_prefs("agile_calendar_view"))
 						{
 							var eventModel = eventCollectionView.collection.get(event_id);
 							eventModel.set(eventModel, { remove : true });
@@ -212,7 +243,7 @@ $("#updateActivityModal").on(
 
 										$('#calendar_event').fullCalendar('removeEvents', event_id);
 									} });
-						if (readCookie("agile_calendar_view"))
+						if (_agile_get_prefs("agile_calendar_view"))
 						{
 							var eventModel = eventCollectionView.collection.get(event_id);
 							eventModel.set(eventModel, { remove : true });
@@ -230,14 +261,6 @@ $("#updateActivityModal").on(
 
 function initializeEventListners(el)
 {
-
-
-/*$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
-{
-	event.preventDefault();
-	set_api_key();
-});*/
-
 
 /**
  * When Send Mail is clicked from Ical Modal, it hides the ical modal and shows
@@ -330,16 +353,10 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 	{
 		e.preventDefault();
 
-		$('#activityModal').modal('show');
+		$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
+
 		agile_type_ahead("event_relates_to_deals", $('#activityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 		highlight_event();
-
-		/*
-		 * $('#task-date-1').val(new Date().format('mm/dd/yyyy'));
-		 * $("#event-date-1").val(new Date().format('mm/dd/yyyy'));
-		 * $("#event-date-2").val(new Date().format('mm/dd/yyyy'));
-		 */
-
 		return;
 	});
 
@@ -367,19 +384,24 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 			}
 
 		}
-		if(calendar == 'google')
-		{
-			if (this.checked == true)
-			{
+
+		if(calendar == 'google'){
+			if (this.checked == true){
 				//_init_gcal_options();
 				addGoogleCalendarEvents();
-			}
-			else
-			{
-				
-				removeEventSource('google');
+			}else{
+				removeGoogleEventSource();
 			}
 		}	
+
+		if(calendar == 'office'){
+			if(this.checked == true){
+				addOffice365CalendarEvents();
+			}else{
+				removeEventSource('office');
+			}
+		}
+
 	});
 
 	$("#calendar-listers").on('click', '.calendar_user_check', function(e)
@@ -441,146 +463,13 @@ $(function()
 	 * 
 	 */
 	
-	  $("body").on('click', '#show-activity', function(e) { e.preventDefault();
-	  highlight_event();
-	  
-	  $("#activityModal").modal('show'); });
-	 
+	  $("body").on('click', '#show-activity', function(e) { 
+	  		e.preventDefault();
 
-	/**
-	 * Activates the date picker to the corresponding fields in activity modal
-	 * and activity-update modal
-	 */
-
-	var eventDate = $('#event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
-	{
-		// If event start date is changed and end date is less than start date,
-		// change the value of the end date to start date.
-		var eventDate2;
-		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-			eventDate2 = new Date(convertDateFromUKtoUS($('#event-date-2').val()));
-		else
-		 	eventDate2 = new Date($('#event-date-2').val());
-		if (ev.date.valueOf() > eventDate2.valueOf())
-		{
-			$('#event-date-2').val($('#event-date-1').val());
-		}
-
-	});
-
-
-	$('#event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
-	$('#update-event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
-
-	{
-		// If event start date is changed and end date is less than start date,
-		// change the value of the end date to start date.
-		var eventDate2;
-		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-			eventDate2 = new Date(convertDateFromUKtoUS($('#update-event-date-2').val()));
-		else
-		 	eventDate2 = new Date($('#update-event-date-2').val());
-		if (ev.date.valueOf() > eventDate2.valueOf())
-		{
-			$('#update-event-date-2').val($('#update-event-date-1').val());
-		}
-
-	});
-
-	$('#update-event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
-
-
-	/**
-	 * Activates time picker for start time to the fields with class
-	 * start-timepicker
-	 */
-	$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false }).on('hide.timepicker', function(e)
-	{
-		if ($('#activityModal #allDay').is(':checked'))
-		{
-			$('#event-time-1').closest('.control-group').hide();
-			$('#event-date-2').closest('.row').hide();
-		}
-
-		// ChangeTime event is not working, so need to invoke user method.
-		var endTime = changeEndTime($('.start-timepicker').val().split(":"), $('.end-timepicker').val().split(":"));
-		$('.end-timepicker').val(endTime);
-
-		e.stopImmediatePropagation();
-		return false;
-	});
-	$('.start-timepicker').timepicker().on('show.timepicker', function(e)
-	{
-		if ($('.start-timepicker').prop('value') != "" && $('.start-timepicker').prop('value') != undefined)
-		{
-			if ($('.start-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.hours = $('.start-timepicker').prop('value').split(":")[0];
-			if ($('.start-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.minutes = $('.start-timepicker').prop('value').split(":")[1];
-		}
-		$('.bootstrap-timepicker-hour').val(e.time.hours);
-		$('.bootstrap-timepicker-minute').val(e.time.minutes);
-	});
-
-	/**
-	 * Activates time picker for end time to the fields with class
-	 * end-timepicker
-	 */
-	$('.end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-	console.log(get_hh_mm(true));
-	$('.end-timepicker').timepicker().on('show.timepicker', function(e)
-	{
-		if ($('.end-timepicker').prop('value') != "" && $('.end-timepicker').prop('value') != undefined)
-		{
-			if ($('.end-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.hours = $('.end-timepicker').prop('value').split(":")[0];
-			if ($('.end-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.minutes = $('.end-timepicker').prop('value').split(":")[1];
-		}
-		$('.bootstrap-timepicker-hour').val(e.time.hours);
-		$('.bootstrap-timepicker-minute').val(e.time.minutes);
-	});
-
-	/**
-	 * Activates time picker for start time to the fields with class
-	 * update-start-timepicker
-	 */
-	$('.update-start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false }).on('hide.timepicker', function(e)
-	{
-		// ChangeTime event is not working, so need to invoke user method.
-		var endTime = changeEndTime($('.update-start-timepicker').val().split(":"), $('.update-end-timepicker').val().split(":"));
-		$('.update-end-timepicker').val(endTime); 
-	});
-	$('.update-start-timepicker').timepicker().on('show.timepicker', function(e)
-	{
-		if ($('.update-start-timepicker').prop('value') != "" && $('.update-start-timepicker').prop('value') != undefined)
-		{
-			if ($('.update-start-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.hours = $('.update-start-timepicker').prop('value').split(":")[0];
-			if ($('.update-start-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.minutes = $('.update-start-timepicker').prop('value').split(":")[1];
-		}
-		$('.bootstrap-timepicker-hour').val(e.time.hours);
-		$('.bootstrap-timepicker-minute').val(e.time.minutes);
-	});
-
-	/**
-	 * Activates time picker for end time to the fields with class
-	 * update-end-timepicker
-	 */
-	$('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-	$('.update-end-timepicker').timepicker().on('show.timepicker', function(e)
-	{
-		if ($('.update-end-timepicker').prop('value') != "" && $('.update-end-timepicker').prop('value') != undefined)
-		{
-			if ($('.update-end-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.hours = $('.update-end-timepicker').prop('value').split(":")[0];
-			if ($('.update-end-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.minutes = $('.update-end-timepicker').prop('value').split(":")[1];
-		}
-		$('.bootstrap-timepicker-hour').val(e.time.hours);
-		$('.bootstrap-timepicker-minute').val(e.time.minutes);
-	});
+	  		$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
+	 		highlight_event();
+	  		
+	  });
 
 	/**
 	 * Sets the start time with current time and end time half an hour more than
@@ -590,73 +479,40 @@ $(function()
 	{
 		// Show related to contacts list
 		var el = $("#activityForm");
+		$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+		$('#task-date-1').datepicker('update');
+
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
 
 		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
+		$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
+		$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
+		{
+			if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
+			{
+				if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
+				if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		});
+	
 		/**
 		 * Fills current time only when there is no time in the fields
 		 */
-		if ($('.start-timepicker').val() == '')
-			$('.start-timepicker').val(get_hh_mm());
+		if ($('.start-timepicker', el).val() == '')
+			$('.start-timepicker', el).val(get_hh_mm());
 
-		if ($('.end-timepicker').val() == '')
-			$('.end-timepicker').val(get_hh_mm(true));
+		if ($('.end-timepicker', el).val() == '')
+			$('.end-timepicker', el).val(get_hh_mm(true));
 		// sets the time in time picker if it is empty
-		if ($('.new-task-timepicker').val() == '')
-			$('.new-task-timepicker').val("12:00");
-		// Update will highlight the date of in date picker
-		$("input.date").datepicker('update');
+		if ($('.new-task-timepicker', el).val() == '')
+			$('.new-task-timepicker', el).val("12:00");
 
-		/*if($('#activityTaskModal').find('.new-task-related-contacts-input').find('ul').find('li').length>0)
-		{
-			$('#activityTaskModal').find('#new-task-related-contacts-label').parent().addClass('hide');
-			$('#activityTaskModal').find('.new-task-related-contacts-input').removeClass('hide');
-			$('#activityTaskModal').find('.new-task-related-contacts-label').removeClass('hide');
-		}
-		else
-		{
-			$('#activityTaskModal').find('#new-task-related-contacts-label').parent().removeClass('hide');
-			$('#activityTaskModal').find('.new-task-related-contacts-input').addClass('hide');
-			$('#activityTaskModal').find('.new-task-related-contacts-label').addClass('hide');
-		}
-		if($('#activityTaskModal').find('.new-task-related-deals-input').find('ul').find('li').length>0)
-		{
-			$('#activityTaskModal').find('#new-task-related-deals-label').parent().addClass('hide');
-			$('#activityTaskModal').find('.new-task-related-deals-input').removeClass('hide');
-			$('#activityTaskModal').find('.new-task-related-deals-label').removeClass('hide');
-		}
-		else
-		{
-			$('#activityTaskModal').find('#new-task-related-deals-label').parent().removeClass('hide');
-			$('#activityTaskModal').find('.new-task-related-deals-input').addClass('hide');
-			$('#activityTaskModal').find('.new-task-related-deals-label').addClass('hide');
-		}
-
-		if($('#activityModal').find('.new-event-related-contacts-input').find('ul').find('li').length>0)
-		{
-			$('#activityModal').find('#new-event-related-contacts-label').parent().addClass('hide');
-			$('#activityModal').find('.new-event-related-contacts-input').removeClass('hide');
-			$('#activityModal').find('.new-event-related-contacts-label').removeClass('hide');
-		}
-		else
-		{
-			$('#activityModal').find('#new-event-related-contacts-label').parent().removeClass('hide');
-			$('#activityModal').find('.new-event-related-contacts-input').addClass('hide');
-			$('#activityModal').find('.new-event-related-contacts-label').addClass('hide');
-		}
-		if($('#activityModal').find('.new-event-related-deals-input').find('ul').find('li').length>0)
-		{
-			$('#activityModal').find('#new-event-related-deals-label').parent().addClass('hide');
-			$('#activityModal').find('.new-event-related-deals-input').removeClass('hide');
-			$('#activityModal').find('.new-event-related-deals-label').removeClass('hide');
-		}
-		else
-		{
-			$('#activityModal').find('#new-event-related-deals-label').parent().removeClass('hide');
-			$('#activityModal').find('.new-event-related-deals-input').addClass('hide');
-			$('#activityModal').find('.new-event-related-deals-label').addClass('hide');
-		}*/
+		activateSliderAndTimerToTaskModal(el);
 
 	});
 
@@ -671,10 +527,10 @@ $(function()
 		
 		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
-		if ($('#updateActivityModal #allDay').is(':checked'))
+		if ($('#allDay', el).is(':checked'))
 		{
-			$('#update-event-time-1').closest('.control-group').hide();
-			$('#update-event-date-2').closest('.row').hide();
+			$('#update-event-time-1', el).closest('.control-group').hide();
+			$('#update-event-date-2', el).closest('.row').hide();
 		}
 
 		// Removes alert message of error related date and time.
@@ -683,40 +539,28 @@ $(function()
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
 
-		$("input.date").datepicker('update');
-
-		/*if($('#updateActivityModal').find('.update-event-related-contacts-input').find('ul').find('li').length>0)
-		{
-			$('#updateActivityModal').find('#update-event-related-contacts-label').parent().addClass('hide');
-			$('#updateActivityModal').find('.update-event-related-contacts-input').removeClass('hide');
-			$('#updateActivityModal').find('.update-event-related-contacts-label').removeClass('hide');
-		}
-		else
-		{
-			$('#updateActivityModal').find('#update-event-related-contacts-label').parent().removeClass('hide');
-			$('#updateActivityModal').find('.update-event-related-contacts-input').addClass('hide');
-			$('#updateActivityModal').find('.update-event-related-contacts-label').addClass('hide');
-		}
-		if($('#updateActivityModal').find('.update-event-related-deals-input').find('ul').find('li').length>0)
-		{
-			$('#updateActivityModal').find('#update-event-related-deals-label').parent().addClass('hide');
-			$('#updateActivityModal').find('.update-event-related-deals-input').removeClass('hide');
-			$('#updateActivityModal').find('.update-event-related-deals-label').removeClass('hide');
-		}
-		else
-		{
-			$('#updateActivityModal').find('#update-event-related-deals-label').parent().removeClass('hide');
-			$('#updateActivityModal').find('.update-event-related-deals-input').addClass('hide');
-			$('#updateActivityModal').find('.update-event-related-deals-label').addClass('hide');
-		}*/
+		// $("input.date", el).datepicker('update');
 
 	});
 
+	$('#activityModal, #activityTaskModal, #updateActivityModal').on('shown.bs.modal', function(e)
+	{
+		if($(e.target).hasClass("date"))
+			   return;
+
+		// Update will highlight the date of in date picker
+		$("input.date").each(function(index, ele){$(ele).datepicker('update');});
+
+	});
+		
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#activityModal, #activityTaskModal').on('show.bs.modal', function(e)
+	$('#activityModal, #activityTaskModal, #updateActivityModal').on('show.bs.modal', function(e)
 	{
+		if($(e.target).hasClass("date"))
+			   return;
+
 		$(".event_discription").addClass("hide");
 		$("textarea#description").val('');
 		// Removes alert message of error related date and time.
@@ -725,17 +569,154 @@ $(function()
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
 
-		var isOwnerListUploded = $("#event-owners-list", $("#activityForm")).val();
-		if (isOwnerListUploded == null)
-		{
-			// Fills owner select element
-			populateUsers("event-owners-list", $("#activityForm"), undefined, undefined, function(data)
+		if($("#activityForm").length  > 0){
+			var isOwnerListUploded = $("#event-owners-list", $("#activityForm")).val();
+			if (isOwnerListUploded == null)
 			{
-				$("#activityForm").find("#event-owners-list").html(data);
-				$("#event-owners-list", $("#activityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
-				$("#event-owners-list", $("#activityForm")).closest('div').find('.loading-img').hide();
-			});
+				// Fills owner select element
+				populateUsers("event-owners-list", $("#activityForm"), undefined, undefined, function(data)
+				{
+					$("#activityForm").find("#event-owners-list").html(data);
+					$("#event-owners-list", $("#activityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
+					$("#event-owners-list", $("#activityForm")).closest('div').find('.loading-img').hide();
+				});
+			}
 		}
+		
+		/**
+		 * Activates the date picker to the corresponding fields in activity modal
+		 * and activity-update modal
+		 */
+
+		var eventDate = $('#event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+		{
+			// If event start date is changed and end date is less than start date,
+			// change the value of the end date to start date.
+			var eventDate2;
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				eventDate2 = new Date(convertDateFromUKtoUS($('#event-date-2').val()));
+			else
+			 	eventDate2 = new Date($('#event-date-2').val());
+			if (ev.date.valueOf() > eventDate2.valueOf())
+			{
+				$('#event-date-2').val($('#event-date-1').val());
+			}
+
+		});
+
+
+		$('#event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+		$('#update-event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+
+		{
+			// If event start date is changed and end date is less than start date,
+			// change the value of the end date to start date.
+			var eventDate2;
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				eventDate2 = new Date(convertDateFromUKtoUS($('#update-event-date-2').val()));
+			else
+			 	eventDate2 = new Date($('#update-event-date-2').val());
+			if (ev.date.valueOf() > eventDate2.valueOf())
+			{
+				$('#update-event-date-2').val($('#update-event-date-1').val());
+			}
+
+		});
+
+		$('#update-event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
+
+
+		/**
+		 * Activates time picker for start time to the fields with class
+		 * start-timepicker
+		 */
+		$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false }).on('hide.timepicker', function(e)
+		{
+			if ($('#activityModal #allDay').is(':checked'))
+			{
+				$('#event-time-1').closest('.control-group').hide();
+				$('#event-date-2').closest('.row').hide();
+			}
+
+			// ChangeTime event is not working, so need to invoke user method.
+			var endTime = changeEndTime($('.start-timepicker').val().split(":"), $('.end-timepicker').val().split(":"));
+			$('.end-timepicker').val(endTime);
+
+			e.stopImmediatePropagation();
+			return false;
+		});
+		$('.start-timepicker').timepicker().on('show.timepicker', function(e)
+		{
+			if ($('.start-timepicker').prop('value') != "" && $('.start-timepicker').prop('value') != undefined)
+			{
+				if ($('.start-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.start-timepicker').prop('value').split(":")[0];
+				if ($('.start-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.start-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		});
+
+		/**
+		 * Activates time picker for end time to the fields with class
+		 * end-timepicker
+		 */
+		$('.end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
+		console.log(get_hh_mm(true));
+		$('.end-timepicker').timepicker().on('show.timepicker', function(e)
+		{
+			if ($('.end-timepicker').prop('value') != "" && $('.end-timepicker').prop('value') != undefined)
+			{
+				if ($('.end-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.end-timepicker').prop('value').split(":")[0];
+				if ($('.end-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.end-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		});
+
+		/**
+		 * Activates time picker for start time to the fields with class
+		 * update-start-timepicker
+		 */
+		$('.update-start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false }).on('hide.timepicker', function(e)
+		{
+			// ChangeTime event is not working, so need to invoke user method.
+			var endTime = changeEndTime($('.update-start-timepicker').val().split(":"), $('.update-end-timepicker').val().split(":"));
+			$('.update-end-timepicker').val(endTime); 
+		});
+		$('.update-start-timepicker').timepicker().on('show.timepicker', function(e)
+		{
+			if ($('.update-start-timepicker').prop('value') != "" && $('.update-start-timepicker').prop('value') != undefined)
+			{
+				if ($('.update-start-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.update-start-timepicker').prop('value').split(":")[0];
+				if ($('.update-start-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.update-start-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		});
+
+		/**
+		 * Activates time picker for end time to the fields with class
+		 * update-end-timepicker
+		 */
+		$('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
+		$('.update-end-timepicker').timepicker().on('show.timepicker', function(e)
+		{
+			if ($('.update-end-timepicker').prop('value') != "" && $('.update-end-timepicker').prop('value') != undefined)
+			{
+				if ($('.update-end-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.update-end-timepicker').prop('value').split(":")[0];
+				if ($('.update-end-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.update-end-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		});
 
 	});
 
@@ -762,32 +743,7 @@ $(function()
 		$('#update-event-time-1').closest('.control-group').show();
 		$('#update-event-date-2').closest('.row').show();
 	});
-	$('#activityModal').on('hidden.bs.modal', function()
-	{
-		$("#add_event_desctiption").show();
-
-		$(".event_discription").addClass("hide");
-
-		if ($(this).hasClass('in'))
-		{
-			return;
-		}
-
-		// Remove validation error messages
-		remove_validation_errors('activityModal');
-
-		$("#activityForm").find("li").remove();
-		$('#event-time-1').closest('.control-group').show();
-		$('#event-date-2').closest('.row').show();
-
-		/*$('#activityModal').find('#new-event-related-contacts-label').parent().removeClass('hide');
-		$('#activityModal').find('.new-event-related-contacts-input').addClass('hide');
-		$('#activityModal').find('.new-event-related-contacts-label').addClass('hide');
-		$('#activityModal').find('#new-event-related-deals-label').parent().removeClass('hide');
-		$('#activityModal').find('.new-event-related-deals-input').addClass('hide');
-		$('#activityModal').find('.new-event-related-deals-label').addClass('hide');*/
-	});
-
+	
 	$('#webEventCancelModel').on('hidden.bs.modal', function()
 	{
 		$("#webEventCancelForm").each(function()
@@ -795,34 +751,6 @@ $(function()
 			this.reset();
 		});
 	});
-
-	/*$('#activityModal').on('click', '#new-event-related-contacts-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.new-event-related-contacts-input').removeClass('hide');
-		$(this).parent().parent().find('.new-event-related-contacts-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#activityModal').on('click', '#new-event-related-deals-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.new-event-related-deals-input').removeClass('hide');
-		$(this).parent().parent().find('.new-event-related-deals-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#updateActivityModal').on('click', '#update-event-related-contacts-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.update-event-related-contacts-input').removeClass('hide');
-		$(this).parent().parent().find('.update-event-related-contacts-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#updateActivityModal').on('click', '#update-event-related-deals-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.update-event-related-deals-input').removeClass('hide');
-		$(this).parent().parent().find('.update-event-related-deals-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});*/
 
 });
 
@@ -877,7 +805,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date. Please change.</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date. Please change.</div>');
 
 		return false;
 	}
@@ -886,7 +814,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
 
 		return false;
 	}
@@ -895,7 +823,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
 
 		return false;
 	}
@@ -968,12 +896,6 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 	var endarray = (json.end_time).split(":");
 	json.end = new Date(json.end * 1000).setHours(endarray[0], endarray[1]) / 1000.0;
 
-	$('#' + modalName).modal('hide');
-
-	$('#' + formId).each(function()
-	{
-		this.reset();
-	});
 
 	// Deleting start_time and end_time from json
 	delete json.start_time;
@@ -1002,7 +924,7 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 						// $('#calendar').fullCalendar( 'refetchEvents' );
 						var event = data.toJSON();
 						event = renderEventBasedOnOwner(event);
-						if (Current_Route == 'calendar' && !readCookie("agile_calendar_view"))
+						if (Current_Route == 'calendar' && !_agile_get_prefs("agile_calendar_view"))
 						{
 
 							// When updating an event remove the old event from
@@ -1037,14 +959,25 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 									// function
 									if (eventsView && eventsView.collection)
 									{
+										var owner = data.get("owner_id");
+
+									  	if(!owner){
+									  		owner = data.get("owner").id;
+									  	}
+
 										if (eventsView.collection.get(data.id))
 										{
-											eventsView.collection.get(data.id).set(new BaseModel(data));
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												eventsView.collection.get(data.id).set(new BaseModel(data));
+											}
+											
 										}
 										else
 										{
-											eventsView.collection.add(new BaseModel(data), { sort : false });
-											eventsView.collection.sort();
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												eventsView.collection.add(new BaseModel(data), { sort : false });
+												eventsView.collection.sort();
+											}
 										}
 									}
 
@@ -1075,16 +1008,16 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 							if($('.minical-portlet-event').attr('data-date')!=undefined){
 								var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
 								a.setHours(0,0,0,0);
-								createCookie("current_date_calendar",a);
+								_agile_set_prefs("current_date_calendar",a);
 							}
 							else{
 								var a=new Date(parseInt($('.minical-portlet-event-add').attr('data-date')));	
 								a.setHours(0,0,0,0);
-								createCookie("current_date_calendar",a);
+								_agile_set_prefs("current_date_calendar",a);
 							}
 							$('#calendar_container').fullCalendar( 'refetchEvents' );
 						       App_Portlets.refetchEvents = true;
-						       //eraseCookie('current_date_calendar');
+						       //_agile_delete_prefs('current_date_calendar');
 					      }
 						else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
 						{
@@ -1107,14 +1040,24 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 									// function
 									if (dealEventsView && dealEventsView.collection)
 									{
+										var owner = data.get("owner_id");
+
+									  	if(!owner){
+									  		owner = data.get("owner").id;
+									  	}
+
 										if (dealEventsView.collection.get(data.id))
 										{
-											dealEventsView.collection.get(data.id).set(new BaseModel(data));
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												dealEventsView.collection.get(data.id).set(new BaseModel(data));
+											}
 										}
 										else
 										{
-											dealEventsView.collection.add(new BaseModel(data), { sort : false });
-											dealEventsView.collection.sort();
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												dealEventsView.collection.add(new BaseModel(data), { sort : false });
+												dealEventsView.collection.sort();
+											}
 										}
 									}
 									dealEventsView.render(true);
@@ -1129,6 +1072,15 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 						if (callback && typeof callback === 'function')
 							callback(data);
+					}, error : function(model, err)
+					{
+						enable_save_button($(saveBtn));
+						$('#' + modalName).find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
+						setTimeout(function()
+						{
+							$('#' + modalName).find('span.error-status').html('');
+						}, 2000);
+						console.log('-----------------', err.responseText);
 					} });
 }
 
@@ -1220,6 +1172,28 @@ function changeEndTime(startTime, endTime)
 	console.log("In changeEndTime");
 	console.log(startTime);
 	console.log(endTime);
+	// var s0 = startTime[0];
+ //    var s1=startTime[1];
+    var reg = /[a-zA-Z]/;
+   
+  for(var i=0;i<startTime.length;i++)
+  {
+     if (reg.test(startTime[i])) {
+   startTime[i]=00;
+	}
+	else if(!reg.test(startTime[i])){
+		startTime[i] = startTime[i].substring(0,2);
+	}
+
+
+  }
+
+   /*if (reg.test(s1)) {
+   startTime[1]=00;
+	}
+	else if(!reg.test(s1)){
+		startTime[1] = s1.substring(0,2);
+	}*/
 
 	if (startTime[0] > endTime[0] || (startTime[0] == endTime[0] && startTime[1] >= endTime[1]))
 	{

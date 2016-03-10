@@ -186,7 +186,7 @@ public class TaskQueueStatsDaemon extends Thread
      * 
      * @throws IOException
      */
-    private void setRemoteAPI() throws IOException
+    protected void setRemoteAPI() throws IOException
     {
 	System.out.println("setting remote api in thread " + Thread.currentThread().getName());
 
@@ -350,14 +350,14 @@ public class TaskQueueStatsDaemon extends Thread
 		    try
 		    {
 			System.out.println("waiting");
-			wait(wairPeriodInMilliSeconds);
+			sleep(wairPeriodInMilliSeconds);
 		    }
 		    catch (InterruptedException e)
 		    {
 			logger.log(Level.WARN, e.getMessage() + ", " + Thread.currentThread().getName());
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			wait(wairPeriodInMilliSeconds);
+			sleep(wairPeriodInMilliSeconds);
 		    }
 		    continue;
 		}

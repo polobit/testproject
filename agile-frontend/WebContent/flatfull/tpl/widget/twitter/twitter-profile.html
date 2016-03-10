@@ -132,7 +132,7 @@
 			<li id="twitter_status" status_id="{{id}}" class="list-group-item r-none b-l-none b-r-none text-base">		
 				<a class="thumb-sm m-r-xs pull-left"><img src="{{tweeted_person_pic_url}}" width="40px" alt="" class="r r-2x"/></a>
 				<div class="clear">					
-						<p class="mb_0 w-full">{{safe_string message}}</p>						
+						<p class="mb_0 w-full">{{{message}}}</p>						
 				</div>
 				<small class="text-muted">
 						<i class="fa fa-clock-o m-r-xs"></i>
@@ -248,12 +248,13 @@
 <div class="m-t">
 	Engage with contacts in real time based on what they tweet.	
 <br>
-		<center><a class='btn btn-sm btn-primary text-l-none m-t' href="{{url}}">Link Your Twitter</a>	</center>
+		<center><a class='btn btn-sm btn-primary text-l-none m-t' href="{{url}}">Link your Twitter</a>	</center>
 </div>
 </script>
 
 <script id="twitter-revoke-access-template" type="text/html">
 <div class="m-t">
+	{{#if profile.picture}}
 		<div class="pull-left thumb-md thumb-wrapper">
 			<img src="{{profile.picture}}"  alt="" />
 		</div>
@@ -262,6 +263,9 @@
 			<p>{{profile.location}}</p>
 			<p class="word-break" style="word-break:normal;">{{show_link_in_statement profile.summary}}</p>
 		</div>
+	{{else}}
+		<div class="wrapper-sm"><p>Please reconfigure your Twitter widget</p></div>
+	{{/if}}
 	<div class="clearfix"></div>
 	<div class="m-t-md text-center">
 			<a class='btn revoke-widget btn-sm btn-danger text-l-none' widget-name="Twitter">Revoke Access</a>

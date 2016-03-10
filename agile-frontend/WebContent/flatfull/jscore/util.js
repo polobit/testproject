@@ -19,15 +19,25 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-r
  * Default image shown for contacts if image is not available
  */
 
-var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/flatfull/user-default.jpg";
+var DEFAULT_GRAVATAR_url = agileWindowOrigin() + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
 
-var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi,Sandeep";
 
-var SALES_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Shravi_Sharma,stephen";
+var ONBOARDING_SCHEDULE_URL = "http://supportcal.agilecrm.com";
 
-var SUPPORT_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Raja_Shekar,Natesh,Abhishek_Pandey";
+
+var SALES_SCHEDULE_URL = "http://salescal.agilecrm.com";
+
+
+var SUPPORT_SCHEDULE_URL = "http://supportcal.agilecrm.com";
+
 
 var CALENDAR_WEEK_START_DAY = CURRENT_USER_PREFS.calendar_wk_start_day;
+
+var AVOID_PAGEBLOCK_URL = [ "subscribe", "purchase-plan", "updateCreditCard" ];
+
+var PAGEBLOCK_REASON = [ "BILLING_FAILED_2", "BILLING_FAILED_3", "SUBSCRIPTION_DELETED" ];
+
+var PAYMENT_FAILED_REASON = ["BILLING_FAILED_0", "BILLING_FAILED_1"];
 /**
  * Returns random loading images
  * 
@@ -126,6 +136,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		});
 		// Convert template into HTML
 		var modelTemplate = Handlebars.compile(template);
+		var optionsHTML = "";
 		// Iterates though each model in the collection and
 		// populates the template using handlebars
 		$.each(data, function(index, model)
@@ -136,8 +147,8 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 			}
 			else
 			{
-				var optionsHTML = modelTemplate(model);
-				$("#" + selectId, el).append(optionsHTML);
+				optionsHTML += modelTemplate(model);
+				$("#" + selectId, el).append(modelTemplate(model));
 			}
 		});
 
@@ -147,7 +158,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		{
 			// execute the callback, passing parameters as
 			// necessary
-			callback(collection);
+			callback(collection, optionsHTML);
 		}
 	}
 
@@ -358,7 +369,9 @@ function showTextGravatar(selector, element)
 			return;
 
 		$(this).attr("data-name", name);
-		$(this).initial({ charCount : 2 });
+
+		// $(element).initial({charCount: 2,fontWeight: 'normal',fontSize:20, width:$(element).width(), height:$(element).height()});
+		$(element).initial({charCount: 2,fontWeight: 'normal'});
 	});
 }
 
@@ -548,6 +561,9 @@ function convertDateFromUKtoUS(ukDate)
 		date = ukDate.split(".");
 	if(date.length == 3)
 	{	
+		if(date[2].length == 2)
+			  date[2] = "20" + date[2];
+
 		var returnDate = new Date(date[1]+"/"+date[0]+"/"+date[2]);
 		if(!/Invalid|NaN/.test(returnDate))
 			return returnDate.format("mm/dd/yyyy");
@@ -558,4 +574,93 @@ function convertDateFromUKtoUS(ukDate)
 		return "";
 }
 
+/**
+* Retuns date with supportable format
+*/
+function getFormattedDateObjectWithString(value){
 
+		if(!value)
+			   return new Date("");
+
+        value = value.replace(/\./g,'/');
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("yyyy") == -1){
+			value = value.substring(0, value.length - 2) + "20" + value.substring(value.length - 2);
+		}
+
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+			value = convertDateFromUKtoUS(value);
+
+		return new Date(value);
+	
+}
+
+function isIE() {
+
+	var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
+	var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
+	if(isIE || isIENew)
+	 return true;
+
+	return false;
+}
+
+function agileWindowOrigin(){
+	if (!window.location.origin) {
+	   return window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+	}
+
+	return window.location.origin;
+}
+
+$(function(){
+    $( document ).ajaxError(function(event, jqXHR) {
+	   // Get response code and redirect to login page
+	   if(jqXHR.status && jqXHR.status == 401)
+	   	      handleAjaxError();
+	});
+});
+
+function handleAjaxError(){
+
+		var hash = window.location.hash;
+
+        try{
+            // Unregister all streams on server.
+			unregisterAll();
+        }catch(err){}
+		
+		// Unregister on SIP server.
+		sipUnRegister();
+		
+		// Firefox do not support window.location.origin, so protocol is explicitly added to host
+		window.location.href = window.location.protocol + "//" + window.location.host+"/login"+hash;
+
+}
+
+function showPageBlockModal() {
+
+	// Removing existing modal
+	$("#user-blocked-modal").modal('hide');
+	$("#alert-message").html("").hide();
+	if ($.inArray(Current_Route, AVOID_PAGEBLOCK_URL) != -1 || USER_BILLING_PREFS == undefined || USER_BILLING_PREFS.status == undefined || USER_BILLING_PREFS.status == null || USER_BILLING_PREFS.updated_time == undefined || USER_BILLING_PREFS.updated_time == null || USER_BILLING_PREFS.updated_time < 1456803000)
+		return;
+	else if($.inArray(USER_BILLING_PREFS.status, PAYMENT_FAILED_REASON) != -1){
+		var expiry_date = (USER_BILLING_PREFS.updated_time+691200)*1000;
+		if(USER_BILLING_PREFS.status == "BILLING_FAILED_1")
+			expiry_date = (USER_BILLING_PREFS.updated_time+432000)*1000;
+		getTemplate("user-alert", {"message":"Action Required! Your account has dues. Please update your credit card information to pay your outstanding amount. Non-payment of the dues will lead to locking of your account on "+new Date(expiry_date).format('mmm dd, yyyy')+"."}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("#alert-message").html(template_ui).show();
+		}, null);
+
+	}else if($.inArray(USER_BILLING_PREFS.status, PAGEBLOCK_REASON) != -1 && USER_BILLING_PREFS.updated_time != null && USER_BILLING_PREFS.updated_time != undefined && USER_BILLING_PREFS.updated_time > 1457494200){
+		getTemplate("block-user", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("body").append(template_ui);
+			$("#user-blocked-modal").modal('show');
+		}, null);
+	}
+
+}

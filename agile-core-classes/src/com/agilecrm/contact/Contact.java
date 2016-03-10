@@ -21,6 +21,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.util.EmailBounceStatusUtil;
+import com.agilecrm.contact.util.CompanyUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.contact.util.TagUtil;
@@ -249,7 +250,15 @@ public class Contact extends Cursor
     public static final String WEBSITE = "website";
     public static final String ADDRESS = "address";
     public static final String PHONE = "phone";
+    public static final String SKYPEPHONE = "skypePhone";
     public static final String IMAGE = "image";
+    public static final String UTM_SOURCE = "utm_source";
+    public static final String UTM_MEDIUM = "utm_medium";
+    public static final String UTM_CAMPAIGN = "utm_campaign";
+    public static final String UTM_TERM = "utm_term";
+    public static final String UTM_CONTENT = "utm_content";
+    public static final String SHOPIFY_SYNC = "shopifySyncId";
+    public static final String QUICKBOOK_SYNC = "quickbookSyncId";
 
     /**
      * Unsubscribe status
@@ -333,7 +342,7 @@ public class Contact extends Cursor
 	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(EMAIL)
 		|| fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
 		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
-		|| fieldName.equals(NAME))
+		|| fieldName.equals(NAME) || fieldName.equals(SKYPEPHONE))
 	    type = FieldType.SYSTEM;
 
 	// If field is null then new contact field is added to properties.
@@ -401,90 +410,32 @@ public class Contact extends Cursor
     {
 	// Stores current contact id in to a temporary variable, to check
 	// whether contact is newly created or being edited.
-	Long id = this.id;
 
-	Contact oldContact = null;
+	ContactSavePreprocessor preProcessor = new ContactSavePreprocessor(this);
+	preProcessor.preProcess(args);
 
-	// Checks User access control over current entity to be saved.
-	// UserAccessControlUtil.check(this.getClass().getSimpleName(), this,
-	// CRUDOperation.CREATE, true);
-	System.out.println("id is: " + id);
-	if (id != null)
-	{
-
-	    oldContact = ContactUtil.getContact(id);
-
-	    // Sets old owner key to updated contact which restricts contact
-	    // owner being changed everytime contact is updated
-	    if (owner_key == null)
-	    {
-		owner_key = oldContact.owner_key;
-	    }
-
-	    // Sets tags into tags, so they can be compared in
-	    // notifications/triggers with new tags
-	    oldContact.tags = oldContact.getContactTags();
-
-	    oldContact.bulkActionTracker = bulkActionTracker;
-	    // Set the created time. This will help to restrict the user from
-	    // changing the created time through rest api.
-	    created_time = oldContact.created_time;
-	}
-
-	// Check for already existing email if any,
-	// loop through for checking multiple emails
-	if (Type.PERSON == type)
-	{
-	    // Throw BAD_REQUEST if countEmails>=2 (sure duplicate contact)
-	    // otherwise if countEmails==1, make sure its not due to
-	    // previous
-	    // value of this(current) Contact
-	    ContactUtil.isDuplicateContact(this, oldContact, true);
-	}
-	System.out.println("After duplicate check");
-	// To skip validation for Campaign Tags
-	if (args == null || args.length < 2)
-	{
-	    for (Tag tag : tagsWithTime)
-	    {
-		// Check whether tag already exists. Equals method is overridden
-		// in
-		// Tag class to use this contains functionality
-		if (oldContact != null && !oldContact.tagsWithTime.contains(tag))
-		{
-		    TagUtil.validateTag(tag.tag);
-		}
-	    }
-	}
-
-	convertEmailToLower();
-
-	// Updated time is updated only if particular fields are changed.
-	if (oldContact != null && isDocumentUpdateRequired(oldContact))
-	    updated_time = System.currentTimeMillis() / 1000;
-	System.out.println("viewed time : " + viewed_time);
-	if (viewed_time != 0L)
-	{
-	    System.out.println(viewed_time);
-	    viewed.viewed_time = viewed_time;
-	    viewed.viewer_id = SessionManager.get().getDomainId();
-	}
-	System.out.println("viewed time" + viewed_time);
-	System.out.println("converted the email to lowercase");
-	// Updates Tag entity, if any new tag is added
-	// if (type == Type.PERSON)
-	updateTagsEntity(oldContact, this);
-
-	// Verifies EmailBounceStatus
-	checkBounceStatus(oldContact, this);
-
-	// Verifies CampaignStatus
-	checkCampaignStatus(oldContact, this);
-
-	// Verifies last contacted fields
-	checkLastContactedFields(oldContact, this);
+	Contact oldContact = preProcessor.getOldContact();
 
 	dao.put(this);
+
+	postSave(oldContact, args);
+
+	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
+	    return;
+	
+	addToSearch();
+
+    }
+
+    public void postSave(Contact oldContact, boolean... args)
+    {
+
+	Long time = System.currentTimeMillis();
+
+	if (type == Type.COMPANY && oldContact != null)
+	{
+	    CompanyUtil.checkAndUpdateCompanyName(oldContact, this);
+	}
 
 	// Execute trigger for contacts
 	ContactTriggerUtil.executeTriggerToContact(oldContact, this);
@@ -504,11 +455,8 @@ public class Contact extends Cursor
 	    // Execute notification for contacts
 	    ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
 
-	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
-	    return;
-
-	addToSearch();
-
+	System.out.println("Time taken to process post save on contact : " + this.id + " time is : "
+		+ (System.currentTimeMillis() - time));
     }
 
     public void update()
@@ -563,12 +511,15 @@ public class Contact extends Cursor
 
 	// If tags and properties length differ, contact is considered to be
 	// changed
-	if (forceSearch || contact.tags.size() != currentContactTags.size()
-		|| contact.properties.size() != properties.size() || contact.star_value != star_value
+	if (forceSearch
+		|| contact.tags.size() != currentContactTags.size()
+		|| contact.properties.size() != properties.size()
+		|| contact.star_value != star_value
 		|| (contact.lead_score != null ? !contact.lead_score.equals(lead_score) : false)
 		|| contact.campaignStatus.size() != campaignStatus.size()
 		|| contact.emailBounceStatus.size() != emailBounceStatus.size()
-		|| (contact.contact_company_key != null ? !contact.contact_company_key.equals(contact_company_key) : false))
+		|| (contact.contact_company_key != null ? !contact.contact_company_key.equals(contact_company_key)
+			: false))
 
 	    return true;
 

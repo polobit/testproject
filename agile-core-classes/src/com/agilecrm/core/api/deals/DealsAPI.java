@@ -18,6 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import net.sf.json.JSONObject;
 
@@ -88,6 +89,8 @@ public class DealsAPI
 	    @QueryParam("order_by") String fieldName, @QueryParam("cursor") String cursor,
 	    @QueryParam("page_size") String count, @QueryParam("pipeline_id") Long pipelineId)
     {
+	count = (count == null) ? "25" : count;
+
 	if (count != null)
 	    return OpportunityUtil.getOpportunitiesWithMilestones(ownerId, milestone, contactId, fieldName,
 		    (Integer.parseInt(count)), cursor, pipelineId);
@@ -105,6 +108,8 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Opportunity> getOpportunities(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
+	count = (count == null) ? "25" : count;
+
 	if (count != null)
 	{
 	    return OpportunityUtil.getOpportunities((Integer.parseInt(count)), cursor);
@@ -138,6 +143,8 @@ public class DealsAPI
 	    @QueryParam("page_size") String count, @QueryParam("pipeline_id") Long pipelineId,
 	    @QueryParam("filters") String filters)
     {
+	count = (count == null) ? "25" : count;
+
 	if (filters != null)
 	{
 	    System.out.println(filters);
@@ -248,6 +255,11 @@ public class DealsAPI
     {
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
+	//Some times milestone comes as null from client side, if it is null we can'tsave it.
+	if(opportunity != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
+	{
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Deal not saved properly.").build());
+	}
 	opportunity.save();
 	try
 	{
@@ -276,7 +288,12 @@ public class DealsAPI
 
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
-
+	//Some times milestone comes as null from client side, if it is null we can'tsave it.
+	if(opportunity != null && opportunity.id != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
+	{
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Deal not updated properly.").build());
+	}
+	
 	try
 	{
 	    ActivitySave.createDealEditActivity(opportunity);
@@ -489,6 +506,8 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Opportunity> getUpcomingDealsRelatedToCurrentUser(@QueryParam("page_size") String page_size)
     {
+	page_size = (page_size == null) ? "25" : page_size;
+
 	if (page_size != null)
 	    return OpportunityUtil.getUpcomingDealsRelatedToCurrentUser(page_size);
 
@@ -1187,6 +1206,19 @@ public class DealsAPI
 	    opportunity.save();
 
 	return opportunity;
+    }
+
+    @Path("/conversionRate/{owner-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getConvertedDeals(@PathParam("owner-id") Long ownerId, @QueryParam("track-id") Long trackId,
+	    @QueryParam("start-date") Long min, @QueryParam("end-date") Long max)
+    {
+	if (trackId != null)
+	{
+	    ReportsUtil.check(min * 1000, max * 1000);
+	}
+	return OpportunityUtil.getPipelineConversionData(ownerId, min, max, trackId).toString();
     }
 
 }

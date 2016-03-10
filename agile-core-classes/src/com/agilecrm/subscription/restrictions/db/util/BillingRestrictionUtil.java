@@ -7,17 +7,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.deferred.EmailsAddedDeferredTask;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.PlanLimits.PlanClasses;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 @XmlRootElement
 public class BillingRestrictionUtil {
@@ -83,8 +92,7 @@ public class BillingRestrictionUtil {
 
 	public static BillingRestriction getBillingRestrictionFromDB() {
 		System.out.println(NamespaceManager.get());
-		BillingRestriction restriction = BillingRestriction.dao.ofy()
-				.query(BillingRestriction.class).get();
+		BillingRestriction restriction = getRestrictionFromDB();
 
 		// Gets respective PlanLimits class based on plan.
 		restriction.planDetails = PlanLimits
@@ -97,16 +105,23 @@ public class BillingRestrictionUtil {
 	}
 
 	public static BillingRestriction getBillingRestrictionFromDbWithoutSubscription() {
-		BillingRestriction restriction = BillingRestriction.dao.ofy()
-				.query(BillingRestriction.class).get();
-
+		BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
 		if (restriction == null) {
 			restriction = BillingRestriction.getInstance(null, null);
 			restriction.refresh(true);
 			restriction.save();
-
-		}
-
+			return restriction;
+		}	
+		return restriction;
+	}
+	
+	
+	public static BillingRestriction getRestrictionFromDB(){
+		System.out.println("Fetching restriction from db");
+		BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
+		System.out.println("Done fetching restriction from db");
+		if(restriction.checkToUpdateFreeEmails())
+			restriction.refreshEmails();
 		return restriction;
 	}
 
@@ -388,7 +403,24 @@ public class BillingRestrictionUtil {
 
 			return billingRestriction;
 		} catch (Exception e) {
+			System.out.println("got exception while retrieving billing restriction");
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			return null;
 		}
 	}
+	
+	public static void sendFreeEmailsUpdatedMail(){
+		try {
+			EmailsAddedDeferredTask task = new EmailsAddedDeferredTask(NamespaceManager.get());
+			// Add to queue
+			Queue queue = QueueFactory.getQueue(AgileQueues.EMAILS_ADDED_QUEUE);
+			queue.add(TaskOptions.Builder.withTaskName(NamespaceManager.get()).payload(task));
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Task already created with domain: "+NamespaceManager.get());
+			e.printStackTrace();
+		}
+		
+	}
+	
 }

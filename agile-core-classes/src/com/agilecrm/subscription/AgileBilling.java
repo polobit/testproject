@@ -8,6 +8,7 @@ import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.stripe.model.Invoice;
+import com.stripe.model.InvoiceItem;
 
 /**
  * 
@@ -113,5 +114,17 @@ public interface AgileBilling
     public void cancelSubscription(JSONObject billingData) throws Exception;
     
     public JSONObject addSubscriptionAddon(Plan plan) throws Exception;
-
+    
+    /**
+     * Cancels customer Email Subscription
+     * 
+     * @param billingData
+     *            as {@link JSONObject}
+     * 
+     * 
+     * @throws Exception
+     */
+    public void cancelEmailSubscription(JSONObject billingData) throws Exception;
+    public Invoice getUpcomingInvoice(JSONObject billingData, Plan plan) throws Exception;
+    public void purchaseEmailCredits(JSONObject billingData, Integer quantity) throws Exception;
 }

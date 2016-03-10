@@ -55,6 +55,8 @@
                 <i class="icon-calendar icon-large"></i>
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
+
+                
 			<div style="padding:0px 8px 10px" class="pull-right">
 				<select class="required form-control" name="group-by" id="users">
 					<option value="All" selected="selected">All Users</option>
@@ -86,4 +88,53 @@
 
    </div>
 
+</script>
+<script id="report-calls-timeGraph-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+ 
+     <div class="col-sm-12 col-md-12">
+                     
+             <div style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
+			border:1px solid #cfdadd;height:34px;padding:5px;" class="pull-right test-class" id="reportrange">
+                <i class="icon-calendar icon-large"></i>
+                <span id="range">{{date-range "today" "-6"}}</span>
+              </div>
+
+			<div class="pull-right" style="padding:0px 8px 10px">
+				<select name="frequency" id="frequency" class="required form-control" style="width:105px">
+					<option value="daily">Daily</option>
+					<option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+			</div> 
+			<div style="padding:0px 8px 10px" class="pull-right">
+				<select class="required form-control" name="group-by" id="users">
+					<option value="All" selected="selected">All Users</option>
+						
+                </select>
+			</div>
+			<div class="col-md-4 col-sm-6" style="padding-left:0px;">
+            <h3 class="font-thin h3">Call Reports</h3>
+
+			</div>
+   
+        </div>
+ </div>
+</div>
+<div>	
+	<!-- Call Reports -->
+	<div id="email-reports" class="wrapper-md">	
+		<div class="row">
+			<div class="col-md-12">
+				<div id="calls-chart" class="panel"></div>
+			</div>
+		</div>
+		<hr>
+	</div>
+	<!-- End of Call Reports -->  
+
+   </div>
+</div>
 </script>

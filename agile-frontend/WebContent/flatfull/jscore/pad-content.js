@@ -127,7 +127,7 @@ var CONTENT_JSON = {
 		"title" : "You do not have any Email templates currently.",
 		"description" : "Personalize and customize email templates for every scenario in the sales cycle.",
 		"button_text" : "Add Email Template",
-		"route" : "#email-template-add",
+		"route" : "#emailbuilder-templates",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-activities" : {
@@ -174,11 +174,19 @@ var CONTENT_JSON = {
 		"button_text" : "Add Webpage",
 		"route" : "#webpage-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
-	}
+	},
+	"deal-filters" : {
+		"title" : "You do not have any filters currently.",
+		"description" : "Filters are used to sort deals with a specific criteria to find patterns.",
+		//"learn_more" : "click here to learn more",
+		"button_text" : "Add Filter",
+		"route" : "#deal-filter-add",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
 	/*"web-rules" : {/All_Activities
 		
 		"title" : "Engage visitors on website",
-		"description" : "Define web rules and enagage your website visitors with smart popups, or perform automatic actions when contacts do (or don't do) something in your application or website. Checkout the <a href='https://github.com/agilecrm/agile-popups'>documentation</a>",
+		"description" : "Define web rules and engage your website visitors with smart popups, or perform automatic actions when contacts do (or don't do) something in your application or website. Checkout the <a href='https://github.com/agilecrm/agile-popups'>documentation</a>",
 		"button_text" : "Add Web Rule",
 		"route" : "#webrules-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
@@ -204,7 +212,7 @@ function fill_slate(id, el, key) {
 
 		var template_name = "", json = {};
 
-		if((route_path == "contacts") && readCookie('company_filter')){
+		if((route_path == "contacts") && _agile_get_prefs('company_filter')){
 			template_name = "empty-collection-model";
 			json = CONTENT_JSON["companies"];
 		} 	
@@ -268,7 +276,9 @@ $(function() {
 		var id = $(this).attr('modal_id');
 		if(id == "opportunityModal")
 			show_deal();
-		else
+		else if(id == "personModal")
+			addContactBasedOnCustomfields();
+		else 
 			$("#" + id).modal('show');
 	});
 });

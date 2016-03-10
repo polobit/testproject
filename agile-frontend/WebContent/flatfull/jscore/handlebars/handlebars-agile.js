@@ -243,6 +243,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("googleplus.js");
 	}	
+	else if (templateName.indexOf("paypal") == 0)
+	{
+		template_relative_urls.push("paypal.js");
+	}
 	else if (templateName.indexOf("xero") == 0)
 	{
 		template_relative_urls.push("xero.js");
@@ -297,6 +301,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("landingpages.js");
 	}
+	if (templateName.indexOf("emailbuilder") == 0)
+	{
+		template_relative_urls.push("emailbuilder.js");
+	}
 	if (templateName.indexOf("billing-settings") == 0 || templateName.indexOf("creditcard-update") == 0)
 	{
 		template_relative_urls.push("settings.js");
@@ -304,6 +312,10 @@ function getTemplateUrls(templateName)
 	if (templateName.indexOf("bria") == 0)
 	{
 		template_relative_urls.push("bria.js");
+	}
+	if (templateName.indexOf("skype") == 0)
+	{
+		template_relative_urls.push("skype.js");
 	}
 	return template_relative_urls;
 }

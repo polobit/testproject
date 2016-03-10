@@ -19,23 +19,22 @@
 		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank">{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</a>
 	{{/if}}
 </div>
-
-{{#if_domain "our"}}
-	<div class="b-t b-b wrapper-xs">
-		<div class="row">
-			<div class="col-md-1 p-r-none">
-				<p class="m-b-none c-p" id="add_credits"><i class="icon-plus-sign"></i></p>
-			</div>
-			<div class="col-md-5">
-				Credits<div class="pull-right"> :</div>
-			</div>
-			<div class="col-md-6">
-	  			<span>$ </span>
-	  			<span id="balance_credit">{{stripeCreditConvertion customer.accountBalance}}</span>
-			</div>
+<div class="b-t b-b wrapper-xs">
+	<div class="row">
+		<div class="col-md-1 p-r-none">
+			<p class="m-b-none c-p" id="add_credits"><i class="icon-plus-sign"></i></p>
+		</div>
+		<div class="col-md-5">
+			Credits<div class="pull-right"> :</div>
+		</div>
+		<div class="col-md-6">
+  			<span>$ </span>
+  			<span id="balance_credit">{{stripeCreditConvertion customer.accountBalance}}</span>
 		</div>
 	</div>
-	<div id="stripe_credits_panel" class="col-md-12 p-t-xs p-b-xs hide">
+</div>
+<div id="stripe_credits_panel" class="col-md-12 p-t-xs p-b-xs hide">
+{{#if_hasWriteAccess}}
 		<div class="col-md-6 p-l-none p-r-sm">
 			<input class="form-control input-sm" id="credit_amount" type="number" value="0" name="credit_amount">
 		</div>
@@ -45,9 +44,13 @@
 		<div class="col-md-3 p-none">
 			<button href="#" class="btn btn-sm btn-default" id="stripe_credits_cancel" style="" name="stripe_credits_cancel">cancel</button>
 		</div>
-	</div>
-	<div class="clearfix"></div>
-{{/if_domain}}
+	{{else}}
+		<div class="col-md-12 p-l-none p-r-sm">
+			<p>Revoke stripe with write access to enable add credit feature.</p>
+		</div>
+{{/if_hasWriteAccess}}
+</div>
+<div class="clearfix"></div>
 <div class="b-t">
 	<div class=" wrapper-xs">
 		<span>Subscription Details</span>
@@ -196,7 +199,7 @@
 <script id="stripe-custom-field-template" type="text/html">
 <div class="wrapper-sm">
 {{#if_equals this.custom_fields.length "0"}}
-	<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
+	<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a class="text-info" href="#custom-fields">create one</a>.</p>
 {{else}}
 	<p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p>
 	<select name="stripe_field" id="stripe_custom_field_name" class="required form-control col-md-10 w-full">
@@ -230,7 +233,18 @@
 <div class="m-t">
 	See the contact's subscriptions history and payments from your Stripe account.
 <br>
-	<div class="text-center"><a class="btn btn-sm btn-primary m-t-sm" href="{{url}}">Link Your Stripe</a></div>
+	<div class="col-sm-12 text-center m-t-sm">
+		<p><b>Access <i class="icon-question c-p" data-toggle="tooltip" data-placement="top" title="Select the access mode to enable features. Ex- Give write access to enable add credit feature." ></i></b></p>
+	    <div class="btn-group" data-toggle="buttons">
+	        <label class="btn btn-default active">
+	            <input type="radio" class="stripe_scopes" checked="checked" id="read_only" name="scope" value="read_only"/> Read
+	        </label> 
+	        <label class="btn btn-default">
+	            <input type="radio" class="stripe_scopes" id="read_write" name="scope" value="read_write"/> Write
+	        </label> 	      
+	    </div>	   
+	</div>
+<div class="text-center"><button class="btn btn-sm btn-primary m-t-sm" url="{{url}}" id="stripe_url">Link your Stripe</button></div>
 </div>
 </script>
 
@@ -240,10 +254,20 @@
 <div>
 
 {{#if_equals custom_data.length "0"}}
-				<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
+				<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a class="text-info" href="#custom-fields">create one</a>.</p>
 {{else}}
 
-<p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p><form id="reportsForm">
+<p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p>
+<form id="reportsForm">
+
+<input name="scope"  id="scope" value="{{prefs.scope}}" hidden/>
+<input name="stripe_publishable_key"  id="stripe_publishable_key" value="{{prefs.stripe_publishable_key}}" hidden/>
+<input name="token_type"  id="token_type" value="{{prefs.token_type}}" hidden/>
+<input name="livemode"  id="livemode" value="{{prefs.livemode}}" hidden/>
+<input name="refresh_token"  id="refresh_token" value="{{prefs.refresh_token}}" hidden/>
+<input name="stripe_user_id"  id="stripe_user_id" value="{{prefs.stripe_user_id}}" hidden/>
+<input name="access_token"  id="access_token" value="{{prefs.access_token}}" hidden/>
+
 <fieldset class="m-l-md">
 		<div class="control-group m-l-n-md">
 				<label class="control-label">Current custom field</label>

@@ -242,15 +242,17 @@ function set_up_widgets(el, widgets_el)
 		if (model.get("widget_type") == "CUSTOM")
 		{
 
-			if ($('#' + model.get('selector') + '-container').length)
-			{
-				setup_custom_widget(model, widgets_el)
-			}
-			else
-				$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e)
-				{
-					setup_custom_widget(model, widgets_el)
+			if ($('#' + model.get('selector') + '-container').length){
+				$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e){
+					setup_custom_widget(model, widgets_el);
 				});
+
+				//setup_custom_widget(model, widgets_el)
+			}else {
+				$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e){
+					setup_custom_widget(model, widgets_el);
+				});
+			}
 		}
 	}, this);
 	enableWidgetSoring(widgets_el);
@@ -315,7 +317,7 @@ function enableWidgetSoring(el)
 		$('.widget-sortable', el).sortable();
 
 		// Makes icon-cursor-move on widgets panel as handle for sorting
-		$('.widget-sortable', el).sortable("option", "handle", ".icon-cursor-move");
+		$('.widget-sortable', el).sortable("option", "handle", ".icon-widget-move");
 
 		/*
 		 * This event is called after sorting stops to save new positions of

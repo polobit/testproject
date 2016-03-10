@@ -339,7 +339,7 @@ function populate_call_trigger_options(trigger_form, triggerJSON)
 	trigger_form.find('div#CALL').closest('div.control-group').css('display', '');
 	
 	if(triggerJSON && triggerJSON["call_disposition"])
-		trigger_form.find('div#CALL select').find('option[value=' + triggerJSON["call_disposition"] + ']').attr('selected', 'selected').trigger('change');
+		trigger_form.find('div#CALL select').find('option[value="' + triggerJSON["call_disposition"] + '"]').attr('selected', 'selected').trigger('change');
 }
 
 function populate_forms_in_trigger(trigger_form, trigger_form_select_id, trigger_form_id, trigger_run_on_new_contacts)
@@ -468,12 +468,16 @@ function initializeTriggerEventListners()
 function initializeTriggerListEventListners(id,trigger_type)
 {
 
-	$('#trigger-selector').on('click', '#trigger-cancel', function(e)
+	$('#trigger-selector, #trigger-edit-selector').on('click', '#trigger-cancel', function(e)
  	{
 		e.preventDefault();
 
-		if (history !== undefined)
+		if (!history)
+			   return;
+
+		if($(this).closest("#trigger-edit-selector").length == 0)
 			Backbone.history.loadUrl();
+		else history.back(-1);
 	});
 
 

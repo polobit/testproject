@@ -78,33 +78,33 @@ $(function () {
 	
 	$('#opportunity-listners').on('click', '#deal-milestone-regular', function(e) {
     	e.preventDefault();
-    	eraseCookie('deal-milestone-view');
+    	_agile_delete_prefs('deal-milestone-view');
     	App_Deals.deals();
     });
 	
 	$('body').on('click', '#deal-milestone-compact', function(e) {
     	e.preventDefault();
-    	createCookie('deal-milestone-view','compact');
+    	_agile_set_prefs('deal-milestone-view','compact');
     	App_Deals.deals();
     });
 	
 	$('body').on('click', '#deal-milestone-fit', function(e) {
     	e.preventDefault();
-    	createCookie('deal-milestone-view','fit');
+    	_agile_set_prefs('deal-milestone-view','fit');
     	App_Deals.deals();
     });
 	
 	//Check the archived filter for the first time and set it to false as default.
-	if(readCookie('deal-filters')){
-		var json = $.parseJSON(readCookie('deal-filters'));
+	if(_agile_get_prefs('deal-filters')){
+		var json = $.parseJSON(_agile_get_prefs('deal-filters'));
 		if(!json.archived){
 			json.archived="false";
-			createCookie('deal-filters',JSON.stringify(json));
+			_agile_set_prefs('deal-filters',JSON.stringify(json));
 		}
 	} else {
 		var json = {"owner_id":"","pipeline_id":"","milestone":"","value_filter":"equals","value":"","value_start":"","value_end":"","archived":"false","":false,"contact_ids":[]};
 		json.archived="false";
-		createCookie('deal-filters',JSON.stringify(json));
+		_agile_set_prefs('deal-filters',JSON.stringify(json));
 	}
 	
 });
@@ -180,15 +180,16 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			if(jsonModel.length==1){
 				var mile = jsonModel[0];
 				$.each(mile.milestones.split(","), function(index,milestone){
+					var json = {id : mile.id, milestone : milestone};
 					if(value && mile.id == value.pipeline_id && milestone == value.milestone)
-						html+='<option value="'+mile.id+'_'+milestone+'" selected="selected">'+milestone+'</option>';
+						html += Handlebars.compile('<option value="{{id}}_{{milestone}}" selected="selected">{{milestone}}</option>')(json);
 					else
-						html+='<option value="'+mile.id+'_'+milestone+'">'+milestone+'</option>';
+						html += Handlebars.compile('<option value="{{id}}_{{milestone}}">{{milestone}}</option>')(json);
 				});
 				if(mile.lost_milestone){
-					html+='<option value="'+mile.id+'_'+mile.lost_milestone+'" style="display:none;">'+mile.lost_milestone+'</option>';
+					html += Handlebars.compile('<option value="{{id}}_{{lost_milestone}}" style="display:none;">{{lost_milestone}}</option>')({id : mile.id, lost_milestone : mile.lost_milestone});
 				}
-				$('#' + id, el).closest('.control-group').find('label b').text('Milestone');
+				$('#' + id, el).closest('.control-group').find('label').html('Milestone<span class="field_req">*</span>');
 			}
 			else {
 				$.each(jsonModel,function(index,mile){
@@ -197,18 +198,20 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					html+='<optgroup label="'+mile.name+'">';
 					$.each(mile.milestones.split(","), function(index,milestone){
 						array.push($.trim(this));
+						var json = {id : mile.id, milestone : milestone, name : mile.name};
 						if(value && mile.id == value.pipeline_id && milestone == value.milestone)
-							html+='<option value="'+mile.id+'_'+milestone+'" selected="selected">'+mile.name+' - '+milestone+'</option>';
+							html += Handlebars.compile('<option value="{{id}}_{{milestone}}" selected="selected">{{name}} - {{milestone}}</option>')(json);
 						else
-							html+='<option value="'+mile.id+'_'+milestone+'">'+mile.name+' - '+milestone+'</option>';
+							html += Handlebars.compile('<option value="{{id}}_{{milestone}}">{{name}} - {{milestone}}</option>')(json);
 					});
 					if(mile.lost_milestone){
-						html+='<option value="'+mile.id+'_'+mile.lost_milestone+'" style="display:none;">'+mile.name+' - '+mile.lost_milestone+'</option>';
+						html += Handlebars.compile('<option value="{{id}}_{{lost_milestone}}" style="display:none;">{{name}} - {{milestone}}</option>')({id : mile.id, lost_milestone : mile.lost_milestone, name : mile.name});
 					}
 					html+='</optgroup>';
 				});
-				$('#' + id, el).closest('.control-group').find('label b').text('Track & Milestone');
+				$('#' + id, el).closest('.control-group').find('label').html('Track & Milestone<span class="field_req">*</span>');
 			}
+			
 			$('#' + id, el).html(html);
 			console.log('adding');
 			$('#' + id, el).closest('div').find('.loading-img').hide();
@@ -252,19 +255,19 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			
 			// If there is only one pipeline, select the option by default and hide the field.
 			if(jsonModel.length==1){
-				html+='<option value="'+jsonModel[0].id+'" selected="selected">'+jsonModel[0].name+'</option>';
+				html += Handlebars.compile('<option value="{{id}}" selected="selected">{{name}}</option>')({id : jsonModel[0].id, name : jsonModel[0].name});
 				milestone_util.showMilestonePopup(jsonModel[0]);
 			}
 			else {
 				milestone_util.isNotyVisible = false;
 				$.each(jsonModel,function(index,mile){
-					console.log(mile.milestones,value);
+					var json = {id : mile.id, name : mile.name};
 					if(!mile.name)
 						mile.name = 'Default';
 					if(value && mile.id == value.pipeline_id)
-						html+='<option value="'+mile.id+'" selected="selected">'+mile.name+'</option>';
+						html += Handlebars.compile('<option value="{{id}}" selected="selected">{{name}}</option>')(json);
 					else
-						html+='<option value="'+mile.id+'">'+mile.name+'</option>';
+						html += Handlebars.compile('<option value="{{id}}">{{name}}</option>')(json);
 					milestone_util.showMilestonePopup(mile);
 				});
 			}
@@ -273,15 +276,15 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			$('#pipeline',el).closest('div').find('.loading-img').hide();
 			
 			// Hide the Tracks select box when there is only one pipeline.
-			if(jsonModel.length==1){
+			/*if(jsonModel.length==1){
 				$('#pipeline',el).closest('div.control-group').hide();
 				$('#milestone',el).closest('div.control-group').css("margin-left","0px");
 				$('#dealsFilterForm #pipeline',el).closest('div.control-group').show();
-			}
+			}*/
 			
 			if (callback && typeof (callback) === "function") {
 				// execute the callback, passing parameters as necessary
-				callback(jsonModel);
+				callback(jsonModel, html);
 			}
 		}
 	}); 
@@ -337,7 +340,7 @@ function populateMilestones(el, dealsDetails, pipeline, value, callback, default
 							if (callback && typeof (callback) === "function") {
 								var optionsHtml = '<option value="">Select...</option>';
 								$.each(array, function(index,element){
-									optionsHtml += '<option value=' + '"' + element + '">' + element + '</option>'
+									optionsHtml += Handlebars.compile('<option value="{{element}}">{{element}}</option>')({element : element});
 								});
 								// execute the callback, passing parameters as necessary
 								callback($(optionsHtml));
@@ -361,18 +364,20 @@ function setupDealsTracksList(cel){
 			if(pipeline_id == 0 && value.toJSON().isDefault){
 				pipeline_id = value.id;
 				console.log('default pipeline set.');
-				createCookie('agile_deal_track',pipeline_id);
+				_agile_set_prefs('agile_deal_track',pipeline_id);
 			}
 				
 			if(value.id == pipeline_id)
-				$('#deals-tracks .filter-dropdown').append(value.attributes.name);
+				$('#deals-tracks .filter-dropdown').append(Handlebars.compile('{{name}}')({name : value.attributes.name}));
 		});
 		
 		// Add all option for the deals in the list view.
-		if (readCookie("agile_deal_view"))
+		if (_agile_get_prefs("agile_deal_view"))
 			$('#deals-tracks .dropdown-menu').append('<li><a id="1" class="pipeline" data="All" style="cursor: pointer;">All</a></li>');
 		else{
-			startGettingDeals();
+			setupNewDealFilters(function(){
+				startGettingDeals();
+			});
 		}
 		// Hide the track list if there is only one pipeline.
 		if(tracksArray.length<=1)
@@ -410,8 +415,7 @@ function appendCustomfieldsHeaders(el){
 		success: function(customfields){
 			var columns = '';
 			$.each(customfields, function(index,customfield){
-				//console.log(customfield);
-				columns += '<th>'+customfield.field_label+'</th>';
+				columns +=  Handlebars.compile('<th>{{label}}</th>')({label : customfield.field_label});
 			});
 			$(el).find('#deal-list thead tr').append(columns);
 		}
@@ -490,10 +494,10 @@ function populateLostReasons(el, value){
 			
 			$.each(jsonModel,function(index,lostReason){
 				if (value && value.lost_reason_id == lostReason.id){
-					html+='<option value="'+lostReason.id+'" selected="selected">'+lostReason.label+'</option>';
+					html+= Handlebars.compile('<option value="{{id}}" selected="selected">{{label}}</option>')({label : lostReason.label, id : lostReason.id});
 					$('#deal_lost_reason',el).removeClass("hidden");
 				}else{
-					html+='<option value="'+lostReason.id+'">'+lostReason.label+'</option>';
+					html+= Handlebars.compile('<option value="{{id}}">{{label}}</option>')({label : lostReason.label, id : lostReason.id});
 				}
 			});
 			$('#lost_reason', el).html(html);
@@ -535,7 +539,7 @@ function populateDealSources(el, value){
 	if(!$('#deal_deal_source',el).hasClass("hidden")){
 		$('#deal_deal_source',el).addClass("hidden");
 	}
-	var tracks = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_SOURCE', sortKey : "label"});
+	var tracks = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_SOURCE', sort_collection: false});
 	tracks.collection.fetch({
 		success: function(data){
 			var jsonModel = data.toJSON();
@@ -544,10 +548,10 @@ function populateDealSources(el, value){
 			
 			$.each(jsonModel,function(index,dealSource){
 				if (value && value.deal_source_id == dealSource.id){
-					html+='<option value="'+dealSource.id+'" selected="selected">'+dealSource.label+'</option>';
+					html += Handlebars.compile('<option value="{{id}}" selected="selected">{{label}}</option>')({label : dealSource.label, id : dealSource.id});
 					$('#deal_deal_source',el).removeClass("hidden");
 				}else{
-					html+='<option value="'+dealSource.id+'">'+dealSource.label+'</option>';
+					html += Handlebars.compile('<option value="{{id}}">{{label}}</option>')({label : dealSource.label, id : dealSource.id});
 				}
 			});
 			$('#deal_source', el).html(html);

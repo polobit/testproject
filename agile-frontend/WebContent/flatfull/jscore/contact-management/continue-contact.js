@@ -19,14 +19,15 @@ function show_error(modalId, formId, errorClass, htmlText)
 	if (modal_elem.css('display') !== 'none')
 	{
 		modal_elem.find('.' + errorClass).html(
-				'<div class="alert alert-danger m-b-none" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
+				'<div class="alert alert-danger" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
 	}
 	else if (form_elem.css('display') !== 'none')
 	{
 		form_elem.find('.' + errorClass).html(
-				'<div class="alert alert-danger m-b-none" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
+				'<div class="alert alert-danger" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
 	}
 }
+
 
 function show_error_in_formactions(modalId, formId, errorClass, htmlText)
 {
@@ -211,6 +212,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 		if (isValidField(form_id + ' #phone'))
 			properties.push(property_JSON('phone', form_id + ' #phone'));
+		
+/*		if (isValidField(form_id + ' #skypePhone'))
+			properties.push(property_JSON('skypePhone', form_id + ' #skypePhone'));*/
 
 		if (isValidField(form_id + ' #job_title'))
 			properties.push(property_JSON('title', form_id + ' #job_title'));
@@ -307,7 +311,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 					if (status)
 					{
-						show_error(modal_id, form_id, 'duplicate-email', 'Company name already exist.');
+						show_error(modal_id, form_id, 'duplicate-email', 'Company name already exists.');
 
 						enable_save_button($(saveBtn));// Remove loading image
 						return;
@@ -513,8 +517,8 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 
 		// Remove social search results from local storage after editing a
 		// contact
-		localStorage.removeItem("Agile_linkedin_matches_" + data.get('id'));
-		localStorage.removeItem("Agile_twitter_matches_" + data.get('id'));
+		_agile_delete_prefs("Agile_linkedin_matches_" + data.get('id'));
+		_agile_delete_prefs("Agile_twitter_matches_" + data.get('id'));
 
 		// Removes disabled attribute of save button
 		enable_save_button($(saveBtn));
@@ -561,6 +565,25 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 				if(!CALL_CAMPAIGN.start && Current_Route != "contact/" + data.id)
 				App_Contacts.navigate("contact/" + data.id, { trigger : true });
 			} else {
+				//Update all the existed contacts with mapped this company
+				var companyJSON = data.toJSON();
+				if(App_Contacts.contactsListView)
+				{
+					var realetd_contats = App_Contacts.contactsListView.collection.where({ contact_company_id : ""+companyJSON.id });
+					$.each(realetd_contats, function(index, contactModel){
+						$.each(contactModel.get("properties"), function(index, property){
+							if(property.name == "company" && property.type == "SYSTEM")
+							{
+								$.each(companyJSON.properties, function(index, companyProperty){
+									if (companyProperty.name == "name" && companyProperty.type == "SYSTEM"){
+										property.value = companyProperty.value;
+									}
+								});
+							}
+						});
+					});
+				}
+
 				// update contacts-details view
 				if (App_Companies.companyDetailView)
 					App_Companies.companyDetailView.model = data;
@@ -771,6 +794,7 @@ function fill_multi_options(field_element, element)
 	}
 }
 
+
 /**
  * Creates json object for each custom field in contact form with name, type and
  * value as attributes.
@@ -918,9 +942,9 @@ function add_contact_to_view(appView, model, isUpdate)
 	}
 	else
 	{
-		if (!readCookie('company_filter')) // check if in contacts view
+		if (!_agile_get_prefs('company_filter')) // check if in contacts view
 		{
-			if (!readCookie('contact_filter')) // add model only if its in
+			if (!_agile_get_prefs('contact_filter')) // add model only if its in
 			// plain contact view, otherwise
 			// always hard reload
 			{
@@ -953,8 +977,9 @@ function add_model_cursor(app_collection, mdl)
 	else
 		app_collection.add(mdl);
 
-	if (app_collection.at(0).attributes.count)
+	if(app_collection.at(0).attributes.count){
 		app_collection.at(0).attributes.count += 1;
+	}		
 }
 
 /**
@@ -962,7 +987,7 @@ function add_model_cursor(app_collection, mdl)
  */
 function isCompanyExist(company, callback)
 {
-	$.get('core/api/contacts/company/validate/' + company, function(data){
+	$.get('core/api/contacts/company/validate?companyName=' + company, function(data){
 		   if(data == "true"){
 		   	    callback(true);
 		   		return;

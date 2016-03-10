@@ -65,6 +65,11 @@ var PortletsRouter = Backbone.Router
 										updateImageS3Path('flatfull/img/dashboard_images/Task.png'),
 										updateImageS3Path('flatfull/img/dashboard_images/User-Activities.png'),
 										updateImageS3Path('flatfull/img/dashboard_images/Campaign-stats.jpg'),
+										updateImageS3Path('flatfull/img/dashboard_images/Quota.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/incoming-deals-new.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/lost-deal-analysis-new.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Average_deviation.png'),
+
 
 								]);
 								// Event initializers
@@ -130,6 +135,13 @@ function deletePortlet(el) {
 
 	else if (model.get("name") == "Mini Calendar")
 		deleteWarnHTML = "Are you sure you want to delete Dashlet - Mini Calendar?";
+
+	else if (model.get("name") == "Deal Goals")
+		deleteWarnHTML = "Are you sure you want to delete Dashlet - Deal Goals "
+				+ portlet_utility.getDurationForPortlets(
+						model.get("settings").duration, function(duration) {
+							return duration;
+						}) + "?";
 
 	else
 		deleteWarnHTML = "Are you sure you want to delete Dashlet - Activity Overview "

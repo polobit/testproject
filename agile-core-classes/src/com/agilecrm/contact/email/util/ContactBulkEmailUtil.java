@@ -9,6 +9,7 @@ import com.agilecrm.AgileQueues;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
+import com.agilecrm.email.wrappers.ContactEmailWrapper.PushParams;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.email.MustacheUtil;
@@ -35,13 +36,15 @@ public class ContactBulkEmailUtil
 		try
 		{
 			// Fetches values from email json with form field names
-			String fromEmail = emailData.getString("from_email");
+			String fromEmail = emailData.getString("from");
 			String fromName = emailData.getString("from_name");
 			String subject = emailData.getString("subject");
-			String body = emailData.getString("body");
+			String body = emailData.getString("message");
 			String signature = emailData.getString("signature");
 			boolean trackClicks = emailData.getBoolean("track_clicks");
-
+			String pushParam = "";
+			if(emailData.has("push_param"))
+			       pushParam = emailData.getString("push_param");
 			if (contactList == null)
 				return 0;
 
@@ -96,16 +99,19 @@ public class ContactBulkEmailUtil
 						ContactEmailUtil.saveContactEmail(fromEmail, fromName, email, null, null, replacedSubject,
 								replacedBody, signature, contact.id, openTrackerId, null, null, null);
 
-						if (trackClicks)
-							replacedBody = EmailLinksConversion.convertLinksUsingJSOUP(replacedBody,
-									contact.id.toString(), null, false);
-
 						// combined body and signature. Inorder to avoid link
 						// tracking in signature, it is appended after
 						// conversion.
 						replacedBody = replacedBody.replace("</body>", "<div><br/>" + signature + "</div></body>");
-						replacedBody = EmailUtil.appendTrackingImage(replacedBody, null, String.valueOf(openTrackerId));
+						
+						if (trackClicks){
+							
+							replacedBody = EmailLinksConversion.convertLinksUsingJSOUP(replacedBody,
+										contact.id.toString(), null, String.valueOf(openTrackerId), pushParam);
 
+							replacedBody = EmailUtil.appendTrackingImage(replacedBody, null, String.valueOf(openTrackerId));
+						}
+						
 						// Agile label to outgoing emails
 						replacedBody = EmailUtil.appendAgileToHTML(replacedBody, "email", "Sent using",
 								emailSender.isEmailWhiteLabelEnabled());

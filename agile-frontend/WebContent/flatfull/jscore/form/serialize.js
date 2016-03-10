@@ -34,12 +34,12 @@ function serializeForm(form_id) {
 		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
 			return {
 				"name" : this.name,
-				"value" : new Date(convertDateFromUKtoUS(this.value)).getTime() / 1000
+				"value" : getFormattedDateObjectWithString(this.value).getTime() / 1000
 			};
 		else
 			return {
 				"name" : this.name,
-				"value" : new Date(this.value).getTime() / 1000
+				"value" : getFormattedDateObjectWithString(this.value).getTime() / 1000
 			};
 	}).get());
 	
@@ -152,11 +152,8 @@ function serializeChainedElement(element)
 
 		// If type of the field is "date" then return epoch time
 		if ($(data).hasClass("date")) {
-			var date;
-			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-				date = new Date(convertDateFromUKtoUS($(data).val()));
-			else
-				date = new Date($(data).val());
+			var date = getFormattedDateObjectWithString($(data).val());
+
 			value = getGMTEpochFromDate(date);
 		}
 
@@ -195,7 +192,13 @@ $(function(){
 	}
 	
 	$('.modal').on('shown.bs.modal', function(event){
+		var modalClassLength =  event.target.classList.length;
+		if(event.target.classList[modalClassLength - 2] == "focusRelatedTo"){
+			$('#opportunityUpdateForm').find("input[name='relates_to']").focus();
+		}
+		else {
 		$('form', this).focus_first();
+		}	
 	});
 });
 
@@ -216,21 +219,24 @@ function serializeLhsFilters(element)
 			RHS_VALUE = $(RHS_ELEMENT).val().trim();
 		}
 		if ($(RHS_ELEMENT).hasClass("date") && RHS_VALUE && RHS_VALUE != "") {
-			var date;
-			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-				date = new Date(convertDateFromUKtoUS($(RHS_ELEMENT).val()));
-			else
-				date = new Date($(RHS_ELEMENT).val());
+			var date = getFormattedDateObjectWithString($(RHS_ELEMENT).val());
+
 			RHS_VALUE = getGMTEpochFromDate(date);
 		}
+
 		RHS_NEW_VALUE = $(RHS_NEW_ELEMENT).val();
 		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
-			var date;
-			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-				date = new Date(convertDateFromUKtoUS($(RHS_NEW_ELEMENT).val()));
-			else
-				date = new Date($(RHS_NEW_ELEMENT).val());
+			var date = getFormattedDateObjectWithString($(RHS_NEW_ELEMENT).val());
+		if(CONDITION != "BETWEEN") {
 			RHS_NEW_VALUE = getGMTEpochFromDate(date);
+		}
+		else {
+			date = new Date(getGMTEpochFromDate(date) + (24 * 60 * 60 * 1000) - 1);
+
+			RHS_NEW_VALUE = date.getTime();
+		}
+			
+			
 		}
 		if(RHS_NEW_VALUE && typeof RHS_NEW_VALUE == "string") {
 			RHS_NEW_VALUE = RHS_NEW_VALUE.trim();

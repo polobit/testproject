@@ -473,7 +473,20 @@ $("#button_email_html").die().live("click", function(e){
     e.preventDefault();
    
     testMailButton("#button_email_html");
+
         });
+
+$("#spam_button_email").die().live("click", function(e){
+    e.preventDefault();
+   testMailButton("#spam_button_email");
+        });
+
+$("#spam_button_email_html").die().live("click", function(e){
+    e.preventDefault();
+      testMailButton("#spam_button_email_html");
+    
+        });
+
 
 
 function testMailButton(button){
@@ -513,41 +526,49 @@ function testMailButton(button){
     	    }
     	 
     // Verify email message
-    if($("#from_email").val() == "{{owner.email}}")
+    if(button == "#button_email" || button=="#button_email_html")
     {
-    	if(button == "#button_email")
-    		margin = "margin:-6px 24px;";
-    	else
-    	    margin = "margin:-44px 29px 0px;";
 
-    	$(button).before("<span class='clearfix' id='confirmation-text'style='top: -49px;"+margin+"display: inline-block;text-align: center;float: left;width: 75%; color: red;font-style: italic;'>Test email cannot be sent to Contact's Owner. Please select any verified email.</span>");
-    	
-    	// Hide message
-    	$("#confirmation-text").fadeOut(15000,function(){
-				
-				  $("#confirmation-text").remove();
-				  $(button).removeAttr('disabled', 'disabled');
-				$(button).css('color','');
-    	});
-    	
-    	return;
+        if($("#from_email").val() == "{{owner.email}}")
+        {
+        	if(button == "#button_email" || button=="#spam_button_email")
+        		margin = "margin:-6px 24px;";
+        	else
+        	    margin = "margin:-44px 29px 0px;";
+
+        	$(button).before("<span class='clearfix' id='confirmation-text'style='top: -49px;"+margin+"display: inline-block;text-align: center;float: left;width: 60%; color: red;font-style: italic;'>Test email cannot be sent to Contact's Owner. Please select any verified email.</span>");
+        	
+        	// Hide message
+        	$("#confirmation-text").fadeOut(15000,function(){
+    				
+    				  $("#confirmation-text").remove();
+    				  $(button).removeAttr('disabled', 'disabled');
+    				$(button).css('color','');
+        	});
+        	
+        	return;
+        }//End of inner if
     }
 
     // Verifies merge fields and gives alert
     check_merge_fields_and_send(button);
     
-}
+ }
 
 function check_merge_fields_and_send(button)
 {
-
+   
     var subject = $('#subject').val();
     var text_body = $("#text_email").val();
     var html_body = $("#tinyMCEhtml_email").val();
 
     if((subject && subject.indexOf('{{') != -1) || (text_body && text_body.indexOf('{{') != -1) || (html_body && html_body.indexOf('{{') != -1))
         show_test_email_alert(button);
-    else
+    else if(button == "#spam_button_email_html" || button=="#spam_button_email")
+     {      
+         check_spam_score(button);
+     }
+     else
         send_test_email(button);
 
 }
@@ -570,9 +591,8 @@ function send_test_email(button){
                  margin = "margin:-6px 24px;";
                  else
                  margin = "margin:-44px 29px 0px;";
-                                 
+
              $(button).before("<span class='clearfix' id='confirmation-text'style='top: -49px;"+margin+"display: inline-block;text-align: center;float: left;width: 75%; color: red;font-style: italic;'>Email has been sent to "+email+"</span>");
-         
               $("#confirmation-text").fadeOut(8000,function(){
             
               $("#confirmation-text").remove();
@@ -586,10 +606,59 @@ function send_test_email(button){
         }
     });
 }
+function check_spam_score(button){
+      window.parent.workflow_alerts("Please Wait Spam Score Checking is Progress...", "<img src='img/21-0.gif' alt='Waiting' style='padding-left:240px; height=50px; '>" , "workflow-alert-modal",undefined);        
+    
+    var margin;
+    var jsonValues = serializeNodeForm();
+    $(button).css('color','gray');
+
+    $.ajax({
+          url: 'core/api/emails/check-spam-score',
+          type: "POST",
+          data:jsonValues,
+          async:true,
+          success: function (score) {//top": "-44px
+
+             $('#errorsdiv').text("sfasd"+score);
+             if(button == "#spam_button_email")
+                 margin = "margin:-6px 24px;";
+             else
+                 margin = "margin:-44px 29px 0px;";
+                
+              while(window.parent.$("#workflow-alert").length)
+                  window.parent.$("#workflow-alert").remove();
+
+             if(score!="" && score.indexOf('reason')>-1 && score.indexOf('score') > -1 )
+             {
+                var spamResult=JSON.parse(score);
+                window.parent.workflow_spam_alerts(spamResult['reason'], spamResult['score'], "workflow-spam-score-modal", undefined);
+             }
+            else
+            {              
+                window.parent.workflow_alerts("Message", "Sorry.. Please Try Again later.." , "workflow-alert-modal",undefined);        
+            }
+             $(button).removeAttr('disabled', 'disabled');
+             $(button).css('color','');
+       },
+        error: function(Error){
+            console.log(Error);
+            $(button).css('color','');
+        }
+    });
+}
 
 function show_test_email_alert(button){
+    var title="Send Test Email";
+    var message="Please observe that the merge fields in test emails would not be replaced. You can however run this campaign on your test contacts.";
 
-    window.parent.workflow_alerts("Send Test Email", "Please observe that the merge fields in test emails would not be replaced. You can however run this campaign on your test contacts." , "workflow-alert-modal"
+    if(button == "#spam_button_email_html" || button=="#spam_button_email")
+    {    
+         title="Check Spam Score";
+         message="Please observe that the merge fields in check spam score would not be replaced.";
+    }
+
+    window.parent.workflow_alerts(title, message , "workflow-alert-modal"
 
         ,function(modal){
 
@@ -602,7 +671,10 @@ function show_test_email_alert(button){
                     // Disable and change text
                     $(this).attr('disabled', 'disabled').text("Sending");
 
-                    // send test email
+                    //Senda test mail and check spam score
+            if(button == "#spam_button_email_html" || button=="#spam_button_email")
+                    check_spam_score(button);
+                else
                     send_test_email(button);
                    
                 });

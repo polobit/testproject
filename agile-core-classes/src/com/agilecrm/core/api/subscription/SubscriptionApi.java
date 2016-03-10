@@ -18,6 +18,9 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -34,6 +37,7 @@ import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
@@ -117,6 +121,13 @@ public class SubscriptionApi {
 
 				return subscribe;
 			}
+			
+			//If uesr is not admin throw exception
+			DomainUser user = DomainUserUtil.getCurrentDomainUser();
+			if (!user.is_admin)
+			{
+				throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
+			}
 
 			/*
 			 * If card_details are null and plan in not null then update plan
@@ -168,7 +179,11 @@ public class SubscriptionApi {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Subscription changePlan(Plan plan, HttpServletRequest request) {
 		try {
-
+			DomainUser user = DomainUserUtil.getCurrentDomainUser();
+			if (!user.is_admin)
+			{
+				throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
+			}
 			Subscription subscribe = Subscription.updatePlan(plan);
 
 			BillingRestriction restriction = BillingRestrictionUtil
@@ -203,6 +218,11 @@ public class SubscriptionApi {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Subscription addEmailPlan(Plan plan) {
 		try {
+			DomainUser user = DomainUserUtil.getCurrentDomainUser();
+			if (!user.is_admin)
+			{
+				throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
+			}
 			// Return updated subscription object
 			return SubscriptionUtil.createEmailSubscription(plan);
 		} catch (PlanRestrictedException e) {
@@ -353,6 +373,25 @@ public class SubscriptionApi {
 	}
 	
 	/**
+	 * Cancels subscription from gateway but never delete {@link Subscription}
+	 * entity
+	 */
+	@Path("/cancel/email")
+	@GET
+	public void cancelEmailSubscription() {
+		try {
+			Subscription subscription = SubscriptionUtil.getSubscription();
+			subscription.cancelEmailSubscription();
+			System.out.println("Cancelled Email Subscription");
+			SubscriptionUtil.deleteEmailSubscription();
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
+	/**
 	 * Cancels trial from gateway
 	 */
 	@Path("/cancel/trial")
@@ -403,25 +442,32 @@ public class SubscriptionApi {
 	public String planRestrictions(Plan plan) {
 		try {
 			Subscription subscription = SubscriptionUtil.getSubscription();
+			String restrictionsJSONString = null;
+			JSONObject json =  new JSONObject();
 			if (subscription.plan != null && subscription.plan.plan_type == PlanType.FREE) {
 				int count = DomainUserUtil.count();
 				System.out.println("existing users cout in free plan " + count);
 				if (plan.quantity < count) {
-					JSONObject json =  new JSONObject();
 					json.put("is_more_users", true);
 					json.put("count", count);
+					return json.toString();
+				}else{
+					json.put("is_allowed_plan", true);
 					return json.toString();
 				}
 			}else if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)) {
 				System.out.println("plan upgrade not possible");
 				Map<String, Map<String, Integer>> restrictions = BillingRestrictionUtil.getInstanceTemporary(plan).getRestrictions();
-				String restrictionsJSONString = new Gson().toJson(restrictions);
-				return restrictionsJSONString;
+				restrictionsJSONString = new Gson().toJson(restrictions);
 			}
-			Map<String, Boolean> restrictions = new HashMap<String, Boolean>();
-			restrictions.put("is_allowed_plan", true);
-			String restrictionsJSONString = new Gson().toJson(restrictions);
-			return restrictionsJSONString;
+			Invoice invoice = subscription.getUpcomingInvoice(plan);
+			if(restrictionsJSONString != null){
+				json.put("restrictions", restrictionsJSONString);
+				json.put("nextPaymentAttempt", invoice.getNextPaymentAttempt());
+				return json.toString();
+			}
+			String invoiceJSONString = new Gson().toJson(invoice);
+			return invoiceJSONString;
 		} catch (Exception e) {
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
@@ -453,5 +499,24 @@ public class SubscriptionApi {
 			NamespaceManager.set(oldNameSpace);
 		}
 	}
+	
+	// Life time emails purchase 
+	@Path("/purchaseEmailCredits")
+	@POST
+	public void purchaseEmailCredits(@QueryParam("quantity") Integer quantity)
+	{
+		Subscription subscription = SubscriptionUtil.getSubscription();
+		try {
+			subscription.purchaseEmailCredits(quantity);
+			BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+			restriction.incrementEmailCreditsCount(quantity*1000);
+			restriction.save();
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
 
 }

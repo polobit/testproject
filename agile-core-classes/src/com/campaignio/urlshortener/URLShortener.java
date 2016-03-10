@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.Cached;
+import com.googlecode.objectify.annotation.Unindexed;
 
 /**
  * <code>URLShortener</code> considers Id, long url, contact id and tracking id
@@ -42,11 +43,21 @@ public class URLShortener
      * Campaign Id
      */
     public String campaign_id;
+    
+    public enum ShortenURLType
+    {
+    	SMS, EMAIL, TWEET
+    };
+    
+    private ShortenURLType type = ShortenURLType.EMAIL;
 
     /**
      * Shortener Url - "https://click.agilecrm.com/backend/click"
      */
     public static final String SHORTENER_URL = "http://agle.cc/";
+    
+    @Unindexed
+    private String push = null;
 
     /**
      * Dao for URLShortener class.
@@ -78,6 +89,26 @@ public class URLShortener
 	this.campaign_id = campaignId;
     }
 
+    public void setURLShortenerType(ShortenURLType type)
+    {
+    	this.type = type;
+    }
+    
+    public ShortenURLType getURLShortenerType()
+    {
+    	return type;
+    }
+    
+    public void setPushParameter(String push)
+    {
+    	this.push = push;
+    }
+    
+    public String getPushParameter()
+    {
+    	return push;
+    }
+    
     /**
      * Saves URLShortener Object in empty namespace.
      */

@@ -60,7 +60,7 @@ function enableKeyboardShotcuts()
 		// New event
 		Mousetrap.bind('shift+v',function(){
 			if(!isModalVisible()){
-				$('#activityModal').modal('show'); 
+				$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 				highlight_event();
 			}
 		});
@@ -127,8 +127,8 @@ function enableKeyboardShotcuts()
 
 		// Help
 		Mousetrap.bind('shift+h',function(){
-			if(!isRoute("help") && !isModalVisible())
-				App_Settings.navigate("help",{trigger:true});
+			if(!isModalVisible())
+				window.open("https://www.agilecrm.com/support", true);
 		});
 
 		// Logout
@@ -186,7 +186,7 @@ function enableKeyboardShotcuts()
 				showTaskModal("");
 			else if(isRoute('calendar'))
 				{
-				  $('#activityModal').modal('show');
+				  $('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 				  highlight_event();
 				}
 		});

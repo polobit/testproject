@@ -1,3 +1,4 @@
+
 /**
  * validate.js is used to validate the forms in the application, isValidFom
  * method validates the form element
@@ -63,7 +64,7 @@ function isValidForm(form) {
 		
 		return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
 	}," Please enter a valid email.");
-	
+
 	// Phone number validation
 	jQuery.validator.addMethod("phone", function(value, element){
 		
@@ -80,7 +81,10 @@ function isValidForm(form) {
 		$(element).val("");
 		if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
 		{
-			$(element).closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+			var template = Handlebars.compile('<li class="tag" style="display: inline-block;" data="{{name}}">{{name}}<a class="close" id="remove_tag" tag="{{name}}">&times</a></li>');
+
+		 	// Adds contact name to tags ul as li element
+			$(element).closest(".control-group").find('ul.tags').append(template({name : tag_input}));
 		}
 		
 		return $(element).closest(".control-group").find('ul.tags > li').length > 0 ? true : false;
@@ -107,6 +111,16 @@ function isValidForm(form) {
 		
 		return /^[0-9\-]+$/.test(value);
 	}," Please enter a valid number.");
+
+	//positive number validation
+	jQuery.validator.addMethod("positive_number", function(value, element){
+			
+		if(value=="")
+			return false;
+		
+		return /^\+?([1-9]\d*)$/.test(value);
+	}," Please enter a number greater than 0.");
+
 	
 	jQuery.validator.addMethod("multi-select", function(value, element){
 		var counter = 0;
@@ -129,24 +143,40 @@ function isValidForm(form) {
 		return true;
 	},"Please select atleast one option.");
 
+	jQuery.validator.addMethod("checkedMultiCheckbox", function(value, element){
+		
+		console.log("value = " + value);
+		console.log("element = " + element);
+
+		var counter = $(element).find('input:checked').length;
+		
+		if(counter == 0)
+			return false;
+
+		return true;
+	},"Please select atleast one option.");
+
 	jQuery.validator.addMethod("date", function(value, element){
 		if(value=="")
 			return true;
-		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-		{
-			return !/Invalid|NaN/.test(new Date(convertDateFromUKtoUS(value))); 
-		}else
-			return !/Invalid|NaN/.test(new Date(value));
+
+		return !/Invalid|NaN/.test(getFormattedDateObjectWithString(value));
+
+			
 	}," Please enter a valid date.");
+
+	jQuery.validator.addMethod("isHttpsURL", function(value, element){
+		var urlregex = new RegExp("^(https:\/\/){1}([0-9A-Za-z]+\.)");
+  		return urlregex.test(value);		
+	}," Please enter a valid https URL");
 
 	jQuery.validator.addMethod("date_input", function(value, element){
 		if(value=="")
 			return true;
-		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-		{
-			return !/Invalid|NaN/.test(new Date(convertDateFromUKtoUS(value))); 
-		}else
-			return !/Invalid|NaN/.test(new Date(value));
+
+		return !/Invalid|NaN/.test(getFormattedDateObjectWithString(value));
+
+		
 	}," Please enter a valid date.");
 
 	jQuery.validator.addMethod("field_length", function(value, element){
@@ -163,6 +193,8 @@ function isValidForm(form) {
 		  return 'Maximum length is ' + $(element).attr("max_len") + ' chars only.'
 		}
 	);
+
+
 	$(form).validate({
 		rules : {
 			atleastThreeMonths : true,

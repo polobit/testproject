@@ -35,8 +35,10 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.document.Document;
 import com.agilecrm.facebookpage.FacebookPage;
 import com.agilecrm.forms.Form;
@@ -63,6 +65,8 @@ import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.voicemail.VoiceMail;
+import com.agilecrm.webhooks.triggers.util.Webhook;
+import com.agilecrm.webhooks.triggers.util.WebhookTriggerUtil;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -87,6 +91,8 @@ import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
 import com.thirdparty.office365.calendar.Office365CalendarPrefs;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+
 /**
  * <code>ObjectifyGenericDao</code> is a generic class for all the entities,
  * which provides the facility to interact with the database (appengine) using
@@ -106,6 +112,8 @@ import com.thirdparty.office365.calendar.Office365CalendarPrefs;
  */
 public class ObjectifyGenericDao<T> extends DAOBase
 {
+
+    static final String[] countRestrictedClassNames = new String[] { "contact", "activity" };
 
     static final int BAD_MODIFIERS = Modifier.FINAL | Modifier.STATIC | Modifier.TRANSIENT;
 
@@ -207,11 +215,16 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(FacebookPage.class);
 
 	ObjectifyService.register(VerifiedEmails.class);
-	
+
 	ObjectifyService.register(Office365CalendarPrefs.class);
 
-    ObjectifyService.register(LandingPage.class);
-    ObjectifyService.register(LandingPageCNames.class);
+	ObjectifyService.register(DealFilter.class);
+
+	ObjectifyService.register(LandingPage.class);
+	ObjectifyService.register(LandingPageCNames.class);
+	ObjectifyService.register(Goals.class);
+
+	ObjectifyService.register(Webhook.class);
 
     }
 
@@ -251,7 +264,34 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	// Checks User access control over current entity to be saved.
 	UserAccessControlUtil.check(clazz.getSimpleName(), entity, CRUDOperation.CREATE, true);
 
-	return ofy().put(entity);
+	Long id = getEntityIdByEnity(entity);
+	Key<T> key = ofy().put(entity);
+
+	String className = clazz.getSimpleName();
+	if (className.equals("Contact") || className.equals("Opportunity"))
+	{
+	    try
+	    {
+		if (id != null && className.equals("Contact"))
+		{
+		    System.out.println("Class Name" + className);
+		    return key;
+		}
+		else
+		{
+		    WebhookTriggerUtil.triggerWebhook(entity, className, (id != null));
+		}
+
+	    }
+	    catch (EntityNotFoundException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+
+	}
+
+	return key;
     }
 
     /**
@@ -649,16 +689,24 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		if (result instanceof com.agilecrm.cursor.Cursor)
 		{
 
+		    String className = this.clazz.getSimpleName().toLowerCase();
+
 		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
 		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
 			    + NamespaceManager.get() + "_count");
 
 		    if (object != null)
-			agileCursor.count = (Integer) object;
+		    {
+			if (!Arrays.asList(countRestrictedClassNames).contains(className))
+			    agileCursor.count = (Integer) object;
+		    }
+
 		    else
 		    {
 			long startTime = System.currentTimeMillis();
-			agileCursor.count = query.count();
+			if (!Arrays.asList(countRestrictedClassNames).contains(className))
+			    agileCursor.count = query.count();
+
 			long endTime = System.currentTimeMillis();
 			if ((endTime - startTime) > 15 * 1000 && cache)
 			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
@@ -961,6 +1009,30 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	    }
 	}
 	return results;
+    }
+
+    private Long getEntityIdByEnity(T entity)
+    {
+	Long id = null;
+	Object obj = (Object) entity;
+	String entitytype = clazz.getSimpleName();
+	switch (entitytype.toLowerCase())
+	{
+	case "contact":
+	    Contact con = (Contact) obj;
+	    System.out.println(con);
+	    id = con.id;
+	    break;
+
+	case "opportunity":
+	    Opportunity opp = (Opportunity) obj;
+	    id = opp.id;
+	    break;
+
+	default:
+	    break;
+	}
+	return id;
     }
 
 }

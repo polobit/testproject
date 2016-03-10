@@ -172,6 +172,55 @@ public class WidgetUtil {
 		}
 	}
 
+		/**
+	 * @author prakash 
+	 * To get added  widget with itegation type
+	 * 
+	 * 
+	 * @param name
+	 *            {@link Integration type}. Type of the widget
+	 * @return {@link Widget}
+	 */
+	public static List<Widget> getWidget(WidgetType type) {
+		try {
+			System.out.println("In get widget by type ");
+
+			// Getting the widget based on widget name and current user id.
+			return getWidget(type, AgileUser.getCurrentAgileUser().id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * @author - prakash
+	 * Gets the widget based on the widget type and user id.
+	 * 
+	 * @param name
+	 *            {@link Integration type}. Type of the widget
+	 * @param agileUserId
+	 *            {@link Long} agile user id
+	 * @return {@link Widget}
+	 */
+	public static List<Widget> getWidget(WidgetType type, Long agileUserId) {
+		try {
+			Objectify ofy = ObjectifyService.begin();
+
+			// Gets the Current AgileUser key to query on widgets
+			Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
+					agileUserId);
+
+			// Queries on widget name, with current AgileUser Key
+			return ofy.query(Widget.class).ancestor(userKey)
+					.filter("widget_type", type).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+
 	/**
 	 * Gets the widget based on the widget name and user id.
 	 * 

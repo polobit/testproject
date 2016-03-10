@@ -1,3 +1,38 @@
+<script id = "contacts-custom-view-basic_info-mobile-template" type="text/html">
+	<td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}}>
+    	<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:15em;" {{/is_mobile}}>
+    	<div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<img class="r r-2x" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
+        	{{/if_contact_type}}
+    	</div>
+  		<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
+        	{{#if_contact_type "PERSON"}}
+        		<a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </a>
+        		<div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
+        		<div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "url"}}</small></div>
+        	{{/if_contact_type}}
+        	{{#is_mobile}}
+        	 <div>
+	      	<a class="text-muted  block text-ellipsis text-xs text-cap">{{getPropertyValue properties "company"}}</a>
+    		 </div>
+    		{{/is_mobile}}
+
+
+	</div>
+	</div>
+	</td>
+</script>
+
 <script id = "contacts-custom-view-image-template" type="text/html">
 	<td class="data" data="{{id}}">
     	<div class="overflow-hidden thumb-sm" style="width:15em;">
@@ -11,9 +46,9 @@
 </script>
 
 <script id = "contacts-custom-view-basic_info-template" type="text/html">
-	<td class="data" data="{{id}}">
-    	<div class="table-resp" style="width:15em;">
-    	<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
+	<td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}}>
+    	<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:15em;" {{/is_mobile}}>
+    	<div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
         	{{#if_contact_type "PERSON"}}
         		<img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
         	{{/if_contact_type}}
@@ -22,17 +57,24 @@
         		<img class="r r-2x" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
         	{{/if_contact_type}}
     	</div>
-    	<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
+  		<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
         	{{#if_contact_type "PERSON"}}
         		<a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </a></br>
-        		<div><small class="text-muted m-t-xs">{{getPropertyValue properties "email"}}</small></div>
+        		{{getPropertyValue properties "last_name"}} </a>
+        		<div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<a class="text-cap">{{getPropertyValue properties "name"}}</a></br>
-        		<div><small class="text-muted m-t-xs">{{getPropertyValue properties "url"}}</small></div>
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
+        		<div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "url"}}</small></div>
         	{{/if_contact_type}}
+        	{{#is_mobile}}
+        	 <div>
+	      	<a class="text-muted  block text-ellipsis text-xs text-cap">{{getPropertyValue properties "company"}}</a>
+    		 </div>
+    		{{/is_mobile}}
+
+
 	</div>
 	</div>
 	</td>
@@ -104,7 +146,7 @@
 
 <script id = "contacts-custom-view-tags-template" type="text/html">
 	<td class="data" data="{{id}}">
-	 <div class="overflow-hidden line-clamp line-clamp-2" style="width:15em;"> 	
+	 <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:15em;"> 	
 		{{#each tags}}
 	    	<span class="label bg-light dk text-tiny">{{this}}</span>	
 		{{/each}}
@@ -247,4 +289,136 @@
 	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_called}}</span>
        </div>
 	</td>
+</script>
+
+<script id = "contacts-custom-view-popover-template" type="text/html">
+       <div class="data panel-default" data={{id}} style="width:260px">
+	   
+       	<div class="text-cap panel-heading text-ellipsis"><div class="text-ellipsis inline-block" style="width:80%" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}}</div>
+				 <div class="pull-left" style="width:80%"><div id='star' class="contact-star"></div></div>
+        		<div>
+	   	  <div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
+							<div  class="text-lg score-view">
+								<img src="{{getS3ImagePath '../../img/flame.png'}}" style="width:13px;"> 
+								<span class="inline-block v-middle">
+									{{#if lead_score}} <span id="lead-score">{{lead_score}}</span>&nbsp;
+									{{else}} <span id="lead-score">0</span>&nbsp;
+									{{/if}}
+								</span>
+							{{#canEditContact owner.id}}
+								<span class="contact-score-control m-l-xs">
+									<ul class="inline-block list-none m-n p-n">
+										<li style="height: 9px"><i class="icon-sort-up c-p" id="add-score"
+											style="height: 10px;"></i></li>
+										<li><i class="icon-sort-down c-p" id="minus-score"
+											style="height: 10px;"></i></li>
+									</ul>
+								</span>
+							{{/canEditContact}}
+							</div>
+						</div>
+						</div>
+        		</div>
+        		<div class="panel-body">
+       		<div class="b-b b-light p-b-xs"><div class="pull-left"><i class="icon icon-user text-sm v-middle"></i></div>
+       			
+       	<div class="contact-owner text-base m-l-md" id="change-owner-element">
+        	
+		{{#canEditContact owner.id}}
+		{{#if owner}}
+        	<a id="contact-owner-popover" class="custom-color" data={{owner.id}} title="{{owner.name}}">{{owner.name}}</a>
+        	{{else}}
+        		<a id="contact-owner-popover" class="custom-color" >Assign Owner</a>
+        		{{/if}}
+        	
+        	{{else}}
+        		{{#if owner}}
+        		<span id="contact-owner-static" class="custom-color" data={{owner.id}} title="{{owner.name}}">{{owner.name}}</span>
+        		{{else}}
+        			<span id="contact-owner-static" class="custom-color" >Assign Owner</span>
+        		{{/if}}
+        {{/canEditContact}}
+        	{{#canEditContact owner.id}}
+        	<div class="dropdown" id="change-owner-ul-popover"  style="display: none">
+        		 <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
+        		 <ul id='contact-detail-owner-popover' class="dropdown-menu"></ul>
+        	</div> 
+			{{/canEditContact}}
+       </div>
+       </div>
+       		{{#property_is_exists "company" properties}}
+       		<div class="b-b b-light p-b-xs">
+       		<div class="pull-left"><i class="icon icon-building text-sm v-middle"></i></div>
+       		<span class="text-cap m-l-sm" title="{{getPropertyValue properties "title"}}">{{getPropertyValue properties "title"}}</span> 
+       		<span class="text-cap" href="#company/{{contact_company_id}}" title="{{getPropertyValue properties "company"}}">{{getPropertyValue properties "company"}}</span></div>
+
+       		{{else}}
+       			{{#property_is_exists "title" properties}}
+       		<div class="b-b b-light p-b-xs">
+       		<div class="pull-left"><i class="icon icon-building text-sm v-middle"></i></div>
+       		<span class="text-cap m-l-sm" title="{{getPropertyValue properties "title"}}">{{getPropertyValue properties "title"}}</span> 
+       		</div>
+     		{{/property_is_exists}}
+       		
+       		{{/property_is_exists}}
+       			{{#property_is_exists "phone" properties}}
+        					<div class="b-b b-light p-b-xs">
+        					<div class="pull-left"><i class="icon icon-call-end text-sm v-middle"></i></div>
+        					{{#multiple_Property_Element_List "phone" properties id}}
+        					{{#each this}}
+       					<div class="text-ellipsis m-l-md" style="width:13em;">
+    		<span class="text-cap"title="{{value}}" >{{value}}</a>
+        </div>
+        {{/each}}
+        {{/multiple_Property_Element_List}}
+        					</div>
+        					{{/property_is_exists}}
+					{{#property_is_exists "email" properties}}
+							<div class="b-b b-light p-b-xs">
+							<div class="pull-left"><i class="icon icon-envelope text-sm v-middle"></i></div>
+								{{#multiple_Property_Element_List "email" properties id}}
+
+								<div class="contact-email text-sm l-h p-l-md"> 
+									{{#each this}}
+
+										<div class="text-ellipsis">
+											<a href='#send-emails/{{value}}' class="email" title="{{value}}">{{value}}</a> 
+										</div>
+
+<div class="clearfix"></div>
+									{{/each}}
+									</div>
+									
+									
+								
+									{{/multiple_Property_Element_List}}
+								
+										</div>
+								{{/property_is_exists}}
+
+								<div class="m-t-xs">
+								 <div id="added-tags-popover" class="text-ellipsis pull-left m-b-xs" style="width:14em;"> 	
+				{{#each tags}}
+	    			<span class="label bg-light text-tiny">{{this}}</span>	
+							{{/each}}
+						</div>
+						<div id="addTagsForm-popover" style="display: none;" class="m-b-none">
+							<div class="control-group save-tag m-b-none">
+								<input name="" type="text" id="addTags"
+									class="tags-typeahead ignore-comma-keydown form-control inline-block"
+									style="width: 60%" placeholder="Enter tag" />
+								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags-popover">Add</a></span>
+							</div>
+						</div>
+						{{#canEditContact owner.id}}
+			<div class="pull-left"><a href="#" id="add-tags-popover" rel="tooltip"
+							data-original-title="addtag" data-placement="top" class="text-xs  pull-left" style="padding:.2em"> <i class="fa fa-plus" style="font-size:8px; padding-right:2px"></i><span>Tag</span></a></div>
+						{{/canEditContact}}
+
+						
+					</div>
+
+	   	    </div>
+	   	          </div>	
 </script>

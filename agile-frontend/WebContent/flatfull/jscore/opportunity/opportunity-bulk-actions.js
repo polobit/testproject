@@ -148,7 +148,10 @@
 			
 			if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
 			{
-				$('#addBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+				var template = Handlebars.compile('<li class="tag" style="display: inline-block;" data="{{name}}">{{name}}<a class="close" id="remove_tag" tag="{{name}}">&times</a></li>');
+
+			 	// Adds contact name to tags ul as li element
+				$('#addBulkTags').closest(".control-group").find('ul.tags').append(template({name : tag_input}));
 			}
 		
 			var url = '/core/api/opportunity/bulk/contacts/add-tag';
@@ -223,7 +226,7 @@
 		deleteDeals = $('#deal-bulk-delete');
 		dealConAddTag = $('#deal-contact-add-tag');
 		dealConAddCamp = $('#deal-contact-add-camp');
-		filterJSON = $.parseJSON(readCookie('deal-filters'));
+		filterJSON = $.parseJSON(_agile_get_prefs('deal-filters'));
 		
 		changeOwner.on('click',function(e){
 			e.preventDefault();
@@ -311,13 +314,11 @@
 			success: function(campaigns){
 				var html = '';
 				$.each(campaigns, function(index,camp){
-					//console.log(customfield);
+					var option = '<option value="{{id}}">{{name}}</option></th>';
 					if(camp.is_disabled){
- 						html += '<option value="'+camp.id+'" disabled = disabled>'+camp.name+' (Disabled)</option>';
- 						return true;
+						option = '<option value="{{id}}" disabled = disabled>{{name}} (Disabled)</option>';
  					} 
-
-					html += '<option value="'+camp.id+'">'+camp.name+'</th>';
+					html += Handlebars.compile(option)({id : camp.id, name : camp.name});
 				});
 				el.html(html);
 				return campaigns;
@@ -328,7 +329,8 @@
 	deal_bulk_actions.fillPipelineList = function(pipelines){
 		var html = '<option value="">Select</option>';
 		$.each(pipelines,function(index,value){
-			html += '<option value="'+value.id+'" data="'+value.milestones+'">'+value.name+'</option>'
+			var option = '<option value="{{id}}" data="{{milestones}}">{{name}}</option>';
+			html += Handlebars.compile(option)({id : value.id, milestones : value.milestones, name : value.name});
 		});
 		$("#deal_mile_change_modal").find("#pipeline-list-bulk").html(html);
 	};
@@ -336,7 +338,7 @@
 	deal_bulk_actions.toggle_deals_bulk_actions_dropdown = function(clicked_ele, isBulk, isCampaign)
 	{
 		
-		if (!readCookie("agile_deal_view")){
+		if (!_agile_get_prefs("agile_deal_view")){
 			return;
 		}
 		

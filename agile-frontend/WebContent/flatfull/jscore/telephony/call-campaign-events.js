@@ -25,6 +25,25 @@ $(function(){
 			
 	});  
 	
+	// This method is called when the add-note modal is closed .....
+	//This will check if the campaign is started and need to dial the next call....
+		$('#logCallModal').on('hidden.bs.modal', function (e) {
+			console.log(CALL_CAMPAIGN.start +"  closeTwilioNoty "+CALL_CAMPAIGN.call_from_campaign);
+				
+			if(CALL_CAMPAIGN.start){
+				if(CALL_CAMPAIGN.call_status == "DISCONNECTED"){
+					  CALL_CAMPAIGN.state = "START";
+					  if(CALL_CAMPAIGN.autodial){
+						  dialNextCallAutomatically();
+					  }else{
+						  dialNextCallManually();
+					  }
+				}
+			}	
+				
+		});  
+		
+	
 //This method is called when the personmodal is closed....
 //This will check if the campaign is started and need to dial the next call....
 	$('#personModal').on('hidden.bs.modal', function (e) {
@@ -101,7 +120,7 @@ $(function(){
 					// Disabled the buttons and fields......
 					$("#bulk-start-call-campaign").attr("disabled","disabled");
 					$("#bulk-start-call-campaign").html("Loading...");
-					$("input:radio[name='call_campaign_autodial']").attr("disabled",'disabled');
+					$("#call_campaign_autodial").attr("disabled","disabled");
 					$("#addTag").attr("disabled","disabled");
 					$("#rampTimeButton").attr("disabled","disabled");
 					
@@ -128,10 +147,12 @@ $(function(){
 							$('#correctTag').modal('show');
 							$("#bulk-start-call-campaign").removeAttr('disabled');
 							$("#bulk-start-call-campaign").html("Start Campaign");
-							$("input:radio[name='call_campaign_autodial']").removeAttr("disabled",'disabled');
+							$("#call_campaign_autodial").removeAttr('disabled');
 							$("#addTag").removeAttr('disabled');
 							$("#addTag").val("");
-							$("#rampTimeButton").removeAttr('disabled');
+							if(CALL_CAMPAIGN.autodial == true){
+								$("#rampTimeButton").removeAttr('disabled');
+							}
 							return;
 						}
 						CALL_CAMPAIGN.tag = tag;
@@ -167,11 +188,11 @@ $(function(){
 											
 											$("#bulk-start-call-campaign").removeAttr('disabled');
 											$("#bulk-start-call-campaign").html("Start Campaign");
-											$("input:radio[name='call_campaign_autodial']").removeAttr("disabled",'disabled');
+											$("#call_campaign_autodial").removeAttr('disabled');
 											$("#addTag").removeAttr('disabled');
-											$("#rampTimeButton").removeAttr('disabled');
-											CALL_CAMPAIGN.tag = null;
-											CALL_CAMPAIGN.has_tag = false;	
+											if(CALL_CAMPAIGN.autodial == true){
+												$("#rampTimeButton").removeAttr('disabled');
+											}
 											$('#hitRefreshModel').modal('show');
 										}
 									}
@@ -190,11 +211,11 @@ $(function(){
 			CALL_CAMPAIGN.last_clicked = null;
 			$("#bulk-start-call-campaign").removeAttr('disabled');
 			$("#bulk-start-call-campaign").html("Start Campaign");
-			$("input:radio[name='call_campaign_autodial']").removeAttr("disabled",'disabled');
+			$("#call_campaign_autodial").removeAttr('disabled');
 			$("#addTag").removeAttr('disabled');
-			$("#rampTimeButton").removeAttr('disabled');
-			CALL_CAMPAIGN.tag = null;
-			CALL_CAMPAIGN.has_tag = false;
+			if(CALL_CAMPAIGN.autodial == true){
+				$("#rampTimeButton").removeAttr('disabled');
+			}
 		}
 	   });
 	
@@ -374,9 +395,10 @@ $(function(){
 				// Show add note modal with current contact from call
 				// noty
 				var el = $("#noteForm");
-				$('.tags', el)
-						.html(
-								'<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="' + CALL_CAMPAIGN.current_contact.id + '">' + CALL_CAMPAIGN.current_contact_name + '</li>');
+				var template = Handlebars.compile('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="{{id}}">{{name}}</li>');
+			 	// Adds contact name to tags ul as li element
+				$('.tags',el).html(template({name : CALL_CAMPAIGN.current_contact_name, id : CALL_CAMPAIGN.current_contact.id}));
+
 				$("#noteForm").find("#description").focus();
 				$('#noteModal').modal('show');
 				agile_type_ahead("note_related_to", el, contacts_typeahead);

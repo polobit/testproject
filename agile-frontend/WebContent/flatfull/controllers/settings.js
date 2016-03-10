@@ -231,15 +231,13 @@ var SettingsRouter = Backbone.Router
 					$('#content').html($(template_ui));
 
 					var data = { "service" : "linkedin" };
-					var itemView = new Base_Model_View({ url : '/core/api/social-prefs/LINKEDIN', template : "settings-social-prefs", data : data, postRenderCallback : function(el){
-						initializeSettingsListeners();
+					var itemView = new Settings_Modal_Events({ url : '/core/api/social-prefs/LINKEDIN', template : "settings-social-prefs", data : data, postRenderCallback : function(el){
 					} });
 
 					$('#prefs-tabs-content').html(itemView.render().el);
 
 					data = { "service" : "twitter" };
-					var itemView2 = new Base_Model_View({ url : '/core/api/social-prefs/TWITTER', template : "settings-social-prefs", data : data , postRenderCallback : function(el){
-						initializeSettingsListeners();
+					var itemView2 = new Settings_Modal_Events({ url : '/core/api/social-prefs/TWITTER', template : "settings-social-prefs", data : data , postRenderCallback : function(el){
 					} });
 
 					$('#prefs-tabs-content').append(itemView2.render().el);
@@ -275,12 +273,15 @@ var SettingsRouter = Backbone.Router
 							that.officeListView = {};
 							that.gmailListView = {};
 
+							$('#PrefsTab .select').removeClass('select');
+							$('.email-tab').addClass('select');
+							$(".active").removeClass("active");
+
 					}, "#prefs-tabs-content");
 
 					var socialHeight = 0;
 					$.getJSON("/core/api/emails/synced-accounts", function(data)
 					{
-						initializeSettingsListeners();
 						if (typeof data !== undefined && data.hasOwnProperty('emailAccountsLimitReached') && data.emailAccountsLimitReached)
 							HAS_EMAIL_ACCOUNT_LIMIT_REACHED = true;
 						else
@@ -292,9 +293,6 @@ var SettingsRouter = Backbone.Router
 						load_imap_widgets(limit);
 						load_office365_widgets(limit);
 
-						$('#PrefsTab .select').removeClass('select');
-						$('.email-tab').addClass('select');
-						$(".active").removeClass("active");
 					});
 
 				}, "#content");
@@ -317,10 +315,9 @@ var SettingsRouter = Backbone.Router
 
 					var imapmodel = App_Settings.imapListView.collection.get(imap_id);
 					// Gets IMAP Prefs
-					var itemView2 = new Base_Model_View({ url : '/core/api/imap/', model : imapmodel, template : "settings-imap-prefs", change : false,
+					var itemView2 = new Settings_Modal_Events({ url : '/core/api/imap/', model : imapmodel, template : "settings-imap-prefs", change : false,
 						postRenderCallback : function(el)
 						{
-							initializeSettingsListeners();
 							var model = itemView2.model;
 							var id = model.id;
 							itemView2.model.set("password", "");
@@ -349,10 +346,9 @@ var SettingsRouter = Backbone.Router
 						  return;
 					$('#content').html($(template_ui));	
 					// Gets IMAP Prefs
-					var itemView2 = new Base_Model_View({ url : '/core/api/imap/', template : "settings-imap-prefs", change : false, isNew : true,
+					var itemView2 = new Settings_Modal_Events({ url : '/core/api/imap/', template : "settings-imap-prefs", change : false, isNew : true,
 						postRenderCallback : function(el)
 						{
-							initializeSettingsListeners();
 						}, saveCallback : function()
 						{
 							var model = itemView2.model;
@@ -387,10 +383,9 @@ var SettingsRouter = Backbone.Router
 					$('#content').html($(template_ui));	
 
 					// Gets Office Prefs
-					var itemView3 = new Base_Model_View({ url : '/core/api/office', template : "settings-office-prefs", isNew : true, change : false,
+					var itemView3 = new Settings_Modal_Events({ url : '/core/api/office', template : "settings-office-prefs", isNew : true, change : false,
 						postRenderCallback : function(el)
 						{
-							initializeSettingsListeners();
 							itemView3.model.set("password", "");
 						}, saveCallback : function()
 						{
@@ -426,10 +421,9 @@ var SettingsRouter = Backbone.Router
 					var office_model = App_Settings.officeListView.collection.get(id);
 
 					// Gets Office Prefs
-					var itemView3 = new Base_Model_View({ url : '/core/api/office/', model : office_model, template : "settings-office-prefs",
+					var itemView3 = new Settings_Modal_Events({ url : '/core/api/office/', model : office_model, template : "settings-office-prefs",
 						postRenderCallback : function(el)
 						{
-							initializeSettingsListeners();
 							itemView3.model.set("password", "");
 						}, saveCallback : function()
 						{
@@ -464,11 +458,10 @@ var SettingsRouter = Backbone.Router
 					}
 					var gmail_model = App_Settings.gmailListView.collection.get(id);
 					// Gets GMAIL Prefs
-					var gmailShareView = new Base_Model_View({ url : 'core/api/social-prefs/share/' + id, model : gmail_model,
+					var gmailShareView = new Settings_Modal_Events({ url : 'core/api/social-prefs/share/' + id, model : gmail_model,
 						template : "settings-gmail-prefs-share", postRenderCallback : function(el)
 						{
-							initializeSettingsListeners();
-
+							
 						}, saveCallback : function()
 						{
 							App_Settings.navigate("email", { trigger : true });
@@ -497,7 +490,6 @@ var SettingsRouter = Backbone.Router
 					that.emailTemplatesListView = new Base_Collection_View({ url : '/core/api/email/templates', restKey : "emailTemplates",
 					templateKey : "settings-email-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
 					{
-						initializeSettingsListeners();
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
 							console.log("In email tmplt postrender");
@@ -526,10 +518,9 @@ var SettingsRouter = Backbone.Router
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));
-					var view = new Base_Model_View({ url : '/core/api/email/templates', isNew : true, template : "settings-email-template-add",
+					var view = new Email_Template_Events({ url : '/core/api/email/templates', isNew : true, template : "settings-email-template-add",
 					window : 'email-templates', postRenderCallback : function()
 					{
-						initializeEmailTemplateAddListeners();
 					} });
 
 					$('#prefs-tabs-content').html(view.render().el);
@@ -543,6 +534,12 @@ var SettingsRouter = Backbone.Router
 
 						// Register focus
 						register_focus_on_tinymce('email-template-html');
+
+						//To open source code automatically when "Bring Your Code" button is clicked
+						if(typeof BRING_YOUR_CODE_BTN != "undefined" && BRING_YOUR_CODE_BTN) {
+							$('.mce-i-code').trigger('click');
+							BRING_YOUR_CODE_BTN = false;
+						}
 					});
 
 					$('#PrefsTab .select').removeClass('select');
@@ -577,10 +574,9 @@ var SettingsRouter = Backbone.Router
 					// Gets the template form its collection
 					var currentTemplate = that.emailTemplatesListView.collection.get(id);
 
-					var view = new Base_Model_View({ url : '/core/api/email/templates', model : currentTemplate, template : "settings-email-template-add",
+					var view = new Email_Template_Events({ url : '/core/api/email/templates', model : currentTemplate, template : "settings-email-template-add",
 						window : 'email-templates', postRenderCallback : function()
 						{
-							initializeEmailTemplateAddListeners();
 						} });
 
 					$('#prefs-tabs-content').html(view.render().el);
@@ -634,14 +630,12 @@ var SettingsRouter = Backbone.Router
 						  return;
 					$('#content').html($(template_ui));	
 
-					var view = new Base_Model_View({
+					var view = new Settings_Modal_Events({
 					url : 'core/api/notifications',
 					template : 'settings-notification-prefs',
 					reload : true,
 					postRenderCallback : function(el)
 					{
-						initializeSettingsListeners();
-
 						// Update Notification prefs
 						notification_prefs = view.model.toJSON();
 

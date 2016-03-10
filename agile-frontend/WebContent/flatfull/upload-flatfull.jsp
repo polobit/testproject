@@ -100,24 +100,25 @@ function isValid(){
     // to remove error message while change
     isValid();
   });
-		}); 
+		});
+
+function agile_is_mobile_browser(){
+   return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+   }
+
+(function()
+ 	{
+ 		if(agile_is_mobile_browser()){
+   $( "<style>@media all and (max-width: 767px) {	.mobile-popup {min-height: 50vh; } .mobile-popup * {text-align: center;font-"+"size: 20px;}.mobile-popup input {display: inline-block;}}</style>" ).appendTo( "head" );
+    }
+ 	})();
+
 </script>
 <style>
 	label.error {
 		color:red;
 	}
-	@media all and (max-width: 767px) {	
-	.mobile-popup {
-    min-height: 50vh;
-  }
-  .mobile-popup * {
-    text-align: center;
-    font-size: 20px;
-  }
-  .mobile-popup input {
-  	display: inline-block;
-  }
-}
+	
 </style>
 
 </head>
@@ -131,7 +132,7 @@ function isValid(){
 <div class="panel panel-default mobile-popup">
 <div class="panel-heading">Upload your image file</div>
 <div class="panel-body">
-<p>For best results, we recommend you upload png files. You can also upload jpg or gif files also.</i></p>
+<p>For best results, we recommend that you upload .png files. We even support .jpg and .gif formats.</i></p>
 
 <br/>
 <form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 

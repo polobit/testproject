@@ -27,7 +27,7 @@ function setupTwitterOAuth()
 	// Shows a link button in the UI which connects to the above URL
 	$('#Twitter', agile_crm_get_current_view())
 			.html(
-					"<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + "Engage with contacts in real time based on what they tweet." + "<p style='margin: 10px 0px 5px 0px;'>" + "<a class='btn' href=\"" + url + "\" style='text-decoration:none;'>" + "Link Your Twitter</a></p></div>");
+					"<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + "Engage with contacts in real time based on what they tweet." + "<p style='margin: 10px 0px 5px 0px;'>" + "<a class='btn' href=\"" + url + "\" style='text-decoration:none;'>" + "Link your Twitter</a></p></div>");
 }
 
 /**
@@ -173,7 +173,7 @@ function getTwitterMatchingProfiles(contact_id)
 	// Reads from cookie (local storage HTML5), since widgets are saved using
 	// local
 	// storage when matches are fetched for the first time on the contact
-	var data = localStorage.getItem('Agile_twitter_matches_' + contact_id);
+	var data = _agile_get_prefs('Agile_twitter_matches_' + contact_id);
 
 	// If cookie is not available fetch results from Twitter
 	if (!data)
@@ -185,7 +185,7 @@ function getTwitterMatchingProfiles(contact_id)
 		queueGetRequest("widget_queue_"+contact_id, "core/api/widgets/social/match/" + Twitter_Plugin_Id + "/" + contact_id, 'json', function success(data)
 		{
 			// Save social results in cookie of particular contact
-			localStorage.setItem('Agile_twitter_matches_' + contact_id, JSON.stringify(data));
+			_agile_set_prefs('Agile_twitter_matches_' + contact_id, JSON.stringify(data));
 
 			showTwitterMatchingProfiles(data);
 
@@ -1333,6 +1333,13 @@ function startTwitterWidget(contact_id){
 	{
 		setupTwitterOAuth();
 		return;
+	}
+
+	var version = JSON.parse(twitter_widget.prefs).version;	
+	if(version == undefined || version != "v2"){
+	 	$('#widget_load_img').remove();
+	 	$('#Twitter', agile_crm_get_current_view()).html('<div class="wrapper-sm"><a class="link" href="#add-widget">Please reconfigure widget</a></div>');
+	 	return;
 	}
 
 	// Get website URL for Twitter from contact to get profile based on it

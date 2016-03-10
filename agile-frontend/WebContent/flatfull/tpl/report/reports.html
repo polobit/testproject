@@ -441,7 +441,7 @@
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="See a full call log of all users.">
-          Generate ​timelines of calls by user.
+          Generate timelines of calls by user.
         </div>
         <!-- Add button -->
         <div >
@@ -470,6 +470,30 @@
         </div>
     </div>
 </div>
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Call_Report_Time.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-bar-chart  icon-3x"></i>
+            </div>
+            <b>Call Report-Time Based</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Generate a bar graph with calls based on time.">
+          Generate a bar graph with calls based on time.
+        </div>
+        <!-- Add button -->
+        <div >
+            <a class="btn btn-sm btn-default" href="#report-calls/timebased">Go</a>
+        </div>
+    </div>
+</div>
+
+
+
 </div>
 </div>
 
@@ -580,8 +604,66 @@
     </div>
 </div>
 
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Rep_Performance.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-graph icon-3x"></i>
+            </div>
+            <b>Rep Performance</b><span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
+        </div>
+        <br />
+        <!-- Description -->
+        {{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+         Know the performance by each user.
+         <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+        </div>
+        <!-- Add button -->
+        <div  style="display:inline;">
+            <a class="btn btn-sm btn-default" href="#rep-reports">Go</a>
+        </div>
+
+            {{else}}
+            <!-- Description -->
+            <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+             Know the performance by each user.
+            <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+             </div>
+        <!-- Add button -->
+            <div >
+                    <div class="btn btn-sm btn-default _upgrade" id="activity-reports-upgrade">Go</div>
+                </div>
+                 
+            {{/isAllowedInCurrentPlan}}
+    </div>
+</div>
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/Comparison_Report.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-graph icon-3x"></i>
+            </div>
+            <b>Comparison Reports</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+        Compare the pipeline stages for each user.
+        </div>
+        <!-- Add button -->
+        <div>
+            <a class="btn btn-sm btn-default" href="#report-comparison">Go</a>
+        </div>
+    </div>
 </div>
 </div>
+</div>
+
+
 
 
 </div>

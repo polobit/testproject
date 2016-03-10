@@ -28,13 +28,13 @@ $(function(){
 		    return;
 		}
 		
-		if($('.grid-view', el).hasClass('showCheckboxes'))
+		/*if($('.grid-view', el).hasClass('showCheckboxes'))
 		{
 			if($(this).find('#delete-checked-grid').length == 0)
 					var element = $('.showCheckboxes').after('<div class="row"><div class="span6 select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked-grid" style="margin-bottom: 15px"> Delete</a>');		
 			console.log(element);
 			return;
-		}
+		}*/
 		
 		
 		var table = $(el).find('table.showCheckboxes');
@@ -116,7 +116,7 @@ $(function(){
 		
 		if (Current_Route == 'deals')
 			deal_bulk_actions.toggle_deals_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
-		/*else if(Current_Route=='contacts' && readCookie("agile_contact_view"))
+		/*else if(Current_Route=='contacts' && _agile_get_prefs("agile_contact_view"))
 			toggle_contacts_bulk_actions_dropdown(this,true,$(this).parents('table').attr("id"));*/
 		else
 			toggle_contacts_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));

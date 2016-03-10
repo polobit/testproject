@@ -29,15 +29,102 @@ $('#app-aside-folded').on('click', function(e) {
 	
     
 	});
+
+
+
+
+
+
+
+
+
+
 	
 $(document).ready(function(){
 
-	 $("#contact-results li").click(function(){
+
+
+
+	
+
+	
+	
+
+   $("#contact-results li").click(function(){
    $("#mobile-menu-settings").trigger('click');
    });
+
+
+
+   
  
 
+
+
+
+ 	 $('.aside-wrap').off('ul li');
+	 if(agile_is_mobile_browser()){
+
+	 	$('body').on('click',function(e){
+		setTimeout(function(){
+		if(e.target.id != 'searchText' && !$(e.target).closest('button').hasClass('search-menu-mobile'))  {
+		$('.search-mobile').addClass('hide');
+		$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
+		$('.navbar-brand').removeClass('hide');
+		}
+		},500);
+	});
+
+	 	$('body').on('click','.add-modal-mobile',function(){
+	 		
+		if($('#aside').hasClass('off-screen')) {
+			$("#mobile-menu").trigger('click');
+		}
+		
+		});
+
+
+	// search bar in mobile 
+		$('#search-menu-mobile').on('click touchstart',function(){
+		$('.search-mobile').removeClass('hide');
+		$('.add-modal-mobile , #search-menu-mobile').removeClass('visible-xs');
+		$('.navbar-brand').addClass('hide');
+		}); 	
+
+
+
+	 	$('.aside-wrap ul li').bind('touchstart',function(){
+ 		$('.aside-wrap ul li').removeClass('active');
+ 		$(this).addClass('active');
+ 		}).bind('touchleave touchend',function(){
+ 			setTimeout(function(){
+ 		$('.aside-wrap ul li').removeClass('active');
+ 		},500);
+ 		});
+
+ 		
+		}
+
+	$('#menu1 a').click(function(e){
+		console.log(e.target);
+	});	
+
+	
+	
+
 	if(( $(window).width() ) < 768 ) {
+
+
+	// if the tabs are in wide columns on larger viewports
+    $('.content-tabs').tabCollapse();
+
+    // initialize tab function
+    $('.nav-tabs a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
+    $('#navbar').removeClass('bg-white-only');
 
 	/*$('body').on('click','#mobile-dropdown-click-sort',function(){
 			$("#contact-sort-views").css("display","block");
@@ -51,6 +138,24 @@ $(document).ready(function(){
    	$('body').on('click','#contact-sort-views',function(){
         $(this).css('display','none');
     });	*/
+
+	/*$('#recent-menu').off('li');
+	$('#recent-menu').on('click', 'li', function(e){
+		e.preventDefault();
+		$('#mobile-menu-settings').trigger('click');
+	});
+*/
+
+	
+	$('body').on('mousedown','.navi-wrap li a , #navbar li a',function(e){
+		e.preventDefault();
+		$(this).css('opacity','0.5');
+	});
+
+	$('body').on('mouseup','.navi-wrap li a , #navbar li a',function(e){
+		e.preventDefault();
+		$(this).css('opacity','1');
+	});
 
 	$('body').on('touchstart','.magicMenu .i-checks',function(e){
 		e.preventDefault();
@@ -134,7 +239,7 @@ $(document).ready(function(){
 	    $('.popover').each(function () {
 	        //the 'is' for buttons that trigger popups
 	        //the 'has' for icons within a button that triggers a popup
-	        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0 && !e.target.closest(".need_help")) {
+	        if ((!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0 && !e.target.closest(".need_help")) || e.target.hasAttribute("rep")) {
 	            $(this).popover('hide');
 	        }
 	    });

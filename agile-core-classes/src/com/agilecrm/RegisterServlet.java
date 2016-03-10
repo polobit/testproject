@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountPrefs;
@@ -230,6 +232,7 @@ public class RegisterServlet extends HttpServlet
 	}
 	catch (Exception e)
 	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    e.printStackTrace();
 	}
 
@@ -254,6 +257,9 @@ public class RegisterServlet extends HttpServlet
 	String companyType = request.getParameter(RegistrationGlobals.COMPANY_TYPE);
 	String role = request.getParameter(RegistrationGlobals.USER_ROLE);
 	String phoneNumber = request.getParameter(RegistrationGlobals.PHONE_NUMBER);
+	String country = request.getHeader("X-AppEngine-Country");
+	String state = request.getHeader("X-AppEngine-Region");
+	String city = request.getHeader("X-AppEngine-City");
 
 	List<ContactField> properties = new ArrayList<ContactField>();
 
@@ -320,6 +326,13 @@ public class RegisterServlet extends HttpServlet
 	    }
 
 	    properties.add(createField(RegistrationGlobals.DOMAIN, userDomain));
+	    properties.add(createField(RegistrationGlobals.IP, request.getRemoteAddr()));
+	    
+	    JSONObject json = new JSONObject();
+	    json.put("city", city);
+	    json.put("state", state);
+	    json.put("country", country);
+	    properties.add(createField(Contact.ADDRESS, json.toString()));
 
 	    NamespaceManager.set(Globals.COMPANY_DOMAIN);
 
@@ -337,7 +350,7 @@ public class RegisterServlet extends HttpServlet
 	    String version = VersioningUtil.getAppVersion(request);
 	    if (!StringUtils.isEmpty(version))
 	    {
-		key = APIKey.getDomainUserKeyRelatedToAPIKey("td2h2iv4njd4mbalruce18q7n4");
+		key = APIKey.getDomainUserKeyRelatedToAPIKey("fdpa0sc7i1putehsp8ajh81efh");
 	    }
 	    else
 	    {
@@ -369,6 +382,7 @@ public class RegisterServlet extends HttpServlet
 	}
 	catch (Exception e)
 	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    e.printStackTrace();
 	}
 	finally
@@ -577,4 +591,10 @@ public class RegisterServlet extends HttpServlet
 	    System.out.println("Exception in setting timezone in account prefs.");
 	}
     }
+    
+    public static void main(String[] args) {
+    	String email = "info@mpagenciadigital.com.br";
+    	String emailType = (email.split("@")[1]).split("\\.")[0];
+    	System.out.println(emailType);
+	}
 }

@@ -91,18 +91,30 @@ public class ContactPrefsUtil
     }
     
     
-    public static List<ContactPrefs> getAllprefs()
-    {
-    List<String> prefsTyes=new ArrayList<String>();
-    Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
- 	List<ContactPrefs> contactPrefs=ContactPrefs.dao.listByProperty(searchMap);
-	for(ContactPrefs prefs:contactPrefs){
-		if(prefs.type!=null)
-		prefsTyes.add(prefs.type.toString());
-	}
-	
-	return addSyncTemplates(prefsTyes,contactPrefs);
+    public static List<ContactPrefs> getAllprefs() {
+	    List<String> prefsTyes=new ArrayList<String>();
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
+	 	List<ContactPrefs> contactPrefs=ContactPrefs.dao.listByProperty(searchMap);
+		for(ContactPrefs prefs:contactPrefs){
+			if(prefs.type!=null){
+				prefsTyes.add(prefs.type.toString());
+				
+				if(Type.SALESFORCE ==  prefs.type){
+					prefs.imageUrl=DataSyncUrlConstants.SALESFORCE_IMAGE_URL;
+					prefs.content=DataSyncUrlConstants.SALESFORCE_CONTENT; 
+		        	  
+				}
+			}
+			
+			if(prefs.type.toString().equals("SALESFORCE")){
+				prefs.imageUrl=DataSyncUrlConstants.SALESFORCE_IMAGE_URL;
+				prefs.content=DataSyncUrlConstants.SALESFORCE_CONTENT; 
+	        	  
+			}
+		}
+		
+		return addSyncTemplates(prefsTyes,contactPrefs);
     }
     
     public static List<ContactPrefs> addSyncTemplates(List<String> configuredSync,List<ContactPrefs> finalSyncPrefs){
@@ -112,7 +124,7 @@ public class ContactPrefsUtil
     	for(String defaults:defaultSyncTemplates){
     		if(!configuredSync.contains(defaults)){
     			finalSyncPrefs.add(dataSyncUrls.getDataSyncWidget(defaults));
-    		}
+    		} 
     	}
     	return finalSyncPrefs;
     }

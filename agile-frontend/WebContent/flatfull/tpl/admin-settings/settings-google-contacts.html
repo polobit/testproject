@@ -156,11 +156,7 @@
 
       <div class="form-actions text-center">
 <a href="#sync" class="btn btn-default btn-sm ml_5">Cancel</a>
-{{#if inProgress}}
-			<div class="btn btn-primary btn-sm save-contact-prefs inline-block" id="google-import-prefs-save" disabled>Syncing</div>
-	{{else}}
-<div class="btn btn-sm btn-primary save-contact-prefs inline-block" id="google-import-prefs-save">Sync</div>
-{{/if}}		
+<div class="btn btn-sm btn-primary save-contact-prefs inline-block" id="google-import-prefs-save">Sync</div>	
 
 	 </div>
 	{{/if}}
@@ -192,8 +188,8 @@
     {{#if id}}
 <form id="stripe-prefs-form" class="m-b">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
-	
+          <div>Account Linked: <div class="text-ellipsis" title={{userName}}>{{userName}}</div></div>
+			<br>
           
              	<div class="control-group form-group">
 					<label class="control-label">Frequency</label> 
@@ -215,11 +211,7 @@
 
 			<div class="form-actions text-center">
 <a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
-{{#if inProgress}}
-			<button class="btn btn-sm btn-primary ml_5" id="stripe_sync_prefs" disabled="disabled">Syncing</button>
-{{else}}
 <button class="btn btn-sm btn-primary ml_5" id="stripe_sync_prefs">Sync</button>
-{{/if}}
 
        	  	</div>
 
@@ -265,8 +257,7 @@
 </div>
 </script>
 
-<script id="admin-settings-import-shopify-prefs-template"
-	type="text/html">
+<script id="admin-settings-import-shopify-prefs-template" type="text/html">
 <div class="row">
 <div class="col-md-6 col-sm-6 col-xs-12">
 <div class="panel panel-default" >
@@ -300,11 +291,11 @@
 	
            {{#if id}}
               <div>
-                   Shop : <span>{{othersParams}}</span>
+                   Shop: <span>{{othersParams}}</span>
                 
-                       <div class="text-center"><a class="delete" href="#"  id="shopify-import-prefs-delete" >Change</a></div>
+                      
 					</div>
-                 
+                 <br>
              	<div class="control-group form-group">
 					<label class="control-label">Frequency</label> 
            				<div class="controls">
@@ -325,11 +316,7 @@
 
 			<div class="form-actions text-center">
 <a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
-{{#if inProgress}}
-			<button class="btn btn-sm btn-primary ml_5" id="shopify-setting" disabled="disabled">Syncing</button>
-{{else}}
 <button class="btn btn-sm btn-primary ml_5" id="shopify-setting">Sync</button>
-{{/if}}
 
        	  	</div>
 
@@ -342,9 +329,7 @@
 </div>
 </script>
 
-
-<script id="admin-settings-import-shopify-contact-syncPrefs-template"
-	type="text/html">
+<script id="admin-settings-import-shopify-contact-syncPrefs-template" type="text/html">
 	<div class="panel panel-default widget-add" style="height: 220px;">
 	<div class="panel-heading">
 	    <center>
@@ -370,10 +355,7 @@
 			{{/if}}
 		</div>
 	</div>
-
 </div>
-
-
 </script>
 
 <!--  creating template for zoho crm syn -->
@@ -426,7 +408,7 @@
     {{#if id}}
 <form id="quickbook-form">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
+          <div>Account Linked: <div class="text-ellipsis" title={{userName}}>{{userName}}</div> </div>
 	
           <br>
              	<div class="control-group form-group">
@@ -449,11 +431,7 @@
 
 			<div class="form-actions m-t-md text-center">
 <a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
-{{#if inProgress}}
-			<button class="btn btn-sm btn-primary ml_5" id="quickbook_sync_prefs" disabled="disabled">Syncing</button>
-{{else}}
 <button class="btn btn-sm btn-primary ml_5" id="quickbook_sync_prefs">Sync</button>
-{{/if}}
 
        	  	</div>
 
@@ -547,7 +525,7 @@
     {{#if id}}
 <form id="xero-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
+          <div>Account Linked: <div class="text-ellipsis" title={{userName}}>{{userName}} </div></div>
 	
           
              	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
@@ -570,11 +548,7 @@
 
 			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
 
-{{#if inProgress}}
-			<button class="btn btn-sm btn-primary" id="xero_sync_prefs" style="display:inline-block;" disabled="disabled">Syncing</button>
-{{else}}
 <button class="btn btn-sm btn-primary" id="xero_sync_prefs" style="display:inline-block;">Sync</button>
-{{/if}}
 
            		<a href="#sync" class="btn btn-default btn-sm ml_5" style="text-decoration:none;">Cancel</a>
        	  	</div>
@@ -606,8 +580,8 @@
     {{#if id}}
 <form id="freshbooks-form">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div><span>Account Linked </span>  <span>{{othersParams}}.freshbooks.com <span><a href="#" class="delete">Change</a></span></span></div>
-	
+          <div><span>Account Linked </span>  <span>{{othersParams}}.freshbooks.com </span></div>
+			<br>
           
              	<div class="control-group form-group">
 					<label class="control-label">Frequency</label> 
@@ -629,11 +603,7 @@
 
 			<div class="form-actions">
 <a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
-{{#if inProgress}}
-			<button class="btn btn-sm btn-primary ml_5" id="freshbooks_sync_prefs" disabled="disabled">Syncing</button>
-{{else}}
 <button class="btn btn-sm btn-primary ml_5" id="freshbooks_sync_prefs">Sync</button>
-{{/if}}
        	  	</div>
 
 
@@ -717,7 +687,7 @@
 <div class="panel panel-default" >
 <div class="panel-heading">
 <span class="label label-danger pull-right m-b">Beta</span>
-<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" {{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}" /></center>
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}" /></center>
 </div>
 <div class="panel-body">
 {{#unless id}}

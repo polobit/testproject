@@ -1,5 +1,6 @@
 package com.agilecrm.core.api;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -105,7 +106,21 @@ public class UsersAPI
 
 	try
 	{
+		DomainUser owner = null;
+		if(domainUser.is_account_owner == true){
+	    	if(domainUser.is_admin == false)
+			{
+				throw new Exception("Owner should always be an administrator. Please select administrator option and try again.");
+			}
+	    	owner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+	    	
+	    }
 	    domainUser.save();
+	    if(owner != null && domainUser.id != null && !domainUser.id.equals(owner.id))
+	    {
+	    	owner.is_account_owner = false;
+	    	owner.save();
+	    }
 	    return domainUser;
 	}
 	catch (Exception e)
@@ -138,13 +153,25 @@ public class UsersAPI
     {
 	try
 	{
+		DomainUser owner = null;
 	    if (domainUser.id == null)
 	    {
 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Invalid User")
 			.build());
 	    }
-
+	    if(domainUser.is_account_owner == true){
+	    	if(domainUser.is_admin == false)
+			{
+				throw new Exception("Owner should always be an administrator. Please select administrator option and try again.");
+			}
+	    	owner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+	    }
 	    domainUser.save();
+	    if(owner != null && !domainUser.id.equals(owner.id))
+	    {
+	    	owner.is_account_owner = false;
+	    	owner.save();
+	    }
 	    return domainUser;
 	}
 	catch (Exception e)
@@ -249,16 +276,35 @@ public class UsersAPI
     public List<AgileUser> getAgileUsers()
     {
 	List<AgileUser> agileUser = AgileUser.getUsers();
+	List<AgileUser> agileWithDomain = new ArrayList<AgileUser>();
+
+	for (AgileUser auser : agileUser)
+	{
+	    if (auser.getDomainUser() == null)
+		continue;
+	    agileWithDomain.add(auser);
+	}
 
 	// Now sort by name.
-	Collections.sort(agileUser, new Comparator<AgileUser>()
+	Collections.sort(agileWithDomain, new Comparator<AgileUser>()
 	{
 	    public int compare(AgileUser one, AgileUser other)
 	    {
-		return one.getDomainUser().name.toLowerCase().compareTo(other.getDomainUser().name.toLowerCase());
+	    	try {
+				
+	    		if(one.getDomainUser().name == null || other.getDomainUser().name == null)
+		    		  return 0;
+		    	
+			return one.getDomainUser().name.toLowerCase().compareTo(other.getDomainUser().name.toLowerCase());
+			
+			} catch (Exception e) {
+			}
+	    	
+	    	 return 0;
+	    	
 	    }
 	});
-	return agileUser;
+	return agileWithDomain;
     }
 
     // Get all refered people based on reference code

@@ -923,6 +923,12 @@ z-index: 99;
 	position:relative;
 	border-bottom:1px solid #ddd;
 }
+.dealtitle-angular + .tooltip{
+
+	width:200px;
+    word-wrap:break-word;
+    white-space:normal;
+}
 .milestone-main .milestone-column:last-child .milestone-heading:after,.milestone-main .milestone-column:last-child span:after
 {
 	display:none;
@@ -939,6 +945,31 @@ z-index: 99;
 content: "\f075"!important;
 }
 /*ending UI for deals new look*/
+
+/*Styling for deal color starts*/
+
+li.deal-color:after {
+    content: '';
+    display: block;
+    height: 40px;
+    position: absolute;
+    left: 0px;
+    top: 25%;
+    width: 2px;
+}
+li.deal-color{position:relative;}
+li.deal-color.YELLOW:after { background: yellow;}
+li.deal-color.RED:after { background: red;}
+li.deal-color.VIOLET:after { background: violet;}
+li.deal-color.INDIGO:after { background: indigo;}
+li.deal-color.BLUE:after { background: blue;}
+li.deal-color.GREEN:after { background: green;}
+li.deal-color.ORANGE:after { background: orange;}
+li.deal-color.BLACK:after { background: black;}
+li.deal-color.WHITE:after { background: white;}
+li.deal-color.GREY:after { background: grey;}
+
+/*Styling for deal color ends*/
 
 .milestone-main {
 	white-space: nowrap;
@@ -1135,9 +1166,9 @@ time {
 }*/
 
 @media (min-width:760px) and (max-width:991px) {
-.agile-menu > li:nth-child(n + 4):not(.nav-bar-search):not(#more-menu) {
+/*.agile-menu > li:nth-child(n + 4):not(.nav-bar-search):not(#more-menu) {
 	display:none;
-}
+}*/
 #searchText {
 	width:100px;
 }
@@ -1276,7 +1307,6 @@ ul.tags-management li.tag a {/*color:#ffffff;*/
 	/*color: #000;*/
 	font-size: 12px;
 	width: 100%;
-	max-width:100px;
 }
 .tag-management-actions a {
 	cursor: pointer;
@@ -2960,7 +2990,7 @@ width: 915px;
 
 }
 
-#deals-reports .highcharts-tooltip span , #lossreasonpie-chart-users .highcharts-tooltip span , #calls-chart-user .highcharts-tooltip span , #call-report .highcharts-tooltip span
+#deals-reports .highcharts-tooltip span , #lossreasonpie-chart-users .highcharts-tooltip span , #calls-chart-user .highcharts-tooltip span , #call-report .highcharts-tooltip span, .lost-deal-analysis-portlet-pie .highcharts-tooltip span 
 {
 	 background-color: #313030;
      opacity: 1;
@@ -2968,7 +2998,7 @@ width: 915px;
      padding: 8px;
      border-radius: 5px
  }
- #deals-reports svg .highcharts-tooltip, #lossreasonpie-chart-users svg .highcharts-tooltip,#calls-chart-user svg .highcharts-tooltip , #call-report svg .highcharts-tooltip {
+ #deals-reports svg .highcharts-tooltip, #lossreasonpie-chart-users svg .highcharts-tooltip,#calls-chart-user svg .highcharts-tooltip , #call-report svg .highcharts-tooltip, .lost-deal-analysis-portlet-pie svg .highcharts-tooltip {
  	visibility: hidden!important;
  }
 
@@ -2986,6 +3016,18 @@ width: 915px;
  white-space:normal!important;
  } 
 
+ .thumb-m {
+	 display: inline-block;
+  width: 80px;
+}
+
+.rep-user-info
+{
+	background-color: rgb(240, 243, 244);
+    margin-top: 108px;
+    margin-left: 156px;
+}
+
 .custom_popover .popover-content{
 	padding-top: 5px;
 	padding-bottom:5px;
@@ -2996,4 +3038,322 @@ width: 915px;
 {
 	max-width: none;
 	
+}
+
+.c-progress
+{
+	cursor: progress;
+}
+
+.width-goal
+{
+width : 150px;
+}
+
+.padder-portlet
+{
+	padding-top: 9px;
+	padding-bottom:9px;
+}
+
+#portlets-add-listener .wrapper-md div:nth-of-type(4)
+{
+	height: 243px;
+}
+
+.goal
+{
+	width:calc(100% - 420px);
+}
+
+.datepicker-months
+{
+		width : 233px;
+}
+@-moz-document url-prefix() { 
+
+.mozilla-addon
+{
+	position:relative; top :-2px;
+
+}
+}
+table.hide-head-checkbox th label.i-checks {
+      visibility: hidden;
+}
+
+.table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th,.table-striped>tbody>tr:hover>td{
+  background-color: #f9f9f9 !important;
+  
+}
+
+@media all and (min-width: 768px) {
+.app-aside-fixed:not(.app-aside-dock) aside {
+	position: fixed;
+	height: 100vh;
+}
+}
+
+#calls-chart .highcharts-legend , #calls-chart .highcharts-tooltip
+{
+	text-transform: capitalize;
+}
+
+.display-none{
+	display: none;
+}
+
+}
+.fullscreen{
+  width: 100%;
+  height: 100%;
+  background-color: #f0f3f4;
+}
+.fullscreenwidjet{
+
+	float: left!important;
+	width: 100%!important;
+	position: absolute!important;
+	font-size: 13px!important;
+	margin: 0!important;
+	left:0px;
+	top:0px;
+	z-index:9999;
+	overflow-y:scroll;
+}
+.fullscreenwidjet .landingpagessmart,.fullscreenwidjet .campaign-new-add{
+	position: relative;
+    top: -20px;
+    left: -20px;
+    width: 100vw;
+}
+
+.contacts-toolbar .sort-field-txt:hover {
+    color: rgb(88, 102, 110)!important;
+}
+
+.modal-cbx-m-t{
+	margin-top: -9px;
+}
+
+
+.conversion_track::-webkit-scrollbar-thumb {
+ background: #bebebe;
+}
+.conversion_track::-webkit-scrollbar {
+ width: 5px;
+ margin-right: 4px !important;
+ background:#eee;
+}
+
+.conversion_track{
+	height:332px;
+	overflow-y:auto;
+}
+
+
+#count_goals_chart .highcharts-tooltip , 
+#amount_goals_chart .highcharts-tooltip 
+{
+	z-index: 1;
+}
+
+
+
+.slate-content h4{
+	font-size: 18px;
+	opacity:0.8;
+}
+.slate-content .text, .slate-content .text-base{
+	font-size: 15px;
+}
+
+
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+/* Safari and Chrome */
+.no-wrap {
+ white-space: normal !important;
+}
+ 
+} 
+
+.deals-nowrap .no-wrap {
+ white-space: nowrap !important;
+}
+
+.contact_popover{ 
+
+	border-radius: 0px;
+	//width : 260px;
+}
+
+#contacts-table .popover-content{
+	padding: 0px;
+}
+#contacts-table .popover{
+	max-width:100%;
+}
+
+.contact_popover .arrow{
+	display: none;
+}
+
+.well{
+	background: none!important;
+	 border:none!important;
+	  
+}
+
+#api_key_generate_icon span , #jsapi_key_generate_icon span{
+	color: white !important;
+}
+
+
+
+#calls-chart svg {
+	overflow: visible!important;
+}
+
+
+.api-key-pos
+{
+	padding:5px;
+	position:relative;
+	
+}
+.api-key-spacing{
+	letter-spacing: 1px;
+}
+
+
+/* account block model */
+#user-blocked-modal .panel-body{
+	padding: 60px 30px 60px 30px;
+	background-color: #edb25b;
+	color: white;
+}
+#user-blocked-modal a{
+	color: white !important;
+}
+#user-blocked-modal .modal-dialog{
+	top: 20vh;
+}
+
+.user-alert{
+	position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.user-alert .user-alert-message{
+	position: fixed;
+    width: 50%;
+    margin: 25px auto;
+    text-align: center;
+    background: #f7ecc2!important;
+    border: 1px solid rgb(255, 194, 55);
+    left: 0;
+    right: 0;
+    z-index: 99999;
+    cursor: pointer;
+    padding: 5px;
+    margin-top: 5px;
+    border-radius: 6px;
+}
+.user-alert .user-alert-message span{
+	background-color: #DCD1A5;
+    padding: 0px 6px 4px;
+	margin-left: 10px;
+    margin-right: 5px;
+    font-size: 15px;
+}
+.companies_input{
+	height:30px;
+	font-size:12px;
+}
+.lhs-contact-filter-row  div.add-icon{
+	display: none;
+}
+
+.lhs-contact-filter-row div.add-icon:last-of-type {
+	display: block!important;
+	}
+#addBtn:hover
+{
+  color: black !important;
+}
+
+#removeBtn:hover
+{
+  color: black !important;
+  opacity: 0.9;
+}
+#removeBtn:hover
+{
+  color: black !important;
+}
+
+
+@media ( max-width : 767px) {
+	.vbox-mobile-view .vbox{ display: block;min-height:auto;}
+	.vbox-mobile-view .row-row{ display: inherit !important; }
+
+}
+
+#lhs_filters_conatiner .panel-body{
+	padding: 5px 15px;
+	min-height: 35px;
+}
+#lhs_filters_conatiner #lhs-filters-header{
+	font-size : 14px;
+}
+#lhs_filters_conatiner #lhs-filters-header i{
+	top : 3px;
+}
+/* Modals New  Look  UI Starting */
+ 
+ .modal-footer {
+     padding: 10px;
+     background-color: rgba(0,0,0,0.025);
+ }
+ 
+ .modal-title {
+     margin: 0;
+     /* line-height: 1.42857143; */
+ }
+ 
+ .modal-header h3,.modal-header .h3 {
+     font-size: 16px;
+ }
+ 
+ .modal-title i {
+ 	display: none;
+ }
+ 
+ 
+ .modal-content {
+     position: relative;
+     background-color: #fff;
+     -webkit-background-clip: padding-box;
+     background-clip: padding-box;
+     border: 1px solid #999;
+     border: 1px solid rgba(0,0,0,.2);
+      border-radius: 0px;
+     outline: 0;
+     -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+     box-shadow: 0 3px 9px rgba(0,0,0,.5);
+ }
+ 
+ /* Modals New  Look  UI Ending */
+ .p-l-r-8{
+ 	padding: 0 8px 0 8px;
+ }
+ .modal-cbx-m-t {
+    margin-top: -9px;
+}
+
+#dashboard-video
+{
+	margin-top: 110px;
 }

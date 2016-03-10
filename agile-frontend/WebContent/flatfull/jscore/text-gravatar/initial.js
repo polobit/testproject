@@ -1,4 +1,4 @@
-$(function ($) {
+;$(function ($) {
 	
     $.fn.initial = function (options) {
 
@@ -15,7 +15,7 @@ $(function ($) {
                 textColor: '#ffffff',
                 height: 100,
                 width: 100,
-                fontSize: 60,
+                fontSize: 40,
                 fontWeight: 400,
                 fontFamily: 'HelveticaNeue-Light,Helvetica Neue Light,Helvetica Neue,Helvetica, Arial,Lucida Grande, sans-serif'
             }, options);
@@ -73,8 +73,19 @@ function image_error(element)
 		
 		if(!name)
 			return;
+
+        console.log("image_error");
 		$(element).attr("data-name", name);
-		$(element).initial({charCount: 2, fontWeight : 'normal'});
+
+        var initialCSS = {charCount: 2,fontWeight: 'normal'};
+
+        if(isIE()){
+             initialCSS.fontSize = 20;
+             initialCSS.width = $(element).width();
+             initialCSS.height = $(element).height();
+        }
+
+		$(element).initial(initialCSS);
 }
 
 function image_load(element)

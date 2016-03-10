@@ -8,7 +8,7 @@
 var _data = null;
 var IS_TRIAL = false;
 _IS_EMAIL_PLAN_ACTIVE = false;
-var IS_CANCELLED_USER = false;
+var IS_ALLOWED_TRIAL = false;
 var SubscribeRouter = Backbone.Router
 		.extend({
 
@@ -187,7 +187,7 @@ var SubscribeRouter = Backbone.Router
 
 				saveCallback : function()
 				{
-					showNotyPopUp("information", "Emails have been purchased successfully.", "top");
+					showNotyPopUp("information", "Emails have been added successfully. It will take a few seconds to update on your account. <a href='#subscribe' onclick='document.location.reload();'>Click here</a> if they are not added.", "top", 15000);
 				}, postRenderCallback : function(el)
 				{
 					_IS_EMAIL_PLAN_ACTIVE = true;
@@ -225,16 +225,6 @@ var SubscribeRouter = Backbone.Router
             		IS_TRIAL = false;
 				$("#content").html("<div id='subscribe_plan_change'></div>");
 
-				/*// Set it in local machine
-				if(_plan_on_signup && _plan_on_signup.plan_type){
-					localStorage.setItem("registered_plan" + CURRENT_DOMAIN_USER.id,localStorage.setItem("registered_plan" + CURRENT_DOMAIN_USER.id, JSON.stringify(_plan_on_signup)));
-				}
-				else {
-					_plan_on_signup = localStorage.getItem("registered_plan" + CURRENT_DOMAIN_USER.id);
-					if(_plan_on_signup)
-						   _plan_on_signup = JSON.parse(_plan_on_signup);
-				}*/	
-
 				if (IS_NEW_USER && _plan_on_signup && _plan_on_signup.plan_type && _plan_on_signup.plan_type == "FREE")
 				{
 					 _plan_on_signup = null;
@@ -260,6 +250,7 @@ var SubscribeRouter = Backbone.Router
 					_data = that.subscribe_plan.model.toJSON();
 
 					initializeSubscriptionListeners()
+					$('[data-toggle="tooltip"]').tooltip();
 
 					var _window = window;
 					// Setup account statistics
@@ -388,6 +379,7 @@ var SubscribeRouter = Backbone.Router
 								if (!template_ui)
 									return;
 								$('#content').html($(template_ui));
+								$('[data-toggle="tooltip"]').tooltip();
 							}, "#content");
 						});
 
@@ -456,9 +448,7 @@ var SubscribeRouter = Backbone.Router
 			 */
 			invoiceDetails : function(id)
 			{
-				var invoicedata;
-				var companydata;
-				var obj;
+
 				// Checks whether invoice list is defined, if list is not
 				// defined get the list of invoices
 
@@ -476,21 +466,9 @@ var SubscribeRouter = Backbone.Router
 					var invoice_detail_model = new Base_Model_View({ url : "core/api/subscription/getinvoice", model : model, template : "invoice-detail",
 						postRenderCallback : function(el)
 						{
-							var company_detail = new Base_Model_View({ url : "core/api/account-prefs", model : model, template : "invoice-detail",
-								postRenderCallback : function(el)
-								{
-									companydata = data;
-									obj = { "invoice" : invoicedata, "company" : companydata }
-									getTemplate('invoice-detail', obj, undefined, function(template_ui)
-											{
-												if (!template_ui)
-													return;
-												$('#billing-settings-tab-content').html($(template_ui));
-											}, "#billing-settings-tab-content");
-								} });
 						} });
-//					$("#billing-settings-tab-content").html("");
-//					$("#billing-settings-tab-content").html(invoice_detail_model.render().el);
+					$("#billing-settings-tab-content").html("");
+					$("#billing-settings-tab-content").html(invoice_detail_model.render().el);
 				}
 				else
 					return;
@@ -559,6 +537,7 @@ var SubscribeRouter = Backbone.Router
 
 				// Prepend Loading
 				$('#content').html(upgrade_plan.render().el);
+				$('[data-toggle="tooltip"]').tooltip();
 				$(".active").removeClass("active");
 				$("#planView").addClass("active");
 			},
@@ -570,7 +549,7 @@ var SubscribeRouter = Backbone.Router
 				IS_HAVING_MANDRILL = false;
 				$.ajax({ url : "core/api/email-gateway", type : "GET", success : function(data)
 				{
-					if (data && data.email_api == "MANDRILL")
+					if (data && data.email_api)
 						IS_HAVING_MANDRILL = true;
 
 				}
@@ -676,7 +655,7 @@ var SubscribeRouter = Backbone.Router
 			{
 				IS_TRIAL = true;
 				var that = this;
-				if(!IS_CANCELLED_USER)
+				if(!IS_ALLOWED_TRIAL)
 				{
 					$.ajax({ url : "core/api/subscription/agileTags?email="+CURRENT_DOMAIN_USER.email,
 					 type : "GET",
@@ -687,8 +666,8 @@ var SubscribeRouter = Backbone.Router
 							console.log(data);
 							if(data && data.tags)
 							{
-								if ( $.inArray('Cancellation Request', data.tags) > -1 || $.inArray('Cancelled Trial', data.tags) > -1) {
-								    IS_CANCELLED_USER = true;
+								if ( $.inArray('Cancellation Request', data.tags) == -1 && $.inArray('Cancelled Trial', data.tags) == -1 && $.inArray('Trial', data.tags) != -1) {
+								    IS_ALLOWED_TRIAL = true;
 								}
 							}
 							that.subscribe();
@@ -745,7 +724,7 @@ function getMaxEmailsLimit()
 }
 function canSendEmails(emails_to_send)
 {
-	var pending = getPendingEmails();
+	var pending = getPendingEmails() + getEmailCreditsCount();
 	if (pending >= emails_to_send)
 		return true;
 
@@ -792,20 +771,26 @@ function removeStyleForAPlan(id)
 
 }
 
-function emailClickEvent() {
-	$('ul.nav.nav-tabs').removeClass("hide");
-	$("#email").addClass("hide");
-	$("#currentPlan").addClass("p-t-md");
-	$("#usertab").removeClass("active");
-	$("#emailtab").addClass("active");
-	$("#users-content").removeClass("active");
-	$("#email-content").addClass("active");
+function getEmailsNextRenewalTime()
+{
+	var last_renewal_time = _billing_restriction.last_renewal_time;
+	if(last_renewal_time == undefined || last_renewal_time == null){
+		$.getJSON("core/api/users/current-owner", function(data){
+			$("#next_emails_renewal").html(new Date((data.createdTime+2592000)*1000).format("mmm dd, yyyy"));
+		  return;
+		});
+	}else{
+		return new Date((last_renewal_time+2592000)*1000).format("mmm dd, yyyy");
+	}
+
 }
 
-function printPage() {
-	$("#print-div").addClass("hide");
-	//document.getElementById('header').style.display = 'none';
-    //document.getElementById('footer').style.display = 'none';
-	window.print();
-	$("#print-div").removeClass("hide");
+function getEmailCreditsCount()
+{
+	var count = _billing_restriction.email_credits_count;
+
+	if (count == undefined)
+		count = 0;
+
+	return count;
 }

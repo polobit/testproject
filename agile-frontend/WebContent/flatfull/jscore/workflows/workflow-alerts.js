@@ -57,10 +57,30 @@ function workflow_alerts(title, message , template, callback){
 	}, null);
 }
 
-function send_verify_email()
+function workflow_spam_alerts(reason, score , template, callback){
+	
+	var JSONValues = {};
+	JSONValues["title"] = "Spam Result";
+	JSONValues["score"] = score;
+	JSONValues["reason"]=reason;
+	
+	getTemplate(template, JSONValues, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+			
+		var $modal = $(template_ui);
+		$modal.modal('show');	
+
+		if(callback && typeof (callback) === "function")
+			callback($modal);
+
+	}, null);
+}
+
+function send_verify_email(el)
 {
 	// On Enter Key
-	var $input = $('#verify-email-form').find('input');
+	var $input = $('#verify-email-form', el).find('input');
 
 	$input.off('keypress');
 	$input.on('keypress', function(e){
@@ -75,8 +95,8 @@ function send_verify_email()
 		$('#verify-email-send').trigger('click');
 	});
 
-	$('#verify-email-send').off('click');
-	$('#verify-email-send').on('click', function(e){
+	$('#verify-email-send', el).off('click');
+	$('#verify-email-send', el).on('click', function(e){
 		
 		e.preventDefault();
 

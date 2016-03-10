@@ -35,6 +35,9 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 <meta name="description" content="">
 <meta name="author" content="">
 
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
+
 <style>
 body {
 	background: #7266ba;
@@ -68,8 +71,107 @@ body {
 	color: rgb(199, 73, 73);
 	display: none;
 }
+.modal-title {
+	line-height: 1.42857143;
+}
+.modal-content{
+	border-radius: 0px!important;
+}
+.modal{
+diplay:block!important;
+position:fixed!important;
+}
+
+.progress-bar.animate {
+   width: 100%;
+}
+
+.loading-image {
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    position: absolute;
+    z-index: 9;
+    text-align: center;
+}
+
+/*Starting of the animation*/
+#loading_p1 {
+    /* margin-top: 255px; */
+    font-size: 15pt;
+    line-height: 1.873;
+    font-family: "Source Sans Pro","Helvetica Neue","Helvetica,Arial,sans-serif";
+    /* display: none; */
+    position: relative;
+    top: -100px;
+    left: -50%;
+    /* display: none; */
+    
+}
+.animationload {
+    background-color: #fff;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10000;
+    
+}
+.osahanloading {
+    animation: 1.5s linear 0s normal none infinite running osahanloading;
+    background: #fed37f none repeat scroll 0 0;
+    border-radius: 50px;
+    height: 50px;
+    /* left: 50%; */
+    margin-left: -25px;
+    margin-top: -25px;
+    position: absolute;
+    top: -165px;
+    width: 50px;
+}
+.osahanloading::after {
+    animation: 1.5s linear 0s normal none infinite running osahanloading_after;
+    border-color: #85d6de transparent;
+    border-radius: 80px;
+    border-style: solid;
+    border-width: 10px;
+    content: "";
+    height: 80px;
+    left: -15px;
+    position: absolute;
+    top: -15px;
+    width: 80px;
+}
+@keyframes osahanloading {
+0% {
+    transform: rotate(0deg);
+}
+50% {
+    background: #85d6de none repeat scroll 0 0;
+    transform: rotate(180deg);
+}
+100% {
+    transform: rotate(360deg);
+}
+}
+.animate {
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    margin: 0 auto;
+    position: absolute;
+
+}
+/*Ending of the animation*/
+
+
 
 </style>
+ 
+<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
+
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
 <link type="text/css" rel="stylesheet" href="/css/phonenumber-lib/intlTelInput.css" />
@@ -83,6 +185,27 @@ if(isSafari && isWin)
 
 </head>
 <body>
+<div class="loading-image hide">
+	<!--starting of animation-->
+	<div class="container">
+	<div class="row">   
+        <div class="animationload">
+  		<div class="animate">
+            <div class="osahanloading">
+ 			
+        	</div>
+        	<p id="loading_p1">
+	 			Please wait while we are setting up your account...</p>
+    	</div>
+  		</div>
+	</div>
+	</div>
+	<!--ending of animation-->
+	
+</div>
+
+    
+
 	<div id="error-area" class="error-top-view"></div>
 	<div class="app-content-body">
 		<div class="bg-light lter b-b wrapper-md text-center">
@@ -183,15 +306,15 @@ This is where you and your users will log in to your account
 </div>
 
 <input type='hidden' id="login_email" name='email' value=<%=request.getParameter("email")%>></input>
-<input type='hidden' id="" name='name' value=<%=request.getParameter("name")%>></input>
-
+<input type='hidden' id="user_name" name='name' value=<%=request.getParameter("name")%>></input>
+<input type='hidden' name='account_timezone' id='account_timezone' value=''></input>
 <input type="password" class="hide" name='password' id="password" value="<%=request.getParameter("password")%>"></input>
 	<input type='hidden' name='type' value='agile'></input>
 <div class="line line-lg b-b" style="margin-top:25px;"></div>
 
 <div class="row">
                     <div class="col-sm-offset-3 col-sm-8">                      
-                       <input type='submit' id="confirm_registration" value="I'm Done"
+                       <input type='submit' id="confirm_registration" value="Get Started" 
 											class='save btn btn-sm btn-primary' style="padding-left:15px;padding-right:15px;">
 
 
@@ -206,9 +329,18 @@ This is where you and your users will log in to your account
 </div>
 </div>
 
+
+
+
+
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+<script src="/flatfull/lib/bootstrap.v3.min.js"></script>
 <script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
 <script src="/flatfull/registration/register.js?_v=<%=_AGILE_VERSION%>"   type="text/javascript"></script>
+<!--[if lt IE 10]>
+<script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
+<![endif]-->
+
 <script type="text/javascript">
 var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
@@ -218,9 +350,10 @@ var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
 <script>
 $(document).ready(function(){
 
+	
 	// Pre load dashlet files when don is active
 	preload_dashlet_libs();
-
+	$('#account_timezone').val(jstz.determine().name());
 	var telInput = $("#login_phone_number"),
 	  errorMsg = $("#error-msg"),
 	  validMsg = $("#valid-msg");

@@ -97,6 +97,13 @@
 														<option value="country">Country</option>
 														<option value="zip">Zip</option>
 													</optgroup>
+													<optgroup label="UTM Parameter">
+														<option value="utm_campaign">UTM Campaign</option>
+														<option value="utm_content">UTM Content</option>
+														<option value="utm_medium">UTM Medium</option>
+														<option value="utm_source">UTM Source</option>
+														<option value="utm_term">UTM Term</option>
+													</optgroup>
 													<optgroup label="Campaigns">
 														<option value="campaign_status">Campaign Status</option>
 													</optgroup>
@@ -109,11 +116,11 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="form-control">
 													<option value="EQUALS"
-														class="first_name last_name phone company title org_tag jobtitle email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="utm_campaign utm_content utm_medium utm_source utm_term first_name last_name phone company title org_tag jobtitle email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="utm_campaign utm_content utm_medium utm_source utm_term first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>
 													<option value="EQUALS" class="lead_score">equals</option>
@@ -257,6 +264,13 @@
 														<option value="country">Country</option>
 														<option value="zip">Zip</option>
 													</optgroup>
+													<optgroup label="UTM Parameter">
+														<option value="utm_campaign">UTM Campaign</option>
+														<option value="utm_content">UTM Content</option>
+														<option value="utm_medium">UTM Medium</option>
+														<option value="utm_source">UTM Source</option>
+														<option value="utm_term">UTM Term</option>
+													</optgroup>
 													<optgroup label="Campaigns">
 														<option value="campaign_status">Campaign Status</option>
 													</optgroup>
@@ -269,11 +283,11 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="w-full form-control">
 													<option value="EQUALS"
-														class="first_name last_name phone company title org_tag jobtitle email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="utm_campaign utm_content utm_medium utm_source utm_term first_name last_name phone company title org_tag jobtitle email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="utm_campaign utm_content utm_medium utm_source utm_term first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>
 													<option value="EQUALS" class="lead_score">equals</option>
@@ -653,7 +667,7 @@
 <div class="line line-lg b-b"></div>
 <div class="row">
 			<div class="form-actions col-sm-offset-2 col-sm-10">
-				<a href="#contact-filters" class="btn btn-sm btn-danger">Close</a>
+				<a href="#contact-filters" class="btn btn-sm btn-default">Cancel</a>
 				<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">Save</a> 
 			</div>
 </div>

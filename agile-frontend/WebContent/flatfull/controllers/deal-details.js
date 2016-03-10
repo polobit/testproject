@@ -21,8 +21,12 @@ var DealDetailsRouter = Backbone.Router.extend({
 			App_Deals.customFieldsList.collection.fetch();
 		}
 
-		this.dealDetailView = new Base_Model_View({ url : '/core/api/opportunity/' + id, template : "deal-detail", postRenderCallback : function(el)
+		this.dealDetailView = new Deal_Modal_Event_View({ url : '/core/api/opportunity/' + id, template : "deal-detail", postRenderCallback : function(el)
 		{
+
+			$('.content-tabs',el).tabCollapse();
+			
+
 			/**
 			 * gets the tracks count when user comes to deals page and stores in
 			 * global variable
@@ -150,8 +154,11 @@ function fill_relation_deal(el)
 
 	var json = App_Deal_Details.dealDetailView.model.toJSON();
 	var deal_name = json.name;
-	$('.tags', el).html('<li class="tag inline-block v-middle m-r-xs btn btn-xs btn-primary" data="' + json.id + '">' + deal_name + '</li>');
 
+	var template = Handlebars.compile('<li class="tag inline-block v-middle m-r-xs btn btn-xs btn-primary" data="{{id}}">{{name}}</li>');
+  
+ 	// Adds contact name to tags ul as li element
+ 	$('.tags',el).html(template({name : deal_name, id : json.id}));
 }
 
 function deserialize_deal(value, template)
@@ -239,10 +246,8 @@ function initializeDealTabWithCount(id, el){
 	if (App_Deals.opportunityCollectionView && App_Deals.opportunityCollectionView.collection)
 		deal_collection = App_Deals.opportunityCollectionView.collection;
 
-	if (deal_collection != null && readCookie("agile_deal_view"))
+	if (deal_collection != null && _agile_get_prefs("agile_deal_view"))
 		deal_detail_view_navigation(id, deal_collection, el);
-
-	initializeDealDetailsListners(el);
 
 }
 
@@ -255,6 +260,10 @@ function fill_relation_deal_task(el)
 
 	var json = App_Deal_Details.dealDetailView.model.toJSON();
 	var deal_name = json.name;
-	$('.deal_tags', el).html('<li class="tag inline-block v-middle m-r-xs btn btn-xs btn-primary" data="' + json.id + '">' + deal_name + '</li>');
 
+	var template = Handlebars.compile('<li class="tag inline-block v-middle m-r-xs btn btn-xs btn-primary" data="{{id}}">{{name}}</li>');
+
+ 	// Adds contact name to tags ul as li element
+ 	$('.deal_tags',el).html(template({name : deal_name, id : json.id}));
+	
 }

@@ -50,12 +50,15 @@
 
         {{#if_entity "agile_email"}}
             <div class="timestamp">{{createdTime}}</div>
-            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-open-alt text-muted" title="Email Opened"></i></a></span> Email Opened</div></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-open-alt text-muted" title="{{subject}}"></i></a></span> {{subject}}</div></div>
             <div class="date">{{epochToTaskDate createdTime}}</div>
             <div class="body">
-                <div style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Subject:</b> {{subject}}</div>
+                <!--<div style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Subject:</b> {{subject}}</div>-->
                 <div class="text-xs"><span><em>Sent on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" trackerId}}</div>
                 <div class="text-xs"><span><em>Opened on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
+                {{#if email_link_clicked_at}}
+                <div class="text-xs"><span><em>Clicked on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" email_link_clicked_at}}</div>
+                {{/if}}
             </div>
         {{/if_entity}}
 
@@ -133,13 +136,13 @@
 									{{#if user_agent}}
 										{{#stringToJSON this "parsedUserAgent"}}
 										{{#if device_type}}
-											<img src="{{getS3ImagePath 'img/web-stats/devices/{{device_type}}.png'}}" title="{{device_type}}">
+											<img src="{{getS3ImagePath ''}}img/web-stats/devices/{{device_type}}.png" title="{{device_type}}">
 									    {{/if}}
 										{{#if os}}
-											<img src="{{getS3ImagePath 'img/web-stats/os/{{normalize_os os}}.png'}}" title="{{os}}">
+											<img src="{{getS3ImagePath ''}}img/web-stats/os/{{normalize_os os}}.png" title="{{os}}">
 										{{/if}}
 										{{#if browser_name}}
-                                        	<img src="{{getS3ImagePath 'img/web-stats/browsers/{{browser_name}}.png'}}" title="{{browser_name}}">
+                                        	<img src="{{getS3ImagePath ''}}img/web-stats/browsers/{{browser_name}}.png" title="{{browser_name}}">
 										{{/if}}
                                         {{/stringToJSON}}
 									{{/if}}
@@ -201,14 +204,41 @@
 <div class="item post" id="id-{{@index}}">
 {{/if}}
     <div class="inner">
+
+	{{#if_entity "logPhone"}}
+
+            <div class="timestamp">{{created_time}}</div>
+            <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</div></div> -->
+			<div class="text-md text-cap pull-left">	
+				<div class="contact-job-title text-sm custom-color  wrapper-xs bg-light-color">
+					<i class="icon-list-alt text-muted p-r-xs"></i>{{subject}}
+				</div>
+			</div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body wrapper-sm">
+				<div class="text-sm">
+					{{#if_equals callType "inbound"}}Incoming{{else}}Outgoing{{/if_equals}} call {{status}} 
+					{{#if_equals status "completed"}}  - {{toProperFormat duration}} 
+					{{else}}
+						{{#if_equals status "answered"}}   - {{toProperFormat duration}} 
+						{{else}}
+						{{/if_equals}}	
+					{{/if_equals}}
+ 				</div>
+                <div class="text-sm">{{description}}</div>
+            </div>
+        {{/if_entity}}
+
         {{#if_entity "note"}}
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</div></div> -->
-			<div class="text-md text-cap">	
+			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-list-alt text-muted p-r-xs"></i>{{subject}}
 				</div>
 			</div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <span class="text-xs"><pre class="bg-transparent b-n p-n"  style="white-space:pre-wrap;">{{description}}</pre></span>
@@ -218,26 +248,28 @@
         {{#if_entity "task"}}
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks"></i></a></span> Task Added</div></div> -->
-			<div class="text-md text-cap">	
+			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-tasks text-muted p-r-xs"></i>Task Added
 				</div>
 			</div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <!-- <div class="caption" style="margin-top:-8px"><i class="{{icons type}}"></i> ({{type}})</div> -->         
-                <div class="text-xs ">{{{subject}}} <span>({{task_property type}})</span></div>
+                <div class="text-xs ">{{subject}} <span>({{task_property type}})</span></div>
             </div>
         {{/if_entity}}
 
         {{#if_entity "contact_entity"}}
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</div></div> -->
-			<div class="text-md text-cap">	
+			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-tasks text-muted p-r-xs"></i>Created
 				</div>
 			</div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
             <div class="date" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}">{{epochToTaskDate created_time}}</div>
             <!-- <div class="body" style="padding:5px">
                 <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
@@ -248,11 +280,12 @@
 			<div id="{{remove_spaces tag}}-tag-timeline-element"></div>
             <div class="timestamp">{{createdTime}}</div>
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added</div> - {{tag}}</div> -->
-			<div class="text-md text-cap">	
+			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-tag text-muted p-r-xs"></i>Tag Added - {{tag}}
 				</div>
 			</div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" createdTime}}</div><div class="clearfix"></div>
             <div class="date" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}">{{epochToTaskDate createdTime}}</div>
             <!-- <div class="body">
                 <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
@@ -262,27 +295,32 @@
         {{#if_entity "agile_email"}}
             <div class="timestamp">{{createdTime}}</div>
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span> Email Opened</div></div> -->
-			<div class="text-md text-cap">	
+			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
-					<i class="icon-folder-open-alt text-muted p-r-xs"></i>Email Opened
+					<i class="icon-folder-open-alt text-muted p-r-xs"></i>{{subject}}
 				</div>
 			</div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" createdTime}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate createdTime}}</div>
             <div class="body">
-                <div style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Subject:</b> {{subject}}</div>
+                <!--<div style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Subject:</b> {{subject}}</div>-->
                 <div class="text-xs"><span><em>Sent on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" trackerId}}</div>
                 <div class="text-xs"><span><em>Opened on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
+                {{#if email_link_clicked_at}}
+                <div class="text-xs"><span><em>Clicked on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" email_link_clicked_at}}</div>
+                {{/if}}
             </div>
         {{/if_entity}}
 
         {{#if_entity "deal"}}
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-money"></i></a></span> Deal Added</div></div> -->
-			<div class="text-md text-cap">	
+			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-money text-muted p-r-xs"></i>Deal Added
 				</div>
 			</div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="text-xs ">{{name}}</div>
@@ -295,11 +333,12 @@
             {{#if_equals "incoming" custom2}}
          <div class="timestamp">{{time}}</div>
        <!--  <div class="title"><h3><span><a class="no-line"><i class="icon-phone"></i></a></span> Incoming Call</h3></div>-->
-          <div class="text-md text-cap">	
+          <div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-phone text-muted p-r-xs"></i>Incoming Call
 				</div>
 			</div>
+             <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" time}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate time}}</div>
             <div class="body">
                 <div class="text-xs " >{{user.name}}</div>
@@ -310,11 +349,12 @@
 
         <div class="timestamp">{{time}}</div>
        <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-phone"></i></a></span> Outgoing Call</h3></div>-->
-            <div class="text-md text-cap">	
+            <div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-phone text-muted p-r-xs"></i>Outgoing Call
 				</div>
 			</div>
+             <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" time}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate time}}</div>
             <div class="body">
                 <div class="text-xs">{{user.name}}</div>
@@ -326,14 +366,15 @@
          {{#if_equals "CONTACT_OWNER_CHANGE" activity_type}}
          <div class="timestamp">{{time}}</div>
         <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-user"></i></a></span> Owner Changed</h3></div>-->
-           <div class="text-md text-cap">	
-				<div class="contact-job-title text-base custom-color">
+           <div class="text-md text-cap pull-left">	
+				<div class="contact-job-title text-base custom-color ">
 					<i class="icon-user text-muted p-r-xs"></i>Owner Changed
 				</div>
-			</div>
+               </div>
+               <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" time}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate time}}</div>
             <div class="body" style="padding:5px">
-                <div class="text-xs">Owner changed to {{custom1}}</div>
+                <div class="text-xs">Owner changed to {{custom1}} by {{user_name}}</div>
             </div>
          {{/if_equals}}
         {{/if_entity}}
@@ -342,11 +383,12 @@
 			
             <div class="timestamp">{{start}}</div>
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Event Added</div></div> -->
-			<div class="text-md text-cap">	
+			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon icon-calendar text-muted p-r-xs"></i>Event Completed
 				</div>
 			</div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" start}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate start}}</div>
             <div class="body">
                 <div class="text-xs ">{{title}}</div>
@@ -358,11 +400,12 @@
 			
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Case Added</div></div> -->
-			<div class="text-md text-cap">	
+			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-folder-close text-muted p-r-xs"></i>Case Added
 				</div>
 			</div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="text-xs ">{{title}}</div>
@@ -383,8 +426,8 @@
                 <div class="text-xs text-ellipsis" style="margin-top:-8px">Campaign - {{campaign_name}}</div>
 
             {{#if message}}
-                    <div class="text-xs text-ellipsis">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
-                        <div class="right" data="{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}"><a href="#" id="tl-log-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
+                    <div class="text-xs text-ellipsis">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{message}} {{/if_email_sent}}
+                        <div class="right" data="{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{message}} {{/if_email_sent}}"><a href="#" id="tl-log-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
                     </div>   
             {{/if}}        
             </div>
@@ -400,7 +443,7 @@
     		{{/if}}
             </a>
             </span> {{subject}}</h3></div> -->
-			<div class="text-md text-cap">	
+			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-envelope text-muted p-r-xs"></i>
 					{{#if trackerId}}
@@ -411,6 +454,7 @@
 					{{subject}}
 				</div>
 			</div>
+             <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" date_secs}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate date_secs}}</div>
             <div class="body">
                 <div class="text-xs text-ellipsis" ><b>From:</b> {{from}}</div>
@@ -435,11 +479,12 @@
      {{#if_entity "guid"}}
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> Web</h3></div> -->
-			<div class="text-md text-cap">	
+			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-list-alt text-muted p-r-xs"></i>Web
 				</div>
 			</div>
+             <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div>
@@ -450,13 +495,13 @@
 									{{#if user_agent}}
 										{{#stringToJSON this "parsedUserAgent"}}
 										{{#if device_type}}
-											<img src="{{getS3ImagePath 'img/web-stats/devices/{{device_type}}.png'}}" title="{{device_type}}">
+											<img src="{{getS3ImagePath ''}}img/web-stats/devices/{{device_type}}.png" title="{{device_type}}">
 										{{/if}}
 										{{#if os}}
-											<img src="{{getS3ImagePath 'img/web-stats/os/{{normalize_os os}}.png'}}" title="{{os}}">
+											<img src="{{getS3ImagePath ''}}img/web-stats/os/{{normalize_os os}}.png" title="{{os}}">
 										{{/if}}
 										{{#if browser_name}}
-                                        <img src="{{getS3ImagePath 'img/web-stats/browsers/{{browser_name}}.png'}}" title="{{browser_name}}">
+                                        <img src="{{getS3ImagePath ''}}img/web-stats/browsers/{{browser_name}}.png" title="{{browser_name}}">
 										{{/if}}
                                         {{/stringToJSON}}
 									{{/if}}
@@ -487,11 +532,12 @@
 {{#if_entity "twilio"}}
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-phone" title="You Called"></i></a></span>{{title}}</h3></div> -->
-			<div class="text-md text-cap">	
+			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-phone text-muted p-r-xs" title="You Called"></i>{{title}}
 				</div>
 			</div>
+             <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                  <div class="text-xs ">{{name}}</div>
@@ -502,11 +548,12 @@
 {{#if_entity "custom"}}
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span>{{title}}</h3></div> -->
-			<div class="text-md text-cap">	
+			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-folder-open-alt text-muted p-r-xs" title="Email Opened"></i>{{title}}
 				</div>
 			</div>
+             <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                  <div class="text-xs ">{{name}}</div>

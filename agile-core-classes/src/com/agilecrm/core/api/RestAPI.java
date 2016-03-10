@@ -99,7 +99,7 @@ public class RestAPI
 	    int count = 0;
 
 	    if (obj.has("email"))
-		count = ContactUtil.searchContactCountByEmail(obj.getString("email"));
+		count = ContactUtil.searchContactCountByEmail(obj.getString("email").toLowerCase());
 
 	    System.out.println("contacts available" + count);
 	    if (count != 0)
@@ -271,7 +271,7 @@ public class RestAPI
 		return null;
 
 	    // Search contact if email is present else return null
-	    Contact contact = ContactUtil.searchContactByEmail(obj.getString("email"));
+	    Contact contact = ContactUtil.searchContactByEmail(obj.getString("email").toLowerCase());
 
 	    if (contact == null)
 	    {
@@ -569,7 +569,7 @@ public class RestAPI
 	return contact;
     }
 
- // This newTagsByUpdate is temporary solution for Zapier.
+    // This newTagsByUpdate is temporary solution for Zapier.
     /**
      * Gets all the contacts which are associated with the given tag and returns
      * as list

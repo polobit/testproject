@@ -190,7 +190,10 @@ var Base_Collection_View = Backbone.View
 			 */
 			initialize : function()
 			{
-				showTransitionBar();
+				// Do not show transition bar 
+				if(!this.options.no_transition_bar)
+				    showTransitionBar();
+
 				// Binds functions to view
 				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'buildCollectionUI');
 
@@ -242,17 +245,7 @@ var Base_Collection_View = Backbone.View
 				{
 					if (response.status == 401)
 					{
-						var hash = window.location.hash;
-
-						// Unregister all streams on server.
-						unregisterAll();
-
-						// Unregister on SIP server.
-						sipUnRegister();
-
-						// Firefox do not support window.location.origin, so
-						// protocol is explicitly added to host
-						window.location.href = window.location.protocol + "//" + window.location.host + "/login" + hash;
+						handleAjaxError();
 						return;
 					}
 					that.render(true, response.responseText);
@@ -292,7 +285,7 @@ var Base_Collection_View = Backbone.View
 					var that = this;
 
 					/**
-					 * Initiazlizes the infiniscroll on the collection created
+					 * Initiazlizes the infi$target : this.options.scroll_target ? tarniscroll on the collection created
 					 * in the view,
 					 */
 					this.infiniScroll = new Backbone.InfiniScroll(this.collection, { success : function()
@@ -303,13 +296,14 @@ var Base_Collection_View = Backbone.View
 						 * view
 						 */
 						$(".scroll-loading", that.el).remove();
-					}, untilAttr : 'cursor', param : 'cursor', strict : true, pageSize : this.page_size,
+					}, untilAttr : 'cursor', param : 'cursor', strict : true, pageSize : this.page_size, target : this.options.scroll_target ? this.options.scroll_target: $(window),
 
 					/*
 					 * Shows loading on fetch, at the bottom of the table
 					 */
 					onFetch : function()
 					{
+						
 						var element="table"; 
 						if (that.options.scroll_symbol)
 							element="section";
@@ -389,6 +383,7 @@ var Base_Collection_View = Backbone.View
 					return;
 				}
 
+				console.log("appendItem");
 				this.model_list_element_fragment.appendChild(this.createListView(base_model).render().el);
 			},
 			createListView : function(base_model)
@@ -485,6 +480,7 @@ var Base_Collection_View = Backbone.View
 					this.infiniScroll.destroy();
 				}
 
+				this.delegateEvents();
 				return this;
 			}, buildCollectionUI : function(result)
 			{
@@ -559,6 +555,16 @@ var Base_Collection_View = Backbone.View
 *  Extended View of Base_Collection. It combines parent events to extended view events.
 */
 Base_Collection_View.extend = function(child) {
+	var view = Backbone.View.extend.apply(this, arguments);
+	view.prototype.events = _.extend({}, this.prototype.events, child.events);
+	return view;
+};
+
+
+/**
+*  Extended View of list view. It combines parent events to extended view events.
+*/
+Base_List_View.extend = function(child) {
 	var view = Backbone.View.extend.apply(this, arguments);
 	view.prototype.events = _.extend({}, this.prototype.events, child.events);
 	return view;
