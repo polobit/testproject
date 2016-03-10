@@ -17,6 +17,9 @@ function loadUservoiceComments(offSet){
 
 		getTemplate('uservoice-transactions', result, undefined, function(template_inv){						
 			$('#uservoice-comments').html(template_inv);
+			head.js('lib/jquery.timeago.js', function(){
+				$(".time-ago", $('#uservoice-comments')).timeago();
+			});			
 		},null);
 
 		if(uservoiceOBJ.comments && uservoiceOBJ.comments.length > 5){
@@ -25,14 +28,26 @@ function loadUservoiceComments(offSet){
 	}else if(offSet > 0  && (offSet+5) < uservoiceOBJ.comments.length){
 		var result = {};
 		result.comments = uservoiceOBJ.comments.slice(offSet, (offSet+5));
-		$('.uservoice_show_more').remove();
-		$('#uservoice-comments').apped(getTemplate('uservoice-transactions', result));
+		$('.uservoice_show_more').remove();		
+
+		getTemplate('uservoice-transactions', result, undefined, function(template_inv){						
+			$('#uservoice-comments').append(template_inv);
+			head.js('lib/jquery.timeago.js', function(){
+				$(".time-ago", $('#uservoice-comments')).timeago();
+			});
+		},null);
+		
 		$('#uservoice-comments').append(showMoreUservoiceCommments);
 	}else{
 		var result = {};
 		result.comments = uservoiceOBJ.comments.slice(offSet, uservoiceOBJ.comments.length);
 		$('.uservoice_show_more').remove();
-		$('#uservoice-comments').append(getTemplate('uservoice-transactions', result));
+		getTemplate('uservoice-transactions', result, undefined, function(template_inv){						
+			$('#uservoice-comments').append(template_inv);
+			head.js('lib/jquery.timeago.js', function(){
+				$(".time-ago", $('#uservoice-comments')).timeago();
+			});
+		},null);
 	}
 }
 
@@ -55,7 +70,7 @@ function loadData(contact_id){
 			}			
 			getTemplate('uservoice-profile', sendData, undefined, function(template_ui){				
 		 		if(!template_ui){
-		    		return;
+		    		return;		    		
 		    	}
 		    	$('#Uservoice').html(template_ui);
 		    }, "#Uservoice");

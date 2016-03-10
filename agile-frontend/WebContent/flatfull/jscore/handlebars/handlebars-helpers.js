@@ -810,6 +810,16 @@ $(function()
 	});
 
 
+	/**
+	 * Helper function to return date string from epoch time
+	 */
+	Handlebars.registerHelper('uservoicedate', function(date)
+	{
+		if(date){
+			var newDate = new Date(date);
+			return newDate;
+		}
+	});
 
 	// Helper function to return date in user selected format in  preferences.
 
