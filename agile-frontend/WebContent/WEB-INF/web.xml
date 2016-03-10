@@ -539,6 +539,18 @@
 		<url-pattern>/core/php/*</url-pattern>
 	</filter-mapping>
 	
+	<!-- JSON Filter gadget -->
+	<filter>
+		<filter-name>JSONPFilterPHP</filter-name>
+		<filter-class>com.agilecrm.filter.JSONPRequestFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>JSONPFilterPHP</filter-name>
+		<url-pattern>/core/php/*</url-pattern>
+	</filter-mapping>
+	<!-- JSON Filter -->
+	
 	<filter>
 		<filter-name>WebhooksFilter</filter-name>
 		<filter-class>com.agilecrm.filter.WebhooksFilter</filter-class>
