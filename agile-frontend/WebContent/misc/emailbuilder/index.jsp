@@ -1,8 +1,9 @@
+<%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%
-String version = "beta1dot0";
-// long unixTime = System.currentTimeMillis() / 1000L;
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
+String templateId = request.getParameter("tmpid");
+String action = request.getParameter("action");
 %>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -17,14 +18,8 @@ String version = "beta1dot0";
         <link href="css/colpick.css" rel="stylesheet"  type="text/css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-        <link href="css/template.editor.css?v=<%=version%>" rel="stylesheet"/>
+        <link href="css/template.editor.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
         <link href="css/responsive-table.css" rel="stylesheet"/>
-
-
-<%
-String templateId = request.getParameter("tmpid");
-String action = request.getParameter("action");
-%>
 
 <script>
 var AGILE_EB_ROOT = window.location.origin + "/";
@@ -53,7 +48,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
         <script type="text/javascript" src="js/colpick.js"></script>
-        <script type="text/javascript" src="js/template.editor.js?v=<%=version%>"></script>
+        <script type="text/javascript" src="js/template.editor.js?v=<%=_AGILE_VERSION%>"></script>
 
 <style>
 .mce-btn button {
