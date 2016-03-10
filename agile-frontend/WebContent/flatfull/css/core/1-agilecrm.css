@@ -3357,3 +3357,6 @@ table.hide-head-checkbox th label.i-checks {
 {
 	margin-top: 110px;
 }
+.landingpage-copy{
+	min-width: 0px;
+}
