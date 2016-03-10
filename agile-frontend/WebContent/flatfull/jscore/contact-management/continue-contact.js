@@ -457,8 +457,8 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 	 * be stripe id..) using developers API, in order not to loose them
 	 * following verification is done
 	 */
-
-	if (obj.properties)
+	 //Not added custome field data which is not there in form
+	/*if (obj.properties)
 	{
 		var properties_temp = properties;
 		$
@@ -490,7 +490,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 												}
 											});
 						});
-	}
+	}*/
 
 	// Stores json object with "properties" as value
 	var propertiesList = [];
