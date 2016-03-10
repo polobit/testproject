@@ -173,6 +173,10 @@ public class Task extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String note_description = null;
+    
+  //Description about  the task
+    @NotSaved(IfDefault.class)
+    public String taskDescription = null;
 
     public int progress = 0;
 
