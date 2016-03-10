@@ -90,7 +90,7 @@ public class Subscription {
 
 	/** This {@link Enum} Type represents subscription status of domain */
 	public static enum BillingStatus {
-		BILLING_FAILED_0, BILLING_FAILED_1, BILLING_FAILED_2, BILLING_FAILED_3, BILLING_SUCCESS, SUBSCRIPTION_DELETED
+		BILLING_FAILED_0, BILLING_FAILED_1, BILLING_FAILED_2, BILLING_FAILED_3, BILLING_SUCCESS, BILLING_PAUSED, SUBSCRIPTION_DELETED
 	};
 
 	/**
@@ -448,6 +448,15 @@ public class Subscription {
 	 */
 	public void purchaseEmailCredits(Integer quantity) throws Exception {
 		getAgileBilling().purchaseEmailCredits(billing_data, quantity);
+	}
+	
+	/**
+	 * Adds trial for all subscriptions
+	 * 
+	 * @throws Exception
+	 */
+	public void addTrial(Long trialEnd) throws Exception {
+		getAgileBilling().addTrial(trialEnd);
 	}
 
 	/**

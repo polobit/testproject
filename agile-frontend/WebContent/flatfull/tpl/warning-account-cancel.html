@@ -89,7 +89,6 @@
 </script>
 
 <script id="send-cancellation-request-template" type="text/html">
- <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -111,7 +110,6 @@
         <a href="#" id="send-delete-request" class="btn btn-sm btn-primary ">Send Request</a>
     </div>
 </div>
-</div>
 </script>
 
 <script id="account-delete-step2-template" type="text/html">
@@ -131,4 +129,69 @@
     </div>
 </div>
 </div>
+</script>
+
+<script id="cancel-subscription-request-template" type="text/html">
+     <div id="cancel_subscription_modal" class="modal-dialog p-t-md">
+        <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h3 class="modal-title">Cancellation</h3>
+            </div>
+            <div class="modal-body">
+                <div id="account_cancel_options" class="text-center"> <div style="font-size: 20px;line-height: 35px;">Wait a Second</div>
+                    <div class="m-b" style="font-size: 16px;">Let us help you</div>
+
+                    <div class="text-center row">
+                     <div class="display-center p-b">
+                            <div class="col-md-4">
+                      <div id="account_cancel_chat" class="wrapper">
+                              <div class="bg-box" style="background-color: #50c7a7;">
+                                <i class="fa fa-comment-o pos-rlt pos-t-xs"></i>
+                              </div>
+                              <h4>Instant Help</h4>
+                              <div class="text-xs p-b-xs">We can help you to get more out of chat. Just ask us!</div>
+                              <button id="account_cancel_chat_btn" class="btn btn-lg btn-default p-t-sm w-full">Chat</button>
+                            </div></div>
+                    <div class="col-md-4">
+                      <div id="account_cancel_support" class="wrapper">
+                              <div class="bg-box" style="background-color: #5fa2dd;">
+                                <i class="fa icon-support pos-rlt pos-t"></i>
+                              </div>
+                              <h4>Get Answers</h4>
+                              <div class="text-xs p-b-xs">Check out our blog posts to get the help you need.</div>
+                              <button id="account_cancel_support_btn" class="btn btn-lg btn-default p-t-sm w-full">Help</button>
+                            </div></div>
+                    <div class="col-md-4">
+                      <div id="account_pause" class="wrapper">
+                              <div class="bg-box" style="background-color: #f76c51;">
+                                <i class="fa icon-ban pos-rlt pos-t"></i>
+                              </div>
+                              <h4>Need a Break?</h4>
+                              <div id="pause_settings" class="text-xs pos-rlt p-b-xs">
+                                  Postpone your billing for 
+                                  <span id="pause_count">2</span>
+                                  <span class="pause-count-control m-l-sm">
+                                        <ul class="inline-block list-none m-n p-n">
+                                            <li style="height: 4px"><i class="icon-sort-up c-p" id="add" style="height: 10px;"></i></li>
+                                            <li><i class="icon-sort-down c-p" id="minus" style="height: 10px;"></i></li>
+                                        </ul>
+                                  </span>
+                                  <span id="month_id" class="m-l-xs">months</span>, so that you don't lost your data.
+                             </div>
+                              <button id="account_pause_btn" class="btn btn-lg btn-default p-t-sm w-full">Pause</button>
+                            </div></div>
+                            
+                            </div>
+                            <div class="display-center" style="width: 87%;"><hr></div>
+                          </div>
+                    <div class="text-center text-lg">Still want to cancel?</div>
+                    <div class="text-base text-muted m-b m-t-xs">By cancelling your subscription all your data and settings will be lost and never restore them back.</div>
+                    <div class="m-b">
+                        <a href="#" onClick="$('#send-cancellation').modal('hide');" class="btn btn-sm" style="background-color: #50c7a7;color:white;">Back to Dashboard</a>
+                        <a href="#" id="cancel-account-request-proceed" class="btn btn-sm btn-default m-l-sm">Cancel My Subscription</a></div>
+                    </div>
+            </div>
+        </div>
+    </div>
 </script>

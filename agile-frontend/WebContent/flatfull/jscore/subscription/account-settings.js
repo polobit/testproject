@@ -103,8 +103,89 @@ $(function(){
 			e.preventDefault();
 			
 			// Shows cancellation modal
-			$("#send-cancellation").html(getTemplate('send-cancellation-request', {})).modal('show');	
+			//$("#send-cancellation").html(getTemplate('send-cancellation-request', {})).modal('show');	
+			$("#send-cancellation").html(getTemplate('cancel-subscription-request', {})).modal('show');	
 			
+	});
+
+	$("#send-cancellation #cancel-account-request-proceed").off("click");
+	$('#send-cancellation').on('click', '#cancel-account-request-proceed', function(e) {
+			e.preventDefault();
+			
+			// Shows cancellation modal
+			//$("#send-cancellation").html(getTemplate('send-cancellation-request', {})).modal('show');	
+			getTemplate("send-cancellation-request",{} , undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$("#send-cancellation .modal-dialog").html($(template_ui));
+			}, null);
+			
+	});
+
+	$("#send-cancellation #account_cancel_chat_btn").off("click");
+	$('#send-cancellation').on('click', '#account_cancel_chat_btn', function(e) {
+			e.preventDefault();
+
+			$(this).closest(".modal").modal("hide");
+	});
+
+	$("#send-cancellation #account_cancel_support_btn").off("click");
+	$('#send-cancellation').on('click', '#account_cancel_support_btn', function(e) {
+			e.preventDefault();
+			
+			$(this).closest(".modal").modal("hide");
+	});
+
+	$("#send-cancellation #account_pause_btn").off("click");
+	$('#send-cancellation').on('click', '#account_pause_btn', function(e) {
+		e.preventDefault();
+		var period = $("#pause_count").html();
+		$.ajax({
+				url : 'core/api/subscription/pauseOrResumeSubscriptions?period='+period,
+				type : 'POST',
+				success : function(){
+					location.reload(true);
+				},
+				error : function(response){
+					showNotyPopUp("warning", response.responseText, "top");
+				}
+			});
+			
+	});
+
+	$("#send-cancellation #add").off("click");
+	$('#send-cancellation').on('click', '#add', function(e) {
+			e.preventDefault();
+			var value = $("#pause_count").html();
+			if(value < 6)
+				value++;
+			$("#pause_count").html(value);
+			if(value > 1)
+				$("#send-cancellation #month_id").html("months");
+	});
+	$("#send-cancellation #minus").off("click");
+	$('#send-cancellation').on('click', '#minus', function(e) {
+			e.preventDefault();
+			var value = $("#pause_count").html();
+			if(value > 1)
+				value--;
+			$("#send-cancellation #pause_count").html(value);
+			if(value == 1)
+				$("#send-cancellation #month_id").html("month");
+			
+	});
+	$('body').on('click', '#account_resume', function(e) {
+		e.preventDefault();
+		$.ajax({
+			url : 'core/api/subscription/pauseOrResumeSubscriptions?period=0',
+			type : 'POST',
+			success : function(){
+				showNotyPopUp("information", "Thank you, Your account will be Resume soon.", "top");
+			},
+			error : function(response){
+				showNotyPopUp("warning", response.responseText, "top");
+			}
+		});
 	});
 
 });

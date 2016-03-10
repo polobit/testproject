@@ -3352,3 +3352,51 @@ table.hide-head-checkbox th label.i-checks {
  .modal-cbx-m-t {
     margin-top: -9px;
 }
+
+#send-cancellation #cancel_subscription_modal{
+	width: 70%;
+	margin: 0px auto;
+}
+#send-cancellation #account_cancel_options .wrapper{
+	border: 1px solid #ccc;
+}
+#send-cancellation #account_cancel_options .wrapper .bg-box{
+	font-size: 70px;
+	color: white;
+	margin: auto;
+	height: 127px;
+}
+#send-cancellation .display-center{
+	display: table;
+    width: 90%;
+    margin: 0 auto;
+}
+#account_cancel_chat button:hover{
+	background-color: #50c7a7;
+	border-color: #50c7a7;
+	color: white !important;
+}
+#account_cancel_support button:hover{
+	background-color: #5fa2dd;
+	border-color: #5fa2dd;
+	color: white !important;
+}
+#account_pause button:hover{
+	background-color: #f76c51;
+	border-color: #f76c51;
+	color: white !important;
+}
+
+.pause-count-control {
+    display: none;
+    position: absolute;
+    top: 0px;
+    font-size: 11px;
+    left: 138px;
+}
+#pause_settings:hover .pause-count-control{
+	display: inline-block!important;
+}
+#pause_settings:hover #month_id{
+	margin-left: 10px!important;
+}

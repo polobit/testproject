@@ -689,4 +689,16 @@ public class StripeImpl implements AgileBilling {
 		
 		
 	}
+	
+	public void addTrial(Long trialEnd) throws Exception{
+		// Fetches subscription from customer object in stripe
+		Subscription subscription = SubscriptionUtil.getSubscription();
+		Customer customer = StripeUtil.getCustomerFromJson(new JSONObject(subscription.billing_data_json_string));
+		List<com.stripe.model.Subscription> subscriptions = customer.getSubscriptions().getData();
+		for(com.stripe.model.Subscription sub : subscriptions){
+			Map<String, Object> updateParams = new HashMap<String, Object>();
+			updateParams.put("trial_end", trialEnd);
+			sub.update(updateParams);
+		}
+	}
 }
