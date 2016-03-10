@@ -8,6 +8,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.agilecrm.activities.util.WebCalendarEventUtil;
+import com.thirdparty.google.calendar.GoogleCalenderPrefs;
+import com.thirdparty.google.calendar.util.GooglecalendarPrefsUtil;
 import com.thirdparty.office365.calendar.OfficeCalendarTemplate;
 import com.thirdparty.office365.calendar.util.Office365CalendarUtil;
 
@@ -31,11 +34,20 @@ public class OfficeCalendar365API {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<OfficeCalendarTemplate> getOffice365Appointments(
 			@QueryParam("startDate") String startDate,
-			@QueryParam("endDate") String endDate) throws Exception {
+			@QueryParam("endDate") String endDate)  {
 		List<OfficeCalendarTemplate> appointments = null;
-		String Url = Office365CalendarUtil.getOfficeURL(startDate, endDate);
-		appointments = Office365CalendarUtil.getAppointmentsFromServer(Url);
-
+		try{
+			GoogleCalenderPrefs calendarPrefs = GooglecalendarPrefsUtil
+					.getCalendarPrefsByType(GoogleCalenderPrefs.CALENDAR_TYPE.OFFICE365);
+			
+			String Url = Office365CalendarUtil.getOfficeURL(startDate, endDate, calendarPrefs);
+			if(Url !=null){
+				appointments = Office365CalendarUtil.getAppointmentsFromServer(Url);
+			}
+		}catch(Exception e){
+			System.out.println("Error "+ e);
+		}
+		
 		return appointments;
 	}
 }

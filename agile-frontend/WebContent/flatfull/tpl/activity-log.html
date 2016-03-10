@@ -2,13 +2,18 @@
 
 {{#unless this.length}}
 
-        <div class="alert-info alert">
-            <div class="slate-content">
+        <div class="alert bg-white">
+            <div class="slate-content p-md">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>                
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">No activity found</h4>
+
+                    <h4 class="m-t-none" style="opacity:0.8;">You do not have any activity yet.</h4>
+                </div>
+                <div class="text text-center" style="opacity:0.5">
+                Displays a live timeline of all user activities here.
+
                 </div>
 				<div class="clearfix">
 				</div>
@@ -41,7 +46,44 @@
 
 
 <script id="activity-list-log-model-template" type="text/html">
-    <div class="pos-rlt list-group-item"> 
+{{#if_equals "CALL" activity_type}}
+		{{#if custom1}}
+    		<div class="pos-rlt list-group-item"> 
+			<div class="pull-left avatar thumb-xs m-r m-t-xs">
+				{{#if this.user}}
+                
+					<img class="user-img ref-roundedimg"  alt="" src="{{this.user.ownerPic}}" title="{{this.user.name}}">
+				{{else}}
+					<img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+				{{/if}}
+			</div>
+			<div class="activity-tag p-l-xxl">
+			<div class="custom-link">
+			
+			{{#if_equals "incoming" custom2}}
+			Call from {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+			<small class="activities_second_line m-t-none text-sm">
+			<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+			</small>
+			{{/if_equals}}
+			{{#if_equals "outgoing" custom2}}	
+			Called {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+			<small class="activities_second_line m-t-none text-sm">
+			<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+					</small>
+			{{/if_equals}}
+			</div>
+			<div>	
+				<small class="edit-hover pull-right activity_time p-r-xs p-t-xs text-muted" > 
+				<i class="fa fa-clock-o"></i>&nbsp;<time class="pull-right  text-sm" datetime="{{epochToHumanDate "" time}}"> {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" time}}</time>
+				</small>
+			</div>
+			</div>
+			</div>
+			<div class="clearfix"></div>
+		{{/if}}
+{{else}}
+	    <div class="pos-rlt list-group-item"> 
 	<div class="pull-left avatar thumb-xs m-r m-t-xs">
 			{{#if this.user}}
                 
@@ -514,6 +556,14 @@ Created a new Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 </small>  
 {{/if_equals}}
 
+{{#if_equals "MERGE_CONTACT" activity_type}}
+{{#if_equals "1" custom1}} 
+Merged {{custom1}} contact to {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+{{else}}
+Merged {{custom1}} contacts to {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+{{/if_equals}}
+{{/if_equals}}
+
 {{#if_equals "COMPANY_CREATE" activity_type}}
 Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>	
 <small class="activities_second_line m-t-none text-sm">
@@ -562,10 +612,20 @@ Changed owner for Contact {{#if this.entityObject}}<a href="#contact/{{entity_id
 {{/if_equals}}
 
   {{#if_equals "NOTE_ADD" activity_type}}
-Added note to Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+{{#if custom4}}
+Added call log to Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+ <i class="icon-pencil"></i>{{#unless this.entityObject}} Contact deleted later. {{/unless}} {{custom1}} {{#if custom2}}- {{custom2}}{{/if}}
+</small> <br/>
+<small class="activities_second_line m-t-none text-sm">
+ <i class="icon-pencil"></i>{{custom4}}
+</small>
+{{else}}
+Added note to Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm">
  <i class="icon-pencil"></i>{{#unless this.entityObject}} Contact deleted later. {{/unless}} {{custom1}} {{#if custom2}}- {{custom2}}{{/if}}
 </small>  
+{{/if}}
 {{/if_equals}}
 
 
@@ -709,18 +769,20 @@ Removed a Tag from Contact {{#if this.entityObject}}<a href="#contact/{{entity_i
 {{/if_equals}}
 
 {{#if_equals "CALL" activity_type}}
+{{#if custom1}}
 {{#if_equals "incoming" custom2}}
 Call from {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
 <small class="activities_second_line m-t-none text-sm">
-<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}} {{else}} &nbsp;- 0s{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>) 
 </small>
 {{/if_equals}}
 {{#if_equals "outgoing" custom2}}	
 Called {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
 <small class="activities_second_line m-t-none text-sm">
-<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{else}} &nbsp;- 0s{{/if}} {{#if custom1}}(<span style="text-transform: capitalize;">{{custom1}}</span>){{/if}} 
 </small>
 {{/if_equals}}
+{{/if}}
 {{/if_equals}}
 
 {{/if_equals}}
@@ -781,6 +843,7 @@ Deleted  {{custom1}} Documents<br/>
 
 {{#if_equals "CALL" activity_type}}
 {{#unless entity_type}}
+{{#if custom1}}
 {{#if_equals "incoming" custom2}}
 Call from {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
 <small class="activities_second_line m-t-none text-sm">
@@ -793,6 +856,7 @@ Called {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{
 <i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
 </small>
 {{/if_equals}}
+{{/if}}
 {{/unless}}
 {{/if_equals}}
 
@@ -846,6 +910,8 @@ Deleted  {{custom1}} Campaigns<br/>
 		</small>
 </div>
 </div>
+	
+{{/if_equals}}
 <div class="clearfix"></div>
 
 </script>
@@ -866,6 +932,7 @@ Deleted  {{custom1}} Campaigns<br/>
                 <ul class="dropdown-menu" id="entity_type">
 					 <li><a href="">All Activities</a></li>
                      <li><a href="CALL">Calls</a></li>
+                    <li><a href="CAMPAIGN">Campaigns</a></li>  
                      <li><a href="CONTACT">Contacts</a></li>
                      
 					{{#hasMenuScope 'DEALS'}}

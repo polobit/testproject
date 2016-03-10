@@ -81,6 +81,9 @@ String S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL().replace("fl
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
+
 <style>
 
 
@@ -160,6 +163,10 @@ body {
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script> -->
 <script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
 <script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
+
+<!--[if lt IE 10]>
+<script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
+<![endif]-->
 <!-- <script type="text/javascript">
 jQuery.validator.setDefaults({
 	debug: true,

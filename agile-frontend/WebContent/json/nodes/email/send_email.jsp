@@ -123,7 +123,7 @@
             "id": "button_email",
             "title": "Send test Email",
             "required": "required",
-            "value": "Send Test Email",
+            "value": "Test Email",
             "fieldType": "input",
             "type": "button",
             "class": "ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary",
@@ -138,7 +138,30 @@
                 "position": "relative",
                 "outline": "none",
                 "font-size": "11px",
-                "top": "-6px"
+                "top": "-15px"
+            }
+        }, {
+            "category": "Text",
+            "name": "spam_button_email",
+            "id": "spam_button_email",
+            "title": "Spam Score",
+            "required": "required",
+            "value": "Spam Score",
+            "fieldType": "input",
+            "type": "button",
+            "class": "ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary",
+            "style": {
+                "float": "right",
+                "margin-right": "-5px",
+                "background": "none",
+                "border": "none",
+                "text-decoration": "underline",
+                "border-bottom": "1px solid",
+                "padding": "0px 0px 1px 0px",
+                "position": "relative",
+                "outline": "none",
+                "font-size": "11px",
+                "right": "70px"
             }
         },
         {
@@ -172,7 +195,7 @@
             "id": "button_email_html",
             "title": "Send test Email",
             "required": "required",
-            "value": "Send Test Email",
+            "value": "Test Email",
             "fieldType": "input",
             "type": "button",
             "class": "ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary",
@@ -185,9 +208,33 @@
                 "border-bottom": "1px solid",
                 "padding": "0px 0px 1px 0px",
                 "position": "relative",
-                "top": "-44px",
+                "top": "-50px",
                 "outline": "none",
                 "font-size": "11px"
+            }
+        },
+         {
+            "category": "HTML",
+            "name": "spam_button_email_html",
+            "id": "spam_button_email_html",
+            "title": "Spam Score",
+            "required": "required",
+            "value": "Spam Score",
+            "fieldType": "input",
+            "type": "button",
+            "class": "ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary",
+            "style": {
+                "float": "right",
+                "margin-right": "-5px",
+                "background": "none",
+                "border": "none",
+                "text-decoration": "underline",
+                "border-bottom": "1px solid",
+                "padding": "0px 0px 1px 0px",
+                "position": "relative",
+                "outline": "none",
+                "font-size": "11px",
+                "right":"70px"
             }
         },
         {
@@ -199,8 +246,8 @@
             "options": {
                 "*No": "no",
                 "Yes": "yes",
-                "Yes & Push": "yes_and_push",
-                "Yes & Push (Email only)": "yes_and_push_email_only"
+                "Yes & Push (Email only)": "yes_and_push_email_only",
+                "Yes & Push": "yes_and_push"
             },
             "fieldType": "select",
             "type": "select"

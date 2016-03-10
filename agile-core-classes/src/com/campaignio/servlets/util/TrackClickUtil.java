@@ -1,5 +1,6 @@
 package com.campaignio.servlets.util;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Iterator;
 
@@ -213,9 +214,9 @@ public class TrackClickUtil
 			    subscriberId, interruptedData.toString());
 	    }
 	    
-	    if(type.equals(ShortenURLType.SMS))
+	    if(type.equals(ShortenURLType.SMS) || type.equals(ShortenURLType.TWEET))
 	    {
-	    	emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, null);
+	    	emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, type, null);
 	    }
 	    
 	    if(emailClickDeferredTask == null)

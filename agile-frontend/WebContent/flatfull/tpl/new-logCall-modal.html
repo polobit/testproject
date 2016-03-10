@@ -1,0 +1,160 @@
+
+<script type="text/html" id="phoneLogModal-template">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title">
+		{{#if_equals action "edit"}}	
+			<i class="icon-edit"></i>&nbsp;Edit call log
+			{{else}}
+			<i class="icon-plus-sign"></i>&nbsp;Log a call	
+		{{/if_equals}}
+		</h3>
+    </div>
+    <div class="modal-body">
+        <form id="phoneLogForm" name="phoneLogForm" method="post">
+            <fieldset>
+              {{#if_equals action "edit"}}	
+					<input name="id" type="hidden"/>
+					<input name="created_time" type="hidden"/>					
+			{{/if_equals}}      
+<input id="saveActivity" type="hidden" value = "false"/>
+<input id="callWidgetName" type="hidden" value = ""/>
+
+                <div class="control-group form-group">
+                    <label class="control-label"><b>Subject</b> <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input type="text" placeholder="About" name="subject" id="subject" class="form-control" />
+                    </div>
+                    <span id="logPhone_subject_error" style="color:#d9534f;display:none;">Subject required.</span>
+                </div>
+                
+                <div class="control-group form-group">
+                    <label class="control-label col-lg-3 pull-left p-l-none"><b>Phone Number</b> <span class="field_req">*</span></label>
+                     <div class="controls contact_phone_controls">
+
+
+	{{#if_equals num.length "0"}}
+		<span  title="Add Phone">
+			<a id="contact_logPhone_number" class="contact_logPhone_number add_logPhone text-info text-l-none" name="contact_logPhone_number" value = ""> Add Phone</a>
+        </span>
+	{{else}}
+		{{#if_equals num.length "1"}}
+			{{#if num.[0]}}
+				<span id="contact_logPhone_number" name="contact_logPhone_number" value="{{num.[0]}}" >{{num.[0]}}</span>
+			{{else}}
+				<span  title="Add Phone">
+					<a id="contact_logPhone_number" class="contact_logPhone_number add_logPhone text-info text-l-none" name="contact_logPhone_number" value = ""> Add Phone</a>
+        		</span>
+			{{/if}}
+		{{else}}
+				<a class="dropdown-toggle " data-toggle="dropdown" aria-expanded="false"> 
+	     		      <button id="phoneButton" type="button" class="btn btn-default">
+							<span  id="contact_logPhone_number" class="contact_logPhone_number" name="contact_logPhone_number" value = ""> Select </span>
+       				   		<span class="caret"></span>
+	                  </button>
+				</a>
+						<ul class="dropdown-menu" style="top:121px;left: 157px;">
+							{{#each num}}<li><a id = "logPhone_number_option" value = "{{this}}">{{this}}</a></li> {{/each}}
+						</ul>
+		{{/if_equals}}	
+	{{/if_equals}}	
+
+					</div>
+					<span id="logPhone_number_error" style="color:#d9534f;display:none;">Phone number required.</span>
+                </div>
+                
+                <div class="control-group form-group">
+                    <label class="control-label col-lg-3 pull-left p-l-none"><b>Call Type</b> <span class="field_req">*</span></label>
+                    <div class="controls">
+                      <label class="i-checks">
+               					  <input type="radio" name="callType" id="callType" checked="checked" value="inbound" title="Inbound">
+								<i></i>
+               					 Inbound
+ 						</label>
+ 								&nbsp;&nbsp;&nbsp;
+					 <label class="i-checks">
+               					 <input type="radio" name="callType" id="callType" value="outbound-dial" title="Outbound">
+								<i></i>
+               					 Outbound
+              		  </label>
+                    </div>
+                </div>
+                
+                 <div class="control-group form-group">
+                    <label class="control-label col-lg-3 pull-left p-l-none"><b>Status</b> <span class="field_req">*</span></label>
+                    <div class="controls">
+                    
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
+    				      <button id="statusButton" type="button" class="btn btn-default">
+    						  				  
+								<span  id="callStatus" class="callStatus" name="status" value = ""> Select </span>
+         				   		<span class="caret"></span>
+							
+ 							</button>
+						</a>
+								<ul class="dropdown-menu" style="top:196px;left: 157px;">
+									<li><a id = "statusValue"  value = "answered">Answered</a></li>
+									<li><a id = "statusValue"  value = "busy">Busy</a></li>
+									<li><a id = "statusValue"  value = "failed">Failed</a></li>
+									<li><a id = "statusValue"  value = "missed">Missed</a></li>
+									<li><a id = "statusValue"  value = "inquiry">Inquiry</a></li>
+									<li><a id = "statusValue"  value = "interest">Interest</a></li>
+									<li><a id = "statusValue"  value = "no interest">No Interest</a></li>
+									<li><a id = "statusValue"  value = "incorrect referral">Incorrect Referral</a></li>
+									<li><a id = "statusValue"  value = "meeting scheduled">Meeting Scheduled</a></li>
+									<li><a id = "statusValue"  value = "new opportunity">New Opportunity</a></li>
+									<li><a id = "statusValue"  value = "voicemail">Voicemail</a></li>
+								</ul>
+								
+                    </div>
+                    <span id="logPhone_status_error" style="color:#d9534f;display:none;">Status not declared.</span>
+                </div>
+                
+                 <div class="control-group form-group">
+                    <label class="control-label"><b>Duration</b> <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input type="text" name="hour" id="hour" value="0" style = "max-width:42px;"/>&nbsp;<span class="label label-default">hours</span> &nbsp;&nbsp;
+                        <input type="text" name="min" id="min" value="0" style = "max-width:42px;"/>&nbsp;<span class="label label-default">minutes</span> &nbsp;&nbsp;
+                        <input type="text" name="sec" id="sec" value="0" style = "max-width:42px;"/>&nbsp;<span class="label label-default">seconds</span>
+                    </div>
+					<span id="logPhone_duration_error" style="color:#d9534f;display:none;">For minutes and seconds, please enter values between 0-59 only.</span>
+					<span id="logPhone_duration_error1" style="color:#d9534f;display:none;">Duration should be in positive values only.</span>
+                </div>
+                
+                
+	                <div class="control-group form-group">
+	                    <label class="control-label"><b>Description</b></label>
+	                    <div class="controls">
+	                        <textarea rows="3" class="form-control-F-width form-control" placeholder="Detailed Note" name="description" id="description" style="max-width:400px;"></textarea> 
+	                    </div>
+	                </div>
+                
+                
+                <div class="control-group form-group">
+                    <label class="control-label col-lg-3 pull-left p-l-none"><b>Related To</b> </label>
+                     <div class="controls">
+                      <ul id="logPhone_relatedto_tag" name="contact_ids" class="contacts tags p-none"></ul>
+                     </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+    <span class="save-status pull-left" style="color:#d9534f;"></span>
+        <a href="#" class="btn btn-sm btn-primary" id="validate-logPhone" action = "save">
+		{{#if_equals action "edit"}}	
+			Update
+		{{else}}
+			Save
+		{{/if_equals}}
+        </a>
+        
+    </div>
+    </div>
+    </div>
+</div>
+</div>
+</script>
+

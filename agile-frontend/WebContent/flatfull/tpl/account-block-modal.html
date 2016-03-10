@@ -1,0 +1,30 @@
+<script id="block-user-template" type="text/html">
+	<div class="modal fade" id="user-blocked-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="panel text-center text-md m-b-none bg-light">
+					<div class="panel-body">
+						Your account has dues and has been locked. Please contact our Billing Team at billing@agilecrm.com or update your credit card information by clicking the 'Update Card' button below. 
+					<div class="p-t"><a class="btn btn-success btn-lg" href="#updateCreditCard">Update Card</a></div><span class="text-info text-xs"><a href="/login">Log out</a></span> 
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</script>
+
+<script id="user-alert-template" type="text/html">
+	<div class="user-alert center-div">
+ <div class="user-alert-message"><span class="pull-right" onclick="$('#alert-message').hide();">x</span><a href="#subscribe">{{message}}</a></div> 
+  </div>
+</div>
+</script>
+
+<script id="free-user-alert-template" type="text/html">
+	<div class="user-alert center-div">
+ <div class="free-user-alert-message">You are using FREE limited version of Agile CRM. <a class="text-info font-bold" href="#subscribe">Upgrade Now</a></div> 
+  </div>
+</div>
+</script>

@@ -33,7 +33,9 @@ gapi_helper.init = function() {
     console.log("gapi_helper.init %s", gapi_helper.time());
     console.log(gapi_helper.config.apiKey);
     gapi.client.setApiKey(gapi_helper.config.apiKey);
-    window.setTimeout(gapi_helper.checkAuth, 1);
+    window.setTimeout(function(){
+        gapi_helper.handleAuthResult({});   
+    }, 1);
 };
 
 gapi_helper.checkAuth = function() {

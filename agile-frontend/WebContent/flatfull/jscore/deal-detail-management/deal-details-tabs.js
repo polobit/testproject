@@ -339,8 +339,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	    fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
 		{
-			el.find("#document-select").append("<option value='new'>Add New Doc</option>");
-
+			el.find("#document-select > option:first").after("<option value='new'>Add New Doc</option><option style='font-size: 1pt; background-color: #EDF1F2;'disabled>&nbsp;</option>");
+			el.find("#document-select > option:first").remove();
 		}, optionsTemplate, false, el); 
 	},
 
@@ -375,7 +375,11 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
 	    	var deal_json = App_Deal_Details.dealDetailView.model.toJSON();
 	    	var deal_name = deal_json.name;
-	    	$('.deal_tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ deal_json.id +'">'+deal_name+'</li>');
+
+	    	var template = Handlebars.compile('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="{{id}}">{{name}}</li>');
+  
+		 	// Adds contact name to tags ul as li element
+		 	$('.deal_tags',el).html(template({name : deal_name, id : deal_json.id}));
 	    }
 	    else if(document_id != undefined && document_id != null)
 	    {
@@ -409,6 +413,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		el.find(".add-deal-document-select").css("display", "inline");
 	},
 
+	
 	dealAddtask:  function(e){ 
     	e.preventDefault();
     	$('#activityTaskModal').html(getTemplate("new-task-modal")).modal('show');
@@ -421,14 +426,16 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
 
         agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-
-		// Fills owner select element
-		populateUsers("owners-list", $("#taskForm"), undefined, undefined,
-				function(data) {
-					$("#taskForm").find("#owners-list").html(data);
-					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();					
-		});
+		categories.getCategoriesHtml(undefined,function(catsHtml){
+		   $('#type',el).html(catsHtml);
+		   // Fills owner select element
+		   populateUsers("owners-list", $("#taskForm"), undefined, undefined,
+		     function(data) {
+		      $("#taskForm").find("#owners-list").html(data);
+		      $("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+		      $("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();     
+		   });
+		  });
 
        activateSliderAndTimerToTaskModal();
     },
@@ -446,16 +453,19 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 			deserializeForm(value, $("#updateTaskForm"));
 			
 			$('.update-task-timepicker').val(fillTimePicker(value.due));
-			// Fills owner select element
-			populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
-			{
-				$("#updateTaskForm").find("#owners-list").html(data);
-				if (value.taskOwner)
-					$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
+			agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+			categories.getCategoriesHtml(value,function(catsHtml){
+			   $('#type',el).html(catsHtml);			   
+				// Fills owner select element
+				populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
+				{
+					$("#updateTaskForm").find("#owners-list").html(data);
+					if (value.taskOwner)
+						$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
 
-				$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+					$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+				});
 			});
-
 			// Add notes in task modal
 			showNoteOnForm("updateTaskForm", value.notes);
 		});
@@ -463,7 +473,6 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		// activateSliderAndTimerToTaskModal();
 
 	},
-
 	/**
 	 * Delete functionality for tasks blocks in deal details
 	 */
@@ -650,6 +659,17 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		var targetEl = $(e.currentTarget)
 
 		var model = $(targetEl).parents('li').data();
+
+		var owner = model.get("owner_id");
+
+	  	if(!owner && model.get("owner")){
+	  		owner = model.get("owner").id;
+	  	}
+
+		if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "event"){
+			$("#deleteEventErrorModal").html(getTemplate("delete-event-error-modal")).modal('show');
+			return;
+		}
 
 		if (model && model.toJSON().type != "WEB_APPOINTMENT")
 		{

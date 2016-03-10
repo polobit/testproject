@@ -102,12 +102,11 @@ function contactListener(el)
 
 	$('body').off('mouseover','.popover_contact');
 		$('body').on('mouseover','.popover_contact',function(e){
+
 			//e.stopPropagation();
 			var left=e.pageX;
             var that=$(this);
 
-
- 
      // clearTimeout(timer);
 
 			timer=setTimeout(function() {
@@ -122,6 +121,7 @@ function contactListener(el)
 				success : function(data) {
 					App_Contacts.contact_popover=new Backbone.Model(data);
 		 		getTemplate("contacts-custom-view-popover", data, undefined, function(template_ui){
+
 						if(!template_ui)
 							  return;
 								$(that).popover(
@@ -320,7 +320,7 @@ e.preventDefault();
 	    	
 	    	// Reset form
 	    	$('#addTagsForm-popover input').each (function(){
-   		  	  	$(e.currentTarget).val("");
+   		  	  	$(this).val("");
    		  	});
 	    	
 	    	// Checks if tag already exists in contact

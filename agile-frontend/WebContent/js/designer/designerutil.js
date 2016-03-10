@@ -471,13 +471,14 @@ function disable_text_required_property(selector)
 	if (selector.find('#tinyMCEhtml_email').val() != "" && selector.find('#text_email').val() == "")
 		selector.find('#text_email').removeProp("required");
 }
+
 // Bhasuri 10/25/2014
 function getDate(selector)
 {
 	if(!selector)
 		selector = '#duration';
 	
-	$(selector).datepicker({ changeMonth : true, changeYear : true, yearRange : "+0:+100]", constrainInput : false,
+	$(selector).datepicker({ changeMonth : true, changeYear : true, yearRange: "2010:2050",  constrainInput : false
 	// minDate: 0
 	});
 
@@ -586,6 +587,9 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 	});
 	
 	console.log(selectoption);
+	if(uiFieldDefinition.invisible)
+		selectoption = $(selectoption).attr("invisible", uiFieldDefinition.invisible);
+
 	return selectoption;
 }
 
@@ -758,3 +762,66 @@ function insertSelectedOption(ele ,target_id)
 	$('#new_field').val($(ele).find(':selected').val());
 
 }
+
+function insertSelectedOption1(ele ,target_id)
+{
+	var text = $(target_id).val();
+	
+		$(target_id).val($(ele).find(':selected').val());
+
+}
+	// function remove_property(ele)
+	// {
+	//  	$("#updated_value").prop('disabled', true).val('');
+	// }
+	// function add_property(ele)
+	// {
+	// 	$("#updated_value").prop('disabled', false);
+	// }
+
+	//for new set_property_node
+	// function add_remove_property(ele)
+	// {
+	// 	if($(ele).val() == "SET_NULL")
+	// 	$("#" + id).prop('disabled', true).val('');
+	// 	else	
+	// 	$("#updated_value").prop('disabled', false);	
+	// }
+
+	//disable a field 
+	function disable_property(ele, target_id, param)
+	{
+		if(!target_id)
+			target_id = $(ele).attr('id');
+		try{
+		if(param)
+		$('#' + target_id).prop('disabled',param).val('');
+		else
+		$('#' + target_id).prop('disabled',param);
+		}
+		catch(err){ }
+	}
+
+	//event handlers for radio buttons
+	function remove_property(ele, target_id)
+	{
+		disable_property(ele, target_id, true);
+	}
+	function add_property(ele, target_id)
+	{
+		disable_property(ele, target_id, false);
+	}
+
+		//for edit set_property_node
+     function setPropertyNode(jsonData)
+     {
+		if(jsonData){
+    			for (var i=0;i<jsonData.length;i++){
+    				if(jsonData[i].name == "action" && jsonData[i].value == "SET_NULL")
+    					disable_property( jsonData[i], "updated_value", true);
+    		}
+    	}
+	}
+
+	
+

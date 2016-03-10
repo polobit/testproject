@@ -97,11 +97,17 @@ public class AnalyticsServlet extends HttpServlet
 	if(isBlockedIp(ip, domain))
 	    return;
 	    
+	Long timeBeforeLog = System.currentTimeMillis();
+	System.out.println("Before log " + timeBeforeLog);
+	
 	// Insert into table
-	AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew, ref, userAgent, country, region,
-		    city, cityLatLong);
+	//AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew, ref, userAgent, country, region,
+	//	    city, cityLatLong);
 	    
 
+	Long timeAfterLog = System.currentTimeMillis();
+	System.out.println("After log " + timeAfterLog + " Diff " + (timeAfterLog-timeBeforeLog));
+	
 	// Show notification with url
 	if (StringUtils.isNotBlank(email) && !StringUtils.equals(email, "null"))
 	{
@@ -119,7 +125,13 @@ public class AnalyticsServlet extends HttpServlet
 		e.printStackTrace();
 	    }
 
+	    timeBeforeLog = System.currentTimeMillis();
+		System.out.println("Before log " + timeBeforeLog);
+		
 	    NotificationPrefsUtil.executeNotification(Type.IS_BROWSING, ContactUtil.searchContactByEmail(email), json);
+	    
+	    timeAfterLog = System.currentTimeMillis();
+		System.out.println("After log " + timeAfterLog + " Diff " + (timeAfterLog-timeBeforeLog));
 	}
     }
 

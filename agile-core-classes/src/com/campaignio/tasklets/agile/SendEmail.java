@@ -238,6 +238,7 @@ public class SendEmail extends TaskletAdapter
     	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
     	
     	data.remove(SendMessage.SMS_CLICK_TRACKING_ID);
+    	data.remove(TwitterSendMessage.TWEET_CLICK_TRACKING_ID);
     	
     	// If From email empty
     	if(StringUtils.isBlank(fromEmail))
@@ -685,10 +686,10 @@ public class SendEmail extends TaskletAdapter
     {
     	try
     	{
-    	    return VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "unsubscribe?sid="
-                    + URLEncoder.encode(subscriberId, "UTF-8") + "&cid="
-                    + URLEncoder.encode(campaignId, "UTF-8") + "&e="
-                    + URLEncoder.encode(email, "UTF-8");
+    	    return VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "unsubscribe?e="
+                    + URLEncoder.encode(email, "UTF-8")
+                    + "&sid=" + URLEncoder.encode(subscriberId, "UTF-8")
+                    + "&cid=" + URLEncoder.encode(campaignId, "UTF-8");
     	}
     	catch(Exception e)
     	{

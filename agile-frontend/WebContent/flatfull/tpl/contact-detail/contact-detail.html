@@ -8,35 +8,42 @@
 <div id = "contact-dtl" class="app-content-full  h-full dock-view-fixing">
 <div class="hbox hbox-auto-xs hbox-auto-sm bg-light" >
   
-  <div class="col bg-light lter b-r details-mobile-view">
+
+  <div class="col  details-mobile-view b-r bg-light lter vbox-mobile-view">
+
   <div class="vbox">
   <div class="row-row">
   <div>
   <div>
-    <div class="wrapper contactView p-t-sm details-mobile-view text-center-mobile-view">
-	<div class="pos-rlt w-full">
-<div class="contact-navigation-view"><span class="navigation  contact-switching"></span></div>
-<div class="clearfix"></div>
-     </div>
+    <div class=" contactView details-mobile-view text-center-mobile-view">
+	
 
 <!-- starting section one -->
+<div class="wrapper p-t">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+
+    					<div class="pos-rlt w-full">
+						<div class="contact-navigation-view"><span class="navigation  contact-switching"></span></div>
+						<div class="clearfix"></div>
+    				    </div>
                         <div class="text-center   pos-rlt">
 						<div class="thumb-lg">
 							<form id="contact-container">
-								<a href="#" class="tooltip_info" data-placement="top"
+								<a href="#" class="tooltip_info contact-image-view" data-placement="top"
 									data-toggle="tooltip"
 									title="<i class='icon-edit icon-white icon'></i> Change Picture"> 
-									<img class='upload_pic imgholder submit w-full img-circle' style="width:96px;height:96px;" type="submit"
+									<img class='upload_pic imgholder submit w-full img-circle' style="width:75px;height:75px;" type="submit"
 									src="{{gravatarurl properties 80}}" /></a> 
 									<input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
 							</form>
 						</div>
-						 <div class="pos-abs pos-r-0 m-t-sm">
+						 <div class="pos-abs pos-r-0 m-t-sm isotope-item">
 						<div>
 								
 								
-								<a class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
+								<a class="dropdown-toggle" data-toggle="dropdown"><span class="caret" style="margin-top:-6px;opacity:0.8;"></span></a>
 								<ul class="dropdown-menu pull-right text-sm">
                                    <li><a href='#contact-edit'>
                                      <div class="pull-left"><i class="fa fa-pencil-square"></i> Edit</div> {{#if_keyboard_shortcuts_enabled}}
@@ -90,15 +97,20 @@
 						
                            
 						
-						<div class="w-full  m-t-xs  h3 font-thin custom-color" style="padding-bottom:1px;">
-								{{getPropertyValue properties
-										"first_name"}} {{getPropertyValue properties "last_name"}}
+
+
+					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:5px;" id ="contactName">
+
+								<span class="text-capitalize ">{{getPropertyValue properties
+										"first_name"}}</span> <span class="text-capitalize "> {{getPropertyValue properties "last_name"}}</span>
+
 								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
 								</div>
-							<div class="text-md m-b-xs text-cap">	
-						<div class="contact-job-title  text-center font-thin custom-color">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}   {{#if contact_company_id}}
+							<div class=" m-b-xs text-cap" style="padding-right:5px;">	
 
-									<a href="#company/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
+						<div class="contact-job-title text-base text-center font-thin custom-color text-ellipsis" style="max-width:100%;">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}   {{#if contact_company_id}}
+
+									<a class = "block text-xs"  href="#company/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
 								{{else}}
 									{{getPropertyValue properties "company"}}
 								{{/if}}</div>
@@ -211,62 +223,88 @@
 						<!--  starting section 3  -->
                      
 <div class="btn-group btn-group-justified m-b hide"> <a class="btn btn-primary btn-rounded" data-toggle="button"> <span class="text"> <i class="fa fa-phone"></i> Call </span> </a> <a class="btn btn-info btn-rounded"> <i class="fa fa-envelope-o"></i> Email </a> </div>
-                    <div class="panel wrapper panel-middle-align-mobile">	
+
+                    <div class=" panel-middle-align-mobile">	
+
 					<div class="row">
-					<div class="col-xs-12 col-sm-7">			
+					<div class="col-xs-12 col-sm-7 text-center">
 					 <div id='star' class="contact-star"></div>
-					</div>
-					<div class="col-sm-5 text-right hidden-xs">		
+					</div>		
+
+
+		<div class="text-right hidden-xs col-sm-5" style="left:5px;width: 90px;padding-left: 1px;padding-right: 1px;">		
 								<!--  starting score -->
 						<div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
-							<div  class="text-lg score-view">
-								<img src="{{getS3ImagePath '../../img/flame.png'}}" style="width:13px;"> <span class="m-l-n-xs pos-rlt" style="top:-3px">
-									<img border="0" src="{{getS3ImagePath '/img/help.png'}}"
-									style="height: 6px; vertical-align: middle" rel="popover"
-									data-placement="bottom" data-title="Lead Score"
-									data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation."
-									id="element" data-trigger="hover">
+							<div class="text-lg score-view text-left">
+							<div style="position:relative;">
+
+ 								<span class="m-l-n-xs pos-rlt" style="font-size:14px;float:left;margin-left:8px;top:6px">
+								<i class="icon-trophy" border="0" style="height: 6px; vertical-align: middle" rel="popover" data-placement="bottom" data-title="Lead Score" data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation." id="element" data-trigger="hover" ></i>
 								</span>
-							
-								<span class="inline-block v-middle">
-									{{#if lead_score}} <span id="lead-score">{{lead_score}}</span>&nbsp;
-									{{else}} <span id="lead-score">0</span>&nbsp;
-									{{/if}}
+
+							  		{{#canEditContact owner.id}}
+								<span class="inline-block v-middle" style="margin-top: -5px;margin-left: 6px;">
+									{{#if lead_score}}<span title="{{lead_score}}" id="lead-score"class="inline-block text-ellipsis" style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px;">{{lead_score}}</span>&nbsp;
+									{{else}} <span title="0" id="lead-score"class="inline-block text-ellipsis"style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px">0</span>&nbsp;
+										{{/if}}
+									</span>
+
+									<span class="inline-block v-middle">
+									<input type="text" maxlength="10" autofocus="true" class="hide pos-abs form-control" id="scorebox">
+									</span>
+									
+									<span class="contact-score-control m-l-xs" style="left:79px;position:absolute;top:5px;">
+										<ul class="inline-block list-none m-n p-n">
+											<li style="height: 12px"><i class="icon-sort-up c-p" id="add" style="height: 6px;"></i></li>
+											<li><i class="icon-sort-down c-p" id="minus" style="height: 10px;"></i></li>
+										</ul>
 								</span>
-							{{#canEditContact owner.id}}
-								<span class="contact-score-control m-l-xs">
-									<ul class="inline-block list-none m-n p-n">
-										<li style="height: 9px"><i class="icon-sort-up c-p" id="add"
-											style="height: 10px;"></i></li>
-										<li><i class="icon-sort-down c-p" id="minus"
-											style="height: 10px;"></i></li>
-									</ul>
+								{{else}}
+								<span class="inline-block v-middle" style="margin-left:21px">
+
+									{{#if lead_score}} <span title="{{lead_score}}" id="lead_score_uneditable"class="inline-block text-ellipsis" style="text-align:center;position: relative;top: 5px;width:48px;font-size: 14px;">{{lead_score}}</span>&nbsp;
+									{{else}} <span title="0" id="lead-score"class="inline-block text-ellipsis"style="text-align:center;position: relative;top: 4px;width:48px;font-size: 14px;">0</span>&nbsp;
+									{{/if}}		
 								</span>
+								
 							{{/canEditContact}}
 							</div>
-						</div>
+							</div>
+							</div>
+
 						</div>
 						</div>
 						</div>
 						
+
+		</div>
+	</div>
+</div>
+						
 						<!--  ending section 3 -->
-								
+					
+
 <div class="text-md ">
 <div class="p-t-none p-r-xs p-b-none p-l-xs" style="display:none;"> {{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}</div>
 <div class="clearfix"></div>
 </div>
 
-	<div clas="m-t-sm"><small class="text-muted text-sm">Owner</small></div>
+ 
+
+<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+	<small class="text-muted text-base">Owner</small>
 	<div class="change-owner-succes"></div>
      <div title="Owner">
-      	<div class="contact-owner text-base" id="change-owner-element">
+      	<div class="contact-owner text-xs" id="change-owner-element">
         	
 			{{#if owner}}
         	<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
 			{{else}}
 			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">Assign Owner</a></span>
  			{{/if}}
-        	<a id="contact-owner" class="custom-color" data={{owner.id}}>{{owner.name}}</a>
+        	<a id="contact-owner" class="custom-color text-xs" data={{owner.id}}>{{owner.name}}</a>
         
         	{{#canEditContact owner.id}}
         	<div class="dropdown" id="change-owner-ul"  style="display: none">
@@ -276,14 +314,22 @@
 			{{/canEditContact}}
        </div>
     </div>
+    </div>
+   </div>
+ </div>
+   
 
-<div class="m-t-sm"><small class="text-muted text-sm">Tags</small></div>
+<div class="wrapper hidden-sm hidden-xs p-b-xs" style="padding-top:0px;">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+
+<small class="text-muted text-base">Tags</small>
 						<div class="contact-tags m-b-xs m-t-xs">
 					<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
 							{{#if tagsWithTime.length}} 
 							 {{#canEditContact owner.id}}
 								{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this.tag}}"><span><a
 								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
 								class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
 								{{/each}}
@@ -316,10 +362,17 @@
 					</div>
 				</div>	
 
-						
+		</div>
+	</div>
+</div>				
 				<!--  starting section 5 -->		
-						
+	
+					
+		
+
 			 {{#property_is_exists "phone" properties}}
+
+			 
 			<div class="widget_container contact-rightpanel phone m-t-sm" id="{{name}}-container">
 				{{else}} 
 					{{#property_is_exists "skypePhone" properties}}
@@ -355,22 +408,25 @@
 						</div>
 
 						<div class="clearfix"></div>
-					
-	
-						
-						
-						
-						
+
 						
 							{{#property_is_exists "phone" properties}}
-							<div>
+							
+							<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  								<div class="panel panel-default m-b-none">
+   							    <div class="panel-body">
 								{{#multiple_Property_Element "phone" properties}}
 								  
 								<!-- <div style="display: inline-block; text-align: right" class="span4">
 									<span><strong style="color: gray">Phone</strong><span>
 								</div> -->
+								
+								
+
 						
-				<div class="m-t-sm"><small class="text-muted text-xs">Contact Info</small></div>				
+
+				<small class="text-muted text-base" >Contact Info</small>				
+
 								<div class="contact-phone">
 									{{#each this}}
 									<div class="pull-left contact-phone-icon hide">
@@ -389,34 +445,39 @@
                                         	
 										<span class="contact-call-button-div"  data-toggle="tooltip" data-placement="top" title="">
 										<a href="tel:{{remove_spaces value}}" class="contact-make-call contact-call-button" phone="{{value}}">{{value}}</a> 
-                                        {{#if subtype}}<span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
+                                        {{#if subtype}}<span class="label bg-light  text-tiny">{{subtype}}</span> {{/if}}
 										</span>
 -->
 <div class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
-			<a class="contact-make-call c-progress" phone="{{value}}" >{{value}}   {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}} </a>
 
 
-			
+			<a class="contact-make-call c-progress text-xs" phone="{{value}}" >{{value}}   {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}} </a>
+</div>
 
- </div>
 
 									</div>
 									<div class="clearfix"></div>
 									{{/each}}
 								</div>
+
+								
 								{{/multiple_Property_Element}}
-							</div>
+							
 							<div class="clearfix"></div>
 							{{/property_is_exists}}
+		
 <!-- added by prakash for skype field.. -->
-
+<!--
 							{{#property_is_exists "skypePhone" properties}}
 							<div>
 								{{#multiple_Property_Element "skypePhone" properties}}
-								  
+								 
 								{{#property_is_exists "phone" ../properties}}
+								
+
 									{{else}}
-										<div class="m-t-sm"><small class="text-muted text-xs">Contact Info</small></div>	
+
+										<small class="text-muted text-base">Contact Info</small>	
 								{{/property_is_exists}}
 			
 								<div class="contact-phone">
@@ -425,13 +486,6 @@
 									<i class="icon icon-call-end text-sm m-r-xs v-middle"></i>
 									</div>
 									<div class="text-sm">
-
-
-
-
-
-
-
 
 
 										<span class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
@@ -443,11 +497,13 @@
 									<div class="clearfix"></div>
 									{{/each}}
 								</div>
+
+
 								{{/multiple_Property_Element}}
 							</div>
 							<div class="clearfix"></div>
 							{{/property_is_exists}}
-
+-->
 <!-- editing done for skype-->
  							{{#property_is_exists "email" properties}}
 							
@@ -455,21 +511,24 @@
 								<!--  <div style="display: inline-block; text-align: right" class="span4">
 									<span><strong style="color: gray">Email</strong></span>
 								</div> -->
-							
-									
+							   
 									
 								{{#property_is_exists "phone" ../properties}}
 								
 									{{else}}
-									<div class="m-t-sm"><small class="text-muted text-xs">Contact Info</small></div>
+									<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  								<div class="panel panel-default m-b-none">
+   							    <div class="panel-body">
+
+									<small class="text-muted text-base" >Contact Info</small>
 									
 										{{/property_is_exists}}
 										<div class="contact-email text-sm l-h"> 
 									{{#each this}}
 
 <div class="pull-left contact-email-icon m-r-xs hide"><i class="icon icon-envelope text-sm v-middle"></i></div>
-										<div class="text-ellipsis">
-											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
+										<div class="text-ellipsis text-xs">
+											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light  text-tiny">{{subtype}}</span> {{/if}}
 										</div>
 
 <div class="clearfix"></div>
@@ -477,33 +536,72 @@
 									</div>
 									
 									
-								
+
 									{{/multiple_Property_Element}}
 								
 
 								{{/property_is_exists}}
+								{{#property_is_exists "phone" properties}}
+								</div></div></div>
+								{{else}}
+									{{#property_is_exists "email" ../properties}}
+									</div></div></div>
+									{{/property_is_exists}}
+								{{/property_is_exists}}
+								
 
- {{#getContactCustomPropertiesExclusively
+ 
+
+
+{{#getContactCustomPropertiesExclusively
 								properties}}
+
+	
+
 								<div class="custom-data">
-<div class="m-t-sm"><small class="text-xs text-muted">Custom Info</small></div>
+								<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  								<div class="panel panel-default m-b-none">
+    							<div class="panel-body">
+
+
+
+<small class=" text-muted text-base" >Custom Info</small>
+
 								<div>
 					<div class="contact-custom-icon pull-left hide" style="width:19px;"><i class="icon icon-info text-sm"></i></div>			
 								<div class="l-h">
 									{{#each_with_index this}}
+										
 
 
-                                            <span class="contact-custom-name custom-color">
-												<span class="text-light" title="{{name}}">{{name}}</span>
+                                            <span class="contact-custom-name custom-color word-break ">
+												<span class="text-light word-break text-base" title="{{name}}"  >{{name}}</span>
+
 											</span>
 
 										
 										{{#if_equals index ../this.length}}
-											<span class="contact-custom-value text-sm word-break custom-color">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</span>
+											<span class="contact-custom-value  word-break custom-color custom-value text-xs" name="{{name}}">
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>
+											{{else}}
+												{{#if custom_field_type}}
+													{{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
+												{{else}}
+													{{value}}
+												{{/if}}
+											{{/if_equals}}
+											</span>
 										{{else}}
-											<span class="contact-custom-value text-sm word-break custom-color">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</span>
+											<span class="contact-custom-value text-base word-break custom-color custom-value text-xs" name="{{name}}">
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>
+											{{else}}
+												{{#if custom_field_type}}
+													{{getContactTypeCustomFields custom_field_type value name}}
+												{{else}}
+													{{value}}
+												{{/if}}
+											{{/if_equals}}
+											</span>
 										{{/if_equals}}
 										
 										
@@ -515,18 +613,27 @@
 </div>
 									</div>
 									</div>
-									{{/getContactCustomPropertiesExclusively}}
+
+</div>
+</div>
+</div>
+					{{/getContactCustomPropertiesExclusively}}
 									
 									<div class="clearfix"></div>
+
 									{{#property_is_exists "address" properties}} 
+									<div class=" wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  									<div class="panel panel-default m-b-none">
+    								<div class="panel-body">
+
+									
 									 {{#property_json_is_not_empty "address" properties}}
-									<div class="m-t-sm"><small class="text-xs text-muted">Location</small></div>
-										<div >{{#address_Element properties}}{{/address_Element}}</div>
+
+									<small class="text-base text-muted">Location</small>
+
+										<div>{{#address_Element properties}}{{/address_Element}}</div>
                                         <div class="clearfix"></div>
-										
-										
-										
-                                        <div class="pull-left m-t-sm m-b-sm w-full">
+                                        <div class="pull-left m-t-sm m-b-sm w-full text-xs">
 											<div id="map" class="w-auto m-n" style="height: 200px; display: none;">
 											</div>
                                             <div id="contacts-local-time" class="text-xs" style="display:none;">                                             
@@ -536,18 +643,22 @@
                            	            <div class="clearfix"></div> 
                                      </div>                                       
                                      {{/property_json_is_not_empty}}
+                                     </div>
+									 </div>
+									 </div>  
 									{{/property_is_exists}}
 
-							
-
+								
 
 							<div class="clearfix"></div>
                             </div>	
 
-                    
+	
+                  
 							
 				<!-- ending section 5 -->	
 					
+
 
 
 </div>
@@ -567,19 +678,19 @@
 		
 		<!--  starting time line view -->
 		<div  id="contacts-inner-tabs">
-        <div class="tab-container bg-light">
-<div class="pull-left p-sm bg-light text-xs text-muted" id="prev"><i class="fa fa-chevron-left"></i></div>
-			<ul class="nav nav-tabs bg-light pull-left b-n" id="contactDetailsTab">
-				<li class=""><a data-toggle="tab" href="#timeline">Timeline</a></li>
-				<li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
-				<li class=""><a data-toggle="tab" href="#events">Events</a></li>
-				<li class=""><a data-toggle="tab" href="#tasks">Tasks</a></li>
-				<li class=""><a data-toggle="tab" href="#deals">Deals</a></li>
-				<li class=""><a data-toggle="tab" href="#cases">Cases</a></li>
-				<li class=""><a data-toggle="tab" href="#campaigns">Campaigns</a></li>
-				<li class=""><a data-toggle="tab" href="#stats">Web Stats</a></li>
-				<li class=""><a data-toggle="tab" href="#mail">Mail</a></li>
-				<li id="custom-contact-document" class=""><a data-toggle="tab" href="#documents">Documents</a></li>
+        <div class="tab-container bg-light hide-margin-mobile">
+<div class="pull-left p-sm bg-light text-xs text-muted hidden-sm hidden-xs" id="prev"><i class="fa fa-chevron-left"></i></div>
+			<ul class="nav nav-tabs bg-light pull-left b-n content-tabs"  role="tablist" id="contactDetailsTab">
+		<li class=""><a data-toggle="tab" role="tab" href="#timeline" onclick="setTimeout(function(){$(window).resize()}, 1000)">Timeline</a></li>
+				<li class=""><a data-toggle="tab" role="tab"  href="#notes">Notes</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#events">Events</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#tasks">Tasks</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#deals">Deals</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#cases">Cases</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#campaigns">Campaigns</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#stats">Web Stats</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#mail">Mail</a></li>
+				<li id="custom-contact-document" class=""><a data-toggle="tab" role="tab" href="#documents">Documents</a></li>
               <!--  <li role="presentation" class="dropdown custom-contact-menu">
         <a id="drop6" href="#" class="dropdown-toggle" data-toggle="dropdown">
           
@@ -592,10 +703,10 @@
          </ul> 
          </li>  -->
 			</ul> 
-<div class="pull-left p-sm bg-light text-xs text-muted" id="next"><i class="fa fa-chevron-right"></i></div>
+<div class="pull-left p-sm bg-light text-xs text-muted hidden-xs hidden-sm" id="next"><i class="fa fa-chevron-right"></i></div>
 <div class="clearfix"></div>
            </div>
-			<div class="tab-content no-tab-cell" id="contact-tab-content">
+			<div class="tab-content no-tab-cell hidden-xs" id="contact-tab-content">
 				<div class="tab-pane" id="time-line">
 					<div class="timeline-loading-img overflow-hidden" style="width:35px;max-height:30px;">
 						<!-- <img class="loading-img" src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img> -->
@@ -605,7 +716,7 @@
 						<img class="loading-img-stats" src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img> -->
 					</div>
 
-					<div class="alert-info alert" id="timeline-slate"
+					<div class="alert<" id="timeline-slate"
 						style="display: none">
 						<div class="slate-content">
 							<div class="box-left pull-left m-r-md">
@@ -639,6 +750,7 @@
 				<div class="tab-pane" id="deals"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
 				<div class="tab-pane" id="cases"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
 				<div class="tab-pane" id="campaigns"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+				<div class="tab-pane" id="widgets-tab"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>				
 				<div class="tab-pane" id="stats"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
 				<div class="tab-pane" id="mail" style="min-height: 20em">
 					<div id="mail-account-types"  style="display:none"></div>
@@ -648,43 +760,30 @@
 			</div>
 		</div>
 	<!--  ending timeline view -->
+
+		
 </div>
 </div>
  </div>
   </div>
   </div>
-	<!--  starting right panel view -->
-	<div class="contact-right-widgetsview box-border b-l col w-lg bg-light lter b-l bg-auto">
-	 <div class="vbox">
-  <div class="row-row">
-  <div>
-  <div>	
-		
-<div class="wrapper">
 
-	
-                           
-						
+  <div class="contact-right-widgetsview box-border  col w-lg   bg-auto {{#is_mobile}} p-t-none bg-white m-b m-l m-r {{else}}
+    b-l bg-light lter {{/is_mobile}}">
+ 	 <div class="vbox">
+   <div class="row-row">
+   <div>
+   <div>	
+ 		
+ <div class="wrapper">
+ 						
+ 
+ 				<div id="widgets" class="contact_{{id}}"></div>
+ 					</div>
+ 					</div>
+ 					</div>
+ 					</div>
+ 					</div>
+ 					</div>
 
-				<div id="widgets" class="contact_{{id}}"></div>
-
-							
-
-
-								
-							
-
-						</div>
-					</div>
-					</div>
-					</div>
-					</div>
-					</div>
-					</div>
-					</div>
-					</div>
-                    </div>
-					<!--  ending middle view row -->
-					
-					
-					</script>
+</script>

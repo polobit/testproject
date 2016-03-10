@@ -1,6 +1,6 @@
 <script id="new-opportunity-header-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md bg-light lter b-b">
+<div class="wrapper-md bg-light lter b-b" id="deals-milestone-view-heading">
 <div class="row">
     <div class="col-md-12">
         
@@ -10,28 +10,28 @@
 			</div>
 			</h3>
 <div class="pull-right">
-            <div class="btn-group inline-block m-r-sm" id="deals-tracks">
+            <div class="btn-group inline-block m-l-xs" id="deals-tracks">
 			</div>
-			<div id="deal-list-filters" class="btn-group inline-block m-r-sm">
+			<div id="deal-list-filters" class="btn-group inline-block m-l-xs">
 				 <img class="loading_img p-r-xs" height="32px" width="32px" src= "{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
 			</div>
-			<div class="btn-group inline-block m-r-sm" id="deals-view">
-					<div class="btn btn-sm btn-default"><i class="icon-list m-r-xs"></i></div>
+			<div class="btn-group inline-block m-l-xs" id="deals-view">
+					<div class="btn btn-sm btn-default"><i class="icon-list m-l-xs"></i></div>
 					<a class="btn btn-sm btn-default  dropdown-toggle" data-toggle="dropdown" href="#">
-						<span class="caret"></span>
+						<span class="caret deals-view-caret"></span>
 					</a>
 					<ul class="dropdown-menu pull-right">
-						<li><a href="#" class="deals-list-view">List View</a></li>
-						<li class="dropdown-submenu do-onclick-nothing"><a href="#" data-toggle="dropdown" class="deals-pipelined-view">Milestone View</a>
+						<li><a href="#deal-rc-0" class="deals-list-view">List View</a></li>
+						<li class="dropdown-submenu do-onclick-nothing"><a href="#deal-rc-1" data-toggle="dropdown" class="deals-pipelined-view">Milestone View</a>
 							<ul class="dropdown-menu">
-								<li><a href="#" id="deal-milestone-regular">Relaxed</a></li>
-								<li><a href="#" id="deal-milestone-compact">Compact</a></li>
-								<li><a href="#" id="deal-milestone-fit">Fit</a></li>
+								<li><a href="#deal-rc-1" id="deal-milestone-regular">Relaxed</a></li>
+								<li><a href="#deal-rc-2" id="deal-milestone-compact">Compact</a></li>
+								<li><a href="#deal-rc-3" id="deal-milestone-fit">Fit</a></li>
 							</ul>
 						</li>
 					</ul>
 			</div>
-			<div class="btn-group inline-block" id="deals-action">
+			<div class="btn-group inline-block m-l-xs" id="deals-action">
 					<a href="#deals-add" class="deals-add btn btn-sm  btn-default"><i class="icon-plus-sign" /> Add Deal
 					</a>
 					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
@@ -41,6 +41,18 @@
 						<li><a href="#import-deals" >Import from CSV</a></li>
 						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
 					</ul>
+					<!--
+					{{#is_mobile}}
+
+					{{else}}
+					<div class="btn-group pull-left m-l-xs" style="padding-left:3px;">
+						<button class="btn btn-default btn-sm m-l-sm fullscreenelement" style="height:30px;width:30px;" targetFullscreenElement="#content" >
+							<i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
+
+							{{/is_mobile}}
+							-->
+						
+	  		
 			</div>
 			</div>
         <div class="clearfix"></div>
@@ -109,17 +121,19 @@
 
 <script id="opportunities-by-paging-collection-template" type="text/html">
 <div id="opportunities-by-paging-model-list">
-<div class="milestone-main">
-				</div>
-</div>
-</script>
+<div class="milestone-main"></div>
+</div></script>
+
 <script id="opportunities-by-paging-model-template" type="text/html">
 	<div class='dealtitle-angular panel-heading'>
 		<div class='milestone-heading text-left text-ellipsis'> <span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left" style="width:calc(100% - 75px);">{{heading}}</span>
-			<div class="pull-right">
+		    <div class="pull-right">
+		    <div style="font-size:14px; float:left">
+		       <input type="hidden" id="{{remove_spaces heading}}_totalvalue" name="0" />	  
 			{{#if lost_milestone}}<i data-toogle="tooltip" title="" class="icon-dislike mark-lost" data-original-title="Deals with this milestone are considered as Lost." style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
 			{{#if won_milestone}}<i data-toogle="tooltip" title="" class="icon-like mark-won" data-original-title="Deals with this milestone are considered as Won." style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
-			<span id="{{remove_spaces heading}}_count" class="txt-mute badge m-t-xs"></span><span class="pull-right pos-abs pos-r-sm pos-t-xs"><img class="loading_img" src="{{getS3ImagePath '/img/ajax-loader-cursor.gif'}}" width="12px"></span>
+
+			<span id="{{remove_spaces heading}}_count" class="txt-mute badge m-t-xs"></span><span class="pull-right pos-abs pos-r-sm pos-t-xs"><img class="loading_img" src="{{getS3ImagePath '/img/ajax-loader-cursor.gif'}}" width="12px"></span> </div>
 		</div></div>
 		<span></span>
 	</div>
@@ -133,13 +147,16 @@
 </ul>
 </script>
 
+
 <script id="deals-by-paging-model-template" type="text/html">
+
 <div id={{id}} data="{{milestone}}" class="data agile-overflow-ellipsis">
 	<div>
 		<span class="pull-left text-flow-ellipsis inline-block l-h-xs font-thin word-break" style="max-width: 70%;"><a href="#deal/{{id}}">{{name}}</a></span>
 		
 		<span class="pull-right  dealnotes-view">
 			{{#if notes}}
+
              <span class="txt-small note-count" title="Notes" >{{notes.length}}</span><a title="Notes" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit c-p text-l-none"><i class="deal-action icon icon-comment-alt deal-notes" data="{{id}}"></i></a>
               
 			{{/if}}
@@ -151,6 +168,7 @@
 		<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
 {{/if}}
 	</div>
+
 	{{#if this.contacts}}
 	<div class="agile-overflow-ellipsis" style="display:block;margin-top:0px;">
 		{{#related_to_one contacts}}{{/related_to_one}}
@@ -180,8 +198,10 @@
         </span>
 </div>
 <div class="clearfix"></div>
+<input type="hidden" name="{{colorName}}" class="{{colorName}}"/>
 </div>
 </script>
+
 
 <script id="deals-by-paging-relax-collection-template" type="text/html">
 <ul id="deals-by-paging-relax-model-list" class="milestones p-n">
@@ -205,6 +225,7 @@
 {{#if expected_value}}
 		<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
 {{/if}}
+
 		{{#if this.contacts}}
 			{{#if expected_value}}
 				<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #d5d5d5"></span>
@@ -261,9 +282,12 @@
 			<a title="Delete" class="deal-delete c-p text-l-none" style="text-decoration:none;color:#727272;"><i style="width: 0.9em!important;" class="fa fa-trash"></i></a>
         </span>
 </div>
-<div class="clearfix"></div>
+
+ <div class="clearfix"></div>
+ <input type="hidden" name="{{colorName}}" class="{{colorName}}"/>
 </div>
 </script>
+
 
 <script id="related-to-contacts-template" type="text/html">
 	{{#if_contact_type "PERSON"}}	
@@ -291,3 +315,52 @@
 <a id='{{id}}' class="pipeline c-p" data="Default">Default</a>
 {{/if}}
 </script>
+
+
+<script id="deal-detail-dummy-popover-template" type="text/html">
+
+<div id='deal_detail_popover-div' style="font-size:12px;">
+    <div style="background-color:#edf1f2;font-weight:bold;max-width:100%;padding: 2px;">
+    <p class="deal-popover-p" style="margin:2px;overflow:hidden !important;text-overflow: ellipsis;">
+    	<span>{{heading}}</span></p>
+    <p class="deal-popover-p pull-left" style="margin:2px;overflow:hidden !important;text-overflow:ellipsis;max-width:calc(100% - 35px);">
+    	<span>{{heading}}</span ></p><span class="pull-right">{{dealNumber}}</span><div class="clearfix"></div>
+     </div>
+    <p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>Total Value:</span><span> {{symbol}}{{dealcount}}</span></p>
+    <p class="deal-popover-p" style="margin:2px"><span>Avg. Value:</span><span> {{symbol}}{{avgDeal}}</span></p>
+</div>
+</script>
+
+<!-- popover on deal milestone -->
+<script id = "over-template" type="text/html"> 
+       <div class="data panel-default" style="min-width:200px;max-width:280px;">
+	   
+       	<div class="text-cap panel-heading text-ellipsis" style="padding:6px;"><div class="text-ellipsis inline-block" style="width:100%;" title="{{track}}"><strong>{{dealTrack}}</strong></div>
+				 <div class="pull-left" style="max-width:60%;overflow:hidden !important;text-overflow: ellipsis;">{{heading}}</div>
+        		<div>
+	   	  <div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
+							<div  class="text-lg score-view">
+								<span class="pull-right" style="font-size:15px;">
+									<span id="lead-score">{{dealNumber}}</span>
+								
+								</span>
+							
+							</div>
+						</div>
+						</div>
+        		</div>
+        		<div style="padding: 0px 5px;">
+       		<div class="b-b b-light p-b-xs">
+       			
+       	<div class="contact-owner text-base" id="change-owner-element">
+        	
+		<p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>Total Value:</span><span> {{symbol}}{{dealcount}}</span></p>
+       </div>
+       </div>
+       		<div class=" p-b-xs">
+			<p class="deal-popover-p" style="margin:2px"><span>Avg. Value:</span><span> {{symbol}}{{avgDeal}}</span></p>
+       		</div>
+                   </div>
+	   	          </div>	
+</script>
+<!--end popover on deal milestone-->

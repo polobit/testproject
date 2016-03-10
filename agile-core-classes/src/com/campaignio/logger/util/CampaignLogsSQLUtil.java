@@ -10,9 +10,12 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.util.GoogleSQLUtil;
+import com.agilecrm.util.HTTPUtil;
+import com.analytics.util.AnalyticsUtil;
 import com.campaignio.wrapper.CampaignLogWrapper;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -293,55 +296,36 @@ public class CampaignLogsSQLUtil
      */
     public static JSONArray getContactActivitiesLogs(String log_type, String cursor, String page_size)
     {
-	String logs = null;
-	String domain = NamespaceManager.get();
-
-	if (log_type == null || ("All_Activities").equals(log_type))
-	{
-
-	    String pageViewAliasTable = " ( SELECT url,ip,stats_time,email,"
-		    + "NULL AS campaign_id,NULL AS subscriber_id ,NULL AS campaign_name,NULL AS log_time,NULL AS log_type, NULL AS message, UNIX_TIMESTAMP(stats_time) AS time"
-		    + " FROM page_views AS pageViewAlias WHERE DOMAIN = '" + domain
-		    + "' AND URL !='' AND EMAIL != '' ORDER BY stats_time DESC LIMIT "
-		    + (Integer.parseInt(cursor) == 0 ? "20" : Integer.parseInt(cursor) + 20) + ") ";
-
-	    String campaignLogAliasTable = " ( SELECT NULL AS url,NULL AS ip,NULL AS stats_time,NULL AS email,"
-		    + "campaign_id,subscriber_id,campaign_name,log_time,log_type,message,UNIX_TIMESTAMP(log_time) AS time "
-		    + "FROM campaign_logs AS campaignLogsAlias WHERE DOMAIN = '"
-		    + domain
-		    + "' AND (log_type='EMAIL_OPENED' OR log_type='CLICK' OR log_type='UNSUBSCRIBED') ORDER BY log_time DESC LIMIT "
-		    + (Integer.parseInt(cursor) == 0 ? "20" : Integer.parseInt(cursor) + 20) + ") ";
-
-	    logs = "SELECT url, ip, stats_time, email, campaign_id, subscriber_id, campaign_name, log_time, log_type, message, time"
-		    + " from( "
-		    + pageViewAliasTable
-		    + " UNION ALL "
-		    + campaignLogAliasTable
-		    + " ) as ContactLogAlias ORDER BY TIME DESC LIMIT " + page_size + " OFFSET " + cursor;
-	}
-
-	else if (("PAGE_VIEWS").equals(log_type.toUpperCase()))
-	    logs = "SELECT url, ip, stats_time, email, UNIX_TIMESTAMP(stats_time) AS time FROM page_views "
-		    + "WHERE email != '' AND url != '' AND domain = '" + domain + "' ORDER BY stats_time DESC LIMIT "
-		    + page_size + "  OFFSET " + cursor;
-
-	else
-	    logs = "SELECT campaign_id, subscriber_id, campaign_name, log_time, log_type,message, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs "
-		    + " USE INDEX(domain_logtype_logtime_index) WHERE domain = '"
-		    + domain
-		    + "' AND log_type = '"
-		    + log_type.toUpperCase() + "' ORDER BY time DESC LIMIT " + page_size + " OFFSET " + cursor;
-	// change
-	try
-	{
-
-	    return GoogleSQL.getJSONQuery(logs);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
+		String logs = null;
+		String domain = NamespaceManager.get();
+		JSONArray contactActivities = null;
+		if (log_type == null || ("All_Activities").equals(log_type))
+		{
+			contactActivities = getAllContactActivitiesByPage(domain,cursor,page_size);
+		}	    
+		else
+		{
+			if (("PAGE_VIEWS").equals(log_type.toUpperCase()))
+			    logs = "SELECT url, ip, stats_time, email, UNIX_TIMESTAMP(stats_time) AS time FROM page_views "
+				    + "WHERE email != '' AND url != '' AND domain = '" + domain + "' ORDER BY stats_time DESC LIMIT "
+				    + page_size + "  OFFSET " + cursor;
+			else
+			    logs = "SELECT campaign_id, subscriber_id, campaign_name, log_time, log_type,message, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs "
+				    + " USE INDEX(domain_logtype_logtime_index) WHERE domain = '"
+				    + domain
+				    + "' AND log_type = '"
+				    + log_type.toUpperCase() + "' ORDER BY time DESC LIMIT " + page_size + " OFFSET " + cursor;
+			try
+			{
+				contactActivities = GoogleSQL.getJSONQuery(logs);
+			}
+			catch (Exception e)
+			{
+			    e.printStackTrace();
+			    return null;
+			}
+		}
+		return contactActivities;
     }
 
     /**
@@ -462,6 +446,67 @@ public class CampaignLogsSQLUtil
 
 	return resultFlags;
 
+    }
+    
+    /**
+     * Fetches Contact Activities (Both Page Views and Campaign Logs)
+     * Fetches page by page. Uses Offset and Limit.
+     * @param domain
+     * @param cursor
+     * @param page_size
+     * @return
+     */
+    private static JSONArray getAllContactActivitiesByPage(String domain,String cursor,String page_size)
+    {
+    	JSONArray contactActivities = null;
+    	try
+	    {	    		    	
+	    	JSONArray campaignLogs = null;
+	    	JSONArray webStats = null;
+	    	
+	    	String campaignLogAliasTable = "SELECT NULL AS url,NULL AS ip,NULL AS stats_time,NULL AS email,"
+		    + "campaign_id,subscriber_id,campaign_name,log_time,log_type,message,UNIX_TIMESTAMP(log_time) AS time "
+		    + "FROM campaign_logs AS campaignLogsAlias WHERE DOMAIN = '"
+		    + domain
+		    + "' AND (log_type='EMAIL_OPENED' OR log_type='CLICK' OR log_type='UNSUBSCRIBED') ORDER BY log_time DESC"
+		    + GoogleSQLUtil.appendLimitToQuery(cursor, page_size);	    
+	    
+		    try
+			{
+			    campaignLogs = GoogleSQL.getJSONQuery(campaignLogAliasTable);
+			}
+			catch (Exception e)
+			{
+			    System.out.println("Exception occured while fetching campaign logs " + e.getMessage());
+			}
+		    
+		    try
+		    {
+				String url = AnalyticsUtil.getStatsUrlForContactsPageViews(cursor, page_size,domain);
+				String webStatsString = HTTPUtil.accessURL(url);
+				if(StringUtils.isNotBlank(webStatsString))
+				{
+					try
+					{
+						webStats = new JSONArray(webStatsString);
+					}
+					catch(JSONException e)
+					{
+						System.out.println("Exception while parsing activities web stats json string " + e.getMessage());
+					}
+				}
+				contactActivities = AnalyticsUtil.getMergedJSONArray(webStats, campaignLogs);	
+		    }
+		    catch(Exception e)
+		    {
+		    	System.out.println("Exception occured while fetching web stats " + e.getMessage());
+		    }
+	    }
+		catch (Exception e)
+		{
+		   	System.out.println("Exception while fetching contact activites by page " + e.getMessage());
+		}
+    	return contactActivities;
     }
 
 }

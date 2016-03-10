@@ -150,10 +150,12 @@ $(function(){
 						id_array.push($(element).parent().parent().parent('div').attr('id'));
 					}
 					else
-					id_array.push($(element).parent('div').attr('id'));
-					//data_array.push($(element).parent('div').data().toJSON());
+					id_array.push($(element).closest('div').attr('id'));
+					if(Current_Route.indexOf('users')!=-1)
+					data_array.push($(element).closest("div.data").parent('div').data().toJSON())
 					checked = true;
 				}
+				
 			});
 			if(checked){
 				
@@ -211,11 +213,13 @@ function customize_bulk_delete(id_array, data_array){
 	if(Current_Route == 'users'){
 		$.each(data_array, function(index, model){
 			if(model.is_admin){
-				id_array.splice(id_array.indexOf(model.id), 1);
+				console.log(id_array.indexOf(model.id));
+				id_array.splice((id_array.indexOf(model.id)+1), 1);
+
 			}	
 		});
 		if(id_array.length == 0){
-			$('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry, can not delete user having <i>admin</i> privilege.</div>').show().delay(5000).hide(1);
+			$('body').find(".master-tag").html('<div class="alert alert-danger delete-adminuser"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry, can not delete user having <i>admin</i> privilege.</div>').show().delay(5000).hide(1);
 			return false;
 		}
 	}
@@ -268,6 +272,15 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			}
 			
 			$(".bulk-delete-loading").remove();	
+			if(url=='core/api/users/bulk' && !_billing_restriction.currentLimits.freePlan)
+			{
+				var message;
+				if(count > 1)
+					message = "Users have been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted users.";
+				else
+					message = "User has been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted user.";
+				showNotyPopUp('information', message, "top", 10000);
+			}
 			if(count > 20 || count == 0)
 			{
 				if($(table).attr('id') == "contacts-table")
@@ -293,6 +306,18 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 					$("."+id_array[i]).fadeOut(300, function() { $(this).remove(); });				
 			}
 			
+			try{
+			if(App_Workflows.workflow_list_view && Current_Route == "workflows")
+				{
+				for(i=0;i<id_array.length;i++){
+				App_Workflows.workflow_list_view.collection.remove(id_array[i]);
+				$(App_Workflows.workflow_list_view.el).find(id_array[i]).closest("tr").remove();
+				}
+			}
+			}
+			catch(err)
+			{}
+
 			$('.thead_check').attr("checked", false);
 			
 			// Show bulk operations only when thead check box is checked

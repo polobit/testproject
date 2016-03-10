@@ -143,7 +143,7 @@ var timeline_entity_loader = {
 		$.getJSON(url, function(data)
 		{
 			
-			console.log("success : " + _this.active_connections)
+			console.log("success : " + _this.active_connections);
 			--_this.active_connections;
 			console.log("success : " + _this.active_connections)
 			if (callback && typeof callback === "function")
@@ -192,6 +192,7 @@ var timeline_entity_loader = {
 
 	get_stats : function(email, contact, el)
 	{
+		var that = this;
 		get_web_stats_count_for_domain(function(count){
 
 			// If there are no web-stats - return
@@ -209,11 +210,11 @@ var timeline_entity_loader = {
 
 			var StatsCollection = Backbone.Collection.extend({});
 
-			this.timline_fetch_data('core/api/web-stats?e=' + encodeURIComponent(email), function(data)
+			that.timline_fetch_data('core/api/web-stats?e=' + encodeURIComponent(email), function(data)
 			{
 
-				this.statsCollection = new StatsCollection(data);
-				data = statsCollection;
+				that.statsCollection = new StatsCollection(data);
+				data = that.statsCollection;
 
 				is_mails_fetched = true;
 				is_logs_fetched = false;

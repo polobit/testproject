@@ -42,6 +42,7 @@ import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.MD5Util;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
@@ -104,7 +105,7 @@ public class ContactUtil
 
 	return dao.listByPropertyAndOrder(searchMap, orderBy);
     }
-    
+
     /**
      * Fetches a contact based on its id
      * 
@@ -225,11 +226,10 @@ public class ContactUtil
      *            Activates infiniScroll at client side
      * @return list of contacts (company)
      */
-    public static List<Contact> getAllCompaniesByOrder(int max, String cursor, String sortKey)
-    {
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("type", Type.COMPANY);
-	return dao.fetchAllByOrder(max, cursor, searchMap, false, false, sortKey);
+    public static List<Contact> getAllCompaniesByOrder(int max, String cursor, String sortKey){
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("type", Type.COMPANY);
+		return dao.fetchAllByOrder(max, cursor, searchMap, false, false, sortKey);
     }
 
     /**
@@ -317,14 +317,20 @@ public class ContactUtil
 	if (StringUtils.isBlank(email))
 	    return null;
 
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-
 	Query<Contact> q = dao.ofy().query(Contact.class);
 	q.filter("properties.name", Contact.EMAIL);
 	q.filter("type", Type.PERSON);
 	q.filter("properties.value", email.toLowerCase());
 
-	return q.get();
+	try
+	{
+	    return dao.get(q.getKey());
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
     }
 
     public static Contact searchContactByCompanyName(String companyName)
@@ -541,7 +547,7 @@ public class ContactUtil
 		.filter("properties.value = ", email.toLowerCase()).filter("type", type).count();
 
     }
-    
+
     /**
      * Get Count of contact by Email and Type i.e PERSON or COMPANY
      */
@@ -849,7 +855,7 @@ public class ContactUtil
 	if (count == 0)
 	    return;
 
-	CompanyDeleteDeferredTask task = new CompanyDeleteDeferredTask(company.name, company.id, NamespaceManager.get());
+	CompanyDeleteDeferredTask task = new CompanyDeleteDeferredTask(company.id, NamespaceManager.get());
 	Queue defaultQueue = QueueFactory.getDefaultQueue();
 	defaultQueue.addAsync(TaskOptions.Builder.withPayload(task));
     }
@@ -858,8 +864,7 @@ public class ContactUtil
     {
 	for (Contact company : companies)
 	{
-	    CompanyDeleteDeferredTask task = new CompanyDeleteDeferredTask(company.name, company.id,
-		    NamespaceManager.get());
+	    CompanyDeleteDeferredTask task = new CompanyDeleteDeferredTask(company.id, NamespaceManager.get());
 	    task.run();
 	}
     }
@@ -1761,15 +1766,15 @@ public class ContactUtil
     {
 	try
 	{
-		Query<Contact> query = dao.ofy().query(Contact.class).filter("type", Contact.Type.PERSON);
-		
-		if(minTime != null)
-			query.filter("created_time >= ", minTime);
-		if(maxTime != null)
-			query.filter("created_time <= ", maxTime);
-		
+	    Query<Contact> query = dao.ofy().query(Contact.class).filter("type", Contact.Type.PERSON);
+
+	    if (minTime != null)
+		query.filter("created_time >= ", minTime);
+	    if (maxTime != null)
+		query.filter("created_time <= ", maxTime);
+
 	    return query.count();
-	    
+
 	}
 	catch (Exception e)
 	{
@@ -1791,15 +1796,15 @@ public class ContactUtil
     {
 	try
 	{
-		Query<Contact> query = dao.ofy().query(Contact.class).filter("type", Contact.Type.COMPANY);
-		
-		if(minTime != null)
-			query.filter("created_time >= ", minTime);
-		if(maxTime != null)
-			query.filter("created_time <= ", maxTime);
-		
+	    Query<Contact> query = dao.ofy().query(Contact.class).filter("type", Contact.Type.COMPANY);
+
+	    if (minTime != null)
+		query.filter("created_time >= ", minTime);
+	    if (maxTime != null)
+		query.filter("created_time <= ", maxTime);
+
 	    return query.count();
-	    
+
 	}
 	catch (Exception e)
 	{
@@ -1808,13 +1813,32 @@ public class ContactUtil
 	return 0;
 
     }
-    
+
     public static void updateCampaignEmailedTime(Long contactId, Long lastCampaignEmailed, String toEmail)
     {
 	LastContactedDeferredTask lastContactDeferredtask = new LastContactedDeferredTask(contactId,
 		lastCampaignEmailed, toEmail);
 	Queue queue = QueueFactory.getQueue(AgileQueues.LAST_CONTACTED_UPDATE_QUEUE);
-	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask));
+	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).etaMillis(System.currentTimeMillis() + 5000));
     }
 
+    public static String getMD5EncodedImage(Contact contact){
+
+         String email = contact.getContactFieldValue(contact.EMAIL);
+         String image_email = "";
+            if(email != null)
+            {
+                try
+                {
+                     image_email = MD5Util.getMD5Code(email);   
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+                
+            }
+            return image_email;
+    }
+    
 }

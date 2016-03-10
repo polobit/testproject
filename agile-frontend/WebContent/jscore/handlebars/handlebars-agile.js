@@ -233,6 +233,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("googleplus.js");
 	}	
+	else if (templateName.indexOf("paypal") == 0)
+	{
+		template_relative_urls.push("paypal.js");
+	}
 	else if (templateName.indexOf("xero") == 0)
 	{
 		template_relative_urls.push("xero.js");

@@ -283,7 +283,7 @@ $(function()
 	 * @returns image link
 	 * 
 	 */
-	Handlebars.registerHelper('gravatarurl', function(items, width)
+	Handlebars.registerHelper('gravatarurl', function(items, width,type)
 	{
 
 		if (items == undefined)
@@ -299,9 +299,11 @@ $(function()
 		var backup_image = "&d=404\" ";
 		// backup_image="";
 		var initials = '';
+
 		try
 		{
-			// initials = text_gravatar_initials(items)
+			// if(!isIE())
+			initials = text_gravatar_initials(items);
 		}
 		catch (e)
 		{
@@ -310,9 +312,11 @@ $(function()
 
 		if (initials.length == 0)
 			backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
-		var data_name = '';
-		// "onLoad=\"image_load(this)\" onError=\"image_error(this)\"
-		// _data-name=\"" + initials;
+
+		var data_name =  '';
+		// if(!isIE())
+			data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
+		
 		var email = getPropertyValue(items, "email");
 		if (email)
 		{
@@ -322,6 +326,7 @@ $(function()
 		return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 
 	});
+
 
 	Handlebars.registerHelper('defaultGravatarurl', function(width)
 	{
@@ -791,6 +796,24 @@ $(function()
 		// 1000));
 	});
 
+	Handlebars.registerHelper('paypalInvoiceDate', function(format, date)
+	{
+		if (date){
+			// var data = new Date(date); 
+			// var time = data.getTime();			
+    		var din = date.replace(/-/g, "//");
+			if(!format){
+			 	format = "ddd mmm dd yyyy";
+			}
+			var d= new Date(din).format(format);
+			return d;			
+		}
+		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
+		// 1000));
+	});
+
+
+
 	// Helper function to return date in user selected format in  preferences.
 
 	Handlebars.registerHelper('epochToHumanDateInFormat', function(date)
@@ -983,6 +1006,8 @@ $(function()
 	{
 		var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 		var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
+		if(symbol=='Rs')
+			symbol='Rs.';
 		return symbol;
 	});
 	Handlebars.registerHelper('mandrill_exist', function(options)
@@ -1281,11 +1306,15 @@ $(function()
 	{
 
         var value = getPropertyValue(properties, name);
+        if(!value)
+        {
+        	return options.inverse(this);
+        }
         try{
         	value = JSON.parse(value);
         }catch(e){}
 
-		if (Object.keys(value).length > 0)
+		if (value && Object.keys(value) && Object.keys(value).length > 0)
 			return options.fn(this);
 		
 		return options.inverse(this);
@@ -1388,10 +1417,10 @@ $(function()
 								if (properties_count != 0)
 
 									el = el
-											.concat('<div class="contact-addressview"><div><div class="pull-left hide" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color">');
+											.concat('<div class="contact-addressview text-xs"><div><div class="pull-left hide text-xs" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color text-xs">');
 								else
 									el = el
-											.concat('<div class="contact-addressview"><div><div class="pull-left hide" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color">');
+											.concat('<div class="contact-addressview text-xs"><div><div class="pull-left hide text-xs" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color text-xs">');
 
 								if(address.address !== undefined)
 									el = el.concat(address.address+", ");
@@ -1569,6 +1598,10 @@ $(function()
 	Handlebars.registerHelper('show_link_in_statement', function(value)
 	{
 
+        if(value){
+			value = value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		}
+
 		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 
 		try
@@ -1628,7 +1661,10 @@ $(function()
 
 	Handlebars.registerHelper('safe_string', function(data)
 	{
-
+		console.log("data = " + data);
+		if (data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
+				data = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		
 		data = data.replace(/\n/, "<br/>");
 		return new Handlebars.SafeString(data);
 	});
@@ -2597,37 +2633,6 @@ $(function()
 			return options.inverse(this);
 		}
 		 
-	});
-
-	Handlebars.registerHelper('get_subscribers_type_from_hash', function()
-	{
-
-		// Returns "workflows" from "#workflows"
-		var hash = window.location.hash.substr(1);
-
-		if (hash.indexOf("all") != -1)
-			return "All";
-
-		if (hash.indexOf("active") != -1)
-			return "Active";
-
-		if (hash.indexOf("completed") != -1)
-			return "Completed";
-
-		if (hash.indexOf("removed") != -1)
-			return "Removed";
-
-		if (hash.indexOf("unsubscribed") != -1)
-			return "Unsubscribed";
-
-		if (hash.indexOf("hardbounced") != -1)
-			return "Hard Bounced";
-
-		if (hash.indexOf("softbounced") != -1)
-			return "Soft Bounced";
-
-		if (hash.indexOf("spam-reported") != -1)
-			return "Spam Reported";
 	});
 
 	Handlebars.registerHelper("check_plan", function(plan, options)
@@ -3619,22 +3624,27 @@ $(function()
 	 * Compares the arguments (value and target) and executes the template based
 	 * on the result (used in contacts typeahead)
 	 */
-	Handlebars.registerHelper('if_domain', function(value, options)
-	{
+	Handlebars.registerHelper('if_hasWriteAccess', function(options){
 
+		var status = false;
+		// Retrieves widget which is fetched using script API
+		var stripe_widget = agile_crm_get_widget("Stripe");
+		if(stripe_widget != undefined){
 
-		if (typeof value === "undefined")
-			return options.inverse(this);
-
-		var domainName = CURRENT_DOMAIN_USER.domain;
-
-		if(domainName){
-			if (value.toString().trim().toLowerCase() == domainName.toLowerCase()){
-				return options.fn(this);
-			}else{
-				return options.inverse(this);
+			if (stripe_widget.prefs != undefined)
+			{			
+				// Parse string Stripe widget preferences as JSON
+				var stripe_widget_prefs = JSON.parse(stripe_widget.prefs);
+				var scope = stripe_widget_prefs.scope;				
+				if(scope == "read_write"){					
+					status = true;
+				}
 			}
-		}else{
+		}
+
+		if(status){
+			return options.fn(this);			
+		}else{			
 			return options.inverse(this);
 		}
 	});
@@ -3717,23 +3727,6 @@ $(function()
 			return options.inverse(this);
 	});
 
-	Handlebars.registerHelper('show_link_in_statement', function(value)
-	{
-
-		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-
-		try
-		{
-			value = value.replace(exp, "<a href='$1' target='_blank' class='cd_hyperlink'>$1</a>");
-			return new Handlebars.SafeString(value);
-		}
-		catch (err)
-		{
-			return value;
-		}
-
-	});
-
 	/**
 	 * Returns table headings for custom contacts list view
 	 */
@@ -3762,13 +3755,6 @@ $(function()
 			console.log(App_Contacts.contactDetailView.model.toJSON());
 			return getPropertyValue(contact_properties, value);
 		}
-	});
-
-	Handlebars.registerHelper('safe_string', function(data)
-	{
-
-		data = data.replace(/\n/, "<br/>");
-		return new Handlebars.SafeString(data);
 	});
 
 	Handlebars.registerHelper('string_to_date', function(format, date)
@@ -3824,6 +3810,14 @@ $(function()
 		var from_date = Date.parse(from_date_string);
 		var to_date = Date.today().add({ days : parseInt(no_of_days) });
 		return to_date.toString('MMMM d, yyyy') + " - " + from_date.toString('MMMM d, yyyy');
+
+	});
+
+		Handlebars.registerHelper('month-range', function(options)
+	{
+		var from_date = Date.today().moveToFirstDayOfMonth();
+		var to_date = Date.today().moveToLastDayOfMonth();
+		return from_date.toString('MMMM d, yyyy') + " - " + to_date.toString('MMMM d, yyyy');
 
 	});
 
@@ -5278,6 +5272,11 @@ $(function()
 			return "-";
 	});
 
+	Handlebars.registerHelper('getEmailCreditsCount', function()
+	{
+		return getEmailCreditsCount();
+	});
+
 	// helper function to return agile bcc special email for inbound mail event
 	// trigger
 	Handlebars.registerHelper('inboundMail', function()
@@ -5675,6 +5674,8 @@ $(function()
 	// function to compare integer values
 	Handlebars.registerHelper('ifCond', function(v1, type, v2, options)
 	{
+		if(!v1 || !v2)
+			return options.inverse(this);
 		switch (type) {
 		case "greaterthan":
 			if (parseInt(v1) > parseInt(v2))
@@ -5698,6 +5699,12 @@ $(function()
 		switch (status) {
 		case "completed":
 		case "answered":
+		case "inquiry":
+		case "interest":
+		case "no interest":
+		case "incorrect referral":
+		case "meeting scheduled":
+		case "new oppurtunity":
 			return "Call duration";
 			break;
 		case "busy":
@@ -5717,6 +5724,9 @@ $(function()
 		case "voicemail":
 			return "Left voicemail";
 			break;
+		case "missed":
+			return "Call missed";
+			break;
 		default:
 			return "";
 		}
@@ -5727,7 +5737,7 @@ $(function()
 	{
 		var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
 		agile_api = JSON.parse(agile_api);
-		var shopify_webhook = window.location.origin + "/shopifytrigger?api-key=" + agile_api.api_key;
+		var shopify_webhook = agileWindowOrigin() + "/shopifytrigger?api-key=" + agile_api.api_key;
 		return new Handlebars.SafeString(shopify_webhook);
 	});
 
@@ -5778,7 +5788,9 @@ $(function()
 		else if(p_name=='Stats Report')
 			portlet_name = "Activity Overview";
 		else if(p_name=='Campaign stats')
-			portlet_name = "Campaign Stats"
+			portlet_name = "Campaign Stats";
+		else if(p_name=='Average Deviation')
+			portlet_name = "Tasks Completion Time Deviation";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5795,11 +5807,11 @@ $(function()
 			icon_name = 'icon-envelope';
 		else if (p_name == 'Emails Sent')
 			icon_name = 'icon-envelope';
-		else if (p_name == 'Growth Graph')
+		else if (p_name == 'Growth Graph' || p_name == 'Incoming Deals')
 			icon_name = 'icon-graph';
 		else if (p_name == 'Calls Per Person')
 			icon_name = 'icon-call-end';
-		else if (p_name == 'Pending Deals')
+		else if (p_name == 'Pending Deals' || p_name == 'Average Deviation')
 			icon_name = 'icon-clock';
 		else if (p_name == 'Deals By Milestone')
 			icon_name = 'icon-flag';
@@ -5831,6 +5843,8 @@ $(function()
 			icon_name = 'icon-sitemap';
 		else if (p_name == 'Deal Goals')
 			icon_name = 'icon-flag';
+		else if (p_name == 'Lost Deal Analysis')
+			icon_name = 'icon-pie-chart';
 		return icon_name;
 	});
 	
@@ -6119,29 +6133,15 @@ $(function()
 	 */
 	Handlebars.registerHelper("isCurrentDeal", function(deal_id, options)
 	{
-		var dealId = App_Deal_Details.dealDetailView.model.id;
+
+		var dealId = '';
+		if (App_Deal_Details.dealDetailView)
+			dealId = App_Deal_Details.dealDetailView.model.id;
+
 		if (deal_id && deal_id == dealId)
 			return options.fn(this);
 
 		return options.inverse(this);
-	});
-	Handlebars.registerHelper('getDealNames', function(deals)
-	{
-		var html = '';
-		var currentDealId = 0;
-		if (App_Deal_Details.dealDetailView)
-			currentDealId = App_Deal_Details.dealDetailView.model.id;
-		$.each(deals, function(index, deal)
-		{
-			if (deal.id != currentDealId)
-			{
-				html += '<a href="#deal/' + deal.id + '">' + deal.name + '</a>';
-				if (index + 1 < deals.length)
-					html += ', ';
-			}
-		});
-		return html;
-
 	});
 
 	/**
@@ -6241,7 +6241,7 @@ $(function()
 	});
 	
 	Handlebars.registerHelper("getPlanLimits", function(key){
-		if(_billing_restriction.currentLimits.planName == "PRO")
+		if(_billing_restriction.currentLimits.planName == "PRO" || _billing_restriction.currentLimits.planName == "ENTERPRISE")
 			return "Unlimited";
 		else
 			return _billing_restriction.currentLimits[key];
@@ -6359,6 +6359,10 @@ $(function()
 		else if (duration == 'next-year')
 		{
 			time_period = 'Next Year';
+		}
+		else if (duration == 'last-year')
+		{
+			time_period = 'Last Year';
 		}
 		
 		return time_period;
@@ -6614,6 +6618,12 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
 	else if(p_name == 'Deal Goals')
 		description = 'See how much sales target you have achieved.'
+	else if(p_name == 'Incoming Deals')
+		description = 'See how your deal sources are performing over time.'
+	else if(p_name == 'Lost Deal Analysis')
+		description = 'Get insights into why deals were lost. Filter by owner, track and source.'
+	else if(p_name == 'Average Deviation')
+		description = 'A quick view of deviation in tasks completion times.'
 	return description;
 			});
 
@@ -6919,8 +6929,74 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 	return dateInepoch;
 });
 
+	Handlebars.registerHelper('emails_next_renewal_time', function(items, name)
+	{
+		return getEmailsNextRenewalTime();
+	});
+
+	Handlebars.registerHelper('is_paid_emails', function(options)
+	{
+		var max = getMaxEmailsLimit();
+		// if max is greater than zero, we consider user is subscrbed to email plan
+		if (max > 0)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
+
+	Handlebars.registerHelper('is_acl_allowed', function(options)
+	{
+		if(_plan_restrictions.is_ACL_allowed[0]() || checkForSpecialUsers())
+			return options.inverse(this);
+		else
+			return options.fn(this);
+	});
+	
+	Handlebars.registerHelper("check_admin_ip", function(options)
+	{
+		if($.inArray(CURRENTIP, IPCHECK) != -1)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
+
+	Handlebars.registerHelper('getCredit', function(credit, options)
+	{
+		if(!credit)
+			return 0;
+		return (credit/100)*(-1).toFixed(2);
+	});
+
+	Handlebars.registerHelper('event_format_time', function(time, format, options)
+	{
+		return time.format(format);
+	});
+	Handlebars.registerHelper('dottedEventDescription', function(description, options)
+	{
+		return addDotsAtEnd(description);
+	});
+	Handlebars.registerHelper('get_template_type', function(template_name)
+	{
+		return new Handlebars.SafeString(getTemplate(template_name, this));
+	});
+
+Handlebars.registerHelper('is_IE_browser', function(options) {
+	     return (isIEBrowser() ? options.fn(this) : options.inverse(this));
+});
+
 function agile_is_mobile_browser(){
    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+  
+ }
+
+ function isIEBrowser(){
+
+ 	var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
+	var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
+	if(isIE || isIENew)
+		return true;
+
+	return false;
  }
 
 Handlebars.registerHelper('multiple_Property_Element_List', function(name, properties,id, options)

@@ -128,6 +128,8 @@ function get_campaign_subscribers_collection(workflow_id, fetch_url, template_ke
 	//var workflow_model = App_Workflows.workflow_list_view.collection.get(workflow_id);
 	//var workflow_name = workflow_model.get("name");
 
+	abortCountQueryCall();
+
 	var subscribers_collection = new Base_Collection_View({ 
 		url : fetch_url, 
 		templateKey : template_key,
@@ -144,6 +146,9 @@ function get_campaign_subscribers_collection(workflow_id, fetch_url, template_ke
 			});
 
 			//$('#subscribers-campaign-name').text(workflow_name);
+			
+			// Call to get Count 
+			getAndUpdateCollectionCount("workflows", el, fetch_url);
 
 		},
 		appendItemCallback : function(el)

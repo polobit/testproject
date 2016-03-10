@@ -21,6 +21,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.util.EmailBounceStatusUtil;
+import com.agilecrm.contact.util.CompanyUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.contact.util.TagUtil;
@@ -249,8 +250,15 @@ public class Contact extends Cursor
     public static final String WEBSITE = "website";
     public static final String ADDRESS = "address";
     public static final String PHONE = "phone";
-	public static final String SKYPEPHONE = "skypePhone";
+    public static final String SKYPEPHONE = "skypePhone";
     public static final String IMAGE = "image";
+    public static final String UTM_SOURCE = "utm_source";
+    public static final String UTM_MEDIUM = "utm_medium";
+    public static final String UTM_CAMPAIGN = "utm_campaign";
+    public static final String UTM_TERM = "utm_term";
+    public static final String UTM_CONTENT = "utm_content";
+    public static final String SHOPIFY_SYNC = "shopifySyncId";
+    public static final String QUICKBOOK_SYNC = "quickbookSyncId";
 
     /**
      * Unsubscribe status
@@ -414,7 +422,7 @@ public class Contact extends Cursor
 
 	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
 	    return;
-
+	
 	addToSearch();
 
     }
@@ -423,6 +431,11 @@ public class Contact extends Cursor
     {
 
 	Long time = System.currentTimeMillis();
+
+	if (type == Type.COMPANY && oldContact != null)
+	{
+	    CompanyUtil.checkAndUpdateCompanyName(oldContact, this);
+	}
 
 	// Execute trigger for contacts
 	ContactTriggerUtil.executeTriggerToContact(oldContact, this);

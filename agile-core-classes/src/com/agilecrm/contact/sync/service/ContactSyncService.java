@@ -310,13 +310,76 @@ public abstract class ContactSyncService implements IContactSyncService
      * @param contact
      *            the contact
      */
+    
+    private boolean findDuplicateAndMerge(Contact contact,Map<String, Object> queryMap)
+    {
+	boolean isDuplicate = false;
+	if (prefs.type == Type.SHOPIFY || prefs.type == Type.QUICKBOOK)
+	{
+	    boolean isDuplicateById = false;
+
+	    
+
+	    int count = contact.dao.getCountByProperty(queryMap);
+	    if (count > 0)
+	    {
+		isDuplicate = isDuplicateById = true;
+	    }
+	    else
+	    {
+		isDuplicate = ContactUtil.isDuplicateContact(contact);
+	    }
+
+	    if (isDuplicate && isDuplicateById)
+	    {
+		//mergeContacts(contact, queryMap);
+		return true;
+	    }
+	}
+	else
+	{
+	    isDuplicate = ContactUtil.isDuplicateContact(contact);
+	}
+
+	//if (isDuplicate)
+	    //mergeContacts(contact, null);
+
+	return isDuplicate;
+
+    }
+
+    private Contact mergeContacts(Contact contact, final Map<String, Object> queryMap)
+    {
+	Contact oldContact = null;
+	if (queryMap != null)
+	{
+	    oldContact = Contact.dao.getByProperty(queryMap);
+	    if (oldContact != null)
+		contact = ContactUtil.mergeContactFeilds(contact, oldContact);
+	    return contact;
+	}
+
+	return ContactUtil.mergeContactFields(contact);
+    }
+    
     private Contact saveContact(Contact contact)
     {
 	addTagToContact(contact);
-	// Temporary fix for stripe sync merging contacts
-	if (ContactUtil.isDuplicateContact(contact) && prefs.type != null && !prefs.type.equals(Type.STRIPE))
+	Map<String, Object> queryMap = new HashMap<String , Object>();
+	if (prefs.type == Type.SHOPIFY)
 	{
-	    contact = ContactUtil.mergeContactFields(contact);
+    queryMap.put("properties.name", Contact.SHOPIFY_SYNC);
+    queryMap.put("properties.value", contact.getContactFieldValue(Contact.SHOPIFY_SYNC));
+	}
+	if (prefs.type == Type.QUICKBOOK)
+	{
+    queryMap.put("properties.name", Contact.QUICKBOOK_SYNC);
+    queryMap.put("properties.value", contact.getContactFieldValue(Contact.QUICKBOOK_SYNC));
+	}
+	boolean isUpdated= findDuplicateAndMerge(contact,queryMap);
+	if (isUpdated)
+	{
+	    contact = mergeContacts(contact,queryMap);
 
 	    accessControl.setObject(contact);
 	    if (!accessControl.canDelete())

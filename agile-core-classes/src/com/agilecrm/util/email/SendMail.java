@@ -77,6 +77,9 @@ public class SendMail
 
     public static final String EMAIL_PLAN_CHANGED = "subscription/add-on/email/plan_changed";
     public static final String EMAIL_PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
+    
+    public static final String FREE_EMAILS_UPDATED = "subscription/emails_updated";
+    public static final String FREE_EMAILS_UPDATED_SUBJECT = "Your Free 5000 Branded Emails Are Updated";
 
     public static final String FAILED_BILLINGS_FIRST_TIME = "subscription/payments/failed/failed_billings_first_time";
     public static final String FAILED_BILLINGS_FIRST_TIME_SUBJECT = "[Notice #1] Your Payment to Agile CRM has Declined";
@@ -121,6 +124,10 @@ public class SendMail
     public static final String FROM_VERIFICATION_EMAIL = "from_verification_email";
     public static final String FROM_VERIFICATION_EMAIL_SUBJECT = "Verify your Email";
 
+	// For campaign sharing
+	public static final String SHARE_CAMPAIGN_CONFIRMATION = "share_campaign_confirmation";
+	public static final String SHARE_CAMPAIGN_SUBJECT = " Campaign Shared - Agile CRM";
+
     /**
      * From Name of email.
      */
@@ -129,7 +136,7 @@ public class SendMail
     /**
      * From Email-id of email.
      */
-    public static final String AGILE_FROM_EMAIL = "noreply@agilecrm.com";
+    public static final String AGILE_FROM_EMAIL = "noreply@agilecrm.com  ";
 
     /**
      * Templates path where template files exist.

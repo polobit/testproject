@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.activities.Category;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.deals.CustomFieldData;
@@ -35,6 +37,9 @@ public class DealCSVExport
     public static final String CLOSE_DATE = "Close Date";
     public static final String OWNER = "Owner";
     public static final String RELATED_TO = "Related Contacts";
+    public static final String SOURCE = "Deal Source";
+    public static final String LOSSREASON = "Loss Reason";
+    public static final String CREATED_DATE = "Created Date";
 
     private static final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -99,6 +104,26 @@ public class DealCSVExport
 	    for (CustomFieldData field : deal.custom_data)
 	    {
 		str[indexMap.get(field.name)] = field.value;
+	    }
+	    if(deal.getDeal_source_id()!=null && deal.getDeal_source_id()!=0)
+	    	{
+	    	CategoriesUtil cu=new CategoriesUtil();
+	    	Category source = cu.getCategory(deal.getDeal_source_id());
+	    	if(source!=null)
+	    	str[indexMap.get(SOURCE)] = source.getLabel();
+	    	}
+	    if(deal.getLost_reason_id()!=null && deal.getLost_reason_id()!=0)
+    	{
+    	CategoriesUtil cu=new CategoriesUtil();
+    	Category reason = cu.getCategory(deal.getLost_reason_id());
+    	if(reason!=null)
+    	str[indexMap.get(LOSSREASON)] = reason.getLabel();
+    	}
+	    if (deal.created_time != null)
+	    {
+		Date d = new Date();
+		d.setTime(deal.created_time * 1000);
+		str[indexMap.get(CREATED_DATE)] = date.format(d);
 	    }
 
 	}

@@ -45,7 +45,7 @@ public class BriaWidgetAPI
 	    	if (!(StringUtils.isBlank(phone))){
 	    		Contact contact = ContactUtil.searchContactByPhoneNumber(phone);
 
-	    		if (direction.equalsIgnoreCase("Outgoing"))
+	    		if (direction.equalsIgnoreCase("Outgoing") || direction.equalsIgnoreCase("outbound-dial"))
 	    		{
 	    		    ActivityUtil.createLogForCalls("Bria", phone, Call.OUTBOUND, status.toLowerCase(), duration);
 
@@ -53,7 +53,7 @@ public class BriaWidgetAPI
 	    		    CallTriggerUtil.executeTriggerForCall(contact, "Bria", Call.OUTBOUND, status.toLowerCase(), duration);
 	    		}
 
-	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("Missed"))
+	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("Missed") || direction.equalsIgnoreCase("inbound"))
 	    		{
 	    		    ActivityUtil.createLogForCalls("Bria", phone, Call.INBOUND, status.toLowerCase(), duration);
 
@@ -63,5 +63,43 @@ public class BriaWidgetAPI
 	    	}
 		return "";
 	}
+	
+	/**
+	 * Saving call info and history on the basis of id.
+	 * 
+	 * @author Prakash
+	 * @created 10-Jan-2015
+	 * @return String
+	 */
+	@Path("savecallactivityById")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String saveCallActivityById(@FormParam("id") Long id,@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration) {		
+	    
+	    	if (null != id && !(StringUtils.isBlank(phone))){
+	    		Contact contact = ContactUtil.getContact(id);
+	    		if(null == contact){
+	    			return "";
+	    		}
+	    		if (direction.equalsIgnoreCase("Outgoing") || direction.equalsIgnoreCase("outbound-dial"))
+	    		{
+	    		    ActivityUtil.createLogForCalls("Bria", phone, Call.OUTBOUND, status.toLowerCase(), duration, contact);
+
+	    		    // Trigger for outbound
+	    		    CallTriggerUtil.executeTriggerForCall(contact, "Bria", Call.OUTBOUND, status.toLowerCase(), duration);
+	    		}
+
+	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("inbound"))
+	    		{
+	    			ActivityUtil.createLogForCalls("Bria", phone, Call.INBOUND, status.toLowerCase(), duration, contact);
+
+	    		    // Trigger for inbound
+	    			 CallTriggerUtil.executeTriggerForCall(contact,  "Bria", Call.INBOUND, status.toLowerCase(), duration);
+	    		}
+	    	}
+		return "";
+	}
+
 	
 }

@@ -44,6 +44,8 @@ public class SearchUtil
      *            {@link Contact}
      * @return {@link Map}
      */
+	
+
     public static Map<String, String> getFieldsMap(Contact contact, Document.Builder doc)
     {
 	// Map to store all the fields
@@ -54,7 +56,22 @@ public class SearchUtil
 	{
 	    // if (StringUtils.isEmpty(contactField.value))
 	    // continue;
-
+		
+		 // Trims the spaces in field value
+	    String normalized_value = normalizeString(contactField.value);
+	    String field_name = normalizeTextSearchString(contactField.name);
+		
+		/*
+		 * Add UTM parameter in a Search Document of contact. If UTM parameter is Avialable 
+		 */
+		if (!(StringUtils.isEmpty(contactField.value)) && (contactField.name.equals(Contact.UTM_SOURCE) || contactField.name.equals(Contact.UTM_MEDIUM) || contactField.name.equals(Contact.UTM_CAMPAIGN) || contactField.name.equals(Contact.UTM_TERM) || contactField.name.equals(Contact.UTM_CONTENT)))
+		{
+			 doc.addField(Field.newBuilder().setName(field_name).setText(StringUtils.lowerCase(normalized_value)));
+		     fields.put(field_name, normalized_value);
+			 continue;
+		}
+		
+		
 	    CustomFieldDef customField = null;
 
 	    if (contactField.value == null || contactField.name == null)
@@ -77,10 +94,7 @@ public class SearchUtil
 		    continue;
 	    }
 
-	    // Trims the spaces in field value
-	    String normalized_value = normalizeString(contactField.value);
-
-	    String field_name = normalizeTextSearchString(contactField.name);
+	   
 
 	    System.out.println(field_name);
 	    /*
@@ -144,6 +158,9 @@ public class SearchUtil
 		    fields.put(field_name, normalized_value);
 			continue;
 		}
+		
+			
+		
 
 	    /*
 	     * If key already exist appends contact field value to respective
