@@ -283,7 +283,7 @@ $(function()
 	 * @returns image link
 	 * 
 	 */
-	Handlebars.registerHelper('gravatarurl', function(items, width)
+	Handlebars.registerHelper('gravatarurl', function(items, width,type)
 	{
 
 		if (items == undefined)
@@ -299,6 +299,7 @@ $(function()
 		var backup_image = "&d=404\" ";
 		// backup_image="";
 		var initials = '';
+
 		try
 		{
 			// if(!isIE())
@@ -325,6 +326,7 @@ $(function()
 		return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 
 	});
+
 
 	Handlebars.registerHelper('defaultGravatarurl', function(width)
 	{

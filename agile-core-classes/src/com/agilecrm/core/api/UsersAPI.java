@@ -205,7 +205,7 @@ public class UsersAPI
 			.entity("Can’t delete all users").build());
 
 	    // Throws exception, if user is owner
-	    if (domainUser.is_account_owner)
+	    if (domainUser.is_account_owner || domainUser.is_admin)
 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 			.entity("Master account can’t be deleted").build());
 	}
@@ -220,6 +220,24 @@ public class UsersAPI
 	AccountDeleteUtil.deleteRelatedEntities(domainUser.id);
 
 	domainUser.delete();
+    }
+    
+    /**
+     * Deletes a user from database, by validating users count and ownership of
+     * the user to be deleted. If the user is fit to delete, deletes its related
+     * entities also.
+     * 
+     * @param domainUser
+     *            user to be deleted
+     */
+    @Path("/{domainuserid}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteDomainUser(@PathParam("domainuserid") String domainUserKey)
+    {
+    	DomainUser domainuser = DomainUserUtil.getDomainUser(Long.parseLong(domainUserKey));
+    	
+    	deleteDomainUser(domainuser);
     }
 
     /**

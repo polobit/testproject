@@ -50,7 +50,9 @@ angular.module('builder', ['pascalprecht.translate', 'angularFileUpload', 'ngAni
 
         	if(AGILE_LP_OPTIONS['action'] == "edit" && AGILE_LP_OPTIONS['templateId'] != "") {
         		project.loadExistingPage(AGILE_LP_OPTIONS['templateId']);
-        	} else {
+        	}else if(AGILE_LP_OPTIONS['action'] == "copy" && AGILE_LP_OPTIONS['templateId'] != ""){
+        		project.copyExistingPage(AGILE_LP_OPTIONS['templateId']);
+        	}else {
         		project.load(AGILE_LP_OPTIONS['templateId']);
         	}
 

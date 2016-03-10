@@ -1006,7 +1006,7 @@ li.deal-color.GREY:after { background: grey;}
 	background:lightyellow!important;
 }
 .milestone-column>ul, .milestone-column>div.milestones {
-	height: 468px;
+	height: calc(100vh - 200px);
 	overflow-y: auto !important;
 	list-style: none;
 	margin-left: 0px;
@@ -1017,7 +1017,7 @@ li.deal-color.GREY:after { background: grey;}
 	list-style: none;
 	margin-left: 0px;
 	margin-bottom: 0px;
-	min-height: 468px;
+	min-height: calc(100vh - 200px);
 }
 
 #opportunities-by-milestones-model-list .milestone-column>ul>li, #deals-by-paging-model-list li, #deals-by-paging-relax-model-list li
@@ -3029,6 +3029,7 @@ width: 915px;
 }
 
 .custom_popover .popover-content{
+	z-index: 99999;
 	padding-top: 5px;
 	padding-bottom:5px;
 	background-color: #fff;
@@ -3180,6 +3181,7 @@ table.hide-head-checkbox th label.i-checks {
 .deals-nowrap .no-wrap {
  white-space: nowrap !important;
 }
+
 
 .contact_popover{ 
 
@@ -3356,4 +3358,112 @@ table.hide-head-checkbox th label.i-checks {
 #dashboard-video
 {
 	margin-top: 110px;
+}
+
+.landingpage-copy{
+	min-width: 0px;
+}
+
+.emailbuilder-copy{
+	min-width: 120px;
+    margin-right: 80px;
+    top: 50px;
+}
+.user-alert .free-user-alert-message{
+	position: fixed;
+	width: 30%;
+	margin: 25px auto;
+	text-align: center;
+	background: #f7ecc2!important;
+	border: 1px solid #ffc237;
+	left: 0;
+	right: -310px;
+	z-index: 1030;
+	padding: 5px;
+	margin-top: 8px;
+	border-radius: 2px;
+}
+
+/* Fix for timeline support issue starting */
+.item table.body td.center {
+    position: static!important;
+}
+/* Fix for timeline support issue ending */
+
+.admin-user-name{
+	width: calc(100% - 45px);
+	line-height: 20px;
+	color:#7C7C7C;
+	margin-left:82px;
+	font-size:12px;
+	 margin-top: -64px;
+    margin-left: 57px;
+}
+
+.admin-user-adduser{
+	margin-left:13px;
+	width:140px;
+	font-size:14px;
+}
+
+.admin-username{
+	max-width:calc(100% - 101px);
+	text-transform: capitalize;
+	font-size:14px;
+}
+
+.admin-user_temp:hover div.user-view-actions {
+  display: block;
+}
+div.user-view-actions {
+  display: none;
+}
+
+.useradmin-edit-delete{
+	margin-top:-104px;
+}
+.admin-settings-bulkactions{
+	border-bottom: 1px solid rgba(140, 139, 139, 0.2);
+	background-color: rgba(246,248,248,1);
+	margin-left:15px;
+}
+
+.delete-adminuser{
+	width: 98%;
+    margin: 0 0 5px 4px;
+    padding: 6px 10px;
+}
+.delete-adminuser-individual{
+	width: 58%;
+    margin: 0 0 0 15px;
+    text-align: left;
+    float: left;
+    padding: 6px 10px 2px;
+}
+.adduser
+{
+	margin-left: 104px;
+}
+
+#admin-newuser-image{
+	margin-left: -24px;	
+}
+
+#admin-newuser-adduser{
+ text-align: left;
+    margin-top: 4px;	
+}
+#admin-newuser-adduser
+{
+ 	text-align: left;
+    margin-top: 5px;
+
+}
+
+.task-view-description-outbox .task-view-description
+{
+max-width:300px;
+text-overflow:ellipsis;
+overflow-x:hidden;
+text-align:left;
 }

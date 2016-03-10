@@ -273,7 +273,7 @@ function initializePortletsListeners() {
 						json2["done"] = false;
 						json2["skip"] = false;
 					}
-					json1["" + $(this).prop('value')] = json2;
+					json1["" + $(this).attr('value')] = json2;
 				});
 				model.set({
 					'prefs' : JSON.stringify(json1)

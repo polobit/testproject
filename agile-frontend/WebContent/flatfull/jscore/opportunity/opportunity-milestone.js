@@ -166,7 +166,7 @@ function dealsFetch(base_model)
 
 
 			includeTimeAgo(el);
-			initializeDealsListeners(el);			
+			initializeDealsListeners(el);
 
 		} });
 
