@@ -59,9 +59,7 @@ var ReportsRouter = Backbone.Router
 			/** shows list of activity reports added * */
 			activityReports : function()
 			{
-				report_utility.loadReportsTemplate();
-				//$("#content").html("<div id='reports-listerners-container'></div>");
-				$(".reports-Container").html(getRandomLoadingImg());
+			
 				this.activityReports = new Base_Collection_View({ url : '/core/api/activity-reports', restKey : "activityReports",
 					templateKey : "activity-report", individual_tag_name : 'tr', postRenderCallback : function()
 					{
@@ -69,10 +67,14 @@ var ReportsRouter = Backbone.Router
 					} });
 
 				this.activityReports.collection.fetch();
-				$(".reports-Container").html(this.activityReports.render().el);
+				var b=this.activityReports;
+					report_utility.loadReportsTemplate(function(){
+				$(".reports-Container").html(getRandomLoadingImg());
+				$(".reports-Container").html(b.render().el);
 
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				});
 			},
 
 			/**
@@ -185,7 +187,7 @@ var ReportsRouter = Backbone.Router
 			 */
 			emailReports : function()
 			{
-				report_utility.loadReportsTemplate(function(){
+				
 				//$("#content").html("<div id='reports-listerners-container'></div>");
 				this.reports = new Base_Collection_View({ url : '/core/api/reports', restKey : "reports", templateKey : "report", individual_tag_name : 'tr',
 					postRenderCallback : function()
@@ -194,7 +196,9 @@ var ReportsRouter = Backbone.Router
 					} });
 
 				this.reports.collection.fetch();
-				$(".reports-Container").html(this.reports.render().el);
+				var a=this.reports;
+				report_utility.loadReportsTemplate(function(){
+				$(".reports-Container").html(a.render().el);
 			});
 
 			},
