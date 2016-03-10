@@ -10,14 +10,11 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
-import com.agilecrm.contact.Contact;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
-import com.googlecode.objectify.Key;
 
 /**
  * Projection property dao
