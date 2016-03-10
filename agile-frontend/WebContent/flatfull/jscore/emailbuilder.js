@@ -1,15 +1,22 @@
 function initializeEmailBuilderListeners() {
 
-	$('#emailbuilder-listeners').off();
-	
-	$('#emailbuilder-listeners').on('click', '.saveEmailBuilderButton', function(e){
-		e.preventDefault();
-    	if (isValidForm('#emailBuilderForm')) {
-    		$(".saveEmailBuilderButton").prop("disabled",true);
-			$(".saveEmailBuilderButton").html("Saving...");
-    		document.getElementById('emailBuilderFrame').contentWindow.$('#save').trigger("click");
-    	}
-	});
+    $('#emailbuilder-listeners').off();
+    
+    $('#emailbuilder-listeners').on('click', '.saveEmailBuilderButton', function(e){
+        e.preventDefault();
+        if (isValidForm('#emailBuilderForm')) {
+            $(".saveEmailBuilderButton").prop("disabled",true);
+            $(".saveEmailBuilderButtonText").html("Saving...");
+            document.getElementById('emailBuilderFrame').contentWindow.$('#save').trigger("click");
+        }
+    });
+
+    $('#emailbuilder-listeners').on('click', '.sendTestEmailButton', function(e){
+         e.preventDefault();
+        if (isValidForm('#emailBuilderForm')) {
+            document.getElementById('emailBuilderFrame').contentWindow.$('#sendTestEmail').trigger("click");          
+        }
+    });
 
     $('#emailbuilder-listeners').on('click', '.sendTestEmailButton', function(e){
         e.preventDefault();
@@ -82,7 +89,7 @@ function initializeEmailBuilderListeners() {
         BRING_YOUR_CODE_BTN = true;
         window.location.hash = "#email-template-add";
     });
-	
+    
 }
 
 function saveEmailTemplateFromBuilder(fullSource,builderSource) {
@@ -116,7 +123,7 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
         success: function (data) {
             $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
             $(".saveEmailBuilderButton",parent.document).prop("disabled",false);
-            $(".saveEmailBuilderButton",parent.document).html("Save");
+            $(".saveEmailBuilderButtonText",parent.document).html("Save");
             if(requestType == "post") {
                 window.location.hash = "email-templates";
             }
@@ -152,7 +159,6 @@ function sendTestEmailTemplate(fullSource,builderSource) {
             },
         });
     }
-    
 }
 
 

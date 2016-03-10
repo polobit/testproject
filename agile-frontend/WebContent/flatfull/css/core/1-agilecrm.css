@@ -3357,6 +3357,13 @@ table.hide-head-checkbox th label.i-checks {
 {
 	margin-top: 110px;
 }
+
 .landingpage-copy{
 	min-width: 0px;
+}
+
+.emailbuilder-copy{
+	min-width: 120px;
+    margin-right: 80px;
+    top: 50px;
 }
