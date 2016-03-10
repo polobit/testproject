@@ -240,7 +240,7 @@ angular.module('builder.projects', [])
                               		$rootScope.savingChanges = false;
                               		$timeout(function() {
                                       	$(".saveLandingPageButton",parent.document).prop("disabled",false);
-                      					$(".saveLandingPageButton",parent.document).html("Save Page");
+                      					$(".saveLandingPageButtonText",parent.document).html("Save Page");
                                   	}, 3000);
                         	  }else{
                         		   
@@ -281,7 +281,7 @@ angular.module('builder.projects', [])
 
                       				$timeout(function() {
                                       	$(".saveLandingPageButton",parent.document).prop("disabled",false);
-                      					$(".saveLandingPageButton",parent.document).html("Save Page");
+                      					$(".saveLandingPageButtonText",parent.document).html("Save Page");
                       					//window.parent.location.hash = ("landing-page/"+returnDataFormat.pages[0].id);
                     					if(typeof projectPageData.id == "undefined") {
                     						window.parent.location.hash = ("landing-pages");
@@ -295,7 +295,7 @@ angular.module('builder.projects', [])
                       			}).error(function(data) {
                       				$timeout(function() {
                                       	$(".saveLandingPageButton",parent.document).prop("disabled",false);
-                      					$(".saveLandingPageButton",parent.document).html("Save Page");
+                      					$(".saveLandingPageButtonText",parent.document).html("Save Page");
                                   	}, 3000);
                       				//alertify.log(data.substring(0, 500), 'error', 2500);
                       			}).finally(function(data) {
@@ -313,7 +313,7 @@ angular.module('builder.projects', [])
               			}).error(function(data) {
               				$timeout(function() {
                               	$(".saveLandingPageButton",parent.document).prop("disabled",false);
-              					$(".saveLandingPageButton",parent.document).html("Save Page");
+              					$(".saveLandingPageButtonText",parent.document).html("Save Page");
                           	}, 3000);
               				//alertify.log(data.substring(0, 500), 'error', 2500);
               			});
@@ -415,6 +415,29 @@ angular.module('builder.projects', [])
 
             project.save();
             $rootScope.$broadcast('builder.project.cleared');
+		},
+
+		/**
+		* Loads existing page from datastore
+		* @author reddy
+		*/
+		copyExistingPage: function(pageId) {
+		
+            this.getPageFromDatastore(pageId).success(function(data) { 
+            	var returnDataFormat = {"pages": []};
+            	returnDataFormat.pages[0] = data;
+            	delete returnDataFormat.pages[0].id;
+            	returnDataFormat.pages[0].name = "index";
+				project.active = returnDataFormat;
+
+            	if (project.active) {
+                	project.changePage(localStorage.get('activePage'));
+            	} else {
+                	project.createNewProject();
+                	project.changePage('index');
+            	}
+			});
+
 		}
 	};
 

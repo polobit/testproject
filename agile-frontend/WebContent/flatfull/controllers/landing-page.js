@@ -6,7 +6,8 @@ var LandingPageRouter = Backbone.Router.extend({
 	"landing-page-templates" : "getListOfTemplates",
 	"landing-page-add/:id" : "loadSelectedTemplate",
 	"landing-page/:id" : "loadSavedLandingPage",
-    "landing-page-settings/:id" : "pageSettings"
+    "landing-page-settings/:id" : "pageSettings",
+    "landing-page-copy/:id" : "copySelectedLandingPage"
 	},
 
 	getListOfLandingPages : function(){
@@ -145,6 +146,25 @@ var LandingPageRouter = Backbone.Router.extend({
         
         $(".active").removeClass("active");
 	$("#landing-pages-menu").addClass("active");
+        hideTransitionBar();
+    },
+
+    copySelectedLandingPage :function(defaultTemplateId) {
+       $('#content').html("<div id='landingpages-listeners'></div>");
+        initializeLandingPageListeners();
+
+        var data = {
+            "templateId" : defaultTemplateId,
+            "action" : "copy"
+        };
+
+        getTemplate("landingpages-add", data, undefined, function(ui){
+            $("#landingpages-listeners").html($(ui));
+        }, "#landingpages-listeners");
+    
+    $('html, body').animate({scrollTop: $('body').offset().top}, 500);
+    $(".active").removeClass("active");
+    $("#landing-pages-menu").addClass("active");
         hideTransitionBar();
     }
 	
