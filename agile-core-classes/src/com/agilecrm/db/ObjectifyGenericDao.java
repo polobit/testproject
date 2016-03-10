@@ -85,6 +85,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.Key;
@@ -1045,29 +1046,17 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	return id;
     }
     
-    private Object getPartial(Long id){
-    	
-    	com.google.appengine.api.datastore.Query proj = new com.google.appengine.api.datastore.Query("DomainUser");
-    	proj.addProjection(new PropertyProjection("email", String.class));
-    	proj.addProjection(new PropertyProjection("name", String.class));
-
-    	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    	Iterator<Entity> projTests = datastore.prepare(proj).asIterable().iterator();
-
-    	while (projTests.hasNext()) {
-    		Entity entity = projTests.next();
-    		System.out.println(entity.getKey().getId());
-
-    		Map<String, Object> props = entity.getProperties();
-
-    		for (Map.Entry<String, Object> entry : props.entrySet()) {
-    			System.out.println(entry.getKey() + "/" + entry.getValue());
-
-    		}
-
-    	}
-    	
-    	return null;
+    public List<com.google.appengine.api.datastore.Key> convertKeysToNativeKeys(List<Key<T>> ids_list)
+    {
+    	List<com.google.appengine.api.datastore.Key> keys = new ArrayList<com.google.appengine.api.datastore.Key>();
+		Iterator<Key<T>> iteartor = ids_list.iterator();
+		while (iteartor.hasNext()) {
+			Key<T> key = (Key<T>) iteartor.next();
+			keys.add(KeyFactory.createKey(key.getKind(), key.getId()));
+		}
+		
+		return keys;
     }
+    
 
 }

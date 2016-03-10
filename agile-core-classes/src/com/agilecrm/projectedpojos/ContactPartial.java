@@ -8,11 +8,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.ContactField;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PropertyProjection;
 import com.googlecode.objectify.annotation.Cached;
 
 @XmlRootElement
 @Cached
-public class ContactPartial {
+public class ContactPartial extends ProjectionEntityParse {
 	public Long id;
 	
 	@JsonIgnore
@@ -24,20 +26,27 @@ public class ContactPartial {
 	
 	public String type;
 	
+	// In future add annotation type ignore for property projection
 	public List<ContactField> properties = new ArrayList<ContactField>();
 	
+	public ContactPartial(){
+		super();
+	}
 	
-	public ContactPartial(Long id, String first_name, String last_name, String name, String type){
-		this.id = id;
-		this.name = name;
-		this.first_name = first_name;
-		this.last_name = last_name;
-		this.type = type;
+	public ContactPartial parseEntity(Entity entity){
+		
+		id = entity.getKey().getId();
+		first_name = (String) getPropertyValue(entity, "first_name");
+		last_name = (String) getPropertyValue(entity, "last_name"); 
+		name = (String) getPropertyValue(entity, "name"); 
+		type = (String) getPropertyValue(entity, "type"); 
 		
 		// Create a properties list
 		properties.add(new ContactField("first_name", first_name, null));
 		properties.add(new ContactField("last_name", last_name, null));
 		properties.add(new ContactField("name", name, null));
 		
+		return this;
+
 	}
 }

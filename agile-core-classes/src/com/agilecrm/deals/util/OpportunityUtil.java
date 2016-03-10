@@ -35,6 +35,7 @@ import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.OpportunityPartial;
+import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.OpportunityDocument;
@@ -89,6 +90,11 @@ public class OpportunityUtil
      * ObjectifyDao of Opportunity.
      */
     private static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
+    
+    /**
+     * ObjectifyDao of OpportunityPartial.
+     */
+    private static PartialDAO<OpportunityPartial> partialDAO = new PartialDAO<OpportunityPartial>(OpportunityPartial.class);
 
     /**
      * Gets opportunity based on id.
@@ -2977,39 +2983,25 @@ public class OpportunityUtil
     public static List<OpportunityPartial> getPartialOpportunities(List<Key<Opportunity>> ids_list)
     {
     	List<OpportunityPartial> list = new ArrayList<OpportunityPartial>();
-	try
-	{
-		List<com.google.appengine.api.datastore.Key> keys = new ArrayList<com.google.appengine.api.datastore.Key>();
-		Iterator<Key<Opportunity>> iteartor = ids_list.iterator();
-		while (iteartor.hasNext()) {
-			Key<com.agilecrm.deals.Opportunity> key = (Key<com.agilecrm.deals.Opportunity>) iteartor.next();
-			keys.add(KeyFactory.createKey(key.getKind(), key.getId()));
-		}
+    	if(ids_list == null || ids_list.size() == 0)
+   		 return list;
 		
-		
-		String dbName = "Opportunity";
-		
-		com.google.appengine.api.datastore.Query proj = new com.google.appengine.api.datastore.Query(dbName);
-		proj.addFilter("__key__", FilterOperator.IN, keys);
-		
-    	proj.addProjection(new PropertyProjection("name", String.class));
-
-    	DatastoreService datastore = CachingDatastoreServiceFactory.getDatastoreService();
-    	Iterator<Entity> entities = datastore.prepare(proj).asIterable().iterator();
-    	while (entities.hasNext()) {
-			Entity entity2 = (Entity) entities.next();
+		try
+		{
+			List<com.google.appengine.api.datastore.Key> keys = dao.convertKeysToNativeKeys(ids_list);
+			if(keys.size() == 0)
+				return list;
 			
-			list.add(new OpportunityPartial(entity2.getKey().getId(), (String) entity2.getProperty("name")));
+			Map map = new HashMap();
+			map.put("__key__ IN", keys);
+			
+			return partialDAO.listByProperty(map);
 		}
-    	
-    	return list;
-    	
-	}
-	catch (Exception e)
-	{
-		System.out.println(ExceptionUtils.getFullStackTrace(e));
-	    e.printStackTrace();
-	    return null;
-	}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		    e.printStackTrace();
+		    return list;
+		}
     }
 }

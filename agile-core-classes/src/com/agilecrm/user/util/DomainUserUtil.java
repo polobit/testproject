@@ -17,6 +17,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.OpportunityPartial;
+import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -56,6 +57,9 @@ public class DomainUserUtil
 {
     // Dao
     public static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
+    
+    // Partial Dao
+    public static PartialDAO<DomainUserPartial> partialDAO = new PartialDAO<DomainUserPartial>(DomainUserPartial.class);
 
     /**
      * Generates a password of length eight characters and sends an email to the
@@ -156,19 +160,7 @@ public class DomainUserUtil
 
 	try
 	{
-		
-		com.google.appengine.api.datastore.Query proj = new com.google.appengine.api.datastore.Query("DomainUser", KeyFactory.createKey("DomainUser", id));
-		
-    	proj.addProjection(new PropertyProjection("email", String.class));
-    	proj.addProjection(new PropertyProjection("name", String.class));
-    	proj.addProjection(new PropertyProjection("pic", String.class));
-
-    	DatastoreService datastore = CachingDatastoreServiceFactory.getDatastoreService();
-    	Entity entity = datastore.prepare(proj).asSingleEntity();
-    	
-    	return new DomainUserPartial(id, (String) entity.getProperty("name"), (String) entity.getProperty("email"), (String) entity.getProperty("pic"));
-
-    	
+		return partialDAO.get(id);
 	}
 	catch (Exception e)
 	{
@@ -195,35 +187,11 @@ public class DomainUserUtil
 
 	try
 	{
-		List<DomainUserPartial> domainUsers = new ArrayList<DomainUserPartial>();
-
-		com.google.appengine.api.datastore.Query proj = new com.google.appengine.api.datastore.Query("DomainUser");
-		proj.addFilter("domain", FilterOperator.EQUAL, domainname);
+		Map map = new HashMap();
+		map.put("domain", domainname);
 		
-    	proj.addProjection(new PropertyProjection("email", String.class));
-    	proj.addProjection(new PropertyProjection("name", String.class));
-    	proj.addProjection(new PropertyProjection("pic", String.class));
-
-    	DatastoreService datastore = CachingDatastoreServiceFactory.getDatastoreService();
-    	
-    	Iterator<Entity> entities = datastore.prepare(proj).asIterable().iterator();
-    	while (entities.hasNext()) {
-			Entity entity2 = (Entity) entities.next();
-			
-			domainUsers.add(new DomainUserPartial(entity2.getKey().getId(), (String) entity2.getProperty("name"), (String) entity2.getProperty("email"), (String) entity2.getProperty("pic")));
-		}
-    	
-    	// Now sort by name.
-	    Collections.sort(domainUsers, new Comparator<DomainUserPartial>()
-	    {
-		public int compare(DomainUserPartial one, DomainUserPartial other)
-		{
-		    return one.name.toLowerCase().compareTo(other.name.toLowerCase());
-		}
-	    });
-	    
-	    return domainUsers;
-    	
+		return partialDAO.listByProperty(map);
+		
 	}
 	catch (Exception e)
 	{

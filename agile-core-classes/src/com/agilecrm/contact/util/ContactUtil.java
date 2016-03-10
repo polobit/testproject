@@ -36,6 +36,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.OpportunityPartial;
+import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -88,6 +89,9 @@ public class ContactUtil
 {
     // Dao
     private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
+    
+    // Partial Dao
+    private static PartialDAO<ContactPartial> partialDAO = new PartialDAO<ContactPartial>(ContactPartial.class);
 
     /**
      * Gets the number of contacts (count) present in the database with given
@@ -1878,56 +1882,23 @@ public class ContactUtil
     	List<ContactPartial> list = new ArrayList<ContactPartial>();
     	if(ids_list == null || ids_list.size() == 0)
     		 return list;
-	try
-	{
-		List<com.google.appengine.api.datastore.Key> keys = new ArrayList<com.google.appengine.api.datastore.Key>();
-		Iterator<Key<Contact>> iteartor = ids_list.iterator();
-		while (iteartor.hasNext()) {
-			Key<Contact> key = (Key<Contact>) iteartor.next();
-			keys.add(KeyFactory.createKey(key.getKind(), key.getId()));
+		try
+		{
+			List<com.google.appengine.api.datastore.Key> keys = dao.convertKeysToNativeKeys(ids_list);
+			if(keys.size() == 0)
+				return list;
+			
+			Map map = new HashMap();
+			map.put("__key__ IN", keys);
+			
+			return partialDAO.listByProperty(map);
+	    	
 		}
-		
-		
-		String dbName = "Contact";
-		
-		com.google.appengine.api.datastore.Query proj = new com.google.appengine.api.datastore.Query(dbName);
-		proj.addFilter("__key__", FilterOperator.IN, keys);
-		
-    	proj.addProjection(new PropertyProjection("first_name", String.class));
-    	proj.addProjection(new PropertyProjection("last_name", String.class));
-    	proj.addProjection(new PropertyProjection("name", String.class));
-    	proj.addProjection(new PropertyProjection("type", String.class));
-
-    	DatastoreService datastore = CachingDatastoreServiceFactory.getDatastoreService();
-    	Iterator<Entity> entities = datastore.prepare(proj).asIterable().iterator();
-    	while (entities.hasNext()) {
-			Entity entity2 = (Entity) entities.next();
-			
-			String first_name = null, last_name = null, name = null, type = null;
-			if(entity2.hasProperty("first_name"))
-				first_name = (String) entity2.getProperty("first_name");
-			if(entity2.hasProperty("last_name"))
-				last_name = (String) entity2.getProperty("last_name");
-			if(entity2.hasProperty("name"))
-				name = (String) entity2.getProperty("name");
-			
-			if(entity2.hasProperty("type"))
-				type = (String) entity2.getProperty("type");
-			
-			list.add(new ContactPartial(entity2.getKey().getId(), first_name, last_name, name, type));
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		    e.printStackTrace();
+		    return list;
 		}
-    	
-    	
-    	
-    	return list;
-
-    	
-	}
-	catch (Exception e)
-	{
-		System.out.println(ExceptionUtils.getFullStackTrace(e));
-	    e.printStackTrace();
-	    return null;
-	}
     }
 }
