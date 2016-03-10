@@ -1886,3 +1886,194 @@ color:#727272;
     width: 858px;
 }
 }
+
+
+/* css for tabs mobile */
+ 
+
+.content-tabs-show {
+  margin: 20px auto;
+}
+.content-tabs-show .panel-heading {
+    padding: 0
+}
+.content-tabs-show .panel-heading a {
+    display: block;
+    padding: 13px 10px;
+    position: relative;
+}
+.content-tabs-show .panel-heading a.collapsed {
+    background: #fff;
+    
+}
+.content-tabs-show .panel-heading a {
+    background: #f7f7f7;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: normal;
+}
+.content-tabs-show .panel-heading a:after {
+    
+    content: "\f106";
+    font-family: FontAwesome;
+    position: absolute;
+    top: 9px;
+    right: 15px;
+    color: #98a6ad !important;
+}
+.content-tabs-show .panel-heading a.collapsed:after {
+    content: "\f107";
+    position: absolute;
+    top: 11px;
+    right: 15px;
+    color: #98a6ad !important;
+}
+.content-tabs-show  .panel-heading + .panel-collapse .panel-body {
+  border-top: none;
+}
+.content-tabs-show .btn {
+      padding: 3px 7px;
+    font-size: 11px;
+    line-height: 1.5;
+}
+.content-tabs-show .btn:not(#send-new-mail) i {
+  display: none;
+}
+.content-tabs-show .contact-desc-dynamic .word-break-all {
+    word-break: break-all;
+    float: left;
+    white-space: normal;
+}
+.content-tabs-show .text-info {
+  white-space: normal;
+}
+.content-tabs-show .contact-title-dynamic {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.content-tabs-show .panel-body {
+  padding:0px;
+}
+
+
+/*.nav.nav-tabs li a,
+.nav.nav-tabs li.active > a:hover,
+.nav.nav-tabs li.active > a:active,
+.nav.nav-tabs li.active > a:focus {
+    border-bottom-width: 0px;
+    outline: none;
+}
+.nav.nav-tabs li a {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.tab-pane {
+    background: #fff;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-top: -1px;
+}
+
+*/
+
+
+/* used for sidebar tab/collapse*/
+@media (max-width: 991px) {
+  .visible-tabs {
+    display: none;
+  }
+}
+
+@media (min-width: 992px) {
+  .visible-tabs {
+    display: block !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .hidden-tabs {
+    display: none !important;
+  }
+}
+
+
+.slate-content .box-left {
+      display: none;
+  }
+  .slate-content .box-right {
+    float: none!important;
+    text-align: center;
+  }
+  .slate-content .box-right h4 {
+    font-weight: normal;
+    font-size: 18px;
+    margin-bottom: 5px;
+    opacity:0.8;
+  }
+  .slate-content .box-right .text {
+
+ color:#98a6ad !important
+  }
+
+
+.search-mobile {
+  width: 65%;
+  list-style: none;
+}
+
+.admin-setting-icon a.select{
+  opacity: 1;
+  background-color: #edf1f2;
+}
+.stats-tabs-border li.active > a{
+  border-left-color: #fff !important;
+}
+.icons-space-m li a{
+  padding: 10px 14px;
+}
+.prefs-view a {
+    width: calc(100% / 7);
+    padding: 10px 6px;
+    display: inline-block;
+    float: left;
+    opacity: 0.4;
+}
+.admin-setting-icon a{
+ width:calc(100% / 4);
+ padding: 10px 0;
+ text-align: center;
+ opacity: 0.4;
+ float: left;
+}
+
+
+.prefs-view a.select {
+  background: #edf1f2;
+  opacity: 1;
+}
+.stats-tabs-border li.active > a{
+  border-left-color: #fff !important;
+}
+
+@media all and (min-width: 768px) and (max-width: 800px) {
+  #wrap:not(.app-aside-folded) .need_help{
+  display: none;
+  }
+}
+
+ .prefs-mobile-view .vbox {
+    min-height: auto;
+  }
+
+.icons-space-m li a{
+  padding: 10px 14px;
+}
+
+.Api_code span .lit {
+
+color:#484848!important;
+
+}
+.addField i {
+  color:#838D93;
+}
