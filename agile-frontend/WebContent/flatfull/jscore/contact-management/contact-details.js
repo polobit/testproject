@@ -1201,7 +1201,7 @@ updateScoreValue :function(){
 				});							
 		}
 		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck||(scoreboxval<0)){
-			alert("Invalid Input. This field can take only numbers");
+			alert("Please enter a valid number.");
 			scoreboxval=prvs;
 		}
 		else{
