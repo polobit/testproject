@@ -16,8 +16,6 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.AgileBilling;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
-import com.agilecrm.subscription.restrictions.db.BillingRestriction;
-import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -666,7 +664,7 @@ public class StripeImpl implements AgileBilling {
 	}
 	
 	// Create InvoiceIterm and pay to purchase life time emails
-	public void purchaseEmailCredits(JSONObject customerJSON, Integer quantity) throws Exception {
+	public String purchaseEmailCredits(JSONObject customerJSON, Integer quantity) throws Exception {
 		Customer customer = StripeUtil.getCustomerFromJson(customerJSON);
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("customer", customer.getId());
@@ -675,9 +673,6 @@ public class StripeImpl implements AgileBilling {
 		params.put("description", quantity*1000+" Email Credits");
 		InvoiceItem invoiceItem = InvoiceItem.create(params);
 		System.out.println("invoiceItem for email credits "+invoiceItem);
-		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
-		restriction.last_credit_id = invoiceItem.getId();
-		restriction.save();
 		params.remove("amount");
 		params.remove("currency");
 		try{
@@ -691,7 +686,7 @@ public class StripeImpl implements AgileBilling {
 			invoiceItems.get(0).delete();
 			throw new Exception(e.getMessage());
 		}
-		
+		return invoiceItem.getId();
 		
 	}
 }

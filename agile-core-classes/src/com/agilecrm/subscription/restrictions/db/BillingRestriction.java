@@ -541,10 +541,10 @@ public class BillingRestriction
     }
     
     public void decrementEmailCreditsCount(int count){
+    	this.email_credits_count -= count;
     	if(isAutoRenewalEnabled && email_credits_count <= autoRenewalPoint){
     		renewalCedits(nextRechargeCount);
     	}
-    	this.email_credits_count -= count;
     }
     
     public void incrementEmailCreditsCount(int count){

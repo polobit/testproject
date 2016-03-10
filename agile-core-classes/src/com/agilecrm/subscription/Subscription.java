@@ -447,10 +447,13 @@ public class Subscription {
 	 * @throws Exception
 	 */
 	public void purchaseEmailCredits(Integer quantity) throws Exception {
-		getAgileBilling().purchaseEmailCredits(billing_data, quantity);
+		String invoiceItemId = getAgileBilling().purchaseEmailCredits(billing_data, quantity);
 		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
 		restriction.incrementEmailCreditsCount(quantity*1000);
+		System.out.println("last_credit_id:: "+invoiceItemId+" Credits count:: "+restriction.email_credits_count+" at:: "+System.currentTimeMillis());
+		restriction.last_credit_id = invoiceItemId;
 		restriction.save();
+		System.out.println("Credits purchased successfully ::"+System.currentTimeMillis());
 	}
 
 	/**
