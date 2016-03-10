@@ -1006,7 +1006,7 @@ li.deal-color.GREY:after { background: grey;}
 	background:lightyellow!important;
 }
 .milestone-column>ul, .milestone-column>div.milestones {
-	height: 468px;
+	height: calc(100vh - 200px);
 	overflow-y: auto !important;
 	list-style: none;
 	margin-left: 0px;
@@ -1017,7 +1017,7 @@ li.deal-color.GREY:after { background: grey;}
 	list-style: none;
 	margin-left: 0px;
 	margin-bottom: 0px;
-	min-height: 468px;
+	min-height: calc(100vh - 200px);
 }
 
 #opportunities-by-milestones-model-list .milestone-column>ul>li, #deals-by-paging-model-list li, #deals-by-paging-relax-model-list li
