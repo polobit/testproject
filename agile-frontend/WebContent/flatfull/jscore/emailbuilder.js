@@ -18,13 +18,6 @@ function initializeEmailBuilderListeners() {
         }
     });
 
-    $('#emailbuilder-listeners').on('click', '.sendTestEmailButton', function(e){
-        e.preventDefault();
-        if (isValidForm('#emailBuilderForm')) {
-            document.getElementById('emailBuilderFrame').contentWindow.$('#sendTestEmail').trigger("click");          
-        }
-    });
-
     $('#emailbuilder-listeners').on('click', '#emailBuilderOptionsLink', function (e) {
         e.preventDefault();
         $(this).find('i').toggleClass('icon-plus').toggleClass('icon-minus');
