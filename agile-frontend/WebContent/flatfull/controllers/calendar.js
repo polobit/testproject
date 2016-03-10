@@ -75,9 +75,10 @@ calendar : function()
 						 $("[data-toggle=tooltip").tooltip();
 						 
 					}, $('#calendar-listers').find("#calendar-filters"));
-					loadPortlets('Events');
+					
 
 		});	
+			loadPortlets('Events');
 	}, "#calendar-listers");
 
 
