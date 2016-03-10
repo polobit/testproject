@@ -100,8 +100,7 @@ public class Office365CalendarUtil {
 	 * @return String
 	 */
 
-	public static String getOfficeURLCalendarPrefs(
-			Office365CalendarPrefs calendarPrefs, String startDate,
+	public static String getOfficeURLCalendarPrefs(Office365CalendarPrefs calendarPrefs, String startDate,
 			String endDate) {
 
 		String userName = calendarPrefs.getUsername();
@@ -112,12 +111,12 @@ public class Office365CalendarUtil {
 			host = host + "/ews/exchange.asmx";
 		}
 
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
 		if (startDate != null) {
 			long milliSeconds = Long.parseLong(startDate);
 			Calendar calendar = Calendar.getInstance();
-			calendar.setTimeInMillis(milliSeconds);
+			calendar.setTimeInMillis(milliSeconds);		
 			startDate = formatter.format(calendar.getTime());
 		}
 
@@ -180,8 +179,8 @@ public class Office365CalendarUtil {
 							.getCurrentAgileUser().id);
 
 			// For Testing use the below code.
-			// String userTimeZone = UserPrefsUtil
-			// .getUserTimezoneFromUserPrefs(null);
+//			 String userTimeZone = UserPrefsUtil
+//			 .getUserTimezoneFromUserPrefs(null);
 
 			SimpleDateFormat parsedFormat = new SimpleDateFormat(pattern,
 					Locale.ENGLISH);

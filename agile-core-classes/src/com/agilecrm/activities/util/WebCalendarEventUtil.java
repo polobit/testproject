@@ -121,18 +121,18 @@ public class WebCalendarEventUtil
 			// Remove all filled odd timing slots from available/possible slots.
 			possibleSlots = removeAllOddSlots(possibleSlots, filledGoogleSlots);
 		}
-//		
-//		// Get all filled slots from office calendar.
-//		List<List<Long>> filledOfficeSlots = Office365CalendarUtil.getFilledOfficeSlots(userid, slotTime, timezone,
-//				timezoneName, startTime, endTime);
-//		
-//		if(filledOfficeSlots != null){
-//			// Remove all filled slots from available/possible slots.
-//			possibleSlots.removeAll(filledOfficeSlots);
-//
-//			// Remove all filled odd timing slots from available/possible slots.
-//			possibleSlots = removeAllOddSlots(possibleSlots, filledOfficeSlots);
-//		}
+		
+		// Get all filled slots from office calendar.
+		List<List<Long>> filledOfficeSlots = Office365CalendarUtil.getFilledOfficeSlots(userid, slotTime, timezone,
+				timezoneName, startTime, endTime);
+		
+		if(filledOfficeSlots != null){
+			// Remove all filled slots from available/possible slots.
+			possibleSlots.removeAll(filledOfficeSlots);
+
+			// Remove all filled odd timing slots from available/possible slots.
+			possibleSlots = removeAllOddSlots(possibleSlots, filledOfficeSlots);
+		}
 
 		if (possibleSlots != null && possibleSlots.size() > 0)
 		{
@@ -1378,13 +1378,14 @@ public class WebCalendarEventUtil
 	}
 	
 	public static void getBaseDetails() {
+		
 		Long user_id = 5629499534213120L;
-		String date = "Wed Feb 03 2016 11:15:34 GMT 0530 (India Standard Time)";
+		String date = "Fri Mar 18 2016 17:12:21 GMT 0530 (India Standard Time)";
 		int slot_time = 60;
 		String timezone_name = "Asia/Kolkata";
-		long epoch_time = 1453055400L;
-		long startTime = 1453055400L;
-		long endTime = 1453141800L;
+		long epoch_time = 1458239400L;
+		long startTime = 1458239400L;
+		long endTime = 1458325800L;		
 		// long agile_user_id = 5716606839685120L;
 		Long agile_user_id = null;
 		int timezone = -330;
