@@ -124,7 +124,9 @@ int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 
 <style>
 body {
+
   background-image: url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-low.jpg');
+
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% 100%;
@@ -329,7 +331,9 @@ if(isSafari && isWin)
         $("body").css("background-image","url('"+this.src+"')");
        
         }
+
         newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high.jpg';
+
         // agile-login-page-high.png
 
 			// Pre load dashlet files when don is active

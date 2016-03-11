@@ -87,7 +87,9 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 <%@ include file="ios-native-app-meta-tags.jsp"%>
 <STYLE>
 body{
+
 	background-image: url('<%=S3_STATIC_IMAGE_PATH%>images/signup-<%=randomBGImageInteger%>-low.jpg');
+
 }
 .overlay:before{
 	content: "";
@@ -248,7 +250,9 @@ $(document).ready(function() {
     newImg.onload = function() {
     $("body").css("background-image","url('"+this.src+"')");
      }
+
    newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/signup-<%=randomBGImageInteger%>-high.jpg';
+
    console.log(newImg.src);
     if($("#error-area").text().trim())
     	$("#error-area").slideDown("slow");
