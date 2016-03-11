@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 
-import com.agilecrm.ticket.rest.CheckTicketSLADeferred;
+import com.agilecrm.ticket.deferred.CheckTicketSLADeferred;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;

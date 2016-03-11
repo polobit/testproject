@@ -22,6 +22,7 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
+import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets;
@@ -152,57 +153,7 @@ public class TicketsUtil
 	 */
 	public static Tickets getTicketByID(Long ticketID) throws EntityNotFoundException
 	{
-		try
-		{
-			return Tickets.ticketsDao.get(ticketID);
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-		}
-
-		return null;
-	}
-
-	/**
-	 * Updates existing {@link Tickets} as well as text search document
-	 * {@link TicketsDocument}
-	 * 
-	 * @param ticketID
-	 * @param cc_emails
-	 * @param last_reply_plain_text
-	 * @param attachments_exists
-	 * @return {@link Tickets} object
-	 * @throws EntityNotFoundException
-	 */
-	public static Tickets updateTicket(Long ticketID, List<String> cc_emails, String last_reply_plain_text,
-			LAST_UPDATED_BY last_updated_by, Long updated_time, Long customer_replied_time,
-			Long last_agent_replied_time, Boolean attachments_exists) throws EntityNotFoundException
-	{
-		// Get existing ticket
-		Tickets ticket = TicketsUtil.getTicketByID(ticketID);
-
-		ticket.cc_emails = cc_emails;
-		ticket.last_updated_time = updated_time;
-		ticket.last_updated_by = last_updated_by;
-		ticket.last_reply_text = last_reply_plain_text;
-		ticket.user_replies_count += 1;
-
-		if (customer_replied_time != null)
-			ticket.last_customer_replied_time = customer_replied_time;
-
-		if (last_agent_replied_time != null)
-			ticket.last_agent_replied_time = last_agent_replied_time;
-
-		if (!ticket.attachments_exists)
-			ticket.attachments_exists = attachments_exists;
-
-		Tickets.ticketsDao.put(ticket);
-
-		// Update search document
-		new TicketsDocument().edit(ticket);
-
-		return ticket;
+		return Tickets.ticketsDao.get(ticketID);
 	}
 
 	/**
@@ -1032,8 +983,8 @@ public class TicketsUtil
 			String htmlText = plainText.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
 
 			// Creating new Notes in TicketNotes table
-			TicketNotesUtil.createTicketNotes(ticket.id, group.id, null, CREATED_BY.REQUESTER, "Customer",
-					"customer@domain.com", plainText, htmlText, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
+			new TicketNotes(ticket.id, group.id, null, CREATED_BY.REQUESTER, "Customer", "customer@domain.com",
+					plainText, htmlText, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
 		}
 		catch (Exception e)
 		{

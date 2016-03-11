@@ -130,7 +130,7 @@ public class ZendeskFetchAudits implements DeferredTask
 							if (repliedByEndUser)
 							{
 								// Creating new Notes in TicketNotes table
-								TicketNotes notes = TicketNotesUtil.createTicketNotes(ticket.id, ticket.groupID, null,
+								TicketNotes notes = new TicketNotes(ticket.id, ticket.groupID, null,
 										CREATED_BY.REQUESTER, ticket.requester_name, ticket.requester_email, body,
 										body, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
 
@@ -145,7 +145,7 @@ public class ZendeskFetchAudits implements DeferredTask
 							}
 							else
 							{
-								TicketNotesUtil.createTicketNotes(ticket.id, ticket.groupID, ticket.assigneeID,
+								new TicketNotes(ticket.id, ticket.groupID, ticket.assigneeID,
 										CREATED_BY.AGENT, ticket.requester_name, ticket.requester_email, body, body,
 										NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
 
@@ -169,7 +169,7 @@ public class ZendeskFetchAudits implements DeferredTask
 							else
 								domainUser = domainOwner;
 
-							TicketNotesUtil.createTicketNotes(ticket.id, null, domainUser.id, CREATED_BY.AGENT, "", "",
+							new TicketNotes(ticket.id, null, domainUser.id, CREATED_BY.AGENT, "", "",
 									body, body, NOTE_TYPE.PRIVATE, new ArrayList<TicketDocuments>(), "");
 
 							// Logging private notes activity

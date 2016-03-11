@@ -1,4 +1,4 @@
-package com.agilecrm.ticket.rest;
+package com.agilecrm.ticket.deferred;
 
 import java.util.List;
 import java.util.Set;

@@ -9,11 +9,17 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
+import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 
@@ -168,10 +174,11 @@ public class TicketNotes
 	}
 
 	public TicketNotes(Long ticket_id, Long group_id, Long assignee_id, CREATED_BY created_by, String requester_name,
-			String requester_email, String plain_text, String html_text, String original_plain_text,
-			String original_html_text, NOTE_TYPE note_type, List<TicketDocuments> attachments_list, String mimeObject)
+			String requester_email, String original_plain_text, String original_html_text, NOTE_TYPE note_type,
+			List<TicketDocuments> attachments_list, String mimeObject)
 	{
 		super();
+
 		this.ticket_key = new Key<Tickets>(Tickets.class, ticket_id);
 
 		if (group_id != null)
@@ -183,15 +190,46 @@ public class TicketNotes
 		this.created_by = created_by;
 		this.requester_name = requester_name;
 		this.requester_email = requester_email;
-		this.plain_text = plain_text;
-		this.html_text = html_text;
 		this.original_plain_text = original_plain_text;
 		this.original_html_text = original_html_text;
 		this.note_type = note_type;
 		this.attachments_list = attachments_list;
 		this.created_time = Calendar.getInstance().getTimeInMillis();
 
+		this.plain_text = TicketNotesUtil.removedQuotedRepliesFromPlainText(original_plain_text);
+		this.html_text = TicketNotesUtil.removedQuotedRepliesFromHTMLText(original_html_text);
+
 		this.mime_object = mimeObject;
+
+		TicketNotes.ticketNotesDao.put(this);
+
+		boolean isPublicNotes = (note_type == NOTE_TYPE.PUBLIC);
+
+		ActivityType activityType = (isPublicNotes) ? ActivityType.TICKET_ASSIGNEE_REPLIED
+				: ActivityType.TICKET_PRIVATE_NOTES_ADD;
+
+		try
+		{
+			Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+
+			// Sending reply to requester if and only if notes type is public
+			if (isPublicNotes && created_by == CREATED_BY.AGENT)
+			{
+				// Send email thread to user
+				TicketNotesUtil.sendReplyToRequester(ticket);
+
+				// Execute note created by user trigger
+				TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);
+			}
+
+			// Logging notes activity
+			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plain_text, html_text,
+					"html_text");
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
 	}
 
 	@javax.persistence.PostLoad
@@ -207,7 +245,7 @@ public class TicketNotes
 			assignee_id = assignee_key.getId();
 
 		if (StringUtils.isNotBlank(plain_text))
-			plain_text = TicketNotesUtil.parsePlainText(plain_text);
+			plain_text = TicketNotesUtil.convertNewLinesToBreakTags(plain_text);
 	}
 
 	/**

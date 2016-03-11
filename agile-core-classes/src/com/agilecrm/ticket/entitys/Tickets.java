@@ -21,11 +21,14 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.document.TicketsDocument;
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.googlecode.objectify.Key;
@@ -425,7 +428,6 @@ public class Tickets extends Cursor implements Serializable
 
 			// Save ticket
 			this.saveWithNewID();
-			// Tickets.ticketsDao.put(ticket);
 
 			// Create search document
 			new TicketsDocument().add(this);
@@ -442,6 +444,126 @@ public class Tickets extends Cursor implements Serializable
 			System.out.println("ExceptionUtils.getFullStackTrace(e): " + ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Updates existing {@link Tickets} as well as text search document
+	 * {@link TicketsDocument}
+	 * 
+	 * @param ticketID
+	 * @param cc_emails
+	 * @param last_reply_plain_text
+	 * @param attachments_exists
+	 * @return {@link Tickets} object
+	 * @throws EntityNotFoundException
+	 */
+	public Tickets updateTicketAndSave(List<String> cc_emails, String last_reply_plain_text,
+			LAST_UPDATED_BY last_updated_by, Long updated_time, Long customer_replied_time,
+			Long last_agent_replied_time, Boolean attachments_exists, Boolean isTicketClosed)
+	{
+		Long currentTime = Calendar.getInstance().getTimeInMillis();
+
+		if (this.user_replies_count == 1)
+			this.first_replied_time = currentTime;
+
+		boolean isPublicNotes = (this.last_updated_time == updated_time) ? false : true, assigneeChanged = false;
+
+		// Increment only when public notes is added
+		if (isPublicNotes)
+			this.user_replies_count += 1;
+
+		this.cc_emails = cc_emails;
+		this.last_updated_time = updated_time;
+		this.last_updated_by = last_updated_by;
+		this.last_reply_text = last_reply_plain_text;
+
+		if (customer_replied_time != null)
+			this.last_customer_replied_time = customer_replied_time;
+
+		if (last_agent_replied_time != null)
+			this.last_agent_replied_time = last_agent_replied_time;
+
+		if (!this.attachments_exists)
+			this.attachments_exists = attachments_exists;
+
+		Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
+
+		// Checking if assignee is replying to new ticket for first time
+		if (this.status == Status.NEW || this.assignee_id == null)
+		{
+			// Logging ticket assigned activity
+			ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, this.contactID, this.id, "", SessionManager
+					.get().getName(), "assigneeID");
+		}
+		else
+		{
+			if (this.assignee_id != null && this.assignee_id.getId() != domainUserKey.getId())
+			{
+				// Log assignee changed activity
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, this.contactID, this.id, "",
+						SessionManager.get().getName(), "assigneeID");
+
+				assigneeChanged = true;
+			}
+		}
+
+		// Set current user as ticket assignee
+		this.assignee_id = domainUserKey;
+		this.assigneeID = domainUserKey.getId();
+		this.assigned_time = currentTime;
+		this.assigned_to_group = false;
+
+		Status oldStatus = this.status;
+
+		if (isTicketClosed)
+		{
+			this.status = Status.CLOSED;
+			this.closed_time = currentTime;
+		}
+		else
+			this.status = (last_updated_by == LAST_UPDATED_BY.REQUESTER) ? Status.OPEN : Status.PENDING;
+
+		// If status if closed then incr. no of re-opens attr.
+		if (oldStatus == Status.CLOSED)
+		{
+			this.no_of_reopens += 1;
+			this.closed_time = null;
+		}
+
+		// Logging status changed activity
+		ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, this.contactID, this.id,
+				oldStatus.toString(), this.status.toString(), "status");
+
+		// Logging public notes activity
+		if (isPublicNotes)
+		{
+			ActivityType activityType = (last_updated_by == LAST_UPDATED_BY.REQUESTER) ? ActivityType.TICKET_REQUESTER_REPLIED
+					: ActivityType.TICKET_ASSIGNEE_REPLIED;
+
+			ActivityUtil.createTicketActivity(activityType, this.contactID, this.id, "", last_reply_plain_text,
+					"html_text");
+		}
+
+		this.save();
+
+		if (assigneeChanged)
+			TicketTriggerUtil.executeTriggerForAssigneeChanged(this);
+
+		return this;
+	}
+
+	public Tickets save()
+	{
+		// Updating ticket entity
+		Tickets.ticketsDao.put(this);
+
+		// Updating text search data
+		new TicketsDocument().edit(this);
+
+		if (this.status == Status.CLOSED)
+			TicketTriggerUtil.executeTriggerForClosedTicket(this);
+
+		return this;
 	}
 
 	/**

@@ -164,8 +164,8 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			DomainUser domaiUser = DomainUserUtil.getDomainUser(assigneeID);
-			TicketGroups group = TicketGroupUtil.getTicketGroupById(groupID);
+//			DomainUser domaiUser = DomainUserUtil.getDomainUser(assigneeID);
+//			TicketGroups group = TicketGroupUtil.getTicketGroupById(groupID);
 
 			// Create log with static content (Domain user who initiated actiona
 			// and group name)
@@ -222,7 +222,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			Workflow workflow = WorkflowUtil.getWorkflow(workflowID);
+			//Workflow workflow = WorkflowUtil.getWorkflow(workflowID);
 
 			// Logging bulk action activity
 			// ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_EXECUTE_WORKFLOW,

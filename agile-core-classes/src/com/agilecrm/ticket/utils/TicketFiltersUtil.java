@@ -36,9 +36,9 @@ public class TicketFiltersUtil
 		searchMap.put("owner_key", domainUserKey);
 		searchMap.put("is_default_filter", true);
 
-		int defaultFiltersCount = TicketFilters.dao.getCountByProperty(searchMap);
+		List<TicketFilters>  filters = TicketFilters.dao.listByProperty(searchMap);
 
-		if (defaultFiltersCount == 0)
+		if (filters.size() == 0)
 			saveDefaultFilters();
 
 		searchMap.remove("is_default_filter");

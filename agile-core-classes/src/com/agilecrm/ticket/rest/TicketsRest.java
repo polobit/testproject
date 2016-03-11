@@ -245,6 +245,9 @@ public class TicketsRest
 	{
 		try
 		{
+			if (filterID == null)
+				throw new Exception("Filter not exits");
+
 			TicketFilters filter = TicketFiltersUtil.getFilterById(filterID);
 
 			String queryString = TicketFiltersUtil.getQueryFromConditions(filter.conditions);
@@ -356,7 +359,7 @@ public class TicketsRest
 
 			if (StringUtils.isBlank(ticket.requester_name))
 				ticket.requester_name = fromName;
-			
+
 			String html_text = ticket.html_text, plain_text = html_text;
 			html_text = html_text.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
 
@@ -367,7 +370,7 @@ public class TicketsRest
 
 			Long groupID = ticket.groupID, assigneeID = ticket.assigneeID;
 
-			//String plain_text = TicketNotesUtil.br2nl(html_text);
+			// String plain_text = TicketNotesUtil.br2nl(html_text);
 
 			boolean attachmentExists = false;
 
@@ -383,14 +386,13 @@ public class TicketsRest
 					labels_keys_list.add(new Key<TicketLabels>(TicketLabels.class, labelID));
 
 			// Creating new Ticket in Ticket table
-			ticket = new Tickets(groupID, assigneeID, ticket.requester_name, ticket.requester_email,
-					ticket.subject, ticket.cc_emails, plain_text, ticket.status, ticket.type, ticket.priority,
-					ticket.source, ticket.created_by, attachmentExists, "", labels_keys_list);
+			ticket = new Tickets(groupID, assigneeID, ticket.requester_name, ticket.requester_email, ticket.subject,
+					ticket.cc_emails, plain_text, ticket.status, ticket.type, ticket.priority, ticket.source,
+					ticket.created_by, attachmentExists, "", labels_keys_list);
 
 			// Creating new Notes in TicketNotes table
-			TicketNotesUtil.createTicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER,
-					ticket.requester_name, ticket.requester_email, plain_text, html_text, NOTE_TYPE.PUBLIC,
-					attachmentsList, "");
+			new TicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER, ticket.requester_name,
+					ticket.requester_email, plain_text, html_text, NOTE_TYPE.PUBLIC, attachmentsList, "");
 
 			ticket.groupID = ticket.group_id.getId();
 
@@ -852,8 +854,8 @@ public class TicketsRest
 	}
 
 	@GET
-	@Path("/email")
-	public List<Tickets> getTicketsByEmail(@QueryParam("email") String email)
+	@Path("/{{email}}")
+	public List<Tickets> getTicketsByEmail(@PathParam("email") String email)
 	{
 		try
 		{
@@ -868,7 +870,7 @@ public class TicketsRest
 	}
 
 	@GET
-	@Path("/ticket-count")
+	@Path("/{{email}}/count")
 	public int getTicketCountByEmail(@QueryParam("email") String email)
 	{
 		try
@@ -1051,8 +1053,8 @@ public class TicketsRest
 						new ArrayList<Key<TicketLabels>>());
 
 				// Creating new Notes in TicketNotes table
-				TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, group.id, ticket.assigneeID,
-						CREATED_BY.REQUESTER, "Sasi", "sasi@clickdesk.com", message, message, NOTE_TYPE.PUBLIC,
+				TicketNotes ticketNotes = new TicketNotes(ticket.id, group.id, ticket.assigneeID, CREATED_BY.REQUESTER,
+						"Sasi", "sasi@clickdesk.com", message, message, NOTE_TYPE.PUBLIC,
 						new ArrayList<TicketDocuments>(), "");
 			}
 		}
@@ -1081,9 +1083,8 @@ public class TicketsRest
 		{
 			if (ticketID == null)
 				throw new Exception("Required parameters missing.");
-			Tickets ticket = TicketsUtil.removeDuedate(ticketID);
 
-			return ticket;
+			return TicketsUtil.removeDuedate(ticketID);
 		}
 		catch (Exception e)
 		{

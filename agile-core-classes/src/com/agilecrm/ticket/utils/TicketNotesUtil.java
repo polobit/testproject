@@ -16,7 +16,6 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.safety.Whitelist;
 
 import com.agilecrm.Globals;
 import com.agilecrm.account.util.AccountPrefsUtil;
@@ -31,7 +30,6 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
@@ -74,36 +72,36 @@ public class TicketNotesUtil
 		return inclDomainUsers(notes);
 	}
 
-	/**
-	 * 
-	 * @param ticket_id
-	 * @param group_id
-	 * @param created_by
-	 * @param requester_name
-	 * @param requester_email
-	 * @param original_plain_text
-	 * @param original_html_text
-	 * @param note_type
-	 * @param attachments_list
-	 * @return
-	 * @throws EntityNotFoundException
-	 */
-	public static TicketNotes createTicketNotes(Long ticket_id, Long group_id, Long assignee_id, CREATED_BY created_by,
-			String requester_name, String requester_email, String original_plain_text, String original_html_text,
-			NOTE_TYPE note_type, List<TicketDocuments> attachments_list, String mimeObject)
-			throws EntityNotFoundException
-	{
-		TicketNotes ticketNotes = new TicketNotes(ticket_id, group_id, assignee_id, created_by, requester_name,
-				requester_email, removedQuotedRepliesFromPlainText(original_plain_text),
-				removedQuotedRepliesFromHTMLText(original_html_text), original_plain_text, original_html_text,
-				note_type, attachments_list, mimeObject);
-
-		Key<TicketNotes> key = TicketNotes.ticketNotesDao.put(ticketNotes);
-
-		System.out.println("Notes key: " + key.getId());
-
-		return ticketNotes;
-	}
+//	/**
+//	 * 
+//	 * @param ticket_id
+//	 * @param group_id
+//	 * @param created_by
+//	 * @param requester_name
+//	 * @param requester_email
+//	 * @param original_plain_text
+//	 * @param original_html_text
+//	 * @param note_type
+//	 * @param attachments_list
+//	 * @return
+//	 * @throws EntityNotFoundException
+//	 */
+//	public static TicketNotes createTicketNotes(Long ticket_id, Long group_id, Long assignee_id, CREATED_BY created_by,
+//			String requester_name, String requester_email, String original_plain_text, String original_html_text,
+//			NOTE_TYPE note_type, List<TicketDocuments> attachments_list, String mimeObject)
+//			throws EntityNotFoundException
+//	{
+//		TicketNotes ticketNotes = new TicketNotes(ticket_id, group_id, assignee_id, created_by, requester_name,
+//				requester_email, removedQuotedRepliesFromPlainText(original_plain_text),
+//				removedQuotedRepliesFromHTMLText(original_html_text), original_plain_text, original_html_text,
+//				note_type, attachments_list, mimeObject);
+//
+//		Key<TicketNotes> key = TicketNotes.ticketNotesDao.put(ticketNotes);
+//
+//		System.out.println("Notes key: " + key.getId());
+//
+//		return ticketNotes;
+//	}
 
 	/**
 	 * 
@@ -340,9 +338,8 @@ public class TicketNotesUtil
 	 * @param original_plain_text
 	 * @return
 	 */
-	public static String parsePlainText(String plainText)
+	public static String convertNewLinesToBreakTags(String plainText)
 	{
-		// parse plain text
 		return plainText.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
 	}
 

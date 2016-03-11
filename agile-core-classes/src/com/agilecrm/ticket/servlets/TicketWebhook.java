@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -128,7 +129,7 @@ public class TicketWebhook extends HttpServlet
 			 * msgJSON contains email field where Mandrill received the message
 			 */
 
-			String toAddress = msgJSON.getString("email");
+			String toAddress = (String) getValueFromJSON(msgJSON, "email");
 
 			System.out.println("toAddress: " + toAddress);
 
@@ -176,32 +177,12 @@ public class TicketWebhook extends HttpServlet
 				return;
 			}
 
-			boolean isNewTicket = true;
+			boolean isNewTicket = isNewTicket(toAddressArray);
 
-			/**
-			 * If received ticket is reply to existing ticket then email address
-			 * will be in the form of namespace+groupid+ticketid@helptor.com
-			 */
-			if (toAddressArray.length == 3)
-				isNewTicket = false;
+			List<String> ccEmails = (List<String>) getValueFromJSON(msgJSON, "cc");
 
-			List<String> ccEmails = new ArrayList<String>();
-			JSONArray ccEmailsArray = new JSONArray();
-
-			// CC emails will be sent as JSON array
-			if (msgJSON.has("cc"))
-				ccEmailsArray = msgJSON.getJSONArray("cc");
-
-			for (int i = 0; i < ccEmailsArray.length(); i++)
-				ccEmails.add(ccEmailsArray.getJSONArray(i).getString(0));
-
-			String plainText = "", html = "";
-
-			if (msgJSON.has("text"))
-				plainText = msgJSON.getString("text").trim();
-
-			if (msgJSON.has("html"))
-				html = msgJSON.getString("html").trim();
+			String plainText = (String) getValueFromJSON(msgJSON, "text"), html = (String) getValueFromJSON(msgJSON,
+					"html");
 
 			// Check if any attachments exists
 			Boolean attachmentExists = msgJSON.has("attachments");
@@ -283,17 +264,14 @@ public class TicketWebhook extends HttpServlet
 
 			Tickets ticket = null;
 
-			String fromEmail = msgJSON.getString("from_email");
+			String fromEmail = (String) getValueFromJSON(msgJSON, "from_email");
+			String fromName = (String) getValueFromJSON(msgJSON, "from_name");
 
-			String fromName = fromEmail.substring(0, fromEmail.lastIndexOf("@"));
-
-			if (msgJSON.has("from_name"))
-				fromName = msgJSON.getString("from_name");
+			if (StringUtils.isBlank(fromName))
+				fromName = fromEmail.substring(0, fromEmail.lastIndexOf("@"));
 
 			System.out.println("From email: " + fromEmail);
 			System.out.println("From name: " + fromName);
-
-			Status status = Status.PENDING;
 
 			if (isNewTicket)
 			{
@@ -308,9 +286,9 @@ public class TicketWebhook extends HttpServlet
 				}
 
 				// Creating new Ticket in Ticket table
-				ticket = new Tickets(groupID, null, fromName, fromEmail, msgJSON.getString("subject"),
-						ccEmails, TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText), Status.NEW,
-						Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip,
+				ticket = new Tickets(groupID, null, fromName, fromEmail, msgJSON.getString("subject"), ccEmails,
+						TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText), Status.NEW, Type.PROBLEM,
+						Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip,
 						new ArrayList<Key<TicketLabels>>());
 
 				BulkActionNotifications.publishNotification("New ticket #" + ticket.id + " received");
@@ -319,56 +297,37 @@ public class TicketWebhook extends HttpServlet
 			{
 				Long ticketID = Long.parseLong(toAddressArray[2]);
 
-				ticket = TicketsUtil.getTicketByID(ticketID);
+				try
+				{
+					ticket = TicketsUtil.getTicketByID(ticketID);
+				}
+				catch (Exception e)
+				{
+					System.out.println(ExceptionUtils.getFullStackTrace(e));
+				}
 
 				// Check if ticket exists
 				if (ticket == null)
 				{
-					System.out.println("Invalid ticketID: " + ticketID);
+					System.out.println("Invalid ticketID or ticket has been deleted: " + ticketID);
 					return;
 				}
 
-				// Updating existing ticket
-				ticket = TicketsUtil.updateTicket(ticketID, ccEmails,
-						TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText), LAST_UPDATED_BY.REQUESTER,
-						currentTime, currentTime, null, attachmentExists);
+				String lastReplieText = TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText);
 
-				if (ticket.status == Status.CLOSED)
-				{
-					ticket.no_of_reopens += 1;
-					ticket.closed_time = null;
-					status = Status.CLOSED;
-				}
-
-				ticket.status = Status.OPEN;
-
-				// Updating ticket entity
-				Tickets.ticketsDao.put(ticket);
-
-				// Updating text search data
-				new TicketsDocument().edit(ticket);
-
-				// Logging public notes activity
-				ActivityUtil.createTicketActivity(ActivityType.TICKET_REQUESTER_REPLIED, ticket.contactID, ticket.id,
-						html, TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText), "html_text");
+				ticket.updateTicketAndSave(ccEmails, lastReplieText, LAST_UPDATED_BY.REQUESTER, currentTime,
+						currentTime, null, attachmentExists, false);
 
 				// Sending user replied notification
 				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket#" + ticket.id);
+
+				// Execute note created by customer trigger
+				TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
 			}
 
 			// Creating new Notes in TicketNotes table
-			TicketNotesUtil.createTicketNotes(ticket.id, groupID, ticket.assigneeID, CREATED_BY.REQUESTER, fromName,
-					fromEmail, plainText, html, NOTE_TYPE.PUBLIC, documentsList, msgJSON.toString());
-
-			if (!isNewTicket)
-			{
-				// Execute note created by customer trigger
-				TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
-
-				// Logging status changed activity
-				ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-						status.toString(), Status.OPEN.toString(), "status");
-			}
+			new TicketNotes(ticket.id, groupID, ticket.assigneeID, CREATED_BY.REQUESTER, fromName, fromEmail,
+					plainText, html, NOTE_TYPE.PUBLIC, documentsList, msgJSON.toString());
 
 			NamespaceManager.set(oldNamespace);
 
@@ -514,5 +473,48 @@ public class TicketWebhook extends HttpServlet
 		writer.close();
 
 		return service;
+	}
+
+	public static Object getValueFromJSON(JSONObject msgJSON, String key) throws JSONException
+	{
+		switch (key)
+		{
+		case "cc":
+
+			List<String> ccEmails = new ArrayList<String>();
+			JSONArray ccEmailsArray = new JSONArray();
+
+			// CC emails will be sent as JSON array
+			if (msgJSON.has(key))
+				ccEmailsArray = msgJSON.getJSONArray(key);
+
+			for (int i = 0; i < ccEmailsArray.length(); i++)
+				ccEmails.add(ccEmailsArray.getJSONArray(i).getString(0));
+
+			return ccEmails;
+		case "text":
+		case "html":
+			String content = msgJSON.getString(key);
+
+			content = (StringUtils.isBlank(content)) ? "" : content.trim();
+
+			return content;
+		case "from_name":
+			if (msgJSON.has(key))
+				return msgJSON.getString(key);
+
+			return "";
+		default:
+			return msgJSON.get(key);
+		}
+	}
+
+	/**
+	 * If received ticket is reply to existing ticket then email address will be
+	 * in the form of namespace+groupid+ticketid@helptor.com
+	 */
+	public static boolean isNewTicket(String[] toAddressArray)
+	{
+		return (toAddressArray.length == 3) ? true : false;
 	}
 }
