@@ -16,6 +16,12 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
 
+/**
+ * Projection property dao
+ * @author govindchunchula
+ *
+ * @param <T>
+ */
 public class PartialDAO<T extends ProjectionEntityParse> {
 
 	/**

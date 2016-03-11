@@ -9,7 +9,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.ContactField;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PropertyProjection;
 import com.googlecode.objectify.annotation.Cached;
 
 @XmlRootElement
