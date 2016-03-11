@@ -14,8 +14,10 @@
  function inlineDealNameChange(e){
 
     	
-    	var name = $("#inline-input").val();
+    	var dealName = $("#inline-input").val();
     	var lastname = $("#deals-inline").text();
+    	name = dealName.trim();
+
 
     	if(!name)
     	{
