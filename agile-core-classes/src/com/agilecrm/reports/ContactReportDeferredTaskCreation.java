@@ -9,7 +9,7 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 
 public class ContactReportDeferredTaskCreation
 {
-    public static void createContactDeferredTask(String domain, Long reportid, Long time, String timezone)
+    public void createContactDeferredTask(String domain, Long reportid, Long time, String timezone)
 	    throws IOException
     {
 	System.out.println("Time in create createDeferredTask ============ " + time);

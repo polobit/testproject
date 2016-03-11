@@ -80,7 +80,8 @@ public class ReportsDeferredTask implements DeferredTask
 		        report.activity_weekday, report.activity_day, report.report_timezone, duration);
 		try
 		{
-		    ContactReportDeferredTaskCreation.createContactDeferredTask(domain, report.id, time,
+			ContactReportDeferredTaskCreation contactReportDeferredTaskCreation =new ContactReportDeferredTaskCreation();
+			contactReportDeferredTaskCreation.createContactDeferredTask(domain, report.id, time,
 			    report.report_timezone);
 		}
 		catch (IOException e)
