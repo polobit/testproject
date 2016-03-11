@@ -52,10 +52,6 @@ return;
 }
 
 DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-if(domainUser.pic == null){
-	 // Add pic to all domain users
-	QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withPayload(new DomainUserAddPicDeferredTask(NamespaceManager.get())));
-}
 
 System.out.println("Domain user " + domainUser);
 
