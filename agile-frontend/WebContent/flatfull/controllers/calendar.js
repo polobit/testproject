@@ -33,6 +33,7 @@ calendar : function()
 		getCalendarUsersDetails(function(users){
 
 		$('#calendar-listers').html($(template_ui));
+		loadPortlets('Events');
 
 				getTemplate("event-left-filter", users, undefined, function(template_ui1){
 					
@@ -78,7 +79,7 @@ calendar : function()
 					
 
 		});	
-			loadPortlets('Events');
+			
 	}, "#calendar-listers");
 
 
