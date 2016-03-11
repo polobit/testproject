@@ -111,8 +111,10 @@ function inlineNameChange(e,data){
 				return;
 
            // Get actual name
-          var firstName = $("#Contact-input-firstname").val();
-          var lastName  = $("#Contact-input-lastname").val();
+          var first = $("#Contact-input-firstname").val();
+          var last  = $("#Contact-input-lastname").val();
+          firstName =first.trim();
+          lastName =last.trim();
           if(!firstName)
           {
           	$("#Contact-input-firstname").addClass("error-inputfield");
@@ -158,7 +160,8 @@ function inlineNameChange(e,data){
    function inlineCompanyNameChange(el){
     
     console.log("inlineCompanyNameChange");
-    var companyname = $("#company-inline-input").val();
+    var companyInlineName = $("#company-inline-input").val();
+      companyname = companyInlineName.trim();
     console.log(companyname);
     if(!companyname)
     {
