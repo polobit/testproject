@@ -522,6 +522,23 @@ function getDateInFormatFromEpoc(date)
 
 }
 
+// function to get the gmt format of date to show to edit the custom filters for contacts
+function getDateInFormatFromEpocForContactFilters(date)
+{
+	if(!date)
+		return;
+	var now = new Date(parseInt(date)); 
+	var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+	if ((date / 100000000000) > 1)
+	{1  
+		
+		
+		return en.dateFormatter({raw: getGlobalizeFormat()})(now_utc);
+	}
+	return en.dateFormatter({raw: getGlobalizeFormat()})(now_utc * 1000);
+
+}
+
 /*
  function to get the date in user selected format in useprefs page. Will takes date object as input
 */
