@@ -3370,12 +3370,12 @@ table.hide-head-checkbox th label.i-checks {
     width: 90%;
     margin: 0 auto;
 }
-#account_cancel_chat button:hover{
+#account_cancel_chat a:hover{
 	background-color: #50c7a7;
 	border-color: #50c7a7;
 	color: white !important;
 }
-#account_cancel_support button:hover{
+#account_cancel_support a:hover{
 	background-color: #5fa2dd;
 	border-color: #5fa2dd;
 	color: white !important;
