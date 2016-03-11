@@ -25,7 +25,7 @@ function contactListener(el)
 			//e.stopPropagation();
 			//var left=e.pageX;
             var that=$(this);
-             popoverEnter(that,undefined,undefined,undefined);
+             popoverEnter(that,undefined,0,undefined);
 });
 
 
@@ -39,7 +39,7 @@ function contactListener(el)
 	$('#company-contacts-model-list').off('mouseenter','tr > td');
 		$('#company-contacts-model-list').on('mouseenter','tr > td',function(e){
 			var left=e.pageX;
-			left=left-400;
+			left=left-100;
             var that=$(this).parent();
              popoverEnter(that,left,0,undefined);
 });
@@ -52,7 +52,7 @@ function contactListener(el)
 	$('#task-related-model-list').off('mouseenter','tr > td');
 		$('#task-related-model-list').on('mouseenter','tr > td',function(e){
 			var left=e.pageX;
-			left=left-400;
+			left=left-100;
             var that=$(this).parent();
              popoverEnter(that,left,0,undefined);
 			
@@ -67,7 +67,7 @@ function contactListener(el)
 	$('#deal-related-model-list').off('mouseenter','tr > td');
 		$('#deal-related-model-list').on('mouseenter','tr > td',function(e){
 			var left=e.pageX;
-			left=left-400;
+			left=left-100;
             var that=$(this).parent();
              popoverEnter(that,left,0,undefined);
 });
@@ -83,7 +83,7 @@ function contactListener(el)
 		$('#workflow-other-subscribers-model-list').on('mouseenter','td.data .table-resp',function(e){
 			var left=e.pageX;
             var that=$(this).parents('tr');
-            left=left-350;
+            left=left-100;
             if(insidePopover==true){
  			insidePopover=false;
  			$("time.campaign-started-time").timeago();
@@ -131,6 +131,7 @@ function contactListener(el)
             "placement": "auto top",
             "html": "true",
             "content": template_ui,
+            "container" : 'body'
             });
 								$(that).popover('show');
 								
@@ -525,6 +526,7 @@ function popoverEnter(that,left,top,listView,campaigns_view)
             "placement": "auto top",
             "html": "true",
             "content": template_ui,
+            "container" : 'body'
             });
 								$(that).popover('show');
 															$('.popover').addClass("contact_popover fadeInLeft animated");
@@ -556,7 +558,7 @@ function popout(that)
 		
 	setTimeout(function() {
 		if (!insidePopover){
-			if($('.popover',that.parent()).length!=0)
+			if($('.popover').length!=0)
 			{
 			$(that).popover('hide');
 			$('.popover').remove();
