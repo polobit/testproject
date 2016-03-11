@@ -1064,7 +1064,7 @@
  
     <servlet-mapping>
         <servlet-name>AllDomainStatsServlet</servlet-name>
-        <url-pattern>/stats-report</url-pattern>
+        <url-pattern>/backend/stats-report</url-pattern>
     </servlet-mapping>
   
 </web-app>
