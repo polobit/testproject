@@ -48,29 +48,32 @@ function socialsuite_add_website()
  */
 function changeProperty()
 {
-	var display = $('#network_handle', $('#personModal')).css("display");
-	var picDisplay = $("#pic", $('#personModal')).css("display");
-	var picValue = $("#pic", $('#personModal')).html();
+	try{
+		var display = $('#network_handle', $('#personModal')).css("display");
+		var picDisplay = $("#pic", $('#personModal')).css("display");
+		var picValue = $("#pic", $('#personModal')).html();
 
-	var $networkEle = $("#network_handle");
-	var $handle = $("#handle");;
+		var $networkEle = $("#network_handle");
+		var $handle = $("#handle");;
 
-	if ((picDisplay == 'inline' || picDisplay == 'block') && picValue != '')
-	{
-		if (display == 'none')
-			$networkEle.removeAttr('class').addClass('after-img-load-hide');
-		else if (display == 'block')
-			$networkEle.removeAttr('class').addClass('after-img-load-show');
+		if ((picDisplay == 'inline' || picDisplay == 'block') && picValue != '')
+		{
+			if (display == 'none')
+				$networkEle.removeAttr('class').addClass('after-img-load-hide');
+			else if (display == 'block')
+				$networkEle.removeAttr('class').addClass('after-img-load-show');
 
-		$handle.removeAttr('class').addClass('add-form-input');
-	}
-	else if ((picDisplay == 'none' || picDisplay == null || picDisplay == '') || (picValue == null || picValue == ''))
-	{
-		if (display == 'none')
-			$networkEle.removeAttr('class').addClass('network-handle');
-		else if (display == 'block')
-			$networkEle.removeAttr('class').addClass('socialsuite-network-handle');
+			$handle.removeAttr('class').addClass('add-form-input');
+		}
+		else if ((picDisplay == 'none' || picDisplay == null || picDisplay == '') || (picValue == null || picValue == ''))
+		{
+			if (display == 'none')
+				$networkEle.removeAttr('class').addClass('network-handle');
+			else if (display == 'block')
+				$networkEle.removeAttr('class').addClass('socialsuite-network-handle');
 
-		$handle.removeAttr('class');
-	}
+			$handle.removeAttr('class');
+		}
+
+	}catch(e){}
 }
