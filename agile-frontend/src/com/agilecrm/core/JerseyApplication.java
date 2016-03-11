@@ -5,6 +5,9 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
+import com.agilecrm.ipaccess.IpAccess;
+import com.agilecrm.ipaccess.IpAccessAPI;
+
 public class JerseyApplication extends Application
 {
     @Override
@@ -114,6 +117,8 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.deals.GoalsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.PaypalWidgetApi.class);
 	s.add(com.agilecrm.webhooks.triggers.util.AgileWebhookAPI.class);
+	
+	s.add(IpAccessAPI.class);
 
 	return s;
     }

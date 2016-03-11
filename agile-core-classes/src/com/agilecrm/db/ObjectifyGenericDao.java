@@ -43,6 +43,7 @@ import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.document.Document;
 import com.agilecrm.facebookpage.FacebookPage;
 import com.agilecrm.forms.Form;
+import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.landingpages.LandingPage;
 import com.agilecrm.landingpages.LandingPageCNames;
 import com.agilecrm.portlets.Portlet;
@@ -229,6 +230,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	//All Domain Stats report for Agile Management
 	ObjectifyService.register(AllDomainStats.class);
+	ObjectifyService.register(IpAccess.class);
 
     }
 

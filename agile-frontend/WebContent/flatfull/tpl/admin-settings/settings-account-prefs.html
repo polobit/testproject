@@ -1,8 +1,19 @@
+<script id="settings-account-tab-template" type="text/html">
+    <div class="tab-container m-b-none">
+           <ul class="nav nav-tabs b-b-none">
+            <li class="settings-account-prefs"><a href="#account-prefs" class="b-l-none">Preferences</a></li>
+            <li class="settings-account-ips"><a href="#account-ipaccess" class="b-l-none">IpAccess</a></li>
+           </ul>
+    </div>
+    <div class="tab-pane active" id="settings-account-tab-content">
+</script>
+
+
 
 <!--  Contact View Detail in Detailed mode - when only one contact is shown -->
 <script id="admin-settings-account-prefs-template" type="text/html">
 <div class="panel panel-default">
-	<div class="panel-heading">Preferences</div>
+	<!--<div class="panel-heading">Preferences</div>-->
 	<div class="panel-body">
     <form id="accountPrefs" class="form-horizontal">
         <fieldset>
@@ -75,5 +86,46 @@
     </form>
 </div>
 </div>
+
+</script>
+
+
+<script id="admin-settings-ip-prefs-template" type="text/html">
+
+<!-- Blocked IP's template -->
+                  <div class="panel panel-default">
+                     <div id="settings-blocked-ips">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                           <div class="panel-title">
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#ip-filters">IP Filters</a>
+                           </div>
+                        </div>
+                        <form  name = "account-ip" id="account-ip">
+                        <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="ip-filters">
+                           <div class="panel-body p-n" id="api-accordion">
+   {{#unless blocked_ips}}
+            <div class="p-t-sm p-l-sm p-r-sm p-b-xs">
+                <div>By creating IP filters you can disable <b>Web Stats</b> and <b>Tracking</b>.</div>
+            </div>
+   {{/unless}}
+   
+                    <table class="table table-hover custom-fields-table bg-white m-b-none">
+                        <colgroup><col width="50%"><col width="4%"></colgroup>
+                        <tbody id="blocked_ips_list">
+                            {{#blocked_ips_list blocked_ips}}{{/blocked_ips_list}}
+                        </tbody>
+                    </table>
+                    <input type="text" id="domain" name="domain" style="width:250px;display:inline-block;" class="form-control input-sm hidden">
+                    <div class="show_field p-l p-t p-b">
+            <input type="text" id="new_blocked_ip" name="new_blocked_ip" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="New IP Address">
+                        <a href="#blocked-ips" class="btn btn-sm btn-primary" id="update_blocked_ips">Add</a>
+                    </div>
+                           </div>
+                        </div>
+
+                    </form>
+                     </div>
+                  </div>
+                  <!-- end of Blocked IPs template -->
 
 </script>
