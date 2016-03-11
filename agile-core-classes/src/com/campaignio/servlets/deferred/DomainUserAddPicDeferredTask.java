@@ -30,27 +30,33 @@ public class DomainUserAddPicDeferredTask implements DeferredTask {
 	}
 	
 	public void run() {
-
-		NamespaceManager.set(domain);
+		String oldNamespace = NamespaceManager.get();
 		
-		// Get all users and update domain user db with user pic
-		List<AgileUser> agileUsers = AgileUser.getUsers();
-		for (AgileUser user : agileUsers) {
+		try {
+			NamespaceManager.set(domain);
+			
+			// Get all users and update domain user db with user pic
+			List<AgileUser> agileUsers = AgileUser.getUsers();
+			for (AgileUser user : agileUsers) {
 
-			DomainUser domainUser = user.getDomainUser();
-			if (domainUser == null)
-				continue;
+				DomainUser domainUser = user.getDomainUser();
+				if (domainUser == null)
+					continue;
 
-			UserPrefs prefs = UserPrefsUtil.getUserPrefs(user);
-			if (prefs == null)
-				continue;
+				UserPrefs prefs = UserPrefsUtil.getUserPrefs(user);
+				if (prefs == null)
+					continue;
 
-			domainUser.pic = prefs.pic;
-			try {
-				domainUser.save();
-			} catch (Exception e) {
-				System.out.println(ExceptionUtils.getFullStackTrace(e));
+				domainUser.pic = prefs.pic;
+				try {
+					domainUser.save();
+				} catch (Exception e) {
+					System.out.println(ExceptionUtils.getFullStackTrace(e));
+				}
 			}
+		} finally {
+			NamespaceManager.set(oldNamespace);
 		}
+		
 	}
 }
