@@ -1177,9 +1177,9 @@ var WorkflowsRouter = Backbone.Router
 			{
 				var that = this;
 				that.render_email_reports_select_ui(id, function(){
-					if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+					if (!that.workflow_list_view || that.workflow_list_view.collection.length == 0)
 					{
-						this.navigate("workflows", { trigger : true });
+						that.navigate("workflows", { trigger : true });
 						return;
 					}
 

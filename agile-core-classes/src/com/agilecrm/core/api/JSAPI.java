@@ -698,9 +698,9 @@ public class JSAPI
     {
 	try
 	{
-		if(!JSAPIUtil.isRequestFromOurDomain())
-			return new JSONArray().toString();
-		
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
@@ -771,9 +771,9 @@ public class JSAPI
     {
 	try
 	{
-		if(!JSAPIUtil.isRequestFromOurDomain())
-			return new JSONArray().toString();
-		
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
@@ -810,9 +810,9 @@ public class JSAPI
     {
 	try
 	{
-		if(!JSAPIUtil.isRequestFromOurDomain())
-			return new JSONArray().toString();
-		
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
@@ -985,9 +985,9 @@ public class JSAPI
     {
 	try
 	{
-		if(!JSAPIUtil.isRequestFromOurDomain())
-			return new JSONArray().toString();
-		
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Milestone milestone = MilestoneUtil.getMilestones();
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(milestone);
@@ -1011,9 +1011,6 @@ public class JSAPI
     {
 	try
 	{
-		if(!JSAPIUtil.isRequestFromOurDomain())
-			return new JSONArray().toString();
-		
 	    List<Milestone> milestones = MilestoneUtil.getMilestonesList();
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(milestones);
@@ -1037,9 +1034,9 @@ public class JSAPI
     {
 	try
 	{
-		if(!JSAPIUtil.isRequestFromOurDomain())
-			return new JSONArray().toString();
-		
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Milestone milestone = null;
 	    if (pipelineId != null && pipelineId > 0)
 		milestone = MilestoneUtil.getMilestone(pipelineId);
@@ -1423,9 +1420,9 @@ public class JSAPI
     {
 	try
 	{
-		if(!JSAPIUtil.isRequestFromOurDomain())
-			return new JSONArray().toString();
-		
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(DomainUserUtil.getUsers());
 	}

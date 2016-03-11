@@ -268,9 +268,16 @@ public class LandingPageUtil
 			for(int i = 0; i < noOfPages; i++) {
 				q = dao.ofy().query(LandingPageCNames.class);
 				q.filter("landing_page_id", pageIds.getLong(i));
-				LandingPageCNames lpCname = q.get();
-				if(lpCname != null) {
-					dao.delete(lpCname);
+				List<LandingPageCNames> lpCnames = q.list();
+				
+				int noOfLandingPages = lpCnames.size();
+				if(noOfLandingPages != 0) {
+					for(int j = 0; j < noOfLandingPages; j++) {
+						LandingPageCNames lpCname = lpCnames.get(j);
+						if(lpCname != null && lpCname.domain.equals(oldNameSpace)) {
+							dao.delete(lpCname);
+						}
+					}
 				}
 			}
 			return true;
@@ -283,6 +290,28 @@ public class LandingPageUtil
 		finally
 		{
 			NamespaceManager.set(oldNameSpace);
+		}
+		
+	}
+	
+	public static boolean deleteAllLandingPageCNamesAssociatedWithDomain(String namespace)
+	{	
+		try
+		{
+			Query<LandingPageCNames> q = null;
+			ObjectifyGenericDao<LandingPageCNames> dao = new ObjectifyGenericDao<LandingPageCNames>(LandingPageCNames.class);
+			q = dao.ofy().query(LandingPageCNames.class);
+			q.filter("domain", namespace);
+			List<LandingPageCNames> lpcnames = q.list();
+			if(lpcnames.size() != 0) {
+				dao.deleteAll(lpcnames);
+			}
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
 		}
 		
 	}

@@ -31,6 +31,8 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.JSAPIUtil;
 import com.agilecrm.util.PHPAPIUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
@@ -771,6 +773,136 @@ public class PHPAPI
 
 	    // Return contact object as String
 	    return mapper.writeValueAsString(contact);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Get all domain users. for google gadgets.
+     */
+    @Path("users")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getAllDomainUsers()
+    {
+	try
+	{
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(DomainUserUtil.getUsers());
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+
+    /**
+     * Get tasks based on email of the contact
+     * 
+     * @param email
+     *            email of the contact
+     * 
+     * @return String (tasks)
+     */
+    @Path("contacts/get-tasks")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getTasksGadget(@QueryParam("email") String email)
+    {
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    List<Task> tasks = new ArrayList<Task>();
+	    tasks = TaskUtil.getContactTasks(contact.id);
+	    ObjectMapper mapper = new ObjectMapper();
+	    JSONArray arr = new JSONArray();
+	    for (Task task : tasks)
+	    {
+		arr.put(mapper.writeValueAsString(task));
+	    }
+	    return arr.toString();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Get notes from contact based on email
+     * 
+     * @param email
+     *            email of the contact
+     * 
+     * @return String (notes)
+     */
+    @Path("contacts/get-notes")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getNotesGadget(@QueryParam("email") String email)
+    {
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    else
+	    {
+		List<Note> Notes = new ArrayList<Note>();
+		Notes = NoteUtil.getNotes(contact.id);
+		ObjectMapper mapper = new ObjectMapper();
+		JSONArray arr = new JSONArray();
+		for (Note note : Notes)
+		{
+		    arr.put(mapper.writeValueAsString(note));
+		}
+		return arr.toString();
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Get deals based on the email of the contact
+     * 
+     * @param email
+     *            email of the contact
+     * 
+     * @return String
+     */
+    @Path("contacts/get-deals")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getDealsGadget(@QueryParam("email") String email)
+    {
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    List<Opportunity> deals = new ArrayList<Opportunity>();
+	    deals = OpportunityUtil.getDeals(contact.id, null, null);
+	    ObjectMapper mapper = new ObjectMapper();
+	    JSONArray arr = new JSONArray();
+	    for (Opportunity deal : deals)
+	    {
+		arr.put(mapper.writeValueAsString(deal));
+	    }
+	    return arr.toString();
 	}
 	catch (Exception e)
 	{
