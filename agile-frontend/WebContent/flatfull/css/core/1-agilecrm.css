@@ -3384,13 +3384,13 @@ table.hide-head-checkbox th label.i-checks {
 }
 .user-alert .free-user-alert-message{
 	position: fixed;
-	width: 30%;
+	width: 125px;
 	margin: 25px auto;
 	text-align: center;
 	background: #f7ecc2!important;
 	border: 1px solid #ffc237;
 	left: 0;
-	right: -310px;
+	right: 0;
 	z-index: 1030;
 	padding: 5px;
 	margin-top: 8px;
