@@ -588,6 +588,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 		try
 		{
+			
 			dao.put(this);
 
 			/*
