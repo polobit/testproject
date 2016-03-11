@@ -3174,3 +3174,9 @@ table.hide-head-checkbox th label.i-checks {
 .highcharts-button {
   display: none;
 }
+
+.highcharts-contextmenu hr
+{
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
