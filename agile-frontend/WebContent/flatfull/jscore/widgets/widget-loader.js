@@ -10,12 +10,12 @@ var widget_template_loaded_map = {};
  * @param el
  * @param contact
  */
-function loadWidgets(el, contact)
+function loadWidgets(el, contactObject, templateID)
 {
 	// Before loading the widgets, clear the queue of requests.
 	// queueClear("widget_queue");
 	// Create Data JSON
-	var data = { contact : contact };
+	var data = { contact : contactObject };
 
 	var is_widget_view_new = false;
 	/*
@@ -27,18 +27,16 @@ function loadWidgets(el, contact)
 		// This flag is used to ensure widget script are loaded only once in
 		// postrender. It is set to false after widget setup is initialized
 		is_widget_view_new = true;
-		Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : "widgets", individual_tag_name : 'li',
+		Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : templateID, individual_tag_name : 'li',
 			sortKey : 'position', modelData : data, postRenderCallback : function(widgets_el)
 			{
-				head.load(FLAT_FULL_UI + "css/misc/agile-widgets.css", function()
-				{
+				head.load(FLAT_FULL_UI + "css/misc/agile-widgets.css", function(){
 					// If scripts aren't loaded earlier, setup is initialized
-					if (is_widget_view_new)
-					{
-						set_up_widgets(el, widgets_el);
+					if (is_widget_view_new){
+						set_up_widgets(el, widgets_el, contactObject);
 					}
 					is_widget_view_new = false;
-				})
+				});
 
 			} });
 
@@ -49,7 +47,7 @@ function loadWidgets(el, contact)
 
 		// show widgets
 		var newEl = Widgets_View.render().el;
-		$('#widgets', el).html(newEl);
+		$('#'+templateID, el).html(newEl);
 		widgetBindingsLoader();
 	}
 	else
@@ -70,9 +68,9 @@ function loadWidgets(el, contact)
 				// Sort needs to be called as there could be position change
 				Widgets_View.collection.sort();
 
-				$('#widgets', el).html(Widgets_View.render(true).el);
+				$('#'+templateID, el).html(Widgets_View.render(true).el);
 				// Sets up widget
-				set_up_widgets(el, Widgets_View.el);
+				set_up_widgets(el, Widgets_View.el, contactObject);
 
 			}
 			widgetBindingsLoader();
@@ -185,7 +183,7 @@ function process_url(url)
  * @param el
  * @param widgets_el
  */
-function set_up_widgets(el, widgets_el)
+function set_up_widgets(el, widgets_el, contactObject)
 {
 	/*
 	 * Iterates through all the models (widgets) in the collection, and scripts
@@ -205,7 +203,7 @@ function set_up_widgets(el, widgets_el)
 		 */
 		$('#' + model.get('selector'), widgets_el).data('model', model);
 
-		var contact_id = App_Contacts.contactDetailView.model.get("id");
+		var contact_id = contactObject.id;
 		/*
 		 * Checks if widget is minimized, if minimized script is not loaded
 		 */
@@ -216,7 +214,7 @@ function set_up_widgets(el, widgets_el)
 				queueGetRequest("_widgets_" + contact_id, url, "script", function(data, queueName){
 					try{
 					console.log("start" + model.get('name') + "Widget");
-					  eval("start" + model.get('name') + "Widget")(queueName.replace("_widgets_", ""));	
+					  eval("start" + model.get('name') + "Widget")(queueName.replace("_widgets_", ""), contactObject);	
 					}catch(err){console.log(err);}
 					
 				}, undefined, 'true');
@@ -228,7 +226,7 @@ function set_up_widgets(el, widgets_el)
 					queueGetRequest("_widgets_" + contact_id, url, "script", function(data, queueName){
 						try{
 							console.log("start" + model.get('name') + "Widget");
-					  		eval("start" + model.get('name') + "Widget")(queueName.replace("_widgets_", ""));	
+					  		eval("start" + model.get('name') + "Widget")(queueName.replace("_widgets_", ""), contactObject);	
 						}catch(err){console.log(err);}						
 					}, undefined, 'true');
 				});

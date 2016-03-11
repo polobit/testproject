@@ -600,7 +600,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 			load_contact_tab(el, contact.toJSON());
 
-			loadWidgets(el, contact.toJSON());
+			loadWidgets(el, contact.toJSON(), "widgets");
 			
 			
 			
