@@ -151,6 +151,10 @@ if(isSafari && isWin)
 									</div> 		
 
 <input type='submit' id="register_account" value="Sign Up" class='btn btn-lg btn-primary btn-block'>
+<div class="text-center text-white m-t m-b">
+	<small>Forgot</small> 
+	<a href="/forgot-domain" class="text-white">Domain?</a>
+</div>
 </form>
 					
 </div>

@@ -201,6 +201,12 @@ function isValidForm(form) {
 
 	}," Please enter a value greater than or equal to 0.");
 
+	// domain name validation
+	jQuery.validator.addMethod("domain_format", function(value, element){
+		
+		return /^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$/.test(value);
+	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter.");
+
 	$(form).validate({
 		rules : {
 			atleastThreeMonths : true,

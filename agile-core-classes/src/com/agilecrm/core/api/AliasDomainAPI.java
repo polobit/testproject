@@ -85,6 +85,7 @@ public class AliasDomainAPI {
     		throw new Exception("Please provide valid details");
     	if(aliasDomain.alias.size() == 1 && aliasDomain.alias.get(0).equals(NamespaceManager.get())){
     		deleteAliasDomain(aliasDomain);
+    		return aliasDomain;
     	}
     	for(String alias: aliasDomain.alias)
     	{
