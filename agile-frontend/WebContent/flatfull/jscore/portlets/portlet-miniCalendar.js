@@ -42,7 +42,7 @@ function minicalendar(el)
 		            		   else if(datasizeY==3)
 		            			   $(el).find('.fc-header').css('height','250px');		
 
-		            		   jso=[];
+		            		   
 		            		   var date=new Date();
 		            		   var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 		            		   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
@@ -77,6 +77,7 @@ function minicalendar(el)
 
 		            		   $.getJSON(eventsURL, function(doc)
 		            				   {
+		            				   	jso=[];
 		            			   $.each(doc, function(index, data)
 		            					   {
 

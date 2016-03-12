@@ -1071,18 +1071,20 @@ function initializeAddPortletsListeners() {
 function insideAddListener()
 {
 
-	$('.modal-content').on('click', '#route-select-all',
-			function(e) {
-				e.preventDefault();
-				$('#route-list').multiSelect('select_all');
-			});
-
-	$('.modal-content').on('click', '#route-select-none',
-			function(e) {
-				e.preventDefault();
-				$('#route-list').multiSelect('deselect_all');
-			});
-
+	 $('.modal-content').off('click', '#route-select-all');
+  $('.modal-content').on('click', '#route-select-all',
+      function(e) {
+        e.preventDefault();
+        $('#route-list').multiSelect('select_all');
+      });
+  $('.modal-content').off('click', '#route-select-none');
+  $('.modal-content').on('click', '#route-select-none',
+      function(e) {
+        e.preventDefault();
+        $('#route-list').multiSelect('deselect_all');
+      });
+  
+    $('.modal-content').off('click', '.add-portlet');
 		$('.modal-content').on(
 			"click",
 			'.add-portlet',
