@@ -6,6 +6,8 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -175,6 +177,8 @@ public class AddDeal extends TaskletAdapter
 		opportunity.pipeline_id = pipelineID;
 		opportunity.close_date = closedEpochTime;
 		opportunity.deal_source_id = source_id;
+		System.out.println("addDeal------------Checking ACLs for creating deal");
+		UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
 		opportunity.save();
 	}
 }

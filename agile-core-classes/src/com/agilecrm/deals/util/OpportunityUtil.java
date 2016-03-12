@@ -37,6 +37,8 @@ import com.agilecrm.search.document.OpportunityDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -2749,7 +2751,10 @@ public class OpportunityUtil
 	   	
 	   	if(expectedValue.length()!=0 && expectedValue!=null)   
     		opportunityObj.expected_value=expectedValueD;
-    	
+	   	
+	   	System.out.println("updateDeal------------Checking ACLs for creating deal");
+	   	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunityObj, CRUDOperation.CREATE, true);
+	   	
     	opportunityObj.save();
 
     	return opportunityObj.name;
