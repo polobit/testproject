@@ -186,13 +186,26 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html($(template_ui));	
 
 			that.usersListView = new Base_Collection_View({ url : '/core/api/users', restKey : "domainUser", templateKey : "admin-settings-users",
-			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+			individual_tag_name : "div", sortKey : "name", postRenderCallback : function(el)
 			{
+				$('i').tooltip();
+
+				getTemplate('adminsettings-newuser', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+
+					// Get template and fill it with chats data and append it to chats panel
+					$('#admin-settings-users-model-list').append($(template_ui));
+
+				}, null);
+
+
 
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{
 					$(".last-login-time", el).timeago();
 				});
+				
 			} });
 			that.usersListView.collection.fetch();
 
@@ -1159,3 +1172,39 @@ function initQuota(callback)
 
 				callback();
 }
+
+function toggle_admin_user_bulk_actions_delete(clicked_ele, isBulk, isCampaign)
+{
+	$("#bulk-action-btns button").addClass("disabled");
+	if ($(clicked_ele).is(':checked'))
+	{
+		$("#bulk-action-btns button").removeClass("disabled");
+
+	}
+	else
+	{
+		if (isBulk)
+		{
+			$("#bulk-action-btns button").addClass("disabled");
+
+			return;
+		}
+
+		var check_count = 0
+		$.each($('.tbody_check'), function(index, element)
+		{
+			if ($(element).is(':checked'))
+			{
+				check_count++;
+				return false;
+			}
+			// return;
+		});
+
+		if (check_count == 0)
+		{
+			$("#bulk-action-btns button").addClass("disabled");
+		}
+	}
+}
+

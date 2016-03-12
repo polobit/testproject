@@ -67,7 +67,9 @@ var PortletsRouter = Backbone.Router
 										updateImageS3Path('flatfull/img/dashboard_images/Campaign-stats.jpg'),
 										updateImageS3Path('flatfull/img/dashboard_images/Quota.png'),
 										updateImageS3Path('flatfull/img/dashboard_images/incoming-deals-new.png'),
-										updateImageS3Path('flatfull/img/dashboard_images/lost-deal-analysis-new.png')
+										updateImageS3Path('flatfull/img/dashboard_images/lost-deal-analysis-new.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Average_deviation.png'),
+
 
 								]);
 								// Event initializers

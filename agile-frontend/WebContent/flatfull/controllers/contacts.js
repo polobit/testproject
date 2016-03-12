@@ -120,8 +120,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 * all at once.
 	 */
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
-	{
-		
+		{
 		insidePopover=false;
 		if(SCROLL_POSITION)
 		{
@@ -315,7 +314,7 @@ var ContactsRouter = Backbone.Router.extend({
 						}
 						var count_message;
 						if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
-							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: 0px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 						else
 							count_message = "<small> (" + count + " Total) </small>";
 						$('#contacts-count').html(count_message);
@@ -348,9 +347,10 @@ var ContactsRouter = Backbone.Router.extend({
 			contactFiltersListeners();
 			contactListener();
 		} else {
-			$('#contacts-listener-container').find('.contacts-div').html(this.contactsListView.render().el);
+			$('#contacts-listener-container').find('.contacts-inner-div').html(this.contactsListView.render().el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
+			$('#bulk-action-btns > button').addClass("disabled");
 			CONTACTS_HARD_RELOAD = true;
 			
 		}
@@ -749,7 +749,8 @@ var ContactsRouter = Backbone.Router.extend({
 
 		// Contact Duplicate
 		var contact = this.contactDetailView.model
-		var json = contact.toJSON();
+		var orginal_json = contact.toJSON();
+		var json = $.extend(true, {}, orginal_json);
 
 		// Delete email as well as it has to be unique
 		json = delete_contact_property(json, 'email');
@@ -939,7 +940,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#contacts-listener-container').html(el);
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 			if(agile_is_mobile_browser()) {
-			$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+			$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 			}
 			
 
@@ -1036,7 +1037,7 @@ var ContactsRouter = Backbone.Router.extend({
 						}
 						var count_message;
 						if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
-							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+ updateImageS3Path("/img/help.png") +'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: 0px">' + '<img border="0" src="'+ updateImageS3Path("/img/help.png") +'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 						else
 							count_message = "<small> (" + count + " Total) </small>";
 						$('#contacts-count').html(count_message);
@@ -1054,7 +1055,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 				if(agile_is_mobile_browser()) {
 				
-					var $nextEle = $('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+					var $nextEle = $('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 					$('#contacts-table tbody tr .icon-append-mobile',el).after($nextEle);
 				}
 				
@@ -1063,7 +1064,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 			}, appendItemCallback: function(el){
 				if(agile_is_mobile_browser()) {
-					$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t-sm contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+					$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 				}
 			}, });
 
@@ -1100,9 +1101,10 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#contacts-listener-container').html(this.contact_custom_view.el);
 			contactFiltersListeners();
 		} else {
-			$('#contacts-listener-container').find('.contacts-div').html(this.contact_custom_view.el);
+			$('#contacts-listener-container').find('.contacts-inner-div').html(this.contact_custom_view.el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
+			$('#bulk-action-btns > button').addClass("disabled");
 
 			CONTACTS_HARD_RELOAD = true;
 		}
@@ -1236,7 +1238,8 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 					if(type == "contacts")
 						App_Contacts.contactsListView.collection.models[0].set("count", data, {silent: true});
 					else if(type == "workflows"){
-						
+						if(App_Workflows.active_subscribers_collection && App_Workflows.active_subscribers_collection.collection && App_Workflows.active_subscribers_collection.collection.length > 0)
+							App_Workflows.active_subscribers_collection.collection.models[0].set("count", data, {silent: true});
 					} else{
 						App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
 					}
@@ -1260,11 +1263,12 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 		{
 			var pendingEmails = getPendingEmails();
 			window.history.back();
-			var title = "Emails limit";
+			var title = "Emails Limit";
 			var yes = "";
 			var no = "Ok"
-			var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
-			var message = "You have used up all emails in your quota. " + upgrade_link;
+			var upgrade_link =  'Please <a  href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> upgrade </a> your email subscription.';
+			var emialErrormsg = '<div class="m-t-xs">To continue sending emails from your account, please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> purchase </a>more.</div>';
+			var message = "<div>Sorry, your emails quota has been utilized.</div>" + emialErrormsg;
 			
 			showModalConfirmation(title, 
 					message, 

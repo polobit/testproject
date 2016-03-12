@@ -20,6 +20,15 @@ function agile_getEmail(callback)
 {
 	// Email
 	var email = agile_guid.get_email();
+
+    // Added server call remove if email is empty
+	if(email == null || !email)
+	{
+		if (callback && typeof (callback['success']) == "function")
+			callback['success']({"email":"null"});
+
+		return;
+	}
 	
 	// Get
 	var agile_url = agile_id.getURL() + "/email?callback=?&id=" + agile_id.get() + "&email=" + encodeURIComponent(email);

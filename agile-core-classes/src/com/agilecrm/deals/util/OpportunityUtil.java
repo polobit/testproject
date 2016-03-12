@@ -2032,680 +2032,727 @@ public class OpportunityUtil
      * @return JsonObject .
      */
     public static JSONObject getDealswithLossReason(Long ownerId, Long pipelineId, Long sourceId, long minTime,
-    	    long maxTime)
-        {
+	    long maxTime)
+    {
 
-    	JSONObject sourcecount = new JSONObject();
-    	CategoriesUtil categoriesUtil = new CategoriesUtil();
+	JSONObject sourcecount = new JSONObject();
+	CategoriesUtil categoriesUtil = new CategoriesUtil();
 
-    	if (minTime == 0 || pipelineId == 0)
-    	{
-    	    pipelineId = null;
-    	}
-    	if (ownerId == 0)
-    	{
-    	    ownerId = null;
-    	}
-    	if (sourceId == 0)
-    	    sourceId = null;
-    	String timeZone = "UTC";
-    	UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
-    	if (userPrefs != null && userPrefs.timezone != null)
-    	{
-    	    timeZone = userPrefs.timezone;
-    	}
-    	List<Opportunity> opportunitiesList = getLostDealsWithOwnerandPipeline(ownerId, pipelineId, minTime, maxTime);
-    	List<Opportunity> opportunitiesList_temp = new ArrayList<Opportunity>();
-    	if (opportunitiesList != null && opportunitiesList.size() > 0)
-    	{
-    	    for (Opportunity opportunity : opportunitiesList)
-    	    {
-    		boolean flag = true;
-    		try
-    		{
-    		    Long source = opportunity.getDeal_source_id();
-    		    if (sourceId != null)
-    		    {
-    			if (sourceId == 1)
-    			{
-    			    if (source == 0L)
-    				opportunitiesList_temp.add(opportunity);
-    			    else
-    			    {
-    				List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
-    				for (Category source_id : sources)
-    				{
-    				    if (source.toString().equals(source_id.getId().toString()))
-    				    {
-    					flag = false;
-    					break;
-    				    }
+	if (minTime == 0 || pipelineId == 0)
+	{
+	    pipelineId = null;
+	}
+	if (ownerId == 0)
+	{
+	    ownerId = null;
+	}
+	if (sourceId == 0)
+	    sourceId = null;
+	String timeZone = "UTC";
+	UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+	if (userPrefs != null && userPrefs.timezone != null)
+	{
+	    timeZone = userPrefs.timezone;
+	}
+	List<Opportunity> opportunitiesList = getLostDealsWithOwnerandPipeline(ownerId, pipelineId, minTime, maxTime);
+	List<Opportunity> opportunitiesList_temp = new ArrayList<Opportunity>();
+	if (opportunitiesList != null && opportunitiesList.size() > 0)
+	{
+	    for (Opportunity opportunity : opportunitiesList)
+	    {
+		boolean flag = true;
+		try
+		{
+		    Long source = opportunity.getDeal_source_id();
+		    if (sourceId != null)
+		    {
+			if (sourceId == 1)
+			{
+			    if (source == 0L)
+				opportunitiesList_temp.add(opportunity);
+			    else
+			    {
+				List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
+				for (Category source_id : sources)
+				{
+				    if (source.toString().equals(source_id.getId().toString()))
+				    {
+					flag = false;
+					break;
+				    }
 
-    				}
-    				if (flag)
-    				    opportunitiesList_temp.add(opportunity);
-    			    }
+				}
+				if (flag)
+				    opportunitiesList_temp.add(opportunity);
+			    }
 
-    			}
-    			else if (source.toString().equals(sourceId.toString()))
-    			    opportunitiesList_temp.add(opportunity);
-    			else
-    			    continue;
-    		    }
-    		    else
-    			opportunitiesList_temp.add(opportunity);
-    		}
-    		catch (Exception e)
-    		{
-    		    System.out.println("Exception :" + e);
-    		}
-    	    }
-    	    if (opportunitiesList_temp != null && opportunitiesList_temp.size() > 0)
-    	    {
-    		List<Category> reasons = categoriesUtil.getCategoriesByType("DEAL_LOST_REASON");
-    		JSONObject countandToal = new JSONObject();
-    		countandToal.put("count", 0);
-    		countandToal.put("total", 0);
-    		sourcecount.put("0", countandToal);
-    		for (Category reason : reasons)
-    		{
-    		    sourcecount.put(reason.getId(), countandToal);
-    		}
-    	    }
-    	}
-    	for (Opportunity opportunity : opportunitiesList_temp)
-    	{
-    	    boolean flag_reason = true;
-    	    try
-    	    {
-    		Long lost_id = opportunity.getLost_reason_id();
-    		Double value = opportunity.expected_value;
-    		List<Category> reasons = categoriesUtil.getCategoriesByType("DEAL_LOST_REASON");
-    		for (Category reason : reasons)
-    		{
-    		    if (reason.getId().toString().equals(lost_id.toString()))
-    			flag_reason = false;
-    		}
-    		if (flag_reason)
-    		    lost_id = 0L;
-    		// Read from previous object if present
-    		if (sourcecount.containsKey(lost_id.toString()))
-    		{
-    		    JSONObject sourceObject = sourcecount.getJSONObject(lost_id.toString());
-    		    int count = sourceObject.getInt("count");
-    		    count++;
-    		    Double total = sourceObject.getDouble("total");
-    		    total = total + value;
-    		    sourceObject.put("count", count);
-    		    sourceObject.put("total", total);
-    		    sourcecount.put(lost_id.toString(), sourceObject);
-    		}
+			}
+			else if (source.toString().equals(sourceId.toString()))
+			    opportunitiesList_temp.add(opportunity);
+			else
+			    continue;
+		    }
+		    else
+			opportunitiesList_temp.add(opportunity);
+		}
+		catch (Exception e)
+		{
+		    System.out.println("Exception :" + e);
+		}
+	    }
+	    if (opportunitiesList_temp != null && opportunitiesList_temp.size() > 0)
+	    {
+		List<Category> reasons = categoriesUtil.getCategoriesByType("DEAL_LOST_REASON");
+		JSONObject countandToal = new JSONObject();
+		countandToal.put("count", 0);
+		countandToal.put("total", 0);
+		sourcecount.put("0", countandToal);
+		for (Category reason : reasons)
+		{
+		    sourcecount.put(reason.getId(), countandToal);
+		}
+	    }
+	}
+	for (Opportunity opportunity : opportunitiesList_temp)
+	{
+	    boolean flag_reason = true;
+	    try
+	    {
+		Long lost_id = opportunity.getLost_reason_id();
+		Double value = opportunity.expected_value;
+		List<Category> reasons = categoriesUtil.getCategoriesByType("DEAL_LOST_REASON");
+		for (Category reason : reasons)
+		{
+		    if (reason.getId().toString().equals(lost_id.toString()))
+			flag_reason = false;
+		}
+		if (flag_reason)
+		    lost_id = 0L;
+		// Read from previous object if present
+		if (sourcecount.containsKey(lost_id.toString()))
+		{
+		    JSONObject sourceObject = sourcecount.getJSONObject(lost_id.toString());
+		    int count = sourceObject.getInt("count");
+		    count++;
+		    Double total = sourceObject.getDouble("total");
+		    total = total + value;
+		    sourceObject.put("count", count);
+		    sourceObject.put("total", total);
+		    sourcecount.put(lost_id.toString(), sourceObject);
+		}
 
-    	    }
-    	    catch (Exception e)
-    	    {
-    		System.out.println("Exception :" + e);
-    	    }
-    	}
-    	return sourcecount;
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("Exception :" + e);
+	    }
+	}
+	return sourcecount;
 
-        }
+    }
 
-        /**
-         * Returns deals based on ownerId or PipelineId or sourceId or close-date or
-         * all at once
-         * 
-         * 
-         * @param ownerId
-         *            - Owner Id
-         * @param pipelineId
-         *            - pipeline Id -
-         * @param sourceId
-         * @return List
-         */
-        public static List<Opportunity> getLostDealsWithOwnerandPipeline(Long ownerId, Long pipelineId, long minTime,
-    	    long maxTime)
-        {
+    /**
+     * Returns deals based on ownerId or PipelineId or sourceId or close-date or
+     * all at once
+     * 
+     * 
+     * @param ownerId
+     *            - Owner Id
+     * @param pipelineId
+     *            - pipeline Id -
+     * @param sourceId
+     * @return List
+     */
+    public static List<Opportunity> getLostDealsWithOwnerandPipeline(Long ownerId, Long pipelineId, long minTime,
+	    long maxTime)
+    {
+	Map<String, Object> conditionsMap = new HashMap<String, Object>();
+	Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
+	// List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
+	// List<Opportunity> list=null;
+	List<Opportunity> list2 = new ArrayList<Opportunity>();
+	Set<Opportunity> ownDealsSet = new TreeSet<Opportunity>(new Comparator<Opportunity>()
+	{
+	    @Override
+	    public int compare(Opportunity o1, Opportunity o2)
+	    {
+		return o1.id.equals(o2.id) ? 0 : -1;
+	    }
+	});
+	List<Milestone> milestoneList;
+	Milestone milestone1;
+	if (ownerId != null)
+	{
+	    conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+	    conditionsMap1.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+	}
+
+	conditionsMap.put("archived", false);
+	conditionsMap1.put("archived", false);
+	conditionsMap.put("created_time >= ", minTime);
+	conditionsMap.put("created_time <= ", maxTime);
+	conditionsMap1.put("milestone_changed_time >= ", minTime);
+	conditionsMap1.put("milestone_changed_time <= ", maxTime);
+	if (pipelineId != null)
+	{
+	    milestone1 = MilestoneUtil.getMilestone(pipelineId);
+	    if (milestone1.lost_milestone != null)
+	    {
+		conditionsMap.put("milestone", milestone1.lost_milestone);
+		conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
+		conditionsMap1.put("milestone", milestone1.lost_milestone);
+		conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
+		List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "-created_time");
+		List<Opportunity> list2_temp = dao.listByPropertyAndOrder(conditionsMap1, "-milestone_changed_time");
+		boolean flag = false;
+		list2.addAll(list2_temp);
+		for (Opportunity list_it : list)
+		{
+			if(list2.size()>0){
+		    for (Opportunity list_it2 : list2)
+		    {
+			if (!list_it.id.equals(list_it2.id))
+			{
+			    flag = true;
+			    continue;
+			}
+			else
+			{
+			    flag = false;
+			    break;
+			}
+		    }
+		    if (flag)
+			list2.add(list_it);
+		}
+			else
+				list2.add(list_it);
+		}
+	    }
+	    else
+	    {
+		conditionsMap.put("milestone", "Lost");
+		conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
+		conditionsMap1.put("milestone", "Lost");
+		conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
+		List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "-created_time");
+		List<Opportunity> list2_temp = dao.listByPropertyAndOrder(conditionsMap1, "-milestone_changed_time");
+		boolean flag = false;
+		list2.addAll(list2_temp);
+		for (Opportunity list_it : list)
+		{
+			if(list2.size()>0){
+		    for (Opportunity list_it2 : list2)
+		    {
+			if (!list_it.id.equals(list_it2.id))
+			{
+			    flag = true;
+			    continue;
+			}
+			else
+			{
+			    flag = false;
+			    break;
+			}
+		    }
+		    if (flag)
+			list2.add(list_it);
+			}
+			else
+				list2.add(list_it);
+		}
+	    }
+	}
+	else
+	{
+	    milestoneList = MilestoneUtil.getMilestonesList();
+	    for (Milestone milestone : milestoneList)
+	    {
+		if (milestone.lost_milestone != null)
+		{
+		    conditionsMap.put("milestone", milestone.lost_milestone);
+		    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+		    conditionsMap1.put("milestone", milestone.lost_milestone);
+		    conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+		    List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "-created_time");
+		    List<Opportunity> list2_temp = dao
+			    .listByPropertyAndOrder(conditionsMap1, "-milestone_changed_time");
+		    boolean flag = false;
+		    list2.addAll(list2_temp);
+		    for (Opportunity list_it : list)
+		    {
+		    	if(list2.size()>0){
+			for (Opportunity list_it2 : list2)
+			{
+			    if (!list_it.id.equals(list_it2.id))
+			    {
+				flag = true;
+				continue;
+			    }
+			    else
+			    {
+				flag = false;
+				break;
+			    }
+			}
+			if (flag)
+			    list2.add(list_it);
+		    }
+		    	 else
+						list2.add(list_it);
+		    }
+		   
+		}
+		else
+		{
+		    conditionsMap.put("milestone", "Lost");
+		    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+		    conditionsMap1.put("milestone", "Lost");
+		    conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+
+		    List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "-created_time");
+		    List<Opportunity> list2_temp = dao
+			    .listByPropertyAndOrder(conditionsMap1, "-milestone_changed_time");
+		    boolean flag = false;
+		    list2.addAll(list2_temp);
+		    for (Opportunity list_it : list)
+		    {
+		    	if(list2.size()>0){
+			for (Opportunity list_it2 : list2)
+			{
+			    if (!list_it.id.equals(list_it2.id))
+			    {
+				flag = true;
+				continue;
+			    }
+			    else
+			    {
+				flag = false;
+				break;
+			    }
+			}
+			if (flag)
+			    list2.add(list_it);
+		    }
+		    	 else
+						list2.add(list_it);
+		    }
+		}
+	    }
+	}
+	// ownDealsList=new ArrayList<>(ownDealsSet);
+	return list2;
+    }
+
+    /**
+     * Returns JSONObject of won Deals divided by source. These are used for pie
+     * chart building.
+     * 
+     * @param minTime
+     *            - Given time less than closed date.
+     * @param maxTime
+     *            - Given time greater than closed date.
+     * @return JsonObject .
+     */
+    public static JSONObject getWonDealsforpiechart(Long ownerId, long minTime, long maxTime)
+    {
+	JSONObject dealswoncount = new JSONObject();
+	CategoriesUtil categoriesUtil = new CategoriesUtil();
+
+	if (ownerId == 0)
+	{
+	    ownerId = null;
+	}
+	String timeZone = "UTC";
+	UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+	if (userPrefs != null && userPrefs.timezone != null)
+	{
+	    timeZone = userPrefs.timezone;
+	}
+	List<Opportunity> opportunitiesList = getWonDealsListWithOwner(minTime, maxTime, ownerId);
+	if (opportunitiesList != null && opportunitiesList.size() > 0)
+	{
+
+	    List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
+	    JSONObject countandvalue = new JSONObject();
+	    countandvalue.put("count", 0);
+	    countandvalue.put("total", 0);
+	    dealswoncount.put("0", countandvalue);
+	    for (Category source : sources)
+	    {
+		dealswoncount.put(source.getId(), countandvalue);
+	    }
+	}
+	for (Opportunity opportunity : opportunitiesList)
+	{
+	    boolean flag_reason = true;
+	    try
+	    {
+
+		Long source_id = opportunity.getDeal_source_id();
+		Double value = opportunity.expected_value;
+
+		List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
+		for (Category reason : sources)
+		{
+		    if (reason.getId().toString().equals(source_id.toString()))
+			flag_reason = false;
+		}
+		if (flag_reason)
+		    source_id = 0L;
+
+		// Read from previous object if present
+		if (dealswoncount.containsKey(source_id.toString()))
+		{
+		    JSONObject sourceObject = dealswoncount.getJSONObject(source_id.toString());
+		    int count = sourceObject.getInt("count");
+		    count++;
+		    Double total = sourceObject.getDouble("total");
+		    total = total + value;
+		    sourceObject.put("count", count);
+		    sourceObject.put("total", total);
+		    dealswoncount.put(source_id.toString(), sourceObject);
+		}
+
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("Exception :" + e);
+	    }
+	}
+	return dealswoncount;
+    }
+
+    /**
+     * Returns list of deals based on ownerId or won-date or all at once
+     * 
+     * 
+     * @param ownerId
+     *            - Owner Id
+     * @return List
+     */
+    public static List<Opportunity> getWonDealsListWithOwner(long minTime, long maxTime, Long ownerId)
+    {
+	Map<String, Object> conditionsMap = new HashMap<String, Object>();
+	List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
+	if (ownerId != null)
+	    conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+	conditionsMap.put("won_date >= ", minTime);
+	conditionsMap.put("won_date <= ", maxTime);
+	conditionsMap.put("archived", false);
+	try
+	{
+	    List<Milestone> milestoneList = MilestoneUtil.getMilestonesList();
+	    for (Milestone milestone : milestoneList)
+	    {
+		if (milestone.won_milestone != null)
+		{
+		    conditionsMap.put("milestone", milestone.won_milestone);
+		    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+		    List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "won_date");
+		    if (list != null)
+		    {
+			ownDealsList.addAll(list);
+		    }
+		}
+		else
+		{
+		    conditionsMap.put("milestone", "Won");
+		    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+		    List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "won_date");
+		    if (list != null)
+		    {
+			ownDealsList.addAll(list);
+		    }
+		}
+	    }
+	    return ownDealsList;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+
+    }
+
+    /*
+     * Returns list of deals based on ownerId or trackid and mintime, maxtime
+     * 
+     * @param ownerId - Owner Id
+     * 
+     * @param trackId - Track Id
+     * 
+     * @return JSONObject
+     */
+    @SuppressWarnings("unchecked")
+    public static JSONObject getPipelineConversionData(Long ownerId, long minTime, long maxTime, Long Track)
+    {
+
+	JSONObject Track_conversion = new JSONObject();
+	JSONObject Track_conversion_User = new JSONObject();
+	List<DomainUser> domainUsersList = new ArrayList<DomainUser>();
+	if (ownerId != null && ownerId == 0)
+	    ownerId = null;
+	else
+	{
+	    if (DomainUserUtil.getDomainUser(ownerId) != null)
+		domainUsersList.add(DomainUserUtil.getDomainUser(ownerId));
+	}
+	List<Opportunity> opportunitiesList_main = getConversionDeals(ownerId, minTime, maxTime);
+	List<Opportunity> opportunitiesList = new ArrayList<Opportunity>();
+	List<Milestone> milestones = new ArrayList<Milestone>();
+
+	try
+	{
+
+	    if (Track != null)
+	    {
+		System.out.println("Inside track check");
+		Milestone milestone = MilestoneUtil.getMilestone(Track);
+		milestones.add(milestone);
+		if (opportunitiesList_main != null && opportunitiesList_main.size() > 0)
+		{
+		    for (Opportunity opp : opportunitiesList_main)
+		    {
+			if (opp.getPipeline_id().equals(Track))
+			    opportunitiesList.add(opp);
+		    }
+		    System.out.println("Inside list" + opportunitiesList);
+		}
+	    }
+	    else
+	    {
+		opportunitiesList = opportunitiesList_main;
+		System.out.println("Opportunity list" + opportunitiesList);
+		milestones = MilestoneUtil.getMilestonesList();
+	    }
+
+	    for (Milestone milestone : milestones)
+	    {
+		System.out.println("Milestone check");
+		JSONObject milestoneValue = new JSONObject();
+		Opportunity.MILESTONES = milestone.milestones.split(",");
+		for (String milestone_data : Opportunity.MILESTONES)
+		{
+		    milestoneValue.put(" " + milestone_data.toString(), 0);
+		}
+		Track_conversion.put(milestone.name, milestoneValue);
+
+	    }
+
+	    if (ownerId == null)
+	    {
+		System.out.println("Owner check");
+		DomainUser dUser = DomainUserUtil.getCurrentDomainUser();
+		if (dUser != null)
+		    domainUsersList = DomainUserUtil.getUsers(dUser.domain);
+	    }
+	    for (DomainUser domainuser : domainUsersList)
+	    {
+		System.out.println("domainuser" + domainuser);
+		JSONObject Track_user_pair = new JSONObject();
+		Track_user_pair.put(domainuser.name, Track_conversion);
+		System.out.println("user pair" + Track_user_pair);
+		Track_conversion_User.put(domainuser.id, Track_user_pair);
+		System.out.println("Conversion Json" + Track_conversion_User);
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	if (opportunitiesList != null && opportunitiesList.size() != 0)
+	{
+
+	    for (Opportunity opp : opportunitiesList)
+	    {
+		System.out.println("Inside deal List");
+		try
+		{
+		    // int count=0;
+		    Long pipeline_id = opp.getPipeline_id();
+
+		    Milestone mile = MilestoneUtil.getMilestone(pipeline_id);
+
+		    System.out.println("mile" + mile);
+
+		    System.out.println("ownerid" + opp.getOwner());
+		    if (opp.getOwner() != null)
+			if (Track_conversion_User.containsKey(opp.getOwner().id.toString()))
+			{
+			    JSONObject conversion_user = Track_conversion_User.getJSONObject(opp.getOwner().id
+				    .toString());
+			    if (conversion_user.containsKey(opp.getOwner().name))
+			    {
+
+				JSONObject conversion = conversion_user.getJSONObject(opp.getOwner().name);
+
+				if (mile != null)
+				    if (conversion.containsKey(mile.name))
+				    {
+					JSONObject mileObject = conversion.getJSONObject(mile.name);
+					System.out.println("Mileobject" + mileObject);
+					if (mileObject.containsKey(" " + opp.milestone))
+					{
+					    Iterator keys = mileObject.keys();
+					    while (keys.hasNext())
+					    {
+						String key = (String) keys.next();
+						int count = mileObject.getInt(key);
+						count++;
+						mileObject.put(key, count);
+
+						if (key.equalsIgnoreCase(" " + opp.milestone))
+						    break;
+					    }
+
+					    conversion.put(mile.name, mileObject);
+					}
+					conversion_user.put(opp.getOwner().name, conversion);
+
+				    }
+				Track_conversion_User.put(opp.getOwner().id, conversion_user);
+			    }
+			}
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    return null;
+		}
+	    }
+	}
+	System.out.println("Tracks" + Track_conversion);
+	return Track_conversion_User;
+    }
+
+    /*
+     * 
+     * Return List of Opportunities for pipeline conversion
+     */
+    public static List<Opportunity> getConversionDeals(Long ownerId, long minTime, long maxTime)
+    {
+
+	Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
+	Map<String, Object> conditionsMap2 = new HashMap<String, Object>();
+
+	System.out.println("insdie conversion");
+	if (ownerId != null)
+	{
+	    conditionsMap1.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+	    conditionsMap2.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+	}
+	// conditionsMap2.put("archived", false);
+	conditionsMap2.put("created_time >= ", minTime);
+	conditionsMap2.put("created_time <= ", maxTime);
+	conditionsMap1.put("milestone_changed_time >= ", minTime);
+	conditionsMap1.put("milestone_changed_time <= ", maxTime);
+	// conditionsMap1.put("archived", false);
+	try
+	{
+
+	    List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap1, "-milestone_changed_time");
+	    System.out.println("list1--" + list);
+	    List<Opportunity> list2 = dao.listByPropertyAndOrder(conditionsMap2, "-created_time");
+	    System.out.println("list2--" + list2);
+	    List<Opportunity> list_main = new ArrayList<Opportunity>();
+	    List<Opportunity> list2_main = new ArrayList<Opportunity>();
+	    for (Opportunity it1 : list)
+	    {
+		if (it1.archived == false)
+		    list_main.add(it1);
+	    }
+	    for (Opportunity it2 : list2)
+	    {
+		if (it2.archived == false)
+		    list2_main.add(it2);
+	    }
+
+	    boolean flag = false;
+	    for (Opportunity list_it : list_main)
+	    {
+		if (list2_main.size() != 0)
+		{
+		    for (Opportunity list_it2 : list2_main)
+		    {
+			if (!list_it.id.equals(list_it2.id))
+			{
+			    flag = true;
+			    continue;
+			}
+			else
+			{
+			    flag = false;
+			    break;
+			}
+		    }
+		    if (flag)
+			list2_main.add(list_it);
+		}
+		else
+		    list2_main.add(list_it);
+	    }
+
+	    // conversionList=new ArrayList<>(ownDealsSet);
+	    System.out.println("list2" + list2_main);
+	    // System.out.println("main list"+conversionList);
+
+	    return list2_main;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
+    @SuppressWarnings("null")
+	public static String updateDeal(Long contactId, String milestone, String expectedValue)
+    {   
+    	if(expectedValue==null && milestone==null)
+    		if (contactId == 0 && milestone.length()==0 && expectedValue.length()==0 )
+    			return null; 
+    	
+    	double expectedValueD=0;
+    	if(expectedValue.length()!=0 && expectedValue!=null)    		
+    		expectedValueD= Double.parseDouble(expectedValue);	
+    	
     	Map<String, Object> conditionsMap = new HashMap<String, Object>();
-    	Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
-    	// List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
-    	// List<Opportunity> list=null;
-    	List<Opportunity> list2 = new ArrayList<Opportunity>();
-    	Set<Opportunity> ownDealsSet = new TreeSet<Opportunity>(new Comparator<Opportunity>()
-    	{
-    	    @Override
-    	    public int compare(Opportunity o1, Opportunity o2)
-    	    {
-    		return o1.id.equals(o2.id) ? 0 : -1;
-    	    }
-    	});
-    	List<Milestone> milestoneList;
-    	Milestone milestone1;
-    	if (ownerId != null)
-    	{
-    	    conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
-    	    conditionsMap1.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
-    	}
-
     	conditionsMap.put("archived", false);
-    	conditionsMap1.put("archived", false);
-    	conditionsMap.put("created_time >= ", minTime);
-    	conditionsMap.put("created_time <= ", maxTime);
-    	conditionsMap1.put("milestone_changed_time >= ", minTime);
-    	conditionsMap1.put("milestone_changed_time <= ", maxTime);
-    	if (pipelineId != null)
-    	{
-    	    milestone1 = MilestoneUtil.getMilestone(pipelineId);
-    	    if (milestone1.lost_milestone != null)
-    	    {
-    		conditionsMap.put("milestone", milestone1.lost_milestone);
-    		conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
-    		conditionsMap1.put("milestone", milestone1.lost_milestone);
-    		conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
-    		List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "-created_time");
-    		List<Opportunity> list2_temp = dao.listByPropertyAndOrder(conditionsMap1, "-milestone_changed_time");
-    		boolean flag = false;
-    		list2.addAll(list2_temp);
-    		for (Opportunity list_it : list)
-    		{
-    			if(list2.size()>0){
-    		    for (Opportunity list_it2 : list2)
-    		    {
-    			if (!list_it.id.equals(list_it2.id))
-    			{
-    			    flag = true;
-    			    continue;
-    			}
-    			else
-    			{
-    			    flag = false;
-    			    break;
-    			}
-    		    }
-    		    if (flag)
-    			list2.add(list_it);
-    		}
-    			else
-    				list2.add(list_it);
-    		}
-    	    }
-    	    else
-    	    {
-    		conditionsMap.put("milestone", "Lost");
-    		conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
-    		conditionsMap1.put("milestone", "Lost");
-    		conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
-    		List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "-created_time");
-    		List<Opportunity> list2_temp = dao.listByPropertyAndOrder(conditionsMap1, "-milestone_changed_time");
-    		boolean flag = false;
-    		list2.addAll(list2_temp);
-    		for (Opportunity list_it : list)
-    		{
-    			if(list2.size()>0){
-    		    for (Opportunity list_it2 : list2)
-    		    {
-    			if (!list_it.id.equals(list_it2.id))
-    			{
-    			    flag = true;
-    			    continue;
-    			}
-    			else
-    			{
-    			    flag = false;
-    			    break;
-    			}
-    		    }
-    		    if (flag)
-    			list2.add(list_it);
-    			}
-    			else
-    				list2.add(list_it);
-    		}
-    	    }
+
+    	Long pipeline=null;
+    	String milestoneStr=null;
+    	
+    	if(milestone.length()!=0 && milestone!=null){ 
+    		Map<String, String> fromMilestoneDetails = AgileTaskletUtil.getTrackDetails(milestone);
+    		milestoneStr=fromMilestoneDetails.get("milestone").trim();
+    		pipeline=Long.parseLong(fromMilestoneDetails.get("pipelineID"));
     	}
-    	else
-    	{
-    	    milestoneList = MilestoneUtil.getMilestonesList();
-    	    for (Milestone milestone : milestoneList)
-    	    {
-    		if (milestone.lost_milestone != null)
-    		{
-    		    conditionsMap.put("milestone", milestone.lost_milestone);
-    		    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
-    		    conditionsMap1.put("milestone", milestone.lost_milestone);
-    		    conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
-    		    List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "-created_time");
-    		    List<Opportunity> list2_temp = dao
-    			    .listByPropertyAndOrder(conditionsMap1, "-milestone_changed_time");
-    		    boolean flag = false;
-    		    list2.addAll(list2_temp);
-    		    for (Opportunity list_it : list)
-    		    {
-    		    	if(list2.size()>0){
-    			for (Opportunity list_it2 : list2)
-    			{
-    			    if (!list_it.id.equals(list_it2.id))
-    			    {
-    				flag = true;
-    				continue;
-    			    }
-    			    else
-    			    {
-    				flag = false;
-    				break;
-    			    }
-    			}
-    			if (flag)
-    			    list2.add(list_it);
-    		    }
-    		    	 else
-    						list2.add(list_it);
-    		    }
-    		   
-    		}
-    		else
-    		{
-    		    conditionsMap.put("milestone", "Lost");
-    		    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
-    		    conditionsMap1.put("milestone", "Lost");
-    		    conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
-
-    		    List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "-created_time");
-    		    List<Opportunity> list2_temp = dao
-    			    .listByPropertyAndOrder(conditionsMap1, "-milestone_changed_time");
-    		    boolean flag = false;
-    		    list2.addAll(list2_temp);
-    		    for (Opportunity list_it : list)
-    		    {
-    		    	if(list2.size()>0){
-    			for (Opportunity list_it2 : list2)
-    			{
-    			    if (!list_it.id.equals(list_it2.id))
-    			    {
-    				flag = true;
-    				continue;
-    			    }
-    			    else
-    			    {
-    				flag = false;
-    				break;
-    			    }
-    			}
-    			if (flag)
-    			    list2.add(list_it);
-    		    }
-    		    	 else
-    						list2.add(list_it);
-    		    }
-    		}
-    	    }
+    	
+    	if (contactId != null)
+    		conditionsMap.put("related_contacts", new Key<Contact>(Contact.class, contactId));
+    	
+	   	List<Opportunity> listOpportunityObj= dao.fetchAllByOrder(1,null,conditionsMap,true,false,"-created_time");
+    	
+	   	if(listOpportunityObj.isEmpty())
+	   		return null;
+	   	
+	   	Opportunity opportunityObj = listOpportunityObj.get(0);
+    		
+	   	if(milestoneStr!=null){
+	   		opportunityObj.milestone=milestoneStr;
+	   		opportunityObj.pipeline_id=pipeline;
     	}
-    	// ownDealsList=new ArrayList<>(ownDealsSet);
-    	return list2;
-        }
+	   	
+	   	if(expectedValue.length()!=0 && expectedValue!=null)   
+    		opportunityObj.expected_value=expectedValueD;
+    	
+    	opportunityObj.save();
 
-        /**
-         * Returns JSONObject of won Deals divided by source. These are used for pie
-         * chart building.
-         * 
-         * @param minTime
-         *            - Given time less than closed date.
-         * @param maxTime
-         *            - Given time greater than closed date.
-         * @return JsonObject .
-         */
-        public static JSONObject getWonDealsforpiechart(Long ownerId, long minTime, long maxTime)
-        {
-    	JSONObject dealswoncount = new JSONObject();
-    	CategoriesUtil categoriesUtil = new CategoriesUtil();
-
-    	if (ownerId == 0)
-    	{
-    	    ownerId = null;
-    	}
-    	String timeZone = "UTC";
-    	UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
-    	if (userPrefs != null && userPrefs.timezone != null)
-    	{
-    	    timeZone = userPrefs.timezone;
-    	}
-    	List<Opportunity> opportunitiesList = getWonDealsListWithOwner(minTime, maxTime, ownerId);
-    	if (opportunitiesList != null && opportunitiesList.size() > 0)
-    	{
-
-    	    List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
-    	    JSONObject countandvalue = new JSONObject();
-    	    countandvalue.put("count", 0);
-    	    countandvalue.put("total", 0);
-    	    dealswoncount.put("0", countandvalue);
-    	    for (Category source : sources)
-    	    {
-    		dealswoncount.put(source.getId(), countandvalue);
-    	    }
-    	}
-    	for (Opportunity opportunity : opportunitiesList)
-    	{
-    	    boolean flag_reason = true;
-    	    try
-    	    {
-
-    		Long source_id = opportunity.getDeal_source_id();
-    		Double value = opportunity.expected_value;
-
-    		List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
-    		for (Category reason : sources)
-    		{
-    		    if (reason.getId().toString().equals(source_id.toString()))
-    			flag_reason = false;
-    		}
-    		if (flag_reason)
-    		    source_id = 0L;
-
-    		// Read from previous object if present
-    		if (dealswoncount.containsKey(source_id.toString()))
-    		{
-    		    JSONObject sourceObject = dealswoncount.getJSONObject(source_id.toString());
-    		    int count = sourceObject.getInt("count");
-    		    count++;
-    		    Double total = sourceObject.getDouble("total");
-    		    total = total + value;
-    		    sourceObject.put("count", count);
-    		    sourceObject.put("total", total);
-    		    dealswoncount.put(source_id.toString(), sourceObject);
-    		}
-
-    	    }
-    	    catch (Exception e)
-    	    {
-    		System.out.println("Exception :" + e);
-    	    }
-    	}
-    	return dealswoncount;
-        }
-
-        /**
-         * Returns list of deals based on ownerId or won-date or all at once
-         * 
-         * 
-         * @param ownerId
-         *            - Owner Id
-         * @return List
-         */
-        public static List<Opportunity> getWonDealsListWithOwner(long minTime, long maxTime, Long ownerId)
-        {
-    	Map<String, Object> conditionsMap = new HashMap<String, Object>();
-    	List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
-    	if (ownerId != null)
-    	    conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
-    	conditionsMap.put("won_date >= ", minTime);
-    	conditionsMap.put("won_date <= ", maxTime);
-    	conditionsMap.put("archived", false);
-    	try
-    	{
-    	    List<Milestone> milestoneList = MilestoneUtil.getMilestonesList();
-    	    for (Milestone milestone : milestoneList)
-    	    {
-    		if (milestone.won_milestone != null)
-    		{
-    		    conditionsMap.put("milestone", milestone.won_milestone);
-    		    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
-    		    List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "won_date");
-    		    if (list != null)
-    		    {
-    			ownDealsList.addAll(list);
-    		    }
-    		}
-    		else
-    		{
-    		    conditionsMap.put("milestone", "Won");
-    		    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
-    		    List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "won_date");
-    		    if (list != null)
-    		    {
-    			ownDealsList.addAll(list);
-    		    }
-    		}
-    	    }
-    	    return ownDealsList;
-    	}
-    	catch (Exception e)
-    	{
-    	    e.printStackTrace();
-    	    return null;
-    	}
-
-        }
-
-        /*
-         * Returns list of deals based on ownerId or trackid and mintime, maxtime
-         * 
-         * @param ownerId - Owner Id
-         * 
-         * @param trackId - Track Id
-         * 
-         * @return JSONObject
-         */
-        @SuppressWarnings("unchecked")
-        public static JSONObject getPipelineConversionData(Long ownerId, long minTime, long maxTime, Long Track)
-        {
-
-    	JSONObject Track_conversion = new JSONObject();
-    	JSONObject Track_conversion_User = new JSONObject();
-    	List<DomainUser> domainUsersList = new ArrayList<DomainUser>();
-    	if (ownerId != null && ownerId == 0)
-    	    ownerId = null;
-    	else
-    	{
-    	    if (DomainUserUtil.getDomainUser(ownerId) != null)
-    		domainUsersList.add(DomainUserUtil.getDomainUser(ownerId));
-    	}
-    	List<Opportunity> opportunitiesList_main = getConversionDeals(ownerId, minTime, maxTime);
-    	List<Opportunity> opportunitiesList = new ArrayList<Opportunity>();
-    	List<Milestone> milestones = new ArrayList<Milestone>();
-
-    	try
-    	{
-
-    	    if (Track != null)
-    	    {
-    		System.out.println("Inside track check");
-    		Milestone milestone = MilestoneUtil.getMilestone(Track);
-    		milestones.add(milestone);
-    		if (opportunitiesList_main != null && opportunitiesList_main.size() > 0)
-    		{
-    		    for (Opportunity opp : opportunitiesList_main)
-    		    {
-    			if (opp.getPipeline_id().equals(Track))
-    			    opportunitiesList.add(opp);
-    		    }
-    		    System.out.println("Inside list" + opportunitiesList);
-    		}
-    	    }
-    	    else
-    	    {
-    		opportunitiesList = opportunitiesList_main;
-    		System.out.println("Opportunity list" + opportunitiesList);
-    		milestones = MilestoneUtil.getMilestonesList();
-    	    }
-
-    	    for (Milestone milestone : milestones)
-    	    {
-    		System.out.println("Milestone check");
-    		JSONObject milestoneValue = new JSONObject();
-    		Opportunity.MILESTONES = milestone.milestones.split(",");
-    		for (String milestone_data : Opportunity.MILESTONES)
-    		{
-    		    milestoneValue.put(" " + milestone_data.toString(), 0);
-    		}
-    		Track_conversion.put(milestone.name, milestoneValue);
-
-    	    }
-
-    	    if (ownerId == null)
-    	    {
-    		System.out.println("Owner check");
-    		DomainUser dUser = DomainUserUtil.getCurrentDomainUser();
-    		if (dUser != null)
-    		    domainUsersList = DomainUserUtil.getUsers(dUser.domain);
-    	    }
-    	    for (DomainUser domainuser : domainUsersList)
-    	    {
-    		System.out.println("domainuser" + domainuser);
-    		JSONObject Track_user_pair = new JSONObject();
-    		Track_user_pair.put(domainuser.name, Track_conversion);
-    		System.out.println("user pair" + Track_user_pair);
-    		Track_conversion_User.put(domainuser.id, Track_user_pair);
-    		System.out.println("Conversion Json" + Track_conversion_User);
-    	    }
-
-    	}
-    	catch (Exception e)
-    	{
-    	    e.printStackTrace();
-    	    return null;
-    	}
-    	if (opportunitiesList != null && opportunitiesList.size() != 0)
-    	{
-
-    	    for (Opportunity opp : opportunitiesList)
-    	    {
-    		System.out.println("Inside deal List");
-    		try
-    		{
-    		    // int count=0;
-    		    Long pipeline_id = opp.getPipeline_id();
-
-    		    Milestone mile = MilestoneUtil.getMilestone(pipeline_id);
-
-    		    System.out.println("mile" + mile);
-
-    		    System.out.println("ownerid" + opp.getOwner());
-    		    if (opp.getOwner() != null)
-    			if (Track_conversion_User.containsKey(opp.getOwner().id.toString()))
-    			{
-    			    JSONObject conversion_user = Track_conversion_User.getJSONObject(opp.getOwner().id
-    				    .toString());
-    			    if (conversion_user.containsKey(opp.getOwner().name))
-    			    {
-
-    				JSONObject conversion = conversion_user.getJSONObject(opp.getOwner().name);
-
-    				if (mile != null)
-    				    if (conversion.containsKey(mile.name))
-    				    {
-    					JSONObject mileObject = conversion.getJSONObject(mile.name);
-    					System.out.println("Mileobject" + mileObject);
-    					if (mileObject.containsKey(" " + opp.milestone))
-    					{
-    					    Iterator keys = mileObject.keys();
-    					    while (keys.hasNext())
-    					    {
-    						String key = (String) keys.next();
-    						int count = mileObject.getInt(key);
-    						count++;
-    						mileObject.put(key, count);
-
-    						if (key.equalsIgnoreCase(" " + opp.milestone))
-    						    break;
-    					    }
-
-    					    conversion.put(mile.name, mileObject);
-    					}
-    					conversion_user.put(opp.getOwner().name, conversion);
-
-    				    }
-    				Track_conversion_User.put(opp.getOwner().id, conversion_user);
-    			    }
-    			}
-    		}
-    		catch (Exception e)
-    		{
-    		    e.printStackTrace();
-    		    return null;
-    		}
-    	    }
-    	}
-    	System.out.println("Tracks" + Track_conversion);
-    	return Track_conversion_User;
-        }
-
-        /*
-         * 
-         * Return List of Opportunities for pipeline conversion
-         */
-        public static List<Opportunity> getConversionDeals(Long ownerId, long minTime, long maxTime)
-        {
-
-    	Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
-    	Map<String, Object> conditionsMap2 = new HashMap<String, Object>();
-
-    	System.out.println("insdie conversion");
-    	if (ownerId != null)
-    	{
-    	    conditionsMap1.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
-    	    conditionsMap2.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
-    	}
-    	// conditionsMap2.put("archived", false);
-    	conditionsMap2.put("created_time >= ", minTime);
-    	conditionsMap2.put("created_time <= ", maxTime);
-    	conditionsMap1.put("milestone_changed_time >= ", minTime);
-    	conditionsMap1.put("milestone_changed_time <= ", maxTime);
-    	// conditionsMap1.put("archived", false);
-    	try
-    	{
-
-    	    List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap1, "-milestone_changed_time");
-    	    System.out.println("list1--" + list);
-    	    List<Opportunity> list2 = dao.listByPropertyAndOrder(conditionsMap2, "-created_time");
-    	    System.out.println("list2--" + list2);
-    	    List<Opportunity> list_main = new ArrayList<Opportunity>();
-    	    List<Opportunity> list2_main = new ArrayList<Opportunity>();
-    	    for (Opportunity it1 : list)
-    	    {
-    		if (it1.archived == false)
-    		    list_main.add(it1);
-    	    }
-    	    for (Opportunity it2 : list2)
-    	    {
-    		if (it2.archived == false)
-    		    list2_main.add(it2);
-    	    }
-
-    	    boolean flag = false;
-    	    for (Opportunity list_it : list_main)
-    	    {
-    		if (list2_main.size() != 0)
-    		{
-    		    for (Opportunity list_it2 : list2_main)
-    		    {
-    			if (!list_it.id.equals(list_it2.id))
-    			{
-    			    flag = true;
-    			    continue;
-    			}
-    			else
-    			{
-    			    flag = false;
-    			    break;
-    			}
-    		    }
-    		    if (flag)
-    			list2_main.add(list_it);
-    		}
-    		else
-    		    list2_main.add(list_it);
-    	    }
-
-    	    // conversionList=new ArrayList<>(ownDealsSet);
-    	    System.out.println("list2" + list2_main);
-    	    // System.out.println("main list"+conversionList);
-
-    	    return list2_main;
-    	}
-    	catch (Exception e)
-    	{
-    	    e.printStackTrace();
-    	    return null;
-    	}
-        }
+    	return opportunityObj.name;
+    }
+	
 }

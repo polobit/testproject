@@ -76,6 +76,12 @@ public class AgileUser
     public static AgileUser getCurrentAgileUser()
     {
 	// Gets user from Domain_id
+    	System.out.println("User Info : ");
+    	System.out.println(SessionManager.get().toString());
+    	
+    	System.out.println("Domain Info : ");
+    	System.out.println(SessionManager.get().getDomainId());
+    	
 	return getCurrentAgileUserFromDomainUser(SessionManager.get().getDomainId());
     }
 

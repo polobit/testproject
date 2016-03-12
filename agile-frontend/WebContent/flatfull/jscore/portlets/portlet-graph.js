@@ -838,7 +838,7 @@ var portlet_graph_utility = {
 	 * To display task report portlet as bar graph
 	 */
 	taskReportBarGraph : function(selector, groupByList, series, text,
-			base_model, domainUserNamesList) {
+			base_model, domainUserNamesList,CountData,yaxistitle) {
 			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
 		var pos = '' + column_position + '' + row_position;
 
@@ -850,13 +850,13 @@ var portlet_graph_utility = {
 												colors : [ "#23b7e5",
 														"#27c24c", "#7266ba",
 														"#fad733", "#f05050",
-														"#aaeeee", "#ff0066",
+														"#aaeeee", "#f4a460",
 														"#eeaaee", "#55BF3B",
 														"#DF5353" ],
 												chart : {
 													renderTo:selector,
 													type : 'bar',
-													marginRight : 20,
+													marginRight : 80,
 													height:groupByList.length*30+($('#'+selector).height()-30),
 													events: {
 												   		load: function(){
@@ -871,10 +871,50 @@ var portlet_graph_utility = {
 												title : {
 													text : ''
 												},
+												
 												xAxis : {
 													categories : groupByList,
 													labels : {
 														formatter : function() {
+															if(base_model.get('name')=='Average Deviation')
+															{
+																var userIndex = 0;
+																for ( var i = 0; i < groupByList.length; i++) {
+																	if (this.value == groupByList[i]
+																			&& groupByList[i]
+																					.substring(
+																							0,
+																							8) != "no image")
+																		userIndex = i;
+																	else if (this.value == groupByList[i]
+																			&& groupByList[i]
+																					.substring(
+																							0,
+																							8) == "no image")
+																		userIndex = parseInt(groupByList[i]
+																				.substring(
+																						9,
+																						10));
+																}
+																if (this.value != undefined
+																		&& this.value != ""
+																		&& this.value
+																				.substring(
+																						0,
+																						8) != "no image")
+																	return '<img src="'
+																			+ this.value.split('#')[0]
+																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
+																			+ domainUserNamesList[userIndex]
+																			+ '"/>';
+																else
+																	return '<img src="'
+																			+ gravatarImgForPortlets(25)
+																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
+																			+ domainUserNamesList[userIndex]
+																			+ '"/>';
+															}
+																else{
 															if (base_model
 																	.get('settings')["group-by"] == "user") {
 																var userIndex = 0;
@@ -902,7 +942,7 @@ var portlet_graph_utility = {
 																						0,
 																						8) != "no image")
 																	return '<img src="'
-																			+ this.value
+																			+ this.value.split('#')[0]
 																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
 																			+ domainUserNamesList[userIndex]
 																			+ '"/>';
@@ -923,6 +963,7 @@ var portlet_graph_utility = {
 																	return this.value;
 																}
 															}
+														}
 														},
 														style : {
 															color : '#98a6ad',
@@ -938,7 +979,7 @@ var portlet_graph_utility = {
 												yAxis : {
 													min : 0,
 													title : {
-														text : ''
+														text : yaxistitle
 													},
 													allowDecimals : false,
 													gridLineWidth : 1,
@@ -977,7 +1018,35 @@ var portlet_graph_utility = {
 														color : '#EFEFEF'
 													},
 													formatter : function() {
-														if (base_model
+														if( base_model.get('name')=='Average Deviation'){
+															var userIndex = 0;
+															for ( var i = 0; i < groupByList.length; i++) {
+																if (this.key == groupByList[i])
+																	userIndex = i;
+															}
+															return '<div>'
+																	+ '<div class="p-n">'
+																	+ domainUserNamesList[userIndex]
+																	+ ' </div>'
+																	+ '<div class="p-n" style="color:'
+																	+ this.series.color
+																	+ ';">'
+																	+ 'Deviation Time'
+																	+ ':'
+																	+ portlet_utility.getPortletsTimeConversion(Math.round(this.y))
+																	+ ' </div>'
+																	+ '<div class="p-n" style="color:'
+																	+ this.series.color
+																	+ ';">'
+																	+ this.series.name
+																	+ ': '
+																	+ portlet_utility.getNumberWithCommasForPortlets(CountData[this.series.index][this.point.x])
+																	+ ' </div>'
+																	+ '</div>';
+															
+														}
+														
+													else	if (base_model
 																.get('settings')["group-by"] == "user") {
 															var userIndex = 0;
 															for ( var i = 0; i < groupByList.length; i++) {
