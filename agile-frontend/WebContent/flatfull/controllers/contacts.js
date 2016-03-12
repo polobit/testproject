@@ -351,6 +351,10 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
 			$('#bulk-action-btns > button').addClass("disabled");
+			if($("#select_grid_contacts1"))
+			{
+				$("#select_grid_contacts1").attr("checked", false);
+			}
 			CONTACTS_HARD_RELOAD = true;
 			
 		}
@@ -1105,6 +1109,10 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
 			$('#bulk-action-btns > button').addClass("disabled");
+			if($("#select_grid_contacts1"))
+			{
+				$("#select_grid_contacts1").attr("checked", false);
+			}
 
 			CONTACTS_HARD_RELOAD = true;
 		}
