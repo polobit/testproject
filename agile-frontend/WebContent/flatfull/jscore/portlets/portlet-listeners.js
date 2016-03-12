@@ -381,11 +381,7 @@ function initializePortletsListeners() {
 						if (id && !isNaN(id)) {
 							var events_array = $(
 									'#calendar_container',
-									$(this)
-											.parentsUntil('.mini-cal')
-											.eq(
-													$(this).parentsUntil(
-															'.mini-cal').length - 1))
+									$(this).parents('.portlet_body_calendar'))
 									.fullCalendar(
 											'clientEvents',
 											id,
