@@ -1,12 +1,15 @@
 package com.agilecrm.search;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.SearchFilter;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.google.appengine.api.search.Index;
@@ -145,19 +148,20 @@ public class AppengineSearch<T>
 		System.out.println( queryList.size());
 		if(queryList.size() == 10){
 			int totalpersons = 0 ; 
+			Set<String> set = new HashSet<String>();
 			for (Contact  temp : queryList) {
 				if(temp.type.name().equals("PERSON")){
+					set.add(temp.contact_company_id);
 					totalpersons = totalpersons + 1;
 				}
 			}
-			if (totalpersons == 10){
+			if (set.size() == 1){
+				String id = set.iterator().next().toString();
 				List<Contact> companyQuery  = (List<Contact>) query.simpleSearchWithType(keyword, 1, cursor, "COMPANY");
-				if(companyQuery.size() >0){
-					for (Contact  temp : companyQuery) {
-					queryList.remove(9);
-					queryList.add(0, temp);
-					}
-				}
+				Contact contact = ContactUtil.getContact(Long.parseLong(id));
+				queryList.remove(9);
+				queryList.add(0, contact);
+									
 			}
 		}
 		return queryList;
