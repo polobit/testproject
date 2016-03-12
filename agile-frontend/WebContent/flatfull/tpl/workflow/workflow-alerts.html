@@ -181,3 +181,41 @@
 	  </div>
 </script>
 
+<script id="workflow-save-popup-modal-template" type="text/html">
+	<div class="modal  fade" id="workflow-save-popup">
+		<div class="modal-dialog" style="width:500px;">
+    		<div class="modal-content">
+				<div class="modal-header">
+					<button class="close" data-dismiss="modal">x</button>
+					<h3 class="modal-title">
+						<h6 id="popup-msg" style="margin:5px"><span style="color: green;">Campaign saved successfully</span></h6>
+						<i class="glyphicon glyphicon-arrow-right"></i> <strong> {{title}} </strong> Assign contact(s) to the Campaign</h3>
+				</div> 
+				<div class="modal-body">
+					<form id="workflow-save-popup-form" >
+						<fieldset>            
+                			<div class="control-group form-group">
+								<div class="radio col-sm-6">
+   							  			<label  onclick="popupCampaignContact();">
+   								 	<i class="icon-user icon-4x" style="margin-left: 40px;"></i><br> Add Contacts Manually</label>
+								</div>
+								<div class="radio col-sm-6" style="margin-top:11px;" >
+   							  		<label onclick="popupCampaignTrigger();">
+   								 		<i class="fa fa-bullseye icon-4x" style="margin-left: 40px;"></i><br> Add Trigger to Campaign</label>
+								</div>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<div class="checkbox col-sm-6" style="margin-top:4px; margin-bottom:4px;">
+    					<label class="pull-left" onclick="hideCampaignPopup();"><input type="checkbox" id="campaign-save-popup" value="false">Don't show me again</label>
+					</div>
+  					<div class="col-sm-6">	
+ 						<button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" id="ok">Close</button>
+  					</div>
+  				</div>	
+			</div>
+		</div>
+	</div>
+</script>

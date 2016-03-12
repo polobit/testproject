@@ -310,8 +310,8 @@ var contact_details_documentandtasks_actions = {
        },
 
        show_document_list : function(e){
-       		var targetEl = $(e.currentTarget);
 
+       		var targetEl = $(e.currentTarget);
        		var el = $(targetEl).closest("div");
 			$(targetEl).css("display", "none");
 			if(agile_is_mobile_browser()){
@@ -323,7 +323,8 @@ var contact_details_documentandtasks_actions = {
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 			fillSelect('document-select', 'core/api/documents', 'documents', function fillNew()
 			{
-				el.find("#document-select").append("<option value='new'>Add New Doc</option>");
+				el.find("#document-select > option:first").after("<option value='new'>Add New Doc</option><option style='font-size: 1pt; background-color: #EDF1F2;'disabled>&nbsp;</option>");
+				el.find("#document-select > option:first").remove();
 
 			}, optionsTemplate, false, el);
 	    },

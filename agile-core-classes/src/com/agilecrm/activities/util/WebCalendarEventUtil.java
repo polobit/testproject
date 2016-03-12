@@ -872,7 +872,13 @@ public class WebCalendarEventUtil
 							+ "mins)</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=https://"
 							+ user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 				}
-
+				if(attachments_to_agile_user!=null)
+				{
+					for(String str :attachments_to_agile_user )
+					{
+					System.out.print("support debug:WebCalendarEventUtil:" +str);
+					}
+				}
 				EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
 						"Appointment Scheduled", null, usermail, null, null, null, null, attachments_to_agile_user);
 			}
@@ -925,7 +931,13 @@ public class WebCalendarEventUtil
 							+ "mins</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=https://"
 							+ user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 				}
-
+				if(attachments_to_agile_user!=null)
+				{
+					for(String str :attachments_to_agile_user )
+					{
+					System.out.print(	"support debug:WebCalendarEventUtil:" +str);
+					}
+				}
 				EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
 						"Appointment Scheduled", null, usermail, null, null, null, null, attachments_to_agile_user);
 
