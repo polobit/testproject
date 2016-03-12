@@ -158,6 +158,8 @@ public class PortletUtil {
 		if(route==null){
 			route= Portlet.PortletRoute.DashBoard;
 		}
+
+		if(route.equals(Portlet.PortletRoute.DashBoard)){
 		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
 		//If user first time login after portlets code deploy, we add some portlets by default
 		//in DB and one null portlet also
@@ -167,6 +169,7 @@ public class PortletUtil {
 					portlet.portlet_route=Portlet.PortletRoute.DashBoard;
 				portlet.save();
 			}
+		}
 		}
 		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route", route).list();
 		if(portlets!=null && portlets.size()==0 && route.equals(Portlet.PortletRoute.DashBoard))
@@ -242,27 +245,22 @@ public class PortletUtil {
 
 			
 		List<Portlet> currentPortlets = getAddedPortletsForCurrentUser(Portlet.PortletRoute.DashBoard);
-		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Contacts));
-		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Deals));
-		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Tasks));
-		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Events));
+		//currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Contacts));
+		//currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Deals));
+		//currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Tasks));
+		//currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Events));
 			for (Portlet portlet : portlets){
 				HashSet<String> s = new HashSet<String>();
 				for (Portlet currentPortlet : currentPortlets){
 					if (currentPortlet.name.equals(portlet.name) && currentPortlet.portlet_type.equals(portlet.portlet_type)){
 						portlet.is_added = true;
-						s.add(currentPortlet.portlet_route.toString());
+						//s.add(currentPortlet.portlet_route.toString());
 					}	
 				}
-				portlet.is_routeadded=s.toString();
+				//portlet.is_routeadded=s.toString();
 				
 			
 		}
-		/*List<Portlet> currentPortlets = getAddedPortletsForCurrentUser(Portlet.PortletRoute.DashBoard);
-		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Contacts));
-		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Deals));
-		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Tasks));
-		currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Events));*/
 		
 		return portlets;
 	}

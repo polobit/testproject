@@ -422,7 +422,7 @@ function initializePortletsListeners() {
 												deserializeForm(
 														model,
 														$("#updateActivityForm"));
-												$('#current_div').val("Mini Calendar");
+												$('#current_div','#updateActivityModal').val("Mini Calendar");
 												$("#update-event-date-1").val(
 														getDateInFormat(start));
 												$("#update-event-date-2").val(
@@ -525,6 +525,8 @@ function initializePortletsListeners() {
 												// Show edit modal for the event
 												$("#updateActivityModal")
 														.modal('show');
+
+
 												$(
 														'#' + id,
 														$('#calendar_container'))
@@ -559,7 +561,7 @@ function initializePortletsListeners() {
 				$('#task-date-1').val(getDateInFormat(start));
 				$("#event-date-1").val(getDateInFormat(start));
 				$("#event-date-2").val(getDateInFormat(start));
-				$('#current_div').val("Mini Calendar");
+				$('#current_div','#activityModal').val("Mini Calendar");
 
 
 				// Set Time for Event
@@ -758,7 +760,7 @@ $('.portlet_body')
 							var startDate = new Date(model.get('start') * 1000);
 							var endDate = new Date(model.get('end') * 1000)
 							// Set time for update Event
-							$('#current_div').val("Events Dashlet");
+							$('#current_div',"#updateActivityModal").val("Events Dashlet");
 							$('#update-event-time-1')
 									.val(
 											(startDate.getHours() < 10 ? "0"
@@ -1073,7 +1075,7 @@ function initializeAddPortletsListeners() {
 function insideAddListener()
 {
 
-	$('.modal-content').off('click').on('click', '#route-select-all',
+	$('.modal-content').on('click', '#route-select-all',
 			function(e) {
 				e.preventDefault();
 				$('#route-list').multiSelect('select_all');
@@ -1107,8 +1109,7 @@ function insideAddListener()
 				clickfunction($(this),url,forAll,route);
 			});
 		
-	$('#portletStreamModal').																																																																												off('click').on(
-			"click touchstart",
+	$('.modal-footer').off('click touchstart').on('click touchstart',
 			'.add_to_all',
 			function() {
 				var id=$(this).parents('.modal-footer').prev().find("form:visible").attr("id");
