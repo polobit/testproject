@@ -86,17 +86,17 @@
           {{#hasScope 'MANAGE_DEALS'}}
             <li><a href="#deal_owner_change_modal" data-toggle="modal">Change Owner</a></li>
           {{/hasScope}}
-            <li><a href="#deal_mile_change_modal" data-toggle="modal">Change Milestone/Track</a></li>
+            <li><a href="#" id="bulk_deals_milestone_change" data-toggle="modal">Change Milestone/Track</a></li>
             <li class="divider"></li>
             <li><a href="#deal_contact_add_tag_modal" data-toggle="modal">Add Tag to related Contacts</a></li>
             {{#hasMenuScope 'CAMPAIGN'}}
               <li><a href="#deal_contact_add_camp_modal" data-toggle="modal">Add related Contacts to Campaign</a></li>
             {{/hasMenuScope}}
             <li class="divider"></li>
-            <li><a href="#deal_bulk_archive_modal" data-toggle="modal">Archive</a></li>
-            <li><a href="#deal_bulk_restore_modal" data-toggle="modal">Restore</a></li>
+            <li><a href="#" id="bulk_deals_archive" data-toggle="modal">Archive</a></li>
+            <li><a href="#" id="bulk_deals_restore" data-toggle="modal">Restore</a></li>
             <li class="divider"></li>
-            <li><a href="#deal_bulk_delete_modal" data-toggle="modal">Delete</a></li>
+            <li><a href="#" id="deal-delete-checked" data-toggle="modal">Delete</a></li>
             
           </ul>
         </div>
@@ -109,7 +109,7 @@
       {{#is_mobile}} {{else}} <div class="panel-heading"> Deals</div>{{/is_mobile}}
       <div class="table-responsive">
 
-                <table class="table {{#is_mobile}} {{else}} table-striped {{/is_mobile}} showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table deals-nowrap {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/delete" id="deal-list" style="{{#is_mobile}} border-radius:0px; {{/is_mobile}} table-layout:auto;">
+                <table class="table {{#is_mobile}} {{else}} table-striped {{/is_mobile}} showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table deals-nowrap {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/bulk" id="deal-list" style="{{#is_mobile}} border-radius:0px; {{/is_mobile}} table-layout:auto;">
 
           {{#is_mobile}}
            {{else}}
