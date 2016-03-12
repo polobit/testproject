@@ -130,7 +130,7 @@ public class PortletUtil {
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
 			allPortlets.add(new Portlet("Account Details",PortletType.ACCOUNT));
 			
-			setIsAddedStatus(allPortlets);
+			//setIsAddedStatus(allPortlets);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
