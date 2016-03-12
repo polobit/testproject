@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.SearchFilter;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.google.appengine.api.search.Index;
@@ -133,6 +134,38 @@ public class AppengineSearch<T>
 	    return query.simpleSearch(keyword, count, cursor);
 	return query.simpleSearchWithType(keyword, count, cursor, type);
     }
+    
+    //contact along with the company to search while adding the relation at the time of adding the deals
+    @SuppressWarnings("rawtypes")
+    public Collection getSimpleSearchResultsWithCompany(String keyword, Integer count, String cursor, String type)
+    {
+	System.out.println("simple search with company");
+	if (StringUtils.isEmpty(type)){
+		List<Contact> queryList  = (List<Contact>) query.simpleSearch(keyword, count, cursor);
+		System.out.println( queryList.size());
+		if(queryList.size() == 10){
+			int totalpersons = 0 ; 
+			for (Contact  temp : queryList) {
+				if(temp.type.name().equals("PERSON")){
+					totalpersons = totalpersons + 1;
+				}
+			}
+			if (totalpersons == 10){
+				List<Contact> companyQuery  = (List<Contact>) query.simpleSearchWithType(keyword, 1, cursor, "COMPANY");
+				if(companyQuery.size() >0){
+					for (Contact  temp : companyQuery) {
+					queryList.remove(9);
+					queryList.add(0, temp);
+					}
+				}
+			}
+		}
+		return queryList;
+	}
+	return query.simpleSearchWithType(keyword, count, cursor, type);
+    }
+
+    
 
     /**
      * Calls advanced search method in query document. It queries based on set
