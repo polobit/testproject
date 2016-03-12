@@ -297,8 +297,8 @@ public class Office365CalendarUtil {
 						long ending = 0L;
 
 						// Starting time.
-						Date start = new Date(officeTemplate.getStart());
-						if (start.getTime() / 1000 < startTime) {
+						Date start = new Date(officeTemplate.getStart());				
+						if (start.getTime() < startTime) {
 							starting = startTime / 1000;
 						} else {
 							starting = start.getTime() / 1000;
@@ -306,10 +306,10 @@ public class Office365CalendarUtil {
 
 						// Ending time.
 						Date end = new Date(officeTemplate.getEnd());
-						if (end.getTime() / 1000 < endTime) {
-							ending = endTime / 1000;
-						} else {
+						if (end.getTime() < endTime) {
 							ending = end.getTime() / 1000;
+						} else {
+							ending = endTime / 1000;							
 						}
 						filledSlots.addAll(WebCalendarEventUtil.makeSlots(
 								slotTime, starting, ending));
