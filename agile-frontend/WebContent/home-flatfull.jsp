@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.subscription.Subscription"%>
 <%@page import="com.agilecrm.SafeHtmlUtil"%>
 <%@page import="com.agilecrm.contact.CustomFieldDef.SCOPE"%>
 <%@page import="com.agilecrm.contact.util.CustomFieldDefUtil"%>
@@ -92,6 +93,7 @@ if(restriction != null && restriction.checkToUpdateFreeEmails()){
 	restriction.refreshEmails();
 	restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
 }
+Subscription subscription = SubscriptionUtil.getSubscription(true);
 boolean is_free_plan = false;
 
 if(restriction != null && restriction.planDetails != null)
@@ -149,7 +151,6 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   display: none !important;
 }
 
-
 </style>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -176,7 +177,7 @@ function isIE() {
  {window.location='/error/not-supported.jsp';}
 
 </script>
-
+<div id="alert-message" style="display:none;"></div>
 <div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
@@ -526,7 +527,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
                       <div class="pull-left">Upgrade</div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
                   <li><a href="https://www.agilecrm.com/product-updates" target="_blank"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left">Product Updates</div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
-                  <li><a href="#help"><!-- <i class="icon-off"></i> -->
+                  <li><a href="https://www.agilecrm.com/support" target="_blank"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left">Help</div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
                   <!-- <li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i> Help
                       Videos</a></li>
@@ -585,8 +586,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 %>
 
 
-  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
-   
+   <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
@@ -656,7 +656,7 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 
 // Billing Restriction
 var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
-
+var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
 var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 //var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
@@ -664,8 +664,11 @@ var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.j
 
 <!-- JQUery Core and UI CDN --> 
 <!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
+console.log("before dashboard load");
 head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min.js?_=' + _AGILE_VERSION, function(){
         load_globalize();
+        showVideoForRegisteredUser();
+
 })
 // , LIB_PATH + 'lib/backbone-route-filter.js'
 
@@ -698,9 +701,12 @@ head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-mi
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core"], function(){
 	 $('[data-toggle="tooltip"]').tooltip();  
-	//Code to display alerts of widgets.
-	showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
    
+   try{
+    //Code to display alerts of widgets.
+    showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
+   }catch(e){}
+	 
 	//Resting the variables.
 	<%  session.removeAttribute("widgetMsgType");
 	session.removeAttribute("widgetMsg"); %>
@@ -722,6 +728,23 @@ function load_globalize()
 
 }
 
+function showVideoForRegisteredUser(){
+    console.log("Ref = " + document.referrer);
+
+    if(!document.referrer || document.referrer.indexOf("register") == -1)
+         return;
+    var domainuser_video_cookie = CURRENT_DOMAIN_USER.domain+'_video_cookie';
+    if(!localStorage.getItem(domainuser_video_cookie))
+    {     
+       $("#dashboard_video").modal("show");
+       var $frame = $("#dashboard_video iframe");
+      $frame.attr("src", $frame.attr("data-source"));
+    }       
+    
+    localStorage.setItem(domainuser_video_cookie,true);
+    
+}
+
 </script>
 
 
@@ -734,7 +757,25 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
 </script>
 <!-- End of ClickDesk -->
 
-
+ <!--video on dashboard -->
+ <div class="modal  fade hidden-xs" id="dashboard_video"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" id="dashboard-video" >
+        <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" data-dismiss="modal">&times;</button>
+          <h3 id="myModalLabel">Welcome to Agile CRM</h3>
+          <small>Here is a short video which explains the steps to get started with Agile. We recommend you watch it.</small>
+        </div>      
+        <div class="modal-body">
+              <div class="embed-responsive embed-responsive-16by9">
+                      <iframe class="embed-responsive-item" data-source="https://www.youtube.com/embed/9aH60N6HPcc?list=PLqZv4FUxASTctDCZmdVbheU75Y3Szk9Ny" frameborder="0" allowfullscreen></iframe>
+              </div>                     
+        </div>
+               
+        
+        </div>
+        </div>
+  </div>
 
 </body>
 </html>

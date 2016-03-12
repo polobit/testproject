@@ -18,6 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AllDomainStats;
+import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 import com.agilecrm.landingpages.LandingPage;
 import com.agilecrm.landingpages.LandingPageUtil;
 import com.agilecrm.util.HTTPUtil;
@@ -98,8 +100,12 @@ public class LandingPagesAPI
 		try
 		{
 			LandingPage landingPage = LandingPageUtil.getLandingPage(id);
-			if (landingPage != null)
+			if (landingPage != null) {
+				JSONArray pageIds = new JSONArray();
+				pageIds.put(landingPage.id);
+				LandingPageUtil.deleteLandingPageCNames(pageIds);
 				landingPage.delete();
+			}
 		}
 		catch (Exception e)
 		{
@@ -139,6 +145,10 @@ public class LandingPagesAPI
 	{
 		System.out.println(landingPage);
 		landingPage.save();
+		
+		//Increase count of Campaign for AllDomainstats report in database
+		AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.LANDINGPAGE_COUNT);
+		
 		return landingPage;
 	}
 	

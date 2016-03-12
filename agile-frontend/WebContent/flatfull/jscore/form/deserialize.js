@@ -652,6 +652,7 @@ function deserializeLhsFilters(element, data)
 		{
 			$('#' + LHS + '_div').parent().find('a').addClass('bold-text');
 			$('#' + LHS + '_div').removeClass('hide');
+			$('#' + LHS + '_div').prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 			if ((tagsConditionsCount == 0 && LHS == 'tags') || (campaignConditionsCount == 0 && LHS == 'campaign_status'))
 			{
 				currentElemnt = $('#' + LHS + '-lhs-filter-table').find("div.lhs-contact-filter-row:last")

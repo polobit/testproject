@@ -19,14 +19,15 @@ function show_error(modalId, formId, errorClass, htmlText)
 	if (modal_elem.css('display') !== 'none')
 	{
 		modal_elem.find('.' + errorClass).html(
-				'<div class="alert alert-danger m-b-none" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
+				'<div class="alert alert-danger" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
 	}
 	else if (form_elem.css('display') !== 'none')
 	{
 		form_elem.find('.' + errorClass).html(
-				'<div class="alert alert-danger m-b-none" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
+				'<div class="alert alert-danger" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
 	}
 }
+
 
 function show_error_in_formactions(modalId, formId, errorClass, htmlText)
 {
@@ -334,7 +335,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 					if (status)
 					{
-						show_error(modal_id, form_id, 'duplicate-email', 'Company name already exist.');
+						show_error(modal_id, form_id, 'duplicate-email', 'Company name already exists.');
 
 						enable_save_button($(saveBtn));// Remove loading image
 						return;
@@ -865,6 +866,7 @@ function fill_multi_options(field_element, element)
 		html_element.appendTo(append_to);
 	}
 }
+
 
 /**
  * Creates json object for each custom field in contact form with name, type and

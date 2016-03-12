@@ -37,6 +37,7 @@ function loadPortlets(el){
 	App_Portlets.campaignstats = new Array();
 	App_Portlets.dealGoals=new Array();
 	App_Portlets.adminPortlets = new Array();
+	App_Portlets.taskAverage = new Array();
 
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
@@ -467,7 +468,7 @@ function loadGoogleEventsForPortlets(p_el,startTime,endTime){
 		if (response)
 		{
 
-		head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
+		head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=25', function()
 		{
 			setupGC(function()
 			{

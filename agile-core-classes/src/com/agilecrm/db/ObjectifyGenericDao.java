@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
+import com.agilecrm.AllDomainStats;
 import com.agilecrm.ContactSchemaUpdateStats;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountEmailStats;
@@ -225,6 +226,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(Goals.class);
 
 	ObjectifyService.register(Webhook.class);
+	
+	//All Domain Stats report for Agile Management
+	ObjectifyService.register(AllDomainStats.class);
 
     }
 

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -29,6 +30,7 @@ import com.stripe.model.Coupon;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerSubscriptionCollection;
 import com.stripe.model.Invoice;
+import com.stripe.model.InvoiceItem;
 import com.stripe.net.RequestOptions;
 import com.stripe.net.RequestOptions.RequestOptionsBuilder;
 
@@ -660,5 +662,31 @@ public class StripeImpl implements AgileBilling {
 		System.out.println("Invoice===  "+invoice);
 		return invoice;
 	}
-
+	
+	// Create InvoiceIterm and pay to purchase life time emails
+	public void purchaseEmailCredits(JSONObject customerJSON, Integer quantity) throws Exception {
+		Customer customer = StripeUtil.getCustomerFromJson(customerJSON);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("customer", customer.getId());
+		params.put("amount", quantity*4*100);
+		params.put("currency", "usd");
+		params.put("description", quantity*1000+" Email Credits");
+		InvoiceItem invoiceItem = InvoiceItem.create(params);
+		System.out.println("invoiceItem for email credits "+invoiceItem);
+		params.remove("amount");
+		params.remove("currency");
+		try{
+			Invoice invoice = Invoice.create(params).pay();
+			System.out.println("invoice for email credits "+invoice);
+		}catch(Exception e){
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			params.remove("description");
+			params.put("limit", 1);
+			List<InvoiceItem> invoiceItems = InvoiceItem.all(params).getData();
+			invoiceItems.get(0).delete();
+			throw new Exception(e.getMessage());
+		}
+		
+		
+	}
 }

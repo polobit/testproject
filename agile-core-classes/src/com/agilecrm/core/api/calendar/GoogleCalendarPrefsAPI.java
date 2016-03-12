@@ -69,7 +69,7 @@ public class GoogleCalendarPrefsAPI {
 			Calendar c = Calendar.getInstance();
 			String endDate = String.valueOf(c.getTimeInMillis());
 
-			c.add(Calendar.DATE, -30);
+			c.add(Calendar.DATE, -1);
 			String startDate = String.valueOf(c.getTimeInMillis());
 
 			System.out.println("start date " + startDate);

@@ -34,17 +34,20 @@ public class OfficeCalendar365API {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<OfficeCalendarTemplate> getOffice365Appointments(
 			@QueryParam("startDate") String startDate,
-			@QueryParam("endDate") String endDate) throws Exception {
-		
+			@QueryParam("endDate") String endDate)  {
 		List<OfficeCalendarTemplate> appointments = null;
-		
-		GoogleCalenderPrefs calendarPrefs = GooglecalendarPrefsUtil
-				.getCalendarPrefsByType(GoogleCalenderPrefs.CALENDAR_TYPE.OFFICE365);
-		
-		String Url = Office365CalendarUtil.getOfficeURL(startDate, endDate, calendarPrefs);
-		if(Url !=null){
-			appointments = Office365CalendarUtil.getAppointmentsFromServer(Url);
+		try{
+			GoogleCalenderPrefs calendarPrefs = GooglecalendarPrefsUtil
+					.getCalendarPrefsByType(GoogleCalenderPrefs.CALENDAR_TYPE.OFFICE365);
+			
+			String Url = Office365CalendarUtil.getOfficeURL(startDate, endDate, calendarPrefs);
+			if(Url !=null){
+				appointments = Office365CalendarUtil.getAppointmentsFromServer(Url);
+			}
+		}catch(Exception e){
+			System.out.println("Error "+ e);
 		}
+		
 		return appointments;
 	}
 }

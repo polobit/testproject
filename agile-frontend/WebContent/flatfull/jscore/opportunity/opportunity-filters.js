@@ -656,8 +656,26 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 
             $('#'+milestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(removeDealValue));
           
-           $('#'+ milestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()) - 1);			
-           
+            $('#'+ milestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()) - 1);	
+	          
+			 /* average of deal total */
+	      	var avg_deal_size = 0;
+	     	var deal_count = parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()); 
+	     	if(deal_count == 0)
+	     		avg_new_deal_size = 0;
+	     	else
+	     		avg_new_deal_size = removeDealValue / deal_count;	
+
+ 			removeDealValue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(removeDealValue) ;
+        	avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
+           	var heading = milestone.replace(/ +/g, '');
+            var symbol = getCurrencySymbolForCharts();
+	       
+	        $("#"+heading+" .dealtitle-angular").removeAttr("data"); 
+	        var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();	       
+	        var dealdata = {"dealTrack":dealTrack,"heading": heading ,"dealcount":removeDealValue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":deal_count};
+			var dealDataString = JSON.stringify(dealdata); 
+			$("#"+heading+" .dealtitle-angular").attr("data" , dealDataString); 
 
 			dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
 
@@ -673,8 +691,6 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 			dealsLineChart();
 		} });
 	});
-
-	
 
 	/**
 	 * Deal list view edit
@@ -1129,7 +1145,7 @@ function initializeMilestoneListners(el){
 			$('#lost_reason_name_error').show();
 			return false;
 		}
-		if(!(/^[a-zA-Z0-9-_ ]*$/).test($('#lost_reason_name').val().trim())){
+		if(!categories.isValid($('#lost_reason_name').val().trim())){
 			$('#lost_reason_chars_error').show();
 			return false;
 		}
@@ -1178,7 +1194,7 @@ function initializeMilestoneListners(el){
 				$('#lost_reason_name_error_'+$(this).attr("id")).show();
 				return false;
 			}
-			if(!(/^[a-zA-Z0-9-_ ]*$/).test($(this).val().trim())){
+			if(!categories.isValid($(this).val().trim())){
 				$('#lost_reason_chars_error_'+$(this).attr("id")).show();
 				return false;
 			}
@@ -1210,7 +1226,7 @@ function initializeMilestoneListners(el){
 			$('#lost_reason_name_error_'+$(this).parent().find('input:text').attr("id")).show();
 			return false;
 		}
-		if(!(/^[a-zA-Z0-9-_ ]*$/).test($(this).parent().find('input:text').val().trim())){
+		if(!categories.isValid($(this).parent().find('input:text').val().trim())){
 			$('#lost_reason_chars_error_'+$(this).parent().find('input:text').attr("id")).show();
 			return false;
 		}
@@ -1259,7 +1275,7 @@ function initializeMilestoneListners(el){
 			$('#deal_source_name_error').show();
 			return false;
 		}
-		if(!(/^[a-zA-Z0-9-_ ]*$/).test($('#deal_source_name').val().trim())){
+		if(!categories.isValid($('#deal_source_name').val().trim())){
 			$('#deal_source_chars_error').show();
 			return false;
 		}
@@ -1319,7 +1335,7 @@ function initializeMilestoneListners(el){
 				$('#deal_source_name_error_'+$(this).attr("id")).show();
 				return false;
 			}
-			if(!(/^[a-zA-Z0-9-_ ]*$/).test($(this).val().trim())){
+			if(!categories.isValid($(this).val().trim())){
 				$('#deal_source_chars_error_'+$(this).attr("id")).show();
 				return false;
 			}
@@ -1351,7 +1367,7 @@ function initializeMilestoneListners(el){
 			$('#deal_source_name_error_'+$(this).parent().find('input:text').attr("id")).show();
 			return false;
 		}
-		if(!(/^[a-zA-Z0-9-_ ]*$/).test($(this).parent().find('input:text').val().trim())){
+		if(!categories.isValid($(this).parent().find('input:text').val().trim())){
 			$('#deal_source_chars_error_'+$(this).parent().find('input:text').attr("id")).show();
 			return false;
 		}

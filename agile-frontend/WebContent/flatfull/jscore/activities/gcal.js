@@ -94,7 +94,7 @@ function agile_transform_options(sourceOptions, start, end)
 
 function _load_gapi(callback)
 {
-	head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
+	head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=25', function()
 		{
 			setupGC(callback);
 		});
