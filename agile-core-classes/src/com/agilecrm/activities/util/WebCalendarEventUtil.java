@@ -127,6 +127,7 @@ public class WebCalendarEventUtil
 				timezoneName, startTime, endTime);
 		
 		if(filledOfficeSlots != null){
+			System.out.println(filledOfficeSlots.toString());
 			// Remove all filled slots from available/possible slots.
 			possibleSlots.removeAll(filledOfficeSlots);
 
@@ -147,7 +148,7 @@ public class WebCalendarEventUtil
 
 			}
 		}
-
+		System.out.println(listOfLists.toString());
 		// Return available slots
 		return listOfLists;
 	}
