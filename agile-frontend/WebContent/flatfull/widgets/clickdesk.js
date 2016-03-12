@@ -629,6 +629,7 @@ function clickDeskStreamError(id, message)
 }
 
 function startClickDeskWidget(contact_id) {
+
 		// ClickDesk widget name as a global variable
 		CLICKDESK_PLUGIN_NAME = "ClickDesk";
 
@@ -642,10 +643,10 @@ function startClickDeskWidget(contact_id) {
 		console.log(clickdesk_widget);
 
 		// ID of the ClickDesk widget as global variable
-		ClickDesk_Plugin_Id = clickdesk_widget.id;
+		ClickDesk_Plugin_Id = WIDGET_LOADED_CONTACT.id;
 
 		// Stores email of the contact as global variable
-		Email = agile_crm_get_contact_property('email');
+		Email = agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'email');
 		console.log('Email: ' + Email);
 
 
@@ -671,15 +672,15 @@ function startClickDeskWidget(contact_id) {
 		 * On mouse enter of ticket, show tab link which has a link to show detailed
 		 * description of ticket
 		 */
-        $("#widgets").off("mouseenter", ".clickdesk_ticket_hover");
-		$("widgets").on("mouseenter", ".clickdesk_ticket_hover", function(e)
+        $("#"+WIDGET_PARENT_ELEMENT).off("mouseenter", ".clickdesk_ticket_hover");
+		$("#"+WIDGET_PARENT_ELEMENT).on("mouseenter", ".clickdesk_ticket_hover", function(e)
 		{
 			$(this).find('.clickdesk_ticket_tab_link').show();
 		});
 
 		// On mouse leave of ticket, hides tab link
-        $("#widgets").off("mouseleave", ".clickdesk_ticket_hover");
-		$("#widgets").on("mouseleave", ".clickdesk_ticket_hover", function(e)
+        $("#"+WIDGET_PARENT_ELEMENT).off("mouseleave", ".clickdesk_ticket_hover");
+		$("#"+WIDGET_PARENT_ELEMENT).on("mouseleave", ".clickdesk_ticket_hover", function(e)
 		{
 			$('.clickdesk_ticket_tab_link').hide();
 		});
@@ -688,15 +689,15 @@ function startClickDeskWidget(contact_id) {
 		 * On mouse enter of chat, show tab link which has a link to show detailed
 		 * description of chat
 		 */
-        $("#widgets").off("mouseenter", ".clickdesk_chat_hover");
-		$("#widgets").on("mouseenter", ".clickdesk_chat_hover", function(e)
+        $("#"+WIDGET_PARENT_ELEMENT).off("mouseenter", ".clickdesk_chat_hover");
+		$("#"+WIDGET_PARENT_ELEMENT).on("mouseenter", ".clickdesk_chat_hover", function(e)
 		{
 			$(this).find('.clickdesk_chat_tab_link').show();
 		});
 
 		// On mouse leave of chat, hides tab link
-        $("#widgets").off("mouseleave", ".clickdesk_chat_hover");
-		$("#widgets").on("mouseleave", ".clickdesk_chat_hover", function(e)
+        $("#"+WIDGET_PARENT_ELEMENT).off("mouseleave", ".clickdesk_chat_hover");
+		$("#"+WIDGET_PARENT_ELEMENT).on("mouseleave", ".clickdesk_chat_hover", function(e)
 		{
 			$('.clickdesk_chat_tab_link').hide();
 		});

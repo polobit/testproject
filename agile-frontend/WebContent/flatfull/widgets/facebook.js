@@ -1,6 +1,6 @@
 function showFacebookMatchingProfile(contact_id, first_name)
 {
-	var contact_image = agile_crm_get_contact_property("image");
+	var contact_image = agile_crm_contact_property(WIDGET_LOADED_CONTACT, "image");
 	/*
 	 * if (!Email) { facebookError(FACEBOOK_PLUGIN_NAME, "Please provide email
 	 * for this contact"); return; }
@@ -20,8 +20,8 @@ function showFacebookMatchingProfile(contact_id, first_name)
 			console.log(data);
 			var template = $('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-matching-profiles', data));
             
-            $("#widgets").off("mouseover", ".facebookImage");
-			$("#widgets").on("mouseover", ".facebookImage", function(e)
+            $("#"+WIDGET_PARENT_ELEMENT).off("mouseover", ".facebookImage");
+			$("#"+WIDGET_PARENT_ELEMENT).on("mouseover", ".facebookImage", function(e)
 			{
 				// Unique Twitter Id from widget
 				Facebook_id = $(this).attr('id');
@@ -69,7 +69,7 @@ function showFacebookMatchingProfile(contact_id, first_name)
 					 * If contact title is undefined, saves headline of the
 					 * Twitter profile to the contact title
 					 */
-					if (!agile_crm_get_contact_property("title"))
+					if (!agile_crm_contact_property(WIDGET_LOADED_CONTACT, "title"))
 					{
 						// var summary = $(this).attr("summary");
 						// propertiesArray.push({ "name" : "title", "value" :
@@ -158,14 +158,14 @@ function showFacebookProfile(facebookid, contact_id)
 		// If data is not defined return
 		if (data)
 		{
-			var contact_image = agile_crm_get_contact_property("image");
+			var contact_image = agile_crm_contact_property(WIDGET_LOADED_CONTACT, "image");
 			console.log(contact_image);
 			data.image = contact_image;
 			$('#Twitter_plugin_delete').show();
 			var template = $('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-profile', data));
             
-            $("#widgets").off("click", "#facebook_post_btn");
-			$("#widgets").on("click", "#facebook_post_btn", function(e)
+            $("#"+WIDGET_PARENT_ELEMENT).off("click", "#facebook_post_btn");
+			$("#"+WIDGET_PARENT_ELEMENT).on("click", "#facebook_post_btn", function(e)
 			{
 				console.log("post on a wall")
 				queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/facebook/postonwall/" + FACEBOOK_PLUGIN_ID + "/" + facebookid + "/" + "hai", 'json',
@@ -223,8 +223,8 @@ function startFacebookWidget(contact_id)
 
 	// Email as global variable
 	// Email = agile_crm_get_contact_property('email');
-	var first_name = agile_crm_get_contact_property("first_name");
-	var last_name = agile_crm_get_contact_property("last_name");
+	var first_name = agile_crm_contact_property(WIDGET_LOADED_CONTACT, "first_name");
+	var last_name = agile_crm_contact_property(WIDGET_LOADED_CONTACT, "last_name");
 
 	// setting lastname to empty string if it is undefined
 	if (last_name == undefined || last_name == null)
@@ -286,16 +286,16 @@ function startFacebookWidget(contact_id)
 		showFacebookMatchingProfile(contact_id, SEARCH_STRING);
 	}
 
-    $("#widgets").off("click", "#facebook_search_btn");
-	$("#widgets").on("click", "#facebook_search_btn", function(e)
+    $("#"+WIDGET_PARENT_ELEMENT).off("click", "#facebook_search_btn");
+	$("#"+WIDGET_PARENT_ELEMENT).on("click", "#facebook_search_btn", function(e)
 	{
 		e.preventDefault();
 
 		getModifiedFacebookMatchingProfiles(contact_id);
 	});
 
-    $("#widgets").off("click", ".facebook_modify_search");
-	$("#widgets").on("click", ".facebook_modify_search", function(e)
+    $("#"+WIDGET_PARENT_ELEMENT).off("click", ".facebook_modify_search");
+	$("#"+WIDGET_PARENT_ELEMENT).on("click", ".facebook_modify_search", function(e)
 	{
 		e.preventDefault();
 
@@ -304,8 +304,8 @@ function startFacebookWidget(contact_id)
 		$('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-modified-search', { "searchString" : SEARCH_STRING }));
 	});
     
-    $("#widgets").off("click", "#facebook_search_close");
-	$("#widgets").on("click", "#facebook_search_close", function(e)
+    $("#"+WIDGET_PARENT_ELEMENT).off("click", "#facebook_search_close");
+	$("#"+WIDGET_PARENT_ELEMENT).on("click", "#facebook_search_close", function(e)
 	{
 		e.preventDefault();
 
@@ -316,8 +316,8 @@ function startFacebookWidget(contact_id)
 	});
 	
 	// Deletes Twitter profile on click of delete button in template
-    $("#widgets").off("click", "#Facebook_plugin_delete");
-	$("#widgets").on("click", "#Facebook_plugin_delete", function(e)
+    $("#"+WIDGET_PARENT_ELEMENT).off("click", "#Facebook_plugin_delete");
+	$("#"+WIDGET_PARENT_ELEMENT).on("click", "#Facebook_plugin_delete", function(e)
 	{
 		e.preventDefault();
 		web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');

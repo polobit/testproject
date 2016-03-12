@@ -8,7 +8,6 @@ var ZENTickets = {};
 var ZENCount = 1;
 var showMoreHtmlZEN = '<div class="widget_tab_footer zen_show_more" align="center"><a class="c-p text-info" id="ZEN_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
 
-
 /**
  * Shows setup if user adds Zendesk widget for the first time or clicks on reset
  * icon on Zendesk panel in the UI
@@ -31,8 +30,8 @@ function setupZendeskAuth(contact_id)
 	}, "#Zendesk");
 
 	// On click of save button, check input and save details
-    $("#widgets").off('click','#save_prefs');
-	$("#widgets").on('click','#save_prefs', function(e)
+    $("#"+WIDGET_PARENT_ELEMENT).off('click','#save_prefs');
+	$("#"+WIDGET_PARENT_ELEMENT).on('click','#save_prefs', function(e)
 	{
 		e.preventDefault();
 
@@ -288,8 +287,8 @@ function registerClickEventsInZendesk()
 	/*
 	 * On click of update ticket link for ticket, update ticket method is called
 	 */
-    $("#widgets").off('click','#ticket_update');
-	$("#widgets").on('click','#ticket_update', function(e)
+    $("#"+WIDGET_PARENT_ELEMENT).off('click','#ticket_update');
+	$("#"+WIDGET_PARENT_ELEMENT).on('click','#ticket_update', function(e)
 	{
 		e.preventDefault();
 
@@ -299,8 +298,8 @@ function registerClickEventsInZendesk()
 	});
 
 	// On click of show ticket, show ticket by ticket id method is called
-    $("#widgets").off('click','#ticket_show');
-	$("#widgets").on('click','#ticket_show', function(e)
+    $("#"+WIDGET_PARENT_ELEMENT).off('click','#ticket_show');
+	$("#"+WIDGET_PARENT_ELEMENT).on('click','#ticket_show', function(e)
 	{		
 		e.preventDefault();
 
@@ -335,11 +334,11 @@ function addTicketToZendesk()
 
 	// Name of the contact to be added to ticket
 	var name = "";
-	if(agile_crm_get_contact_property('first_name')){
-		name += agile_crm_get_contact_property('first_name');
+	if(agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'first_name')){
+		name += agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'first_name');
 	}
-	if(agile_crm_get_contact_property('last_name')){
-		name += agile_crm_get_contact_property('last_name');
+	if(agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'last_name')){
+		name += agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'last_name');
 	}
 	json["name"] = name;
 
@@ -567,7 +566,8 @@ function startZendeskWidget(contact_id){
 	Zendesk_Plugin_Id = zendesk_widget.id;
 
 	// Stores email of the contact as global variable
-	Email = agile_crm_get_contact_property('email');
+	Email = agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'email');
+
 	console.log('Email: ' + Email);
 
 
@@ -589,8 +589,8 @@ function startZendeskWidget(contact_id){
 	showZendeskProfile(contact_id);
 
 	// On click of add ticket, add ticket method is called
-    $("#widgets").off('click','#add_ticket');
-	$("#widgets").on('click','#add_ticket', function(e)
+    $("#"+WIDGET_PARENT_ELEMENT).off('click','#add_ticket');
+	$("#"+WIDGET_PARENT_ELEMENT).on('click','#add_ticket', function(e)
 	{
 		e.preventDefault();
 		addTicketToZendesk();
@@ -600,15 +600,15 @@ function startZendeskWidget(contact_id){
 	 * On mouse enter of ticket, show tab link which has a link to show detailed
 	 * description of ticket and comment on it
 	 */
-     $("#widgets").off('mouseenter','.zendesk_ticket_hover');
-	 $("#widgets").on('mouseenter','.zendesk_ticket_hover', function(e)
+     $("#"+WIDGET_PARENT_ELEMENT).off('mouseenter','.zendesk_ticket_hover');
+	 $("#"+WIDGET_PARENT_ELEMENT).on('mouseenter','.zendesk_ticket_hover', function(e)
 	{
 		$(this).find('.zendesk_tab_link').show();
 	});
 
 	// On mouse leave of chat, hides tab link
-    $("#widgets").off('mouseleave','.zendesk_ticket_hover');
-	$("#widgets").on('mouseleave','.zendesk_ticket_hover', function(e)
+    $("#"+WIDGET_PARENT_ELEMENT).off('mouseleave','.zendesk_ticket_hover');
+	$("#"+WIDGET_PARENT_ELEMENT).on('mouseleave','.zendesk_ticket_hover', function(e)
 	{
 		$('.zendesk_tab_link').hide();
 	});
@@ -619,8 +619,8 @@ function startZendeskWidget(contact_id){
 	 * all_tickets and show every time
 	 */
 	 $('body').off('click', '.revoke-widget');
-	 $("#widgets").off('click','#ZEN_show_more');
-	 $("#widgets").on('click','#ZEN_show_more', function(e){
+	 $("#"+WIDGET_PARENT_ELEMENT).off('click','#ZEN_show_more');
+	 $("#"+WIDGET_PARENT_ELEMENT).on('click','#ZEN_show_more', function(e){
 		e.preventDefault();
 		var offSet = ZENCount * 5;
 		loadZENTickets(offSet);

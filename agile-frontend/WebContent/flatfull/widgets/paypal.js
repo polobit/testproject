@@ -95,11 +95,11 @@ function startPayPalWidget(contact_id){
 	console.log(paypal_widget);
 
 	PAYPAL_Plugin_Id = paypal_widget.id;	
-	Email = agile_crm_get_contact_property('email');
+	Email = agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'email');
 
 
-	$("#widgets").off("click", "#paypal_inv_show_more");
-	$("#widgets").on("click", "#paypal_inv_show_more", function(e){
+	$("#"+WIDGET_PARENT_ELEMENT).off("click", "#paypal_inv_show_more");
+	$("#"+WIDGET_PARENT_ELEMENT).on("click", "#paypal_inv_show_more", function(e){
 		e.preventDefault();
 		var offSet = paymentINVCount * 5;
 		loadPaypalInvoices(offSet);
