@@ -231,8 +231,6 @@ public class CSVUtil
 	    }
 	}
 
-	reportStatus(data.size());
-
 	return data;
 
     }
