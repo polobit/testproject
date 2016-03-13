@@ -277,7 +277,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 					message = "User has been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted user.";
 				showNotyPopUp('information', message, "top", 10000);
 			}
-			if(count > 20 || count == 0)
+			if(count >= 100 || count == 0)
 			{
 				if($(table).attr('id') == "contacts-table")
 					showNotyPopUp('information', "Your contacts deletion will be processed shortly", "top", 5000);
