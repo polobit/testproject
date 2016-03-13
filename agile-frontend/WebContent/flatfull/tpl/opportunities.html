@@ -464,7 +464,63 @@
         <a href="#" data-dismiss="modal" class="close">×</a>
         <h3>Delete</h3>
       </div>
-      <div class="modal-body">You do not have privileges to delete this deal.</div>
+      <div class="modal-body">You do not have permission to delete this deal.</div>
+      <div class="modal-footer">
+        <div>
+          <a href="#" class="btn btn-primary" data-dismiss="modal">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk archive ACLs confirmation-->
+<div id="deal_bulk_archive_acl_modal" class="deal_bulk_modal modal  fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 class="modal-title">Archive</h3>
+  </div>
+  <div class="modal-body">
+    You may not have permission to archive some of the deals selected. Proceeding with this operation will archive only the deals that you are permitted to update.<br/><br/> Do you want to proceed?
+  </div>
+  <div class="modal-footer">
+  <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+    <a href="#" id="deal-bulk-archive-acl" class="btn btn-sm btn-primary">Yes</a>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Bulk restore ACLs confirmation-->
+<div id="deal_bulk_restore_acl_modal" class="deal_bulk_modal modal fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 class="modal-title">Restore</h3>
+  </div>
+  <div class="modal-body">
+    You may not have permission to restore some of the deals selected. Proceeding with this operation will restore only the deals that you are permitted to update.<br/><br/> Do you want to proceed?
+  </div>
+  <div class="modal-footer">
+  <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+    <a href="#" id="deal-bulk-restore-acl" class="btn btn-sm btn-primary">Yes</a>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Update privileges error modal -->
+<div id="deal_update_privileges_error_modal" class="modal  fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a href="#" data-dismiss="modal" class="close">×</a>
+        <h3>Update</h3>
+      </div>
+      <div class="modal-body">You do not have permission to update this deal.</div>
       <div class="modal-footer">
         <div>
           <a href="#" class="btn btn-primary" data-dismiss="modal">Cancel</a>

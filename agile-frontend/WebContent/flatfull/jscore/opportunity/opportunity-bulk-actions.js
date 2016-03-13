@@ -3,6 +3,8 @@
 	var changOwner = null;
 	var archiveDeals = null;
 	var restoreDeals = null;
+	var archiveACLDeals = null;
+	var restoreACLDeals = null;
 	var deleteDeals = null;
 	var dealConAddTag = null;
 	var dealConAddCamp = null;
@@ -64,20 +66,29 @@
 		} });
 	}
 	
-	var bulkRestoreDeals = function(){
+	var bulkRestoreDeals = function(isACLCondition){
 		console.log('restore',getDealsBulkIds());
 		console.log('archive',getDealsBulkIds());
 		var url = '/core/api/opportunity/bulk/restore';
 		postBulkActionDealsData(url,undefined,function(){
-			$("#deal_bulk_restore_modal").modal('hide');
+			if(isACLCondition){
+				$("#deal_bulk_restore_acl_modal").modal('hide');
+			}else{
+				$("#deal_bulk_restore_modal").modal('hide');
+			}
 		},message);
 	};
 	
-	var bulkArchiveDeals = function(){
+	var bulkArchiveDeals = function(isACLCondition){
 		console.log('archive',getDealsBulkIds());
 		var url = '/core/api/opportunity/bulk/archive';
 		postBulkActionDealsData(url,undefined,function(){
-			$("#deal_bulk_archive_modal").modal('hide');
+			if(isACLCondition){
+				$("#deal_bulk_archive_acl_modal").modal('hide');
+			}else{
+				$("#deal_bulk_archive_modal").modal('hide');
+			}
+			
 		},message);
 	};
 	
@@ -223,6 +234,8 @@
 		changeOwner = $('#deal-bulk-owner');
 		archiveDeals = $('#deal-bulk-archive');
 		restoreDeals = $('#deal-bulk-restore');
+		archiveACLDeals = $('#deal-bulk-archive-acl');
+		restoreACLDeals = $('#deal-bulk-restore-acl');
 		deleteDeals = $('#deal-bulk-delete');
 		dealConAddTag = $('#deal-contact-add-tag');
 		dealConAddCamp = $('#deal-contact-add-camp');
@@ -244,6 +257,16 @@
 		restoreDeals.on('click',function(e){
 			e.preventDefault();
 			bulkRestoreDeals();
+		});
+
+		archiveACLDeals.on('click',function(e){
+			e.preventDefault();
+			bulkArchiveDeals(true);
+		});
+		
+		restoreACLDeals.on('click',function(e){
+			e.preventDefault();
+			bulkRestoreDeals(true);
 		});
 		
 		deleteDeals.on('click',function(e){
@@ -280,11 +303,7 @@
 			e.preventDefault();
 			if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
 			{
-				showModalConfirmation("Bulk Update", 
-						"You may not have permission to archive some of the deals selected. Proceeding with this operation will archive only the deals that you are permitted to update.<br/><br/> Do you want to proceed?", 
-						function (){
-							$('#deal_bulk_archive_modal').modal('show');
-						});
+				$('#deal_bulk_archive_acl_modal').modal('show');
 			}else
 			{
 				$('#deal_bulk_archive_modal').modal('show');
@@ -295,11 +314,7 @@
 			e.preventDefault();
 			if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
 			{
-				showModalConfirmation("Bulk Update", 
-						"You may not have permission to restore some of the deals selected. Proceeding with this operation will restore only the deals that you are permitted to update.<br/><br/> Do you want to proceed?", 
-						function (){
-							$('#deal_bulk_restore_modal').modal('show');
-						});
+				$('#deal_bulk_restore_acl_modal').modal('show');
 			}else
 			{
 				$('#deal_bulk_restore_modal').modal('show');

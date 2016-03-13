@@ -123,7 +123,7 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
 					App_Deals.deals();	
 				},
 				"",
-				"", "Ok", "");
+				"", "Cancel", "");
 			}
 		}
 	});
