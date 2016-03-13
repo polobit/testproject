@@ -573,11 +573,17 @@
 									{{#each_with_index this}}
 										
 
-
-                                            <span class="contact-custom-name custom-color word-break ">
+										{{#if custom_field_type}}
+											<div class="m-b-xs">
+											<span class="contact-custom-name custom-color word-break ">
 												<span class="text-light word-break text-base" title="{{name}}"  >{{name}}</span>
-
 											</span>
+											</div>
+										{{else}}
+											<span class="contact-custom-name custom-color word-break ">
+												<span class="text-light word-break text-base" title="{{name}}"  >{{name}}</span>
+											</span>
+										{{/if}}
 
 										
 										{{#if_equals index ../this.length}}

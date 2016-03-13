@@ -6948,23 +6948,99 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 						if(type == "CONTACT")
 						{
 							$.each(contact_values_json, function(index, value){
+								var items = data.get(value).get("properties");
+								var width = 40;
+								var img_path = "";
+								if (items == undefined)
+									return;
+
+								// Checks if properties already has an image, to return it
+								var agent_image = getPropertyValue(items, "image");
+								if (agent_image){
+									img_path = agent_image;
+								}
+								else{
+									// Default image
+									var img = DEFAULT_GRAVATAR_url;
+									var backup_image = "&d=404\" ";
+									// backup_image="";
+									var initials = '';
+
+									try
+									{
+										// if(!isIE())
+										initials = text_gravatar_initials(items);
+									}
+									catch (e)
+									{
+										console.log(e);
+									}
+
+									if (initials.length == 0)
+										backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
+
+									var data_name =  '';
+									// if(!isIE())
+										data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
+									
+									var email = getPropertyValue(items, "email");
+									if (email)
+									{
+										img_path = new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + backup_image + data_name);
+									}
+
+									img_path = new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
+								}
+								
 								var contact_name = getPropertyValue(data.get(value).get("properties"), "first_name");
 								var last_name = getPropertyValue(data.get(value).get("properties"), "last_name");
 								if(last_name)
 								{
 									contact_name += " "+last_name;
 								}
-								contact_values += "<li class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'><a href='#contact/"+value+"' class='text-white'>"+contact_name+"</a></li>";
+								//contact_values += "<li class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'><a href='#contact/"+value+"' class='text-white'>"+contact_name+"</a></li>";
+								contact_values += '<a href="#contact/'+value+'" class="activate-link thumb m-b-xs m-r-xs"><img  data-name="" src="'+img_path+'"  title="'+contact_name+'" /></a>';
 							});
 						}else if(type == "COMPANY")
 						{
 							$.each(contact_values_json, function(index, value){
-								contact_values += "<li class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'><a href='#company/"+value+"' class='text-white'>"+getPropertyValue(data.get(value).get("properties"), "name")+"</a></li>";
+								var frame_size = "50";
+								var additional_style = "display:inline";
+								var full_size = parseInt(frame_size); // size
+								var size_diff = 4 + ((full_size - 32) / 2); // calculating
+								var properties = data.get(value).get("properties");
+								var img_path = "";
+								
+								var default_return = "src='"+updateImageS3Path('img/company.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+
+								var error_fxn = "";
+
+								for (var i = 0; i < properties.length; i++)
+								{
+									if (properties[i].name == "image")
+									{
+										default_return = "src='" + properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
+
+										error_fxn = "this.src='"+updateImageS3Path('img/company.png')+"'; this.onerror=null;";
+
+										break;
+									}
+									if (properties[i].name == "url")
+									{
+										default_return = "src='https://www.google.com/s2/favicons?domain=" + properties[i].value + "' " + "style='width:" + full_size + "px; height=" + full_size + "px; padding:" + size_diff + "px; " + additional_style + " ;'";
+
+										error_fxn = "this.src='"+updateImageS3Path("img/company.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+									}
+								}
+								img_path = new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");
+								
+								//contact_values += "<li class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'><a href='#company/"+value+"' class='text-white'>"+getPropertyValue(data.get(value).get("properties"), "name")+"</a></li>";
+								contact_values += '<a href="#company/'+value+'" class="activate-link thumb m-b-xs m-r-xs"><img  '+img_path+' title="'+getPropertyValue(data.get(value).get("properties"), "name")+'"/></a>';
 							});
 						}
+						$('.custom-value[name="'+custom_field_name+'"]').html(contact_values);
 					}
 					hideTransitionBar();
-					$('.custom-value[name="'+custom_field_name+'"]').html(contact_values);
 				}
 			});
 		}

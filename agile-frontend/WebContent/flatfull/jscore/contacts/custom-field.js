@@ -627,9 +627,9 @@ function show_custom_fields_helper(custom_fields, properties){
 			field_type = "contact";
 			if(field.is_required){
 				if(isModal){
-					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break-all"><b>'
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break-all col-sm-3">'
 								+field.field_label
-								+'</b><span class="field_req">*</span></label><div class="controls">'
+								+'<span class="field_req">*</span></label><div class="controls col-sm-7">'
 								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
 								+'<input type="text" class="'
 								+field.field_type.toLowerCase()
@@ -637,7 +637,7 @@ function show_custom_fields_helper(custom_fields, properties){
 								+field.id+' name="'+field.field_label
 								+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
 				}else{
-					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'">	<label class="control-label '+label_style+'">'
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label '+label_style+'">'
 							+field.field_label
 							+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'">'
 							+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
@@ -649,9 +649,9 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break-all"><b>'
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break-all col-sm-3">'
 								+field.field_label
-								+'</b></label><div class="controls">'
+								+'</label><div class="controls col-sm-7">'
 								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
 								+'<input type="text" class="'
 								+field.field_type.toLowerCase()
@@ -680,9 +680,9 @@ function show_custom_fields_helper(custom_fields, properties){
 			field_type = "company";
 			if(field.is_required){
 				if(isModal){
-					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break-all"><b>'
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break-all col-sm-3">'
 								+field.field_label
-								+'</b><span class="field_req">*</span></label><div class="controls">'
+								+'<span class="field_req">*</span></label><div class="controls col-sm-7">'
 								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
 								+'<input type="text" class="'
 								+field.field_type.toLowerCase()
@@ -702,9 +702,9 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break-all"><b>'
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break-all col-sm-3">'
 								+field.field_label
-								+'</b></label><div class="controls">'
+								+'</label><div class="controls col-sm-7">'
 								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
 								+'<input type="text" class="'
 								+field.field_type.toLowerCase()
