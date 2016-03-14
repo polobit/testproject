@@ -107,7 +107,7 @@
                                         Select Assignee
                                     </label>
                                     <div class="controls col-sm-6">
-                                        <select class="form-control" name="assigneeID">
+                                        <select class="form-control" name="assigneeID" id="assigneeID">
                                             {{#each this}}
                                                 <optgroup label="{{group_name}}">
                                                     {{#group_users}}
@@ -154,7 +154,7 @@
                                         Select workflow
                                     </label>
                                     <div class="controls col-sm-6">
-                                        <select name="workflowID" class="form-control">
+                                        <select id="workflowID" name="workflowID" class="form-control">
                                             {{#each this}}
                                                <option value="{{id}}" {{#is_disabled}}disabled{{/is_disabled}}>{{name}}
                                                 </option>
@@ -183,98 +183,90 @@
 </div>          
 </script>
 <script id="ticket-bulk-actions-close-tickets-template" type="text/html">
-<div id="close-tickets-modal" class="modal fade">
-    <div class="modal-dialog">
-        <form id="closeTicketsForm" name="closeTicketsForm" class="form-horizontal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button class="close" data-dismiss="modal">x</button>
-                    <h3 class="modal-title"><i class="icon icon-copyright"></i> Close Tickets</h3>
-                </div>
-                <div class="modal-body">
-                    Are you sure, you want to close selected tickets?<br/><br/>
-                </div>
-                <div class="modal-footer">
-                    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
-                    <a href="javascript:void(0);" data-loading-text="Close Tickets" class="save btn btn-sm btn-primary m-l-xs">
-                        Close Tickets
-                    </a>
-                    &nbsp;&nbsp;<span id="msg"></span>
-                </div>
+<div class="modal-dialog">
+    <form id="closeTicketsForm" name="closeTicketsForm" class="form-horizontal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">x</button>
+                <h3 class="modal-title"><i class="icon icon-copyright"></i> Close Tickets</h3>
             </div>
-        </form>
-    </div>
+            <div class="modal-body">
+                Are you sure, you want to close selected tickets?<br/><br/>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+                <a href="javascript:void(0);" data-loading-text="Close Tickets" class="save btn btn-sm btn-primary m-l-xs">
+                    Close Tickets
+                </a>
+                &nbsp;&nbsp;<span id="msg"></span>
+            </div>
+        </div>
+    </form>
 </div>
 </script>
 <script id="ticket-bulk-actions-delete-tickets-template" type="text/html">
-<div id="delete-tickets-modal" class="modal fade">
-    <div class="modal-dialog">
-        <form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button class="close" data-dismiss="modal">x</button>
-                    <h3 class="modal-title"><i class="icon icon-trash"></i> Delete Tickets</h3>
-                </div>
-                <div class="modal-body">
-                    Are you sure, you want to delete selected tickets?<br/><br/>
-                </div>
-                <div class="modal-footer">
-                    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
-                    <a href="javascript:void(0);" data-loading-text="Delete Tickets" class="save btn btn-sm btn-primary">
-                        Delete Tickets
-                    </a>
-                    &nbsp;&nbsp;<span id="msg"></span>
-                </div>
+<div class="modal-dialog">
+    <form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">x</button>
+                <h3 class="modal-title"><i class="icon icon-trash"></i> Delete Tickets</h3>
             </div>
-        </form>
-    </div>
+            <div class="modal-body">
+                Are you sure, you want to delete selected tickets?<br/><br/>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+                <a href="javascript:void(0);" data-loading-text="Delete Tickets" class="save btn btn-sm btn-primary">
+                    Delete Tickets
+                </a>
+                &nbsp;&nbsp;<span id="msg"></span>
+            </div>
+        </div>
+    </form>
 </div>
 </script>
 <script id="ticket-bulk-actions-spam-tickets-template" type="text/html">
-<div id="spam-tickets-modal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="closeTicketsForm" name="closeTicketsForm" class="form-horizontal">
-                <div class="modal-header">
-                    <button class="close" data-dismiss="modal">x</button>
-                    <h3 class="modal-title"><i class="icon icon-copyright"></i> Spam Tickets</h3>
-                </div>
-                <div class="modal-body">
-                    Are you sure, you want to mark selected tickets as spam?<br/><br/>
-                </div>
-                <div class="modal-footer">
-                    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
-                    <a href="javascript:void(0);" data-loading-text="Mark Spam" class="save btn btn-sm btn-primary m-l-xs">
-                        Mark Spam
-                    </a>
-                    &nbsp;&nbsp;<span id="msg"></span>
-                </div>
-            </form>
-        </div>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form id="closeTicketsForm" name="closeTicketsForm" class="form-horizontal">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">x</button>
+                <h3 class="modal-title"><i class="icon icon-copyright"></i> Spam Tickets</h3>
+            </div>
+            <div class="modal-body">
+                Are you sure, you want to mark selected tickets as spam?<br/><br/>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+                <a href="javascript:void(0);" data-loading-text="Mark Spam" class="save btn btn-sm btn-primary m-l-xs">
+                    Mark Spam
+                </a>
+                &nbsp;&nbsp;<span id="msg"></span>
+            </div>
+        </form>
     </div>
 </div>
 </script>
 <script id="ticket-bulk-actions-favorite-tickets-template" type="text/html">
-<div id="favorite-tickets-modal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
-                <div class="modal-header">
-                    <button class="close" data-dismiss="modal">x</button>
-                    <h3 class="modal-title">Favorite Tickets</h3>
-                </div>
-                <div class="modal-body">
-                    Are you sure, you want to mark selected tickets as favorite?<br/><br/>
-                </div>
-                <div class="modal-footer">
-                    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
-                    <a href="javascript:void(0);" data-loading-text="Mark favorite" class="save btn btn-sm btn-primary">
-                        Mark Favorite
-                    </a>
-                    &nbsp;&nbsp;<span id="msg"></span>
-                </div>
-            </form>
-        </div>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">x</button>
+                <h3 class="modal-title">Favorite Tickets</h3>
+            </div>
+            <div class="modal-body">
+                Are you sure, you want to mark selected tickets as favorite?<br/><br/>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+                <a href="javascript:void(0);" data-loading-text="Mark favorite" class="save btn btn-sm btn-primary">
+                    Mark Favorite
+                </a>
+                &nbsp;&nbsp;<span id="msg"></span>
+            </div>
+        </form>
     </div>
 </div>
 </script>

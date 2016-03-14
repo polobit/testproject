@@ -89,17 +89,17 @@ $(function(){
 					getTemplate("bulk-actions-delete-modal", json, undefined, function(template_ui){
 
 						if(!template_ui)
-							  return;
+							return;
 
-						$('#ticket-modals').html($(template_ui));
-						$('#bulk-delete-modal').modal('show');
+						$('#ticketsModal').html($(template_ui)).modal('show').on('shown.bs.modal', function(){
 
-						$('#bulk-delete-modal').on('click', 'a.bulk-delete', function(e){
+							$('#ticketsModal').on('click', 'a.bulk-delete', function(e){
 
-							$('#bulk-delete-modal').modal('hide');
-							$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
-							bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
-						});						
+								$('#ticketsModal').modal('hide');
+								$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+								bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
+							});
+						});				
 					});
 
 					return;
@@ -370,7 +370,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 					break;
 				}
 				case 'core/api/tickets/labels/bulk':{
-					if(id_array.length == App_Ticket_Module.labelsCollection.collection.length)
+					if(id_array.length == Ticket_Labels.labelsCollection.collection.length)
 						App_Ticket_Module.ticketLabels();
 					break;
 				}

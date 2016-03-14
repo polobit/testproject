@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -34,6 +35,7 @@ import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.ticket.entitys.TicketActivityAttributes;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
@@ -50,15 +52,12 @@ import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
-import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
-import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
-import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -74,11 +73,6 @@ import com.googlecode.objectify.Key;
 @Path("/api/tickets")
 public class TicketsRest
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * 
 	 * @return
@@ -117,27 +111,7 @@ public class TicketsRest
 
 		try
 		{
-			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
-
-			try
-			{
-				// Include Ticket Group Object
-				ticket.group = TicketGroups.ticketGroupsDao.get(ticket.groupID);
-			}
-			catch (Exception e)
-			{
-				System.out.println(ExceptionUtils.getFullStackTrace(e));
-			}
-
-			if (ticket.assignee_id != null)
-			{
-				NamespaceManager.set("");
-
-				Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class, ticket.assigneeID);
-				ticket.assignee = DomainUserUtil.dao.get(userKey);
-			}
-
-			return ticket;
+			return TicketsUtil.getTicketByID(ticketID);
 		}
 		catch (Exception e)
 		{
@@ -170,6 +144,8 @@ public class TicketsRest
 			if (filterID == null)
 				throw new Exception("Required paramaters missing.");
 
+			final int DEFAULT_PAGE_SIZE = 25;
+
 			TicketFilters filter = TicketFiltersUtil.getFilterById(filterID);
 
 			List<SearchRule> customFilters = new ObjectMapper().readValue(customFiltersString,
@@ -183,7 +159,7 @@ public class TicketsRest
 				sortField = "-last_updated_time";
 
 			if (pageSize == null)
-				pageSize = 25;
+				pageSize = DEFAULT_PAGE_SIZE;
 
 			JSONObject resultJSON = new TicketsDocument().searchDocuments(queryString.trim(), cursor, sortField,
 					pageSize);
@@ -201,19 +177,13 @@ public class TicketsRest
 
 			List<Tickets> tickets = Tickets.ticketsDao.fetchAllByKeys(keys);
 
-			if (tickets.size() > 0)
-			{
-				tickets = TicketsUtil.inclGroupDetails(tickets);
-				tickets = TicketsUtil.inclDomainUsers(tickets);
-			}
-
 			if (resultJSON.has("count"))
 			{
 				int count = resultJSON.getInt("count");
 
-				if (count > 20 && tickets.size() == 20)
+				if (count > pageSize && tickets.size() == pageSize)
 				{
-					Tickets ticket = tickets.get(19);
+					Tickets ticket = tickets.get(pageSize - 1);
 
 					ticket.count = count;
 					ticket.cursor = resultJSON.getString("cursor");
@@ -313,12 +283,14 @@ public class TicketsRest
 	{
 		try
 		{
-			List<Activity> activitys = ActivityUtil.getActivitiesByEntityId(EntityType.TICKET.toString(), ticketID,
-					200, null);
+			// List<Activity> activitys =
+			// ActivityUtil.getActivitiesByEntityId(EntityType.TICKET.toString(),
+			// ticketID,
+			// 200, null);
 
-			activitys = TicketsUtil.includeData(activitys);
+			// activitys = TicketsUtil.includeData(activitys);
 
-			return activitys;
+			return ActivityUtil.getActivitiesByEntityId(EntityType.TICKET.toString(), ticketID, 200, null);
 		}
 		catch (Exception e)
 		{
@@ -326,17 +298,6 @@ public class TicketsRest
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
-	}
-
-	/**
-	 * @return list of worklows
-	 */
-	@GET
-	@Path("/execute-workflow")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Workflow> listWorkflows()
-	{
-		return WorkflowUtil.getAllWorkflows();
 	}
 
 	/**
@@ -391,8 +352,9 @@ public class TicketsRest
 					ticket.created_by, attachmentExists, "", labels_keys_list);
 
 			// Creating new Notes in TicketNotes table
-			new TicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER, ticket.requester_name,
+			TicketNotes notes = new TicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER, ticket.requester_name,
 					ticket.requester_email, plain_text, html_text, NOTE_TYPE.PUBLIC, attachmentsList, "");
+			notes.save();
 
 			ticket.groupID = ticket.group_id.getId();
 
@@ -400,6 +362,113 @@ public class TicketsRest
 			// TicketTriggerUtil.executeTriggerForNewTicket(ticket);
 
 			BulkActionNotifications.publishNotification("Ticket#" + ticket.id + " has been created.");
+
+			return ticket;
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
+	 * 
+	 * @param tickeID
+	 * @param activity
+	 * @return
+	 */
+	@PUT
+	@Path("/{ticket_id}/activity/{activity}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Tickets doActivity(@PathParam("ticket_id") Long ticketID, @PathParam("activity") String activity,
+			TicketActivityAttributes activityAttributes)
+	{
+		try
+		{
+			Tickets ticket = null;
+
+			switch (activity)
+			{
+//				case "mark-solved":
+//				{
+//					ticket = TicketsUtil.closeTicket(ticketID);
+//
+//					// Execute closed ticket trigger. Do not execute trigger if
+//					// updated
+//					// status and current status is same.
+//					TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
+//
+//					break;
+//				}
+				case "change-due-date":
+				{
+					ticket = TicketsUtil.changeDueDate(ticketID, activityAttributes.getDue_time());
+					break;
+				}
+				case "change-priority":
+				{
+					ticket = TicketsUtil.changePriority(ticketID, activityAttributes.getPriority());
+					break;
+				}
+				case "change-ticket-type":
+				{
+					ticket = TicketsUtil.changeTicketType(ticketID, activityAttributes.getType());
+					break;
+				}
+				case "change-status":
+				{
+					ticket = TicketsUtil.changeStatus(ticketID, activityAttributes.getStatus());
+
+					// Execute closed ticket trigger. Do not execute trigger if
+					// updated
+					// status and current status is same.
+					if (Status.CLOSED == activityAttributes.getStatus())
+						TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
+
+					break;
+				}
+				case "remove-due-date":
+				{
+					ticket = TicketsUtil.removeDuedate(ticketID);
+					break;
+				}
+				case "toggle-spam":
+				{
+					ticket = TicketsUtil.getTicketByID(ticketID);
+					boolean isSpam = (ticket.is_spam != null && ticket.is_spam) ? false : true;
+					ticket = TicketsUtil.markSpam(ticketID, isSpam);
+
+					break;
+				}
+				case "toggle-favorite":
+				{
+					ticket = TicketsUtil.getTicketByID(ticketID);
+					boolean isFavorite = (ticket.is_favorite != null && ticket.is_favorite) ? false : true;
+					ticket = TicketsUtil.markFavorite(ticketID, isFavorite);
+
+					break;
+				}
+				case "update-cc-emails":
+				{
+					ticket = TicketsUtil.updateCCEmails(ticketID, activityAttributes.getEmail(),
+							activityAttributes.getCommand());
+					break;
+				}
+				case "update-labels":
+				{
+					ticket = TicketsUtil.updateLabels(ticketID, new Key<TicketLabels>(TicketLabels.class,
+							activityAttributes.getLabelID()), activityAttributes.getCommand());
+
+					if ("add".equalsIgnoreCase(activityAttributes.getCommand()))
+						TicketTriggerUtil.executeTriggerForLabelAddedToTicket(ticket);
+					else
+						TicketTriggerUtil.executeTriggerForLabelDeletedToTicket(ticket);
+
+					break;
+				}
+			}
 
 			return ticket;
 		}
@@ -456,41 +525,6 @@ public class TicketsRest
 	}
 
 	/**
-	 * changes ticket status
-	 * 
-	 * @param ticket_id
-	 * @param group_id
-	 * @param assignee_id
-	 * @return returns success json
-	 */
-	@PUT
-	@Path("/change-status")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets changeStatus(@QueryParam("id") Long ticketID, @QueryParam("status") Status status)
-	{
-		try
-		{
-			if (ticketID == null && status == null)
-				throw new Exception("Required parameters missing.");
-
-			Tickets ticket = TicketsUtil.changeStatus(ticketID, status);
-
-			// Execute closed ticket trigger. Do not execute trigger if updated
-			// status and current status is same.
-			if (Status.CLOSED == status)
-				TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
-
-			return ticket;
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-	}
-
-	/**
 	 * Assigns Ticket to given domain user and ticket group
 	 * 
 	 * @param ticket_id
@@ -499,10 +533,10 @@ public class TicketsRest
 	 * @return returns updated ticket object
 	 */
 	@PUT
-	@Path("/assign-ticket")
+	@Path("/{ticket_id}/assign-ticket/{group_id}/{assignee_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets assignTicket(@QueryParam("ticket_id") Long ticketID, @QueryParam("assignee_id") Long assigneeID,
-			@QueryParam("group_id") Long groupID)
+	public Tickets assignTicket(@PathParam("ticket_id") Long ticketID, @PathParam("assignee_id") Long assigneeID,
+			@PathParam("group_id") Long groupID)
 	{
 		try
 		{
@@ -515,10 +549,10 @@ public class TicketsRest
 			Tickets updatedTicket = TicketsUtil.changeGroupAndAssignee(ticketID, groupID, assigneeID);
 
 			if (updatedTicket.assigneeID != null)
-				updatedTicket.assignee = DomainUserUtil.getDomainUser(assigneeID);
+				updatedTicket.assignee = DomainUserUtil.getPartialDomainUser(assigneeID);
 
 			if (updatedTicket.groupID != null)
-				updatedTicket.group = TicketGroups.ticketGroupsDao.get(groupID);
+				updatedTicket.group = TicketGroupUtil.getPartialGroupByID(groupID);
 
 			if (oldTicket.assigneeID != updatedTicket.assigneeID || (oldTicket.groupID != updatedTicket.groupID))
 				TicketTriggerUtil.executeTriggerForAssigneeChanged(updatedTicket);
@@ -536,208 +570,12 @@ public class TicketsRest
 	/**
 	 * 
 	 * @param ticket_id
-	 * @param priority
 	 * @return
 	 */
-	@PUT
-	@Path("/change-ticket-type")
+	@DELETE
+	@Path("/{ticket_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets changeTicketType(@QueryParam("id") Long id, @QueryParam("type") Type ticketType)
-	{
-		try
-		{
-			if (ticketType == null)
-				throw new Exception("Required parameters missing.");
-
-			return TicketsUtil.changeTicketType(id, ticketType);
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-	}
-
-	/**
-	 * 
-	 * @param ticket_id
-	 * @param priority
-	 * @return
-	 */
-	@PUT
-	@Path("/change-priority")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets changePriority(@QueryParam("id") Long id, @QueryParam("priority") Priority priority)
-	{
-		try
-		{
-			if (id == null || priority == null)
-				throw new Exception("Required parameters missing.");
-
-			return TicketsUtil.changePriority(id, priority);
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-	}
-
-	/**
-	 * 
-	 * @param ticket_id
-	 * @param priority
-	 * @return
-	 */
-	@PUT
-	@Path("/change-due-date")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets changeDueDate(@QueryParam("id") Long ticketID, @QueryParam("due_time") Long dueDate)
-	{
-		try
-		{
-			if (ticketID == null || dueDate == null)
-				throw new Exception("Required parameters missing.");
-
-			return TicketsUtil.changeDueDate(ticketID, dueDate);
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-	}
-
-	/**
-	 * 
-	 * @param ticket_id
-	 * @param is_starred
-	 * @return
-	 */
-	@PUT
-	@Path("/make-favorite")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets makeFavorite(Tickets ticket)
-	{
-		try
-		{
-			if (ticket == null || ticket.is_favorite == null)
-				throw new Exception("Required parameters missing.");
-
-			return TicketsUtil.markFavorite(ticket.id, ticket.is_favorite);
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-	}
-
-	/**
-	 * 
-	 * @param ticket_id
-	 * @return
-	 */
-	@PUT
-	@Path("/mark-solved")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets closeTicket(Tickets ticket)
-	{
-		try
-		{
-			if (ticket == null || ticket.id == null)
-				throw new Exception("Required parameter missing.");
-
-			ticket = TicketsUtil.closeTicket(ticket.id);
-
-			// Execute closed ticket trigger. Do not execute trigger if updated
-			// status and current status is same.
-			TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
-
-			return ticket;
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-	}
-
-	/**
-	 * 
-	 * @param ticket_id
-	 * @return
-	 */
-	@PUT
-	@Path("/update-labels")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets updateLabels(@QueryParam("command") String command, @QueryParam("label") Long labelID,
-			@QueryParam("id") Long ticketID)
-	{
-		try
-		{
-			if (ticketID == null)
-				throw new Exception("Required parameter missing.");
-
-			Tickets ticket = TicketsUtil.updateLabels(ticketID, new Key<TicketLabels>(TicketLabels.class, labelID),
-					command);
-
-			if ("add".equalsIgnoreCase(command))
-				TicketTriggerUtil.executeTriggerForLabelAddedToTicket(ticket);
-			else
-				TicketTriggerUtil.executeTriggerForLabelDeletedToTicket(ticket);
-
-			return ticket;
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-	}
-
-	/**
-	 * To update cc emails
-	 * 
-	 * @param ticket_id
-	 * @return
-	 */
-	@PUT
-	@Path("/update-cc-emails")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets updateCCEmails(@QueryParam("command") String command, @QueryParam("email") String email,
-			@QueryParam("id") Long ticketID)
-	{
-		try
-		{
-			if (ticketID == null || email == null || command == null)
-				throw new Exception("Required parameter missing.");
-
-			return TicketsUtil.updateCCEmails(ticketID, email, command);
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-	}
-
-	/**
-	 * 
-	 * @param ticket_id
-	 * @return
-	 */
-	@PUT
-	@Path("/delete-ticket")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteTicket(@QueryParam("id") Long ticketID)
+	public String deleteTicket(@PathParam("ticket_id") Long ticketID)
 	{
 		try
 		{
@@ -755,67 +593,6 @@ public class TicketsRest
 					.build());
 		}
 
-	}
-
-	/**
-	 * changes ticket favorite
-	 * 
-	 * @param ticketID
-	 * @return returns success json
-	 */
-	@PUT
-	@Path("/toggle-favorite")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets toggleFavorite(@QueryParam("id") Long ticketID)
-	{
-		try
-		{
-			if (ticketID == null)
-				throw new Exception("Required parameters missing.");
-
-			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
-
-			boolean isFavorite = (ticket.is_favorite != null && ticket.is_favorite) ? false : true;
-
-			return TicketsUtil.markFavorite(ticketID, isFavorite);
-
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-	}
-
-	/**
-	 * changes ticket spam
-	 * 
-	 * @param ticketID
-	 * @return returns success json
-	 */
-	@PUT
-	@Path("/toggle-spam")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets toggleSpam(@QueryParam("id") Long ticketID)
-	{
-		try
-		{
-			if (ticketID == null)
-				throw new Exception("Required parameters missing.");
-
-			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
-
-			boolean isSpam = (ticket.is_spam != null && ticket.is_spam) ? false : true;
-
-			return TicketsUtil.markSpam(ticketID, isSpam);
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
 	}
 
 	/**
@@ -854,7 +631,7 @@ public class TicketsRest
 	}
 
 	@GET
-	@Path("/{{email}}")
+	@Path("/email/{email}")
 	public List<Tickets> getTicketsByEmail(@PathParam("email") String email)
 	{
 		try
@@ -870,8 +647,8 @@ public class TicketsRest
 	}
 
 	@GET
-	@Path("/{{email}}/count")
-	public int getTicketCountByEmail(@QueryParam("email") String email)
+	@Path("/{email}/count")
+	public int getTicketCountByEmail(@PathParam("email") String email)
 	{
 		try
 		{
@@ -975,9 +752,7 @@ public class TicketsRest
 			List<Key<Tickets>> keys = Tickets.ticketsDao.listAllKeys();
 
 			for (Key<Tickets> key : keys)
-			{
 				new TicketsDocument().add(Tickets.ticketsDao.get(key));
-			}
 		}
 		catch (Exception e)
 		{
@@ -1053,9 +828,9 @@ public class TicketsRest
 						new ArrayList<Key<TicketLabels>>());
 
 				// Creating new Notes in TicketNotes table
-				TicketNotes ticketNotes = new TicketNotes(ticket.id, group.id, ticket.assigneeID, CREATED_BY.REQUESTER,
-						"Sasi", "sasi@clickdesk.com", message, message, NOTE_TYPE.PUBLIC,
-						new ArrayList<TicketDocuments>(), "");
+				TicketNotes notes = new TicketNotes(ticket.id, group.id, ticket.assigneeID, CREATED_BY.REQUESTER, "Sasi",
+						"sasi@clickdesk.com", message, message, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
+				notes.save();
 			}
 		}
 		catch (Exception e)
@@ -1066,32 +841,5 @@ public class TicketsRest
 		}
 
 		return new JSONObject().put("status", "success").toString();
-	}
-
-	/**
-	 * changes ticket due date
-	 * 
-	 * @param ticket_id
-	 * @return returns success json
-	 */
-	@PUT
-	@Path("/remove-due-date")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets removeDuedate(@QueryParam("id") Long ticketID)
-	{
-		try
-		{
-			if (ticketID == null)
-				throw new Exception("Required parameters missing.");
-
-			return TicketsUtil.removeDuedate(ticketID);
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-
 	}
 }

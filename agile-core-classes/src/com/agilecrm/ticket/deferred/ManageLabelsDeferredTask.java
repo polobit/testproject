@@ -47,7 +47,7 @@ public class ManageLabelsDeferredTask extends TicketBulkActionAdaptor
 						// Execute note closed by user trigger
 						TicketTriggerUtil.executeTriggerForLabelDeletedToTicket(ticket);
 				}
-				catch (EntityNotFoundException e)
+				catch (Exception e)
 				{
 					System.out.println(ExceptionUtils.getFullStackTrace(e));
 				}

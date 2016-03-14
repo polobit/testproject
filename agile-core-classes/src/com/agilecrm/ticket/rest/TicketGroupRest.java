@@ -1,7 +1,6 @@
 package com.agilecrm.ticket.rest;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -10,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -64,9 +64,9 @@ public class TicketGroupRest
 	 * @return List of Domain Users
 	 */
 	@GET
-	@Path("/domain-users")
+	@Path("/{group_id}/users")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<DomainUser> getDomainUsersInGroup(@QueryParam("group_id") Long groupID)
+	public List<DomainUser> getDomainUsersInGroup(@PathParam("group_id") Long groupID)
 	{
 		String oldnamespace = NamespaceManager.get();
 
@@ -142,10 +142,7 @@ public class TicketGroupRest
 				agents_key_list.add(new Key<DomainUser>(DomainUser.class, agent_key));
 
 			ticketGroup.setAgents_key_list(agents_key_list);
-			ticketGroup.setOwner_key(DomainUserUtil.getCurentUserKey());
-			ticketGroup.updated_time = Calendar.getInstance().getTimeInMillis();
-
-			TicketGroups.ticketGroupsDao.put(ticketGroup);
+			ticketGroup.save();
 
 			return ticketGroup;
 		}
@@ -178,7 +175,7 @@ public class TicketGroupRest
 				throw new Exception("Please select atleast one User to create Ticket Group.");
 
 			TicketGroups existingGroup = TicketGroupUtil.getTicketGroupByName(groupName);
-			
+
 			if (existingGroup != null && !existingGroup.equals(ticketGroup))
 				throw new Exception("Ticket Group with name " + groupName
 						+ " already exists. Please choose a different Group name.");
@@ -187,15 +184,23 @@ public class TicketGroupRest
 
 			for (Long agent_key : agents_keys)
 				agents_key_list.add(new Key<DomainUser>(DomainUser.class, agent_key));
-			
-			//Get group from db
-			TicketGroups dbGroup = TicketGroupUtil.getTicketGroupById(ticketGroup.id);
-			
-			//Set updated values
+
+			TicketGroups dbGroup = null;
+
+			try
+			{
+				dbGroup = TicketGroupUtil.getTicketGroupById(ticketGroup.id);
+			}
+			catch (Exception e)
+			{
+				throw new Exception("No group found with id " + ticketGroup.id + " or group has been deleted.");
+			}
+
+			// Set updated values
 			dbGroup.group_name = ticketGroup.group_name;
 			dbGroup.setAgents_key_list(agents_key_list);
 
-			TicketGroups.ticketGroupsDao.put(dbGroup);
+			dbGroup.save();
 
 			return dbGroup;
 		}
@@ -222,8 +227,7 @@ public class TicketGroupRest
 	{
 		try
 		{
-			JSONArray groupIDsArray = new JSONArray(model_ids);
-			TicketGroups.ticketGroupsDao.deleteBulkByIds(groupIDsArray);
+			TicketGroups.delete(new JSONArray(model_ids));
 		}
 		catch (Exception e)
 		{

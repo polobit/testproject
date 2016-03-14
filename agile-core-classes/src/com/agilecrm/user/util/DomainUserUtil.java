@@ -14,6 +14,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -46,7 +48,10 @@ public class DomainUserUtil
 {
     // Dao
     public static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
-
+    
+    // Partial Dao
+    public static PartialDAO<DomainUserPartial> partialDAO = new PartialDAO<DomainUserPartial>(DomainUserPartial.class);
+    
     /**
      * Generates a password of length eight characters and sends an email to the
      * user.
@@ -132,7 +137,64 @@ public class DomainUserUtil
 	    NamespaceManager.set(oldNamespace);
 	}
     }
+    
+    /**
+     * Gets a user based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static DomainUserPartial getPartialDomainUser(Long id)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
 
+	try
+	{
+		return partialDAO.get(id);
+	}
+	catch (Exception e)
+	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
+	    e.printStackTrace();
+	    return null;
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+    
+    /**
+     * Gets a user based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static List<DomainUserPartial> getPartialDomainUsers(String domainname)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+		Map map = new HashMap();
+		map.put("domain", domainname);
+		
+		return partialDAO.listByProperty(map);
+		
+	}
+	catch (Exception e)
+	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
+	    e.printStackTrace();
+	    return null;
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
     /**
      * Creates domain user key
      */

@@ -589,21 +589,19 @@
 {{/each}}
 </script>
 <script id="ticket-sla-error-template" type="text/html">
-<div id="sla-error-modal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal">x</button>
-                <h3 class="modal-title"><i class="icon icon-warning"></i> Error</h3>
-            </div>
-            <div class="modal-body">
-                <form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
-                    Due date must be greater than current time<br/><br/>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
-            </div>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">x</button>
+            <h3 class="modal-title"><i class="icon icon-warning"></i> Error</h3>
+        </div>
+        <div class="modal-body">
+            <form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
+                Due date must be greater than current time<br/><br/>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
         </div>
     </div>
 </div>

@@ -77,41 +77,41 @@ var Ticket_Custom_Filters = {
 
 		var options = [];
 
-	  	//Initializing click event due date dropdown
-	  	$container.off('click','ul.due-date-dropdown li a');
-	  	$container.on('click','ul.due-date-dropdown li a', function(event){
+	  // 	//Initializing click event due date dropdown
+	  // 	$container.off('click','ul.due-date-dropdown li a');
+	  // 	$container.on('click','ul.due-date-dropdown li a', function(event){
 
-	  		var $target = $(event.currentTarget);
+	  // 		var $target = $(event.currentTarget);
 
-	  		$(event.target).blur();
+	  // 		$(event.target).blur();
 
-	  		if($target.hasClass("due-date-custom")){
+	  // 		if($target.hasClass("due-date-custom")){
 
-	  			$('input.due-date-input').trigger('click');
-	  			return false;
-	  		}else if($target.hasClass("clear-due-dates")){
+	  // 			$('input.due-date-input').trigger('click');
+	  // 			return false;
+	  // 		}else if($target.hasClass("clear-due-dates")){
 
-	  			options = [];
-	  			$('input.due-date-input').val('');
-	  			$('.due-date-chbx').prop('checked', false);
+	  // 			options = [];
+	  // 			$('input.due-date-input').val('');
+	  // 			$('.due-date-chbx').prop('checked', false);
 
-	  			return false;
-	  		}
+	  // 			return false;
+	  // 		}
 
-	  		var val = $target.attr('data-value'),
-					$chbx = $target.find('input[type="checkbox"]'), idx;
+	  // 		var val = $target.attr('data-value'),
+			// 		$chbx = $target.find('input[type="checkbox"]'), idx;
 
-				if((idx = options.indexOf(val)) > -1){
-		      options.splice(idx, 1);
-		      setTimeout(function(){$chbx.prop('checked', false)}, 0);
-		   	}else{
-		      options.push(val);
-		      setTimeout(function(){$chbx.prop('checked', true)}, 0);
-		   	}
+			// 	if((idx = options.indexOf(val)) > -1){
+		 //      options.splice(idx, 1);
+		 //      setTimeout(function(){$chbx.prop('checked', false)}, 0);
+		 //   	}else{
+		 //      options.push(val);
+		 //      setTimeout(function(){$chbx.prop('checked', true)}, 0);
+		 //   	}
 			
-			$('input.due-date-input').val(options);
-			return false;
-	  	});
+			// $('input.due-date-input').val(options);
+			// return false;
+	  // 	});
 
 	  	//Initializing click event on clear due date button
 	  	$container.off('click','a#clear-due-date');
@@ -187,7 +187,7 @@ var Ticket_Custom_Filters = {
 				url : '/core/api/tickets/filters',
 				saveCallback: function(model){
 
-					$('#create-filter-modal').modal('hide');
+					$('#ticketsModal').modal('hide');
 
 					App_Ticket_Module.ticketFiltersList.collection.add(model);
 					App_Ticket_Module.ticketsByFilter(model.id);
@@ -208,8 +208,7 @@ var Ticket_Custom_Filters = {
 				}
 			});
 
-			$('#ticket-modals').html(view.render().el);
-			$('#create-filter-modal').modal('show');
+			$('#ticketsModal').html(view.render().el).modal('show');
 		});
 
 		//Initializing click event on 'Save as' button in LHS filters 

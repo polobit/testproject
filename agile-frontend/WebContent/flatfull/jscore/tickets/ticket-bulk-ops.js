@@ -184,13 +184,16 @@ var Ticket_Bulk_Ops = {
 	renderTemplate: function(action_type){
 
 		if (!App_Ticket_Module.ticketsCollection || App_Ticket_Module.ticketsCollection.collection.length == 0)
+		{	
 			Backbone.history.navigate("tickets", { trigger : true });
-
+			return;
+		}
+		
 		switch(action_type){
 			case 'manage-labels':{
 
 				var view = new Ticket_Base_Model({
-					isNew : true, 
+					isNew : true,
 					template : "ticket-bulk-actions-add-labels",
 					url : "/core/api/tickets/bulk-actions/manage-labels",
 					saveCallback: function(){
@@ -218,7 +221,7 @@ var Ticket_Bulk_Ops = {
 			case 'change-assignee':{
 
 				var view = new Ticket_Base_Model({
-					isNew : false, 
+					isNew : true, 
 					template : "ticket-bulk-actions-change-assignee",
 					url : "/core/api/tickets/bulk-actions/change-assignee",
 					saveCallback: function(){
@@ -238,6 +241,13 @@ var Ticket_Bulk_Ops = {
 						json.groupID = $('[name="assigneeID"]').find('option:selected').data('group-id');
 
 						model.set(json, { silent : true });
+					},
+					postRenderCallback: function(el){
+
+						//Fetching all groups, assignees and appending them to select dropdown
+						fillSelect('assigneeID', '/core/api/tickets/new-ticket', '', function(collection){
+							$('#assigneeID').html(getTemplate('select-assignee-dropdown', collection.toJSON()));
+						}, '', false, el);
 					}
 				});
 
@@ -247,7 +257,7 @@ var Ticket_Bulk_Ops = {
 			case 'execute-workflows':
 
 				var view = new Ticket_Base_Model({
-					isNew : false, 
+					isNew : true, 
 					template : "ticket-bulk-actions-execute-workflow",
 					url : "/core/api/tickets/bulk-actions/execute-workflow",
 					saveCallback: function(){
@@ -265,6 +275,13 @@ var Ticket_Bulk_Ops = {
 						}
 
 						model.set(json, { silent : true });
+					},
+					postRenderCallback: function(el){
+
+						var template = '<option value="{{id}}">{{name}}</option>';
+
+						//Fetching all groups, assignees and appending them to select dropdown
+						fillSelect('workflowID', '/core/api/workflows', '', null, template, false, el);
 					}
 				});
 
@@ -276,12 +293,11 @@ var Ticket_Bulk_Ops = {
 					isNew : true, 
 					template : "ticket-bulk-actions-close-tickets",
 					url : "/core/api/tickets/bulk-actions/close-tickets",
-					modal: '#close-tickets-modal',
 					saveCallback: function(){
 						Ticket_Bulk_Ops.clearSelection();
 						//$('#close-tickets-modal').modal('hide');
 
-						Ticket_Utils.resetModalSettings($('#close-tickets-modal'));
+						Ticket_Utils.resetModalSettings($('#ticketsModal'));
 					},
 					prePersist : function(model)
 					{
@@ -295,8 +311,7 @@ var Ticket_Bulk_Ops = {
 					}
 				});
 
-				$('#ticket-modals').html(view.render().el);
-				$('#close-tickets-modal').modal('show');
+				$('#ticketsModal').html(view.render().el).modal('show');
 				break;
 			case 'delete-tickets':
 
@@ -316,7 +331,7 @@ var Ticket_Bulk_Ops = {
 						Ticket_Bulk_Ops.clearSelection();
 						//$('#delete-tickets-modal').modal('hide');
 
-						Ticket_Utils.resetModalSettings($('#delete-tickets-modal'));
+						Ticket_Utils.resetModalSettings($('#ticketsModal'));
 					},
 					prePersist : function(model)
 					{
@@ -330,8 +345,7 @@ var Ticket_Bulk_Ops = {
 					}
 				});
 
-				$('#ticket-modals').html(view.render().el);
-				$('#delete-tickets-modal').modal('show');
+				$('#ticketsModal').html(view.render().el).modal('show');
 				break;
 			case 'mark-spam':
 
@@ -343,7 +357,7 @@ var Ticket_Bulk_Ops = {
 						Ticket_Bulk_Ops.clearSelection();
 						//$('#spam-tickets-modal').modal('hide');
 
-						Ticket_Utils.resetModalSettings($('#spam-tickets-modal'));
+						Ticket_Utils.resetModalSettings($('#ticketsModal'));
 					},
 					prePersist : function(model)
 					{
@@ -357,8 +371,7 @@ var Ticket_Bulk_Ops = {
 					}
 				});
 
-				$('#ticket-modals').html(view.render().el);
-				$('#spam-tickets-modal').modal('show');
+				$('#ticketsModal').html(view.render().el).modal('show');
 				break;
 			case 'mark-favorite':
 
@@ -370,7 +383,7 @@ var Ticket_Bulk_Ops = {
 						Ticket_Bulk_Ops.clearSelection();
 						//$('#favorite-tickets-modal').modal('hide');
 
-						Ticket_Utils.resetModalSettings($('#favorite-tickets-modal'));
+						Ticket_Utils.resetModalSettings($('#ticketsModal'));
 					},
 					prePersist : function(model)
 					{
@@ -384,42 +397,41 @@ var Ticket_Bulk_Ops = {
 					}
 				});
 
-				$('#ticket-modals').html(view.render().el);
-				$('#favorite-tickets-modal').modal('show');
+				$('#ticketsModal').html(view.render().el).modal('show');
 				break;
 		}
 	},
 
-	bulkManageLabels: function(e){
+	// bulkManageLabels: function(e){
 
-		var saveButton = $('.bulk-manage-labels');
-		disable_save_button(saveButton);
+	// 	var saveButton = $('.bulk-manage-labels');
+	// 	disable_save_button(saveButton);
 
-		var tagsObj = get_tags('bulk-labels').pop();
+	// 	var tagsObj = get_tags('bulk-labels').pop();
 
-		if(tagsObj['value'].length == 0)
-		{
-			var $err_msg = $('.error-tags');
-			$err_msg.show();
-			setTimeout(function(){$err_msg.hide();}, 3000);
-			enable_save_button(saveButton);
-			return;
-		}
+	// 	if(tagsObj['value'].length == 0)
+	// 	{
+	// 		var $err_msg = $('.error-tags');
+	// 		$err_msg.show();
+	// 		setTimeout(function(){$err_msg.hide();}, 3000);
+	// 		enable_save_button(saveButton);
+	// 		return;
+	// 	}
 
-		var url = '/core/api/tickets/bulk-actions/add-tags';
+	// 	var url = '/core/api/tickets/bulk-actions/add-tags';
 
-		var json = {};
-		json.tags = tagsObj['value'].toString();
-		json.ticket_ids = Ticket_Bulk_Ops.getSelectedTickesObj();
-		json.command = saveButton.hasClass('bulk-add-labels') ? 'add' : 'remove';
+	// 	var json = {};
+	// 	json.tags = tagsObj['value'].toString();
+	// 	json.ticket_ids = Ticket_Bulk_Ops.getSelectedTickesObj();
+	// 	json.command = saveButton.hasClass('bulk-add-labels') ? 'add' : 'remove';
 
-		if(Ticket_Bulk_Ops.selected_all_filter_tickets)
-			json.filter_id =  Ticket_Filter_ID;
+	// 	if(Ticket_Bulk_Ops.selected_all_filter_tickets)
+	// 		json.filter_id =  Ticket_Filter_ID;
 
-		this.ajax_call(url, json, function(){
-			enable_save_button(saveButton);
-		});
-	},
+	// 	this.ajax_call(url, json, function(){
+	// 		enable_save_button(saveButton);
+	// 	});
+	// },
 
 	ajax_call: function(url, data, callback){
 

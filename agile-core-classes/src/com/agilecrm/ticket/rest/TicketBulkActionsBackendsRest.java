@@ -25,17 +25,13 @@ import com.agilecrm.ticket.deferred.ManageLabelsDeferredTask;
 import com.agilecrm.ticket.deferred.MarkTicketsAsFavoriteDeferredTask;
 import com.agilecrm.ticket.deferred.MarkTicketsAsSpamDeferredTask;
 import com.agilecrm.ticket.entitys.TicketBulkActionAttributes;
-import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.utils.CSVTicketIdsFetcher;
 import com.agilecrm.ticket.utils.FilterTicketIdsFetcher;
 import com.agilecrm.ticket.utils.ITicketIdsFetcher;
 import com.agilecrm.ticket.utils.TicketBulkActionUtil;
-import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.workflows.Workflow;
-import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 

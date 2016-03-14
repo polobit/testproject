@@ -137,7 +137,13 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	// menu scopes in future
 	@NotSaved(IfDefault.class)
 	public HashSet<NavbarConstants> restricted_menu_scopes = null;
-
+	
+	/**
+	 * Pic of the domain user
+	 */
+	@NotSaved(IfDefault.class)
+	public String pic = null;
+	
 	/**
 	 * Name of the domain user
 	 */

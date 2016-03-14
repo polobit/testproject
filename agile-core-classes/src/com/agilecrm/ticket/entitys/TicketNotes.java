@@ -15,7 +15,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
@@ -200,12 +199,16 @@ public class TicketNotes
 		this.html_text = TicketNotesUtil.removedQuotedRepliesFromHTMLText(original_html_text);
 
 		this.mime_object = mimeObject;
+	}
 
+	public TicketNotes save()
+	{
 		TicketNotes.ticketNotesDao.put(this);
 
 		boolean isPublicNotes = (note_type == NOTE_TYPE.PUBLIC);
 
-		ActivityType activityType = (isPublicNotes) ? ActivityType.TICKET_ASSIGNEE_REPLIED
+		ActivityType activityType = (isPublicNotes) ? ((created_by == CREATED_BY.AGENT) ? ActivityType.TICKET_ASSIGNEE_REPLIED
+				: ActivityType.TICKET_REQUESTER_REPLIED)
 				: ActivityType.TICKET_PRIVATE_NOTES_ADD;
 
 		try
@@ -213,13 +216,18 @@ public class TicketNotes
 			Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
 			// Sending reply to requester if and only if notes type is public
-			if (isPublicNotes && created_by == CREATED_BY.AGENT)
+			if (isPublicNotes)
 			{
-				// Send email thread to user
-				TicketNotesUtil.sendReplyToRequester(ticket);
+				if (created_by == CREATED_BY.AGENT)
+					// Send email thread to user
+					TicketNotesUtil.sendReplyToRequester(ticket);
 
-				// Execute note created by user trigger
-				TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);
+				if (created_by == CREATED_BY.AGENT)
+					// Execute note created by agent trigger
+					TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
+				else
+					// Execute note created by user trigger
+					TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);
 			}
 
 			// Logging notes activity
@@ -230,6 +238,8 @@ public class TicketNotes
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
+
+		return this;
 	}
 
 	@javax.persistence.PostLoad

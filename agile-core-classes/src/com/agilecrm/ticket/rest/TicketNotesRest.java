@@ -40,7 +40,7 @@ import com.googlecode.objectify.Key;
 public class TicketNotesRest
 {
 	@GET
-	@Path("/{{ticket_id}}")
+	@Path("/{ticket_id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<TicketNotes> getNotes(@PathParam("ticket_id") Long ticketID)
 	{
@@ -92,10 +92,8 @@ public class TicketNotesRest
 			}
 			catch (Exception e)
 			{
-			}
-
-			if (ticket == null)
 				throw new Exception("Ticket has been deleted.");
+			}
 
 			TicketNotes ticketNotes = null;
 
@@ -104,6 +102,8 @@ public class TicketNotesRest
 				ticketNotes = new TicketNotes(ticket.id, ticket.groupID, DomainUserUtil.getCurentUserKey().getId(),
 						CREATED_BY.AGENT, ticket.requester_name, ticket.requester_email, plain_text, html_text,
 						NOTE_TYPE.PRIVATE, new ArrayList<TicketDocuments>(), "");
+
+				ticketNotes.save();
 
 				if (notes.close_ticket)
 				{
@@ -116,11 +116,18 @@ public class TicketNotesRest
 			else
 			{
 				Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
-				TicketGroups group = TicketGroupUtil.getTicketGroupById(ticket.group_id.getId());
+				
+				TicketGroups group = null;
 
-				if (group == null)
+				try
+				{
+					group = TicketGroupUtil.getTicketGroupById(ticket.groupID);
+				}
+				catch (Exception e)
+				{
 					throw new Exception("Ticket group has been deleted. Please change ticket group to reply.");
-
+				}
+				
 				// If domain user doesn't exists in ticket group then
 				// throwing exception
 				if (!group.agents_keys.contains(domainUserKey.getId()))
@@ -135,6 +142,8 @@ public class TicketNotesRest
 				ticketNotes = new TicketNotes(ticket.id, ticket.groupID, ticket.assigneeID, CREATED_BY.AGENT,
 						ticket.requester_name, ticket.requester_email, plain_text, html_text, notes.note_type,
 						new ArrayList<TicketDocuments>(), "");
+				
+				ticketNotes.save();
 			}
 
 			ticketNotes.domain_user = DomainUserUtil.getDomainUser(ticket.assigneeID);

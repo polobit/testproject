@@ -36,7 +36,9 @@ var Tickets = {
 					if(callback)
 						callback();
 
-				}, "");
+					var loaderEl = $(getRandomLoadingImg());
+					$(".tickets-collection-pane").html(loaderEl.css("margin", "10px"));
+				}, "#right-pane");
 				
 			}, "#content");
 		}else{
@@ -209,24 +211,29 @@ var Tickets = {
 
 			var $that = $(this);
 			var action_type = $that.data('field'), action_value = $that.attr('value');
-			var ticket_id = $that.closest('ul').data('ticket-id'), url = '/core/api/tickets', message = '';
+			var ticket_id = $that.closest('ul').data('ticket-id'); 
+			var url = '/core/api/tickets', message = '';
+			var json = {};
 
 			switch(action_type){
 
 				case 'status':
-					url += "/change-status?id=" + ticket_id + "&status=" + action_value;
-					message = 'Status has been updated to ' + action_value.toLowerCase();
+					url += "/" + ticket_id + "/activity/change-status";
+					json = {status: action_value, id: ticket_id};
+
+			        message = 'Status has been updated to ' + action_value.toLowerCase();
 					break;
 				case 'priority':
-					url += "/change-priority?id=" + ticket_id + "&priority=" + action_value;
+					url += "/" + ticket_id + "/activity/change-priority";
+					json = {priority: action_value, id: ticket_id};
+
 					message = 'Priority has been updated to ' + action_value.toLowerCase();
 					break;
 				case 'assignee':
 				{
 					var group_id = $that.data('group-id');
 
-					url += "/assign-ticket?ticket_id=" + ticket_id + "&assignee_id=" + action_value + 
-			                     '&group_id=' + group_id;
+					url += "/" + ticket_id + "/assign-ticket/" + group_id + "/" + action_value;
 
 					if(action_value == 0){
 						 message = 'Ticket group has been changed to ' + $that.data('name');
@@ -239,9 +246,10 @@ var Tickets = {
 			    }
 			}
 
-			Tickets.updateModel(url, function(){
+			Tickets.updateModel(url, json, function(){
 
 				showNotyPopUp('information', message, 'bottomRight', 5000);
+
 				$that.closest('tr').find('a.' + action_type).html(action_value);
 				$that.closest('div').find('.dropdown-menu').dropdown('toggle');
 
@@ -256,7 +264,7 @@ var Tickets = {
 				$that.closest('div').removeClass('bg-light');
 				$that.closest('div').find('.caret-btn').removeClass('inline-block').addClass('display-none');
 
-			}, null, ticket_id);
+			});
 		});
 
 		/**
@@ -597,40 +605,39 @@ var Tickets = {
        		&& ticketJSON.groupID == groupId)
        		return;
 
-       	Tickets.sendReqToChangeAssignee(assigneeId, groupId, ticketJSON, function(data){
-            
-            var modelData = data;
+       	var url = "/core/api/tickets/" + ticket_id + "/assign-ticket/" + groupId + "/" + assigneeId;
+       	var json = {id: Current_Ticket_ID};
 
-            try{
-            	if(modelData.assigneeID != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(groupId, Tickets.groupsList))
-	    		$('.assign-to-me').show();
+       	Tickets.updateModel(url, json, function(data){
+            
+			var modelData = data;
+
+			try{
+				if(modelData.assigneeID != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(groupId, Tickets.groupsList))
+				$('.assign-to-me').show();
 			else
 				$('.assign-to-me').hide();
-            }
-            catch(e){
-            	console.log(e);
-            }
+			}
+			catch(e){
+				console.log(e);
+			}
 
-            console.log(modelData);
-           // console.log(modelData.assigneeID);
-
-            var assigneeName = (modelData.assigneeID) ? (modelData.assignee.name) : modelData.group.group_name;
+			var assigneeName = (modelData.assigneeID) ? (modelData.assignee.name) : modelData.group.group_name;
 
 			var message = 'Ticket group has been changed to ' + assigneeName;
+
 			if(modelData.assigneeID)
 				var message = 'Assignee has been changed to ' + assigneeName;
 			
-		    showNotyPopUp('information', message, 'bottomRight', 5000);
+			showNotyPopUp('information', message, 'bottomRight', 5000);
 
-		    modelData.assignee = ((modelData.assignee) ? modelData.assignee : "");
-		    modelData.group = ((modelData.group) ? modelData.group : "");
- 
-		   	// Update assignee in model and collection 
+			modelData.assignee = ((modelData.assignee) ? modelData.assignee : "");
+			modelData.group = ((modelData.group) ? modelData.group : "");
+
+			// Update assignee in model and collection 
 			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, modelData); 					
-			
 		});
-
-	},
+    },
 
 	isCurrentUserExistInGroup : function(selectedGroupId, groupsList){
 
@@ -651,68 +658,48 @@ var Tickets = {
 
 	},
 
-	sendReqToChangeAssignee : function(assignee_id, group_id, ticketModel, callback){
-
-		var url = "/core/api/tickets/assign-ticket?ticket_id=" + Current_Ticket_ID + '&group_id=' + group_id;
-		if(assignee_id)
-			url += "&assignee_id=" + assignee_id;
-
-		$.ajax({
-			url : url,
-			method: "PUT",
-			data: {},
-			contentType: 'application/x-www-form-urlencoded',
-			accept: 'application/json',
-			success : function(response){
-				Tickets.updateDataInModelAndCollection(Current_Ticket_ID, response);
-				if(callback)
-					callback(response);
-				
-			}	
-		});
-
-	},
-
 	changeTicketType: function(event){
 
 		var $select = $('.ticket_type');
 		var new_ticket_type = $select.find('option:selected').val();
-		var url = "/core/api/tickets/change-ticket-type?id=" + Current_Ticket_ID + "&type=" + new_ticket_type;
 		$select.attr('disabled', true);
 
-		this.updateModel(url, function(){
+		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-ticket-type";
+		var json = {type: new_ticket_type};
 
-		// current view
-		Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {type : new_ticket_type}); 
-		//update collection 
-   			$select.attr('disabled', false);
-            showNotyPopUp('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
-		},
+		this.updateModel(url, json, function(){
 
-		 function(error){
-			$select.attr('disabled', false);
-			showNotyPopUp('information', error , 'bottomRight', 5000);
-		});
+			// current view
+			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {type : new_ticket_type}); 
+				//update collection 
+	   			$select.attr('disabled', false);
+	            showNotyPopUp('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
+			},
+
+			function(error){
+				$select.attr('disabled', false);
+			}
+		);
 	},
 
 	changeTicketPriority: function(event){
 
 		var $priority = $('.ticket_priority');
 		var new_priority = $priority.find('option:selected').val();
-		var url = "/core/api/tickets/change-priority?id=" + Current_Ticket_ID + "&priority=" + new_priority;
 		$priority.attr('disabled', true);
 
-		this.updateModel(url, function(){
+		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-priority";
+		var json = {priority: new_priority};
 
+		this.updateModel(url, json, function(){
 
-			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {priority : new_priority});
+			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
 			$priority.attr('disabled', false);
 			showNotyPopUp('information', 'Ticket Type has been changed to '+ new_priority.toLowerCase() , 'bottomRight', 5000);
 		    
 		}, function(error){
 			$priority.attr('disabled', false);
-	        showNotyPopUp('information', 'Ticket Type has been changed to'+new_priority , 'bottomRight', 5000);
 		});
 	},
 
@@ -727,47 +714,27 @@ var Tickets = {
 		updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
 		// Update data in model
 		updated_model.set(data, {silent: true});
-		
-
 	},
 
-	// changeSLA: function($input, selected_date){
+	updateModel: function(url, json, success_cbk, err_cbk){
 
-	// 	$input.attr('disabled', true);
-
- //        var slaEpoch = new Date(selected_date).getTime();
-
- //        var url = "/core/api/tickets/change-due-date?id=" + Current_Ticket_ID + "&due_time=" + slaEpoch;
-
- //        Tickets.updateModel(url, function(model){
-
-	// 		$input.attr('disabled', false).hide();
-
-	// 		var updatedDueDate = new Date(slaEpoch).format('mmm dd, yyyy HH:MM')
-
-	// 		showNotyPopUp('information', 'Ticket due date has been updated to ' + updatedDueDate, 'bottomRight', 5000);
-	// 	}, function(error){
-	// 		$input.attr('disabled', false);
-	// 		showNotyPopUp('information', error , 'bottomRight', 5000);
-	// 	});
-	// },
-
-	updateModel: function(url, success_cbk, err_cbk, ticket_id){
 		var newTicketModel = new BaseModel();
 		newTicketModel.url = url;
 		
-		ticket_id = !ticket_id ? Current_Ticket_ID : ticket_id;
+		if(!json.id)
+			json.id = Current_Ticket_ID;
 
-		newTicketModel.save({id: ticket_id}, 
-			{
-				success: function(model){
+		newTicketModel.save(json, {
+			success: function(model){
 
-				if(App_Ticket_Module.ticketView)
-					App_Ticket_Module.ticketView.model.set(model, {silent: true});
+			if(App_Ticket_Module.ticketView)
+				App_Ticket_Module.ticketView.model.set(model, {silent: true});
 
-				if(success_cbk)
-					success_cbk(model);
+			if(success_cbk)
+				success_cbk(model);
+
 			}, error: function(){
+
 				if(err_cbk)
 					err_cbk(model);
 			}}
@@ -969,32 +936,38 @@ var Tickets = {
 	
 	changeStatus : function(status, callback){
     
-		var url = "/core/api/tickets/change-status?status="+status+"&id=" + Current_Ticket_ID;
-        var current_time = new Date().getTime();
-		Tickets.updateModel(url, function(model){
+		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-status";
+		var json = {status: status};
 
-				if(status != "CLOSED"){
-					    $(".ticket-addnote-close").removeAttr("disabled");
-					    $(".ticket-send-reply .btn").removeAttr("disabled");
-                    	$('#ticket_change_sla').removeAttr("disabled");                    	
-                    	$(".close-current-ticket").removeAttr("disabled");
-                    	$(".remove-date").css("display", "block");					
+        var current_time = new Date().getTime();
+		Tickets.updateModel(url, json, function(model){
+
+				if(status != "CLOSED")
+				{
+				    $(".ticket-addnote-close").removeAttr("disabled");
+				    $(".ticket-send-reply .btn").removeAttr("disabled");
+                	$('#ticket_change_sla').removeAttr("disabled");                    	
+                	$(".close-current-ticket").removeAttr("disabled");
+                	$(".remove-date").css("display", "block");
 				}						
-				else{
+				else
+				{
 					$(".remove-date").css("display", "none");
 				    $(".ticket-addnote_close").attr("disabled","disabled"); 
 					$(".ticket-send-reply .btn").attr("disabled","disabled");
 					$('#ticket_change_sla').attr("disabled","disabled");
 					$(".close-current-ticket").attr("disabled","disabled");
 					$(".ticket_status").val("CLOSED");
-				    Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{closed_time:current_time});
+
+					json.closed_time = current_time;
 				}
-                Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{status:status});
+
+                Tickets.updateDataInModelAndCollection(Current_Ticket_ID, json);
 				
 				if(callback)
 					callback(model.toJSON());
 
-			}, null, Current_Ticket_ID);		
+			}, null);
 	},
 
 	closeTicket : function(e){
@@ -1006,27 +979,32 @@ var Tickets = {
 
 	deleteTicket: function(e){
 
-		var deleteTicketView = new Base_Model_View({
-			isNew : true,
-			url : "/core/api/tickets/delete-ticket?id=" + Current_Ticket_ID,
-			template : "ticket-delete",
-			saveCallback : function(){
+		//Rendering root template
+		getTemplate("ticket-delete", {}, undefined, function(template_ui){
 
-				$('#ticket-delete-modal').modal('hide');
+			if(!template_ui)
+		  		return;
 
-				 if(App_Ticket_Module.ticketsCollection)
-	           	 	App_Ticket_Module.ticketsCollection.collection.remove(Current_Ticket_ID);
+			$('#ticketsModal').html($(template_ui)).modal('show').on('shown.bs.modal', function() {
+			    
+			    $('#ticketsModal').on('click', 'a.delete-ticket', function(){
 
-	           	showNotyPopUp('information', "Ticket has been deleted",'bottomRight', 5000);
+					disable_save_button($(this));
+
+					App_Ticket_Module.ticketView.model.destroy({
+						success : function(model, response) {
+							
+							showNotyPopUp('information', "Ticket has been deleted",'bottomRight', 5000);
 	                          
-				var url = '#tickets/filter/' + Ticket_Filter_ID;
-				Backbone.history.navigate(url, {trigger : true});
+							var url = '#tickets/filter/' + Ticket_Filter_ID;
+							Backbone.history.navigate(url, {trigger : true});
+						}
+					});
 
-			}
+					$('#ticketsModal').modal('hide');
+				});
+			});
 		});
-
-		$('#ticket-modals').html(deleteTicketView.render().el);
-		$('#ticket-delete-modal').modal('show');
 	},
 
 	showWorkflows: function(e){
@@ -1036,17 +1014,14 @@ var Tickets = {
 		$this.siblings("#workflows_list").html('<li><a href="javascript:void(0);">Loading...</a></li>');
 
 		var workflows = Backbone.Collection.extend({
-			url : 'core/api/tickets/execute-workflow'
+			url : 'core/api/workflows'
 		});
 
 		new workflows().fetch({
 			success : function(Collection) {
-
 				$('#workflows_list').html(getTemplate("ticket-show-workflows-list", Collection.toJSON()));
-
 			}
 		});
-
 	},
 
 	loadWidgets: function(){
@@ -1117,60 +1092,49 @@ var Tickets = {
 			$(e.target).addClass("fa-star text-warning").removeClass("fa-star-o text-light");
 		}
 
-		var newTicketModel = new BaseModel();
-		newTicketModel.url = "/core/api/tickets/toggle-favorite?id=" + Current_Ticket_ID;
-		newTicketModel.save({'id': Current_Ticket_ID}, 
-			{	
+		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/toggle-favorite";
+		var json = {};
 
-				success: function(model){
-                     var succesmessage = "Ticket marked favourite";
-					if(!favourite)
+		Tickets.updateModel(url, json, function(model){
 
-						succesmessage = "Ticket marked as unfavourite";
-                     Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{is_favorite:favourite});
-					 showNotyPopUp('information', succesmessage, 'bottomRight', 5000);
-					// if(model.toJSON().is_favorite)
-					// 	$(e.target).addClass("fa-star text-warning").removeClass("fa-star-o text-light");
-					// else
-					// 	$(e.target).removeClass("fa-star text-warning").addClass("fa-star-o text-light");
+			var succesmessage = "Ticket marked favourite";
 
-					// If in time line add event to timeline
-					// if($('.ticket-timeline-container').length > 0){
-					// 	Ticket_Timeline.render_individual_ticket_timeline()
-					// }
+			if(!favourite)
+				succesmessage = "Ticket marked as unfavourite";
 
-				}
-			});
+             Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {is_favorite:favourite});
+
+			 showNotyPopUp('information', succesmessage, 'bottomRight', 5000);
+		}, null);
 	},
 
 	toggleSpam : function(e){
 
-		var newTicketModel = new BaseModel();
-		newTicketModel.url = "/core/api/tickets/toggle-spam?id=" + Current_Ticket_ID;
-		newTicketModel.save({'id': Current_Ticket_ID}, 
-			{	
-				success: function(model){
-					var message ="";
-					var spam_value=true;
-					if(model.toJSON().is_spam){
-						$(e.target).addClass("btn-danger").removeClass("btn-default");
-					    message="Ticket marked as Spam";
-					    
-					}
-					else{
-						$(e.target).removeClass("btn-danger").addClass("btn-default");
-                        message="Ticket un marked as Spam";
-                        spam_value=false;
-                    }
-                    showNotyPopUp('information',message, 'bottomRight', 5000);
-					// If in time line add event to timeline
-					// if($('.ticket-timeline-container').length > 0){
-					// 	Ticket_Timeline.render_individual_ticket_timeline()
-					// }
-					 Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {is_spam:spam_value});
+		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/toggle-spam";
+		var json = {};
 
-				}
-			});
+		Tickets.updateModel(url, json, function(model){
+
+			var message ="";
+			var spam_value=true;
+
+			if(model.toJSON().is_spam)
+			{
+				$(e.target).addClass("btn-danger").removeClass("btn-default");
+			    message="Ticket marked as Spam"; 
+			}
+			else
+			{
+				$(e.target).removeClass("btn-danger").addClass("btn-default");
+                message="Ticket un marked as Spam";
+                spam_value=false;
+            }
+
+            showNotyPopUp('information',message, 'bottomRight', 5000);
+			
+			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {is_spam:spam_value});
+
+		}, null);
 	},
 
 	toggleWidgets : function(e){
@@ -1204,51 +1168,47 @@ var Tickets = {
 
 	updateDueDate : function(timeInMilli, callback){
 
-		var json = App_Ticket_Module.ticketView.model.toJSON();
+		var currentTicketJSON = App_Ticket_Module.ticketView.model.toJSON();
 
-		var due_date_present = json.due_time ? true : false;
+		var due_date_present = currentTicketJSON.due_time ? true : false;
 
-	  	json.due_time = Math.floor(timeInMilli);
+		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-due-date";
+	  	var json = {due_time: Math.floor(timeInMilli)};
 
-		// Send req to trigger campaign
-		var newTicketModel = new BaseModel();
-		newTicketModel.url = "core/api/tickets/change-due-date?due_time="
-		+ timeInMilli + "&id=" + Current_Ticket_ID;
+	  	Tickets.updateModel(url, json, function(model){
 
-		newTicketModel.save(json, {	
-			success: function(model){
+			var formatted_date = new Date(timeInMilli).format('mmm dd, yyyy');
 
-				var formatted_date = new Date(timeInMilli).format('mmm dd, yyyy');
+			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
-				Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {due_time:json.due_time});
+			$(".remove-date").css("display", "block");
 
-				$(".remove-date").css("display", "block");
+			var msg = (due_date_present) ? ("Due date has been changed to " + formatted_date) 
+						: ("Due date has been set to " + formatted_date);
 
-				var msg = (due_date_present) ? ("Due date has been changed to " + formatted_date) 
-							: ("Due date has been set to " + formatted_date);
+			showNotyPopUp('information', msg, 'bottomRight', 5000);
 
-				showNotyPopUp('information', msg, 'bottomRight', 5000);
+			if(callback)
+				callback();
 
-				if(callback)
-					callback();
-			}}
-		);
+		}, null);
 	},
 	removeDuedate : function(){
-		url = "/core/api/tickets/remove-due-date?id=" + Current_Ticket_ID;
 
-        Tickets.updateModel(url, function(model){
+		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/remove-due-date";
+		var json = {};
 
-        		$('#ticket_change_sla').val(''); 
+		Tickets.updateModel(url, json, function(model){
 
-        		$(".remove-date").css("display", "none");
+    		$('#ticket_change_sla').val(''); 
 
-				Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:''});
+    		$(".remove-date").css("display", "none");
 
-				showNotyPopUp('information', "Due date has been removed",'bottomRight', 5000);
+			Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:''});
 
-		}, null, Current_Ticket_ID);
- 
+			showNotyPopUp('information', "Due date has been removed",'bottomRight', 5000);
+
+		}, null);
 	},
 
 	initializeTicketSLA : function(el){
@@ -1288,8 +1248,7 @@ var Tickets = {
 					  	else
 					  		$('#ticket_change_sla').val('');
 
-					  	$('#ticket-modals').html($(template_ui));
-					  	$('#sla-error-modal').modal('show');
+					  	$('#ticketsModal').html($(template_ui)).modal('show');
 					});
 
 					return;
@@ -1348,7 +1307,7 @@ var Tickets = {
 
 	showPreviousTicketCount: function(email, el){
 
-		$.get('/core/api/tickets/ticket-count?email=' + email, {}, function(count){
+		$.get('/core/api/tickets/' + email + '/count', {}, function(count){
 
 			if(count && count > 1){ 
 					$(".previous-tickets-panel", el).find("#count").html("(" + (count - 1) + ")");
@@ -1374,7 +1333,7 @@ var Tickets = {
 			return;
 			
 		var previousTickets = Backbone.Model.extend({
-			url : '/core/api/tickets/email?email=' + email
+			url : '/core/api/tickets/email/' + email
 		});
 		new previousTickets().fetch({
 			success : function(tickets) {

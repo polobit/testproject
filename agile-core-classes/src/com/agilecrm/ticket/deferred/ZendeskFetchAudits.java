@@ -135,27 +135,15 @@ public class ZendeskFetchAudits implements DeferredTask
 										body, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
 
 								notes.created_time = date.getTime();
-								TicketNotes.ticketNotesDao.put(notes);
-
-								// Logging private notes activity
-								ActivityUtil.createTicketActivity(ActivityType.TICKET_REQUESTER_REPLIED,
-										ticket.contactID, ticket.id, body, body, "html_text");
-								// activity.created_time = date.getTime();
-								// activity.save();
+								notes.save();
 							}
 							else
 							{
-								new TicketNotes(ticket.id, ticket.groupID, ticket.assigneeID,
+								TicketNotes notes = new TicketNotes(ticket.id, ticket.groupID, ticket.assigneeID,
 										CREATED_BY.AGENT, ticket.requester_name, ticket.requester_email, body, body,
 										NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
 
-								// Logging private notes activity
-								ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_REPLIED,
-										ticket.contactID, ticket.id, body, body, "html_text");
-								// activity.setUser(new Key<>(DomainUser.class,
-								// ticket.assigneeID));
-								// activity.created_time = date.getTime();
-								// activity.save();
+								notes.save();
 							}
 						}
 						else
@@ -169,16 +157,10 @@ public class ZendeskFetchAudits implements DeferredTask
 							else
 								domainUser = domainOwner;
 
-							new TicketNotes(ticket.id, null, domainUser.id, CREATED_BY.AGENT, "", "",
+							TicketNotes notes =new TicketNotes(ticket.id, null, domainUser.id, CREATED_BY.AGENT, "", "",
 									body, body, NOTE_TYPE.PRIVATE, new ArrayList<TicketDocuments>(), "");
-
-							// Logging private notes activity
-							ActivityUtil.createTicketActivity(ActivityType.TICKET_PRIVATE_NOTES_ADD, ticket.contactID,
-									ticket.id, body, body, "html_text");
-							// activity.setUser(new Key<>(DomainUser.class,
-							// domainUser.id));
-							// activity.created_time = date.getTime();
-							// activity.save();
+							
+							notes.save();
 						}
 					}
 					else

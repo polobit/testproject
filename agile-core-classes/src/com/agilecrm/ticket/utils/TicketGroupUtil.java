@@ -2,16 +2,13 @@ package com.agilecrm.ticket.utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 
+import com.agilecrm.projectedpojos.PartialDAO;
+import com.agilecrm.projectedpojos.TicketGroupsPartial;
 import com.agilecrm.ticket.entitys.TicketGroups;
-import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.campaignio.urlshortener.util.Base62;
@@ -28,6 +25,10 @@ import com.googlecode.objectify.Key;
  */
 public class TicketGroupUtil
 {
+	// Partial Dao
+	public static PartialDAO<TicketGroupsPartial> partialDAO = new PartialDAO<TicketGroupsPartial>(
+			TicketGroupsPartial.class);
+
 	/**
 	 * Creates default Ticket Group with name Support & assigns all domain users
 	 * to that Group.
@@ -133,18 +134,12 @@ public class TicketGroupUtil
 	 * @return
 	 * @throws EntityNotFoundException
 	 */
-	public static TicketGroups getTicketGroupById(Long groupID) throws EntityNotFoundException
+	public static TicketGroups getTicketGroupById(Long groupID) throws Exception
 	{
-		try
-		{
-			return TicketGroups.ticketGroupsDao.get(groupID);
-		}	
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-		}
-		
-		return null;
+		if (groupID == null)
+			throw new Exception("Group id is missing.");
+
+		return TicketGroups.ticketGroupsDao.get(groupID);
 	}
 
 	/**
@@ -208,6 +203,17 @@ public class TicketGroupUtil
 	public static TicketGroups getTicketGroupByName(String groupName)
 	{
 		return TicketGroups.ticketGroupsDao.getByProperty("group_name", groupName);
+	}
+
+	/**
+	 * Returns ticket group with name and forward email attributes only.
+	 * 
+	 * @param groupID
+	 * @return
+	 */
+	public static TicketGroupsPartial getPartialGroupByID(Long id)
+	{
+		return partialDAO.get(id);
 	}
 
 	/**

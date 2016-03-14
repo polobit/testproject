@@ -78,12 +78,6 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		Tickets.changeStatus(status, function(){
 
 			showNotyPopUp('information', "Ticket status has been changed to " + status.toLowerCase(), 'bottomRight', 3000);
-
-			// var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
-			// '/' + status;
-
-			//Backbone.history.navigate(url, {trigger : true});
-
 		});
 	},
 
@@ -103,12 +97,13 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		e.preventDefault();
 
-		// var $selected_option = $('select#ticket-assignee-list').find('option:selected');
-
 		var groupId = App_Ticket_Module.ticketView.model.toJSON().groupID;
 		var assigneeId = CURRENT_AGILE_USER.domainUser.id;
 
-		Tickets.sendReqToChangeAssignee(assigneeId, groupId, App_Ticket_Module.ticketView.model.toJSON(), function(model){
+		var url = "/core/api/tickets/" + ticket_id + "/assign-ticket/" + groupId + "/" + assigneeId;
+       	var json = {id: Current_Ticket_ID};
+
+       	Tickets.updateModel(url, json, function(model){
         
 			App_Ticket_Module.ticketView.model.set(model, {silent: true});
 
@@ -121,8 +116,6 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
           	console.log($('#ticket-assignee').length);
 		});
-		
-
 	},
 
 	addMeToCC : function(e){

@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -20,8 +21,11 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.projectedpojos.TicketGroupsPartial;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -81,7 +85,7 @@ public class Tickets extends Cursor implements Serializable
 	 * Util attribute to send group id to client
 	 */
 	@NotSaved
-	public TicketGroups group = null;
+	public TicketGroupsPartial group = null;
 
 	/**
 	 * Stores true if ticket is assigned to a group
@@ -119,7 +123,7 @@ public class Tickets extends Cursor implements Serializable
 	 * Util attribute to domain user obj
 	 */
 	@NotSaved
-	public DomainUser assignee = null;
+	public DomainUserPartial assignee = null;
 
 	/**
 	 * Stores name of customer who created ticket
@@ -549,6 +553,9 @@ public class Tickets extends Cursor implements Serializable
 		if (assigneeChanged)
 			TicketTriggerUtil.executeTriggerForAssigneeChanged(this);
 
+		if (this.status == Status.CLOSED)
+			TicketTriggerUtil.executeTriggerForClosedTicket(this);
+
 		return this;
 	}
 
@@ -559,9 +566,6 @@ public class Tickets extends Cursor implements Serializable
 
 		// Updating text search data
 		new TicketsDocument().edit(this);
-
-		if (this.status == Status.CLOSED)
-			TicketTriggerUtil.executeTriggerForClosedTicket(this);
 
 		return this;
 	}
@@ -707,6 +711,21 @@ public class Tickets extends Cursor implements Serializable
 	{
 		if (this.contactID != null)
 			return ContactUtil.getContact(this.contactID);
+
+		return null;
+	}
+
+	public TicketGroupsPartial getGroup()
+	{
+		return TicketGroupUtil.getPartialGroupByID(group_id.getId());
+	}
+
+	public DomainUserPartial getAssignee()
+	{
+		if (assignee_id != null)
+		{
+			return DomainUserUtil.getPartialDomainUser(assignee_id.getId());
+		}
 
 		return null;
 	}

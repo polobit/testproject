@@ -46,16 +46,16 @@ var Ticket_Filters = {
 
 		// If there is a change in lhs field, and it has tags in it then tags are
 		// loaded into its respective RHS block
-		$('.lhs', el).on('change', function(e)
-		{
-			e.preventDefault();
-			var value = $(this).val();
+		// $('.lhs', el).on('change', function(e)
+		// {
+		// 	e.preventDefault();
+		// 	var value = $(this).val();
 
-			if (value.indexOf('tags') != -1)
-			{
-				addTagsDefaultTypeahead($(this).closest('td').siblings('td.rhs-block'));
-			}
-		})
+		// 	if (value.indexOf('tags') != -1)
+		// 	{
+		// 		addTagsDefaultTypeahead($(this).closest('td').siblings('td.rhs-block'));
+		// 	}
+		// })
 	},
 
 	cloneTicketFiltersRow : function(event){
@@ -64,7 +64,7 @@ var Ticket_Filters = {
 		getTemplate('ticket-filter-add-edit', {}, undefined, function(template_ui){
 			
 			if(!template_ui)
-				  return;
+				return;
 
 			var htmlContent = $(template_ui).find('.ticket-filter-conditions-table tr').clone();
 

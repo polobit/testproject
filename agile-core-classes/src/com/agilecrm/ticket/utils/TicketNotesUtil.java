@@ -72,36 +72,41 @@ public class TicketNotesUtil
 		return inclDomainUsers(notes);
 	}
 
-//	/**
-//	 * 
-//	 * @param ticket_id
-//	 * @param group_id
-//	 * @param created_by
-//	 * @param requester_name
-//	 * @param requester_email
-//	 * @param original_plain_text
-//	 * @param original_html_text
-//	 * @param note_type
-//	 * @param attachments_list
-//	 * @return
-//	 * @throws EntityNotFoundException
-//	 */
-//	public static TicketNotes createTicketNotes(Long ticket_id, Long group_id, Long assignee_id, CREATED_BY created_by,
-//			String requester_name, String requester_email, String original_plain_text, String original_html_text,
-//			NOTE_TYPE note_type, List<TicketDocuments> attachments_list, String mimeObject)
-//			throws EntityNotFoundException
-//	{
-//		TicketNotes ticketNotes = new TicketNotes(ticket_id, group_id, assignee_id, created_by, requester_name,
-//				requester_email, removedQuotedRepliesFromPlainText(original_plain_text),
-//				removedQuotedRepliesFromHTMLText(original_html_text), original_plain_text, original_html_text,
-//				note_type, attachments_list, mimeObject);
-//
-//		Key<TicketNotes> key = TicketNotes.ticketNotesDao.put(ticketNotes);
-//
-//		System.out.println("Notes key: " + key.getId());
-//
-//		return ticketNotes;
-//	}
+	// /**
+	// *
+	// * @param ticket_id
+	// * @param group_id
+	// * @param created_by
+	// * @param requester_name
+	// * @param requester_email
+	// * @param original_plain_text
+	// * @param original_html_text
+	// * @param note_type
+	// * @param attachments_list
+	// * @return
+	// * @throws EntityNotFoundException
+	// */
+	// public static TicketNotes createTicketNotes(Long ticket_id, Long
+	// group_id, Long assignee_id, CREATED_BY created_by,
+	// String requester_name, String requester_email, String
+	// original_plain_text, String original_html_text,
+	// NOTE_TYPE note_type, List<TicketDocuments> attachments_list, String
+	// mimeObject)
+	// throws EntityNotFoundException
+	// {
+	// TicketNotes ticketNotes = new TicketNotes(ticket_id, group_id,
+	// assignee_id, created_by, requester_name,
+	// requester_email, removedQuotedRepliesFromPlainText(original_plain_text),
+	// removedQuotedRepliesFromHTMLText(original_html_text),
+	// original_plain_text, original_html_text,
+	// note_type, attachments_list, mimeObject);
+	//
+	// Key<TicketNotes> key = TicketNotes.ticketNotesDao.put(ticketNotes);
+	//
+	// System.out.println("Notes key: " + key.getId());
+	//
+	// return ticketNotes;
+	// }
 
 	/**
 	 * 
@@ -116,8 +121,17 @@ public class TicketNotesUtil
 
 		System.out.println("notesList size.." + notesList.size());
 
-		TicketGroups group = TicketGroupUtil.getTicketGroupById(ticket.groupID);
-
+		TicketGroups group = null;
+		
+		try
+		{
+			group = TicketGroupUtil.getTicketGroupById(ticket.groupID);
+		}
+		catch (Exception e)
+		{
+			throw new Exception("No group found with id " + group.id + " or group has been deleted.");
+		}
+		
 		String groupName = group.group_name;
 		String agentName = DomainUserUtil.getDomainUser(ticket.assigneeID).name;
 
@@ -154,8 +168,8 @@ public class TicketNotesUtil
 
 		System.out.println("notesArray: " + notesArray);
 
-		String fromAddress = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(group.id) + "+"
-				+ TicketsUtil.getTicketShortID(ticket.id) + Globals.INBOUND_EMAIL_SUFFIX;
+		String fromAddress = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(group.id) + "+" + ticket.id
+				+ Globals.INBOUND_EMAIL_SUFFIX;
 
 		sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress, ticket.cc_emails,
 				SendMail.TICKET_REPLY, json);
@@ -381,7 +395,7 @@ public class TicketNotesUtil
 
 			if (textArray.length >= 1)
 				return textArray[0];
-			
+
 			// Checking with \r\n and greater than delimeter
 			pattern = Pattern.compile("\r\n\r\n>", Pattern.DOTALL);
 

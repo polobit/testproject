@@ -8,11 +8,14 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.json.JSONArray;
 
 import com.agilecrm.Globals;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
@@ -101,10 +104,27 @@ public class TicketGroups
 	public static ObjectifyGenericDao<TicketGroups> ticketGroupsDao = new ObjectifyGenericDao<TicketGroups>(
 			TicketGroups.class);
 
-	@javax.persistence.PrePersist
-	private void prePersist()
+	/**
+	 * 
+	 * @return
+	 */
+	public TicketGroups save()
 	{
+		this.setOwner_key(DomainUserUtil.getCurentUserKey());
 		this.updated_time = Calendar.getInstance().getTimeInMillis();
+
+		TicketGroups.ticketGroupsDao.put(this);
+
+		return this;
+	}
+	
+	/**
+	 * 
+	 * @param groupIDsArray
+	 */
+	public static void delete(JSONArray groupIDsArray)
+	{
+		TicketGroups.ticketGroupsDao.deleteBulkByIds(groupIDsArray);
 	}
 
 	@javax.persistence.PostLoad

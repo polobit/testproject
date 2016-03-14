@@ -14,7 +14,7 @@ function getUsersFromGroup(element, jsonData) {
 		type : 'get',
 		async : false,
 		dataType : "json",
-		url : '/core/api/tickets/groups/domain-users?group_id=' + groupId,
+		url : '/core/api/tickets/groups/' + groupId + '/users',
 		success : function(data) {
 
 			var usersSelectField = "";

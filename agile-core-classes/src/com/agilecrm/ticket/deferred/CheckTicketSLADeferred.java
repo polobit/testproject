@@ -71,7 +71,7 @@ public class CheckTicketSLADeferred implements DeferredTask
 						{
 							TicketTriggerUtil.executeTriggerForSLAReachedTicket(TicketsUtil.getTicketByID(key.getId()));
 						}
-						catch (EntityNotFoundException e)
+						catch (Exception e)
 						{
 							System.out.println(ExceptionUtils.getFullStackTrace(e));
 						}

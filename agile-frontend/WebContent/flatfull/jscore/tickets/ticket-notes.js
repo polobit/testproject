@@ -39,18 +39,15 @@ var Tickets_Notes = {
 		var note_type = $(e.target).hasClass('private') ? 'PRIVATE' : 'PUBLIC';
 		json.note_type = note_type;
 
+        var is_ticket_closed = $(e.target).hasClass('close-ticket');
          
-
-		var is_ticket_closed = $(e.target).hasClass('close-ticket');
-         
-        
-		if(is_ticket_closed)
+        if(is_ticket_closed)
 			json.close_ticket="true";
         
         disable_save_button($save_btn);
 
 		var newTicketNotesModel = new BaseModel();
-		newTicketNotesModel.url = '/core/api/tickets/notes';
+		newTicketNotesModel.url = '/core/api/tickets/notes/' + Current_Ticket_ID;
 		newTicketNotesModel.save(json, {
 
 			success : function(model) {
@@ -439,7 +436,7 @@ var Tickets_Notes = {
 			template : "ticket-delete",
 			saveCallback : function() {
 
-				$('#ticket-delete-modal').modal('hide');
+				$('#ticketsModal').modal('hide');
 				var url = '#tickets/group/'
 						+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + '/'
 						+ (Ticket_Status ? Ticket_Status : 'new');
@@ -450,8 +447,7 @@ var Tickets_Notes = {
 			}
 		});
 
-		$('#ticket-modals').html(deleteTicketView.render().el);
-		$('#ticket-delete-modal').modal('show');
+		$('#ticketsModal').html(deleteTicketView.render().el).modal('show');
 	},
 
 	executeWorkflow : function(e) {

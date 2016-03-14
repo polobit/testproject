@@ -405,7 +405,16 @@ public class TicketsDocument implements BuilderInterface
 	@SuppressWarnings("rawtypes")
 	public List getResults(List<Long> doc_ids)
 	{
-		return TicketsUtil.getTicketsBulk(doc_ids);
+		try
+		{
+			return TicketsUtil.getTicketsByIDsList(doc_ids);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		
+		return new ArrayList<Tickets>();
 	}
 
 	public void removeAllDocuments()

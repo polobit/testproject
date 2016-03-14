@@ -170,13 +170,16 @@ public class TicketWebhook extends HttpServlet
 			/**
 			 * Verifying for valid Group or not
 			 */
-			TicketGroups ticketGroup = TicketGroupUtil.getTicketGroupById(groupID);
-			if (ticketGroup == null)
+			try
+			{
+				TicketGroupUtil.getTicketGroupById(groupID);
+			}
+			catch (Exception e)
 			{
 				System.out.println("Invalid groupID: " + groupID);
 				return;
 			}
-
+			
 			boolean isNewTicket = isNewTicket(toAddressArray);
 
 			List<String> ccEmails = (List<String>) getValueFromJSON(msgJSON, "cc");
@@ -326,8 +329,9 @@ public class TicketWebhook extends HttpServlet
 			}
 
 			// Creating new Notes in TicketNotes table
-			new TicketNotes(ticket.id, groupID, ticket.assigneeID, CREATED_BY.REQUESTER, fromName, fromEmail,
+			TicketNotes notes = new TicketNotes(ticket.id, groupID, ticket.assigneeID, CREATED_BY.REQUESTER, fromName, fromEmail,
 					plainText, html, NOTE_TYPE.PUBLIC, documentsList, msgJSON.toString());
+			notes.save();
 
 			NamespaceManager.set(oldNamespace);
 
