@@ -679,16 +679,16 @@
 
 	 		Ticket_Labels.fetchCollection(function(){
 
-				Ticket_Canned_Response.cannedResponseCollection = new Base_Collection_View({
+				App_Ticket_Module.cannedResponseCollection = new Base_Collection_View({
 					url : '/core/api/tickets/canned-messages',
 					templateKey : "ticket-canned-response",
 					individual_tag_name : 'tr',
 					slateKey : "no-groups"
 				});
 
-				Ticket_Canned_Response.cannedResponseCollection.collection.fetch();
+				App_Ticket_Module.cannedResponseCollection.collection.fetch();
 
-				$('.ticket-settings', $('#admin-prefs-tabs-content')).html(Ticket_Canned_Response.cannedResponseCollection.el);
+				$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.cannedResponseCollection.el);
 				
 				if(callback)
 					callback();
@@ -732,13 +732,13 @@
 	 	//Rendering root template
 		this.loadAdminsettingsTemplate(function(callback){
 
-			if(!Ticket_Canned_Response.cannedResponseCollection || !Ticket_Canned_Response.cannedResponseCollection.collection){
+			if(!App_Ticket_Module.cannedResponseCollection || !App_Ticket_Module.cannedResponseCollection.collection){
 
  				Backbone.history.navigate( "canned-responses", { trigger : true });
  				return;
  			}
 
- 			var cannedResponse = Ticket_Canned_Response.cannedResponseCollection.collection.get(id);
+ 			var cannedResponse = App_Ticket_Module.cannedResponseCollection.collection.get(id);
 
  			var editCannedResponseView = new Base_Model_View({
  				model : cannedResponse, 
