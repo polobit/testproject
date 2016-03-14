@@ -70,6 +70,7 @@ function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 
 	// Render it
 	$('#new-opportunity-list-paging').html(DEALS_LIST_COLLECTION.render(true).el);
+	initializeDealsListeners();
 
 }
 
@@ -108,6 +109,7 @@ function initDealListCollection(milestones)
 
 	// Over write append function
 	DEALS_LIST_COLLECTION.appendItem = dealAppend;
+
 }
 
 // Append sub collection and model
@@ -196,7 +198,7 @@ function dealsFetch(base_model)
 		pipeline_count++;
 		setup_deals_in_milestones('opportunities-by-paging-model-list');
 		dealTotalCountForPopover(heading);
-		initializeDealsListeners();		
+				
 		
 		
 	} });
@@ -264,6 +266,7 @@ function initializeDealsListeners()
  		if(!template_ui)
 	    		return;
     	var ele = $(template_ui);
+    	$(that).popover('destroy');
 		$(that).popover(
 					{ "rel" : "popover", "trigger" : "manual", "placement" : 'bottom', "content" : ele,
 						"html" : "true"}); 
@@ -275,18 +278,16 @@ function initializeDealsListeners()
 			$(".dealtitle-angular + .popover ").css("border-radius","0px");
 		});
 		}
-		else{
-			initializeDealsListeners();
-		}
 	});
 
 	/**
 	 * On mouse out on the row hides the popover.
 	 */
-	 $('.milestone-column > .dealtitle-angular').off('mouseleave');
+	 $("#opportunity-listners").off('mouseleave','.milestone-column > .dealtitle-angular');
 	 $('#opportunity-listners').on('mouseleave', '.milestone-column > .dealtitle-angular', function()
 	{
 		$(this).popover('hide');
+		$(that).popover('destroy');
 	});
 }
 function dealTotalCountForPopover(milestone){
