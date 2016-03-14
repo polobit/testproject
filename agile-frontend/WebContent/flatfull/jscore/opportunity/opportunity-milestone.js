@@ -255,7 +255,7 @@ function initializeDealsListeners()
 {
 	$("#opportunity-listners").off('mouseenter','.milestone-column > .dealtitle-angular');
 	$("#opportunity-listners").on('mouseenter','.milestone-column > .dealtitle-angular', function(){
-	var data = $(this).attr('data');
+    	var data = $(this).attr('data');
 		if(data){
 
 		var originalHeading = $(this).siblings().find('.milestones').attr('milestone');
@@ -266,7 +266,6 @@ function initializeDealsListeners()
  		if(!template_ui)
 	    		return;
     	var ele = $(template_ui);
-    	$(that).popover('destroy');
 		$(that).popover(
 					{ "rel" : "popover", "trigger" : "manual", "placement" : 'bottom', "content" : ele,
 						"html" : "true"}); 
@@ -287,7 +286,7 @@ function initializeDealsListeners()
 	 $('#opportunity-listners').on('mouseleave', '.milestone-column > .dealtitle-angular', function()
 	{
 		$(this).popover('hide');
-		$(that).popover('destroy');
+		$(this).popover('destroy');
 	});
 }
 function dealTotalCountForPopover(milestone){
