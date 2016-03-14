@@ -364,7 +364,7 @@
 	 ticketGroups : function() {
 
 	 	//Rendering root template
-	 	loadAdminsettingsHelpdeskTemplate({groups: true}, function(callback){
+	 	this.loadAdminsettingsHelpdeskTemplate({groups: true}, function(callback){
 
 	 		//Initializing base collection with groups URL
  			App_Ticket_Module.groupsCollection = new Base_Collection_View({
@@ -411,7 +411,7 @@
 	 addTicketGroup: function(){
 
 	 	//Rendering root template
-	 	loadAdminsettingsTemplate(function(callback){
+	 	this.loadAdminsettingsTemplate(function(callback){
 
 	 		var addTicketGroupView = new Base_Model_View({
  				isNew : true,
@@ -440,7 +440,7 @@
 	 editTicketGroup: function(id){
 
 	 	//Rendering root template
-		loadAdminsettingsTemplate(function(callback){
+		this.loadAdminsettingsTemplate(function(callback){
 
 			//Redirecting to groups collection if collection not exists
 	 		if(!App_Ticket_Module.groupsCollection || !App_Ticket_Module.groupsCollection.collection){
@@ -494,7 +494,7 @@
 	 ticketLabels: function(){
 
 	 	//Rendering root template
-	 	loadAdminsettingsHelpdeskTemplate({labels: true}, function(callback){
+	 	this.loadAdminsettingsHelpdeskTemplate({labels: true}, function(callback){
 
 	 		//Creating base collection for fetching labels collection
  			Ticket_Labels.labelsCollection = new Base_Collection_View({ 
@@ -521,7 +521,7 @@
 	 addTicketLabel: function(){
 
 	 	//Rendering root template
-		loadAdminsettingsTemplate(function(callback){
+		this.loadAdminsettingsTemplate(function(callback){
 
 			var addTicketLabelView = new Base_Model_View({
  				isNew : false,
@@ -552,7 +552,7 @@
 	 editTicketLabel: function(id){
 
 	 	//Rendering root template
-		loadAdminsettingsTemplate(function(callback){
+		this.loadAdminsettingsTemplate(function(callback){
 
 			if(!Ticket_Labels.labelsCollection || !Ticket_Labels.labelsCollection.collection){
 
@@ -583,7 +583,7 @@
 	 ticketFilters : function() {
 
 	 	//Rendering root template
-	 	loadAdminsettingsHelpdeskTemplate({filters: true}, function(callback){
+	 	this.loadAdminsettingsHelpdeskTemplate({filters: true}, function(callback){
 
 	 		App_Ticket_Module.ticketFiltersList = new Base_Collection_View({
  				url : '/core/api/tickets/filters',
@@ -607,7 +607,7 @@
 	 addTicketFilter: function(){
 
 	 	//Rendering root template
-		loadAdminsettingsTemplate(function(callback){
+		this.loadAdminsettingsTemplate(function(callback){
 
 			var addTicketFilterView = new Ticket_Base_Model({
  				isNew : true,
@@ -636,7 +636,7 @@
 	 editTicketFilter: function(id){
 
 	 	//Rendering root template
-		loadAdminsettingsTemplate(function(callback){
+		this.loadAdminsettingsTemplate(function(callback){
 
 			if(!App_Ticket_Module.ticketFiltersList || !App_Ticket_Module.ticketFiltersList.collection){
 
@@ -675,7 +675,7 @@
 	 cannedResponses : function() {
 
 	 	//Rendering root template
-	 	loadAdminsettingsHelpdeskTemplate({canned_responses: true}, function(callback){
+	 	this.loadAdminsettingsHelpdeskTemplate({canned_responses: true}, function(callback){
 
 	 		Ticket_Labels.fetchCollection(function(){
 
@@ -702,7 +702,7 @@
 	 addCannedResponse: function(){
 
 	 	//Rendering root template
-		loadAdminsettingsTemplate(function(callback){
+		this.loadAdminsettingsTemplate(function(callback){
 
 			var addCannedResponseView = new Base_Model_View({
  				isNew : true,
@@ -730,7 +730,7 @@
 	 editCannedResponse: function(id){
 
 	 	//Rendering root template
-		loadAdminsettingsTemplate(function(callback){
+		this.loadAdminsettingsTemplate(function(callback){
 
 			if(!Ticket_Canned_Response.cannedResponseCollection || !Ticket_Canned_Response.cannedResponseCollection.collection){
 
@@ -868,7 +868,7 @@
 	 renderNotesCollection : function(ticket_id, $ele, callback){
 
 	 	App_Ticket_Module.notesCollection = new Base_Collection_View({
-	 		url : '/core/api/tickets/notes?ticket_id=' + ticket_id,
+	 		url : '/core/api/tickets/notes/' + ticket_id,
 	 		templateKey : "ticket-notes",
 	 		sortKey:"created_time",
 	 		customLoader: true,
