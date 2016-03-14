@@ -697,8 +697,22 @@ public class StripeImpl implements AgileBilling {
 		List<com.stripe.model.Subscription> subscriptions = customer.getSubscriptions().getData();
 		for(com.stripe.model.Subscription sub : subscriptions){
 			Map<String, Object> updateParams = new HashMap<String, Object>();
+			if(trialEnd == 0)
+				updateParams.put("trial_end", "now");
 			updateParams.put("trial_end", trialEnd);
 			sub.update(updateParams);
+		}
+		if(trialEnd == 0)
+		{
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("customer", customer.getId());
+			try{
+				Invoice invoice = Invoice.create(params).pay();
+				System.out.println("invoice for email credits "+invoice);
+			}catch(Exception e){
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+				e.printStackTrace();
+			}
 		}
 	}
 }

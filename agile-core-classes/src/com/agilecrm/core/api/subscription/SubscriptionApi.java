@@ -531,14 +531,13 @@ public class SubscriptionApi {
 	{
 		try{
 			Subscription subscription = SubscriptionUtil.getSubscription();
-			Long trialEnd;
+			Long trialEnd = 0L;
 			if(period == 0){
-				trialEnd = new DateUtil().addMinutes(1).getTime().getTime() / 1000;
 				subscription.addTrial(trialEnd);
 				System.out.println("Added trial to::"+trialEnd);
 			}
 			else{
-				trialEnd = new DateUtil().addDays(period*30).getTime().getTime() / 1000;
+				trialEnd = System.currentTimeMillis() / 1000 + period * 2592000;
 				subscription.addTrial(trialEnd);
 				subscription.status = Subscription.BillingStatus.BILLING_PAUSED;
 				System.out.println("Added trial to::"+trialEnd+" and set subscription status to ACCOUNT_PAUSED");
