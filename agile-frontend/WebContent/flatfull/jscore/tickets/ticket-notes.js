@@ -217,8 +217,8 @@ var Tickets_Notes = {
 		 data.notes = this.constructTextComments(App_Ticket_Module.notesCollection.collection.toJSON());
 		
 
-		if(Ticket_Canned_Response.cannedResponseCollection && Ticket_Canned_Response.cannedResponseCollection.toJSON() 
-			&& Ticket_Canned_Response.cannedResponseCollection.toJSON().length > 0)
+		if(Ticket_Canned_Response.cannedResponseCollection && 
+			Ticket_Canned_Response.cannedResponseCollection.toJSON())
 			data.canned_responses = Ticket_Canned_Response.cannedResponseCollection.toJSON();
 
 		data.label_matched_canned_responses = this.getMatchedCannedResponses(data.labels);

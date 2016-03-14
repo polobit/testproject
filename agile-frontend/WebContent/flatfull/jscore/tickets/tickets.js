@@ -33,11 +33,12 @@ var Tickets = {
 			  		//Rendering top toolbar container
 					$('#right-pane').html($(toolbar_ui));
 
-					if(callback)
-						callback();
-
 					var loaderEl = $(getRandomLoadingImg());
 					$(".tickets-collection-pane").html(loaderEl.css("margin", "10px"));
+
+					if(callback)
+						callback();
+					
 				}, "#right-pane");
 				
 			}, "#content");

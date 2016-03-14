@@ -19,7 +19,7 @@ var Ticket_Canned_Response = {
 
 		new cannedResponses().fetch({success: function(collection){
 
-			console.log('Label collection length: ' + collection.length);
+			console.log('cannedResponses collection length: ' + collection.length);
 			Ticket_Canned_Response.cannedResponseCollection = collection;
 
 			if(callback)

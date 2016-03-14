@@ -519,6 +519,6 @@ public class TicketWebhook extends HttpServlet
 	 */
 	public static boolean isNewTicket(String[] toAddressArray)
 	{
-		return (toAddressArray.length == 3) ? true : false;
+		return (toAddressArray.length == 3) ? false : true;
 	}
 }
