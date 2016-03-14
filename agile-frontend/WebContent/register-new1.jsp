@@ -86,10 +86,6 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 <!-- Include ios meta tags -->
 <%@ include file="ios-native-app-meta-tags.jsp"%>
 <STYLE>
-body{
-
-	background-image: url('<%=S3_STATIC_IMAGE_PATH%>images/signup-<%=randomBGImageInteger%>-low.jpg');
-}
 .overlay:before{
 	content: "";
     position: fixed;
@@ -249,14 +245,14 @@ $(document).ready(function() {
     newImg.onload = function() {
     $("body").css("background-image","url('"+this.src+"')");
      }
-   newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/signup-<%=randomBGImageInteger%>-high.jpg';
+   newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/agile-registration-page-high.png';
    
   console.log(newImg.src);
     if($("#error-area").text().trim())
     	$("#error-area").slideDown("slow");
-preload_login_pages();
+//preload_login_pages();
 });
-
+/*
  function preload_login_pages()
 			{
 
@@ -273,7 +269,7 @@ preload_login_pages();
 				}).appendTo('body');
 
 			}
-		}
+		}*/
   </script>
 
   <!-- Clicky code -->
