@@ -213,7 +213,7 @@ public class TicketNotes
 
 		try
 		{
-			Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+			Tickets ticket = TicketsUtil.getTicketByID(ticket_key.getId());
 
 			// Sending reply to requester if and only if notes type is public
 			if (isPublicNotes)
