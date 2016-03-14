@@ -1177,9 +1177,21 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			      { 
 			       silent : true 
 			      });
-			   }, saveCallback : function(){
+			   }, saveCallback : function(response){
 				console.log("saveCallback");
-				showNotyPopUp("information", "Domain saved successfully", "top", 1000);
+				var temp = window.location.host.split("-dot");
+				if(temp.length == 1)
+					temp = window.location.host.split(".");
+				if(temp.length == 1)
+					window.location.href = "/login";
+				var domain = temp[0];
+				if(domain != response.alias[0]){
+					setTimeout(function()
+					{
+						showNotyPopUp("information", "You Domain has been updated successfully. Logging out...", "top");
+						window.location.href = window.location.protocol + "//" + domain + ".agilecrm.com/login" + window.location.hash;
+					}, 5000);
+				}
 			},errorCallback : function(data){
 				showNotyPopUp("warning", data.responseText, "top");
 			} });
