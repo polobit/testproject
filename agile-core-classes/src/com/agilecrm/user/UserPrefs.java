@@ -207,7 +207,7 @@ public class UserPrefs
 	 * 
 	 * @return selected gravatar url
 	 */
-	public String chooseRandomAvatar()
+	public static String chooseRandomAvatar()
 	{
 		String[] avatar = { "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/86.png",
 				"https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/72.png",

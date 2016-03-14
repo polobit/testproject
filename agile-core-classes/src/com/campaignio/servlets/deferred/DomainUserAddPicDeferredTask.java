@@ -2,6 +2,7 @@ package com.campaignio.servlets.deferred;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.user.AgileUser;
@@ -35,31 +36,23 @@ public class DomainUserAddPicDeferredTask implements DeferredTask {
 		try {
 			NamespaceManager.set(domain);
 			
-			// Get all users and update domain user db with user pic
-			List<AgileUser> agileUsers = AgileUser.getUsers();
-			System.out.println(agileUsers.size());
+			List<DomainUser> domainUsers = DomainUserUtil.getUsers();
+			System.out.println("domainUsers = " + domainUsers.size());
 			
-			for (AgileUser user : agileUsers) {
-
+			for (DomainUser domainUser : domainUsers) {
+				String pic = domainUser.getOwnerPic();
 				
-				DomainUser domainUser = user.getDomainUser();
-				System.out.println("domainUser = " + domainUser);
+				if(StringUtils.isBlank(pic))
+					pic = UserPrefs.chooseRandomAvatar();
 				
-				if (domainUser == null)
-					continue;
-
-				UserPrefs prefs = UserPrefsUtil.getUserPrefs(user);
-				System.out.println("prefs = " + prefs);
+				domainUser.pic = pic;
 				
-				if (prefs == null)
-					continue;
-
-				domainUser.pic = prefs.pic;
 				try {
 					domainUser.save();
 				} catch (Exception e) {
 					System.out.println(ExceptionUtils.getFullStackTrace(e));
 				}
+				
 			}
 		} finally {
 			NamespaceManager.set(oldNamespace);

@@ -1018,7 +1018,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 * @throws Exception
 	 */
 	@XmlElement
-	public String getOwnerPic() throws Exception
+	public String getOwnerPic()
 	{
 		AgileUser agileUser = null;
 		UserPrefs userPrefs = null;
