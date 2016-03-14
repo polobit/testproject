@@ -920,6 +920,7 @@ var ContactsRouter = Backbone.Router.extend({
 						App_Contacts.contacts();
 						return;
 					}
+					
 					App_Contacts.contactViewModel = data.toJSON();
 					App_Contacts.customView(undefined, App_Contacts.contactViewModel, url, tag_id, is_lhs_filter);
 
@@ -1166,6 +1167,14 @@ var ContactsRouter = Backbone.Router.extend({
 						$("#content #contact_company").hide();
 					}
 					agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
+
+					$('.contact_input', $('#content')).each(function(){
+						agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=PERSON');
+					});
+
+					$('.company_input', $('#content')).each(function(){
+						agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=COMPANY');
+					});
 
 				}, "#content"); 
 

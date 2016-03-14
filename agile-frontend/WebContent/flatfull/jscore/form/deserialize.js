@@ -428,6 +428,17 @@ function deserializeChainedElement(data, rule_element)
 
 				return;
 			}
+			if (($(input_element).closest('td').siblings('td.lhs-block').find('option:selected').attr("field_type") == "CONTACT" || $(input_element).closest('td').siblings('td.lhs-block').find('option:selected').attr("field_type") == "COMPANY") && value != "Contact" && value != "Company")
+			{
+				var referenceContactModel = Backbone.Model.extend({ url : '/core/api/contacts/references?references='+value });
+				var model = new referenceContactModel();
+				model.fetch({
+					success : function(data){
+						$(input_element).val(getPropertyValue(data.get(0).properties, "first_name"));
+					}
+				});
+				return;
+			}
 			$(input_element).val(value);
 			return;
 		}
@@ -600,6 +611,43 @@ function deserializeLhsFilters(element, data)
 		var fieldName = LHS.replace(/ +/g, '_');
 		fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@');
 		var currentElemnt = $(element).find('#' + fieldName + '_div');
+		$('.custom_contact').each(function(){
+			if ($(this).attr("name") == LHS)
+			{
+				var that = this;
+				var referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+RHS_VALUE, sort_collection : false });
+
+				referenceContactsCollection.collection.fetch({
+					success : function(data){
+						var name = "";
+						if(getPropertyValue(data.get(RHS_VALUE).get("properties"), "first_name")){
+							name += getPropertyValue(data.get(RHS_VALUE).get("properties"), "first_name");
+						}
+						if(getPropertyValue(data.get(RHS_VALUE).get("properties"), "last_name")){
+							name += " "+getPropertyValue(data.get(RHS_VALUE).get("properties"), "last_name");
+						}
+						$(that).parent().find("input").val(name);
+						$(that).parent().find("input").attr("data", RHS_VALUE);
+						hideTransitionBar();
+					}
+				});
+			}
+		});
+		$('.custom_company').each(function(){
+			if ($(this).attr("name") == LHS)
+			{
+				var that = this;
+				var referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+RHS_VALUE, sort_collection : false });
+
+				referenceContactsCollection.collection.fetch({
+					success : function(data){
+						$(that).parent().find("input").val(getPropertyValue(data.get(RHS_VALUE).get("properties"), "name"));
+						$(that).parent().find("input").attr("data", RHS_VALUE);
+						hideTransitionBar();
+					}
+				});
+			}
+		});
 		if (LHS == 'tags' || LHS == 'campaign_status')
 		{
 			$('#' + LHS + '_div').parent().find('a').addClass('bold-text');
@@ -665,4 +713,98 @@ function deserializeLhsFilters(element, data)
 		}
 
 	});
+	if(json_object.or_rules)
+	{
+		$('.custom_contacts').each(function(){
+			var referenceContactIds = "";
+			var referenceContactIdsArray = [];
+			var that = this;
+			$.each(json_object.or_rules, function(index, filter){
+				var LHS = filter.LHS;
+				var CONDITION = filter.CONDITION;
+				var RHS_VALUE = filter.RHS;
+				var RHS_NEW_VALUE = filter.RHS_NEW;
+				var fieldName = LHS.replace(/ +/g, '_');
+				fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@');
+				var currentElemnt = $(element).find('#' + fieldName + '_div');
+				if($(that).attr("name") == LHS)
+				{
+					referenceContactIds += filter.RHS + ",";
+					referenceContactIdsArray.push(filter.RHS);
+
+					$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
+					$(currentElemnt).find('a.clear-filter-condition-lhs').removeClass('hide');
+					$(currentElemnt).removeClass('hide');
+					$(currentElemnt).find('[name="CONDITION"]').val("IN");
+					$(currentElemnt).find('[name="CONDITION"]').trigger('change');
+					$(currentElemnt).prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
+				}
+			});
+			if(referenceContactIds)
+			{
+				var referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+
+				referenceContactsCollection.collection.fetch({
+					success : function(data){
+						$.each(referenceContactIdsArray, function(index){
+							var contactId = referenceContactIdsArray[index];
+							var name = "";
+							if (getPropertyValue(data.get(contactId).get("properties"), "first_name")){
+								name = getPropertyValue(data.get(contactId).get("properties"), "first_name");
+							}
+							if (getPropertyValue(data.get(contactId).get("properties"), "last_name")){
+								name += " "+getPropertyValue(data.get(contactId).get("properties"), "last_name");
+							}
+ 							$(that).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+data.get(contactId).id+'"><a href="#contact/'+data.get(contactId).id+'" class="text-white v-middle">'+name+'</a><a class="close m-l-xs" id="remove_contact_in_lhs">×</a></li>');
+						});
+						hideTransitionBar();
+					}
+				});
+			}
+			
+		});
+
+		$('.custom_companies').each(function(){
+			var referenceContactIds = "";
+			var referenceContactIdsArray = [];
+			var that = this;
+			$.each(json_object.or_rules, function(index, filter){
+				var LHS = filter.LHS;
+				var CONDITION = filter.CONDITION;
+				var RHS_VALUE = filter.RHS;
+				var RHS_NEW_VALUE = filter.RHS_NEW;
+				var fieldName = LHS.replace(/ +/g, '_');
+				fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@');
+				var currentElemnt = $(element).find('#' + fieldName + '_div');
+				if($(that).attr("name") == LHS)
+				{
+					referenceContactIds += filter.RHS + ",";
+					referenceContactIdsArray.push(filter.RHS);
+
+					$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
+					$(currentElemnt).find('a.clear-filter-condition-lhs').removeClass('hide');
+					$(currentElemnt).removeClass('hide');
+					$(currentElemnt).find('[name="CONDITION"]').val("IN");
+					$(currentElemnt).find('[name="CONDITION"]').trigger('change');
+					$(currentElemnt).prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
+				}
+			});
+			if(referenceContactIds)
+			{
+				var referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+
+				referenceContactsCollection.collection.fetch({
+					success : function(data){
+						$.each(referenceContactIdsArray, function(index){
+							var contactId = referenceContactIdsArray[index];
+ 							$(that).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+data.get(contactId).id+'"><a href="#company/'+data.get(contactId).id+'" class="text-white v-middle">'+getPropertyValue(data.get(contactId).get("properties"), "name")+'</a><a class="close m-l-xs" id="remove_contact_in_lhs">×</a></li>');
+						});
+						hideTransitionBar();
+					}
+				});
+			}
+			
+		});
+	}
+	
 }

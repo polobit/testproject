@@ -154,14 +154,38 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	// Reads custom fields and pushes into properties
 	var custom_field_elements = $('#' + form_id).find('.custom_field');
 	var custom_fields_in_template = [];
+	var contact_custom_fields_flag = true;
 
 	$.each(custom_field_elements, function(index, element)
 	{
 		var id = $(element).attr('id'), name = $(element).attr('name');
 		custom_fields_in_template.push(name);
-		if (isValidField(id))
-			properties.push(custom_Property_JSON(name, 'CUSTOM', form_id));
+		if($(element).hasClass("contact_input") || $(element).hasClass("company_input")){
+			if ($(element).hasClass("required_field"))
+			{
+				if ($(this).parent().find("ul").find("li").length == 0)
+				{
+					$(this).parent().append('<span for="fname" generated="true" class="help-inline">This field is required.</span>');
+					var that = this;
+					setTimeout(function(){
+						$(that).parent().find('span').remove();
+					},1500);
+					contact_custom_fields_flag = false;
+				}
+			}
+			if (isValidContactCustomField(id))
+				properties.push(custom_Property_JSON(name, 'CUSTOM', form_id));
+		}else{
+			if (isValidField(id))
+				properties.push(custom_Property_JSON(name, 'CUSTOM', form_id));
+		}
+		
 	});
+	if (!contact_custom_fields_flag)
+	{
+		enable_save_button($(saveBtn));
+		return;
+	}
 
 	if (is_person)
 	{
@@ -728,6 +752,55 @@ function deserialize_contact(contact, template)
 		// If contact is added from social suite, need to add website.
 		// socialsuite_add_website();
 
+		$('.contact_input', $('#content')).each(function(){
+			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=PERSON');
+		});
+
+		$('.contact_input', $('#content')).each(function(){
+			var name = $(this).attr("name");
+			for (var i = 0; i < contact.properties.length; ++i)
+			{
+				if (contact.properties[i].name == name)
+				{
+					var valJSON = $.parseJSON(contact.properties[i].value);
+					var referenceContactIds = "";
+					$.each(valJSON, function(index, value){
+						if(index != valJSON.length-1){
+							referenceContactIds += value + ",";
+						}else{
+							referenceContactIds += value;
+						}
+					});
+					setReferenceContacts(name, $('#content'), valJSON, referenceContactIds);
+				}
+			}
+		});
+
+		$('.company_input', $('#content')).each(function(){
+			agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=COMPANY');
+		});
+
+		$('.company_input', $('#content')).each(function(){
+			var name = $(this).attr("name");
+			for (var i = 0; i < contact.properties.length; ++i)
+			{
+				if (contact.properties[i].name == name)
+				{
+					var valJSON = $.parseJSON(contact.properties[i].value);
+					var referenceContactIds = "";
+					$.each(valJSON, function(index, value){
+						if(index != valJSON.length-1){
+							referenceContactIds += value + ",";
+						}else{
+							referenceContactIds += value;
+						}
+					});
+					setReferenceContacts(name, $('#content'), valJSON, referenceContactIds);
+				}
+			}
+		});
+		
+
 	}, "#content");
 
 	
@@ -832,6 +905,14 @@ function custom_Property_JSON(name, type, form_id)
 			else
 				elem_value = new Date(elem.val()).getTime() / 1000;
 		}
+	else if (elem.hasClass("contact_input") || elem.hasClass("company_input"))
+	{
+		var contact_values = [];
+		$('ul[name="'+name+'"]', $('#'+form_id)).find('li').each(function(){
+			contact_values.push($(this).attr("data"));
+		});
+		elem_value = JSON.stringify(contact_values);
+	}
 		else
 			elem_value = elem.val();
 
@@ -996,4 +1077,51 @@ function isCompanyExist(company, callback)
 		   callback(false);
 	});
 
+}
+
+/**
+ * Sets refernce contacts to contacts, companies, deals and cases update forms
+ * 
+ * @param name -
+ *            custom field name
+ * @param ele -
+ *            update from element
+ * @param valJSON -
+ *            list of custom fields
+ * @param referenceContactIds -
+ *            list of reference contact ids
+ */
+function setReferenceContacts(name, ele, valJSON, referenceContactIds)
+{
+	App_Contacts.referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+
+	App_Contacts.referenceContactsCollection.collection.fetch({
+		success : function(data){
+			if (data && data.length > 0)
+			{
+				$.each(valJSON, function(index, value){
+					var contact_name = getPropertyValue(data.get(value).get("properties"), "first_name");
+					var last_name = getPropertyValue(data.get(value).get("properties"), "last_name");
+					if(last_name)
+					{
+						contact_name += " "+last_name;
+					}
+					if(contact_name)
+					{
+						$("ul[name='"+name+"']", ele)
+						.append(
+								'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + value + '"><a class="text-white m-r-xs" href="#contact/' + value + '">' + contact_name + '</a><a class="close" id="remove_tag">&times</a></li>');
+					}
+					else
+					{
+						$("ul[name='"+name+"']", ele)
+						.append(
+								'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + value + '"><a class="text-white m-r-xs" href="#company/' + value + '">' + getPropertyValue(data.get(value).get("properties"), "name") + '</a><a class="close" id="remove_tag">&times</a></li>');
+					}
+					
+				});
+			}
+			hideTransitionBar();
+		}
+	});
 }
