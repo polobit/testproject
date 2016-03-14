@@ -984,6 +984,7 @@ var portlet_graph_utility = {
 													floating : true,
 													align : 'right',
 													verticalAlign : 'top',
+													y:30,
 													enabled:portlet_utility.is_legend_enable(base_model),
 													labelFormatter : function() {
 														if (this.name.length > 12) {
