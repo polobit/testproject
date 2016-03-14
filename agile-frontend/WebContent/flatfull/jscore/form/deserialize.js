@@ -416,9 +416,9 @@ function deserializeChainedElement(data, rule_element)
 			// Fills date in to fields and initialize datepicker on the field
 			if ($(input_element).hasClass('date'))
 			{
-				value = getLocalTimeFromGMTMilliseconds(value);
+			//	value = getLocalTimeFromGMTMilliseconds(value);
 
-				$(input_element).val(getDateInFormatFromEpoc(value));
+				$(input_element).val(getDateInFormatFromEpocForContactFilters(value));
 
 
 				$(input_element).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
