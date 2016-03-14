@@ -111,30 +111,17 @@ var Ticket_Labels = {
 			}
 
 			ticket_model.set({labels: ticket_labels}, {
-					silent : true
+				silent : true
 			});
-
-			//console.log(App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID)); 
 		} 		         
 		
-		var newTicketModel = new BaseModel();
-		     
-		newTicketModel.url = "/core/api/tickets/update-labels?command="
-				+ command + "&label=" + label + '&id=' + Current_Ticket_ID;
+		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/update-labels";
+		var json = {command: command, labelID: label, id: Current_Ticket_ID};
 
-		newTicketModel.set({id: Current_Ticket_ID}, {silent : true});
-		//var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
+       	Tickets.updateModel(url, json, function(model){
 
-		newTicketModel.save(ticket_model, {
-			success : function(model) {
-               
-    //            App_Ticket_Module.ticketView.model.set(model, {
-				// 	silent : true
-				// });
-
-				if (callback)
+       		if (callback)
 					callback();
-			}
 		});
 	}
 };

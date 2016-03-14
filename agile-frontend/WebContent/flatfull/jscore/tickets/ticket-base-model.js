@@ -100,7 +100,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		var groupId = App_Ticket_Module.ticketView.model.toJSON().groupID;
 		var assigneeId = CURRENT_AGILE_USER.domainUser.id;
 
-		var url = "/core/api/tickets/" + ticket_id + "/assign-ticket/" + groupId + "/" + assigneeId;
+		var url = "/core/api/tickets/" + Current_Ticket_ID + "/assign-ticket/" + groupId + "/" + assigneeId;
        	var json = {id: Current_Ticket_ID};
 
        	Tickets.updateModel(url, json, function(model){

@@ -719,8 +719,10 @@ public class Tickets extends Cursor implements Serializable
 		{
 			List<Key<Contact>> keys = new ArrayList<Key<Contact>>();
 			keys.add(this.contact_key);
-			
-			return ContactUtil.getPartialContacts(keys).get(0);
+
+			List<ContactPartial> partialObjects = ContactUtil.getPartialContacts(keys);
+
+			return (partialObjects.size() > 0 ? ContactUtil.getPartialContacts(keys).get(0) : null);
 		}
 
 		return null;
