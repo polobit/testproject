@@ -47,9 +47,14 @@
 			<div class="clearfix"></div>					
 			<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
 				<div class="col-md-5 p-none text-left">Tax Amount</div>
-				<div class="col-md-7 p-none text-right text-ellipsis" title="{{taxAmount}}">$ {{taxAmount}}</div>
+				<div class="col-md-7 p-none text-right text-ellipsis" title="{{taxAmount}}">
+					${{#if taxAmount}}
+						{{taxAmount}}
+					{{else}}
+						0
+					{{/if}}
+				</div>
 				<div class="clearfix"></div>
-
 				<div class="col-md-5 p-none text-left">Order ID</div>
 				<div class="col-md-7 p-none text-right text-ellipsis" title="{{orderId}}">{{orderId}}</div>
 				<div class="clearfix"></div>

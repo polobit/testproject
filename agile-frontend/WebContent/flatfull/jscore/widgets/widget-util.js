@@ -132,9 +132,14 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				}
 
 			}else{
-				msgType = "error";
-				msg = ("Error occurred while saving "+displayName);
-				$('#stripe_url').removeAttr('disabled');
+				if(pluginName == "Braintree"){
+					msgType = "error";
+					msg = "Invalid  "+displayName+" credentials";
+				}else{
+					msgType = "error";
+					msg = ("Error occurred while saving "+displayName);
+					$('#stripe_url').removeAttr('disabled');
+				}
 			}
 
 			// if (pluginName != "CallScript")

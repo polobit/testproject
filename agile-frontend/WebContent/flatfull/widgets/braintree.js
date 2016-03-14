@@ -29,7 +29,7 @@ function getTransactions(callback, contact_id){
 			$('#Braintree').html('<div class="wrapper-sm">Please configure widget properly</div>');
 		});
 	}else{
-		$('#Braintree').html('<div class="wrapper-sm">Email not found for this contact</div>');
+		$('#Braintree').html('<div class="wrapper-sm">Please provide email for this contact.</div>');
 	}
 }
 
