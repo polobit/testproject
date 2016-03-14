@@ -585,16 +585,16 @@
 	 	//Rendering root template
 	 	this.loadAdminsettingsHelpdeskTemplate({filters: true}, function(callback){
 
-	 		App_Ticket_Module.ticketFiltersList = new Base_Collection_View({
+	 		App_Ticket_Module.ticketFiltersCollection = new Base_Collection_View({
  				url : '/core/api/tickets/filters',
  				templateKey : "ticket-filters",
  				individual_tag_name : 'tr',
  				slateKey : "no-ticket-filters"
  			});
 
- 			App_Ticket_Module.ticketFiltersList.collection.fetch();
+ 			App_Ticket_Module.ticketFiltersCollection.collection.fetch();
 
- 			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.ticketFiltersList.el);
+ 			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.ticketFiltersCollection.el);
 
 	 		if(callback)
 	 			callback();
@@ -638,13 +638,13 @@
 	 	//Rendering root template
 		this.loadAdminsettingsTemplate(function(callback){
 
-			if(!App_Ticket_Module.ticketFiltersList || !App_Ticket_Module.ticketFiltersList.collection){
+			if(!App_Ticket_Module.ticketFiltersCollection || !App_Ticket_Module.ticketFiltersCollection.collection){
 
  				Backbone.history.navigate( "ticket-views", { trigger : true });
  				return;
  			}
 
- 			var filter = App_Ticket_Module.ticketFiltersList.collection.get(id);
+ 			var filter = App_Ticket_Module.ticketFiltersCollection.collection.get(id);
 
  			var editTicketFilterView = new Ticket_Base_Model({
  				model : filter, 
