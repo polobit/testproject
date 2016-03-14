@@ -80,7 +80,7 @@ public class StripeChargeWebhook extends HttpServlet
 		catch (StripeException e)
 		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Exception occured in getting name space:"+e.getMessage());
 			return;
 		}
 
