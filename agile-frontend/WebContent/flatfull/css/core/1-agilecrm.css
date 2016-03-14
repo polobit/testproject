@@ -3480,3 +3480,7 @@ text-overflow:ellipsis;
 overflow-x:hidden;
 text-align:left;
 }
+.delete_ip{
+	font-size: 11px;
+    margin-top: -2px;
+}

@@ -431,5 +431,30 @@ $(function(){
 });
 
 
+function loadip_access_events()
+{
+	$(".blocked-panel-ip-delete").on('click', function(e) {
+        e.preventDefault();
+        var formId = $(this).closest('form');
 
+        var ip = $(this).closest("tr").find('input').val();
+        var id = $(this).closest("form").find('input[name="id"]').val();
+        var $that = $(this);
+        $.ajax({ url : 'core/api/allowedips/delete_ip?id='+id+'&ip='+ip,
+			type : 'DELETE',
+		success : function()
+		{
+			$that.closest("tr").remove(); 
+
+		},error : function(response)
+			{
+
+				console.log(response);
+			}
+
+	});
+          
+
+    });
+}
 	

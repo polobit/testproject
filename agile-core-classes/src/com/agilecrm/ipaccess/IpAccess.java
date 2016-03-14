@@ -2,6 +2,7 @@ package com.agilecrm.ipaccess;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -23,7 +24,7 @@ public class IpAccess {
     public Long id;
 	
 	public String domain;
-	public List<String> ipList;
+	public Set<String> ipList;
 	
 	public Long created_time;
 
@@ -32,9 +33,9 @@ public class IpAccess {
 	public IpAccess() {
 	}
 
-	public IpAccess(String domain, List<String> ipList) {
+	public IpAccess(String domain, Set<String> ipList) {
 		this.domain = domain;
-		this.ipList = ipList;
+		this.ipList =  ipList;
 	}
 
 	public void Save() {
@@ -42,6 +43,7 @@ public class IpAccess {
 		if(this.created_time == null)
 			   this.created_time = Calendar.getInstance().getTimeInMillis() / 1000;
 		
+		domain = IpAccessUtil.getPanelIpAccessNamespaceName();
 		
 		String oldNamespace = NamespaceManager.get();
 		try {
@@ -53,5 +55,33 @@ public class IpAccess {
 			NamespaceManager.set(oldNamespace);
 		}
 	}
+	
+	public void delete(){
+		dao.delete(this);
+	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+
+	public Set<String> getIpList() {
+		return ipList;
+	}
+
+	public void setIpList(Set<String> ipList) {
+		this.ipList = ipList;
+	}
+	
 }

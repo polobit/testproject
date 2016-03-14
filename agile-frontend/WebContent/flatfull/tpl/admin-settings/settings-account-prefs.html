@@ -13,14 +13,14 @@
 <!--  Contact View Detail in Detailed mode - when only one contact is shown -->
 <script id="admin-settings-account-prefs-template" type="text/html">
 <div class="panel panel-default">
-	<!--<div class="panel-heading">Preferences</div>-->
-	<div class="panel-body">
+    <!--<div class="panel-heading">Preferences</div>-->
+    <div class="panel-body">
     <form id="accountPrefs" class="form-horizontal">
         <fieldset>
             <input name="id" class="form-control" type="hidden" value="{{id}}" />
             
             <div class="row">
-				<div class="col-md-7 col-xs-12">
+                <div class="col-md-7 col-xs-12">
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Plan</label> 
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
@@ -48,8 +48,8 @@
                             <input name="company_name" class="input-medium required form-control" type="text" value="{{company_name}}" />
                         </div>
                     </div>
-					 <input name="timezone" class="form-control" type="hidden" value="{{timezone}}" />
-				</div>
+                     <input name="timezone" class="form-control" type="hidden" value="{{timezone}}" />
+                </div>
                 <div class="col-md-offset-2 col-md-3 col-xs-offset-4 col-xs-8 hide">
                     <div >
                         <div id="upload-container" messg="User image has been uploaded">
@@ -59,7 +59,7 @@
                                     <img class="w-full" src="{{logo}}"  width="85" />
                                     {{else}}
                                     <img class="w-full" src="https://contactuswidget.appspot.com/images/pic.png"  width="85" />
-                                    {{/if}}													
+                                    {{/if}}                                                 
                                 </div>
                                 <p>
                                     <input type="hidden" class="form-control" id="upload_url" name="logo" />  
@@ -91,41 +91,47 @@
 
 
 <script id="admin-settings-ip-prefs-template" type="text/html">
-
-<!-- Blocked IP's template -->
-                  <div class="panel panel-default">
-                     <div id="settings-blocked-ips">
-                        <div class="panel-heading" role="tab" id="headingTwo">
-                           <div class="panel-title">
-                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#ip-filters">IP Filters</a>
-                           </div>
-                        </div>
-                        <form  name = "account-ip" id="account-ip">
-                        <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="ip-filters">
-                           <div class="panel-body p-n" id="api-accordion">
-   {{#unless blocked_ips}}
-            <div class="p-t-sm p-l-sm p-r-sm p-b-xs">
-                <div>By creating IP filters you can disable <b>Web Stats</b> and <b>Tracking</b>.</div>
-            </div>
-   {{/unless}}
-   
-                    <table class="table table-hover custom-fields-table bg-white m-b-none">
-                        <colgroup><col width="50%"><col width="4%"></colgroup>
-                        <tbody id="blocked_ips_list">
-                            {{#blocked_ips_list blocked_ips}}{{/blocked_ips_list}}
-                        </tbody>
-                    </table>
-                    <input type="text" id="domain" name="domain" style="width:250px;display:inline-block;" class="form-control input-sm hidden">
-                    <div class="show_field p-l p-t p-b">
-            <input type="text" id="new_blocked_ip" name="new_blocked_ip" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="New IP Address">
-                        <a href="#blocked-ips" class="btn btn-sm btn-primary" id="update_blocked_ips">Add</a>
-                    </div>
-                           </div>
-                        </div>
-
-                    </form>
-                     </div>
-                  </div>
-                  <!-- end of Blocked IPs template -->
-
+<div id="ip_access" class="panel panel-default">
+    <div class="panel-heading">Ip</div>
+    <div class="panel-body">
+    <form id="access-ip" class="form-horizontal">
+        <fieldset>
+            {{#if id}}
+                <input name="id"  class="form-control" type="hidden" value="{{id}}" />
+            {{/if}}
+            <input name="domain" class="form-control" type="hidden" value="{{get_current_domain}}" />
+            
+            <table class="table table-hover custom-fields-table bg-white m-b-none">
+                <colgroup><col width="50%"><col width="4%"></colgroup>
+                <tbody id="blocked_panel_ips_list" class="multiple-input" name="ipList">
+                   {{#each ipList}}
+                    <tr data="{{this}}" style="display: table-row;">
+                        <td>
+                            <div class="inline-block v-top text-ellipsis" style="width:80%">{{this}}</div>
+                            <input class="form-control" type="hidden" value="{{this}}" />
+                        </td>
+                        <td class="b-r-none">
+                            <div class="m-b-n-xs" style="display:none;">
+                                <a class="blocked-panel-ip-delete c-p m-l-sm text-l-none text-xs" data-toggle="modal" role="button" href="#"><i title="Delete Panel Blocked IP" class="task-action icon icon-trash"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                    <tr data="{{this}}" style="display: table-row;">
+                        <td>
+                            
+                             Ip  <input id="ipList"  type="text"  />   
+                             <a href="#" type="submit" class="save btn btn-sm btn-primary delete_ip">Save</a>         
+                        </td>
+                        
+                             
+                        
+                    </tr>
+                </tbody>
+            </table>  
+            
+        </fieldset>
+    </form>
+</div>
+</div>
 </script>

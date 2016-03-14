@@ -51,7 +51,13 @@ function serializeForm(form_id) {
 		};
 	}).get());
 	console.log(arr);
-	
+	arr = arr.concat($('#' + form_id + ' .array-input-fields').map(function() {
+		console.log($(this).val());
+		return {
+			"name" : this.name,
+			"value" : $(this).val()
+		};
+	}).get());
 
 	// Serialize tags
 	arr = arr.concat(get_tags(form_id));
@@ -76,6 +82,23 @@ function serializeForm(form_id) {
 		// array fields_set
 		$.each($(this).children('li'), function(index, data) {
 			fields_set.push(($(data).attr('ms-value')))
+		});
+
+		// The array of selected values are mapped with the field name and
+		// returned as a key value pair
+		return {
+			"name" : $(this).attr('name'),
+			"value" : fields_set
+		};
+	}).get());
+
+	arr = arr.concat($('#' + form_id + ' .multiple-input').map(function() {
+		var fields_set = [];
+
+		// Gets list of options, selected and pushes the field values in to an
+		// array fields_set
+		$.each($(this).find('input'), function(index, data) {
+			fields_set.push($(data).val());
 		});
 
 		// The array of selected values are mapped with the field name and

@@ -160,8 +160,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			var view = new Base_Model_View({ url : '/core/api/allowedips', template : "admin-settings-ip-prefs",
 				postRenderCallback : function(el)
 				{
+					loadip_access_events();
 					
-				} });
+				}, saveCallback : function(){
+				console.log("saveCallback");
+				showNotyPopUp("information", "Ip saved successfully", "top", 1000);
+				App_Admin_Settings.ipaccess();
+			},errorCallback : function(data){
+				showNotyPopUp("warning", data.responseText, "top");
+			}
+
+				 });
 			
 			$('#content').find('#admin-prefs-tabs-content').find('#settings-account-tab-content').html(view.render().el);
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');

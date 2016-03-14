@@ -2,6 +2,7 @@ package com.agilecrm.ipaccess;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 
 /**
  * 
@@ -27,4 +28,13 @@ public class IpAccessUtil {
 		}
 
 	}
+	
+	public static String getPanelIpAccessNamespaceName(){
+		if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+			 return "localhost";
+		else 
+			return NamespaceManager.get();
+	}
+	
+	
 }
