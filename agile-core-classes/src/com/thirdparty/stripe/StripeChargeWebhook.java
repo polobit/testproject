@@ -25,13 +25,16 @@ import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.googlecode.objectify.Key;
+import com.stripe.exception.StripeException;
 
 @SuppressWarnings("serial")
 public class StripeChargeWebhook extends HttpServlet
@@ -66,6 +69,24 @@ public class StripeChargeWebhook extends HttpServlet
 
 	    String eventType = stripeJson.getString("type");
 	    System.out.println("stripe post event type is " + eventType);
+	    
+	    String newNamespace;
+		try
+		{
+			// Get Namespace from event
+			StripeWebhookServlet stripeWebhookServlet = new StripeWebhookServlet();
+			newNamespace = stripeWebhookServlet.getNamespaceFromEvent(stripeJson);
+		}
+		catch (StripeException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}
+
+		System.out.println("Namespace for event : " + newNamespace);
+		
+		
 
 	    JSONObject stripeEventJson = getStripeEventJson(stripeJson, eventType);
 	    if (stripeEventJson == null)
@@ -83,6 +104,11 @@ public class StripeChargeWebhook extends HttpServlet
 		if (StringUtils.equals(trigger.trigger_stripe_event, eventType.replace(".", "_").toUpperCase()))
 		{
 		    String email = getStripeEmail(stripeJson, eventType);
+		    if(newNamespace!= null && newNamespace.equals("our")){
+		    	DomainUser user = DomainUserUtil.getDomainOwner(newNamespace);
+				email = user.email;
+				
+			}
 		    Contact contact = ContactUtil.searchContactByEmail(email);
 
 		    Boolean newContact = false;
