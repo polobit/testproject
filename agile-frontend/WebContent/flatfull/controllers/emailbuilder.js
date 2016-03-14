@@ -4,7 +4,8 @@ var EmailBuilderRouter = Backbone.Router.extend({
 	"emailbuilder-add" : "showEmailBuilder",
     "emailbuilder-templates" : "getListOfTemplates",
 	"emailbuilder-add/:id" : "loadSelectedTemplate",
-	"emailbuilder/:id" : "loadSavedTemplate"
+	"emailbuilder/:id" : "loadSavedTemplate",
+    "emailbuilder-copy/:id" : "copyEmailTemplate"
 	},
 
 	showEmailBuilder : function() {
@@ -61,6 +62,27 @@ var EmailBuilderRouter = Backbone.Router.extend({
         var data = {
             "templateId" : templateId,
             "action" : "edit"
+        };
+
+        getTemplate("emailbuilder-add", data, undefined, function(ui){
+            $("#emailbuilder-listeners").html($(ui));            
+        }, "#emailbuilder-listeners");
+
+        //hide sidebar
+        collapseLeftMenuInBuilder();
+        
+       $('html, body').animate({scrollTop: $('body').offset().top}, 500);
+       hideTransitionBar();
+
+    },
+
+    copyEmailTemplate : function(templateId) {
+        $('#content').html("<div id='emailbuilder-listeners'></div>");
+        initializeEmailBuilderListeners();
+
+        var data = {
+            "templateId" : templateId,
+            "action" : "copy"
         };
 
         getTemplate("emailbuilder-add", data, undefined, function(ui){

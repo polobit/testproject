@@ -23,7 +23,7 @@
   </div>
 </div>
 
-<div class="col-md-4">
+<div class="col-md-3">
   <div class="form-group">
     <b>Subject:</b> <span class="field_req">*</span><br>
     <input type="text" class="form-control required" name="subject" id="subject" placeholder="Enter subject">
@@ -35,16 +35,41 @@
     <span id="nameoftemplate-msg" class="text-center"></span>
 </div>
 
-<div class="col-md-3">
-    <div class="form-group right">
-        <br>&nbsp;&nbsp;<a href="#email-templates" class="btn btn-default btn-sm">Cancel</a>
+<div class="col-md-4">
+     <div class="form-group right m-l-sm">
+        <br>
+        <a href="#email-templates" class="btn btn-default btn-sm">Cancel</a>
     </div>
-    <div class="form-group right">
-        <br>&nbsp;&nbsp;<button class="btn btn-primary btn-sm saveEmailBuilderButton">Save</button>
+    <div class="form-group right {{#if_equals action "edit"}} m-r-n-sm {{/if_equals}}">
+        <br>
+        {{#if_equals action "edit"}}
+        <button class="btn btn-primary btn-sm btn-addon saveEmailBuilderButton" style="
+    width: 90px;"><i class="icon-plus-sign"></i><span class="saveEmailBuilderButtonText">Save</span></button>
+        <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm m-l-n-xs" data-toggle="dropdown" aria-expanded="false"> 
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu pull-right emailbuilder-copy">
+                                                <li>
+                                                    <a class="sendTestEmailButton">
+                                                        <i class="fa fa-envelope" style="width: 20px;"></i>Send Test
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#emailbuilder-copy/{{templateId}}" id="copy-emailbuilder">
+                                                        <i class="fa fa-clipboard" style="width: 20px;"></i>Copy
+                                                    </a>
+                                                </li>
+                                            </ul>
+        {{else}}
+        <button class="btn btn-primary btn-sm btn-addon saveEmailBuilderButton"><span class="saveEmailBuilderButtonText">Save</span></button>
+        {{/if_equals}}
     </div>
-    <div class="form-group right"> 
-        <br><button class="btn btn-default btn-sm" id="mainsourcepreview"><i class="glyphicon-eye-open glyphicon"></i> Preview</button>
+    <div class="form-group right m-r-sm"> 
+        <br>&nbsp;&nbsp;<button class="btn btn-default btn-sm" id="mainsourcepreview"><i class="glyphicon-eye-open glyphicon"></i> Preview</button>
     </div>
+    <!--<div class="form-group right">
+        <br><button class="btn btn-default btn-sm sendTestEmailButton">Send Test Email</button>
+    </div>-->
 </div>
 
 </div>
