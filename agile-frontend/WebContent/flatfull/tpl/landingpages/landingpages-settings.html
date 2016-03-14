@@ -23,6 +23,7 @@
   <div class="panel-body">
 
   <a id="cname" href="{{cname}}" class="text-info" style="display:none;">{{cname}}</a>
+  <input type="hidden" id="cname_id" value="{{#if id}}{{id}}{{/if}}">
 
     <div>
 
@@ -57,7 +58,7 @@
   <div class="row">
     <div class="col-md-12" id="statusMessageHolder"></div>
     <div class="col-md-12">
-      <button class="btn btn-sm btn-primary" id="landingPageSettingBtn" data-pageid="{{id}}" data-loading-text="Saving...">Save</button>
+      <button class="btn btn-sm btn-primary" id="landingPageSettingBtn" data-pageid="{{pageid}}" data-loading-text="Saving...">Save</button>
       &nbsp;<a href="#" class="text-info" id="landingPageVerifyBtn" {{#unless cname}} style="display:none;" {{/unless}}>Verify</a>
     </div>
   </div>
