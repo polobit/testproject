@@ -1,3 +1,4 @@
+<%@page import="org.jsoup.Jsoup"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
@@ -259,6 +260,7 @@ if (scheduleid != null && multiple_users){  %>
 				 String timezone=pro_pic.get(3);
 				 String domain_user_id=pro_pic.get(4);
 				 String custom_message = online_prefs.user_calendar_title;
+				 custom_message = Jsoup.parse(custom_message).text();
 				 if(custom_message == null)
 					 custom_message = "Welcome to my scheduling page.Please follow the instructions to book an appointment."; 
 		   %>
