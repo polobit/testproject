@@ -1,6 +1,7 @@
 package com.agilecrm.ticket.deferred;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
@@ -36,7 +37,7 @@ public class ExecuteWorkflowDeferredTask extends TicketBulkActionAdaptor
 				Tickets ticket = TicketsUtil.getTicketByID(ticketKey.getId());
 
 				// Fetching contact
-				Contact contact = ticket.getContact();
+				Contact contact = ContactUtil.getContact(ticket.contact_key.getId());
 
 				if (contact == null)
 					continue;

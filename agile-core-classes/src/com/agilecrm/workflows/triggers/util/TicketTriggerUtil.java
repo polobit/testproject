@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.Trigger.Type;
@@ -35,7 +36,7 @@ public class TicketTriggerUtil
 		if (ticket == null)
 			return;
 
-		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.NEW_TICKET_IS_ADDED);
+		executeTriggerForTicketBasedOnCondition(ContactUtil.getContact(ticket.contact_key.getId()), ticket, Trigger.Type.NEW_TICKET_IS_ADDED);
 	}
 
 	/**
@@ -50,7 +51,7 @@ public class TicketTriggerUtil
 		if (ticket == null)
 			return;
 
-		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.TICKET_IS_CLOSED);
+		executeTriggerForTicketBasedOnCondition(ContactUtil.getContact(ticket.contact_key.getId()), ticket, Trigger.Type.TICKET_IS_CLOSED);
 
 	}
 
@@ -60,7 +61,7 @@ public class TicketTriggerUtil
 		if (ticket == null)
 			return;
 
-		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.TICKET_NOTE_ADDED_BY_USER);
+		executeTriggerForTicketBasedOnCondition(ContactUtil.getContact(ticket.contact_key.getId()), ticket, Trigger.Type.TICKET_NOTE_ADDED_BY_USER);
 
 	}
 
@@ -76,7 +77,7 @@ public class TicketTriggerUtil
 		if (ticket == null)
 			return;
 
-		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.TICKET_NOTE_ADDED_BY_CUSTOMER);
+		executeTriggerForTicketBasedOnCondition(ContactUtil.getContact(ticket.contact_key.getId()), ticket, Trigger.Type.TICKET_NOTE_ADDED_BY_CUSTOMER);
 
 	}
 
@@ -92,7 +93,7 @@ public class TicketTriggerUtil
 		if (ticket == null)
 			return;
 
-		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.TICKET_SLA_REACHED);
+		executeTriggerForTicketBasedOnCondition(ContactUtil.getContact(ticket.contact_key.getId()), ticket, Trigger.Type.TICKET_SLA_REACHED);
 
 	}
 
@@ -108,7 +109,7 @@ public class TicketTriggerUtil
 		if (ticket == null)
 			return;
 
-		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.TICKET_ASSIGNEE_CHANGED);
+		executeTriggerForTicketBasedOnCondition(ContactUtil.getContact(ticket.contact_key.getId()), ticket, Trigger.Type.TICKET_ASSIGNEE_CHANGED);
 
 	}
 
@@ -124,7 +125,7 @@ public class TicketTriggerUtil
 		if (ticket == null)
 			return;
 
-		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.TICKET_LABEL_IS_ADDED);
+		executeTriggerForTicketBasedOnCondition(ContactUtil.getContact(ticket.contact_key.getId()), ticket, Trigger.Type.TICKET_LABEL_IS_ADDED);
 
 	}
 
@@ -140,7 +141,7 @@ public class TicketTriggerUtil
 		if (ticket == null)
 			return;
 
-		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.TICKET_LABEL_IS_DELETED);
+		executeTriggerForTicketBasedOnCondition(ContactUtil.getContact(ticket.contact_key.getId()), ticket, Trigger.Type.TICKET_LABEL_IS_DELETED);
 
 	}
 

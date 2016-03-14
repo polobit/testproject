@@ -31,6 +31,7 @@ import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.BulkActionUtil;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -505,7 +506,7 @@ public class TicketsRest
 			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
 
 			// Fetching contact
-			Contact contact = ticket.getContact();
+			Contact contact = ContactUtil.getContact(ticket.contact_key.getId());
 
 			// Throwing exception if contact is null
 			if (contact == null)

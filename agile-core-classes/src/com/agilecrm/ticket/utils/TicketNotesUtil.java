@@ -20,6 +20,7 @@ import org.jsoup.nodes.Element;
 import com.agilecrm.Globals;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -158,7 +159,7 @@ public class TicketNotesUtil
 			if (notes.note_type == NOTE_TYPE.PRIVATE)
 				continue;
 
-			JSONObject eachNoteJSON = getFormattedEmailNoteJSON(notes, ticket.getContact());
+			JSONObject eachNoteJSON = getFormattedEmailNoteJSON(notes, ContactUtil.getContact(ticket.contact_key.getId()));
 
 			if (eachNoteJSON != null)
 				notesArray.put(eachNoteJSON);
