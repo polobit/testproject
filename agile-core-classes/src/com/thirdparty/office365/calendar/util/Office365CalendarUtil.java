@@ -100,7 +100,8 @@ public class Office365CalendarUtil {
 	 * @return String
 	 */
 
-	public static String getOfficeURLCalendarPrefs(Office365CalendarPrefs calendarPrefs, String startDate,
+	public static String getOfficeURLCalendarPrefs(
+			Office365CalendarPrefs calendarPrefs, String startDate,
 			String endDate) {
 
 		String userName = calendarPrefs.getUsername();
@@ -112,11 +113,11 @@ public class Office365CalendarUtil {
 		}
 
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		
+
 		if (startDate != null) {
 			long milliSeconds = Long.parseLong(startDate);
 			Calendar calendar = Calendar.getInstance();
-			calendar.setTimeInMillis(milliSeconds);		
+			calendar.setTimeInMillis(milliSeconds);
 			startDate = formatter.format(calendar.getTime());
 		}
 
@@ -179,8 +180,8 @@ public class Office365CalendarUtil {
 							.getCurrentAgileUser().id);
 
 			// For Testing use the below code.
-//			 String userTimeZone = UserPrefsUtil
-//			 .getUserTimezoneFromUserPrefs(null);
+			// String userTimeZone = UserPrefsUtil
+			// .getUserTimezoneFromUserPrefs(null);
 
 			SimpleDateFormat parsedFormat = new SimpleDateFormat(pattern,
 					Locale.ENGLISH);
@@ -211,6 +212,8 @@ public class Office365CalendarUtil {
 			CalenderObj.setTitle(resultObj.getString("subject"));
 			CalenderObj.setType(type);
 			CalenderObj.setBackgroundColor(backgroundColor);
+			CalenderObj.setDisableDragging(true);
+			CalenderObj.setEditable(false);
 
 			appointmentsList.add(CalenderObj);
 		}
@@ -297,7 +300,7 @@ public class Office365CalendarUtil {
 						long ending = 0L;
 
 						// Starting time.
-						Date start = new Date(officeTemplate.getStart());				
+						Date start = new Date(officeTemplate.getStart());
 						if (start.getTime() < startTime) {
 							starting = startTime / 1000;
 						} else {
@@ -309,7 +312,7 @@ public class Office365CalendarUtil {
 						if (end.getTime() < endTime) {
 							ending = end.getTime() / 1000;
 						} else {
-							ending = endTime / 1000;							
+							ending = endTime / 1000;
 						}
 						filledSlots.addAll(WebCalendarEventUtil.makeSlots(
 								slotTime, starting, ending));
