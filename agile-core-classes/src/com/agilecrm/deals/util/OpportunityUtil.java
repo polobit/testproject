@@ -1106,7 +1106,6 @@ public class OpportunityUtil
 	double start_value = 0d;
 	double end_value = 0d;
 	String sortField = "close_date";
-	
 	try
 	{
 		
@@ -1281,7 +1280,6 @@ public class OpportunityUtil
 	  }
 	catch (JSONException e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 	return null;

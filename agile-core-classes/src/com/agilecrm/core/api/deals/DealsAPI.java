@@ -190,14 +190,14 @@ public class DealsAPI
 	    System.out.println(filters);
 	    try
 	    {
-				org.json.JSONObject json = new org.json.JSONObject(filters);
-				if (milestone != null)
-					json.put("milestone", milestone);
-				System.out.println(json.toString());			
-				totalValue =  OpportunityUtil.getTotalValueOfDeals(json);
-				obj.put("total", totalValue);	
-				obj.put("milestone", milestone);
-				return obj;
+			org.json.JSONObject json = new org.json.JSONObject(filters);
+			if (milestone != null)
+				json.put("milestone", milestone);
+			System.out.println(json.toString());			
+			totalValue =  OpportunityUtil.getTotalValueOfDeals(json);
+			obj.put("total", totalValue);	
+			obj.put("milestone", milestone);
+			return obj;
 	     }	    
 	    catch (JSONException e)
 	    {
