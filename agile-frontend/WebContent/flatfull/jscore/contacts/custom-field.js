@@ -154,7 +154,7 @@ function showCustomFieldModel(data)
 				errorJSON["NUMBER"] = "Number";
 				errorJSON["FORMULA"] = "Formula";
 				errorJSON["CONTACT"] = "Contact";
-				errorJSON["COMPAN"] = "Company";
+				errorJSON["COMPANY"] = "Company";
 
 				if($('#label', $('#textModalForm')).is(':disabled'))
 				{
