@@ -1186,9 +1186,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					window.location.href = "/login";
 				var domain = temp[0];
 				if(domain != response.alias[0]){
+					showNotyPopUp("information", "You Domain has been updated successfully. Logging out...", "top");
 					setTimeout(function()
 					{
-						showNotyPopUp("information", "You Domain has been updated successfully. Logging out...", "top");
 						window.location.href = window.location.protocol + "//" + domain + ".agilecrm.com/login" + window.location.hash;
 					}, 5000);
 				}
