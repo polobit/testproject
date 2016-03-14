@@ -87,7 +87,6 @@ public class LandingPageCNames
 	private void PrePersist()
 	{
 		cname = cname.toLowerCase();
-		domain = NamespaceManager.get();
 		
 		System.out.println("in prepresist of lpcnames");
 		URL landingPageURL;

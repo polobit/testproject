@@ -24,6 +24,7 @@ import com.agilecrm.landingpages.LandingPage;
 import com.agilecrm.landingpages.LandingPageCNames;
 import com.agilecrm.landingpages.LandingPageUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 
 @Path("/api/landingpages")
@@ -155,6 +156,7 @@ public class LandingPagesAPI
     @Produces(MediaType.APPLICATION_JSON)
 	public LandingPageCNames createLandingPageCName(LandingPageCNames landingPageCName)
 	{
+		landingPageCName.domain = NamespaceManager.get();
 		landingPageCName.save();
 		return landingPageCName;
 	}
@@ -166,6 +168,7 @@ public class LandingPagesAPI
     @Produces(MediaType.APPLICATION_JSON)
 	public LandingPageCNames updateLandingPageCName(LandingPageCNames landingPageCName)
 	{
+		landingPageCName.domain = NamespaceManager.get();
 		landingPageCName.save();
 		return landingPageCName;
 	}
