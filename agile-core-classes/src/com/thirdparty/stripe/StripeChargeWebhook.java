@@ -70,7 +70,7 @@ public class StripeChargeWebhook extends HttpServlet
 	    String eventType = stripeJson.getString("type");
 	    System.out.println("stripe post event type is " + eventType);
 	    
-	    String newNamespace;
+	    String newNamespace="";
 		try
 		{
 			// Get Namespace from event
@@ -81,12 +81,9 @@ public class StripeChargeWebhook extends HttpServlet
 		{
 			// TODO Auto-generated catch block
 			System.out.println("Exception occured in getting name space:"+e.getMessage());
-			return;
 		}
 
 		System.out.println("Namespace for event : " + newNamespace);
-		
-		
 
 	    JSONObject stripeEventJson = getStripeEventJson(stripeJson, eventType);
 	    if (stripeEventJson == null)
