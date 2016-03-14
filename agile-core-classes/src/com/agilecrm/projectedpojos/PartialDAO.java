@@ -143,7 +143,7 @@ public class PartialDAO<T extends ProjectionEntityParse>
 		for (Field f : this.clazz.getFields())
 		{
 			if (f.getName().equals("id") || f.getName().equalsIgnoreCase("properties")
-					|| f.getName().equalsIgnoreCase("group_email"))
+					||  f.getName().equalsIgnoreCase("group_email"))
 				continue;
 
 			query.addProjection(new PropertyProjection(f.getName(), f.getType()));

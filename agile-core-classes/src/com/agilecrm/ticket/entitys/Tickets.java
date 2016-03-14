@@ -8,7 +8,6 @@ import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -513,7 +512,7 @@ public class Tickets extends Cursor implements Serializable
 					assigneeChanged = true;
 				}
 			}
-			
+
 			// Set current user as ticket assignee
 			this.assignee_id = domainUserKey;
 			this.assigneeID = domainUserKey.getId();
@@ -543,15 +542,17 @@ public class Tickets extends Cursor implements Serializable
 			ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, this.contactID, this.id,
 					oldStatus.toString(), this.status.toString(), "status");
 
-//		// Logging public notes activity
-//		if (isPublicNotes)
-//		{
-//			ActivityType activityType = (last_updated_by == LAST_UPDATED_BY.REQUESTER) ? ActivityType.TICKET_REQUESTER_REPLIED
-//					: ActivityType.TICKET_ASSIGNEE_REPLIED;
-//
-//			ActivityUtil.createTicketActivity(activityType, this.contactID, this.id, "", last_reply_plain_text,
-//					"html_text");
-//		}
+		// // Logging public notes activity
+		// if (isPublicNotes)
+		// {
+		// ActivityType activityType = (last_updated_by ==
+		// LAST_UPDATED_BY.REQUESTER) ? ActivityType.TICKET_REQUESTER_REPLIED
+		// : ActivityType.TICKET_ASSIGNEE_REPLIED;
+		//
+		// ActivityUtil.createTicketActivity(activityType, this.contactID,
+		// this.id, "", last_reply_plain_text,
+		// "html_text");
+		// }
 
 		this.save();
 
@@ -715,7 +716,12 @@ public class Tickets extends Cursor implements Serializable
 	public ContactPartial getContact()
 	{
 		if (this.contactID != null)
-			return ContactUtil.getPartialContact(this.contact_key.getId());
+		{
+			List<Key<Contact>> keys = new ArrayList<Key<Contact>>();
+			keys.add(this.contact_key);
+			
+			return ContactUtil.getPartialContacts(keys).get(0);
+		}
 
 		return null;
 	}
