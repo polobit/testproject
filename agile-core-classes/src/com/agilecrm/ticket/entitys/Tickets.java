@@ -21,6 +21,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.TicketGroupsPartial;
 import com.agilecrm.search.document.TicketsDocument;
@@ -492,30 +493,33 @@ public class Tickets extends Cursor implements Serializable
 
 		Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
 
-		// Checking if assignee is replying to new ticket for first time
-		if (this.status == Status.NEW || this.assignee_id == null)
+		if (last_updated_by == LAST_UPDATED_BY.AGENT)
 		{
-			// Logging ticket assigned activity
-			ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, this.contactID, this.id, "", SessionManager
-					.get().getName(), "assigneeID");
-		}
-		else
-		{
-			if (this.assignee_id != null && this.assignee_id.getId() != domainUserKey.getId())
+			// Checking if assignee is replying to new ticket for first time
+			if (this.status == Status.NEW || this.assignee_id == null)
 			{
-				// Log assignee changed activity
-				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, this.contactID, this.id, "",
+				// Logging ticket assigned activity
+				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, this.contactID, this.id, "",
 						SessionManager.get().getName(), "assigneeID");
-
-				assigneeChanged = true;
 			}
-		}
+			else
+			{
+				if (this.assignee_id != null && this.assignee_id.getId() != domainUserKey.getId())
+				{
+					// Log assignee changed activity
+					ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, this.contactID, this.id,
+							"", SessionManager.get().getName(), "assigneeID");
 
-		// Set current user as ticket assignee
-		this.assignee_id = domainUserKey;
-		this.assigneeID = domainUserKey.getId();
-		this.assigned_time = currentTime;
-		this.assigned_to_group = false;
+					assigneeChanged = true;
+				}
+			}
+			
+			// Set current user as ticket assignee
+			this.assignee_id = domainUserKey;
+			this.assigneeID = domainUserKey.getId();
+			this.assigned_time = currentTime;
+			this.assigned_to_group = false;
+		}
 
 		Status oldStatus = this.status;
 
@@ -534,19 +538,20 @@ public class Tickets extends Cursor implements Serializable
 			this.closed_time = null;
 		}
 
-		// Logging status changed activity
-		ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, this.contactID, this.id,
-				oldStatus.toString(), this.status.toString(), "status");
+		if (oldStatus != this.status)
+			// Logging status changed activity
+			ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, this.contactID, this.id,
+					oldStatus.toString(), this.status.toString(), "status");
 
-		// Logging public notes activity
-		if (isPublicNotes)
-		{
-			ActivityType activityType = (last_updated_by == LAST_UPDATED_BY.REQUESTER) ? ActivityType.TICKET_REQUESTER_REPLIED
-					: ActivityType.TICKET_ASSIGNEE_REPLIED;
-
-			ActivityUtil.createTicketActivity(activityType, this.contactID, this.id, "", last_reply_plain_text,
-					"html_text");
-		}
+//		// Logging public notes activity
+//		if (isPublicNotes)
+//		{
+//			ActivityType activityType = (last_updated_by == LAST_UPDATED_BY.REQUESTER) ? ActivityType.TICKET_REQUESTER_REPLIED
+//					: ActivityType.TICKET_ASSIGNEE_REPLIED;
+//
+//			ActivityUtil.createTicketActivity(activityType, this.contactID, this.id, "", last_reply_plain_text,
+//					"html_text");
+//		}
 
 		this.save();
 
@@ -707,10 +712,10 @@ public class Tickets extends Cursor implements Serializable
 		return assignee_id;
 	}
 
-	public Contact getContact()
+	public ContactPartial getContact()
 	{
 		if (this.contactID != null)
-			return ContactUtil.getContact(this.contactID);
+			return ContactUtil.getPartialContact(this.contact_key.getId());
 
 		return null;
 	}

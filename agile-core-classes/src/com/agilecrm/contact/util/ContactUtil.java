@@ -32,6 +32,9 @@ import com.agilecrm.contact.email.deferred.LastContactedDeferredTask;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.exception.DuplicateContactException;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -77,7 +80,10 @@ public class ContactUtil
 {
     // Dao
     private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
-
+    
+    // Partial Dao
+    private static PartialDAO<ContactPartial> partialDAO = new PartialDAO<ContactPartial>(ContactPartial.class);
+    
     /**
      * Gets the number of contacts (count) present in the database with given
      * tag name
@@ -1880,5 +1886,56 @@ public class ContactUtil
                 
             }
             return image_email;
+    }
+    
+    /**
+     * Gets a partial opportunity based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static List<ContactPartial> getPartialContacts(List<Key<Contact>> ids_list)
+    {
+    	List<ContactPartial> list = new ArrayList<ContactPartial>();
+    	if(ids_list == null || ids_list.size() == 0)
+    		 return list;
+		try
+		{
+			List<com.google.appengine.api.datastore.Key> keys = dao.convertKeysToNativeKeys(ids_list);
+			if(keys.size() == 0)
+				return list;
+			
+			Map map = new HashMap();
+			map.put("__key__ IN", keys);
+			
+			return partialDAO.listByProperty(map);
+	    	
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		    e.printStackTrace();
+		    return list;
+		}
+    }
+    
+    /**
+     * Gets a user based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static ContactPartial getPartialContact(Long id)
+    {
+		try
+		{
+			return partialDAO.get(id);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		    e.printStackTrace();
+		    return null;
+		}
     }
 }

@@ -450,4 +450,8 @@
         <property name="ticket_key" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
+    <datastore-index kind="TicketGroups" ancestor="true" source="manual">
+        <property name="group_email" direction="asc"/>
+        <property name="group_name" direction="asc"/>
+    </datastore-index>
 </datastore-indexes>

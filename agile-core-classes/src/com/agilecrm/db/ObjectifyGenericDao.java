@@ -87,6 +87,7 @@ import com.campaignio.urlshortener.URLShortener;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
@@ -1052,5 +1053,16 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	}
 	return id;
     }
-
+    
+    public List<com.google.appengine.api.datastore.Key> convertKeysToNativeKeys(List<Key<T>> ids_list)
+    {
+    	List<com.google.appengine.api.datastore.Key> keys = new ArrayList<com.google.appengine.api.datastore.Key>();
+		Iterator<Key<T>> iteartor = ids_list.iterator();
+		while (iteartor.hasNext()) {
+			Key<T> key = (Key<T>) iteartor.next();
+			keys.add(KeyFactory.createKey(key.getKind(), key.getId()));
+		}
+		
+		return keys;
+    }
 }
