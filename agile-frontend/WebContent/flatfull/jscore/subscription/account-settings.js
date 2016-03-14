@@ -101,6 +101,7 @@ $(function(){
 	$("#content #cancel-account-request").off("click");
 	$('#content').on('click', '#cancel-account-request', function(e) {
 			e.preventDefault();
+			load_clickdesk_code();
 			
 			// Shows cancellation modal
 			//$("#send-cancellation").html(getTemplate('send-cancellation-request', {})).modal('show');	
@@ -125,8 +126,8 @@ $(function(){
 	$("#send-cancellation #account_cancel_chat_btn").off("click");
 	$('#send-cancellation').on('click', '#account_cancel_chat_btn', function(e) {
 			e.preventDefault();
-
 			$(this).closest(".modal").modal("hide");
+			CLICKDESK_LIVECHAT.show();
 	});
 
 	$("#send-cancellation #account_cancel_support_btn").off("click");

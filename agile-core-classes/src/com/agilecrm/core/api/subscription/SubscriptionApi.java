@@ -533,7 +533,7 @@ public class SubscriptionApi {
 			Subscription subscription = SubscriptionUtil.getSubscription();
 			Long trialEnd;
 			if(period == 0){
-				trialEnd = new DateUtil().getTime().getTime() / 1000;
+				trialEnd = new DateUtil().addMinutes(1).getTime().getTime() / 1000;
 				subscription.addTrial(trialEnd);
 				System.out.println("Added trial to::"+trialEnd);
 			}
