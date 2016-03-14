@@ -42,7 +42,13 @@ function minicalendar(el)
 		            		   else if(datasizeY==3)
 		            			   $(el).find('.fc-header').css('height','250px');		
 
-		            		   
+		            		   $(el).find('.fc-border-separate').addClass('ignore-collection');
+		            		   if($(el).find('#calendar_container').width()<185)
+		            		   {
+		            		   		$(el).find("#calendar_container").find(".fc-widget-header").each(function() {
+                 					   $(this).text($(this).text().substring(0, 1))
+              					  });
+		            		   }
 		            		   var date=new Date();
 		            		   var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 		            		   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
@@ -179,7 +185,8 @@ function minicalendar(el)
 		            		   var count=$(el).find('.'+result).length;
 		            		   if(count>3){
 		            			   return false;
-		            		   }  
+		            		   } 
+
 		            	   } ,
 		            	   eventAfterRender: function (event, element, view) {
 

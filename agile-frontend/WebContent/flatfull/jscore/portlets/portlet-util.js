@@ -1106,11 +1106,7 @@ var portlet_utility = {
 			break;
 		}
 		case "Mini Calendar": {
-			head
-					.js(
-							LIB_PATH + 'lib/jquery-ui.min.js',
-							'lib/fullcalendar.min.js',
-							function() {
+
 								$('.portlet_body_calendar', $("#ui-id-"+column_position+"-"+row_position))
 										.attr(
 												'id',
@@ -1131,7 +1127,13 @@ var portlet_utility = {
 													setPortletContentHeight(base_model);
 													App_Portlets.refetchEvents = false;
 													App_Portlets.eventCalendar=$(this);
-													minicalendar($(this));
+													var that=$(this);
+																head
+					.js(
+							LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 
+							'lib/fullcalendar.min.js',
+							function() {
+													minicalendar(that);
 												});
 							});
 			break;

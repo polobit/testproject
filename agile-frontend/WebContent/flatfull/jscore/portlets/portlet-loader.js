@@ -401,11 +401,19 @@ function set_up_portlets(el, portlets_el){
 					var that=$(this);
 					if($("#calendar_container",that).find('.fc-widget-header').length!=0)
 					$('#calendar_container',that).fullCalendar('option','aspectRatio',getaspectratio(that));
+					if($(el).find('#calendar_container').width()<185)
+		            		   {
+		            		   		$(el).find("#calendar_container").find(".fc-widget-header").each(function() {
+                 					   $(this).text($(this).text().substring(0, 1))
+              					  });
+		            		   }
+		            		   else{
 					var weeksArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 					$(this).find('#calendar_container').find('.fc-widget-header').each(function(index)
 					{
 						$(this).text(weeksArray[index]);
 					});
+				}
 				});
 		}
     });
