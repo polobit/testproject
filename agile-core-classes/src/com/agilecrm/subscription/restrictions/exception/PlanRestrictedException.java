@@ -22,6 +22,6 @@ public class PlanRestrictedException extends WebApplicationException
     public PlanRestrictedException(String reason, String info)
     {
 	super(Response.status(Response.Status.NOT_ACCEPTABLE)
-			.entity(reason + ". Please <a href=\"#subscribe\" class=\"hideCurrentModal\">upgrade</a>. If contacts are deleted, <a href=\"/login\">re-login</a> to refresh the contacts count.").build());
+			.entity(reason + ". Please <a href=\"#subscribe\" class=\"hideCurrentModal\">upgrade</a>.<br>If contacts are deleted, <a href=\"/login\">re-login</a> to refresh the contacts count.").build());
     }
 }
