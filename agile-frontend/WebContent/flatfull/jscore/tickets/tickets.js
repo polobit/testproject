@@ -606,12 +606,12 @@ var Tickets = {
        		&& ticketJSON.groupID == groupId)
        		return;
 
-       	var url = "/core/api/tickets/" + ticket_id + "/assign-ticket/" + groupId + "/" + assigneeId;
+       	var url = "/core/api/tickets/" + Current_Ticket_ID + "/assign-ticket/" + groupId + "/" + assigneeId;
        	var json = {id: Current_Ticket_ID};
 
        	Tickets.updateModel(url, json, function(data){
             
-			var modelData = data;
+			var modelData = data.toJSON();
 
 			try{
 				if(modelData.assigneeID != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(groupId, Tickets.groupsList))

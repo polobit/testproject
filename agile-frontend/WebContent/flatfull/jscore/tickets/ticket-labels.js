@@ -105,14 +105,8 @@ var Ticket_Labels = {
 				
 				ticket_labels= jQuery.grep(ticket_labels, function(value) {
 				 	return value != label;
-				});
-
-				//console.log(ticket_labels);                      
+				});                   
 			}
-
-			ticket_model.set({labels: ticket_labels}, {
-				silent : true
-			});
 		} 		         
 		
 		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/update-labels";
@@ -120,8 +114,13 @@ var Ticket_Labels = {
 
        	Tickets.updateModel(url, json, function(model){
 
+       		//Updating modal
+       		ticket_model.set({labels: ticket_labels}, {
+				silent : true
+			});
+
        		if (callback)
-					callback();
+				callback();
 		});
 	}
 };
