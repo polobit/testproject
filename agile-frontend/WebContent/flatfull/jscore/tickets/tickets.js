@@ -1511,6 +1511,67 @@ var Tickets = {
 
 		draft_mssgs[key] = ticketDraft;
 		sessionStorage.setItem("ticket-draft-message", JSON.stringify(draft_mssgs));
+	},
+
+	//Written only for new ticket form
+	initNewTicketTypeahead: function(el){
+
+		//Fetching all groups, assignees and appending them to select dropdown
+		fillSelect('groupID', '/core/api/tickets/new-ticket', '', function(collection){
+			$('#groupID').html(getTemplate('select-assignee-dropdown', collection.toJSON()));
+		}, '', false, el);
+
+		//Initializing type ahead for labels
+		Ticket_Labels.showSelectedLabels(new Array(), $(el));
+
+		//Initializing type ahead for cc emails
+		agile_type_ahead("cc_email_field", el, tickets_typeahead, function(arg1, arg2){
+
+			//Upon selection of any contact in cc field, this callback will be executed
+			arg2 = arg2.split(" ").join("");
+
+			var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
+
+			if(!email || email == 'No email')
+				return;
+
+			//Appending cc email template
+			$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email, new_ticket: true}));
+
+			$('#cc_email_field').val('');
+
+	  	},undefined, undefined, 'core/api/search/');
+
+  		//Initializing type ahead on email field
+		agile_type_ahead("requester_email", el, tickets_typeahead, function(arg1, arg2){
+
+			arg2 = arg2.split(" ").join("");
+
+			var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
+
+			//Showing error if the selected contact doesn't have email
+			if(!email || email == 'No email'){
+				var $span = $('.form-action-error');
+
+				$span.html('No email address found.');
+
+				setTimeout(function(){
+					$span.html('');
+				}, 4000);
+			}else{
+				setTimeout(function(){
+
+					$('#requester_email', el).val(email);
+					$('#requester_name', el).val(arg2);
+					$('#contact_id', el).val(arg1);
+				}, 0);
+			}
+
+		},undefined, undefined, 'core/api/search/');
+
+		$('div#ticketsModal').on('click', 'a.close', function(e){
+			$(e.target).closest('li').remove();
+		});
 	}
 };
 

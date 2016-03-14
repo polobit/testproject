@@ -16,7 +16,7 @@
                   <div class="control-group col-md-6">
                       <label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
                       <span class="controls">
-                        <input type="text" id="requester_email" autocomplete="off" name="requester_email" placeholder="Search contacts" class="required typeahead typeahead_contacts form-control email" data-provide="typeahead">
+                        <input type="text" id="requester_email" autocomplete="off" name="requester_email" placeholder="Search contacts" class="required form-control email">
                         <a class="text-xs pull-right link-color add-ticket-contact" href="javascript:void(0);">
                           Add new contact
                         </a>
@@ -154,8 +154,10 @@
 <script id="cc-email-li-template" type="text/html">
   <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{email}}">
     <span>
-      <a class="anchor m-r-xs {{#if err_email}}boder-btm-dot{{/if}}" href="javascript:void(0);" >{{email}}</a>
-      <a class="close remove-ticket-cc-emails text-lg">&times</a>
+      <a class="anchor m-r-xs {{#if err_email}}boder-btm-dot{{/if}}" href="javascript:void(0);" >
+        {{email}}
+      </a>
+      <a class="close {{#if new_ticket}}{{else}}remove-ticket-cc-emails{{/if}} text-lg">&times</a>
     </span>
   </li>
 </script>

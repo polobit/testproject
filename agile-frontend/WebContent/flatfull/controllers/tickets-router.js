@@ -6,15 +6,8 @@
 
  		/* Tickets */
  		"tickets" : "tickets",
- 		"new-ticket" : "newTicket",
- 		/*"ticket/:id" : "ticketDetails",*/
-
- 		/*Tickets by group*/
-		/*"tickets/group/:id" : "ticketsByGroup",
-		"tickets/group/:id/:status" : "ticketsByGroup",
-		"tickets/group/:id/:status/:id" : "ticketNotes",*/
-
-		/* Tickets  by filter*/
+ 		
+ 		/* Tickets  by filter*/
 		"tickets/filter/:id" : "ticketsByFilter",
 		"tickets/filter/:id/ticket/:id" : "ticketDetailsByFilter",
 
@@ -42,9 +35,7 @@
 		"add-canned-response" : "addCannedResponse",
 		"edit-canned-response/:id" : "editCannedResponse",
 
-		/*Ticket collection view type*/
-		"ticket-collection-view" : "ticketsCollectionView",
-
+		/*Ticket reports*/
 		"ticket-reports" : "ticketReports",
 		"ticket-report/:report_type" : "ticketReport"
 	},
@@ -62,71 +53,33 @@
 	 */
 	renderNewTicketModalView: function(){
 
-		//Rendering root template
-		getTemplate("ticket-new-modal", {}, undefined, function(template_ui){
+		var newTicket = new Base_Model_View({
+			isNew : true,
+			template : "ticket-new-modal",
+			url : "/core/api/tickets/new-ticket",
+			prePersist : function(model){
+				
+				var json = {};
 
-			if(!template_ui)
-				return;
+				//Fetching selected assignee ID
+				var assignee_id = $('#groupID option:selected').data('assignee-id');
 
-			var el = $(template_ui);
+				if(assignee_id)
+					json.assigneeID = assignee_id;
 
-			//Appending template to ticket modals container
-			$('#ticketsModal').html(el).modal('show').on('shown.bs.modal', function(){
+				var last_name = $('#last_name').val();
 
-				//Fetching all groups, assignees and appending them to select dropdown
-				fillSelect('groupID', '/core/api/tickets/new-ticket', '', function(collection){
-					$('#groupID').html(getTemplate('select-assignee-dropdown', collection.toJSON()));
-				}, '', false, el);
+				if(last_name)
+					json.requester_name = $('#first_name').val() + ' ' + last_name;
 
-				//$('[data-toggle="tooltip"]').tooltip();
+				var email = $('#email_input').val();
 
-				//Initializing type ahead for labels
-				Ticket_Labels.showSelectedLabels(new Array(), $(el));
+				if(email)
+					json.requester_email = email;
 
-				//Initializing type ahead for cc emails
-				agile_type_ahead("cc_email_field", el, tickets_typeahead, function(arg1, arg2){
-
-					//Upon selection of any contact in cc field, this callback will be executed
-					arg2 = arg2.split(" ").join("");
-
-					var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
-
-					if(!email || email == 'No email')
-						return;
-
-					//Appending cc email template
-					$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
-
-        			$('#cc_email_field').val('');
-
-        	  	},undefined, undefined, 'core/api/search/');
-
-    	  		//Initializing type ahead on email field
-				agile_type_ahead("requester_email", el, tickets_typeahead, function(arg1, arg2){
-
-					arg2 = arg2.split(" ").join("");
-
-					var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
-
-					//Showing error if the selected contact doesn't have email
-					if(!email || email == 'No email'){
-						var $span = $('.form-action-error');
-
-						$span.html('No email address found.');
-
-						setTimeout(function(){
-							$span.html('');
-						}, 4000);
-					}else{
-						setTimeout(function(){
-
-							$('#requester_email', el).val(email);
-							$('#requester_name', el).val(arg2);
-							$('#contact_id', el).val(arg1);
-						}, 0);
-					}
-
-				},undefined, undefined, 'core/api/search/');
+				model.set(json, { silent : true });
+			},
+			postRenderCallback : function(el) {
 
 				//Initializing click event on add new contact link
 				el.on('click', '.add-ticket-contact', function(e){
@@ -137,59 +90,14 @@
 
 					$('#email_input').val($('#requester_email').val());
 				});
+			}
+		});
 
-				//Initializing click event on create ticket button
-				el.on('click', '#create-ticket', function(e){
+		//Appending template to ticket modals container
+		$('#ticketsModal').html(newTicket.render().el).modal('show').on('shown.bs.modal', function(){
 
-					//Aborting execution if form is invalid 
-					if (!isValidForm($('#new-ticket', el)))
-						return;
-
-					//Serializing form and preparing data
-					var json = serializeForm('new-ticket');
-
-					//Fetching selected assignee ID
-					var assignee_id = $('#groupID option:selected').data('assignee-id');
-
-					if(assignee_id)
-						json.assigneeID = assignee_id;
-
-					var last_name = $('#last_name').val();
-
-					if(last_name)
-						json.requester_name = $('#first_name').val() + ' ' + last_name;
-
-					var email = $('#email_input').val();
-
-					if(email)
-						json.requester_email = email;
-
-					//Disable create ticket button
-					disable_save_button($(this));
-					
-					var $that = $(this);
-
-					//Creating base model
-					var newTicketModel = new BaseModel();
-					newTicketModel.url = '/core/api/tickets/new-ticket';
-					
-					//Creating new ticket
-					newTicketModel.save(json, {
-							success: function(model){
-
-								//Hiding the modal if ticket is created is created succesffully
-								$('#ticketsModal').modal('hide');
-						}, error: function(){
-
-							enable_save_button($that);
-
-							if(err_cbk)
-								err_cbk(model);
-						}
-					});
-				});
-			});
-		});	
+			Tickets.initNewTicketTypeahead($('#ticketsModal'));
+		});
 	},
 
 	/**
@@ -347,8 +255,7 @@
 		});
 
 		//$(".tickets-collection-pane").html('');
-		$('#content').html(App_Ticket_Module.ticketView.render().el);
-		
+		$('#content').html(App_Ticket_Module.ticketView.render().el);	
 	},
 
 	/**

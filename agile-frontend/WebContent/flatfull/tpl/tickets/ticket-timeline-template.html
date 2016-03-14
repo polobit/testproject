@@ -34,7 +34,7 @@
 			        	{{/if_equals}}
 
 			        	{{#if_equals activity_type 'TICKET_ASSIGNEE_REPLIED'}}
-			        		<img class="r-5x" src="{{#if domainUser.name}}{{domainUser.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" data-original-title="{{domainUser.name}}"/>
+			        		<img class="r-5x" src="{{#if domainUser.pic}}{{domainUser.pic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" data-original-title="{{domainUser.name}}"/>
 			        	{{/if_equals}}
 
 			        </a>  
@@ -96,7 +96,7 @@
 
 			        <a class="pull-left thumb-xs m-l-n-md">
 
-		        		<img class="r-5x" src="{{#if domainUser.name}}{{domainUser.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" data-original-title="{{domainUser.name}}"/>
+		        		<img class="r-5x" src="{{#if domainUser.pic}}{{domainUser.pic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" data-original-title="{{domainUser.name}}"/>
 			        	
 			        </a>  
 			        <div class="m-l-lg panel b-a {{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}bg-lightyellow{{/if_equals}} ">

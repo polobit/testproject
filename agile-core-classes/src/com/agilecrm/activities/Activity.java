@@ -9,11 +9,13 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.ticket.entitys.TicketGroups;
@@ -21,6 +23,7 @@ import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
@@ -194,8 +197,8 @@ public class Activity extends Cursor
 	/**
 	 * saves domain user who performed the operation
 	 */
-	@NotSaved
-	public DomainUser domainUser = null;
+	/*@NotSaved
+	public DomainUser domainUser = null;*/
 	
 	/**
 	 * saves domain user id who performed the operation
@@ -222,12 +225,23 @@ public class Activity extends Cursor
      * @throws Exception
      *             when Domain User not exists with respect to id.
      */
-    /*
-     * @XmlElement(name = "user") public DomainUser getUser() throws Exception {
-     * if (user != null) { try { // Gets Domain User Object return
-     * DomainUserUtil.getDomainUser(user.getId()); } catch (Exception e) {
-     * e.printStackTrace(); } } return null; }
-     */
+    
+      public DomainUserPartial getdomainUser() throws Exception 
+      {
+    	  if (user != null)
+    	  { 
+    		  try
+    		  { 
+			  	return DomainUserUtil.getPartialDomainUser(user.getId());
+			  } 
+    		  catch (Exception e)
+    		  {
+    			  System.out.println(ExceptionUtils.getFullStackTrace(e));
+    		  }
+    	  } 
+    	  
+    	  return null; 
+      }
 
     /*  *//**
      * 
