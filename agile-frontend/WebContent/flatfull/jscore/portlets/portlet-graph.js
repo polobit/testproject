@@ -435,7 +435,8 @@ var portlet_graph_utility = {
 								floating : true,
 								align : 'right',
 								enabled:portlet_utility.is_legend_enable(base_model),
-								verticalAlign : 'top'
+								verticalAlign : 'top',
+								y: 30
 							},
 							colors : [ "#23b7e5", "#27c24c", "#7266ba",
 									"#fad733", "#f05050", "#aaeeee", "#ff0066",
@@ -700,7 +701,8 @@ var portlet_graph_utility = {
 									floating : true,
 									align : 'right',
 									enabled:portlet_utility.is_legend_enable(base_model),
-									verticalAlign : 'top'
+									verticalAlign : 'top',
+									y:30
 								}
 						    });
 							
@@ -1126,7 +1128,8 @@ var portlet_graph_utility = {
 													floating : true,
 													align : 'right',
 													enabled:portlet_utility.is_legend_enable(base_model),
-													verticalAlign : 'top'
+													verticalAlign : 'top',
+													y : 30,
 												},
 												colors : [ "#23b7e5",
 														"#27c24c", "#7266ba",
