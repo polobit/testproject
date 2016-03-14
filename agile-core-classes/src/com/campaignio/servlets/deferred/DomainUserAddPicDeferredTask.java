@@ -37,13 +37,20 @@ public class DomainUserAddPicDeferredTask implements DeferredTask {
 			
 			// Get all users and update domain user db with user pic
 			List<AgileUser> agileUsers = AgileUser.getUsers();
+			System.out.println(agileUsers.size());
+			
 			for (AgileUser user : agileUsers) {
 
+				
 				DomainUser domainUser = user.getDomainUser();
+				System.out.println("domainUser = " + domainUser);
+				
 				if (domainUser == null)
 					continue;
 
 				UserPrefs prefs = UserPrefsUtil.getUserPrefs(user);
+				System.out.println("prefs = " + prefs);
+				
 				if (prefs == null)
 					continue;
 
