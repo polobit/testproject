@@ -45,6 +45,8 @@ public class IpAccessUtil {
 		
 		IpAccess ipAccess = IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
 		Set<String> iplist = ipAccess.getIpList();
+		if(iplist==null)
+			return true;
 		String userip = request.getRemoteAddr();
 		if(iplist.contains(userip))
 			return true;
