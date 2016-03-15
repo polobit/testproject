@@ -1,5 +1,14 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%
+
+boolean ipcheck = IpAccessUtil.isValidIpOpenPanel(request);
+	if(ipcheck==true){
+		//response.sendRedirect("/login");
+	}	
+	else{
+		
+	}
 //Check if it is being access directly and not through servlet
 if(request.getAttribute("javax.servlet.forward.request_uri") == null)
 {

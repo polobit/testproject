@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.util.RegisterUtil"%>
 <%@page import="com.agilecrm.user.RegisterVerificationServlet"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -5,9 +6,17 @@
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="com.agilecrm.util.MathUtil"%>
 <%@page contentType="text/html; charset=UTF-8" %>
-<%
 
-	  if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+<%
+	boolean ipcheck = IpAccessUtil.isValidIpOpenPanel(request);
+	if(ipcheck==true){
+		//response.sendRedirect("/login");
+	}	
+	else{
+		
+	}
+
+	if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
 	} 

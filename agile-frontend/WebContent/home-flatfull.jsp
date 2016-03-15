@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.subscription.Subscription"%>
 <%@page import="com.agilecrm.SafeHtmlUtil"%>
 <%@page import="com.agilecrm.contact.CustomFieldDef.SCOPE"%>
@@ -45,6 +46,17 @@ if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 response.sendRedirect("/login");
 return;
 }
+
+//check ip
+boolean ipcheck = IpAccessUtil.isValidIpOpenPanel(request);
+  if(ipcheck==true){
+    //response.sendRedirect("/login");
+  } 
+  else{
+    
+  }
+
+
 
 DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 System.out.println("Domain user " + domainUser);

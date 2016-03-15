@@ -60,28 +60,6 @@ public class IpAccess {
 		dao.delete(this);
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getDomain() {
-		return domain;
-	}
-
-	public void setDomain(String domain) {
-		this.domain = domain;
-	}
-
-	public Set<String> getIpList() {
-		return this.ipList;
-	}
-
-	public void setIpList(Set<String> ipList) {
-		this.ipList = ipList;
-	}
+	
 	
 }

@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -55,6 +56,16 @@ public class HomeServlet extends HttpServlet
 	 * datastore.
 	 */
 	String isFirstTimerUser = req.getParameter("w");
+	//IP access
+	try{
+		if(!IpAccessUtil.isValidIpOpenPanel(req))
+			req.getSession().removeAttribute(
+					SessionManager.AUTH_SESSION_COOKIE_NAME);
+			resp.sendRedirect(Globals.CHOOSE_DOMAIN);
+	}
+	catch(Exception e){
+		e.printStackTrace();
+	}
 
 	// If parameter 'w' is not empty, the user is created and it reached
 	// here due to eventual consistency. Request is forwared back to

@@ -2,7 +2,7 @@
     <div class="tab-container m-b-none">
            <ul class="nav nav-tabs b-b-none">
             <li class="settings-account-prefs"><a href="#account-prefs" class="b-l-none">Preferences</a></li>
-            <li class="settings-account-ips"><a href="#account-ipaccess" class="b-l-none">IpAccess</a></li>
+            <li class="settings-account-ips"><a href="#account-ipaccess" class="b-l-none">Allow Access</a></li>
            </ul>
     </div>
     <div class="tab-pane active" id="settings-account-tab-content">
@@ -92,7 +92,7 @@
 
 <script id="admin-settings-ip-prefs-template" type="text/html">
 <div id="ip_access" class="panel panel-default">
-    <div class="panel-heading">Ip</div>
+    <!--<div class="panel-heading">Ip</div>-->
     <div class="panel-body">
     <form id="access-ip" class="form-horizontal">
         <fieldset>
@@ -101,11 +101,19 @@
             {{/if}}
             <input name="domain" class="form-control" type="hidden" value="{{get_current_domain}}" />
             
-            <table class="table table-hover custom-fields-table bg-white m-b-none">
-                <colgroup><col width="50%"><col width="4%"></colgroup>
+            <table class="table table-striped showCheckboxes  no-sorting panel">
+                <thead>
+                    <tr>
+                        <th><label class="i-checks i-checks-sm"><input class="thead_check" type="checkbox"/><i></i></label></th>
+                        <th>IP Address</th>              
+                    </tr>
+                </thead>
                 <tbody id="blocked_panel_ips_list" class="multiple-input" name="ipList">
                    {{#each ipList}}
                     <tr data="{{this}}" style="display: table-row;">
+                        <td class="v-middle checkbox" style="cursor:default;">
+                        <label class="i-checks i-checks-sm"><input type="checkbox" class="tbody_check" value=""><i></i></label>
+                        </td>
                         <td>
                             <div class="inline-block v-top text-ellipsis" style="width:80%">{{this}}</div>
                             <input class="form-control" type="hidden" value="{{this}}" />
@@ -120,12 +128,10 @@
                     <tr data="{{this}}" style="display: table-row;">
                         <td>
                             
-                             Ip  <input id="ipList"  type="text"  />   
-                             <a href="#" type="submit" class="save btn btn-sm btn-primary delete_ip">Save</a>         
+                             <input id="ipList"  type="text" placeholder="IP" />   
+                             <a href="#" type="submit" class="save btn btn-sm btn-primary delete_ip">Add</a>         
                         </td>
-                        
-                             
-                        
+                        <td></td>
                     </tr>
                 </tbody>
             </table>  

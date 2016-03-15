@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
@@ -67,13 +68,13 @@ public class LoginServlet extends HttpServlet {
 		// Delete Login Session
 		request.getSession().removeAttribute(
 				SessionManager.AUTH_SESSION_COOKIE_NAME);
-
+		
 		// Check if this subdomain even exists
 		if (DomainUserUtil.count() == 0) {
 			response.sendRedirect(Globals.CHOOSE_DOMAIN);
 			return;
 		}
-
+					
 		// If request is due to multiple logins, page is redirected to error
 		// page
 		String multipleLogin = (String) request.getParameter("ml");
@@ -81,6 +82,12 @@ public class LoginServlet extends HttpServlet {
 
 		// Check the type of authentication
 		try {
+
+			// Check ip with allowed ones
+			if(!IpAccessUtil.isValidIpOpenPanel(request))
+				throw new Exception(
+						"Invalid IP");
+			
 			if (!StringUtils.isEmpty(multipleLogin)) {
 				handleMulipleLogin(response);
 				return;

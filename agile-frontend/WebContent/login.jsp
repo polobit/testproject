@@ -17,8 +17,7 @@ String flatfull_path="/flatfull";
 boolean ipcheck = IpAccessUtil.isValidIpOpenPanel(request);
 if(ipcheck==true){
 	//response.sendRedirect("/login");
-}
-	
+}	
 else{
 	
 }
