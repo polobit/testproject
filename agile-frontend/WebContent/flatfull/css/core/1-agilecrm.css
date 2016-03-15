@@ -3488,3 +3488,12 @@ text-align:left;
     margin-top: 20px;
 
 }
+.highcharts-button {
+  display: none;
+}
+
+.highcharts-contextmenu hr
+{
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
