@@ -65,11 +65,13 @@ import com.googlecode.objectify.condition.IfDefault;
 @Cached
 public class Opportunity extends Cursor implements Serializable
 {
-	
-	/* enum for color for the deal */
-    public enum Color{
-    	VIOLET,INDIGO,BLUE,GREEN,YELLOW,ORANGE,RED,WHITE,BLACK,GREY;
+
+    /* enum for color for the deal */
+    public enum Color
+    {
+	VIOLET, INDIGO, BLUE, GREEN, YELLOW, ORANGE, RED, WHITE, BLACK, GREY;
     }
+
     public Color colorName;
     /**
      * Opportunity Id.
@@ -197,6 +199,9 @@ public class Opportunity extends Cursor implements Serializable
     @NotSaved
     public String note_subject = null;
 
+    @NotSaved
+    public Long note_created_time = 0L;
+
     /**
      * Related notes objects fetched using notes id's.
      */
@@ -246,9 +251,8 @@ public class Opportunity extends Cursor implements Serializable
     /**
      * ObjectifyDao of Opportunity.
      */
-   
 
-	public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
+    public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
 
     /**
      * Default Constructor.
@@ -256,7 +260,7 @@ public class Opportunity extends Cursor implements Serializable
     public Opportunity()
     {
     }
-    
+
     /**
      * Constructs a new {@link Opportunity}.
      * 
@@ -285,22 +289,21 @@ public class Opportunity extends Cursor implements Serializable
 	this.probability = probability;
 	this.track = track;
 	this.owner_id = ownerId;
-	
+
     }
 
     public Opportunity(String name, String description, Double expectedValue, String milestone, int probability,
-    	    String track, String ownerId,String deal_color)
-        {
-    	this.name = name;
-    	this.description = description;
-    	this.expected_value = expectedValue;
-    	this.milestone = milestone;
-    	this.probability = probability;
-    	this.track = track;
-    	this.owner_id = ownerId;
-        this.colorName = Color.valueOf(deal_color);
-        }
-    
+	    String track, String ownerId, String deal_color)
+    {
+	this.name = name;
+	this.description = description;
+	this.expected_value = expectedValue;
+	this.milestone = milestone;
+	this.probability = probability;
+	this.track = track;
+	this.owner_id = ownerId;
+	this.colorName = Color.valueOf(deal_color);
+    }
 
     public Opportunity(String name, String description, Double expectedValue, Long pipelineId, String milestone,
 	    int probability, String track, String ownerId)
@@ -313,7 +316,7 @@ public class Opportunity extends Cursor implements Serializable
 	this.probability = probability;
 	this.track = track;
 	this.owner_id = ownerId;
-	
+
     }
 
     /**
@@ -611,10 +614,10 @@ public class Opportunity extends Cursor implements Serializable
     @PrePersist
     private void PrePersist()
     {
-    
-    if(colorName == null)
-    	colorName = Color.GREY ; 
-    
+
+	if (colorName == null)
+	    colorName = Color.GREY;
+
 	// Initializes created Time
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
@@ -672,18 +675,34 @@ public class Opportunity extends Cursor implements Serializable
 		// Create note
 		Note note = null;
 		// Create note
-		if (this.note_subject != null)
-		    note = new Note(this.note_subject, this.note_description);
-		else
-		    note = new Note(null, this.note_description);
-		// Save note
-		note.save();
-
-		if (this.id != null)
+		if (this.note_created_time != 0)
 		{
-		    ActivitySave.createNoteAddForDeal(note, this);
-		}
+		    if (this.note_subject != null)
+			note = new Note(this.note_subject, this.note_description, this.note_created_time);
+		    else
+			note = new Note(null, this.note_description, this.note_created_time);
+		    // Save note
+		    note.save();
 
+		    if (this.id != null)
+		    {
+			ActivitySave.createNoteAddForDeal(note, this);
+		    }
+		}
+		else
+		{
+		    if (this.note_subject != null)
+			note = new Note(this.note_subject, this.note_description);
+		    else
+			note = new Note(null, this.note_description);
+		    // Save note
+		    note.save();
+
+		    if (this.id != null)
+		    {
+			ActivitySave.createNoteAddForDeal(note, this);
+		    }
+		}
 		// Add note to task
 		this.related_notes.add(new Key<Note>(Note.class, note.id));
 	    }
@@ -698,8 +717,16 @@ public class Opportunity extends Cursor implements Serializable
 		// Create note
 		Note note = null;
 		// Create note
-		if (this.note_subject != null)
-		    note = new Note(this.note_subject, null);
+		if (this.note_created_time != 0)
+		{
+		    if (this.note_subject != null)
+			note = new Note(this.note_subject, null, this.note_created_time);
+		}
+		else
+		{
+		    if (this.note_subject != null)
+			note = new Note(this.note_subject, null);
+		}
 		// Save note
 		note.save();
 		if (this.id != null)
