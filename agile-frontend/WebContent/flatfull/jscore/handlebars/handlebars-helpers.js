@@ -885,6 +885,10 @@ $(function()
 	Handlebars.registerHelper('epochToTaskDate', function(date)
 	{
 
+		try{
+			date = parseInt(date);	
+		}catch(e){
+		}
 		var intMonth, intDay;
 
 		// Verifies whether date is in milliseconds, then
