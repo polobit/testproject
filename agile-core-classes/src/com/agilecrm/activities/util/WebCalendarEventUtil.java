@@ -113,8 +113,7 @@ public class WebCalendarEventUtil
 		List<List<Long>> filledGoogleSlots = GoogleCalendarUtil.getFilledGoogleSlots(userid, slotTime, timezone,
 				timezoneName, startTime, endTime);
 
-		if (filledGoogleSlots != null)
-		{
+		if (filledGoogleSlots != null){
 			// Remove all filled slots from available/possible slots.
 			possibleSlots.removeAll(filledGoogleSlots);
 
@@ -124,7 +123,7 @@ public class WebCalendarEventUtil
 		
 		// Get all filled slots from office calendar.
 		List<List<Long>> filledOfficeSlots = Office365CalendarUtil.getFilledOfficeSlots(userid, slotTime, timezone,
-				timezoneName, startTime, endTime);
+				timezoneName, startTime, endTime, "online");
 		
 		if(filledOfficeSlots != null){
 			System.out.println(filledOfficeSlots.toString());
