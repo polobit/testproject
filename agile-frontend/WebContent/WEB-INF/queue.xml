@@ -155,6 +155,15 @@
   </retry-parameters>
   <target>agile-normal-bulk</target>
   </queue>
+   <queue>
+    <name>contacts-post-delete-queue</name>
+    <rate>5/s</rate>
+    <max-concurrent-requests>5</max-concurrent-requests>
+    <retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
+  </queue>
   <queue>
     <name>owner-change-queue</name>
     <rate>5/s</rate>

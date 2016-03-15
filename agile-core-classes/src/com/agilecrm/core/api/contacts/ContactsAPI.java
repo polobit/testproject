@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +39,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
@@ -45,8 +47,10 @@ import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
+import com.agilecrm.bulkaction.BulkActionAdaptor;
 import com.agilecrm.bulkaction.ContactExportBulkPullTask;
 import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
+import com.agilecrm.bulkaction.deferred.ContactsBulkDeleteDeferredTask;
 import com.agilecrm.cases.Case;
 import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.Contact;
@@ -55,6 +59,8 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactFullDetails;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.bulk.ContactsDeleteTask;
+import com.agilecrm.contact.filter.ContactFilterIdsResultFetcher;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.imports.CSVImporter;
@@ -76,6 +82,10 @@ import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -1738,4 +1748,33 @@ public class ContactsAPI
 	return contact.getTagsList();
     }
 
+    @Path("delete")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteContacts(@FormParam("ids") String model_ids, @QueryParam("filter") String filter,
+	    @FormParam("dynamic_filter") String dynamicFilter) throws JSONException
+    {
+	Long current_user_id = SessionManager.get().getDomainId();
+	System.out.println(model_ids + " model ids " + filter + " filter " + current_user_id + " current user");
+
+	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter, model_ids,
+		null, 100, current_user_id);
+
+	Set<Key<Contact>> keys = idsFetcher.next();
+
+	if (keys.size() < 100)
+	{
+	    BulkActionAdaptor taskRunner = new ContactsBulkDeleteDeferredTask(current_user_id, NamespaceManager.get(),
+		    keys);
+	    taskRunner.run();
+	    ContactsDeleteTask task = new ContactsDeleteTask(idsFetcher, current_user_id);
+	    task.logActivity();
+	    return;
+	}
+
+	ContactsDeleteTask task = new ContactsDeleteTask(model_ids, filter, current_user_id, dynamicFilter);
+	// Add to queue
+	Queue queue = QueueFactory.getQueue(AgileQueues.BULK_ACTION_QUEUE);
+	queue.addAsync(TaskOptions.Builder.withPayload(task));
+    }
 }

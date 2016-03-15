@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
-import com.agilecrm.user.AliasDomain;
-import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -29,8 +27,8 @@ import com.google.appengine.api.utils.SystemProperty;
  * domain page.
  * <p>
  * If the url path starts with "/backend/" then filter forwards request without
- * verification of namespace, because it is required to run specific
- * webhooks from stripe etc
+ * verification of namespace, because it is required to run specific webhooks
+ * from stripe etc
  * </p>
  * 
  */
@@ -205,11 +203,12 @@ public class NamespaceFilter implements Filter
 	 * (Exception e) { // TODO Auto-generated catch block
 	 * e.printStackTrace(); }
 	 */
-	
-	/*AliasDomain aliasDomain = new AliasDomain("testDomain", "testAlias");
-	   try { aliasDomain.save(); } catch
-	  (Exception e) { // TODO Auto-generated catch block
-	  e.printStackTrace(); }*/
+
+	/*
+	 * AliasDomain aliasDomain = new AliasDomain("testDomain", "testAlias");
+	 * try { aliasDomain.save(); } catch (Exception e) { // TODO
+	 * Auto-generated catch block e.printStackTrace(); }
+	 */
 
 	// If URL path starts with "/backend", then request is forwarded without
 	// namespace verification i.e., no filter on url which starts with
@@ -221,12 +220,13 @@ public class NamespaceFilter implements Filter
 	    return;
 	}
 
-	 // For IE cache issue fix
-	  if(isRequestFromIEClient(request)){
-		  HttpServletResponse res = (HttpServletResponse) response;
-		  res.setDateHeader("Expires", Calendar.getInstance().getTimeInMillis());	  
-	  }
-	  
+	// For IE cache issue fix
+	if (isRequestFromIEClient(request))
+	{
+	    HttpServletResponse res = (HttpServletResponse) response;
+	    res.setDateHeader("Expires", Calendar.getInstance().getTimeInMillis());
+	}
+
 	// Returns true if name space is set or namespace is already set for the
 	// application. If request is not to access the
 	// application but to create new domain (choosing domain) then it
@@ -249,19 +249,26 @@ public class NamespaceFilter implements Filter
     {
 	// Nothing to do
     }
-    
-    public boolean isRequestFromIEClient(ServletRequest request){
-    	try {
-    		HttpServletRequest req = (HttpServletRequest) request;
-    		String userAgent = req.getHeader("user-agent");
-    		
-    	    return userAgent.contains("MSIE");
-    	
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-    	
-    	return false;
+
+    public boolean isRequestFromIEClient(ServletRequest request)
+    {
+	try
+	{
+	    HttpServletRequest req = (HttpServletRequest) request;
+	    String userAgent = req.getHeader("user-agent");
+	    if (userAgent == null)
+	    {
+		return false;
+	    }
+	    return userAgent.contains("MSIE");
+
+	}
+	catch (Exception e)
+	{
+	    // TODO: handle exception
+	    e.printStackTrace();
+	}
+
+	return false;
     }
 }

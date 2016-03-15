@@ -188,7 +188,7 @@
         {{#if this.length}}
         <div class="data">
             <div class="data-container contacts-inner-div">
-                <div id="contacts-grid-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/bulk/update?action_type=DELETE"></div>
+                <div id="contacts-grid-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/contacts/delete?action=DELETE"></div>
             </div>
         </div>
         {{/if}}
@@ -225,9 +225,10 @@
         </div>
         {{/unless}}
         {{#if this.length}}
+
         <!-- <div class="data">
             <div class="data-container"> -->
-                <div id="contacts-grid-table-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/bulk/update?action_type=DELETE"></div>
+                <div id="contacts-grid-table-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/contacts/delete?action=DELETE"></div>
             <!-- </div>
         </div> -->
         {{/if}}
