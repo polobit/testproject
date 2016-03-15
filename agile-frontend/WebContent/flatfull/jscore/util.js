@@ -344,6 +344,16 @@ function getGMTEpochFromDate(date)
 	return date.getTime() + (date.getTimezoneOffset() * 60 * 1000);
 }
 
+//get the GMT time for contact and compant static filters
+function getGMTEpochFromDateForCustomFilters(date)
+{
+	var current_sys_date = new Date();
+	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+	var offset = (date.getTimezoneOffset() * 60 * 1000) ;
+	// Adding offset to date returns GMT time 
+	return date.getTime() - (date.getTimezoneOffset() * 60 * 1000);
+	}
+
 /**
  * Returns local epoch time based form GMT time
  * 
@@ -515,6 +525,23 @@ function getDateInFormatFromEpoc(date)
 		return en.dateFormatter({raw: getGlobalizeFormat()})(new Date(parseInt(date)));
 	}
 	return en.dateFormatter({raw: getGlobalizeFormat()})(new Date(parseInt(date) * 1000));
+
+}
+
+// function to get the gmt format of date to show to edit the custom filters for contacts
+function getDateInFormatFromEpocForContactFilters(date)
+{
+	if(!date)
+		return;
+	var now = new Date(parseInt(date)); 
+	var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+	if ((date / 100000000000) > 1)
+	{1  
+		
+		
+		return en.dateFormatter({raw: getGlobalizeFormat()})(now_utc);
+	}
+	return en.dateFormatter({raw: getGlobalizeFormat()})(now_utc * 1000);
 
 }
 

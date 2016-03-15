@@ -638,6 +638,7 @@ users.
 
 		</div>
 	{{/ifCond}}
+{{#isAdmin}}
 {{#check_plan "FREE"}}
         <div class="panel panel-default wrapper-md m-t-xl">
 {{else}}
@@ -656,7 +657,7 @@ users.
 		<div class="clearfix"></div>
 
 		</div>
-		
+{{/isAdmin}}	
 </div>
  
 </div>
@@ -736,7 +737,7 @@ users.
 </script>
 
 <script id="latest-invoice-template" type="text/html">
- Thank you for your last payment of ${{numeric_operation this.total 100 "/"}} on {{epochToHumanDate "mmm dd, yyyy" periodStart}}.
+ Thank you for your last payment of ${{numeric_operation this.total 100 "/"}} on {{epochToHumanDate "mmm dd, yyyy" date}}.
 </script>
 
 <script id="subscribe-error-modal-template" type="text/html">

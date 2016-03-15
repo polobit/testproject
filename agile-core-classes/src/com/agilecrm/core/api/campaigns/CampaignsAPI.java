@@ -277,8 +277,10 @@ public class CampaignsAPI
 	    @QueryParam("page_size") String count, @QueryParam("log_type") String log_type)
     {
 
-	if (cursor == null)
-	    cursor = "0";
+	if (StringUtils.isBlank(cursor))
+		cursor = "0";
+	if (StringUtils.isBlank(count))
+	        count = "20";
 	return LogUtil.getConatctActivitiesSQLLogs(log_type, cursor, count);
     }
 

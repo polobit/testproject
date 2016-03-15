@@ -83,10 +83,7 @@ var _agile_synch_form_v4 = function()
 	if (agile_email)
 		_agile.set_email(agile_email);
        	 	
-	delete agile_contact._agile_form_name;
-	delete agile_contact._agile_domain;
-	delete agile_contact._agile_api;
-	delete agile_contact._agile_redirect_url;
+	agile_contact = deleteAgileHiddenFields(agile_contact);
 	
 	_agile.create_contact(agile_contact, { success : function(data)
 	{

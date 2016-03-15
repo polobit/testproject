@@ -2,8 +2,10 @@ package com.agilecrm.core.api.deals;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.Consumes;
@@ -18,7 +20,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -171,6 +175,43 @@ public class DealsAPI
 	return OpportunityUtil
 		.getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName, 0, cursor, pipelineId);
     }
+    
+    
+    @Path("/totalDealValue")
+    @GET
+    @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
+    public JSON getOpportunitiesTotalValue(@QueryParam("owner_id") String ownerId,
+	    @QueryParam("milestone") String milestone, @QueryParam("related_to") String contactId,
+	    @QueryParam("order_by") String fieldName, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @QueryParam("pipeline_id") Long pipelineId,
+	    @QueryParam("filters") String filters)
+    {
+     double totalValue = 0.0d;
+    JSONObject obj = new JSONObject();
+    System.out.println(count);
+    obj.put("id", "100");
+	if (filters != null)
+	{
+	    System.out.println(filters);
+	    try
+	    {
+			org.json.JSONObject json = new org.json.JSONObject(filters);
+			if (milestone != null)
+				json.put("milestone", milestone);
+			System.out.println(json.toString());			
+			totalValue =  OpportunityUtil.getTotalValueOfDeals(json);
+			obj.put("total", totalValue);	
+			obj.put("milestone", milestone);
+			return obj;
+	     }	    
+	    catch (JSONException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
+	return obj;
+    }
 
     /**
      * Return opportunity with respect to Id. This method is called if XML is
@@ -254,6 +295,13 @@ public class DealsAPI
     {
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
+	// Some times milestone comes as null from client side, if it is null we
+	// can'tsave it.
+	if (opportunity != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Deal not saved properly.").build());
+	}
 	opportunity.save();
 	try
 	{
@@ -282,6 +330,14 @@ public class DealsAPI
 
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
+	// Some times milestone comes as null from client side, if it is null we
+	// can'tsave it.
+	if (opportunity != null && opportunity.id != null
+		&& (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Deal not updated properly.").build());
+	}
 
 	try
 	{
@@ -738,6 +794,7 @@ public class DealsAPI
 		Opportunity opp = OpportunityUtil.getOpportunity(Long.parseLong(deal_ids.get(i)));
 		opp.note_description = note.description;
 		opp.note_subject = note.subject;
+		opp.note_created_time = note.created_time;
 		opp.save();
 	    }
 	}

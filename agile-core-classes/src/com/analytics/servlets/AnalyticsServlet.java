@@ -101,8 +101,8 @@ public class AnalyticsServlet extends HttpServlet
 	System.out.println("Before log " + timeBeforeLog);
 	
 	// Insert into table
-	AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew, ref, userAgent, country, region,
-		    city, cityLatLong);
+	//AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew, ref, userAgent, country, region,
+	//	    city, cityLatLong);
 	    
 
 	Long timeAfterLog = System.currentTimeMillis();

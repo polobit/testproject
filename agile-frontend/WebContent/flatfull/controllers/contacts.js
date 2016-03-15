@@ -347,9 +347,14 @@ var ContactsRouter = Backbone.Router.extend({
 			contactFiltersListeners();
 			contactListener();
 		} else {
-			$('#contacts-listener-container').find('.contacts-div').html(this.contactsListView.render().el);
+			$('#contacts-listener-container').find('.contacts-inner-div').html(this.contactsListView.render().el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
+			$('#bulk-action-btns > button').addClass("disabled");
+			if($("#select_grid_contacts1"))
+			{
+				$("#select_grid_contacts1").attr("checked", false);
+			}
 			CONTACTS_HARD_RELOAD = true;
 			
 		}
@@ -748,7 +753,8 @@ var ContactsRouter = Backbone.Router.extend({
 
 		// Contact Duplicate
 		var contact = this.contactDetailView.model
-		var json = contact.toJSON();
+		var orginal_json = contact.toJSON();
+		var json = $.extend(true, {}, orginal_json);
 
 		// Delete email as well as it has to be unique
 		json = delete_contact_property(json, 'email');
@@ -918,6 +924,7 @@ var ContactsRouter = Backbone.Router.extend({
 						App_Contacts.contacts();
 						return;
 					}
+					
 					App_Contacts.contactViewModel = data.toJSON();
 					App_Contacts.customView(undefined, App_Contacts.contactViewModel, url, tag_id, is_lhs_filter);
 
@@ -1099,9 +1106,14 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#contacts-listener-container').html(this.contact_custom_view.el);
 			contactFiltersListeners();
 		} else {
-			$('#contacts-listener-container').find('.contacts-div').html(this.contact_custom_view.el);
+			$('#contacts-listener-container').find('.contacts-inner-div').html(this.contact_custom_view.el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
+			$('#bulk-action-btns > button').addClass("disabled");
+			if($("#select_grid_contacts1"))
+			{
+				$("#select_grid_contacts1").attr("checked", false);
+			}
 
 			CONTACTS_HARD_RELOAD = true;
 		}
@@ -1163,6 +1175,14 @@ var ContactsRouter = Backbone.Router.extend({
 						$("#content #contact_company").hide();
 					}
 					agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
+
+					$('.contact_input', $('#content')).each(function(){
+						agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=PERSON');
+					});
+
+					$('.company_input', $('#content')).each(function(){
+						agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=COMPANY');
+					});
 
 				}, "#content"); 
 
@@ -1235,7 +1255,8 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 					if(type == "contacts")
 						App_Contacts.contactsListView.collection.models[0].set("count", data, {silent: true});
 					else if(type == "workflows"){
-						
+						if(App_Workflows.active_subscribers_collection && App_Workflows.active_subscribers_collection.collection && App_Workflows.active_subscribers_collection.collection.length > 0)
+							App_Workflows.active_subscribers_collection.collection.models[0].set("count", data, {silent: true});
 					} else{
 						App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
 					}
@@ -1259,11 +1280,12 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 		{
 			var pendingEmails = getPendingEmails();
 			window.history.back();
-			var title = "Emails limit";
+			var title = "Emails Limit";
 			var yes = "";
 			var no = "Ok"
-			var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
-			var message = "You have used up all emails in your quota. " + upgrade_link;
+			var upgrade_link =  'Please <a  href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> upgrade </a> your email subscription.';
+			var emialErrormsg = '<div class="m-t-xs">To continue sending emails from your account, please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> purchase </a>more.</div>';
+			var message = "<div>Sorry, your emails quota has been utilized.</div>" + emialErrormsg;
 			
 			showModalConfirmation(title, 
 					message, 

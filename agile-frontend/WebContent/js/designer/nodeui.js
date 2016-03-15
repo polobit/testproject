@@ -122,6 +122,7 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
             	
             	// Disables 'text' required property if html is given and text is empty 
             	disable_text_required_property($(this));
+            	
                 
             	var $form = $(this).find('form');
             	

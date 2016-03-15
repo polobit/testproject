@@ -273,7 +273,7 @@ function initializePortletsListeners() {
 						json2["done"] = false;
 						json2["skip"] = false;
 					}
-					json1["" + $(this).prop('value')] = json2;
+					json1["" + $(this).attr('value')] = json2;
 				});
 				model.set({
 					'prefs' : JSON.stringify(json1)
@@ -597,11 +597,14 @@ function initializePortletsListeners() {
 								var model_id = $(this).find('.portlets').attr('id');
 					
 					var model = Portlets_View.collection.get(model_id);
+					if(model!=undefined){
 					model.set({ 'column_position' : parseInt($(this).attr("data-col")) }, { silent : true });
 					model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
 
 					models.push({ id : model.get("id"), column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
+							}
 							});
+
 							// Saves new positions in server
 				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
 					contentType : "application/json; charset=utf-8", dataType : 'json' });

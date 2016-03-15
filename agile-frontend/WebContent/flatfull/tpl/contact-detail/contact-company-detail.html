@@ -74,16 +74,51 @@
 									</span>{{/if_equals}} {{/if_equals}} {{/each}} {{/multiple_Company_Property_Element}}
 									{{/property_is_exists}}
 								</div>
-							</div>
-					
-		
-							
-				<div id='star' class="company-star-view" style='width:auto!important;padding-bottom: 13px;margin:0 auto;'></div>	
-
+							</div>	
 					</div>
-	</div>
-	</div>
-	</div>
+
+			<div class=" panel-middle-align-mobile">	
+			   <div class="row">
+				<div class="col-xs-12 col-sm-7 text-center">
+				 	<div id='star' class="company-star-view" style='width:auto!important;padding-bottom: 13px;margin:0 auto;'></div>
+				</div>
+
+                <div class="text-right hidden-xs col-sm-5">		
+								<!--  starting score -->
+						<div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
+							<div  class="text-lg score-view">
+							<div style="position:relative;">
+
+							<i class="icon-trophy " style="height:14px; vertical-align: middle; display: inline-block;right:1px;position: relative;font-size:14px;opacity: 0.8;top:1px;" rel="popover" data-placement="bottom" data-title="Lead Score"
+									data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation."
+									id="element" data-trigger="hover" ></i>
+								 
+							
+								<span class="inline-block v-middle">
+									{{#if lead_score}} <span id="lead-cscore">{{lead_score}}</span>&nbsp;
+									{{else}} <span id="lead-cscore">0</span>&nbsp;
+									{{/if}}
+								</span>
+							{{#canEditContact owner.id}}
+								<span class="contact-score-control m-l-xs">
+									<ul class="inline-block list-none m-n p-n">
+										<li style="height: 9px"><i class="icon-sort-up c-p" id="cadd"
+											style="height: 10px;"></i></li>
+										<li><i class="icon-sort-down c-p" id="cminus"
+											style="height: 10px;"></i></li>
+									</ul>
+								</span>
+							{{/canEditContact}}
+							</div>
+							</div>
+							</div>
+
+						</div>
+						</div>
+						</div>
+			</div>
+			</div>
+			</div>
 
 					<!-- Owner block -->
 <div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
@@ -264,11 +299,35 @@
 											<span class="text-muted"  title="{{name}}">{{name}}<span>
 										</div>
 										{{#if_equals index ../this.length}}
-											<div class="inline-block custom-color text-xs" >
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+											{{#if custom_field_type}}
+												<div class="custom-color custom-value text-xs p-t-xs" name="{{name}}">
+											{{else}}
+												<div class="inline-block custom-color custom-value text-xs" name="{{name}}">
+											{{/if}}
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>
+											{{else}}
+												{{#if custom_field_type}}
+													{{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
+												{{else}}
+													{{value}}
+												{{/if}}
+											{{/if_equals}}
+											</div>
 										{{else}}
-											<div class="inline-block custom-color text-xs">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+											{{#if custom_field_type}}
+												<div class="custom-color custom-value text-xs" name="{{name}}">
+											{{else}}
+												<div class="inline-block custom-color custom-value text-xs" name="{{name}}">
+											{{/if}}
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>
+											{{else}}
+												{{#if custom_field_type}}
+													{{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
+												{{else}}
+													{{value}}
+												{{/if}}
+											{{/if_equals}}
+											</div>
 
 										{{/if_equals}}
 										</div>

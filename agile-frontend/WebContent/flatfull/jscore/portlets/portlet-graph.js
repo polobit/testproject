@@ -1031,7 +1031,7 @@ var portlet_graph_utility = {
 																	+ '<div class="p-n" style="color:'
 																	+ this.series.color
 																	+ ';">'
-																	+ 'Average Deviation Time Taken'
+																	+ 'Deviation Time'
 																	+ ':'
 																	+ portlet_utility.getPortletsTimeConversion(Math.round(this.y))
 																	+ ' </div>'
@@ -1039,7 +1039,7 @@ var portlet_graph_utility = {
 																	+ this.series.color
 																	+ ';">'
 																	+ this.series.name
-																	+ ':'
+																	+ ': '
 																	+ portlet_utility.getNumberWithCommasForPortlets(CountData[this.series.index][this.point.x])
 																	+ ' </div>'
 																	+ '</div>';

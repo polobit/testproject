@@ -283,7 +283,7 @@ $(function()
 	 * @returns image link
 	 * 
 	 */
-	Handlebars.registerHelper('gravatarurl', function(items, width)
+	Handlebars.registerHelper('gravatarurl', function(items, width,type)
 	{
 
 		if (items == undefined)
@@ -299,6 +299,7 @@ $(function()
 		var backup_image = "&d=404\" ";
 		// backup_image="";
 		var initials = '';
+
 		try
 		{
 			// if(!isIE())
@@ -325,6 +326,7 @@ $(function()
 		return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 
 	});
+
 
 	Handlebars.registerHelper('defaultGravatarurl', function(width)
 	{
@@ -6914,6 +6916,136 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 			return options.fn(this);
 	});
 
+	Handlebars.registerHelper('getContactTypeCustomFields', function(type, value, custom_field_name, options)
+	{
+		if (type != "CONTACT" && type != "COMPANY")
+		{
+			return value;
+		}
+		var contact_values = "";
+		var contact_values_json;
+		try {
+			contact_values_json = $.parseJSON(value);
+		}
+		catch(err) {
+
+		}
+		var referenceContactIds = "";
+		if (contact_values_json)
+		{
+			$.each(contact_values_json, function(index, value){
+				if(index != contact_values_json.length-1){
+					referenceContactIds += value + ",";
+				}else{
+					referenceContactIds += value;
+				}
+			});
+			App_Contacts.referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+			App_Contacts.referenceContactsCollection.collection.fetch({
+				success : function(data){
+					if(data && data.length > 0)
+					{
+						if(type == "CONTACT")
+						{
+							$.each(contact_values_json, function(index, value){
+								var items = data.get(value).get("properties");
+								var width = 40;
+								var img_path = "";
+								if (items == undefined)
+									return;
+
+								// Checks if properties already has an image, to return it
+								var agent_image = getPropertyValue(items, "image");
+								if (agent_image){
+									img_path = agent_image;
+								}
+								else{
+									// Default image
+									var img = DEFAULT_GRAVATAR_url;
+									var backup_image = "&d=404\" ";
+									// backup_image="";
+									var initials = '';
+
+									try
+									{
+										// if(!isIE())
+										initials = text_gravatar_initials(items);
+									}
+									catch (e)
+									{
+										console.log(e);
+									}
+
+									if (initials.length == 0)
+										backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
+
+									var data_name =  '';
+									// if(!isIE())
+										data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
+									
+									var email = getPropertyValue(items, "email");
+									if (email)
+									{
+										img_path = new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + backup_image + data_name);
+									}
+
+									img_path = new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
+								}
+								
+								var contact_name = getPropertyValue(data.get(value).get("properties"), "first_name");
+								var last_name = getPropertyValue(data.get(value).get("properties"), "last_name");
+								if(last_name)
+								{
+									contact_name += " "+last_name;
+								}
+								//contact_values += "<li class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'><a href='#contact/"+value+"' class='text-white'>"+contact_name+"</a></li>";
+								contact_values += '<a href="#contact/'+value+'" class="activate-link thumb m-b-xs m-r-xs"><img  data-name="" src="'+img_path+'"  title="'+contact_name+'" /></a>';
+							});
+						}else if(type == "COMPANY")
+						{
+							$.each(contact_values_json, function(index, value){
+								var frame_size = "50";
+								var additional_style = "display:inline";
+								var full_size = parseInt(frame_size); // size
+								var size_diff = 4 + ((full_size - 32) / 2); // calculating
+								var properties = data.get(value).get("properties");
+								var img_path = "";
+								
+								var default_return = "src='"+updateImageS3Path('img/company.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+
+								var error_fxn = "";
+
+								for (var i = 0; i < properties.length; i++)
+								{
+									if (properties[i].name == "image")
+									{
+										default_return = "src='" + properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
+
+										error_fxn = "this.src='"+updateImageS3Path('img/company.png')+"'; this.onerror=null;";
+
+										break;
+									}
+									if (properties[i].name == "url")
+									{
+										default_return = "src='https://www.google.com/s2/favicons?domain=" + properties[i].value + "' " + "style='width:" + full_size + "px; height=" + full_size + "px; padding:" + size_diff + "px; " + additional_style + " ;'";
+
+										error_fxn = "this.src='"+updateImageS3Path("img/company.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+									}
+								}
+								img_path = new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");
+								
+								//contact_values += "<li class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'><a href='#company/"+value+"' class='text-white'>"+getPropertyValue(data.get(value).get("properties"), "name")+"</a></li>";
+								contact_values += '<a href="#company/'+value+'" class="activate-link thumb m-b-xs m-r-xs"><img  '+img_path+' title="'+getPropertyValue(data.get(value).get("properties"), "name")+'"/></a>';
+							});
+						}
+						$('.custom-value[name="'+custom_field_name+'"]').html(contact_values);
+					}
+					hideTransitionBar();
+				}
+			});
+		}
+	});
+
 // the epoch time is in milisecond.
 // jquery uses isostring format to implement timeago function on date...
 Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) {
@@ -7005,4 +7137,9 @@ Handlebars.registerHelper('multiple_Property_Element_List', function(name, prope
 			if (matching_properties_list.length > 0)
 				return options.fn(matching_properties_list);
 		});
+
+Handlebars.registerHelper('getDomainFromURL', function(options) {
+	var domain = getDomainFromURL();
+	return domain;
+});
 

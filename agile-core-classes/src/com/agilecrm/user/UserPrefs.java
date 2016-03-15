@@ -131,7 +131,7 @@ public class UserPrefs
 	public String layout = "fluid";
 
 	@NotSaved(IfDefault.class)
-	public String theme = "1";
+	public String theme = "3";
 
 	@NotSaved(IfDefault.class)
 	public boolean animations = true;

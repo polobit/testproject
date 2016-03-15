@@ -337,6 +337,7 @@ public class ContactsAPI
 	// Throw non-200 if it exists
 	if (isDuplicate)
 	{
+	    System.out.println("Duplicate contact found");
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry, duplicate contact found with the same email address.").build());
 	}
@@ -1645,6 +1646,24 @@ public class ContactsAPI
 	    contact.save();
 
 	return contact;
+    }
+    
+    /* Fetch all reference contacts to a contact or company or deal or case */
+    @Path("/references")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getReferenceContacts(@QueryParam("references") String references)
+    {
+    List<Long> refContactIdsList = new ArrayList<Long>();
+    String[] refContactsArray = references.split(",");
+    for (String contactId : refContactsArray)
+    {
+    if(!contactId.equals(""))
+    {
+    refContactIdsList.add(Long.valueOf(contactId));
+    }
+    }
+	return ContactUtil.getContactsBulk(refContactIdsList);
     }
 
     /**

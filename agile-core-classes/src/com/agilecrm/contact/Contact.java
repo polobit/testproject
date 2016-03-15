@@ -257,6 +257,8 @@ public class Contact extends Cursor
     public static final String UTM_CAMPAIGN = "utm_campaign";
     public static final String UTM_TERM = "utm_term";
     public static final String UTM_CONTENT = "utm_content";
+    public static final String SHOPIFY_SYNC = "shopifySyncId";
+    public static final String QUICKBOOK_SYNC = "quickbookSyncId";
 
     /**
      * Unsubscribe status
@@ -1200,6 +1202,11 @@ public class Contact extends Cursor
 	{
 	    // remove any blank 'company' in properties before sending
 	    removeProperty(COMPANY);
+	}
+	//If entity is Company type, set entity_type to company
+	if (this.type == Contact.Type.COMPANY)
+	{
+		this.entity_type = "company_entity";
 	}
     }
 

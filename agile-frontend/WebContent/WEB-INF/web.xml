@@ -539,6 +539,18 @@
 		<url-pattern>/core/php/*</url-pattern>
 	</filter-mapping>
 	
+	<!-- JSON Filter gadget -->
+	<filter>
+		<filter-name>JSONPFilterPHP</filter-name>
+		<filter-class>com.agilecrm.filter.JSONPRequestFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>JSONPFilterPHP</filter-name>
+		<url-pattern>/core/php/*</url-pattern>
+	</filter-mapping>
+	<!-- JSON Filter -->
+	
 	<filter>
 		<filter-name>WebhooksFilter</filter-name>
 		<filter-class>com.agilecrm.filter.WebhooksFilter</filter-class>
@@ -1043,6 +1055,16 @@
     <servlet-mapping>
         <servlet-name>TaskReminderUnitTest</servlet-name>
         <url-pattern>test/taskreminder/unit-test</url-pattern>
+    </servlet-mapping>
+    <servlet>
+    
+        <servlet-name>AllDomainStatsServlet</servlet-name>
+        <servlet-class>com.agilecrm.alldomainstats.util.AllDomainStatsServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>AllDomainStatsServlet</servlet-name>
+        <url-pattern>/backend/stats-report</url-pattern>
     </servlet-mapping>
   
 </web-app>
