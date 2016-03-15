@@ -179,7 +179,7 @@ public class TicketWebhook extends HttpServlet
 				System.out.println("Invalid groupID: " + groupID);
 				return;
 			}
-			
+
 			boolean isNewTicket = isNewTicket(toAddressArray);
 
 			List<String> ccEmails = (List<String>) getValueFromJSON(msgJSON, "cc");
@@ -329,8 +329,8 @@ public class TicketWebhook extends HttpServlet
 			}
 
 			// Creating new Notes in TicketNotes table
-			TicketNotes notes = new TicketNotes(ticket.id, groupID, ticket.assigneeID, CREATED_BY.REQUESTER, fromName, fromEmail,
-					plainText, html, NOTE_TYPE.PUBLIC, documentsList, msgJSON.toString());
+			TicketNotes notes = new TicketNotes(ticket.id, groupID, ticket.assigneeID, CREATED_BY.REQUESTER, fromName,
+					fromEmail, plainText, html, NOTE_TYPE.PUBLIC, documentsList, msgJSON.toString());
 			notes.save();
 
 			NamespaceManager.set(oldNamespace);
@@ -424,14 +424,14 @@ public class TicketWebhook extends HttpServlet
 			{
 				switch (fileType)
 				{
-				case "image/png":
-					fileName += ".png";
-					break;
-				case "image/jpeg":
-					fileName += ".jpg";
-					break;
-				default:
-					break;
+					case "image/png":
+						fileName += ".png";
+						break;
+					case "image/jpeg":
+						fileName += ".jpg";
+						break;
+					default:
+						break;
 				}
 			}
 
@@ -483,33 +483,40 @@ public class TicketWebhook extends HttpServlet
 	{
 		switch (key)
 		{
-		case "cc":
+			case "cc":
 
-			List<String> ccEmails = new ArrayList<String>();
-			JSONArray ccEmailsArray = new JSONArray();
+				List<String> ccEmails = new ArrayList<String>();
+				JSONArray ccEmailsArray = new JSONArray();
 
-			// CC emails will be sent as JSON array
-			if (msgJSON.has(key))
-				ccEmailsArray = msgJSON.getJSONArray(key);
+				// CC emails will be sent as JSON array
+				if (msgJSON.has(key))
+					ccEmailsArray = msgJSON.getJSONArray(key);
 
-			for (int i = 0; i < ccEmailsArray.length(); i++)
-				ccEmails.add(ccEmailsArray.getJSONArray(i).getString(0));
+				for (int i = 0; i < ccEmailsArray.length(); i++)
+					ccEmails.add(ccEmailsArray.getJSONArray(i).getString(0));
 
-			return ccEmails;
-		case "text":
-		case "html":
-			String content = msgJSON.getString(key);
+				return ccEmails;
+			case "text":
+			case "html":
 
-			content = (StringUtils.isBlank(content)) ? "" : content.trim();
+				if (!msgJSON.has(key))
+					return "";
 
-			return content;
-		case "from_name":
-			if (msgJSON.has(key))
-				return msgJSON.getString(key);
+				String content = msgJSON.getString(key);
 
-			return "";
-		default:
-			return msgJSON.get(key);
+				content = (StringUtils.isBlank(content)) ? "" : content.trim();
+
+				return content;
+			case "from_name":
+				if (msgJSON.has(key))
+					return msgJSON.getString(key);
+
+				return "";
+			default:
+				if (!msgJSON.has(key))
+					return "";
+
+				return msgJSON.get(key);
 		}
 	}
 

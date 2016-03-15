@@ -57,7 +57,9 @@
 			isNew : true,
 			template : "ticket-new-modal",
 			url : "/core/api/tickets/new-ticket",
-			modal: "#ticketsModal",
+			saveCallback: function(){
+				$('#ticketsModal').modal('hide');
+			},
 			prePersist : function(model){
 				
 				var json = {};
@@ -127,6 +129,9 @@
 		//Rendering the root layout
 		Tickets.renderLayout(function(){
 
+			//Initialize custom filters and render layout with filter conditions selected
+			Ticket_Custom_Filters.renderLayout();
+
 			//Fetching filters collection
 			Ticket_Filters.fetchFiltersCollection(function(){
 
@@ -135,9 +140,6 @@
 				
 				//Showing selected filter name on top
 				Ticket_Filters.updateFilterName();
-
-				//Initialize custom filters and render layout with filter conditions selected
-				Ticket_Custom_Filters.renderLayout();
 
 				//Fetching selected filter ticket collection
 				Tickets.fetchTicketsCollection();

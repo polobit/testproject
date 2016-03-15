@@ -811,7 +811,6 @@ var Tickets = {
 		$('#cc_email_field').val('');
 		Tickets.updateCCEmails(email, 'add');
 		$('.add-me-to-cc').hide();
-
 	},
 
 	removeCCEmails: function(e){
@@ -832,39 +831,18 @@ var Tickets = {
 
 	updateCCEmails : function(email, command, callback){
 
-		var newTicketModel = new BaseModel();
-		newTicketModel.url = "/core/api/tickets/update-cc-emails?command="
-				+ command + "&email=" + email + '&id=' + Current_Ticket_ID;
-		newTicketModel.save({'id': Current_Ticket_ID}, 
-			{success: function(model){
+		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/update-cc-emails";
+		var json = {command: command, email: email, id: Current_Ticket_ID};
 
-					// If in time line add event to timeline
-					// if($('.ticket-timeline-container').length > 0){
-					// 	Ticket_Timeline.render_individual_ticket_timeline()
-					// }
+		this.updateModel(url, json, function(){
 
-					// if($("#ticket-activities-model-list").length > 0)
-					// 	App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
-					
-					if(App_Ticket_Module.ticketsCollection){
-						//Updating model collection
-						var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
-	            		var cc_emails = ticket_model.get('cc_emails');
+			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
-	            		if("add" == command){
-	            			cc_emails.push(email);
-	            		}else{
-							cc_emails.splice(cc_emails.indexOf(cc_emails), 1);
-	            		}
+			var msg = (command == 'remove') ? email + ' removed from CC emails' : email + ' added to CC emails';
 
-	            		//Settting update cc emails back to current ticket model
-	            		ticket_model.set({cc_emails: cc_emails}, {silent : true});
-	            	}
-
-					if(callback)
-						callback(model);
-				}
-			});
+			showNotyPopUp('information', msg, 'bottomRight', 5000);
+		    
+		});
 	},
 
 	//Return true if provided email is valid
@@ -1065,19 +1043,6 @@ var Tickets = {
 		}
 	},
 
-	/*clearSelection: function(e){
-
-		var container = $('div.show-caret');
-
-		if (!container.is(e.target) // if the target of the click isn't the container...
-	        && container.has(e.target).length === 0) // ... nor a descendant of the container
-	    {
-	        container.find('.dropdown-menu').dropdown('toggle');
-			container.removeClass('bg-light');
-			container.find('.caret-btn').removeClass('inline-block').addClass('display-none');
-	    }
-	},*/
-
 	isSingleRowView: function(){
 		return (CURRENT_DOMAIN_USER.helpdeskSettings && CURRENT_DOMAIN_USER.helpdeskSettings.ticket_view_type == 'SINGLELINE')
 								 ? true : false;
@@ -1197,6 +1162,7 @@ var Tickets = {
 
 		}, null);
 	},
+
 	removeDuedate : function(){
 
 		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/remove-due-date";
