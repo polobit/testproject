@@ -17,8 +17,10 @@ function loadUservoiceComments(offSet){
 
 		getTemplate('uservoice-transactions', result, undefined, function(template_inv){						
 			$('#uservoice-comments').html(template_inv);
-			head.js('lib/jquery.timeago.js', function(){
-				$(".time-ago", $('#uservoice-comments')).timeago();
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+				$( ".time-ago", $('#uservoice-comments')).each(function(){
+  					$(this).text(jQuery.timeago($(this).text()));
+				});							
 			});			
 		},null);
 
@@ -32,8 +34,10 @@ function loadUservoiceComments(offSet){
 
 		getTemplate('uservoice-transactions', result, undefined, function(template_inv){						
 			$('#uservoice-comments').append(template_inv);
-			head.js('lib/jquery.timeago.js', function(){
-				$(".time-ago", $('#uservoice-comments')).timeago();
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+				$( ".time-ago", $('#uservoice-comments')).each(function(){
+  					$(this).text(jQuery.timeago($(this).text()));
+				});							
 			});
 		},null);
 		
@@ -44,8 +48,10 @@ function loadUservoiceComments(offSet){
 		$('.uservoice_show_more').remove();
 		getTemplate('uservoice-transactions', result, undefined, function(template_inv){						
 			$('#uservoice-comments').append(template_inv);
-			head.js('lib/jquery.timeago.js', function(){
-				$(".time-ago", $('#uservoice-comments')).timeago();
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+				$( ".time-ago", $('#uservoice-comments')).each(function(){
+  					$(this).text(jQuery.timeago($(this).text()));
+				});							
 			});
 		},null);
 	}
