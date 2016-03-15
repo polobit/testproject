@@ -3393,6 +3393,10 @@ table.hide-head-checkbox th label.i-checks {
 	position: absolute;
 	left: 40%;
 	font-size: 13px;
+	color: #58666e !important;
+}
+.free-user-alert-message .text-info{
+	color: #23b7e5 !important;
 }
 #free-user-md-text { display: block; }
 #free-user-sm-text{ display: none;}
