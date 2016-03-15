@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.ticket.entitys.HelpdeskSettings;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -72,7 +73,32 @@ public class UsersAPI
 			return null;
 		}
 	}
+	
+	/**
+     * Gets list of users of a domain with partial prefs
+     * 
+     * @return list of domain users
+     */
+    @Path("partial")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<DomainUserPartial> getDomainUsers()
+    {
+	try
+	{
 
+	    String domain = NamespaceManager.get();
+	    
+	    // Gets the users and update the password to the masked one
+	    return  DomainUserUtil.getPartialDomainUsers(domain);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
 	// Send Current User Info
 	@Path("current-user")
 	@GET

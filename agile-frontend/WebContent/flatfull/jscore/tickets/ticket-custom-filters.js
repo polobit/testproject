@@ -164,10 +164,6 @@ var Ticket_Custom_Filters = {
 		});
 
 		var $select = $(".chosen-select");
-
-		// Initliazing multi select drop down
-		$select.chosen({no_results_text: "No labels found"});
-
 		$select.off('change');
 		$select.on('change', function(evt, params) {
 
@@ -196,8 +192,13 @@ var Ticket_Custom_Filters = {
 			//Re-render collection with customized filters
 			Tickets.fetchTicketsCollection();
 		});
+	},
 
-		//Initializing on change events on all select dropdowns in custom filters
+	initCheckboxEvents: function(){
+
+		var $container = $('#custom-filters-container');
+
+		//Initializing on change events on all checkboxes in LHS
 		$('[type="checkbox"]', $container).off('change');
 		$('[type="checkbox"]', $container).on('change', function(evt) {
 
@@ -277,21 +278,39 @@ var Ticket_Custom_Filters = {
 
 					$select.html(optionList);
 
+					// Initliazing multi select drop down
+					$select.chosen({no_results_text: "No labels found"});
+
 					//Initializes click events
 		  			Ticket_Custom_Filters.initEvents();
 				});
 		  	});
 
-		  	//Filling up domain users and groups
-		  	Ticket_Utils.fetchAssgineesAndGroups(function(){
+		  	Ticket_Utils.fetchAssignees(function(){
 
-		  		$('.assignee-select', $container).html(
-		  			getTemplate('ticket-filter-assignee', {all_assignees: Ticket_Utils.assignees}));
+		  		var assigneeCollection = new Base_Collection_View({
+		  			data: Assingees_Collection.collection.toArray(),
+	 				url : '/core/api/users/partial',
+	 				templateKey : "ticket-lhs-assignees",
+	 				individual_tag_name : 'div'
+	 			});
 
-				$('.group-select', $container).html(
-					getTemplate('ticket-filter-group', {all_groups: Ticket_Utils.groups}));
+	 			$('.assignee-select', $container).html(assigneeCollection.render(true).el);
 
-				Ticket_Custom_Filters.checkSelectedConditions();
+	 			Ticket_Utils.fetchGroups(function(){
+
+			  		var groupsCollection = new Base_Collection_View({
+			  			data : Groups_Collection.collection.toArray(),
+		 				url : '/core/api/tickets/groups',
+		 				templateKey : "ticket-lhs-groups",
+		 				individual_tag_name : 'div'
+		 			});
+
+		 			$('.group-select', $container).html(groupsCollection.render(true).el);
+
+		 			Ticket_Custom_Filters.checkSelectedConditions();
+					Ticket_Custom_Filters.initCheckboxEvents();
+			  	});
 		  	});
 		});
 	},

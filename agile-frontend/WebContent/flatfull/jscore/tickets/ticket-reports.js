@@ -29,7 +29,7 @@ var Ticket_Reports = {
 		$('#frequency').change(function()
 		{	
 			frequency = $(this).find('option:selected').val();
-			showBar('/core/api/tickets/reports/tickets?start_time=' + start_time + '&end_time=' 
+			showBar('/core/api/tickets/reports/daily?start_time=' + start_time + '&end_time=' 
 					+ end_time + '&frequency=' + frequency, 'tickets-chart', '', 'Tickets count', false);
 		});
 
@@ -38,11 +38,11 @@ var Ticket_Reports = {
 		$('#status').change(function()
 		{	
 			status = $(this).find('option:selected').val();
-			showBar('/core/api/tickets/reports/tickets?start_time=' + start_time + '&end_time=' 
+			showBar('/core/api/tickets/reports/daily?start_time=' + start_time + '&end_time=' 
 					+ end_time + '&frequency=' + frequency + '&status=' + status, 'tickets-chart', '', 'Tickets count', false, ((status == 'NEW') ? ['#f0ad4e'] : ['#5cb85c']));
 		});
 
-		showBar('/core/api/tickets/reports/tickets?start_time=' + start_time + '&end_time=' 
+		showBar('/core/api/tickets/reports/daily?start_time=' + start_time + '&end_time=' 
 				+ end_time + '&frequency=' + frequency + '&status=' + status, 'tickets-chart', '', 'Tickets count', false, ((status == 'NEW') ? ['#f0ad4e'] : ['#5cb85c']));
 	},
 
@@ -76,11 +76,11 @@ var Ticket_Reports = {
 		{	
 			report_type = $(this).find('option:selected').val();
 
-			var url = '/core/api/tickets/reports/priority-report?start_time=' + start_time + '&end_time=' + end_time,
+			var url = '/core/api/tickets/reports/priority?start_time=' + start_time + '&end_time=' + end_time,
 			    report_title = 'Priority report';
 
 			if(report_type == 'status'){
-				url = '/core/api/tickets/reports/status-report?start_time=' + start_time + '&end_time=' + end_time;
+				url = '/core/api/tickets/reports/status?start_time=' + start_time + '&end_time=' + end_time;
 			    report_title = 'Status report';
 			}
 
@@ -90,11 +90,11 @@ var Ticket_Reports = {
 
 		report_type = $(this).find('option:selected').val();
 
-		var url = '/core/api/tickets/reports/priority-report?start_time=' + start_time + '&end_time=' + end_time,
+		var url = '/core/api/tickets/reports/priority?start_time=' + start_time + '&end_time=' + end_time,
 		    report_title = 'Priority report';
 
 		if(report_type == 'status'){
-			url = '/core/api/tickets/reports/status-report?start_time=' + start_time + '&end_time=' + end_time;
+			url = '/core/api/tickets/reports/status?start_time=' + start_time + '&end_time=' + end_time;
 		    report_title = 'Status report';
 		}
 
@@ -155,7 +155,7 @@ var Ticket_Reports = {
 	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
 	    end_time=end_time/1000;
 		
-		Ticket_Reports.pieforReports('/core/api/tickets/reports/sla-report?start_time=' + start_time + '&end_time=' + end_time,
+		Ticket_Reports.pieforReports('/core/api/tickets/reports/sla?start_time=' + start_time + '&end_time=' + end_time,
 			'sla-report-chart', '', true);
 
 		// pie('/core/api/tickets/reports/sla-report?start_time=' + start_time + '&end_time=' + end_time,
