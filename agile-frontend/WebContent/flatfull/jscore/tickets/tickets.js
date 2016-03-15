@@ -111,7 +111,7 @@ var Tickets = {
 					Ticket_Utils.enableTooltips(el);
 
 					//Initialize time ago plugin
-					Tickets_Utils.loadTimeAgoPlugin(function(){
+					Ticket_Utils.loadTimeAgoPlugin(function(){
 						$("time", el).timeago();
 					});
 					
