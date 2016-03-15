@@ -128,7 +128,7 @@ body {
   background-image: url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-low.jpg');
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: 100% 100%;
+  background-size: cover;
   background-attachment: fixed;
 }
 
@@ -139,7 +139,7 @@ color:#fff!important;
 }
 input
 {
-color:#000!Important;
+color:#000 !Important;
 }
 a:hover
 {
