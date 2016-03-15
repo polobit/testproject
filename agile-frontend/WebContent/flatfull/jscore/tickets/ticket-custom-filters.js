@@ -317,11 +317,10 @@ var Ticket_Custom_Filters = {
 
 					var $select = $(".chosen-select");
 
-					var $option = $select.find('option[value="'+ label.RHS +'"]');
+					var $option = $select.find('option[value="'+ condition.RHS +'"]');
 					$option.attr('selected', 'selected');
 
 					$select.trigger("chosen:updated");
-					
 					break;
 				}
 				case 'status':{

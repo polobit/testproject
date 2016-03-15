@@ -36,23 +36,24 @@ Handlebars.registerHelper('calculate_due_date', function(due_date, options) {
 
 	return 'Due in ' + Ticket_Utils.dateDiff(currentEpoch, due_date);
 });
+
 Handlebars.registerHelper('get_contact_image', function(width)
-	{ 
-		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
-		var items = ticketModel.contact.properties;
-		var agent_image = getPropertyValue(items, "image");
-		if (agent_image)
-			return agent_image;
+{ 
+	var contact = Ticket_Utils.Current_Ticket_Contact.toJSON();
 
-		var email = getPropertyValue(items, "email");
-		if (email)
-		{
-			return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + '&d=404';
-		}
+	var items = contact.properties;
 
-		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '&d=404';
+	var agent_image = getPropertyValue(items, "image");
 
-	});
+	if (agent_image)
+		return agent_image;
+
+	var email = getPropertyValue(items, "email");
+	if (email)
+		return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + '&d=404';
+
+	return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '&d=404';
+});
 
 Handlebars
 		.registerHelper(

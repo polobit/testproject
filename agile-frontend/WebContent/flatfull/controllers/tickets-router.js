@@ -209,6 +209,13 @@
 	 		url : "/core/api/tickets/" + id,
 	 		postRenderCallback : function(el, data) {
 
+	 			//Get ticket contact
+	 			Ticket_Utils.fetchContact(data.contactID, function(){
+
+	 				$('#ticket-contact-details', el).html(
+	 					getTemplate('ticket-contact', Ticket_Utils.Current_Ticket_Contact.toJSON()));
+	 			});
+
 	 			// Append reply container
 	 			Tickets_Notes.repltBtn("reply", el);
 

@@ -600,14 +600,14 @@ var Tickets = {
 
 	    if(!groupId){
 	    	groupId = $(that).val();
-	    	assigneeId = "";
+	    	assigneeId = 0;
 	    }
        	
        	var ticketJSON = App_Ticket_Module.ticketView.model.toJSON();
 
-       	if(ticketJSON.assigneeID == assigneeId 
-       		&& ticketJSON.groupID == groupId)
-       		return;
+       	// if(ticketJSON.assigneeID == assigneeId 
+       	// 	&& ticketJSON.groupID == groupId)
+       	// 	return;
 
        	var url = "/core/api/tickets/" + Current_Ticket_ID + "/assign-ticket/" + groupId + "/" + assigneeId;
        	var json = {id: Current_Ticket_ID};
@@ -626,12 +626,15 @@ var Tickets = {
 				console.log(e);
 			}
 
-			var assigneeName = (modelData.assigneeID) ? (modelData.assignee.name) : modelData.group.group_name;
+			var assigneeName = '';
+			try{
+			 assigneeName = (modelData.assigneeID) ? (modelData.assignee.name) : modelData.group.group_name;
+			}catch(e){}
 
 			var message = 'Ticket group has been changed to ' + assigneeName;
 
 			if(modelData.assigneeID)
-				var message = 'Assignee has been changed to ' + assigneeName;
+				message = 'Assignee has been changed to ' + assigneeName;
 			
 			showNotyPopUp('information', message, 'bottomRight', 5000);
 
@@ -639,7 +642,9 @@ var Tickets = {
 			modelData.group = ((modelData.group) ? modelData.group : "");
 
 			// Update assignee in model and collection 
-			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, modelData); 					
+			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, modelData);
+
+			App_Ticket_Module.ticketView.model.set(modelData, {silent: true});				
 		});
     },
 
@@ -713,9 +718,11 @@ var Tickets = {
 		// if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
 		// 	return;
         if(!App_Ticket_Module.ticketsCollection)
-        return;
+        	return;
+
 		// get data from collection with id
 		updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
+		
 		// Update data in model
 		updated_model.set(data, {silent: true});
 	},
@@ -841,7 +848,6 @@ var Tickets = {
 			var msg = (command == 'remove') ? email + ' removed from CC emails' : email + ' added to CC emails';
 
 			showNotyPopUp('information', msg, 'bottomRight', 5000);
-		    
 		});
 	},
 

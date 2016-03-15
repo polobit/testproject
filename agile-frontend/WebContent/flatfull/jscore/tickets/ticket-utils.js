@@ -30,6 +30,23 @@ var Ticket_Utils = {
 		}});
 	},
 
+	fetchContact: function(contact_id, callback){
+
+		var contact = Backbone.Model.extend({
+			url : "/core/api/contacts/" + contact_id
+		});
+
+		new contact().fetch({
+			success : function(contactModel) {
+
+				Ticket_Utils.Current_Ticket_Contact = contactModel;
+
+				if (callback)
+					callback();
+			}
+		});
+	},
+
 	dateDiff: function(date_future, date_now){
 
 		// get total seconds between the times

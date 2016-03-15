@@ -351,10 +351,11 @@ public class TicketsRest
 			ticket = new Tickets(groupID, assigneeID, ticket.requester_name, ticket.requester_email, ticket.subject,
 					ticket.cc_emails, plain_text, ticket.status, ticket.type, ticket.priority, ticket.source,
 					ticket.created_by, attachmentExists, "", labels_keys_list);
-			
+
 			// Creating new Notes in TicketNotes table
-			TicketNotes notes = new TicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER, ticket.requester_name,
-					ticket.requester_email, plain_text, html_text, NOTE_TYPE.PUBLIC, attachmentsList, "");
+			TicketNotes notes = new TicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER,
+					ticket.requester_name, ticket.requester_email, plain_text, html_text, NOTE_TYPE.PUBLIC,
+					attachmentsList, "");
 			notes.save();
 
 			ticket.groupID = ticket.group_id.getId();
@@ -392,17 +393,17 @@ public class TicketsRest
 
 			switch (activity)
 			{
-//				case "mark-solved":
-//				{
-//					ticket = TicketsUtil.closeTicket(ticketID);
-//
-//					// Execute closed ticket trigger. Do not execute trigger if
-//					// updated
-//					// status and current status is same.
-//					TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
-//
-//					break;
-//				}
+			// case "mark-solved":
+			// {
+			// ticket = TicketsUtil.closeTicket(ticketID);
+			//
+			// // Execute closed ticket trigger. Do not execute trigger if
+			// // updated
+			// // status and current status is same.
+			// TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
+			//
+			// break;
+			// }
 				case "change-due-date":
 				{
 					ticket = TicketsUtil.changeDueDate(ticketID, activityAttributes.getDue_time());
@@ -542,7 +543,11 @@ public class TicketsRest
 		try
 		{
 			if (ticketID == null || groupID == null)
-				throw new Exception("Required parameters missing.");
+				throw new Exception("Required parameters missing");
+			
+			//From client side sending value 0 when ticket is assigned to group
+			if (assigneeID == 0)
+				assigneeID = null;
 
 			// Fetching ticket object by its id
 			Tickets oldTicket = TicketsUtil.getTicketByID(ticketID);
@@ -555,7 +560,7 @@ public class TicketsRest
 			if (updatedTicket.groupID != null)
 				updatedTicket.group = TicketGroupUtil.getPartialGroupByID(groupID);
 
-			if (oldTicket.assigneeID != updatedTicket.assigneeID || (oldTicket.groupID != updatedTicket.groupID))
+			if (oldTicket.assigneeID != updatedTicket.assigneeID)
 				TicketTriggerUtil.executeTriggerForAssigneeChanged(updatedTicket);
 
 			return updatedTicket;
@@ -829,8 +834,9 @@ public class TicketsRest
 						new ArrayList<Key<TicketLabels>>());
 
 				// Creating new Notes in TicketNotes table
-				TicketNotes notes = new TicketNotes(ticket.id, group.id, ticket.assigneeID, CREATED_BY.REQUESTER, "Sasi",
-						"sasi@clickdesk.com", message, message, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
+				TicketNotes notes = new TicketNotes(ticket.id, group.id, ticket.assigneeID, CREATED_BY.REQUESTER,
+						"Sasi", "sasi@clickdesk.com", message, message, NOTE_TYPE.PUBLIC,
+						new ArrayList<TicketDocuments>(), "");
 				notes.save();
 			}
 		}
