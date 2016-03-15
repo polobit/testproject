@@ -295,10 +295,12 @@ public class DealsAPI
     {
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
-	//Some times milestone comes as null from client side, if it is null we can'tsave it.
-	if(opportunity != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
+	// Some times milestone comes as null from client side, if it is null we
+	// can'tsave it.
+	if (opportunity != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
 	{
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Deal not saved properly.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Deal not saved properly.").build());
 	}
 	opportunity.save();
 	try
@@ -328,12 +330,15 @@ public class DealsAPI
 
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
-	//Some times milestone comes as null from client side, if it is null we can'tsave it.
-	if(opportunity != null && opportunity.id != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
+	// Some times milestone comes as null from client side, if it is null we
+	// can'tsave it.
+	if (opportunity != null && opportunity.id != null
+		&& (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
 	{
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Deal not updated properly.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Deal not updated properly.").build());
 	}
-	
+
 	try
 	{
 	    ActivitySave.createDealEditActivity(opportunity);
@@ -789,6 +794,7 @@ public class DealsAPI
 		Opportunity opp = OpportunityUtil.getOpportunity(Long.parseLong(deal_ids.get(i)));
 		opp.note_description = note.description;
 		opp.note_subject = note.subject;
+		opp.note_created_time = note.created_time;
 		opp.save();
 	    }
 	}
