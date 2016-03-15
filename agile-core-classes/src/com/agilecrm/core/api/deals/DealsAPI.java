@@ -2,8 +2,10 @@ package com.agilecrm.core.api.deals;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.Consumes;
@@ -20,6 +22,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -171,6 +174,43 @@ public class DealsAPI
 	}
 	return OpportunityUtil
 		.getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName, 0, cursor, pipelineId);
+    }
+    
+    
+    @Path("/totalDealValue")
+    @GET
+    @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
+    public JSON getOpportunitiesTotalValue(@QueryParam("owner_id") String ownerId,
+	    @QueryParam("milestone") String milestone, @QueryParam("related_to") String contactId,
+	    @QueryParam("order_by") String fieldName, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @QueryParam("pipeline_id") Long pipelineId,
+	    @QueryParam("filters") String filters)
+    {
+     double totalValue = 0.0d;
+    JSONObject obj = new JSONObject();
+    System.out.println(count);
+    obj.put("id", "100");
+	if (filters != null)
+	{
+	    System.out.println(filters);
+	    try
+	    {
+			org.json.JSONObject json = new org.json.JSONObject(filters);
+			if (milestone != null)
+				json.put("milestone", milestone);
+			System.out.println(json.toString());			
+			totalValue =  OpportunityUtil.getTotalValueOfDeals(json);
+			obj.put("total", totalValue);	
+			obj.put("milestone", milestone);
+			return obj;
+	     }	    
+	    catch (JSONException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
+	return obj;
     }
 
     /**

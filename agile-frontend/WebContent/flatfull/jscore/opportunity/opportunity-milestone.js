@@ -70,6 +70,7 @@ function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 
 	// Render it
 	$('#new-opportunity-list-paging').html(DEALS_LIST_COLLECTION.render(true).el);
+	initializeDealsListeners();
 
 }
 
@@ -103,10 +104,12 @@ function initDealListCollection(milestones)
 
 			$('#opportunities-by-paging-model-list', el).find('.milestone-column').width(width + "%");
 			$('.mark-won, .mark-lost',el).tooltip();
+			
 		} });
 
 	// Over write append function
 	DEALS_LIST_COLLECTION.appendItem = dealAppend;
+
 }
 
 // Append sub collection and model
@@ -166,7 +169,6 @@ function dealsFetch(base_model)
 
 
 			includeTimeAgo(el);
-			initializeDealsListeners(el);
 
 		} });
 
@@ -178,35 +180,14 @@ function dealsFetch(base_model)
 		$('#' + base_model.get("heading").replace(/ +/g, '') + '-list-container').html(dealCollection.render(true).el)
 		console.log($('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').length);
 		$('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
+		var heading =  base_model.get("heading");
 		try
 		{
 			var count = data.at(0) ? data.at(0).toJSON().count : 0;
 			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(data.at(0) ? data.at(0).toJSON().count : 0);
-	        var heading =  base_model.get("heading").replace(/ +/g, '');
-	        var dealcountarray = data.toArray();
-	        var i;
-	        var dealcount=0;
-            for (i = 0; i < dealcountarray.length; ++i){
-            	dealcount = dealcount + dealcountarray[i].get("expected_value");
-            }
-            $('#' + base_model.get("heading").replace(/ +/g, '') + '_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount));
-
-            var avg_deal_size = 0;
-            if(count == 0)
-            	avg_deal_size = 0;
-            else
-            	avg_deal_size = dealcount / count ; 
-            var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
-            dealcount = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount) ;
-            var symbol = getCurrencySymbolForCharts();
-            avg_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_deal_size);
-			var dealdata = {"dealTrack": dealTrack ,"heading": heading ,"dealcount":dealcount ,"avgDeal" : avg_deal_size,"symbol":symbol,"dealNumber":count};
-			var dealDataString = JSON.stringify(dealdata) ; 
-			$("#"+heading+" .dealtitle-angular").removeAttr("data");
-			$("#"+heading+" .dealtitle-angular").attr("data" , dealDataString ); 
-            }
-
-		catch (err)
+	     
+        }
+        catch (err)
 		{
 			console.log(err);
 		}  
@@ -215,6 +196,9 @@ function dealsFetch(base_model)
         	// Counter to fetch next sub collection
 		pipeline_count++;
 		setup_deals_in_milestones('opportunities-by-paging-model-list');
+		dealTotalCountForPopover(heading);
+				
+		
 		
 	} });
 }
@@ -249,6 +233,11 @@ function deal_infi_scroll(element_id, targetCollection)
 			$(targetCollection.infiniScroll.options.target).find('.scroll-loading').remove();
 			includeTimeAgo($(targetCollection.infiniScroll.options.target));
 			$('a.deal-notes').tooltip();
+			$(response).each(function(){
+				$('#'+this.id).parent('li').addClass("deal-color");
+				$('#'+this.id).parent('li').addClass(this.colorName);
+
+			});
 		},
 		onFetch : function()
 		{
@@ -261,23 +250,23 @@ function deal_infi_scroll(element_id, targetCollection)
 }
 // show deal pop-over modal
 
-function initializeDealsListeners(el)
+function initializeDealsListeners()
 {
 	$("#opportunity-listners").off('mouseenter','.milestone-column > .dealtitle-angular');
 	$("#opportunity-listners").on('mouseenter','.milestone-column > .dealtitle-angular', function(){
+    	var data = $(this).attr('data');
+		if(data){
 
-		var data = $(this).attr('data');
 		var originalHeading = $(this).siblings().find('.milestones').attr('milestone');
 		var jsonDealData = JSON.parse(data);
 		jsonDealData.heading = originalHeading;
-	//  var currentCase = App_Cases.casesCollectionView.collection.get(data);
 		var that = this;
 		getTemplate('deal-detail-popover', jsonDealData , undefined, function(template_ui){
  		if(!template_ui)
 	    		return;
     	var ele = $(template_ui);
 		$(that).popover(
-					{ "rel" : "popover", "trigger" : "hover", "placement" : 'bottom', "content" : ele,
+					{ "rel" : "popover", "trigger" : "manual", "placement" : 'bottom', "content" : ele,
 						"html" : "true"}); 
 			$(that).popover('show');
 			$(".popover-content").html(ele);
@@ -286,15 +275,77 @@ function initializeDealsListeners(el)
 			$(".dealtitle-angular + .popover > .popover-content" ).css("padding","0px");
 			$(".dealtitle-angular + .popover ").css("border-radius","0px");
 		});
-
+		}
 	});
 
 	/**
 	 * On mouse out on the row hides the popover.
 	 */
-	 $('.milestone-column > .dealtitle-angular').off('mouseleave');
+	 $("#opportunity-listners").off('mouseleave','.milestone-column > .dealtitle-angular');
 	 $('#opportunity-listners').on('mouseleave', '.milestone-column > .dealtitle-angular', function()
 	{
 		$(this).popover('hide');
+		$(this).popover('destroy');
 	});
+}
+function dealTotalCountForPopover(milestone){
+
+console.log('------popover pipeline id-----', pipeline_id);
+	if (_agile_get_prefs('agile_deal_track'))
+	{
+		if (_agile_get_prefs('agile_deal_track') != pipeline_id)
+			_agile_set_prefs('agile_deal_track', pipeline_id);
+	}
+	var currentTrack = trackListView.collection.get(pipeline_id).toJSON();
+	var milestones = currentTrack.milestones.split(',');
+	console.log(milestones);
+
+	// Url to call DB
+	var initialURL = '/core/api/opportunity/totalDealValue?pipeline_id=' + pipeline_id + '&order_by=close_date';
+
+	if (_agile_get_prefs('deal-filters'))
+	{
+		initialURL += '&filters=' + encodeURIComponent(getDealFilters());
+	}
+
+	// Creates main collection with deals lists
+		var newDealList;
+			var url = initialURL + "&milestone=" + milestone;
+			newDealList = { "heading" : milestone, "url" : url};
+			if(currentTrack.won_milestone == milestone)
+				newDealList.won_milestone = currentTrack.won_milestone;
+			else if(currentTrack.lost_milestone == milestone)
+				newDealList.lost_milestone = currentTrack.lost_milestone;
+			$.ajax({ type : 'GET', url : url, success : function(data){
+                if(data){
+					var json = JSON.parse(data); 
+					var dealcount = json.total;
+					var count = $('#'+json.milestone.replace(/ +/g, '')+'_count').text();
+					var countoto = 3;
+			        var heading = json.milestone.replace(/ +/g, '');
+			        var i;
+			        $('#'+json.milestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount));
+
+		            var avg_deal_size = 0;
+		            if(count == 0)
+		            	avg_deal_size = 0;
+		            else
+		            	avg_deal_size = dealcount / count ; 
+		            var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
+		            dealcount = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount) ;
+		            var symbol = getCurrencySymbolForCharts();
+		            avg_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_deal_size);
+					var dealdata = {"dealTrack": dealTrack ,"heading": heading ,"dealcount":dealcount ,"avgDeal" : avg_deal_size,"symbol":symbol,"dealNumber":count};
+					var dealDataString = JSON.stringify(dealdata) ; 
+					$("#"+heading+" .dealtitle-angular").attr("data" , dealDataString ); 	
+		        }
+		        else{
+		        	dealTotalCountForPopover(milestone);
+		        }
+			},error: function() {
+                 console.log('An error occurred');
+      		}
+			});
+	
+
 }
