@@ -5,6 +5,7 @@
 
 //json Object for collecting events
 var jso=[];
+var mini_fullCal;
 
 /**
  * initialises full calendar functionality in a mini calendar
@@ -20,7 +21,7 @@ function minicalendar(el)
 	var dayClasses = [];
 
 
-	$('#calendar_container',el).fullCalendar({
+	mini_fullCal=$('#calendar_container',el).fullCalendar({
 
 
 		aspectRatio:getaspectratio(el),
@@ -36,6 +37,8 @@ function minicalendar(el)
 		               {
 		            	   events : function(start, end, callback)
 		            	   {
+
+		            	   		App_Portlets.eventCalendar=$(el);
 		            		   var datasizeY=$(el).parent().attr('data-sizey');
 		            		   if(datasizeY==2)
 		            			   $(el).find('.fc-header').css('height','145px');		
@@ -167,7 +170,7 @@ function minicalendar(el)
 		            				   });
 
 
-		            	   } },{dataType :'agile-events'}
+		            	   } },{dataType :'agile-events-mini'}
 
 
 		            	   ],
@@ -451,13 +454,18 @@ function loadingGoogleEvents(el,startTime,endTime){
 
 }
 
+var isSet = false;
+
 /**Initializes google Calendar **/
 function init_cal(el){
+	if(isSet)
+		return;
 	var fc = $.fullCalendar;
-	fc.sourceFetchers = [];
+	isSet = true;
+	//fc.sourceFetchers = [];
 	// Transforms the event sources to Google Calendar Events
 	fc.sourceFetchers.push(function(sourceOptions, start, end) {
-		if (sourceOptions.dataType == 'agile-events')
+		if (sourceOptions.dataType == 'agile-events-mini')
 			loadingGoogleEvents(App_Portlets.eventCalendar,start.getTime()/1000,end.getTime()/1000);
 	});
 
@@ -475,11 +483,11 @@ function googledata(el,response,startTime,endTime)
 	var gDateStart = startDate.toISOString();
 	var endDate = new Date((endTime * 1000)-(timezone_offset*60*1000));
 	var gDateEnd = endDate.toISOString();
-	// Retrieve the events from primary
-	var request = gapi.client.calendar.events
-	.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime', timeMin : gDateStart, timeMax : gDateEnd });
-	request.execute(function(resp)
-			{
+
+	function callbackEvents(resp)
+	{
+		var startDate = startDate;
+		var endDate = endDate;
 		var events = new Array();
 		console.log(resp);
 		for (var j = 0; j < resp.items.length; j++)
@@ -489,6 +497,19 @@ function googledata(el,response,startTime,endTime)
 
 
 		}
+		console.log($("#calendar_container", el).fullCalendar("getView").visStart);
+		$('#calendar_container', el).fullCalendar('removeEventSource', functions["event_mini_google" + $(el).attr('id')]);
+
+			functions["event_mini_google" + $(el).attr('id')] = function(start, end, callback)
+			{
+				console.log(this);
+				console.log($("#calendar_container", el).fullCalendar("getView").visStart);
+				if($('#calendar_container', el).fullCalendar('getView').visStart.getTime()!=start.getTime())
+					return;
+				callback(events);
+			}
+
+			$('#calendar_container',el).fullCalendar('addEventSource', functions["event_mini_google" + $(el).attr('id')]);
 
 		//**Add the google Events in the list of events in events_show div **/
 		var len=$(".events_show",el).find('.list').find('li').length;
@@ -532,7 +553,12 @@ function googledata(el,response,startTime,endTime)
 		},5000);
 
 
-			});
+			
+	}
+	// Retrieve the events from primary
+	var request = gapi.client.calendar.events
+	.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime', timeMin : gDateStart, timeMax : gDateEnd });
+	request.execute(callbackEvents);
 }
 
 /** Rendering the events to the mini Calendar
@@ -552,7 +578,7 @@ function renderGoogleEvents(events,fc_event,el)
 				{
 					fc_event.start=fc_event.start.getTime()/1000;
 					fc_event.end=(fc_event.end.getTime()-1)/1000;
-					$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
+					//$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
 					events.push(fc_event);
 				}
 				else
@@ -573,7 +599,7 @@ function renderGoogleEvents(events,fc_event,el)
 							new_json.end=fc_event.end.getTime()/1000;
 						}
 						console.log(new_json);
-						$('#calenetdar_container',el).fullCalendar('renderEvent',new_json);
+						//$('#calenetdar_container',el).fullCalendar('renderEvent',new_json);
 						events.push(new_json);
 					}
 				}
@@ -586,7 +612,7 @@ function renderGoogleEvents(events,fc_event,el)
 				if(a==0){
 					fc_event.start=fc_event.startDate.getTime()/1000;
 					fc_event.end=fc_event.end.getTime()/1000;
-					$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
+					//$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
 					events.push(fc_event);
 				}
 				else{
@@ -606,11 +632,13 @@ function renderGoogleEvents(events,fc_event,el)
 							new_json.end=fc_event.end.getTime()/1000;
 						}
 						console.log(new_json);
-						$('#calendar_container',el).fullCalendar('renderEvent',new_json);
+						//$('#calendar_container',el).fullCalendar('renderEvent',new_json);
 						events.push(new_json);
 					}
 				}
 			}
+
+			
 }
 /*
  *  get the aspectratio(width/height) for minicalendar

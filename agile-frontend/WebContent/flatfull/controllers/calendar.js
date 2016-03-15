@@ -18,6 +18,7 @@ routes : {
  */
 calendar : function()
 {
+	$('#due_tasks').css('pointer-events','none');
 	_agile_delete_prefs("agile_calendar_view");
 	// read cookie for view if list_view is there then rendar list view else
 	// rendar default view
@@ -68,6 +69,8 @@ calendar : function()
 							showCalendar(users);
 							hideTransitionBar();
 							initializeEventListners();
+							loadPortlets('Events');
+							$('#due_tasks').css('pointer-events','inherit');
 						});
 
 						$('#grp_filter').css('display', 'none');
@@ -76,7 +79,7 @@ calendar : function()
 						 $("[data-toggle=tooltip").tooltip();
 						 
 					}, $('#calendar-listers').find("#calendar-filters"));
-					loadPortlets('Events');
+					
 
 		});	
 			

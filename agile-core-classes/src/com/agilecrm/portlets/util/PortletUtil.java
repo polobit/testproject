@@ -159,34 +159,30 @@ public class PortletUtil {
 			route= Portlet.PortletRoute.DashBoard;
 		}
 
-		if(route.equals(Portlet.PortletRoute.DashBoard)){
-		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
+		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route",route).list();
+		
 		//If user first time login after portlets code deploy, we add some portlets by default
 		//in DB and one null portlet also
-		if(portlets!=null && portlets.size()>0){
-			for(Portlet portlet : portlets){
-				if(portlet.portlet_route==null)
-					portlet.portlet_route=Portlet.PortletRoute.DashBoard;
-				portlet.save();
+		if(route.equals(Portlet.PortletRoute.DashBoard) && portlets != null &&  portlets.size() == 0){
+			portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
+			if(portlets!=null && portlets.size()==0){
+				addDefaultPortlets();
+				portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route", route).list();
+			}
+			else {
+				for(Portlet portlet : portlets){
+					if(portlet.portlet_route==null){
+						portlet.portlet_route=Portlet.PortletRoute.DashBoard;
+						portlet.save();
+					}
+				}
 			}
 		}
-		}
-		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route", route).list();
-		if(portlets!=null && portlets.size()==0 && route.equals(Portlet.PortletRoute.DashBoard))
-			{addDefaultPortlets();
-		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route",Portlet.PortletRoute.DashBoard ).list();
-		}
+
 		for(Portlet portlet : portlets){
 			if(portlet.prefs!=null){
 				JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
-				//if portlet is growth graph we can change the start date and end dates based on duration
-				/*System.out.println("Portlet Name---"+portlet.name);
-				System.out.println("portlet.name.equalsIgnoreCase(Growth Graph)---"+portlet.name.equalsIgnoreCase("Growth Graph"));
-				System.out.println("contains start-date----"+json.containsKey("start-date"));
-				System.out.println("contains end-date-----"+json.containsKey("end-date"));
-				System.out.println("contains duration-----"+json.containsKey("duration"));
-				System.out.println("is duration value null--"+json.get("duration")==null);
-				System.out.println("duration value--"+json.get("duration"));*/
+
 				if(portlet.name!=null && portlet.name.equalsIgnoreCase("Growth Graph") && json.containsKey("start-date") && json.containsKey("end-date")
 						 && !json.containsKey("duration"))
 					json.put("duration","1-week");
