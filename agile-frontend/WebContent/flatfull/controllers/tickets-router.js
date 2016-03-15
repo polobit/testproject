@@ -57,6 +57,7 @@
 			isNew : true,
 			template : "ticket-new-modal",
 			url : "/core/api/tickets/new-ticket",
+			modal: "#ticketsModal",
 			prePersist : function(model){
 				
 				var json = {};
@@ -136,7 +137,7 @@
 				Ticket_Filters.updateFilterName();
 
 				//Initialize custom filters and render layout with filter conditions selected
-				Ticket_Custom_Filters.init(Ticket_Custom_Filters.renderLayout);
+				Ticket_Custom_Filters.renderLayout();
 
 				//Fetching selected filter ticket collection
 				Tickets.fetchTicketsCollection();
@@ -210,7 +211,7 @@
 	 			Tickets_Notes.repltBtn("reply", el);
 
 	 			//Initialize tooltips
-				$('[data-toggle="tooltip"]', el).tooltip();
+				Ticket_Utils.enableTooltips(el);
 
 				//Showing ticket labels as selected labels
 				Ticket_Labels.showSelectedLabels(data.labels, $(el));

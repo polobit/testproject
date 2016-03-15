@@ -27,13 +27,12 @@ var Ticket_Canned_Response = {
 		}});
 	},
 
-	getCannedResponses: function(labels, key){
+	getCannedResponses: function(){
 
 		if(!this.cannedResponseCollection || $.isEmptyObject(this.cannedResponseCollection))
 			this.fetchCollection();
 
 			return;
-		
 	}
 };
 

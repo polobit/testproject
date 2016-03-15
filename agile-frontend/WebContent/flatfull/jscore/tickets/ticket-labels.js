@@ -4,7 +4,7 @@ var Ticket_Labels = {
 
 	initChoosenSelect : function(el) {
 
-		head.js('/flatfull/css/misc/chosen.css', '/lib/chosen.jquery.min.js', function() {
+		this.loadChosenLibrary(function() {
 			var $select = $(".chosen-select", el);
 
 			// Initliazing multi select drop down
@@ -120,6 +120,15 @@ var Ticket_Labels = {
 			});
 
        		if (callback)
+				callback();
+		});
+	},
+
+	loadChosenLibrary: function(callback){
+
+		head.js('/flatfull/css/misc/chosen.css', '/lib/chosen.jquery.min.js', function() {
+
+			if (callback)
 				callback();
 		});
 	}

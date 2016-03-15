@@ -170,46 +170,12 @@ var Tickets_Notes = {
 				Tickets.renderExistingCollection();
 			}	
 		});
-
-		// var newTicketNotesModel = new BaseModel();
-		// newTicketNotesModel.url = '/core/api/tickets/forward-ticket';
-		// newTicketNotesModel.save(data, {
-
-		// 	success : function(model) {
-
-		// 		Tickets.renderExistingCollection();
-		// 		return;
-
-		// 		// Tickets_Notes.repltBtn('reply');
-
-		// 		// If in time line add event to timeline
-		// 		// if($('.ticket-timeline-container').length > 0){
-		// 		// 	Ticket_Timeline.render_individual_ticket_timeline();
-		// 		// 	return;
-		// 		// }
-
-		// 		// if($("#ticket-activities-model-list").length > 0)
-		// 		// 	App_Ticket_Module.renderActivitiesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
-				
-
-				
-		// 	},
-		// 	error : function(data, response) {
-
-		// 		$('.error-msg').html(response.responseText);
-
-		// 		enable_save_button(targetEle);
-
-		// 		setTimeout(function() {
-		// 			$('.error-msg').html('');
-		// 		}, 3000);
-		// 	}
-		// });
 	},
 
 	repltBtn : function(reply_type, el) {
 
 		var ticketModel = App_Ticket_Module.ticketView.model;
+
 		var data = ticketModel.toJSON();
 
 		data.reply_type = (reply_type) ? reply_type : "reply";
@@ -229,17 +195,16 @@ var Tickets_Notes = {
 		$container.html(getTemplate('create-ticket-notes', data));
 
 		if(data.reply_type == 'forward'){
-		 $("#macro_list", $container).addClass("disabled text-muted");
-		 $("#macro_list").css("cursor","no-drop");
+			$("#macro_list", $container).addClass("disabled text-muted");
+			$("#macro_list").css("cursor","no-drop");
 		}
 
-		head.js('/flatfull/lib/jquery.textarea-expander.js', function()
+		Ticket_Utils.loadTextExpander(function()
 		{	
 			try{
 				$('textarea#reply_textarea', $container).TextAreaExpander({'padding' : '8px 8px 1px 8px' });
 				$('textarea#reply_textarea', $container).css({'height':'60px'});
 			}catch(e){}
-			
 		});
 
 		Tickets.start_ticket_draft_timer(data.id, 'textarea#reply_textarea');
@@ -273,7 +238,6 @@ var Tickets_Notes = {
 				}
 
 	        	return false;
-
 	    	}
 		});
 
@@ -323,22 +287,11 @@ var Tickets_Notes = {
 			if(!message)
 				return;
 
-			// var type_text = $container.find("#reply_textarea").val();
-
-			// Get canned response
-			head.js('/flatfull/lib/jquery.insertatcursor.js', function()
+			Ticket_Utils.loadInsertCursor(function()
 			{	
 				$container.find("#reply_textarea").insertAtCaret(message);
 			});
-			
-
 		})
-
-		// Scroll to bottom of page
-		// $("html, body").animate({ scrollTop: $(document).height() }, 1000);
-
-		// Initialize tooltips
-		// $('[data-toggle="tooltip"]', $('#reply-editor')).tooltip();
 	},
 
 	getMatchedCannedResponses : function(labels){
@@ -404,29 +357,6 @@ var Tickets_Notes = {
 
 		return notesText;
 	},
-
-	/**
-	appendCannedResponseMessage : function(e) {
-
-		var ticketModel = App_Ticket_Module.ticketView.model;
-
-		$('#reply-editor').html(getTemplate('create-ticket-notes', ticketModel.toJSON()));
-
-		// Get canned response
-		var cannedMessage = e.currentTarget.children.message.innerHTML + "<br><br><br>";
-		
-		$("#reply-editor").find("#reply_textarea").html(
-				cannedMessage + $("#reply-editor").find("#reply_textarea").text());
-
-		$('#send-reply-container').hide();
-
-		// Scroll to bottom of page
-		// $("html, body").animate({ scrollTop: $(document).height() }, 1000);
-
-		// Initialize tooltips
-		// $('[data-toggle="tooltip"]', $('#reply-editor')).tooltip();
-	},
-	*/
 
 	showCannedMessages : function(e) {
 

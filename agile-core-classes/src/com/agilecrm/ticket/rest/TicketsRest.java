@@ -351,7 +351,7 @@ public class TicketsRest
 			ticket = new Tickets(groupID, assigneeID, ticket.requester_name, ticket.requester_email, ticket.subject,
 					ticket.cc_emails, plain_text, ticket.status, ticket.type, ticket.priority, ticket.source,
 					ticket.created_by, attachmentExists, "", labels_keys_list);
-
+			
 			// Creating new Notes in TicketNotes table
 			TicketNotes notes = new TicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER, ticket.requester_name,
 					ticket.requester_email, plain_text, html_text, NOTE_TYPE.PUBLIC, attachmentsList, "");

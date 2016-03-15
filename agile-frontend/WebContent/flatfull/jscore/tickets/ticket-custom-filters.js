@@ -11,38 +11,13 @@ var Ticket_Custom_Filters = {
 		this.customFilters = new Array();
 		template_data_json = {};
 	},
-	init: function(callback){
-
-		if(this.assignees.length == 0 && this.groups.length == 0){
-
-			var Assignees = Backbone.Collection.extend({url : '/core/api/users'});
-			new Assignees().fetch({success: function(model, response, options){
-				
-				Ticket_Custom_Filters.assignees = model.toJSON();
-
-				var Groups = Backbone.Collection.extend({url: '/core/api/tickets/groups?only_groups=true'});
-				new Groups().fetch({success: function(model, response, options){
-
-					Ticket_Custom_Filters.groups = model.toJSON();
-
-					if(callback)
-						callback();
-				}});
-			}});
-		}
-		else{
-			if(callback)
-				callback();
-		}	
-	},
-
+	
 	initEvents: function(){
 
 		var $container = $('#custom-filters-container');
 
 		//Initializing date picker
-		head.load(LIB_PATH + 'lib/date-charts.js', 
-				  LIB_PATH + 'lib/date-range-picker.js'+'?_=' + _AGILE_VERSION, function()
+		Ticket_Utils.loadDateChartAndDatePicker(function()
 		{	
 			var $input = $('.due-date-input', $container);
 
@@ -76,44 +51,8 @@ var Ticket_Custom_Filters = {
 		});
 
 		var options = [];
-
-	  // 	//Initializing click event due date dropdown
-	  // 	$container.off('click','ul.due-date-dropdown li a');
-	  // 	$container.on('click','ul.due-date-dropdown li a', function(event){
-
-	  // 		var $target = $(event.currentTarget);
-
-	  // 		$(event.target).blur();
-
-	  // 		if($target.hasClass("due-date-custom")){
-
-	  // 			$('input.due-date-input').trigger('click');
-	  // 			return false;
-	  // 		}else if($target.hasClass("clear-due-dates")){
-
-	  // 			options = [];
-	  // 			$('input.due-date-input').val('');
-	  // 			$('.due-date-chbx').prop('checked', false);
-
-	  // 			return false;
-	  // 		}
-
-	  // 		var val = $target.attr('data-value'),
-			// 		$chbx = $target.find('input[type="checkbox"]'), idx;
-
-			// 	if((idx = options.indexOf(val)) > -1){
-		 //      options.splice(idx, 1);
-		 //      setTimeout(function(){$chbx.prop('checked', false)}, 0);
-		 //   	}else{
-		 //      options.push(val);
-		 //      setTimeout(function(){$chbx.prop('checked', true)}, 0);
-		 //   	}
-			
-			// $('input.due-date-input').val(options);
-			// return false;
-	  // 	});
-
-	  	//Initializing click event on clear due date button
+		
+		//Initializing click event on clear due date button
 	  	$container.off('click','a#clear-due-date');
 	  	$container.on('click','a#clear-due-date', function(event){
 
@@ -312,78 +251,58 @@ var Ticket_Custom_Filters = {
 
 	renderLayout: function(){
 
-		Ticket_Custom_Filters.prepareConditions(function(){
+		getTemplate("ticket-custom-filters", {}, undefined, function(template_ui){
 
-			getTemplate("ticket-custom-filters", Ticket_Custom_Filters.template_data_json, undefined, function(template_ui){
+			if(!template_ui)
+		  		return;
 
-				if(!template_ui)
-			  		return;
+		  	Ticket_Custom_Filters.template_ui = template_ui;
 
-			  	Ticket_Custom_Filters.template_ui = template_ui;
+		  	var $container = $('#custom-filters-container');
 
-			  	var $container = $('#custom-filters-container');
+		  	$container.html($(template_ui));
 
-			  	$container.html($(template_ui));
+		  	//Loading labels library and initializing click events on all checkboxes
+		  	Ticket_Labels.loadChosenLibrary(function() {
 
-			  	var tempAssignees = {all_assignees: Ticket_Custom_Filters.assignees, selected_assignees: Ticket_Custom_Filters.template_data_json.assignees};
-				var tempGroups = {all_groups: Ticket_Custom_Filters.groups, selected_groups: Ticket_Custom_Filters.template_data_json.groups};
-
-				$('.assignee-select').html(getTemplate('ticket-filter-assignee', tempAssignees));
-				$('.group-select').html(getTemplate('ticket-filter-group', tempGroups));
-
-				//Initializes chosen dropdown, fetches labels collection and renders selected labels
+		  		//Initializes chosen dropdown, fetches labels collection
 			  	Ticket_Labels.fetchCollection(function(labelsCollection){
 
-			  		head.js('/flatfull/css/misc/chosen.css','/lib/chosen.jquery.min.js', function() {
-				  		var optionList = "";
-						$.each(labelsCollection.toJSON(), function(index, label) {
-							optionList += "<option value='" + label.id + "'>"
-										+ label.label + "</option>";
-						});
-
-						var $select = $(".chosen-select");
-
-						$select.html(optionList);
-
-						$.each(Ticket_Custom_Filters.template_data_json.labels, function(index, label) {
-							
-							var $option = $select.find('option[value="'+ label.RHS +'"]');
-							if($option && $option.length){
-
-								$option.attr('selected', 'selected');
-
-								if(label.CONDITION == 'TICKET_LABEL_IS_NOT')
-									$option.html('!' + $option.html());
-							}
-						});
-
-						Ticket_Custom_Filters.initEvents();
+			  		var optionList = "";
+					$.each(labelsCollection.toJSON(), function(index, label) {
+						optionList += getTemplate('ticket-label-option', label);
 					});
+
+					var $select = $(".chosen-select");
+
+					$select.html(optionList);
+
+					//Initializes click events
+		  			Ticket_Custom_Filters.initEvents();
 				});
-			});
-		});	
+		  	});
+
+		  	//Filling up domain users and groups
+		  	Ticket_Utils.fetchAssgineesAndGroups(function(){
+
+		  		$('.assignee-select', $container).html(
+		  			getTemplate('ticket-filter-assignee', {all_assignees: Ticket_Utils.assignees}));
+
+				$('.group-select', $container).html(
+					getTemplate('ticket-filter-group', {all_groups: Ticket_Utils.groups}));
+
+				Ticket_Custom_Filters.checkSelectedConditions();
+		  	});
+		});
 	},
 
-	prepareConditions: function(callback){
-
-		var statusArray = ['NEW', 'OPEN', 'PENDING', 'CLOSED'], 
-			priorityArray = ['LOW', 'MEDIUM','HIGH'], 
-			typeArray = ['PROBLEM','INCIDENT','TASK','QUESTION'], assigneesArray = [], groupsArray = [];
-		
-		var is_favorite = false, is_spam = false;
-
-		for(var i=0; i<this.assignees.length; i++)
-			assigneesArray.push(this.assignees[i].id);
-		
-		for(var i=0; i<this.groups.length; i++)
-			groupsArray.push(this.groups[i].id);
-
-		var _status=[], _priority=[], _type=[], _assignees=[], _groups=[], _labels = [];
+	checkSelectedConditions: function(){
 
 		if(Ticket_Custom_Filters.customFilters.length == 0){
+
 			var filterJSON = App_Ticket_Module.ticketFiltersList.collection.get(Ticket_Filter_ID).toJSON();
 
-			//Cloning filter object to avoid changing in collection when custom filter changed
+			//Cloning filter object to avoid changing in collection when LHS changed
 			var copiedFilterJSON = $.extend(true, {}, filterJSON)
 
 			Ticket_Custom_Filters.customFilters = copiedFilterJSON.conditions;
@@ -395,137 +314,62 @@ var Ticket_Custom_Filters = {
 
 			switch(condition.LHS){
 				case 'labels':{
-					_labels.push(condition);
+
+					var $select = $(".chosen-select");
+
+					var $option = $select.find('option[value="'+ label.RHS +'"]');
+					$option.attr('selected', 'selected');
+
+					$select.trigger("chosen:updated");
+					
 					break;
 				}
 				case 'status':{
 
-					if(condition.CONDITION == 'TICKET_STATUS_IS'){
-
-						if(_status.indexOf(condition.RHS) == -1)
-							_status.push(condition.RHS);
-					}else{
-						for(var j=0; j<statusArray.length; j++){
-
-							var status = statusArray[j];
-
-							if(condition.RHS == status)
-								continue;
-
-							if(_status.indexOf(status) == -1)
-								_status.push(status);
-						}
-					}
-
+					if(condition.CONDITION == 'TICKET_STATUS_IS')
+						$('input[value="' + condition.RHS + '"]').attr('checked', 'checked');
+					
 					break;
 				}	
 				case 'priority':
 					
-					if(condition.CONDITION == 'TICKET_PRIORITY_IS'){
-
-						if(_priority.indexOf(condition.RHS) == -1)
-							_priority.push(condition.RHS);
-					}else{
-						for(var j=0; j<priorityArray.length; j++){
-
-							var priority = priorityArray[j];
-
-							if(condition.RHS == priority)
-								continue;
-
-							if(_priority.indexOf(priority) == -1)
-								_priority.push(priority);
-						}
-					}
+					if(condition.CONDITION == 'TICKET_PRIORITY_IS')
+						$('input[value="' + condition.RHS + '"]').attr('checked', 'checked');
 
 					break;
 				case 'ticket_type':
 					
-					if(condition.CONDITION == 'TICKET_TYPE_IS'){
-
-						if(_type.indexOf(condition.RHS) == -1)
-							_type.push(condition.RHS);
-					}else{
-						for(var j=0; j<typeArray.length; j++){
-
-							var type = typeArray[j];
-
-							if(condition.RHS == type)
-								continue;
-
-							if(_type.indexOf(type) == -1)
-								_type.push(type);
-						}
-					}
+					if(condition.CONDITION == 'TICKET_TYPE_IS')
+						$('input[value="' + condition.RHS + '"]').attr('checked', 'checked');
 
 					break;
 				case 'assignee_id':
 					
-					if(condition.CONDITION == 'EQUALS'){
-
-						if(_assignees.indexOf(condition.RHS) == -1)
-							_assignees.push(condition.RHS);
-					}else{
-						for(var j=0; j<assigneesArray.length; j++){
-
-							var assignee = assigneesArray[j];
-
-							if(condition.RHS == assignee)
-								continue;
-
-							if(_assignees.indexOf(assignee) == -1)
-								_assignees.push(assignee);
-						}
-					}
-
+					if(condition.CONDITION == 'EQUALS')
+						$('input[value="' + condition.RHS + '"]').attr('checked', 'checked');
+					
 					break;	
 				case 'group_id':
 					
-					if(condition.CONDITION == 'EQUALS'){
-
-						if(_groups.indexOf(condition.RHS) == -1)
-							_groups.push(condition.RHS);
-					}else{
-						for(var j=0; j<groupsArray.length; j++){
-
-							var group = groupsArray[j];
-
-							if(condition.RHS == group)
-								continue;
-
-							if(_groups.indexOf(group) == -1)
-								_groups.push(group);
-						}
-					}
+					if(condition.CONDITION == 'EQUALS')
+						$('input[value="' + condition.RHS + '"]').attr('checked', 'checked');
+					
 					break;	
 				case 'ticket_favorite':{
 
-					if(condition.CONDITION == 'TICKET_IS'){
-						is_favorite= true;
-					}
-
+					if(condition.CONDITION == 'TICKET_IS')
+						$('input[name="ticket_favorite"]').attr('checked', 'checked');
+					
 					break;
 				}
 				case 'ticket_spam':{
 					
 					if(condition.CONDITION == 'TICKET_IS'){
-						is_spam = true;
+						$('input[name="ticket_spam"]').attr('checked', 'checked');
 					}
 				}
 			}
 		}
-
-		Ticket_Custom_Filters.template_data_json.status = _status.toString();
-		Ticket_Custom_Filters.template_data_json.priority = _priority.toString();
-		Ticket_Custom_Filters.template_data_json.type = _type.toString();
-		Ticket_Custom_Filters.template_data_json.assignees = _assignees.toString();
-		Ticket_Custom_Filters.template_data_json.groups = _groups.toString();
-		Ticket_Custom_Filters.template_data_json.labels = _labels;
-		Ticket_Custom_Filters.template_data_json.is_favorite = is_favorite;
-		Ticket_Custom_Filters.template_data_json.is_spam = is_spam;
-
-		if(callback)
-			callback();
 	},
 
 	changeDueDate: function(epoch_time){

@@ -1,5 +1,35 @@
 var Ticket_Utils = {
 
+	assignees: [],
+	groups: [],
+
+	fetchAssgineesAndGroups: function(callback){
+
+		if(Ticket_Utils.assignees.length && Ticket_Utils.groups.length){
+
+			if(callback)
+				callback();
+
+			return;
+		}
+
+		var Assignees = Backbone.Collection.extend({url : '/core/api/users'});
+		
+		new Assignees().fetch({success: function(model, response, options){
+			
+			Ticket_Utils.assignees = model.toJSON();
+
+			var Groups = Backbone.Collection.extend({url: '/core/api/tickets/groups?only_groups=true'});
+			new Groups().fetch({success: function(model, response, options){
+
+				Ticket_Utils.groups = model.toJSON();
+
+				if(callback)
+					callback();
+			}});
+		}});
+	},
+
 	dateDiff: function(date_future, date_now){
 
 		// get total seconds between the times
@@ -31,5 +61,45 @@ var Ticket_Utils = {
 			$body.removeClass('modal-open').animate({scrollTop: 0}, "slow");
 			$body.css('padding-right', '');
 		}
+	},
+
+	loadDateChartAndDatePicker: function(callback){
+
+		head.js(LIB_PATH + 'lib/date-charts.js', 
+				  LIB_PATH + 'lib/date-range-picker.js'+'?_=' + _AGILE_VERSION, function(){
+
+			if(callback)
+				callback();
+		});
+	},
+
+	loadTextExpander: function(callback){
+
+		head.js('/flatfull/lib/jquery.textarea-expander.js?_=' + _AGILE_VERSION, function(){
+
+			if(callback)
+				callback();
+		});
+	},
+
+	loadInsertCursor: function(callback){
+
+		head.js('/flatfull/lib/jquery.insertatcursor.js?_=' + _AGILE_VERSION, function(){
+
+			if(callback)
+				callback();
+		});
+	},
+
+	enableTooltips: function(el){
+		$('[data-toggle="tooltip"]', el).tooltip();
+	},
+
+	loadTimeAgoPlugin: function(callback){
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+			
+			if(callback)
+				callback();
+		});
 	}
 };

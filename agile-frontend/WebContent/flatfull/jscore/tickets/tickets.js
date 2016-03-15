@@ -57,7 +57,7 @@ var Tickets = {
 				Ticket_Custom_Filters.reset();
 
 				//Initialize custom filters and render layout with filter conditions selected
-				Ticket_Custom_Filters.init(Ticket_Custom_Filters.renderLayout);
+				Ticket_Custom_Filters.renderLayout();
 				
 				//Fetching selected filter ticket collection
 				Tickets.fetchTicketsCollection();
@@ -108,9 +108,12 @@ var Tickets = {
 					Tickets.initEvents(el);
 
 					//Initialize tooltips
-					$('[data-toggle="tooltip"]').tooltip();
+					Ticket_Utils.enableTooltips(el);
 
-					head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){$("time", el).timeago();});
+					//Initialize time ago plugin
+					Tickets_Util.loadTimeAgoPlugin(function(){
+						$("time", el).timeago();
+					});
 					
 					//Clear bulk ops selections
 					Ticket_Bulk_Ops.clearSelection();
@@ -168,7 +171,7 @@ var Tickets = {
 			this.renderLayout(function(){
 
 				//Initialize custom filters
-				Ticket_Custom_Filters.init(Ticket_Custom_Filters.renderLayout);
+				Ticket_Custom_Filters.renderLayout();
 
 				Ticket_Filters.renderFiltersCollection(function(){
 

@@ -43,19 +43,6 @@ var Ticket_Filters = {
 		{
 			addTagsDefaultTypeahead(RHS)
 		}
-
-		// If there is a change in lhs field, and it has tags in it then tags are
-		// loaded into its respective RHS block
-		// $('.lhs', el).on('change', function(e)
-		// {
-		// 	e.preventDefault();
-		// 	var value = $(this).val();
-
-		// 	if (value.indexOf('tags') != -1)
-		// 	{
-		// 		addTagsDefaultTypeahead($(this).closest('td').siblings('td.rhs-block'));
-		// 	}
-		// })
 	},
 
 	cloneTicketFiltersRow : function(event){

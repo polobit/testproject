@@ -3,9 +3,9 @@
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
         <div class="col-md-12 p-n m-b-xs">Assignee</div>
-        <div class="col-md-12 p-n assignee-select txt-small"></div>
+        <div class="col-md-12 p-n assignee-select txt-small"><small>Loading...</small></div>
         <div class="col-md-12 p-n m-t-xs m-b-xs">Group</div>
-        <div class="col-md-12 p-n group-select txt-small"></div>
+        <div class="col-md-12 p-n group-select txt-small"><small>Loading...</small></div>
     </div>
   </div>
 </div>
@@ -61,13 +61,13 @@
         <div class="col-md-12 p-n txt-small">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="status" name="status" value="NEW" {{#contains_string 'NEW' status}}checked{{/contains_string}} type="checkbox">
+              <input class="status" name="status" value="NEW" type="checkbox">
               <i></i>
             </label> New
           </div>
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="status" name="status" value="OPEN" {{#contains_string 'OPEN' status}}checked{{/contains_string}} type="checkbox">
+              <input class="status" name="status" value="OPEN" type="checkbox">
               <i></i>
             </label> Open
           </div>
@@ -75,13 +75,13 @@
         <div class="col-md-12 p-n txt-small">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="status" name="status" value="PENDING" {{#contains_string 'PENDING' status}}checked{{/contains_string}} type="checkbox">
+              <input class="status" name="status" value="PENDING" type="checkbox">
               <i></i>
             </label> Pending
           </div>
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="status" name="status" value="CLOSED" {{#contains_string 'CLOSED' status}}checked{{/contains_string}} type="checkbox">
+              <input class="status" name="status" value="CLOSED" type="checkbox">
               <i></i>
             </label> Closed
           </div>
@@ -90,17 +90,17 @@
         <div class="col-md-12 p-n txt-small">
           <div class="col-md-4 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="priority" name="priority" value="LOW" {{#contains_string 'LOW' priority}}checked{{/contains_string}} type="checkbox"><i></i>
+              <input class="priority" name="priority" value="LOW" type="checkbox"><i></i>
             </label> Low
           </div>
           <div class="col-md-5 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="priority" name="priority" value="MEDIUM" {{#contains_string 'MEDIUM' priority}}checked{{/contains_string}} type="checkbox"><i></i>
+              <input class="priority" name="priority" value="MEDIUM" type="checkbox"><i></i>
             </label> Medium
           </div>
           <div class="col-md-3 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="priority" name="priority" value="HIGH" {{#contains_string 'HIGH' priority}}checked{{/contains_string}} type="checkbox"><i></i>
+              <input class="priority" name="priority" value="HIGH" type="checkbox"><i></i>
             </label> High
           </div>
         </div>
@@ -116,13 +116,13 @@
           <div class="col-md-12 p-n">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="ticket_type" name="ticket_type" value="INCIDENT" {{#contains_string 'INCIDENT' type}}checked{{/contains_string}} type="checkbox">
+              <input class="ticket_type" name="ticket_type" value="INCIDENT" type="checkbox">
               <i></i>
             </label> Incident
           </div>
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="ticket_type" name="ticket_type" value="PROBLEM" {{#contains_string 'PROBLEM' type}}checked{{/contains_string}} type="checkbox">
+              <input class="ticket_type" name="ticket_type" value="PROBLEM" type="checkbox">
               <i></i>
             </label> Problem
           </div>
@@ -130,13 +130,13 @@
         <div class="col-md-12 p-n">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="ticket_type" name="ticket_type" value="TASK" {{#contains_string 'TASK' type}}checked{{/contains_string}} type="checkbox">
+              <input class="ticket_type" name="ticket_type" value="TASK" type="checkbox">
               <i></i>
             </label> Task
           </div>
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="ticket_type" name="ticket_type" value="QUESTION" {{#contains_string 'QUESTION' type}}checked{{/contains_string}} type="checkbox">
+              <input class="ticket_type" name="ticket_type" value="QUESTION" type="checkbox">
               <i></i>
             </label> Question
           </div>
@@ -144,13 +144,13 @@
         <div class="col-md-12 p-n">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="favorite" name="ticket_favorite" value="true" {{#if is_favorite}}checked{{/if}} type="checkbox">
+              <input class="favorite" name="ticket_favorite" value="true" type="checkbox">
               <i></i>
             </label> Favorite
           </div>
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
-              <input class="spam" name="ticket_spam" value="true" {{#if is_spam}}checked{{/if}} type="checkbox">
+              <input class="spam" name="ticket_spam" value="true" type="checkbox">
               <i></i>
             </label> Spam
           </div>
@@ -168,7 +168,7 @@
   {{#all_assignees}}
      <div>
       <label class="i-checks i-checks-sm">
-        <input name="assignee_id" value="{{this.id}}" {{#contains_string  this.id ../selected_assignees}}checked{{/contains_string}} type="checkbox">
+        <input name="assignee_id" value="{{this.id}}" type="checkbox">
         <i></i>
       </label> {{this.name}}
     </div>
@@ -178,7 +178,7 @@
   {{#all_groups}}
     <div>
       <label class="i-checks i-checks-sm">
-        <input name="group_id" value="{{this.id}}" {{#contains_string  this.id ../selected_groups}}checked {{/contains_string}} type="checkbox">
+        <input name="group_id" value="{{this.id}}" type="checkbox">
         <i></i>
       </label> {{this.group_name}}
     </div>
