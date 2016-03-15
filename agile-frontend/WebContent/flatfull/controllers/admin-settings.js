@@ -1177,14 +1177,22 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			      { 
 			       silent : true 
 			      });
-			   }, saveCallback : function(response){
+			   }, saveAuth : function(el){
+				if(getDomainFromURL() != $("#alias", el).val())
+				{
+					$("#saveAliasAuthentication", el).html(getTemplate("conform-domain-change-model",{}));
+					$("#saveAliasAuthentication", el).modal("show");
+					return true;
+				}
+				else{
+					return false;
+				}
+			}, saveCallback : function(response){
 				console.log("saveCallback");
-				var temp = window.location.host.split("-dot");
-				if(temp.length == 1)
-					temp = window.location.host.split(".");
-				if(temp.length == 1)
+				
+				var domain = getDomainFromURL();
+				if(domain == null)
 					window.location.href = "/login";
-				var domain = temp[0];
 				if(domain != response.alias[0]){
 					showNotyPopUp("information", "You Domain has been updated successfully. Logging out...", "top");
 					setTimeout(function()
@@ -1222,4 +1230,13 @@ function initQuota(callback)
        						}).datepicker("setDate", new Date());
 
 				callback();
+}
+
+function getDomainFromURL(){
+	var temp = window.location.host.split("-dot");
+	if(temp.length == 1)
+		temp = window.location.host.split(".");
+	if(temp.length == 1)
+		return "my";
+	return temp[0];
 }
