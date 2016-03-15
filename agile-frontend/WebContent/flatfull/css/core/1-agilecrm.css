@@ -3473,10 +3473,18 @@ div.user-view-actions {
 
 }
 
+
 .task-view-description-outbox .task-view-description
 {
 max-width:300px;
 text-overflow:ellipsis;
 overflow-x:hidden;
 text-align:left;
+}
+
+.new-user
+{
+	  margin-left: 10px;
+    margin-top: 20px;
+
 }
