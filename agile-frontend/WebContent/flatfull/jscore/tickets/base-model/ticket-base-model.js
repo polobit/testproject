@@ -75,7 +75,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		var status = $(e.target).val();
 
-		Tickets.changeStatus(status, function(){
+		Tickets_Rest.changeStatus(status, function(){
 
 			showNotyPopUp('information', "Ticket status has been changed to " + status.toLowerCase(), 'bottomRight', 3000);
 		});
@@ -90,7 +90,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 	changeAssignee: function(e){
 		e.preventDefault();
 
-		Tickets.changeAssignee(e);
+		Tickets_Rest.changeAssignee(e);
 	},
 
 	assignToMe : function(e){
@@ -124,13 +124,13 @@ var Ticket_Base_Model = Base_Model_View.extend({
 	changeTicketType: function(e){
 		e.preventDefault();
 
-		Tickets.changeTicketType(e);
+		Tickets_Rest.changeTicketType(e);
 	},
 
 	changeTicketPriority: function(e){
 		e.preventDefault();
 
-		Tickets.changeTicketPriority(e);
+		Tickets_Rest.changeTicketPriority(e);
 	},
 
 	toEmails: function(e){
@@ -171,7 +171,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 	
 	removeTicketDuedate : function(e){
       e.preventDefault();
-      Tickets.removeDuedate(e);
+      Tickets_Rest.removeDuedate(e);
 	},
 
 
@@ -337,13 +337,13 @@ var Ticket_Base_Model = Base_Model_View.extend({
 	toggleFavorite : function(e){
 		e.preventDefault();
 		
-		Tickets.toggleFavorite(e);
+		Tickets_Rest.toggleFavorite(e);
 	},
 
 	toggleSpam : function(e){
 		e.preventDefault();
 		
-		Tickets.toggleSpam(e);
+		Tickets_Rest.toggleSpam(e);
 	},
 
 	toggleWidgets : function(e){
@@ -356,19 +356,19 @@ var Ticket_Base_Model = Base_Model_View.extend({
 	deleteTicket: function(e){
 		e.preventDefault();
 		
-		Tickets.deleteTicket();
+		Tickets_Rest.deleteTicket();
 	},
 
 	closeTicket : function(e){
 		e.preventDefault();
 		
-		Tickets.closeTicket();
+		Tickets_Rest.closeTicket();
 	},
 
 	workflows: function(e){
 		e.preventDefault();
 		
-		Tickets.showWorkflows(e);
+		Tickets_Rest.showWorkflows(e);
 	},
 
 	executeWorkflows :  function(e){

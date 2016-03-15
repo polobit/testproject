@@ -586,67 +586,90 @@ var Tickets = {
 		}});
 	},
 
-	changeAssignee : function(e){
+	// changeAssignee : function(e){
 
-		var that = e.target;
+	// 	var that = e.target;
 
-		var assigneeId = $(that).val();
-		//console.log(assigneeId);
+	// 	var assigneeId = $(that).val();
+	// 	//console.log(assigneeId);
 
-		if(!assigneeId)
-			return;
+	// 	if(!assigneeId)
+	// 		return;
 
-	    var groupId = $(that.options[that.selectedIndex]).closest('optgroup').attr('data-group-id');
+	//     var groupId = $(that.options[that.selectedIndex]).closest('optgroup').attr('data-group-id');
 
-	    if(!groupId){
-	    	groupId = $(that).val();
-	    	assigneeId = 0;
-	    }
+
+	 //   if(!groupId){
+	   // 	groupId = $(that).val();
+	    //	assigneeId = 0;
+	    //}
+
        	
-       	var ticketJSON = App_Ticket_Module.ticketView.model.toJSON();
+ //       	var ticketJSON = App_Ticket_Module.ticketView.model.toJSON();
 
        	// if(ticketJSON.assigneeID == assigneeId 
        	// 	&& ticketJSON.groupID == groupId)
        	// 	return;
+=======
+ //       	if(ticketJSON.assigneeID == assigneeId 
+ //       		&& ticketJSON.groupID == groupId)
+ //       		return;
+>>>>>>> sreedevi_ui_fixes
 
-       	var url = "/core/api/tickets/" + Current_Ticket_ID + "/assign-ticket/" + groupId + "/" + assigneeId;
-       	var json = {id: Current_Ticket_ID};
+ //       	var url = "/core/api/tickets/" + Current_Ticket_ID + "/assign-ticket/" + groupId + "/" + assigneeId;
+ //       	var json = {id: Current_Ticket_ID};
 
-       	Tickets.updateModel(url, json, function(data){
+ //       	Tickets.updateModel(url, json, function(data){
             
-			var modelData = data.toJSON();
+	// 		var modelData = data.toJSON();
 
-			try{
-				if(modelData.assigneeID != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(groupId, Tickets.groupsList))
-				$('.assign-to-me').show();
-			else
-				$('.assign-to-me').hide();
-			}
-			catch(e){
-				console.log(e);
-			}
+	// 		try{
+	// 			if(modelData.assigneeID != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(groupId, Tickets.groupsList))
+	// 			$('.assign-to-me').show();
+	// 		else
+	// 			$('.assign-to-me').hide();
+	// 		}
+	// 		catch(e){
+	// 			console.log(e);
+	// 		}
 
+<<<<<<< HEAD
 			var assigneeName = '';
 			try{
 			 assigneeName = (modelData.assigneeID) ? (modelData.assignee.name) : modelData.group.group_name;
 			}catch(e){}
+=======
+	// 		var assigneeName = (modelData.assigneeID) ? (modelData.assignee.name) : modelData.group.group_name;
+>>>>>>> sreedevi_ui_fixes
 
-			var message = 'Ticket group has been changed to ' + assigneeName;
+	// 		var message = 'Ticket group has been changed to ' + assigneeName;
 
+<<<<<<< HEAD
 			if(modelData.assigneeID)
 				message = 'Assignee has been changed to ' + assigneeName;
+=======
+	// 		if(modelData.assigneeID)
+	// 			var message = 'Assignee has been changed to ' + assigneeName;
+>>>>>>> sreedevi_ui_fixes
 			
-			showNotyPopUp('information', message, 'bottomRight', 5000);
+	// 		showNotyPopUp('information', message, 'bottomRight', 5000);
 
-			modelData.assignee = ((modelData.assignee) ? modelData.assignee : "");
-			modelData.group = ((modelData.group) ? modelData.group : "");
+	// 		modelData.assignee = ((modelData.assignee) ? modelData.assignee : "");
+	// 		modelData.group = ((modelData.group) ? modelData.group : "");
 
+<<<<<<< HEAD
 			// Update assignee in model and collection 
 			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, modelData);
 
 			App_Ticket_Module.ticketView.model.set(modelData, {silent: true});				
 		});
     },
+=======
+	// 		// Update assignee in model and collection 
+	// 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, modelData); 					
+	// 	});
+ //    },
+>>>>>>> sreedevi_ui_fixes
 
 	isCurrentUserExistInGroup : function(selectedGroupId, groupsList){
 
@@ -667,46 +690,47 @@ var Tickets = {
 
 	},
 
-	changeTicketType: function(event){
+	// changeTicketType: function(event){
 
-		var $select = $('.ticket_type');
-		var new_ticket_type = $select.find('option:selected').val();
-		$select.attr('disabled', true);
+	// 	var $select = $('.ticket_type');
+	// 	var new_ticket_type = $select.find('option:selected').val();
+	// 	$select.attr('disabled', true);
 
-		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-ticket-type";
-		var json = {type: new_ticket_type};
+	// 	var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-ticket-type";
+	// 	var json = {type: new_ticket_type};
 
-		this.updateModel(url, json, function(){
+	// 	this.updateModel(url, json, function(){
 
-			// current view
-			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {type : new_ticket_type}); 
-				//update collection 
-	   			$select.attr('disabled', false);
-	            showNotyPopUp('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
-			},
+	// 		// current view
+	// 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {type : new_ticket_type}); 
+	// 			//update collection 
+	//    			$select.attr('disabled', false);
+	//             showNotyPopUp('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
+	// 		},
 
-			function(error){
-				$select.attr('disabled', false);
-			}
-		);
-	},
+	// 		function(error){
+	// 			$select.attr('disabled', false);
+	// 		}
+	// 	);
+	// },
 
-	changeTicketPriority: function(event){
+	// changeTicketPriority: function(event){
 
-		var $priority = $('.ticket_priority');
-		var new_priority = $priority.find('option:selected').val();
-		$priority.attr('disabled', true);
+	// 	var $priority = $('.ticket_priority');
+	// 	var new_priority = $priority.find('option:selected').val();
+	// 	$priority.attr('disabled', true);
 
-		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-priority";
-		var json = {priority: new_priority};
+	// 	var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-priority";
+	// 	var json = {priority: new_priority};
 
-		this.updateModel(url, json, function(){
+	// 	this.updateModel(url, json, function(){
 
-			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, json);
+	// 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
-			$priority.attr('disabled', false);
-			showNotyPopUp('information', 'Ticket Type has been changed to '+ new_priority.toLowerCase() , 'bottomRight', 5000);
+	// 		$priority.attr('disabled', false);
+	// 		showNotyPopUp('information', 'Ticket Type has been changed to '+ new_priority.toLowerCase() , 'bottomRight', 5000);
 		    
+<<<<<<< HEAD
 		}, function(error){
 			$priority.attr('disabled', false);
 		});
@@ -726,6 +750,25 @@ var Tickets = {
 		// Update data in model
 		updated_model.set(data, {silent: true});
 	},
+=======
+	// 	}, function(error){
+	// 		$priority.attr('disabled', false);
+	// 	});
+	// },
+
+	// updateDataInModelAndCollection : function(id, data){
+
+	//      App_Ticket_Module.ticketView.model.set(data, {silent: true});
+	// 	// if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
+	// 	// 	return;
+ //        if(!App_Ticket_Module.ticketsCollection)
+ //        return;
+	// 	// get data from collection with id
+	// 	updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
+	// 	// Update data in model
+	// 	updated_model.set(data, {silent: true});
+	// },
+>>>>>>> sreedevi_ui_fixes
 
 	updateModel: function(url, json, success_cbk, err_cbk){
 
@@ -843,7 +886,7 @@ var Tickets = {
 
 		this.updateModel(url, json, function(){
 
-			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, json);
+			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
 			var msg = (command == 'remove') ? email + ' removed from CC emails' : email + ' added to CC emails';
 
@@ -922,95 +965,95 @@ var Tickets = {
 		
 	},
 	
-	changeStatus : function(status, callback){
+	// changeStatus : function(status, callback){
     
-		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-status";
-		var json = {status: status};
+	// 	var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-status";
+	// 	var json = {status: status};
 
-        var current_time = new Date().getTime();
-		Tickets.updateModel(url, json, function(model){
+ //        var current_time = new Date().getTime();
+	// 	Tickets.updateModel(url, json, function(model){
 
-				if(status != "CLOSED")
-				{
-				    $(".ticket-addnote-close").removeAttr("disabled");
-				    $(".ticket-send-reply .btn").removeAttr("disabled");
-                	$('#ticket_change_sla').removeAttr("disabled");                    	
-                	$(".close-current-ticket").removeAttr("disabled");
-                	$(".remove-date").css("display", "block");
-				}						
-				else
-				{
-					$(".remove-date").css("display", "none");
-				    $(".ticket-addnote_close").attr("disabled","disabled"); 
-					$(".ticket-send-reply .btn").attr("disabled","disabled");
-					$('#ticket_change_sla').attr("disabled","disabled");
-					$(".close-current-ticket").attr("disabled","disabled");
-					$(".ticket_status").val("CLOSED");
+	// 			if(status != "CLOSED")
+	// 			{
+	// 			    $(".ticket-addnote-close").removeAttr("disabled");
+	// 			    $(".ticket-send-reply .btn").removeAttr("disabled");
+ //                	$('#ticket_change_sla').removeAttr("disabled");                    	
+ //                	$(".close-current-ticket").removeAttr("disabled");
+ //                	$(".remove-date").css("display", "block");
+	// 			}						
+	// 			else
+	// 			{
+	// 				$(".remove-date").css("display", "none");
+	// 			    $(".ticket-addnote_close").attr("disabled","disabled"); 
+	// 				$(".ticket-send-reply .btn").attr("disabled","disabled");
+	// 				$('#ticket_change_sla').attr("disabled","disabled");
+	// 				$(".close-current-ticket").attr("disabled","disabled");
+	// 				$(".ticket_status").val("CLOSED");
 
-					json.closed_time = current_time;
-				}
+	// 				json.closed_time = current_time;
+	// 			}
 
-                Tickets.updateDataInModelAndCollection(Current_Ticket_ID, json);
+ //                Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 				
-				if(callback)
-					callback(model.toJSON());
+	// 			if(callback)
+	// 				callback(model.toJSON());
 
-			}, null);
-	},
+	// 		}, null);
+	// },
 
-	closeTicket : function(e){
+	// closeTicket : function(e){
 
-		this.changeStatus("CLOSED", function(){
-			showNotyPopUp('information', "Ticket status has been changed to closed", 'bottomRight', 5000);
-		});
-	},
+	// 	this.changeStatus("CLOSED", function(){
+	// 		showNotyPopUp('information', "Ticket status has been changed to closed", 'bottomRight', 5000);
+	// 	});
+	// },
 
-	deleteTicket: function(e){
+	// deleteTicket: function(e){
 
-		//Rendering root template
-		getTemplate("ticket-delete", {}, undefined, function(template_ui){
+	// 	//Rendering root template
+	// 	getTemplate("ticket-delete", {}, undefined, function(template_ui){
 
-			if(!template_ui)
-		  		return;
+	// 		if(!template_ui)
+	// 	  		return;
 
-			$('#ticketsModal').html($(template_ui)).modal('show').on('shown.bs.modal', function() {
+	// 		$('#ticketsModal').html($(template_ui)).modal('show').on('shown.bs.modal', function() {
 			    
-			    $('#ticketsModal').on('click', 'a.delete-ticket', function(){
+	// 		    $('#ticketsModal').on('click', 'a.delete-ticket', function(){
 
-					disable_save_button($(this));
+	// 				disable_save_button($(this));
 
-					App_Ticket_Module.ticketView.model.destroy({
-						success : function(model, response) {
+	// 				App_Ticket_Module.ticketView.model.destroy({
+	// 					success : function(model, response) {
 							
-							showNotyPopUp('information', "Ticket has been deleted",'bottomRight', 5000);
+	// 						showNotyPopUp('information', "Ticket has been deleted",'bottomRight', 5000);
 	                          
-							var url = '#tickets/filter/' + Ticket_Filter_ID;
-							Backbone.history.navigate(url, {trigger : true});
-						}
-					});
+	// 						var url = '#tickets/filter/' + Ticket_Filter_ID;
+	// 						Backbone.history.navigate(url, {trigger : true});
+	// 					}
+	// 				});
 
-					$('#ticketsModal').modal('hide');
-				});
-			});
-		});
-	},
+	// 				$('#ticketsModal').modal('hide');
+	// 			});
+	// 		});
+	// 	});
+	// },
 
-	showWorkflows: function(e){
+	// showWorkflows: function(e){
 
-		var $this = $(e.target);
+	// 	var $this = $(e.target);
 
-		$this.siblings("#workflows_list").html('<li><a href="javascript:void(0);">Loading...</a></li>');
+	// 	$this.siblings("#workflows_list").html('<li><a href="javascript:void(0);">Loading...</a></li>');
 
-		var workflows = Backbone.Collection.extend({
-			url : 'core/api/workflows'
-		});
+	// 	var workflows = Backbone.Collection.extend({
+	// 		url : 'core/api/workflows'
+	// 	});
 
-		new workflows().fetch({
-			success : function(Collection) {
-				$('#workflows_list').html(getTemplate("ticket-show-workflows-list", Collection.toJSON()));
-			}
-		});
-	},
+	// 	new workflows().fetch({
+	// 		success : function(Collection) {
+	// 			$('#workflows_list').html(getTemplate("ticket-show-workflows-list", Collection.toJSON()));
+	// 		}
+	// 	});
+	// },
 
 	loadWidgets: function(){
 
@@ -1054,63 +1097,63 @@ var Tickets = {
 								 ? true : false;
 	},
 
-	toggleFavorite : function(e){
+	// toggleFavorite : function(e){
 
-		var favourite = true; 
+	// 	var favourite = true; 
 
-		//Toggling star color
-		if($(e.target).hasClass("fa-star text-warning")){
-			$(e.target).removeClass("fa-star text-warning").addClass("fa-star-o text-light");
-		     favourite=false;
-		}else{
+	// 	//Toggling star color
+	// 	if($(e.target).hasClass("fa-star text-warning")){
+	// 		$(e.target).removeClass("fa-star text-warning").addClass("fa-star-o text-light");
+	// 	     favourite=false;
+	// 	}else{
 		   
-			$(e.target).addClass("fa-star text-warning").removeClass("fa-star-o text-light");
-		}
+	// 		$(e.target).addClass("fa-star text-warning").removeClass("fa-star-o text-light");
+	// 	}
 
-		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/toggle-favorite";
-		var json = {};
+	// 	var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/toggle-favorite";
+	// 	var json = {};
 
-		Tickets.updateModel(url, json, function(model){
+	// 	Tickets.updateModel(url, json, function(model){
 
-			var succesmessage = "Ticket marked favourite";
+	// 		var succesmessage = "Ticket marked favourite";
 
-			if(!favourite)
-				succesmessage = "Ticket marked as unfavourite";
+	// 		if(!favourite)
+	// 			succesmessage = "Ticket marked as unfavourite";
 
-             Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {is_favorite:favourite});
+ //             Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {is_favorite:favourite});
 
-			 showNotyPopUp('information', succesmessage, 'bottomRight', 5000);
-		}, null);
-	},
+	// 		 showNotyPopUp('information', succesmessage, 'bottomRight', 5000);
+	// 	}, null);
+	// },
 
-	toggleSpam : function(e){
+	// toggleSpam : function(e){
 
-		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/toggle-spam";
-		var json = {};
+	// 	var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/toggle-spam";
+	// 	var json = {};
 
-		Tickets.updateModel(url, json, function(model){
+	// 	Tickets.updateModel(url, json, function(model){
 
-			var message ="";
-			var spam_value=true;
+	// 		var message ="";
+	// 		var spam_value=true;
 
-			if(model.toJSON().is_spam)
-			{
-				$(e.target).addClass("btn-danger").removeClass("btn-default");
-			    message="Ticket marked as Spam"; 
-			}
-			else
-			{
-				$(e.target).removeClass("btn-danger").addClass("btn-default");
-                message="Ticket un marked as Spam";
-                spam_value=false;
-            }
+	// 		if(model.toJSON().is_spam)
+	// 		{
+	// 			$(e.target).addClass("btn-danger").removeClass("btn-default");
+	// 		    message="Ticket marked as Spam"; 
+	// 		}
+	// 		else
+	// 		{
+	// 			$(e.target).removeClass("btn-danger").addClass("btn-default");
+ //                message="Ticket un marked as Spam";
+ //                spam_value=false;
+ //            }
 
-            showNotyPopUp('information',message, 'bottomRight', 5000);
+ //            showNotyPopUp('information',message, 'bottomRight', 5000);
 			
-			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, {is_spam:spam_value});
+	// 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {is_spam:spam_value});
 
-		}, null);
-	},
+	// 	}, null);
+	// },
 
 	toggleWidgets : function(e){
 
@@ -1154,7 +1197,7 @@ var Tickets = {
 
 			var formatted_date = new Date(timeInMilli).format('mmm dd, yyyy');
 
-			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, json);
+			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
 			$(".remove-date").css("display", "block");
 
@@ -1169,23 +1212,23 @@ var Tickets = {
 		}, null);
 	},
 
-	removeDuedate : function(){
+	// removeDuedate : function(){
 
-		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/remove-due-date";
-		var json = {};
+	// 	var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/remove-due-date";
+	// 	var json = {};
 
-		Tickets.updateModel(url, json, function(model){
+	// 	Tickets.updateModel(url, json, function(model){
 
-    		$('#ticket_change_sla').val(''); 
+ //    		$('#ticket_change_sla').val(''); 
 
-    		$(".remove-date").css("display", "none");
+ //    		$(".remove-date").css("display", "none");
 
-			Tickets.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:''});
+	// 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:''});
 
-			showNotyPopUp('information', "Due date has been removed",'bottomRight', 5000);
+	// 		showNotyPopUp('information', "Due date has been removed",'bottomRight', 5000);
 
-		}, null);
-	},
+	// 	}, null);
+	// },
 
 	initializeTicketSLA : function(el){
 		
@@ -1268,18 +1311,18 @@ var Tickets = {
 	  	});
 	},
 
-	removeTicketsFromCollection: function(ticketIDCSV){
+	// removeTicketsFromCollection: function(ticketIDCSV){
 
-		var ticketIDArray = ticketIDCSV.split(",");
+	// 	var ticketIDArray = ticketIDCSV.split(",");
 
-		if(!ticketIDArray || ticketIDArray.length ==0)
-			return;
+	// 	if(!ticketIDArray || ticketIDArray.length ==0)
+	// 		return;
 
-		for(var i=0; i<ticketIDArray.length; i++){
-			$('td#' + ticketIDArray[i]).closest('tr').remove();
-			App_Ticket_Module.ticketsCollection.collection.remove(ticketIDArray[i]);
-		}
-	},
+	// 	for(var i=0; i<ticketIDArray.length; i++){
+	// 		$('td#' + ticketIDArray[i]).closest('tr').remove();
+	// 		App_Ticket_Module.ticketsCollection.collection.remove(ticketIDArray[i]);
+	// 	}
+	// },
 
 	showPreviousTicketCount: function(email, el){
 
@@ -1500,7 +1543,7 @@ var Tickets = {
 		Ticket_Labels.showSelectedLabels(new Array(), $(el));
 
 		//Initializing type ahead for cc emails
-		agile_type_ahead("cc_email_field", el, tickets_typeahead, function(arg1, arg2){
+		agile_type_ahead("cc_email_field", el, Tickets_Typeahead.contact_typeahead, function(arg1, arg2){
 
 			//Upon selection of any contact in cc field, this callback will be executed
 			arg2 = arg2.split(" ").join("");
@@ -1518,7 +1561,7 @@ var Tickets = {
 	  	},undefined, undefined, 'core/api/search/');
 
   		//Initializing type ahead on email field
-		agile_type_ahead("requester_email", el, tickets_typeahead, function(arg1, arg2){
+		agile_type_ahead("requester_email", el, Tickets_Typeahead.contact_typeahead, function(arg1, arg2){
 
 			arg2 = arg2.split(" ").join("");
 
@@ -1550,57 +1593,57 @@ var Tickets = {
 	}
 };
 
-function tickets_typeahead(data){
+// function tickets_typeahead(data){
 
-	if (data == null)
-		return;
+// 	if (data == null)
+// 		return;
 
-	// To store contact names list
-	var contact_names_list = [];
+// 	// To store contact names list
+// 	var contact_names_list = [];
 
-	/*
-	 * Iterates through all the contacts and get name property
-	 */
-	$.each(data, function(index, contact)
-	{
-		var contact_name;
+// 	/*
+// 	 * Iterates through all the contacts and get name property
+// 	 */
+// 	$.each(data, function(index, contact)
+// 	{
+// 		var contact_name;
 
-		// Appends first and last name to push in to a list
-		contact_name = getContactName(contact) + "-" + contact.id;
+// 		// Appends first and last name to push in to a list
+// 		contact_name = getContactName(contact) + "-" + contact.id;
 
-		// Spaces are removed from the name, name should be used as a key in map
-		// "TYPEHEAD_TAGS"
-		contact_names_list.push(contact_name.split(" ").join(""));
-	});
+// 		// Spaces are removed from the name, name should be used as a key in map
+// 		// "TYPEHEAD_TAGS"
+// 		contact_names_list.push(contact_name.split(" ").join(""));
+// 	});
 
-	// Returns list of contact/company names
-	return contact_names_list;
-}
+// 	// Returns list of contact/company names
+// 	return contact_names_list;
+// }
 
-function tickets_cc_emails_typeahead(data){
+// function tickets_cc_emails_typeahead(data){
 
-	if (data == null)
-		return;
+// 	if (data == null)
+// 		return;
 
-	// To store contact names list
-	var contact_names_list = [];
+// 	// To store contact names list
+// 	var contact_names_list = [];
 
-	/*
-	 * Iterates through all the contacts and get name property
-	 */
-	$.each(data, function(index, contact)
-	{
-		var contact_name;
+// 	/*
+// 	 * Iterates through all the contacts and get name property
+// 	 */
+// 	$.each(data, function(index, contact)
+// 	{
+// 		var contact_name;
 
-		// Appends first and last name to push in to a list
-		contact_name = getContactName(contact) + "-" + contact.id;
+// 		// Appends first and last name to push in to a list
+// 		contact_name = getContactName(contact) + "-" + contact.id;
 
-		// Spaces are removed from the name, name should be used as a key in map
-		// "TYPEHEAD_TAGS"
-		contact_names_list.push(contact_name.split(" ").join(""));
-	});
+// 		// Spaces are removed from the name, name should be used as a key in map
+// 		// "TYPEHEAD_TAGS"
+// 		contact_names_list.push(contact_name.split(" ").join(""));
+// 	});
 
-	// Returns list of contact/company names
-	return contact_names_list;
-}
+// 	// Returns list of contact/company names
+// 	return contact_names_list;
+// }
 

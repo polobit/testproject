@@ -242,7 +242,7 @@ var Tickets_Notes = {
 		});
 
 		if($("#forward_email_input", $container).length > 0){
-			agile_type_ahead("forward_email_input", $container, tickets_typeahead, function(arg1, arg2){
+			agile_type_ahead("forward_email_input", $container, Tickets_Typeahead.contact_typeahead, function(arg1, arg2){
 
 				arg2 = arg2.split(" ").join("");
 
