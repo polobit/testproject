@@ -184,7 +184,7 @@ var subject=<%=mapper.writeValueAsString(sNoteSubject)%>
  <div class="col" style="height:90%;">
    <div class="vbox">
      <div class="row-row">
-       <div class="cell">
+       <div class="cell" style="height:90%;">
          <div class="cell-inner">
            <div class="wrapper-md">
             <div class="col-md-8 col-sm-12 col-xs-12 container panel panel-default col-md-offset-2">
@@ -208,7 +208,7 @@ var subject=<%=mapper.writeValueAsString(sNoteSubject)%>
 
   <!-- column -->
  <div class="col w-md lter b-l" style="height:90%;">
-   <div class="vbox" style="height:90%;">
+   <div class="vbox" style="height:85%;">
      <div class="wrapper b-b b-light">
        <div class="font-thin h4">Comments History</div>
      </div>
@@ -274,9 +274,12 @@ function bodyLoad()
 					$("body").on("click","#send-comments",function (e){
 						e.preventDefault();
 						var jsonreq=[];
-						
-						
-						
+						var sCommentsVal=$("#comments").val();
+						if(!sCommentsVal.trim())
+						{
+							alert("Enter comments");
+							return;
+						}
 						var doc_json={"description":$("#comments").val(),
 							"contact_id": contact_id,
 								"commenter_id": contact_id,
@@ -301,12 +304,17 @@ function bodyLoad()
 							},
 							success:function(res){
 								var sComments=$("#comments").val();
-								var sHTML='<ul class="list-group"><li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="word-wrap: break-word;overflow:hidden;">'+ sComments +'</p><small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time class="timeago" datetime="Feb 19 2016 19:02:53" title="1455888773">less than a minute ago</time></small></li></ul>'
+								var sHTML='<ul class="list-group"><li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="display:-moz-box;word-wrap: break-word;overflow:hidden;">'+ sComments +'</p><small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time class="timeago" datetime="Feb 19 2016 19:02:53" title="1455888773">less than a minute ago</time></small></li></ul>'
 								$(".comments-history").prepend(sHTML)
 								$("#comments").val("")
+								$('#comments').focus();
 							}	
 						});			
 					});
+
+					setTimeout(function(){
+						$('#comments').focus();
+					},1000);
 				}
 				
 			);

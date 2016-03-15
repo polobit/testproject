@@ -748,7 +748,7 @@ function populate_deal_products(el, value,form_id){
 				{
 					//$(".discounttype-input-group-btn","#opportunityForm").removeClass("open").addClass("open")
 					//return;
-					var source = event.target || event.srcElement;
+					var source = e.target || e.srcElement;
 					if($(".discounttype-input-group-btn",me._form_id).hasClass("open"))
 						$(".discounttype-input-group-btn",me._form_id).removeClass("open")
 					else
@@ -756,7 +756,7 @@ function populate_deal_products(el, value,form_id){
 				}
 				this.toggleDiscountOptionsClick=function (e)
 				{
-					var source = event.target || event.srcElement;
+					var source = e.target || e.srcElement;
 					var sText=$(source).text();
 					var objButtonGroup=$(source).closest(".discounttype-input-group-btn")
 
@@ -771,7 +771,7 @@ function populate_deal_products(el, value,form_id){
 				}
 				this.processProductsClick=function(e)
 				{
-					var source = event.target || event.srcElement;
+					var source = e.target || e.srcElement;
 					var checked = false;
 					var iTotal=0;
 					var objTR=$(source).closest('tr');
@@ -805,7 +805,7 @@ function populate_deal_products(el, value,form_id){
 				}
 				this.close=function(e,type)
 				{
-					var source = event.target || event.srcElement;		
+					var source = e.target || e.srcElement;		
 					var value=$(source).val();
 					
 					//type-enter/blur
@@ -852,7 +852,7 @@ function populate_deal_products(el, value,form_id){
 				}
 				this.processProductQtyClick=function(e)
 				{
-					var source = event.target || event.srcElement;
+					var source = e.target || e.srcElement;
 					var jSpan=$(source)
 					if($(source).prop("tagName")=="SPAN")
 					{
@@ -915,10 +915,17 @@ function ValidateDealDiscountAmt(_form_id)
 	
 	var iTotal=0;
 	try{
+		var iDiscountValue=$("#discount_value",_form_id).val();
 		$(".calculation-error-status",_form_id).html("")
+		var iDiscountValue=$("#discount_value",_form_id).val();
+			if(iDiscountValue.trim() && !$.isNumeric(iDiscountValue))
+			{
+				$(".calculation-error-status",_form_id).html("Discount should be numeric")
+				return false;
+			}
 		if($("#apply_discount",_form_id).is(':checked'))
 		{
-			var iDiscountValue=$("#discount_value",_form_id).val();
+			
 			if(!$.isNumeric(iDiscountValue))
 			{
 				$(".calculation-error-status",_form_id).html("Discount should be numeric")

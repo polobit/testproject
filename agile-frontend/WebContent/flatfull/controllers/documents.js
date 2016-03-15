@@ -23,6 +23,8 @@ var DocumentsRouter = Backbone.Router.extend({
 	{
 		var model_json={};
 
+		if(contactcompanydealtype==null)
+			contactcompanydealtype="document"
 		var id=null
 		$("#content").html('<div templateid=' + templateid + ' edocattachtype='+ edocattachtype +' contactcompanydealid='+ contactcompanydealid +' contactcompanydealtype='+ contactcompanydealtype +' id="documents-listener-container"></div>');	
 		
@@ -300,6 +302,69 @@ function append_document_notes(base_model)
 
 function initializeDocumentsListeners()
 {
+	$('#uploadDocumentUpdateForm,#uploadDocumentModalForm').on('click', '.cancel-document', function(e)
+	{
+ 		e.preventDefault();
+
+ 		if (App_Contacts.contactDetailView)
+		{
+				if(Current_Route.indexOf( "contact")>-1)	
+				{
+					var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
+					Backbone.history.navigate(sURL, { trigger : true });
+					return;			
+				}
+				else if( Current_Route.indexOf( App_Contacts.contactDetailView.model.get('id'))>-1)
+				{
+					var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
+					Backbone.history.navigate(sURL, { trigger : true });
+					return;
+				}
+		}
+		if (App_Companies.companyDetailView)
+		{
+			if(Current_Route.indexOf( "company")>-1)	
+			{
+				var sURL="company/" + App_Companies.companyDetailView.model.get('id');
+				Backbone.history.navigate(sURL, { trigger : true });
+				return;	
+			}
+			else if( Current_Route.indexOf( App_Companies.companyDetailView.model.get('id'))>-1)
+			{
+				company_util.updateDocumentsList(document,true);
+				var sURL="company/" + App_Companies.companyDetailView.model.get('id');
+				Backbone.history.navigate(sURL, { trigger : true });
+				return;
+			}		
+		}
+		if (App_Deal_Details.dealDetailView)
+		{
+				if(Current_Route.indexOf( "deal" + "/" +App_Deal_Details.dealDetailView.model.id)>-1)	
+				{
+					var sURL="deal/" + App_Deal_Details.dealDetailView.model.id ;
+					Backbone.history.navigate(sURL, { trigger : true });
+					return;			
+				}
+
+		}		
+		if (Current_Route == 'documents') 
+		{
+			App_Documents.navigate("documents", {trigger : true});
+				return;
+		}	
+		if (Current_Route == "email-template-add" || Current_Route.indexOf("email-template") == 0) 
+		{
+			App_Settings.navigate(Current_Route, {
+					trigger : true
+				});
+		}
+		else 
+		{
+			App_Documents.navigate("documents", {
+				trigger : true
+			});
+		}
+	});
 	$('#uploadDocumentUpdateForm,#uploadDocumentModalForm').on('click', '#document_validate, #document_update_validate', function(e)
 	{
  		e.preventDefault();
@@ -362,7 +427,7 @@ function proc_add_document(model_json)
 					sPricingTable= get_pricingtable_from_deal(model_json)	
 					$('.deal_tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ model_json.id +'">'+model_json.name+'</li>');
 				}
-				else
+				else 
 				{
 					var contact_name = getContactName(model_json);
 					$('.contacts', "#uploadDocumentModalForm").append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + model_json.id + '">' + contact_name + '</li>');
@@ -462,7 +527,9 @@ function proc_add_document(model_json)
 							if($("#documents-listener-container").data("contact_model_json"))
 							{
 								contact_json=get_contact_json_for_merge_fields($("#documents-listener-container").data("contact_model_json"));
-							}										
+							}
+							else
+								contact_json={}										
 							if($("#documents-listener-container").data("deal_model_json"))
 							{
 								contact_json["pricing_table"]=get_pricingtable_from_deal($("#documents-listener-container").data("deal_model_json"));
@@ -497,7 +564,7 @@ function process_add_document_templatemodel(template_model,sPricingTable,context
 	if(context_model==null)
 		context_model=$("#documents-listener-container").data("context_model");
 	var json={};
-	if(contactcompanydealtype!="deal")
+	if(contactcompanydealtype!="deal" && contactcompanydealtype!="document")
 	{
 		json = get_contact_json_for_merge_fields(context_model);	
 	}
@@ -594,6 +661,9 @@ function get_pricingtable_from_deal(model_json)
 }
 function initialize_add_document_template_listeners(elContainer) {
 
+	$('[data-toggle=popover]').on('shown.bs.popover', function () {
+	  $('.popover').css('top',parseInt($('.popover').css('top')) + 22 + 'px')
+	})
 	$("#edocument-type-select-container")
 		.on(
 		"mouseenter",
@@ -608,18 +678,68 @@ function initialize_add_document_template_listeners(elContainer) {
 			}
 		}
 		var placement="right";
+		function wheretoplace(context,source){
+			   var $win, $source, winWidth, popoverWidth, popoverHeight, offset, toRight, toLeft, placement, scrollTop;
+
+		    $win = $(window);
+		    $source = $(source);
+		    placement = "right"//$source.attr('data-placement');
+		    popoverWidth = 400;
+		    popoverHeight = 110;
+		    offset = $source.offset();
+
+		    // Check for horizontal positioning and try to use it.
+		    if (placement.match(/^right|left$/)) {
+		      winWidth = $win.width();
+		      toRight = winWidth - offset.left - source.offsetWidth;
+		      toLeft = offset.left;
+
+		      if (placement === 'left') {
+		        if (toLeft > popoverWidth) {
+		          return 'left';
+		        }
+		        else if (toRight > popoverWidth) {
+		          return 'right';
+		        }
+		      }
+		      else {
+		        if (toRight > popoverWidth) {
+		          return 'right';
+		        }
+		        else if (toLeft > popoverWidth) {
+		          return 'left';
+		        }
+		      }
+		    }
+
+		    // Handle vertical positioning.
+		    scrollTop = $win.scrollTop();
+		    if (placement === 'bottom') {
+		      if (($win.height() + scrollTop) - (offset.top + source.offsetHeight) > popoverHeight) {
+		        return 'bottom';
+		      }
+		      return 'top';
+		    }
+		    else {
+		      if (offset.top - scrollTop > popoverHeight) {
+		        return 'top';
+		      }
+		      return 'bottom';
+		    }
+	    }
 		if(index==2 || index==3)
 			placement="left";
 		$(this).popover({
 				"trigger": "hover", 
-            	"placement": placement,
+            	"placement": wheretoplace,
             	"max-width":"100%",
             	"toggle" : "popover",
 		        "template":'<div style="overflow-x:hidden;max-width:640px;height:90vh;overflow-y:hidden;box-sizing:content-box;background:rgb(239,241,242);" class="popover m-l-xs m-r-xs"><div class="arrow"></div><div class="popover-inner" style="padding:1px;width:640px;border-radius:2px"><div class="popover-content" style="background:rgb(239,241,242)"><p></p></div></div></div>',
 		        "container": 'body',
-		        "html":"true",
-		       
+		        "html":"true"
 		       	});
+
+		
 		console.log($(".document-template-go-popover",this).attr("pos"));
 		//$(this).attr("data-content", "test");
 		$(this).attr("data-content", $(".document-template-go-popover",this).html());
@@ -631,6 +751,11 @@ function initialize_add_document_template_listeners(elContainer) {
 		//$(this).attr("data-content", $(".document-template-go-popover",this).html());
 		       
 		$(this).popover('show');
+		$(this).off('shown.bs.popover')
+
+		$(this).on('shown.bs.popover', function () {
+		  $('.popover').css('top',parseInt($('.popover').css('top')) + 22 + 'px')
+		})
 		});
 }
 function load_document_from_edit_model(model)
@@ -651,6 +776,13 @@ function load_document_from_edit_model(model)
 						$(".senddoc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");
 						$(".send-doc-button",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");
 						$(".attachment",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide ");
+						setupTinyMCEEditor('textarea#signdoc-template-html', false, undefined, function()
+						{
+							set_tinymce_content('signdoc-template-html', model.text);
+							// Register focus
+							register_focus_on_tinymce('signdoc-template-html');
+							// Reset tinymce
+						});
 				}
 				else
 				{
@@ -659,13 +791,7 @@ function load_document_from_edit_model(model)
 						$(".attachment",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");				
 				}
 
-				setupTinyMCEEditor('textarea#signdoc-template-html', false, undefined, function()
-				{
-					set_tinymce_content('signdoc-template-html', model.text);
-					// Register focus
-					register_focus_on_tinymce('signdoc-template-html');
-					// Reset tinymce
-				});		
+						
 				
 
 				$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").find(".icon-ok").css("display", "inline");

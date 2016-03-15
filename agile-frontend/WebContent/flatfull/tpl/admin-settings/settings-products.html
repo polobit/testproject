@@ -2,32 +2,51 @@
 
 <div class="panel panel-default">
  <div class="panel-heading">
-	<div class="pull-left  m-t-xs">Products</div>
-	<div class="pull-right">
-		<a href="#product-add" class="btn btn-sm btn-default btn-addon" id="addProduct"><span><i class='icon-plus-sign'/></span> Add Product</a>
-	</div>
-	<div class="clearfix"></div>
- </div>
-<div class="row">
-<div class="col-md-12 col-sm-12">
-            <div class=" table-responsive"> 
-            <table class="table table-striped agile-table panel table-layout-mob-view showCheckboxes" url="core/api/products/bulk?action_type=DELETE">
-                <thead>
-                    <tr>
-                        <th style="width:25%" class="header">Name</th>
-						<th style="width:25%" class="header">Description</th>
-						<th style="width:25%" class="header">Price</th>
-                        <th style="width:25%" class="header">Created On</th>
-                        <!-- <th style="width:20%" class="header">&nbsp;</th> -->
-                    </tr>
-                 </thead>
-                 <tbody id='admin-settings-products-model-list' route='product-edit/'>
-                 </tbody>
-            </table>
-            </div>
+    <div class="pull-left  m-t-xs">Products</div>
+    <div class="pull-right">
+        <a href="#product-add" class="btn btn-sm btn-default btn-addon" id="addProduct"><span><i class='icon-plus-sign'/></span> Add Product</a>
     </div>
-</div>
-</div>
+    <div class="clearfix"></div>
+ </div>
+{{#unless this.length}}
+    <div id="slate">
+        <div class="alert bg-white ">
+            <div class="slate-content p-md">        
+                    <div class="box-left pull-left m-r-md">
+                        <img alt="Clipboard" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/clipboard.png">
+                    </div>
+                     <div class="box-right pull-left">
+                        <h4 class="m-t-none">You do not have any Products currently.</h4>
+                            <a href="#product-add" class="btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  Add Products</a>
+                    </div>
+                    <div class="clearfix"></div>
+        </div>
+    </div>
+
+    
+ {{/unless}}
+{{#if this.length}}
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+                    <div class=" table-responsive"> 
+                    <table class="table table-striped agile-table panel table-layout-mob-view showCheckboxes" url="core/api/products/bulk?action_type=DELETE">
+                        <thead>
+                            <tr>
+                                <th style="width:25%" class="header">Name</th>
+        						<th style="width:25%" class="header">Description</th>
+        						<th style="width:25%" class="header">Price</th>
+                                <th style="width:25%" class="header">Created On</th>
+                                <!-- <th style="width:20%" class="header">&nbsp;</th> -->
+                            </tr>
+                         </thead>
+                         <tbody id='admin-settings-products-model-list' route='product-edit/'>
+                         </tbody>
+                    </table>
+                    </div>
+            </div>
+        </div>
+    </div>
+ {{/if}}    
 </script>
 <script id="admin-settings-products-model-template" type="text/html">
     <td class='data' data='{{id}}'>
@@ -42,14 +61,15 @@
 	</td>
 
 	<td class='data'>
-    {{price}}
+    {{currencySymbol}}{{price}}
 	</td>
-    <td>
-		<div class="table-resp">
-		{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
-		</div>
-	</td>
-    
+    <td class="text-muted" style="color: #b2b0b1;">
+       {{#if created_time}}
+          <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
+               Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time>
+          </div>
+       {{/if}}
+    </td>    
    
 </script>
 <script id="admin-settings-product-add-template" type="text/html">

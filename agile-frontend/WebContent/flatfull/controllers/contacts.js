@@ -1384,17 +1384,21 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 				    	$("#emailForm").find(".attach-file").addClass("hide");
 				    	$("#emailForm").find(".fa-paperclip").removeClass("fa-paperclip").addClass("fa-file-text-o");
 				    	$("#emailForm").find("#attachment-select").append('<option selected=\'yes\' value='+ model.id +'>' + model.name+ '</option>');
-				    	
-				    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
-				    	$("#doc_type","#emailForm").val(model.doc_type);
-		               	var first_name = getPropertyValue(model.contacts[0].properties, "first_name");
-						var last_name = getPropertyValue(model.contacts[0].properties, "last_name");
+				    	var first_name ="",last_name="";
+				    	if(model.contacts && model.contacts.length>0)
+				    	{
+					    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
+					    	$("#doc_type","#emailForm").val(model.doc_type);
+			               	first_name = getPropertyValue(model.contacts[0].properties, "first_name");
+							last_name = getPropertyValue(model.contacts[0].properties, "last_name");
+							id=getPropertyValue(model.contacts[0].properties, "email");
+						}
 						if (first_name || last_name)
 						{
 							name = first_name ? first_name : "";
 							name = (name + " " + (last_name ? last_name : "")).trim();
 						}
-						id=getPropertyValue(model.contacts[0].properties, "email");
+						
 					}
 					else if (model.type == "PERSON")
 					{

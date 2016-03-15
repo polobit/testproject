@@ -109,7 +109,20 @@ public class ProductsAPI
     public Product updateProduct(Product product)
     {
 	
-	return productsUtil.updateProduct(product);
+    	List<Product> products=productsUtil.getProductByName(product.getName());
+    	if(products!=null && products.size()>0)
+    	{
+    		for(Product s_product:products)
+    		{
+    			if(!String.valueOf( s_product.getId()).equals(String.valueOf(product.getId())))
+        		{
+        			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+        				    .entity("Product with this name already exists.").build());
+        		}
+    		}
+    		
+    	}
+    	return productsUtil.updateProduct(product);
     }
 
     

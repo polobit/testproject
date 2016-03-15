@@ -605,6 +605,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
 				console.log("loaded products : ", el);
+						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+						{
+							
+							$(".created_time", el).timeago();
+						});
 				
 			} });
 		this.productsGridView.collection.fetch();

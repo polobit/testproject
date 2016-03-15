@@ -594,6 +594,10 @@ function initializeSendEmailListeners(){
 				$('.add-attachment-select').hide();
 				$('#eattachment_error').hide();
 			}
+			else if($("#eattachment_key","#emailForm").attr('name')=="edoc_key")
+			{
+				//No Action
+			}
 			else if(!model.attachment_id)
 			{
 				$('.add-attachment-cancel').trigger("click");
@@ -602,7 +606,19 @@ function initializeSendEmailListeners(){
 		} });
 
 	});
-
+	
+	$('#send-email-listener-container').on('click', '.send-email-close', function(e)
+	{
+		e.preventDefault();
+		if($("#eattachment_key","#emailForm").attr('name')=="edoc_key")
+		{
+			App_Documents.navigate("documents" , {trigger: true});							
+		}
+		else
+		{
+			Backbone.history.navigate("contacts" , {trigger: true});							
+		}
+	});
 	/**
 	 * Sends email to the target email. Before sending, validates and serializes
 	 * email form.

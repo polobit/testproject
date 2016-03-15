@@ -19,17 +19,17 @@
 		<label class="i-checks i-checks-sm"><input data='{{id}}' type="checkbox" {{#if isChecked}}checked{{/if}} class="dealproducts_td_checkbox" value=""><i></i></label>
 	</td>
 	<td class='data' data='{{id}}' >
-		<div class="line-clamp" title="{{name}}">	
+		<div class="line-clamp" style="display:-moz-box;" title="{{name}}">	
     		{{name}}
     	</div>
 	</td>
 	<td class='data'>
-		<div class="line-clamp line-clamp-3" title="{{description}}">	
+		<div class="line-clamp line-clamp-3"  style="display:-moz-box;" title="{{description}}">	
 	    	{{description}}
 	   	</div>
 	</td>
 	<td class='data dealproducts_td_qty'>
-    	<span class="dealproducts_td_qty_span">{{#if qty}}{{qty}}{{else}}1{{/if}}</span><input class="hide dealproducts_qty_input" maxlength="4"  type="text"  value={{#if qty}}"{{qty}}"{{else}}1{{/if}} />
+    	<span class="dealproducts_td_qty_span">{{#if qty}}{{qty}}{{else}}1{{/if}}</span><input class="hide dealproducts_qty_input" maxlength="4" placeholder="Enter Qty" type="text"  value={{#if qty}}"{{qty}}"{{else}}1{{/if}} />
 	</td>
 	<td class='data'>
     	{{price}}

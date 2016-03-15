@@ -139,6 +139,9 @@ var contact_details_documentandtasks_actions = {
 					$("#owners-list", $("#opportunityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
 					$("#owners-list", $("#opportunityForm")).closest('div').find('.loading-img').hide();
 				});
+
+				//Populate products
+				populate_deal_products(el, undefined,"#opportunityForm");
 				// Contacts type-ahead
 				agile_type_ahead("relates_to", el, contacts_typeahead);
 

@@ -629,8 +629,8 @@ var SettingsRouter = Backbone.Router
 
 				this.documentTemplatesListView.collection.fetch();
 				$('#prefs-tabs-content').html(this.documentTemplatesListView.el);
-				$('#PrefsTab .active').removeClass('active');
-				$('.document-templates-tab').addClass('active');
+				$('#PrefsTab .active').removeClass('select');
+				$('.document-templates-tab').addClass('select');
 				
 
 			},
@@ -658,8 +658,8 @@ var SettingsRouter = Backbone.Router
 					$("#document-template-html_ifr").height("90vh");
 				});
 
-				$('#PrefsTab .active').removeClass('active');
-				$('.document-templates-tab').addClass('active');
+				$('#PrefsTab .active').removeClass('select');
+				$('.document-templates-tab').addClass('select');
 
 			},
 
@@ -705,8 +705,8 @@ var SettingsRouter = Backbone.Router
 
 				/** End of TinyMCE* */
 
-				$('#PrefsTab .active').removeClass('active');
-				$('.document-templates-tab').addClass('active');
+				$('#PrefsTab .active').removeClass('select');
+				$('.document-templates-tab').addClass('select');
 				// $("#content").html(view.el);
 			},
 

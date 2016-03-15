@@ -17,7 +17,8 @@ var CONTACT_CUSTOM_FIELDS = undefined;
  */
 function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback,merge_fields_values_callback)
 {
-	
+
+	var _merge_fields_values_callback	=merge_fields_values_callback
 	// Id undefined
 	if (selector === undefined)
 	{
@@ -75,7 +76,7 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback,me
 			        forced_root_block : false,
 					extended_valid_elements : "*[*]", setup : function(editor)
 					{
-						editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor,merge_fields_values_callback) });
+						editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor,_merge_fields_values_callback) });
 					}
 					});
 				

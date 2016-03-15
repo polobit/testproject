@@ -120,10 +120,16 @@
 </td>
 </script>
 <script id="document-etype-select-collection-template" type="text/html">
-    <div class="bg-light lter b-b wrapper-md">
-        <h1 class="m-n font-thin h3"><i class="icon-plus-sign">
-        </i> Select Document Template </h1>
+    <div class="wrapper-md lter bg-light b-b">
+            <div class="row">
+                <div class="col-md-12" >
+                        <h3 class="pull-left font-thin h3">Select Document Template</h3>
+                        <a href="#document-templates" class="btn btn-default btn-addon pull-right btn-sm m-l-xs"><i class="fa fa-plus-circle"></i> Add Document Template</a>
+                        <div class="clearfix"></div>
+                </div>
+            </div>
     </div>
+    
     <div class="wrapper-md">
         <div class="row">
             <div class="col-md-12">
@@ -143,10 +149,10 @@
         </center>
       </div>
       <div class="panel-body">
-         <div class="text-flow-ellipsis line-clamp line-clamp-3 document-template-text" style="height:85px;" rel="tooltip" title="{{description}}">
-            <center><div class="ellipsis-multiline line-clamp line-clamp-3 " title="{{description}}">{{description}}</div></center>
+         <div class="text-flow-ellipsis line-clamp  document-template-text" style="height:95px;-webkit-line-clamp:4;" rel="tooltip" title="{{description}}">
+            <center>{{description}}</center>
          </div>
-         <div class="text-center m-t-xs">
+         <div class="text-center m-t">
          {{#if contactcompanydealtype}}
             <a class="btn btn-sm btn-default add-widget" href="#documents/{{contactcompanydealtype}}/{{contactcompanydealid}}/edoc/{{id}}">Go</a>
           {{else}}  
@@ -156,7 +162,12 @@
          </div>
       </div>
         <div pos="{{getIndexIncrementByOne @index}}" class="m-r-xs m-l-xs document-template-go-popover hide {{id}}">
-            <div style="width: 94%;margin: 0 auto;background: #fff;padding: 0px 25px;height:calc(90vh - 21px);overflow:hidden;" class="b b-light">
+            <center>
+                <div class=" line-clamp">
+                    {{name}}
+                </div>
+            </center>
+            <div style="width: 94%;margin: 0 auto;background: #fff;padding: 0px 25px;height:calc(90vh - 51px);overflow:hidden;" class="b b-light">
             {{{text}}}
             </div>
       </div>
@@ -204,7 +215,9 @@
 </script>
 <script id="document-notes-model-template" type="text/html">
                     <li class="wrapper-sm b-b">
-                    <a class="line-clamp activity-tag"  title="{{description}}" href="#documents/{{document_id}}"><div class="m-b-none text-flow-ellipsis line-clamp">{{description}} by {{commenter_name}}</div></a>
+                    <a class="line-clamp activity-tag"   title="{{description}}" href="#documents/{{document_id}}"><div class="m-b-none text-flow-ellipsis line-clamp" style="display:-moz-box;">{{description}}</div></a>
+                    <small class="block text-muted" > 
+                    <div class="m-b-none text-flow-ellipsis line-clamp">by {{commenter_name}}</div>
                     <small class="block text-muted" > 
                     <i class="fa fa-fw fa-clock-o"></i>&nbsp;<time class="text-sm" datetime="{{epochToHumanDate "" created_time}}"> {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" created_time}}</time>
                     </small>
