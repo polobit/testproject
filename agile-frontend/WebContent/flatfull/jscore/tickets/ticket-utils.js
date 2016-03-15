@@ -118,5 +118,15 @@ var Ticket_Utils = {
 			if(callback)
 				callback();
 		});
+	},
+
+	getPropertyFromTicket: function(property_name){
+
+		if(!App_Ticket_Module.ticketView.model)
+			return '';
+
+		var ticketJSON = App_Ticket_Module.ticketView.model.toJSON();
+
+		return ticketJSON[property_name];
 	}
 };
