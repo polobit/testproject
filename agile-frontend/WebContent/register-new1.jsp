@@ -86,6 +86,7 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 <!-- Include ios meta tags -->
 <%@ include file="ios-native-app-meta-tags.jsp"%>
 <STYLE>
+
 .overlay:before{
 	content: "";
     position: fixed;

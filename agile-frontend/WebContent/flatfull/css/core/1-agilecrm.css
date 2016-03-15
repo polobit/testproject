@@ -3400,7 +3400,7 @@ table.hide-head-checkbox th label.i-checks {
 @media(max-width:1260px){
 #free-user-sm-text{ display: block; }
 #free-user-md-text{ display: none;}
-.free-user-alert-message{ left: 49%;}
+.free-user-alert-message{ left: 45%;}
 
 }
 @media(max-width:1060px){ 
