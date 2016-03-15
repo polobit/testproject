@@ -1071,5 +1071,13 @@
         <servlet-name>TaskReminderUnitTest</servlet-name>
         <url-pattern>test/taskreminder/unit-test</url-pattern>
     </servlet-mapping>
-  
+   <servlet>
+		<servlet-name>TicketsPdfServlet</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketsPdfServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketsPdfServlet</servlet-name>
+		<url-pattern>/ticketsPdfServlet</url-pattern>
+	</servlet-mapping>
+	
 </web-app>
