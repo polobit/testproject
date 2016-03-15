@@ -77,7 +77,7 @@ public class IpAccess {
 	}
 
 	public Set<String> getIpList() {
-		return ipList;
+		return this.ipList;
 	}
 
 	public void setIpList(Set<String> ipList) {

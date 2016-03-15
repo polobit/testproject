@@ -14,6 +14,11 @@ we use setAttribute() to store the username and to autofill if he want to resubm
 //flatfull path
 String flatfull_path="/flatfull";
 
+boolean ipcheck = IpAccessUtil.isValidIpOpenPanel(request,response)
+if(ipcheck==true)
+	response.sendRedirect("/login");
+else
+	response.sendRedirect("/errorip");
 
 
 // Gets User Name
@@ -26,6 +31,9 @@ email = email.toLowerCase();
 request.setAttribute("agile_email", email);
 
 }
+//Gets the Ip 
+
+
 	
 // Checks if it is being access directly and not through servlet
 /* if(request.getAttribute("javax.servlet.forward.request_uri") == null)

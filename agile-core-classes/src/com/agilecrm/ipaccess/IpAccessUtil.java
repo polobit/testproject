@@ -1,5 +1,9 @@
 package com.agilecrm.ipaccess;
 
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -35,6 +39,17 @@ public class IpAccessUtil {
 		else 
 			return NamespaceManager.get();
 	}
+
 	
+	public static  boolean isValidIpOpenPanel(HttpServletRequest request){
+		
+		IpAccess ipAccess = IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
+		Set<String> iplist = ipAccess.getIpList();
+		String userip = request.getRemoteAddr();
+		if(iplist.contains(userip))
+			return true;
+		else
+			return false;
+	}
 	
 }
