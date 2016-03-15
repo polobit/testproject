@@ -127,7 +127,7 @@ public class Globals
     // public static final String QUICKBOOKS_CONSUMER_SECRET =
     // "CSLHb8B5vIlcgLN3N1LcOe5tt5iagel1QZNk9Kye";
     // production key
-    
+    	
     //original sync activated
     public static final String QUICKBOOKS_APP_KEY = "a572c32cb35f8b404cbbadbb224fbd6d0fc6";
     public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdiBIgnIhxVdzKKdnWohGfPmrOD";
@@ -135,9 +135,9 @@ public class Globals
 
 
     //New Testing Keys for widget Issue (AgileCRM Widget APP keys)
-    public static final String QUICKBOOKS_WIDGET_APP_KEY = "1639cdaab6418b4af9bb9eab600468969077";
-    public static final String QUICKBOOKS_WIDGET_CONSUMER_KEY = "qyprdXoSXv87x0xWWzSPPA5fOFkmDU";
-    public static final String QUICKBOOKS_WIDGET_CONSUMER_SECRET = "eX0eco8KJuGStfCBKf0R59bxxEHmMAtPwUxoxA3m";
+    public static final String QUICKBOOKS_WIDGET_APP_KEY = "6275c638bedb8b4116bb079b2f6ab9f543e5";
+    public static final String QUICKBOOKS_WIDGET_CONSUMER_KEY = "qyprdcvks8DVYIVTm9RX4zd77GEvyb";
+    public static final String QUICKBOOKS_WIDGET_CONSUMER_SECRET = "nwIqkA7pdS1RZlZyE2e08f3X9baNcLXyApXw21lZ";
     
     
     /** test facebook app details */
