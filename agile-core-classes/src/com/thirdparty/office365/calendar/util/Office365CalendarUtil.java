@@ -112,7 +112,7 @@ public class Office365CalendarUtil {
 			host = host + "/ews/exchange.asmx";
 		}
 
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		if (startDate != null) {
 			long milliSeconds = Long.parseLong(startDate);
@@ -159,59 +159,67 @@ public class Office365CalendarUtil {
 	 * @return
 	 */
 	public static List<OfficeCalendarTemplate> getAppointmentsFromServer(
-			String url) throws Exception {
+			String url, Long userId, String type) throws Exception {
 		List<OfficeCalendarTemplate> appointmentsList = new ArrayList<OfficeCalendarTemplate>();
 
 		// Returns imap emails, usually in form of {emails:[]}, if not build
 		// result like that.
 		String jsonResult = HTTPUtil.accessURL(url);
 		JSONArray jsonArray = new JSONArray(jsonResult);
+
+		System.out.println(jsonArray.toString());
+
 		for (int i = 0; i < jsonArray.length(); i++) {
 			OfficeCalendarTemplate CalenderObj = new OfficeCalendarTemplate();
 			String obj = String.valueOf(jsonArray.get(i));
 			JSONObject resultObj = new JSONObject(obj);
-
-			String pattern = "EE MMM dd HH:mm:ss z yyyy";
-
-			System.out.println(AccountPrefsUtil.getTimeZone());
-
-			String userTimeZone = UserPrefsUtil
-					.getUserTimezoneFromUserPrefs(AgileUser
-							.getCurrentAgileUser().id);
-
-			// For Testing use the below code.
-			// String userTimeZone = UserPrefsUtil
-			// .getUserTimezoneFromUserPrefs(null);
-
-			SimpleDateFormat parsedFormat = new SimpleDateFormat(pattern,
-					Locale.ENGLISH);
-			parsedFormat.setTimeZone(TimeZone.getTimeZone(userTimeZone));
-			SimpleDateFormat reqFormat = new SimpleDateFormat(
-					"MMM d, yyyy HH:mm:ss");
-			reqFormat.setTimeZone(TimeZone.getTimeZone(userTimeZone));
-			System.out.println("test");
-			Date parsedDate;
 			String start = resultObj.getString("startDate");
-			if (start != null) {
-				parsedDate = parsedFormat.parse(start);
-				start = reqFormat.format(parsedDate);
-			}
-			CalenderObj.setStart(start);
 
 			String end = resultObj.getString("endDate");
-			if (end != null) {
-				parsedDate = parsedFormat.parse(end);
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(parsedDate);
-				// cal.add(Calendar.DATE, -1);
-				Date extactDate = cal.getTime();
-				end = reqFormat.format(extactDate);
+
+			if (!type.equals("online")) {
+				String pattern = "EE MMM dd HH:mm:ss z yyyy";
+				System.out.println(AccountPrefsUtil.getTimeZone());
+				String userTimeZone = UserPrefsUtil
+						.getUserTimezoneFromUserPrefs(userId);
+				System.out.println(userTimeZone);
+
+				// For Testing use the below code.
+				// String userTimeZone = UserPrefsUtil
+				// .getUserTimezoneFromUserPrefs(null);
+
+				SimpleDateFormat parsedFormat = new SimpleDateFormat(pattern,
+						Locale.ENGLISH);
+				parsedFormat.setTimeZone(TimeZone.getTimeZone(userTimeZone));
+				SimpleDateFormat reqFormat = new SimpleDateFormat(
+						"MMM d, yyyy HH:mm:ss");
+				reqFormat.setTimeZone(TimeZone.getTimeZone(userTimeZone));
+				Date parsedDate;
+
+				if (start != null) {
+					parsedDate = parsedFormat.parse(start);
+					start = reqFormat.format(parsedDate);
+				}
+
+				if (end != null) {
+					parsedDate = parsedFormat.parse(end);
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(parsedDate);
+					// cal.add(Calendar.DATE, -1);
+					Date extactDate = cal.getTime();
+					end = reqFormat.format(extactDate);
+				}
+
 			}
+
+			CalenderObj.setStart(start);
 			CalenderObj.setEnd(end);
 
 			CalenderObj.setTitle(resultObj.getString("subject"));
 			CalenderObj.setType(type);
 			CalenderObj.setBackgroundColor(backgroundColor);
+			CalenderObj.setDisableDragging(true);
+			CalenderObj.setEditable(false);
 
 			appointmentsList.add(CalenderObj);
 		}
@@ -255,8 +263,7 @@ public class Office365CalendarUtil {
 	 */
 	public static List<List<Long>> getFilledOfficeSlots(Long userid,
 			int slotTime, int timezone, String timezoneName, Long startTime,
-			Long endTime) {
-		System.out.println("In getFilledGoogleSlots");
+			Long endTime, String type) {
 
 		List<List<Long>> filledSlots = new ArrayList<List<Long>>();
 
@@ -285,7 +292,7 @@ public class Office365CalendarUtil {
 			}
 			try {
 				List<OfficeCalendarTemplate> appointments = Office365CalendarUtil
-						.getAppointmentsFromServer(Url);
+						.getAppointmentsFromServer(Url, userid, type);
 
 				for (int i = 0; i < appointments.size(); i++) {
 					OfficeCalendarTemplate officeTemplate = appointments.get(i);
@@ -299,7 +306,7 @@ public class Office365CalendarUtil {
 
 						// Starting time.
 						Date start = new Date(officeTemplate.getStart());
-						if (start.getTime() / 1000 < startTime) {
+						if (start.getTime() < startTime) {
 							starting = startTime / 1000;
 						} else {
 							starting = start.getTime() / 1000;
@@ -307,10 +314,10 @@ public class Office365CalendarUtil {
 
 						// Ending time.
 						Date end = new Date(officeTemplate.getEnd());
-						if (end.getTime() / 1000 < endTime) {
-							ending = endTime / 1000;
-						} else {
+						if (end.getTime() < endTime) {
 							ending = end.getTime() / 1000;
+						} else {
+							ending = endTime / 1000;
 						}
 						filledSlots.addAll(WebCalendarEventUtil.makeSlots(
 								slotTime, starting, ending));
