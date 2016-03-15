@@ -1120,7 +1120,7 @@ public class OpportunityUtil
 	    }
 	    }
 	    if (checkJsonString(filterJson, "owner_id")){
-	    	 Key<Milestone> ownerkey = new Key<Milestone>(Milestone.class, Long.parseLong(filterJson.getString("owner_id")));
+	    	 Key<DomainUser> ownerkey = new Key<DomainUser>(DomainUser.class, Long.parseLong(filterJson.getString("owner_id")));
     		 query.addFilter("ownerKey", FilterOperator.EQUAL, KeyFactory.createKey(ownerkey.getKind(), ownerkey.getId()));
     		 
 	    	
