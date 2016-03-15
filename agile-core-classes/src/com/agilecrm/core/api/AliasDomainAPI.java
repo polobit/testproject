@@ -57,7 +57,7 @@ public class AliasDomainAPI {
     	for(String alias: aliasDomain.alias)
     	{
     		if(AliasDomainUtil.getAliasDomainByAlias(alias) != null || DomainUserUtil.count(alias)>0)
-        		throw new Exception("Domain '"+alias + "' already exists. Please choose another name.");
+        		throw new Exception("Domain name '"+alias + "' already exists. Please choose another domain name and try again.");
     	}
     	aliasDomain.save();
     	return aliasDomain;
@@ -90,7 +90,7 @@ public class AliasDomainAPI {
     	for(String alias: aliasDomain.alias)
     	{
     		if(AliasDomainUtil.getAliasDomainByAlias(alias) != null || DomainUserUtil.count(alias)>0)
-        		throw new Exception("Domain '"+alias + "' already exists. Please choose another name.");
+        		throw new Exception("Domain name '"+alias + "' already exists. Please choose another domain name and try again.");
     	}
     	aliasDomain.save();
     	return aliasDomain;
