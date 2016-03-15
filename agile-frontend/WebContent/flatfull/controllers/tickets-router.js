@@ -212,8 +212,16 @@
 	 			//Get ticket contact
 	 			Ticket_Utils.fetchContact(data.contactID, function(){
 
-	 				$('#ticket-contact-details', el).html(
-	 					getTemplate('ticket-contact', Ticket_Utils.Current_Ticket_Contact.toJSON()));
+	 				//Render template with contact details
+	 				if(Ticket_Utils.Current_Ticket_Contact &&
+	 					!$.isEmptyObject(Ticket_Utils.Current_Ticket_Contact.toJSON())){
+	 					$('#ticket-contact-details', el).html(
+	 						getTemplate('ticket-contact', Ticket_Utils.Current_Ticket_Contact.toJSON()));
+	 				}else{
+	 					
+	 					$('#ticket-contact-details', el).html(
+	 						getTemplate('ticket-contact-fallback', data));
+	 				}
 	 			});
 
 	 			// Append reply container

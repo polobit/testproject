@@ -38,21 +38,24 @@ Handlebars.registerHelper('calculate_due_date', function(due_date, options) {
 });
 
 Handlebars.registerHelper('get_contact_image', function(width)
-{ 
-	var contact = Ticket_Utils.Current_Ticket_Contact.toJSON();
+{ 	
+	if(Ticket_Utils.Current_Ticket_Contact){
+		var contact = Ticket_Utils.Current_Ticket_Contact.toJSON();
 
-	var items = contact.properties;
+		var items = contact.properties;
 
-	var agent_image = getPropertyValue(items, "image");
+		var agent_image = getPropertyValue(items, "image");
 
-	if (agent_image)
-		return agent_image;
+		if (agent_image)
+			return agent_image;
 
-	var email = getPropertyValue(items, "email");
-	if (email)
-		return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + '&d=404';
+		var email = getPropertyValue(items, "email");
 
-	return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '&d=404';
+		if (email)
+			return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + '&d=404';
+	}
+
+	return 'https://secure.gravatar.com/avatar/' + Agile_MD5(Ticket_Utils.getPropertyFromTicket('requester_email')) + '.jpg?s=' + width + '&d=404';
 });
 
 Handlebars
