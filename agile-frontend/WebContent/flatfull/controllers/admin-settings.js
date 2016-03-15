@@ -1191,6 +1191,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			       silent : true 
 			      });
 			   }, saveAuth : function(el){
+			   	var form_id = $("#alias", el).closest('form').attr("id");
+				if (!isValidForm('#' + form_id))
+				{
+					return false;
+				}
 				if(getDomainFromURL() != $("#alias", el).val())
 				{
 					$("#saveAliasAuthentication", el).html(getTemplate("conform-domain-change-model",{}));
@@ -1210,7 +1215,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					showNotyPopUp("information", "Your domain name has been updated successfully. Logging out...", "top");
 					setTimeout(function()
 					{
-						window.location.href = window.location.protocol + "//" + domain + ".agilecrm.com/login" + window.location.hash;
+						window.location.href = window.location.protocol + "//" + response.alias[0] + ".agilecrm.com/login" + window.location.hash;
 					}, 5000);
 				}
 			},errorCallback : function(data){
