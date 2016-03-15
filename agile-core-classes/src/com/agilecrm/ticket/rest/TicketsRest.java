@@ -809,6 +809,29 @@ public class TicketsRest
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws JSONException
+	 */
+	@GET
+	@Path("/add-pic/{email}")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void addPic(@PathParam("email") String email) throws JSONException
+	{
+		try
+		{
+			DomainUser user = DomainUserUtil.getDomainUserFromEmail(email);
+			user.pic = "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/64.png";
+			
+			user.save();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+	}
 
 	/**
 	 * 

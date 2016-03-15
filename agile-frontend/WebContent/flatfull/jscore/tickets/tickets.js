@@ -1,6 +1,3 @@
-var Group_ID = null, Current_Ticket_ID = null, Ticket_Filter_ID = null, 
-	Tickets_Util = {}, Sort_By = "-", Sort_Field = 'last_updated_time', Ticket_Position= null;
-var popoverFunction = undefined, Helpdesk_Enabled = false;
 
 var Tickets = {
 
@@ -122,11 +119,10 @@ var Tickets = {
 					Ticket_Bulk_Ops.initEvents(el);
 
 					if(!Tickets.isSingleRowView()){
-						var Groups = Backbone.Collection.extend({url: '/core/api/tickets/groups'});
-						new Groups().fetch({success: function(model, response, options){
-							
-							$('ul.ul-select-assignee').html(getTemplate('ticket-model-change-assignee', model.toJSON()))
-						}});
+						Ticket_Utils.fetchGroups(function(){
+							$('ul.ul-select-assignee', el).html(
+								getTemplate('ticket-model-change-assignee', Groups_Collection.collection.toJSON()));
+				 		});
 					}
 
 					Tickets.setCountText();
@@ -205,6 +201,15 @@ var Tickets = {
 
 	initEvents: function(el){
 		
+		/**
+		 * Initializing click event on ul lists to remove bg
+		 */
+		$('div.assignee-change').on('hidden.bs.dropdown', function () {
+		 	
+		 	$(this).removeClass('bg-light');
+		 	$(this).find('a.caret-btn').removeClass('inline-block');
+		});
+
 		/**
 		 * Initializing click event on ul lists in ticket collection
 		 */
@@ -310,14 +315,14 @@ var Tickets = {
 			.on('mouseover mouseout', 'td.show-notes',
 				function(event) {
 
-					clearTimeout(popoverFunction);
+					clearTimeout(Popover_Function);
 
 					var top = '60px';
 					if (event.type == 'mouseover'){
 
 						var $tr = $(this).closest('tr'), $that = $tr.find('td.notes-container');
 
-						popoverFunction = setTimeout(function(){
+						Popover_Function = setTimeout(function(){
 
 							if(Current_Ticket_ID || Current_Route.indexOf('ticket') == -1)
 								return;
@@ -343,13 +348,13 @@ var Tickets = {
 			.on('mouseover mouseout', 'tbody.ticket-single-row-model-list > tr',
 				function(event) {
 
-					clearTimeout(popoverFunction);
+					clearTimeout(Popover_Function);
 					
 					if (event.type == 'mouseover'){
 
 						var $that = $(this);
 						
-						popoverFunction = setTimeout(function(){
+						Popover_Function = setTimeout(function(){
 
 							var ticketID = $that.find('td.data').data('id');
 							var ticketJSON = App_Ticket_Module.ticketsCollection.collection.get(ticketID).toJSON();
@@ -1378,14 +1383,14 @@ var Tickets = {
 			.on('mouseover mouseout', '.show-notes',
 				function(event) {
 
-					clearTimeout(popoverFunction);
+					clearTimeout(Popover_Function);
 
 					var top = '20px';
 					if (event.type == 'mouseover'){
 
 						var $tr = $(this).closest('.each-previous-ticket'), $that = $tr.find('#ticket-last-notes');
 
-						popoverFunction = setTimeout(function(){
+						Popover_Function = setTimeout(function(){
 
 							var popup_height = $that.height();
 

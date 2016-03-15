@@ -6,9 +6,11 @@ var Ticket_Filter_ID = null;
 var	Tickets_Util = {};
 var Sort_By = "-";
 var Sort_Field = 'last_updated_time';
-var Ticket_Position= null;
+var Ticket_Position = null;
 
-var popoverFunction = undefined;
+var Popover_Function = undefined;
 var Helpdesk_Enabled = false;
+
+var Assingees_Collection = null, Groups_Collection = null;
 
 

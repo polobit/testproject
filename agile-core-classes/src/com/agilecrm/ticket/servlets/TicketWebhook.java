@@ -26,13 +26,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.agilecrm.Globals;
-import com.agilecrm.activities.Activity.ActivityType;
-import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.export.gcs.GCSServiceAgile;
-import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.ticket.entitys.TicketDocuments;
-import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
@@ -317,6 +315,20 @@ public class TicketWebhook extends HttpServlet
 				}
 
 				String lastReplieText = TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText);
+
+				try
+				{
+					if (ContactUtil.getPartialContact(ticket.contact_key.getId()) == null)
+					{
+						Contact contact = ContactUtil.createContact(ticket.requester_name, ticket.requester_email);
+						ticket.contact_key = new Key<Contact>(Contact.class, contact.id);
+						ticket.contactID = contact.id;
+					}
+				}
+				catch (Exception e)
+				{
+					System.out.println(ExceptionUtils.getFullStackTrace(e));
+				}
 
 				ticket.updateTicketAndSave(ccEmails, lastReplieText, LAST_UPDATED_BY.REQUESTER, currentTime,
 						currentTime, null, attachmentExists, false);

@@ -234,3 +234,19 @@
       </div>
   </div>
 </script>
+<script id="ticket-lhs-assignees-collection-template" type="text/html">
+  <div id="ticket-lhs-assignees-model-list"></div>
+</script>
+<script id="ticket-lhs-assignees-model-template" type="text/html">
+  <label class="i-checks i-checks-sm">
+    <input name="assignee_id" value="{{id}}" type="checkbox"><i></i>
+  </label> {{name}}
+</script>
+<script id="ticket-lhs-groups-collection-template" type="text/html">
+  <div id="ticket-lhs-groups-model-list"></div>
+</script>
+<script id="ticket-lhs-groups-model-template" type="text/html">
+  <label class="i-checks i-checks-sm">
+    <input name="group_id" value="{{id}}" type="checkbox"><i></i>
+  </label> {{group_name}}
+</script>

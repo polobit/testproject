@@ -1,11 +1,9 @@
 var Ticket_Utils = {
 
-	assignees: [],
-	groups: [],
+	fetchAssignees: function(callback){
 
-	fetchAssgineesAndGroups: function(callback){
-
-		if(Ticket_Utils.assignees.length && Ticket_Utils.groups.length){
+		if(Assingees_Collection &&
+			Assingees_Collection.collection){
 
 			if(callback)
 				callback();
@@ -13,21 +11,45 @@ var Ticket_Utils = {
 			return;
 		}
 
-		var Assignees = Backbone.Collection.extend({url : '/core/api/users'});
-		
-		new Assignees().fetch({success: function(model, response, options){
-			
-			Ticket_Utils.assignees = model.toJSON();
+		//Initializing base collection with groups URL
+		Assingees_Collection = new Base_Collection_View({
+			url : '/core/api/users/partial'
+		});
 
-			var Groups = Backbone.Collection.extend({url: '/core/api/tickets/groups?only_groups=true'});
-			new Groups().fetch({success: function(model, response, options){
-
-				Ticket_Utils.groups = model.toJSON();
-
+		//Fetching assingnee collection
+		Assingees_Collection.collection.fetch({
+			success: function(){
+				
 				if(callback)
 					callback();
-			}});
-		}});
+			}
+		});
+	},
+
+	fetchGroups: function(callback){
+
+		if(Groups_Collection &&
+			Groups_Collection.collection){
+
+			if(callback)
+				callback();
+
+			return;
+		}
+
+		//Initializing base collection with groups URL
+		Groups_Collection = new Base_Collection_View({
+			url : '/core/api/tickets/groups'
+		});
+
+		//Fetching groups collection
+		Groups_Collection.collection.fetch({
+			success: function(model){
+				
+				if(callback)
+					callback();
+			}
+		});
 	},
 
 	fetchContact: function(contact_id, callback){
