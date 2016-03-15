@@ -125,18 +125,27 @@
                                       <small class="text-xs text-muted">Custom Data</small>
                                        </div>
 									{{#getDealCustomProperties custom_data}}
-									{{#each_with_index this}}
-                                       
-                                   	
-
-                                            <span class="contact-custom-name">
-												<span class="text-light" title="{{name}}">{{name}}</span>
-											</span>
-
-										
-											<span class="contact-custom-value">
-											<span class="note-created-time" title="{{value}}">{{value}}</span>
-                                             </span><br/> 
+									{{#each_with_index this}}             	
+                      {{#if custom_field_type}}
+                        <div class="m-b-xs">
+                          <span class="contact-custom-name">
+                            <span class="text-light" title="{{name}}">{{name}}</span>
+                          </span>
+                        </div>
+                        <div class="note-created-time custom-value" title="" name="{{name}}">
+                          {{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
+                        </div>
+                      {{else}}
+                        <span class="contact-custom-name">
+                          <span class="text-light" title="{{name}}">{{name}}</span>
+                        </span>
+                        <span class="contact-custom-value">
+                          <span class="note-created-time custom-value" title="{{value}}" name="{{name}}">
+                            {{value}}
+                          </span>
+                        </span>
+                        <br/>
+                      {{/if}}
 										{{/each_with_index}}
 									{{/getDealCustomProperties}}
                                     {{/if}}

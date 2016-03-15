@@ -190,22 +190,39 @@ function landingPageShowAlertMessage(message, type) {
 	+ message + '</div>');
 }
 
-function landingPageSaveCnameSettings(modelId,CNAME) {
-	CNAME = CNAME.toLowerCase();
-	var model = App_LandingPageRouter.LandingPageCollectionView.collection.get(modelId);
-	model.set("cname",CNAME);
-	model.set("requestViaCnameSetup",true);
-	
-	var landingPageModel = new Backbone.Model();
-    landingPageModel.url = 'core/api/landingpages';
-    landingPageModel.save(model.toJSON(), { success : function(obj){
-	    if(obj.get("isDuplicateCName")) {
-			landingPageShowAlertMessage("Custom domain should be unique","alert-danger");
-		} else {
-			landingPageShowAlertMessage("Custom domain saved successfully","alert-success");
-			$("#cname").attr("href",CNAME);
-			$("#landingPageVerifyBtn").show();
-			App_LandingPageRouter.LandingPageCollectionView.collection.get(modelId).set(obj);
-		}
-    }});
+function landingPageSaveCnameSettings(pageId,CNAME) {
+
+    var cnameSettings = {
+    "landing_page_id": pageId,
+    "cname": CNAME.toLowerCase()
+    };
+
+    var requestType = "post";
+    var message = "saved";
+
+    var cnameId = $("#cname_id").val();
+    if(cnameId) {
+        var requestType = "put";
+        cnameSettings["id"] = cnameId;
+        message = "updated";
+    }
+
+    $.ajax({
+        type: requestType, 
+        url: 'core/api/landingpages/custom-domain',       
+        data: JSON.stringify(cnameSettings),
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        success: function (obj) {
+	       	if(obj["isDuplicateCName"]) {
+				landingPageShowAlertMessage("Custom domain should be unique","alert-danger");
+			} else {
+				landingPageShowAlertMessage("Custom domain "+message+" successfully","alert-success");
+				$("#cname_id").val(obj.id);
+				$("#cname").attr("href",CNAME);
+				$("#landingPageVerifyBtn").show();
+			}
+        },
+    });
+    
 }
