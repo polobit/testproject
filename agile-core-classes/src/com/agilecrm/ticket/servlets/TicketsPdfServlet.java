@@ -13,6 +13,8 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
@@ -110,11 +112,12 @@ public class TicketsPdfServlet extends HttpServlet
 				if (notes.note_type == NOTE_TYPE.PRIVATE)
 					continue;
 
-				JSONObject eachNoteJSON = TicketNotesUtil.getFormattedEmailNoteJSON(notes, ticket.getContact());
+				JSONObject eachNoteJSON = TicketNotesUtil.getFormattedEmailNoteJSON(notes, ContactUtil.getContact(ticket.contact_key.getId()));
 
 				if (eachNoteJSON != null)
 					notesArray.put(eachNoteJSON);
 			}
+			
 			json.put("note_json_array", notesArray);
 			
 			
