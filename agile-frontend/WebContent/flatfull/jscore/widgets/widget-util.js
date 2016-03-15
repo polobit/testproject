@@ -133,7 +133,11 @@ function save_widget_prefs(pluginName, prefs, callback) {
 
 			}else{
 				msgType = "error";
-				msg = ("Error occurred while saving "+displayName);
+				if(displayName == "Uservoice"){
+					msg = ("Invalid "+displayName+" details.");
+				}else{					
+					msg = ("Error occurred while saving "+displayName);
+				}
 				$('#stripe_url').removeAttr('disabled');
 			}
 

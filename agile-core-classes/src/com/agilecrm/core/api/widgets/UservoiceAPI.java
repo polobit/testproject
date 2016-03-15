@@ -2,11 +2,9 @@ package com.agilecrm.core.api.widgets;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +21,8 @@ public class UservoiceAPI {
 	private String API_KEY;
 	private String API_SECRET;
 
-	UservoiceAPI(String subDomain, String api_key, String api_secert) {
+	UservoiceAPI(String subDomain, String api_key, String api_secert)
+			throws Exception {
 		this.subDomain = subDomain;
 		this.API_KEY = api_key;
 		this.API_SECRET = api_secert;
@@ -31,7 +30,7 @@ public class UservoiceAPI {
 		loadSuggestions();
 	}
 
-	private void loadAccessToken() {
+	private void loadAccessToken() throws Exception {
 		String result = null;
 		String url = "https://" + subDomain
 				+ ".uservoice.com/api/v2/oauth/token";
@@ -40,37 +39,27 @@ public class UservoiceAPI {
 		JSONObject resultObj = postData(url, parameters);
 
 		if (resultObj != null && !resultObj.has("error")) {
-			try {
-				result = resultObj.getString("access_token");
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			result = resultObj.getString("access_token");
 		}
 		accessToken = result;
 	}
 
-	private void loadSuggestions() {
+	private void loadSuggestions() throws Exception {
 		String url = "https://" + subDomain
 				+ ".uservoice.com/api/v2/admin/suggestions";
 		JSONObject resultObj = getData(url, null);
 		if (resultObj != null && resultObj != null) {
-			try {			
-				suggestionsObject = new JSONObject();
-				JSONArray suggestionsArray = resultObj
-						.getJSONArray("suggestions");
-				for (int i = 0; i < suggestionsArray.length(); i++) {
-					JSONObject object = suggestionsArray.getJSONObject(i);
-					suggestionsObject.put(object.getString("id"), object.getString("title"));
-				}				
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			suggestionsObject = new JSONObject();
+			JSONArray suggestionsArray = resultObj.getJSONArray("suggestions");
+			for (int i = 0; i < suggestionsArray.length(); i++) {
+				JSONObject object = suggestionsArray.getJSONObject(i);
+				suggestionsObject.put(object.getString("id"),
+						object.getString("title"));
 			}
 		}
 	}
 
-	public JSONObject getUserInfo(String email) {
+	public JSONObject getUserInfo(String email) throws Exception {
 		String url = "https://" + subDomain
 				+ ".uservoice.com/api/v2/admin/users";
 		String parameters = "per_page=1&email_address=" + email;
@@ -87,7 +76,7 @@ public class UservoiceAPI {
 		return resultObj;
 	}
 
-	public JSONObject getuserComments(String userId) {
+	public JSONObject getuserComments(String userId) throws Exception {
 		String url = "https://" + subDomain + ".uservoice.com/api/v1/users/"
 				+ userId + "/comments.json";
 		String parameters = "client=" + API_KEY;
@@ -95,98 +84,88 @@ public class UservoiceAPI {
 		return resultObj;
 	}
 
-	public JSONObject postData(String url, String parameters) {
+	public JSONObject postData(String url, String parameters) throws Exception {
 		JSONObject resultObj = null;
 
-		try {
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+		con.setRequestMethod("POST");
+		con.setRequestProperty("User-Agent", USER_AGENT);
+		con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-			URL obj = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-			con.setRequestMethod("POST");
-			con.setRequestProperty("User-Agent", USER_AGENT);
-			con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-
-			// Send post request
-			con.setDoOutput(true);
-			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-			if (parameters != null) {
-				wr.writeBytes(parameters);
-			}
-			wr.flush();
-			wr.close();
-
-			int responseCode = con.getResponseCode();
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					con.getInputStream()));
-			String inputLine;
-
-			StringBuffer response = new StringBuffer();
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-
-			in.close();
-
-			resultObj = new JSONObject(response.toString());
-
-		} catch (java.io.FileNotFoundException e) {
-			System.out.println("Error while getting Data");
-		} catch (IOException | JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			System.out.println(e);
-			System.out.println("Error in post");
+		// Send post request
+		con.setDoOutput(true);
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		if (parameters != null) {
+			wr.writeBytes(parameters);
 		}
+		wr.flush();
+		wr.close();
+
+		int responseCode = con.getResponseCode();
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				con.getInputStream()));
+		String inputLine;
+
+		StringBuffer response = new StringBuffer();
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+
+		in.close();
+
+		resultObj = new JSONObject(response.toString());
 
 		return resultObj;
 	}
 
-	public JSONObject getData(String url, String parameters) {
+	public JSONObject getData(String url, String parameters) throws Exception {
 		JSONObject resultObj = null;
-		try {
-			if (parameters != null) {
-				url += "?" + parameters;
-			}
-
-			URL obj = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-			// optional default is GET
-			con.setRequestMethod("GET");
-
-			// add request header
-			con.setRequestProperty("User-Agent", USER_AGENT);
-			con.setRequestProperty("Authorization", "Bearer  " + accessToken);
-
-			int responseCode = con.getResponseCode();
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					con.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-			System.out.println(response.toString());
-			resultObj = new JSONObject(response.toString());
-		} catch (IOException | JSONException e) {
-			System.out
-					.println("IO / Json error occured while accessing the resource");
-		} catch (Exception e) {
-			System.out.println("Error occured while accessing the resource");
+		if (parameters != null) {
+			url += "?" + parameters;
 		}
+
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		// add request header
+		con.setRequestProperty("User-Agent", USER_AGENT);
+		con.setRequestProperty("Authorization", "Bearer  " + accessToken);
+
+		int responseCode = con.getResponseCode();
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+		System.out.println(response.toString());
+		resultObj = new JSONObject(response.toString());
 		return resultObj;
 	}
 
-	// public static void main(String args[]) {
-	// String email = "premtammina22@gmail.com";
-	// String API_KEY = "Od0Vo5spH4BeFOwotefuw";
-	// String API_SECRET = "Sv7Wib2alD1K2Ih4Ns9ytgFp33ERTmFedlr6k9pA";
-	//
-	// UservoiceAPI uv = new UservoiceAPI("masala124", API_KEY, API_SECRET);
-	// JSONObject userInfo = uv.getUserInfo(email);
-	// uv.getuserComments("148025571");
-	// }
+	public static void main(String args[]) {
+		 String email = "premtammina22@gmail.com";
+		 String domain = "masala124";
+		 String API_KEY = "Od0Vo5spH4BeFOwotefuw";
+		 String API_SECRET = "Sv7Wib2alD1K2Ih4Ns9ytgFp33ERTmFedlr6k9pA";
+
+		// String email = "Alekhyaoffice365@gmail.com";
+		// String domain = "alekhyak89";
+		// String API_KEY = "UYn4H2qDfFLpNN8FO12A";
+		// String API_SECRET = "TpF10Hvfm96C78eRxrVmPy4RK0nmMiz2B7xokoHUS4";
+		try {
+			UservoiceAPI uv = new UservoiceAPI(domain, API_KEY, API_SECRET);
+			JSONObject userInfo = uv.getUserInfo(email);
+			// uv.getuserComments("148025571");
+		} catch (Exception e) {
+			System.out.println(e.getMessage() + " Error in point ");
+		}
+	}
 }

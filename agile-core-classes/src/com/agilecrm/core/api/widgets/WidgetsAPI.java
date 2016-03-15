@@ -15,6 +15,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.contact.Contact;
@@ -94,8 +96,14 @@ public class WidgetsAPI {
 	public Widget createWidget(Widget widget) {
 		System.out.println("In widgets api create");
 		if (widget != null) {
-			widget.save();
-			return widget;
+			try {
+				WidgetsAPI.checkValidDetails(widget);
+				widget.save();
+				return widget;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -119,21 +127,21 @@ public class WidgetsAPI {
 			if (WidgetUtil.checkIfWidgetNameExists(customWidget.name)) {
 				return null;
 			}
-			
+
 			customWidget.save();
-			
+
 			Widget widget = new Widget();
 			widget.isForAll = customWidget.custom_isForAll;
 			widget.script = customWidget.script;
 			widget.logo_url = customWidget.logo_url;
 			widget.fav_ico_url = customWidget.fav_ico_url;
 			widget.description = customWidget.description;
-			widget.name =customWidget.name;
+			widget.name = customWidget.name;
 			widget.widget_type = customWidget.widget_type;
 			widget.save();
-			
+
 			customWidget.is_added = true;
-			
+
 			return customWidget;
 		}
 		return null;
@@ -151,8 +159,14 @@ public class WidgetsAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Widget updateWidget(Widget widget) {
 		if (widget != null) {
-			widget.save();
-			return widget;
+			try {
+				WidgetsAPI.checkValidDetails(widget);
+				widget.save();
+				return widget;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
 		}
 		return null;
 	}
@@ -307,35 +321,44 @@ public class WidgetsAPI {
 		}
 		System.err.println("The widget is null and id is " + id);
 	}
-	
-/**
- * return the default_call widget otherwise null
- * 	
- * name and default_call are the attribute to be ooked at ui side...
- * 
- * 
- * @return null or widget 
- */
-	
+
+	/**
+	 * return the default_call widget otherwise null
+	 * 
+	 * name and default_call are the attribute to be ooked at ui side...
+	 * 
+	 * 
+	 * @return null or widget
+	 */
+
 	@Path("/availableCallWidgets")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	
-	public List<Widget> getDefaultCallWIdgetName(){
+	public List<Widget> getDefaultCallWIdgetName() {
 		List<Widget> widgets = new ArrayList<Widget>();
-		//ArrayList<String> callOptionName = new ArrayList<>();
+		// ArrayList<String> callOptionName = new ArrayList<>();
 
 		widgets.addAll(WidgetUtil.getWidget(WidgetType.CALL));
-		/*if(!widgets.isEmpty()){
-			for(Widget widget : widgets){
-				callOptionName.add(widget.name);
-			}
-			System.out.println("Available call options : " + callOptionName.toString());
-		}else{
-			System.out.println("No default call widget found sending null ...");
-		}*/
-		
+		/*
+		 * if(!widgets.isEmpty()){ for(Widget widget : widgets){
+		 * callOptionName.add(widget.name); }
+		 * System.out.println("Available call options : " +
+		 * callOptionName.toString()); }else{
+		 * System.out.println("No default call widget found sending null ...");
+		 * }
+		 */
+
 		return widgets;
 	}
-	
+
+	public static void checkValidDetails(Widget widget) throws Exception {
+		if (widget.name.equals("Uservoice")) {
+			String prefs = widget.prefs;
+			JSONObject prefsObj = new JSONObject(prefs);
+			String API_KEY = prefsObj.getString("uv_api_key");
+			String API_SECRET = prefsObj.getString("uv_secert_key");
+			String domain = prefsObj.getString("uv_domain_name");
+			UservoiceAPI uv = new UservoiceAPI(domain, API_KEY, API_SECRET);
+		}
+	}
 }
