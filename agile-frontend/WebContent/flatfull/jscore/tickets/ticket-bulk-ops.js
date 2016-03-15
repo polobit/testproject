@@ -327,7 +327,7 @@ var Ticket_Bulk_Ops = {
 							Tickets_Count.ticketsCount[Ticket_Filter_ID] = Tickets_Count.ticketsCount[Ticket_Filter_ID] - 
 												Ticket_Bulk_Ops.selected_ticket_ids.length;
 
-						Tickets.removeTicketsFromCollection(Ticket_Bulk_Ops.getSelectedTickesObj());
+						Tickets_Rest.removeTicketsFromCollection(Ticket_Bulk_Ops.getSelectedTickesObj());
 						Ticket_Bulk_Ops.clearSelection();
 						//$('#delete-tickets-modal').modal('hide');
 

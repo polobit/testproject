@@ -234,7 +234,7 @@
 				Tickets.ticket_detail_view_navigation(id, el)
 
 				//Initializing type ahead for cc emails
-				agile_type_ahead("cc_email_field", el, tickets_typeahead, function(arg1, arg2){
+				agile_type_ahead("cc_email_field", el, Tickets_Typeahead.contact_typeahead, function(arg1, arg2){
 
 					arg2 = arg2.split(" ").join("");
 
