@@ -44,87 +44,9 @@
 
                     <div class="b-b b-light m-t-sm m-b-sm"></div>
 
-                  <div class="clearfix cursor-pointer" onclick="window.open('#contact/{{contact.id}}', '_blank')">
-
-                      <div class="inline">
-                        <div class="thumb-sm">
-                          {{#if contact.properties}}
-                            <img src="{{nameAvatar contact.properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}">
-                          {{else}}
-                            <img src="{{getGravatarFromEmail requester_email 24}}"  class="r-5x" onerror="image_error(this);" _data-name="{{requester_name}}">
-                          {{/if}}
-
-                          </div>
-                        <div class="text-md m-t-sm m-b-xxs overflow-elipsis m-b-none" style="max-width: 230px"> <span class="">
-                              {{getPropertyValue contact.properties "first_name"}}
-                              {{getPropertyValue contact.properties "last_name"}} 
-                            </span>
-                        </div>
-                        <div class="overflow-elipsis m-b-none" style="max-width: 230px">
-                          <span class="">
-                              {{getPropertyValue contact.properties "company"}}
-                            </span>
-                        </div>
-
-                         <div class="overflow-elipsis m-b-none" style="max-width: 230px">
-                              {{getPropertyValue contact.properties "email"}}
-                          </div>
-
-                           <div class="overflow-elipsis m-b-none" style="max-width: 230px">
-                               <a href="tel:{{getPropertyValue contact.properties "phone"}}" class="contact-make-call contact-call-button" phone="{{getPropertyValue contact.properties "phone"}}">
-                                  {{getPropertyValue contact.properties "phone"}}
-                                </a>
-                            </div>  
-
-                            {{#if contact.tags}}
-                            <div>
-                              {{#each contact.tags}}
-                              <span class="label bg-light dk text-tiny first-letter-cap inline-block m-r-xxs">
-                                {{this}}
-                              </span>
-                              {{/each}}
-                            </div>
-                            {{/if}}
-
-                            <div class="col-md-12 p-n m-t-xso verflow-elipsis m-b-none" style="max-width: 230px">
-
-                              {{#each contact.properties}}
-
-                                {{#if_equals name "website"}}
-
-                                  {{#if subtype}}
-
-                                   <a target="_blank" href="
-                                     {{#if_equals subtype "URL"}}http://{{value}}{{/if_equals}}
-                                     {{#if_equals subtype "SKYPE"}}skype:{{value}}{{/if_equals}}
-                                     {{#if_equals subtype "TWITTER"}}https://twitter.com/{{value}}{{/if_equals}}
-                                     {{#if_equals subtype "LINKEDIN"}}http://{{value}}{{/if_equals}}
-                                     {{#if_equals subtype "FACEBOOK"}}https://www.facebook.com/{{value}}{{/if_equals}}
-                                     {{#if_equals subtype "XING"}}http://{{value}}{{/if_equals}}
-                                     {{#if_equals subtype "FEED"}}http://{{value}}{{/if_equals}}
-                                     {{#if_equals subtype "GOOGLE-PLUS"}}https://plus.google.com/{{value}}{{/if_equals}}
-                                     {{#if_equals subtype "FLICKR"}}http://{{value}}{{/if_equals}}
-                                     {{#if_equals subtype "GITHUB"}}http://{{value}}{{/if_equals}}
-                                     {{#if_equals subtype "YOUTUBE"}}http://{{value}}{{/if_equals}}
-                                   " class="m-l-xs">
-                                    <i class="{{get_social_icon subtype}} text-base text-muted"></i>
-                                   </a>
-
-                                   {{else}}
-                                        <a target="_blank" href="http://{{value}}" 
-                                        class="text-l-none">
-                                        <i class="{{get_social_icon URL}} text-base text-muted"></i>
-                                      </a>
-                                   {{/if}}
-
-                                 {{/if_equals}}
-
-                              {{/each}}
-
-                              </div>
-
-                      </div>                      
-                    </div>
+                  <div id="ticket-contact-details" class="clearfix cursor-pointer" 
+                    onclick="window.open('#contact/{{contact.id}}', '_blank')">
+                  </div>
               </div>
                   
             </div>
@@ -605,4 +527,74 @@
         </div>
     </div>
 </div>
+</script>
+<script id="ticket-contact-template" type="text/html">
+<div class="inline">
+    <div class="thumb-sm">
+      {{#if properties}}
+      <img src="{{nameAvatar properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">
+      {{else}}
+      <img src="{{getGravatarFromEmail requester_email 24}}"  class="r-5x" onerror="image_error(this);" _data-name="{{requester_name}}">
+      {{/if}}
+
+    </div>
+    <div class="text-md m-t-sm m-b-xxs overflow-elipsis m-b-none" style="max-width: 230px"> <span class="">
+        {{getPropertyValue properties "first_name"}}
+        {{getPropertyValue properties "last_name"}} 
+      </span>
+    </div>
+    <div class="overflow-elipsis m-b-none" style="max-width: 230px">
+      <span class="">
+        {{getPropertyValue properties "company"}}
+      </span>
+    </div>
+    <div class="overflow-elipsis m-b-none" style="max-width: 230px">
+        {{getPropertyValue properties "email"}}
+    </div>
+     <div class="overflow-elipsis m-b-none" style="max-width: 230px">
+         <a href="tel:{{getPropertyValue properties "phone"}}" class="contact-make-call contact-call-button" phone="{{getPropertyValue properties "phone"}}">
+            {{getPropertyValue properties "phone"}}
+          </a>
+      </div>  
+
+      {{#if tags}}
+        <div>
+          {{#each tags}}
+          <span class="label bg-light dk text-tiny first-letter-cap inline-block m-r-xxs">
+            {{this}}
+          </span>
+          {{/each}}
+        </div>
+      {{/if}}
+
+      <div class="col-md-12 p-n m-t-xso verflow-elipsis m-b-none" style="max-width: 230px">
+
+        {{#each properties}}
+            {{#if_equals name "website"}}
+              {{#if subtype}}
+                  <a target="_blank" href="
+                   {{#if_equals subtype "URL"}}http://{{value}}{{/if_equals}}
+                   {{#if_equals subtype "SKYPE"}}skype:{{value}}{{/if_equals}}
+                   {{#if_equals subtype "TWITTER"}}https://twitter.com/{{value}}{{/if_equals}}
+                   {{#if_equals subtype "LINKEDIN"}}http://{{value}}{{/if_equals}}
+                   {{#if_equals subtype "FACEBOOK"}}https://www.facebook.com/{{value}}{{/if_equals}}
+                   {{#if_equals subtype "XING"}}http://{{value}}{{/if_equals}}
+                   {{#if_equals subtype "FEED"}}http://{{value}}{{/if_equals}}
+                   {{#if_equals subtype "GOOGLE-PLUS"}}https://plus.google.com/{{value}}{{/if_equals}}
+                   {{#if_equals subtype "FLICKR"}}http://{{value}}{{/if_equals}}
+                   {{#if_equals subtype "GITHUB"}}http://{{value}}{{/if_equals}}
+                   {{#if_equals subtype "YOUTUBE"}}http://{{value}}{{/if_equals}}
+                    " class="m-l-xs">
+                    <i class="{{get_social_icon subtype}} text-base text-muted"></i>
+                 </a>
+              {{else}}
+                  <a target="_blank" href="http://{{value}}" 
+                  class="text-l-none">
+                  <i class="{{get_social_icon URL}} text-base text-muted"></i>
+                </a>
+              {{/if}}
+            {{/if_equals}}
+        {{/each}}
+      </div>
+  </div>
 </script>

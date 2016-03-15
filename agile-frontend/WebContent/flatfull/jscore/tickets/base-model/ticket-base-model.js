@@ -105,12 +105,10 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
        	Tickets.updateModel(url, json, function(model){
         
-			App_Ticket_Module.ticketView.model.set(model, {silent: true});
+			showNotyPopUp('information', 'Assignee has been changed to ' + CURRENT_AGILE_USER.domainUser.name, 'bottomRight', 5000);
 
-       		showNotyPopUp('information', 'Assignee has been changed to ' + CURRENT_AGILE_USER.domainUser.name, 'bottomRight', 5000);
-
-       		$('#ticket-assignee').find("optgroup[data-group-id='"+groupId+"']")
-       			.find("option[value='"+assigneeId+"']").attr('selected', 'selected');
+       		$('#ticket-assignee').find("optgroup[data-group-id='" + groupId + "']")
+       			.find("option[value='" + assigneeId + "']").attr('selected', 'selected');
           	
           	$('.assign-to-me').hide();
 

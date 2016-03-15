@@ -588,7 +588,7 @@ public class TicketsUtil
 	{
 		System.out.println("changeGroupAndAssignee: ");
 
-		if (ticket_id == null || group_id == null || assignee_id == null)
+		if (ticket_id == null || group_id == null)
 			throw new Exception("Required parameters missing");
 
 		// Fetching ticket object by its id

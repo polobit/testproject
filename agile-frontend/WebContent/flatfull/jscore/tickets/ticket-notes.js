@@ -75,39 +75,39 @@ var Tickets_Notes = {
 	            	json.status = 'CLOSED'; 
 	            }
 
-                var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
+	            if( App_Ticket_Module.ticketsCollection){
 
-				//Update model in collection
-				if(notes_json.note_type != 'PRIVATE' && 
-					App_Ticket_Module.ticketsCollection){
-                    
-					var current_date = new Date().getTime();
-                    
-                    json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
-   					json.last_updated_time = current_date;
-					json.closed_time= (is_ticket_closed) ? current_date : '';
-					json.last_reply_text = notes_json.plain_text;
-					json.last_updated_by = 'AGENT';
-					json.user_replies_count = notes_json.user_replies_count;
-				    json.assigneeID = model.attributes.assignee_id;
-				}
+	                var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
 
-				ticket_model.set(json, {
+					//Update model in collection
+					if(notes_json.note_type != 'PRIVATE'){
+	                    
+						var current_date = new Date().getTime();
+	                    
+	                    json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
+	   					json.last_updated_time = current_date;
+						json.closed_time= (is_ticket_closed) ? current_date : '';
+						json.last_reply_text = notes_json.plain_text;
+						json.last_updated_by = 'AGENT';
+						json.user_replies_count = notes_json.user_replies_count;
+					    json.assigneeID = model.attributes.assignee_id;
+					}
+
+					ticket_model.set(json, {
 						silent : true
 					});
 
-				var next_ticket_url = $(".navigation .next-ticket").attr("href");
+					var next_ticket_url = $(".navigation .next-ticket").attr("href");
 
-				if(next_ticket_url){
-					Backbone.history.navigate(next_ticket_url, {
-						trigger : true
-					});
-					
+					if(next_ticket_url)
+						Backbone.history.navigate(next_ticket_url, {
+							trigger : true
+						});
+
 					return;
 				}
 
 				Tickets.renderExistingCollection();
-
 				return;
 			},
 			error : function(data, response) {
