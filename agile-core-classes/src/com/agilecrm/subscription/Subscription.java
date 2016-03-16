@@ -150,7 +150,7 @@ public class Subscription {
 	 */
 	@NotSaved
 	@JsonIgnore
-	JSONObject billing_data;
+	public JSONObject billing_data;
 
 	@NotSaved
 	public PlanLimits planLimits;
