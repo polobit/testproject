@@ -378,7 +378,7 @@ function isDefaultValue($el)
 {
     var nodeUIDefinition = $el.closest('table').data('ui');
 
-    if(nodeUIDefinition.label == 'Territory')
+    if(nodeUIDefinition.label == 'Location')
        return checkLocationDefaultValue($el);
         
 }
@@ -387,7 +387,7 @@ function checkLocationDefaultValue($el)
 {
     var nodeUIDefinition = $el.closest('table').data('ui');
 
-        if(nodeUIDefinition.label == 'Territory')
+        if(nodeUIDefinition.label == 'Location')
         {
             var rowIndex = $el.closest('tr').index();
 
