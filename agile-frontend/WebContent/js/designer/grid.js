@@ -6,6 +6,14 @@ function constructGridPopup(uiFieldDefinition, callback, jsonValues) {
 
     // Store UIfielddefinition for add and edit for table definition
     gridPopup.data('ui', uiFieldDefinition);
+
+    if(uiFieldDefinition.name = "zones")
+    {
+        var zones = get_zones($('#zones-table'));
+
+        gridPopup.data('zones', zones);
+
+    }
         
     // Construct UI dialog from node defonition
     constructUI(gridPopup, uiFieldDefinition);
@@ -29,12 +37,18 @@ function constructGridPopup(uiFieldDefinition, callback, jsonValues) {
     buttons[buttonName] = function(){ $(this).find("form").trigger('submit'); }    
     buttons['Cancel'] = function(){ $(this).dialog('close'); } 
                 
+    var $popup = gridPopup;
+
     // Construct dialog	
     gridPopup.dialog({
 	autoOpen: true,
 	title: uiFieldDefinition.label,
 	open: function(event, ui) {
 		$(this).css({'max-height': 500, 'overflow-y': 'auto'}); 
+
+        // event handlers for zones
+        zones_popup_handler($popup, $(this));
+
 	},
 	modal: true,
 	position: 'top',
@@ -73,7 +87,11 @@ function editGrid(e, selector, rowIndex)
    // alert($('#' + tableId + ' tbody tr:nth-child(' + rowIndex + ')').html());
     
     $('#' + tableId + ' tbody tr:nth-child(' + rowIndex + ')').empty().append($(td));
-        
+    
+    // Hides zone condition operator - Territory node (Naresh - 03/15/2016)
+    if(uiFieldDefinition.name == 'zones')
+        hide_zone_comparator($('#'+ tableId));
+    
     // Update global operations array so that it gets associated to ports - dynamic nodes
     /* ----------- CHECK THIS */
     if(uiFieldDefinition.type != "audiogrid")        
@@ -94,12 +112,12 @@ function addToGrid(e, selector) {
     console.log(jsonArray);
 
     // Create tr and add to parent table
-    var tbody = "<tr>" + Edit_Delete_Column
-    ;
+    var tbody = "<tr>" + Edit_Delete_Column;
+    
     $.each(jsonArray, function (index, json) {
         $.each(json, function (key, value) {
             if (key == "value") tbody += "<td>" + value + "</td>";
-        })
+        });
     });
     tbody += "</tr>";
 
@@ -108,8 +126,15 @@ function addToGrid(e, selector) {
     // Find Table and append it
     var uiFieldDefinition = selector.data('ui');
     var tableId = uiFieldDefinition.name + '-table';
+
     $(tbody).appendTo($('#' + tableId));
-    
+
+    // Row data is used to update Branches
+    $('#' + tableId).find('tr:last').data("rowJson", jsonArray);
+
+    // Hides zone condition operator - Territory node (Naresh - 03/15/2016)
+    if(uiFieldDefinition.name == 'zones')
+        hide_zone_comparator($('#'+ tableId));
     
     // Update global operations array so that it gets associated to ports - dynamic nodes
     /* ----------- CHECK THIS */
@@ -160,6 +185,7 @@ function generateGridUI(container, uiFieldDefinition) {
                 //}
                 
             });
+
             tbody += "</tr>";
         }
     }
@@ -223,6 +249,11 @@ function generateGridUI(container, uiFieldDefinition) {
     		//alert(uiFieldDefinition);
     		constructGridPopup(uiFieldDefinition, addToGrid)
     	});
+
+    // Hides zones in Territory node (Naresh - 03/15/2016)
+    if(uiFieldDefinition.name == 'zones')
+        hide_zone_comparator($('#' + tableId));
+
     }
 }
 
@@ -230,10 +261,16 @@ function generateGridUI(container, uiFieldDefinition) {
 function initGridHandlers(selector)
 {
 
-
     // Delete Handler
     $(".deletegridrow").die().unbind().live('click', function(){
     
+        // Verifies whether value deleted is default one
+        if(isDefaultValue($(this)))
+        {
+            alert("Default values cannot be deleted.");
+            return;
+        }
+
 	    if(confirm('Are you sure to delete this item?'))
 	    {	
 			// Update global operations array so that it gets associated to ports - dynamic nodes
@@ -243,15 +280,19 @@ function initGridHandlers(selector)
 			/* ISSUE - FIX THIS LATER */
 			/* ----------- */
 			var nodeUIDefinition = $(this).closest('table').data('ui');
+
 			if(nodeUIDefinition.type == "audiogrid") 									 							      
 				addGridOperations("delete", rowIndex, null, $("#nodeui").data('jsonDefinition'));
 			/* ----------- */
 			
+            var $table = $(this).closest('table');
+
 			// Delete
 		    $(this).closest('tr').fadeTo(400, 0, function () { 
 			    $(this).remove();
-			});	
 
+                 hide_zone_comparator($table);
+			});	
 	     }
      
      });
@@ -259,6 +300,13 @@ function initGridHandlers(selector)
      // Edit Handler
      $(".editgridrow").die().unbind().live('click', function(e){         
          
+        // Verifies whether value deleted is default one
+        if(isDefaultValue($(this)))
+        {
+            alert("Default values cannot be edited.");
+            return;
+        }
+
 	     var rowIndex = $(this).closest('tr').index();		 
 	     var nodeUIDefinition = $(this).closest('table').data('ui');      
 	     var selectedTR = $(this).closest('tr'); 
@@ -309,7 +357,14 @@ function serializeRow($row)
      			
      			var columnJson = {};
      			columnJson["name"] =  keys[index];
-     			columnJson["value"] =  $(eachTD).text();
+     			
+                if($(eachTD).find('select').length > 0)
+                {
+                    columnJson["value"] = $(eachTD).find('select option:selected').val();
+                }
+                else
+                    columnJson["value"] =  $(eachTD).text();
+                
      			rowJson.push(columnJson);	     			
      		}     						 		 		
 	});
@@ -317,4 +372,113 @@ function serializeRow($row)
 
 
    return rowJson;           
+}
+
+function isDefaultValue($el)
+{
+    var nodeUIDefinition = $el.closest('table').data('ui');
+
+    if(nodeUIDefinition.label == 'Territory')
+       return checkLocationDefaultValue($el);
+        
+}
+
+function checkLocationDefaultValue($el)
+{
+    var nodeUIDefinition = $el.closest('table').data('ui');
+
+        if(nodeUIDefinition.label == 'Territory')
+        {
+            var rowIndex = $el.closest('tr').index();
+
+            if(rowIndex == 0)
+            {
+                var row_text = $el.closest('tr').find('td:nth-child(2)').text();
+
+                if(row_text == "Nomatch")
+                {
+                   return true;
+                }
+            }
+        }
+
+    return false;
+}
+
+function hide_zone_comparator($table)
+{
+     var trArr = $table.find('tr');
+
+    var cacheKeys = {};
+    for(var i=0; i< trArr.length; i++){
+
+        // Skip headers
+        if($(trArr[i]).find('td').length == 0)
+            continue;
+
+        var txt = $(trArr[i]).find('td').eq(1).text();
+        var $last_td = $(trArr[i]).find('td:last');
+
+        if(!cacheKeys[txt])
+        {
+            cacheKeys[txt] = true;
+            
+            if($last_td.find('input').length > 0)
+                $last_td.html($last_td.find('input').attr('comparator'));
+
+            continue;
+        }
+
+        if(txt == 'Nomatch')
+            continue;
+
+        
+        var zone_comparator = $last_td.text();
+        $last_td.html("<input type='text' style='display:none;' comparator=\""+zone_comparator+"\" value =\""+zone_comparator+"\">");
+    }
+}
+
+function get_zones($table)
+{
+    var zones = {};
+   $table.find("tbody tr").each(function (rowIndex, eachTR) {
+
+        // $(eachTR).find("td").each(function (index, eachTD) {
+
+            var zone = $(eachTR).find('td').eq(1).text();
+
+            if(!zones[zone])
+            {
+                var condition = $(eachTR).find('td:last').text();
+
+                zones[zone]=condition;
+            }
+        // });
+   });
+
+   return zones;
+}
+
+function zones_popup_handler($popup, $this){
+
+    var options = $popup.find('[name="in_zone_compare"]').find('option');
+        
+    $this.find('input:first').focusout(function(e){
+            e.preventDefault();
+
+            var given_value = $(this).val();
+
+            var zones = $popup.data('zones');
+
+            if(zones[given_value])
+            {
+                $popup.find('[name="in_zone_compare"]').val(zones[given_value]);
+                $popup.find('[name="in_zone_compare"]').find("option[value!="+zones[given_value]+"]").remove();
+            }
+            else
+            {
+                $popup.find('[name="in_zone_compare"]').find('option').remove();
+                $popup.find('[name="in_zone_compare"]').html(options);
+            }
+        });
 }

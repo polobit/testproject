@@ -279,16 +279,22 @@ function addNodeInternal(node)
     		// If the node is dynamic node, we need to iterate the array and create the ports
 			console.log(node.formValues);
 										
+            var cache_arr = [];
 			$.each(node.formValues, function(index, json){				
 				
 				$.each(json, function(key,  value){
 					
 					// Check which grid is dynamic - look for dynamicportkey
 					if( key == node.nodeDefinition.dynamicportkey ) 
-					{						
+					{	
+                        
 						// Iterate through dynamic grid
 						$.each(value, function(index, portJSONObject){
 							
+                            // Make branch names unique - Naresh (03/08/2016)
+                            if(node.nodeDefinition.unique_branches && is_duplicate(cache_arr, portJSONObject["dynamicgrid"]))
+                                 return;
+
 							// Store the name 
 							console.log(portJSONObject);									
 							object.addAttribute(portJSONObject["dynamicgrid"], "String");								
@@ -298,9 +304,10 @@ function addNodeInternal(node)
 				});
 
 			});
-		
+
+            // Empty cache arr
+            cache_arr = [];
     		
-    
     }
 
 	/*

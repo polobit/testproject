@@ -259,15 +259,16 @@ function saveNode(e) {
 			  	// Connects to older ports automatically
 			  	if( nodeObject.isDynamicPorts == "yes" )
 			  	{
-					editDynamicNode(nodeObject);
-					
+			  		if(nodeObject.name == "Check Location")
+			  			update_location_ports(nodeObject, jsonValues);
+			  		else
+						editDynamicNode(nodeObject);
 				}	  
 			  				  	
 		}
 		
 		
-		
-		 templateContinue(nodeId);
+		 //templateContinue(nodeId);
 		 
 		 var $save_info = '<span id="workflow-edit-msg" style="color: red;">You have unsaved changes. Click on &lsquo;Save Campaign&rsquo; to save.</span>';
 		 
@@ -327,8 +328,16 @@ function serializeTable(selector, jsonValues)
 		$(eachTR).find("td").each(function (index, eachTD) {
 		
 		 	// Index 0 is edit, delete
-			if(index != 0)
-				eachRowJSON[keys[index]] = $(eachTD).text();
+			if(index != 0){
+
+				if($(eachTD).find('select').length > 0)
+                    eachRowJSON[keys[index]] = $(eachTD).find('select option:selected').val();
+                else if($(eachTD).find('input').length > 0)
+                	eachRowJSON[keys[index]] = $(eachTD).find('input').val();
+                else
+					eachRowJSON[keys[index]] = $(eachTD).text();
+			}
+
 			
 	  });
 		 gridJSONObject.push(eachRowJSON);
@@ -447,3 +456,54 @@ function setCheckboxValueIntoJSONArray(jsonArray, key, value) {
 
 }
 */
+
+
+function update_location_ports(nodeObject, jsonValues)
+{
+
+	var formValues = jsonValues[1].zones;
+  	var formValuesJson  = {};
+
+  	for(var i=0;i<formValues.length;i++)
+  	{
+  		formValuesJson[formValues[i]["dynamicgrid"]] = true;
+  	}
+
+	var ports = nodeObject.getPorts();
+
+		while(true){
+
+			// Removes all ports except Source
+			for(var i=0; i < ports.size; i++){
+
+				var portName = ports.get(i).properties.name;
+
+				if(portName == 'Source' || portName == 'Nomatch')
+					continue;
+
+				removePort(nodeObject, i-1);
+				alignDynamicNodePorts(nodeObject);
+
+				// Draw2D (based on the ports)
+				nodeObject.allignDynamicNode();
+					
+			}
+
+			if(nodeObject.getPorts().size == 2)
+				break;
+		}
+
+		$.each(formValuesJson, function(key, value){
+
+			if(key == 'Nomatch')
+				return true;
+
+			addPort(key, nodeObject);
+
+			alignDynamicNodePorts(nodeObject);
+
+			// Draw2D (based on the ports)
+			nodeObject.allignDynamicNode();
+		});
+
+}
