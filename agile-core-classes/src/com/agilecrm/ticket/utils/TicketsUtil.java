@@ -17,6 +17,7 @@ import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -613,7 +614,7 @@ public class TicketsUtil
 			throw new Exception("No group found with id " + group_id + " or group has been deleted.");
 		}
 
-		DomainUser domainUser = DomainUserUtil.getDomainUser(assignee_id);
+		DomainUserPartial domainUser = DomainUserUtil.getPartialDomainUser(assignee_id);
 
 		// Verifying if ticket is assigned to Group. This happens only if ticket
 		// is NEW.

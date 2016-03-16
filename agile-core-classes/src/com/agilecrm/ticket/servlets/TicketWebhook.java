@@ -248,9 +248,10 @@ public class TicketWebhook extends HttpServlet
 						Element element = elements.first();
 
 						plainText = plainText.replace("[image: " + element.attr("alt") + "]", "");
+						html = html.replace("[image: " + element.attr("alt") + "]", "");
 					}
 
-					html = doc.toString();
+					//html = doc.toString();
 				}
 			}
 			catch (Exception e)

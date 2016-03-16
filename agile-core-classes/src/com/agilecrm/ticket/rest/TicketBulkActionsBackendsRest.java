@@ -136,9 +136,14 @@ public class TicketBulkActionsBackendsRest
 			JSONObject dataJSON = new JSONObject(attributes.dataString);
 			System.out.println("dataJSON: " + dataJSON);
 
-			Long assigneeID = dataJSON.getLong("assignee_id");
-			Long groupID = dataJSON.getLong("group_id");
+			Long assigneeID = null;
 
+			if (dataJSON.has("assignee_id"))
+				assigneeID = dataJSON.getLong("assignee_id");
+
+			Long groupID = dataJSON.getLong("group_id");
+			
+			//Cannot set DomainUserPartial to SessionManager so fetching domainUserObject
 			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
 			BulkActionUtil.setSessionManager(user);
 
@@ -159,15 +164,6 @@ public class TicketBulkActionsBackendsRest
 					assigneeID, groupID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
-
-//			DomainUser domaiUser = DomainUserUtil.getDomainUser(assigneeID);
-//			TicketGroups group = TicketGroupUtil.getTicketGroupById(groupID);
-
-			// Create log with static content (Domain user who initiated actiona
-			// and group name)
-			// ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_CHANGE_ASSIGNEE,
-			// null, null, domaiUser.name,
-			// group.group_name, idsFetcher.getCount() + "");
 
 			int selectedTicketsCount = idsFetcher.getCount();
 
@@ -218,7 +214,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			//Workflow workflow = WorkflowUtil.getWorkflow(workflowID);
+			// Workflow workflow = WorkflowUtil.getWorkflow(workflowID);
 
 			// Logging bulk action activity
 			// ActivityUtil.createTicketActivity(ActivityType.BULK_ACTION_EXECUTE_WORKFLOW,
