@@ -30,8 +30,8 @@ function setupZendeskAuth(contact_id)
 	}, "#Zendesk");
 
 	// On click of save button, check input and save details
-    $("#"+WIDGET_PARENT_ELEMENT).off('click','#save_prefs');
-	$("#"+WIDGET_PARENT_ELEMENT).on('click','#save_prefs', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','#save_prefs');
+	$("#"+WIDGET_PARENT_ID).on('click','#save_prefs', function(e)
 	{
 		e.preventDefault();
 
@@ -287,8 +287,8 @@ function registerClickEventsInZendesk()
 	/*
 	 * On click of update ticket link for ticket, update ticket method is called
 	 */
-    $("#"+WIDGET_PARENT_ELEMENT).off('click','#ticket_update');
-	$("#"+WIDGET_PARENT_ELEMENT).on('click','#ticket_update', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','#ticket_update');
+	$("#"+WIDGET_PARENT_ID).on('click','#ticket_update', function(e)
 	{
 		e.preventDefault();
 
@@ -298,8 +298,8 @@ function registerClickEventsInZendesk()
 	});
 
 	// On click of show ticket, show ticket by ticket id method is called
-    $("#"+WIDGET_PARENT_ELEMENT).off('click','#ticket_show');
-	$("#"+WIDGET_PARENT_ELEMENT).on('click','#ticket_show', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','#ticket_show');
+	$("#"+WIDGET_PARENT_ID).on('click','#ticket_show', function(e)
 	{		
 		e.preventDefault();
 
@@ -589,8 +589,8 @@ function startZendeskWidget(contact_id){
 	showZendeskProfile(contact_id);
 
 	// On click of add ticket, add ticket method is called
-    $("#"+WIDGET_PARENT_ELEMENT).off('click','#add_ticket');
-	$("#"+WIDGET_PARENT_ELEMENT).on('click','#add_ticket', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','#add_ticket');
+	$("#"+WIDGET_PARENT_ID).on('click','#add_ticket', function(e)
 	{
 		e.preventDefault();
 		addTicketToZendesk();
@@ -600,15 +600,15 @@ function startZendeskWidget(contact_id){
 	 * On mouse enter of ticket, show tab link which has a link to show detailed
 	 * description of ticket and comment on it
 	 */
-     $("#"+WIDGET_PARENT_ELEMENT).off('mouseenter','.zendesk_ticket_hover');
-	 $("#"+WIDGET_PARENT_ELEMENT).on('mouseenter','.zendesk_ticket_hover', function(e)
+     $("#"+WIDGET_PARENT_ID).off('mouseenter','.zendesk_ticket_hover');
+	 $("#"+WIDGET_PARENT_ID).on('mouseenter','.zendesk_ticket_hover', function(e)
 	{
 		$(this).find('.zendesk_tab_link').show();
 	});
 
 	// On mouse leave of chat, hides tab link
-    $("#"+WIDGET_PARENT_ELEMENT).off('mouseleave','.zendesk_ticket_hover');
-	$("#"+WIDGET_PARENT_ELEMENT).on('mouseleave','.zendesk_ticket_hover', function(e)
+    $("#"+WIDGET_PARENT_ID).off('mouseleave','.zendesk_ticket_hover');
+	$("#"+WIDGET_PARENT_ID).on('mouseleave','.zendesk_ticket_hover', function(e)
 	{
 		$('.zendesk_tab_link').hide();
 	});
@@ -619,8 +619,8 @@ function startZendeskWidget(contact_id){
 	 * all_tickets and show every time
 	 */
 	 $('body').off('click', '.revoke-widget');
-	 $("#"+WIDGET_PARENT_ELEMENT).off('click','#ZEN_show_more');
-	 $("#"+WIDGET_PARENT_ELEMENT).on('click','#ZEN_show_more', function(e){
+	 $("#"+WIDGET_PARENT_ID).off('click','#ZEN_show_more');
+	 $("#"+WIDGET_PARENT_ID).on('click','#ZEN_show_more', function(e){
 		e.preventDefault();
 		var offSet = ZENCount * 5;
 		loadZENTickets(offSet);

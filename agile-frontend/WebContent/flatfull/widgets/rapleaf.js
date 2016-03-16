@@ -20,8 +20,8 @@ function setupRapleafAuth(contact_id)
 	console.log('In Rapleaf Auth');
 
 	// Saves the API key
-    $("#"+WIDGET_PARENT_ELEMENT).off("click", '#save_api_key');
-	$("#"+WIDGET_PARENT_ELEMENT).on("click", '#save_api_key', function(e)
+    $("#"+WIDGET_PARENT_ID).off("click", '#save_api_key');
+	$("#"+WIDGET_PARENT_ID).on("click", '#save_api_key', function(e)
 	{
 		e.preventDefault();
 

@@ -4,6 +4,7 @@
 var Widgets_View;
 var widget_template_loaded_map = {};
 var WIDGET_LOADED_CONTACT;
+var WIDGET_PARENT_ID;
 var WIDGET_PARENT_ELEMENT;
 
 /**
@@ -20,7 +21,8 @@ function loadWidgets(el, contactObject, templateID)
 	var data = { contact : contactObject };
 
 	WIDGET_LOADED_CONTACT = contactObject;
-	WIDGET_PARENT_ELEMENT = templateID;
+	WIDGET_PARENT_ID = templateID;
+	WIDGET_PARENT_ELEMENT = el;
 
 	var is_widget_view_new = false;
 	/*
@@ -32,7 +34,7 @@ function loadWidgets(el, contactObject, templateID)
 		// This flag is used to ensure widget script are loaded only once in
 		// postrender. It is set to false after widget setup is initialized
 		is_widget_view_new = true;
-		Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : WIDGET_PARENT_ELEMENT, individual_tag_name : 'li',
+		Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : WIDGET_PARENT_ID, individual_tag_name : 'li',
 			sortKey : 'position', modelData : data, postRenderCallback : function(widgets_el)
 			{
 				head.load(FLAT_FULL_UI + "css/misc/agile-widgets.css", function(){

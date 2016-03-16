@@ -672,15 +672,15 @@ function startClickDeskWidget(contact_id) {
 		 * On mouse enter of ticket, show tab link which has a link to show detailed
 		 * description of ticket
 		 */
-        $("#"+WIDGET_PARENT_ELEMENT).off("mouseenter", ".clickdesk_ticket_hover");
-		$("#"+WIDGET_PARENT_ELEMENT).on("mouseenter", ".clickdesk_ticket_hover", function(e)
+        $("#"+WIDGET_PARENT_ID).off("mouseenter", ".clickdesk_ticket_hover");
+		$("#"+WIDGET_PARENT_ID).on("mouseenter", ".clickdesk_ticket_hover", function(e)
 		{
 			$(this).find('.clickdesk_ticket_tab_link').show();
 		});
 
 		// On mouse leave of ticket, hides tab link
-        $("#"+WIDGET_PARENT_ELEMENT).off("mouseleave", ".clickdesk_ticket_hover");
-		$("#"+WIDGET_PARENT_ELEMENT).on("mouseleave", ".clickdesk_ticket_hover", function(e)
+        $("#"+WIDGET_PARENT_ID).off("mouseleave", ".clickdesk_ticket_hover");
+		$("#"+WIDGET_PARENT_ID).on("mouseleave", ".clickdesk_ticket_hover", function(e)
 		{
 			$('.clickdesk_ticket_tab_link').hide();
 		});
@@ -689,15 +689,15 @@ function startClickDeskWidget(contact_id) {
 		 * On mouse enter of chat, show tab link which has a link to show detailed
 		 * description of chat
 		 */
-        $("#"+WIDGET_PARENT_ELEMENT).off("mouseenter", ".clickdesk_chat_hover");
-		$("#"+WIDGET_PARENT_ELEMENT).on("mouseenter", ".clickdesk_chat_hover", function(e)
+        $("#"+WIDGET_PARENT_ID).off("mouseenter", ".clickdesk_chat_hover");
+		$("#"+WIDGET_PARENT_ID).on("mouseenter", ".clickdesk_chat_hover", function(e)
 		{
 			$(this).find('.clickdesk_chat_tab_link').show();
 		});
 
 		// On mouse leave of chat, hides tab link
-        $("#"+WIDGET_PARENT_ELEMENT).off("mouseleave", ".clickdesk_chat_hover");
-		$("#"+WIDGET_PARENT_ELEMENT).on("mouseleave", ".clickdesk_chat_hover", function(e)
+        $("#"+WIDGET_PARENT_ID).off("mouseleave", ".clickdesk_chat_hover");
+		$("#"+WIDGET_PARENT_ID).on("mouseleave", ".clickdesk_chat_hover", function(e)
 		{
 			$('.clickdesk_chat_tab_link').hide();
 		});

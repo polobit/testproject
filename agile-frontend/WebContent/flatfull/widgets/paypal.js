@@ -98,8 +98,8 @@ function startPayPalWidget(contact_id){
 	Email = agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'email');
 
 
-	$("#"+WIDGET_PARENT_ELEMENT).off("click", "#paypal_inv_show_more");
-	$("#"+WIDGET_PARENT_ELEMENT).on("click", "#paypal_inv_show_more", function(e){
+	$("#"+WIDGET_PARENT_ID).off("click", "#paypal_inv_show_more");
+	$("#"+WIDGET_PARENT_ID).on("click", "#paypal_inv_show_more", function(e){
 		e.preventDefault();
 		var offSet = paymentINVCount * 5;
 		loadPaypalInvoices(offSet);
