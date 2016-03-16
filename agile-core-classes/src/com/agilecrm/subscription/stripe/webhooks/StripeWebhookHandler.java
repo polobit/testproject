@@ -78,7 +78,7 @@ public abstract class StripeWebhookHandler
 	return user;
     }
 
-    protected Contact getContactFromOurDomain()
+    public Contact getContactFromOurDomain()
     {
 	if (contact != null)
 	    return contact;
