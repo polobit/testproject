@@ -187,6 +187,81 @@ function agile_crm_update_contact(propertyName, value, callback)
 	} }, { silent : true });
 }
 
+/**
+ * Updates a contact with the list of property name and its value specified in
+ * propertiesArray. If property name already exists with the given then replaces
+ * the value, if property is new then creates a new field and saves it
+ * 
+ * @param propertiesArray
+ *            Array of the properties to be created/updated
+ * @param callback
+ */
+function agile_widget_update_contact_properties(propertiesArray)
+{
+	// Gets current contact model from the contactDetailView object
+	var contact_model = WIDGET_LOADED_CONTACT;
+
+	// Reads properties field from the contact
+	var properties = contact_model['properties'];
+
+	// Iterates for each property in properties list
+	for ( var i in propertiesArray)
+	{
+		var flag = false;
+
+		// Iterates through each property in contact properties
+		$.each(properties, function(index, property)
+		{
+			/*
+			 * checks for the match with given property name in properties list
+			 * and if match is found and if given properties has no subtype,
+			 * updates the value of it with the given value
+			 */
+			if (property.name == propertiesArray[i].name)
+			{
+				// flag is set true to indicate property is not new
+				flag = true;
+
+				/*
+				 * If given properties list has subtype, then update the value
+				 * of it, else flag is set false to indicate it as new property
+				 */
+				if (propertiesArray[i].subtype)
+				{
+					if (propertiesArray[i].subtype == property.subtype)
+						property.value = propertiesArray[i].value;
+					else
+						flag = false;
+				}
+				else
+					property.value = propertiesArray[i].value;
+
+				// break each if match is found
+				return false;
+			}
+		});
+
+		// If flag is false, given property is new then new field is created
+		if (!flag)
+			properties
+					.push({ "name" : propertiesArray[i].name, "value" : propertiesArray[i].value, "subtype" : propertiesArray[i].subtype, "type" : "CUSTOM" });
+
+	}
+
+	if(App_Contacts.contactDetailView.model){
+		// If property is new then new field is created
+		contact_model.set({ "properties" : properties }, { silent : true });
+		contact_model.url = "core/api/contacts";
+
+		// Save model
+		contact_model.save({ success : function(model, response)
+		{
+			console.log('contact saving ');
+			if (callback && typeof (callback) == "function")
+				callback();
+		} }, { silent : true });
+	}
+}
 
 /**
  * Updates a contact with the list of property name and its value specified in
@@ -466,6 +541,41 @@ function agile_crm_delete_widget_property_from_contact(propertyName)
 
 	// Save updated contact model
 	contact_model.save();
+}
+
+/**
+ * Retrieves property value from current contact based on given property name
+ * and sub type of the property
+ * 
+ * @param propertyName
+ *            Name of the property
+ * @param subtype
+ *            Subtype of the property
+ */
+function agile_widget_contact_property_by_subtype(propertyName, subtype)
+{
+
+	// Reads current contact model form the contactDetailView
+	var contact_model = WIDGET_LOADED_CONTACT;
+
+	// Gets properties list field from contact
+	var properties = contact_model['properties'];
+	var property;
+
+	// Iterates though each property and finds the value related to the property
+	// name
+	$.each(properties, function(key, value)
+	{
+		if (value.name == propertyName && value.subtype == subtype)
+		{
+			property = value;
+		}
+	});
+
+	// If property is defined then return property value
+	if (property)
+		return property.value;
+
 }
 
 /**

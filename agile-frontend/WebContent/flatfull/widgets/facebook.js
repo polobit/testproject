@@ -78,7 +78,7 @@ function showFacebookMatchingProfile(contact_id, first_name)
 
 					console.log(propertiesArray);
 
-					agile_crm_update_contact_properties(propertiesArray);
+					agile_widget_update_contact_properties(propertiesArray);
 
 					// show twitter profile by id
 					showFacebookProfile(Facebook_id, contact_id);
@@ -236,7 +236,7 @@ function startFacebookWidget(contact_id)
 	SEARCH_STRING = first_name + ' ' + last_name;
 	console.log("    SEARCH_STRING" + SEARCH_STRING)
 
-	web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
+	web_url = agile_widget_contact_property_by_subtype('website', 'FACEBOOK');
 	console.log(web_url);
 
 	$('#Facebook').html(FACEBOOK_PROFILE_LOAD_IMAGE);
@@ -265,7 +265,7 @@ function startFacebookWidget(contact_id)
 								fbUserId = fbProfileDetails.id;				
 								var propertiesArray = [{ "name" : "website", "value" : "@"+fbUserId, "subtype" : "FACEBOOK" }];
 								console.log(propertiesArray);
-								agile_crm_update_contact_properties(propertiesArray);
+								agile_widget_update_contact_properties(propertiesArray);
 							} else {
 								if(typeof fbProfileDetails.error != 'undefined') {
 									facebookError("Facebook profile do not exist.("+fbProfileLink+")");
@@ -320,7 +320,7 @@ function startFacebookWidget(contact_id)
 	$("#"+WIDGET_PARENT_ELEMENT).on("click", "#Facebook_plugin_delete", function(e)
 	{
 		e.preventDefault();
-		web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
+		web_url = agile_widget_contact_property_by_subtype('website', 'FACEBOOK');
 		console.log('deleting facebook acct.',web_url);
 		agile_crm_delete_contact_property_by_subtype('website', 'FACEBOOK', web_url, function(data)
 		{
