@@ -997,10 +997,9 @@ function initializeAddPortletsListeners() {
 						$(this).popover('show');
 					});
 
-$('.col-sm-6 ').off('click touchstart');
-		$('.col-sm-6').on(
+$('.show_screeshot').off('click touchstart').on(
 			"click touchstart",
-			'.add-portlet',
+			'.add-portlet-direct',
 			function() {
 				var route=[];
 				var url='core/api/portlets/add';
@@ -1010,7 +1009,6 @@ $('.col-sm-6 ').off('click touchstart');
 				var forAll=false;
 				clickfunction($(this),url,forAll,route);
 			});
-		
 	$('.col-md-3').off('click touchstart').on('click touchstart',
 			'.add_to_all',
 			function() {

@@ -14,7 +14,7 @@
 				{{#if_equals "Mini Calendar" name}}
 					{{#isAdmin}}
 				<div class="btn-group  m-l-n-lg">
-  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     									<span class="caret"></span>
     									<span class="sr-only">Toggle Dropdown</span>
@@ -24,13 +24,13 @@
   									</ul>
 								</div>
 					{{else}}
-					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet"  portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
+					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet-direct"  portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
 					  {{/isAdmin}}
 				{{else}}
 				 	 {{#if_equals "Agenda" name}} 
 				 	 {{#isAdmin}}
 				<div class="btn-group  m-l-n-lg">
-  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     									<span class="caret"></span>
     									<span class="sr-only">Toggle Dropdown</span>
@@ -40,7 +40,7 @@
   									</ul>
 								</div>
 					{{else}}
-					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
+					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
 					  {{/isAdmin}}
 					  {{else}}
 				<a type="button" class="btn btn-sm btn-default configure-portlets" route="{{is_routeadded}}" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
