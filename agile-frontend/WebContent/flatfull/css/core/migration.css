@@ -2248,3 +2248,17 @@ color:#484848!important;
 }}
 
  /* Safari 6.1+ (9.0 is the latest version of Safari at this time) */
+
+
+  
+.moreDetailsTab .panel-body{ padding: 15px;}
+.moreDetailsTab ul li{ padding:3px 7px !important; border: 1px solid #e7ecee;}
+#contact-detail-owner li{ border: 0px; padding: 0px !important;}
+
+/* start contact-details styles */
+
+
+
+
+
+
