@@ -163,7 +163,7 @@ toggleFavorite : function(e){
 
 		var $select = $('.ticket_type');
 		var new_ticket_type = $select.find('option:selected').val();
-		$select.attr('disabled', true);
+		//$select.attr('disabled', true);
 
 		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-ticket-type";
 		var json = {type: new_ticket_type};
@@ -173,12 +173,7 @@ toggleFavorite : function(e){
 			// current view
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {type : new_ticket_type}); 
 				//update collection 
-	   			$select.attr('disabled', false);
-	            showNotyPopUp('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
-			},
-
-			function(error){
-				$select.attr('disabled', false);
+	   			showNotyPopUp('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
 			}
 		);
 	},
@@ -187,7 +182,6 @@ toggleFavorite : function(e){
 
 		var $priority = $('.ticket_priority');
 		var new_priority = $priority.find('option:selected').val();
-		$priority.attr('disabled', true);
 
 		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-priority";
 		var json = {priority: new_priority};
@@ -196,11 +190,7 @@ toggleFavorite : function(e){
 
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
-			$priority.attr('disabled', false);
 			showNotyPopUp('information', 'Ticket Type has been changed to '+ new_priority.toLowerCase() , 'bottomRight', 5000);
-		    
-		}, function(error){
-			$priority.attr('disabled', false);
 		});
 	},
 

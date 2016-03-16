@@ -17,6 +17,8 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -116,7 +118,7 @@ public class TicketNotesRest
 			else
 			{
 				Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
-				
+
 				TicketGroups group = null;
 
 				try
@@ -127,12 +129,18 @@ public class TicketNotesRest
 				{
 					throw new Exception("Ticket group has been deleted. Please change ticket group to reply.");
 				}
-				
+
 				// If domain user doesn't exists in ticket group then
 				// throwing exception
 				if (!group.agents_keys.contains(domainUserKey.getId()))
 					throw new Exception("You must in " + group.group_name + " group in order to reply to this ticket");
 
+				// Checking if contact existing or not
+				Contact contact = ticket.getTicketRelatedContact();
+
+				ticket.contact_key = new Key<Contact>(Contact.class, contact.id);
+				ticket.contactID = contact.id;
+				
 				// Updating existing ticket
 				ticket = ticket.updateTicketAndSave(ticket.cc_emails, plain_text, LAST_UPDATED_BY.AGENT, currentTime,
 						null, currentTime, (notes.attachments_list != null && notes.attachments_list.size() > 0) ? true
@@ -142,7 +150,7 @@ public class TicketNotesRest
 				ticketNotes = new TicketNotes(ticket.id, ticket.groupID, ticket.assigneeID, CREATED_BY.AGENT,
 						ticket.requester_name, ticket.requester_email, plain_text, html_text, notes.note_type,
 						new ArrayList<TicketDocuments>(), "");
-				
+
 				ticketNotes.save();
 			}
 

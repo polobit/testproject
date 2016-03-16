@@ -278,7 +278,7 @@ var Ticket_Bulk_Ops = {
 					},
 					postRenderCallback: function(el){
 
-						var template = '<option value="{{id}}">{{name}}</option>';
+						var template = '<option value="{{id}}" {{#is_disabled}}disabled{{/is_disabled}}>{{name}}</option>';
 
 						//Fetching all groups, assignees and appending them to select dropdown
 						fillSelect('workflowID', '/core/api/workflows', '', null, template, false, el);

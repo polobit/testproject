@@ -418,15 +418,9 @@ public class Tickets extends Cursor implements Serializable
 			this.last_updated_by = LAST_UPDATED_BY.REQUESTER;
 			this.requester_ip_address = ipAddress;
 			this.user_replies_count = 1;
-
-			/**
-			 * Checking if new ticket requester is exists in Contacts
-			 */
-			Contact contact = ContactUtil.searchContactByEmail(requester_email);
-
-			if (contact == null)
-				contact = ContactUtil.createContact(requester_name, requester_email);
-
+			
+			Contact contact = this.getTicketRelatedContact();
+			
 			this.contact_key = new Key<Contact>(Contact.class, contact.id);
 			this.contactID = contact.id;
 
@@ -741,6 +735,19 @@ public class Tickets extends Cursor implements Serializable
 		}
 
 		return null;
+	}
+
+	public Contact getTicketRelatedContact()
+	{
+		/**
+		 * Checking if new ticket requester is exists in Contacts
+		 */
+		Contact contact = ContactUtil.searchContactByEmail(requester_email);
+
+		if (contact == null)
+			contact = ContactUtil.createContact(requester_name, requester_email);
+
+		return contact;
 	}
 
 	@Override
