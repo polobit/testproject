@@ -696,3 +696,7 @@ function  printCurrentDateMillis(type){
 function  startFunctionTimer(name){
       console.time(name);
 }
+
+function endFunctionTimer(name){
+      console.timeEnd(name);
+}
