@@ -90,18 +90,16 @@
 
 <script id="send-cancellation-request-template" type="text/html">
     <div class="modal-content">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3 class="modal-title">Request for Cancellation</h3>
-    </div>
     <div class="modal-body">
+     <button type="button" class="close pull-right" data-dismiss="modal" aria-hidden="true">&times;</button>
      <div class="display-center">
+        <h4>Request for Cancellation</h4>
             <p class="p-t-xs">
 			   Please let us know why you want to leave. In case of any issues, our support team will be in touch with you soon.
             </p>
 		<form id="cancelation-request-form">
 			<div class="controls">
-				<textarea name="account_cancel_reason" class="required form-control w-full" id="account_cancel_reason" rows="3" ></textarea>
+				<textarea name="account_cancel_reason" class="required form-control w-full" id="account_cancel_reason" rows="10" ></textarea>
 				<p class="p-t-xs"><span class="font-bold">Important: </span>Upon cancellation of your account, unused period will automatically lapse.</p>
     		</div>
 		</form>
@@ -136,12 +134,8 @@
 <script id="cancel-subscription-request-template" type="text/html">
      <div id="cancel_subscription_modal" class="modal-dialog p-t-md">
         <div class="modal-content">
-            <div class="modal-header">
-               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 class="modal-title">Cancellation</h3>
-            </div>
             <div class="modal-body">
-                <div id="account_cancel_options" class="text-center"> <div style="font-size: 20px;line-height: 35px;">Wait a Second</div>
+                <div id="account_cancel_options" class="text-center"> <div style="font-size: 20px;line-height: 35px;">Please do not break up. Friends? <button type="button" class="close pull-right pos-abs" data-dismiss="modal" aria-hidden="true" style="right: 20px;">×</button></div>
                     <div class="m-b" style="font-size: 16px;">Let us help you</div>
 
                     <div class="text-center row">
@@ -161,18 +155,18 @@
                                 <i class="fa icon-support pos-rlt pos-t"></i>
                               </div>
                               <h4>Get Answers</h4>
-                              <div class="text-xs p-b-xs p-l-sm p-r-sm">Check out our blog posts to get the help you need.</div>
-                              <a href="https://www.agilecrm.com/blog/" target="_blank" class="btn btn-md btn-default p-t-sm w-xx-half">Help</a>
+                              <div class="text-xs p-b-xs p-l-sm p-r-sm">Check out our detailed instructions to get the help you need.</div>
+                              <a href="https://www.agilecrm.com/support" target="_blank" class="btn btn-md btn-default p-t-sm w-xx-half">Help</a>
                             </div></div>
                     <div class="col-md-4">
                       <div id="account_pause" class="wrapper">
                               <div class="bg-box m-r m-l" style="background-color: #f76c51;">
-                                <i class="fa icon-lock pos-rlt pos-t"></i>
+                                <i class="fa icon-rocket pos-rlt pos-t"></i>
                               </div>
                               <h4>Need a Break?</h4>
                               <div id="pause_settings" class="text-xs pos-rlt p-b-xs p-l-sm p-r-sm">
                                   Postpone your billing for 
-                                  <span id="pause_count">2</span>
+                                  <span id="pause_count">1</span>
                                   <span class="pause-count-control m-l-sm">
                                         <ul class="inline-block list-none m-n p-n">
                                             <li style="height: 4px"><i class="icon-sort-up c-p" id="add" style="height: 10px;"></i></li>

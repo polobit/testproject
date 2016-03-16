@@ -158,7 +158,7 @@ $(function(){
 	$('#send-cancellation').on('click', '#add', function(e) {
 			e.preventDefault();
 			var value = $("#pause_count").html();
-			if(value < 6)
+			if(value < 3)
 				value++;
 			$("#pause_count").html(value);
 			if(value > 1)
