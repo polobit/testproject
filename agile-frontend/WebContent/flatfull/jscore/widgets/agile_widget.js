@@ -249,6 +249,7 @@ function agile_widget_update_contact_properties(propertiesArray)
 	}
 
 	if(App_Contacts.contactDetailView.model){
+		contact_model = App_Contacts.contactDetailView.model;
 		// If property is new then new field is created
 		contact_model.set({ "properties" : properties }, { silent : true });
 		contact_model.url = "core/api/contacts";

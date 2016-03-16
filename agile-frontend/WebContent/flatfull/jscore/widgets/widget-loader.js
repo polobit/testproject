@@ -3,8 +3,8 @@
  */
 var Widgets_View;
 var widget_template_loaded_map = {};
-WIDGET_LOADED_CONTACT;
-WIDGET_PARENT_ELEMENT;
+var WIDGET_LOADED_CONTACT;
+var WIDGET_PARENT_ELEMENT;
 
 /**
  * Loads all the widgets for the current agile user
@@ -208,7 +208,7 @@ function set_up_widgets(el, widgets_el)
 		 */
 		$('#' + model.get('selector'), widgets_el).data('model', model);
 
-		var contact_id = contactObject.id;
+		var contact_id = WIDGET_LOADED_CONTACT.id;
 		/*
 		 * Checks if widget is minimized, if minimized script is not loaded
 		 */

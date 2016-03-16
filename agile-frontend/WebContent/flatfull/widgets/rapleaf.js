@@ -20,8 +20,8 @@ function setupRapleafAuth(contact_id)
 	console.log('In Rapleaf Auth');
 
 	// Saves the API key
-    $("#widgets").off("click", '#save_api_key');
-	$("#widgets").on("click", '#save_api_key', function(e)
+    $("#"+WIDGET_PARENT_ELEMENT).off("click", '#save_api_key');
+	$("#"+WIDGET_PARENT_ELEMENT).on("click", '#save_api_key', function(e)
 	{
 		e.preventDefault();
 
@@ -137,7 +137,7 @@ function startRapleafWidget(contact_id){
 	Rapleaf_Plugin_Id = rapleaf_widget.id;
 
 	// Stores email of the contact as global variable
-	Email = agile_crm_get_contact_property('email');
+	Email = agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'email');
 	console.log('Email: ' + Email);
 
 
