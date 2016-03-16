@@ -103,12 +103,14 @@ public class CSVUtil
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
 		Contact.class.getSimpleName(), this.billingRestriction);
 
-	GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
-		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+	if (!VersioningUtil.isLocalHost())
+	{
+	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
+		    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
-	service = new GCSServiceAgile(
-		NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate() + ".csv", "agile-exports",
-		options);
+	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
+		    + ".csv", "agile-exports", options);
+	}
 
 	this.accessControl = accessControl;
 
@@ -357,6 +359,7 @@ public class CSVUtil
 
 			for (String tag : tagsArray)
 			{
+			    tag = tag.trim();
 			    if (!TagValidator.getInstance().validate(tag))
 			    {
 				throw new InvalidTagException();
@@ -1628,6 +1631,15 @@ public class CSVUtil
 
 	System.out.println("building failed contacts service");
 	return failedContactsWriter = new CSVWriter(service.getOutputWriter());
+    }
+
+    public static void main(String[] args)
+    {
+	String[] tagsArray = "salemslot,newtag, new tag".split("[,;]+");
+	for (int i = 0; i < tagsArray.length; i++)
+	{
+	    System.out.println(tagsArray[i]);
+	}
     }
 
 }

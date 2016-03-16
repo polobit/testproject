@@ -54,6 +54,7 @@ import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.AliasDomain;
 import com.agilecrm.user.ContactViewPrefs;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
@@ -132,6 +133,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(ContactViewPrefs.class);
 	ObjectifyService.register(AgileUser.class);
 	ObjectifyService.register(DomainUser.class);
+	ObjectifyService.register(AliasDomain.class);
 	ObjectifyService.register(Tag.class);
 	ObjectifyService.register(SocialPrefs.class);
 	ObjectifyService.register(AccountPrefs.class);

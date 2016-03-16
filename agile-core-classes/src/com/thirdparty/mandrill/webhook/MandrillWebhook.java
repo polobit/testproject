@@ -6,19 +6,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONSerializer;
+
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.EmailBounceTriggerUtil;
+import com.campaignio.cron.Cron;
+import com.campaignio.cron.deferred.CronDeferredTask;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.thirdparty.mandrill.MandrillSetBounceStatusDeferredTask;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
 /**
@@ -71,8 +81,16 @@ public class MandrillWebhook extends HttpServlet
 		// Set to contact if event is HardBounce or SoftBounce
 		if (StringUtils.equalsIgnoreCase(event, HARD_BOUNCE)
 		        || StringUtils.equalsIgnoreCase(event, SOFT_BOUNCE)
-		        || StringUtils.equalsIgnoreCase(event, SPAM))
-		    setBounceStatusToContact(eventJSON);
+		        || StringUtils.equalsIgnoreCase(event, SPAM)){
+		    //setBounceStatusToContact(eventJSON);
+			//System.out.println(eventJSON.toString());
+		MandrillSetBounceStatusDeferredTask mandrillSetBounceStatusDeferredTask = new MandrillSetBounceStatusDeferredTask(eventJSON.toString());
+
+		
+			// Interruptted crons like Click, Open
+			Queue queue = QueueFactory.getQueue(AgileQueues.MANDRILL_QUEUE);
+			queue.add(TaskOptions.Builder.withPayload(mandrillSetBounceStatusDeferredTask));
+		}
 	    }
 	}
 	catch (Exception e)

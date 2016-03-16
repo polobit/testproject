@@ -46,7 +46,7 @@ function navigateToDetailsPage(data, name)
 		break;
 	}
 	console.log(model);
-	if (model.entity_type == "contact_entity")
+	if (model.entity_type == "contact_entity" || model.entity_type == "company_entity")
 	{
 		if(model.type == "COMPANY")
 			App_Companies.navigate("company/" + data, { trigger : true });

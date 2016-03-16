@@ -129,6 +129,14 @@ var contact_details_documentandtasks_actions = {
 					]);
 					$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
 
+					$('.contact_input', el).each(function(){
+						agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=PERSON');
+					});
+
+					$('.company_input', el).each(function(){
+						agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=COMPANY');
+					});
+
 				}, "DEAL");
 
 				// Fills owner select element
