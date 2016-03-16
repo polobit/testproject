@@ -106,7 +106,10 @@ public class StripeChargeWebhook extends HttpServlet
 		    String email = getStripeEmail(stripeJson, eventType);
 		    StripeWebhookHandlerImpl stripeWebhookHandlerImpl = new StripeWebhookHandlerImpl();
 			Contact contact = stripeWebhookHandlerImpl.getContactFromOurDomain();
+			if(contact!=null)
+			{
 			email = contact.getContactFieldValue(contact.EMAIL);
+			}
 				
 		    //Contact contact = ContactUtil.searchContactByEmail(email);
 
