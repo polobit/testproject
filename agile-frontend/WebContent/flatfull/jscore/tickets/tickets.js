@@ -615,11 +615,11 @@ var Tickets = {
        	// if(ticketJSON.assigneeID == assigneeId 
        	// 	&& ticketJSON.groupID == groupId)
        	// 	return;
-=======
+
  //       	if(ticketJSON.assigneeID == assigneeId 
  //       		&& ticketJSON.groupID == groupId)
  //       		return;
->>>>>>> sreedevi_ui_fixes
+
 
  //       	var url = "/core/api/tickets/" + Current_Ticket_ID + "/assign-ticket/" + groupId + "/" + assigneeId;
  //       	var json = {id: Current_Ticket_ID};
@@ -638,43 +638,41 @@ var Tickets = {
 	// 			console.log(e);
 	// 		}
 
-<<<<<<< HEAD
-			var assigneeName = '';
-			try{
-			 assigneeName = (modelData.assigneeID) ? (modelData.assignee.name) : modelData.group.group_name;
-			}catch(e){}
-=======
+
+			// var assigneeName = '';
+			// try{
+			//  assigneeName = (modelData.assigneeID) ? (modelData.assignee.name) : modelData.group.group_name;
+			// }catch(e){}
+
 	// 		var assigneeName = (modelData.assigneeID) ? (modelData.assignee.name) : modelData.group.group_name;
->>>>>>> sreedevi_ui_fixes
+
 
 	// 		var message = 'Ticket group has been changed to ' + assigneeName;
 
-<<<<<<< HEAD
-			if(modelData.assigneeID)
-				message = 'Assignee has been changed to ' + assigneeName;
-=======
+			// if(modelData.assigneeID)
+			// 	message = 'Assignee has been changed to ' + assigneeName;
+
 	// 		if(modelData.assigneeID)
 	// 			var message = 'Assignee has been changed to ' + assigneeName;
->>>>>>> sreedevi_ui_fixes
+
 			
 	// 		showNotyPopUp('information', message, 'bottomRight', 5000);
 
 	// 		modelData.assignee = ((modelData.assignee) ? modelData.assignee : "");
 	// 		modelData.group = ((modelData.group) ? modelData.group : "");
 
-<<<<<<< HEAD
+
 			// Update assignee in model and collection 
 			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, modelData);
 
 			App_Ticket_Module.ticketView.model.set(modelData, {silent: true});				
 		});
     },
-=======
 	// 		// Update assignee in model and collection 
 	// 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, modelData); 					
 	// 	});
  //    },
->>>>>>> sreedevi_ui_fixes
+
 
 	isCurrentUserExistInGroup : function(selectedGroupId, groupsList){
 
@@ -735,28 +733,27 @@ var Tickets = {
 	// 		$priority.attr('disabled', false);
 	// 		showNotyPopUp('information', 'Ticket Type has been changed to '+ new_priority.toLowerCase() , 'bottomRight', 5000);
 		    
-<<<<<<< HEAD
-		}, function(error){
-			$priority.attr('disabled', false);
-		});
-	},
 
-	updateDataInModelAndCollection : function(id, data){
-
-	     App_Ticket_Module.ticketView.model.set(data, {silent: true});
-		// if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
-		// 	return;
-        if(!App_Ticket_Module.ticketsCollection)
-        	return;
-
-		// get data from collection with id
-		updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
-		
-		// Update data in model
-		updated_model.set(data, {silent: true});
-	},
-=======
 	// 	}, function(error){
+	// 		$priority.attr('disabled', false);
+	// 	});
+	// },
+
+	// updateDataInModelAndCollection : function(id, data){
+
+	//      App_Ticket_Module.ticketView.model.set(data, {silent: true});
+	// 	// if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
+	// 	// 	return;
+ //        if(!App_Ticket_Module.ticketsCollection)
+ //        	return;
+
+	// 	// get data from collection with id
+	// 	updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
+		
+	// 	// Update data in model
+	// 	updated_model.set(data, {silent: true});
+	// },
+	// // 	}, function(error){
 	// 		$priority.attr('disabled', false);
 	// 	});
 	// },
@@ -773,7 +770,7 @@ var Tickets = {
 	// 	// Update data in model
 	// 	updated_model.set(data, {silent: true});
 	// },
->>>>>>> sreedevi_ui_fixes
+
 
 	updateModel: function(url, json, success_cbk, err_cbk){
 
