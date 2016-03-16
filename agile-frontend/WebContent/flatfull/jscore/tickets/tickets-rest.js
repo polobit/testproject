@@ -204,19 +204,7 @@ toggleFavorite : function(e){
 		});
 	},
 
-	updateDataInModelAndCollection : function(id, data){
-
-	     App_Ticket_Module.ticketView.model.set(data, {silent: true});
-		// if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
-		// 	return;
-        if(!App_Ticket_Module.ticketsCollection)
-        return;
-		// get data from collection with id
-		updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
-		// Update data in model
-		updated_model.set(data, {silent: true});
-	},
-   changeAssignee : function(e){
+	changeAssignee : function(e){
 
 		var that = e.target;
 
@@ -269,9 +257,28 @@ toggleFavorite : function(e){
 			modelData.group = ((modelData.group) ? modelData.group : "");
 
 			// Update assignee in model and collection 
-			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, modelData); 					
+			Tickets_Rest.updateDataInModelAndCollection(modelData.id, modelData); 					
 		});
-    }
+    },
 
+    updateDataInModelAndCollection : function(id, data){
 
+	     //App_Ticket_Module.ticketView.model.set(data, {silent: true});
+		// if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
+		// 	return;
+        if(!App_Ticket_Module.ticketsCollection)
+        	return;
+		// get data from collection with id
+		// var updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
+
+		// Update data in model
+		//updated_model.set(data, {silent: true, merge: false});
+		//App_Ticket_Module.ticketsCollection.collection.add(data, {silent: true, merge: false})
+
+		App_Ticket_Module.ticketsCollection.collection.remove(data);
+
+		App_Ticket_Module.ticketsCollection.collection.add(data, {silent: true})
+
+		console.log(App_Ticket_Module.ticketsCollection.collection.get(id).toJSON());
+	}
 };
