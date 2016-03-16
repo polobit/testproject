@@ -418,7 +418,7 @@ function minicalendar(el)
  **/
 function loadingGoogleEvents(el,startTime,endTime){
 
-	$.getJSON('core/api/calendar-prefs/get', function(response)
+	$.getJSON('core/api/calendar-prefs/type/GOOGLE', function(response)
 			{
 		if(response==undefined)
 		{
@@ -475,7 +475,7 @@ function init_cal(el){
  */
 function googledata(el,response,startTime,endTime)
 {
-	gapi.auth.setToken({ access_token : response.access_token, state : "https://www.`apis.com/auth/calendar" });
+	gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
 
 	var current_date = new Date();
 	var timezone_offset = current_date.getTimezoneOffset();
@@ -484,10 +484,15 @@ function googledata(el,response,startTime,endTime)
 	var endDate = new Date((endTime * 1000)-(timezone_offset*60*1000));
 	var gDateEnd = endDate.toISOString();
 
-	function callbackEvents(resp)
-	{
-		var startDate = startDate;
-		var endDate = endDate;
+
+
+			
+	// Retrieve the events from primary
+	var request = gapi.client.calendar.events
+	.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime', timeMin : gDateStart, timeMax : gDateEnd });
+	request.execute(function(resp)
+			{
+
 		var events = new Array();
 		console.log(resp);
 		for (var j = 0; j < resp.items.length; j++)
@@ -498,18 +503,21 @@ function googledata(el,response,startTime,endTime)
 
 		}
 		console.log($("#calendar_container", el).fullCalendar("getView").visStart);
-		$('#calendar_container', el).fullCalendar('removeEventSource', functions["event_mini_google" + $(el).attr('id')]);
 
+		$('#calendar_container', el).fullCalendar('removeEventSource', functions["event_mini_google" + $(el).attr('id')]);
+			var events_clone = events.slice(0);
 			functions["event_mini_google" + $(el).attr('id')] = function(start, end, callback)
 			{
 				console.log(this);
 				console.log($("#calendar_container", el).fullCalendar("getView").visStart);
 				if($('#calendar_container', el).fullCalendar('getView').visStart.getTime()!=start.getTime())
 					return;
-				callback(events);
+				callback(events_clone);
+				
 			}
 
 			$('#calendar_container',el).fullCalendar('addEventSource', functions["event_mini_google" + $(el).attr('id')]);
+			events_clone = [];
 
 		//**Add the google Events in the list of events in events_show div **/
 		var len=$(".events_show",el).find('.list').find('li').length;
@@ -551,14 +559,8 @@ function googledata(el,response,startTime,endTime)
 				$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
 			}
 		},5000);
+	});
 
-
-			
-	}
-	// Retrieve the events from primary
-	var request = gapi.client.calendar.events
-	.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime', timeMin : gDateStart, timeMax : gDateEnd });
-	request.execute(callbackEvents);
 }
 
 /** Rendering the events to the mini Calendar

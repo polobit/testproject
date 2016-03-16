@@ -4,21 +4,49 @@
 						id="{{remove_spaces name}}">
 			<div class="panel wrapper b-a text-center">
 				<div class="text-md"><i class="portlets-modal-icon icon {{get_portlet_icon name}}"></i>				
-					{{#if_equals "Deal Goals" name}}
-					<b>{{get_portlet_name name}}</b><span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
-					{{else}}
 					<b>{{get_portlet_name name}}</b>
-						{{/if_equals}}
 					</div><br>
 				<div class="text-flow-ellipsis line-clamp line-clamp-3 m-b widget-text" style="height:60px"  rel="tooltip" title="{{get_portlet_description name}}">
 					{{get_portlet_description name}}
 					<!--<img class="show_screeshot v-top question-tag" id="{{remove_spaces name}}"
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"/>-->
 				</div>
+				{{#if_equals "Mini Calendar" name}}
+					{{#isAdmin}}
+				<div class="btn-group  m-l-n-lg">
+  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    									<span class="caret"></span>
+    									<span class="sr-only">Toggle Dropdown</span>
+  									</a>
+  									<ul class="dropdown-menu" role="menu">
+    									<li><a class="btn btn-sm add_to_all" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add for all users</a></li>    									
+  									</ul>
+								</div>
+					{{else}}
+					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet"  portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
+					  {{/isAdmin}}
+				{{else}}
+				 	 {{#if_equals "Agenda" name}} 
+				 	 {{#isAdmin}}
+				<div class="btn-group  m-l-n-lg">
+  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    									<span class="caret"></span>
+    									<span class="sr-only">Toggle Dropdown</span>
+  									</a>
+  									<ul class="dropdown-menu" role="menu">
+    									<li><a class="btn btn-sm add_to_all" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add for all users</a></li>    									
+  									</ul>
+								</div>
+					{{else}}
+					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
+					  {{/isAdmin}}
+					  {{else}}
 				<a type="button" class="btn btn-sm btn-default configure-portlets" route="{{is_routeadded}}" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
-				<!--
-			
-			-->
+				{{/if_equals}}
+				{{/if_equals}}
+				
 		</div> 
 		</div>
 </form>

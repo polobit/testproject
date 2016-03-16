@@ -997,7 +997,30 @@ function initializeAddPortletsListeners() {
 						$(this).popover('show');
 					});
 
+$('.col-sm-6 ').off('click touchstart');
+		$('.col-sm-6').on(
+			"click touchstart",
+			'.add-portlet',
+			function() {
+				var route=[];
+				var url='core/api/portlets/add';
 
+													route.push('DashBoard');
+												
+				var forAll=false;
+				clickfunction($(this),url,forAll,route);
+			});
+		
+	$('.col-md-3').off('click touchstart').on('click touchstart',
+			'.add_to_all',
+			function() {
+				var route=[];
+			route.push('DashBoard');
+				var forAll=true;
+				var url='core/api/portlets/addforAll';
+				clickfunction($(this),url,forAll,route);
+				
+			});
 	
 	$('#portlets-add-listener').on('click','.configure-portlets',function(e){
 		e.preventDefault();
@@ -1012,29 +1035,6 @@ function initializeAddPortletsListeners() {
 				
 
 					  
-            	/*if(p_name=='Mini Calendar'){
-            	$.each(data,function(index,p){ 
-            		if(p.name=='Mini Calendar'){
-            			var route=p.is_routeadded;
-					route=route.substr(1,route.length-2);
-					var routes=route.split(',');
-					$.each(routes,function(index,data)
-					{
-						$('#route-list>option', $('#portletStreamModalNew')).each(function(i,d)
-						{
-							if(d.value==data.trim())
-								this.remove();
-						})
-					});
-				}
-            		});
-            		if($('#route-list' , $('#portletStreamModalNew')).children().length==0){
-					$('.modal-body',$('#portletStreamModalNew')).text('Already Added');
-				$(".add-portlet").addClass('disabled');
-				//$(".add_to_all").addClass('disabled');
-			}
-            	
-            } */
 					
 			
 

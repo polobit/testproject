@@ -505,19 +505,39 @@ function gravatarImgForPortlets(width){
 
 /** Loading google events for Events Portet**/
 function loadGoogleEventsForPortlets(p_el,startTime,endTime){
-	$.getJSON('core/api/calendar-prefs/get', function(response)
+	$.getJSON('core/api/calendar-prefs/type/GOOGLE', function(response)
 	{
-		var events = new Array();
+
 		console.log(response);
 		if (response)
 		{
 
-		head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=25', function()
-		{
-			setupGC(function()
+			if(typeof gapi != "undefined" && isDefined(gapi) && isDefined(gapi.client) && isDefined(gapi.client.calendar)) 
 			{
+				googledataforEvents(p_el,response,startTime,endTime);
+				return;
+			}	
+		_load_gapi(function(){
 
-				gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
+				googledataforEvents(p_el,response,startTime,endTime);
+
+			});
+		}
+		else{
+			setTimeout(function(){
+				if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length==0 && $(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
+				{
+					$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">No calendar events</div>');
+				}
+			},1000);
+		}
+	});
+}
+
+function googledataforEvents(p_el,response,startTime,endTime)
+{
+			var events = new Array();
+	gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
 
 				var current_date = new Date();
 				var timezone_offset = current_date.getTimezoneOffset();
@@ -566,17 +586,4 @@ function loadGoogleEventsForPortlets(p_el,startTime,endTime){
 						}
 						hideTransitionBar();
 					});
-
-				});
-			});
-		}
-		else{
-			setTimeout(function(){
-				if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length==0 && $(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
-				{
-					$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">No calendar events</div>');
-				}
-			},1000);
-		}
-	});
 }
