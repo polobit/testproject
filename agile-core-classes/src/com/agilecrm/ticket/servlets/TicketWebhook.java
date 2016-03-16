@@ -186,7 +186,7 @@ public class TicketWebhook extends HttpServlet
 					"html");
 
 			// Check if any attachments exists
-			Boolean attachmentExists = msgJSON.has("attachments");
+			Boolean attachmentExists = msgJSON.has("attachments") || msgJSON.has("images");
 
 			List<TicketDocuments> documentsList = new ArrayList<TicketDocuments>();
 
@@ -238,19 +238,16 @@ public class TicketWebhook extends HttpServlet
 						if (document == null)
 							continue;
 
+						documentsList.add(document);
+
 						Elements elements = doc.getElementsByAttributeValue("src", "cid:" + fileJSON.getString("name"));
 
 						if (elements == null || elements.size() == 0)
-						{
-							documentsList.add(document);
 							continue;
-						}
 
 						Element element = elements.first();
 
-						element.attr("src", document.url);
-
-						plainText = plainText.replace("[image: " + element.attr("alt") + "]", element.outerHtml());
+						plainText = plainText.replace("[image: " + element.attr("alt") + "]", "");
 					}
 
 					html = doc.toString();
