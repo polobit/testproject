@@ -699,7 +699,8 @@ public class StripeImpl implements AgileBilling {
 			Map<String, Object> updateParams = new HashMap<String, Object>();
 			if(trialEnd == 0)
 				updateParams.put("trial_end", "now");
-			updateParams.put("trial_end", trialEnd);
+			else
+				updateParams.put("trial_end", trialEnd);
 			sub.update(updateParams);
 		}
 		if(trialEnd == 0)
