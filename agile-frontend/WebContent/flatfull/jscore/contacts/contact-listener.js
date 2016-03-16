@@ -102,14 +102,12 @@ function contactListener(el)
 
 	$('body').off('mouseover','.popover_contact');
 		$('body').on('mouseover','.popover_contact',function(e){
-
 			//e.stopPropagation();
 			var left=e.pageX;
             var that=$(this);
 
-     // clearTimeout(timer);
-
 			timer=setTimeout(function() {
+
 						 		
 		
 					var contact_id=$(that).attr('data')
@@ -121,7 +119,6 @@ function contactListener(el)
 				success : function(data) {
 					App_Contacts.contact_popover=new Backbone.Model(data);
 		 		getTemplate("contacts-custom-view-popover", data, undefined, function(template_ui){
-
 						if(!template_ui)
 							  return;
 								$(that).popover(
@@ -136,7 +133,12 @@ function contactListener(el)
 								$(that).popover('show');
 								
 						$('.popover').addClass("contact_popover fadeInLeft animated");
-							
+							var top;
+							if (window.innerHeight - $(that).offset().top + $(window).scrollTop()>= 250)
+       	  top = $(that).offset().top + 30 + 'px';
+        else
+         top = $(that).offset().top-$('.popover').height() + 'px';
+     $('.popover').css('top',top);
 
 						contact_list_starify('.popover',undefined);
 						
@@ -162,10 +164,9 @@ function contactListener(el)
 var insidePopover=false;
 
 function attachEvents(tr,Contact_collection,listView,campaigns_view) {
-
 	$('.popover').off('mouseenter','.popover-content');
 	$('.popover').on('mouseenter', '.popover-content',function() {
-
+		
 		insidePopover=true;
 	
 	});
