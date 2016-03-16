@@ -227,8 +227,8 @@ toggleFavorite : function(e){
        		&& ticketJSON.groupID == groupId)
        		return;
 
-       	var url = "/core/api/tickets/" + Current_Ticket_ID + "/assign-ticket/" + groupId + "/" + assigneeId;
-       	var json = {id: Current_Ticket_ID};
+       	var url = "/core/api/tickets/" + ticketJSON.id + "/assign-ticket/" + groupId + "/" + assigneeId;
+       	var json = {id: ticketJSON.id};
 
        	Tickets.updateModel(url, json, function(data){
             
@@ -246,10 +246,13 @@ toggleFavorite : function(e){
 
 			var assigneeName = (modelData.assigneeID) ? (modelData.assignee.name) : modelData.group.group_name;
 
+			var assigned_to_group = true;
 			var message = 'Ticket group has been changed to ' + assigneeName;
 
-			if(modelData.assigneeID)
-				var message = 'Assignee has been changed to ' + assigneeName;
+			if(modelData.assigneeID){
+				message = 'Assignee has been changed to ' + assigneeName;
+				assigned_to_group = false;
+			}
 			
 			showNotyPopUp('information', message, 'bottomRight', 5000);
 
@@ -257,28 +260,32 @@ toggleFavorite : function(e){
 			modelData.group = ((modelData.group) ? modelData.group : "");
 
 			// Update assignee in model and collection 
-			Tickets_Rest.updateDataInModelAndCollection(modelData.id, modelData); 					
+			Tickets_Rest.updateDataInModelAndCollection(modelData.id, modelData);
+
+			//Do not call updateDataInModelAndCollection for change assignee it causes issues when ticket is assigned to group
+			if(!App_Ticket_Module.ticketsCollection)
+        		return;
+
+			// Get data from collection with id
+			var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(modelData.id);
+
+			if(assigned_to_group)
+				ticket_model.unset('assigneeID', {silent: true});
+
+			//Update data in model
+			ticket_model.set(data, {silent: true});
 		});
     },
 
     updateDataInModelAndCollection : function(id, data){
 
-	     //App_Ticket_Module.ticketView.model.set(data, {silent: true});
-		// if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
-		// 	return;
-        if(!App_Ticket_Module.ticketsCollection)
+	    if(!App_Ticket_Module.ticketsCollection)
         	return;
-		// get data from collection with id
-		var updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
+
+		// Get data from collection with id
+		var model = App_Ticket_Module.ticketsCollection.collection.get(id);
 
 		//Update data in model
-		updated_model.set(data, {silent: true, merge: false});
-		//App_Ticket_Module.ticketsCollection.collection.add(data, {silent: true, merge: false})
-
-		// App_Ticket_Module.ticketsCollection.collection.remove(data);
-
-		// App_Ticket_Module.ticketsCollection.collection.add(data, {silent: true})
-
-		// console.log(App_Ticket_Module.ticketsCollection.collection.get(id).toJSON());
+		model.set(data, {silent: true});
 	}
 };

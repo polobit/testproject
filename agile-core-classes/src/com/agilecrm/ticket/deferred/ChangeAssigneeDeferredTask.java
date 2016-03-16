@@ -24,7 +24,6 @@ public class ChangeAssigneeDeferredTask extends TicketBulkActionAdaptor
 		this.key = new Key<DomainUser>(DomainUser.class, domainUserID);
 		this.newAssigneeID = newAssigneeID;
 		this.groupID = newGroupID;
-		this.namespace = nameSpace;
 	}
 
 	@Override
