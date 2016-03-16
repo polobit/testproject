@@ -269,16 +269,16 @@ toggleFavorite : function(e){
         if(!App_Ticket_Module.ticketsCollection)
         	return;
 		// get data from collection with id
-		// var updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
+		var updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
 
-		// Update data in model
-		//updated_model.set(data, {silent: true, merge: false});
+		//Update data in model
+		updated_model.set(data, {silent: true, merge: false});
 		//App_Ticket_Module.ticketsCollection.collection.add(data, {silent: true, merge: false})
 
-		App_Ticket_Module.ticketsCollection.collection.remove(data);
+		// App_Ticket_Module.ticketsCollection.collection.remove(data);
 
-		App_Ticket_Module.ticketsCollection.collection.add(data, {silent: true})
+		// App_Ticket_Module.ticketsCollection.collection.add(data, {silent: true})
 
-		console.log(App_Ticket_Module.ticketsCollection.collection.get(id).toJSON());
+		// console.log(App_Ticket_Module.ticketsCollection.collection.get(id).toJSON());
 	}
 };
