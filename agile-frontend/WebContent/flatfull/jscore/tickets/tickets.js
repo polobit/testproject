@@ -218,6 +218,7 @@ var Tickets = {
 			var ticket_id = $that.closest('ul').data('ticket-id'); 
 			var url = '/core/api/tickets', message = '';
 			var json = {};
+			var assignee_changed = false;
 
 			switch(action_type){
 
@@ -234,8 +235,11 @@ var Tickets = {
 					message = 'Priority has been updated to ' + action_value.toLowerCase();
 					break;
 				case 'assignee':
-				{
+				{	
+					assignee_changed = true;
+
 					var group_id = $that.data('group-id');
+					json = {id: ticket_id};
 
 					url += "/" + ticket_id + "/assign-ticket/" + group_id + "/" + action_value;
 
@@ -250,7 +254,9 @@ var Tickets = {
 			    }
 			}
 
-			Tickets.updateModel(url, json, function(){
+			Tickets.updateModel(url, json, function(data){
+
+				var modelData = data.toJSON();
 
 				showNotyPopUp('information', message, 'bottomRight', 5000);
 
@@ -268,6 +274,14 @@ var Tickets = {
 				$that.closest('div').removeClass('bg-light');
 				$that.closest('div').find('.caret-btn').removeClass('inline-block').addClass('display-none');
 
+				// Get data from collection with id
+				var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(ticket_id);
+
+				if(assignee_changed)
+					ticket_model.unset('assigneeID', {silent: true});
+
+				//Update data in model
+				ticket_model.set(modelData, {silent: true});
 			});
 		});
 

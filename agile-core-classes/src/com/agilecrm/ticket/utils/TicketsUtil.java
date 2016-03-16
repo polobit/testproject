@@ -13,14 +13,12 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.session.UserInfo;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
@@ -909,31 +907,7 @@ public class TicketsUtil
 
 		return keys;
 	}
-
-	// public static List<Activity> includeData(List<Activity> activitys) throws
-	// Exception
-	// {
-	// if (activitys == null || activitys.size() == 0)
-	// return new ArrayList<Activity>();
-	//
-	// Map<Long, DomainUser> assigneeList = new HashMap<Long, DomainUser>();
-	//
-	// for (Activity activity : activitys)
-	// {
-	// if (!assigneeList.containsKey(activity.domainUserID))
-	// {
-	// DomainUser temp = DomainUserUtil.getDomainUser(activity.domainUserID);
-	//
-	// if (temp != null)
-	// assigneeList.put(activity.domainUserID, temp);
-	// }
-	//
-	// activity.domainUser = assigneeList.get(activity.domainUserID);
-	// }
-	//
-	// return activitys;
-	// }
-
+	
 	public static void createDefaultTicket()
 	{
 		try
