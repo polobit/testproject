@@ -29,7 +29,7 @@ var Tickets_Notes = {
 
 		var json = serializeForm("send-reply");
 
-		json.html_text = json.html_text.trim() + "<br><br>" + CURRENT_USER_PREFS.signature;
+		json.html_text = json.html_text.trim() + "\r\n\r\n" + CURRENT_USER_PREFS.signature;
 
 		if($(e.target).hasClass('forward')){
 		    this.forwardTicket(json, $save_btn, true);
