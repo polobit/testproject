@@ -25,6 +25,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.deferred.CompanyDeleteDeferredTask;
+import com.agilecrm.contact.deferred.ContactPostDeleteTask;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.email.deferred.LastContactedDeferredTask;
@@ -52,6 +53,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Index;
+import com.google.appengine.api.search.SearchException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -226,10 +228,11 @@ public class ContactUtil
      *            Activates infiniScroll at client side
      * @return list of contacts (company)
      */
-    public static List<Contact> getAllCompaniesByOrder(int max, String cursor, String sortKey){
-		Map<String, Object> searchMap = new HashMap<String, Object>();
-		searchMap.put("type", Type.COMPANY);
-		return dao.fetchAllByOrder(max, cursor, searchMap, false, false, sortKey);
+    public static List<Contact> getAllCompaniesByOrder(int max, String cursor, String sortKey)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("type", Type.COMPANY);
+	return dao.fetchAllByOrder(max, cursor, searchMap, false, false, sortKey);
     }
 
     /**
@@ -903,34 +906,45 @@ public class ContactUtil
 	}
     }
 
+    public static void deleteTextSearchDataWithRetries(String[] ids, int maxRetries)
+    {
+	Index index = new AppengineSearch<Contact>(Contact.class).index;
+
+	try
+	{
+	    index.delete(ids);
+	    return;
+	}
+	catch (SearchException e)
+	{
+	    System.out.println("Exception occured while deleting text search data in domain : "
+		    + NamespaceManager.get() + " " + maxRetries);
+
+	    if (maxRetries > 0)
+	    {
+		System.out.println("retrying");
+		deleteTextSearchDataWithRetries(ids, --maxRetries);
+	    }
+	}
+    }
+
     public static void postDeleteOperation(List<Long> ids, Set<String> tags)
     {
 	String[] docIds = new String[ids.size()];
-	for (int i = 0; i < ids.size(); i++)
+	Iterator<Long> iterator = ids.iterator();
+	for (int i = 0; iterator.hasNext(); i++)
 	{
-	    Long id = ids.get(i);
-	    // Delete Notes
-	    NoteUtil.deleteAllNotes(id);
-
-	    // Delete Crons.
-	    CronUtil.removeTask(null, id.toString());
-
-	    // Deletes logs of contact.
-	    LogUtil.deleteSQLLogs(null, id.toString());
-
-	    // Deletes TwitterCron
-	    TwitterJobQueueUtil.removeTwitterJobs(null, id.toString(), NamespaceManager.get());
-
-	    docIds[i] = String.valueOf(id);
+	    docIds[i] = String.valueOf(iterator.next());
 	}
 
-	Index index = new AppengineSearch<Contact>(Contact.class).index;
+	/**
+	 * Delete text search indexed data with maximum of 3 retires
+	 */
+	deleteTextSearchDataWithRetries(docIds, 4);
 
-	if (index != null)
-	    index.delete(docIds);
-
-	// Delete Tags
-	TagUtil.deleteTags(tags);
+	ContactPostDeleteTask task = new ContactPostDeleteTask(ids, tags, NamespaceManager.get());
+	Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_POST_DELETE_QUEUE);
+	queue.addAsync(TaskOptions.Builder.withPayload(task));
     }
 
     public static void postDeleteOperation(Long id, Set<String> tags)
@@ -1822,23 +1836,24 @@ public class ContactUtil
 	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).etaMillis(System.currentTimeMillis() + 5000));
     }
 
-    public static String getMD5EncodedImage(Contact contact){
+    public static String getMD5EncodedImage(Contact contact)
+    {
 
-         String email = contact.getContactFieldValue(contact.EMAIL);
-         String image_email = "";
-            if(email != null)
-            {
-                try
-                {
-                     image_email = MD5Util.getMD5Code(email);   
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-                
-            }
-            return image_email;
+	String email = contact.getContactFieldValue(contact.EMAIL);
+	String image_email = "";
+	if (email != null)
+	{
+	    try
+	    {
+		image_email = MD5Util.getMD5Code(email);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
+	}
+	return image_email;
     }
     
 }

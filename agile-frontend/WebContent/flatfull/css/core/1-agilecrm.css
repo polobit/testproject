@@ -3382,23 +3382,37 @@ table.hide-head-checkbox th label.i-checks {
     margin-right: 80px;
     top: 50px;
 }
-.user-alert .free-user-alert-message{
-	position: fixed;
-	width: 30%;
-	margin: 25px auto;
+.free-user-alert-message{
 	text-align: center;
-	background: #f7ecc2!important;
-	border: 1px solid #ffc237;
-	left: 0;
-	right: -310px;
+	background: #F7F7D0 !important;
+	border: 1px solid #E2E29C;
 	z-index: 1030;
-	padding: 5px;
+	padding: 5px 10px;
 	margin-top: 8px;
 	border-radius: 2px;
+	position: absolute;
+	left: 40%;
+	font-size: 13px;
+	color: #58666e !important;
+}
+.free-user-alert-message .text-info{
+	color: #23b7e5 !important;
+}
+#free-user-md-text { display: block; }
+#free-user-sm-text{ display: none;}
+
+@media(max-width:1260px){
+#free-user-sm-text{ display: block; }
+#free-user-md-text{ display: none;}
+.free-user-alert-message{ left: 45%;}
+
+}
+@media(max-width:1060px){ 
+	.free-user-alert-message{display: none;}
 }
 
 /* Fix for timeline support issue starting */
-.item table.body td.center {
+.item table.body td.center {E2E29C
     position: static!important;
 }
 /* Fix for timeline support issue ending */
@@ -3473,10 +3487,27 @@ div.user-view-actions {
 
 }
 
+
 .task-view-description-outbox .task-view-description
 {
 max-width:300px;
 text-overflow:ellipsis;
 overflow-x:hidden;
 text-align:left;
+}
+
+.new-user
+{
+	margin-left: 10px;
+    margin-top: 15px;
+
+}
+.highcharts-button {
+  display: none;
+}
+
+.highcharts-contextmenu hr
+{
+	margin-top: 6px;
+	margin-bottom: 6px;
 }

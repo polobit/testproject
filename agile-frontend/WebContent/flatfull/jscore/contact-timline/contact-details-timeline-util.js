@@ -35,7 +35,7 @@ function entity_created_month_year(model)
 	else if (model.time)
 		return month_year = new Date(model.time * 1000).getMonth() + '-' + new Date(model.time * 1000).getFullYear();
 	else if (model.date_secs)
-		return month_year = new Date(model.date_secs).getMonth() + '-' + new Date(model.date_secs).getFullYear();
+		return month_year = new Date(model.date_secs*1).getMonth() + '-' + new Date(model.date_secs*1).getFullYear();
 }
 
 /**

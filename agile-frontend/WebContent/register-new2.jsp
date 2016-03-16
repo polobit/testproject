@@ -41,6 +41,7 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 <style>
 body {
 	background: #7266ba;
+	background-size: cover;
 }
 
 /*hack for phone number plugin*/
