@@ -54,4 +54,4 @@ var Tickets_Typeahead = {
 }
 
 
-}
+};

@@ -1,3 +1,6 @@
+var Group_ID = null, Current_Ticket_ID = null, Ticket_Filter_ID = null, 
+	Tickets_Util = {}, Sort_By = "-", Sort_Field = 'last_updated_time', Ticket_Position= null;
+var popoverFunction = undefined, Helpdesk_Enabled = false;
 
 var Tickets = {
 
@@ -119,10 +122,11 @@ var Tickets = {
 					Ticket_Bulk_Ops.initEvents(el);
 
 					if(!Tickets.isSingleRowView()){
-						Ticket_Utils.fetchGroups(function(){
-							$('ul.ul-select-assignee', el).html(
-								getTemplate('ticket-model-change-assignee', Groups_Collection.collection.toJSON()));
-				 		});
+						var Groups = Backbone.Collection.extend({url: '/core/api/tickets/groups'});
+						new Groups().fetch({success: function(model, response, options){
+							
+							$('ul.ul-select-assignee').html(getTemplate('ticket-model-change-assignee', model.toJSON()))
+						}});
 					}
 
 					Tickets.setCountText();
@@ -201,15 +205,6 @@ var Tickets = {
 
 	initEvents: function(el){
 		
-		/**
-		 * Initializing click event on ul lists to remove bg
-		 */
-		$('div.assignee-change').on('hidden.bs.dropdown', function () {
-		 	
-		 	$(this).removeClass('bg-light');
-		 	$(this).find('a.caret-btn').removeClass('inline-block');
-		});
-
 		/**
 		 * Initializing click event on ul lists in ticket collection
 		 */
@@ -315,14 +310,14 @@ var Tickets = {
 			.on('mouseover mouseout', 'td.show-notes',
 				function(event) {
 
-					clearTimeout(Popover_Function);
+					clearTimeout(popoverFunction);
 
 					var top = '60px';
 					if (event.type == 'mouseover'){
 
 						var $tr = $(this).closest('tr'), $that = $tr.find('td.notes-container');
 
-						Popover_Function = setTimeout(function(){
+						popoverFunction = setTimeout(function(){
 
 							if(Current_Ticket_ID || Current_Route.indexOf('ticket') == -1)
 								return;
@@ -348,13 +343,13 @@ var Tickets = {
 			.on('mouseover mouseout', 'tbody.ticket-single-row-model-list > tr',
 				function(event) {
 
-					clearTimeout(Popover_Function);
+					clearTimeout(popoverFunction);
 					
 					if (event.type == 'mouseover'){
 
 						var $that = $(this);
 						
-						Popover_Function = setTimeout(function(){
+						popoverFunction = setTimeout(function(){
 
 							var ticketID = $that.find('td.data').data('id');
 							var ticketJSON = App_Ticket_Module.ticketsCollection.collection.get(ticketID).toJSON();
@@ -615,7 +610,6 @@ var Tickets = {
        	// if(ticketJSON.assigneeID == assigneeId 
        	// 	&& ticketJSON.groupID == groupId)
        	// 	return;
-
  //       	if(ticketJSON.assigneeID == assigneeId 
  //       		&& ticketJSON.groupID == groupId)
  //       		return;
@@ -649,8 +643,8 @@ var Tickets = {
 
 	// 		var message = 'Ticket group has been changed to ' + assigneeName;
 
-			// if(modelData.assigneeID)
-			// 	message = 'Assignee has been changed to ' + assigneeName;
+		// if(modelData.assigneeID)
+		// 		message = 'Assignee has been changed to ' + assigneeName;
 
 	// 		if(modelData.assigneeID)
 	// 			var message = 'Assignee has been changed to ' + assigneeName;
@@ -661,13 +655,13 @@ var Tickets = {
 	// 		modelData.assignee = ((modelData.assignee) ? modelData.assignee : "");
 	// 		modelData.group = ((modelData.group) ? modelData.group : "");
 
+		// 	// Update assignee in model and collection 
+		// 	Tickets.updateDataInModelAndCollection(Current_Ticket_ID, modelData);
 
-			// Update assignee in model and collection 
-			Tickets.updateDataInModelAndCollection(Current_Ticket_ID, modelData);
+		// 	App_Ticket_Module.ticketView.model.set(modelData, {silent: true});				
+		// });
+  //   },
 
-			App_Ticket_Module.ticketView.model.set(modelData, {silent: true});				
-		});
-    },
 	// 		// Update assignee in model and collection 
 	// 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, modelData); 					
 	// 	});
@@ -739,21 +733,22 @@ var Tickets = {
 	// 	});
 	// },
 
-	// updateDataInModelAndCollection : function(id, data){
+	updateDataInModelAndCollection : function(id, data){
 
-	//      App_Ticket_Module.ticketView.model.set(data, {silent: true});
-	// 	// if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
-	// 	// 	return;
- //        if(!App_Ticket_Module.ticketsCollection)
- //        	return;
+	     App_Ticket_Module.ticketView.model.set(data, {silent: true});
+		// if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
+		// 	return;
+        if(!App_Ticket_Module.ticketsCollection)
+        	return;
 
-	// 	// get data from collection with id
-	// 	updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
+		// get data from collection with id
+		updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
 		
-	// 	// Update data in model
-	// 	updated_model.set(data, {silent: true});
-	// },
-	// // 	}, function(error){
+		// Update data in model
+		updated_model.set(data, {silent: true});
+	},
+
+	// 	}, function(error){
 	// 		$priority.attr('disabled', false);
 	// 	});
 	// },
@@ -1380,14 +1375,14 @@ var Tickets = {
 			.on('mouseover mouseout', '.show-notes',
 				function(event) {
 
-					clearTimeout(Popover_Function);
+					clearTimeout(popoverFunction);
 
 					var top = '20px';
 					if (event.type == 'mouseover'){
 
 						var $tr = $(this).closest('.each-previous-ticket'), $that = $tr.find('#ticket-last-notes');
 
-						Popover_Function = setTimeout(function(){
+						popoverFunction = setTimeout(function(){
 
 							var popup_height = $that.height();
 
