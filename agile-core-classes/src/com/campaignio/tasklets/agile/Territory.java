@@ -74,7 +74,7 @@ public class Territory extends TaskletAdapter
 				boolean expr = NewCondition.evaluateExpression(locationType, locationValue, NewCondition.IF_TYPE_VALUE, comparator); 
 				
 				System.out.println("Evaluation expr: " + expr);
-				if((inZoneComparator.equalsIgnoreCase("and") && expr) || (inZoneComparator.equalsIgnoreCase("or") || expr))
+				if((inZoneComparator.equalsIgnoreCase("and") && expr) || (inZoneComparator.equalsIgnoreCase("or") && expr))
 					branchTo = branch; 
 				else
 				{

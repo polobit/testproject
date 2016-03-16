@@ -259,7 +259,7 @@ function saveNode(e) {
 			  	// Connects to older ports automatically
 			  	if( nodeObject.isDynamicPorts == "yes" )
 			  	{
-			  		if(nodeObject.name == "Territory")
+			  		if(nodeObject.name == NODES_CONSTANTS.TERRITORY)
 			  			update_location_ports(nodeObject, jsonValues);
 			  		else
 						editDynamicNode(nodeObject);

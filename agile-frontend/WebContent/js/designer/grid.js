@@ -7,7 +7,7 @@ function constructGridPopup(uiFieldDefinition, callback, jsonValues) {
     // Store UIfielddefinition for add and edit for table definition
     gridPopup.data('ui', uiFieldDefinition);
 
-    if(uiFieldDefinition.name = "zones")
+    if(uiFieldDefinition.name = NODES_CONSTANTS.ZONES)
     {
         var zones = get_zones($('#zones-table'));
 
@@ -89,7 +89,7 @@ function editGrid(e, selector, rowIndex)
     $('#' + tableId + ' tbody tr:nth-child(' + rowIndex + ')').empty().append($(td));
     
     // Hides zone condition operator - Territory node (Naresh - 03/15/2016)
-    if(uiFieldDefinition.name == 'zones')
+    if(uiFieldDefinition.name == NODES_CONSTANTS.ZONES)
         hide_zone_comparator($('#'+ tableId));
     
     // Update global operations array so that it gets associated to ports - dynamic nodes
@@ -133,7 +133,7 @@ function addToGrid(e, selector) {
     $('#' + tableId).find('tr:last').data("rowJson", jsonArray);
 
     // Hides zone condition operator - Territory node (Naresh - 03/15/2016)
-    if(uiFieldDefinition.name == 'zones')
+    if(uiFieldDefinition.name == NODES_CONSTANTS.ZONES)
         hide_zone_comparator($('#'+ tableId));
     
     // Update global operations array so that it gets associated to ports - dynamic nodes
@@ -251,7 +251,7 @@ function generateGridUI(container, uiFieldDefinition) {
     	});
 
     // Hides zones in Territory node (Naresh - 03/15/2016)
-    if(uiFieldDefinition.name == 'zones')
+    if(uiFieldDefinition.name == NODES_CONSTANTS.ZONES)
         hide_zone_comparator($('#' + tableId));
 
     }
