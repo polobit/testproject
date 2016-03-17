@@ -689,6 +689,7 @@ function showPageBlockModal() {
 			$("#user-blocked-modal").modal('show');
 		}, null);
 	}
+}
 
 function  printCurrentDateMillis(type){
       console.info(type + " " + new Date().getTime());
