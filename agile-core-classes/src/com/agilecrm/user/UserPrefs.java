@@ -239,11 +239,10 @@ public class UserPrefs
 		if (pic == null)
 			pic = chooseRandomAvatar();
 		
-		boolean isDomainUpdated = false;
+		boolean isDomainUserUpdated = false;
 		
 		try
 		{
-			
 			
 			if ((currentDomainUser != null)
 					&& (currentDomainUser.name == null || !currentDomainUser.name.equals(this.name)))
@@ -254,8 +253,8 @@ public class UserPrefs
 				currentDomainUser.save();
 				
 				this.name = null;
+				isDomainUserUpdated = true;
 				
-				isDomainUpdated = true;
 			}
 		}
 		catch (Exception e)
@@ -264,8 +263,11 @@ public class UserPrefs
 		}
 
 		try {
-			if(!isDomainUpdated)
+			if(!isDomainUserUpdated){
+				// Add pic also
+				currentDomainUser.pic = pic;
 				currentDomainUser.save();
+			}
 		}catch(Exception e){}
 		
 		
