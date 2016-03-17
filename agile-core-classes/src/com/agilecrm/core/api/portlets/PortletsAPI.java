@@ -22,8 +22,10 @@ import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.portlets.util.PortletUtil;
+import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -593,7 +595,11 @@ public class PortletsAPI {
 		return PortletUtil.getGoalsAttainedData(owner_id, start_time, end_time);
 	}
 	
-	
+	/**
+	 * Gets Task Deviation portlet data
+	 * 
+	 * @return Json of Task deviated time.
+	 */
 	@Path("/averageDeviation")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -601,5 +607,34 @@ public class PortletsAPI {
 	{
 		return PortletUtil.getAverageDeviationForTasks(start_time, end_time);
 	}
+	
+	/**
+	 * Gets Incoming Deals portlet data
+	 * 
+	 * @return String of Deals
+	 */
+	@Path("incomingDeals/{owner-Id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getNewDeals(@PathParam("owner-Id") Long ownerId, @QueryParam("min") Long min,
+	    @QueryParam("max") Long max, @QueryParam("frequency") String frequency, @QueryParam("type") String type)
+    {
+	return OpportunityUtil.getIncomingDealsList(ownerId, min, max, frequency, type).toString();
+    }
+	
+	
+	/**
+	 * Gets Loss Reason portlet data
+	 * 
+	 * @return String of Deals 
+	 */
+	@Path("/lossReason/{owner-id}/{pipeline-id}/{source-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getDealsbyLossReason(@PathParam("owner-id") Long ownerId, @PathParam("pipeline-id") Long pipelineId,
+	    @PathParam("source-id") Long sourceId, @QueryParam("min") Long min, @QueryParam("max") Long max)
+    {
+	return OpportunityUtil.getDealswithLossReason(ownerId, pipelineId, sourceId, min, max).toString();
+    }
 	
 }
