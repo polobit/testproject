@@ -172,7 +172,8 @@ toggleFavorite : function(e){
 		Tickets.updateModel(url, json, function(){
 
 			// current view
-			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {type : new_ticket_type}); 
+			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {type : new_ticket_type});
+			 
 				//update collection 
 	   			showNotyPopUp('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
 			}
