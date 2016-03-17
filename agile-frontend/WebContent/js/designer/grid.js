@@ -92,7 +92,7 @@ function editGrid(e, selector, rowIndex)
         var updated_text = $(td).eq(1).text();
 
         // Update branches
-        update_zones_ports($('#' + tableId), $(td), old_text, new_text);
+        update_zones_ports($('#' + tableId), $(td), old_text, updated_text);
     }
     
     $('#' + tableId + ' tbody tr:nth-child(' + rowIndex + ')').empty().append($(td));
