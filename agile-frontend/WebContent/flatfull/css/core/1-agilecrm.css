@@ -3594,3 +3594,23 @@ text-align:left;
 }
 
 /* Dashboard Search Custom Scrollbar End */
+=======
+/* Custom Scrollbar Start */
+
+.email-editor-custom-scroll-bar ::-webkit-scrollbar {
+	width: 8px;
+}
+.email-editor-custom-scroll-bar ::-webkit-scrollbar-button {
+	width: 8px;
+	height:5px;
+}
+.email-editor-custom-scroll-bar ::-webkit-scrollbar-thumb {
+	background:#ccc;
+	border-radius:10px;
+}
+
+/* Custom Scrollbar End */
+
+.mce-statusbar{
+	display: none !important;
+}
