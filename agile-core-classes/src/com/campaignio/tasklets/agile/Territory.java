@@ -55,10 +55,7 @@ public class Territory extends TaskletAdapter
 				}
 				
 				if(!zonesMap.containsKey(branch))
-				{
-					zonesMap.put(branch, false);
 					zonesComparators.put(branch, zone.getString(IN_ZONE_COMPARE));
-				}
 				
 				String comparator = zone.getString(NewCondition.COMPARATOR); 
 				String locationType = zone.getString(LOCATION_TYPE); 
@@ -71,6 +68,12 @@ public class Territory extends TaskletAdapter
 				boolean expr = NewCondition.evaluateExpression(locationType, locationValue, NewCondition.IF_TYPE_VALUE, comparator); 
 				
 				Boolean flag = zonesMap.get(branch);
+				
+				if(flag == null)
+				{
+					zonesMap.put(branch, expr);
+					flag = expr;
+				}
 					
 				if(flag != null && inZoneComparator != null)
 				{
