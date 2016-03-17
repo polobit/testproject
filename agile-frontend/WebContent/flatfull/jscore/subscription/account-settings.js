@@ -183,8 +183,9 @@ $(function(){
 			url : 'core/api/subscription/pauseOrResumeSubscriptions?period=0',
 			type : 'POST',
 			success : function(){
+				showNotyPopUp("information", "Welcome back! We are resuming services for your account, please wait for few seconds while we re-activate it.", "top",30000);
 				setTimeout(function(){
-					showNotyPopUp("information", "Welcome back! We are resuming services for your account, please wait for few seconds while we re-activate it.", "top");
+					window.location.reload(true);
 				},30000);
 			},
 			error : function(response){
