@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
@@ -70,6 +71,13 @@ public class TicketNotesUtil
 		searchMap.put("ticket_key", new Key<Tickets>(Tickets.class, ticketID));
 
 		List<TicketNotes> notes = TicketNotes.ticketNotesDao.listByPropertyAndOrder(searchMap, sortOrder);
+		
+		//Formatting plain text content
+		for (TicketNotes note : notes)
+		{
+			note.plain_text = StringEscapeUtils.escapeHtml(note.plain_text);
+			note.plain_text = TicketNotesUtil.convertNewLinesToBreakTags(note.plain_text);
+		}
 
 		return inclDomainUsers(notes);
 	}
