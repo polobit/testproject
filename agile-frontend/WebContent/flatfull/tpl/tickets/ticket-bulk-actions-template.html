@@ -107,16 +107,7 @@
                                         Select Assignee
                                     </label>
                                     <div class="controls col-sm-6">
-                                        <select class="form-control" name="assigneeID" id="assigneeID">
-                                            {{#each this}}
-                                                <optgroup label="{{group_name}}">
-                                                    {{#group_users}}
-                                                        <option data-group-id="{{../id}}" value="{{id}}">
-                                                            {{name}}
-                                                        </option>
-                                                    {{/group_users}}
-                                                </optgroup>    
-                                            {{/each}}  
+                                        <select class="form-control" name="groupID" id="groupID">
                                         </select>
                                     </div>
                                 </div>
@@ -154,11 +145,7 @@
                                         Select workflow
                                     </label>
                                     <div class="controls col-sm-6">
-                                        <select id="workflowID" name="workflowID" class="form-control">
-                                            {{#each this}}
-                                               <option value="{{id}}" {{#is_disabled}}disabled{{/is_disabled}}>{{name}}
-                                                </option>
-                                            {{/each}}                                               
+                                        <select id="workflowID" name="workflowID" class="form-control">                                            
                                         </select>
                                     </div>
                                 </div>

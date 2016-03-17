@@ -164,7 +164,7 @@ toggleFavorite : function(e){
 
 		var $select = $('.ticket_type');
 		var new_ticket_type = $select.find('option:selected').val();
-		$select.attr('disabled', true);
+		//$select.attr('disabled', true);
 
 		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-ticket-type";
 		var json = {type: new_ticket_type};
@@ -174,12 +174,7 @@ toggleFavorite : function(e){
 			// current view
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {type : new_ticket_type}); 
 				//update collection 
-	   			$select.attr('disabled', false);
-	            showNotyPopUp('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
-			},
-
-			function(error){
-				$select.attr('disabled', false);
+	   			showNotyPopUp('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
 			}
 		);
 	},
@@ -188,7 +183,6 @@ toggleFavorite : function(e){
 
 		var $priority = $('.ticket_priority');
 		var new_priority = $priority.find('option:selected').val();
-		$priority.attr('disabled', true);
 
 		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-priority";
 		var json = {priority: new_priority};
@@ -197,27 +191,11 @@ toggleFavorite : function(e){
 
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
-			$priority.attr('disabled', false);
 			showNotyPopUp('information', 'Ticket Type has been changed to '+ new_priority.toLowerCase() , 'bottomRight', 5000);
-		    
-		}, function(error){
-			$priority.attr('disabled', false);
 		});
 	},
 
-	updateDataInModelAndCollection : function(id, data){
-
-	     App_Ticket_Module.ticketView.model.set(data, {silent: true});
-		// if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
-		// 	return;
-        if(!App_Ticket_Module.ticketsCollection)
-        return;
-		// get data from collection with id
-		updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
-		// Update data in model
-		updated_model.set(data, {silent: true});
-	},
-   changeAssignee : function(e){
+	changeAssignee : function(e){
 
 		var that = e.target;
 
@@ -240,8 +218,8 @@ toggleFavorite : function(e){
        		&& ticketJSON.groupID == groupId)
        		return;
 
-       	var url = "/core/api/tickets/" + Current_Ticket_ID + "/assign-ticket/" + groupId + "/" + assigneeId;
-       	var json = {id: Current_Ticket_ID};
+       	var url = "/core/api/tickets/" + ticketJSON.id + "/assign-ticket/" + groupId + "/" + assigneeId;
+       	var json = {id: ticketJSON.id};
 
        	Tickets.updateModel(url, json, function(data){
             
@@ -259,10 +237,13 @@ toggleFavorite : function(e){
 
 			var assigneeName = (modelData.assigneeID) ? (modelData.assignee.name) : modelData.group.group_name;
 
+			var assigned_to_group = true;
 			var message = 'Ticket group has been changed to ' + assigneeName;
 
-			if(modelData.assigneeID)
-				var message = 'Assignee has been changed to ' + assigneeName;
+			if(modelData.assigneeID){
+				message = 'Assignee has been changed to ' + assigneeName;
+				assigned_to_group = false;
+			}
 			
 			showNotyPopUp('information', message, 'bottomRight', 5000);
 
@@ -270,7 +251,20 @@ toggleFavorite : function(e){
 			modelData.group = ((modelData.group) ? modelData.group : "");
 
 			// Update assignee in model and collection 
-			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, modelData); 					
+			Tickets_Rest.updateDataInModelAndCollection(modelData.id, modelData);
+
+			//Do not call updateDataInModelAndCollection for change assignee it causes issues when ticket is assigned to group
+			if(!App_Ticket_Module.ticketsCollection)
+        		return;
+
+			// Get data from collection with id
+			var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(modelData.id);
+
+			if(assigned_to_group)
+				ticket_model.unset('assigneeID', {silent: true});
+
+			//Update data in model
+			ticket_model.set(data, {silent: true});
 		});
     },
 
@@ -290,6 +284,18 @@ toggleFavorite : function(e){
 	 		showNotyPopUp('information', "Due date has been removed",'bottomRight', 5000);
 
 	 	}, null);
-	 }
+	 },
 
+    updateDataInModelAndCollection : function(id, data){
+
+	    if(!App_Ticket_Module.ticketsCollection)
+        	return;
+
+		// Get data from collection with id
+		var model = App_Ticket_Module.ticketsCollection.collection.get(id);
+
+
+		//Update data in model
+		model.set(data, {silent: true});
+	}
 };

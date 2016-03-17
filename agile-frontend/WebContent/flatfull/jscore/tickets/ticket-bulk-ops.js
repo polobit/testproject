@@ -238,15 +238,15 @@ var Ticket_Bulk_Ops = {
 							//json.filterID =  Ticket_Filter_ID;
 						}
 						
-						json.groupID = $('[name="assigneeID"]').find('option:selected').data('group-id');
+						json.assigneeID = $('[name="groupID"]').find('option:selected').data('assignee-id');
 
 						model.set(json, { silent : true });
 					},
 					postRenderCallback: function(el){
 
 						//Fetching all groups, assignees and appending them to select dropdown
-						fillSelect('assigneeID', '/core/api/tickets/new-ticket', '', function(collection){
-							$('#assigneeID').html(getTemplate('select-assignee-dropdown', collection.toJSON()));
+						fillSelect('groupID', '/core/api/tickets/new-ticket', '', function(collection){
+							$('#groupID').html(getTemplate('select-assignee-dropdown', collection.toJSON()));
 						}, '', false, el);
 					}
 				});
@@ -278,7 +278,7 @@ var Ticket_Bulk_Ops = {
 					},
 					postRenderCallback: function(el){
 
-						var template = '<option value="{{id}}">{{name}}</option>';
+						var template = '<option value="{{id}}" {{#is_disabled}}disabled{{/is_disabled}}>{{name}}</option>';
 
 						//Fetching all groups, assignees and appending them to select dropdown
 						fillSelect('workflowID', '/core/api/workflows', '', null, template, false, el);

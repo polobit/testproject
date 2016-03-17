@@ -1,3 +1,5 @@
+<%@page import="com.agilecrm.ticket.entitys.TicketDocuments"%>
+<%@page import="java.util.List"%>
 <%@page import="org.json.JSONArray"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.agilecrm.ticket.utils.TicketNotesUtil"%>
@@ -41,6 +43,18 @@ body {
 	String outputString = null;
 	if(type != null && type.equalsIgnoreCase("html")){ 
 		out.println(notes.html_text);
+		out.println();
+		out.println();
+		out.println();
+		
+		if(notes.attachments_list != null && notes.attachments_list.size() > 0){
+			
+			out.println("<h5>Attachments</h5>");
+			List<TicketDocuments> documents = notes.attachments_list;
+			
+			for(TicketDocuments document : documents)
+				out.println("<a href="+ document.url +"  target=\"_blank\">" + document.name + "</a>");
+		}
 	}else{
 
 		try{

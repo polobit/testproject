@@ -913,7 +913,7 @@ Deleted  {{custom1}} Campaigns<br/>
 		{{#if_equals "TICKET_DELETED" activity_type}}
 			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> has been deleted <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
 			<small class="activities_second_line m-t-none text-sm">
-			 	<i class="icon-trash"></i>Ticket deleted by {{user_name}}
+			 	<i class="icon-trash"></i>Ticket deleted
 			</small> 
 		{{/if_equals}}
 		{{#if_equals "TICKET_ASSIGNED" activity_type}}
@@ -956,7 +956,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> status changed to <span class="inline-block first-letter-cap">{{custom2}}</span>
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_PRIORITY_CHANGE" activity_type}}
@@ -966,7 +966,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a>  priority changed to <span class="inline-block first-letter-cap">{{custom2}}</span>
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_TYPE_CHANGE" activity_type}}
@@ -976,7 +976,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> type changed to <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_LABEL_ADD" activity_type}}
@@ -986,7 +986,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				Label <span class="inline-block first-letter-cap">{{custom2}}</span> has been added to <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a>
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_LABEL_REMOVE" activity_type}}
@@ -996,7 +996,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				Label <span class="inline-block first-letter-cap">{{custom2}}</span> has been removed from <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a>
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
 			</small>  
 		{{/if_equals}}
 		{{#if_equals "TICKET_ASSIGNEE_REPLIED" activity_type}}
@@ -1042,7 +1042,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> marked as unfavorite
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
 			</small> 
 		{{/if_equals}}
 		{{#if_equals "TICKET_MARKED_SPAM" activity_type}}
@@ -1052,7 +1052,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> marked as spam
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
 			</small>   
 		{{/if_equals}}
 		{{#if_equals "TICKET_MARKED_UNSPAM" activity_type}}
@@ -1062,7 +1062,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> marked as not spam
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
 			</small>    
 		{{/if_equals}}
 		{{#if_equals "BULK_ACTION_MANAGE_LABELS" activity_type}}
@@ -1121,7 +1121,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> due date has been set to {{epochToHumanDate "mmm dd, yyyy" custom2}}
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
 			</small>    
 		{{/if_equals}}
 		{{#if_equals "DUE_DATE_CHANGED" activity_type}}
@@ -1131,7 +1131,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> due date has been changed to {{epochToHumanDate "mmm dd, yyyy" custom2}}
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
 			</small>    
 		{{/if_equals}}
 		{{#if_equals "DUE_DATE_REMOVED" activity_type}}
@@ -1141,7 +1141,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> due date has been removed
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
 			</small>    
 		{{/if_equals}}
 		{{#if_equals "TICKET_CC_EMAIL_ADD" activity_type}}
@@ -1151,7 +1151,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				{{custom2}} has been cc'ed to <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a>
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
 			</small>    
 		{{/if_equals}}
 		{{#if_equals "TICKET_CC_EMAIL_REMOVE" activity_type}}
@@ -1161,7 +1161,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				{{custom2}} has been removed from <a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> cc emails
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
 			</small>    
 		{{/if_equals}}
 		{{#if_equals "TICKET_NOTES_FORWARD" activity_type}}
@@ -1171,7 +1171,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> has been forwarded to {{custom2}}
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
 			</small>    
 		{{/if_equals}}
 	{{/if_equals}}

@@ -8,9 +8,15 @@ import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.TextNode;
+import org.jsoup.select.Elements;
 
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
@@ -204,21 +210,20 @@ public class TicketNotes
 	public TicketNotes save()
 	{
 		TicketNotes.ticketNotesDao.put(this);
-		
 
 		try
 		{
 			Tickets ticket = TicketsUtil.getTicketByID(ticket_key.getId());
-			
-			if(ticket.user_replies_count == 1)
+
+			if (ticket.user_replies_count == 1)
 				return this;
-			
+
 			boolean isPublicNotes = (note_type == NOTE_TYPE.PUBLIC);
 
 			ActivityType activityType = (isPublicNotes) ? ((created_by == CREATED_BY.AGENT) ? ActivityType.TICKET_ASSIGNEE_REPLIED
 					: ActivityType.TICKET_REQUESTER_REPLIED)
 					: ActivityType.TICKET_PRIVATE_NOTES_ADD;
-			
+
 			// Sending reply to requester if and only if notes type is public
 			if (isPublicNotes)
 			{
@@ -259,7 +264,10 @@ public class TicketNotes
 			assignee_id = assignee_key.getId();
 
 		if (StringUtils.isNotBlank(plain_text))
+		{
+			plain_text = StringEscapeUtils.escapeHtml(plain_text);
 			plain_text = TicketNotesUtil.convertNewLinesToBreakTags(plain_text);
+		}
 	}
 
 	/**
