@@ -458,52 +458,32 @@ function setCheckboxValueIntoJSONArray(jsonArray, key, value) {
 */
 
 
+/**Updates Branches for Zones**/
 function update_location_ports(nodeObject, jsonValues)
 {
 
 	var formValues = jsonValues[1].zones;
   	var formValuesJson  = {};
 
+  	// Converts array to json
   	for(var i=0;i<formValues.length;i++)
-  	{
   		formValuesJson[formValues[i]["dynamicgrid"]] = true;
-  	}
 
-	var ports = nodeObject.getPorts();
+	// array of ports
+	var ports = getPorts(nodeObject);
 
-		while(true){
+	$.each(formValuesJson, function(key, value){
 
-			// Removes all ports except Source
-			for(var i=0; i < ports.size; i++){
-
-				var portName = ports.get(i).properties.name;
-
-				if(portName == 'Source' || portName == 'Nomatch')
-					continue;
-
-				removePort(nodeObject, i-1);
-				alignDynamicNodePorts(nodeObject);
-
-				// Draw2D (based on the ports)
-				nodeObject.allignDynamicNode();
-					
-			}
-
-			if(nodeObject.getPorts().size == 2)
-				break;
-		}
-
-		$.each(formValuesJson, function(key, value){
-
-			if(key == 'Nomatch')
-				return true;
-
+		// If key doesn't exists in ports, add new port
+		if(ports.indexOf(key) == -1)
 			addPort(key, nodeObject);
+		else
+			editPort(nodeObject, ports.indexOf(key), key);
 
-			alignDynamicNodePorts(nodeObject);
+		alignDynamicNodePorts(nodeObject);
 
-			// Draw2D (based on the ports)
-			nodeObject.allignDynamicNode();
-		});
-
+		// Draw2D (based on the ports)
+		nodeObject.allignDynamicNode();
+		
+	});
 }
