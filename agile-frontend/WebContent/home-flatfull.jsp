@@ -56,7 +56,7 @@ DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
 System.out.println("Domain user " + domainUser);
 
-DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(domainUser.name);
+DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(domainUser.domain);
 // Add to queue
 Queue queue = QueueFactory.getDefaultQueue();
 queue.add(TaskOptions.Builder.withPayload(task));
