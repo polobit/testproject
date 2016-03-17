@@ -1184,9 +1184,11 @@ function clickfunction(that,url,forAll,route){
 							$('#zero-portlets').hide();
 						if ($('#no-portlets').is(':visible'))
 							$('#no-portlets').hide();
-						/*App_Portlets.navigate("dashboard", {
+						if(data.toJSON().name=='Mini Calendar' || data.toJSON().name=='Agenda'){
+						App_Portlets.navigate("dashboard", {
 							trigger : true
-						});*/
+						});
+					}
 					},
 					error : function(model, response) {
 						alert("Failed to add.");
