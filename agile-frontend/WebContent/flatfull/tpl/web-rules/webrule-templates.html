@@ -1,0 +1,53 @@
+<script type="text/html" id="webrule-categories-template">
+<div class="custom-animated custom-fadeInUp">
+
+{{#if_equals "Information" category}}
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-md-12">
+       <h3 class="pull-left font-light h3">Select a template <small> New Webrule template</small></h3>
+	   <div class="pull-right">
+            <a href="#webrules-add" class="btn btn-default btn-sm btn-addon" title="Create your own template by copy pasting your HTML into editor" id="goToEditor" >Go To Editor</a>
+            <a href="#webrules-custom" class="btn btn-default btn-sm btn-addon" title="Start with an empty email">Custom</a>
+	   </div>
+	   <div class="clearfix"></div>
+     </div>
+</div>
+</div>
+ {{/if_equals}}
+
+<div class="wrapper-md  p-t-none">
+<div class="row">    
+    <div class="col-md-12">
+         <h4>{{category}}</h4>
+         <br> 
+    </div>
+</div>
+
+<div id="general" class="row">
+
+{{#each list}}
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="panel wrapper text-center">
+        <!-- Thumbnail and Title -->
+        <div>
+           <div class="p-b-sm p-l-none p-r-none theme-preview">
+            <a class="web_fancybox" id="{{id}}" href="{{thumbnail}}" title="{{title}}" data-link="{{link}}" onclick="show_fancy_box(this)"><img style="width:98%;" src="{{thumbnail}}" alt="Template image" /></a>
+           </div>
+        </div>
+        <!-- Add button -->
+        <div>
+            <a class="btn btn-sm btn-default" href="#webrules-add/{{link}}">Go</a>
+        </div>
+    </div>
+</div>
+{{/each}}
+
+    
+</div>
+
+</div>
+
+
+</div>
+</script>
