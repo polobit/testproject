@@ -1,4 +1,4 @@
-	
+
 		function initilizeDealNotesListeners()
 		{
 			/**
@@ -14,6 +14,9 @@
 				// Remove value of input field
 				$("#from_task", "#dealnoteForm").val("");
 				$("#task_form", "#dealnoteForm").val("");
+
+				$("#subject", "#dealnoteForm").val("");
+				$("#description", "#dealnoteForm").val("");
 				
 				// Removes validation error messages
 				remove_validation_errors('dealnoteModal');
