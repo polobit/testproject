@@ -248,24 +248,51 @@
 	   {{#if event.contacts.length}}
 	   		<i class="icon-user text-muted m-r-xs"></i>
 	   {{/if}}
-	   {{#each event.contacts}}
-	       {{#if_equals this.entity_type "contact_entity"}}
-	             {{#if_equals this.type "COMPANY"}}
-	              		<a class="text-info" href="#company/{{this.id}}">
-	              			{{getPropertyValue this.properties "name"}}
-	              		</a>
-	              	{{else}}
-	              	    <a class="text-info" href="#contact/{{this.id}}">
-	              			{{getPropertyValue this.properties "first_name"}} {{getPropertyValue this.properties "last_name"}}
-	              		</a>
-	       		 {{/if_equals}}   
-	       	{{else}}
-	       	     <a class="text-info" href="#contact/{{this.id}}">
-	       	     	 {{getPropertyValue this.properties "name"}}
-	       	     </a> 
-	       {{/if_equals}}
-	       {{#if @last}} {{else}}, {{/if}}
-	   {{/each}}
+	   {{#if_equals event.contacts.length 1}}
+          {{#if_equals event.contacts.[0].entity_type "contact_entity"}}
+               {{#if_equals event.contacts.[0].type "COMPANY"}}
+               <a class="text-info" href="#company/{{event.contacts.id}}">
+                      {{getPropertyValue event.contacts.[0].properties "name"}}
+                    </a>
+
+                    {{#property_is_exists "url" event.contacts.[0].properties }}
+                    <div><i class="icon-envelope text-muted m-r-xs"></i><a>{{getPropertyValue event.contacts.[0].properties "url"}}</a></div>{{/property_is_exists}}
+                   {{#property_is_exists "phone" event.contacts.[0].properties }}
+                    <div><i class="icon-call-end text-muted m-r-xs"></i><a>{{getPropertyValue event.contacts.[0].properties "phone"}}</a></div>{{/property_is_exists}}
+                    <div class="m-l-md">{{setupRating event.contacts.[0].star_value}}</div>
+                    {{else}}
+                    	<a class="text-info" href="#contact/{{event.contacts.id}}">
+                      {{getPropertyValue event.contacts.[0].properties "first_name"}}
+                    </a>
+
+                     {{#property_is_exists "email" event.contacts.[0].properties }}
+                    <div><i class="icon-envelope text-muted m-r-xs"></i><a>{{getPropertyValue event.contacts.[0].properties "email"}}</a></div>{{/property_is_exists}}
+                    {{#property_is_exists "phone" event.contacts.[0].properties }}
+                    <div><i class="icon-call-end text-muted m-r-xs"></i><a>{{getPropertyValue event.contacts.[0].properties "phone"}}</a></div>{{/property_is_exists}}
+                    <div class="m-l-md"><a>Score:{{event.contacts.[0].lead_score}}</a></div>
+                    <div class="m-l-md">{{setupRating event.contacts.[0].star_value}}</div>
+                   {{/if_equals}}
+                   {{/if_equals}}
+     {{else}}
+     {{#each event.contacts}}
+         {{#if_equals this.entity_type "contact_entity"}}
+               {{#if_equals this.type "COMPANY"}}
+                    <a class="text-info" href="#company/{{this.id}}">
+                      {{getPropertyValue this.properties "name"}}
+                    </a>
+                  {{else}}
+                      <a class="text-info" href="#contact/{{this.id}}">
+                      {{getPropertyValue this.properties "first_name"}} {{getPropertyValue this.properties "last_name"}}
+                    </a>
+             {{/if_equals}}   
+          {{else}}
+               <a class="text-info" href="#contact/{{this.id}}">
+                 {{getPropertyValue this.properties "name"}}
+               </a> 
+         {{/if_equals}}
+         {{#if @last}} {{else}}, {{/if}}
+     {{/each}}
+     {{/if_equals}}
 	{{/if}}
 </script>
 
