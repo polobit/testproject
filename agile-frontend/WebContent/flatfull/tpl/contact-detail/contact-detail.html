@@ -27,14 +27,25 @@
 						<div class="contact-navigation-view"><span class="navigation  contact-switching"></span></div>
 						<div class="clearfix"></div>
     				    </div>
-                        <div class="text-center   pos-rlt">
+                        <div class="text-center   pos-rlt" id="contact-image-content">
 						<div class="thumb-lg">
-							<form id="contact-container">
-								<a href="#" class="tooltip_info contact-image-view" data-placement="top"
-									data-toggle="tooltip"
-									title="<i class='icon-edit icon-white icon'></i> Change Picture"> 
+						<div id="contact_delete_image" style="display:none">{{id}}</div>
+						<form id="contact-container">
+									 <div id="contact-image-option-dropdown" class="pull-right">
+										<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret" style="margin-top:-15px;opacity:0.8;"></span></a>
+										<ul class="dropdown-menu pull-right text-sm">
+		                                   <li class="contact-edit-option"><a class='edit-pic'>
+		                                     <div class="pull-left"><i class="fa fa-pencil-square"></i> Edit Picture</div> 
+		                                     <div class="clearfix"></div>
+		                                     </a></li>
+		                                     {{#property_is_exists "image" properties}}
+		                                     <li class="divider"></li>
+		                                     <li class="contact-delete-option"><a onClick="deleteConfirmation();"><i class="fa fa-trash"></i> Delete Picture</a></li>{{/property_is_exists}}                                
+										</ul>
+									</div>
+									<a href="#" class="contact-image-view"> 
 									<img class='upload_pic imgholder submit w-full img-circle' style="width:75px;height:75px;" type="submit"
-									src="{{gravatarurl properties 80}}" /></a> 
+									src="{{gravatarurl properties 80}}" /></a>
 									<input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
 							</form>
@@ -101,7 +112,7 @@
 
 					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:5px;" id ="contactName">
 
-								<span class="text-capitalize ">{{getPropertyValue properties
+								<span class="text-capitalize contactFirstname">{{getPropertyValue properties
 										"first_name"}}</span> <span class="text-capitalize "> {{getPropertyValue properties "last_name"}}</span>
 
 								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
@@ -792,4 +803,8 @@
  					</div>
  					</div>
 
+</script>
+
+<script id="contact-edit-delete-template">
+<div style="width:70px;"><div style="float:left">edit</div>|<div style="float:right">delete</div></div>
 </script>

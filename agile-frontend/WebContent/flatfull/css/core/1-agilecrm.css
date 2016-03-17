@@ -3480,3 +3480,16 @@ text-overflow:ellipsis;
 overflow-x:hidden;
 text-align:left;
 }
+
+.toggle-contact-image{
+ display:none;
+}
+#contact-container:hover .toggle-contact-image{
+display: block;
+margin-left: 26px;
+}
+#contact-image-option-dropdown .dropdown-menu{
+top: 10%;
+left: 65%;
+min-width: 130px;
+}
