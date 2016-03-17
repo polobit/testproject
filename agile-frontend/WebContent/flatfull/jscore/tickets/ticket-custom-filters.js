@@ -391,6 +391,7 @@ var Ticket_Custom_Filters = {
 					if(condition.CONDITION == 'IS_LESS_THAN'){
 						$('input[name="due-date-input"]').val(
 							new Date(parseInt(condition.RHS) * 1000).format(CURRENT_USER_PREFS.dateFormat));
+						$('#clear-due-date').show();	
 					}
 				}
 				case 'created_between':{
@@ -401,6 +402,7 @@ var Ticket_Custom_Filters = {
 									new Date(parseInt(condition.RHS_NEW) * 1000).format(CURRENT_USER_PREFS.dateFormat);
 
 						$('input[name="created-date-input"]').val(val);
+						$('#clear-created-date').show();
 					}
 				}
 			}
