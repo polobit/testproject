@@ -177,8 +177,6 @@ public class AddDeal extends TaskletAdapter
 		opportunity.pipeline_id = pipelineID;
 		opportunity.close_date = closedEpochTime;
 		opportunity.deal_source_id = source_id;
-		System.out.println("addDeal------------Checking ACLs for creating deal");
-		UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
 		opportunity.save();
 	}
 }
