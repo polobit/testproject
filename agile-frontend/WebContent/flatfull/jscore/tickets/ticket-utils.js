@@ -172,28 +172,31 @@ var Ticket_Utils = {
 
 	showNoty: function(type, message, position, timeout){
 
-		$.noty.clearQueue();
-		
-		head.js('lib/noty/layouts/bottom.js', LIB_PATH
+		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', function(){
+			
+			$.noty.clearQueue();
+
+			head.js('lib/noty/layouts/bottom.js', LIB_PATH
 				+ 'lib/noty/layouts/bottomRight.js', LIB_PATH
 				+ 'lib/noty/themes/default.js', function(){
 
-			noty({
-				text : message,
-				layout : position,
-				//dismissQueue: true,
-				type : type,
-				animation : {
-					open : {
-						height : 'toggle'
+				noty({
+					text : message,
+					layout : position,
+					//dismissQueue: true,
+					type : type,
+					animation : {
+						open : {
+							height : 'toggle'
+						},
+						close : {
+							height : 'toggle'
+						},
+						easing : 'swing',
+						speed : 500
 					},
-					close : {
-						height : 'toggle'
-					},
-					easing : 'swing',
-					speed : 500
-				},
-				timeout : timeout,
+					timeout : timeout,
+				});
 			});
 		});
 	}
