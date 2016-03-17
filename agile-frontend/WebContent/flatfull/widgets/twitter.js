@@ -36,7 +36,7 @@ function setupTwitterOAuth()
  */
 function showTwitterMatchingProfiles(data)
 {
-	var contact_image = agile_crm_contact_property(WIDGET_LOADED_CONTACT, "image");
+	var contact_image = agile_crm_get_contact_property("image");
 
 	// search and store string to show it in the search template
 	// for the first time, contact name is search string
@@ -45,10 +45,10 @@ function showTwitterMatchingProfiles(data)
 	else
 	{
 		var name = "";
-		if (agile_crm_contact_property(WIDGET_LOADED_CONTACT, "first_name"))
-			name = name + agile_crm_contact_property(WIDGET_LOADED_CONTACT, "first_name");
-		if agile_crm_contact_property(WIDGET_LOADED_CONTACT, "last_name"))
-			name = name + " " + agile_crm_contact_property(WIDGET_LOADED_CONTACT, "last_name");
+		if (agile_crm_get_contact_property("first_name"))
+			name = name + agile_crm_get_contact_property("first_name");
+		if (agile_crm_get_contact_property("last_name"))
+			name = name + " " + agile_crm_get_contact_property("last_name");
 		Twitter_search_details['keywords'] = name.trim();
 	}
 
@@ -139,7 +139,7 @@ function showTwitterMatchingProfiles(data)
 				 * If contact title is undefined, saves headline of the Twitter
 				 * profile to the contact title
 				 */
-				if (!agile_crm_contact_property(WIDGET_LOADED_CONTACT, "title"))
+				if (!agile_crm_get_contact_property("title"))
 				{
 					var summary = $(this).attr("summary");
 					propertiesArray.push({ "name" : "title", "value" : summary });

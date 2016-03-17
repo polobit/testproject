@@ -1,6 +1,6 @@
 function showFacebookMatchingProfile(contact_id, first_name)
 {
-	var contact_image = agile_crm_contact_property(WIDGET_LOADED_CONTACT, "image");
+	var contact_image = agile_crm_get_contact_property("image");
 	/*
 	 * if (!Email) { facebookError(FACEBOOK_PLUGIN_NAME, "Please provide email
 	 * for this contact"); return; }
@@ -69,7 +69,7 @@ function showFacebookMatchingProfile(contact_id, first_name)
 					 * If contact title is undefined, saves headline of the
 					 * Twitter profile to the contact title
 					 */
-					if (!agile_crm_contact_property(WIDGET_LOADED_CONTACT, "title"))
+					if (!agile_crm_get_contact_property("title"))
 					{
 						// var summary = $(this).attr("summary");
 						// propertiesArray.push({ "name" : "title", "value" :
@@ -158,7 +158,7 @@ function showFacebookProfile(facebookid, contact_id)
 		// If data is not defined return
 		if (data)
 		{
-			var contact_image = agile_crm_contact_property(WIDGET_LOADED_CONTACT, "image");
+			var contact_image = agile_crm_get_contact_property("image");
 			console.log(contact_image);
 			data.image = contact_image;
 			$('#Twitter_plugin_delete').show();
@@ -223,8 +223,8 @@ function startFacebookWidget(contact_id)
 
 	// Email as global variable
 	// Email = agile_crm_get_contact_property('email');
-	var first_name = agile_crm_contact_property(WIDGET_LOADED_CONTACT, "first_name");
-	var last_name = agile_crm_contact_property(WIDGET_LOADED_CONTACT, "last_name");
+	var first_name = agile_crm_get_contact_property("first_name");
+	var last_name = agile_crm_get_contact_property("last_name");
 
 	// setting lastname to empty string if it is undefined
 	if (last_name == undefined || last_name == null)

@@ -334,11 +334,11 @@ function addTicketToZendesk()
 
 	// Name of the contact to be added to ticket
 	var name = "";
-	if(agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'first_name')){
-		name += agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'first_name');
+	if(agile_crm_get_contact_property('first_name')){
+		name += agile_crm_get_contact_property('first_name');
 	}
-	if(agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'last_name')){
-		name += agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'last_name');
+	if(agile_crm_get_contact_property('last_name')){
+		name += agile_crm_get_contact_property('last_name');
 	}
 	json["name"] = name;
 
@@ -566,7 +566,7 @@ function startZendeskWidget(contact_id){
 	Zendesk_Plugin_Id = zendesk_widget.id;
 
 	// Stores email of the contact as global variable
-	Email = agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'email');
+	Email = agile_crm_get_contact_property('email');
 
 	console.log('Email: ' + Email);
 

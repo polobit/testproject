@@ -59,32 +59,6 @@ function agile_crm_get_contact_property(propertyName)
 
 }
 
-function agile_crm_contact_property(contactObject, propertyName){
-
-	// Gets properties field list from contact
-	var properties = contactObject.properties;
-	var property_value;
-
-	/*
-	 * Iterates through each property in contact properties and checks for the
-	 * match in it for the given property name and retrieves value of the
-	 * property if it matches
-	 */
-	$.each(properties, function(index, property)
-	{
-		if (property.name == propertyName)
-		{
-			property_value = property.value;
-			return false;
-		}
-	});
-
-	// If property value is defined then return it
-	if (property_value)
-		return property_value;
-
-}
-
 /**
  * Searches the property fields in current contact with given property name, if
  * property with given property name exists, then returns its value in a array

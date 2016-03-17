@@ -266,10 +266,10 @@ function startGooglePlusWidget(contact_id) {
 	// console.log(widgetPref);
 
 	var name = "";
-	if (agile_crm_contact_property(WIDGET_LOADED_CONTACT, "first_name"))
-		name = name + agile_crm_contact_property(WIDGET_LOADED_CONTACT, "first_name");
-	if (agile_crm_contact_property(WIDGET_LOADED_CONTACT, "last_name"))
-		name = name + " " + agile_crm_contact_property(WIDGET_LOADED_CONTACT, "last_name");
+	if (agile_crm_get_contact_property("first_name"))
+		name = name + agile_crm_get_contact_property("first_name");
+	if (agile_crm_get_contact_property("last_name"))
+		name = name + " " + agile_crm_get_contact_property("last_name");
 	searchDetails['keywords'] = name.trim();	
 	contactGooglePlusId = agile_widget_contact_property_by_subtype('website', 'GOOGLE-PLUS');
 
@@ -392,7 +392,7 @@ function startGooglePlusWidget(contact_id) {
 				{ "name" : "website", "value" : profileID, "subtype" : "GOOGLE-PLUS" }
 			];
 
-			if (!agile_crm_contact_property(WIDGET_LOADED_CONTACT, "image")){
+			if (!agile_crm_get_contact_property("image")){
 				// Get image link which can be used to save image for contact
 				var displayImage = $(this).attr('src');
 				propertiesArray.push({ "name" : "image", "value" : displayImage });

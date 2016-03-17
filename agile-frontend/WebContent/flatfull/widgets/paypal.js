@@ -95,7 +95,7 @@ function startPayPalWidget(contact_id){
 	console.log(paypal_widget);
 
 	PAYPAL_Plugin_Id = paypal_widget.id;	
-	Email = agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'email');
+	Email = agile_crm_get_contact_property('email');
 
 
 	$("#"+WIDGET_PARENT_ID).off("click", "#paypal_inv_show_more");

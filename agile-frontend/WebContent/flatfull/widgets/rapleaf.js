@@ -137,7 +137,7 @@ function startRapleafWidget(contact_id){
 	Rapleaf_Plugin_Id = rapleaf_widget.id;
 
 	// Stores email of the contact as global variable
-	Email = agile_crm_contact_property(WIDGET_LOADED_CONTACT, 'email');
+	Email = agile_crm_get_contact_property('email');
 	console.log('Email: ' + Email);
 
 
