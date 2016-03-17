@@ -595,12 +595,21 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed',{}));
-			return;
-		}
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
 
-		$("#content").html(getTemplate("admin-settings"), {});
-		this.productsGridView = new Base_Collection_View({ url : '/core/api/products', 
+			return;
+		} 
+		var that = this;
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#content').html($(template_ui));	
+
+			that.productsGridView = new Base_Collection_View({ url : '/core/api/products', 
 			templateKey : "admin-settings-products",
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
@@ -612,11 +621,16 @@ var AdminSettingsRouter = Backbone.Router.extend({
 						});
 				
 			} });
-		this.productsGridView.collection.fetch();
-		$('#content').find('#admin-prefs-tabs-content').html(this.productsGridView.render().el);
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.products-tab').addClass('select');
-		$(".active").removeClass("active");
+			that.productsGridView.collection.fetch();
+
+			$('#content').find('#admin-prefs-tabs-content').html(that.productsGridView.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.products-tab').addClass('select');
+			$(".active").removeClass("active");
+		}, "#content");
+
+		
+		
 	},
 
 	/**

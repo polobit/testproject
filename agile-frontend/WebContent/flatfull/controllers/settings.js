@@ -528,7 +528,7 @@ var SettingsRouter = Backbone.Router
 					$('#prefs-tabs-content').html(view.render().el);
 
 					// set up TinyMCE Editor
-					setupTinyMCEEditor('textarea#email-template-html', false, undefined, function()
+					setupTinyMCEEditorsetupTinyMCEEditor('textarea#email-template-html', false, undefined, function()
 					{
 
 						// Reset tinymce
@@ -616,23 +616,33 @@ var SettingsRouter = Backbone.Router
 
 			documentTemplates : function()
 			{
-				$("#content").html(getTemplate("settings"), {});
-				this.documentTemplatesListView = new Base_Collection_View({ url : '/core/api/document/templates', restKey : "documentTemplates",
-					templateKey : "settings-document-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
-					{
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-						{
-							console.log("In document tmplt postrender");
-							$(".created_time", el).timeago();
-						});
-					} });
-
-				this.documentTemplatesListView.collection.fetch();
-				$('#prefs-tabs-content').html(this.documentTemplatesListView.el);
-				$('#PrefsTab .active').removeClass('select');
-				$('.document-templates-tab').addClass('select');
 				
 
+				var that = this;
+				getTemplate("settings", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					that.documentTemplatesListView = new Base_Collection_View({ url : '/core/api/document/templates', 
+					templateKey : "settings-document-templates",
+					individual_tag_name : 'tr', postRenderCallback : function(el)
+					{
+						console.log("loaded document template : ", el);
+								head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+								{
+									
+									$(".created_time", el).timeago();
+								});
+						
+					} });
+					that.documentTemplatesListView.collection.fetch();
+
+					$('#content').find('#prefs-tabs-content').html(that.documentTemplatesListView.render().el);
+					$('#content').find('#PrefsTab .active').removeClass('select');
+					$('#content').find('.document-templates-tab').addClass('select');
+					
+				}, "#content");
 			},
 
 			/**
@@ -641,26 +651,35 @@ var SettingsRouter = Backbone.Router
 			 */
 			documentTemplateAdd : function()
 			{
-				$("#content").html(getTemplate("settings"), {});
-				var view = new Base_Model_View({ url : '/core/api/document/templates', isNew : true, template : "settings-document-template-add",
-					window : 'document-templates', });
 
-				$('#prefs-tabs-content').html(view.render().el);
+				var that = this;
+				getTemplate("settings", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
 
-				// set up TinyMCE Editor
-				setupTinyMCEEditor('textarea#document-template-html', false, undefined, function()
-				{
-					// Reset tinymce
-					set_tinymce_content('document-template-html', '');
+					that.view = new Base_Model_View({url : '/core/api/document/templates', isNew : true, template : "settings-document-template-add",
+					window : 'document-templates',
+					postRenderCallback : function(el)
+					{
+								// set up TinyMCE Editor
+								setupTinyMCEEditor('textarea#document-template-html', false, undefined, function()
+								{
+									// Reset tinymce
+									set_tinymce_content('document-template-html', '');
 
-					// Register focus
-					register_focus_on_tinymce('document-template-html');
-					$("#document-template-html_ifr").height("90vh");
-				});
+									// Register focus
+									register_focus_on_tinymce('document-template-html');
+									$("#document-template-html_ifr").height("90vh");
+								});
+						
+					} });
+					$('#prefs-tabs-content').html(that.view.render().el);
 
-				$('#PrefsTab .active').removeClass('select');
-				$('.document-templates-tab').addClass('select');
-
+					$('#PrefsTab .active').removeClass('select');
+					$('.document-templates-tab').addClass('select');
+					
+				}, "#content");
 			},
 
 			/**
@@ -672,42 +691,43 @@ var SettingsRouter = Backbone.Router
 			 */
 			documentTemplateEdit : function(id)
 			{
-				$("#content").html(getTemplate("settings"), {});
-				// Navigates to list of document templates, if it is not defined
+
 				if (!this.documentTemplatesListView || this.documentTemplatesListView.collection.length == 0)
 				{
 					this.navigate("document-templates", { trigger : true });
 					return;
 				}
+				var that = this;
+				that.currentTemplate = that.documentTemplatesListView.collection.get(id);
+				getTemplate("settings", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
 
-				// Gets the template form its collection
-				var currentTemplate = this.documentTemplatesListView.collection.get(id);
+					that.view = new Base_Model_View({url : '/core/api/document/templates', model : that.currentTemplate, template : "settings-document-template-add",
+					window : 'document-templates',
+					postRenderCallback : function(el)
+					{
+								// set up TinyMCE Editor
+								setupTinyMCEEditor('textarea#document-template-html', false, undefined, function()
+								{
+									// Reset tinymce
+									set_tinymce_content('document-template-html', that.currentTemplate.toJSON().text);
 
-				var view = new Base_Model_View({ url : '/core/api/document/templates', model : currentTemplate, template : "settings-document-template-add",
-					window : 'document-templates' });
+									// Register focus
+									register_focus_on_tinymce('document-template-html');
+									$("#document-template-html_ifr").height("90vh");
+								});
+						
+					} });
+					$('#prefs-tabs-content').html(that.view.render().el);
 
-				$('#prefs-tabs-content').html(view.render().el);
+					$('#PrefsTab .active').removeClass('select');
+					$('.document-templates-tab').addClass('select');
+					
+				}, "#content");
 
-				/** TinyMCE * */
-
-				// set up TinyMCE Editor
-				setupTinyMCEEditor('textarea#document-template-html', false, undefined, function()
-				{
-
-					// Insert content into tinymce
-					set_tinymce_content('document-template-html', currentTemplate.toJSON().text);
-
-					// Register focus
-					register_focus_on_tinymce('document-template-html');
-					 $("#document-template-html_ifr").height("90vh");
-
-				});
-
-				/** End of TinyMCE* */
-
-				$('#PrefsTab .active').removeClass('select');
-				$('.document-templates-tab').addClass('select');
-				// $("#content").html(view.el);
+				
 			},
 
 			/**
