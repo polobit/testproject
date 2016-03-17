@@ -1,26 +1,30 @@
 	
-		/**
-		 * "Hide" event of note modal to remove contacts appended to related to
-		 * field and validation errors
-		 */
-		$('#deal-note-modal').on('hidden.bs.modal', function()
+		function initilizeDealNotesListeners()
 		{
-			// Removes appended contacts from related-to field
-			$("#dealnoteForm").find("li").remove();
+			/**
+			 * "Hide" event of note modal to remove contacts appended to related to
+			 * field and validation errors
+			 */
+			$('#deal-note-modal').off('hidden.bs.modal');
+			$('#deal-note-modal').on('hidden.bs.modal', function()
+			{
+				// Removes appended contacts from related-to field
+				$("#dealnoteForm").find("li").remove();
 
-			// Remove value of input field
-			$("#from_task", "#dealnoteForm").val("");
-			$("#task_form", "#dealnoteForm").val("");
-			
-			// Removes validation error messages
-			remove_validation_errors('dealnoteModal');
-		});
+				// Remove value of input field
+				$("#from_task", "#dealnoteForm").val("");
+				$("#task_form", "#dealnoteForm").val("");
+				
+				// Removes validation error messages
+				remove_validation_errors('dealnoteModal');
+			});
+		}
 
 
 	
 		function saveDealNote(form, modal, element, note)
 		{
-
+			initilizeDealNotesListeners();
 			console.log(note);
 			var noteModel = new Backbone.Model();
 			noteModel.url = 'core/api/opportunity/deals/notes';
