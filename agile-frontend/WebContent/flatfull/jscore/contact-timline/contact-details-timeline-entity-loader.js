@@ -14,7 +14,7 @@ var timeline_entity_loader = {
 			console.log(_this);
 			_this.load_other_timline_entities(contact);
 
-			timeline_collection_view.render();
+			timeline_collection_view.render(true);
 			// timeline_collection_view.render();
 
 		});
@@ -97,6 +97,42 @@ var timeline_entity_loader = {
 					if(contact_emails)
 						timeline_collection_view.addItems(contact_emails);
 				}
+				if(stats && stats["emailPrefs"]){
+					killAllPreviousRequests();
+					var fetch_urls = stats["emailPrefs"];
+					var contact_social_emails = [];
+					
+					for(var i=0;i<fetch_urls.length;i++)
+					{
+						var xhr = $.ajax({ url : fetch_urls[i]+'&search_email='+encodeURIComponent(email),
+							success : function(emails)
+							{	
+								if(emails)
+								{	
+									var mail_array = [];
+									$.each(emails, function(index,data){
+										// if error occurs in imap (model is obtained with the
+										// error msg along with contact-email models),
+										// ignore that model
+										if(('errormssg' in data) || data.status === "error")
+										return;
+										mail_array.push(data);
+										});
+									
+									if(mail_array.length > 0){
+										timeline_collection_view.addItems(mail_array);
+									}
+							    }
+							},
+						    error : function(response)
+						    {
+						    }
+						});
+						email_requests.push(xhr);
+					}
+				}
+				
+				
 			})
 		}
 	},

@@ -126,10 +126,9 @@ int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 body {
 
   background-image: url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-low.jpg');
-
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: 100% 100%;
+  background-size: cover;
   background-attachment: fixed;
 }
 
@@ -140,7 +139,7 @@ color:#fff!important;
 }
 input
 {
-color:#000!Important;
+color:#000 !Important;
 }
 a:hover
 {
@@ -320,6 +319,7 @@ if(isSafari && isWin)
 		$(document).ready(function()
 		{
 
+
 			var login_hash = window.location.hash;
 
 			// Sets location hash in hidden fields
@@ -335,7 +335,7 @@ if(isSafari && isWin)
         newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high.jpg';
 
         // agile-login-page-high.png
-
+        	preload_login_pages();
 			// Pre load dashlet files when don is active
 			preload_dashlet_libs();
 
@@ -369,7 +369,24 @@ if(isSafari && isWin)
 		}
 
 		function preload_dashlet_libs(){ 
-			setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
+			setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
+		}
+
+		function preload_login_pages(){
+
+			for(var i=1; i < 10; i++){
+
+				$('<img/>', {
+				    class: 'hide',
+				    src: '<%=S3_STATIC_IMAGE_PATH%>/images/login-' + i + '-high.jpg',
+				}).appendTo('body');
+
+				$('<img/>', {
+				    class: 'hide',
+				    src: '<%=S3_STATIC_IMAGE_PATH%>/images/login-' + i + '-low.jpg',
+				}).appendTo('body');
+
+			}
 		}
 	</script>
 	<!-- Clicky code -->

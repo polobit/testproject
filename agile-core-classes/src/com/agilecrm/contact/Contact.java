@@ -27,6 +27,7 @@ import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.social.linkedin.LinkedInUtil;
@@ -967,20 +968,44 @@ public class Contact extends Cursor
      * @return {@link DomainUser} object
      */
     @XmlElement(name = "owner")
-    public DomainUser getOwner()
+    public DomainUserPartial getOwner()
     {
 	if (owner_key != null)
 	{
+		System.out.println("owner_key call");
+		
+	    // If user is deleted no user is found with key so set user to null
+	    // and return null
+		return DomainUserUtil.getPartialDomainUser(owner_key.getId());
+	}
+	return null;
+    }
+    
+    /**
+     * While saving a contact it contains domain user key as owner, but while
+     * retrieving includes complete DomainUser object.
+     * 
+     * @return {@link DomainUser} object
+     */
+    public DomainUser getContactOwner()
+    {
+    	System.out.println("getContactOwner call");
+    	
+	if (owner_key != null)
+	{
+	    
 	    // If user is deleted no user is found with key so set user to null
 	    // and return null
 	    try
 	    {
+	    	
 		// return dao.ofy().get(owner_key);
 		DomainUser user = DomainUserUtil.getDomainUser(owner_key.getId());
 		if (user != null)
 		    user.getCalendarURL();
 
 		return user;
+	    
 	    }
 	    catch (Exception e)
 	    {
@@ -1202,6 +1227,11 @@ public class Contact extends Cursor
 	{
 	    // remove any blank 'company' in properties before sending
 	    removeProperty(COMPANY);
+	}
+	//If entity is Company type, set entity_type to company
+	if (this.type == Contact.Type.COMPANY)
+	{
+		this.entity_type = "company_entity";
 	}
     }
 

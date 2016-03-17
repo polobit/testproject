@@ -155,7 +155,7 @@ public class CustomFieldsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<CustomFieldDef> getSearchableCustomFieldsByScope(@QueryParam("scope") String scope)
     {
-	try
+    try
 	{
 	    if (scope == null)
 		CustomFieldDefUtil.getSearchableCustomFields();

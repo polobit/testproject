@@ -3,15 +3,9 @@ var Portlets_View, gridster;
 /** If CURRENT_AGILE_USER is not set, set it from user.domain **/
 $(function()
 {
-	$.getJSON('/core/api/users/agileusers', function(users)
+	$.getJSON('/core/api/users/current-agile-user', function(user)
 	{
-		$.each(users, function(i, user)
-		{
-			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-			{
-				CURRENT_AGILE_USER = user;
-			}
-		});
+		CURRENT_AGILE_USER = user;
 	});
 });
 
@@ -43,6 +37,7 @@ function loadPortlets(el){
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
 	 */
+	$('#portlets', el).html(getRandomLoadingImg());
 	
 	// This flag is used to ensure portlet script are loaded only once in
 	// postrender. It is set to false after portlet setup is initialized

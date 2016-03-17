@@ -54,6 +54,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Webhook */
 	"webhook" : "webhookSettings",
 
+	"change-domain" : "changeDomain"
+
 
 	},
 
@@ -1154,6 +1156,81 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('.settings-deal-goal').parent().removeClass('b-b-none');
 
 		}, "#milestone-listner");
+	},
+
+	changeDomain : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+
+			return;
+		}
+		
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#content').html($(template_ui));	
+			var view = new Base_Model_View({ url : '/core/api/alias', template : "admin-settings-domain-alias", postRenderCallback : function(el)
+			{
+				if($("#alias_domain #alias").html() == "")
+					$("#alias_domain #alias").val(CURRENT_DOMAIN_USER.domain);
+			},prePersist : function(model){
+				var aliasJSON = [];
+				$.each($("#alias_domain").find('input[name="alias"]'), function(index, data) {
+					aliasJSON.push(($(data).val()));
+				});
+			    model.set({ 
+			       'alias' : aliasJSON
+			      }, 
+			      { 
+			       silent : true 
+			      });
+			   }, saveAuth : function(el){
+			   	var form_id = $("#alias", el).closest('form').attr("id");
+				if (!isValidForm('#' + form_id))
+				{
+					return false;
+				}
+				if(getDomainFromURL() != $("#alias", el).val())
+				{
+					$("#saveAliasAuthentication", el).html(getTemplate("conform-domain-change-model",{}));
+					$("#saveAliasAuthentication", el).modal("show");
+					return true;
+				}
+				else{
+					return false;
+				}
+			}, saveCallback : function(response){
+				console.log("saveCallback");
+				
+				var domain = getDomainFromURL();
+				if(domain == null)
+					window.location.href = "/login";
+				if(domain != response.alias[0]){
+					showNotyPopUp("information", "Your domain name has been updated successfully. Logging out...", "top");
+					setTimeout(function()
+					{
+						window.location.href = window.location.protocol + "//" + response.alias[0] + ".agilecrm.com/login" + window.location.hash;
+					}, 5000);
+				}
+			},errorCallback : function(data){
+				showNotyPopUp("warning", data.responseText, "top");
+			} });
+
+			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.account-prefs-tab').addClass('select');
+			$(".active").removeClass("active");
+
+		}, "#content");
+
+		
+		
 	}
 
 });
@@ -1208,3 +1285,11 @@ function toggle_admin_user_bulk_actions_delete(clicked_ele, isBulk, isCampaign)
 	}
 }
 
+function getDomainFromURL(){
+	var temp = window.location.host.split("-dot");
+	if(temp.length == 1)
+		temp = window.location.host.split(".");
+	if(temp.length == 1)
+		return "my";
+	return temp[0];
+}

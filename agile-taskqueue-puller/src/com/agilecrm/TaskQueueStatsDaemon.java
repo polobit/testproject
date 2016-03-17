@@ -229,6 +229,7 @@ public class TaskQueueStatsDaemon extends Thread
 
 	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
 		.useApplicationDefaultCredential();
+
 	installer.install(options);
 
 	threadLocalDelegate = ApiProxy.getDelegate();
@@ -444,21 +445,29 @@ public class TaskQueueStatsDaemon extends Thread
 	uninstall();
     }
 
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args)
     {
-	TaskQueueStatsDaemon tqsd = new TaskQueueStatsDaemon("dummy");
-
-	tqsd.setRemoteAPI();
-
-	NamespaceManager.set("local");
-	List<Contact> contacts = ContactUtil.getAll(10, null);
-	for (int i = 0; i < contacts.size(); i++)
+	System.out.println("Initializing project");
+	for (int i = 10; i < 20; i++)
 	{
-	    Contact contact = contacts.get(i);
-	    Long start = System.currentTimeMillis();
-	    contact.save(true);
-	    System.out.println("**********************################");
-	    System.out.println("time : " + (System.currentTimeMillis() - start));
+
+	    TaskQueueStatsDaemon demo = new TaskQueueStatsDaemon("demo");
+	    try
+	    {
+		demo.setRemoteAPI();
+		System.out.println("setting namespace Local" + i);
+	    }
+	    catch (IOException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return;
+	    }
+
+	    NamespaceManager.set("local");
+	    List<Contact> contacts = ContactUtil.getAll(10, null);
+	    System.out.println("Contact list : " + contacts);
+	    demo.uninstall();
 	}
 
     }

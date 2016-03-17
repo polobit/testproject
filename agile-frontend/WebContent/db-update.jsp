@@ -1,40 +1,22 @@
-<%@page import="java.util.List"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Map"%>
-<%@page import="org.apache.commons.lang.exception.ExceptionUtils"%>
-<%@page import="com.agilecrm.activities.Task.Status"%>
-<%@page import="com.googlecode.objectify.Query"%>
-<%@page import="com.agilecrm.activities.Task"%>
-<%@page import="com.agilecrm.db.ObjectifyGenericDao"%>
-<%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
+<%@page import="com.google.appengine.api.taskqueue.TaskOptions"%>
+<%@page import="com.google.appengine.api.taskqueue.QueueFactory"%>
+<%@page import="com.google.appengine.api.taskqueue.Queue"%>
+<%@page import="com.campaignio.servlets.deferred.DomainUserAddPicDeferredTask"%>
+<%@page import="com.agilecrm.util.NamespaceUtil"%>
+<%@page import="java.util.Set"%>
 <%
-	String nameSpace = request.getParameter("domain");
-	if (StringUtils.isBlank(nameSpace))
-		return;
 
-	String oldNamespace = NamespaceManager.get();
-	try{
-		NamespaceManager.set(nameSpace);
-		
-		ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(Task.class);
-		Query<Task> query = dao.ofy().query(Task.class);
-	    
-	    Map<String, Object> searchMap = new HashMap<String, Object>();
-	    searchMap.put("status", Status.COMPLETED);
-	    searchMap.put("is_complete", false);
-	    
-	    List<Task> tasks =  dao.listByProperty(searchMap);
-	    
-	    for(Task task : tasks){
-	    	task.completeTask();
-	    }
+	//Fetches all namespaces
+	Set<String> namespaces = NamespaceUtil.getAllNamespacesNew();
+	
+	// Iterates through each Namespace and initiates task for each namespace
+	// to update usage info
+	for (String namespace : namespaces) {
+		DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(namespace);
 
-		
-	}catch(Exception e){
-		e.printStackTrace();
-	    System.out.println(ExceptionUtils.getFullStackTrace(e));		
-	}finally {
-		NamespaceManager.set(oldNamespace);	
+		// Add to queue
+		Queue queue = QueueFactory.getDefaultQueue();
+		queue.add(TaskOptions.Builder.withPayload(task));
 	}
 %>

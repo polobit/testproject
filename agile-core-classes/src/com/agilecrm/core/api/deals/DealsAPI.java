@@ -2,8 +2,10 @@ package com.agilecrm.core.api.deals;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.Consumes;
@@ -20,6 +22,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -47,6 +50,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.deferred.DealsDeferredTask;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -174,6 +178,43 @@ public class DealsAPI
 	return OpportunityUtil
 		.getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName, 0, cursor, pipelineId);
     }
+    
+    
+    @Path("/totalDealValue")
+    @GET
+    @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
+    public JSON getOpportunitiesTotalValue(@QueryParam("owner_id") String ownerId,
+	    @QueryParam("milestone") String milestone, @QueryParam("related_to") String contactId,
+	    @QueryParam("order_by") String fieldName, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @QueryParam("pipeline_id") Long pipelineId,
+	    @QueryParam("filters") String filters)
+    {
+     double totalValue = 0.0d;
+    JSONObject obj = new JSONObject();
+    System.out.println(count);
+    obj.put("id", "100");
+	if (filters != null)
+	{
+	    System.out.println(filters);
+	    try
+	    {
+			org.json.JSONObject json = new org.json.JSONObject(filters);
+			if (milestone != null)
+				json.put("milestone", milestone);
+			System.out.println(json.toString());			
+			totalValue =  OpportunityUtil.getTotalValueOfDeals(json);
+			obj.put("total", totalValue);	
+			obj.put("milestone", milestone);
+			return obj;
+	     }	    
+	    catch (JSONException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
+	return obj;
+    }
 
     /**
      * Return opportunity with respect to Id. This method is called if XML is
@@ -260,10 +301,12 @@ public class DealsAPI
     {
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
-	//Some times milestone comes as null from client side, if it is null we can'tsave it.
-	if(opportunity != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
+	// Some times milestone comes as null from client side, if it is null we
+	// can'tsave it.
+	if (opportunity != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
 	{
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Deal not saved properly.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Deal not saved properly.").build());
 	}
 	opportunity.save();
 	try
@@ -293,12 +336,15 @@ public class DealsAPI
     UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
-	//Some times milestone comes as null from client side, if it is null we can'tsave it.
-	if(opportunity != null && opportunity.id != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
+	// Some times milestone comes as null from client side, if it is null we
+	// can'tsave it.
+	if (opportunity != null && opportunity.id != null
+		&& (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
 	{
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Deal not updated properly.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Deal not updated properly.").build());
 	}
-	
+
 	try
 	{
 	    ActivitySave.createDealEditActivity(opportunity);
@@ -666,7 +712,7 @@ public class DealsAPI
     public List<Contact> getRelatedContacts(@PathParam("deal-id") Long id)
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
-	return opportunity.getContacts();
+	return opportunity.relatedContacts();
     }
 
     /**
@@ -693,7 +739,7 @@ public class DealsAPI
 
 	    String new_owner_name = DomainUserUtil.getDomainUser(Long.parseLong(new_owner)).name;
 
-	    List<Contact> contacts = opportunity.getContacts();
+	    List<ContactPartial> contacts = opportunity.getContacts();
 	    JSONArray jsn = null;
 	    if (contacts != null && contacts.size() > 0)
 	    {
@@ -755,6 +801,7 @@ public class DealsAPI
 		Opportunity opp = OpportunityUtil.getOpportunity(Long.parseLong(deal_ids.get(i)));
 		opp.note_description = note.description;
 		opp.note_subject = note.subject;
+		opp.note_created_time = note.created_time;
 		opp.save();
 	    }
 	}

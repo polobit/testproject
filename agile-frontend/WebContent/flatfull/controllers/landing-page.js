@@ -118,35 +118,33 @@ var LandingPageRouter = Backbone.Router.extend({
     },
 
     pageSettings : function(pageId) {
-        if (!this.LandingPageCollectionView || !this.LandingPageCollectionView.collection || this.LandingPageCollectionView.collection.get(pageId) == null) {
-           this.navigate("landing-pages", { trigger : true });
-           return;
-        }
-
-        var model = this.LandingPageCollectionView.collection.get(pageId);
 
         $('#content').html("<div id='landingpages-listeners'></div>");
         initializeLandingPageListeners();
 
-        getTemplate("landingpages-settings", model.toJSON(), undefined, function(ui){
-            $("#landingpages-listeners").html($(ui));
-            var cnameEL = document.getElementById("cname");
-            if($("#cname").attr("href") != "") {
-                var parts = cnameEL.hostname.split('.');
-                $("#sub_domain").val(parts.shift());
-                $("#domain").val(parts.join('.'));
+        $.getJSON("core/api/landingpages/custom-domain/"+pageId, function(data){
+            data = data || {};
+            data["pageid"] = pageId;
+            getTemplate("landingpages-settings", data, undefined, function(ui){
+                $("#landingpages-listeners").html($(ui));
+                var cnameEL = document.getElementById("cname");
+                if($("#cname").attr("href") != "") {
+                    var parts = cnameEL.hostname.split('.');
+                    $("#sub_domain").val(parts.shift());
+                    $("#domain").val(parts.join('.'));
 
-                var dirPath = cnameEL.pathname;
-                if(dirPath.charAt(0) === '/'){
-                    dirPath = dirPath.substr(1);
+                    var dirPath = cnameEL.pathname;
+                    if(dirPath.charAt(0) === '/'){
+                        dirPath = dirPath.substr(1);
+                    }
+                    $("#directory_path").val(dirPath);
                 }
-                $("#directory_path").val(dirPath);
-            }
-        }, "#landingpages-listeners");
+            }, "#landingpages-listeners");
+        });
         
-        $(".active").removeClass("active");
-	$("#landing-pages-menu").addClass("active");
-        hideTransitionBar();
+       $(".active").removeClass("active");
+	   $("#landing-pages-menu").addClass("active");
+       hideTransitionBar();
     },
 
     copySelectedLandingPage :function(defaultTemplateId) {

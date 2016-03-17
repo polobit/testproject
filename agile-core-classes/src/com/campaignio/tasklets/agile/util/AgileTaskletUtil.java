@@ -351,7 +351,7 @@ public class AgileTaskletUtil {
 								+ e.getMessage());
 			}
 			// Get contact owner.
-			DomainUser domainUser = contact.getOwner();
+			DomainUser domainUser = contact.getContactOwner();
 			JSONObject owner = new JSONObject();
 
 			if (domainUser != null) {
@@ -498,7 +498,7 @@ public class AgileTaskletUtil {
 			}
 
 			// Get contact owner.
-			DomainUser domainUser = contact.getOwner();
+			DomainUser domainUser = contact.getContactOwner();
 			JSONObject owner = new JSONObject();
 
 			if (domainUser != null) {
