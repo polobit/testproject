@@ -21,6 +21,7 @@ import org.jsoup.select.Elements;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
@@ -156,7 +157,7 @@ public class TicketNotes
 	 * Util attribute to send assignee id to client
 	 */
 	@NotSaved
-	public DomainUser domain_user = null;
+	public DomainUserPartial domain_user = null;
 
 	/**
 	 * Stores CC email addresses if ticket have any

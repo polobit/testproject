@@ -35,7 +35,7 @@ public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 	private static final long serialVersionUID = 1L;
 
 	Integer fetchedCount = 0;
-	String cursor = null;
+	String cursor = "";
 	Long totalCount = null;
 	List<SearchRule> conditions;
 
@@ -81,7 +81,7 @@ public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 		 * if (fetchedCount >= totalCount) return false;
 		 */
 
-		if (StringUtils.isEmpty(cursor))
+		if (cursor == null)
 			return false;
 
 		return true;
@@ -114,7 +114,15 @@ public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 				System.out.println("this.totalCount: " + this.totalCount);
 			}
 
-			this.cursor = results.getCursor().toWebSafeString();
+			try
+			{
+				this.cursor = results.getCursor().toWebSafeString();
+			}
+			catch (Exception e)
+			{
+				this.cursor = null;
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
 
 			// Setting fetched record count
 			fetchedCount = (fetchedCount == null) ? results.getNumberReturned() : (fetchedCount + results

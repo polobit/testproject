@@ -154,7 +154,7 @@ public class TicketNotesRest
 				ticketNotes.save();
 			}
 
-			ticketNotes.domain_user = DomainUserUtil.getDomainUser(ticket.assigneeID);
+			ticketNotes.domain_user = DomainUserUtil.getPartialDomainUser(ticket.assigneeID);
 			ticketNotes.assignee_id = ticket.assigneeID;
 
 			System.out.println("Execution time: " + (Calendar.getInstance().getTimeInMillis() - currentTime) + "ms");

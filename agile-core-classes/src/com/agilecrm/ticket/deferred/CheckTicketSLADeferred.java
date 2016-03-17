@@ -1,6 +1,5 @@
 package com.agilecrm.ticket.deferred;
 
-import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -10,7 +9,6 @@ import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;

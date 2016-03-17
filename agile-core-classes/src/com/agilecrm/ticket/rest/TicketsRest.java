@@ -544,8 +544,8 @@ public class TicketsRest
 		{
 			if (ticketID == null || groupID == null)
 				throw new Exception("Required parameters missing");
-			
-			//From client side sending value 0 when ticket is assigned to group
+
+			// From client side sending value 0 when ticket is assigned to group
 			if (assigneeID == 0)
 				assigneeID = null;
 
@@ -809,7 +809,7 @@ public class TicketsRest
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -824,12 +824,34 @@ public class TicketsRest
 		{
 			DomainUser user = DomainUserUtil.getDomainUserFromEmail(email);
 			user.pic = "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/64.png";
-			
+
 			user.save();
 		}
 		catch (Exception e)
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws JSONException
+	 */
+	@GET
+	@Path("/due-date-tickets")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void getDueDateTickets() throws JSONException
+	{
+		try
+		{
+			System.out.println(TicketsUtil.getOverdueTickets());
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
 		}
 	}
 
