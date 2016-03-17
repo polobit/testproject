@@ -532,7 +532,7 @@
 <div class="inline">
     <div class="thumb-sm">
       {{#if properties}}
-      <img src="{{nameAvatar properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">
+      <img src="{{gravatarurl properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">
       {{else}}
       <img src="{{getGravatarFromEmail requester_email 24}}"  class="r-5x" onerror="image_error(this);" _data-name="{{requester_name}}">
       {{/if}}
