@@ -917,6 +917,10 @@ display:flex;
 {
 	width:80%;
 }
+.w-xx-half
+{
+  width:85%;
+}
 .w-full {
   width: 100%;
 }
