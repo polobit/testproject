@@ -60,12 +60,12 @@ var Tickets_Notes = {
 				Tickets.remove_draft_message(Current_Ticket_ID, ((note_type == 'PUBLIC') ? 'reply' : 'comment'));
                 
                 if(notes_json.note_type == 'PRIVATE'){
-                	showNotyPopUp('information', "Comment has been added" + ((is_ticket_closed) ? ' and status changed to Closed' : ''), 'bottomRight', 5000);
+                	Ticket_Utils.showNoty('information', "Comment has been added" + ((is_ticket_closed) ? ' and status changed to Closed' : ''), 'bottomRight', 5000);
                 }else{
 	                
 	                var msg = 'Comment has been added and ticket status changed to ' + ((is_ticket_closed) ? 'Closed' : 'Pending');
 
-	                showNotyPopUp('information', msg, 'bottomRight', 5000);
+	                Ticket_Utils.showNoty('information', msg, 'bottomRight', 5000);
 				}
 				
 				var json = {};
@@ -160,7 +160,7 @@ var Tickets_Notes = {
 			accept: 'application/json',
 			success : function(data){
 				
-				showNotyPopUp('information', "Ticket has been forwarded to " + emails.join(), 
+				Ticket_Utils.showNoty('information', "Ticket has been forwarded to " + emails.join(), 
 					'bottomRight', 5000);
 
 				// Remove draft message from local staorage
@@ -354,8 +354,7 @@ var Tickets_Notes = {
 
 	        $.each(noteAttachment,function(index,note_Attachment){
 	           
-	            notesText += "\n"+ (index+=1) +". "+note_Attachment.name+" - "+ encodeURI(note_Attachment.url);
-	          
+	            notesText += "\n"+ encodeURI(note_Attachment.url);
 	        });
 	         
             notesText += "\n\n-----------------------------------------\n\n";
@@ -404,7 +403,7 @@ var Tickets_Notes = {
 		newTicketModel.url = "core/api/tickets/execute-workflow";
 		newTicketModel.save(json, {	
 				success: function(model){
-					showNotyPopUp('information', 'Workflow execution has been started successfully', 'bottomRight', 5000);
+					Ticket_Utils.showNoty('information', 'Workflow execution has been started successfully', 'bottomRight', 5000);
 			}}
 		);
 	},

@@ -27,8 +27,8 @@ import org.jsoup.select.Elements;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.export.gcs.GCSServiceAgile;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketLabels;
@@ -251,7 +251,7 @@ public class TicketWebhook extends HttpServlet
 						html = html.replace("[image: " + element.attr("alt") + "]", "");
 					}
 
-					//html = doc.toString();
+					// html = doc.toString();
 				}
 			}
 			catch (Exception e)
@@ -290,7 +290,8 @@ public class TicketWebhook extends HttpServlet
 						Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, ip,
 						new ArrayList<Key<TicketLabels>>());
 
-				BulkActionNotifications.publishNotification("New ticket #" + ticket.id + " received");
+				//BulkActionNotifications.publishNotification("New ticket #" + ticket.id + " received");
+				BulkActionNotifications.publishconfirmation(BulkAction.NEW_TICKET_RECEIVED, ticket.id + "");
 			}
 			else
 			{
@@ -313,10 +314,10 @@ public class TicketWebhook extends HttpServlet
 				}
 
 				String lastReplieText = TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText);
-				
+
 				// Checking if contact existing or not
 				Contact contact = ticket.getTicketRelatedContact();
-				
+
 				ticket.contact_key = new Key<Contact>(Contact.class, contact.id);
 				ticket.contactID = contact.id;
 
@@ -324,8 +325,10 @@ public class TicketWebhook extends HttpServlet
 						currentTime, null, attachmentExists, false);
 
 				// Sending user replied notification
-				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket#" + ticket.id);
-
+				//BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket#" + ticket.id);
+				
+				BulkActionNotifications.publishconfirmation(BulkAction.REQUESTER_REPLIED_TO_TICKET, ticket.requester_name, ticket.id + "");
+				
 				// Execute note created by customer trigger
 				TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
 			}

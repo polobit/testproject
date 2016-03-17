@@ -150,5 +150,51 @@ var Ticket_Utils = {
 		var ticketJSON = App_Ticket_Module.ticketView.model.toJSON();
 
 		return ticketJSON[property_name];
+	},
+
+	//Should be used only when ticket collection is available
+	isTicketAttributesChanged: function(ticket_id, attributesJSON){
+
+		var ticket_json = App_Ticket_Module.ticketsCollection.collection.get(ticket_id).toJSON();
+
+		var isAttributeChanged = false;
+
+		for (var key in attributesJSON) {
+		  
+		  if(attributesJSON[key] === ticket_json[key])
+		  	continue;
+
+		  isAttributeChanged = true;
+		}
+
+		return isAttributeChanged;
+	},
+
+	showNoty: function(type, message, position, timeout){
+
+		$.noty.clearQueue();
+		
+		head.js('lib/noty/layouts/bottom.js', LIB_PATH
+				+ 'lib/noty/layouts/bottomRight.js', LIB_PATH
+				+ 'lib/noty/themes/default.js', function(){
+
+			noty({
+				text : message,
+				layout : position,
+				//dismissQueue: true,
+				type : type,
+				animation : {
+					open : {
+						height : 'toggle'
+					},
+					close : {
+						height : 'toggle'
+					},
+					easing : 'swing',
+					speed : 500
+				},
+				timeout : timeout,
+			});
+		});
 	}
 };
