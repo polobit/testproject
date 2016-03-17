@@ -91,7 +91,7 @@
 <script id="send-cancellation-request-template" type="text/html">
     <div class="modal-content">
     <div class="modal-body">
-     <button type="button" class="close pull-right" data-dismiss="modal" aria-hidden="true">&times;</button>
+     <button type="button" class="close pull-right m-r-xs" data-dismiss="modal" aria-hidden="true">&times;</button>
      <div class="display-center">
         <h4>Request for Cancellation</h4>
             <p class="p-t-xs">
@@ -145,7 +145,7 @@
                               <div class="bg-box m-r m-l" style="background-color: #50c7a7;">
                                 <i class="fa fa-comment-o pos-rlt pos-t-xs"></i>
                               </div>
-                              <h4>Instant Help</h4>
+                              <h4>Schedule a Call</h4>
                               <div class="text-xs p-b-xs p-l-sm p-r-sm">We can help you to get more out of chat. Just ask us!</div>
                               <a id="account_cancel_chat_btn" class="btn btn-md btn-default p-t-sm w-xx-half">Chat</a>
                             </div></div>
@@ -155,8 +155,8 @@
                                 <i class="fa icon-support pos-rlt pos-t"></i>
                               </div>
                               <h4>Get Answers</h4>
-                              <div class="text-xs p-b-xs p-l-sm p-r-sm">Check out our detailed instructions to get the help you need.</div>
-                              <a href="https://www.agilecrm.com/support" target="_blank" class="btn btn-md btn-default p-t-sm w-xx-half">Help</a>
+                              <div class="text-xs p-b-xs p-l-sm p-r-sm">Schedule a convenient time slot and one of our product experts will call you for assistance.</div>
+                              <a href="https://our.agilecrm.com/calendar/rabinder,raja_shekar,kiran" target="_blank" class="btn btn-md btn-default p-t-sm w-xx-half">Schedule</a>
                             </div></div>
                     <div class="col-md-4">
                       <div id="account_pause" class="wrapper">
@@ -166,6 +166,7 @@
                               <h4>Need a Break?</h4>
                               <div id="pause_settings" class="text-xs pos-rlt p-b-xs p-l-sm p-r-sm">
                                   Postpone your billing for 
+                                  <span class="pos-rlt">
                                   <span id="pause_count">1</span>
                                   <span class="pause-count-control m-l-sm">
                                         <ul class="inline-block list-none m-n p-n">
@@ -173,7 +174,8 @@
                                             <li><i class="icon-sort-down c-p" id="minus" style="height: 10px;"></i></li>
                                         </ul>
                                   </span>
-                                  <span id="month_id" class="m-l-xs">months</span>, so that you don't lost your data.
+                                  </span>
+                                  <span id="month_id" class="m-l-xs">month</span>, so that you don't lose your data.
                              </div>
                               <a id="account_pause_btn" class="btn btn-md btn-default p-t-sm w-xx-half">Pause</a>
                             </div></div>

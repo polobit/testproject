@@ -177,13 +177,18 @@ $(function(){
 	});
 	$('body').on('click', '#account_resume', function(e) {
 		e.preventDefault();
+		$(this).attr("disabled","disabled").text("Resuming");
+		$that = $(this);
 		$.ajax({
 			url : 'core/api/subscription/pauseOrResumeSubscriptions?period=0',
 			type : 'POST',
 			success : function(){
-				showNotyPopUp("information", "Thank you, Your account will be Resume soon.", "top");
+				setTimeout(function(){
+					showNotyPopUp("information", "Welcome back! We are resuming services for your account, please wait for few seconds while we re-activate it.", "top");
+				},30000);
 			},
 			error : function(response){
+				$that.text("Resume").removeAttr("disabled");
 				showNotyPopUp("warning", response.responseText, "top");
 			}
 		});

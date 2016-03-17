@@ -3391,10 +3391,10 @@ table.hide-head-checkbox th label.i-checks {
     position: absolute;
     top: 0px;
     font-size: 11px;
-    left: 138px;
+    left: -2px;
 }
 #pause_settings:hover .pause-count-control{
-	display: inline-block!important;
+	display: block!important;
 }
 #pause_settings:hover #month_id{
 	margin-left: 10px!important;
