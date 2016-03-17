@@ -85,12 +85,26 @@ function editGrid(e, selector, rowIndex)
     rowIndex++;
     
    // alert($('#' + tableId + ' tbody tr:nth-child(' + rowIndex + ')').html());
+
+    if(tableId == 'zones-table')
+    {
+        var old_text = $('#' + tableId + ' tbody tr:nth-child(' + rowIndex + ')').find('td').eq(1).text();
+        var updated_text = $(td).eq(1).text();
+
+        // Update branches
+        update_zones_ports($('#' + tableId), $(td), old_text, new_text);
+    }
     
     $('#' + tableId + ' tbody tr:nth-child(' + rowIndex + ')').empty().append($(td));
     
     // Hides zone condition operator - Territory node (Naresh - 03/15/2016)
     if(uiFieldDefinition.name == NODES_CONSTANTS.ZONES)
-        hide_zone_comparator($('#'+ tableId));
+    {
+       hide_zone_comparator($('#'+ tableId));
+
+       // Sort grid table
+       sort_grid_table(tableId, 1, [NODES_CONSTANTS.NOMATCH]);
+    }
     
     // Update global operations array so that it gets associated to ports - dynamic nodes
     /* ----------- CHECK THIS */
@@ -134,7 +148,12 @@ function addToGrid(e, selector) {
 
     // Hides zone condition operator - Territory node (Naresh - 03/15/2016)
     if(uiFieldDefinition.name == NODES_CONSTANTS.ZONES)
-        hide_zone_comparator($('#'+ tableId));
+    {
+       hide_zone_comparator($('#'+ tableId));
+       
+       // Sort grid table
+       sort_grid_table(tableId, 1, [NODES_CONSTANTS.NOMATCH]);
+    }
     
     // Update global operations array so that it gets associated to ports - dynamic nodes
     /* ----------- CHECK THIS */
@@ -247,7 +266,7 @@ function generateGridUI(container, uiFieldDefinition) {
     		e.preventDefault();    	    
     		var uiFieldDefinition = $('#' + tableId).data('ui')
     		//alert(uiFieldDefinition);
-    		constructGridPopup(uiFieldDefinition, addToGrid)
+    		constructGridPopup(uiFieldDefinition, addToGrid);           
     	});
 
     // Hides zones in Territory node (Naresh - 03/15/2016)
@@ -320,8 +339,9 @@ function initGridHandlers(selector)
             return;
         }
 
+         var $tableId = $(this).closest('table');
 	     var rowIndex = $(this).closest('tr').index();		 
-	     var nodeUIDefinition = $(this).closest('table').data('ui');      
+	     var nodeUIDefinition = $tableId.data('ui');      
 	     var selectedTR = $(this).closest('tr'); 
 	     
 	     var rowJSON = serializeRow(selectedTR);
@@ -336,16 +356,16 @@ function initGridHandlers(selector)
 		}
      
      	constructGridPopup(nodeUIDefinition, function(e, selector){                    
-     		editGrid(e, selector, rowIndex);     
+     		editGrid(e, selector, rowIndex);  
+
+             
+            
      	}, rowJSON);    
           
      });
      
 
 }
-
-
-
 
 function serializeRow($row)
 {
@@ -456,8 +476,6 @@ function get_zones($table)
     var zones = {};
    $table.find("tbody tr").each(function (rowIndex, eachTR) {
 
-        // $(eachTR).find("td").each(function (index, eachTD) {
-
             var zone = $(eachTR).find('td').eq(1).text();
 
             if(!zones[zone])
@@ -466,7 +484,6 @@ function get_zones($table)
 
                 zones[zone]=condition;
             }
-        // });
    });
 
    return zones;
@@ -542,4 +559,52 @@ function remove_deleted_port($table, $deleted_td){
         // Draw2D (based on the ports)
         nodeObject.allignDynamicNode();
     }
+}
+
+function update_zones_ports($zones_tbl, $updated_td, old_text, updated_text)
+{
+
+    if(old_text == updated_text)
+        return;
+
+    // Update text for all other rows
+    $($zones_tbl).find('tbody tr').each(function(index, tr){
+
+        var td_text = $(tr).find('td').eq(1).text();
+
+        if(td_text == old_text)
+        {
+            $(tr).find('td').eq(1).text(updated_text);
+        }
+    });
+
+    var nodeId = $("#nodeui").data('nodeId');
+    var nodeObject = workflow.getFigure(nodeId);
+    var ports = getPorts(nodeObject);
+
+    editPort(nodeObject, ports.indexOf(old_text), updated_text);
+
+    alignDynamicNodePorts(nodeObject);
+
+    // Draw2D (based on the ports)
+    nodeObject.allignDynamicNode();
+}
+
+function sort_grid_table(table_id, sort_td_index, skip_rows)
+{
+    var $tbody = $('#' + table_id + ' tbody');
+
+    $tbody.find('tr').sort(function (tr1, tr2) {
+        
+        var td1 = $(tr1).find('td:eq('+sort_td_index+')').text();
+
+        // Skip sorting
+        if(skip_rows.indexOf(td1) != -1)
+            return 0;
+
+        var td2 = $(tr2).find('td:eq('+sort_td_index+')').text();
+
+        return td1 > td2 ? 1 : (td1 < td2 ? -1 : 0);
+
+    }).appendTo($tbody);
 }
