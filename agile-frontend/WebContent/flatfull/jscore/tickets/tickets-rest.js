@@ -160,6 +160,7 @@ toggleFavorite : function(e){
 
 		}, null);
 	},
+	
 	changeTicketType: function(event){
 
 		var $select = $('.ticket_type');

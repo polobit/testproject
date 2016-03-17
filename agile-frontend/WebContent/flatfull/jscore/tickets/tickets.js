@@ -108,7 +108,7 @@ var Tickets = {
 					Tickets.initEvents(el);
 
 					//Initialize tooltips
-					Ticket_Utils.enableTooltips(el);
+					Ticket_Utils.enableTooltips($('#tickets-container'));
 
 					//Initialize time ago plugin
 					Ticket_Utils.loadTimeAgoPlugin(function(){
@@ -566,38 +566,60 @@ var Tickets = {
 
 	fillAssigneeAndGroup : function(el){
 
-		var groupsAssignees = Backbone.Model.extend({urlRoot : '/core/api/tickets/groups'});
-		new groupsAssignees().fetch({success: function(model, response, options){
+		//Fetching all groups, assignees and appending them to select dropdown
+		fillSelect('ticket-assignee', '/core/api/tickets/groups', '', function(collection){
 
-			Tickets.groupsList = model.toJSON();
-		
-			var html = getTemplate('ticket-change-assignee', Tickets.groupsList);
-			html += "<option role='separator' disabled>----------------------------------------------------------</option>";
-			$.each(Tickets.groupsList, function(index, data){
-				html += "<option value='"+data.id+"'>"+data.group_name+"</option>";
-			});
+			$('#ticket-assignee', el).html(getTemplate('select-assignee-dropdown', collection.toJSON()));
 
 			var selectedAssignee = App_Ticket_Module.ticketView.model.toJSON().assigneeID;
 			var selectedGroup = App_Ticket_Module.ticketView.model.toJSON().groupID;
 
-			$('#ticket-assignee', el).html(html);
-
 			if(!selectedAssignee)
 				$('#ticket-assignee', el).find("option[value='"+selectedGroup+"']").attr('selected', 'selected');
 			else
-      		 $('#ticket-assignee', el).find("optgroup[data-group-id='"+selectedGroup+"']").find("option[value='"+selectedAssignee+"']").attr('selected', 'selected');
+      		 	$('#ticket-assignee', el).find("optgroup[data-group-id='"+selectedGroup+"']").find("option[value='"+selectedAssignee+"']").attr('selected', 'selected');
       		
-
-      		 // If current user not 
+			// If current user not 
       		if(selectedAssignee != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(selectedGroup, Tickets.groupsList))
       			$('.assign-to-me', el).show();
       		else
 				$('.assign-to-me', el).hide();
 
+		}, '', false, el);
 
-		}, error: function(){
+		// var groupsAssignees = Backbone.Model.extend({urlRoot : '/core/api/tickets/groups'});
+		// new groupsAssignees().fetch({success: function(model, response, options){
 
-		}});
+		// 	Tickets.groupsList = model.toJSON();
+		
+		// 	var html = '';
+			
+		// 	$.each(Tickets.groupsList, function(index, data){
+		// 		html += "<option value='"+data.id+"'>"+data.group_name+"</option>";
+		// 	});
+
+		// 	html += "<option role='separator' disabled>----------------------------------------------------------</option>";
+		// 	html += getTemplate('ticket-change-assignee', Tickets.groupsList);
+
+		// 	var selectedAssignee = App_Ticket_Module.ticketView.model.toJSON().assigneeID;
+		// 	var selectedGroup = App_Ticket_Module.ticketView.model.toJSON().groupID;
+
+		// 	$('#ticket-assignee', el).html(html);
+
+		// 	if(!selectedAssignee)
+		// 		$('#ticket-assignee', el).find("option[value='"+selectedGroup+"']").attr('selected', 'selected');
+		// 	else
+  //     		 	$('#ticket-assignee', el).find("optgroup[data-group-id='"+selectedGroup+"']").find("option[value='"+selectedAssignee+"']").attr('selected', 'selected');
+      		
+
+  //     		 // If current user not 
+  //     		if(selectedAssignee != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(selectedGroup, Tickets.groupsList))
+  //     			$('.assign-to-me', el).show();
+  //     		else
+		// 		$('.assign-to-me', el).hide();
+		// }, error: function(){
+
+		// }});
 	},
 
 	// changeAssignee : function(e){
