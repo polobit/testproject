@@ -49,6 +49,8 @@ public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 		{
 			this.queryString = queryString;
 			count = new TicketsDocument().getTicketsCount(queryString);
+			
+			System.out.println("Tickets count for query: " + count);
 		}
 		catch (Exception e)
 		{
