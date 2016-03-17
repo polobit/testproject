@@ -142,8 +142,9 @@ public class TicketBulkActionsBackendsRest
 				assigneeID = dataJSON.getLong("assignee_id");
 
 			Long groupID = dataJSON.getLong("group_id");
-			
-			//Cannot set DomainUserPartial to SessionManager so fetching domainUserObject
+
+			// Cannot set DomainUserPartial to SessionManager so fetching
+			// domainUserObject
 			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
 			BulkActionUtil.setSessionManager(user);
 
@@ -167,9 +168,14 @@ public class TicketBulkActionsBackendsRest
 
 			int selectedTicketsCount = idsFetcher.getCount();
 
-			BulkActionNotifications
-					.publishNotification((selectedTicketsCount + ((selectedTicketsCount == 1) ? " ticket" : " tickets"))
-							+ " assignee and group have been changed.");
+			String message = (selectedTicketsCount + ((selectedTicketsCount == 1) ? " ticket" : " tickets"))
+					+ " group have been changed.";
+
+			if (assigneeID == null)
+				message = (selectedTicketsCount + ((selectedTicketsCount == 1) ? " ticket" : " tickets"))
+						+ " assignee have been changed.";
+
+			BulkActionNotifications.publishNotification(message);
 		}
 		catch (Exception e)
 		{

@@ -159,6 +159,7 @@ toggleFavorite : function(e){
 
 		}, null);
 	},
+	
 	changeTicketType: function(event){
 
 		var $select = $('.ticket_type');
@@ -168,7 +169,7 @@ toggleFavorite : function(e){
 		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-ticket-type";
 		var json = {type: new_ticket_type};
 
-		Ticket.updateModel(url, json, function(){
+		Tickets.updateModel(url, json, function(){
 
 			// current view
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {type : new_ticket_type}); 
@@ -186,7 +187,7 @@ toggleFavorite : function(e){
 		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-priority";
 		var json = {priority: new_priority};
 
-		Ticket.updateModel(url, json, function(){
+		Tickets.updateModel(url, json, function(){
 
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
