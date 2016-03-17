@@ -21,6 +21,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -123,7 +124,7 @@ public class TicketNotesUtil
 		System.out.println("notesList size.." + notesList.size());
 
 		TicketGroups group = null;
-		
+
 		try
 		{
 			group = TicketGroupUtil.getTicketGroupById(ticket.groupID);
@@ -132,7 +133,7 @@ public class TicketNotesUtil
 		{
 			throw new Exception("No group found with id " + group.id + " or group has been deleted.");
 		}
-		
+
 		String groupName = group.group_name;
 		String agentName = DomainUserUtil.getDomainUser(ticket.assigneeID).name;
 
@@ -159,7 +160,8 @@ public class TicketNotesUtil
 			if (notes.note_type == NOTE_TYPE.PRIVATE)
 				continue;
 
-			JSONObject eachNoteJSON = getFormattedEmailNoteJSON(notes, ContactUtil.getContact(ticket.contact_key.getId()));
+			JSONObject eachNoteJSON = getFormattedEmailNoteJSON(notes,
+					ContactUtil.getContact(ticket.contact_key.getId()));
 
 			if (eachNoteJSON != null)
 				notesArray.put(eachNoteJSON);
@@ -304,7 +306,7 @@ public class TicketNotesUtil
 		{
 			Set<Key<DomainUser>> domainUserKeys = new HashSet<Key<DomainUser>>();
 
-			Map<Long, DomainUser> map = new HashMap<Long, DomainUser>();
+			Map<Long, DomainUserPartial> map = new HashMap<Long, DomainUserPartial>();
 
 			NamespaceManager.set("");
 
@@ -320,13 +322,12 @@ public class TicketNotesUtil
 
 			System.out.println("domainUserKeys: " + domainUserKeys);
 
-			List<DomainUser> domainUsers = DomainUserUtil.dao.fetchAllByKeys(new ArrayList<Key<DomainUser>>(
-					domainUserKeys));
+			List<DomainUserPartial> domainUsers = new ArrayList<DomainUserPartial>();
+
+			for (Key<DomainUser> key : domainUserKeys)
+				map.put(key.getId(), DomainUserUtil.getPartialDomainUser(key.getId()));
 
 			System.out.println("domainUsers: " + domainUsers);
-
-			for (DomainUser domainUser : domainUsers)
-				map.put(domainUser.id, domainUser);
 
 			for (TicketNotes note : notes)
 			{
