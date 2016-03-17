@@ -25,7 +25,7 @@ function setupLhsFilters(cel, is_company)
 			$('#lhs_filters_conatiner', cel).html($(template_ui));
 
 			setTimeout(function(){
-				fillSelect('owner_select', '/core/api/users/partal', undefined, function()
+				fillSelect('owner_select', '/core/api/users/partial', undefined, function()
 				{
 					if (!COMPANY_CUSTOM_FIELDS)
 					{
@@ -58,7 +58,7 @@ function setupLhsFilters(cel, is_company)
 			$('#lhs_filters_conatiner', cel).html($(template_ui));
 			
 			setTimeout(function(){
-				fillSelect('owner_select', '/core/api/users/partal', undefined, function()
+				fillSelect('owner_select', '/core/api/users/partial', undefined, function()
 				{
 					fillSelect('campaign_select_master', '/core/api/workflows', undefined, function()
 					{
