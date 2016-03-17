@@ -196,6 +196,111 @@ $(function(){
 	            $('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
 				
 		});
+
+	$("body").on("click", "#deal-delete-checked", function(event){
+		event.preventDefault();
+		var id_array = [];
+		var index_array = [];
+		var data_array = [];
+		var checked = false;
+		var table = $('body').find('.showCheckboxes');
+		var dealsCount = 0;
+		$(table).find('tr .tbody_check').each(function(index, element){
+			
+			// If element is checked store it's id in an array 
+			if($(element).is(':checked')){
+				// Disables mouseenter once checked for delete(To avoid popover in deals when model is checked)
+				$(element).closest('tr').on("mouseenter", false);
+				index_array.push(index);
+				dealsCount++;
+				if(!$(element).closest('tr').hasClass("pseduo-row"))
+				{
+					id_array.push($(element).closest('tr').data().get('id'));
+					data_array.push($(element).closest('tr').data().toJSON());
+					checked = true;
+				}
+			}
+		});
+		if(checked){
+			
+			if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+			{
+				showModalConfirmation("Bulk Delete", 
+						"You may not have permission to delete some of the deals selected. Proceeding with this operation will delete only the deals that you are permitted to delete.<br/><br/> Do you want to proceed?", 
+						function (){
+					
+					// Customize the bulk delete operations
+					if(!customize_bulk_delete(id_array, data_array))
+						return;
+					
+					
+					//$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
+					
+					var url = $(table).attr('url');
+					if(SELECT_ALL == true)
+					{
+						if($(table).attr('id') == "contacts-table" || $(table).attr('id') == "companies" ) {
+							var dynamic_filter = getDynamicFilters();
+							if(dynamic_filter == null) {								
+								url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+							}
+						}
+					}
+					
+					// For Active Subscribers table
+					if(SUBSCRIBERS_SELECT_ALL == true){	
+						if($(table).attr('id') == "active-campaign")
+							url = url + "&filter=all-active-subscribers";
+					}
+					
+					bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
+						}, 
+						function(){
+							
+							return;
+						},
+						function() {
+							
+						});
+			}
+			else
+			{
+				showModalConfirmation("Bulk Delete", 
+						"Delete "+dealsCount+" Deal(s)?", 
+						function (){
+							// Customize the bulk delete operations
+							if(!customize_bulk_delete(id_array, data_array))
+								return;
+							
+							
+							//$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
+							
+							var url = $(table).attr('url');
+							if(SELECT_ALL && SELECT_ALL == true)
+							{
+								if($(table).attr('id') == "contacts-table" || $(table).attr('id') == "companies" ) {
+									var dynamic_filter = getDynamicFilters();
+									if(dynamic_filter == null) {								
+										url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+									}
+								}
+							}
+							
+							bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
+						});
+			}
+						
+		}	
+		else
+		{
+			// if disabled return
+			if($(this).attr('disabled') === "disabled")
+				return;
+			
+			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+		}
+			
+	});
 	
 });
 
