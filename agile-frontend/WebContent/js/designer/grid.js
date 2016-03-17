@@ -281,17 +281,30 @@ function initGridHandlers(selector)
 			/* ----------- */
 			var nodeUIDefinition = $(this).closest('table').data('ui');
 
+           
+
 			if(nodeUIDefinition.type == "audiogrid") 									 							      
 				addGridOperations("delete", rowIndex, null, $("#nodeui").data('jsonDefinition'));
 			/* ----------- */
 			
             var $table = $(this).closest('table');
 
+            // Deleted text
+            var $deleted_td = $(this).closest('tr').find('td').eq(1);
+
 			// Delete
 		    $(this).closest('tr').fadeTo(400, 0, function () { 
 			    $(this).remove();
 
-                 hide_zone_comparator($table);
+                // Update ports for zones-table 
+                if($table.attr('id') == 'zones-table'){
+              
+                     hide_zone_comparator($table);
+
+                     remove_deleted_port($table, $deleted_td);
+                }
+
+                
 			});	
 	     }
      
@@ -472,7 +485,7 @@ function zones_popup_handler($popup, $this){
 
             if(zones[given_value])
             {
-                $popup.find('[name="in_zone_compare"]').val(zones[given_value]);
+                $popup.find('[name="in_zone_compare"]').val(zones[given_value]).attr('selected', 'selected');
                 $popup.find('[name="in_zone_compare"]').find("option[value!="+zones[given_value]+"]").remove();
             }
             else
@@ -481,4 +494,52 @@ function zones_popup_handler($popup, $this){
                 $popup.find('[name="in_zone_compare"]').html(options);
             }
         });
+}
+
+function getPorts(nodeObject)
+{
+    var ports = nodeObject.getPorts();
+    var portsJSON = [];
+    
+    // Removes all ports except Source
+    for(var i=0; i < ports.size; i++){
+
+        var portName = ports.get(i).properties.name;
+
+        portsJSON.push(portName);
+    }
+
+    return portsJSON;
+}
+
+function remove_deleted_port($table, $deleted_td){
+    var remove_port = true;
+
+     var nodeId = $("#nodeui").data('nodeId');
+     var nodeObject = workflow.getFigure(nodeId);
+
+     // Returns ports
+    var ports = getPorts(nodeObject);
+
+    $table.find('tbody tr').each(function(index, tr){
+
+            var td_text = $(tr).find('td').eq(1).text();
+
+            if($deleted_td.text() == td_text)
+            {
+                remove_port = false;
+                return true;
+            }
+
+    });
+
+    if(remove_port)
+    {
+        removePort(nodeObject, ports.indexOf($deleted_td.text())-1);
+        
+        alignDynamicNodePorts(nodeObject);
+
+        // Draw2D (based on the ports)
+        nodeObject.allignDynamicNode();
+    }
 }

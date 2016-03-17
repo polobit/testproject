@@ -1,6 +1,9 @@
 package com.campaignio.tasklets.agile;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -32,10 +35,9 @@ public class Territory extends TaskletAdapter
     		
     		JSONArray zonesArray = new JSONArray(zones);
     		
-    		String branchTo = NO_MATCH;
+    		Map<String, Boolean> zonesMap = new LinkedHashMap<String, Boolean>(); 
+    		Map<String, String> zonesComparators = new HashMap<String, String>();
     		
-    		Set<String> skipZones = new HashSet<String>();
-    		String zonesObserver = null;
     		String inZoneComparator = null;
     		
     		 // Iterate through json array having key-value pairs
@@ -52,46 +54,48 @@ public class Territory extends TaskletAdapter
 					continue;
 				}
 				
-				// Skips already iterated branch
-				if(skipZones.contains(branch)) 
-					continue;
-				
-				if(zonesObserver == null)
+				if(!zonesMap.containsKey(branch))
 				{
-					inZoneComparator = zone.getString(IN_ZONE_COMPARE);
-					zonesObserver = branch;
-				} 
-				
-				if(!zonesObserver.equalsIgnoreCase(branch))  
-					continue;
+					zonesMap.put(branch, false);
+					zonesComparators.put(branch, zone.getString(IN_ZONE_COMPARE));
+				}
 				
 				String comparator = zone.getString(NewCondition.COMPARATOR); 
 				String locationType = zone.getString(LOCATION_TYPE); 
 				String locationValue =  zone.getString(LOCATION_VALUE);
 				
+				inZoneComparator = (zonesComparators.get(branch) == null) ? zone.getString(IN_ZONE_COMPARE) : zonesComparators.get(branch);
+				
 				System.out.println("Zone " + branch + " " + "locationType: " + locationType + " locationValue: " + locationValue + " Comparator: " + comparator);
 				
 				boolean expr = NewCondition.evaluateExpression(locationType, locationValue, NewCondition.IF_TYPE_VALUE, comparator); 
 				
-				System.out.println("Evaluation expr: " + expr);
-				if((inZoneComparator.equalsIgnoreCase("and") && expr) || (inZoneComparator.equalsIgnoreCase("or") && expr))
-					branchTo = branch; 
-				else
+				Boolean flag = zonesMap.get(branch);
+					
+				if(flag != null && inZoneComparator != null)
 				{
-					skipZones.add(branch);
-					zonesObserver = null;
-					branchTo = NO_MATCH;
-					i = 0;
+					if(inZoneComparator.equalsIgnoreCase("and")){
+						flag = flag && expr;
+						zonesMap.put(branch, flag);
+					}
 					
-					totalBranches--;
-					
-					if(totalBranches <= 0)
-						break;
+					if(inZoneComparator.equalsIgnoreCase("or")){
+						flag = flag || expr;
+						zonesMap.put(branch, flag);
+					}
 				}
 		    }
-				
-			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, branchTo);
-			return;
+		    
+		    Set<String> keys = zonesMap.keySet();
+		    
+		    for(String key : keys)
+		    {
+		    	if(zonesMap.get(key))
+		    	{
+		    		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, key);
+		    		return;
+		    	}
+		    }
     	}
     	catch(Exception e)
     	{
@@ -102,77 +106,6 @@ public class Territory extends TaskletAdapter
     	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, NO_MATCH);
     	
     }
-    
-public static void main(String[] args)
-{
-	String zones = "[{\"dynamicgrid\":\"Nomatch\",\"location_type\":\"-\",\"comparator\":\"-\",\"location_value\":\"-\",\"in_zone_compare\":\"-\"},{\"dynamicgrid\":\"A\",\"location_type\":\"IN\",\"comparator\":\"equal_to\",\"location_value\":\"IN\",\"in_zone_compare\":\"and\"},{\"dynamicgrid\":\"A\",\"location_type\":\"AP\",\"comparator\":\"equal_to\",\"location_value\":\"AP1\",\"in_zone_compare\":\"\"},{\"dynamicgrid\":\"A\",\"location_type\":\"AP\",\"comparator\":\"equal_to\",\"location_value\":\"AP\",\"in_zone_compare\":\"\"},{\"dynamicgrid\":\"B\",\"location_type\":\"sss\",\"comparator\":\"equal_to\",\"location_value\":\"sss\",\"in_zone_compare\":\"and\"},{\"dynamicgrid\":\"B\",\"location_type\":\"tn\",\"comparator\":\"equal_to\",\"location_value\":\"tn1\",\"in_zone_compare\":\"and\"},{\"dynamicgrid\":\"C\",\"location_type\":\"APP\",\"comparator\":\"equal_to\",\"location_value\":\"APPs\",\"in_zone_compare\":\"\"}]";
-	
-	try
-	{
-		int count = 3;
-		JSONArray zonesArray = new JSONArray(zones);
-		
-		Territory cl = new Territory();
-		
-		String branchTo = cl.NO_MATCH;
-		
-		Set<String> skipZones = new HashSet<String>();
-		String zonesObserver = null;
-		
-		 // Iterate through json array having key-value pairs
-	    for (int i = 0, len = zonesArray.length(); i < len; i++)
-	    {
-			JSONObject zone = zonesArray.getJSONObject(i); // A json
-			
-			String branch = zone.getString(cl.DYNAMIC_GRID);// A
-			
-			// If 'NoMatch' continue
-			if(cl.NO_MATCH.equalsIgnoreCase(branch))
-			{
-				count = count -1;
-				continue;
-			}
-			
-			// Skips already iterated branch
-			if(skipZones.contains(branch)) 
-				continue;
-			
-			if(zonesObserver == null)
-				zonesObserver = branch; //zO = A
-			
-			if(!zonesObserver.equalsIgnoreCase(branch))  
-				continue;
-			
-			String comparator = zone.getString(NewCondition.COMPARATOR); // equal_to
-			String locationType = zone.getString(cl.LOCATION_TYPE); // in
-			String locationValue = zone.getString(cl.LOCATION_VALUE);// in
-			
-			String inZoneComparator =  zone.getString("in_zone_compare"); //and
-			
-			boolean expr = NewCondition.evaluateExpression(locationType, locationValue, NewCondition.IF_TYPE_VALUE, comparator); 
-			
-			if((inZoneComparator.equalsIgnoreCase("and") && expr) || (inZoneComparator.equalsIgnoreCase("or") || expr))
-				branchTo = branch;
-			else
-			{
-				skipZones.add(branch);
-				zonesObserver = null;
-				branchTo = "No Match";
-				i = 0;
-				count--;
-				
-				if(count < 0)
-					break;
-			}
-	    }
-	    
-	    System.out.println("branchTo is " + branchTo);
-	}catch(Exception e)
-	{
-		e.printStackTrace();
-		
-	}
-}
     
 }
 

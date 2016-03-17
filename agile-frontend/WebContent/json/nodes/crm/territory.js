@@ -49,7 +49,7 @@
                 "eventHandler":"show_location_type"
               },
               {
-                  "label": "",
+                  "label": "Location Type",
                   "required": "required",
                   "category": "Settings",
                   "id": "location-type",
@@ -60,7 +60,7 @@
                   "type": "text"
               },
               {
-               "label": "compares",
+               "label": "Compares",
                 "category": "Settings",
                 "name": "comparator",
                 "options": {
