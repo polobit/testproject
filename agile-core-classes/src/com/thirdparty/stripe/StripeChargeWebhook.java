@@ -26,6 +26,7 @@ import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandlerImpl;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
@@ -38,6 +39,11 @@ import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
+import com.stripe.exception.APIConnectionException;
+import com.stripe.exception.APIException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
 import com.stripe.exception.StripeException;
 
 @SuppressWarnings("serial")
@@ -106,7 +112,15 @@ public class StripeChargeWebhook extends HttpServlet
 		if (StringUtils.equals(trigger.trigger_stripe_event, eventType.replace(".", "_").toUpperCase()))
 		{
 		    String email = getStripeEmail(stripeJson, eventType);
-		    Event event = new Gson().fromJson(stripeData, Event.class);
+		    //Event event = new Gson().fromJson(stripeData, Event.class);
+		    Event event = null;
+			try {
+				event = StripeUtil.getEventFromJSON(stripeData);
+			} catch (AuthenticationException | InvalidRequestException
+					| APIConnectionException | CardException | APIException e1) {
+				// TODO Auto-generated catch block
+				System.out.println("Exception occured in fetching event from json:"+ e1.getMessage());
+			}
 		    StripeWebhookHandler webhookHandlerImpl = new StripeWebhookHandlerImpl();
 		    webhookHandlerImpl.init(stripeData, event);
 		    
