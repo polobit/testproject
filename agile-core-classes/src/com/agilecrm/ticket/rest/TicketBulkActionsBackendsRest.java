@@ -17,7 +17,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.util.BulkActionUtil;
-import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.ticket.deferred.ChangeAssigneeDeferredTask;
 import com.agilecrm.ticket.deferred.CloseTicketsDeferredTask;
@@ -176,7 +175,7 @@ public class TicketBulkActionsBackendsRest
 			String message = (selectedTicketsCount + ((selectedTicketsCount == 1) ? " ticket" : " tickets"))
 					+ " group have been changed.";
 
-			if (assigneeID == null)
+			if (assigneeID != null)
 				message = (selectedTicketsCount + ((selectedTicketsCount == 1) ? " ticket" : " tickets"))
 						+ " assignee have been changed.";
 
