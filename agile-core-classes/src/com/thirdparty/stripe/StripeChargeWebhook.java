@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.stripe.model.Event;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
@@ -35,6 +36,7 @@ import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
+import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
 import com.stripe.exception.StripeException;
 
@@ -104,6 +106,10 @@ public class StripeChargeWebhook extends HttpServlet
 		if (StringUtils.equals(trigger.trigger_stripe_event, eventType.replace(".", "_").toUpperCase()))
 		{
 		    String email = getStripeEmail(stripeJson, eventType);
+		    Event event = new Gson().fromJson(stripeData, Event.class);
+		    StripeWebhookHandler webhookHandlerImpl = new StripeWebhookHandlerImpl();
+		    webhookHandlerImpl.init(stripeData, event);
+		    
 		    StripeWebhookHandlerImpl stripeWebhookHandlerImpl = new StripeWebhookHandlerImpl();
 			Contact contact = stripeWebhookHandlerImpl.getContactFromOurDomain();
 			if(contact!=null)
