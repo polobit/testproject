@@ -26,18 +26,15 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 @SuppressWarnings("serial")
 public class DomainUserAddPicDeferredTask implements DeferredTask {
 
-	public Long domainId;
-	public DomainUserAddPicDeferredTask(Long domainId){
-	  this.domainId = domainId;	
+	public String domain;
+	public DomainUserAddPicDeferredTask(String domain){
+	  this.domain = domain;	
 	}
 	
 	public void run() {
 		String oldNamespace = NamespaceManager.get();
 		
 		try {
-			
-			// Get domain name from id
-			String domain = NamespaceUtil.getNamespaceNameFromId(domainId);
 			
 			if(StringUtils.isBlank(domain))
 				return;
@@ -48,6 +45,10 @@ public class DomainUserAddPicDeferredTask implements DeferredTask {
 			System.out.println("domainUsers = " + domainUsers.size());
 			
 			for (DomainUser domainUser : domainUsers) {
+				
+				if(StringUtils.isNotBlank(domainUser.pic))
+					continue;
+				
 				String pic = domainUser.getOwnerPic();
 				
 				if(StringUtils.isBlank(pic))

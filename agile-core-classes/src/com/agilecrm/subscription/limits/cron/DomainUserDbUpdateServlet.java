@@ -36,12 +36,12 @@ public class DomainUserDbUpdateServlet extends HttpServlet
     {
 
     	//Fetches all namespaces
-      	Set<Long> namespaceIds = NamespaceUtil.getAllNamespaceIdsNew();
+      	Set<String> namespaces = NamespaceUtil.getAllNamespacesNew();
       	
       	// Iterates through each Namespace and initiates task for each namespace
       	// to update usage info
-      	for (Long namespaceId : namespaceIds) {
-      		DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(namespaceId);
+      	for (String namespace : namespaces) {
+      		DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(namespace);
 
       		// Add to queue
       		Queue queue = QueueFactory.getDefaultQueue();

@@ -55,6 +55,12 @@ DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
 System.out.println("Domain user " + domainUser);
 
+DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(domainUser.name);
+// Add to queue
+Queue queue = QueueFactory.getDefaultQueue();
+queue.add(TaskOptions.Builder.withPayload(task));
+
+
 ObjectMapper mapper = new ObjectMapper();
 
 String panel = request.getParameter("sp");
