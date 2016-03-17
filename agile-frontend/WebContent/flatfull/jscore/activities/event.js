@@ -39,7 +39,8 @@ $(function(){
 	{
 		e.preventDefault();
 		var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
-		save_event('updateActivityForm', 'updateActivityModal', true, this, function(data)
+		var currentDiv = $('#updateActivityModal').find("#current_div").val();
+		save_event('updateActivityForm', 'updateActivityModal', true, this,currentDiv, function(data)
 		{
 			console.log(data);
 			var eventModel = eventCollectionView.collection.get(eventId);
@@ -108,7 +109,7 @@ $("#updateActivityModal").on(
 										// if event deleted from today events
 										// portlet, we removed that event from
 										// portlet events collection
-										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
+										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)])
 										{
 											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection
 													.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
@@ -121,8 +122,16 @@ $("#updateActivityModal").on(
 												var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
 												a.setHours(0,0,0,0);
 												_agile_set_prefs("current_date_calendar",a);
-										       $('#calendar_container').fullCalendar( 'refetchEvents' );
+										       $('.portlet_body_calendar').each(function(){
+										       	var that=$(this);
+										       	if(that.parents('.gs-w').attr('data-col')+that.parents('.gs-w').attr('data-row')==App_Portlets.currentPosition){
+										       	 App_Portlets.eventCalendar=that;
+										       	$('#calendar_container',that).fullCalendar( 'refetchEvents' );
+
 										       App_Portlets.refetchEvents = true;
+										   }
+										       });
+										       
 										       //_agile_delete_prefs('current_date_calendar');
 									      }
 										else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
@@ -216,7 +225,7 @@ $("#updateActivityModal").on(
 										// if event deleted from today events
 										// portlet, we removed that event from
 										// portlet events collection
-										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
+										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)])
 										{
 											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection
 													.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
@@ -847,7 +856,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
  *            or updating the existing one
  * 
  */
-function save_event(formId, modalName, isUpdate, saveBtn, callback)
+function save_event(formId, modalName, isUpdate, saveBtn, el,callback)
 {
 
 	// Returns, if the save button has disabled attribute
@@ -924,7 +933,41 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 						// $('#calendar').fullCalendar( 'refetchEvents' );
 						var event = data.toJSON();
 						event = renderEventBasedOnOwner(event);
-						if (Current_Route == 'calendar' && !_agile_get_prefs("agile_calendar_view"))
+						if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar' && el == "Mini Calendar")
+					      {
+							
+						$('.portlet_body_calendar').each(function(){
+										       	var that=$(this);
+										       	if(that.parents('.gs-w').attr('data-col')+that.parents('.gs-w').attr('data-row')==App_Portlets.currentPosition){
+										       	if($('.minical-portlet-event',that).attr('data-date')!=undefined){
+								var a=new Date(parseInt($('.minical-portlet-event',that).attr('data-date')));	
+								a.setHours(0,0,0,0);
+								_agile_set_prefs("current_date_calendar",a);
+							}
+							else{
+								var a=new Date(parseInt($('.minical-portlet-event-add',that).attr('data-date')));	
+								a.setHours(0,0,0,0);
+								_agile_set_prefs("current_date_calendar",a);
+							}
+										       	 App_Portlets.eventCalendar=that;
+										       	$('#calendar_container',that).fullCalendar( 'refetchEvents' );
+										       App_Portlets.refetchEvents = true;
+										   }
+										       });
+					      }
+
+					      else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && el == "Events Dashlet")
+						{
+							if (isUpdate)
+								App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+							// Updates events list view
+							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
+						}
+						else if (Current_Route == 'calendar' && !_agile_get_prefs("agile_calendar_view"))
 						{
 
 							// When updating an event remove the old event from
@@ -992,33 +1035,8 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 							});
 						}
-						else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
-						{
-							if (isUpdate)
-								App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
-
-							// Updates events list view
-							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
-
-							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
-
-						}
-						else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
-					      {
-							if($('.minical-portlet-event').attr('data-date')!=undefined){
-								var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
-								a.setHours(0,0,0,0);
-								_agile_set_prefs("current_date_calendar",a);
-							}
-							else{
-								var a=new Date(parseInt($('.minical-portlet-event-add').attr('data-date')));	
-								a.setHours(0,0,0,0);
-								_agile_set_prefs("current_date_calendar",a);
-							}
-							$('#calendar_container').fullCalendar( 'refetchEvents' );
-						       App_Portlets.refetchEvents = true;
-						       //_agile_delete_prefs('current_date_calendar');
-					      }
+						
+						
 						else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
 						{
 

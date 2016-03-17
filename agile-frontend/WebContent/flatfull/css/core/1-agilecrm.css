@@ -2247,6 +2247,7 @@ li.error {
 	border-radius: 10px;
 }
 
+
 .list-bottom {
 /*	-webkit-border-radius: 0 0 3px 3px;
 	-moz-border-radius: 0 0 3px 3px;
@@ -3083,6 +3084,7 @@ table.hide-head-checkbox th label.i-checks {
       visibility: hidden;
 }
 
+
 .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th,.table-striped>tbody>tr:hover>td{
   background-color: #f9f9f9 !important;
   
@@ -3366,6 +3368,20 @@ table.hide-head-checkbox th label.i-checks {
  }
  .modal-cbx-m-t {
     margin-top: -9px;
+}
+#portlets::-webkit-scrollbar {
+    width: 5px;
+}
+#portlets::-webkit-scrollbar-thumb {
+	background: #999;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+.route_Portlet {
+	padding-left: 20px;
+	padding-right : 20px;
 }
 
 #dashboard-video

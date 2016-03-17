@@ -45,6 +45,7 @@
           <ul class="dropdown-menu pull-right">
             <li><a href="#import-deals" >Import from CSV</a></li>
             <li><a href="#" class="deals-export-csv">Export as CSV</a></li>
+            <li><a href="#add-dashlet">Add Dashlet</a></li>
           
           </ul>
           {{/hasScope}}
@@ -65,6 +66,15 @@
 </div>
 </div>
 {{/is_mobile}}
+<div class="route_Portlet b-b" style="display:none">
+  <div class="row">
+    <div class="col-md-12">
+      <div>
+        <div id="portlets">&nbsp;</div>
+      </div>
+    </div>
+  </div>
+  </div>
 <div class="{{#is_mobile}} {{else}} wrapper-md {{/is_mobile}}">
 <div class="row">
     <div class="col-md-9">
