@@ -7,7 +7,7 @@
 			{{#if_equals created_by 'REQUESTER'}}
 		 		<img src="{{get_contact_image 24}}" class="r-5x" alt="..." onerror="image_error(this);" _data-name="{{requester_name}}">
 		    {{else}}
-		 		<img src="{{domain_user.ownerPic}}" class="r-5x" alt="...">
+		 		<img src="{{domain_user.pic}}" class="r-5x" alt="{{domain_user.name}}">
 		 	{{/if_equals}}
 	</span>
 
@@ -80,8 +80,7 @@
 
 <div class="p-t-xxs p-b-xxs">
 	<span class="pull-left thumb-sm">
-			
-		 <img src="{{domain_user.ownerPic}}" class="r-5x" alt="...">
+		<img src="{{domain_user.pic}}" class="r-5x" alt="{{domain_user.name}}">
 	</span>
 	<div class="m-l-xl p-l-sm">
 	   <span>
