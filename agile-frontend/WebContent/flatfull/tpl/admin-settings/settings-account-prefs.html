@@ -91,9 +91,9 @@
 
 
 <script id="admin-settings-ip-prefs-template" type="text/html">
-<div id="ip_access" class="panel panel-default">
+<div id="ip_access" class="panel panel-default" style="overflow-x:auto; border-left:none;">
     <!--<div class="panel-heading">Ip</div>-->
-    <div class="panel-body">
+    <div class="dta-contatiner table-responsive m-r-sm contacts-inner-div" >
     <form id="access-ip" class="form-horizontal">
         <fieldset>
             {{#if id}}
@@ -101,16 +101,16 @@
             {{/if}}
             <input name="domain" class="form-control" type="hidden" value="{{get_current_domain}}" />
             
-            <table class="table table-striped showCheckboxes  no-sorting panel">
+            <table class="table table-striped showCheckboxes  no-sorting panel agile-table noDelete" >
                 <thead>
                     <tr>
-                        <th><label class="i-checks i-checks-sm"><input class="thead_check" type="checkbox"/><i></i></label></th>
+                        <th style="width:5%;"><label class="i-checks i-checks-sm"><input class="thead_check" type="checkbox"/><i></i></label></th>
                         <th>IP Address</th>              
                     </tr>
                 </thead>
                 <tbody id="blocked_panel_ips_list" class="multiple-input" name="ipList">
                    {{#each ipList}}
-                    <tr data="{{this}}" style="display: table-row;">
+                    <tr data="{{this}}" >
                         <td class="v-middle checkbox" style="cursor:default;">
                         <label class="i-checks i-checks-sm"><input type="checkbox" class="tbody_check" value=""><i></i></label>
                         </td>
@@ -118,24 +118,32 @@
                             <div class="inline-block v-top text-ellipsis" style="width:80%">{{this}}</div>
                             <input class="form-control" type="hidden" value="{{this}}" />
                         </td>
-                        <td class="b-r-none">
-                            <div class="m-b-n-xs" style="display:none;">
-                                <a class="blocked-panel-ip-delete c-p m-l-sm text-l-none text-xs" data-toggle="modal" role="button" href="#"><i title="Delete Panel Blocked IP" class="task-action icon icon-trash"></i></a>
-                            </div>
-                        </td>
+                       
                     </tr>
                     {{/each}}
-                    <tr data="{{this}}" style="display: table-row;">
-                        <td>
-                            
-                             <input id="ipList"  type="text" placeholder="IP" />   
-                             <a href="#" type="submit" class="save btn btn-sm btn-primary delete_ip">Add</a>         
-                        </td>
+                    <tr data="{{this}}" >
                         <td></td>
+                        <td>
+                        <div>
+                             IP Address    <input id="ipList"  type="text" placeholder="IP" />   
+                             <a href="#" type="submit" class="save btn btn-sm btn-primary delete_ip">Add</a>         
+                        </div>
+                        </td>
+                        
                     </tr>
+                    
+                    <tr>
+                    <td></td>
+                    <td>
+                    <div>
+                    <a class="blocked-panel-ip-delete c-p m-l-sm text-l-none text-xs btn btn-danger" data-toggle="modal" role="button" href="#">Delete</a>
+                    </div>
+                    </td>
+                    </tr>
+                    
                 </tbody>
             </table>  
-            
+           
         </fieldset>
     </form>
 </div>

@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -58,9 +59,12 @@ public class IpAccessAPI {
 	@Path("/delete_ip")
 	@DELETE
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public void deleteIPAccess(@QueryParam("id") Long id, @QueryParam("ip") String ip){
+	public void deleteIPAccess(@QueryParam("id") Long id, @FormParam("ip") Set<String> iplist){
 		IpAccess ipAccess = IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
-		ipAccess.ipList.remove(ip);
+		for (String ips : iplist) {
+			ipAccess.ipList.remove(ips);
+		}
+		//ipAccess.ipList.remove(ip);
 		ipAccess.Save();
 	}
 

@@ -437,7 +437,7 @@ function loadip_access_events()
         e.preventDefault();
         var formId = $(this).closest('form');
 
-        var ip = $(this).closest("tr").find('input').val();
+       /* var ip = $(this).closest("tr").find('input').val();
         var id = $(this).closest("form").find('input[name="id"]').val();
         var $that = $(this);
         $.ajax({ url : 'core/api/allowedips/delete_ip?id='+id+'&ip='+ip,
@@ -452,9 +452,38 @@ function loadip_access_events()
 				console.log(response);
 			}
 
-	});
-          
+		});*/
 
+		var data_array = [];
+		var index_array = [];
+		var checked = false;
+		var ip = $(this).closest("tr").find('input').val();
+        var id = $(this).closest("form").find('input[name="id"]').val();
+		var table = $('body').find('.showCheckboxes');
+		 var $that = $(this);
+		$(table).find('tr .tbody_check').each(function(id, ip){
+			
+			// If element is checked store it's id in an array 
+			if($(id).is(':checked')){
+				$(id).closest('tr').on("mouseenter", false);
+				index_array.push(id);
+				data_array.push(ip);
+				checked = true;
+			}
+          });
+		  $.ajax({ url : 'core/api/allowedips/delete_ip?id='+id+'&iplist='+data_array,
+			type : 'DELETE',
+		  success : function()
+		  {
+				$that.closest("tr").remove(); 
+
+		  },error : function(response)
+			{
+
+				console.log(response);
+			}
+
+			});
     });
 }
 	
