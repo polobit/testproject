@@ -147,7 +147,7 @@ function showTwitterMatchingProfiles(data)
 
 				console.log(propertiesArray);
 
-				agile_widget_update_contact_properties(propertiesArray);
+				agile_crm_update_contact_properties(propertiesArray);
 
 				// show twitter profile by id
 				showTwitterProfile(Twitter_id);
@@ -1344,7 +1344,7 @@ function startTwitterWidget(contact_id){
 	}
 
 	// Get website URL for Twitter from contact to get profile based on it
-	web_url = agile_widget_contact_property_by_subtype('website', 'TWITTER');
+	web_url = agile_crm_get_contact_property_by_subtype('website', 'TWITTER');
 	console.log(web_url);
 
 	// If Twitter URL exists for contact,

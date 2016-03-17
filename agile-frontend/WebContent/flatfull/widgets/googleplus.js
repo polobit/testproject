@@ -271,7 +271,7 @@ function startGooglePlusWidget(contact_id) {
 	if (agile_crm_get_contact_property("last_name"))
 		name = name + " " + agile_crm_get_contact_property("last_name");
 	searchDetails['keywords'] = name.trim();	
-	contactGooglePlusId = agile_widget_contact_property_by_subtype('website', 'GOOGLE-PLUS');
+	contactGooglePlusId = agile_crm_get_contact_property_by_subtype('website', 'GOOGLE-PLUS');
 
 	// console.log("From Java API after refresh");
 	// refreshAccessToken();
@@ -296,7 +296,7 @@ function startGooglePlusWidget(contact_id) {
 	$("#"+WIDGET_PARENT_ID).on("click", "#GooglePlus_plugin_delete", function(e)
 	{
 		e.preventDefault();
-		contactGooglePlusId = agile_widget_contact_property_by_subtype('website', 'GOOGLE-PLUS');
+		contactGooglePlusId = agile_crm_get_contact_property_by_subtype('website', 'GOOGLE-PLUS');
 
 		if(App_Contacts.contactDetailView.model){
 			agile_crm_delete_contact_property_by_subtype('website', 'GOOGLE-PLUS', contactGooglePlusId, function(data){
@@ -407,7 +407,7 @@ function startGooglePlusWidget(contact_id) {
 			// var summary = $(this).attr("summary");
 			// propertiesArray.push({ "name" : "title", "value" : summary });
 			// }
-			agile_widget_update_contact_properties(propertiesArray);
+			agile_crm_update_contact_properties(propertiesArray);
 
 			contactGooglePlusId = profileID;
 
