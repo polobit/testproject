@@ -335,6 +335,16 @@
 		<servlet-name>AccountLimitChecker</servlet-name>
 		<url-pattern>/backend/billing/restrictions</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DomainUserDbUpdateServlet</servlet-name>
+		<servlet-class>com.agilecrm.subscription.limits.cron.DomainUserDbUpdateServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DomainUserDbUpdateServlet</servlet-name>
+		<url-pattern>/backend/domainuserdbupdate</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Stripe Webhook</servlet-name>

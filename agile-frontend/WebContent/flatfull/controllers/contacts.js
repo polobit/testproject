@@ -895,6 +895,9 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 		console.log("customView");
 
+		// Load contact detail js file
+		tpl_directory.loadTemplates(["contact-detail"], function () {});
+
 		SELECT_ALL = false;
 		App_Contacts.tag_id = tag_id;
 

@@ -50,6 +50,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.deferred.DealsDeferredTask;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -705,7 +706,7 @@ public class DealsAPI
     public List<Contact> getRelatedContacts(@PathParam("deal-id") Long id)
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
-	return opportunity.getContacts();
+	return opportunity.relatedContacts();
     }
 
     /**
@@ -732,7 +733,7 @@ public class DealsAPI
 
 	    String new_owner_name = DomainUserUtil.getDomainUser(Long.parseLong(new_owner)).name;
 
-	    List<Contact> contacts = opportunity.getContacts();
+	    List<ContactPartial> contacts = opportunity.getContacts();
 	    JSONArray jsn = null;
 	    if (contacts != null && contacts.size() > 0)
 	    {

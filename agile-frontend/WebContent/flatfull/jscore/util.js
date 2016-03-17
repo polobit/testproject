@@ -689,5 +689,15 @@ function showPageBlockModal() {
 			$("#user-blocked-modal").modal('show');
 		}, null);
 	}
+}
 
+function  printCurrentDateMillis(type){
+      console.info(type + " " + new Date().getTime());
+}
+function  startFunctionTimer(name){
+      console.time(name);
+}
+
+function endFunctionTimer(name){
+      console.timeEnd(name);
 }

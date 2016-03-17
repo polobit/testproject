@@ -830,7 +830,7 @@ function show_bulk_owner_change_page()
 		$("body").off('fill_owners').on("fill_owners", function(event)
 		{
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-			fillSelect('ownerBulkSelect', '/core/api/users', 'domainUsers', 'no-callback ', optionsTemplate);
+			fillSelect('ownerBulkSelect', '/core/api/users/partial', 'domainUsers', 'no-callback ', optionsTemplate);
 		});
 
 		// Navigate to show form

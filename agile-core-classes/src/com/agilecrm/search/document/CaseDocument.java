@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.search.util.SearchUtil;
@@ -43,7 +44,7 @@ public class CaseDocument extends com.agilecrm.search.document.Document implemen
 	doc.addField(Field.newBuilder().setName("type").setText(Type.CASES.toString()));
 
 	// Get owner of the case
-	DomainUser caseOwner = caseEntity.getOwner();
+	DomainUserPartial caseOwner = caseEntity.getOwner();
 
 	// Sets owner of the task
 	if (caseOwner != null)
