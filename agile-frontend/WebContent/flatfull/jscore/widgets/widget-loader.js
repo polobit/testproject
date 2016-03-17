@@ -91,8 +91,8 @@ function widgetBindingsLoader(){
 	 * and sets "is_minimized" field of widget as true, we check this while
 	 * loading widgets and skip loading widget if it is minimized
 	 */
-    $('#widgets').off('click', '.widget-minimize');
-	$('#widgets').on('click', '.widget-minimize', function(e)
+    $('#'+WIDGET_PARENT_ID).off('click', '.widget-minimize');
+	$('#'+WIDGET_PARENT_ID).on('click', '.widget-minimize', function(e)
 	{
 		e.preventDefault();
 		var widget_name = $(this).attr('widget');
@@ -127,8 +127,8 @@ function widgetBindingsLoader(){
 	 * widget as false, we check this while loading widgets and skip loading
 	 * widget if it is minimized
 	 */
-    $('#widgets').off('click', '.widget-maximize');
-	$('#widgets').on('click', '.widget-maximize', function(e)
+    $('#'+WIDGET_PARENT_ID).off('click', '.widget-maximize');
+	$('#'+WIDGET_PARENT_ID).on('click', '.widget-maximize', function(e)
 	{
 		e.preventDefault();
 		var widget_name = $(this).attr('widget');

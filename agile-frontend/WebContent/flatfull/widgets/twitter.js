@@ -491,8 +491,8 @@ function showTwitterProfile(Twitter_id)
 function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data)
 {
 	// On click of see more link, more updates are retrieved
-    $("#widgets").off('click','.twitter_stream');
-	$("#widgets").on('click','.twitter_stream', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','.twitter_stream');
+	$("#"+WIDGET_PARENT_ID).on('click','.twitter_stream', function(e)
 	{
 
 		e.preventDefault();
@@ -1529,7 +1529,8 @@ function startTwitterWidget(contact_id){
 			 		if(!template_ui)
 			    		return;
 					$('#twitter_follower_panel', agile_crm_get_current_view()).html($(template_ui)); 
-					$("#widgets").on('mouseover','.twitterImage', function(e1)
+					$("#"+WIDGET_PARENT_ID).off('mouseover','.twitterImage');
+					$("#"+WIDGET_PARENT_ID).on('mouseover','.twitterImage', function(e1)
 					{
 						// Unique Twitter Id from widget
 						var id = $(this).attr('id');
@@ -1633,12 +1634,12 @@ function startTwitterWidget(contact_id){
 			 		if(!template_ui)
 			    		return;
 					$('#twitter_following_panel', agile_crm_get_current_view()).html($(template_ui));
-					$("#widgets").on('mouseover','.twitterImage', function(e1)
+					$("#"+WIDGET_PARENT_ID).off('mouseover','.twitterImage');
+					$("#"+WIDGET_PARENT_ID).on('mouseover','.twitterImage', function(e1)
 					{
 						// Unique Twitter Id from widget
 						var id = $(this).attr('id');
-                
-                $("#widgets").off('mouseover','.twitterImage');
+                               
 						// Aligns details to left in the pop over
 						$('#' + id).popover({ placement : 'left',
 							html : true

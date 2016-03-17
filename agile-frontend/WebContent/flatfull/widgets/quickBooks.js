@@ -153,8 +153,8 @@ function startQuickBooksWidget(contact_id){
 
     showQuickbooksContacts(contact_id);
 
-    $("#widgets").off("click", '#quickbooks_add_contact');
-	$("#widgets").on("click", '#quickbooks_add_contact', function(e)
+    $("#"+WIDGET_PARENT_ID).off("click", '#quickbooks_add_contact');
+	$("#"+WIDGET_PARENT_ID).on("click", '#quickbooks_add_contact', function(e)
     {
 		e.preventDefault();
 		addContactToQuickbooks(first_name, last_name, contact_id, Email);

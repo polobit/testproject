@@ -47,9 +47,8 @@ function showShopifyClient(shop, contact_id)
 				    	var template = $(template_ui);
 				    	console.log("libpath is" + LIB_PATH);
 						console.log(template)
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-						{
-										$(".time-ago", template).timeago();
+						head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+							$(".time-ago", template).timeago();
 						});
 
 						$('#Shopify').html(template);
@@ -70,14 +69,10 @@ function showShopifyClient(shop, contact_id)
 			$('#SHOPIFY_PROFILE_LOAD_IMAGE').remove();
 
 			var resText = data.responseText;
-			if (resText.indexOf('No Customer found') != -1)
-			{
-							console.log("No customer found")
-							createStripeContact(resText);
-			}
-
-			else
-			{
+			if (resText.indexOf('No Customer found') != -1){
+				console.log("No customer found");
+				createStripeContact(resText);
+			}else{
 							shopifyError("Shopify", resText);
 			}
 
@@ -164,15 +159,15 @@ function startShopifyWidget(contact_id){
 						last_name = ' ';
 		showShopifyClient(shop, contact_id);
 
-        $("#widgets").off("click", '#shopify_add_contact');
-		$("#widgets").on("click", '#shopify_add_contact', function(e){
+        $("#"+WIDGET_PARENT_ID).off("click", '#shopify_add_contact');
+		$("#"+WIDGET_PARENT_ID).on("click", '#shopify_add_contact', function(e){
 						e.preventDefault();
 
 						addContactToShopify(shop);
 		});
 
-        $("#widgets").off("click", '.order');
-		$("#widgets").on("click", '.order', function(e){
+        $("#"+WIDGET_PARENT_ID).off("click", '.order');
+		$("#"+WIDGET_PARENT_ID).on("click", '.order', function(e){
 			e.preventDefault();
 			var orderId = $(this).attr('value');
 			console.log("order id is " + orderId);
@@ -195,13 +190,10 @@ function startShopifyWidget(contact_id){
 							$('#SHOPIFY_PROFILE_LOAD_IMAGE').remove();
 			} });
 
-			if ($('#collapse-' + orderId).hasClass("collapse"))
-			{
-							$('#collapse-' + orderId).removeClass("collapse");
-			}
-			else
-			{
-							$('#collapse-' + orderId).addClass("collapse");
+			if ($('#collapse-' + orderId).hasClass("collapse")){
+				$('#collapse-' + orderId).removeClass("collapse");
+			}else{
+				$('#collapse-' + orderId).addClass("collapse");
 			}
 
 		});
