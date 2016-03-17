@@ -733,20 +733,20 @@ var Tickets = {
 	// 	});
 	// },
 
-	updateDataInModelAndCollection : function(id, data){
+	// updateDataInModelAndCollection : function(id, data){
 
-	     App_Ticket_Module.ticketView.model.set(data, {silent: true});
-		// if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
-		// 	return;
-        if(!App_Ticket_Module.ticketsCollection)
-        	return;
+	//      App_Ticket_Module.ticketView.model.set(data, {silent: true});
+	// 	// if(id !== App_Ticket_Module.ticketView.model.toJSON().id)
+	// 	// 	return;
+ //        if(!App_Ticket_Module.ticketsCollection)
+ //        	return;
 
-		// get data from collection with id
-		updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
+	// 	// get data from collection with id
+	// 	updated_model = App_Ticket_Module.ticketsCollection.collection.get(id);
 		
-		// Update data in model
-		updated_model.set(data, {silent: true});
-	},
+	// 	// Update data in model
+	// 	updated_model.set(data, {silent: true});
+	// },
 
 	// 	}, function(error){
 	// 		$priority.attr('disabled', false);

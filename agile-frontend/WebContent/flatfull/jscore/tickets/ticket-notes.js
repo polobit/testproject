@@ -72,9 +72,13 @@ var Tickets_Notes = {
                 
                 if(is_ticket_closed){
 	            	$(".ticket_status").val("CLOSED");
-	            	json.status = 'CLOSED'; 
+	            	json.status = 'CLOSED';
+	            	$(".remove-date").css("display", "none");
+                    $('#ticket_change_sla').attr("disabled","disabled");
 	            }
-
+                else{
+                    $('#ticket_change_sla').removeAttr("disabled"); 
+                }
 	            if( App_Ticket_Module.ticketsCollection){
 
 	                var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
@@ -103,6 +107,10 @@ var Tickets_Notes = {
 						Backbone.history.navigate(next_ticket_url, {
 							trigger : true
 						});
+                    else{
+                    	
+                    	Tickets.renderExistingCollection();
+			        } 
 
 					return;
 				}
