@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
 import com.analytics.servlets.AnalyticsServlet;
@@ -101,7 +102,7 @@ public class RegisterVerificationServlet extends HttpServlet
 	}
 	System.out.println("domain : " + domain + ", email" + email);
 
-	if (!StringUtils.isEmpty(domain) && DomainUserUtil.count(domain) > 0)
+	if (!StringUtils.isEmpty(domain) && (DomainUserUtil.count(domain) > 0 || AliasDomainUtil.checkForAlias(domain)))
 	{
 	    System.out.println("duplicate domain");
 

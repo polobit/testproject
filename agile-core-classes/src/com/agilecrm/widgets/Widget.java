@@ -272,16 +272,6 @@ public class Widget
 	    		user = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);    		
 	    	}
 			
-//			JSONObject jsObj = new JSONObject();
-//			try {
-//				jsObj.put("shop", "agency.myshopify.com");
-//				jsObj.put("token", "612a256d2616dffcba7b94ba81f6eeae");
-//			} catch (JSONException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			
-//			this.prefs = jsObj.toString();
 			dao.put(this);
 		}    
     }

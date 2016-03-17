@@ -422,3 +422,199 @@
 	   	    </div>
 	   	          </div>	
 </script>
+
+<script id="contacts-custom-view-properies-new-template" type="text/html">
+ {{#each fields_set}}
+     <td class='data' data='{{../id}}'>
+       {{#is_property_custom_field this}}
+            {{#is_property_custom_field_date_type ../../custom_fields ../../properties this}}
+      <div class="text-ellipsis" style="width:15em;">
+		<span>{{stringToHumanDateInFormat value}}</span>
+      </div>
+            {{else}}
+                 <div class="text-ellipsis" style="width:15em;">
+ <span>{{value}}</span>
+      </div>
+            {{/is_property_custom_field_date_type}}
+       {{else}}
+      {{#if_equals this "last_called"}}
+      <div class="text-ellipsis" style="width:15em;">
+   <span>{{epochToHumanDate "dd mmm yyyy" ../../../last_called}}</span>
+      </div>
+      {{/if_equals}}
+
+      {{#if_equals this "last_emailed"}}
+      <div class="text-ellipsis" style="width:15em;">
+   <span>{{epochToHumanDate "dd mmm yyyy" ../../../last_emailed}}</span>
+      </div>
+      {{/if_equals}}
+
+      {{#if_equals this "last_contacted"}}
+      <div class="text-ellipsis" style="width:15em;">
+      {{#if_equals ../../../last_contacted 0}}
+      
+  {{else}}
+  <span>{{epochToHumanDateInFormat  ../../../../last_contacted}}</span>
+  {{#if_equals ../../../last_contacted ../../../../last_emailed}}<i class="fa fa-envelope-o text-muted m-l-xs"></i>
+  {{else}}
+  {{#if_equals ../../../../last_contacted ../../../../last_campaign_emaild}}<i class="fa fa-sitemap text-muted m-l-xs"></i>
+  {{else}}
+  {{#if_equals ../../../../last_contacted ../../../../last_called}}<i class="fa fa-phone text-muted m-l-xs"></i>{{/if_equals}}
+  {{/if_equals}}
+  {{/if_equals}}
+  {{/if_equals}} 
+      </div>
+      {{/if_equals}}
+
+      {{#if_equals this "lead_score"}}
+       <div style="width:15em;">
+ {{../../../lead_score}}
+      </div>
+      {{/if_equals}}
+
+      {{#if_equals this "star_value"}}
+      <ul class="m-n p-n list-none" style="width:15em;">
+{{setupRating ../../../star_value}}
+  </ul>
+      {{/if_equals}}
+
+      {{#if_equals this "owner"}}
+      <div class="text-ellipsis" style="width:15em;">
+  <a class="text-cap">{{../../../owner.name}}</a>
+   </div>
+      {{/if_equals}}
+
+      {{#if_equals this "lead_owner"}}
+      <div class="text-ellipsis" style="width:15em;">
+  <a class="text-cap">{{../../../owner.name}}</a>
+   </div>
+      {{/if_equals}}
+
+      {{#if_equals this "url"}}
+      <div class="text-ellipsis" style="width:15em;">
+<a href="{{getPropertyValue ../../../properties 'url'}}" class="text-cap">{{getPropertyValue ../../../properties "url"}}</a>
+  </div>
+      {{/if_equals}}
+      
+      {{#if_equals this "title"}}
+      <div class="text-ellipsis" style="width:15em;">
+<a class="text-cap">{{getPropertyValue ../../../properties "title"}}</a>
+   </div>
+      {{/if_equals}}
+
+      {{#if_equals this "image"}}
+      <div class="overflow-hidden thumb-sm" style="width:15em;">
+{{#if_equals ../../../type "COMPANY"}}
+<img class="img-inital r r-2x pull-left" {{getCompanyImage "40" "" ../../../../properties}}/></img>
+{{else}}
+<img class="img-inital r r-2x" data-name="{{dataNameAvatar ../../../../properties 40}}" src="{{gravatarurl ../../../../properties }}" />
+{{/if_equals}}
+   	</div>
+      {{/if_equals}}
+
+      {{#if_equals this "basic_info"}}
+      <div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 110px);" {{else}} style="width:15em;" {{/is_mobile}}>
+   	<div class="agile-img m-r-sm {{#is_mobile}} thumb-55 {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
+       	{{#if_equals ../../../type "PERSON"}}
+       	<img class="img-inital r r-2x"  title="{{getPropertyValue ../../../../properties 'first_name'}} {{getPropertyValue ../../../../properties 'last_name'}}" data-name="{{dataNameAvatar ../../../../properties}}" src="{{gravatarurl ../../../../properties 40}}"/>
+       	{{/if_equals}}
+       
+{{#if_equals ../../../type "COMPANY"}}
+       	<img class="r r-2x" title="{{getPropertyValue ../../../../properties 'name'}}" {{getCompanyImage "40" "display:inline;" ../../../../properties}}/>
+       	{{/if_equals}}
+   	</div>
+ 	<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 65px);" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
+       	{{#if_equals ../../../type "PERSON"}}
+       	<a class="text-cap custom-link">{{getPropertyValue ../../../../properties "first_name"}}
+       	{{getPropertyValue ../../../../properties "last_name"}} </a>
+       	<div><small class="text-muted  block text-ellipsis">{{getPropertyValue ../../../../properties "email"}}</small></div>
+       	{{/if_equals}}
+       
+{{#if_equals ../../../type "COMPANY"}}
+       	<a class="text-cap">{{getPropertyValue ../../../../properties "name"}}</a>
+       	<div><small class="text-muted  block text-ellipsis">{{getPropertyValue ../../../../properties "url"}}</small></div>
+       	{{/if_equals}}
+       	{{#is_mobile}}
+       	<div>
+     	<a class="text-muted  block text-ellipsis text-xs text-cap">{{getPropertyValue ../../../../properties "company"}}</a>
+   	</div>
+   	{{/is_mobile}}
+</div>
+</div>
+      {{/if_equals}}
+
+
+      {{#if_equals this "name"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{#getPropertyValue ../../../properties "name"}}{{/getPropertyValue}}</>
+   	</div>
+      {{/if_equals}}
+
+      {{#if_equals this "first_name"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{#getPropertyValue ../../../properties "first_name"}}{{/getPropertyValue}}</>
+   	</div>
+      {{/if_equals}}
+
+      {{#if_equals this "last_name"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{#getPropertyValue ../../../properties "last_name"}}{{/getPropertyValue}}</>
+   	</div>
+      {{/if_equals}}
+
+
+{{#if_equals this "phone"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{getPropertyValue ../../../properties "phone"}}</>
+   	</div>
+      {{/if_equals}}
+
+      {{#if_equals this "address"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{#address_Template ../../../properties}}{{/address_Template}}</a>
+       </div>
+      {{/if_equals}}
+
+      {{#if_equals this "website"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{getPropertyValue ../../../properties "website"}}</a>
+       </div>
+      {{/if_equals}}
+
+{{#if_equals this "email"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{getPropertyValue ../../../properties "email"}}</a>
+       </div>
+      {{/if_equals}}
+
+      {{#if_equals this "company"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{getPropertyValue ../../../properties "company"}}</a>
+       </div>
+      {{/if_equals}}
+
+      {{#if_equals this "tags"}}
+     <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:15em;">
+{{#each ../../../tags}}
+   	<span class="label bg-light dk text-tiny">{{this}}</span>
+{{/each}}
+ </div>
+      {{/if_equals}}
+
+      {{#if_equals this "created_time"}}
+     <div class="text-ellipsis" style="width:15em;">
+<a class="text-cap">{{epochToHumanDateInFormat  ../../../created_time}}</a>
+   </div>
+      {{/if_equals}}
+
+      {{#if_equals this "updated_time"}}
+     <div class="text-ellipsis" style="width:15em;">
+ {{epochToHumanDateInFormat  ../../../updated_time}}
+   </div>
+      {{/if_equals}}
+</td>
+ 	{{/is_property_custom_field}}
+
+ {{/each}}
+</script>
+>>>>>>> 385a8cd... Contact view template updates

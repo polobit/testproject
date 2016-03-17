@@ -179,7 +179,7 @@ public class Workflow extends Cursor {
 		DomainUser domainUser = null;
 
 		try {
-			domainUser = DomainUserUtil.getDomainUser(creator_key.getId());
+			// domainUser = DomainUserUtil.getDomainUser(creator_key.getId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

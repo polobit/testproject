@@ -299,11 +299,35 @@
 											<span class="text-muted"  title="{{name}}">{{name}}<span>
 										</div>
 										{{#if_equals index ../this.length}}
-											<div class="inline-block custom-color text-xs" >
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+											{{#if custom_field_type}}
+												<div class="custom-color custom-value text-xs p-t-xs" name="{{name}}">
+											{{else}}
+												<div class="inline-block custom-color custom-value text-xs" name="{{name}}">
+											{{/if}}
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>
+											{{else}}
+												{{#if custom_field_type}}
+													{{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
+												{{else}}
+													{{value}}
+												{{/if}}
+											{{/if_equals}}
+											</div>
 										{{else}}
-											<div class="inline-block custom-color text-xs">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+											{{#if custom_field_type}}
+												<div class="custom-color custom-value text-xs" name="{{name}}">
+											{{else}}
+												<div class="inline-block custom-color custom-value text-xs" name="{{name}}">
+											{{/if}}
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>
+											{{else}}
+												{{#if custom_field_type}}
+													{{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
+												{{else}}
+													{{value}}
+												{{/if}}
+											{{/if_equals}}
+											</div>
 
 										{{/if_equals}}
 										</div>

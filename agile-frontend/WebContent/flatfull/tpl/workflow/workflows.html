@@ -39,7 +39,7 @@
     <td>
         <div class="table-resp hide" id="camp_reports">
             <div class="pull-left text-ellipsis">
-                <a href="#email-reports/{{id}}" class="stop-propagation">Reports</a>
+                <a href="#email-reports/{{id}}" class="stop-propagation"><i class="icon icon-bar-chart"></i></a>
             </div>
         </div> 
     </td>
@@ -47,7 +47,7 @@
     <td>   
     <div class="table-resp hide" id="camp_history">
         <div class="pull-left">
-        <a href="#activities/campaign/{{id}}" class="stop-propagation" >History</a></div>
+        <a href="#activities/campaign/{{id}}" class="stop-propagation" ><i class=" icon icon-cogs"></i></a></div>
         </div>
     </td> 
 <br />
@@ -98,7 +98,7 @@
             <div id="slate">
         </div>
         <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tgM4Rwbz8Ps?rel=0&amp;" frameborder="0" style="
+        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/pXwKUnQa5Ec?rel=0&amp;" frameborder="0" style="
                 width: 58%;
                 position: absolute;
                 left: 37%;
@@ -161,12 +161,14 @@
                 eg: You can send an email to all contacts who have signed up on your website. Then, based on their behaviour in the control panel, you can nurture them with targeted messages periodically.
             </p>
             <br>
+            {{#if this.length}}
              <p>
             <a href="https://www.youtube.com/watch?v=pXwKUnQa5Ec" target="_blank">
 <img src="{{getS3ImagePath '../../img/campaign-info.png'}}" class="img-responsive w-full">
             </a>
             </p>
             <br>
+            {{/if}}
             <h4 class="m-t-none h4 m-b-sm">
                 What are Triggers?
             </h4>

@@ -8,6 +8,8 @@ public class OfficeCalendarTemplate {
 	private String type;
 	private String backgroundColor;
 	private boolean allDay;
+	private boolean disableDragging;
+	private boolean editable;
 
 	/**
 	 * @return the start
@@ -49,6 +51,20 @@ public class OfficeCalendarTemplate {
 	 */
 	public boolean isAllDay() {
 		return allDay;
+	}
+
+	/**
+	 * @return the disableDragging
+	 */
+	public boolean isDisableDragging() {
+		return disableDragging;
+	}
+
+	/**
+	 * @return the editable
+	 */
+	public boolean isEditable() {
+		return editable;
 	}
 
 	/**
@@ -99,20 +115,20 @@ public class OfficeCalendarTemplate {
 		this.allDay = allDay;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
+	/**
+	 * @param disableDragging
+	 *            the disableDragging to set
 	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("OfficeCalendarTemplate [start=").append(start)
-				.append(", end=").append(end).append(", title=").append(title)
-				.append(", type=").append(type).append(", backgroundColor=")
-				.append(backgroundColor).append(", allDay=").append(allDay)
-				.append("]");
-		return builder.toString();
+	public void setDisableDragging(boolean disableDragging) {
+		this.disableDragging = disableDragging;
+	}
+
+	/**
+	 * @param editable
+	 *            the editable to set
+	 */
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 
 }

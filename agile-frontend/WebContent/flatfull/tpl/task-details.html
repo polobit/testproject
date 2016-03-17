@@ -130,6 +130,15 @@
   		<div style="width:40%" class="pull-left text-ellipsis">({{currencySymbol}}{{numberWithCommas expected_value}}, {{probability}}%)</div>
 	</div>
 {{/each}}
+<div class="clearfix"></div>
+{{#if taskDescription}} 
+<div class="m-t-sm task-view-description-outbox">
+  	<div>
+    	<small class="text-xs text-muted">Description</small>
+	</div>
+	<p  class="task-view-description">{{taskDescription}}</p>
+</div>
+{{/if}}
 </div>
 </div>
 </div>

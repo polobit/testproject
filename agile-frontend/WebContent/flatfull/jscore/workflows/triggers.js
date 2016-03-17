@@ -320,7 +320,7 @@ function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner
 
 	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	
-	fillSelect(owner_select_id, '/core/api/users', 'users', function()
+	fillSelect(owner_select_id, '/core/api/users/partial', 'users', function()
 			{
 		
 			$("#" + owner_select_id +' option:first').after('<option value="ANY">Any Owner</option>');
