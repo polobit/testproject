@@ -1,5 +1,7 @@
 package com.analytics.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -143,7 +145,16 @@ public class AnalyticsUtil
     {
 	String hostUrl = getStatsServerUrl(domain);
 	String statsServerUrl = null;
-	statsServerUrl = hostUrl + "action=URL_VISITED_XCOUNT&url=" + url + "&email=" + email + "&type=" + type
+	if (StringUtils.isNotBlank(url))
+	    try
+	    {
+		url = URLEncoder.encode(url, "UTF-8");
+	    }
+	    catch (UnsupportedEncodingException e)
+	    {
+		System.out.println("exception while url encode " + url);
+	    }
+	statsServerUrl = hostUrl + "&action=URL_VISITED_XCOUNT&url=" + url + "&email=" + email + "&type=" + type
 		+ "&duration=" + duration + "&durationType=" + durationType;
 	return statsServerUrl;
     }
@@ -152,7 +163,7 @@ public class AnalyticsUtil
     {
 	String hostUrl = getStatsServerUrl(domain);
 	String url = null;
-	url = hostUrl + "action=page_views_count";
+	url = hostUrl + "&action=page_views_count";
 	return url;
     }
     

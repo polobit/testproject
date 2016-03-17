@@ -24,6 +24,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
@@ -793,7 +794,7 @@ public class ActivityUtil
 	    JSONObject js = new JSONObject(new Gson().toJson(obj));
 	    JSONArray jsn = js.getJSONArray("contact_ids");
 	    jsn = ActivitySave.getExistingContactsJsonArray(jsn);
-	    List<Contact> contacts = oldobj.getContacts();
+	    List<ContactPartial> contacts = oldobj.getContacts();
 
 	    if (obj.archived != oldobj.archived)
 	    {
@@ -828,7 +829,7 @@ public class ActivityUtil
      *            entity
      * @throws JSONException
      */
-    public static void getDealRelatedContacts(List<Contact> contacts, JSONArray jsn, Opportunity opportunity)
+    public static void getDealRelatedContacts(List<ContactPartial> contacts, JSONArray jsn, Opportunity opportunity)
 	    throws JSONException
     {
 
@@ -869,7 +870,7 @@ public class ActivityUtil
      * @param event
      * @throws JSONException
      */
-    public static void getEventRelatedContacts(List<Contact> contacts, JSONArray jsn, Event event) throws JSONException
+    public static void getEventRelatedContacts(List<ContactPartial> contacts, JSONArray jsn, Event event) throws JSONException
     {
 
 	List<String> old_cont_ids = getContactIds(contacts);
@@ -907,7 +908,7 @@ public class ActivityUtil
      * @param task
      * @throws JSONException
      */
-    public static void getTaskRelatedContacts(List<Contact> contacts, JSONArray jsn, Task task) throws JSONException
+    public static void getTaskRelatedContacts(List<ContactPartial> contacts, JSONArray jsn, Task task) throws JSONException
     {
 
 	List<String> old_cont_ids = getContactIds(contacts);
@@ -1020,7 +1021,7 @@ public class ActivityUtil
 	    JSONArray jsn = js.getJSONArray("contacts");
 
 	    jsn = ActivitySave.getExistingContactsJsonArray(jsn);
-	    List<Contact> contacts = oldobj.getContacts();
+	    List<ContactPartial> contacts = oldobj.getContacts();
 	    List<String> old_cont_ids = getContactIds(contacts);
 	    if (jsn != null && (jsn.length() != contacts.size()))
 		getEventRelatedContacts(contacts, jsn, obj);
@@ -1128,7 +1129,7 @@ public class ActivityUtil
 	    JSONArray jsn = js.getJSONArray("contacts");
 	    jsn = ActivitySave.getExistingContactsJsonArray(jsn);
 
-	    List<Contact> contacts = oldobj.getContacts();
+	    List<ContactPartial> contacts = oldobj.getContacts();
 	    List<String> old_cont_ids = getContactIds(contacts);
 	    if (jsn != null && (jsn.length() != contacts.size()))
 		getTaskRelatedContacts(contacts, jsn, obj);
@@ -1230,11 +1231,11 @@ public class ActivityUtil
      * @param contacts
      * @return list of contact ids
      */
-    public static List<String> getContactIds(List<Contact> contacts)
+    public static List<String> getContactIds(List<ContactPartial> contacts)
     {
 
 	List<String> contids = new ArrayList<>();
-	for (Contact con : contacts)
+	for (ContactPartial con : contacts)
 	{
 	    contids.add(con.id.toString());
 	}
@@ -1248,11 +1249,11 @@ public class ActivityUtil
      * @param contacts
      * @return list of contact ids
      */
-    public static JSONArray getContactIdsJson(List<Contact> contacts)
+    public static JSONArray getContactIdsJson(List<ContactPartial> contacts)
     {
 	System.out.println(contacts.size());
 	JSONArray jsn = new JSONArray();
-	for (Contact con : contacts)
+	for (ContactPartial con : contacts)
 	{
 	    jsn.put(con.id);
 	}

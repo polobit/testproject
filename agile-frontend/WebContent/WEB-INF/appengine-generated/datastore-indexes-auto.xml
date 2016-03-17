@@ -2,6 +2,31 @@
 
 <datastore-indexes>
 
+    <datastore-index kind="DomainUser" ancestor="true" source="manual">
+        <property name="email" direction="asc"/>
+        <property name="name" direction="asc"/>
+        <property name="pic" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="DomainUser" ancestor="false" source="manual">
+        <property name="domain" direction="asc"/>
+        <property name="email" direction="asc"/>
+        <property name="name" direction="asc"/>
+        <property name="pic" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Contact" ancestor="false" source="manual">
+        <property name="__key__" direction="asc"/>
+        <property name="first_name" direction="asc"/>
+        <property name="last_name" direction="asc"/>
+        <property name="name" direction="asc"/>
+        <property name="type" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="manual">
+        <property name="__key__" direction="asc"/>
+        <property name="name" direction="asc"/>
+    </datastore-index>
+    
 
     <!-- Used 2 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">

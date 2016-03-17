@@ -1836,7 +1836,7 @@ var portlet_utility = {
 				var options = '';
 				$.ajax({
 					type : 'GET',
-					url : '/core/api/users',
+					url : '/core/api/users/partial',
 					dataType : 'json',
 					success : function(data) {
 						$.each(data, function(index, domainUser) {
@@ -1868,7 +1868,7 @@ var portlet_utility = {
 				var options = '';
 				$.ajax({
 					type : 'GET',
-					url : '/core/api/users',
+					url : '/core/api/users/partial',
 					dataType : 'json',
 					success : function(data) {
 						$.each(data, function(index, domainUser) {
@@ -2329,7 +2329,7 @@ var portlet_utility = {
 		var options = '<option value="">All</option>';
 		$.ajax({
 			type : 'GET',
-			url : '/core/api/users',
+			url : '/core/api/users/partial',
 			dataType : 'json',
 			success : function(data) {
 				$.each(data, function(index, domainUser) {
