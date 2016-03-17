@@ -40,6 +40,7 @@ Handlebars.registerHelper('calculate_due_date', function(due_date, options) {
 Handlebars.registerHelper('get_contact_image', function(width)
 { 	
 	if(Ticket_Utils.Current_Ticket_Contact){
+		
 		var contact = Ticket_Utils.Current_Ticket_Contact.toJSON();
 
 		var items = contact.properties;
@@ -51,11 +52,32 @@ Handlebars.registerHelper('get_contact_image', function(width)
 
 		var email = getPropertyValue(items, "email");
 
-		if (email)
-			return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + '&d=404';
-	}
+		var img = DEFAULT_GRAVATAR_url;
+		var backup_image = "&d=404\" ";
+		// backup_image="";
+		var initials = '';
+		try
+		{
+			// if(!isIE())
+			initials = text_gravatar_initials(items);
+		}
+		catch (e)
+		{
+			console.log(e);
+		}
 
-	return 'https://secure.gravatar.com/avatar/' + Agile_MD5(Ticket_Utils.getPropertyFromTicket('requester_email')) + '.jpg?s=' + width + '&d=404';
+		if (initials.length == 0)
+			backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
+
+		var data_name =  '';
+		// if(!isIE())
+			data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
+		
+		var email = getPropertyValue(items, "email");
+		if (email)
+			return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + backup_image + data_name);
+}
+return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 });
 
 Handlebars
@@ -483,5 +505,48 @@ Handlebars.registerHelper('replace_br_with_space', function(text, options)
 
 	return text.replace(regex, " ");
 });
+Handlebars.registerHelper('gravatarurl', function(items, width)
+	{
+
+		if (items == undefined)
+			return;
+
+		// Checks if properties already has an image, to return it
+		var agent_image = getPropertyValue(items, "image");
+		if (agent_image)
+			return agent_image;
+
+		// Default image
+		var img = DEFAULT_GRAVATAR_url;
+		var backup_image = "&d=404\" ";
+		// backup_image="";
+		var initials = '';
+		try
+		{
+			// if(!isIE())
+			initials = text_gravatar_initials(items);
+		}
+		catch (e)
+		{
+			console.log(e);
+		}
+
+		if (initials.length == 0)
+			backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
+
+		var data_name =  '';
+		// if(!isIE())
+			data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
+		
+		var email = getPropertyValue(items, "email");
+		if (email)
+		{
+			return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + backup_image + data_name);
+		}
+
+		return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
+
+	});
+
 
 /** End of ticketing handlebars* */
