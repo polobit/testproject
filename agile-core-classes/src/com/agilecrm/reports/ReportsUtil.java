@@ -476,8 +476,9 @@ public class ReportsUtil
 
 			if(wonDealsList!=null){
 				for(Opportunity opportunity : wonDealsList){
-					milestoneValue += opportunity.expected_value;
-					soldCount++;
+					if(opportunity.expected_value!=null)
+					{milestoneValue += opportunity.expected_value;
+					soldCount++;}
 				}
 				avgValue=(double) Math.round(milestoneValue/soldCount);
 			}
@@ -485,31 +486,7 @@ public class ReportsUtil
 			dataJson.put("soldDeals",soldCount);
 			dataJson.put("avgSalesValue",avgValue);
 			
-		/*	List<Opportunity> closedDeals=OpportunityUtil.getDealsWithOwnerandPipeline(ownerId,null,minTime, maxTime);
-			if(closedDeals!=null )
-			{
-				
-				for(Opportunity opportunity : closedDeals){
-					Integer r=0;
-					if(opportunity.close_date >= opportunity.created_time)
-					 r=Math.round((opportunity.close_date-opportunity.created_time)/(60*60*24));
-					avgDealsClosure=avgDealsClosure+r;
-				}
-				if(closedDeals.size()!=0)
-				avgDealsClosure=(double) Math.round(avgDealsClosure/closedDeals.size());
-			}
-			
-			dataJson.put("avgDealClosetime", avgDealsClosure);*/
-			/*int contact_count=ContactUtil.getContactsCountForOwner(ownerId,minTime,maxTime);
-			List<Activity> contact_created=ActivityUtil.getActivitiesByActivityType("CONTACT_CREATE",ownerId,minTime,maxTime);
-			dataJson.put("contactCount", contact_count);
-				int contactAssigned=0;
-			if(contact_created!=null && contact_created.size()!=0)
-			{
-				contactAssigned=contact_created.size();
-				
-			}
-			dataJson.put("contactAssigned",contact_created.size());*/
+		
 			dataJson.put("userName", DomainUserUtil.getDomainUser(ownerId).name);
 			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(ownerId);
 			
@@ -543,8 +520,10 @@ public class ReportsUtil
 				int count=0;
 				if(wonDealList!=null){
 					for(Opportunity opportunity : wonDealList){
+						if(opportunity.expected_value!=null){
 						milestoneValues += opportunity.expected_value;
 						count++;
+					}
 					}
 				}
 				total_milestoneValues=total_milestoneValues+milestoneValues;
