@@ -205,6 +205,55 @@ var Tickets = {
 
 	initEvents: function(el){
 		
+		$('div.assignee-change', el).off('click'); 
+		$('div.assignee-change', el).on('show.bs.dropdown', function(e){
+			
+			var $ul = $(this).find('ul.ul-select');
+
+			var ticket_id = $ul.data('ticket-id');
+			var ticket_json = App_Ticket_Module.ticketsCollection.collection.get(ticket_id).toJSON()
+			var action = $(this).data('action');
+
+			switch(action){
+
+				case 'status':
+
+					$ul.find('li').removeClass('active');
+
+					var $a = $ul.find('li').find('a[value="' + ticket_json.status + '"]');
+					$a.closest('li').addClass('active');
+					break;
+				case 'priority':
+
+					$ul.find('li').removeClass('active');
+
+					var $a = $ul.find('li').find('a[value="' + ticket_json.priority + '"]');
+					$a.closest('li').addClass('active');
+					break;
+				case 'assignee':
+
+					$ul.find('li').removeClass('active');
+					
+					var assigneeID = ticket_json.assigneeID, groupID = ticket_json.groupID;
+
+					if(!assigneeID){
+
+						var $a = $ul.find('li').find('a[data-group-id="' + groupID + '"][value="0"]');
+						$a.closest('li').addClass('active');
+					}else{
+
+						var $a = $ul.find('li').find('a[data-group-id="' + groupID + '"][value="' + assigneeID+ '"]');
+						$a.closest('li').addClass('active');
+					}
+			}
+		});
+
+		$('div.assignee-change', el).off('click'); 
+		$('div.assignee-change', el).on('hidden.bs.dropdown', function(e){
+			$(this).removeClass('bg-light');
+			$(this).find('a.caret-btn').removeClass('inline-block');
+		});
+
 		/**
 		 * Initializing click event on ul lists in ticket collection
 		 */
@@ -212,8 +261,14 @@ var Tickets = {
 		$('ul.ul-select', el).on('click', "li a", function(e){
 			e.stopPropagation();
 			e.preventDefault();
-
+			
 			var $that = $(this);
+
+			if($(this).closest('li').hasClass('active')){
+				$that.closest('div').find('.dropdown-menu').dropdown('toggle');
+				return;
+			}
+
 			var action_type = $that.data('field'), action_value = $that.attr('value');
 			var ticket_id = $that.closest('ul').data('ticket-id'); 
 			var url = '/core/api/tickets', message = '';
@@ -223,12 +278,14 @@ var Tickets = {
 			switch(action_type){
 
 				case 'status':
+
 					url += "/" + ticket_id + "/activity/change-status";
 					json = {status: action_value, id: ticket_id};
 
 			        message = 'Status has been updated to ' + action_value.toLowerCase();
 					break;
 				case 'priority':
+
 					url += "/" + ticket_id + "/activity/change-priority";
 					json = {priority: action_value, id: ticket_id};
 
@@ -258,7 +315,7 @@ var Tickets = {
 
 				var modelData = data.toJSON();
 
-				showNotyPopUp('information', message, 'bottomRight', 5000);
+				Ticket_Utils.showNoty('information', message, 'bottomRight', 5000);
 
 				$that.closest('tr').find('a.' + action_type).html(action_value);
 				$that.closest('div').find('.dropdown-menu').dropdown('toggle');
@@ -686,7 +743,7 @@ var Tickets = {
 	// 			var message = 'Assignee has been changed to ' + assigneeName;
 
 			
-	// 		showNotyPopUp('information', message, 'bottomRight', 5000);
+	// 		Ticket_Utils.showNoty('information', message, 'bottomRight', 5000);
 
 	// 		modelData.assignee = ((modelData.assignee) ? modelData.assignee : "");
 	// 		modelData.group = ((modelData.group) ? modelData.group : "");
@@ -738,7 +795,7 @@ var Tickets = {
 	// 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {type : new_ticket_type}); 
 	// 			//update collection 
 	//    			$select.attr('disabled', false);
-	//             showNotyPopUp('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
+	//             Ticket_Utils.showNoty('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
 	// 		},
 
 	// 		function(error){
@@ -761,7 +818,7 @@ var Tickets = {
 	// 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
 	// 		$priority.attr('disabled', false);
-	// 		showNotyPopUp('information', 'Ticket Type has been changed to '+ new_priority.toLowerCase() , 'bottomRight', 5000);
+	// 		Ticket_Utils.showNoty('information', 'Ticket Type has been changed to '+ new_priority.toLowerCase() , 'bottomRight', 5000);
 		    
 
 	// 	}, function(error){
@@ -923,7 +980,7 @@ var Tickets = {
 
 			var msg = (command == 'remove') ? email + ' removed from CC emails' : email + ' added to CC emails';
 
-			showNotyPopUp('information', msg, 'bottomRight', 5000);
+			Ticket_Utils.showNoty('information', msg, 'bottomRight', 5000);
 		});
 	},
 
@@ -1037,7 +1094,7 @@ var Tickets = {
 	// closeTicket : function(e){
 
 	// 	this.changeStatus("CLOSED", function(){
-	// 		showNotyPopUp('information', "Ticket status has been changed to closed", 'bottomRight', 5000);
+	// 		Ticket_Utils.showNoty('information', "Ticket status has been changed to closed", 'bottomRight', 5000);
 	// 	});
 	// },
 
@@ -1058,7 +1115,7 @@ var Tickets = {
 	// 				App_Ticket_Module.ticketView.model.destroy({
 	// 					success : function(model, response) {
 							
-	// 						showNotyPopUp('information', "Ticket has been deleted",'bottomRight', 5000);
+	// 						Ticket_Utils.showNoty('information', "Ticket has been deleted",'bottomRight', 5000);
 	                          
 	// 						var url = '#tickets/filter/' + Ticket_Filter_ID;
 	// 						Backbone.history.navigate(url, {trigger : true});
@@ -1155,7 +1212,7 @@ var Tickets = {
 
  //             Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {is_favorite:favourite});
 
-	// 		 showNotyPopUp('information', succesmessage, 'bottomRight', 5000);
+	// 		 Ticket_Utils.showNoty('information', succesmessage, 'bottomRight', 5000);
 	// 	}, null);
 	// },
 
@@ -1181,7 +1238,7 @@ var Tickets = {
  //                spam_value=false;
  //            }
 
- //            showNotyPopUp('information',message, 'bottomRight', 5000);
+ //            Ticket_Utils.showNoty('information',message, 'bottomRight', 5000);
 			
 	// 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {is_spam:spam_value});
 
@@ -1237,7 +1294,7 @@ var Tickets = {
 			var msg = (due_date_present) ? ("Due date has been changed to " + formatted_date) 
 						: ("Due date has been set to " + formatted_date);
 
-			showNotyPopUp('information', msg, 'bottomRight', 5000);
+			Ticket_Utils.showNoty('information', msg, 'bottomRight', 5000);
 
 			if(callback)
 				callback();
@@ -1258,7 +1315,7 @@ var Tickets = {
 
 	// 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:''});
 
-	// 		showNotyPopUp('information', "Due date has been removed",'bottomRight', 5000);
+	// 		Ticket_Utils.showNoty('information', "Due date has been removed",'bottomRight', 5000);
 
 	// 	}, null);
 	// },

@@ -127,7 +127,7 @@ var Ticket_Labels = {
 	         
 	         }
                    		
-       		showNotyPopUp('information', msg, 'bottomRight', 5000);
+       		Ticket_Utils.showNoty('information', msg, 'bottomRight', 5000);
 
        		if (callback)
 				callback();

@@ -20,6 +20,8 @@ var Tickets_Rest={
         var current_time = new Date().getTime();
 		Tickets.updateModel(url, json, function(model){
 
+				Ticket_Utils.showNoty('information', 'Ticket status has been changed to '+ status.toLowerCase() , 'bottomRight', 5000);
+
 				if(status != "CLOSED")
 				{
 				    $(".ticket-addnote-close").removeAttr("disabled");
@@ -52,7 +54,7 @@ var Tickets_Rest={
 	closeTicket : function(e){
 
 		this.changeStatus("CLOSED", function(){
-			showNotyPopUp('information', "Ticket status has been changed to closed", 'bottomRight', 5000);
+			Ticket_Utils.showNoty('information', "Ticket status has been changed to closed", 'bottomRight', 5000);
 		});
 	},
 
@@ -73,7 +75,7 @@ var Tickets_Rest={
 					App_Ticket_Module.ticketView.model.destroy({
 						success : function(model, response) {
 							
-							showNotyPopUp('information', "Ticket has been deleted",'bottomRight', 5000);
+							Ticket_Utils.showNoty('information', "Ticket has been deleted",'bottomRight', 5000);
 	                          
 							var url = '#tickets/filter/' + Ticket_Filter_ID;
 							Backbone.history.navigate(url, {trigger : true});
@@ -103,7 +105,7 @@ var Tickets_Rest={
 		});
 	},
 
-toggleFavorite : function(e){
+	toggleFavorite : function(e){
 
 		var favourite = true; 
 
@@ -128,7 +130,7 @@ toggleFavorite : function(e){
 
              Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {is_favorite:favourite});
 
-			 showNotyPopUp('information', succesmessage, 'bottomRight', 5000);
+			 Ticket_Utils.showNoty('information', succesmessage, 'bottomRight', 5000);
 		}, null);
 	},
 
@@ -154,7 +156,7 @@ toggleFavorite : function(e){
                 spam_value=false;
             }
 
-            showNotyPopUp('information',message, 'bottomRight', 5000);
+            Ticket_Utils.showNoty('information',message, 'bottomRight', 5000);
 			
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {is_spam:spam_value});
 
@@ -176,7 +178,7 @@ toggleFavorite : function(e){
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {type : new_ticket_type});
 			 
 				//update collection 
-	   			showNotyPopUp('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
+	   			Ticket_Utils.showNoty('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
 			}
 		);
 	},
@@ -193,7 +195,7 @@ toggleFavorite : function(e){
 
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
-			showNotyPopUp('information', 'Ticket Type has been changed to '+ new_priority.toLowerCase() , 'bottomRight', 5000);
+			Ticket_Utils.showNoty('information', 'Ticket priority has been changed to '+ new_priority.toLowerCase() , 'bottomRight', 5000);
 		});
 	},
 
@@ -247,7 +249,7 @@ toggleFavorite : function(e){
 				assigned_to_group = false;
 			}
 			
-			showNotyPopUp('information', message, 'bottomRight', 5000);
+			Ticket_Utils.showNoty('information', message, 'bottomRight', 5000);
 
 			modelData.assignee = ((modelData.assignee) ? modelData.assignee : "");
 			modelData.group = ((modelData.group) ? modelData.group : "");
@@ -283,7 +285,7 @@ toggleFavorite : function(e){
 
 	 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:''});
 
-	 		showNotyPopUp('information', "Due date has been removed",'bottomRight', 5000);
+	 		Ticket_Utils.showNoty('information', "Due date has been removed",'bottomRight', 5000);
 
 	 	}, null);
 	 },

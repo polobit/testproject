@@ -13,10 +13,12 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.ticket.deferred.ChangeAssigneeDeferredTask;
 import com.agilecrm.ticket.deferred.CloseTicketsDeferredTask;
 import com.agilecrm.ticket.deferred.DeleteTicketsDeferredTask;
@@ -34,6 +36,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
+import com.thirdparty.PubNub;
 
 /**
  * 
@@ -43,6 +46,8 @@ import com.googlecode.objectify.Key;
 @Path("/api/ticket-module/backend")
 public class TicketBulkActionsBackendsRest
 {
+	public static final String TICKET_BULK_ACTIONS = "TICKET_OPEARTIONS";
+
 	@POST
 	@Path("/manage-labels/{domain_user_id}")
 	@Produces(MediaType.APPLICATION_FORM_URLENCODED)
@@ -113,7 +118,7 @@ public class TicketBulkActionsBackendsRest
 				message = "Labels " + labelsCSV + " have been removed from " + selectedTicketsCount
 						+ ((selectedTicketsCount == 1) ? " ticket" : " tickets");
 
-			BulkActionNotifications.publishNotification(message);
+			publishNotification(message);
 		}
 		catch (Exception e)
 		{
@@ -175,7 +180,7 @@ public class TicketBulkActionsBackendsRest
 				message = (selectedTicketsCount + ((selectedTicketsCount == 1) ? " ticket" : " tickets"))
 						+ " assignee have been changed.";
 
-			BulkActionNotifications.publishNotification(message);
+			publishNotification(message);
 		}
 		catch (Exception e)
 		{
@@ -229,7 +234,7 @@ public class TicketBulkActionsBackendsRest
 
 			int selectedTicketsCount = idsFetcher.getCount();
 
-			BulkActionNotifications.publishNotification("Workflow have been executed on " + selectedTicketsCount
+			publishNotification("Workflow have been executed on " + selectedTicketsCount
 					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets"));
 		}
 		catch (Exception e)
@@ -276,8 +281,8 @@ public class TicketBulkActionsBackendsRest
 
 			int selectedTicketsCount = idsFetcher.getCount();
 
-			BulkActionNotifications.publishNotification(selectedTicketsCount
-					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets") + " have been closed.");
+			publishNotification(selectedTicketsCount + ((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
+					+ " have been closed.");
 		}
 		catch (Exception e)
 		{
@@ -323,8 +328,8 @@ public class TicketBulkActionsBackendsRest
 
 			int selectedTicketsCount = idsFetcher.getCount();
 
-			BulkActionNotifications.publishNotification(selectedTicketsCount
-					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets") + " have been deleted.");
+			publishNotification(selectedTicketsCount + ((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
+					+ " have been deleted.");
 		}
 		catch (Exception e)
 		{
@@ -370,8 +375,8 @@ public class TicketBulkActionsBackendsRest
 
 			int selectedTicketsCount = idsFetcher.getCount();
 
-			BulkActionNotifications.publishNotification(selectedTicketsCount
-					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets") + " have been marked as spam.");
+			publishNotification(selectedTicketsCount + ((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
+					+ " have been marked as spam.");
 		}
 		catch (Exception e)
 		{
@@ -420,10 +425,30 @@ public class TicketBulkActionsBackendsRest
 
 			int selectedTicketsCount = idsFetcher.getCount();
 
-			BulkActionNotifications.publishNotification(selectedTicketsCount
-					+ ((idsFetcher.getCount() == 1) ? " ticket" : " tickets") + " have been added to favourites.");
+			publishNotification(selectedTicketsCount + ((idsFetcher.getCount() == 1) ? " ticket" : " tickets")
+					+ " have been added to favourites.");
 		}
 		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+	}
+
+	public static void publishNotification(String message)
+	{
+
+		JSONObject messageJSON = new JSONObject();
+		try
+		{
+			System.out.println("message to send in notification " + message);
+
+			messageJSON.put("message", message);
+			messageJSON.put("type", BulkAction.TICKET_BULK_ACTIONS);
+			messageJSON.put("sub_type", BulkAction.TICKET_BULK_ACTIONS);
+
+			PubNub.pubNubPush(NamespaceManager.get(), messageJSON);
+		}
+		catch (JSONException e)
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
