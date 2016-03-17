@@ -174,7 +174,7 @@ public abstract class StripeWebhookHandler
 
 	//System.out.println("Event is:"+event);
 	//System.out.println("Event.getData() is:"+event.getData());
-	//StripeObject stripeObject = event.getData().getObject();
+	StripeObject stripeObject = event.getData().getObject();
 
 	// If type is customer deletion stripe return customer object which
 	// contains description(which is set to namespace)
