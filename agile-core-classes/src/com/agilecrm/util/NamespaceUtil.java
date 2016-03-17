@@ -71,15 +71,14 @@ public class NamespaceUtil
 	 * 
 	 * @return set of domains as namespaces
 	 */
-	public static Set<Long> getAllNamespaceIdsNew()
+	public static Set<String> getAllNamespacesNew(int limit, int offset)
 	{
-		Set<Long> namespaces = new HashSet<Long>();
+		Set<String> namespaces = new HashSet<String>();
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
-		FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
+		FetchOptions options = FetchOptions.Builder.withChunkSize(1000).limit(limit).offset(offset);
 
 		Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
-		q.setKeysOnly();
 
 		for (Entity e : ds.prepare(q).asIterable(options))
 		{
@@ -91,29 +90,12 @@ public class NamespaceUtil
 			}
 			else
 			{
-				namespaces.add(e.getKey().getId());
+				namespaces.add(e.getKey().getName());
 			}
 		}
 
 		System.out.println("Total domains : " + namespaces.size());
 		return namespaces;
-	}
-	
-	/**
-	 * Gets all namespaces by iterating domain users
-	 * 
-	 * @return set of domains as namespaces
-	 */
-	public static String getNamespaceNameFromId(Long id)
-	{
-		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-		FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
-				
-		Query query = new Query(Entities.NAMESPACE_METADATA_KIND, KeyFactory.createKey(Entities.NAMESPACE_METADATA_KIND, id));
-		Entity entity = ds.prepare(query).asSingleEntity();
-		
-		return entity.getKey().getName();
-
 	}
 
 	/**

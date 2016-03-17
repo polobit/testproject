@@ -34,8 +34,17 @@ public class DomainUserDbUpdateServlet extends HttpServlet
 
     public void doGet(HttpServletRequest req, HttpServletResponse res)
     {
+    	String page = req.getParameter("page");
+    	String limit = req.getParameter("limit");
+    	if(StringUtils.isBlank(page))
+    		return;
+    	
+    	int pageCount = Integer.parseInt(page);
+    	int limitCount = Integer.parseInt(limit);
+    	int offsetCount = pageCount * 1000;
+    	
     	//Fetches all namespaces
-      	Set<String> namespaces = NamespaceUtil.getAllNamespacesNew();
+      	Set<String> namespaces = NamespaceUtil.getAllNamespacesNew(limitCount, offsetCount);
       	
       	// Iterates through each Namespace and initiates task for each namespace
       	// to update usage info
