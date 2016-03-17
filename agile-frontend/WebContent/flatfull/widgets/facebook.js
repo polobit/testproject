@@ -321,14 +321,10 @@ function startFacebookWidget(contact_id)
 	{
 		e.preventDefault();
 		web_url = agile_widget_contact_property_by_subtype('website', 'FACEBOOK');
-		console.log('deleting facebook acct.',web_url);
-		if(App_Contacts.contactDetailView.model){
-			agile_crm_delete_contact_property_by_subtype('website', 'FACEBOOK', web_url, function(data)
-			{
-				console.log("In facebook delete callback");
-				showFacebookMatchingProfile(contact_id);
-			});
-		}
-
+		console.log('deleting facebook acct.',web_url);		
+		agile_crm_delete_contact_property_by_subtype('website', 'FACEBOOK', web_url, function(data){
+			console.log("In facebook delete callback");
+			showFacebookMatchingProfile(contact_id);
+		});
 	});
 }

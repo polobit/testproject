@@ -127,10 +127,8 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 			   if(!isValidForm($('#stripe_contact_id_form')))
 			    return;
 			   
-			   customer_id = $('#stripe_contact_id').val();
-			   if(App_Contacts.contactDetailView.model){
-			   	agile_crm_save_contact_property(stripe_custom_field_name, "", customer_id, "CUSTOM");
-			   }
+			   customer_id = $('#stripe_contact_id').val();			  
+			   agile_crm_save_contact_property(stripe_custom_field_name, "", customer_id, "CUSTOM");			   
 			   
 			   showStripeProfile(stripe_custom_field_name, contact_id);
 			   return;

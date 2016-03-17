@@ -275,11 +275,9 @@ function getTwitterIdByUrl(web_url, callback, contact_id)
 			alert("URL provided for Twitter is not valid ");
 
 			// Shows Twitter matching profiles based on contact name
-			getTwitterMatchingProfiles(contact_id);
-			if(App_Contacts.contactDetailView.model){
-				// Delete the Twitter URL associated with contact as it is incorrect
-				agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url);
-			}
+			getTwitterMatchingProfiles(contact_id);			
+			// Delete the Twitter URL associated with contact as it is incorrect
+			agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url);
 			return;
 		}
 
@@ -295,11 +293,10 @@ function getTwitterIdByUrl(web_url, callback, contact_id)
 		{
 			alert(data.responseText);
 
-			console.log('Twitter URL ' + web_url);
-			if(App_Contacts.contactDetailView.model){
-				// Delete the Twitter URL associated with contact as it is incorrect
-				agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url.toString());
-			}
+			console.log('Twitter URL ' + web_url);			
+			// Delete the Twitter URL associated with contact as it is incorrect
+			agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url.toString());
+			
 			return;
 		}
 
@@ -1368,13 +1365,10 @@ function startTwitterWidget(contact_id){
 	$("#"+WIDGET_PARENT_ID).on('click','#Twitter_plugin_delete', function(e)
 	{
 		e.preventDefault();
-		if(App_Contacts.contactDetailView.model){
-			agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url, function(data)
-			{
+		agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url, function(data){
 				console.log("In twitter delete callback");
 				getTwitterMatchingProfiles(contact_id);
-			});
-		}
+		});
 	});
 
 	// Sends a message to Twitter when clicked on send message button
