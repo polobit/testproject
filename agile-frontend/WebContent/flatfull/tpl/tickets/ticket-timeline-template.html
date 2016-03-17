@@ -23,10 +23,8 @@
 			        <a class="pull-left thumb-xs m-l-n-md">
 
 			        	{{#if_equals activity_type 'TICKET_CREATED'}}
-			        		<img class="r-5x" src="{{get_contact_image 30}}" onerror="image_error(this);" 
-			        		_data-name="{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}{{this.contactname}}{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}" data-toggle="tooltip" data-placement="top" 
-			        			data-original-title="{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}
-			        			{{#toLinkTrigger this}}{{thiscontactname}}{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}"/>
+			        		<img src="{{get_contact_image 24}}" class="r-5x" alt="..." onerror="image_error(this);" _data-name="{{requester_name}}">
+		
 			        	{{/if_equals}}
 
 			        	{{#if_equals activity_type 'TICKET_REQUESTER_REPLIED'}}
