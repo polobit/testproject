@@ -34,7 +34,6 @@ public class DomainUserDbUpdateServlet extends HttpServlet
 
     public void doGet(HttpServletRequest req, HttpServletResponse res)
     {
-
     	//Fetches all namespaces
       	Set<String> namespaces = NamespaceUtil.getAllNamespacesNew();
       	

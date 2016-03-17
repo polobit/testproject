@@ -175,10 +175,10 @@ edit : function(e)
 	{
 		var that = this
 		// console.log(this.model.toJSON());
-		startFunctionTimer("model getTemplate");
+		// startFunctionTimer("model getTemplate");
 		getTemplate(that.options.template, that.model.toJSON(), undefined, function(el)
 		{
-			endFunctionTimer("model getTemplate");
+			// endFunctionTimer("model getTemplate");
 			$(that.el).html(el);
 			$(that.el).data(that.model);
 			console.log($(that.el));
@@ -242,7 +242,7 @@ var Base_Collection_View = Backbone.View
 			 */
 			initialize : function()
 			{
-				startFunctionTimer("initialize");
+				// startFunctionTimer("initialize");
 
 				// Do not show transition bar 
 				if(!this.options.no_transition_bar)
@@ -308,7 +308,7 @@ var Base_Collection_View = Backbone.View
 				// Commented as it was creating a ripple effect
 				// this.collection.bind('add', function(){that.render(true)});
 
-				endFunctionTimer("initialize");
+				// endFunctionTimer("initialize");
 				/*
 				 * Calls render before fetching the collection to show loading
 				 * image while collection is being fetched.
@@ -388,7 +388,7 @@ var Base_Collection_View = Backbone.View
 					// Set the URL
 					this.collection.fetch = function(options)
 					{
-						startFunctionTimer("fetch time");
+						// startFunctionTimer("fetch time");
 						options || (options = {})
 						options.data || (options.data = {});
 						options.data['page_size'] = page_size;
@@ -522,15 +522,15 @@ var Base_Collection_View = Backbone.View
 					$(this.el).html('<div style="padding:10px;font-size:14px"><b>' + error_message + '<b></div>');
 					return;
 				}
-				endFunctionTimer("fetch time");
-				printCurrentDateMillis("render start");
+				// endFunctionTimer("fetch time");
+				// printCurrentDateMillis("render start");
 
 				var _this = this;
 				var ui_function = this.buildCollectionUI;
 				// Populate template with collection and view element is created
 				// with content, is used to fill heading of the table
 
-				startFunctionTimer("getTemplate");
+				// startFunctionTimer("getTemplate");
 				getTemplate((this.options.templateKey + '-collection'), this.collection.toJSON(), "yes", ui_function);
 
 				if (this.page_size && (this.collection.length < this.page_size))
@@ -543,8 +543,8 @@ var Base_Collection_View = Backbone.View
 				return this;
 			}, buildCollectionUI : function(result)
 			{
-				endFunctionTimer("getTemplate")
-				startFunctionTimer("buildCollectionUI");
+				// endFunctionTimer("getTemplate")
+				// startFunctionTimer("buildCollectionUI");
 				$(this.el).html(result);
 				// If collection is Empty show some help slate
 				if (this.collection.models.length == 0)
@@ -579,7 +579,7 @@ var Base_Collection_View = Backbone.View
 
 				$(this.model_list_element).append(this.model_list_element_fragment);
 
-				endFunctionTimer("buildCollectionUI");
+				// endFunctionTimer("buildCollectionUI");
 
 				/*
 				 * Few operations on the view after rendering the view,
@@ -595,7 +595,7 @@ var Base_Collection_View = Backbone.View
 				 */
 				if (callback && typeof (callback) === "function")
 				{
-					startFunctionTimer("postRenderCallback");
+					// startFunctionTimer("postRenderCallback");
 					// execute the callback, passing parameters as necessary
 					callback($(this.el), this.collection);
 				}
@@ -611,10 +611,10 @@ var Base_Collection_View = Backbone.View
 
 				// For the first time fetch, disable Scroll bar if results are
 				// lesser
-				if (callback && typeof (callback) === "function")
-					endFunctionTimer("postRenderCallback");
+				if (callback && typeof (callback) === "function"){}
+					// endFunctionTimer("postRenderCallback");
 
-				printCurrentDateMillis("render end");
+				// printCurrentDateMillis("render end");
 
 				return this;
 			}, });
