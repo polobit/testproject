@@ -272,9 +272,10 @@ var CompaniesRouter = Backbone.Router
 		}
 		else
 		{
-			$('#content').find('.contacts-div').html(this.companiesListView.el);
+			$('#content').find('.contacts-inner-div').html(this.companiesListView.el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
+			$('#bulk-action-btns > button').addClass("disabled");
 			COMPANIES_HARD_RELOAD = true;
 		}
 

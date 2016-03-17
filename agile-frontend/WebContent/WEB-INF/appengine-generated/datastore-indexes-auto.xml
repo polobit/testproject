@@ -450,4 +450,10 @@
         <property name="created_time" direction="desc"/>
     </datastore-index>
     
+    <datastore-index kind="AliasDomain" ancestor="false" source="auto">
+        <property name="alias" direction="asc"/>
+        <property name="domain" direction="asc"/>
+    </datastore-index>
+    
+    
 </datastore-indexes>

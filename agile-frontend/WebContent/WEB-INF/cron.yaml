@@ -112,3 +112,8 @@ cron:
 - description: Webhooks Normal TEST Cron
   url: /backend/cron/cron-pull?q=webhooks-register-add-queue
   schedule: every 1 mins
+
+- description: All Domain stats report
+  url: /backend/stats-report
+  schedule: every day 03:00
+ 

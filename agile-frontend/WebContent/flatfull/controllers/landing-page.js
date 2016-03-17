@@ -6,7 +6,8 @@ var LandingPageRouter = Backbone.Router.extend({
 	"landing-page-templates" : "getListOfTemplates",
 	"landing-page-add/:id" : "loadSelectedTemplate",
 	"landing-page/:id" : "loadSavedLandingPage",
-    "landing-page-settings/:id" : "pageSettings"
+    "landing-page-settings/:id" : "pageSettings",
+    "landing-page-copy/:id" : "copySelectedLandingPage"
 	},
 
 	getListOfLandingPages : function(){
@@ -117,34 +118,51 @@ var LandingPageRouter = Backbone.Router.extend({
     },
 
     pageSettings : function(pageId) {
-        if (!this.LandingPageCollectionView || !this.LandingPageCollectionView.collection || this.LandingPageCollectionView.collection.get(pageId) == null) {
-           this.navigate("landing-pages", { trigger : true });
-           return;
-        }
-
-        var model = this.LandingPageCollectionView.collection.get(pageId);
 
         $('#content').html("<div id='landingpages-listeners'></div>");
         initializeLandingPageListeners();
 
-        getTemplate("landingpages-settings", model.toJSON(), undefined, function(ui){
-            $("#landingpages-listeners").html($(ui));
-            var cnameEL = document.getElementById("cname");
-            if($("#cname").attr("href") != "") {
-                var parts = cnameEL.hostname.split('.');
-                $("#sub_domain").val(parts.shift());
-                $("#domain").val(parts.join('.'));
+        $.getJSON("core/api/landingpages/custom-domain/"+pageId, function(data){
+            data = data || {};
+            data["pageid"] = pageId;
+            getTemplate("landingpages-settings", data, undefined, function(ui){
+                $("#landingpages-listeners").html($(ui));
+                var cnameEL = document.getElementById("cname");
+                if($("#cname").attr("href") != "") {
+                    var parts = cnameEL.hostname.split('.');
+                    $("#sub_domain").val(parts.shift());
+                    $("#domain").val(parts.join('.'));
 
-                var dirPath = cnameEL.pathname;
-                if(dirPath.charAt(0) === '/'){
-                    dirPath = dirPath.substr(1);
+                    var dirPath = cnameEL.pathname;
+                    if(dirPath.charAt(0) === '/'){
+                        dirPath = dirPath.substr(1);
+                    }
+                    $("#directory_path").val(dirPath);
                 }
-                $("#directory_path").val(dirPath);
-            }
-        }, "#landingpages-listeners");
+            }, "#landingpages-listeners");
+        });
         
-        $(".active").removeClass("active");
-	$("#landing-pages-menu").addClass("active");
+       $(".active").removeClass("active");
+	   $("#landing-pages-menu").addClass("active");
+       hideTransitionBar();
+    },
+
+    copySelectedLandingPage :function(defaultTemplateId) {
+       $('#content').html("<div id='landingpages-listeners'></div>");
+        initializeLandingPageListeners();
+
+        var data = {
+            "templateId" : defaultTemplateId,
+            "action" : "copy"
+        };
+
+        getTemplate("landingpages-add", data, undefined, function(ui){
+            $("#landingpages-listeners").html($(ui));
+        }, "#landingpages-listeners");
+    
+    $('html, body').animate({scrollTop: $('body').offset().top}, 500);
+    $(".active").removeClass("active");
+    $("#landing-pages-menu").addClass("active");
         hideTransitionBar();
     }
 	

@@ -18,6 +18,8 @@ import net.sf.json.JSONException;
 
 import org.json.JSONArray;
 
+import com.agilecrm.AllDomainStats;
+import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.webrules.WebRule;
@@ -41,7 +43,10 @@ public class WebRuleAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public void saveWebRule(WebRule webRule, @Context HttpServletResponse response) throws PlanRestrictedException
     {
-	webRule.save();
+	 webRule.save();
+	 
+	//Increase count of Web Rules for AllDomainstats report in database
+		AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.WEBRULE_COUNT);
     }
 
     @PUT

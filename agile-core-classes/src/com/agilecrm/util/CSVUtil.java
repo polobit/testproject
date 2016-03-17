@@ -113,7 +113,7 @@ public class CSVUtil
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
 		Contact.class.getSimpleName(), this.billingRestriction);
 
-	if ((i + 1) != 1)
+	if (!VersioningUtil.isLocalHost())
 	{
 	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
 		    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
@@ -427,6 +427,7 @@ public class CSVUtil
 
 			for (String tag : tagsArray)
 			{
+			    tag = tag.trim();
 			    if (!TagValidator.getInstance().validate(tag))
 			    {
 				throw new InvalidTagException();
@@ -1245,7 +1246,11 @@ public class CSVUtil
 					int year = Integer.parseInt(data[2].trim());
 					int month = Integer.parseInt(data[1].trim());
 					int day = Integer.parseInt(data[0].trim());
-					c.set(year, month - 1, day);
+					if (month > 0)
+					{
+					    month = month - 1;
+					}
+					c.set(year, month, day);
 					Date date = c.getTime();
 					if (month > 11)
 					{
@@ -1670,7 +1675,7 @@ public class CSVUtil
 		int year = Integer.parseInt(data[2].trim());
 		int day = Integer.parseInt(data[1].trim());
 		int month = Integer.parseInt(data[0].trim());
-		if (month >= 0)
+		if (month > 0)
 		{
 		    month = month - 1;
 		}

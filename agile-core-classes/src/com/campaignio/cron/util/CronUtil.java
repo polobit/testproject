@@ -17,6 +17,7 @@ import com.campaignio.cron.Cron;
 import com.campaignio.cron.deferred.CronDeferredTask;
 import com.campaignio.tasklets.agile.Wait;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.DatastoreTimeoutException;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -228,25 +229,37 @@ public class CronUtil
 		
 		Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", milliSeconds);
 		int count = query.count();
+		query = query.chunkSize(50);
 		QueryResultIterator<Cron> iterator = query.iterator();
 		
-		while (iterator.hasNext())
-		{
-			Cron cron = iterator.next();
-			dao.delete(cron);
-			
-			// Skips if duplicate cron got from Datastore in the same query
-			if(cronUtil.isCronExists(cron))
-				continue;
-			
-			// Temporary list
-			List<Cron> cronList = new ArrayList<Cron>();
-			cronList.add(cron);
+		
+			while (iterator.hasNext())
+			{
+				try
+				{
+					long start = System.currentTimeMillis();
+					Cron cron = iterator.next();
+					dao.delete(cron);
+				
+					// Skips if duplicate cron got from Datastore in the same query
+					if(cronUtil.isCronExists(cron))
+						continue;
+				
+					// Temporary list
+					List<Cron> cronList = new ArrayList<Cron>();
+					cronList.add(cron);
 
-			// Run cron job
-			executeTasklets(cronList, Cron.CRON_TYPE_TIME_OUT, null, count);
-			
-		}
+					// Run cron job
+					executeTasklets(cronList, Cron.CRON_TYPE_TIME_OUT, null, count);
+					long end = System.currentTimeMillis();
+					System.out.println("Took : " + ((end - start)) + " milli seconds to process one cron record in queue");
+				}
+				catch(DatastoreTimeoutException e){
+					e.printStackTrace();
+					System.out.println("Data store time out exception occured while iterating the query result"+e.getMessage());
+				}
+				
+			}
 		
 		// clears cacheMap
 		cronUtil.cacheMap.clear();

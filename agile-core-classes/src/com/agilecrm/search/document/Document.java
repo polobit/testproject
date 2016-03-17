@@ -1,10 +1,13 @@
 package com.agilecrm.search.document;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
@@ -55,6 +58,33 @@ public class Document
 		catch (NumberFormatException e)
 		{
 		    e.printStackTrace();
+		}
+	    }
+	    else if (fieldDef != null && (fieldDef.field_type == CustomFieldDef.Type.CONTACT || fieldDef.field_type == CustomFieldDef.Type.COMPANY))
+	    {
+		try
+		{
+			String contact_value = "";
+			if (data.value != null)
+		    {
+		    JSONArray jsonArray = new JSONArray(data.value);
+		    for (int i=0; i<jsonArray.length(); i++)
+		    {
+		    	contact_value += String.valueOf(jsonArray.getString(i)) + " ";
+		    }
+		    }
+			
+			builder.setName(SearchUtil.normalizeTextSearchString(data.name) + "");
+
+		    builder.setText(contact_value);
+		    doc.addField(Field.newBuilder().setText(contact_value));
+		}
+		catch (NumberFormatException e)
+		{
+		    e.printStackTrace();
+		}
+		catch (Exception e1) {
+			e1.printStackTrace();
 		}
 	    }
 	    else

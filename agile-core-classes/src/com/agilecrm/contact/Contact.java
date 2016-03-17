@@ -1203,6 +1203,11 @@ public class Contact extends Cursor
 	    // remove any blank 'company' in properties before sending
 	    removeProperty(COMPANY);
 	}
+	//If entity is Company type, set entity_type to company
+	if (this.type == Contact.Type.COMPANY)
+	{
+		this.entity_type = "company_entity";
+	}
     }
 
     /**

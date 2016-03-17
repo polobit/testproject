@@ -68,7 +68,8 @@ parse : function(response)
  * view.
  */
 var Base_List_View = Backbone.View.extend({ events : { "click .delete" : "deleteItem", "click .edit" : "edit", "delete-checked .agile_delete" : "deleteItem",
-	"click .delete-model" : "deleteModel"
+	"click .delete-model" : "deleteModel",
+	"click .delete-confirm" : "deleteConfirm"
 
 },
 /*
@@ -91,7 +92,6 @@ initialize : function()
  */
 deleteItem : function(e)
 {
-	
 	e.preventDefault();
 	this.model.destroy();
 	this.remove();
@@ -101,11 +101,61 @@ deleteModel : function(e)
 	e.preventDefault();
 	if(!confirm("Are you sure you want to delete?"))
 		return false;
+
 	$.ajax({ type: 'DELETE', url: this.model.url(),success : function() {
 		location.reload(true);
 	}
         });
+	
 },
+
+deleteConfirm : function(e)
+{
+	var that = this;
+	var confirmModal = $('#deleteConfirmationModal');
+
+	confirmModal.html(getTemplate('modal-delete-confirm', {})).modal('show');
+
+	$("#delete-confirm", confirmModal).click(function(e){
+			e.preventDefault();
+			var id=that.model.get("id");
+			console.log(id);
+		   // Show loading
+		   $(this).addClass("disabled")
+		   $.ajax({
+    					url: 'core/api/users/'+id,
+       					type: 'DELETE',
+       					success: function()
+       					{
+       						console.log("success");
+       						$('#deleteConfirmationModal').modal('hide');
+       						that.remove();
+						    if(!_billing_restriction.currentLimits.freePlan)
+							   {
+							    var message;
+							    if(count > 1)
+							     message = "Users have been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted users.";
+							    else
+							     message = "User has been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted user.";
+							    showNotyPopUp('information', message, "top", 10000);
+							   }
+
+
+       					},
+       					error : function(response)
+						{
+							console.log("error");
+							confirmModal.find(".modal-footer").find("#delete-user").html('<small class="text-danger" style="font-size:15px;margin-right:172px;">Sorry, can not delete user having admin privilege.</small>');
+							console.log(response);
+
+						}
+
+       			});
+          
+	});
+
+},
+
 edit : function(e)
 {
 	/*

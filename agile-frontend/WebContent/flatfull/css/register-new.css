@@ -1,8 +1,8 @@
 body {
-  /*background-image: url('../images/flatfull/agile-registration-page-low.jpg');
-  */background-repeat: no-repeat;
+  background-image: url('../images/flatfull/agile-registration-page-low.jpg');
+  background-repeat: no-repeat;
   background-position: center center;
-  background-size: 100% 100%;
+  background-size: cover;
   background-attachment: fixed;
 }
 
