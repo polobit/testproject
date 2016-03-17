@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.google.appengine.api.taskqueue.Queue"%>
 <%@page import="com.agilecrm.subscription.Subscription"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="com.campaignio.servlets.deferred.DomainUserAddPicDeferredTask"%>
