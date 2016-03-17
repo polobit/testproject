@@ -27,7 +27,7 @@ public class ImportStatusSender implements StatusSender
 
 	// TODO Auto-generated method stub
 	System.out.println("Email to be sent to email");
-	SendMail.sendMail(domainUser.email, "CSV Contacts Import Delay", SendMail.CSV_IMPORT_DELAY_NOTIFICATION,
+	SendMail.sendMail(domainUser.email, "Import in progress. Please expect some delay in contacts CSV import at this moment.", SendMail.CSV_IMPORT_DELAY_NOTIFICATION,
 		new Object[] { domainUser });
     }
 }
