@@ -26,6 +26,7 @@ var Tickets_Rest={
 				    $(".ticket-send-reply .btn").removeAttr("disabled");
                 	$('#ticket_change_sla').removeAttr("disabled");                    	
                 	$(".close-current-ticket").removeAttr("disabled");
+                	if($('#ticket_change_sla').val() != "")
                 	$(".remove-date").css("display", "block");
 				}						
 				else
@@ -269,6 +270,24 @@ toggleFavorite : function(e){
 		});
     },
 
+    removeDuedate : function(){
+
+	 	var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/remove-due-date";
+	 	var json = {};
+
+	 	Tickets.updateModel(url, json, function(model){
+
+    		$('#ticket_change_sla').val(''); 
+
+    		$(".remove-date").css("display", "none");
+
+	 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:''});
+
+	 		showNotyPopUp('information', "Due date has been removed",'bottomRight', 5000);
+
+	 	}, null);
+	 },
+
     updateDataInModelAndCollection : function(id, data){
 
 	    if(!App_Ticket_Module.ticketsCollection)
@@ -276,6 +295,7 @@ toggleFavorite : function(e){
 
 		// Get data from collection with id
 		var model = App_Ticket_Module.ticketsCollection.collection.get(id);
+
 
 		//Update data in model
 		model.set(data, {silent: true});
