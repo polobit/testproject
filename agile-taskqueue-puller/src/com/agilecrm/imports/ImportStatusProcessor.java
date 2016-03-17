@@ -22,6 +22,8 @@ public class ImportStatusProcessor<T> implements StatusProcessor<T>
     private String TASK_QUEUE_NAME = getTaskQueueName() == null ? "dummy-pull-queue" : getTaskQueueName();
     private Taskqueue taskQueue = null;
     private int totalCount = 0;
+    private static final int BOTTLE_NECK_LIMIT = 20;
+    private static final int CONTACTS_BOTTLE_NECK = 5000;
 
     @Override
     public T getStatus()
@@ -40,11 +42,11 @@ public class ImportStatusProcessor<T> implements StatusProcessor<T>
     public boolean shouldSendDelayMessage()
     {
 	System.out.println("in should continue " + totalCount);
-	if (totalCount > 10)
+	if (totalCount > CONTACTS_BOTTLE_NECK)
 	{
 	    return true;
 	}
-	else if (ThreadPool.totalTasksPool() > 50)
+	else if (ThreadPool.totalTasksPool() > BOTTLE_NECK_LIMIT)
 	{
 	    return true;
 	}
