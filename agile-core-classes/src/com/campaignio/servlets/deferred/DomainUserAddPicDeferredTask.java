@@ -10,6 +10,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.agilecrm.util.NamespaceUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.tasklets.util.CampaignConstants;
 import com.google.appengine.api.NamespaceManager;
@@ -25,15 +26,22 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 @SuppressWarnings("serial")
 public class DomainUserAddPicDeferredTask implements DeferredTask {
 
-	public String domain;
-	public DomainUserAddPicDeferredTask(String domain){
-	  this.domain = domain;	
+	public Long domainId;
+	public DomainUserAddPicDeferredTask(Long domainId){
+	  this.domainId = domainId;	
 	}
 	
 	public void run() {
 		String oldNamespace = NamespaceManager.get();
 		
 		try {
+			
+			// Get domain name from id
+			String domain = NamespaceUtil.getNamespaceNameFromId(domainId);
+			
+			if(StringUtils.isBlank(domain))
+				return;
+			
 			NamespaceManager.set(domain);
 			
 			List<DomainUser> domainUsers = DomainUserUtil.getUsers();

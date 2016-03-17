@@ -6,27 +6,17 @@
 <%@page import="com.agilecrm.util.NamespaceUtil"%>
 <%@page import="java.util.Set"%>
 <%
-	String domainName = request.getParameter("domain");
-    if(StringUtils.isNotBlank(domainName)){
-    	DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(domainName);
 
-		// Add to queue
-		Queue queue = QueueFactory.getDefaultQueue();
-		queue.add(TaskOptions.Builder.withPayload(task));
-		
-    	return;
-    }
+  	//Fetches all namespaces
+  	Set<Long> namespaceIds = NamespaceUtil.getAllNamespaceIdsNew();
+  	
+  	// Iterates through each Namespace and initiates task for each namespace
+  	// to update usage info
+  	for (Long namespaceId : namespaceIds) {
+  		DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(namespaceId);
 
-	//Fetches all namespaces
-	Set<String> namespaces = NamespaceUtil.getAllNamespaces();
-	
-	// Iterates through each Namespace and initiates task for each namespace
-	// to update usage info
-	for (String namespace : namespaces) {
-		DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(namespace);
-
-		// Add to queue
-		Queue queue = QueueFactory.getDefaultQueue();
-		queue.add(TaskOptions.Builder.withPayload(task));
-	}
+  		// Add to queue
+  		Queue queue = QueueFactory.getDefaultQueue();
+  		queue.add(TaskOptions.Builder.withPayload(task));
+  	}
 %>
