@@ -775,16 +775,22 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Opportunity saveDealUpdateNote(Note note)
     {
+    Opportunity opportunity = null;
 	String updatedOpportunityid = null;
 	List<String> deal_ids = note.deal_ids;
 	if (deal_ids != null && deal_ids.size() > 0)
 	{
 	    updatedOpportunityid = deal_ids.get(0);
 	}
+	if (updatedOpportunityid != null){
+		opportunity = OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
+		UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
+		opportunity.note_description = note.description;
+		opportunity.note_subject = note.subject;
+	}
 	note.save();
-	if (updatedOpportunityid != null)
-	    return OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
-	return null;
+	
+	return opportunity;
     }
 
     /**

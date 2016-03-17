@@ -652,23 +652,34 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 
 					if (dealsView && dealsView.collection)
 					{
-						if (deal.archived == true)
-						{
-							dealsView.collection.remove(deal.id);
+						var owner = deal.owner_id;
+
+					  	if(!owner){
+					  		owner = deal.owner.id;
+					  	}
+					  	if(hasScope("VIEW_DEALS") || CURRENT_DOMAIN_USER.id == owner){
+					  		if (deal.archived == true)
+							{
+								dealsView.collection.remove(deal.id);
+								dealsView.collection.sort();
+							}
+							else if (dealsView.collection.get(deal.id))
+							{
+								dealsView.collection.get(deal.id).set(new BaseModel(deal));
+								$("#"+deal.id).closest("li").removeAttr("class");
+								$("#"+deal.id).closest("li").addClass("deal-color");
+								$("#"+deal.id).closest("li").addClass(deal.colorName);
+							}
+							else
+							{
+								dealsView.collection.add(new BaseModel(deal), { sort : false });
+								dealsView.collection.sort();
+							}
+					  	}
+					  	if(!hasScope("VIEW_DEALS") && CURRENT_DOMAIN_USER.id != owner && isUpdate){
+					  		dealsView.collection.remove(deal.id);
 							dealsView.collection.sort();
-						}
-						else if (dealsView.collection.get(deal.id))
-						{
-							dealsView.collection.get(deal.id).set(new BaseModel(deal));
-							$("#"+deal.id).closest("li").removeAttr("class");
-							$("#"+deal.id).closest("li").addClass("deal-color");
-							$("#"+deal.id).closest("li").addClass(deal.colorName);
-						}
-						else
-						{
-							dealsView.collection.add(new BaseModel(deal), { sort : false });
-							dealsView.collection.sort();
-						}
+					  	}
 					}
 
 					// Activates "Timeline" tab and its tab content in
@@ -685,7 +696,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		} else if(App_Companies.companyDetailView
 				&& Current_Route == "company/"
 					+ App_Companies.companyDetailView.model.get('id')){
-			company_util.updateDealsList(deal,true);
+			company_util.updateDealsList(deal,true, isUpdate);
 		}
 		// When deal is added or updated from Deals route
 		else if (Current_Route == 'deals')

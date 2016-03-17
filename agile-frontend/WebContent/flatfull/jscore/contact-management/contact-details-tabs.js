@@ -211,8 +211,17 @@ var Contact_Details_Tab_Actions = {
 		  		owner = model.get("owner").id;
 		  	}
 
+		  	if(!owner && Current_Route.indexOf("deal/") == 0 && App_Deal_Details.dealDetailView && App_Deal_Details.dealDetailView.model){
+		  		owner = App_Deal_Details.dealDetailView.model.get("owner").id;
+		  	}
+
 		  	if(!hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "deal"){
 		  		$('#deal_delete_privileges_error_modal').modal('show');
+		  		return;
+		  	}
+
+		  	if(model.get("entity_type") && model.get("entity_type") == "note" && Current_Route.indexOf("deal/") == 0 && model.get("domainOwner") && !hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != owner)){
+		  		$('#deal_update_privileges_error_modal').modal('show');
 		  		return;
 		  	}
 

@@ -48,6 +48,16 @@
 				
 			
 				
+			},
+			error : function(model, err)
+			{
+				enable_save_button($(element));
+				modal.find('span.error-status').html("<i style='color:#B94A48;'>"+err.responseText+"</i>");
+				setTimeout(function()
+				{
+					modal.find('span.error-status').html('');
+				}, 2000);
+				console.log('-----------------', err.responseText);
 			} });
 		}
 		
@@ -81,6 +91,16 @@
 				
 			
 				
+			},
+			error : function(model, err)
+			{
+				enable_save_button($(element));
+				modal.find('span.error-status').html("<i style='color:#B94A48;'>"+err.responseText+"</i>");
+				setTimeout(function()
+				{
+					modal.find('span.error-status').html('');
+				}, 2000);
+				console.log('-----------------', err.responseText);
 			} });
 		}
 
