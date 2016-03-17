@@ -55,6 +55,8 @@ import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.NamespaceUtil;
@@ -228,6 +230,9 @@ public class DealsAPI
     public Opportunity getOpportunity(@PathParam("opportunity-id") Long id)
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+	
+	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.READ, true);
+	
 	return opportunity;
     }
 
@@ -328,7 +333,7 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Opportunity updateOpportunity(Opportunity opportunity)
     {
-
+    UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 	// Some times milestone comes as null from client side, if it is null we
@@ -363,9 +368,10 @@ public class DealsAPI
     @Path("{opportunity-id}")
     @DELETE
     public void deleteOpportunity(@PathParam("opportunity-id") Long id)
-	    throws com.google.appengine.labs.repackaged.org.json.JSONException, JSONException
+	    throws com.google.appengine.labs.repackaged.org.json.JSONException, JSONException, Exception
     {
-	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+    Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+    UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.DELETE, true);
 	if (opportunity != null)
 	{
 	    ActivitySave.createDealDeleteActivity(opportunity);
@@ -816,16 +822,22 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Opportunity saveDealUpdateNote(Note note)
     {
+    Opportunity opportunity = null;
 	String updatedOpportunityid = null;
 	List<String> deal_ids = note.deal_ids;
 	if (deal_ids != null && deal_ids.size() > 0)
 	{
 	    updatedOpportunityid = deal_ids.get(0);
 	}
+	if (updatedOpportunityid != null){
+		opportunity = OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
+		UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
+		opportunity.note_description = note.description;
+		opportunity.note_subject = note.subject;
+	}
 	note.save();
-	if (updatedOpportunityid != null)
-	    return OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
-	return null;
+	
+	return opportunity;
     }
 
     /**
