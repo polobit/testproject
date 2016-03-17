@@ -479,6 +479,15 @@ Handlebars.registerHelper('replace_br_with_space', function(text, options)
 	if(!text)
 		return;
 
+	// Construct anchor links
+	try {
+		var exp = /(\b(http|https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+		text = text.replace(exp,
+				"<a href='$1' target='_blank' class='link-color'>$1</a>");
+
+	} catch (err) {
+	}
+	
 	var regex = /<br\s*[\/]?>/gi;
 
 	return text.replace(regex, " ");

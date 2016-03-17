@@ -241,8 +241,8 @@ public class TicketNotes
 			}
 
 			// Logging notes activity
-			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plain_text, html_text,
-					"html_text");
+			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id,
+					StringEscapeUtils.escapeHtml(plain_text), html_text, "html_text");
 		}
 		catch (Exception e)
 		{
@@ -263,12 +263,6 @@ public class TicketNotes
 
 		if (assignee_key != null)
 			assignee_id = assignee_key.getId();
-
-		if (StringUtils.isNotBlank(plain_text))
-		{
-			plain_text = StringEscapeUtils.escapeHtml(plain_text);
-			plain_text = TicketNotesUtil.convertNewLinesToBreakTags(plain_text);
-		}
 	}
 
 	/**
