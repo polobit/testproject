@@ -81,7 +81,7 @@ function showTwitterMatchingProfiles(data)
 		el += "</div><div class='clearfix'></div>";
 
 		// Show matching profiles in Twitter panel
-		$('#Twitter', WIDGET_PARENT_ELEMENT).html(el);
+		$('#Twitter', WIDGET_PARENT_ID).html(el);
 
 		/*
 		 * Displays Twitter profile details on mouse hover and saves profile on
@@ -164,8 +164,9 @@ function showTwitterMatchingProfiles(data)
  */
 function getTwitterMatchingProfiles(contact_id)
 {
+	console.log("Twitter matching lodded ***** ");
 	// Shows loading image, until matches profiles are fetched
-	$('#Twitter', WIDGET_PARENT_ELEMENT).html(TWITTER_UPDATE_LOAD_IMAGE);
+	$('#Twitter', WIDGET_PARENT_ID).html(TWITTER_UPDATE_LOAD_IMAGE);
 
 	// Gets contact id, to save social results of a particular id
 	var contact_id = WIDGET_LOADED_CONTACT.id;
@@ -186,6 +187,7 @@ function getTwitterMatchingProfiles(contact_id)
 		{
 			// Save social results in cookie of particular contact
 			_agile_set_prefs('Agile_twitter_matches_' + contact_id, JSON.stringify(data));
+			console.log("Twitter matching lodded ***** ");
 
 			showTwitterMatchingProfiles(data);
 
@@ -1358,13 +1360,13 @@ function startTwitterWidget(contact_id){
 	{
 		// Shows all the matches in Twitter for the contact
 		getTwitterMatchingProfiles(contact_id);
-	}
+	}	
 
 	// Deletes Twitter profile on click of delete button in template
     $("#"+WIDGET_PARENT_ID).off('click','#Twitter_plugin_delete');
 	$("#"+WIDGET_PARENT_ID).on('click','#Twitter_plugin_delete', function(e)
 	{
-		e.preventDefault();
+		e.preventDefault();		
 		agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url, function(data){
 				console.log("In twitter delete callback");
 				getTwitterMatchingProfiles(contact_id);
