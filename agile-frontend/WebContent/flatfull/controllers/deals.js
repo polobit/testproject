@@ -100,7 +100,7 @@ var DealsRouter = Backbone.Router.extend({
 						setupDealFilters(cel);
 						setNewDealFilters(App_Deals.deal_filters.collection);
 						initializeDealListners(el);
-						loadPortlets('Deals');
+						loadPortlets('Deals',el);
 						setTimeout(function(){
 							$('#delete-checked',el).attr("id","deal-delete-checked");
 						},500);
@@ -120,7 +120,7 @@ var DealsRouter = Backbone.Router.extend({
 
 		$(".active").removeClass("active");
 		$("#dealsmenu").addClass("active");
-		
+		loadPortlets('Deals');
 		setTimeout(function()
 		{
 			$('a.deal-notes').tooltip();
