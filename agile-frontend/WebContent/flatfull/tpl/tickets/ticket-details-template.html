@@ -314,7 +314,7 @@
       
         {{#if canned_responses}}
         <div class="btn-group dropdown m-l-xs pull-right">
-          <a class="link-color text-sm"  id="macro_list" data-toggle="dropdown" aria-expanded="false">Macros <span class="caret"></span></a>
+          <a class="link-color text-sm"  id="macro_list" data-toggle="dropdown" aria-expanded="false">Canned Responses <span class="caret"></span></a>
           <ul class="dropdown-menu">
             {{#each canned_responses}}
             <li id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>
@@ -378,7 +378,7 @@
 
                   {{#if label_matched_canned_responses}}
                   <div class="panel panel-default m-t-md matched-canned-responses-list" style="display: none;">
-                    <div class="panel-heading">Matched Macros</div>
+                    <div class="panel-heading">Matched Canned Responses</div>
                     <table class="table table-striped table-responsive m-b-none">
                       <tbody>
                         {{#each label_matched_canned_responses}}

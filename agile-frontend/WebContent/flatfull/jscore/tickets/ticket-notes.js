@@ -98,12 +98,7 @@ var Tickets_Notes = {
 							json.last_reply_text = notes_json.plain_text;
 							json.last_updated_by = 'AGENT';
 							json.user_replies_count = notes_json.user_replies_count;
-						    json.assigneeID = model.attributes.assignee_id;
 						}
-
-						ticket_model.set(json, {
-							silent : true
-						});
 					}
 
 					var next_ticket_url = $(".navigation .next-ticket").attr("href");
@@ -358,7 +353,7 @@ var Tickets_Notes = {
 
 	        $.each(noteAttachment,function(index,note_Attachment){
 	           
-	            notesText += "\n"+ encodeURI(note_Attachment.url);
+	            notesText += '\n <a href="encodeURI(note_Attachment.url)">'+ note_Attachment.name + '</a>';
 	        });
 	         
             notesText += "\n\n-----------------------------------------\n\n";

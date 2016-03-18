@@ -75,7 +75,7 @@ public class TicketNotesUtil
 		//Formatting plain text content
 		for (TicketNotes note : notes)
 		{
-			note.plain_text = StringEscapeUtils.escapeHtml(note.plain_text);
+			//note.plain_text = StringEscapeUtils.escapeHtml(note.plain_text);
 			note.plain_text = TicketNotesUtil.convertNewLinesToBreakTags(note.plain_text);
 		}
 
