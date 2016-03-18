@@ -134,10 +134,10 @@ public class Globals
     public static final String QUICKBOOKS_CONSUMER_SECRET = "sHeU8i12GIHe6YpgdgFpNfLV0jIiZhe0iG4A9cgS";
 
 
-    //New Testing Keys for widget Issue (AgileCRM Widget APP keys)
-    public static final String QUICKBOOKS_WIDGET_APP_KEY = "6275c638bedb8b4116bb079b2f6ab9f543e5";
-    public static final String QUICKBOOKS_WIDGET_CONSUMER_KEY = "qyprdcvks8DVYIVTm9RX4zd77GEvyb";
-    public static final String QUICKBOOKS_WIDGET_CONSUMER_SECRET = "nwIqkA7pdS1RZlZyE2e08f3X9baNcLXyApXw21lZ";
+    //New App Keys for widget Issue (AgileCRM Widget APP)
+    public static final String QUICKBOOKS_WIDGET_APP_KEY = "df14ce2bbf0ccb40debbeacbf914b4c9a105";
+    public static final String QUICKBOOKS_WIDGET_CONSUMER_KEY = "qyprdkWGHkoQFLC1CT21TCDOA4lmcu";
+    public static final String QUICKBOOKS_WIDGET_CONSUMER_SECRET = "ajSKfhERVhlqHbucMt0yZO7bBGhf9KC5RjvlEGXx";
     
     
     /** test facebook app details */
