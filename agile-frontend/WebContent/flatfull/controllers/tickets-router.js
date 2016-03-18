@@ -95,11 +95,15 @@
 				});
 			}
 		});
-
+		
 		//Appending template to ticket modals container
 		$('#ticketsModal').html(newTicket.render().el).modal('show').on('shown.bs.modal', function(){
 
 			Tickets.initNewTicketTypeahead($('#ticketsModal'));
+		});
+
+		$('#ticketsModal').on('hidden.bs.modal', function (e) {
+		    $(e.currentTarget).unbind();    
 		});
 	},
 

@@ -33,6 +33,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.session.SessionManager;
@@ -249,13 +250,13 @@ public class TicketsRest
 		{
 			List<TicketGroups> groups = TicketGroupUtil.getAllGroups();
 
-			List<DomainUser> domainUsers = DomainUserUtil.getUsers(NamespaceManager.get());
+			List<DomainUserPartial> domainUsers = DomainUserUtil.getPartialDomainUsers(NamespaceManager.get());
 
 			for (TicketGroups group : groups)
 			{
-				List<DomainUser> groupUsers = new ArrayList<DomainUser>();
+				List<DomainUserPartial> groupUsers = new ArrayList<DomainUserPartial>();
 
-				for (DomainUser domainUser : domainUsers)
+				for (DomainUserPartial domainUser : domainUsers)
 				{
 					if (group.agents_keys.contains(domainUser.id))
 						groupUsers.add(domainUser);

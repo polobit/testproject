@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.projectedpojos.TicketGroupsPartial;
 import com.agilecrm.ticket.entitys.TicketGroups;
@@ -163,32 +164,26 @@ public class TicketGroupUtil
 
 	public static List<TicketGroups> inclDomainUsers(List<TicketGroups> ticketGroups)
 	{
-		String oldnamespace = NamespaceManager.get();
-
 		try
 		{
-			NamespaceManager.set("");
-
+			List<DomainUserPartial> domainUsers = DomainUserUtil.getPartialDomainUsers(NamespaceManager.get());
+			
 			for (TicketGroups group : ticketGroups)
 			{
-				List<Long> users_keys = group.agents_keys;
-				List<Key<DomainUser>> domainUserKeys = new ArrayList<Key<DomainUser>>();
+				List<DomainUserPartial> groupUsers = new ArrayList<DomainUserPartial>();
+				
+				for (DomainUserPartial domainUser : domainUsers)
+				{
+					if (group.agents_keys.contains(domainUser.id))
+						groupUsers.add(domainUser);
+				}
 
-				for (Long userKey : users_keys)
-					domainUserKeys.add(new Key<DomainUser>(DomainUser.class, userKey));
-
-				group.group_users = DomainUserUtil.dao.fetchAllByKeys(domainUserKeys);
+				group.group_users = groupUsers;
 			}
-
-			NamespaceManager.set(oldnamespace);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-		}
-		finally
-		{
-			NamespaceManager.set(oldnamespace);
 		}
 
 		return ticketGroups;

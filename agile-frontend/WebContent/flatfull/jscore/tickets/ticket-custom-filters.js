@@ -39,9 +39,13 @@ var Ticket_Custom_Filters = {
 			$('.daterangepicker').remove();
 
 			// Bootstrap date range picker.
-			$('#created-date-input').daterangepicker({drops: 'up', locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', firstDay : parseInt(CALENDAR_WEEK_START_DAY)}}, function(start, end)
+			$('#created-date-input').daterangepicker({changed: true, drops: 'up', locale : { applyLabel : 'Apply', cancelLabel : 'Cancel'}}, function(start, end)
 			{
 				var range = $('#created-date-input').val();
+
+				if(!range)
+					return;
+				
 				var range_array = range.split('-');
 
 				$('#clear-created-date').show();
@@ -438,6 +442,8 @@ var Ticket_Custom_Filters = {
 
 	changeCreatedDate: function(start, end){
 
+		var date_applied = false;
+
 		//Removing existing due date conditions from custom filters
   		for(var i=0; i< Ticket_Custom_Filters.customFilters.length; i++){
 
@@ -446,9 +452,13 @@ var Ticket_Custom_Filters = {
 			if(condition.LHS != 'created_between')
 				continue;
 
+			dateApplied = true;
 			Ticket_Custom_Filters.customFilters.splice(i, 1);
 			break;
 		}
+
+		if(!date_applied)
+			return;
 
 		if(start && end){
 
