@@ -78,8 +78,11 @@ public class StripeChargeWebhook extends HttpServlet
 	    System.out.println("stripe json is " + stripeJson);
 	    
 	    String amount = stripeJson.getJSONObject("data").getJSONObject("object").getString("amount");
+	    System.out.println("Amount is :"+ amount);
 	    stripeJson.getJSONObject("data").getJSONObject("object").remove("amount");
+	    System.out.println("Removing amount attribute in json");
 	    stripeJson.getJSONObject("data").getJSONObject("object").put("amount", Double.parseDouble(amount)/100);
+	    System.out.println("Calculating amount in dollars and updating it in json");
 
 	    String eventType = stripeJson.getString("type");
 	    System.out.println("stripe post event type is " + eventType);
@@ -216,7 +219,7 @@ public class StripeChargeWebhook extends HttpServlet
 	}
 	catch (JSONException e)
 	{
-	    e.printStackTrace();
+	    System.out.println("JSON Exception occured:"+e.getMessage());
 	}
     }
 
