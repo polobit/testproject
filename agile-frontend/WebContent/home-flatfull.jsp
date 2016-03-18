@@ -696,7 +696,7 @@ var Agile_Contact = {};
 head.ready(function() {
 	
 if(!HANDLEBARS_PRECOMPILATION){
-    downloadTemplate("tpl-combined.js", function(){             
+    downloadTemplate("tpl.js", function(){             
     });
 }
  
