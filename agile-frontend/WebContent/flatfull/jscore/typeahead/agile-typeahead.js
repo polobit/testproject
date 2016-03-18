@@ -178,8 +178,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 						{
 							self.$menu.empty();
 							/* Sets css to html data to be displayed */
-							self.$menu.css({"width" : 300, "max-height" : "calc(100vh - 50px)", "overflow-y" : "auto"});
-							self.$menu.addClass("dashboard-search-scroll-bar");							
+							self.$menu.css("width", 300);
+							/*self.$menu.css({"width" : 300, "max-height" : "calc(100vh - 50px)", "overflow-y" : "auto"});
+							self.$menu.addClass("dashboard-search-scroll-bar");*/							
 
 							/*
 							 * Calls render because menu needs to be initialized
