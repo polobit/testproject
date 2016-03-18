@@ -3486,10 +3486,8 @@ text-align:left;
 }
 #contact-container:hover .toggle-contact-image{
 display: block;
-margin-left: 26px;
+margin-left: 33px;
 }
-#contact-image-option-dropdown .dropdown-menu{
-top: 10%;
-left: 65%;
-min-width: 130px;
+#contact-container:hover .contact-image-view{
+opacity: .1;
 }

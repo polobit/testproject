@@ -31,21 +31,16 @@
 						<div class="thumb-lg">
 						<div id="contact_delete_image" style="display:none">{{id}}</div>
 						<form id="contact-container">
-									 <div id="contact-image-option-dropdown" class="pull-right">
-										<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret" style="margin-top:-15px;opacity:0.8;"></span></a>
-										<ul class="dropdown-menu pull-right text-sm">
-		                                   <li class="contact-edit-option"><a class='edit-pic'>
-		                                     <div class="pull-left"><i class="fa fa-pencil-square"></i> Edit Picture</div> 
-		                                     <div class="clearfix"></div>
-		                                     </a></li>
-		                                     {{#property_is_exists "image" properties}}
-		                                     <li class="divider"></li>
-		                                     <li class="contact-delete-option"><a onClick="deleteConfirmation();"><i class="fa fa-trash"></i> Delete Picture</a></li>{{/property_is_exists}}                                
-										</ul>
-									</div>
-									<a href="#" class="contact-image-view"> 
+									<a class="contact-image-view"> 
 									<img class='upload_pic imgholder submit w-full img-circle' style="width:75px;height:75px;" type="submit"
 									src="{{gravatarurl properties 80}}" /></a>
+									<div style="width: 32px;top:53px;position:absolute;font-size: 11px;" class="toggle-contact-image">
+										<div style="float:left" class="contact-edit-option"><a name="Delete" class='tooltip_info  edit-pic' data-placement="bottom" data-toggle="tooltip" title="Change"><i class='glyphicon glyphicon-edit'></i></a>
+										</div>
+										{{#property_is_exists "image" properties}}
+										<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="Delete"><i class="glyphicon glyphicon-trash" style="color:red"></i></a>
+										</div>{{/property_is_exists}}
+									</div>
 									<input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
 							</form>

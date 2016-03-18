@@ -64,8 +64,10 @@ function setContactImageURL(url)
 	// Set the media stream
 	$('#' + id).find('.contact-image-view').html('');
 	$('#' + id).find('.contact-image-view').html('<img src="' + url + '" class="upload_pic imgholder submit w-full img-circle" style="width:75px;height:75px;" type="submit" />');
-	if($(".dropdown-menu .contact-delete-option").length == 0) {
- 	$('#' + id).find('.dropdown-menu').append('<li class="divider"></li><li class="contact-delete-option"><a onClick="deleteConfirmation();"><i class="fa fa-trash"></i> Delete Picture</a></li>');	
+	if($(".toggle-contact-image .contact-delete-option").length == 0) {
+ 	$('#' + id).find('.toggle-contact-image').append('<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="Delete"><i class="glyphicon glyphicon-trash" style="color:red"></i></a></div>');	
+	$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").removeAttr('style');
+	$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").css("float","left");
 	}
 	// Set the value of selector for input
 	$('#' + id).find('#upload_url').val(url);
@@ -110,9 +112,9 @@ function deleteContactImage(){
 		// Set the media stream
 		$('#' + id).find('.contact-image-view').html('');
 		$('#' + id).find('.contact-image-view').html('<img src="' + url + '" class="upload_pic imgholder submit w-full img-circle" style="width:75px;height:75px;"/>');
-		if($(".dropdown-menu .contact-delete-option").length > 0) {
- 		$('#' + id).find('.dropdown-menu').find(".divider").remove();
- 		$('#' + id).find('.dropdown-menu').find(".contact-delete-option").remove();
+		if($(".toggle-contact-image .contact-delete-option").length > 0) {
+ 		$('#' + id).find('.toggle-contact-image').find(".contact-delete-option").remove();
+ 		$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").css("margin-left","10px");
 		}
 
 	},error: function() {
