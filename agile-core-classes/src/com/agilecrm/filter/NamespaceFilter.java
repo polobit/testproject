@@ -122,7 +122,15 @@ public class NamespaceFilter implements Filter
 	    return false;
 	}
 
-	subdomain = AliasDomainUtil.getActualDomain(subdomain);
+	try
+	{
+		subdomain = AliasDomainUtil.getActualDomain(subdomain);	
+	}
+	catch(Exception e)
+	{
+		e.printStackTrace();
+	}
+	
 	// Set the subdomain as name space
 	System.out.println("Setting the domain " + subdomain + " " + ((HttpServletRequest) request).getRequestURL());
 	NamespaceManager.set(subdomain);
