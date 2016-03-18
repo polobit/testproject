@@ -49,8 +49,8 @@ var Ticket_Labels = {
 	showSelectedLabels : function(labels, el) {
 
 		this.fetchCollection(function() {
-				Ticket_Labels.prepareOptionsList(labels, el);
-			});
+			Ticket_Labels.prepareOptionsList(labels, el);
+		});
 
 		return;
 	},
@@ -81,8 +81,9 @@ var Ticket_Labels = {
 
 	updateLabel : function(label, command, callback) {
 
-        //console.log(command);
-		if (!label || !Current_Ticket_ID) {
+		//console.log(command);
+		if (!label || !Current_Ticket_ID 
+			 || Current_Route.indexOf('edit-canned-response') != -1) {
 			if (callback)
 				callback();
 
@@ -115,7 +116,8 @@ var Ticket_Labels = {
        	Tickets.updateModel(url, json, function(model){
        		
 
-       		var label_text = $('.chosen-select option[value="'+json.labelID+'"]').text()      		
+       		var label_text = $('.chosen-select option[value="'+json.labelID+'"]', 
+       								App_Ticket_Module.ticketView.el).text();
        		
        		//Updating modal
        		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, model);

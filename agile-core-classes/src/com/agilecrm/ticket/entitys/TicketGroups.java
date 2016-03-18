@@ -12,6 +12,7 @@ import org.json.JSONArray;
 
 import com.agilecrm.Globals;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -90,7 +91,7 @@ public class TicketGroups
 	 * Stores group users list
 	 */
 	@NotSaved
-	public List<DomainUser> group_users = null;
+	public List<DomainUserPartial> group_users = null;
 
 	public TicketGroups()
 	{

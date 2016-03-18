@@ -1374,9 +1374,11 @@ var Tickets = {
 		//Initializing click event on due date button
 	  	$(el).on('click','.choose-due-date', function(event){
          
-         var currentTicketJSON = App_Ticket_Module.ticketView.model.toJSON();   
+         var currentTicketJSON = App_Ticket_Module.ticketView.model.toJSON();
+
 	  		if(currentTicketJSON.status == "CLOSED")
 	  			return;
+	  		
 	  		var value = $(this).data('value'), current_date = new Date();
 
 	  		switch(value){
