@@ -154,6 +154,8 @@ function initValidator(selector, callback) {
 				
 					}
   			});
+
+  			
 	        //special condition to skip the error message for and_key_grid-table
 	        if(keys[1] == "and_key_grid-table" || keys[1] == "or_key_grid-table" )
 	        {
@@ -162,7 +164,15 @@ function initValidator(selector, callback) {
 	        	saveflag = true;
 	        	}
 	        }
-	        
+
+	    	var selector_ele = selector;
+	    	var isValid =  isCheckFlagUpdateDeal();
+	    
+	    	if(!isValid){
+        	    errorMessageUpdateDeal(selector_ele);
+				return;
+	    	}   
+
   	        //if errors show single message
 	   		if(!saveflag){
 				  
@@ -172,6 +182,7 @@ function initValidator(selector, callback) {
 	   				selector.find("#errorsdiv").html("<p> Please add atleast one condition </p>").addClass('ui-state-highlight');
 	   			  
 		        }
+		             
 	   			else
 	   			{  
 	   		     selector.find("#errorsdiv").html("<p> <strong>" + keys[1]  + "</strong> -Please add data inside <strong>"+ keys[0] +"</strong></p>").addClass('ui-state-highlight');
@@ -193,4 +204,35 @@ function initValidator(selector, callback) {
     	});    
 
 
+}
+
+function isCheckFlagUpdateDeal()
+{
+	var errorflag = true;
+
+		if($('#expected_value') && $('#milestone') ){
+	        
+	        	if($('#expected_value').val()=="" && $('#milestone').val()=="")
+		        	errorflag = false;
+
+		    	else if(!isNaN($('#expected_value').val()) && $('#expected_value').val()<0)
+					errorflag = false;				
+		}	
+		return errorflag;
+}
+
+function errorMessageUpdateDeal(selector)
+{
+	       
+	        	if($('#expected_value').val() == "" && $('#milestone').val() == "")
+	   				selector.find("#errorsdiv").html("<p> Please complete any one of the fields. </p>").addClass('ui-state-highlight');
+		       
+		        else if(!isNaN($('#expected_value').val()) && $('#expected_value').val()<0){
+
+		        	$('#expected_value').css("border", "1px solid red");
+		        	selector.find("#errorsdiv").html("<p> <strong> Value </strong> - Please enter a value greater than or equal to 0.</p>").addClass('ui-state-highlight');
+				
+				}			
+			
+		
 }

@@ -335,6 +335,16 @@
 		<servlet-name>AccountLimitChecker</servlet-name>
 		<url-pattern>/backend/billing/restrictions</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DomainUserDbUpdateServlet</servlet-name>
+		<servlet-class>com.agilecrm.subscription.limits.cron.DomainUserDbUpdateServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DomainUserDbUpdateServlet</servlet-name>
+		<url-pattern>/backend/domainuserdbupdate</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Stripe Webhook</servlet-name>
@@ -538,6 +548,18 @@
 		<filter-name>PHPAPIFilter</filter-name>
 		<url-pattern>/core/php/*</url-pattern>
 	</filter-mapping>
+	
+	<!-- JSON Filter gadget -->
+	<filter>
+		<filter-name>JSONPFilterPHP</filter-name>
+		<filter-class>com.agilecrm.filter.JSONPRequestFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>JSONPFilterPHP</filter-name>
+		<url-pattern>/core/php/*</url-pattern>
+	</filter-mapping>
+	<!-- JSON Filter -->
 	
 	<filter>
 		<filter-name>WebhooksFilter</filter-name>
@@ -1044,6 +1066,7 @@
         <servlet-name>TaskReminderUnitTest</servlet-name>
         <url-pattern>test/taskreminder/unit-test</url-pattern>
     </servlet-mapping>
+
   <servlet>
 
         <servlet-name>OpenDocumentViewer</servlet-name>
@@ -1059,4 +1082,18 @@
         <url-pattern>/sendemail/*</url-pattern>
 
     </servlet-mapping>
+<servlet>
+    
+        <servlet-name>AllDomainStatsServlet</servlet-name>
+        <servlet-class>com.agilecrm.alldomainstats.util.AllDomainStatsServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>AllDomainStatsServlet</servlet-name>
+        <url-pattern>/backend/stats-report</url-pattern>
+    </servlet-mapping>
+  
 </web-app>
+
+    
+

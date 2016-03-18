@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+<%@page import="com.google.appengine.api.taskqueue.Queue"%>
+<%@page import="com.agilecrm.subscription.Subscription"%>
+<%@page import="com.google.appengine.api.NamespaceManager"%>
+<%@page import="com.campaignio.servlets.deferred.DomainUserAddPicDeferredTask"%>
+<%@page import="com.google.appengine.api.taskqueue.TaskOptions"%>
+<%@page import="com.google.appengine.api.taskqueue.QueueFactory"%>
+<%@page import="com.agilecrm.activities.util.TaskUtil"%>
 <%@page import="com.agilecrm.SafeHtmlUtil"%>
 <%@page import="com.agilecrm.contact.CustomFieldDef.SCOPE"%>
 <%@page import="com.agilecrm.contact.util.CustomFieldDefUtil"%>
@@ -46,7 +53,14 @@ return;
 }
 
 DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+
 System.out.println("Domain user " + domainUser);
+
+DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(domainUser.name);
+// Add to queue
+Queue queue = QueueFactory.getDefaultQueue();
+queue.add(TaskOptions.Builder.withPayload(task));
+
 
 ObjectMapper mapper = new ObjectMapper();
 
@@ -92,6 +106,7 @@ if(restriction != null && restriction.checkToUpdateFreeEmails()){
 	restriction.refreshEmails();
 	restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
 }
+Subscription subscription = SubscriptionUtil.getSubscription(true);
 boolean is_free_plan = false;
 
 if(restriction != null && restriction.planDetails != null)
@@ -140,15 +155,18 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-all.css?_=<%=_AGILE_VERSION%>" />  -->
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib-min.css"></link> -->
-<link rel="stylesheet" type="text/css" href="flatfull/css/min/lib-all-new.css?_=<%=_AGILE_VERSION%>"></link>
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-app-framework.css">  -->
+
+<!--<link rel="stylesheet" type="text/css" href="flatfull/css/min/lib-all-new.css?_=<%=_AGILE_VERSION%>"></link>
 <link rel="stylesheet" type="text/css" href="flatfull/css/min/misc-all-new.css?_=<%=_AGILE_VERSION%>"></link>
-<link rel="stylesheet" type="text/css" href="flatfull/css/min/core-all-new.css?_=<%=_AGILE_VERSION%>"></link>
+<link rel="stylesheet" type="text/css" href="flatfull/css/min/core-all-new.css?_=<%=_AGILE_VERSION%>"></link>-->
+
+<link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
+
 <style>
 .clickdesk_bubble {
   display: none !important;
 }
-
 
 </style>
 <!--  responsive table js -->
@@ -176,7 +194,7 @@ function isIE() {
  {window.location='/error/not-supported.jsp';}
 
 </script>
-
+<div id="alert-message" style="display:none;"></div>
 <div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
@@ -526,7 +544,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
                       <div class="pull-left">Upgrade</div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
                   <li><a href="https://www.agilecrm.com/product-updates" target="_blank"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left">Product Updates</div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
-                  <li><a href="#help"><!-- <i class="icon-off"></i> -->
+                  <li><a href="https://www.agilecrm.com/support" target="_blank"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left">Help</div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
                   <!-- <li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i> Help
                       Videos</a></li>
@@ -585,8 +603,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 %>
 
 
-  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
-   
+   <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
@@ -597,6 +614,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
+console.time("startbackbone");
 
 var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
 //var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
@@ -656,21 +674,15 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 
 // Billing Restriction
 var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
+var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
 
-var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
-//var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
-
-// head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + 'final-lib/min/lib-all-min.js', LIB_PATH + 'lib/backbone-route-filter.js');
-
-<!-- JQUery Core and UI CDN --> 
-<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
-head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min.js?_=' + _AGILE_VERSION, function(){
+head.load(LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION, function(){
         load_globalize();
-})
-// , LIB_PATH + 'lib/backbone-route-filter.js'
+        showVideoForRegisteredUser();
+});
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(HANDLEBARS_LIB, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _AGILE_VERSION);
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
 else
 	head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION);
 
@@ -684,9 +696,7 @@ var Agile_Contact = {};
 head.ready(function() {
 	
 if(!HANDLEBARS_PRECOMPILATION){
-    downloadTemplate("tpl.js", function(){             
-    });
-    downloadTemplate("contact-view.js", function(){             
+    downloadTemplate("tpl-combined.js", function(){             
     });
 }
  
@@ -694,13 +704,17 @@ if(!HANDLEBARS_PRECOMPILATION){
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
-head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION});
+head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION}, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _AGILE_VERSION);
+
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core"], function(){
 	 $('[data-toggle="tooltip"]').tooltip();  
-	//Code to display alerts of widgets.
-	showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
    
+   try{
+    //Code to display alerts of widgets.
+    showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
+   }catch(e){}
+	 
 	//Resting the variables.
 	<%  session.removeAttribute("widgetMsgType");
 	session.removeAttribute("widgetMsg"); %>
@@ -722,6 +736,23 @@ function load_globalize()
 
 }
 
+function showVideoForRegisteredUser(){
+    console.log("Ref = " + document.referrer);
+
+    if(!document.referrer || document.referrer.indexOf("register") == -1)
+         return;
+    var domainuser_video_cookie = CURRENT_DOMAIN_USER.domain+'_video_cookie';
+    if(!localStorage.getItem(domainuser_video_cookie))
+    {     
+       $("#dashboard_video").modal("show");
+       var $frame = $("#dashboard_video iframe");
+      $frame.attr("src", $frame.attr("data-source"));
+    }       
+    
+    localStorage.setItem(domainuser_video_cookie,true);
+    
+}
+
 </script>
 
 
@@ -734,7 +765,25 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
 </script>
 <!-- End of ClickDesk -->
 
-
+ <!--video on dashboard -->
+ <div class="modal  fade hidden-xs" id="dashboard_video"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" id="dashboard-video" >
+        <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" data-dismiss="modal">&times;</button>
+          <h3 id="myModalLabel">Welcome to Agile CRM</h3>
+          <small>Here is a short video which explains the steps to get started with Agile. We recommend you watch it.</small>
+        </div>      
+        <div class="modal-body">
+              <div class="embed-responsive embed-responsive-16by9">
+                      <iframe class="embed-responsive-item" data-source="https://www.youtube.com/embed/9aH60N6HPcc?list=PLqZv4FUxASTctDCZmdVbheU75Y3Szk9Ny" frameborder="0" allowfullscreen></iframe>
+              </div>                     
+        </div>
+               
+        
+        </div>
+        </div>
+  </div>
 
 </body>
 </html>

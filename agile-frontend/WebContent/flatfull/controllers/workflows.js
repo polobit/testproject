@@ -133,7 +133,13 @@ var WorkflowsRouter = Backbone.Router
 					isNew : 'true',
 					data : {  "is_new" : true, "is_disabled" : "false", "was_disabled" : "false" },
 					postRenderCallback : function(el){
-						initiate_tour("workflows-add", $('#content'));						
+						
+						initiate_tour("workflows-add", $('#content'));	
+						var optionsTemplate = "<option value='{{id}}'> {{#if name}}{{name}}{{else}}{{subject}}{{/if}}</option>";
+						fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', function(){
+							console.log($(el).html());
+						}, optionsTemplate, false, el, 'Default template');
+
 						// Init SendVerify Email
 						send_verify_email(el);
 					}
@@ -320,6 +326,12 @@ var WorkflowsRouter = Backbone.Router
 					isNew : 'true',
 					data : { "is_new" : true, "is_disabled" : false, "was_disabled" : false  },
 					postRenderCallback : function(el){
+
+						var optionsTemplate = "<option value='{{id}}'> {{#if name}}{{name}}{{else}}{{subject}}{{/if}}</option>";
+						fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', function(){
+							console.log($(el).html());
+						}, optionsTemplate, false, el, 'Default template');
+
 						// Init SendVerify Email
 						send_verify_email(el);
 					}
@@ -1165,9 +1177,9 @@ var WorkflowsRouter = Backbone.Router
 			{
 				var that = this;
 				that.render_email_reports_select_ui(id, function(){
-					if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+					if (!that.workflow_list_view || that.workflow_list_view.collection.length == 0)
 					{
-						this.navigate("workflows", { trigger : true });
+						that.navigate("workflows", { trigger : true });
 						return;
 					}
 

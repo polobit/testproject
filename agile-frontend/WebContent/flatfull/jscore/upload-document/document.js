@@ -1,122 +1,14 @@
-
-
 /**
 *  Document collection event listeners
 */
 var Document_Collection_Events = Base_Collection_View.extend({
 	
 	events: {
-		
 		'click #documents-model-list > tr > td:not(":first-child")': 'onDocumentListSelect',		
 	},
 
-	/**
-	 * For adding new document
-	 */
-
-	 /*
-	onAddDocument: function(e){
-		e.preventDefault();
-
-		// Show modal
-		$('#uploadDocumentModalForm').html(getTemplate("upload-document-modal", {})).modal('show');
 	
-		// Add type a head actions
-		var el = $("#uploadDocumentForm");
-		// Contacts type-ahead
-		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
-		
-		// Deals type-ahead
-		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-	},
-	onAddeDocument: function(e){
-		e.preventDefault();
 
-		// Show modal
-		//$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
-		var model = {};
-		var id=null;
-		
-		$("#content").html('<div id="documents-listener-container"></div>');
-		getTemplate("upload-document-modal", model, undefined, function(template_ui){
-			if(!template_ui)
-				  return;
-
-			var el = $("#documents-listener-container").html($(template_ui));
-
-
-			$('#doc_type','#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').val("SENDDOC")
-			
-
-						setupTinyMCEEditor('textarea#signdoc-template-html', false, undefined, function()
-						{
-							set_tinymce_content('signdoc-template-html', "");
-							// Register focus
-							register_focus_on_tinymce('signdoc-template-html');
-							// Reset tinymce
-						});		
-						var optionsTemplate = "<option doc_type='SENDDOC' value='{{id}}'>{{name}}</option>";
-						fillSelect('template_type', '/core/api/document/templates', 'documents', function fillNew(coll)
-						{
-						
-						$('#template_type','#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').get(0).document_templates=coll;
-						
-						//console.log(coll);
-
-						}, optionsTemplate, false, el);
-					
-						$('#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').on('change', '#template_type', function(e)
-						{
-								var template_id = $("#template_type option:selected").val();
-								var sTemplateText="";
-								$.each($(this).get(0).document_templates.toJSON(), function(index, model)
-								{
-									if(model.id==template_id)
-									{
-										var template;
-										sTemplateText=model.text;
-										var json = get_contact_json_for_merge_fields();
-										try
-										{
-											template = Handlebars.compile(sTemplateText);
-											sTemplateText = template(json);
-										}
-										catch (err)
-										{
-											sTemplateText = add_square_brackets_to_merge_fields(sTemplateText);
-
-											template = Handlebars.compile(sTemplateText);
-											sTemplateText = template(json);
-										}
-										return false;
-									}
-								});
-								set_tinymce_content('signdoc-template-html', sTemplateText);
-						});			
-						$('#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').on('click', '#document_send', function(e)
-						{
-								e.preventDefault()
-								$("#signDocSendEmailModal").html(getTemplate("send-email")).modal('show');
-						});			
-					
-					$(".senddoc",'#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').removeClass("hide ");
-					$(".send-doc-button",'#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').removeClass("hide ");
-					$(".attachment",'#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').addClass("hide");
-					
-
-			
-			
-			
-		}, "#documents-listener-container"); 
-		// Add type a head actions
-		var el = $("#uploadDocumentForm");
-		// Contacts type-ahead
-		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
-		
-		// Deals type-ahead
-		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-	},
-	*/
 	 /** 
      * Document list view edit
      */
@@ -131,12 +23,12 @@ var Document_Collection_Events = Base_Collection_View.extend({
 });
   
 /** Modal event initializer **/
-/*
 $(function(){
 
-	
-  
-    $('#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').on('click', '.link', function(e)
+    /** 
+     * When clicked on choose network type
+     */
+    $('#uploadDocumentUpdateModal,#uploadDocumentModal').on('click', '.link', function(e)
 	{
 		e.preventDefault();
 		$(this).closest('form').find('#error').html("");
@@ -155,17 +47,15 @@ $(function(){
 		return false;
 	});
 	
-	
-	$('#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').on('click', '#document_validate, #document_update_validate', function(e){
+	/**
+	 * To validate the document add or edit forms
+	 */
+	$('#uploadDocumentUpdateModal,#uploadDocumentModal').on('click', '#document_validate, #document_update_validate', function(e){
  		e.preventDefault();
 
  		var modal_id = $(this).closest('.upload-document-modal').attr("id");
     	var form_id = $(this).closest('.upload-document-modal').find('form').attr("id");
-
-		if($('#doc_type','#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').val()=="SENDDOC")
-		{	    	
-	    		save_content_to_textarea('text');
-	    }
+    	
     	// serialize form.
     	var json = serializeForm(form_id);
     	console.log(json);
@@ -176,12 +66,12 @@ $(function(){
     		saveDocument(form_id, modal_id, this, true, json);
 	});
 
-	$('#uploadDocumentModalForm').on('hidden.bs.modal', function(e){
-		$('#GOOGLE',$('#uploadDocumentModalForm')).parent().show();
+	$('#uploadDocumentModal').on('hidden.bs.modal', function(e){
+		$('#GOOGLE',$('#uploadDocumentModal')).parent().show();
 	});
 
 });
-*/
+
 
 /**
  * Show document popup for updating
@@ -272,6 +162,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 			
 			return false;
 		}
+		
 		if(json.doc_type!="SENDDOC")
 		{		
 			var url = $('#' + form_id).find('#upload_url').val();
@@ -297,8 +188,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 		{
 			console.log(er);
 		},
-		success : function(data) 
-		{
+		success : function(data) {
 			// reset document size 
 			CUSTOM_DOCUMENT_SIZE = 0;
 

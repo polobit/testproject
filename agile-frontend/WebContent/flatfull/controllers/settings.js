@@ -536,6 +536,12 @@ var SettingsRouter = Backbone.Router
 
 						// Register focus
 						register_focus_on_tinymce('email-template-html');
+
+						//To open source code automatically when "Bring Your Code" button is clicked
+						if(typeof BRING_YOUR_CODE_BTN != "undefined" && BRING_YOUR_CODE_BTN) {
+							$('.mce-i-code').trigger('click');
+							BRING_YOUR_CODE_BTN = false;
+						}
 					});
 
 					$('#PrefsTab .select').removeClass('select');

@@ -113,6 +113,7 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("Today Tasks",PortletType.TASKSANDEVENTS));
 				allPortlets.add(new Portlet("Task Report",PortletType.TASKSANDEVENTS));
 				allPortlets.add(new Portlet("Mini Calendar",PortletType.TASKSANDEVENTS));
+				allPortlets.add(new Portlet("Average Deviation",PortletType.TASKSANDEVENTS));
 			}
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY)){
@@ -153,20 +154,14 @@ public class PortletUtil {
 		List<Portlet> portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
 		//If user first time login after portlets code deploy, we add some portlets by default
 		//in DB and one null portlet also
-		if(portlets!=null && portlets.size()==0)
+		if(portlets!=null && portlets.size()==0){
 			addDefaultPortlets();
-		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
+			portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
+		}
+		
 		for(Portlet portlet : portlets){
 			if(portlet.prefs!=null){
 				JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
-				//if portlet is growth graph we can change the start date and end dates based on duration
-				/*System.out.println("Portlet Name---"+portlet.name);
-				System.out.println("portlet.name.equalsIgnoreCase(Growth Graph)---"+portlet.name.equalsIgnoreCase("Growth Graph"));
-				System.out.println("contains start-date----"+json.containsKey("start-date"));
-				System.out.println("contains end-date-----"+json.containsKey("end-date"));
-				System.out.println("contains duration-----"+json.containsKey("duration"));
-				System.out.println("is duration value null--"+json.get("duration")==null);
-				System.out.println("duration value--"+json.get("duration"));*/
 				if(portlet.name!=null && portlet.name.equalsIgnoreCase("Growth Graph") && json.containsKey("start-date") && json.containsKey("end-date")
 						 && !json.containsKey("duration"))
 					json.put("duration","1-week");
@@ -1634,7 +1629,7 @@ public class PortletUtil {
 			System.out.println(a);
 			Contact contact=ContactUtil.searchContactByEmail(user.email);
 			if(contact!=null){
-				DomainUser owner=contact.getOwner();
+				DomainUser owner=contact.getContactOwner();
 				json.put("Owner_name",owner.name);
 				json.put("Owner_pic",owner.getOwnerPic());
 				json.put("Owner_url", owner.getCalendarURL());
@@ -1707,6 +1702,89 @@ public class PortletUtil {
 			json.put("goalAmount", amount_goal);
 	}
 		return json;
+	}
+	
+	public static JSONObject getAverageDeviationForTasks(Long minTime,Long maxTime)
+	{
+		List<DomainUser> domainUsersList=null;
+		List<String> domainUserNamesList = new ArrayList<String>();
+		List<String> groupByList = new ArrayList<String>();
+		JSONObject dataJson = new JSONObject();
+		List<Map<String,List<Long>>> splitByList = new ArrayList<Map<String,List<Long>>>();
+		try {
+		DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+		
+		List<DomainUser> usersList = new ArrayList<DomainUser>();
+		
+		List<Key<DomainUser>> usersKeyList = new ArrayList<Key<DomainUser>>();
+		if(dUser!=null)
+			domainUsersList=DomainUserUtil.getUsers(dUser.domain);
+
+		for(DomainUser domainUser : domainUsersList){
+			if(!domainUser.is_disabled){
+				usersList.add(domainUser);
+				usersKeyList.add(new Key<DomainUser>(DomainUser.class, domainUser.id));
+			}
+		}
+		//List <Task> tasks=TaskUtil.getCompletedTasks(minTime, maxTime);
+		
+		
+		CategoriesUtil categoriesUtil = new CategoriesUtil();
+		List<Category> taskCategoriesList = categoriesUtil.getAllCategoriesByType(Category.EntityType.TASK.toString());
+		int i=0;
+		for(DomainUser domainUser : usersList){
+			Map<String,List<Long>> splitByMap = new LinkedHashMap<String,List<Long>>();
+			for(Category category : taskCategoriesList){
+				List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.getName(),null,minTime,maxTime,null,null);
+				if(tasksList!=null)
+					{
+					List<Long> l=new ArrayList<Long>();
+					//l.add((long) tasksList.size());
+					Long Total_closure = 0L;
+					int count=0;
+					for(Task task:tasksList){
+						Long time_deviation=0L;
+						if(task.task_completed_time>task.due)
+							{
+							time_deviation=(task.task_completed_time-task.due);
+							count++;
+							}
+						Total_closure+=time_deviation;
+								}
+					l.add((long)count);
+					if(count!=0)
+					l.add(Total_closure/count);
+					else
+						l.add(Total_closure);
+					splitByMap.put(category.getLabel(),l);
+					}
+
+			}
+			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+			
+			UserPrefs userPrefs = null;
+			
+			if(agileUser!=null)
+				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+			if(userPrefs!=null)
+				groupByList.add(userPrefs.pic);
+			else
+				groupByList.add("no image-"+i);
+			splitByList.add(splitByMap);
+			domainUserNamesList.add(domainUser.name);
+			i++;
+		}
+		dataJson.put("groupByList", groupByList);
+		dataJson.put("splitByList", splitByList);
+		dataJson.put("domainUserNamesList", domainUserNamesList);
+		
+		
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return dataJson;
 	}
 
 }

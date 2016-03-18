@@ -1,3 +1,4 @@
+<%@page import="org.jsoup.Jsoup"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
@@ -193,8 +194,16 @@ if(scheduleid.contains(",")){
 <%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
-
+<% 
+if (scheduleid != null && multiple_users){  %>
+<title>Online Appointment Scheduling - <%=scheduleid %></title>
+<%
+} else {
+ %>
 <title>Online Appointment Scheduling - <%=user_name %></title>
+<%
+} 
+%>
 <link rel="stylesheet" href="../../css/web-calendar-event/bootstrap.min.css">
 <link rel="stylesheet" href="../../css/web-calendar-event/style.css?_=<%=_AGILE_VERSION%>">
 <link rel="stylesheet" type="text/css" href="<%=baseUrl%>css/agile-css-framework.css?_=<%=_AGILE_VERSION%>">
@@ -238,17 +247,26 @@ if(scheduleid.contains(",")){
 			<div class="row user_avatars hide">
 		
 			<!-- <div align="center" style="margin: 5px auto;width: 100%;"> -->
-			<% for(int k=0;k<=profile_list.size()-1;k++){
+			<% 
+				List<String> list=WebCalendarEventUtil.removeDuplicateScheduleIds(scheduleid);
+           		String _multiple_schedule_ids[]=list.toArray(new String[list.size()]);
+				for(int k=0;k<=profile_list.size()-1;k++){
+				 System.out.println(_multiple_schedule_ids[k]+"  schedule id");
+                 OnlineCalendarPrefs online_prefs = OnlineCalendarUtil.getOnlineCalendarPrefs(_multiple_schedule_ids[k]);
 				 List<String> pro_pic=profile_list.get(k);
 				 String pr_pic=pro_pic.get(0);
 				 String pr_name=pro_pic.get(1);
 				 String workHours=pro_pic.get(2);
 				 String timezone=pro_pic.get(3);
-				 String domain_user_id=pro_pic.get(4); 
+				 String domain_user_id=pro_pic.get(4);
+				 String custom_message = online_prefs.user_calendar_title;
+				 custom_message = Jsoup.parse(custom_message).text();
+				 if(custom_message == null)
+					 custom_message = "Welcome to my scheduling page.Please follow the instructions to book an appointment."; 
 		   %>
 		   <div class="fluidClass col-xs-12 text-center">
 		   <div style="display: inline-block;width: 150px;margin-right: 5px;">
-		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" title="<%=pr_name%>"/>
+		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" title='<%=custom_message%>'/>
 		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" title="<%=pr_name %>"><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
 		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:16px;" title="Working Hours"><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
 		<span class="user_in_visitor_timezone" style="color:#8E8F8F;font-size:16px;" title="Timezone"><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>

@@ -3469,7 +3469,7 @@ $(function()
 
 		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 
-		if (value.search(exp) != -1)
+		if (value && value.search(exp) != -1)
 			return options.fn(this);
 		else
 			return options.inverse(this);

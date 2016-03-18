@@ -1,15 +1,19 @@
 <script id="contacts-lhs-filters-custom-template" type="text/html">
 {{#each this}}
-<div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none"> 
-	<a data-toggle="collapse" id="lhs-filters-header" 
-class="c-p text-l-none text-l-none-hover block" style="width:85%;">
-{{field_label}}
-<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        
+	<div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover block" style="width:90%;">
+		{{field_label}}
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+
 {{#if_equals_or "CHECKBOX" field_type "TEXT" field_type "TEXTAREA" field_type}}
 	<div class="controls m-t-xs hide" id="{{replace_spaces field_label}}_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}" />
-		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control">
+		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
 			<option value="DEFINED">is defined</option>
@@ -17,19 +21,19 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
-				<input type="text" placeholder="Value" prev-val="" class="required form-control">
+				<input type="text" placeholder="Value" prev-val="" class="required form-control text-xs" style="height:30px;">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>		
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity:0.9;"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>		
 		<div class="clearfix"></div>
 		</div>
-	</div>
+	
 	{{/if_equals_or}}
 	{{#if_equals "NUMBER" field_type}}
 	<div class="controls m-t-xs hide" id="{{replace_spaces field_label}}_number_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}_number" />
-		<select id="between_filter" name="CONDITION" class="form-control" >
+		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="EQUALS">equals</option>
 			<option value="IS_LESS_THAN">less than</option>
 			<option value="IS_GREATER_THAN">greater than</option>
@@ -39,19 +43,19 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		</select>
 		<div class="EQUALS IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
-				<input type="number" min="0" placeholder="Value" prev-val="" class="form-control required">
+				<input type="number" min="0" placeholder="Value" prev-val="" class="form-control required text-xs" style="height:30px;">
 			</span>
 		</div>
 		<div class="BETWEEN condition_container hide m-t-xs">
 			<div class="clear" />
 			<span id="RHS">
-				<input type="number" min="0" class="required form-control" prev-val="" placeholder="Min Value"> 
+				<input type="number" min="0" class="required form-control text-xs" prev-val="" placeholder="Min Value" style="height:30px;"> 
 			</span>
 			<span id="RHS_NEW">
-				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control">
+				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control text-xs" style="height:30px;">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide clear-filter-condition-lhs pull-right"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide clear-filter-condition-lhs pull-right" style="opacity: 0.9;"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 	</div>
 	</div>
@@ -60,7 +64,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 	<div class="controls m-t-xs hide" id="{{replace_spaces field_label}}_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 	<input type="hidden" class="form-control" name="LHS" value="{{field_label}}_time" />
-	<select id="between_filter" name="CONDITION" class="form-control">
+	<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 		<option value="ON">on</option>
 		<option value="AFTER">is after</option>
 		<option value="BEFORE">is before</option>
@@ -72,24 +76,24 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 	</select>
 	<div class="AFTER BEFORE ON condition_container m-t-xs">
 		<span id="RHS">
-			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control" >
+			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control text-xs" style="height:30px;">
 		</span>
 	</div>
 	<div class="LAST NEXT condition_container hide m-t-xs">
 		<span id="RHS">
-			<input type="number" placeholder="Number of days" prev-val="" class="form-control required">
+			<input type="number" placeholder="Number of days" prev-val="" class="form-control required text-xs" style="height:30px;">
 		</span>
 	</div>
 	<div class="BETWEEN condition_container hide m-t-xs">
 		<div class="clear" />
 		<span id="RHS">
-			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control">
+			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control text-xs" style="height:30px;">
 		</span>
 		<span id="RHS_NEW">
-			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control">
+			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control text-xs" style="height:30px;">
 		</span>
 	</div>
-	<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+	<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 	<div class="clearfix"></div>
 	</div>
 	</div>
@@ -98,7 +102,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 	<div class="controls m-t-xs hide" id="{{replace_spaces field_label}}_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="{{field_label}}" />
-		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control">
+		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
 			<option value="DEFINED">is defined</option>
@@ -106,160 +110,237 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
-				<select id="{{replace_spaces field_label}}-values" prev-val="" class="required form-control" name="temp">
+				<select id="{{replace_spaces field_label}}-values" prev-val="" class="required form-control text-xs" name="temp" style="height:30px;">
 					<option value="">Select value</option>
 					{{{buildOptions field_data}}}
 				</select>
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
 	{{/if_equals}}
+	{{#if_equals "CONTACT" field_type}}
+	<div class="controls m-t-xs hide" id="{{replace_spaces field_label}}_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="{{field_label}}" />
+		<select id="between_filter" name="CONDITION" class="form-control" >
+			<option value="EQUALS" >is</option>
+			<option value="NOTEQUALS" >isn't</option>
+			<option value="IN" >in</option>
+		</select>
+		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
+			<span id="RHS">
+				<ul name="{{field_label}}" id="is_{{id}}" class="contacts tagsinput tags p-n m-n custom_contact"></ul>
+				<input type="text" placeholder="Contact Name" prev-val="" class="typeahead typeahead_contacts form-control required" id="custom_contact_is_{{id}}">
+			</span>
+		</div>
+		<div class="IN hide condition_container m-t-xs">
+			<span id="RHS">
+				<ul name="{{field_label}}" id="in_{{id}}" class="contacts tagsinput tags p-n m-n custom_contacts"></ul>
+				<input type="text" placeholder="Contact Names" prev-val="" class="typeahead typeahead_contacts form-control required" id="custom_contact_in_{{id}}">
+			</span>
+		</div>
+		<div class="m-t-xs"><a class="hide clear-filter-condition-lhs pull-right" style="opacity: 0.9;"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="clearfix"></div>
+	</div>
+	</div>
+	{{/if_equals}}
+	{{#if_equals "COMPANY" field_type}}
+	<div class="controls m-t-xs hide" id="{{replace_spaces field_label}}_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="{{field_label}}" />
+		<select id="between_filter" name="CONDITION" class="form-control" >
+			<option value="EQUALS" >is</option>
+			<option value="NOTEQUALS" >isn't</option>
+			<option value="IN" >in</option>
+		</select>
+		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
+			<span id="RHS">
+				<ul name="{{field_label}}" id="is_{{id}}" class="contacts tagsinput tags p-n m-n custom_company"></ul>
+				<input type="text" placeholder="Company Name" prev-val="" class="typeahead typeahead_contacts form-control required" id="custom_company_is_{{id}}">
+			</span>
+		</div>
+		<div class="IN hide condition_container m-t-xs">
+			<span id="RHS">
+				<ul name="{{field_label}}" id="in_{{id}}" class="contacts tagsinput tags p-n m-n custom_companies"></ul>
+				<input type="text" placeholder="Company Names" prev-val="" class="typeahead typeahead_contacts form-control required" id="custom_company_in_{{id}}">
+			</span>
+		</div>
+		<div class="m-t-xs"><a class="hide clear-filter-condition-lhs pull-right" style="opacity: 0.9;"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="clearfix"></div>
+	</div>
+	</div>
+	{{/if_equals}}
+	</div>
+	</div>
+	</div>
+	</div>
 	</div>
 {{/each}}
 </script>
 <script id="contacts-lhs-filters-template" type="text/html">
-<header>
-<div>
-	<h4 class="m-b-md" style="margin-left:22px;">
-		<span class="pull-left"><span>Filter Contacts</span>
-		</span>
-<span class="pull-right m-r-sm">
-		<a id="clear-lhs-contact-filters" class="text-sm text-muted" href="#">
-			 Clear all
-			 </a>
-	</span>
-<div class="clearfix"></div>
-	</h4>
-	
-</div>
-</header>
-<form id="lhs-contact-filter-form" name="lhs-contact-filter-form" class="m-t-xs">
+
+<form id="lhs-contact-filter-form" name="lhs-contact-filter-form">
 <input type="hidden" name="contact_type" class="form-control" id="contact_type" value="PERSON" />
-<div id="tagslist" class="word-break">
+<div id="tagslist">
 <fieldset>
-<div class="control-group form-group lhs-row-filter">
-	<a data-toggle="collapse" id="lhs-filters-header" 
-		class="c-p text-l-none text-l-none-hover" >
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+  <div class="panel panel-default m-b-none">
+  
+    <div class="panel-body">
+      <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
+    <a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
 		Tags
-		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
-	<div class="controls m-t-xs hide" id="tags_div">
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="tags_div" style="position: relative;">
 		<div id="tags-lhs-filter-table" class="ignore-collection">
-				<div class="hide master-tags-add-div pos-rlt">
-					<input class="form-control" type="hidden" name="LHS" value="tags" />
-					<select id="tags-filter" class="form-control" name="CONDITION">
+				<div class="hide master-tags-add-div pos-rlt m-t-xs">
+					<input class="form-control" type="hidden" name="LHS" value="tags">
+					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
 						<option value="EQUALS" class="tags">is</option>
 						<option value="NOTEQUALS" class="tags">isn't</option>
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
-							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" />
+							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead text-xs" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;
+							">
 						</span>
 					</div>
-					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
+					<div class="m-t-xs"><a class="pull-right trash-css" style="font-size:16px;"><i class="filter-tags-multiple-remove-lhs fa fa-trash text-l-none-hover c-p" id="removeBtn"></i></a>
+						<div class="clearfix"></div>
+					</div>
 					<div class="clearfix"></div>
+					
 				</div>
-				<div class="lhs-contact-filter-row pos-rlt m-t-xs">
-					<input type="hidden" name="LHS" value="tags" />
-					<select id="tags-filter" class="form-control" name="CONDITION">
+				<div class="lhs-contact-filter-row pos-rlt m-t-xs " style="min-height: 90px;" >
+					<input type="hidden" name="LHS" value="tags">
+					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
 						<option value="EQUALS" class="tags">is</option>
 						<option value="NOTEQUALS" class="tags">isn't</option>
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
-							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" />
+							<input type="text" placeholder="Enter Tag" prev-val="" class="required text-xs form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;">
 						</span>
 					</div>
-					<div class="m-t-xs">
-						<a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></a></i>
-					</div>
+					<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 					<div class="clearfix"></div>
+					
 				</div>
+
 		</div>	
-		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-left text-muted pos-rlt" style="top:-10px" data-name="tags"><i class="icon-plus"></i> Add</a>
-		<div class="clearfix" style="height:10px"></div>	
+		<div class="m-t-xs">
+						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;font-weight: normal !important;" data-name="tags" id="addBtn"><i class="icon-plus"></i> Add</a>
+					</div>
 	</div>
 </div>
-	
-<div class="control-group form-group lhs-row-filter">
-	<a data-toggle="collapse" id="lhs-filters-header" 
-		class="c-p text-l-none text-l-none-hover" >
+
+
+    </div>
+  </div>
+</div>
+
+
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        
+	<div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
 		Score
-		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
-	<div class="controls hide m-t-xs" id="lead_score_div">
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="lead_score_div">
 		<div class="lhs-contact-filter-row pos-rlt">
-		<input type="hidden" name="LHS" class="form-control" value="lead_score" />
-		<select id="between_filter" name="CONDITION" class="form-control" >
+		<input type="hidden" name="LHS" class="form-control" value="lead_score">
+		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="IS_GREATER_THAN">greater than</option>
 			<option value="IS_LESS_THAN">less than</option>
 			<option value="BETWEEN">between</option>
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
-				<input type="number" min="0" placeholder="Value" prev-val="" class="form-control required">
+				<input type="number" min="0" placeholder="Value" prev-val="0" class="form-control required text-xs" name="temp-2" id="temp-2" style="height:30px;">
 			</span>
 		</div>
 		<div class="BETWEEN condition_container hide m-t-xs">
-			<div class="clear" />
+			<div class="clear"></div>
 			<span id="RHS">
-				<input type="number" min="0" class="required form-control" prev-val="" placeholder="Min Value"> 
+				<input type="number" min="0" class="required form-control text-xs" prev-val="" placeholder="Min Value" name="temp-3" id="temp-3" style="height:30px;"> 
 			</span>
 			<span id="RHS_NEW">
-				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control">
+				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control text-xs" name="temp-4" id="temp-4" style="height:30px;">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
+</div>    
+        
+        
+        
+      </div>
+    </div>
 </div>
 
-<div class="control-group form-group lhs-row-filter" >
-	<a data-toggle="collapse" id="lhs-filters-header" 
-		class="c-p text-l-none text-l-none-hover" >
+
+
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+    <a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
 		Star Value
-		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
-	<div class="controls hide m-t-xs" id="star_value_div">
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="star_value_div">
 		<div class="lhs-contact-filter-row pos-rlt">
-		<input type="hidden" class="form-control" name="LHS" value="star_value" />
-		<select id="between_filter" name="CONDITION" class="form-control" >
+		<input type="hidden" class="form-control" name="LHS" value="star_value">
+		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="IS_GREATER_THAN">greater than</option>
 			<option value="IS_LESS_THAN">less than</option>
 			<option value="BETWEEN">between</option>
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
-				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="form-control required">
+				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="form-control required text-xs" name="temp-5" id="temp-5" style="height:30px;">
 			</span>
 		</div>
 		<div class="BETWEEN condition_container hide m-t-xs">
-			<div class="clear" />
+			<div class="clear"></div>
 			<span id="RHS">
-				<input type="number" min="0" max="5" class="required form-control" prev-val="" placeholder="Min Value"> 
+				<input type="number" min="0" max="5" class="required form-control text-xs" prev-val="" placeholder="Min Value" name="temp-6" id="temp-6" style="height:30px;"> 
 			</span>
 			<span id="RHS_NEW">
-				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control">
+				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control text-xs" name="temp-7" id="temp-7" style="height:30px;">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
 </div>
-<div class="control-group form-group lhs-row-filter" >
-	<a data-toggle="collapse" id="lhs-filters-header" 
-		class="c-p text-l-none text-l-none-hover" >
+        
+     </div>
+  </div>
+</div>
+
+
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+  <div class="panel panel-default m-b-none">
+  
+    <div class="panel-body">
+      <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
+      
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
 		Campaign Status
-		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
-	<div class="controls m-t-xs hide" id="campaign_status_div">
-
-
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="campaign_status_div" style="position: relative;">
 		<div id="campaign_status-lhs-filter-table" class="ignore-collection">
-			<div class="hide master-campaign_status-add-div pos-rlt">
-				<input type="hidden" class="form-control" name="LHS" value="campaign_status" />
-				<select id="between_filter" name="CONDITION" class="form-control" >
+				<div class="hide master-campaign_status-add-div pos-rlt m-t-xs">
+					<input type="hidden" class="form-control" name="LHS" value="campaign_status">
+				<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 					<option value="NOT_ADDED">Never Added</option>
 					<option value="ACTIVE">Active</option>
 					<option value="DONE">Completed</option>
@@ -268,20 +349,20 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 					<option value="UNSUBSCRIBED">Unsubscribed</option>
 					<option value="SPAM">Spam Reported</option>
 				</select>
-		
 				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED BOUNCED SPAM condition_container m-t-xs">
 					<span id="RHS">
-						<select id="campaign_select_master" class="required form-control" name="temp1" prev-val="">
-							<option value="">Select value</option>
-						</select>
+						<select id="campaign_select_master" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">Select...</option></select>
 					</span>
 				</div>
-					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
+					<div class="m-t-xs"><a class="pull-right trash-css" style="font-size:16px;"><i class="filter-tags-multiple-remove-lhs fa fa-trash text-l-none-hover c-p" id="removeBtn"></i></a>
+						<div class="clearfix"></div>
+					</div>
 					<div class="clearfix"></div>
-			</div>
-			<div class="lhs-contact-filter-row pos-rlt m-t-xs">
-				<input type="hidden" class="form-control" name="LHS" value="campaign_status" />
-				<select id="between_filter" name="CONDITION" class="form-control" >
+					
+				</div>
+				<div class="lhs-contact-filter-row pos-rlt m-t-xs " style="min-height: 90px;" >
+					<input type="hidden" class="form-control" name="LHS" value="campaign_status">
+				<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 					<option value="NOT_ADDED">Never Added</option>
 					<option value="ACTIVE">Active</option>
 					<option value="DONE">Completed</option>
@@ -291,57 +372,78 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 					<option value="UNSUBSCRIBED">Unsubscribed</option>
 					<option value="SPAM">Spam Reported</option>
 				</select>
-		
-				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED HARDBOUNCED SOFTBOUNCED SPAM condition_container m-t-xs">
+					<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED HARDBOUNCED SOFTBOUNCED SPAM condition_container m-t-xs">
 					<span id="RHS">
-						<select id="campaign_select" class="required form-control" name="temp1" prev-val="">
-							<option value="">Select value</option>
-						</select>
+						<select id="campaign_select" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">Select...</option></select>
 					</span>
+					</div>
+					<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
+					
+					<div class="clearfix"></div>
+					
 				</div>
-				<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
-				<div class="clearfix"></div>
-			</div>
-		</div>
-		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-left text-muted pos-rlt" style="top:-10px" data-name="campaign_status"><i class="icon-plus"></i> Add</a>
+
+		</div>	
+
+		<div class="m-t-xs">
+						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;" data-name="campaign_status" id="addBtn"><i class="icon-plus"></i> Add</a>
+					</div>
+			
 	</div>
 </div>
-<div class="control-group form-group lhs-row-filter" >
-	<a data-toggle="collapse" id="lhs-filters-header" 
-		class="c-p text-l-none text-l-none-hover" >
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
 		Owner
-		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="owner_id_div">
 		<div class="lhs-contact-filter-row pos-rlt">
-		<input type="hidden" class="form-control" name="LHS" value="owner_id" />
-		<select id="between_filter" name="CONDITION" class="form-control" >
-			<option value="EQUALS" >is</option>
-			<option value="NOTEQUALS" >isn't</option>
+		<input type="hidden" class="form-control" name="LHS" value="owner_id">
+		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
+			<option value="EQUALS">is</option>
+			<option value="NOTEQUALS">isn't</option>
 		</select>
 		
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
-				<select id="owner_select" class="required form-control" name="temp1" prev-val="">
-					<option value="">Select value</option>
-					
-				</select>
+				<select id="owner_select" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">Select...</option></select>
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
 </div>
+        
+     </div>
+  </div>
+</div>
 
-<div class="control-group form-group lhs-row-filter" >
-	<a data-toggle="collapse" id="lhs-filters-header" 
-		class="c-p text-l-none text-l-none-hover" >
+
+
+
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
 		Created Date
-		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="created_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
-		<input type="hidden" name="LHS" value="created_time" class="form-control"/>
-		<select id="between_filter" name="CONDITION" class="form-control" >
+		<input type="hidden" name="LHS" value="created_time" class="form-control">
+		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="ON">on</option>
 			<option value="AFTER">is after</option>
 			<option value="BEFORE">is before</option>
@@ -351,37 +453,45 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		</select>
 		<div class="AFTER BEFORE ON condition_container m-t-xs">
 			<span id="RHS">
-				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control required date">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control required date text-xs" name="temp-8" id="temp-8" style="height:30px;">
 			</span>
 		</div>
 		<div class="LAST NEXT condition_container hide m-t-xs">
 			<span id="RHS">
-				<input type="number" placeholder="Number of days" prev-val="" class="form-control required">
+				<input type="number" placeholder="Number of days" prev-val="" class="form-control required text-xs" name="temp-9" id="temp-9" style="height:30px;">
 			</span>
 		</div>
 		<div class="BETWEEN condition_container hide m-t-xs">
-			<div class="clear" />
+			<div class="clear"></div>
 			<span id="RHS">
-				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required text-xs" placeholder="{{dateFormat}}" name="temp-10" id="temp-10" style="height:30px;">
 			</span>
 			<span id="RHS_NEW"> 
-				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control date required">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control date required text-xs" name="temp-11" id="temp-11" style="height:30px;">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
 </div>
-<div class="control-group form-group lhs-row-filter" >
-	<a data-toggle="collapse" id="lhs-filters-header" 
-		class="c-p text-l-none text-l-none-hover" >
+        
+     </div>
+  </div>
+</div>
+
+
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
 		Last Contacted
-		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="last_contacted_div">
 		<div class="lhs-contact-filter-row pos-rlt">
-		<input type="hidden" name="LHS" value="last_contacted" class="form-control"/>
-		<select id="between_filter" name="CONDITION" class="form-control" >
+		<input type="hidden" name="LHS" value="last_contacted" class="form-control">
+		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
 			<option value="ON">on</option>
 			<option value="AFTER">is after</option>
 			<option value="BEFORE">is before</option>
@@ -390,169 +500,198 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		</select>
 		<div class="AFTER BEFORE ON condition_container m-t-xs">
 			<span id="RHS">
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="{{dateFormat}}" class="form-control required date">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="Select Date" class="form-control required date text-xs" name="temp-12" id="temp-12" style="height:30px;">
 			</span>
 		</div>
 		<div class="LAST condition_container hide m-t-xs">
 			<span id="RHS">
-				<input type="number" placeholder="Number of days" prev-val="" class="form-control required">
+				<input type="number" placeholder="Number of days" prev-val="" class="form-control required text-xs" name="temp-13" id="temp-13" style="height:30px;">
 			</span>
 		</div>
 		<div class="BETWEEN condition_container hide m-t-xs">
-			<div class="clear" />
+			<div class="clear"></div>
 			<span id="RHS">
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="form-control date required text-xs" placeholder="Select Date" name="temp-14" id="temp-14" style="height:30px;">
 			</span>
 			<span id="RHS_NEW"> 
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="{{dateFormat}}" class="form-control date required">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="Select Date" class="form-control date required text-xs" name="temp-15" id="temp-15" style="height:30px;">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
 </div>
-
+        
+     </div>
+  </div>
+</div>
 <div id="custom-filter-fields" ></div>
 	
 </div>
-
+<div class="bg-light">
+		<span class="pull-left m-l-md">
+			<a href="#" id="clear-lhs-contact-filters" class="text-sm text-muted text-xs link-color" style="color: #23b7e5;">
+				 Clear
+			</a>
+		</span>
+		<div class="clearfix"></div>
+</div>
 </fieldset>
 </div>
 </form>
 </script>
+
+
 <script id="companies-lhs-filters-template" type="text/html">
-<header>
-<div>
-	<h4 class="m-b-md" style="margin-left:22px;">
-		<span class="pull-left"><span>Filter Companies</span>
-		</span>
-<span class="pull-right m-r-sm hidden-xs">
-		<a id="clear-lhs-company-filters" class="text-sm text-muted" href="#">
-			 Clear all</i>
-		</a>
-	</span>
-<div class="clearfix"></div>
-	</h4>
-	
-</div>
-</header>
+
 <form id="lhs-contact-filter-form" name="lhs-contact-filter-form">
 <input type="hidden" name="contact_type" id="contact_type" value="COMPANY" class="form-control"/>
 <div id="tagslist" style="word-wrap: break-word;">
 <fieldset>
 
-<div class="control-group form-group lhs-row-filter">
-	<a data-toggle="collapse" id="lhs-filters-header" 
-		class="c-p text-l-none text-l-none-hover" >
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+  <div class="panel panel-default m-b-none">
+  
+    <div class="panel-body">
+      <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
+      
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
 		Tags
-		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
-	<div class="controls m-t-xs hide" id="tags_div">
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="tags_div" style="position: relative;">
 		<div id="tags-lhs-filter-table" class="ignore-collection">
-				<div class="hide master-tags-add-div pos-rlt">
-					<input class="form-control" type="hidden" name="LHS" value="tags" />
-					<select id="tags-filter" class="form-control" name="CONDITION">
+				<div class="hide master-tags-add-div pos-rlt m-t-xs" style="margin-top:8px;">
+					<input class="form-control" type="hidden" name="LHS" value="tags">
+					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
+						<option value="EQUALS" class="tags">is</option>
+						<option value="NOTEQUALS" class="tags">isn't</option>
+					</select>
+					<div class="EQUALS NOTEQUALS condition_container m-t-xs companies_input">
+						<span id="RHS" class="no-filter-action">
+							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead companies_input" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;font-size:12px;">
+						</span>					
+					</div>
+					<a class="pull-right trash-css" style="font-size:16px;opacity: 0.9;"><i class="filter-tags-multiple-remove-lhs fa fa-trash text-l-none-hover c-p" id="removeBtn"></i></a>
+						<div class="clearfix"></div>
+					
+					<div class="clearfix"></div>
+					
+				</div>
+				<div class="lhs-contact-filter-row pos-rlt m-t-xs " style="min-height: 90px;" >
+					<input type="hidden" name="LHS" value="tags">
+					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
 						<option value="EQUALS" class="tags">is</option>
 						<option value="NOTEQUALS" class="tags">isn't</option>
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
-							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);">
+							<input type="text" placeholder="Enter Tag" prev-val="" class="required form-control filters-tags-typeahead companies_input" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;font-size:12px;">
 						</span>
 					</div>
-					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
+					<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;" ><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
+					
 					<div class="clearfix"></div>
+					
 				</div>
-				<div class="lhs-contact-filter-row pos-rlt m-t-xs">
-					<input type="hidden" name="LHS" value="tags" />
-					<select id="tags-filter" class="form-control" name="CONDITION">
-						<option value="EQUALS" class="tags">is</option>
-						<option value="NOTEQUALS" class="tags">isn't</option>
-					</select>
-					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
-						<span id="RHS">
-							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);">
-						</span>
-					</div>
-					<div class="m-t-xs">
-						<a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></a></i>
-					</div>
-					<div class="clearfix"></div>
-				</div>
+
 		</div>	
-		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-left text-muted pos-rlt" style="top:-10px" data-name="tags"><i class="icon-plus"></i> Add</a>
-		<div class="clearfix" style="height:10px"></div>	
+
+		<div class="m-t-xs">
+						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;" data-name="tags" id="addBtn"><i class="icon-plus"></i> Add</a>
+					</div>
+			
 	</div>
 </div>
 
-<div class="control-group form-group lhs-row-filter" >
-	<a data-toggle="collapse" id="lhs-filters-header" 
-		class="c-p text-l-none text-l-none-hover" >
+
+    </div>
+  </div>
+</div>
+
+
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="control-group  lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
 		Star Value
-		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
-	<div class="controls hide m-t-xs" id="star_value_div">
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="star_value_div">
 		<div class="lhs-contact-filter-row pos-rlt">
-		<input type="hidden" name="LHS" class="form-control" value="star_value" />
-		<select id="between_filter" name="CONDITION" class="form-control" >
+		<input type="hidden" class="form-control" name="LHS" value="star_value">
+		<select id="between_filter" name="CONDITION" class="form-control companies_input" >
 			<option value="IS_GREATER_THAN">greater than</option>
 			<option value="IS_LESS_THAN">less than</option>
 			<option value="BETWEEN">between</option>
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
-				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="form-control required">
+				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="form-control required companies_input" name="temp-5" id="temp-5" >
 			</span>
 		</div>
 		<div class="BETWEEN condition_container hide m-t-xs">
-			<div class="clear" />
+			<div class="clear"></div>
 			<span id="RHS">
-				<input type="number" min="0" max="5" class="required form-control" prev-val="" placeholder="Min Value"> 
+				<input type="number" min="0" max="5" class="required form-control companies_input" prev-val="" placeholder="Min Value" name="temp-6" id="temp-6" > 
 			</span>
 			<span id="RHS_NEW">
-				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control">
+				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control companies_input" name="temp-7" id="temp-7" >
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;" ><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
-		</div>
-	</div>
+       </div>
+        
+     </div>
+  </div>
 </div>
-<div class="control-group form-group lhs-row-filter" >
-	<a data-toggle="collapse" id="lhs-filters-header" 
-		class="c-p text-l-none text-l-none-hover" >
+</div>
+</div>
+
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="control-group  lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
 		Owner
-		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
-	<div class="controls hide m-t-xs" id="owner_id_div">
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="owner_id_div">
 		<div class="lhs-contact-filter-row pos-rlt">
-		<input type="hidden" class="form-control" name="LHS" value="owner_id" />
-		<select id="between_filter" name="CONDITION" class="form-control" >
-			<option value="EQUALS" >is</option>
-			<option value="NOTEQUALS" >isn't</option>
+		<input type="hidden" class="form-control" name="LHS" value="owner_id">
+		<select id="between_filter" name="CONDITION" class="form-control companies_input" >
+			<option value="EQUALS">is</option>
+			<option value="NOTEQUALS">isn't</option>
 		</select>
 		
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
-				<select id="owner_select" class="required form-control" prev-val="" name="temp1">
-					<option value="">Select value</option>
-					
-				</select>
+				<select id="owner_select" class="required form-control companies_input" name="temp1" prev-val="" ><option class="default-select" value="">Select...</option></select>
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;" ><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
 </div>
+        
+     </div>
+  </div>
+</div>
 
-<div class="control-group form-group lhs-row-filter" >
-	<a data-toggle="collapse" id="lhs-filters-header" 
-		class="c-p text-l-none text-l-none-hover" >
+
+
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="control-group  lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
 		Created Date
-		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
-	<div class="controls hide m-t-xs" id="created_time_div">
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="created_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
-		<input type="hidden" name="LHS" class="form-control" value="created_time" />
-		<select id="between_filter" name="CONDITION" class="form-control" >
+		<input type="hidden" name="LHS" value="created_time" class="form-control">
+		<select id="between_filter" name="CONDITION" class="form-control companies_input" >
 			<option value="ON">on</option>
 			<option value="AFTER">is after</option>
 			<option value="BEFORE">is before</option>
@@ -562,54 +701,78 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		</select>
 		<div class="AFTER BEFORE ON condition_container m-t-xs">
 			<span id="RHS">
-				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control required date">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control required date companies_input" name="temp-8" id="temp-8" >
 			</span>
 		</div>
-		<div class="LAST NEXT hide condition_container m-t-xs">
+		<div class="LAST NEXT condition_container hide m-t-xs">
 			<span id="RHS">
-				<input type="number" placeholder="Number of days" prev-val="" class="form-control required">
+				<input type="number" placeholder="Number of days" prev-val="" class="form-control required companies_input" name="temp-9" id="temp-9" >
 			</span>
 		</div>
-		<div class="BETWEEN hide condition_container m-t-xs">
-			<div class="clear" />
+		<div class="BETWEEN condition_container hide m-t-xs">
+			<div class="clear"></div>
 			<span id="RHS">
-				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required companies_input" placeholder="{{dateFormat}}" name="temp-10" id="temp-10" >
 			</span>
 			<span id="RHS_NEW"> 
-				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control date required">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control date required companies_input" name="temp-11" id="temp-11" >
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;" ><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
 </div>
-<div class="control-group form-group lhs-row-filter" >
-	<a data-toggle="collapse" id="lhs-filters-header" 
-		class="c-p text-l-none text-l-none-hover" >
+        
+     </div>
+  </div>
+</div>
+
+
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+
+<div class="control-group  lhs-row-filter p-n" style="border-bottom: solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;" >
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
 		Name
-		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
-	<div class="controls hide m-t-xs" id="name_div">
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="name_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="name" />
-		<select id="between_filter" name="CONDITION" class="form-control" >
+		<select id="between_filter" name="CONDITION" class="form-control companies_input"  >
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
-				<input type="text" placeholder="Value" prev-val="" class="form-control required">
+				<input type="text" placeholder="Value" prev-val="" class="form-control required companies_input" >
 			</span>
+			<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;" ><i class="fa fa-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
+		<div class="clearfix"></div>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		
 		<div class="clearfix"></div>
 		</div>
 	</div>
 </div>
-<div id="custom-filter-fields" ></div>
+</div>
+</div>
 	
 </div>
+	<div class="clearfix"></div>
 
+<div id="custom-filter-fields" ></div>
+
+</div>
+<div class="bg-light">
+  <span class="pull-left m-l-md">
+
+	<a id="clear-lhs-company-filters" href="#" class="c-p txt-small link-color" style="color: #337ab7!important;">Clear</a>
+	</span>
+<div class="clearfix"></div>
+
+</div>
 </fieldset>
 </div>
 </form>

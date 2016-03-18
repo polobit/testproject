@@ -11,9 +11,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -167,9 +172,9 @@ public class Document extends Cursor
      * @return List of contact objects
      */
     @XmlElement
-    public List<Contact> getContacts()
+    public List<ContactPartial> getContacts()
     {
-	return Contact.dao.fetchAllByKeys(this.related_contacts);
+    	return ContactUtil.getPartialContacts(this.related_contacts);
     }
 
     /**
@@ -181,7 +186,8 @@ public class Document extends Cursor
     @XmlElement
     public List<Case> getCases()
     {
-	return Case.dao.fetchAllByKeys(this.related_cases);
+	// return Case.dao.fetchAllByKeys(this.related_cases);
+    	return null;
     }
 
     /**
@@ -191,9 +197,10 @@ public class Document extends Cursor
      * @return List of deal objects
      */
     @XmlElement
-    public List<Opportunity> getDeals()
+    public List<OpportunityPartial> getDeals()
     {
-	return Opportunity.dao.fetchAllByKeys(this.related_deals);
+    	return OpportunityUtil.getPartialOpportunities(this.related_deals);
+	   
     }
 
     /**
@@ -274,6 +281,15 @@ public class Document extends Cursor
 
 	return deal_ids;
     }
+    
+    public List<Key<Opportunity>> relatedDealKeys(){
+    	return this.related_deals;
+    }
+    
+    public List<Key<Contact>> relatedContactKeys(){
+    	return this.related_contacts;
+    }
+    
 
     /**
      * Gets domain user with respect to owner id if exists, otherwise null.
@@ -283,14 +299,14 @@ public class Document extends Cursor
      *             when Domain User not exists with respect to id.
      */
     @XmlElement(name = "owner")
-    public DomainUser getOwner() throws Exception
+    public DomainUserPartial getOwner() throws Exception
     {
 	if (ownerKey != null)
 	{
 	    try
 	    {
 		// Gets Domain User Object
-		return DomainUserUtil.getDomainUser(ownerKey.getId());
+	    return DomainUserUtil.getPartialDomainUser(ownerKey.getId());
 	    }
 	    catch (Exception e)
 	    {
@@ -298,39 +314,6 @@ public class Document extends Cursor
 	    }
 	}
 	return null;
-    }
-
-    /**
-     * Gets picture of owner who created deal. Owner picture is retrieved from
-     * user prefs of domain user who created deal and is used to display owner
-     * picture in deals list.
-     * 
-     * @return picture of owner.
-     * @throws Exception
-     *             when agileuser doesn't exist with respect to owner key.
-     */
-    @XmlElement(name = "ownerPic")
-    public String getOwnerPic() throws Exception
-    {
-	AgileUser agileuser = null;
-	UserPrefs userprefs = null;
-
-	try
-	{
-	    // Get owner pic through agileuser prefs
-	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey.getId());
-	    if (agileuser != null)
-		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
-	    if (userprefs != null)
-		return userprefs.pic;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-
-	}
-
-	return "";
     }
 
     /**

@@ -103,12 +103,14 @@ public class CSVUtil
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
 		Contact.class.getSimpleName(), this.billingRestriction);
 
-	GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
-		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+	if (!VersioningUtil.isLocalHost())
+	{
+	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
+		    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
-	service = new GCSServiceAgile(
-		NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate() + ".csv", "agile-exports",
-		options);
+	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
+		    + ".csv", "agile-exports", options);
+	}
 
 	this.accessControl = accessControl;
 
@@ -357,6 +359,7 @@ public class CSVUtil
 
 			for (String tag : tagsArray)
 			{
+			    tag = tag.trim();
 			    if (!TagValidator.getInstance().validate(tag))
 			    {
 				throw new InvalidTagException();
@@ -437,7 +440,8 @@ public class CSVUtil
 		    }
 		    if (field.name.equalsIgnoreCase(Contact.COMPANY))
 		    {
-			tempContact.properties.add(new ContactField("name", csvValues[j].trim().toLowerCase(), null));
+			tempContact.properties.add(new ContactField(Contact.COMPANY, csvValues[j].trim().toLowerCase(),
+				null));
 		    }
 
 		    tempContact.properties.add(field);
@@ -1163,7 +1167,11 @@ public class CSVUtil
 					int year = Integer.parseInt(data[2].trim());
 					int month = Integer.parseInt(data[1].trim());
 					int day = Integer.parseInt(data[0].trim());
-					c.set(year, month - 1, day);
+					if (month > 0)
+					{
+					    month = month - 1;
+					}
+					c.set(year, month , day);
 					Date date = c.getTime();
 					if (month > 11)
 					{
@@ -1588,7 +1596,7 @@ public class CSVUtil
 		int year = Integer.parseInt(data[2].trim());
 		int day = Integer.parseInt(data[1].trim());
 		int month = Integer.parseInt(data[0].trim());
-		if (month >= 0)
+		if (month > 0)
 		{
 		    month = month - 1;
 		}
@@ -1623,6 +1631,15 @@ public class CSVUtil
 
 	System.out.println("building failed contacts service");
 	return failedContactsWriter = new CSVWriter(service.getOutputWriter());
+    }
+
+    public static void main(String[] args)
+    {
+	String[] tagsArray = "salemslot,newtag, new tag".split("[,;]+");
+	for (int i = 0; i < tagsArray.length; i++)
+	{
+	    System.out.println(tagsArray[i]);
+	}
     }
 
 }

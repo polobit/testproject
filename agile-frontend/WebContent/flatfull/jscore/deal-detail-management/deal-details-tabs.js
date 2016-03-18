@@ -350,8 +350,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	    fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
 		{
-			el.find("#document-select").append("<option value='new'>Add New Doc</option>");
-
+			el.find("#document-select > option:first").after("<option value='new'>Add New Doc</option><option style='font-size: 1pt; background-color: #EDF1F2;'disabled>&nbsp;</option>");
+			el.find("#document-select > option:first").remove();
 		}, optionsTemplate, false, el); 
 	},
 
@@ -427,6 +427,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		el.find(".add-deal-edocument-select").css("display", "inline");
 	},
 
+	
 	dealAddtask:  function(e){ 
     	e.preventDefault();
     	$('#activityTaskModal').html(getTemplate("new-task-modal")).modal('show');
@@ -439,14 +440,16 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
 
         agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-
-		// Fills owner select element
-		populateUsers("owners-list", $("#taskForm"), undefined, undefined,
-				function(data) {
-					$("#taskForm").find("#owners-list").html(data);
-					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();					
-		});
+		categories.getCategoriesHtml(undefined,function(catsHtml){
+		   $('#type',el).html(catsHtml);
+		   // Fills owner select element
+		   populateUsers("owners-list", $("#taskForm"), undefined, undefined,
+		     function(data) {
+		      $("#taskForm").find("#owners-list").html(data);
+		      $("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+		      $("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();     
+		   });
+		  });
 
        activateSliderAndTimerToTaskModal();
     },
@@ -464,16 +467,19 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 			deserializeForm(value, $("#updateTaskForm"));
 			
 			$('.update-task-timepicker').val(fillTimePicker(value.due));
-			// Fills owner select element
-			populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
-			{
-				$("#updateTaskForm").find("#owners-list").html(data);
-				if (value.taskOwner)
-					$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
+			agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+			categories.getCategoriesHtml(value,function(catsHtml){
+			   $('#type',el).html(catsHtml);			   
+				// Fills owner select element
+				populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
+				{
+					$("#updateTaskForm").find("#owners-list").html(data);
+					if (value.taskOwner)
+						$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
 
-				$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+					$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+				});
 			});
-
 			// Add notes in task modal
 			showNoteOnForm("updateTaskForm", value.notes);
 		});
@@ -481,7 +487,6 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		// activateSliderAndTimerToTaskModal();
 
 	},
-
 	/**
 	 * Delete functionality for tasks blocks in deal details
 	 */

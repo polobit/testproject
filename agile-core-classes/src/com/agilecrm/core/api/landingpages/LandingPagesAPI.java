@@ -18,9 +18,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AllDomainStats;
+import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 import com.agilecrm.landingpages.LandingPage;
+import com.agilecrm.landingpages.LandingPageCNames;
 import com.agilecrm.landingpages.LandingPageUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 
 @Path("/api/landingpages")
 public class LandingPagesAPI
@@ -58,7 +63,7 @@ public class LandingPagesAPI
 		System.out.println("hasRightsToAddDomain this "+ domain);
 		String responseText = "{\"result\":false}";
 		
-		if(LandingPageUtil.hasRightsToAddDomain(domain)) {
+		if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development || LandingPageUtil.hasRightsToAddDomain(domain)) {
 			responseText = "{\"result\":true}";
 		}
 		
@@ -98,8 +103,12 @@ public class LandingPagesAPI
 		try
 		{
 			LandingPage landingPage = LandingPageUtil.getLandingPage(id);
-			if (landingPage != null)
+			if (landingPage != null) {
+				JSONArray pageIds = new JSONArray();
+				pageIds.put(landingPage.id);
+				LandingPageUtil.deleteLandingPageCNames(pageIds);
 				landingPage.delete();
+			}
 		}
 		catch (Exception e)
 		{
@@ -132,6 +141,38 @@ public class LandingPagesAPI
 		}
 	}
 	
+	@Path("/custom-domain/{landingPageId}")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
+	public LandingPageCNames getLandingPageCName(@PathParam("landingPageId") Long id)
+	{
+		LandingPageCNames landingPageCName = LandingPageUtil.getLandingPageCNamesForPage(id);
+		return landingPageCName;
+	}
+	
+	@Path("/custom-domain")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+	public LandingPageCNames createLandingPageCName(LandingPageCNames landingPageCName)
+	{
+		landingPageCName.domain = NamespaceManager.get();
+		landingPageCName.save();
+		return landingPageCName;
+	}
+	
+	
+	@Path("/custom-domain")
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+	public LandingPageCNames updateLandingPageCName(LandingPageCNames landingPageCName)
+	{
+		landingPageCName.domain = NamespaceManager.get();
+		landingPageCName.save();
+		return landingPageCName;
+	}
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -139,6 +180,10 @@ public class LandingPagesAPI
 	{
 		System.out.println(landingPage);
 		landingPage.save();
+		
+		//Increase count of Campaign for AllDomainstats report in database
+		AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.LANDINGPAGE_COUNT);
+		
 		return landingPage;
 	}
 	

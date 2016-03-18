@@ -34,8 +34,8 @@
 <div  class="activity block pos-rlt">
 	<div>
 		<div class="activity-block-owner  thumb-xs pull-left m-r-sm avatar">
-			{{#if pic}}
-				<img class="user-img r r-2x" alt="" src="{{pic}}" >
+			{{#if owner.pic}}
+				<img class="user-img r r-2x" alt="" src="{{owner.pic}}" >
 			{{else}}
 				<img class="user-img r r-2x" src="{{defaultGravatarurl 40}}">
 			{{/if}}
@@ -93,6 +93,7 @@
 	<div class="clearfix"></div>
 </div>
 <div class="clearfix"></div>
+<input type="hidden" name="{{colorName}}" class="{{colorName}}"/>
 </div>
 </div>
 </script>

@@ -202,6 +202,9 @@ var portlet_utility = {
 		} else if (portlet_type == "DEALS" && p_name == "Lost Deal Analysis") {
 			json['duration'] = "1-week";
 		}
+		else if (portlet_type == "TASKSANDEVENTS" && p_name == "Average Deviation") {
+			json['duration'] = "1-day";
+		}
 		return json;
 	},
 
@@ -323,6 +326,7 @@ var portlet_utility = {
 			"Deal Goals" : "portlets-deal-goals",
 			"Incoming Deals" : "portlets-incoming-deals",
 			"Lost Deal Analysis" : "portlets-lost-deal-analysis",
+			"Average Deviation" : "portlets-Tasks-Deviation",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
@@ -1222,10 +1226,21 @@ var portlet_utility = {
 									+ "px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			$("#"+selector).addClass("lost-deal-analysis-portlet-pie");
 			pieforReports(url, selector, '', undefined, true);
+				setPortletContentHeight(base_model);
+			break;
+		}
+			case "Average Deviation": {
+			var url = '/core/api/portlets/averageDeviation?start-date='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str)
+								+ '&end-date='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str);
+			portlet_graph_data_utility.taskDeviationGraphData(base_model,
+					selector, url);
 			setPortletContentHeight(base_model);
 			break;
 		}
-
 		}
 	},
 
@@ -1769,6 +1784,17 @@ var portlet_utility = {
 			portlet_utility.setSources("source-lost-deal-analysis", base_model, elData);
 			break;
 		}
+
+		case "Average Deviation": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsTaskClosureSettingsModal");
+			elData = $('#portletsTaskClosureSettingsModal');
+			$("#duration", elData).find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+						break;
+		}
 		}
 		if (base_model.get('name') == "Pending Deals"
 				|| base_model.get('name') == "Deals By Milestone"
@@ -1810,7 +1836,7 @@ var portlet_utility = {
 				var options = '';
 				$.ajax({
 					type : 'GET',
-					url : '/core/api/users',
+					url : '/core/api/users/partial',
 					dataType : 'json',
 					success : function(data) {
 						$.each(data, function(index, domainUser) {
@@ -1842,7 +1868,7 @@ var portlet_utility = {
 				var options = '';
 				$.ajax({
 					type : 'GET',
-					url : '/core/api/users',
+					url : '/core/api/users/partial',
 					dataType : 'json',
 					success : function(data) {
 						$.each(data, function(index, domainUser) {
@@ -1928,8 +1954,10 @@ var portlet_utility = {
 		var secs = Math
 				.floor(((diffInSeconds % (24 * 60 * 60)) % (60 * 60)) % 60);
 
+		if(days!=0)
+			duration += ' ' + days + 'd';
 		if (hrs != 0)
-			duration += '' + ((days * 24) + hrs) + 'h';
+			duration += ' ' + hrs + 'h';
 		if (mins != 0)
 			duration += ' ' + mins + 'm';
 		if (secs != 0)
@@ -2301,7 +2329,7 @@ var portlet_utility = {
 		var options = '<option value="">All</option>';
 		$.ajax({
 			type : 'GET',
-			url : '/core/api/users',
+			url : '/core/api/users/partial',
 			dataType : 'json',
 			success : function(data) {
 				$.each(data, function(index, domainUser) {

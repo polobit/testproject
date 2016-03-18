@@ -7,11 +7,7 @@ var portlet_graph_utility = {
 	 */
 	dealsByMilestonePieGraph : function(selector, milestonesList,
 			milestoneValuesList, milestoneNumbersList) {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						LIB_PATH + 'lib/flot/no-data-to-display.js',
-						function() {
+		setupCharts(function(){
 							var emptyFlag = true;
 							$.each(milestoneValuesList, function(index, value) {
 								if (value > 0)
@@ -123,10 +119,7 @@ var portlet_graph_utility = {
 														name : 'Deal',
 														data : data
 													} ],
-													exporting : {
-														enabled : false
-													}
-												});
+																									});
 							}
 						});
 	},
@@ -135,7 +128,7 @@ var portlet_graph_utility = {
 	 * To display closers per person portlet as bar graph
 	 */
 	closuresPerPersonBarGraph : function(selector, catges, data, text, name, base_model) {
-		head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function() {
+		setupCharts(function(){
 			$('#' + selector).highcharts(
 					{
 						chart : {
@@ -183,9 +176,6 @@ var portlet_graph_utility = {
 							name : name,
 							data : data
 						} ],
-						exporting : {
-							enabled : false
-						}
 					});
 		});
 	},
@@ -202,12 +192,8 @@ var portlet_graph_utility = {
 		else {
 			currency = portlet_utility.getPortletsCurrencySymbol();
 		}
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						LIB_PATH + 'lib/flot/funnel.js',
-						LIB_PATH + 'lib/flot/no-data-to-display.js',
-						function() {
+		setupCharts(function(){
+						
 							if (funnel_data == undefined
 									|| (funnel_data != undefined && funnel_data.length == 0)) {
 								$('#' + selector)
@@ -274,9 +260,7 @@ var portlet_graph_utility = {
 													name : series_name,
 													data : funnel_data
 												} ],
-												exporting : {
-													enabled : false
-												}
+											
 											});
 						});
 	},
@@ -286,10 +270,7 @@ var portlet_graph_utility = {
 	 */
 	emailsSentBarGraph : function(selector, domainUsersList, series,
 			mailsCountList, mailsOpenedCountList, text, colors) {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						function() {
+		setupCharts(function(){
 							$('#' + selector)
 									.highcharts(
 											{
@@ -344,9 +325,7 @@ var portlet_graph_utility = {
 													}
 												},
 												series : series,
-												exporting : {
-													enabled : false
-												},
+									
 												colors : colors
 											});
 						});
@@ -367,7 +346,7 @@ var portlet_graph_utility = {
 			flag = false;
 		}
 		if (flag) {
-			head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function() {
+			setupCharts(function(){
 				$('#' + selector).highcharts(
 						{
 							chart : {
@@ -435,9 +414,7 @@ var portlet_graph_utility = {
 								}
 							},
 							series : series,
-							exporting : {
-								enabled : false
-							},
+				
 							tooltip : {
 								borderWidth : 1,
 								backgroundColor : '#313030',
@@ -458,7 +435,8 @@ var portlet_graph_utility = {
 								floating : true,
 								align : 'right',
 								enabled:portlet_utility.is_legend_enable(base_model),
-								verticalAlign : 'top'
+								verticalAlign : 'top',
+								y: 30
 							},
 							colors : [ "#23b7e5", "#27c24c", "#7266ba",
 									"#fad733", "#f05050", "#aaeeee", "#ff0066",
@@ -472,10 +450,7 @@ var portlet_graph_utility = {
 	 * To display deals assigned portlet as bar graph
 	 */
 	dealsAssignedBarGraph : function(selector, catges, dealsCountList, base_model) {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						function() {
+		setupCharts(function(){
 							$('#' + selector)
 									.highcharts(
 											{
@@ -537,9 +512,7 @@ var portlet_graph_utility = {
 													name : 'Assigned Deals',
 													data : dealsCountList
 												} ],
-												exporting : {
-													enabled : false
-												}
+									
 											});
 						});
 	},
@@ -555,11 +528,7 @@ var portlet_graph_utility = {
 		var	height=domainUsersList.length*30+($('#'+selector).height()-30);
 		if(selector=='calls-chart')
 			height=domainUsersList.length*30+120;
-		
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						function() {
+		setupCharts(function(){
 							
 							callschart[parseInt(pos)]=new Highcharts.Chart({
 								chart: {
@@ -721,9 +690,6 @@ var portlet_graph_utility = {
 						    		}
 						        },
 						        series: series,
-						        exporting: {
-							        enabled: false
-							    },
 							    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
 							    legend : {
 									itemStyle : {
@@ -735,7 +701,8 @@ var portlet_graph_utility = {
 									floating : true,
 									align : 'right',
 									enabled:portlet_utility.is_legend_enable(base_model),
-									verticalAlign : 'top'
+									verticalAlign : 'top',
+									y:30
 								}
 						    });
 							
@@ -748,7 +715,7 @@ var portlet_graph_utility = {
 	 */
 	callsByPersonPieGraph :function(selector,categoryList,valueList){
 
-	head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/no-data-to-display.js', function(){
+	setupCharts(function(){
 		var emptyFlag = true;
 		$.each(valueList,function(index,value){
 			if(value>0)
@@ -825,9 +792,7 @@ var portlet_graph_utility = {
 		            name: "",
 		            data: data
 		        }],
-		        exporting: {
-			        enabled: false
-			    }
+
 		    });
 		}
 	});
@@ -838,25 +803,22 @@ var portlet_graph_utility = {
 	 * To display task report portlet as bar graph
 	 */
 	taskReportBarGraph : function(selector, groupByList, series, text,
-			base_model, domainUserNamesList) {
+			base_model, domainUserNamesList,CountData,yaxistitle) {
 			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
 		var pos = '' + column_position + '' + row_position;
 
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						function() {
+		setupCharts(function(){
 							taskReport[parseInt(pos)]=new Highcharts.Chart({
 												colors : [ "#23b7e5",
 														"#27c24c", "#7266ba",
 														"#fad733", "#f05050",
-														"#aaeeee", "#ff0066",
+														"#aaeeee", "#f4a460",
 														"#eeaaee", "#55BF3B",
 														"#DF5353" ],
 												chart : {
 													renderTo:selector,
 													type : 'bar',
-													marginRight : 20,
+													marginRight : 80,
 													height:groupByList.length*30+($('#'+selector).height()-30),
 													events: {
 												   		load: function(){
@@ -871,10 +833,50 @@ var portlet_graph_utility = {
 												title : {
 													text : ''
 												},
+												
 												xAxis : {
 													categories : groupByList,
 													labels : {
 														formatter : function() {
+															if(base_model.get('name')=='Average Deviation')
+															{
+																var userIndex = 0;
+																for ( var i = 0; i < groupByList.length; i++) {
+																	if (this.value == groupByList[i]
+																			&& groupByList[i]
+																					.substring(
+																							0,
+																							8) != "no image")
+																		userIndex = i;
+																	else if (this.value == groupByList[i]
+																			&& groupByList[i]
+																					.substring(
+																							0,
+																							8) == "no image")
+																		userIndex = parseInt(groupByList[i]
+																				.substring(
+																						9,
+																						10));
+																}
+																if (this.value != undefined
+																		&& this.value != ""
+																		&& this.value
+																				.substring(
+																						0,
+																						8) != "no image")
+																	return '<img src="'
+																			+ this.value.split('#')[0]
+																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
+																			+ domainUserNamesList[userIndex]
+																			+ '"/>';
+																else
+																	return '<img src="'
+																			+ gravatarImgForPortlets(25)
+																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
+																			+ domainUserNamesList[userIndex]
+																			+ '"/>';
+															}
+																else{
 															if (base_model
 																	.get('settings')["group-by"] == "user") {
 																var userIndex = 0;
@@ -902,7 +904,7 @@ var portlet_graph_utility = {
 																						0,
 																						8) != "no image")
 																	return '<img src="'
-																			+ this.value
+																			+ this.value.split('#')[0]
 																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
 																			+ domainUserNamesList[userIndex]
 																			+ '"/>';
@@ -923,6 +925,7 @@ var portlet_graph_utility = {
 																	return this.value;
 																}
 															}
+														}
 														},
 														style : {
 															color : '#98a6ad',
@@ -938,7 +941,7 @@ var portlet_graph_utility = {
 												yAxis : {
 													min : 0,
 													title : {
-														text : ''
+														text : yaxistitle
 													},
 													allowDecimals : false,
 													gridLineWidth : 1,
@@ -964,9 +967,7 @@ var portlet_graph_utility = {
 													}
 												},
 												series : series,
-												exporting : {
-													enabled : false
-												},
+										
 												tooltip : {
 													borderWidth : 1,
 													backgroundColor : '#313030',
@@ -977,7 +978,35 @@ var portlet_graph_utility = {
 														color : '#EFEFEF'
 													},
 													formatter : function() {
-														if (base_model
+														if( base_model.get('name')=='Average Deviation'){
+															var userIndex = 0;
+															for ( var i = 0; i < groupByList.length; i++) {
+																if (this.key == groupByList[i])
+																	userIndex = i;
+															}
+															return '<div>'
+																	+ '<div class="p-n">'
+																	+ domainUserNamesList[userIndex]
+																	+ ' </div>'
+																	+ '<div class="p-n" style="color:'
+																	+ this.series.color
+																	+ ';">'
+																	+ 'Deviation Time'
+																	+ ':'
+																	+ portlet_utility.getPortletsTimeConversion(Math.round(this.y))
+																	+ ' </div>'
+																	+ '<div class="p-n" style="color:'
+																	+ this.series.color
+																	+ ';">'
+																	+ this.series.name
+																	+ ': '
+																	+ portlet_utility.getNumberWithCommasForPortlets(CountData[this.series.index][this.point.x])
+																	+ ' </div>'
+																	+ '</div>';
+															
+														}
+														
+													else	if (base_model
 																.get('settings')["group-by"] == "user") {
 															var userIndex = 0;
 															for ( var i = 0; i < groupByList.length; i++) {
@@ -1024,6 +1053,7 @@ var portlet_graph_utility = {
 													floating : true,
 													align : 'right',
 													verticalAlign : 'top',
+													y:30,
 													enabled:portlet_utility.is_legend_enable(base_model),
 													labelFormatter : function() {
 														if (this.name.length > 12) {
@@ -1044,10 +1074,7 @@ var portlet_graph_utility = {
 	 * To display revenue graph portlet as area spline graph
 	 */
 	portletDealRevenueGraph : function(selector, series, base_model, categories) {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						function() {
+		setupCharts(function(){
 							if (series == undefined && categories != undefined
 									&& categories.length == 0) {
 								$('#' + selector)
@@ -1128,9 +1155,7 @@ var portlet_graph_utility = {
 													}
 												},
 												series : series,
-												exporting : {
-													enabled : false
-												},
+										
 												tooltip : {
 													borderWidth : 1,
 													backgroundColor : '#313030',
@@ -1173,7 +1198,8 @@ var portlet_graph_utility = {
 													floating : true,
 													align : 'right',
 													enabled:portlet_utility.is_legend_enable(base_model),
-													verticalAlign : 'top'
+													verticalAlign : 'top',
+													y : 30,
 												},
 												colors : [ "#23b7e5",
 														"#27c24c", "#7266ba",
@@ -1190,11 +1216,7 @@ var portlet_graph_utility = {
 	 */
 	emailsOpenedPieChart : function(selector, data, emailsSentCount,
 			emailsOpenedCount) {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						LIB_PATH + 'lib/flot/no-data-to-display.js',
-						function() {
+setupCharts(function(){
 							if (emailsSentCount == 0 && emailsOpenedCount == 0) {
 								$('#' + selector)
 										.html(
@@ -1290,9 +1312,7 @@ var portlet_graph_utility = {
 													name : 'Deal',
 													data : data
 												} ],
-												exporting : {
-													enabled : false
-												}
+												
 											});
 						});
 	},
@@ -1301,11 +1321,7 @@ var portlet_graph_utility = {
 	 * To display campaigns stats portlet as pie graph 
 	 */
 	campstatsPieChart : function() {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						LIB_PATH + 'lib/flot/no-data-to-display.js',
-						function() {
+	setupCharts(function(){
 							var color;
 							//var innersize='100%';
 							var dis = 0;
@@ -1474,9 +1490,7 @@ var portlet_graph_utility = {
 													// name: 'Deal',
 													data : data
 												} ],
-												exporting : {
-													enabled : false
-												}
+										
 											});
 						});
 	},
@@ -1487,12 +1501,7 @@ var portlet_graph_utility = {
 									data2 - data1 ]);
 							series.push([ "Won", data1 ]);
 							//portlet_graph_utility.emailsOpenedPieChart(selector,series,data1,data2);
-							head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						LIB_PATH + 'lib/flot/no-data-to-display.js',
-						function() {
-
+							setupCharts(function(){
 							$('#' + selector)
 									.highcharts(
 											{
@@ -1569,13 +1578,15 @@ var portlet_graph_utility = {
 														}
 													}
 												},
+												exporting :
+												{
+													enabled : false,
+												},
 												series : [ {
 													name : 'Goal',
 													data : series
 												} ],
-												exporting : {
-													enabled : false
-												}
+											
 											});
 						});
 	},

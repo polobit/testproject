@@ -826,12 +826,12 @@ var portlet_graph_data_utility = {
 
 							$.each(groupByList, function(index, name) {
 								groupByNamesList[index] = portlet_utility
-										.getPortletNormalName(name);
+										.getPortletNormalName(name+'#'+index);
 							});
 
 							portlet_graph_utility.taskReportBarGraph(selector,
 									groupByNamesList, series, text, base_model,
-									domainUserNamesList);
+									domainUserNamesList,undefined,'');
 
 							portlet_utility.addWidgetToGridster(base_model);
 						});
@@ -983,6 +983,7 @@ var portlet_graph_data_utility = {
 	 */
 	incomingDealsGraphData : function(base_model, selector, url) {
 		var that = this;
+
 		var sizey = parseInt($('#' + selector).parent().attr("data-sizey"));
 		var topPos = 50 * sizey;
 		if (sizey == 2 || sizey == 3)
@@ -1073,7 +1074,7 @@ var portlet_graph_data_utility = {
 	                }
 	            }
 	            if(series==undefined)
-	            	 chartRenderforIncoming(selector,categories,name,'',min_tick_interval,type,series,AllData,0,0);
+	            	 chartRenderforIncoming(selector,categories,name,'',min_tick_interval,type,series,AllData,0,30);
 	            else
 	            {
 	            $.ajax({ type : 'GET', url : '/core/api/categories?entity_type=DEAL_SOURCE', dataType : 'json',
@@ -1088,7 +1089,7 @@ var portlet_graph_data_utility = {
 	                            
 	                    }
 	                });
-	                chartRenderforIncoming(selector,categories,name,'',min_tick_interval,type,series,AllData,0,0);
+	                chartRenderforIncoming(selector,categories,name,'',min_tick_interval,type,series,AllData,0,30);
 	                } 
 	            });
 	        	}
@@ -1338,5 +1339,88 @@ var portlet_graph_data_utility = {
 								cnt++;
 							}
 						});
-	}
+	},
+taskDeviationGraphData : function(base_model, selector, url) {
+		var groupByList = [];
+		var splitByList = [];
+		var splitByNamesList = [];
+		var domainUserNamesList = [];
+var sizey = parseInt($('#' + selector).parent().attr("data-sizey"));
+		var topPos = 50 * sizey;
+		if (sizey == 2 || sizey == 3)
+			topPos += 50;
+		$('#' + selector)
+				.html(
+						"<div class='text-center v-middle opa-half' style='margin-top:"
+								+ topPos
+								+ "px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		this
+				.fetchPortletsGraphData(
+						url,
+						function(data) {
+							if (data.status == 403) {
+								$('#' + selector)
+										.html(
+												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+								return;
+							}
+							groupByList = data["groupByList"];
+							splitByList = data["splitByList"];
+							domainUserNamesList = data["domainUserNamesList"];
+							var series = [];
+							var CountData=[];
+							var text = '';
+							var colors;
+
+							$.each(splitByList, function(index, splitByData) {
+								if (splitByNamesList.length == 0)
+									$.each(splitByData, function(key, value) {
+										splitByNamesList.push(portlet_utility
+												.getPortletNormalName(key));
+									});
+							});
+							for ( var i = 0; i < splitByNamesList.length; i++) {
+								var tempData = {};
+								var splitByDataList = [];
+								var splitByDataListCount = [];
+								$
+										.each(
+												splitByList,
+												function(index, splitByData) {
+													$
+															.each(
+																	splitByData,
+																	function(
+																			key,
+																			value) {
+																		if (portlet_utility
+																				.getPortletNormalName(key) == splitByNamesList[i]){
+																			splitByDataListCount.push(value[0]);
+																			
+																			splitByDataList
+																					.push(value[1]);
+																				}
+																	});
+												});
+								tempData.name = splitByNamesList[i];
+								tempData.data = splitByDataList;
+								series[i] = tempData;
+								CountData[i]=splitByDataListCount;
+							}
+							text = "Average Deviation";
+
+							var groupByNamesList = [];
+
+							$.each(groupByList, function(index, name) {
+								groupByNamesList[index] = portlet_utility
+										.getPortletNormalName(name+'#'+index);
+							});
+
+							portlet_graph_utility.taskReportBarGraph(selector,
+									groupByNamesList, series, text, base_model,
+									domainUserNamesList,CountData,'In Seconds');
+
+							portlet_utility.addWidgetToGridster(base_model);
+						});
+	},
 };

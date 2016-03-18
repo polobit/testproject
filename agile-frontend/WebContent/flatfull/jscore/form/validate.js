@@ -111,6 +111,16 @@ function isValidForm(form) {
 		
 		return /^[0-9\-]+$/.test(value);
 	}," Please enter a valid number.");
+
+	//positive number validation
+	jQuery.validator.addMethod("positive_number", function(value, element){
+			
+		if(value=="")
+			return false;
+		
+		return /^\+?([1-9]\d*)$/.test(value);
+	}," Please enter a number greater than 0.");
+
 	
 	jQuery.validator.addMethod("multi-select", function(value, element){
 		var counter = 0;
@@ -184,22 +194,12 @@ function isValidForm(form) {
 		}
 	);
 
-	//Positive Number validation
-	jQuery.validator.addMethod("positive_number", function(value, element){
+
+	// domain name validation
+	jQuery.validator.addMethod("domain_format", function(value, element){
 		
-		if(value=="")
-			return true;
-
-		if(isNaN(value))
-		{
-			return false;
-		}
-		if(!isNaN(value) && parseFloat(value) >= 0)
-		{
-			return true;
-		}
-
-	}," Please enter a value greater than or equal to 0.");
+		return /^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$/.test(value);
+	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter.");
 
 	$(form).validate({
 		rules : {
@@ -271,4 +271,13 @@ function isAlphaNumeric(subdomain) {
 		return false;
     }
   return true;
+}
+
+function isValidContactCustomField(id) {
+    var name = $('#' + id).attr("name");
+    if($('ul[name="'+name+'"]').find("li").length == 0) {
+    	return false;
+    }else {
+    	return true;
+    }
 }

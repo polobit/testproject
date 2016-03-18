@@ -805,7 +805,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date. Please change.</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date. Please change.</div>');
 
 		return false;
 	}
@@ -814,7 +814,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
 
 		return false;
 	}
@@ -823,7 +823,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
 
 		return false;
 	}
@@ -1172,6 +1172,28 @@ function changeEndTime(startTime, endTime)
 	console.log("In changeEndTime");
 	console.log(startTime);
 	console.log(endTime);
+	// var s0 = startTime[0];
+ //    var s1=startTime[1];
+    var reg = /[a-zA-Z]/;
+   
+  for(var i=0;i<startTime.length;i++)
+  {
+     if (reg.test(startTime[i])) {
+   startTime[i]=00;
+	}
+	else if(!reg.test(startTime[i])){
+		startTime[i] = startTime[i].substring(0,2);
+	}
+
+
+  }
+
+   /*if (reg.test(s1)) {
+   startTime[1]=00;
+	}
+	else if(!reg.test(s1)){
+		startTime[1] = s1.substring(0,2);
+	}*/
 
 	if (startTime[0] > endTime[0] || (startTime[0] == endTime[0] && startTime[1] >= endTime[1]))
 	{

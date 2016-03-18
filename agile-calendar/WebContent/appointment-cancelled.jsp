@@ -35,7 +35,7 @@
 			{
 			    if (event != null)
 			    {
-				domain_user=event.getOwner();
+				domain_user=event.eventOwner();
 				domain_user_name=domain_user.name;
 				calendar_url=domain_user.getCalendarURL();
 				String timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
@@ -50,7 +50,7 @@
 								"EEE, MMMM d yyyy, h:mm a (z)"));
 				event_title=event.title;
 				Long duration=(event.end-event.start)/60;
-				List<Contact> contacts=event.getContacts();
+				List<Contact> contacts=event.relatedContacts();
 				String client_name=contacts.get(0).getContactFieldValue("FIRST_NAME");
 				if(StringUtils.isNotEmpty(contacts.get(0).getContactFieldValue("LAST_NAME"))){
 				    client_name.concat(contacts.get(0).getContactFieldValue("LAST_NAME"));

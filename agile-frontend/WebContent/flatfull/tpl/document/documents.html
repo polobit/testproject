@@ -105,9 +105,10 @@
     </div>
 </td><td>
     <div class="thumb-sm avatar">
-       {{#if ownerPic}}
-        <img class="r r-2x" src="{{ownerPic}}"  title="{{owner.name}}" />
-       {{else}}
+       {{#if owner.pic}}
+        <img class="r r-2x" src="{{owner.pic}}"  title="{{owner.name}}" />
+	   {{else}}
+             <div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;">{{owner.name}}</div>
        {{/if}}
     </div>
 </td>

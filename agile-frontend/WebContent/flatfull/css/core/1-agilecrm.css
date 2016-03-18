@@ -923,6 +923,12 @@ z-index: 99;
 	position:relative;
 	border-bottom:1px solid #ddd;
 }
+.dealtitle-angular + .tooltip{
+
+	width:200px;
+    word-wrap:break-word;
+    white-space:normal;
+}
 .milestone-main .milestone-column:last-child .milestone-heading:after,.milestone-main .milestone-column:last-child span:after
 {
 	display:none;
@@ -1000,7 +1006,7 @@ li.deal-color.GREY:after { background: grey;}
 	background:lightyellow!important;
 }
 .milestone-column>ul, .milestone-column>div.milestones {
-	height: 468px;
+	height: calc(100vh - 200px);
 	overflow-y: auto !important;
 	list-style: none;
 	margin-left: 0px;
@@ -1011,7 +1017,7 @@ li.deal-color.GREY:after { background: grey;}
 	list-style: none;
 	margin-left: 0px;
 	margin-bottom: 0px;
-	min-height: 468px;
+	min-height: calc(100vh - 200px);
 }
 
 #opportunities-by-milestones-model-list .milestone-column>ul>li, #deals-by-paging-model-list li, #deals-by-paging-relax-model-list li
@@ -3023,6 +3029,7 @@ width: 915px;
 }
 
 .custom_popover .popover-content{
+	z-index: 99999;
 	padding-top: 5px;
 	padding-bottom:5px;
 	background-color: #fff;
@@ -3050,7 +3057,7 @@ width : 150px;
 	padding-bottom:9px;
 }
 
-#portlets-add-listener #deals > div:nth-of-type(4)
+#portlets-add-listener .wrapper-md div:nth-of-type(4)
 {
 	height: 243px;
 }
@@ -3126,6 +3133,9 @@ table.hide-head-checkbox th label.i-checks {
     color: rgb(88, 102, 110)!important;
 }
 
+.modal-cbx-m-t{
+	margin-top: -9px;
+}
 
 
 .conversion_track::-webkit-scrollbar-thumb {
@@ -3150,6 +3160,7 @@ table.hide-head-checkbox th label.i-checks {
 }
 
 
+
 .slate-content h4{
 	font-size: 18px;
 	opacity:0.8;
@@ -3170,6 +3181,8 @@ table.hide-head-checkbox th label.i-checks {
 .deals-nowrap .no-wrap {
  white-space: nowrap !important;
 }
+
+
 .contact_popover{ 
 
 	border-radius: 0px;
@@ -3186,7 +3199,19 @@ table.hide-head-checkbox th label.i-checks {
 .contact_popover .arrow{
 	display: none;
 }
-
+#scorebox{
+	text-align:center;
+	right: 5px;
+	width: 56px;
+	padding-bottom: 0;padding-left: 0px;
+	padding-right: 0px;padding-top: 0px;
+	border-top-width: 1px;
+	margin-top: 6px;
+	top: -3px;
+	height: 28px;
+	left:26px;
+	font-size: 18px;
+}
 
 .well{
 	background: none!important;
@@ -3215,3 +3240,274 @@ table.hide-head-checkbox th label.i-checks {
 	letter-spacing: 1px;
 }
 
+
+/* account block model */
+#user-blocked-modal .panel-body{
+	padding: 60px 30px 60px 30px;
+	background-color: #edb25b;
+	color: white;
+}
+#user-blocked-modal a{
+	color: white !important;
+}
+#user-blocked-modal .modal-dialog{
+	top: 20vh;
+}
+
+.user-alert{
+	position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.user-alert .user-alert-message{
+	position: fixed;
+    width: 50%;
+    margin: 25px auto;
+    text-align: center;
+    background: #f7ecc2!important;
+    border: 1px solid rgb(255, 194, 55);
+    left: 0;
+    right: 0;
+    z-index: 99999;
+    cursor: pointer;
+    padding: 5px;
+    margin-top: 5px;
+    border-radius: 6px;
+}
+.user-alert .user-alert-message span{
+	background-color: #DCD1A5;
+    padding: 0px 6px 4px;
+	margin-left: 10px;
+    margin-right: 5px;
+    font-size: 15px;
+}
+.companies_input{
+	height:30px;
+	font-size:12px;
+}
+.lhs-contact-filter-row  div.add-icon{
+	display: none;
+}
+
+.lhs-contact-filter-row div.add-icon:last-of-type {
+	display: block!important;
+	}
+#addBtn:hover
+{
+  color: black !important;
+}
+
+#removeBtn:hover
+{
+  color: black !important;
+  opacity: 0.9;
+}
+#removeBtn:hover
+{
+  color: black !important;
+}
+
+
+@media ( max-width : 767px) {
+	.vbox-mobile-view .vbox{ display: block;min-height:auto;}
+	.vbox-mobile-view .row-row{ display: inherit !important; }
+
+}
+
+#lhs_filters_conatiner .panel-body{
+	padding: 5px 15px;
+	min-height: 35px;
+}
+#lhs_filters_conatiner #lhs-filters-header{
+	font-size : 14px;
+}
+#lhs_filters_conatiner #lhs-filters-header i{
+	top : 3px;
+}
+/* Modals New  Look  UI Starting */
+ 
+ .modal-footer {
+     padding: 10px;
+     background-color: rgba(0,0,0,0.025);
+ }
+ 
+ .modal-title {
+     margin: 0;
+     /* line-height: 1.42857143; */
+ }
+ 
+ .modal-header h3,.modal-header .h3 {
+     font-size: 16px;
+ }
+ 
+ .modal-title i {
+ 	display: none;
+ }
+ 
+ 
+ .modal-content {
+     position: relative;
+     background-color: #fff;
+     -webkit-background-clip: padding-box;
+     background-clip: padding-box;
+     border: 1px solid #999;
+     border: 1px solid rgba(0,0,0,.2);
+      border-radius: 0px;
+     outline: 0;
+     -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+     box-shadow: 0 3px 9px rgba(0,0,0,.5);
+ }
+ 
+ /* Modals New  Look  UI Ending */
+ .p-l-r-8{
+ 	padding: 0 8px 0 8px;
+ }
+ .modal-cbx-m-t {
+    margin-top: -9px;
+}
+
+#dashboard-video
+{
+	margin-top: 110px;
+}
+
+.landingpage-copy{
+	min-width: 0px;
+}
+
+.emailbuilder-copy{
+	min-width: 120px;
+    margin-right: 80px;
+    top: 50px;
+}
+.free-user-alert-message{
+	text-align: center;
+	background: #F7F7D0 !important;
+	border: 1px solid #E2E29C;
+	z-index: 1030;
+	padding: 5px 10px;
+	margin-top: 8px;
+	border-radius: 2px;
+	position: absolute;
+	left: 40%;
+	font-size: 13px;
+	color: #58666e !important;
+}
+.free-user-alert-message .text-info{
+	color: #23b7e5 !important;
+}
+#free-user-md-text { display: block; }
+#free-user-sm-text{ display: none;}
+
+@media(max-width:1260px){
+#free-user-sm-text{ display: block; }
+#free-user-md-text{ display: none;}
+.free-user-alert-message{ left: 45%;}
+
+}
+@media(max-width:1060px){ 
+	.free-user-alert-message{display: none;}
+}
+
+/* Fix for timeline support issue starting */
+.item table.body td.center {E2E29C
+    position: static!important;
+}
+/* Fix for timeline support issue ending */
+
+.admin-user-name{
+	width: calc(100% - 45px);
+	line-height: 20px;
+	color:#7C7C7C;
+	margin-left:82px;
+	font-size:12px;
+	 margin-top: -64px;
+    margin-left: 57px;
+}
+
+.admin-user-adduser{
+	margin-left:13px;
+	width:140px;
+	font-size:14px;
+}
+
+.admin-username{
+	max-width:calc(100% - 101px);
+	text-transform: capitalize;
+	font-size:14px;
+}
+
+.admin-user_temp:hover div.user-view-actions {
+  display: block;
+}
+div.user-view-actions {
+  display: none;
+}
+
+.useradmin-edit-delete{
+	margin-top:-104px;
+}
+.admin-settings-bulkactions{
+	border-bottom: 1px solid rgba(140, 139, 139, 0.2);
+	background-color: rgba(246,248,248,1);
+	margin-left:15px;
+}
+
+.delete-adminuser{
+	width: 98%;
+    margin: 0 0 5px 4px;
+    padding: 6px 10px;
+}
+.delete-adminuser-individual{
+	width: 58%;
+    margin: 0 0 0 15px;
+    text-align: left;
+    float: left;
+    padding: 6px 10px 2px;
+}
+.adduser
+{
+	margin-left: 104px;
+}
+
+#admin-newuser-image{
+	margin-left: -24px;	
+}
+
+#admin-newuser-adduser{
+ text-align: left;
+    margin-top: 4px;	
+}
+#admin-newuser-adduser
+{
+ 	text-align: left;
+    margin-top: 5px;
+
+}
+
+
+.task-view-description-outbox .task-view-description
+{
+max-width:300px;
+text-overflow:ellipsis;
+overflow-x:hidden;
+text-align:left;
+}
+
+.new-user
+{
+	margin-left: 10px;
+    margin-top: 15px;
+
+}
+.highcharts-button {
+  display: none;
+}
+
+.highcharts-contextmenu hr
+{
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
