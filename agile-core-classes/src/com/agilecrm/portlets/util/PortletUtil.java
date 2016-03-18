@@ -159,24 +159,22 @@ public class PortletUtil {
 			route= Portlet.PortletRoute.DashBoard;
 		}
 
-		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route",route).list();
-		
+		if(route.equals(Portlet.PortletRoute.DashBoard)){
+		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
 		//If user first time login after portlets code deploy, we add some portlets by default
 		//in DB and one null portlet also
-		if(route.equals(Portlet.PortletRoute.DashBoard) && portlets != null &&  portlets.size() == 0){
-			portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
-			if(portlets!=null && portlets.size()==0){
-				addDefaultPortlets();
-				portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route", route).list();
+		if(portlets!=null && portlets.size()>0){
+			for(Portlet portlet : portlets){
+				if(portlet.portlet_route==null)
+					portlet.portlet_route=Portlet.PortletRoute.DashBoard;
+				portlet.save();
 			}
-			else {
-				for(Portlet portlet : portlets){
-					if(portlet.portlet_route==null){
-						portlet.portlet_route=Portlet.PortletRoute.DashBoard;
-						portlet.save();
-					}
-				}
-			}
+		}
+		}
+		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route", route).list();
+		if(portlets!=null && portlets.size()==0 && route.equals(Portlet.PortletRoute.DashBoard))
+			{addDefaultPortlets();
+		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route",Portlet.PortletRoute.DashBoard ).list();
 		}
 
 		for(Portlet portlet : portlets){
