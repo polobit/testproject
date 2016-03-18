@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -106,7 +107,7 @@ public class DealFilterIdsFetcher {
         		return true;
         	}
         }else if (opportunity.owner_id == null){
-        	DomainUser domainUser = opportunity.getOwner();
+        	DomainUserPartial domainUser = opportunity.getOwner();
         	if(domainUser != null && domainUser.id.equals(domainUserId))
         	{
         		return true;
