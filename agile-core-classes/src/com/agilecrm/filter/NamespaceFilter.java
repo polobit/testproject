@@ -80,7 +80,7 @@ public class NamespaceFilter implements Filter
 	if (((HttpServletRequest) request).getRequestURI().contains("/_ah/mail"))
 	    return true;
 	
-	if (((HttpServletRequest) request).getRequestURI().contains("/_ah/spi/BackendService"))
+	if (((HttpServletRequest) request).getRequestURI().contains("/_ah/spi"))
 	    return true;
 	
 
