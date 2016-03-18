@@ -10,8 +10,8 @@
 function setupCharts(callback)
 {
 
-	head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/highcharts-more.js',LIB_PATH + 'lib/flot/solid-gauge.js', LIB_PATH + 'lib/flot/highcharts-exporting.js', LIB_PATH + 'lib/flot/funnel.js',LIB_PATH + 'lib/flot/highcharts-grid.js',
-	LIB_PATH + 'lib/flot/no-data-to-display.js', function()
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/highcharts-more.js',LIB_PATH + 'lib/flot/solid-gauge.js', LIB_PATH + 'lib/flot/highcharts-exporting.js?_=v1', LIB_PATH + 'lib/flot/funnel.js',LIB_PATH + 'lib/flot/highcharts-grid.js',
+	LIB_PATH + 'lib/flot/no-data-to-display.js', LIB_PATH + 'lib/flot/export-csv.js', function()
 	{
 
 		// Checks if callback is available, if available calls the callback
@@ -108,6 +108,7 @@ function pie(url, selector, name)
 												return { x : 15, y : 23 };
 											}, },
 										legend : { itemWidth : 75, },
+
 										plotOptions : {
 											pie : {
 												 animation: animation,
@@ -133,7 +134,7 @@ function pie(url, selector, name)
 
 										series : [
 											{ type : 'pie', name : 'Tag', data : pieData, startAngle : 90 }
-										], exporting : { enabled : false } }, function(chart)
+										], }, function(chart)
 									{ // on complete
 
 										chart.renderer.image(updateImageS3Path('img/donut-tooltip-frame.png'), 14, 5, 200, 80).add();
@@ -312,6 +313,7 @@ function showBar(url, selector, name, yaxis_name, stacked, selected_colors)
 			        },
 			        useHTML : true,
 			    },
+
 			    plotOptions: {
 			        column: {
 			            stacking: stacked,
@@ -615,9 +617,6 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 			    //Sets the series of data to be shown in the graph,shows total 
 			    //and pipeline
 			    series: series,
-			    exporting: {
-			        enabled: false
-			    }
 			});
 		});
 	});
@@ -1082,9 +1081,7 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 			    //Sets the series of data to be shown in the graph,shows total 
 			    //and pipeline
 			    series: series,
-			    exporting: {
-			        enabled: false
-			    }
+			  
 			});
 		});
 	});
@@ -1437,9 +1434,6 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,freque
 			    //Sets the series of data to be shown in the graph,shows total 
 			    //and pipeline
 			    series: series,
-			    exporting: {
-			        enabled: false
-			    },
 			    lang: {
             				noData: "No Deals Found"
         				},
@@ -1705,9 +1699,20 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                 //Sets the series of data to be shown in the graph,shows total 
                 //and pipeline
                 series: series,
-                exporting: {
-                    enabled: false
-                }
+          /*      exporting : {
+						    	buttons: {
+			   						  exportButton: {
+       					 menuItems: null,
+       					 onclick: function () { this.downloadCSV(); }
+       					 
+       					},
+       					printButton: {
+       						enabled : false
+       					}
+	       		
+			       		
+			       				}
+						    },*/
             });
 }
 function pieforReports(url, selector, name,show_loading, is_lost_analysis)
@@ -1860,7 +1865,7 @@ if(selector == 'lossreasonpie-chart-users'){
 
 				series : [
 					{ type : 'pie', name : 'Deal', data : pieData, startAngle : 90 }
-				], exporting : { enabled : false },
+				], 
 
 				 lang: {
 					noData: "No Deals Found"
@@ -2089,9 +2094,6 @@ function showGuage(selector, data,goal_data,name,show_loading)
             },
         },
         },
-        exporting :{
-        	enabled : false,
-        },
 
              series: [{
             name: 'Goal',
@@ -2174,9 +2176,6 @@ function showFunnelForConversion(selector, name, show_loading,v)
 		        	},
 		        legend: {
 		            enabled: false
-		        },
-		        exporting :{
-		        	enabled:false
 		        },
 		        series: [{
 		            name: 'Deals',
@@ -2432,9 +2431,6 @@ function BubbleChart(url, selector, name,show_loading)
 			    //Sets the series of data to be shown in the graph,shows total 
 			    //and pipeline
 			    series: series,
-			    exporting: {
-			        enabled: false
-			    }
 			});
 		});
 	});

@@ -390,11 +390,11 @@ var contacts_bulk_actions = {
 			var no = "No"
 
 			var message = "";
-			var upgrade_link = ' You may <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">purchase more emails </a> if this does not suffice your bulk action.';
-			var title = "Low on emails"
+			var upgrade_link = ' You may <a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny">purchase </a>more emails if this does not suffice your bulk action.';
+			var title = "Low on Emails"
 			if (pendingEmails <= 0)
 			{
-				title = "Low on emails";
+				title = "Low on Emails";
 				yes = "";
 				no = "Ok"
 				message = "You have used up all emails in your quota. " + upgrade_link;
@@ -581,14 +581,15 @@ var contacts_bulk_actions = {
 								var no = "No"
 
 								var message = "";
-								var upgrade_link = 'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgrade your email subscription.</a>';
-								var title = "Not enough emails left"
+								var upgrade_link = 'Please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> upgrade</a> your email subscription.';
+								var emialErrormsg = '<div>To continue sending emails from your account, please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> purchase</a>  more.</div>';
+								var title = "Not Enough Emails Left"
 								if (pendingEmails <= 0)
 								{
-									title = "Emails limit";
+									title = "Emails Limit";
 									yes = "";
 									no = "Ok"
-									message = "You have used up all emails in your quota. " + upgrade_link;
+									message = "<div>Sorry, your emails quota has been utilized.</div> " + emialErrormsg;
 								}
 								else
 									message = "You have only " + pendingEmails + " emails remaining as per your quota. " + upgrade_link + " Continuing with this operation may not send the email to some contacts. <br/><br/>" + "Do you want to proceed?";
@@ -829,7 +830,7 @@ function show_bulk_owner_change_page()
 		$("body").off('fill_owners').on("fill_owners", function(event)
 		{
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-			fillSelect('ownerBulkSelect', '/core/api/users', 'domainUsers', 'no-callback ', optionsTemplate);
+			fillSelect('ownerBulkSelect', '/core/api/users/partial', 'domainUsers', 'no-callback ', optionsTemplate);
 		});
 
 		// Navigate to show form

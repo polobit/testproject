@@ -187,8 +187,8 @@
         {{/unless}}
         {{#if this.length}}
         <div class="data">
-            <div class="data-container">
-                <div id="contacts-grid-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/bulk/update?action_type=DELETE"></div>
+            <div class="data-container contacts-inner-div">
+                <div id="contacts-grid-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/contacts/delete?action=DELETE"></div>
             </div>
         </div>
         {{/if}}
@@ -199,7 +199,7 @@
 </script>
 	<script id="contacts-grid-table-collection-template" type="text/html">
 
-	<div id="bulk-action-btns" class="panel-heading no-shadow m-r-sm b-r" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);background-color: rgba(246,248,248,1);">
+	<!-- <div id="bulk-action-btns" class="panel-heading no-shadow m-r-sm b-r" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);background-color: rgba(246,248,248,1);">
 				      	{{#if this.length}}
 				          <span style="margin: 5px 0px 5px 5px;"> <label class="i-checks i-checks-sm p-l-lg">
 				                <input type="checkbox" id="select_grid_contacts1" class="thead_check" value="">
@@ -218,18 +218,19 @@
 					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Export Contacts as CSV</button>
 					    {{/hasScope}}
 					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Delete</button>
-				    </div>
+				    </div> -->
       <div class="m-l-sm filter-criteria"></div>
       {{#unless this.length}}
         <div class="m-l-sm" id="slate">
         </div>
         {{/unless}}
         {{#if this.length}}
-        <div class="data">
-            <div class="data-container">
-                <div id="contacts-grid-table-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/bulk/update?action_type=DELETE"></div>
-            </div>
-        </div>
+
+        <!-- <div class="data">
+            <div class="data-container"> -->
+                <div id="contacts-grid-table-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/contacts/delete?action=DELETE"></div>
+            <!-- </div>
+        </div> -->
         {{/if}}
 		
 </script>

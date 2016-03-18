@@ -104,12 +104,3 @@ function getTitleForClip(id) {
  return title;
 
 }
-
-function loadZeroclipboard2(callback){
-
-	head.js('/lib/zeroclipboard2/ZeroClipboard.min.js', function(){
-		
-		if(callback)
-			callback();
-	});
-}

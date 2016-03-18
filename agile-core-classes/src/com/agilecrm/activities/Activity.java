@@ -13,9 +13,11 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.ticket.entitys.TicketGroups;
@@ -95,9 +97,10 @@ public class Activity extends Cursor
      * @return List of contact objects
      */
     @XmlElement
-    public List<Contact> getContacts()
+    public List<ContactPartial> getContacts()
     {
-	return Contact.dao.fetchAllByKeys(this.contacts_related);
+	// return Contact.dao.fetchAllByKeys(this.contacts_related);
+    return ContactUtil.getPartialContacts(this.contacts_related);
     }
 
     /**

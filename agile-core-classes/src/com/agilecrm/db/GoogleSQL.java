@@ -47,15 +47,7 @@ public class GoogleSQL
 		if (SystemProperty.environment.value() == null)
 		{
 		    // Local MySQL instance to use during development.
-
-		    System.out.println("getting connection");
-		    Long startTime = System.currentTimeMillis();
-
 		    conn = getConnection();
-
-		    System.out.println(conn.isClosed());
-		    System.out.println(System.currentTimeMillis() - startTime);
-
 		    return conn;
 		}
 		// Load the class that provides the new "jdbc:google:mysql://"
@@ -82,7 +74,12 @@ public class GoogleSQL
 	{
 	    System.out.println("The connection url is  " + url);
 
+	    Long startTime = System.currentTimeMillis();
+
 	    conn = DriverManager.getConnection(url);
+
+	    System.out.println(conn.isClosed());
+	    System.out.println("Time taken to get sql connection  : " + (System.currentTimeMillis() - startTime));
 	}
 	catch (Exception ex)
 	{

@@ -131,7 +131,7 @@ public class UserPrefs
 	public String layout = "fluid";
 
 	@NotSaved(IfDefault.class)
-	public String theme = "1";
+	public String theme = "3";
 
 	@NotSaved(IfDefault.class)
 	public boolean animations = true;
@@ -207,7 +207,7 @@ public class UserPrefs
 	 * 
 	 * @return selected gravatar url
 	 */
-	public String chooseRandomAvatar()
+	public static String chooseRandomAvatar()
 	{
 		String[] avatar = { "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/86.png",
 				"https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/72.png",
@@ -244,7 +244,10 @@ public class UserPrefs
 					&& (currentDomainUser.name == null || !currentDomainUser.name.equals(this.name)))
 			{
 				currentDomainUser.name = this.name;
+				// Add pic also
+				currentDomainUser.pic = pic;
 				currentDomainUser.save();
+				
 				this.name = null;
 			}
 		}

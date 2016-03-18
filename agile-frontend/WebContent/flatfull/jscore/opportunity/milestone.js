@@ -20,6 +20,7 @@ function setup_deals_in_milestones(id){
 		      },
 		      // When deal is dropped its milestone is changed 
 		      update : function(event, ui) {
+		      	  $('ul.milestones').sortable("disable");
 		      	  console.log(">>>>>>>>>>>>>>>>>> deals id");
 		    	  console.log(ui);
 		    	  console.log(ui.item[0]);
@@ -102,7 +103,10 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
 	
 	 if(!DealJSON.close_date || DealJSON.close_date==0)
 		 DealJSON.close_date = null;
-	 DealJSON.owner_id = DealJSON.owner.id;
+	if(DealJSON && DealJSON.owner)
+	{
+		DealJSON.owner_id = DealJSON.owner.id;
+	}
    // Saving that deal object
 	var up_deal = new Backbone.Model();
 	up_deal.url = '/core/api/opportunity';
@@ -112,6 +116,19 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
 			console.log('moved deal----',model);
 			if (updateCollectionFlag) {
 				update_deal_collection(model.toJSON(), id, newMilestone, oldMilestone);
+			}
+			$('ul.milestones').sortable("enable");
+		},
+		error : function(model, response) {
+			$('ul.milestones').sortable("enable");
+			if(response && (response.responseText == "Deal not saved properly." || response.responseText == "Deal not updated properly.")) {
+				showModalConfirmation("Deals", response.responseText, function(element){
+					App_Deals.deals();	
+				},
+				"",
+				function(element){
+					App_Deals.deals();
+				}, "Ok", "");
 			}
 		}
 	});

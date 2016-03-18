@@ -145,6 +145,12 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public String pic = null;
 	
 	/**
+	 * Pic of the domain user
+	 */
+	@NotSaved(IfDefault.class)
+	public String pic = null;
+	
+	/**
 	 * Name of the domain user
 	 */
 	@NotSaved(IfDefault.class)
@@ -594,6 +600,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 		try
 		{
+			// Assigning Random avatar
+			if (pic == null)
+				pic = new UserPrefs().chooseRandomAvatar();
+			
 			dao.put(this);
 
 			/*
@@ -1022,7 +1032,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 * @throws Exception
 	 */
 	@XmlElement
-	public String getOwnerPic() throws Exception
+	public String getOwnerPic()
 	{
 		AgileUser agileUser = null;
 		UserPrefs userPrefs = null;

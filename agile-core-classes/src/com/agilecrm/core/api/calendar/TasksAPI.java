@@ -33,6 +33,7 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.util.DomainUserUtil;
 
 /**
@@ -481,7 +482,7 @@ public class TasksAPI
 	try
 	{
 	    Task task = TaskUtil.getTask(id);
-	    return task.getContacts();
+	    return task.relatedContacts();
 	}
 	catch (Exception e)
 	{
@@ -507,7 +508,7 @@ public class TasksAPI
 	{
 	    String prevOwner = task.getTaskOwner().name;
 	    String new_owner_name = DomainUserUtil.getDomainUser(Long.parseLong(new_owner)).name;
-	    List<Contact> contacts = task.getContacts();
+	    List<ContactPartial> contacts = task.getContacts();
 	    JSONArray jsn = null;
 	    if (contacts != null && contacts.size() > 0)
 	    {
@@ -537,7 +538,7 @@ public class TasksAPI
 	try
 	{
 	    Task task = TaskUtil.getTask(id);
-	    return task.getDeals();
+	    return task.relatedDeals();
 	}
 	catch (Exception e)
 	{

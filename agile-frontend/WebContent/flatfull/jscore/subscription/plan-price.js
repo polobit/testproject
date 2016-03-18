@@ -343,6 +343,10 @@ function initializeSubscriptionListeners()
 			function(e)
 			{
 				e.preventDefault();
+				if(!CURRENT_DOMAIN_USER.is_admin && USER_BILLING_PREFS.billingData){
+					showNotyPopUp("warning", "Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.", "top");
+					return;
+				}
 				plan_json = {};
 				var buttonText = $(this).html();
 				$(this).text("Loading...");

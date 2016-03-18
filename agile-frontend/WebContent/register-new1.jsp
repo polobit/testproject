@@ -3,6 +3,7 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
+<%@page import="com.agilecrm.util.MathUtil"%>
 <%@page contentType="text/html; charset=UTF-8" %>
 <%
 
@@ -16,7 +17,7 @@
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
 	}
- 
+
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");
 
@@ -32,6 +33,9 @@ CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
 //Static images s3 path
 String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
 
+// Bg Image
+int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
+
 // Error Message
 String errorMessage = "";
 if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
@@ -39,7 +43,7 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
 	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
 	  CSS_PATH = FLAT_FULL_PATH;
-	  S3_STATIC_IMAGE_PATH = VersioningUtil.getBaseServerURL() + "/beta/static/";
+	  S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL();
 }
 
   if(registered_email != null)
@@ -81,6 +85,19 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 
 <!-- Include ios meta tags -->
 <%@ include file="ios-native-app-meta-tags.jsp"%>
+<STYLE>
+
+.overlay:before{
+	content: "";
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: black;
+    opacity: 0.25;
+}
+</STYLE>
 
 <script type="text/javascript">
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
@@ -115,13 +132,13 @@ if(isSafari && isWin)
     <![endif]-->
 
 </head>
-<body>
+<body class="overlay">
   <div id="error-area" class="error-top-view">
     <%if(StringUtils.isNotEmpty(errorMessage)){
         out.println(errorMessage);
     }%>
   </div>
-<div class="app app-header-fixed app-aside-fixed">
+<div class="app app-header-fixed app-aside-fixed transparant">
 <div class="container w-xxl w-auto-xs">
 <a href="https://www.agilecrm.com/" class="navbar-brand block m-t text-white">
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
@@ -171,6 +188,10 @@ if(isSafari && isWin)
 									</div> 		
 
 <input type='submit' id="register_account" value="Sign Up" class='btn btn-lg btn-primary btn-block'>
+<div class="text-center text-white m-t m-b">
+	<small>Forgot</small> 
+	<a href="/forgot-domain" class="text-white">Domain?</a>
+</div>
 </form>
 					
 </div>
@@ -225,18 +246,35 @@ if(isSafari && isWin)
   var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
 $(document).ready(function() {
-	
   	var newImg = new Image;
     newImg.onload = function() {
     $("body").css("background-image","url('"+this.src+"')");
      }
-    newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/agile-registration-page-high.png';
-
+   newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/agile-registration-page-high.png';
+   
+  console.log(newImg.src);
     if($("#error-area").text().trim())
     	$("#error-area").slideDown("slow");
-
-
+//preload_login_pages();
 });
+/*
+ function preload_login_pages()
+			{
+
+			for(var i=1; i < 10; i++){
+
+			$('<img/>', {
+				class: 'hide',
+				src: '<%=S3_STATIC_IMAGE_PATH%>/images/signup-' + i + '-high.jpg',
+			}).appendTo('body');
+
+			$('<img/>', {
+				class: 'hide',
+				src: '<%=S3_STATIC_IMAGE_PATH%>/images/signup-' + i + '-low.jpg',
+				}).appendTo('body');
+
+			}
+		}*/
   </script>
 
   <!-- Clicky code -->
@@ -244,9 +282,11 @@ $(document).ready(function() {
   <script type="text/javascript">try{ clicky.init(100729733); }catch(e){}</script>
 <script src="//platform.twitter.com/oct.js" type="text/javascript"></script>
 <script type="text/javascript">twttr.conversion.trackPid('nu0pq', { tw_sale_amount: 0, tw_order_quantity: 0 });</script>
+
 <noscript>
 <img height="1" width="1" style="display:none;" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=nu0pq&p_id=Twitter&tw_sale_amount=0&tw_order_quantity=0" />
 <img height="1" width="1" style="display:none;" alt="" src="//t.co/i/adsct?txn_id=nu0pq&p_id=Twitter&tw_sale_amount=0&tw_order_quantity=0" />
+
 </noscript>
 	</body>
 	</html>

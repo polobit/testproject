@@ -36,9 +36,9 @@
 <script id="tasks-list-model-template" type="text/html">
 <td class="data" data="{{id}}">  
   <div class="h-auto">
-	{{#if ownerPic}}
+	{{#if taskOwner.pic}}
 		<span class="thumb avatar">
-        	<img class="r r-2x" src="{{ownerPic}}"  title="{{taskOwner.name}}"/>
+        	<img class="r r-2x" src="{{taskOwner.pic}}"  title="{{taskOwner.name}}"/>
 		</span>
 	{{else}}
 		<span class="thumb">

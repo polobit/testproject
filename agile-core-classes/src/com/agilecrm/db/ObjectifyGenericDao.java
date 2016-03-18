@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
+import com.agilecrm.AllDomainStats;
 import com.agilecrm.ContactSchemaUpdateStats;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountEmailStats;
@@ -60,6 +61,7 @@ import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.AliasDomain;
 import com.agilecrm.user.ContactViewPrefs;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
@@ -86,8 +88,12 @@ import com.campaignio.twitter.TwitterJobQueue;
 import com.campaignio.urlshortener.URLShortener;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
@@ -139,6 +145,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(ContactViewPrefs.class);
 	ObjectifyService.register(AgileUser.class);
 	ObjectifyService.register(DomainUser.class);
+	ObjectifyService.register(AliasDomain.class);
 	ObjectifyService.register(Tag.class);
 	ObjectifyService.register(SocialPrefs.class);
 	ObjectifyService.register(AccountPrefs.class);
@@ -244,6 +251,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(Goals.class);
 
 	ObjectifyService.register(Webhook.class);
+	
+	//All Domain Stats report for Agile Management
+	ObjectifyService.register(AllDomainStats.class);
 
     }
 
@@ -1065,4 +1075,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		
 		return keys;
     }
+    
+
 }

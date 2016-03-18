@@ -113,6 +113,15 @@ cron:
   url: /backend/cron/cron-pull?q=webhooks-register-add-queue
   schedule: every 1 mins
 
+- description: All Domain stats report
+  url: /backend/stats-report
+  schedule: every day 03:00
+
+- description: DomainUser db Update
+  url: /backend/domainuserdbupdate
+  schedule: every 30 mins
+  target: agile-normal-bulk 
+
 - description: Ticket SLA cron
   url: /ticket-module/backend/slacron
   schedule: every day 00:00

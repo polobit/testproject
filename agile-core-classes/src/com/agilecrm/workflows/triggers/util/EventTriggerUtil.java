@@ -16,7 +16,7 @@ public class EventTriggerUtil
 
     public static void executeTriggerForNewEvent(Event event)
     {
-	List<Contact> contactsList = event.getContacts();
+	List<Contact> contactsList = event.relatedContacts();
 
 	// if event has no related contacts
 	if (contactsList == null || contactsList.size() == 0)
@@ -53,7 +53,7 @@ public class EventTriggerUtil
 	    if (trigger == null || trigger.event_owner_id == null)
 		return;
 
-	    DomainUser eventOwner = event.getOwner();
+	    DomainUser eventOwner = event.eventOwner();
 
 	    String eventOwnerId = eventOwner == null ? null : eventOwner.id.toString();
 

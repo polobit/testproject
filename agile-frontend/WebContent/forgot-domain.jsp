@@ -1,3 +1,5 @@
+<%@page import="com.agilecrm.user.AliasDomain"%>
+<%@page import="com.agilecrm.user.util.AliasDomainUtil"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
@@ -25,8 +27,13 @@ if(!StringUtils.isEmpty(email))
 	}
 	else
 	{
-	   success = "Redirecting to " + domainUser.domain;
-	   response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com");
+	   String domain = domainUser.domain;
+	   AliasDomain aliasDomain = AliasDomainUtil.getAliasDomain(domain);
+	   if(aliasDomain != null)
+		   domain = aliasDomain.alias.get(0);
+	   success = "Redirecting to " + domain;
+	   String url = VersioningUtil.getURL(domain, request);
+	   response.sendRedirect(url);
 	}
 	
 	System.out.println(error + " " + success);

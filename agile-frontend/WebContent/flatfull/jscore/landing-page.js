@@ -25,7 +25,7 @@ function initializeLandingPageListeners() {
 		// Check if the form is valid
     	if (isValidForm('#landingPageBuilderForm')) {
     		$(".saveLandingPageButton").prop("disabled",true);
-			$(".saveLandingPageButton").html("Saving...");
+			$(".saveLandingPageButtonText").html("Saving...");
     		document.getElementById('landingPageBuilder').contentWindow.$('.icon-floppy-1:last').trigger("click");
     		if(App_LandingPageRouter.LandingPageCollectionView) {
     			App_LandingPageRouter.LandingPageCollectionView.collection.fetch();
@@ -35,6 +35,37 @@ function initializeLandingPageListeners() {
     			$('html, body').animate({scrollTop: $('body').offset().top}, 500);
     		}
     	}
+	});
+	
+	$('#landingpages-listeners').on('click', '.lpDeviceView', function(e){
+		e.preventDefault();
+		var triggeringElement = $(this).data("trigger");
+    	var landingPageIframe = document.getElementById('landingPageBuilder').contentWindow;
+    	landingPageIframe.$(triggeringElement).trigger("click");
+    	var deviceClass = $(this).data("deviceclass");
+    	landingPageIframe.$("#preview-frame").removeClass("xs-width sm-width md-width full-width");
+    	landingPageIframe.$("#preview-frame").addClass(deviceClass);
+
+	});
+
+	$('#landingpages-listeners').on('click', '.lpPreviewView', function(e){
+		e.preventDefault();
+		var triggeringElement = $(this).data("trigger");
+    	document.getElementById('landingPageBuilder').contentWindow.$(triggeringElement).trigger("click");
+    	$(this).find('i').toggleClass('fa-eye fa-eye-slash');
+    	
+    	
+    	if( $(this).find('i').hasClass('fa-eye')) {
+    		//alert("Inside toggle");
+    		document.getElementById('landingPageBuilder').contentWindow.$("#preview-closer").trigger("click");
+    	}
+    	
+    	if ($(this).find("span").text() == 'Close'){
+        	$(this).find("span").text('Preview');
+    	} else {
+        	$(this).find("span").text('Close');
+    	} 
+    	document.getElementById('landingPageBuilder').contentWindow.$("#preview-closer").addClass("hidden");
 	});
 
 	$('#landingpages-listeners').on('click', '#builderPageOptionsLink', function (e) {
@@ -96,7 +127,8 @@ function initializeLandingPageListeners() {
 	$('#landingpages-listeners').on('click', '.lpBuilderMenuItem', function(e){
 		e.preventDefault();
 		var builderIFrame = document.getElementById('landingPageBuilder').contentWindow;
-		var selector = '#'+$(this).data("id")+'AgileId';
+		var selectorId = $(this).data("id");
+		var selector = '#'+selectorId+'AgileId';
 
 		if($(this).hasClass("active")) {
 			builderIFrame.$('#elements-container').hide();
@@ -106,6 +138,18 @@ function initializeLandingPageListeners() {
 			$('.lpBuilderMenuItem').removeClass("active");
 			$(this).addClass("active");
 		}
+
+/*		if(selectorId == "inspector") {
+			builderIFrame.$('#elementsPanelAgileId').addClass("hidden");
+			builderIFrame.$('#elements-container').css("position","fixed");
+			builderIFrame.$('#elements-container').css("left","");
+			builderIFrame.$('#elements-container').css("right","0");
+		} else {
+			builderIFrame.$('#elementsPanelAgileId').removeClass("hidden");
+			builderIFrame.$('#elements-container').css("position","absolute");
+			builderIFrame.$('#elements-container').css("right","");
+			builderIFrame.$('#elements-container').css("left","0");
+		}*/
 		
 		builderIFrame.$(selector).trigger("click");
 	});
@@ -146,22 +190,39 @@ function landingPageShowAlertMessage(message, type) {
 	+ message + '</div>');
 }
 
-function landingPageSaveCnameSettings(modelId,CNAME) {
-	CNAME = CNAME.toLowerCase();
-	var model = App_LandingPageRouter.LandingPageCollectionView.collection.get(modelId);
-	model.set("cname",CNAME);
-	model.set("requestViaCnameSetup",true);
-	
-	var landingPageModel = new Backbone.Model();
-    landingPageModel.url = 'core/api/landingpages';
-    landingPageModel.save(model.toJSON(), { success : function(obj){
-	    if(obj.get("isDuplicateCName")) {
-			landingPageShowAlertMessage("Custom domain should be unique","alert-danger");
-		} else {
-			landingPageShowAlertMessage("Custom domain saved successfully","alert-success");
-			$("#cname").attr("href",CNAME);
-			$("#landingPageVerifyBtn").show();
-			App_LandingPageRouter.LandingPageCollectionView.collection.get(modelId).set(obj);
-		}
-    }});
+function landingPageSaveCnameSettings(pageId,CNAME) {
+
+    var cnameSettings = {
+    "landing_page_id": pageId,
+    "cname": CNAME.toLowerCase()
+    };
+
+    var requestType = "post";
+    var message = "saved";
+
+    var cnameId = $("#cname_id").val();
+    if(cnameId) {
+        var requestType = "put";
+        cnameSettings["id"] = cnameId;
+        message = "updated";
+    }
+
+    $.ajax({
+        type: requestType, 
+        url: 'core/api/landingpages/custom-domain',       
+        data: JSON.stringify(cnameSettings),
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        success: function (obj) {
+	       	if(obj["isDuplicateCName"]) {
+				landingPageShowAlertMessage("Custom domain should be unique","alert-danger");
+			} else {
+				landingPageShowAlertMessage("Custom domain "+message+" successfully","alert-success");
+				$("#cname_id").val(obj.id);
+				$("#cname").attr("href",CNAME);
+				$("#landingPageVerifyBtn").show();
+			}
+        },
+    });
+    
 }

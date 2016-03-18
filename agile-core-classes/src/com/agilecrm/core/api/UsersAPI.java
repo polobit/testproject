@@ -99,12 +99,82 @@ public class UsersAPI
 	}
     }
     
+    /**
+     * Gets list of users of a domain with partial prefs
+     * 
+     * @return list of domain users
+     */
+    @Path("partial")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<DomainUserPartial> getDomainUsers()
+    {
+	try
+	{
+
+	    String domain = NamespaceManager.get();
+	    
+	    // Gets the users and update the password to the masked one
+	    return  DomainUserUtil.getPartialDomainUsers(domain);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
+
+    // Send Current User Info
+    @Path("current-user")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public DomainUser getCurrentUser()
+    {
+	try
+	{
+	    // Fetches current domain user based on user info set in thread
+		return DomainUserUtil.getCurrentDomainUser();
+	}
+	
 	// Send Current User Info
 	@Path("current-user")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public DomainUser getCurrentUser()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	{
+	    // Fetches current domain user based on user info set in thread
+	    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+	    System.out.println(domainUser);
+	    return domainUser;
 		try
 		{
 			// Fetches current domain user based on user info set in thread
@@ -131,6 +201,24 @@ public class UsersAPI
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public DomainUser createDomainUser(DomainUser domainUser)
 	{
+    
+    // Send Current User Info
+    @Path("current-agile-user")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public AgileUser getCurrentAgileUser()
+    {
+	try
+	{
+	    // Fetches current domain user based on user info set in thread
+		return AgileUser.getCurrentAgileUser();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 
 		try
 		{
@@ -234,12 +322,12 @@ public class UsersAPI
 			// Throws exception, if only one account exists
 			if (count == 1)
 				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-						.entity("Can’t delete all users").build());
+						.entity("Canâ€™t delete all users").build());
 
 			// Throws exception, if user is owner
 			if (domainUser.is_account_owner)
 				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-						.entity("Master account can’t be deleted").build());
+						.entity("Master account canâ€™t be deleted").build());
 		}
 		catch (Exception e)
 		{
@@ -272,8 +360,12 @@ public class UsersAPI
 		{
 			DomainUser domainuser = DomainUserUtil.getDomainUser(Long.parseLong(usersJSONArray.getString(i)));
 
-			deleteDomainUser(domainuser);
-		}
+	    // Throws exception, if user is owner
+	    if (domainUser.is_account_owner || domainUser.is_admin)
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			.entity("Master account canâ€™t be deleted").build());
+		
+		deleteDomainUser(domainuser);
 	}
 
 	// Get Stats for particular name-space
@@ -316,6 +408,24 @@ public class UsersAPI
 				continue;
 			agileWithDomain.add(auser);
 		}
+    
+    /**
+     * Deletes a user from database, by validating users count and ownership of
+     * the user to be deleted. If the user is fit to delete, deletes its related
+     * entities also.
+     * 
+     * @param domainUser
+     *            user to be deleted
+     */
+    @Path("/{domainuserid}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteDomainUser(@PathParam("domainuserid") String domainUserKey)
+    {
+    	DomainUser domainuser = DomainUserUtil.getDomainUser(Long.parseLong(domainUserKey));
+    	
+    	deleteDomainUser(domainuser);
+    }
 
 		// Now sort by name.
 		Collections.sort(agileWithDomain, new Comparator<AgileUser>()

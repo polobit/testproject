@@ -542,6 +542,7 @@ function disable_text_required_property(selector) {
 			&& selector.find('#text_email').val() == "")
 		selector.find('#text_email').removeProp("required");
 }
+
 // Bhasuri 10/25/2014
 function getDate(selector) {
 	if (!selector)
@@ -904,4 +905,6 @@ function insertSelectedOption1(ele ,target_id)
     		}
     	}
 	}
+
+	
 

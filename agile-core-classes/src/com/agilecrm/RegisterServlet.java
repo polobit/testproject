@@ -237,7 +237,9 @@ public class RegisterServlet extends HttpServlet
 	}
 
 	String redirectionURL = VersioningUtil.getURL(domainUser.domain, request);
-	redirectionURL+= "#subscribe";
+	String planValue = request.getParameter(RegistrationGlobals.PLAN_TYPE);
+	if(!planValue.equals("Free"))
+		redirectionURL+= "#subscribe";
 	// Redirect to home page
 	response.sendRedirect(redirectionURL);
     }

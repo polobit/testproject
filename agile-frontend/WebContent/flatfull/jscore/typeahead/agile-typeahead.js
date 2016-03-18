@@ -393,7 +393,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 											
 							}
 							//Sets modal backdrop height to modal dialog height after select the tag
-							$('.modal-backdrop',$('.modal:visible')).height($('.modal-dialog',$('.modal:visible')).height()+70);
+							$('.modal-backdrop',$('.modal:visible')).height($('.modal-dialog',$('.modal:visible')).height()+180);
 						},
 						// Needs to be overridden to set timedelay on search
 						keyup : function(e)
@@ -776,6 +776,12 @@ function appendItemInResult(item)
 
 			$("#contact-typeahead-heading", this.el).show();
 			$("#contact-results", this.el).append(i);
+		}
+		if (type == "company_entity")
+		{
+
+			$("#company-typeahead-heading", this.el).show();
+			$("#company-results", this.el).append(i);
 		}
 		if (type == "deal")
 		{

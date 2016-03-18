@@ -342,7 +342,7 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
 
 function generateMilestonesSelectUI(uiFieldDefinition)
 {
-	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
+	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "' id='" + uiFieldDefinition.id +"'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + "</select>");
 	var options = uiFieldDefinition.options;
 	var selectOptionAttributes ="";
 	

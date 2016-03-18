@@ -82,8 +82,29 @@ public class BasicAuthFilter implements Filter
 		    String user = credentials[0];
 		    String password = credentials[1];
 
+		    String email = "";
+		    if (user != null)
+		    {
+			System.out.println("User = " + user);
+			email = user.toLowerCase();
+		    }
+
 		    // Get AgileUser
-		    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(user);
+		    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+
+		    if (domainUser == null)
+		    {
+			JSONObject duser = new JSONObject();
+
+			duser.put("status", "401");
+			duser.put("exception message", "authentication issue");
+
+			httpResponse.setContentType("application/json");
+			httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			httpResponse.getWriter().write(duser.toString());
+
+			return;
+		    }
 
 		    // Domain should be checked to avoid saving in other domains
 
@@ -113,7 +134,6 @@ public class BasicAuthFilter implements Filter
 			    httpResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
 			    httpResponse.getWriter().write(address.toString());
-			    System.out.println("done");
 			    System.err.println("This code has below error : ");
 			    e.printStackTrace();
 			    return;
