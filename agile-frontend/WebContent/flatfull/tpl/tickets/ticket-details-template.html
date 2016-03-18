@@ -147,6 +147,7 @@
                    <div class="col-md-12 p-n">
                       <div class="p-n m-b-xxs">Status</div>
                       <select name="status" class="form-control text-xs ticket_status" style="height: 28px;padding: 3px 6px;">
+                        {{#if_equals status "NEW"}}<option value="NEW" selected>New</option>{{/if_equals}}
                         <option value="OPEN" {{#if_equals status "OPEN"}}selected{{/if_equals}}>Open</option>
                         <option value="PENDING" {{#if_equals status "PENDING"}}selected{{/if_equals}}>Pending</option>
                         <option value="CLOSED" {{#if_equals status "CLOSED"}}selected{{/if_equals}}>Closed</option>
