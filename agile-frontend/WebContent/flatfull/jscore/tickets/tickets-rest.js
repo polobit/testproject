@@ -22,6 +22,9 @@ var Tickets_Rest={
 
 				Ticket_Utils.showNoty('information', 'Ticket status has been changed to '+ status.toLowerCase() , 'bottomRight', 5000);
 
+				 if(status != "NEW")
+                     $('.ticket_status option[value="NEW"]').hide()
+
 				if(status != "CLOSED")
 				{
 				    $(".ticket-addnote-close").removeAttr("disabled");
@@ -54,7 +57,7 @@ var Tickets_Rest={
 	closeTicket : function(e){
 
 		this.changeStatus("CLOSED", function(){
-			Ticket_Utils.showNoty('information', "Ticket status has been changed to closed", 'bottomRight', 5000);
+			//Ticket_Utils.showNoty('information', "Ticket status has been changed to closed", 'bottomRight', 5000);
 		});
 	},
 
