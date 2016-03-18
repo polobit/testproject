@@ -203,16 +203,15 @@ var Tickets_Rest={
 
 		var that = e.target;
 
-		var assigneeId = $(that).val();
+		var groupId = $(that).val();
 		//console.log(assigneeId);
 
-		if(!assigneeId)
+		if(!groupId)
 			return;
 
-	    var groupId = $(that.options[that.selectedIndex]).closest('optgroup').attr('data-group-id');
+	    var assigneeId = $(that.options[that.selectedIndex]).attr('data-assignee-id');
 
-	    if(!groupId){
-	    	groupId = $(that).val();
+	    if(!assigneeId){
 	    	assigneeId = 0;
 	    }
        	

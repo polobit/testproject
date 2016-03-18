@@ -241,8 +241,8 @@ public class TicketNotes
 			}
 
 			// Logging notes activity
-			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id,
-					StringEscapeUtils.escapeHtml(plain_text), html_text, "html_text");
+			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plain_text, html_text,
+					"html_text");
 		}
 		catch (Exception e)
 		{

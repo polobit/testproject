@@ -294,17 +294,17 @@ var Tickets = {
 				case 'assignee':
 				{	
 					assignee_changed = true;
-
+					
 					var group_id = $that.data('group-id');
 					json = {id: ticket_id};
 
 					url += "/" + ticket_id + "/assign-ticket/" + group_id + "/" + action_value;
 
 					if(action_value == 0){
-						 message = 'Ticket group has been changed to ' + $that.data('name');
+						message = 'Ticket group has been changed to ' + $that.data('name');
 					}
 					else{
-			            message = 'Assignee has been changed to ' + $that.data('name');
+						message = 'Assignee has been changed to ' + $that.data('name');
 			        }
 
 			        action_value = $that.data('name');
@@ -626,15 +626,15 @@ var Tickets = {
 		//Fetching all groups, assignees and appending them to select dropdown
 		fillSelect('ticket-assignee', '/core/api/tickets/groups', '', function(collection){
 
-			$('#ticket-assignee', el).html(getTemplate('select-assignee-dropdown', collection.toJSON()));
+			$('#ticket-assignee', el).html(getTemplate('select-assignee-ticket-dropdown', collection.toJSON()));
 
 			var selectedAssignee = App_Ticket_Module.ticketView.model.toJSON().assigneeID;
 			var selectedGroup = App_Ticket_Module.ticketView.model.toJSON().groupID;
 
 			if(!selectedAssignee)
-				$('#ticket-assignee', el).find("option[value='"+selectedGroup+"']").attr('selected', 'selected');
+				$('#ticket-assignee', el).find("option[group_id='"+selectedGroup+"']").attr('selected', 'selected');
 			else
-      		 	$('#ticket-assignee', el).find("optgroup[data-group-id='"+selectedGroup+"']").find("option[value='"+selectedAssignee+"']").attr('selected', 'selected');
+      		 	$('#ticket-assignee', el).find("optgroup[data-group-id='"+selectedGroup+"']").find("option[data-assignee-id='"+selectedAssignee+"']").attr('selected', 'selected');
       		
 			// If current user not 
       		if(selectedAssignee != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(selectedGroup, Tickets.groupsList))
@@ -1656,8 +1656,9 @@ var Tickets = {
   		//Initializing type ahead on email field
 		agile_type_ahead("requester_email", el, Tickets_Typeahead.contact_typeahead, function(arg1, arg2){
 
-			arg2 = arg2.split(" ").join("");
+			var requester_name = arg2;
 
+			arg2 = arg2.split(" ").join("");
 			var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
 
 			//Showing error if the selected contact doesn't have email
@@ -1673,7 +1674,7 @@ var Tickets = {
 				setTimeout(function(){
 
 					$('#requester_email', el).val(email);
-					$('#requester_name', el).val(arg2);
+					$('#requester_name', el).val(requester_name);
 					$('#contact_id', el).val(arg1);
 				}, 0);
 			}

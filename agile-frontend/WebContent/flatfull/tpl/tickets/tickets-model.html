@@ -31,7 +31,9 @@
         </tr>
         <tr>
           <td>
-            <a class="text-cap custom-link subject-row text-ellipsis text-xs" style="color: #697073;">{{requester_name}}</a>
+            <a class="text-cap custom-link subject-row text-ellipsis text-xs" style="color: #697073;">
+              {{getPropertyValue contact.properties "first_name"}}&nbsp;{{getPropertyValue contact.properties "last_name"}}
+            </a>
           </td>
         </tr>
         <tr>
@@ -131,7 +133,13 @@
         <td class="p-l-sm cursor-pointer" style="width: 80%;">
           <div class="assignee-change pos-rlt show-caret" data-action="assignee">
             <a class="btn btn-sm p-n b-n first-letter-cap inline-block m-r-xs txt-small assignee txt-color-light" data-toggle="dropdown">
-              {{#if assigneeID}}{{assignee.name}}{{else}}{{#if assigned_to_group}}{{group.group_name}}{{else}}-{{/if}}{{/if}}
+              {{#if assigneeID}}
+                {{assignee.name}}
+              {{else}}
+                {{#if assigned_to_group}}
+                  {{group.group_name}}
+                {{else}}-{{/if}}
+              {{/if}}
             </a>
             <a class="btn btn-sm p-n dropdown-toggle b-n caret-btn pull-right display-none" data-toggle="dropdown" aria-expanded="false">
               <span class="caret"></span>
@@ -200,8 +208,9 @@
     </td>
   {{/is_column_selected}}
   {{#is_column_selected 'requester_name'}}
-    <td class="first-letter-cap open-ticket requester_name width-9em text-ellipsis">
-    <div class="text-ellipsis">{{requester_name}}</div>
+    <td class="text-cap open-ticket requester_name width-9em text-ellipsis">
+    <div class="text-ellipsis">
+      {{getPropertyValue contact.properties "first_name"}}&nbsp;{{getPropertyValue contact.properties "last_name"}}</div>
     </td>
   {{/is_column_selected}}
   {{#is_column_selected 'requester_email'}}
