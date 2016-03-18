@@ -53,9 +53,7 @@ var Tickets_Rest={
 
 	closeTicket : function(e){
 
-		this.changeStatus("CLOSED", function(){
-			Ticket_Utils.showNoty('information', "Ticket status has been changed to closed", 'bottomRight', 5000);
-		});
+		this.changeStatus("CLOSED");
 	},
 
 	deleteTicket: function(e){
