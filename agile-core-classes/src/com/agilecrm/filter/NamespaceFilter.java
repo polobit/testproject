@@ -79,6 +79,10 @@ public class NamespaceFilter implements Filter
 
 	if (((HttpServletRequest) request).getRequestURI().contains("/_ah/mail"))
 	    return true;
+	
+	if (((HttpServletRequest) request).getRequestURI().contains("/_ah/spi/BackendService"))
+	    return true;
+	
 
 	// Read Subdomain
 	String subdomain = NamespaceUtil.getNamespaceFromURL(request.getServerName());
