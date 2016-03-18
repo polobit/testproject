@@ -76,6 +76,10 @@ public class StripeChargeWebhook extends HttpServlet
 	{
 	    JSONObject stripeJson = new JSONObject(stripeData);
 	    System.out.println("stripe json is " + stripeJson);
+	    
+	    String amount = stripeJson.getJSONObject("data").getJSONObject("object").getString("amount");
+	    stripeJson.getJSONObject("data").getJSONObject("object").remove("amount");
+	    stripeJson.getJSONObject("data").getJSONObject("object").put("amount", Double.parseDouble(amount)/100);
 
 	    String eventType = stripeJson.getString("type");
 	    System.out.println("stripe post event type is " + eventType);
@@ -115,14 +119,14 @@ public class StripeChargeWebhook extends HttpServlet
 		    //Event event = new Gson().fromJson(stripeData, Event.class);
 		    Event event = null;
 			try {
-				event = StripeUtil.getEventFromJSON(stripeData);
+				event = StripeUtil.getEventFromJSON(stripeJson.toString());
 			} catch (AuthenticationException | InvalidRequestException
 					| APIConnectionException | CardException | APIException e1) {
 				// TODO Auto-generated catch block
 				System.out.println("Exception occured in fetching event from json:"+ e1.getMessage());
 			}
 		    StripeWebhookHandler webhookHandlerImpl = new StripeWebhookHandlerImpl();
-		    webhookHandlerImpl.init(stripeData, event);
+		    webhookHandlerImpl.init(stripeJson.toString(), event);
 		    
 		    //StripeWebhookHandlerImpl stripeWebhookHandlerImpl = new StripeWebhookHandlerImpl();
 			Contact contact = webhookHandlerImpl.getContactFromOurDomain();
