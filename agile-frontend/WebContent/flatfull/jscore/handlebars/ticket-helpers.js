@@ -407,9 +407,9 @@ Handlebars.registerHelper('is_column_selected', function(field_name, options) {
 Handlebars.registerHelper('is_ticket_collection_available', function(options) {
 
 	try{
-		if(App_Ticket_Module.ticketFiltersList 
-			&& App_Ticket_Module.ticketFiltersList.collection.toJSON().length > 0
-			&& App_Ticket_Module.ticketFiltersList.collection.get(Current_Ticket_ID))
+		if(App_Ticket_Module.ticketsCollection 
+			&& App_Ticket_Module.ticketsCollection.collection.toJSON().length > 0
+			&& App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID))
 		  return options.fn(this);
 	}catch(e){}
 	
