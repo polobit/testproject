@@ -2,30 +2,31 @@
     "name": "Territory",
     "thumbnail": "json/nodes/images/crm/territory.png",
     "icon": "json/nodes/icons/crm/territory.png",
-    "info": "Compares given location conditions across zones.",
-    "help": "Compares given location conditions across zones and goto first true zone/branch, otherwise Nomatch branch",
+    "info": "Compares given location conditions across territories.",
+    "help": "Compares the contact’s address against the territories defined. Each territory can have multiple criteria and the Operator (And/OR) with in each territory can also be defined. If No Match happens, then a Default Nomatch Route will be taken.",
     "author": "Naresh",
     "company": "Agile CRM",
     "language": "en",
     "branches": "",
     "dynamicports":"yes",
-    "dynamicportkey":"zones",
+    "dynamicportkey":"territories",
     "unique_branches":"yes",
     "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.Territory",
     "category": "Utilities",
     "ui": [
       {
-			"label"   : "Location",
+			"label"   : "Territories Comparison",
 			"category": "Settings",
-			"name"    : "zones",
+			"name"    : "territories",
 			"type"    : "grid",
       "required": "required",
 			"ui":[
              {
-                "label": "Zones",
+                "label": "Territory",
                 "name": "dynamicgrid",
+                "name_on_error": "territory",
     					  "required":"required",
-    					  "title":"Please enter value",
+    					  "title":"Enter territory name",
                 "fieldType": "input",
                 "type": "text",
                 "category": "Settings" 
@@ -55,7 +56,7 @@
                   "id": "location-type",
                   "class":"location-type",
                   "name": "location_type",
-                  "title": "E.g. {{score}}, {{company}}, <br>{{your custom field}}",
+                  "title": "E.g. {{your custom field}}",
                   "fieldType": "input",                    
                   "type": "text"
               },
@@ -82,7 +83,7 @@
                   "type": "text"
               },
               {
-                "label": "Within Zone",
+                "label": "Within Territory",
                 "name" : "in_zone_compare",
                 "fieldType":"select",
                 "type": "select",
@@ -90,7 +91,7 @@
                   "And": "and",
                   "Or": "or"
                 },
-                "title":"Select within zone condition.",
+                "title":"Select within territory condition.",
                 "in_grid_popup" : false,
                 "add_in_each_row": true
               }
@@ -107,7 +108,7 @@
 					 ]
 		},
     {
-            "label": "Compares given location conditions across zones and goto first true zone/branch, otherwise Nomatch branch.",
+            "label": "Compares the contact’s address against the territories defined. Each territory can have multiple criteria and the Operator (And/OR) with in each territory can also be defined. If No Match happens, then a Default Nomatch Route will be taken.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

@@ -462,7 +462,7 @@ function setCheckboxValueIntoJSONArray(jsonArray, key, value) {
 function update_location_ports(nodeObject, jsonValues)
 {
 
-	var formValues = jsonValues[1].zones;
+	var formValues = jsonValues[1][NODES_CONSTANTS.TERRITORIES];
   	var formValuesJson  = {};
 
   	// Converts array to json

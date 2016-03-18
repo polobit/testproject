@@ -14,7 +14,7 @@ import com.campaignio.tasklets.util.TaskletUtil;
 
 public class Territory extends TaskletAdapter
 {
-	private String ZONES = "zones";
+	private String TERRITORIES = "territories";
 	private String LOCATION_TYPE = "location_type";
 	private String LOCATION_VALUE = "location_value";
 	
@@ -26,7 +26,7 @@ public class Territory extends TaskletAdapter
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
 			throws Exception
     {
-    	String zones = getStringValue(nodeJSON, subscriberJSON, data, ZONES);
+    	String zones = getStringValue(nodeJSON, subscriberJSON, data, TERRITORIES);
     	
     	try
     	{

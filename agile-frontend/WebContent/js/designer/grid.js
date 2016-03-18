@@ -7,9 +7,9 @@ function constructGridPopup(uiFieldDefinition, callback, jsonValues) {
     // Store UIfielddefinition for add and edit for table definition
     gridPopup.data('ui', uiFieldDefinition);
 
-    if(uiFieldDefinition.name = NODES_CONSTANTS.ZONES)
+    if(uiFieldDefinition.name = NODES_CONSTANTS.TERRITORIES)
     {
-        var zones = get_zones($('#zones-table'));
+        var zones = get_zones($('#'+NODES_CONSTANTS.TERRITORIES+'-table'));
 
         gridPopup.data('zones', zones);
 
@@ -86,7 +86,7 @@ function editGrid(e, selector, rowIndex)
     
    // alert($('#' + tableId + ' tbody tr:nth-child(' + rowIndex + ')').html());
 
-    if(tableId == 'zones-table')
+    if(tableId == NODES_CONSTANTS.TERRITORIES+'-table')
     {
         var old_text = $('#' + tableId + ' tbody tr:nth-child(' + rowIndex + ')').find('td').eq(1).text();
         var updated_text = $(td).eq(1).text();
@@ -98,7 +98,7 @@ function editGrid(e, selector, rowIndex)
     $('#' + tableId + ' tbody tr:nth-child(' + rowIndex + ')').empty().append($(td));
     
     // Hides zone condition operator - Territory node (Naresh - 03/15/2016)
-    if(uiFieldDefinition.name == NODES_CONSTANTS.ZONES)
+    if(uiFieldDefinition.name == NODES_CONSTANTS.TERRITORIES)
     {
        hide_zone_comparator($('#'+ tableId));
 
@@ -147,7 +147,7 @@ function addToGrid(e, selector) {
     $('#' + tableId).find('tr:last').data("rowJson", jsonArray);
 
     // Hides zone condition operator - Territory node (Naresh - 03/15/2016)
-    if(uiFieldDefinition.name == NODES_CONSTANTS.ZONES)
+    if(uiFieldDefinition.name == NODES_CONSTANTS.TERRITORIES)
     {
        hide_zone_comparator($('#'+ tableId));
        
@@ -270,7 +270,7 @@ function generateGridUI(container, uiFieldDefinition) {
     	});
 
     // Hides zones in Territory node (Naresh - 03/15/2016)
-    if(uiFieldDefinition.name == NODES_CONSTANTS.ZONES)
+    if(uiFieldDefinition.name == NODES_CONSTANTS.TERRITORIES)
         hide_zone_comparator($('#' + tableId));
 
     }
@@ -316,7 +316,7 @@ function initGridHandlers(selector)
 			    $(this).remove();
 
                 // Update ports for zones-table 
-                if($table.attr('id') == 'zones-table'){
+                if($table.attr('id') == NODES_CONSTANTS.TERRITORIES+'-table'){
               
                      hide_zone_comparator($table);
 
@@ -411,7 +411,7 @@ function isDefaultValue($el)
 {
     var nodeUIDefinition = $el.closest('table').data('ui');
 
-    if(nodeUIDefinition.label == 'Location')
+    if(nodeUIDefinition.name == NODES_CONSTANTS.TERRITORIES)
        return checkLocationDefaultValue($el);
         
 }
@@ -420,7 +420,7 @@ function checkLocationDefaultValue($el)
 {
     var nodeUIDefinition = $el.closest('table').data('ui');
 
-        if(nodeUIDefinition.label == 'Location')
+        if(nodeUIDefinition.name == NODES_CONSTANTS.TERRITORIES)
         {
             var rowIndex = $el.closest('tr').index();
 
