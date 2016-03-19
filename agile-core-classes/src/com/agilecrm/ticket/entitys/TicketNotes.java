@@ -233,11 +233,11 @@ public class TicketNotes
 					TicketNotesUtil.sendReplyToRequester(ticket);
 
 				if (created_by == CREATED_BY.AGENT)
-					// Execute note created by agent trigger
-					TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
-				else
 					// Execute note created by user trigger
 					TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);
+				else
+					// Execute note created by agent trigger
+					TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
 			}
 
 			// Logging notes activity
