@@ -69,7 +69,7 @@ var Ticket_Reports = {
 	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
 	    end_time=end_time/1000;
 		
-	    var report_type = $(this).find('option:selected').val();
+	    var report_type = $('#report_type').find('option:selected').val();
 
 	    $('#report_type').off('change');
 		$('#report_type').change(function()
@@ -88,7 +88,7 @@ var Ticket_Reports = {
 			$('.report_name').text(report_title);
 		});
 
-		report_type = $(this).find('option:selected').val();
+		//report_type = $(this).find('option:selected').val();
 
 		var url = '/core/api/tickets/reports/priority?start_time=' + start_time + '&end_time=' + end_time,
 		    report_title = 'Priority report';
