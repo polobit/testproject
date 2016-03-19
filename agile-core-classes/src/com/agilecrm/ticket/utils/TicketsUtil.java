@@ -451,10 +451,16 @@ public class TicketsUtil
 
 		List<Key<TicketLabels>> labels = ticket.labels_keys_list;
 
+		System.out.println("Existing labels: " + labels);
+		System.out.println("labelKey: " + labelKey);
+		System.out.println("command: " + command);
+		
 		ActivityType activityType = null;
 
 		if ("add".equalsIgnoreCase(command))
 		{
+			System.out.println("labels.contains(labelKey): " + labels.contains(labelKey));
+			
 			if (labels.contains(labelKey))
 				return ticket;
 
