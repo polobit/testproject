@@ -3,7 +3,7 @@
     "thumbnail": "json/nodes/images/ticket/labels.png",
     "icon": "json/nodes/icons/ticket/labels.png",
     "info": "Add or delete label for a ticket.",
-    "help": "",
+    "help": "Add or delete label for a ticket.",
     "author": "John",
     "company": "mantra",
     "language": "en",
