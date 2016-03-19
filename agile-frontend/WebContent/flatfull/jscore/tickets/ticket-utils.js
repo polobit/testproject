@@ -199,5 +199,23 @@ var Ticket_Utils = {
 				});
 			});
 		});
+	},
+
+	getInitials: function(name){
+
+		if(!name)
+			return 'X';
+
+		var array = name.split(" ");
+
+		if(array.length >= 2){
+
+			var initials = array[0].substr(0, 1);
+			initials += array[0].substr(0, 1);
+
+			return initials;
+		}
+
+		return name;
 	}
 };

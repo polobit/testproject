@@ -12,10 +12,10 @@
   <td class="v-middle p-l-none p-r-none show-notes" style="width: 6%;">
     <a class="thumb cursor-pointer" href="javascript:void(0);">
       {{#if contact.properties}}
-        <img src="{{gravatarurl contact.properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}" style="height: 45px; width: 45px;">
+        <img src="{{gravatarurl contact.properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{getPropertyValue contact.properties "first_name"}}&nbsp;{{getPropertyValue contact.properties "last_name"}}" style="height: 45px; width: 45px;">
       {{else}}
         <img src="{{getGravatarFromEmail requester_email 42}}" class="r-5x" onerror="image_error(this);"
-          _data-name="{{requester_name}}" style="height: 45px; width: 45px;">
+          _data-name="{{getInitials requester_name}}" style="height: 45px; width: 45px;">
       {{/if}}
     </a>
   </td>
@@ -246,12 +246,12 @@
     </td>
   {{/is_column_selected}}
   {{#is_column_selected 'assignee'}}
-    <td class="first-letter-cap open-ticket assignee">
+    <td class="open-ticket assignee">
       <div class="text-ellipsis width-9em">{{#if assignee}}{{assignee.name}}{{else}}-{{/if}}</div>
     </td>
   {{/is_column_selected}}
   {{#is_column_selected 'group'}}
-    <td class="first-letter-cap open-ticket group">
+    <td class="open-ticket group">
       <div class="text-ellipsis width-9em">{{#if group}}{{group.group_name}}{{else}}-{{/if}}</div>
     </td>
   {{/is_column_selected}}

@@ -37,6 +37,11 @@ Handlebars.registerHelper('calculate_due_date', function(due_date, options) {
 	return 'Due in ' + Ticket_Utils.dateDiff(currentEpoch, due_date);
 });
 
+Handlebars.registerHelper('getInitials', function(name, options) {
+
+	return Ticket_Utils.getInitials(name);
+});
+
 Handlebars.registerHelper('ticket_contact_exists', function(options) {
 
 	if(Ticket_Utils.Current_Ticket_Contact

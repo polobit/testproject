@@ -737,6 +737,7 @@ public class Tickets extends Cursor implements Serializable
 		return null;
 	}
 
+	@JsonIgnore
 	public Contact getTicketRelatedContact()
 	{
 		/**
