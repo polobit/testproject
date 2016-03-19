@@ -1930,9 +1930,12 @@ public class ActivityUtil
 
 			activity.related_contact_ids = new JSONArray().put(obj).toString();
 			
-			//Set username only if activity is running in frontend instance
+			String moduleName = VersioningUtil.getCurrentModuleName();
+			System.out.println("In ticket create activity: " + moduleName);
+			
+			//Set username only if activity is running in frontend instance or in agile-ticketing-module
 			if(VersioningUtil.isBackgroundThread() 
-					&& !"default".equals(VersioningUtil.getCurrentModuleName()))
+					&& !"default".equals(moduleName) && !"agile-ticket-module".equals(moduleName))
 			{
 				String namespace = NamespaceManager.get();
 				

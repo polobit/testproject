@@ -148,11 +148,12 @@ public class TicketsUtil
 		}
 
 		ticket.save();
-		
-		// Execute closed ticket trigger. Do not execute trigger if updated status and current status is same.
+
+		// Execute closed ticket trigger. Do not execute trigger if updated
+		// status and current status is same.
 		if (status == Status.CLOSED)
 			TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
-		
+
 		// Logging activity
 		ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
 				oldStatus.toString(), status.toString(), "status");
@@ -454,13 +455,13 @@ public class TicketsUtil
 		System.out.println("Existing labels: " + labels);
 		System.out.println("labelKey: " + labelKey);
 		System.out.println("command: " + command);
-		
+
 		ActivityType activityType = null;
 
 		if ("add".equalsIgnoreCase(command))
 		{
 			System.out.println("labels.contains(labelKey): " + labels.contains(labelKey));
-			
+
 			if (labels.contains(labelKey))
 				return ticket;
 
@@ -480,13 +481,13 @@ public class TicketsUtil
 		ticket.save();
 
 		TicketLabels label = TicketLabelsUtil.getLabelById(labelKey.getId());
-		
-		//Trigger activity
+
+		// Trigger activity
 		if ("add".equalsIgnoreCase(command))
 			TicketTriggerUtil.executeTriggerForLabelAddedToTicket(ticket);
 		else
 			TicketTriggerUtil.executeTriggerForLabelDeletedToTicket(ticket);
-		
+
 		// Logging activity
 		ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, "", (label != null ? label.label
 				: ""), "labels");
@@ -608,13 +609,13 @@ public class TicketsUtil
 
 		// Fetching ticket object by its id
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-		
+
 		System.out.println("new group_id" + group_id);
 		System.out.println("new assignee_id" + assignee_id);
-		
+
 		System.out.println("current groupID" + ticket.groupID);
 		System.out.println("current assigneeID" + ticket.assigneeID);
-		
+
 		// Verifying if ticket assigned to same Group and Assignee
 		if ((ticket.groupID != null && ticket.groupID.longValue() == group_id.longValue())
 				&& (ticket.assigneeID != null && ticket.assigneeID.longValue() == assignee_id.longValue()))
@@ -694,9 +695,13 @@ public class TicketsUtil
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, "",
 						((domainUser != null) ? domainUser.name : ""), "assigneeID");
 			else
+			{
 				// Logging ticket assignee changed activity
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
 						oldAssigneeID + "", ((domainUser != null) ? domainUser.name : ""), "assigneeID");
+				
+				TicketTriggerUtil.executeTriggerForAssigneeChanged(ticket);
+			}
 		}
 
 		System.out.println("completed changeGroupAndAssignee execution");
@@ -929,7 +934,7 @@ public class TicketsUtil
 
 		return keys;
 	}
-	
+
 	public static void createDefaultTicket()
 	{
 		try

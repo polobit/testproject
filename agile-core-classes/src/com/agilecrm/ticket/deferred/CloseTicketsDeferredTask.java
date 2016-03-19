@@ -28,10 +28,7 @@ public class CloseTicketsDeferredTask extends TicketBulkActionAdaptor
 		{
 			try
 			{
-				Tickets ticket = TicketsUtil.closeTicket(ticketKey.getId());
-
-				// Execute note closed by user trigger
-				TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
+				TicketsUtil.closeTicket(ticketKey.getId());
 			}
 			catch (Exception e)
 			{

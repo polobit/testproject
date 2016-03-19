@@ -38,14 +38,7 @@ public class ManageLabelsDeferredTask extends TicketBulkActionAdaptor
 			{
 				try
 				{
-					Tickets ticket = TicketsUtil.updateLabels(ticketKey.getId(), labelKey, command);
-
-					if ("add".equalsIgnoreCase(command))
-						// Execute note closed by user trigger
-						TicketTriggerUtil.executeTriggerForLabelAddedToTicket(ticket);
-					else
-						// Execute note closed by user trigger
-						TicketTriggerUtil.executeTriggerForLabelDeletedToTicket(ticket);
+					TicketsUtil.updateLabels(ticketKey.getId(), labelKey, command);
 				}
 				catch (Exception e)
 				{

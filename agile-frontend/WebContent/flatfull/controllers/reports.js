@@ -50,7 +50,10 @@ var ReportsRouter = Backbone.Router
 							'flatfull/img/reports_images/Daily-reports.png',
 							'flatfull/img/reports_images/Call_Report_Time.png',
 							'flatfull/img/reports_images/Rep_Performance.png',
-							'flatfull/img/reports_images/Comparison_Report.png',
+							'flatfull/img/reports_images/new-tickets.png',
+							'flatfull/img/reports_images/sla-report.png',
+							'flatfull/img/reports_images/status-report.png',
+							'flatfull/img/reports_images/first-response-time.png'
 							]);
 				initializeReportsListeners();
 				hideTransitionBar();

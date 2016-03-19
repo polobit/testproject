@@ -550,9 +550,6 @@ public class TicketsRest
 			if (updatedTicket.groupID != null)
 				updatedTicket.group = TicketGroupUtil.getPartialGroupByID(groupID);
 
-			if ((oldTicket.assigneeID != updatedTicket.assigneeID) || (oldTicket.groupID != updatedTicket.groupID))
-				TicketTriggerUtil.executeTriggerForAssigneeChanged(updatedTicket);
-
 			return updatedTicket;
 		}
 		catch (Exception e)
