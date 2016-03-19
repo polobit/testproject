@@ -27,7 +27,7 @@ public class MarkTicketsAsSpamDeferredTask extends TicketBulkActionAdaptor
 		{
 			try
 			{
-				TicketsUtil.markSpam(ticketKey.getId(), true);
+				TicketsUtil.markSpam(ticketKey.getId(), true, false);
 			}
 			catch (Exception e)
 			{

@@ -32,7 +32,7 @@ public class ChangeAssigneeDeferredTask extends TicketBulkActionAdaptor
 		{
 			try
 			{
-				TicketsUtil.changeGroupAndAssignee(ticketKey.getId(), groupID, newAssigneeID);
+				TicketsUtil.changeGroupAndAssignee(ticketKey.getId(), groupID, newAssigneeID, false);
 			}
 			catch (Exception e)
 			{

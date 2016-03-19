@@ -432,7 +432,7 @@ public class Tickets extends Cursor implements Serializable
 
 			// Logging ticket created activity
 			ActivityUtil.createTicketActivity(ActivityType.TICKET_CREATED, this.contactID, this.id, "", plain_text,
-					"last_reply_text");
+					"last_reply_text", true);
 
 			// Execute triggers
 			TicketTriggerUtil.executeTriggerForNewTicket(this);
@@ -493,7 +493,7 @@ public class Tickets extends Cursor implements Serializable
 			{
 				// Logging ticket assigned activity
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, this.contactID, this.id, "",
-						SessionManager.get().getName(), "assigneeID");
+						SessionManager.get().getName(), "assigneeID", false);
 			}
 			else
 			{
@@ -501,7 +501,7 @@ public class Tickets extends Cursor implements Serializable
 				{
 					// Log assignee changed activity
 					ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, this.contactID, this.id,
-							"", SessionManager.get().getName(), "assigneeID");
+							"", SessionManager.get().getName(), "assigneeID", false);
 
 					assigneeChanged = true;
 				}
@@ -534,7 +534,7 @@ public class Tickets extends Cursor implements Serializable
 		if (oldStatus != this.status)
 			// Logging status changed activity
 			ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, this.contactID, this.id,
-					oldStatus.toString(), this.status.toString(), "status");
+					oldStatus.toString(), this.status.toString(), "status", false);
 
 		// // Logging public notes activity
 		// if (isPublicNotes)

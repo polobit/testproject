@@ -407,35 +407,35 @@ public class TicketsRest
 			// }
 				case "change-due-date":
 				{
-					ticket = TicketsUtil.changeDueDate(ticketID, activityAttributes.getDue_time());
+					ticket = TicketsUtil.changeDueDate(ticketID, activityAttributes.getDue_time(), false);
 					break;
 				}
 				case "change-priority":
 				{
-					ticket = TicketsUtil.changePriority(ticketID, activityAttributes.getPriority());
+					ticket = TicketsUtil.changePriority(ticketID, activityAttributes.getPriority(), false);
 					break;
 				}
 				case "change-ticket-type":
 				{
-					ticket = TicketsUtil.changeTicketType(ticketID, activityAttributes.getType());
+					ticket = TicketsUtil.changeTicketType(ticketID, activityAttributes.getType(), false);
 					break;
 				}
 				case "change-status":
 				{
-					ticket = TicketsUtil.changeStatus(ticketID, activityAttributes.getStatus());
+					ticket = TicketsUtil.changeStatus(ticketID, activityAttributes.getStatus(), false);
 
 					break;
 				}
 				case "remove-due-date":
 				{
-					ticket = TicketsUtil.removeDuedate(ticketID);
+					ticket = TicketsUtil.removeDuedate(ticketID, false);
 					break;
 				}
 				case "toggle-spam":
 				{
 					ticket = TicketsUtil.getTicketByID(ticketID);
 					boolean isSpam = (ticket.is_spam != null && ticket.is_spam) ? false : true;
-					ticket = TicketsUtil.markSpam(ticketID, isSpam);
+					ticket = TicketsUtil.markSpam(ticketID, isSpam, false);
 
 					break;
 				}
@@ -443,20 +443,20 @@ public class TicketsRest
 				{
 					ticket = TicketsUtil.getTicketByID(ticketID);
 					boolean isFavorite = (ticket.is_favorite != null && ticket.is_favorite) ? false : true;
-					ticket = TicketsUtil.markFavorite(ticketID, isFavorite);
+					ticket = TicketsUtil.markFavorite(ticketID, isFavorite, false);
 
 					break;
 				}
 				case "update-cc-emails":
 				{
 					ticket = TicketsUtil.updateCCEmails(ticketID, activityAttributes.getEmail(),
-							activityAttributes.getCommand());
+							activityAttributes.getCommand(), false);
 					break;
 				}
 				case "update-labels":
 				{
 					ticket = TicketsUtil.updateLabels(ticketID, new Key<TicketLabels>(TicketLabels.class,
-							activityAttributes.getLabelID()), activityAttributes.getCommand());
+							activityAttributes.getLabelID()), activityAttributes.getCommand(), false);
 
 					break;
 				}
@@ -542,7 +542,7 @@ public class TicketsRest
 			// Fetching ticket object by its id
 			Tickets oldTicket = TicketsUtil.getTicketByID(ticketID);
 
-			Tickets updatedTicket = TicketsUtil.changeGroupAndAssignee(ticketID, groupID, assigneeID);
+			Tickets updatedTicket = TicketsUtil.changeGroupAndAssignee(ticketID, groupID, assigneeID, false);
 
 			if (updatedTicket.assigneeID != null)
 				updatedTicket.assignee = DomainUserUtil.getPartialDomainUser(assigneeID);
@@ -575,7 +575,7 @@ public class TicketsRest
 			if (ticketID == null)
 				throw new Exception("Required parameter missing.");
 
-			TicketsUtil.deleteTicket(ticketID);
+			TicketsUtil.deleteTicket(ticketID, false);
 
 			return new JSONObject().put("status", "success").toString();
 		}
@@ -613,7 +613,7 @@ public class TicketsRest
 
 			String plain_text = HTMLcontent;
 
-			return TicketsUtil.forwardTicket(ticketId, plain_text, email);
+			return TicketsUtil.forwardTicket(ticketId, plain_text, email, false);
 		}
 		catch (Exception e)
 		{
@@ -720,7 +720,7 @@ public class TicketsRest
 			List<Key<Tickets>> keys = Tickets.ticketsDao.listAllKeys();
 
 			for (Key<Tickets> key : keys)
-				TicketsUtil.deleteTicket(key.getId());
+				TicketsUtil.deleteTicket(key.getId(), false);
 		}
 		catch (Exception e)
 		{

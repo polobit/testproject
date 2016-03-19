@@ -51,7 +51,7 @@ public class TicketPriority extends TaskletAdapter
 
 			if (ticketJSON != null)
 			{
-				TicketsUtil.changePriority(ticketJSON.getLong("id"), Tickets.Priority.valueOf(priority));
+				TicketsUtil.changePriority(ticketJSON.getLong("id"), Tickets.Priority.valueOf(priority), true);
 
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
 						"Ticket(#" + ticketJSON.getString("id") + ") priority changed - " + priority,

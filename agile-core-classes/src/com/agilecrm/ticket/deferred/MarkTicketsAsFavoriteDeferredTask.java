@@ -39,7 +39,7 @@ public class MarkTicketsAsFavoriteDeferredTask extends TicketBulkActionAdaptor
 		{
 			try
 			{
-				TicketsUtil.markFavorite(ticketKey.getId(), true);
+				TicketsUtil.markFavorite(ticketKey.getId(), true, false);
 			}
 			catch (Exception e)
 			{

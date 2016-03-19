@@ -66,7 +66,7 @@ public class TicketLabels extends TaskletAdapter
 
 				String[] labelsArray = tags.split(",");
 
-				TicketsUtil.updateLabels(ticketJSON.getLong("id"), labelsArray, type);
+				TicketsUtil.updateLabels(ticketJSON.getLong("id"), labelsArray, type, true);
 
 				if (type.equals(ADD))
 				{

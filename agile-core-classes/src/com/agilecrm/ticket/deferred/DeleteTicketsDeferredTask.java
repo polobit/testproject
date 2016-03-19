@@ -27,7 +27,7 @@ public class DeleteTicketsDeferredTask extends TicketBulkActionAdaptor
 		{
 			try
 			{
-				TicketsUtil.deleteTicket(ticketKey.getId());
+				TicketsUtil.deleteTicket(ticketKey.getId(), false);
 			}
 			catch (Exception e)
 			{

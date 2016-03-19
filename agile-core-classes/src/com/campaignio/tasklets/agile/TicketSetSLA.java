@@ -68,7 +68,7 @@ public class TicketSetSLA extends TaskletAdapter
 			if (ticketJSON != null && StringUtils.isNotBlank(durationType) && StringUtils.isNotBlank(duration))
 			{
 				// Set SLA
-				TicketsUtil.changeDueDate(ticketID, SLATime);
+				TicketsUtil.changeDueDate(ticketID, SLATime, true);
 
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
 						"Ticket(#" + ticketID + ") SLA changed - " + duration + " hours",

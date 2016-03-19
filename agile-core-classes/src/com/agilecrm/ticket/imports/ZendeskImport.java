@@ -232,7 +232,7 @@ public class ZendeskImport
 
 			// Logging ticket created activity
 			ActivityUtil.createTicketActivity(ActivityType.TICKET_CREATED, ticket.contactID, ticket.id,
-					ticketJSON.getString("description"), ticketJSON.getString("description"), "last_reply_text");
+					ticketJSON.getString("description"), ticketJSON.getString("description"), "last_reply_text",false);
 			// activity.created_time = date.getTime();
 			// activity.save();
 

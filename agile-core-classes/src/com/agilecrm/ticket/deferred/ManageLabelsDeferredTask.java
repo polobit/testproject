@@ -38,7 +38,7 @@ public class ManageLabelsDeferredTask extends TicketBulkActionAdaptor
 			{
 				try
 				{
-					TicketsUtil.updateLabels(ticketKey.getId(), labelKey, command);
+					TicketsUtil.updateLabels(ticketKey.getId(), labelKey, command, false);
 				}
 				catch (Exception e)
 				{

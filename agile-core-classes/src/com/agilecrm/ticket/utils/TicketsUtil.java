@@ -122,7 +122,7 @@ public class TicketsUtil
 	 * @return
 	 * @throws Exception
 	 */
-	public static Tickets changeStatus(Long ticket_id, Status status) throws Exception
+	public static Tickets changeStatus(Long ticket_id, Status status, boolean set_user_key) throws Exception
 	{
 		if (ticket_id == null || status == null)
 			throw new Exception("Required parameters missing");
@@ -156,7 +156,7 @@ public class TicketsUtil
 
 		// Logging activity
 		ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-				oldStatus.toString(), status.toString(), "status");
+				oldStatus.toString(), status.toString(), "status", set_user_key);
 
 		return ticket;
 	}
@@ -170,7 +170,7 @@ public class TicketsUtil
 	 * @return
 	 * @throws Exception
 	 */
-	public static Tickets changeGroup(Long ticket_id, Long group_id) throws Exception
+	public static Tickets changeGroup(Long ticket_id, Long group_id, boolean set_user_key) throws Exception
 	{
 		if (ticket_id == null || group_id == null)
 			throw new Exception("Required parameters missing");
@@ -186,7 +186,7 @@ public class TicketsUtil
 
 		// Logging ticket assigned activity
 		ActivityUtil.createTicketActivity(ActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id, oldGroupID
-				+ "", group_id + "", "groupID");
+				+ "", group_id + "", "groupID", set_user_key);
 
 		return ticket;
 	}
@@ -245,7 +245,7 @@ public class TicketsUtil
 	 * @return updated ticket
 	 * @throws Exception
 	 */
-	public static Tickets changePriority(Long ticket_id, Priority newPriority) throws Exception
+	public static Tickets changePriority(Long ticket_id, Priority newPriority, boolean set_user_key) throws Exception
 	{
 		if (ticket_id == null || newPriority == null)
 			throw new Exception("Required parameters missing");
@@ -263,7 +263,7 @@ public class TicketsUtil
 
 		// Logging activity
 		ActivityUtil.createTicketActivity(ActivityType.TICKET_PRIORITY_CHANGE, ticket.contactID, ticket.id,
-				oldPriority.toString(), newPriority.toString(), "priority");
+				oldPriority.toString(), newPriority.toString(), "priority", set_user_key);
 
 		return ticket;
 	}
@@ -278,7 +278,7 @@ public class TicketsUtil
 	 * 
 	 * @throws EntityNotFoundException
 	 */
-	public static Tickets changeTicketType(Long ticket_id, Type newTicketType) throws Exception
+	public static Tickets changeTicketType(Long ticket_id, Type newTicketType, boolean set_user_key) throws Exception
 	{
 		if (ticket_id == null || newTicketType == null)
 			throw new Exception("Required parameters missing");
@@ -297,7 +297,7 @@ public class TicketsUtil
 
 		// Logging activity
 		ActivityUtil.createTicketActivity(ActivityType.TICKET_TYPE_CHANGE, ticket.contactID, ticket.id,
-				oldTicketType.toString(), newTicketType.toString(), "type");
+				oldTicketType.toString(), newTicketType.toString(), "type", set_user_key);
 
 		return ticket;
 	}
@@ -310,7 +310,7 @@ public class TicketsUtil
 	 * @return
 	 * @throws EntityNotFoundException
 	 */
-	public static Tickets markFavorite(Long ticket_id, Boolean is_favorite) throws Exception
+	public static Tickets markFavorite(Long ticket_id, Boolean is_favorite, boolean set_user_key) throws Exception
 	{
 		if (ticket_id == null || is_favorite == null)
 			throw new Exception("Required parameters missing");
@@ -326,7 +326,8 @@ public class TicketsUtil
 
 		// Logging activity
 		ActivityUtil.createTicketActivity((is_favorite ? ActivityType.TICKET_MARKED_FAVORITE
-				: ActivityType.TICKET_MARKED_UNFAVORITE), ticket.contactID, ticket.id, "", "", "is_favorite");
+				: ActivityType.TICKET_MARKED_UNFAVORITE), ticket.contactID, ticket.id, "", "", "is_favorite",
+				set_user_key);
 
 		return ticket;
 	}
@@ -339,7 +340,7 @@ public class TicketsUtil
 	 * @return
 	 * @throws EntityNotFoundException
 	 */
-	public static Tickets markSpam(Long ticket_id, Boolean is_spam) throws Exception
+	public static Tickets markSpam(Long ticket_id, Boolean is_spam, boolean set_user_key) throws Exception
 	{
 		if (ticket_id == null || is_spam == null)
 			throw new Exception("Required parameters missing");
@@ -355,7 +356,7 @@ public class TicketsUtil
 
 		// Logging activity
 		ActivityUtil.createTicketActivity((is_spam ? ActivityType.TICKET_MARKED_SPAM
-				: ActivityType.TICKET_MARKED_UNSPAM), ticket.contactID, ticket.id, "", "", "is_spam");
+				: ActivityType.TICKET_MARKED_UNSPAM), ticket.contactID, ticket.id, "", "", "is_spam", set_user_key);
 
 		return ticket;
 	}
@@ -369,7 +370,8 @@ public class TicketsUtil
 	 * @return
 	 * @throws Exception
 	 */
-	public static Tickets forwardTicket(Long ticket_id, String content, String csvEmails) throws Exception
+	public static Tickets forwardTicket(Long ticket_id, String content, String csvEmails, boolean set_user_key)
+			throws Exception
 	{
 		if (ticket_id == null || StringUtils.isBlank(content) || StringUtils.isBlank(csvEmails))
 			throw new Exception("Required parameters missing");
@@ -395,7 +397,7 @@ public class TicketsUtil
 
 			// Logging activity
 			ActivityUtil.createTicketActivity(ActivityType.TICKET_NOTES_FORWARD, ticket.contactID, ticket.id, "",
-					email, "");
+					email, "", set_user_key);
 		}
 
 		return ticket;
@@ -409,30 +411,34 @@ public class TicketsUtil
 	 * @return
 	 * @throws Exception
 	 */
-	public static Tickets closeTicket(Long ticket_id) throws Exception
+	public static Tickets closeTicket(Long ticket_id, boolean set_user_key) throws Exception
 	{
-		if (ticket_id == null)
-			throw new Exception("Required parameters missing");
+		// if (ticket_id == null)
+		// throw new Exception("Required parameters missing");
+		//
+		// Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+		//
+		// if (ticket.status == Status.CLOSED)
+		// return ticket;
+		//
+		// Status oldStatus = ticket.status;
+		//
+		// ticket.status = Status.CLOSED;
+		// ticket.closed_time = Calendar.getInstance().getTimeInMillis();
+		//
+		// ticket.save();
+		//
+		// // Logging activity
+		// ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE,
+		// ticket.contactID, ticket.id,
+		// oldStatus.toString(), Status.CLOSED.toString(), "status",
+		// set_user_key);
+		//
+		// TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
+		//
+		// return ticket;
 
-		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-
-		if (ticket.status == Status.CLOSED)
-			return ticket;
-
-		Status oldStatus = ticket.status;
-
-		ticket.status = Status.CLOSED;
-		ticket.closed_time = Calendar.getInstance().getTimeInMillis();
-
-		ticket.save();
-
-		// Logging activity
-		ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
-				oldStatus.toString(), Status.CLOSED.toString(), "status");
-
-		TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
-
-		return ticket;
+		return changeStatus(ticket_id, Status.CLOSED, set_user_key);
 	}
 
 	/**
@@ -443,7 +449,8 @@ public class TicketsUtil
 	 * @return
 	 * @throws Exception
 	 */
-	public static Tickets updateLabels(Long ticket_id, Key<TicketLabels> labelKey, String command) throws Exception
+	public static Tickets updateLabels(Long ticket_id, Key<TicketLabels> labelKey, String command, boolean set_user_key)
+			throws Exception
 	{
 		if (ticket_id == null || labelKey == null || StringUtils.isBlank(command))
 			throw new Exception("Required parameters missing");
@@ -490,7 +497,7 @@ public class TicketsUtil
 
 		// Logging activity
 		ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, "", (label != null ? label.label
-				: ""), "labels");
+				: ""), "labels", set_user_key);
 
 		return ticket;
 	}
@@ -503,7 +510,8 @@ public class TicketsUtil
 	 * @return
 	 * @throws Exception
 	 */
-	public static Tickets updateCCEmails(Long ticket_id, String email, String command) throws Exception
+	public static Tickets updateCCEmails(Long ticket_id, String email, String command, boolean set_user_key)
+			throws Exception
 	{
 		if (ticket_id == null || StringUtils.isBlank(email) || StringUtils.isBlank(command))
 			throw new Exception("Required parameters missing");
@@ -535,7 +543,8 @@ public class TicketsUtil
 		ticket.save();
 
 		// Logging activity
-		ActivityUtil.createTicketActivity(ActivityType, ticket.contactID, ticket.id, "", email, "cc_emails");
+		ActivityUtil.createTicketActivity(ActivityType, ticket.contactID, ticket.id, "", email, "cc_emails",
+				set_user_key);
 
 		return ticket;
 	}
@@ -548,7 +557,8 @@ public class TicketsUtil
 	 * @param type
 	 * @throws Exception
 	 */
-	public static void updateLabels(Long ticketId, String[] labelsArray, String type) throws Exception
+	public static void updateLabels(Long ticketId, String[] labelsArray, String type, boolean set_user_key)
+			throws Exception
 	{
 		for (String label : labelsArray)
 		{
@@ -557,7 +567,7 @@ public class TicketsUtil
 			try
 			{
 				TicketsUtil.updateLabels(ticketId, new Key<TicketLabels>(TicketLabels.class, ticketLabel.id),
-						type.toLowerCase());
+						type.toLowerCase(), set_user_key);
 			}
 			catch (Exception e)
 			{
@@ -572,7 +582,7 @@ public class TicketsUtil
 	 * @param ticket_id
 	 * @throws Exception
 	 */
-	public static void deleteTicket(Long ticket_id) throws Exception
+	public static void deleteTicket(Long ticket_id, boolean set_user_key) throws Exception
 	{
 		Tickets ticket = getTicketByID(ticket_id);
 
@@ -586,7 +596,8 @@ public class TicketsUtil
 		new TicketsDocument().delete(ticket_id + "");
 
 		// Logging deleting ticket activity
-		ActivityUtil.createTicketActivity(ActivityType.TICKET_DELETED, ticket.contactID, ticket.id, "", "", "");
+		ActivityUtil.createTicketActivity(ActivityType.TICKET_DELETED, ticket.contactID, ticket.id, "", "", "",
+				set_user_key);
 	}
 
 	/**
@@ -600,7 +611,8 @@ public class TicketsUtil
 	 * @return Tickets
 	 * @throws Exception
 	 */
-	public static Tickets changeGroupAndAssignee(Long ticket_id, Long group_id, Long assignee_id) throws Exception
+	public static Tickets changeGroupAndAssignee(Long ticket_id, Long group_id, Long assignee_id, boolean set_user_key)
+			throws Exception
 	{
 		System.out.println("changeGroupAndAssignee: ");
 
@@ -661,7 +673,7 @@ public class TicketsUtil
 			if (oldGroupID != ticket.groupID)
 			{
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id,
-						oldGroupID + "", (group != null) ? group.group_name : "", "groupID");
+						oldGroupID + "", (group != null) ? group.group_name : "", "groupID", set_user_key);
 			}
 		}
 		else
@@ -693,17 +705,17 @@ public class TicketsUtil
 			// Logging group change activity
 			if (oldGroupID.longValue() != ticket.groupID.longValue())
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id,
-						oldGroupID + "", (group != null) ? group.group_name : "", "groupID");
+						oldGroupID + "", (group != null) ? group.group_name : "", "groupID", set_user_key);
 
 			// Logging new ticket assigned activity
 			if (isNewTicket)
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, "",
-						((domainUser != null) ? domainUser.name : ""), "assigneeID");
+						((domainUser != null) ? domainUser.name : ""), "assigneeID", set_user_key);
 			else
 			{
 				// Logging ticket assignee changed activity
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
-						oldAssigneeID + "", ((domainUser != null) ? domainUser.name : ""), "assigneeID");
+						oldAssigneeID + "", ((domainUser != null) ? domainUser.name : ""), "assigneeID", set_user_key);
 
 				TicketTriggerUtil.executeTriggerForAssigneeChanged(ticket);
 			}
@@ -722,7 +734,7 @@ public class TicketsUtil
 	 * @return
 	 * @throws Exception
 	 */
-	public static Tickets changeDueDate(Long ticketID, Long dueDate) throws Exception
+	public static Tickets changeDueDate(Long ticketID, Long dueDate, boolean set_user_key) throws Exception
 	{
 		if (ticketID == null || dueDate == null)
 			throw new Exception("Required parameters missing");
@@ -748,7 +760,7 @@ public class TicketsUtil
 
 		// Logging ticket assignee changed activity
 		ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, oldDueDate + "", dueDate + "",
-				"due_date");
+				"due_date", set_user_key);
 
 		return ticket;
 	}
@@ -760,7 +772,7 @@ public class TicketsUtil
 	 * @return
 	 * @throws Exception
 	 */
-	public static Tickets removeDuedate(Long ticket_id) throws Exception
+	public static Tickets removeDuedate(Long ticket_id, boolean set_user_key) throws Exception
 	{
 		if (ticket_id == null)
 			throw new Exception("Required parameters missing");
@@ -776,7 +788,7 @@ public class TicketsUtil
 
 		// Logging ticket assignee changed activity
 		ActivityUtil.createTicketActivity(ActivityType.DUE_DATE_REMOVED, ticket.contactID, ticket.id, "", "",
-				"due_date");
+				"due_date", set_user_key);
 
 		// Logging activity
 		return ticket;

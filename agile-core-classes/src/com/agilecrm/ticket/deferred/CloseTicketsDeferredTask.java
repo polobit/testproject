@@ -28,7 +28,7 @@ public class CloseTicketsDeferredTask extends TicketBulkActionAdaptor
 		{
 			try
 			{
-				TicketsUtil.closeTicket(ticketKey.getId());
+				TicketsUtil.closeTicket(ticketKey.getId(), false);
 			}
 			catch (Exception e)
 			{

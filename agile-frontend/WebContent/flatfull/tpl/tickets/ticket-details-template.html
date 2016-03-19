@@ -341,7 +341,7 @@
                      {{#if_equals reply_type "forward"}}forward{{/if_equals}} 
                      {{#if_equals reply_type "reply"}}reply{{/if_equals}} 
                      {{#if_equals reply_type "comment"}} bg-lightyellow comment{{/if_equals}}
-                     " style="min-height: 49px;height: 60px;max-height:400px;width:100%;text-indent: 0px; resize: none;">{{#if_equals reply_type "forward"}}{{#if draft_message.forward}}{{draft_message.forward}}{{else}}{{get_palin_text_from_html notes}}{{/if}}{{/if_equals}}{{#if_equals reply_type "comment"}}{{draft_message.comment}}{{/if_equals}}{{#if_equals reply_type "reply"}}{{draft_message.reply}}{{/if_equals}}</textarea>
+                     " style="min-height: 49px;height: 60px;max-height:400px;width:100%;text-indent: 0px; resize: none;">{{#if_equals reply_type "forward"}}{{#if draft_message.forward}}{{draft_message.forward}}{{else}}{{notes}}{{/if}}{{/if_equals}}{{#if_equals reply_type "comment"}}{{draft_message.comment}}{{/if_equals}}{{#if_equals reply_type "reply"}}{{draft_message.reply}}{{/if_equals}}</textarea>
             
                   </div>
                   

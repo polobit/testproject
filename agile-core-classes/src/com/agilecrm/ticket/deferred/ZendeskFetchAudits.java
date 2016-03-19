@@ -174,7 +174,7 @@ public class ZendeskFetchAudits implements DeferredTask
 							case "assignee_id":
 								ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED,
 										ticket.contactID, ticket.id, eventJSON.getString("previous_value"),
-										eventJSON.getString("value"), "assigneeID");
+										eventJSON.getString("value"), "assigneeID", false);
 								// activity.setUser(new Key<>(DomainUser.class,
 								// domainOwner.id));
 								// activity.created_time = date.getTime();
@@ -201,7 +201,7 @@ public class ZendeskFetchAudits implements DeferredTask
 
 								// Logging activity
 								ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID,
-										ticket.id, statusMap.get(oldStatus), statusMap.get(newStatus), "status");
+										ticket.id, statusMap.get(oldStatus), statusMap.get(newStatus), "status", false);
 								// statusActivity.setUser(new
 								// Key<>(DomainUser.class, domainOwner.id));
 								// statusActivity.created_time = date.getTime();
@@ -225,7 +225,7 @@ public class ZendeskFetchAudits implements DeferredTask
 
 									// Logging private notes activity
 									ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNED, ticket.contactID,
-											ticket.id, "", agentID + "", "assigneeID");
+											ticket.id, "", agentID + "", "assigneeID", false);
 									// activity.setUser(new
 									// Key<>(DomainUser.class, domainOwner.id));
 									// activity.created_time = date.getTime();

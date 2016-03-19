@@ -59,7 +59,7 @@ public class TicketAssignee extends TaskletAdapter
 
 				// Change Group and Assignee
 				TicketsUtil.changeGroupAndAssignee(ticketJSON.getLong("id"), Long.parseLong(ticketGroupId),
-						Long.parseLong(ticketAssigneeId));
+						Long.parseLong(ticketAssigneeId), true);
 
 				String message = "Ticket(#" + ticketJSON.getString("id") + ") assignee changed";
 				try

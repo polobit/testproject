@@ -50,7 +50,7 @@ public class TicketGroup extends TaskletAdapter
 				String ticketGroupId = getStringValue(nodeJSON, subscriberJSON, data, TICKET_GROUP_ID);
 
 				// Change Group and Assignee
-				TicketsUtil.changeGroup(ticketJSON.getLong("id"), Long.parseLong(ticketGroupId));
+				TicketsUtil.changeGroup(ticketJSON.getLong("id"), Long.parseLong(ticketGroupId), true);
 
 				String message = "Ticket(#" + ticketJSON.getString("id") + ") group changed";
 				try
