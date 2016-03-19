@@ -35,7 +35,7 @@
             "type": "text" 
             
         },{
-            "label": "",
+            "label": "Add or delete label for a ticket.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

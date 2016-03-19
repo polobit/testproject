@@ -52,7 +52,7 @@
                "type": "text"
            },
            {
-               "label": "",
+               "label": "Send an email to requester or assignee.",
                "category": "Help",
                "fieldType": "label",
                "type": "label"
