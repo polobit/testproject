@@ -99,6 +99,8 @@ var Tickets_Notes = {
 							json.last_updated_by = 'AGENT';
 							json.user_replies_count = notes_json.user_replies_count;
 						}
+
+						ticket_model.set(json, {silent: true});
 					}
 
 					var next_ticket_url = $(".navigation .next-ticket").attr("href");
