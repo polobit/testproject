@@ -258,7 +258,7 @@
 					if(!email || email == 'No email')
 						return;
 
-					$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
+					//$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
         			$('#cc_email_field').val('');
 
         	  		Tickets.updateCCEmails(email, 'add');

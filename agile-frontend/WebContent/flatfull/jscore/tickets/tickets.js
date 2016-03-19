@@ -935,7 +935,7 @@ var Tickets = {
         	
         	var err_email = !Tickets.isValidEmail(email);
 
-        	$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email, err_email: err_email}));
+        	//$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email, err_email: err_email}));
         	$('#cc_email_field').val('');
 
         	// Save cc emails to the
@@ -947,7 +947,7 @@ var Tickets = {
 	addMeToCC: function(){
 
 		var email = CURRENT_DOMAIN_USER.email;
-		$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
+		//$('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
 		$('#cc_email_field').val('');
 		Tickets.updateCCEmails(email, 'add');
 		$('.add-me-to-cc').hide();
@@ -979,6 +979,9 @@ var Tickets = {
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
 			var msg = (command == 'remove') ? email + ' removed from CC emails' : email + ' added to CC emails';
+                
+            if(command != 'remove')
+            $('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
 
 			Ticket_Utils.showNoty('information', msg, 'bottomRight', 5000);
 		});
