@@ -145,12 +145,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public String pic = null;
 	
 	/**
-	 * Pic of the domain user
-	 */
-	@NotSaved(IfDefault.class)
-	public String pic = null;
-	
-	/**
 	 * Name of the domain user
 	 */
 	@NotSaved(IfDefault.class)

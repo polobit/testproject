@@ -1895,21 +1895,6 @@ public class ContactUtil
 			contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, name, null));
 		}
 
-    public static String getMD5EncodedImage(Contact contact){
-
-		DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
-		
-		contact.setContactOwner(new Key<DomainUser>(DomainUser.class, domainUser.id));
-		
-		try
-		{
-			contact.save();
-		}
-		catch (PlanRestrictedException e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-		}
-		
 		return contact;
 	}
 
