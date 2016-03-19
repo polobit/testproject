@@ -109,7 +109,8 @@
 
                     <div class="col-md-12 p-n m-b-xxs"> 
                       <span class="sla-text">Due Date</span>
-                      <a class="link-color pull-right text-xs remove-date {{#if due_time}}{{else}}display-none{{/if}}" href="javascript:void(0);">
+                      <a class="link-color pull-right text-xs remove-date {{#if due_time}}{{#if_equals status "CLOSED"}}display-none{{/if_equals}}{{else}}display-none 
+                      {{/if}}" href="javascript:void(0);">
                         remove
                       </a>
                     </div>

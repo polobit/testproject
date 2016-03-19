@@ -39,7 +39,7 @@ var Ticket_Custom_Filters = {
 			$('.daterangepicker').remove();
 
 			// Bootstrap date range picker.
-			$('#created-date-input').daterangepicker({drops: 'up', locale : { applyLabel : 'Apply', cancelLabel : 'Cancel'}}, function(start, end)
+			$('#created-date-input').daterangepicker({drops: 'up', locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', firstDay : parseInt(CALENDAR_WEEK_START_DAY)}}, function(start, end)
 			{
 				var range = $('#created-date-input').val();
 
@@ -79,6 +79,7 @@ var Ticket_Custom_Filters = {
 	  		//Re-render collection with updated filter conditions
 	  		Ticket_Custom_Filters.changeCreatedDate();
 	  	});
+
 
 	  	//Initializing click event on due date button
 	  	$container.off('click','a.choose-due-date');
@@ -131,7 +132,6 @@ var Ticket_Custom_Filters = {
 				saveCallback: function(model){
 
 					$('#ticketsModal').modal('hide');
-
 					App_Ticket_Module.ticketFiltersList.collection.add(model);
 					App_Ticket_Module.ticketsByFilter(model.id);
 
@@ -145,7 +145,7 @@ var Ticket_Custom_Filters = {
 					var formJSON = model.toJSON();
 
 					if(formJSON['save-type'] == 'replace')
-						json.id = $('[name="filter-collection"]').val();
+					 	json.id = $('[name="filter-collection"]').val();
 
 					model.set(json, { silent : true });
 				}
@@ -442,8 +442,6 @@ var Ticket_Custom_Filters = {
 
 	changeCreatedDate: function(start, end){
 
-		var date_applied = false;
-
 		//Removing existing due date conditions from custom filters
   		for(var i=0; i< Ticket_Custom_Filters.customFilters.length; i++){
 
@@ -452,13 +450,9 @@ var Ticket_Custom_Filters = {
 			if(condition.LHS != 'created_between')
 				continue;
 
-			dateApplied = true;
 			Ticket_Custom_Filters.customFilters.splice(i, 1);
 			break;
 		}
-
-		if(!date_applied)
-			return;
 
 		if(start && end){
 
