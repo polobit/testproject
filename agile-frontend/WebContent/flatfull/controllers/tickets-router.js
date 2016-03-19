@@ -216,6 +216,10 @@
 	 			//Get ticket contact
 	 			Ticket_Utils.fetchContact(data.contactID, function(){
 
+	 				//Rendering ticket notes
+					App_Ticket_Module.renderNotesCollection(id, 
+						$('#notes-collection-container', el), function(){});
+
 	 				//Render template with contact details
 	 				if(Ticket_Utils.Current_Ticket_Contact &&
 	 					!$.isEmptyObject(Ticket_Utils.Current_Ticket_Contact.toJSON())){
@@ -236,9 +240,6 @@
 
 				//Showing ticket labels as selected labels
 				Ticket_Labels.showSelectedLabels(data.labels, $(el));
-
-				//Rendering ticket notes
-				App_Ticket_Module.renderNotesCollection(id, $('#notes-collection-container', el), function(){});
 
 				//Load RHS side bar widgets
 				Tickets.loadWidgets(App_Ticket_Module.ticketView.el);
