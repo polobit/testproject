@@ -617,9 +617,14 @@ public class TicketsUtil
 		System.out.println("current assigneeID: " + ticket.assigneeID);
 
 		// Verifying if ticket assigned to same Group and Assignee
-		if ((ticket.groupID != null && ticket.groupID.longValue() == group_id.longValue())
-				&& (ticket.assigneeID != null && ticket.assigneeID.longValue() == assignee_id.longValue()))
-			return ticket;
+		if ((ticket.groupID != null && ticket.groupID.longValue() == group_id.longValue()))
+		{
+			if (assignee_id != null)
+			{
+				if (ticket.assigneeID != null && ticket.assigneeID.longValue() == assignee_id.longValue())
+					return ticket;
+			}
+		}
 
 		// Copying old data to create ticket activity
 		Long oldGroupID = ticket.groupID, oldAssigneeID = ticket.assigneeID;
@@ -699,7 +704,7 @@ public class TicketsUtil
 				// Logging ticket assignee changed activity
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
 						oldAssigneeID + "", ((domainUser != null) ? domainUser.name : ""), "assigneeID");
-				
+
 				TicketTriggerUtil.executeTriggerForAssigneeChanged(ticket);
 			}
 		}

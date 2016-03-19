@@ -83,29 +83,27 @@
 		  	{{/if_equals}}
 
 		  	{{#if_equals activity_type 'TICKET_ASSIGNED'}}
-		        Ticket assigned to <span class="first-letter-cap">{{custom2}}</span>
+		        Ticket assigned to <span>{{custom2}}</span>
 		    {{/if_equals}}
 
 		    {{#if_equals activity_type 'TICKET_ASSIGNEE_CHANGED'}}
-	        	Ticket assignee changed to <span class="first-letter-cap">
-		            	{{custom2}}
-		            </span>
+	        	Ticket assignee changed to <span>{{custom2}}</span>
 		    {{/if_equals}}
 
 		    {{#if_equals activity_type 'TICKET_GROUP_CHANGED'}}
-	                Ticket group changed to <span class="first-letter-cap">{{custom2}}</span>
+	                Ticket group changed to <span>{{custom2}}</span>
 		    {{/if_equals}}
 
 		    {{#if_equals activity_type 'TICKET_STATUS_CHANGE'}}
-	            Status changed to <span class="first-letter-cap">{{custom2}}</span>
+	            Status changed to <span class="first-letter-cap inline-block">{{custom2}}</span>
 	        {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_PRIORITY_CHANGE'}}
-	           Priority changed to <span class="first-letter-cap">{{custom2}}</span>
+	           Priority changed to <span class="first-letter-cap inline-block">{{custom2}}</span>
 	        {{/if_equals}}
 
 		    {{#if_equals activity_type 'TICKET_TYPE_CHANGE'}}
-	            Type changed to <span class="first-letter-cap">{{custom2}}</span>
+	            Type changed to <span class="first-letter-cap inline-block">{{custom2}}</span>
 	         {{/if_equals}}
 		                        
 	        {{#if_equals activity_type 'TICKET_LABEL_ADD'}}
@@ -136,29 +134,26 @@
 	         {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_MARKED_FAVORITE'}}
-	            <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as favorite
+	            Marked as favorite
 	        {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_MARKED_UNFAVORITE'}}
-	            <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as unfavorite
+	            Marked as unfavorite
 	        {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_MARKED_SPAM'}}
-	            <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as spam
+	            Marked as spam
 	        {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_MARKED_UNSPAM'}}
-	            <span class="first-letter-cap inline-block">{{user.name}}</span>  marked as unspam
+	            Marked as not spam
 	        {{/if_equals}}
 
 	        {{#if_equals activity_type 'DUE_DATE_CHANGED'}}
 	            <span class="first-letter-cap inline-block">{{user.name}}</span>  Changed due date to {{epochToHumanDate "mmm dd, yyyy" custom2}}
 	      		</span>
 	        {{/if_equals}}
-	        
-
-		 </div>
-
+	    </div>
 	</div>
 </div>
 

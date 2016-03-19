@@ -217,5 +217,10 @@ var Ticket_Utils = {
 		}
 
 		return name;
+	},
+
+	getInitialsEmptyMethod: function(name){
+
+		return name;
 	}
 };

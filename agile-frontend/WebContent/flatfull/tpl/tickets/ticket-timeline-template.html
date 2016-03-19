@@ -51,11 +51,11 @@
 			            <a href="javascript:;">
 
 			           	 {{#if_equals activity_type 'TICKET_ASSIGNEE_REPLIED'}}
-				            <span class="first-letter-cap inline-block">{{user_name}}</span> replied to ticket
+				            <span class="inline-block">{{user_name}}</span> replied to ticket
 				         {{/if_equals}}
 
 				         {{#if_equals activity_type 'TICKET_REQUESTER_REPLIED'}}
-				            <span class="first-letter-cap inline-block">
+				            <span class="inline-block">
 					            {{#if contact}}
 					                {{getPropertyValue contact.properties "first_name"}} 
 					                    {{getPropertyValue contact.properties "last_name"}}
@@ -68,9 +68,7 @@
 				         {{#if_equals activity_type 'TICKET_CREATED'}}
 				    		Ticket Created
 				    	 {{/if_equals}}
-
 			            </a>
-			            
 			          </div>
 			          
 			          <div class="panel-body">
@@ -111,30 +109,27 @@
 			            <a href="javascript:;">
 
 			               {{#if_equals activity_type 'TICKET_ASSIGNED'}}
-						        Ticket assigned to <span class="first-letter-cap">{{custom2}}</span>
+						        Ticket assigned to <span>{{custom2}}</span>
 						    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_ASSIGNEE_CHANGED'}}
-				            	Ticket assignee changed to <span class="first-letter-cap">
-						            	{{custom2}}
-						            </span>
+				            	Ticket assignee changed to <span>{{custom2}}</span>
 						    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_GROUP_CHANGED'}}
-					                Ticket group changed to <span class="first-letter-cap">
-					                {{custom2}}</span>
+					                Ticket group changed to <span>{{custom2}}</span>
 						    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_STATUS_CHANGE'}}
-			                    Status changed from <span class="first-letter-cap">{{custom1}}</span> to <span class="first-letter-cap">{{custom2}}</span>
+			                    Status changed from <span class="first-letter-cap inline-block">{{custom1}}</span> to <span class="first-letter-cap inline-block">{{custom2}}</span>
 			                {{/if_equals}}
 
 			                {{#if_equals activity_type 'TICKET_PRIORITY_CHANGE'}}
-		                       Priority changed from <span class="first-letter-cap">{{custom1}}</span> to <span class="first-letter-cap">{{custom2}}</span>
+		                       Priority changed from <span class="first-letter-cap inline-block">{{custom1}}</span> to <span class="first-letter-cap inline-block">{{custom2}}</span>
 		                    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_TYPE_CHANGE'}}
-		                        Type changed from <span class="first-letter-cap">{{custom1}}</span> to <span class="first-letter-cap">{{custom2}}</span>
+		                        Type changed from <span class="first-letter-cap inline-block">{{custom1}}</span> to <span class="first-letter-cap inline-block">{{custom2}}</span>
 		                     {{/if_equals}}
 						                        
 		                    {{#if_equals activity_type 'TICKET_LABEL_ADD'}}
@@ -155,7 +150,7 @@
 
 
 		                    {{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}
-		                        <span class="first-letter-cap inline-block">{{domainUser.name}}</span>  added a note
+		                        <span>{{domainUser.name}}</span>  added a note
 		                    {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_MARKED_FAVORITE'}}
@@ -175,7 +170,7 @@
 
 		                    {{#if_equals activity_type 'TICKET_MARKED_UNSPAM'}}
 		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
-		                        Marked as unspam
+		                        Marked as not spam
 		                    {{/if_equals}}
 		                    {{#if_equals activity_type 'SET_DUE_DATE'}}
 		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
