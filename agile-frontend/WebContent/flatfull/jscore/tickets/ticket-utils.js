@@ -211,7 +211,7 @@ var Ticket_Utils = {
 		if(array.length >= 2){
 
 			var initials = array[0].substr(0, 1);
-			initials += array[0].substr(0, 1);
+			initials += array[1].substr(0, 1);
 
 			return initials;
 		}

@@ -123,13 +123,10 @@ var Ticket_Labels = {
 		    ticket_model.set({labels:ticket_labels},{silent: true});
 		} 		         
 		
-       		var msg = "Label '"+ label_text + "' has been deleted from ticket";
+       		var msg = "Label "+ label_text + " has been deleted from ticket";
 
-       		if(json.command == 'add'){
-
-	           msg = "Label '" + label_text + "' has been added to ticket" ;
-	         
-	         }
+       		if(json.command == 'add')
+				msg = "Label " + label_text + " has been added to ticket" ;
                    		
        		Ticket_Utils.showNoty('information', msg, 'bottomRight', 5000);
 
