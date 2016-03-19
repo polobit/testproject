@@ -131,7 +131,6 @@ var Ticket_Custom_Filters = {
 				saveCallback: function(model){
 
 					$('#ticketsModal').modal('hide');
-
 					App_Ticket_Module.ticketFiltersList.collection.add(model);
 					App_Ticket_Module.ticketsByFilter(model.id);
 
@@ -145,7 +144,7 @@ var Ticket_Custom_Filters = {
 					var formJSON = model.toJSON();
 
 					if(formJSON['save-type'] == 'replace')
-						json.id = $('[name="filter-collection"]').val();
+					 	json.id = $('[name="filter-collection"]').val();
 
 					model.set(json, { silent : true });
 				}
