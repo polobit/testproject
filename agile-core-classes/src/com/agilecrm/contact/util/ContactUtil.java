@@ -1897,7 +1897,19 @@ public class ContactUtil
 		}else{
 			contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, name, null));
 		}
-
+		
+		DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+		contact.setContactOwner(new Key<DomainUser>(DomainUser.class, domainUser.id));
+		
+		try
+		{
+			contact.save();
+		}
+		catch (PlanRestrictedException e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		
 		return contact;
 	}
 
