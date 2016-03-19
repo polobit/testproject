@@ -80,7 +80,7 @@
             "type": "text" 
         },
         {
-            "label": "",
+            "label": "Check for a condition (if/value/len) in your workflow.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

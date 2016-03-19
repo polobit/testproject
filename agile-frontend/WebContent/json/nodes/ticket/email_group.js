@@ -51,7 +51,7 @@
                "type": "text"
            },
            {
-               "label": "",
+               "label": "Send an email to assigned ticket group.",
                "category": "Help",
                "fieldType": "label",
                "type": "label"

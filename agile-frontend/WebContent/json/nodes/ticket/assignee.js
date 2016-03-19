@@ -45,7 +45,7 @@
                "type": "select"
            },
            {
-               "label": "",
+               "label": "You can change the group and assignee  for a ticket.",
                "category": "Help",
                "fieldType": "label",
                "type": "label"
