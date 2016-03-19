@@ -90,26 +90,7 @@ var Ticket_Labels = {
 			return;
 		}
 
-  //       if(App_Ticket_Module.ticketsCollection){
-
-  //           var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
-  //           var ticket_labels = ticket_model.get('labels');
-		//     //console.log(ticket_labels);  
-		    
-		//     if(!ticket_labels)
-		// 	    ticket_labels = [];
-
-		//    	if(command=='add'){
-	 //        	ticket_labels.push(parseInt(label));
-	 //        }
-		//     else{
-				
-		// 		ticket_labels= jQuery.grep(ticket_labels, function(value) {
-		// 		 	return value != label;
-		// 		});                   
-		// 	}
-		// } 		         
-		
+        
 		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/update-labels";
 		var json = {command: command, labelID: label, id: Current_Ticket_ID};
 
@@ -119,8 +100,29 @@ var Ticket_Labels = {
        		var label_text = $('.chosen-select option[value="'+json.labelID+'"]', 
        								App_Ticket_Module.ticketView.el).text();
        		
-       		//Updating modal
-       		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, model);
+       		//Updating model
+       		
+       		if(App_Ticket_Module.ticketsCollection){
+
+            var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
+            var ticket_labels = ticket_model.get('labels');
+		    //console.log(ticket_labels);  
+		    
+		    if(!ticket_labels)
+			    ticket_labels = [];
+
+		   	if(command=='add'){
+	        	ticket_labels.push(parseInt(label));
+	        }
+		    else{
+				
+				ticket_labels= jQuery.grep(ticket_labels, function(value) {
+				 	return value != label;
+				});                   
+			}
+		    ticket_model.set({labels:ticket_labels},{silent: true});
+		} 		         
+		
        		var msg = "Label '"+ label_text + "' has been deleted from ticket";
 
        		if(json.command == 'add'){
