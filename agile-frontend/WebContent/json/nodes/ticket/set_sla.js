@@ -3,7 +3,7 @@
     "thumbnail": "json/nodes/icons/ticket/priority.png",
     "icon": "json/nodes/icons/ticket/priority.png",
     "info": "Set due date/duration time for a ticket in Hours.",
-    "help": "",
+    "help": "Set due date/duration time for a ticket in Hours.",
     "author": "John",
     "company": "mantra",
     "language": "en",
