@@ -14,7 +14,7 @@
       {{#if contact.properties}}
         <img src="{{gravatarurl contact.properties 24}}" class="r-5x" onerror="image_error(this);" _data-name="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}" style="height: 45px; width: 45px;">
       {{else}}
-        <img src="{{getGravatarFromEmail requester_email 42}}" onerror="image_error(this);"
+        <img src="{{getGravatarFromEmail requester_email 42}}" class="r-5x" onerror="image_error(this);"
           _data-name="{{requester_name}}" style="height: 45px; width: 45px;">
       {{/if}}
     </a>
@@ -32,7 +32,11 @@
         <tr>
           <td>
             <a class="custom-link subject-row text-ellipsis text-xs" style="color: #697073;">
-              {{getPropertyValue contact.properties "first_name"}}&nbsp;{{getPropertyValue contact.properties "last_name"}}
+              {{#if contact.properties}}
+                {{getPropertyValue contact.properties "first_name"}}&nbsp;{{getPropertyValue contact.properties "last_name"}}
+              {{else}}
+                {{requester_email}}
+              {{/if}}
             </a>
           </td>
         </tr>
@@ -210,7 +214,11 @@
   {{#is_column_selected 'requester_name'}}
     <td class="open-ticket requester_name width-9em text-ellipsis">
     <div class="text-ellipsis">
-      {{getPropertyValue contact.properties "first_name"}}&nbsp;{{getPropertyValue contact.properties "last_name"}}</div>
+      {{#if contact.properties}}
+        {{getPropertyValue contact.properties "first_name"}}&nbsp;{{getPropertyValue contact.properties "last_name"}}
+      {{else}}
+        {{requester_email}}
+      {{/if_equals}}
     </td>
   {{/is_column_selected}}
   {{#is_column_selected 'requester_email'}}

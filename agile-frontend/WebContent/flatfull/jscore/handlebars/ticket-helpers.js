@@ -37,9 +37,19 @@ Handlebars.registerHelper('calculate_due_date', function(due_date, options) {
 	return 'Due in ' + Ticket_Utils.dateDiff(currentEpoch, due_date);
 });
 
+Handlebars.registerHelper('ticket_contact_exists', function(options) {
+
+	if(Ticket_Utils.Current_Ticket_Contact
+		&& !($.isEmptyObject(Ticket_Utils.Current_Ticket_Contact.toJSON())))
+		return options.fn(this);
+
+	return options.inverse(this);
+});
+
 Handlebars.registerHelper('get_contact_image', function(width)
 { 	
-	if(Ticket_Utils.Current_Ticket_Contact){
+	if(Ticket_Utils.Current_Ticket_Contact
+		&& !($.isEmptyObject(Ticket_Utils.Current_Ticket_Contact.toJSON()))){
 		
 		var contact = Ticket_Utils.Current_Ticket_Contact.toJSON();
 
@@ -70,14 +80,15 @@ Handlebars.registerHelper('get_contact_image', function(width)
 			backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
 
 		var data_name =  '';
-		// if(!isIE())
-			data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
+		data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
 		
 		var email = getPropertyValue(items, "email");
+
 		if (email)
 			return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + backup_image + data_name);
-}
-return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
+	}
+
+	return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 });
 
 Handlebars

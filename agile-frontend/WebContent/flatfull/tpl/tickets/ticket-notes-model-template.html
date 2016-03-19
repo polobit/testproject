@@ -4,25 +4,30 @@
 
 <div class="p-t-xxs p-b-xxs public-notes-container">
 	<span class="pull-left thumb-sm">
-			{{#if_equals created_by 'REQUESTER'}}
-		 		<img src="{{get_contact_image 24}}" class="r-5x" alt="..." onerror="image_error(this);" _data-name="{{requester_name}}">
-		    {{else}}
-		 		<img src="{{domain_user.pic}}" class="r-5x" alt="{{domain_user.name}}">
-		 	{{/if_equals}}
+		{{#if_equals created_by 'REQUESTER'}}
+			{{#if ticket_contact_exists}}
+		 		<img src="{{get_contact_image 24}}" class="r-5x" alt="..." onerror="image_error(this);" 
+		 			_data-name="{{requester_name}}">
+		 	{{else}}
+		 		<img src="" class="r-5x" alt="..." onerror="image_error(this);" _data-name="{{requester_name}}">
+		 	{{/if}}
+	    {{else}}
+	 		<img src="{{domain_user.pic}}" class="r-5x" alt="{{domain_user.name}}">
+	 	{{/if_equals}}
 	</span>
 
 	<div class="m-l-xl p-l-sm">
 
 		{{#if_equals created_by "REQUESTER"}}
-	  	<div class="btn-group dropdown show-original-div">
-	      <button class="btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="false">
-		  	<span class="caret"></span>
-		  </button>
-	      <ul class="dropdown-menu  pull-right">
-	        <li><a onClick="Tickets_Notes.showOriginal({{id}}, 'html')" href="javascript:void(0);">Show HTML</a></li>
-	        {{#if mime_object}}<li><a onClick="Tickets_Notes.showOriginal({{id}}, 'original')" href="javascript:void(0);">Show original</a></li>{{/if}}
-	      </ul>
-	    </div>
+		  	<div class="btn-group dropdown show-original-div">
+		      <button class="btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="false">
+			  	<span class="caret"></span>
+			  </button>
+		      <ul class="dropdown-menu  pull-right">
+		        <li><a onClick="Tickets_Notes.showOriginal({{id}}, 'html')" href="javascript:void(0);">Show HTML</a></li>
+		        {{#if mime_object}}<li><a onClick="Tickets_Notes.showOriginal({{id}}, 'original')" href="javascript:void(0);">Show original</a></li>{{/if}}
+		      </ul>
+		    </div>
 	    {{/if_equals}}
 
         <span>
