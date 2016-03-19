@@ -196,7 +196,18 @@ public class VersioningUtil
 
 	return false;
     }
-
+    
+    public static String getCurrentModuleName()
+    {
+    	ModulesService service = ModulesServiceFactory.getModulesService();
+    	if (service == null)
+    	    return "";
+    	
+    	String moduleName = service.getCurrentModule();
+    	System.out.println("current module : " + moduleName);
+    	
+    	return moduleName;
+    }
     /**
      * Returns app release version
      * 

@@ -10,19 +10,15 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
-import com.agilecrm.ticket.entitys.TicketGroups;
-import com.agilecrm.ticket.entitys.TicketLabels;
-import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -77,6 +73,11 @@ public class Activity extends Cursor
 
 	public void setUser_name(String user_name) {
 		this.user_name = user_name;
+	}
+
+	public void setUser(Key<DomainUser> user)
+	{
+		this.user = user;
 	}
 
 	/**
@@ -185,24 +186,6 @@ public class Activity extends Cursor
     @NotSaved(IfDefault.class)
     public String related_contact_ids;
     
-	/**
-	 * Util attributes to send data to client when changed group
-	 */
-	@NotSaved
-	public TicketGroups old_group = null, new_group = null;
-
-	/**
-	 * Util attributes to send data to client when label added/removed
-	 */
-	@NotSaved
-	public TicketLabels ticket_label = null;
-	
-	/**
-	 * saves domain user who performed the operation
-	 */
-	/*@NotSaved
-	public DomainUser domainUser = null;*/
-	
 	/**
 	 * saves domain user id who performed the operation
 	 */

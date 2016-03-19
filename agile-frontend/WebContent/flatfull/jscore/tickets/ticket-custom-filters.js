@@ -39,7 +39,7 @@ var Ticket_Custom_Filters = {
 			$('.daterangepicker').remove();
 
 			// Bootstrap date range picker.
-			$('#created-date-input').daterangepicker({changed: true, drops: 'up', locale : { applyLabel : 'Apply', cancelLabel : 'Cancel'}}, function(start, end)
+			$('#created-date-input').daterangepicker({drops: 'up', locale : { applyLabel : 'Apply', cancelLabel : 'Cancel'}}, function(start, end)
 			{
 				var range = $('#created-date-input').val();
 

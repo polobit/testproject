@@ -604,8 +604,8 @@ public class TicketsUtil
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
 		// Verifying if ticket assigned to same Group and Assignee
-		if ((ticket.groupID != null && ticket.groupID == group_id)
-				&& (ticket.assigneeID != null && ticket.assigneeID == assignee_id))
+		if ((ticket.groupID != null && ticket.groupID.longValue() == group_id.longValue())
+				&& (ticket.assigneeID != null && ticket.assigneeID.longValue() == assignee_id.longValue()))
 			return ticket;
 
 		// Copying old data to create ticket activity

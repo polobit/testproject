@@ -30,6 +30,7 @@ import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -1928,7 +1929,21 @@ public class ActivityUtil
 			obj.put("contactname", calledToName);
 
 			activity.related_contact_ids = new JSONArray().put(obj).toString();
-
+			
+			//Set username only if activity is running in frontend instance
+			if(VersioningUtil.isBackgroundThread() 
+					&& !"default".equals(VersioningUtil.getCurrentModuleName()))
+			{
+				String namespace = NamespaceManager.get();
+				
+				if(StringUtils.isNotBlank(namespace))
+				{
+					DomainUser domainUser = DomainUserUtil.getDomainOwner(namespace);
+					
+					activity.setUser(new Key<DomainUser>(DomainUser.class, domainUser.id));
+				}
+			}
+			
 			activity.save();
 			
 			return activity;
