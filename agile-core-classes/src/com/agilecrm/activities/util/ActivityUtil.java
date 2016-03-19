@@ -1939,6 +1939,8 @@ public class ActivityUtil
 			{
 				String namespace = NamespaceManager.get();
 				
+				System.out.println("namespace: " + namespace);
+				
 				if(StringUtils.isNotBlank(namespace))
 				{
 					DomainUser domainUser = DomainUserUtil.getDomainOwner(namespace);
