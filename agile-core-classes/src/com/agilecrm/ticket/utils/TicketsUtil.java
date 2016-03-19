@@ -148,7 +148,11 @@ public class TicketsUtil
 		}
 
 		ticket.save();
-
+		
+		// Execute closed ticket trigger. Do not execute trigger if updated status and current status is same.
+		if (status == Status.CLOSED)
+			TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
+		
 		// Logging activity
 		ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id,
 				oldStatus.toString(), status.toString(), "status");
@@ -470,7 +474,13 @@ public class TicketsUtil
 		ticket.save();
 
 		TicketLabels label = TicketLabelsUtil.getLabelById(labelKey.getId());
-
+		
+		//Trigger activity
+		if ("add".equalsIgnoreCase(command))
+			TicketTriggerUtil.executeTriggerForLabelAddedToTicket(ticket);
+		else
+			TicketTriggerUtil.executeTriggerForLabelDeletedToTicket(ticket);
+		
 		// Logging activity
 		ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, "", (label != null ? label.label
 				: ""), "labels");

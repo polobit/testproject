@@ -424,12 +424,6 @@ public class TicketsRest
 				{
 					ticket = TicketsUtil.changeStatus(ticketID, activityAttributes.getStatus());
 
-					// Execute closed ticket trigger. Do not execute trigger if
-					// updated
-					// status and current status is same.
-					if (Status.CLOSED == activityAttributes.getStatus())
-						TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
-
 					break;
 				}
 				case "remove-due-date":
@@ -463,11 +457,6 @@ public class TicketsRest
 				{
 					ticket = TicketsUtil.updateLabels(ticketID, new Key<TicketLabels>(TicketLabels.class,
 							activityAttributes.getLabelID()), activityAttributes.getCommand());
-
-					if ("add".equalsIgnoreCase(activityAttributes.getCommand()))
-						TicketTriggerUtil.executeTriggerForLabelAddedToTicket(ticket);
-					else
-						TicketTriggerUtil.executeTriggerForLabelDeletedToTicket(ticket);
 
 					break;
 				}
@@ -561,7 +550,7 @@ public class TicketsRest
 			if (updatedTicket.groupID != null)
 				updatedTicket.group = TicketGroupUtil.getPartialGroupByID(groupID);
 
-			if (oldTicket.assigneeID != updatedTicket.assigneeID)
+			if ((oldTicket.assigneeID != updatedTicket.assigneeID) || (oldTicket.groupID != updatedTicket.groupID))
 				TicketTriggerUtil.executeTriggerForAssigneeChanged(updatedTicket);
 
 			return updatedTicket;

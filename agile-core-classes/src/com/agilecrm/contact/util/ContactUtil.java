@@ -1880,6 +1880,9 @@ public class ContactUtil
      */
 	public static Contact createContact(String name, String email)
 	{
+		if(StringUtils.isBlank(name) || StringUtils.isBlank(email))
+			return null;
+		
 		Contact contact = new Contact();
 		contact.addpropertyWithoutSaving(new ContactField(Contact.EMAIL, email, null));
 		
