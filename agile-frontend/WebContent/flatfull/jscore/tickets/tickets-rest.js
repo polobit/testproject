@@ -292,7 +292,7 @@ var Tickets_Rest={
 	 },
 
     updateDataInModelAndCollection : function(id, data){
-
+	    
 	    if(!App_Ticket_Module.ticketsCollection)
         	return;
 
