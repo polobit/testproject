@@ -608,7 +608,13 @@ public class TicketsUtil
 
 		// Fetching ticket object by its id
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-
+		
+		System.out.println("new group_id" + group_id);
+		System.out.println("new assignee_id" + assignee_id);
+		
+		System.out.println("current groupID" + ticket.groupID);
+		System.out.println("current assigneeID" + ticket.assigneeID);
+		
 		// Verifying if ticket assigned to same Group and Assignee
 		if ((ticket.groupID != null && ticket.groupID.longValue() == group_id.longValue())
 				&& (ticket.assigneeID != null && ticket.assigneeID.longValue() == assignee_id.longValue()))
