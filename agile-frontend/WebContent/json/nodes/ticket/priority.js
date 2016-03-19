@@ -27,7 +27,7 @@
                "type": "select"
            },
            {
-               "label": "",
+               "label": "Set the priority of a ticket as low,medium or high.",
                "category": "Help",
                "fieldType": "label",
                "type": "label"

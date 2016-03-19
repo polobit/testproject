@@ -27,7 +27,7 @@
             "type": "select"
         },
         {
-            "label": "",
+            "label": "Change the status of a ticket as open,pending or closed.",
             "category": "Help",
             "fieldType": "label",
             "type": "label"

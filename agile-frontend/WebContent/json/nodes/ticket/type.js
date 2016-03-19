@@ -28,7 +28,7 @@
             "type": "select"
         },
         {
-            "label": "",
+            "label": "Change the type of a ticket.",
             "category": "Help",
             "fieldType": "label",
             "type": "label"

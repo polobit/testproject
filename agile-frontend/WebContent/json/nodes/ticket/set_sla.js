@@ -32,7 +32,7 @@
 			"fieldType": "select",
 			"type": "select" 
          },{
-            "label": "",
+            "label": "Set due date/duration time for a ticket in Hours.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 
