@@ -386,6 +386,23 @@ var Ticket_Custom_Filters = {
 						$('input[name="ticket_spam"]').attr('checked', 'checked');
 					}
 				}
+				case 'due_date':{
+					
+					if(condition.CONDITION == 'IS_LESS_THAN'){
+						$('input[name="due-date-input"]').val(
+							new Date(parseInt(condition.RHS) * 1000).format(CURRENT_USER_PREFS.dateFormat));
+					}
+				}
+				case 'created_between':{
+					
+					if(condition.CONDITION == 'BETWEEN'){
+
+						var val = new Date(parseInt(condition.RHS) * 1000).format(CURRENT_USER_PREFS.dateFormat) + ' - ' + 
+									new Date(parseInt(condition.RHS_NEW) * 1000).format(CURRENT_USER_PREFS.dateFormat);
+
+						$('input[name="created-date-input"]').val(val);
+					}
+				}
 			}
 		}
 	},
